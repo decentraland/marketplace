@@ -1,11 +1,24 @@
 {
-  "name": "decentraland",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "git@github.com:decentraland/decentraland.git",
-  "author": "The Decentraland Team <developers@decentraland.org>",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "ethereum-cryptography": "^0.0.7"
-  }
+    "name": "decentraland",
+    "version": "0.1.0",
+    "private": true,
+    "devDependencies": {
+        "@bazel/bazel": "latest",
+        "@bazel/buildifier": "latest",
+        "@bazel/ibazel": "latest",
+        "@bazel/typescript": "^0.42.2"
+    },
+    "scripts": {
+        "build": "bazel build //...",
+        "test": "bazel test //..."
+    },
+    "dependencies": {
+        "@bazel/jasmine": "^0.42.2",
+        "@types/chai": "^4.2.6",
+        "@types/jasmine": "^3.5.0",
+        "chai": "^4.2.0",
+        "ethereum-cryptography": "^0.0.7",
+        "jasmine": "^3.5.0",
+        "typescript": "^3.7.3"
+    }
 }
