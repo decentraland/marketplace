@@ -1,8 +1,4 @@
-# What is Decentraland?
-
-Decentraland is a virtual world owned by its users.
-
-Modeled after some of the most interesting developments of the past decades, it's a consensus-system to get a render of a shared space.
+# Cryptographic Identity utilities
 
 Assets are owned by an Ethereum Address.
 
