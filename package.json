@@ -1,0 +1,11 @@
+{
+  "name": "decentraland",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:decentraland/decentraland.git",
+  "author": "The Decentraland Team <developers@decentraland.org>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "ethereum-cryptography": "^0.0.7"
+  }
+}
