@@ -1,4 +1,0 @@
-import { importPrivateKeyFromHexString } from './importPrivateKeyFromHexString'
-
-export const testIdentity = importPrivateKeyFromHexString('670915F67686D8B24678451642751E4606A2F50623079C7EEF479FC2C0AD80DF')
-export const secondTestIdentity = importPrivateKeyFromHexString('00000000000000000000000000000000000000000000000000000002C0AD80DF')
