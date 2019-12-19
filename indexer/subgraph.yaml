@@ -1,0 +1,50 @@
+specVersion: 0.0.2
+description: Gravatar for Ethereum
+repository: https://github.com/decentraland/decentraland
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: MANACrowdsale
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: "0xa66d83716c7cfe425b44d0f7ef92de263468fb3d"
+      abi: MANACrowdsale
+      startBlock: 4162059
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/manaCrowdsale.ts
+      entities:
+        - User
+      abis:
+        - name: MANACrowdsale
+          file: ./abis/MANACrowdsale.json
+      eventHandlers:
+        - event: Finalized()
+          handler: handleFinalized
+
+templates:
+  - name: ERC721
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: ERC721
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/nft.ts
+      entities:
+        - NFT
+      abis:
+        - name: ERC721
+          file: ./abis/ERC721.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256,address,bytes,bytes)
+          handler: handleTransfer
+        - event: Transfer(indexed address,indexed address,indexed uint256,address,bytes)
+          handler: handleTransfer
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
