@@ -1,0 +1,16 @@
+type Metric @entity {
+  id: ID!
+  parcel: Int!
+  estate: Int!
+  wearable_halloween_2019: Int!
+  wearable_exclusive_masks: Int!
+}
+
+type NFT @entity {
+  id: ID!
+  tokenId: BigInt!
+  contractAddress: Bytes!
+  category: String
+  owner: Bytes!
+  tokenURI: String
+}
