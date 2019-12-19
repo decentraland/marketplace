@@ -1,3 +1,3 @@
-# decentraland
+# Marketplace
 
-Monorepo with all of Decentraland's code
+Decentraland's Marketplace
