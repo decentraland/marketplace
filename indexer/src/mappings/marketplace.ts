@@ -11,7 +11,7 @@ import * as status from '../modules/order/status'
 
 export function handleOrderCreated(event: OrderCreated): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = buildId(event.params.assetId.toHex(), category)
+  let nftId = buildId(event.params.assetId.toString(), category)
   let orderId = event.params.id.toHex()
 
   let order = new Order(orderId)
@@ -28,30 +28,15 @@ export function handleOrderCreated(event: OrderCreated): void {
   order.save()
 
   let nft = NFT.load(nftId)
+  let oldOrder = Order.load(nft.activeOrder)
 
-  if (nft == null) {
-    log.warning(
-      '[OrderCreated] NFT DID NOT EXIST BEFORE. OrderId: {} NFTId: {} AssetId: {}',
-      [orderId, nftId, event.params.assetId.toHex()]
-    )
-
-    // TODO: Why Do I need to do this?
-    // TODO: Call handleTransfer from nft mappings?
-    nft = new NFT(nftId)
-    nft.tokenId = event.params.assetId
-    nft.owner = event.params.seller
-    nft.contractAddress = event.address
-    nft.category = category
-  } else {
-    let oldOrder = Order.load(nft.activeOrder)
-    if (oldOrder != null) {
-      // Here we are setting old orders as cancelled, because the samrt contract allows new orders to be created
-      // and they just overwrite them in place. But the subgraph stores all orders ever
-      // you can also overwrite ones that are expired
-      oldOrder.status = status.CANCELLED
-      oldOrder.updatedAt = event.block.timestamp
-      oldOrder.save()
-    }
+  if (oldOrder != null) {
+    // Here we are setting old orders as cancelled, because the samrt contract allows new orders to be created
+    // and they just overwrite them in place. But the subgraph stores all orders ever
+    // you can also overwrite ones that are expired
+    oldOrder.status = status.CANCELLED
+    oldOrder.updatedAt = event.block.timestamp
+    oldOrder.save()
   }
 
   nft.activeOrder = orderId
@@ -60,12 +45,8 @@ export function handleOrderCreated(event: OrderCreated): void {
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = buildId(event.params.assetId.toHex(), category)
+  let nftId = buildId(event.params.assetId.toString(), category)
   let orderId = event.params.id.toHex()
-
-  if (Order.load(orderId) == null) {
-    log.warning('[OrderSuccessful] ORDER DID NOT EXIST BEFORE {}', [orderId])
-  }
 
   let order = new Order(orderId)
   order.category = category
@@ -83,12 +64,8 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 
 export function handleOrderCancelled(event: OrderCancelled): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = buildId(event.params.assetId.toHex(), category)
+  let nftId = buildId(event.params.assetId.toString(), category)
   let orderId = event.params.id.toHex()
-
-  if (Order.load(orderId) == null) {
-    log.warning('[OrderCancelled] ORDER DID NOT EXIST BEFORE {}', [orderId])
-  }
 
   let order = new Order(orderId)
   order.category = category
