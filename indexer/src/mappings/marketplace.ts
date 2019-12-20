@@ -29,7 +29,6 @@ export function handleOrderCreated(event: OrderCreated): void {
   order.save()
 
   let nft = NFT.load(nftId)
-
   if (nft == null) {
     log.error('Undefined NFT {} for order {}', [nftId, orderId])
     throw new Error('Undefined NFT')
