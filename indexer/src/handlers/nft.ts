@@ -1,5 +1,5 @@
-import { Transfer } from '../types/templates/ERC721/ERC721'
-import { NFT } from '../types/schema'
+import { Transfer } from '../entities/templates/ERC721/ERC721'
+import { NFT } from '../entities/schema'
 import { isMint, buildId, getTokenURI } from '../modules/nft'
 import { getUpdatedMetricEntity } from '../modules/metric'
 import { getCategory } from '../modules/category'

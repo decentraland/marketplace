@@ -1,4 +1,4 @@
-import { Metric } from '../../types/schema'
+import { Metric } from '../../entities/schema'
 import * as addresses from '../contract/addresses'
 
 export const DEFAULT_ID = 'all'

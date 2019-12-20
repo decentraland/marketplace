@@ -1,7 +1,7 @@
 import { Address } from '@graphprotocol/graph-ts'
 
-import { Finalized } from '../types/MANACrowdsale/MANACrowdsale'
-import { ERC721 } from '../types/templates'
+import { Finalized } from '../entities/MANACrowdsale/MANACrowdsale'
+import { ERC721 } from '../entities/templates'
 import {
   LANDRegistry,
   EstateRegistry,

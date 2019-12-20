@@ -3,8 +3,8 @@ import {
   OrderCreated,
   OrderSuccessful,
   OrderCancelled
-} from '../types/Marketplace/Marketplace'
-import { Order, NFT } from '../types/schema'
+} from '../entities/Marketplace/Marketplace'
+import { Order, NFT } from '../entities/schema'
 import { buildId } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import * as status from '../modules/order/status'

@@ -15,7 +15,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
-      file: ./src/mappings/manaCrowdsale.ts
+      file: ./src/handlers/manaCrowdsale.ts
       entities:
         - User
       abis:
@@ -35,7 +35,7 @@ dataSources:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
-      file: ./src/mappings/marketplace.ts
+      file: ./src/handlers/marketplace.ts
       entities:
         - Order
         - NFT
@@ -60,7 +60,7 @@ templates:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
-      file: ./src/mappings/nft.ts
+      file: ./src/handlers/nft.ts
       entities:
         - NFT
       abis:
