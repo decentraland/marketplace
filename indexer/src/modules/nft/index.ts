@@ -6,6 +6,10 @@ export function isMint(event: Transfer): boolean {
   return event.params.from.toHexString() == addresses.Null
 }
 
+export function buildId(tokenId: string, category: string): string {
+  return category + '-' + tokenId
+}
+
 export function getTokenURI(event: Transfer): string {
   let erc721 = ERC721.bind(event.address)
   let tokenURICallResult = erc721.try_tokenURI(event.params.tokenId)
