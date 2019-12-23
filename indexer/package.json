@@ -2,7 +2,6 @@
   "name": "testing",
   "version": "0.1.0",
   "scripts": {
-    "build-contract": "solc contracts/Gravity.sol --abi -o abis --overwrite && solc contracts/Gravity.sol --bin -o bin --overwrite",
     "create": "graph create nicosantangelo/testing --node https://api.thegraph.com/deploy/",
     "create-local": "graph create nicosantangelo/testing --node http://127.0.0.1:8020",
     "codegen": "graph codegen --debug --output-dir src/entities/",

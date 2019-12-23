@@ -34,6 +34,11 @@ type NFT @entity {
 
   orders: [Order!] @derivedFrom(field: "nft") # History of all orders. should only ever be ONE open order. all others must be closed or sold
   activeOrder: Order
+
+  wearable_id: String
+  wearable_name: String
+  wearable_description: String
+  wearable_rarity: String
 }
 
 # TODO: User entity?
