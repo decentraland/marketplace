@@ -18,6 +18,7 @@ export function handleOrderCreated(event: OrderCreated): void {
   order.status = status.OPEN
   order.category = category
   order.nft = nftId
+  order.nftAddress = event.params.nftAddress
   order.txHash = event.transaction.hash
   order.owner = event.params.seller
   order.price = event.params.priceInWei
@@ -28,10 +29,15 @@ export function handleOrderCreated(event: OrderCreated): void {
   order.save()
 
   let nft = NFT.load(nftId)
-  let oldOrder = Order.load(nft.activeOrder)
 
+  if (nft == null) {
+    log.error('Undefined NFT {} for order {}', [nftId, orderId])
+    throw new Error('Undefined NFT')
+  }
+
+  let oldOrder = Order.load(nft.activeOrder)
   if (oldOrder != null) {
-    // Here we are setting old orders as cancelled, because the samrt contract allows new orders to be created
+    // Here we are setting old orders as cancelled, because the smart contract allows new orders to be created
     // and they just overwrite them in place. But the subgraph stores all orders ever
     // you can also overwrite ones that are expired
     oldOrder.status = status.CANCELLED

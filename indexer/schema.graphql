@@ -10,6 +10,7 @@ type Order @entity {
   id: ID!
   category: Category!
   nft: NFT
+  nftAddress: Bytes!
   txHash: Bytes!
   owner: Bytes!
   price: BigInt!

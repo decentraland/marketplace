@@ -135,6 +135,15 @@ export class Order extends Entity {
     }
   }
 
+  get nftAddress(): Bytes {
+    let value = this.get("nftAddress");
+    return value.toBytes();
+  }
+
+  set nftAddress(value: Bytes) {
+    this.set("nftAddress", Value.fromBytes(value));
+  }
+
   get txHash(): Bytes {
     let value = this.get("txHash");
     return value.toBytes();

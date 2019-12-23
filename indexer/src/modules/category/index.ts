@@ -16,6 +16,7 @@ export function getCategory(contractAddress: string): string {
     category = categories.WEARABLE
   } else {
     log.warning('Contract address {} not being monitored', [contractAddress])
+    category = contractAddress
   }
 
   return category
