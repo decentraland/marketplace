@@ -5,21 +5,30 @@ import { Props } from './Navigation.types'
 
 export default class Navigation extends React.PureComponent<Props> {
   render() {
-    const { address, isFullscreen, onNavigate } = this.props
+    const { address, activeTab, isFullscreen, onNavigate } = this.props
     return (
       <Tabs isFullscreen={isFullscreen}>
         <Tabs.Left>
-          <Tabs.Tab active onClick={() => onNavigate(locations.atlas())}>
+          <Tabs.Tab
+            active={activeTab === 'atlas'}
+            onClick={() => onNavigate(locations.atlas())}
+          >
             Atlas
           </Tabs.Tab>
-          <Tabs.Tab onClick={() => onNavigate(locations.market())}>
+          <Tabs.Tab
+            active={activeTab === 'market'}
+            onClick={() => onNavigate(locations.market())}
+          >
             Market
           </Tabs.Tab>
-          {address && (
-            <Tabs.Tab onClick={() => onNavigate(locations.address(address))}>
+          {address ? (
+            <Tabs.Tab
+              active={activeTab === 'address'}
+              onClick={() => onNavigate(locations.address(address))}
+            >
               My Assets
             </Tabs.Tab>
-          )}
+          ) : null}
         </Tabs.Left>
       </Tabs>
     )

@@ -3,8 +3,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
-import { BrowserRouter as Router } from 'react-router-dom'
-import WalletProvider from './providers/WalletProvider'
+import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
+import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 
 import './setup'
 import './themes'
@@ -16,13 +16,13 @@ import './index.css'
 
 const component = (
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    <TranslationProvider locales={['en']}>
       <WalletProvider>
-        <Router>
+        <ConnectedRouter history={history}>
           <Routes />
-        </Router>
+        </ConnectedRouter>
       </WalletProvider>
-    </ConnectedRouter>
+    </TranslationProvider>
   </Provider>
 )
 

@@ -1,9 +1,9 @@
 import Navigation from './Navigation'
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
 import { RootState } from '../../modules/reducer'
-import { getAddress } from '../../modules/wallet/selectors'
 import {
   MapStateProps,
   MapDispatch,

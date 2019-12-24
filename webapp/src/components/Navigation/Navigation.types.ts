@@ -2,7 +2,8 @@ import { CallHistoryMethodAction } from 'connected-react-router'
 import { Dispatch } from 'redux'
 
 export type Props = {
-  address: string | null
+  address?: string
+  activeTab?: 'atlas' | 'market' | 'address'
   isFullscreen?: boolean
   onNavigate: (path: string) => void
 }

@@ -1,17 +1,22 @@
 import React from 'react'
-import {} from 'decentraland-dapps/dist/containers'
-import { Page, Atlas } from 'decentraland-ui'
+import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
+import { Page, Atlas, AtlasTile } from 'decentraland-ui'
 
 import { Navigation } from '../Navigation'
+
+let tiles: Record<string, AtlasTile>
+Atlas.fetchTiles().then(_tiles => (tiles = _tiles))
 
 export default class AtlasPage extends React.PureComponent {
   render() {
     return (
       <>
-        <Navigation isFullscreen />
+        <Navbar isFullscreen activePage="marketplace" />
+        <Navigation isFullscreen activeTab="atlas" />
         <Page isFullscreen>
-          <Atlas />
+          <Atlas tiles={tiles} />
         </Page>
+        <Footer isFullscreen />
       </>
     )
   }
