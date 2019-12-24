@@ -4,6 +4,7 @@ import { Page, Atlas, AtlasTile } from 'decentraland-ui'
 
 import { Navigation } from '../Navigation'
 
+// TODO: move this to redux so we can reuse it from other <Atlas /> instances
 let tiles: Record<string, AtlasTile>
 Atlas.fetchTiles().then(_tiles => (tiles = _tiles))
 
