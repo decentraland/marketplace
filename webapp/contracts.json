@@ -1,0 +1,10 @@
+{
+  "outputPath": "./src/contracts",
+  "contracts": {
+    "MANA": {
+      "source": "etherscan",
+      "net": "mainnet",
+      "address": "0x0f5d2fb29fb7d3cfee444a200298f468908cc942"
+    }
+  }
+}
