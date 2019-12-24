@@ -22,7 +22,7 @@ const loggerMiddleware = createLogger({
   predicate: (_: any, action) => isDev || action.type.includes('Failure')
 })
 const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
-  storageKey: 'storage-key', // this is the key used to save the state in localStorage (required)
+  storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
   paths: [], // array of paths from state to be persisted (optional)
   actions: [], // array of actions types that will trigger a SAVE (optional)
   migrations: {} // migration object that will migrate your localstorage (optional)
