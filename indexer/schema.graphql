@@ -6,11 +6,46 @@ type Metric @entity {
   wearable_exclusive_masks: Int!
 }
 
+type Order @entity {
+  id: ID!
+  category: Category!
+  nft: NFT
+  nftAddress: Bytes!
+  txHash: Bytes!
+  owner: Bytes!
+  price: BigInt!
+  status: OrderStatus!
+  buyer: Bytes
+  blockNumber: BigInt!
+  expiresAt: BigInt!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+# TODO: createdAt/updatedAt
+# TODO: custom data for each type of NFT or metadata prop
 type NFT @entity {
   id: ID!
   tokenId: BigInt!
   contractAddress: Bytes!
-  category: String
+  category: Category!
   owner: Bytes!
   tokenURI: String
+
+  orders: [Order!] @derivedFrom(field: "nft") # History of all orders. should only ever be ONE open order. all others must be closed or sold
+  activeOrder: Order
+}
+
+# TODO: User entity?
+
+enum Category @entity {
+  parcel
+  estate
+  wearable
+}
+
+enum OrderStatus @entity {
+  open
+  sold
+  cancelled
 }

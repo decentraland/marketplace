@@ -7,7 +7,7 @@ import {
   EstateRegistry,
   ERC721Collection_halloween_2019,
   ERC721Collection_exclusive_masks
-} from '../utils/addresses'
+} from '../modules/contract/addresses'
 
 export function handleFinalized(_: Finalized): void {
   ERC721.create(Address.fromString(LANDRegistry))

@@ -7,3 +7,5 @@ export const ERC721Collection_halloween_2019 =
   '0xc1f4b0eea2bd6690930e6c66efd3e197d620b9c2'
 export const ERC721Collection_exclusive_masks =
   '0xc04528c14c8ffd84c7c1fb6719b4a89853035cdd'
+
+export const Marketplace = '0x8e5660b4Ab70168b5a6fEeA0e0315cb49c8Cd539'

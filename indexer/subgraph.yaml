@@ -8,7 +8,7 @@ dataSources:
     kind: ethereum/contract
     network: mainnet
     source:
-      address: "0xa66d83716c7cfe425b44d0f7ef92de263468fb3d"
+      address: '0xa66d83716c7cfe425b44d0f7ef92de263468fb3d'
       abi: MANACrowdsale
       startBlock: 4162059
     mapping:
@@ -24,6 +24,31 @@ dataSources:
       eventHandlers:
         - event: Finalized()
           handler: handleFinalized
+
+  - kind: ethereum/contract
+    name: Marketplace
+    network: mainnet
+    source:
+      address: '0x8e5660b4Ab70168b5a6fEeA0e0315cb49c8Cd539'
+      abi: Marketplace
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/mappings/marketplace.ts
+      entities:
+        - Order
+        - NFT
+      abis:
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
+          handler: handleOrderCreated
+        - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed address)
+          handler: handleOrderSuccessful
+        - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
+          handler: handleOrderCancelled
 
 templates:
   - name: ERC721
