@@ -33,7 +33,7 @@ export function upsertMetric(contractAddress: string): void {
   } else if (contractAddress == addresses.ERC721Collection_exclusive_masks) {
     metric.wearables_exclusive_masks += 1
   } else if (contractAddress == addresses.ERC721Collection_xmas_2019) {
-    metric.wearables_exclusive_masks += 1
+    metric.wearables_xmas_2019 += 1
   }
 
   metric.save()
