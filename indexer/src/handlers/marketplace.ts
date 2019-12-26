@@ -5,15 +5,15 @@ import {
   OrderCancelled
 } from '../entities/Marketplace/Marketplace'
 import { Order, NFT } from '../entities/schema'
-import { buildId } from '../modules/nft'
+import { getNFTId } from '../modules/nft'
 import { getCategory } from '../modules/category'
-import { upsertMetric } from '../modules/metric'
+import { buildMetricFromContractAddress } from '../modules/metric'
 import * as status from '../modules/order/status'
 import * as addresses from '../modules/contract/addresses'
 
 export function handleOrderCreated(event: OrderCreated): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = buildId(event.params.assetId.toString(), category)
+  let nftId = getNFTId(event.params.assetId.toString(), category)
   let orderId = event.params.id.toHex()
 
   let order = new Order(orderId)
@@ -49,12 +49,13 @@ export function handleOrderCreated(event: OrderCreated): void {
   nft.activeOrder = orderId
   nft.save()
 
-  upsertMetric(addresses.Marketplace)
+  let metric = buildMetricFromContractAddress(addresses.Marketplace)
+  metric.save()
 }
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = buildId(event.params.assetId.toString(), category)
+  let nftId = getNFTId(event.params.assetId.toString(), category)
   let orderId = event.params.id.toHex()
 
   let order = new Order(orderId)
@@ -73,7 +74,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 
 export function handleOrderCancelled(event: OrderCancelled): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = buildId(event.params.assetId.toString(), category)
+  let nftId = getNFTId(event.params.assetId.toString(), category)
   let orderId = event.params.id.toHex()
 
   let order = new Order(orderId)

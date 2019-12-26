@@ -1,8 +1,8 @@
 type Metric @entity {
   id: ID!
+  orders: Int!
   parcels: Int!
   estates: Int!
-  orders: Int!
   wearables_halloween_2019: Int!
   wearables_exclusive_masks: Int!
   wearables_xmas_2019: Int!
@@ -34,8 +34,6 @@ type Parcel @entity {
   estate: Estate
   data: Data
   rawData: String
-  operator: Bytes
-  updateOperator: Bytes
 }
 
 type Estate @entity {
@@ -46,8 +44,6 @@ type Estate @entity {
   size: Int
   data: Data
   rawData: String
-  operator: Bytes
-  updateOperator: Bytes
 }
 
 type Data @entity {
@@ -62,6 +58,7 @@ type Data @entity {
 
 type Wearable @entity {
   id: ID!
+  owner: Wallet!
   name: String!
   description: String!
   category: String!
@@ -86,18 +83,9 @@ type NFT @entity {
   updatedAt: BigInt!
 }
 
-type Authorization @entity {
-  id: ID!
-  type: String!
-  tokenAddress: Bytes!
-  owner: Wallet!
-  operator: Bytes!
-}
-
 type Wallet @entity {
   id: ID! # ETH addr
   nfts: [NFT!] @derivedFrom(field: "owner")
-  authorizations: [Authorization!] @derivedFrom(field: "owner")
   mana: BigInt # Amount of mana owned
 }
 

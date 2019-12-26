@@ -1,4 +1,4 @@
-import { Metric } from '../../entities/schema'
+import { NFT, Metric } from '../../entities/schema'
 import * as addresses from '../contract/addresses'
 
 export const DEFAULT_ID = 'all'
@@ -8,9 +8,9 @@ export function buildMetric(): Metric {
 
   if (metric == null) {
     metric = new Metric(DEFAULT_ID)
+    metric.orders = 0
     metric.parcels = 0
     metric.estates = 0
-    metric.orders = 0
     metric.wearables_halloween_2019 = 0
     metric.wearables_exclusive_masks = 0
     metric.wearables_xmas_2019 = 0
@@ -19,15 +19,22 @@ export function buildMetric(): Metric {
   return metric as Metric
 }
 
-export function upsertMetric(contractAddress: string): void {
+export function buildMetricFromNFT(nft: NFT): Metric {
+  let contractAddress = nft.contractAddress.toHexString()
+  return buildMetricFromContractAddress(contractAddress)
+}
+
+export function buildMetricFromContractAddress(
+  contractAddress: string
+): Metric {
   let metric = buildMetric()
 
-  if (contractAddress == addresses.LANDRegistry) {
+  if (contractAddress == addresses.Marketplace) {
+    metric.orders += 1
+  } else if (contractAddress == addresses.LANDRegistry) {
     metric.parcels += 1
   } else if (contractAddress == addresses.EstateRegistry) {
     metric.estates += 1
-  } else if (contractAddress == addresses.Marketplace) {
-    metric.orders += 1
   } else if (contractAddress == addresses.ERC721Collection_halloween_2019) {
     metric.wearables_halloween_2019 += 1
   } else if (contractAddress == addresses.ERC721Collection_exclusive_masks) {
@@ -36,5 +43,5 @@ export function upsertMetric(contractAddress: string): void {
     metric.wearables_xmas_2019 += 1
   }
 
-  metric.save()
+  return metric
 }

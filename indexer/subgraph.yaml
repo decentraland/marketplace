@@ -20,7 +20,7 @@ dataSources:
       language: wasm/assemblyscript
       file: ./src/handlers/manaCrowdsale.ts
       entities:
-        - User
+        - ERC721
       abis:
         - name: MANACrowdsale
           file: ./abis/MANACrowdsale.json
@@ -31,70 +31,59 @@ dataSources:
   # ---------------------------------------------------------
   # PARCELS -------------------------------------------------
   # ---------------------------------------------------------
-  # - kind: ethereum/contract
-  #   name: LANDRegistry
-  #   network: mainnet
-  #   source:
-  #     address: '0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d'
-  #     abi: LANDRegistry
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.3
-  #     language: wasm/assemblyscript
-  #     file: ./src/handlers/parcel.ts
-  #     entities:
-  #       - Parcel
-  #     abis:
-  #       - name: LANDRegistry
-  #         file: ./abis/LANDRegistry.json
-  #     eventHandlers:
-  #       - event: Update(indexed uint256,indexed address,indexed address,string)
-  #         handler: handleUpdate
-  #       - event: Approval(indexed address,indexed address,indexed uint256)
-  #         handler: handleApproval
-  #       - event: UpdateManager(indexed address,indexed address,indexed address,bool)
-  #         handler: handleUpdateManager
-  #       - event: UpdateOperator(indexed uint256,indexed address)
-  #         handler: handleUpdateOperator
-  #       - event: ApprovalForAll(indexed address,indexed address,bool)
-  #         handler: handleApprovalForAll
+  - kind: ethereum/contract
+    name: LANDRegistry
+    network: mainnet
+    source:
+      address: '0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d'
+      abi: LANDRegistry
+      startBlock: 4944642
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/parcel.ts
+      entities:
+        - Parcel
+        - Data
+      abis:
+        - name: LANDRegistry
+          file: ./abis/LANDRegistry.json
+      eventHandlers:
+        - event: Update(indexed uint256,indexed address,indexed address,string)
+          handler: handleUpdate
 
   # ---------------------------------------------------------
   # ESTATES -------------------------------------------------
   # ---------------------------------------------------------
-  # - kind: ethereum/contract
-  #   name: EstateRegistry
-  #   network: mainnet
-  #   source:
-  #     address: '0x959e104e1a4db6317fa58f8295f586e1a978c297'
-  #     abi: EstateRegistry
-  #   mapping:
-  #     kind: ethereum/events
-  #     apiVersion: 0.0.3
-  #     language: wasm/assemblyscript
-  #     file: ./src/handlers/estate.ts
-  #     entities:
-  #       - Estate
-  #     abis:
-  #       - name: EstateRegistry
-  #         file: ./abis/EstateRegistry.json
-  #     eventHandlers:
-  #       - event: CreateEstate(indexed address,indexed uint256,string)
-  #         handler: handleCreateEstate
-  #       - event: AddLand(indexed uint256,indexed uint256)
-  #         handler: handleAddLand
-  #       - event: RemoveLand(indexed uint256,indexed uint256,indexed address)
-  #         handler: handleRemoveLand
-  #       - event: Update(indexed uint256,indexed address,indexed address,string)
-  #         handler: handleUpdate
-  #       - event: Approval(indexed address,indexed address,indexed uint256)
-  #         handler: handleApproval
-  #       - event: UpdateManager(indexed address,indexed address,indexed address,bool)
-  #         handler: handleUpdateManager
-  #       - event: UpdateOperator(indexed uint256,indexed address)
-  #         handler: handleUpdateOperator
-  #       - event: ApprovalForAll(indexed address,indexed address,bool)
-  #         handler: handleApprovalForAll
+  - kind: ethereum/contract
+    name: EstateRegistry
+    network: mainnet
+    source:
+      address: '0x959e104e1a4db6317fa58f8295f586e1a978c297'
+      abi: EstateRegistry
+      startBlock: 6236547
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/estate.ts
+      entities:
+        - Estate
+        - Parcel
+        - Data
+      abis:
+        - name: EstateRegistry
+          file: ./abis/EstateRegistry.json
+      eventHandlers:
+        - event: CreateEstate(indexed address,indexed uint256,string)
+          handler: handleCreateEstate
+        - event: AddLand(indexed uint256,indexed uint256)
+          handler: handleAddLand
+        - event: RemoveLand(indexed uint256,indexed uint256,indexed address)
+          handler: handleRemoveLand
+        - event: Update(indexed uint256,indexed address,indexed address,string)
+          handler: handleUpdate
 
   # ---------------------------------------------------------
   # MANA ----------------------------------------------------
@@ -105,13 +94,14 @@ dataSources:
   #   source:
   #     address: "0x0f5d2fb29fb7d3cfee444a200298f468908cc942"
   #     abi: ManaToken
+  #     startBlock: 4162059
   #   mapping:
   #     kind: ethereum/events
   #     apiVersion: 0.0.3
   #     language: wasm/assemblyscript
   #     file: ./src/handlers/manaToken.ts
   #     entities:
-  #       - User
+  #       - Wallet
   #     abis:
   #       - name: ManaToken
   #         file: ./abis/ManaToken.json
@@ -132,6 +122,7 @@ dataSources:
     source:
       address: '0x8e5660b4Ab70168b5a6fEeA0e0315cb49c8Cd539'
       abi: Marketplace
+      startBlock: 6496012
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -167,9 +158,14 @@ templates:
       file: ./src/handlers/nft.ts
       entities:
         - NFT
+        - Parcel
+        - Estate
+        - Wearable
       abis:
         - name: ERC721
           file: ./abis/ERC721.json
+        - name: LANDRegistry
+          file: ./abis/LANDRegistry.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,indexed uint256,address,bytes,bytes)
           handler: handleTransfer
