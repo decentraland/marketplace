@@ -16,6 +16,10 @@
     "@types/redux-logger": "^3.0.7",
     "connected-react-router": "^6.6.1",
     "dcl-tslint-config-standard": "^2.0.0",
+    "decentraland-dapps": "^6.0.1-rc2",
+    "decentraland-eth": "^8.18.2",
+    "decentraland-ui": "^2.11.2",
+    "dotenv": "^8.2.0",
     "history": "^4.10.1",
     "prettier": "^1.19.1",
     "react": "^16.12.0",
@@ -29,11 +33,14 @@
     "tslint": "^5.20.1",
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^4.1.0",
-    "typescript": "~3.7.2"
+    "typescript": "~3.7.2",
+    "web3x-codegen": "^4.0.6",
+    "web3x-es": "^4.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "contracts": "web3x-codegen",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "tslint -p tsconfig.json"
