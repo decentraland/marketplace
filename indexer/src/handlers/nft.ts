@@ -25,13 +25,40 @@ export function handleTransfer(event: Transfer): void {
   nft.owner = event.params.to.toHex()
   nft.contractAddress = event.address
   nft.category = category
+  nft.updatedAt = event.block.timestamp
 
   if (contractAddress != addresses.LANDRegistry) {
     // The LANDRegistry contract does not have a tokenURI method
     nft.tokenURI = getTokenURI(event)
   }
 
-  if (category == categories.WEARABLE) {
+  if (category == categories.PARCEL) {
+    // TODO: Extract to parcel?
+    let parcel = new Parcel(id)
+    let coordinates = decodeTokenId(event.params.tokenId)
+
+    parcel.x = coordinates[0]
+    parcel.y = coordinates[1]
+    parcel.tokenId = nft.tokenId
+    parcel.owner = nft.owner
+    parcel.save()
+
+    nft.parcel = id
+  } else if (category == categories.ESTATE) {
+    // TODO: Extract to estate?
+    let estate = new Estate(id)
+
+    estate.tokenId = nft.tokenId
+    estate.owner = nft.owner
+    estate.parcels = []
+    estate.size = 0
+    estate.save()
+
+    nft.estate = id
+  } else if (category == categories.WEARABLE) {
+    // TODO: use id as wearableId
+    // TODO: Add warable owner
+    // TODO: save wearable here
     let wearableId = upsertWearable(nft.tokenURI)
     if (wearableId != '') {
       nft.wearable = wearableId
@@ -41,8 +68,6 @@ export function handleTransfer(event: Transfer): void {
   if (isMint(event)) {
     upsertMetric(contractAddress)
     nft.createdAt = event.block.timestamp
-  } else {
-    nft.updatedAt = event.block.timestamp
   }
 
   createWallet(event.params.to.toHex())

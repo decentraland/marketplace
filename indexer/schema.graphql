@@ -34,8 +34,6 @@ type Parcel @entity {
   estate: Estate
   data: Data
   rawData: String
-  operator: Bytes
-  updateOperator: Bytes
 }
 
 type Estate @entity {
@@ -46,8 +44,6 @@ type Estate @entity {
   size: Int
   data: Data
   rawData: String
-  operator: Bytes
-  updateOperator: Bytes
 }
 
 type Data @entity {
@@ -86,18 +82,9 @@ type NFT @entity {
   updatedAt: BigInt!
 }
 
-type Authorization @entity {
-  id: ID!
-  type: String!
-  tokenAddress: Bytes!
-  owner: Wallet!
-  operator: Bytes!
-}
-
 type Wallet @entity {
   id: ID! # ETH addr
   nfts: [NFT!] @derivedFrom(field: "owner")
-  authorizations: [Authorization!] @derivedFrom(field: "owner")
   mana: BigInt # Amount of mana owned
 }
 

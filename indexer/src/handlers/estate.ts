@@ -9,29 +9,30 @@ import {
   UpdateOperator,
   ApprovalForAll
 } from '../entities/EstateRegistry/EstateRegistry'
-import { NFT, Parcel, Estate, Authorization } from '../entities/schema'
-import {
-  AuthorizationTypes,
-  getAuthorizationId
-} from '../modules/authorization'
+import { NFT, Parcel, Estate } from '../entities/schema'
+import { buildId } from '../modules/nft'
 import { decodeTokenId } from '../modules/parcel'
 import { createWallet } from '../modules/wallet'
 import { buildData, DataType } from '../modules/data'
+import * as categories from '../modules/category/categories'
 
 export function handleCreateEstate(event: CreateEstate): void {
   let estateId = event.params._estateId.toString()
   let data = event.params._data.toString()
 
-  let estate = new Estate(estateId)
+  let id = buildId(estateId, categories.ESTATE)
 
+  let estate = new Estate(id)
+
+  estate.tokenId = event.params._estateId
   estate.owner = event.params._owner.toHex()
   estate.rawData = data
   estate.parcels = []
   estate.size = 0
 
-  let estateData = buildData(estateId, data, DataType.ESTATE)
+  let estateData = buildData(id, data, DataType.ESTATE)
   if (estateData != null) {
-    estate.data = estateData.id
+    estate.data = id
     estateData.save()
   }
 
@@ -42,8 +43,11 @@ export function handleCreateEstate(event: CreateEstate): void {
 
 export function handleAddLand(event: AddLand): void {
   let estateId = event.params._estateId.toString()
-  let parcelId = event.params._landId.toHex()
-  let estate = Estate.load(estateId)
+
+  let id = buildId(estateId, categories.ESTATE)
+  let parcelId = buildId(event.params._landId.toString(), categories.PARCEL)
+
+  let estate = Estate.load(id)
 
   let parcels = estate.parcels
   parcels.push(parcelId)
@@ -66,7 +70,7 @@ export function handleAddLand(event: AddLand): void {
   }
 
   parcel.owner = estate.owner
-  parcel.estate = estateId
+  parcel.estate = id
   parcel.save()
 
   let nft = new NFT(parcelId)
@@ -76,8 +80,11 @@ export function handleAddLand(event: AddLand): void {
 
 export function handleRemoveLand(event: RemoveLand): void {
   let estateId = event.params._estateId.toString()
-  let parcelId = event.params._landId.toHex()
-  let estate = Estate.load(estateId)
+
+  let id = buildId(estateId, categories.ESTATE)
+  let parcelId = buildId(event.params._landId.toString(), categories.PARCEL)
+
+  let estate = Estate.load(id)
 
   let parcels = estate.parcels
   let index = parcels.indexOf(parcelId)
@@ -88,6 +95,7 @@ export function handleRemoveLand(event: RemoveLand): void {
   estate.save()
 
   let parcel = Parcel.load(parcelId)
+
   // Would expect that this isn't needed, but it is here for safety, since failing at block 6,000,000 slows down iterative testing
   // Because if land parcel doesn't exist, we get a crashed node
   if (parcel == null) {
@@ -109,64 +117,19 @@ export function handleRemoveLand(event: RemoveLand): void {
 }
 
 export function handleUpdate(event: Update): void {
-  let estateId = event.params._assetId.toHex()
-  let data = event.params._data.toString()
+  let estateId = event.params._assetId.toString()
 
-  let estate = new Estate(estateId)
+  let data = event.params._data.toString()
+  let id = buildId(estateId, categories.ESTATE)
+
+  let estate = new Estate(id)
   estate.rawData = data
 
-  let estateData = buildData(estateId, data, DataType.ESTATE)
+  let estateData = buildData(id, data, DataType.ESTATE)
   if (estateData != null) {
-    estate.data = estateData.id
+    estate.data = id
     estateData.save()
   }
 
   estate.save()
-}
-
-export function handleApproval(event: Approval): void {
-  let id = event.params._tokenId.toString()
-  let estate = new Estate(id)
-
-  estate.owner = event.params._owner.toHex()
-  estate.operator = event.params._approved
-
-  estate.save()
-}
-
-export function handleUpdateManager(event: UpdateManager): void {
-  let id = getAuthorizationId(event, AuthorizationTypes.manager)
-  let authorization = new Authorization(id)
-
-  authorization.type = AuthorizationTypes.manager
-  authorization.owner = event.params._owner.toHex()
-  authorization.operator = event.params._operator
-  authorization.tokenAddress = event.address
-
-  authorization.save()
-
-  createWallet(event.params._owner.toHex())
-}
-
-export function handleUpdateOperator(event: UpdateOperator): void {
-  let id = event.params._estateId.toString()
-  let estate = new Estate(id)
-
-  estate.operator = event.params._operator
-
-  estate.save()
-}
-
-export function handleApprovalForAll(event: ApprovalForAll): void {
-  let id = getAuthorizationId(event, AuthorizationTypes.operator)
-  let authorization = new Authorization(id)
-
-  authorization.type = AuthorizationTypes.operator
-  authorization.owner = event.params._owner.toHex()
-  authorization.operator = event.params._operator
-  authorization.tokenAddress = event.address
-
-  authorization.save()
-
-  createWallet(event.params._owner.toHex())
 }

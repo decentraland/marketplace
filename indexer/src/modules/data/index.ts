@@ -15,9 +15,7 @@ export function buildData(
   csv: string,
   dataType: DataType
 ): Data | null {
-  let dataId = assetId + '-data'
-
-  let dataEntity = new Data(dataId)
+  let dataEntity = new Data(assetId)
 
   if (csv.charAt(0) != '0') {
     return null
@@ -28,7 +26,6 @@ export function buildData(
     return null
   }
 
-  dataEntity.id = dataId
   dataEntity.version = data[0]
 
   if (data.length > 1) {

@@ -6,7 +6,6 @@ export function createWallet(id: string): void {
 
   if (wallet == null) {
     wallet = new Wallet(id)
-    wallet.nfts = []
     wallet.mana = BigInt.fromI32(0)
   }
 
