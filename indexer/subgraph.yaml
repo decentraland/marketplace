@@ -4,6 +4,9 @@ repository: https://github.com/decentraland/decentraland
 schema:
   file: ./schema.graphql
 dataSources:
+  # ---------------------------------------------------------
+  # CROWDSALE (Finalize) ------------------------------------
+  # ---------------------------------------------------------
   - name: MANACrowdsale
     kind: ethereum/contract
     network: mainnet
@@ -25,31 +28,132 @@ dataSources:
         - event: Finalized()
           handler: handleFinalized
 
+  # ---------------------------------------------------------
+  # PARCELS -------------------------------------------------
+  # ---------------------------------------------------------
   # - kind: ethereum/contract
-  #   name: Marketplace
+  #   name: LANDRegistry
   #   network: mainnet
   #   source:
-  #     address: '0x8e5660b4Ab70168b5a6fEeA0e0315cb49c8Cd539'
-  #     abi: Marketplace
+  #     address: '0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d'
+  #     abi: LANDRegistry
   #   mapping:
   #     kind: ethereum/events
   #     apiVersion: 0.0.3
   #     language: wasm/assemblyscript
-  #     file: ./src/handlers/marketplace.ts
+  #     file: ./src/handlers/parcel.ts
   #     entities:
-  #       - Order
-  #       - NFT
+  #       - Parcel
   #     abis:
-  #       - name: Marketplace
-  #         file: ./abis/Marketplace.json
+  #       - name: LANDRegistry
+  #         file: ./abis/LANDRegistry.json
   #     eventHandlers:
-  #       - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
-  #         handler: handleOrderCreated
-  #       - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed address)
-  #         handler: handleOrderSuccessful
-  #       - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
-  #         handler: handleOrderCancelled
+  #       - event: Update(indexed uint256,indexed address,indexed address,string)
+  #         handler: handleUpdate
+  #       - event: Approval(indexed address,indexed address,indexed uint256)
+  #         handler: handleApproval
+  #       - event: UpdateManager(indexed address,indexed address,indexed address,bool)
+  #         handler: handleUpdateManager
+  #       - event: UpdateOperator(indexed uint256,indexed address)
+  #         handler: handleUpdateOperator
+  #       - event: ApprovalForAll(indexed address,indexed address,bool)
+  #         handler: handleApprovalForAll
 
+  # ---------------------------------------------------------
+  # ESTATES -------------------------------------------------
+  # ---------------------------------------------------------
+  # - kind: ethereum/contract
+  #   name: EstateRegistry
+  #   network: mainnet
+  #   source:
+  #     address: '0x959e104e1a4db6317fa58f8295f586e1a978c297'
+  #     abi: EstateRegistry
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.3
+  #     language: wasm/assemblyscript
+  #     file: ./src/handlers/estate.ts
+  #     entities:
+  #       - Estate
+  #     abis:
+  #       - name: EstateRegistry
+  #         file: ./abis/EstateRegistry.json
+  #     eventHandlers:
+  #       - event: CreateEstate(indexed address,indexed uint256,string)
+  #         handler: handleCreateEstate
+  #       - event: AddLand(indexed uint256,indexed uint256)
+  #         handler: handleAddLand
+  #       - event: RemoveLand(indexed uint256,indexed uint256,indexed address)
+  #         handler: handleRemoveLand
+  #       - event: Update(indexed uint256,indexed address,indexed address,string)
+  #         handler: handleUpdate
+  #       - event: Approval(indexed address,indexed address,indexed uint256)
+  #         handler: handleApproval
+  #       - event: UpdateManager(indexed address,indexed address,indexed address,bool)
+  #         handler: handleUpdateManager
+  #       - event: UpdateOperator(indexed uint256,indexed address)
+  #         handler: handleUpdateOperator
+  #       - event: ApprovalForAll(indexed address,indexed address,bool)
+  #         handler: handleApprovalForAll
+
+  # ---------------------------------------------------------
+  # MANA ----------------------------------------------------
+  # ---------------------------------------------------------
+  # - kind: ethereum/contract
+  #   name: ManaToken
+  #   network: mainnet
+  #   source:
+  #     address: "0x0f5d2fb29fb7d3cfee444a200298f468908cc942"
+  #     abi: ManaToken
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.3
+  #     language: wasm/assemblyscript
+  #     file: ./src/handlers/manaToken.ts
+  #     entities:
+  #       - User
+  #     abis:
+  #       - name: ManaToken
+  #         file: ./abis/ManaToken.json
+  #     eventHandlers:
+  #       - event: Burn(indexed address,uint256)
+  #         handler: handleBurn
+  #       - event: Mint(indexed address,uint256)
+  #         handler: handleMint
+  #       - event: Transfer(indexed address,indexed address,uint256)
+  #         handler: handleTransfer
+
+  # ---------------------------------------------------------
+  # ORDERS --------------------------------------------------
+  # ---------------------------------------------------------
+  - kind: ethereum/contract
+    name: Marketplace
+    network: mainnet
+    source:
+      address: '0x8e5660b4Ab70168b5a6fEeA0e0315cb49c8Cd539'
+      abi: Marketplace
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/marketplace.ts
+      entities:
+        - Order
+        - NFT
+      abis:
+        - name: Marketplace
+          file: ./abis/Marketplace.json
+      eventHandlers:
+        - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
+          handler: handleOrderCreated
+        - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed address)
+          handler: handleOrderSuccessful
+        - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
+          handler: handleOrderCancelled
+
+# ---------------------------------------------------------
+# TEMPLATES -----------------------------------------------
+# ---------------------------------------------------------
 templates:
   - name: ERC721
     kind: ethereum/contract
