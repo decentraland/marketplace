@@ -2,15 +2,10 @@ import {
   CreateEstate,
   AddLand,
   RemoveLand,
-  Transfer,
-  Update,
-  Approval,
-  UpdateManager,
-  UpdateOperator,
-  ApprovalForAll
+  Update
 } from '../entities/EstateRegistry/EstateRegistry'
 import { NFT, Parcel, Estate } from '../entities/schema'
-import { buildId } from '../modules/nft'
+import { getNFTId } from '../modules/nft'
 import { decodeTokenId } from '../modules/parcel'
 import { createWallet } from '../modules/wallet'
 import { buildData, DataType } from '../modules/data'
@@ -20,7 +15,7 @@ export function handleCreateEstate(event: CreateEstate): void {
   let estateId = event.params._estateId.toString()
   let data = event.params._data.toString()
 
-  let id = buildId(estateId, categories.ESTATE)
+  let id = getNFTId(estateId, categories.ESTATE)
 
   let estate = new Estate(id)
 
@@ -44,8 +39,8 @@ export function handleCreateEstate(event: CreateEstate): void {
 export function handleAddLand(event: AddLand): void {
   let estateId = event.params._estateId.toString()
 
-  let id = buildId(estateId, categories.ESTATE)
-  let parcelId = buildId(event.params._landId.toString(), categories.PARCEL)
+  let id = getNFTId(estateId, categories.ESTATE)
+  let parcelId = getNFTId(event.params._landId.toString(), categories.PARCEL)
 
   let estate = Estate.load(id)
 
@@ -81,8 +76,8 @@ export function handleAddLand(event: AddLand): void {
 export function handleRemoveLand(event: RemoveLand): void {
   let estateId = event.params._estateId.toString()
 
-  let id = buildId(estateId, categories.ESTATE)
-  let parcelId = buildId(event.params._landId.toString(), categories.PARCEL)
+  let id = getNFTId(estateId, categories.ESTATE)
+  let parcelId = getNFTId(event.params._landId.toString(), categories.PARCEL)
 
   let estate = Estate.load(id)
 
@@ -120,7 +115,7 @@ export function handleUpdate(event: Update): void {
   let estateId = event.params._assetId.toString()
 
   let data = event.params._data.toString()
-  let id = buildId(estateId, categories.ESTATE)
+  let id = getNFTId(estateId, categories.ESTATE)
 
   let estate = new Estate(id)
   estate.rawData = data

@@ -1,8 +1,8 @@
 type Metric @entity {
   id: ID!
+  orders: Int!
   parcels: Int!
   estates: Int!
-  orders: Int!
   wearables_halloween_2019: Int!
   wearables_exclusive_masks: Int!
   wearables_xmas_2019: Int!
@@ -58,6 +58,7 @@ type Data @entity {
 
 type Wearable @entity {
   id: ID!
+  owner: Wallet!
   name: String!
   description: String!
   category: String!

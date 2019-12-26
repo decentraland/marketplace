@@ -1,6 +1,6 @@
 import { Update } from '../entities/LANDRegistry/LANDRegistry'
 import { Parcel } from '../entities/schema'
-import { buildId } from '../modules/nft'
+import { getNFTId } from '../modules/nft'
 import { buildData, DataType } from '../modules/data'
 import * as categories from '../modules/category/categories'
 
@@ -8,7 +8,7 @@ export function handleUpdate(event: Update): void {
   let parcelId = event.params.assetId.toString()
   let data = event.params.data.toString()
 
-  let id = buildId(parcelId, categories.PARCEL)
+  let id = getNFTId(parcelId, categories.PARCEL)
 
   let parcel = new Parcel(id)
   parcel.rawData = data

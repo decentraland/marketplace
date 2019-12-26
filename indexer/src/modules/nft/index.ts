@@ -6,7 +6,7 @@ export function isMint(event: Transfer): boolean {
   return event.params.from.toHexString() == addresses.Null
 }
 
-export function buildId(tokenId: string, category: string): string {
+export function getNFTId(tokenId: string, category: string): string {
   return category + '-' + tokenId
 }
 
