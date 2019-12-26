@@ -7,7 +7,7 @@ import {
 import { Order, NFT } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { getCategory } from '../modules/category'
-import { buildMetricFromNFT } from '../modules/metric'
+import { buildMetricFromContractAddress } from '../modules/metric'
 import * as status from '../modules/order/status'
 import * as addresses from '../modules/contract/addresses'
 
@@ -49,7 +49,7 @@ export function handleOrderCreated(event: OrderCreated): void {
   nft.activeOrder = orderId
   nft.save()
 
-  let metric = buildMetricFromNFT(nft as NFT)
+  let metric = buildMetricFromContractAddress(addresses.Marketplace)
   metric.save()
 }
 

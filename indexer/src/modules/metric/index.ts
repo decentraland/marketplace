@@ -20,8 +20,14 @@ export function buildMetric(): Metric {
 }
 
 export function buildMetricFromNFT(nft: NFT): Metric {
-  let metric = buildMetric()
   let contractAddress = nft.contractAddress.toHexString()
+  return buildMetricFromContractAddress(contractAddress)
+}
+
+export function buildMetricFromContractAddress(
+  contractAddress: string
+): Metric {
+  let metric = buildMetric()
 
   if (contractAddress == addresses.Marketplace) {
     metric.orders += 1
