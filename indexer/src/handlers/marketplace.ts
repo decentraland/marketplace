@@ -3,11 +3,13 @@ import {
   OrderCreated,
   OrderSuccessful,
   OrderCancelled
-} from '../types/Marketplace/Marketplace'
-import { Order, NFT } from '../types/schema'
+} from '../entities/Marketplace/Marketplace'
+import { Order, NFT } from '../entities/schema'
 import { buildId } from '../modules/nft'
 import { getCategory } from '../modules/category'
+import { upsertMetric } from '../modules/metric'
 import * as status from '../modules/order/status'
+import * as addresses from '../modules/contract/addresses'
 
 export function handleOrderCreated(event: OrderCreated): void {
   let category = getCategory(event.params.nftAddress.toHexString())
@@ -29,7 +31,6 @@ export function handleOrderCreated(event: OrderCreated): void {
   order.save()
 
   let nft = NFT.load(nftId)
-
   if (nft == null) {
     log.error('Undefined NFT {} for order {}', [nftId, orderId])
     throw new Error('Undefined NFT')
@@ -47,6 +48,8 @@ export function handleOrderCreated(event: OrderCreated): void {
 
   nft.activeOrder = orderId
   nft.save()
+
+  upsertMetric(addresses.Marketplace)
 }
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
@@ -63,7 +66,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
   order.save()
 
   let nft = new NFT(nftId)
-  nft.owner = event.params.buyer
+  nft.owner = event.params.buyer.toHex()
   nft.activeOrder = null
   nft.save()
 }

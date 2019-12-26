@@ -1,9 +1,11 @@
 type Metric @entity {
   id: ID!
-  parcel: Int!
-  estate: Int!
-  wearable_halloween_2019: Int!
-  wearable_exclusive_masks: Int!
+  parcels: Int!
+  estates: Int!
+  orders: Int!
+  wearables_halloween_2019: Int!
+  wearables_exclusive_masks: Int!
+  wearables_xmas_2019: Int!
 }
 
 type Order @entity {
@@ -22,21 +24,82 @@ type Order @entity {
   updatedAt: BigInt!
 }
 
-# TODO: createdAt/updatedAt
-# TODO: custom data for each type of NFT or metadata prop
+# aka LAND
+type Parcel @entity {
+  id: ID!
+  tokenId: BigInt!
+  owner: Wallet!
+  x: BigInt!
+  y: BigInt!
+  estate: Estate
+  data: Data
+  rawData: String
+  operator: Bytes
+  updateOperator: Bytes
+}
+
+type Estate @entity {
+  id: ID!
+  tokenId: BigInt!
+  owner: Wallet!
+  parcels: [Parcel!]
+  size: Int
+  data: Data
+  rawData: String
+  operator: Bytes
+  updateOperator: Bytes
+}
+
+type Data @entity {
+  id: ID!
+  parcel: Parcel
+  estate: Estate
+  version: String!
+  name: String
+  description: String
+  ipns: String
+}
+
+type Wearable @entity {
+  id: ID!
+  name: String!
+  description: String!
+  category: String!
+  rarity: String!
+}
+
 type NFT @entity {
   id: ID!
   tokenId: BigInt!
   contractAddress: Bytes!
   category: Category!
-  owner: Bytes!
+  owner: Wallet!
   tokenURI: String
 
   orders: [Order!] @derivedFrom(field: "nft") # History of all orders. should only ever be ONE open order. all others must be closed or sold
   activeOrder: Order
+
+  parcel: Parcel
+  estate: Estate
+  wearable: Wearable
+  createdAt: BigInt!
+  updatedAt: BigInt!
 }
 
-# TODO: User entity?
+type Authorization @entity {
+  id: ID!
+  type: String!
+  tokenAddress: Bytes!
+  owner: Wallet!
+  operator: Bytes!
+}
+
+type Wallet @entity {
+  id: ID! # ETH addr
+  nfts: [NFT!] @derivedFrom(field: "owner")
+  authorizations: [Authorization!] @derivedFrom(field: "owner")
+  mana: BigInt # Amount of mana owned
+}
 
 enum Category @entity {
   parcel

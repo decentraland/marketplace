@@ -11,7 +11,8 @@ export function getCategory(contractAddress: string): string {
     category = categories.ESTATE
   } else if (
     contractAddress == addresses.ERC721Collection_exclusive_masks ||
-    contractAddress == addresses.ERC721Collection_halloween_2019
+    contractAddress == addresses.ERC721Collection_halloween_2019 ||
+    contractAddress == addresses.ERC721Collection_xmas_2019
   ) {
     category = categories.WEARABLE
   } else {
