@@ -22,10 +22,16 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     exclusive_masks,
     xmas_2019
   ]
+  let collectionNames: string[] = [
+    'halloween_2019',
+    'exclusive_masks',
+    'xmas_2019'
+  ]
   for (let i = 1; i < allCollections.length; i++) {
     let wearable = findWearable(wearableId, allCollections[i])
     if (wearable.id == wearableId) {
       wearable.id = nft.id
+      wearable.collection = collectionNames[i]
       wearable.owner = nft.owner
       return wearable
     }
