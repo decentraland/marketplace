@@ -4,6 +4,7 @@ import { routerMiddleware } from 'connected-react-router'
 import { createLogger } from 'redux-logger'
 import { createStorageMiddleware } from 'decentraland-dapps/dist/modules/storage/middleware'
 import { storageReducerWrapper } from 'decentraland-dapps/dist/modules/storage/reducer'
+import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/transaction/middleware'
 
 import { createRootReducer } from './reducer'
 import { rootSaga } from './sagas'
@@ -21,6 +22,7 @@ const loggerMiddleware = createLogger({
   collapsed: () => true,
   predicate: (_: any, action) => isDev || action.type.includes('Failure')
 })
+const transactionMiddleware = createTransactionMiddleware()
 const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
   storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
   paths: [], // array of paths from state to be persisted (optional)
@@ -32,6 +34,7 @@ const middleware = applyMiddleware(
   sagasMiddleware,
   routerMiddleware(history),
   loggerMiddleware,
+  transactionMiddleware,
   storageMiddleware
 )
 const enhancer = composeEnhancers(middleware)

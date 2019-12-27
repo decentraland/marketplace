@@ -1,0 +1,20 @@
+.TestPage .ui.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.TestPage input {
+  margin-bottom: 20px;
+}
+
+.TestPage button {
+  width: 100px;
+}
+
+.TestPage header {
+  margin-top: 20px;
+  margin-bottom: 12px;
+  font-size: 20px;
+}

@@ -4,6 +4,7 @@ import { AtlasPage } from '../AtlasPage'
 import { locations } from '../../modules/routing/locations'
 import { MarketPage } from '../MarketPage'
 import { AddressPage } from '../AddressPage'
+import { TestPage } from '../TestPage'
 
 export default class Routes extends React.PureComponent {
   render() {
@@ -17,6 +18,9 @@ export default class Routes extends React.PureComponent {
         </Route>
         <Route exact path={locations.address(':address')}>
           <AddressPage />
+        </Route>
+        <Route exact path={'/test'}>
+          <TestPage />
         </Route>
         {/* TODO: The following redirect shoud be changed once we have a HomePage */}
         <Redirect to={locations.atlas()} />
