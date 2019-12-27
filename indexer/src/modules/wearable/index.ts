@@ -38,12 +38,23 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
   return new WearableEntity('')
 }
 
+export function getWearableImage(wearable: WearableEntity): String {
+  return (
+    'http://wearable-api.decentraland.org/v2/collections/' +
+    wearable.collection +
+    '/wearables/' +
+    wearable.representationId +
+    '/image'
+  )
+}
+
 function findWearable(id: string, collection: Wearable[]): WearableEntity {
   for (let i = 1; i < collection.length; i++) {
     let representation = collection[i]
     if (id == representation.id) {
       // TODO: representation.toEntity()
       let wearable = new WearableEntity(id)
+      wearable.representationId = representation.id
       wearable.name = representation.name
       wearable.description = representation.description
       wearable.category = representation.category

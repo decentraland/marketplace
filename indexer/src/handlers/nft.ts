@@ -2,10 +2,10 @@ import { Transfer } from '../entities/templates/ERC721/ERC721'
 import { NFT } from '../entities/schema'
 import { isMint, getNFTId, getTokenURI } from '../modules/nft'
 import { getCategory } from '../modules/category'
-import { buildEstateFromNFT } from '../modules/estate'
+import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
 import { buildMetricFromNFT } from '../modules/metric'
-import { buildParcelFromNFT } from '../modules/parcel'
-import { buildWearableFromNFT } from '../modules/wearable'
+import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
+import { buildWearableFromNFT, getWearableImage } from '../modules/wearable'
 import { createWallet } from '../modules/wallet'
 import * as addresses from '../modules/contract/addresses'
 import * as categories from '../modules/category/categories'
@@ -36,15 +36,19 @@ export function handleTransfer(event: Transfer): void {
     let parcel = buildParcelFromNFT(nft)
     parcel.save()
     nft.parcel = id
+    nft.image = getParcelImage(parcel)
   } else if (category == categories.ESTATE) {
     let estate = buildEstateFromNFT(nft)
     estate.save()
     nft.estate = id
+    nft.image = getEstateImage(estate)
   } else if (category == categories.WEARABLE) {
     let wearable = buildWearableFromNFT(nft)
     if (wearable.id != '') {
       wearable.save()
       nft.wearable = id
+      nft.name = wearable.name
+      nft.image = getWearableImage(wearable)
     }
   }
 
