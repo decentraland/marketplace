@@ -1,0 +1,71 @@
+# /marketplace `All Assets`
+query MarketOrders($first: Int = 6, $skip: Int = 0) {
+  orders(where: { status: 'open' }, first: $first, skip: $skip, orderBy: createdAt, orderDirection: desc) {
+    ...ordersFields
+  }
+}
+
+# /marketplace `Parcel/Estate/Wearable`
+query MarketOrdersByCategory($category: Category!, $first: Int = 6, $skip: Int = 0) {
+  orders(where: { status: 'open', category: $category }, first: $first, skip: $skip, orderBy: createdAt, orderDirection: desc) {
+    ...ordersFields
+  }
+}
+
+# TODO: /marketplace Wearable category
+
+# /address `All Assets`
+query AddressNFTs($owner: String!, $first: Int = 6, $skip: Int = 0) {
+  nfts(where: { owner: $owner }, first: $first, skip: $skip, orderBy: createdAt, orderDirection: desc) {
+    ...nftsFields
+  }
+}
+
+# /address `Parcel/Estate/Wearable`
+query AddressNFTsByCategory($owner: String!, $category: Category!, $first: Int = 6, $skip: Int = 0) {
+  nfts(where: { owner: $owner, category: $category }, first: $first, skip: $skip, orderBy: createdAt, orderDirection: desc) {
+    ...nftsFields
+  }
+}
+
+# /nft
+query NFTDetail($owner: String!, $category: Category!, $first: Int = 6, $skip: Int = 0) {
+  nfts(where: { owner: $owner, category: $category }, first: $first, skip: $skip, orderBy: createdAt, orderDirection: desc) {
+    ...nftsFields
+  }
+}
+
+fragment ordersFields on Order {
+  nft {
+    ...nftsFields
+  }
+  category
+  nftAddress
+  owner
+  buyer
+  price
+  status
+  expiresAt
+  # createdAt
+  # updatedAt
+  # txHash
+  # blockNumber
+}
+
+fragment nftsFields on NFT {
+  name
+  description
+  image
+  parcel {
+    x
+    y
+  }
+  estate {
+    size
+  }
+  wearable {
+    description
+    category
+    rarity
+  }
+}
