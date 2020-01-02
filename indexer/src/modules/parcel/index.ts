@@ -21,3 +21,13 @@ export function decodeTokenId(assetId: BigInt): BigInt[] {
   let coordinate = registry.decodeTokenId(assetId)
   return [coordinate.value0, coordinate.value1]
 }
+
+export function getParcelImage(parcel: Parcel): String {
+  return (
+    'https://api.decentraland.org/v1/parcels/' +
+    parcel.x.toString() +
+    '/' +
+    parcel.y.toString() +
+    '/map.png'
+  )
+}

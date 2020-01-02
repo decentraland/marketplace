@@ -1,5 +1,5 @@
 import { Update } from '../entities/LANDRegistry/LANDRegistry'
-import { Parcel } from '../entities/schema'
+import { Parcel, NFT } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { buildData, DataType } from '../modules/data'
 import * as categories from '../modules/category/categories'
@@ -17,6 +17,10 @@ export function handleUpdate(event: Update): void {
   if (parcelData != null) {
     parcel.data = id
     parcelData.save()
+
+    let nft = new NFT(id)
+    nft.name = parcelData.name
+    nft.save()
   }
 
   parcel.save()

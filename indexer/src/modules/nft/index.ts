@@ -1,6 +1,8 @@
 import { log } from '@graphprotocol/graph-ts'
+import { NFT } from '../../entities/schema'
 import { ERC721, Transfer } from '../../entities/templates/ERC721/ERC721'
 import * as addresses from '../contract/addresses'
+import * as categories from '../category/categories'
 
 export function isMint(event: Transfer): boolean {
   return event.params.from.toHexString() == addresses.Null

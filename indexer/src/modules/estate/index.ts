@@ -10,3 +10,11 @@ export function buildEstateFromNFT(nft: NFT): Estate {
 
   return estate
 }
+
+export function getEstateImage(estate: Estate): String {
+  return (
+    'https://api.decentraland.org/v1/estates/' +
+    estate.id.toString() +
+    '/map.png'
+  )
+}

@@ -59,6 +59,8 @@ type Data @entity {
 type Wearable @entity {
   id: ID!
   owner: Wallet!
+  representationId: String!
+  collection: String!
   name: String!
   description: String!
   category: String!
@@ -73,8 +75,11 @@ type NFT @entity {
   owner: Wallet!
   tokenURI: String
 
-  orders: [Order!] @derivedFrom(field: "nft") # History of all orders. should only ever be ONE open order. all others must be closed or sold
+  orders: [Order!] @derivedFrom(field: "nft") # History of all orders. should only ever be ONE open order. all others must be cancelled or sold
   activeOrder: Order
+
+  name: String
+  image: String
 
   parcel: Parcel
   estate: Estate

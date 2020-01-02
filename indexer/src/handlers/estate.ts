@@ -29,6 +29,10 @@ export function handleCreateEstate(event: CreateEstate): void {
   if (estateData != null) {
     estate.data = id
     estateData.save()
+
+    let nft = new NFT(id)
+    nft.name = estateData.name
+    nft.save()
   }
 
   estate.save()
@@ -112,6 +116,7 @@ export function handleRemoveLand(event: RemoveLand): void {
 }
 
 export function handleUpdate(event: Update): void {
+  // TODO: Code really similar to handleCreateEstate
   let estateId = event.params._assetId.toString()
 
   let data = event.params._data.toString()
@@ -124,6 +129,10 @@ export function handleUpdate(event: Update): void {
   if (estateData != null) {
     estate.data = id
     estateData.save()
+
+    let nft = new NFT(id)
+    nft.name = estateData.name
+    nft.save()
   }
 
   estate.save()
