@@ -8,6 +8,12 @@ type Metric @entity {
   wearables_xmas_2019: Int!
 }
 
+# ---------------------------------------------------------
+# Orders --------------------------------------------------
+# ---------------------------------------------------------
+
+# thegraph doesn't support nested property searches, so we're doing promoting properties
+# we need from each NFT type to the Order, in order to search for them, prefixing them with search_[nft]_[prop]
 type Order @entity {
   id: ID!
   category: Category!
@@ -22,7 +28,19 @@ type Order @entity {
   expiresAt: BigInt!
   createdAt: BigInt!
   updatedAt: BigInt!
+
+  # search indexes
+  search_wearable_subcategory: WearableCategory
+  search_wearable_bodyShape: WearableBodyShape
+  search_wearable_rarity: WearableRarity
+
+  search_parcel_x: BigInt
+  search_parcel_y: BigInt
 }
+
+# ---------------------------------------------------------
+# NFTs ----------------------------------------------------
+# ---------------------------------------------------------
 
 # aka LAND
 type Parcel @entity {
@@ -63,8 +81,9 @@ type Wearable @entity {
   collection: String!
   name: String!
   description: String!
-  category: String!
-  rarity: String!
+  category: WearableCategory!
+  bodyShape: WearableBodyShape!
+  rarity: WearableRarity!
 }
 
 type NFT @entity {
@@ -88,11 +107,19 @@ type NFT @entity {
   updatedAt: BigInt!
 }
 
+# ---------------------------------------------------------
+# Wallet (user) -------------------------------------------
+# ---------------------------------------------------------
+
 type Wallet @entity {
   id: ID! # ETH addr
   nfts: [NFT!] @derivedFrom(field: "owner")
   mana: BigInt # Amount of mana owned
 }
+
+# ---------------------------------------------------------
+# Enums ---------------------------------------------------
+# ---------------------------------------------------------
 
 enum Category @entity {
   parcel
@@ -104,4 +131,31 @@ enum OrderStatus @entity {
   open
   sold
   cancelled
+}
+
+enum WearableCategory @entity {
+  mask
+  earring
+  eyewear
+  feet
+  hair
+  hat
+  helmet
+  facial_hair
+  upper_body
+  top_head
+  lower_body
+}
+
+enum WearableRarity @entity {
+  unique
+  mythic
+  legendary
+  epic
+  swanky
+}
+
+enum WearableBodyShape @entity {
+  BaseFemale
+  BaseMale
 }

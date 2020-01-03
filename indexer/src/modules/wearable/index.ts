@@ -27,7 +27,7 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     'exclusive_masks',
     'xmas_2019'
   ]
-  for (let i = 1; i < allCollections.length; i++) {
+  for (let i = 0; i < allCollections.length; i++) {
     let wearable = findWearable(wearableId, allCollections[i])
     if (wearable.id == wearableId) {
       wearable.id = nft.id
@@ -55,7 +55,7 @@ export function getWearableImage(wearable: WearableEntity): String {
 }
 
 function findWearable(id: string, collection: Wearable[]): WearableEntity {
-  for (let i = 1; i < collection.length; i++) {
+  for (let i = 0; i < collection.length; i++) {
     let representation = collection[i]
     if (id == representation.id) {
       // TODO: representation.toEntity()

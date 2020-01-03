@@ -4,17 +4,24 @@ import {
   OrderSuccessful,
   OrderCancelled
 } from '../entities/Marketplace/Marketplace'
-import { Order, NFT } from '../entities/schema'
+import { Order, NFT, Parcel, Wearable } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildMetricFromContractAddress } from '../modules/metric'
 import * as status from '../modules/order/status'
 import * as addresses from '../modules/contract/addresses'
+import * as categories from '../modules/category/categories'
 
 export function handleOrderCreated(event: OrderCreated): void {
   let category = getCategory(event.params.nftAddress.toHexString())
   let nftId = getNFTId(event.params.assetId.toString(), category)
   let orderId = event.params.id.toHex()
+
+  let nft = NFT.load(nftId)
+  if (nft == null) {
+    log.error('Undefined NFT {} for order {}', [nftId, orderId])
+    throw new Error('Undefined NFT')
+  }
 
   let order = new Order(orderId)
   order.status = status.OPEN
@@ -28,13 +35,21 @@ export function handleOrderCreated(event: OrderCreated): void {
   order.blockNumber = event.block.number
   order.createdAt = event.block.timestamp
   order.updatedAt = event.block.timestamp
-  order.save()
 
-  let nft = NFT.load(nftId)
-  if (nft == null) {
-    log.error('Undefined NFT {} for order {}', [nftId, orderId])
-    throw new Error('Undefined NFT')
+  if (category == categories.PARCEL) {
+    let parcel = Parcel.load(nft.parcel)
+
+    order.search_parcel_x = parcel.x
+    order.search_parcel_y = parcel.y
+  } else if (category == categories.WEARABLE) {
+    let wearable = Wearable.load(nft.wearable)
+
+    order.search_wearable_subcategory = wearable.category
+    order.search_wearable_bodyShape = wearable.bodyShape
+    order.search_wearable_rarity = wearable.rarity
   }
+
+  order.save()
 
   let oldOrder = Order.load(nft.activeOrder)
   if (oldOrder != null) {

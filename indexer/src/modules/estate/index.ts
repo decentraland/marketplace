@@ -14,7 +14,7 @@ export function buildEstateFromNFT(nft: NFT): Estate {
 export function getEstateImage(estate: Estate): String {
   return (
     'https://api.decentraland.org/v1/estates/' +
-    estate.id.toString() +
+    estate.tokenId.toString() +
     '/map.png'
   )
 }
