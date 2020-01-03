@@ -8,17 +8,17 @@ import { Navigation } from '../Navigation'
 let tiles: Record<string, AtlasTile>
 Atlas.fetchTiles().then(_tiles => (tiles = _tiles))
 
-export default class AtlasPage extends React.PureComponent {
-  render() {
-    return (
-      <>
-        <Navbar isFullscreen activePage="marketplace" />
-        <Navigation isFullscreen activeTab="atlas" />
-        <Page isFullscreen>
-          <Atlas tiles={tiles} />
-        </Page>
-        <Footer isFullscreen />
-      </>
-    )
-  }
+const AtlasPage = () => {
+  return (
+    <>
+      <Navbar isFullscreen activePage="marketplace" />
+      <Navigation isFullscreen activeTab="atlas" />
+      <Page isFullscreen>
+        <Atlas tiles={tiles} />
+      </Page>
+      <Footer isFullscreen />
+    </>
+  )
 }
+
+export default React.memo(AtlasPage)
