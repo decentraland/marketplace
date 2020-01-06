@@ -1,11 +1,26 @@
-type Metric @entity {
+# ---------------------------------------------------------
+# Counts --------------------------------------------------
+# ---------------------------------------------------------
+
+# thegraph doesn't support count operations, but we need them to paginate results
+# This entity is a workaround to this issue, but it's still not enough, as we'd need counts for more complex queries
+# Keep in mind, orders asume OrderStatus = Open
+type Count @entity {
   id: ID!
-  orders: Int!
-  parcels: Int!
-  estates: Int!
-  wearables_halloween_2019: Int!
-  wearables_exclusive_masks: Int!
-  wearables_xmas_2019: Int!
+
+  order_total: Int!
+  order_parcel: Int!
+  order_estate: Int!
+  order_wearable: Int!
+
+  parcel_total: Int!
+
+  estate_total: Int!
+
+  wearable_total: Int!
+  wearable_halloween_2019: Int!
+  wearable_exclusive_masks: Int!
+  wearable_xmas_2019: Int!
 }
 
 # ---------------------------------------------------------
@@ -30,12 +45,14 @@ type Order @entity {
   updatedAt: BigInt!
 
   # search indexes
-  search_wearable_subcategory: WearableCategory
-  search_wearable_bodyShape: WearableBodyShape
-  search_wearable_rarity: WearableRarity
-
   search_parcel_x: BigInt
   search_parcel_y: BigInt
+
+  search_estate_size: Int
+
+  search_wearable_category: WearableCategory
+  search_wearable_rarity: WearableRarity
+  search_wearable_bodyShapes: [WearableBodyShape!]
 }
 
 # ---------------------------------------------------------
@@ -82,8 +99,8 @@ type Wearable @entity {
   name: String!
   description: String!
   category: WearableCategory!
-  bodyShape: WearableBodyShape!
   rarity: WearableRarity!
+  bodyShapes: [WearableBodyShape!]
 }
 
 type NFT @entity {

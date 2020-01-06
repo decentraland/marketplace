@@ -3,7 +3,7 @@ import { NFT } from '../entities/schema'
 import { isMint, getNFTId, getTokenURI } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
-import { buildMetricFromNFT } from '../modules/metric'
+import { buildCountFromNFT } from '../modules/count'
 import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
 import { buildWearableFromNFT, getWearableImage } from '../modules/wearable'
 import { createWallet } from '../modules/wallet'
@@ -53,7 +53,7 @@ export function handleTransfer(event: Transfer): void {
   }
 
   if (isMint(event)) {
-    let metric = buildMetricFromNFT(nft)
+    let metric = buildCountFromNFT(nft)
     metric.save()
     nft.createdAt = event.block.timestamp
   }

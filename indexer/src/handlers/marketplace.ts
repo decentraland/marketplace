@@ -4,10 +4,10 @@ import {
   OrderSuccessful,
   OrderCancelled
 } from '../entities/Marketplace/Marketplace'
-import { Order, NFT, Parcel, Wearable } from '../entities/schema'
+import { Order, NFT, Parcel, Wearable, Estate } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { getCategory } from '../modules/category'
-import { buildMetricFromContractAddress } from '../modules/metric'
+import { buildCountFromNFT } from '../modules/count'
 import * as status from '../modules/order/status'
 import * as addresses from '../modules/contract/addresses'
 import * as categories from '../modules/category/categories'
@@ -41,11 +41,15 @@ export function handleOrderCreated(event: OrderCreated): void {
 
     order.search_parcel_x = parcel.x
     order.search_parcel_y = parcel.y
+  } else if (category == categories.ESTATE) {
+    let estate = Estate.load(nft.estate)
+
+    order.search_estate_size = estate.size
   } else if (category == categories.WEARABLE) {
     let wearable = Wearable.load(nft.wearable)
 
-    order.search_wearable_subcategory = wearable.category
-    order.search_wearable_bodyShape = wearable.bodyShape
+    order.search_wearable_category = wearable.category
+    order.search_wearable_bodyShapes = wearable.bodyShapes
     order.search_wearable_rarity = wearable.rarity
   }
 
@@ -64,8 +68,8 @@ export function handleOrderCreated(event: OrderCreated): void {
   nft.activeOrder = orderId
   nft.save()
 
-  let metric = buildMetricFromContractAddress(addresses.Marketplace)
-  metric.save()
+  let count = buildCountFromNFT(nft as NFT)
+  count.save()
 }
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
