@@ -65,6 +65,7 @@ function findWearable(id: string, collection: Wearable[]): WearableEntity {
       wearable.description = representation.description
       wearable.category = representation.category
       wearable.rarity = representation.rarity
+      wearable.bodyShapes = representation.bodyShapes
       return wearable
     }
   }
@@ -73,12 +74,15 @@ function findWearable(id: string, collection: Wearable[]): WearableEntity {
 }
 
 function getWearableIdFromTokenURI(tokenURI: string): string {
-  // https://wearable-api.decentraland.org/v2/standards/erc721-metadata/collections/halloween_2019/wearables/funny_skull_mask/1
   let splitted = tokenURI.split('/')
-  if (splitted.length != 11) {
-    return ''
+
+  // https://wearable-api.decentraland.org/v2/standards/erc721-metadata/collections/halloween_2019/wearables/funny_skull_mask/1
+  // or
+  // dcl://halloween_2019/vampire_feet/55
+  if (splitted.length == 11 || splitted.length == 5) {
+    let ids = splitted.slice(-2)
+    return ids[0]
   }
 
-  let ids = splitted.slice(-2)
-  return ids[0]
+  return ''
 }
