@@ -11,7 +11,9 @@
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.16.0",
-    "@graphprotocol/graph-ts": "^0.16.0"
+    "@graphprotocol/graph-ts": "^0.16.0",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
