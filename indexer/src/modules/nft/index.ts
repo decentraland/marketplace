@@ -1,6 +1,6 @@
 import { log } from '@graphprotocol/graph-ts'
 import { ERC721, Transfer } from '../../entities/templates/ERC721/ERC721'
-import * as addresses from '../contract/addresses'
+import * as addresses from '../../data/addresses'
 
 export function isMint(event: Transfer): boolean {
   return event.params.from.toHexString() == addresses.Null

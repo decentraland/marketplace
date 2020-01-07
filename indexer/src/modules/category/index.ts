@@ -1,6 +1,6 @@
 import { log } from '@graphprotocol/graph-ts'
-import * as addresses from '../contract/addresses'
 import * as categories from './categories'
+import * as addresses from '../../data/addresses'
 
 export function getCategory(contractAddress: string): string {
   let category = ''

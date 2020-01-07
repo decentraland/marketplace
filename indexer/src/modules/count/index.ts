@@ -1,5 +1,5 @@
 import { NFT, Count } from '../../entities/schema'
-import * as addresses from '../contract/addresses'
+import * as addresses from '../../data/addresses'
 import * as categories from '../category/categories'
 
 export const DEFAULT_ID = 'all'
