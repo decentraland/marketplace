@@ -6,7 +6,8 @@
     "deploy-local": "graph deploy decentraland/marketplace --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "codegen": "graph codegen --debug --output-dir src/entities/",
     "build": "graph build",
-    "deploy": "ts-node ./scripts/deploy"
+    "build-data": "ts-node ./scripts/buildData.ts",
+    "deploy": "ts-node ./scripts/deploy.ts"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.16.0",

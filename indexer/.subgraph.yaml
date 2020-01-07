@@ -5,50 +5,30 @@ schema:
   file: ./schema.graphql
 dataSources:
   # ---------------------------------------------------------
-  # CROWDSALE (Finalize) ------------------------------------
-  # ---------------------------------------------------------
-  - name: MANACrowdsale
-    kind: ethereum/contract
-    network: {{network}}
-    source:
-      address: '{{MANACrowdsale}}'
-      abi: MANACrowdsale
-      startBlock: {{MANACrowdsale_startBlock}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/handlers/manaCrowdsale.ts
-      entities:
-        - ERC721
-      abis:
-        - name: MANACrowdsale
-          file: ./abis/MANACrowdsale.json
-      eventHandlers:
-        - event: Finalized()
-          handler: handleFinalized
-
-  # ---------------------------------------------------------
   # PARCELS -------------------------------------------------
   # ---------------------------------------------------------
   - kind: ethereum/contract
     name: LANDRegistry
     network: {{network}}
     source:
-      address: '{{LANDRegistry}}'
+      address: '{{address:LANDRegistry}}'
       abi: LANDRegistry
-      startBlock: {{LANDRegistry_startBlock}}
+      startBlock: {{startBlock:LANDRegistry}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
       file: ./src/handlers/parcel.ts
       entities:
+        - ERC721
         - Parcel
         - Data
       abis:
         - name: LANDRegistry
           file: ./abis/LANDRegistry.json
+      callHandlers:
+        - function: initialize(bytes)
+          handler: handleInitialize
       eventHandlers:
         - event: Update(indexed uint256,indexed address,indexed address,string)
           handler: handleUpdate
@@ -60,9 +40,9 @@ dataSources:
     name: EstateRegistry
     network: {{network}}
     source:
-      address: '{{EstateRegistry}}'
+      address: '{{address:EstateRegistry}}'
       abi: EstateRegistry
-      startBlock: {{EstateRegistry_startBlock}}
+      startBlock: {{startBlock:EstateRegistry}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -92,9 +72,9 @@ dataSources:
   #   name: MANAToken
   #   network: {{network}}
   #   source:
-  #     address: '{{MANAToken}}'
+  #     address: '{{address:MANAToken}}'
   #     abi: MANAToken
-  #     startBlock: {{MANAToken_startBlock}}
+  #     startBlock: {{startBlock:MANAToken}}
   #   mapping:
   #     kind: ethereum/events
   #     apiVersion: 0.0.3
@@ -106,10 +86,10 @@ dataSources:
   #       - name: MANAToken
   #         file: ./abis/MANAToken.json
   #     eventHandlers:
-  #       - event: Burn(indexed address,uint256)
-  #         handler: handleBurn
   #       - event: Mint(indexed address,uint256)
   #         handler: handleMint
+  #       - event: Burn(indexed address,uint256)
+  #         handler: handleBurn
   #       - event: Transfer(indexed address,indexed address,uint256)
   #         handler: handleTransfer
 
@@ -120,9 +100,9 @@ dataSources:
     name: Marketplace
     network: {{network}}
     source:
-      address: '{{Marketplace}}'
+      address: '{{address:Marketplace}}'
       abi: Marketplace
-      startBlock: {{Marketplace_startBlock}}
+      startBlock: {{startBlock:Marketplace}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -172,4 +152,6 @@ templates:
         - event: Transfer(indexed address,indexed address,indexed uint256,address,bytes)
           handler: handleTransfer
         - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - topic0: '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
           handler: handleTransfer
