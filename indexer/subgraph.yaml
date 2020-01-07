@@ -1,5 +1,5 @@
 specVersion: 0.0.2
-description: Gravatar for Ethereum
+description: Decentraland's Marketplace
 repository: https://github.com/decentraland/decentraland
 schema:
   file: ./schema.graphql
@@ -9,11 +9,11 @@ dataSources:
   # ---------------------------------------------------------
   - name: MANACrowdsale
     kind: ethereum/contract
-    network: mainnet
+    network: {{network}}
     source:
-      address: '0xa66d83716c7cfe425b44d0f7ef92de263468fb3d'
+      address: '{{MANACrowdsale}}'
       abi: MANACrowdsale
-      startBlock: 4162059
+      startBlock: {{MANACrowdsale_startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -33,11 +33,11 @@ dataSources:
   # ---------------------------------------------------------
   - kind: ethereum/contract
     name: LANDRegistry
-    network: mainnet
+    network: {{network}}
     source:
-      address: '0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d'
+      address: '{{LANDRegistry}}'
       abi: LANDRegistry
-      startBlock: 4944642
+      startBlock: {{LANDRegistry_startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -58,11 +58,11 @@ dataSources:
   # ---------------------------------------------------------
   - kind: ethereum/contract
     name: EstateRegistry
-    network: mainnet
+    network: {{network}}
     source:
-      address: '0x959e104e1a4db6317fa58f8295f586e1a978c297'
+      address: '{{EstateRegistry}}'
       abi: EstateRegistry
-      startBlock: 6236547
+      startBlock: {{EstateRegistry_startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -89,12 +89,12 @@ dataSources:
   # MANA ----------------------------------------------------
   # ---------------------------------------------------------
   # - kind: ethereum/contract
-  #   name: ManaToken
-  #   network: mainnet
+  #   name: MANAToken
+  #   network: {{network}}
   #   source:
-  #     address: "0x0f5d2fb29fb7d3cfee444a200298f468908cc942"
-  #     abi: ManaToken
-  #     startBlock: 4162059
+  #     address: '{{MANAToken}}'
+  #     abi: MANAToken
+  #     startBlock: {{MANAToken_startBlock}}
   #   mapping:
   #     kind: ethereum/events
   #     apiVersion: 0.0.3
@@ -103,8 +103,8 @@ dataSources:
   #     entities:
   #       - Wallet
   #     abis:
-  #       - name: ManaToken
-  #         file: ./abis/ManaToken.json
+  #       - name: MANAToken
+  #         file: ./abis/MANAToken.json
   #     eventHandlers:
   #       - event: Burn(indexed address,uint256)
   #         handler: handleBurn
@@ -118,11 +118,11 @@ dataSources:
   # ---------------------------------------------------------
   - kind: ethereum/contract
     name: Marketplace
-    network: mainnet
+    network: {{network}}
     source:
-      address: '0x8e5660b4Ab70168b5a6fEeA0e0315cb49c8Cd539'
+      address: '{{Marketplace}}'
       abi: Marketplace
-      startBlock: 6496012
+      startBlock: {{Marketplace_startBlock}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -148,7 +148,7 @@ dataSources:
 templates:
   - name: ERC721
     kind: ethereum/contract
-    network: mainnet
+    network: {{network}}
     source:
       abi: ERC721
     mapping:

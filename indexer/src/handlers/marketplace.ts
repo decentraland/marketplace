@@ -9,7 +9,6 @@ import { getNFTId } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildCountFromNFT } from '../modules/count'
 import * as status from '../modules/order/status'
-import * as addresses from '../modules/contract/addresses'
 import * as categories from '../modules/category/categories'
 
 export function handleOrderCreated(event: OrderCreated): void {

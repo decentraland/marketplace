@@ -3,14 +3,14 @@ import * as path from 'path'
 
 const prettier = require('prettier')
 
-export enum RarityId {
+enum RarityId {
   SWANKY = 'swanky',
   EPIC = 'epic',
   LENGENDARY = 'legendary',
   MYTHIC = 'mythic',
   UNIQUE = 'unique'
 }
-export type Wearable = {
+type Wearable = {
   id: string
   representations: {
     bodyShapes: string[]
@@ -34,7 +34,7 @@ export type Wearable = {
   description?: string
   issuedId?: number
 }
-export type Collection = Wearable[]
+type Collection = Wearable[]
 
 function importCollection() {
   const collection = getCollectionJson()

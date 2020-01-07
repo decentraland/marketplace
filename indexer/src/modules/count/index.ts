@@ -39,11 +39,11 @@ export function buildCountFromNFT(nft: NFT): Count {
   } else if (nft.category == categories.WEARABLE) {
     count.wearable_total += 1
 
-    if (contractAddress == addresses.ERC721Collection_halloween_2019) {
+    if (contractAddress == addresses.Halloween2019Collection) {
       count.wearable_halloween_2019 += 1
-    } else if (contractAddress == addresses.ERC721Collection_exclusive_masks) {
+    } else if (contractAddress == addresses.ExclusiveMasksCollection) {
       count.wearable_exclusive_masks += 1
-    } else if (contractAddress == addresses.ERC721Collection_xmas_2019) {
+    } else if (contractAddress == addresses.Xmas2019Collection) {
       count.wearable_xmas_2019 += 1
     }
   } else if (contractAddress == addresses.Marketplace) {
