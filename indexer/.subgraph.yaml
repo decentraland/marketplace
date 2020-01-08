@@ -1,54 +1,34 @@
 specVersion: 0.0.2
-description: Gravatar for Ethereum
+description: Decentraland's Marketplace
 repository: https://github.com/decentraland/decentraland
 schema:
   file: ./schema.graphql
 dataSources:
   # ---------------------------------------------------------
-  # CROWDSALE (Finalize) ------------------------------------
-  # ---------------------------------------------------------
-  - name: MANACrowdsale
-    kind: ethereum/contract
-    network: mainnet
-    source:
-      address: '0xa66d83716c7cfe425b44d0f7ef92de263468fb3d'
-      abi: MANACrowdsale
-      startBlock: 4162059
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/handlers/manaCrowdsale.ts
-      entities:
-        - ERC721
-      abis:
-        - name: MANACrowdsale
-          file: ./abis/MANACrowdsale.json
-      eventHandlers:
-        - event: Finalized()
-          handler: handleFinalized
-
-  # ---------------------------------------------------------
   # PARCELS -------------------------------------------------
   # ---------------------------------------------------------
   - kind: ethereum/contract
     name: LANDRegistry
-    network: mainnet
+    network: {{network}}
     source:
-      address: '0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d'
+      address: '{{address:LANDRegistry}}'
       abi: LANDRegistry
-      startBlock: 4944642
+      startBlock: {{startBlock:LANDRegistry}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
       language: wasm/assemblyscript
       file: ./src/handlers/parcel.ts
       entities:
+        - ERC721
         - Parcel
         - Data
       abis:
         - name: LANDRegistry
           file: ./abis/LANDRegistry.json
+      callHandlers:
+        - function: initialize(bytes)
+          handler: handleInitialize
       eventHandlers:
         - event: Update(indexed uint256,indexed address,indexed address,string)
           handler: handleUpdate
@@ -58,11 +38,11 @@ dataSources:
   # ---------------------------------------------------------
   - kind: ethereum/contract
     name: EstateRegistry
-    network: mainnet
+    network: {{network}}
     source:
-      address: '0x959e104e1a4db6317fa58f8295f586e1a978c297'
+      address: '{{address:EstateRegistry}}'
       abi: EstateRegistry
-      startBlock: 6236547
+      startBlock: {{startBlock:EstateRegistry}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -89,12 +69,12 @@ dataSources:
   # MANA ----------------------------------------------------
   # ---------------------------------------------------------
   # - kind: ethereum/contract
-  #   name: ManaToken
-  #   network: mainnet
+  #   name: MANAToken
+  #   network: {{network}}
   #   source:
-  #     address: "0x0f5d2fb29fb7d3cfee444a200298f468908cc942"
-  #     abi: ManaToken
-  #     startBlock: 4162059
+  #     address: '{{address:MANAToken}}'
+  #     abi: MANAToken
+  #     startBlock: {{startBlock:MANAToken}}
   #   mapping:
   #     kind: ethereum/events
   #     apiVersion: 0.0.3
@@ -103,13 +83,13 @@ dataSources:
   #     entities:
   #       - Wallet
   #     abis:
-  #       - name: ManaToken
-  #         file: ./abis/ManaToken.json
+  #       - name: MANAToken
+  #         file: ./abis/MANAToken.json
   #     eventHandlers:
-  #       - event: Burn(indexed address,uint256)
-  #         handler: handleBurn
   #       - event: Mint(indexed address,uint256)
   #         handler: handleMint
+  #       - event: Burn(indexed address,uint256)
+  #         handler: handleBurn
   #       - event: Transfer(indexed address,indexed address,uint256)
   #         handler: handleTransfer
 
@@ -118,11 +98,11 @@ dataSources:
   # ---------------------------------------------------------
   - kind: ethereum/contract
     name: Marketplace
-    network: mainnet
+    network: {{network}}
     source:
-      address: '0x8e5660b4Ab70168b5a6fEeA0e0315cb49c8Cd539'
+      address: '{{address:Marketplace}}'
       abi: Marketplace
-      startBlock: 6496012
+      startBlock: {{startBlock:Marketplace}}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.3
@@ -148,7 +128,7 @@ dataSources:
 templates:
   - name: ERC721
     kind: ethereum/contract
-    network: mainnet
+    network: {{network}}
     source:
       abi: ERC721
     mapping:
@@ -172,4 +152,6 @@ templates:
         - event: Transfer(indexed address,indexed address,indexed uint256,address,bytes)
           handler: handleTransfer
         - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

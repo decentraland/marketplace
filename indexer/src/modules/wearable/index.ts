@@ -1,10 +1,12 @@
 import { log } from '@graphprotocol/graph-ts'
 
 import { NFT, Wearable as WearableEntity } from '../../entities/schema'
-import { Wearable } from './Wearable'
-import { halloween_2019 } from './halloween_2019'
-import { exclusive_masks } from './exclusive_masks'
-import { xmas_2019 } from './xmas_2019'
+import {
+  Wearable,
+  halloween_2019,
+  exclusive_masks,
+  xmas_2019
+} from '../../data/wearables'
 
 export function buildWearableFromNFT(nft: NFT): WearableEntity {
   // https://wearable-api.decentraland.org/v2/standards/erc721-metadata/collections/halloween_2019/wearables/funny_skull_mask/1

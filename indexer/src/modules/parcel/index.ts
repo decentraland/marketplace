@@ -1,7 +1,7 @@
-import { BigInt, Address, ipfs } from '@graphprotocol/graph-ts'
+import { BigInt, Address } from '@graphprotocol/graph-ts'
 import { LANDRegistry } from '../../entities/LANDRegistry/LANDRegistry'
 import { NFT, Parcel } from '../../entities/schema'
-import * as addresses from '../contract/addresses'
+import * as addresses from '../../data/addresses'
 
 export function buildParcelFromNFT(nft: NFT): Parcel {
   let parcel = new Parcel(nft.id)

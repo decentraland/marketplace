@@ -66,7 +66,9 @@ typings/
 # Built files
 dist
 
-# Indexer
+# Indexer generated data
 indexer/build
 indexer/src/entities
+indexer/addresses.ts
+indexer/subgraph.yaml
 

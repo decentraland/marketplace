@@ -7,8 +7,8 @@ import { buildCountFromNFT } from '../modules/count'
 import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
 import { buildWearableFromNFT, getWearableImage } from '../modules/wearable'
 import { createWallet } from '../modules/wallet'
-import * as addresses from '../modules/contract/addresses'
 import * as categories from '../modules/category/categories'
+import * as addresses from '../data/addresses'
 
 export function handleTransfer(event: Transfer): void {
   if (event.params.tokenId.toString() == '') {
