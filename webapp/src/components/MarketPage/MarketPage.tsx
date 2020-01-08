@@ -8,7 +8,8 @@ import {
   Dropdown,
   DropdownProps,
   Pagination,
-  PaginationProps
+  PaginationProps,
+  Loader
 } from 'decentraland-ui'
 
 import { Navigation } from '../Navigation'
@@ -77,7 +78,7 @@ const MarketPage = (props: Props) => {
   }, [page, section, sortBy, onFetchOrders])
 
   const handleDropdownChange = useCallback(
-    (event: React.SyntheticEvent, props: DropdownProps) => {
+    (_: React.SyntheticEvent, props: DropdownProps) => {
       onNavigate(
         locations.market({
           page: 1,
@@ -90,7 +91,8 @@ const MarketPage = (props: Props) => {
   )
 
   const handlePaginationChange = useCallback(
-    (event: React.SyntheticEvent, props: PaginationProps) => {
+    (_: React.SyntheticEvent, props: PaginationProps) => {
+      window.scrollTo(0, 0)
       onNavigate(
         locations.market({
           page: +props.activePage!,
@@ -182,13 +184,19 @@ const MarketPage = (props: Props) => {
                   { value: MarketSortBy.CHEAPEST, text: 'Cheapest' }
                 ]}
                 onChange={handleDropdownChange}
-              ></Dropdown>
+              />
             </HeaderMenu.Right>
           </HeaderMenu>
           <Card.Group>
             {orders.map(order => (
               <OrderCard key={order.id} order={order} />
             ))}
+            {orders.length === 0 || isLoading ? (
+              <>
+                <div className="overlay" />
+                <Loader size="massive" active />
+              </>
+            ) : null}
           </Card.Group>
           <Pagination
             activePage={page}

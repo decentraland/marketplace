@@ -11,15 +11,7 @@ const OrderCard = (props: Props) => {
   const { order } = props
   return (
     <Card className="OrderCard" link>
-      <Image
-        src={
-          order.category === 'estate'
-            ? order.nft.image.replace('estate-', '')
-            : order.nft.image
-        }
-        wrapped
-        ui={false}
-      />
+      <Image src={order.nft.image} wrapped ui={false} />
       <Card.Content>
         <Card.Header>
           <div className="title">

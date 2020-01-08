@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
-import { push, CallHistoryMethodAction } from 'connected-react-router'
-import { Order, OrderCategory } from '../../modules/order/types'
+import { CallHistoryMethodAction } from 'connected-react-router'
+import { Order } from '../../modules/order/types'
 import {
   fetchOrdersRequest,
   FetchOrdersRequestAction

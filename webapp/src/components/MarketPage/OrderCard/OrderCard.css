@@ -28,3 +28,8 @@
 .ui.card.link:hover .meta {
   color: var(--secondary-text);
 }
+
+.OrderCard .image {
+  min-height: 241px;
+  min-width: 100%;
+}
