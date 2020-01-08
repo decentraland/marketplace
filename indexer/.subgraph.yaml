@@ -153,5 +153,5 @@ templates:
           handler: handleTransfer
         - event: Transfer(indexed address,indexed address,indexed uint256)
           handler: handleTransfer
-        - topic0: '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+        - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
