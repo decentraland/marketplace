@@ -40,72 +40,130 @@ const contractNameToProxy: Record<string, ContractName> = {
 // TODO: Handle ctrl+C
 async function build() {
   const network = getNetwork()
-  const contractsByNetwork: ContractsResponse = await fetch(
-    'https://contracts.decentraland.org/addresses.json'
-  )
-  const contractAddresses = contractsByNetwork[network]
-  const startBlocks = startBlockByNetwork[network]
-
   const basePath = path.resolve(__dirname, '../')
-  const addressesPath = path.resolve(basePath, './src/data')
 
-  const addressesFile = await readFile(`${addressesPath}/.addresses.ts`)
-  const subgraphFile = await readFile(`${basePath}/.subgraph.yaml`)
+  const ethereum = new Ethereum(network)
+  await ethereum.fetchContracts()
 
-  try {
-    const addressesToReplace = addressesFile.match(/{{address\:[a-zA-Z0-9]+}}/g)
+  const template = new TemplateFile(ethereum)
 
-    let newAddressesFile = addressesFile
-    for (const match of addressesToReplace) {
-      // Example: {{address:LANDRegistry}}
-      const [_, contractName] = match.replace(/{|}/g, '').split(':')
-      const finalContractName =
-        contractNameToProxy[contractName] || contractName
-      const address =
-        contractAddresses[finalContractName] ||
-        '0x0000000000000000000000000000000000000000'
-      newAddressesFile = newAddressesFile.replace(match, address)
+  await Promise.all([
+    template.write(
+      `${basePath}/src/data/.addresses.ts`,
+      `${basePath}/src/data/addresses.ts`
+    ),
+    template.write(`${basePath}/.subgraph.yaml`, `${basePath}/subgraph.yaml`)
+  ])
+}
+
+// ------------------------------------------------------------------
+// Parser -----------------------------------------------------------
+
+class TemplateFile {
+  constructor(public ethereum: Ethereum) {}
+
+  async write(src: string, destination: string) {
+    const contents = await readFile(src)
+
+    try {
+      const newContents = new Parser(contents, this.ethereum).parse()
+
+      await writeFile(destination, newContents)
+    } catch (error) {
+      await deleteFile(destination)
+      throw error
     }
+  }
+}
 
-    await writeFile(`${addressesPath}/addresses.ts`, newAddressesFile)
+class Ethereum {
+  network: Network
 
-    // ============================================================
+  contractAddresses: Record<ContractName, string>
+  startBlocks: Record<ContractName, number>
 
-    const addressesToReplace2 = subgraphFile.match(/{{address\:[a-zA-Z0-9]+}}/g)
+  constructor(network: Network) {
+    this.network = network
+    this.startBlocks = startBlockByNetwork[network]
+  }
 
-    let newSubgraphFile = subgraphFile
-    for (const match of addressesToReplace2) {
-      // Example: {{address:LANDRegistry}}
-      const [_, contractName] = match.replace(/{|}/g, '').split(':')
-      const finalContractName =
-        contractNameToProxy[contractName] || contractName
-      const address =
-        contractAddresses[finalContractName] ||
-        '0x0000000000000000000000000000000000000000'
-      newSubgraphFile = newSubgraphFile.replace(match, address)
-    }
-
-    const startBlocksToReplace = newSubgraphFile.match(
-      /{{startBlock\:[a-zA-Z0-9]+}}/g
+  async fetchContracts() {
+    const contractsByNetwork: ContractsResponse = await fetch(
+      'https://contracts.decentraland.org/addresses.json'
     )
+    this.contractAddresses = contractsByNetwork[this.network]
+  }
 
-    for (const match of startBlocksToReplace) {
-      // Example: {{startBlock:LANDRegistry}}
-      const [_, contractName] = match.replace(/{|}/g, '').split(':')
-      const finalContractName =
-        contractNameToProxy[contractName] || contractName
-      const startBlock = startBlocks[finalContractName] || 0
-      newSubgraphFile = newSubgraphFile.replace(match, startBlock.toString())
+  getAddress(contractName: string) {
+    return (
+      this.contractAddresses[this.getProxyContractName(contractName)] ||
+      this.getDefaultAddress()
+    )
+  }
+
+  getStartBlock(contractName: string) {
+    return (
+      this.startBlocks[this.getProxyContractName(contractName)] ||
+      this.getDefaultStartBlock()
+    )
+  }
+
+  private getProxyContractName(contractName: string) {
+    return contractNameToProxy[contractName] || contractName
+  }
+
+  private getDefaultAddress() {
+    return '0x0000000000000000000000000000000000000000'
+  }
+
+  private getDefaultStartBlock() {
+    return 0
+  }
+}
+
+class Parser {
+  constructor(public text: string, public ethereum: Ethereum) {}
+
+  parse() {
+    let newText = this.replaceNetworks()
+    newText = this.replaceAddresses()
+    newText = this.replaceStartBlocks()
+    return newText
+  }
+
+  replaceAddresses() {
+    let newText = this.text
+    for (const placeholder of this.getPlaceholders('address')) {
+      const contractName = this.getPlaceholderValue(placeholder)
+      const address = this.ethereum.getAddress(contractName)
+      newText = newText.replace(placeholder, address)
     }
+    return newText
+  }
 
-    newSubgraphFile = newSubgraphFile.replace(/{{network}}/g, network)
+  replaceStartBlocks() {
+    let newText = this.text
+    for (const placeholder of this.getPlaceholders('startBlock')) {
+      const contractName = this.getPlaceholderValue(placeholder)
+      const startBlock = this.ethereum.getStartBlock(contractName)
+      newText = newText.replace(placeholder, startBlock.toString())
+    }
+    return newText
+  }
 
-    await writeFile(`${basePath}/subgraph.yaml`, newSubgraphFile)
-  } catch (error) {
-    await deleteFile(`${addressesPath}/addresses.ts`)
-    await deleteFile(`${basePath}/subgraph.yaml`)
+  replaceNetworks() {
+    return this.text.replace(/{{network}}/g, this.ethereum.network)
+  }
 
-    throw error
+  getPlaceholders(name: string) {
+    const regexp = new RegExp(`{{${name}\:[a-zA-Z0-9]+}}`, 'g')
+    return this.text.match(regexp) || []
+  }
+
+  getPlaceholderValue(placeholder: string) {
+    // Example: {{operator:value}}
+    const [_, value] = placeholder.replace(/{|}/g, '').split(':')
+    return value
   }
 }
 
@@ -154,17 +212,9 @@ async function fetch(uri: string, method = 'GET'): Promise<any> {
 
 async function readFile(path: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    fs.readFile(
-      path,
-      'utf-8',
-      (err, data) => (err ? reject(err) : resolve(data))
+    fs.readFile(path, 'utf-8', (err, data) =>
+      err ? reject(err) : resolve(data)
     )
-  })
-}
-
-async function moveFile(src: string, destination: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    fs.rename(src, destination, err => (err ? reject(err) : resolve()))
   })
 }
 
@@ -187,11 +237,14 @@ async function writeFile(path: string, data: string): Promise<void> {
 // Args -------------------------------------------------------------
 
 function getNetwork() {
-  let network: Network
-  for (let i = 0; i < process.argv.length; i++) {
-    if (process.argv[i] === '--network') {
-      network = process.argv[i + 1] as Network
-      break
+  let network: Network = process.env.ETHEREUM_NETWORK as Network
+
+  if (!network) {
+    for (let i = 0; i < process.argv.length; i++) {
+      if (process.argv[i] === '--network') {
+        network = process.argv[i + 1] as Network
+        break
+      }
     }
   }
 

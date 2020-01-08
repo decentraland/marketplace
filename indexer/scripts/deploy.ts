@@ -1,5 +1,10 @@
 import { spawn, SpawnOptions } from 'child_process'
 
+enum Network {
+  MAINNET = 'mainnet',
+  ROPSTEN = 'ropsten'
+}
+
 const graphByNetwork: Record<Network, string> = {
   [Network.MAINNET]: 'decentraland/marketplace',
   [Network.ROPSTEN]: `decentraland/marketplace-ropsten`
@@ -7,6 +12,7 @@ const graphByNetwork: Record<Network, string> = {
 
 // TODO: Handle ctrl+C
 async function deploy() {
+  const network = getNetwork()
   await run(
     `npx`,
     [
