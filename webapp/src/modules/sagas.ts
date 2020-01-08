@@ -3,11 +3,12 @@ import { createWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
 
 import { translationSaga } from './translation/sagas'
+import { orderSaga } from './order/sagas'
 
 const walletSaga = createWalletSaga({
   MANA_ADDRESS: process.env.REACT_APP_MANA_ADDRESS!
 })
 
 export function* rootSaga() {
-  yield all([walletSaga(), translationSaga(), transactionSaga()])
+  yield all([walletSaga(), translationSaga(), transactionSaga(), orderSaga()])
 }

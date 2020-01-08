@@ -4,14 +4,7 @@
     "no-commented-out-code": false,
     "jsx-no-multiline-js": false,
     "ban-types": [true, "Number", "Boolean", "String", "Object"],
-    "prettier": [
-      true,
-      {
-        "printWidth": 80,
-        "singleQuote": true,
-        "semi": false
-      }
-    ],
+    "prettier": [true, { "printWidth": 80, "singleQuote": true, "semi": false }],
     "quotemark": [true, "single", "jsx-double"]
   },
   "linterOptions": {
