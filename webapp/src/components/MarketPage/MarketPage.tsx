@@ -188,10 +188,11 @@ const MarketPage = (props: Props) => {
             </HeaderMenu.Right>
           </HeaderMenu>
           <Card.Group>
-            {orders.map(order => (
-              <OrderCard key={order.id} order={order} />
-            ))}
-            {orders.length === 0 || isLoading ? (
+            {orders.length > 0
+              ? orders.map(order => <OrderCard key={order.id} order={order} />)
+              : null}
+            {orders.length === 0 && !isLoading ? <div>No orders</div> : null}
+            {isLoading ? (
               <>
                 <div className="overlay" />
                 <Loader size="massive" active />
