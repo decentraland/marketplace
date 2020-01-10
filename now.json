@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "name": "marketplace",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/static-build"
+    }
+  ]
+}
