@@ -69,6 +69,6 @@ dist
 # Indexer generated data
 indexer/build
 indexer/src/entities
-indexer/addresses.ts
+indexer/src/data/addresses.ts
 indexer/subgraph.yaml
 

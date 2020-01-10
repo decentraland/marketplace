@@ -125,39 +125,37 @@ class Parser {
   constructor(public text: string, public ethereum: Ethereum) {}
 
   parse() {
-    let newText = this.replaceNetworks()
-    newText = this.replaceAddresses()
-    newText = this.replaceStartBlocks()
+    let newText = this.replaceNetworks(this.text)
+    newText = this.replaceAddresses(newText)
+    newText = this.replaceStartBlocks(newText)
     return newText
   }
 
-  replaceAddresses() {
-    let newText = this.text
+  replaceAddresses(text = this.text) {
     for (const placeholder of this.getPlaceholders('address')) {
       const contractName = this.getPlaceholderValue(placeholder)
       const address = this.ethereum.getAddress(contractName)
-      newText = newText.replace(placeholder, address)
+      text = text.replace(placeholder, address)
     }
-    return newText
+    return text
   }
 
-  replaceStartBlocks() {
-    let newText = this.text
+  replaceStartBlocks(text = this.text) {
     for (const placeholder of this.getPlaceholders('startBlock')) {
       const contractName = this.getPlaceholderValue(placeholder)
       const startBlock = this.ethereum.getStartBlock(contractName)
-      newText = newText.replace(placeholder, startBlock.toString())
+      text = text.replace(placeholder, startBlock.toString())
     }
-    return newText
+    return text
   }
 
-  replaceNetworks() {
-    return this.text.replace(/{{network}}/g, this.ethereum.network)
+  replaceNetworks(text = this.text) {
+    return text.replace(/{{network}}/g, this.ethereum.network)
   }
 
-  getPlaceholders(name: string) {
+  getPlaceholders(name: string, text = this.text) {
     const regexp = new RegExp(`{{${name}\:[a-zA-Z0-9]+}}`, 'g')
-    return this.text.match(regexp) || []
+    return text.match(regexp) || []
   }
 
   getPlaceholderValue(placeholder: string) {

@@ -15,14 +15,13 @@ import {
 import { Navigation } from '../Navigation'
 import { Props } from './MarketPage.types'
 import { OrderCard } from './OrderCard'
-
-import './MarketPage.css'
 import {
   locations,
   MarketSortBy,
   MarketSection
 } from '../../modules/routing/locations'
 import { Order, OrderCategory } from '../../modules/order/types'
+import './MarketPage.css'
 
 const PAGE_SIZE = 24
 
@@ -40,7 +39,7 @@ const MarketPage = (props: Props) => {
   useEffect(() => {
     let orderBy: keyof Order = 'createdAt'
     let orderDirection: 'asc' | 'desc' = 'desc'
-    let category: OrderCategory | null = null
+    let category: OrderCategory | undefined
     switch (sortBy) {
       case MarketSortBy.NEWEST: {
         orderBy = 'createdAt'
@@ -68,11 +67,13 @@ const MarketPage = (props: Props) => {
       }
     }
     onFetchOrders({
-      first: PAGE_SIZE,
-      skip: (page - 1) * PAGE_SIZE,
-      category,
-      orderBy,
-      orderDirection,
+      variables: {
+        first: PAGE_SIZE,
+        skip: (page - 1) * PAGE_SIZE,
+        orderBy,
+        orderDirection,
+        category
+      },
       view: 'market'
     })
   }, [page, section, sortBy, onFetchOrders])
