@@ -1,63 +1,55 @@
+import { gql } from 'apollo-boost'
+
 import { Order } from '../../modules/order/types'
 import { FetchOrderOptions } from '../../modules/order/actions'
+import { orderFields } from '../../modules/order/fragments'
+import { client } from './client'
 
-export const MARKETPLACE_URL = process.env.REACT_APP_MARKETPLACE_URL
-
-const getMarketQuery = (options: FetchOrderOptions) => {
-  let where = ['status: "open"']
-  if (options.category) {
-    where.push(`category: "${options.category}"`)
-  }
-  let filters = [
-    `first: ${options.first}`,
-    `skip: ${options.skip}`,
-    `where: { ${where.join(',')} }`
-  ]
-  if (options.orderBy) {
-    filters.push(`orderBy: "${options.orderBy}"`)
-  }
-  if (options.orderDirection) {
-    filters.push(`orderDirection: "${options.orderDirection}"`)
-  }
-  return `
-{
-  orders(${filters.join(',')}) {
-    id
-    nft {
-      tokenId
-      name
-      image
-      parcel {
-        x
-        y
-      }
-      estate {
-        size
-      }
-      wearable {
-        rarity
-      }
+export const MARKET_QUERY = gql`
+  {
+    orders(
+      where: { status: open, search_estate_size_gt: 0 }
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      ...orderFields
     }
-    owner
-    price
-    category
-    status
-    expiresAt
-    createdAt
-    updatedAt
   }
-}
+  ${orderFields}
 `
-}
+
+export const MARKET_BY_CATEGORY_QUERY = gql`
+  query MarketplaceByCategory($category: String) {
+    orders(
+      where: { category: $category, status: open, search_estate_size_gt: 0 }
+      first: $first
+      skip: $skip
+      orderBy: $orderBy
+      orderDirection: $orderDirection
+    ) {
+      ...orderFields
+    }
+  }
+  ${orderFields}
+`
 
 class MarketplaceAPI {
   fetchOrders = async (options: FetchOrderOptions) => {
-    const resp = await fetch(MARKETPLACE_URL!, {
-      method: 'post',
-      body: JSON.stringify({ query: getMarketQuery(options) })
+    const query =
+      options.variables.category !== undefined
+        ? MARKET_BY_CATEGORY_QUERY
+        : MARKET_QUERY
+
+    const { data } = await client.query({
+      query,
+      variables: options.variables
     })
-    const json = await resp.json()
-    return json.data.orders as Order[]
+
+    console.log(data.orders)
+
+    return data.orders as Order[]
   }
 }
 

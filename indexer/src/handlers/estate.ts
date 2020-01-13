@@ -4,7 +4,7 @@ import {
   RemoveLand,
   Update
 } from '../entities/EstateRegistry/EstateRegistry'
-import { NFT, Parcel, Estate } from '../entities/schema'
+import { NFT, Parcel, Estate, Order } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { decodeTokenId } from '../modules/parcel'
 import { createWallet } from '../modules/wallet'
@@ -55,11 +55,17 @@ export function handleAddLand(event: AddLand): void {
   estate.size = parcels.length
   estate.save()
 
+  let estateNFT = NFT.load(id)
+  if (estateNFT.activeOrder != null) {
+    let order = Order.load(estateNFT.activeOrder)
+    order.search_estate_size += 1
+    order.save()
+  }
+
   let parcel = Parcel.load(parcelId)
 
-  // Would expect that this isn't needed, but it is here for safety, since failing at block 6,000,000 slows down iterative testing
-  // Because if land parcel doesn't exist, we get a crashed node
   if (parcel == null) {
+    // Would expect that this isn't needed, but it is here for safety, since failing at block 6,000,000 slows down iterative testing
     let coordinates = decodeTokenId(event.params._landId)
 
     parcel = new Parcel(parcelId)
@@ -72,9 +78,9 @@ export function handleAddLand(event: AddLand): void {
   parcel.estate = id
   parcel.save()
 
-  let nft = new NFT(parcelId)
-  nft.owner = estate.owner
-  nft.save()
+  let parcelNFT = new NFT(parcelId)
+  parcelNFT.owner = estate.owner
+  parcelNFT.save()
 }
 
 export function handleRemoveLand(event: RemoveLand): void {
@@ -93,6 +99,13 @@ export function handleRemoveLand(event: RemoveLand): void {
   estate.size = parcels.length
   estate.save()
 
+  let estateNFT = NFT.load(id)
+  if (estateNFT.activeOrder != null) {
+    let order = Order.load(estateNFT.activeOrder)
+    order.search_estate_size -= 1
+    order.save()
+  }
+
   let parcel = Parcel.load(parcelId)
 
   // Would expect that this isn't needed, but it is here for safety, since failing at block 6,000,000 slows down iterative testing
@@ -110,9 +123,9 @@ export function handleRemoveLand(event: RemoveLand): void {
   parcel.estate = null
   parcel.save()
 
-  let nft = new NFT(parcelId)
-  nft.owner = event.params._destinatary.toHex()
-  nft.save()
+  let parcelNFT = new NFT(parcelId)
+  parcelNFT.owner = event.params._destinatary.toHex()
+  parcelNFT.save()
 }
 
 export function handleUpdate(event: Update): void {

@@ -45,10 +45,13 @@ export function orderReducer(
         ...state,
         data: {
           ...state.data,
-          ...action.payload.orders.reduce((obj, order) => {
-            obj[order.id] = order
-            return obj
-          }, {} as Record<string, Order>)
+          ...action.payload.orders.reduce(
+            (obj, order) => {
+              obj[order.id] = order
+              return obj
+            },
+            {} as Record<string, Order>
+          )
         },
         loading: loadingReducer(state.loading, action),
         error: null

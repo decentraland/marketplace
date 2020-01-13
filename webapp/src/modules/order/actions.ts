@@ -10,21 +10,25 @@ export const FETCH_ORDERS_SUCCESS = '[Success] Fetch Orders'
 export const FETCH_ORDERS_FAILURE = '[Failure] Fetch Orders'
 
 export type FetchOrderOptions = {
-  first: number
-  skip: number
-  category: OrderCategory | null
-  orderBy: keyof Order | null
-  orderDirection: 'asc' | 'desc'
-  view: View | null
+  variables: {
+    first: number
+    skip: number
+    orderBy?: keyof Order
+    orderDirection: 'asc' | 'desc'
+    category?: OrderCategory
+  }
+  view?: View
 }
 
 export const DEFAULT_FETCH_ORDER_OPTIONS: FetchOrderOptions = {
-  first: 24,
-  skip: 0,
-  category: null,
-  orderBy: 'createdAt',
-  orderDirection: 'desc',
-  view: null
+  variables: {
+    first: 24,
+    skip: 0,
+    orderBy: 'createdAt',
+    orderDirection: 'desc',
+    category: undefined
+  },
+  view: undefined
 }
 
 export const fetchOrdersRequest = (options: Partial<FetchOrderOptions> = {}) =>

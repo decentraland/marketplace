@@ -35,6 +35,10 @@ export function handleOrderCreated(event: OrderCreated): void {
   order.createdAt = event.block.timestamp
   order.updatedAt = event.block.timestamp
 
+  // We're defaulting "Estate size" to one to allow the frontend to search for `search_estate_size_gt: 0`,
+  // necessary because thegraph doesn't support complex queries and we can't do `OR` operations
+  order.search_estate_size = 1
+
   if (category == categories.PARCEL) {
     let parcel = Parcel.load(nft.parcel)
 
