@@ -30,7 +30,7 @@ export const MARKET_QUERY = gql`
 export const MARKET_BY_CATEGORY_QUERY = gql`
   query MarketplaceByCategory(
     ${MARKET_FILTERS}
-    $category: String
+    $category: Category
   ) {
     orders(
       where: { category: $category, status: open }
