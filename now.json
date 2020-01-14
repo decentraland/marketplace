@@ -7,8 +7,10 @@
       "use": "@now/static-build"
     }
   ],
-  "env": {
-    "REACT_APP_MANA_ADDRESS": "@mana-address",
-    "REACT_APP_MARKETPLACE_URL": "@graph-url"
+  "build": {
+    "env": {
+      "REACT_APP_MANA_ADDRESS": "@mana-address",
+      "REACT_APP_MARKETPLACE_URL": "@graph-url"
+    }
   }
 }
