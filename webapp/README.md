@@ -17,20 +17,22 @@ $ vi .env
 $ npm install
 ```
 
-2. Generate contracts
-
-```
-$ npm run contracts
-```
-
-3. Run development server
+2. Run development server
 
 ```
 $ npm start
 ```
 
-4. Build for production
+3. Build for production
 
 ```
 $ npm run build
+```
+
+## Generate TypeScript interfaces for contracts
+
+If you want to regenerate the contract typings in `webapp/src/contract` do the following:
+
+```
+npx web3x-codegen
 ```
