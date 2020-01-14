@@ -30,8 +30,10 @@
 }
 
 .MarketPage ul.menu {
+  margin-left: -16px;
   padding: 0px;
 }
+
 .MarketPage ul.menu li {
   font-size: 17px;
   line-height: 26px;
@@ -47,7 +49,7 @@
 .MarketPage ul.menu li.sub {
   color: var(--secondary-text);
   margin-left: 16px;
-  width: 226px;
+  width: 232px;
 }
 
 .MarketPage ul.menu li:hover,
@@ -63,4 +65,15 @@
   position: absolute;
   background: var(--background);
   opacity: 0.6;
+}
+
+.MarketPage .load-more {
+  margin-top: 36px;
+}
+
+.MarketPage.dcl.page > .ui.container {
+  min-height: calc(
+    100vh - var(--navbar-height) - var(--footer-height) -
+      var(--navbar-margin-bottom) - var(--footer-margin-top) - 1px
+  );
 }

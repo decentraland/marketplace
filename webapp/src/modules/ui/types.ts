@@ -1,1 +1,1 @@
-export type View = 'market' | 'home'
+export type View = 'market' | 'home' | 'load-more'

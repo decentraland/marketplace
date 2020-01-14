@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
 import {
   Page,
@@ -7,9 +7,8 @@ import {
   HeaderMenu,
   Dropdown,
   DropdownProps,
-  Pagination,
-  PaginationProps,
-  Loader
+  Loader,
+  Button
 } from 'decentraland-ui'
 
 import { Navigation } from '../Navigation'
@@ -24,6 +23,44 @@ import { Order, OrderCategory } from '../../modules/order/types'
 import './MarketPage.css'
 
 const PAGE_SIZE = 24
+const MAX_QUERY_SIZE = 1000
+
+const getFilters = (
+  sortBy: MarketSortBy,
+  section: MarketSection
+): [keyof Order, 'asc' | 'desc', OrderCategory | undefined] => {
+  let orderBy: keyof Order = 'createdAt'
+  let orderDirection: 'asc' | 'desc' = 'desc'
+  let category: OrderCategory | undefined
+  switch (sortBy) {
+    case MarketSortBy.NEWEST: {
+      orderBy = 'createdAt'
+      orderDirection = 'desc'
+      break
+    }
+    case MarketSortBy.CHEAPEST: {
+      orderBy = 'price'
+      orderDirection = 'asc'
+      break
+    }
+  }
+  switch (section) {
+    case MarketSection.PARCELS: {
+      category = OrderCategory.PARCEL
+      break
+    }
+    case MarketSection.ESTATES: {
+      category = OrderCategory.ESTATE
+      break
+    }
+    case MarketSection.WEARABLES: {
+      category = OrderCategory.WEARABLE
+      break
+    }
+  }
+
+  return [orderBy, orderDirection, category]
+}
 
 const MarketPage = (props: Props) => {
   const {
@@ -36,50 +73,27 @@ const MarketPage = (props: Props) => {
     isLoading
   } = props
 
+  const [offset, setOffset] = useState(0)
+
   useEffect(() => {
-    let orderBy: keyof Order = 'createdAt'
-    let orderDirection: 'asc' | 'desc' = 'desc'
-    let category: OrderCategory | undefined
-    switch (sortBy) {
-      case MarketSortBy.NEWEST: {
-        orderBy = 'createdAt'
-        orderDirection = 'desc'
-        break
-      }
-      case MarketSortBy.CHEAPEST: {
-        orderBy = 'price'
-        orderDirection = 'asc'
-        break
-      }
-    }
-    switch (section) {
-      case MarketSection.PARCELS: {
-        category = OrderCategory.PARCEL
-        break
-      }
-      case MarketSection.ESTATES: {
-        category = OrderCategory.ESTATE
-        break
-      }
-      case MarketSection.WEARABLES: {
-        category = OrderCategory.WEARABLE
-        break
-      }
-    }
+    const [orderBy, orderDirection, category] = getFilters(sortBy, section)
+    const skip = offset * PAGE_SIZE
+    const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
     onFetchOrders({
       variables: {
-        first: PAGE_SIZE,
-        skip: (page - 1) * PAGE_SIZE,
+        first,
+        skip,
         orderBy,
         orderDirection,
         category
       },
-      view: 'market'
+      view: skip === 0 ? 'market' : 'load-more'
     })
-  }, [page, section, sortBy, onFetchOrders])
+  }, [offset, page, section, sortBy, onFetchOrders])
 
   const handleDropdownChange = useCallback(
     (_: React.SyntheticEvent, props: DropdownProps) => {
+      setOffset(0)
       onNavigate(
         locations.market({
           page: 1,
@@ -91,22 +105,9 @@ const MarketPage = (props: Props) => {
     [section, onNavigate]
   )
 
-  const handlePaginationChange = useCallback(
-    (_: React.SyntheticEvent, props: PaginationProps) => {
-      window.scrollTo(0, 0)
-      onNavigate(
-        locations.market({
-          page: +props.activePage!,
-          section,
-          sortBy
-        })
-      )
-    },
-    [section, sortBy, onNavigate]
-  )
-
   const handleSectionChange = useCallback(
     (section: MarketSection) => {
+      setOffset(0)
       onNavigate(
         locations.market({
           page: 1,
@@ -117,6 +118,17 @@ const MarketPage = (props: Props) => {
     },
     [sortBy, onNavigate]
   )
+
+  const handleLoadMore = useCallback(() => {
+    setOffset(page)
+    onNavigate(
+      locations.market({
+        page: page + 1,
+        section,
+        sortBy
+      })
+    )
+  }, [page, sortBy, section, onNavigate, setOffset])
 
   return (
     <>
@@ -200,11 +212,17 @@ const MarketPage = (props: Props) => {
               </>
             ) : null}
           </Card.Group>
-          <Pagination
-            activePage={page}
-            totalPages={20}
-            onPageChange={handlePaginationChange}
-          />
+          {orders.length === 0 ? null : (
+            <Button
+              className="load-more"
+              loading={isLoading}
+              inverted
+              primary
+              onClick={handleLoadMore}
+            >
+              Load more
+            </Button>
+          )}
         </div>
       </Page>
       <Footer />

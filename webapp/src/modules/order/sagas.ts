@@ -1,4 +1,4 @@
-import { takeLatest, put, call } from 'redux-saga/effects'
+import { put, call, takeEvery } from 'redux-saga/effects'
 import {
   FETCH_ORDERS_REQUEST,
   FetchOrdersRequestAction,
@@ -9,7 +9,7 @@ import {
 import { marketplace } from '../../lib/api/marketplace'
 
 export function* orderSaga() {
-  yield takeLatest(FETCH_ORDERS_REQUEST, handleFetchOrdersRequest)
+  yield takeEvery(FETCH_ORDERS_REQUEST, handleFetchOrdersRequest)
 }
 
 function* handleFetchOrdersRequest(action: FetchOrdersRequestAction) {

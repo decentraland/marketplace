@@ -1,0 +1,8 @@
+.ui.inverted.primary.button:focus {
+  color: var(--primary);
+  background-color: transparent;
+}
+
+.ui.loading.button:after {
+  border-color: var(--primary) transparent transparent;
+}
