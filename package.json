@@ -1,0 +1,7 @@
+{
+  "name": "marketplace-now-deploy",
+  "version": "0.0.1",
+  "scripts": {
+    "now-build": "cd webapp && npm install && npm run contracts && npm run build && mv build ../dist"
+  }
+}
