@@ -4,11 +4,7 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@now/static-build",
-      "env": {
-        "REACT_APP_MANA_ADDRESS": "@mana-address",
-        "REACT_APP_MARKETPLACE_URL": "@graph-url"
-      }
+      "use": "@now/static-build"
     }
   ]
 }
