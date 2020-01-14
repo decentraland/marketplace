@@ -5,8 +5,15 @@ import { FetchOrderOptions } from '../../modules/order/actions'
 import { orderFields } from '../../modules/order/fragments'
 import { client } from './client'
 
+export const MARKET_FILTERS = `$first: Int
+$skip: Int
+$orderBy: String
+$orderDirection: String`
+
 export const MARKET_QUERY = gql`
-  {
+  query Marketplace(
+    ${MARKET_FILTERS}
+  ) {
     orders(
       where: { status: open, search_estate_size_gt: 0 }
       first: $first
@@ -21,9 +28,12 @@ export const MARKET_QUERY = gql`
 `
 
 export const MARKET_BY_CATEGORY_QUERY = gql`
-  query MarketplaceByCategory($category: String) {
+  query MarketplaceByCategory(
+    ${MARKET_FILTERS}
+    $category: Category
+  ) {
     orders(
-      where: { category: $category, status: open, search_estate_size_gt: 0 }
+      where: { category: $category, status: open }
       first: $first
       skip: $skip
       orderBy: $orderBy
@@ -46,8 +56,6 @@ class MarketplaceAPI {
       query,
       variables: options.variables
     })
-
-    console.log(data.orders)
 
     return data.orders as Order[]
   }

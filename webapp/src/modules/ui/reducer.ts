@@ -26,6 +26,15 @@ export function uiReducer(
             marketOrderIds: action.payload.orders.map(order => order.id)
           }
         }
+        case 'load-more': {
+          return {
+            ...state,
+            marketOrderIds: [
+              ...state.marketOrderIds,
+              ...action.payload.orders.map(order => order.id)
+            ]
+          }
+        }
         default:
           return state
       }
