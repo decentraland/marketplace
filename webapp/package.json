@@ -39,13 +39,11 @@
     "tslint-react": "^4.1.0",
     "typesafe-actions": "^5.1.0",
     "typescript": "~3.7.2",
-    "web3x-codegen": "^4.0.6",
     "web3x-es": "^4.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "contracts": "web3x-codegen",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "tslint -p tsconfig.json"
