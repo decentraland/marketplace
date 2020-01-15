@@ -35,6 +35,6 @@ export const locations = {
     }
     return '/market'
   },
-  address: (address: string) => `/addresses/${address}`,
+  account: (address: string) => `/accounts/${address}`,
   ntf: (contract: string, id: string) => `/contracts/${contract}/id/${id}`
 }

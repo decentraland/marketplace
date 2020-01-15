@@ -1,9 +1,11 @@
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { Dispatch } from 'redux'
 
+export type NavigationTab = 'atlas' | 'market' | 'account'
+
 export type Props = {
   address?: string
-  activeTab?: 'atlas' | 'market' | 'address'
+  activeTab?: NavigationTab
   isFullscreen?: boolean
   onNavigate: (path: string) => void
 }

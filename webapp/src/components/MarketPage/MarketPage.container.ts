@@ -4,12 +4,6 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 
 import { RootState } from '../../modules/reducer'
 import {
-  MapStateProps,
-  MapDispatch,
-  MapDispatchProps
-} from './MarketPage.types'
-import MarketPage from './MarketPage'
-import {
   getMarketOrders,
   getMarketPage,
   getMarketSection,
@@ -20,6 +14,12 @@ import {
   FETCH_ORDERS_REQUEST
 } from '../../modules/order/actions'
 import { getLoading } from '../../modules/order/selectors'
+import {
+  MapStateProps,
+  MapDispatch,
+  MapDispatchProps
+} from './MarketPage.types'
+import MarketPage from './MarketPage'
 
 const mapState = (state: RootState): MapStateProps => ({
   orders: getMarketOrders(state),
@@ -34,4 +34,7 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path))
 })
 
-export default connect(mapState, mapDispatch)(MarketPage)
+export default connect(
+  mapState,
+  mapDispatch
+)(MarketPage)

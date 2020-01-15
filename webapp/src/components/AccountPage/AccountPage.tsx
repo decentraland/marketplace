@@ -4,11 +4,11 @@ import { Page } from 'decentraland-ui'
 
 import { Navigation } from '../Navigation'
 
-const AddressPage = () => {
+const AccountPage = () => {
   return (
     <>
       <Navbar isFullscreen activePage="marketplace" />
-      <Navigation activeTab="address" />
+      <Navigation activeTab="account" />
       <Page>
         <div>Coming soon you will see your assets here...</div>
       </Page>
@@ -17,4 +17,4 @@ const AddressPage = () => {
   )
 }
 
-export default React.memo(AddressPage)
+export default React.memo(AccountPage)

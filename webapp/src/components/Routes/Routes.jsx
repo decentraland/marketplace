@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import { AtlasPage } from '../AtlasPage'
 import { locations } from '../../modules/routing/locations'
 import { MarketPage } from '../MarketPage'
-import { AddressPage } from '../AddressPage'
+import { AccountPage } from '../AccountPage'
 
 const Routes = () => {
   return (
@@ -14,8 +14,8 @@ const Routes = () => {
       <Route exact path={locations.market()}>
         <MarketPage />
       </Route>
-      <Route exact path={locations.address(':address')}>
-        <AddressPage />
+      <Route exact path={locations.account(':address')}>
+        <AccountPage />
       </Route>
       {/* TODO: The following redirect shoud be changed once we have a HomePage */}
       <Redirect to={locations.atlas()} />

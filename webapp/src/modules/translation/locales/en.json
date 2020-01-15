@@ -1,1 +1,7 @@
-{}
+{
+  "navigation": {
+    "atlas": "Atlas",
+    "market": "Market",
+    "account": "Account"
+  }
+}
