@@ -19,8 +19,8 @@ function* handleFetchOrdersRequest(action: FetchOrdersRequestAction) {
   }
 
   try {
-    const orders = yield call(() => marketplace.fetchOrders(options))
-    yield put(fetchOrdersSuccess(options, orders))
+    const [orders, nfts] = yield call(() => marketplace.fetchOrders(options))
+    yield put(fetchOrdersSuccess(options, orders, nfts))
   } catch (error) {
     yield put(fetchOrdersFailure(options, error.message))
   }

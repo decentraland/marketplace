@@ -7,6 +7,7 @@ import { storageReducer as storage } from 'decentraland-dapps/dist/modules/stora
 import { transactionReducer as transaction } from 'decentraland-dapps/dist/modules/transaction/reducer'
 import { orderReducer as order } from './order/reducer'
 import { uiReducer as ui } from './ui/reducer'
+import { nftReducer as nft } from './nft/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({
@@ -16,6 +17,7 @@ export const createRootReducer = (history: History) =>
     storage,
     order,
     ui,
+    nft,
     router: connectRouter(history)
   })
 

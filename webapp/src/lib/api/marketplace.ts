@@ -4,6 +4,7 @@ import { Order } from '../../modules/order/types'
 import { FetchOrderOptions } from '../../modules/order/actions'
 import { orderFields } from '../../modules/order/fragments'
 import { client } from './client'
+import { NFT } from '../../modules/nft/types'
 
 export const MARKET_FILTERS = `$first: Int
 $skip: Int
@@ -57,7 +58,18 @@ class MarketplaceAPI {
       variables: options.variables
     })
 
-    return data.orders as Order[]
+    const orders: Order[] = []
+    const nfts: NFT[] = []
+
+    for (const result of data.orders as (Order & { nft: NFT })[]) {
+      const { nft, ...order } = result
+      order.nftId = nft.id
+      nft.activeOrderId = order.id
+      orders.push(order)
+      nfts.push(nft)
+    }
+
+    return [orders, nfts]
   }
 }
 
