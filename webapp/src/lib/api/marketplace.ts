@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost'
 
 import { Order } from '../../modules/order/types'
 import { FetchOrderOptions } from '../../modules/order/actions'
-import { orderFields } from '../../modules/order/fragments'
+import { orderFragment, OrderFragment } from '../../modules/order/fragments'
 import { client } from './client'
 import { NFT } from '../../modules/nft/types'
 
@@ -22,10 +22,10 @@ export const MARKET_QUERY = gql`
       orderBy: $orderBy
       orderDirection: $orderDirection
     ) {
-      ...orderFields
+      ...orderFragment
     }
   }
-  ${orderFields}
+  ${orderFragment()}
 `
 
 export const MARKET_BY_CATEGORY_QUERY = gql`
@@ -40,10 +40,10 @@ export const MARKET_BY_CATEGORY_QUERY = gql`
       orderBy: $orderBy
       orderDirection: $orderDirection
     ) {
-      ...orderFields
+      ...orderFragment
     }
   }
-  ${orderFields}
+  ${orderFragment()}
 `
 
 class MarketplaceAPI {
@@ -61,10 +61,10 @@ class MarketplaceAPI {
     const orders: Order[] = []
     const nfts: NFT[] = []
 
-    for (const result of data.orders as (Order & { nft: NFT })[]) {
-      const { nft, ...order } = result
-      order.nftId = nft.id
-      nft.activeOrderId = order.id
+    for (const result of data.orders as OrderFragment[]) {
+      const { nft: nestedNFT, ...rest } = result
+      const order = { ...rest, nftId: nestedNFT.id }
+      const nft = { ...nestedNFT, activeOrderId: order.id }
       orders.push(order)
       nfts.push(nft)
     }
