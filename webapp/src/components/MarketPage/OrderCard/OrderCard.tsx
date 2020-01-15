@@ -8,15 +8,13 @@ import './OrderCard.css'
 const capitalize = (value: string) => value[0].toUpperCase() + value.slice(1)
 
 const OrderCard = (props: Props) => {
-  const { order } = props
+  const { order, nft } = props
   return (
     <Card className="OrderCard" link>
-      <Image src={order.nft.image} wrapped ui={false} />
+      <Image src={nft.image} wrapped ui={false} />
       <Card.Content>
         <Card.Header>
-          <div className="title">
-            {order.nft.name || capitalize(order.category)}
-          </div>{' '}
+          <div className="title">{nft.name || capitalize(order.category)}</div>{' '}
           <Mana inline>
             {(parseInt(order.price, 10) / 10 ** 18).toLocaleString()}
           </Mana>

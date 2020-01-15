@@ -1,5 +1,3 @@
-import { NFT } from '../nft/types'
-
 export enum OrderCategory {
   PARCEL = 'parcel',
   ESTATE = 'estate',
@@ -10,7 +8,7 @@ export type OrderStatus = 'open' | 'sold' | 'cancelled'
 
 export type Order = {
   id: string
-  nft: NFT
+  nftId: string
   category: OrderCategory
   nftAddress: string
   owner: string
