@@ -7,6 +7,7 @@ export type NFT = {
   activeOrderId: string | null
   name: string
   description: string
+  category: string
   image: string
   parcel: Parcel
   estate: Estate

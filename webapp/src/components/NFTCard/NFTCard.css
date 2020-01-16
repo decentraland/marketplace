@@ -1,11 +1,11 @@
-.OrderCard .header,
-.OrderCard .dcl.mana.inline {
+.NFTCard .header,
+.NFTCard .dcl.mana.inline {
   font-size: 17px;
   line-height: 26px;
   letter-spacing: -0.2px;
 }
 
-.OrderCard .header .title {
+.NFTCard .header .title {
   white-space: nowrap;
   flex: 1 2 auto;
   text-overflow: ellipsis;
@@ -13,23 +13,23 @@
   margin-right: 20px;
 }
 
-.ui.card.OrderCard > .content > .header:not(.ui),
+.ui.card.NFTCard > .content > .header:not(.ui),
 .ui.cards > .card > .content > .header:not(.ui) {
   display: flex;
   margin-bottom: 4px;
 }
 
-.OrderCard .dcl.mana.inline {
+.NFTCard .dcl.mana.inline {
   margin: 0px;
   flex: none;
 }
 
-.ui.cards > .ui.card.OrderCard.link:hover .meta,
+.ui.cards > .ui.card.NFTCard.link:hover .meta,
 .ui.card.link:hover .meta {
   color: var(--secondary-text);
 }
 
-.OrderCard .image {
+.NFTCard .image {
   min-height: 241px;
   min-width: 100%;
 }

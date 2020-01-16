@@ -9,6 +9,7 @@ export const nftFields = () => gql`
     name
     image
     tokenId
+    category
     parcel {
       x
       y

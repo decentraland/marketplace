@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Card, Loader } from 'decentraland-ui'
 
-import OrderCard from '../MarketPage/OrderCard/OrderCard'
+import { NFTCard } from '../NFTCard'
 import { Props } from './AccountNFTs.types'
 
 const AccountNFTs = (props: Props) => {
@@ -28,7 +28,7 @@ const AccountNFTs = (props: Props) => {
                 nft.activeOrderId ||
                   '0x822aa01a2fa61f734069e242a9719a28d1a53bb63b9aaace506aa9ea7d80dd59'
               ]
-            return <OrderCard key={nftId} nft={nft} order={order} />
+            return <NFTCard key={nftId} nft={nft} order={order} />
           })}
         </Card.Group>
       ) : (

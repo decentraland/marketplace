@@ -9,6 +9,7 @@ import {
   getMarketSection,
   getMarketSortBy
 } from '../../modules/ui/selectors'
+import { getData as getNFTsData } from '../../modules/nft/selectors'
 import {
   fetchOrdersRequest,
   FETCH_ORDERS_REQUEST
@@ -22,6 +23,7 @@ import {
 import MarketPage from './MarketPage'
 
 const mapState = (state: RootState): MapStateProps => ({
+  nfts: getNFTsData(state),
   orders: getMarketOrders(state),
   page: getMarketPage(state),
   section: getMarketSection(state),

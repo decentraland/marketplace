@@ -3,5 +3,8 @@
     "atlas": "Atlas",
     "market": "Market",
     "my_account": "My account"
+  },
+  "nft_card": {
+    "expires_at": "Expires {date}"
   }
 }

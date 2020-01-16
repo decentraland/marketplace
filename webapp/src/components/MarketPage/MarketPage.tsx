@@ -14,8 +14,8 @@ import {
 
 import { Navigation } from '../Navigation'
 import { CategoriesMenu } from '../CategoriesMenu'
+import { NFTCard } from '../NFTCard'
 import { Props } from './MarketPage.types'
-import { OrderCard } from './OrderCard'
 import {
   locations,
   MarketSortBy,
@@ -27,6 +27,7 @@ import './MarketPage.css'
 const PAGE_SIZE = 24
 const MAX_QUERY_SIZE = 1000
 
+// @nico TODO: Move this to utils?
 const getFilters = (
   sortBy: MarketSortBy,
   section: MarketSection
@@ -69,6 +70,7 @@ const MarketPage = (props: Props) => {
     page,
     section,
     sortBy,
+    nfts,
     orders,
     onFetchOrders,
     onNavigate,
@@ -149,7 +151,9 @@ const MarketPage = (props: Props) => {
           </HeaderMenu>
           <Card.Group>
             {orders.length > 0
-              ? orders.map(order => <OrderCard key={order.id} order={order} />)
+              ? orders.map(order => (
+                  <NFTCard key={order.id} nft={nfts[order.nftId]} />
+                ))
               : null}
             {orders.length === 0 && !isLoading ? <div>No orders</div> : null}
             {isLoading ? (
