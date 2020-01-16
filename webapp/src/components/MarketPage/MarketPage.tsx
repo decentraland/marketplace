@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback, useState } from 'react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
 import {
   Page,
@@ -135,15 +136,15 @@ const MarketPage = (props: Props) => {
         <Grid.Column className={`right-column ${isLoading ? 'loading' : ''}`}>
           <HeaderMenu>
             <HeaderMenu.Left>
-              <Header sub>Assets</Header>
+              <Header sub>{t('global.assets')}</Header>
             </HeaderMenu.Left>
             <HeaderMenu.Right>
               <Dropdown
                 direction="left"
                 value={sortBy}
                 options={[
-                  { value: MarketSortBy.NEWEST, text: 'Newest' },
-                  { value: MarketSortBy.CHEAPEST, text: 'Cheapest' }
+                  { value: MarketSortBy.NEWEST, text: t('filters.newest') },
+                  { value: MarketSortBy.CHEAPEST, text: t('filters.Cheapest') }
                 ]}
                 onChange={handleDropdownChange}
               />
@@ -155,7 +156,9 @@ const MarketPage = (props: Props) => {
                   <NFTCard key={order.id} nft={nfts[order.nftId]} />
                 ))
               : null}
-            {orders.length === 0 && !isLoading ? <div>No orders</div> : null}
+            {orders.length === 0 && !isLoading ? (
+              <div>{t('market_page.empty_orders')}</div>
+            ) : null}
             {isLoading ? (
               <>
                 <div className="overlay" />
@@ -171,7 +174,7 @@ const MarketPage = (props: Props) => {
               primary
               onClick={handleLoadMore}
             >
-              Load more
+              {t('global.load_more')}
             </Button>
           )}
         </Grid.Column>

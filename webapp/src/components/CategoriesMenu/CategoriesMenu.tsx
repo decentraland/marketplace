@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header } from 'decentraland-ui'
 
 import { Props } from './CategoriesMenu.types'
@@ -28,13 +29,13 @@ const CategoriesMenu = (props: Props) => {
           className={section === MarketSection.ALL ? 'active' : ''}
           onClick={() => handleSectionChange(MarketSection.ALL)}
         >
-          All Assets
+          {t('categories_menu.all_assets')}
         </li>
         <li
           className={section === MarketSection.LAND ? 'active' : ''}
           onClick={() => handleSectionChange(MarketSection.LAND)}
         >
-          Land
+          {t('categories_menu.land')}
         </li>
         {[
           MarketSection.LAND,
@@ -57,7 +58,7 @@ const CategoriesMenu = (props: Props) => {
               }
               onClick={() => handleSectionChange(MarketSection.ESTATES)}
             >
-              Estates
+              {t('categories_menu.estates')}
             </li>
           </>
         ) : null}
@@ -65,7 +66,7 @@ const CategoriesMenu = (props: Props) => {
           className={section === MarketSection.WEARABLES ? 'active' : ''}
           onClick={() => handleSectionChange(MarketSection.WEARABLES)}
         >
-          Wearables
+          {t('categories_menu.wearables')}
         </li>
       </ul>
     </div>

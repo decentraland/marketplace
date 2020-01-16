@@ -1,8 +1,25 @@
 {
+  "global": {
+    "assets": "Assets",
+    "load_more": "Load more"
+  },
   "navigation": {
     "atlas": "Atlas",
     "market": "Market",
     "my_account": "My account"
+  },
+  "market_page": {
+    "empty_orders": "There are no orders to show"
+  },
+  "categories_menu": {
+    "all_assets": "All Assets",
+    "land": "LAND",
+    "estates": "Estates",
+    "wearables": "Wearables"
+  },
+  "filters": {
+    "newest": "Newest",
+    "cheapest": "Cheapest"
   },
   "nft_card": {
     "expires_at": "Expires {date}"
