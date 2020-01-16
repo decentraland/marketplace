@@ -1,0 +1,7 @@
+.AccountPage > .ui.container {
+  display: flex;
+}
+
+.AccountPage .right-column {
+  width: 100%;
+}

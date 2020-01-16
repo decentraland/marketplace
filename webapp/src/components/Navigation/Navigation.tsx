@@ -5,7 +5,7 @@ import { locations } from '../../modules/routing/locations'
 import { Props } from './Navigation.types'
 
 const Navigation = (props: Props) => {
-  const { address, activeTab, isFullscreen, onNavigate } = props
+  const { activeTab, isFullscreen, onNavigate } = props
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
@@ -21,14 +21,12 @@ const Navigation = (props: Props) => {
         >
           {t('navigation.market')}
         </Tabs.Tab>
-        {address ? (
-          <Tabs.Tab
-            active={activeTab === 'account'}
-            onClick={() => onNavigate(locations.account(address))}
-          >
-            {t('navigation.account')}
-          </Tabs.Tab>
-        ) : null}
+        <Tabs.Tab
+          active={activeTab === 'account'}
+          onClick={() => onNavigate(locations.currentAccount())}
+        >
+          {t('navigation.my_account')}
+        </Tabs.Tab>
       </Tabs.Left>
     </Tabs>
   )

@@ -1,15 +1,13 @@
 import { Dispatch } from 'redux'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { MarketSection } from '../../modules/routing/locations'
 
-export type Params = {
-  address: string
-}
-
 export type Props = {
-  address: string
   section: MarketSection
+  wallet: Wallet | null
+  isConnecting: boolean
 }
 
-export type MapStateProps = Pick<Props, 'address' | 'section'>
+export type MapStateProps = Pick<Props, 'section' | 'wallet' | 'isConnecting'>
 export type MapDispatchProps = {}
 export type MapDispatch = Dispatch<any>

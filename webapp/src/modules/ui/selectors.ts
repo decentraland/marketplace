@@ -13,9 +13,12 @@ export const getMarketOrders = createSelector<
   UIState,
   OrderState['data'],
   Order[]
->(getState, getData, (ui, ordersById) =>
-  ui.marketOrderIds.map(id => ordersById[id])
+>(
+  getState,
+  getData,
+  (ui, ordersById) => ui.marketOrderIds.map(id => ordersById[id])
 )
+
 export const getMarketPage = createSelector<RootState, string, number>(
   getSearch,
   search => {
@@ -28,13 +31,16 @@ export const getMarketSection = createSelector<
   RootState,
   string,
   MarketSection
->(getSearch, search => {
-  const section = new URLSearchParams(search).get('section')
-  if (section && Object.values(MarketSection).includes(section as any)) {
-    return section as MarketSection
+>(
+  getSearch,
+  search => {
+    const section = new URLSearchParams(search).get('section')
+    if (section && Object.values(MarketSection).includes(section as any)) {
+      return section as MarketSection
+    }
+    return MarketSection.ALL
   }
-  return MarketSection.ALL
-})
+)
 
 export const getMarketSortBy = createSelector<RootState, string, MarketSortBy>(
   getSearch,

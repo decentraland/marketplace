@@ -1,16 +1,25 @@
 import React from 'react'
 import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
-import { Page } from 'decentraland-ui'
+import { Page, Grid } from 'decentraland-ui'
 
-import { Navigation } from '../Navigation'
+import { AccountNFTs } from '../AccountNFTs'
+import { CategoriesMenu } from '../CategoriesMenu'
+import { Props } from './AccountPage.types'
+import './AccountPage.css'
 
-const AccountPage = () => {
+const AccountPage = (props: Props) => {
+  const { address, section } = props
+
   return (
     <>
-      <Navbar isFullscreen activePage="marketplace" />
-      <Navigation activeTab="account" />
-      <Page>
-        <div>Coming soon you will see your assets here...</div>
+      <Navbar isFullscreen={true} activePage="marketplace" />
+      <Page className="AccountPage">
+        <Grid.Column>
+          <CategoriesMenu section={section} />
+        </Grid.Column>
+        <Grid.Column>
+          <AccountNFTs address={address} />
+        </Grid.Column>
       </Page>
       <Footer />
     </>

@@ -1,8 +1,8 @@
 import { action } from 'typesafe-actions'
 
-import { Order, OrderCategory } from './types'
 import { View } from '../ui/types'
 import { NFT } from '../nft/types'
+import { Order, OrderCategory } from './types'
 
 // Fetch Orders
 

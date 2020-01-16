@@ -1,11 +1,9 @@
-import { CallHistoryMethodAction } from 'connected-react-router'
 import { Dispatch } from 'redux'
-
-export type NavigationTab = 'atlas' | 'market' | 'account'
+import { CallHistoryMethodAction } from 'connected-react-router'
+import { MarketSection } from '../../modules/routing/locations'
 
 export type Props = {
-  activeTab?: NavigationTab
-  isFullscreen?: boolean
+  section: MarketSection
   onNavigate: (path: string) => void
 }
 

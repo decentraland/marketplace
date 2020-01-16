@@ -8,7 +8,7 @@ import './OrderCard.css'
 const capitalize = (value: string) => value[0].toUpperCase() + value.slice(1)
 
 const OrderCard = (props: Props) => {
-  const { order, nft } = props
+  const { nft, order } = props
   return (
     <Card className="OrderCard" link>
       <Image src={nft.image} wrapped ui={false} />

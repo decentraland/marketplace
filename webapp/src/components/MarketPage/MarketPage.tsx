@@ -2,6 +2,7 @@ import React, { useEffect, useCallback, useState } from 'react'
 import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
 import {
   Page,
+  Grid,
   Card,
   Header,
   HeaderMenu,
@@ -12,6 +13,7 @@ import {
 } from 'decentraland-ui'
 
 import { Navigation } from '../Navigation'
+import { CategoriesMenu } from '../CategoriesMenu'
 import { Props } from './MarketPage.types'
 import { OrderCard } from './OrderCard'
 import {
@@ -91,6 +93,10 @@ const MarketPage = (props: Props) => {
     })
   }, [offset, page, section, sortBy, onFetchOrders])
 
+  useEffect(() => {
+    setOffset(0)
+  }, [section])
+
   const handleDropdownChange = useCallback(
     (_: React.SyntheticEvent, props: DropdownProps) => {
       setOffset(0)
@@ -103,20 +109,6 @@ const MarketPage = (props: Props) => {
       )
     },
     [section, onNavigate]
-  )
-
-  const handleSectionChange = useCallback(
-    (section: MarketSection) => {
-      setOffset(0)
-      onNavigate(
-        locations.market({
-          page: 1,
-          section,
-          sortBy
-        })
-      )
-    },
-    [sortBy, onNavigate]
   )
 
   const handleLoadMore = useCallback(() => {
@@ -135,55 +127,10 @@ const MarketPage = (props: Props) => {
       <Navbar isFullscreen activePage="marketplace" />
       <Navigation activeTab="market" />
       <Page className="MarketPage">
-        <div className="menu-column">
-          <Header sub>Categories</Header>
-          <ul className="menu">
-            <li
-              className={section === MarketSection.ALL ? 'active' : ''}
-              onClick={() => handleSectionChange(MarketSection.ALL)}
-            >
-              All Assets
-            </li>
-            <li
-              className={section === MarketSection.LAND ? 'active' : ''}
-              onClick={() => handleSectionChange(MarketSection.LAND)}
-            >
-              Land
-            </li>
-            {[
-              MarketSection.LAND,
-              MarketSection.PARCELS,
-              MarketSection.ESTATES
-            ].includes(section) ? (
-              <>
-                {' '}
-                <li
-                  className={
-                    section === MarketSection.PARCELS ? 'sub active' : 'sub'
-                  }
-                  onClick={() => handleSectionChange(MarketSection.PARCELS)}
-                >
-                  Parcels
-                </li>
-                <li
-                  className={
-                    section === MarketSection.ESTATES ? 'sub active' : 'sub'
-                  }
-                  onClick={() => handleSectionChange(MarketSection.ESTATES)}
-                >
-                  Estates
-                </li>
-              </>
-            ) : null}
-            <li
-              className={section === MarketSection.WEARABLES ? 'active' : ''}
-              onClick={() => handleSectionChange(MarketSection.WEARABLES)}
-            >
-              Wearables
-            </li>
-          </ul>
-        </div>
-        <div className={`orders-column ${isLoading ? 'loading' : ''}`}>
+        <Grid.Column>
+          <CategoriesMenu section={section} />
+        </Grid.Column>
+        <Grid.Column className={`right-column ${isLoading ? 'loading' : ''}`}>
           <HeaderMenu>
             <HeaderMenu.Left>
               <Header sub>Assets</Header>
@@ -223,7 +170,7 @@ const MarketPage = (props: Props) => {
               Load more
             </Button>
           )}
-        </div>
+        </Grid.Column>
       </Page>
       <Footer />
     </>

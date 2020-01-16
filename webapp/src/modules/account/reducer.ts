@@ -24,15 +24,15 @@ const INITIAL_STATE = {
   error: null
 }
 
-type OrderReducerAction =
+type AccountReducerAction =
   | FetchAccountRequestAction
   | FetchAccountSuccessAction
   | FetchAccountFailureAction
 
 export function accountReducer(
   state: AccountState = INITIAL_STATE,
-  action: OrderReducerAction
-) {
+  action: AccountReducerAction
+): AccountState {
   switch (action.type) {
     case FETCH_ACCOUNT_REQUEST: {
       return {
@@ -41,10 +41,13 @@ export function accountReducer(
       }
     }
     case FETCH_ACCOUNT_SUCCESS: {
+      const { account } = action.payload
+      const newData = account ? { [account.address]: { ...account } } : {}
       return {
         ...state,
         data: {
-          ...state.data
+          ...state.data,
+          ...newData
         },
         loading: loadingReducer(state.loading, action),
         error: null

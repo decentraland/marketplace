@@ -1,26 +1,25 @@
 import { connect } from 'react-redux'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { RouteComponentProps } from 'react-router'
 
-import { RootState } from '../../modules/reducer'
 import {
-  fetchAccountRequest,
-  FETCH_ACCOUNT_REQUEST
-} from '../../modules/account/actions'
-import { getLoading } from '../../modules/account/selectors'
-import {
+  Params,
   MapStateProps,
   MapDispatch,
   MapDispatchProps
 } from './AccountPage.types'
 import AccountPage from './AccountPage'
+import { getMarketSection } from '../../modules/ui/selectors'
+import { RootState } from '../../modules/reducer'
 
-const mapState = (state: RootState): MapStateProps => ({
-  isLoading: isLoadingType(getLoading(state), FETCH_ACCOUNT_REQUEST)
-})
+const mapState = (
+  state: RootState,
+  ownProps: RouteComponentProps<Params>
+): MapStateProps => {
+  const { address } = ownProps.match.params
+  return { address, section: getMarketSection(state) }
+}
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchAddres: (account: string) => dispatch(fetchAccountRequest(account))
-})
+const mapDispatch = (_: MapDispatch): MapDispatchProps => ({})
 
 export default connect(
   mapState,

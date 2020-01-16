@@ -6,7 +6,7 @@ import {
   fetchOrdersSuccess,
   fetchOrdersFailure
 } from './actions'
-import { marketplace } from '../../lib/api/marketplace'
+import { marketplace as marketplaceAPI } from '../../lib/api/marketplace'
 
 export function* orderSaga() {
   yield takeEvery(FETCH_ORDERS_REQUEST, handleFetchOrdersRequest)
@@ -19,7 +19,7 @@ function* handleFetchOrdersRequest(action: FetchOrdersRequestAction) {
   }
 
   try {
-    const [orders, nfts] = yield call(() => marketplace.fetchOrders(options))
+    const [orders, nfts] = yield call(() => marketplaceAPI.fetchOrders(options))
     yield put(fetchOrdersSuccess(options, orders, nfts))
   } catch (error) {
     yield put(fetchOrdersFailure(options, error.message))

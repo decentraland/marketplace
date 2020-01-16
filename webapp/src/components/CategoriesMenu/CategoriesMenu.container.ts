@@ -2,14 +2,17 @@ import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 
 import { RootState } from '../../modules/reducer'
+import { getMarketSection } from '../../modules/ui/selectors'
 import {
   MapStateProps,
   MapDispatch,
   MapDispatchProps
-} from './Navigation.types'
-import Navigation from './Navigation'
+} from './CategoriesMenu.types'
+import CategoriesMenu from './CategoriesMenu'
 
-const mapState = (_: RootState): MapStateProps => ({})
+const mapState = (state: RootState): MapStateProps => ({
+  section: getMarketSection(state)
+})
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path))
@@ -18,4 +21,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
 export default connect(
   mapState,
   mapDispatch
-)(Navigation)
+)(CategoriesMenu)
