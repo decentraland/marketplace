@@ -5,7 +5,7 @@ import { NFTCard } from '../NFTCard'
 import { Props } from './AccountNFTs.types'
 
 const AccountNFTs = (props: Props) => {
-  const { address, account, nfts, orders, onFetchAccount, isLoading } = props
+  const { address, account, nfts, onFetchAccount, isLoading } = props
 
   useEffect(() => {
     onFetchAccount({
@@ -21,15 +21,9 @@ const AccountNFTs = (props: Props) => {
         <Loader size="massive" active />
       ) : account ? (
         <Card.Group>
-          {account.nftIds.map(nftId => {
-            const nft = nfts[nftId]
-            const order =
-              orders[
-                nft.activeOrderId ||
-                  '0x822aa01a2fa61f734069e242a9719a28d1a53bb63b9aaace506aa9ea7d80dd59'
-              ]
-            return <NFTCard key={nftId} nft={nft} order={order} />
-          })}
+          {account.nftIds.map(nftId => (
+            <NFTCard key={nftId} nft={nfts[nftId]} />
+          ))}
         </Card.Group>
       ) : (
         <div>No account for address {address}</div>

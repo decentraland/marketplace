@@ -18,7 +18,6 @@ import {
   getLoading
 } from '../../modules/account/selectors'
 import { getData as getNFTData } from '../../modules/nft/selectors'
-import { getData as getOrderData } from '../../modules/order/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { address } = ownProps
@@ -28,7 +27,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
     account,
     nfts: getNFTData(state),
-    orders: getOrderData(state),
     isLoading: isLoadingType(getLoading(state), FETCH_ACCOUNT_REQUEST)
   }
 }

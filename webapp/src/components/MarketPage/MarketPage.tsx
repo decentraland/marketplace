@@ -153,7 +153,11 @@ const MarketPage = (props: Props) => {
           <Card.Group>
             {orders.length > 0
               ? orders.map(order => (
-                  <NFTCard key={order.id} nft={nfts[order.nftId]} />
+                  <NFTCard
+                    key={order.id}
+                    nft={nfts[order.nftId]}
+                    order={order}
+                  />
                 ))
               : null}
             {orders.length === 0 && !isLoading ? (
