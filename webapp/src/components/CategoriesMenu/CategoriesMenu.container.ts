@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../modules/reducer'
-import { getMarketSection } from '../../modules/ui/selectors'
+import { getUISection } from '../../modules/ui/selectors'
 import {
   MapStateProps,
   MapDispatch,
@@ -10,7 +10,7 @@ import {
 import CategoriesMenu from './CategoriesMenu'
 
 const mapState = (state: RootState): MapStateProps => ({
-  section: getMarketSection(state)
+  section: getUISection(state)
 })
 
 const mapDispatch = (_: MapDispatch): MapDispatchProps => ({})

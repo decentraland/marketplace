@@ -14,10 +14,15 @@ import {
   FETCH_ACCOUNT_REQUEST
 } from '../../modules/account/actions'
 import {
+  getAccountNFTs,
+  getUIPage,
+  getUISection,
+  getUISortBy
+} from '../../modules/ui/selectors'
+import {
   getData as getAccountData,
   getLoading
 } from '../../modules/account/selectors'
-import { getData as getNFTData } from '../../modules/nft/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { address } = ownProps
@@ -26,7 +31,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 
   return {
     account,
-    nfts: getNFTData(state),
+    nfts: getAccountNFTs(state),
+    page: getUIPage(state),
+    section: getUISection(state),
+    sortBy: getUISortBy(state),
     isLoading: isLoadingType(getLoading(state), FETCH_ACCOUNT_REQUEST)
   }
 }

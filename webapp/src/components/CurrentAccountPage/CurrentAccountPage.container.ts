@@ -5,7 +5,7 @@ import {
   isConnecting
 } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
-import { getMarketSection } from '../../modules/ui/selectors'
+import { getUISection } from '../../modules/ui/selectors'
 import {
   MapStateProps,
   MapDispatch,
@@ -15,7 +15,7 @@ import CurrentAccountPage from './CurrentAccountPage'
 import { RootState } from '../../modules/reducer'
 
 const mapState = (state: RootState): MapStateProps => ({
-  section: getMarketSection(state),
+  section: getUISection(state),
   wallet: getWalletData(state),
   isConnecting: isConnecting(state)
 })

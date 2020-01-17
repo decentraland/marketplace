@@ -70,7 +70,7 @@ class MarketplaceAPI {
       nfts.push(nft)
     }
 
-    return [orders, nfts]
+    return [orders, nfts] as const
   }
 }
 

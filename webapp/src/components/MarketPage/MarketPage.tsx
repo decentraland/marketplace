@@ -18,9 +18,10 @@ import { CategoriesMenu } from '../CategoriesMenu'
 import { NFTCard } from '../NFTCard'
 import { Props } from './MarketPage.types'
 import { locations } from '../../modules/routing/locations'
+import { getSortOrder } from '../../modules/order/utils'
 import {
-  getSearchFilters,
-  SearchSortBy,
+  getSearchCategory,
+  SortBy,
   SearchOptions
 } from '../../modules/routing/search'
 import './MarketPage.css'
@@ -43,10 +44,9 @@ const MarketPage = (props: Props) => {
   const [offset, setOffset] = useState(0)
 
   useEffect(() => {
-    const [orderBy, orderDirection, category] = getSearchFilters(
-      sortBy,
-      section
-    )
+    const category = getSearchCategory(section)
+    const [orderBy, orderDirection] = getSortOrder(sortBy)
+
     const skip = offset * PAGE_SIZE
     const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
     onFetchOrders({
@@ -70,7 +70,7 @@ const MarketPage = (props: Props) => {
         locations.market({
           page: 1,
           section,
-          sortBy: props.value as SearchSortBy
+          sortBy: props.value as SortBy
         })
       )
     },
@@ -113,8 +113,8 @@ const MarketPage = (props: Props) => {
                 direction="left"
                 value={sortBy}
                 options={[
-                  { value: SearchSortBy.NEWEST, text: t('filters.newest') },
-                  { value: SearchSortBy.CHEAPEST, text: t('filters.cheapest') }
+                  { value: SortBy.NEWEST, text: t('filters.newest') },
+                  { value: SortBy.CHEAPEST, text: t('filters.cheapest') }
                 ]}
                 onChange={handleDropdownChange}
               />

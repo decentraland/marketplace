@@ -1,6 +1,6 @@
-import { Order, OrderCategory } from '../order/types'
+import { NFTCategory } from '../nft/types'
 
-export enum SearchSection {
+export enum Section {
   ALL = 'all',
   LAND = 'land',
   PARCELS = 'parcels',
@@ -8,7 +8,7 @@ export enum SearchSection {
   WEARABLES = 'wearables'
 }
 
-export enum SearchSortBy {
+export enum SortBy {
   NEWEST = 'newest',
   CHEAPEST = 'cheapest'
 }
@@ -20,8 +20,8 @@ export enum SortDirection {
 
 export type SearchOptions = {
   page?: number | null
-  section?: SearchSection | null
-  sortBy?: SearchSortBy | null
+  section?: Section | null
+  sortBy?: SortBy | null
 }
 
 export function getSearchParams(options?: SearchOptions) {
@@ -41,36 +41,23 @@ export function getSearchParams(options?: SearchOptions) {
   return params
 }
 
-export function getSearchFilters(sortBy: SearchSortBy, section: SearchSection) {
-  let orderBy: keyof Order = 'createdAt'
-  let orderDirection: SortDirection = SortDirection.DESC
-  let category: OrderCategory | undefined
-  switch (sortBy) {
-    case SearchSortBy.NEWEST: {
-      orderBy = 'createdAt'
-      orderDirection = SortDirection.DESC
-      break
-    }
-    case SearchSortBy.CHEAPEST: {
-      orderBy = 'price'
-      orderDirection = SortDirection.ASC
-      break
-    }
-  }
+// @nico TODO: Maybe this isn't the best name for it? there's a bit of a mixup between categories and sections
+// @nico TODO: We need to support the LAND section, which comprises PARCELS and ESTATES. Might need backend work
+export function getSearchCategory(section: Section) {
+  let category: NFTCategory | undefined
   switch (section) {
-    case SearchSection.PARCELS: {
-      category = OrderCategory.PARCEL
+    case Section.PARCELS: {
+      category = NFTCategory.PARCEL
       break
     }
-    case SearchSection.ESTATES: {
-      category = OrderCategory.ESTATE
+    case Section.ESTATES: {
+      category = NFTCategory.ESTATE
       break
     }
-    case SearchSection.WEARABLES: {
-      category = OrderCategory.WEARABLE
+    case Section.WEARABLES: {
+      category = NFTCategory.WEARABLE
       break
     }
   }
-
-  return [orderBy, orderDirection, category] as const
+  return category
 }

@@ -3,14 +3,14 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header } from 'decentraland-ui'
 
 import { Props } from './CategoriesMenu.types'
-import { SearchSection } from '../../modules/routing/search'
+import { Section } from '../../modules/routing/search'
 import './CategoriesMenu.css'
 
 const CategoriesMenu = (props: Props) => {
   const { section, onNavigate } = props
 
   const handleSectionChange = useCallback(
-    (section: SearchSection) => {
+    (section: Section) => {
       onNavigate({ page: 1, section })
     },
     [onNavigate]
@@ -21,45 +21,37 @@ const CategoriesMenu = (props: Props) => {
       <Header sub>Categories</Header>
       <ul className="menu">
         <li
-          className={section === SearchSection.ALL ? 'active' : ''}
-          onClick={() => handleSectionChange(SearchSection.ALL)}
+          className={section === Section.ALL ? 'active' : ''}
+          onClick={() => handleSectionChange(Section.ALL)}
         >
           {t('categories_menu.all_assets')}
         </li>
         <li
-          className={section === SearchSection.LAND ? 'active' : ''}
-          onClick={() => handleSectionChange(SearchSection.LAND)}
+          className={section === Section.LAND ? 'active' : ''}
+          onClick={() => handleSectionChange(Section.LAND)}
         >
           {t('categories_menu.land')}
         </li>
-        {[
-          SearchSection.LAND,
-          SearchSection.PARCELS,
-          SearchSection.ESTATES
-        ].includes(section) ? (
+        {[Section.LAND, Section.PARCELS, Section.ESTATES].includes(section) ? (
           <>
             {' '}
             <li
-              className={
-                section === SearchSection.PARCELS ? 'sub active' : 'sub'
-              }
-              onClick={() => handleSectionChange(SearchSection.PARCELS)}
+              className={section === Section.PARCELS ? 'sub active' : 'sub'}
+              onClick={() => handleSectionChange(Section.PARCELS)}
             >
               Parcels
             </li>
             <li
-              className={
-                section === SearchSection.ESTATES ? 'sub active' : 'sub'
-              }
-              onClick={() => handleSectionChange(SearchSection.ESTATES)}
+              className={section === Section.ESTATES ? 'sub active' : 'sub'}
+              onClick={() => handleSectionChange(Section.ESTATES)}
             >
               {t('categories_menu.estates')}
             </li>
           </>
         ) : null}
         <li
-          className={section === SearchSection.WEARABLES ? 'active' : ''}
-          onClick={() => handleSectionChange(SearchSection.WEARABLES)}
+          className={section === Section.WEARABLES ? 'active' : ''}
+          onClick={() => handleSectionChange(Section.WEARABLES)}
         >
           {t('categories_menu.wearables')}
         </li>

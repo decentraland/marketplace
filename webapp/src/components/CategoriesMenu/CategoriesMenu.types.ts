@@ -1,7 +1,7 @@
-import { SearchSection, SearchOptions } from '../../modules/routing/search'
+import { Section, SearchOptions } from '../../modules/routing/search'
 
 export type Props = {
-  section: SearchSection
+  section: Section
   onNavigate: (options?: SearchOptions) => void
 }
 

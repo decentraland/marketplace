@@ -20,6 +20,7 @@ function* handleFetchAccountRequest(action: FetchAccountRequestAction) {
     )
     yield put(fetchAccountSuccess(options, account, nfts, orders))
   } catch (error) {
+    console.log(error)
     yield put(fetchAccountFailure(options, error.message))
   }
 }

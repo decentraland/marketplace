@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import { SearchSection } from '../../modules/routing/search'
+import { Section } from '../../modules/routing/search'
 
 export type Params = {
   address: string
@@ -8,7 +8,7 @@ export type Params = {
 
 export type Props = {
   address: string
-  section: SearchSection
+  section: Section
   onNavigate: (path: string) => void
 }
 

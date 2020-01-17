@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import { SearchSection } from '../../modules/routing/search'
+import { Section } from '../../modules/routing/search'
 
 export type Props = {
-  section: SearchSection
+  section: Section
   wallet: Wallet | null
   isConnecting: boolean
   onNavigate: (path: string) => void

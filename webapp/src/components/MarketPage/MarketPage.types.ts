@@ -5,15 +5,15 @@ import {
   fetchOrdersRequest,
   FetchOrdersRequestAction
 } from '../../modules/order/actions'
-import { SearchSortBy, SearchSection } from '../../modules/routing/search'
+import { SortBy, Section } from '../../modules/routing/search'
 import { NFTState } from '../../modules/nft/reducer'
 
 export type Props = {
   nfts: NFTState['data']
   orders: Order[]
   page: number
-  section: SearchSection
-  sortBy: SearchSortBy
+  section: Section
+  sortBy: SortBy
   isLoading: boolean
   onFetchOrders: typeof fetchOrdersRequest
   onNavigate: (path: string) => void

@@ -1,8 +1,9 @@
 import { action } from 'typesafe-actions'
 
-import { NFT } from '../nft/types'
+import { NFT, NFTCategory } from '../nft/types'
 import { Order } from '../order/types'
 import { Account } from './types'
+import { View } from '../ui/types'
 
 // Fetch Account
 
@@ -12,12 +13,26 @@ export const FETCH_ACCOUNT_FAILURE = '[Failure] Fetch Account'
 
 export type FetchAccountOptions = {
   variables: {
+    first: number
+    skip: number
+    category?: NFTCategory
     address: string
   }
+  view?: View // @nico TODO: Maybe restrict this to the actual possible vaules (account|load-more)
 }
 
-export const fetchAccountRequest = (options: FetchAccountOptions) =>
-  action(FETCH_ACCOUNT_REQUEST, { options })
+export const DEFAULT_FETCH_ACCOUNT_OPTIONS: FetchAccountOptions = {
+  variables: {
+    first: 24,
+    skip: 0,
+    category: undefined,
+    address: ''
+  },
+  view: undefined
+}
+export const fetchAccountRequest = (
+  options: FetchAccountOptions = DEFAULT_FETCH_ACCOUNT_OPTIONS
+) => action(FETCH_ACCOUNT_REQUEST, { options })
 export const fetchAccountSuccess = (
   options: FetchAccountOptions,
   account: Account,

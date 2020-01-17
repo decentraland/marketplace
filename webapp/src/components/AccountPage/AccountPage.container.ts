@@ -9,7 +9,7 @@ import {
   MapDispatchProps
 } from './AccountPage.types'
 import AccountPage from './AccountPage'
-import { getMarketSection } from '../../modules/ui/selectors'
+import { getUISection } from '../../modules/ui/selectors'
 import { RootState } from '../../modules/reducer'
 
 const mapState = (
@@ -17,7 +17,7 @@ const mapState = (
   ownProps: RouteComponentProps<Params>
 ): MapStateProps => {
   const { address } = ownProps.match.params
-  return { address, section: getMarketSection(state) }
+  return { address, section: getUISection(state) }
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
