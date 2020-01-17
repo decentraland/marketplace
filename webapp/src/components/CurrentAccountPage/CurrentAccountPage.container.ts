@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
 import {
   getData as getWalletData,
   isConnecting
@@ -19,7 +20,9 @@ const mapState = (state: RootState): MapStateProps => ({
   isConnecting: isConnecting(state)
 })
 
-const mapDispatch = (_: MapDispatch): MapDispatchProps => ({})
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onNavigate: path => dispatch(push(path))
+})
 
 export default connect(
   mapState,

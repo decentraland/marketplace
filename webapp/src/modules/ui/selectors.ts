@@ -5,7 +5,7 @@ import { OrderState } from '../order/reducer'
 import { Order } from '../order/types'
 import { getData } from '../order/selectors'
 import { getSearch } from 'connected-react-router'
-import { MarketSortBy, MarketSection } from '../routing/locations'
+import { SearchSortBy, SearchSection } from '../routing/search'
 
 export const getState = (state: RootState) => state.ui
 export const getMarketOrders = createSelector<
@@ -13,10 +13,8 @@ export const getMarketOrders = createSelector<
   UIState,
   OrderState['data'],
   Order[]
->(
-  getState,
-  getData,
-  (ui, ordersById) => ui.marketOrderIds.map(id => ordersById[id])
+>(getState, getData, (ui, ordersById) =>
+  ui.marketOrderIds.map(id => ordersById[id])
 )
 
 export const getMarketPage = createSelector<RootState, string, number>(
@@ -30,25 +28,22 @@ export const getMarketPage = createSelector<RootState, string, number>(
 export const getMarketSection = createSelector<
   RootState,
   string,
-  MarketSection
->(
-  getSearch,
-  search => {
-    const section = new URLSearchParams(search).get('section')
-    if (section && Object.values(MarketSection).includes(section as any)) {
-      return section as MarketSection
-    }
-    return MarketSection.ALL
+  SearchSection
+>(getSearch, search => {
+  const section = new URLSearchParams(search).get('section')
+  if (section && Object.values(SearchSection).includes(section as any)) {
+    return section as SearchSection
   }
-)
+  return SearchSection.ALL
+})
 
-export const getMarketSortBy = createSelector<RootState, string, MarketSortBy>(
+export const getMarketSortBy = createSelector<RootState, string, SearchSortBy>(
   getSearch,
   search => {
     const sortBy = new URLSearchParams(search).get('sortBy')
     if (sortBy) {
-      return sortBy as MarketSortBy
+      return sortBy as SearchSortBy
     }
-    return MarketSortBy.NEWEST
+    return SearchSortBy.NEWEST
   }
 )

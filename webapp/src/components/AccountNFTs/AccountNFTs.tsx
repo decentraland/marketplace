@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Loader } from 'decentraland-ui'
 
 import { NFTCard } from '../NFTCard'
 import { Props } from './AccountNFTs.types'
+import './AccountNFTs.css'
 
 const AccountNFTs = (props: Props) => {
   const { address, account, nfts, onFetchAccount, isLoading } = props
@@ -26,7 +28,9 @@ const AccountNFTs = (props: Props) => {
           ))}
         </Card.Group>
       ) : (
-        <div>No account for address {address}</div>
+        <div className="empty">
+          {t('account_nfts.empty_account', { address })}
+        </div>
       )}
     </div>
   )

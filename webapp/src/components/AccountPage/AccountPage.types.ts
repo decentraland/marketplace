@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux'
-import { MarketSection } from '../../modules/routing/locations'
+import { CallHistoryMethodAction } from 'connected-react-router'
+import { SearchSection } from '../../modules/routing/search'
 
 export type Params = {
   address: string
@@ -7,9 +8,10 @@ export type Params = {
 
 export type Props = {
   address: string
-  section: MarketSection
+  section: SearchSection
+  onNavigate: (path: string) => void
 }
 
 export type MapStateProps = Pick<Props, 'address' | 'section'>
-export type MapDispatchProps = {}
-export type MapDispatch = Dispatch<any>
+export type MapDispatchProps = Pick<Props, 'onNavigate'>
+export type MapDispatch = Dispatch<CallHistoryMethodAction>

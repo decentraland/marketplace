@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { push } from 'connected-react-router'
 import { RouteComponentProps } from 'react-router'
 
 import {
@@ -19,7 +20,9 @@ const mapState = (
   return { address, section: getMarketSection(state) }
 }
 
-const mapDispatch = (_: MapDispatch): MapDispatchProps => ({})
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onNavigate: path => dispatch(push(path))
+})
 
 export default connect(
   mapState,

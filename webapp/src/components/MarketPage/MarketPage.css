@@ -3,6 +3,7 @@
 }
 
 .MarketPage .right-column {
+  height: 100%;
   width: 100%;
 }
 
@@ -29,6 +30,7 @@
 }
 
 .MarketPage .load-more {
+  text-align: center;
   margin-top: 36px;
 }
 

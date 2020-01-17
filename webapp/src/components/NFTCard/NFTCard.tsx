@@ -27,7 +27,9 @@ const NFTCard = (props: Props) => {
           {order ? <Mana inline>{getPrice(order)}</Mana> : null}
         </Card.Header>
         <Card.Meta>
-          {order ? t('nft_card.expires', { date: getExpiresAt(order) }) : null}
+          {order
+            ? t('nft_card.expires_at', { date: getExpiresAt(order) })
+            : null}
         </Card.Meta>
       </Card.Content>
     </Card>

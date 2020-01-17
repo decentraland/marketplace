@@ -21,6 +21,9 @@
     "newest": "Newest",
     "cheapest": "Cheapest"
   },
+  "account_nfts": {
+    "empty_account": "Address {address} doesn't have any assets"
+  },
   "nft_card": {
     "expires_at": "Expires {date}"
   }

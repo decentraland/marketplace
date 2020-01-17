@@ -17,54 +17,16 @@ import { Navigation } from '../Navigation'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { NFTCard } from '../NFTCard'
 import { Props } from './MarketPage.types'
+import { locations } from '../../modules/routing/locations'
 import {
-  locations,
-  MarketSortBy,
-  MarketSection
-} from '../../modules/routing/locations'
-import { Order, OrderCategory } from '../../modules/order/types'
+  getSearchFilters,
+  SearchSortBy,
+  SearchOptions
+} from '../../modules/routing/search'
 import './MarketPage.css'
 
 const PAGE_SIZE = 24
 const MAX_QUERY_SIZE = 1000
-
-// @nico TODO: Move this to utils?
-const getFilters = (
-  sortBy: MarketSortBy,
-  section: MarketSection
-): [keyof Order, 'asc' | 'desc', OrderCategory | undefined] => {
-  let orderBy: keyof Order = 'createdAt'
-  let orderDirection: 'asc' | 'desc' = 'desc'
-  let category: OrderCategory | undefined
-  switch (sortBy) {
-    case MarketSortBy.NEWEST: {
-      orderBy = 'createdAt'
-      orderDirection = 'desc'
-      break
-    }
-    case MarketSortBy.CHEAPEST: {
-      orderBy = 'price'
-      orderDirection = 'asc'
-      break
-    }
-  }
-  switch (section) {
-    case MarketSection.PARCELS: {
-      category = OrderCategory.PARCEL
-      break
-    }
-    case MarketSection.ESTATES: {
-      category = OrderCategory.ESTATE
-      break
-    }
-    case MarketSection.WEARABLES: {
-      category = OrderCategory.WEARABLE
-      break
-    }
-  }
-
-  return [orderBy, orderDirection, category]
-}
 
 const MarketPage = (props: Props) => {
   const {
@@ -81,7 +43,10 @@ const MarketPage = (props: Props) => {
   const [offset, setOffset] = useState(0)
 
   useEffect(() => {
-    const [orderBy, orderDirection, category] = getFilters(sortBy, section)
+    const [orderBy, orderDirection, category] = getSearchFilters(
+      sortBy,
+      section
+    )
     const skip = offset * PAGE_SIZE
     const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
     onFetchOrders({
@@ -96,9 +61,7 @@ const MarketPage = (props: Props) => {
     })
   }, [offset, page, section, sortBy, onFetchOrders])
 
-  useEffect(() => {
-    setOffset(0)
-  }, [section])
+  useEffect(() => setOffset(0), [section])
 
   const handleDropdownChange = useCallback(
     (_: React.SyntheticEvent, props: DropdownProps) => {
@@ -107,11 +70,18 @@ const MarketPage = (props: Props) => {
         locations.market({
           page: 1,
           section,
-          sortBy: props.value as MarketSortBy
+          sortBy: props.value as SearchSortBy
         })
       )
     },
     [section, onNavigate]
+  )
+
+  const handleOnNavigate = useCallback(
+    (options?: SearchOptions) => {
+      onNavigate(locations.market(options))
+    },
+    [onNavigate]
   )
 
   const handleLoadMore = useCallback(() => {
@@ -131,7 +101,7 @@ const MarketPage = (props: Props) => {
       <Navigation activeTab="market" />
       <Page className="MarketPage">
         <Grid.Column>
-          <CategoriesMenu section={section} />
+          <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
         </Grid.Column>
         <Grid.Column className={`right-column ${isLoading ? 'loading' : ''}`}>
           <HeaderMenu>
@@ -143,8 +113,8 @@ const MarketPage = (props: Props) => {
                 direction="left"
                 value={sortBy}
                 options={[
-                  { value: MarketSortBy.NEWEST, text: t('filters.newest') },
-                  { value: MarketSortBy.CHEAPEST, text: t('filters.Cheapest') }
+                  { value: SearchSortBy.NEWEST, text: t('filters.newest') },
+                  { value: SearchSortBy.CHEAPEST, text: t('filters.cheapest') }
                 ]}
                 onChange={handleDropdownChange}
               />
@@ -171,15 +141,16 @@ const MarketPage = (props: Props) => {
             ) : null}
           </Card.Group>
           {orders.length === 0 ? null : (
-            <Button
-              className="load-more"
-              loading={isLoading}
-              inverted
-              primary
-              onClick={handleLoadMore}
-            >
-              {t('global.load_more')}
-            </Button>
+            <div className="load-more">
+              <Button
+                loading={isLoading}
+                inverted
+                primary
+                onClick={handleLoadMore}
+              >
+                {t('global.load_more')}
+              </Button>
+            </div>
           )}
         </Grid.Column>
       </Page>

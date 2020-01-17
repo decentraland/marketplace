@@ -1,5 +1,4 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
 
 import { RootState } from '../../modules/reducer'
 import { getMarketSection } from '../../modules/ui/selectors'
@@ -14,9 +13,7 @@ const mapState = (state: RootState): MapStateProps => ({
   section: getMarketSection(state)
 })
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path))
-})
+const mapDispatch = (_: MapDispatch): MapDispatchProps => ({})
 
 export default connect(
   mapState,
