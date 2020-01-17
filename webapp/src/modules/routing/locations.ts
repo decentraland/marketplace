@@ -1,6 +1,7 @@
 import { getSearchParams, SearchOptions } from './search'
 
 export const locations = {
+  signIn: () => '/sign-in',
   atlas: () => '/atlas',
   market: (options?: SearchOptions) => {
     const params = getSearchParams(options)

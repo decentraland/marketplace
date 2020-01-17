@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
 import { Page, Grid, Loader } from 'decentraland-ui'
 
@@ -18,6 +18,12 @@ const CurrentAccountPage = (props: Props) => {
     [onNavigate]
   )
 
+  useEffect(() => {
+    if (!isConnecting && !wallet) {
+      onNavigate(locations.signIn())
+    }
+  }, [isConnecting, wallet, onNavigate])
+
   return (
     <>
       <Navbar isFullscreen activePage="marketplace" />
@@ -35,9 +41,7 @@ const CurrentAccountPage = (props: Props) => {
             </Grid.Column>
           </>
         ) : (
-          <div>
-            Please connect your wallet <br /> SIGN IN
-          </div>
+          <Loader size="massive" active />
         )}
       </Page>
       <Footer />
