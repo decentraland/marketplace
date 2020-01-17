@@ -1,3 +1,4 @@
+import { ValueKind } from '@graphprotocol/graph-ts'
 import {
   CreateEstate,
   AddLand,
@@ -7,7 +8,7 @@ import {
 import { NFT, Parcel, Estate, Order } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { decodeTokenId } from '../modules/parcel'
-import { createWallet } from '../modules/wallet'
+import { createAccount } from '../modules/wallet'
 import { buildData, DataType } from '../modules/data'
 import * as categories from '../modules/category/categories'
 
@@ -37,7 +38,7 @@ export function handleCreateEstate(event: CreateEstate): void {
 
   estate.save()
 
-  createWallet(event.params._owner.toHex())
+  createAccount(event.params._owner)
 }
 
 export function handleAddLand(event: AddLand): void {
@@ -53,13 +54,16 @@ export function handleAddLand(event: AddLand): void {
 
   estate.parcels = parcels
   estate.size = parcels.length
+
   estate.save()
 
   let estateNFT = NFT.load(id)
-  if (estateNFT.activeOrder != null) {
+  if (estateNFT.get('activeOrder').kind == ValueKind.STRING) {
     let order = Order.load(estateNFT.activeOrder)
-    order.search_estate_size += 1
-    order.save()
+    if (order != null) {
+      order.search_estate_size = estate.size
+      order.save()
+    }
   }
 
   let parcel = Parcel.load(parcelId)
@@ -97,13 +101,16 @@ export function handleRemoveLand(event: RemoveLand): void {
 
   estate.parcels = parcels
   estate.size = parcels.length
+
   estate.save()
 
   let estateNFT = NFT.load(id)
-  if (estateNFT.activeOrder != null) {
+  if (estateNFT.get('activeOrder').kind == ValueKind.STRING) {
     let order = Order.load(estateNFT.activeOrder)
-    order.search_estate_size -= 1
-    order.save()
+    if (order != null) {
+      order.search_estate_size = estate.size
+      order.save()
+    }
   }
 
   let parcel = Parcel.load(parcelId)

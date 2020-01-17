@@ -6,7 +6,7 @@ import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
 import { buildCountFromNFT } from '../modules/count'
 import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
 import { buildWearableFromNFT, getWearableImage } from '../modules/wearable'
-import { createWallet } from '../modules/wallet'
+import { createAccount } from '../modules/wallet'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
 
@@ -58,7 +58,7 @@ export function handleTransfer(event: Transfer): void {
     nft.createdAt = event.block.timestamp
   }
 
-  createWallet(event.params.to.toHex())
+  createAccount(event.params.to)
 
   nft.save()
 }

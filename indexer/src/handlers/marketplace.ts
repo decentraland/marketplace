@@ -85,6 +85,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
   order.status = status.SOLD
   order.buyer = event.params.buyer
   order.price = event.params.totalPrice
+  order.blockNumber = event.block.number
   order.updatedAt = event.block.timestamp
   order.save()
 
@@ -102,6 +103,7 @@ export function handleOrderCancelled(event: OrderCancelled): void {
   let order = new Order(orderId)
   order.category = category
   order.status = status.CANCELLED
+  order.blockNumber = event.block.number
   order.updatedAt = event.block.timestamp
   order.save()
 
