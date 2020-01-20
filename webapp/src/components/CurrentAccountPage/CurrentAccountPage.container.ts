@@ -6,13 +6,13 @@ import {
 } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
 import { getUISection } from '../../modules/ui/selectors'
+import { RootState } from '../../modules/reducer'
 import {
   MapStateProps,
   MapDispatch,
   MapDispatchProps
 } from './CurrentAccountPage.types'
 import CurrentAccountPage from './CurrentAccountPage'
-import { RootState } from '../../modules/reducer'
 
 const mapState = (state: RootState): MapStateProps => ({
   section: getUISection(state),

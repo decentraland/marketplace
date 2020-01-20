@@ -1,7 +1,8 @@
 import React, { useEffect, useCallback } from 'react'
-import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
+import { Footer } from 'decentraland-dapps/dist/containers'
 import { Page, Grid, Loader } from 'decentraland-ui'
 
+import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { locations } from '../../modules/routing/locations'
@@ -26,8 +27,8 @@ const CurrentAccountPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen activePage="marketplace" />
-      <Navigation isFullscreen activeTab="account" />
+      <Navbar isFullscreen />
+      <Navigation activeTab="account" />
       <Page className="CurrentAccountPage">
         {isConnecting ? (
           <Loader size="massive" active />

@@ -1,7 +1,8 @@
 import React from 'react'
-import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
+import { Footer } from 'decentraland-dapps/dist/containers'
 import { Page, Atlas, AtlasTile } from 'decentraland-ui'
 
+import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 
 // TODO: move this to redux so we can reuse it from other <Atlas /> instances
@@ -11,7 +12,7 @@ Atlas.fetchTiles().then(_tiles => (tiles = _tiles))
 const AtlasPage = () => {
   return (
     <>
-      <Navbar isFullscreen activePage="marketplace" />
+      <Navbar isFullscreen />
       <Navigation isFullscreen activeTab="atlas" />
       <Page isFullscreen>
         <Atlas tiles={tiles} />

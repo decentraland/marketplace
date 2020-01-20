@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
+import { Footer } from 'decentraland-dapps/dist/containers'
 import {
   Page,
   Grid,
@@ -13,10 +13,10 @@ import {
   Button
 } from 'decentraland-ui'
 
+import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { NFTCard } from '../NFTCard'
-import { Props } from './MarketPage.types'
 import { locations } from '../../modules/routing/locations'
 import { getSortOrder } from '../../modules/order/utils'
 import {
@@ -24,6 +24,7 @@ import {
   SortBy,
   SearchOptions
 } from '../../modules/routing/search'
+import { Props } from './MarketPage.types'
 import './MarketPage.css'
 
 const PAGE_SIZE = 24
@@ -97,7 +98,7 @@ const MarketPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen activePage="marketplace" />
+      <Navbar isFullscreen />
       <Navigation activeTab="market" />
       <Page className="MarketPage">
         <Grid.Column>
