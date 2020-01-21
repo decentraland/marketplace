@@ -44,6 +44,8 @@ type Order @entity {
   updatedAt: BigInt!
 
   # search indexes
+  search_is_land: Boolean!
+
   search_parcel_x: BigInt
   search_parcel_y: BigInt
 

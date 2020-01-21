@@ -32,27 +32,27 @@ export function handleTransfer(event: Transfer): void {
     nft.tokenURI = getTokenURI(event)
   }
 
-  if (category == categories.PARCEL) {
-    let parcel = buildParcelFromNFT(nft)
-    parcel.save()
-    nft.parcel = id
-    nft.image = getParcelImage(parcel)
-  } else if (category == categories.ESTATE) {
-    let estate = buildEstateFromNFT(nft)
-    estate.save()
-    nft.estate = id
-    nft.image = getEstateImage(estate)
-  } else if (category == categories.WEARABLE) {
-    let wearable = buildWearableFromNFT(nft)
-    if (wearable.id != '') {
-      wearable.save()
-      nft.wearable = id
-      nft.name = wearable.name
-      nft.image = getWearableImage(wearable)
-    }
-  }
-
   if (isMint(event)) {
+    if (category == categories.PARCEL) {
+      let parcel = buildParcelFromNFT(nft)
+      parcel.save()
+      nft.parcel = id
+      nft.image = getParcelImage(parcel)
+    } else if (category == categories.ESTATE) {
+      let estate = buildEstateFromNFT(nft)
+      estate.save()
+      nft.estate = id
+      nft.image = getEstateImage(estate)
+    } else if (category == categories.WEARABLE) {
+      let wearable = buildWearableFromNFT(nft)
+      if (wearable.id != '') {
+        wearable.save()
+        nft.wearable = id
+        nft.name = wearable.name
+        nft.image = getWearableImage(wearable)
+      }
+    }
+
     let metric = buildCountFromNFT(nft)
     metric.save()
     nft.createdAt = event.block.timestamp

@@ -146,11 +146,11 @@ dataSources:
           file: ./abis/ERC721Bid.json
       eventHandlers:
         - event: BidCreated(bytes32,indexed address,indexed uint256,indexed address,uint256,uint256,bytes)
-          handler: handleCreated
+          handler: handleBidCreated
         - event: BidAccepted(bytes32,indexed address,indexed uint256,address,indexed address,uint256,uint256)
-          handler: handleAccepted
+          handler: handleBidAccepted
         - event: BidCancelled(bytes32,indexed address,indexed uint256,indexed address)
-          handler: handleCancelled
+          handler: handleBidCancelled
 
 
 # ---------------------------------------------------------
