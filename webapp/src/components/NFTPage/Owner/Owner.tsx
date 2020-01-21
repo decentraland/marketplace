@@ -1,0 +1,24 @@
+import React from 'react'
+import { Blockie, Popup } from 'decentraland-ui'
+import { Props } from './Owner.types'
+import './Owner.css'
+
+const Owner = (props: Props) => {
+  const address = props.nft.owner.id
+  return (
+    <div className="Owner">
+      <label>Owner</label>
+      <Popup
+        content={address.slice(0, 6) + '...' + address.slice(-4)}
+        position="top center"
+        trigger={
+          <div className="blockie-wrapper">
+            <Blockie seed={address} />
+          </div>
+        }
+      />
+    </div>
+  )
+}
+
+export default React.memo(Owner)

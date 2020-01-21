@@ -15,6 +15,7 @@ import {
   FETCH_ORDERS_SUCCESS,
   FETCH_ORDERS_FAILURE
 } from './actions'
+import { FetchNFTSuccessAction, FETCH_NFT_SUCCESS } from '../nft/actions'
 
 export type OrderState = {
   data: Record<string, Order>
@@ -33,6 +34,7 @@ type OrderReducerAction =
   | FetchOrdersSuccessAction
   | FetchOrdersFailureAction
   | FetchAccountSuccessAction
+  | FetchNFTSuccessAction
 
 export function orderReducer(
   state: OrderState = INITIAL_STATE,
@@ -51,13 +53,10 @@ export function orderReducer(
         ...state,
         data: {
           ...state.data,
-          ...action.payload.orders.reduce(
-            (obj, order) => {
-              obj[order.id] = order
-              return obj
-            },
-            {} as Record<string, Order>
-          )
+          ...action.payload.orders.reduce((obj, order) => {
+            obj[order.id] = order
+            return obj
+          }, {} as Record<string, Order>)
         },
         loading: loadingReducer(state.loading, action),
         error: null
@@ -69,6 +68,19 @@ export function orderReducer(
         loading: loadingReducer(state.loading, action),
         error: action.payload.error
       }
+    }
+    case FETCH_NFT_SUCCESS: {
+      const { order } = action.payload
+      if (order) {
+        return {
+          ...state,
+          data: {
+            ...state.data,
+            [order.id]: order
+          }
+        }
+      }
+      return state
     }
     default:
       return state

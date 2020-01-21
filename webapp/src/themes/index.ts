@@ -6,3 +6,4 @@ import 'decentraland-ui/lib/dark-theme.css'
 
 // Overrides
 import './components/Button.css'
+import './components/Card.css'

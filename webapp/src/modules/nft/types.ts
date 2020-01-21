@@ -10,12 +10,16 @@ export enum NFTCategory {
 
 export type NFT = {
   id: string
+  contractAddress: string
+  tokenId: string
   activeOrderId: string | null
   name: string
-  description: string
   category: NFTCategory
   image: string
-  parcel: Parcel
-  estate: Estate
-  wearable: Wearable
+  parcel: Parcel | null
+  estate: Estate | null
+  wearable: Wearable | null
+  owner: {
+    id: string
+  }
 }

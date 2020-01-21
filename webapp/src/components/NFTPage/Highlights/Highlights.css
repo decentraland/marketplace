@@ -1,0 +1,8 @@
+.Highlights {
+  margin-bottom: 48px;
+}
+
+.Highlights .row {
+  display: flex;
+  margin-top: 13px;
+}

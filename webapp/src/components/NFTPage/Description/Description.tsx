@@ -1,0 +1,15 @@
+import React from 'react'
+import { Header } from 'decentraland-ui'
+import { Props } from './Description.types'
+import './Description.css'
+
+const Description = (props: Props) => {
+  return props.text ? (
+    <div className="Description">
+      <Header sub>Description</Header>
+      <div className="description-text">{props.text}</div>
+    </div>
+  ) : null
+}
+
+export default React.memo(Description)
