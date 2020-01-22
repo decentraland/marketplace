@@ -28,7 +28,7 @@ const AccountPage = (props: Props) => {
         <Grid.Column>
           <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
         </Grid.Column>
-        <Grid.Column>
+        <Grid.Column className="right-column">
           <AccountNFTs address={address} />
         </Grid.Column>
       </Page>

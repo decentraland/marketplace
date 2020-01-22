@@ -1,7 +1,9 @@
 import React from 'react'
 import { Page } from 'decentraland-ui'
-import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
+import { Footer } from 'decentraland-dapps/dist/containers'
 
+import { Navbar } from '../Navbar'
+import { Navigation } from '../Navigation'
 import { NFTProvider } from '../NFTProvider'
 import { ParcelDetail } from './ParcelDetail'
 import { EstateDetail } from './EstateDetail'
@@ -11,7 +13,8 @@ import './NFTPage.css'
 const NFTPage = () => {
   return (
     <>
-      <Navbar isFullscreen activePage="marketplace" />
+      <Navbar isFullscreen />
+      <Navigation isFullscreen />
       <Page className="NFTPage" isFullscreen>
         <NFTProvider>
           {nft => (
