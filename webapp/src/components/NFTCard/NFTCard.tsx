@@ -36,7 +36,7 @@ const NFTCard = (props: Props) => {
   return (
     <Card className="NFTCard" link onClick={handleClick}>
       <div className="image-wrapper" style={imgStyle}>
-        <img className="image" src={nft.image} />
+        <img className="image" src={nft.image} alt={title} />
       </div>
       <Card.Content>
         <Card.Header>
