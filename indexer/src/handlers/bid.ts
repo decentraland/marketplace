@@ -12,7 +12,7 @@ import * as categories from '../modules/category/categories'
 
 export function handleBidCreated(event: BidCreated): void {
   let category = getCategory(event.params._tokenAddress.toHexString())
-  let nftId = getNFTId(event.params._tokenId.toString(), categories.PARCEL)
+  let nftId = getNFTId(event.params._tokenId.toString(), category)
   let id = event.params._id.toHex()
 
   let bid = new Bid(id)
@@ -29,10 +29,8 @@ export function handleBidCreated(event: BidCreated): void {
   bid.createdAt = event.block.timestamp
   bid.updatedAt = event.block.timestamp
 
-  if (nft) {
-    bid.nft = nft.id
-    bid.seller = Address.fromString(nft.owner)
-  }
+  bid.nft = nftId
+  bid.seller = Address.fromString(nft.owner)
 
   bid.save()
 }
