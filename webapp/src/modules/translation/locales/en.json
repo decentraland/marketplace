@@ -1,7 +1,8 @@
 {
   "global": {
     "assets": "Assets",
-    "load_more": "Load more"
+    "load_more": "Load more",
+    "not_found": "Not found"
   },
   "navigation": {
     "atlas": "Atlas",
@@ -44,8 +45,7 @@
     "distance": "{distance} {distance, plural, one {parcel} other {parcels}} away",
     "plaza": "Plaza",
     "road": "Road",
-    "district": "District",
-    "not_found": "Not found..."
+    "district": "District"
   },
   "wearable": {
     "body_shape": {

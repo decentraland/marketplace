@@ -1,27 +1,14 @@
-import React, { useEffect } from 'react'
-import { Page, Loader } from 'decentraland-ui'
+import React from 'react'
+import { Page } from 'decentraland-ui'
 import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { Props } from './NFTPage.types'
 import { NFT } from '../../modules/nft/types'
 
-import './NFTPage.css'
+import { NFTProvider } from '../NFTProvider'
 import { ParcelDetail } from './ParcelDetail'
 import { EstateDetail } from './EstateDetail'
 import { WearableDetail } from './WearableDetail'
-
-const Loading = () => (
-  <div className="center">
-    <Loader active size="huge" />
-  </div>
-)
-
-const NotFound = () => (
-  <div className="center">
-    <p className="secondary-text">{t('detail.not_found')}</p>
-  </div>
-)
+import './NFTPage.css'
 
 const NFTDetail = (props: { nft: NFT }) => {
   const { nft } = props
@@ -37,21 +24,12 @@ const NFTDetail = (props: { nft: NFT }) => {
   return null
 }
 
-const NFTPage = (props: Props) => {
-  const { nft, contractAddress, tokenId, onFetchNFT, isLoading } = props
-  useEffect(() => {
-    if (!nft && contractAddress && tokenId) {
-      onFetchNFT(contractAddress, tokenId)
-    }
-  }, [nft, contractAddress, tokenId, onFetchNFT])
-
+const NFTPage = () => {
   return (
     <>
       <Navbar isFullscreen activePage="marketplace" />
       <Page className="NFTPage" isFullscreen>
-        {isLoading ? <Loading /> : null}
-        {!isLoading && !nft ? <NotFound /> : null}
-        {nft ? <NFTDetail nft={nft} /> : null}
+        <NFTProvider>{nft => <NFTDetail nft={nft} />}</NFTProvider>
       </Page>
       <Footer />
     </>
