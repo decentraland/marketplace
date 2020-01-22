@@ -37,7 +37,7 @@ const EstateDetail = (props: Props) => {
             <>
               <Header size="large">{nft.name || t('detail.estate')}</Header>
               <Badge color="#37333d">
-                {selection.length.toLocaleString()} LAND
+                {nft.estate!.size.toLocaleString()} LAND
               </Badge>
             </>
           }

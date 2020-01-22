@@ -4,9 +4,12 @@ import { Card, Image, Mana } from 'decentraland-ui'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Props } from './NFTCard.types'
 
-import { Order } from '../../modules/order/types'
-import './NFTCard.css'
 import { locations } from '../../modules/routing/locations'
+import { Order } from '../../modules/order/types'
+import { ParcelTags } from './ParcelTags'
+import { EstateTags } from './EstateTags'
+import { WearableTags } from './WearableTags'
+import './NFTCard.css'
 
 const getPrice = (order: Order) =>
   (parseInt(order.price, 10) / 10 ** 18).toLocaleString()
@@ -32,11 +35,14 @@ const NFTCard = (props: Props) => {
           <div className="title">{title}</div>{' '}
           {order ? <Mana inline>{getPrice(order)}</Mana> : null}
         </Card.Header>
-        <Card.Meta>
-          {order
-            ? t('nft_card.expires_at', { date: getExpiresAt(order) })
-            : null}
-        </Card.Meta>
+        {order ? (
+          <Card.Meta>
+            {t('nft_card.expires_at', { date: getExpiresAt(order) })}
+          </Card.Meta>
+        ) : null}
+        {nft.parcel ? <ParcelTags nft={nft} /> : null}
+        {nft.estate ? <EstateTags nft={nft} /> : null}
+        {nft.wearable ? <WearableTags nft={nft} /> : null}
       </Card.Content>
     </Card>
   )
