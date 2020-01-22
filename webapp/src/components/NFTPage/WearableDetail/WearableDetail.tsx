@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { RARITY_COLOR, BodyShape } from '../../../modules/nft/wearable/types'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
@@ -10,13 +11,6 @@ import { Order } from '../Order'
 import { Highlight } from '../Highlight'
 import { Highlights } from '../Highlights'
 import './WearableDetail.css'
-
-const capitalize = (text: string) => text[0].toUpperCase() + text.slice(1)
-const humanize = (text: string) =>
-  text
-    .split('_')
-    .map(capitalize)
-    .join(' ')
 
 const WearableDetail = (props: Props) => {
   const { nft } = props
@@ -30,15 +24,15 @@ const WearableDetail = (props: Props) => {
           backgroundColor: RARITY_COLOR[nft.wearable!.rarity]
         }}
       >
-        <img src={nft.image} />
+        <img alt={nft.name} src={nft.image} />
       </div>
       <Container className="WearableDetail">
         <Title
           left={
             <>
-              <Header size="large">{nft.name || 'Estate'}</Header>
+              <Header size="large">{nft.name || t('detail.wearable')}</Header>
               <Badge color={RARITY_COLOR[nft.wearable!.rarity]}>
-                {nft.wearable!.rarity}
+                {t(`wearable.rarity.${nft.wearable!.rarity}`)}
               </Badge>
             </>
           }
@@ -49,12 +43,16 @@ const WearableDetail = (props: Props) => {
         <Highlights>
           <Highlight
             icon={<div className={nft.wearable!.category} />}
-            name={humanize(nft.wearable!.category)}
+            name={t(`wearable.category.${nft.wearable!.category}`)}
           />
           {nft.wearable!.bodyShapes.map(shape => (
             <Highlight
               icon={<div className={shape} />}
-              name={shape === BodyShape.MALE ? 'Male' : 'Female'}
+              name={
+                shape === BodyShape.MALE
+                  ? t('wearable.body_shape.male')
+                  : t('wearable.body_shape.female')
+              }
             />
           ))}
         </Highlights>

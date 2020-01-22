@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import { Stats, Mana, Button } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { formatPrice } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -12,19 +13,19 @@ const Order = (props: Props) => {
 
   const handleSell = useCallback(
     () => onNavigate(locations.sell(nft.contractAddress, nft.tokenId)),
-    []
+    [nft, onNavigate]
   )
   const handleBuy = useCallback(
     () => onNavigate(locations.buy(nft.contractAddress, nft.tokenId)),
-    []
+    [nft, onNavigate]
   )
   const handleCancel = useCallback(
     () => onNavigate(locations.cancel(nft.contractAddress, nft.tokenId)),
-    []
+    [nft, onNavigate]
   )
   const handleTransfer = useCallback(
     () => onNavigate(locations.cancel(nft.contractAddress, nft.tokenId)),
-    []
+    [nft, onNavigate]
   )
 
   const isOwner =
@@ -39,10 +40,10 @@ const Order = (props: Props) => {
       <div className="left">
         {order ? (
           <>
-            <Stats title="Price">
+            <Stats title={t('detail.price')}>
               <Mana>{formatPrice(order.price)}</Mana>
             </Stats>
-            <Stats title="Expires in">
+            <Stats title={t('detail.expires')}>
               {formatDistanceToNow(+order.expiresAt)}
             </Stats>
           </>
@@ -52,19 +53,21 @@ const Order = (props: Props) => {
         {order ? (
           isOwner ? (
             <Button onClick={handleCancel} primary>
-              Cancel Sale
+              {t('detail.cancel_sale')}
             </Button>
           ) : (
             <Button onClick={handleBuy} primary>
-              Buy
+              {t('detail.buy')}
             </Button>
           )
         ) : isOwner ? (
           <Button onClick={handleSell} primary>
-            Sell
+            {t('detail.sell')}
           </Button>
         ) : null}
-        {isOwner ? <Button onClick={handleTransfer}>Transfer</Button> : null}
+        {isOwner ? (
+          <Button onClick={handleTransfer}>{t('detail.transfer')}</Button>
+        ) : null}
       </div>
     </div>
   )

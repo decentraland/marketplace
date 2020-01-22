@@ -26,5 +26,58 @@
   },
   "nft_card": {
     "expires_at": "Expires {date}"
+  },
+  "detail": {
+    "description": "Description",
+    "parcel": "Parcel",
+    "estate": "Estate",
+    "wearable": "Wearable",
+    "highlights": "Highlights",
+    "owner": "Owner",
+    "price": "Price",
+    "expires": "Expires in",
+    "cancel_sale": "Cancel Sale",
+    "buy": "Buy",
+    "sell": "Sell",
+    "transfer": "Transfer",
+    "adjacent": "Adjacent",
+    "distance": "{distance} {distance, plural, one {parcel} other {parcels}} away",
+    "plaza": "Plaza",
+    "road": "Road",
+    "district": "District",
+    "not_found": "Not found..."
+  },
+  "wearable": {
+    "body_shape": {
+      "male": "Male",
+      "female": "Female"
+    },
+    "rarity": {
+      "unique": "Unique",
+      "mythic": "Mythic",
+      "legendary": "Legendary",
+      "epic": "Epic",
+      "swanky": "Swanky",
+      "uncommon": "Uncommon",
+      "common": "Common"
+    },
+    "category": {
+      "body_shape": "Body Shape",
+      "earring": "Earring",
+      "eyebrows": "Eyebrows",
+      "eyes": "Eyes",
+      "eyewear": "Eyewear",
+      "facial_hair": "Facial Hair",
+      "feet": "Feet",
+      "hair": "Hair",
+      "hat": "Hat",
+      "helmet": "Helmet",
+      "lower_body": "Lower Body",
+      "mask": "Mask",
+      "mouth": "Mouth",
+      "tiara": "Tiara",
+      "top_head": "Top Head",
+      "upper_body": "Upper Body"
+    }
   }
 }

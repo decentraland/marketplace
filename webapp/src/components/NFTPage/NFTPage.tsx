@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Page, Loader } from 'decentraland-ui'
 import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { Props } from './NFTPage.types'
 import { NFT } from '../../modules/nft/types'
@@ -18,7 +19,7 @@ const Loading = () => (
 
 const NotFound = () => (
   <div className="center">
-    <p className="secondary-text">Not found...</p>
+    <p className="secondary-text">{t('detail.not_found')}</p>
   </div>
 )
 
