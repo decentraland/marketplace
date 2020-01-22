@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Card, Image, Mana } from 'decentraland-ui'
+import { Card, Mana } from 'decentraland-ui'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Props } from './NFTCard.types'
 
 import { locations } from '../../modules/routing/locations'
+import { RARITY_COLOR } from '../../modules/nft/wearable/types'
 import { Order } from '../../modules/order/types'
 import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
@@ -27,9 +28,16 @@ const NFTCard = (props: Props) => {
     [nft, onNavigate]
   )
 
+  let imgStyle
+  if (nft.wearable) {
+    imgStyle = { backgroundColor: RARITY_COLOR[nft.wearable.rarity] }
+  }
+
   return (
     <Card className="NFTCard" link onClick={handleClick}>
-      <Image src={nft.image} wrapped ui={false} />
+      <div className="image-wrapper" style={imgStyle}>
+        <img className="image" src={nft.image} />
+      </div>
       <Card.Content>
         <Card.Header>
           <div className="title">{title}</div>{' '}
