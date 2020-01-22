@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Image, Mana } from 'decentraland-ui'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
@@ -6,20 +6,26 @@ import { Props } from './NFTCard.types'
 
 import { Order } from '../../modules/order/types'
 import './NFTCard.css'
+import { locations } from '../../modules/routing/locations'
 
-const capitalize = (value: string) => value[0].toUpperCase() + value.slice(1)
 const getPrice = (order: Order) =>
   (parseInt(order.price, 10) / 10 ** 18).toLocaleString()
+
 const getExpiresAt = (order: Order) =>
   formatDistanceToNow(+order.expiresAt, { addSuffix: true })
 
 const NFTCard = (props: Props) => {
-  const { nft, order } = props
+  const { nft, order, onNavigate } = props
 
-  const title = nft.name || capitalize(nft.category)
+  const title = nft.name || t(`detail.${nft.category}`)
+
+  const handleClick = useCallback(
+    () => onNavigate(locations.ntf(nft.contractAddress, nft.tokenId)),
+    [nft, onNavigate]
+  )
 
   return (
-    <Card className="NFTCard" link>
+    <Card className="NFTCard" link onClick={handleClick}>
       <Image src={nft.image} wrapped ui={false} />
       <Card.Content>
         <Card.Header>
