@@ -24,12 +24,22 @@
   flex: none;
 }
 
+.ui.cards > .ui.card.NFTCard.link .meta,
+.ui.card.link .meta {
+  margin-bottom: 4px;
+}
+
 .ui.cards > .ui.card.NFTCard.link:hover .meta,
 .ui.card.link:hover .meta {
   color: var(--secondary-text);
 }
 
 .NFTCard .image {
-  min-height: 241px;
-  min-width: 100%;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.NFTCard .tags {
+  margin-top: 12px;
 }

@@ -8,22 +8,38 @@ export const nftFields = () => gql`
     id
     name
     image
+    contractAddress
     tokenId
     category
+    owner {
+      id
+    }
     parcel {
       x
       y
+      data {
+        description
+      }
     }
     estate {
       size
+      parcels(first: 1000) {
+        x
+        y
+      }
+      data {
+        description
+      }
     }
     wearable {
       description
       category
       rarity
+      bodyShapes
     }
   }
 `
+
 export const nftFragment = () => gql`
   fragment nftFragment on NFT {
     ...nftFields
@@ -36,4 +52,4 @@ export const nftFragment = () => gql`
 `
 
 export type NFTFields = Omit<NFT, 'activeOrderId'>
-export type NFTFragment = NFTFields & { activeOrder: OrderFields }
+export type NFTFragment = NFTFields & { activeOrder: OrderFields | null }

@@ -1,0 +1,9 @@
+.Description {
+  margin-bottom: 48px;
+}
+
+.Description .description-text {
+  font-size: 17px;
+  line-height: 26px;
+  letter-spacing: 0.2px;
+}

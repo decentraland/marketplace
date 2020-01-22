@@ -3,6 +3,7 @@ import { Footer } from 'decentraland-dapps/dist/containers'
 import { Page, Grid } from 'decentraland-ui'
 
 import { Navbar } from '../Navbar'
+import { Navigation } from '../Navigation'
 import { AccountNFTs } from '../AccountNFTs'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { locations } from '../../modules/routing/locations'
@@ -21,7 +22,8 @@ const AccountPage = (props: Props) => {
 
   return (
     <>
-      <Navbar />
+      <Navbar isFullscreen />
+      <Navigation />
       <Page className="AccountPage">
         <Grid.Column>
           <CategoriesMenu section={section} onNavigate={handleOnNavigate} />

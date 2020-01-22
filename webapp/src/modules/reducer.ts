@@ -9,6 +9,7 @@ import { accountReducer as account } from './account/reducer'
 import { orderReducer as order } from './order/reducer'
 import { uiReducer as ui } from './ui/reducer'
 import { nftReducer as nft } from './nft/reducer'
+import { contractReducer as contract } from './contract/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({
@@ -20,6 +21,7 @@ export const createRootReducer = (history: History) =>
     order,
     ui,
     nft,
+    contract,
     router: connectRouter(history)
   })
 

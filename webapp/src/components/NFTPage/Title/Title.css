@@ -1,0 +1,31 @@
+.Title {
+  display: flex;
+  margin-top: 35px;
+  margin-bottom: 48px;
+}
+
+.Title .left {
+  display: flex;
+  flex: 1 1 auto;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-right: 34px;
+}
+
+.Title .right {
+  flex: none;
+  text-align: right;
+}
+
+.Title .left .ui.header {
+  display: inline-block;
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 0px;
+}
+
+.Title .Badge {
+  margin-left: 16px;
+  margin-top: 1px;
+}

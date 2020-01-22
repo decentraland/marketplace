@@ -1,0 +1,38 @@
+.Highlight {
+  display: flex;
+}
+
+.Highlight + .Highlight {
+  margin-left: 64px;
+}
+
+.Highlight .left {
+  width: 48px;
+  height: 48px;
+  background-color: #37333d;
+  border-radius: 8px;
+}
+
+.Highlight .right {
+  margin-left: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.Highlight .name {
+  font-size: 15px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.Highlight .description {
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--secondary-text);
+}
+
+.Highlight .left > div {
+  width: 100%;
+  height: 100%;
+}

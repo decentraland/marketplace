@@ -1,4 +1,7 @@
 export type Parcel = {
-  x: number
-  y: number
+  x: string
+  y: string
+  data: {
+    description: string
+  } | null
 }

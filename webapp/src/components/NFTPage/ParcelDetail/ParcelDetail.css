@@ -1,0 +1,21 @@
+.ParcelDetail .pin {
+  background-image: url(../../../images/pin.svg);
+  width: 12px;
+  height: 14px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-right: 4px;
+}
+
+.ParcelDetail .Highlight .plaza {
+  background-image: url(../../../images/plaza.svg);
+}
+
+.ParcelDetail .Highlight .road {
+  background-image: url(../../../images/road.svg);
+}
+
+.ParcelDetail .Highlight .district {
+  background-image: url(../../../images/district.svg);
+}

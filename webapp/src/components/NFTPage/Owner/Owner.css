@@ -1,0 +1,10 @@
+.Owner > a {
+  display: flex;
+  align-items: center;
+}
+
+.Owner label {
+  text-transform: uppercase;
+  color: var(--secondary-text);
+  margin-right: 20px;
+}

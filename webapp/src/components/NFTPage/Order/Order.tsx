@@ -1,0 +1,76 @@
+import React, { useCallback } from 'react'
+import { Stats, Mana, Button } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import { formatPrice } from '../../../modules/order/utils'
+import { locations } from '../../../modules/routing/locations'
+import { Props } from './Order.types'
+
+import './Order.css'
+
+const Order = (props: Props) => {
+  const { address, nft, order, onNavigate } = props
+
+  const handleSell = useCallback(
+    () => onNavigate(locations.sell(nft.contractAddress, nft.tokenId)),
+    [nft, onNavigate]
+  )
+  const handleBuy = useCallback(
+    () => onNavigate(locations.buy(nft.contractAddress, nft.tokenId)),
+    [nft, onNavigate]
+  )
+  const handleCancel = useCallback(
+    () => onNavigate(locations.cancel(nft.contractAddress, nft.tokenId)),
+    [nft, onNavigate]
+  )
+  const handleTransfer = useCallback(
+    () => onNavigate(locations.cancel(nft.contractAddress, nft.tokenId)),
+    [nft, onNavigate]
+  )
+
+  const isOwner =
+    !!address && nft.owner.id.toLowerCase() === address.toLowerCase()
+
+  // nothing to show
+  const isHidden = !order && !isOwner
+  if (isHidden) return null
+
+  return (
+    <div className="Order">
+      <div className="left">
+        {order ? (
+          <>
+            <Stats title={t('detail.price')}>
+              <Mana>{formatPrice(order.price)}</Mana>
+            </Stats>
+            <Stats title={t('detail.expires')}>
+              {formatDistanceToNow(+order.expiresAt)}
+            </Stats>
+          </>
+        ) : null}
+      </div>
+      <div className="right">
+        {order ? (
+          isOwner ? (
+            <Button onClick={handleCancel} primary>
+              {t('detail.cancel_sale')}
+            </Button>
+          ) : (
+            <Button onClick={handleBuy} primary>
+              {t('detail.buy')}
+            </Button>
+          )
+        ) : isOwner ? (
+          <Button onClick={handleSell} primary>
+            {t('detail.sell')}
+          </Button>
+        ) : null}
+        {isOwner ? (
+          <Button onClick={handleTransfer}>{t('detail.transfer')}</Button>
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+export default React.memo(Order)

@@ -1,0 +1,13 @@
+.Order {
+  display: flex;
+  margin-bottom: 48px;
+}
+
+.Order .left {
+  flex: 1 0 auto;
+}
+
+.Order .right {
+  flex: 1 0 auto;
+  text-align: right;
+}
