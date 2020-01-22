@@ -1,17 +1,9 @@
 .MarketPage > .ui.container {
   display: flex;
-  flex-direction: row;
 }
 
-.MarketPage .menu-column {
-  flex: none;
-  margin-right: 24px;
-}
-
-.MarketPage .orders-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.MarketPage .right-column {
+  height: 100%;
   width: 100%;
 }
 
@@ -29,36 +21,6 @@
   text-transform: uppercase;
 }
 
-.MarketPage ul.menu {
-  margin-left: -16px;
-  padding: 0px;
-}
-
-.MarketPage ul.menu li {
-  font-size: 17px;
-  line-height: 26px;
-  letter-spacing: -0.2;
-  list-style: none;
-  padding: 9px 16px;
-  margin-bottom: 8px;
-  width: 248px;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
-.MarketPage ul.menu li.sub {
-  color: var(--secondary-text);
-  margin-left: 16px;
-  width: 232px;
-}
-
-.MarketPage ul.menu li:hover,
-.MarketPage ul.menu li.active {
-  color: white;
-  font-weight: 600;
-  background-color: var(--card);
-}
-
 .MarketPage .overlay {
   height: 100%;
   width: 100%;
@@ -68,9 +30,11 @@
 }
 
 .MarketPage .load-more {
+  text-align: center;
   margin-top: 36px;
 }
 
+/* @nico: TODO: Move this to a common stylesheet? */
 .MarketPage.dcl.page > .ui.container {
   min-height: calc(
     100vh - var(--navbar-height) - var(--footer-height) -

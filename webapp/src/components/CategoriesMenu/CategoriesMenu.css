@@ -1,0 +1,33 @@
+.CategoriesMenu {
+  margin-right: 24px;
+}
+
+.CategoriesMenu ul.menu {
+  margin-left: -16px;
+  padding: 0px;
+}
+
+.CategoriesMenu ul.menu li {
+  font-size: 17px;
+  line-height: 26px;
+  letter-spacing: -0.2;
+  list-style: none;
+  padding: 9px 16px;
+  margin-bottom: 8px;
+  width: 248px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.CategoriesMenu ul.menu li.sub {
+  color: var(--secondary-text);
+  margin-left: 16px;
+  width: 232px;
+}
+
+.CategoriesMenu ul.menu li:hover,
+.CategoriesMenu ul.menu li.active {
+  color: white;
+  font-weight: 600;
+  background-color: var(--card);
+}

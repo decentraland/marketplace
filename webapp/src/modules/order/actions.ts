@@ -1,8 +1,9 @@
 import { action } from 'typesafe-actions'
 
-import { Order, OrderCategory } from './types'
 import { View } from '../ui/types'
-import { NFT } from '../nft/types'
+import { NFT, NFTCategory } from '../nft/types'
+import { SortDirection } from '../routing/search'
+import { Order } from './types'
 
 // Fetch Orders
 
@@ -15,10 +16,10 @@ export type FetchOrderOptions = {
     first: number
     skip: number
     orderBy?: keyof Order
-    orderDirection: 'asc' | 'desc'
-    category?: OrderCategory
+    orderDirection: SortDirection
+    category?: NFTCategory
   }
-  view?: View
+  view?: View // @nico TODO: Maybe restrict this to the actual possible vaules (account|load-more)
 }
 
 export const DEFAULT_FETCH_ORDER_OPTIONS: FetchOrderOptions = {
@@ -26,7 +27,7 @@ export const DEFAULT_FETCH_ORDER_OPTIONS: FetchOrderOptions = {
     first: 24,
     skip: 0,
     orderBy: 'createdAt',
-    orderDirection: 'desc',
+    orderDirection: SortDirection.DESC,
     category: undefined
   },
   view: undefined

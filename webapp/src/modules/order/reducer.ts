@@ -4,6 +4,10 @@ import {
 } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { Order } from './types'
 import {
+  FetchAccountSuccessAction,
+  FETCH_ACCOUNT_SUCCESS
+} from '../account/actions'
+import {
   FetchOrdersRequestAction,
   FetchOrdersSuccessAction,
   FetchOrdersFailureAction,
@@ -28,11 +32,12 @@ type OrderReducerAction =
   | FetchOrdersRequestAction
   | FetchOrdersSuccessAction
   | FetchOrdersFailureAction
+  | FetchAccountSuccessAction
 
 export function orderReducer(
   state: OrderState = INITIAL_STATE,
   action: OrderReducerAction
-) {
+): OrderState {
   switch (action.type) {
     case FETCH_ORDERS_REQUEST: {
       return {
@@ -40,6 +45,7 @@ export function orderReducer(
         loading: loadingReducer(state.loading, action)
       }
     }
+    case FETCH_ACCOUNT_SUCCESS:
     case FETCH_ORDERS_SUCCESS: {
       return {
         ...state,

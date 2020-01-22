@@ -1,10 +1,11 @@
 import React from 'react'
 import { Tabs } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { Props } from './Navigation.types'
 
 const Navigation = (props: Props) => {
-  const { address, activeTab, isFullscreen, onNavigate } = props
+  const { activeTab, isFullscreen, onNavigate } = props
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
@@ -12,22 +13,20 @@ const Navigation = (props: Props) => {
           active={activeTab === 'atlas'}
           onClick={() => onNavigate(locations.atlas())}
         >
-          Atlas
+          {t('navigation.atlas')}
         </Tabs.Tab>
         <Tabs.Tab
           active={activeTab === 'market'}
           onClick={() => onNavigate(locations.market())}
         >
-          Market
+          {t('navigation.market')}
         </Tabs.Tab>
-        {address ? (
-          <Tabs.Tab
-            active={activeTab === 'address'}
-            onClick={() => onNavigate(locations.address(address))}
-          >
-            My Assets
-          </Tabs.Tab>
-        ) : null}
+        <Tabs.Tab
+          active={activeTab === 'account'}
+          onClick={() => onNavigate(locations.currentAccount())}
+        >
+          {t('navigation.my_account')}
+        </Tabs.Tab>
       </Tabs.Left>
     </Tabs>
   )

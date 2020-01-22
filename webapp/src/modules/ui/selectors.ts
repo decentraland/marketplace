@@ -2,10 +2,13 @@ import { createSelector } from 'reselect'
 import { RootState } from '../reducer'
 import { UIState } from '../ui/reducer'
 import { OrderState } from '../order/reducer'
+import { NFTState } from '../nft/reducer'
 import { Order } from '../order/types'
-import { getData } from '../order/selectors'
+import { NFT } from '../nft/types'
+import { getData as getOrderData } from '../order/selectors'
+import { getData as getNFTData } from '../nft/selectors'
 import { getSearch } from 'connected-react-router'
-import { MarketSortBy, MarketSection } from '../routing/locations'
+import { SortBy, Section } from '../routing/search'
 
 export const getState = (state: RootState) => state.ui
 export const getMarketOrders = createSelector<
@@ -13,10 +16,23 @@ export const getMarketOrders = createSelector<
   UIState,
   OrderState['data'],
   Order[]
->(getState, getData, (ui, ordersById) =>
-  ui.marketOrderIds.map(id => ordersById[id])
+>(
+  getState,
+  getOrderData,
+  (ui, ordersById) => ui.marketOrderIds.map(id => ordersById[id])
 )
-export const getMarketPage = createSelector<RootState, string, number>(
+export const getAccountNFTs = createSelector<
+  RootState,
+  UIState,
+  NFTState['data'],
+  NFT[]
+>(
+  getState,
+  getNFTData,
+  (ui, nftsById) => ui.accountNFTIds.map(id => nftsById[id])
+)
+
+export const getUIPage = createSelector<RootState, string, number>(
   getSearch,
   search => {
     const page = new URLSearchParams(search).get('page')
@@ -24,25 +40,24 @@ export const getMarketPage = createSelector<RootState, string, number>(
   }
 )
 
-export const getMarketSection = createSelector<
-  RootState,
-  string,
-  MarketSection
->(getSearch, search => {
-  const section = new URLSearchParams(search).get('section')
-  if (section && Object.values(MarketSection).includes(section as any)) {
-    return section as MarketSection
+export const getUISection = createSelector<RootState, string, Section>(
+  getSearch,
+  search => {
+    const section = new URLSearchParams(search).get('section')
+    if (section && Object.values(Section).includes(section as any)) {
+      return section as Section
+    }
+    return Section.ALL
   }
-  return MarketSection.ALL
-})
+)
 
-export const getMarketSortBy = createSelector<RootState, string, MarketSortBy>(
+export const getUISortBy = createSelector<RootState, string, SortBy>(
   getSearch,
   search => {
     const sortBy = new URLSearchParams(search).get('sortBy')
     if (sortBy) {
-      return sortBy as MarketSortBy
+      return sortBy as SortBy
     }
-    return MarketSortBy.NEWEST
+    return SortBy.NEWEST
   }
 )

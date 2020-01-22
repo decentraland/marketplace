@@ -1,7 +1,9 @@
 import React, { useEffect, useCallback, useState } from 'react'
-import { Navbar, Footer } from 'decentraland-dapps/dist/containers'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Footer } from 'decentraland-dapps/dist/containers'
 import {
   Page,
+  Grid,
   Card,
   Header,
   HeaderMenu,
@@ -11,62 +13,29 @@ import {
   Button
 } from 'decentraland-ui'
 
+import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
-import { Props } from './MarketPage.types'
-import { OrderCard } from './OrderCard'
+import { CategoriesMenu } from '../CategoriesMenu'
+import { NFTCard } from '../NFTCard'
+import { locations } from '../../modules/routing/locations'
+import { getSortOrder } from '../../modules/order/utils'
 import {
-  locations,
-  MarketSortBy,
-  MarketSection
-} from '../../modules/routing/locations'
-import { Order, OrderCategory } from '../../modules/order/types'
+  getSearchCategory,
+  SortBy,
+  SearchOptions
+} from '../../modules/routing/search'
+import { Props } from './MarketPage.types'
 import './MarketPage.css'
 
 const PAGE_SIZE = 24
 const MAX_QUERY_SIZE = 1000
-
-const getFilters = (
-  sortBy: MarketSortBy,
-  section: MarketSection
-): [keyof Order, 'asc' | 'desc', OrderCategory | undefined] => {
-  let orderBy: keyof Order = 'createdAt'
-  let orderDirection: 'asc' | 'desc' = 'desc'
-  let category: OrderCategory | undefined
-  switch (sortBy) {
-    case MarketSortBy.NEWEST: {
-      orderBy = 'createdAt'
-      orderDirection = 'desc'
-      break
-    }
-    case MarketSortBy.CHEAPEST: {
-      orderBy = 'price'
-      orderDirection = 'asc'
-      break
-    }
-  }
-  switch (section) {
-    case MarketSection.PARCELS: {
-      category = OrderCategory.PARCEL
-      break
-    }
-    case MarketSection.ESTATES: {
-      category = OrderCategory.ESTATE
-      break
-    }
-    case MarketSection.WEARABLES: {
-      category = OrderCategory.WEARABLE
-      break
-    }
-  }
-
-  return [orderBy, orderDirection, category]
-}
 
 const MarketPage = (props: Props) => {
   const {
     page,
     section,
     sortBy,
+    nfts,
     orders,
     onFetchOrders,
     onNavigate,
@@ -76,7 +45,9 @@ const MarketPage = (props: Props) => {
   const [offset, setOffset] = useState(0)
 
   useEffect(() => {
-    const [orderBy, orderDirection, category] = getFilters(sortBy, section)
+    const category = getSearchCategory(section)
+    const [orderBy, orderDirection] = getSortOrder(sortBy)
+
     const skip = offset * PAGE_SIZE
     const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
     onFetchOrders({
@@ -91,6 +62,8 @@ const MarketPage = (props: Props) => {
     })
   }, [offset, page, section, sortBy, onFetchOrders])
 
+  useEffect(() => setOffset(0), [section])
+
   const handleDropdownChange = useCallback(
     (_: React.SyntheticEvent, props: DropdownProps) => {
       setOffset(0)
@@ -98,25 +71,18 @@ const MarketPage = (props: Props) => {
         locations.market({
           page: 1,
           section,
-          sortBy: props.value as MarketSortBy
+          sortBy: props.value as SortBy
         })
       )
     },
     [section, onNavigate]
   )
 
-  const handleSectionChange = useCallback(
-    (section: MarketSection) => {
-      setOffset(0)
-      onNavigate(
-        locations.market({
-          page: 1,
-          section,
-          sortBy
-        })
-      )
+  const handleOnNavigate = useCallback(
+    (options?: SearchOptions) => {
+      onNavigate(locations.market(options))
     },
-    [sortBy, onNavigate]
+    [onNavigate]
   )
 
   const handleLoadMore = useCallback(() => {
@@ -132,69 +98,24 @@ const MarketPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen activePage="marketplace" />
+      <Navbar isFullscreen />
       <Navigation activeTab="market" />
       <Page className="MarketPage">
-        <div className="menu-column">
-          <Header sub>Categories</Header>
-          <ul className="menu">
-            <li
-              className={section === MarketSection.ALL ? 'active' : ''}
-              onClick={() => handleSectionChange(MarketSection.ALL)}
-            >
-              All Assets
-            </li>
-            <li
-              className={section === MarketSection.LAND ? 'active' : ''}
-              onClick={() => handleSectionChange(MarketSection.LAND)}
-            >
-              Land
-            </li>
-            {[
-              MarketSection.LAND,
-              MarketSection.PARCELS,
-              MarketSection.ESTATES
-            ].includes(section) ? (
-              <>
-                {' '}
-                <li
-                  className={
-                    section === MarketSection.PARCELS ? 'sub active' : 'sub'
-                  }
-                  onClick={() => handleSectionChange(MarketSection.PARCELS)}
-                >
-                  Parcels
-                </li>
-                <li
-                  className={
-                    section === MarketSection.ESTATES ? 'sub active' : 'sub'
-                  }
-                  onClick={() => handleSectionChange(MarketSection.ESTATES)}
-                >
-                  Estates
-                </li>
-              </>
-            ) : null}
-            <li
-              className={section === MarketSection.WEARABLES ? 'active' : ''}
-              onClick={() => handleSectionChange(MarketSection.WEARABLES)}
-            >
-              Wearables
-            </li>
-          </ul>
-        </div>
-        <div className={`orders-column ${isLoading ? 'loading' : ''}`}>
+        <Grid.Column>
+          <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
+        </Grid.Column>
+        <Grid.Column className={`right-column ${isLoading ? 'loading' : ''}`}>
           <HeaderMenu>
             <HeaderMenu.Left>
-              <Header sub>Assets</Header>
+              <Header sub>{t('global.assets')}</Header>
             </HeaderMenu.Left>
             <HeaderMenu.Right>
               <Dropdown
                 direction="left"
                 value={sortBy}
                 options={[
-                  { value: MarketSortBy.NEWEST, text: 'Newest' },
-                  { value: MarketSortBy.CHEAPEST, text: 'Cheapest' }
+                  { value: SortBy.NEWEST, text: t('filters.newest') },
+                  { value: SortBy.CHEAPEST, text: t('filters.cheapest') }
                 ]}
                 onChange={handleDropdownChange}
               />
@@ -202,9 +123,17 @@ const MarketPage = (props: Props) => {
           </HeaderMenu>
           <Card.Group>
             {orders.length > 0
-              ? orders.map(order => <OrderCard key={order.id} order={order} />)
+              ? orders.map(order => (
+                  <NFTCard
+                    key={order.id}
+                    nft={nfts[order.nftId]}
+                    order={order}
+                  />
+                ))
               : null}
-            {orders.length === 0 && !isLoading ? <div>No orders</div> : null}
+            {orders.length === 0 && !isLoading ? (
+              <div>{t('market_page.empty_orders')}</div>
+            ) : null}
             {isLoading ? (
               <>
                 <div className="overlay" />
@@ -213,17 +142,18 @@ const MarketPage = (props: Props) => {
             ) : null}
           </Card.Group>
           {orders.length === 0 ? null : (
-            <Button
-              className="load-more"
-              loading={isLoading}
-              inverted
-              primary
-              onClick={handleLoadMore}
-            >
-              Load more
-            </Button>
+            <div className="load-more">
+              <Button
+                loading={isLoading}
+                inverted
+                primary
+                onClick={handleLoadMore}
+              >
+                {t('global.load_more')}
+              </Button>
+            </div>
           )}
-        </div>
+        </Grid.Column>
       </Page>
       <Footer />
     </>

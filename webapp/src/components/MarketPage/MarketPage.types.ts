@@ -5,13 +5,15 @@ import {
   fetchOrdersRequest,
   FetchOrdersRequestAction
 } from '../../modules/order/actions'
-import { MarketSortBy, MarketSection } from '../../modules/routing/locations'
+import { SortBy, Section } from '../../modules/routing/search'
+import { NFTState } from '../../modules/nft/reducer'
 
 export type Props = {
+  nfts: NFTState['data']
   orders: Order[]
   page: number
-  section: MarketSection
-  sortBy: MarketSortBy
+  section: Section
+  sortBy: SortBy
   isLoading: boolean
   onFetchOrders: typeof fetchOrdersRequest
   onNavigate: (path: string) => void
@@ -19,7 +21,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'orders' | 'page' | 'section' | 'sortBy' | 'isLoading'
+  'nfts' | 'orders' | 'page' | 'section' | 'sortBy' | 'isLoading'
 >
 export type MapDispatchProps = Pick<Props, 'onFetchOrders' | 'onNavigate'>
 export type MapDispatch = Dispatch<

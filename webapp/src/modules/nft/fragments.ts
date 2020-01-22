@@ -1,14 +1,15 @@
 import { gql } from 'apollo-boost'
-import { NFT } from './types'
-import { orderFields, OrderFields } from '../order/fragments'
 
-export type NFTFields = Omit<NFT, 'activeOrderId'>
+import { orderFields, OrderFields } from '../order/fragments'
+import { NFT } from './types'
+
 export const nftFields = () => gql`
   fragment nftFields on NFT {
     id
     name
     image
     tokenId
+    category
     parcel {
       x
       y
@@ -23,7 +24,6 @@ export const nftFields = () => gql`
     }
   }
 `
-export type NFTFragment = NFTFields & { activeOrder: OrderFields }
 export const nftFragment = () => gql`
   fragment nftFragment on NFT {
     ...nftFields
@@ -34,3 +34,6 @@ export const nftFragment = () => gql`
   ${nftFields()}
   ${orderFields()}
 `
+
+export type NFTFields = Omit<NFT, 'activeOrderId'>
+export type NFTFragment = NFTFields & { activeOrder: OrderFields }

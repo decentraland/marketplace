@@ -1,4 +1,5 @@
 import { gql } from 'apollo-boost'
+
 import { nftFields, NFTFields } from '../nft/fragments'
 import { Order } from './types'
 

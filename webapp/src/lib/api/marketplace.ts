@@ -1,10 +1,10 @@
 import { gql } from 'apollo-boost'
 
 import { Order } from '../../modules/order/types'
+import { NFT } from '../../modules/nft/types'
 import { FetchOrderOptions } from '../../modules/order/actions'
 import { orderFragment, OrderFragment } from '../../modules/order/fragments'
 import { client } from './client'
-import { NFT } from '../../modules/nft/types'
 
 export const MARKET_FILTERS = `$first: Int
 $skip: Int
@@ -65,11 +65,12 @@ class MarketplaceAPI {
       const { nft: nestedNFT, ...rest } = result
       const order = { ...rest, nftId: nestedNFT.id }
       const nft = { ...nestedNFT, activeOrderId: order.id }
+
       orders.push(order)
       nfts.push(nft)
     }
 
-    return [orders, nfts]
+    return [orders, nfts] as const
   }
 }
 
