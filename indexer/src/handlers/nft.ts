@@ -17,7 +17,7 @@ export function handleTransfer(event: Transfer): void {
 
   let contractAddress = event.address.toHexString()
   let category = getCategory(contractAddress)
-  let id = getNFTId(event.params.tokenId.toString(), category)
+  let id = getNFTId(category, event.address, event.params.tokenId.toString())
 
   let nft = new NFT(id)
 
@@ -33,6 +33,8 @@ export function handleTransfer(event: Transfer): void {
   }
 
   if (isMint(event)) {
+    nft.createdAt = event.block.timestamp
+
     if (category == categories.PARCEL) {
       let parcel = buildParcelFromNFT(nft)
       parcel.save()
@@ -55,7 +57,6 @@ export function handleTransfer(event: Transfer): void {
 
     let metric = buildCountFromNFT(nft)
     metric.save()
-    nft.createdAt = event.block.timestamp
   }
 
   createAccount(event.params.to)

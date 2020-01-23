@@ -16,7 +16,7 @@ export function handleCreateEstate(event: CreateEstate): void {
   let estateId = event.params._estateId.toString()
   let data = event.params._data.toString()
 
-  let id = getNFTId(estateId, categories.ESTATE)
+  let id = getNFTId(categories.ESTATE, event.address, estateId)
 
   let estate = new Estate(id)
 
@@ -43,9 +43,10 @@ export function handleCreateEstate(event: CreateEstate): void {
 
 export function handleAddLand(event: AddLand): void {
   let estateId = event.params._estateId.toString()
+  let landId = event.params._landId.toString()
 
-  let id = getNFTId(estateId, categories.ESTATE)
-  let parcelId = getNFTId(event.params._landId.toString(), categories.PARCEL)
+  let id = getNFTId(categories.ESTATE, event.address, estateId)
+  let parcelId = getNFTId(categories.PARCEL, event.address, landId)
 
   let estate = Estate.load(id)
 
@@ -89,9 +90,10 @@ export function handleAddLand(event: AddLand): void {
 
 export function handleRemoveLand(event: RemoveLand): void {
   let estateId = event.params._estateId.toString()
+  let landId = event.params._landId.toString()
 
-  let id = getNFTId(estateId, categories.ESTATE)
-  let parcelId = getNFTId(event.params._landId.toString(), categories.PARCEL)
+  let id = getNFTId(categories.ESTATE, event.address, estateId)
+  let parcelId = getNFTId(categories.PARCEL, event.address, landId)
 
   let estate = Estate.load(id)
 
@@ -140,7 +142,7 @@ export function handleUpdate(event: Update): void {
   let estateId = event.params._assetId.toString()
 
   let data = event.params._data.toString()
-  let id = getNFTId(estateId, categories.ESTATE)
+  let id = getNFTId(categories.ESTATE, event.address, estateId)
 
   let estate = new Estate(id)
   estate.rawData = data

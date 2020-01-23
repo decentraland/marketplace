@@ -1,4 +1,4 @@
-import { log } from '@graphprotocol/graph-ts'
+import { log, Address } from '@graphprotocol/graph-ts'
 import { ERC721, Transfer } from '../../entities/templates/ERC721/ERC721'
 import * as addresses from '../../data/addresses'
 
@@ -6,8 +6,12 @@ export function isMint(event: Transfer): boolean {
   return event.params.from.toHexString() == addresses.Null
 }
 
-export function getNFTId(tokenId: string, category: string): string {
-  return category + '-' + tokenId
+export function getNFTId(
+  category: string,
+  contractAddress: Address,
+  tokenId: string
+): string {
+  return category + '-' + contractAddress.toHexString() + '-' + tokenId
 }
 
 export function getTokenURI(event: Transfer): string {

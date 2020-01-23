@@ -7,13 +7,13 @@ import {
 import { Order, NFT, Parcel, Wearable, Estate } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { getCategory } from '../modules/category'
-import { buildCountFromNFT } from '../modules/count'
+import { buildCountFromOrder } from '../modules/count'
 import * as status from '../modules/order/status'
 import * as categories from '../modules/category/categories'
 
 export function handleOrderCreated(event: OrderCreated): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = getNFTId(event.params.assetId.toString(), category)
+  let nftId = getNFTId(category, event.address, event.params.assetId.toString())
   let orderId = event.params.id.toHex()
 
   let nft = NFT.load(nftId)
@@ -74,13 +74,13 @@ export function handleOrderCreated(event: OrderCreated): void {
   nft.activeOrder = orderId
   nft.save()
 
-  let count = buildCountFromNFT(nft as NFT)
+  let count = buildCountFromOrder(order)
   count.save()
 }
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = getNFTId(event.params.assetId.toString(), category)
+  let nftId = getNFTId(category, event.address, event.params.assetId.toString())
   let orderId = event.params.id.toHex()
 
   let order = new Order(orderId)
@@ -100,7 +100,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 
 export function handleOrderCancelled(event: OrderCancelled): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = getNFTId(event.params.assetId.toString(), category)
+  let nftId = getNFTId(category, event.address, event.params.assetId.toString())
   let orderId = event.params.id.toHex()
 
   let order = new Order(orderId)

@@ -25,7 +25,7 @@ export function handleUpdate(event: Update): void {
   let parcelId = event.params.assetId.toString()
   let data = event.params.data.toString()
 
-  let id = getNFTId(parcelId, categories.PARCEL)
+  let id = getNFTId(categories.PARCEL, event.address, parcelId)
 
   let parcel = new Parcel(id)
   parcel.rawData = data

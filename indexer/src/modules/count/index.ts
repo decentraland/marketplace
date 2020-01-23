@@ -1,4 +1,4 @@
-import { NFT, Count } from '../../entities/schema'
+import { NFT, Order, Count } from '../../entities/schema'
 import * as addresses from '../../data/addresses'
 import * as categories from '../category/categories'
 
@@ -36,7 +36,7 @@ export function buildCountFromNFT(nft: NFT): Count {
     count.parcel_total += 1
   } else if (category == categories.ESTATE) {
     count.estate_total += 1
-  } else if (nft.category == categories.WEARABLE) {
+  } else if (category == categories.WEARABLE) {
     count.wearable_total += 1
 
     if (contractAddress == addresses.Halloween2019Collection) {
@@ -46,17 +46,22 @@ export function buildCountFromNFT(nft: NFT): Count {
     } else if (contractAddress == addresses.Xmas2019Collection) {
       count.wearable_xmas_2019 += 1
     }
-  } else if (contractAddress == addresses.Marketplace) {
-    count.order_total += 1
-
-    if (category == categories.PARCEL) {
-      count.order_parcel += 1
-    } else if (category == categories.ESTATE) {
-      count.order_estate += 1
-    } else if (nft.category == categories.WEARABLE) {
-      count.order_wearable += 1
-    }
   }
 
+  return count
+}
+
+export function buildCountFromOrder(order: Order): Count {
+  let category = order.category
+  let count = buildCount()
+  count.order_total += 1
+
+  if (category == categories.PARCEL) {
+    count.order_parcel += 1
+  } else if (category == categories.ESTATE) {
+    count.order_estate += 1
+  } else if (category == categories.WEARABLE) {
+    count.order_wearable += 1
+  }
   return count
 }
