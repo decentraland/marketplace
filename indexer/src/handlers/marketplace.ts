@@ -13,7 +13,11 @@ import * as categories from '../modules/category/categories'
 
 export function handleOrderCreated(event: OrderCreated): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = getNFTId(category, event.address, event.params.assetId.toString())
+  let nftId = getNFTId(
+    category,
+    event.params.nftAddress.toHexString(),
+    event.params.assetId.toString()
+  )
   let orderId = event.params.id.toHex()
 
   let nft = NFT.load(nftId)
@@ -80,7 +84,11 @@ export function handleOrderCreated(event: OrderCreated): void {
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = getNFTId(category, event.address, event.params.assetId.toString())
+  let nftId = getNFTId(
+    category,
+    event.params.nftAddress.toHexString(),
+    event.params.assetId.toString()
+  )
   let orderId = event.params.id.toHex()
 
   let order = new Order(orderId)
@@ -100,7 +108,11 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 
 export function handleOrderCancelled(event: OrderCancelled): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = getNFTId(category, event.address, event.params.assetId.toString())
+  let nftId = getNFTId(
+    category,
+    event.params.nftAddress.toHexString(),
+    event.params.assetId.toString()
+  )
   let orderId = event.params.id.toHex()
 
   let order = new Order(orderId)

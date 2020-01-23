@@ -11,12 +11,13 @@ import { decodeTokenId } from '../modules/parcel'
 import { createAccount } from '../modules/wallet'
 import { buildData, DataType } from '../modules/data'
 import * as categories from '../modules/category/categories'
+import * as addresses from '../data/addresses'
 
 export function handleCreateEstate(event: CreateEstate): void {
   let estateId = event.params._estateId.toString()
   let data = event.params._data.toString()
 
-  let id = getNFTId(categories.ESTATE, event.address, estateId)
+  let id = getNFTId(categories.ESTATE, addresses.EstateRegistry, estateId)
 
   let estate = new Estate(id)
 
@@ -45,8 +46,8 @@ export function handleAddLand(event: AddLand): void {
   let estateId = event.params._estateId.toString()
   let landId = event.params._landId.toString()
 
-  let id = getNFTId(categories.ESTATE, event.address, estateId)
-  let parcelId = getNFTId(categories.PARCEL, event.address, landId)
+  let id = getNFTId(categories.ESTATE, addresses.EstateRegistry, estateId)
+  let parcelId = getNFTId(categories.PARCEL, addresses.LANDRegistry, landId)
 
   let estate = Estate.load(id)
 
@@ -92,8 +93,8 @@ export function handleRemoveLand(event: RemoveLand): void {
   let estateId = event.params._estateId.toString()
   let landId = event.params._landId.toString()
 
-  let id = getNFTId(categories.ESTATE, event.address, estateId)
-  let parcelId = getNFTId(categories.PARCEL, event.address, landId)
+  let id = getNFTId(categories.ESTATE, addresses.EstateRegistry, estateId)
+  let parcelId = getNFTId(categories.PARCEL, addresses.LANDRegistry, landId)
 
   let estate = Estate.load(id)
 
@@ -142,7 +143,7 @@ export function handleUpdate(event: Update): void {
   let estateId = event.params._assetId.toString()
 
   let data = event.params._data.toString()
-  let id = getNFTId(categories.ESTATE, event.address, estateId)
+  let id = getNFTId(categories.ESTATE, addresses.EstateRegistry, estateId)
 
   let estate = new Estate(id)
   estate.rawData = data
