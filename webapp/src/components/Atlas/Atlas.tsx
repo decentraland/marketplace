@@ -36,22 +36,47 @@ const Atlas = (props: Props) => {
     [props.selection]
   )
 
+  const isSelected = useCallback(
+    (x: number, y: number) => {
+      if (selection.has(coords(x, y))) return true
+      // This is a workaround to paint the large estates, because GraphQL can return only up to 1000 results
+      // and some Estates have more parcels than thats
+      if (!tiles) return false
+      const id = selection.values().next().value as string
+      const center = tiles[id] as Tile
+      const tile = tiles[coords(x, y)] as Tile
+      if (
+        center &&
+        tile &&
+        center.estate_id &&
+        tile.estate_id &&
+        center.estate_id === tile.estate_id
+      ) {
+        return true
+      }
+      return false
+    },
+    [selection, props.x, props.y]
+  )
+
   const selectedStrokeLayer: Layer = useCallback(
-    (x, y) =>
-      selection.has(coords(x, y)) ? { color: '#ff0044', scale: 1.4 } : null,
-    [selection]
+    (x, y) => {
+      return isSelected(x, y) ? { color: '#ff0044', scale: 1.4 } : null
+    },
+    [isSelected]
   )
 
   const selectedFillLayer: Layer = useCallback(
-    (x, y) =>
-      selection.has(coords(x, y)) ? { color: '#ff9990', scale: 1.2 } : null,
-    [selection]
+    (x, y) => {
+      return isSelected(x, y) ? { color: '#ff9990', scale: 1.2 } : null
+    },
+    [isSelected]
   )
 
   const handleClick = useCallback(
     async (x: number, y: number) => {
       if (!tiles) return
-      const tile = tiles[x + ',' + y] as Tile
+      const tile = tiles[coords(x, y)] as Tile
       if (tile.estate_id) {
         onNavigate(locations.ntf(ContractAddress.ESTATE, tile.estate_id))
       } else {
