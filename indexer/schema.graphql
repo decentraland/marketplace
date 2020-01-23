@@ -42,18 +42,6 @@ type Order @entity {
   expiresAt: BigInt!
   createdAt: BigInt!
   updatedAt: BigInt!
-
-  # search indexes
-  search_is_land: Boolean!
-
-  search_parcel_x: BigInt
-  search_parcel_y: BigInt
-
-  search_estate_size: Int
-
-  search_wearable_category: WearableCategory
-  search_wearable_rarity: WearableRarity
-  search_wearable_bodyShapes: [WearableBodyShape!]
 }
 
 # ---------------------------------------------------------
@@ -144,6 +132,19 @@ type NFT @entity {
   wearable: Wearable
   createdAt: BigInt!
   updatedAt: BigInt!
+
+  # search indexes
+  searchOrderStatus: OrderStatus
+  searchOrderExpiresAt: BigInt
+
+  searchParcelX: BigInt
+  searchParcelY: BigInt
+
+  searchEstateSize: Int
+
+  searchWearableCategory: WearableCategory
+  searchWearableRarity: WearableRarity
+  searchWearableBodyShapes: [WearableBodyShape!]
 }
 
 # ---------------------------------------------------------

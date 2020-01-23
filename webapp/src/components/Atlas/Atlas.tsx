@@ -2,11 +2,12 @@ import React, { useCallback, useMemo } from 'react'
 import { Atlas as AtlasComponent, AtlasTile, Layer } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { ContractAddress } from '../../modules/contract/types'
-import { marketplace } from '../../lib/api/marketplace'
+import { LAND_API_URL } from '../../lib/api/land'
+import { nftAPI } from '../../lib/api/nft'
 import { Tile, Props } from './Atlas.types'
 
 let tiles: Record<string, AtlasTile>
-AtlasComponent.fetchTiles(process.env.REACT_APP_LAND_URL + '/tiles').then(
+AtlasComponent.fetchTiles(LAND_API_URL + '/tiles').then(
   _tiles => (tiles = _tiles)
 )
 
@@ -36,20 +37,14 @@ const Atlas = (props: Props) => {
   )
 
   const selectedStrokeLayer: Layer = useCallback(
-    (x, y) => {
-      return selection.has(coords(x, y))
-        ? { color: '#ff0044', scale: 1.4 }
-        : null
-    },
+    (x, y) =>
+      selection.has(coords(x, y)) ? { color: '#ff0044', scale: 1.4 } : null,
     [selection]
   )
 
   const selectedFillLayer: Layer = useCallback(
-    (x, y) => {
-      return selection.has(coords(x, y))
-        ? { color: '#ff9990', scale: 1.2 }
-        : null
-    },
+    (x, y) =>
+      selection.has(coords(x, y)) ? { color: '#ff9990', scale: 1.2 } : null,
     [selection]
   )
 
@@ -61,7 +56,7 @@ const Atlas = (props: Props) => {
         onNavigate(locations.ntf(ContractAddress.ESTATE, tile.estate_id))
       } else {
         try {
-          const tokenId = await marketplace.fetchTokenId(tile.x, tile.y)
+          const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
           onNavigate(locations.ntf(ContractAddress.LAND, tokenId))
         } catch (error) {
           console.warn(

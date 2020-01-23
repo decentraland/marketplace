@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { land } from '../../../lib/api/land'
+import { landAPI } from '../../../lib/api/land'
 import { Atlas } from '../../Atlas'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
@@ -25,7 +25,7 @@ const ParcelDetail = (props: Props) => {
   const [parcel, setParcel] = useState<ParcelData | null>(null)
   useEffect(() => {
     if (!parcel || parcel.x !== +x || parcel.y !== +y) {
-      land
+      landAPI
         .fetchParcel(x, y)
         .then(setParcel)
         .catch()

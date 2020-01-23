@@ -11,4 +11,4 @@ class LandAPI extends BaseAPI {
   }
 }
 
-export const land = new LandAPI(LAND_API_URL)
+export const landAPI = new LandAPI(LAND_API_URL)

@@ -5,7 +5,7 @@ import {
   RemoveLand,
   Update
 } from '../entities/EstateRegistry/EstateRegistry'
-import { NFT, Parcel, Estate, Order } from '../entities/schema'
+import { NFT, Parcel, Estate } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { decodeTokenId } from '../modules/parcel'
 import { createAccount } from '../modules/wallet'
@@ -61,11 +61,8 @@ export function handleAddLand(event: AddLand): void {
 
   let estateNFT = NFT.load(id)
   if (estateNFT.get('activeOrder').kind == ValueKind.STRING) {
-    let order = Order.load(estateNFT.activeOrder)
-    if (order != null) {
-      order.search_estate_size = estate.size
-      order.save()
-    }
+    estateNFT.searchEstateSize = parcels.length
+    estateNFT.save()
   }
 
   let parcel = Parcel.load(parcelId)
@@ -109,11 +106,8 @@ export function handleRemoveLand(event: RemoveLand): void {
 
   let estateNFT = NFT.load(id)
   if (estateNFT.get('activeOrder').kind == ValueKind.STRING) {
-    let order = Order.load(estateNFT.activeOrder)
-    if (order != null) {
-      order.search_estate_size = estate.size
-      order.save()
-    }
+    estateNFT.searchEstateSize = parcels.length
+    estateNFT.save()
   }
 
   let parcel = Parcel.load(parcelId)

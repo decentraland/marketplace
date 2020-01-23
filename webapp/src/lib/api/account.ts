@@ -84,4 +84,4 @@ class AccountAPI {
   }
 }
 
-export const account = new AccountAPI()
+export const accountAPI = new AccountAPI()
