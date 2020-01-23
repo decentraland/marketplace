@@ -4,23 +4,23 @@
 
 # thegraph doesn't support count operations, but we need them to paginate results
 # This entity is a workaround to this issue, but it's still not enough, as we'd need counts for more complex queries
-type Count @entity {
-  id: ID!
+# type Count @entity {
+#   id: ID!
 
-  order_total: Int!
-  order_parcel: Int!
-  order_estate: Int!
-  order_wearable: Int!
+#   order_total: Int!
+#   order_parcel: Int!
+#   order_estate: Int!
+#   order_wearable: Int!
 
-  parcel_total: Int!
+#   parcel_total: Int!
 
-  estate_total: Int!
+#   estate_total: Int!
 
-  wearable_total: Int!
-  wearable_halloween_2019: Int!
-  wearable_exclusive_masks: Int!
-  wearable_xmas_2019: Int!
-}
+#   wearable_total: Int!
+#   wearable_halloween_2019: Int!
+#   wearable_exclusive_masks: Int!
+#   wearable_xmas_2019: Int!
+# }
 
 # ---------------------------------------------------------
 # Orders --------------------------------------------------
@@ -28,79 +28,79 @@ type Count @entity {
 
 # thegraph doesn't support nested property searches, so we're doing promoting properties
 # we need from each NFT type to the Order, in order to search for them, prefixing them with search_[nft]_[prop]
-type Order @entity {
-  id: ID!
-  category: Category!
-  nft: NFT
-  nftAddress: Bytes!
-  txHash: Bytes!
-  owner: Bytes!
-  price: BigInt!
-  status: OrderStatus!
-  buyer: Bytes
-  blockNumber: BigInt!
-  expiresAt: BigInt!
-  createdAt: BigInt!
-  updatedAt: BigInt!
+# type Order @entity {
+#   id: ID!
+#   category: Category!
+#   nft: NFT
+#   nftAddress: Bytes!
+#   txHash: Bytes!
+#   owner: Bytes!
+#   price: BigInt!
+#   status: OrderStatus!
+#   buyer: Bytes
+#   blockNumber: BigInt!
+#   expiresAt: BigInt!
+#   createdAt: BigInt!
+#   updatedAt: BigInt!
 
-  # search indexes
-  search_parcel_x: BigInt
-  search_parcel_y: BigInt
+#   # search indexes
+#   search_parcel_x: BigInt
+#   search_parcel_y: BigInt
 
-  search_estate_size: Int
+#   search_estate_size: Int
 
-  search_wearable_category: WearableCategory
-  search_wearable_rarity: WearableRarity
-  search_wearable_bodyShapes: [WearableBodyShape!]
-}
+#   search_wearable_category: WearableCategory
+#   search_wearable_rarity: WearableRarity
+#   search_wearable_bodyShapes: [WearableBodyShape!]
+# }
 
 # ---------------------------------------------------------
 # NFTs ----------------------------------------------------
 # ---------------------------------------------------------
 
 # aka LAND
-type Parcel @entity {
-  id: ID!
-  tokenId: BigInt!
-  owner: Wallet!
-  x: BigInt!
-  y: BigInt!
-  estate: Estate
-  data: Data
-  rawData: String
-}
+# type Parcel @entity {
+#   id: ID!
+#   tokenId: BigInt!
+#   owner: Wallet!
+#   x: BigInt!
+#   y: BigInt!
+#   estate: Estate
+#   data: Data
+#   rawData: String
+# }
 
-type Estate @entity {
-  id: ID!
-  tokenId: BigInt!
-  owner: Wallet!
-  parcels: [Parcel!]
-  size: Int
-  data: Data
-  rawData: String
-}
+# type Estate @entity {
+#   id: ID!
+#   tokenId: BigInt!
+#   owner: Wallet!
+#   parcels: [Parcel!]
+#   size: Int
+#   data: Data
+#   rawData: String
+# }
 
-type Data @entity {
-  id: ID!
-  parcel: Parcel
-  estate: Estate
-  version: String!
-  name: String
-  description: String
-  ipns: String
-}
+# type Data @entity {
+#   id: ID!
+#   parcel: Parcel
+#   estate: Estate
+#   version: String!
+#   name: String
+#   description: String
+#   ipns: String
+# }
 
-type Wearable @entity {
-  id: ID!
-  owner: Wallet!
-  representationId: String!
-  collection: String!
-  name: String!
-  description: String!
-  category: WearableCategory!
-  rarity: WearableRarity!
-  bodyShapes: [WearableBodyShape!]
-}
+# type Wearable @entity {
+#   id: ID!
+#   owner: Wallet!
+#   representationId: String!
+#   collection: String!
+#   name: String!
+#   description: String!
+#   category: WearableCategory!
+#   rarity: WearableRarity!
+#   bodyShapes: [WearableBodyShape!]
+# }
 
 type NFT @entity {
   id: ID!
@@ -110,15 +110,17 @@ type NFT @entity {
   owner: Wallet!
   tokenURI: String
 
-  orders: [Order!] @derivedFrom(field: "nft") # History of all orders. should only ever be ONE open order. all others must be cancelled or sold
-  activeOrder: Order
+  # orders: [Order!] @derivedFrom(field: "nft") # History of all orders. should only ever be ONE open order. all others must be cancelled or sold
+  # activeOrder: Order
 
   name: String
   image: String
 
-  parcel: Parcel
-  estate: Estate
-  wearable: Wearable
+  # parcel: Parcel
+  # estate: Estate
+  # wearable: Wearable
+  ens: ENS
+
   createdAt: BigInt!
   updatedAt: BigInt!
 }
@@ -131,6 +133,23 @@ type Wallet @entity {
   id: ID! # ETH addr
   nfts: [NFT!] @derivedFrom(field: "owner")
   mana: BigInt # Amount of mana owned
+}
+
+# ---------------------------------------------------------
+# Counts --------------------------------------------------
+# ---------------------------------------------------------
+
+type ENS @entity {
+  id: ID!
+}
+
+type NameRegistration @entity {
+  id: ID!
+  caller: Bytes!
+  beneficiary: Bytes!
+  labelHash: Bytes!
+  subdomain: String
+  createdAt: BigInt!
 }
 
 # ---------------------------------------------------------

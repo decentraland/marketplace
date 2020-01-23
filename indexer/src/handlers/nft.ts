@@ -2,10 +2,11 @@ import { Transfer } from '../entities/templates/ERC721/ERC721'
 import { NFT } from '../entities/schema'
 import { isMint, getNFTId, getTokenURI } from '../modules/nft'
 import { getCategory } from '../modules/category'
-import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
-import { buildCountFromNFT } from '../modules/count'
-import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
-import { buildWearableFromNFT, getWearableImage } from '../modules/wearable'
+// import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
+// import { buildCountFromNFT } from '../modules/count'
+// import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
+// import { buildWearableFromNFT, getWearableImage } from '../modules/wearable'
+import { buildENSFromNFT } from '../modules/ens'
 import { createWallet } from '../modules/wallet'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
@@ -32,30 +33,37 @@ export function handleTransfer(event: Transfer): void {
     nft.tokenURI = getTokenURI(event)
   }
 
-  if (category == categories.PARCEL) {
-    let parcel = buildParcelFromNFT(nft)
-    parcel.save()
-    nft.parcel = id
-    nft.image = getParcelImage(parcel)
-  } else if (category == categories.ESTATE) {
-    let estate = buildEstateFromNFT(nft)
-    estate.save()
-    nft.estate = id
-    nft.image = getEstateImage(estate)
-  } else if (category == categories.WEARABLE) {
-    let wearable = buildWearableFromNFT(nft)
-    if (wearable.id != '') {
-      wearable.save()
-      nft.wearable = id
-      nft.name = wearable.name
-      nft.image = getWearableImage(wearable)
-    }
-  }
-
   if (isMint(event)) {
-    let metric = buildCountFromNFT(nft)
-    metric.save()
     nft.createdAt = event.block.timestamp
+
+    /*if (category == categories.PARCEL) {
+      let parcel = buildParcelFromNFT(nft)
+      parcel.save()
+      nft.parcel = id
+      nft.image = getParcelImage(parcel)
+    } else if (category == categories.ESTATE) {
+      let estate = buildEstateFromNFT(nft)
+      estate.save()
+      nft.estate = id
+      nft.image = getEstateImage(estate)
+    } else if (category == categories.WEARABLE) {
+      let wearable = buildWearableFromNFT(nft)
+      if (wearable.id != '') {
+        wearable.save()
+        nft.wearable = id
+        nft.name = wearable.name
+        nft.image = getWearableImage(wearable)
+      }
+    }*/ if (
+      category == categories.ENS
+    ) {
+      let ens = buildENSFromNFT(nft)
+      ens.save()
+      nft.ens = ens.id
+    }
+
+    // let metric = buildCountFromNFT(nft)
+    // metric.save()
   }
 
   createWallet(event.params.to.toHex())

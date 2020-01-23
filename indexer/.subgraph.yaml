@@ -29,41 +29,41 @@ dataSources:
       callHandlers:
         - function: initialize(bytes)
           handler: handleInitialize
-      eventHandlers:
-        - event: Update(indexed uint256,indexed address,indexed address,string)
-          handler: handleUpdate
+      # eventHandlers:
+      #   - event: Update(indexed uint256,indexed address,indexed address,string)
+      #     handler: handleUpdate
 
   # ---------------------------------------------------------
   # ESTATES -------------------------------------------------
   # ---------------------------------------------------------
-  - kind: ethereum/contract
-    name: EstateRegistry
-    network: {{network}}
-    source:
-      address: '{{address:EstateRegistry}}'
-      abi: EstateRegistry
-      startBlock: {{startBlock:EstateRegistry}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/handlers/estate.ts
-      entities:
-        - Estate
-        - Parcel
-        - Data
-      abis:
-        - name: EstateRegistry
-          file: ./abis/EstateRegistry.json
-      eventHandlers:
-        - event: CreateEstate(indexed address,indexed uint256,string)
-          handler: handleCreateEstate
-        - event: AddLand(indexed uint256,indexed uint256)
-          handler: handleAddLand
-        - event: RemoveLand(indexed uint256,indexed uint256,indexed address)
-          handler: handleRemoveLand
-        - event: Update(indexed uint256,indexed address,indexed address,string)
-          handler: handleUpdate
+  # - kind: ethereum/contract
+  #   name: EstateRegistry
+  #   network: {{network}}
+  #   source:
+  #     address: '{{address:EstateRegistry}}'
+  #     abi: EstateRegistry
+  #     startBlock: {{startBlock:EstateRegistry}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.3
+  #     language: wasm/assemblyscript
+  #     file: ./src/handlers/estate.ts
+  #     entities:
+  #       - Estate
+  #       - Parcel
+  #       - Data
+  #     abis:
+  #       - name: EstateRegistry
+  #         file: ./abis/EstateRegistry.json
+  #     eventHandlers:
+  #       - event: CreateEstate(indexed address,indexed uint256,string)
+  #         handler: handleCreateEstate
+  #       - event: AddLand(indexed uint256,indexed uint256)
+  #         handler: handleAddLand
+  #       - event: RemoveLand(indexed uint256,indexed uint256,indexed address)
+  #         handler: handleRemoveLand
+  #       - event: Update(indexed uint256,indexed address,indexed address,string)
+  #         handler: handleUpdate
 
   # ---------------------------------------------------------
   # MANA ----------------------------------------------------
@@ -96,31 +96,31 @@ dataSources:
   # ---------------------------------------------------------
   # ORDERS --------------------------------------------------
   # ---------------------------------------------------------
-  - kind: ethereum/contract
-    name: Marketplace
-    network: {{network}}
-    source:
-      address: '{{address:Marketplace}}'
-      abi: Marketplace
-      startBlock: {{startBlock:Marketplace}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/handlers/marketplace.ts
-      entities:
-        - Order
-        - NFT
-      abis:
-        - name: Marketplace
-          file: ./abis/Marketplace.json
-      eventHandlers:
-        - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
-          handler: handleOrderCreated
-        - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed address)
-          handler: handleOrderSuccessful
-        - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
-          handler: handleOrderCancelled
+  # - kind: ethereum/contract
+  #   name: Marketplace
+  #   network: {{network}}
+  #   source:
+  #     address: '{{address:Marketplace}}'
+  #     abi: Marketplace
+  #     startBlock: {{startBlock:Marketplace}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.3
+  #     language: wasm/assemblyscript
+  #     file: ./src/handlers/marketplace.ts
+  #     entities:
+  #       - Order
+  #       - NFT
+  #     abis:
+  #       - name: Marketplace
+  #         file: ./abis/Marketplace.json
+  #     eventHandlers:
+  #       - event: OrderCreated(bytes32,indexed uint256,indexed address,address,uint256,uint256)
+  #         handler: handleOrderCreated
+  #       - event: OrderSuccessful(bytes32,indexed uint256,indexed address,address,uint256,indexed address)
+  #         handler: handleOrderSuccessful
+  #       - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
+  #         handler: handleOrderCancelled
 
 # ---------------------------------------------------------
 # TEMPLATES -----------------------------------------------
