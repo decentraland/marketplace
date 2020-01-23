@@ -7,31 +7,31 @@ dataSources:
   # ---------------------------------------------------------
   # PARCELS -------------------------------------------------
   # ---------------------------------------------------------
-  - kind: ethereum/contract
-    name: LANDRegistry
-    network: {{network}}
-    source:
-      address: '{{address:LANDRegistry}}'
-      abi: LANDRegistry
-      startBlock: {{startBlock:LANDRegistry}}
-    mapping:
-      kind: ethereum/events
-      apiVersion: 0.0.3
-      language: wasm/assemblyscript
-      file: ./src/handlers/parcel.ts
-      entities:
-        - ERC721
-        - Parcel
-        - Data
-      abis:
-        - name: LANDRegistry
-          file: ./abis/LANDRegistry.json
-      callHandlers:
-        - function: initialize(bytes)
-          handler: handleInitialize
-      # eventHandlers:
-      #   - event: Update(indexed uint256,indexed address,indexed address,string)
-      #     handler: handleUpdate
+  # - kind: ethereum/contract
+  #   name: LANDRegistry
+  #   network: {{network}}
+  #   source:
+  #     address: '{{address:LANDRegistry}}'
+  #     abi: LANDRegistry
+  #     startBlock: {{startBlock:LANDRegistry}}
+  #   mapping:
+  #     kind: ethereum/events
+  #     apiVersion: 0.0.3
+  #     language: wasm/assemblyscript
+  #     file: ./src/handlers/parcel.ts
+  #     entities:
+  #       - ERC721
+  #       - Parcel
+  #       - Data
+  #     abis:
+  #       - name: LANDRegistry
+  #         file: ./abis/LANDRegistry.json
+  #     callHandlers:
+  #       - function: initialize(bytes)
+  #         handler: handleInitialize
+  #     eventHandlers:
+  #       - event: Update(indexed uint256,indexed address,indexed address,string)
+  #         handler: handleUpdate
 
   # ---------------------------------------------------------
   # ESTATES -------------------------------------------------
@@ -121,6 +121,36 @@ dataSources:
   #         handler: handleOrderSuccessful
   #       - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
   #         handler: handleOrderCancelled
+
+  # ---------------------------------------------------------
+  # ENS -------------------------------------------------
+  # ---------------------------------------------------------
+  - kind: ethereum/contract
+    name: DCLRegistrar
+    network: {{network}}
+    source:
+      address: '{{address:DCLRegistrar}}'
+      abi: DCLRegistrar
+      startBlock: {{startBlock:DCLRegistrar}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/nft.ts
+      entities:
+        - ERC721
+        - DCLRegistrar
+      abis:
+        - name: DCLRegistrar
+          file: ./abis/DCLRegistrar.json
+        - name: ERC721
+          file: ./abis/ERC721.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+        - event: NameRegistered(indexed address,indexed address,indexed bytes32,string,uint256)
+          handler: handleNameRegistered
+
 
 # ---------------------------------------------------------
 # TEMPLATES -----------------------------------------------
