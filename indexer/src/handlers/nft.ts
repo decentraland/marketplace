@@ -6,7 +6,7 @@ import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
 import { buildCountFromNFT } from '../modules/count'
 import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
 import { buildWearableFromNFT, getWearableImage } from '../modules/wearable'
-import { createWallet } from '../modules/wallet'
+import { createAccount } from '../modules/wallet'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
 
@@ -32,33 +32,33 @@ export function handleTransfer(event: Transfer): void {
     nft.tokenURI = getTokenURI(event)
   }
 
-  if (category == categories.PARCEL) {
-    let parcel = buildParcelFromNFT(nft)
-    parcel.save()
-    nft.parcel = id
-    nft.image = getParcelImage(parcel)
-  } else if (category == categories.ESTATE) {
-    let estate = buildEstateFromNFT(nft)
-    estate.save()
-    nft.estate = id
-    nft.image = getEstateImage(estate)
-  } else if (category == categories.WEARABLE) {
-    let wearable = buildWearableFromNFT(nft)
-    if (wearable.id != '') {
-      wearable.save()
-      nft.wearable = id
-      nft.name = wearable.name
-      nft.image = getWearableImage(wearable)
-    }
-  }
-
   if (isMint(event)) {
+    if (category == categories.PARCEL) {
+      let parcel = buildParcelFromNFT(nft)
+      parcel.save()
+      nft.parcel = id
+      nft.image = getParcelImage(parcel)
+    } else if (category == categories.ESTATE) {
+      let estate = buildEstateFromNFT(nft)
+      estate.save()
+      nft.estate = id
+      nft.image = getEstateImage(estate)
+    } else if (category == categories.WEARABLE) {
+      let wearable = buildWearableFromNFT(nft)
+      if (wearable.id != '') {
+        wearable.save()
+        nft.wearable = id
+        nft.name = wearable.name
+        nft.image = getWearableImage(wearable)
+      }
+    }
+
     let metric = buildCountFromNFT(nft)
     metric.save()
     nft.createdAt = event.block.timestamp
   }
 
-  createWallet(event.params.to.toHex())
+  createAccount(event.params.to)
 
   nft.save()
 }

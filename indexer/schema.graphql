@@ -35,15 +35,17 @@ type Order @entity {
   nftAddress: Bytes!
   txHash: Bytes!
   owner: Bytes!
+  buyer: Bytes
   price: BigInt!
   status: OrderStatus!
-  buyer: Bytes
   blockNumber: BigInt!
   expiresAt: BigInt!
   createdAt: BigInt!
   updatedAt: BigInt!
 
   # search indexes
+  search_is_land: Boolean!
+
   search_parcel_x: BigInt
   search_parcel_y: BigInt
 
@@ -55,6 +57,26 @@ type Order @entity {
 }
 
 # ---------------------------------------------------------
+# Bids ----------------------------------------------------
+# ---------------------------------------------------------
+
+type Bid @entity {
+  id: ID!
+  category: Category!
+  nft: NFT
+  nftAddress: Bytes!
+  bidder: Bytes
+  seller: Bytes
+  price: BigInt!
+  fingerprint: Bytes
+  status: OrderStatus!
+  blockNumber: BigInt!
+  expiresAt: BigInt!
+  createdAt: BigInt!
+  updatedAt: BigInt!
+}
+
+# ---------------------------------------------------------
 # NFTs ----------------------------------------------------
 # ---------------------------------------------------------
 
@@ -62,7 +84,7 @@ type Order @entity {
 type Parcel @entity {
   id: ID!
   tokenId: BigInt!
-  owner: Wallet!
+  owner: Account!
   x: BigInt!
   y: BigInt!
   estate: Estate
@@ -73,7 +95,7 @@ type Parcel @entity {
 type Estate @entity {
   id: ID!
   tokenId: BigInt!
-  owner: Wallet!
+  owner: Account!
   parcels: [Parcel!]
   size: Int
   data: Data
@@ -92,7 +114,7 @@ type Data @entity {
 
 type Wearable @entity {
   id: ID!
-  owner: Wallet!
+  owner: Account!
   representationId: String!
   collection: String!
   name: String!
@@ -107,10 +129,11 @@ type NFT @entity {
   tokenId: BigInt!
   contractAddress: Bytes!
   category: Category!
-  owner: Wallet!
+  owner: Account!
   tokenURI: String
 
-  orders: [Order!] @derivedFrom(field: "nft") # History of all orders. should only ever be ONE open order. all others must be cancelled or sold
+  orders: [Order!] @derivedFrom(field: "nft") # History of all orders. Should only ever be ONE open order. all others must be cancelled or sold
+  bids: [Bid!] @derivedFrom(field: "nft") # History of all bids.
   activeOrder: Order
 
   name: String
@@ -124,11 +147,12 @@ type NFT @entity {
 }
 
 # ---------------------------------------------------------
-# Wallet (user) -------------------------------------------
+# Account (user) -------------------------------------------
 # ---------------------------------------------------------
 
-type Wallet @entity {
+type Account @entity {
   id: ID! # ETH addr
+  address: Bytes!
   nfts: [NFT!] @derivedFrom(field: "owner")
   mana: BigInt # Amount of mana owned
 }

@@ -6,8 +6,9 @@ enum Network {
 }
 
 const graphByNetwork: Record<Network, string> = {
-  [Network.MAINNET]: 'decentraland/marketplace',
-  [Network.ROPSTEN]: `decentraland/marketplace-ropsten`
+  [Network.MAINNET]: process.env.GRAPH_NAME || 'decentraland/marketplace',
+  [Network.ROPSTEN]:
+    process.env.GRAPH_NAME || 'decentraland/marketplace-ropsten'
 }
 
 // TODO: Handle ctrl+C
@@ -37,9 +38,8 @@ async function run(command: string, args: string[], options?: SpawnOptions) {
   return new Promise((resolve, reject) => {
     const program = spawn(command, args, options)
 
-    program.on(
-      'close',
-      code => (code === 0 ? resolve() : reject(`Error: ${code}`))
+    program.on('close', code =>
+      code === 0 ? resolve() : reject(`Error: ${code}`)
     )
   })
 }

@@ -55,6 +55,8 @@ dataSources:
       abis:
         - name: EstateRegistry
           file: ./abis/EstateRegistry.json
+        - name: LANDRegistry
+          file: ./abis/LANDRegistry.json
       eventHandlers:
         - event: CreateEstate(indexed address,indexed uint256,string)
           handler: handleCreateEstate
@@ -121,6 +123,35 @@ dataSources:
           handler: handleOrderSuccessful
         - event: OrderCancelled(bytes32,indexed uint256,indexed address,address)
           handler: handleOrderCancelled
+
+  # ---------------------------------------------------------
+  # BIDS ----------------------------------------------------
+  # ---------------------------------------------------------
+  - kind: ethereum/contract
+    name: ERC721Bid
+    network: {{network}}
+    source:
+      address: '{{address:ERC721Bid}}'
+      abi: ERC721Bid
+      startBlock: {{startBlock:ERC721Bid}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/bid.ts
+      entities:
+        - Bid
+      abis:
+        - name: ERC721Bid
+          file: ./abis/ERC721Bid.json
+      eventHandlers:
+        - event: BidCreated(bytes32,indexed address,indexed uint256,indexed address,uint256,uint256,bytes)
+          handler: handleBidCreated
+        - event: BidAccepted(bytes32,indexed address,indexed uint256,address,indexed address,uint256,uint256)
+          handler: handleBidAccepted
+        - event: BidCancelled(bytes32,indexed address,indexed uint256,indexed address)
+          handler: handleBidCancelled
+
 
 # ---------------------------------------------------------
 # TEMPLATES -----------------------------------------------

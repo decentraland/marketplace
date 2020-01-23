@@ -38,15 +38,18 @@ export function handleOrderCreated(event: OrderCreated): void {
   // We're defaulting "Estate size" to one to allow the frontend to search for `search_estate_size_gt: 0`,
   // necessary because thegraph doesn't support complex queries and we can't do `OR` operations
   order.search_estate_size = 1
+  order.search_is_land = false
 
   if (category == categories.PARCEL) {
     let parcel = Parcel.load(nft.parcel)
 
+    order.search_is_land = true
     order.search_parcel_x = parcel.x
     order.search_parcel_y = parcel.y
   } else if (category == categories.ESTATE) {
     let estate = Estate.load(nft.estate)
 
+    order.search_is_land = true
     order.search_estate_size = estate.size
   } else if (category == categories.WEARABLE) {
     let wearable = Wearable.load(nft.wearable)
@@ -85,6 +88,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
   order.status = status.SOLD
   order.buyer = event.params.buyer
   order.price = event.params.totalPrice
+  order.blockNumber = event.block.number
   order.updatedAt = event.block.timestamp
   order.save()
 
@@ -102,6 +106,7 @@ export function handleOrderCancelled(event: OrderCancelled): void {
   let order = new Order(orderId)
   order.category = category
   order.status = status.CANCELLED
+  order.blockNumber = event.block.number
   order.updatedAt = event.block.timestamp
   order.save()
 

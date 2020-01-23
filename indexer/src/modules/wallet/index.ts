@@ -1,11 +1,12 @@
-import { BigInt } from '@graphprotocol/graph-ts'
-import { Wallet } from '../../entities/schema'
+import { BigInt, Address } from '@graphprotocol/graph-ts'
+import { Account } from '../../entities/schema'
 
-export function createWallet(id: string): void {
-  let wallet = Wallet.load(id)
+export function createAccount(id: Address): void {
+  let wallet = Account.load(id.toHex())
 
   if (wallet == null) {
-    wallet = new Wallet(id)
+    wallet = new Account(id.toHex())
+    wallet.address = id
     wallet.mana = BigInt.fromI32(0)
   }
 
