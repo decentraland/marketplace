@@ -51,7 +51,7 @@ export function handleOrderCreated(event: OrderCreated): void {
     oldOrder.save()
   }
 
-  nft = updateNFTOrderProperties(nft, order)
+  nft = updateNFTOrderProperties(nft!, order)
   nft.save()
 
   let count = buildCountFromOrder(order)
@@ -78,7 +78,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 
   let nft = new NFT(nftId)
   nft.owner = event.params.buyer.toHex()
-  nft = updateNFTOrderProperties(nft, order)
+  nft = updateNFTOrderProperties(nft!, order)
   nft.save()
 }
 
@@ -99,6 +99,6 @@ export function handleOrderCancelled(event: OrderCancelled): void {
   order.save()
 
   let nft = new NFT(nftId)
-  nft = updateNFTOrderProperties(nft, order)
+  nft = updateNFTOrderProperties(nft!, order)
   nft.save()
 }

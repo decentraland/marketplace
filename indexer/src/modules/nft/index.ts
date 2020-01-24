@@ -34,7 +34,7 @@ export function getTokenURI(event: Transfer): string {
   return tokenURI
 }
 
-export function updateNFTOrderProperties(nft: NFT, order: Order) {
+export function updateNFTOrderProperties(nft: NFT, order: Order): NFT {
   nft.searchOrderStatus = order.status
 
   if (order.status == status.OPEN) {

@@ -5,10 +5,9 @@ import { Card, Loader } from 'decentraland-ui'
 import { NFTCard } from '../NFTCard'
 import { getSearchCategory } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
+import { MAX_QUERY_SIZE } from '../../lib/api/client'
 import { Props } from './AccountNFTs.types'
 import './AccountNFTs.css'
-
-const MAX_QUERY_SIZE = 1000 // @nico TODO: Move this to api/ ?
 
 const AccountNFTs = (props: Props) => {
   const {

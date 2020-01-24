@@ -25,11 +25,11 @@ import {
   SortBy,
   SearchOptions
 } from '../../modules/routing/search'
+import { MAX_QUERY_SIZE } from '../../lib/api/client'
 import { Props } from './MarketPage.types'
 import './MarketPage.css'
 
 const PAGE_SIZE = 24
-const MAX_QUERY_SIZE = 1000
 
 const MarketPage = (props: Props) => {
   const {
