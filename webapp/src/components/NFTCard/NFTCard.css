@@ -34,16 +34,10 @@
   color: var(--secondary-text);
 }
 
-.NFTCard .image-wrapper {
-  overflow: hidden;
-}
-
-.NFTCard .image {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 .NFTCard .tags {
   margin-top: 12px;
+}
+
+.NFTCard .NFTImage {
+  overflow: hidden;
 }
