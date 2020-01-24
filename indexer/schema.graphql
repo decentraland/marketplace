@@ -7,19 +7,19 @@
 type Count @entity {
   id: ID!
 
-  order_total: Int!
-  order_parcel: Int!
-  order_estate: Int!
-  order_wearable: Int!
+  orderTotal: Int!
+  orderParcel: Int!
+  orderEstate: Int!
+  orderWearable: Int!
 
-  parcel_total: Int!
+  parcelTotal: Int!
 
-  estate_total: Int!
+  estateTotal: Int!
 
-  wearable_total: Int!
-  wearable_halloween_2019: Int!
-  wearable_exclusive_masks: Int!
-  wearable_xmas_2019: Int!
+  wearableTotal: Int!
+  wearableHalloween2019: Int!
+  wearableExclusiveMasks: Int!
+  wearableXmas2019: Int!
 }
 
 # ---------------------------------------------------------
@@ -42,18 +42,6 @@ type Order @entity {
   expiresAt: BigInt!
   createdAt: BigInt!
   updatedAt: BigInt!
-
-  # search indexes
-  search_is_land: Boolean!
-
-  search_parcel_x: BigInt
-  search_parcel_y: BigInt
-
-  search_estate_size: Int
-
-  search_wearable_category: WearableCategory
-  search_wearable_rarity: WearableRarity
-  search_wearable_bodyShapes: [WearableBodyShape!]
 }
 
 # ---------------------------------------------------------
@@ -144,6 +132,19 @@ type NFT @entity {
   wearable: Wearable
   createdAt: BigInt!
   updatedAt: BigInt!
+
+  # search indexes
+  searchOrderStatus: OrderStatus
+  searchOrderExpiresAt: BigInt
+
+  searchParcelX: BigInt
+  searchParcelY: BigInt
+
+  searchEstateSize: Int
+
+  searchWearableCategory: WearableCategory
+  searchWearableRarity: WearableRarity
+  searchWearableBodyShapes: [WearableBodyShape!]
 }
 
 # ---------------------------------------------------------

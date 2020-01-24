@@ -5,18 +5,19 @@ import {
   RemoveLand,
   Update
 } from '../entities/EstateRegistry/EstateRegistry'
-import { NFT, Parcel, Estate, Order } from '../entities/schema'
+import { NFT, Parcel, Estate } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { decodeTokenId } from '../modules/parcel'
 import { createAccount } from '../modules/wallet'
 import { buildData, DataType } from '../modules/data'
 import * as categories from '../modules/category/categories'
+import * as addresses from '../data/addresses'
 
 export function handleCreateEstate(event: CreateEstate): void {
   let estateId = event.params._estateId.toString()
   let data = event.params._data.toString()
 
-  let id = getNFTId(estateId, categories.ESTATE)
+  let id = getNFTId(categories.ESTATE, addresses.EstateRegistry, estateId)
 
   let estate = new Estate(id)
 
@@ -43,9 +44,10 @@ export function handleCreateEstate(event: CreateEstate): void {
 
 export function handleAddLand(event: AddLand): void {
   let estateId = event.params._estateId.toString()
+  let landId = event.params._landId.toString()
 
-  let id = getNFTId(estateId, categories.ESTATE)
-  let parcelId = getNFTId(event.params._landId.toString(), categories.PARCEL)
+  let id = getNFTId(categories.ESTATE, addresses.EstateRegistry, estateId)
+  let parcelId = getNFTId(categories.PARCEL, addresses.LANDRegistry, landId)
 
   let estate = Estate.load(id)
 
@@ -59,11 +61,8 @@ export function handleAddLand(event: AddLand): void {
 
   let estateNFT = NFT.load(id)
   if (estateNFT.get('activeOrder').kind == ValueKind.STRING) {
-    let order = Order.load(estateNFT.activeOrder)
-    if (order != null) {
-      order.search_estate_size = estate.size
-      order.save()
-    }
+    estateNFT.searchEstateSize = parcels.length
+    estateNFT.save()
   }
 
   let parcel = Parcel.load(parcelId)
@@ -89,9 +88,10 @@ export function handleAddLand(event: AddLand): void {
 
 export function handleRemoveLand(event: RemoveLand): void {
   let estateId = event.params._estateId.toString()
+  let landId = event.params._landId.toString()
 
-  let id = getNFTId(estateId, categories.ESTATE)
-  let parcelId = getNFTId(event.params._landId.toString(), categories.PARCEL)
+  let id = getNFTId(categories.ESTATE, addresses.EstateRegistry, estateId)
+  let parcelId = getNFTId(categories.PARCEL, addresses.LANDRegistry, landId)
 
   let estate = Estate.load(id)
 
@@ -106,11 +106,8 @@ export function handleRemoveLand(event: RemoveLand): void {
 
   let estateNFT = NFT.load(id)
   if (estateNFT.get('activeOrder').kind == ValueKind.STRING) {
-    let order = Order.load(estateNFT.activeOrder)
-    if (order != null) {
-      order.search_estate_size = estate.size
-      order.save()
-    }
+    estateNFT.searchEstateSize = parcels.length
+    estateNFT.save()
   }
 
   let parcel = Parcel.load(parcelId)
@@ -140,7 +137,7 @@ export function handleUpdate(event: Update): void {
   let estateId = event.params._assetId.toString()
 
   let data = event.params._data.toString()
-  let id = getNFTId(estateId, categories.ESTATE)
+  let id = getNFTId(categories.ESTATE, addresses.EstateRegistry, estateId)
 
   let estate = new Estate(id)
   estate.rawData = data

@@ -4,7 +4,6 @@ import { Parcel, NFT } from '../entities/schema'
 import { ERC721 } from '../entities/templates'
 import { getNFTId } from '../modules/nft'
 import { buildData, DataType } from '../modules/data'
-import * as categories from '../modules/category/categories'
 import {
   LANDRegistry,
   EstateRegistry,
@@ -12,6 +11,8 @@ import {
   ExclusiveMasksCollection,
   Xmas2019Collection
 } from '../data/addresses'
+import * as categories from '../modules/category/categories'
+import * as addresses from '../data/addresses'
 
 export function handleInitialize(_: InitializeCall): void {
   ERC721.create(Address.fromString(LANDRegistry))
@@ -25,7 +26,7 @@ export function handleUpdate(event: Update): void {
   let parcelId = event.params.assetId.toString()
   let data = event.params.data.toString()
 
-  let id = getNFTId(parcelId, categories.PARCEL)
+  let id = getNFTId(categories.PARCEL, addresses.LANDRegistry, parcelId)
 
   let parcel = new Parcel(id)
   parcel.rawData = data

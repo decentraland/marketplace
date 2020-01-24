@@ -7,13 +7,17 @@ import {
 import { Order, NFT, Parcel, Wearable, Estate } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { getCategory } from '../modules/category'
-import { buildCountFromNFT } from '../modules/count'
+import { buildCountFromOrder } from '../modules/count'
 import * as status from '../modules/order/status'
 import * as categories from '../modules/category/categories'
 
 export function handleOrderCreated(event: OrderCreated): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = getNFTId(event.params.assetId.toString(), category)
+  let nftId = getNFTId(
+    category,
+    event.params.nftAddress.toHexString(),
+    event.params.assetId.toString()
+  )
   let orderId = event.params.id.toHex()
 
   let nft = NFT.load(nftId)
@@ -35,30 +39,6 @@ export function handleOrderCreated(event: OrderCreated): void {
   order.createdAt = event.block.timestamp
   order.updatedAt = event.block.timestamp
 
-  // We're defaulting "Estate size" to one to allow the frontend to search for `search_estate_size_gt: 0`,
-  // necessary because thegraph doesn't support complex queries and we can't do `OR` operations
-  order.search_estate_size = 1
-  order.search_is_land = false
-
-  if (category == categories.PARCEL) {
-    let parcel = Parcel.load(nft.parcel)
-
-    order.search_is_land = true
-    order.search_parcel_x = parcel.x
-    order.search_parcel_y = parcel.y
-  } else if (category == categories.ESTATE) {
-    let estate = Estate.load(nft.estate)
-
-    order.search_is_land = true
-    order.search_estate_size = estate.size
-  } else if (category == categories.WEARABLE) {
-    let wearable = Wearable.load(nft.wearable)
-
-    order.search_wearable_category = wearable.category
-    order.search_wearable_bodyShapes = wearable.bodyShapes
-    order.search_wearable_rarity = wearable.rarity
-  }
-
   order.save()
 
   let oldOrder = Order.load(nft.activeOrder)
@@ -72,15 +52,21 @@ export function handleOrderCreated(event: OrderCreated): void {
   }
 
   nft.activeOrder = orderId
+  nft.searchOrderStatus = status.OPEN
+  nft.searchOrderExpiresAt = event.params.expiresAt
   nft.save()
 
-  let count = buildCountFromNFT(nft as NFT)
+  let count = buildCountFromOrder(order)
   count.save()
 }
 
 export function handleOrderSuccessful(event: OrderSuccessful): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = getNFTId(event.params.assetId.toString(), category)
+  let nftId = getNFTId(
+    category,
+    event.params.nftAddress.toHexString(),
+    event.params.assetId.toString()
+  )
   let orderId = event.params.id.toHex()
 
   let order = new Order(orderId)
@@ -95,12 +81,17 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
   let nft = new NFT(nftId)
   nft.owner = event.params.buyer.toHex()
   nft.activeOrder = null
+  nft.searchOrderStatus = status.SOLD
   nft.save()
 }
 
 export function handleOrderCancelled(event: OrderCancelled): void {
   let category = getCategory(event.params.nftAddress.toHexString())
-  let nftId = getNFTId(event.params.assetId.toString(), category)
+  let nftId = getNFTId(
+    category,
+    event.params.nftAddress.toHexString(),
+    event.params.assetId.toString()
+  )
   let orderId = event.params.id.toHex()
 
   let order = new Order(orderId)
@@ -112,5 +103,6 @@ export function handleOrderCancelled(event: OrderCancelled): void {
 
   let nft = new NFT(nftId)
   nft.activeOrder = null
+  nft.searchOrderStatus = status.CANCELLED
   nft.save()
 }

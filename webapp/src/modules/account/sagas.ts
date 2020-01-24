@@ -5,7 +5,7 @@ import {
   fetchAccountSuccess,
   fetchAccountFailure
 } from './actions'
-import { account as accountAPI } from '../../lib/api/account'
+import { accountAPI } from '../../lib/api/account'
 
 export function* accountSaga() {
   yield takeEvery(FETCH_ACCOUNT_REQUEST, handleFetchAccountRequest)

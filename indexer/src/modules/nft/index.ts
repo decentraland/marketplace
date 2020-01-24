@@ -6,8 +6,12 @@ export function isMint(event: Transfer): boolean {
   return event.params.from.toHexString() == addresses.Null
 }
 
-export function getNFTId(tokenId: string, category: string): string {
-  return category + '-' + tokenId
+export function getNFTId(
+  category: string,
+  contractAddress: string,
+  tokenId: string
+): string {
+  return category + '-' + contractAddress + '-' + tokenId
 }
 
 export function getTokenURI(event: Transfer): string {

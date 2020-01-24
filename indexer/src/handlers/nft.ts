@@ -1,5 +1,5 @@
 import { Transfer } from '../entities/templates/ERC721/ERC721'
-import { NFT } from '../entities/schema'
+import { NFT, Parcel, Estate } from '../entities/schema'
 import { isMint, getNFTId, getTokenURI } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
@@ -17,7 +17,11 @@ export function handleTransfer(event: Transfer): void {
 
   let contractAddress = event.address.toHexString()
   let category = getCategory(contractAddress)
-  let id = getNFTId(event.params.tokenId.toString(), category)
+  let id = getNFTId(
+    category,
+    event.address.toHexString(),
+    event.params.tokenId.toString()
+  )
 
   let nft = new NFT(id)
 
@@ -33,16 +37,25 @@ export function handleTransfer(event: Transfer): void {
   }
 
   if (isMint(event)) {
+    nft.createdAt = event.block.timestamp
+
+    // We're defaulting "Estate size" to one to allow the frontend to search for `searchEstateSize_gt: 0`,
+    // necessary because thegraph doesn't support complex queries and we can't do `OR` operations
+    nft.searchEstateSize = 1
+
     if (category == categories.PARCEL) {
       let parcel = buildParcelFromNFT(nft)
       parcel.save()
       nft.parcel = id
       nft.image = getParcelImage(parcel)
+      nft.searchParcelX = parcel.x
+      nft.searchParcelY = parcel.y
     } else if (category == categories.ESTATE) {
       let estate = buildEstateFromNFT(nft)
       estate.save()
       nft.estate = id
       nft.image = getEstateImage(estate)
+      nft.searchEstateSize = estate.size
     } else if (category == categories.WEARABLE) {
       let wearable = buildWearableFromNFT(nft)
       if (wearable.id != '') {
@@ -50,12 +63,14 @@ export function handleTransfer(event: Transfer): void {
         nft.wearable = id
         nft.name = wearable.name
         nft.image = getWearableImage(wearable)
+        nft.searchWearableCategory = wearable.category
+        nft.searchWearableBodyShapes = wearable.bodyShapes
+        nft.searchWearableRarity = wearable.rarity
       }
     }
 
     let metric = buildCountFromNFT(nft)
     metric.save()
-    nft.createdAt = event.block.timestamp
   }
 
   createAccount(event.params.to)

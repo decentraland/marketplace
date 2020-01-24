@@ -6,7 +6,7 @@ import {
   fetchNFTSuccess,
   fetchNFTFailure
 } from './actions'
-import { marketplace } from '../../lib/api/marketplace'
+import { nftAPI } from '../../lib/api/nft'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFT_REQUEST, handleFetchNFTRequest)
@@ -17,7 +17,7 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
 
   try {
     const [nft, order] = yield call(() =>
-      marketplace.fetchNFT(contractAddress, tokenId)
+      nftAPI.fetch(contractAddress, tokenId)
     )
     yield put(fetchNFTSuccess(nft, order))
   } catch (error) {
