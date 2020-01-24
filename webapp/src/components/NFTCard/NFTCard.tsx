@@ -11,6 +11,7 @@ import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
 import './NFTCard.css'
+import { getNFTName } from '../../modules/nft/utils'
 
 const getPrice = (order: Order) =>
   (parseInt(order.price, 10) / 10 ** 18).toLocaleString()
@@ -21,7 +22,7 @@ const getExpiresAt = (order: Order) =>
 const NFTCard = (props: Props) => {
   const { nft, order, onNavigate } = props
 
-  const title = nft.name || t(`detail.${nft.category}`)
+  const title = getNFTName(nft)
 
   const handleClick = useCallback(
     () => onNavigate(locations.ntf(nft.contractAddress, nft.tokenId)),

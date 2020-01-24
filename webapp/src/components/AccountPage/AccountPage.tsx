@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
-import { Footer } from 'decentraland-dapps/dist/containers'
 import { Page, Grid } from 'decentraland-ui'
 
 import { Navbar } from '../Navbar'
+import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { AccountNFTs } from '../AccountNFTs'
 import { CategoriesMenu } from '../CategoriesMenu'

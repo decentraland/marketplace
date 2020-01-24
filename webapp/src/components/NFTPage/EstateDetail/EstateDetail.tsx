@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Container, Header } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getNFTName } from '../../../modules/nft/utils'
 import { Atlas } from '../../Atlas'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
@@ -35,7 +35,7 @@ const EstateDetail = (props: Props) => {
         <Title
           left={
             <>
-              <Header size="large">{nft.name || t('detail.estate')}</Header>
+              <Header size="large">{getNFTName(nft)}</Header>
               <Badge color="#37333d">
                 {nft.estate!.size.toLocaleString()} LAND
               </Badge>

@@ -6,10 +6,11 @@ import { translationSaga } from './translation/sagas'
 import { orderSaga } from './order/sagas'
 import { accountSaga } from './account/sagas'
 import { nftSaga } from './nft/sagas'
+import { uiSaga } from './ui/sagas'
 
-const walletSaga = createWalletSaga({
-  MANA_ADDRESS: process.env.REACT_APP_MANA_ADDRESS!
-})
+import { MANA_ADDRESS } from './contracts'
+
+const walletSaga = createWalletSaga({ MANA_ADDRESS })
 
 export function* rootSaga() {
   yield all([
@@ -18,6 +19,7 @@ export function* rootSaga() {
     transactionSaga(),
     orderSaga(),
     accountSaga(),
-    nftSaga()
+    nftSaga(),
+    uiSaga()
   ])
 }

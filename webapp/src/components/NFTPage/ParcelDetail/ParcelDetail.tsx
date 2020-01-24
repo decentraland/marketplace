@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { landAPI } from '../../../lib/api/land'
+import { getNFTName } from '../../../modules/nft/utils'
 import { Atlas } from '../../Atlas'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
@@ -43,7 +44,7 @@ const ParcelDetail = (props: Props) => {
         <Title
           left={
             <>
-              <Header size="large">{nft.name || t('detail.parcel')}</Header>
+              <Header size="large">{getNFTName(nft)}</Header>
               <Badge color="#37333d">
                 <i className="pin" />
                 {nft.parcel!.x},{nft.parcel!.y}

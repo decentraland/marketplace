@@ -1,8 +1,8 @@
 import React from 'react'
-import { Footer } from 'decentraland-dapps/dist/containers'
 import { Page } from 'decentraland-ui'
 
 import { Navbar } from '../Navbar'
+import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { Atlas } from '../Atlas'
 

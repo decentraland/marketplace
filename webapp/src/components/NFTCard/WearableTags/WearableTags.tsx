@@ -21,6 +21,7 @@ const WearableTags = (props: Props) => {
       />
       {nft.wearable!.bodyShapes.map(shape => (
         <div
+          key={shape}
           className={'icon ' + shape}
           title={
             shape === BodyShape.MALE

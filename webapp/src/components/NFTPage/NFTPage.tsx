@@ -1,8 +1,8 @@
 import React from 'react'
 import { Page } from 'decentraland-ui'
-import { Footer } from 'decentraland-dapps/dist/containers'
 
 import { Navbar } from '../Navbar'
+import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { NFTProvider } from '../NFTProvider'
 import { ParcelDetail } from './ParcelDetail'

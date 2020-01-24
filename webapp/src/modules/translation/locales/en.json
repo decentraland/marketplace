@@ -2,7 +2,12 @@
   "global": {
     "assets": "Assets",
     "load_more": "Load more",
-    "not_found": "Not found"
+    "not_found": "Not found",
+    "parcel": "Parcel",
+    "estate": "Estate",
+    "wearable": "Wearable",
+    "cancel": "Cancel",
+    "proceed": "Proceed"
   },
   "navigation": {
     "atlas": "Atlas",
@@ -30,9 +35,6 @@
   },
   "detail": {
     "description": "Description",
-    "parcel": "Parcel",
-    "estate": "Estate",
-    "wearable": "Wearable",
     "highlights": "Highlights",
     "owner": "Owner",
     "price": "Price",
@@ -79,5 +81,22 @@
       "top_head": "Top Head",
       "upper_body": "Upper Body"
     }
+  },
+  "sell_page": {
+    "title": "List for sale",
+    "subtitle": "Set a price and expiration date for {name}.",
+    "price": "Price",
+    "expiration_date": "Expiration date",
+    "invalid_date": "This date has already passed",
+    "submit": "List for sale",
+    "confirm": {
+      "title": "Please confirm",
+      "line_one": "You are about to list {name} on sale for {amount}.",
+      "line_two": "Please re-enter the price to confirm:"
+    }
+  },
+  "wallet": {
+    "sign_in_required": "You need to {sign_in} to access this page.",
+    "sign_in": "Sign In"
   }
 }

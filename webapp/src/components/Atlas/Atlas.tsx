@@ -11,8 +11,10 @@ AtlasComponent.fetchTiles(LAND_API_URL + '/tiles').then(
   _tiles => (tiles = _tiles)
 )
 
+const coords = (x: number | string, y: number | string) => `${x},${y}`
+
 const forSaleLayer: Layer = (x, y) => {
-  const key = x + ',' + y
+  const key = coords(x, y)
   if (!tiles) return null
   const tile = tiles[key]
   if (tile && 'price' in tile) {
@@ -21,8 +23,6 @@ const forSaleLayer: Layer = (x, y) => {
   }
   return null
 }
-
-const coords = (x: number | string, y: number | string) => `${x},${y}`
 
 const Atlas = (props: Props) => {
   const { onNavigate } = props
@@ -56,7 +56,7 @@ const Atlas = (props: Props) => {
       }
       return false
     },
-    [selection, props.x, props.y]
+    [selection]
   )
 
   const selectedStrokeLayer: Layer = useCallback(

@@ -1,0 +1,16 @@
+.SellPage .ui.header {
+  margin-bottom: 8px;
+}
+
+.SellPage .subtitle {
+  margin-bottom: 32px;
+}
+
+.SellPage .fields {
+  max-width: 420px;
+  margin-bottom: 20px;
+}
+
+.ConfirmPriceModal .dcl.field .ui.sub.header {
+  margin-top: 24px;
+}

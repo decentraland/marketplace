@@ -1,6 +1,7 @@
 import { getSearchParams, SearchOptions } from './search'
 
 export const locations = {
+  root: () => '/',
   signIn: () => '/sign-in',
   atlas: () => '/atlas',
   market: (options?: SearchOptions) => {
@@ -36,5 +37,6 @@ export const locations = {
   transfer: (
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/transfer`
+  ) => `/contracts/${contractAddress}/tokens/${tokenId}/transfer`,
+  activity: () => `/activity`
 }
