@@ -19,6 +19,7 @@ export type FetchOrderOptions = {
     skip: number
     orderBy?: NFTSortBy
     orderDirection: SortDirection
+    isLand?: boolean
     category?: NFTCategory
   }
   view?: View
@@ -30,6 +31,7 @@ export const DEFAULT_FETCH_ORDER_OPTIONS: FetchOrderOptions = {
     skip: 0,
     orderBy: NFTSortBy.CREATED_AT,
     orderDirection: SortDirection.DESC,
+    isLand: undefined,
     category: undefined
   },
   view: undefined

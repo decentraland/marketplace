@@ -6,18 +6,21 @@ import { FetchOrderOptions } from '../../modules/order/actions'
 import { client } from './client'
 import { nftFragment, NFTFragment } from '../../modules/nft/fragments'
 
-export const MARKET_FILTERS = `$first: Int
-$skip: Int
-$orderBy: String
-$orderDirection: String
-$expiresAt: String`
+export const MARKET_FILTERS = `
+  $first: Int
+  $skip: Int
+  $orderBy: String
+  $orderDirection: String
+  $expiresAt: String
+`
 
 export const MARKET_QUERY = gql`
   query Marketplace(
     ${MARKET_FILTERS}
+    $isLand: Boolean = false
   ) {
     nfts(
-      where: { searchOrderStatus: open, searchEstateSize_gt: 0, searchOrderExpiresAt_gt: $expiresAt }
+      where: { searchIsLand: $isLand, searchOrderStatus: open, searchEstateSize_gt: 0, searchOrderExpiresAt_gt: $expiresAt }
       first: $first
       skip: $skip
       orderBy: $orderBy
@@ -49,20 +52,16 @@ export const MARKET_BY_CATEGORY_QUERY = gql`
 
 class MarketplaceAPI {
   fetch = async (options: FetchOrderOptions) => {
+    const { variables } = options
     const query =
-      options.variables.category !== undefined
+      variables.isLand || variables.category !== undefined
         ? MARKET_BY_CATEGORY_QUERY
         : MARKET_QUERY
-
-    console.log({
-      query,
-      variables: options.variables
-    })
 
     const { data } = await client.query({
       query,
       variables: {
-        ...options.variables,
+        ...variables,
         expiresAt: Date.now().toString()
       }
     })

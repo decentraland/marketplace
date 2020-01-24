@@ -23,7 +23,8 @@ import { View } from '../../modules/ui/types'
 import {
   getSearchCategory,
   SortBy,
-  SearchOptions
+  SearchOptions,
+  Section
 } from '../../modules/routing/search'
 import { MAX_QUERY_SIZE } from '../../lib/api/client'
 import { Props } from './MarketPage.types'
@@ -48,6 +49,7 @@ const MarketPage = (props: Props) => {
   useEffect(() => {
     const category = getSearchCategory(section)
     const [orderBy, orderDirection] = getSortOrder(sortBy)
+    const isLand = section === Section.LAND
 
     const skip = offset * PAGE_SIZE
     const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
@@ -57,6 +59,7 @@ const MarketPage = (props: Props) => {
         skip,
         orderBy,
         orderDirection,
+        isLand,
         category
       },
       view: skip === 0 ? View.MARKET : View.LOAD_MORE

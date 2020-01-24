@@ -7,16 +7,20 @@ import { FetchAccountOptions } from '../../modules/account/actions'
 import { nftFragment, NFTFragment } from '../../modules/nft/fragments'
 import { client } from './client'
 
-export const ACCOUNT_FILTERS = `$first: Int
-$skip: Int`
+export const ACCOUNT_FILTERS = `
+  $first: Int
+  $skip: Int
+  $isLand: Boolean
+`
 
 export const ACCOUNT_NFTS_QUERY = gql`
   query AccountById(
-    $address: String!
     ${ACCOUNT_FILTERS}
+    $address: String!
+    $isLand: Boolean = false
   ) {
     nfts(
-      where: { owner: $address }
+      where: { owner: $address, searchIsLand: $isLand }
       first: $first
       skip: $skip
     ) {
@@ -28,9 +32,9 @@ export const ACCOUNT_NFTS_QUERY = gql`
 
 export const ACCOUNT_NFTS_BY_CATEGORY_QUERY = gql`
   query AccountById(
+    ${ACCOUNT_FILTERS}
     $address: String!
     $category: Category!
-    ${ACCOUNT_FILTERS}
   ) {
     nfts(
       where: { owner: $address, category: $category }
@@ -45,16 +49,17 @@ export const ACCOUNT_NFTS_BY_CATEGORY_QUERY = gql`
 
 class AccountAPI {
   fetchAccount = async (options: FetchAccountOptions) => {
+    const { variables } = options
+    const { address } = variables
+
     const query =
-      options.variables.category !== undefined
+      variables.isLand || variables.category !== undefined
         ? ACCOUNT_NFTS_BY_CATEGORY_QUERY
         : ACCOUNT_NFTS_QUERY
 
-    const { address } = options.variables
-
     const { data } = await client.query({
       query,
-      variables: options.variables
+      variables
     })
 
     let account: Account | undefined

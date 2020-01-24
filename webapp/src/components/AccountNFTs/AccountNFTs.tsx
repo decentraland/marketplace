@@ -3,7 +3,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Loader } from 'decentraland-ui'
 
 import { NFTCard } from '../NFTCard'
-import { getSearchCategory } from '../../modules/routing/search'
+import { getSearchCategory, Section } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
 import { MAX_QUERY_SIZE } from '../../lib/api/client'
 import { Props } from './AccountNFTs.types'
@@ -26,10 +26,13 @@ const AccountNFTs = (props: Props) => {
   // @nico TODO: Support LoadMore? Maybe extract it from MarketPage first to avoid repetition
   useEffect(() => {
     const category = getSearchCategory(section)
+    const isLand = section === Section.LAND
+
     onFetchAccount({
       variables: {
         first: MAX_QUERY_SIZE,
         skip: 0,
+        isLand,
         category,
         address
       },
