@@ -50,7 +50,7 @@ export const getCurrentNFT = createSelector<
     if (contractAddress && tokenId && contractAddress in contracts) {
       const contract = contracts[contractAddress]
       if (contract) {
-        const nftId = contract.category + '-' + tokenId
+        const nftId = contract.category + '-' + contractAddress + '-' + tokenId
         if (nftId in nfts) {
           nft = nfts[nftId]
         }
