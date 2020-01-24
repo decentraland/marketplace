@@ -1,8 +1,8 @@
 import React, { useEffect, useCallback } from 'react'
-import { Footer } from 'decentraland-dapps/dist/containers'
 import { Page, Grid, Loader } from 'decentraland-ui'
 
 import { Navbar } from '../Navbar'
+import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { locations } from '../../modules/routing/locations'

@@ -1,0 +1,45 @@
+.NFTAction .back {
+  background-image: url(../../images/back.svg);
+  background-repeat: no-repeat;
+  background-position-x: 10px;
+  background-position-y: 9px;
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  border: solid 1px rgba(115, 110, 125, 0.4);
+  background-size: 7px;
+  margin-top: 5vh;
+  margin-bottom: 10vh;
+  cursor: pointer;
+  margin-left: 2px;
+}
+
+.NFTAction .back:hover {
+  border: solid 1px rgba(255, 255, 255, 0.5);
+}
+
+.NFTAction .action {
+  display: flex;
+}
+
+.NFTAction .action .left {
+  flex: 0.75 1 auto;
+  text-align: right;
+  margin-right: 80px;
+}
+
+.NFTAction .action .right {
+  flex: 1.25 1 auto;
+}
+
+.NFTAction .image-wrapper {
+  max-width: 240px;
+  border-radius: 16px;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.NFTAction .image-wrapper img {
+  width: 100%;
+  height: auto;
+}

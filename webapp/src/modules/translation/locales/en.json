@@ -1,7 +1,13 @@
 {
   "global": {
     "assets": "Assets",
-    "load_more": "Load more"
+    "load_more": "Load more",
+    "not_found": "Not found",
+    "parcel": "Parcel",
+    "estate": "Estate",
+    "wearable": "Wearable",
+    "cancel": "Cancel",
+    "proceed": "Proceed"
   },
   "navigation": {
     "atlas": "Atlas",
@@ -29,9 +35,6 @@
   },
   "detail": {
     "description": "Description",
-    "parcel": "Parcel",
-    "estate": "Estate",
-    "wearable": "Wearable",
     "highlights": "Highlights",
     "owner": "Owner",
     "price": "Price",
@@ -39,13 +42,13 @@
     "cancel_sale": "Cancel Sale",
     "buy": "Buy",
     "sell": "Sell",
+    "update": "Update price",
     "transfer": "Transfer",
     "adjacent": "Adjacent",
     "distance": "{distance} {distance, plural, one {parcel} other {parcels}} away",
     "plaza": "Plaza",
     "road": "Road",
-    "district": "District",
-    "not_found": "Not found..."
+    "district": "District"
   },
   "wearable": {
     "body_shape": {
@@ -79,5 +82,25 @@
       "top_head": "Top Head",
       "upper_body": "Upper Body"
     }
+  },
+  "sell_page": {
+    "title": "List for sale",
+    "update_title": "Update your listing",
+    "subtitle": "Set a price and expiration date for {name}.",
+    "update_subtitle": "Set a new price and expiration date for {name}.",
+    "price": "Price",
+    "expiration_date": "Expiration date",
+    "invalid_date": "This date has already passed",
+    "submit": "List for sale",
+    "update_submit": "Update",
+    "confirm": {
+      "title": "Please confirm",
+      "line_one": "You are about to list {name} on sale for {amount}.",
+      "line_two": "Please re-enter the price to confirm:"
+    }
+  },
+  "wallet": {
+    "sign_in_required": "You need to {sign_in} to access this page.",
+    "sign_in": "Sign In"
   }
 }

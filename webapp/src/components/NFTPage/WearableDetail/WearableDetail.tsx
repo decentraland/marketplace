@@ -2,6 +2,7 @@ import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { RARITY_COLOR, BodyShape } from '../../../modules/nft/wearable/types'
+import { getNFTName } from '../../../modules/nft/utils'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Props } from './WearableDetail.types'
@@ -30,7 +31,7 @@ const WearableDetail = (props: Props) => {
         <Title
           left={
             <>
-              <Header size="large">{nft.name || t('detail.wearable')}</Header>
+              <Header size="large">{getNFTName(nft)}</Header>
               <Badge color={RARITY_COLOR[nft.wearable!.rarity]}>
                 {t(`wearable.rarity.${nft.wearable!.rarity}`)}
               </Badge>
@@ -47,6 +48,7 @@ const WearableDetail = (props: Props) => {
           />
           {nft.wearable!.bodyShapes.map(shape => (
             <Highlight
+              key={shape}
               icon={<div className={shape} />}
               name={
                 shape === BodyShape.MALE

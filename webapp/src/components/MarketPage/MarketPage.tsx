@@ -1,6 +1,4 @@
 import React, { useEffect, useCallback, useState } from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Footer } from 'decentraland-dapps/dist/containers'
 import {
   Page,
   Grid,
@@ -12,8 +10,10 @@ import {
   Loader,
   Button
 } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { Navbar } from '../Navbar'
+import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { NFTCard } from '../NFTCard'

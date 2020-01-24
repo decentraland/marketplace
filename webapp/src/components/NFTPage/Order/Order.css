@@ -9,5 +9,7 @@
 
 .Order .right {
   flex: 1 0 auto;
-  text-align: right;
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
 }

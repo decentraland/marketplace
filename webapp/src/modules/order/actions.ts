@@ -1,9 +1,11 @@
 import { action } from 'typesafe-actions'
+import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 
 import { View } from '../ui/types'
 import { NFT, NFTCategory } from '../nft/types'
 import { SortDirection } from '../routing/search'
 import { Order } from './types'
+import { getNFTName } from '../nft/utils'
 
 // Fetch Orders
 
@@ -53,12 +55,34 @@ export const CREATE_ORDER_REQUEST = '[Request] Create Order'
 export const CREATE_ORDER_SUCCESS = '[Success] Create Order'
 export const CREATE_ORDER_FAILURE = '[Failure] Create Order'
 
-export const createOrderRequest = (nft: NFT) =>
-  action(CREATE_ORDER_REQUEST, { nft })
-export const createOrderSuccess = (nft: NFT, order: Order) =>
-  action(CREATE_ORDER_SUCCESS, { nft, order })
-export const createOrderFailure = (nft: NFT, error: string) =>
-  action(CREATE_ORDER_FAILURE, { nft, error })
+export const createOrderRequest = (
+  nft: NFT,
+  price: number,
+  expiresAt: number
+) => action(CREATE_ORDER_REQUEST, { nft, price, expiresAt })
+export const createOrderSuccess = (
+  nft: NFT,
+  price: number,
+  expiresAt: number,
+  txHash: string
+) =>
+  action(CREATE_ORDER_SUCCESS, {
+    nft,
+    price,
+    expiresAt,
+    ...buildTransactionPayload(txHash, {
+      tokenId: nft.tokenId,
+      contractAddress: nft.contractAddress,
+      name: getNFTName(nft),
+      price
+    })
+  })
+export const createOrderFailure = (
+  nft: NFT,
+  price: number,
+  expiresAt: number,
+  error: string
+) => action(CREATE_ORDER_FAILURE, { nft, price, expiresAt, error })
 
 export type CreateOrderRequestAction = ReturnType<typeof createOrderRequest>
 export type CreateOrderSuccessAction = ReturnType<typeof createOrderSuccess>

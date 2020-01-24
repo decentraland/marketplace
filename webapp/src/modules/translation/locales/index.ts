@@ -1,2 +1,3 @@
 const en = require('./en.json')
-export { en }
+const es = en
+export { en, es }

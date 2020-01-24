@@ -34,6 +34,10 @@
   color: var(--secondary-text);
 }
 
+.NFTCard .image-wrapper {
+  overflow: hidden;
+}
+
 .NFTCard .image {
   display: block;
   width: 100%;

@@ -1,18 +1,20 @@
 import { Dispatch } from 'redux'
+import React from 'react'
 import { NFT } from '../../modules/nft/types'
-import { Order } from '../../modules/order/types'
 import {
   fetchNFTRequest,
   FetchNFTRequestAction
 } from '../../modules/nft/actions'
+import { Order } from '../../modules/order/types'
 
 export type Props = {
   contractAddress: string | null
   tokenId: string | null
   nft: NFT | null
   order: Order | null
-  onFetchNFT: typeof fetchNFTRequest
   isLoading: boolean
+  onFetchNFT: typeof fetchNFTRequest
+  children: (nft: NFT, order: Order | null) => React.ReactNode | null
 }
 
 export type MapStateProps = Pick<
