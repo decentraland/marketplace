@@ -11,10 +11,10 @@ AtlasComponent.fetchTiles(LAND_API_URL + '/tiles').then(
   _tiles => (tiles = _tiles)
 )
 
-const coords = (x: number | string, y: number | string) => `${x},${y}`
+const getCoords = (x: number | string, y: number | string) => `${x},${y}`
 
 const forSaleLayer: Layer = (x, y) => {
-  const key = coords(x, y)
+  const key = getCoords(x, y)
   if (!tiles) return null
   const tile = tiles[key]
   if (tile && 'price' in tile) {
@@ -30,7 +30,7 @@ const Atlas = (props: Props) => {
   const selection = useMemo(
     () =>
       (props.selection || []).reduce(
-        (set, pair) => set.add(coords(pair.x, pair.y)),
+        (set, pair) => set.add(getCoords(pair.x, pair.y)),
         new Set<string>()
       ),
     [props.selection]
@@ -38,13 +38,13 @@ const Atlas = (props: Props) => {
 
   const isSelected = useCallback(
     (x: number, y: number) => {
-      if (selection.has(coords(x, y))) return true
+      if (selection.has(getCoords(x, y))) return true
       // This is a workaround to paint the large estates, because GraphQL can return only up to 1000 results
       // and some Estates have more parcels than thats
       if (!tiles) return false
       const id = selection.values().next().value as string
       const center = tiles[id] as Tile
-      const tile = tiles[coords(x, y)] as Tile
+      const tile = tiles[getCoords(x, y)] as Tile
       if (
         center &&
         tile &&
@@ -76,7 +76,7 @@ const Atlas = (props: Props) => {
   const handleClick = useCallback(
     async (x: number, y: number) => {
       if (!tiles) return
-      const tile = tiles[coords(x, y)] as Tile
+      const tile = tiles[getCoords(x, y)] as Tile
       if (tile.estate_id) {
         onNavigate(locations.ntf(ContractAddress.ESTATE, tile.estate_id))
       } else {
