@@ -3,7 +3,10 @@ import { Atlas } from '../Atlas'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import { Props } from './NFTImage.types'
 import './NFTImage.css'
-import { RARITY_COLOR } from '../../modules/nft/wearable/types'
+import {
+  RARITY_COLOR,
+  RARITY_COLOR_LIGHT
+} from '../../modules/nft/wearable/types'
 import { getNFTName } from '../../modules/nft/utils'
 
 // 1x1 transparent pixel
@@ -45,10 +48,15 @@ const NFTImage = (props: Props) => {
   }
 
   if (nft.wearable) {
+    const backgroundImage = `radial-gradient(${
+      RARITY_COLOR_LIGHT[nft.wearable.rarity]
+    }, ${RARITY_COLOR[nft.wearable.rarity]})`
     return (
       <div
         className="rarity-background"
-        style={{ backgroundColor: RARITY_COLOR[nft.wearable.rarity] }}
+        style={{
+          backgroundImage
+        }}
       >
         <img alt={getNFTName(nft)} className="image" src={nft.image} />
       </div>

@@ -29,7 +29,7 @@ export enum WearableRarity {
 
 export const RARITY_COLOR_LIGHT = {
   [WearableRarity.UNIQUE]: '#FFE617',
-  [WearableRarity.MYTHIC]: '#FF63E1',
+  [WearableRarity.MYTHIC]: '#FB7DE3',
   [WearableRarity.LEGENDARY]: '#A657ED',
   [WearableRarity.EPIC]: '#6397F2',
   [WearableRarity.SWANKY]: '#3AD682',
