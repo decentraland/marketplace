@@ -18,7 +18,6 @@ export const ACCOUNT_NFTS_QUERY = gql`
   query AccountById(
     ${ACCOUNT_FILTERS}
     $address: String!
-    $isLand: Boolean = false
   ) {
     nfts(
       where: { owner: $address, searchIsLand: $isLand, searchEstateSize_gt: 0 }
@@ -54,7 +53,7 @@ class AccountAPI {
     const { address } = variables
 
     const query =
-      variables.isLand || variables.category !== undefined
+      variables.category !== undefined
         ? ACCOUNT_NFTS_BY_CATEGORY_QUERY
         : ACCOUNT_NFTS_QUERY
 

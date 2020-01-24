@@ -31,7 +31,7 @@ export const DEFAULT_FETCH_ORDER_OPTIONS: FetchOrderOptions = {
     skip: 0,
     orderBy: NFTSortBy.CREATED_AT,
     orderDirection: SortDirection.DESC,
-    isLand: undefined,
+    isLand: false,
     category: undefined
   },
   view: undefined

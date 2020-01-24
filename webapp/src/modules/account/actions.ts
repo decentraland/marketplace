@@ -26,7 +26,7 @@ export const DEFAULT_FETCH_ACCOUNT_OPTIONS: FetchAccountOptions = {
   variables: {
     first: 24,
     skip: 0,
-    isLand: undefined,
+    isLand: false,
     category: undefined,
     address: ''
   },
