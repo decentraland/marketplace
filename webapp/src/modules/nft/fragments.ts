@@ -43,7 +43,7 @@ export const nftFields = () => gql`
 export const nftFragment = () => gql`
   fragment nftFragment on NFT {
     ...nftFields
-    activeOrder {
+    activeOrder(size_gt: 0) {
       ...orderFields
     }
   }

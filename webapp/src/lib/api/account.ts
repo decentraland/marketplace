@@ -4,6 +4,7 @@ import { Order } from '../../modules/order/types'
 import { NFT } from '../../modules/nft/types'
 import { Account } from '../../modules/account/types'
 import { FetchAccountOptions } from '../../modules/account/actions'
+import { isExpired } from '../../modules/order/utils'
 import { nftFragment, NFTFragment } from '../../modules/nft/fragments'
 import { client } from './client'
 
@@ -20,7 +21,7 @@ export const ACCOUNT_NFTS_QUERY = gql`
     $isLand: Boolean = false
   ) {
     nfts(
-      where: { owner: $address, searchIsLand: $isLand }
+      where: { owner: $address, searchIsLand: $isLand, searchEstateSize_gt: 0 }
       first: $first
       skip: $skip
     ) {
@@ -37,7 +38,7 @@ export const ACCOUNT_NFTS_BY_CATEGORY_QUERY = gql`
     $category: Category!
   ) {
     nfts(
-      where: { owner: $address, category: $category }
+      where: { owner: $address, category: $category, searchEstateSize_gt: 0 }
       first: $first
       skip: $skip
     ) {
@@ -77,7 +78,7 @@ class AccountAPI {
         account.nftIds.push(nft.id)
         nfts.push(nft)
 
-        if (nestedOrder) {
+        if (nestedOrder && !isExpired(nestedOrder.expiresAt)) {
           const order = { ...nestedOrder, nftId: nft.id }
           nft.activeOrderId = order.id
           orders.push(order)
