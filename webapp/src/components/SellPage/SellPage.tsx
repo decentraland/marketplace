@@ -1,18 +1,19 @@
 import React, { useState } from 'react'
 import addDays from 'date-fns/addDays'
 import dateFnsFormat from 'date-fns/format'
+import { fromWei } from 'web3x-es/utils'
+import { Page, Header, Button, Field, Modal, Mana } from 'decentraland-ui'
+import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
-import { Page, Header, Button, Field, Modal, Mana } from 'decentraland-ui'
 import { Wallet } from '../Wallet'
 import { NFTProvider } from '../NFTProvider'
 import { NFTAction } from '../NFTAction'
 import { getNFTName } from '../../modules/nft/utils'
 import { locations } from '../../modules/routing/locations'
+import { MANA_SYMBOL } from '../../lib/api/mana'
 import { Props } from './SellPage.types'
 import './SellPage.css'
-import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { fromWei } from 'web3x-es/utils'
 
 const DEFAULT_EXPIRATION_IN_DAYS = 30
 const INPUT_FORMAT = 'yyyy-MM-dd'
@@ -21,10 +22,11 @@ const DEFAULT_EXPIRATION_DATE = dateFnsFormat(
   INPUT_FORMAT
 )
 
-const toMANA = (num: number) => (num > 0 ? '⏣ ' + num.toLocaleString() : '')
+const toMANA = (num: number) =>
+  num > 0 ? MANA_SYMBOL + ' ' + num.toLocaleString() : ''
 const fromMANA = (mana: string) => {
   const num = mana
-    .split('⏣ ')
+    .split(MANA_SYMBOL + ' ')
     .join('')
     .split(',')
     .join('')
@@ -81,7 +83,9 @@ const SellPage = (props: Props) => {
                     <div className="fields">
                       <Field
                         label={t('sell_page.price')}
-                        placeholder={'⏣ ' + (1000).toLocaleString()}
+                        placeholder={
+                          MANA_SYMBOL + ' ' + (1000).toLocaleString()
+                        }
                         value={price}
                         onChange={(_event, props) => {
                           const newPrice = fromMANA(props.value)
