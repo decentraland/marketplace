@@ -18,7 +18,7 @@ export type FetchAccountOptions = {
     category?: NFTCategory
     address: string
   }
-  view?: View // @nico TODO: Maybe restrict this to the actual possible vaules (account|load-more)
+  view?: View
 }
 
 export const DEFAULT_FETCH_ACCOUNT_OPTIONS: FetchAccountOptions = {

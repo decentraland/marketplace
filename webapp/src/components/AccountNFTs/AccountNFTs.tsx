@@ -4,6 +4,7 @@ import { Card, Loader } from 'decentraland-ui'
 
 import { NFTCard } from '../NFTCard'
 import { getSearchCategory } from '../../modules/routing/search'
+import { View } from '../../modules/ui/types'
 import { Props } from './AccountNFTs.types'
 import './AccountNFTs.css'
 
@@ -33,7 +34,7 @@ const AccountNFTs = (props: Props) => {
         category,
         address
       },
-      view: 'account'
+      view: View.ACCOUNT
     })
   }, [address, offset, page, section, sortBy, onFetchAccount])
 

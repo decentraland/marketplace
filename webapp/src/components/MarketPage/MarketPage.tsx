@@ -17,8 +17,9 @@ import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { NFTCard } from '../NFTCard'
+import { getSortOrder } from '../../modules/nft/utils'
 import { locations } from '../../modules/routing/locations'
-import { getSortOrder } from '../../modules/order/utils'
+import { View } from '../../modules/ui/types'
 import {
   getSearchCategory,
   SortBy,
@@ -58,7 +59,7 @@ const MarketPage = (props: Props) => {
         orderDirection,
         category
       },
-      view: skip === 0 ? 'market' : 'load-more'
+      view: skip === 0 ? View.MARKET : View.LOAD_MORE
     })
   }, [offset, page, section, sortBy, onFetchOrders])
 

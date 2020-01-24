@@ -54,6 +54,11 @@ class MarketplaceAPI {
         ? MARKET_BY_CATEGORY_QUERY
         : MARKET_QUERY
 
+    console.log({
+      query,
+      variables: options.variables
+    })
+
     const { data } = await client.query({
       query,
       variables: {

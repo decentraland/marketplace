@@ -1,6 +1,6 @@
 import { NFT, Order, Count } from '../../entities/schema'
-import * as addresses from '../../data/addresses'
 import * as categories from '../category/categories'
+import * as addresses from '../../data/addresses'
 
 export const DEFAULT_ID = 'all'
 

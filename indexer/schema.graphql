@@ -135,7 +135,11 @@ type NFT @entity {
 
   # search indexes
   searchOrderStatus: OrderStatus
+  searchOrderPrice: BigInt
   searchOrderExpiresAt: BigInt
+  searchOrderCreatedAt: BigInt
+
+  searchIsLand: Boolean
 
   searchParcelX: BigInt
   searchParcelY: BigInt
