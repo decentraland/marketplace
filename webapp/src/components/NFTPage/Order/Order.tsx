@@ -52,9 +52,12 @@ const Order = (props: Props) => {
       <div className="right">
         {order ? (
           isOwner ? (
-            <Button onClick={handleCancel} primary>
-              {t('detail.cancel_sale')}
-            </Button>
+            <>
+              <Button onClick={handleSell} primary>
+                {t('detail.update')}
+              </Button>
+              <Button onClick={handleCancel}>{t('detail.cancel_sale')}</Button>
+            </>
           ) : (
             <Button onClick={handleBuy} primary>
               {t('detail.buy')}

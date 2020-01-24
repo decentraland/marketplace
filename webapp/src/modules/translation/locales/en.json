@@ -42,6 +42,7 @@
     "cancel_sale": "Cancel Sale",
     "buy": "Buy",
     "sell": "Sell",
+    "update": "Update price",
     "transfer": "Transfer",
     "adjacent": "Adjacent",
     "distance": "{distance} {distance, plural, one {parcel} other {parcels}} away",
@@ -84,11 +85,14 @@
   },
   "sell_page": {
     "title": "List for sale",
+    "update_title": "Update your listing",
     "subtitle": "Set a price and expiration date for {name}.",
+    "update_subtitle": "Set a new price and expiration date for {name}.",
     "price": "Price",
     "expiration_date": "Expiration date",
     "invalid_date": "This date has already passed",
     "submit": "List for sale",
+    "update_submit": "Update",
     "confirm": {
       "title": "Please confirm",
       "line_one": "You are about to list {name} on sale for {amount}.",

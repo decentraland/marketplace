@@ -12,6 +12,7 @@ import { locations } from '../../modules/routing/locations'
 import { Props } from './SellPage.types'
 import './SellPage.css'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { fromWei } from 'web3x-es/utils'
 
 const DEFAULT_EXPIRATION_IN_DAYS = 30
 const INPUT_FORMAT = 'yyyy-MM-dd'
@@ -35,11 +36,18 @@ const fromMANA = (mana: string) => {
 }
 
 const SellPage = (props: Props) => {
-  const { onNavigate, onCreateOrder } = props
-  const [price, setPrice] = useState('')
+  const { order, onNavigate, onCreateOrder } = props
+  const isUpdate = order !== null
+  const [price, setPrice] = useState(
+    isUpdate ? toMANA(+fromWei(order!.price, 'ether')) : ''
+  )
+  const [expiresAt, setExpiresAt] = useState(
+    isUpdate
+      ? dateFnsFormat(new Date(+order!.expiresAt), INPUT_FORMAT)
+      : DEFAULT_EXPIRATION_DATE
+  )
   const [confirmPrice, setConfirmPrice] = useState('')
   const [showConfirm, setShowConfirm] = useState(false)
-  const [expiresAt, setExpiresAt] = useState(DEFAULT_EXPIRATION_DATE)
   return (
     <>
       <Navbar isFullscreen />
@@ -51,10 +59,18 @@ const SellPage = (props: Props) => {
                 const isInvalidDate = +new Date(expiresAt) < Date.now()
                 return (
                   <NFTAction nft={nft}>
-                    <Header size="large">{t('sell_page.title')}</Header>
+                    <Header size="large">
+                      {t(
+                        isUpdate ? 'sell_page.update_title' : 'sell_page.title'
+                      )}
+                    </Header>
                     <p className="subtitle">
                       <T
-                        id="sell_page.subtitle"
+                        id={
+                          isUpdate
+                            ? 'sell_page.update_subtitle'
+                            : 'sell_page.subtitle'
+                        }
                         values={{
                           name: (
                             <b className="primary-text">{getNFTName(nft)}</b>
@@ -106,7 +122,11 @@ const SellPage = (props: Props) => {
                         }
                         onClick={() => setShowConfirm(true)}
                       >
-                        {t('sell_page.submit')}
+                        {t(
+                          isUpdate
+                            ? 'sell_page.update_submit'
+                            : 'sell_page.submit'
+                        )}
                       </Button>
                     </div>
                     <Modal
