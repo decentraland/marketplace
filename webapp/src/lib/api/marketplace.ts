@@ -17,7 +17,7 @@ export const MARKET_QUERY = gql`
     ${MARKET_FILTERS}
   ) {
     nfts(
-      where: { searchOrderStatus: open, searchEstateSize_gt: 0, searchOrderexpiresAt_gt: $expiresAt }
+      where: { searchOrderStatus: open, searchEstateSize_gt: 0, searchOrderExpiresAt_gt: $expiresAt }
       first: $first
       skip: $skip
       orderBy: $orderBy
@@ -35,7 +35,7 @@ export const MARKET_BY_CATEGORY_QUERY = gql`
     $category: Category
   ) {
     nfts(
-      where: { category: $category, searchOrderStatus: open, searchEstateSize_gt: 0, searchOrderexpiresAt_gt: $expiresAt }
+      where: { category: $category, searchOrderStatus: open, searchEstateSize_gt: 0, searchOrderExpiresAt_gt: $expiresAt }
       first: $first
       skip: $skip
       orderBy: $orderBy
@@ -65,7 +65,7 @@ class MarketplaceAPI {
     const orders: Order[] = []
     const nfts: NFT[] = []
 
-    for (const result of data.orders as NFTFragment[]) {
+    for (const result of data.nfts as NFTFragment[]) {
       const { activeOrder: nestedOrder, ...rest } = result
       const nft = { ...rest, activeOrderId: nestedOrder!.id }
       const order = { ...nestedOrder!, nftId: nft.id }
