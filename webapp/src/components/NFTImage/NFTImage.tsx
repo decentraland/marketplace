@@ -27,7 +27,6 @@ const NFTImage = (props: Props) => {
         isDraggable={false}
         selection={selection}
         zoom={zoom}
-        disableClick
       />
     )
   }
@@ -42,7 +41,6 @@ const NFTImage = (props: Props) => {
         isDraggable={false}
         selection={selection}
         zoom={zoom}
-        disableClick
       />
     )
   }
@@ -82,7 +80,8 @@ const NFTImageWrapper = (props: Props) => {
     </div>
   )
 }
-;(NFTImage as React.FC).defaultProps = {
+
+NFTImage.defaultProps = {
   zoom: 0.5
 }
 

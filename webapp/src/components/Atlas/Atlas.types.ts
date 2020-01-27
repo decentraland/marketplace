@@ -7,7 +7,7 @@ export type Tile = AtlasTile & { estate_id?: string }
 export type Props = Partial<AtlasProps> & {
   tiles: Record<string, AtlasTile>
   selection?: { x: number | string; y: number | string }[]
-  disableClick?: boolean
+  withNavigation?: boolean
   onNavigate: (path: string) => void
 }
 

@@ -8,7 +8,7 @@ import { Tile, Props } from './Atlas.types'
 const getCoords = (x: number | string, y: number | string) => `${x},${y}`
 
 const Atlas = (props: Props) => {
-  const { tiles, onNavigate, disableClick } = props
+  const { tiles, onNavigate, withNavigation } = props
 
   const selection = useMemo(
     () =>
@@ -71,6 +71,7 @@ const Atlas = (props: Props) => {
 
   const handleClick = useCallback(
     async (x: number, y: number) => {
+      if (!withNavigation) return
       const tile = tiles[getCoords(x, y)] as Tile
       if (tile.estate_id) {
         onNavigate(locations.ntf(ContractAddress.ESTATE, tile.estate_id))
@@ -92,7 +93,7 @@ const Atlas = (props: Props) => {
     <AtlasComponent
       {...props}
       tiles={tiles}
-      onClick={disableClick ? undefined : handleClick}
+      onClick={handleClick}
       layers={[
         forSaleLayer,
         ...(props.layers || []),

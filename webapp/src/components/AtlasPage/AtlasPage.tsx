@@ -12,7 +12,7 @@ const AtlasPage = () => {
       <Navbar isFullscreen />
       <Navigation isFullscreen activeTab="atlas" />
       <Page isFullscreen>
-        <Atlas />
+        <Atlas withNavigation />
       </Page>
       <Footer isFullscreen />
     </>

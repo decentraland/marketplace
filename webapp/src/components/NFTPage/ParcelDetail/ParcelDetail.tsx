@@ -15,7 +15,7 @@ import { Highlight } from '../Highlight'
 import './ParcelDetail.css'
 
 const getDistance = (distance: number) =>
-  distance === 0 ? t('adjacent') : t('detail.distance', { distance })
+  distance === 0 ? t('detail.adjacent') : t('detail.distance', { distance })
 
 const ParcelDetail = (props: Props) => {
   const { nft } = props
@@ -38,7 +38,7 @@ const ParcelDetail = (props: Props) => {
   return (
     <>
       <div style={{ height: 420 }}>
-        <Atlas x={+x} y={+y} isDraggable selection={selection} />
+        <Atlas x={+x} y={+y} isDraggable selection={selection} withNavigation />
       </div>
       <Container className="ParcelDetail">
         <Title

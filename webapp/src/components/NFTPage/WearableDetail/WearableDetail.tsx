@@ -33,7 +33,7 @@ const WearableDetail = (props: Props) => {
           backgroundImage
         }}
       >
-        <img alt={nft.name} src={nft.image} />
+        <img alt={getNFTName(nft)} src={nft.image} />
       </div>
       <Container className="WearableDetail">
         <Title
