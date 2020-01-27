@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../../modules/reducer'
-import { getTokenIds } from '../../../modules/nft/parcel/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -9,11 +8,7 @@ import {
 } from './EstateDetail.types'
 import EstateDetail from './EstateDetail'
 
-const mapState = (state: RootState): MapStateProps => {
-  return {
-    tokenIds: getTokenIds(state)
-  }
-}
+const mapState = (_state: RootState): MapStateProps => ({})
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path))
