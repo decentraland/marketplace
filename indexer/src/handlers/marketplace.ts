@@ -5,7 +5,7 @@ import {
   OrderCancelled
 } from '../entities/Marketplace/Marketplace'
 import { Order, NFT, Parcel, Wearable, Estate } from '../entities/schema'
-import { getNFTId } from '../modules/nft'
+import { getNFTId, updateNFTOrderProperties } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildCountFromOrder } from '../modules/count'
 import * as status from '../modules/order/status'
@@ -51,9 +51,7 @@ export function handleOrderCreated(event: OrderCreated): void {
     oldOrder.save()
   }
 
-  nft.activeOrder = orderId
-  nft.searchOrderStatus = status.OPEN
-  nft.searchOrderExpiresAt = event.params.expiresAt
+  nft = updateNFTOrderProperties(nft!, order)
   nft.save()
 
   let count = buildCountFromOrder(order)
@@ -80,8 +78,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 
   let nft = new NFT(nftId)
   nft.owner = event.params.buyer.toHex()
-  nft.activeOrder = null
-  nft.searchOrderStatus = status.SOLD
+  nft = updateNFTOrderProperties(nft!, order)
   nft.save()
 }
 
@@ -102,7 +99,6 @@ export function handleOrderCancelled(event: OrderCancelled): void {
   order.save()
 
   let nft = new NFT(nftId)
-  nft.activeOrder = null
-  nft.searchOrderStatus = status.CANCELLED
+  nft = updateNFTOrderProperties(nft!, order)
   nft.save()
 }

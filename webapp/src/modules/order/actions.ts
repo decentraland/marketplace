@@ -2,7 +2,7 @@ import { action } from 'typesafe-actions'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 
 import { View } from '../ui/types'
-import { NFT, NFTCategory } from '../nft/types'
+import { NFT, NFTCategory, NFTSortBy } from '../nft/types'
 import { SortDirection } from '../routing/search'
 import { Order } from './types'
 import { getNFTName } from '../nft/utils'
@@ -17,19 +17,21 @@ export type FetchOrderOptions = {
   variables: {
     first: number
     skip: number
-    orderBy?: keyof Order
+    orderBy?: NFTSortBy
     orderDirection: SortDirection
+    isLand?: boolean
     category?: NFTCategory
   }
-  view?: View // @nico TODO: Maybe restrict this to the actual possible vaules (account|load-more)
+  view?: View
 }
 
 export const DEFAULT_FETCH_ORDER_OPTIONS: FetchOrderOptions = {
   variables: {
     first: 24,
     skip: 0,
-    orderBy: 'createdAt',
+    orderBy: NFTSortBy.CREATED_AT,
     orderDirection: SortDirection.DESC,
+    isLand: false,
     category: undefined
   },
   view: undefined

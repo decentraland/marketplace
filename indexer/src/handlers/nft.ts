@@ -43,11 +43,14 @@ export function handleTransfer(event: Transfer): void {
     // necessary because thegraph doesn't support complex queries and we can't do `OR` operations
     nft.searchEstateSize = 1
 
+    nft.searchIsLand = false
+
     if (category == categories.PARCEL) {
       let parcel = buildParcelFromNFT(nft)
       parcel.save()
       nft.parcel = id
       nft.image = getParcelImage(parcel)
+      nft.searchIsLand = true
       nft.searchParcelX = parcel.x
       nft.searchParcelY = parcel.y
     } else if (category == categories.ESTATE) {
@@ -55,6 +58,7 @@ export function handleTransfer(event: Transfer): void {
       estate.save()
       nft.estate = id
       nft.image = getEstateImage(estate)
+      nft.searchIsLand = true
       nft.searchEstateSize = estate.size
     } else if (category == categories.WEARABLE) {
       let wearable = buildWearableFromNFT(nft)

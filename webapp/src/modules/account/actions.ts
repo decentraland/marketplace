@@ -15,16 +15,18 @@ export type FetchAccountOptions = {
   variables: {
     first: number
     skip: number
+    isLand?: boolean
     category?: NFTCategory
     address: string
   }
-  view?: View // @nico TODO: Maybe restrict this to the actual possible vaules (account|load-more)
+  view?: View
 }
 
 export const DEFAULT_FETCH_ACCOUNT_OPTIONS: FetchAccountOptions = {
   variables: {
     first: 24,
     skip: 0,
+    isLand: false,
     category: undefined,
     address: ''
   },

@@ -6,22 +6,43 @@ import { FetchOrderOptions } from '../../modules/order/actions'
 import { client } from './client'
 import { nftFragment, NFTFragment } from '../../modules/nft/fragments'
 
-export const MARKET_FILTERS = `$first: Int
-$skip: Int
-$orderBy: String
-$orderDirection: String
-$expiresAt: String`
+const MARKET_FILTERS = `
+  $first: Int
+  $skip: Int
+  $orderBy: String
+  $orderDirection: String
+  $expiresAt: String
+`
 
-export const MARKET_QUERY = gql`
+const MARKET_ARGUMENTS = `
+  first: $first
+  skip: $skip
+  orderBy: $orderBy
+  orderDirection: $orderDirection
+`
+
+export const MARKET_FULL_QUERY = gql`
   query Marketplace(
     ${MARKET_FILTERS}
   ) {
     nfts(
       where: { searchOrderStatus: open, searchEstateSize_gt: 0, searchOrderExpiresAt_gt: $expiresAt }
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-      orderDirection: $orderDirection
+      ${MARKET_ARGUMENTS}
+    ) {
+      ...nftFragment
+    }
+  }
+  ${nftFragment()}
+`
+
+export const MARKET_LAND_QUERY = gql`
+  query MarketplaceLAND(
+    ${MARKET_FILTERS}
+    $isLand: Boolean = false
+  ) {
+    nfts(
+      where: { searchIsLand: $isLand, searchOrderStatus: open, searchEstateSize_gt: 0, searchOrderExpiresAt_gt: $expiresAt }
+      ${MARKET_ARGUMENTS}
     ) {
       ...nftFragment
     }
@@ -36,10 +57,7 @@ export const MARKET_BY_CATEGORY_QUERY = gql`
   ) {
     nfts(
       where: { category: $category, searchOrderStatus: open, searchEstateSize_gt: 0, searchOrderExpiresAt_gt: $expiresAt }
-      first: $first
-      skip: $skip
-      orderBy: $orderBy
-      orderDirection: $orderDirection
+      ${MARKET_ARGUMENTS}
     ) {
       ...nftFragment
     }
@@ -49,15 +67,18 @@ export const MARKET_BY_CATEGORY_QUERY = gql`
 
 class MarketplaceAPI {
   fetch = async (options: FetchOrderOptions) => {
+    const { variables } = options
     const query =
-      options.variables.category !== undefined
+      variables.category !== undefined
         ? MARKET_BY_CATEGORY_QUERY
-        : MARKET_QUERY
+        : variables.isLand
+        ? MARKET_LAND_QUERY
+        : MARKET_FULL_QUERY
 
     const { data } = await client.query({
       query,
       variables: {
-        ...options.variables,
+        ...variables,
         expiresAt: Date.now().toString()
       }
     })
