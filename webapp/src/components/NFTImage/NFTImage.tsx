@@ -1,13 +1,14 @@
 import React from 'react'
 import { Atlas } from '../Atlas'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
-import { Props } from './NFTImage.types'
-import './NFTImage.css'
 import {
   RARITY_COLOR,
   RARITY_COLOR_LIGHT
 } from '../../modules/nft/wearable/types'
 import { getNFTName } from '../../modules/nft/utils'
+import { NFTCategory } from '../../modules/nft/types'
+import { Props } from './NFTImage.types'
+import './NFTImage.css'
 
 // 1x1 transparent pixel
 const PIXEL =
@@ -16,52 +17,54 @@ const PIXEL =
 const NFTImage = (props: Props) => {
   const { nft, zoom } = props
 
-  if (nft.parcel) {
-    const x = +nft.parcel.x
-    const y = +nft.parcel.y
-    const selection = [{ x, y }]
-    return (
-      <Atlas
-        x={x}
-        y={y}
-        isDraggable={false}
-        selection={selection}
-        zoom={zoom}
-      />
-    )
-  }
+  switch (nft.category) {
+    case NFTCategory.PARCEL: {
+      const x = +nft.parcel!.x
+      const y = +nft.parcel!.y
+      const selection = [{ x, y }]
+      return (
+        <Atlas
+          x={x}
+          y={y}
+          isDraggable={false}
+          selection={selection}
+          zoom={zoom}
+        />
+      )
+    }
+    case NFTCategory.ESTATE: {
+      const selection = getSelection(nft)
+      const [x, y] = getCenter(selection)
+      return (
+        <Atlas
+          x={x}
+          y={y}
+          isDraggable={false}
+          selection={selection}
+          zoom={zoom}
+        />
+      )
+    }
 
-  if (nft.estate) {
-    const selection = getSelection(nft)
-    const [x, y] = getCenter(selection)
-    return (
-      <Atlas
-        x={x}
-        y={y}
-        isDraggable={false}
-        selection={selection}
-        zoom={zoom}
-      />
-    )
-  }
+    case NFTCategory.WEARABLE: {
+      const backgroundImage = `radial-gradient(${
+        RARITY_COLOR_LIGHT[nft.wearable!.rarity]
+      }, ${RARITY_COLOR[nft.wearable!.rarity]})`
+      return (
+        <div
+          className="rarity-background"
+          style={{
+            backgroundImage
+          }}
+        >
+          <img alt={getNFTName(nft)} className="image" src={nft.image} />
+        </div>
+      )
+    }
 
-  if (nft.wearable) {
-    const backgroundImage = `radial-gradient(${
-      RARITY_COLOR_LIGHT[nft.wearable.rarity]
-    }, ${RARITY_COLOR[nft.wearable.rarity]})`
-    return (
-      <div
-        className="rarity-background"
-        style={{
-          backgroundImage
-        }}
-      >
-        <img alt={getNFTName(nft)} className="image" src={nft.image} />
-      </div>
-    )
+    default:
+      return <img alt={getNFTName(nft)} className="image" src={nft.image} />
   }
-
-  return <img alt={getNFTName(nft)} className="image" src={nft.image} />
 }
 
 // the purpose of this wrapper is to make the div always be square, by using a 1x1 transparent pixel
