@@ -3,6 +3,7 @@ import { gql } from 'apollo-boost'
 import { NFT } from '../../modules/nft/types'
 import { client } from './client'
 import { nftFragment, NFTFragment } from '../../modules/nft/fragments'
+import { Order } from '../../modules/order/types'
 
 export const NFT_BY_ADDRESS_AND_ID = gql`
   query NFTByTokenId($contractAddress: String, $tokenId: String) {
@@ -33,8 +34,14 @@ class NFTAPI {
         tokenId
       }
     })
-    const { activeOrder: order, ...rest } = data.nfts[0] as NFTFragment
-    const nft: NFT = { ...rest, activeOrderId: order ? order.id : null }
+    const { activeOrder, ...rest } = data.nfts[0] as NFTFragment
+    const nft: NFT = {
+      ...rest,
+      activeOrderId: activeOrder ? activeOrder.id : null
+    }
+    const order: Order | null = activeOrder
+      ? { ...activeOrder, nftId: nft.id }
+      : null
     return [nft, order] as const
   }
 

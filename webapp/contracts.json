@@ -10,6 +10,11 @@
       "source": "etherscan",
       "net": "mainnet",
       "address": "0x19a8ed4860007a66805782ed7e0bed4e44fc6717"
+    },
+    "EstateRegistry": {
+      "source": "etherscan",
+      "net": "mainnet",
+      "address": "0x55fd705b431f95c8e09fcf85a245377568cc2c6e"
     }
   }
 }
