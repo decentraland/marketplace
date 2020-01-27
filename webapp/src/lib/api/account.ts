@@ -8,21 +8,40 @@ import { isExpired } from '../../modules/order/utils'
 import { nftFragment, NFTFragment } from '../../modules/nft/fragments'
 import { client } from './client'
 
-export const ACCOUNT_FILTERS = `
+const ACCOUNT_FILTERS = `
   $first: Int
   $skip: Int
-  $isLand: Boolean
 `
 
-export const ACCOUNT_NFTS_QUERY = gql`
+const ACCOUNT_ARGUMENTS = `
+  first: $first
+  skip: $skip
+`
+
+export const ACCOUNT_NFTS_FULL_QUERY = gql`
   query AccountById(
     ${ACCOUNT_FILTERS}
     $address: String!
   ) {
     nfts(
+      where: { owner: $address, searchEstateSize_gt: 0 }
+      ${ACCOUNT_ARGUMENTS}
+    ) {
+      ...nftFragment
+    }
+  }
+  ${nftFragment()}
+`
+
+export const ACCOUNT_NFTS_LAND_QUERY = gql`
+  query AccountById(
+    ${ACCOUNT_FILTERS}
+    $address: String!
+    $isLand: Boolean = false
+  ) {
+    nfts(
       where: { owner: $address, searchIsLand: $isLand, searchEstateSize_gt: 0 }
-      first: $first
-      skip: $skip
+      ${ACCOUNT_ARGUMENTS}
     ) {
       ...nftFragment
     }
@@ -38,8 +57,7 @@ export const ACCOUNT_NFTS_BY_CATEGORY_QUERY = gql`
   ) {
     nfts(
       where: { owner: $address, category: $category, searchEstateSize_gt: 0 }
-      first: $first
-      skip: $skip
+      ${ACCOUNT_ARGUMENTS}
     ) {
       ...nftFragment
     }
@@ -55,7 +73,9 @@ class AccountAPI {
     const query =
       variables.category !== undefined
         ? ACCOUNT_NFTS_BY_CATEGORY_QUERY
-        : ACCOUNT_NFTS_QUERY
+        : variables.isLand
+        ? ACCOUNT_NFTS_LAND_QUERY
+        : ACCOUNT_NFTS_FULL_QUERY
 
     const { data } = await client.query({
       query,
