@@ -86,7 +86,7 @@ const Atlas = (props: Props) => {
         }
       }
     },
-    [onNavigate, tiles]
+    [withNavigation, onNavigate, tiles]
   )
 
   return (
