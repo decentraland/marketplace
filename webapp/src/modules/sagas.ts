@@ -7,6 +7,7 @@ import { orderSaga } from './order/sagas'
 import { accountSaga } from './account/sagas'
 import { nftSaga } from './nft/sagas'
 import { uiSaga } from './ui/sagas'
+import { tileSaga } from './tile/sagas'
 
 import { MANA_ADDRESS } from './contracts'
 
@@ -20,6 +21,7 @@ export function* rootSaga() {
     orderSaga(),
     accountSaga(),
     nftSaga(),
-    uiSaga()
+    uiSaga(),
+    tileSaga()
   ])
 }

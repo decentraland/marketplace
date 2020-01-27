@@ -2,16 +2,16 @@ import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card, Mana } from 'decentraland-ui'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { Props } from './NFTCard.types'
 
 import { locations } from '../../modules/routing/locations'
-import { RARITY_COLOR } from '../../modules/nft/wearable/types'
 import { Order } from '../../modules/order/types'
+import { getNFTName } from '../../modules/nft/utils'
+import { NFTImage } from '../NFTImage'
 import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
+import { Props } from './NFTCard.types'
 import './NFTCard.css'
-import { getNFTName } from '../../modules/nft/utils'
 
 const getPrice = (order: Order) =>
   (parseInt(order.price, 10) / 10 ** 18).toLocaleString()
@@ -29,16 +29,9 @@ const NFTCard = (props: Props) => {
     [nft, onNavigate]
   )
 
-  let imgStyle
-  if (nft.wearable) {
-    imgStyle = { backgroundColor: RARITY_COLOR[nft.wearable.rarity] }
-  }
-
   return (
     <Card className="NFTCard" link onClick={handleClick}>
-      <div className="image-wrapper" style={imgStyle}>
-        <img className="image" src={nft.image} alt={title} />
-      </div>
+      <NFTImage nft={nft} />
       <Card.Content>
         <Card.Header>
           <div className="title">{title}</div>{' '}

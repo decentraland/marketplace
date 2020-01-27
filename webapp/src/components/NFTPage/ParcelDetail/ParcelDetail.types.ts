@@ -4,11 +4,10 @@ import { NFT } from '../../../modules/nft/types'
 
 export type Props = {
   nft: NFT
-  tokenIds: Record<string, string>
   onNavigate: (path: string) => void
 }
 
-export type MapStateProps = Pick<Props, 'tokenIds'>
+export type MapStateProps = {}
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>
 

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { locations } from '../../modules/routing/locations'
-import { getNFTName } from '../../modules/nft/utils'
+import { NFTImage } from '../NFTImage'
 import { Props } from './NFTAction.types'
 import './NFTAction.css'
 
@@ -15,8 +15,8 @@ const NFTAction = (props: Props) => {
       <div className="back" onClick={handleBack}></div>
       <div className="action">
         <div className="left">
-          <div className="image-wrapper">
-            <img alt={getNFTName(nft)} src={nft.image} />
+          <div className="nft-image-wrapper">
+            <NFTImage nft={nft} zoom={1} />
           </div>
         </div>
         <div className="right">{children}</div>

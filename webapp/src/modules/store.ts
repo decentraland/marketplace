@@ -8,6 +8,7 @@ import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/tra
 
 import { createRootReducer } from './reducer'
 import { rootSaga } from './sagas'
+import { fetchTilesRequest } from './tile/actions'
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -47,5 +48,7 @@ if (isDev) {
   const _window = window as any
   _window.getState = store.getState
 }
+
+store.dispatch(fetchTilesRequest())
 
 export { store }

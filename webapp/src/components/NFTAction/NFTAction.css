@@ -32,14 +32,9 @@
   flex: 1.25 1 auto;
 }
 
-.NFTAction .image-wrapper {
-  max-width: 240px;
+.NFTAction .nft-image-wrapper {
+  width: 240px;
   border-radius: 16px;
   overflow: hidden;
   display: inline-block;
-}
-
-.NFTAction .image-wrapper img {
-  width: 100%;
-  height: auto;
 }

@@ -1,31 +1,14 @@
 import React, { useCallback, useMemo } from 'react'
-import { Atlas as AtlasComponent, AtlasTile, Layer } from 'decentraland-ui'
+import { Atlas as AtlasComponent, Layer } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { ContractAddress } from '../../modules/contract/types'
-import { LAND_API_URL } from '../../lib/api/land'
 import { nftAPI } from '../../lib/api/nft'
 import { Tile, Props } from './Atlas.types'
 
-let tiles: Record<string, AtlasTile>
-AtlasComponent.fetchTiles(LAND_API_URL + '/tiles').then(
-  _tiles => (tiles = _tiles)
-)
-
 const getCoords = (x: number | string, y: number | string) => `${x},${y}`
 
-const forSaleLayer: Layer = (x, y) => {
-  const key = getCoords(x, y)
-  if (!tiles) return null
-  const tile = tiles[key]
-  if (tile && 'price' in tile) {
-    const { left, top, topLeft } = tile
-    return { color: '#00d3ff', left, top, topLeft }
-  }
-  return null
-}
-
 const Atlas = (props: Props) => {
-  const { onNavigate } = props
+  const { tiles, onNavigate, withNavigation } = props
 
   const selection = useMemo(
     () =>
@@ -56,7 +39,20 @@ const Atlas = (props: Props) => {
       }
       return false
     },
-    [selection]
+    [selection, tiles]
+  )
+
+  const forSaleLayer: Layer = useCallback(
+    (x, y) => {
+      const key = getCoords(x, y)
+      const tile = tiles[key]
+      if (tile && 'price' in tile) {
+        const { left, top, topLeft } = tile
+        return { color: '#00d3ff', left, top, topLeft }
+      }
+      return null
+    },
+    [tiles]
   )
 
   const selectedStrokeLayer: Layer = useCallback(
@@ -75,7 +71,7 @@ const Atlas = (props: Props) => {
 
   const handleClick = useCallback(
     async (x: number, y: number) => {
-      if (!tiles) return
+      if (!withNavigation) return
       const tile = tiles[getCoords(x, y)] as Tile
       if (tile.estate_id) {
         onNavigate(locations.ntf(ContractAddress.ESTATE, tile.estate_id))
@@ -90,7 +86,7 @@ const Atlas = (props: Props) => {
         }
       }
     },
-    [onNavigate]
+    [onNavigate, tiles]
   )
 
   return (
