@@ -52,7 +52,7 @@ export function getWearableImage(wearable: WearableEntity): String {
     wearable.collection +
     '/wearables/' +
     wearable.representationId +
-    '/image'
+    '/thumbnail'
   )
 }
 
