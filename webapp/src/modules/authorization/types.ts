@@ -1,17 +1,17 @@
-// @nico TODO: These two could be specified further
-export type ContractName = string
-export type TokenName = string
+export type Address = string
 
-export type Allowance = Record<TokenName, number>
-export type Allowances = Record<ContractName, Allowance>
+export type Allowance = Record<Address, number>
+export type Allowances = Record<Address, Allowance>
 
-export type Approval = Record<TokenName, boolean>
-export type Approvals = Record<ContractName, Approval>
+export type Approval = Record<Address, boolean>
+export type Approvals = Record<Address, Approval>
 
-export type Authorization = { allowances: Allowances; approvals: Approvals }
+export type Authorization = {
+  allowances: Partial<Allowances>
+  approvals: Partial<Approvals>
+}
 
-export type ContractRequest = Record<ContractName, TokenName[]>
 export type AuthorizationRequest = {
-  allowances: ContractRequest
-  approvals: ContractRequest
+  allowances: Record<Address, Address[]>
+  approvals: Record<Address, Address[]>
 }

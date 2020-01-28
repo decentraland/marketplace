@@ -6,9 +6,12 @@ import {
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 
 import { fetchAuthorizationRequest } from '../authorization/actions'
-import { MANAToken } from '../contracts'
+import { AuthorizationRequest } from '../authorization/types'
+import { contractAddresses } from '../contract/addresses'
 
-const baseWalletSaga = createWalletSaga({ MANA_ADDRESS: MANAToken })
+const baseWalletSaga = createWalletSaga({
+  MANA_ADDRESS: contractAddresses.MANAToken
+})
 
 export function* walletSaga() {
   yield all([baseWalletSaga(), fullWalletSaga()])
@@ -21,15 +24,19 @@ function* fullWalletSaga() {
 function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
   const { address } = action.payload.wallet
 
-  const authorization = {
+  const {
+    MANAToken,
+    Marketplace,
+    LANDRegistry,
+    EstateRegistry
+  } = contractAddresses
+
+  const authorization: AuthorizationRequest = {
     allowances: {
-      Marketplace: ['MANAToken'],
-      LegacyMarketplace: ['MANAToken'],
-      MortgageHelper: ['MANAToken'],
-      MortgageManager: ['RCNToken']
+      [Marketplace]: [MANAToken]
     },
     approvals: {
-      Marketplace: ['LANDRegistry', 'EstateRegistry']
+      [Marketplace]: [LANDRegistry, EstateRegistry]
     }
   }
 

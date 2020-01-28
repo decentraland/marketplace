@@ -24,7 +24,7 @@ import {
 } from './actions'
 import { marketplaceAPI } from '../../lib/api/marketplace'
 import { Marketplace } from '../../contracts/Marketplace'
-import { Marketplace as MarketplaceAddress } from '../contracts'
+import { contractAddresses } from '../contract/addresses'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 
@@ -58,7 +58,7 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
     }
     const marketplace = new Marketplace(
       eth,
-      Address.fromString(MarketplaceAddress)
+      Address.fromString(contractAddresses.Marketplace)
     )
     const address = yield select(getAddress)
     if (!address) {

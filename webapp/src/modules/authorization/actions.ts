@@ -1,11 +1,6 @@
 import { action } from 'typesafe-actions'
 import { buildTransactionPayload } from 'decentraland-dapps/dist//modules/transaction/utils'
-import {
-  Authorization,
-  AuthorizationRequest,
-  ContractName,
-  TokenName
-} from './types'
+import { Authorization, AuthorizationRequest, Address } from './types'
 
 // Fetch authorization
 
@@ -44,39 +39,37 @@ export const ALLOW_TOKEN_FAILURE = '[Failure] Allow Token'
 
 export const allowTokenRequest = (
   amount: number,
-  contractName: ContractName,
-  tokenContractName?: TokenName
+  contractAddress: Address,
+  tokenContractAddress: Address
 ) =>
   action(ALLOW_TOKEN_REQUEST, {
     amount,
-    contractName,
-    tokenContractName
+    contractAddress,
+    tokenContractAddress
   })
 
 export const allowTokenSuccess = (
   txHash: string,
   address: string,
   amount: number,
-  contractName: ContractName,
-  tokenContractName: TokenName
+  contractAddress: Address,
+  tokenContractAddress: Address
 ) =>
   action(ALLOW_TOKEN_SUCCESS, {
     ...buildTransactionPayload(txHash, {
       address,
       amount,
-      contractName,
-      tokenContractName
+      contractAddress,
+      tokenContractAddress
     }),
     address,
     amount,
-    contractName,
-    tokenContractName
+    contractAddress,
+    tokenContractAddress
   })
 
 export const allowTokenFailure = (error: string) =>
-  action(ALLOW_TOKEN_FAILURE, {
-    error
-  })
+  action(ALLOW_TOKEN_FAILURE, { error })
 
 export type AllowTokenRequestAction = ReturnType<typeof allowTokenRequest>
 export type AllowTokenSuccessAction = ReturnType<typeof allowTokenSuccess>
@@ -90,39 +83,37 @@ export const APPROVE_TOKEN_FAILURE = '[Failure] Approve Token'
 
 export const approveTokenRequest = (
   isApproved: boolean,
-  contractName: ContractName,
-  tokenContractName?: TokenName
+  contractAddress: Address,
+  tokenContractAddress: Address
 ) =>
   action(APPROVE_TOKEN_REQUEST, {
     isApproved,
-    contractName,
-    tokenContractName
+    contractAddress,
+    tokenContractAddress
   })
 
 export const approveTokenSuccess = (
   txHash: string,
   address: string,
   isApproved: boolean,
-  contractName: ContractName,
-  tokenContractName: TokenName
+  contractAddress: Address,
+  tokenContractAddress: Address
 ) =>
   action(APPROVE_TOKEN_SUCCESS, {
     ...buildTransactionPayload(txHash, {
       address,
       isApproved,
-      contractName,
-      tokenContractName
+      contractAddress,
+      tokenContractAddress
     }),
     address,
     isApproved,
-    contractName,
-    tokenContractName
+    contractAddress,
+    tokenContractAddress
   })
 
 export const approveTokenFailure = (error: string) =>
-  action(APPROVE_TOKEN_FAILURE, {
-    error
-  })
+  action(APPROVE_TOKEN_FAILURE, { error })
 
 export type ApproveTokenRequestAction = ReturnType<typeof approveTokenRequest>
 export type ApproveTokenSuccessAction = ReturnType<typeof approveTokenSuccess>

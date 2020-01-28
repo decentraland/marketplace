@@ -7,7 +7,7 @@ import {
   FETCH_TRANSACTION_SUCCESS
 } from 'decentraland-dapps/dist/modules/transaction/actions'
 
-import { Authorization } from './types'
+import { Authorization, Address } from './types'
 import {
   FetchAuthorizationRequestAction,
   FetchAuthorizationSuccessAction,
@@ -68,16 +68,17 @@ export function authorizationReducer(
       const allowances = { ...addressState.allowances }
       const approvals = { ...addressState.approvals }
 
-      for (const contractName in authorization.allowances) {
-        allowances[contractName] = {
-          ...allowances[contractName],
-          ...authorization.allowances[contractName]
+      let contractAddress: Address
+      for (contractAddress in authorization.allowances) {
+        allowances[contractAddress] = {
+          ...allowances[contractAddress],
+          ...authorization.allowances[contractAddress]
         }
       }
-      for (const contractName in authorization.approvals) {
-        approvals[contractName] = {
-          ...approvals[contractName],
-          ...authorization.approvals[contractName]
+      for (contractAddress in authorization.approvals) {
+        approvals[contractAddress] = {
+          ...approvals[contractAddress],
+          ...authorization.approvals[contractAddress]
         }
       }
 
@@ -105,15 +106,15 @@ export function authorizationReducer(
           const {
             address,
             amount,
-            contractName,
+            contractAddress,
             tokenContractName
           } = transaction.payload
           const addressState = state.data[address] || EMPTY_ADDRESS_STATE
 
           const allowances = {
             ...addressState.allowances,
-            [contractName]: {
-              ...addressState.allowances[contractName],
+            [contractAddress]: {
+              ...addressState.allowances[contractAddress],
               [tokenContractName]: amount
             }
           }
@@ -130,15 +131,15 @@ export function authorizationReducer(
           const {
             address,
             isApproved,
-            contractName,
+            contractAddress,
             tokenContractName
           } = transaction.payload
           const addressState = state.data[address] || EMPTY_ADDRESS_STATE
 
           const approvals = {
             ...addressState.approvals,
-            [contractName]: {
-              ...addressState.approvals[contractName],
+            [contractAddress]: {
+              ...addressState.approvals[contractAddress],
               [tokenContractName]: isApproved
             }
           }
