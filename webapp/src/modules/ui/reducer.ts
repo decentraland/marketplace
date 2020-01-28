@@ -6,6 +6,7 @@ import {
   FetchAccountSuccessAction,
   FETCH_ACCOUNT_SUCCESS
 } from '../account/actions'
+import { View } from './types'
 
 export type UIState = {
   marketOrderIds: string[]
@@ -26,13 +27,13 @@ export function uiReducer(
   switch (action.type) {
     case FETCH_ACCOUNT_SUCCESS: {
       switch (action.payload.options.view) {
-        case 'account': {
+        case View.ACCOUNT: {
           return {
             ...state,
             accountNFTIds: action.payload.nfts.map(nft => nft.id)
           }
         }
-        case 'load-more': {
+        case View.LOAD_MORE: {
           return {
             ...state,
             accountNFTIds: [
@@ -47,13 +48,13 @@ export function uiReducer(
     }
     case FETCH_ORDERS_SUCCESS: {
       switch (action.payload.options.view) {
-        case 'market': {
+        case View.MARKET: {
           return {
             ...state,
             marketOrderIds: action.payload.orders.map(order => order.id)
           }
         }
-        case 'load-more': {
+        case View.LOAD_MORE: {
           return {
             ...state,
             marketOrderIds: [

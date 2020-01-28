@@ -8,6 +8,11 @@ export enum NFTCategory {
   WEARABLE = 'wearable'
 }
 
+export enum NFTSortBy {
+  CREATED_AT = 'searchOrderCreatedAt',
+  PRICE = 'searchOrderPrice'
+}
+
 export type NFT = {
   id: string
   contractAddress: string

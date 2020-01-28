@@ -1,5 +1,7 @@
 import { log } from '@graphprotocol/graph-ts'
+import { NFT, Order } from '../../entities/schema'
 import { ERC721, Transfer } from '../../entities/templates/ERC721/ERC721'
+import * as status from '../order/status'
 import * as addresses from '../../data/addresses'
 
 export function isMint(event: Transfer): boolean {
@@ -30,4 +32,22 @@ export function getTokenURI(event: Transfer): string {
   }
 
   return tokenURI
+}
+
+export function updateNFTOrderProperties(nft: NFT, order: Order): NFT {
+  nft.searchOrderStatus = order.status
+
+  if (order.status == status.OPEN) {
+    nft.activeOrder = order.id
+    nft.searchOrderPrice = order.price
+    nft.searchOrderCreatedAt = order.createdAt
+    nft.searchOrderExpiresAt = order.expiresAt
+  } else if (order.status == status.SOLD || order.status == status.CANCELLED) {
+    nft.activeOrder = null
+    nft.searchOrderPrice = null
+    nft.searchOrderCreatedAt = null
+    nft.searchOrderExpiresAt = null
+  }
+
+  return nft
 }
