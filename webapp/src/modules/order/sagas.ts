@@ -24,7 +24,7 @@ import {
 } from './actions'
 import { marketplaceAPI } from '../../lib/api/marketplace'
 import { Marketplace } from '../../contracts/Marketplace'
-import { contractAddresses } from '../contract/addresses'
+import { contractAddresses } from '../contract/utils'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 

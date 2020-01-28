@@ -6,12 +6,12 @@ export type Allowances = Record<Address, Allowance>
 export type Approval = Record<Address, boolean>
 export type Approvals = Record<Address, Approval>
 
-export type Authorization = {
+export type Authorizations = {
   allowances: Partial<Allowances>
   approvals: Partial<Approvals>
 }
 
-export type AuthorizationRequest = {
+export type AuthorizationsRequest = {
   allowances: Record<Address, Address[]>
   approvals: Record<Address, Address[]>
 }

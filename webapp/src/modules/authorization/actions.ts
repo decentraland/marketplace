@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions'
 import { buildTransactionPayload } from 'decentraland-dapps/dist//modules/transaction/utils'
-import { Authorization, AuthorizationRequest, Address } from './types'
+import { Authorizations, AuthorizationsRequest, Address } from './types'
 
 // Fetch authorization
 
@@ -10,12 +10,12 @@ export const FETCH_AUTHORIZATION_FAILURE = '[Failure] Fetch Authorization'
 
 export const fetchAuthorizationRequest = (
   address: string,
-  { allowances, approvals }: AuthorizationRequest
+  { allowances, approvals }: AuthorizationsRequest
 ) => action(FETCH_AUTHORIZATION_REQUEST, { address, allowances, approvals })
 
 export const fetchAuthorizationSuccess = (
   address: string,
-  authorization: Authorization
+  authorization: Authorizations
 ) => action(FETCH_AUTHORIZATION_SUCCESS, { address, authorization })
 
 export const fetchAuthorizationFailure = (error: string) =>

@@ -7,7 +7,7 @@ import {
   FETCH_TRANSACTION_SUCCESS
 } from 'decentraland-dapps/dist/modules/transaction/actions'
 
-import { Authorization, Address } from './types'
+import { Authorizations, Address } from './types'
 import {
   FetchAuthorizationRequestAction,
   FetchAuthorizationSuccessAction,
@@ -26,7 +26,7 @@ import {
 } from './actions'
 
 export type AuthorizationState = {
-  data: Record<string, Authorization>
+  data: Record<string, Authorizations>
   loading: LoadingState
   error: string | null
 }
@@ -36,7 +36,7 @@ const INITIAL_STATE = {
   loading: [],
   error: null
 }
-const EMPTY_ADDRESS_STATE: Authorization = { allowances: {}, approvals: {} }
+const EMPTY_ADDRESS_STATE: Authorizations = { allowances: {}, approvals: {} }
 
 type AuthorizationReducerAction =
   | FetchAuthorizationRequestAction

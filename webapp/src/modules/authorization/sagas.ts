@@ -4,7 +4,7 @@ import { put, call, takeEvery } from 'redux-saga/effects'
 
 import { ERC20 } from '../../contracts/ERC20'
 import { ERC721 } from '../../contracts/ERC721'
-import { nftContracts } from '../contract/addresses'
+import { tokenContracts, nftContracts } from '../contract/utils'
 import { Allowances, Approvals } from './types'
 import {
   FetchAuthorizationRequestAction,
@@ -41,11 +41,13 @@ function* handleFetchAuthorizationRequest(
 
     let allowances: Allowances = {}
 
+    console.log('-==========>', payload.allowances)
+
     for (const contractAddress in payload.allowances) {
       const tokenContractAddresses = payload.allowances[contractAddress]
 
       for (const tokenContractAddress of tokenContractAddresses) {
-        const nftContract = nftContracts[tokenContractAddress]
+        const nftContract = tokenContracts[tokenContractAddress]
         if (!nftContract) {
           continue
         }
@@ -94,6 +96,7 @@ function* handleFetchAuthorizationRequest(
     // ------------------------
 
     const authorization = { allowances, approvals }
+    console.log('AUTH', authorization)
 
     yield put(fetchAuthorizationSuccess(address, authorization))
   } catch (error) {

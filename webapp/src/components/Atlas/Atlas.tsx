@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { Atlas as AtlasComponent, Layer } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
-import { contractAddresses } from '../../modules/contract/addresses'
+import { contractAddresses } from '../../modules/contract/utils'
 import { nftAPI } from '../../lib/api/nft'
 import { Tile, Props } from './Atlas.types'
 

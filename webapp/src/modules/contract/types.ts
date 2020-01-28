@@ -1,5 +1,5 @@
 import { NFTCategory } from '../nft/types'
-import { contractAddresses } from './addresses'
+import { contractAddresses } from './utils'
 
 export type ContractName = keyof typeof contractAddresses
 

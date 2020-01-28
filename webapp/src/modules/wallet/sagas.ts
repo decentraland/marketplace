@@ -6,8 +6,8 @@ import {
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 
 import { fetchAuthorizationRequest } from '../authorization/actions'
-import { AuthorizationRequest } from '../authorization/types'
-import { contractAddresses } from '../contract/addresses'
+import { AuthorizationsRequest } from '../authorization/types'
+import { contractAddresses } from '../contract/utils'
 
 const baseWalletSaga = createWalletSaga({
   MANA_ADDRESS: contractAddresses.MANAToken
@@ -31,7 +31,7 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
     EstateRegistry
   } = contractAddresses
 
-  const authorization: AuthorizationRequest = {
+  const authorization: AuthorizationsRequest = {
     allowances: {
       [Marketplace]: [MANAToken]
     },

@@ -119,7 +119,31 @@
   "settings_page": {
     "buy_more_mana": "BUY MORE",
     "copy_address": "COPY ADDRESS",
-    "copied": "COPIED ✔"
+    "copied": "COPIED ✔",
+
+    "authorization_error":
+      "We couldn't load your authorizations, please try again",
+    "authorization_error_contact":
+      "If the error persist don't hesitate to contact us",
+    "for_buying": "For buying",
+    "for_buying_ERC721Bid": "Assets using MANA (bid)",
+    "for_buying_Marketplace": "ERC721 using MANA",
+    "for_selling": "For selling",
+    "pending_tx":
+      "Transaction pending, click the loading to go to your activity for a detailed status"
+  },
+  "authorization": {
+    "allow": "Authorize the {contract_link} to operate {symbol} on your behalf",
+    "allowed":
+      "You authorized the {contract_link} to operate {symbol} on your behalf",
+    "approve":
+      "Authorize the {contract_link} to operate {symbol} on your behalf",
+    "approved":
+      "You authorized the {contract_link} to operate {symbol} on your behalf",
+    "disallowed":
+      "You unauthorized the {contract_link} to operate {symbol} on your behalf",
+    "disapproved":
+      "You unauthorized the {contract_link} to operate {symbol} on your behalf"
   },
   "wallet": {
     "sign_in_required": "You need to {sign_in} to access this page.",

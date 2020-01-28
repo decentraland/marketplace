@@ -1,5 +1,4 @@
 import { NFTCategory } from '../nft/types'
-import { TokenContract, NFTContract } from './types'
 
 const env = process.env
 
@@ -21,14 +20,23 @@ export const contractAddresses = {
   Marketplace
 }
 
-export const tokenContracts: Record<string, TokenContract> = {
+export const contractSymbols = {
+  [MANAToken]: 'MANA',
+  [LANDRegistry]: 'LAND',
+  [EstateRegistry]: 'Estates',
+  [ExclusiveMasksCollection]: 'Wearable',
+  [Halloween2019Collection]: 'Wearable',
+  [Xmas2019Collection]: 'Wearable'
+} as const
+
+export const tokenContracts = {
   [MANAToken]: {
     name: 'MANAToken',
     address: MANAToken
   }
-}
+} as const
 
-export const nftContracts: Record<string, NFTContract> = {
+export const nftContracts = {
   [LANDRegistry]: {
     name: 'LANDRegistry',
     address: LANDRegistry,
@@ -53,5 +61,14 @@ export const nftContracts: Record<string, NFTContract> = {
     name: 'Xmas2019Collection',
     address: Xmas2019Collection,
     category: NFTCategory.WEARABLE
+  }
+} as const
+
+export function getContractName(contractAddress: string) {
+  let contractName: keyof typeof contractAddresses
+  for (contractName in contractAddresses) {
+    if (contractAddresses[contractName] === contractAddress) {
+      return contractName
+    }
   }
 }
