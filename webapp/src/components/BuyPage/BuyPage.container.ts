@@ -12,7 +12,8 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
-  onExecuteOrder: (order, nft) => dispatch(executeOrderRequest(order, nft))
+  onExecuteOrder: (order, nft, fingerprint) =>
+    dispatch(executeOrderRequest(order, nft, fingerprint))
 })
 
 export default connect(mapState, mapDispatch)(BuyPage)

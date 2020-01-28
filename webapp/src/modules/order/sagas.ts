@@ -88,12 +88,14 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
     if (!address) throw new Error('Invalid address. Wallet must be connected.')
     const tx = yield call(() => {
       if (fingerprint) {
-        return marketplace.methods.safeExecuteOrder(
-          Address.fromString(nft.contractAddress),
-          nft.tokenId,
-          order.price,
-          fingerprint
-        )
+        return marketplace.methods
+          .safeExecuteOrder(
+            Address.fromString(nft.contractAddress),
+            nft.tokenId,
+            order.price,
+            fingerprint
+          )
+          .send({ from: Address.fromString(address) })
       } else {
         return marketplace.methods
           .executeOrder(
