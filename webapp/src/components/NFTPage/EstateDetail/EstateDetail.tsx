@@ -18,7 +18,14 @@ const EstateDetail = (props: Props) => {
   return (
     <>
       <div style={{ height: 420 }}>
-        <Atlas x={x} y={y} isDraggable selection={selection} withNavigation />
+        <Atlas
+          x={x}
+          y={y}
+          isDraggable
+          selection={selection}
+          withNavigation
+          isEstate
+        />
       </div>
       <Container>
         <Title
