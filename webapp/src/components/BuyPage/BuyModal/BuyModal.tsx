@@ -22,6 +22,8 @@ const BuyPage = (props: Props) => {
     notEnoughMana
   } = props
 
+  const name = getNFTName(nft)
+
   const [fingerprint, setFingerprint] = useState()
   const [isLoading, setLoading] = useState(false)
   useEffect(() => {
@@ -46,23 +48,27 @@ const BuyPage = (props: Props) => {
 
   let subtitle = null
   if (!order) {
-    subtitle = <T id={'buy_page.not_for_sale'} />
-  } else if (!fingerprint && order.category === NFTCategory.ESTATE) {
-    if (isLoading) {
-      subtitle = <T id={'buy_page.loading_fingerprint'} />
-    } else {
-      subtitle = <T id={'buy_page.no_fingerprint'} />
-    }
+    subtitle = (
+      <T id={'buy_page.not_for_sale'} values={{ name: <b>{name}</b> }} />
+    )
+  } else if (
+    !fingerprint &&
+    order.category === NFTCategory.ESTATE &&
+    !isLoading
+  ) {
+    subtitle = <T id={'buy_page.no_fingerprint'} />
   } else if (isOwner) {
-    subtitle = <T id={'buy_page.is_owner'} />
+    subtitle = <T id={'buy_page.is_owner'} values={{ name: <b>{name}</b> }} />
   } else if (notEnoughMana) {
-    subtitle = <T id={'buy_page.not_enough_mana'} />
+    subtitle = (
+      <T id={'buy_page.not_enough_mana'} values={{ name: <b>{name}</b> }} />
+    )
   } else {
     subtitle = (
       <T
         id={'buy_page.subtitle'}
         values={{
-          name: <b className="primary-text">{getNFTName(nft)}</b>,
+          name: <b className="primary-text">{name}</b>,
           amount: <Mana inline>{formatMANA(order.price)}</Mana>
         }}
       />
@@ -77,7 +83,9 @@ const BuyPage = (props: Props) => {
 
   return (
     <NFTAction nft={nft}>
-      <Header size="large">{t('buy_page.title')}</Header>
+      <Header size="large">
+        {t('buy_page.title', { category: t(`global.${nft.category}`) })}
+      </Header>
       <div className="subtitle">{subtitle}</div>
       <div className="buttons">
         <Button

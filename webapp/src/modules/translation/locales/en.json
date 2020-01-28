@@ -101,14 +101,13 @@
     }
   },
   "buy_page": {
-    "title": "Buy item",
+    "title": "Buy {category}",
     "subtitle": "You are about to buy {name} for {amount}.",
-    "not_for_sale": "This item is not for sale.",
+    "not_for_sale": "{name} is not for sale.",
     "buy": "Buy",
-    "loading_fingerprint": "Loading fingerprint...",
     "no_fingerprint": "Could not load fingerprint.",
-    "is_owner": "You are the owner of this item.",
-    "not_enough_mana": "You don't have enough MANA to buy this item."
+    "is_owner": "You are the owner of {name}.",
+    "not_enough_mana": "You don't have enough MANA to buy {name}."
   },
   "wallet": {
     "sign_in_required": "You need to {sign_in} to access this page.",
