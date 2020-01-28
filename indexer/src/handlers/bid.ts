@@ -12,7 +12,11 @@ import * as categories from '../modules/category/categories'
 
 export function handleBidCreated(event: BidCreated): void {
   let category = getCategory(event.params._tokenAddress.toHexString())
-  let nftId = getNFTId(event.params._tokenId.toString(), category)
+  let nftId = getNFTId(
+    category,
+    event.params._tokenAddress.toHexString(),
+    event.params._tokenId.toString()
+  )
   let id = event.params._id.toHex()
 
   let bid = new Bid(id)
