@@ -9,19 +9,19 @@ import { nftSaga } from './nft/sagas'
 import { uiSaga } from './ui/sagas'
 import { tileSaga } from './tile/sagas'
 
-import { MANA_ADDRESS } from './contracts'
+import { MANAToken } from './contracts'
 
-const walletSaga = createWalletSaga({ MANA_ADDRESS })
+const walletSaga = createWalletSaga({ MANA_ADDRESS: MANAToken })
 
 export function* rootSaga() {
-  yield all([
-    walletSaga(),
-    translationSaga(),
-    transactionSaga(),
-    orderSaga(),
-    accountSaga(),
-    nftSaga(),
-    uiSaga(),
-    tileSaga()
-  ])
+    yield all([
+        walletSaga(),
+        translationSaga(),
+        transactionSaga(),
+        orderSaga(),
+        accountSaga(),
+        nftSaga(),
+        uiSaga(),
+        tileSaga()
+    ])
 }

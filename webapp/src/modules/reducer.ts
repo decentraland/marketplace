@@ -11,6 +11,7 @@ import { uiReducer as ui } from './ui/reducer'
 import { nftReducer as nft } from './nft/reducer'
 import { contractReducer as contract } from './contract/reducer'
 import { tileReducer as tile } from './tile/reducer'
+import { authorizationReducer as authorization } from './authorization/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({
@@ -24,6 +25,7 @@ export const createRootReducer = (history: History) =>
     nft,
     contract,
     tile,
+    authorization,
     router: connectRouter(history)
   })
 
