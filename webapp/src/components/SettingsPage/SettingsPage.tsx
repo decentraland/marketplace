@@ -73,9 +73,7 @@ const SettingsPage = (props: Props) => {
               </Grid.Column>
               <Grid.Column width={12}>
                 <div className="balance">
-                  <Mana inline cla>
-                    {wallet!.mana}
-                  </Mana>
+                  <Mana inline>{wallet!.mana}</Mana>
                   {BUY_MANA_URL ? (
                     <a
                       className="buy-more"
