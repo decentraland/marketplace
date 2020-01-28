@@ -116,6 +116,11 @@
     "invalid_owner": "You are not the owner of {name}.",
     "submit": "Confirm"
   },
+  "settings_page": {
+    "buy_more_mana": "BUY MORE",
+    "copy_address": "COPY ADDRESS",
+    "copied": "COPIED ✔"
+  },
   "wallet": {
     "sign_in_required": "You need to {sign_in} to access this page.",
     "sign_in": "Sign In"

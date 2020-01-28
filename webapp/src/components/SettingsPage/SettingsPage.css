@@ -12,7 +12,36 @@
   float: left;
 }
 
+.SettingsPage .address-container {
+  margin-top: 7px;
+  margin-left: 24px;
+  float: left;
+}
+
 .SettingsPage .address {
+  margin-bottom: 8px;
   font-size: 21px;
 }
 
+.SettingsPage .copy-text,
+.SettingsPage .link {
+  color: var(--primary);
+}
+
+.SettingsPage .link {
+  cursor: pointer;
+}
+
+.SettingsPage .balance {
+  display: flex;
+  align-items: center;
+}
+
+.SettingsPage .dcl.mana {
+  font-size: 21px;
+  margin-bottom: 0;
+}
+
+.SettingsPage .buy-more {
+  margin-left: 24px;
+}

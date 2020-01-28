@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
 import { Page, Grid, Blockie, Mana, Loader } from 'decentraland-ui'
+import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
@@ -8,8 +10,24 @@ import { locations } from '../../modules/routing/locations'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
 
+const BUY_MANA_URL = process.env.REACT_APP_BUY_MANA_URL
+
 const SettingsPage = (props: Props) => {
   const { wallet, isConnecting, onNavigate } = props
+
+  const [hasCopiedText, setHasCopiedText] = useState(false)
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
+    undefined
+  )
+
+  const handleOnCopy = useCallback(() => {
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
+    setHasCopiedText(true)
+    const newTimeoutId = setTimeout(() => setHasCopiedText(false), 1200)
+    setTimeoutId(newTimeoutId)
+  }, [timeoutId])
 
   useEffect(() => {
     if (!isConnecting && !wallet) {
@@ -31,12 +49,20 @@ const SettingsPage = (props: Props) => {
                 <div className="left-column secondary-text">Address</div>
               </Grid.Column>
               <Grid.Column width={12}>
-                <div>
-                  <Blockie seed={wallet!.address} scale={12} />
+                <Blockie seed={wallet!.address} scale={12} />
+                <div className="address-container">
                   <div className="address">{wallet!.address}</div>
-                  <a href="#" className="link">
-                    COPY ADDRESS
-                  </a>
+                  <CopyToClipboard text={wallet!.address} onCopy={handleOnCopy}>
+                    {hasCopiedText ? (
+                      <span className="copy-text">
+                        {t('settings_page.copied')}
+                      </span>
+                    ) : (
+                      <span className="copy-text link">
+                        {t('settings_page.copy_address')}
+                      </span>
+                    )}
+                  </CopyToClipboard>
                 </div>
               </Grid.Column>
             </Grid.Row>
@@ -46,13 +72,21 @@ const SettingsPage = (props: Props) => {
                 <div className="left-column secondary-text">Balance</div>
               </Grid.Column>
               <Grid.Column width={12}>
-                <Mana inline>{wallet!.mana}</Mana>
-                <a href="#" className="link">
-                  BUY MORE
-                </a>
-                <a href="#" className="link">
-                  TRANSFER
-                </a>
+                <div className="balance">
+                  <Mana inline cla>
+                    {wallet!.mana}
+                  </Mana>
+                  {BUY_MANA_URL ? (
+                    <a
+                      className="buy-more"
+                      href={BUY_MANA_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {t('settings_page.buy_more_mana')}
+                    </a>
+                  ) : null}
+                </div>
               </Grid.Column>
             </Grid.Row>
 
