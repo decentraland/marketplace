@@ -48,13 +48,17 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
   const { nft, price, expiresAt } = action.payload
   try {
     const eth = Eth.fromCurrentProvider()
-    if (!eth) throw new Error('Could not connect to Ethereum')
+    if (!eth) {
+      throw new Error('Could not connect to Ethereum')
+    }
     const marketplace = new Marketplace(
       eth,
       Address.fromString(MARKETPLACE_ADDRESS)
     )
     const address = yield select(getAddress)
-    if (!address) throw new Error('Invalid address. Wallet must be connected.')
+    if (!address) {
+      throw new Error('Invalid address. Wallet must be connected.')
+    }
     const txHash = yield call(() =>
       marketplace.methods
         .createOrder(
@@ -76,16 +80,21 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
 function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   const { order, nft, fingerprint } = action.payload
   try {
-    if (order.nftId !== nft.id)
+    if (order.nftId !== nft.id) {
       throw new Error('The order does not match the NFT')
+    }
     const eth = Eth.fromCurrentProvider()
-    if (!eth) throw new Error('Could not connect to Ethereum')
+    if (!eth) {
+      throw new Error('Could not connect to Ethereum')
+    }
     const marketplace = new Marketplace(
       eth,
       Address.fromString(MARKETPLACE_ADDRESS)
     )
     const address = yield select(getAddress)
-    if (!address) throw new Error('Invalid address. Wallet must be connected.')
+    if (!address) {
+      throw new Error('Invalid address. Wallet must be connected.')
+    }
     const txHash = yield call(() => {
       if (fingerprint) {
         return marketplace.methods
