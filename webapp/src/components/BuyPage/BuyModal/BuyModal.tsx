@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { Header, Mana, Button } from 'decentraland-ui'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTAction } from '../../NFTAction'
 import { formatMANA } from '../../../lib/api/mana'
 import { getNFTName } from '../../../modules/nft/utils'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
-import { Props } from './BuyModal.types'
 import { NFTCategory } from '../../../modules/nft/types'
-import { Eth } from 'web3x-es/eth'
-import { Address } from 'web3x-es/address'
-import { ESTATE_REGISTRY_ADDRESS } from '../../../modules/contracts'
-import { EstateRegistry } from '../../../contracts/EstateRegistry'
+import { getFingerprint } from '../../../modules/nft/estate/utils'
+import { Props } from './BuyModal.types'
 
 const BuyPage = (props: Props) => {
   const {
@@ -26,25 +23,16 @@ const BuyPage = (props: Props) => {
 
   const [fingerprint, setFingerprint] = useState()
   const [isLoading, setLoading] = useState(false)
+
   useEffect(() => {
     if (order && order.category === NFTCategory.ESTATE) {
-      const eth = Eth.fromCurrentProvider()
-      if (eth) {
-        const estateRegistry = new EstateRegistry(
-          eth,
-          Address.fromString(ESTATE_REGISTRY_ADDRESS)
-        )
-        setLoading(true)
-        estateRegistry.methods
-          .getFingerprint(nft.tokenId)
-          .call()
-          .then(result => {
-            setFingerprint(result)
-            setLoading(false)
-          })
-      }
+      setLoading(true)
+      getFingerprint(nft.tokenId).then(result => {
+        setFingerprint(result)
+        setLoading(false)
+      })
     }
-  }, [order, setFingerprint])
+  }, [order, setFingerprint, nft.tokenId])
 
   let subtitle = null
   if (!order) {
