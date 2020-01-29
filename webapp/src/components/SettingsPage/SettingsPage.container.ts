@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { getTransactionsByType } from 'decentraland-dapps/dist/modules/transaction/selectors'
 import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
 import { isPending as isTransactionPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 
@@ -8,11 +7,11 @@ import { RootState } from '../../modules/reducer'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import {
   getData as getAuthorizationsData,
-  isLoading as isLoadingAuthorization
+  isLoading as isLoadingAuthorization,
+  getAllowTransactions,
+  getApproveTransactions
 } from '../../modules/authorization/selectors'
 import {
-  ALLOW_TOKEN_SUCCESS,
-  APPROVE_TOKEN_SUCCESS,
   allowTokenRequest,
   approveTokenRequest
 } from '../../modules/authorization/actions'
@@ -33,17 +32,13 @@ const mapState = (state: RootState): MapStateProps => {
     const allAuthorizations = getAuthorizationsData(state)
     authorizations = allAuthorizations[wallet.address]
 
-    pendingAllowTransactions = getTransactionsByType(
-      state,
-      wallet.address,
-      ALLOW_TOKEN_SUCCESS
+    pendingAllowTransactions = getAllowTransactions(
+      state
     ).filter((transaction: Transaction) =>
       isTransactionPending(transaction.status)
     )
-    pendingApproveTransactions = getTransactionsByType(
-      state,
-      wallet.address,
-      APPROVE_TOKEN_SUCCESS
+    pendingApproveTransactions = getApproveTransactions(
+      state
     ).filter((transaction: Transaction) =>
       isTransactionPending(transaction.status)
     )

@@ -60,7 +60,9 @@ const SettingsPage = (props: Props) => {
           <Grid>
             <Grid.Row>
               <Grid.Column width={4}>
-                <div className="left-column secondary-text">Address</div>
+                <div className="left-column secondary-text">
+                  {t('global.address')}
+                </div>
               </Grid.Column>
               <Grid.Column width={12}>
                 <Blockie seed={wallet!.address} scale={12} />
@@ -83,7 +85,9 @@ const SettingsPage = (props: Props) => {
 
             <Grid.Row>
               <Grid.Column width={4}>
-                <div className="left-column secondary-text">Balance</div>
+                <div className="left-column secondary-text">
+                  {t('global.balance')}
+                </div>
               </Grid.Column>
               <Grid.Column width={12}>
                 <div className="balance">
@@ -104,7 +108,9 @@ const SettingsPage = (props: Props) => {
 
             <Grid.Row>
               <Grid.Column width={4}>
-                <div className="left-column secondary-text">Authorizations</div>
+                <div className="left-column secondary-text">
+                  {t('settings_page.authorizations')}
+                </div>
               </Grid.Column>
               <Grid.Column width={12}>
                 {isLoadingAuthorization ? (

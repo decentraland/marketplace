@@ -4,7 +4,7 @@ import { all, put, call, select, takeEvery } from 'redux-saga/effects'
 
 import { ERC20, ERC20TransactionReceipt } from '../../contracts/ERC20'
 import { ERC721, ERC721TransactionReceipt } from '../../contracts/ERC721'
-import { getAddress } from '../wallet/selectors'
+import { getWallet } from '../wallet/selectors'
 import {
   getAuthorizations,
   callAllowance,
@@ -80,12 +80,13 @@ function* handleAllowTokenRequest(action: AllowTokenRequestAction) {
     const { isAllowed, contractAddress, tokenContractAddress } = action.payload
 
     const eth = Eth.fromCurrentProvider()
-    const address = yield select(getAddress)
+    const wallet = yield select(getWallet)
 
-    if (!eth || !address) {
+    if (!eth || !wallet) {
       throw new Error('Could not connect to Ethereum')
     }
 
+    const { address } = wallet
     const amount = isAllowed ? getTokenAmountToApprove() : 0
 
     const contractToApproveAddress = Address.fromString(tokenContractAddress)
@@ -117,12 +118,13 @@ function* handleApproveTokenRequest(action: ApproveTokenRequestAction) {
     const { isApproved, contractAddress, tokenContractAddress } = action.payload
 
     const eth = Eth.fromCurrentProvider()
-    const address = yield select(getAddress)
+    const wallet = yield select(getWallet)
 
-    if (!eth || !address) {
+    if (!eth || !wallet) {
       throw new Error('Could not connect to Ethereum')
     }
 
+    const { address } = wallet
     const tokenContract = new ERC721(
       eth,
       Address.fromString(tokenContractAddress)

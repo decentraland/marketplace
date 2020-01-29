@@ -107,7 +107,7 @@ export function authorizationReducer(
             address,
             isAllowed,
             contractAddress,
-            tokenContractName
+            tokenContractAddress
           } = transaction.payload
           const addressState = state.data[address] || EMPTY_ADDRESS_STATE
 
@@ -115,7 +115,7 @@ export function authorizationReducer(
             ...addressState.allowances,
             [contractAddress]: {
               ...addressState.allowances[contractAddress],
-              [tokenContractName]: isAllowed
+              [tokenContractAddress]: isAllowed
             }
           }
 
@@ -132,7 +132,7 @@ export function authorizationReducer(
             address,
             isApproved,
             contractAddress,
-            tokenContractName
+            tokenContractAddress
           } = transaction.payload
           const addressState = state.data[address] || EMPTY_ADDRESS_STATE
 
@@ -140,7 +140,7 @@ export function authorizationReducer(
             ...addressState.approvals,
             [contractAddress]: {
               ...addressState.approvals[contractAddress],
-              [tokenContractName]: isApproved
+              [tokenContractAddress]: isApproved
             }
           }
 

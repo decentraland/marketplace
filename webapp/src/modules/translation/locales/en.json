@@ -1,6 +1,8 @@
 {
   "global": {
     "assets": "Assets",
+    "address": "Address",
+    "balance": "Balance",
     "load_more": "Load more",
     "not_found": "Not found",
     "parcel": "Parcel",
@@ -117,6 +119,7 @@
     "submit": "Confirm"
   },
   "settings_page": {
+    "authorizations": "Authorizations",
     "buy_more_mana": "BUY MORE",
     "copy_address": "COPY ADDRESS",
     "copied": "COPIED ✔",
