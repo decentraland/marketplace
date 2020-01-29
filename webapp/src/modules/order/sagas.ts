@@ -132,22 +132,27 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
 function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
   const { nft, order } = action.payload
   try {
-    if (order.nftId !== nft.id)
+    if (order.nftId !== nft.id) {
       throw new Error('The order does not match the NFT')
+    }
     const eth = Eth.fromCurrentProvider()
-    if (!eth) throw new Error('Could not connect to Ethereum')
+    if (!eth) {
+      throw new Error('Could not connect to Ethereum')
+    }
     const marketplace = new Marketplace(
       eth,
       Address.fromString(MARKETPLACE_ADDRESS)
     )
     const address = yield select(getAddress)
-    if (!address) throw new Error('Invalid address. Wallet must be connected.')
-    const tx = yield call(() =>
+    if (!address) {
+      throw new Error('Invalid address. Wallet must be connected.')
+    }
+    const txHash = yield call(() =>
       marketplace.methods
-        .cancelOrder(nft.tokenId)
+        .cancelOrder(Address.fromString(nft.contractAddress), nft.tokenId)
         .send({ from: Address.fromString(address) })
+        .getTxHash()
     )
-    const txHash = yield call(() => tx.txHashPromise)
     yield put(cancelOrderSuccess(order, nft, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
