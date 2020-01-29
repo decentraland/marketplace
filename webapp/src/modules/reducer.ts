@@ -11,20 +11,22 @@ import { uiReducer as ui } from './ui/reducer'
 import { nftReducer as nft } from './nft/reducer'
 import { tileReducer as tile } from './tile/reducer'
 import { authorizationReducer as authorization } from './authorization/reducer'
+import { proximityReducer as proximity } from './proximity/reducer'
 
 export const createRootReducer = (history: History) =>
-    combineReducers({
-        wallet,
-        translation,
-        transaction,
-        storage,
-        account,
-        order,
-        ui,
-        nft,
-        tile,
-        authorization,
-        router: connectRouter(history)
-    })
+  combineReducers({
+    wallet,
+    translation,
+    transaction,
+    storage,
+    account,
+    order,
+    ui,
+    nft,
+    tile,
+    proximity,
+    authorization,
+    router: connectRouter(history)
+  })
 
 export type RootState = ReturnType<ReturnType<typeof createRootReducer>>

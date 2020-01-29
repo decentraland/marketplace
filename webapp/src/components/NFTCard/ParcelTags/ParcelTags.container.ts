@@ -1,20 +1,17 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
 import { RootState } from '../../../modules/reducer'
 import { getProximity } from '../../../modules/proximity/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch
-} from './ParcelDetail.types'
-import ParcelDetail from './ParcelDetail'
+} from './ParcelTags.types'
+import ParcelTags from './ParcelTags'
 
 const mapState = (state: RootState): MapStateProps => ({
   proximity: getProximity(state)
 })
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path))
-})
+const mapDispatch = (_dispatch: MapDispatch): MapDispatchProps => ({})
 
-export default connect(mapState, mapDispatch)(ParcelDetail)
+export default connect(mapState, mapDispatch)(ParcelTags)

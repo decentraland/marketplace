@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { landAPI } from '../../../lib/api/land'
+import { getDistance } from '../../../modules/proximity/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { Atlas } from '../../Atlas'
 import { Title } from '../Title'
@@ -10,30 +10,16 @@ import { Badge } from '../Badge'
 import { Description } from '../Description'
 import { Order } from '../Order'
 import { Highlights } from '../Highlights'
-import { Props, ParcelData } from './ParcelDetail.types'
+import { Props } from './ParcelDetail.types'
 import { Highlight } from '../Highlight'
 import './ParcelDetail.css'
 
-const getDistance = (distance: number) =>
-  distance === 0 ? t('detail.adjacent') : t('detail.distance', { distance })
-
 const ParcelDetail = (props: Props) => {
-  const { nft } = props
+  const { nft, proximity } = props
   const { x, y } = nft.parcel!
-
+  const id = x + ',' + y
+  const tags = proximity[id]
   const selection = useMemo(() => [{ x, y }], [x, y])
-
-  const [parcel, setParcel] = useState<ParcelData | null>(null)
-  useEffect(() => {
-    if (!parcel || parcel.x !== +x || parcel.y !== +y) {
-      landAPI
-        .fetchParcel(x, y)
-        .then(setParcel)
-        .catch()
-    }
-  }, [parcel, setParcel, x, y])
-
-  const proximity = parcel?.tags.proximity
 
   return (
     <>
@@ -55,27 +41,27 @@ const ParcelDetail = (props: Props) => {
         />
         <Description text={nft.parcel!.data?.description} />
         <Order nft={nft} />
-        {proximity ? (
+        {tags ? (
           <Highlights>
-            {proximity?.plaza ? (
+            {tags?.plaza !== undefined ? (
               <Highlight
                 icon={<div className="plaza" />}
                 name={t('detail.plaza')}
-                description={getDistance(proximity?.plaza.distance)}
+                description={getDistance(tags?.plaza)}
               />
             ) : null}
-            {proximity?.road ? (
+            {tags?.road !== undefined ? (
               <Highlight
                 icon={<div className="road" />}
                 name={t('detail.road')}
-                description={getDistance(proximity?.road.distance)}
+                description={getDistance(tags?.road)}
               />
             ) : null}
-            {proximity?.district ? (
+            {tags?.district !== undefined ? (
               <Highlight
                 icon={<div className="district" />}
                 name={t('detail.district')}
-                description={getDistance(proximity?.district.distance)}
+                description={getDistance(tags?.district)}
               />
             ) : null}
           </Highlights>

@@ -1,13 +1,15 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { NFT } from '../../../modules/nft/types'
+import { Proximity } from '../../../modules/proximity/types'
 
 export type Props = {
   nft: NFT
+  proximity: Record<string, Proximity>
   onNavigate: (path: string) => void
 }
 
-export type MapStateProps = {}
+export type MapStateProps = Pick<Props, 'proximity'>
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>
 

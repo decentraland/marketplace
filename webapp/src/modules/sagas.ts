@@ -9,6 +9,7 @@ import { nftSaga } from './nft/sagas'
 import { uiSaga } from './ui/sagas'
 import { tileSaga } from './tile/sagas'
 import { walletSaga } from './wallet/sagas'
+import { proxmitySaga } from './proximity/sagas'
 
 export function* rootSaga() {
   yield all([
@@ -20,6 +21,7 @@ export function* rootSaga() {
     nftSaga(),
     uiSaga(),
     tileSaga(),
-    walletSaga()
+    walletSaga(),
+    proxmitySaga()
   ])
 }

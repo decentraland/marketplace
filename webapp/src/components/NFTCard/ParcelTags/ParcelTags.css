@@ -23,3 +23,23 @@
   margin-right: 6px;
   background-size: contain;
 }
+
+.ParcelTags .tag {
+  width: 22px;
+  height: 22px;
+  margin-left: 8px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.ParcelTags .tag.plaza {
+  background-image: url(../../../images/plaza.svg);
+}
+
+.ParcelTags .tag.road {
+  background-image: url(../../../images/road.svg);
+}
+
+.ParcelTags .tag.district {
+  background-image: url(../../../images/district.svg);
+}

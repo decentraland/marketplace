@@ -1,2 +1,2 @@
-import ParcelTags from './ParcelTags'
+import ParcelTags from './ParcelTags.container'
 export { ParcelTags }
