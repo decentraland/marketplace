@@ -38,12 +38,12 @@ export const ALLOW_TOKEN_SUCCESS = '[Success] Allow Token'
 export const ALLOW_TOKEN_FAILURE = '[Failure] Allow Token'
 
 export const allowTokenRequest = (
-  amount: number,
+  isAllowed: boolean,
   contractAddress: Address,
   tokenContractAddress: Address
 ) =>
   action(ALLOW_TOKEN_REQUEST, {
-    amount,
+    isAllowed,
     contractAddress,
     tokenContractAddress
   })
@@ -51,19 +51,19 @@ export const allowTokenRequest = (
 export const allowTokenSuccess = (
   txHash: string,
   address: string,
-  amount: number,
+  isAllowed: boolean,
   contractAddress: Address,
   tokenContractAddress: Address
 ) =>
   action(ALLOW_TOKEN_SUCCESS, {
     ...buildTransactionPayload(txHash, {
       address,
-      amount,
+      isAllowed,
       contractAddress,
       tokenContractAddress
     }),
     address,
-    amount,
+    isAllowed,
     contractAddress,
     tokenContractAddress
   })

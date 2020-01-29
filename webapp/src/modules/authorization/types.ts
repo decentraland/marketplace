@@ -1,17 +1,15 @@
 export type Address = string
 
-export type Allowance = Record<Address, number>
-export type Allowances = Record<Address, Allowance>
-
-export type Approval = Record<Address, boolean>
-export type Approvals = Record<Address, Approval>
+export type Privilege = Record<Address, boolean>
+export type Privileges = Record<Address, Privilege>
 
 export type Authorizations = {
-  allowances: Partial<Allowances>
-  approvals: Partial<Approvals>
+  allowances: Partial<Privileges>
+  approvals: Partial<Privileges>
 }
 
+export type AuthorizationDefinition = Record<Address, Address[]>
 export type AuthorizationsRequest = {
-  allowances: Record<Address, Address[]>
-  approvals: Record<Address, Address[]>
+  allowances: AuthorizationDefinition
+  approvals: AuthorizationDefinition
 }

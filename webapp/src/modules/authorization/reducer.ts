@@ -105,7 +105,7 @@ export function authorizationReducer(
         case ALLOW_TOKEN_SUCCESS: {
           const {
             address,
-            amount,
+            isAllowed,
             contractAddress,
             tokenContractName
           } = transaction.payload
@@ -115,7 +115,7 @@ export function authorizationReducer(
             ...addressState.allowances,
             [contractAddress]: {
               ...addressState.allowances[contractAddress],
-              [tokenContractName]: amount
+              [tokenContractName]: isAllowed
             }
           }
 

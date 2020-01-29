@@ -1,11 +1,16 @@
-import { Eth } from 'web3x-es/eth'
+import { Eth, SendTx } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
-import { put, call, takeEvery } from 'redux-saga/effects'
+import { all, put, call, select, takeEvery } from 'redux-saga/effects'
 
-import { ERC20 } from '../../contracts/ERC20'
-import { ERC721 } from '../../contracts/ERC721'
-import { tokenContracts, nftContracts } from '../contract/utils'
-import { Allowances, Approvals } from './types'
+import { ERC20, ERC20TransactionReceipt } from '../../contracts/ERC20'
+import { ERC721, ERC721TransactionReceipt } from '../../contracts/ERC721'
+import { getAddress } from '../wallet/selectors'
+import {
+  getAuthorizations,
+  callAllowance,
+  callIsApprovedForAll,
+  getTokenAmountToApprove
+} from './utils'
 import {
   FetchAuthorizationRequestAction,
   AllowTokenRequestAction,
@@ -37,66 +42,18 @@ function* handleFetchAuthorizationRequest(
     const payload = action.payload
     const address = payload.address.toLowerCase()
 
-    // ------------------------
-
-    let allowances: Allowances = {}
-
-    console.log('-==========>', payload.allowances)
-
-    for (const contractAddress in payload.allowances) {
-      const tokenContractAddresses = payload.allowances[contractAddress]
-
-      for (const tokenContractAddress of tokenContractAddresses) {
-        const nftContract = tokenContracts[tokenContractAddress]
-        if (!nftContract) {
-          continue
-        }
-        const contractAddress = Address.fromString(nftContract.address)
-        const contract = new ERC20(eth, contractAddress)
-        const result: string = yield call(() =>
-          contract.methods
-            .allowance(Address.fromString(address), contractAddress)
-            .call()
-        )
-
-        allowances[nftContract.address] = {
-          ...allowances[nftContract.address],
-          [tokenContractAddress]: parseInt(result, 10)
-        }
-      }
-    }
-
-    // ------------------------
-
-    let approvals: Approvals = {}
-
-    for (const contractAddress in payload.approvals) {
-      const tokenContractAddresses = payload.approvals[contractAddress]
-
-      for (const tokenContractAddress of tokenContractAddresses) {
-        const tokenContract = nftContracts[tokenContractAddress]
-        if (!tokenContract) {
-          continue
-        }
-        const contractAddress = Address.fromString(tokenContract.address)
-        const contract = new ERC721(eth, contractAddress)
-        const result: boolean = yield call(() =>
-          contract.methods
-            .isApprovedForAll(Address.fromString(address), contractAddress)
-            .call()
-        )
-
-        approvals[tokenContract.address] = {
-          ...approvals[tokenContract.address],
-          [tokenContractAddress]: result
-        }
-      }
-    }
+    const [allowances, approvals] = yield all([
+      getAuthorizations(payload.allowances, (address: string) =>
+        callAllowance(eth, address).then(allowance => allowance > 0)
+      ),
+      getAuthorizations(payload.approvals, (address: string) =>
+        callIsApprovedForAll(eth, address)
+      )
+    ])
 
     // ------------------------
 
     const authorization = { allowances, approvals }
-    console.log('AUTH', authorization)
 
     yield put(fetchAuthorizationSuccess(address, authorization))
   } catch (error) {
@@ -106,25 +63,32 @@ function* handleFetchAuthorizationRequest(
 
 function* handleAllowTokenRequest(action: AllowTokenRequestAction) {
   try {
-    const { amount, contractAddress, tokenContractAddress } = action.payload
+    const { isAllowed, contractAddress, tokenContractAddress } = action.payload
 
     const eth = Eth.fromCurrentProvider()
-    if (!eth) throw new Error('Could not connect to Ethereum')
+    const address = yield select(getAddress)
 
-    const accounts = yield call(() => eth.getAccounts())
-    const address = accounts[0]
+    if (!eth || !address) {
+      throw new Error('Could not connect to Ethereum')
+    }
 
-    const contractToApproveAddress = Address.fromString('')
+    const amount = isAllowed ? getTokenAmountToApprove() : 0
+
+    const contractToApproveAddress = Address.fromString(tokenContractAddress)
     const tokenContract = new ERC20(eth, Address.fromString(contractAddress))
-    const { transactionHash } = yield call(() =>
-      tokenContract.methods.approve(contractToApproveAddress, amount).send()
+
+    const transaction: SendTx<ERC20TransactionReceipt> = yield call(() =>
+      tokenContract.methods
+        .approve(contractToApproveAddress, amount)
+        .send({ from: address })
     )
+    const transactionHash: string = yield call(() => transaction.getTxHash())
 
     yield put(
       allowTokenSuccess(
         transactionHash,
         address,
-        amount,
+        isAllowed,
         contractAddress,
         tokenContractAddress
       )
@@ -139,20 +103,22 @@ function* handleApproveTokenRequest(action: ApproveTokenRequestAction) {
     const { isApproved, contractAddress, tokenContractAddress } = action.payload
 
     const eth = Eth.fromCurrentProvider()
-    if (!eth) throw new Error('Could not connect to Ethereum')
+    const address = yield select(getAddress)
 
-    const accounts = yield call(() => eth.getAccounts())
-    const address = accounts[0]
+    if (!eth || !address) {
+      throw new Error('Could not connect to Ethereum')
+    }
 
     const tokenContract = new ERC721(
       eth,
       Address.fromString(tokenContractAddress)
     )
-    const { transactionHash } = yield call(() =>
+    const transaction: SendTx<ERC721TransactionReceipt> = yield call(() =>
       tokenContract.methods
         .setApprovalForAll(Address.fromString(contractAddress), isApproved)
-        .send()
+        .send({ from: address })
     )
+    const transactionHash: string = yield call(() => transaction.getTxHash())
 
     yield put(
       approveTokenSuccess(

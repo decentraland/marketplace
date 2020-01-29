@@ -6,10 +6,15 @@ import { isPending as isTransactionPending } from 'decentraland-dapps/dist/modul
 
 import { RootState } from '../../modules/reducer'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
-import { getData as getAuthorizationsData } from '../../modules/authorization/selectors'
+import {
+  getData as getAuthorizationsData,
+  isLoading as isLoadingAuthorization
+} from '../../modules/authorization/selectors'
 import {
   ALLOW_TOKEN_SUCCESS,
-  APPROVE_TOKEN_SUCCESS
+  APPROVE_TOKEN_SUCCESS,
+  allowTokenRequest,
+  approveTokenRequest
 } from '../../modules/authorization/actions'
 import {
   MapStateProps,
@@ -49,11 +54,23 @@ const mapState = (state: RootState): MapStateProps => {
     authorizations,
     pendingAllowTransactions,
     pendingApproveTransactions,
+    isLoadingAuthorization: isLoadingAuthorization(state),
     isConnecting: isConnecting(state)
   }
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onAllowToken: (
+    isAllowed: boolean,
+    contractName: string,
+    tokenContractName: string
+  ) => dispatch(allowTokenRequest(isAllowed, contractName, tokenContractName)),
+  onApproveToken: (
+    isApproved: boolean,
+    contractName: string,
+    tokenContractName: string
+  ) =>
+    dispatch(approveTokenRequest(isApproved, contractName, tokenContractName)),
   onNavigate: path => dispatch(push(path))
 })
 

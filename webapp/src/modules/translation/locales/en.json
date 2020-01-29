@@ -120,7 +120,6 @@
     "buy_more_mana": "BUY MORE",
     "copy_address": "COPY ADDRESS",
     "copied": "COPIED ✔",
-
     "authorization_error":
       "We couldn't load your authorizations, please try again",
     "authorization_error_contact":
@@ -133,11 +132,9 @@
       "Transaction pending, click the loading to go to your activity for a detailed status"
   },
   "authorization": {
-    "allow": "Authorize the {contract_link} to operate {symbol} on your behalf",
+    "authorize": "Authorize the {contract_link} to operate {symbol} on your behalf",
     "allowed":
       "You authorized the {contract_link} to operate {symbol} on your behalf",
-    "approve":
-      "Authorize the {contract_link} to operate {symbol} on your behalf",
     "approved":
       "You authorized the {contract_link} to operate {symbol} on your behalf",
     "disallowed":
