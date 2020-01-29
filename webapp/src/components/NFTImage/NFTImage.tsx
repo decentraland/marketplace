@@ -42,6 +42,7 @@ const NFTImage = (props: Props) => {
           isDraggable={false}
           selection={selection}
           zoom={zoom}
+          isEstate
         />
       )
     }

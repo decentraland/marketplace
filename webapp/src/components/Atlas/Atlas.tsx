@@ -8,7 +8,7 @@ import { Tile, Props } from './Atlas.types'
 const getCoords = (x: number | string, y: number | string) => `${x},${y}`
 
 const Atlas = (props: Props) => {
-  const { tiles, onNavigate, withNavigation } = props
+  const { tiles, onNavigate, isEstate, withNavigation } = props
 
   const selection = useMemo(
     () =>
@@ -33,13 +33,14 @@ const Atlas = (props: Props) => {
         tile &&
         center.estate_id &&
         tile.estate_id &&
-        center.estate_id === tile.estate_id
+        center.estate_id === tile.estate_id &&
+        isEstate
       ) {
         return true
       }
       return false
     },
-    [selection, tiles]
+    [selection, tiles, isEstate]
   )
 
   const forSaleLayer: Layer = useCallback(
