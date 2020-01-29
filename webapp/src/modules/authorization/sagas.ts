@@ -43,11 +43,25 @@ function* handleFetchAuthorizationRequest(
     const address = payload.address.toLowerCase()
 
     const [allowances, approvals] = yield all([
-      getAuthorizations(payload.allowances, (address: string) =>
-        callAllowance(eth, address).then(allowance => allowance > 0)
+      getAuthorizations(
+        payload.allowances,
+        (tokenContractAddress: string, contractAddress: string) =>
+          callAllowance(
+            eth,
+            tokenContractAddress,
+            contractAddress,
+            address
+          ).then(allowance => allowance > 0)
       ),
-      getAuthorizations(payload.approvals, (address: string) =>
-        callIsApprovedForAll(eth, address)
+      getAuthorizations(
+        payload.approvals,
+        (tokenContractAddress: string, contractAddress: string) =>
+          callIsApprovedForAll(
+            eth,
+            tokenContractAddress,
+            contractAddress,
+            address
+          )
       )
     ])
 

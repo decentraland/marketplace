@@ -3,12 +3,14 @@ import { Address } from 'web3x-es/address'
 import { toBN } from 'web3x-es/utils'
 import { ERC20 } from '../../contracts/ERC20'
 import { ERC721 } from '../../contracts/ERC721'
-import { tokenContracts, nftContracts } from '../contract/utils'
 import { Privileges, AuthorizationDefinition } from './types'
 
 export async function getAuthorizations(
   definition: AuthorizationDefinition,
-  contractCall: (address: string) => Promise<boolean>
+  contractCall: (
+    tokenAddress: string,
+    contractAddress: string
+  ) => Promise<boolean>
 ) {
   const result: Privileges = {}
 
@@ -16,7 +18,10 @@ export async function getAuthorizations(
     const tokenContractAddresses = definition[contractAddress]
 
     for (const tokenContractAddress of tokenContractAddresses) {
-      const callResult = await contractCall(tokenContractAddress)
+      const callResult = await contractCall(
+        tokenContractAddress,
+        contractAddress
+      )
 
       result[contractAddress] = {
         ...result[contractAddress],
@@ -27,18 +32,28 @@ export async function getAuthorizations(
   return result
 }
 
-export async function callAllowance(eth: Eth, address: string) {
-  const contract = new ERC20(eth, getAddress(address))
+export async function callAllowance(
+  eth: Eth,
+  tokenContractAddress: string,
+  contractAddress: string,
+  walletAddress: string
+) {
+  const contract = new ERC20(eth, toAddress(tokenContractAddress))
   const result = await contract.methods
-    .allowance(Address.fromString(address), contract.address!)
+    .allowance(toAddress(walletAddress), toAddress(contractAddress))
     .call()
   return parseInt(result, 10)
 }
 
-export async function callIsApprovedForAll(eth: Eth, address: string) {
-  const contract = new ERC721(eth, getAddress(address))
+export async function callIsApprovedForAll(
+  eth: Eth,
+  tokenContractAddress: string,
+  contractAddress: string,
+  walletAddress: string
+) {
+  const contract = new ERC721(eth, toAddress(tokenContractAddress))
   return contract.methods
-    .isApprovedForAll(Address.fromString(address), contract.address!)
+    .isApprovedForAll(toAddress(walletAddress), toAddress(contractAddress))
     .call()
 }
 
@@ -46,10 +61,6 @@ export function getTokenAmountToApprove() {
   return toBN(2).pow(toBN(180))
 }
 
-function getAddress(address: string) {
-  const contractDefinition = nftContracts[address] || tokenContracts[address]
-  if (!contractDefinition) {
-    throw new Error(`Invalid address "${address}" for authorization contract`)
-  }
-  return Address.fromString(contractDefinition.address)
+function toAddress(address: string) {
+  return Address.fromString(address)
 }
