@@ -28,7 +28,10 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
     MANAToken,
     Marketplace,
     LANDRegistry,
-    EstateRegistry
+    EstateRegistry,
+    ExclusiveMasksCollection,
+    Halloween2019Collection,
+    Xmas2019Collection
   } = contractAddresses
 
   const authorization: AuthorizationsRequest = {
@@ -36,7 +39,13 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
       [Marketplace]: [MANAToken]
     },
     approvals: {
-      [Marketplace]: [LANDRegistry, EstateRegistry]
+      [Marketplace]: [
+        LANDRegistry,
+        EstateRegistry,
+        ExclusiveMasksCollection,
+        Halloween2019Collection,
+        Xmas2019Collection
+      ]
     }
   }
 
