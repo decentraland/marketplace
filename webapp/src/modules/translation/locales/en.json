@@ -40,7 +40,7 @@
     "owner": "Owner",
     "price": "Price",
     "expires": "Expires in",
-    "cancel_sale": "Cancel Sale",
+    "cancel_sale": "Remove listing",
     "buy": "Buy",
     "sell": "Sell",
     "update": "Update price",
@@ -108,6 +108,13 @@
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name}."
+  },
+  "cancel_sale_page": {
+    "title": "Remove listing",
+    "subtitle": "You are about to remove the listing of {name} for {amount}.",
+    "not_for_sale": "There are no active listings for {name}.",
+    "invalid_owner": "You are not the owner of {name}.",
+    "submit": "Confirm"
   },
   "wallet": {
     "sign_in_required": "You need to {sign_in} to access this page.",

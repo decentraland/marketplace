@@ -119,3 +119,29 @@ export const executeOrderFailure = (order: Order, nft: NFT, error: string) =>
 export type ExecuteOrderRequestAction = ReturnType<typeof executeOrderRequest>
 export type ExecuteOrderSuccessAction = ReturnType<typeof executeOrderSuccess>
 export type ExecuteOrderFailureAction = ReturnType<typeof executeOrderFailure>
+
+// Cancel Order (aka Cancel Sale)
+
+export const CANCEL_ORDER_REQUEST = '[Request] Cancel Order'
+export const CANCEL_ORDER_SUCCESS = '[Success] Cancel Order'
+export const CANCEL_ORDER_FAILURE = '[Failure] Cancel Order'
+
+export const cancelOrderRequest = (order: Order, nft: NFT) =>
+  action(CANCEL_ORDER_REQUEST, { order, nft })
+export const cancelOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
+  action(CANCEL_ORDER_SUCCESS, {
+    order,
+    nft,
+    ...buildTransactionPayload(txHash, {
+      tokenId: nft.tokenId,
+      contractAddress: nft.contractAddress,
+      name: getNFTName(nft),
+      price: formatMANA(order.price)
+    })
+  })
+export const cancelOrderFailure = (order: Order, nft: NFT, error: string) =>
+  action(CANCEL_ORDER_FAILURE, { order, nft, error })
+
+export type CancelOrderRequestAction = ReturnType<typeof cancelOrderRequest>
+export type CancelOrderSuccessAction = ReturnType<typeof cancelOrderSuccess>
+export type CancelOrderFailureAction = ReturnType<typeof cancelOrderFailure>

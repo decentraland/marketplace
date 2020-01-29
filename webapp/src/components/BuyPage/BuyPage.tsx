@@ -10,7 +10,7 @@ import './BuyPage.css'
 import { fromWei } from 'web3x-es/utils'
 
 const BuyPage = (props: Props) => {
-  const { order, onNavigate, onExecuteOrder } = props
+  const { onNavigate, onExecuteOrder } = props
 
   return (
     <>
@@ -19,7 +19,7 @@ const BuyPage = (props: Props) => {
         <Wallet>
           {wallet => (
             <NFTProvider>
-              {nft => (
+              {(nft, order) => (
                 <BuyModal
                   nft={nft}
                   order={order}
