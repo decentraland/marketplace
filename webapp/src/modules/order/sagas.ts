@@ -55,7 +55,7 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
     )
     const address = yield select(getAddress)
     if (!address) throw new Error('Invalid address. Wallet must be connected.')
-    const tx = yield call(() =>
+    const txHash = yield call(() =>
       marketplace.methods
         .createOrder(
           Address.fromString(nft.contractAddress),
@@ -64,8 +64,8 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
           expiresAt
         )
         .send({ from: Address.fromString(address) })
+        .getTxHash()
     )
-    const txHash = yield call(() => tx.txHashPromise)
     yield put(createOrderSuccess(nft, price, expiresAt, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
@@ -86,7 +86,7 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
     )
     const address = yield select(getAddress)
     if (!address) throw new Error('Invalid address. Wallet must be connected.')
-    const tx = yield call(() => {
+    const txHash = yield call(() => {
       if (fingerprint) {
         return marketplace.methods
           .safeExecuteOrder(
@@ -96,6 +96,7 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
             fingerprint
           )
           .send({ from: Address.fromString(address) })
+          .getTxHash()
       } else {
         return marketplace.methods
           .executeOrder(
@@ -104,9 +105,9 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
             order.price
           )
           .send({ from: Address.fromString(address) })
+          .getTxHash()
       }
     })
-    const txHash = yield call(() => tx.txHashPromise)
     yield put(executeOrderSuccess(order, nft, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
