@@ -1,6 +1,7 @@
 import { Eth, SendTx } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 import { all, put, call, select, takeEvery } from 'redux-saga/effects'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 
 import { ERC20, ERC20TransactionReceipt } from '../../contracts/ERC20'
 import { ERC721, ERC721TransactionReceipt } from '../../contracts/ERC721'
@@ -80,7 +81,7 @@ function* handleAllowTokenRequest(action: AllowTokenRequestAction) {
     const { isAllowed, contractAddress, tokenContractAddress } = action.payload
 
     const eth = Eth.fromCurrentProvider()
-    const wallet = yield select(getWallet)
+    const wallet: Wallet | null = yield select(getWallet)
 
     if (!eth || !wallet) {
       throw new Error('Could not connect to Ethereum')
@@ -95,7 +96,7 @@ function* handleAllowTokenRequest(action: AllowTokenRequestAction) {
     const transaction: SendTx<ERC20TransactionReceipt> = yield call(() =>
       tokenContract.methods
         .approve(contractToApproveAddress, amount)
-        .send({ from: address })
+        .send({ from: Address.fromString(address) })
     )
     const transactionHash: string = yield call(() => transaction.getTxHash())
 
@@ -118,7 +119,7 @@ function* handleApproveTokenRequest(action: ApproveTokenRequestAction) {
     const { isApproved, contractAddress, tokenContractAddress } = action.payload
 
     const eth = Eth.fromCurrentProvider()
-    const wallet = yield select(getWallet)
+    const wallet: Wallet | null = yield select(getWallet)
 
     if (!eth || !wallet) {
       throw new Error('Could not connect to Ethereum')
@@ -132,7 +133,7 @@ function* handleApproveTokenRequest(action: ApproveTokenRequestAction) {
     const transaction: SendTx<ERC721TransactionReceipt> = yield call(() =>
       tokenContract.methods
         .setApprovalForAll(Address.fromString(contractAddress), isApproved)
-        .send({ from: address })
+        .send({ from: Address.fromString(address) })
     )
     const transactionHash: string = yield call(() => transaction.getTxHash())
 
