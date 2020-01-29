@@ -24,9 +24,9 @@ export const contractSymbols = {
   [MANAToken]: 'MANA',
   [LANDRegistry]: 'LAND',
   [EstateRegistry]: 'Estates',
-  [ExclusiveMasksCollection]: 'Wearable',
-  [Halloween2019Collection]: 'Wearable',
-  [Xmas2019Collection]: 'Wearable'
+  [ExclusiveMasksCollection]: 'Exclusive Masks',
+  [Halloween2019Collection]: 'Halloween',
+  [Xmas2019Collection]: 'Xmas'
 } as const
 
 export const tokenContracts = {

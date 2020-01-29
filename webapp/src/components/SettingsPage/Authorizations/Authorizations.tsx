@@ -49,9 +49,12 @@ const Authorizations = (props: Props) => {
           ) : (
             <Radio
               checked={privilege[tokenContractAddress]}
-              label={t(`settings_page.for_buying_${contractName}`, {
-                token: contractSymbols[tokenContractAddress]
-              })}
+              label={t(
+                `settings_page.authorization_${contractName}_${getContractName(
+                  tokenContractAddress
+                )}`,
+                { token: contractSymbols[tokenContractAddress] }
+              )}
               onChange={(_, data: CheckboxProps) =>
                 handleOnChange(tokenContractAddress, !!data.checked)
               }

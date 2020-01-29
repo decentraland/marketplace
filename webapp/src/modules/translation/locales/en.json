@@ -125,8 +125,12 @@
     "authorization_error_contact":
       "If the error persist don't hesitate to contact us",
     "for_buying": "For buying",
-    "for_buying_ERC721Bid": "Assets using MANA (bid)",
-    "for_buying_Marketplace": "ERC721 using MANA",
+    "authorization_Marketplace_MANAToken": "ERC721 using MANA",
+    "authorization_Marketplace_LANDRegistry": "{token}",
+    "authorization_Marketplace_EstateRegistry": "{token}",
+    "authorization_Marketplace_ExclusiveMasksCollection": "{token}",
+    "authorization_Marketplace_Halloween2019Collection": "{token}",
+    "authorization_Marketplace_Xmas2019Collection": "{token}",
     "for_selling": "For selling",
     "pending_tx":
       "Transaction pending, click the loading to go to your activity for a detailed status"
