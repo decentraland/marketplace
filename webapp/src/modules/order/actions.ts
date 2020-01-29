@@ -6,6 +6,7 @@ import { NFT, NFTCategory, NFTSortBy } from '../nft/types'
 import { SortDirection } from '../routing/search'
 import { Order } from './types'
 import { getNFTName } from '../nft/utils'
+import { formatMANA } from '../../lib/api/mana'
 
 // Fetch Orders
 
@@ -96,9 +97,25 @@ export const EXECUTE_ORDER_REQUEST = '[Request] Execute Order'
 export const EXECUTE_ORDER_SUCCESS = '[Success] Execute Order'
 export const EXECUTE_ORDER_FAILURE = '[Failure] Execute Order'
 
-export const executeOrderRequest = (order: Order) =>
-  action(EXECUTE_ORDER_REQUEST, { order })
-export const executeOrderSuccess = (order: Order, nft: NFT) =>
-  action(EXECUTE_ORDER_SUCCESS, { order, nft })
-export const executeOrderFailure = (order: Order, error: string) =>
-  action(EXECUTE_ORDER_FAILURE, { order, error })
+export const executeOrderRequest = (
+  order: Order,
+  nft: NFT,
+  fingerprint?: string
+) => action(EXECUTE_ORDER_REQUEST, { order, nft, fingerprint })
+export const executeOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
+  action(EXECUTE_ORDER_SUCCESS, {
+    order,
+    nft,
+    ...buildTransactionPayload(txHash, {
+      tokenId: nft.tokenId,
+      contractAddress: nft.contractAddress,
+      name: getNFTName(nft),
+      price: formatMANA(order.price)
+    })
+  })
+export const executeOrderFailure = (order: Order, nft: NFT, error: string) =>
+  action(EXECUTE_ORDER_FAILURE, { order, nft, error })
+
+export type ExecuteOrderRequestAction = ReturnType<typeof executeOrderRequest>
+export type ExecuteOrderSuccessAction = ReturnType<typeof executeOrderSuccess>
+export type ExecuteOrderFailureAction = ReturnType<typeof executeOrderFailure>
