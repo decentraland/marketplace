@@ -1,10 +1,10 @@
-.nft-header {
+.WearableDetail .PageHeader {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.nft-header img {
+.WearableDetail .PageHeader img {
   flex: 0 1 auto;
   max-height: 420px;
 }

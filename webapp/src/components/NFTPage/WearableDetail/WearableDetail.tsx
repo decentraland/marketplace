@@ -7,6 +7,7 @@ import {
   RARITY_COLOR_LIGHT
 } from '../../../modules/nft/wearable/types'
 import { getNFTName } from '../../../modules/nft/utils'
+import { PageHeader } from '../../PageHeader'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Props } from './WearableDetail.types'
@@ -25,17 +26,11 @@ const WearableDetail = (props: Props) => {
   }, ${RARITY_COLOR[nft.wearable!.rarity]})`
 
   return (
-    <>
-      <div
-        className="nft-header"
-        style={{
-          height: 420,
-          backgroundImage
-        }}
-      >
+    <div className="WearableDetail">
+      <PageHeader style={{ backgroundImage }}>
         <img alt={getNFTName(nft)} src={nft.image} />
-      </div>
-      <Container className="WearableDetail">
+      </PageHeader>
+      <Container>
         <Title
           left={
             <>
@@ -67,7 +62,7 @@ const WearableDetail = (props: Props) => {
           ))}
         </Highlights>
       </Container>
-    </>
+    </div>
   )
 }
 

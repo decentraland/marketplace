@@ -17,14 +17,11 @@ const mapState = (
   ownProps: RouteComponentProps<Params>
 ): MapStateProps => {
   const { address } = ownProps.match.params
-  return { address, section: getUISection(state) }
+  return { address: address.toLowerCase(), section: getUISection(state) }
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path))
 })
 
-export default connect(
-  mapState,
-  mapDispatch
-)(AccountPage)
+export default connect(mapState, mapDispatch)(AccountPage)

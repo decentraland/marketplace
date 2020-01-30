@@ -4,6 +4,7 @@ import { getNFTName } from '../../../modules/nft/utils'
 import { getSelection, getCenter } from '../../../modules/nft/estate/utils'
 import { ProximityHighlights } from '../ProximityHighlights'
 import { Atlas } from '../../Atlas'
+import { PageHeader } from '../../PageHeader'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Props } from './EstateDetail.types'
@@ -18,7 +19,7 @@ const EstateDetail = (props: Props) => {
   const [x, y] = getCenter(selection)
   return (
     <>
-      <div style={{ height: 420 }}>
+      <PageHeader>
         <Atlas
           x={x}
           y={y}
@@ -27,7 +28,7 @@ const EstateDetail = (props: Props) => {
           withNavigation
           isEstate
         />
-      </div>
+      </PageHeader>
       <Container className="EstateDetail">
         <Title
           left={
