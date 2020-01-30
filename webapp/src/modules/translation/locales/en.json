@@ -123,10 +123,8 @@
     "buy_more_mana": "BUY MORE",
     "copy_address": "COPY ADDRESS",
     "copied": "COPIED ✔",
-    "authorization_error":
-      "We couldn't load your authorizations, please try again",
-    "authorization_error_contact":
-      "If the error persist don't hesitate to contact us",
+    "authorization_error": "We couldn't load your authorizations, please try again",
+    "authorization_error_contact": "If the error persist don't hesitate to contact us",
     "for_buying": "For buying",
     "authorization_Marketplace_MANAToken": "ERC721 using MANA",
     "authorization_Marketplace_LANDRegistry": "{token}",
@@ -135,19 +133,24 @@
     "authorization_Marketplace_Halloween2019Collection": "{token}",
     "authorization_Marketplace_Xmas2019Collection": "{token}",
     "for_selling": "For selling",
-    "pending_tx":
-      "Transaction pending, click the loading to go to your activity for a detailed status"
+    "pending_tx": "Transaction pending, click the loading to go to your activity for a detailed status"
   },
   "authorization": {
     "authorize": "Authorize the {contract_link} to operate {symbol} on your behalf",
-    "allowed":
-      "You authorized the {contract_link} to operate {symbol} on your behalf",
-    "approved":
-      "You authorized the {contract_link} to operate {symbol} on your behalf",
-    "disallowed":
-      "You unauthorized the {contract_link} to operate {symbol} on your behalf",
-    "disapproved":
-      "You unauthorized the {contract_link} to operate {symbol} on your behalf"
+    "allowed": "You authorized the {contract_link} to operate {symbol} on your behalf",
+    "approved": "You authorized the {contract_link} to operate {symbol} on your behalf",
+    "disallowed": "You unauthorized the {contract_link} to operate {symbol} on your behalf",
+    "disapproved": "You unauthorized the {contract_link} to operate {symbol} on your behalf"
+  },
+  "transfer_page": {
+    "title": "Transfer {category}",
+    "subtitle": "You are about to transfer {name}.",
+    "for_sale": "{name} can't be transferred because it's on sale.",
+    "invalid_owner": "You are not the owner of {name}.",
+    "invalid_address": "That's not a valid address",
+    "recipient": "Recepient address",
+    "warning": "Remember that transferring is an irreversible operation.{br}Please check the address carefully.",
+    "submit": "Transfer"
   },
   "wallet": {
     "sign_in_required": "You need to {sign_in} to access this page.",
