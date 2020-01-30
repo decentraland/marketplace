@@ -24,7 +24,7 @@ const Order = (props: Props) => {
     [nft, onNavigate]
   )
   const handleTransfer = useCallback(
-    () => onNavigate(locations.cancel(nft.contractAddress, nft.tokenId)),
+    () => onNavigate(locations.transfer(nft.contractAddress, nft.tokenId)),
     [nft, onNavigate]
   )
 
@@ -68,7 +68,7 @@ const Order = (props: Props) => {
             {t('detail.sell')}
           </Button>
         ) : null}
-        {isOwner ? (
+        {isOwner && !order ? (
           <Button onClick={handleTransfer}>{t('detail.transfer')}</Button>
         ) : null}
       </div>

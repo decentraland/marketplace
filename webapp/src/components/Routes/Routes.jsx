@@ -11,6 +11,7 @@ import { NFTPage } from '../NFTPage'
 import { SellPage } from '../SellPage'
 import { BuyPage } from '../BuyPage'
 import { CancelSalePage } from '../CancelSalePage'
+import { TransferPage } from '../TransferPage'
 
 const Routes = () => {
   return (
@@ -27,8 +28,9 @@ const Routes = () => {
       <Route exact path={locations.sell()} component={SellPage} />
       <Route exact path={locations.buy()} component={BuyPage} />
       <Route exact path={locations.cancel()} component={CancelSalePage} />
-      <Route exact path={locations.settings()} component={SettingsPage} />
+      <Route exact path={locations.transfer()} component={TransferPage} />
       <Route exact path={locations.ntf()} component={NFTPage} />
+      <Route exact path={locations.settings()} component={SettingsPage} />
       {/* TODO: The following redirect shoud be changed once we have a HomePage */}
       <Redirect to={locations.atlas()} />
     </Switch>
