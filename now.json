@@ -14,6 +14,5 @@
       "REACT_APP_HALLOWEEN_2019_ADDRESS": "0xc1f4b0eea2bd6690930e6c66efd3e197d620b9c2",
       "REACT_APP_XMAS_2019_ADDRESS": "0xc3af02c0fd486c8e9da5788b915d6fff3f049866"
     }
-  },
-  "redirects": [{ "source": "/(.*)", "destination": "/index.html" }]
+  }
 }
