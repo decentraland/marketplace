@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
+import { replace } from 'connected-react-router'
 
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import { getUISection } from '../../modules/ui/selectors'
@@ -18,7 +18,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path))
+  onNavigate: path => dispatch(replace(path))
 })
 
 export default connect(mapState, mapDispatch)(CurrentAccountPage)
