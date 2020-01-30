@@ -15,6 +15,14 @@
       "source": "etherscan",
       "net": "mainnet",
       "address": "0x55fd705b431f95c8e09fcf85a245377568cc2c6e"
+    },
+    "ERC20": {
+      "source": "files",
+      "abiFile": "./src/contracts/ERC20.json"
+    },
+    "ERC721": {
+      "source": "files",
+      "abiFile": "./src/contracts/ERC721.json"
     }
   }
 }

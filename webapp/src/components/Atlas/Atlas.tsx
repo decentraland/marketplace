@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import { Atlas as AtlasComponent, Layer } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
-import { ContractAddress } from '../../modules/contract/types'
+import { contractAddresses } from '../../modules/contract/utils'
 import { nftAPI } from '../../lib/api/nft'
 import { Tile, Props } from './Atlas.types'
 
@@ -75,11 +75,13 @@ const Atlas = (props: Props) => {
       if (!withNavigation) return
       const tile = tiles[getCoords(x, y)] as Tile
       if (tile.estate_id) {
-        onNavigate(locations.ntf(ContractAddress.ESTATE, tile.estate_id))
+        onNavigate(
+          locations.ntf(contractAddresses.EstateRegistry, tile.estate_id)
+        )
       } else {
         try {
           const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
-          onNavigate(locations.ntf(ContractAddress.LAND, tokenId))
+          onNavigate(locations.ntf(contractAddresses.LANDRegistry, tokenId))
         } catch (error) {
           console.warn(
             `Couldn't fetch parcel ${tile.x},${tile.y}: ${error.message}`

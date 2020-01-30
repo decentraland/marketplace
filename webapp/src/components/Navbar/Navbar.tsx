@@ -11,12 +11,17 @@ const Navbar = (props: Props) => {
     onNavigate(locations.signIn())
   }, [onNavigate])
 
+  const handleOnClickAccount = useCallback(() => {
+    onNavigate(locations.settings())
+  }, [onNavigate])
+
   return (
     <BaseNavbar
       activePage="marketplace"
       isFullscreen={props.isFullscreen}
       isSignIn={window.location.pathname === locations.signIn()}
       onSignIn={handleOnSignIn}
+      onClickAccount={handleOnClickAccount}
     />
   )
 }

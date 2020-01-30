@@ -1,0 +1,94 @@
+.SettingsPage .left-column {
+  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.SettingsPage .row {
+  margin-bottom: 70px;
+}
+
+.SettingsPage .dcl.blockie {
+  float: left;
+}
+
+.SettingsPage .address-container {
+  margin-top: 7px;
+  margin-left: 24px;
+  float: left;
+}
+
+.SettingsPage .address {
+  margin-bottom: 8px;
+  font-size: 21px;
+}
+
+.SettingsPage .copy-text,
+.SettingsPage .link {
+  color: var(--primary);
+}
+
+.SettingsPage .link {
+  cursor: pointer;
+}
+
+.SettingsPage .balance {
+  display: flex;
+  align-items: center;
+}
+
+.SettingsPage .dcl.mana {
+  font-size: 21px;
+  margin-bottom: 0;
+}
+
+.SettingsPage .buy-more {
+  margin-left: 24px;
+}
+
+.SettingsPage .ui.form .field {
+  margin-bottom: 41px;
+}
+
+.SettingsPage .authorization-checks > label {
+  display: block;
+  font-size: 17px;
+  margin-bottom: 17px;
+  text-transform: capitalize;
+}
+
+.SettingsPage .ui.checkbox input.hidden + label {
+  font-weight: 700;
+  font-size: 17px;
+  padding-left: 35px;
+}
+
+.SettingsPage .is-pending .ui.checkbox label:before,
+.SettingsPage .is-pending .ui.checkbox label:after {
+  display: none;
+}
+
+.SettingsPage .authorization-checks .radio-description {
+  font-size: 15px;
+  margin-left: 35px;
+}
+
+.SettingsPage .authorization-checks .is-pending .loader-tooltip {
+  display: inline;
+}
+
+.SettingsPage .authorization-checks .loader-tooltip {
+  display: none;
+}
+
+.SettingsPage .authorization-checks .ui.loader {
+  left: 7px;
+  top: 2px;
+  float: left;
+}
+
+.SettingsPage .authorization-checks .ui.mini.loader:after,
+.SettingsPage .authorization-checks .ui.mini.loader:before {
+  width: 1.8rem;
+  height: 1.8rem;
+}

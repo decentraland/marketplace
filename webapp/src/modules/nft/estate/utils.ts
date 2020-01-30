@@ -1,8 +1,8 @@
 import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
-import { ESTATE_REGISTRY_ADDRESS } from '../../../modules/contracts'
-import { NFT } from '../types'
+import { contractAddresses } from '../../contract/utils'
 import { EstateRegistry } from '../../../contracts/EstateRegistry'
+import { NFT } from '../types'
 
 export const getSelection = (nft: NFT) => {
   return nft.estate!.parcels.map(pair => ({
@@ -24,7 +24,7 @@ export async function getFingerprint(estateId: string) {
   if (eth) {
     const estateRegistry = new EstateRegistry(
       eth,
-      Address.fromString(ESTATE_REGISTRY_ADDRESS)
+      Address.fromString(contractAddresses.EstateRegistry)
     )
     return estateRegistry.methods.getFingerprint(estateId).call()
   }

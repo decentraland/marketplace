@@ -4,6 +4,7 @@ export const locations = {
   root: () => '/',
   signIn: () => '/sign-in',
   atlas: () => '/atlas',
+  settings: () => '/settings',
   market: (options?: SearchOptions) => {
     const params = getSearchParams(options)
     return params ? `/market?${params.toString()}` : '/market'

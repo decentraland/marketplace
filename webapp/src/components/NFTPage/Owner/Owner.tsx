@@ -2,9 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Blockie, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { locations } from '../../../modules/routing/locations'
 import { Props } from './Owner.types'
 import './Owner.css'
-import { locations } from '../../../modules/routing/locations'
 
 const Owner = (props: Props) => {
   const address = props.nft.owner.id
