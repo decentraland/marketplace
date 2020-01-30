@@ -141,7 +141,7 @@ function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
     }
     const marketplace = new Marketplace(
       eth,
-      Address.fromString(MARKETPLACE_ADDRESS)
+      Address.fromString(contractAddresses.Marketplace)
     )
     const address = yield select(getAddress)
     if (!address) {
