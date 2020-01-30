@@ -1,7 +1,7 @@
 import React from 'react'
+import { FooterProps } from 'decentraland-ui'
 import { Footer as BaseFooter } from 'decentraland-dapps/dist/containers'
 import * as tranlsations from '../../modules/translation/locales'
-import { FooterProps } from 'decentraland-ui'
 
 const locales = Object.keys(tranlsations)
 

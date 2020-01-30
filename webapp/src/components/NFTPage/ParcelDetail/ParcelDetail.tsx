@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { getNFTName } from '../../../modules/nft/utils'
 import { Atlas } from '../../Atlas'
+import { PageHeader } from '../../PageHeader'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
@@ -18,9 +19,9 @@ const ParcelDetail = (props: Props) => {
 
   return (
     <>
-      <div style={{ height: 420 }}>
+      <PageHeader>
         <Atlas x={+x} y={+y} isDraggable selection={selection} withNavigation />
-      </div>
+      </PageHeader>
       <Container className="ParcelDetail">
         <Title
           left={
