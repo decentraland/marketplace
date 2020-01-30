@@ -17,8 +17,8 @@ const MARKET_FILTERS = `
 const MARKET_ARGUMENTS = `
   first: $first
   skip: $skip
-  #orderBy: $orderBy
-  #orderDirection: $orderDirection
+  orderBy: $orderBy
+  orderDirection: $orderDirection
 `
 
 export const MARKET_FULL_QUERY = gql`
