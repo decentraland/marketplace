@@ -1,17 +1,17 @@
 import { connect } from 'react-redux'
 import { RootState } from '../../../modules/reducer'
-import { getProximity } from '../../../modules/proximity/selectors'
+import { getProximities } from '../../../modules/proximity/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch
-} from './ParcelTags.types'
-import ParcelTags from './ParcelTags'
+} from './ProximityHighlights.types'
+import ProximityHighlights from './ProximityHighlights'
 
 const mapState = (state: RootState): MapStateProps => ({
-  proximity: getProximity(state)
+  proximities: getProximities(state)
 })
 
 const mapDispatch = (_dispatch: MapDispatch): MapDispatchProps => ({})
 
-export default connect(mapState, mapDispatch)(ParcelTags)
+export default connect(mapState, mapDispatch)(ProximityHighlights)
