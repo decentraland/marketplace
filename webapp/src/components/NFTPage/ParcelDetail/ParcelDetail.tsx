@@ -3,6 +3,7 @@ import { Container, Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getDistanceText } from '../../../modules/proximity/utils'
 import { getNFTName } from '../../../modules/nft/utils'
+import { getId } from '../../../modules/nft/parcel/utils'
 import { Atlas } from '../../Atlas'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
@@ -17,7 +18,7 @@ import './ParcelDetail.css'
 const ParcelDetail = (props: Props) => {
   const { nft, proximity } = props
   const { x, y } = nft.parcel!
-  const id = x + ',' + y
+  const id = getId(x, y)
   const tags = proximity[id]
   const selection = useMemo(() => [{ x, y }], [x, y])
 
@@ -33,7 +34,7 @@ const ParcelDetail = (props: Props) => {
               <Header size="large">{getNFTName(nft)}</Header>
               <Badge color="#37333d">
                 <i className="pin" />
-                {nft.parcel!.x},{nft.parcel!.y}
+                {id}
               </Badge>
             </>
           }
