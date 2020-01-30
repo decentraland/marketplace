@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { getNFTName } from '../../../modules/nft/utils'
 import { getSelection, getCenter } from '../../../modules/nft/estate/utils'
+import { ProximityHighlights } from '../ProximityHighlights'
 import { Atlas } from '../../Atlas'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
@@ -27,7 +28,7 @@ const EstateDetail = (props: Props) => {
           isEstate
         />
       </div>
-      <Container>
+      <Container className="EstateDetail">
         <Title
           left={
             <>
@@ -41,6 +42,7 @@ const EstateDetail = (props: Props) => {
         />
         <Description text={nft.estate!.data?.description} />
         <Order nft={nft} />
+        <ProximityHighlights nft={nft} />
       </Container>
     </>
   )

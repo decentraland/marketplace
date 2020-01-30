@@ -1,0 +1,19 @@
+.ProximityTag {
+  width: 22px;
+  height: 22px;
+  margin-left: 8px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.ProximityTag.plaza {
+  background-image: url(../../../images/plaza.svg);
+}
+
+.ProximityTag.road {
+  background-image: url(../../../images/road.svg);
+}
+
+.ProximityTag.district {
+  background-image: url(../../../images/district.svg);
+}

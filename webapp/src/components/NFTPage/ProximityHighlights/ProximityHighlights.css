@@ -1,0 +1,11 @@
+.ProximityHighlights .Highlight .plaza {
+  background-image: url(../../../images/plaza.svg);
+}
+
+.ProximityHighlights .Highlight .road {
+  background-image: url(../../../images/road.svg);
+}
+
+.ProximityHighlights .Highlight .district {
+  background-image: url(../../../images/district.svg);
+}

@@ -6,14 +6,23 @@ import { createStorageMiddleware } from 'decentraland-dapps/dist/modules/storage
 import { storageReducerWrapper } from 'decentraland-dapps/dist/modules/storage/reducer'
 import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/transaction/middleware'
 
-import { createRootReducer } from './reducer'
+import { createRootReducer, RootState } from './reducer'
 import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
 
 const isDev = process.env.NODE_ENV === 'development'
 
 const composeEnhancers =
-  (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+  isDev && (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        stateSanitizer: (state: RootState) => {
+          const sanitized = { ...state }
+          delete sanitized.tile
+          delete sanitized.proximity
+          return sanitized
+        }
+      })
+    : compose
 
 export const history = require('history').createBrowserHistory()
 const rootReducer = storageReducerWrapper(createRootReducer(history))
@@ -49,6 +58,7 @@ if (isDev) {
   _window.getState = store.getState
 }
 
+// fetch tiles
 store.dispatch(fetchTilesRequest())
 
 export { store }
