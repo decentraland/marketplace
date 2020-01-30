@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getDistance } from '../../../modules/proximity/utils'
+import { getDistanceText } from '../../../modules/proximity/utils'
 import { Props } from './ParcelTags.types'
 import './ParcelTags.css'
 
@@ -16,13 +16,13 @@ const ParcelTags = (props: Props) => {
         {nft.parcel!.x},{nft.parcel!.y}
       </div>
       {tags?.plaza !== undefined ? (
-        <div className="tag plaza" title={getDistance(tags.plaza)} />
+        <div className="tag plaza" title={getDistanceText(tags.plaza)} />
       ) : null}
       {tags?.road !== undefined ? (
-        <div className="tag road" title={getDistance(tags.road)} />
+        <div className="tag road" title={getDistanceText(tags.road)} />
       ) : null}
       {tags?.district !== undefined ? (
-        <div className="tag district" title={getDistance(tags.district)} />
+        <div className="tag district" title={getDistanceText(tags.district)} />
       ) : null}
     </div>
   )

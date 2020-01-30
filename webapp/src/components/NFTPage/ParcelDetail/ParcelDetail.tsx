@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getDistance } from '../../../modules/proximity/utils'
+import { getDistanceText } from '../../../modules/proximity/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { Atlas } from '../../Atlas'
 import { Title } from '../Title'
@@ -47,21 +47,21 @@ const ParcelDetail = (props: Props) => {
               <Highlight
                 icon={<div className="plaza" />}
                 name={t('detail.plaza')}
-                description={getDistance(tags?.plaza)}
+                description={getDistanceText(tags?.plaza)}
               />
             ) : null}
             {tags?.road !== undefined ? (
               <Highlight
                 icon={<div className="road" />}
                 name={t('detail.road')}
-                description={getDistance(tags?.road)}
+                description={getDistanceText(tags?.road)}
               />
             ) : null}
             {tags?.district !== undefined ? (
               <Highlight
                 icon={<div className="district" />}
                 name={t('detail.district')}
-                description={getDistance(tags?.district)}
+                description={getDistanceText(tags?.district)}
               />
             ) : null}
           </Highlights>
