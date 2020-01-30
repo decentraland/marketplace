@@ -5,7 +5,11 @@ export enum Section {
   LAND = 'land',
   PARCELS = 'parcels',
   ESTATES = 'estates',
-  WEARABLES = 'wearables'
+  WEARABLES = 'wearables',
+  WEARABLES_TOP = 'top',
+  WEARABLES_BOTTOM = 'bottom',
+  WEARABLES_SHOES = 'shoes',
+  WEARABLES_ACCESORIES = 'accesories'
 }
 
 export enum SortBy {

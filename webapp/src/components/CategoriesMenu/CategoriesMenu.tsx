@@ -18,7 +18,7 @@ const CategoriesMenu = (props: Props) => {
 
   return (
     <div className="CategoriesMenu">
-      <Header sub>Categories</Header>
+      <Header sub>{t('categories_menu.categories')}</Header>
       <ul className="menu">
         <li
           className={section === Section.ALL ? 'active' : ''}
@@ -34,12 +34,11 @@ const CategoriesMenu = (props: Props) => {
         </li>
         {[Section.LAND, Section.PARCELS, Section.ESTATES].includes(section) ? (
           <>
-            {' '}
             <li
               className={section === Section.PARCELS ? 'sub active' : 'sub'}
               onClick={() => handleSectionChange(Section.PARCELS)}
             >
-              Parcels
+              {t('categories_menu.parcels')}
             </li>
             <li
               className={section === Section.ESTATES ? 'sub active' : 'sub'}
@@ -55,6 +54,24 @@ const CategoriesMenu = (props: Props) => {
         >
           {t('categories_menu.wearables')}
         </li>
+        {[
+          Section.WEARABLES,
+          Section.WEARABLES_TOP,
+          Section.WEARABLES_BOTTOM,
+          Section.WEARABLES_SHOES,
+          Section.WEARABLES_ACCESORIES
+        ].includes(section) ? (
+          <>
+            <li
+              className={
+                section === Section.WEARABLES_TOP ? 'sub active' : 'sub'
+              }
+              onClick={() => handleSectionChange(Section.WEARABLES)}
+            >
+              {t('categories_menu.wearables_top')}
+            </li>
+          </>
+        ) : null}
       </ul>
     </div>
   )
