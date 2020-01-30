@@ -1,17 +1,17 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import {
-  executeOrderRequest,
-  ExecuteOrderRequestAction
+  cancelOrderRequest,
+  CancelOrderRequestAction
 } from '../../modules/order/actions'
 
 export type Props = {
-  onExecuteOrder: typeof executeOrderRequest
+  onCancelOrder: typeof cancelOrderRequest
   onNavigate: (path: string) => void
 }
 
 export type MapStateProps = {}
-export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onExecuteOrder'>
+export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onCancelOrder'>
 export type MapDispatch = Dispatch<
-  CallHistoryMethodAction | ExecuteOrderRequestAction
+  CallHistoryMethodAction | CancelOrderRequestAction
 >
