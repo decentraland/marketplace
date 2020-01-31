@@ -4,7 +4,7 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
-import { NFTProvider } from '../NFTProvider'
+import { NFTProviderPage } from '../NFTProviderPage'
 import NFTAction from '../NFTAction/NFTAction'
 import { locations } from '../../modules/routing/locations'
 import { getNFTName } from '../../modules/nft/utils'
@@ -23,7 +23,7 @@ const TransferPage = (props: Props) => {
       <Page className="TransferPage">
         <Wallet>
           {wallet => (
-            <NFTProvider>
+            <NFTProviderPage>
               {(nft, order) => {
                 let subtitle
                 let isDisabled = isInvalidAddress
@@ -104,7 +104,7 @@ const TransferPage = (props: Props) => {
                   </NFTAction>
                 )
               }}
-            </NFTProvider>
+            </NFTProviderPage>
           )}
         </Wallet>
       </Page>

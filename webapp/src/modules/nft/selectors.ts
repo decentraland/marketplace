@@ -6,6 +6,7 @@ import { nftContracts } from '../contract/utils'
 import { RootState } from '../reducer'
 import { NFTState } from './reducer'
 import { NFT } from './types'
+import { getNFTId } from './utils'
 
 export const getState = (state: RootState) => state.nft
 export const getData = (state: RootState) => getState(state).data
@@ -45,12 +46,9 @@ export const getCurrentNFT = createSelector<
   (contractAddress, tokenId, nfts) => {
     let nft: NFT | null = null
     if (contractAddress && tokenId && contractAddress in nftContracts) {
-      const contract = nftContracts[contractAddress]
-      if (contract) {
-        const nftId = contract.category + '-' + contractAddress + '-' + tokenId
-        if (nftId in nfts) {
-          nft = nfts[nftId]
-        }
+      const nftId = getNFTId(contractAddress, tokenId)
+      if (nftId && nftId in nfts) {
+        nft = nfts[nftId]
       }
     }
     return nft

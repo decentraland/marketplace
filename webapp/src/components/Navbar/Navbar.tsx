@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react'
+import { Menu, Icon } from 'decentraland-ui'
 import { Navbar as BaseNavbar } from 'decentraland-dapps/dist/containers'
 
-import { Props } from './Navbar.types'
 import { locations } from '../../modules/routing/locations'
+import { Props } from './Navbar.types'
+import './Navbar.css'
 
 const Navbar = (props: Props) => {
-  const { onNavigate } = props
+  const { pathname, hasPendingTransactions, onNavigate } = props
 
   const handleOnSignIn = useCallback(() => {
     onNavigate(locations.signIn())
@@ -15,13 +17,28 @@ const Navbar = (props: Props) => {
     onNavigate(locations.settings())
   }, [onNavigate])
 
+  const handleClickActivity = useCallback(() => {
+    onNavigate(locations.activity())
+  }, [onNavigate])
+
   return (
     <BaseNavbar
       activePage="marketplace"
       isFullscreen={props.isFullscreen}
-      isSignIn={window.location.pathname === locations.signIn()}
+      isSignIn={pathname === locations.signIn()}
       onSignIn={handleOnSignIn}
       onClickAccount={handleOnClickAccount}
+      middleMenu={
+        <Menu.Item
+          className={pathname === locations.activity() ? 'active' : ''}
+        >
+          <Icon
+            className={hasPendingTransactions ? 'pending' : ''}
+            name="bell"
+            onClick={handleClickActivity}
+          />
+        </Menu.Item>
+      }
     />
   )
 }

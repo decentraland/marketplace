@@ -7,7 +7,7 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
-import { NFTProvider } from '../NFTProvider'
+import { NFTProviderPage } from '../NFTProviderPage'
 import { NFTAction } from '../NFTAction'
 import { getNFTName } from '../../modules/nft/utils'
 import { locations } from '../../modules/routing/locations'
@@ -56,7 +56,7 @@ const SellPage = (props: Props) => {
       <Page className="SellPage">
         <Wallet>
           {wallet => (
-            <NFTProvider>
+            <NFTProviderPage>
               {nft => {
                 const isInvalidDate = +new Date(expiresAt) < Date.now()
                 return (
@@ -194,7 +194,7 @@ const SellPage = (props: Props) => {
                   </NFTAction>
                 )
               }}
-            </NFTProvider>
+            </NFTProviderPage>
           )}
         </Wallet>
       </Page>

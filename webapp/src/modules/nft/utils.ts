@@ -1,6 +1,19 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { SortDirection, SortBy } from '../routing/search'
+import { nftContracts } from '../contract/utils'
 import { NFT, NFTCategory, NFTSortBy } from './types'
+
+export function getNFTId(
+  contractAddress: string | null,
+  tokenId: string | null
+) {
+  if (!contractAddress || !tokenId) return
+  const contract = contractAddress ? nftContracts[contractAddress] : null
+  if (contract) {
+    return contract.category + '-' + contractAddress + '-' + tokenId
+  }
+  return null
+}
 
 export function getNFTName(nft: NFT) {
   if (nft.name) {

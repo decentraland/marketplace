@@ -3,7 +3,7 @@ import { Page, Header, Button, Mana } from 'decentraland-ui'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
-import { NFTProvider } from '../NFTProvider'
+import { NFTProviderPage } from '../NFTProviderPage'
 import { Props } from './CancelSalePage.types'
 import './CancelSalePage.css'
 import NFTAction from '../NFTAction/NFTAction'
@@ -21,7 +21,7 @@ const CancelSalePage = (props: Props) => {
       <Page className="CancelSalePage">
         <Wallet>
           {wallet => (
-            <NFTProvider>
+            <NFTProviderPage>
               {(nft, order) => {
                 let subtitle
                 let isDisabled = false
@@ -78,7 +78,7 @@ const CancelSalePage = (props: Props) => {
                   </NFTAction>
                 )
               }}
-            </NFTProvider>
+            </NFTProviderPage>
           )}
         </Wallet>
       </Page>

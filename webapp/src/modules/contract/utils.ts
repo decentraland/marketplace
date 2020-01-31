@@ -26,7 +26,8 @@ export const contractSymbols = {
   [EstateRegistry]: 'Estates',
   [ExclusiveMasksCollection]: 'Exclusive Masks',
   [Halloween2019Collection]: 'Halloween',
-  [Xmas2019Collection]: 'Xmas'
+  [Xmas2019Collection]: 'Xmas',
+  [Marketplace]: 'Marketplace'
 } as const
 
 export const tokenContracts = {
