@@ -23,15 +23,17 @@
   },
   "categories_menu": {
     "categories": "Categories",
-    "all_assets": "All Assets",
-    "land": "Land",
-    "parcels": "Parcels",
-    "estates": "Estates",
-    "wearables": "Wearables",
-    "wearables_top": "Top",
-    "wearables_bottom": "Bottom",
-    "wearables_shoes": "Shoes",
-    "wearables_accesories": "Accesories"
+    "menu_item": {
+      "all": "All Assets",
+      "land": "Land",
+      "parcels": "Parcels",
+      "estates": "Estates",
+      "wearables": "Wearables",
+      "wearables_top": "Top",
+      "wearables_bottom": "Bottom",
+      "wearables_shoes": "Shoes",
+      "wearables_accesories": "Accesories"
+    }
   },
   "filters": {
     "newest": "Newest",
