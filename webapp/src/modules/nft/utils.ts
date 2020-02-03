@@ -41,7 +41,7 @@ export function getSortOrder(sortBy: SortBy) {
   let orderDirection: SortDirection = SortDirection.DESC
   switch (sortBy) {
     case SortBy.NEWEST: {
-      orderBy = NFTSortBy.CREATED_AT
+      orderBy = NFTSortBy.ORDER_CREATED_AT
       orderDirection = SortDirection.DESC
       break
     }

@@ -13,6 +13,10 @@ class NFTAPI {
     const { variables } = options
     const query = getNFTsQuery(variables)
 
+    console.log('*********************************************')
+    console.log(query.loc.source.body)
+    console.log('*********************************************')
+
     const { data } = await client.query({
       query,
       variables: {
@@ -28,8 +32,7 @@ class NFTAPI {
     for (const result of data.nfts as NFTFragment[]) {
       const { activeOrder: nestedOrder, ...rest } = result
 
-      const nft = { ...rest, activeOrderId: nestedOrder!.id }
-      nfts.push(nft)
+      const nft: NFT = { ...rest, activeOrderId: null }
 
       if (nestedOrder && !isExpired(nestedOrder.expiresAt)) {
         const order = { ...nestedOrder, nftId: nft.id }
@@ -44,6 +47,8 @@ class NFTAPI {
       } else {
         accounts.push({ id: address, address, nftIds: [nft.id] })
       }
+
+      nfts.push(nft)
     }
 
     return [nfts, accounts, orders] as const
@@ -88,9 +93,9 @@ const NFTS_FILTERS = `
   $orderDirection: String
 
   $expiresAt: String
-  address: String!
-  category: Category!
-  isLand: Boolean!
+  $address: String
+  $category: Category
+  $isLand: Boolean
 `
 
 const NFTS_ARGUMENTS = `
@@ -104,7 +109,7 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
   let extraWhere: string[] = []
 
   if (variables.address) {
-    extraWhere.push('address: $address')
+    extraWhere.push('owner: $address')
   }
 
   if (variables.category) {
@@ -112,10 +117,10 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
   }
 
   if (variables.isLand) {
-    extraWhere.push('isLand: $isLand')
+    extraWhere.push('searchIsLand: $isLand')
   }
 
-  if (variables.onSale) {
+  if (variables.onlyOnSale) {
     extraWhere.push('searchOrderStatus: open')
     extraWhere.push('searchOrderExpiresAt_gt: $expiresAt')
   }

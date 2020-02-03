@@ -2,9 +2,9 @@ import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { Order } from '../../modules/order/types'
 import {
-  fetchOrdersRequest,
-  FetchOrdersRequestAction
-} from '../../modules/order/actions'
+  fetchNFTsRequest,
+  FetchNFTsRequestAction
+} from '../../modules/nft/actions'
 import { SortBy, Section } from '../../modules/routing/search'
 import { NFTState } from '../../modules/nft/reducer'
 
@@ -15,7 +15,7 @@ export type Props = {
   section: Section
   sortBy: SortBy
   isLoading: boolean
-  onFetchOrders: typeof fetchOrdersRequest
+  onFetchNFTs: typeof fetchNFTsRequest
   onNavigate: (path: string) => void
 }
 
@@ -23,7 +23,7 @@ export type MapStateProps = Pick<
   Props,
   'nfts' | 'orders' | 'page' | 'section' | 'sortBy' | 'isLoading'
 >
-export type MapDispatchProps = Pick<Props, 'onFetchOrders' | 'onNavigate'>
+export type MapDispatchProps = Pick<Props, 'onFetchNFTs' | 'onNavigate'>
 export type MapDispatch = Dispatch<
-  FetchOrdersRequestAction | CallHistoryMethodAction
+  FetchNFTsRequestAction | CallHistoryMethodAction
 >

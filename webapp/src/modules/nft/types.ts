@@ -9,7 +9,8 @@ export enum NFTCategory {
 }
 
 export enum NFTSortBy {
-  CREATED_AT = 'searchOrderCreatedAt',
+  ORDER_CREATED_AT = 'searchOrderCreatedAt',
+  CREATED_AT = 'createdAt',
   PRICE = 'searchOrderPrice'
 }
 

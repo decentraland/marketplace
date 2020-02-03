@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux'
 
 import {
-  fetchAccountRequest,
-  FetchAccountRequestAction
-} from '../../modules/account/actions'
+  fetchNFTsRequest,
+  FetchNFTsRequestAction
+} from '../../modules/nft/actions'
 import { Account } from '../../modules/account/types'
 import { NFT } from '../../modules/nft/types'
 import { Section, SortBy } from '../../modules/routing/search'
@@ -16,7 +16,7 @@ export type Props = {
   section: Section
   sortBy: SortBy
   isLoading: boolean
-  onFetchAccount: typeof fetchAccountRequest
+  onFetchNFTs: typeof fetchNFTsRequest
 }
 
 export type MapStateProps = Pick<
@@ -24,5 +24,5 @@ export type MapStateProps = Pick<
   'account' | 'nfts' | 'page' | 'section' | 'sortBy' | 'isLoading'
 >
 export type OwnProps = Pick<Props, 'address'>
-export type MapDispatchProps = Pick<Props, 'onFetchAccount'>
-export type MapDispatch = Dispatch<FetchAccountRequestAction>
+export type MapDispatchProps = Pick<Props, 'onFetchNFTs'>
+export type MapDispatch = Dispatch<FetchNFTsRequestAction>

@@ -39,7 +39,7 @@ const MarketPage = (props: Props) => {
     sortBy,
     nfts,
     orders,
-    onFetchOrders,
+    onFetchNFTs,
     onNavigate,
     isLoading
   } = props
@@ -53,18 +53,19 @@ const MarketPage = (props: Props) => {
 
     const skip = offset * PAGE_SIZE
     const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
-    onFetchOrders({
+    onFetchNFTs({
       variables: {
         first,
         skip,
         orderBy,
         orderDirection,
+        onlyOnSale: true,
         isLand,
         category
       },
       view: skip === 0 ? View.MARKET : View.LOAD_MORE
     })
-  }, [offset, page, section, sortBy, onFetchOrders])
+  }, [offset, page, section, sortBy, onFetchNFTs])
 
   useEffect(() => setOffset(0), [section])
 

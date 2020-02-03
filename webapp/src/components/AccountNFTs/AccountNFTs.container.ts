@@ -9,10 +9,7 @@ import {
 } from './AccountNFTs.types'
 import AccountNFTs from './AccountNFTs'
 import { RootState } from '../../modules/reducer'
-import {
-  fetchAccountRequest,
-  FETCH_ACCOUNT_REQUEST
-} from '../../modules/account/actions'
+import { fetchNFTsRequest, FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import {
   getAccountNFTs,
   getUIPage,
@@ -35,15 +32,12 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     page: getUIPage(state),
     section: getUISection(state),
     sortBy: getUISortBy(state),
-    isLoading: isLoadingType(getLoading(state), FETCH_ACCOUNT_REQUEST)
+    isLoading: isLoadingType(getLoading(state), FETCH_NFTS_REQUEST)
   }
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchAccount: options => dispatch(fetchAccountRequest(options))
+  onFetchNFTs: options => dispatch(fetchNFTsRequest(options))
 })
 
-export default connect(
-  mapState,
-  mapDispatch
-)(AccountNFTs)
+export default connect(mapState, mapDispatch)(AccountNFTs)

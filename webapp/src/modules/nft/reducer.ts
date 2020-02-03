@@ -3,19 +3,13 @@ import {
   loadingReducer
 } from 'decentraland-dapps/dist/modules/loading/reducer'
 
-import {
-  FetchOrdersSuccessAction,
-  FETCH_ORDERS_SUCCESS
-} from '../order/actions'
-import {
-  FetchAccountSuccessAction,
-  FETCH_ACCOUNT_SUCCESS
-} from '../account/actions'
 import { NFT } from './types'
 import {
+  FetchNFTsSuccessAction,
   FetchNFTRequestAction,
   FetchNFTSuccessAction,
   FetchNFTFailureAction,
+  FETCH_NFTS_SUCCESS,
   FETCH_NFT_REQUEST,
   FETCH_NFT_SUCCESS,
   FETCH_NFT_FAILURE
@@ -34,11 +28,10 @@ const INITIAL_STATE = {
 }
 
 type NFTReducerAction =
-  | FetchAccountSuccessAction
+  | FetchNFTsSuccessAction
   | FetchNFTRequestAction
   | FetchNFTSuccessAction
   | FetchNFTFailureAction
-  | FetchOrdersSuccessAction
 
 export function nftReducer(
   state: NFTState = INITIAL_STATE,
@@ -70,8 +63,7 @@ export function nftReducer(
         error: action.payload.error
       }
     }
-    case FETCH_ACCOUNT_SUCCESS:
-    case FETCH_ORDERS_SUCCESS: {
+    case FETCH_NFTS_SUCCESS: {
       return {
         ...state,
         data: {

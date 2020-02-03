@@ -19,9 +19,9 @@ export type FetchNFTsOptions = {
     first: number
     skip: number
     orderBy?: NFTSortBy
-    orderDirection: SortDirection
+    orderDirection?: SortDirection
     address?: string
-    onSale: boolean
+    onlyOnSale: boolean
     isLand?: boolean
     category?: NFTCategory
   }
@@ -35,7 +35,7 @@ export const DEFAULT_FETCH_NFTS_OPTIONS: FetchNFTsOptions = {
     orderBy: NFTSortBy.CREATED_AT,
     orderDirection: SortDirection.DESC,
     address: undefined,
-    onSale: true,
+    onlyOnSale: false,
     isLand: false,
     category: undefined
   },

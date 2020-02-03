@@ -10,10 +10,7 @@ import {
   getUISortBy
 } from '../../modules/ui/selectors'
 import { getData as getNFTsData } from '../../modules/nft/selectors'
-import {
-  fetchOrdersRequest,
-  FETCH_ORDERS_REQUEST
-} from '../../modules/order/actions'
+import { fetchNFTsRequest, FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import { getLoading } from '../../modules/order/selectors'
 import {
   MapStateProps,
@@ -28,15 +25,12 @@ const mapState = (state: RootState): MapStateProps => ({
   page: getUIPage(state),
   section: getUISection(state),
   sortBy: getUISortBy(state),
-  isLoading: isLoadingType(getLoading(state), FETCH_ORDERS_REQUEST)
+  isLoading: isLoadingType(getLoading(state), FETCH_NFTS_REQUEST)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchOrders: options => dispatch(fetchOrdersRequest(options)),
+  onFetchNFTs: options => dispatch(fetchNFTsRequest(options)),
   onNavigate: path => dispatch(push(path))
 })
 
-export default connect(
-  mapState,
-  mapDispatch
-)(MarketPage)
+export default connect(mapState, mapDispatch)(MarketPage)

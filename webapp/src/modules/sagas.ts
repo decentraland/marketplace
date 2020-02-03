@@ -3,7 +3,6 @@ import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sag
 
 import { translationSaga } from './translation/sagas'
 import { orderSaga } from './order/sagas'
-import { accountSaga } from './account/sagas'
 import { authorizationSaga } from './authorization/sagas'
 import { nftSaga } from './nft/sagas'
 import { uiSaga } from './ui/sagas'
@@ -16,7 +15,6 @@ export function* rootSaga() {
     translationSaga(),
     transactionSaga(),
     orderSaga(),
-    accountSaga(),
     authorizationSaga(),
     nftSaga(),
     uiSaga(),

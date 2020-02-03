@@ -31,7 +31,11 @@ export function* nftSaga() {
 function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   const options = {
     ...DEFAULT_FETCH_NFTS_OPTIONS,
-    ...action.payload.options
+    ...action.payload.options,
+    variables: {
+      ...DEFAULT_FETCH_NFTS_OPTIONS.variables,
+      ...action.payload.options.variables
+    }
   }
 
   try {

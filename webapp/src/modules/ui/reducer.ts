@@ -1,11 +1,4 @@
-import {
-  FetchOrdersSuccessAction,
-  FETCH_ORDERS_SUCCESS
-} from '../order/actions'
-import {
-  FetchAccountSuccessAction,
-  FETCH_ACCOUNT_SUCCESS
-} from '../account/actions'
+import { FetchNFTsSuccessAction, FETCH_NFTS_SUCCESS } from '../nft/actions'
 import { View } from './types'
 
 export type UIState = {
@@ -18,35 +11,14 @@ const INITIAL_STATE: UIState = {
   accountNFTIds: []
 }
 
-type UIReducerAction = FetchAccountSuccessAction | FetchOrdersSuccessAction
+type UIReducerAction = FetchNFTsSuccessAction
 
 export function uiReducer(
   state: UIState = INITIAL_STATE,
   action: UIReducerAction
 ) {
   switch (action.type) {
-    case FETCH_ACCOUNT_SUCCESS: {
-      switch (action.payload.options.view) {
-        case View.ACCOUNT: {
-          return {
-            ...state,
-            accountNFTIds: action.payload.nfts.map(nft => nft.id)
-          }
-        }
-        case View.LOAD_MORE: {
-          return {
-            ...state,
-            accountNFTIds: [
-              ...state.accountNFTIds,
-              ...action.payload.nfts.map(nft => nft.id)
-            ]
-          }
-        }
-        default:
-          return state
-      }
-    }
-    case FETCH_ORDERS_SUCCESS: {
+    case FETCH_NFTS_SUCCESS: {
       switch (action.payload.options.view) {
         case View.MARKET: {
           return {
@@ -54,7 +26,24 @@ export function uiReducer(
             marketOrderIds: action.payload.orders.map(order => order.id)
           }
         }
+        case View.ACCOUNT: {
+          return {
+            ...state,
+            accountNFTIds: action.payload.nfts.map(nft => nft.id)
+          }
+        }
         case View.LOAD_MORE: {
+          /*
+            case View.LOAD_MORE: {
+              return {
+                ...state,
+                accountNFTIds: [
+                  ...state.accountNFTIds,
+                  ...action.payload.nfts.map(nft => nft.id)
+                ]
+              }
+            }
+          */
           return {
             ...state,
             marketOrderIds: [

@@ -17,7 +17,7 @@ const AccountNFTs = (props: Props) => {
     sortBy,
     account,
     nfts,
-    onFetchAccount,
+    onFetchNFTs,
     isLoading
   } = props
 
@@ -28,17 +28,18 @@ const AccountNFTs = (props: Props) => {
     const category = getSearchCategory(section)
     const isLand = section === Section.LAND
 
-    onFetchAccount({
+    onFetchNFTs({
       variables: {
         first: MAX_QUERY_SIZE,
         skip: 0,
+        onlyOnSale: false,
         isLand,
         category,
         address
       },
       view: View.ACCOUNT
     })
-  }, [address, offset, page, section, sortBy, onFetchAccount])
+  }, [address, offset, page, section, sortBy, onFetchNFTs])
 
   return (
     <div className="AccountNFTs">

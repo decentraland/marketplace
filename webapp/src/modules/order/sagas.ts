@@ -4,11 +4,6 @@ import { toWei } from 'web3x-es/utils'
 import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 import {
-  FETCH_ORDERS_REQUEST,
-  FetchOrdersRequestAction,
-  DEFAULT_FETCH_ORDER_OPTIONS,
-  fetchOrdersSuccess,
-  fetchOrdersFailure,
   CREATE_ORDER_REQUEST,
   CreateOrderRequestAction,
   createOrderFailure,
@@ -22,31 +17,15 @@ import {
   cancelOrderSuccess,
   cancelOrderFailure
 } from './actions'
-import { marketplaceAPI } from '../../lib/api/marketplace'
 import { Marketplace } from '../../contracts/Marketplace'
 import { contractAddresses } from '../contract/utils'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 
 export function* orderSaga() {
-  yield takeEvery(FETCH_ORDERS_REQUEST, handleFetchOrdersRequest)
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
   yield takeEvery(EXECUTE_ORDER_REQUEST, handleExecuteOrderRequest)
   yield takeEvery(CANCEL_ORDER_REQUEST, handleCancelOrderRequest)
-}
-
-function* handleFetchOrdersRequest(action: FetchOrdersRequestAction) {
-  const options = {
-    ...DEFAULT_FETCH_ORDER_OPTIONS,
-    ...action.payload.options
-  }
-
-  try {
-    const [orders, nfts] = yield call(() => marketplaceAPI.fetch(options))
-    yield put(fetchOrdersSuccess(options, orders, nfts))
-  } catch (error) {
-    yield put(fetchOrdersFailure(options, error.message))
-  }
 }
 
 function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
