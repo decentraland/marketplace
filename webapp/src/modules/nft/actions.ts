@@ -8,7 +8,7 @@ import { View } from '../ui/types'
 import { NFT, NFTCategory, NFTSortBy } from './types'
 import { getNFTName } from './utils'
 
-// Browse NFTs
+// Fetch NFTs
 
 export const FETCH_NFTS_REQUEST = '[Request] Fetch NFTs'
 export const FETCH_NFTS_SUCCESS = '[Success] Fetch NFTs'

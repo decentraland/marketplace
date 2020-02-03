@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Blockie, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
+import { shortenAddress } from '../../../modules/wallet/utils'
 import { Props } from './Owner.types'
 import './Owner.css'
 
@@ -13,7 +14,7 @@ const Owner = (props: Props) => {
       <Link to={locations.account(address)}>
         <label>{t('detail.owner')}</label>
         <Popup
-          content={address.slice(0, 6) + '...' + address.slice(-4)}
+          content={shortenAddress(address)}
           position="top center"
           trigger={
             <div className="blockie-wrapper">
