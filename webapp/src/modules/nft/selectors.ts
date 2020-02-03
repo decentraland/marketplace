@@ -2,10 +2,10 @@ import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
 import { getData as getNFTs } from '../nft/selectors'
 import { locations } from '../routing/locations'
-import { nftContracts } from '../contract/utils'
 import { RootState } from '../reducer'
 import { NFTState } from './reducer'
 import { NFT } from './types'
+import { getNFT } from './utils'
 
 export const getState = (state: RootState) => state.nft
 export const getData = (state: RootState) => getState(state).data
@@ -42,17 +42,5 @@ export const getCurrentNFT = createSelector<
   state => getContractAddress(state),
   state => getTokenId(state),
   state => getNFTs(state),
-  (contractAddress, tokenId, nfts) => {
-    let nft: NFT | null = null
-    if (contractAddress && tokenId && contractAddress in nftContracts) {
-      const contract = nftContracts[contractAddress]
-      if (contract) {
-        const nftId = contract.category + '-' + contractAddress + '-' + tokenId
-        if (nftId in nfts) {
-          nft = nfts[nftId]
-        }
-      }
-    }
-    return nft
-  }
+  (contractAddress, tokenId, nfts) => getNFT(contractAddress, tokenId, nfts)
 )

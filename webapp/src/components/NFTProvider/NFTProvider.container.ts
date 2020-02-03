@@ -5,23 +5,32 @@ import { fetchNFTRequest, FETCH_NFT_REQUEST } from '../../modules/nft/actions'
 import {
   getTokenId,
   getContractAddress,
-  getCurrentNFT,
-  getLoading
+  getLoading,
+  getData as getNFTs
 } from '../../modules/nft/selectors'
-import { getCurrentOrder } from '../../modules/order/selectors'
+import { getData as getOrders } from '../../modules/order/selectors'
+import { getNFT } from '../../modules/nft/utils'
 import {
   MapDispatch,
   MapDispatchProps,
-  MapStateProps
+  MapStateProps,
+  OwnProps
 } from './NFTProvider.types'
 import NFTProvider from './NFTProvider'
+import { getActiveOrder } from '../../modules/order/utils'
 
-const mapState = (state: RootState): MapStateProps => {
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
+  const contractAddress = ownProps.contractAddress || getContractAddress(state)
+  const tokenId = ownProps.tokenId || getTokenId(state)
+  const nfts = getNFTs(state)
+  const orders = getOrders(state)
+  const nft = getNFT(contractAddress, tokenId, nfts)
+  const order = getActiveOrder(nft, orders)
   return {
-    tokenId: getTokenId(state),
-    contractAddress: getContractAddress(state),
-    nft: getCurrentNFT(state),
-    order: getCurrentOrder(state),
+    tokenId,
+    contractAddress,
+    nft,
+    order,
     isLoading: isLoadingType(getLoading(state), FETCH_NFT_REQUEST)
   }
 }
@@ -31,4 +40,14 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
     dispatch(fetchNFTRequest(contractAddress, tokenId))
 })
 
-export default connect(mapState, mapDispatch)(NFTProvider)
+const mergeProps = (
+  stateProps: MapStateProps,
+  dispatchProps: MapDispatchProps,
+  ownProps: OwnProps
+) => ({
+  ...stateProps,
+  ...dispatchProps,
+  ...ownProps
+})
+
+export default connect(mapState, mapDispatch, mergeProps)(NFTProvider)

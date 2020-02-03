@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Page, Grid, Blockie } from 'decentraland-ui'
+import { Page, Grid, Blockie, Popup } from 'decentraland-ui'
 
 import { Navbar } from '../Navbar'
 import { PageHeader } from '../PageHeader'
@@ -29,14 +29,15 @@ const AccountPage = (props: Props) => {
       <PageHeader>
         <div>
           <Blockie seed={address} scale={18} />
-          <div
-            className="blockie-address secondary-text"
-            data-balloon={address}
-            data-balloon-pos="up"
-            data-balloon-length="large"
-          >
-            {shortenAddress(address)}
-          </div>
+          <Popup
+            content={address}
+            position="top center"
+            trigger={
+              <div className="blockie-address secondary-text">
+                {shortenAddress(address)}
+              </div>
+            }
+          />
         </div>
       </PageHeader>
       <Page>

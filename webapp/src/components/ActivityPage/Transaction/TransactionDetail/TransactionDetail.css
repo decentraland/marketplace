@@ -1,0 +1,86 @@
+.TransactionDetail {
+  display: flex;
+  margin-bottom: 24px;
+}
+
+.TransactionDetail .left {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.TransactionDetail .right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: none;
+  margin-left: 16px;
+}
+
+.TransactionDetail .left .image {
+  width: 48px;
+  height: 48px;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-right: 16px;
+  flex: none;
+}
+
+.TransactionDetail .left .image .dcl.mana {
+  font-size: 48px;
+  height: 48px;
+  padding-top: 10px;
+  margin-left: 2px;
+  color: var(--neon-blue);
+  margin-top: -2px;
+  display: flex;
+}
+
+.TransactionDetail .left .text {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.TransactionDetail .left .text .description {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.TransactionDetail .left .text .timestamp {
+  color: var(--secondary-text);
+  margin-left: 8px;
+}
+
+.TransactionDetail .right .status {
+  display: flex;
+  color: var(--secondary-text);
+}
+
+.TransactionDetail .right .status .description {
+  text-transform: capitalize;
+}
+
+.TransactionDetail .right .status .description + * {
+  margin-left: 8px;
+}
+
+.TransactionDetail .right .status.confirmed,
+.TransactionDetail .right .status.replaced {
+  color: var(--neon-blue);
+}
+
+.TransactionDetail .right .status.reverted {
+  color: var(--danger);
+}
+
+.TransactionDetail .right .status .spinner {
+  position: relative;
+  width: 20px;
+  height: 16px;
+  margin-top: 3px;
+}

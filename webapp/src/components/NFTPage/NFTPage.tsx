@@ -4,7 +4,7 @@ import { Page } from 'decentraland-ui'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
-import { NFTProvider } from '../NFTProvider'
+import { NFTProviderPage } from '../NFTProviderPage'
 import { ParcelDetail } from './ParcelDetail'
 import { EstateDetail } from './EstateDetail'
 import { WearableDetail } from './WearableDetail'
@@ -16,7 +16,7 @@ const NFTPage = () => {
       <Navbar isFullscreen />
       <Navigation isFullscreen />
       <Page className="NFTPage" isFullscreen>
-        <NFTProvider>
+        <NFTProviderPage>
           {nft => (
             <>
               {nft.parcel ? <ParcelDetail nft={nft} /> : null}
@@ -24,7 +24,7 @@ const NFTPage = () => {
               {nft.wearable ? <WearableDetail nft={nft} /> : null}
             </>
           )}
-        </NFTProvider>
+        </NFTProviderPage>
       </Page>
       <Footer />
     </>

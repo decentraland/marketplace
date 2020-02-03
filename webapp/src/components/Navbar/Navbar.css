@@ -1,0 +1,18 @@
+.dcl.navbar .ui.menu .item .bell {
+  color: var(--text);
+}
+
+.dcl.navbar .ui.menu .item.active .bell {
+  color: var(--primary);
+}
+
+.dcl.navbar .ui.menu .item .bell.pending:after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background-color: var(--primary);
+  position: absolute;
+  border-radius: 100%;
+  top: -5px;
+  right: -5px;
+}

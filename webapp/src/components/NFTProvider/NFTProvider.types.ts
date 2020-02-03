@@ -14,7 +14,11 @@ export type Props = {
   order: Order | null
   isLoading: boolean
   onFetchNFT: typeof fetchNFTRequest
-  children: (nft: NFT, order: Order | null) => React.ReactNode | null
+  children: (
+    nft: NFT | null,
+    order: Order | null,
+    isLoading: boolean
+  ) => React.ReactNode | null
 }
 
 export type MapStateProps = Pick<
@@ -23,3 +27,4 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<Props, 'onFetchNFT'>
 export type MapDispatch = Dispatch<FetchNFTRequestAction>
+export type OwnProps = Partial<Pick<Props, 'contractAddress' | 'tokenId'>>

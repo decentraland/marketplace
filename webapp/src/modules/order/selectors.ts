@@ -5,6 +5,7 @@ import { getData as getOrders } from '../order/selectors'
 import { NFT } from '../nft/types'
 import { Order } from './types'
 import { OrderState } from './reducer'
+import { getActiveOrder } from './utils'
 
 export const getState = (state: RootState) => state.order
 export const getData = (state: RootState) => getState(state).data
@@ -18,11 +19,5 @@ export const getCurrentOrder = createSelector<
 >(
   state => getCurrentNFT(state),
   state => getOrders(state),
-  (nft, orders) => {
-    let order: Order | null = null
-    if (nft && nft.activeOrderId && nft.activeOrderId in orders) {
-      order = orders[nft.activeOrderId]
-    }
-    return order
-  }
+  (nft, orders) => getActiveOrder(nft, orders)
 )

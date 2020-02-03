@@ -10,7 +10,8 @@
     "wearable": "Wearable",
     "cancel": "Cancel",
     "proceed": "Proceed",
-    "nft": "NFT"
+    "nft": "NFT",
+    "loading": "Loading"
   },
   "navigation": {
     "atlas": "Atlas",
@@ -22,7 +23,7 @@
   },
   "categories_menu": {
     "all_assets": "All Assets",
-    "land": "LAND",
+    "land": "Land",
     "estates": "Estates",
     "wearables": "Wearables"
   },
@@ -133,7 +134,7 @@
     "authorization_Marketplace_Halloween2019Collection": "{token}",
     "authorization_Marketplace_Xmas2019Collection": "{token}",
     "for_selling": "For selling",
-    "pending_tx": "Transaction pending, click the loading to go to your activity for a detailed status"
+    "pending_tx": "Transaction pending, click the spinner to go to your activity for a detailed status"
   },
   "authorization": {
     "authorize": "Authorize the {contract_link} to operate {symbol} on your behalf",
@@ -151,6 +152,26 @@
     "recipient": "Recepient address",
     "warning": "Remember that transferring is an irreversible operation.{br}Please check the address carefully.",
     "submit": "Transfer"
+  },
+  "activity_page": {
+    "empty": "You have no activity yet.",
+    "clear_history_modal": {
+      "title": "Are you sure?",
+      "text": "You are about to clear your transaction history. Do you want to proceed?"
+    }
+  },
+  "transaction": {
+    "action": {
+      "approved": "approved",
+      "not_approved": "unapproved"
+    },
+    "detail": {
+      "approve_token": "You {action} the {contract} contract to operate {token} on your behalf.",
+      "create_order": "You listed {name} on sale for {price}.",
+      "cancel_order": "You removed the listing of {name} for {price}.",
+      "execute_order": "You bought {name} for {price}.",
+      "transfer": "You transferred {name} to {address}."
+    }
   },
   "wallet": {
     "sign_in_required": "You need to {sign_in} to access this page.",

@@ -1,13 +1,13 @@
 import React from 'react'
+import { fromWei } from 'web3x-es/utils'
 import { Page } from 'decentraland-ui'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
-import { NFTProvider } from '../NFTProvider'
+import { NFTProviderPage } from '../NFTProviderPage'
 import { BuyModal } from './BuyModal'
 import { Props } from './BuyPage.types'
 import './BuyPage.css'
-import { fromWei } from 'web3x-es/utils'
 
 const BuyPage = (props: Props) => {
   const { onNavigate, onExecuteOrder } = props
@@ -18,7 +18,7 @@ const BuyPage = (props: Props) => {
       <Page className="BuyPage">
         <Wallet>
           {wallet => (
-            <NFTProvider>
+            <NFTProviderPage>
               {(nft, order) => (
                 <BuyModal
                   nft={nft}
@@ -31,7 +31,7 @@ const BuyPage = (props: Props) => {
                   }
                 />
               )}
-            </NFTProvider>
+            </NFTProviderPage>
           )}
         </Wallet>
       </Page>

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { EtherscanLink } from 'decentraland-dapps/dist/containers'
-import { Form, CheckboxProps, Radio, Loader } from 'decentraland-ui'
+import { Form, CheckboxProps, Radio, Loader, Popup } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 
 import {
@@ -42,15 +42,15 @@ const Authorizations = (props: Props) => {
               : ''
           }
         >
-          <Link
-            to={locations.activity()}
-            className="loader-tooltip"
-            data-balloon={t('settings_page.pending_tx')}
-            data-balloon-pos="up"
-            data-balloon-length="large"
-          >
-            <Loader active size="mini" />
-          </Link>
+          <Popup
+            content={t('settings_page.pending_tx')}
+            position="top left"
+            trigger={
+              <Link to={locations.activity()} className="loader-tooltip">
+                <Loader active size="mini" />
+              </Link>
+            }
+          />
           <Radio
             checked={privilege[tokenContractAddress]}
             label={t(
