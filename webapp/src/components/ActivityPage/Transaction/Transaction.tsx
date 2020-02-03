@@ -159,36 +159,34 @@ const Transaction = (props: Props) => {
       )
     }
     case TRANSFER_NFT_SUCCESS: {
-      {
-        const { tokenId, contractAddress, name, address } = tx.payload
-        return (
-          <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
-            {nft => (
-              <TransactionDetail
-                nft={nft}
-                text={
-                  <T
-                    id="transaction.detail.transfer"
-                    values={{
-                      name: (
-                        <Link to={locations.ntf(contractAddress, tokenId)}>
-                          {name}
-                        </Link>
-                      ),
-                      address: (
-                        <EtherscanLink address={address} txHash="">
-                          {shortenAddress(address)}
-                        </EtherscanLink>
-                      )
-                    }}
-                  />
-                }
-                tx={tx}
-              />
-            )}
-          </NFTProvider>
-        )
-      }
+      const { tokenId, contractAddress, name, address } = tx.payload
+      return (
+        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+          {nft => (
+            <TransactionDetail
+              nft={nft}
+              text={
+                <T
+                  id="transaction.detail.transfer"
+                  values={{
+                    name: (
+                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                        {name}
+                      </Link>
+                    ),
+                    address: (
+                      <EtherscanLink address={address} txHash="">
+                        {shortenAddress(address)}
+                      </EtherscanLink>
+                    )
+                  }}
+                />
+              }
+              tx={tx}
+            />
+          )}
+        </NFTProvider>
+      )
     }
     default:
       return null
