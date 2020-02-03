@@ -154,7 +154,11 @@
     "submit": "Transfer"
   },
   "activity_page": {
-    "empty": "You have no activity yet."
+    "empty": "You have no activity yet.",
+    "clear_history_modal": {
+      "title": "Are you sure?",
+      "text": "You are about to clear your transaction history. Do you want to proceed?"
+    }
   },
   "transaction": {
     "action": {

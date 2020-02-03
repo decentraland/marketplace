@@ -82,16 +82,17 @@ const ActivityPage = (props: Props) => {
       <Navigation />
       <Page className="ActivityPage">{content}</Page>
       <Modal size="tiny" open={showConfirmation}>
-        <Modal.Header>Are you sure?</Modal.Header>
+        <Modal.Header>
+          {t('activity_page.clear_history_modal.title')}
+        </Modal.Header>
         <Modal.Content>
-          You are about to clear your transaction history. Do you want to
-          proceed?
+          {t('activity_page.clear_history_modal.text')}
         </Modal.Content>
         <Modal.Actions>
+          <Button onClick={handleCancel}>{t('global.cancel')}</Button>
           <Button primary onClick={handleClear}>
-            Proceed
+            {t('global.proceed')}
           </Button>
-          <Button onClick={handleCancel}>Cancel</Button>
         </Modal.Actions>
       </Modal>
       <Footer />

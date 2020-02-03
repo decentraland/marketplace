@@ -169,6 +169,14 @@ const SellPage = (props: Props) => {
                       </Modal.Content>
                       <Modal.Actions>
                         <Button
+                          onClick={() => {
+                            setConfirmPrice('')
+                            setShowConfirm(false)
+                          }}
+                        >
+                          {t('global.cancel')}
+                        </Button>
+                        <Button
                           primary
                           disabled={fromMANA(price) !== fromMANA(confirmPrice)}
                           onClick={() =>
@@ -180,14 +188,6 @@ const SellPage = (props: Props) => {
                           }
                         >
                           {t('global.proceed')}
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setConfirmPrice('')
-                            setShowConfirm(false)
-                          }}
-                        >
-                          {t('global.cancel')}
                         </Button>
                       </Modal.Actions>
                     </Modal>
