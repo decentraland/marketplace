@@ -52,3 +52,16 @@ export function getSortOrder(sortBy: SortBy) {
 
   return [orderBy, orderDirection] as const
 }
+
+export function getNFT(
+  contractAddress: string | null,
+  tokenId: string | null,
+  nfts: Record<string, NFT>
+) {
+  let nft = null
+  const nftId = getNFTId(contractAddress, tokenId)
+  if (nftId && nftId in nfts) {
+    nft = nfts[nftId]
+  }
+  return nft
+}

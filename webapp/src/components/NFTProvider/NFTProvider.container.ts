@@ -9,7 +9,7 @@ import {
   getData as getNFTs
 } from '../../modules/nft/selectors'
 import { getData as getOrders } from '../../modules/order/selectors'
-import { getNFTId } from '../../modules/nft/utils'
+import { getNFT } from '../../modules/nft/utils'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -17,23 +17,15 @@ import {
   OwnProps
 } from './NFTProvider.types'
 import NFTProvider from './NFTProvider'
+import { getActiveOrder } from '../../modules/order/utils'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const contractAddress = ownProps.contractAddress || getContractAddress(state)
   const tokenId = ownProps.tokenId || getTokenId(state)
   const nfts = getNFTs(state)
   const orders = getOrders(state)
-  let nft = null
-  let order = null
-  const nftId = getNFTId(contractAddress, tokenId)
-  if (nftId && nftId in nfts) {
-    nft = nfts[nftId]
-  }
-
-  if (nft && nft.activeOrderId && nft.activeOrderId in orders) {
-    order = orders[nft.activeOrderId]
-  }
-
+  const nft = getNFT(contractAddress, tokenId, nfts)
+  const order = getActiveOrder(nft, orders)
   return {
     tokenId,
     contractAddress,
@@ -52,13 +44,10 @@ const mergeProps = (
   stateProps: MapStateProps,
   dispatchProps: MapDispatchProps,
   ownProps: OwnProps
-) => {
-  console.log(stateProps, dispatchProps, ownProps)
-  return {
-    ...stateProps,
-    ...dispatchProps,
-    ...ownProps
-  }
-}
+) => ({
+  ...stateProps,
+  ...dispatchProps,
+  ...ownProps
+})
 
 export default connect(mapState, mapDispatch, mergeProps)(NFTProvider)
