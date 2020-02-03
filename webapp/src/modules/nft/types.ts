@@ -18,13 +18,13 @@ export type NFT = {
   contractAddress: string
   tokenId: string
   activeOrderId: string | null
+  owner: {
+    address: string
+  }
   name: string
   category: NFTCategory
   image: string
   parcel: Parcel | null
   estate: Estate | null
   wearable: Wearable | null
-  owner: {
-    id: string
-  }
 }

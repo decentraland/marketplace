@@ -9,7 +9,7 @@ import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
 import { NFTProviderPage } from '../NFTProviderPage'
 import { NFTAction } from '../NFTAction'
-import { getNFTName } from '../../modules/nft/utils'
+import { getNFTName, isOwnedBy } from '../../modules/nft/utils'
 import { locations } from '../../modules/routing/locations'
 import { MANA_SYMBOL } from '../../lib/api/mana'
 import { Props } from './SellPage.types'
@@ -24,6 +24,7 @@ const DEFAULT_EXPIRATION_DATE = dateFnsFormat(
 
 const toMANA = (num: number) =>
   num > 0 ? MANA_SYMBOL + ' ' + num.toLocaleString() : ''
+
 const fromMANA = (mana: string) => {
   const num = mana
     .split(MANA_SYMBOL + ' ')
@@ -120,7 +121,7 @@ const SellPage = (props: Props) => {
                       <Button
                         primary
                         disabled={
-                          wallet.address !== nft.owner.id ||
+                          !isOwnedBy(nft, wallet) ||
                           fromMANA(price) <= 0 ||
                           isInvalidDate
                         }

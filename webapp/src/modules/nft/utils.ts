@@ -1,6 +1,8 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { SortDirection, SortBy } from '../routing/search'
 import { nftContracts } from '../contract/utils'
+import { addressEquals } from '../wallet/utils'
 import { NFT, NFTCategory, NFTSortBy } from './types'
 
 export function getNFTId(
@@ -64,4 +66,8 @@ export function getNFT(
     nft = nfts[nftId]
   }
   return nft
+}
+
+export function isOwnedBy(nft: NFT, wallet: Wallet | null) {
+  return addressEquals(wallet?.address, nft.owner.address)
 }

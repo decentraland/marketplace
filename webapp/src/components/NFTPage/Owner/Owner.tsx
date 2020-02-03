@@ -7,7 +7,7 @@ import { Props } from './Owner.types'
 import './Owner.css'
 
 const Owner = (props: Props) => {
-  const address = props.nft.owner.id
+  const address = props.nft.owner.address
   return (
     <div className="Owner">
       <Link to={locations.account(address)}>

@@ -5,6 +5,7 @@ import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
 import { NFTProviderPage } from '../NFTProviderPage'
+import { isOwnedBy } from '../../modules/nft/utils'
 import { BuyModal } from './BuyModal'
 import { Props } from './BuyPage.types'
 import './BuyPage.css'
@@ -25,7 +26,7 @@ const BuyPage = (props: Props) => {
                   order={order}
                   onNavigate={onNavigate}
                   onExecuteOrder={onExecuteOrder}
-                  isOwner={wallet.address === nft.owner.id}
+                  isOwner={isOwnedBy(nft, wallet)}
                   notEnoughMana={
                     !!order && wallet.mana < +fromWei(order.price, 'ether')
                   }
