@@ -23,7 +23,7 @@
   },
   "categories_menu": {
     "all_assets": "All Assets",
-    "land": "LAND",
+    "land": "Land",
     "estates": "Estates",
     "wearables": "Wearables"
   },
@@ -134,7 +134,7 @@
     "authorization_Marketplace_Halloween2019Collection": "{token}",
     "authorization_Marketplace_Xmas2019Collection": "{token}",
     "for_selling": "For selling",
-    "pending_tx": "Transaction pending, click the loading to go to your activity for a detailed status"
+    "pending_tx": "Transaction pending, click the spinner to go to your activity for a detailed status"
   },
   "authorization": {
     "authorize": "Authorize the {contract_link} to operate {symbol} on your behalf",

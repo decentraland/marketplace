@@ -15,7 +15,7 @@ import {
   EXECUTE_ORDER_SUCCESS
 } from '../../../modules/order/actions'
 import { NFTProvider } from '../../NFTProvider'
-import { Mana } from 'decentraland-ui'
+import { Mana, Popup } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
 import { Link } from 'react-router-dom'
 import { TRANSFER_NFT_SUCCESS } from '../../../modules/nft/actions'
@@ -175,9 +175,16 @@ const Transaction = (props: Props) => {
                       </Link>
                     ),
                     address: (
-                      <EtherscanLink address={address} txHash="">
-                        {shortenAddress(address)}
-                      </EtherscanLink>
+                      <Popup
+                        content={address}
+                        position="top center"
+                        on="hover"
+                        trigger={
+                          <Link to={locations.account(address.toLowerCase())}>
+                            {shortenAddress(address)}
+                          </Link>
+                        }
+                      />
                     )
                   }}
                 />

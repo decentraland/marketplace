@@ -15,3 +15,8 @@ code {
 .danger-text {
   color: var(--danger);
 }
+
+.ui.popup,
+.ui.inverted.popup {
+  height: auto;
+}

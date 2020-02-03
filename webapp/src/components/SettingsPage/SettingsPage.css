@@ -75,6 +75,7 @@
 
 .SettingsPage .authorization-checks .is-pending .loader-tooltip {
   display: inline;
+  position: relative;
 }
 
 .SettingsPage .authorization-checks .loader-tooltip {
