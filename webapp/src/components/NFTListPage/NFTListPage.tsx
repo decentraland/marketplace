@@ -73,18 +73,23 @@ const NFTListPage = (props: Props) => {
 
   // Handlers
   const handleOnNavigate = useCallback(
-    (options?: SearchOptions) => onNavigate(options),
+    (options?: SearchOptions) => {
+      setOffset(0)
+      onNavigate(options)
+    },
     [onNavigate]
   )
 
   const handleOnlyOnSaleChange = useCallback(
-    (_: React.SyntheticEvent, props: CheckboxProps) =>
+    (_: React.SyntheticEvent, props: CheckboxProps) => {
+      setOffset(0)
       onNavigate({
         page: 1,
         section,
         sortBy,
         onlyOnSale: !!props.checked
-      }),
+      })
+    },
     [section, sortBy, onNavigate]
   )
 
@@ -185,7 +190,7 @@ const NFTListPage = (props: Props) => {
           <div className="empty">{t('nft_list_page.empty')}</div>
         ) : null}
 
-        {nfts.length <= PAGE_SIZE ? null : (
+        {nfts.length < PAGE_SIZE ? null : (
           <div className="load-more">
             <Button
               loading={isLoading}
