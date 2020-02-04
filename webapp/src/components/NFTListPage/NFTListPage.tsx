@@ -1,20 +1,35 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Page, Grid, Card, Loader } from 'decentraland-ui'
+import {
+  Page,
+  Grid,
+  Card,
+  Button,
+  Loader,
+  HeaderMenu,
+  Header,
+  Dropdown,
+  DropdownProps
+} from 'decentraland-ui'
 
+import {
+  getSearchCategory,
+  SortBy,
+  SearchOptions,
+  Section
+} from '../../modules/routing/search'
+import { View } from '../../modules/ui/types'
+import { getSortOrder } from '../../modules/nft/utils'
+import { MAX_QUERY_SIZE, PAGE_SIZE } from '../../lib/api/client'
 import { NFTCard } from '../NFTCard'
 import { CategoriesMenu } from '../CategoriesMenu'
-import { getSearchCategory, Section } from '../../modules/routing/search'
-import { SearchOptions } from '../../modules/routing/search'
-import { MAX_QUERY_SIZE } from '../../lib/api/client'
 import { Props } from './NFTListPage.types'
 import './NFTListPage.css'
 
 const NFTListPage = (props: Props) => {
   const {
     address,
-    account,
-    onlyOnSale,
+    defaultOnlyOnSale,
     page,
     section,
     sortBy,
@@ -30,25 +45,51 @@ const NFTListPage = (props: Props) => {
     [onNavigate]
   )
 
-  const [offset] = useState(0)
+  const [onlyOnSale] = useState(defaultOnlyOnSale)
+  const [offset, setOffset] = useState(0)
 
-  // @nico TODO: Support LoadMore. Maybe extract it from MarketPage first to avoid repetition
+  const handleDropdownChange = useCallback(
+    (_: React.SyntheticEvent, props: DropdownProps) => {
+      setOffset(0)
+      onNavigate({
+        page: 1,
+        section,
+        sortBy: props.value as SortBy
+      })
+    },
+    [section, onNavigate]
+  )
+
   useEffect(() => {
     const category = getSearchCategory(section)
+    const [orderBy, orderDirection] = getSortOrder(sortBy)
     const isLand = section === Section.LAND
 
+    const skip = offset * PAGE_SIZE
+    const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
     onFetchNFTs({
       variables: {
-        first: MAX_QUERY_SIZE,
-        skip: 0,
+        first,
+        skip,
+        orderBy,
+        orderDirection,
         onlyOnSale,
+        address,
         isLand,
-        category,
-        address
+        category
       },
-      view
+      view: skip === 0 ? view : View.LOAD_MORE
     })
-  }, [address, onlyOnSale, view, offset, page, section, sortBy, onFetchNFTs])
+  }, [address, view, offset, page, section, sortBy, onFetchNFTs])
+
+  const handleLoadMore = useCallback(() => {
+    setOffset(page)
+    onNavigate({
+      page: page + 1,
+      section,
+      sortBy
+    })
+  }, [page, sortBy, section, onNavigate, setOffset])
 
   return (
     <Page className="NFTListPage">
@@ -56,21 +97,54 @@ const NFTListPage = (props: Props) => {
         <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
       </Grid.Column>
       <Grid.Column className="right-column">
-        <div>
-          {isLoading ? (
+        <HeaderMenu>
+          <HeaderMenu.Left>
+            <Header sub>{t('global.assets')}</Header>
+          </HeaderMenu.Left>
+          <HeaderMenu.Right>
+            <Dropdown
+              direction="left"
+              value={sortBy}
+              options={[
+                { value: SortBy.NEWEST, text: t('filters.newest') },
+                { value: SortBy.CHEAPEST, text: t('filters.cheapest') }
+              ]}
+              onChange={handleDropdownChange}
+            />
+          </HeaderMenu.Right>
+        </HeaderMenu>
+
+        {nfts.length > 0 ? (
+          <Card.Group>
+            {nfts.map(nft => (
+              <NFTCard key={nft.id} nft={nft} />
+            ))}
+          </Card.Group>
+        ) : null}
+
+        {nfts.length === 0 && !isLoading ? (
+          <div>{t('nft_list_page.empty')}</div>
+        ) : null}
+
+        {isLoading ? (
+          <>
+            <div className="overlay" />
             <Loader size="massive" active />
-          ) : address && !account ? (
-            <div className="empty">
-              {t('nft_list_page.empty_account', { address })}
-            </div>
-          ) : (
-            <Card.Group>
-              {nfts.map(nft => (
-                <NFTCard key={nft.id} nft={nft} />
-              ))}
-            </Card.Group>
-          )}
-        </div>
+          </>
+        ) : null}
+
+        {nfts.length <= PAGE_SIZE ? null : (
+          <div className="load-more">
+            <Button
+              loading={isLoading}
+              inverted
+              primary
+              onClick={handleLoadMore}
+            >
+              {t('global.load_more')}
+            </Button>
+          </div>
+        )}
       </Grid.Column>
     </Page>
   )

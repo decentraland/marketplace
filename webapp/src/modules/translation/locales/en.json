@@ -18,9 +18,6 @@
     "market": "Market",
     "my_account": "My account"
   },
-  "market_page": {
-    "empty_orders": "There are no orders to show"
-  },
   "categories_menu": {
     "categories": "Categories",
     "menu_item": {
@@ -40,7 +37,7 @@
     "cheapest": "Cheapest"
   },
   "nft_list_page": {
-    "empty_account": "Address {address} doesn't have any assets"
+    "empty": "Could not find any assets"
   },
   "nft_card": {
     "expires_at": "Expires {date}"

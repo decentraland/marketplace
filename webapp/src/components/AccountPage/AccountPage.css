@@ -1,12 +1,3 @@
-.AccountPage .ui.container {
-  display: flex;
-}
-
-.AccountPage .right-column {
-  width: 100%;
-  margin-top: 10px;
-}
-
 .AccountPage .PageHeader {
   display: flex;
   align-items: center;

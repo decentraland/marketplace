@@ -4,15 +4,13 @@ import {
   fetchNFTsRequest,
   FetchNFTsRequestAction
 } from '../../modules/nft/actions'
-import { Account } from '../../modules/account/types'
 import { NFT } from '../../modules/nft/types'
 import { View } from '../../modules/ui/types'
 import { Section, SortBy, SearchOptions } from '../../modules/routing/search'
 
 export type Props = {
-  onlyOnSale: boolean
+  defaultOnlyOnSale: boolean
   address?: string
-  account?: Account
   nfts: NFT[]
   page: number
   section: Section
@@ -25,11 +23,11 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'account' | 'nfts' | 'page' | 'section' | 'sortBy' | 'isLoading'
+  'nfts' | 'page' | 'section' | 'sortBy' | 'isLoading'
 >
 export type OwnProps = Pick<
   Props,
-  'address' | 'onlyOnSale' | 'view' | 'onNavigate'
+  'address' | 'defaultOnlyOnSale' | 'view' | 'onNavigate'
 >
 export type MapDispatchProps = Pick<Props, 'onFetchNFTs'>
 export type MapDispatch = Dispatch<FetchNFTsRequestAction>

@@ -2,13 +2,11 @@ import { FetchNFTsSuccessAction, FETCH_NFTS_SUCCESS } from '../nft/actions'
 import { View } from './types'
 
 export type UIState = {
-  marketOrderIds: string[]
-  accountNFTIds: string[]
+  nftIds: string[]
 }
 
 const INITIAL_STATE: UIState = {
-  marketOrderIds: [],
-  accountNFTIds: []
+  nftIds: []
 }
 
 type UIReducerAction = FetchNFTsSuccessAction
@@ -20,36 +18,17 @@ export function uiReducer(
   switch (action.type) {
     case FETCH_NFTS_SUCCESS: {
       switch (action.payload.options.view) {
-        case View.MARKET: {
-          return {
-            ...state,
-            marketOrderIds: action.payload.orders.map(order => order.id)
-          }
-        }
+        case View.MARKET:
         case View.ACCOUNT: {
           return {
             ...state,
-            accountNFTIds: action.payload.nfts.map(nft => nft.id)
+            nftIds: action.payload.nfts.map(nft => nft.id)
           }
         }
         case View.LOAD_MORE: {
-          /*
-            case View.LOAD_MORE: {
-              return {
-                ...state,
-                accountNFTIds: [
-                  ...state.accountNFTIds,
-                  ...action.payload.nfts.map(nft => nft.id)
-                ]
-              }
-            }
-          */
           return {
             ...state,
-            marketOrderIds: [
-              ...state.marketOrderIds,
-              ...action.payload.orders.map(order => order.id)
-            ]
+            nftIds: [...state.nftIds, ...action.payload.nfts.map(nft => nft.id)]
           }
         }
         default:

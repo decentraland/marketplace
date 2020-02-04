@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Page, Loader, Blockie, Popup } from 'decentraland-ui'
 
 import { Navbar } from '../Navbar'
@@ -18,7 +18,6 @@ const AccountPage = (props: Props) => {
 
   const isCurrentAccount = address === undefined
 
-  const [onlyOnSale] = useState(false)
   const handleOnNavigate = useCallback(
     (options?: SearchOptions) =>
       onNavigate(
@@ -32,7 +31,7 @@ const AccountPage = (props: Props) => {
   const renderNFTListPage = (address: string) => (
     <NFTListPage
       address={address}
-      onlyOnSale={onlyOnSale}
+      defaultOnlyOnSale={false}
       view={View.ACCOUNT}
       onNavigate={handleOnNavigate}
     />
@@ -49,7 +48,7 @@ const AccountPage = (props: Props) => {
     <div className="AccountPage">
       <Navbar isFullscreen />
       <Navigation
-        isFullscreen
+        isFullscreen={!isCurrentAccount}
         activeTab={isCurrentAccount ? 'account' : undefined}
       />
       {!isCurrentAccount ? (

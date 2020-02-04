@@ -126,6 +126,8 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
     extraWhere.push('wearableCategory: $wearableCategory')
   }
 
+  console.log(extraWhere)
+
   return gql`
     query NFTs(
       ${NFTS_FILTERS}

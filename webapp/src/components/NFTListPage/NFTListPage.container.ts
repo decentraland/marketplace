@@ -2,37 +2,24 @@ import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 
 import {
-  OwnProps,
-  MapStateProps,
   MapDispatch,
-  MapDispatchProps
+  MapDispatchProps,
+  MapStateProps
 } from './NFTListPage.types'
 import { RootState } from '../../modules/reducer'
 import { fetchNFTsRequest, FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import {
-  getAccountNFTs,
+  getNFTs,
   getUIPage,
   getUISection,
   getUISortBy
 } from '../../modules/ui/selectors'
-import {
-  getData as getAccountData,
-  getLoading
-} from '../../modules/account/selectors'
+import { getLoading } from '../../modules/nft/selectors'
 import NFTListPage from './NFTListPage'
 
-const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const { address } = ownProps
-
-  let account
-  if (address) {
-    const accounts = getAccountData(state)
-    account = accounts[address]
-  }
-
+const mapState = (state: RootState): MapStateProps => {
   return {
-    account,
-    nfts: getAccountNFTs(state),
+    nfts: getNFTs(state),
     page: getUIPage(state),
     section: getUISection(state),
     sortBy: getUISortBy(state),
