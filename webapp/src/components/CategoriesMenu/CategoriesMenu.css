@@ -35,3 +35,7 @@
 .CategoriesMenu ul.submenu {
   padding-left: 16px;
 }
+
+.CategoriesMenu ul.submenu li.sub {
+  width: 216px;
+}
