@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import { AtlasPage } from '../AtlasPage'
 import { locations } from '../../modules/routing/locations'
 import { MarketPage } from '../MarketPage'
-import { CurrentAccountPage } from '../CurrentAccountPage'
 import { AccountPage } from '../AccountPage'
 import { SignInPage } from '../SignInPage'
 import { SettingsPage } from '../SettingsPage'
@@ -19,11 +18,7 @@ const Routes = () => {
     <Switch>
       <Route exact path={locations.atlas()} component={AtlasPage} />
       <Route exact path={locations.market()} component={MarketPage} />
-      <Route
-        exact
-        path={locations.currentAccount()}
-        component={CurrentAccountPage}
-      />
+      <Route exact path={locations.currentAccount()} component={AccountPage} />
       <Route exact path={locations.account()} component={AccountPage} />
       <Route exact path={locations.signIn()} component={SignInPage} />
       <Route exact path={locations.sell()} component={SellPage} />

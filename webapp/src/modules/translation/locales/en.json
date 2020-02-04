@@ -39,7 +39,7 @@
     "newest": "Newest",
     "cheapest": "Cheapest"
   },
-  "account_nfts": {
+  "nft_list_page": {
     "empty_account": "Address {address} doesn't have any assets"
   },
   "nft_card": {

@@ -5,6 +5,7 @@ import { SortDirection } from '../routing/search'
 import { Order } from '../order/types'
 import { Account } from '../account/types'
 import { View } from '../ui/types'
+import { WearableCategory } from './wearable/types'
 import { NFT, NFTCategory, NFTSortBy } from './types'
 import { getNFTName } from './utils'
 
@@ -24,6 +25,7 @@ export type FetchNFTsOptions = {
     onlyOnSale: boolean
     isLand?: boolean
     category?: NFTCategory
+    wearableCategory?: WearableCategory
   }
   view?: View
 }
@@ -34,10 +36,7 @@ export const DEFAULT_FETCH_NFTS_OPTIONS: FetchNFTsOptions = {
     skip: 0,
     orderBy: NFTSortBy.CREATED_AT,
     orderDirection: SortDirection.DESC,
-    address: undefined,
-    onlyOnSale: false,
-    isLand: false,
-    category: undefined
+    onlyOnSale: false
   },
   view: undefined
 }

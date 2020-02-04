@@ -2,6 +2,8 @@ import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RouteComponentProps } from 'react-router'
 
+import { RootState } from '../../modules/reducer'
+import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import {
   Params,
   MapStateProps,
@@ -9,15 +11,18 @@ import {
   MapDispatchProps
 } from './AccountPage.types'
 import AccountPage from './AccountPage'
-import { getUISection } from '../../modules/ui/selectors'
-import { RootState } from '../../modules/reducer'
 
 const mapState = (
   state: RootState,
   ownProps: RouteComponentProps<Params>
 ): MapStateProps => {
   const { address } = ownProps.match.params
-  return { address: address.toLowerCase(), section: getUISection(state) }
+
+  return {
+    address: address?.toLowerCase(),
+    wallet: getWallet(state),
+    isConnecting: isConnecting(state)
+  }
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

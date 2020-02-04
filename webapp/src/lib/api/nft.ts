@@ -13,10 +13,6 @@ class NFTAPI {
     const { variables } = options
     const query = getNFTsQuery(variables)
 
-    console.log('*********************************************')
-    console.log(query.loc.source.body)
-    console.log('*********************************************')
-
     const { data } = await client.query({
       query,
       variables: {
@@ -95,6 +91,7 @@ const NFTS_FILTERS = `
   $expiresAt: String
   $address: String
   $category: Category
+  $wearableCategory: WearableCategory
   $isLand: Boolean
 `
 
@@ -123,6 +120,10 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
   if (variables.onlyOnSale) {
     extraWhere.push('searchOrderStatus: open')
     extraWhere.push('searchOrderExpiresAt_gt: $expiresAt')
+  }
+
+  if (variables.wearableCategory) {
+    extraWhere.push('wearableCategory: $wearableCategory')
   }
 
   return gql`
