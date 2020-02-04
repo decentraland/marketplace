@@ -93,6 +93,7 @@ const NFTS_FILTERS = `
   $category: Category
   $wearableCategory: WearableCategory
   $isLand: Boolean
+  $isWearableAccessory: Boolean
 `
 
 const NFTS_ARGUMENTS = `
@@ -113,17 +114,21 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
     extraWhere.push('category: $category')
   }
 
+  if (variables.wearableCategory) {
+    extraWhere.push('searchWearableCategory: $wearableCategory')
+  }
+
   if (variables.isLand) {
     extraWhere.push('searchIsLand: $isLand')
+  }
+
+  if (variables.isWearableAccessory) {
+    extraWhere.push('searchIsWearableAccessory: $isWearableAccessory')
   }
 
   if (variables.onlyOnSale) {
     extraWhere.push('searchOrderStatus: open')
     extraWhere.push('searchOrderExpiresAt_gt: $expiresAt')
-  }
-
-  if (variables.wearableCategory) {
-    extraWhere.push('wearableCategory: $wearableCategory')
   }
 
   return gql`
@@ -132,7 +137,7 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
     ) {
       nfts(
         where: {
-          searchEstateSize_gt: 0,
+          searchEstateSize_gt: 0
           ${extraWhere.join('\n')}
         }
         ${NFTS_ARGUMENTS}

@@ -29,11 +29,17 @@
       "wearables_top": "Top",
       "wearables_bottom": "Bottom",
       "wearables_shoes": "Shoes",
-      "wearables_accesories": "Accesories"
+      "wearables_accesories": "Accesories",
+      "wearables_eyewear": "Eyewear",
+      "wearables_earring": "Earrings",
+      "wearables_mask": "Masks",
+      "wearables_hat": "Hats",
+      "wearables_helmet": "Helmets"
     }
   },
   "filters": {
     "newest": "Newest",
+    "recently_listed": "Recently listed",
     "cheapest": "Cheapest"
   },
   "nft_list_page": {

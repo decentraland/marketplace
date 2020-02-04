@@ -7,6 +7,7 @@ import {
   exclusive_masks,
   xmas_2019
 } from '../../data/wearables'
+import * as categories from '../../data/wearables/categories'
 
 export function buildWearableFromNFT(nft: NFT): WearableEntity {
   // https://wearable-api.decentraland.org/v2/standards/erc721-metadata/collections/halloween_2019/wearables/funny_skull_mask/1
@@ -53,6 +54,17 @@ export function getWearableImage(wearable: WearableEntity): String {
     '/wearables/' +
     wearable.representationId +
     '/thumbnail'
+  )
+}
+
+export function isWearableAccessory(wearable: WearableEntity): boolean {
+  let category = wearable.category
+  return (
+    category == categories.EYEWEAR ||
+    category == categories.EARRING ||
+    category == categories.MASK ||
+    category == categories.HAT ||
+    category == categories.HELMET
   )
 }
 

@@ -16,11 +16,13 @@ import {
 
 import {
   getSearchCategory,
+  getSearchWearableCategory,
   SortBy,
   SearchOptions,
   Section
 } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
+import { NFTCategory } from '../../modules/nft/types'
 import { getSortOrder } from '../../modules/nft/utils'
 import { MAX_QUERY_SIZE, PAGE_SIZE } from '../../lib/api/client'
 import { NFTCard } from '../NFTCard'
@@ -42,18 +44,31 @@ const NFTListPage = (props: Props) => {
     onNavigate
   } = props
 
+  const [onlyOnSale, setOnlyOnSale] = useState(defaultOnlyOnSale)
+  const [offset, setOffset] = useState(0)
+
+  const dropdownOptions = [{ value: SortBy.NEWEST, text: t('filters.newest') }]
+
+  if (onlyOnSale) {
+    dropdownOptions.unshift({
+      value: SortBy.RECENTLY_LISTED,
+      text: t('filters.recently_listed')
+    })
+    dropdownOptions.unshift({
+      value: SortBy.CHEAPEST,
+      text: t('filters.cheapest')
+    })
+  }
+
   const handleOnNavigate = useCallback(
     (options?: SearchOptions) => onNavigate(options),
     [onNavigate]
   )
 
-  const [onlyOnSale, setOnlyOnSale] = useState(defaultOnlyOnSale)
-  const [offset, setOffset] = useState(0)
-
   const handleOnlyOnSaleChange = useCallback(
     (_: React.SyntheticEvent, props: CheckboxProps) =>
       setOnlyOnSale(!!props.checked),
-    [section, onNavigate]
+    [setOnlyOnSale]
   )
 
   const handleDropdownChange = useCallback(
@@ -79,12 +94,19 @@ const NFTListPage = (props: Props) => {
 
   // Kick things off
   useEffect(() => {
+    const skip = offset * PAGE_SIZE
+    const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
+
     const category = getSearchCategory(section)
     const [orderBy, orderDirection] = getSortOrder(sortBy)
     const isLand = section === Section.LAND
+    const isWearableAccessory = section === Section.WEARABLES_ACCESORIES
 
-    const skip = offset * PAGE_SIZE
-    const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
+    const wearableCategory =
+      !isWearableAccessory && category === NFTCategory.WEARABLE
+        ? getSearchWearableCategory(section)
+        : undefined
+
     onFetchNFTs({
       variables: {
         first,
@@ -94,7 +116,9 @@ const NFTListPage = (props: Props) => {
         onlyOnSale,
         address,
         isLand,
-        category
+        isWearableAccessory,
+        category,
+        wearableCategory
       },
       view: skip === 0 ? view : View.LOAD_MORE
     })
@@ -120,10 +144,7 @@ const NFTListPage = (props: Props) => {
             <Dropdown
               direction="left"
               value={sortBy}
-              options={[
-                { value: SortBy.NEWEST, text: t('filters.newest') },
-                { value: SortBy.CHEAPEST, text: t('filters.cheapest') }
-              ]}
+              options={dropdownOptions}
               onChange={handleDropdownChange}
             />
           </HeaderMenu.Right>

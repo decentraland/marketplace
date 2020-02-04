@@ -5,7 +5,11 @@ import { getCategory } from '../modules/category'
 import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
 import { buildCountFromNFT } from '../modules/count'
 import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
-import { buildWearableFromNFT, getWearableImage } from '../modules/wearable'
+import {
+  buildWearableFromNFT,
+  getWearableImage,
+  isWearableAccessory
+} from '../modules/wearable'
 import { createAccount } from '../modules/wallet'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
@@ -67,6 +71,7 @@ export function handleTransfer(event: Transfer): void {
         nft.wearable = id
         nft.name = wearable.name
         nft.image = getWearableImage(wearable)
+        nft.searchIsWearableAccessory = isWearableAccessory(wearable)
         nft.searchWearableCategory = wearable.category
         nft.searchWearableBodyShapes = wearable.bodyShapes
         nft.searchWearableRarity = wearable.rarity
