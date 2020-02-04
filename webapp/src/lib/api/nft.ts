@@ -58,24 +58,25 @@ class NFTAPI {
         tokenId
       }
     })
+
     const { activeOrder, ...rest } = data.nfts[0] as NFTFragment
-    const nft: NFT = {
-      ...rest,
-      activeOrderId: activeOrder ? activeOrder.id : null
+
+    const nft: NFT = { ...rest, activeOrderId: null }
+
+    let order: Order | null = null
+
+    if (activeOrder && !isExpired(activeOrder.expiresAt)) {
+      order = { ...activeOrder, nftId: nft.id }
+      nft.activeOrderId = order.id
     }
-    const order: Order | null = activeOrder
-      ? { ...activeOrder, nftId: nft.id }
-      : null
+
     return [nft, order] as const
   }
 
   async fetchTokenId(x: number, y: number) {
     const { data } = await client.query({
       query: PARCEL_TOKEN_ID,
-      variables: {
-        x,
-        y
-      }
+      variables: { x, y }
     })
     const { tokenId } = data.parcels[0]
     return tokenId as string

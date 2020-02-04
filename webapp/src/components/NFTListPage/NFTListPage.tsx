@@ -1,3 +1,5 @@
+import './NFTListPage.css'
+
 import React, { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -15,11 +17,11 @@ import {
 } from 'decentraland-ui'
 
 import {
-  getSearchCategory,
-  getSearchWearableCategory,
-  SortBy,
   SearchOptions,
-  Section
+  Section,
+  SortBy,
+  getSearchCategory,
+  getSearchWearableCategory
 } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
 import { NFTCategory } from '../../modules/nft/types'
@@ -28,7 +30,6 @@ import { MAX_QUERY_SIZE, PAGE_SIZE } from '../../lib/api/client'
 import { NFTCard } from '../NFTCard'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { Props } from './NFTListPage.types'
-import './NFTListPage.css'
 
 const NFTListPage = (props: Props) => {
   const {
@@ -36,18 +37,19 @@ const NFTListPage = (props: Props) => {
     defaultOnlyOnSale,
     page,
     section,
-    sortBy,
     nfts,
     view,
     isLoading,
     onFetchNFTs,
     onNavigate
   } = props
+  const onlyOnSale =
+    props.onlyOnSale === null ? defaultOnlyOnSale : props.onlyOnSale
 
-  const [onlyOnSale, setOnlyOnSale] = useState(defaultOnlyOnSale)
-  const [offset, setOffset] = useState(0)
-
-  const dropdownOptions = [{ value: SortBy.NEWEST, text: t('filters.newest') }]
+  const dropdownOptions = [
+    { value: SortBy.NEWEST, text: t('filters.newest') },
+    { value: SortBy.NAME, text: t('filters.name') }
+  ]
 
   if (onlyOnSale) {
     dropdownOptions.unshift({
@@ -60,6 +62,12 @@ const NFTListPage = (props: Props) => {
     })
   }
 
+  const sortBy = dropdownOptions.find(option => option.value === props.sortBy)
+    ? props.sortBy
+    : dropdownOptions[0].value
+
+  const [offset, setOffset] = useState(0)
+
   const handleOnNavigate = useCallback(
     (options?: SearchOptions) => onNavigate(options),
     [onNavigate]
@@ -67,8 +75,13 @@ const NFTListPage = (props: Props) => {
 
   const handleOnlyOnSaleChange = useCallback(
     (_: React.SyntheticEvent, props: CheckboxProps) =>
-      setOnlyOnSale(!!props.checked),
-    [setOnlyOnSale]
+      onNavigate({
+        page: 1,
+        section,
+        sortBy,
+        onlyOnSale: !!props.checked
+      }),
+    [section, sortBy, onNavigate]
   )
 
   const handleDropdownChange = useCallback(
@@ -77,10 +90,11 @@ const NFTListPage = (props: Props) => {
       onNavigate({
         page: 1,
         section,
-        sortBy: props.value as SortBy
+        sortBy: props.value as SortBy,
+        onlyOnSale
       })
     },
-    [section, onNavigate]
+    [section, onlyOnSale, onNavigate]
   )
 
   const handleLoadMore = useCallback(() => {
@@ -88,9 +102,10 @@ const NFTListPage = (props: Props) => {
     onNavigate({
       page: page + 1,
       section,
-      sortBy
+      sortBy,
+      onlyOnSale
     })
-  }, [page, sortBy, section, onNavigate, setOffset])
+  }, [page, sortBy, section, onlyOnSale, onNavigate, setOffset])
 
   // Kick things off
   useEffect(() => {

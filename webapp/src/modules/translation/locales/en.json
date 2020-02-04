@@ -15,7 +15,7 @@
   },
   "navigation": {
     "atlas": "Atlas",
-    "market": "Market",
+    "browse": "Browse",
     "my_account": "My account"
   },
   "categories_menu": {
@@ -38,6 +38,7 @@
     }
   },
   "filters": {
+    "name": "Name",
     "newest": "Newest",
     "recently_listed": "Recently listed",
     "cheapest": "Cheapest"

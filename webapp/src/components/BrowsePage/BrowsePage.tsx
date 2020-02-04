@@ -4,18 +4,18 @@ import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { NFTListPage } from '../NFTListPage'
+import { NavigationTab } from '../Navigation/Navigation.types'
 import { SearchOptions } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
 import { locations } from '../../modules/routing/locations'
-import { Props } from './MarketPage.types'
-import './MarketPage.css'
+import { Props } from './BrowsePage.types'
 
-const MarketPage = (props: Props) => {
+const BrowsePage = (props: Props) => {
   const { onNavigate } = props
 
   const handleOnNavigate = useCallback(
     (options?: SearchOptions) => {
-      onNavigate(locations.market(options))
+      onNavigate(locations.browse(options))
     },
     [onNavigate]
   )
@@ -23,7 +23,7 @@ const MarketPage = (props: Props) => {
   return (
     <>
       <Navbar isFullscreen />
-      <Navigation activeTab="market" />
+      <Navigation activeTab={NavigationTab.BROWSE} />
       <NFTListPage
         view={View.MARKET}
         defaultOnlyOnSale={true}
@@ -34,4 +34,4 @@ const MarketPage = (props: Props) => {
   )
 }
 
-export default React.memo(MarketPage)
+export default React.memo(BrowsePage)

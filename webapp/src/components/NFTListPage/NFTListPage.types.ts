@@ -15,6 +15,7 @@ export type Props = {
   page: number
   section: Section
   sortBy: SortBy
+  onlyOnSale: boolean | null
   view: View
   isLoading: boolean
   onNavigate: (options?: SearchOptions) => void
@@ -23,7 +24,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'nfts' | 'page' | 'section' | 'sortBy' | 'isLoading'
+  'nfts' | 'page' | 'section' | 'sortBy' | 'onlyOnSale' | 'isLoading'
 >
 export type OwnProps = Pick<
   Props,

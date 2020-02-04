@@ -16,10 +16,6 @@
   height: 100%;
 }
 
-.NFTListPage .ui.pagination {
-  margin-top: 42px;
-}
-
 .NFTListPage .ui.toggle.checkbox {
   top: 4px;
 }

@@ -5,9 +5,9 @@ export const locations = {
   signIn: () => '/sign-in',
   atlas: () => '/atlas',
   settings: () => '/settings',
-  market: (options?: SearchOptions) => {
+  browse: (options?: SearchOptions) => {
     const params = getSearchParams(options)
-    return params ? `/market?${params.toString()}` : '/market'
+    return params ? `/browse?${params.toString()}` : '/browse'
   },
   currentAccount: (options?: SearchOptions) => {
     const params = getSearchParams(options)

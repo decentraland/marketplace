@@ -6,6 +6,7 @@ import { PageHeader } from '../PageHeader'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { NFTListPage } from '../NFTListPage'
+import { NavigationTab } from '../Navigation/Navigation.types'
 import { locations } from '../../modules/routing/locations'
 import { View } from '../../modules/ui/types'
 import { SearchOptions } from '../../modules/routing/search'
@@ -49,7 +50,7 @@ const AccountPage = (props: Props) => {
       <Navbar isFullscreen />
       <Navigation
         isFullscreen={!isCurrentAccount}
-        activeTab={isCurrentAccount ? 'account' : undefined}
+        activeTab={isCurrentAccount ? NavigationTab.ACCOUNT : undefined}
       />
       {!isCurrentAccount ? (
         <PageHeader>

@@ -19,6 +19,7 @@ export enum Section {
 }
 
 export enum SortBy {
+  NAME = 'name',
   NEWEST = 'newest',
   RECENTLY_LISTED = 'recently_listed',
   CHEAPEST = 'cheapest'
@@ -30,9 +31,10 @@ export enum SortDirection {
 }
 
 export type SearchOptions = {
-  page?: number | null
-  section?: Section | null
-  sortBy?: SortBy | null
+  page?: number
+  section?: Section
+  sortBy?: SortBy
+  onlyOnSale?: boolean
 }
 
 export function getSearchParams(options?: SearchOptions) {
@@ -47,6 +49,9 @@ export function getSearchParams(options?: SearchOptions) {
     }
     if (options.sortBy) {
       params.set('sortBy', options.sortBy)
+    }
+    if (options.onlyOnSale !== undefined) {
+      params.set('onlyOnSale', options.onlyOnSale.toString())
     }
   }
   return params

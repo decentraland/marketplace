@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { AtlasPage } from '../AtlasPage'
 import { locations } from '../../modules/routing/locations'
-import { MarketPage } from '../MarketPage'
+import { BrowsePage } from '../MarketPage'
 import { AccountPage } from '../AccountPage'
 import { SignInPage } from '../SignInPage'
 import { SettingsPage } from '../SettingsPage'
@@ -17,7 +17,7 @@ const Routes = () => {
   return (
     <Switch>
       <Route exact path={locations.atlas()} component={AtlasPage} />
-      <Route exact path={locations.market()} component={MarketPage} />
+      <Route exact path={locations.browse()} component={BrowsePage} />
       <Route exact path={locations.currentAccount()} component={AccountPage} />
       <Route exact path={locations.account()} component={AccountPage} />
       <Route exact path={locations.signIn()} component={SignInPage} />

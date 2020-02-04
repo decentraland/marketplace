@@ -44,3 +44,12 @@ export const getUISortBy = createSelector<RootState, string, SortBy>(
     return SortBy.NEWEST
   }
 )
+
+export const getUIOnlyOnSale = createSelector<
+  RootState,
+  string,
+  boolean | null
+>(getSearch, search => {
+  const onlyOnSale = new URLSearchParams(search).get('onlyOnSale')
+  return onlyOnSale === null ? onlyOnSale : onlyOnSale === 'true'
+})
