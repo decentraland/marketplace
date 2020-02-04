@@ -43,6 +43,8 @@ const NFTListPage = (props: Props) => {
     onFetchNFTs,
     onNavigate
   } = props
+
+  // "Instance" variables
   const onlyOnSale =
     props.onlyOnSale === null ? defaultOnlyOnSale : props.onlyOnSale
 
@@ -66,8 +68,10 @@ const NFTListPage = (props: Props) => {
     ? props.sortBy
     : dropdownOptions[0].value
 
+  // State variables
   const [offset, setOffset] = useState(0)
 
+  // Handlers
   const handleOnNavigate = useCallback(
     (options?: SearchOptions) => onNavigate(options),
     [onNavigate]
@@ -137,7 +141,7 @@ const NFTListPage = (props: Props) => {
       },
       view: skip === 0 ? view : View.LOAD_MORE
     })
-  }, [onlyOnSale, address, view, offset, page, section, sortBy, onFetchNFTs])
+  }, [address, onlyOnSale, view, offset, page, section, sortBy, onFetchNFTs])
 
   return (
     <Page className="NFTListPage">
@@ -181,7 +185,7 @@ const NFTListPage = (props: Props) => {
         ) : null}
 
         {nfts.length === 0 && !isLoading ? (
-          <div>{t('nft_list_page.empty')}</div>
+          <div className="empty">{t('nft_list_page.empty')}</div>
         ) : null}
 
         {nfts.length <= PAGE_SIZE ? null : (
