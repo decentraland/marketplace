@@ -81,7 +81,7 @@ const NFTListPage = (props: Props) => {
         sortBy
       })
     },
-    [onlyOnSale, onNavigate]
+    [onlyOnSale, sortBy, onNavigate]
   )
 
   const handleOnlyOnSaleChange = useCallback(
