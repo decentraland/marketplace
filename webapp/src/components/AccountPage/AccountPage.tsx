@@ -17,7 +17,8 @@ import './AccountPage.css'
 const AccountPage = (props: Props) => {
   const { address, wallet, isConnecting, onNavigate } = props
 
-  const isCurrentAccount = address === undefined
+  const isCurrentAccount =
+    address === undefined || (wallet && wallet.address === address)
 
   const handleOnNavigate = useCallback(
     (options?: SearchOptions) =>
