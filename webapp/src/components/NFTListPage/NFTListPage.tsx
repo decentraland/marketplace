@@ -4,6 +4,8 @@ import {
   Page,
   Grid,
   Card,
+  Radio,
+  CheckboxProps,
   Button,
   Loader,
   HeaderMenu,
@@ -45,8 +47,14 @@ const NFTListPage = (props: Props) => {
     [onNavigate]
   )
 
-  const [onlyOnSale] = useState(defaultOnlyOnSale)
+  const [onlyOnSale, setOnlyOnSale] = useState(defaultOnlyOnSale)
   const [offset, setOffset] = useState(0)
+
+  const handleOnlyOnSaleChange = useCallback(
+    (_: React.SyntheticEvent, props: CheckboxProps) =>
+      setOnlyOnSale(!!props.checked),
+    [section, onNavigate]
+  )
 
   const handleDropdownChange = useCallback(
     (_: React.SyntheticEvent, props: DropdownProps) => {
@@ -60,6 +68,16 @@ const NFTListPage = (props: Props) => {
     [section, onNavigate]
   )
 
+  const handleLoadMore = useCallback(() => {
+    setOffset(page)
+    onNavigate({
+      page: page + 1,
+      section,
+      sortBy
+    })
+  }, [page, sortBy, section, onNavigate, setOffset])
+
+  // Kick things off
   useEffect(() => {
     const category = getSearchCategory(section)
     const [orderBy, orderDirection] = getSortOrder(sortBy)
@@ -80,16 +98,7 @@ const NFTListPage = (props: Props) => {
       },
       view: skip === 0 ? view : View.LOAD_MORE
     })
-  }, [address, view, offset, page, section, sortBy, onFetchNFTs])
-
-  const handleLoadMore = useCallback(() => {
-    setOffset(page)
-    onNavigate({
-      page: page + 1,
-      section,
-      sortBy
-    })
-  }, [page, sortBy, section, onNavigate, setOffset])
+  }, [onlyOnSale, address, view, offset, page, section, sortBy, onFetchNFTs])
 
   return (
     <Page className="NFTListPage">
@@ -102,6 +111,12 @@ const NFTListPage = (props: Props) => {
             <Header sub>{t('global.assets')}</Header>
           </HeaderMenu.Left>
           <HeaderMenu.Right>
+            <Radio
+              toggle
+              checked={onlyOnSale}
+              onChange={handleOnlyOnSaleChange}
+              label={t('nft_list_page.on_sale')}
+            />
             <Dropdown
               direction="left"
               value={sortBy}
@@ -119,18 +134,18 @@ const NFTListPage = (props: Props) => {
             {nfts.map(nft => (
               <NFTCard key={nft.id} nft={nft} />
             ))}
+
+            {isLoading ? (
+              <>
+                <div className="overlay" />
+                <Loader size="massive" active />
+              </>
+            ) : null}
           </Card.Group>
         ) : null}
 
         {nfts.length === 0 && !isLoading ? (
           <div>{t('nft_list_page.empty')}</div>
-        ) : null}
-
-        {isLoading ? (
-          <>
-            <div className="overlay" />
-            <Loader size="massive" active />
-          </>
         ) : null}
 
         {nfts.length <= PAGE_SIZE ? null : (

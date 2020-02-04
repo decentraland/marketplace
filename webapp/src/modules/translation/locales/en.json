@@ -37,6 +37,7 @@
     "cheapest": "Cheapest"
   },
   "nft_list_page": {
+    "on_sale": "On sale",
     "empty": "Could not find any assets"
   },
   "nft_card": {

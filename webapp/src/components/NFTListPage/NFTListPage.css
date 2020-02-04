@@ -20,6 +20,17 @@
   margin-top: 42px;
 }
 
+.NFTListPage .ui.toggle.checkbox {
+  top: 4px;
+}
+
+.NFTListPage .right-column .ui.toggle.checkbox label {
+  color: var(--secondary-text);
+  font-size: 14px;
+  margin-right: 24px;
+}
+
+.NFTListPage .ui.toggle.checkbox label,
 .NFTListPage .ui.dropdown > .text {
   text-transform: uppercase;
 }
