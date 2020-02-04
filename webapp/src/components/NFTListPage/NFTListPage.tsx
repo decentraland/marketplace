@@ -169,20 +169,17 @@ const NFTListPage = (props: Props) => {
           </HeaderMenu.Right>
         </HeaderMenu>
 
-        {nfts.length > 0 ? (
-          <Card.Group>
-            {nfts.map(nft => (
-              <NFTCard key={nft.id} nft={nft} />
-            ))}
-
-            {isLoading ? (
-              <>
-                <div className="overlay" />
-                <Loader size="massive" active />
-              </>
-            ) : null}
-          </Card.Group>
-        ) : null}
+        <Card.Group>
+          {nfts.length > 0
+            ? nfts.map(nft => <NFTCard key={nft.id} nft={nft} />)
+            : null}
+          {isLoading ? (
+            <>
+              <div className="overlay" />
+              <Loader size="massive" active />
+            </>
+          ) : null}
+        </Card.Group>
 
         {nfts.length === 0 && !isLoading ? (
           <div className="empty">{t('nft_list_page.empty')}</div>
