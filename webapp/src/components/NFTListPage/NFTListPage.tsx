@@ -75,9 +75,13 @@ const NFTListPage = (props: Props) => {
   const handleOnNavigate = useCallback(
     (options?: SearchOptions) => {
       setOffset(0)
-      onNavigate(options)
+      onNavigate({
+        ...options,
+        onlyOnSale,
+        sortBy
+      })
     },
-    [onNavigate]
+    [onlyOnSale, onNavigate]
   )
 
   const handleOnlyOnSaleChange = useCallback(
@@ -123,6 +127,7 @@ const NFTListPage = (props: Props) => {
 
     const category = getSearchCategory(section)
     const [orderBy, orderDirection] = getSortOrder(sortBy)
+
     const isLand = section === Section.LAND
     const isWearableAccessory = section === Section.WEARABLES_ACCESORIES
 
