@@ -48,7 +48,7 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
 
 export function getWearableImage(wearable: WearableEntity): String {
   return (
-    'http://wearable-api.decentraland.org/v2/collections/' +
+    'https://wearable-api.decentraland.org/v2/collections/' +
     wearable.collection +
     '/wearables/' +
     wearable.representationId +
