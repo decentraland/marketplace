@@ -12,6 +12,7 @@ import { BuyPage } from '../BuyPage'
 import { CancelSalePage } from '../CancelSalePage'
 import { TransferPage } from '../TransferPage'
 import { ActivityPage } from '../ActivityPage'
+import { HomePage } from '../HomePage'
 
 const Routes = () => {
   return (
@@ -28,8 +29,8 @@ const Routes = () => {
       <Route exact path={locations.ntf()} component={NFTPage} />
       <Route exact path={locations.settings()} component={SettingsPage} />
       <Route exact path={locations.activity()} component={ActivityPage} />
-      {/* TODO: The following redirect shoud be changed once we have a HomePage */}
-      <Redirect to={locations.atlas()} />
+      <Route exact path={locations.root()} component={HomePage} />
+      <Redirect to={locations.root()} />
     </Switch>
   )
 }

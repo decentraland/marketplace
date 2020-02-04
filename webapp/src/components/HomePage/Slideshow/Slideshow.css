@@ -1,0 +1,37 @@
+.Slideshow {
+  margin-bottom: 70px;
+}
+
+.Slideshow .nfts {
+  display: flex;
+  overflow: auto;
+  min-height: 336px;
+}
+
+.Slideshow .nfts .NFTCard {
+  flex: none;
+  width: 220px;
+  margin-right: 20px;
+  height: 300px;
+  margin-top: 12px;
+}
+
+.Slideshow .dcl.header-menu {
+  margin-bottom: 12px;
+}
+
+.Slideshow i.caret {
+  background-image: url(../../../images/forward.svg);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: inline-block;
+  width: 16px;
+  height: 13px;
+  margin-left: 4px;
+}
+
+.Slideshow .ui.button.basic {
+  display: flex;
+  align-items: center;
+}
