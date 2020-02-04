@@ -3,6 +3,11 @@ import { push } from 'connected-react-router'
 import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 import {
+  DEFAULT_FETCH_NFTS_OPTIONS,
+  FETCH_NFTS_REQUEST,
+  FetchNFTsRequestAction,
+  fetchNFTsSuccess,
+  fetchNFTsFailure,
   FETCH_NFT_REQUEST,
   FetchNFTRequestAction,
   fetchNFTSuccess,
@@ -18,8 +23,27 @@ import { locations } from '../routing/locations'
 import { ERC721 } from '../../contracts/ERC721'
 
 export function* nftSaga() {
+  yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
   yield takeEvery(FETCH_NFT_REQUEST, handleFetchNFTRequest)
   yield takeEvery(TRANSFER_NFT_REQUEST, handleTransferNFTRequest)
+}
+
+function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
+  const options = {
+    ...DEFAULT_FETCH_NFTS_OPTIONS,
+    ...action.payload.options,
+    variables: {
+      ...DEFAULT_FETCH_NFTS_OPTIONS.variables,
+      ...action.payload.options.variables
+    }
+  }
+
+  try {
+    const [nfts, accounts, orders] = yield call(() => nftAPI.fetch(options))
+    yield put(fetchNFTsSuccess(options, nfts, accounts, orders))
+  } catch (error) {
+    yield put(fetchNFTsFailure(options, error.message))
+  }
 }
 
 function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
@@ -27,7 +51,7 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
 
   try {
     const [nft, order] = yield call(() =>
-      nftAPI.fetch(contractAddress, tokenId)
+      nftAPI.fetchOne(contractAddress, tokenId)
     )
     yield put(fetchNFTSuccess(nft, order))
   } catch (error) {

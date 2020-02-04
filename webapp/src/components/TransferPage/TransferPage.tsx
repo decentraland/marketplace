@@ -5,9 +5,9 @@ import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
 import { NFTProviderPage } from '../NFTProviderPage'
-import NFTAction from '../NFTAction/NFTAction'
+import { NFTAction } from '../NFTAction'
 import { locations } from '../../modules/routing/locations'
-import { getNFTName } from '../../modules/nft/utils'
+import { getNFTName, isOwnedBy } from '../../modules/nft/utils'
 import { Props } from './TransferPage.types'
 import './TransferPage.css'
 
@@ -36,7 +36,7 @@ const TransferPage = (props: Props) => {
                       values={{ name: <b>{name}</b> }}
                     />
                   )
-                } else if (wallet.address !== nft.owner.id) {
+                } else if (isOwnedBy(nft, wallet)) {
                   subtitle = (
                     <T
                       id="transfer_page.invalid_owner"
@@ -52,7 +52,7 @@ const TransferPage = (props: Props) => {
                   )
                 }
                 return (
-                  <NFTAction nft={nft} onNavigate={onNavigate}>
+                  <NFTAction nft={nft}>
                     <Header size="large">
                       {t('transfer_page.title', {
                         category: t(`global.${nft.category}`)

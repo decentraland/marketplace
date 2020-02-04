@@ -1,15 +1,27 @@
 import { NFTCategory } from '../nft/types'
+import { WearableCategory } from '../nft/wearable/types'
 
 export enum Section {
   ALL = 'all',
   LAND = 'land',
   PARCELS = 'parcels',
   ESTATES = 'estates',
-  WEARABLES = 'wearables'
+  WEARABLES = 'wearables',
+  WEARABLES_TOP = 'wearables_top',
+  WEARABLES_BOTTOM = 'wearables_bottom',
+  WEARABLES_SHOES = 'wearables_shoes',
+  WEARABLES_ACCESORIES = 'wearables_accesories',
+  WEARABLES_EYEWEAR = 'wearables_eyewear',
+  WEARABLES_EARRING = 'wearables_earring',
+  WEARABLES_MASK = 'wearables_mask',
+  WEARABLES_HAT = 'wearables_hat',
+  WEARABLES_HELMET = 'wearables_helmet'
 }
 
 export enum SortBy {
+  NAME = 'name',
   NEWEST = 'newest',
+  RECENTLY_LISTED = 'recently_listed',
   CHEAPEST = 'cheapest'
 }
 
@@ -19,9 +31,10 @@ export enum SortDirection {
 }
 
 export type SearchOptions = {
-  page?: number | null
-  section?: Section | null
-  sortBy?: SortBy | null
+  page?: number
+  section?: Section
+  sortBy?: SortBy
+  onlyOnSale?: boolean
 }
 
 export function getSearchParams(options?: SearchOptions) {
@@ -37,27 +50,50 @@ export function getSearchParams(options?: SearchOptions) {
     if (options.sortBy) {
       params.set('sortBy', options.sortBy)
     }
+    if (options.onlyOnSale !== undefined) {
+      params.set('onlyOnSale', options.onlyOnSale.toString())
+    }
   }
   return params
 }
 
-// @nico TODO: Maybe this isn't the best name for it? there's a bit of a mixup between categories and sections
-// @nico TODO: We need to support the LAND section, which comprises PARCELS and ESTATES. Might need backend work
 export function getSearchCategory(section: Section) {
-  let category: NFTCategory | undefined
   switch (section) {
-    case Section.PARCELS: {
-      category = NFTCategory.PARCEL
-      break
-    }
-    case Section.ESTATES: {
-      category = NFTCategory.ESTATE
-      break
-    }
-    case Section.WEARABLES: {
-      category = NFTCategory.WEARABLE
-      break
-    }
+    case Section.PARCELS:
+      return NFTCategory.PARCEL
+    case Section.ESTATES:
+      return NFTCategory.ESTATE
+    case Section.WEARABLES:
+    case Section.WEARABLES_TOP:
+    case Section.WEARABLES_BOTTOM:
+    case Section.WEARABLES_SHOES:
+    case Section.WEARABLES_ACCESORIES:
+    case Section.WEARABLES_EYEWEAR:
+    case Section.WEARABLES_EARRING:
+    case Section.WEARABLES_MASK:
+    case Section.WEARABLES_HAT:
+    case Section.WEARABLES_HELMET:
+      return NFTCategory.WEARABLE
   }
-  return category
+}
+
+export function getSearchWearableCategory(section: Section) {
+  switch (section) {
+    case Section.WEARABLES_TOP:
+      return WearableCategory.UPPER_BODY
+    case Section.WEARABLES_BOTTOM:
+      return WearableCategory.LOWER_BODY
+    case Section.WEARABLES_SHOES:
+      return WearableCategory.FEET
+    case Section.WEARABLES_EYEWEAR:
+      return WearableCategory.EYEWEAR
+    case Section.WEARABLES_EARRING:
+      return WearableCategory.EARRING
+    case Section.WEARABLES_MASK:
+      return WearableCategory.MASK
+    case Section.WEARABLES_HAT:
+      return WearableCategory.HAT
+    case Section.WEARABLES_HELMET:
+      return WearableCategory.HELMET
+  }
 }

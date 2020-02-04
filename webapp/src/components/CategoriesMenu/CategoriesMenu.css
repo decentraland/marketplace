@@ -31,3 +31,11 @@
   font-weight: 600;
   background-color: var(--card);
 }
+
+.CategoriesMenu ul.submenu {
+  padding-left: 16px;
+}
+
+.CategoriesMenu ul.submenu li.sub {
+  width: 216px;
+}

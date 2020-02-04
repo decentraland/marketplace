@@ -146,6 +146,7 @@ type NFT @entity {
 
   searchEstateSize: Int
 
+  searchIsWearableAccessory: Boolean
   searchWearableCategory: WearableCategory
   searchWearableRarity: WearableRarity
   searchWearableBodyShapes: [WearableBodyShape!]

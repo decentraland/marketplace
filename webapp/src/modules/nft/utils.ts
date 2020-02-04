@@ -1,6 +1,8 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { SortDirection, SortBy } from '../routing/search'
 import { nftContracts } from '../contract/utils'
+import { addressEquals } from '../wallet/utils'
 import { NFT, NFTCategory, NFTSortBy } from './types'
 
 export function getNFTId(
@@ -35,11 +37,22 @@ export function getNFTName(nft: NFT) {
 }
 
 export function getSortOrder(sortBy: SortBy) {
-  let orderBy: NFTSortBy = NFTSortBy.CREATED_AT
+  let orderBy: NFTSortBy = NFTSortBy.NAME
   let orderDirection: SortDirection = SortDirection.DESC
+
   switch (sortBy) {
+    case SortBy.NAME: {
+      orderBy = NFTSortBy.NAME
+      orderDirection = SortDirection.ASC
+      break
+    }
     case SortBy.NEWEST: {
       orderBy = NFTSortBy.CREATED_AT
+      orderDirection = SortDirection.DESC
+      break
+    }
+    case SortBy.RECENTLY_LISTED: {
+      orderBy = NFTSortBy.ORDER_CREATED_AT
       orderDirection = SortDirection.DESC
       break
     }
@@ -64,4 +77,8 @@ export function getNFT(
     nft = nfts[nftId]
   }
   return nft
+}
+
+export function isOwnedBy(nft: NFT, wallet: Wallet | null) {
+  return addressEquals(wallet?.address, nft.owner.address)
 }

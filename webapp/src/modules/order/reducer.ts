@@ -4,18 +4,15 @@ import {
 } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { Order } from './types'
 import {
-  FetchAccountSuccessAction,
-  FETCH_ACCOUNT_SUCCESS
-} from '../account/actions'
-import {
-  FetchOrdersRequestAction,
-  FetchOrdersSuccessAction,
-  FetchOrdersFailureAction,
-  FETCH_ORDERS_REQUEST,
-  FETCH_ORDERS_SUCCESS,
-  FETCH_ORDERS_FAILURE
-} from './actions'
-import { FetchNFTSuccessAction, FETCH_NFT_SUCCESS } from '../nft/actions'
+  FetchNFTsRequestAction,
+  FetchNFTsSuccessAction,
+  FetchNFTsFailureAction,
+  FETCH_NFTS_REQUEST,
+  FETCH_NFTS_SUCCESS,
+  FETCH_NFTS_FAILURE,
+  FetchNFTSuccessAction,
+  FETCH_NFT_SUCCESS
+} from '../nft/actions'
 
 export type OrderState = {
   data: Record<string, Order>
@@ -30,10 +27,9 @@ const INITIAL_STATE = {
 }
 
 type OrderReducerAction =
-  | FetchOrdersRequestAction
-  | FetchOrdersSuccessAction
-  | FetchOrdersFailureAction
-  | FetchAccountSuccessAction
+  | FetchNFTsRequestAction
+  | FetchNFTsSuccessAction
+  | FetchNFTsFailureAction
   | FetchNFTSuccessAction
 
 export function orderReducer(
@@ -41,14 +37,13 @@ export function orderReducer(
   action: OrderReducerAction
 ): OrderState {
   switch (action.type) {
-    case FETCH_ORDERS_REQUEST: {
+    case FETCH_NFTS_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
     }
-    case FETCH_ACCOUNT_SUCCESS:
-    case FETCH_ORDERS_SUCCESS: {
+    case FETCH_NFTS_SUCCESS: {
       return {
         ...state,
         data: {
@@ -62,7 +57,7 @@ export function orderReducer(
         error: null
       }
     }
-    case FETCH_ORDERS_FAILURE: {
+    case FETCH_NFTS_FAILURE: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action),

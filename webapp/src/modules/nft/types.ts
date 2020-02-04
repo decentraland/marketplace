@@ -9,7 +9,9 @@ export enum NFTCategory {
 }
 
 export enum NFTSortBy {
-  CREATED_AT = 'searchOrderCreatedAt',
+  NAME = 'name',
+  CREATED_AT = 'createdAt',
+  ORDER_CREATED_AT = 'searchOrderCreatedAt',
   PRICE = 'searchOrderPrice'
 }
 
@@ -18,13 +20,13 @@ export type NFT = {
   contractAddress: string
   tokenId: string
   activeOrderId: string | null
+  owner: {
+    address: string
+  }
   name: string
   category: NFTCategory
   image: string
   parcel: Parcel | null
   estate: Estate | null
   wearable: Wearable | null
-  owner: {
-    id: string
-  }
 }

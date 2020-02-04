@@ -15,24 +15,37 @@
   },
   "navigation": {
     "atlas": "Atlas",
-    "market": "Market",
+    "browse": "Browse",
     "my_account": "My account"
   },
-  "market_page": {
-    "empty_orders": "There are no orders to show"
-  },
   "categories_menu": {
-    "all_assets": "All Assets",
-    "land": "Land",
-    "estates": "Estates",
-    "wearables": "Wearables"
+    "categories": "Categories",
+    "menu_item": {
+      "all": "All Assets",
+      "land": "Land",
+      "parcels": "Parcels",
+      "estates": "Estates",
+      "wearables": "Wearables",
+      "wearables_top": "Top",
+      "wearables_bottom": "Bottom",
+      "wearables_shoes": "Shoes",
+      "wearables_accesories": "Accesories",
+      "wearables_eyewear": "Eyewear",
+      "wearables_earring": "Earrings",
+      "wearables_mask": "Masks",
+      "wearables_hat": "Hats",
+      "wearables_helmet": "Helmets"
+    }
   },
   "filters": {
+    "name": "Name",
     "newest": "Newest",
+    "recently_listed": "Recently listed",
     "cheapest": "Cheapest"
   },
-  "account_nfts": {
-    "empty_account": "Address {address} doesn't have any assets"
+  "nft_list_page": {
+    "on_sale": "On sale",
+    "empty": "Could not find any assets"
   },
   "nft_card": {
     "expires_at": "Expires {date}"

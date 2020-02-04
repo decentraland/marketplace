@@ -12,7 +12,7 @@ export const nftFields = () => gql`
     tokenId
     category
     owner {
-      id
+      address
     }
     parcel {
       x

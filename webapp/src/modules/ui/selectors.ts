@@ -1,36 +1,19 @@
 import { createSelector } from 'reselect'
 import { RootState } from '../reducer'
 import { UIState } from '../ui/reducer'
-import { OrderState } from '../order/reducer'
 import { NFTState } from '../nft/reducer'
-import { Order } from '../order/types'
 import { NFT } from '../nft/types'
-import { getData as getOrderData } from '../order/selectors'
 import { getData as getNFTData } from '../nft/selectors'
 import { getSearch } from 'connected-react-router'
 import { SortBy, Section } from '../routing/search'
 
 export const getState = (state: RootState) => state.ui
-export const getMarketOrders = createSelector<
-  RootState,
-  UIState,
-  OrderState['data'],
-  Order[]
->(
-  getState,
-  getOrderData,
-  (ui, ordersById) => ui.marketOrderIds.map(id => ordersById[id])
-)
-export const getAccountNFTs = createSelector<
+export const getNFTs = createSelector<
   RootState,
   UIState,
   NFTState['data'],
   NFT[]
->(
-  getState,
-  getNFTData,
-  (ui, nftsById) => ui.accountNFTIds.map(id => nftsById[id])
-)
+>(getState, getNFTData, (ui, nftsById) => ui.nftIds.map(id => nftsById[id]))
 
 export const getUIPage = createSelector<RootState, string, number>(
   getSearch,
@@ -61,3 +44,12 @@ export const getUISortBy = createSelector<RootState, string, SortBy>(
     return SortBy.NEWEST
   }
 )
+
+export const getUIOnlyOnSale = createSelector<
+  RootState,
+  string,
+  boolean | null
+>(getSearch, search => {
+  const onlyOnSale = new URLSearchParams(search).get('onlyOnSale')
+  return onlyOnSale === null ? onlyOnSale : onlyOnSale === 'true'
+})

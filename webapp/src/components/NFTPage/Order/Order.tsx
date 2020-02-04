@@ -3,13 +3,13 @@ import { Stats, Mana, Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { formatPrice } from '../../../modules/order/utils'
+import { isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Props } from './Order.types'
-
 import './Order.css'
 
 const Order = (props: Props) => {
-  const { address, nft, order, onNavigate } = props
+  const { wallet, nft, order, onNavigate } = props
 
   const handleSell = useCallback(
     () => onNavigate(locations.sell(nft.contractAddress, nft.tokenId)),
@@ -28,10 +28,9 @@ const Order = (props: Props) => {
     [nft, onNavigate]
   )
 
-  const isOwner =
-    !!address && nft.owner.id.toLowerCase() === address.toLowerCase()
+  const isOwner = isOwnedBy(nft, wallet)
 
-  // nothing to show
+  // Nothing to show
   const isHidden = !order && !isOwner
   if (isHidden) return null
 

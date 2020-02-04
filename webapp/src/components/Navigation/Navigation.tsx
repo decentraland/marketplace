@@ -2,7 +2,7 @@ import React from 'react'
 import { Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
-import { Props } from './Navigation.types'
+import { Props, NavigationTab } from './Navigation.types'
 
 const Navigation = (props: Props) => {
   const { activeTab, isFullscreen, onNavigate } = props
@@ -10,19 +10,19 @@ const Navigation = (props: Props) => {
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
         <Tabs.Tab
-          active={activeTab === 'atlas'}
+          active={activeTab === NavigationTab.ATLAS}
           onClick={() => onNavigate(locations.atlas())}
         >
           {t('navigation.atlas')}
         </Tabs.Tab>
         <Tabs.Tab
-          active={activeTab === 'market'}
-          onClick={() => onNavigate(locations.market())}
+          active={activeTab === NavigationTab.BROWSE}
+          onClick={() => onNavigate(locations.browse())}
         >
-          {t('navigation.market')}
+          {t('navigation.browse')}
         </Tabs.Tab>
         <Tabs.Tab
-          active={activeTab === 'account'}
+          active={activeTab === NavigationTab.ACCOUNT}
           onClick={() => onNavigate(locations.currentAccount())}
         >
           {t('navigation.my_account')}

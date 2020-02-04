@@ -1,8 +1,61 @@
 import { action } from 'typesafe-actions'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { NFT } from './types'
-import { getNFTName } from './utils'
+
+import { SortDirection } from '../routing/search'
 import { Order } from '../order/types'
+import { Account } from '../account/types'
+import { View } from '../ui/types'
+import { WearableCategory } from './wearable/types'
+import { NFT, NFTCategory, NFTSortBy } from './types'
+import { getNFTName } from './utils'
+
+// Fetch NFTs
+
+export const FETCH_NFTS_REQUEST = '[Request] Fetch NFTs'
+export const FETCH_NFTS_SUCCESS = '[Success] Fetch NFTs'
+export const FETCH_NFTS_FAILURE = '[Failure] Fetch NFTs'
+
+export type FetchNFTsOptions = {
+  variables: {
+    first: number
+    skip: number
+    orderBy?: NFTSortBy
+    orderDirection?: SortDirection
+    address?: string
+    onlyOnSale: boolean
+    isLand?: boolean
+    isWearableAccessory?: boolean
+    category?: NFTCategory
+    wearableCategory?: WearableCategory
+  }
+  view?: View
+}
+
+export const DEFAULT_FETCH_NFTS_OPTIONS: FetchNFTsOptions = {
+  variables: {
+    first: 24,
+    skip: 0,
+    orderBy: NFTSortBy.CREATED_AT,
+    orderDirection: SortDirection.DESC,
+    onlyOnSale: false
+  },
+  view: undefined
+}
+
+export const fetchNFTsRequest = (options: Partial<FetchNFTsOptions> = {}) =>
+  action(FETCH_NFTS_REQUEST, { options })
+export const fetchNFTsSuccess = (
+  options: FetchNFTsOptions,
+  nfts: NFT[],
+  accounts: Account[],
+  orders: Order[]
+) => action(FETCH_NFTS_SUCCESS, { options, nfts, accounts, orders })
+export const fetchNFTsFailure = (options: FetchNFTsOptions, error: string) =>
+  action(FETCH_NFTS_FAILURE, { options, error })
+
+export type FetchNFTsRequestAction = ReturnType<typeof fetchNFTsRequest>
+export type FetchNFTsSuccessAction = ReturnType<typeof fetchNFTsSuccess>
+export type FetchNFTsFailureAction = ReturnType<typeof fetchNFTsFailure>
 
 // Fetch NFT
 

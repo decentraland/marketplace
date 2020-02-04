@@ -2,15 +2,15 @@ import {
   LoadingState,
   loadingReducer
 } from 'decentraland-dapps/dist/modules/loading/reducer'
-import { Account } from './types'
 import {
-  FetchAccountRequestAction,
-  FetchAccountSuccessAction,
-  FetchAccountFailureAction,
-  FETCH_ACCOUNT_REQUEST,
-  FETCH_ACCOUNT_SUCCESS,
-  FETCH_ACCOUNT_FAILURE
-} from './actions'
+  FetchNFTsRequestAction,
+  FetchNFTsSuccessAction,
+  FetchNFTsFailureAction,
+  FETCH_NFTS_REQUEST,
+  FETCH_NFTS_SUCCESS,
+  FETCH_NFTS_FAILURE
+} from '../nft/actions'
+import { Account } from './types'
 
 export type AccountState = {
   data: Record<string, Account>
@@ -25,35 +25,36 @@ const INITIAL_STATE = {
 }
 
 type AccountReducerAction =
-  | FetchAccountRequestAction
-  | FetchAccountSuccessAction
-  | FetchAccountFailureAction
+  | FetchNFTsRequestAction
+  | FetchNFTsSuccessAction
+  | FetchNFTsFailureAction
 
 export function accountReducer(
   state: AccountState = INITIAL_STATE,
   action: AccountReducerAction
 ): AccountState {
   switch (action.type) {
-    case FETCH_ACCOUNT_REQUEST: {
+    case FETCH_NFTS_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
     }
-    case FETCH_ACCOUNT_SUCCESS: {
-      const { account } = action.payload
-      const newData = account ? { [account.address]: { ...account } } : {}
+    case FETCH_NFTS_SUCCESS: {
       return {
         ...state,
         data: {
           ...state.data,
-          ...newData
+          ...action.payload.accounts.reduce((obj, account) => {
+            obj[account.address] = account
+            return obj
+          }, {} as Record<string, Account>)
         },
         loading: loadingReducer(state.loading, action),
         error: null
       }
     }
-    case FETCH_ACCOUNT_FAILURE: {
+    case FETCH_NFTS_FAILURE: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action),

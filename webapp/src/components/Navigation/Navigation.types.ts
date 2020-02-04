@@ -1,7 +1,11 @@
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { Dispatch } from 'redux'
 
-export type NavigationTab = 'atlas' | 'market' | 'account'
+export enum NavigationTab {
+  ATLAS = 'atlas',
+  BROWSE = 'browse',
+  ACCOUNT = 'account'
+}
 
 export type Props = {
   activeTab?: NavigationTab

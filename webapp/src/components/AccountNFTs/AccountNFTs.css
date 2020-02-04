@@ -1,7 +1,0 @@
-/* @nico TODO: We probably want to extract this to a global class for other components to use */
-.AccountNFTs .empty {
-  margin-top: 40px;
-  font-size: 16px;
-  text-align: center;
-  color: var(--secondary-text);
-}

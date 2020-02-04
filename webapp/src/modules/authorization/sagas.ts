@@ -90,12 +90,13 @@ function* handleAllowTokenRequest(action: AllowTokenRequestAction) {
     const { address } = wallet
     const amount = isAllowed ? getTokenAmountToApprove() : 0
 
-    const contractToApproveAddress = Address.fromString(tokenContractAddress)
-    const tokenContract = new ERC20(eth, Address.fromString(contractAddress))
-
+    const tokenContract = new ERC20(
+      eth,
+      Address.fromString(tokenContractAddress)
+    )
     const transaction: SendTx<ERC20TransactionReceipt> = yield call(() =>
       tokenContract.methods
-        .approve(contractToApproveAddress, amount)
+        .approve(Address.fromString(contractAddress), amount)
         .send({ from: Address.fromString(address) })
     )
     const transactionHash: string = yield call(() => transaction.getTxHash())

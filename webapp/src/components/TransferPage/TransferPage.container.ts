@@ -1,12 +1,12 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
+import { transferNFTRequest } from '../../modules/nft/actions'
 import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch
 } from './TransferPage.types'
-import { transferNFTRequest } from '../../modules/nft/actions'
 import TransferPage from './TransferPage'
 
 const mapState = (_state: RootState): MapStateProps => ({})
