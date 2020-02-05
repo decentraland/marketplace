@@ -3,10 +3,14 @@ import { View } from './types'
 
 export type UIState = {
   nftIds: string[]
+  homepageWearableIds: string[]
+  homepageLandIds: string[]
 }
 
 const INITIAL_STATE: UIState = {
-  nftIds: []
+  nftIds: [],
+  homepageWearableIds: [],
+  homepageLandIds: []
 }
 
 type UIReducerAction = FetchNFTsSuccessAction
@@ -29,6 +33,18 @@ export function uiReducer(
           return {
             ...state,
             nftIds: [...state.nftIds, ...action.payload.nfts.map(nft => nft.id)]
+          }
+        }
+        case View.HOME_WEARABLES: {
+          return {
+            ...state,
+            homepageWearableIds: action.payload.nfts.map(nft => nft.id)
+          }
+        }
+        case View.HOME_LAND: {
+          return {
+            ...state,
+            homepageLandIds: action.payload.nfts.map(nft => nft.id)
           }
         }
         default:

@@ -23,6 +23,7 @@ const Navbar = (props: Props) => {
 
   return (
     <BaseNavbar
+      {...props}
       activePage="marketplace"
       isFullscreen={props.isFullscreen}
       isSignIn={pathname === locations.signIn()}

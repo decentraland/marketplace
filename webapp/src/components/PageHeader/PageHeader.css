@@ -1,4 +1,4 @@
 .PageHeader {
-  height: 420px;
+  height: var(--page-header-height);
   margin-bottom: 35px;
 }

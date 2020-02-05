@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
+import { NavbarProps } from 'decentraland-ui'
 
-export type Props = {
+export type Props = Partial<NavbarProps> & {
   pathname: string
   hasPendingTransactions: boolean
-  isFullscreen?: boolean
   onNavigate: (path: string) => void
 }
 

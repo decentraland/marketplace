@@ -6,7 +6,7 @@
 
 .WearableDetail .PageHeader img {
   flex: 0 1 auto;
-  max-height: 420px;
+  max-height: var(--page-header-height);
 }
 
 .WearableDetail .Highlight .left > div {
