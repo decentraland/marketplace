@@ -2,15 +2,16 @@ import React, { useMemo } from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { getNFTName } from '../../../modules/nft/utils'
 import { getSelection, getCenter } from '../../../modules/nft/estate/utils'
-import { ProximityHighlights } from '../ProximityHighlights'
 import { Atlas } from '../../Atlas'
 import { PageHeader } from '../../PageHeader'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
-import { Props } from './EstateDetail.types'
 import { Badge } from '../Badge'
 import { Description } from '../Description'
 import { Order } from '../Order'
+import { ProximityHighlights } from '../ProximityHighlights'
+import { TransactionHistory } from '../../TransactionHistory'
+import { Props } from './EstateDetail.types'
 import './EstateDetail.css'
 
 const EstateDetail = (props: Props) => {
@@ -44,6 +45,7 @@ const EstateDetail = (props: Props) => {
         <Description text={nft.estate!.data?.description} />
         <Order nft={nft} />
         <ProximityHighlights nft={nft} />
+        <TransactionHistory nft={nft} />
       </Container>
     </>
   )

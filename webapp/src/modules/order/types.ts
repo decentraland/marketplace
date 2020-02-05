@@ -1,6 +1,10 @@
 import { NFTCategory } from '../nft/types'
 
-export type OrderStatus = 'open' | 'sold' | 'cancelled'
+export enum OrderStatus {
+  OPEN = 'open',
+  SOLD = 'sold',
+  CANCELLED = 'cancelled'
+}
 
 export type Order = {
   id: string

@@ -65,7 +65,15 @@
     "distance": "{distance} {distance, plural, one {parcel} other {parcels}} away",
     "plaza": "Plaza",
     "road": "Road",
-    "district": "District"
+    "district": "District",
+    "history": {
+      "title": "Transaction History",
+      "event": "Event",
+      "sold": "Sold",
+      "from": "From",
+      "to": "To",
+      "when": "When"
+    }
   },
   "wearable": {
     "body_shape": {

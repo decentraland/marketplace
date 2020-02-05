@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Header, Mana, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTAction } from '../../NFTAction'
-import { formatMANA } from '../../../lib/api/mana'
+import { formatMANA } from '../../../lib/mana'
 import { getNFTName } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { NFTCategory } from '../../../modules/nft/types'
@@ -22,14 +22,14 @@ const BuyPage = (props: Props) => {
   const name = getNFTName(nft)
 
   const [fingerprint, setFingerprint] = useState()
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (order && order.category === NFTCategory.ESTATE) {
-      setLoading(true)
+      setIsLoading(true)
       getFingerprint(nft.tokenId).then(result => {
         setFingerprint(result)
-        setLoading(false)
+        setIsLoading(false)
       })
     }
   }, [order, setFingerprint, nft.tokenId])

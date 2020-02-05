@@ -1,0 +1,50 @@
+.ui.grid.TransactionHistory {
+  margin-bottom: 16px;
+}
+
+.TransactionHistory .transaction-history-header {
+  background-color: var(--darker-gray);
+  border-radius: 10px 10px 0px 0px;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.TransactionHistory .transaction-history-entry {
+  background-color: var(--darker-gray);
+}
+
+.TransactionHistory .transaction-history-entry .type {
+  text-transform: capitalize;
+}
+
+.TransactionHistory .transaction-history-entry:last-child {
+  border-radius: 0px 0px 10px 10px;
+}
+
+.TransactionHistory .transaction-history-header,
+.TransactionHistory .transaction-history-entry {
+  margin: 0em 1em;
+}
+
+.TransactionHistory .address-wrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.TransactionHistory .address-wrapper > a {
+  display: flex;
+  align-items: center;
+}
+
+.TransactionHistory .address-wrapper .AddressBlock {
+  flex: none;
+  margin-right: 0.5em;
+}
+
+@media (max-width: 768px) {
+  .TransactionHistory .address-wrapper .short-address {
+    display: none;
+  }
+}
