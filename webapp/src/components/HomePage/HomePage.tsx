@@ -54,7 +54,7 @@ const HomePage = (props: Props) => {
   return (
     <>
       <Navbar isFullscreen isOverlay />
-      <Hero height={420}>
+      <Hero className="HomePageHero">
         <Hero.Header>{t('home_page.title')}</Hero.Header>
         <Hero.Description>{t('home_page.subtitle')}</Hero.Description>
         <Hero.Content>

@@ -1,4 +1,8 @@
-.hero-image {
+.HomePageHero.dcl.hero {
+  height: var(--page-header-height);
+}
+
+.HomePageHero .hero-image {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -9,7 +13,7 @@
   background-repeat: no-repeat;
 }
 
-.dcl.hero .ui.header.hero-subtitle {
+.HomePageHero.dcl.hero .ui.header.hero-subtitle {
   margin-bottom: 24px;
   color: var(--secondary-text);
 }
