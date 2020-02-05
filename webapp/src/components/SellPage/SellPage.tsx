@@ -4,18 +4,19 @@ import dateFnsFormat from 'date-fns/format'
 import { fromWei } from 'web3x-es/utils'
 import { Page, Header, Button, Field, Modal, Mana } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
 import { NFTProviderPage } from '../NFTProviderPage'
 import { NFTAction } from '../NFTAction'
+import { DEFAULT_EXPIRATION_IN_DAYS } from '../../modules/order/utils'
 import { getNFTName, isOwnedBy } from '../../modules/nft/utils'
 import { locations } from '../../modules/routing/locations'
 import { toMANA, fromMANA } from '../../lib/mana'
 import { Props } from './SellPage.types'
 import './SellPage.css'
 
-const DEFAULT_EXPIRATION_IN_DAYS = 30
 const INPUT_FORMAT = 'yyyy-MM-dd'
 const DEFAULT_EXPIRATION_DATE = dateFnsFormat(
   addDays(new Date(), DEFAULT_EXPIRATION_IN_DAYS),
