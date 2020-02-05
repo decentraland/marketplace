@@ -27,7 +27,7 @@ const TransactionHistory = (props: Props) => {
         setOrders(orders)
       })
     }
-  }, [setIsLoading, setOrders])
+  }, [nft, setIsLoading, setOrders])
 
   return (
     <div className="TransactionHistory">
