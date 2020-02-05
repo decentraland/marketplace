@@ -48,7 +48,7 @@ const TransactionHistory = (props: Props) => {
         <Loader active size="massive" />
       ) : orders.length > 0 ? (
         <>
-          <Header size="small">{t('transaction_history.title')}</Header>
+          <Header sub>{t('transaction_history.title')}</Header>
           <Table basic="very">
             <Table.Header>
               <Table.Row>
