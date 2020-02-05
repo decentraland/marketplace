@@ -9,7 +9,8 @@ import {
   EstateRegistry,
   Halloween2019Collection,
   ExclusiveMasksCollection,
-  Xmas2019Collection
+  Xmas2019Collection,
+  DCLRegistrar
 } from '../data/addresses'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
@@ -20,6 +21,7 @@ export function handleInitialize(_: InitializeCall): void {
   ERC721.create(Address.fromString(Halloween2019Collection))
   ERC721.create(Address.fromString(ExclusiveMasksCollection))
   ERC721.create(Address.fromString(Xmas2019Collection))
+  ERC721.create(Address.fromString(DCLRegistrar))
 }
 
 export function handleUpdate(event: Update): void {

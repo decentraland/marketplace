@@ -125,6 +125,30 @@ dataSources:
           handler: handleOrderCancelled
 
   # ---------------------------------------------------------
+  # ENS -------------------------------------------------
+  # ---------------------------------------------------------
+  - kind: ethereum/contract
+    name: DCLRegistrar
+    network: {{network}}
+    source:
+      address: '{{address:DCLRegistrar}}'
+      abi: DCLRegistrar
+      startBlock: {{startBlock:DCLRegistrar}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.3
+      language: wasm/assemblyscript
+      file: ./src/handlers/ens.ts
+      entities:
+        - DCLRegistrar
+      abis:
+        - name: DCLRegistrar
+          file: ./abis/DCLRegistrar.json
+      eventHandlers:
+        - event: NameRegistered(indexed address,indexed address,indexed bytes32,string,uint256)
+          handler: handleNameRegistered
+
+  # ---------------------------------------------------------
   # BIDS ----------------------------------------------------
   # ---------------------------------------------------------
   - kind: ethereum/contract

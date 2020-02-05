@@ -11,6 +11,7 @@ import {
   isWearableAccessory,
   isWearableHead
 } from '../modules/wearable'
+import { buildENSFromNFT } from '../modules/ens'
 import { createAccount } from '../modules/wallet'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
@@ -78,6 +79,10 @@ export function handleTransfer(event: Transfer): void {
         nft.searchWearableBodyShapes = wearable.bodyShapes
         nft.searchWearableRarity = wearable.rarity
       }
+    } else if (category == categories.ENS) {
+      let ens = buildENSFromNFT(nft)
+      ens.save()
+      nft.ens = ens.id
     }
 
     let metric = buildCountFromNFT(nft)

@@ -112,6 +112,19 @@ type Wearable @entity {
   bodyShapes: [WearableBodyShape!]
 }
 
+type ENS @entity {
+  id: ID!
+}
+
+type NameRegistration @entity {
+  id: ID!
+  caller: Bytes!
+  beneficiary: Bytes!
+  labelHash: Bytes!
+  subdomain: String
+  createdAt: BigInt!
+}
+
 type NFT @entity {
   id: ID!
   tokenId: BigInt!
@@ -130,6 +143,8 @@ type NFT @entity {
   parcel: Parcel
   estate: Estate
   wearable: Wearable
+  ens: ENS
+
   createdAt: BigInt!
   updatedAt: BigInt!
 
