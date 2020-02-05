@@ -1,0 +1,19 @@
+.HomePageHero.dcl.hero {
+  height: var(--page-header-height);
+}
+
+.HomePageHero .hero-image {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  background-image: url(../../images/hero.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.HomePageHero.dcl.hero .ui.header.hero-subtitle {
+  margin-bottom: 24px;
+  color: var(--secondary-text);
+}

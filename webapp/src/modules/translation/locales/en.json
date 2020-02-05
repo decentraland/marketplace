@@ -18,6 +18,15 @@
     "browse": "Browse",
     "my_account": "My account"
   },
+  "home_page": {
+    "title": "Decentraland Marketplace",
+    "subtitle": "Where you can buy blockchain sombreros",
+    "get_started": "Get Started",
+    "learn_more": "Learn More",
+    "view_all": "View All",
+    "wearables": "Wearables",
+    "land": "Parcels and Estates"
+  },
   "categories_menu": {
     "categories": "Categories",
     "menu_item": {

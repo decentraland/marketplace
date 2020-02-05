@@ -53,3 +53,21 @@ export const getUIOnlyOnSale = createSelector<
   const onlyOnSale = new URLSearchParams(search).get('onlyOnSale')
   return onlyOnSale === null ? onlyOnSale : onlyOnSale === 'true'
 })
+
+export const getHomepageWearables = createSelector<
+  RootState,
+  UIState,
+  NFTState['data'],
+  NFT[]
+>(getState, getNFTData, (ui, nftsById) =>
+  ui.homepageWearableIds.map(id => nftsById[id])
+)
+
+export const getHomepageLand = createSelector<
+  RootState,
+  UIState,
+  NFTState['data'],
+  NFT[]
+>(getState, getNFTData, (ui, nftsById) =>
+  ui.homepageLandIds.map(id => nftsById[id])
+)
