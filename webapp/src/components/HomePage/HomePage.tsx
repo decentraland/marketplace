@@ -14,7 +14,9 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 const HomePage = (props: Props) => {
   const { wearables, land, onNavigate, onFetchNFTs } = props
 
-  const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [])
+  const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
+    onNavigate
+  ])
 
   const handleViewWearables = useCallback(
     () => onNavigate(locations.browse({ section: Section.WEARABLES })),
@@ -49,7 +51,7 @@ const HomePage = (props: Props) => {
       },
       view: View.HOME_LAND
     })
-  }, [])
+  }, [onFetchNFTs])
 
   return (
     <>

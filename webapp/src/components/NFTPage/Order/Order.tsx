@@ -1,9 +1,10 @@
 import React, { useCallback } from 'react'
 import { Stats, Mana, Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { formatPrice } from '../../../modules/order/utils'
+
+import { formatMANA } from '../../../lib/mana'
 import { isOwnedBy } from '../../../modules/nft/utils'
+import { getExpiresAt } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Props } from './Order.types'
 import './Order.css'
@@ -40,11 +41,9 @@ const Order = (props: Props) => {
         {order ? (
           <>
             <Stats title={t('detail.price')}>
-              <Mana>{formatPrice(order.price)}</Mana>
+              <Mana>{formatMANA(order.price)}</Mana>
             </Stats>
-            <Stats title={t('detail.expires')}>
-              {formatDistanceToNow(+order.expiresAt)}
-            </Stats>
+            <Stats title={t('detail.expires')}>{getExpiresAt(order)}</Stats>
           </>
         ) : null}
       </div>

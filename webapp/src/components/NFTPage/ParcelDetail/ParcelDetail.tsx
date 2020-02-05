@@ -9,6 +9,7 @@ import { Badge } from '../Badge'
 import { Description } from '../Description'
 import { Order } from '../Order'
 import { ProximityHighlights } from '../ProximityHighlights'
+import { TransactionHistory } from '../../TransactionHistory'
 import { Props } from './ParcelDetail.types'
 import './ParcelDetail.css'
 
@@ -38,6 +39,7 @@ const ParcelDetail = (props: Props) => {
         <Description text={nft.parcel!.data?.description} />
         <Order nft={nft} />
         <ProximityHighlights nft={nft} />
+        <TransactionHistory nft={nft} />
       </Container>
     </>
   )

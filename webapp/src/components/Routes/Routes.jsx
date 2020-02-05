@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { AtlasPage } from '../AtlasPage'
 import { locations } from '../../modules/routing/locations'
+import { AtlasPage } from '../AtlasPage'
 import { BrowsePage } from '../BrowsePage'
 import { AccountPage } from '../AccountPage'
 import { SignInPage } from '../SignInPage'

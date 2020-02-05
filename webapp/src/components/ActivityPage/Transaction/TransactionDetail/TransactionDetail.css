@@ -51,6 +51,10 @@
   text-overflow: ellipsis;
 }
 
+.TransactionDetail .left .description .dcl.blockie {
+  margin-left: 3px;
+}
+
 .TransactionDetail .left .text .timestamp {
   color: var(--secondary-text);
   margin-left: 8px;

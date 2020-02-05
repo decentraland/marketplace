@@ -10,12 +10,13 @@ import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
-import { Props } from './WearableDetail.types'
 import { Badge } from '../Badge'
 import { Description } from '../Description'
 import { Order } from '../Order'
 import { Highlight } from '../Highlight'
 import { Highlights } from '../Highlights'
+import { TransactionHistory } from '../../TransactionHistory'
+import { Props } from './WearableDetail.types'
 import './WearableDetail.css'
 
 const WearableDetail = (props: Props) => {
@@ -61,6 +62,7 @@ const WearableDetail = (props: Props) => {
             />
           ))}
         </Highlights>
+        <TransactionHistory nft={nft} />
       </Container>
     </div>
   )

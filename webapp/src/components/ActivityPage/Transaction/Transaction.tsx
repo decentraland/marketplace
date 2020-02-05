@@ -1,25 +1,24 @@
 import React from 'react'
-import { Props } from './Transaction.types'
+import { Link } from 'react-router-dom'
+import { Mana, Popup } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { EtherscanLink } from 'decentraland-dapps/dist/containers'
 import {
   APPROVE_TOKEN_SUCCESS,
   ALLOW_TOKEN_SUCCESS
 } from '../../../modules/authorization/actions'
-import { TransactionDetail } from './TransactionDetail'
 import { contractSymbols } from '../../../modules/contract/utils'
-import './Transaction.css'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
   EXECUTE_ORDER_SUCCESS
 } from '../../../modules/order/actions'
-import { NFTProvider } from '../../NFTProvider'
-import { Mana, Popup } from 'decentraland-ui'
-import { locations } from '../../../modules/routing/locations'
-import { Link } from 'react-router-dom'
 import { TRANSFER_NFT_SUCCESS } from '../../../modules/nft/actions'
-import { shortenAddress } from '../../../modules/wallet/utils'
+import { NFTProvider } from '../../NFTProvider'
+import { Address } from '../../Address'
+import { locations } from '../../../modules/routing/locations'
+import { TransactionDetail } from './TransactionDetail'
+import { Props } from './Transaction.types'
 
 const Transaction = (props: Props) => {
   const { tx } = props
@@ -179,11 +178,7 @@ const Transaction = (props: Props) => {
                         content={address}
                         position="top center"
                         on="hover"
-                        trigger={
-                          <Link to={locations.account(address.toLowerCase())}>
-                            {shortenAddress(address)}
-                          </Link>
-                        }
+                        trigger={<Address address={address} />}
                       />
                     )
                   }}

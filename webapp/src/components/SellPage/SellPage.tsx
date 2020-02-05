@@ -4,39 +4,24 @@ import dateFnsFormat from 'date-fns/format'
 import { fromWei } from 'web3x-es/utils'
 import { Page, Header, Button, Field, Modal, Mana } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
 import { NFTProviderPage } from '../NFTProviderPage'
 import { NFTAction } from '../NFTAction'
+import { DEFAULT_EXPIRATION_IN_DAYS } from '../../modules/order/utils'
 import { getNFTName, isOwnedBy } from '../../modules/nft/utils'
 import { locations } from '../../modules/routing/locations'
-import { MANA_SYMBOL } from '../../lib/api/mana'
+import { toMANA, fromMANA } from '../../lib/mana'
 import { Props } from './SellPage.types'
 import './SellPage.css'
 
-const DEFAULT_EXPIRATION_IN_DAYS = 30
 const INPUT_FORMAT = 'yyyy-MM-dd'
 const DEFAULT_EXPIRATION_DATE = dateFnsFormat(
   addDays(new Date(), DEFAULT_EXPIRATION_IN_DAYS),
   INPUT_FORMAT
 )
-
-const toMANA = (num: number) =>
-  num > 0 ? MANA_SYMBOL + ' ' + num.toLocaleString() : ''
-
-const fromMANA = (mana: string) => {
-  const num = mana
-    .split(MANA_SYMBOL + ' ')
-    .join('')
-    .split(',')
-    .join('')
-  const result = parseInt(num)
-  if (isNaN(result) || result < 0) {
-    return 0
-  }
-  return result
-}
 
 const SellPage = (props: Props) => {
   const { order, onNavigate, onCreateOrder } = props
@@ -51,6 +36,7 @@ const SellPage = (props: Props) => {
   )
   const [confirmPrice, setConfirmPrice] = useState('')
   const [showConfirm, setShowConfirm] = useState(false)
+
   return (
     <>
       <Navbar isFullscreen />
@@ -84,13 +70,11 @@ const SellPage = (props: Props) => {
                     <div className="fields">
                       <Field
                         label={t('sell_page.price')}
-                        placeholder={
-                          MANA_SYMBOL + ' ' + (1000).toLocaleString()
-                        }
+                        placeholder={toMANA(1000).toLocaleString()}
                         value={price}
                         onChange={(_event, props) => {
                           const newPrice = fromMANA(props.value)
-                          setPrice(newPrice > 0 ? toMANA(newPrice) : '')
+                          setPrice(toMANA(newPrice))
                         }}
                       />
                       <Field
@@ -162,9 +146,7 @@ const SellPage = (props: Props) => {
                           value={confirmPrice}
                           onChange={(_event, props) => {
                             const newPrice = fromMANA(props.value)
-                            setConfirmPrice(
-                              newPrice > 0 ? toMANA(newPrice) : ''
-                            )
+                            setConfirmPrice(toMANA(newPrice))
                           }}
                         />
                       </Modal.Content>

@@ -6,6 +6,7 @@ import { Order } from '../../modules/order/types'
 import { isExpired } from '../../modules/order/utils'
 import { FetchNFTsOptions } from '../../modules/nft/actions'
 import { nftFragment, NFTFragment } from '../../modules/nft/fragments'
+import { orderFragment } from '../../modules/order/fragments'
 import { client } from './client'
 
 class NFTAPI {
@@ -52,7 +53,7 @@ class NFTAPI {
 
   async fetchOne(contractAddress: string, tokenId: string) {
     const { data } = await client.query({
-      query: NFT_BY_ADDRESS_AND_ID,
+      query: NFT_BY_ADDRESS_AND_ID_QUERY,
       variables: {
         contractAddress,
         tokenId
@@ -73,9 +74,17 @@ class NFTAPI {
     return [nft, order] as const
   }
 
+  async fetchOrders(nftId: string) {
+    const { data } = await client.query({
+      query: NFT_ORDERS_QUERY,
+      variables: { nftId }
+    })
+    return data.orders as Order[]
+  }
+
   async fetchTokenId(x: number, y: number) {
     const { data } = await client.query({
-      query: PARCEL_TOKEN_ID,
+      query: PARCEL_TOKEN_ID_QUERY,
       variables: { x, y }
     })
     const { tokenId } = data.parcels[0]
@@ -150,7 +159,7 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
   `
 }
 
-export const NFT_BY_ADDRESS_AND_ID = gql`
+export const NFT_BY_ADDRESS_AND_ID_QUERY = gql`
   query NFTByTokenId($contractAddress: String, $tokenId: String) {
     nfts(
       where: { contractAddress: $contractAddress, tokenId: $tokenId }
@@ -162,7 +171,20 @@ export const NFT_BY_ADDRESS_AND_ID = gql`
   ${nftFragment()}
 `
 
-export const PARCEL_TOKEN_ID = gql`
+export const NFT_ORDERS_QUERY = gql`
+  query NFTOrders($nftId: String!) {
+    orders(
+      where: { nft: $nftId, status: sold }
+      orderBy: createdAt
+      orderDirection: desc
+    ) {
+      ...orderFragment
+    }
+  }
+  ${orderFragment()}
+`
+
+export const PARCEL_TOKEN_ID_QUERY = gql`
   query ParcelTokenId($x: BigInt, $y: BigInt) {
     parcels(where: { x: $x, y: $y }) {
       tokenId
