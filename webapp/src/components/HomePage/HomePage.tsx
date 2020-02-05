@@ -14,6 +14,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 const HomePage = (props: Props) => {
   const { wearables, land, onNavigate, onFetchNFTs } = props
 
+  const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [])
+
   const handleViewWearables = useCallback(
     () => onNavigate(locations.browse({ section: Section.WEARABLES })),
     [onNavigate]
@@ -59,7 +61,9 @@ const HomePage = (props: Props) => {
           <div className="hero-image" />
         </Hero.Content>
         <Hero.Actions>
-          <Button primary>{t('home_page.get_started')}</Button>
+          <Button primary onClick={handleGetStarted}>
+            {t('home_page.get_started')}
+          </Button>
           <Button secondary disabled>
             {t('home_page.learn_more')}
           </Button>
