@@ -57,14 +57,27 @@ export function getWearableImage(wearable: WearableEntity): String {
   )
 }
 
+export function isWearableHead(wearable: WearableEntity): boolean {
+  let category = wearable.category
+  return (
+    category == categories.EYEBROWS ||
+    category == categories.EYES ||
+    category == categories.FACIAL_HAIR ||
+    category == categories.HAIR ||
+    category == categories.MOUTH
+  )
+}
+
 export function isWearableAccessory(wearable: WearableEntity): boolean {
   let category = wearable.category
   return (
-    category == categories.EYEWEAR ||
     category == categories.EARRING ||
-    category == categories.MASK ||
+    category == categories.EYEWEAR ||
     category == categories.HAT ||
-    category == categories.HELMET
+    category == categories.HELMET ||
+    category == categories.MASK ||
+    category == categories.TIARA ||
+    category == categories.TOP_HEAD
   )
 }
 

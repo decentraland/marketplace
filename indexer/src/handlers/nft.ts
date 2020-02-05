@@ -8,7 +8,8 @@ import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
 import {
   buildWearableFromNFT,
   getWearableImage,
-  isWearableAccessory
+  isWearableAccessory,
+  isWearableHead
 } from '../modules/wearable'
 import { createAccount } from '../modules/wallet'
 import * as categories from '../modules/category/categories'
@@ -72,6 +73,7 @@ export function handleTransfer(event: Transfer): void {
         nft.name = wearable.name
         nft.image = getWearableImage(wearable)
         nft.searchIsWearableAccessory = isWearableAccessory(wearable)
+        nft.searchIsWearableHead = isWearableHead(wearable)
         nft.searchWearableCategory = wearable.category
         nft.searchWearableBodyShapes = wearable.bodyShapes
         nft.searchWearableRarity = wearable.rarity

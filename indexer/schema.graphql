@@ -146,9 +146,10 @@ type NFT @entity {
 
   searchEstateSize: Int
 
+  searchIsWearableHead: Boolean
   searchIsWearableAccessory: Boolean
+  searchWearableRarity: String # We're using String instead of WearableRarity here so we can later query this field via ()_in
   searchWearableCategory: WearableCategory
-  searchWearableRarity: WearableRarity
   searchWearableBodyShapes: [WearableBodyShape!]
 }
 
