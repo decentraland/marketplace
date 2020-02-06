@@ -185,6 +185,7 @@ enum Category @entity {
   parcel
   estate
   wearable
+  ens
 }
 
 enum OrderStatus @entity {

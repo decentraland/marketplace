@@ -7,6 +7,7 @@ import * as addresses from '../data/addresses'
 
 export function handleNameRegistered(event: NameRegistered): void {
   let tokenId = BigInt.fromUnsignedBytes(event.params._labelHash)
+
   let id = getNFTId(categories.ENS, addresses.DCLRegistrar, tokenId.toString())
 
   let ens = new ENS(id)
