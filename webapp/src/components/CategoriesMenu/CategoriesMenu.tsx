@@ -16,6 +16,7 @@ const CategoriesMenu = (props: Props) => {
       <ul className="menu">
         {[Section.ALL, Section.LAND].map(menuSection => (
           <MenuItem
+            key={menuSection}
             section={menuSection}
             currentSection={section}
             onNavigate={onNavigate}
@@ -25,6 +26,7 @@ const CategoriesMenu = (props: Props) => {
         {[Section.LAND, Section.PARCELS, Section.ESTATES].includes(section)
           ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
               <MenuItem
+                key={menuSection}
                 section={menuSection}
                 currentSection={section}
                 onNavigate={onNavigate}
@@ -59,6 +61,7 @@ const CategoriesMenu = (props: Props) => {
         ].includes(section) ? (
           <>
             <MenuItem
+              key={Section.WEARABLES_HEAD}
               section={Section.WEARABLES_HEAD}
               currentSection={section}
               onNavigate={onNavigate}
@@ -82,6 +85,7 @@ const CategoriesMenu = (props: Props) => {
                     Section.WEARABLES_MOUTH
                   ].map(menuSection => (
                     <MenuItem
+                      key={menuSection}
                       section={menuSection}
                       currentSection={section}
                       onNavigate={onNavigate}
@@ -97,6 +101,7 @@ const CategoriesMenu = (props: Props) => {
               Section.WEARABLES_FEET
             ].map(menuSection => (
               <MenuItem
+                key={menuSection}
                 section={menuSection}
                 currentSection={section}
                 onNavigate={onNavigate}
@@ -130,6 +135,7 @@ const CategoriesMenu = (props: Props) => {
                     Section.WEARABLES_TOP_HEAD
                   ].map(menuSection => (
                     <MenuItem
+                      key={menuSection}
                       section={menuSection}
                       currentSection={section}
                       onNavigate={onNavigate}
