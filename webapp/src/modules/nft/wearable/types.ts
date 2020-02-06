@@ -1,20 +1,19 @@
 export enum WearableCategory {
-  BODY_SHAPE = 'body_shape',
-  EARRING = 'earring',
   EYEBROWS = 'eyebrows',
   EYES = 'eyes',
-  EYEWEAR = 'eyewear',
   FACIAL_HAIR = 'facial_hair',
-  FEET = 'feet',
   HAIR = 'hair',
+  MOUTH = 'mouth',
+  UPPER_BODY = 'upper_body',
+  LOWER_BODY = 'lower_body',
+  FEET = 'feet',
+  EARRING = 'earring',
+  EYEWEAR = 'eyewear',
   HAT = 'hat',
   HELMET = 'helmet',
-  LOWER_BODY = 'lower_body',
   MASK = 'mask',
-  MOUTH = 'mouth',
   TIARA = 'tiara',
-  TOP_HEAD = 'top_head',
-  UPPER_BODY = 'upper_body'
+  TOP_HEAD = 'top_head'
 }
 
 export enum WearableRarity {

@@ -103,6 +103,7 @@ const NFTS_FILTERS = `
   $category: Category
   $wearableCategory: WearableCategory
   $isLand: Boolean
+  $isWearableHead: Boolean
   $isWearableAccessory: Boolean
 `
 
@@ -130,6 +131,10 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
 
   if (variables.isLand) {
     extraWhere.push('searchIsLand: $isLand')
+  }
+
+  if (variables.isWearableHead) {
+    extraWhere.push('searchIsWearableHead: $isWearableHead')
   }
 
   if (variables.isWearableAccessory) {

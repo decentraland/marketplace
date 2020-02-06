@@ -114,15 +114,13 @@ type Wearable @entity {
 
 type ENS @entity {
   id: ID!
-}
-
-type NameRegistration @entity {
-  id: ID!
-  caller: Bytes!
-  beneficiary: Bytes!
-  labelHash: Bytes!
+  tokenId: BigInt!
+  owner: Account!
+  caller: Bytes
+  beneficiary: Bytes
+  labelHash: Bytes
   subdomain: String
-  createdAt: BigInt!
+  createdAt: BigInt
 }
 
 type NFT @entity {
@@ -196,17 +194,21 @@ enum OrderStatus @entity {
 }
 
 enum WearableCategory @entity {
-  mask
+  eyebrows
+  eyes
+  facial_hair
+  hair
+  mouth
+  upper_body
+  lower_body
+  feet
   earring
   eyewear
-  feet
-  hair
   hat
   helmet
-  facial_hair
-  upper_body
+  mask
+  tiara
   top_head
-  lower_body
 }
 
 enum WearableRarity @entity {

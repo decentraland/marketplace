@@ -129,6 +129,7 @@ const NFTListPage = (props: Props) => {
     const [orderBy, orderDirection] = getSortOrder(sortBy)
 
     const isLand = section === Section.LAND
+    const isWearableHead = section === Section.WEARABLES_HEAD
     const isWearableAccessory = section === Section.WEARABLES_ACCESORIES
 
     const wearableCategory =
@@ -145,6 +146,7 @@ const NFTListPage = (props: Props) => {
         onlyOnSale,
         address,
         isLand,
+        isWearableHead,
         isWearableAccessory,
         category,
         wearableCategory

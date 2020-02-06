@@ -24,6 +24,7 @@ export type FetchNFTsOptions = {
     address?: string
     onlyOnSale: boolean
     isLand?: boolean
+    isWearableHead?: boolean
     isWearableAccessory?: boolean
     category?: NFTCategory
     wearableCategory?: WearableCategory

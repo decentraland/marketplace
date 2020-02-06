@@ -8,8 +8,8 @@ import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
 import {
   buildWearableFromNFT,
   getWearableImage,
-  isWearableAccessory,
-  isWearableHead
+  isWearableHead,
+  isWearableAccessory
 } from '../modules/wearable'
 import { buildENSFromNFT } from '../modules/ens'
 import { createAccount } from '../modules/wallet'
@@ -73,8 +73,8 @@ export function handleTransfer(event: Transfer): void {
         nft.wearable = id
         nft.name = wearable.name
         nft.image = getWearableImage(wearable)
-        nft.searchIsWearableAccessory = isWearableAccessory(wearable)
         nft.searchIsWearableHead = isWearableHead(wearable)
+        nft.searchIsWearableAccessory = isWearableAccessory(wearable)
         nft.searchWearableCategory = wearable.category
         nft.searchWearableBodyShapes = wearable.bodyShapes
         nft.searchWearableRarity = wearable.rarity
@@ -83,6 +83,7 @@ export function handleTransfer(event: Transfer): void {
       let ens = buildENSFromNFT(nft)
       ens.save()
       nft.ens = ens.id
+      nft.name = ens.subdomain
     }
 
     let metric = buildCountFromNFT(nft)
