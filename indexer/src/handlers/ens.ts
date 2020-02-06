@@ -1,12 +1,12 @@
-import { BigInt } from '@graphprotocol/graph-ts'
 import { NameRegistered } from '../entities/DCLRegistrar/DCLRegistrar'
 import { ENS } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
+import { getTokenIdFromLabelHash } from '../modules/ens'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
 
 export function handleNameRegistered(event: NameRegistered): void {
-  let tokenId = BigInt.fromUnsignedBytes(event.params._labelHash)
+  let tokenId = getTokenIdFromLabelHash(event.params._labelHash)
 
   let id = getNFTId(categories.ENS, addresses.DCLRegistrar, tokenId.toString())
 
