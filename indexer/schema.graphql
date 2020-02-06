@@ -141,15 +141,15 @@ type Wallet @entity {
 
 type ENS @entity {
   id: ID!
-}
-
-type NameRegistration @entity {
-  id: ID!
-  caller: Bytes!
-  beneficiary: Bytes!
-  labelHash: Bytes!
+  caller: Bytes
+  beneficiary: Bytes
+  labelHash: Bytes
   subdomain: String
-  createdAt: BigInt!
+  createdAt: BigInt
+
+  tokenId: BigInt
+  tokenId2: BigInt
+  tokenId3: BigInt
 }
 
 # ---------------------------------------------------------

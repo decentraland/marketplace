@@ -1,28 +1,32 @@
+import { log, BigInt, Value } from '@graphprotocol/graph-ts'
 import { Transfer } from '../entities/templates/ERC721/ERC721'
 import { NFT } from '../entities/schema'
 import { isMint, getNFTId, getTokenURI } from '../modules/nft'
 import { getCategory } from '../modules/category'
-// import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
-// import { buildCountFromNFT } from '../modules/count'
-// import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
-// import { buildWearableFromNFT, getWearableImage } from '../modules/wearable'
 import { buildENSFromNFT } from '../modules/ens'
 import { createWallet } from '../modules/wallet'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
 
 import { NameRegistered } from '../entities/DCLRegistrar/DCLRegistrar'
-import { NameRegistration } from '../entities/schema'
+import { ENS } from '../entities/schema'
 
 export function handleNameRegistered(event: NameRegistered): void {
-  let nameRegistered = new NameRegistration(
-    event.params._labelHash.toHexString()
-  )
+  let tokenId = BigInt.fromUnsignedBytes(event.params._labelHash)
+
+  let id = getNFTId(tokenId.toString(), categories.ENS)
+
+  let nameRegistered = new ENS(id)
   nameRegistered.caller = event.params._caller
   nameRegistered.beneficiary = event.params._beneficiary
   nameRegistered.labelHash = event.params._labelHash
   nameRegistered.subdomain = event.params._subdomain
   nameRegistered.createdAt = event.params._createdDate
+
+  nameRegistered.tokenId = tokenId
+  // nameRegistered.tokenId2 = tokenId2
+  // nameRegistered.tokenId3 = tokenId3
+
   nameRegistered.save()
 }
 
@@ -51,34 +55,11 @@ export function handleTransfer(event: Transfer): void {
   if (isMint(event)) {
     nft.createdAt = event.block.timestamp
 
-    /*if (category == categories.PARCEL) {
-      let parcel = buildParcelFromNFT(nft)
-      parcel.save()
-      nft.parcel = id
-      nft.image = getParcelImage(parcel)
-    } else if (category == categories.ESTATE) {
-      let estate = buildEstateFromNFT(nft)
-      estate.save()
-      nft.estate = id
-      nft.image = getEstateImage(estate)
-    } else if (category == categories.WEARABLE) {
-      let wearable = buildWearableFromNFT(nft)
-      if (wearable.id != '') {
-        wearable.save()
-        nft.wearable = id
-        nft.name = wearable.name
-        nft.image = getWearableImage(wearable)
-      }
-    }*/ if (
-      category == categories.ENS
-    ) {
+    if (category == categories.ENS) {
       let ens = buildENSFromNFT(nft)
       ens.save()
       nft.ens = ens.id
     }
-
-    // let metric = buildCountFromNFT(nft)
-    // metric.save()
   }
 
   createWallet(event.params.to.toHex())

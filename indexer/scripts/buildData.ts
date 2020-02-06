@@ -85,7 +85,7 @@ class Ethereum {
   constructor(network: Network) {
     this.network = network
     this.startBlocks = startBlockByNetwork[network]
-    this.startBlocks['DCLRegistrar'] = 7170497
+    this.startBlocks['DCLRegistrar'] = 9412979
   }
 
   async fetchContracts() {
@@ -95,7 +95,7 @@ class Ethereum {
     this.contractAddresses = contractsByNetwork[this.network]
     // TODO: remove this
     this.contractAddresses['DCLRegistrar'] =
-      '0xeb6f5d94d79f0750781cc962908b161b95192f53'
+      '0x2a187453064356c898cae034eaed119e1663acb8'
   }
 
   getAddress(contractName: string) {
