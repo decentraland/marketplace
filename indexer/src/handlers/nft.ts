@@ -1,4 +1,4 @@
-import { log, BigInt, Value } from '@graphprotocol/graph-ts'
+import { log, BigInt, Value, Bytes } from '@graphprotocol/graph-ts'
 import { Transfer } from '../entities/templates/ERC721/ERC721'
 import { NFT } from '../entities/schema'
 import { isMint, getNFTId, getTokenURI } from '../modules/nft'
@@ -12,20 +12,22 @@ import { NameRegistered } from '../entities/DCLRegistrar/DCLRegistrar'
 import { ENS } from '../entities/schema'
 
 export function handleNameRegistered(event: NameRegistered): void {
-  let tokenId = BigInt.fromUnsignedBytes(event.params._labelHash)
+  let labelHash = event.params._labelHash
+
+  let tokenId = BigInt.fromUnsignedBytes(
+    event.params._labelHash.reverse() as Bytes
+  )
 
   let id = getNFTId(tokenId.toString(), categories.ENS)
 
   let nameRegistered = new ENS(id)
   nameRegistered.caller = event.params._caller
   nameRegistered.beneficiary = event.params._beneficiary
-  nameRegistered.labelHash = event.params._labelHash
+  nameRegistered.labelHash = labelHash.reverse() as Bytes
   nameRegistered.subdomain = event.params._subdomain
   nameRegistered.createdAt = event.params._createdDate
 
   nameRegistered.tokenId = tokenId
-  // nameRegistered.tokenId2 = tokenId2
-  // nameRegistered.tokenId3 = tokenId3
 
   nameRegistered.save()
 }
@@ -58,6 +60,7 @@ export function handleTransfer(event: Transfer): void {
     if (category == categories.ENS) {
       let ens = buildENSFromNFT(nft)
       ens.save()
+      nft.name = ens.subdomain
       nft.ens = ens.id
     }
   }

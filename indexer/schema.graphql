@@ -148,8 +148,7 @@ type ENS @entity {
   createdAt: BigInt
 
   tokenId: BigInt
-  tokenId2: BigInt
-  tokenId3: BigInt
+  tokenId2: Int
 }
 
 # ---------------------------------------------------------
