@@ -25,6 +25,10 @@
   width: 232px;
 }
 
+.CategoriesMenu ul.menu li .dropdown.icon {
+  float: right;
+}
+
 .CategoriesMenu ul.menu li:hover,
 .CategoriesMenu ul.menu li.active {
   color: white;

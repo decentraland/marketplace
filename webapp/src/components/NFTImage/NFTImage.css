@@ -20,6 +20,7 @@
 
 .NFTImage .image {
   margin: auto;
+  max-height: 100%;
 }
 
 .NFTImage .rarity-background {

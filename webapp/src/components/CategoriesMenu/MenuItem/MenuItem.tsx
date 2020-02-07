@@ -14,7 +14,7 @@ const MenuItem = (props: Props) => {
     [onNavigate]
   )
 
-  const classNames: string[] = []
+  const classNames: string[] = ['MenuItem']
   if (currentSection === section) {
     classNames.push('active')
   }

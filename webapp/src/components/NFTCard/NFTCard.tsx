@@ -10,6 +10,7 @@ import { NFTImage } from '../NFTImage'
 import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
+import { ENSTags } from './ENSTags'
 import { Props } from './NFTCard.types'
 import './NFTCard.css'
 
@@ -39,6 +40,7 @@ const NFTCard = (props: Props) => {
         {nft.parcel ? <ParcelTags nft={nft} /> : null}
         {nft.estate ? <EstateTags nft={nft} /> : null}
         {nft.wearable ? <WearableTags nft={nft} /> : null}
+        {nft.ens ? <ENSTags nft={nft} /> : null}
       </Card.Content>
     </Card>
   )
