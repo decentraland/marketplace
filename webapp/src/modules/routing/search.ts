@@ -26,7 +26,9 @@ export enum Section {
   WEARABLES_HELMET = 'wearables_helmet',
   WEARABLES_MASK = 'wearables_mask',
   WEARABLES_TIARA = 'wearables_tiara',
-  WEARABLES_TOP_HEAD = 'wearables_top_head'
+  WEARABLES_TOP_HEAD = 'wearables_top_head',
+
+  ENS = 'ens'
 }
 
 export enum SortBy {
@@ -93,6 +95,8 @@ export function getSearchCategory(section: Section) {
     case Section.WEARABLES_TIARA:
     case Section.WEARABLES_TOP_HEAD:
       return NFTCategory.WEARABLE
+    case Section.ENS:
+      return NFTCategory.ENS
   }
 }
 

@@ -31,6 +31,10 @@ export function getNFTName(nft: NFT) {
 
     case NFTCategory.WEARABLE:
       return t('global.wearable')
+
+    case NFTCategory.ENS:
+      return t('global.ens')
+
     default:
       return t('global.nft')
   }

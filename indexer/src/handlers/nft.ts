@@ -83,7 +83,6 @@ export function handleTransfer(event: Transfer): void {
       let ens = buildENSFromNFT(nft)
       ens.save()
       nft.ens = ens.id
-      nft.name = ens.subdomain
     }
 
     let metric = buildCountFromNFT(nft)

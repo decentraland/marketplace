@@ -32,6 +32,7 @@ const NFTImage = (props: Props) => {
         />
       )
     }
+
     case NFTCategory.ESTATE: {
       const selection = getSelection(nft)
       const [x, y] = getCenter(selection)
@@ -59,6 +60,14 @@ const NFTImage = (props: Props) => {
           }}
         >
           <img alt={getNFTName(nft)} className="image" src={nft.image} />
+        </div>
+      )
+    }
+
+    case NFTCategory.ENS: {
+      return (
+        <div className="ens-subdomain">
+          <span>{nft.ens!.subdomain}</span>
         </div>
       )
     }

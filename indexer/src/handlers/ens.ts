@@ -1,5 +1,5 @@
 import { NameRegistered } from '../entities/DCLRegistrar/DCLRegistrar'
-import { ENS } from '../entities/schema'
+import { ENS, NFT } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { getTokenIdFromLabelHash } from '../modules/ens'
 import * as categories from '../modules/category/categories'
@@ -19,4 +19,8 @@ export function handleNameRegistered(event: NameRegistered): void {
   ens.subdomain = event.params._subdomain
   ens.createdAt = event.params._createdDate
   ens.save()
+
+  let nft = NFT.load(id)
+  nft.name = ens.subdomain
+  nft.save()
 }

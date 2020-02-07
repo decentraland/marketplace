@@ -1,11 +1,13 @@
 import { Parcel } from './parcel/types'
 import { Estate } from './estate/types'
 import { Wearable } from './wearable/types'
+import { ENS } from './ens/types'
 
 export enum NFTCategory {
   PARCEL = 'parcel',
   ESTATE = 'estate',
-  WEARABLE = 'wearable'
+  WEARABLE = 'wearable',
+  ENS = 'ens'
 }
 
 export enum NFTSortBy {
@@ -29,4 +31,5 @@ export type NFT = {
   parcel: Parcel | null
   estate: Estate | null
   wearable: Wearable | null
+  ens: ENS | null
 }

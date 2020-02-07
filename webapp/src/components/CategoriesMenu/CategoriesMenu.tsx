@@ -146,6 +146,12 @@ const CategoriesMenu = (props: Props) => {
             </ul>
           </>
         ) : null}
+
+        <MenuItem
+          section={Section.ENS}
+          currentSection={section}
+          onNavigate={onNavigate}
+        />
       </ul>
     </div>
   )
