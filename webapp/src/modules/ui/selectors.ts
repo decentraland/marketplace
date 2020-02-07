@@ -41,7 +41,7 @@ export const getUISortBy = createSelector<RootState, string, SortBy>(
     if (sortBy) {
       return sortBy as SortBy
     }
-    return SortBy.NEWEST
+    return SortBy.RECENTLY_LISTED
   }
 )
 

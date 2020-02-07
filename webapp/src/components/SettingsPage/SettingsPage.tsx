@@ -7,7 +7,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { locations } from '../../modules/routing/locations'
-import { Authorizations } from './Authorizations'
+import { Authorization } from './Authorization'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
 
@@ -133,17 +133,29 @@ const SettingsPage = (props: Props) => {
                           </label>
 
                           {Object.keys(authorizations!.allowances).map(
-                            contractAddress => (
-                              <Authorizations
-                                key={contractAddress}
-                                contractAddress={contractAddress}
-                                privilege={
-                                  authorizations!.allowances[contractAddress]
-                                }
-                                pendingTransactions={pendingAllowTransactions}
-                                onChange={onAllowToken}
-                              />
-                            )
+                            contractAddress => {
+                              const privilege = authorizations!.allowances[
+                                contractAddress
+                              ]
+                              return !privilege
+                                ? null
+                                : Object.keys(
+                                    privilege
+                                  ).map(tokenContractAddress => (
+                                    <Authorization
+                                      key={contractAddress}
+                                      checked={privilege[tokenContractAddress]}
+                                      contractAddress={contractAddress}
+                                      tokenContractAddress={
+                                        tokenContractAddress
+                                      }
+                                      pendingTransactions={
+                                        pendingAllowTransactions
+                                      }
+                                      onChange={onAllowToken}
+                                    />
+                                  ))
+                            }
                           )}
                         </div>
 
@@ -153,17 +165,29 @@ const SettingsPage = (props: Props) => {
                           </label>
 
                           {Object.keys(authorizations!.approvals).map(
-                            contractAddress => (
-                              <Authorizations
-                                key={contractAddress}
-                                contractAddress={contractAddress}
-                                privilege={
-                                  authorizations!.approvals[contractAddress]
-                                }
-                                pendingTransactions={pendingApproveTransactions}
-                                onChange={onApproveToken}
-                              />
-                            )
+                            contractAddress => {
+                              const privilege = authorizations!.approvals[
+                                contractAddress
+                              ]
+                              return !privilege
+                                ? null
+                                : Object.keys(
+                                    privilege
+                                  ).map(tokenContractAddress => (
+                                    <Authorization
+                                      key={contractAddress}
+                                      checked={privilege[tokenContractAddress]}
+                                      contractAddress={contractAddress}
+                                      tokenContractAddress={
+                                        tokenContractAddress
+                                      }
+                                      pendingTransactions={
+                                        pendingApproveTransactions
+                                      }
+                                      onChange={onApproveToken}
+                                    />
+                                  ))
+                            }
                           )}
                         </div>
                       </Form>

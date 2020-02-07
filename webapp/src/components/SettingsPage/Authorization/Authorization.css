@@ -1,0 +1,40 @@
+.Authorization > .field {
+  margin-bottom: 41px !important;
+}
+
+.Authorization .ui.checkbox input.hidden + label {
+  font-weight: 700;
+  font-size: 17px;
+  padding-left: 35px;
+}
+
+.Authorization .is-pending .ui.checkbox label:before,
+.Authorization .is-pending .ui.checkbox label:after {
+  display: none;
+}
+
+.Authorization .radio-description {
+  font-size: 15px;
+  margin-left: 35px;
+}
+
+.Authorization .is-pending .loader-tooltip {
+  display: inline;
+  position: relative;
+}
+
+.Authorization .loader-tooltip {
+  display: none;
+}
+
+.Authorization .ui.loader {
+  left: 7px;
+  top: 2px;
+  float: left;
+}
+
+.Authorization .ui.mini.loader:after,
+.Authorization .ui.mini.loader:before {
+  width: 1.8rem;
+  height: 1.8rem;
+}
