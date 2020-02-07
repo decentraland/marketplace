@@ -1,9 +1,8 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { getNFTName } from '../../../modules/nft/utils'
-import { getSelection, getCenter } from '../../../modules/nft/estate/utils'
-import { Atlas } from '../../Atlas'
 import { PageHeader } from '../../PageHeader'
+import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
@@ -16,19 +15,10 @@ import './EstateDetail.css'
 
 const EstateDetail = (props: Props) => {
   const { nft } = props
-  const selection = useMemo(() => getSelection(nft), [nft])
-  const [x, y] = getCenter(selection)
   return (
     <>
       <PageHeader>
-        <Atlas
-          x={x}
-          y={y}
-          isDraggable
-          selection={selection}
-          withNavigation
-          isEstate
-        />
+        <NFTImage nft={nft} isDraggable={true} withNavigation={true} />
       </PageHeader>
       <Container className="EstateDetail">
         <Title

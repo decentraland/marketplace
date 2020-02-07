@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { getNFTName } from '../../../modules/nft/utils'
-import { Atlas } from '../../Atlas'
 import { PageHeader } from '../../PageHeader'
+import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
@@ -16,12 +16,11 @@ import './ParcelDetail.css'
 const ParcelDetail = (props: Props) => {
   const { nft } = props
   const { x, y } = nft.parcel!
-  const selection = useMemo(() => [{ x, y }], [x, y])
 
   return (
     <>
       <PageHeader>
-        <Atlas x={+x} y={+y} isDraggable selection={selection} withNavigation />
+        <NFTImage nft={nft} isDraggable={true} withNavigation={true} />
       </PageHeader>
       <Container className="ParcelDetail">
         <Title
