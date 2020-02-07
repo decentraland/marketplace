@@ -1,12 +1,12 @@
 import React from 'react'
-import { Props, AuthorizationType } from './AuthorizationModal.types'
+import { Link } from 'react-router-dom'
 import { Modal, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { contractSymbols } from '../../modules/contract/utils'
 import { Authorization } from '../SettingsPage/Authorization'
 import { hasAuthorization } from '../../modules/authorization/utils'
 import { locations } from '../../modules/routing/locations'
-import { Link } from 'react-router-dom'
+import { Props, AuthorizationType } from './AuthorizationModal.types'
 
 const AuthorizationModal = (props: Props) => {
   const {
