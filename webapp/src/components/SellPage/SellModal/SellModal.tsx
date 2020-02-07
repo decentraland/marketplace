@@ -3,7 +3,7 @@ import { fromWei } from 'web3x-es/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import addDays from 'date-fns/addDays'
 import dateFnsFormat from 'date-fns/format'
-import { MANA_SYMBOL } from '../../../lib/mana'
+import { MANA_SYMBOL, toMANA, fromMANA } from '../../../lib/mana'
 import { NFTAction } from '../../NFTAction'
 import { Header, Field, Button, Modal, Mana } from 'decentraland-ui'
 import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
@@ -21,22 +21,6 @@ const DEFAULT_EXPIRATION_DATE = dateFnsFormat(
   addDays(new Date(), DEFAULT_EXPIRATION_IN_DAYS),
   INPUT_FORMAT
 )
-
-const toMANA = (num: number) =>
-  num > 0 ? MANA_SYMBOL + ' ' + num.toLocaleString() : ''
-
-const fromMANA = (mana: string) => {
-  const num = mana
-    .split(MANA_SYMBOL + ' ')
-    .join('')
-    .split(',')
-    .join('')
-  const result = parseInt(num)
-  if (isNaN(result) || result < 0) {
-    return 0
-  }
-  return result
-}
 
 const SellModal = (props: Props) => {
   const { nft, order, wallet, onNavigate, onCreateOrder } = props
