@@ -173,6 +173,7 @@
     "authorization_Marketplace_ExclusiveMasksCollection": "{token}",
     "authorization_Marketplace_Halloween2019Collection": "{token}",
     "authorization_Marketplace_Xmas2019Collection": "{token}",
+    "authorization_Marketplace_DCLRegistrar": "{token}",
     "for_selling": "For selling",
     "pending_tx": "Transaction pending, click the spinner to go to your activity for a detailed status"
   },
