@@ -12,7 +12,8 @@
     "cancel": "Cancel",
     "proceed": "Proceed",
     "nft": "NFT",
-    "loading": "Loading"
+    "loading": "Loading",
+    "settings": "Settings"
   },
   "navigation": {
     "atlas": "Atlas",
@@ -167,7 +168,7 @@
     "authorization_error": "We couldn't load your authorizations, please try again",
     "authorization_error_contact": "If the error persist don't hesitate to contact us",
     "for_buying": "For buying",
-    "authorization_Marketplace_MANAToken": "ERC721 using MANA",
+    "authorization_Marketplace_MANAToken": "MANA",
     "authorization_Marketplace_LANDRegistry": "{token}",
     "authorization_Marketplace_EstateRegistry": "{token}",
     "authorization_Marketplace_ExclusiveMasksCollection": "{token}",
@@ -183,6 +184,10 @@
     "approved": "You authorized the {contract_link} to operate {symbol} on your behalf",
     "disallowed": "You unauthorized the {contract_link} to operate {symbol} on your behalf",
     "disapproved": "You unauthorized the {contract_link} to operate {symbol} on your behalf"
+  },
+  "authorization_modal": {
+    "title": "Authorize {token}",
+    "description": "In order to continue you will need to authorize the {contract} contract to operate {token} tokens on your behalf.{br}This only has to be done once, and you can always manage your authorizations from the {settings_link} page."
   },
   "transfer_page": {
     "title": "Transfer {category}",

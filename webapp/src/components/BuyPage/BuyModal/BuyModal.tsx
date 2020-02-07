@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Header, Mana, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTAction } from '../../NFTAction'
@@ -8,6 +8,10 @@ import { locations } from '../../../modules/routing/locations'
 import { NFTCategory } from '../../../modules/nft/types'
 import { getFingerprint } from '../../../modules/nft/estate/utils'
 import { Props } from './BuyModal.types'
+import { contractAddresses } from '../../../modules/contract/utils'
+import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.types'
+import { AuthorizationModal } from '../../AuthorizationModal'
+import { hasAuthorization } from '../../../modules/authorization/utils'
 
 const BuyPage = (props: Props) => {
   const {
@@ -23,6 +27,30 @@ const BuyPage = (props: Props) => {
 
   const [fingerprint, setFingerprint] = useState()
   const [isLoading, setIsLoading] = useState(false)
+  const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
+
+  const handleExecuteOrder = useCallback(
+    () => onExecuteOrder(order!, nft, fingerprint),
+    [order, nft, fingerprint, onExecuteOrder]
+  )
+
+  const handleSubmit = useCallback(() => {
+    if (
+      hasAuthorization(
+        contractAddresses.Marketplace,
+        contractAddresses.MANAToken,
+        AuthorizationType.ALLOWANCE
+      )
+    ) {
+      handleExecuteOrder()
+    } else {
+      setShowAuthorizationModal(true)
+    }
+  }, [handleExecuteOrder, setShowAuthorizationModal])
+
+  const handleClose = useCallback(() => setShowAuthorizationModal(false), [
+    setShowAuthorizationModal
+  ])
 
   useEffect(() => {
     if (order && order.category === NFTCategory.ESTATE) {
@@ -83,14 +111,18 @@ const BuyPage = (props: Props) => {
         >
           {t('global.cancel')}
         </Button>
-        <Button
-          primary
-          disabled={isDisabled}
-          onClick={() => onExecuteOrder(order!, nft, fingerprint)}
-        >
+        <Button primary disabled={isDisabled} onClick={handleSubmit}>
           {t('buy_page.buy')}
         </Button>
       </div>
+      <AuthorizationModal
+        open={showAuthorizationModal}
+        contractAddress={contractAddresses.Marketplace}
+        tokenAddress={contractAddresses.MANAToken}
+        type={AuthorizationType.ALLOWANCE}
+        onProceed={handleExecuteOrder}
+        onCancel={handleClose}
+      />
     </NFTAction>
   )
 }

@@ -46,50 +46,9 @@
   margin-left: 24px;
 }
 
-.SettingsPage .ui.form .field {
-  margin-bottom: 41px;
-}
-
 .SettingsPage .authorization-checks > label {
   display: block;
   font-size: 17px;
   margin-bottom: 17px;
   text-transform: capitalize;
-}
-
-.SettingsPage .ui.checkbox input.hidden + label {
-  font-weight: 700;
-  font-size: 17px;
-  padding-left: 35px;
-}
-
-.SettingsPage .is-pending .ui.checkbox label:before,
-.SettingsPage .is-pending .ui.checkbox label:after {
-  display: none;
-}
-
-.SettingsPage .authorization-checks .radio-description {
-  font-size: 15px;
-  margin-left: 35px;
-}
-
-.SettingsPage .authorization-checks .is-pending .loader-tooltip {
-  display: inline;
-  position: relative;
-}
-
-.SettingsPage .authorization-checks .loader-tooltip {
-  display: none;
-}
-
-.SettingsPage .authorization-checks .ui.loader {
-  left: 7px;
-  top: 2px;
-  float: left;
-}
-
-.SettingsPage .authorization-checks .ui.mini.loader:after,
-.SettingsPage .authorization-checks .ui.mini.loader:before {
-  width: 1.8rem;
-  height: 1.8rem;
 }

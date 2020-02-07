@@ -36,7 +36,10 @@ const INITIAL_STATE = {
   loading: [],
   error: null
 }
-const EMPTY_ADDRESS_STATE: Authorizations = { allowances: {}, approvals: {} }
+export const EMPTY_ADDRESS_STATE: Authorizations = {
+  allowances: {},
+  approvals: {}
+}
 
 type AuthorizationReducerAction =
   | FetchAuthorizationRequestAction
