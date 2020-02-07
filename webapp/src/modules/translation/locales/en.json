@@ -187,7 +187,7 @@
   },
   "authorization_modal": {
     "title": "Authorize {token}",
-    "description": "In order to continue you will need to authorize the {contract} contract to operate {token} tokens on your behalf.{br}This only has to be done once, and you can always manage your authorizations from the settings page."
+    "description": "In order to continue you will need to authorize the {contract} contract to operate {token} tokens on your behalf.{br}This only has to be done once, and you can always manage your authorizations from the {settings_link} page."
   },
   "transfer_page": {
     "title": "Transfer {category}",
