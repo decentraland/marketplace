@@ -56,7 +56,7 @@ const SellModal = (props: Props) => {
       setShowAuthorizationModal(true)
       setShowConfirm(false)
     }
-  }, [handleCreateOrder, setShowAuthorizationModal])
+  }, [nft, handleCreateOrder, setShowAuthorizationModal])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal
