@@ -8,7 +8,7 @@
     "parcel": "Parcel",
     "estate": "Estate",
     "wearable": "Wearable",
-    "ens": "Passport",
+    "ens": "Name",
     "cancel": "Cancel",
     "proceed": "Proceed",
     "nft": "NFT",
@@ -27,7 +27,7 @@
     "view_all": "View All",
     "wearables": "Wearables",
     "land": "Parcels and Estates",
-    "ens": "Passports"
+    "ens": "Names"
   },
   "categories_menu": {
     "categories": "Categories",
@@ -54,7 +54,7 @@
       "wearables_mask": "Mask",
       "wearables_tiara": "Tiara",
       "wearables_top_head": "Top head",
-      "ens": "Passport"
+      "ens": "Names"
     }
   },
   "filters": {
