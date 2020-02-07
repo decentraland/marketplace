@@ -31,7 +31,8 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
     EstateRegistry,
     ExclusiveMasksCollection,
     Halloween2019Collection,
-    Xmas2019Collection
+    Xmas2019Collection,
+    DCLRegistrar
   } = contractAddresses
 
   const authorization: AuthorizationsRequest = {
@@ -44,7 +45,8 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
         EstateRegistry,
         ExclusiveMasksCollection,
         Halloween2019Collection,
-        Xmas2019Collection
+        Xmas2019Collection,
+        DCLRegistrar
       ]
     }
   }

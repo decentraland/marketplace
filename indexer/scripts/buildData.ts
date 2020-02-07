@@ -12,7 +12,8 @@ enum ContractName {
   ERC721Bid = 'ERC721Bid',
   LANDProxy = 'LANDProxy',
   EstateProxy = 'EstateProxy',
-  MarketplaceProxy = 'MarketplaceProxy'
+  MarketplaceProxy = 'MarketplaceProxy',
+  DCLRegistrar = 'DCLRegistrar'
 }
 type ContractsResponse = Record<Network, Record<ContractName, string>>
 
@@ -22,14 +23,16 @@ const startBlockByNetwork: Record<Network, Record<ContractName, number>> = {
     ERC721Bid: 7270906,
     LANDProxy: 4944642,
     EstateProxy: 6236547,
-    MarketplaceProxy: 6496012
+    MarketplaceProxy: 6496012,
+    DCLRegistrar: 9412979
   },
   [Network.ROPSTEN]: {
     MANAToken: 1891200,
     ERC721Bid: 5058246,
     LANDProxy: 2482847,
     EstateProxy: 3890399,
-    MarketplaceProxy: 4202120
+    MarketplaceProxy: 4202120,
+    DCLRegistrar: 7170497
   }
 }
 

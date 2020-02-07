@@ -1,5 +1,3 @@
-import './NFTListPage.css'
-
 import React, { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -30,6 +28,7 @@ import { MAX_QUERY_SIZE, PAGE_SIZE } from '../../lib/api/client'
 import { NFTCard } from '../NFTCard'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { Props } from './NFTListPage.types'
+import './NFTListPage.css'
 
 const NFTListPage = (props: Props) => {
   const {
@@ -129,6 +128,7 @@ const NFTListPage = (props: Props) => {
     const [orderBy, orderDirection] = getSortOrder(sortBy)
 
     const isLand = section === Section.LAND
+    const isWearableHead = section === Section.WEARABLES_HEAD
     const isWearableAccessory = section === Section.WEARABLES_ACCESORIES
 
     const wearableCategory =
@@ -145,6 +145,7 @@ const NFTListPage = (props: Props) => {
         onlyOnSale,
         address,
         isLand,
+        isWearableHead,
         isWearableAccessory,
         category,
         wearableCategory

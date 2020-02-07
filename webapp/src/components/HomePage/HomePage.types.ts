@@ -9,11 +9,12 @@ import {
 export type Props = {
   wearables: NFT[]
   land: NFT[]
+  ens: NFT[]
   onFetchNFTs: typeof fetchNFTsRequest
   onNavigate: (path: string) => void
 }
 
-export type MapStateProps = Pick<Props, 'wearables' | 'land'>
+export type MapStateProps = Pick<Props, 'wearables' | 'land' | 'ens'>
 export type MapDispatchProps = Pick<Props, 'onFetchNFTs' | 'onNavigate'>
 export type MapDispatch = Dispatch<
   FetchNFTsRequestAction | CallHistoryMethodAction

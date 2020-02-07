@@ -8,6 +8,7 @@
     "parcel": "Parcel",
     "estate": "Estate",
     "wearable": "Wearable",
+    "ens": "Passport",
     "cancel": "Cancel",
     "proceed": "Proceed",
     "nft": "NFT",
@@ -25,7 +26,8 @@
     "learn_more": "Learn More",
     "view_all": "View All",
     "wearables": "Wearables",
-    "land": "Parcels and Estates"
+    "land": "Parcels and Estates",
+    "ens": "Passports"
   },
   "categories_menu": {
     "categories": "Categories",
@@ -35,15 +37,24 @@
       "parcels": "Parcels",
       "estates": "Estates",
       "wearables": "Wearables",
-      "wearables_top": "Top",
-      "wearables_bottom": "Bottom",
-      "wearables_shoes": "Shoes",
+      "wearables_head": "Head",
+      "wearables_eyebrows": "Eyebrows",
+      "wearables_eyes": "Eyes",
+      "wearables_facial_hair": "Facial hair",
+      "wearables_hair": "Hair",
+      "wearables_mouth": "Mouth",
+      "wearables_upper_body": "Upper body",
+      "wearables_lower_body": "Lower body",
+      "wearables_feet": "Feet",
       "wearables_accesories": "Accesories",
+      "wearables_earring": "Earring",
       "wearables_eyewear": "Eyewear",
-      "wearables_earring": "Earrings",
-      "wearables_mask": "Masks",
-      "wearables_hat": "Hats",
-      "wearables_helmet": "Helmets"
+      "wearables_hat": "Hat",
+      "wearables_helmet": "Helmet",
+      "wearables_mask": "Mask",
+      "wearables_tiara": "Tiara",
+      "wearables_top_head": "Top head",
+      "ens": "Passport"
     }
   },
   "filters": {
@@ -162,6 +173,7 @@
     "authorization_Marketplace_ExclusiveMasksCollection": "{token}",
     "authorization_Marketplace_Halloween2019Collection": "{token}",
     "authorization_Marketplace_Xmas2019Collection": "{token}",
+    "authorization_Marketplace_DCLRegistrar": "{token}",
     "for_selling": "For selling",
     "pending_tx": "Transaction pending, click the spinner to go to your activity for a detailed status"
   },

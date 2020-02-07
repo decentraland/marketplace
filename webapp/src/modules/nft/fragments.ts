@@ -37,6 +37,9 @@ export const nftFields = () => gql`
       rarity
       bodyShapes
     }
+    ens {
+      subdomain
+    }
   }
 `
 

@@ -1,13 +1,10 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  RARITY_COLOR,
-  BodyShape,
-  RARITY_COLOR_LIGHT
-} from '../../../modules/nft/wearable/types'
+import { RARITY_COLOR, BodyShape } from '../../../modules/nft/wearable/types'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
+import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
@@ -22,14 +19,10 @@ import './WearableDetail.css'
 const WearableDetail = (props: Props) => {
   const { nft } = props
 
-  const backgroundImage = `radial-gradient(${
-    RARITY_COLOR_LIGHT[nft.wearable!.rarity]
-  }, ${RARITY_COLOR[nft.wearable!.rarity]})`
-
   return (
     <div className="WearableDetail">
-      <PageHeader style={{ backgroundImage }}>
-        <img alt={getNFTName(nft)} src={nft.image} />
+      <PageHeader>
+        <NFTImage nft={nft} />
       </PageHeader>
       <Container>
         <Title

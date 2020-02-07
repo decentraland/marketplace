@@ -9,3 +9,11 @@
   align-items: center;
   height: calc(100vh - 350px);
 }
+
+.NFTPage .NFTImage .pixel {
+  display: none;
+}
+
+.NFTPage .NFTImage .ens-subdomain {
+  font-size: 64px;
+}

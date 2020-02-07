@@ -1,5 +1,7 @@
 .NFTImage {
   position: relative;
+  height: 100%;
+  width: 100%;
 }
 
 .NFTImage .pixel {
@@ -17,12 +19,26 @@
 }
 
 .NFTImage .image {
-  display: block;
-  width: 100%;
-  height: auto;
+  margin: auto;
+  max-height: 100%;
 }
 
 .NFTImage .rarity-background {
+  display: flex;
+  align-items: center;
   width: 100%;
   height: 100%;
+}
+
+.NFTImage .ens-subdomain {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  height: 100%;
+  background-color: #fff;
+  color: #000;
+}
+
+.NFTImage .ens-subdomain > span {
+  margin: auto;
 }

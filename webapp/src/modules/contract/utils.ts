@@ -8,6 +8,7 @@ const EstateRegistry = env.REACT_APP_ESTATE_ADDRESS!
 const ExclusiveMasksCollection = env.REACT_APP_EXCLUSIVE_MASKS_ADDRESS!
 const Halloween2019Collection = env.REACT_APP_HALLOWEEN_2019_ADDRESS!
 const Xmas2019Collection = env.REACT_APP_XMAS_2019_ADDRESS!
+const DCLRegistrar = env.REACT_APP_DCL_REGISTRAR!
 const Marketplace = env.REACT_APP_MARKETPLACE_ADDRESS!
 
 export const contractAddresses = {
@@ -17,6 +18,7 @@ export const contractAddresses = {
   ExclusiveMasksCollection,
   Halloween2019Collection,
   Xmas2019Collection,
+  DCLRegistrar,
   Marketplace
 }
 
@@ -27,6 +29,7 @@ export const contractSymbols = {
   [ExclusiveMasksCollection]: 'Exclusive Masks',
   [Halloween2019Collection]: 'Halloween',
   [Xmas2019Collection]: 'Xmas',
+  [DCLRegistrar]: 'Passport',
   [Marketplace]: 'Marketplace'
 } as const
 
@@ -62,6 +65,11 @@ export const nftContracts = {
     name: 'Xmas2019Collection',
     address: Xmas2019Collection,
     category: NFTCategory.WEARABLE
+  },
+  [DCLRegistrar]: {
+    name: 'Passport',
+    address: DCLRegistrar,
+    category: NFTCategory.ENS
   }
 } as const
 

@@ -15,6 +15,8 @@ export function getCategory(contractAddress: string): string {
     contractAddress == addresses.Xmas2019Collection
   ) {
     category = categories.WEARABLE
+  } else if (contractAddress == addresses.DCLRegistrar) {
+    category = categories.ENS
   } else {
     log.warning('Contract address {} not being monitored', [contractAddress])
     category = contractAddress

@@ -6,12 +6,14 @@ import { MapStateProps, MapDispatchProps, MapDispatch } from './HomePage.types'
 import HomePage from './HomePage'
 import {
   getHomepageWearables,
-  getHomepageLand
+  getHomepageLand,
+  getHomepageENS
 } from '../../modules/ui/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
   wearables: getHomepageWearables(state),
-  land: getHomepageLand(state)
+  land: getHomepageLand(state),
+  ens: getHomepageENS(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

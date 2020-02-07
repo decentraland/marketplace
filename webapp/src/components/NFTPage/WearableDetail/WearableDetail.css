@@ -4,11 +4,6 @@
   justify-content: center;
 }
 
-.WearableDetail .PageHeader img {
-  flex: 0 1 auto;
-  max-height: var(--page-header-height);
-}
-
 .WearableDetail .Highlight .left > div {
   background-position: center;
   background-repeat: no-repeat;

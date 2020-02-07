@@ -10,72 +10,148 @@ import './CategoriesMenu.css'
 const CategoriesMenu = (props: Props) => {
   const { section, onNavigate } = props
 
-  const renderParentMenuItem = (menuSection: Section) =>
-    renderMenuItem(menuSection, false)
-  const renderChildMenuItem = (menuSection: Section) =>
-    renderMenuItem(menuSection, true)
-
-  const renderMenuItem = (menuSection: Section, isSub: boolean) => (
-    <MenuItem
-      section={menuSection}
-      currentSection={section}
-      onNavigate={onNavigate}
-      isSub={isSub}
-    />
-  )
-
   return (
     <div className="CategoriesMenu">
       <Header sub>{t('categories_menu.categories')}</Header>
       <ul className="menu">
-        {renderParentMenuItem(Section.ALL)}
-        {renderParentMenuItem(Section.LAND)}
+        {[Section.ALL, Section.LAND].map(menuSection => (
+          <MenuItem
+            key={menuSection}
+            section={menuSection}
+            currentSection={section}
+            onNavigate={onNavigate}
+          />
+        ))}
 
-        {[Section.LAND, Section.PARCELS, Section.ESTATES].includes(section) ? (
-          <>
-            {renderChildMenuItem(Section.PARCELS)}
-            {renderChildMenuItem(Section.ESTATES)}
-          </>
-        ) : null}
+        {[Section.LAND, Section.PARCELS, Section.ESTATES].includes(section)
+          ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
+              <MenuItem
+                key={menuSection}
+                section={menuSection}
+                currentSection={section}
+                onNavigate={onNavigate}
+                isSub={true}
+              />
+            ))
+          : null}
 
-        {renderParentMenuItem(Section.WEARABLES)}
+        <MenuItem
+          section={Section.WEARABLES}
+          currentSection={section}
+          onNavigate={onNavigate}
+        />
         {[
           Section.WEARABLES,
-          Section.WEARABLES_TOP,
-          Section.WEARABLES_BOTTOM,
-          Section.WEARABLES_SHOES,
+          Section.WEARABLES_HEAD,
+          Section.WEARABLES_EYEBROWS,
+          Section.WEARABLES_EYES,
+          Section.WEARABLES_FACIAL_HAIR,
+          Section.WEARABLES_HAIR,
+          Section.WEARABLES_MOUTH,
+          Section.WEARABLES_UPPER_BODY,
+          Section.WEARABLES_LOWER_BODY,
+          Section.WEARABLES_FEET,
           Section.WEARABLES_ACCESORIES,
-          Section.WEARABLES_EYEWEAR,
           Section.WEARABLES_EARRING,
-          Section.WEARABLES_MASK,
           Section.WEARABLES_HAT,
-          Section.WEARABLES_HELMET
+          Section.WEARABLES_HELMET,
+          Section.WEARABLES_MASK,
+          Section.WEARABLES_TIARA,
+          Section.WEARABLES_TOP_HEAD
         ].includes(section) ? (
           <>
-            {renderChildMenuItem(Section.WEARABLES_TOP)}
-            {renderChildMenuItem(Section.WEARABLES_BOTTOM)}
-            {renderChildMenuItem(Section.WEARABLES_SHOES)}
-            {renderChildMenuItem(Section.WEARABLES_ACCESORIES)}
+            <MenuItem
+              key={Section.WEARABLES_HEAD}
+              section={Section.WEARABLES_HEAD}
+              currentSection={section}
+              onNavigate={onNavigate}
+              isSub={true}
+              withCaret={true}
+            />
+            <ul className="submenu">
+              {[
+                Section.WEARABLES_HEAD,
+                Section.WEARABLES_EYEBROWS,
+                Section.WEARABLES_EYES,
+                Section.WEARABLES_FACIAL_HAIR,
+                Section.WEARABLES_HAIR,
+                Section.WEARABLES_MOUTH
+              ].includes(section)
+                ? [
+                    Section.WEARABLES_EYEBROWS,
+                    Section.WEARABLES_EYES,
+                    Section.WEARABLES_FACIAL_HAIR,
+                    Section.WEARABLES_HAIR,
+                    Section.WEARABLES_MOUTH
+                  ].map(menuSection => (
+                    <MenuItem
+                      key={menuSection}
+                      section={menuSection}
+                      currentSection={section}
+                      onNavigate={onNavigate}
+                      isSub={true}
+                    />
+                  ))
+                : null}
+            </ul>
+
+            {[
+              Section.WEARABLES_UPPER_BODY,
+              Section.WEARABLES_LOWER_BODY,
+              Section.WEARABLES_FEET
+            ].map(menuSection => (
+              <MenuItem
+                key={menuSection}
+                section={menuSection}
+                currentSection={section}
+                onNavigate={onNavigate}
+                isSub={true}
+              />
+            ))}
+
+            <MenuItem
+              section={Section.WEARABLES_ACCESORIES}
+              currentSection={section}
+              onNavigate={onNavigate}
+              isSub={true}
+              withCaret={true}
+            />
             <ul className="submenu">
               {[
                 Section.WEARABLES_ACCESORIES,
-                Section.WEARABLES_EYEWEAR,
                 Section.WEARABLES_EARRING,
-                Section.WEARABLES_MASK,
                 Section.WEARABLES_HAT,
-                Section.WEARABLES_HELMET
-              ].includes(section) ? (
-                <>
-                  {renderChildMenuItem(Section.WEARABLES_EYEWEAR)}
-                  {renderChildMenuItem(Section.WEARABLES_EARRING)}
-                  {renderChildMenuItem(Section.WEARABLES_MASK)}
-                  {renderChildMenuItem(Section.WEARABLES_HAT)}
-                  {renderChildMenuItem(Section.WEARABLES_HELMET)}
-                </>
-              ) : null}
+                Section.WEARABLES_HELMET,
+                Section.WEARABLES_MASK,
+                Section.WEARABLES_TIARA,
+                Section.WEARABLES_TOP_HEAD
+              ].includes(section)
+                ? [
+                    Section.WEARABLES_EARRING,
+                    Section.WEARABLES_HAT,
+                    Section.WEARABLES_HELMET,
+                    Section.WEARABLES_MASK,
+                    Section.WEARABLES_TIARA,
+                    Section.WEARABLES_TOP_HEAD
+                  ].map(menuSection => (
+                    <MenuItem
+                      key={menuSection}
+                      section={menuSection}
+                      currentSection={section}
+                      onNavigate={onNavigate}
+                      isSub={true}
+                    />
+                  ))
+                : null}
             </ul>
           </>
         ) : null}
+
+        <MenuItem
+          section={Section.ENS}
+          currentSection={section}
+          onNavigate={onNavigate}
+        />
       </ul>
     </div>
   )

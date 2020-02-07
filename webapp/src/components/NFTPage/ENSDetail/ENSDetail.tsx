@@ -1,4 +1,5 @@
 import React from 'react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Container, Header } from 'decentraland-ui'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
@@ -6,42 +7,32 @@ import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
-import { Description } from '../Description'
 import { Order } from '../Order'
-import { ProximityHighlights } from '../ProximityHighlights'
 import { TransactionHistory } from '../../TransactionHistory'
-import { Props } from './ParcelDetail.types'
-import './ParcelDetail.css'
+import { Props } from './ENSDetail.types'
 
-const ParcelDetail = (props: Props) => {
+const ENSDetail = (props: Props) => {
   const { nft } = props
-  const { x, y } = nft.parcel!
-
   return (
     <>
       <PageHeader>
-        <NFTImage nft={nft} isDraggable={true} withNavigation={true} />
+        <NFTImage nft={nft} />
       </PageHeader>
-      <Container className="ParcelDetail">
+      <Container className="ENSDetail">
         <Title
           left={
             <>
               <Header size="large">{getNFTName(nft)}</Header>
-              <Badge color="#37333d">
-                <i className="pin" />
-                {x},{y}
-              </Badge>
+              <Badge color="#37333d">{t('global.ens')}</Badge>
             </>
           }
           right={<Owner nft={nft} />}
         />
-        <Description text={nft.parcel!.data?.description} />
         <Order nft={nft} />
-        <ProximityHighlights nft={nft} />
         <TransactionHistory nft={nft} />
       </Container>
     </>
   )
 }
 
-export default React.memo(ParcelDetail)
+export default React.memo(ENSDetail)

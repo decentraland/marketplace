@@ -71,3 +71,12 @@ export const getHomepageLand = createSelector<
 >(getState, getNFTData, (ui, nftsById) =>
   ui.homepageLandIds.map(id => nftsById[id])
 )
+
+export const getHomepageENS = createSelector<
+  RootState,
+  UIState,
+  NFTState['data'],
+  NFT[]
+>(getState, getNFTData, (ui, nftsById) =>
+  ui.homepageENSIds.map(id => nftsById[id])
+)

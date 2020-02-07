@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Atlas } from '../Atlas'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import {
@@ -15,7 +15,11 @@ const PIXEL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
 
 const NFTImage = (props: Props) => {
-  const { nft, zoom } = props
+  const { nft, isDraggable, withNavigation, zoom } = props
+
+  const estateSelection = useMemo(() => (nft.estate ? getSelection(nft) : []), [
+    nft
+  ])
 
   switch (nft.category) {
     case NFTCategory.PARCEL: {
@@ -26,21 +30,23 @@ const NFTImage = (props: Props) => {
         <Atlas
           x={x}
           y={y}
-          isDraggable={false}
+          isDraggable={isDraggable}
+          withNavigation={withNavigation}
           selection={selection}
           zoom={zoom}
         />
       )
     }
+
     case NFTCategory.ESTATE: {
-      const selection = getSelection(nft)
-      const [x, y] = getCenter(selection)
+      const [x, y] = getCenter(estateSelection!)
       return (
         <Atlas
           x={x}
           y={y}
-          isDraggable={false}
-          selection={selection}
+          isDraggable={isDraggable}
+          withNavigation={withNavigation}
+          selection={estateSelection}
           zoom={zoom}
           isEstate
         />
@@ -63,6 +69,14 @@ const NFTImage = (props: Props) => {
       )
     }
 
+    case NFTCategory.ENS: {
+      return (
+        <div className="ens-subdomain">
+          <span>{nft.ens!.subdomain}</span>
+        </div>
+      )
+    }
+
     default:
       return <img alt={getNFTName(nft)} className="image" src={nft.image} />
   }
@@ -70,7 +84,7 @@ const NFTImage = (props: Props) => {
 
 // the purpose of this wrapper is to make the div always be square, by using a 1x1 transparent pixel
 const NFTImageWrapper = (props: Props) => {
-  const { nft, className, zoom } = props
+  const { nft, className, ...rest } = props
   let classes = 'NFTImage'
   if (className) {
     classes += ' ' + className
@@ -79,13 +93,15 @@ const NFTImageWrapper = (props: Props) => {
     <div className={classes}>
       <img src={PIXEL} alt="pixel" className="pixel" />
       <div className="image-wrapper">
-        <NFTImage nft={nft} zoom={zoom} />
+        <NFTImage nft={nft} {...rest} />
       </div>
     </div>
   )
 }
 
 NFTImage.defaultProps = {
+  isDraggable: false,
+  withNavigation: false,
   zoom: 0.5
 }
 

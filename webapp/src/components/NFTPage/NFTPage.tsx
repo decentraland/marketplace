@@ -8,6 +8,7 @@ import { NFTProviderPage } from '../NFTProviderPage'
 import { ParcelDetail } from './ParcelDetail'
 import { EstateDetail } from './EstateDetail'
 import { WearableDetail } from './WearableDetail'
+import { ENSDetail } from './ENSDetail'
 import './NFTPage.css'
 
 const NFTPage = () => {
@@ -22,6 +23,7 @@ const NFTPage = () => {
               {nft.parcel ? <ParcelDetail nft={nft} /> : null}
               {nft.estate ? <EstateDetail nft={nft} /> : null}
               {nft.wearable ? <WearableDetail nft={nft} /> : null}
+              {nft.ens ? <ENSDetail nft={nft} /> : null}
             </>
           )}
         </NFTProviderPage>
