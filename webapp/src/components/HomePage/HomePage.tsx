@@ -12,7 +12,7 @@ import { View } from '../../modules/ui/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 const HomePage = (props: Props) => {
-  const { wearables, land, onNavigate, onFetchNFTs } = props
+  const { wearables, ens, land, onNavigate, onFetchNFTs } = props
 
   const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
     onNavigate
@@ -28,6 +28,12 @@ const HomePage = (props: Props) => {
     [onNavigate]
   )
 
+  const handleViewEns = useCallback(
+    () => onNavigate(locations.browse({ section: Section.ENS })),
+    [onNavigate]
+  )
+
+  // @nico TODO: isLoading?
   useEffect(() => {
     onFetchNFTs({
       variables: {
@@ -50,6 +56,17 @@ const HomePage = (props: Props) => {
         onlyOnSale: true
       },
       view: View.HOME_LAND
+    })
+    onFetchNFTs({
+      variables: {
+        category: NFTCategory.ENS,
+        first: 20,
+        skip: 0,
+        orderDirection: SortDirection.DESC,
+        orderBy: NFTSortBy.CREATED_AT,
+        onlyOnSale: true
+      },
+      view: View.HOME_ENS
     })
   }, [onFetchNFTs])
 
@@ -81,6 +98,11 @@ const HomePage = (props: Props) => {
           title={t('home_page.land')}
           nfts={land}
           onViewAll={handleViewLand}
+        ></Slideshow>
+        <Slideshow
+          title={t('home_page.ens')}
+          nfts={ens}
+          onViewAll={handleViewEns}
         ></Slideshow>
       </Page>
       <Footer />
