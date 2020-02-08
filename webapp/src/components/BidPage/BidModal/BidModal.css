@@ -1,0 +1,16 @@
+.BidPage .ui.header {
+  margin-bottom: 8px;
+}
+
+.BidPage .subtitle {
+  margin-bottom: 32px;
+}
+
+.BidPage .fields {
+  max-width: 420px;
+  margin-bottom: 20px;
+}
+
+.BidPage .fields .dcl.field {
+  margin-bottom: 8px;
+}

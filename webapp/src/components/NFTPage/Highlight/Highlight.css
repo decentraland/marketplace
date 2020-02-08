@@ -2,6 +2,10 @@
   display: flex;
 }
 
+.Highlight.clickable {
+  cursor: pointer;
+}
+
 .Highlight + .Highlight {
   margin-left: 64px;
 }

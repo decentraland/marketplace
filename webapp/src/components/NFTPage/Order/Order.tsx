@@ -20,6 +20,10 @@ const Order = (props: Props) => {
     () => onNavigate(locations.buy(nft.contractAddress, nft.tokenId)),
     [nft, onNavigate]
   )
+  const handleBid = useCallback(
+    () => onNavigate(locations.bid(nft.contractAddress, nft.tokenId)),
+    [nft, onNavigate]
+  )
   const handleCancel = useCallback(
     () => onNavigate(locations.cancel(nft.contractAddress, nft.tokenId)),
     [nft, onNavigate]
@@ -30,10 +34,6 @@ const Order = (props: Props) => {
   )
 
   const isOwner = isOwnedBy(nft, wallet)
-
-  // Nothing to show
-  const isHidden = !order && !isOwner
-  if (isHidden) return null
 
   return (
     <div className="Order">
@@ -57,15 +57,22 @@ const Order = (props: Props) => {
               <Button onClick={handleCancel}>{t('detail.cancel_sale')}</Button>
             </>
           ) : (
-            <Button onClick={handleBuy} primary>
-              {t('detail.buy')}
-            </Button>
+            <>
+              <Button onClick={handleBuy} primary>
+                {t('detail.buy')}
+              </Button>
+              <Button onClick={handleBid}>{t('detail.bid')}</Button>
+            </>
           )
         ) : isOwner ? (
           <Button onClick={handleSell} primary>
             {t('detail.sell')}
           </Button>
-        ) : null}
+        ) : (
+          <Button primary onClick={handleBid}>
+            {t('detail.bid')}
+          </Button>
+        )}
         {isOwner && !order ? (
           <Button onClick={handleTransfer}>{t('detail.transfer')}</Button>
         ) : null}

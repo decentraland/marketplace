@@ -11,6 +11,11 @@
       "net": "mainnet",
       "address": "0x19a8ed4860007a66805782ed7e0bed4e44fc6717"
     },
+    "Bids": {
+      "source": "etherscan",
+      "net": "mainnet",
+      "address": "0xe479dfd9664c693b2e2992300930b00bfde08233"
+    },
     "EstateRegistry": {
       "source": "etherscan",
       "net": "mainnet",

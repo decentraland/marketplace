@@ -14,9 +14,10 @@ import {
   EXECUTE_ORDER_SUCCESS
 } from '../../../modules/order/actions'
 import { TRANSFER_NFT_SUCCESS } from '../../../modules/nft/actions'
+import { PLACE_BID_SUCCESS } from '../../../modules/bid/actions'
+import { locations } from '../../../modules/routing/locations'
 import { NFTProvider } from '../../NFTProvider'
 import { Address } from '../../Address'
-import { locations } from '../../../modules/routing/locations'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
 
@@ -181,6 +182,32 @@ const Transaction = (props: Props) => {
                         trigger={<Address address={address} />}
                       />
                     )
+                  }}
+                />
+              }
+              tx={tx}
+            />
+          )}
+        </NFTProvider>
+      )
+    }
+    case PLACE_BID_SUCCESS: {
+      const { tokenId, contractAddress, name, price } = tx.payload
+      return (
+        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+          {nft => (
+            <TransactionDetail
+              nft={nft}
+              text={
+                <T
+                  id="transaction.detail.place_bid"
+                  values={{
+                    name: (
+                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                        {name}
+                      </Link>
+                    ),
+                    price: <Mana inline>{price.toLocaleString()}</Mana>
                   }}
                 />
               }

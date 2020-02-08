@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Header, Mana, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTAction } from '../../NFTAction'
@@ -6,12 +6,12 @@ import { formatMANA } from '../../../lib/mana'
 import { getNFTName } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { NFTCategory } from '../../../modules/nft/types'
-import { getFingerprint } from '../../../modules/nft/estate/utils'
 import { Props } from './BuyModal.types'
 import { contractAddresses } from '../../../modules/contract/utils'
 import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.types'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { hasAuthorization } from '../../../modules/authorization/utils'
+import { useFingerprint } from '../../../modules/nft/hooks'
 
 const BuyPage = (props: Props) => {
   const {
@@ -25,8 +25,7 @@ const BuyPage = (props: Props) => {
 
   const name = getNFTName(nft)
 
-  const [fingerprint, setFingerprint] = useState()
-  const [isLoading, setIsLoading] = useState(false)
+  const [fingerprint, isLoading] = useFingerprint(nft)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
   const handleExecuteOrder = useCallback(
@@ -51,16 +50,6 @@ const BuyPage = (props: Props) => {
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal
   ])
-
-  useEffect(() => {
-    if (order && order.category === NFTCategory.ESTATE) {
-      setIsLoading(true)
-      getFingerprint(nft.tokenId).then(result => {
-        setFingerprint(result)
-        setIsLoading(false)
-      })
-    }
-  }, [order, setFingerprint, nft.tokenId])
 
   let subtitle = null
   if (!order) {

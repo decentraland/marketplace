@@ -10,6 +10,9 @@ import { locations } from '../../modules/routing/locations'
 import { Authorization } from './Authorization'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
+import { contractAddresses } from '../../modules/contract/utils'
+import { hasAuthorization } from '../../modules/authorization/utils'
+import { AuthorizationType } from '../AuthorizationModal/AuthorizationModal.types'
 
 const BUY_MANA_URL = process.env.REACT_APP_BUY_MANA_URL
 
@@ -131,32 +134,34 @@ const SettingsPage = (props: Props) => {
                           <label className="secondary-text">
                             {t('settings_page.for_buying')}
                           </label>
+                          <Authorization
+                            checked={hasAuthorization(
+                              contractAddresses.Marketplace,
+                              contractAddresses.MANAToken,
+                              AuthorizationType.ALLOWANCE
+                            )}
+                            contractAddress={contractAddresses.Marketplace}
+                            tokenContractAddress={contractAddresses.MANAToken}
+                            pendingTransactions={pendingAllowTransactions}
+                            onChange={onAllowToken}
+                          />
+                        </div>
 
-                          {Object.keys(authorizations!.allowances).map(
-                            contractAddress => {
-                              const privilege = authorizations!.allowances[
-                                contractAddress
-                              ]
-                              return !privilege
-                                ? null
-                                : Object.keys(
-                                    privilege
-                                  ).map(tokenContractAddress => (
-                                    <Authorization
-                                      key={contractAddress}
-                                      checked={privilege[tokenContractAddress]}
-                                      contractAddress={contractAddress}
-                                      tokenContractAddress={
-                                        tokenContractAddress
-                                      }
-                                      pendingTransactions={
-                                        pendingAllowTransactions
-                                      }
-                                      onChange={onAllowToken}
-                                    />
-                                  ))
-                            }
-                          )}
+                        <div className="authorization-checks">
+                          <label className="secondary-text">
+                            {t('settings_page.for_bidding')}
+                          </label>
+                          <Authorization
+                            checked={hasAuthorization(
+                              contractAddresses.Bids,
+                              contractAddresses.MANAToken,
+                              AuthorizationType.ALLOWANCE
+                            )}
+                            contractAddress={contractAddresses.Bids}
+                            tokenContractAddress={contractAddresses.MANAToken}
+                            pendingTransactions={pendingAllowTransactions}
+                            onChange={onAllowToken}
+                          />
                         </div>
 
                         <div className="authorization-checks">
@@ -175,7 +180,9 @@ const SettingsPage = (props: Props) => {
                                     privilege
                                   ).map(tokenContractAddress => (
                                     <Authorization
-                                      key={contractAddress}
+                                      key={
+                                        contractAddress + tokenContractAddress
+                                      }
                                       checked={privilege[tokenContractAddress]}
                                       contractAddress={contractAddress}
                                       tokenContractAddress={
