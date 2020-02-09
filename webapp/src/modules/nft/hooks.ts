@@ -14,6 +14,7 @@ export const useFingerprint = (nft: NFT) => {
           setFingerprint(result)
           setIsLoading(false)
         })
+        break
       }
       default:
       // nothings

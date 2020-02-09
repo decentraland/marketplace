@@ -27,7 +27,7 @@ const WearableDetail = (props: Props) => {
         section: `wearables_${nft.wearable!.category}` as Section
       })
     )
-  }, [onNavigate])
+  }, [nft, onNavigate])
 
   return (
     <div className="WearableDetail">
