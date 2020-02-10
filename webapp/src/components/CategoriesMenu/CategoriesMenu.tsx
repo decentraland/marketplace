@@ -3,6 +3,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header } from 'decentraland-ui'
 
 import { Section } from '../../modules/routing/search'
+import { DropdownMenu } from './DropdownMenu'
 import { MenuItem } from './MenuItem'
 import { Props } from './CategoriesMenu.types'
 import './CategoriesMenu.css'
@@ -23,17 +24,11 @@ const CategoriesMenu = (props: Props) => {
           />
         ))}
 
-        {[Section.LAND, Section.PARCELS, Section.ESTATES].includes(section)
-          ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
-              <MenuItem
-                key={menuSection}
-                section={menuSection}
-                currentSection={section}
-                onNavigate={onNavigate}
-                isSub={true}
-              />
-            ))
-          : null}
+        <DropdownMenu
+          sections={[Section.LAND, Section.PARCELS, Section.ESTATES]}
+          currentSection={section}
+          onNavigate={onNavigate}
+        />
 
         <MenuItem
           section={Section.WEARABLES}
@@ -57,37 +52,15 @@ const CategoriesMenu = (props: Props) => {
           Section.WEARABLES_TOP_HEAD
         ].includes(section) ? (
           <>
-            <MenuItem
-              key={Section.WEARABLES_HEAD}
-              section={Section.WEARABLES_HEAD}
-              currentSection={section}
-              onNavigate={onNavigate}
-              isSub={true}
-              withCaret={true}
-            />
-            <ul className="submenu">
-              {[
+            <DropdownMenu
+              sections={[
                 Section.WEARABLES_HEAD,
                 Section.WEARABLES_FACIAL_HAIR,
                 Section.WEARABLES_HAIR
-              ].includes(section)
-                ? [
-                    Section.WEARABLES_EYEBROWS,
-                    Section.WEARABLES_EYES,
-                    Section.WEARABLES_FACIAL_HAIR,
-                    Section.WEARABLES_HAIR,
-                    Section.WEARABLES_MOUTH
-                  ].map(menuSection => (
-                    <MenuItem
-                      key={menuSection}
-                      section={menuSection}
-                      currentSection={section}
-                      onNavigate={onNavigate}
-                      isSub={true}
-                    />
-                  ))
-                : null}
-            </ul>
+              ]}
+              currentSection={section}
+              onNavigate={onNavigate}
+            />
 
             {[
               Section.WEARABLES_UPPER_BODY,
@@ -103,15 +76,8 @@ const CategoriesMenu = (props: Props) => {
               />
             ))}
 
-            <MenuItem
-              section={Section.WEARABLES_ACCESORIES}
-              currentSection={section}
-              onNavigate={onNavigate}
-              isSub={true}
-              withCaret={true}
-            />
-            <ul className="submenu">
-              {[
+            <DropdownMenu
+              sections={[
                 Section.WEARABLES_ACCESORIES,
                 Section.WEARABLES_EARRING,
                 Section.WEARABLES_HAT,
@@ -119,25 +85,10 @@ const CategoriesMenu = (props: Props) => {
                 Section.WEARABLES_MASK,
                 Section.WEARABLES_TIARA,
                 Section.WEARABLES_TOP_HEAD
-              ].includes(section)
-                ? [
-                    Section.WEARABLES_EARRING,
-                    Section.WEARABLES_HAT,
-                    Section.WEARABLES_HELMET,
-                    Section.WEARABLES_MASK,
-                    Section.WEARABLES_TIARA,
-                    Section.WEARABLES_TOP_HEAD
-                  ].map(menuSection => (
-                    <MenuItem
-                      key={menuSection}
-                      section={menuSection}
-                      currentSection={section}
-                      onNavigate={onNavigate}
-                      isSub={true}
-                    />
-                  ))
-                : null}
-            </ul>
+              ]}
+              currentSection={section}
+              onNavigate={onNavigate}
+            />
           </>
         ) : null}
 
