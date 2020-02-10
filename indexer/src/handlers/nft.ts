@@ -4,7 +4,11 @@ import { isMint, getNFTId, getTokenURI } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
 import { buildCountFromNFT } from '../modules/count'
-import { buildParcelFromNFT, getParcelImage } from '../modules/parcel'
+import {
+  buildParcelFromNFT,
+  getParcelImage,
+  isInBounds
+} from '../modules/parcel'
 import {
   buildWearableFromNFT,
   getWearableImage,
@@ -59,6 +63,10 @@ export function handleTransfer(event: Transfer): void {
       nft.searchIsLand = true
       nft.searchParcelX = parcel.x
       nft.searchParcelY = parcel.y
+
+      if (!isInBounds(parcel)) {
+        return // Finish early
+      }
     } else if (category == categories.ESTATE) {
       let estate = buildEstateFromNFT(nft)
       estate.save()
