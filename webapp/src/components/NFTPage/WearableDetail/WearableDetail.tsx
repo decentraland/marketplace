@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { RARITY_COLOR, BodyShape } from '../../../modules/nft/wearable/types'
 import { getNFTName } from '../../../modules/nft/utils'
+import { locations } from '../../../modules/routing/locations'
+import { Section } from '../../../modules/routing/search'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
@@ -17,7 +19,15 @@ import { Props } from './WearableDetail.types'
 import './WearableDetail.css'
 
 const WearableDetail = (props: Props) => {
-  const { nft } = props
+  const { nft, onNavigate } = props
+
+  const handleHighlightClick = useCallback(() => {
+    onNavigate(
+      locations.browse({
+        section: `wearables_${nft.wearable!.category}` as Section
+      })
+    )
+  }, [nft, onNavigate])
 
   return (
     <div className="WearableDetail">
@@ -42,6 +52,7 @@ const WearableDetail = (props: Props) => {
           <Highlight
             icon={<div className={nft.wearable!.category} />}
             name={t(`wearable.category.${nft.wearable!.category}`)}
+            onClick={handleHighlightClick}
           />
           {nft.wearable!.bodyShapes.map(shape => (
             <Highlight

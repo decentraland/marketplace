@@ -80,6 +80,7 @@
     "cancel_sale": "Remove listing",
     "buy": "Buy",
     "sell": "Sell",
+    "bid": "Bid",
     "update": "Update price",
     "transfer": "Transfer",
     "adjacent": "Adjacent",
@@ -153,6 +154,15 @@
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name}."
   },
+  "bid_page": {
+    "title": "Place a bid",
+    "subtitle": "Set a price and expiration date for your bid on {name}.",
+    "price": "Price",
+    "expiration_date": "Expiration date",
+    "invalid_date": "This date has already passed",
+    "not_enougn_mana": "You don't have enough MANA",
+    "submit": "Bid"
+  },
   "cancel_sale_page": {
     "title": "Remove listing",
     "subtitle": "You are about to remove the listing of {name} for {amount}.",
@@ -168,6 +178,7 @@
     "authorization_error": "We couldn't load your authorizations, please try again",
     "authorization_error_contact": "If the error persist don't hesitate to contact us",
     "for_buying": "For buying",
+    "for_bidding": "For bidding",
     "authorization_Marketplace_MANAToken": "MANA",
     "authorization_Marketplace_LANDRegistry": "{token}",
     "authorization_Marketplace_EstateRegistry": "{token}",
@@ -175,15 +186,16 @@
     "authorization_Marketplace_Halloween2019Collection": "{token}",
     "authorization_Marketplace_Xmas2019Collection": "{token}",
     "authorization_Marketplace_DCLRegistrar": "{token}",
+    "authorization_Bids_MANAToken": "{token}",
     "for_selling": "For selling",
     "pending_tx": "Transaction pending, click the spinner to go to your activity for a detailed status"
   },
   "authorization": {
-    "authorize": "Authorize the {contract_link} to operate {symbol} on your behalf",
-    "allowed": "You authorized the {contract_link} to operate {symbol} on your behalf",
-    "approved": "You authorized the {contract_link} to operate {symbol} on your behalf",
-    "disallowed": "You unauthorized the {contract_link} to operate {symbol} on your behalf",
-    "disapproved": "You unauthorized the {contract_link} to operate {symbol} on your behalf"
+    "authorize": "Authorize the {contract_link} contract to operate {symbol} on your behalf",
+    "allowed": "You authorized the {contract_link} contract to operate {symbol} on your behalf",
+    "approved": "You authorized the {contract_link} contract to operate {symbol} on your behalf",
+    "disallowed": "You unauthorized the {contract_link} contract to operate {symbol} on your behalf",
+    "disapproved": "You unauthorized the {contract_link} contract to operate {symbol} on your behalf"
   },
   "authorization_modal": {
     "title": "Authorize {token}",
@@ -216,7 +228,8 @@
       "create_order": "You listed {name} on sale for {price}.",
       "cancel_order": "You removed the listing of {name} for {price}.",
       "execute_order": "You bought {name} for {price}.",
-      "transfer": "You transferred {name} to {address}."
+      "transfer": "You transferred {name} to {address}.",
+      "place_bid": "You placed a bid of {price} on {name}."
     }
   },
   "wallet": {

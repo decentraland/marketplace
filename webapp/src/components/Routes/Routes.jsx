@@ -9,6 +9,7 @@ import { SettingsPage } from '../SettingsPage'
 import { NFTPage } from '../NFTPage'
 import { SellPage } from '../SellPage'
 import { BuyPage } from '../BuyPage'
+import { BidPage } from '../BidPage'
 import { CancelSalePage } from '../CancelSalePage'
 import { TransferPage } from '../TransferPage'
 import { ActivityPage } from '../ActivityPage'
@@ -24,6 +25,7 @@ const Routes = () => {
       <Route exact path={locations.signIn()} component={SignInPage} />
       <Route exact path={locations.sell()} component={SellPage} />
       <Route exact path={locations.buy()} component={BuyPage} />
+      <Route exact path={locations.bid()} component={BidPage} />
       <Route exact path={locations.cancel()} component={CancelSalePage} />
       <Route exact path={locations.transfer()} component={TransferPage} />
       <Route exact path={locations.ntf()} component={NFTPage} />

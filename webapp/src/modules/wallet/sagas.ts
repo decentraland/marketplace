@@ -32,12 +32,14 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
     ExclusiveMasksCollection,
     Halloween2019Collection,
     Xmas2019Collection,
-    DCLRegistrar
+    DCLRegistrar,
+    Bids
   } = contractAddresses
 
   const authorization: AuthorizationsRequest = {
     allowances: {
-      [Marketplace]: [MANAToken]
+      [Marketplace]: [MANAToken],
+      [Bids]: [MANAToken]
     },
     approvals: {
       [Marketplace]: [

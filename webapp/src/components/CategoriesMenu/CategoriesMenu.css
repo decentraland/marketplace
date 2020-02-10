@@ -17,6 +17,7 @@
   width: 248px;
   cursor: pointer;
   border-radius: 8px;
+  text-transform: capitalize;
 }
 
 .CategoriesMenu ul.menu li.sub {

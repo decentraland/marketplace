@@ -3,6 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
+import { ScrollToTop } from './components/ScrollToTop'
 import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 
@@ -19,6 +20,7 @@ const component = (
     <TranslationProvider locales={['en']}>
       <WalletProvider>
         <ConnectedRouter history={history}>
+          <ScrollToTop />
           <Routes />
         </ConnectedRouter>
       </WalletProvider>
