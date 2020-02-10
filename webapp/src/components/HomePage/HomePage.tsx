@@ -1,18 +1,33 @@
 import React, { useCallback, useEffect } from 'react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Hero, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { Section, SortDirection } from '../../modules/routing/search'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
-import { Props } from './HomePage.types'
-import { Slideshow } from './Slideshow'
-import './HomePage.css'
 import { NFTCategory, NFTSortBy } from '../../modules/nft/types'
 import { View } from '../../modules/ui/types'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Navbar } from '../Navbar'
+import { Footer } from '../Footer'
+import { Slideshow } from './Slideshow'
+import { Props } from './HomePage.types'
+import './HomePage.css'
 
 const HomePage = (props: Props) => {
-  const { wearables, ens, land, onNavigate, onFetchNFTs } = props
+  const {
+    wearables,
+    ens,
+    land,
+    isWearablesLoading,
+    isENSLoading,
+    isLandLoading,
+    onNavigate,
+    onFetchNFTs
+  } = props
+
+  console.log({
+    isWearablesLoading,
+    isENSLoading,
+    isLandLoading
+  })
 
   const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
     onNavigate
@@ -33,7 +48,6 @@ const HomePage = (props: Props) => {
     [onNavigate]
   )
 
-  // @nico TODO: isLoading?
   useEffect(() => {
     onFetchNFTs({
       variables: {
@@ -92,18 +106,21 @@ const HomePage = (props: Props) => {
         <Slideshow
           title={t('home_page.wearables')}
           nfts={wearables}
+          isLoading={isWearablesLoading}
           onViewAll={handleViewWearables}
-        ></Slideshow>
+        />
         <Slideshow
           title={t('home_page.land')}
           nfts={land}
+          isLoading={isENSLoading}
           onViewAll={handleViewLand}
-        ></Slideshow>
+        />
         <Slideshow
           title={t('home_page.ens')}
           nfts={ens}
+          isLoading={isLandLoading}
           onViewAll={handleViewEns}
-        ></Slideshow>
+        />
       </Page>
       <Footer />
     </>

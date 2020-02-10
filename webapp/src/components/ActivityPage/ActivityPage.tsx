@@ -59,11 +59,11 @@ const ActivityPage = (props: Props) => {
       <>
         <div className="history-header">
           <div className="left">
-            <Header sub>Latest Activity</Header>
+            <Header sub>{t('activity_page.latest_activity')}</Header>
           </div>
           <div className="right">
             <Button basic onClick={handleConfirm}>
-              Clear History
+              {t('activity_page.clear_history')}
             </Button>
           </div>
         </div>

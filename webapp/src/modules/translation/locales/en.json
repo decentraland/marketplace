@@ -212,6 +212,8 @@
     "submit": "Transfer"
   },
   "activity_page": {
+    "latest_activity": "Latest Activity",
+    "clear_history":"Clear History",
     "empty": "You have no activity yet.",
     "clear_history_modal": {
       "title": "Are you sure?",

@@ -43,11 +43,8 @@ const CategoriesMenu = (props: Props) => {
         {[
           Section.WEARABLES,
           Section.WEARABLES_HEAD,
-          Section.WEARABLES_EYEBROWS,
-          Section.WEARABLES_EYES,
           Section.WEARABLES_FACIAL_HAIR,
           Section.WEARABLES_HAIR,
-          Section.WEARABLES_MOUTH,
           Section.WEARABLES_UPPER_BODY,
           Section.WEARABLES_LOWER_BODY,
           Section.WEARABLES_FEET,
@@ -71,11 +68,8 @@ const CategoriesMenu = (props: Props) => {
             <ul className="submenu">
               {[
                 Section.WEARABLES_HEAD,
-                Section.WEARABLES_EYEBROWS,
-                Section.WEARABLES_EYES,
                 Section.WEARABLES_FACIAL_HAIR,
-                Section.WEARABLES_HAIR,
-                Section.WEARABLES_MOUTH
+                Section.WEARABLES_HAIR
               ].includes(section)
                 ? [
                     Section.WEARABLES_EYEBROWS,

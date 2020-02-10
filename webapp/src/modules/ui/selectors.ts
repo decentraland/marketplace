@@ -1,11 +1,16 @@
+import { getSearch } from 'connected-react-router'
 import { createSelector } from 'reselect'
-import { RootState } from '../reducer'
 import { UIState } from '../ui/reducer'
 import { NFTState } from '../nft/reducer'
+import { FETCH_NFTS_REQUEST } from '../nft/actions'
 import { NFT } from '../nft/types'
-import { getData as getNFTData } from '../nft/selectors'
-import { getSearch } from 'connected-react-router'
+import {
+  getData as getNFTData,
+  getLoading as getNFTLoading
+} from '../nft/selectors'
 import { SortBy, Section } from '../routing/search'
+import { RootState } from '../reducer'
+import { View } from './types'
 
 export const getState = (state: RootState) => state.ui
 export const getNFTs = createSelector<
@@ -80,3 +85,23 @@ export const getHomepageENS = createSelector<
 >(getState, getNFTData, (ui, nftsById) =>
   ui.homepageENSIds.map(id => nftsById[id])
 )
+
+export const isHomepageWearablesLoading = (state: RootState) =>
+  getNFTLoading(state).some(
+    action =>
+      action.type === FETCH_NFTS_REQUEST &&
+      action.payload.options.view === View.HOME_WEARABLES
+  )
+
+export const isHomepageENSLoading = (state: RootState) =>
+  getNFTLoading(state).some(
+    action =>
+      action.type === FETCH_NFTS_REQUEST &&
+      action.payload.options.view === View.HOME_LAND
+  )
+export const isHomepageLandLoading = (state: RootState) =>
+  getNFTLoading(state).some(
+    action =>
+      action.type === FETCH_NFTS_REQUEST &&
+      action.payload.options.view === View.HOME_ENS
+  )
