@@ -14,6 +14,9 @@ const Bids = (props: Props) => {
           bid.contractAddress === nft.contractAddress &&
           bid.tokenId === nft.tokenId
       ),
+    // we don't add `bids` to the dependency list because it's used as a dependency
+    // for the `useEffect` below, and it causes a loop every time `onFetchBids` is triggered
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [nft]
   )
 

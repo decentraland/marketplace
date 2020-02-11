@@ -27,7 +27,7 @@ const MyBidsPage = (props: Props) => {
 
   const handleToggleSeller = useCallback(
     () => setShowArchivedSeller(!showArchivedSeller),
-    [showArchivedSeller, showArchivedSeller]
+    [showArchivedSeller, setShowArchivedSeller]
   )
 
   // Redirect to signIn if trying to access current account without a wallet

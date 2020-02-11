@@ -52,7 +52,6 @@ const TransactionHistory = (props: Props) => {
         nftAPI.fetchOrders(nft.id),
         bidAPI.fetchByNFT(nft, OrderStatus.SOLD)
       ]).then(([orders, bids]) => {
-        console.log(orders, bids)
         setIsLoading(false)
         setOrders(orders)
         setBids(bids)
