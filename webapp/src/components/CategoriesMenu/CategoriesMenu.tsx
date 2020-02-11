@@ -24,11 +24,17 @@ const CategoriesMenu = (props: Props) => {
           />
         ))}
 
-        <DropdownMenu
-          sections={[Section.LAND, Section.PARCELS, Section.ESTATES]}
-          currentSection={section}
-          onNavigate={onNavigate}
-        />
+        {[Section.LAND, Section.PARCELS, Section.ESTATES].includes(section)
+          ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
+              <MenuItem
+                key={menuSection}
+                section={menuSection}
+                currentSection={section}
+                onNavigate={onNavigate}
+                isSub
+              />
+            ))
+          : null}
 
         <MenuItem
           section={Section.WEARABLES}
@@ -72,7 +78,7 @@ const CategoriesMenu = (props: Props) => {
                 section={menuSection}
                 currentSection={section}
                 onNavigate={onNavigate}
-                isSub={true}
+                isSub
               />
             ))}
 
