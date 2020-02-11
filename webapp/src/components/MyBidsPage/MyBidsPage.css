@@ -1,0 +1,9 @@
+.MyBidsPage .center {
+  position: relative;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary-text);
+  margin-bottom: 20px;
+}

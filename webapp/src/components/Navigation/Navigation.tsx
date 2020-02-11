@@ -22,10 +22,16 @@ const Navigation = (props: Props) => {
           {t('navigation.browse')}
         </Tabs.Tab>
         <Tabs.Tab
-          active={activeTab === NavigationTab.ACCOUNT}
+          active={activeTab === NavigationTab.MY_ASSETS}
           onClick={() => onNavigate(locations.currentAccount())}
         >
-          {t('navigation.my_account')}
+          {t('navigation.my_assets')}
+        </Tabs.Tab>
+        <Tabs.Tab
+          active={activeTab === NavigationTab.MY_BIDS}
+          onClick={() => onNavigate(locations.bids())}
+        >
+          {t('navigation.my_bids')}
         </Tabs.Tab>
       </Tabs.Left>
     </Tabs>

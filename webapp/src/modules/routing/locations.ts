@@ -19,6 +19,7 @@ export const locations = {
       ? `/accounts/${address}?${params.toString()}`
       : `/accounts/${address}`
   },
+  bids: () => '/bids',
   ntf: (
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'

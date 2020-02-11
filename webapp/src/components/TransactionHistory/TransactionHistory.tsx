@@ -74,7 +74,7 @@ const TransactionHistory = (props: Props) => {
                     <Address address={order.owner} />
                   </Table.Cell>
                   <Table.Cell>
-                    <Address address={order.buyer} />
+                    <Address address={order.buyer!} />
                   </Table.Cell>
                   <Table.Cell title={formatDateTitle(order)}>
                     {formatOrderDate(order)}

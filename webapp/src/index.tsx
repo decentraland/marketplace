@@ -6,6 +6,7 @@ import { ConnectedRouter } from 'connected-react-router'
 import { ScrollToTop } from './components/ScrollToTop'
 import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
+import { bidAPI } from './lib/api/bid'
 
 import './setup'
 import './themes'
@@ -14,6 +15,7 @@ import { store, history } from './modules/store'
 import { Routes } from './components/Routes'
 
 import './index.css'
+;(window as any).bidAPI = bidAPI
 
 const component = (
   <Provider store={store}>

@@ -1,21 +1,39 @@
 import { FetchNFTsSuccessAction, FETCH_NFTS_SUCCESS } from '../nft/actions'
 import { View } from './types'
+import {
+  FETCH_BIDS_BY_ADDRESS_SUCCESS,
+  FetchBidsByAddressSuccessAction,
+  ArchiveBidAction,
+  UnarchiveBidAction,
+  ARCHIVE_BID,
+  UNARCHIVE_BID
+} from '../bid/actions'
 
 export type UIState = {
   nftIds: string[]
   homepageWearableIds: string[]
   homepageLandIds: string[]
   homepageENSIds: string[]
+  sellerBidIds: string[]
+  bidderBidIds: string[]
+  archivedBidIds: string[]
 }
 
 const INITIAL_STATE: UIState = {
   nftIds: [],
   homepageWearableIds: [],
   homepageLandIds: [],
-  homepageENSIds: []
+  homepageENSIds: [],
+  sellerBidIds: [],
+  bidderBidIds: [],
+  archivedBidIds: []
 }
 
-type UIReducerAction = FetchNFTsSuccessAction
+type UIReducerAction =
+  | FetchNFTsSuccessAction
+  | FetchBidsByAddressSuccessAction
+  | ArchiveBidAction
+  | UnarchiveBidAction
 
 export function uiReducer(
   state: UIState = INITIAL_STATE,
@@ -57,6 +75,31 @@ export function uiReducer(
         }
         default:
           return state
+      }
+    }
+    case FETCH_BIDS_BY_ADDRESS_SUCCESS: {
+      const { seller, bidder } = action.payload
+      return {
+        ...state,
+        sellerBidIds: seller.map(bid => bid.id),
+        bidderBidIds: bidder.map(bid => bid.id)
+      }
+    }
+    case ARCHIVE_BID: {
+      const { bid } = action.payload
+      return {
+        ...state,
+        archivedBidIds: [
+          ...state.archivedBidIds.filter(id => id !== bid.id),
+          bid.id
+        ]
+      }
+    }
+    case UNARCHIVE_BID: {
+      const { bid } = action.payload
+      return {
+        ...state,
+        archivedBidIds: [...state.archivedBidIds.filter(id => id !== bid.id)]
       }
     }
     default:

@@ -18,7 +18,8 @@
   "navigation": {
     "atlas": "Atlas",
     "browse": "Browse",
-    "my_account": "My account"
+    "my_assets": "My Assets",
+    "my_bids": "My Bids"
   },
   "home_page": {
     "title": "Decentraland Marketplace",
@@ -99,7 +100,8 @@
   "wearable": {
     "body_shape": {
       "male": "Male",
-      "female": "Female"
+      "female": "Female",
+      "unisex": "Unisex"
     },
     "rarity": {
       "unique": "Unique",
@@ -109,6 +111,15 @@
       "swanky": "Swanky",
       "uncommon": "Uncommon",
       "common": "Common"
+    },
+    "rarity_tooltip": {
+      "unique": "Grail-like: One-of-a-kind",
+      "mythic": "For the lucky few: max 10",
+      "legendary": "Limited supply: max 100",
+      "epic": "Max supply: 1000",
+      "swanky": "Max supply: 5000",
+      "uncommon": "Max supply: 10,000",
+      "common": "Max supply: 100,000"
     },
     "category": {
       "body_shape": "Body Shape",
@@ -162,6 +173,13 @@
     "invalid_date": "This date has already passed",
     "not_enougn_mana": "You don't have enough MANA",
     "submit": "Bid"
+  },
+  "my_bids_page": {
+    "bids_received": "Bids received",
+    "bids_placed": "Bids placed",
+    "show_archives": "Show Archives ({amount})",
+    "hide_archives": "Hide Archives ({amount})",
+    "empty": "Nothing found..."
   },
   "cancel_sale_page": {
     "title": "Remove listing",
@@ -224,7 +242,9 @@
       "cancel_order": "You removed the listing of {name} for {price}.",
       "execute_order": "You bought {name} for {price}.",
       "transfer": "You transferred {name} to {address}.",
-      "place_bid": "You placed a bid of {price} on {name}."
+      "place_bid": "You placed a bid of {price} on {name}.",
+      "accept_bid": "You accepted a bid of {price} on {name}.",
+      "cancel_bid": "You cancelled a bid of {price} on {name}."
     }
   },
   "wallet": {

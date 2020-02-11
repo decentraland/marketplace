@@ -14,6 +14,7 @@ import { CancelSalePage } from '../CancelSalePage'
 import { TransferPage } from '../TransferPage'
 import { ActivityPage } from '../ActivityPage'
 import { HomePage } from '../HomePage'
+import { MyBidsPage } from '../MyBidsPage'
 
 const Routes = () => {
   return (
@@ -22,6 +23,7 @@ const Routes = () => {
       <Route exact path={locations.browse()} component={BrowsePage} />
       <Route exact path={locations.currentAccount()} component={AccountPage} />
       <Route exact path={locations.account()} component={AccountPage} />
+      <Route exact path={locations.bids()} component={MyBidsPage} />
       <Route exact path={locations.signIn()} component={SignInPage} />
       <Route exact path={locations.sell()} component={SellPage} />
       <Route exact path={locations.buy()} component={BuyPage} />

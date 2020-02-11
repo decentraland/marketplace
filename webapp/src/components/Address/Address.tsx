@@ -4,9 +4,10 @@ import { Blockie, Popup } from 'decentraland-ui'
 
 import { locations } from '../../modules/routing/locations'
 import { shortenAddress } from '../../modules/wallet/utils'
+import { Props } from './Address.types'
 import './Address.css'
 
-const Address = (props: any) => {
+const Address = (props: Props) => {
   const { address } = props
 
   return (

@@ -1,10 +1,9 @@
 import React, { useState, useCallback } from 'react'
+import { Header, Field, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import addDays from 'date-fns/addDays'
-import dateFnsFormat from 'date-fns/format'
 import { MANA_SYMBOL, toMANA, fromMANA } from '../../../lib/mana'
 import { NFTAction } from '../../NFTAction'
-import { Header, Field, Button } from 'decentraland-ui'
+import { DEFAULT_EXPIRATION_DATE } from '../../../modules/bid/utils'
 import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { hasAuthorization } from '../../../modules/authorization/utils'
@@ -14,13 +13,6 @@ import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.t
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './BidModal.types'
 import './BidModal.css'
-
-const DEFAULT_EXPIRATION_IN_DAYS = 30
-const INPUT_FORMAT = 'yyyy-MM-dd'
-const DEFAULT_EXPIRATION_DATE = dateFnsFormat(
-  addDays(new Date(), DEFAULT_EXPIRATION_IN_DAYS),
-  INPUT_FORMAT
-)
 
 const BidModal = (props: Props) => {
   const { nft, wallet, onNavigate, onPlaceBid } = props
@@ -76,7 +68,7 @@ const BidModal = (props: Props) => {
           value={price}
           onChange={(_event, props) => {
             const newPrice = fromMANA(props.value)
-            setPrice(newPrice > 0 ? toMANA(newPrice) : '')
+            setPrice(toMANA(newPrice))
           }}
           error={notEnoughMana}
           message={notEnoughMana ? t('bid_page.not_enougn_mana') : undefined}

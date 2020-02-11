@@ -10,26 +10,29 @@ const WearableTags = (props: Props) => {
   return (
     <div className="WearableTags tags">
       <div
+        title={t(`wearable.rarity_tooltip.${nft.wearable!.rarity}`)}
         className="rarity"
         style={{ backgroundColor: RARITY_COLOR[nft.wearable!.rarity] }}
       >
         {t(`wearable.rarity.${nft.wearable!.rarity}`)}
       </div>
+
       <div
         className={'icon ' + nft.wearable!.category}
         title={t(`wearable.category.${nft.wearable!.category}`)}
       />
-      {nft.wearable!.bodyShapes.map(shape => (
+      {nft.wearable!.bodyShapes.length === 1 ? (
         <div
-          key={shape}
-          className={'icon ' + shape}
+          className={'icon ' + nft.wearable!.bodyShapes[0]}
           title={
-            shape === BodyShape.MALE
+            nft.wearable!.bodyShapes[0] === BodyShape.MALE
               ? t('wearable.body_shape.male')
               : t('wearable.body_shape.female')
           }
         />
-      ))}
+      ) : nft.wearable!.bodyShapes.length === 2 ? (
+        <div className="icon Unisex" title={t('wearable.body_shape.unisex')} />
+      ) : null}
     </div>
   )
 }
