@@ -1,4 +1,5 @@
 import { all } from 'redux-saga/effects'
+import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
 
 import { translationSaga } from './translation/sagas'
@@ -11,8 +12,11 @@ import { tileSaga } from './tile/sagas'
 import { walletSaga } from './wallet/sagas'
 import { proxmitySaga } from './proximity/sagas'
 
+const analyticsSaga = createAnalyticsSaga()
+
 export function* rootSaga() {
   yield all([
+    analyticsSaga(),
     translationSaga(),
     transactionSaga(),
     orderSaga(),

@@ -13,6 +13,7 @@ import './themes'
 import { store, history } from './modules/store'
 import { Routes } from './components/Routes'
 
+import './modules/analytics/track'
 import './index.css'
 
 const component = (
