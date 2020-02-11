@@ -13,9 +13,10 @@ import { Description } from '../Description'
 import { Order } from '../Order'
 import { Highlight } from '../Highlight'
 import { Highlights } from '../Highlights'
-import { TransactionHistory } from '../../TransactionHistory'
+import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './WearableDetail.types'
 import './WearableDetail.css'
+import { Bids } from '../Bids'
 
 const WearableDetail = (props: Props) => {
   const { nft, onNavigate } = props
@@ -81,6 +82,7 @@ const WearableDetail = (props: Props) => {
           ) : null}
         </Highlights>
         <TransactionHistory nft={nft} />
+        <Bids nft={nft} />
       </Container>
     </div>
   )

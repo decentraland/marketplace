@@ -129,3 +129,10 @@ export const getBidderBids = createSelector<
 
 export const getArchivedBidIds = (state: RootState) =>
   getState(state).archivedBidIds
+
+export const getNFTBids = createSelector<
+  RootState,
+  UIState,
+  BidState['data'],
+  Bid[]
+>(getState, getBidData, (ui, bidsById) => ui.nftBidIds.map(id => bidsById[id]))

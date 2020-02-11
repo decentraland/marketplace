@@ -13,7 +13,9 @@
     "proceed": "Proceed",
     "nft": "NFT",
     "loading": "Loading",
-    "settings": "Settings"
+    "settings": "Settings",
+    "accept": "Accept",
+    "update": "Update"
   },
   "navigation": {
     "atlas": "Atlas",
@@ -179,7 +181,9 @@
     "bids_placed": "Bids placed",
     "show_archives": "Show Archives ({amount})",
     "hide_archives": "Hide Archives ({amount})",
-    "empty": "Nothing found..."
+    "empty": "Nothing found...",
+    "archive": "Archive",
+    "unarchive": "Unarchive"
   },
   "cancel_sale_page": {
     "title": "Remove listing",
@@ -224,7 +228,7 @@
   },
   "activity_page": {
     "latest_activity": "Latest Activity",
-    "clear_history":"Clear History",
+    "clear_history": "Clear History",
     "empty": "You have no activity yet.",
     "clear_history_modal": {
       "title": "Are you sure?",

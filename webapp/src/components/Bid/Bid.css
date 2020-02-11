@@ -64,6 +64,10 @@
   margin-top: 4px;
 }
 
+.Bid .wrapper .info .dcl.stats .Address > a {
+  color: var(--text);
+}
+
 .Bid .actions {
   flex: none;
   margin-left: 48px;

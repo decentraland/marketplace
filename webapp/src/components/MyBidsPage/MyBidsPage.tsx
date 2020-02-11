@@ -74,35 +74,41 @@ const MyBidsPage = (props: Props) => {
                 </Button>
               </HeaderMenu.Right>
             </HeaderMenu>
-            {filteredSeller.length === 0 && isLoading ? (
-              <div className="center">
-                <Loader active />
-              </div>
-            ) : null}
-            {filteredSeller.length === 0 && !isLoading ? (
-              <div className="center">
-                <div className="empty">{t('my_bids_page.empty')}</div>
-              </div>
-            ) : null}
-            {filteredSeller.length > 0
-              ? filteredSeller.map(bid => <Bid bid={bid} />)
-              : null}
+            <div className="bids">
+              {filteredSeller.length === 0 && isLoading ? (
+                <div className="center">
+                  <Loader active />
+                </div>
+              ) : null}
+              {filteredSeller.length === 0 && !isLoading ? (
+                <div className="center">
+                  <div className="empty">{t('my_bids_page.empty')}</div>
+                </div>
+              ) : null}
+              {filteredSeller.length > 0
+                ? filteredSeller.map(bid => <Bid key={bid.id} bid={bid} />)
+                : null}
+            </div>
             <HeaderMenu>
               <HeaderMenu.Left>
                 <Header sub>{t('my_bids_page.bids_placed')}</Header>
               </HeaderMenu.Left>
             </HeaderMenu>
-            {bidder.length === 0 && isLoading ? (
-              <div className="center">
-                <Loader active />
-              </div>
-            ) : null}
-            {bidder.length === 0 && !isLoading ? (
-              <div className="center">
-                <div className="empty">{t('my_bids_page.empty')}</div>
-              </div>
-            ) : null}
-            {bidder.length > 0 ? bidder.map(bid => <Bid bid={bid} />) : null}
+            <div className="bids">
+              {bidder.length === 0 && isLoading ? (
+                <div className="center">
+                  <Loader active />
+                </div>
+              ) : null}
+              {bidder.length === 0 && !isLoading ? (
+                <div className="center">
+                  <div className="empty">{t('my_bids_page.empty')}</div>
+                </div>
+              ) : null}
+              {bidder.length > 0
+                ? bidder.map(bid => <Bid key={bid.id} bid={bid} />)
+                : null}
+            </div>
           </>
         )}
       </Page>

@@ -7,3 +7,7 @@
   color: var(--secondary-text);
   margin-bottom: 20px;
 }
+
+.MyBidsPage .bids {
+  margin-bottom: 48px;
+}

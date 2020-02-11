@@ -47,33 +47,6 @@ export type PlaceBidRequestAction = ReturnType<typeof placeBidRequest>
 export type PlaceBidSuccessAction = ReturnType<typeof placeBidSuccess>
 export type PlaceBidFailureAction = ReturnType<typeof placeBidFailure>
 
-// Fetch Bids By Address
-export const FETCH_BIDS_BY_ADDRESS_REQUEST = '[Request] Fetch bids by address'
-export const FETCH_BIDS_BY_ADDRESS_SUCCESS = '[Success] Fetch bids by address'
-export const FETCH_BIDS_BY_ADDRESS_FAILURE = '[Failure] Fetch bids by address'
-
-export const fetchBidsByAddressRequest = (address: string) =>
-  action(FETCH_BIDS_BY_ADDRESS_REQUEST, { address })
-
-export const fetchBidsByAddressSuccess = (
-  address: string,
-  seller: Bid[],
-  bidder: Bid[]
-) => action(FETCH_BIDS_BY_ADDRESS_SUCCESS, { address, seller, bidder })
-
-export const fetchBidsByAddressFailure = (address: string, error: string) =>
-  action(FETCH_BIDS_BY_ADDRESS_FAILURE, { address, error })
-
-export type FetchBidsByAddressRequestAction = ReturnType<
-  typeof fetchBidsByAddressRequest
->
-export type FetchBidsByAddressSuccessAction = ReturnType<
-  typeof fetchBidsByAddressSuccess
->
-export type FetchBidsByAddressFailureAction = ReturnType<
-  typeof fetchBidsByAddressFailure
->
-
 // Archive Bid
 export const ARCHIVE_BID = 'Archive bid'
 export const archiveBid = (bid: Bid) => action(ARCHIVE_BID, { bid })
@@ -131,3 +104,54 @@ export const cancelBidFailure = (bid: Bid, error: string) =>
 export type CancelBidRequestAction = ReturnType<typeof cancelBidRequest>
 export type CancelBidSuccessAction = ReturnType<typeof cancelBidSuccess>
 export type CancelBidFailureAction = ReturnType<typeof cancelBidFailure>
+
+// Fetch Bids By Address
+export const FETCH_BIDS_BY_ADDRESS_REQUEST = '[Request] Fetch bids by address'
+export const FETCH_BIDS_BY_ADDRESS_SUCCESS = '[Success] Fetch bids by address'
+export const FETCH_BIDS_BY_ADDRESS_FAILURE = '[Failure] Fetch bids by address'
+
+export const fetchBidsByAddressRequest = (address: string) =>
+  action(FETCH_BIDS_BY_ADDRESS_REQUEST, { address })
+
+export const fetchBidsByAddressSuccess = (
+  address: string,
+  seller: Bid[],
+  bidder: Bid[]
+) => action(FETCH_BIDS_BY_ADDRESS_SUCCESS, { address, seller, bidder })
+
+export const fetchBidsByAddressFailure = (address: string, error: string) =>
+  action(FETCH_BIDS_BY_ADDRESS_FAILURE, { address, error })
+
+export type FetchBidsByAddressRequestAction = ReturnType<
+  typeof fetchBidsByAddressRequest
+>
+export type FetchBidsByAddressSuccessAction = ReturnType<
+  typeof fetchBidsByAddressSuccess
+>
+export type FetchBidsByAddressFailureAction = ReturnType<
+  typeof fetchBidsByAddressFailure
+>
+
+// Fetch Bids By NFT
+export const FETCH_BIDS_BY_NFT_REQUEST = '[Request] Fetch bids by NFT'
+export const FETCH_BIDS_BY_NFT_SUCCESS = '[Success] Fetch bids by NFT'
+export const FETCH_BIDS_BY_NFT_FAILURE = '[Failure] Fetch bids by NFT'
+
+export const fetchBidsByNFTRequest = (nft: NFT) =>
+  action(FETCH_BIDS_BY_NFT_REQUEST, { nft })
+
+export const fetchBidsByNFTSuccess = (nft: NFT, bids: Bid[]) =>
+  action(FETCH_BIDS_BY_NFT_SUCCESS, { nft, bids })
+
+export const fetchBidsByNFTFailure = (nft: NFT, error: string) =>
+  action(FETCH_BIDS_BY_NFT_FAILURE, { nft, error })
+
+export type FetchBidsByNFTRequestAction = ReturnType<
+  typeof fetchBidsByNFTRequest
+>
+export type FetchBidsByNFTSuccessAction = ReturnType<
+  typeof fetchBidsByNFTSuccess
+>
+export type FetchBidsByNFTFailureAction = ReturnType<
+  typeof fetchBidsByNFTFailure
+>

@@ -10,6 +10,7 @@ import { Address } from '../Address'
 import { formatMANA } from '../../lib/mana'
 import { Props } from './Bid.types'
 import './Bid.css'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 const Bid = (props: Props) => {
   const {
@@ -20,7 +21,9 @@ const Bid = (props: Props) => {
     onArchive,
     onUnarchive,
     onCancel,
-    onUpdate
+    onUpdate,
+    isArchivable,
+    hasImage
   } = props
 
   const isArchived = archivedBidIds.includes(bid.id)
@@ -29,26 +32,28 @@ const Bid = (props: Props) => {
 
   return (
     <div className="Bid">
-      <div className="image">
-        <NFTProvider
-          contractAddress={bid.contractAddress}
-          tokenId={bid.tokenId}
-        >
-          {(nft, isLoading) => (
-            <>
-              {!nft && isLoading ? <Loader active /> : null}
-              {nft ? (
-                <Link to={locations.ntf(bid.contractAddress, bid.tokenId)}>
-                  <NFTImage nft={nft} />{' '}
-                </Link>
-              ) : null}
-            </>
-          )}
-        </NFTProvider>
-      </div>
+      {hasImage ? (
+        <div className="image">
+          <NFTProvider
+            contractAddress={bid.contractAddress}
+            tokenId={bid.tokenId}
+          >
+            {(nft, isLoading) => (
+              <>
+                {!nft && isLoading ? <Loader active /> : null}
+                {nft ? (
+                  <Link to={locations.ntf(bid.contractAddress, bid.tokenId)}>
+                    <NFTImage nft={nft} />{' '}
+                  </Link>
+                ) : null}
+              </>
+            )}
+          </NFTProvider>
+        </div>
+      ) : null}
       <div className="wrapper">
         <div className="info">
-          {isSeller ? (
+          {!isBidder ? (
             <Stats className="from" title="from">
               <Address address={bid.bidder} />
             </Stats>
@@ -63,21 +68,30 @@ const Bid = (props: Props) => {
             {isBidder ? (
               <>
                 <Button primary onClick={() => onUpdate(bid)}>
-                  Update
+                  {t('global.update')}
                 </Button>
-                <Button onClick={() => onCancel(bid)}>Cancel</Button>
+                <Button onClick={() => onCancel(bid)}>
+                  {t('global.cancel')}
+                </Button>
               </>
             ) : null}
             {isSeller ? (
               <>
                 <Button primary onClick={() => onAccept(bid)}>
-                  Accept
+                  {t('global.accept')}
                 </Button>
-                {!isArchived ? (
-                  <Button onClick={() => onArchive(bid)}>Archive</Button>
-                ) : (
-                  <Button onClick={() => onUnarchive(bid)}>Unarchive</Button>
-                )}
+
+                {isArchivable ? (
+                  !isArchived ? (
+                    <Button onClick={() => onArchive(bid)}>
+                      {t('my_bids_page.archive')}
+                    </Button>
+                  ) : (
+                    <Button onClick={() => onUnarchive(bid)}>
+                      {t('my_bids_page.unarchive')}
+                    </Button>
+                  )
+                ) : null}
               </>
             ) : null}
           </div>
@@ -85,6 +99,11 @@ const Bid = (props: Props) => {
       </div>
     </div>
   )
+}
+
+Bid.defaultProps = {
+  isArchivable: true,
+  hasImage: true
 }
 
 export default React.memo(Bid)

@@ -13,6 +13,8 @@ export type Props = {
   bid: Bid
   wallet: Wallet | null
   archivedBidIds: string[]
+  isArchivable?: boolean
+  hasImage?: boolean
   onUpdate: (bid: Bid) => void
   onCancel: (bid: Bid) => void
   onArchive: (bid: Bid) => void
@@ -32,3 +34,5 @@ export type MapDispatch = Dispatch<
   | UnarchiveBidAction
   | AcceptBidRequestAction
 >
+
+export type OwnProps = Pick<Props, 'bid' | 'isArchivable' | 'hasImage'>

@@ -19,7 +19,11 @@ import {
   acceptBidFailure,
   CancelBidRequestAction,
   cancelBidSuccess,
-  cancelBidFailure
+  cancelBidFailure,
+  FETCH_BIDS_BY_NFT_REQUEST,
+  FetchBidsByNFTRequestAction,
+  fetchBidsByNFTSuccess,
+  fetchBidsByNFTFailure
 } from './actions'
 import { contractAddresses } from '../contract/utils'
 import { Bids } from '../../contracts/Bids'
@@ -36,6 +40,7 @@ export function* bidSaga() {
     FETCH_BIDS_BY_ADDRESS_REQUEST,
     handleFetchBidsByAddressRequest
   )
+  yield takeEvery(FETCH_BIDS_BY_NFT_REQUEST, handleFetchBidsByNFTRequest)
 }
 
 function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
@@ -153,5 +158,15 @@ function* handleFetchBidsByAddressRequest(
     yield put(fetchBidsByAddressSuccess(address, seller, bidder))
   } catch (error) {
     yield put(fetchBidsByAddressFailure(address, error.message))
+  }
+}
+
+function* handleFetchBidsByNFTRequest(action: FetchBidsByNFTRequestAction) {
+  const { nft } = action.payload
+  try {
+    const bids = yield call(() => bidAPI.fetchByNFT(nft))
+    yield put(fetchBidsByNFTSuccess(nft, bids))
+  } catch (error) {
+    yield put(fetchBidsByNFTFailure(nft, error.message))
   }
 }

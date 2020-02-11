@@ -6,7 +6,9 @@ import {
   ArchiveBidAction,
   UnarchiveBidAction,
   ARCHIVE_BID,
-  UNARCHIVE_BID
+  UNARCHIVE_BID,
+  FetchBidsByNFTSuccessAction,
+  FETCH_BIDS_BY_NFT_SUCCESS
 } from '../bid/actions'
 
 export type UIState = {
@@ -17,6 +19,7 @@ export type UIState = {
   sellerBidIds: string[]
   bidderBidIds: string[]
   archivedBidIds: string[]
+  nftBidIds: string[]
 }
 
 const INITIAL_STATE: UIState = {
@@ -26,12 +29,14 @@ const INITIAL_STATE: UIState = {
   homepageENSIds: [],
   sellerBidIds: [],
   bidderBidIds: [],
-  archivedBidIds: []
+  archivedBidIds: [],
+  nftBidIds: []
 }
 
 type UIReducerAction =
   | FetchNFTsSuccessAction
   | FetchBidsByAddressSuccessAction
+  | FetchBidsByNFTSuccessAction
   | ArchiveBidAction
   | UnarchiveBidAction
 
@@ -83,6 +88,13 @@ export function uiReducer(
         ...state,
         sellerBidIds: seller.map(bid => bid.id),
         bidderBidIds: bidder.map(bid => bid.id)
+      }
+    }
+    case FETCH_BIDS_BY_NFT_SUCCESS: {
+      const { bids } = action.payload
+      return {
+        ...state,
+        nftBidIds: bids.map(bid => bid.id)
       }
     }
     case ARCHIVE_BID: {

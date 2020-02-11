@@ -9,7 +9,8 @@ import { Badge } from '../Badge'
 import { Description } from '../Description'
 import { Order } from '../Order'
 import { ProximityHighlights } from '../ProximityHighlights'
-import { TransactionHistory } from '../../TransactionHistory'
+import { TransactionHistory } from '../TransactionHistory'
+import { Bids } from '../Bids'
 import { Props } from './ParcelDetail.types'
 import './ParcelDetail.css'
 
@@ -39,6 +40,7 @@ const ParcelDetail = (props: Props) => {
         <Order nft={nft} />
         <ProximityHighlights nft={nft} />
         <TransactionHistory nft={nft} />
+        <Bids nft={nft} />
       </Container>
     </>
   )
