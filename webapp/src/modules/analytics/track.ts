@@ -5,7 +5,10 @@ import {
 import {
   FETCH_TRANSACTION_FAILURE,
   FIX_REVERTED_TRANSACTION,
-  REPLACE_TRANSACTION_SUCCESS
+  REPLACE_TRANSACTION_SUCCESS,
+  FetchTransactionFailureAction,
+  FixRevertedTransactionAction,
+  ReplaceTransactionSuccessAction
 } from 'decentraland-dapps/dist/modules/transaction/actions'
 import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -21,9 +24,12 @@ import {
 import { TRANSFER_NFT_SUCCESS, TransferNFTSuccessAction } from '../nft/actions'
 import {
   ALLOW_TOKEN_SUCCESS,
-  APPROVE_TOKEN_SUCCESS
+  APPROVE_TOKEN_SUCCESS,
+  AllowTokenSuccessAction,
+  ApproveTokenSuccessAction
 } from '../authorization/actions'
 import { NFT } from '../nft/types'
+import { getContractName } from '../contract/utils'
 
 function addWithPayload<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -60,53 +66,61 @@ addWithPayload<CreateOrderSuccessAction>(
   })
 )
 
-addWithPayload(
+addWithPayload<CancelOrderSuccessAction>(
   CANCEL_ORDER_SUCCESS,
   ({ payload }) => withCategory('Cancel Sale', payload.nft),
-  ({ payload }: CancelOrderSuccessAction) => ({
+  ({ payload }) => ({
     category: payload.nft.category,
     nftId: payload.nft.id,
     price: payload.order.price
   })
 )
 
-addWithPayload(
+addWithPayload<TransferNFTSuccessAction>(
   TRANSFER_NFT_SUCCESS,
   ({ payload }) => withCategory('Transfer NFT', payload.nft),
-  ({ payload }: TransferNFTSuccessAction) => ({
+  ({ payload }) => ({
     category: payload.nft.category,
     assetId: payload.nft.id,
     to: payload.address
   })
 )
 
-add(
+addWithPayload<FetchTransactionFailureAction>(
   FETCH_TRANSACTION_FAILURE,
-  action =>
-    action.payload.status === TransactionStatus.REVERTED
+  ({ payload }) =>
+    payload.status === TransactionStatus.REVERTED
       ? 'Transaction Failed'
-      : 'Transaction Dropped',
-  action => action.payload
+      : 'Transaction Dropped'
 )
 
-add(FIX_REVERTED_TRANSACTION, 'Transaction Fixed', action => action.payload)
+addWithPayload<FixRevertedTransactionAction>(
+  FIX_REVERTED_TRANSACTION,
+  'Transaction Fixed'
+)
 
-add(
+addWithPayload<ReplaceTransactionSuccessAction>(
   REPLACE_TRANSACTION_SUCCESS,
-  'Transaction Replaced',
-  action => action.payload
+  'Transaction Replaced'
 )
 
-add(ALLOW_TOKEN_SUCCESS, ({ payload }) =>
-  payload.amount > 0
-    ? `Authorize ${payload.contractName} for ${payload.tokenContractName}`
-    : `Unauthorize ${payload.contractName} for ${payload.tokenContractName}`
-)
+addWithPayload<AllowTokenSuccessAction>(ALLOW_TOKEN_SUCCESS, ({ payload }) => {
+  const contractName = getContractName(payload.contractAddress)
+  const tokenContractName = getContractName(payload.tokenContractAddress)
+  return payload.isAllowed
+    ? `Authorize ${contractName} for ${tokenContractName}`
+    : `Unauthorize ${contractName} for ${tokenContractName}`
+})
 
-add(APPROVE_TOKEN_SUCCESS, ({ payload }) =>
-  payload.isApproved
-    ? `Authorize ${payload.contractName} for ${payload.tokenContractName}`
-    : `Unauthorize ${payload.contractName} for ${payload.tokenContractName}`
+addWithPayload<ApproveTokenSuccessAction>(
+  APPROVE_TOKEN_SUCCESS,
+  ({ payload }) => {
+    const contractName = getContractName(payload.contractAddress)
+    const tokenContractName = getContractName(payload.tokenContractAddress)
+    return payload.isApproved
+      ? `Authorize ${contractName} for ${tokenContractName}`
+      : `Unauthorize ${contractName} for ${tokenContractName}`
+  }
 )
 
 // TODO:
