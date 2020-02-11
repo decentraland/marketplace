@@ -180,13 +180,6 @@
     "for_buying": "For buying",
     "for_bidding": "For bidding",
     "authorization_Marketplace_MANAToken": "MANA",
-    "authorization_Marketplace_LANDRegistry": "{token}",
-    "authorization_Marketplace_EstateRegistry": "{token}",
-    "authorization_Marketplace_ExclusiveMasksCollection": "{token}",
-    "authorization_Marketplace_Halloween2019Collection": "{token}",
-    "authorization_Marketplace_Xmas2019Collection": "{token}",
-    "authorization_Marketplace_DCLRegistrar": "{token}",
-    "authorization_Bids_MANAToken": "{token}",
     "for_selling": "For selling",
     "pending_tx": "Transaction pending, click the spinner to go to your activity for a detailed status"
   },
@@ -212,6 +205,8 @@
     "submit": "Transfer"
   },
   "activity_page": {
+    "latest_activity": "Latest Activity",
+    "clear_history":"Clear History",
     "empty": "You have no activity yet.",
     "clear_history_modal": {
       "title": "Are you sure?",

@@ -31,3 +31,9 @@ export function getParcelImage(parcel: Parcel): String {
     '/map.png'
   )
 }
+
+export function isInBounds(parcel: Parcel) {
+  return (
+    parcel.x >= -150 && parcel.x <= 150 && parcel.y >= -150 && parcel.y <= 150
+  )
+}

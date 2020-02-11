@@ -7,13 +7,19 @@ import HomePage from './HomePage'
 import {
   getHomepageWearables,
   getHomepageLand,
-  getHomepageENS
+  getHomepageENS,
+  isHomepageWearablesLoading,
+  isHomepageENSLoading,
+  isHomepageLandLoading
 } from '../../modules/ui/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
   wearables: getHomepageWearables(state),
   land: getHomepageLand(state),
-  ens: getHomepageENS(state)
+  ens: getHomepageENS(state),
+  isWearablesLoading: isHomepageWearablesLoading(state),
+  isENSLoading: isHomepageENSLoading(state),
+  isLandLoading: isHomepageLandLoading(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
