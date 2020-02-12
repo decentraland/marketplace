@@ -179,8 +179,9 @@
   "my_bids_page": {
     "bids_received": "Bids received",
     "bids_placed": "Bids placed",
-    "show_archives": "Show Archives ({amount})",
-    "hide_archives": "Hide Archives ({amount})",
+    "bids_archived": "Bids archived",
+    "show_archived": "Show Archived ({amount})",
+    "show_received": "Show Received ({amount})",
     "empty": "Nothing found...",
     "archive": "Archive",
     "unarchive": "Unarchive"

@@ -23,11 +23,11 @@ const MyBidsPage = (props: Props) => {
     archivedBidIds
   } = props
 
-  const [showArchivedSeller, setShowArchivedSeller] = useState(false)
+  const [showArchived, setShowArchivedSeller] = useState(false)
 
   const handleToggleSeller = useCallback(
-    () => setShowArchivedSeller(!showArchivedSeller),
-    [showArchivedSeller, setShowArchivedSeller]
+    () => setShowArchivedSeller(!showArchived),
+    [showArchived, setShowArchivedSeller]
   )
 
   // Redirect to signIn if trying to access current account without a wallet
@@ -45,9 +45,7 @@ const MyBidsPage = (props: Props) => {
 
   const archived = seller.filter(bid => archivedBidIds.includes(bid.id))
   const unarchived = seller.filter(bid => !archivedBidIds.includes(bid.id))
-  const filteredSeller = showArchivedSeller
-    ? [...unarchived, ...archived]
-    : unarchived
+  const filteredSeller = showArchived ? archived : unarchived
 
   return (
     <div className="MyBidsPage">
@@ -60,18 +58,26 @@ const MyBidsPage = (props: Props) => {
           <>
             <HeaderMenu>
               <HeaderMenu.Left>
-                <Header sub>{t('my_bids_page.bids_received')}</Header>
+                <Header sub>
+                  {t(
+                    showArchived
+                      ? 'my_bids_page.bids_archived'
+                      : 'my_bids_page.bids_received'
+                  )}
+                </Header>
               </HeaderMenu.Left>
               <HeaderMenu.Right>
-                <Button basic onClick={handleToggleSeller}>
-                  {showArchivedSeller
-                    ? t('my_bids_page.hide_archives', {
-                        amount: archived.length
-                      })
-                    : t('my_bids_page.show_archives', {
-                        amount: archived.length
-                      })}
-                </Button>
+                {showArchived || archived.length > 0 ? (
+                  <Button basic onClick={handleToggleSeller}>
+                    {showArchived
+                      ? t('my_bids_page.show_received', {
+                          amount: unarchived.length
+                        })
+                      : t('my_bids_page.show_archived', {
+                          amount: archived.length
+                        })}
+                  </Button>
+                ) : null}
               </HeaderMenu.Right>
             </HeaderMenu>
             <div className="bids">
