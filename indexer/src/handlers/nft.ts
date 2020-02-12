@@ -1,6 +1,12 @@
+import { log } from '@graphprotocol/graph-ts'
 import { Transfer } from '../entities/templates/ERC721/ERC721'
 import { NFT, Parcel, Estate } from '../entities/schema'
-import { isMint, getNFTId, getTokenURI } from '../modules/nft'
+import {
+  isMint,
+  getNFTId,
+  getTokenURI,
+  cancelActiveOrder
+} from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
 import { buildCountFromNFT } from '../modules/count'
@@ -57,16 +63,16 @@ export function handleTransfer(event: Transfer): void {
 
     if (category == categories.PARCEL) {
       let parcel = buildParcelFromNFT(nft)
+      if (!isInBounds(parcel)) {
+        return // Finish early
+      }
+
       parcel.save()
       nft.parcel = id
       nft.image = getParcelImage(parcel)
       nft.searchIsLand = true
       nft.searchParcelX = parcel.x
       nft.searchParcelY = parcel.y
-
-      if (!isInBounds(parcel)) {
-        return // Finish early
-      }
     } else if (category == categories.ESTATE) {
       let estate = buildEstateFromNFT(nft)
       estate.save()
@@ -95,6 +101,8 @@ export function handleTransfer(event: Transfer): void {
 
     let metric = buildCountFromNFT(nft)
     metric.save()
+  } else {
+    cancelActiveOrder(nft, event.block.timestamp)
   }
 
   createAccount(event.params.to)

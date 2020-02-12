@@ -5,10 +5,9 @@ import {
   BidCancelled
 } from '../entities/ERC721Bid/ERC721Bid'
 import { Bid, NFT } from '../entities/schema'
-import { getNFTId } from '../modules/nft'
+import { getNFTId, cancelActiveBids } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import * as status from '../modules/order/status'
-import * as categories from '../modules/category/categories'
 
 export function handleBidCreated(event: BidCreated): void {
   let category = getCategory(event.params._tokenAddress.toHexString())
@@ -37,6 +36,8 @@ export function handleBidCreated(event: BidCreated): void {
   bid.seller = Address.fromString(nft.owner)
 
   bid.save()
+
+  cancelActiveBids(nft!, event.block.timestamp)
 }
 
 export function handleBidAccepted(event: BidAccepted): void {

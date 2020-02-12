@@ -32,8 +32,13 @@ export function getParcelImage(parcel: Parcel): String {
   )
 }
 
-export function isInBounds(parcel: Parcel) {
+export function isInBounds(parcel: Parcel): boolean {
+  let lowerBound = BigInt.fromI32(-150)
+  let upperBound = BigInt.fromI32(150)
   return (
-    parcel.x >= -150 && parcel.x <= 150 && parcel.y >= -150 && parcel.y <= 150
+    parcel.x.ge(lowerBound) &&
+    parcel.x.le(upperBound) &&
+    parcel.y.ge(lowerBound) &&
+    parcel.y.le(upperBound)
   )
 }
