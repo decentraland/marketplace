@@ -77,12 +77,12 @@ export function handleAddLand(event: AddLand): void {
     parcel.tokenId = event.params._landId
   }
 
-  parcel.owner = estate.owner
+  parcel.owner = addresses.EstateRegistry
   parcel.estate = id
   parcel.save()
 
   let parcelNFT = new NFT(parcelId)
-  parcelNFT.owner = estate.owner
+  parcelNFT.owner = addresses.EstateRegistry
   parcelNFT.save()
 }
 
