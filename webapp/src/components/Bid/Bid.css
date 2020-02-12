@@ -31,7 +31,7 @@
 }
 
 .Bid .wrapper .info .dcl.stats {
-  width: 15%;
+  width: 20%;
 }
 
 .Bid .wrapper .info .dcl.stats.from {
@@ -80,4 +80,10 @@
 
 .Bid .actions .ui.button {
   width: 146px;
+}
+
+.Bid .actions .not-enough-mana {
+  display: inline-block;
+  height: 48px;
+  margin-right: 16px;
 }

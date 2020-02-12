@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Loader, Stats, Mana, Button } from 'decentraland-ui'
+import { Loader, Stats, Mana, Button, Popup } from 'decentraland-ui'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { locations } from '../../modules/routing/locations'
 import { addressEquals } from '../../modules/wallet/utils'
@@ -11,6 +11,7 @@ import { formatMANA } from '../../lib/mana'
 import { Props } from './Bid.types'
 import './Bid.css'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isInsufficientMANA } from '../../modules/bid/utils'
 
 const Bid = (props: Props) => {
   const {
@@ -29,6 +30,30 @@ const Bid = (props: Props) => {
   const isArchived = archivedBidIds.includes(bid.id)
   const isBidder = !!wallet && addressEquals(wallet.address, bid.bidder)
   const isSeller = !!wallet && addressEquals(wallet.address, bid.seller)
+
+  const [isDisabled, setIsDisabled] = useState(false)
+
+  useEffect(() => {
+    if (isSeller) {
+      isInsufficientMANA(bid).then(setIsDisabled)
+    }
+  }, [bid, isSeller])
+
+  let acceptButton = (
+    <Button primary disabled={isDisabled} onClick={() => onAccept(bid)}>
+      {t('global.accept')}
+    </Button>
+  )
+
+  if (isDisabled) {
+    acceptButton = (
+      <Popup
+        content={t('bid.not_enough_mana')}
+        position="top center"
+        trigger={<div className="not-enough-mana">{acceptButton}</div>}
+      />
+    )
+  }
 
   return (
     <div className="Bid">
@@ -77,10 +102,7 @@ const Bid = (props: Props) => {
             ) : null}
             {isSeller ? (
               <>
-                <Button primary onClick={() => onAccept(bid)}>
-                  {t('global.accept')}
-                </Button>
-
+                {acceptButton}
                 {isArchivable ? (
                   !isArchived ? (
                     <Button onClick={() => onArchive(bid)}>

@@ -74,6 +74,9 @@
   "nft_card": {
     "expires_at": "Expires {date}"
   },
+  "bid": {
+    "not_enough_mana": "The bidder doesn't have enough MANA to pay for this bid"
+  },
   "detail": {
     "description": "Description",
     "highlights": "Highlights",
