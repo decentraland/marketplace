@@ -36,8 +36,8 @@ const EstateDetail = (props: Props) => {
         <Description text={nft.estate!.data?.description} />
         <Order nft={nft} />
         <ProximityHighlights nft={nft} />
-        <TransactionHistory nft={nft} />
         <Bids nft={nft} />
+        <TransactionHistory nft={nft} />
       </Container>
     </>
   )

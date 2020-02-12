@@ -81,8 +81,8 @@ const WearableDetail = (props: Props) => {
             />
           ) : null}
         </Highlights>
-        <TransactionHistory nft={nft} />
         <Bids nft={nft} />
+        <TransactionHistory nft={nft} />
       </Container>
     </div>
   )

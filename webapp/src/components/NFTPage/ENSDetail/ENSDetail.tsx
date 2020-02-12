@@ -30,8 +30,8 @@ const ENSDetail = (props: Props) => {
           right={<Owner nft={nft} />}
         />
         <Order nft={nft} />
-        <TransactionHistory nft={nft} />
         <Bids nft={nft} />
+        <TransactionHistory nft={nft} />
       </Container>
     </>
   )

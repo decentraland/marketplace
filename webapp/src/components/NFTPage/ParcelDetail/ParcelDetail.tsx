@@ -39,8 +39,8 @@ const ParcelDetail = (props: Props) => {
         <Description text={nft.parcel!.data?.description} />
         <Order nft={nft} />
         <ProximityHighlights nft={nft} />
-        <TransactionHistory nft={nft} />
         <Bids nft={nft} />
+        <TransactionHistory nft={nft} />
       </Container>
     </>
   )
