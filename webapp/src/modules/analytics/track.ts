@@ -30,8 +30,9 @@ import {
 } from '../authorization/actions'
 import { NFT } from '../nft/types'
 import { getContractName } from '../contract/utils'
+import { PLACE_BID_SUCCESS, PlaceBidSuccessAction } from '../bid/actions'
 
-function addWithPayload<T extends PayloadAction<string, any>>(
+function track<T extends PayloadAction<string, any>>(
   actionType: string,
   eventName: string | ((action: T) => string),
   getPayload = (action: T) => action.payload
@@ -44,7 +45,7 @@ function withCategory(eventName: string, nft: NFT) {
   return `${eventName} ${category}`
 }
 
-addWithPayload<ExecuteOrderSuccessAction>(
+track<ExecuteOrderSuccessAction>(
   EXECUTE_ORDER_SUCCESS,
   ({ payload }) => withCategory('Buy', payload.nft),
   ({ payload }) => ({
@@ -56,7 +57,7 @@ addWithPayload<ExecuteOrderSuccessAction>(
   })
 )
 
-addWithPayload<CreateOrderSuccessAction>(
+track<CreateOrderSuccessAction>(
   CREATE_ORDER_SUCCESS,
   ({ payload }) => withCategory('Publish', payload.nft),
   ({ payload }) => ({
@@ -66,7 +67,7 @@ addWithPayload<CreateOrderSuccessAction>(
   })
 )
 
-addWithPayload<CancelOrderSuccessAction>(
+track<CancelOrderSuccessAction>(
   CANCEL_ORDER_SUCCESS,
   ({ payload }) => withCategory('Cancel Sale', payload.nft),
   ({ payload }) => ({
@@ -76,35 +77,33 @@ addWithPayload<CancelOrderSuccessAction>(
   })
 )
 
-addWithPayload<TransferNFTSuccessAction>(
+track<TransferNFTSuccessAction>(
   TRANSFER_NFT_SUCCESS,
   ({ payload }) => withCategory('Transfer NFT', payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
-    assetId: payload.nft.id,
+    nftId: payload.nft.id,
     to: payload.address
   })
 )
 
-addWithPayload<FetchTransactionFailureAction>(
-  FETCH_TRANSACTION_FAILURE,
-  ({ payload }) =>
-    payload.status === TransactionStatus.REVERTED
-      ? 'Transaction Failed'
-      : 'Transaction Dropped'
+track<FetchTransactionFailureAction>(FETCH_TRANSACTION_FAILURE, ({ payload }) =>
+  payload.status === TransactionStatus.REVERTED
+    ? 'Transaction Failed'
+    : 'Transaction Dropped'
 )
 
-addWithPayload<FixRevertedTransactionAction>(
+track<FixRevertedTransactionAction>(
   FIX_REVERTED_TRANSACTION,
   'Transaction Fixed'
 )
 
-addWithPayload<ReplaceTransactionSuccessAction>(
+track<ReplaceTransactionSuccessAction>(
   REPLACE_TRANSACTION_SUCCESS,
   'Transaction Replaced'
 )
 
-addWithPayload<AllowTokenSuccessAction>(ALLOW_TOKEN_SUCCESS, ({ payload }) => {
+track<AllowTokenSuccessAction>(ALLOW_TOKEN_SUCCESS, ({ payload }) => {
   const contractName = getContractName(payload.contractAddress)
   const tokenContractName = getContractName(payload.tokenContractAddress)
   return payload.isAllowed
@@ -112,54 +111,42 @@ addWithPayload<AllowTokenSuccessAction>(ALLOW_TOKEN_SUCCESS, ({ payload }) => {
     : `Unauthorize ${contractName} for ${tokenContractName}`
 })
 
-addWithPayload<ApproveTokenSuccessAction>(
-  APPROVE_TOKEN_SUCCESS,
-  ({ payload }) => {
-    const contractName = getContractName(payload.contractAddress)
-    const tokenContractName = getContractName(payload.tokenContractAddress)
-    return payload.isApproved
-      ? `Authorize ${contractName} for ${tokenContractName}`
-      : `Unauthorize ${contractName} for ${tokenContractName}`
-  }
+track<ApproveTokenSuccessAction>(APPROVE_TOKEN_SUCCESS, ({ payload }) => {
+  const contractName = getContractName(payload.contractAddress)
+  const tokenContractName = getContractName(payload.tokenContractAddress)
+  return payload.isApproved
+    ? `Authorize ${contractName} for ${tokenContractName}`
+    : `Unauthorize ${contractName} for ${tokenContractName}`
+})
+
+track<PlaceBidSuccessAction>(
+  PLACE_BID_SUCCESS,
+  ({ payload }) => withCategory('Bid', payload.nft),
+  ({ payload }) => ({
+    category: payload.nft.category,
+    nftId: payload.nft.id,
+    price: payload.price,
+    bidder: payload.bidder
+  })
 )
 
-// TODO:
-
-// addWithPayload(BID_ON_PARCELS_SUCCESS, 'Bid on parcels', action => ({
-//   beneficiary: action.beneficiary,
-//   parcels: action.xs.map((x, index) => `${x}, ${action.ys[index]}`).join(', '),
-//   currentPrice: action.params.currentPrice,
-//   token: action.params.token,
-//   rate: action.params.rate
-// }))
-
-// addWithPayload(
-//   BID_SUCCESS,
-//   ({ bid }) => addAssetType('Bid', bid.asset_type),
-//   ({ bid }) => ({
-//     assetId: bid.asset_id,
-//     price: bid.price,
-//     bidder: bid.bidder
-//   })
-// )
-
-// addWithPayload(
+// track(
 //   ACCEPT_BID_SUCCESS,
 //   ({ bid }) => addAssetType('Accept bid', bid.asset_type),
 //   ({ bid }) => ({
 //     id: bid.id,
-//     assetId: bid.asset_id,
+//     nftId: bid.asset_id,
 //     bidder: bid.bidder,
 //     seller: bid.seller
 //   })
 // )
 
-// addWithPayload(
+// track(
 //   CANCEL_BID_SUCCESS,
 //   ({ bid }) => addAssetType('Cancel bid', bid.asset_type),
 //   ({ bid }) => ({
 //     id: bid.id,
-//     assetId: bid.asset_id,
+//     nftId: bid.asset_id,
 //     bidder: bid.bidder
 //   })
 // )
@@ -169,7 +156,7 @@ addWithPayload<ApproveTokenSuccessAction>(
 //   ({ bid }) => addAssetType('Archive Bid', bid.asset_type),
 //   ({ bid }) => ({
 //     id: bid.id,
-//     assetId: bid.asset_id,
+//     nftId: bid.asset_id,
 //     price: bid.price
 //   })
 // )
@@ -179,7 +166,7 @@ addWithPayload<ApproveTokenSuccessAction>(
 //   ({ bid }) => addAssetType('Unarchive Bid', bid.asset_type),
 //   ({ bid }) => ({
 //     id: bid.id,
-//     assetId: bid.asset_id,
+//     nftId: bid.asset_id,
 //     price: bid.price
 //   })
 // )
