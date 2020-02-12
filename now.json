@@ -16,5 +16,9 @@
       "REACT_APP_XMAS_2019_ADDRESS": "0xc3af02c0fd486c8e9da5788b915d6fff3f049866",
       "REACT_APP_DCL_REGISTRAR": "0x2a187453064356c898cae034eaed119e1663acb8"
     }
-  }
+  },
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/.*", "dest": "/index.html" }
+  ]
 }
