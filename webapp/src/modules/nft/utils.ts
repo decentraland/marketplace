@@ -1,7 +1,7 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { SortDirection, SortBy } from '../routing/search'
-import { nftContracts } from '../contract/utils'
+import { contracts } from '../contract/utils'
 import { addressEquals } from '../wallet/utils'
 import { NFT, NFTCategory, NFTSortBy } from './types'
 
@@ -10,7 +10,7 @@ export function getNFTId(
   tokenId: string | null
 ) {
   if (!contractAddress || !tokenId) return
-  const contract = contractAddress ? nftContracts[contractAddress] : null
+  const contract = contractAddress ? contracts[contractAddress] : null
   if (contract) {
     return contract.category + '-' + contractAddress + '-' + tokenId
   }
