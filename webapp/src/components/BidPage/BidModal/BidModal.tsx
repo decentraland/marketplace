@@ -3,8 +3,8 @@ import { Header, Field, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { MANA_SYMBOL, toMANA, fromMANA } from '../../../lib/mana'
 import { NFTAction } from '../../NFTAction'
-import { DEFAULT_EXPIRATION_DATE } from '../../../modules/bid/utils'
 import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
+import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
 import { hasAuthorization } from '../../../modules/authorization/utils'
 import { contractAddresses } from '../../../modules/contract/utils'
@@ -18,7 +18,7 @@ const BidModal = (props: Props) => {
   const { nft, wallet, onNavigate, onPlaceBid } = props
 
   const [price, setPrice] = useState('')
-  const [expiresAt, setExpiresAt] = useState(DEFAULT_EXPIRATION_DATE)
+  const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
 
   const [fingerprint, isLoading] = useFingerprint(nft)
 
@@ -78,7 +78,7 @@ const BidModal = (props: Props) => {
           type="date"
           value={expiresAt}
           onChange={(_event, props) =>
-            setExpiresAt(props.value || DEFAULT_EXPIRATION_DATE)
+            setExpiresAt(props.value || getDefaultExpirationDate())
           }
           error={isInvalidDate}
           message={isInvalidDate ? t('bid_page.invalid_date') : undefined}

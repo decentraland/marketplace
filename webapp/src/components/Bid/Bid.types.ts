@@ -6,7 +6,11 @@ import {
   CancelBidRequestAction,
   ArchiveBidAction,
   UnarchiveBidAction,
-  AcceptBidRequestAction
+  AcceptBidRequestAction,
+  cancelBidRequest,
+  archiveBid,
+  acceptBidRequest,
+  unarchiveBid
 } from '../../modules/bid/actions'
 
 export type Props = {
@@ -16,10 +20,10 @@ export type Props = {
   isArchivable?: boolean
   hasImage?: boolean
   onUpdate: (bid: Bid) => void
-  onCancel: (bid: Bid) => void
-  onArchive: (bid: Bid) => void
-  onUnarchive: (bid: Bid) => void
-  onAccept: (bid: Bid) => void
+  onCancel: typeof cancelBidRequest
+  onArchive: typeof archiveBid
+  onUnarchive: typeof unarchiveBid
+  onAccept: typeof acceptBidRequest
 }
 
 export type MapStateProps = Pick<Props, 'archivedBidIds' | 'wallet'>

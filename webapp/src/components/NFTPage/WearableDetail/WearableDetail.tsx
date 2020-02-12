@@ -5,6 +5,7 @@ import { RARITY_COLOR, BodyShape } from '../../../modules/nft/wearable/types'
 import { getNFTName } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/routing/search'
+import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
@@ -13,10 +14,10 @@ import { Description } from '../Description'
 import { Order } from '../Order'
 import { Highlight } from '../Highlight'
 import { Highlights } from '../Highlights'
+import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './WearableDetail.types'
 import './WearableDetail.css'
-import { Bids } from '../Bids'
 
 const WearableDetail = (props: Props) => {
   const { nft, onNavigate } = props
@@ -65,21 +66,21 @@ const WearableDetail = (props: Props) => {
             name={t(`wearable.category.${nft.wearable!.category}`)}
             onClick={handleHighlightClick}
           />
-          {nft.wearable!.bodyShapes.length === 1 ? (
-            <Highlight
-              icon={<div className={nft.wearable!.bodyShapes[0]} />}
-              name={
-                nft.wearable!.bodyShapes[0] === BodyShape.MALE
-                  ? t('wearable.body_shape.male')
-                  : t('wearable.body_shape.female')
-              }
-            />
-          ) : nft.wearable!.bodyShapes.length === 2 ? (
+          {isUnisex(nft) ? (
             <Highlight
               icon={<div className="Unisex" />}
               name={t('wearable.body_shape.unisex')}
             />
-          ) : null}
+          ) : (
+            <Highlight
+              icon={<div className={nft.wearable!.bodyShapes[0]} />}
+              name={
+                isGender(nft, BodyShape.MALE)
+                  ? t('wearable.body_shape.male')
+                  : t('wearable.body_shape.female')
+              }
+            />
+          )}
         </Highlights>
         <Bids nft={nft} />
         <TransactionHistory nft={nft} />
