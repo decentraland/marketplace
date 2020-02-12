@@ -1,0 +1,89 @@
+.Bid {
+  position: relative;
+  height: 96px;
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--card);
+  margin-bottom: 20px;
+}
+
+.Bid .image {
+  flex: none;
+  height: 96px;
+  width: 96px;
+  position: relative;
+}
+
+.Bid .wrapper {
+  flex: 1 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+}
+
+.Bid .wrapper .info {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.Bid .wrapper .info .dcl.stats {
+  width: 20%;
+}
+
+.Bid .wrapper .info .dcl.stats.from {
+  width: 30%;
+}
+
+.Bid .wrapper .info .dcl.stats .ui.header {
+  white-space: nowrap;
+}
+
+.Bid .wrapper .info .dcl.stats + .dcl.stats {
+  margin-left: 48px;
+}
+
+.Bid .wrapper .info .dcl.stats .ui.header:not(.sub) {
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.Bid .wrapper .info .dcl.stats .ui.header.sub {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.Bid .wrapper .info .dcl.stats .Address {
+  font-size: 17px;
+  line-height: 26px;
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.Bid .wrapper .info .dcl.stats .Address > a {
+  color: var(--text);
+}
+
+.Bid .actions {
+  flex: none;
+  margin-left: 48px;
+}
+
+.Bid .actions .ui.button:not(.primary) {
+  background-color: transparent;
+  border: 2px solid var(--secondary-on-modal);
+}
+
+.Bid .actions .ui.button {
+  width: 146px;
+}
+
+.Bid .actions .not-enough-mana {
+  display: inline-block;
+  height: 48px;
+  margin-right: 16px;
+}

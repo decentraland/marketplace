@@ -4,49 +4,70 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
-import { Order } from '../../modules/order/types'
-import { formatMANA } from '../../lib/mana'
-import { nftAPI } from '../../lib/api/nft'
-import { Address } from '../Address'
-import { Props } from './TransactionHistory.types'
+import { Order, OrderStatus } from '../../../modules/order/types'
+import { formatMANA } from '../../../lib/mana'
+import { nftAPI } from '../../../lib/api/nft'
+import { Address } from '../../Address'
+import { Props, HistoryEvent } from './TransactionHistory.types'
 import './TransactionHistory.css'
+import { bidAPI } from '../../../lib/api/bid'
+import { Bid } from '../../../modules/bid/types'
 
 const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000
 
-const formatOrderDate = (order: Order) => {
-  const updatedAt = new Date(+order.updatedAt * 1000)
-  return Date.now() - updatedAt.getTime() > WEEK_IN_MILLISECONDS
-    ? dateFnsFormat(updatedAt, INPUT_FORMAT)
-    : formatDistanceToNow(updatedAt, { addSuffix: true })
+const formatOrderDate = (updatedAt: string) => {
+  const newUpdatedAt = new Date(+updatedAt * 1000)
+  return Date.now() - newUpdatedAt.getTime() > WEEK_IN_MILLISECONDS
+    ? dateFnsFormat(newUpdatedAt, INPUT_FORMAT)
+    : formatDistanceToNow(newUpdatedAt, { addSuffix: true })
 }
 
-const formatDateTitle = (order: Order) => {
-  return new Date(+order.updatedAt * 1000).toLocaleString()
+const formatDateTitle = (updatedAt: string) => {
+  return new Date(+updatedAt * 1000).toLocaleString()
 }
+
+const sortByUpdatedAt = (a: Order | Bid, b: Order | Bid) =>
+  a.updatedAt > b.updatedAt ? 1 : -1
+
+const toEvent = (orderOrBid: Order | Bid): HistoryEvent => ({
+  from: (orderOrBid as Order).owner! || (orderOrBid as Bid).seller!,
+  to: (orderOrBid as Order).buyer! || (orderOrBid as Bid).bidder!,
+  price: orderOrBid.price,
+  updatedAt: orderOrBid.updatedAt
+})
 
 const TransactionHistory = (props: Props) => {
   const { nft } = props
 
   const [orders, setOrders] = useState([] as Order[])
+  const [bids, setBids] = useState([] as Bid[])
   const [isLoading, setIsLoading] = useState(false)
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the last open one
   useEffect(() => {
     if (nft) {
       setIsLoading(true)
-      nftAPI.fetchOrders(nft.id).then(orders => {
+      Promise.all([
+        nftAPI.fetchOrders(nft.id),
+        bidAPI.fetchByNFT(nft, OrderStatus.SOLD)
+      ]).then(([orders, bids]) => {
         setIsLoading(false)
         setOrders(orders)
+        setBids(bids)
       })
     }
-  }, [nft, setIsLoading, setOrders])
+  }, [nft, setIsLoading, setOrders, setBids])
+
+  const events: HistoryEvent[] = [...orders, ...bids]
+    .sort(sortByUpdatedAt)
+    .map(toEvent)
 
   return (
     <div className="TransactionHistory">
       {isLoading ? (
         <Loader active size="massive" />
-      ) : orders.length > 0 ? (
+      ) : events.length > 0 ? (
         <>
           <Header sub>{t('transaction_history.title')}</Header>
           <Table basic="very">
@@ -68,19 +89,19 @@ const TransactionHistory = (props: Props) => {
             </Table.Header>
 
             <Table.Body>
-              {orders.map((order, index) => (
+              {events.map((event, index) => (
                 <Table.Row key={index}>
                   <Table.Cell>
-                    <Address address={order.owner} />
+                    <Address address={event.from} />
                   </Table.Cell>
                   <Table.Cell>
-                    <Address address={order.buyer} />
+                    <Address address={event.to!} />
                   </Table.Cell>
-                  <Table.Cell title={formatDateTitle(order)}>
-                    {formatOrderDate(order)}
+                  <Table.Cell title={formatDateTitle(event.updatedAt)}>
+                    {formatOrderDate(event.updatedAt)}
                   </Table.Cell>
                   <Table.Cell>
-                    <Mana inline>{formatMANA(order.price)}</Mana>
+                    <Mana inline>{formatMANA(event.price)}</Mana>
                   </Table.Cell>
                 </Table.Row>
               ))}

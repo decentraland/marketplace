@@ -1,20 +1,21 @@
 import React, { useCallback } from 'react'
-import { Container, Header } from 'decentraland-ui'
+import { Container, Header, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { RARITY_COLOR, BodyShape } from '../../../modules/nft/wearable/types'
 import { getNFTName } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/routing/search'
+import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
-import { Badge } from '../Badge'
 import { Description } from '../Description'
 import { Order } from '../Order'
 import { Highlight } from '../Highlight'
 import { Highlights } from '../Highlights'
-import { TransactionHistory } from '../../TransactionHistory'
+import { Bids } from '../Bids'
+import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './WearableDetail.types'
 import './WearableDetail.css'
 
@@ -39,9 +40,20 @@ const WearableDetail = (props: Props) => {
           left={
             <>
               <Header size="large">{getNFTName(nft)}</Header>
-              <Badge color={RARITY_COLOR[nft.wearable!.rarity]}>
-                {t(`wearable.rarity.${nft.wearable!.rarity}`)}
-              </Badge>
+              <Popup
+                position="top center"
+                content={t(`wearable.rarity_tooltip.${nft.wearable!.rarity}`)}
+                trigger={
+                  <div
+                    className="rarity"
+                    style={{
+                      backgroundColor: RARITY_COLOR[nft.wearable!.rarity]
+                    }}
+                  >
+                    {t(`wearable.rarity.${nft.wearable!.rarity}`)}
+                  </div>
+                }
+              />
             </>
           }
           right={<Owner nft={nft} />}
@@ -54,18 +66,23 @@ const WearableDetail = (props: Props) => {
             name={t(`wearable.category.${nft.wearable!.category}`)}
             onClick={handleHighlightClick}
           />
-          {nft.wearable!.bodyShapes.map(shape => (
+          {isUnisex(nft) ? (
             <Highlight
-              key={shape}
-              icon={<div className={shape} />}
+              icon={<div className="Unisex" />}
+              name={t('wearable.body_shape.unisex')}
+            />
+          ) : (
+            <Highlight
+              icon={<div className={nft.wearable!.bodyShapes[0]} />}
               name={
-                shape === BodyShape.MALE
+                isGender(nft, BodyShape.MALE)
                   ? t('wearable.body_shape.male')
                   : t('wearable.body_shape.female')
               }
             />
-          ))}
+          )}
         </Highlights>
+        <Bids nft={nft} />
         <TransactionHistory nft={nft} />
       </Container>
     </div>

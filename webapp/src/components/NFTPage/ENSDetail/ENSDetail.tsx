@@ -8,7 +8,8 @@ import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
 import { Order } from '../Order'
-import { TransactionHistory } from '../../TransactionHistory'
+import { Bids } from '../Bids'
+import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './ENSDetail.types'
 
 const ENSDetail = (props: Props) => {
@@ -29,6 +30,7 @@ const ENSDetail = (props: Props) => {
           right={<Owner nft={nft} />}
         />
         <Order nft={nft} />
+        <Bids nft={nft} />
         <TransactionHistory nft={nft} />
       </Container>
     </>

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import { RootState } from '../../modules/reducer'
+import { RootState } from '../../../modules/reducer'
 import TransactionHistory from './TransactionHistory'
 
 const mapState = (_: RootState) => ({})

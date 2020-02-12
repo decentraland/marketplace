@@ -23,75 +23,80 @@
 }
 
 .WearableTags .icon.body_shape {
-  background-image: url(../../../images//wearables/BodyShapeIcon.svg);
+  background-image: url(../../../images/wearables/BodyShapeIcon.svg);
 }
 
 .WearableTags .icon.earring {
-  background-image: url(../../../images//wearables/EarringsIcon.svg);
+  background-image: url(../../../images/wearables/EarringsIcon.svg);
 }
 
 .WearableTags .icon.eyebrows {
-  background-image: url(../../../images//wearables/EyebrowIcon.svg);
+  background-image: url(../../../images/wearables/EyebrowIcon.svg);
 }
 
 .WearableTags .icon.eyes {
-  background-image: url(../../../images//wearables/EyesIcon.svg);
+  background-image: url(../../../images/wearables/EyesIcon.svg);
 }
 
 .WearableTags .icon.eyewear {
-  background-image: url(../../../images//wearables/EyewearIcon.svg);
+  background-image: url(../../../images/wearables/EyewearIcon.svg);
 }
 
 .WearableTags .icon.facial_hair {
-  background-image: url(../../../images//wearables/FacilHairIcon.svg);
+  background-image: url(../../../images/wearables/FacilHairIcon.svg);
 }
 
 .WearableTags .icon.feet {
-  background-image: url(../../../images//wearables/FeetIcon.svg);
+  background-image: url(../../../images/wearables/FeetIcon.svg);
 }
 
 .WearableTags .icon.hair {
-  background-image: url(../../../images//wearables/HairIcon.svg);
+  background-image: url(../../../images/wearables/HairIcon.svg);
 }
 
 .WearableTags .icon.hat {
-  background-image: url(../../../images//wearables/HatIcon.svg);
+  background-image: url(../../../images/wearables/HatIcon.svg);
 }
 
 .WearableTags .icon.helmet {
-  background-image: url(../../../images//wearables/HelmetIcon.svg);
+  background-image: url(../../../images/wearables/HelmetIcon.svg);
 }
 
 .WearableTags .icon.lower_body {
-  background-image: url(../../../images//wearables/LowerBodyIcon.svg);
+  background-image: url(../../../images/wearables/LowerBodyIcon.svg);
 }
 
 .WearableTags .icon.mask {
-  background-image: url(../../../images//wearables/MaskIcon.svg);
+  background-image: url(../../../images/wearables/MaskIcon.svg);
 }
 
 .WearableTags .icon.mouth {
-  background-image: url(../../../images//wearables/MouthIcon.svg);
+  background-image: url(../../../images/wearables/MouthIcon.svg);
 }
 
 .WearableTags .icon.tiara {
-  background-image: url(../../../images//wearables/TiaraIcon.svg);
+  background-image: url(../../../images/wearables/TiaraIcon.svg);
 }
 
 .WearableTags .icon.top_head {
-  background-image: url(../../../images//wearables/TopHeadIcon.svg);
+  background-image: url(../../../images/wearables/TopHeadIcon.svg);
 }
 
 .WearableTags .icon.upper_body {
-  background-image: url(../../../images//wearables/UpperBodyIcon.svg);
+  background-image: url(../../../images/wearables/UpperBodyIcon.svg);
 }
 
 .WearableTags .icon.BaseMale {
-  background-image: url(../../../images//wearables/MaleIcon.svg);
+  background-image: url(../../../images/wearables/MaleIcon.svg);
   background-size: 14px 14px;
 }
 
 .WearableTags .icon.BaseFemale {
-  background-image: url(../../../images//wearables/FemaleIcon.svg);
+  background-image: url(../../../images/wearables/FemaleIcon.svg);
+  background-size: 14px 14px;
+}
+
+.WearableTags .icon.Unisex {
+  background-image: url(../../../images/wearables/UnisexIcon.svg);
   background-size: 14px 14px;
 }

@@ -5,10 +5,12 @@ import { createLogger } from 'redux-logger'
 import { createStorageMiddleware } from 'decentraland-dapps/dist/modules/storage/middleware'
 import { storageReducerWrapper } from 'decentraland-dapps/dist/modules/storage/reducer'
 import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/transaction/middleware'
+import { CLEAR_TRANSACTIONS } from 'decentraland-dapps/dist/modules/transaction/actions'
 
 import { createRootReducer, RootState } from './reducer'
 import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
+import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -35,8 +37,8 @@ const loggerMiddleware = createLogger({
 const transactionMiddleware = createTransactionMiddleware()
 const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
   storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
-  paths: [], // array of paths from state to be persisted (optional)
-  actions: [], // array of actions types that will trigger a SAVE (optional)
+  paths: [['ui', 'archivedBidIds']], // array of paths from state to be persisted (optional)
+  actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID], // array of actions types that will trigger a SAVE (optional)
   migrations: {} // migration object that will migrate your localstorage (optional)
 })
 

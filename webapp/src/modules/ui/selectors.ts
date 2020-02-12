@@ -4,6 +4,7 @@ import { UIState } from '../ui/reducer'
 import { NFTState } from '../nft/reducer'
 import { FETCH_NFTS_REQUEST } from '../nft/actions'
 import { NFT } from '../nft/types'
+import { getData as getBidData } from '../bid/selectors'
 import {
   getData as getNFTData,
   getLoading as getNFTLoading
@@ -11,6 +12,8 @@ import {
 import { SortBy, Section } from '../routing/search'
 import { RootState } from '../reducer'
 import { View } from './types'
+import { BidState } from '../bid/reducer'
+import { Bid } from '../bid/types'
 
 export const getState = (state: RootState) => state.ui
 export const getNFTs = createSelector<
@@ -105,3 +108,31 @@ export const isHomepageLandLoading = (state: RootState) =>
       action.type === FETCH_NFTS_REQUEST &&
       action.payload.options.view === View.HOME_ENS
   )
+
+export const getSellerBids = createSelector<
+  RootState,
+  UIState,
+  BidState['data'],
+  Bid[]
+>(getState, getBidData, (ui, bidsById) =>
+  ui.sellerBidIds.map(id => bidsById[id])
+)
+
+export const getBidderBids = createSelector<
+  RootState,
+  UIState,
+  BidState['data'],
+  Bid[]
+>(getState, getBidData, (ui, bidsById) =>
+  ui.bidderBidIds.map(id => bidsById[id])
+)
+
+export const getArchivedBidIds = (state: RootState) =>
+  getState(state).archivedBidIds
+
+export const getNFTBids = createSelector<
+  RootState,
+  UIState,
+  BidState['data'],
+  Bid[]
+>(getState, getBidData, (ui, bidsById) => ui.nftBidIds.map(id => bidsById[id]))

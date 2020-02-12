@@ -9,6 +9,7 @@ import { accountReducer as account } from './account/reducer'
 import { orderReducer as order } from './order/reducer'
 import { uiReducer as ui } from './ui/reducer'
 import { nftReducer as nft } from './nft/reducer'
+import { bidReducer as bid } from './bid/reducer'
 import { tileReducer as tile } from './tile/reducer'
 import { authorizationReducer as authorization } from './authorization/reducer'
 import { proximityReducer as proximity } from './proximity/reducer'
@@ -26,6 +27,7 @@ export const createRootReducer = (history: History) =>
     tile,
     proximity,
     authorization,
+    bid,
     router: connectRouter(history)
   })
 

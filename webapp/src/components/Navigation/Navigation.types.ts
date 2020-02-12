@@ -4,7 +4,8 @@ import { Dispatch } from 'redux'
 export enum NavigationTab {
   ATLAS = 'atlas',
   BROWSE = 'browse',
-  ACCOUNT = 'account'
+  MY_ASSETS = 'my_assets',
+  MY_BIDS = 'my_bids'
 }
 
 export type Props = {

@@ -14,7 +14,11 @@ import {
   EXECUTE_ORDER_SUCCESS
 } from '../../../modules/order/actions'
 import { TRANSFER_NFT_SUCCESS } from '../../../modules/nft/actions'
-import { PLACE_BID_SUCCESS } from '../../../modules/bid/actions'
+import {
+  PLACE_BID_SUCCESS,
+  ACCEPT_BID_SUCCESS,
+  CANCEL_BID_SUCCESS
+} from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
 import { NFTProvider } from '../../NFTProvider'
 import { Address } from '../../Address'
@@ -201,6 +205,58 @@ const Transaction = (props: Props) => {
               text={
                 <T
                   id="transaction.detail.place_bid"
+                  values={{
+                    name: (
+                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                        {name}
+                      </Link>
+                    ),
+                    price: <Mana inline>{price.toLocaleString()}</Mana>
+                  }}
+                />
+              }
+              tx={tx}
+            />
+          )}
+        </NFTProvider>
+      )
+    }
+    case ACCEPT_BID_SUCCESS: {
+      const { tokenId, contractAddress, name, price } = tx.payload
+      return (
+        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+          {nft => (
+            <TransactionDetail
+              nft={nft}
+              text={
+                <T
+                  id="transaction.detail.accept_bid"
+                  values={{
+                    name: (
+                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                        {name}
+                      </Link>
+                    ),
+                    price: <Mana inline>{price.toLocaleString()}</Mana>
+                  }}
+                />
+              }
+              tx={tx}
+            />
+          )}
+        </NFTProvider>
+      )
+    }
+    case CANCEL_BID_SUCCESS: {
+      const { tokenId, contractAddress, name, price } = tx.payload
+      return (
+        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+          {nft => (
+            <TransactionDetail
+              nft={nft}
+              text={
+                <T
+                  id="transaction.detail.cancel_bid"
                   values={{
                     name: (
                       <Link to={locations.ntf(contractAddress, tokenId)}>

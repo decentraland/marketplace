@@ -1,11 +1,14 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { fromWei } from 'web3x-es/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import addDays from 'date-fns/addDays'
 import dateFnsFormat from 'date-fns/format'
 import { MANA_SYMBOL, toMANA, fromMANA } from '../../../lib/mana'
 import { NFTAction } from '../../NFTAction'
 import { Header, Field, Button, Modal, Mana } from 'decentraland-ui'
+import {
+  INPUT_FORMAT,
+  getDefaultExpirationDate
+} from '../../../modules/order/utils'
 import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { hasAuthorization } from '../../../modules/authorization/utils'
@@ -14,13 +17,6 @@ import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.t
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './SellModal.types'
 import './SellModal.css'
-
-const DEFAULT_EXPIRATION_IN_DAYS = 30
-const INPUT_FORMAT = 'yyyy-MM-dd'
-const DEFAULT_EXPIRATION_DATE = dateFnsFormat(
-  addDays(new Date(), DEFAULT_EXPIRATION_IN_DAYS),
-  INPUT_FORMAT
-)
 
 const SellModal = (props: Props) => {
   const { nft, order, wallet, onNavigate, onCreateOrder } = props
@@ -31,7 +27,7 @@ const SellModal = (props: Props) => {
   const [expiresAt, setExpiresAt] = useState(
     isUpdate
       ? dateFnsFormat(new Date(+order!.expiresAt), INPUT_FORMAT)
-      : DEFAULT_EXPIRATION_DATE
+      : getDefaultExpirationDate()
   )
   const [confirmPrice, setConfirmPrice] = useState('')
   const [showConfirm, setShowConfirm] = useState(false)
@@ -99,7 +95,7 @@ const SellModal = (props: Props) => {
           type="date"
           value={expiresAt}
           onChange={(_event, props) =>
-            setExpiresAt(props.value || DEFAULT_EXPIRATION_DATE)
+            setExpiresAt(props.value || getDefaultExpirationDate())
           }
           error={isInvalidDate}
           message={isInvalidDate ? t('sell_page.invalid_date') : undefined}

@@ -41,7 +41,7 @@ const AccountPage = (props: Props) => {
       <Navbar isFullscreen />
       <Navigation
         isFullscreen={!isCurrentAccount}
-        activeTab={isCurrentAccount ? NavigationTab.ACCOUNT : undefined}
+        activeTab={isCurrentAccount ? NavigationTab.MY_ASSETS : undefined}
       />
       {!isCurrentAccount ? (
         <PageHeader>
