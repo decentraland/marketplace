@@ -1,6 +1,11 @@
 import { Transfer } from '../entities/templates/ERC721/ERC721'
 import { NFT, Parcel, Estate } from '../entities/schema'
-import { isMint, getNFTId, getTokenURI } from '../modules/nft'
+import {
+  isMint,
+  getNFTId,
+  getTokenURI,
+  cancelActiveOrder
+} from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
 import { buildCountFromNFT } from '../modules/count'
@@ -95,6 +100,8 @@ export function handleTransfer(event: Transfer): void {
 
     let metric = buildCountFromNFT(nft)
     metric.save()
+  } else {
+    cancelActiveOrder(nft, event.block.timestamp)
   }
 
   createAccount(event.params.to)

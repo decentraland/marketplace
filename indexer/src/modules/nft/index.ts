@@ -1,5 +1,5 @@
-import { log } from '@graphprotocol/graph-ts'
-import { NFT, Order } from '../../entities/schema'
+import { log, BigInt } from '@graphprotocol/graph-ts'
+import { NFT, Order, Bid } from '../../entities/schema'
 import { ERC721, Transfer } from '../../entities/templates/ERC721/ERC721'
 import * as status from '../order/status'
 import * as addresses from '../../data/addresses'
@@ -34,7 +34,7 @@ export function getTokenURI(event: Transfer): string {
   return tokenURI
 }
 
-export function updateNFTOrderProperties(nft: NFT, order: Order): NFT {
+export function upsertNFTOrderProperties(nft: NFT, order: Order): NFT {
   nft.searchOrderStatus = order.status
 
   if (order.status == status.OPEN) {
@@ -50,4 +50,29 @@ export function updateNFTOrderProperties(nft: NFT, order: Order): NFT {
   }
 
   return nft
+}
+
+export function cancelActiveOrder(nft: NFT, now: BigInt): void {
+  let oldOrder = Order.load(nft.activeOrder)
+  if (oldOrder != null && oldOrder.status == status.OPEN) {
+    // Here we are setting old orders as cancelled, because the smart contract allows new orders to be created
+    // and they just overwrite them in place. But the subgraph stores all orders ever
+    // you can also overwrite ones that are expired
+    oldOrder.status = status.CANCELLED
+    oldOrder.updatedAt = now
+    oldOrder.save()
+  }
+}
+
+export function cancelActiveBids(nft: NFT, now: BigInt): void {
+  let bids = nft.bids as Array<string>
+  for (let index = 0; index < bids.length; index++) {
+    let bid = Bid.load(bids[index])
+
+    if (bid != null && bid.nft == nft.id && bid.status == status.OPEN) {
+      bid.status = status.CANCELLED
+      bid.updatedAt = now
+      bid.save()
+    }
+  }
 }

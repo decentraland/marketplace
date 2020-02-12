@@ -4,12 +4,15 @@ import {
   OrderSuccessful,
   OrderCancelled
 } from '../entities/Marketplace/Marketplace'
-import { Order, NFT, Parcel, Wearable, Estate } from '../entities/schema'
-import { getNFTId, updateNFTOrderProperties } from '../modules/nft'
+import { Order, NFT } from '../entities/schema'
+import {
+  getNFTId,
+  upsertNFTOrderProperties,
+  cancelActiveOrder
+} from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildCountFromOrder } from '../modules/count'
 import * as status from '../modules/order/status'
-import * as categories from '../modules/category/categories'
 
 export function handleOrderCreated(event: OrderCreated): void {
   let category = getCategory(event.params.nftAddress.toHexString())
@@ -41,17 +44,9 @@ export function handleOrderCreated(event: OrderCreated): void {
 
   order.save()
 
-  let oldOrder = Order.load(nft.activeOrder)
-  if (oldOrder != null) {
-    // Here we are setting old orders as cancelled, because the smart contract allows new orders to be created
-    // and they just overwrite them in place. But the subgraph stores all orders ever
-    // you can also overwrite ones that are expired
-    oldOrder.status = status.CANCELLED
-    oldOrder.updatedAt = event.block.timestamp
-    oldOrder.save()
-  }
+  cancelActiveOrder(nft!, event.block.timestamp)
 
-  nft = updateNFTOrderProperties(nft!, order)
+  nft = upsertNFTOrderProperties(nft!, order)
   nft.save()
 
   let count = buildCountFromOrder(order)
@@ -78,7 +73,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 
   let nft = new NFT(nftId)
   nft.owner = event.params.buyer.toHex()
-  nft = updateNFTOrderProperties(nft!, order)
+  nft = upsertNFTOrderProperties(nft!, order)
   nft.save()
 }
 
@@ -99,6 +94,6 @@ export function handleOrderCancelled(event: OrderCancelled): void {
   order.save()
 
   let nft = new NFT(nftId)
-  nft = updateNFTOrderProperties(nft!, order)
+  nft = upsertNFTOrderProperties(nft!, order)
   nft.save()
 }
