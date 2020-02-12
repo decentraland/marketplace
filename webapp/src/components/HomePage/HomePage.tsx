@@ -23,12 +23,6 @@ const HomePage = (props: Props) => {
     onFetchNFTs
   } = props
 
-  console.log({
-    isWearablesLoading,
-    isENSLoading,
-    isLandLoading
-  })
-
   const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
     onNavigate
   ])
