@@ -88,7 +88,13 @@ const MyBidsPage = (props: Props) => {
               ) : null}
               {filteredSeller.length === 0 && !isLoading ? (
                 <div className="center">
-                  <div className="empty">{t('my_bids_page.empty')}</div>
+                  <div className="empty">
+                    {t(
+                      showArchived
+                        ? 'my_bids_page.empty_archived'
+                        : 'my_bids_page.empty_received'
+                    )}
+                  </div>
                 </div>
               ) : null}
               {filteredSeller.length > 0
@@ -108,7 +114,7 @@ const MyBidsPage = (props: Props) => {
               ) : null}
               {bidder.length === 0 && !isLoading ? (
                 <div className="center">
-                  <div className="empty">{t('my_bids_page.empty')}</div>
+                  <div className="empty">{t('my_bids_page.empty_placed')}</div>
                 </div>
               ) : null}
               {bidder.length > 0

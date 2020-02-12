@@ -185,7 +185,9 @@
     "bids_archived": "Bids archived",
     "show_archived": "Show Archived ({amount})",
     "show_received": "Show Received ({amount})",
-    "empty": "Nothing found...",
+    "empty_received": "You haven't received any bids yet...",
+    "empty_archived": "You don't have any archived bids...",
+    "empty_placed": "You haven't placed any bids yet...",
     "archive": "Archive",
     "unarchive": "Unarchive"
   },
