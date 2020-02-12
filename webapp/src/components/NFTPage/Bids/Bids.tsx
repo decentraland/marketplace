@@ -25,14 +25,14 @@ const Bids = (props: Props) => {
       setHasFetched(true)
       onFetchBids(nft)
     }
-  }, [setHasFetched, onFetchBids, nft])
+  }, [hasFetched, onFetchBids, nft])
 
   // reset the flag if the nft changes
   useEffect(() => {
     if (nft) {
       setHasFetched(false)
     }
-  }, [nft, hasFetched])
+  }, [nft])
 
   return bids.length > 0 ? (
     <div className="Bids">
