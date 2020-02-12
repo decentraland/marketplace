@@ -32,7 +32,7 @@ const Bids = (props: Props) => {
     if (nft) {
       setHasFetched(false)
     }
-  }, [nft])
+  }, [nft, hasFetched])
 
   return bids.length > 0 ? (
     <div className="Bids">
