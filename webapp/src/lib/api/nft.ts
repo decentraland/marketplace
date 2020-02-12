@@ -85,7 +85,8 @@ class NFTAPI {
   async fetchTokenId(x: number, y: number) {
     const { data } = await client.query({
       query: PARCEL_TOKEN_ID_QUERY,
-      variables: { x, y }
+      variables: { x, y },
+      fetchPolicy: 'cache-first'
     })
     const { tokenId } = data.parcels[0]
     return tokenId as string
