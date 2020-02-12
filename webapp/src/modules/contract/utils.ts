@@ -36,51 +36,38 @@ export const contractSymbols = {
   [Bids]: 'Bids'
 } as const
 
-export const tokenContracts = {
+export const contracts = {
   [MANAToken]: {
     name: 'MANAToken',
     address: MANAToken
-  }
-} as const
-
-export const nftContracts = {
+  },
   [LANDRegistry]: {
     name: 'LANDRegistry',
-    address: LANDRegistry,
     category: NFTCategory.PARCEL
   },
   [EstateRegistry]: {
     name: 'EstateRegistry',
-    address: EstateRegistry,
     category: NFTCategory.ESTATE
   },
   [ExclusiveMasksCollection]: {
     name: 'ExclusiveMasksCollection',
-    address: ExclusiveMasksCollection,
     category: NFTCategory.WEARABLE
   },
   [Halloween2019Collection]: {
     name: 'Halloween2019Collection',
-    address: Halloween2019Collection,
     category: NFTCategory.WEARABLE
   },
   [Xmas2019Collection]: {
     name: 'Xmas2019Collection',
-    address: Xmas2019Collection,
     category: NFTCategory.WEARABLE
   },
   [DCLRegistrar]: {
     name: 'Names',
-    address: DCLRegistrar,
     category: NFTCategory.ENS
   }
 } as const
 
 export function getContractName(contractAddress: string) {
-  let contractName: keyof typeof contractAddresses
-  for (contractName in contractAddresses) {
-    if (contractAddresses[contractName] === contractAddress) {
-      return contractName
-    }
-  }
+  const contract = contracts[contractAddress]
+  return contract.name
 }
