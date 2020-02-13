@@ -1,4 +1,4 @@
-import { Address } from '@graphprotocol/graph-ts'
+import { log, Address } from '@graphprotocol/graph-ts'
 import { Update, InitializeCall } from '../entities/LANDRegistry/LANDRegistry'
 import { Parcel, NFT } from '../entities/schema'
 import { ERC721 } from '../entities/templates'
