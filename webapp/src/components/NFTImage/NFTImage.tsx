@@ -15,7 +15,7 @@ const PIXEL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
 
 const NFTImage = (props: Props) => {
-  const { nft, isDraggable, withNavigation, zoom, small } = props
+  const { nft, isDraggable, withNavigation, zoom, isSmall } = props
 
   const estateSelection = useMemo(() => (nft.estate ? getSelection(nft) : []), [
     nft
@@ -72,7 +72,7 @@ const NFTImage = (props: Props) => {
     case NFTCategory.ENS: {
       let name = nft.ens!.subdomain
       let classes = ['ens-subdomain']
-      if (small) {
+      if (isSmall) {
         name = name.slice(0, 2)
         classes.push('small')
       }
@@ -108,7 +108,8 @@ const NFTImageWrapper = (props: Props) => {
 NFTImage.defaultProps = {
   isDraggable: false,
   withNavigation: false,
-  zoom: 0.5
+  zoom: 0.5,
+  isSmall: false
 }
 
 export default React.memo(NFTImageWrapper)

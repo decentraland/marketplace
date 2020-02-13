@@ -6,5 +6,5 @@ export type Props = {
   isDraggable?: boolean
   withNavigation?: boolean
   zoom?: number
-  small?: boolean
+  isSmall?: boolean
 }
