@@ -41,3 +41,8 @@
 .NFTCard .NFTImage {
   overflow: hidden;
 }
+
+.NFTCard .NFTImage .ens-subdomain {
+  background-size: 557px;
+  background-position-y: -133px;
+}
