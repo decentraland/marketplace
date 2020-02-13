@@ -12,7 +12,7 @@ import { locations } from '../../modules/routing/locations'
 import { SearchOptions } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
 import { shortenAddress } from '../../modules/wallet/utils'
-import { contracts } from '../../modules/contract/utils'
+import { contractNames } from '../../modules/contract/utils'
 import { Props } from './AccountPage.types'
 import './AccountPage.css'
 
@@ -69,11 +69,11 @@ const AccountPage = (props: Props) => {
                 position="top center"
                 trigger={
                   <div className="blockie-address secondary-text">
-                    {contracts[address] ? (
+                    {contractNames[address] ? (
                       <EtherscanLink
                         address={address}
                         txHash={''}
-                        text={contracts[address].name}
+                        text={contractNames[address]}
                       />
                     ) : (
                       shortenAddress(address)
