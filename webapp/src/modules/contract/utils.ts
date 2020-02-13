@@ -36,38 +36,23 @@ export const contractSymbols = {
   [Bids]: 'Bids'
 } as const
 
-export const contracts = {
-  [MANAToken]: {
-    name: 'MANAToken',
-    address: MANAToken
-  },
-  [LANDRegistry]: {
-    name: 'LANDRegistry',
-    category: NFTCategory.PARCEL
-  },
-  [EstateRegistry]: {
-    name: 'EstateRegistry',
-    category: NFTCategory.ESTATE
-  },
-  [ExclusiveMasksCollection]: {
-    name: 'ExclusiveMasksCollection',
-    category: NFTCategory.WEARABLE
-  },
-  [Halloween2019Collection]: {
-    name: 'Halloween2019Collection',
-    category: NFTCategory.WEARABLE
-  },
-  [Xmas2019Collection]: {
-    name: 'Xmas2019Collection',
-    category: NFTCategory.WEARABLE
-  },
-  [DCLRegistrar]: {
-    name: 'Names',
-    category: NFTCategory.ENS
-  }
+export const contractCategories = {
+  [LANDRegistry]: NFTCategory.PARCEL,
+  [EstateRegistry]: NFTCategory.ESTATE,
+  [ExclusiveMasksCollection]: NFTCategory.WEARABLE,
+  [Halloween2019Collection]: NFTCategory.WEARABLE,
+  [Xmas2019Collection]: NFTCategory.WEARABLE,
+  [DCLRegistrar]: NFTCategory.ENS
 } as const
 
-export function getContractName(contractAddress: string) {
-  const contract = contracts[contractAddress]
-  return contract.name
+export const contractNames = {
+  [MANAToken]: 'MANAToken',
+  [LANDRegistry]: 'LANDRegistry',
+  [EstateRegistry]: 'EstateRegistry',
+  [ExclusiveMasksCollection]: 'ExclusiveMasksCollection',
+  [Halloween2019Collection]: 'Halloween2019Collection',
+  [Xmas2019Collection]: 'Xmas2019Collection',
+  [DCLRegistrar]: 'DCLRegistrar',
+  [Marketplace]: 'Marketplace',
+  [Bids]: 'ERC721Bid'
 }
