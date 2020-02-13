@@ -17,3 +17,7 @@
 .NFTPage .NFTImage .ens-subdomain {
   font-size: 64px;
 }
+
+.NFTPage .NFTImage .ens-subdomain > span {
+  padding: 36px;
+}
