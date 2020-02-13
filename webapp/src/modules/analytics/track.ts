@@ -28,7 +28,6 @@ import {
   AllowTokenSuccessAction,
   ApproveTokenSuccessAction
 } from '../authorization/actions'
-import { NFT } from '../nft/types'
 import { getContractName } from '../contract/utils'
 import {
   PLACE_BID_SUCCESS,
