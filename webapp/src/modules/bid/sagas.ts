@@ -81,7 +81,9 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
           .getTxHash()
       }
     })
-    yield put(placeBidSuccess(nft, price, expiresAt, txHash, fingerprint))
+    yield put(
+      placeBidSuccess(nft, price, expiresAt, txHash, address, fingerprint)
+    )
     yield put(push(locations.activity()))
   } catch (error) {
     yield put(placeBidFailure(nft, price, expiresAt, error, fingerprint))

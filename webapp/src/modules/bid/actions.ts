@@ -21,12 +21,14 @@ export const placeBidSuccess = (
   price: number,
   expiresAt: number,
   txHash: string,
+  bidder: string,
   fingerprint?: string
 ) =>
   action(PLACE_BID_SUCCESS, {
     nft,
     price,
     expiresAt,
+    bidder,
     fingerprint,
     ...buildTransactionPayload(txHash, {
       tokenId: nft.tokenId,
@@ -41,7 +43,14 @@ export const placeBidFailure = (
   expiresAt: number,
   error: string,
   fingerprint?: string
-) => action(PLACE_BID_FAILURE, { nft, price, expiresAt, error, fingerprint })
+) =>
+  action(PLACE_BID_FAILURE, {
+    nft,
+    price,
+    expiresAt,
+    error,
+    fingerprint
+  })
 
 export type PlaceBidRequestAction = ReturnType<typeof placeBidRequest>
 export type PlaceBidSuccessAction = ReturnType<typeof placeBidSuccess>
