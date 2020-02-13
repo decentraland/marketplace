@@ -28,7 +28,7 @@ import {
   AllowTokenSuccessAction,
   ApproveTokenSuccessAction
 } from '../authorization/actions'
-import { getContractName } from '../contract/utils'
+import { contractNames } from '../contract/utils'
 import {
   PLACE_BID_SUCCESS,
   ACCEPT_BID_SUCCESS,
@@ -114,16 +114,16 @@ track<ReplaceTransactionSuccessAction>(
 )
 
 track<AllowTokenSuccessAction>(ALLOW_TOKEN_SUCCESS, ({ payload }) => {
-  const contractName = getContractName(payload.contractAddress)
-  const tokenContractName = getContractName(payload.tokenContractAddress)
+  const contractName = contractNames[payload.contractAddress]
+  const tokenContractName = contractNames[payload.tokenContractAddress]
   return payload.isAllowed
     ? `Authorize ${contractName} for ${tokenContractName}`
     : `Unauthorize ${contractName} for ${tokenContractName}`
 })
 
 track<ApproveTokenSuccessAction>(APPROVE_TOKEN_SUCCESS, ({ payload }) => {
-  const contractName = getContractName(payload.contractAddress)
-  const tokenContractName = getContractName(payload.tokenContractAddress)
+  const contractName = contractNames[payload.contractAddress]
+  const tokenContractName = contractNames[payload.tokenContractAddress]
   return payload.isApproved
     ? `Authorize ${contractName} for ${tokenContractName}`
     : `Unauthorize ${contractName} for ${tokenContractName}`
