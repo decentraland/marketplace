@@ -91,9 +91,6 @@ const HomePage = (props: Props) => {
           <Button primary onClick={handleGetStarted}>
             {t('home_page.get_started')}
           </Button>
-          <Button secondary disabled>
-            {t('home_page.learn_more')}
-          </Button>
         </Hero.Actions>
       </Hero>
       <Page className="HomePage">
