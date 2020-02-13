@@ -30,7 +30,18 @@ import {
 } from '../authorization/actions'
 import { NFT } from '../nft/types'
 import { getContractName } from '../contract/utils'
-import { PLACE_BID_SUCCESS, PlaceBidSuccessAction } from '../bid/actions'
+import {
+  PLACE_BID_SUCCESS,
+  ACCEPT_BID_SUCCESS,
+  CANCEL_BID_SUCCESS,
+  ARCHIVE_BID,
+  UNARCHIVE_BID,
+  PlaceBidSuccessAction,
+  AcceptBidSuccessAction,
+  CancelBidSuccessAction,
+  ArchiveBidAction,
+  UnarchiveBidAction
+} from '../bid/actions'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -40,8 +51,8 @@ function track<T extends PayloadAction<string, any>>(
   add(actionType, eventName as EventName, getPayload as GetPayload)
 }
 
-function withCategory(eventName: string, nft: NFT) {
-  const category = nft.category[0].toUpperCase() + nft.category.slice(1)
+function withCategory(eventName: string, item: { category: string }) {
+  const category = item.category[0].toUpperCase() + item.category.slice(1)
   return `${eventName} ${category}`
 }
 
@@ -62,7 +73,7 @@ track<CreateOrderSuccessAction>(
   ({ payload }) => withCategory('Publish', payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
-    nftId: payload.nft.id,
+    tokenId: payload.nft.tokenId,
     price: payload.price
   })
 )
@@ -72,7 +83,7 @@ track<CancelOrderSuccessAction>(
   ({ payload }) => withCategory('Cancel Sale', payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
-    nftId: payload.nft.id,
+    tokenId: payload.nft.tokenId,
     price: payload.order.price
   })
 )
@@ -82,7 +93,7 @@ track<TransferNFTSuccessAction>(
   ({ payload }) => withCategory('Transfer NFT', payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
-    nftId: payload.nft.id,
+    tokenId: payload.nft.tokenId,
     to: payload.address
   })
 )
@@ -124,49 +135,53 @@ track<PlaceBidSuccessAction>(
   ({ payload }) => withCategory('Bid', payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
-    nftId: payload.nft.id,
+    tokenId: payload.nft.tokenId,
     price: payload.price,
     bidder: payload.bidder
   })
 )
 
-// track(
-//   ACCEPT_BID_SUCCESS,
-//   ({ bid }) => addAssetType('Accept bid', bid.asset_type),
-//   ({ bid }) => ({
-//     id: bid.id,
-//     nftId: bid.asset_id,
-//     bidder: bid.bidder,
-//     seller: bid.seller
-//   })
-// )
+track<AcceptBidSuccessAction>(
+  ACCEPT_BID_SUCCESS,
+  ({ payload }) => withCategory('Accept bid', payload.bid),
+  ({ payload }) => ({
+    category: payload.bid.category,
+    tokenId: payload.bid.tokenId,
+    bidId: payload.bid.id,
+    bidder: payload.bid.bidder,
+    seller: payload.bid.seller
+  })
+)
 
-// track(
-//   CANCEL_BID_SUCCESS,
-//   ({ bid }) => addAssetType('Cancel bid', bid.asset_type),
-//   ({ bid }) => ({
-//     id: bid.id,
-//     nftId: bid.asset_id,
-//     bidder: bid.bidder
-//   })
-// )
+track<CancelBidSuccessAction>(
+  CANCEL_BID_SUCCESS,
+  ({ payload }) => withCategory('Cancel bid', payload.bid),
+  ({ payload }) => ({
+    category: payload.bid.category,
+    tokenId: payload.bid.tokenId,
+    bidId: payload.bid.id,
+    bidder: payload.bid.bidder
+  })
+)
 
-// track(
-//   ARCHIVE_BID,
-//   ({ bid }) => addAssetType('Archive Bid', bid.asset_type),
-//   ({ bid }) => ({
-//     id: bid.id,
-//     nftId: bid.asset_id,
-//     price: bid.price
-//   })
-// )
+track<ArchiveBidAction>(
+  ARCHIVE_BID,
+  ({ payload }) => withCategory('Archive Bid', payload.bid),
+  ({ payload }) => ({
+    category: payload.bid.category,
+    tokenId: payload.bid.tokenId,
+    bidId: payload.bid.id,
+    price: payload.bid.price
+  })
+)
 
-// track(
-//   UNARCHIVE_BID,
-//   ({ bid }) => addAssetType('Unarchive Bid', bid.asset_type),
-//   ({ bid }) => ({
-//     id: bid.id,
-//     nftId: bid.asset_id,
-//     price: bid.price
-//   })
-// )
+track<UnarchiveBidAction>(
+  UNARCHIVE_BID,
+  ({ payload }) => withCategory('Unarchive Bid', payload.bid),
+  ({ payload }) => ({
+    category: payload.bid.category,
+    tokenId: payload.bid.tokenId,
+    bidId: payload.bid.id,
+    price: payload.bid.price
+  })
+)
