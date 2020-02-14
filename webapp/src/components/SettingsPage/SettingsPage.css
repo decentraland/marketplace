@@ -63,6 +63,10 @@
     margin-bottom: 16px;
   }
 
+  .SettingsPage .ui.grid .ui.loader {
+    margin-top: 40px;
+  }
+
   .SettingsPage .address-container {
     margin-top: 24px;
     margin-left: 0px;

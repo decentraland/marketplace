@@ -43,4 +43,8 @@
   .Authorization .ui.radio.checkbox {
     margin-bottom: 0px;
   }
+
+  .Authorization .ui.loader {
+    top: 8px;
+  }
 }
