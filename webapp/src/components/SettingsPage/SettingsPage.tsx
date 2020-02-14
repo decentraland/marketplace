@@ -1,18 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Page, Grid, Blockie, Mana, Loader, Form } from 'decentraland-ui'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { locations } from '../../modules/routing/locations'
+import { contractAddresses } from '../../modules/contract/utils'
+import { hasAuthorization } from '../../modules/authorization/utils'
+import { shortenAddress } from '../../modules/wallet/utils'
+import { AuthorizationType } from '../AuthorizationModal/AuthorizationModal.types'
 import { Authorization } from './Authorization'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
-import { contractAddresses } from '../../modules/contract/utils'
-import { hasAuthorization } from '../../modules/authorization/utils'
-import { AuthorizationType } from '../AuthorizationModal/AuthorizationModal.types'
 
 const BUY_MANA_URL = process.env.REACT_APP_BUY_MANA_URL
 
@@ -70,7 +72,11 @@ const SettingsPage = (props: Props) => {
               <Grid.Column width={12} mobile={16}>
                 <Blockie seed={wallet!.address} scale={12} />
                 <div className="address-container">
-                  <div className="address">{wallet!.address}</div>
+                  <div className="address">
+                    {isMobile()
+                      ? shortenAddress(wallet!.address)
+                      : wallet!.address}
+                  </div>
                   <CopyToClipboard text={wallet!.address} onCopy={handleOnCopy}>
                     {hasCopiedText ? (
                       <span className="copy-text">

@@ -66,23 +66,4 @@
   .SettingsPage .ui.grid .ui.loader {
     margin-top: 40px;
   }
-
-  .SettingsPage .address-container {
-    margin-top: 24px;
-    margin-left: 0px;
-    max-width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .SettingsPage .address-container .address {
-    flex: 1 1 auto;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .SettingsPage .address-container .copy-text {
-    flex: none;
-    margin-left: 24px;
-  }
 }
