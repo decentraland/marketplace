@@ -64,10 +64,6 @@
   background-color: var(--secondary-on-modal);
 }
 
-.CategoriesMenu ul.menu li {
-  width: calc(100% - 32px);
-}
-
 .FiltersModal .filter-row {
   display: flex;
   align-items: center;
@@ -95,4 +91,10 @@
   position: absolute;
   right: 24px !important;
   top: 24px !important;
+}
+
+@media (max-width: 768px) {
+  .CategoriesMenu ul.menu li {
+    width: calc(100% - 32px);
+  }
 }

@@ -17,3 +17,9 @@
 .ProximityTag.district {
   background-image: url(../../../images/district.svg);
 }
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .ProximityTag {
+    display: none;
+  }
+}
