@@ -64,12 +64,12 @@ const SettingsPage = (props: Props) => {
         ) : wallet ? (
           <Grid>
             <Grid.Row>
-              <Grid.Column width={4} mobile={16}>
+              <Grid.Column computer={4} mobile={16}>
                 <div className="left-column secondary-text">
                   {t('global.address')}
                 </div>
               </Grid.Column>
-              <Grid.Column width={12} mobile={16}>
+              <Grid.Column computer={12} mobile={16}>
                 <Blockie seed={wallet!.address} scale={12} />
                 <div className="address-container">
                   <div className="address">
@@ -93,12 +93,12 @@ const SettingsPage = (props: Props) => {
             </Grid.Row>
 
             <Grid.Row>
-              <Grid.Column width={4} mobile={16}>
+              <Grid.Column computer={4} mobile={16}>
                 <div className="left-column secondary-text">
                   {t('global.balance')}
                 </div>
               </Grid.Column>
-              <Grid.Column width={12} mobile={16}>
+              <Grid.Column computer={12} mobile={16}>
                 <div className="balance">
                   <Mana inline>{wallet!.mana.toLocaleString()}</Mana>
                   {BUY_MANA_URL ? (
@@ -116,12 +116,12 @@ const SettingsPage = (props: Props) => {
             </Grid.Row>
 
             <Grid.Row>
-              <Grid.Column width={4} mobile={16}>
+              <Grid.Column computer={4} mobile={16}>
                 <div className="left-column secondary-text">
                   {t('settings_page.authorizations')}
                 </div>
               </Grid.Column>
-              <Grid.Column width={12} mobile={16}>
+              <Grid.Column computer={12} mobile={16}>
                 {isLoadingAuthorization ? (
                   <Loader size="massive" active />
                 ) : (
