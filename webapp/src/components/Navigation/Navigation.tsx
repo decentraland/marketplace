@@ -1,45 +1,41 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { Tabs, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { Props, NavigationTab } from './Navigation.types'
 
 const Navigation = (props: Props) => {
-  const { activeTab, isFullscreen, onNavigate } = props
+  const { activeTab, isFullscreen } = props
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
-        <Tabs.Tab
-          active={activeTab === NavigationTab.ATLAS}
-          onClick={() => onNavigate(locations.atlas())}
-        >
-          {t('navigation.atlas')}
-        </Tabs.Tab>
-        <Tabs.Tab
-          active={activeTab === NavigationTab.BROWSE}
-          onClick={() => onNavigate(locations.browse())}
-        >
-          {t('navigation.browse')}
-        </Tabs.Tab>
-        <Tabs.Tab
-          active={activeTab === NavigationTab.MY_ASSETS}
-          onClick={() => onNavigate(locations.currentAccount())}
-        >
-          {t('navigation.my_assets')}
-        </Tabs.Tab>
-        <Tabs.Tab
-          active={activeTab === NavigationTab.MY_BIDS}
-          onClick={() => onNavigate(locations.bids())}
-        >
-          {t('navigation.my_bids')}
-        </Tabs.Tab>
-        <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
-          <Tabs.Tab
-            active={activeTab === NavigationTab.ACTIVITY}
-            onClick={() => onNavigate(locations.activity())}
-          >
-            {t('navigation.activity')}
+        <Link to={locations.atlas()}>
+          <Tabs.Tab active={activeTab === NavigationTab.ATLAS}>
+            {t('navigation.atlas')}
           </Tabs.Tab>
+        </Link>
+        <Link to={locations.browse()}>
+          <Tabs.Tab active={activeTab === NavigationTab.BROWSE}>
+            {t('navigation.browse')}
+          </Tabs.Tab>
+        </Link>
+        <Link to={locations.currentAccount()}>
+          <Tabs.Tab active={activeTab === NavigationTab.MY_ASSETS}>
+            {t('navigation.my_assets')}
+          </Tabs.Tab>
+        </Link>
+        <Link to={locations.bids()}>
+          <Tabs.Tab active={activeTab === NavigationTab.MY_BIDS}>
+            {t('navigation.my_bids')}
+          </Tabs.Tab>
+        </Link>
+        <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+          <Link to={locations.activity()}>
+            <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>
+              {t('navigation.activity')}
+            </Tabs.Tab>
+          </Link>
         </Responsive>
       </Tabs.Left>
     </Tabs>
