@@ -154,6 +154,7 @@ type NFT @entity {
 
   searchIsLand: Boolean
 
+  searchParcelIsInBounds: Boolean
   searchParcelX: BigInt
   searchParcelY: BigInt
 

@@ -1,4 +1,3 @@
-import { log } from '@graphprotocol/graph-ts'
 import { Transfer } from '../entities/templates/ERC721/ERC721'
 import { NFT, Parcel, Estate } from '../entities/schema'
 import {
@@ -61,16 +60,17 @@ export function handleTransfer(event: Transfer): void {
 
     nft.searchIsLand = false
 
+    // We default the "in bounds" property for parcels and no-parcels alike so we can just add  `searchParcelIsInBounds: true`
+    // to all queries
+    nft.searchParcelIsInBounds = true
+
     if (category == categories.PARCEL) {
       let parcel = buildParcelFromNFT(nft)
-      if (!isInBounds(parcel)) {
-        return // Finish early
-      }
-
       parcel.save()
       nft.parcel = id
       nft.image = getParcelImage(parcel)
       nft.searchIsLand = true
+      nft.searchParcelIsInBounds = isInBounds(parcel.x, parcel.y)
       nft.searchParcelX = parcel.x
       nft.searchParcelY = parcel.y
     } else if (category == categories.ESTATE) {

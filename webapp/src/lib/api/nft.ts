@@ -154,6 +154,7 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
       nfts(
         where: {
           searchEstateSize_gt: 0
+          searchParcelIsInBounds: true
           ${extraWhere.join('\n')}
         }
         ${NFTS_ARGUMENTS}

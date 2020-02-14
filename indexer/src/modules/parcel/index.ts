@@ -1,4 +1,4 @@
-import { BigInt, Address } from '@graphprotocol/graph-ts'
+import { log, BigInt, Address } from '@graphprotocol/graph-ts'
 import { LANDRegistry } from '../../entities/LANDRegistry/LANDRegistry'
 import { NFT, Parcel } from '../../entities/schema'
 import * as addresses from '../../data/addresses'
@@ -22,7 +22,7 @@ export function decodeTokenId(assetId: BigInt): BigInt[] {
   return [coordinate.value0, coordinate.value1]
 }
 
-export function getParcelImage(parcel: Parcel): String {
+export function getParcelImage(parcel: Parcel): string {
   return (
     'https://api.decentraland.org/v1/parcels/' +
     parcel.x.toString() +
@@ -32,13 +32,10 @@ export function getParcelImage(parcel: Parcel): String {
   )
 }
 
-export function isInBounds(parcel: Parcel): boolean {
+export function isInBounds(x: BigInt, y: BigInt): boolean {
   let lowerBound = BigInt.fromI32(-150)
   let upperBound = BigInt.fromI32(150)
   return (
-    parcel.x.ge(lowerBound) &&
-    parcel.x.le(upperBound) &&
-    parcel.y.ge(lowerBound) &&
-    parcel.y.le(upperBound)
+    x.ge(lowerBound) && x.le(upperBound) && y.ge(lowerBound) && y.le(upperBound)
   )
 }
