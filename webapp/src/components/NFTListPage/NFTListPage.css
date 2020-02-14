@@ -20,10 +20,6 @@
   top: 140px;
 }
 
-.NFTListPage .ui.toggle.checkbox {
-  top: 4px;
-}
-
 .NFTListPage .right-column .ui.toggle.checkbox label {
   color: var(--secondary-text);
   font-size: 14px;

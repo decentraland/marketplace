@@ -41,6 +41,8 @@
   padding-left: 16px;
 }
 
-.CategoriesMenu ul.submenu li.sub {
-  width: 216px;
+@media (max-width: 768px) {
+  .CategoriesMenu ul.submenu li.sub {
+    width: 216px;
+  }
 }
