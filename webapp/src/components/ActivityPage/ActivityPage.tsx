@@ -9,6 +9,7 @@ import { Footer } from '../Footer'
 import { Transaction } from './Transaction'
 import { Props } from './ActivityPage.types'
 import './ActivityPage.css'
+import { NavigationTab } from '../Navigation/Navigation.types'
 
 const ActivityPage = (props: Props) => {
   const { address, transactions, onClearHistory } = props
@@ -79,7 +80,7 @@ const ActivityPage = (props: Props) => {
   return (
     <>
       <Navbar isFullscreen />
-      <Navigation />
+      <Navigation activeTab={NavigationTab.ACTIVITY} />
       <Page className="ActivityPage">{content}</Page>
       <Modal size="tiny" open={showConfirmation}>
         <Modal.Header>

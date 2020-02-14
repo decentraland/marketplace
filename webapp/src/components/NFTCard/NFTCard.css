@@ -1,3 +1,7 @@
+.NFTCard {
+  overflow: hidden;
+}
+
 .NFTCard .header,
 .NFTCard .dcl.mana.inline {
   font-size: 17px;
@@ -6,8 +10,8 @@
 }
 
 .NFTCard .header .title {
-  white-space: nowrap;
   flex: 1 2 auto;
+  white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   margin-right: 20px;
@@ -45,4 +49,29 @@
 .NFTCard .NFTImage .ens-subdomain {
   background-size: 557px;
   background-position-y: -133px;
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .NFTCard .header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .NFTCard .header .title {
+    margin-right: 0;
+  }
+
+  .NFTCard .dcl.mana.inline {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .NFTCard.ui.card > .content,
+  .ui.cards > .NFTCard.card > .content {
+    display: block;
+  }
 }

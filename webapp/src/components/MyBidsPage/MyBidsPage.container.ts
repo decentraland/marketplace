@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
+import { replace } from 'connected-react-router'
 
 import { RootState } from '../../modules/reducer'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
@@ -33,7 +33,7 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path)),
+  onNavigate: path => dispatch(replace(path)),
   onFetchBids: address => dispatch(fetchBidsByAddressRequest(address))
 })
 

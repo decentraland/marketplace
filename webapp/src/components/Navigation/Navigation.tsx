@@ -1,5 +1,5 @@
 import React from 'react'
-import { Tabs } from 'decentraland-ui'
+import { Tabs, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { Props, NavigationTab } from './Navigation.types'
@@ -33,6 +33,14 @@ const Navigation = (props: Props) => {
         >
           {t('navigation.my_bids')}
         </Tabs.Tab>
+        <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+          <Tabs.Tab
+            active={activeTab === NavigationTab.ACTIVITY}
+            onClick={() => onNavigate(locations.activity())}
+          >
+            {t('navigation.activity')}
+          </Tabs.Tab>
+        </Responsive>
       </Tabs.Left>
     </Tabs>
   )

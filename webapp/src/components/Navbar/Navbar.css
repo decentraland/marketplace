@@ -16,3 +16,7 @@
   top: -5px;
   right: -5px;
 }
+
+.dcl.account-wrapper .dcl.mana {
+  flex: none;
+}

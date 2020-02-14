@@ -20,10 +20,6 @@
   top: 140px;
 }
 
-.NFTListPage .ui.toggle.checkbox {
-  top: 4px;
-}
-
 .NFTListPage .right-column .ui.toggle.checkbox label {
   color: var(--secondary-text);
   font-size: 14px;
@@ -61,4 +57,44 @@
     100vh - var(--navbar-height) - var(--footer-height) -
       var(--navbar-margin-bottom) - var(--footer-margin-top) - 1px
   );
+}
+
+.FiltersModal .CategoriesMenu ul.menu li:hover,
+.FiltersModal .CategoriesMenu ul.menu li.active {
+  background-color: var(--secondary-on-modal);
+}
+
+.FiltersModal .filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.FiltersModal .CategoriesMenu {
+  width: 100%;
+}
+
+.FiltersModal .CategoriesMenu ul.menu {
+  width: calc(100% + 16px);
+}
+
+.FiltersModal .CategoriesMenu ul.menu li {
+  width: calc(100% + 16px);
+}
+
+.FiltersModal .CategoriesMenu ul.menu li.sub {
+  width: calc(100% + 0px);
+}
+
+.FiltersModal.ui.modal .dcl.close {
+  position: absolute;
+  right: 24px !important;
+  top: 24px !important;
+}
+
+@media (max-width: 768px) {
+  .CategoriesMenu ul.menu li {
+    width: calc(100% - 32px);
+  }
 }

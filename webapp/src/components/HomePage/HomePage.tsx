@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Page, Hero, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { Section, SortDirection } from '../../modules/routing/search'
@@ -81,7 +82,7 @@ const HomePage = (props: Props) => {
   return (
     <>
       <Navbar isFullscreen isOverlay />
-      <Hero className="HomePageHero">
+      <Hero centered={isMobile()} className="HomePageHero">
         <Hero.Header>{t('home_page.title')}</Hero.Header>
         <Hero.Description>{t('home_page.subtitle')}</Hero.Description>
         <Hero.Content>

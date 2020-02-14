@@ -38,3 +38,13 @@
   width: 1.8rem;
   height: 1.8rem;
 }
+
+@media (max-width: 768px) {
+  .Authorization .ui.radio.checkbox {
+    margin-bottom: 0px;
+  }
+
+  .Authorization .ui.loader {
+    top: 8px;
+  }
+}

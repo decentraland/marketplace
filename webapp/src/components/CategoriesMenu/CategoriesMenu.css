@@ -1,4 +1,5 @@
 .CategoriesMenu {
+  --menu-item-width: 232px;
   margin-right: 24px;
 }
 
@@ -14,16 +15,16 @@
   list-style: none;
   padding: 9px 16px;
   margin-bottom: 8px;
-  width: 248px;
   cursor: pointer;
   border-radius: 8px;
   text-transform: capitalize;
+  width: 248px;
 }
 
 .CategoriesMenu ul.menu li.sub {
   color: var(--secondary-text);
   margin-left: 16px;
-  width: 232px;
+  width: var(--menu-item-width);
 }
 
 .CategoriesMenu ul.menu li .dropdown.icon {
@@ -42,5 +43,5 @@
 }
 
 .CategoriesMenu ul.submenu li.sub {
-  width: 216px;
+  width: calc(var(--menu-item-width) - 16px);
 }

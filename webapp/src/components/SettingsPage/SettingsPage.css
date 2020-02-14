@@ -9,12 +9,12 @@
 }
 
 .SettingsPage .dcl.blockie {
+  margin-right: 24px;
   float: left;
 }
 
 .SettingsPage .address-container {
   margin-top: 7px;
-  margin-left: 24px;
   float: left;
 }
 
@@ -51,4 +51,33 @@
   font-size: 17px;
   margin-bottom: 17px;
   text-transform: capitalize;
+}
+
+@media (max-width: 992px) {
+  .SettingsPage .ui.grid > .row {
+    flex-direction: column;
+    margin-bottom: 48px;
+  }
+
+  .SettingsPage .ui.grid > .row > .column:first-child {
+    margin-bottom: 16px;
+  }
+
+  .SettingsPage .blockie-container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .SettingsPage .address-container {
+    margin-top: 24px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .SettingsPage .address-container .address {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

@@ -11,3 +11,21 @@
 .MyBidsPage .bids {
   margin-bottom: 48px;
 }
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .MyBidsPage .Bid .image {
+    display: none;
+  }
+  .Bid .wrapper .info .dcl.stats.from {
+    width: 35%;
+  }
+
+  .MyBidsPage .Bid .actions {
+    margin-left: 10px;
+  }
+
+  .MyBidsPage .Bid .actions .ui.button {
+    width: 116px;
+    min-width: 116px;
+  }
+}

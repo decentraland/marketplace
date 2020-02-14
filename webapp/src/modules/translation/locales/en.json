@@ -21,7 +21,8 @@
     "atlas": "Atlas",
     "browse": "Browse",
     "my_assets": "My Assets",
-    "my_bids": "My Bids"
+    "my_bids": "My Bids",
+    "activity": "Activity"
   },
   "home_page": {
     "title": "Decentraland Marketplace",
@@ -69,7 +70,9 @@
   },
   "nft_list_page": {
     "on_sale": "On sale",
-    "empty": "Could not find any assets"
+    "empty": "Could not find any assets",
+    "filter": "Filter",
+    "order_by": "Order By"
   },
   "nft_card": {
     "expires_at": "Expires {date}"
