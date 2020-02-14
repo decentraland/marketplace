@@ -38,3 +38,32 @@
   overflow: hidden;
   display: inline-block;
 }
+
+@media (max-width: 768px) {
+  .NFTAction .nft-image-wrapper {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  .NFTAction .action {
+    flex-direction: column;
+  }
+
+  .NFTAction .action .left {
+    margin-right: 0px;
+  }
+
+  .NFTAction .back {
+    margin-bottom: 48px;
+  }
+
+  .NFTAction .buttons {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .NFTAction .buttons .ui.button + .ui.button {
+    margin-left: 0px;
+    margin-bottom: 24px;
+  }
+}

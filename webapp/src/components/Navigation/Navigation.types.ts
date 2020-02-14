@@ -5,7 +5,8 @@ export enum NavigationTab {
   ATLAS = 'atlas',
   BROWSE = 'browse',
   MY_ASSETS = 'my_assets',
-  MY_BIDS = 'my_bids'
+  MY_BIDS = 'my_bids',
+  ACTIVITY = 'activity'
 }
 
 export type Props = {

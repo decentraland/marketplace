@@ -6,3 +6,9 @@
   display: flex;
   margin-top: 13px;
 }
+
+@media (max-width: 768px) {
+  .Highlights .row {
+    flex-direction: column;
+  }
+}

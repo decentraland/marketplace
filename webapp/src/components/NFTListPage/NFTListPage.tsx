@@ -11,7 +11,11 @@ import {
   HeaderMenu,
   Header,
   Dropdown,
-  DropdownProps
+  DropdownProps,
+  Responsive,
+  Icon,
+  Modal,
+  Close
 } from 'decentraland-ui'
 
 import {
@@ -69,6 +73,7 @@ const NFTListPage = (props: Props) => {
 
   // State variables
   const [offset, setOffset] = useState(0)
+  const [showFiltersModal, setShowFiltersModal] = useState(false)
 
   // Handlers
   const handleOnNavigate = useCallback(
@@ -156,27 +161,40 @@ const NFTListPage = (props: Props) => {
 
   return (
     <Page className="NFTListPage">
-      <Grid.Column>
-        <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
-      </Grid.Column>
+      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+        <Grid.Column>
+          <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
+        </Grid.Column>
+      </Responsive>
       <Grid.Column className="right-column">
         <HeaderMenu>
           <HeaderMenu.Left>
             <Header sub>{t('global.assets')}</Header>
           </HeaderMenu.Left>
           <HeaderMenu.Right>
-            <Radio
-              toggle
-              checked={onlyOnSale}
-              onChange={handleOnlyOnSaleChange}
-              label={t('nft_list_page.on_sale')}
-            />
-            <Dropdown
-              direction="left"
-              value={sortBy}
-              options={dropdownOptions}
-              onChange={handleDropdownChange}
-            />
+            <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+              <Radio
+                toggle
+                checked={onlyOnSale}
+                onChange={handleOnlyOnSaleChange}
+                label={t('nft_list_page.on_sale')}
+              />
+              <Dropdown
+                direction="left"
+                value={sortBy}
+                options={dropdownOptions}
+                onChange={handleDropdownChange}
+              />
+            </Responsive>
+            <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+              <Button
+                basic
+                onClick={() => setShowFiltersModal(!showFiltersModal)}
+              >
+                <Icon name="filter" />
+                {t('nft_list_page.filter')}
+              </Button>
+            </Responsive>
           </HeaderMenu.Right>
         </HeaderMenu>
 
@@ -209,6 +227,34 @@ const NFTListPage = (props: Props) => {
           </div>
         )}
       </Grid.Column>
+      <Modal
+        className="FiltersModal"
+        open={showFiltersModal}
+        onClose={() => setShowFiltersModal(false)}
+        closeIcon={<Close onClick={() => setShowFiltersModal(false)} />}
+      >
+        <Modal.Header>Filter</Modal.Header>
+        <Modal.Content>
+          <div className="filter-row">
+            <Header sub>{t('nft_list_page.on_sale')}</Header>
+            <Radio
+              toggle
+              checked={onlyOnSale}
+              onChange={handleOnlyOnSaleChange}
+            />
+          </div>
+          <div className="filter-row">
+            <Header sub>{t('nft_list_page.order_by')}</Header>
+            <Dropdown
+              direction="left"
+              value={sortBy}
+              options={dropdownOptions}
+              onChange={handleDropdownChange}
+            />
+          </div>
+          <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
+        </Modal.Content>
+      </Modal>
     </Page>
   )
 }

@@ -87,3 +87,10 @@
   height: 16px;
   margin-top: 3px;
 }
+
+@media (max-width: 768px) {
+  .TransactionDetail .right .status .description,
+  .TransactionDetail .left .text .timestamp {
+    display: none;
+  }
+}

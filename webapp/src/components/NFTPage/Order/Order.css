@@ -5,6 +5,7 @@
 
 .Order .left {
   flex: 1 0 auto;
+  display: flex;
 }
 
 .Order .right {
@@ -12,4 +13,25 @@
   align-items: center;
   display: flex;
   justify-content: flex-end;
+}
+
+@media (max-width: 768px) {
+  .Order,
+  .Order .left,
+  .Order .right {
+    flex-direction: column;
+  }
+
+  .Order .left {
+    margin-bottom: 24px;
+  }
+
+  .Order .right .ui.button {
+    width: 100%;
+  }
+
+  .Order .right .ui.button + .ui.button {
+    margin-left: 0px;
+    margin-top: 24px;
+  }
 }

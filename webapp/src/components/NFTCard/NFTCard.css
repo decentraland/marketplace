@@ -1,3 +1,7 @@
+.NFTCard {
+  overflow: hidden;
+}
+
 .NFTCard .header,
 .NFTCard .dcl.mana.inline {
   font-size: 17px;
@@ -45,4 +49,11 @@
 .NFTCard .NFTImage .ens-subdomain {
   background-size: 557px;
   background-position-y: -133px;
+}
+
+@media (max-width: 768px) {
+  .NFTCard.ui.card > .content,
+  .ui.cards > .NFTCard.card > .content {
+    display: block;
+  }
 }

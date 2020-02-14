@@ -14,3 +14,9 @@
 .BidPage .fields .dcl.field {
   margin-bottom: 8px;
 }
+
+@media (max-width: 768px) {
+  .BidPage .dcl.field {
+    min-width: auto;
+  }
+}

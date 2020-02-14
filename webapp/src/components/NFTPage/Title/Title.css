@@ -29,3 +29,14 @@
   margin-left: 16px;
   margin-top: 1px;
 }
+
+@media (max-width: 768px) {
+  .Title {
+    flex-direction: column;
+  }
+
+  .Title .left {
+    margin-right: 0px;
+    margin-bottom: 24px;
+  }
+}
