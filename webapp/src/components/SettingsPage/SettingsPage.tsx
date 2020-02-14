@@ -70,7 +70,9 @@ const SettingsPage = (props: Props) => {
                 </div>
               </Grid.Column>
               <Grid.Column computer={12} mobile={16}>
-                <Blockie seed={wallet!.address} scale={12} />
+                <div className="blockie-container">
+                  <Blockie seed={wallet!.address} scale={12} />
+                </div>
                 <div className="address-container">
                   <div className="address">
                     {isMobile()
