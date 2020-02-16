@@ -2,9 +2,9 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { fromWei } from 'web3x-es/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
-import { MANA_SYMBOL, toMANA, fromMANA } from '../../../lib/mana'
-import { NFTAction } from '../../NFTAction'
-import { Header, Field, Button, Modal, Mana } from 'decentraland-ui'
+import { Header, Form, Field, Button, Modal, Mana } from 'decentraland-ui'
+
+import { toMANA, fromMANA } from '../../../lib/mana'
 import {
   INPUT_FORMAT,
   getDefaultExpirationDate
@@ -15,11 +15,12 @@ import { hasAuthorization } from '../../../modules/authorization/utils'
 import { contractAddresses } from '../../../modules/contract/utils'
 import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.types'
 import { AuthorizationModal } from '../../AuthorizationModal'
+import { NFTAction } from '../../NFTAction'
 import { Props } from './SellModal.types'
-import './SellModal.css'
 
 const SellModal = (props: Props) => {
   const { nft, order, wallet, onNavigate, onCreateOrder } = props
+
   const isUpdate = order !== null
   const [price, setPrice] = useState(
     isUpdate ? toMANA(+fromWei(order!.price, 'ether')) : ''
@@ -35,7 +36,7 @@ const SellModal = (props: Props) => {
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
   const handleCreateOrder = useCallback(
-    () => onCreateOrder(nft, fromMANA(price), +new Date(expiresAt)),
+    () => onCreateOrder(nft, fromMANA(price), new Date(expiresAt).getTime()),
     [nft, price, expiresAt, onCreateOrder]
   )
 
@@ -58,9 +59,9 @@ const SellModal = (props: Props) => {
     setShowAuthorizationModal
   ])
 
-  const isInvalidDate = +new Date(expiresAt) < Date.now()
+  const isInvalidDate = new Date(expiresAt).getTime() < Date.now()
 
-  // clear confirm price when closing the confirm modal
+  // Clear confirm price when closing the confirm modal
   useEffect(() => {
     if (!showConfirm) {
       setConfirmPrice('')
@@ -80,84 +81,93 @@ const SellModal = (props: Props) => {
           }}
         />
       </p>
-      <div className="fields">
-        <Field
-          label={t('sell_page.price')}
-          placeholder={MANA_SYMBOL + ' ' + (1000).toLocaleString()}
-          value={price}
-          onChange={(_event, props) => {
-            const newPrice = fromMANA(props.value)
-            setPrice(newPrice > 0 ? toMANA(newPrice) : '')
-          }}
-        />
-        <Field
-          label={t('sell_page.expiration_date')}
-          type="date"
-          value={expiresAt}
-          onChange={(_event, props) =>
-            setExpiresAt(props.value || getDefaultExpirationDate())
-          }
-          error={isInvalidDate}
-          message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
-        />
-      </div>
-      <div className="buttons">
-        <Button
-          onClick={() =>
-            onNavigate(locations.ntf(nft.contractAddress, nft.tokenId))
-          }
-        >
-          {t('global.cancel')}
-        </Button>
-        <Button
-          primary
-          disabled={
-            !isOwnedBy(nft, wallet) || fromMANA(price) <= 0 || isInvalidDate
-          }
-          onClick={() => setShowConfirm(true)}
-        >
-          {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
-        </Button>
-      </div>
-      <Modal size="small" open={showConfirm} className="ConfirmPriceModal">
-        <Modal.Header>{t('sell_page.confirm.title')}</Modal.Header>
-        <Modal.Content>
-          <T
-            id="sell_page.confirm.line_one"
-            values={{
-              name: <b>{getNFTName(nft)}</b>,
-              amount: <Mana inline>{fromMANA(price).toLocaleString()}</Mana>
-            }}
-          />
-          <br />
-          <T id="sell_page.confirm.line_two" />
+
+      <Form onSubmit={() => setShowConfirm(true)}>
+        <div className="form-fields">
           <Field
             label={t('sell_page.price')}
-            placeholder={price}
-            value={confirmPrice}
+            type="text"
+            placeholder={toMANA(1000)}
+            value={price}
             onChange={(_event, props) => {
               const newPrice = fromMANA(props.value)
-              setConfirmPrice(newPrice > 0 ? toMANA(newPrice) : '')
+              setPrice(toMANA(newPrice))
             }}
           />
-        </Modal.Content>
-        <Modal.Actions>
-          <Button
-            onClick={() => {
-              setConfirmPrice('')
-              setShowConfirm(false)
-            }}
+          <Field
+            label={t('sell_page.expiration_date')}
+            type="date"
+            value={expiresAt}
+            onChange={(_event, props) =>
+              setExpiresAt(props.value || getDefaultExpirationDate())
+            }
+            error={isInvalidDate}
+            message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
+          />
+        </div>
+        <div className="buttons">
+          <div
+            className="ui button"
+            onClick={() =>
+              onNavigate(locations.ntf(nft.contractAddress, nft.tokenId))
+            }
           >
             {t('global.cancel')}
-          </Button>
+          </div>
           <Button
+            type="submit"
             primary
-            disabled={fromMANA(price) !== fromMANA(confirmPrice)}
-            onClick={handleSubmit}
+            disabled={
+              !isOwnedBy(nft, wallet) || fromMANA(price) <= 0 || isInvalidDate
+            }
           >
-            {t('global.proceed')}
+            {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
           </Button>
-        </Modal.Actions>
+        </div>
+      </Form>
+
+      <Modal size="small" open={showConfirm} className="ConfirmPriceModal">
+        <Modal.Header>{t('sell_page.confirm.title')}</Modal.Header>
+        <Form onSubmit={handleSubmit}>
+          <Modal.Content>
+            <T
+              id="sell_page.confirm.line_one"
+              values={{
+                name: <b>{getNFTName(nft)}</b>,
+                amount: <Mana inline>{fromMANA(price).toLocaleString()}</Mana>
+              }}
+            />
+            <br />
+            <T id="sell_page.confirm.line_two" />
+            <Field
+              label={t('sell_page.price')}
+              placeholder={price}
+              value={confirmPrice}
+              onChange={(_event, props) => {
+                const newPrice = fromMANA(props.value)
+                setConfirmPrice(toMANA(newPrice))
+              }}
+            />
+          </Modal.Content>
+          <Modal.Actions>
+            <div
+              className="ui button"
+              onClick={() => {
+                setConfirmPrice('')
+                setShowConfirm(false)
+              }}
+            >
+              {t('global.cancel')}
+            </div>
+            <Button
+              type="submit"
+              primary
+              disabled={fromMANA(price) !== fromMANA(confirmPrice)}
+            >
+              {t('global.proceed')}
+            </Button>
+          </Modal.Actions>
+        </Form>
       </Modal>
       <AuthorizationModal
         open={showAuthorizationModal}
