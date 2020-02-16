@@ -91,7 +91,9 @@ const BuyPage = (props: Props) => {
       <Header size="large">
         {t('buy_page.title', { category: t(`global.${nft.category}`) })}
       </Header>
-      <div className="subtitle">{subtitle}</div>
+      <div className={isDisabled ? 'subtitle error' : 'subtitle'}>
+        {subtitle}
+      </div>
       <div className="buttons">
         <Button
           onClick={() =>
