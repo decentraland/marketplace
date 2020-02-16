@@ -1,6 +1,6 @@
 {
   "global": {
-    "assets": "Assets",
+    "assets": "Listado",
     "address": "Direccion",
     "balance": "Balance",
     "load_more": "Cargar Más",
@@ -26,7 +26,7 @@
   },
   "home_page": {
     "title": "Mercado de Decentraland",
-    "subtitle": "Bienvenido al mercado mas piola",
+    "subtitle": "Bienvenido al mercado virtual de Decentraland, donde encontrarás los mejores ítems virtuales.",
     "get_started": "Comienza a navegar",
     "learn_more": "Aprende Más",
     "view_all": "Ver Todos",
@@ -37,7 +37,7 @@
   "categories_menu": {
     "categories": "Categories",
     "menu_item": {
-      "all": "All Assets",
+      "all": "Todos",
       "land": "Tierras",
       "parcels": "Parcelas",
       "estates": "Propiedades",
