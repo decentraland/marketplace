@@ -63,7 +63,7 @@ const BidModal = (props: Props) => {
         />
       </p>
       <Form onSubmit={handleSubmit}>
-        <div className="fields">
+        <div className="form-fields">
           <Field
             label={t('bid_page.price')}
             placeholder={toMANA(1000)}

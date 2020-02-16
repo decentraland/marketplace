@@ -6,7 +6,6 @@ import { Wallet } from '../Wallet'
 import { NFTProviderPage } from '../NFTProviderPage'
 import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
-import './BidPage.css'
 
 const BidPage = (props: Props) => {
   const { onNavigate, onPlaceBid } = props

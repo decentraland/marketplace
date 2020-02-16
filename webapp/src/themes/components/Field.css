@@ -1,0 +1,4 @@
+.ui.form .dcl.field .ui.input input {
+  color: var(--text);
+  background: transparent;
+}

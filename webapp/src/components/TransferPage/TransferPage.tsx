@@ -60,7 +60,7 @@ const TransferPage = (props: Props) => {
                     </Header>
                     <div className="subtitle">{subtitle}</div>
                     <Form onSubmit={() => onTransfer(nft, address)}>
-                      <div className="fields">
+                      <div className="form-fields">
                         <Field
                           type="address"
                           error={isInvalidAddress}
