@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Header, Table, Loader, Mana } from 'decentraland-ui'
+import { Header, Table, Mana, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
@@ -16,7 +16,7 @@ import { Bid } from '../../../modules/bid/types'
 const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000
 
-const formatOrderDate = (updatedAt: string) => {
+const formatEventDate = (updatedAt: string) => {
   const newUpdatedAt = new Date(+updatedAt * 1000)
   return Date.now() - newUpdatedAt.getTime() > WEEK_IN_MILLISECONDS
     ? dateFnsFormat(newUpdatedAt, INPUT_FORMAT)
@@ -27,8 +27,8 @@ const formatDateTitle = (updatedAt: string) => {
   return new Date(+updatedAt * 1000).toLocaleString()
 }
 
-const sortByUpdatedAt = (a: Order | Bid, b: Order | Bid) =>
-  a.updatedAt > b.updatedAt ? 1 : -1
+const sortByUpdatedAt = (a: { updatedAt: string }, b: { updatedAt: string }) =>
+  a.updatedAt > b.updatedAt ? -1 : 1
 
 const toEvent = (orderOrBid: Order | Bid): HistoryEvent => ({
   from: (orderOrBid as Order).owner! || (orderOrBid as Bid).seller!,
@@ -65,48 +65,60 @@ const TransactionHistory = (props: Props) => {
 
   return (
     <div className="TransactionHistory">
-      {isLoading ? (
-        <Loader active size="massive" />
-      ) : events.length > 0 ? (
+      {isLoading ? null : events.length > 0 ? (
         <>
           <Header sub>{t('transaction_history.title')}</Header>
-          <Table basic="very">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>
-                  {t('transaction_history.from')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('transaction_history.to')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('transaction_history.when')}
-                </Table.HeaderCell>
-                <Table.HeaderCell>
-                  {t('transaction_history.price')}
-                </Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-              {events.map((event, index) => (
-                <Table.Row key={index}>
-                  <Table.Cell>
-                    <Address address={event.from} />
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Address address={event.to!} />
-                  </Table.Cell>
-                  <Table.Cell title={formatDateTitle(event.updatedAt)}>
-                    {formatOrderDate(event.updatedAt)}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Mana inline>{formatMANA(event.price)}</Mana>
-                  </Table.Cell>
+          <Responsive minWidth={Responsive.onlyComputer.minWidth}>
+            <Table basic="very">
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>
+                    {t('transaction_history.from')}
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    {t('transaction_history.to')}
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    {t('transaction_history.when')}
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    {t('transaction_history.price')}
+                  </Table.HeaderCell>
                 </Table.Row>
+              </Table.Header>
+
+              <Table.Body>
+                {events.map((event, index) => (
+                  <Table.Row key={index}>
+                    <Table.Cell>
+                      <Address address={event.from} />
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Address address={event.to!} />
+                    </Table.Cell>
+                    <Table.Cell title={formatDateTitle(event.updatedAt)}>
+                      {formatEventDate(event.updatedAt)}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Mana inline>{formatMANA(event.price)}</Mana>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </Responsive>
+          <Responsive maxWidth={Responsive.onlyTablet.maxWidth}>
+            <div className="mobile-tx-history">
+              {events.map((event, index) => (
+                <div className="mobile-tx-history-row" key={index}>
+                  <div className="price">
+                    <Mana inline>{formatMANA(event.price)}</Mana>
+                  </div>
+                  <div className="when">{formatEventDate(event.updatedAt)}</div>
+                </div>
               ))}
-            </Table.Body>
-          </Table>
+            </div>
+          </Responsive>
         </>
       ) : null}
     </div>
