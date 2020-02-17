@@ -167,7 +167,7 @@ const NFTListPage = (props: Props) => {
   return (
     <Page className="NFTListPage">
       <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-        <Grid.Column>
+        <Grid.Column className="left-column">
           <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
         </Grid.Column>
       </Responsive>

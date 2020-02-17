@@ -263,5 +263,9 @@
   "wallet": {
     "sign_in_required": "Necesitas {sign_in} para acceder a esta página.",
     "sign_in": "iniciar sesión"
+  },
+  "banner": {
+    "text": "¡El mercado de Decentraland tiene un nuevo look! Esperamos que te guste. Aún puedes acceder a la antigua interfaz {link}.",
+    "link": "aquí"
   }
 }
