@@ -1,2 +1,2 @@
-import Navigation from './Navigation.container'
+import Navigation from './Navigation'
 export { Navigation }

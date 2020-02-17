@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react'
-import { Header, Field, Button } from 'decentraland-ui'
+import { Header, Form, Field, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { MANA_SYMBOL, toMANA, fromMANA } from '../../../lib/mana'
+
+import { toMANA, fromMANA } from '../../../lib/mana'
 import { NFTAction } from '../../NFTAction'
 import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
@@ -61,51 +62,54 @@ const BidModal = (props: Props) => {
           }}
         />
       </p>
-      <div className="fields">
-        <Field
-          label={t('bid_page.price')}
-          placeholder={MANA_SYMBOL + ' ' + (1000).toLocaleString()}
-          value={price}
-          onChange={(_event, props) => {
-            const newPrice = fromMANA(props.value)
-            setPrice(toMANA(newPrice))
-          }}
-          error={notEnoughMana}
-          message={notEnoughMana ? t('bid_page.not_enougn_mana') : undefined}
-        />
-        <Field
-          label={t('bid_page.expiration_date')}
-          type="date"
-          value={expiresAt}
-          onChange={(_event, props) =>
-            setExpiresAt(props.value || getDefaultExpirationDate())
-          }
-          error={isInvalidDate}
-          message={isInvalidDate ? t('bid_page.invalid_date') : undefined}
-        />
-      </div>
-      <div className="buttons">
-        <Button
-          onClick={() =>
-            onNavigate(locations.ntf(nft.contractAddress, nft.tokenId))
-          }
-        >
-          {t('global.cancel')}
-        </Button>
-        <Button
-          primary
-          disabled={
-            isOwnedBy(nft, wallet) ||
-            fromMANA(price) <= 0 ||
-            isInvalidDate ||
-            notEnoughMana ||
-            isLoading
-          }
-          onClick={handleSubmit}
-        >
-          {t('bid_page.submit')}
-        </Button>
-      </div>
+      <Form onSubmit={handleSubmit}>
+        <div className="form-fields">
+          <Field
+            label={t('bid_page.price')}
+            placeholder={toMANA(1000)}
+            value={price}
+            onChange={(_event, props) => {
+              const newPrice = fromMANA(props.value)
+              setPrice(toMANA(newPrice))
+            }}
+            error={notEnoughMana}
+            message={notEnoughMana ? t('bid_page.not_enougn_mana') : undefined}
+          />
+          <Field
+            label={t('bid_page.expiration_date')}
+            type="date"
+            value={expiresAt}
+            onChange={(_event, props) =>
+              setExpiresAt(props.value || getDefaultExpirationDate())
+            }
+            error={isInvalidDate}
+            message={isInvalidDate ? t('bid_page.invalid_date') : undefined}
+          />
+        </div>
+        <div className="buttons">
+          <div
+            className="ui button"
+            onClick={() =>
+              onNavigate(locations.ntf(nft.contractAddress, nft.tokenId))
+            }
+          >
+            {t('global.cancel')}
+          </div>
+          <Button
+            type="submit"
+            primary
+            disabled={
+              isOwnedBy(nft, wallet) ||
+              fromMANA(price) <= 0 ||
+              isInvalidDate ||
+              notEnoughMana ||
+              isLoading
+            }
+          >
+            {t('bid_page.submit')}
+          </Button>
+        </div>
+      </Form>
       <AuthorizationModal
         open={showAuthorizationModal}
         contractAddress={contractAddresses.Bids}

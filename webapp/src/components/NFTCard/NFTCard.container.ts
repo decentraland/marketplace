@@ -1,13 +1,7 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
 import { getData } from '../../modules/order/selectors'
-import {
-  MapStateProps,
-  OwnProps,
-  MapDispatch,
-  MapDispatchProps
-} from './NFTCard.types'
+import { MapStateProps, OwnProps, MapDispatchProps } from './NFTCard.types'
 import NFTCard from './NFTCard'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
@@ -23,8 +17,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   }
 }
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path))
-})
+const mapDispatch = (): MapDispatchProps => ({})
 
 export default connect(mapState, mapDispatch)(NFTCard)
