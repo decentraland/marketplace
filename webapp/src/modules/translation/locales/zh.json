@@ -263,5 +263,9 @@
   "wallet": {
     "sign_in_required": "您需要 {sign_in} 才能访问此页面。",
     "sign_in": "登入"
+  },
+  "banner": {
+    "text": "Decentraland的市场焕然一新！我们希望你喜欢它。您仍然可以在{link}访问旧界面。",
+    "link": "此处"
   }
 }
