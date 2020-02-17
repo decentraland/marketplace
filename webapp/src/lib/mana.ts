@@ -12,9 +12,7 @@ export function fromMANA(mana: string) {
   const num = mana
     .split(MANA_SYMBOL + ' ')
     .join('')
-    .split(',')
-    .join('')
-    .split('.')
+    .split(/[,|.]/)
     .join('')
 
   const result = parseInt(num)
