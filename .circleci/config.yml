@@ -15,7 +15,7 @@ jobs:
           name: Save the built files
           paths:
             - public
-          key: build-{{ .Revision }}
+          key: build-{{ .Branch }}-{{ .Revision }}
 
   deploy:
     docker:
@@ -25,7 +25,7 @@ jobs:
       - restore_cache:
           name: Restore built files
           keys:
-            - build-{{ .Revision }}
+            - build-{{ .Branch }}-{{ .Revision }}
       - run: sudo apt-get -y -qq install awscli curl
       - run:
           name: Configure AWS Keys
