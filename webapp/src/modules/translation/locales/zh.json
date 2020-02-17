@@ -1,0 +1,267 @@
+{
+  "global": {
+    "assets": "资产",
+    "address": "地址",
+    "balance": "余额",
+    "load_more": "加载更多",
+    "not_found": "未找到",
+    "parcel": "包裹",
+    "estate": "地产",
+    "wearable": "可穿戴设备",
+    "ens": "名称",
+    "cancel": "取消",
+    "proceed": "继续",
+    "nft": "NFT",
+    "loading": "加载",
+    "settings": "设定",
+    "accept": "接受",
+    "update": "更新"
+  },
+  "navigation": {
+    "atlas": " 地图集",
+    "browse": "浏览",
+    "my_assets": "我的资产",
+    "my_bids": "我的出价",
+    "activity": "活动"
+  },
+  "home_page": {
+    "title": "Decentraland 市场",
+    "subtitle": "欢迎来到虚拟世界的一站式商店，以获取最棒的数字资产。",
+    "get_started": "开始浏览",
+    "learn_more": "了解更多",
+    "view_all": "查看全部",
+    "wearables": "可穿戴设备",
+    "land": "包裹和地产",
+    "ens": "名称"
+  },
+  "categories_menu": {
+    "categories": "类别",
+    "menu_item": {
+      "all": "全部资产",
+      "land": "土地",
+      "parcels": "包裹",
+      "estates": "地产",
+      "wearables": "可穿戴设备",
+      "wearables_head": "头部",
+      "wearables_eyebrows": "眉毛",
+      "wearables_eyes": "眼睛",
+      "wearables_facial_hair": "胡子",
+      "wearables_hair": "头发",
+      "wearables_mouth": "嘴巴",
+      "wearables_upper_body": "上半身",
+      "wearables_lower_body": "下半身",
+      "wearables_feet": "腿部",
+      "wearables_accesories": "配件",
+      "wearables_earring": "耳环",
+      "wearables_eyewear": "眼镜",
+      "wearables_hat": "帽子",
+      "wearables_helmet": "头盔",
+      "wearables_mask": "面具",
+      "wearables_tiara": "头饰",
+      "wearables_top_head": "头顶",
+      "ens": "名称"
+    }
+  },
+  "filters": {
+    "name": "名称",
+    "newest": "最新",
+    "recently_listed": "最新上市",
+    "cheapest": "最便宜"
+  },
+  "nft_list_page": {
+    "on_sale": "特价中",
+    "empty": "找不到任何资产",
+    "filter": "过滤",
+    "order_by": "订户"
+  },
+  "nft_card": {
+    "expires_at": "{date} 到期"
+  },
+  "bid": {
+    "not_enough_mana": "投标人没有足够的MANA来支付此投标"
+  },
+  "detail": {
+    "description": "描述",
+    "highlights": "亮点",
+    "owner": "所有者",
+    "price": "价格",
+    "expires": "失效",
+    "cancel_sale": "删除清单",
+    "buy": "购买",
+    "sell": "出售",
+    "bid": "出价",
+    "update": "更新价格",
+    "transfer": "转让",
+    "adjacent": "相邻",
+    "distance": "{distance} {distance, plural, one {parcel} other {parcels}} 距离",
+    "plaza": "广场",
+    "road": "路",
+    "district": "区"
+  },
+  "transaction_history": {
+    "title": "交易记录",
+    "from": "从",
+    "to": "到",
+    "when": "时间",
+    "price": "价格"
+  },
+  "wearable": {
+    "body_shape": {
+      "male": "男性",
+      "female": "女性",
+      "unisex": "中性"
+    },
+    "rarity": {
+      "unique": "独特",
+      "mythic": "神话",
+      "legendary": "传奇",
+      "epic": "史诗",
+      "swanky": "时髦",
+      "uncommon": "罕见",
+      "common": "常见"
+    },
+    "rarity_tooltip": {
+      "unique": "像圣杯一样：独一无二",
+      "mythic": "给幸运的人：最多10个",
+      "legendary": "限量供应：最多100个",
+      "epic": "最大供应量：1000个",
+      "swanky": "最大供应量：5000个",
+      "uncommon": "最大供应量：10,000个",
+      "common": "最大供应量：100,000个"
+    },
+    "category": {
+      "body_shape": "身材",
+      "earring": "耳环",
+      "eyebrows": "眉毛",
+      "eyes": "眼睛",
+      "eyewear": "眼镜",
+      "facial_hair": "胡子",
+      "feet": "腿部",
+      "hair": "头发",
+      "hat": "帽子",
+      "helmet": "头盔",
+      "lower_body": "下半身",
+      "mask": "面具",
+      "mouth": "嘴巴",
+      "tiara": "头饰",
+      "top_head": "头顶",
+      "upper_body": "上半身"
+    }
+  },
+  "sell_page": {
+    "title": "待售清单",
+    "update_title": "更新您的清单",
+    "subtitle": "设置价格和有效日期 {name}.",
+    "update_subtitle": "设置新的价格和有效日期 {name}.",
+    "price": "价格",
+    "expiration_date": "失效日期",
+    "invalid_date": "这个日期已经过去了",
+    "submit": "待售清单",
+    "update_submit": "更新资料",
+    "confirm": {
+      "title": "请确认",
+      "line_one": "您将以 {amount} 出售 {name} 。",
+      "line_two": "请重新输入价格以确认："
+    }
+  },
+  "buy_page": {
+    "title": "购买 {category}",
+    "subtitle": "您将以 {amount} 购买 {name} 。",
+    "not_for_sale": "{name} 不出售.",
+    "buy": "购买",
+    "no_fingerprint": "无法加载指纹。",
+    "is_owner": "您是 {name} 的所有者",
+    "not_enough_mana": "您没有足够的MANA来购买 {name}."
+  },
+  "bid_page": {
+    "title": "出价",
+    "subtitle": "为您对 {name} 的出价设置价格和有效期。",
+    "price": "价格",
+    "expiration_date": "失效日期",
+    "invalid_date": "这个日期已经过去了",
+    "not_enougn_mana": "您没有足够的MANA ",
+    "submit": "出价"
+  },
+  "my_bids_page": {
+    "bids_received": "已收到出价",
+    "bids_placed": "出价",
+    "bids_archived": "出价已存档",
+    "show_archived": "显示已存档 ({amount})",
+    "show_received": "显示已收到 ({amount})",
+    "empty_received": "您尚未收到任何出价...",
+    "empty_archived": "您没有任何存档的出价...",
+    "empty_placed": "您尚未设置任何出价...",
+    "archive": "存档",
+    "unarchive": "取消存档"
+  },
+  "cancel_sale_page": {
+    "title": "删除清单",
+    "subtitle": "您将要刪除 {amount} 的 {name} 的清单。",
+    "not_for_sale": " {name} 无活动列表。",
+    "invalid_owner": "您不是 {name} 的所有者。",
+    "submit": "确认"
+  },
+  "settings_page": {
+    "authorizations": "授权",
+    "buy_more_mana": "购买更多",
+    "copy_address": "复制地址",
+    "copied": "已复制 ✔",
+    "authorization_error": "我们无法加载您的授权，请重试",
+    "authorization_error_contact": "如果错误仍然存在，请随时与我们联系",
+    "for_buying": "购买",
+    "for_bidding": "出价",
+    "authorization_Marketplace_MANAToken": "MANA",
+    "for_selling": "出售",
+    "pending_tx": "待处理的交易，请单击微调器以转到活动详细状态"
+  },
+  "authorization": {
+    "authorize": "授权 {contract_link} 合约代表您操作 {symbol} ",
+    "allowed": "您已授权 {contract_link} 合约代表您操作 {symbol} ",
+    "approved": "您已授权 {contract_link} 合约代表您操作 {symbol} ",
+    "disallowed": "您未授权 {contract_link} 合约代表您操作 {symbol} ",
+    "disapproved": "您未授权 {contract_link} 合约代表您操作 {symbol} "
+  },
+  "authorization_modal": {
+    "title": "授权 {token}",
+    "description": "为了继续进行，您将需要授权 {contract} 合约代表您操作 {token} 代币。{br}这仅需要执行一次，并且您随时可从 {settings_link} 页上管理您的授权。"
+  },
+  "transfer_page": {
+    "title": "转让 {category}",
+    "subtitle": "您即将转让 {name}.",
+    "for_sale": "{name} 出售中，无法转让",
+    "invalid_owner": "您不是 {name} 的所有者。",
+    "invalid_address": "这不是有效地址",
+    "recipient": "收件人地址",
+    "warning": "请记住，转让是不可逆的操作。{br}请仔细检查地址。",
+    "submit": "转让"
+  },
+  "activity_page": {
+    "latest_activity": "最新活动",
+    "clear_history": "清除历史记录",
+    "empty": "您还没有活动。",
+    "clear_history_modal": {
+      "title": "您确定吗？",
+      "text": "您将清除交易记录。您要继续吗？"
+    }
+  },
+  "transaction": {
+    "action": {
+      "approved": "已批准",
+      "not_approved": "未批准"
+    },
+    "detail": {
+      "approve_token": "您 {action} {contract} 合约代表您操作 {token} 。",
+      "create_order": "您以 {price} 的价格出售 {name} 。",
+      "cancel_order": "您删除了{price} 的 {name} 列表。",
+      "execute_order": "您以 {price} 购买了 {name} 。",
+      "transfer": "您已将 {name} 转移到 {address}.",
+      "place_bid": " 您对{name} 出价了 {price} 。",
+      "accept_bid": "您接受了 {name} 的 {price} 出价。",
+      "cancel_bid": "您接取消了 {name} 的 {price} 出价。"
+    }
+  },
+  "wallet": {
+    "sign_in_required": "您需要 {sign_in} 才能访问此页面。",
+    "sign_in": "登入"
+  }
+}

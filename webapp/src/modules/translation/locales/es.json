@@ -1,0 +1,267 @@
+{
+  "global": {
+    "assets": "Listado",
+    "address": "Direccion",
+    "balance": "Balance",
+    "load_more": "Cargar Más",
+    "not_found": "No se ha encontrado",
+    "parcel": "Parcela",
+    "estate": "Propiedad",
+    "wearable": "Vestimenta",
+    "ens": "Nombre",
+    "cancel": "Cancelar",
+    "proceed": "Aceptar",
+    "nft": "NFT",
+    "loading": "Loading",
+    "settings": "Configuración",
+    "accept": "Aceptar",
+    "update": "Actualizar"
+  },
+  "navigation": {
+    "atlas": "Atlas",
+    "browse": "Explorar",
+    "my_assets": "Mi Inventario",
+    "my_bids": "Mis Ofertas",
+    "activity": "Actividad"
+  },
+  "home_page": {
+    "title": "Mercado de Decentraland",
+    "subtitle": "Bienvenido al mercado virtual de Decentraland, donde encontrarás los mejores ítems virtuales.",
+    "get_started": "Comienza a navegar",
+    "learn_more": "Aprende Más",
+    "view_all": "Ver Todos",
+    "wearables": "Vestimenta",
+    "land": "Tierras",
+    "ens": "Nombres"
+  },
+  "categories_menu": {
+    "categories": "Categories",
+    "menu_item": {
+      "all": "Todos",
+      "land": "Tierras",
+      "parcels": "Parcelas",
+      "estates": "Propiedades",
+      "wearables": "Vestimenta",
+      "wearables_head": "Cabeza",
+      "wearables_eyebrows": "Cejas",
+      "wearables_eyes": "Ojos",
+      "wearables_facial_hair": "Barba",
+      "wearables_hair": "Cabello",
+      "wearables_mouth": "Boca",
+      "wearables_upper_body": "Torso",
+      "wearables_lower_body": "Piernas",
+      "wearables_feet": "Piez",
+      "wearables_accesories": "Accesorios",
+      "wearables_earring": "Aros",
+      "wearables_eyewear": "Gafas",
+      "wearables_hat": "Sombreros",
+      "wearables_helmet": "Cascos",
+      "wearables_mask": "Mascaras",
+      "wearables_tiara": "Tiara",
+      "wearables_top_head": "Sobre Cabeza",
+      "ens": "Nombres"
+    }
+  },
+  "filters": {
+    "name": "Nombre",
+    "newest": "Más nuevos",
+    "recently_listed": "Listados recientemente",
+    "cheapest": "Más baratos"
+  },
+  "nft_list_page": {
+    "on_sale": "En venta",
+    "empty": "No se ha encontrado",
+    "filter": "Filtrar",
+    "order_by": "Ordenar por"
+  },
+  "nft_card": {
+    "expires_at": "Expira {date}"
+  },
+  "bid": {
+    "not_enough_mana": "El usuario que ofertó no tiene suficiente MANA para pagar"
+  },
+  "detail": {
+    "description": "Descripción",
+    "highlights": "Destacado",
+    "owner": "Dueño",
+    "price": "Precio",
+    "expires": "Expira en",
+    "cancel_sale": "Cancelar venta",
+    "buy": "Comprar",
+    "sell": "Vender",
+    "bid": "Ofertar",
+    "update": "Cambiar precio",
+    "transfer": "Transferir",
+    "adjacent": "Adjacente",
+    "distance": "A {distance} {distance, plural, one {parcela} other {parcelas}} de distancia",
+    "plaza": "Plaza",
+    "road": "Calle",
+    "district": "Distrito"
+  },
+  "transaction_history": {
+    "title": "Historial de Transacciones",
+    "from": "Vendedor",
+    "to": "Comprador",
+    "when": "Fecha",
+    "price": "Precio"
+  },
+  "wearable": {
+    "body_shape": {
+      "male": "Hombre",
+      "female": "Mujer",
+      "unisex": "Unisex"
+    },
+    "rarity": {
+      "unique": "Único",
+      "mythic": "Mítico",
+      "legendary": "Legendario",
+      "epic": "Épico",
+      "swanky": "Ostentoso",
+      "uncommon": "Poco común",
+      "common": "Común"
+    },
+    "rarity_tooltip": {
+      "unique": "Único en su tipo: uno solo en existencia",
+      "mythic": "Para algunos pocos: máximo 10",
+      "legendary": "Ediciión limitada: máximo 100",
+      "epic": "Suministro máximo: 1000",
+      "swanky": "Suministro máximo: 5000",
+      "uncommon": "Suministro máximo: 10.000",
+      "common": "Suministro máximo: 100.000"
+    },
+    "category": {
+      "body_shape": "Cuerpo",
+      "earring": "Aros",
+      "eyebrows": "Cejas",
+      "eyes": "Ojos",
+      "eyewear": "Gafas",
+      "facial_hair": "Barba",
+      "feet": "Pies",
+      "hair": "Cabello",
+      "hat": "Sombrero",
+      "helmet": "Cazco",
+      "lower_body": "Piernas",
+      "mask": "Mascara",
+      "mouth": "Boca",
+      "tiara": "Tiara",
+      "top_head": "Sobre Cabeza",
+      "upper_body": "Torso"
+    }
+  },
+  "sell_page": {
+    "title": "Poner en venta",
+    "update_title": "Actualizar venta",
+    "subtitle": "Pon un precio y fecha de expiración para {name}.",
+    "update_subtitle": "Pon un nuevo precio y fecha de expiración para {name}.",
+    "price": "Precio",
+    "expiration_date": "Fecha de expiración",
+    "invalid_date": "Esta fecha ya pasó",
+    "submit": "Poner en venta",
+    "update_submit": "Actualizar",
+    "confirm": {
+      "title": "Por favor confirma",
+      "line_one": "Estás por poner en venta {name} por {amount}.",
+      "line_two": "Por favor vuelve a escribir el precio para confirmar:"
+    }
+  },
+  "buy_page": {
+    "title": "Comprar {category}",
+    "subtitle": "Estás por comprar {name} por {amount}.",
+    "not_for_sale": "{name} no esta en venta.",
+    "buy": "Comprar",
+    "no_fingerprint": "No se pudo cargar el fingerprint.",
+    "is_owner": "Ya eres el dueño de {name}.",
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name}."
+  },
+  "bid_page": {
+    "title": "Haz una oferta",
+    "subtitle": "Pon un precio y una fecha de expiración para tu oferta sobre {name}.",
+    "price": "Precio",
+    "expiration_date": "Fecha de expiración",
+    "invalid_date": "Esta fecha ya pasó",
+    "not_enougn_mana": "No tienes suficiente MANA",
+    "submit": "Ofertar"
+  },
+  "my_bids_page": {
+    "bids_received": "Ofertas recibidas",
+    "bids_placed": "Ofertas realizadas",
+    "bids_archived": "Ofertas Archivadas",
+    "show_archived": "Mostrar Archivadas ({amount})",
+    "show_received": "Mostrar Recibidas ({amount})",
+    "empty_received": "No haz recibido ofertas aún...",
+    "empty_archived": "No haz archivado ofertas aún...",
+    "empty_placed": "No haz realizado ofertas aún...",
+    "archive": "Archivar",
+    "unarchive": "Desarchivar"
+  },
+  "cancel_sale_page": {
+    "title": "Cancelar venta",
+    "subtitle": "Estás por cancelar la venta de {name} por {amount}.",
+    "not_for_sale": "{name} no esta en venta.",
+    "invalid_owner": "No eres el dueño de {name}.",
+    "submit": "Confirmar"
+  },
+  "settings_page": {
+    "authorizations": "Autorizaciones",
+    "buy_more_mana": "COMPRAR MAS",
+    "copy_address": "COPIAR DIRECCIÓN",
+    "copied": "COPIADO ✔",
+    "authorization_error": "No pudimos cargar tu autorizaciones, intenta de vuelta.",
+    "authorization_error_contact": "Si el error continue no dudes en contactarnos",
+    "for_buying": "Para comprar",
+    "for_bidding": "Para ofertar",
+    "authorization_Marketplace_MANAToken": "MANA",
+    "for_selling": "Para vender",
+    "pending_tx": "Transaccion pendiente, haz click aquí para ir a tu pantalla de actividad y ver más información"
+  },
+  "authorization": {
+    "authorize": "Autoriza al contrato de {contract_link} a operar {symbol} por tí",
+    "allowed": "Haz autorizado al contrato de {contract_link} a operar {symbol} por tí",
+    "approved": "Haz autorizado al contrato de {contract_link} a operar {symbol} por tí",
+    "disallowed": "Haz desautorizado al contrato de {contract_link} a operar {symbol} por tí",
+    "disapproved": "Haz desautorizado al contrato de {contract_link} a operar {symbol} por tí"
+  },
+  "authorization_modal": {
+    "title": "Autorizar {token}",
+    "description": "Para poder continuar deberás autorizar al contrato de {contract} a operar tus tokens de {token}.{br}Esto solo debe realizarse una única vez, y siempre puedes gestionar tus autorizaciones desde la pagina de {settings_link}."
+  },
+  "transfer_page": {
+    "title": "Transferir {category}",
+    "subtitle": "Estás por transferir {name}.",
+    "for_sale": "{name} no puede ser transferido porque esta en venta.",
+    "invalid_owner": "No eres el dueño de {name}.",
+    "invalid_address": "Dirección invalida",
+    "recipient": "Direccion del destinatario",
+    "warning": "Recuerda que transferir es una operación irreversible.{br}Por favor verifica que la dirección sea la correcta.",
+    "submit": "Transferir"
+  },
+  "activity_page": {
+    "latest_activity": "Última Actividad",
+    "clear_history": "Limpiar Historial",
+    "empty": "No tienes actividad aún.",
+    "clear_history_modal": {
+      "title": "Estás seguro?",
+      "text": "Estas por limpiar tu historial de actividad. Deseas proseguir?"
+    }
+  },
+  "transaction": {
+    "action": {
+      "approved": "Aprobaste",
+      "not_approved": "Desaprobaste"
+    },
+    "detail": {
+      "approve_token": "{action} al contrato de {contract} para que opere tokens de {token} por tí.",
+      "create_order": "Pusiste {name} en venta por {price}.",
+      "cancel_order": "Cancelaste la venta de {name} por {price}.",
+      "execute_order": "Compraste {name} por {price}.",
+      "transfer": "Transferiste {name} a {address}.",
+      "place_bid": "Hiciste una oferta de {price} por {name}.",
+      "accept_bid": "Aceptaste una oferta de {price} por {name}.",
+      "cancel_bid": "Cancelaste una oferta de {price} por {name}."
+    }
+  },
+  "wallet": {
+    "sign_in_required": "Necesitas {sign_in} para acceder a esta página.",
+    "sign_in": "iniciar sesión"
+  }
+}
