@@ -73,12 +73,14 @@ const NFTListPage = (props: Props) => {
 
   // State variables
   const [offset, setOffset] = useState(0)
+  const [lastNFTLength, setLastNFTLength] = useState(0)
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
   // Handlers
   const handleOnNavigate = useCallback(
     (options?: SearchOptions) => {
       setOffset(0)
+      setLastNFTLength(0)
       onNavigate({
         ...options,
         onlyOnSale,
@@ -91,6 +93,7 @@ const NFTListPage = (props: Props) => {
   const handleOnlyOnSaleChange = useCallback(
     (_: React.SyntheticEvent, props: CheckboxProps) => {
       setOffset(0)
+      setLastNFTLength(0)
       onNavigate({
         page: 1,
         section,
@@ -104,6 +107,7 @@ const NFTListPage = (props: Props) => {
   const handleDropdownChange = useCallback(
     (_: React.SyntheticEvent, props: DropdownProps) => {
       setOffset(0)
+      setLastNFTLength(0)
       onNavigate({
         page: 1,
         section,
@@ -116,13 +120,14 @@ const NFTListPage = (props: Props) => {
 
   const handleLoadMore = useCallback(() => {
     setOffset(page)
+    setLastNFTLength(nfts.length)
     onNavigate({
       page: page + 1,
       section,
       sortBy,
       onlyOnSale
     })
-  }, [page, sortBy, section, onlyOnSale, onNavigate, setOffset])
+  }, [page, sortBy, section, onlyOnSale, nfts, onNavigate, setOffset])
 
   // Kick things off
   useEffect(() => {
@@ -214,7 +219,7 @@ const NFTListPage = (props: Props) => {
           <div className="empty">{t('nft_list_page.empty')}</div>
         ) : null}
 
-        {nfts.length < PAGE_SIZE ? null : (
+        {nfts.length >= PAGE_SIZE && nfts.length > lastNFTLength ? (
           <div className="load-more">
             <Button
               loading={isLoading}
@@ -225,7 +230,7 @@ const NFTListPage = (props: Props) => {
               {t('global.load_more')}
             </Button>
           </div>
-        )}
+        ) : null}
       </Grid.Column>
       <Modal
         className="FiltersModal"
