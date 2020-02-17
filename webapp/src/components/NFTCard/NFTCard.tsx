@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Link } from 'react-router-dom'
 import { Card, Mana } from 'decentraland-ui'
 
 import { formatMANA } from '../../lib/mana'
@@ -15,17 +16,17 @@ import { Props } from './NFTCard.types'
 import './NFTCard.css'
 
 const NFTCard = (props: Props) => {
-  const { nft, order, onNavigate } = props
+  const { nft, order } = props
 
   const title = getNFTName(nft)
 
-  const handleClick = useCallback(
-    () => onNavigate(locations.ntf(nft.contractAddress, nft.tokenId)),
-    [nft, onNavigate]
-  )
-
   return (
-    <Card className="NFTCard" link onClick={handleClick}>
+    <Card
+      className="NFTCard"
+      link
+      as={Link}
+      to={locations.ntf(nft.contractAddress, nft.tokenId)}
+    >
       <NFTImage nft={nft} />
       <Card.Content>
         <Card.Header>

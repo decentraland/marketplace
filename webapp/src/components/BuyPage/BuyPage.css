@@ -5,3 +5,7 @@
 .BuyPage .subtitle {
   margin-bottom: 32px;
 }
+
+.BuyPage .subtitle.error {
+  color: var(--danger);
+}
