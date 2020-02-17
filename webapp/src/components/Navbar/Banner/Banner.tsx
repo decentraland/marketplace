@@ -32,6 +32,7 @@ const Banner = () => {
       <T
         id="banner.text"
         values={{
+          br: <br />,
           link: (
             <a
               href={getLegacyMarketUrl()}

@@ -7,6 +7,10 @@
   text-align: center;
 }
 
+.Banner br {
+  display: none;
+}
+
 .Banner .icon.close {
   position: absolute;
   right: 12px;
@@ -17,4 +21,14 @@
 .Banner a {
   color: white;
   font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .Banner {
+    padding: 12px 32px;
+  }
+
+  .Banner br {
+    display: block;
+  }
 }

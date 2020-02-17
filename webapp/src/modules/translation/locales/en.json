@@ -265,7 +265,7 @@
     "sign_in": "Sign In"
   },
   "banner": {
-    "text": "Decentraland's marketplace has a new look! We hope you enjoy it. You can still access the old interface {link}.",
+    "text": "Decentraland's marketplace has a new look!{br}We hope you enjoy it. You can still access the old interface {link}.",
     "link": "here"
   }
 }
