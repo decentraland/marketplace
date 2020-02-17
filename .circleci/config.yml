@@ -46,14 +46,14 @@ workflows:
           context: market-dev
           filters:
             branches:
-              only: /(.*)/
+              only: master
       - deploy:
           context: market-dev
           requires:
             - build
           filters:
             branches:
-              only: /(.*)/
+              only: master
   build-deploy-stg:
     jobs:
       - build:
@@ -65,6 +65,9 @@ workflows:
           context: market-stg
           requires:
             - build
+          filters:
+            branches:
+              only: staging
   build-deploy-release-org:
     jobs:
       - build:
@@ -76,3 +79,15 @@ workflows:
           context: market-prd
           requires:
             - build
+          filters:
+            branches:
+              only: release
+  build-branch:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - master
+                - release
+                - staging
