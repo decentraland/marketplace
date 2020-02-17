@@ -8,4 +8,4 @@ It can be found under [/webapp](https://github.com/decentraland/marketplace/tree
 
 ## Backend
 
-It can be found under [/indexer](https://github.com/decentraland/marketplace/tree/master/indexer
+It can be found under [/indexer](https://github.com/decentraland/marketplace/tree/master/indexer)
