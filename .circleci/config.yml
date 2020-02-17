@@ -46,7 +46,7 @@ workflows:
           context: market-dev
           filters:
             branches:
-              only: master
+              only: /(.*)/
       - deploy:
           context: market-dev
           requires:
