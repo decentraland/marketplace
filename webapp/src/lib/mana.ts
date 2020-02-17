@@ -14,6 +14,8 @@ export function fromMANA(mana: string) {
     .join('')
     .split(',')
     .join('')
+    .split('.')
+    .join('')
 
   const result = parseInt(num)
 
