@@ -33,7 +33,7 @@ jobs:
             aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID} && aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
       - run:
           name: Deploy to S3
-          command: cd public && aws s3 sync . s3://{S3_BUCKET}/
+          command: cd public && aws s3 sync . s3://${S3_BUCKET}/
       - run:
           name: Invalidate cloudflare cache
           command: curl --silent ${PURGE_CACHE_URL}
