@@ -10,6 +10,7 @@ import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationPr
 import './setup'
 import './themes'
 
+import * as locales from './modules/translation/locales'
 import { store, history } from './modules/store'
 import { Routes } from './components/Routes'
 
@@ -18,7 +19,7 @@ import './index.css'
 
 const component = (
   <Provider store={store}>
-    <TranslationProvider locales={['en']}>
+    <TranslationProvider locales={Object.keys(locales)}>
       <WalletProvider>
         <ConnectedRouter history={history}>
           <ScrollToTop />
