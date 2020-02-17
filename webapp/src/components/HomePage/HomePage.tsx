@@ -50,7 +50,7 @@ const HomePage = (props: Props) => {
         first: 20,
         skip: 0,
         orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.CREATED_AT,
+        orderBy: NFTSortBy.ORDER_CREATED_AT,
         onlyOnSale: true
       },
       view: View.HOME_WEARABLES
@@ -61,7 +61,7 @@ const HomePage = (props: Props) => {
         first: 20,
         skip: 0,
         orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.CREATED_AT,
+        orderBy: NFTSortBy.ORDER_CREATED_AT,
         onlyOnSale: true
       },
       view: View.HOME_LAND
@@ -72,7 +72,7 @@ const HomePage = (props: Props) => {
         first: 20,
         skip: 0,
         orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.CREATED_AT,
+        orderBy: NFTSortBy.ORDER_CREATED_AT,
         onlyOnSale: true
       },
       view: View.HOME_ENS
