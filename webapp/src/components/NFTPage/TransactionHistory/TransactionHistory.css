@@ -1,3 +1,20 @@
 .TransactionHistory {
   position: relative;
 }
+
+.TransactionHistory .mobile-tx-history {
+  margin-top: 16px;
+  margin-bottom: 96px;
+  font-size: 15px;
+}
+
+.TransactionHistory .mobile-tx-history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.TransactionHistory .mobile-tx-history-row .when {
+  color: var(--secondary-text);
+}

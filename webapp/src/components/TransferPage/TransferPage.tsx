@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Page, Header, Button, Field } from 'decentraland-ui'
+import { Page, Header, Form, Field, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -59,48 +59,47 @@ const TransferPage = (props: Props) => {
                       })}
                     </Header>
                     <div className="subtitle">{subtitle}</div>
-                    <div className="fields">
-                      <Field
-                        type="address"
-                        error={isInvalidAddress}
-                        message={
-                          isInvalidAddress
-                            ? t('transfer_page.invalid_address')
-                            : undefined
-                        }
-                        label={t('transfer_page.recipient')}
-                        value={address}
-                        placeholder="0x..."
-                        onChange={(_event, props) => {
-                          setAddress(props.value)
-                          const isValid =
-                            !props.value ||
-                            /^0x[a-fA-F0-9]{40}$/g.test(props.value)
-                          setIsInvalidAddress(!isValid)
-                        }}
-                      />
-                    </div>
-                    <div className="warning">
-                      <T id="transfer_page.warning" values={{ br: <br /> }} />
-                    </div>
-                    <div className="buttons">
-                      <Button
-                        onClick={() =>
-                          onNavigate(
-                            locations.ntf(nft.contractAddress, nft.tokenId)
-                          )
-                        }
-                      >
-                        {t('global.cancel')}
-                      </Button>
-                      <Button
-                        primary
-                        disabled={isDisabled}
-                        onClick={() => onTransfer(nft, address)}
-                      >
-                        {t('transfer_page.submit')}
-                      </Button>
-                    </div>
+                    <Form onSubmit={() => onTransfer(nft, address)}>
+                      <div className="form-fields">
+                        <Field
+                          type="address"
+                          error={isInvalidAddress}
+                          message={
+                            isInvalidAddress
+                              ? t('transfer_page.invalid_address')
+                              : undefined
+                          }
+                          label={t('transfer_page.recipient')}
+                          value={address}
+                          placeholder="0x..."
+                          onChange={(_event, props) => {
+                            setAddress(props.value)
+                            const isValid =
+                              !props.value ||
+                              /^0x[a-fA-F0-9]{40}$/g.test(props.value)
+                            setIsInvalidAddress(!isValid)
+                          }}
+                        />
+                      </div>
+                      <div className="warning">
+                        <T id="transfer_page.warning" values={{ br: <br /> }} />
+                      </div>
+                      <div className="buttons">
+                        <div
+                          className="ui button"
+                          onClick={() =>
+                            onNavigate(
+                              locations.ntf(nft.contractAddress, nft.tokenId)
+                            )
+                          }
+                        >
+                          {t('global.cancel')}
+                        </div>
+                        <Button type="submit" primary disabled={isDisabled}>
+                          {t('transfer_page.submit')}
+                        </Button>
+                      </div>
+                    </Form>
                   </NFTAction>
                 )
               }}
