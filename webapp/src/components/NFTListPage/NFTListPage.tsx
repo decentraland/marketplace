@@ -73,8 +73,8 @@ const NFTListPage = (props: Props) => {
 
   // State variables
   const [offset, setOffset] = useState(0)
+  const [lastNFTLength, setLastNFTLength] = useState(0)
   const [showFiltersModal, setShowFiltersModal] = useState(false)
-  const [lastNFTLength, setLastNFTLength] = useState(nfts.length)
 
   // Handlers
   const handleOnNavigate = useCallback(
