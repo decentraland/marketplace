@@ -125,12 +125,16 @@
     width: 100%;
   }
 
-  .Bid .actions .ui.button {
+  .Bid .actions .ui.button,
+  .Bid .actions .not-enough-mana {
     width: 100%;
   }
 
-  .Bid .actions .ui.button + .ui.button {
-    margin-top: 24px;
+  .Bid .actions .ui.button + .ui.button,
+  .Bid .actions .not-enough-mana + .ui.button,
+  .Bid .actions .ui.button + .not-enough-mana,
+  .Bid .actions .not-enough-mana + .not-enough-mana {
+    margin-top: 16px;
     margin-left: 0px;
   }
 }
