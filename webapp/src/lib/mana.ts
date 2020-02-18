@@ -5,7 +5,7 @@ export function formatMANA(value: string) {
 }
 
 export function toMANA(num: number) {
-  return num > 0 ? MANA_SYMBOL + ' ' + num.toLocaleString() : ''
+  return num > 0 ? MANA_SYMBOL + ' ' + num.toString() : ''
 }
 
 export function fromMANA(mana: string) {
