@@ -78,7 +78,11 @@
     "expires_at": "Expires {date}"
   },
   "bid": {
-    "not_enough_mana": "The bidder doesn't have enough MANA to pay for this bid"
+    "not_enough_mana_on_bid_received": "The bidder doesn't have enough MANA to pay for this bid",
+    "invalid_fingerprint_on_bid_received": "This asset has been modified since this bid was made and it's not valid anymore",
+    "invalid_seller": "You don't own this asset anymore",
+    "not_enough_mana_on_bid_placed": "You don't have enough MANA to pay for this bid",
+    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it"
   },
   "detail": {
     "description": "Description",

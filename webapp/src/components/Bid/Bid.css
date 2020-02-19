@@ -1,11 +1,15 @@
 .Bid {
   position: relative;
-  height: 96px;
   display: flex;
+  flex-direction: column;
   border-radius: 8px;
   overflow: hidden;
   background-color: var(--card);
   margin-bottom: 20px;
+}
+
+.Bid .bid-row {
+  display: flex;
 }
 
 .Bid .image {
@@ -82,16 +86,23 @@
   width: 146px;
 }
 
-.Bid .actions .not-enough-mana {
+.Bid .actions .AcceptButton {
   display: inline-block;
   height: 48px;
-  margin-right: 16px;
+}
+
+.Bid .actions .ui.button + .ui.button,
+.Bid .actions .AcceptButton + .ui.button {
+  margin-left: 16px;
 }
 
 @media (max-width: 768px) {
   .Bid {
-    flex-direction: column;
     height: auto;
+  }
+
+  .Bid .bid-row {
+    flex-direction: column;
   }
 
   .Bid .image {
@@ -129,8 +140,9 @@
     width: 100%;
   }
 
-  .Bid .actions .ui.button + .ui.button {
-    margin-top: 24px;
+  .Bid .actions .ui.button + .ui.button,
+  .Bid .actions .AcceptButton + .ui.button {
+    margin-top: 12px;
     margin-left: 0px;
   }
 }

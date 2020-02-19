@@ -1,0 +1,6 @@
+.WarningMessage {
+  padding: 16px;
+  color: var(--danger);
+  text-align: center;
+  border-top: 1px solid var(--divider);
+}
