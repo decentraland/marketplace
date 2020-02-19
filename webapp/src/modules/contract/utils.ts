@@ -23,6 +23,10 @@ export const contractAddresses = {
   ExclusiveMasksCollection,
   Halloween2019Collection,
   Xmas2019Collection,
+  MCHCollection,
+  CommunityContestCollection,
+  DCLLaunchCollection,
+  DCGCollection,
   DCLRegistrar,
   Marketplace,
   Bids
