@@ -32,6 +32,10 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
     ExclusiveMasksCollection,
     Halloween2019Collection,
     Xmas2019Collection,
+    MCHCollection,
+    CommunityContestCollection,
+    DCLLaunchCollection,
+    DCGCollection,
     DCLRegistrar,
     Bids
   } = contractAddresses
@@ -48,6 +52,10 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
         ExclusiveMasksCollection,
         Halloween2019Collection,
         Xmas2019Collection,
+        MCHCollection,
+        CommunityContestCollection,
+        DCLLaunchCollection,
+        DCGCollection,
         DCLRegistrar
       ]
     }
