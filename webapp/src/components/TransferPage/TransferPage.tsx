@@ -36,7 +36,7 @@ const TransferPage = (props: Props) => {
                       values={{ name: <b>{name}</b> }}
                     />
                   )
-                } else if (isOwnedBy(nft, wallet)) {
+                } else if (!isOwnedBy(nft, wallet)) {
                   subtitle = (
                     <T
                       id="transfer_page.invalid_owner"
