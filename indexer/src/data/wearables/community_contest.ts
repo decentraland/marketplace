@@ -26,7 +26,7 @@ export let community_contest: Wearable[] = [
     ['BaseFemale', 'BaseMale']
   ),
   new Wearable(
-    'cw_cyborg_monocle_eyewear',
+    'cw_cyborg_monocle_eyewearraver',
     "Cyborg Monocle (It's over 9000!!!)",
     "It's over 9000!!!",
     'eyewear',
@@ -90,7 +90,7 @@ export let community_contest: Wearable[] = [
     ['BaseFemale']
   ),
   new Wearable(
-    'f_cw_trendy_sportwear_shoes_feet',
+    'f_cw_trendy_sport_shoes_feet',
     'Trendy Sport Shoes',
     '',
     'feet',
@@ -269,7 +269,7 @@ export let community_contest: Wearable[] = [
     ['BaseFemale']
   ),
   new Wearable(
-    'cw_pants_of_wonder_lower_body',
+    'm_cw_pants_of_wonder_lower_body',
     'Trousers of Wonder',
     '',
     'lower_body',
@@ -417,7 +417,7 @@ export let community_contest: Wearable[] = [
     ['BaseFemale']
   ),
   new Wearable(
-    'cw_coat_of_wonder_upper_body',
+    'm_cw_coat_of_wonder_upper_body',
     'Coat of Wonder',
     '',
     'upper_body',

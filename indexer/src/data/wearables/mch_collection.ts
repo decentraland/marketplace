@@ -6,7 +6,7 @@ export let mch_collection: Wearable[] = [
     'Caocao T-Shirt',
     '',
     'upper_body',
-    'mythic',
+    'epic',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
@@ -14,7 +14,7 @@ export let mch_collection: Wearable[] = [
     'Cleopatra T-Shirt',
     '',
     'upper_body',
-    'mythic',
+    'epic',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
