@@ -12,7 +12,11 @@ export function getCategory(contractAddress: string): string {
   } else if (
     contractAddress == addresses.ExclusiveMasksCollection ||
     contractAddress == addresses.Halloween2019Collection ||
-    contractAddress == addresses.Xmas2019Collection
+    contractAddress == addresses.Xmas2019Collection ||
+    contractAddress == addresses.MCHCollection ||
+    contractAddress == addresses.CommunityContestCollection ||
+    contractAddress == addresses.DCLLaunchCollection ||
+    contractAddress == addresses.DCGCollection
   ) {
     category = categories.WEARABLE
   } else if (contractAddress == addresses.DCLRegistrar) {
