@@ -7,4 +7,5 @@ export type Props = {
   withNavigation?: boolean
   zoom?: number
   isSmall?: boolean
+  showMonospace?: boolean
 }

@@ -17,7 +17,7 @@ const ENSDetail = (props: Props) => {
   return (
     <>
       <PageHeader>
-        <NFTImage nft={nft} />
+        <NFTImage nft={nft} showMonospace />
       </PageHeader>
       <Container className="ENSDetail">
         <Title

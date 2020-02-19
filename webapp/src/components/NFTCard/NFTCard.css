@@ -51,6 +51,10 @@
   background-position-y: -133px;
 }
 
+.NFTCard .NFTImage .ens-subdomain .monospace {
+  margin-top: 0px;
+}
+
 @media (min-width: 768px) and (max-width: 992px) {
   .NFTCard .header {
     display: flex;
