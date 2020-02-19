@@ -49,6 +49,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   padding: 12px 16px 16px 16px;
+  font-family: var(--ens-font-family);
 }
 
 .NFTImage .ens-subdomain.small > span {

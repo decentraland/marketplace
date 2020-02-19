@@ -11,6 +11,7 @@ import { Order } from '../Order'
 import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './ENSDetail.types'
+import './ENSDetail.css'
 
 const ENSDetail = (props: Props) => {
   const { nft } = props
