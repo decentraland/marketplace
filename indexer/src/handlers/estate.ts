@@ -60,10 +60,8 @@ export function handleAddLand(event: AddLand): void {
   estate.save()
 
   let estateNFT = NFT.load(id)
-  if (estateNFT.get('activeOrder').kind == ValueKind.STRING) {
-    estateNFT.searchEstateSize = parcels.length
-    estateNFT.save()
-  }
+  estateNFT.searchEstateSize = parcels.length
+  estateNFT.save()
 
   let parcel = Parcel.load(parcelId)
 
@@ -82,6 +80,7 @@ export function handleAddLand(event: AddLand): void {
   parcel.save()
 
   let parcelNFT = new NFT(parcelId)
+  parcelNFT.searchParcelEstateId = id
   parcelNFT.owner = addresses.EstateRegistry
   parcelNFT.save()
 }
@@ -105,10 +104,8 @@ export function handleRemoveLand(event: RemoveLand): void {
   estate.save()
 
   let estateNFT = NFT.load(id)
-  if (estateNFT.get('activeOrder').kind == ValueKind.STRING) {
-    estateNFT.searchEstateSize = parcels.length
-    estateNFT.save()
-  }
+  estateNFT.searchEstateSize = parcels.length
+  estateNFT.save()
 
   let parcel = Parcel.load(parcelId)
 
@@ -128,6 +125,7 @@ export function handleRemoveLand(event: RemoveLand): void {
   parcel.save()
 
   let parcelNFT = new NFT(parcelId)
+  parcelNFT.searchParcelEstateId = null
   parcelNFT.owner = event.params._destinatary.toHex()
   parcelNFT.save()
 }

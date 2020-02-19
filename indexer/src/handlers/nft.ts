@@ -1,10 +1,12 @@
+import { log } from '@graphprotocol/graph-ts'
 import { Transfer } from '../entities/templates/ERC721/ERC721'
-import { NFT, Parcel, Estate } from '../entities/schema'
+import { NFT, Parcel, Estate, Order } from '../entities/schema'
 import {
   isMint,
   getNFTId,
   getTokenURI,
-  cancelActiveOrder
+  cancelActiveOrder,
+  clearNFTOrderProperties
 } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
@@ -24,6 +26,7 @@ import { buildENSFromNFT } from '../modules/ens'
 import { createAccount } from '../modules/wallet'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
+import * as status from '../modules/order/status'
 
 export function handleTransfer(event: Transfer): void {
   if (event.params.tokenId.toString() == '') {
@@ -102,7 +105,10 @@ export function handleTransfer(event: Transfer): void {
     let metric = buildCountFromNFT(nft)
     metric.save()
   } else {
-    cancelActiveOrder(nft, event.block.timestamp)
+    let oldNFT = NFT.load(id)
+    if (cancelActiveOrder(oldNFT!, event.block.timestamp)) {
+      nft = clearNFTOrderProperties(nft!)
+    }
   }
 
   createAccount(event.params.to)
