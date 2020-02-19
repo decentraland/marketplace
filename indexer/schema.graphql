@@ -11,6 +11,7 @@ type Count @entity {
   orderParcel: Int!
   orderEstate: Int!
   orderWearable: Int!
+  orderENS: Int!
 
   parcelTotal: Int!
 
@@ -20,6 +21,8 @@ type Count @entity {
   wearableHalloween2019: Int!
   wearableExclusiveMasks: Int!
   wearableXmas2019: Int!
+
+  ensTotal: Int!
 }
 
 # ---------------------------------------------------------
@@ -157,6 +160,7 @@ type NFT @entity {
   searchParcelIsInBounds: Boolean
   searchParcelX: BigInt
   searchParcelY: BigInt
+  searchParcelEstateId: String
 
   searchEstateSize: Int
 
