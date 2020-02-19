@@ -78,7 +78,11 @@
     "expires_at": "{date} 到期"
   },
   "bid": {
-    "not_enough_mana": "投标人没有足够的MANA来支付此投标"
+    "not_enough_mana": "投标人没有足够的MANA来支付此投标",
+    "invalid_fingerprint_on_bid_received": "此资产自进行出价以来已被修改，因此不再有效",
+    "invalid_seller": "您不再拥有此资产",
+    "not_enough_mana_on_bid_placed": "您没有足够的MANA来支付此出价",
+    "invalid_fingerprint_on_bid_placed": "此资产自进行出价以来已被修改，除非您对其进行更新，否则它将不再有效"
   },
   "detail": {
     "description": "描述",
