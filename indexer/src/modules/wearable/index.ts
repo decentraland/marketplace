@@ -3,6 +3,10 @@ import { log } from '@graphprotocol/graph-ts'
 import { NFT, Wearable as WearableEntity } from '../../entities/schema'
 import {
   Wearable,
+  community_contest,
+  dcg_collection,
+  dcl_launch,
+  mch_collection,
   halloween_2019,
   exclusive_masks,
   xmas_2019
@@ -21,11 +25,19 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
   }
 
   let allCollections: Wearable[][] = [
+    community_contest,
+    dcg_collection,
+    dcl_launch,
+    mch_collection,
     halloween_2019,
     exclusive_masks,
     xmas_2019
   ]
   let collectionNames: string[] = [
+    'community_contest',
+    'dcg_collection',
+    'dcl_launch',
+    'mch_collection',
     'halloween_2019',
     'exclusive_masks',
     'xmas_2019'

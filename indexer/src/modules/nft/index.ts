@@ -34,25 +34,36 @@ export function getTokenURI(event: Transfer): string {
   return tokenURI
 }
 
-export function upsertNFTOrderProperties(nft: NFT, order: Order): NFT {
-  nft.searchOrderStatus = order.status
-
+export function updateNFTOrderProperties(nft: NFT, order: Order): NFT {
+  log.warning('upsertNFTOrderProperties. Order status {}', [order.status])
   if (order.status == status.OPEN) {
-    nft.activeOrder = order.id
-    nft.searchOrderPrice = order.price
-    nft.searchOrderCreatedAt = order.createdAt
-    nft.searchOrderExpiresAt = order.expiresAt
+    return addNFTOrderProperties(nft, order)
   } else if (order.status == status.SOLD || order.status == status.CANCELLED) {
-    nft.activeOrder = null
-    nft.searchOrderPrice = null
-    nft.searchOrderCreatedAt = null
-    nft.searchOrderExpiresAt = null
+    return clearNFTOrderProperties(nft)
+  } else {
+    return nft
   }
+}
 
+export function addNFTOrderProperties(nft: NFT, order: Order): NFT {
+  nft.activeOrder = order.id
+  nft.searchOrderStatus = order.status
+  nft.searchOrderPrice = order.price
+  nft.searchOrderCreatedAt = order.createdAt
+  nft.searchOrderExpiresAt = order.expiresAt
   return nft
 }
 
-export function cancelActiveOrder(nft: NFT, now: BigInt): void {
+export function clearNFTOrderProperties(nft: NFT): NFT {
+  nft.activeOrder = ''
+  nft.searchOrderStatus = null
+  nft.searchOrderPrice = null
+  nft.searchOrderCreatedAt = null
+  nft.searchOrderExpiresAt = null
+  return nft
+}
+
+export function cancelActiveOrder(nft: NFT, now: BigInt): boolean {
   let oldOrder = Order.load(nft.activeOrder)
   if (oldOrder != null && oldOrder.status == status.OPEN) {
     // Here we are setting old orders as cancelled, because the smart contract allows new orders to be created
@@ -61,7 +72,10 @@ export function cancelActiveOrder(nft: NFT, now: BigInt): void {
     oldOrder.status = status.CANCELLED
     oldOrder.updatedAt = now
     oldOrder.save()
+
+    return true
   }
+  return false
 }
 
 export function cancelActiveBids(nft: NFT, now: BigInt): void {

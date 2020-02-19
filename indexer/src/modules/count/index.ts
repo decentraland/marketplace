@@ -13,6 +13,7 @@ export function buildCount(): Count {
     count.orderParcel = 0
     count.orderEstate = 0
     count.orderWearable = 0
+    count.orderENS = 0
 
     count.parcelTotal = 0
 
@@ -22,6 +23,8 @@ export function buildCount(): Count {
     count.wearableHalloween2019 = 0
     count.wearableExclusiveMasks = 0
     count.wearableXmas2019 = 0
+
+    count.ensTotal = 0
   }
 
   return count as Count
@@ -46,6 +49,8 @@ export function buildCountFromNFT(nft: NFT): Count {
     } else if (contractAddress == addresses.Xmas2019Collection) {
       count.wearableXmas2019 += 1
     }
+  } else if (category == categories.ENS) {
+    count.ensTotal += 1
   }
 
   return count
@@ -62,6 +67,8 @@ export function buildCountFromOrder(order: Order): Count {
     count.orderEstate += 1
   } else if (category == categories.WEARABLE) {
     count.orderWearable += 1
+  } else if (category == categories.ENS) {
+    count.orderENS += 1
   }
   return count
 }

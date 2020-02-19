@@ -10,6 +10,10 @@ import {
   Halloween2019Collection,
   ExclusiveMasksCollection,
   Xmas2019Collection,
+  MCHCollection,
+  CommunityContestCollection,
+  DCLLaunchCollection,
+  DCGCollection,
   DCLRegistrar
 } from '../data/addresses'
 import * as categories from '../modules/category/categories'
@@ -21,6 +25,10 @@ export function handleInitialize(_: InitializeCall): void {
   ERC721.create(Address.fromString(Halloween2019Collection))
   ERC721.create(Address.fromString(ExclusiveMasksCollection))
   ERC721.create(Address.fromString(Xmas2019Collection))
+  ERC721.create(Address.fromString(MCHCollection))
+  ERC721.create(Address.fromString(CommunityContestCollection))
+  ERC721.create(Address.fromString(DCLLaunchCollection))
+  ERC721.create(Address.fromString(DCGCollection))
   ERC721.create(Address.fromString(DCLRegistrar))
 }
 
