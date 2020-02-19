@@ -15,7 +15,14 @@ const PIXEL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
 
 const NFTImage = (props: Props) => {
-  const { nft, isDraggable, withNavigation, zoom, isSmall } = props
+  const {
+    nft,
+    isDraggable,
+    withNavigation,
+    zoom,
+    isSmall,
+    showMonospace
+  } = props
 
   const estateSelection = useMemo(() => (nft.estate ? getSelection(nft) : []), [
     nft
@@ -78,7 +85,8 @@ const NFTImage = (props: Props) => {
       }
       return (
         <div className={classes.join(' ')}>
-          <span>{name}</span>
+          <div className="name">{name}</div>
+          {showMonospace ? <div className="monospace">{name}</div> : null}
         </div>
       )
     }
@@ -109,7 +117,8 @@ NFTImage.defaultProps = {
   isDraggable: false,
   withNavigation: false,
   zoom: 0.5,
-  isSmall: false
+  isSmall: false,
+  showMonospace: false
 }
 
 export default React.memo(NFTImageWrapper)

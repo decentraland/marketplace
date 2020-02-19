@@ -19,6 +19,6 @@
   background-size: 2016px;
 }
 
-.NFTPage .NFTImage .ens-subdomain > span {
+.NFTPage .NFTImage .ens-subdomain .name {
   padding: 25px;
 }
