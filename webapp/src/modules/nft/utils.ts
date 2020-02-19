@@ -82,6 +82,7 @@ export function getNFT(
   if (nftId && nftId in nfts) {
     nft = nfts[nftId]
   }
+  console.log(contractAddress, tokenId, nftId, nfts, nft)
   return nft
 }
 
