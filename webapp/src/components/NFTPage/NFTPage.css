@@ -22,7 +22,3 @@
 .NFTPage .NFTImage .ens-subdomain .name {
   padding: 25px;
 }
-
-.NFTPage .NFTImage .ens-subdomain .name::after {
-  content: '';
-}
