@@ -74,6 +74,9 @@ const Atlas = (props: Props) => {
     async (x: number, y: number) => {
       if (!withNavigation) return
       const tile = tiles[getCoords(x, y)] as Tile
+      if (!tile) {
+        return
+      }
       if (tile.estate_id) {
         onNavigate(
           locations.ntf(contractAddresses.EstateRegistry, tile.estate_id)
