@@ -218,11 +218,13 @@ enum WearableCategory @entity {
 }
 
 enum WearableRarity @entity {
-  unique
-  mythic
-  legendary
-  epic
+  common
+  uncommon
   swanky
+  epic
+  legendary
+  mythic
+  unique
 }
 
 enum WearableBodyShape @entity {
