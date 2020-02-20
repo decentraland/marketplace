@@ -1,7 +1,6 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { getNFTName } from '../../../modules/nft/utils'
-import { getCenter, getSelection } from '../../../modules/nft/estate/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
@@ -14,8 +13,6 @@ import { TransactionHistory } from '../TransactionHistory'
 import { Bids } from '../Bids'
 import { Props } from './EstateDetail.types'
 import './EstateDetail.css'
-
-const goToExplorer = (x: number, y: number) => `https://play.decentraland.org/?position=${x},${y}`
 
 const EstateDetail = (props: Props) => {
   const { nft } = props
@@ -36,14 +33,7 @@ const EstateDetail = (props: Props) => {
               </Badge>
             </>
           }
-          right={
-            <>
-              <Badge color="#37333d">
-                <a href={goToExplorer(x, y)} target="_blank" rel="noopener">Enter</a>
-              </Badge>
-              <Owner nft={nft} />
-            </>
-          }
+          right={<Owner nft={nft} />}
         />
         <Description text={nft.estate!.data?.description} />
         <Order nft={nft} />
