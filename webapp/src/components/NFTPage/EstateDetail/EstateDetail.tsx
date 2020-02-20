@@ -18,6 +18,8 @@ const goToExplorer = (x: number, y: number) => `https://play.decentraland.org/?p
 
 const EstateDetail = (props: Props) => {
   const { nft } = props
+  const firstParcel = nft.estate!.parcels[0]
+  const { x, y } = firstParcel ? firstParcel : { x: 0, y: 0 }
   return (
     <>
       <PageHeader>
