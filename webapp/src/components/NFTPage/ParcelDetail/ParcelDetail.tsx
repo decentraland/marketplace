@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
@@ -45,7 +46,7 @@ const ParcelDetail = (props: Props) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Enter
+                  {t('global.enter')}
                 </a>
               </Badge>
               <Owner nft={nft} />
