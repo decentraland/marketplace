@@ -20,7 +20,7 @@ const goToExplorer = (x: number, y: number) => `https://play.decentraland.org/?p
 const EstateDetail = (props: Props) => {
   const { nft } = props
   const parcels = nft.estate!.parcels
-  const { x, y } = parcels.length ? getCenter(getSelection(parcels)) : { x: 0, y: 0 }
+  const [ x, y ] = parcels.length ? getCenter(getSelection(parcels)) : [ 0, 0 ]
   return (
     <>
       <PageHeader>
