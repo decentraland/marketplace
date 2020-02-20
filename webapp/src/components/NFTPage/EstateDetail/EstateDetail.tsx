@@ -35,7 +35,7 @@ const EstateDetail = (props: Props) => {
           }
           right={
             <>
-              <Badge>
+              <Badge color="#37333d">
                 <a href={goToExplorer(x, y)} target="_blank" rel="noopener">Enter</a>
               </Badge>
               <Owner nft={nft} />
