@@ -14,6 +14,8 @@ import { Bids } from '../Bids'
 import { Props } from './EstateDetail.types'
 import './EstateDetail.css'
 
+const goToExplorer = (x: number, y: number) => `https://play.decentraland.org/?position=${x},${y}`
+
 const EstateDetail = (props: Props) => {
   const { nft } = props
   return (
@@ -31,7 +33,14 @@ const EstateDetail = (props: Props) => {
               </Badge>
             </>
           }
-          right={<Owner nft={nft} />}
+          right={
+            <>
+              <Badge>
+                <a href={goToExplorer(x, y)} target="_blank" rel="noopener">Enter</a>
+              </Badge>
+              <Owner nft={nft} />
+            </>
+          }
         />
         <Description text={nft.estate!.data?.description} />
         <Order nft={nft} />
