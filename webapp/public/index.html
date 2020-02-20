@@ -3,12 +3,16 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Decentraland - Marketplace"
+    <link
+      href="https://fonts.googleapis.com/css?family=Inconsolata&display=swap"
+      rel="stylesheet"
     />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Decentraland - Marketplace" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -31,11 +35,58 @@
     <div id="root"></div>
 
     <script>
-      !function () {
-        var analytics = window.analytics = window.analytics || []; if (!analytics.initialize) if (analytics.invoked) window.console && console.error && console.error("Segment snippet included twice."); else {
-          analytics.invoked = !0; analytics.methods = ["trackSubmit", "trackClick", "trackLink", "trackForm", "pageview", "identify", "reset", "group", "track", "ready", "alias", "debug", "page", "once", "off", "on"]; analytics.factory = function (t) { return function () { var e = Array.prototype.slice.call(arguments); e.unshift(t); analytics.push(e); return analytics } }; for (var t = 0; t < analytics.methods.length; t++) { var e = analytics.methods[t]; analytics[e] = analytics.factory(e) } analytics.load = function (t, e) { var n = document.createElement("script"); n.type = "text/javascript"; n.async = !0; n.src="https://segment.decentraland.org/v1/"+t+"/segment.min.js"; var o = document.getElementsByTagName("script")[0]; o.parentNode.insertBefore(n, o); analytics.integrationOptions = e }; analytics.SNIPPET_VERSION = "4.0.1";
-        }
-      }();
+      !(function() {
+        var analytics = (window.analytics = window.analytics || [])
+        if (!analytics.initialize)
+          if (analytics.invoked)
+            window.console &&
+              console.error &&
+              console.error('Segment snippet included twice.')
+          else {
+            analytics.invoked = !0
+            analytics.methods = [
+              'trackSubmit',
+              'trackClick',
+              'trackLink',
+              'trackForm',
+              'pageview',
+              'identify',
+              'reset',
+              'group',
+              'track',
+              'ready',
+              'alias',
+              'debug',
+              'page',
+              'once',
+              'off',
+              'on'
+            ]
+            analytics.factory = function(t) {
+              return function() {
+                var e = Array.prototype.slice.call(arguments)
+                e.unshift(t)
+                analytics.push(e)
+                return analytics
+              }
+            }
+            for (var t = 0; t < analytics.methods.length; t++) {
+              var e = analytics.methods[t]
+              analytics[e] = analytics.factory(e)
+            }
+            analytics.load = function(t, e) {
+              var n = document.createElement('script')
+              n.type = 'text/javascript'
+              n.async = !0
+              n.src =
+                'https://segment.decentraland.org/v1/' + t + '/segment.min.js'
+              var o = document.getElementsByTagName('script')[0]
+              o.parentNode.insertBefore(n, o)
+              analytics.integrationOptions = e
+            }
+            analytics.SNIPPET_VERSION = '4.0.1'
+          }
+      })()
     </script>
   </body>
 </html>
