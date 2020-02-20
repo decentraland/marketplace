@@ -6,6 +6,10 @@
   margin-bottom: 32px;
 }
 
+.TransferPage .subtitle.error {
+  color: var(--danger);
+}
+
 .TransferPage .warning {
   color: var(--danger);
   margin-bottom: 24px;
