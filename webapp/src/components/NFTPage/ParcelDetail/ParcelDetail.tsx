@@ -14,7 +14,7 @@ import { Bids } from '../Bids'
 import { Props } from './ParcelDetail.types'
 import './ParcelDetail.css'
 
-const goToExplorer = (x: number, y: number) =>
+const goToExplorer = (x: string, y: string) =>
   `https://play.decentraland.org/?position=${x},${y}`
 
 const ParcelDetail = (props: Props) => {
