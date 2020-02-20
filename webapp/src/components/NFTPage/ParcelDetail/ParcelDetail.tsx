@@ -40,7 +40,11 @@ const ParcelDetail = (props: Props) => {
           right={
             <>
               <Badge color="#37333d">
-                <a href={goToExplorer(x, y)} target="_blank" rel="noopener">
+                <a
+                  href={goToExplorer(x, y)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Enter
                 </a>
               </Badge>
