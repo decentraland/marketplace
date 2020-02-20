@@ -1,5 +1,7 @@
 import React from 'react'
-import { Container, Header } from 'decentraland-ui'
+import { Container, Header, Icon } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
@@ -16,6 +18,7 @@ import './EstateDetail.css'
 
 const EstateDetail = (props: Props) => {
   const { nft } = props
+  const { x, y } = nft.estate!.parcels[0]
   return (
     <>
       <PageHeader>
@@ -28,6 +31,16 @@ const EstateDetail = (props: Props) => {
               <Header size="large">{getNFTName(nft)}</Header>
               <Badge color="#37333d">
                 {nft.estate!.size.toLocaleString()} LAND
+              </Badge>
+              <Badge color="#37333d">
+                <a
+                  href={buildExplorerUrl(x, y)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t('global.enter')}&nbsp;
+                  <Icon name="external" />
+                </a>
               </Badge>
             </>
           }

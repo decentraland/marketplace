@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Header, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
@@ -14,9 +15,6 @@ import { TransactionHistory } from '../TransactionHistory'
 import { Bids } from '../Bids'
 import { Props } from './ParcelDetail.types'
 import './ParcelDetail.css'
-
-const goToExplorer = (x: string, y: string) =>
-  `https://play.decentraland.org/?position=${x},${y}`
 
 const ParcelDetail = (props: Props) => {
   const { nft } = props
@@ -38,7 +36,7 @@ const ParcelDetail = (props: Props) => {
               </Badge>
               <Badge color="#37333d">
                 <a
-                  href={goToExplorer(x, y)}
+                  href={buildExplorerUrl(x, y)}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
