@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Header } from 'decentraland-ui'
+import { Container, Header, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
@@ -36,22 +36,19 @@ const ParcelDetail = (props: Props) => {
                 <i className="pin" />
                 {x},{y}
               </Badge>
-            </>
-          }
-          right={
-            <>
               <Badge color="#37333d">
                 <a
                   href={goToExplorer(x, y)}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {t('global.enter')}
+                  {t('global.enter')}&nbsp;
+                  <Icon name="external" />
                 </a>
               </Badge>
-              <Owner nft={nft} />
             </>
           }
+          right={<Owner nft={nft} />}
         />
         <Description text={nft.parcel!.data?.description} />
         <Order nft={nft} />
