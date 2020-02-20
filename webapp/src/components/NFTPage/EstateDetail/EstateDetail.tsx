@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { getNFTName } from '../../../modules/nft/utils'
+import { getCenter, getSelection } from '../../../modules/nft/estate/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
@@ -18,8 +19,8 @@ const goToExplorer = (x: number, y: number) => `https://play.decentraland.org/?p
 
 const EstateDetail = (props: Props) => {
   const { nft } = props
-  const firstParcel = nft.estate!.parcels[0]
-  const { x, y } = firstParcel ? firstParcel : { x: 0, y: 0 }
+  const parcels = nft.estate!.parcels
+  const { x, y } = parcels.length ? getCenter(getSelection(parcels)) : { x: 0, y: 0 }
   return (
     <>
       <PageHeader>
