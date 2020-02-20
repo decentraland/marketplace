@@ -16,8 +16,6 @@ import './EstateDetail.css'
 
 const EstateDetail = (props: Props) => {
   const { nft } = props
-  const parcels = nft.estate!.parcels
-  const [ x, y ] = parcels.length ? getCenter(getSelection(parcels)) : [ 0, 0 ]
   return (
     <>
       <PageHeader>
