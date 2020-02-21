@@ -35,7 +35,6 @@ export function getTokenURI(event: Transfer): string {
 }
 
 export function updateNFTOrderProperties(nft: NFT, order: Order): NFT {
-  log.warning('upsertNFTOrderProperties. Order status {}', [order.status])
   if (order.status == status.OPEN) {
     return addNFTOrderProperties(nft, order)
   } else if (order.status == status.SOLD || order.status == status.CANCELLED) {
