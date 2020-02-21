@@ -26,10 +26,14 @@ const TransferPage = (props: Props) => {
             <NFTProviderPage>
               {(nft, order) => {
                 let subtitle
-                let isDisabled = isInvalidAddress
+                let isDisabled = !address || isInvalidAddress
+                let canTransfer = true
+                const subtitleClasses = ['subtitle']
                 const name = getNFTName(nft)
                 if (!!order) {
                   isDisabled = true
+                  canTransfer = false
+                  subtitleClasses.push('error')
                   subtitle = (
                     <T
                       id="transfer_page.for_sale"
@@ -37,6 +41,9 @@ const TransferPage = (props: Props) => {
                     />
                   )
                 } else if (!isOwnedBy(nft, wallet)) {
+                  isDisabled = true
+                  canTransfer = false
+                  subtitleClasses.push('error')
                   subtitle = (
                     <T
                       id="transfer_page.invalid_owner"
@@ -58,7 +65,7 @@ const TransferPage = (props: Props) => {
                         category: t(`global.${nft.category}`)
                       })}
                     </Header>
-                    <div className="subtitle">{subtitle}</div>
+                    <div className={subtitleClasses.join(' ')}>{subtitle}</div>
                     <Form onSubmit={() => onTransfer(nft, address)}>
                       <div className="form-fields">
                         <Field
@@ -72,6 +79,7 @@ const TransferPage = (props: Props) => {
                           label={t('transfer_page.recipient')}
                           value={address}
                           placeholder="0x..."
+                          disabled={!canTransfer}
                           onChange={(_event, props) => {
                             setAddress(props.value)
                             const isValid =
@@ -81,9 +89,14 @@ const TransferPage = (props: Props) => {
                           }}
                         />
                       </div>
-                      <div className="warning">
-                        <T id="transfer_page.warning" values={{ br: <br /> }} />
-                      </div>
+                      {canTransfer ? (
+                        <div className="warning">
+                          <T
+                            id="transfer_page.warning"
+                            values={{ br: <br /> }}
+                          />
+                        </div>
+                      ) : null}
                       <div className="buttons">
                         <div
                           className="ui button"
