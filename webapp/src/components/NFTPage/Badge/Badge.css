@@ -10,3 +10,8 @@
   text-transform: uppercase;
   cursor: default;
 }
+
+.Badge a {
+  /* Link to "enter world" looking oddly at line-height: 18px */
+  line-height: 22px;
+}
