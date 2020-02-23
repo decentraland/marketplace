@@ -317,7 +317,7 @@ export let halloween_2019: Wearable[] = [
     'Zombie Suit Pants',
     'When we say suit, we mean suit. Look your zombie best!',
     'lower_body',
-    'legendary',
+    'epic',
     ['BaseMale']
   ),
   new Wearable(
