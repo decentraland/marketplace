@@ -17,10 +17,22 @@ import {
   transferNFTSuccess,
   transferNFTFailure
 } from './actions'
+import { NFT } from './types'
+import { WearableRarity } from './wearable/types'
 import { nftAPI } from '../../lib/api/nft'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { ERC721 } from '../../contracts/ERC721'
+
+const ZOMBIE_SUIT_LOWER_BODY =
+  'https://wearable-api.decentraland.org/v2/collections/halloween_2019/wearables/zombie_suit_lower_body/thumbnail'
+const MONKEY_PATCH_ZOMBIE = (nft: NFT) =>
+  nft.image === ZOMBIE_SUIT_LOWER_BODY && nft.wearable
+    ? {
+        ...nft,
+        wearable: { ...nft.wearable, rarity: WearableRarity.EPIC }
+      }
+    : nft
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -39,7 +51,10 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   }
 
   try {
-    const [nfts, accounts, orders] = yield call(() => nftAPI.fetch(options))
+    const [emergencyPatchedNFTs, accounts, orders] = yield call(() =>
+      nftAPI.fetch(options)
+    )
+    const nfts = emergencyPatchedNFTs.map(MONKEY_PATCH_ZOMBIE)
     yield put(fetchNFTsSuccess(options, nfts, accounts, orders))
   } catch (error) {
     yield put(fetchNFTsFailure(options, error.message))
@@ -50,9 +65,10 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   const { contractAddress, tokenId } = action.payload
 
   try {
-    const [nft, order] = yield call(() =>
+    const [emergencyPatchedNFT, order] = yield call(() =>
       nftAPI.fetchOne(contractAddress, tokenId)
     )
+    const nft = MONKEY_PATCH_ZOMBIE(emergencyPatchedNFT)
     yield put(fetchNFTSuccess(nft, order))
   } catch (error) {
     yield put(fetchNFTFailure(contractAddress, tokenId, error.message))
