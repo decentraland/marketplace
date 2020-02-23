@@ -22,6 +22,8 @@ import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { ERC721 } from '../../contracts/ERC721'
 
+const ZOMBIE_SUIT_LOWER_BODY = 'https://wearable-api.decentraland.org/v2/collections/halloween_2019/wearables/zombie_suit_lower_body/thumbnail'
+
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
   yield takeEvery(FETCH_NFT_REQUEST, handleFetchNFTRequest)
@@ -39,7 +41,10 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   }
 
   try {
-    const [nfts, accounts, orders] = yield call(() => nftAPI.fetch(options))
+    const [emergencyPatchedNFTs, accounts, orders] = yield call(() => nftAPI.fetch(options))
+    const nfts = emergencyPatchedNFTs.map(
+      _ => _.image === ZOMBIE_SUIT_LOWER_BODY ? { ..._, wearable: { ..._.wearable, rarity: 'epic' } : _
+    )
     yield put(fetchNFTsSuccess(options, nfts, accounts, orders))
   } catch (error) {
     yield put(fetchNFTsFailure(options, error.message))
