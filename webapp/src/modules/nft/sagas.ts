@@ -43,7 +43,7 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   try {
     const [emergencyPatchedNFTs, accounts, orders] = yield call(() => nftAPI.fetch(options))
     const nfts = emergencyPatchedNFTs.map(
-      _ => _.image === ZOMBIE_SUIT_LOWER_BODY ? { ..._, wearable: { ..._.wearable, rarity: 'epic' } } : _
+      (_: any) => _.image === ZOMBIE_SUIT_LOWER_BODY ? { ..._, wearable: { ..._.wearable, rarity: 'epic' } } : _
     )
     yield put(fetchNFTsSuccess(options, nfts, accounts, orders))
   } catch (error) {
