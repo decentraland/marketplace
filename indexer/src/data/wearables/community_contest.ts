@@ -22,7 +22,7 @@ export let community_contest: Wearable[] = [
     'Bitcoin Eyewear',
     '',
     'eyewear',
-    'mythic',
+    'legendary',
     ['BaseFemale', 'BaseMale']
   ),
   new Wearable(
