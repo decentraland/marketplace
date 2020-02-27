@@ -286,7 +286,7 @@ const NFTListPage = (props: Props) => {
               <Responsive
                 minWidth={Responsive.onlyComputer.minWidth}
                 as={ClearFilter}
-                name="rarity"
+                name={t('global.rarity')}
                 onClear={() => handleRaritiesChange([])}
               />
             ) : null}
@@ -294,7 +294,7 @@ const NFTListPage = (props: Props) => {
               <Responsive
                 minWidth={Responsive.onlyComputer.minWidth}
                 as={ClearFilter}
-                name="gender"
+                name={t('global.gender')}
                 onClear={() => handleGendersChange([])}
               />
             ) : null}
@@ -349,15 +349,21 @@ const NFTListPage = (props: Props) => {
             className="filters"
           >
             <ArrayFilter
-              name="rarity"
+              name={t('global.rarity')}
               values={wearableRarities}
-              options={RARITY_FILTER_OPTIONS}
+              options={RARITY_FILTER_OPTIONS.map(rarity => ({
+                value: rarity,
+                label: t(`wearable.rarity.${rarity}`)
+              }))}
               onChange={handleRaritiesChange}
             />
             <ArrayFilter
-              name="gender"
+              name={t('global.gender')}
               values={wearableGenders}
-              options={GENDER_FILTER_OPTIONS}
+              options={GENDER_FILTER_OPTIONS.map(gender => ({
+                value: gender,
+                label: t(`wearable.body_shape.${gender}`)
+              }))}
               onChange={handleGendersChange}
             />
           </Responsive>
@@ -419,15 +425,21 @@ const NFTListPage = (props: Props) => {
           {hasFilters ? (
             <>
               <ArrayFilter
-                name="rarity"
+                name={t('global.rarity')}
                 values={wearableRarities}
-                options={RARITY_FILTER_OPTIONS}
+                options={RARITY_FILTER_OPTIONS.map(rarity => ({
+                  value: rarity,
+                  label: t(`wearable.rarity.${rarity}`)
+                }))}
                 onChange={handleRaritiesChange}
               />
               <ArrayFilter
-                name="gender"
+                name={t('global.gender')}
                 values={wearableGenders}
-                options={GENDER_FILTER_OPTIONS}
+                options={GENDER_FILTER_OPTIONS.map(gender => ({
+                  value: gender,
+                  label: t(`wearable.body_shape.${gender}`)
+                }))}
                 onChange={handleGendersChange}
               />
             </>

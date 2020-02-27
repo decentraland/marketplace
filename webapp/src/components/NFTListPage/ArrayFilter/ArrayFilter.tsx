@@ -30,10 +30,10 @@ const ArrayFilter = (props: Props) => {
       <div className="options">
         {options.map(option => (
           <div
-            className={getClasses(option, values)}
-            onClick={() => onChange(getNewValues(option, values))}
+            className={getClasses(option.value, values)}
+            onClick={() => onChange(getNewValues(option.value, values))}
           >
-            {option}
+            {option.label}
           </div>
         ))}
       </div>

@@ -15,7 +15,9 @@
     "loading": "加载",
     "settings": "设定",
     "accept": "接受",
-    "update": "更新"
+    "update": "更新",
+    "rarity": "稀有性",
+    "gender": "性别"
   },
   "navigation": {
     "atlas": " 地图集",
@@ -80,6 +82,9 @@
     "expires_at": "{date} 到期"
   },
   "bid": {
+    "from": "投标人",
+    "price": "价格",
+    "time_left": "剩下的时间",
     "not_enough_mana": "投标人没有足够的MANA来支付此投标",
     "invalid_fingerprint_on_bid_received": "此资产自进行出价以来已被修改，因此不再有效",
     "invalid_seller": "您不再拥有此资产",

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Loader, Mana, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -11,6 +10,7 @@ import {
   TransactionStatus,
   Transaction
 } from 'decentraland-dapps/dist/modules/transaction/types'
+import { formatDistanceToNow } from '../../../../lib/date'
 import { locations } from '../../../../modules/routing/locations'
 import { NFTImage } from '../../../NFTImage'
 import { Props } from './Transaction.types'

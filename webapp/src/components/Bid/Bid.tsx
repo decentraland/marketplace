@@ -2,7 +2,6 @@ import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Loader, Stats, Mana, Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { locations } from '../../modules/routing/locations'
 import { addressEquals } from '../../modules/wallet/utils'
 import { NFTProvider } from '../NFTProvider'
@@ -11,6 +10,7 @@ import { Address } from '../Address'
 import { AcceptButton } from './AcceptButton'
 import { WarningMessage } from './WarningMessage'
 import { formatMANA } from '../../lib/mana'
+import { formatDistanceToNow } from '../../lib/date'
 import { Props } from './Bid.types'
 import './Bid.css'
 
@@ -59,14 +59,14 @@ const Bid = (props: Props) => {
         <div className="wrapper">
           <div className="info">
             {!isBidder ? (
-              <Stats className="from" title="from">
+              <Stats className="from" title={t('bid.from')}>
                 <Address address={bid.bidder} />
               </Stats>
             ) : null}
-            <Stats title="price">
+            <Stats title={t('bid.price')}>
               <Mana>{formatMANA(bid.price)}</Mana>
             </Stats>
-            <Stats title="time left">
+            <Stats title={t('bid.time_left')}>
               {formatDistanceToNow(+bid.expiresAt)}
             </Stats>
           </div>

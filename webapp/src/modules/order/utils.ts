@@ -1,8 +1,8 @@
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import addDays from 'date-fns/addDays'
 import dateFnsFormat from 'date-fns/format'
 import { NFT } from '../nft/types'
 import { Order } from './types'
+import { formatDistanceToNow } from '../../lib/date'
 
 export const DEFAULT_EXPIRATION_IN_DAYS = 30
 export const INPUT_FORMAT = 'yyyy-MM-dd'
