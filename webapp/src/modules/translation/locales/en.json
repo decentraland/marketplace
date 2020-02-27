@@ -72,7 +72,9 @@
     "on_sale": "On sale",
     "empty": "Could not find any assets",
     "filter": "Filter",
-    "order_by": "Order By"
+    "order_by": "Order By",
+    "results": "{count} {count, plural, one {result} other {results}}",
+    "more_than_results": "+{count} results"
   },
   "nft_card": {
     "expires_at": "Expires {date}"

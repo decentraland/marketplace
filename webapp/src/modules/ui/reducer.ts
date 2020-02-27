@@ -1,4 +1,9 @@
-import { FetchNFTsSuccessAction, FETCH_NFTS_SUCCESS } from '../nft/actions'
+import {
+  FetchNFTsSuccessAction,
+  FETCH_NFTS_SUCCESS,
+  FetchNFTsRequestAction,
+  FETCH_NFTS_REQUEST
+} from '../nft/actions'
 import { View } from './types'
 import {
   FETCH_BIDS_BY_ADDRESS_SUCCESS,
@@ -20,6 +25,7 @@ export type UIState = {
   bidderBidIds: string[]
   archivedBidIds: string[]
   nftBidIds: string[]
+  assetCount: number | null
 }
 
 const INITIAL_STATE: UIState = {
@@ -30,10 +36,12 @@ const INITIAL_STATE: UIState = {
   sellerBidIds: [],
   bidderBidIds: [],
   archivedBidIds: [],
-  nftBidIds: []
+  nftBidIds: [],
+  assetCount: null
 }
 
 type UIReducerAction =
+  | FetchNFTsRequestAction
   | FetchNFTsSuccessAction
   | FetchBidsByAddressSuccessAction
   | FetchBidsByNFTSuccessAction
@@ -45,19 +53,30 @@ export function uiReducer(
   action: UIReducerAction
 ) {
   switch (action.type) {
+    case FETCH_NFTS_REQUEST: {
+      return {
+        ...state,
+        assetCount: null
+      }
+    }
     case FETCH_NFTS_SUCCESS: {
       switch (action.payload.options.view) {
         case View.MARKET:
         case View.ACCOUNT: {
           return {
             ...state,
-            nftIds: action.payload.nfts.map(nft => nft.id)
+            nftIds: action.payload.nfts.map(nft => nft.id),
+            assetCount: action.payload.count
           }
         }
         case View.LOAD_MORE: {
           return {
             ...state,
-            nftIds: [...state.nftIds, ...action.payload.nfts.map(nft => nft.id)]
+            nftIds: [
+              ...state.nftIds,
+              ...action.payload.nfts.map(nft => nft.id)
+            ],
+            assetCount: action.payload.count
           }
         }
         case View.HOME_WEARABLES: {

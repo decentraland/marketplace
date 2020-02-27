@@ -1,5 +1,9 @@
 import { NFTCategory } from '../nft/types'
-import { WearableCategory } from '../nft/wearable/types'
+import {
+  WearableCategory,
+  WearableRarity,
+  WearableGender
+} from '../nft/wearable/types'
 
 export enum Section {
   ALL = 'all',
@@ -48,6 +52,8 @@ export type SearchOptions = {
   section?: Section
   sortBy?: SortBy
   onlyOnSale?: boolean
+  wearableRarities?: WearableRarity[]
+  wearableGenders?: WearableGender[]
 }
 
 export function getSearchParams(options?: SearchOptions) {
@@ -65,6 +71,12 @@ export function getSearchParams(options?: SearchOptions) {
     }
     if (options.onlyOnSale !== undefined) {
       params.set('onlyOnSale', options.onlyOnSale.toString())
+    }
+    if (options.wearableRarities && options.wearableRarities.length > 0) {
+      params.set('rarities', options.wearableRarities.join('_'))
+    }
+    if (options.wearableGenders && options.wearableGenders.length > 0) {
+      params.set('genders', options.wearableGenders.join('_'))
     }
   }
   return params
@@ -134,4 +146,3 @@ export function getSearchWearableCategory(section: Section) {
       return WearableCategory.TOP_HEAD
   }
 }
-

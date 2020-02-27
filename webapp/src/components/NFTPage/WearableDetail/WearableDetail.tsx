@@ -1,7 +1,11 @@
 import React, { useCallback } from 'react'
 import { Container, Header, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { RARITY_COLOR, BodyShape } from '../../../modules/nft/wearable/types'
+import {
+  RARITY_COLOR,
+  BodyShape,
+  WearableGender
+} from '../../../modules/nft/wearable/types'
 import { getNFTName } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/routing/search'
@@ -22,13 +26,42 @@ import './WearableDetail.css'
 const WearableDetail = (props: Props) => {
   const { nft, onNavigate } = props
 
-  const handleHighlightClick = useCallback(() => {
+  const handleCategoryClick = useCallback(() => {
     onNavigate(
       locations.browse({
         section: `wearables_${nft.wearable!.category}` as Section
       })
     )
   }, [nft, onNavigate])
+
+  const handleGenderClick = useCallback(() => {
+    onNavigate(
+      locations.browse({
+        section: Section.WEARABLES,
+        wearableGenders: isGender(nft, BodyShape.MALE)
+          ? [WearableGender.MALE]
+          : [WearableGender.FEMALE]
+      })
+    )
+  }, [nft, onNavigate])
+
+  const handleRarityClick = useCallback(() => {
+    onNavigate(
+      locations.browse({
+        section: Section.WEARABLES,
+        wearableRarities: [nft.wearable!.rarity]
+      })
+    )
+  }, [nft, onNavigate])
+
+  const handleUnisexClick = useCallback(() => {
+    onNavigate(
+      locations.browse({
+        section: Section.WEARABLES,
+        wearableGenders: [WearableGender.MALE, WearableGender.FEMALE]
+      })
+    )
+  }, [onNavigate])
 
   return (
     <div className="WearableDetail">
@@ -49,6 +82,7 @@ const WearableDetail = (props: Props) => {
                     style={{
                       backgroundColor: RARITY_COLOR[nft.wearable!.rarity]
                     }}
+                    onClick={handleRarityClick}
                   >
                     {t(`wearable.rarity.${nft.wearable!.rarity}`)}
                   </div>
@@ -64,12 +98,13 @@ const WearableDetail = (props: Props) => {
           <Highlight
             icon={<div className={nft.wearable!.category} />}
             name={t(`wearable.category.${nft.wearable!.category}`)}
-            onClick={handleHighlightClick}
+            onClick={handleCategoryClick}
           />
           {isUnisex(nft) ? (
             <Highlight
               icon={<div className="Unisex" />}
               name={t('wearable.body_shape.unisex')}
+              onClick={handleUnisexClick}
             />
           ) : (
             <Highlight
@@ -79,6 +114,7 @@ const WearableDetail = (props: Props) => {
                   ? t('wearable.body_shape.male')
                   : t('wearable.body_shape.female')
               }
+              onClick={handleGenderClick}
             />
           )}
         </Highlights>

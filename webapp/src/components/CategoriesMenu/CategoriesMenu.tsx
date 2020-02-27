@@ -51,6 +51,7 @@ const CategoriesMenu = (props: Props) => {
           Section.WEARABLES_FEET,
           Section.WEARABLES_ACCESORIES,
           Section.WEARABLES_EARRING,
+          Section.WEARABLES_EYEWEAR,
           Section.WEARABLES_HAT,
           Section.WEARABLES_HELMET,
           Section.WEARABLES_MASK,
@@ -86,6 +87,7 @@ const CategoriesMenu = (props: Props) => {
               sections={[
                 Section.WEARABLES_ACCESORIES,
                 Section.WEARABLES_EARRING,
+                Section.WEARABLES_EYEWEAR,
                 Section.WEARABLES_HAT,
                 Section.WEARABLES_HELMET,
                 Section.WEARABLES_MASK,

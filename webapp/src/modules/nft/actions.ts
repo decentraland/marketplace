@@ -5,7 +5,11 @@ import { SortDirection } from '../routing/search'
 import { Order } from '../order/types'
 import { Account } from '../account/types'
 import { View } from '../ui/types'
-import { WearableCategory } from './wearable/types'
+import {
+  WearableCategory,
+  WearableRarity,
+  WearableGender
+} from './wearable/types'
 import { NFT, NFTCategory, NFTSortBy } from './types'
 import { getNFTName } from './utils'
 
@@ -28,6 +32,8 @@ export type FetchNFTsOptions = {
     isWearableAccessory?: boolean
     category?: NFTCategory
     wearableCategory?: WearableCategory
+    wearableRarities?: WearableRarity[]
+    wearableGenders?: WearableGender[]
   }
   view?: View
 }
@@ -49,8 +55,9 @@ export const fetchNFTsSuccess = (
   options: FetchNFTsOptions,
   nfts: NFT[],
   accounts: Account[],
-  orders: Order[]
-) => action(FETCH_NFTS_SUCCESS, { options, nfts, accounts, orders })
+  orders: Order[],
+  count: number
+) => action(FETCH_NFTS_SUCCESS, { options, nfts, accounts, orders, count })
 export const fetchNFTsFailure = (options: FetchNFTsOptions, error: string) =>
   action(FETCH_NFTS_FAILURE, { options, error })
 
