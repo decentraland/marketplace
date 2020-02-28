@@ -3,7 +3,7 @@ import { Wearable } from './Wearable'
 export let community_contest: Wearable[] = [
   new Wearable(
     'cw_peacock_feather_earring',
-    'Pecock Feather Earrings',
+    'Peacock Feather Earrings',
     '',
     'earring',
     'epic',
@@ -11,7 +11,7 @@ export let community_contest: Wearable[] = [
   ),
   new Wearable(
     'cw_aviator_googles_eyewear',
-    'Aviator Googles',
+    'Aviator Goggles',
     '',
     'eyewear',
     'mythic',
@@ -47,7 +47,7 @@ export let community_contest: Wearable[] = [
   ),
   new Wearable(
     'cw_raver_eyewear',
-    'Raver Googles',
+    'Raver Goggles',
     '',
     'eyewear',
     'legendary',
@@ -55,7 +55,7 @@ export let community_contest: Wearable[] = [
   ),
   new Wearable(
     'cw_city_sneakers_feet',
-    'City Decentraland Sneackers',
+    'City Decentraland Sneakers',
     '',
     'feet',
     'epic',
@@ -262,7 +262,7 @@ export let community_contest: Wearable[] = [
   ),
   new Wearable(
     'f_cw_trendy_pants_lower_body',
-    'Trandy Sport Pants',
+    'Trendy Sport Pants',
     '',
     'lower_body',
     'mythic',
@@ -278,7 +278,7 @@ export let community_contest: Wearable[] = [
   ),
   new Wearable(
     'm_cw_trendy_pants_lower_body',
-    'Trandy Sport Pants',
+    'Trendy Sport Pants',
     '',
     'lower_body',
     'mythic',

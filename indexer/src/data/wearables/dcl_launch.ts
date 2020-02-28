@@ -32,7 +32,7 @@ export let dcl_launch: Wearable[] = [
     'BaseMale',
     'BaseFemale'
   ]),
-  new Wearable('colorful_hat_hat', 'Coloful Hat', '', 'hat', 'epic', [
+  new Wearable('colorful_hat_hat', 'Colorful Hat', '', 'hat', 'epic', [
     'BaseMale',
     'BaseFemale'
   ]),
