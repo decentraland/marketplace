@@ -78,7 +78,7 @@ export let community_contest: Wearable[] = [
     'Shoes of Wonder',
     '',
     'feet',
-    'epic',
+    'mythic',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
