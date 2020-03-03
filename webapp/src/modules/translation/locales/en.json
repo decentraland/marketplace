@@ -15,7 +15,9 @@
     "loading": "Loading",
     "settings": "Settings",
     "accept": "Accept",
-    "update": "Update"
+    "update": "Update",
+    "rarity": "Rarity",
+    "gender": "Gender"
   },
   "navigation": {
     "atlas": "Atlas",
@@ -72,12 +74,17 @@
     "on_sale": "On sale",
     "empty": "Could not find any assets",
     "filter": "Filter",
-    "order_by": "Order By"
+    "order_by": "Order By",
+    "results": "{count} {count, plural, one {result} other {results}}",
+    "more_than_results": "+{count} results"
   },
   "nft_card": {
     "expires_at": "Expires {date}"
   },
   "bid": {
+    "from": "From",
+    "price": "Price",
+    "time_left": "Time Left",
     "not_enough_mana_on_bid_received": "The bidder doesn't have enough MANA to pay for this bid",
     "invalid_fingerprint_on_bid_received": "This asset has been modified since this bid was made and it's not valid anymore",
     "invalid_seller": "You don't own this asset anymore",

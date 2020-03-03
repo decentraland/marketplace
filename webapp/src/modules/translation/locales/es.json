@@ -12,10 +12,12 @@
     "cancel": "Cancelar",
     "proceed": "Aceptar",
     "nft": "NFT",
-    "loading": "Loading",
+    "loading": "Cargando",
     "settings": "Configuración",
     "accept": "Aceptar",
-    "update": "Actualizar"
+    "update": "Actualizar",
+    "rarity": "Rareza",
+    "gender": "Género"
   },
   "navigation": {
     "atlas": "Atlas",
@@ -35,7 +37,7 @@
     "ens": "Nombres"
   },
   "categories_menu": {
-    "categories": "Categories",
+    "categories": "Categorias",
     "menu_item": {
       "all": "Todos",
       "land": "Tierras",
@@ -72,12 +74,17 @@
     "on_sale": "En venta",
     "empty": "No se ha encontrado",
     "filter": "Filtrar",
-    "order_by": "Ordenar por"
+    "order_by": "Ordenar por",
+    "results": "{count} {count, plural, one {resultado} other {resultados}}",
+    "more_than_results": "+{count} resultados"
   },
   "nft_card": {
     "expires_at": "Expira {date}"
   },
   "bid": {
+    "from": "Ofertante",
+    "price": "Precio",
+    "time_left": "Expiración",
     "not_enough_mana_on_bid_received": "El usuario no tiene suficiente MANA para pagar esta oferta",
     "invalid_fingerprint_on_bid_received": "Este artículo ha sido modificado desde que se hizo esta oferta y ya no es válida",
     "invalid_seller": "Ya no eres el dueño de este artículo",

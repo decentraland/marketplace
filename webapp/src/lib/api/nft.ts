@@ -7,20 +7,33 @@ import { isExpired } from '../../modules/order/utils'
 import { FetchNFTsOptions } from '../../modules/nft/actions'
 import { nftFragment, NFTFragment } from '../../modules/nft/fragments'
 import { orderFragment } from '../../modules/order/fragments'
+import { WearableGender } from '../../modules/nft/wearable/types'
 import { client } from './client'
 
 class NFTAPI {
   fetch = async (options: FetchNFTsOptions) => {
     const { variables } = options
     const query = getNFTsQuery(variables)
+    const countQuery = getNFTsQuery(variables, true)
 
-    const { data } = await client.query({
-      query,
-      variables: {
-        ...variables,
-        expiresAt: Date.now().toString()
-      }
-    })
+    const [{ data }, { data: countData }] = await Promise.all([
+      client.query({
+        query,
+        variables: {
+          ...variables,
+          expiresAt: Date.now().toString()
+        }
+      }),
+      client.query({
+        query: countQuery,
+        variables: {
+          ...variables,
+          first: 1000,
+          skip: 0,
+          expiresAt: Date.now().toString()
+        }
+      })
+    ])
 
     const nfts: NFT[] = []
     const accounts: Account[] = []
@@ -48,7 +61,7 @@ class NFTAPI {
       nfts.push(nft)
     }
 
-    return [nfts, accounts, orders] as const
+    return [nfts, accounts, orders, countData.nfts.length] as const
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
@@ -115,7 +128,10 @@ const NFTS_ARGUMENTS = `
   orderDirection: $orderDirection
 `
 
-function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
+function getNFTsQuery(
+  variables: FetchNFTsOptions['variables'],
+  isCount = false
+) {
   let extraWhere: string[] = []
 
   if (variables.address) {
@@ -147,6 +163,29 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
     extraWhere.push('searchOrderExpiresAt_gt: $expiresAt')
   }
 
+  if (!!variables.wearableRarities && variables.wearableRarities.length > 0) {
+    extraWhere.push(
+      `searchWearableRarity_in: [${variables.wearableRarities
+        .map(rarity => `"${rarity}"`)
+        .join(',')}]`
+    )
+  }
+
+  if (!!variables.wearableGenders && variables.wearableGenders.length > 0) {
+    const hasMale = variables.wearableGenders.includes(WearableGender.MALE)
+    const hasFemale = variables.wearableGenders.includes(WearableGender.FEMALE)
+
+    if (hasMale && !hasFemale) {
+      extraWhere.push(`searchWearableBodyShapes: [BaseMale]`)
+    } else if (hasFemale && !hasMale) {
+      extraWhere.push(`searchWearableBodyShapes: [BaseFemale]`)
+    } else if (hasMale && hasFemale) {
+      extraWhere.push(
+        `searchWearableBodyShapes_contains: [BaseMale, BaseFemale]`
+      )
+    }
+  }
+
   return gql`
     query NFTs(
       ${NFTS_FILTERS}
@@ -159,10 +198,10 @@ function getNFTsQuery(variables: FetchNFTsOptions['variables']) {
         }
         ${NFTS_ARGUMENTS}
       ) {
-        ...nftFragment
+        ${isCount ? 'id' : '...nftFragment'}
       }
     }
-    ${nftFragment()}
+    ${isCount ? '' : nftFragment()}
   `
 }
 

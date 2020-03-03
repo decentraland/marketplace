@@ -1,5 +1,11 @@
 import { NFTCategory } from '../nft/types'
-import { WearableCategory } from '../nft/wearable/types'
+import {
+  WearableCategory,
+  WearableRarity,
+  WearableGender
+} from '../nft/wearable/types'
+
+const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
 export enum Section {
   ALL = 'all',
@@ -48,6 +54,8 @@ export type SearchOptions = {
   section?: Section
   sortBy?: SortBy
   onlyOnSale?: boolean
+  wearableRarities?: WearableRarity[]
+  wearableGenders?: WearableGender[]
 }
 
 export function getSearchParams(options?: SearchOptions) {
@@ -65,6 +73,12 @@ export function getSearchParams(options?: SearchOptions) {
     }
     if (options.onlyOnSale !== undefined) {
       params.set('onlyOnSale', options.onlyOnSale.toString())
+    }
+    if (options.wearableRarities && options.wearableRarities.length > 0) {
+      params.set('rarities', options.wearableRarities.join('_'))
+    }
+    if (options.wearableGenders && options.wearableGenders.length > 0) {
+      params.set('genders', options.wearableGenders.join('_'))
     }
   }
   return params
@@ -135,3 +149,15 @@ export function getSearchWearableCategory(section: Section) {
   }
 }
 
+export function getParamArray<T extends string>(
+  search: string,
+  paramName: string,
+  validValues: string[] = []
+) {
+  const param = new URLSearchParams(search).get(paramName)
+  return param === null
+    ? []
+    : (param
+        .split(SEARCH_ARRAY_PARAM_SEPARATOR)
+        .filter(item => validValues.includes(item as T)) as T[])
+}

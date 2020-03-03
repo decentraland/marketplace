@@ -15,6 +15,10 @@
   justify-content: flex-end;
 }
 
+.Order .left .ui.header:not(.sub) {
+  text-transform: capitalize;
+}
+
 @media (max-width: 768px) {
   .Order,
   .Order .left,

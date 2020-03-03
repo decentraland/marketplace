@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { replace } from 'connected-react-router'
+import { replace, push } from 'connected-react-router'
 import { RouteComponentProps } from 'react-router'
 
 import { RootState } from '../../modules/reducer'
@@ -26,7 +26,8 @@ const mapState = (
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(replace(path))
+  onNavigate: path => dispatch(push(path)),
+  onRedirect: path => dispatch(replace(path))
 })
 
 export default connect(mapState, mapDispatch)(AccountPage)

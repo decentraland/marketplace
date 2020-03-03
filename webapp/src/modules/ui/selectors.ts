@@ -9,11 +9,12 @@ import {
   getData as getNFTData,
   getLoading as getNFTLoading
 } from '../nft/selectors'
-import { SortBy, Section } from '../routing/search'
+import { SortBy, Section, getParamArray } from '../routing/search'
 import { RootState } from '../reducer'
 import { View } from './types'
 import { BidState } from '../bid/reducer'
 import { Bid } from '../bid/types'
+import { WearableRarity, WearableGender } from '../nft/wearable/types'
 
 export const getState = (state: RootState) => state.ui
 export const getNFTs = createSelector<
@@ -61,6 +62,30 @@ export const getUIOnlyOnSale = createSelector<
   const onlyOnSale = new URLSearchParams(search).get('onlyOnSale')
   return onlyOnSale === null ? onlyOnSale : onlyOnSale === 'true'
 })
+
+export const getUIWearableRarities = createSelector<
+  RootState,
+  string,
+  WearableRarity[]
+>(getSearch, search =>
+  getParamArray<WearableRarity>(
+    search,
+    'rarities',
+    Object.values(WearableRarity)
+  )
+)
+
+export const getUIWearableGenders = createSelector<
+  RootState,
+  string,
+  WearableGender[]
+>(getSearch, search =>
+  getParamArray<WearableGender>(
+    search,
+    'genders',
+    Object.values(WearableGender)
+  )
+)
 
 export const getHomepageWearables = createSelector<
   RootState,
@@ -136,3 +161,5 @@ export const getNFTBids = createSelector<
   BidState['data'],
   Bid[]
 >(getState, getBidData, (ui, bidsById) => ui.nftBidIds.map(id => bidsById[id]))
+
+export const getAssetsCount = (state: RootState) => getState(state).assetCount

@@ -63,6 +63,55 @@
   );
 }
 
+.NFTListPage .results {
+  margin: 0px;
+}
+
+.NFTListPage .filters {
+  padding: 16px;
+  background-color: var(--card);
+  border-radius: 16px;
+  margin-bottom: 32px;
+  user-select: none;
+  outline: none;
+  padding-bottom: 8px;
+  margin-top: -8px;
+}
+
+.NFTListPage .open-filters-wrapper {
+  display: inline-block;
+  height: 15px;
+  margin-left: 24px;
+  position: relative;
+  cursor: pointer;
+}
+
+.NFTListPage .open-filters-wrapper .label {
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-right: 30px;
+  font-weight: 500;
+}
+
+.NFTListPage .open-filters {
+  width: 20px;
+  height: 20px;
+  background-image: url(../../images/filters.svg);
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  display: inline-block;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+.NFTListPage .open-filters.active {
+  background-image: url(../../images/filters-active.svg);
+  background-size: 20px;
+}
+
 .FiltersModal .CategoriesMenu ul.menu li:hover,
 .FiltersModal .CategoriesMenu ul.menu li.active {
   background-color: var(--secondary-on-modal);
@@ -100,5 +149,8 @@
 @media (max-width: 768px) {
   .CategoriesMenu ul.menu li {
     width: calc(100% - 32px);
+  }
+  .NFTListPage .filters {
+    margin-top: 0px;
   }
 }

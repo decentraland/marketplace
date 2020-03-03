@@ -15,7 +15,9 @@
     "loading": "加载",
     "settings": "设定",
     "accept": "接受",
-    "update": "更新"
+    "update": "更新",
+    "rarity": "稀有性",
+    "gender": "性别"
   },
   "navigation": {
     "atlas": " 地图集",
@@ -72,12 +74,17 @@
     "on_sale": "特价中",
     "empty": "找不到任何资产",
     "filter": "过滤",
-    "order_by": "订户"
+    "order_by": "订户",
+    "results": "{count}个结果",
+    "more_than_results": "+{count}个结果"
   },
   "nft_card": {
     "expires_at": "{date} 到期"
   },
   "bid": {
+    "from": "投标人",
+    "price": "价格",
+    "time_left": "剩下的时间",
     "not_enough_mana": "投标人没有足够的MANA来支付此投标",
     "invalid_fingerprint_on_bid_received": "此资产自进行出价以来已被修改，因此不再有效",
     "invalid_seller": "您不再拥有此资产",

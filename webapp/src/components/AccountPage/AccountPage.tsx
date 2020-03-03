@@ -17,7 +17,7 @@ import { Props } from './AccountPage.types'
 import './AccountPage.css'
 
 const AccountPage = (props: Props) => {
-  const { address, wallet, isConnecting, onNavigate } = props
+  const { address, wallet, isConnecting, onNavigate, onRedirect } = props
 
   const isCurrentAccount =
     address === undefined || (wallet && wallet.address === address)
@@ -35,9 +35,9 @@ const AccountPage = (props: Props) => {
   // Redirect to signIn if trying to access current account without a wallet
   useEffect(() => {
     if (isCurrentAccount && !isConnecting && !wallet) {
-      onNavigate(locations.signIn())
+      onRedirect(locations.signIn())
     }
-  }, [isCurrentAccount, isConnecting, wallet, onNavigate])
+  }, [isCurrentAccount, isConnecting, wallet, onRedirect])
 
   return (
     <div className="AccountPage">

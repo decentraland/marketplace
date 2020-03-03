@@ -57,3 +57,8 @@ export enum BodyShape {
   MALE = 'BaseMale',
   FEMALE = 'BaseFemale'
 }
+
+export enum WearableGender {
+  MALE = 'male',
+  FEMALE = 'female'
+}
