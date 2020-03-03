@@ -37,7 +37,7 @@ const AccountPage = (props: Props) => {
     if (isCurrentAccount && !isConnecting && !wallet) {
       onRedirect(locations.signIn())
     }
-  }, [isCurrentAccount, isConnecting, wallet, onNavigate])
+  }, [isCurrentAccount, isConnecting, wallet, onRedirect])
 
   return (
     <div className="AccountPage">
