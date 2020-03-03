@@ -5,6 +5,8 @@ import {
   WearableGender
 } from '../nft/wearable/types'
 
+const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
+
 export enum Section {
   ALL = 'all',
   LAND = 'land',
@@ -145,4 +147,17 @@ export function getSearchWearableCategory(section: Section) {
     case Section.WEARABLES_TOP_HEAD:
       return WearableCategory.TOP_HEAD
   }
+}
+
+export function getParamArray<T extends string>(
+  search: string,
+  paramName: string,
+  validValues: string[] = []
+) {
+  const param = new URLSearchParams(search).get(paramName)
+  return param === null
+    ? []
+    : (param
+        .split(SEARCH_ARRAY_PARAM_SEPARATOR)
+        .filter(item => validValues.includes(item as T)) as T[])
 }

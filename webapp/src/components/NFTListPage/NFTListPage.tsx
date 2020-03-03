@@ -40,9 +40,9 @@ import {
 import { ClearFilter } from './ClearFilter'
 
 const MAX_RESULTS = 1000
-const RARITY_FILTER_OPTIONS = Object.values(WearableRarity).filter(
-  x => x !== WearableRarity.COMMON && x !== WearableRarity.UNIQUE
-)
+const RARITY_FILTER_OPTIONS = Object.values(WearableRarity)
+  .filter(x => x !== WearableRarity.COMMON && x !== WearableRarity.UNIQUE)
+  .reverse()
 const GENDER_FILTER_OPTIONS = Object.values(WearableGender)
 
 const NFTListPage = (props: Props) => {
@@ -273,7 +273,23 @@ const NFTListPage = (props: Props) => {
       <Grid.Column className="right-column">
         <HeaderMenu>
           <HeaderMenu.Left>
-            <Header sub>
+            {wearableRarities.length > 0 ? (
+              <Responsive
+                minWidth={Responsive.onlyComputer.minWidth}
+                as={ClearFilter}
+                name={t('global.rarity')}
+                onClear={() => handleRaritiesChange([])}
+              />
+            ) : null}
+            {wearableGenders.length > 0 ? (
+              <Responsive
+                minWidth={Responsive.onlyComputer.minWidth}
+                as={ClearFilter}
+                name={t('global.gender')}
+                onClear={() => handleGendersChange([])}
+              />
+            ) : null}
+            <Header sub className="results">
               {count == null
                 ? t('global.loading') + '...'
                 : count < MAX_RESULTS
@@ -282,22 +298,6 @@ const NFTListPage = (props: Props) => {
                     count: count.toLocaleString()
                   })}
             </Header>
-            {!showFiltersMenu && wearableRarities.length > 0 ? (
-              <Responsive
-                minWidth={Responsive.onlyComputer.minWidth}
-                as={ClearFilter}
-                name={t('global.rarity')}
-                onClear={() => handleRaritiesChange([])}
-              />
-            ) : null}
-            {!showFiltersMenu && wearableGenders.length > 0 ? (
-              <Responsive
-                minWidth={Responsive.onlyComputer.minWidth}
-                as={ClearFilter}
-                name={t('global.gender')}
-                onClear={() => handleGendersChange([])}
-              />
-            ) : null}
           </HeaderMenu.Left>
           <HeaderMenu.Right>
             <Responsive minWidth={Responsive.onlyTablet.minWidth}>

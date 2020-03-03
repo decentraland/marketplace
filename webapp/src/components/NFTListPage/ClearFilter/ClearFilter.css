@@ -9,15 +9,15 @@
   color: var(--primary);
   font-weight: 600;
   text-transform: uppercase;
-  margin-left: 16px;
 }
 
 .ClearFilter .close {
-  margin-left: 8px;
   width: 16px;
   height: 16px;
   background-image: url(../../../images/close.svg);
   background-position: center;
   background-size: cover;
   display: inline-block;
+  margin-left: 8px;
+  margin-right: 16px;
 }

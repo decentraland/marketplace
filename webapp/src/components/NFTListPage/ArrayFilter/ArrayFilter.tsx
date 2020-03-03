@@ -4,11 +4,9 @@ import { Header } from 'decentraland-ui'
 import { Props } from './ArrayFilter.types'
 import './ArrayFilter.css'
 
-const isSelected = (value: string, values: string[]) => values.includes(value)
-
 const getClasses = (value: string, values: string[]) => {
   const classes = ['option']
-  if (isSelected(value, values)) {
+  if (values.includes(value)) {
     classes.push('selected')
   }
   return classes.join(' ')

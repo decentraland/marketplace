@@ -9,7 +9,7 @@ import {
   getData as getNFTData,
   getLoading as getNFTLoading
 } from '../nft/selectors'
-import { SortBy, Section } from '../routing/search'
+import { SortBy, Section, getParamArray } from '../routing/search'
 import { RootState } from '../reducer'
 import { View } from './types'
 import { BidState } from '../bid/reducer'
@@ -67,31 +67,25 @@ export const getUIWearableRarities = createSelector<
   RootState,
   string,
   WearableRarity[]
->(getSearch, search => {
-  const rarities = new URLSearchParams(search).get('rarities')
-  return rarities === null
-    ? []
-    : (rarities
-        .split('_')
-        .filter(rarity =>
-          Object.values(WearableRarity).includes(rarity as WearableRarity)
-        ) as WearableRarity[])
-})
+>(getSearch, search =>
+  getParamArray<WearableRarity>(
+    search,
+    'rarities',
+    Object.values(WearableRarity)
+  )
+)
 
 export const getUIWearableGenders = createSelector<
   RootState,
   string,
   WearableGender[]
->(getSearch, search => {
-  const genders = new URLSearchParams(search).get('genders')
-  return genders === null
-    ? []
-    : (genders
-        .split('_')
-        .filter(gender =>
-          Object.values(WearableGender).includes(gender as WearableGender)
-        ) as WearableGender[])
-})
+>(getSearch, search =>
+  getParamArray<WearableGender>(
+    search,
+    'genders',
+    Object.values(WearableGender)
+  )
+)
 
 export const getHomepageWearables = createSelector<
   RootState,

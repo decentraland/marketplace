@@ -63,6 +63,10 @@
   );
 }
 
+.NFTListPage .results {
+  margin: 0px;
+}
+
 .NFTListPage .filters {
   padding: 16px;
   background-color: var(--card);
@@ -70,6 +74,8 @@
   margin-bottom: 32px;
   user-select: none;
   outline: none;
+  padding-bottom: 8px;
+  margin-top: -8px;
 }
 
 .NFTListPage .open-filters-wrapper {
@@ -143,5 +149,8 @@
 @media (max-width: 768px) {
   .CategoriesMenu ul.menu li {
     width: calc(100% - 32px);
+  }
+  .NFTListPage .filters {
+    margin-top: 0px;
   }
 }
