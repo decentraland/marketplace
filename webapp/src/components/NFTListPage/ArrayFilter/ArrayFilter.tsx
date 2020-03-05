@@ -21,7 +21,7 @@ const getNewValues = (value: string, values: string[]) => {
 const ArrayFilter = (props: Props) => {
   const { name, values, options, onChange } = props
   return (
-    <div className="ArrayFilter">
+    <div className="ArrayFilter Filter">
       <Header sub className="name">
         {name}
       </Header>

@@ -5,6 +5,7 @@ import { SortDirection } from '../routing/search'
 import { Order } from '../order/types'
 import { Account } from '../account/types'
 import { View } from '../ui/types'
+import { ContractName } from '../contract/types'
 import {
   WearableCategory,
   WearableRarity,
@@ -34,6 +35,8 @@ export type FetchNFTsOptions = {
     wearableCategory?: WearableCategory
     wearableRarities?: WearableRarity[]
     wearableGenders?: WearableGender[]
+    search?: string
+    contracts?: ContractName[]
   }
   view?: View
 }

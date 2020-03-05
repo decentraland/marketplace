@@ -78,6 +78,10 @@
   margin-top: -8px;
 }
 
+.NFTListPage .filters .Filter + .Filter {
+  margin-top: 14px;
+}
+
 .NFTListPage .open-filters-wrapper {
   display: inline-block;
   height: 15px;
@@ -122,6 +126,8 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--divider);
 }
 
 .FiltersModal .CategoriesMenu {
@@ -144,6 +150,11 @@
   position: absolute;
   right: 24px !important;
   top: 24px !important;
+}
+
+.FiltersModal .apply-filters {
+  width: 100%;
+  margin-top: 48px;
 }
 
 @media (max-width: 768px) {

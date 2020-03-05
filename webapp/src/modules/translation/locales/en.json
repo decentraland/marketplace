@@ -16,8 +16,7 @@
     "settings": "Settings",
     "accept": "Accept",
     "update": "Update",
-    "rarity": "Rarity",
-    "gender": "Gender"
+    "search": "Search"
   },
   "navigation": {
     "atlas": "Atlas",
@@ -76,7 +75,12 @@
     "filter": "Filter",
     "order_by": "Order By",
     "results": "{count} {count, plural, one {result} other {results}}",
-    "more_than_results": "+{count} results"
+    "more_than_results": "+{count} results",
+    "search": "Filter by text...",
+    "multiple_filters": "{count} filters",
+    "rarity": "Rarity",
+    "gender": "Gender",
+    "collection": "Collection"
   },
   "nft_card": {
     "expires_at": "Expires {date}"

@@ -16,7 +16,9 @@ import {
   getUIOnlyOnSale,
   getAssetsCount,
   getUIWearableRarities,
-  getUIWearableGenders
+  getUIWearableGenders,
+  getUISearch,
+  getUIContracts
 } from '../../modules/ui/selectors'
 import { getLoading } from '../../modules/nft/selectors'
 import NFTListPage from './NFTListPage'
@@ -29,6 +31,8 @@ const mapState = (state: RootState): MapStateProps => ({
   count: getAssetsCount(state),
   wearableRarities: getUIWearableRarities(state),
   wearableGenders: getUIWearableGenders(state),
+  contracts: getUIContracts(state),
+  search: getUISearch(state),
   onlyOnSale: getUIOnlyOnSale(state),
   isLoading: isLoadingType(getLoading(state), FETCH_NFTS_REQUEST)
 })

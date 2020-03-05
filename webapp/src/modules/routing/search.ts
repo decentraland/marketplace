@@ -4,6 +4,7 @@ import {
   WearableRarity,
   WearableGender
 } from '../nft/wearable/types'
+import { ContractName } from '../contract/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -56,6 +57,8 @@ export type SearchOptions = {
   onlyOnSale?: boolean
   wearableRarities?: WearableRarity[]
   wearableGenders?: WearableGender[]
+  search?: string
+  contracts?: ContractName[]
 }
 
 export function getSearchParams(options?: SearchOptions) {
@@ -75,10 +78,27 @@ export function getSearchParams(options?: SearchOptions) {
       params.set('onlyOnSale', options.onlyOnSale.toString())
     }
     if (options.wearableRarities && options.wearableRarities.length > 0) {
-      params.set('rarities', options.wearableRarities.join('_'))
+      params.set(
+        'rarities',
+        options.wearableRarities.join(SEARCH_ARRAY_PARAM_SEPARATOR)
+      )
     }
     if (options.wearableGenders && options.wearableGenders.length > 0) {
-      params.set('genders', options.wearableGenders.join('_'))
+      params.set(
+        'genders',
+        options.wearableGenders.join(SEARCH_ARRAY_PARAM_SEPARATOR)
+      )
+    }
+
+    if (options.contracts && options.contracts.length > 0) {
+      params.set(
+        'contracts',
+        options.contracts.join(SEARCH_ARRAY_PARAM_SEPARATOR)
+      )
+    }
+
+    if (options.search) {
+      params.set('search', options.search)
     }
   }
   return params
