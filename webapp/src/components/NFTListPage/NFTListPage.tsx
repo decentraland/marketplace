@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import {
   Page,
   Grid,
@@ -392,9 +393,10 @@ const NFTListPage = (props: Props) => {
   let appliedFiltersLabel = ''
   if (appliedFilters.length === 1) {
     appliedFiltersLabel = appliedFilters[0]
-  } else if (appliedFilters.length === 2) {
+    // "RARITY, GENDER (X)" on desktop, "2 FILTERS (X)" on mobile
+  } else if (appliedFilters.length === 2 && !isMobile()) {
     appliedFiltersLabel = appliedFilters.join(', ')
-  } else if (appliedFilters.length > 0) {
+  } else if (appliedFilters.length > 1) {
     appliedFiltersLabel = t('nft_list_page.multiple_filters', {
       count: appliedFilters.length
     })
@@ -411,9 +413,7 @@ const NFTListPage = (props: Props) => {
         <HeaderMenu>
           <HeaderMenu.Left>
             {appliedFilters.length > 0 ? (
-              <Responsive
-                minWidth={Responsive.onlyComputer.minWidth}
-                as={ClearFilter}
+              <ClearFilter
                 name={appliedFiltersLabel}
                 onClear={handleClearFilters}
               />
@@ -450,12 +450,7 @@ const NFTListPage = (props: Props) => {
                 <div className="label">{t('nft_list_page.filter')}</div>
                 <div
                   className={`open-filters ${
-                    showFiltersMenu ||
-                    wearableRarities.length > 0 ||
-                    wearableGenders.length > 0 ||
-                    search
-                      ? 'active'
-                      : ''
+                    showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
                   }`}
                 />
               </div>
@@ -466,7 +461,11 @@ const NFTListPage = (props: Props) => {
                 onClick={() => setShowFiltersModal(!showFiltersModal)}
               >
                 <div className="label">{t('nft_list_page.filter')}</div>
-                <div className="open-filters" />
+                <div
+                  className={`open-filters ${
+                    showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
+                  }`}
+                />
               </div>
             </Responsive>
           </HeaderMenu.Right>
@@ -540,7 +539,7 @@ const NFTListPage = (props: Props) => {
             primary
             onClick={() => setShowFiltersModal(false)}
           >
-            Apply
+            {t('global.apply')}
           </Button>
         </Modal.Content>
       </Modal>

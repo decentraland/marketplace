@@ -16,8 +16,8 @@
     "settings": "设定",
     "accept": "接受",
     "update": "更新",
-    "rarity": "稀有性",
-    "gender": "性别"
+    "search": "搜索",
+    "apply": "应用"
   },
   "navigation": {
     "atlas": " 地图集",
@@ -76,7 +76,12 @@
     "filter": "过滤",
     "order_by": "订户",
     "results": "{count}个结果",
-    "more_than_results": "+{count}个结果"
+    "more_than_results": "+{count}个结果",
+    "search": "按文字过滤",
+    "multiple_filters": "{count}个过滤器",
+    "rarity": "稀有性",
+    "gender": "性别",
+    "collection": "采集"
   },
   "nft_card": {
     "expires_at": "{date} 到期"
