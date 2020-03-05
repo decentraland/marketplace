@@ -263,7 +263,7 @@ const NFTListPage = (props: Props) => {
         )
       }
     },
-    [setOffset, setLastNFTLength, onNavigate, fillVariables]
+    [setOffset, setLastNFTLength, onNavigate, fillVariables, search]
   )
 
   const handleClearFilters = useCallback(() => {
