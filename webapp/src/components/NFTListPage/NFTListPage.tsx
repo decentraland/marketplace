@@ -176,7 +176,6 @@ const NFTListPage = (props: Props) => {
         fillVariables({
           page: 1,
           onlyOnSale: !!props.checked,
-          sortBy: SortBy.RECENTLY_LISTED,
           search
         })
       )
