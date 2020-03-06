@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Header } from 'decentraland-ui'
 
 import { useInput } from '../../../lib/input'
@@ -10,6 +10,13 @@ const TextFilter = (props: Props) => {
   const { name, value, onChange } = props
 
   const [text, setText] = useInput(value, onChange)
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [])
 
   return (
     <div className="TextFilter Filter">
@@ -18,6 +25,7 @@ const TextFilter = (props: Props) => {
       </Header>
       <div className="text-input">
         <input
+          ref={inputRef}
           value={text}
           onChange={setText}
           placeholder={t('nft_list_page.search')}

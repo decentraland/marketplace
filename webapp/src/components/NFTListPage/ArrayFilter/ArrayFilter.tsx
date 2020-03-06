@@ -31,7 +31,7 @@ const ArrayFilter = (props: Props) => {
             className={getClasses(option.value, values)}
             onClick={() => onChange(getNewValues(option.value, values))}
           >
-            {option.label}
+            {option.text}
           </div>
         ))}
       </div>

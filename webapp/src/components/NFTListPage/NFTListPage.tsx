@@ -14,7 +14,8 @@ import {
   Dropdown,
   DropdownProps,
   Responsive,
-  Modal
+  Modal,
+  Row
 } from 'decentraland-ui'
 
 import {
@@ -45,7 +46,9 @@ import {
   contractCategories,
   contractSymbols
 } from '../../modules/contract/utils'
+import { SelectFilter } from './SelectFilter'
 
+export const ALL_COLLECTIONS_FILTER_OPTION = 'all'
 const MAX_RESULTS = 1000
 const RARITY_FILTER_OPTIONS = Object.values(WearableRarity)
   .filter(x => x !== WearableRarity.COMMON && x !== WearableRarity.UNIQUE)
@@ -173,11 +176,12 @@ const NFTListPage = (props: Props) => {
         fillVariables({
           page: 1,
           onlyOnSale: !!props.checked,
-          sortBy: SortBy.RECENTLY_LISTED
+          sortBy: SortBy.RECENTLY_LISTED,
+          search
         })
       )
     },
-    [onNavigate, fillVariables]
+    [onNavigate, fillVariables, search]
   )
 
   const handleDropdownChange = useCallback(
@@ -233,13 +237,13 @@ const NFTListPage = (props: Props) => {
   )
 
   const handleCollectionsChange = useCallback(
-    (options: string[]) => {
+    (contract: string) => {
       setOffset(0)
       setLastNFTLength(0)
       onNavigate(
         fillVariables({
           page: 1,
-          contracts: options as ContractName[]
+          contracts: [contract as ContractName]
         })
       )
     },
@@ -337,41 +341,51 @@ const NFTListPage = (props: Props) => {
 
   const filters = (
     <>
-      <TextFilter
-        name={t('global.search')}
-        value={search}
-        onChange={handleSearch}
-      />
+      <Row>
+        <TextFilter
+          name={t('global.search')}
+          value={search}
+          onChange={handleSearch}
+        />
+        {category === NFTCategory.WEARABLE ? (
+          <SelectFilter
+            name={t('nft_list_page.collection')}
+            value={contracts[0] || ALL_COLLECTIONS_FILTER_OPTION}
+            options={[
+              {
+                value: ALL_COLLECTIONS_FILTER_OPTION,
+                text: t('nft_list_page.all_collections')
+              },
+              ...COLLECTION_FILTER_OPTIONS.map(collection => ({
+                value: collection,
+                text: contractSymbols[contractAddresses[collection]]
+              }))
+            ]}
+            onChange={handleCollectionsChange}
+          />
+        ) : null}
+      </Row>
       {category === NFTCategory.WEARABLE ? (
-        <>
+        <Row>
           <ArrayFilter
             name={t('nft_list_page.rarity')}
             values={wearableRarities}
             options={RARITY_FILTER_OPTIONS.map(rarity => ({
               value: rarity,
-              label: t(`wearable.rarity.${rarity}`)
+              text: t(`wearable.rarity.${rarity}`)
             }))}
             onChange={handleRaritiesChange}
-          />
-          <ArrayFilter
-            name={t('nft_list_page.collection')}
-            values={contracts}
-            options={COLLECTION_FILTER_OPTIONS.map(collection => ({
-              value: collection,
-              label: contractSymbols[contractAddresses[collection]]
-            }))}
-            onChange={handleCollectionsChange}
           />
           <ArrayFilter
             name={t('nft_list_page.gender')}
             values={wearableGenders}
             options={GENDER_FILTER_OPTIONS.map(gender => ({
               value: gender,
-              label: t(`wearable.body_shape.${gender}`)
+              text: t(`wearable.body_shape.${gender}`)
             }))}
             onChange={handleGendersChange}
           />
-        </>
+        </Row>
       ) : null}
     </>
   )
@@ -515,14 +529,7 @@ const NFTListPage = (props: Props) => {
       >
         <Modal.Header>{t('nft_list_page.filter')}</Modal.Header>
         <Modal.Content>
-          <div className="filter-row">
-            <Header sub>{t('nft_list_page.on_sale')}</Header>
-            <Radio
-              toggle
-              checked={onlyOnSale}
-              onChange={handleOnlyOnSaleChange}
-            />
-          </div>
+          {filters}
           <div className="filter-row">
             <Header sub>{t('nft_list_page.order_by')}</Header>
             <Dropdown
@@ -532,7 +539,14 @@ const NFTListPage = (props: Props) => {
               onChange={handleDropdownChange}
             />
           </div>
-          {filters}
+          <div className="filter-row">
+            <Header sub>{t('nft_list_page.on_sale')}</Header>
+            <Radio
+              toggle
+              checked={onlyOnSale}
+              onChange={handleOnlyOnSaleChange}
+            />
+          </div>
           <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
           <Button
             className="apply-filters"

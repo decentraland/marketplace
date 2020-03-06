@@ -19,11 +19,15 @@
   color: white;
   font-weight: 600;
   font-family: var(--font-family);
-  border: none;
-  border-bottom: 2px solid var(--divider);
-  padding: 4px;
+  border: 1px solid var(--divider);
+  border-radius: 6px;
+  padding: 6px 6px 6px 36px;
   outline: none;
   width: 100%;
+  background-image: url(../../../images/search.svg);
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: 8px;
 }
 
 .TextFilter .text-input input::placeholder {
@@ -34,24 +38,10 @@
 @media (max-width: 768px) {
   .TextFilter {
     margin-bottom: 20px;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 2px solid var(--divider);
-    padding-bottom: 8px;
+    width: 100%;
   }
 
   .TextFilter .ui.sub.header.name {
     font-weight: normal;
-    margin: 0px;
-  }
-
-  .TextFilter .text-input {
-    margin-bottom: 0px;
-  }
-  .TextFilter .text-input input {
-    border-bottom: none;
-    padding: 0px;
-    text-align: right;
   }
 }
