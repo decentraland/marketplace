@@ -188,7 +188,9 @@ function getNFTsQuery(
   }
 
   if (!!variables.search) {
-    extraWhere.push(`searchText_contains: "${variables.search.trim()}"`)
+    extraWhere.push(
+      `searchText_contains: "${variables.search.trim().toLowerCase()}"`
+    )
   }
 
   if (!!variables.contracts && variables.contracts.length > 0) {
