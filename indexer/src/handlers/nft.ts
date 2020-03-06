@@ -14,6 +14,7 @@ import { buildCountFromNFT } from '../modules/count'
 import {
   buildParcelFromNFT,
   getParcelImage,
+  getParcelText,
   isInBounds
 } from '../modules/parcel'
 import {
@@ -24,6 +25,7 @@ import {
 } from '../modules/wearable'
 import { buildENSFromNFT } from '../modules/ens'
 import { createAccount } from '../modules/wallet'
+import { toLowerCase } from '../modules/utils'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
 import * as status from '../modules/order/status'
@@ -61,11 +63,13 @@ export function handleTransfer(event: Transfer): void {
     // necessary because thegraph doesn't support complex queries and we can't do `OR` operations
     nft.searchEstateSize = 1
 
-    nft.searchIsLand = false
-
     // We default the "in bounds" property for parcels and no-parcels alike so we can just add  `searchParcelIsInBounds: true`
     // to all queries
     nft.searchParcelIsInBounds = true
+
+    nft.searchText = ''
+
+    nft.searchIsLand = false
 
     if (category == categories.PARCEL) {
       let parcel = buildParcelFromNFT(nft)
@@ -76,6 +80,7 @@ export function handleTransfer(event: Transfer): void {
       nft.searchParcelIsInBounds = isInBounds(parcel.x, parcel.y)
       nft.searchParcelX = parcel.x
       nft.searchParcelY = parcel.y
+      nft.searchText = getParcelText(parcel, '')
     } else if (category == categories.ESTATE) {
       let estate = buildEstateFromNFT(nft)
       estate.save()
@@ -95,6 +100,7 @@ export function handleTransfer(event: Transfer): void {
         nft.searchWearableCategory = wearable.category
         nft.searchWearableBodyShapes = wearable.bodyShapes
         nft.searchWearableRarity = wearable.rarity
+        nft.searchText = toLowerCase(wearable.name)
       }
     } else if (category == categories.ENS) {
       let ens = buildENSFromNFT(nft)

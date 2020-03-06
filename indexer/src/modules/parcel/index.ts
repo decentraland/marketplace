@@ -1,6 +1,7 @@
 import { log, BigInt, Address } from '@graphprotocol/graph-ts'
 import { LANDRegistry } from '../../entities/LANDRegistry/LANDRegistry'
 import { NFT, Parcel } from '../../entities/schema'
+import { toLowerCase } from '../../modules/utils'
 import * as addresses from '../../data/addresses'
 
 export function buildParcelFromNFT(nft: NFT): Parcel {
@@ -20,6 +21,14 @@ export function decodeTokenId(assetId: BigInt): BigInt[] {
   let registry = LANDRegistry.bind(address)
   let coordinate = registry.decodeTokenId(assetId)
   return [coordinate.value0, coordinate.value1]
+}
+
+export function getParcelText(parcel: Parcel, name: string): string {
+  let text = parcel.x.toString() + ',' + parcel.y.toString()
+  if (name != '') {
+    text += ',' + toLowerCase(name)
+  }
+  return text
 }
 
 export function getParcelImage(parcel: Parcel): string {
