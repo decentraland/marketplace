@@ -3,6 +3,7 @@ import { Update, InitializeCall } from '../entities/LANDRegistry/LANDRegistry'
 import { Parcel, NFT } from '../entities/schema'
 import { ERC721 } from '../entities/templates'
 import { getNFTId } from '../modules/nft'
+import { decodeTokenId, getParcelText } from '../modules/parcel'
 import { buildData, DataType } from '../modules/data'
 import {
   LANDRegistry,
@@ -46,8 +47,13 @@ export function handleUpdate(event: Update): void {
     parcel.data = id
     parcelData.save()
 
+    let coordinates = decodeTokenId(event.params.assetId)
+    parcel.x = coordinates[0]
+    parcel.y = coordinates[1]
+
     let nft = new NFT(id)
     nft.name = parcelData.name
+    nft.searchText = getParcelText(parcel, parcelData.name)
     nft.save()
   }
 

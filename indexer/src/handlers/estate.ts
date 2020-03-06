@@ -10,6 +10,7 @@ import { getNFTId } from '../modules/nft'
 import { decodeTokenId } from '../modules/parcel'
 import { createAccount } from '../modules/wallet'
 import { buildData, DataType } from '../modules/data'
+import { toLowerCase } from '../modules/utils'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
 
@@ -34,6 +35,7 @@ export function handleCreateEstate(event: CreateEstate): void {
 
     let nft = new NFT(id)
     nft.name = estateData.name
+    nft.searchText = toLowerCase(estateData.name)
     nft.save()
   }
 

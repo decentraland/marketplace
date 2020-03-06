@@ -2,6 +2,7 @@ import { NameRegistered } from '../entities/DCLRegistrar/DCLRegistrar'
 import { ENS, NFT } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { getTokenIdFromLabelHash } from '../modules/ens'
+import { toLowerCase } from '../modules/utils'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
 
@@ -22,5 +23,6 @@ export function handleNameRegistered(event: NameRegistered): void {
 
   let nft = NFT.load(id)
   nft.name = ens.subdomain
+  nft.searchText = toLowerCase(ens.subdomain)
   nft.save()
 }
