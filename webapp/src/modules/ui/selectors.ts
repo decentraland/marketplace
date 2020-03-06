@@ -15,6 +15,8 @@ import { View } from './types'
 import { BidState } from '../bid/reducer'
 import { Bid } from '../bid/types'
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
+import { contractAddresses } from '../contract/utils'
+import { ContractName } from '../contract/types'
 
 export const getState = (state: RootState) => state.ui
 export const getNFTs = createSelector<
@@ -85,6 +87,21 @@ export const getUIWearableGenders = createSelector<
     'genders',
     Object.values(WearableGender)
   )
+)
+
+export const getUIContracts = createSelector<RootState, string, ContractName[]>(
+  getSearch,
+  search =>
+    getParamArray<ContractName>(
+      search,
+      'contracts',
+      Object.keys(contractAddresses)
+    )
+)
+
+export const getUISearch = createSelector<RootState, string, string>(
+  getSearch,
+  search => new URLSearchParams(search).get('search') || ''
 )
 
 export const getHomepageWearables = createSelector<

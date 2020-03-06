@@ -11,6 +11,7 @@ import {
   WearableRarity,
   WearableGender
 } from '../../modules/nft/wearable/types'
+import { ContractName } from '../../modules/contract/types'
 
 export type Props = {
   defaultOnlyOnSale: boolean
@@ -21,9 +22,11 @@ export type Props = {
   sortBy: SortBy
   wearableRarities: WearableRarity[]
   wearableGenders: WearableGender[]
+  contracts: ContractName[]
   onlyOnSale: boolean | null
   view: View
   count: number | null
+  search: string
   isLoading: boolean
   onNavigate: (options?: SearchOptions) => void
   onFetchNFTs: typeof fetchNFTsRequest
@@ -36,10 +39,12 @@ export type MapStateProps = Pick<
   | 'section'
   | 'sortBy'
   | 'onlyOnSale'
+  | 'search'
   | 'isLoading'
   | 'count'
   | 'wearableRarities'
   | 'wearableGenders'
+  | 'contracts'
 >
 export type OwnProps = Pick<
   Props,

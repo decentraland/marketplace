@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import {
   Page,
   Grid,
@@ -14,7 +15,7 @@ import {
   DropdownProps,
   Responsive,
   Modal,
-  Close
+  Row
 } from 'decentraland-ui'
 
 import {
@@ -25,25 +26,39 @@ import {
   getSearchWearableCategory
 } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
+import {
+  WearableRarity,
+  WearableGender
+} from '../../modules/nft/wearable/types'
 import { NFTCategory } from '../../modules/nft/types'
 import { getSortOrder } from '../../modules/nft/utils'
 import { MAX_QUERY_SIZE, PAGE_SIZE } from '../../lib/api/client'
 import { NFTCard } from '../NFTCard'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { Props } from './NFTListPage.types'
-import './NFTListPage.css'
-import { ArrayFilter } from './ArrayFilter'
-import {
-  WearableRarity,
-  WearableGender
-} from '../../modules/nft/wearable/types'
 import { ClearFilter } from './ClearFilter'
+import { TextFilter } from './TextFilter'
+import { ArrayFilter } from './ArrayFilter'
+import './NFTListPage.css'
+import { ContractName } from '../../modules/contract/types'
+import {
+  contractAddresses,
+  contractCategories,
+  contractSymbols
+} from '../../modules/contract/utils'
+import { SelectFilter } from './SelectFilter'
 
+export const ALL_COLLECTIONS_FILTER_OPTION = 'all'
 const MAX_RESULTS = 1000
 const RARITY_FILTER_OPTIONS = Object.values(WearableRarity)
   .filter(x => x !== WearableRarity.COMMON && x !== WearableRarity.UNIQUE)
   .reverse()
 const GENDER_FILTER_OPTIONS = Object.values(WearableGender)
+const COLLECTION_FILTER_OPTIONS = Object.keys(contractAddresses).filter(
+  key =>
+    contractCategories[contractAddresses[key as ContractName]] ===
+    NFTCategory.WEARABLE
+) as ContractName[]
 
 const NFTListPage = (props: Props) => {
   const {
@@ -56,6 +71,8 @@ const NFTListPage = (props: Props) => {
     count,
     wearableRarities,
     wearableGenders,
+    contracts,
+    search,
     isLoading,
     onFetchNFTs,
     onNavigate
@@ -63,8 +80,6 @@ const NFTListPage = (props: Props) => {
 
   // "Instance" variables
   const category = section ? getSearchCategory(section) : null
-
-  const hasFilters = category === NFTCategory.WEARABLE
 
   const onlyOnSale =
     props.onlyOnSale === null ? defaultOnlyOnSale : props.onlyOnSale
@@ -96,7 +111,7 @@ const NFTListPage = (props: Props) => {
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
   const fillVariables = useCallback(
-    (options: SearchOptions) => {
+    (options: SearchOptions, clearFilters = false) => {
       let newOptions: SearchOptions = {
         page,
         section,
@@ -108,12 +123,15 @@ const NFTListPage = (props: Props) => {
       const nextCategory = newOptions.section
         ? getSearchCategory(newOptions.section)
         : null
-      if (prevCategory && prevCategory === nextCategory) {
+
+      if (prevCategory && prevCategory === nextCategory && !clearFilters) {
         switch (nextCategory) {
           case NFTCategory.WEARABLE: {
             newOptions = {
               wearableRarities,
               wearableGenders,
+              search,
+              contracts,
               ...newOptions
             }
           }
@@ -122,7 +140,16 @@ const NFTListPage = (props: Props) => {
 
       return newOptions
     },
-    [wearableRarities, wearableGenders, page, section, sortBy, onlyOnSale]
+    [
+      wearableRarities,
+      wearableGenders,
+      page,
+      section,
+      sortBy,
+      onlyOnSale,
+      search,
+      contracts
+    ]
   )
 
   // Handlers
@@ -148,11 +175,12 @@ const NFTListPage = (props: Props) => {
       onNavigate(
         fillVariables({
           page: 1,
-          onlyOnSale: !!props.checked
+          onlyOnSale: !!props.checked,
+          search
         })
       )
     },
-    [onNavigate, fillVariables]
+    [onNavigate, fillVariables, search]
   )
 
   const handleDropdownChange = useCallback(
@@ -207,10 +235,53 @@ const NFTListPage = (props: Props) => {
     [setOffset, setLastNFTLength, onNavigate, fillVariables]
   )
 
+  const handleCollectionsChange = useCallback(
+    (contract: string) => {
+      setOffset(0)
+      setLastNFTLength(0)
+      onNavigate(
+        fillVariables({
+          page: 1,
+          contracts: [contract as ContractName]
+        })
+      )
+    },
+    [setOffset, setLastNFTLength, onNavigate, fillVariables]
+  )
+
   const handleToggleFilterMenu = useCallback(
     () => setShowFiltersMenu(!showFiltersMenu),
     [showFiltersMenu, setShowFiltersMenu]
   )
+
+  const handleSearch = useCallback(
+    (newSearch: string) => {
+      if (search !== newSearch) {
+        setOffset(0)
+        setLastNFTLength(0)
+        onNavigate(
+          fillVariables({
+            page: 1,
+            search: newSearch
+          })
+        )
+      }
+    },
+    [setOffset, setLastNFTLength, onNavigate, fillVariables, search]
+  )
+
+  const handleClearFilters = useCallback(() => {
+    setOffset(0)
+    setLastNFTLength(0)
+    onNavigate(
+      fillVariables(
+        {
+          page: 1
+        },
+        true
+      )
+    )
+  }, [setOffset, setLastNFTLength, onNavigate, fillVariables])
 
   // Kick things off
   useEffect(() => {
@@ -243,7 +314,9 @@ const NFTListPage = (props: Props) => {
         category,
         wearableRarities,
         wearableGenders,
-        wearableCategory
+        wearableCategory,
+        contracts,
+        search
       },
       view: skip === 0 ? view : View.LOAD_MORE
     })
@@ -257,11 +330,90 @@ const NFTListPage = (props: Props) => {
     sortBy,
     wearableRarities,
     wearableGenders,
+    contracts,
+    search,
     onFetchNFTs
   ])
 
   // close the menu when the category changes
   useEffect(() => setShowFiltersMenu(false), [category, setShowFiltersMenu])
+
+  const filters = (
+    <>
+      <Row>
+        <TextFilter
+          name={t('global.search')}
+          value={search}
+          onChange={handleSearch}
+        />
+        {category === NFTCategory.WEARABLE ? (
+          <SelectFilter
+            name={t('nft_list_page.collection')}
+            value={contracts[0] || ALL_COLLECTIONS_FILTER_OPTION}
+            options={[
+              {
+                value: ALL_COLLECTIONS_FILTER_OPTION,
+                text: t('nft_list_page.all_collections')
+              },
+              ...COLLECTION_FILTER_OPTIONS.map(collection => ({
+                value: collection,
+                text: contractSymbols[contractAddresses[collection]]
+              }))
+            ]}
+            onChange={handleCollectionsChange}
+          />
+        ) : null}
+      </Row>
+      {category === NFTCategory.WEARABLE ? (
+        <Row>
+          <ArrayFilter
+            name={t('nft_list_page.rarity')}
+            values={wearableRarities}
+            options={RARITY_FILTER_OPTIONS.map(rarity => ({
+              value: rarity,
+              text: t(`wearable.rarity.${rarity}`)
+            }))}
+            onChange={handleRaritiesChange}
+          />
+          <ArrayFilter
+            name={t('nft_list_page.gender')}
+            values={wearableGenders}
+            options={GENDER_FILTER_OPTIONS.map(gender => ({
+              value: gender,
+              text: t(`wearable.body_shape.${gender}`)
+            }))}
+            onChange={handleGendersChange}
+          />
+        </Row>
+      ) : null}
+    </>
+  )
+
+  let appliedFilters = []
+  if (search) {
+    appliedFilters.push(t('global.search'))
+  }
+  if (wearableRarities.length > 0) {
+    appliedFilters.push(t('nft_list_page.rarity'))
+  }
+  if (wearableGenders.length > 0) {
+    appliedFilters.push(t('nft_list_page.gender'))
+  }
+  if (contracts.length > 0) {
+    appliedFilters.push(t('nft_list_page.collection'))
+  }
+
+  let appliedFiltersLabel = ''
+  if (appliedFilters.length === 1) {
+    appliedFiltersLabel = appliedFilters[0]
+    // "RARITY, GENDER (X)" on desktop, "2 FILTERS (X)" on mobile
+  } else if (appliedFilters.length === 2 && !isMobile()) {
+    appliedFiltersLabel = appliedFilters.join(', ')
+  } else if (appliedFilters.length > 1) {
+    appliedFiltersLabel = t('nft_list_page.multiple_filters', {
+      count: appliedFilters.length
+    })
+  }
 
   return (
     <Page className="NFTListPage">
@@ -273,20 +425,10 @@ const NFTListPage = (props: Props) => {
       <Grid.Column className="right-column">
         <HeaderMenu>
           <HeaderMenu.Left>
-            {wearableRarities.length > 0 ? (
-              <Responsive
-                minWidth={Responsive.onlyComputer.minWidth}
-                as={ClearFilter}
-                name={t('global.rarity')}
-                onClear={() => handleRaritiesChange([])}
-              />
-            ) : null}
-            {wearableGenders.length > 0 ? (
-              <Responsive
-                minWidth={Responsive.onlyComputer.minWidth}
-                as={ClearFilter}
-                name={t('global.gender')}
-                onClear={() => handleGendersChange([])}
+            {appliedFilters.length > 0 ? (
+              <ClearFilter
+                name={appliedFiltersLabel}
+                onClear={handleClearFilters}
               />
             ) : null}
             <Header sub className="results">
@@ -313,23 +455,18 @@ const NFTListPage = (props: Props) => {
                 options={dropdownOptions}
                 onChange={handleDropdownChange}
               />
-              {hasFilters ? (
+
+              <div
+                className="open-filters-wrapper"
+                onClick={handleToggleFilterMenu}
+              >
+                <div className="label">{t('nft_list_page.filter')}</div>
                 <div
-                  className="open-filters-wrapper"
-                  onClick={handleToggleFilterMenu}
-                >
-                  <div className="label">{t('nft_list_page.filter')}</div>
-                  <div
-                    className={`open-filters ${
-                      showFiltersMenu ||
-                      wearableRarities.length > 0 ||
-                      wearableGenders.length > 0
-                        ? 'active'
-                        : ''
-                    }`}
-                  />
-                </div>
-              ) : null}
+                  className={`open-filters ${
+                    showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
+                  }`}
+                />
+              </div>
             </Responsive>
             <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
               <div
@@ -337,7 +474,11 @@ const NFTListPage = (props: Props) => {
                 onClick={() => setShowFiltersModal(!showFiltersModal)}
               >
                 <div className="label">{t('nft_list_page.filter')}</div>
-                <div className="open-filters" />
+                <div
+                  className={`open-filters ${
+                    showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
+                  }`}
+                />
               </div>
             </Responsive>
           </HeaderMenu.Right>
@@ -348,24 +489,7 @@ const NFTListPage = (props: Props) => {
             minWidth={Responsive.onlyTablet.minWidth}
             className="filters"
           >
-            <ArrayFilter
-              name={t('global.rarity')}
-              values={wearableRarities}
-              options={RARITY_FILTER_OPTIONS.map(rarity => ({
-                value: rarity,
-                label: t(`wearable.rarity.${rarity}`)
-              }))}
-              onChange={handleRaritiesChange}
-            />
-            <ArrayFilter
-              name={t('global.gender')}
-              values={wearableGenders}
-              options={GENDER_FILTER_OPTIONS.map(gender => ({
-                value: gender,
-                label: t(`wearable.body_shape.${gender}`)
-              }))}
-              onChange={handleGendersChange}
-            />
+            {filters}
           </Responsive>
         ) : null}
         <Card.Group>
@@ -401,18 +525,10 @@ const NFTListPage = (props: Props) => {
         className="FiltersModal"
         open={showFiltersModal}
         onClose={() => setShowFiltersModal(false)}
-        closeIcon={<Close onClick={() => setShowFiltersModal(false)} />}
       >
-        <Modal.Header>Filter</Modal.Header>
+        <Modal.Header>{t('nft_list_page.filter')}</Modal.Header>
         <Modal.Content>
-          <div className="filter-row">
-            <Header sub>{t('nft_list_page.on_sale')}</Header>
-            <Radio
-              toggle
-              checked={onlyOnSale}
-              onChange={handleOnlyOnSaleChange}
-            />
-          </div>
+          {filters}
           <div className="filter-row">
             <Header sub>{t('nft_list_page.order_by')}</Header>
             <Dropdown
@@ -422,29 +538,22 @@ const NFTListPage = (props: Props) => {
               onChange={handleDropdownChange}
             />
           </div>
-          {hasFilters ? (
-            <>
-              <ArrayFilter
-                name={t('global.rarity')}
-                values={wearableRarities}
-                options={RARITY_FILTER_OPTIONS.map(rarity => ({
-                  value: rarity,
-                  label: t(`wearable.rarity.${rarity}`)
-                }))}
-                onChange={handleRaritiesChange}
-              />
-              <ArrayFilter
-                name={t('global.gender')}
-                values={wearableGenders}
-                options={GENDER_FILTER_OPTIONS.map(gender => ({
-                  value: gender,
-                  label: t(`wearable.body_shape.${gender}`)
-                }))}
-                onChange={handleGendersChange}
-              />
-            </>
-          ) : null}
+          <div className="filter-row">
+            <Header sub>{t('nft_list_page.on_sale')}</Header>
+            <Radio
+              toggle
+              checked={onlyOnSale}
+              onChange={handleOnlyOnSaleChange}
+            />
+          </div>
           <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
+          <Button
+            className="apply-filters"
+            primary
+            onClick={() => setShowFiltersModal(false)}
+          >
+            {t('global.apply')}
+          </Button>
         </Modal.Content>
       </Modal>
     </Page>

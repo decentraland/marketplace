@@ -1,0 +1,38 @@
+.SelectFilter {
+  display: flex;
+  flex-direction: column;
+}
+
+.SelectFilter .ui.sub.header.name {
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.SelectFilter .ui.dropdown {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid var(--divider);
+  border-radius: 6px;
+  color: var(--secondary-text);
+}
+
+.SelectFilter .ui.dropdown .text {
+  flex: 1 0 auto;
+  color: var(--text);
+}
+
+.SelectFilter .ui.dropdown .dropdown.icon {
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .SelectFilter {
+    margin-bottom: 24px;
+    width: 100%;
+  }
+
+  .SelectFilter .ui.sub.header.name {
+    font-weight: normal;
+  }
+}

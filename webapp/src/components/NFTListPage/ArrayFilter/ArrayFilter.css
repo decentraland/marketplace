@@ -3,10 +3,6 @@
   flex-direction: column;
 }
 
-.ArrayFilter + .ArrayFilter {
-  margin-top: 14px;
-}
-
 .ArrayFilter .ui.sub.header.name {
   margin-bottom: 12px;
   font-weight: 600;
@@ -42,5 +38,9 @@
     line-height: 18px;
     margin-right: 16px;
     margin-bottom: 16px;
+  }
+
+  .ArrayFilter .ui.sub.header.name {
+    font-weight: normal;
   }
 }

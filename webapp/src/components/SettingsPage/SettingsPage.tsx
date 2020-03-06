@@ -102,7 +102,9 @@ const SettingsPage = (props: Props) => {
               </Grid.Column>
               <Grid.Column computer={12} mobile={16}>
                 <div className="balance">
-                  <Mana inline>{wallet!.mana.toLocaleString()}</Mana>
+                  <Mana inline>
+                    {parseInt(wallet!.mana.toFixed(0), 10).toLocaleString()}
+                  </Mana>
                   {BUY_MANA_URL ? (
                     <a
                       className="buy-more"

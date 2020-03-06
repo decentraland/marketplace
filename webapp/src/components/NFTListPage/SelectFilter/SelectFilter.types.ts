@@ -1,6 +1,6 @@
 export type Props = {
   name: string
-  values: string[]
+  value: string
   options: { value: string; text: string }[]
-  onChange: (newValues: string[]) => void
+  onChange: (newValue: string) => void
 }

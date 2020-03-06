@@ -8,6 +8,7 @@ import { FetchNFTsOptions } from '../../modules/nft/actions'
 import { nftFragment, NFTFragment } from '../../modules/nft/fragments'
 import { orderFragment } from '../../modules/order/fragments'
 import { WearableGender } from '../../modules/nft/wearable/types'
+import { contractAddresses } from '../../modules/contract/utils'
 import { client } from './client'
 
 class NFTAPI {
@@ -184,6 +185,20 @@ function getNFTsQuery(
         `searchWearableBodyShapes_contains: [BaseMale, BaseFemale]`
       )
     }
+  }
+
+  if (!!variables.search) {
+    extraWhere.push(
+      `searchText_contains: "${variables.search.trim().toLowerCase()}"`
+    )
+  }
+
+  if (!!variables.contracts && variables.contracts.length > 0) {
+    extraWhere.push(
+      `contractAddress_in: [${variables.contracts
+        .map(contract => `"${contractAddresses[contract]}"`)
+        .join(', ')}]`
+    )
   }
 
   return gql`
