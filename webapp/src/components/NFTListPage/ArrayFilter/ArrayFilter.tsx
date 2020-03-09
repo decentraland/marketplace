@@ -28,6 +28,7 @@ const ArrayFilter = (props: Props) => {
       <div className="options">
         {options.map(option => (
           <div
+            key={option.text}
             className={getClasses(option.value, values)}
             onClick={() => onChange(getNewValues(option.value, values))}
           >
