@@ -18,6 +18,7 @@ import {
 
 export type UIState = {
   nftIds: string[]
+  lastTimestamp: number
   homepageWearableIds: string[]
   homepageLandIds: string[]
   homepageENSIds: string[]
@@ -37,7 +38,8 @@ const INITIAL_STATE: UIState = {
   bidderBidIds: [],
   archivedBidIds: [],
   nftBidIds: [],
-  assetCount: null
+  assetCount: null,
+  lastTimestamp: 0
 }
 
 type UIReducerAction =
@@ -60,13 +62,17 @@ export function uiReducer(
       }
     }
     case FETCH_NFTS_SUCCESS: {
+      if (action.payload.timestamp < state.lastTimestamp) {
+        return state
+      }
       switch (action.payload.options.view) {
         case View.MARKET:
         case View.ACCOUNT: {
           return {
             ...state,
             nftIds: action.payload.nfts.map(nft => nft.id),
-            assetCount: action.payload.count
+            assetCount: action.payload.count,
+            timestamp: action.payload.timestamp
           }
         }
         case View.LOAD_MORE: {
@@ -76,7 +82,8 @@ export function uiReducer(
               ...state.nftIds,
               ...action.payload.nfts.map(nft => nft.id)
             ],
-            assetCount: action.payload.count
+            assetCount: action.payload.count,
+            timestamp: action.payload.timestamp
           }
         }
         case View.HOME_WEARABLES: {
