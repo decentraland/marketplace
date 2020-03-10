@@ -24,8 +24,8 @@ import {
 import {
   TRANSFER_NFT_SUCCESS,
   TransferNFTSuccessAction,
-  FetchNFTsRequestAction,
-  FETCH_NFTS_REQUEST
+  FETCH_NFTS_SUCCESS,
+  FetchNFTsSuccessAction
 } from '../nft/actions'
 import {
   ALLOW_TOKEN_SUCCESS,
@@ -190,11 +190,12 @@ track<UnarchiveBidAction>(
   })
 )
 
-track<FetchNFTsRequestAction>(
-  FETCH_NFTS_REQUEST,
+track<FetchNFTsSuccessAction>(
+  FETCH_NFTS_SUCCESS,
   'Fetch NFTs',
   ({ payload }) => ({
     ...payload.options.variables,
-    view: payload.options.view
+    view: payload.options.view,
+    count: payload.count
   })
 )
