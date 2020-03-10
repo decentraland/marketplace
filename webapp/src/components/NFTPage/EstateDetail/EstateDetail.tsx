@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Header, Icon } from 'decentraland-ui'
+import { Container, Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { getNFTName } from '../../../modules/nft/utils'
@@ -32,14 +32,14 @@ const EstateDetail = (props: Props) => {
               <Badge color="#37333d">
                 {nft.estate!.size.toLocaleString()} LAND
               </Badge>
-              <Badge color="#37333d">
+              <Badge color="#ff2d55" className="jump-in-badge">
                 <a
                   href={buildExplorerUrl(x, y)}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {t('global.enter')}&nbsp;
-                  <Icon name="external" />
+                  {t('global.jump_in')}&nbsp;
+                  <i className="jump-in-icon" />
                 </a>
               </Badge>
             </>

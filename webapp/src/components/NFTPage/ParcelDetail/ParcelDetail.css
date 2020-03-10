@@ -7,3 +7,25 @@
   background-position: center;
   margin-right: 4px;
 }
+
+.ParcelDetail .jump-in-icon {
+  background: url(../../../images/jump_in.svg);
+  background-size: 16px 16px;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.ParcelDetail .Badge a {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .ParcelDetail .jump-in-badge {
+    display: none;
+  }
+}

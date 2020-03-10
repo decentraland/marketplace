@@ -17,7 +17,8 @@
     "accept": "Accept",
     "update": "Update",
     "search": "Search",
-    "apply": "Apply"
+    "apply": "Apply",
+    "jump_in": "Jump In"
   },
   "navigation": {
     "atlas": "Atlas",
