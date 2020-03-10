@@ -21,7 +21,12 @@ import {
   CreateOrderSuccessAction,
   CancelOrderSuccessAction
 } from '../order/actions'
-import { TRANSFER_NFT_SUCCESS, TransferNFTSuccessAction } from '../nft/actions'
+import {
+  TRANSFER_NFT_SUCCESS,
+  TransferNFTSuccessAction,
+  FetchNFTsRequestAction,
+  FETCH_NFTS_REQUEST
+} from '../nft/actions'
 import {
   ALLOW_TOKEN_SUCCESS,
   APPROVE_TOKEN_SUCCESS,
@@ -182,5 +187,14 @@ track<UnarchiveBidAction>(
     tokenId: payload.bid.tokenId,
     bidId: payload.bid.id,
     price: payload.bid.price
+  })
+)
+
+track<FetchNFTsRequestAction>(
+  FETCH_NFTS_REQUEST,
+  'Fetch NFTs',
+  ({ payload }) => ({
+    ...payload.options.variables,
+    view: payload.options.view
   })
 )
