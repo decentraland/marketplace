@@ -1,27 +1,31 @@
 import { takeEvery, all, put } from 'redux-saga/effects'
-import { createWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
+import { walletSaga as baseWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
 import {
   ConnectWalletSuccessAction,
-  CONNECT_WALLET_SUCCESS
+  CONNECT_WALLET_SUCCESS,
+  ChangeAccountAction,
+  ChangeNetworkAction,
+  CHANGE_ACCOUNT,
+  CHANGE_NETWORK
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 
 import { fetchAuthorizationRequest } from '../authorization/actions'
 import { AuthorizationsRequest } from '../authorization/types'
 import { contractAddresses } from '../contract/utils'
 
-const baseWalletSaga = createWalletSaga({
-  MANA_ADDRESS: contractAddresses.MANAToken
-})
-
 export function* walletSaga() {
   yield all([baseWalletSaga(), fullWalletSaga()])
 }
 
 function* fullWalletSaga() {
-  yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
+  yield takeEvery(CONNECT_WALLET_SUCCESS, handleWallet)
+  yield takeEvery(CHANGE_ACCOUNT, handleWallet)
+  yield takeEvery(CHANGE_NETWORK, handleWallet)
 }
 
-function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
+function* handleWallet(
+  action: ConnectWalletSuccessAction | ChangeAccountAction | ChangeNetworkAction
+) {
   const { address } = action.payload.wallet
 
   const {
