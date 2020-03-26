@@ -1,5 +1,7 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
@@ -31,6 +33,16 @@ const ParcelDetail = (props: Props) => {
               <Badge color="#37333d">
                 <i className="pin" />
                 {x},{y}
+              </Badge>
+              <Badge color="#ff2d55" className="jump-in-badge">
+                <a
+                  href={buildExplorerUrl(x, y)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {t('global.jump_in')}&nbsp;
+                  <i className="jump-in-icon" />
+                </a>
               </Badge>
             </>
           }
