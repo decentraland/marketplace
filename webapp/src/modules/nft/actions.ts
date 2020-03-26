@@ -53,16 +53,28 @@ export const DEFAULT_FETCH_NFTS_OPTIONS: FetchNFTsOptions = {
 }
 
 export const fetchNFTsRequest = (options: Partial<FetchNFTsOptions> = {}) =>
-  action(FETCH_NFTS_REQUEST, { options })
+  action(FETCH_NFTS_REQUEST, { options, timestamp: Date.now() })
 export const fetchNFTsSuccess = (
   options: FetchNFTsOptions,
   nfts: NFT[],
   accounts: Account[],
   orders: Order[],
-  count: number
-) => action(FETCH_NFTS_SUCCESS, { options, nfts, accounts, orders, count })
-export const fetchNFTsFailure = (options: FetchNFTsOptions, error: string) =>
-  action(FETCH_NFTS_FAILURE, { options, error })
+  count: number,
+  timestamp: number
+) =>
+  action(FETCH_NFTS_SUCCESS, {
+    options,
+    nfts,
+    accounts,
+    orders,
+    count,
+    timestamp
+  })
+export const fetchNFTsFailure = (
+  options: FetchNFTsOptions,
+  error: string,
+  timestamp: number
+) => action(FETCH_NFTS_FAILURE, { options, error, timestamp })
 
 export type FetchNFTsRequestAction = ReturnType<typeof fetchNFTsRequest>
 export type FetchNFTsSuccessAction = ReturnType<typeof fetchNFTsSuccess>

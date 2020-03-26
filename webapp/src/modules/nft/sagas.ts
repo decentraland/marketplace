@@ -29,6 +29,7 @@ export function* nftSaga() {
 }
 
 function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
+  const { timestamp } = action.payload
   const options = {
     ...DEFAULT_FETCH_NFTS_OPTIONS,
     ...action.payload.options,
@@ -42,9 +43,11 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
     const [nfts, accounts, orders, count] = yield call(() =>
       nftAPI.fetch(options)
     )
-    yield put(fetchNFTsSuccess(options, nfts, accounts, orders, count))
+    yield put(
+      fetchNFTsSuccess(options, nfts, accounts, orders, count, timestamp)
+    )
   } catch (error) {
-    yield put(fetchNFTsFailure(options, error.message))
+    yield put(fetchNFTsFailure(options, error.message, timestamp))
   }
 }
 
