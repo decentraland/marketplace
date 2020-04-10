@@ -1,27 +1,6 @@
 {
   "version": 2,
   "name": "marketplace",
-  "build": {
-    "env": {
-      "REACT_APP_BUY_MANA_URL": "https://kyberswap.com/swap/eth-mana",
-      "REACT_APP_MARKETPLACE_URL": "https://api.thegraph.com/subgraphs/name/decentraland/marketplace",
-      "REACT_APP_LAND_URL": "https://api.decentraland.org/v1",
-      "REACT_APP_MANA_ADDRESS": "0x0f5d2fb29fb7d3cfee444a200298f468908cc942",
-      "REACT_APP_MARKETPLACE_ADDRESS": "0x8e5660b4ab70168b5a6feea0e0315cb49c8cd539",
-      "REACT_APP_BIDS_ADDRESS": "0xe479dfd9664c693b2e2992300930b00bfde08233",
-      "REACT_APP_LAND_ADDRESS": "0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d",
-      "REACT_APP_ESTATE_ADDRESS": "0x959e104e1a4db6317fa58f8295f586e1a978c297",
-      "REACT_APP_EXCLUSIVE_MASKS_ADDRESS": "0xc04528c14c8ffd84c7c1fb6719b4a89853035cdd",
-      "REACT_APP_HALLOWEEN_2019_ADDRESS": "0xc1f4b0eea2bd6690930e6c66efd3e197d620b9c2",
-      "REACT_APP_XMAS_2019_ADDRESS": "0xc3af02c0fd486c8e9da5788b915d6fff3f049866",
-      "REACT_APP_DCL_REGISTRAR": "0x2a187453064356c898cae034eaed119e1663acb8",
-      "REACT_APP_MCH_ADDRESS": "0xf64dc33a192e056bb5f0e5049356a0498b502d50",
-      "REACT_APP_COMMUNITY_CONTEST_ADDRESS": "0x32b7495895264ac9d0b12d32afd435453458b1c6",
-      "REACT_APP_DCL_LAUNCH_ADDRESS": "0xd35147be6401dcb20811f2104c33de8e97ed6818",
-      "REACT_APP_DCG_ADDRESS": "0x3163d2cfee3183f9874e2869942cc62649eeb004",
-      "REACT_APP_SEGMENT_API_KEY": "gMnkewUBzA6J879kAtMvp2WhohEk36uy"
-    }
-  },
   "routes": [
     { "handle": "filesystem" },
     { "src": "/.*", "dest": "/index.html" }
