@@ -12,6 +12,7 @@ const MCHCollection = env.REACT_APP_MCH_ADDRESS!
 const CommunityContestCollection = env.REACT_APP_COMMUNITY_CONTEST_ADDRESS!
 const DCLLaunchCollection = env.REACT_APP_DCL_LAUNCH_ADDRESS!
 const DCGCollection = env.REACT_APP_DCG_ADDRESS!
+const StaySafeCollection = env.REACT_APP_DCL_STAY_SAFE_ADDRESS!
 const DCLRegistrar = env.REACT_APP_DCL_REGISTRAR!
 const Marketplace = env.REACT_APP_MARKETPLACE_ADDRESS!
 const Bids = env.REACT_APP_BIDS_ADDRESS!
@@ -27,6 +28,7 @@ export const contractAddresses = {
   CommunityContestCollection,
   DCLLaunchCollection,
   DCGCollection,
+  StaySafeCollection,
   DCLRegistrar,
   Marketplace,
   Bids
@@ -43,6 +45,7 @@ export const contractSymbols = {
   [CommunityContestCollection]: 'Community Contest',
   [DCLLaunchCollection]: 'DCL Launch',
   [DCGCollection]: 'DCG',
+  [StaySafeCollection]: 'Stay Safe',
   [DCLRegistrar]: 'Names',
   [Marketplace]: 'Marketplace',
   [Bids]: 'Bids'
@@ -58,6 +61,7 @@ export const contractCategories = {
   [CommunityContestCollection]: NFTCategory.WEARABLE,
   [DCLLaunchCollection]: NFTCategory.WEARABLE,
   [DCGCollection]: NFTCategory.WEARABLE,
+  [StaySafeCollection]: NFTCategory.WEARABLE,
   [DCLRegistrar]: NFTCategory.ENS
 } as const
 
@@ -73,6 +77,7 @@ export const contractNames = {
   [DCLLaunchCollection]: 'DCLLaunchCollection',
   [DCGCollection]: 'DCGCollection',
   [DCLRegistrar]: 'DCLRegistrar',
+  [StaySafeCollection]: 'StaySafeCollection',
   [Marketplace]: 'Marketplace',
   [Bids]: 'ERC721Bid'
 }
