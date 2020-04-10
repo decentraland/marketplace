@@ -16,7 +16,8 @@ export function getCategory(contractAddress: string): string {
     contractAddress == addresses.MCHCollection ||
     contractAddress == addresses.CommunityContestCollection ||
     contractAddress == addresses.DCLLaunchCollection ||
-    contractAddress == addresses.DCGCollection
+    contractAddress == addresses.DCGCollection ||
+    contractAddress == addresses.StaySafeCollection
   ) {
     category = categories.WEARABLE
   } else if (contractAddress == addresses.DCLRegistrar) {
