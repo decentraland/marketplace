@@ -31,9 +31,11 @@ const INITIAL_STATE = {
   error: null
 }
 
+/**
+ * @TODO(eordano): Fixme -- issue inserted by a bad scan of the blockchain in the API
+ */
 function monkeyPatchFix(nft: NFT) {
   if (nft.wearable) {
-    debugger
     nft.image = nft.image.replace(',/', '/')
   }
   return nft
