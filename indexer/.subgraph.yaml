@@ -196,6 +196,7 @@ templates:
         - Parcel
         - Estate
         - Wearable
+        - ENS
       abis:
         - name: ERC721
           file: ./abis/ERC721.json

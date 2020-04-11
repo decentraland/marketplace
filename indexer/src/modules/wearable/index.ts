@@ -6,9 +6,10 @@ import {
   community_contest,
   dcg_collection,
   dcl_launch,
-  mch_collection,
-  halloween_2019,
   exclusive_masks,
+  halloween_2019,
+  mch_collection,
+  stay_safe,
   xmas_2019
 } from '../../data/wearables'
 import * as categories from '../../data/wearables/categories'
@@ -28,18 +29,20 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     community_contest,
     dcg_collection,
     dcl_launch,
-    mch_collection,
-    halloween_2019,
     exclusive_masks,
+    halloween_2019,
+    mch_collection,
+    stay_safe,
     xmas_2019
   ]
   let collectionNames: string[] = [
     'community_contest',
     'dcg_collection',
     'dcl_launch',
-    'mch_collection',
-    'halloween_2019',
     'exclusive_masks',
+    'halloween_2019',
+    'mch_collection',
+    'stay_safe',
     'xmas_2019'
   ]
   for (let i = 0; i < allCollections.length; i++) {

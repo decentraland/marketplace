@@ -11,5 +11,6 @@ export const CommunityContestCollection =
   '{{address:CommunityContestCollection}}'
 export const DCLLaunchCollection = '{{address:DCLLaunchCollection}}'
 export const DCGCollection = '{{address:DCGCollection}}'
+export const StaySafeCollection = '{{address:StaySafeCollection}}'
 export const DCLRegistrar = '{{address:DCLRegistrar}}'
 export const Marketplace = '{{address:Marketplace}}'

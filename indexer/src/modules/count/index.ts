@@ -25,6 +25,8 @@ export function buildCount(): Count {
     count.wearableXmas2019 = 0
 
     count.ensTotal = 0
+
+    count.started = 0
   }
 
   return count as Count

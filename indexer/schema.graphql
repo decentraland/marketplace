@@ -23,6 +23,8 @@ type Count @entity {
   wearableXmas2019: Int!
 
   ensTotal: Int!
+
+  started: Int!
 }
 
 # ---------------------------------------------------------
