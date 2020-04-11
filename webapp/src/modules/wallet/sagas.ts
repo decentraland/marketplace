@@ -11,7 +11,7 @@ import {
 
 import { fetchAuthorizationRequest } from '../authorization/actions'
 import { AuthorizationsRequest } from '../authorization/types'
-import { contractAddresses } from '../contract/utils'
+import { contractAddresses, contractCategories } from '../contract/utils'
 
 export function* walletSaga() {
   yield all([baseWalletSaga(), fullWalletSaga()])
@@ -28,21 +28,7 @@ function* handleWallet(
 ) {
   const { address } = action.payload.wallet
 
-  const {
-    MANAToken,
-    Marketplace,
-    LANDRegistry,
-    EstateRegistry,
-    ExclusiveMasksCollection,
-    Halloween2019Collection,
-    Xmas2019Collection,
-    MCHCollection,
-    CommunityContestCollection,
-    DCLLaunchCollection,
-    DCGCollection,
-    DCLRegistrar,
-    Bids
-  } = contractAddresses
+  const { MANAToken, Marketplace, Bids } = contractAddresses
 
   const authorization: AuthorizationsRequest = {
     allowances: {
@@ -50,18 +36,7 @@ function* handleWallet(
       [Bids]: [MANAToken]
     },
     approvals: {
-      [Marketplace]: [
-        LANDRegistry,
-        EstateRegistry,
-        ExclusiveMasksCollection,
-        Halloween2019Collection,
-        Xmas2019Collection,
-        MCHCollection,
-        CommunityContestCollection,
-        DCLLaunchCollection,
-        DCGCollection,
-        DCLRegistrar
-      ]
+      [Marketplace]: Object.keys(contractCategories)
     }
   }
 
