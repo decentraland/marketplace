@@ -17,6 +17,10 @@
   margin-right: 20px;
 }
 
+.ui.card.NFTCard > .content {
+  flex: none;
+}
+
 .ui.card.NFTCard > .content > .header:not(.ui),
 .ui.cards > .card > .content > .header:not(.ui) {
   display: flex;
