@@ -31,6 +31,16 @@ const INITIAL_STATE = {
   error: null
 }
 
+/**
+ * @TODO(eordano): Fixme -- issue inserted by a bad scan of the blockchain in the API
+ */
+function monkeyPatchFix(nft: NFT) {
+  if (nft.wearable) {
+    nft.image = nft.image.replace(',/', '/')
+  }
+  return nft
+}
+
 type NFTReducerAction =
   | FetchNFTRequestAction
   | FetchNFTSuccessAction
@@ -66,7 +76,7 @@ export function nftReducer(
         loading: loadingReducer(state.loading, action),
         data: {
           ...state.data,
-          [nft.id]: nft
+          [nft.id]: monkeyPatchFix(nft)
         },
         error: null
       }
@@ -78,7 +88,7 @@ export function nftReducer(
         data: {
           ...state.data,
           ...action.payload.nfts.reduce((obj, nft) => {
-            obj[nft.id] = nft
+            obj[nft.id] = monkeyPatchFix(nft)
             return obj
           }, {} as Record<string, NFT>)
         }
