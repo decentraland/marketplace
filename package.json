@@ -1,0 +1,10 @@
+{
+  "name": "marketplace",
+  "version": "2.3.0",
+  "description": "Decentraland's Marketplace",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/decentraland/marketplace.git"
+  }
+}
