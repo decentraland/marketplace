@@ -6,6 +6,7 @@
     "load_more": "Load more",
     "not_found": "Not found",
     "parcel": "Parcel",
+    "parcel_with_coords": "Parcel {x},{y}",
     "estate": "Estate",
     "wearable": "Wearable",
     "ens": "Name",

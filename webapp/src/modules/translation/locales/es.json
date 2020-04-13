@@ -6,6 +6,7 @@
     "load_more": "Cargar Más",
     "not_found": "No se ha encontrado",
     "parcel": "Parcela",
+    "parcel_with_coords": "Parcela {x},{y}",
     "estate": "Propiedad",
     "wearable": "Vestimenta",
     "ens": "Nombre",

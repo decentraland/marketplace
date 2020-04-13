@@ -26,7 +26,7 @@ export function getNFTName(nft: NFT) {
 
   switch (nft.category) {
     case NFTCategory.PARCEL:
-      return t('global.parcel')
+      return t('global.parcel_with_coords', nft.parcel)
 
     case NFTCategory.ESTATE:
       return t('global.estate')

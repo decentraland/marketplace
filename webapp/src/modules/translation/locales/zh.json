@@ -6,6 +6,7 @@
     "load_more": "加载更多",
     "not_found": "未找到",
     "parcel": "包裹",
+    "parcel_with_coords": "包裹{x},{y}",
     "estate": "地产",
     "wearable": "可穿戴设备",
     "ens": "名称",
