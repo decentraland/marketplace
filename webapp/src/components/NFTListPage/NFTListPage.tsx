@@ -341,58 +341,46 @@ const NFTListPage = (props: Props) => {
   const filters = (
     <>
       <Row>
-        <TextFilter
-          name={t('global.search')}
-          value={search}
-          onChange={handleSearch}
+        <SelectFilter
+          name={t('nft_list_page.collection')}
+          value={contracts[0] || ALL_COLLECTIONS_FILTER_OPTION}
+          options={[
+            {
+              value: ALL_COLLECTIONS_FILTER_OPTION,
+              text: t('nft_list_page.all_collections')
+            },
+            ...COLLECTION_FILTER_OPTIONS.map(collection => ({
+              value: collection,
+              text: contractSymbols[contractAddresses[collection]]
+            }))
+          ]}
+          onChange={handleCollectionsChange}
         />
-        {category === NFTCategory.WEARABLE ? (
-          <SelectFilter
-            name={t('nft_list_page.collection')}
-            value={contracts[0] || ALL_COLLECTIONS_FILTER_OPTION}
-            options={[
-              {
-                value: ALL_COLLECTIONS_FILTER_OPTION,
-                text: t('nft_list_page.all_collections')
-              },
-              ...COLLECTION_FILTER_OPTIONS.map(collection => ({
-                value: collection,
-                text: contractSymbols[contractAddresses[collection]]
-              }))
-            ]}
-            onChange={handleCollectionsChange}
-          />
-        ) : null}
       </Row>
-      {category === NFTCategory.WEARABLE ? (
-        <Row>
-          <ArrayFilter
-            name={t('nft_list_page.rarity')}
-            values={wearableRarities}
-            options={RARITY_FILTER_OPTIONS.map(rarity => ({
-              value: rarity,
-              text: t(`wearable.rarity.${rarity}`)
-            }))}
-            onChange={handleRaritiesChange}
-          />
-          <ArrayFilter
-            name={t('nft_list_page.gender')}
-            values={wearableGenders}
-            options={GENDER_FILTER_OPTIONS.map(gender => ({
-              value: gender,
-              text: t(`wearable.body_shape.${gender}`)
-            }))}
-            onChange={handleGendersChange}
-          />
-        </Row>
-      ) : null}
+      <Row>
+        <ArrayFilter
+          name={t('nft_list_page.rarity')}
+          values={wearableRarities}
+          options={RARITY_FILTER_OPTIONS.map(rarity => ({
+            value: rarity,
+            text: t(`wearable.rarity.${rarity}`)
+          }))}
+          onChange={handleRaritiesChange}
+        />
+        <ArrayFilter
+          name={t('nft_list_page.gender')}
+          values={wearableGenders}
+          options={GENDER_FILTER_OPTIONS.map(gender => ({
+            value: gender,
+            text: t(`wearable.body_shape.${gender}`)
+          }))}
+          onChange={handleGendersChange}
+        />
+      </Row>
     </>
   )
 
   let appliedFilters = []
-  if (search) {
-    appliedFilters.push(t('global.search'))
-  }
   if (wearableRarities.length > 0) {
     appliedFilters.push(t('nft_list_page.rarity'))
   }
@@ -423,6 +411,35 @@ const NFTListPage = (props: Props) => {
         </Grid.Column>
       </Responsive>
       <Grid.Column className="right-column">
+        <div className="topbar">
+          <TextFilter
+            value={search}
+            placeholder={t('nft_list_page.search', {
+              category: t(`categories_menu.menu_item.${section}`).toLowerCase()
+            })}
+            onChange={handleSearch}
+          />
+          <Dropdown
+            direction="left"
+            value={sortBy}
+            options={dropdownOptions}
+            onChange={handleDropdownChange}
+          />
+
+          {category === NFTCategory.WEARABLE ? (
+            <div
+              className="open-filters-wrapper"
+              onClick={handleToggleFilterMenu}
+            >
+              <div className="label">{t('nft_list_page.filter')}</div>
+              <div
+                className={`open-filters ${
+                  showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
+                }`}
+              />
+            </div>
+          ) : null}
+        </div>
         <HeaderMenu>
           <HeaderMenu.Left>
             {appliedFilters.length > 0 ? (
@@ -449,24 +466,6 @@ const NFTListPage = (props: Props) => {
                 onChange={handleOnlyOnSaleChange}
                 label={t('nft_list_page.on_sale')}
               />
-              <Dropdown
-                direction="left"
-                value={sortBy}
-                options={dropdownOptions}
-                onChange={handleDropdownChange}
-              />
-
-              <div
-                className="open-filters-wrapper"
-                onClick={handleToggleFilterMenu}
-              >
-                <div className="label">{t('nft_list_page.filter')}</div>
-                <div
-                  className={`open-filters ${
-                    showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
-                  }`}
-                />
-              </div>
             </Responsive>
             <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
               <div

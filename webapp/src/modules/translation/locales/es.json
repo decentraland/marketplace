@@ -79,11 +79,12 @@
     "order_by": "Ordenar por",
     "results": "{count} {count, plural, one {resultado} other {resultados}}",
     "more_than_results": "+{count} resultados",
-    "search": "Filtrar por texto...",
+    "search": "Buscar {category}...",
     "multiple_filters": "{count} filtros",
     "rarity": "Rareza",
     "gender": "Género",
-    "collection": "Colección"
+    "collection": "Colección",
+    "all_collections": "Todas las colecciones"
   },
   "nft_card": {
     "expires_at": "Expira {date}"

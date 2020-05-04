@@ -4,10 +4,9 @@ import { Header } from 'decentraland-ui'
 import { useInput } from '../../../lib/input'
 import { Props } from './TextFilter.types'
 import './TextFilter.css'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 const TextFilter = (props: Props) => {
-  const { name, value, onChange } = props
+  const { name, value, placeholder, onChange } = props
 
   const [text, setText] = useInput(value, onChange)
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -20,15 +19,17 @@ const TextFilter = (props: Props) => {
 
   return (
     <div className="TextFilter Filter">
-      <Header sub className="name">
-        {name}
-      </Header>
+      {name ? (
+        <Header sub className="name">
+          {name}
+        </Header>
+      ) : null}
       <div className="text-input">
         <input
           ref={inputRef}
           value={text}
           onChange={setText}
-          placeholder={t('nft_list_page.search')}
+          placeholder={placeholder}
         />
       </div>
     </div>

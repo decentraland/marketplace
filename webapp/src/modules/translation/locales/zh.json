@@ -83,7 +83,8 @@
     "multiple_filters": "{count}个过滤器",
     "rarity": "稀有性",
     "gender": "性别",
-    "collection": "采集"
+    "collection": "采集",
+    "all_collections": "所有收藏"
   },
   "nft_card": {
     "expires_at": "{date} 到期"

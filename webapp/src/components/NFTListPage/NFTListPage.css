@@ -25,9 +25,9 @@
 }
 
 .NFTListPage .right-column .ui.toggle.checkbox label {
-  color: var(--secondary-text);
+  color: var(--secondary-text) !important;
   font-size: 14px;
-  margin-right: 24px;
+  margin-right: 0px;
 }
 
 .NFTListPage .ui.toggle.checkbox label,
@@ -133,6 +133,22 @@
 .NFTListPage .open-filters.active {
   background-image: url(../../images/filters-active.svg);
   background-size: 20px;
+}
+
+.NFTListPage .topbar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.NFTListPage .topbar > .TextFilter {
+  flex: 1 0 auto;
+  margin-right: 32px;
+}
+
+.NFTListPage .topbar > .ui.dropdown,
+.NFTListPage .topbar > .open-filters-wrapper {
+  height: 29px;
 }
 
 .FiltersModal .CategoriesMenu ul.menu li:hover,
