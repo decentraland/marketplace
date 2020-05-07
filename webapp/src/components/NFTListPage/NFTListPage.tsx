@@ -124,6 +124,7 @@ const NFTListPage = (props: Props) => {
         ? getSearchCategory(newOptions.section)
         : null
 
+      // category specific logic to keep filters if the category doesn't change (unless forced by clearFilters flag)
       if (prevCategory && prevCategory === nextCategory && !clearFilters) {
         switch (nextCategory) {
           case NFTCategory.WEARABLE: {
@@ -135,6 +136,14 @@ const NFTListPage = (props: Props) => {
               ...newOptions
             }
           }
+        }
+      }
+
+      // keep search if section is not changing (ie. when clicking  on 'load more')
+      if (section === newOptions.section) {
+        newOptions = {
+          search,
+          ...newOptions
         }
       }
 
