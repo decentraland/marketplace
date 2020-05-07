@@ -46,6 +46,7 @@
 .NFTListPage .load-more {
   text-align: center;
   margin-top: 36px;
+  height: 46px;
 }
 
 .NFTListPage .empty {

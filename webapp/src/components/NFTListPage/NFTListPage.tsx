@@ -516,8 +516,10 @@ const NFTListPage = (props: Props) => {
           <div className="empty">{t('nft_list_page.empty')}</div>
         ) : null}
 
-        {nfts.length >= PAGE_SIZE && nfts.length > lastNFTLength ? (
-          <div className="load-more">
+        <div className="load-more">
+          {nfts.length >= PAGE_SIZE &&
+          nfts.length > lastNFTLength &&
+          (nfts.length !== count || count === MAX_QUERY_SIZE) ? (
             <Button
               loading={isLoading}
               inverted
@@ -526,8 +528,8 @@ const NFTListPage = (props: Props) => {
             >
               {t('global.load_more')}
             </Button>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
       </Grid.Column>
       <Modal
         className="FiltersModal"
