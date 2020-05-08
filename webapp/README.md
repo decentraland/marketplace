@@ -29,6 +29,8 @@ $ npm start
 $ npm run build
 ```
 
+.
+
 ## Generate TypeScript interfaces for contracts
 
 If you want to regenerate the contract typings in `webapp/src/contract` do the following:
