@@ -6,7 +6,7 @@ export let dcl_launch: Wearable[] = [
     'Decentraland Logo Earrings',
     '',
     'earring',
-    'swanky',
+    'rare',
     ['BaseFemale', 'BaseMale']
   ),
   new Wearable('dcl_mana_earring', 'MANA Earrings', '', 'earring', 'epic', [
@@ -36,7 +36,7 @@ export let dcl_launch: Wearable[] = [
     'BaseMale',
     'BaseFemale'
   ]),
-  new Wearable('dcl_hat_hat', 'Decentraland Hat', '', 'hat', 'swanky', [
+  new Wearable('dcl_hat_hat', 'Decentraland Hat', '', 'hat', 'rare', [
     'BaseMale',
     'BaseFemale'
   ]),
@@ -48,7 +48,7 @@ export let dcl_launch: Wearable[] = [
     'mythic',
     ['BaseMale']
   ),
-  new Wearable('mana_hat', 'MANA Hat', '', 'hat', 'swanky', [
+  new Wearable('mana_hat', 'MANA Hat', '', 'hat', 'rare', [
     'BaseMale',
     'BaseFemale'
   ]),
@@ -77,7 +77,7 @@ export let dcl_launch: Wearable[] = [
     'Decentraland Hoodie',
     '',
     'upper_body',
-    'swanky',
+    'rare',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
@@ -93,7 +93,7 @@ export let dcl_launch: Wearable[] = [
     'Decentraland Launch T-Shirt',
     '',
     'upper_body',
-    'swanky',
+    'rare',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
@@ -109,7 +109,7 @@ export let dcl_launch: Wearable[] = [
     'MANA Hoodie',
     '',
     'upper_body',
-    'swanky',
+    'rare',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
@@ -117,7 +117,7 @@ export let dcl_launch: Wearable[] = [
     'MANA T-Shirt',
     '',
     'upper_body',
-    'swanky',
+    'rare',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(

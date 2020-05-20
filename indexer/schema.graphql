@@ -224,7 +224,7 @@ enum WearableCategory @entity {
 enum WearableRarity @entity {
   common
   uncommon
-  swanky
+  rare
   epic
   legendary
   mythic

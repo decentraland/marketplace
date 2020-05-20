@@ -4,7 +4,7 @@ import * as path from 'path'
 const prettier = require('prettier')
 
 enum RarityId {
-  SWANKY = 'swanky',
+  RARE = 'rare',
   EPIC = 'epic',
   LENGENDARY = 'legendary',
   MYTHIC = 'mythic',

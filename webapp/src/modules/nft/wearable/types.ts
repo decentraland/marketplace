@@ -21,7 +21,6 @@ export enum WearableRarity {
   MYTHIC = 'mythic',
   LEGENDARY = 'legendary',
   EPIC = 'epic',
-  SWANKY = 'swanky',
   RARE = 'rare',
   UNCOMMON = 'uncommon',
   COMMON = 'common'
@@ -32,7 +31,6 @@ export const RARITY_COLOR_LIGHT = {
   [WearableRarity.MYTHIC]: '#FB7DE3',
   [WearableRarity.LEGENDARY]: '#A657ED',
   [WearableRarity.EPIC]: '#6397F2',
-  [WearableRarity.SWANKY]: '#3AD682',
   [WearableRarity.RARE]: '#3AD682',
   [WearableRarity.UNCOMMON]: '#FF8563',
   [WearableRarity.COMMON]: '#D4E0E0'
@@ -43,7 +41,6 @@ export const RARITY_COLOR = {
   [WearableRarity.MYTHIC]: '#FF63E1',
   [WearableRarity.LEGENDARY]: '#842DDA',
   [WearableRarity.EPIC]: '#3D85E6',
-  [WearableRarity.SWANKY]: '#36CF75',
   [WearableRarity.RARE]: '#36CF75',
   [WearableRarity.UNCOMMON]: '#ED6D4F',
   [WearableRarity.COMMON]: '#ABC1C1'
