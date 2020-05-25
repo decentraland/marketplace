@@ -32,7 +32,7 @@ import {
 } from '../../modules/nft/wearable/types'
 import { NFTCategory } from '../../modules/nft/types'
 import { getSortOrder } from '../../modules/nft/utils'
-import { MAX_QUERY_SIZE, PAGE_SIZE } from '../../lib/api/client'
+import { MAX_QUERY_SIZE, MAX_PAGE, PAGE_SIZE } from '../../lib/api/client'
 import { NFTCard } from '../NFTCard'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { Props } from './NFTListPage.types'
@@ -294,7 +294,7 @@ const NFTListPage = (props: Props) => {
 
   // Kick things off
   useEffect(() => {
-    const skip = offset * PAGE_SIZE
+    const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
     const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
 
     const category = getSearchCategory(section)
@@ -519,7 +519,8 @@ const NFTListPage = (props: Props) => {
         <div className="load-more">
           {nfts.length >= PAGE_SIZE &&
           nfts.length > lastNFTLength &&
-          (nfts.length !== count || count === MAX_QUERY_SIZE) ? (
+          (nfts.length !== count || count === MAX_QUERY_SIZE) &&
+          page <= MAX_PAGE ? (
             <Button
               loading={isLoading}
               inverted
