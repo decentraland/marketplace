@@ -136,6 +136,7 @@
       "legendary": "Legendario",
       "epic": "Épico",
       "swanky": "Ostentoso",
+      "rare": "Raro",
       "uncommon": "Poco común",
       "common": "Común"
     },
@@ -145,6 +146,7 @@
       "legendary": "Ediciión limitada: máximo 100",
       "epic": "Suministro máximo: 1000",
       "swanky": "Suministro máximo: 5000",
+      "rare": "Suministro máximo: 5000",
       "uncommon": "Suministro máximo: 10.000",
       "common": "Suministro máximo: 100.000"
     },
