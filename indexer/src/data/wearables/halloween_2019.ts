@@ -181,7 +181,7 @@ export let halloween_2019: Wearable[] = [
     'Mariachi Hat',
     'Guitar not included',
     'hat',
-    'swanky',
+    'rare',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
@@ -213,7 +213,7 @@ export let halloween_2019: Wearable[] = [
     'Happy Pumpkin',
     'Flesh and seeds removed free of charge!',
     'helmet',
-    'swanky',
+    'rare',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
