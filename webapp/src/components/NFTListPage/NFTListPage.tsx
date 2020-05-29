@@ -428,7 +428,9 @@ const NFTListPage = (props: Props) => {
             })}
             onChange={handleSearch}
           />
-          <Dropdown
+          <Responsive
+            as={Dropdown}
+            minWidth={Responsive.onlyTablet.minWidth}
             direction="left"
             value={sortBy}
             options={dropdownOptions}
