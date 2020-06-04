@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost'
 
-import { Order } from './types'
+import { Order } from '../../../order/types'
 
 export type OrderFields = Omit<Order, 'nftId'>
 export const orderFields = () => gql`

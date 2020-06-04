@@ -17,10 +17,13 @@ import {
   transferNFTSuccess,
   transferNFTFailure
 } from './actions'
-import { nftAPI } from '../../lib/api/nft'
+import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { ERC721 } from '../../contracts/ERC721'
+import { NFTServiceFactory } from '../vendor/NFTServiceFactory'
+import { Vendors } from '../vendor/types'
+import { Await } from '../types'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -40,9 +43,11 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   }
 
   try {
-    const [nfts, accounts, orders, count] = yield call(() =>
-      nftAPI.fetch(options)
-    )
+    const service = NFTServiceFactory.build(Vendors.DECENTRALAND)
+
+    const [nfts, accounts, orders, count]: Await<ReturnType<
+      typeof service.fetch
+    >> = yield call(() => service.fetch(options))
     yield put(
       fetchNFTsSuccess(options, nfts, accounts, orders, count, timestamp)
     )
@@ -55,9 +60,11 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   const { contractAddress, tokenId } = action.payload
 
   try {
-    const [nft, order] = yield call(() =>
-      nftAPI.fetchOne(contractAddress, tokenId)
-    )
+    const service = NFTServiceFactory.build(Vendors.DECENTRALAND)
+
+    const [nft, order]: Await<ReturnType<
+      typeof service.fetchOne
+    >> = yield call(() => nftAPI.fetchOne(contractAddress, tokenId))
     yield put(fetchNFTSuccess(nft, order))
   } catch (error) {
     yield put(fetchNFTFailure(contractAddress, tokenId, error.message))

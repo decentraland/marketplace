@@ -1,10 +1,10 @@
 import { gql } from 'apollo-boost'
-import { client } from './client'
-import { bidFragment, BidFragment } from '../../modules/bid/fragments'
-import { Bid } from '../../modules/bid/types'
-import { getNFTName, getNFTId } from '../../modules/nft/utils'
-import { NFT } from '../../modules/nft/types'
-import { OrderStatus } from '../../modules/order/types'
+import { client } from '../apiClient'
+import { Bid } from '../../../bid/types'
+import { getNFTName, getNFTId } from '../../../nft/utils'
+import { NFT } from '../../../nft/types'
+import { OrderStatus } from '../../../order/types'
+import { BidFragment, bidFragment } from './fragments'
 
 class BidAPI {
   async fetchBySeller(seller: string) {

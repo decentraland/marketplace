@@ -3,15 +3,17 @@ import { Header, Table, Mana, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
 
-import { bidAPI } from '../../../lib/api/bid'
+import { bidAPI } from '../../../modules/vendor/decentraland/bid/api'
+import { nftAPI } from '../../../modules/vendor/decentraland/nft/api'
 import { Bid } from '../../../modules/bid/types'
 import { formatDistanceToNow } from '../../../lib/date'
 import { Order, OrderStatus } from '../../../modules/order/types'
 import { formatMANA } from '../../../lib/mana'
-import { nftAPI } from '../../../lib/api/nft'
 import { Address } from '../../Address'
 import { Props, HistoryEvent } from './TransactionHistory.types'
 import './TransactionHistory.css'
+
+type UnionOrderBid = Partial<Order & Bid>
 
 const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000
@@ -30,11 +32,11 @@ const formatDateTitle = (updatedAt: string) => {
 const sortByUpdatedAt = (a: { updatedAt: string }, b: { updatedAt: string }) =>
   a.updatedAt > b.updatedAt ? -1 : 1
 
-const toEvent = (orderOrBid: Order | Bid): HistoryEvent => ({
-  from: (orderOrBid as Order).owner! || (orderOrBid as Bid).seller!,
-  to: (orderOrBid as Order).buyer! || (orderOrBid as Bid).bidder!,
-  price: orderOrBid.price,
-  updatedAt: orderOrBid.updatedAt
+const toEvent = (orderOrBid: UnionOrderBid): HistoryEvent => ({
+  from: orderOrBid.owner! || orderOrBid.seller!,
+  to: orderOrBid.buyer! || orderOrBid.bidder!,
+  price: orderOrBid.price!,
+  updatedAt: orderOrBid.updatedAt!
 })
 
 const TransactionHistory = (props: Props) => {
@@ -51,11 +53,13 @@ const TransactionHistory = (props: Props) => {
       Promise.all([
         nftAPI.fetchOrders(nft.id),
         bidAPI.fetchByNFT(nft, OrderStatus.SOLD)
-      ]).then(([orders, bids]) => {
-        setIsLoading(false)
-        setOrders(orders)
-        setBids(bids)
-      })
+      ])
+        .then(([orders, bids]) => {
+          setIsLoading(false)
+          setOrders(orders as Order[])
+          setBids(bids)
+        })
+        .catch(error => console.error(error))
     }
   }, [nft, setIsLoading, setOrders, setBids])
 

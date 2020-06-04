@@ -29,8 +29,9 @@ import { contractAddresses } from '../contract/utils'
 import { Bids } from '../../contracts/Bids'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
-import { bidAPI } from '../../lib/api/bid'
+import { bidAPI } from '../vendor/decentraland/bid/api'
 import { ERC721 } from '../../contracts/ERC721'
+import { Bid } from './types'
 
 export function* bidSaga() {
   yield takeEvery(PLACE_BID_REQUEST, handlePlaceBidRequest)
@@ -151,7 +152,7 @@ function* handleFetchBidsByAddressRequest(
 ) {
   const { address } = action.payload
   try {
-    const [seller, bidder] = yield call(() =>
+    const [seller, bidder]: [Bid[], Bid[]] = yield call(() =>
       Promise.all([
         bidAPI.fetchBySeller(address),
         bidAPI.fetchByBidder(address)
