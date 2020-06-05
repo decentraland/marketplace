@@ -30,7 +30,7 @@ const TransferPage = (props: Props) => {
                 let canTransfer = true
                 const subtitleClasses = ['subtitle']
                 const name = getNFTName(nft)
-                if (!!order) {
+                if (order) {
                   isDisabled = true
                   canTransfer = false
                   subtitleClasses.push('error')

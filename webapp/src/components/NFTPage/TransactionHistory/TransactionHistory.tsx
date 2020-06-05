@@ -59,7 +59,7 @@ const TransactionHistory = (props: Props) => {
       ])
         .then(([orders, bids]) => {
           setIsLoading(false)
-          setOrders(orders as Order[])
+          setOrders(orders)
           setBids(bids)
         })
         .catch(error => console.error(error))
@@ -101,7 +101,7 @@ const TransactionHistory = (props: Props) => {
                       <Address address={event.from} />
                     </Table.Cell>
                     <Table.Cell>
-                      <Address address={event.to!} />
+                      <Address address={event.to} />
                     </Table.Cell>
                     <Table.Cell title={formatDateTitle(event.updatedAt)}>
                       {formatEventDate(event.updatedAt)}

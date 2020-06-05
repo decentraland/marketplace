@@ -10,3 +10,6 @@ export type HistoryEvent = {
   price: string
   updatedAt: string
 }
+
+export type MapStateProps = {}
+export type MapDispatchProps = {}

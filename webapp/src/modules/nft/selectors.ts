@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
-import { getData as getNFTs } from '../nft/selectors'
 import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
 import { NFTState } from './reducer'
@@ -41,6 +40,6 @@ export const getCurrentNFT = createSelector<
 >(
   state => getContractAddress(state),
   state => getTokenId(state),
-  state => getNFTs(state),
+  state => getData(state),
   (contractAddress, tokenId, nfts) => getNFT(contractAddress, tokenId, nfts)
 )

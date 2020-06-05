@@ -462,7 +462,7 @@ const NFTListPage = (props: Props) => {
               />
             ) : null}
             <Header sub className="results">
-              {count == null
+              {count === null
                 ? t('global.loading') + '...'
                 : count < MAX_RESULTS
                 ? t('nft_list_page.results', { count: count.toLocaleString() })

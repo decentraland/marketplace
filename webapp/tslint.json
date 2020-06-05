@@ -1,13 +1,23 @@
 {
-  "extends": ["tslint-react", "tslint-plugin-prettier", "dcl-tslint-config-standard"],
+  "extends": [
+    "tslint-react",
+    "dcl-tslint-config-standard",
+    "tslint-plugin-prettier"
+  ],
   "rules": {
+    "ter-indent": false,
     "no-commented-out-code": false,
     "jsx-no-multiline-js": false,
+    "jsx-wrap-multiline": false,
+    "jsx-no-lambda": false,
     "ban-types": [true, "Number", "Boolean", "String", "Object"],
-    "prettier": [true, { "printWidth": 80, "singleQuote": true, "semi": false }],
+    "prettier": [
+      true,
+      { "printWidth": 80, "singleQuote": true, "semi": false }
+    ],
     "quotemark": [true, "single", "jsx-double"]
   },
   "linterOptions": {
-    "exclude": ["config/**/*.js", "node_modules/**/*.ts", "./**/*.js"]
+    "exclude": ["src/contracts/*.ts", "node_modules/**/*.ts", "./**/*.js"]
   }
 }

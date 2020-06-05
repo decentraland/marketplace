@@ -14,7 +14,11 @@ const WarningMessage = (props: Props) => {
   const [notEnoughMana, setNotEnoughMana] = useState(false)
 
   useEffect(() => {
-    isInsufficientMANA(bid).then(setNotEnoughMana)
+    isInsufficientMANA(bid)
+      .then(setNotEnoughMana)
+      .catch(error =>
+        console.error(`Could not get the MANA from bidder ${bid.bidder}`, error)
+      )
   }, [bid])
 
   const isValidFingerprint = checkFingerprint(bid, fingerprint)

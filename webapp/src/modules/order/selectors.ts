@@ -1,7 +1,6 @@
 import { RootState } from '../reducer'
 import { createSelector } from 'reselect'
 import { getCurrentNFT } from '../nft/selectors'
-import { getData as getOrders } from '../order/selectors'
 import { NFT } from '../nft/types'
 import { Order } from './types'
 import { OrderState } from './reducer'
@@ -18,6 +17,6 @@ export const getCurrentOrder = createSelector<
   Order | null
 >(
   state => getCurrentNFT(state),
-  state => getOrders(state),
+  state => getData(state),
   (nft, orders) => getActiveOrder(nft, orders)
 )

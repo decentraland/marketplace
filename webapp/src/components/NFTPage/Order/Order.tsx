@@ -3,8 +3,8 @@ import { Stats, Mana, Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { formatMANA } from '../../../lib/mana'
+import { formatDistanceToNow } from '../../../lib/date'
 import { isOwnedBy } from '../../../modules/nft/utils'
-import { getExpiresAt } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Props } from './Order.types'
 import './Order.css'
@@ -43,7 +43,11 @@ const Order = (props: Props) => {
             <Stats title={t('detail.price')}>
               <Mana>{formatMANA(order.price)}</Mana>
             </Stats>
-            <Stats title={t('detail.expires')}>{getExpiresAt(order)}</Stats>
+            <Stats title={t('detail.expires')}>
+              {formatDistanceToNow(+order.expiresAt, {
+                addSuffix: true
+              })}
+            </Stats>
           </>
         ) : null}
       </div>

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
-import { RootState } from '../../modules/reducer'
-import { getTransactions } from '../../modules/transaction/selectors'
 import { clearTransactions } from 'decentraland-dapps/dist/modules/transaction/actions'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { RootState } from '../../modules/reducer'
+import { getTransactions } from '../../modules/transaction/selectors'
 import {
   MapStateProps,
   MapDispatchProps,

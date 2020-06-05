@@ -43,7 +43,7 @@ const Banner = () => {
             </a>
           )
         }}
-      ></T>
+      />
       <Icon name="close" onClick={handleClose} />
     </div>
   ) : null

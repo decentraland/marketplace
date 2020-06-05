@@ -15,7 +15,7 @@ export function fromMANA(mana: string) {
     .split(/[,|.]/)
     .join('')
 
-  const result = parseInt(num)
+  const result = parseInt(num, 10)
 
   if (isNaN(result) || result < 0) {
     return 0
