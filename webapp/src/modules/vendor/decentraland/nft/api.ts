@@ -2,7 +2,6 @@ import { gql } from 'apollo-boost'
 
 import { FetchNFTsOptions } from '../../../nft/actions'
 import { nftFragment, NFTFragment } from './fragments'
-import { orderFragment, OrderFragment } from '../order/fragments'
 import { WearableGender } from '../../../nft/wearable/types'
 import { contractAddresses } from '../../../contract/utils'
 import { client } from '../apiClient'
@@ -47,14 +46,6 @@ class NFTAPI {
       }
     })
     return data.nfts[0]
-  }
-
-  async fetchOrders(nftId: string) {
-    const { data } = await client.query<{ orders: OrderFragment[] }>({
-      query: NFT_ORDERS_QUERY,
-      variables: { nftId }
-    })
-    return data.orders
   }
 
   async fetchTokenId(x: number, y: number) {
@@ -181,7 +172,7 @@ function getNFTsQuery(
   `
 }
 
-export const NFT_BY_ADDRESS_AND_ID_QUERY = gql`
+const NFT_BY_ADDRESS_AND_ID_QUERY = gql`
   query NFTByTokenId($contractAddress: String, $tokenId: String) {
     nfts(
       where: { contractAddress: $contractAddress, tokenId: $tokenId }
@@ -193,20 +184,7 @@ export const NFT_BY_ADDRESS_AND_ID_QUERY = gql`
   ${nftFragment()}
 `
 
-export const NFT_ORDERS_QUERY = gql`
-  query NFTOrders($nftId: String!) {
-    orders(
-      where: { nft: $nftId, status: sold }
-      orderBy: createdAt
-      orderDirection: desc
-    ) {
-      ...orderFragment
-    }
-  }
-  ${orderFragment()}
-`
-
-export const PARCEL_TOKEN_ID_QUERY = gql`
+const PARCEL_TOKEN_ID_QUERY = gql`
   query ParcelTokenId($x: BigInt, $y: BigInt) {
     parcels(where: { x: $x, y: $y }) {
       tokenId

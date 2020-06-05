@@ -44,7 +44,7 @@ class BidAPI {
   }
 }
 
-export const BIDS_BY_SELLER_QUERY = gql`
+const BIDS_BY_SELLER_QUERY = gql`
   query BidsBySeller($seller: String, $expiresAt: String) {
     bids(where: { seller: $seller, status: open, expiresAt_gt: $expiresAt }) {
       ...bidFragment
@@ -53,7 +53,7 @@ export const BIDS_BY_SELLER_QUERY = gql`
   ${bidFragment()}
 `
 
-export const BIDS_BY_BIDDER_QUERY = gql`
+const BIDS_BY_BIDDER_QUERY = gql`
   query BidsByBidder($bidder: String, $expiresAt: String) {
     bids(where: { bidder: $bidder, status: open, expiresAt_gt: $expiresAt }) {
       ...bidFragment
@@ -62,7 +62,7 @@ export const BIDS_BY_BIDDER_QUERY = gql`
   ${bidFragment()}
 `
 
-export const BIDS_BY_NFT_QUERY = gql`
+const BIDS_BY_NFT_QUERY = gql`
   query BidsByNFT($nft: String, $status: OrderStatus, $expiresAt: String) {
     bids(where: { nft: $nft, status: $status, expiresAt_gt: $expiresAt }) {
       ...bidFragment

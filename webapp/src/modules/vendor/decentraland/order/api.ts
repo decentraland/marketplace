@@ -13,7 +13,7 @@ class OrderAPI {
   }
 }
 
-export const NFT_ORDERS_QUERY = gql`
+const NFT_ORDERS_QUERY = gql`
   query NFTOrders($nftId: String!) {
     orders(
       where: { nft: $nftId, status: sold }

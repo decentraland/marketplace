@@ -25,4 +25,8 @@ class Vendor {
     public orderService?: OrderService,
     public bidService?: BidService
   ) {}
+
+  hasBids(): boolean {
+    return this.bidService !== undefined
+  }
 }
