@@ -1,14 +1,13 @@
 import { gql } from 'apollo-boost'
 import { client } from '../apiClient'
-import { Bid } from '../../../bid/types'
-import { getNFTName, getNFTId } from '../../../nft/utils'
+import { getNFTId } from '../../../nft/utils'
 import { NFT } from '../../../nft/types'
 import { OrderStatus } from '../../../order/types'
 import { BidFragment, bidFragment } from './fragments'
 
 class BidAPI {
   async fetchBySeller(seller: string) {
-    const { data } = await client.query({
+    const { data } = await client.query<{ bids: BidFragment[] }>({
       query: BIDS_BY_SELLER_QUERY,
       variables: {
         seller,
@@ -16,21 +15,11 @@ class BidAPI {
       }
     })
 
-    let bids: Bid[] = []
-    for (const result of data.bids as BidFragment[]) {
-      const { nft, ...rest } = result
-      bids.push({
-        ...rest,
-        name: getNFTName(nft as NFT),
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId
-      })
-    }
-    return bids
+    return data.bids
   }
 
   async fetchByBidder(bidder: string) {
-    const { data } = await client.query({
+    const { data } = await client.query<{ bids: BidFragment[] }>({
       query: BIDS_BY_BIDDER_QUERY,
       variables: {
         bidder,
@@ -38,21 +27,11 @@ class BidAPI {
       }
     })
 
-    let bids: Bid[] = []
-    for (const result of data.bids as BidFragment[]) {
-      const { nft, ...rest } = result
-      bids.push({
-        ...rest,
-        name: getNFTName(nft as NFT),
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId
-      })
-    }
-    return bids
+    return data.bids
   }
 
   async fetchByNFT(nft: NFT, status: OrderStatus = OrderStatus.OPEN) {
-    const { data } = await client.query({
+    const { data } = await client.query<{ bids: BidFragment[] }>({
       query: BIDS_BY_NFT_QUERY,
       variables: {
         nft: getNFTId(nft.contractAddress, nft.tokenId)!,
@@ -61,17 +40,7 @@ class BidAPI {
       }
     })
 
-    let bids: Bid[] = []
-    for (const result of data.bids as BidFragment[]) {
-      const { nft, ...rest } = result
-      bids.push({
-        ...rest,
-        name: getNFTName(nft as NFT),
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId
-      })
-    }
-    return bids
+    return data.bids
   }
 }
 
