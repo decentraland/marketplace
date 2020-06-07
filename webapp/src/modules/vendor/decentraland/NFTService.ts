@@ -8,6 +8,7 @@ import { FetchNFTsOptions } from '../../nft/actions'
 import { isExpired } from '../../order/utils'
 import { ERC721 } from '../../../contracts/ERC721'
 import { NFTService as NFTServiceInterface } from '../services'
+import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
 
 export class NFTService implements NFTServiceInterface {
@@ -21,7 +22,11 @@ export class NFTService implements NFTServiceInterface {
     for (const result of data.nfts) {
       const { activeOrder: nestedOrder, ...rest } = result
 
-      const nft: NFT = { ...rest, activeOrderId: null }
+      const nft: NFT = {
+        ...rest,
+        vendor: Vendors.DECENTRALAND,
+        activeOrderId: null
+      }
 
       if (nestedOrder && !isExpired(nestedOrder.expiresAt)) {
         const order = { ...nestedOrder, nftId: nft.id }
@@ -48,7 +53,11 @@ export class NFTService implements NFTServiceInterface {
 
     const { activeOrder, ...rest } = remoteNFT
 
-    const nft: NFT = { ...rest, activeOrderId: null }
+    const nft: NFT = {
+      ...rest,
+      vendor: Vendors.DECENTRALAND,
+      activeOrderId: null
+    }
 
     let order: Order | undefined
 
