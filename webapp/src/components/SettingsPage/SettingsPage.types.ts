@@ -13,7 +13,7 @@ import {
 
 export type Props = {
   wallet: Wallet | null
-  authorizations: Authorizations | null
+  authorizations: Authorizations | undefined
   pendingAllowTransactions: Transaction[]
   pendingApproveTransactions: Transaction[]
   isLoadingAuthorization: boolean

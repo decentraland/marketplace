@@ -11,7 +11,7 @@ import {
 
 import { fetchAuthorizationRequest } from '../authorization/actions'
 import { AuthorizationsRequest } from '../authorization/types'
-import { contractAddresses } from '../contract/utils'
+import { contractAddresses, contractCategories } from '../contract/utils'
 
 export function* walletSaga() {
   yield all([baseWalletSaga(), fullWalletSaga()])
@@ -36,7 +36,7 @@ function* handleWallet(
       [Bids]: [MANAToken]
     },
     approvals: {
-      [Marketplace]: Object.values(contractAddresses)
+      [Marketplace]: Object.keys(contractCategories)
     }
   }
 

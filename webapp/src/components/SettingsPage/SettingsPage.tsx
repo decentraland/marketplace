@@ -52,7 +52,7 @@ const SettingsPage = (props: Props) => {
   }, [isConnecting, wallet, onNavigate])
 
   const hasEmptyAuthorizations =
-    authorizations === null || Object.keys(authorizations).length === 0
+    authorizations === undefined || Object.keys(authorizations).length === 0
 
   return (
     <>

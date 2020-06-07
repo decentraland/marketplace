@@ -25,7 +25,7 @@ import SettingsPage from './SettingsPage'
 const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
 
-  let authorizations = null
+  let authorizations = undefined
   let pendingAllowTransactions: Transaction[] = []
   let pendingApproveTransactions: Transaction[] = []
   if (wallet) {
