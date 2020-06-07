@@ -1,6 +1,5 @@
 import { gql } from 'apollo-boost'
 import { client } from '../apiClient'
-import { getNFTId } from '../../../nft/utils'
 import { NFT } from '../../../nft/types'
 import { OrderStatus } from '../../../order/types'
 import { BidFragment, bidFragment } from './fragments'
@@ -31,10 +30,15 @@ class BidAPI {
   }
 
   async fetchByNFT(nft: NFT, status: OrderStatus = OrderStatus.OPEN) {
+    console.log('*********************************************')
+    console.log('BIDDDDDDDDDDD')
+    console.log(nft)
+    console.log(nft.id)
+    console.log('*********************************************')
     const { data } = await client.query<{ bids: BidFragment[] }>({
       query: BIDS_BY_NFT_QUERY,
       variables: {
-        nft: getNFTId(nft.contractAddress, nft.tokenId)!,
+        nft: nft.id,
         status: status.toString(),
         expiresAt: Date.now().toString()
       }
