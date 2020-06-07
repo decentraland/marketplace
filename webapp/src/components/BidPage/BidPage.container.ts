@@ -1,13 +1,13 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
-import { getCurrentOrder } from '../../modules/order/selectors'
+import { getAuthorizations } from '../../modules/authorization/selectors'
 import { placeBidRequest } from '../../modules/bid/actions'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './BidPage.types'
 import BidPage from './BidPage'
 
 const mapState = (state: RootState): MapStateProps => ({
-  order: getCurrentOrder(state)
+  authorizations: getAuthorizations(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

@@ -17,6 +17,7 @@ const BuyPage = (props: Props) => {
   const {
     nft,
     order,
+    authorizations,
     onNavigate,
     onExecuteOrder,
     isOwner,
@@ -36,6 +37,7 @@ const BuyPage = (props: Props) => {
   const handleSubmit = useCallback(() => {
     if (
       hasAuthorization(
+        authorizations,
         contractAddresses.Marketplace,
         contractAddresses.MANAToken,
         AuthorizationType.ALLOWANCE
@@ -45,7 +47,7 @@ const BuyPage = (props: Props) => {
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [handleExecuteOrder, setShowAuthorizationModal])
+  }, [authorizations, handleExecuteOrder, setShowAuthorizationModal])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal

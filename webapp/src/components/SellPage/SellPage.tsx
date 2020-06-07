@@ -9,7 +9,7 @@ import { Props } from './SellPage.types'
 import './SellPage.css'
 
 const SellPage = (props: Props) => {
-  const { onNavigate, onCreateOrder } = props
+  const { authorizations, onNavigate, onCreateOrder } = props
   return (
     <>
       <Navbar isFullscreen />
@@ -22,6 +22,7 @@ const SellPage = (props: Props) => {
                   nft={nft}
                   order={order}
                   wallet={wallet}
+                  authorizations={authorizations}
                   onNavigate={onNavigate}
                   onCreateOrder={onCreateOrder}
                 />

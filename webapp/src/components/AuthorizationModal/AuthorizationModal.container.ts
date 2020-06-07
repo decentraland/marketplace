@@ -1,22 +1,24 @@
+import { connect } from 'react-redux'
 import { RootState } from '../../modules/reducer'
+import {
+  allowTokenRequest,
+  approveTokenRequest
+} from '../../modules/authorization/actions'
+import {
+  getAuthorizations,
+  getPendingTransactions
+} from '../../modules/authorization/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch
 } from './AuthorizationModal.types'
-import {
-  allowTokenRequest,
-  approveTokenRequest
-} from '../../modules/authorization/actions'
-import { connect } from 'react-redux'
 import AuthorizationModal from './AuthorizationModal'
-import { getPendingTransactions } from '../../modules/authorization/selectors'
 
-const mapState = (state: RootState): MapStateProps => {
-  return {
-    pendingTransactions: getPendingTransactions(state)
-  }
-}
+const mapState = (state: RootState): MapStateProps => ({
+  authorizations: getAuthorizations(state),
+  pendingTransactions: getPendingTransactions(state)
+})
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onAllow: (isAllowed, contractAddress, tokenAddress) =>

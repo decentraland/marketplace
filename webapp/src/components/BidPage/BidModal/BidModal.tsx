@@ -16,7 +16,7 @@ import { Props } from './BidModal.types'
 import './BidModal.css'
 
 const BidModal = (props: Props) => {
-  const { nft, wallet, onNavigate, onPlaceBid } = props
+  const { nft, wallet, authorizations, onNavigate, onPlaceBid } = props
 
   const [price, setPrice] = useState('')
   const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
@@ -33,6 +33,7 @@ const BidModal = (props: Props) => {
   const handleSubmit = useCallback(() => {
     if (
       hasAuthorization(
+        authorizations,
         contractAddresses.Bids,
         contractAddresses.MANAToken,
         AuthorizationType.ALLOWANCE
@@ -42,7 +43,7 @@ const BidModal = (props: Props) => {
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [handlePlaceBid, setShowAuthorizationModal])
+  }, [authorizations, handlePlaceBid, setShowAuthorizationModal])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal

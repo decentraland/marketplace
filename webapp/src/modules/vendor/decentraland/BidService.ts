@@ -9,9 +9,10 @@ import { Bid } from '../../bid/types'
 import { NFT } from '../../nft/types'
 import { OrderStatus } from '../../order/types'
 import { getNFTName } from '../../nft/utils'
+import { BidService as BidServiceInterface } from '../services'
 import { bidAPI } from './bid/api'
 
-export class BidService {
+export class BidService implements BidServiceInterface {
   async fetchBySeller(seller: string) {
     const remoteBids = await bidAPI.fetchBySeller(seller)
 

@@ -1,6 +1,7 @@
 import * as decentraland from './decentraland'
 import * as superrare from './superrare'
-import { Vendors, NFTService, OrderService, BidService } from './types'
+import { NFTService, OrderService, BidService } from './services'
+import { Vendors } from './types'
 
 export class VendorFactory {
   static build(vendor: Vendors): Vendor {

@@ -7,7 +7,7 @@ import { Account } from '../../account/types'
 import { FetchNFTsOptions } from '../../nft/actions'
 import { isExpired } from '../../order/utils'
 import { ERC721 } from '../../../contracts/ERC721'
-import { NFTService as NFTServiceInterface } from '../types'
+import { NFTService as NFTServiceInterface } from '../services'
 import { nftAPI } from './nft/api'
 
 export class NFTService implements NFTServiceInterface {

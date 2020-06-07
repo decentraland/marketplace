@@ -1,4 +1,4 @@
-import { NFTService as NFTServiceInterface } from '../types'
+import { NFTService as NFTServiceInterface } from '../services'
 
 export class NFTService implements NFTServiceInterface {
   fetch(): any {

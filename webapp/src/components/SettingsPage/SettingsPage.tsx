@@ -146,6 +146,7 @@ const SettingsPage = (props: Props) => {
                           </label>
                           <Authorization
                             checked={hasAuthorization(
+                              authorizations!,
                               contractAddresses.Marketplace,
                               contractAddresses.MANAToken,
                               AuthorizationType.ALLOWANCE
@@ -163,6 +164,7 @@ const SettingsPage = (props: Props) => {
                           </label>
                           <Authorization
                             checked={hasAuthorization(
+                              authorizations!,
                               contractAddresses.Bids,
                               contractAddresses.MANAToken,
                               AuthorizationType.ALLOWANCE

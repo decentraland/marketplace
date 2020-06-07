@@ -6,7 +6,7 @@ import { Marketplace } from '../../../contracts/Marketplace'
 import { contractAddresses } from '../../contract/utils'
 import { NFT } from '../../nft/types'
 import { Order } from '../../order/types'
-import { OrderService as OrderServiceInterface } from '../types'
+import { OrderService as OrderServiceInterface } from '../services'
 import { orderAPI } from './order/api'
 
 export class OrderService implements OrderServiceInterface {

@@ -19,7 +19,14 @@ import { NFTAction } from '../../NFTAction'
 import { Props } from './SellModal.types'
 
 const SellModal = (props: Props) => {
-  const { nft, order, wallet, onNavigate, onCreateOrder } = props
+  const {
+    nft,
+    order,
+    wallet,
+    authorizations,
+    onNavigate,
+    onCreateOrder
+  } = props
 
   const isUpdate = order !== null
   const [price, setPrice] = useState(
@@ -43,6 +50,7 @@ const SellModal = (props: Props) => {
   const handleSubmit = useCallback(() => {
     if (
       hasAuthorization(
+        authorizations,
         contractAddresses.Marketplace,
         nft.contractAddress,
         AuthorizationType.APPROVAL
@@ -53,7 +61,7 @@ const SellModal = (props: Props) => {
       setShowAuthorizationModal(true)
       setShowConfirm(false)
     }
-  }, [nft, handleCreateOrder, setShowAuthorizationModal])
+  }, [authorizations, nft, handleCreateOrder, setShowAuthorizationModal])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal
