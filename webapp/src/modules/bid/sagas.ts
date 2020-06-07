@@ -112,7 +112,7 @@ function* handleFetchBidsByNFTRequest(action: FetchBidsByNFTRequestAction) {
   try {
     const { bidService } = VendorFactory.build(Vendors.DECENTRALAND)
 
-    const bids = yield call(() => bidService!.fetchByNFT(nft))
+    const bids = yield call(() => bidService!.fetchByNFT(nft.id))
 
     yield put(fetchBidsByNFTSuccess(nft, bids))
   } catch (error) {

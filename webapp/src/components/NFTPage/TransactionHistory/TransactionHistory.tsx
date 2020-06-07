@@ -55,7 +55,7 @@ const TransactionHistory = (props: Props) => {
       setIsLoading(true)
       Promise.all([
         orderService!.fetchByNFT(nft.id),
-        bidService!.fetchByNFT(nft, OrderStatus.SOLD)
+        bidService!.fetchByNFT(nft.id, OrderStatus.SOLD)
       ])
         .then(([orders, bids]) => {
           setIsLoading(false)

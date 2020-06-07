@@ -55,4 +55,6 @@ export const nftFragment = () => gql`
 `
 
 export type NFTFields = Omit<NFT, 'activeOrderId'>
-export type NFTFragment = NFTFields & { activeOrder: OrderFields | null }
+export type NFTFragment = Omit<NFTFields, 'vendor'> & {
+  activeOrder: OrderFields | null
+}

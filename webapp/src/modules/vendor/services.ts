@@ -41,7 +41,7 @@ export class OrderService {}
 export interface BidService {
   fetchBySeller: (seller: string) => Promise<Bid[]>
   fetchByBidder: (bidder: string) => Promise<Bid[]>
-  fetchByNFT: (nft: NFT, status?: OrderStatus) => Promise<Bid[]>
+  fetchByNFT: (nftId: string, status?: OrderStatus) => Promise<Bid[]>
   place: (
     nft: NFT,
     price: number,
