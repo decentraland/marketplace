@@ -29,10 +29,6 @@ class BidAPI {
   }
 
   async fetchByNFT(nftId: string, status: OrderStatus = OrderStatus.OPEN) {
-    console.log('*********************************************')
-    console.log('BIDDDDDDDDDDD')
-    console.log(nftId)
-    console.log('*********************************************')
     const { data } = await client.query<{ bids: BidFragment[] }>({
       query: BIDS_BY_NFT_QUERY,
       variables: {
