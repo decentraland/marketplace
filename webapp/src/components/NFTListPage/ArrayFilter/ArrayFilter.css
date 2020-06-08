@@ -1,13 +1,3 @@
-.ArrayFilter {
-  display: flex;
-  flex-direction: column;
-}
-
-.ArrayFilter .ui.sub.header.name {
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-
 .ArrayFilter .options {
   display: flex;
   flex-flow: wrap;
