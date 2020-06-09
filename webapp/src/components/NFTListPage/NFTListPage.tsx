@@ -438,7 +438,8 @@ const NFTListPage = (props: Props) => {
           />
 
           {category === NFTCategory.WEARABLE ? (
-            <div
+            <Responsive
+              minWidth={Responsive.onlyTablet.minWidth}
               className="open-filters-wrapper"
               onClick={handleToggleFilterMenu}
             >
@@ -448,7 +449,7 @@ const NFTListPage = (props: Props) => {
                   showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
                 }`}
               />
-            </div>
+            </Responsive>
           ) : null}
         </div>
         <HeaderMenu>
