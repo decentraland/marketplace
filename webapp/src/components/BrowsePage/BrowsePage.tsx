@@ -11,13 +11,13 @@ import { locations } from '../../modules/routing/locations'
 import { Props } from './BrowsePage.types'
 
 const BrowsePage = (props: Props) => {
-  const { onNavigate } = props
+  const { vendor, onNavigate } = props
 
   const handleOnNavigate = useCallback(
     (options?: SearchOptions) => {
-      onNavigate(locations.browse(options))
+      onNavigate(locations.browse(vendor, options))
     },
-    [onNavigate]
+    [vendor, onNavigate]
   )
 
   return (

@@ -5,9 +5,10 @@ export const locations = {
   signIn: () => '/sign-in',
   atlas: () => '/atlas',
   settings: () => '/settings',
-  browse: (options?: SearchOptions) => {
+  browse: (vendor: string = ':vendor', options?: SearchOptions) => {
     const params = getSearchParams(options)
-    return params ? `/browse?${params.toString()}` : '/browse'
+    const origin = `/browse/${vendor.toLowerCase()}`
+    return params ? `${origin}?${params.toString()}` : origin
   },
   currentAccount: (options?: SearchOptions) => {
     const params = getSearchParams(options)

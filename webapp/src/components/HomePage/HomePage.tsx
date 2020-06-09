@@ -6,6 +6,7 @@ import { locations } from '../../modules/routing/locations'
 import { Section, SortDirection } from '../../modules/routing/search'
 import { NFTCategory, NFTSortBy } from '../../modules/nft/types'
 import { View } from '../../modules/ui/types'
+import { Vendors } from '../../modules/vendor/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Slideshow } from './Slideshow'
@@ -24,23 +25,26 @@ const HomePage = (props: Props) => {
     onFetchNFTs
   } = props
 
-  const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
-    onNavigate
-  ])
+  const vendor = Vendors.DECENTRALAND
+
+  const handleGetStarted = useCallback(
+    () => onNavigate(locations.browse(vendor)),
+    [vendor, onNavigate]
+  )
 
   const handleViewWearables = useCallback(
-    () => onNavigate(locations.browse({ section: Section.WEARABLES })),
-    [onNavigate]
+    () => onNavigate(locations.browse(vendor, { section: Section.WEARABLES })),
+    [vendor, onNavigate]
   )
 
   const handleViewLand = useCallback(
-    () => onNavigate(locations.browse({ section: Section.LAND })),
-    [onNavigate]
+    () => onNavigate(locations.browse(vendor, { section: Section.LAND })),
+    [vendor, onNavigate]
   )
 
   const handleViewEns = useCallback(
-    () => onNavigate(locations.browse({ section: Section.ENS })),
-    [onNavigate]
+    () => onNavigate(locations.browse(vendor, { section: Section.ENS })),
+    [vendor, onNavigate]
   )
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 import { NFTCategory } from '../nft/types'
+import { Vendors } from '../vendor/types'
 
 const env = process.env
 
@@ -51,20 +52,6 @@ export const contractSymbols = {
   [Bids]: 'Bids'
 } as const
 
-export const contractCategories = {
-  [LANDRegistry]: NFTCategory.PARCEL,
-  [EstateRegistry]: NFTCategory.ESTATE,
-  [ExclusiveMasksCollection]: NFTCategory.WEARABLE,
-  [Halloween2019Collection]: NFTCategory.WEARABLE,
-  [Xmas2019Collection]: NFTCategory.WEARABLE,
-  [MCHCollection]: NFTCategory.WEARABLE,
-  [CommunityContestCollection]: NFTCategory.WEARABLE,
-  [DCLLaunchCollection]: NFTCategory.WEARABLE,
-  [DCGCollection]: NFTCategory.WEARABLE,
-  [StaySafeCollection]: NFTCategory.WEARABLE,
-  [DCLRegistrar]: NFTCategory.ENS
-} as const
-
 export const contractNames = {
   [MANAToken]: 'MANAToken',
   [LANDRegistry]: 'LANDRegistry',
@@ -81,3 +68,32 @@ export const contractNames = {
   [Marketplace]: 'Marketplace',
   [Bids]: 'ERC721Bid'
 }
+
+export const contractCategories = {
+  [LANDRegistry]: NFTCategory.PARCEL,
+  [EstateRegistry]: NFTCategory.ESTATE,
+  [ExclusiveMasksCollection]: NFTCategory.WEARABLE,
+  [Halloween2019Collection]: NFTCategory.WEARABLE,
+  [Xmas2019Collection]: NFTCategory.WEARABLE,
+  [MCHCollection]: NFTCategory.WEARABLE,
+  [CommunityContestCollection]: NFTCategory.WEARABLE,
+  [DCLLaunchCollection]: NFTCategory.WEARABLE,
+  [DCGCollection]: NFTCategory.WEARABLE,
+  [StaySafeCollection]: NFTCategory.WEARABLE,
+  [DCLRegistrar]: NFTCategory.ENS
+} as const
+
+export const contractVendors = {
+  [LANDRegistry]: Vendors.DECENTRALAND,
+  [EstateRegistry]: Vendors.DECENTRALAND,
+  [ExclusiveMasksCollection]: Vendors.DECENTRALAND,
+  [Halloween2019Collection]: Vendors.DECENTRALAND,
+  [Xmas2019Collection]: Vendors.DECENTRALAND,
+  [MCHCollection]: Vendors.DECENTRALAND,
+  [CommunityContestCollection]: Vendors.DECENTRALAND,
+  [DCLLaunchCollection]: Vendors.DECENTRALAND,
+  [DCGCollection]: Vendors.DECENTRALAND,
+  [StaySafeCollection]: Vendors.DECENTRALAND,
+  [DCLRegistrar]: Vendors.DECENTRALAND,
+  [Bids]: Vendors.DECENTRALAND
+} as const
