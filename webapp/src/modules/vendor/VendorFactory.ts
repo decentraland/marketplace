@@ -15,7 +15,7 @@ export class VendorFactory {
       case Vendors.SUPERRARE:
         return new Vendor(new superrare.NFTService())
       default:
-        throw new Error(`Invalid vendor ${vendor}`)
+        throw new Error(`Invalid vendor "${vendor}"`)
     }
   }
 }

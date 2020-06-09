@@ -3,7 +3,7 @@ import { Header, Table, Mana, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
 
-import { VendorFactory, Vendors } from '../../../modules/vendor'
+import { VendorFactory } from '../../../modules/vendor'
 import { Bid } from '../../../modules/bid/types'
 import { Order, OrderStatus } from '../../../modules/order/types'
 import { formatDistanceToNow } from '../../../lib/date'
@@ -48,9 +48,7 @@ const TransactionHistory = (props: Props) => {
   // We're doing this outside of redux to avoid having to store all orders when we only care about the last open one
   useEffect(() => {
     if (nft) {
-      const { orderService, bidService } = VendorFactory.build(
-        Vendors.DECENTRALAND
-      )
+      const { orderService, bidService } = VendorFactory.build(nft.vendor)
 
       setIsLoading(true)
       Promise.all([

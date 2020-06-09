@@ -16,7 +16,7 @@ import {
 } from './actions'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
-import { VendorFactory, Vendors } from '../vendor'
+import { VendorFactory } from '../vendor/VendorFactory'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
@@ -27,7 +27,7 @@ export function* orderSaga() {
 function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
   const { nft, price, expiresAt } = action.payload
   try {
-    const { orderService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const { orderService } = VendorFactory.build(nft.vendor)
 
     const address = yield select(getAddress)
     const txHash = yield call(() =>
@@ -46,7 +46,7 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
     if (order.nftId !== nft.id) {
       throw new Error('The order does not match the NFT')
     }
-    const { orderService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const { orderService } = VendorFactory.build(nft.vendor)
 
     const address = yield select(getAddress)
     const price = Number(order.price)
@@ -67,7 +67,7 @@ function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
     if (order.nftId !== nft.id) {
       throw new Error('The order does not match the NFT')
     }
-    const { orderService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const { orderService } = VendorFactory.build(nft.vendor)
 
     const address = yield select(getAddress)
     const txHash = yield call(() => orderService!.cancel(nft, address))

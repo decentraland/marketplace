@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 
 import { RootState } from '../../modules/reducer'
+import { getVendor } from '../../modules/vendor/selectors'
 import {
   MapStateProps,
   MapDispatch,
@@ -9,7 +10,9 @@ import {
 } from './BrowsePage.types'
 import BrowsePage from './BrowsePage'
 
-const mapState = (_: RootState): MapStateProps => ({})
+const mapState = (state: RootState): MapStateProps => ({
+  vendor: getVendor(state)!
+})
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path))
