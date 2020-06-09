@@ -11,7 +11,7 @@ export const getData = (state: RootState) => getState(state).data
 export const getLoading = (state: RootState) => getState(state).loading
 export const getError = (state: RootState) => getState(state).error
 
-const matchSelector = createMatchSelector<
+const nftDetailMatchSelector = createMatchSelector<
   RootState,
   {
     contractAddress: string
@@ -21,15 +21,15 @@ const matchSelector = createMatchSelector<
 
 export const getContractAddress = createSelector<
   RootState,
-  ReturnType<typeof matchSelector>,
+  ReturnType<typeof nftDetailMatchSelector>,
   string | null
->(matchSelector, match => match?.params.contractAddress || null)
+>(nftDetailMatchSelector, match => match?.params.contractAddress || null)
 
 export const getTokenId = createSelector<
   RootState,
-  ReturnType<typeof matchSelector>,
+  ReturnType<typeof nftDetailMatchSelector>,
   string | null
->(matchSelector, match => match?.params.tokenId || null)
+>(nftDetailMatchSelector, match => match?.params.tokenId || null)
 
 export const getCurrentNFT = createSelector<
   RootState,

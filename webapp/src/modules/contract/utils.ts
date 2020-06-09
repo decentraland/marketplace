@@ -1,4 +1,5 @@
 import { NFTCategory } from '../nft/types'
+import { Vendors } from '../vendor/types'
 
 const env = process.env
 
@@ -113,3 +114,18 @@ export const contractNames = {
   [Marketplace]: 'Marketplace',
   [Bids]: 'ERC721Bid'
 }
+
+export const contractVendors = {
+  [LANDRegistry]: Vendors.DECENTRALAND,
+  [EstateRegistry]: Vendors.DECENTRALAND,
+  [ExclusiveMasksCollection]: Vendors.DECENTRALAND,
+  [Halloween2019Collection]: Vendors.DECENTRALAND,
+  [Xmas2019Collection]: Vendors.DECENTRALAND,
+  [MCHCollection]: Vendors.DECENTRALAND,
+  [CommunityContestCollection]: Vendors.DECENTRALAND,
+  [DCLLaunchCollection]: Vendors.DECENTRALAND,
+  [DCGCollection]: Vendors.DECENTRALAND,
+  [StaySafeCollection]: Vendors.DECENTRALAND,
+  [DCLRegistrar]: Vendors.DECENTRALAND,
+  [Bids]: Vendors.DECENTRALAND
+} as const
