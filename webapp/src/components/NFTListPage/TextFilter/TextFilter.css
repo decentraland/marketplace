@@ -1,13 +1,3 @@
-.TextFilter {
-  display: flex;
-  flex-direction: column;
-}
-
-.TextFilter .ui.sub.header.name {
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-
 .TextFilter .text-input {
   margin-bottom: 8px;
 }

@@ -21,7 +21,7 @@
     "date-fns": "^2.8.1",
     "dcl-tslint-config-standard": "^2.0.0",
     "decentraland-dapps": "^7.6.1",
-    "decentraland-ui": "^2.18.0",
+    "decentraland-ui": "^2.22.2",
     "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
     "history": "^4.10.1",

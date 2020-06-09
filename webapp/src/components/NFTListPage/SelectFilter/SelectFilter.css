@@ -1,13 +1,3 @@
-.SelectFilter {
-  display: flex;
-  flex-direction: column;
-}
-
-.SelectFilter .ui.sub.header.name {
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-
 .SelectFilter .ui.dropdown {
   display: flex;
   align-items: center;

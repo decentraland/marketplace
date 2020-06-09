@@ -24,7 +24,7 @@
   top: 140px;
 }
 
-.NFTListPage .right-column .ui.toggle.checkbox label {
+.NFTListPage .right-column .ui.toggle.checkbox input.hidden + label {
   color: var(--secondary-text) !important;
   font-size: 14px;
   margin-right: 0px;
@@ -208,6 +208,16 @@
 
 .FiltersModal .ui.dropdown .dropdown.icon {
   color: var(--text);
+}
+
+.NFTListPage .Filter {
+  display: flex;
+  flex-direction: column;
+}
+
+.NFTListPage .Filter .ui.sub.header.name {
+  margin-bottom: 12px !important;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {

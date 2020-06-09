@@ -6,3 +6,7 @@
 .ui.loading.button:after {
   border-color: var(--primary) transparent transparent;
 }
+
+.ui.button + .ui.button {
+  margin-left: 16px;
+}
