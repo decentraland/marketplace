@@ -18,7 +18,7 @@ import {
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { VendorFactory, Vendors } from '../vendor'
-import { Await } from '../types'
+import { AwaitFn } from '../types'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -40,9 +40,14 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   try {
     const { nftService } = VendorFactory.build(Vendors.DECENTRALAND)
 
-    const [nfts, accounts, orders, count]: Await<ReturnType<
-      typeof nftService.fetch
-    >> = yield call(() => nftService.fetch(options))
+    const [
+      nfts,
+      accounts,
+      orders,
+      count
+    ]: AwaitFn<typeof nftService.fetch> = yield call(() =>
+      nftService.fetch(options)
+    )
 
     yield put(
       fetchNFTsSuccess(options, nfts, accounts, orders, count, timestamp)
@@ -58,9 +63,9 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   try {
     const { nftService } = VendorFactory.build(Vendors.DECENTRALAND)
 
-    const [nft, order]: Await<ReturnType<
-      typeof nftService.fetchOne
-    >> = yield call(() => nftService.fetchOne(contractAddress, tokenId))
+    const [nft, order]: AwaitFn<typeof nftService.fetchOne> = yield call(() =>
+      nftService.fetchOne(contractAddress, tokenId)
+    )
 
     yield put(fetchNFTSuccess(nft, order))
   } catch (error) {

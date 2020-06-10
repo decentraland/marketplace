@@ -3,3 +3,5 @@ export type Await<T> = T extends {
 }
   ? U
   : T
+
+export type AwaitFn<T extends (...args: any) => any> = Await<ReturnType<T>>
