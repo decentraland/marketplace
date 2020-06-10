@@ -58,11 +58,13 @@ const TransactionHistory = (props: Props) => {
         bidService!.fetchByNFT(nft.id, OrderStatus.SOLD)
       ])
         .then(([orders, bids]) => {
-          setIsLoading(false)
           setOrders(orders)
           setBids(bids)
         })
-        .catch(error => console.error(error))
+        .catch(error => {
+          console.error(error)
+        })
+        .then(() => setIsLoading(false))
     }
   }, [nft, setIsLoading, setOrders, setBids])
 
