@@ -13,11 +13,13 @@ import {
 import { formatDistanceToNow } from '../../../../lib/date'
 import { locations } from '../../../../modules/routing/locations'
 import { NFTImage } from '../../../NFTImage'
-import { Props } from './Transaction.types'
+import { Props } from './TransactionDetail.types'
 import './TransactionDetail.css'
 
 const getHref = (tx: Transaction) => {
-  if (tx.status == null) return
+  if (tx.status === null) {
+    return
+  }
   return getEtherscanHref({ txHash: tx.replacedBy || tx.hash })
 }
 

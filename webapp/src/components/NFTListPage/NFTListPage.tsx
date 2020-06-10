@@ -32,21 +32,25 @@ import {
 } from '../../modules/nft/wearable/types'
 import { NFTCategory } from '../../modules/nft/types'
 import { getSortOrder } from '../../modules/nft/utils'
-import { MAX_QUERY_SIZE, MAX_PAGE, PAGE_SIZE } from '../../lib/api/client'
-import { NFTCard } from '../NFTCard'
-import { CategoriesMenu } from '../CategoriesMenu'
-import { Props } from './NFTListPage.types'
-import { ClearFilter } from './ClearFilter'
-import { TextFilter } from './TextFilter'
-import { ArrayFilter } from './ArrayFilter'
-import './NFTListPage.css'
 import { ContractName } from '../../modules/contract/types'
 import {
   contractAddresses,
   contractCategories,
   contractSymbols
 } from '../../modules/contract/utils'
+import {
+  MAX_QUERY_SIZE,
+  MAX_PAGE,
+  PAGE_SIZE
+} from '../../modules/vendor/decentraland/apiClient'
+import { CategoriesMenu } from '../CategoriesMenu'
+import { NFTCard } from '../NFTCard'
+import { Props } from './NFTListPage.types'
+import { ClearFilter } from './ClearFilter'
+import { TextFilter } from './TextFilter'
+import { ArrayFilter } from './ArrayFilter'
 import { SelectFilter } from './SelectFilter'
+import './NFTListPage.css'
 
 export const ALL_COLLECTIONS_FILTER_OPTION = 'all'
 const MAX_RESULTS = 1000
@@ -461,7 +465,7 @@ const NFTListPage = (props: Props) => {
               />
             ) : null}
             <Header sub className="results">
-              {count == null
+              {count === null
                 ? t('global.loading') + '...'
                 : count < MAX_RESULTS
                 ? t('nft_list_page.results', { count: count.toLocaleString() })

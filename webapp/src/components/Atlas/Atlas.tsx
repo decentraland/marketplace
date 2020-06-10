@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import { Atlas as AtlasComponent, Layer } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { contractAddresses } from '../../modules/contract/utils'
-import { nftAPI } from '../../lib/api/nft'
+import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import { Tile, Props } from './Atlas.types'
 
 const getCoords = (x: number | string, y: number | string) => `${x},${y}`

@@ -46,7 +46,7 @@ const NFTImage = (props: Props) => {
     }
 
     case NFTCategory.ESTATE: {
-      const [x, y] = getCenter(estateSelection!)
+      const [x, y] = getCenter(estateSelection)
       return (
         <Atlas
           x={x}

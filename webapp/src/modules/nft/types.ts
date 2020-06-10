@@ -2,6 +2,7 @@ import { Parcel } from './parcel/types'
 import { Estate } from './estate/types'
 import { Wearable } from './wearable/types'
 import { ENS } from './ens/types'
+import { Vendors } from '../vendor'
 
 export enum NFTCategory {
   PARCEL = 'parcel',
@@ -32,4 +33,5 @@ export type NFT = {
   estate: Estate | null
   wearable: Wearable | null
   ens: ENS | null
+  vendor: Vendors
 }

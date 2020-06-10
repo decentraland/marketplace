@@ -1,6 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
 import { Atlas } from 'decentraland-ui'
-import { LAND_API_URL } from '../../lib/api/land'
+import { LAND_API_URL } from '../../modules/vendor/decentraland'
 import {
   FETCH_TILES_REQUEST,
   FetchTilesRequestAction,

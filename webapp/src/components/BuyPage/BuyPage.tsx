@@ -11,7 +11,7 @@ import { Props } from './BuyPage.types'
 import './BuyPage.css'
 
 const BuyPage = (props: Props) => {
-  const { onNavigate, onExecuteOrder } = props
+  const { authorizations, onNavigate, onExecuteOrder } = props
 
   return (
     <>
@@ -24,6 +24,7 @@ const BuyPage = (props: Props) => {
                 <BuyModal
                   nft={nft}
                   order={order}
+                  authorizations={authorizations}
                   onNavigate={onNavigate}
                   onExecuteOrder={onExecuteOrder}
                   isOwner={isOwnedBy(nft, wallet)}

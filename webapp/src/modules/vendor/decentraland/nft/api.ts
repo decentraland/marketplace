@@ -1,15 +1,10 @@
 import { gql } from 'apollo-boost'
 
-import { NFT } from '../../modules/nft/types'
-import { Account } from '../../modules/account/types'
-import { Order } from '../../modules/order/types'
-import { isExpired } from '../../modules/order/utils'
-import { FetchNFTsOptions } from '../../modules/nft/actions'
-import { nftFragment, NFTFragment } from '../../modules/nft/fragments'
-import { orderFragment } from '../../modules/order/fragments'
-import { WearableGender } from '../../modules/nft/wearable/types'
-import { contractAddresses } from '../../modules/contract/utils'
-import { client } from './client'
+import { FetchNFTsOptions } from '../../../nft/actions'
+import { nftFragment, NFTFragment } from './fragments'
+import { WearableGender } from '../../../nft/wearable/types'
+import { contractAddresses } from '../../../contract/utils'
+import { client } from '../apiClient'
 
 class NFTAPI {
   fetch = async (options: FetchNFTsOptions) => {
@@ -18,14 +13,14 @@ class NFTAPI {
     const countQuery = getNFTsQuery(variables, true)
 
     const [{ data }, { data: countData }] = await Promise.all([
-      client.query({
+      client.query<{ nfts: NFTFragment[] }>({
         query,
         variables: {
           ...variables,
           expiresAt: Date.now().toString()
         }
       }),
-      client.query({
+      client.query<{ nfts: NFTFragment[] }>({
         query: countQuery,
         variables: {
           ...variables,
@@ -36,74 +31,31 @@ class NFTAPI {
       })
     ])
 
-    const nfts: NFT[] = []
-    const accounts: Account[] = []
-    const orders: Order[] = []
-
-    for (const result of data.nfts as NFTFragment[]) {
-      const { activeOrder: nestedOrder, ...rest } = result
-
-      const nft: NFT = { ...rest, activeOrderId: null }
-
-      if (nestedOrder && !isExpired(nestedOrder.expiresAt)) {
-        const order = { ...nestedOrder, nftId: nft.id }
-        nft.activeOrderId = order.id
-        orders.push(order)
-      }
-
-      const address = nft.owner.address.toLowerCase()
-      const account = accounts.find(account => account.id === address)
-      if (account) {
-        account.nftIds.push(nft.id)
-      } else {
-        accounts.push({ id: address, address, nftIds: [nft.id] })
-      }
-
-      nfts.push(nft)
+    return {
+      nfts: data.nfts,
+      total: countData.nfts.length
     }
-
-    return [nfts, accounts, orders, countData.nfts.length] as const
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
-    const { data } = await client.query({
+    const { data } = await client.query<{ nfts: NFTFragment[] }>({
       query: NFT_BY_ADDRESS_AND_ID_QUERY,
       variables: {
         contractAddress,
         tokenId
       }
     })
-
-    const { activeOrder, ...rest } = data.nfts[0] as NFTFragment
-
-    const nft: NFT = { ...rest, activeOrderId: null }
-
-    let order: Order | null = null
-
-    if (activeOrder && !isExpired(activeOrder.expiresAt)) {
-      order = { ...activeOrder, nftId: nft.id }
-      nft.activeOrderId = order.id
-    }
-
-    return [nft, order] as const
-  }
-
-  async fetchOrders(nftId: string) {
-    const { data } = await client.query({
-      query: NFT_ORDERS_QUERY,
-      variables: { nftId }
-    })
-    return data.orders as Order[]
+    return data.nfts[0]
   }
 
   async fetchTokenId(x: number, y: number) {
-    const { data } = await client.query({
+    const { data } = await client.query<{ parcels: { tokenId: string }[] }>({
       query: PARCEL_TOKEN_ID_QUERY,
       variables: { x, y },
       fetchPolicy: 'cache-first'
     })
     const { tokenId } = data.parcels[0]
-    return tokenId as string
+    return tokenId
   }
 }
 
@@ -164,7 +116,7 @@ function getNFTsQuery(
     extraWhere.push('searchOrderExpiresAt_gt: $expiresAt')
   }
 
-  if (!!variables.wearableRarities && variables.wearableRarities.length > 0) {
+  if (variables.wearableRarities && variables.wearableRarities.length > 0) {
     extraWhere.push(
       `searchWearableRarity_in: [${variables.wearableRarities
         .map(rarity => `"${rarity}"`)
@@ -172,7 +124,7 @@ function getNFTsQuery(
     )
   }
 
-  if (!!variables.wearableGenders && variables.wearableGenders.length > 0) {
+  if (variables.wearableGenders && variables.wearableGenders.length > 0) {
     const hasMale = variables.wearableGenders.includes(WearableGender.MALE)
     const hasFemale = variables.wearableGenders.includes(WearableGender.FEMALE)
 
@@ -187,13 +139,13 @@ function getNFTsQuery(
     }
   }
 
-  if (!!variables.search) {
+  if (variables.search) {
     extraWhere.push(
       `searchText_contains: "${variables.search.trim().toLowerCase()}"`
     )
   }
 
-  if (!!variables.contracts && variables.contracts.length > 0) {
+  if (variables.contracts && variables.contracts.length > 0) {
     extraWhere.push(
       `contractAddress_in: [${variables.contracts
         .map(contract => `"${contractAddresses[contract]}"`)
@@ -220,7 +172,7 @@ function getNFTsQuery(
   `
 }
 
-export const NFT_BY_ADDRESS_AND_ID_QUERY = gql`
+const NFT_BY_ADDRESS_AND_ID_QUERY = gql`
   query NFTByTokenId($contractAddress: String, $tokenId: String) {
     nfts(
       where: { contractAddress: $contractAddress, tokenId: $tokenId }
@@ -232,20 +184,7 @@ export const NFT_BY_ADDRESS_AND_ID_QUERY = gql`
   ${nftFragment()}
 `
 
-export const NFT_ORDERS_QUERY = gql`
-  query NFTOrders($nftId: String!) {
-    orders(
-      where: { nft: $nftId, status: sold }
-      orderBy: createdAt
-      orderDirection: desc
-    ) {
-      ...orderFragment
-    }
-  }
-  ${orderFragment()}
-`
-
-export const PARCEL_TOKEN_ID_QUERY = gql`
+const PARCEL_TOKEN_ID_QUERY = gql`
   query ParcelTokenId($x: BigInt, $y: BigInt) {
     parcels(where: { x: $x, y: $y }) {
       tokenId

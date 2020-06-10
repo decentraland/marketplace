@@ -3,14 +3,13 @@ import { Header, Table, Mana, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
 
-import { bidAPI } from '../../../lib/api/bid'
+import { VendorFactory, Vendors } from '../../../modules/vendor'
 import { Bid } from '../../../modules/bid/types'
-import { formatDistanceToNow } from '../../../lib/date'
 import { Order, OrderStatus } from '../../../modules/order/types'
+import { formatDistanceToNow } from '../../../lib/date'
 import { formatMANA } from '../../../lib/mana'
-import { nftAPI } from '../../../lib/api/nft'
 import { Address } from '../../Address'
-import { Props, HistoryEvent } from './TransactionHistory.types'
+import { Props, HistoryEvent, UnionOrderBid } from './TransactionHistory.types'
 import './TransactionHistory.css'
 
 const INPUT_FORMAT = 'PPP'
@@ -30,11 +29,11 @@ const formatDateTitle = (updatedAt: string) => {
 const sortByUpdatedAt = (a: { updatedAt: string }, b: { updatedAt: string }) =>
   a.updatedAt > b.updatedAt ? -1 : 1
 
-const toEvent = (orderOrBid: Order | Bid): HistoryEvent => ({
-  from: (orderOrBid as Order).owner! || (orderOrBid as Bid).seller!,
-  to: (orderOrBid as Order).buyer! || (orderOrBid as Bid).bidder!,
-  price: orderOrBid.price,
-  updatedAt: orderOrBid.updatedAt
+const toEvent = (orderOrBid: UnionOrderBid): HistoryEvent => ({
+  from: orderOrBid.owner! || orderOrBid.seller!,
+  to: orderOrBid.buyer! || orderOrBid.bidder!,
+  price: orderOrBid.price!,
+  updatedAt: orderOrBid.updatedAt!
 })
 
 const TransactionHistory = (props: Props) => {
@@ -47,15 +46,23 @@ const TransactionHistory = (props: Props) => {
   // We're doing this outside of redux to avoid having to store all orders when we only care about the last open one
   useEffect(() => {
     if (nft) {
+      const { orderService, bidService } = VendorFactory.build(
+        Vendors.DECENTRALAND
+      )
+
       setIsLoading(true)
       Promise.all([
-        nftAPI.fetchOrders(nft.id),
-        bidAPI.fetchByNFT(nft, OrderStatus.SOLD)
-      ]).then(([orders, bids]) => {
-        setIsLoading(false)
-        setOrders(orders)
-        setBids(bids)
-      })
+        orderService!.fetchByNFT(nft.id),
+        bidService!.fetchByNFT(nft.id, OrderStatus.SOLD)
+      ])
+        .then(([orders, bids]) => {
+          setOrders(orders)
+          setBids(bids)
+        })
+        .catch(error => {
+          console.error(error)
+        })
+        .then(() => setIsLoading(false))
     }
   }, [nft, setIsLoading, setOrders, setBids])
 
@@ -94,7 +101,7 @@ const TransactionHistory = (props: Props) => {
                       <Address address={event.from} />
                     </Table.Cell>
                     <Table.Cell>
-                      <Address address={event.to!} />
+                      <Address address={event.to} />
                     </Table.Cell>
                     <Table.Cell title={formatDateTitle(event.updatedAt)}>
                       {formatEventDate(event.updatedAt)}

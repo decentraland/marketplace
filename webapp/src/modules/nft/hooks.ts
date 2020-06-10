@@ -11,14 +11,19 @@ export const useFingerprint = (nft: NFT | null) => {
       switch (nft.category) {
         case NFTCategory.ESTATE: {
           setIsLoading(true)
-          getFingerprint(nft.tokenId).then(result => {
-            setFingerprint(result)
-            setIsLoading(false)
-          })
+          getFingerprint(nft.tokenId)
+            .then(result => setFingerprint(result))
+            .catch(error =>
+              console.error(
+                `Error getting fingerprint for nft ${nft.tokenId}`,
+                error
+              )
+            )
+            .then(() => setIsLoading(false))
           break
         }
         default:
-        // nothings
+          break
       }
     }
   }, [nft, setFingerprint, setIsLoading])

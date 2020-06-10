@@ -1,7 +1,5 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
-import { Eth } from 'web3x-es/eth'
-import { Address } from 'web3x-es/address'
 import {
   DEFAULT_FETCH_NFTS_OPTIONS,
   FETCH_NFTS_REQUEST,
@@ -17,10 +15,10 @@ import {
   transferNFTSuccess,
   transferNFTFailure
 } from './actions'
-import { nftAPI } from '../../lib/api/nft'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
-import { ERC721 } from '../../contracts/ERC721'
+import { VendorFactory, Vendors } from '../vendor'
+import { AwaitFn } from '../types'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -40,9 +38,17 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   }
 
   try {
-    const [nfts, accounts, orders, count] = yield call(() =>
-      nftAPI.fetch(options)
+    const { nftService } = VendorFactory.build(Vendors.DECENTRALAND)
+
+    const [
+      nfts,
+      accounts,
+      orders,
+      count
+    ]: AwaitFn<typeof nftService.fetch> = yield call(() =>
+      nftService.fetch(options)
     )
+
     yield put(
       fetchNFTsSuccess(options, nfts, accounts, orders, count, timestamp)
     )
@@ -55,9 +61,12 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   const { contractAddress, tokenId } = action.payload
 
   try {
-    const [nft, order] = yield call(() =>
-      nftAPI.fetchOne(contractAddress, tokenId)
+    const { nftService } = VendorFactory.build(Vendors.DECENTRALAND)
+
+    const [nft, order]: AwaitFn<typeof nftService.fetchOne> = yield call(() =>
+      nftService.fetchOne(contractAddress, tokenId)
     )
+
     yield put(fetchNFTSuccess(nft, order))
   } catch (error) {
     yield put(fetchNFTFailure(contractAddress, tokenId, error.message))
@@ -67,21 +76,11 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
 function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
   const { nft, address } = action.payload
   try {
-    const eth = Eth.fromCurrentProvider()
-    if (!eth) throw new Error('Could not connect to Ethereum')
-    const erc721 = new ERC721(eth, Address.fromString(nft.contractAddress))
+    const { nftService } = VendorFactory.build(Vendors.DECENTRALAND)
+
     const from = yield select(getAddress)
-    if (!from) throw new Error('Invalid address. Wallet must be connected.')
-    const txHash = yield call(() =>
-      erc721.methods
-        .transferFrom(
-          Address.fromString(from),
-          Address.fromString(address),
-          nft.tokenId
-        )
-        .send({ from: Address.fromString(from) })
-        .getTxHash()
-    )
+    const txHash = yield call(() => nftService.transfer(from, address, nft))
+
     yield put(transferNFTSuccess(nft, address, txHash))
     yield put(push(locations.activity()))
   } catch (error) {

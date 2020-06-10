@@ -2,7 +2,6 @@ import addDays from 'date-fns/addDays'
 import dateFnsFormat from 'date-fns/format'
 import { NFT } from '../nft/types'
 import { Order } from './types'
-import { formatDistanceToNow } from '../../lib/date'
 
 export const DEFAULT_EXPIRATION_IN_DAYS = 30
 export const INPUT_FORMAT = 'yyyy-MM-dd'
@@ -21,8 +20,4 @@ export function getActiveOrder(nft: NFT | null, orders: Record<string, Order>) {
     return orders[nft.activeOrderId]
   }
   return null
-}
-
-export function getExpiresAt(order: Order) {
-  return formatDistanceToNow(+order.expiresAt, { addSuffix: true })
 }

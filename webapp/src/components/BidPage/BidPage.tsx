@@ -8,7 +8,7 @@ import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
 
 const BidPage = (props: Props) => {
-  const { onNavigate, onPlaceBid } = props
+  const { authorizations, onNavigate, onPlaceBid } = props
   return (
     <>
       <Navbar isFullscreen />
@@ -21,6 +21,7 @@ const BidPage = (props: Props) => {
                   nft={nft}
                   order={order}
                   wallet={wallet}
+                  authorizations={authorizations}
                   onNavigate={onNavigate}
                   onPlaceBid={onPlaceBid}
                 />

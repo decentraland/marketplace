@@ -12,7 +12,7 @@ const NFTAction = (props: Props) => {
   )
   return (
     <div className="NFTAction">
-      <div className="back" onClick={handleBack}></div>
+      <div className="back" onClick={handleBack} />
       <div className="action">
         <div className="left">
           <div className="nft-image-wrapper">

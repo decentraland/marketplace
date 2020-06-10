@@ -15,7 +15,4 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (_: MapDispatch): MapDispatchProps => ({})
 
-export default connect(
-  mapState,
-  mapDispatch
-)(CategoriesMenu)
+export default connect(mapState, mapDispatch)(CategoriesMenu)

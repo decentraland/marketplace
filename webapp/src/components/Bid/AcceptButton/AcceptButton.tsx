@@ -6,7 +6,6 @@ import { useFingerprint } from '../../../modules/nft/hooks'
 import { isInsufficientMANA } from '../../../modules/bid/utils'
 import { Bid } from '../../../modules/bid/types'
 import { Props } from './AcceptButton.types'
-import './AcceptButton.css'
 
 function checkFingerprint(bid: Bid, fingerprint: string | undefined) {
   if (fingerprint && bid.fingerprint) {
@@ -22,7 +21,11 @@ const AcceptButton = (props: Props) => {
   const [notEnoughMana, setNotEnoughMana] = useState(false)
 
   useEffect(() => {
-    isInsufficientMANA(bid).then(setNotEnoughMana)
+    isInsufficientMANA(bid)
+      .then(setNotEnoughMana)
+      .catch(error =>
+        console.error(`Could not get the MANA from bidder ${bid.bidder}`, error)
+      )
   }, [bid])
 
   const isValidFingerprint = checkFingerprint(bid, fingerprint)

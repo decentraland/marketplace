@@ -52,7 +52,7 @@ const SettingsPage = (props: Props) => {
   }, [isConnecting, wallet, onNavigate])
 
   const hasEmptyAuthorizations =
-    authorizations == null || Object.keys(authorizations).length === 0
+    authorizations === undefined || Object.keys(authorizations).length === 0
 
   return (
     <>
@@ -71,15 +71,15 @@ const SettingsPage = (props: Props) => {
               </Grid.Column>
               <Grid.Column computer={12} mobile={16}>
                 <div className="blockie-container">
-                  <Blockie seed={wallet!.address} scale={12} />
+                  <Blockie seed={wallet.address} scale={12} />
                 </div>
                 <div className="address-container">
                   <div className="address">
                     {isMobile()
-                      ? shortenAddress(wallet!.address)
-                      : wallet!.address}
+                      ? shortenAddress(wallet.address)
+                      : wallet.address}
                   </div>
-                  <CopyToClipboard text={wallet!.address} onCopy={handleOnCopy}>
+                  <CopyToClipboard text={wallet.address} onCopy={handleOnCopy}>
                     {hasCopiedText ? (
                       <span className="copy-text">
                         {t('settings_page.copied')}
@@ -103,7 +103,7 @@ const SettingsPage = (props: Props) => {
               <Grid.Column computer={12} mobile={16}>
                 <div className="balance">
                   <Mana inline>
-                    {parseInt(wallet!.mana.toFixed(0), 10).toLocaleString()}
+                    {parseInt(wallet.mana.toFixed(0), 10).toLocaleString()}
                   </Mana>
                   {BUY_MANA_URL ? (
                     <a
@@ -146,6 +146,7 @@ const SettingsPage = (props: Props) => {
                           </label>
                           <Authorization
                             checked={hasAuthorization(
+                              authorizations!,
                               contractAddresses.Marketplace,
                               contractAddresses.MANAToken,
                               AuthorizationType.ALLOWANCE
@@ -163,6 +164,7 @@ const SettingsPage = (props: Props) => {
                           </label>
                           <Authorization
                             checked={hasAuthorization(
+                              authorizations!,
                               contractAddresses.Bids,
                               contractAddresses.MANAToken,
                               AuthorizationType.ALLOWANCE

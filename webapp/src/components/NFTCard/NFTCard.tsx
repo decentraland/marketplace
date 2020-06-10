@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import { Card, Mana } from 'decentraland-ui'
 
 import { formatMANA } from '../../lib/mana'
+import { formatDistanceToNow } from '../../lib/date'
 import { locations } from '../../modules/routing/locations'
-import { getExpiresAt } from '../../modules/order/utils'
 import { getNFTName } from '../../modules/nft/utils'
 import { NFTImage } from '../NFTImage'
 import { ParcelTags } from './ParcelTags'
@@ -35,7 +35,11 @@ const NFTCard = (props: Props) => {
         </Card.Header>
         {order ? (
           <Card.Meta>
-            {t('nft_card.expires_at', { date: getExpiresAt(order) })}
+            {t('nft_card.expires_at', {
+              date: formatDistanceToNow(+order.expiresAt, {
+                addSuffix: true
+              })
+            })}
           </Card.Meta>
         ) : null}
         {nft.parcel ? <ParcelTags nft={nft} /> : null}

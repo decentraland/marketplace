@@ -4,9 +4,6 @@ import { toBN } from 'web3x-es/utils'
 import { AuthorizationType } from '../../components/AuthorizationModal/AuthorizationModal.types'
 import { ERC20 } from '../../contracts/ERC20'
 import { ERC721 } from '../../contracts/ERC721'
-import { store } from '../store'
-import { RootState } from '../reducer'
-import { getAuthorizations as getAuthorizationsData } from './selectors'
 import { Privileges, AuthorizationDefinition, Authorizations } from './types'
 
 export async function getAuthorizations(
@@ -70,13 +67,11 @@ function toAddress(address: string) {
 }
 
 export function hasAuthorization(
+  authorizations: Authorizations,
   contractAddress: string,
   tokenAddress: string,
   type: AuthorizationType
 ) {
-  const authorizations: Authorizations = getAuthorizationsData(
-    store.getState() as RootState
-  )
   const which =
     type === AuthorizationType.ALLOWANCE ? 'allowances' : 'approvals'
   const privileges = authorizations[which]

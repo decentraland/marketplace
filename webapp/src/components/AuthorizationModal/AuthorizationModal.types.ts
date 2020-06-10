@@ -1,11 +1,12 @@
 import { Dispatch } from 'redux'
+import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
+import { Authorizations } from '../../modules/authorization/types'
 import {
   allowTokenRequest,
   approveTokenRequest,
   AllowTokenRequestAction,
   ApproveTokenRequestAction
 } from '../../modules/authorization/actions'
-import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
 
 export enum AuthorizationType {
   ALLOWANCE = 'allowance',
@@ -17,6 +18,7 @@ export type Props = {
   contractAddress: string
   tokenAddress: string
   type: AuthorizationType
+  authorizations: Authorizations
   pendingTransactions: Transaction[]
   onAllow: typeof allowTokenRequest
   onApprove: typeof approveTokenRequest
@@ -24,7 +26,10 @@ export type Props = {
   onProceed: () => void
 }
 
-export type MapStateProps = Pick<Props, 'pendingTransactions'>
+export type MapStateProps = Pick<
+  Props,
+  'authorizations' | 'pendingTransactions'
+>
 export type MapDispatchProps = Pick<Props, 'onAllow' | 'onApprove'>
 export type MapDispatch = Dispatch<
   AllowTokenRequestAction | ApproveTokenRequestAction
