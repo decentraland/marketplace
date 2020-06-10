@@ -9,10 +9,8 @@ import { Order, OrderStatus } from '../../../modules/order/types'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatMANA } from '../../../lib/mana'
 import { Address } from '../../Address'
-import { Props, HistoryEvent } from './TransactionHistory.types'
+import { Props, HistoryEvent, UnionOrderBid } from './TransactionHistory.types'
 import './TransactionHistory.css'
-
-type UnionOrderBid = Partial<Order & Bid>
 
 const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000
