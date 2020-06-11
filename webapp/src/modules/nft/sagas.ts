@@ -18,7 +18,6 @@ import {
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
-import { getVendor } from '../vendor/selectors'
 import { contractVendors } from '../contract/utils'
 import { AwaitFn } from '../types'
 
@@ -40,8 +39,7 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   }
 
   try {
-    const vendor = yield select(getVendor)
-    const { nftService } = VendorFactory.build(vendor)
+    const { nftService } = VendorFactory.build(options.vendor!)
 
     const [
       nfts,
@@ -56,6 +54,7 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       fetchNFTsSuccess(options, nfts, accounts, orders, count, timestamp)
     )
   } catch (error) {
+    console.log(error)
     yield put(fetchNFTsFailure(options, error.message, timestamp))
   }
 }

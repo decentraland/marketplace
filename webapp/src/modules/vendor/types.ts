@@ -5,13 +5,18 @@ import {
   WearableRarity,
   WearableGender
 } from '../nft/wearable/types'
-import { ContractName } from '../contract/types'
 import { View } from '../ui/types'
+import * as decentraland from './decentraland'
+import * as superrare from './superrare'
 
 export enum Vendors {
   DECENTRALAND = 'decentraland',
   SUPERRARE = 'superrare'
 }
+
+export type ContractName =
+  | keyof typeof decentraland.ContractService['contractAddresses']
+  | keyof typeof superrare.ContractService['contractAddresses']
 
 export type FetchNFTsOptions = {
   variables: {
@@ -31,5 +36,6 @@ export type FetchNFTsOptions = {
     search?: string
     contracts?: ContractName[]
   }
+  vendor?: Vendors
   view?: View
 }

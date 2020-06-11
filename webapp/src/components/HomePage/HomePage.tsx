@@ -57,6 +57,7 @@ const HomePage = (props: Props) => {
         orderBy: NFTSortBy.ORDER_CREATED_AT,
         onlyOnSale: true
       },
+      vendor: Vendors.DECENTRALAND,
       view: View.HOME_WEARABLES
     })
     onFetchNFTs({
@@ -68,6 +69,7 @@ const HomePage = (props: Props) => {
         orderBy: NFTSortBy.ORDER_CREATED_AT,
         onlyOnSale: true
       },
+      vendor: Vendors.DECENTRALAND,
       view: View.HOME_LAND
     })
     onFetchNFTs({
@@ -79,6 +81,7 @@ const HomePage = (props: Props) => {
         orderBy: NFTSortBy.ORDER_CREATED_AT,
         onlyOnSale: true
       },
+      vendor: Vendors.DECENTRALAND,
       view: View.HOME_ENS
     })
   }, [onFetchNFTs])

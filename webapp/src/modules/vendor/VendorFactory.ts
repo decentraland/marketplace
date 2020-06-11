@@ -1,6 +1,11 @@
 import * as decentraland from './decentraland'
 import * as superrare from './superrare'
-import { NFTService, OrderService, BidService } from './services'
+import {
+  ContractService,
+  NFTService,
+  OrderService,
+  BidService
+} from './services'
 import { Vendors } from './types'
 
 export class VendorFactory {
@@ -8,12 +13,18 @@ export class VendorFactory {
     switch (vendor) {
       case Vendors.DECENTRALAND:
         return new Vendor(
+          vendor,
+          new decentraland.ContractService(),
           new decentraland.NFTService(),
           new decentraland.OrderService(),
           new decentraland.BidService()
         )
       case Vendors.SUPERRARE:
-        return new Vendor(new superrare.NFTService())
+        return new Vendor(
+          vendor,
+          new superrare.ContractService(),
+          new superrare.NFTService()
+        )
       default:
         throw new Error(`Invalid vendor "${vendor}"`)
     }
@@ -22,6 +33,8 @@ export class VendorFactory {
 
 class Vendor {
   constructor(
+    public type: Vendors,
+    public contractService: ContractService,
     public nftService: NFTService,
     public orderService?: OrderService,
     public bidService?: BidService

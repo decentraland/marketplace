@@ -4,7 +4,7 @@ import {
   WearableRarity,
   WearableGender
 } from '../nft/wearable/types'
-import { ContractName } from '../contract/types'
+import { ContractName } from '../vendor/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 

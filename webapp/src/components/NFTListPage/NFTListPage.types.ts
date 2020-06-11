@@ -11,7 +11,7 @@ import {
   WearableRarity,
   WearableGender
 } from '../../modules/nft/wearable/types'
-import { ContractName } from '../../modules/contract/types'
+import { ContractName } from '../../modules/vendor/types'
 
 export type Props = {
   defaultOnlyOnSale: boolean
