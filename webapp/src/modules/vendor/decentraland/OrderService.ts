@@ -41,7 +41,7 @@ export class OrderService implements OrderServiceInterface {
 
   async execute(
     nft: NFT,
-    price: number,
+    price: string,
     fromAddress: string,
     fingerprint?: string
   ) {
