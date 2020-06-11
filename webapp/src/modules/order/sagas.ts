@@ -49,9 +49,8 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
     const { orderService } = VendorFactory.build(Vendors.DECENTRALAND)
 
     const address = yield select(getAddress)
-    const price = Number(order.price)
     const txHash = yield call(() =>
-      orderService!.execute(nft, price, address, fingerprint)
+      orderService!.execute(nft, order.price, address, fingerprint)
     )
 
     yield put(executeOrderSuccess(order, nft, txHash))
