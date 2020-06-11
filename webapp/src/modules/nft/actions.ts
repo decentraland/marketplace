@@ -4,14 +4,8 @@ import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transac
 import { SortDirection } from '../routing/search'
 import { Order } from '../order/types'
 import { Account } from '../account/types'
-import { View } from '../ui/types'
-import { ContractName } from '../contract/types'
-import {
-  WearableCategory,
-  WearableRarity,
-  WearableGender
-} from './wearable/types'
-import { NFT, NFTCategory, NFTSortBy } from './types'
+import { FetchNFTsOptions } from '../vendor/types'
+import { NFT, NFTSortBy } from './types'
 import { getNFTName } from './utils'
 
 // Fetch NFTs
@@ -19,27 +13,6 @@ import { getNFTName } from './utils'
 export const FETCH_NFTS_REQUEST = '[Request] Fetch NFTs'
 export const FETCH_NFTS_SUCCESS = '[Success] Fetch NFTs'
 export const FETCH_NFTS_FAILURE = '[Failure] Fetch NFTs'
-
-export type FetchNFTsOptions = {
-  variables: {
-    first: number
-    skip: number
-    orderBy?: NFTSortBy
-    orderDirection?: SortDirection
-    address?: string
-    onlyOnSale: boolean
-    isLand?: boolean
-    isWearableHead?: boolean
-    isWearableAccessory?: boolean
-    category?: NFTCategory
-    wearableCategory?: WearableCategory
-    wearableRarities?: WearableRarity[]
-    wearableGenders?: WearableGender[]
-    search?: string
-    contracts?: ContractName[]
-  }
-  view?: View
-}
 
 export const DEFAULT_FETCH_NFTS_OPTIONS: FetchNFTsOptions = {
   variables: {
@@ -49,6 +22,7 @@ export const DEFAULT_FETCH_NFTS_OPTIONS: FetchNFTsOptions = {
     orderDirection: SortDirection.DESC,
     onlyOnSale: false
   },
+  vendor: undefined,
   view: undefined
 }
 

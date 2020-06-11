@@ -32,7 +32,7 @@ import {
 } from '../../modules/nft/wearable/types'
 import { NFTCategory } from '../../modules/nft/types'
 import { getSortOrder } from '../../modules/nft/utils'
-import { ContractName } from '../../modules/contract/types'
+import { ContractName, Vendors } from '../../modules/vendor/types'
 import {
   contractAddresses,
   contractCategories,
@@ -59,8 +59,8 @@ const RARITY_FILTER_OPTIONS = Object.values(WearableRarity)
   .reverse()
 const GENDER_FILTER_OPTIONS = Object.values(WearableGender)
 const COLLECTION_FILTER_OPTIONS = Object.keys(contractAddresses).filter(
-  key =>
-    contractCategories[contractAddresses[key as ContractName]] ===
+  (contractName: string) =>
+    contractCategories[contractAddresses[contractName as ContractName]] ===
     NFTCategory.WEARABLE
 ) as ContractName[]
 
@@ -331,6 +331,7 @@ const NFTListPage = (props: Props) => {
         contracts,
         search
       },
+      vendor: Vendors.DECENTRALAND,
       view: skip === 0 ? view : View.LOAD_MORE
     })
   }, [

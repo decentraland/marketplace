@@ -1,10 +1,10 @@
 import { gql } from 'apollo-boost'
 
-import { FetchNFTsOptions } from '../../../nft/actions'
-import { nftFragment, NFTFragment } from './fragments'
+import { FetchNFTsOptions } from '../../../vendor/types'
 import { WearableGender } from '../../../nft/wearable/types'
 import { contractAddresses } from '../../../contract/utils'
 import { client } from '../apiClient'
+import { nftFragment, NFTFragment } from './fragments'
 
 class NFTAPI {
   fetch = async (options: FetchNFTsOptions) => {

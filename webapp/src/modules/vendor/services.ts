@@ -1,4 +1,4 @@
-import { NFT } from '../nft/types'
+import { NFT, NFTCategory } from '../nft/types'
 import { Account } from '../account/types'
 import { Bid } from '../bid/types'
 import { OrderStatus, Order } from '../order/types'
@@ -53,3 +53,11 @@ export interface BidService {
   cancel: (bid: Bid, fromAddress: string) => Promise<string>
 }
 export class BidService {}
+
+export interface ContractService {
+  contractAddresses: Record<string, string>
+  contractSymbols: Record<string, string>
+  contractNames: Record<string, string>
+  contractCategories: Record<string, NFTCategory>
+}
+export class ContractService {}

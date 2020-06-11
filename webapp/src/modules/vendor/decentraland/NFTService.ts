@@ -4,11 +4,10 @@ import { Address } from 'web3x-es/address'
 import { NFT } from '../../nft/types'
 import { Order } from '../../order/types'
 import { Account } from '../../account/types'
-import { FetchNFTsOptions } from '../../nft/actions'
 import { isExpired } from '../../order/utils'
 import { ERC721 } from '../../../contracts/ERC721'
 import { NFTService as NFTServiceInterface } from '../services'
-import { Vendors } from '../types'
+import { Vendors, FetchNFTsOptions } from '../types'
 import { nftAPI } from './nft/api'
 
 export class NFTService implements NFTServiceInterface {

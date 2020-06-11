@@ -15,8 +15,8 @@ import { View } from './types'
 import { BidState } from '../bid/reducer'
 import { Bid } from '../bid/types'
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
+import { ContractName } from '../vendor/types'
 import { contractAddresses } from '../contract/utils'
-import { ContractName } from '../contract/types'
 
 export const getState = (state: RootState) => state.ui
 export const getNFTs = createSelector<
