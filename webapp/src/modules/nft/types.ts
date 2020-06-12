@@ -8,7 +8,8 @@ export enum NFTCategory {
   PARCEL = 'parcel',
   ESTATE = 'estate',
   WEARABLE = 'wearable',
-  ENS = 'ens'
+  ENS = 'ens',
+  PICTURE_FRAME = 'picture_frame'
 }
 
 export enum NFTSortBy {

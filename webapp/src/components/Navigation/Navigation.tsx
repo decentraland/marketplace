@@ -21,6 +21,11 @@ const Navigation = (props: Props) => {
             {t('navigation.decentraland')}
           </Tabs.Tab>
         </Link>
+        <Link to={locations.partners()}>
+          <Tabs.Tab active={activeTab === NavigationTab.PARTNERS}>
+            {t('navigation.partners')}
+          </Tabs.Tab>
+        </Link>
         <Link to={locations.currentAccount()}>
           <Tabs.Tab active={activeTab === NavigationTab.MY_ASSETS}>
             {t('navigation.my_assets')}

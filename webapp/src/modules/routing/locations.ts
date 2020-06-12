@@ -5,6 +5,7 @@ export const locations = {
   signIn: () => '/sign-in',
   atlas: () => '/atlas',
   settings: () => '/settings',
+  partners: () => '/partners',
   browse: (vendor: string = ':vendor', options?: SearchOptions) => {
     const params = getSearchParams(options)
     const origin = `/browse/${vendor.toLowerCase()}`

@@ -3,24 +3,24 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header } from 'decentraland-ui'
 
 import { Section } from '../../modules/routing/search'
-import { DropdownMenu } from './DropdownMenu'
-import { MenuItem } from './MenuItem'
+import { Menu } from '../Menu'
+import { DropdownMenu } from '../Menu/DropdownMenu'
+import { MenuItem } from '../Menu/MenuItem'
 import { Props } from './CategoriesMenu.types'
-import './CategoriesMenu.css'
 
 const CategoriesMenu = (props: Props) => {
-  const { section, onNavigate } = props
+  const { section, onMenuItemClick } = props
 
   return (
     <div className="CategoriesMenu">
       <Header sub>{t('categories_menu.categories')}</Header>
-      <ul className="menu">
+      <Menu>
         {[Section.ALL, Section.LAND].map(menuSection => (
           <MenuItem
             key={menuSection}
-            section={menuSection}
-            currentSection={section}
-            onNavigate={onNavigate}
+            value={menuSection}
+            currentValue={section}
+            onClick={onMenuItemClick}
           />
         ))}
 
@@ -28,18 +28,18 @@ const CategoriesMenu = (props: Props) => {
           ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
               <MenuItem
                 key={menuSection}
-                section={menuSection}
-                currentSection={section}
-                onNavigate={onNavigate}
+                value={menuSection}
+                currentValue={section}
+                onClick={onMenuItemClick}
                 isSub
               />
             ))
           : null}
 
         <MenuItem
-          section={Section.WEARABLES}
-          currentSection={section}
-          onNavigate={onNavigate}
+          value={Section.WEARABLES}
+          currentValue={section}
+          onClick={onMenuItemClick}
         />
         {[
           Section.WEARABLES,
@@ -60,13 +60,13 @@ const CategoriesMenu = (props: Props) => {
         ].includes(section) ? (
           <>
             <DropdownMenu
-              sections={[
+              values={[
                 Section.WEARABLES_HEAD,
                 Section.WEARABLES_FACIAL_HAIR,
                 Section.WEARABLES_HAIR
               ]}
-              currentSection={section}
-              onNavigate={onNavigate}
+              currentValue={section}
+              onMenuItemClick={onMenuItemClick as any}
             />
 
             {[
@@ -76,15 +76,15 @@ const CategoriesMenu = (props: Props) => {
             ].map(menuSection => (
               <MenuItem
                 key={menuSection}
-                section={menuSection}
-                currentSection={section}
-                onNavigate={onNavigate}
+                value={menuSection}
+                currentValue={section}
+                onClick={onMenuItemClick}
                 isSub
               />
             ))}
 
             <DropdownMenu
-              sections={[
+              values={[
                 Section.WEARABLES_ACCESORIES,
                 Section.WEARABLES_EARRING,
                 Section.WEARABLES_EYEWEAR,
@@ -94,18 +94,18 @@ const CategoriesMenu = (props: Props) => {
                 Section.WEARABLES_TIARA,
                 Section.WEARABLES_TOP_HEAD
               ]}
-              currentSection={section}
-              onNavigate={onNavigate}
+              currentValue={section}
+              onMenuItemClick={onMenuItemClick}
             />
           </>
         ) : null}
 
         <MenuItem
-          section={Section.ENS}
-          currentSection={section}
-          onNavigate={onNavigate}
+          value={Section.ENS}
+          currentValue={section}
+          onClick={onMenuItemClick}
         />
-      </ul>
+      </Menu>
     </div>
   )
 }

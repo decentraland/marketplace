@@ -1,8 +1,8 @@
-import { Section, SearchOptions } from '../../modules/routing/search'
+import { Section } from '../../modules/routing/search'
 
 export type Props = {
   section: Section
-  onNavigate: (options?: SearchOptions) => void
+  onMenuItemClick: (section: Section) => void
 }
 
 export type MapStateProps = {}

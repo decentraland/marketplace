@@ -1,14 +1,14 @@
-.CategoriesMenu {
+.Menu {
   --menu-item-width: 232px;
   margin-right: 24px;
 }
 
-.CategoriesMenu ul.menu {
+ul.Menu {
   margin-left: -16px;
   padding: 0px;
 }
 
-.CategoriesMenu ul.menu li {
+ul.Menu li {
   font-size: 17px;
   line-height: 26px;
   letter-spacing: -0.2;
@@ -21,27 +21,27 @@
   width: 248px;
 }
 
-.CategoriesMenu ul.menu li.sub {
+ul.Menu li.sub {
   color: var(--secondary-text);
   margin-left: 16px;
   width: var(--menu-item-width);
 }
 
-.CategoriesMenu ul.menu li .dropdown.icon {
+ul.Menu li .dropdown.icon {
   float: right;
 }
 
-.CategoriesMenu ul.menu li:hover,
-.CategoriesMenu ul.menu li.active {
+ul.Menu li:hover,
+ul.Menu li.active {
   color: white;
   font-weight: 600;
   background-color: var(--card);
 }
 
-.CategoriesMenu ul.submenu {
+ul.Menu.submenu {
   padding-left: 16px;
 }
 
-.CategoriesMenu ul.submenu li.sub {
+ul.Menu.submenu li.sub {
   width: calc(var(--menu-item-width) - 16px);
 }

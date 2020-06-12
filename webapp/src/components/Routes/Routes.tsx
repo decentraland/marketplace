@@ -16,6 +16,7 @@ import { BidPage } from '../BidPage'
 import { CancelSalePage } from '../CancelSalePage'
 import { TransferPage } from '../TransferPage'
 import { ActivityPage } from '../ActivityPage'
+import { PartnersPage } from '../PartnersPage'
 import { HomePage } from '../HomePage'
 import { MyBidsPage } from '../MyBidsPage'
 
@@ -42,6 +43,7 @@ const Routes = () => {
         <Route exact path={locations.transfer()} component={TransferPage} />
         <Route exact path={locations.ntf()} component={NFTPage} />
         <Route exact path={locations.settings()} component={SettingsPage} />
+        <Route exact path={locations.partners()} component={PartnersPage} />
         <Route exact path={locations.activity()} component={ActivityPage} />
         <Route exact path={locations.root()} component={HomePage} />
         <Redirect

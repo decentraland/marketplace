@@ -167,12 +167,13 @@ const NFTListPage = (props: Props) => {
 
   // Handlers
   const handleOnNavigate = useCallback(
-    (options?: SearchOptions) => {
+    (section: Section) => {
       setOffset(0)
       setLastNFTLength(0)
       onNavigate(
         fillVariables({
-          ...options,
+          page: 1,
+          section: section,
           onlyOnSale,
           sortBy
         })
@@ -421,7 +422,10 @@ const NFTListPage = (props: Props) => {
     <Page className="NFTListPage">
       <Responsive minWidth={Responsive.onlyTablet.minWidth}>
         <Grid.Column className="left-column">
-          <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
+          <CategoriesMenu
+            section={section}
+            onMenuItemClick={handleOnNavigate}
+          />
         </Grid.Column>
       </Responsive>
       <Grid.Column className="right-column">
@@ -565,7 +569,10 @@ const NFTListPage = (props: Props) => {
               onChange={handleOnlyOnSaleChange}
             />
           </div>
-          <CategoriesMenu section={section} onNavigate={handleOnNavigate} />
+          <CategoriesMenu
+            section={section}
+            onMenuItemClick={handleOnNavigate}
+          />
           <Button
             className="apply-filters"
             primary
