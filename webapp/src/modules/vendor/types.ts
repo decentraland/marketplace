@@ -11,7 +11,9 @@ import * as superrare from './superrare'
 
 export enum Vendors {
   DECENTRALAND = 'decentraland',
-  SUPERRARE = 'superrare'
+  SUPER_RARE = 'superrare',
+  KNOWN_ORIGIN = 'knownorigin',
+  MAKERS_PLACE = 'makersplace'
 }
 
 export type ContractName =

@@ -21,6 +21,10 @@ ul.Menu li {
   width: 248px;
 }
 
+ul.Menu li .ui.image {
+  vertical-align: text-bottom;
+}
+
 ul.Menu li.sub {
   color: var(--secondary-text);
   margin-left: 16px;
