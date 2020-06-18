@@ -33,7 +33,7 @@ export class VendorFactory {
   }
 }
 
-class Vendor {
+export class Vendor {
   constructor(
     public type: Vendors,
     public contractService: ContractService,

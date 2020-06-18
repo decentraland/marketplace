@@ -15,7 +15,9 @@ import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Description } from '../Description'
+import { Layout } from '../Layout'
 import { Order } from '../Order'
+import { Actions } from '../Actions'
 import { Highlight } from '../Highlight'
 import { Highlights } from '../Highlights'
 import { Bids } from '../Bids'
@@ -93,7 +95,7 @@ const WearableDetail = (props: Props) => {
           right={<Owner nft={nft} />}
         />
         <Description text={nft.wearable!.description} />
-        <Order nft={nft} />
+        <Layout left={<Order nft={nft} />} right={<Actions nft={nft} />} />
         <Highlights>
           <Highlight
             icon={<div className={nft.wearable!.category} />}

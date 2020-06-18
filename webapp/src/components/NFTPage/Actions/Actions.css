@@ -1,17 +1,16 @@
 .Order {
-  display: flex;
-  margin-bottom: 48px;
+  margin-bottom: 24px;
 }
 
-.Order .left {
-  flex: 1 0 auto;
-  display: flex;
+.Order .column {
+  flex-direction: row;
 }
 
-.Order .right {
-  flex: 1 0 auto;
-  align-items: center;
-  display: flex;
+.Order .column.left {
+  justify-content: flex-start;
+}
+
+.Order .column.right {
   justify-content: flex-end;
 }
 
@@ -20,16 +19,12 @@
 }
 
 @media (max-width: 768px) {
-  .Order,
-  .Order .left,
-  .Order .right {
+  .Order.dcl.row,
+  .Order .dcl.column {
     flex-direction: column;
   }
 
-  .Order .left {
-    margin-bottom: 24px;
-  }
-
+  .Order .column,
   .Order .right .ui.button {
     width: 100%;
   }

@@ -7,7 +7,9 @@ import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
+import { Layout } from '../Layout'
 import { Order } from '../Order'
+import { Actions } from '../Actions'
 import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './ENSDetail.types'
@@ -29,7 +31,7 @@ const ENSDetail = (props: Props) => {
           }
           right={<Owner nft={nft} />}
         />
-        <Order nft={nft} />
+        <Layout left={<Order nft={nft} />} right={<Actions nft={nft} />} />
         <Bids nft={nft} />
         <TransactionHistory nft={nft} />
       </Container>

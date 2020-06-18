@@ -1,25 +1,14 @@
 .Title {
-  display: flex;
   margin-top: 35px;
-  margin-bottom: 48px;
 }
 
-.Title .left {
-  display: flex;
-  flex: 1 1 auto;
+.Title .column.left {
   overflow: hidden;
   white-space: nowrap;
   margin-right: 34px;
 }
 
-.Title .right {
-  flex: none;
-  text-align: right;
-}
-
-.Title .left .ui.header {
-  display: inline-block;
-  flex: 0 1 auto;
+.Title .column.left .ui.header {
   overflow: hidden;
   text-overflow: ellipsis;
   margin-bottom: 0px;
@@ -31,8 +20,8 @@
 }
 
 @media (max-width: 768px) {
-  .Title {
-    flex-direction: column;
+  .Title .column.left {
+    flex-direction: row;
   }
 
   .Title .left {

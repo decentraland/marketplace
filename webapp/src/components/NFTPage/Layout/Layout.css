@@ -1,0 +1,33 @@
+.Layout > .row .column {
+  flex-direction: row;
+}
+
+.Layout > .row .column.left {
+  justify-content: flex-start;
+}
+
+.Layout > .row .column.right {
+  justify-content: flex-end;
+}
+
+.Layout > .row .ui.header:not(.sub) {
+  text-transform: capitalize;
+}
+
+@media (max-width: 768px) {
+  .Layout > .row,
+  .Layout > .row .column {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .Layout > .row .column,
+  .Layout > .row .ui.button {
+    width: 100%;
+  }
+
+  .Layout > .row .ui.button + .ui.button {
+    margin-left: 0px;
+    margin-top: 24px;
+  }
+}

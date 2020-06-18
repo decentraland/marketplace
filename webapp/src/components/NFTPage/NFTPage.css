@@ -22,3 +22,7 @@
 .NFTPage .NFTImage .ens-subdomain .name {
   padding: 25px;
 }
+
+.NFTPage .ui.container > div {
+  margin-bottom: 48px;
+}

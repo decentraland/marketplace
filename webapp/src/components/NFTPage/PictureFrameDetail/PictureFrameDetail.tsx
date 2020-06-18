@@ -1,13 +1,14 @@
 import React from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Container, Header } from 'decentraland-ui'
+
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
-import { Badge } from '../Badge'
+import { Layout } from '../Layout'
 import { Order } from '../Order'
+import { Actions } from '../Actions'
 import { Props } from './PictureFrameDetail.types'
 
 const PictureFrameDetail = (props: Props) => {
@@ -20,15 +21,10 @@ const PictureFrameDetail = (props: Props) => {
       </PageHeader>
       <Container className="PictureFrameDetail">
         <Title
-          left={
-            <>
-              <Header size="large">{getNFTName(nft)}</Header>
-              <Badge color="#37333d">{t('global.ens')}</Badge>
-            </>
-          }
+          left={<Header size="large">{getNFTName(nft)}</Header>}
           right={<Owner nft={nft} />}
         />
-        <Order nft={nft} />
+        <Layout left={<Order nft={nft} />} right={<Actions nft={nft} />} />
       </Container>
     </>
   )

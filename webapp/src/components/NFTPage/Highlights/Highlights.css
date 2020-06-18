@@ -1,14 +1,23 @@
-.Highlights {
-  margin-bottom: 48px;
+.Highlights > .ui.header {
+  margin-bottom: 13px;
 }
 
-.Highlights .row {
-  display: flex;
-  margin-top: 13px;
+@media (min-width: 768px) {
+  .Highlights .Highlight + .Highlight {
+    margin-left: 64px;
+  }
 }
 
 @media (max-width: 768px) {
-  .Highlights .row {
+  .Highlights .dcl.row {
     flex-direction: column;
+  }
+
+  .Highlights .Highlight {
+    width: 100%;
+  }
+
+  .Highlights .Highlight + .Highlight {
+    margin-top: 24px;
   }
 }

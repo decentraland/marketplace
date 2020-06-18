@@ -1,13 +1,13 @@
 import React from 'react'
-import { Header } from 'decentraland-ui'
-import './Highlights.css'
+import { Header, Row } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import './Highlights.css'
 
 const Highlights = (props: { children: React.ReactNode }) => {
   return (
     <div className="Highlights">
       <Header sub>{t('detail.highlights')}</Header>
-      <div className="row">{props.children}</div>
+      <Row>{props.children}</Row>
     </div>
   )
 }

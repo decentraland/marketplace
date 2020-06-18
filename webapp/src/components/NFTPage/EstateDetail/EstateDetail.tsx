@@ -9,7 +9,9 @@ import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
 import { Description } from '../Description'
+import { Layout } from '../Layout'
 import { Order } from '../Order'
+import { Actions } from '../Actions'
 import { ProximityHighlights } from '../ProximityHighlights'
 import { TransactionHistory } from '../TransactionHistory'
 import { Bids } from '../Bids'
@@ -47,7 +49,7 @@ const EstateDetail = (props: Props) => {
           right={<Owner nft={nft} />}
         />
         <Description text={nft.estate!.data?.description} />
-        <Order nft={nft} />
+        <Layout left={<Order nft={nft} />} right={<Actions nft={nft} />} />
         <ProximityHighlights nft={nft} />
         <Bids nft={nft} />
         <TransactionHistory nft={nft} />

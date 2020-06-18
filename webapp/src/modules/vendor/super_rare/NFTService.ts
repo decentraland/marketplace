@@ -43,7 +43,12 @@ export class NFTService implements NFTServiceInterface {
       superRareAPI.fetchNFT(contractAddress, tokenId),
       superRareAPI.fetchOrder(contractAddress, tokenId)
     ])
-    return [this.toNFT(remoteNFT), this.toOrder(remoteOrder)] as const
+    const nft = this.toNFT(remoteNFT)
+    const order = this.toOrder(remoteOrder)
+
+    nft.activeOrderId = order.id
+
+    return [nft, order] as const
   }
 
   transfer(): any {

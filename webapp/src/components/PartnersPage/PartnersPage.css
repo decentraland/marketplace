@@ -1,3 +1,4 @@
+/* @nico: TODO: Move this to a common stylesheet? */
 .PartnersPage .ui.container {
   display: flex;
 }
@@ -25,7 +26,6 @@
   top: 140px;
 }
 
-/* @nico: TODO: Move this to a common stylesheet? */
 .PartnersPage.dcl.page > .ui.container {
   min-height: calc(
     100vh - var(--navbar-height) - var(--footer-height) -
