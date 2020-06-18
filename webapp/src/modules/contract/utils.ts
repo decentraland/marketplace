@@ -38,11 +38,8 @@ export const contractCategories = vendors.reduce(
 
 export const contractVendors: Record<string, Vendors> = {}
 for (const { type, contractService } of vendors) {
-  Object.values(contractService.contractAddresses).reduce(
-    (obj, address) => ({
-      ...obj,
-      [address]: type
-    }),
-    contractVendors
-  )
+  Object.values(contractService.contractAddresses).reduce((obj, address) => {
+    obj[address] = type
+    return obj
+  }, contractVendors)
 }

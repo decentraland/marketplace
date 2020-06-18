@@ -15,7 +15,7 @@ export type Order = {
   buyer: string | null
   price: string
   status: OrderStatus
-  expiresAt: string
+  expiresAt?: string
   createdAt: string
   updatedAt: string
 }

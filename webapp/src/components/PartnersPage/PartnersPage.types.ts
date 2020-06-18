@@ -7,13 +7,13 @@ import {
 } from '../../modules/nft/actions'
 
 export type Props = {
-  nfts: NFT[]
-  isLoading: boolean
+  superRare: NFT[]
+  isSuperRareLoading: boolean
   onNavigate: (path: string) => void
   onFetchNFTs: typeof fetchNFTsRequest
 }
 
-export type MapStateProps = Pick<Props, 'nfts' | 'isLoading'>
+export type MapStateProps = Pick<Props, 'superRare' | 'isSuperRareLoading'>
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onFetchNFTs'>
 export type MapDispatch = Dispatch<
   CallHistoryMethodAction | FetchNFTsRequestAction

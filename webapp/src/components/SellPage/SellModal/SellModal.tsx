@@ -33,8 +33,8 @@ const SellModal = (props: Props) => {
     isUpdate ? toMANA(+fromWei(order!.price, 'ether')) : ''
   )
   const [expiresAt, setExpiresAt] = useState(
-    isUpdate
-      ? dateFnsFormat(new Date(+order!.expiresAt), INPUT_FORMAT)
+    isUpdate && order!.expiresAt
+      ? dateFnsFormat(+order!.expiresAt, INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
   const [confirmPrice, setConfirmPrice] = useState('')

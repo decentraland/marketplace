@@ -27,7 +27,7 @@ export class NFTService implements NFTServiceInterface {
         activeOrderId: null
       }
 
-      if (nestedOrder && !isExpired(nestedOrder.expiresAt)) {
+      if (nestedOrder && !isExpired(nestedOrder.expiresAt!)) {
         const order = { ...nestedOrder, nftId: nft.id }
         nft.activeOrderId = order.id
         orders.push(order)
@@ -60,7 +60,7 @@ export class NFTService implements NFTServiceInterface {
 
     let order: Order | undefined
 
-    if (activeOrder && !isExpired(activeOrder.expiresAt)) {
+    if (activeOrder && !isExpired(activeOrder.expiresAt!)) {
       order = { ...activeOrder, nftId: nft.id }
       nft.activeOrderId = order.id
     }

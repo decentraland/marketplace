@@ -54,7 +54,6 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       fetchNFTsSuccess(options, nfts, accounts, orders, count, timestamp)
     )
   } catch (error) {
-    console.log(error)
     yield put(fetchNFTsFailure(options, error.message, timestamp))
   }
 }

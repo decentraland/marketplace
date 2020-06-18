@@ -1,11 +1,12 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 
 import { RootState } from '../../modules/reducer'
-import { fetchNFTsRequest, FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
-import { getNFTs } from '../../modules/ui/selectors'
-import { getLoading } from '../../modules/nft/selectors'
+import { fetchNFTsRequest } from '../../modules/nft/actions'
+import {
+  getPartnersSuperRare,
+  isPartnersSuperRareLoading
+} from '../../modules/ui/selectors'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -14,8 +15,8 @@ import {
 import PartnersPage from './PartnersPage'
 
 const mapState = (state: RootState): MapStateProps => ({
-  nfts: getNFTs(state),
-  isLoading: isLoadingType(getLoading(state), FETCH_NFTS_REQUEST)
+  superRare: getPartnersSuperRare(state),
+  isSuperRareLoading: isPartnersSuperRareLoading(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

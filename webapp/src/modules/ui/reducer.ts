@@ -22,6 +22,7 @@ export type UIState = {
   homepageWearableIds: string[]
   homepageLandIds: string[]
   homepageENSIds: string[]
+  partnersSuperRareIds: string[]
   sellerBidIds: string[]
   bidderBidIds: string[]
   archivedBidIds: string[]
@@ -34,6 +35,7 @@ const INITIAL_STATE: UIState = {
   homepageWearableIds: [],
   homepageLandIds: [],
   homepageENSIds: [],
+  partnersSuperRareIds: [],
   sellerBidIds: [],
   bidderBidIds: [],
   archivedBidIds: [],
@@ -102,6 +104,12 @@ export function uiReducer(
           return {
             ...state,
             homepageENSIds: action.payload.nfts.map(nft => nft.id)
+          }
+        }
+        case View.PARTNERS_SUPER_RARE: {
+          return {
+            ...state,
+            partnersSuperRareIds: action.payload.nfts.map(nft => nft.id)
           }
         }
         default:

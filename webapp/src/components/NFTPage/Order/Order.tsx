@@ -39,16 +39,16 @@ const Order = (props: Props) => {
     <div className="Order">
       <div className="left">
         {order ? (
-          <>
-            <Stats title={t('detail.price')}>
-              <Mana>{formatMANA(order.price)}</Mana>
-            </Stats>
-            <Stats title={t('detail.expires')}>
-              {formatDistanceToNow(+order.expiresAt, {
-                addSuffix: true
-              })}
-            </Stats>
-          </>
+          <Stats title={t('detail.price')}>
+            <Mana>{formatMANA(order.price)}</Mana>
+          </Stats>
+        ) : null}
+        {order && order.expiresAt ? (
+          <Stats title={t('detail.expires')}>
+            {formatDistanceToNow(+order.expiresAt, {
+              addSuffix: true
+            })}
+          </Stats>
         ) : null}
       </div>
       <div className="right">

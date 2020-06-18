@@ -104,52 +104,35 @@ export const getUISearch = createSelector<RootState, string, string>(
   search => new URLSearchParams(search).get('search') || ''
 )
 
-export const getHomepageWearables = createSelector<
-  RootState,
-  UIState,
-  NFTState['data'],
-  NFT[]
->(getState, getNFTData, (ui, nftsById) =>
-  ui.homepageWearableIds.map(id => nftsById[id])
-)
-
-export const getHomepageLand = createSelector<
-  RootState,
-  UIState,
-  NFTState['data'],
-  NFT[]
->(getState, getNFTData, (ui, nftsById) =>
-  ui.homepageLandIds.map(id => nftsById[id])
-)
-
-export const getHomepageENS = createSelector<
-  RootState,
-  UIState,
-  NFTState['data'],
-  NFT[]
->(getState, getNFTData, (ui, nftsById) =>
-  ui.homepageENSIds.map(id => nftsById[id])
-)
-
-export const isHomepageWearablesLoading = (state: RootState) =>
+const createGetNFTsSelector = (combiner: (ui: UIState) => string[]) =>
+  createSelector<RootState, UIState, NFTState['data'], NFT[]>(
+    getState,
+    getNFTData,
+    (ui, nftsById) => combiner(ui).map(id => nftsById[id])
+  )
+const createNFTsLoadingSelector = (view: View) => (state: RootState) =>
   getNFTLoading(state).some(
     action =>
-      action.type === FETCH_NFTS_REQUEST &&
-      action.payload.options.view === View.HOME_WEARABLES
+      action.type === FETCH_NFTS_REQUEST && action.payload.options.view === view
   )
 
-export const isHomepageENSLoading = (state: RootState) =>
-  getNFTLoading(state).some(
-    action =>
-      action.type === FETCH_NFTS_REQUEST &&
-      action.payload.options.view === View.HOME_LAND
-  )
-export const isHomepageLandLoading = (state: RootState) =>
-  getNFTLoading(state).some(
-    action =>
-      action.type === FETCH_NFTS_REQUEST &&
-      action.payload.options.view === View.HOME_ENS
-  )
+export const getHomepageWearables = createGetNFTsSelector(
+  ui => ui.homepageWearableIds
+)
+export const getHomepageLand = createGetNFTsSelector(ui => ui.homepageLandIds)
+export const getHomepageENS = createGetNFTsSelector(ui => ui.homepageENSIds)
+export const getPartnersSuperRare = createGetNFTsSelector(
+  ui => ui.partnersSuperRareIds
+)
+
+export const isHomepageWearablesLoading = createNFTsLoadingSelector(
+  View.HOME_WEARABLES
+)
+export const isHomepageENSLoading = createNFTsLoadingSelector(View.HOME_LAND)
+export const isHomepageLandLoading = createNFTsLoadingSelector(View.HOME_ENS)
+export const isPartnersSuperRareLoading = createNFTsLoadingSelector(
+  View.PARTNERS_SUPER_RARE
+)
 
 export const getSellerBids = createSelector<
   RootState,

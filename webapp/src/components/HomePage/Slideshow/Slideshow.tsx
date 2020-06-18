@@ -6,7 +6,7 @@ import { Props } from './Slideshow.types'
 import './Slideshow.css'
 
 const Slideshow = (props: Props) => {
-  const { title, nfts, isLoading, onViewAll } = props
+  const { title, nfts, isSubHeader, isLoading, onViewAll } = props
 
   const renderNfts = () =>
     nfts.map((nft, index) => <NFTCard key={index} nft={nft} />)
@@ -15,7 +15,7 @@ const Slideshow = (props: Props) => {
     <div className="Slideshow">
       <HeaderMenu>
         <HeaderMenu.Left>
-          <Header>{title}</Header>
+          <Header sub={isSubHeader}>{title}</Header>
         </HeaderMenu.Left>
         <HeaderMenu.Right>
           <Button basic onClick={onViewAll}>

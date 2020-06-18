@@ -420,20 +420,20 @@ const NFTListPage = (props: Props) => {
 
   return (
     <Page className="NFTListPage">
-      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-        <Grid.Column className="left-column">
+      <Grid.Column className="left-column">
+        <Responsive minWidth={Responsive.onlyTablet.minWidth}>
           <CategoriesMenu
             section={section}
             onMenuItemClick={handleOnNavigate}
           />
-        </Grid.Column>
-      </Responsive>
+        </Responsive>
+      </Grid.Column>
       <Grid.Column className="right-column">
         <div className="topbar">
           <TextFilter
             value={search}
             placeholder={t('nft_list_page.search', {
-              category: t(`categories_menu.menu_item.${section}`).toLowerCase()
+              category: t(`menu.${section}`).toLowerCase()
             })}
             onChange={handleSearch}
           />

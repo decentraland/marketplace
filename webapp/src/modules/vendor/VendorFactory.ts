@@ -1,5 +1,5 @@
 import * as decentraland from './decentraland'
-import * as superrare from './superrare'
+import * as superRare from './super_rare'
 import {
   ContractService,
   NFTService,
@@ -24,8 +24,8 @@ export class VendorFactory {
       case Vendors.MAKERS_PLACE:
         return new Vendor(
           vendor,
-          new superrare.ContractService(),
-          new superrare.NFTService()
+          new superRare.ContractService(),
+          new superRare.NFTService()
         )
       default:
         throw new Error(`Invalid vendor "${vendor}"`)

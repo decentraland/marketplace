@@ -21,6 +21,12 @@
     "apply": "Apply",
     "jump_in": "Jump In"
   },
+  "vendors": {
+    "decentraland": "Decentraland",
+    "super_rare": "SuperRare",
+    "known_origin": "KnownOrigin",
+    "makers_place": "MakersPlace"
+  },
   "navigation": {
     "atlas": "Atlas",
     "decentraland": "Decentraland",
@@ -28,16 +34,6 @@
     "my_assets": "My Assets",
     "my_bids": "My Bids",
     "activity": "Activity"
-  },
-  "home_page": {
-    "title": "Decentraland Marketplace",
-    "subtitle": "Welcome to the virtual world’s one-stop-shop for the very best digital assets.",
-    "get_started": "Start Browsing",
-    "learn_more": "Learn More",
-    "view_all": "View All",
-    "wearables": "Wearables",
-    "land": "Parcels and Estates",
-    "ens": "Names"
   },
   "menu": {
     "all": "All Assets",
@@ -64,9 +60,9 @@
     "wearables_top_head": "Top head",
     "ens": "Names",
     "decentraland": "Decentraland",
-    "superrare": "SuperRare",
-    "knownorigin": "KnownOrigin",
-    "makersplace": "MakersPlace"
+    "super_rare": "SuperRare",
+    "known_origin": "KnownOrigin",
+    "makers_place": "MakersPlace"
   },
   "categories_menu": {
     "categories": "Categories"
@@ -76,6 +72,19 @@
     "newest": "Newest",
     "recently_listed": "Recently listed",
     "cheapest": "Cheapest"
+  },
+  "home_page": {
+    "title": "Decentraland Marketplace",
+    "subtitle": "Welcome to the virtual world’s one-stop-shop for the very best digital assets.",
+    "get_started": "Start Browsing",
+    "learn_more": "Learn More",
+    "view_all": "View All",
+    "wearables": "Wearables",
+    "land": "Parcels and Estates",
+    "ens": "Names"
+  },
+  "partners_page": {
+    "latest_from": "Latest from {vendor}"
   },
   "nft_list_page": {
     "on_sale": "On sale",
