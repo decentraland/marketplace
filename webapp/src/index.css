@@ -20,11 +20,6 @@ code {
   color: var(--danger);
 }
 
-.ui.popup,
-.ui.inverted.popup {
-  height: auto;
-}
-
 @media (max-width: 768px) {
   .dcl.navbar.overlay .ui.container {
     width: calc(100% - 32px) !important;

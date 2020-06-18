@@ -1,0 +1,8 @@
+.SignInPage {
+  display: flex;
+  justify-content: center;
+}
+
+.SignInPage .SignIn.center {
+  position: relative;
+}
