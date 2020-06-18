@@ -1,35 +1,12 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFTSortBy } from '../../nft/types'
-import { SortDirection } from '../../routing/search'
 import { FetchNFTsOptions } from '../types'
-import { SuperRareOrder, SuperRareAsset } from './types'
-
-type SuperRareFetchNFTOptions = Partial<{
-  asset_contract_addresses: string[]
-  creator_addresses: string[]
-  owner_addresses: string[]
-  asset_ids: number[]
-  categories: string[]
-  name: string
-  for_sale: boolean
-  offset: number
-  limit: number
-}>
-
-type SuperRareFetchOrderOptions = Partial<{
-  taker_addresses: string[]
-  maker_addresses: string[]
-  creator_addresses: string[]
-  owner_addresses: string[]
-  asset_contract_addresses: string[]
-  asset_ids: number[]
-  categories: string[]
-  name: string
-  order: SortDirection
-  sort: 'price' | 'timestamp'
-  offset: number
-  limit: number
-}>
+import {
+  SuperRareOrder,
+  SuperRareAsset,
+  SuperRareFetchNFTOptions,
+  SuperRareFetchOrderOptions
+} from './types'
 
 export const SUPER_RARE_API_URL = 'https://superrare.co/sr-json/v0'
 
