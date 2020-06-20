@@ -1,8 +1,12 @@
 import { connect } from 'react-redux'
 import { RootState } from '../../../modules/reducer'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './Order.types'
+import {
+  MapStateProps,
+  MapDispatch,
+  MapDispatchProps
+} from './OrderDetails.types'
 import { getCurrentOrder } from '../../../modules/order/selectors'
-import Order from './Order'
+import OrderDetails from './OrderDetails'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -12,4 +16,4 @@ const mapState = (state: RootState): MapStateProps => {
 
 const mapDispatch = (_: MapDispatch): MapDispatchProps => ({})
 
-export default connect(mapState, mapDispatch)(Order)
+export default connect(mapState, mapDispatch)(OrderDetails)

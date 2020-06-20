@@ -1,6 +1,7 @@
 import React from 'react'
-import { Column } from 'decentraland-ui'
 
+import { Row } from '../../Layout/Row'
+import { Column } from '../../Layout/Column'
 import { Props } from './Highlight.types'
 import './Highlight.css'
 
@@ -11,16 +12,16 @@ const Highlight = (props: Props) => {
     classes.push('clickable')
   }
   return (
-    <Column className={classes.join(' ')} grow={false} onClick={onClick}>
-      <div className="content">
-        <div className="left">{icon}</div>
-        <div className="right">
+    <Column className={classes.join(' ')} onClick={onClick}>
+      <Row>
+        <Column align="left">{icon}</Column>
+        <Column align="right">
           <div className="name">{name}</div>
           {description ? (
             <div className="description">{description}</div>
           ) : null}
-        </div>
-      </div>
+        </Column>
+      </Row>
     </Column>
   )
 }

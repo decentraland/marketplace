@@ -1,6 +1,8 @@
 import React from 'react'
-import { Header, Row } from 'decentraland-ui'
+import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+
+import { Row } from '../../Layout/Row'
 import './Highlights.css'
 
 const Highlights = (props: { children: React.ReactNode }) => {

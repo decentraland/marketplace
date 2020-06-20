@@ -2,8 +2,11 @@ import React, { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Page, Header, Button, Modal } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Navigation } from '../Navigation'
+
 import { locations } from '../../modules/routing/locations'
+import { Navigation } from '../Navigation'
+import { Row } from '../Layout/Row'
+import { Column } from '../Layout/Column'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Transaction } from './Transaction'
@@ -58,16 +61,16 @@ const ActivityPage = (props: Props) => {
   } else {
     content = (
       <>
-        <div className="history-header">
-          <div className="left">
+        <Row>
+          <Column align="left" grow={true}>
             <Header sub>{t('activity_page.latest_activity')}</Header>
-          </div>
-          <div className="right">
+          </Column>
+          <Column align="right">
             <Button basic onClick={handleConfirm}>
               {t('activity_page.clear_history')}
             </Button>
-          </div>
-        </div>
+          </Column>
+        </Row>
         <div className="transactions">
           {transactions
             .map(tx => <Transaction tx={tx} key={tx.hash} />)

@@ -18,17 +18,13 @@
   border: solid 1px rgba(255, 255, 255, 0.5);
 }
 
-.NFTAction .action {
-  display: flex;
-}
-
-.NFTAction .action .left {
+.NFTAction .Row .left {
   flex: 0.75 1 auto;
   text-align: right;
   margin-right: 80px;
 }
 
-.NFTAction .action .right {
+.NFTAction .Row .right {
   flex: 1.25 1 auto;
 }
 
@@ -40,29 +36,23 @@
 }
 
 @media (max-width: 768px) {
-  .NFTAction .nft-image-wrapper {
-    width: 100%;
-    margin-bottom: 24px;
-  }
-
-  .NFTAction .action {
+  .NFTAction > .Row {
     flex-direction: column;
   }
 
-  .NFTAction .action .left {
-    margin-right: 0px;
+  .NFTAction > .Row .Column.left,
+  .NFTAction > .Row .nft-image-wrapper,
+  .NFTAction > .Row .ui.button {
+    width: 100%;
   }
 
-  .NFTAction .back {
-    margin-bottom: 48px;
-  }
-
-  .NFTAction .buttons {
+  .NFTAction > .Row .buttons {
     display: flex;
     flex-direction: column-reverse;
   }
 
-  .NFTAction .buttons .ui.button + .ui.button {
+  .NFTAction > .Row .nft-image-wrapper,
+  .NFTAction > .Row .ui.button + .ui.button {
     margin-left: 0px;
     margin-bottom: 24px;
   }

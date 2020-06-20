@@ -3,7 +3,6 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import {
   Page,
-  Grid,
   Card,
   Radio,
   CheckboxProps,
@@ -15,7 +14,7 @@ import {
   DropdownProps,
   Responsive,
   Modal,
-  Row
+  Row as UIRow
 } from 'decentraland-ui'
 
 import {
@@ -45,11 +44,13 @@ import {
 } from '../../modules/vendor/decentraland/apiClient'
 import { CategoriesMenu } from '../CategoriesMenu'
 import { NFTCard } from '../NFTCard'
-import { Props } from './NFTListPage.types'
+import { Row } from '../Layout/Row'
+import { Column } from '../Layout/Column'
 import { ClearFilter } from './ClearFilter'
 import { TextFilter } from './TextFilter'
 import { ArrayFilter } from './ArrayFilter'
 import { SelectFilter } from './SelectFilter'
+import { Props } from './NFTListPage.types'
 import './NFTListPage.css'
 
 export const ALL_COLLECTIONS_FILTER_OPTION = 'all'
@@ -355,7 +356,7 @@ const NFTListPage = (props: Props) => {
 
   const filters = (
     <>
-      <Row>
+      <UIRow>
         <SelectFilter
           name={t('nft_list_page.collection')}
           value={contracts[0] || ALL_COLLECTIONS_FILTER_OPTION}
@@ -371,8 +372,8 @@ const NFTListPage = (props: Props) => {
           ]}
           onChange={handleCollectionsChange}
         />
-      </Row>
-      <Row>
+      </UIRow>
+      <UIRow>
         <ArrayFilter
           name={t('nft_list_page.rarity')}
           values={wearableRarities}
@@ -391,7 +392,7 @@ const NFTListPage = (props: Props) => {
           }))}
           onChange={handleGendersChange}
         />
-      </Row>
+      </UIRow>
     </>
   )
 
@@ -420,78 +421,38 @@ const NFTListPage = (props: Props) => {
 
   return (
     <Page className="NFTListPage">
-      <Grid.Column className="left-column">
-        <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-          <CategoriesMenu
-            section={section}
-            onMenuItemClick={handleOnNavigate}
-          />
-        </Responsive>
-      </Grid.Column>
-      <Grid.Column className="right-column">
-        <div className="topbar">
-          <TextFilter
-            value={search}
-            placeholder={t('nft_list_page.search', {
-              category: t(`menu.${section}`).toLowerCase()
-            })}
-            onChange={handleSearch}
-          />
-          <Responsive
-            as={Dropdown}
-            minWidth={Responsive.onlyTablet.minWidth}
-            direction="left"
-            value={sortBy}
-            options={dropdownOptions}
-            onChange={handleDropdownChange}
-          />
-
-          {category === NFTCategory.WEARABLE ? (
+      <Row>
+        <Column align="left">
+          <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+            <CategoriesMenu
+              section={section}
+              onMenuItemClick={handleOnNavigate}
+            />
+          </Responsive>
+        </Column>
+        <Column align="right" grow={true}>
+          <div className="topbar">
+            <TextFilter
+              value={search}
+              placeholder={t('nft_list_page.search', {
+                category: t(`menu.${section}`).toLowerCase()
+              })}
+              onChange={handleSearch}
+            />
             <Responsive
+              as={Dropdown}
               minWidth={Responsive.onlyTablet.minWidth}
-              className="open-filters-wrapper"
-              onClick={handleToggleFilterMenu}
-            >
-              <div className="label">{t('nft_list_page.filter')}</div>
-              <div
-                className={`open-filters ${
-                  showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
-                }`}
-              />
-            </Responsive>
-          ) : null}
-        </div>
-        <HeaderMenu>
-          <HeaderMenu.Left>
-            {appliedFilters.length > 0 ? (
-              <ClearFilter
-                name={appliedFiltersLabel}
-                onClear={handleClearFilters}
-              />
-            ) : null}
-            <Header sub className="results">
-              {count === null
-                ? t('global.loading') + '...'
-                : count < MAX_RESULTS
-                ? t('nft_list_page.results', { count: count.toLocaleString() })
-                : t('nft_list_page.more_than_results', {
-                    count: count.toLocaleString()
-                  })}
-            </Header>
-          </HeaderMenu.Left>
-          <HeaderMenu.Right>
-            <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-              <Radio
-                toggle
-                checked={onlyOnSale}
-                onChange={handleOnlyOnSaleChange}
-                label={t('nft_list_page.on_sale')}
-              />
-            </Responsive>
-            <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
-              <div
+              direction="left"
+              value={sortBy}
+              options={dropdownOptions}
+              onChange={handleDropdownChange}
+            />
+
+            {category === NFTCategory.WEARABLE ? (
+              <Responsive
+                minWidth={Responsive.onlyTablet.minWidth}
                 className="open-filters-wrapper"
-                onClick={() => setShowFiltersModal(!showFiltersModal)}
+                onClick={handleToggleFilterMenu}
               >
                 <div className="label">{t('nft_list_page.filter')}</div>
                 <div
@@ -499,51 +460,99 @@ const NFTListPage = (props: Props) => {
                     showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
                   }`}
                 />
-              </div>
-            </Responsive>
-          </HeaderMenu.Right>
-        </HeaderMenu>
+              </Responsive>
+            ) : null}
+          </div>
+          <HeaderMenu>
+            <HeaderMenu.Left>
+              {appliedFilters.length > 0 ? (
+                <ClearFilter
+                  name={appliedFiltersLabel}
+                  onClear={handleClearFilters}
+                />
+              ) : null}
+              <Header sub className="results">
+                {count === null
+                  ? t('global.loading') + '...'
+                  : count < MAX_RESULTS
+                  ? t('nft_list_page.results', {
+                      count: count.toLocaleString()
+                    })
+                  : t('nft_list_page.more_than_results', {
+                      count: count.toLocaleString()
+                    })}
+              </Header>
+            </HeaderMenu.Left>
+            <HeaderMenu.Right>
+              <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+                <Radio
+                  toggle
+                  checked={onlyOnSale}
+                  onChange={handleOnlyOnSaleChange}
+                  label={t('nft_list_page.on_sale')}
+                />
+              </Responsive>
+              <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+                <div
+                  className="open-filters-wrapper"
+                  onClick={() => setShowFiltersModal(!showFiltersModal)}
+                >
+                  <div className="label">{t('nft_list_page.filter')}</div>
+                  <div
+                    className={`open-filters ${
+                      showFiltersMenu || appliedFilters.length > 0
+                        ? 'active'
+                        : ''
+                    }`}
+                  />
+                </div>
+              </Responsive>
+            </HeaderMenu.Right>
+          </HeaderMenu>
 
-        {showFiltersMenu ? (
-          <Responsive
-            minWidth={Responsive.onlyTablet.minWidth}
-            className="filters"
-          >
-            {filters}
-          </Responsive>
-        ) : null}
-        <Card.Group>
-          {nfts.length > 0
-            ? nfts.map(nft => <NFTCard key={nft.id} nft={nft} />)
-            : null}
-          {isLoading ? (
-            <>
-              <div className="overlay" />
-              <Loader size="massive" active />
-            </>
-          ) : null}
-        </Card.Group>
-
-        {nfts.length === 0 && !isLoading ? (
-          <div className="empty">{t('nft_list_page.empty')}</div>
-        ) : null}
-
-        <div className="load-more">
-          {nfts.length >= PAGE_SIZE &&
-          nfts.length > lastNFTLength &&
-          (nfts.length !== count || count === MAX_QUERY_SIZE) &&
-          page <= MAX_PAGE ? (
-            <Button
-              loading={isLoading}
-              inverted
-              primary
-              onClick={handleLoadMore}
+          {showFiltersMenu ? (
+            <Responsive
+              minWidth={Responsive.onlyTablet.minWidth}
+              className="filters"
             >
-              {t('global.load_more')}
-            </Button>
+              {filters}
+            </Responsive>
           ) : null}
-        </div>
-      </Grid.Column>
+
+          <Card.Group>
+            {nfts.length > 0
+              ? nfts.map(nft => <NFTCard key={nft.id} nft={nft} />)
+              : null}
+            {isLoading ? (
+              <>
+                <div className="overlay" />
+                <Loader size="massive" active />
+              </>
+            ) : null}
+          </Card.Group>
+
+          {nfts.length === 0 && !isLoading ? (
+            <div className="empty">{t('nft_list_page.empty')}</div>
+          ) : null}
+
+          <div className="load-more">
+            {nfts.length >= PAGE_SIZE &&
+            nfts.length > lastNFTLength &&
+            (nfts.length !== count || count === MAX_QUERY_SIZE) &&
+            page <= MAX_PAGE ? (
+              <Button
+                loading={isLoading}
+                inverted
+                primary
+                onClick={handleLoadMore}
+              >
+                {t('global.load_more')}
+              </Button>
+            ) : null}
+          </div>
+        </Column>
+      </Row>
+
       <Modal
         className="FiltersModal"
         open={showFiltersModal}

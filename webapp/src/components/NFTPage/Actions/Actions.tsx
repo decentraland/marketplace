@@ -6,7 +6,6 @@ import { isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
 import { Props } from './Actions.types'
-import './Actions.css'
 
 const Actions = (props: Props) => {
   const { wallet, nft, order, onNavigate } = props

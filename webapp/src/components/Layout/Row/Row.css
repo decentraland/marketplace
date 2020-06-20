@@ -1,0 +1,18 @@
+.Row {
+  display: flex;
+  position: relative;
+  flex-flow: row nowrap;
+  width: 100%;
+}
+
+.Row > .Column.right {
+  overflow: hidden;
+}
+
+.Row > .Column.grow {
+  flex: 1 1 auto;
+}
+
+.Row > .Column.shrink {
+  flex: 0 0 auto;
+}

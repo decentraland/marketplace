@@ -4,9 +4,9 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { formatMANA } from '../../../lib/mana'
 import { formatDistanceToNow } from '../../../lib/date'
-import { Props } from './Order.types'
+import { Props } from './OrderDetails.types'
 
-const Order = (props: Props) => {
+const OrderDetails = (props: Props) => {
   const { order } = props
 
   return (
@@ -27,4 +27,4 @@ const Order = (props: Props) => {
   )
 }
 
-export default React.memo(Order)
+export default React.memo(OrderDetails)

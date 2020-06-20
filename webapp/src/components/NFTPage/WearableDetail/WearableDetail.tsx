@@ -12,11 +12,12 @@ import { Section } from '../../../modules/routing/search'
 import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
+import { Row } from '../../Layout/Row'
+import { Column } from '../../Layout/Column'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Description } from '../Description'
-import { Layout } from '../Layout'
-import { Order } from '../Order'
+import { OrderDetails } from '../OrderDetails'
 import { Actions } from '../Actions'
 import { Highlight } from '../Highlight'
 import { Highlights } from '../Highlights'
@@ -74,28 +75,37 @@ const WearableDetail = (props: Props) => {
         <Title
           left={
             <>
-              <Header size="large">{getNFTName(nft)}</Header>
-              <Popup
-                position="top center"
-                content={t(`wearable.rarity_tooltip.${nft.wearable!.rarity}`)}
-                trigger={
-                  <div
-                    className="rarity"
-                    style={{
-                      backgroundColor: RARITY_COLOR[nft.wearable!.rarity]
-                    }}
-                    onClick={handleRarityClick}
-                  >
-                    {t(`wearable.rarity.${nft.wearable!.rarity}`)}
-                  </div>
-                }
-              />
+              <Header size="large">
+                <div className="text">{getNFTName(nft)}</div>
+                <Popup
+                  position="top center"
+                  content={t(`wearable.rarity_tooltip.${nft.wearable!.rarity}`)}
+                  trigger={
+                    <div
+                      className="rarity"
+                      style={{
+                        backgroundColor: RARITY_COLOR[nft.wearable!.rarity]
+                      }}
+                      onClick={handleRarityClick}
+                    >
+                      {t(`wearable.rarity.${nft.wearable!.rarity}`)}
+                    </div>
+                  }
+                />
+              </Header>
             </>
           }
           right={<Owner nft={nft} />}
         />
         <Description text={nft.wearable!.description} />
-        <Layout left={<Order nft={nft} />} right={<Actions nft={nft} />} />
+        <Row>
+          <Column align="left" grow={true}>
+            <OrderDetails nft={nft} />
+          </Column>
+          <Column align="right">
+            <Actions nft={nft} />
+          </Column>
+        </Row>
         <Highlights>
           <Highlight
             icon={<div className={nft.wearable!.category} />}

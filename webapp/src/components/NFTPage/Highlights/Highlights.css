@@ -9,12 +9,8 @@
 }
 
 @media (max-width: 768px) {
-  .Highlights .dcl.row {
+  .Highlights > .Row {
     flex-direction: column;
-  }
-
-  .Highlights .Highlight {
-    width: 100%;
   }
 
   .Highlights .Highlight + .Highlight {

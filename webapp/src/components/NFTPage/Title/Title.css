@@ -2,15 +2,15 @@
   margin-top: 35px;
 }
 
-.Title .column.left {
-  overflow: hidden;
-  white-space: nowrap;
-  margin-right: 34px;
+.Title .left .ui.large.header {
+  display: flex;
+  align-items: center;
 }
 
-.Title .column.left .ui.header {
+.Title .Column.left .ui.header > .text {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   margin-bottom: 0px;
 }
 
@@ -20,10 +20,6 @@
 }
 
 @media (max-width: 768px) {
-  .Title .column.left {
-    flex-direction: row;
-  }
-
   .Title .left {
     margin-right: 0px;
     margin-bottom: 24px;

@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Page, Grid, Responsive } from 'decentraland-ui'
+import { Page, Responsive } from 'decentraland-ui'
 
 import { locations } from '../../modules/routing/locations'
 import { SortDirection } from '../../modules/routing/search'
@@ -8,6 +8,8 @@ import { View } from '../../modules/ui/types'
 import { NFTSortBy } from '../../modules/nft/types'
 import { Vendors } from '../../modules/vendor/types'
 import { NavigationTab } from '../Navigation/Navigation.types'
+import { Row } from '../Layout/Row'
+import { Column } from '../Layout/Column'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
@@ -47,22 +49,24 @@ const PartnersPage = (props: Props) => {
       <Navigation activeTab={NavigationTab.PARTNERS} />
 
       <Page className="PartnersPage">
-        <Grid.Column className="left-column">
-          <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-            <PartnersMenu onMenuItemClick={handleOnNavigate} />
-          </Responsive>
-        </Grid.Column>
-        <Grid.Column className="right-column">
-          <Slideshow
-            title={t('partners_page.latest_from', {
-              vendor: t('vendors.super_rare')
-            })}
-            nfts={superRare}
-            isSubHeader={true}
-            isLoading={isSuperRareLoading}
-            onViewAll={() => handleOnNavigate(Vendors.SUPER_RARE)}
-          />
-        </Grid.Column>
+        <Row>
+          <Column align="left">
+            <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+              <PartnersMenu onMenuItemClick={handleOnNavigate} />
+            </Responsive>
+          </Column>
+          <Column align="right" grow={isSuperRareLoading}>
+            <Slideshow
+              title={t('partners_page.latest_from', {
+                vendor: t('vendors.super_rare')
+              })}
+              nfts={superRare}
+              isSubHeader={true}
+              isLoading={isSuperRareLoading}
+              onViewAll={() => handleOnNavigate(Vendors.SUPER_RARE)}
+            />
+          </Column>
+        </Row>
       </Page>
       <Footer />
     </>

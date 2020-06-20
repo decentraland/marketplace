@@ -1,31 +1,4 @@
-.NFTListPage .ui.container {
-  display: flex;
-}
-
-.NFTListPage .left-column {
-  margin-top: 16px;
-}
-
-.NFTListPage .right-column {
-  height: 100%;
-  min-height: 100%;
-  width: 100%;
-  margin-top: 10px;
-  position: relative;
-}
-
-.NFTListPage .ui.cards {
-  margin-top: 0px;
-  position: relative;
-  height: 100%;
-}
-
-.NFTListPage .ui.loader {
-  top: 140px;
-}
-
-.NFTListPage .right-column .ui.toggle.checkbox input.hidden + label {
-  color: var(--secondary-text) !important;
+.NFTListPage .right .ui.toggle.checkbox input.hidden + label {
   font-size: 14px;
   margin-right: 0px;
 }
@@ -33,6 +6,11 @@
 .NFTListPage .ui.toggle.checkbox label,
 .NFTListPage .ui.dropdown > .text {
   text-transform: uppercase;
+}
+
+.NFTListPage .ui.cards {
+  position: relative;
+  overflow: hidden;
 }
 
 .NFTListPage .overlay {
@@ -54,14 +32,6 @@
   font-size: 16px;
   text-align: center;
   color: var(--secondary-text);
-}
-
-/* @nico: TODO: Move this to a common stylesheet? */
-.NFTListPage.dcl.page > .ui.container {
-  min-height: calc(
-    100vh - var(--navbar-height) - var(--footer-height) -
-      var(--navbar-margin-bottom) - var(--footer-margin-top) - 1px
-  );
 }
 
 .NFTListPage .results {
@@ -221,6 +191,10 @@
 }
 
 @media (max-width: 768px) {
+  .NFTListPage .Layout .right.column > div {
+    width: 100%;
+  }
+
   .CategoriesMenu ul.menu li {
     width: calc(100% - 32px);
   }

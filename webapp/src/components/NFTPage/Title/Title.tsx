@@ -1,11 +1,17 @@
 import React from 'react'
 
-import { Layout } from '../Layout'
+import { Row } from '../../Layout/Row'
+import { Column } from '../../Layout/Column'
 import { Props } from './Title.types'
 import './Title.css'
 
 const Title = (props: Props) => (
-  <Layout className="Title" left={props.left} right={props.right} />
+  <Row className="Title">
+    <Column align="left" grow={true}>
+      {props.left}
+    </Column>
+    <Column align="right">{props.right}</Column>
+  </Row>
 )
 
 export default React.memo(Title)
