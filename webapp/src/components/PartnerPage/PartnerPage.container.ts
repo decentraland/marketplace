@@ -6,8 +6,8 @@ import {
   MapStateProps,
   MapDispatch,
   MapDispatchProps
-} from './BrowsePage.types'
-import BrowsePage from './BrowsePage'
+} from './PartnerPage.types'
+import PartnerPage from './PartnerPage'
 
 const mapState = (_: RootState): MapStateProps => ({})
 
@@ -15,4 +15,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path))
 })
 
-export default connect(mapState, mapDispatch)(BrowsePage)
+export default connect(mapState, mapDispatch)(PartnerPage)

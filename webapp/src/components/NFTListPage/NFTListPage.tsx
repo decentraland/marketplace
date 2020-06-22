@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import {
   Page,
   Card,
@@ -13,8 +12,7 @@ import {
   Dropdown,
   DropdownProps,
   Responsive,
-  Modal,
-  Row as UIRow
+  Modal
 } from 'decentraland-ui'
 
 import {
@@ -33,11 +31,6 @@ import { NFTCategory } from '../../modules/nft/types'
 import { getSortOrder } from '../../modules/nft/utils'
 import { ContractName, Vendors } from '../../modules/vendor/types'
 import {
-  contractAddresses,
-  contractCategories,
-  contractSymbols
-} from '../../modules/contract/utils'
-import {
   MAX_QUERY_SIZE,
   MAX_PAGE,
   PAGE_SIZE
@@ -46,24 +39,13 @@ import { CategoriesMenu } from '../CategoriesMenu'
 import { NFTCard } from '../NFTCard'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
-import { ClearFilter } from './ClearFilter'
+import { ClearFilters } from './ClearFilters'
 import { TextFilter } from './TextFilter'
-import { ArrayFilter } from './ArrayFilter'
-import { SelectFilter } from './SelectFilter'
+import { FiltersMenu } from './FiltersMenu'
 import { Props } from './NFTListPage.types'
 import './NFTListPage.css'
 
-export const ALL_COLLECTIONS_FILTER_OPTION = 'all'
 const MAX_RESULTS = 1000
-const RARITY_FILTER_OPTIONS = Object.values(WearableRarity)
-  .filter(x => x !== WearableRarity.COMMON && x !== WearableRarity.UNIQUE)
-  .reverse()
-const GENDER_FILTER_OPTIONS = Object.values(WearableGender)
-const COLLECTION_FILTER_OPTIONS = Object.keys(contractAddresses).filter(
-  (contractName: string) =>
-    contractCategories[contractAddresses[contractName as ContractName]] ===
-    NFTCategory.WEARABLE
-) as ContractName[]
 
 const NFTListPage = (props: Props) => {
   const {
@@ -115,7 +97,7 @@ const NFTListPage = (props: Props) => {
   const [showFiltersModal, setShowFiltersModal] = useState(false)
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
-  const fillVariables = useCallback(
+  const buildSearch = useCallback(
     (options: SearchOptions, clearFilters = false) => {
       let newOptions: SearchOptions = {
         page,
@@ -129,7 +111,7 @@ const NFTListPage = (props: Props) => {
         ? getSearchCategory(newOptions.section)
         : null
 
-      // category specific logic to keep filters if the category doesn't change (unless forced by clearFilters flag)
+      // Category specific logic to keep filters if the category doesn't change (unless forced by clearFilters flag)
       if (prevCategory && prevCategory === nextCategory && !clearFilters) {
         switch (nextCategory) {
           case NFTCategory.WEARABLE: {
@@ -144,7 +126,7 @@ const NFTListPage = (props: Props) => {
         }
       }
 
-      // keep search if section is not changing (ie. when clicking  on 'load more')
+      // Keep search if section is not changing (ie. when clicking  on 'Load more')
       if (section === newOptions.section) {
         newOptions = {
           search,
@@ -172,7 +154,7 @@ const NFTListPage = (props: Props) => {
       setOffset(0)
       setLastNFTLength(0)
       onNavigate(
-        fillVariables({
+        buildSearch({
           page: 1,
           section: section,
           onlyOnSale,
@@ -180,7 +162,7 @@ const NFTListPage = (props: Props) => {
         })
       )
     },
-    [onlyOnSale, sortBy, onNavigate, fillVariables]
+    [onlyOnSale, sortBy, onNavigate, buildSearch]
   )
 
   const handleOnlyOnSaleChange = useCallback(
@@ -188,14 +170,14 @@ const NFTListPage = (props: Props) => {
       setOffset(0)
       setLastNFTLength(0)
       onNavigate(
-        fillVariables({
+        buildSearch({
           page: 1,
           onlyOnSale: !!props.checked,
           search
         })
       )
     },
-    [onNavigate, fillVariables, search]
+    [onNavigate, buildSearch, search]
   )
 
   const handleDropdownChange = useCallback(
@@ -203,37 +185,33 @@ const NFTListPage = (props: Props) => {
       setOffset(0)
       setLastNFTLength(0)
       onNavigate(
-        fillVariables({
+        buildSearch({
           page: 1,
           sortBy: props.value as SortBy
         })
       )
     },
-    [onNavigate, fillVariables]
+    [onNavigate, buildSearch]
   )
 
   const handleLoadMore = useCallback(() => {
     setOffset(page)
     setLastNFTLength(nfts.length)
-    onNavigate(
-      fillVariables({
-        page: page + 1
-      })
-    )
-  }, [page, nfts, onNavigate, setOffset, fillVariables])
+    onNavigate(buildSearch({ page: page + 1 }))
+  }, [page, nfts, onNavigate, setOffset, buildSearch])
 
   const handleRaritiesChange = useCallback(
     (options: string[]) => {
       setOffset(0)
       setLastNFTLength(0)
       onNavigate(
-        fillVariables({
+        buildSearch({
           page: 1,
           wearableRarities: options as WearableRarity[]
         })
       )
     },
-    [setOffset, setLastNFTLength, onNavigate, fillVariables]
+    [setOffset, setLastNFTLength, onNavigate, buildSearch]
   )
 
   const handleGendersChange = useCallback(
@@ -241,13 +219,13 @@ const NFTListPage = (props: Props) => {
       setOffset(0)
       setLastNFTLength(0)
       onNavigate(
-        fillVariables({
+        buildSearch({
           page: 1,
           wearableGenders: options as WearableGender[]
         })
       )
     },
-    [setOffset, setLastNFTLength, onNavigate, fillVariables]
+    [setOffset, setLastNFTLength, onNavigate, buildSearch]
   )
 
   const handleCollectionsChange = useCallback(
@@ -255,13 +233,13 @@ const NFTListPage = (props: Props) => {
       setOffset(0)
       setLastNFTLength(0)
       onNavigate(
-        fillVariables({
+        buildSearch({
           page: 1,
           contracts: [contract as ContractName]
         })
       )
     },
-    [setOffset, setLastNFTLength, onNavigate, fillVariables]
+    [setOffset, setLastNFTLength, onNavigate, buildSearch]
   )
 
   const handleToggleFilterMenu = useCallback(
@@ -274,29 +252,17 @@ const NFTListPage = (props: Props) => {
       if (search !== newSearch) {
         setOffset(0)
         setLastNFTLength(0)
-        onNavigate(
-          fillVariables({
-            page: 1,
-            search: newSearch
-          })
-        )
+        onNavigate(buildSearch({ page: 1, search: newSearch }))
       }
     },
-    [setOffset, setLastNFTLength, onNavigate, fillVariables, search]
+    [setOffset, setLastNFTLength, onNavigate, buildSearch, search]
   )
 
   const handleClearFilters = useCallback(() => {
     setOffset(0)
     setLastNFTLength(0)
-    onNavigate(
-      fillVariables(
-        {
-          page: 1
-        },
-        true
-      )
-    )
-  }, [setOffset, setLastNFTLength, onNavigate, fillVariables])
+    onNavigate(buildSearch({ page: 1 }, true))
+  }, [setOffset, setLastNFTLength, onNavigate, buildSearch])
 
   // Kick things off
   useEffect(() => {
@@ -351,50 +317,8 @@ const NFTListPage = (props: Props) => {
     onFetchNFTs
   ])
 
-  // close the menu when the category changes
+  // Close the menu when the category changes
   useEffect(() => setShowFiltersMenu(false), [category, setShowFiltersMenu])
-
-  const filters = (
-    <>
-      <UIRow>
-        <SelectFilter
-          name={t('nft_list_page.collection')}
-          value={contracts[0] || ALL_COLLECTIONS_FILTER_OPTION}
-          options={[
-            {
-              value: ALL_COLLECTIONS_FILTER_OPTION,
-              text: t('nft_list_page.all_collections')
-            },
-            ...COLLECTION_FILTER_OPTIONS.map(collection => ({
-              value: collection,
-              text: contractSymbols[contractAddresses[collection]]
-            }))
-          ]}
-          onChange={handleCollectionsChange}
-        />
-      </UIRow>
-      <UIRow>
-        <ArrayFilter
-          name={t('nft_list_page.rarity')}
-          values={wearableRarities}
-          options={RARITY_FILTER_OPTIONS.map(rarity => ({
-            value: rarity,
-            text: t(`wearable.rarity.${rarity}`)
-          }))}
-          onChange={handleRaritiesChange}
-        />
-        <ArrayFilter
-          name={t('nft_list_page.gender')}
-          values={wearableGenders}
-          options={GENDER_FILTER_OPTIONS.map(gender => ({
-            value: gender,
-            text: t(`wearable.body_shape.${gender}`)
-          }))}
-          onChange={handleGendersChange}
-        />
-      </UIRow>
-    </>
-  )
 
   let appliedFilters = []
   if (wearableRarities.length > 0) {
@@ -405,18 +329,6 @@ const NFTListPage = (props: Props) => {
   }
   if (contracts.length > 0) {
     appliedFilters.push(t('nft_list_page.collection'))
-  }
-
-  let appliedFiltersLabel = ''
-  if (appliedFilters.length === 1) {
-    appliedFiltersLabel = appliedFilters[0]
-    // "RARITY, GENDER (X)" on desktop, "2 FILTERS (X)" on mobile
-  } else if (appliedFilters.length === 2 && !isMobile()) {
-    appliedFiltersLabel = appliedFilters.join(', ')
-  } else if (appliedFilters.length > 1) {
-    appliedFiltersLabel = t('nft_list_page.multiple_filters', {
-      count: appliedFilters.length
-    })
   }
 
   return (
@@ -430,6 +342,7 @@ const NFTListPage = (props: Props) => {
             />
           </Responsive>
         </Column>
+
         <Column align="right" grow={true}>
           <div className="topbar">
             <TextFilter
@@ -463,11 +376,12 @@ const NFTListPage = (props: Props) => {
               </Responsive>
             ) : null}
           </div>
+
           <HeaderMenu>
             <HeaderMenu.Left>
               {appliedFilters.length > 0 ? (
-                <ClearFilter
-                  name={appliedFiltersLabel}
+                <ClearFilters
+                  filters={appliedFilters}
                   onClear={handleClearFilters}
                 />
               ) : null}
@@ -515,7 +429,14 @@ const NFTListPage = (props: Props) => {
               minWidth={Responsive.onlyTablet.minWidth}
               className="filters"
             >
-              {filters}
+              <FiltersMenu
+                selectedCollection={contracts[0]}
+                selectedRarities={wearableRarities}
+                selectedGenders={wearableGenders}
+                onCollectionsChange={handleCollectionsChange}
+                onGendersChange={handleGendersChange}
+                onRaritiesChange={handleRaritiesChange}
+              />
             </Responsive>
           ) : null}
 
@@ -560,7 +481,14 @@ const NFTListPage = (props: Props) => {
       >
         <Modal.Header>{t('nft_list_page.filter')}</Modal.Header>
         <Modal.Content>
-          {filters}
+          <FiltersMenu
+            selectedCollection={contracts[0]}
+            selectedRarities={wearableRarities}
+            selectedGenders={wearableGenders}
+            onCollectionsChange={handleCollectionsChange}
+            onGendersChange={handleGendersChange}
+            onRaritiesChange={handleRaritiesChange}
+          />
           <div className="filter-row">
             <Header sub>{t('nft_list_page.order_by')}</Header>
             <Dropdown

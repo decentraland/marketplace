@@ -1,4 +1,4 @@
 export type Props = {
-  name: string
+  filters: string[]
   onClear: () => void
 }

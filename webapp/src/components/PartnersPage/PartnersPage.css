@@ -7,6 +7,5 @@
 }
 
 .PartnersPage .Layout .right.column > div {
-  /*flex: 1 1 auto;*/
   align-self: start;
 }

@@ -6,10 +6,10 @@ export const locations = {
   atlas: () => '/atlas',
   settings: () => '/settings',
   partners: () => '/partners',
-  browse: (vendor: string = ':vendor', options?: SearchOptions) => {
+  bids: () => '/bids',
+  browse: (options?: SearchOptions) => {
     const params = getSearchParams(options)
-    const origin = `/browse/${vendor.toLowerCase()}`
-    return params ? `${origin}?${params.toString()}` : origin
+    return params ? `/browse/?${params.toString()}` : '/browse'
   },
   currentAccount: (options?: SearchOptions) => {
     const params = getSearchParams(options)
@@ -21,7 +21,11 @@ export const locations = {
       ? `/accounts/${address}?${params.toString()}`
       : `/accounts/${address}`
   },
-  bids: () => '/bids',
+  partner: (vendor: string = ':vendor', options?: SearchOptions) => {
+    const params = getSearchParams(options)
+    const origin = `/partner/${vendor.toLowerCase()}`
+    return params ? `${origin}?${params.toString()}` : origin
+  },
   ntf: (
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'

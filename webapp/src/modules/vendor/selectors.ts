@@ -8,7 +8,7 @@ const vendorBrowseMatchSelector = createMatchSelector<
   {
     vendor: string
   }
->(locations.browse(':vendor'))
+>(locations.partner(':vendor'))
 
 export const getVendor = createSelector<
   RootState,

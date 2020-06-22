@@ -8,9 +8,9 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { SearchOptions } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
 import { locations } from '../../modules/routing/locations'
-import { Props } from './BrowsePage.types'
+import { Props } from './PartnerPage.types'
 
-const BrowsePage = (props: Props) => {
+const PartnerPage = (props: Props) => {
   const { onNavigate } = props
 
   const handleOnNavigate = useCallback(
@@ -34,4 +34,4 @@ const BrowsePage = (props: Props) => {
   )
 }
 
-export default React.memo(BrowsePage)
+export default React.memo(PartnerPage)

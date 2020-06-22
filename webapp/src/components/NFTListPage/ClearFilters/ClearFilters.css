@@ -1,17 +1,17 @@
-.ClearFilter {
+.ClearFilters {
   cursor: pointer;
   display: flex;
   align-items: center;
 }
 
-.ClearFilter .name {
+.ClearFilters .name {
   display: inline-block;
   color: var(--primary);
   font-weight: 600;
   text-transform: uppercase;
 }
 
-.ClearFilter .close {
+.ClearFilters .close {
   width: 16px;
   height: 16px;
   background-image: url(../../../images/close.svg);

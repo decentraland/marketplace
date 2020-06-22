@@ -25,26 +25,23 @@ const HomePage = (props: Props) => {
     onFetchNFTs
   } = props
 
-  const vendor = Vendors.DECENTRALAND
-
-  const handleGetStarted = useCallback(
-    () => onNavigate(locations.browse(vendor)),
-    [vendor, onNavigate]
-  )
+  const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
+    onNavigate
+  ])
 
   const handleViewWearables = useCallback(
-    () => onNavigate(locations.browse(vendor, { section: Section.WEARABLES })),
-    [vendor, onNavigate]
+    () => onNavigate(locations.browse({ section: Section.WEARABLES })),
+    [onNavigate]
   )
 
   const handleViewLand = useCallback(
-    () => onNavigate(locations.browse(vendor, { section: Section.LAND })),
-    [vendor, onNavigate]
+    () => onNavigate(locations.browse({ section: Section.LAND })),
+    [onNavigate]
   )
 
   const handleViewEns = useCallback(
-    () => onNavigate(locations.browse(vendor, { section: Section.ENS })),
-    [vendor, onNavigate]
+    () => onNavigate(locations.browse({ section: Section.ENS })),
+    [onNavigate]
   )
 
   useEffect(() => {

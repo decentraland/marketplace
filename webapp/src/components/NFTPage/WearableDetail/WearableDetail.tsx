@@ -31,7 +31,7 @@ const WearableDetail = (props: Props) => {
 
   const handleCategoryClick = useCallback(() => {
     onNavigate(
-      locations.browse(nft.vendor, {
+      locations.browse({
         section: `wearables_${nft.wearable!.category}` as Section
       })
     )
@@ -39,7 +39,7 @@ const WearableDetail = (props: Props) => {
 
   const handleGenderClick = useCallback(() => {
     onNavigate(
-      locations.browse(nft.vendor, {
+      locations.browse({
         section: Section.WEARABLES,
         wearableGenders: isGender(nft, BodyShape.MALE)
           ? [WearableGender.MALE]
@@ -50,7 +50,7 @@ const WearableDetail = (props: Props) => {
 
   const handleRarityClick = useCallback(() => {
     onNavigate(
-      locations.browse(nft.vendor, {
+      locations.browse({
         section: Section.WEARABLES,
         wearableRarities: [nft.wearable!.rarity]
       })
@@ -59,12 +59,12 @@ const WearableDetail = (props: Props) => {
 
   const handleUnisexClick = useCallback(() => {
     onNavigate(
-      locations.browse(nft.vendor, {
+      locations.browse({
         section: Section.WEARABLES,
         wearableGenders: [WearableGender.MALE, WearableGender.FEMALE]
       })
     )
-  }, [nft, onNavigate])
+  }, [onNavigate])
 
   return (
     <div className="WearableDetail">
