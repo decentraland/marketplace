@@ -1,19 +1,19 @@
-.NFTListPage .right .ui.toggle.checkbox input.hidden + label {
+.NFTList .right .ui.toggle.checkbox input.hidden + label {
   font-size: 14px;
   margin-right: 0px;
 }
 
-.NFTListPage .ui.toggle.checkbox label,
-.NFTListPage .ui.dropdown > .text {
+.NFTList .ui.toggle.checkbox label,
+.NFTList .ui.dropdown > .text {
   text-transform: uppercase;
 }
 
-.NFTListPage .ui.cards {
+.NFTList .ui.cards {
   position: relative;
   overflow: hidden;
 }
 
-.NFTListPage .overlay {
+.NFTList .overlay {
   height: 100%;
   width: 100%;
   position: absolute;
@@ -21,24 +21,24 @@
   opacity: 0.6;
 }
 
-.NFTListPage .load-more {
+.NFTList .load-more {
   text-align: center;
   margin-top: 36px;
   height: 46px;
 }
 
-.NFTListPage .empty {
+.NFTList .empty {
   margin-top: 40px;
   font-size: 16px;
   text-align: center;
   color: var(--secondary-text);
 }
 
-.NFTListPage .results {
+.NFTList .results {
   margin: 0px;
 }
 
-.NFTListPage .filters {
+.NFTList .filters {
   padding: 16px;
   background-color: var(--card);
   border-radius: 16px;
@@ -49,30 +49,30 @@
   margin-top: -8px;
 }
 
-.NFTListPage .filters .Filter + .Filter {
+.NFTList .filters .Filter + .Filter {
   margin-top: 14px;
 }
 
-.NFTListPage .filters .dcl.row {
+.NFTList .filters .dcl.row {
   align-items: flex-start;
 }
 
-.NFTListPage .filters .dcl.row + .dcl.row {
+.NFTList .filters .dcl.row + .dcl.row {
   margin-top: 12px;
 }
 
-.NFTListPage .filters .dcl.row .Filter {
+.NFTList .filters .dcl.row .Filter {
   flex: 1 0 auto;
 }
 
-.NFTListPage .filters .dcl.row .Filter + .Filter {
+.NFTList .filters .dcl.row .Filter + .Filter {
   margin-top: 0px;
   flex: none;
   width: 50%;
   margin-left: 24px;
 }
 
-.NFTListPage .open-filters-wrapper {
+.NFTList .open-filters-wrapper {
   display: inline-block;
   height: 15px;
   margin-left: 24px;
@@ -80,14 +80,14 @@
   cursor: pointer;
 }
 
-.NFTListPage .open-filters-wrapper .label {
+.NFTList .open-filters-wrapper .label {
   color: var(--primary);
   text-transform: uppercase;
   margin-right: 30px;
   font-weight: 500;
 }
 
-.NFTListPage .open-filters {
+.NFTList .open-filters {
   width: 20px;
   height: 20px;
   background-image: url(../../images/filters.svg);
@@ -101,24 +101,24 @@
   top: 0px;
 }
 
-.NFTListPage .open-filters.active {
+.NFTList .open-filters.active {
   background-image: url(../../images/filters-active.svg);
   background-size: 20px;
 }
 
-.NFTListPage .topbar {
+.NFTList .topbar {
   display: flex;
   align-items: center;
   margin-bottom: 4px;
 }
 
-.NFTListPage .topbar > .TextFilter {
+.NFTList .topbar > .TextFilter {
   flex: 1 0 auto;
   margin-right: 32px;
 }
 
-.NFTListPage .topbar > .ui.dropdown,
-.NFTListPage .topbar > .open-filters-wrapper {
+.NFTList .topbar > .ui.dropdown,
+.NFTList .topbar > .open-filters-wrapper {
   height: 29px;
 }
 
@@ -180,18 +180,18 @@
   color: var(--text);
 }
 
-.NFTListPage .Filter {
+.NFTList .Filter {
   display: flex;
   flex-direction: column;
 }
 
-.NFTListPage .Filter .ui.sub.header.name {
+.NFTList .Filter .ui.sub.header.name {
   margin-bottom: 12px !important;
   font-weight: 600;
 }
 
 @media (max-width: 768px) {
-  .NFTListPage .Layout .right.column > div {
+  .NFTList .Layout .right.column > div {
     width: 100%;
   }
 

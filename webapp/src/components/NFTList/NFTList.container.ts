@@ -16,12 +16,8 @@ import {
   getUIContracts
 } from '../../modules/ui/selectors'
 import { getLoading } from '../../modules/nft/selectors'
-import {
-  MapDispatch,
-  MapDispatchProps,
-  MapStateProps
-} from './NFTListPage.types'
-import NFTListPage from './NFTListPage'
+import { MapDispatch, MapDispatchProps, MapStateProps } from './NFTList.types'
+import NFTList from './NFTList'
 
 const mapState = (state: RootState): MapStateProps => ({
   nfts: getNFTs(state),
@@ -41,4 +37,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onFetchNFTs: options => dispatch(fetchNFTsRequest(options))
 })
 
-export default connect(mapState, mapDispatch)(NFTListPage)
+export default connect(mapState, mapDispatch)(NFTList)

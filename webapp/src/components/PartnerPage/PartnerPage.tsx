@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
-import { NFTListPage } from '../NFTListPage'
+import { NFTList } from '../NFTList'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { SearchOptions } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
@@ -24,7 +24,7 @@ const PartnerPage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.BROWSE} />
-      <NFTListPage
+      <NFTList
         view={View.MARKET}
         defaultOnlyOnSale={true}
         onNavigate={handleOnNavigate}

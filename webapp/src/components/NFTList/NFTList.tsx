@@ -42,12 +42,12 @@ import { Column } from '../Layout/Column'
 import { ClearFilters } from './ClearFilters'
 import { TextFilter } from './TextFilter'
 import { FiltersMenu } from './FiltersMenu'
-import { Props } from './NFTListPage.types'
-import './NFTListPage.css'
+import { Props } from './NFTList.types'
+import './NFTList.css'
 
 const MAX_RESULTS = 1000
 
-const NFTListPage = (props: Props) => {
+const NFTList = (props: Props) => {
   const {
     address,
     defaultOnlyOnSale,
@@ -332,7 +332,7 @@ const NFTListPage = (props: Props) => {
   }
 
   return (
-    <Page className="NFTListPage">
+    <Page className="NFTList">
       <Row>
         <Column align="left">
           <Responsive minWidth={Responsive.onlyTablet.minWidth}>
@@ -523,4 +523,4 @@ const NFTListPage = (props: Props) => {
   )
 }
 
-export default React.memo(NFTListPage)
+export default React.memo(NFTList)
