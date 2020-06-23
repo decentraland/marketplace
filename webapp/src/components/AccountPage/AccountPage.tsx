@@ -5,7 +5,7 @@ import { EtherscanLink } from 'decentraland-dapps/dist/containers'
 import { Navbar } from '../Navbar'
 import { PageHeader } from '../PageHeader'
 import { Footer } from '../Footer'
-import { NFTList } from '../NFTList'
+import { NFTBrowse } from '../NFTBrowse'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { locations } from '../../modules/routing/locations'
@@ -52,7 +52,7 @@ const AccountPage = (props: Props) => {
             <Loader size="massive" active />
           </Page>
         ) : (
-          <NFTList
+          <NFTBrowse
             address={wallet.address}
             defaultOnlyOnSale={false}
             view={View.ACCOUNT}
@@ -84,7 +84,7 @@ const AccountPage = (props: Props) => {
             </div>
           </PageHeader>
 
-          <NFTList
+          <NFTBrowse
             address={address}
             defaultOnlyOnSale={false}
             view={View.ACCOUNT}

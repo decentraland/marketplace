@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Page,
-  Card,
   Radio,
   CheckboxProps,
   Button,
-  Loader,
   HeaderMenu,
   Header,
   Dropdown,
   DropdownProps,
   Responsive,
+  Card,
+  Loader,
   Modal
 } from 'decentraland-ui'
 
@@ -42,12 +42,12 @@ import { Column } from '../Layout/Column'
 import { ClearFilters } from './ClearFilters'
 import { TextFilter } from './TextFilter'
 import { FiltersMenu } from './FiltersMenu'
-import { Props } from './NFTList.types'
-import './NFTList.css'
+import { Props } from './NFTBrowse.types'
+import './NFTBrowse.css'
 
 const MAX_RESULTS = 1000
 
-const NFTList = (props: Props) => {
+const NFTBrowse = (props: Props) => {
   const {
     address,
     defaultOnlyOnSale,
@@ -97,8 +97,21 @@ const NFTList = (props: Props) => {
   const [showFiltersModal, setShowFiltersModal] = useState(false)
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
 
-  const buildSearch = useCallback(
-    (options: SearchOptions, clearFilters = false) => {
+  const navigate = useCallback(
+    ({
+      offset = 0,
+      total = 0,
+      clear = false,
+      options
+    }: {
+      offset?: number
+      total?: number
+      clear?: boolean
+      options: SearchOptions
+    }) => {
+      setOffset(offset)
+      setLastNFTLength(total)
+
       let newOptions: SearchOptions = {
         page,
         section,
@@ -111,8 +124,8 @@ const NFTList = (props: Props) => {
         ? getSearchCategory(newOptions.section)
         : null
 
-      // Category specific logic to keep filters if the category doesn't change (unless forced by clearFilters flag)
-      if (prevCategory && prevCategory === nextCategory && !clearFilters) {
+      // Category specific logic to keep filters if the category doesn't change (unless we're clearing the filters)
+      if (prevCategory && prevCategory === nextCategory && !clear) {
         switch (nextCategory) {
           case NFTCategory.WEARABLE: {
             newOptions = {
@@ -128,15 +141,14 @@ const NFTList = (props: Props) => {
 
       // Keep search if section is not changing (ie. when clicking  on 'Load more')
       if (section === newOptions.section) {
-        newOptions = {
-          search,
-          ...newOptions
-        }
+        newOptions.search = search
       }
 
-      return newOptions
+      onNavigate(newOptions)
     },
     [
+      setOffset,
+      setLastNFTLength,
       wearableRarities,
       wearableGenders,
       page,
@@ -144,125 +156,79 @@ const NFTList = (props: Props) => {
       sortBy,
       onlyOnSale,
       search,
-      contracts
+      contracts,
+      onNavigate
     ]
   )
 
   // Handlers
   const handleOnNavigate = useCallback(
     (section: Section) => {
-      setOffset(0)
-      setLastNFTLength(0)
-      onNavigate(
-        buildSearch({
-          page: 1,
-          section: section,
-          onlyOnSale,
-          sortBy
-        })
-      )
+      navigate({ options: { page: 1, section: section, onlyOnSale, sortBy } })
     },
-    [onlyOnSale, sortBy, onNavigate, buildSearch]
+    [onlyOnSale, sortBy, navigate]
   )
 
   const handleOnlyOnSaleChange = useCallback(
     (_: React.SyntheticEvent, props: CheckboxProps) => {
-      setOffset(0)
-      setLastNFTLength(0)
-      onNavigate(
-        buildSearch({
-          page: 1,
-          onlyOnSale: !!props.checked,
-          search
-        })
-      )
+      navigate({ options: { page: 1, onlyOnSale: !!props.checked, search } })
     },
-    [onNavigate, buildSearch, search]
+    [search, navigate]
   )
 
   const handleDropdownChange = useCallback(
     (_: React.SyntheticEvent, props: DropdownProps) => {
-      setOffset(0)
-      setLastNFTLength(0)
-      onNavigate(
-        buildSearch({
-          page: 1,
-          sortBy: props.value as SortBy
-        })
-      )
+      navigate({ options: { page: 1, sortBy: props.value as SortBy } })
     },
-    [onNavigate, buildSearch]
+    [navigate]
   )
-
-  const handleLoadMore = useCallback(() => {
-    setOffset(page)
-    setLastNFTLength(nfts.length)
-    onNavigate(buildSearch({ page: page + 1 }))
-  }, [page, nfts, onNavigate, setOffset, buildSearch])
 
   const handleRaritiesChange = useCallback(
     (options: string[]) => {
-      setOffset(0)
-      setLastNFTLength(0)
-      onNavigate(
-        buildSearch({
-          page: 1,
-          wearableRarities: options as WearableRarity[]
-        })
-      )
+      navigate({
+        options: { page: 1, wearableRarities: options as WearableRarity[] }
+      })
     },
-    [setOffset, setLastNFTLength, onNavigate, buildSearch]
+    [navigate]
   )
 
   const handleGendersChange = useCallback(
     (options: string[]) => {
-      setOffset(0)
-      setLastNFTLength(0)
-      onNavigate(
-        buildSearch({
-          page: 1,
-          wearableGenders: options as WearableGender[]
-        })
-      )
+      navigate({
+        options: { page: 1, wearableGenders: options as WearableGender[] }
+      })
     },
-    [setOffset, setLastNFTLength, onNavigate, buildSearch]
+    [navigate]
   )
 
   const handleCollectionsChange = useCallback(
     (contract: string) => {
-      setOffset(0)
-      setLastNFTLength(0)
-      onNavigate(
-        buildSearch({
-          page: 1,
-          contracts: [contract as ContractName]
-        })
-      )
+      navigate({ options: { page: 1, contracts: [contract as ContractName] } })
     },
-    [setOffset, setLastNFTLength, onNavigate, buildSearch]
-  )
-
-  const handleToggleFilterMenu = useCallback(
-    () => setShowFiltersMenu(!showFiltersMenu),
-    [showFiltersMenu, setShowFiltersMenu]
+    [navigate]
   )
 
   const handleSearch = useCallback(
     (newSearch: string) => {
       if (search !== newSearch) {
-        setOffset(0)
-        setLastNFTLength(0)
-        onNavigate(buildSearch({ page: 1, search: newSearch }))
+        navigate({ options: { page: 1, search: newSearch } })
       }
     },
-    [setOffset, setLastNFTLength, onNavigate, buildSearch, search]
+    [search, navigate]
   )
 
+  const handleLoadMore = useCallback(() => {
+    navigate({ offset: page, total: nfts.length, options: { page: page + 1 } })
+  }, [page, nfts, navigate])
+
   const handleClearFilters = useCallback(() => {
-    setOffset(0)
-    setLastNFTLength(0)
-    onNavigate(buildSearch({ page: 1 }, true))
-  }, [setOffset, setLastNFTLength, onNavigate, buildSearch])
+    navigate({ clear: true, options: { page: 1 } })
+  }, [navigate])
+
+  const handleToggleFilterMenu = useCallback(
+    () => setShowFiltersMenu(!showFiltersMenu),
+    [showFiltersMenu, setShowFiltersMenu]
+  )
 
   // Kick things off
   useEffect(() => {
@@ -320,7 +286,7 @@ const NFTList = (props: Props) => {
   // Close the menu when the category changes
   useEffect(() => setShowFiltersMenu(false), [category, setShowFiltersMenu])
 
-  let appliedFilters = []
+  const appliedFilters = []
   if (wearableRarities.length > 0) {
     appliedFilters.push(t('nft_list_page.rarity'))
   }
@@ -332,7 +298,7 @@ const NFTList = (props: Props) => {
   }
 
   return (
-    <Page className="NFTList">
+    <Page className="NFTBrowse">
       <Row>
         <Column align="left">
           <Responsive minWidth={Responsive.onlyTablet.minWidth}>
@@ -456,11 +422,11 @@ const NFTList = (props: Props) => {
             <div className="empty">{t('nft_list_page.empty')}</div>
           ) : null}
 
-          <div className="load-more">
-            {nfts.length >= PAGE_SIZE &&
-            nfts.length > lastNFTLength &&
-            (nfts.length !== count || count === MAX_QUERY_SIZE) &&
-            page <= MAX_PAGE ? (
+          {nfts.length >= PAGE_SIZE &&
+          nfts.length > lastNFTLength &&
+          (nfts.length !== count || count === MAX_QUERY_SIZE) &&
+          page <= MAX_PAGE ? (
+            <div className="load-more">
               <Button
                 loading={isLoading}
                 inverted
@@ -469,8 +435,8 @@ const NFTList = (props: Props) => {
               >
                 {t('global.load_more')}
               </Button>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
         </Column>
       </Row>
 
@@ -523,4 +489,4 @@ const NFTList = (props: Props) => {
   )
 }
 
-export default React.memo(NFTList)
+export default React.memo(NFTBrowse)
