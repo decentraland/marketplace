@@ -3,6 +3,7 @@ import { Estate } from './estate/types'
 import { Wearable } from './wearable/types'
 import { ENS } from './ens/types'
 import { PictureFrame } from './picture_frame/types'
+import { SortDirection } from '../routing/search'
 import { Vendors } from '../vendor'
 
 export enum NFTCategory {
@@ -37,4 +38,15 @@ export type NFT = {
   ens: ENS | null
   pictureFrame: PictureFrame | null
   vendor: Vendors
+}
+
+export type BaseNFTsParams = {
+  first: number
+  skip: number
+  orderBy?: NFTSortBy
+  orderDirection?: SortDirection
+  category?: NFTCategory
+  address?: string
+  onlyOnSale: boolean
+  search?: string
 }

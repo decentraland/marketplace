@@ -1,3 +1,5 @@
+import { SortDirection } from '../../routing/search'
+
 export type SuperRareOrder = {
   asset: SuperRareAsset
   taker: SuperRareOwner | null
@@ -33,8 +35,6 @@ export type SuperRareOwner = {
     avatar: string | null
   }
 }
-
-import { SortDirection } from '../../routing/search'
 
 export type SuperRareFetchNFTOptions = Partial<{
   asset_contract_addresses: string[]

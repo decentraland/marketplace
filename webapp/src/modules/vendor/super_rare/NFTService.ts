@@ -1,17 +1,18 @@
 import { toWei } from 'web3x-es/utils'
 
-import { NFT, NFTCategory } from '../../nft/types'
+import { NFT, NFTCategory, BaseNFTsParams } from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
 import { NFTService as NFTServiceInterface } from '../services'
-import { FetchNFTsOptions, Vendors } from '../types'
+import { Vendors } from '../types'
+import { NFTsParams } from './nft/types'
 import { SuperRareAsset, SuperRareOrder, SuperRareOwner } from './types'
 import { superRareAPI } from './api'
 
 export class NFTService implements NFTServiceInterface {
-  async fetch(options: FetchNFTsOptions) {
-    const remoteOrders = await superRareAPI.fetchOrders(options)
+  async fetch(baseParams: BaseNFTsParams, params: NFTsParams) {
+    const remoteOrders = await superRareAPI.fetchOrders(baseParams, params)
     const nfts: NFT[] = []
     const accounts: Account[] = []
     const orders: Order[] = []

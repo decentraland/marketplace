@@ -247,27 +247,31 @@ const NFTBrowse = (props: Props) => {
         ? getSearchWearableCategory(section)
         : undefined
 
-    onFetchNFTs({
-      variables: {
+    const fetchView = skip === 0 ? view : View.LOAD_MORE
+    const vendor = Vendors.DECENTRALAND
+    onFetchNFTs(
+      fetchView,
+      vendor,
+      {
         first,
         skip,
         orderBy,
         orderDirection,
         onlyOnSale,
         address,
+        category,
+        search
+      },
+      {
         isLand,
         isWearableHead,
         isWearableAccessory,
-        category,
         wearableRarities,
         wearableGenders,
         wearableCategory,
-        contracts,
-        search
-      },
-      vendor: Vendors.DECENTRALAND,
-      view: skip === 0 ? view : View.LOAD_MORE
-    })
+        contracts
+      }
+    )
   }, [
     address,
     onlyOnSale,

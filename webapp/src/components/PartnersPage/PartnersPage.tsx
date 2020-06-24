@@ -30,16 +30,12 @@ const PartnersPage = (props: Props) => {
 
   // Kick things off
   useEffect(() => {
-    onFetchNFTs({
-      variables: {
-        first: 10,
-        skip: 0,
-        orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.ORDER_CREATED_AT,
-        onlyOnSale: true
-      },
-      vendor: Vendors.SUPER_RARE,
-      view: View.PARTNERS_SUPER_RARE
+    onFetchNFTs(View.PARTNERS_SUPER_RARE, Vendors.SUPER_RARE, {
+      first: 10,
+      skip: 0,
+      orderDirection: SortDirection.DESC,
+      orderBy: NFTSortBy.ORDER_CREATED_AT,
+      onlyOnSale: true
     })
   }, [onFetchNFTs])
 

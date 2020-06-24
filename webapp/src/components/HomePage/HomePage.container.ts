@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
-import { fetchNFTsRequest } from '../../modules/nft/actions'
+import { fetchNFTsRequest } from '../../modules/vendor/decentraland/nft/actions'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './HomePage.types'
 import HomePage from './HomePage'
 import {
@@ -24,7 +24,7 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
-  onFetchNFTs: options => dispatch(fetchNFTsRequest(options))
+  onFetchNFTs: (...args) => dispatch(fetchNFTsRequest(...args))
 })
 
 export default connect(mapState, mapDispatch)(HomePage)

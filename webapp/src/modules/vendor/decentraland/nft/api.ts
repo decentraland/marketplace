@@ -1,29 +1,31 @@
 import { gql } from 'apollo-boost'
 
-import { FetchNFTsOptions } from '../../../vendor/types'
+import { BaseNFTsParams } from '../../../nft/types'
 import { WearableGender } from '../../../nft/wearable/types'
 import { contractAddresses } from '../../../contract/utils'
 import { client } from '../apiClient'
+import { NFTsParams } from './types'
 import { nftFragment, NFTFragment } from './fragments'
 
 class NFTAPI {
-  fetch = async (options: FetchNFTsOptions) => {
-    const { variables } = options
-    const query = getNFTsQuery(variables)
-    const countQuery = getNFTsQuery(variables, true)
+  fetch = async (baseParams: BaseNFTsParams, params: NFTsParams) => {
+    const query = getNFTsQuery(baseParams, params)
+    const countQuery = getNFTsCountQuery(baseParams, params)
 
     const [{ data }, { data: countData }] = await Promise.all([
       client.query<{ nfts: NFTFragment[] }>({
         query,
         variables: {
-          ...variables,
+          ...baseParams,
+          ...params,
           expiresAt: Date.now().toString()
         }
       }),
       client.query<{ nfts: NFTFragment[] }>({
         query: countQuery,
         variables: {
-          ...variables,
+          ...baseParams,
+          ...params,
           first: 1000,
           skip: 0,
           expiresAt: Date.now().toString()
@@ -81,52 +83,63 @@ const NFTS_ARGUMENTS = `
   orderDirection: $orderDirection
 `
 
+function getNFTsCountQuery(baseParams: BaseNFTsParams, params: NFTsParams) {
+  return getNFTsQuery(baseParams, params, true)
+}
+
 function getNFTsQuery(
-  variables: FetchNFTsOptions['variables'],
+  baseParams: BaseNFTsParams,
+  params: NFTsParams,
   isCount = false
 ) {
   let extraWhere: string[] = []
 
-  if (variables.address) {
+  if (baseParams.address) {
     extraWhere.push('owner: $address')
   }
 
-  if (variables.category) {
+  if (baseParams.category) {
     extraWhere.push('category: $category')
   }
 
-  if (variables.wearableCategory) {
-    extraWhere.push('searchWearableCategory: $wearableCategory')
-  }
-
-  if (variables.isLand) {
-    extraWhere.push('searchIsLand: $isLand')
-  }
-
-  if (variables.isWearableHead) {
-    extraWhere.push('searchIsWearableHead: $isWearableHead')
-  }
-
-  if (variables.isWearableAccessory) {
-    extraWhere.push('searchIsWearableAccessory: $isWearableAccessory')
-  }
-
-  if (variables.onlyOnSale) {
+  if (baseParams.onlyOnSale) {
     extraWhere.push('searchOrderStatus: open')
     extraWhere.push('searchOrderExpiresAt_gt: $expiresAt')
   }
 
-  if (variables.wearableRarities && variables.wearableRarities.length > 0) {
+  if (baseParams.search) {
     extraWhere.push(
-      `searchWearableRarity_in: [${variables.wearableRarities
+      `searchText_contains: "${baseParams.search.trim().toLowerCase()}"`
+    )
+  }
+
+  if (params.wearableCategory) {
+    extraWhere.push('searchWearableCategory: $wearableCategory')
+  }
+
+  if (params.isLand) {
+    extraWhere.push('searchIsLand: $isLand')
+  }
+
+  if (params.isWearableHead) {
+    extraWhere.push('searchIsWearableHead: $isWearableHead')
+  }
+
+  if (params.isWearableAccessory) {
+    extraWhere.push('searchIsWearableAccessory: $isWearableAccessory')
+  }
+
+  if (params.wearableRarities && params.wearableRarities.length > 0) {
+    extraWhere.push(
+      `searchWearableRarity_in: [${params.wearableRarities
         .map(rarity => `"${rarity}"`)
         .join(',')}]`
     )
   }
 
-  if (variables.wearableGenders && variables.wearableGenders.length > 0) {
-    const hasMale = variables.wearableGenders.includes(WearableGender.MALE)
-    const hasFemale = variables.wearableGenders.includes(WearableGender.FEMALE)
+  if (params.wearableGenders && params.wearableGenders.length > 0) {
+    const hasMale = params.wearableGenders.includes(WearableGender.MALE)
+    const hasFemale = params.wearableGenders.includes(WearableGender.FEMALE)
 
     if (hasMale && !hasFemale) {
       extraWhere.push(`searchWearableBodyShapes: [BaseMale]`)
@@ -139,15 +152,9 @@ function getNFTsQuery(
     }
   }
 
-  if (variables.search) {
+  if (params.contracts && params.contracts.length > 0) {
     extraWhere.push(
-      `searchText_contains: "${variables.search.trim().toLowerCase()}"`
-    )
-  }
-
-  if (variables.contracts && variables.contracts.length > 0) {
-    extraWhere.push(
-      `contractAddress_in: [${variables.contracts
+      `contractAddress_in: [${params.contracts
         .map(contract => `"${contractAddresses[contract]}"`)
         .join(', ')}]`
     )

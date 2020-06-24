@@ -6,7 +6,6 @@ import { locations } from '../../modules/routing/locations'
 import { Section, SortDirection } from '../../modules/routing/search'
 import { NFTCategory, NFTSortBy } from '../../modules/nft/types'
 import { View } from '../../modules/ui/types'
-import { Vendors } from '../../modules/vendor/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Slideshow } from './Slideshow'
@@ -45,41 +44,32 @@ const HomePage = (props: Props) => {
   )
 
   useEffect(() => {
-    onFetchNFTs({
-      variables: {
-        category: NFTCategory.WEARABLE,
-        first: 20,
-        skip: 0,
-        orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.ORDER_CREATED_AT,
-        onlyOnSale: true
-      },
-      vendor: Vendors.DECENTRALAND,
-      view: View.HOME_WEARABLES
+    onFetchNFTs(View.HOME_WEARABLES, {
+      first: 20,
+      skip: 0,
+      orderDirection: SortDirection.DESC,
+      orderBy: NFTSortBy.ORDER_CREATED_AT,
+      category: NFTCategory.WEARABLE,
+      onlyOnSale: true
     })
-    onFetchNFTs({
-      variables: {
-        isLand: true,
+    onFetchNFTs(
+      View.HOME_LAND,
+      {
         first: 20,
         skip: 0,
         orderDirection: SortDirection.DESC,
         orderBy: NFTSortBy.ORDER_CREATED_AT,
         onlyOnSale: true
       },
-      vendor: Vendors.DECENTRALAND,
-      view: View.HOME_LAND
-    })
-    onFetchNFTs({
-      variables: {
-        category: NFTCategory.ENS,
-        first: 20,
-        skip: 0,
-        orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.ORDER_CREATED_AT,
-        onlyOnSale: true
-      },
-      vendor: Vendors.DECENTRALAND,
-      view: View.HOME_ENS
+      { isLand: true }
+    )
+    onFetchNFTs(View.HOME_ENS, {
+      first: 20,
+      skip: 0,
+      category: NFTCategory.ENS,
+      orderDirection: SortDirection.DESC,
+      orderBy: NFTSortBy.ORDER_CREATED_AT,
+      onlyOnSale: true
     })
   }, [onFetchNFTs])
 

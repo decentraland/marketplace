@@ -21,7 +21,7 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
-  onFetchNFTs: options => dispatch(fetchNFTsRequest(options))
+  onFetchNFTs: (...args) => dispatch(fetchNFTsRequest(...args))
 })
 
 export default connect(mapState, mapDispatch)(PartnersPage)

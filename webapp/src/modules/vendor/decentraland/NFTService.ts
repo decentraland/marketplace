@@ -1,18 +1,19 @@
 import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 
-import { NFT } from '../../nft/types'
+import { NFT, BaseNFTsParams } from '../../nft/types'
 import { Order } from '../../order/types'
 import { Account } from '../../account/types'
 import { isExpired } from '../../order/utils'
 import { ERC721 } from '../../../contracts/ERC721'
 import { NFTService as NFTServiceInterface } from '../services'
-import { Vendors, FetchNFTsOptions } from '../types'
+import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
+import { NFTsParams } from './nft/types'
 
 export class NFTService implements NFTServiceInterface {
-  async fetch(options: FetchNFTsOptions) {
-    const data = await nftAPI.fetch(options)
+  async fetch(baseParams: BaseNFTsParams, params: NFTsParams) {
+    const data = await nftAPI.fetch(baseParams, params)
 
     const nfts: NFT[] = []
     const accounts: Account[] = []

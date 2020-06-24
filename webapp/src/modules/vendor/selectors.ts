@@ -5,9 +5,7 @@ import { RootState } from '../reducer'
 
 const vendorBrowseMatchSelector = createMatchSelector<
   RootState,
-  {
-    vendor: string
-  }
+  { vendor: string }
 >(locations.partner(':vendor'))
 
 export const getVendor = createSelector<
@@ -15,4 +13,3 @@ export const getVendor = createSelector<
   ReturnType<typeof vendorBrowseMatchSelector>,
   string | null
 >(vendorBrowseMatchSelector, match => match?.params.vendor || null)
-

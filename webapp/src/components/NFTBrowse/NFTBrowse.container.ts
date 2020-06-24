@@ -34,7 +34,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchNFTs: options => dispatch(fetchNFTsRequest(options))
+  onFetchNFTs: (...args) => dispatch(fetchNFTsRequest(...args))
 })
 
 export default connect(mapState, mapDispatch)(NFTBrowse)
