@@ -122,64 +122,6 @@
   height: 29px;
 }
 
-.FiltersModal .CategoriesMenu ul.menu li:hover,
-.FiltersModal .CategoriesMenu ul.menu li.active {
-  background-color: var(--secondary-on-modal);
-}
-
-.FiltersModal .filter-row {
-  margin-bottom: 20px;
-}
-
-.FiltersModal .filter-row .ui.sub.header {
-  margin-bottom: 12px;
-}
-
-.FiltersModal .CategoriesMenu {
-  width: 100%;
-}
-
-.FiltersModal .CategoriesMenu ul.menu {
-  width: calc(100% + 16px);
-}
-
-.FiltersModal .CategoriesMenu ul.menu li {
-  width: calc(100% + 16px);
-}
-
-.FiltersModal .CategoriesMenu ul.menu li.sub {
-  width: calc(100% + 0px);
-}
-
-.FiltersModal.ui.modal .dcl.close {
-  position: absolute;
-  right: 24px !important;
-  top: 24px !important;
-}
-
-.FiltersModal .apply-filters {
-  width: 100%;
-  margin-top: 48px;
-}
-
-.FiltersModal .ui.dropdown {
-  display: flex;
-  align-items: center;
-  padding: 6px 10px;
-  border: 1px solid var(--divider);
-  border-radius: 6px;
-  color: var(--secondary-text);
-}
-
-.FiltersModal .ui.dropdown .text {
-  flex: 1 0 auto;
-  color: var(--text);
-}
-
-.FiltersModal .ui.dropdown .dropdown.icon {
-  color: var(--text);
-}
-
 .NFTBrowse .Filter {
   display: flex;
   flex-direction: column;
@@ -195,13 +137,7 @@
     width: 100%;
   }
 
-  .CategoriesMenu ul.menu li {
+  .NFTBrowse .CategoriesSidebar ul.menu li {
     width: calc(100% - 32px);
-  }
-
-  .FiltersModal .dcl.row {
-    align-items: flex-start;
-    flex-direction: column;
-    justify-content: stretch;
   }
 }

@@ -4,7 +4,6 @@ import {
   fetchNFTsRequest,
   FetchNFTsRequestAction
 } from '../../modules/nft/actions'
-import { NFT } from '../../modules/nft/types'
 import { View } from '../../modules/ui/types'
 import { Section, SortBy, SearchOptions } from '../../modules/routing/search'
 import {
@@ -14,34 +13,28 @@ import {
 import { ContractName } from '../../modules/vendor/types'
 
 export type Props = {
-  defaultOnlyOnSale: boolean
-  address?: string
-  nfts: NFT[]
-  page: number
   section: Section
   sortBy: SortBy
+  search: string
+  onlyOnSale?: boolean
   wearableRarities: WearableRarity[]
   wearableGenders: WearableGender[]
   contracts: ContractName[]
-  onlyOnSale?: boolean
   view: View
-  count?: number
-  search: string
-  isLoading: boolean
+  page: number
+  address?: string
+  defaultOnlyOnSale: boolean
   onNavigate: (options?: SearchOptions) => void
   onFetchNFTs: typeof fetchNFTsRequest
 }
 
 export type MapStateProps = Pick<
   Props,
-  | 'nfts'
   | 'page'
   | 'section'
   | 'sortBy'
   | 'onlyOnSale'
   | 'search'
-  | 'isLoading'
-  | 'count'
   | 'wearableRarities'
   | 'wearableGenders'
   | 'contracts'

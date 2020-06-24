@@ -13,7 +13,7 @@ import { Column } from '../Layout/Column'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
-import { PartnersMenu } from '../PartnersMenu'
+import { PartnersSidebar } from '../PartnersSidebar'
 import { Slideshow } from '../HomePage/Slideshow'
 import { Props } from './PartnersPage.types'
 import './PartnersPage.css'
@@ -48,7 +48,7 @@ const PartnersPage = (props: Props) => {
         <Row>
           <Column align="left">
             <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-              <PartnersMenu onMenuItemClick={handleOnNavigate} />
+              <PartnersSidebar onMenuItemClick={handleOnNavigate} />
             </Responsive>
           </Column>
           <Column align="right" grow={isSuperRareLoading}>

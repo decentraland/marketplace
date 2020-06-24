@@ -1,36 +1,29 @@
 import { connect } from 'react-redux'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 
 import { RootState } from '../../modules/reducer'
-import { fetchNFTsRequest, FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
+import { fetchNFTsRequest } from '../../modules/nft/actions'
 import {
-  getNFTs,
   getUIPage,
   getUISection,
   getUISortBy,
   getUIOnlyOnSale,
-  getAssetsCount,
   getUIWearableRarities,
   getUIWearableGenders,
   getUISearch,
   getUIContracts
 } from '../../modules/ui/selectors'
-import { getLoading } from '../../modules/nft/selectors'
 import { MapDispatch, MapDispatchProps, MapStateProps } from './NFTBrowse.types'
 import NFTBrowse from './NFTBrowse'
 
 const mapState = (state: RootState): MapStateProps => ({
-  nfts: getNFTs(state),
   page: getUIPage(state),
   section: getUISection(state),
   sortBy: getUISortBy(state),
-  count: getAssetsCount(state),
   wearableRarities: getUIWearableRarities(state),
   wearableGenders: getUIWearableGenders(state),
   contracts: getUIContracts(state),
   search: getUISearch(state),
-  onlyOnSale: getUIOnlyOnSale(state),
-  isLoading: isLoadingType(getLoading(state), FETCH_NFTS_REQUEST)
+  onlyOnSale: getUIOnlyOnSale(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

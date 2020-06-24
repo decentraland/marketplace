@@ -4,14 +4,14 @@ import { Header } from 'decentraland-ui'
 
 import { Menu } from '../Menu'
 import { MenuItem } from '../Menu/MenuItem'
-import { Props } from './PartnersMenu.types'
+import { Props } from './PartnersSidebar.types'
 import { Vendors } from '../../modules/vendor'
 
-const PartnersMenu = (props: Props) => {
+const PartnersSidebar = (props: Props) => {
   const { onMenuItemClick } = props
 
   return (
-    <div className="PartnersMenu">
+    <div className="PartnersSidebar">
       <Header sub>{t('categories_menu.categories')}</Header>
       <Menu>
         {Object.values(Vendors)
@@ -29,4 +29,4 @@ const PartnersMenu = (props: Props) => {
   )
 }
 
-export default React.memo(PartnersMenu)
+export default React.memo(PartnersSidebar)

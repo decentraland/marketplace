@@ -2,17 +2,17 @@ import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header } from 'decentraland-ui'
 
-import { Section } from '../../modules/routing/search'
-import { Menu } from '../Menu'
-import { DropdownMenu } from '../Menu/DropdownMenu'
-import { MenuItem } from '../Menu/MenuItem'
-import { Props } from './CategoriesMenu.types'
+import { Section } from '../../../modules/routing/search'
+import { Menu } from '../../Menu'
+import { DropdownMenu } from '../../Menu/DropdownMenu'
+import { MenuItem } from '../../Menu/MenuItem'
+import { Props } from './CategoriesSidebar.types'
 
-const CategoriesMenu = (props: Props) => {
+const CategoriesSidebar = (props: Props) => {
   const { section, onMenuItemClick } = props
 
   return (
-    <div className="CategoriesMenu">
+    <div className="CategoriesSidebar">
       <Header sub>{t('categories_menu.categories')}</Header>
       <Menu>
         {[Section.ALL, Section.LAND].map(menuSection => (
@@ -110,4 +110,4 @@ const CategoriesMenu = (props: Props) => {
   )
 }
 
-export default React.memo(CategoriesMenu)
+export default React.memo(CategoriesSidebar)

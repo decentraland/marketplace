@@ -16,7 +16,6 @@ import { NFTCategory } from '../../../modules/nft/types'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
-import './FiltersMenu.css'
 
 export const ALL_COLLECTIONS_FILTER_OPTION = 'all'
 
