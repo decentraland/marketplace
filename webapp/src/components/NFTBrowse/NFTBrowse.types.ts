@@ -23,9 +23,9 @@ export type Props = {
   wearableRarities: WearableRarity[]
   wearableGenders: WearableGender[]
   contracts: ContractName[]
-  onlyOnSale: boolean | null
+  onlyOnSale?: boolean
   view: View
-  count: number | null
+  count?: number
   search: string
   isLoading: boolean
   onNavigate: (options?: SearchOptions) => void

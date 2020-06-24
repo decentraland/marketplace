@@ -27,7 +27,7 @@ export type UIState = {
   bidderBidIds: string[]
   archivedBidIds: string[]
   nftBidIds: string[]
-  assetCount: number | null
+  assetCount?: number
 }
 
 const INITIAL_STATE: UIState = {
@@ -40,7 +40,7 @@ const INITIAL_STATE: UIState = {
   bidderBidIds: [],
   archivedBidIds: [],
   nftBidIds: [],
-  assetCount: null,
+  assetCount: undefined,
   lastTimestamp: 0
 }
 
@@ -60,7 +60,7 @@ export function uiReducer(
     case FETCH_NFTS_REQUEST: {
       return {
         ...state,
-        assetCount: null
+        assetCount: undefined
       }
     }
     case FETCH_NFTS_SUCCESS: {

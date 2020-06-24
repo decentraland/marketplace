@@ -59,10 +59,10 @@ export const getUISortBy = createSelector<RootState, string, SortBy>(
 export const getUIOnlyOnSale = createSelector<
   RootState,
   string,
-  boolean | null
+  boolean | undefined
 >(getSearch, search => {
   const onlyOnSale = new URLSearchParams(search).get('onlyOnSale')
-  return onlyOnSale === null ? onlyOnSale : onlyOnSale === 'true'
+  return onlyOnSale === null ? undefined : onlyOnSale === 'true'
 })
 
 export const getUIWearableRarities = createSelector<
