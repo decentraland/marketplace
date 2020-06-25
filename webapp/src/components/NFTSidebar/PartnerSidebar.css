@@ -1,0 +1,25 @@
+.PartnerSidebar .go-back {
+  display: flex;
+  align-items: center;
+  color: var(--secondary-text);
+  text-transform: uppercase;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.PartnerSidebar i.back.icon {
+  background-image: url(../../images/back.svg);
+  background-repeat: no-repeat;
+  background-size: 6px;
+}
+
+.PartnerSidebar .Menu .MenuItem.partner {
+  cursor: default;
+  display: flex;
+  align-items: center;
+}
+
+.PartnerSidebar .Menu .MenuItem.active .assets-count {
+  color: var(--secondary-text);
+  font-size: 13px;
+}

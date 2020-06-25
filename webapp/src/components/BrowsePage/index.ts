@@ -1,2 +1,2 @@
-import BrowsePage from './BrowsePage.container'
+import BrowsePage from './BrowsePage'
 export { BrowsePage }

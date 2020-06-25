@@ -11,5 +11,5 @@ const vendorBrowseMatchSelector = createMatchSelector<
 export const getVendor = createSelector<
   RootState,
   ReturnType<typeof vendorBrowseMatchSelector>,
-  string | null
->(vendorBrowseMatchSelector, match => match?.params.vendor || null)
+  string | undefined
+>(vendorBrowseMatchSelector, match => match?.params.vendor)

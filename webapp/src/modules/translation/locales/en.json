@@ -86,6 +86,9 @@
   "partners_page": {
     "latest_from": "Latest from {vendor}"
   },
+  "partner_sidebar": {
+    "assets": "{count} {count, plural, one {asset} other {assets}}"
+  },
   "nft_list_page": {
     "on_sale": "On sale",
     "empty": "No results",

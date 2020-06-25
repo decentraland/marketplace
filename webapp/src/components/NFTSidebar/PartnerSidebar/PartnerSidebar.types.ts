@@ -1,10 +1,16 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 
+import { Section } from '../../../modules/routing/search'
+import { Vendors } from '../../../modules/vendor/types'
+
 export type Props = {
+  section: Section
+  vendor: Vendors
   onNavigate: (path: string) => void
+  onMenuItemClick: (section: Section) => void
 }
 
-export type MapStateProps = {}
+export type MapStateProps = Pick<Props, 'section'>
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

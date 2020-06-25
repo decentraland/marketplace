@@ -20,7 +20,7 @@ const PartnersSidebar = (props: Props) => {
             <MenuItem
               key={vendor}
               value={vendor}
-              image={`${vendor}.png`}
+              image={`/${vendor}.png`}
               onClick={onMenuItemClick}
             />
           ))}

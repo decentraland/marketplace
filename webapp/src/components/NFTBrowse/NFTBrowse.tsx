@@ -117,7 +117,6 @@ const NFTBrowse = (props: Props) => {
 
         <Column align="right" grow={true}>
           <NFTFilters />
-
           <NFTList />
         </Column>
       </Row>
