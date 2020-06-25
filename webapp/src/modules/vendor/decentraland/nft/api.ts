@@ -1,6 +1,5 @@
 import { gql } from 'apollo-boost'
 
-import { BaseNFTsParams } from '../../../nft/types'
 import { WearableGender } from '../../../nft/wearable/types'
 import { contractAddresses } from '../../../contract/utils'
 import { client } from '../apiClient'
@@ -8,15 +7,14 @@ import { NFTsParams } from './types'
 import { nftFragment, NFTFragment } from './fragments'
 
 class NFTAPI {
-  fetch = async (baseParams: BaseNFTsParams, params: NFTsParams) => {
-    const query = getNFTsQuery(baseParams, params)
-    const countQuery = getNFTsCountQuery(baseParams, params)
+  fetch = async (params: NFTsParams) => {
+    const query = getNFTsQuery(params)
+    const countQuery = getNFTsCountQuery(params)
 
     const [{ data }, { data: countData }] = await Promise.all([
       client.query<{ nfts: NFTFragment[] }>({
         query,
         variables: {
-          ...baseParams,
           ...params,
           expiresAt: Date.now().toString()
         }
@@ -24,7 +22,6 @@ class NFTAPI {
       client.query<{ nfts: NFTFragment[] }>({
         query: countQuery,
         variables: {
-          ...baseParams,
           ...params,
           first: 1000,
           skip: 0,
@@ -83,33 +80,29 @@ const NFTS_ARGUMENTS = `
   orderDirection: $orderDirection
 `
 
-function getNFTsCountQuery(baseParams: BaseNFTsParams, params: NFTsParams) {
-  return getNFTsQuery(baseParams, params, true)
+function getNFTsCountQuery(params: NFTsParams) {
+  return getNFTsQuery(params, true)
 }
 
-function getNFTsQuery(
-  baseParams: BaseNFTsParams,
-  params: NFTsParams,
-  isCount = false
-) {
+function getNFTsQuery(params: NFTsParams, isCount = false) {
   let extraWhere: string[] = []
 
-  if (baseParams.address) {
+  if (params.address) {
     extraWhere.push('owner: $address')
   }
 
-  if (baseParams.category) {
+  if (params.category) {
     extraWhere.push('category: $category')
   }
 
-  if (baseParams.onlyOnSale) {
+  if (params.onlyOnSale) {
     extraWhere.push('searchOrderStatus: open')
     extraWhere.push('searchOrderExpiresAt_gt: $expiresAt')
   }
 
-  if (baseParams.search) {
+  if (params.search) {
     extraWhere.push(
-      `searchText_contains: "${baseParams.search.trim().toLowerCase()}"`
+      `searchText_contains: "${params.search.trim().toLowerCase()}"`
     )
   }
 

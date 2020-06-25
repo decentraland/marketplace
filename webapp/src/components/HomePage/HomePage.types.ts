@@ -4,7 +4,7 @@ import { CallHistoryMethodAction } from 'connected-react-router'
 import {
   fetchNFTsRequest,
   FetchNFTsRequestAction
-} from '../../modules/vendor/decentraland/nft/actions'
+} from '../../modules/nft/actions'
 
 export type Props = {
   wearables: NFT[]

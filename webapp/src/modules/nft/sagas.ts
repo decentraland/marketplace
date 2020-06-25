@@ -28,10 +28,11 @@ export function* nftSaga() {
 }
 
 function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
-  const { view, vendor, params, timestamp } = action.payload
-  const baseParams = {
+  const { options, timestamp } = action.payload
+  const { vendor } = options
+  const params = {
     ...DEFAULT_BASE_NFT_PARAMS,
-    ...action.payload.baseParams
+    ...action.payload.options.params
   }
 
   try {
@@ -43,24 +44,14 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       orders,
       count
     ]: AwaitFn<typeof nftService.fetch> = yield call(() =>
-      nftService.fetch(baseParams, params)
+      nftService.fetch(params)
     )
 
     yield put(
-      fetchNFTsSuccess(
-        view,
-        vendor,
-        baseParams,
-        params,
-        nfts,
-        accounts,
-        orders,
-        count,
-        timestamp
-      )
+      fetchNFTsSuccess(options, nfts, accounts, orders, count, timestamp)
     )
   } catch (error) {
-    yield put(fetchNFTsFailure(baseParams, params, error.message, timestamp))
+    yield put(fetchNFTsFailure(options, error.message, timestamp))
   }
 }
 

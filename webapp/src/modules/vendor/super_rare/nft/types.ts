@@ -1,1 +1,3 @@
-export type NFTsParams = Partial<{}>
+import { BaseNFTsParams } from '../../../nft/types'
+
+export type NFTsParams = BaseNFTsParams

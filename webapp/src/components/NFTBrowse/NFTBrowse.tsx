@@ -1,16 +1,11 @@
 import React, { useEffect } from 'react'
 import { Page, Responsive } from 'decentraland-ui'
 
-import {
-  Section,
-  getSearchCategory,
-  getSearchWearableCategory
-} from '../../modules/routing/search'
+import { getSearchCategory } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
-import { NFTCategory } from '../../modules/nft/types'
+import { Vendors } from '../../modules/vendor/types'
 import { getSortOrder } from '../../modules/nft/utils'
 import { useNavigate } from '../../modules/nft/hooks'
-import { Vendors } from '../../modules/vendor/types'
 import {
   MAX_QUERY_SIZE,
   MAX_PAGE,
@@ -32,10 +27,10 @@ const NFTBrowse = (props: Props) => {
     section,
     sortBy,
     view,
-    wearableRarities,
-    wearableGenders,
-    contracts,
     search,
+    // wearableRarities,
+    // wearableGenders,
+    // contracts,
     onFetchNFTs
   } = props
 
@@ -56,22 +51,19 @@ const NFTBrowse = (props: Props) => {
     const category = getSearchCategory(section)
     const [orderBy, orderDirection] = getSortOrder(sortBy)
 
-    const isLand = section === Section.LAND
-    const isWearableHead = section === Section.WEARABLES_HEAD
-    const isWearableAccessory = section === Section.WEARABLES_ACCESORIES
+    // const isLand = section === Section.LAND
+    // const isWearableHead = section === Section.WEARABLES_HEAD
+    // const isWearableAccessory = section === Section.WEARABLES_ACCESORIES
 
-    const wearableCategory =
-      !isWearableAccessory && category === NFTCategory.WEARABLE
-        ? getSearchWearableCategory(section)
-        : undefined
+    // const wearableCategory =
+    //   !isWearableAccessory && category === NFTCategory.WEARABLE
+    //     ? getSearchWearableCategory(section)
+    //     : undefined
 
-    const fetchView = isLoadMore ? View.LOAD_MORE : view
-    const vendor = Vendors.DECENTRALAND
-
-    onFetchNFTs(
-      fetchView,
-      vendor,
-      {
+    onFetchNFTs({
+      view: isLoadMore ? View.LOAD_MORE : view,
+      vendor: Vendors.DECENTRALAND,
+      params: {
         first,
         skip,
         orderBy,
@@ -80,17 +72,8 @@ const NFTBrowse = (props: Props) => {
         address,
         category,
         search
-      },
-      {
-        isLand,
-        isWearableHead,
-        isWearableAccessory,
-        wearableRarities,
-        wearableGenders,
-        wearableCategory,
-        contracts
       }
-    )
+    })
   }, [
     isLoadMore,
     address,
@@ -99,10 +82,10 @@ const NFTBrowse = (props: Props) => {
     page,
     section,
     sortBy,
-    wearableRarities,
-    wearableGenders,
-    contracts,
     search,
+    // wearableRarities,
+    // wearableGenders,
+    // contracts,
     onFetchNFTs
   ])
 

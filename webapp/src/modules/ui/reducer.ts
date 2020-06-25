@@ -67,7 +67,7 @@ export function uiReducer(
       if (action.payload.timestamp < state.lastTimestamp) {
         return state
       }
-      switch (action.payload.view) {
+      switch (action.payload.options.view) {
         case View.MARKET:
         case View.ACCOUNT: {
           return {

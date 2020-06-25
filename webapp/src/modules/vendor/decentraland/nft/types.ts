@@ -1,3 +1,4 @@
+import { BaseNFTsParams } from '../../../nft/types'
 import {
   WearableCategory,
   WearableRarity,
@@ -5,7 +6,7 @@ import {
 } from '../../../nft/wearable/types'
 import { ContractName } from '../../types'
 
-export type NFTsParams = {
+export type NFTsParams = BaseNFTsParams & {
   isLand?: boolean
   isWearableHead?: boolean
   isWearableAccessory?: boolean

@@ -3,8 +3,9 @@ import { Estate } from './estate/types'
 import { Wearable } from './wearable/types'
 import { ENS } from './ens/types'
 import { PictureFrame } from './picture_frame/types'
+import { View } from '../ui/types'
+import { Vendors } from '../vendor/types'
 import { SortDirection } from '../routing/search'
-import { Vendors } from '../vendor'
 
 export enum NFTCategory {
   PARCEL = 'parcel',
@@ -49,4 +50,10 @@ export type BaseNFTsParams = {
   address?: string
   onlyOnSale: boolean
   search?: string
+}
+
+export type NFTsFetchOptions = {
+  vendor: Vendors
+  view: View
+  params: BaseNFTsParams
 }

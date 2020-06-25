@@ -6,6 +6,7 @@ import { locations } from '../../modules/routing/locations'
 import { Section, SortDirection } from '../../modules/routing/search'
 import { NFTCategory, NFTSortBy } from '../../modules/nft/types'
 import { View } from '../../modules/ui/types'
+import { Vendors } from '../../modules/vendor/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Slideshow } from './Slideshow'
@@ -43,35 +44,46 @@ const HomePage = (props: Props) => {
     [onNavigate]
   )
 
+  const vendor = Vendors.DECENTRALAND
+
   useEffect(() => {
-    onFetchNFTs(View.HOME_WEARABLES, {
-      first: 20,
-      skip: 0,
-      orderDirection: SortDirection.DESC,
-      orderBy: NFTSortBy.ORDER_CREATED_AT,
-      category: NFTCategory.WEARABLE,
-      onlyOnSale: true
+    onFetchNFTs({
+      vendor,
+      view: View.HOME_WEARABLES,
+      params: {
+        first: 20,
+        skip: 0,
+        orderDirection: SortDirection.DESC,
+        orderBy: NFTSortBy.ORDER_CREATED_AT,
+        category: NFTCategory.WEARABLE,
+        onlyOnSale: true
+      }
     })
-    onFetchNFTs(
-      View.HOME_LAND,
-      {
+    onFetchNFTs({
+      vendor,
+      view: View.HOME_LAND,
+      params: {
         first: 20,
         skip: 0,
         orderDirection: SortDirection.DESC,
         orderBy: NFTSortBy.ORDER_CREATED_AT,
         onlyOnSale: true
-      },
-      { isLand: true }
-    )
-    onFetchNFTs(View.HOME_ENS, {
-      first: 20,
-      skip: 0,
-      category: NFTCategory.ENS,
-      orderDirection: SortDirection.DESC,
-      orderBy: NFTSortBy.ORDER_CREATED_AT,
-      onlyOnSale: true
+        // isLand: true
+      }
     })
-  }, [onFetchNFTs])
+    onFetchNFTs({
+      vendor,
+      view: View.HOME_ENS,
+      params: {
+        first: 20,
+        skip: 0,
+        category: NFTCategory.ENS,
+        orderDirection: SortDirection.DESC,
+        orderBy: NFTSortBy.ORDER_CREATED_AT,
+        onlyOnSale: true
+      }
+    })
+  }, [vendor, onFetchNFTs])
 
   return (
     <>
@@ -80,7 +92,7 @@ const HomePage = (props: Props) => {
         <Hero.Header>{t('home_page.title')}</Hero.Header>
         <Hero.Description>{t('home_page.subtitle')}</Hero.Description>
         <Hero.Content>
-          <div className="hero-image" />
+          <div className="hero-image" />}{' '}
         </Hero.Content>
         <Hero.Actions>
           <Button primary onClick={handleGetStarted}>

@@ -112,7 +112,8 @@ const createGetNFTsSelector = (combiner: (ui: UIState) => string[]) =>
   )
 const createNFTsLoadingSelector = (view: View) => (state: RootState) =>
   getNFTLoading(state).some(
-    action => action.type === FETCH_NFTS_REQUEST && action.payload.view === view
+    action =>
+      action.type === FETCH_NFTS_REQUEST && action.payload.options.view === view
   )
 
 export const getHomepageWearables = createGetNFTsSelector(

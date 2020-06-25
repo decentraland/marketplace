@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
-import { fetchNFTsRequest } from '../../modules/vendor/decentraland/nft/actions'
+import { fetchNFTsRequest } from '../../modules/nft/actions'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './HomePage.types'
 import HomePage from './HomePage'
 import {

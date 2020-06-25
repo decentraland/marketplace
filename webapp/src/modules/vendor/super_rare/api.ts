@@ -1,5 +1,5 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { NFTSortBy, BaseNFTsParams } from '../../nft/types'
+import { NFTSortBy } from '../../nft/types'
 import { NFTsParams } from './nft/types'
 import {
   SuperRareOrder,
@@ -57,22 +57,19 @@ class SuperRareAPI extends BaseAPI {
     return orders[0]
   }
 
-  fetchOrders(
-    baseParams: BaseNFTsParams,
-    _params: NFTsParams
-  ): Promise<SuperRareOrder[]> {
+  fetchOrders(params: NFTsParams): Promise<SuperRareOrder[]> {
     const orderBy =
-      baseParams.orderBy === NFTSortBy.PRICE
+      params.orderBy === NFTSortBy.PRICE
         ? 'price'
-        : baseParams.orderBy === NFTSortBy.ORDER_CREATED_AT
+        : params.orderBy === NFTSortBy.ORDER_CREATED_AT
         ? 'timestamp'
         : undefined
 
     const requestOptions: SuperRareFetchOrderOptions = {
       sort: orderBy,
-      order: baseParams.orderDirection,
-      offset: baseParams.skip,
-      limit: baseParams.first
+      order: params.orderDirection,
+      offset: params.skip,
+      limit: params.first
     }
 
     return this.request(
