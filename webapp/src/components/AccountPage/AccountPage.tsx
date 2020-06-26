@@ -9,6 +9,7 @@ import { NFTBrowse } from '../NFTBrowse'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { locations } from '../../modules/routing/locations'
+import { Vendors } from '../../modules/vendor/types'
 import { View } from '../../modules/ui/types'
 import { shortenAddress } from '../../modules/wallet/utils'
 import { contractNames } from '../../modules/contract/utils'
@@ -42,6 +43,7 @@ const AccountPage = (props: Props) => {
           </Page>
         ) : (
           <NFTBrowse
+            vendor={Vendors.DECENTRALAND}
             address={wallet.address}
             defaultOnlyOnSale={false}
             view={View.ACCOUNT}
@@ -73,6 +75,7 @@ const AccountPage = (props: Props) => {
           </PageHeader>
 
           <NFTBrowse
+            vendor={Vendors.DECENTRALAND}
             address={address}
             defaultOnlyOnSale={false}
             view={View.ACCOUNT}

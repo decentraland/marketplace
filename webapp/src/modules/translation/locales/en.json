@@ -89,15 +89,16 @@
   "partner_sidebar": {
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
-  "nft_list_page": {
+  "nft_list": {
+    "empty": "No results"
+  },
+  "nft_filters": {
     "on_sale": "On sale",
-    "empty": "No results",
     "filter": "Filter",
     "order_by": "Order By",
-    "results": "{count} {count, plural, one {result} other {results}}",
-    "more_than_results": "+{count} results",
-    "search": "Search {category}...",
-    "multiple_filters": "{count} filters",
+    "results": "{count} {count, plural, one {{type}} other {{type}s}}",
+    "more_than_results": "+{count} {type}",
+    "search": "Search {suffix}...",
     "rarity": "Rarity",
     "gender": "Gender",
     "collection": "Collection",
@@ -105,6 +106,9 @@
   },
   "nft_card": {
     "expires_at": "Expires {date}"
+  },
+  "nft_sidebar": {
+    "back": "Back"
   },
   "bid": {
     "from": "From",

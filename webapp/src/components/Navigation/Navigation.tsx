@@ -21,7 +21,12 @@ const Navigation = (props: Props) => {
           </Tabs.Tab>
         </Link>
         <Link to={locations.partners()}>
-          <Tabs.Tab active={activeTab === NavigationTab.PARTNERS}>
+          <Tabs.Tab
+            active={
+              activeTab === NavigationTab.PARTNERS ||
+              activeTab === NavigationTab.PARTNER
+            }
+          >
             {t('navigation.partners')}
           </Tabs.Tab>
         </Link>

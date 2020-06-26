@@ -3,16 +3,11 @@ import { Button, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { useFingerprint } from '../../../modules/nft/hooks'
-import { isInsufficientMANA } from '../../../modules/bid/utils'
-import { Bid } from '../../../modules/bid/types'
+import {
+  isInsufficientMANA,
+  checkFingerprint
+} from '../../../modules/bid/utils'
 import { Props } from './AcceptButton.types'
-
-function checkFingerprint(bid: Bid, fingerprint: string | undefined) {
-  if (fingerprint && bid.fingerprint) {
-    return fingerprint === bid.fingerprint
-  }
-  return true
-}
 
 const AcceptButton = (props: Props) => {
   const { nft, bid, onClick } = props

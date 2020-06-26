@@ -1,11 +1,11 @@
 import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
-import { Bid } from './types'
 import { MANA } from '../../contracts/MANA'
 import { contractAddresses } from '../contract/utils'
 import { getAddress } from '../wallet/selectors'
 import { store } from '../store'
 import { RootState } from '../reducer'
+import { Bid } from './types'
 
 export async function isInsufficientMANA(bid: Bid) {
   try {
@@ -27,4 +27,11 @@ export async function isInsufficientMANA(bid: Bid) {
     console.warn(error.message)
   }
   return false
+}
+
+export function checkFingerprint(bid: Bid, fingerprint: string | undefined) {
+  if (fingerprint && bid.fingerprint) {
+    return fingerprint === bid.fingerprint
+  }
+  return true
 }

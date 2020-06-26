@@ -7,20 +7,20 @@ import { NFTBrowse } from '../NFTBrowse'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { View } from '../../modules/ui/types'
 import { Vendors } from '../../modules/vendor/types'
+import { Props } from './PartnerPage.types'
 
-const BrowsePage = () => {
+const PartnerPage = (props: Props) => {
+  // TODO: Validate valid vendor
+  const vendor = props.vendor as Vendors
+
   return (
     <>
       <Navbar isFullscreen />
-      <Navigation activeTab={NavigationTab.BROWSE} />
-      <NFTBrowse
-        vendor={Vendors.DECENTRALAND}
-        view={View.MARKET}
-        defaultOnlyOnSale={true}
-      />
+      <Navigation activeTab={NavigationTab.PARTNER} />
+      <NFTBrowse vendor={vendor} view={View.MARKET} defaultOnlyOnSale={true} />
       <Footer />
     </>
   )
 }
 
-export default React.memo(BrowsePage)
+export default React.memo(PartnerPage)

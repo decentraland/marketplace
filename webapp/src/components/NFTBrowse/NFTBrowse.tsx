@@ -3,14 +3,14 @@ import { Page, Responsive } from 'decentraland-ui'
 
 import { getSearchCategory } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
-import { Vendors } from '../../modules/vendor/types'
-import { getSortOrder } from '../../modules/nft/utils'
-import { useNavigate } from '../../modules/nft/hooks'
 import {
   MAX_QUERY_SIZE,
   MAX_PAGE,
-  PAGE_SIZE
-} from '../../modules/vendor/decentraland/apiClient'
+  PAGE_SIZE,
+  getSortOrder
+} from '../../modules/nft/utils'
+import { useNavigate } from '../../modules/nft/hooks'
+import { useFilters } from '../../modules/vendor/hooks'
 import { NFTFilters } from '../Vendor/NFTFilters'
 import { NFTList } from '../NFTList'
 import { Row } from '../Layout/Row'
@@ -28,9 +28,7 @@ const NFTBrowse = (props: Props) => {
     sortBy,
     view,
     search,
-    // wearableRarities,
-    // wearableGenders,
-    // contracts,
+    vendor,
     onFetchNFTs
   } = props
 
@@ -39,8 +37,8 @@ const NFTBrowse = (props: Props) => {
     props.onlyOnSale === undefined ? defaultOnlyOnSale : props.onlyOnSale
 
   // State variables
-  const data = useNavigate()
-  const isLoadMore = data[1]
+  const [, isLoadMore] = useNavigate()
+  const getFilters = useFilters(vendor)
 
   // Kick things off
   useEffect(() => {
@@ -51,18 +49,9 @@ const NFTBrowse = (props: Props) => {
     const category = getSearchCategory(section)
     const [orderBy, orderDirection] = getSortOrder(sortBy)
 
-    // const isLand = section === Section.LAND
-    // const isWearableHead = section === Section.WEARABLES_HEAD
-    // const isWearableAccessory = section === Section.WEARABLES_ACCESORIES
-
-    // const wearableCategory =
-    //   !isWearableAccessory && category === NFTCategory.WEARABLE
-    //     ? getSearchWearableCategory(section)
-    //     : undefined
-
     onFetchNFTs({
       view: isLoadMore ? View.LOAD_MORE : view,
-      vendor: Vendors.DECENTRALAND,
+      vendor,
       params: {
         first,
         skip,
@@ -71,7 +60,8 @@ const NFTBrowse = (props: Props) => {
         onlyOnSale,
         address,
         category,
-        search
+        search,
+        filters: getFilters()
       }
     })
   }, [
@@ -83,9 +73,8 @@ const NFTBrowse = (props: Props) => {
     section,
     sortBy,
     search,
-    // wearableRarities,
-    // wearableGenders,
-    // contracts,
+    vendor,
+    getFilters,
     onFetchNFTs
   ])
 

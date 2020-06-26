@@ -3,7 +3,6 @@ import {
   Radio,
   CheckboxProps,
   Button,
-  HeaderMenu,
   Header,
   Dropdown,
   DropdownProps,
@@ -66,13 +65,13 @@ const NFTFilters = (props: Props) => {
 
   const appliedFilters = []
   if (wearableRarities.length > 0) {
-    appliedFilters.push(t('nft_list_page.rarity'))
+    appliedFilters.push(t('nft_filters.rarity'))
   }
   if (wearableGenders.length > 0) {
-    appliedFilters.push(t('nft_list_page.gender'))
+    appliedFilters.push(t('nft_filters.gender'))
   }
   if (contracts.length > 0) {
-    appliedFilters.push(t('nft_list_page.collection'))
+    appliedFilters.push(t('nft_filters.collection'))
   }
 
   const handleOnlyOnSaleChange = useCallback(
@@ -126,32 +125,57 @@ const NFTFilters = (props: Props) => {
 
   useEffect(() => setShowFiltersMenu(false), [category, setShowFiltersMenu])
 
+  const sectionName = t(`menu.${section}`).toLowerCase()
+  const searchPlaceholder =
+    count === undefined
+      ? t('global.loading') + '...'
+      : t('nft_filters.search', {
+          suffix:
+            count < MAX_RESULTS
+              ? t('nft_filters.results', {
+                  count: count.toLocaleString(),
+                  type: sectionName
+                })
+              : t('nft_filters.more_than_results', {
+                  count: count.toLocaleString(),
+                  type: sectionName
+                })
+        })
+
   return (
-    <>
+    <div className="NFTFilters">
       <div className="topbar">
         <TextFilter
           value={search}
-          placeholder={t('nft_list_page.search', {
-            category: t(`menu.${section}`).toLowerCase()
-          })}
+          placeholder={searchPlaceholder}
           onChange={handleSearch}
         />
         <Responsive
           as={Dropdown}
+          className="topbar-filter"
           minWidth={Responsive.onlyTablet.minWidth}
           direction="left"
           value={sortBy}
           options={dropdownOptions}
           onChange={handleDropdownChange}
         />
-
+        <Responsive
+          minWidth={Responsive.onlyTablet.minWidth}
+          className="topbar-filter"
+        >
+          <Radio
+            toggle
+            checked={onlyOnSale}
+            onChange={handleOnlyOnSaleChange}
+            label={t('nft_filters.on_sale')}
+          />
+        </Responsive>
         {category === NFTCategory.WEARABLE ? (
           <Responsive
             minWidth={Responsive.onlyTablet.minWidth}
-            className="open-filters-wrapper"
+            className="open-filters-wrapper topbar-filter"
             onClick={handleToggleFilterMenu}
           >
-            <div className="label">{t('nft_list_page.filter')}</div>
             <div
               className={`open-filters ${
                 showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
@@ -161,44 +185,19 @@ const NFTFilters = (props: Props) => {
         ) : null}
       </div>
 
-      <HeaderMenu>
-        <HeaderMenu.Left>
-          <Header sub className="results">
-            {count === undefined
-              ? t('global.loading') + '...'
-              : count < MAX_RESULTS
-              ? t('nft_list_page.results', {
-                  count: count.toLocaleString()
-                })
-              : t('nft_list_page.more_than_results', {
-                  count: count.toLocaleString()
-                })}
-          </Header>
-        </HeaderMenu.Left>
-        <HeaderMenu.Right>
-          <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-            <Radio
-              toggle
-              checked={onlyOnSale}
-              onChange={handleOnlyOnSaleChange}
-              label={t('nft_list_page.on_sale')}
-            />
-          </Responsive>
-          <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
-            <div
-              className="open-filters-wrapper"
-              onClick={() => setShowFiltersModal(!showFiltersModal)}
-            >
-              <div className="label">{t('nft_list_page.filter')}</div>
-              <div
-                className={`open-filters ${
-                  showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
-                }`}
-              />
-            </div>
-          </Responsive>
-        </HeaderMenu.Right>
-      </HeaderMenu>
+      <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+        <div
+          className="open-filters-wrapper"
+          onClick={() => setShowFiltersModal(!showFiltersModal)}
+        >
+          <div className="label">{t('nft_filters.filter')}</div>
+          <div
+            className={`open-filters ${
+              showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
+            }`}
+          />
+        </div>
+      </Responsive>
 
       {showFiltersMenu ? (
         <Responsive
@@ -221,7 +220,7 @@ const NFTFilters = (props: Props) => {
         open={showFiltersModal}
         onClose={() => setShowFiltersModal(false)}
       >
-        <Modal.Header>{t('nft_list_page.filter')}</Modal.Header>
+        <Modal.Header>{t('nft_filters.filter')}</Modal.Header>
         <Modal.Content>
           <FiltersMenu
             selectedCollection={contracts[0]}
@@ -232,7 +231,7 @@ const NFTFilters = (props: Props) => {
             onRaritiesChange={handleRaritiesChange}
           />
           <div className="filter-row">
-            <Header sub>{t('nft_list_page.order_by')}</Header>
+            <Header sub>{t('nft_filters.order_by')}</Header>
             <Dropdown
               direction="left"
               value={sortBy}
@@ -241,7 +240,7 @@ const NFTFilters = (props: Props) => {
             />
           </div>
           <div className="filter-row">
-            <Header sub>{t('nft_list_page.on_sale')}</Header>
+            <Header sub>{t('nft_filters.on_sale')}</Header>
             <Radio
               toggle
               checked={onlyOnSale}
@@ -258,7 +257,7 @@ const NFTFilters = (props: Props) => {
           </Button>
         </Modal.Content>
       </Modal>
-    </>
+    </div>
   )
 }
 

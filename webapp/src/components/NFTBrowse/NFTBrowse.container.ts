@@ -7,10 +7,7 @@ import {
   getUISection,
   getUISortBy,
   getUIOnlyOnSale,
-  getUIWearableRarities,
-  getUIWearableGenders,
-  getUISearch,
-  getUIContracts
+  getUISearch
 } from '../../modules/ui/selectors'
 import { MapDispatch, MapDispatchProps, MapStateProps } from './NFTBrowse.types'
 import NFTBrowse from './NFTBrowse'
@@ -19,9 +16,6 @@ const mapState = (state: RootState): MapStateProps => ({
   page: getUIPage(state),
   section: getUISection(state),
   sortBy: getUISortBy(state),
-  wearableRarities: getUIWearableRarities(state),
-  wearableGenders: getUIWearableGenders(state),
-  contracts: getUIContracts(state),
   search: getUISearch(state),
   onlyOnSale: getUIOnlyOnSale(state)
 })

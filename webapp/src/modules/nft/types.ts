@@ -4,7 +4,7 @@ import { Wearable } from './wearable/types'
 import { ENS } from './ens/types'
 import { PictureFrame } from './picture_frame/types'
 import { View } from '../ui/types'
-import { Vendors } from '../vendor/types'
+import { Vendors, NFTsFetchFilters } from '../vendor/types'
 import { SortDirection } from '../routing/search'
 
 export enum NFTCategory {
@@ -41,7 +41,7 @@ export type NFT = {
   vendor: Vendors
 }
 
-export type BaseNFTsParams = {
+export type NFTsFetchParams = {
   first: number
   skip: number
   orderBy?: NFTSortBy
@@ -50,10 +50,11 @@ export type BaseNFTsParams = {
   address?: string
   onlyOnSale: boolean
   search?: string
+  filters?: NFTsFetchFilters
 }
 
 export type NFTsFetchOptions = {
   vendor: Vendors
   view: View
-  params: BaseNFTsParams
+  params: NFTsFetchParams
 }

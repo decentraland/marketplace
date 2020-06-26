@@ -1,12 +1,11 @@
-import { NFT, NFTCategory } from '../nft/types'
+import { NFT, NFTCategory, NFTsFetchParams } from '../nft/types'
 import { Account } from '../account/types'
 import { Bid } from '../bid/types'
 import { OrderStatus, Order } from '../order/types'
-import { NFTsParams } from './types'
 
 export interface NFTService {
   fetch: (
-    params: NFTsParams
+    params: NFTsFetchParams
   ) => Promise<readonly [NFT[], Account[], Order[], number]>
   fetchOne: (
     contractAddress: string,

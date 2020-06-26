@@ -12,4 +12,6 @@ export type ContractName =
   | keyof typeof decentraland.ContractService['contractAddresses']
   | keyof typeof superRare.ContractService['contractAddresses']
 
-export type NFTsParams = decentraland.NFTsParams | superRare.NFTsParams
+export type NFTsFetchFilters =
+  | decentraland.NFTsFetchFilters
+  | superRare.NFTsFetchFilters

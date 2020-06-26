@@ -1,3 +1,134 @@
+.NFTFilters .topbar {
+  display: flex;
+  margin-bottom: 20px;
+  font-size: 12px;
+}
+
+.NFTFilters .topbar .topbar-filter {
+  margin-left: 20px;
+}
+
+.NFTFilters .topbar > .TextFilter {
+  flex: 1 0 auto;
+  margin-right: 30px;
+}
+
+.NFTFilters .topbar > .TextFilter .text-input input {
+  padding-top: 0;
+  font-size: 15px;
+  background-position-y: 4px;
+}
+
+.NFTFilters .topbar > .ui.dropdown,
+.NFTFilters .topbar > .open-filters-wrapper {
+  height: 29px;
+}
+
+.NFTFilters .Filter {
+  display: flex;
+  flex-direction: column;
+}
+
+.NFTFilters .Filter .ui.sub.header.name {
+  margin-bottom: 12px !important;
+  font-weight: 600;
+}
+
+.NFTFilters .filters {
+  padding: 16px;
+  background-color: var(--card);
+  border-radius: 16px;
+  margin-bottom: 32px;
+  user-select: none;
+  outline: none;
+  padding-bottom: 8px;
+  margin-top: -8px;
+}
+
+.NFTBrowse .filters .Filter + .Filter {
+  margin-top: 14px;
+}
+
+.NFTFilters .filters .dcl.row {
+  align-items: flex-start;
+}
+
+.NFTFilters .filters .dcl.row + .dcl.row {
+  margin-top: 12px;
+}
+
+.NFTFilters .filters .dcl.row .Filter {
+  flex: 1 0 auto;
+}
+
+.NFTFilters .filters .dcl.row .Filter + .Filter {
+  margin-top: 0px;
+  flex: none;
+  width: 50%;
+  margin-left: 24px;
+}
+
+.NFTFilters .ui.toggle.checkbox input.hidden + label,
+.NFTFilters .ui.toggle.checkbox.checked input.hidden:focus + label {
+  font-size: 12px;
+  margin-right: 0px;
+  padding-left: 33px;
+  line-height: 12px;
+  color: var(--primary) !important;
+}
+
+.NFTFilters .ui.toggle.checkbox input.hidden + label:before {
+  width: 28px;
+  height: 12px;
+}
+
+.NFTFilters .ui.toggle.checkbox input.hidden + label:after {
+  background: var(--primary);
+  width: 12px;
+  height: 12px;
+}
+
+.NFTFilters .ui.toggle.checkbox label,
+.NFTFilters .ui.dropdown > .text {
+  text-transform: uppercase;
+}
+
+.NFTFilters .open-filters-wrapper {
+  width: 20px;
+  position: relative;
+  cursor: pointer;
+}
+
+.NFTFilters .open-filters-wrapper .label {
+  color: var(--primary);
+  text-transform: uppercase;
+  margin-right: 30px;
+  font-weight: 500;
+}
+
+.NFTFilters .open-filters {
+  width: 20px;
+  height: 20px;
+  background-image: url(../../../../images/filters.svg);
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  display: inline-block;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+.NFTFilters .open-filters.active {
+  background-image: url(../../../../images/filters-active.svg);
+  background-size: 20px;
+}
+
+/*------------------
+  FiltersModal
+ */
+
 .FiltersModal .NFTSidebar ul.menu li:hover,
 .FiltersModal .NFTSidebar ul.menu li.active {
   background-color: var(--secondary-on-modal);

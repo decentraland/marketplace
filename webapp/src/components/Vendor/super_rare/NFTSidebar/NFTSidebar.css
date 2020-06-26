@@ -1,4 +1,4 @@
-/*TODO: Extract with top level MenuItem*/
+/* TODO: Extract with top level MenuItem*/
 .NFTSidebar .go-back {
   display: flex;
   align-items: center;
@@ -9,18 +9,17 @@
 }
 
 .NFTSidebar i.back.icon {
-  background-image: url(../../images/back.svg);
+  background-image: url(../../../../images/back.svg);
   background-repeat: no-repeat;
   background-size: 6px;
 }
 
-.NFTSidebar .Menu .MenuItem.partner {
-  cursor: default;
-  display: flex;
-  align-items: center;
+.NFTSidebar .Menu > .MenuItem .ui.image {
+  width: 50px;
+  vertical-align: middle;
 }
 
-.NFTSidebar .Menu .MenuItem.active .assets-count {
-  color: var(--secondary-text);
-  font-size: 13px;
+.NFTSidebar .Menu > .MenuItem .dropdown.icon {
+  margin-top: 10px;
+  margin-right: 10px;
 }

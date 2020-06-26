@@ -3,10 +3,7 @@ import { Card, Button, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { useNavigate } from '../../modules/nft/hooks'
-import {
-  MAX_QUERY_SIZE,
-  MAX_PAGE
-} from '../../modules/vendor/decentraland/apiClient'
+import { MAX_QUERY_SIZE, MAX_PAGE } from '../../modules/nft/utils'
 import { NFTCard } from '../NFTCard'
 import { Props } from './NFTList.types'
 
@@ -33,7 +30,7 @@ const NFTList = (props: Props) => {
       </Card.Group>
 
       {nfts.length === 0 && !isLoading ? (
-        <div className="empty">{t('nft_list_page.empty')}</div>
+        <div className="empty">{t('nft_list.empty')}</div>
       ) : null}
 
       {(nfts.length !== count || count === MAX_QUERY_SIZE) &&

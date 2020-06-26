@@ -1,3 +1,1 @@
-import { BaseNFTsParams } from '../../../nft/types'
-
-export type NFTsParams = BaseNFTsParams
+export type NFTsFetchFilters = {}

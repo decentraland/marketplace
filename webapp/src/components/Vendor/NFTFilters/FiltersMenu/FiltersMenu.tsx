@@ -46,7 +46,7 @@ const FiltersMenu = (props: Props) => {
     return [
       {
         value: ALL_COLLECTIONS_FILTER_OPTION,
-        text: t('nft_list_page.all_collections')
+        text: t('nft_filters.all_collections')
       },
       ...COLLECTION_FILTER_OPTIONS.map(collection => ({
         value: collection,
@@ -73,7 +73,7 @@ const FiltersMenu = (props: Props) => {
     <>
       <Row>
         <SelectFilter
-          name={t('nft_list_page.collection')}
+          name={t('nft_filters.collection')}
           value={selectedCollection || ALL_COLLECTIONS_FILTER_OPTION}
           options={collectionOptions}
           onChange={onCollectionsChange}
@@ -81,13 +81,13 @@ const FiltersMenu = (props: Props) => {
       </Row>
       <Row>
         <ArrayFilter
-          name={t('nft_list_page.rarity')}
+          name={t('nft_filters.rarity')}
           values={selectedRarities}
           options={rarityOptions}
           onChange={onRaritiesChange}
         />
         <ArrayFilter
-          name={t('nft_list_page.gender')}
+          name={t('nft_filters.gender')}
           values={selectedGenders}
           options={genderOptions}
           onChange={onGendersChange}
