@@ -1,5 +1,5 @@
-.FiltersModal .CategoriesSidebar ul.menu li:hover,
-.FiltersModal .CategoriesSidebar ul.menu li.active {
+.FiltersModal .NFTSidebar ul.menu li:hover,
+.FiltersModal .NFTSidebar ul.menu li.active {
   background-color: var(--secondary-on-modal);
 }
 
@@ -11,19 +11,19 @@
   margin-bottom: 12px;
 }
 
-.FiltersModal .CategoriesSidebar {
+.FiltersModal .NFTSidebar {
   width: 100%;
 }
 
-.FiltersModal .CategoriesSidebar ul.menu {
+.FiltersModal .NFTSidebar ul.menu {
   width: calc(100% + 16px);
 }
 
-.FiltersModal .CategoriesSidebar ul.menu li {
+.FiltersModal .NFTSidebar ul.menu li {
   width: calc(100% + 16px);
 }
 
-.FiltersModal .CategoriesSidebar ul.menu li.sub {
+.FiltersModal .NFTSidebar ul.menu li.sub {
   width: calc(100% + 0px);
 }
 

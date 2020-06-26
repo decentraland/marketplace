@@ -1,4 +1,4 @@
-.PartnerSidebar .go-back {
+.NFTSidebar .go-back {
   display: flex;
   align-items: center;
   color: var(--secondary-text);
@@ -7,19 +7,19 @@
   cursor: pointer;
 }
 
-.PartnerSidebar i.back.icon {
+.NFTSidebar i.back.icon {
   background-image: url(../../images/back.svg);
   background-repeat: no-repeat;
   background-size: 6px;
 }
 
-.PartnerSidebar .Menu .MenuItem.partner {
+.NFTSidebar .Menu .MenuItem.partner {
   cursor: default;
   display: flex;
   align-items: center;
 }
 
-.PartnerSidebar .Menu .MenuItem.active .assets-count {
+.NFTSidebar .Menu .MenuItem.active .assets-count {
   color: var(--secondary-text);
   font-size: 13px;
 }

@@ -3,12 +3,12 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { Image } from 'decentraland-ui'
 
-import { locations } from '../../../modules/routing/locations'
-import { Menu } from '../../Menu'
-import { MenuItem } from '../../Menu/MenuItem'
-import { Props } from './PartnerSidebar.types'
+import { locations } from '../../../../modules/routing/locations'
+import { Menu } from '../../../Menu'
+import { MenuItem } from '../../../Menu/MenuItem'
+import { Props } from './NFTSidebar.types'
 
-const PartnerSidebar = (props: Props) => {
+const NFTSidebar = (props: Props) => {
   const { section, vendor, onMenuItemClick, onNavigate } = props
 
   const handleGoBack = useCallback(() => {
@@ -16,7 +16,7 @@ const PartnerSidebar = (props: Props) => {
   }, [onNavigate])
 
   return (
-    <div className="PartnerSidebar">
+    <div className="NFTSidebar">
       <div className="go-back" onClick={handleGoBack}>
         <i className="back icon" />
         back
@@ -39,4 +39,4 @@ const PartnerSidebar = (props: Props) => {
   )
 }
 
-export default React.memo(PartnerSidebar)
+export default React.memo(NFTSidebar)

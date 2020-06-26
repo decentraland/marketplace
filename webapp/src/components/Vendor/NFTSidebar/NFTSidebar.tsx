@@ -1,12 +1,11 @@
 import React, { useCallback } from 'react'
 
-import { Section } from '../../modules/routing/search'
-import { Vendors } from '../../modules/vendor/types'
-import { useNavigate } from '../../modules/nft/hooks'
-import { CategoriesSidebar } from './CategoriesSidebar'
-import { PartnerSidebar } from './PartnerSidebar'
+import { Section } from '../../../modules/routing/search'
+import { Vendors } from '../../../modules/vendor/types'
+import { useNavigate } from '../../../modules/nft/hooks'
+import { NFTSidebar as DecentralandNFTSidebar } from '../decentraland/NFTSidebar'
+import { NFTSidebar as SuperRareNFTSidebar } from '../super_rare/NFTSidebar'
 import { Props } from './NFTSidebar.types'
-import './PartnerSidebar.css'
 
 const NFTSidebar = (props: Props) => {
   const { section, vendor } = props
@@ -19,25 +18,23 @@ const NFTSidebar = (props: Props) => {
     [navigate]
   )
 
-  let Sidebar = null
   switch (vendor) {
     case Vendors.SUPER_RARE:
-      Sidebar = (
-        <PartnerSidebar vendor={vendor} onMenuItemClick={handleOnNavigate} />
+      return (
+        <SuperRareNFTSidebar
+          vendor={vendor}
+          onMenuItemClick={handleOnNavigate}
+        />
       )
-      break
     case Vendors.DECENTRALAND:
     default:
-      Sidebar = (
-        <CategoriesSidebar
+      return (
+        <DecentralandNFTSidebar
           section={section}
           onMenuItemClick={handleOnNavigate}
         />
       )
-      break
   }
-
-  return Sidebar
 }
 
 export default React.memo(NFTSidebar)

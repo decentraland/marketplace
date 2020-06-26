@@ -137,7 +137,7 @@
     width: 100%;
   }
 
-  .NFTBrowse .CategoriesSidebar ul.menu li {
+  .NFTBrowse .NFTSidebar ul.menu li {
     width: calc(100% - 32px);
   }
 }

@@ -11,11 +11,11 @@ import {
   MAX_PAGE,
   PAGE_SIZE
 } from '../../modules/vendor/decentraland/apiClient'
-import { NFTSidebar } from '../NFTSidebar'
 import { NFTFilters } from '../NFTFilters'
 import { NFTList } from '../NFTList'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
+import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './NFTBrowse.types'
 import './NFTBrowse.css'
 
