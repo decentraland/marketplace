@@ -12,21 +12,25 @@ class NFTAPI {
     const query = getNFTsQuery(params)
     const countQuery = getNFTsCountQuery(params)
 
+    const expiresAt = Date.now().toString()
+
     const [{ data }, { data: countData }] = await Promise.all([
       client.query<{ nfts: NFTFragment[] }>({
         query,
         variables: {
           ...params,
-          expiresAt: Date.now().toString()
+          ...params.filters,
+          expiresAt
         }
       }),
       client.query<{ nfts: NFTFragment[] }>({
         query: countQuery,
         variables: {
           ...params,
+          ...params.filters,
           first: 1000,
           skip: 0,
-          expiresAt: Date.now().toString()
+          expiresAt
         }
       })
     ])
@@ -88,6 +92,10 @@ function getNFTsCountQuery(params: NFTsFetchParams) {
 function getNFTsQuery(params: NFTsFetchParams, isCount = false) {
   const filters = (params.filters || {}) as NFTsFetchFilters
   let extraWhere: string[] = []
+
+  console.log('*********************************************')
+  console.log(filters, params)
+  console.log('*********************************************')
 
   if (params.address) {
     extraWhere.push('owner: $address')
@@ -154,6 +162,24 @@ function getNFTsQuery(params: NFTsFetchParams, isCount = false) {
         .join(', ')}]`
     )
   }
+
+  console.log(`
+    query NFTs(
+      ${NFTS_FILTERS}
+    ) {
+      nfts(
+        where: {
+          searchEstateSize_gt: 0
+          searchParcelIsInBounds: true
+          ${extraWhere.join('\n')}
+        }
+        ${NFTS_ARGUMENTS}
+      ) {
+        ${isCount ? 'id' : '...nftFragment'}
+      }
+    }
+
+    `)
 
   return gql`
     query NFTs(

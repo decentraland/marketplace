@@ -46,8 +46,9 @@ const NFTBrowse = (props: Props) => {
     const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
     const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
 
-    const category = getSearchCategory(section)
     const [orderBy, orderDirection] = getSortOrder(sortBy)
+    const category = getSearchCategory(section)
+    const filters = getFilters()
 
     onFetchNFTs({
       view: isLoadMore ? View.LOAD_MORE : view,
@@ -61,7 +62,7 @@ const NFTBrowse = (props: Props) => {
         address,
         category,
         search,
-        filters: getFilters()
+        filters
       }
     })
   }, [
