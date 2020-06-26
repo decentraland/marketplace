@@ -29,7 +29,7 @@ export function* nftSaga() {
 
 function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   const { options, timestamp } = action.payload
-  const { vendor } = options
+  const { vendor, filters } = options
   const params = {
     ...DEFAULT_BASE_NFT_PARAMS,
     ...action.payload.options.params
@@ -44,7 +44,7 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       orders,
       count
     ]: AwaitFn<typeof nftService.fetch> = yield call(() =>
-      nftService.fetch(params)
+      nftService.fetch(params, filters)
     )
 
     yield put(

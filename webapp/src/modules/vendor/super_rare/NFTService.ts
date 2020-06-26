@@ -1,5 +1,3 @@
-import { toWei } from 'web3x-es/utils'
-
 import { NFT, NFTsFetchParams, NFTCategory } from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
@@ -87,7 +85,7 @@ export class NFTService implements NFTServiceInterface {
       nftAddress: asset.contractAddress,
       owner: asset.owner.address,
       buyer: taker ? taker.address : null,
-      price: toWei(order.amount.toString(), 'ether'),
+      price: order.amount.toString(),
       status: OrderStatus.OPEN,
       createdAt: order.timestamp,
       updatedAt: order.timestamp

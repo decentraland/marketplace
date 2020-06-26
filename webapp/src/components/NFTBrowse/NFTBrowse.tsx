@@ -61,9 +61,9 @@ const NFTBrowse = (props: Props) => {
         onlyOnSale,
         address,
         category,
-        search,
-        filters
-      }
+        search
+      },
+      filters
     })
   }, [
     isLoadMore,

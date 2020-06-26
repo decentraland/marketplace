@@ -8,29 +8,27 @@ import { nftFragment, NFTFragment } from './fragments'
 import { NFTsFetchFilters } from './types'
 
 class NFTAPI {
-  fetch = async (params: NFTsFetchParams) => {
-    const query = getNFTsQuery(params)
-    const countQuery = getNFTsCountQuery(params)
+  fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
+    const query = getNFTsQuery(params, filters)
+    const countQuery = getNFTsCountQuery(params, filters)
 
-    const expiresAt = Date.now().toString()
+    const variables = {
+      ...params,
+      ...filters,
+      expiresAt: Date.now().toString()
+    }
 
     const [{ data }, { data: countData }] = await Promise.all([
       client.query<{ nfts: NFTFragment[] }>({
         query,
-        variables: {
-          ...params,
-          ...params.filters,
-          expiresAt
-        }
+        variables
       }),
       client.query<{ nfts: NFTFragment[] }>({
         query: countQuery,
         variables: {
-          ...params,
-          ...params.filters,
+          ...variables,
           first: 1000,
-          skip: 0,
-          expiresAt
+          skip: 0
         }
       })
     ])
@@ -85,17 +83,19 @@ const NFTS_ARGUMENTS = `
   orderDirection: $orderDirection
 `
 
-function getNFTsCountQuery(params: NFTsFetchParams) {
-  return getNFTsQuery(params, true)
+function getNFTsCountQuery(
+  params: NFTsFetchParams,
+  filters: NFTsFetchFilters = {}
+) {
+  return getNFTsQuery(params, filters, true)
 }
 
-function getNFTsQuery(params: NFTsFetchParams, isCount = false) {
-  const filters = (params.filters || {}) as NFTsFetchFilters
+function getNFTsQuery(
+  params: NFTsFetchParams,
+  filters: NFTsFetchFilters = {},
+  isCount = false
+) {
   let extraWhere: string[] = []
-
-  console.log('*********************************************')
-  console.log(filters, params)
-  console.log('*********************************************')
 
   if (params.address) {
     extraWhere.push('owner: $address')
@@ -162,24 +162,6 @@ function getNFTsQuery(params: NFTsFetchParams, isCount = false) {
         .join(', ')}]`
     )
   }
-
-  console.log(`
-    query NFTs(
-      ${NFTS_FILTERS}
-    ) {
-      nfts(
-        where: {
-          searchEstateSize_gt: 0
-          searchParcelIsInBounds: true
-          ${extraWhere.join('\n')}
-        }
-        ${NFTS_ARGUMENTS}
-      ) {
-        ${isCount ? 'id' : '...nftFragment'}
-      }
-    }
-
-    `)
 
   return gql`
     query NFTs(

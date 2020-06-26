@@ -67,8 +67,10 @@ const HomePage = (props: Props) => {
         skip: 0,
         orderDirection: SortDirection.DESC,
         orderBy: NFTSortBy.ORDER_CREATED_AT,
-        onlyOnSale: true,
-        filters: { isLand: true }
+        onlyOnSale: true
+      },
+      filters: {
+        isLand: true
       }
     })
     onFetchNFTs({

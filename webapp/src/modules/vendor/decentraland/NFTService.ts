@@ -7,12 +7,12 @@ import { Account } from '../../account/types'
 import { isExpired } from '../../order/utils'
 import { ERC721 } from '../../../contracts/ERC721'
 import { NFTService as NFTServiceInterface } from '../services'
-import { Vendors } from '../types'
+import { Vendors, NFTsFetchFilters } from '../types'
 import { nftAPI } from './nft/api'
 
 export class NFTService implements NFTServiceInterface {
-  async fetch(params: NFTsFetchParams) {
-    const data = await nftAPI.fetch(params)
+  async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
+    const data = await nftAPI.fetch(params, filters)
 
     const nfts: NFT[] = []
     const accounts: Account[] = []

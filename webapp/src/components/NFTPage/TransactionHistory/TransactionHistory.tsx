@@ -57,10 +57,10 @@ const TransactionHistory = (props: Props) => {
           setOrders(orders)
           setBids(bids)
         })
+        .finally(() => setIsLoading(false))
         .catch(error => {
           console.error(error)
         })
-        .then(() => setIsLoading(false))
     }
   }, [nft, setIsLoading, setOrders, setBids])
 
