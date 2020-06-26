@@ -20,12 +20,7 @@ const NFTSidebar = (props: Props) => {
 
   switch (vendor) {
     case Vendors.SUPER_RARE:
-      return (
-        <SuperRareNFTSidebar
-          vendor={vendor}
-          onMenuItemClick={handleOnNavigate}
-        />
-      )
+      return <SuperRareNFTSidebar onMenuItemClick={handleOnNavigate} />
     case Vendors.DECENTRALAND:
     default:
       return (

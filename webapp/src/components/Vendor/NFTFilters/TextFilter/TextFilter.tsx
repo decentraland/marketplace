@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { Header } from 'decentraland-ui'
 
-import { useInput } from '../../../lib/input'
+import { useInput } from '../../../../lib/input'
 import { Props } from './TextFilter.types'
 import './TextFilter.css'
 

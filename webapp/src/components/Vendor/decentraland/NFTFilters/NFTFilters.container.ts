@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 
-import { RootState } from '../../modules/reducer'
+import { RootState } from '../../../../modules/reducer'
 import {
   getUISection,
   getUISortBy,
@@ -10,7 +10,7 @@ import {
   getUIWearableGenders,
   getUISearch,
   getUIContracts
-} from '../../modules/ui/selectors'
+} from '../../../../modules/ui/selectors'
 import { MapStateProps } from './NFTFilters.types'
 import NFTFilters from './NFTFilters'
 

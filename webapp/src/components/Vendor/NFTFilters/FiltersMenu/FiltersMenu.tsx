@@ -6,13 +6,13 @@ import {
   contractAddresses,
   contractCategories,
   contractSymbols
-} from '../../../modules/contract/utils'
+} from '../../../../modules/contract/utils'
 import {
   WearableRarity,
   WearableGender
-} from '../../../modules/nft/wearable/types'
-import { ContractName } from '../../../modules/vendor/types'
-import { NFTCategory } from '../../../modules/nft/types'
+} from '../../../../modules/nft/wearable/types'
+import { ContractName } from '../../../../modules/vendor/types'
+import { NFTCategory } from '../../../../modules/nft/types'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'

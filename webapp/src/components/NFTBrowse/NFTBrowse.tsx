@@ -11,7 +11,7 @@ import {
   MAX_PAGE,
   PAGE_SIZE
 } from '../../modules/vendor/decentraland/apiClient'
-import { NFTFilters } from '../NFTFilters'
+import { NFTFilters } from '../Vendor/NFTFilters'
 import { NFTList } from '../NFTList'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'

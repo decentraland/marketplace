@@ -12,17 +12,17 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { SortBy, getSearchCategory } from '../../modules/routing/search'
+import { SortBy, getSearchCategory } from '../../../../modules/routing/search'
 import {
   WearableRarity,
   WearableGender
-} from '../../modules/nft/wearable/types'
-import { ContractName } from '../../modules/vendor/types'
-import { NFTCategory } from '../../modules/nft/types'
-import { useNavigate } from '../../modules/nft/hooks'
-import { NFTSidebar } from '../Vendor/NFTSidebar'
-import { TextFilter } from './TextFilter'
-import { FiltersMenu } from './FiltersMenu'
+} from '../../../../modules/nft/wearable/types'
+import { ContractName } from '../../../../modules/vendor/types'
+import { NFTCategory } from '../../../../modules/nft/types'
+import { useNavigate } from '../../../../modules/nft/hooks'
+import { NFTSidebar } from '../../NFTSidebar'
+import { TextFilter } from '../../NFTFilters/TextFilter'
+import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
 import './NFTFilters.css'
 
