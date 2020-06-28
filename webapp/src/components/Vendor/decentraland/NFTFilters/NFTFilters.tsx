@@ -23,7 +23,6 @@ import { NFTSidebar } from '../../NFTSidebar'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
-import './NFTFilters.css'
 
 const MAX_RESULTS = 1000
 
@@ -125,7 +124,6 @@ const NFTFilters = (props: Props) => {
 
   useEffect(() => setShowFiltersMenu(false), [category, setShowFiltersMenu])
 
-  const sectionName = t(`menu.${section}`).toLowerCase()
   const searchPlaceholder =
     count === undefined
       ? t('global.loading') + '...'
@@ -133,12 +131,10 @@ const NFTFilters = (props: Props) => {
           suffix:
             count < MAX_RESULTS
               ? t('nft_filters.results', {
-                  count: count.toLocaleString(),
-                  type: sectionName
+                  count: count.toLocaleString()
                 })
               : t('nft_filters.more_than_results', {
-                  count: count.toLocaleString(),
-                  type: sectionName
+                  count: count.toLocaleString()
                 })
         })
 

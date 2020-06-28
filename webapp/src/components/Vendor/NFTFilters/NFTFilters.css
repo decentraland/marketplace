@@ -94,7 +94,7 @@
 }
 
 .NFTFilters .open-filters-wrapper {
-  width: 20px;
+  display: flex;
   position: relative;
   cursor: pointer;
 }
@@ -102,26 +102,22 @@
 .NFTFilters .open-filters-wrapper .label {
   color: var(--primary);
   text-transform: uppercase;
-  margin-right: 30px;
+  margin-right: 10px;
   font-weight: 500;
 }
 
 .NFTFilters .open-filters {
   width: 20px;
   height: 20px;
-  background-image: url(../../../../images/filters.svg);
+  background-image: url(../../../images/filters.svg);
   background-size: 16px;
   background-repeat: no-repeat;
   background-position: center;
-
   display: inline-block;
-  position: absolute;
-  right: 0px;
-  top: 0px;
 }
 
 .NFTFilters .open-filters.active {
-  background-image: url(../../../../images/filters-active.svg);
+  background-image: url(../../../images/filters-active.svg);
   background-size: 20px;
 }
 
@@ -188,6 +184,15 @@
 }
 
 @media (max-width: 768px) {
+  .NFTFilters {
+    display: flex;
+    overflow: hidden;
+  }
+
+  .NFTFilters .topbar {
+    flex: 1 1 auto;
+  }
+
   .FiltersModal .dcl.row {
     align-items: flex-start;
     flex-direction: column;

@@ -1,10 +1,11 @@
+import { AxiosRequestConfig } from 'axios'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFTsFetchParams, NFTSortBy } from '../../nft/types'
 import {
   SuperRareOrder,
   SuperRareAsset,
   SuperRareFetchNFTOptions,
-  SuperRareFetchOrderOptions
+  SuperRareFetchOrderParams
 } from './types'
 
 export const SUPER_RARE_API_URL = 'https://superrare.co/sr-json/v0'
@@ -26,15 +27,14 @@ class SuperRareAPI extends BaseAPI {
     contractAddress: string,
     tokenId: string
   ): Promise<SuperRareAsset> {
-    const requestOptions: SuperRareFetchNFTOptions = {
+    const requestParams: SuperRareFetchNFTOptions = {
       asset_contract_addresses: [contractAddress],
       asset_ids: [Number(tokenId)]
     }
     const nfts: SuperRareAsset[] = await this.request(
       'get',
       '/nfts/assets',
-      requestOptions,
-      this.getHeaders()
+      requestParams
     )
     return nfts[0]
   }
@@ -43,15 +43,14 @@ class SuperRareAPI extends BaseAPI {
     contractAddress: string,
     tokenId: string
   ): Promise<SuperRareOrder> {
-    const requestOptions: SuperRareFetchOrderOptions = {
+    const requestParams: SuperRareFetchOrderParams = {
       asset_contract_addresses: [contractAddress],
       asset_ids: [Number(tokenId)]
     }
     const orders: SuperRareOrder[] = await this.request(
       'get',
       '/nfts/orders',
-      requestOptions,
-      this.getHeaders()
+      requestParams
     )
     return orders[0]
   }
@@ -64,17 +63,26 @@ class SuperRareAPI extends BaseAPI {
         ? 'timestamp'
         : undefined
 
-    const requestOptions: SuperRareFetchOrderOptions = {
+    const requestParams: SuperRareFetchOrderParams = {
       sort: orderBy,
+      name: params.search,
       order: params.orderDirection,
       offset: params.skip,
       limit: params.first
     }
 
-    return this.request(
-      'get',
-      '/nfts/orders',
-      requestOptions,
+    return this.request('get', '/nfts/orders', requestParams)
+  }
+
+  request(
+    method: AxiosRequestConfig['method'],
+    path: string,
+    params: SuperRareFetchOrderParams
+  ) {
+    return super.request(
+      method,
+      path,
+      { ...params, type: 'sell' },
       this.getHeaders()
     )
   }

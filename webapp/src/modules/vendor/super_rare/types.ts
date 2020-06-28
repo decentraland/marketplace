@@ -48,7 +48,8 @@ export type SuperRareFetchNFTOptions = Partial<{
   limit: number
 }>
 
-export type SuperRareFetchOrderOptions = Partial<{
+export type SuperRareFetchOrderParams = Partial<{
+  type: 'sell' | 'buy'
   taker_addresses: string[]
   maker_addresses: string[]
   creator_addresses: string[]

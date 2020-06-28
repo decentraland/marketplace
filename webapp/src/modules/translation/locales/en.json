@@ -64,9 +64,6 @@
     "known_origin": "KnownOrigin",
     "makers_place": "MakersPlace"
   },
-  "categories_menu": {
-    "categories": "Categories"
-  },
   "filters": {
     "name": "Name",
     "newest": "Newest",
@@ -84,6 +81,7 @@
     "ens": "Names"
   },
   "partners_page": {
+    "partners": "Partners",
     "latest_from": "Latest from {vendor}"
   },
   "partner_sidebar": {
@@ -96,8 +94,8 @@
     "on_sale": "On sale",
     "filter": "Filter",
     "order_by": "Order By",
-    "results": "{count} {count, plural, one {{type}} other {{type}s}}",
-    "more_than_results": "+{count} {type}",
+    "results": "{count} {count, plural, one {result} other {results}}",
+    "more_than_results": "+{count} results",
     "search": "Search {suffix}...",
     "rarity": "Rarity",
     "gender": "Gender",
@@ -108,6 +106,7 @@
     "expires_at": "Expires {date}"
   },
   "nft_sidebar": {
+    "categories": "Categories",
     "back": "Back"
   },
   "bid": {

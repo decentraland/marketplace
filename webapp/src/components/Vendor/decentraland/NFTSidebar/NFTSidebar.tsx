@@ -13,7 +13,7 @@ const NFTSidebar = (props: Props) => {
 
   return (
     <div className="NFTSidebar">
-      <Header sub>{t('categories_menu.categories')}</Header>
+      <Header sub>{t('nft_sidebar.categories')}</Header>
       <Menu>
         {[Section.ALL, Section.LAND].map(menuSection => (
           <MenuItem

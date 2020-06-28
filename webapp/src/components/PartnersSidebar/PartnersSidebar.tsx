@@ -12,7 +12,7 @@ const PartnersSidebar = (props: Props) => {
 
   return (
     <div className="PartnersSidebar">
-      <Header sub>{t('categories_menu.categories')}</Header>
+      <Header sub>{t('partners_page.partners')}</Header>
       <Menu>
         {Object.values(Vendors)
           .filter(vendor => vendor !== Vendors.DECENTRALAND)

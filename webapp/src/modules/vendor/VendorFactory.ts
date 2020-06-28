@@ -20,8 +20,6 @@ export class VendorFactory {
           new decentraland.BidService()
         )
       case Vendors.SUPER_RARE:
-      case Vendors.KNOWN_ORIGIN:
-      case Vendors.MAKERS_PLACE:
         return new Vendor(
           vendor,
           new superRare.ContractService(),
