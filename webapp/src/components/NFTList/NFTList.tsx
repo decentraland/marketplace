@@ -15,12 +15,16 @@ const NFTList = (props: Props) => {
     navigate({ page: page + 1 })
   }, [page, navigate])
 
+  const hasExtraPages =
+    (nfts.length !== count || count === MAX_QUERY_SIZE) && page <= MAX_PAGE
+
   return (
     <>
       <Card.Group>
         {nfts.length > 0
           ? nfts.map(nft => <NFTCard key={nft.id} nft={nft} />)
           : null}
+
         {isLoading ? (
           <>
             <div className="overlay" />
@@ -33,8 +37,7 @@ const NFTList = (props: Props) => {
         <div className="empty">{t('nft_list.empty')}</div>
       ) : null}
 
-      {(nfts.length !== count || count === MAX_QUERY_SIZE) &&
-      page <= MAX_PAGE ? (
+      {nfts.length > 0 && (isLoading || hasExtraPages) ? (
         <div className="load-more">
           <Button loading={isLoading} inverted primary onClick={handleLoadMore}>
             {t('global.load_more')}

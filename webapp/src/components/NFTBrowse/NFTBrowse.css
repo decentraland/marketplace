@@ -1,6 +1,11 @@
+/* Account for the loading overlay */
+.NFTBrowse .Row .right.Column,
 .NFTBrowse .ui.cards {
   position: relative;
-  overflow: hidden;
+}
+
+.NFTBrowse .ui.cards {
+  min-height: 150px;
 }
 
 .NFTBrowse .overlay {
