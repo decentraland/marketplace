@@ -77,7 +77,7 @@ const HomePage = (props: Props) => {
         <Hero.Header>{t('home_page.title')}</Hero.Header>
         <Hero.Description>{t('home_page.subtitle')}</Hero.Description>
         <Hero.Content>
-          <div className="hero-image" />}{' '}
+          <div className="hero-image" />{' '}
         </Hero.Content>
         <Hero.Actions>
           <Button primary onClick={handleGetStarted}>
