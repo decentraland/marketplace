@@ -32,8 +32,7 @@ const rootReducer = storageReducerWrapper(createRootReducer(history))
 const sagasMiddleware = createSagasMiddleware()
 const loggerMiddleware = createLogger({
   collapsed: () => true,
-  predicate: (_: any, action) =>
-    false && (isDev || action.type.includes('Failure'))
+  predicate: (_: any, action) => isDev || action.type.includes('Failure')
 })
 const transactionMiddleware = createTransactionMiddleware()
 const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
