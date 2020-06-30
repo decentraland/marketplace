@@ -74,8 +74,6 @@ class SuperRareAPI extends BaseAPI {
       limit: params.first
     }
 
-    console.log('Request Params', requestParams, params)
-
     return this.request('get', '/nfts/orders', requestParams)
   }
 

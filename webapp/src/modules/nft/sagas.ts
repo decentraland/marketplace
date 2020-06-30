@@ -38,12 +38,6 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   try {
     const { nftService } = VendorFactory.build(vendor)
 
-    console.log('handleFetchNFTsRequest --------v')
-    console.log('Action options', options)
-    console.log('Option params', params)
-    console.log('Option filters', filters)
-    console.log('--------^')
-
     const [
       nfts,
       accounts,
