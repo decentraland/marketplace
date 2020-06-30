@@ -4,19 +4,20 @@ import { push, getLocation } from 'connected-react-router'
 import { View } from '../ui/types'
 import { Vendors } from '../vendor/types'
 import { getView } from '../ui/selectors'
-import { fetchNFTsRequest } from '../nft/actions'
 import { NFTCategory } from '../nft/types'
+import { getVendor } from '../vendor/selectors'
+import { fetchNFTsRequest } from '../nft/actions'
 import { getFilters } from '../vendor/utils'
 import { MAX_QUERY_SIZE, MAX_PAGE, PAGE_SIZE, getSortOrder } from '../nft/utils'
 import {
   getPage,
   getSection,
   getSortBy,
-  getSearch,
   getOnlyOnSale,
   getWearableRarities,
   getWearableGenders,
-  getContracts
+  getContracts,
+  getSearch
 } from './selectors'
 import { SearchOptions, getSearchParams, getSearchCategory } from './search'
 import { BROWSE, BrowseAction, setIsLoadMore } from './actions'
@@ -78,6 +79,7 @@ function* handleBrowse(action: BrowseAction) {
 
 function* getNewSearchOptions(currentOptions: SearchOptions) {
   const previousOptions: SearchOptions = {
+    vendor: yield select(getVendor),
     page: yield select(getPage),
     view: yield select(getView),
     section: yield select(getSection),
@@ -85,14 +87,15 @@ function* getNewSearchOptions(currentOptions: SearchOptions) {
     search: yield select(getSearch),
     onlyOnSale: yield select(getOnlyOnSale)
   }
-  currentOptions = yield applyVendorLogic(previousOptions, currentOptions)
+  currentOptions = yield onSearchOptionsUpdate(previousOptions, currentOptions)
 
   const view =
     previousOptions.page! < currentOptions.page!
       ? View.LOAD_MORE
       : currentOptions.view || previousOptions.view!
 
-  const vendor = currentOptions.vendor || Vendors.DECENTRALAND
+  const vendor =
+    currentOptions.vendor || previousOptions.vendor || Vendors.DECENTRALAND
 
   return {
     ...previousOptions,
@@ -102,28 +105,25 @@ function* getNewSearchOptions(currentOptions: SearchOptions) {
   }
 }
 
-function* applyVendorLogic(
+function* onSearchOptionsUpdate(
   previousOptions: SearchOptions,
   currentOptions: SearchOptions
 ) {
-  const prevCategory = previousOptions.section
-    ? getSearchCategory(previousOptions.section)
-    : null
-  const nextCategory = currentOptions.section
-    ? getSearchCategory(currentOptions.section)
-    : null
-
   let newOptions = { ...currentOptions }
 
-  // Category specific logic to keep filters if the category doesn't change
-  if (prevCategory && prevCategory === nextCategory) {
-    switch (nextCategory) {
-      case NFTCategory.WEARABLE: {
+  const nextCategory = getSearchCategory(currentOptions.section!)
+
+  switch (nextCategory) {
+    case NFTCategory.WEARABLE: {
+      const prevCategory = getSearchCategory(previousOptions.section!)
+
+      // Category specific logic to keep filters if the category doesn't change
+      if (prevCategory && prevCategory === nextCategory) {
         newOptions = {
-          search: yield select(getSearch),
           wearableRarities: yield select(getWearableRarities),
           wearableGenders: yield select(getWearableGenders),
           contracts: yield select(getContracts),
+          search: yield select(getSearch),
           ...newOptions
         }
       }
