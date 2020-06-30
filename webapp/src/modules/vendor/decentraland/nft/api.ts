@@ -18,8 +18,6 @@ class NFTAPI {
       expiresAt: Date.now().toString()
     }
 
-    // console.log('NFTAPI', variables)
-
     const [{ data }, { data: countData }] = await Promise.all([
       client.query<{ nfts: NFTFragment[] }>({
         query,
