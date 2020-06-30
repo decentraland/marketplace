@@ -11,6 +11,11 @@
       "net": "mainnet",
       "address": "0x19a8ed4860007a66805782ed7e0bed4e44fc6717"
     },
+    "MarketplaceAdapter": {
+      "source": "etherscan",
+      "net": "ropsten",
+      "address": "0x20e66474bb6178f32925b8ac27043d0e6d542b6f"
+    },
     "Bids": {
       "source": "etherscan",
       "net": "mainnet",

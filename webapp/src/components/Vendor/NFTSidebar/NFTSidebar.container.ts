@@ -1,16 +1,23 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../../modules/reducer'
-import { getUISection } from '../../../modules/ui/selectors'
+import { browse } from '../../../modules/routing/actions'
+import { getSection } from '../../../modules/routing/selectors'
 import { getVendor } from '../../../modules/vendor/selectors'
-import { MapStateProps } from './NFTSidebar.types'
+import {
+  MapStateProps,
+  MapDispatch,
+  MapDispatchProps
+} from './NFTSidebar.types'
 import NFTSidebar from './NFTSidebar'
 
 const mapState = (state: RootState): MapStateProps => ({
-  section: getUISection(state),
+  section: getSection(state),
   vendor: getVendor(state)
 })
 
-const mapDispatch = () => ({})
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onBrowse: options => dispatch(browse(options))
+})
 
 export default connect(mapState, mapDispatch)(NFTSidebar)

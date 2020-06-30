@@ -42,10 +42,10 @@ ul.Menu li.active {
   background-color: var(--card);
 }
 
-ul.Menu.submenu {
+ul.Menu ul.submenu {
   padding-left: 16px;
 }
 
-ul.Menu.submenu li.sub {
+ul.Menu ul.submenu li.sub {
   width: calc(var(--menu-item-width) - 16px);
 }

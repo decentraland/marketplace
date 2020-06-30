@@ -14,10 +14,13 @@ export async function isInsufficientMANA(bid: Bid) {
       throw new Error('Could not connect to Ethereum')
     }
     const mana = new MANA(eth, Address.fromString(contractAddresses.MANAToken))
+
+    // TODO: Remove store from here, receive address as argument
     const address = getAddress(store.getState() as RootState)
     if (!address) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
+
     const balance = await mana.methods
       .balanceOf(Address.fromString(bid.bidder))
       .call()

@@ -1,33 +1,28 @@
 import { Dispatch } from 'redux'
 
-import {
-  fetchNFTsRequest,
-  FetchNFTsRequestAction
-} from '../../modules/nft/actions'
 import { View } from '../../modules/ui/types'
 import { Vendors } from '../../modules/vendor/types'
 import { Section, SortBy } from '../../modules/routing/search'
+import { browse, BrowseAction } from '../../modules/routing/actions'
 
 export type Props = {
+  isLoadMore: boolean
+  page: number
   section: Section
   sortBy: SortBy
   search: string
   onlyOnSale?: boolean
-  page: number
   vendor: Vendors
   view: View
   address?: string
   defaultOnlyOnSale: boolean
-  onFetchNFTs: typeof fetchNFTsRequest
+  onBrowse: typeof browse
 }
 
 export type MapStateProps = Pick<
   Props,
-  'section' | 'sortBy' | 'search' | 'page' | 'onlyOnSale'
+  'isLoadMore' | 'page' | 'section' | 'sortBy' | 'search' | 'onlyOnSale'
 >
-export type MapDispatchProps = Pick<Props, 'onFetchNFTs'>
-export type MapDispatch = Dispatch<FetchNFTsRequestAction>
-export type OwnProps = Pick<
-  Props,
-  'vendor' | 'vendor' | 'address' | 'defaultOnlyOnSale'
->
+export type MapDispatchProps = Pick<Props, 'onBrowse'>
+export type MapDispatch = Dispatch<BrowseAction>
+export type OwnProps = Pick<Props, 'vendor' | 'address' | 'defaultOnlyOnSale'>

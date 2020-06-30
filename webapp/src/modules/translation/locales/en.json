@@ -75,7 +75,6 @@
     "subtitle": "Welcome to the virtual world’s one-stop-shop for the very best digital assets.",
     "get_started": "Start Browsing",
     "learn_more": "Learn More",
-    "view_all": "View All",
     "wearables": "Wearables",
     "land": "Parcels and Estates",
     "ens": "Names"
@@ -109,19 +108,8 @@
     "categories": "Categories",
     "back": "Back"
   },
-  "bid": {
-    "from": "From",
-    "price": "Price",
-    "time_left": "Time Left",
-    "not_enough_mana_on_bid_received": "The bidder doesn't have enough MANA to pay for this bid",
-    "invalid_fingerprint_on_bid_received": "This asset has been modified since this bid was made and it's not valid anymore",
-    "invalid_seller": "You don't own this asset anymore",
-    "not_enough_mana_on_bid_placed": "You don't have enough MANA to pay for this bid",
-    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it"
-  },
-  "detail": {
+  "nft_page": {
     "description": "Description",
-    "highlights": "Highlights",
     "owner": "Owner",
     "price": "Price",
     "expires": "Expires in",
@@ -131,11 +119,23 @@
     "bid": "Bid",
     "update": "Update price",
     "transfer": "Transfer",
-    "adjacent": "Adjacent",
-    "distance": "{distance} {distance, plural, one {parcel} other {parcels}} away",
     "plaza": "Plaza",
     "road": "Road",
     "district": "District"
+  },
+  "proximity": {
+    "adjacent": "Adjacent",
+    "distance": "{distance} {distance, plural, one {parcel} other {parcels}} away"
+  },
+  "bid": {
+    "from": "From",
+    "price": "Price",
+    "time_left": "Time Left",
+    "not_enough_mana_on_bid_received": "The bidder doesn't have enough MANA to pay for this bid",
+    "invalid_fingerprint_on_bid_received": "This asset has been modified since this bid was made and it's not valid anymore",
+    "invalid_seller": "You don't own this asset anymore",
+    "not_enough_mana_on_bid_placed": "You don't have enough MANA to pay for this bid",
+    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it"
   },
   "transaction_history": {
     "title": "Transaction History",
@@ -306,5 +306,11 @@
   "banner": {
     "text": "Decentraland's marketplace has a new look!{br} We hope you enjoy it. You can still access the old interface {link}.",
     "link": "here"
+  },
+  "slideshow": {
+    "view_all": "View All"
+  },
+  "highlights": {
+    "title": "Highlights"
   }
 }

@@ -1,27 +1,29 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../modules/reducer'
-import { fetchNFTsRequest } from '../../modules/nft/actions'
+import { browse } from '../../modules/routing/actions'
 import {
-  getUIPage,
-  getUISection,
-  getUISortBy,
-  getUIOnlyOnSale,
-  getUISearch
-} from '../../modules/ui/selectors'
+  getPage,
+  getSection,
+  getSortBy,
+  getOnlyOnSale,
+  getSearch,
+  getIsLoadMore
+} from '../../modules/routing/selectors'
 import { MapDispatch, MapDispatchProps, MapStateProps } from './NFTBrowse.types'
 import NFTBrowse from './NFTBrowse'
 
 const mapState = (state: RootState): MapStateProps => ({
-  page: getUIPage(state),
-  section: getUISection(state),
-  sortBy: getUISortBy(state),
-  search: getUISearch(state),
-  onlyOnSale: getUIOnlyOnSale(state)
+  isLoadMore: getIsLoadMore(state),
+  page: getPage(state),
+  section: getSection(state),
+  sortBy: getSortBy(state),
+  search: getSearch(state),
+  onlyOnSale: getOnlyOnSale(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchNFTs: (...args) => dispatch(fetchNFTsRequest(...args))
+  onBrowse: options => dispatch(browse(options))
 })
 
 export default connect(mapState, mapDispatch)(NFTBrowse)

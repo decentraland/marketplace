@@ -5,9 +5,17 @@ import { Image } from 'decentraland-ui'
 import { Props } from './MenuItem.types'
 
 const MenuItem = <T extends unknown>(props: Props<T>) => {
-  const { value, currentValue, image, isSub, withCaret, onClick } = props
+  const {
+    className = '',
+    value,
+    currentValue,
+    image,
+    isSub,
+    withCaret,
+    onClick
+  } = props
 
-  const classNames: string[] = ['MenuItem']
+  const classNames: string[] = ['MenuItem', className]
 
   if (currentValue === value) {
     classNames.push('active')

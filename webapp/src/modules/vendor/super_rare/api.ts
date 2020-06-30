@@ -8,7 +8,7 @@ import {
   SuperRareFetchOrderParams
 } from './types'
 
-export const SUPER_RARE_API_URL = 'https://superrare.co/sr-json/v0'
+const API_URL = process.env.REACT_APP_SUPER_RARE_API_URL!
 
 class SuperRareAPI extends BaseAPI {
   public API_KEY: string = ''
@@ -16,10 +16,13 @@ class SuperRareAPI extends BaseAPI {
   constructor(url: string) {
     super(url)
 
-    this.API_KEY = process.env.REACT_APP_SUPER_RARE_API_KEY!
+    if (!url) {
+      throw new Error(`Invalid SuperRare API URL "${url}"`)
+    }
 
+    this.API_KEY = process.env.REACT_APP_SUPER_RARE_API_KEY!
     if (!this.API_KEY) {
-      throw new Error(`Invalid superRare API KEY "${this.API_KEY}"`)
+      throw new Error(`Invalid SuperRare API KEY "${this.API_KEY}"`)
     }
   }
 
@@ -71,6 +74,8 @@ class SuperRareAPI extends BaseAPI {
       limit: params.first
     }
 
+    console.log('Request Params', requestParams, params)
+
     return this.request('get', '/nfts/orders', requestParams)
   }
 
@@ -94,4 +99,4 @@ class SuperRareAPI extends BaseAPI {
   }
 }
 
-export const superRareAPI = new SuperRareAPI(SUPER_RARE_API_URL)
+export const superRareAPI = new SuperRareAPI(API_URL)

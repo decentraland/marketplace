@@ -8,7 +8,7 @@ import './Highlights.css'
 const Highlights = (props: { children: React.ReactNode }) => {
   return (
     <div className="Highlights">
-      <Header sub>{t('detail.highlights')}</Header>
+      <Header sub>{t('highlights.title')}</Header>
       <Row>{props.children}</Row>
     </div>
   )

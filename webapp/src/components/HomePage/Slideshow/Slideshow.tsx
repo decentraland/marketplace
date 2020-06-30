@@ -19,7 +19,7 @@ const Slideshow = (props: Props) => {
         </HeaderMenu.Left>
         <HeaderMenu.Right>
           <Button basic onClick={onViewAll}>
-            {t('home_page.view_all')}
+            {t('slideshow.view_all')}
             <i className="caret" />
           </Button>
         </HeaderMenu.Right>

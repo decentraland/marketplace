@@ -18,25 +18,29 @@ const DCLRegistrar = env.REACT_APP_DCL_REGISTRAR!
 const Marketplace = env.REACT_APP_MARKETPLACE_ADDRESS!
 const Bids = env.REACT_APP_BIDS_ADDRESS!
 
-export class ContractService implements ContractServiceInterface {
-  static contractAddresses = {
-    MANAToken,
-    LANDRegistry,
-    EstateRegistry,
-    ExclusiveMasksCollection,
-    Halloween2019Collection,
-    Xmas2019Collection,
-    MCHCollection,
-    CommunityContestCollection,
-    DCLLaunchCollection,
-    DCGCollection,
-    StaySafeCollection,
-    DCLRegistrar,
-    Marketplace,
-    Bids
-  } as const
+const contractAddresses = {
+  MANAToken,
+  LANDRegistry,
+  EstateRegistry,
+  ExclusiveMasksCollection,
+  Halloween2019Collection,
+  Xmas2019Collection,
+  MCHCollection,
+  CommunityContestCollection,
+  DCLLaunchCollection,
+  DCGCollection,
+  StaySafeCollection,
+  DCLRegistrar,
+  Marketplace,
+  Bids
+} as const
 
-  contractAddresses = ContractService.contractAddresses
+export type ContractName = keyof typeof contractAddresses
+
+export class ContractService implements ContractServiceInterface {
+  static contractAddresses = contractAddresses
+
+  contractAddresses = contractAddresses
 
   contractSymbols = {
     [MANAToken]: 'MANA',

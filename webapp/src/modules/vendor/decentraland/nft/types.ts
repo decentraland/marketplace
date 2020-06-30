@@ -3,7 +3,7 @@ import {
   WearableRarity,
   WearableGender
 } from '../../../nft/wearable/types'
-import { ContractName } from '../../types'
+import { ContractName } from '../ContractService'
 
 export type NFTsFetchFilters = {
   isLand?: boolean

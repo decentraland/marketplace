@@ -6,13 +6,17 @@ const env = process.env
 const SuperRare = env.REACT_APP_SUPER_RARE_ADDRESS!
 const SuperRareV2 = env.REACT_APP_SUPER_RARE_V2_ADDRESS!
 
-export class ContractService implements ContractServiceInterface {
-  static contractAddresses = {
-    SuperRare,
-    SuperRareV2
-  } as const
+const contractAddresses = {
+  SuperRare,
+  SuperRareV2
+} as const
 
-  contractAddresses = ContractService.contractAddresses
+export type ContractName = keyof typeof contractAddresses
+
+export class ContractService implements ContractServiceInterface {
+  static contractAddresses = contractAddresses
+
+  contractAddresses = contractAddresses
 
   contractSymbols = {
     [SuperRare]: 'SR',

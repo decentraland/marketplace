@@ -12,12 +12,12 @@ const OrderDetails = (props: Props) => {
   return (
     <>
       {order ? (
-        <Stats title={t('detail.price')}>
+        <Stats title={t('nft_page.price')}>
           <Mana>{formatMANA(order.price)}</Mana>
         </Stats>
       ) : null}
       {order && order.expiresAt ? (
-        <Stats title={t('detail.expires')}>
+        <Stats title={t('nft_page.expires')}>
           {formatDistanceToNow(+order.expiresAt, {
             addSuffix: true
           })}

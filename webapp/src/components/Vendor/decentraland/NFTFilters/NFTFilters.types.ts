@@ -1,4 +1,5 @@
 import { Section, SortBy } from '../../../../modules/routing/search'
+import { browse } from '../../../../modules/routing/actions'
 import {
   WearableRarity,
   WearableGender
@@ -6,14 +7,26 @@ import {
 import { ContractName } from '../../../../modules/vendor/types'
 
 export type Props = {
+  count?: number
   section: Section
   sortBy: SortBy
   search: string
-  count?: number
   onlyOnSale?: boolean
   wearableRarities: WearableRarity[]
   wearableGenders: WearableGender[]
   contracts: ContractName[]
+  onBrowse: typeof browse
 }
 
-export type MapStateProps = Props
+export type MapStateProps = Pick<
+  Props,
+  | 'count'
+  | 'section'
+  | 'sortBy'
+  | 'search'
+  | 'onlyOnSale'
+  | 'wearableRarities'
+  | 'wearableGenders'
+  | 'contracts'
+>
+export type OwnProps = Pick<Props, 'onBrowse'>

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../../../modules/reducer'
-import { getUISection } from '../../../../modules/ui/selectors'
+import { getSection } from '../../../../modules/routing/selectors'
 import {
   MapStateProps,
   MapDispatch,
@@ -10,7 +10,7 @@ import {
 import NFTSidebar from './NFTSidebar'
 
 const mapState = (state: RootState): MapStateProps => ({
-  section: getUISection(state)
+  section: getSection(state)
 })
 
 const mapDispatch = (_: MapDispatch): MapDispatchProps => ({})

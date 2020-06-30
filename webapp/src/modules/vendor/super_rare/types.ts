@@ -7,6 +7,7 @@ export type SuperRareOrder = {
   marketContractAddress: string
   timestamp: string
   amount: number
+  amountWithFee: number
 }
 
 export type SuperRareAsset = {

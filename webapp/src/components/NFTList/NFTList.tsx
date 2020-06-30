@@ -2,18 +2,16 @@ import React, { useCallback } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { useNavigate } from '../../modules/nft/hooks'
 import { MAX_QUERY_SIZE, MAX_PAGE } from '../../modules/nft/utils'
 import { NFTCard } from '../NFTCard'
 import { Props } from './NFTList.types'
 
 const NFTList = (props: Props) => {
-  const { nfts, page, count, isLoading } = props
-  const [navigate] = useNavigate()
+  const { nfts, page, count, isLoading, onBrowse } = props
 
   const handleLoadMore = useCallback(() => {
-    navigate({ page: page + 1 })
-  }, [page, navigate])
+    onBrowse({ page: page + 1 })
+  }, [onBrowse, page])
 
   const hasExtraPages =
     (nfts.length !== count || count === MAX_QUERY_SIZE) && page <= MAX_PAGE
@@ -22,7 +20,9 @@ const NFTList = (props: Props) => {
     <>
       <Card.Group>
         {nfts.length > 0
-          ? nfts.map(nft => <NFTCard key={nft.id} nft={nft} />)
+          ? nfts.map((nft, index) => (
+              <NFTCard key={nft.id + '-' + index} nft={nft} />
+            ))
           : null}
 
         {isLoading ? (

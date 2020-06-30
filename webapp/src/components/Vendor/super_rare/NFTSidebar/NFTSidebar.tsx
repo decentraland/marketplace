@@ -33,6 +33,7 @@ const NFTSidebar = (props: Props) => {
 
       <Menu>
         <MenuItem
+          className="vendor-menu-item"
           value={vendor}
           currentValue={isOpen ? vendor : undefined}
           image={`/${vendor}.png`}

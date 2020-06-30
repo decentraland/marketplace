@@ -4,7 +4,8 @@ import {
   WearableRarity,
   WearableGender
 } from '../nft/wearable/types'
-import { ContractName } from '../vendor/types'
+import { Vendors, ContractName } from '../vendor/types'
+import { View } from '../ui/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -51,6 +52,8 @@ export enum SortDirection {
 }
 
 export type SearchOptions = {
+  view?: View
+  vendor?: Vendors
   page?: number
   section?: Section
   sortBy?: SortBy
@@ -59,6 +62,7 @@ export type SearchOptions = {
   wearableGenders?: WearableGender[]
   search?: string
   contracts?: ContractName[]
+  address?: string
 }
 
 export function getSearchParams(options?: SearchOptions) {

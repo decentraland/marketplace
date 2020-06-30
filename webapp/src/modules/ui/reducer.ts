@@ -4,7 +4,6 @@ import {
   FetchNFTsRequestAction,
   FETCH_NFTS_REQUEST
 } from '../nft/actions'
-import { View } from './types'
 import {
   FETCH_BIDS_BY_ADDRESS_SUCCESS,
   FetchBidsByAddressSuccessAction,
@@ -15,8 +14,10 @@ import {
   FetchBidsByNFTSuccessAction,
   FETCH_BIDS_BY_NFT_SUCCESS
 } from '../bid/actions'
+import { View } from './types'
 
 export type UIState = {
+  view?: View
   nftIds: string[]
   lastTimestamp: number
   homepageWearableIds: string[]
@@ -31,6 +32,7 @@ export type UIState = {
 }
 
 const INITIAL_STATE: UIState = {
+  view: undefined,
   nftIds: [],
   homepageWearableIds: [],
   homepageLandIds: [],
@@ -67,14 +69,44 @@ export function uiReducer(
       if (action.payload.timestamp < state.lastTimestamp) {
         return state
       }
-      switch (action.payload.options.view) {
+      const view = action.payload.options.view
+      switch (view) {
         case View.MARKET:
         case View.ACCOUNT: {
           return {
             ...state,
+            view,
             nftIds: action.payload.nfts.map(nft => nft.id),
             assetCount: action.payload.count,
             timestamp: action.payload.timestamp
+          }
+        }
+        case View.HOME_WEARABLES: {
+          return {
+            ...state,
+            view,
+            homepageWearableIds: action.payload.nfts.map(nft => nft.id)
+          }
+        }
+        case View.HOME_LAND: {
+          return {
+            ...state,
+            view,
+            homepageLandIds: action.payload.nfts.map(nft => nft.id)
+          }
+        }
+        case View.HOME_ENS: {
+          return {
+            ...state,
+            view,
+            homepageENSIds: action.payload.nfts.map(nft => nft.id)
+          }
+        }
+        case View.PARTNERS_SUPER_RARE: {
+          return {
+            ...state,
+            view,
+            partnersSuperRareIds: action.payload.nfts.map(nft => nft.id)
           }
         }
         case View.LOAD_MORE: {
@@ -86,30 +118,6 @@ export function uiReducer(
             ],
             assetCount: action.payload.count,
             timestamp: action.payload.timestamp
-          }
-        }
-        case View.HOME_WEARABLES: {
-          return {
-            ...state,
-            homepageWearableIds: action.payload.nfts.map(nft => nft.id)
-          }
-        }
-        case View.HOME_LAND: {
-          return {
-            ...state,
-            homepageLandIds: action.payload.nfts.map(nft => nft.id)
-          }
-        }
-        case View.HOME_ENS: {
-          return {
-            ...state,
-            homepageENSIds: action.payload.nfts.map(nft => nft.id)
-          }
-        }
-        case View.PARTNERS_SUPER_RARE: {
-          return {
-            ...state,
-            partnersSuperRareIds: action.payload.nfts.map(nft => nft.id)
           }
         }
         default:

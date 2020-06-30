@@ -2,7 +2,7 @@ import { gql } from 'apollo-boost'
 
 import { NFTsFetchParams } from '../../../nft/types'
 import { WearableGender } from '../../../nft/wearable/types'
-import { contractAddresses } from '../../../contract/utils'
+import { ContractService } from '../ContractService'
 import { client } from '../apiClient'
 import { nftFragment, NFTFragment } from './fragments'
 import { NFTsFetchFilters } from './types'
@@ -17,6 +17,8 @@ class NFTAPI {
       ...filters,
       expiresAt: Date.now().toString()
     }
+
+    // console.log('NFTAPI', variables)
 
     const [{ data }, { data: countData }] = await Promise.all([
       client.query<{ nfts: NFTFragment[] }>({
@@ -156,6 +158,7 @@ function getNFTsQuery(
   }
 
   if (filters.contracts && filters.contracts.length > 0) {
+    const { contractAddresses } = ContractService
     extraWhere.push(
       `contractAddress_in: [${filters.contracts
         .map(contract => `"${contractAddresses[contract]}"`)

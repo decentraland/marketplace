@@ -10,15 +10,13 @@ import {
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { SortBy } from '../../../../modules/routing/search'
-import { useNavigate } from '../../../../modules/nft/hooks'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { Props } from './NFTFilters.types'
 
 const MAX_RESULTS = 1000
 
 const NFTFilters = (props: Props) => {
-  const { search, count } = props
-  const [navigate] = useNavigate()
+  const { search, count, onBrowse } = props
 
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
@@ -33,18 +31,18 @@ const NFTFilters = (props: Props) => {
 
   const handleDropdownChange = useCallback(
     (_, props: DropdownProps) => {
-      navigate({ sortBy: props.value as SortBy })
+      onBrowse({ sortBy: props.value as SortBy })
     },
-    [navigate]
+    [onBrowse]
   )
 
   const handleSearch = useCallback(
     (newSearch: string) => {
       if (search !== newSearch) {
-        navigate({ search: newSearch })
+        onBrowse({ search: newSearch })
       }
     },
-    [search, navigate]
+    [search, onBrowse]
   )
 
   const searchPlaceholder =

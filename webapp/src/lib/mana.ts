@@ -1,11 +1,13 @@
-export const MANA_SYMBOL = '⏣'
+import { fromWei } from 'web3x-es/utils'
+
+const MANA_SYMBOL = '⏣'
 
 export function formatMANA(value: string) {
-  return Math.abs(+value / 10 ** 18).toLocaleString()
+  return Math.round(Number(fromWei(value, 'ether'))).toLocaleString()
 }
 
 export function toMANA(num: number) {
-  return num > 0 ? MANA_SYMBOL + ' ' + num.toString() : ''
+  return num > 0 ? `${MANA_SYMBOL} ${num.toString()}` : ''
 }
 
 export function fromMANA(mana: string) {

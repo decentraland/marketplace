@@ -3,8 +3,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Page, Hero, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
-import { Section, SortDirection } from '../../modules/routing/search'
-import { NFTCategory, NFTSortBy } from '../../modules/nft/types'
+import { Section, SortBy } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
 import { Vendors } from '../../modules/vendor/types'
 import { Navbar } from '../Navbar'
@@ -21,8 +20,8 @@ const HomePage = (props: Props) => {
     isWearablesLoading,
     isENSLoading,
     isLandLoading,
-    onNavigate,
-    onFetchNFTs
+    onBrowse,
+    onNavigate
   } = props
 
   const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
@@ -47,45 +46,29 @@ const HomePage = (props: Props) => {
   const vendor = Vendors.DECENTRALAND
 
   useEffect(() => {
-    onFetchNFTs({
+    onBrowse({
       vendor,
+      section: Section.WEARABLES,
       view: View.HOME_WEARABLES,
-      params: {
-        first: 20,
-        skip: 0,
-        orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.ORDER_CREATED_AT,
-        category: NFTCategory.WEARABLE,
-        onlyOnSale: true
-      }
+      sortBy: SortBy.RECENTLY_LISTED,
+      page: 1,
+      onlyOnSale: true
     })
-    onFetchNFTs({
+    onBrowse({
       vendor,
+      section: Section.LAND,
       view: View.HOME_LAND,
-      params: {
-        first: 20,
-        skip: 0,
-        orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.ORDER_CREATED_AT,
-        onlyOnSale: true
-      },
-      filters: {
-        isLand: true
-      }
+      sortBy: SortBy.RECENTLY_LISTED,
+      page: 1
     })
-    onFetchNFTs({
+    onBrowse({
       vendor,
+      section: Section.ENS,
       view: View.HOME_ENS,
-      params: {
-        first: 20,
-        skip: 0,
-        category: NFTCategory.ENS,
-        orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.ORDER_CREATED_AT,
-        onlyOnSale: true
-      }
+      sortBy: SortBy.RECENTLY_LISTED,
+      page: 1
     })
-  }, [vendor, onFetchNFTs])
+  }, [vendor, onBrowse])
 
   return (
     <>

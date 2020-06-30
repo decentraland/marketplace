@@ -1,4 +1,5 @@
 export type Props<T = string> = {
+  className?: string
   value: T
   currentValue?: T
   image?: string

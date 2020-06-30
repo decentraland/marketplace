@@ -19,7 +19,7 @@
   vertical-align: middle;
 }
 
-.NFTSidebar .Menu > .MenuItem .dropdown.icon {
+.NFTSidebar .Menu > .MenuItem.vendor-menu-item .dropdown.icon {
   margin-top: 10px;
   margin-right: 10px;
 }

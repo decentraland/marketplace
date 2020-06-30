@@ -18,7 +18,6 @@ import {
 } from '../../../../modules/nft/wearable/types'
 import { ContractName } from '../../../../modules/vendor/types'
 import { NFTCategory } from '../../../../modules/nft/types'
-import { useNavigate } from '../../../../modules/nft/hooks'
 import { NFTSidebar } from '../../NFTSidebar'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
@@ -34,9 +33,9 @@ const NFTFilters = (props: Props) => {
     onlyOnSale,
     wearableRarities,
     wearableGenders,
-    contracts
+    contracts,
+    onBrowse
   } = props
-  const [navigate] = useNavigate()
 
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
   const [showFiltersModal, setShowFiltersModal] = useState(false)
@@ -75,46 +74,46 @@ const NFTFilters = (props: Props) => {
 
   const handleOnlyOnSaleChange = useCallback(
     (_, props: CheckboxProps) => {
-      navigate({ onlyOnSale: !!props.checked })
+      onBrowse({ onlyOnSale: !!props.checked })
     },
-    [navigate]
+    [onBrowse]
   )
 
   const handleDropdownChange = useCallback(
     (_, props: DropdownProps) => {
-      navigate({ sortBy: props.value as SortBy })
+      onBrowse({ sortBy: props.value as SortBy })
     },
-    [navigate]
+    [onBrowse]
   )
 
   const handleRaritiesChange = useCallback(
     (options: string[]) => {
-      navigate({ wearableRarities: options as WearableRarity[] })
+      onBrowse({ wearableRarities: options as WearableRarity[] })
     },
-    [navigate]
+    [onBrowse]
   )
 
   const handleGendersChange = useCallback(
     (options: string[]) => {
-      navigate({ wearableGenders: options as WearableGender[] })
+      onBrowse({ wearableGenders: options as WearableGender[] })
     },
-    [navigate]
+    [onBrowse]
   )
 
   const handleCollectionsChange = useCallback(
     (contract: string) => {
-      navigate({ contracts: [contract as ContractName] })
+      onBrowse({ contracts: [contract as ContractName] })
     },
-    [navigate]
+    [onBrowse]
   )
 
   const handleSearch = useCallback(
     (newSearch: string) => {
       if (search !== newSearch) {
-        navigate({ search: newSearch })
+        onBrowse({ search: newSearch })
       }
     },
-    [search, navigate]
+    [search, onBrowse]
   )
 
   const handleToggleFilterMenu = useCallback(

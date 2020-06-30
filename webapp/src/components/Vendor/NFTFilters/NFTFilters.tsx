@@ -7,14 +7,14 @@ import { Props } from './NFTFilters.types'
 import './NFTFilters.css'
 
 const NFTFilters = (props: Props) => {
-  const { vendor } = props
+  const { vendor, onBrowse } = props
 
   switch (vendor) {
     case Vendors.SUPER_RARE:
-      return <SuperRareNFTFilters />
+      return <SuperRareNFTFilters onBrowse={onBrowse} />
     case Vendors.DECENTRALAND:
     default:
-      return <DecentralandNFTFilters />
+      return <DecentralandNFTFilters onBrowse={onBrowse} />
   }
 }
 

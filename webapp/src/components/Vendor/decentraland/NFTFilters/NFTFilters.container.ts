@@ -1,28 +1,28 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../../../modules/reducer'
+import { getAssetsCount } from '../../../../modules/ui/selectors'
 import {
-  getUISection,
-  getUISortBy,
-  getUIOnlyOnSale,
-  getAssetsCount,
-  getUIWearableRarities,
-  getUIWearableGenders,
-  getUISearch,
-  getUIContracts
-} from '../../../../modules/ui/selectors'
+  getSection,
+  getSortBy,
+  getOnlyOnSale,
+  getWearableRarities,
+  getWearableGenders,
+  getSearch,
+  getContracts
+} from '../../../../modules/routing/selectors'
 import { MapStateProps } from './NFTFilters.types'
 import NFTFilters from './NFTFilters'
 
 const mapState = (state: RootState): MapStateProps => ({
-  section: getUISection(state),
-  sortBy: getUISortBy(state),
-  search: getUISearch(state),
   count: getAssetsCount(state),
-  onlyOnSale: getUIOnlyOnSale(state),
-  wearableRarities: getUIWearableRarities(state),
-  wearableGenders: getUIWearableGenders(state),
-  contracts: getUIContracts(state)
+  section: getSection(state),
+  sortBy: getSortBy(state),
+  search: getSearch(state),
+  onlyOnSale: getOnlyOnSale(state),
+  wearableRarities: getWearableRarities(state),
+  wearableGenders: getWearableGenders(state),
+  contracts: getContracts(state)
 })
 
 const mapDispatch = () => ({})

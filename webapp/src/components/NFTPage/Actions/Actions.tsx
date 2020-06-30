@@ -40,31 +40,31 @@ const Actions = (props: Props) => {
         isOwner ? (
           <>
             <Button onClick={handleSell} primary>
-              {t('detail.update')}
+              {t('nft_page.update')}
             </Button>
-            <Button onClick={handleCancel}>{t('detail.cancel_sale')}</Button>
+            <Button onClick={handleCancel}>{t('nft_page.cancel_sale')}</Button>
           </>
         ) : (
           <>
             <Button onClick={handleBuy} primary>
-              {t('detail.buy')}
+              {t('nft_page.buy')}
             </Button>
             {hasBids ? (
-              <Button onClick={handleBid}>{t('detail.bid')}</Button>
+              <Button onClick={handleBid}>{t('nft_page.bid')}</Button>
             ) : null}
           </>
         )
       ) : isOwner ? (
         <Button onClick={handleSell} primary>
-          {t('detail.sell')}
+          {t('nft_page.sell')}
         </Button>
       ) : hasBids ? (
         <Button primary onClick={handleBid}>
-          {t('detail.bid')}
+          {t('nft_page.bid')}
         </Button>
       ) : null}
       {isOwner && !order ? (
-        <Button onClick={handleTransfer}>{t('detail.transfer')}</Button>
+        <Button onClick={handleTransfer}>{t('nft_page.transfer')}</Button>
       ) : null}
     </>
   )
