@@ -7,13 +7,13 @@ import { NFTService as NFTServiceInterface } from '../services'
 import { Vendors } from '../types'
 import { SuperRareAsset, SuperRareOrder, SuperRareOwner } from './types'
 import { superRareAPI } from './api'
-import { Partner } from '../Partner'
+import { MarketPrice } from '../MarketPrice'
 
 export class NFTService implements NFTServiceInterface {
-  private partner: Partner
+  private marketPrice: MarketPrice
 
   constructor() {
-    this.partner = new Partner()
+    this.marketPrice = new MarketPrice()
   }
 
   async fetch(params: NFTsFetchParams) {
@@ -90,7 +90,7 @@ export class NFTService implements NFTServiceInterface {
   toOrder(order: SuperRareOrder, oneEthInMANA: string): Order {
     const { asset, taker } = order
 
-    const totalWei = this.partner.addMarketplaceFee(order.amountWithFee) // Superrare fee AND Marketplace fee
+    const totalWei = this.marketPrice.addFee(order.amountWithFee) // Superrare fee AND Marketplace fee
     const price = toBN(totalWei).mul(toBN(oneEthInMANA))
 
     return {
@@ -116,7 +116,7 @@ export class NFTService implements NFTServiceInterface {
   }
 
   private async getOneEthInMANA() {
-    const mana = await this.partner.ethToMANA(1)
+    const mana = await this.marketPrice.convertEthToMANA(1)
     return toWei(mana.toString(), 'ether')
   }
 }
