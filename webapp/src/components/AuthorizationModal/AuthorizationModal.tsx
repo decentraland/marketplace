@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Modal, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { contractSymbols } from '../../modules/contract/utils'
+import { contractNames, contractSymbols } from '../../modules/contract/utils'
 import { hasAuthorization } from '../../modules/authorization/utils'
 import { locations } from '../../modules/routing/locations'
 import { Authorization } from '../SettingsPage/Authorization'
@@ -40,7 +40,7 @@ const AuthorizationModal = (props: Props) => {
         <T
           id="authorization_modal.description"
           values={{
-            contract: contractSymbols[contractAddress],
+            contract: contractNames[contractAddress],
             token: contractSymbols[tokenAddress],
             settings_link: (
               <Link to={locations.settings()}>{t('global.settings')}</Link>

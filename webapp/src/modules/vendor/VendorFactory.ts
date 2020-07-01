@@ -23,7 +23,8 @@ export class VendorFactory {
         return new Vendor(
           vendor,
           new superRare.ContractService(),
-          new superRare.NFTService()
+          new superRare.NFTService(),
+          new superRare.OrderService()
         )
       default:
         throw new Error(`Invalid vendor "${vendor}"`)

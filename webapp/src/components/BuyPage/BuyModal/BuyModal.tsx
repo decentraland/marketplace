@@ -29,16 +29,21 @@ const BuyPage = (props: Props) => {
   const [fingerprint, isLoading] = useFingerprint(nft)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
-  const handleExecuteOrder = useCallback(
-    () => onExecuteOrder(order!, nft, fingerprint),
-    [order, nft, fingerprint, onExecuteOrder]
-  )
+  const handleExecuteOrder = useCallback(() => {
+    onExecuteOrder(order!, nft, fingerprint)
+  }, [order, nft, fingerprint, onExecuteOrder])
+
+  // TODO: VendorFactory.build().nftService.getMarketpaceAddress() ??
+  const marketplaceAddress =
+    nft.category === NFTCategory.PICTURE_FRAME
+      ? contractAddresses.MarketplaceAdapter
+      : contractAddresses.Marketplace
 
   const handleSubmit = useCallback(() => {
     if (
       hasAuthorization(
         authorizations,
-        contractAddresses.Marketplace,
+        marketplaceAddress,
         contractAddresses.MANAToken,
         AuthorizationType.ALLOWANCE
       )
@@ -47,7 +52,12 @@ const BuyPage = (props: Props) => {
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [authorizations, handleExecuteOrder, setShowAuthorizationModal])
+  }, [
+    marketplaceAddress,
+    authorizations,
+    handleExecuteOrder,
+    setShowAuthorizationModal
+  ])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal
@@ -110,7 +120,7 @@ const BuyPage = (props: Props) => {
       </div>
       <AuthorizationModal
         open={showAuthorizationModal}
-        contractAddress={contractAddresses.Marketplace}
+        contractAddress={marketplaceAddress}
         tokenAddress={contractAddresses.MANAToken}
         type={AuthorizationType.ALLOWANCE}
         onProceed={handleExecuteOrder}

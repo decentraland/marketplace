@@ -15,6 +15,7 @@ const DCLLaunchCollection = env.REACT_APP_DCL_LAUNCH_ADDRESS!
 const DCGCollection = env.REACT_APP_DCG_ADDRESS!
 const StaySafeCollection = env.REACT_APP_DCL_STAY_SAFE_ADDRESS!
 const DCLRegistrar = env.REACT_APP_DCL_REGISTRAR!
+
 const Marketplace = env.REACT_APP_MARKETPLACE_ADDRESS!
 const Bids = env.REACT_APP_BIDS_ADDRESS!
 

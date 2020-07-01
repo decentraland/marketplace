@@ -29,11 +29,15 @@ function* handleWallet(
 ) {
   const { address } = action.payload.wallet
 
-  const { MANAToken, Marketplace, Bids } = contractAddresses
+  const { MANAToken, Marketplace, MarketplaceAdapter, Bids } = contractAddresses
+
+  // TODO: VendorFactory.build().contractService.getAllowances()
+  // TODO: VendorFactory.build().contractService.getApprovals()
 
   const authorization: AuthorizationsRequest = {
     allowances: {
       [Marketplace]: [MANAToken],
+      [MarketplaceAdapter]: [MANAToken],
       [Bids]: [MANAToken]
     },
     approvals: {

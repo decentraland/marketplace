@@ -162,6 +162,20 @@ const SettingsPage = (props: Props) => {
                             pendingTransactions={pendingAllowTransactions}
                             onChange={onAllowToken}
                           />
+                          <Authorization
+                            checked={hasAuthorization(
+                              authorizations!,
+                              contractAddresses.MarketplaceAdapter,
+                              contractAddresses.MANAToken,
+                              AuthorizationType.ALLOWANCE
+                            )}
+                            contractAddress={
+                              contractAddresses.MarketplaceAdapter
+                            }
+                            tokenContractAddress={contractAddresses.MANAToken}
+                            pendingTransactions={pendingAllowTransactions}
+                            onChange={onAllowToken}
+                          />
                         </div>
 
                         <div className="authorization-checks">

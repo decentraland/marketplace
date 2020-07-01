@@ -14,6 +14,7 @@ export type Order = {
   owner: string
   buyer: string | null
   price: string
+  ethPrice?: string
   status: OrderStatus
   expiresAt?: string
   createdAt: string

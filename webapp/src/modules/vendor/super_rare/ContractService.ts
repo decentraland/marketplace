@@ -6,9 +6,17 @@ const env = process.env
 const SuperRare = env.REACT_APP_SUPER_RARE_ADDRESS!
 const SuperRareV2 = env.REACT_APP_SUPER_RARE_V2_ADDRESS!
 
+const SuperRareMarket = env.REACT_APP_SUPER_RARE_MARKET_ADDRESS!
+const SuperRareMarketV2 = env.REACT_APP_SUPER_RARE_MARKET_V2_ADDRESS!
+
+const MarketplaceAdapter = env.REACT_APP_MARKETPLACE_ADAPTER_ADDRESS!
+
 const contractAddresses = {
   SuperRare,
-  SuperRareV2
+  SuperRareV2,
+  SuperRareMarket,
+  SuperRareMarketV2,
+  MarketplaceAdapter
 } as const
 
 export type ContractName = keyof typeof contractAddresses
@@ -20,12 +28,14 @@ export class ContractService implements ContractServiceInterface {
 
   contractSymbols = {
     [SuperRare]: 'SR',
-    [SuperRareV2]: 'SR'
-  }
+    [SuperRareV2]: 'SR',
+    [MarketplaceAdapter]: 'ThirdParty Marketplace'
+  } as const
 
   contractNames = {
     [SuperRare]: 'SuperRare',
-    [SuperRareV2]: 'SuperRareV2'
+    [SuperRareV2]: 'SuperRareV2',
+    [MarketplaceAdapter]: 'MarketplaceAdapter'
   } as const
 
   contractCategories = {

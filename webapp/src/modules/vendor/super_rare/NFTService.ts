@@ -27,10 +27,11 @@ export class NFTService implements NFTServiceInterface {
     for (const remoteOrder of remoteOrders) {
       const asset = remoteOrder.asset
 
-      const order = this.toOrder(remoteOrder, oneEthInMANA)
       const nft = this.toNFT(asset)
+      const order = this.toOrder(remoteOrder, oneEthInMANA)
 
       nft.activeOrderId = order.id
+      order.nftId = nft.id
 
       let account = accounts.find(account => account.id === asset.owner.address)
       if (!account) {
@@ -56,6 +57,7 @@ export class NFTService implements NFTServiceInterface {
     const order = this.toOrder(remoteOrder, oneEthInMANA)
 
     nft.activeOrderId = order.id
+    order.nftId = nft.id
 
     return [nft, order] as const
   }
@@ -101,6 +103,7 @@ export class NFTService implements NFTServiceInterface {
       owner: asset.owner.address,
       buyer: taker ? taker.address : null,
       price: fromWei(price, 'ether').toString(),
+      ethPrice: order.amountWithFee.toString(),
       status: OrderStatus.OPEN,
       createdAt: order.timestamp,
       updatedAt: order.timestamp

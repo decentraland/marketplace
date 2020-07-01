@@ -43,15 +43,14 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
 function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   const { order, nft, fingerprint } = action.payload
   try {
-    if (order.nftId !== nft.id) {
+    if (nft.id !== order.nftId) {
       throw new Error('The order does not match the NFT')
     }
     const { orderService } = VendorFactory.build(nft.vendor)
 
     const address = yield select(getAddress)
-    const price = Number(order.price)
     const txHash = yield call(() =>
-      orderService!.execute(nft, price, address, fingerprint)
+      orderService!.execute(nft, order, address, fingerprint)
     )
 
     yield put(executeOrderSuccess(order, nft, txHash))

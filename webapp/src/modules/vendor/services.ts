@@ -31,7 +31,7 @@ export interface OrderService {
   ) => Promise<string>
   execute: (
     nft: NFT,
-    price: number,
+    order: Order,
     fromAddress: string,
     fingerprint?: string
   ) => Promise<string>

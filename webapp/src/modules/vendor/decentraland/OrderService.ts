@@ -41,11 +41,12 @@ export class OrderService implements OrderServiceInterface {
 
   async execute(
     nft: NFT,
-    price: number,
+    order: Order,
     fromAddress: string,
     fingerprint?: string
   ) {
     const marketplace = this.getMarketplaceContract()
+    const { price } = order
 
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
