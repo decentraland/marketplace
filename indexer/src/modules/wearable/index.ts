@@ -9,6 +9,7 @@ import {
   exclusive_masks,
   halloween_2019,
   mch_collection,
+  moonshot_2020,
   stay_safe,
   xmas_2019
 } from '../../data/wearables'
@@ -32,6 +33,7 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     exclusive_masks,
     halloween_2019,
     mch_collection,
+    moonshot_2020,
     stay_safe,
     xmas_2019
   ]
@@ -42,6 +44,7 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     'exclusive_masks',
     'halloween_2019',
     'mch_collection',
+    'moonshot_2020',
     'stay_safe',
     'xmas_2019'
   ]
