@@ -5,7 +5,8 @@ import { WearableRarity, WearableGender } from '../nft/wearable/types'
 import { ContractName, Vendors } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
 import { contractAddresses } from '../contract/utils'
-import { SortBy, Section, getParamArray } from './search'
+import { getParamArray } from './search'
+import { SortBy, Section } from './types'
 
 export const getState = (state: RootState) => state.routing
 export const getIsLoadMore = (state: RootState) => getState(state).isLoadMore
@@ -21,14 +22,15 @@ export const getVendor = createSelector<RootState, string, Vendors>(
   }
 )
 
-export const getSection = createSelector<RootState, string, Section>(
+export const getSection = createSelector<RootState, string, Vendors, Section>(
   getRouterSearch,
-  search => {
+  getVendor,
+  (search, vendor) => {
     const section = new URLSearchParams(search).get('section') as Section | null
-    if (section && Object.values(Section).includes(section)) {
+    if (section && Object.values(Section[vendor]).includes(section)) {
       return section
     }
-    return Section.ALL
+    return Section[vendor].ALL
   }
 )
 

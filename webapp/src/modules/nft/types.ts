@@ -5,7 +5,7 @@ import { ENS } from './ens/types'
 import { PictureFrame } from './picture_frame/types'
 import { View } from '../ui/types'
 import { Vendors, NFTsFetchFilters } from '../vendor/types'
-import { SortDirection } from '../routing/search'
+import { SortDirection } from '../routing/types'
 
 export enum NFTCategory {
   PARCEL = 'parcel',

@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
 
-import { Section } from '../../../modules/routing/search'
+import { Section } from '../../../modules/routing/types'
 import { browse, BrowseAction } from '../../../modules/routing/actions'
 
 export type Props = {

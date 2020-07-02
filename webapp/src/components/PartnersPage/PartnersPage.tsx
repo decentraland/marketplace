@@ -3,7 +3,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Responsive } from 'decentraland-ui'
 
 import { locations } from '../../modules/routing/locations'
-import { SortDirection } from '../../modules/routing/search'
+import { SortDirection } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
 import { NFTSortBy } from '../../modules/nft/types'
 import { Vendors } from '../../modules/vendor/types'

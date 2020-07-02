@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import { Section } from '../../../modules/routing/search'
+import { Section } from '../../../modules/routing/types'
 import { Vendors } from '../../../modules/vendor/types'
 import { NFTSidebar as DecentralandNFTSidebar } from '../decentraland/NFTSidebar'
 import { NFTSidebar as SuperRareNFTSidebar } from '../super_rare/NFTSidebar'

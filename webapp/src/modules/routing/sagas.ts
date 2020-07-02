@@ -19,8 +19,9 @@ import {
   getContracts,
   getSearch
 } from './selectors'
-import { SearchOptions, getSearchParams, getSearchCategory } from './search'
+import { getSearchParams, getSearchCategory } from './search'
 import { BROWSE, BrowseAction, setIsLoadMore } from './actions'
+import { SearchOptions } from './types'
 
 export function* routingSaga() {
   yield takeEvery(BROWSE, handleBrowse)

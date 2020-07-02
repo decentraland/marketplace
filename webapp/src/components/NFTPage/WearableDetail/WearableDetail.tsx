@@ -7,9 +7,10 @@ import {
   WearableGender
 } from '../../../modules/nft/wearable/types'
 import { getNFTName } from '../../../modules/nft/utils'
-import { locations } from '../../../modules/routing/locations'
-import { Section } from '../../../modules/routing/search'
 import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
+import { locations } from '../../../modules/routing/locations'
+import { getSearchWearableSection } from '../../../modules/routing/search'
+import { Section } from '../../../modules/vendor/decentraland/routing/types'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
 import { Row } from '../../Layout/Row'
@@ -30,11 +31,12 @@ const WearableDetail = (props: Props) => {
   const { nft, onNavigate } = props
 
   const handleCategoryClick = useCallback(() => {
-    onNavigate(
-      locations.browse({
-        section: `wearables_${nft.wearable!.category}` as Section
-      })
-    )
+    const category = nft.wearable!.category
+    const section = getSearchWearableSection(category)
+    if (!section) {
+      throw new Error(`Invalid wearable category ${category}`)
+    }
+    onNavigate(locations.browse({ section }))
   }, [nft, onNavigate])
 
   const handleGenderClick = useCallback(() => {

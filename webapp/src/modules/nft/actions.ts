@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 
-import { SortDirection } from '../routing/search'
+import { SortDirection } from '../routing/types'
 import { Order } from '../order/types'
 import { Account } from '../account/types'
 import { getNFTName } from './utils'

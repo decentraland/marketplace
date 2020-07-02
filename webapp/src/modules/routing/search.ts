@@ -1,69 +1,9 @@
 import { NFTCategory } from '../nft/types'
-import {
-  WearableCategory,
-  WearableRarity,
-  WearableGender
-} from '../nft/wearable/types'
-import { Vendors, ContractName } from '../vendor/types'
-import { View } from '../ui/types'
+import { WearableCategory } from '../nft/wearable/types'
+import { Vendors, Section } from '../vendor/types'
+import { SearchOptions } from './types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
-
-export enum Section {
-  ALL = 'all',
-  LAND = 'land',
-  PARCELS = 'parcels',
-  ESTATES = 'estates',
-  WEARABLES = 'wearables',
-
-  WEARABLES_HEAD = 'wearables_head',
-  WEARABLES_EYEBROWS = 'wearables_eyebrows',
-  WEARABLES_EYES = 'wearables_eyes',
-  WEARABLES_FACIAL_HAIR = 'wearables_facial_hair',
-  WEARABLES_HAIR = 'wearables_hair',
-  WEARABLES_MOUTH = 'wearables_mouth',
-
-  WEARABLES_UPPER_BODY = 'wearables_upper_body',
-  WEARABLES_LOWER_BODY = 'wearables_lower_body',
-  WEARABLES_FEET = 'wearables_feet',
-
-  WEARABLES_ACCESORIES = 'wearables_accesories',
-  WEARABLES_EARRING = 'wearables_earring',
-  WEARABLES_EYEWEAR = 'wearables_eyewear',
-  WEARABLES_HAT = 'wearables_hat',
-  WEARABLES_HELMET = 'wearables_helmet',
-  WEARABLES_MASK = 'wearables_mask',
-  WEARABLES_TIARA = 'wearables_tiara',
-  WEARABLES_TOP_HEAD = 'wearables_top_head',
-
-  ENS = 'ens'
-}
-
-export enum SortBy {
-  NAME = 'name',
-  NEWEST = 'newest',
-  RECENTLY_LISTED = 'recently_listed',
-  CHEAPEST = 'cheapest'
-}
-
-export enum SortDirection {
-  ASC = 'asc',
-  DESC = 'desc'
-}
-
-export type SearchOptions = {
-  view?: View
-  vendor?: Vendors
-  page?: number
-  section?: Section
-  sortBy?: SortBy
-  onlyOnSale?: boolean
-  wearableRarities?: WearableRarity[]
-  wearableGenders?: WearableGender[]
-  search?: string
-  contracts?: ContractName[]
-  address?: string
-}
 
 export function getSearchParams(options?: SearchOptions) {
   let params: URLSearchParams | undefined
@@ -113,66 +53,78 @@ export function getSearchParams(options?: SearchOptions) {
 }
 
 export function getSearchCategory(section: Section) {
+  const DecentralandSection = Section[Vendors.DECENTRALAND]
   switch (section) {
-    case Section.PARCELS:
+    case DecentralandSection.PARCELS:
       return NFTCategory.PARCEL
-    case Section.ESTATES:
+    case DecentralandSection.ESTATES:
       return NFTCategory.ESTATE
-    case Section.WEARABLES:
-    case Section.WEARABLES_HEAD:
-    case Section.WEARABLES_EYEBROWS:
-    case Section.WEARABLES_EYES:
-    case Section.WEARABLES_FACIAL_HAIR:
-    case Section.WEARABLES_HAIR:
-    case Section.WEARABLES_MOUTH:
-    case Section.WEARABLES_UPPER_BODY:
-    case Section.WEARABLES_LOWER_BODY:
-    case Section.WEARABLES_FEET:
-    case Section.WEARABLES_ACCESORIES:
-    case Section.WEARABLES_EARRING:
-    case Section.WEARABLES_EYEWEAR:
-    case Section.WEARABLES_HAT:
-    case Section.WEARABLES_HELMET:
-    case Section.WEARABLES_MASK:
-    case Section.WEARABLES_TIARA:
-    case Section.WEARABLES_TOP_HEAD:
+    case DecentralandSection.WEARABLES:
+    case DecentralandSection.WEARABLES_HEAD:
+    case DecentralandSection.WEARABLES_EYEBROWS:
+    case DecentralandSection.WEARABLES_EYES:
+    case DecentralandSection.WEARABLES_FACIAL_HAIR:
+    case DecentralandSection.WEARABLES_HAIR:
+    case DecentralandSection.WEARABLES_MOUTH:
+    case DecentralandSection.WEARABLES_UPPER_BODY:
+    case DecentralandSection.WEARABLES_LOWER_BODY:
+    case DecentralandSection.WEARABLES_FEET:
+    case DecentralandSection.WEARABLES_ACCESORIES:
+    case DecentralandSection.WEARABLES_EARRING:
+    case DecentralandSection.WEARABLES_EYEWEAR:
+    case DecentralandSection.WEARABLES_HAT:
+    case DecentralandSection.WEARABLES_HELMET:
+    case DecentralandSection.WEARABLES_MASK:
+    case DecentralandSection.WEARABLES_TIARA:
+    case DecentralandSection.WEARABLES_TOP_HEAD:
       return NFTCategory.WEARABLE
-    case Section.ENS:
+    case DecentralandSection.ENS:
       return NFTCategory.ENS
   }
 }
 
+export function getSearchWearableSection(category: WearableCategory) {
+  const DecentralandSection = Section[Vendors.DECENTRALAND]
+  for (const section of Object.values(DecentralandSection)) {
+    const sectionCategory = getSearchWearableCategory(section)
+    if (category === sectionCategory) {
+      return section
+    }
+  }
+}
+
 export function getSearchWearableCategory(section: Section) {
+  const DecentralandSection = Section[Vendors.DECENTRALAND]
   switch (section) {
-    case Section.WEARABLES_EYEBROWS:
+    case DecentralandSection.WEARABLES_EYEBROWS:
       return WearableCategory.EYEBROWS
-    case Section.WEARABLES_EYES:
+    case DecentralandSection.WEARABLES_EYES:
       return WearableCategory.EYES
-    case Section.WEARABLES_FACIAL_HAIR:
+    case DecentralandSection.WEARABLES_FACIAL_HAIR:
       return WearableCategory.FACIAL_HAIR
-    case Section.WEARABLES_HAIR:
+    case DecentralandSection.WEARABLES_HAIR:
       return WearableCategory.HAIR
-    case Section.WEARABLES_MOUTH:
+    case DecentralandSection.WEARABLES_MOUTH:
       return WearableCategory.MOUTH
-    case Section.WEARABLES_UPPER_BODY:
+    case DecentralandSection.WEARABLES_UPPER_BODY:
       return WearableCategory.UPPER_BODY
-    case Section.WEARABLES_LOWER_BODY:
+    case DecentralandSection.WEARABLES_LOWER_BODY:
       return WearableCategory.LOWER_BODY
-    case Section.WEARABLES_FEET:
+    case DecentralandSection.WEARABLES_FEET:
       return WearableCategory.FEET
-    case Section.WEARABLES_EARRING:
+    case DecentralandSection.WEARABLES_EARRING:
       return WearableCategory.EARRING
-    case Section.WEARABLES_EYEWEAR:
+    case DecentralandSection.WEARABLES_EYEWEAR:
       return WearableCategory.EYEWEAR
-    case Section.WEARABLES_HAT:
+    case DecentralandSection.WEARABLES_HAT:
       return WearableCategory.HAT
-    case Section.WEARABLES_HELMET:
+    case DecentralandSection.WEARABLES_HELMET:
       return WearableCategory.HELMET
-    case Section.WEARABLES_MASK:
+    case DecentralandSection.WEARABLES_MASK:
       return WearableCategory.MASK
-    case Section.WEARABLES_TIARA:
+    case DecentralandSection.WEARABLES_TIARA:
       return WearableCategory.TIARA
-    case Section.WEARABLES_TOP_HEAD:
+    case DecentralandSection.WEARABLES_TOP_HEAD:
       return WearableCategory.TOP_HEAD
   }
 }

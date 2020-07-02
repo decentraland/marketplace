@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions'
 
-import { SearchOptions } from './search'
+import { SearchOptions } from './types'
 
 // Browse
 

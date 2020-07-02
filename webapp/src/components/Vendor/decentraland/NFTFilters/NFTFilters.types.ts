@@ -1,4 +1,4 @@
-import { Section, SortBy } from '../../../../modules/routing/search'
+import { Section, SortBy } from '../../../../modules/routing/types'
 import { browse } from '../../../../modules/routing/actions'
 import {
   WearableRarity,

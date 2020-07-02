@@ -1,4 +1,5 @@
-import { getSearchParams, SearchOptions } from './search'
+import { getSearchParams } from './search'
+import { SearchOptions } from './types'
 
 export const locations = {
   root: () => '/',

@@ -9,7 +9,7 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { SortBy } from '../../../../modules/routing/search'
+import { SortBy } from '../../../../modules/routing/types'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { Props } from './NFTFilters.types'
 

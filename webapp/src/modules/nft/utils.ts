@@ -1,6 +1,6 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { SortDirection, SortBy } from '../routing/search'
+import { SortDirection, SortBy } from '../routing/types'
 import { contractCategories } from '../contract/utils'
 import { addressEquals } from '../wallet/utils'
 import { NFT, NFTCategory, NFTSortBy } from './types'

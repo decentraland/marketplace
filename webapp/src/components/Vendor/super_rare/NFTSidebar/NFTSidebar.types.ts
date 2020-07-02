@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 
-import { Section } from '../../../../modules/routing/search'
+import { Section } from '../../../../modules/routing/types'
 
 export type Props = {
   section: Section

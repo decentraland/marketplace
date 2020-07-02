@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 
-import { Section } from '../../../modules/routing/search'
+import { Section } from '../../../modules/routing/types'
 import { MenuItem } from '../../Menu/MenuItem'
 import { Props } from './VendorMenuItem.types'
 import './VendorMenuItem.css'

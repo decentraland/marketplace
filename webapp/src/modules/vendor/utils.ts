@@ -1,10 +1,7 @@
-import {
-  getSearchCategory,
-  getSearchWearableCategory,
-  Section,
-  SearchOptions
-} from '../routing/search'
+import { getSearchCategory, getSearchWearableCategory } from '../routing/search'
+import { SearchOptions } from '../routing/types'
 import { NFTCategory } from '../nft/types'
+import { Section } from './decentraland/routing/types'
 import { Vendors, Partners } from './types'
 
 export function getFilters(vendor: Vendors, searchOptions: SearchOptions): any {

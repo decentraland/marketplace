@@ -11,13 +11,14 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { SortBy, getSearchCategory } from '../../../../modules/routing/search'
+import { SortBy } from '../../../../modules/routing/types'
 import {
   WearableRarity,
   WearableGender
 } from '../../../../modules/nft/wearable/types'
 import { ContractName } from '../../../../modules/vendor/types'
 import { NFTCategory } from '../../../../modules/nft/types'
+import { getSearchCategory } from '../../../../modules/routing/search'
 import { NFTSidebar } from '../../NFTSidebar'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'

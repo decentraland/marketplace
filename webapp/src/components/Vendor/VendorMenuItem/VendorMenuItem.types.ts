@@ -1,4 +1,4 @@
-import { Section } from '../../../modules/routing/search'
+import { Section } from '../../../modules/routing/types'
 import { Vendors } from '../../../modules/vendor/types'
 
 export type Props = {

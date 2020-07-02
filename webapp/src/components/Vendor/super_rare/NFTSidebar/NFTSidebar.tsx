@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { locations } from '../../../../modules/routing/locations'
-import { Section } from '../../../../modules/routing/search'
+import { Section } from '../../../../modules/vendor/super_rare/routing/types'
 import { Vendors } from '../../../../modules/vendor/types'
 import { Menu } from '../../../Menu'
 import { VendorMenuItem } from '../../../Vendor/VendorMenuItem'

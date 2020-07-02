@@ -2,7 +2,7 @@ import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header } from 'decentraland-ui'
 
-import { Section } from '../../../../modules/routing/search'
+import { Section } from '../../../../modules/vendor/decentraland/routing/types'
 import { Menu } from '../../../Menu'
 import { DropdownMenu } from '../../../Menu/DropdownMenu'
 import { MenuItem } from '../../../Menu/MenuItem'

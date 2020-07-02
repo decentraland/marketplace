@@ -1,5 +1,3 @@
-import { SortDirection } from '../../routing/search'
-
 export type SuperRareOrder = {
   asset: SuperRareAsset
   taker: SuperRareOwner | null
@@ -59,7 +57,7 @@ export type SuperRareFetchOrderParams = Partial<{
   asset_ids: number[]
   categories: string[]
   name: string
-  order: SortDirection
+  order: 'asc' | 'desc'
   sort: 'price' | 'timestamp'
   offset: number
   limit: number
