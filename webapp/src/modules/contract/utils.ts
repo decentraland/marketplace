@@ -13,7 +13,7 @@ const DCLLaunchCollection = env.REACT_APP_DCL_LAUNCH_ADDRESS!
 const ExclusiveMasksCollection = env.REACT_APP_EXCLUSIVE_MASKS_ADDRESS!
 const Halloween2019Collection = env.REACT_APP_HALLOWEEN_2019_ADDRESS!
 const MCHCollection = env.REACT_APP_MCH_ADDRESS!
-const Moonshot2020Collection = env.REACT_APP_MOONSHOT2020_ADDRESS!
+const Moonshot2020Collection = env.REACT_APP_MOONSHOT_2020_ADDRESS!
 const StaySafeCollection = env.REACT_APP_DCL_STAY_SAFE_ADDRESS!
 const Xmas2019Collection = env.REACT_APP_XMAS_2019_ADDRESS!
 
