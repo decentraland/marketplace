@@ -3,6 +3,7 @@ import { replace } from 'connected-react-router'
 import { RouteComponentProps } from 'react-router'
 
 import { RootState } from '../../modules/reducer'
+import { getVendor } from '../../modules/routing/selectors'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import {
   Params,
@@ -20,6 +21,7 @@ const mapState = (
 
   return {
     address: address?.toLowerCase(),
+    vendor: getVendor(state),
     wallet: getWallet(state),
     isConnecting: isConnecting(state)
   }

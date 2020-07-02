@@ -2,19 +2,31 @@ import { createSelector } from 'reselect'
 import { getSearch as getRouterSearch } from 'connected-react-router'
 import { RootState } from '../reducer'
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
-import { ContractName } from '../vendor/types'
+import { ContractName, Vendors } from '../vendor/types'
+import { isVendor } from '../vendor/utils'
 import { contractAddresses } from '../contract/utils'
 import { SortBy, Section, getParamArray } from './search'
 
 export const getState = (state: RootState) => state.routing
 export const getIsLoadMore = (state: RootState) => getState(state).isLoadMore
 
+export const getVendor = createSelector<RootState, string, Vendors>(
+  getRouterSearch,
+  search => {
+    const vendor = new URLSearchParams(search).get('vendor') as Vendors | null
+    if (vendor && isVendor(vendor)) {
+      return vendor
+    }
+    return Vendors.DECENTRALAND
+  }
+)
+
 export const getSection = createSelector<RootState, string, Section>(
   getRouterSearch,
   search => {
-    const section = new URLSearchParams(search).get('section')
-    if (section && Object.values(Section).includes(section as any)) {
-      return section as Section
+    const section = new URLSearchParams(search).get('section') as Section | null
+    if (section && Object.values(Section).includes(section)) {
+      return section
     }
     return Section.ALL
   }

@@ -1,4 +1,3 @@
-/* TODO: Extract with top level MenuItem*/
 .NFTSidebar .go-back {
   display: flex;
   align-items: center;
@@ -12,14 +11,4 @@
   background-image: url(../../../../images/back.svg);
   background-repeat: no-repeat;
   background-size: 6px;
-}
-
-.NFTSidebar .Menu > .MenuItem .ui.image {
-  width: 50px;
-  vertical-align: middle;
-}
-
-.NFTSidebar .Menu > .MenuItem.vendor-menu-item .dropdown.icon {
-  margin-top: 10px;
-  margin-right: 10px;
 }

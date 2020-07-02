@@ -1,0 +1,13 @@
+.MenuItem.VendorMenuItem .ui.image {
+  width: 50px;
+  vertical-align: middle;
+}
+
+.MenuItem.VendorMenuItem {
+  cursor: pointer;
+}
+
+.MenuItem.VendorMenuItem .dropdown.icon {
+  margin-top: 10px;
+  margin-right: 10px;
+}

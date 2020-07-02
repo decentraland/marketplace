@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 
 import { RootState } from '../../../modules/reducer'
 import { browse } from '../../../modules/routing/actions'
-import { getVendor } from '../../../modules/vendor/selectors'
+import { getVendor } from '../../../modules/routing/selectors'
 import {
   MapStateProps,
   MapDispatch,

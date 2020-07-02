@@ -9,7 +9,6 @@ import { NFTBrowse } from '../NFTBrowse'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { locations } from '../../modules/routing/locations'
-import { Vendors } from '../../modules/vendor/types'
 import { View } from '../../modules/ui/types'
 import { shortenAddress } from '../../modules/wallet/utils'
 import { contractNames } from '../../modules/contract/utils'
@@ -17,7 +16,7 @@ import { Props } from './AccountPage.types'
 import './AccountPage.css'
 
 const AccountPage = (props: Props) => {
-  const { address, wallet, isConnecting, onRedirect } = props
+  const { address, vendor, wallet, isConnecting, onRedirect } = props
 
   const isCurrentAccount =
     address === undefined || (wallet && wallet.address === address)
@@ -43,7 +42,7 @@ const AccountPage = (props: Props) => {
           </Page>
         ) : (
           <NFTBrowse
-            vendor={Vendors.DECENTRALAND}
+            vendor={vendor}
             address={wallet.address}
             defaultOnlyOnSale={false}
             view={View.ACCOUNT}
@@ -75,7 +74,7 @@ const AccountPage = (props: Props) => {
           </PageHeader>
 
           <NFTBrowse
-            vendor={Vendors.DECENTRALAND}
+            vendor={vendor}
             address={address}
             defaultOnlyOnSale={false}
             view={View.ACCOUNT}

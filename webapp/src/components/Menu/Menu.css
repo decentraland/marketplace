@@ -42,6 +42,10 @@ ul.Menu li.active {
   background-color: var(--card);
 }
 
+ul.Menu li.active {
+  cursor: default;
+}
+
 ul.Menu ul.submenu {
   padding-left: 16px;
 }

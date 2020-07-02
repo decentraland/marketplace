@@ -69,6 +69,10 @@ export function getSearchParams(options?: SearchOptions) {
   let params: URLSearchParams | undefined
   if (options) {
     params = new URLSearchParams()
+
+    if (options.vendor) {
+      params.set('vendor', options.vendor)
+    }
     if (options.page) {
       params.set('page', options.page.toString())
     }

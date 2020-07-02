@@ -5,7 +5,7 @@ import {
   SearchOptions
 } from '../routing/search'
 import { NFTCategory } from '../nft/types'
-import { Vendors } from './types'
+import { Vendors, Partners } from './types'
 
 export function getFilters(vendor: Vendors, searchOptions: SearchOptions): any {
   switch (vendor) {
@@ -37,4 +37,12 @@ export function getFilters(vendor: Vendors, searchOptions: SearchOptions): any {
     default:
       return {}
   }
+}
+
+export function isVendor(vendor: string) {
+  return Object.values(Vendors).includes(vendor as Vendors)
+}
+
+export function isPartner(vendor: string) {
+  return Object.values(Partners).includes(vendor as Partners)
 }

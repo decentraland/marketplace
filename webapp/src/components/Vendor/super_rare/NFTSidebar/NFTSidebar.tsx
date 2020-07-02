@@ -1,29 +1,23 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { locations } from '../../../../modules/routing/locations'
+import { Section } from '../../../../modules/routing/search'
 import { Vendors } from '../../../../modules/vendor/types'
 import { Menu } from '../../../Menu'
-import { MenuItem } from '../../../Menu/MenuItem'
+import { VendorMenuItem } from '../../../Vendor/VendorMenuItem'
 import { Props } from './NFTSidebar.types'
 import './NFTSidebar.css'
 
 const NFTSidebar = (props: Props) => {
   const { section, onMenuItemClick, onNavigate } = props
 
-  const [isOpen, setIsOpen] = useState(true)
-
   const handleGoBack = useCallback(() => {
     onNavigate(locations.partners())
   }, [onNavigate])
 
-  const handleToggleOpen = useCallback(() => {
-    setIsOpen(!isOpen)
-  }, [isOpen, setIsOpen])
-
   const vendor = Vendors.SUPER_RARE
 
-  // TODO: The first MenuItem should be extracted to reuse on partners
   return (
     <div className="NFTSidebar">
       <div className="go-back" onClick={handleGoBack}>
@@ -32,15 +26,12 @@ const NFTSidebar = (props: Props) => {
       </div>
 
       <Menu>
-        <MenuItem
-          className="vendor-menu-item"
-          value={vendor}
-          currentValue={isOpen ? vendor : undefined}
-          image={`/${vendor}.png`}
-          onClick={handleToggleOpen}
-          withCaret
+        <VendorMenuItem
+          vendor={vendor}
+          section={section}
+          sections={[Section.ALL]}
+          onClick={onMenuItemClick}
         />
-        {isOpen ? <MenuItem value={section} onClick={onMenuItemClick} /> : null}
       </Menu>
     </div>
   )

@@ -5,12 +5,12 @@ export enum Partners {
   SUPER_RARE = 'super_rare'
 }
 
-enum Main {
+enum Base {
   DECENTRALAND = 'decentraland'
 }
 
-export type Vendors = Partners | Main
-export const Vendors = { ...Partners, ...Main }
+export type Vendors = Partners | Base
+export const Vendors = { ...Partners, ...Base }
 
 export type ContractName = decentraland.ContractName | superRare.ContractName
 

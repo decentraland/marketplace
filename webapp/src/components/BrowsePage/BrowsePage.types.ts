@@ -1,5 +1,7 @@
+import { Vendors } from '../../modules/vendor/types'
+
 export type Props = {
-  vendor?: string
+  vendor: Vendors
 }
 
 export type MapStateProps = Pick<Props, 'vendor'>

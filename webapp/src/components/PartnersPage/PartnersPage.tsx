@@ -23,7 +23,7 @@ const PartnersPage = (props: Props) => {
 
   const handleOnNavigate = useCallback(
     (vendor: Vendors) => {
-      onNavigate(locations.partner(vendor))
+      onNavigate(locations.browse({ vendor }))
     },
     [onNavigate]
   )

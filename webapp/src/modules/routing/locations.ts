@@ -9,7 +9,7 @@ export const locations = {
   bids: () => '/bids',
   browse: (options?: SearchOptions) => {
     const params = getSearchParams(options)
-    return params ? `/browse/?${params.toString()}` : '/browse'
+    return params ? `/browse?${params.toString()}` : '/browse'
   },
   currentAccount: (options?: SearchOptions) => {
     const params = getSearchParams(options)
@@ -20,11 +20,6 @@ export const locations = {
     return params
       ? `/accounts/${address}?${params.toString()}`
       : `/accounts/${address}`
-  },
-  partner: (vendor: string = ':vendor', options?: SearchOptions) => {
-    const params = getSearchParams(options)
-    const origin = `/partner/${vendor.toLowerCase()}`
-    return params ? `${origin}?${params.toString()}` : origin
   },
   ntf: (
     contractAddress: string = ':contractAddress',

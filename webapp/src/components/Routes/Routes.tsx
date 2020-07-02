@@ -16,7 +16,6 @@ import { CancelSalePage } from '../CancelSalePage'
 import { TransferPage } from '../TransferPage'
 import { ActivityPage } from '../ActivityPage'
 import { PartnersPage } from '../PartnersPage'
-import { PartnerPage } from '../PartnerPage'
 import { HomePage } from '../HomePage'
 import { MyBidsPage } from '../MyBidsPage'
 
@@ -28,7 +27,6 @@ const Routes = () => {
       <Switch>
         <Route exact path={locations.atlas()} component={AtlasPage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
-        <Route exact path={locations.partner()} component={PartnerPage} />
         <Route
           exact
           path={locations.currentAccount()}
