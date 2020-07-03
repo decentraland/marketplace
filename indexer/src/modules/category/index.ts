@@ -10,14 +10,15 @@ export function getCategory(contractAddress: string): string {
   } else if (contractAddress == addresses.EstateRegistry) {
     category = categories.ESTATE
   } else if (
+    contractAddress == addresses.CommunityContestCollection ||
+    contractAddress == addresses.DCGCollection ||
+    contractAddress == addresses.DCLLaunchCollection ||
     contractAddress == addresses.ExclusiveMasksCollection ||
     contractAddress == addresses.Halloween2019Collection ||
-    contractAddress == addresses.Xmas2019Collection ||
     contractAddress == addresses.MCHCollection ||
-    contractAddress == addresses.CommunityContestCollection ||
-    contractAddress == addresses.DCLLaunchCollection ||
-    contractAddress == addresses.DCGCollection ||
-    contractAddress == addresses.StaySafeCollection
+    contractAddress == addresses.Moonshot2020Collection ||
+    contractAddress == addresses.StaySafeCollection ||
+    contractAddress == addresses.Xmas2019Collection
   ) {
     category = categories.WEARABLE
   } else if (contractAddress == addresses.DCLRegistrar) {

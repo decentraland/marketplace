@@ -9,15 +9,16 @@ import { buildData, DataType } from '../modules/data'
 import {
   LANDRegistry,
   EstateRegistry,
-  Halloween2019Collection,
-  ExclusiveMasksCollection,
-  Xmas2019Collection,
-  MCHCollection,
+  DCLRegistrar,
   CommunityContestCollection,
-  DCLLaunchCollection,
   DCGCollection,
+  DCLLaunchCollection,
+  ExclusiveMasksCollection,
+  Halloween2019Collection,
+  MCHCollection,
+  Moonshot2020Collection,
   StaySafeCollection,
-  DCLRegistrar
+  Xmas2019Collection
 } from '../data/addresses'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
@@ -28,15 +29,16 @@ export function handleInitialize(_: InitializeCall): void {
   if (count.started == 0) {
     ERC721.create(Address.fromString(LANDRegistry))
     ERC721.create(Address.fromString(EstateRegistry))
-    ERC721.create(Address.fromString(Halloween2019Collection))
-    ERC721.create(Address.fromString(ExclusiveMasksCollection))
-    ERC721.create(Address.fromString(Xmas2019Collection))
-    ERC721.create(Address.fromString(MCHCollection))
-    ERC721.create(Address.fromString(CommunityContestCollection))
-    ERC721.create(Address.fromString(DCLLaunchCollection))
-    ERC721.create(Address.fromString(DCGCollection))
-    ERC721.create(Address.fromString(StaySafeCollection))
     ERC721.create(Address.fromString(DCLRegistrar))
+    ERC721.create(Address.fromString(CommunityContestCollection))
+    ERC721.create(Address.fromString(DCGCollection))
+    ERC721.create(Address.fromString(DCLLaunchCollection))
+    ERC721.create(Address.fromString(ExclusiveMasksCollection))
+    ERC721.create(Address.fromString(Halloween2019Collection))
+    ERC721.create(Address.fromString(MCHCollection))
+    ERC721.create(Address.fromString(Moonshot2020Collection))
+    ERC721.create(Address.fromString(StaySafeCollection))
+    ERC721.create(Address.fromString(Xmas2019Collection))
 
     count.started = 1
     count.save()
