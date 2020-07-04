@@ -1,3 +1,6 @@
+import BN from 'bn.js'
+import { toBN } from 'web3x-es/utils'
+
 type Ticker = {
   converted_last: {
     eth: number
@@ -10,26 +13,27 @@ type CoinTickers = {
 }
 
 export class MarketPrice {
-  public feePerMillion: number
+  public feePerMillion: BN
 
   constructor() {
-    this.feePerMillion = Number(
+    const feePerMillion =
       process.env.REACT_APP_MARKETPLACE_ADAPTER_FEE_PER_MILLION
-    )
-    if (!this.feePerMillion) {
-      throw new Error(`Invalid adapter fee ${this.feePerMillion}`)
+
+    if (!feePerMillion) {
+      throw new Error(`Invalid adapter fee ${feePerMillion}`)
     }
+    this.feePerMillion = toBN(feePerMillion)
   }
 
   addFee(manaWeiAmount: string | number) {
-    const ONE_MILLION = 1000000
+    const ONE_MILLION = toBN('1000000')
 
-    manaWeiAmount = Number(manaWeiAmount)
+    const bnAmount = toBN(manaWeiAmount.toString())
 
-    return (
-      manaWeiAmount +
-      (manaWeiAmount * this.feePerMillion) / ONE_MILLION
-    ).toString()
+    return bnAmount
+      .add(bnAmount.add(this.feePerMillion))
+      .div(ONE_MILLION)
+      .toString()
   }
 
   async convertEthToMANA(ethAmount: number) {
