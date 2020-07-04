@@ -1,9 +1,10 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { NFTCategory } from '../vendor/decentraland/nft/types'
 import { SortDirection, SortBy } from '../routing/types'
 import { contractCategories } from '../contract/utils'
 import { addressEquals } from '../wallet/utils'
-import { NFT, NFTCategory, NFTSortBy } from './types'
+import { NFT, NFTSortBy } from './types'
 
 export const MAX_QUERY_SIZE = 1000
 export const MAX_PAGE = 10000

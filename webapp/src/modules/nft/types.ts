@@ -4,16 +4,11 @@ import { Wearable } from './wearable/types'
 import { ENS } from './ens/types'
 import { PictureFrame } from './picture_frame/types'
 import { View } from '../ui/types'
-import { Vendors, NFTsFetchFilters } from '../vendor/types'
+import { NFTCategory, NFTsFetchFilters } from '../vendor/nft/types'
+import { Vendors } from '../vendor/types'
 import { SortDirection } from '../routing/types'
 
-export enum NFTCategory {
-  PARCEL = 'parcel',
-  ESTATE = 'estate',
-  WEARABLE = 'wearable',
-  ENS = 'ens',
-  PICTURE_FRAME = 'picture_frame'
-}
+export { NFTCategory }
 
 export enum NFTSortBy {
   NAME = 'name',

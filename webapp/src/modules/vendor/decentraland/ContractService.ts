@@ -1,5 +1,5 @@
 import { ContractService as ContractServiceInterface } from '../services'
-import { NFTCategory } from '../../nft/types'
+import { NFTCategory } from './nft/types'
 
 const env = process.env
 

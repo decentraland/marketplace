@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux'
 
 import { View } from '../../modules/ui/types'
-import { Vendors, Section } from '../../modules/vendor/types'
+import { Vendors } from '../../modules/vendor/types'
+import { Section } from '../../modules/vendor/routing/types'
 import { SortBy } from '../../modules/routing/types'
 import { browse, BrowseAction } from '../../modules/routing/actions'
 

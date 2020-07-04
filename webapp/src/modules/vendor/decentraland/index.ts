@@ -1,3 +1,8 @@
+import { BidService } from './BidService'
+import { ContractService } from './ContractService'
+import { NFTService } from './NFTService'
+import { OrderService } from './OrderService'
+
 export * from './bid'
 export * from './land'
 export * from './nft'
@@ -8,3 +13,10 @@ export * from './BidService'
 export * from './ContractService'
 export * from './NFTService'
 export * from './OrderService'
+
+export const services = {
+  BidService,
+  ContractService,
+  NFTService,
+  OrderService
+}

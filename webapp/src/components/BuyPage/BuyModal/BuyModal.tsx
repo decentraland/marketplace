@@ -1,17 +1,18 @@
 import React, { useState, useCallback } from 'react'
 import { Header, Mana, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { NFTAction } from '../../NFTAction'
 import { formatMANA } from '../../../lib/mana'
-import { getNFTName } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
-import { NFTCategory } from '../../../modules/nft/types'
-import { Props } from './BuyModal.types'
-import { contractAddresses } from '../../../modules/contract/utils'
-import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.types'
-import { AuthorizationModal } from '../../AuthorizationModal'
+import { NFTCategory } from '../../../modules/vendor/decentraland/nft/types'
+import { isPartner } from '../../../modules/vendor/utils'
+import { getNFTName } from '../../../modules/nft/utils'
 import { hasAuthorization } from '../../../modules/authorization/utils'
+import { contractAddresses } from '../../../modules/contract/utils'
 import { useFingerprint } from '../../../modules/nft/hooks'
+import { NFTAction } from '../../NFTAction'
+import { AuthorizationModal } from '../../AuthorizationModal'
+import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.types'
+import { Props } from './BuyModal.types'
 
 const BuyPage = (props: Props) => {
   const {
@@ -34,10 +35,9 @@ const BuyPage = (props: Props) => {
   }, [order, nft, fingerprint, onExecuteOrder])
 
   // TODO: VendorFactory.build().nftService.getMarketpaceAddress() ??
-  const marketplaceAddress =
-    nft.category === NFTCategory.PICTURE_FRAME
-      ? contractAddresses.MarketplaceAdapter
-      : contractAddresses.Marketplace
+  const marketplaceAddress = isPartner(nft.vendor)
+    ? contractAddresses.MarketplaceAdapter
+    : contractAddresses.Marketplace
 
   const handleSubmit = useCallback(() => {
     if (

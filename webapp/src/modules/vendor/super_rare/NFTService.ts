@@ -1,10 +1,11 @@
 import { toBN, toWei, fromWei } from 'web3x-es/utils'
-import { NFT, NFTsFetchParams, NFTCategory } from '../../nft/types'
+import { NFT, NFTsFetchParams } from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
 import { NFTService as NFTServiceInterface } from '../services'
 import { Vendors } from '../types'
+import { NFTCategory } from './nft/types'
 import { SuperRareAsset, SuperRareOrder, SuperRareOwner } from './types'
 import { superRareAPI } from './api'
 import { MarketPrice } from '../MarketPrice'
@@ -84,7 +85,7 @@ export class NFTService implements NFTServiceInterface {
       pictureFrame: {
         description: asset.description
       },
-      category: NFTCategory.PICTURE_FRAME,
+      category: NFTCategory.ART,
       vendor: Vendors.SUPER_RARE
     }
   }
@@ -98,7 +99,7 @@ export class NFTService implements NFTServiceInterface {
     return {
       id: `${Vendors.SUPER_RARE}-order-${asset.id}`,
       nftId: asset.id.toString(),
-      category: NFTCategory.PICTURE_FRAME,
+      category: NFTCategory.ART,
       nftAddress: asset.contractAddress,
       owner: asset.owner.address,
       buyer: taker ? taker.address : null,

@@ -27,7 +27,7 @@ export const getSection = createSelector<RootState, string, Vendors, Section>(
   getVendor,
   (search, vendor) => {
     const section = new URLSearchParams(search).get('section') as Section | null
-    if (section && Object.values(Section[vendor]).includes(section)) {
+    if (section) {
       return section
     }
     return Section[vendor].ALL

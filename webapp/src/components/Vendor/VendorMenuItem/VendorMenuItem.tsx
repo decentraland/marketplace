@@ -27,6 +27,7 @@ const VendorMenuItem = (props: Props) => {
       {isOpen
         ? sections.map((menuSection: Section) => (
             <MenuItem
+              key={section}
               currentValue={section}
               value={menuSection}
               onClick={onClick}

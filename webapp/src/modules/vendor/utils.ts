@@ -1,6 +1,6 @@
 import { getSearchCategory, getSearchWearableCategory } from '../routing/search'
 import { SearchOptions } from '../routing/types'
-import { NFTCategory } from '../nft/types'
+import { NFTCategory } from './decentraland/nft/types'
 import { Section } from './decentraland/routing/types'
 import { Vendors, Partners } from './types'
 

@@ -7,7 +7,8 @@ import { Order } from '../../order/types'
 import { Account } from '../../account/types'
 import { isExpired } from '../../order/utils'
 import { NFTService as NFTServiceInterface } from '../services'
-import { Vendors, NFTsFetchFilters } from '../types'
+import { NFTsFetchFilters } from '../nft/types'
+import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
 
 export class NFTService implements NFTServiceInterface {

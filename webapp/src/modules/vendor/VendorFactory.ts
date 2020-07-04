@@ -1,5 +1,5 @@
-import * as decentraland from './decentraland'
-import * as superRare from './super_rare'
+import { services as decentraland } from './decentraland'
+import { services as superRare } from './super_rare'
 import {
   ContractService,
   NFTService,

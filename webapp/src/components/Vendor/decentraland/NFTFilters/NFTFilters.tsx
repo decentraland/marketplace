@@ -17,7 +17,7 @@ import {
   WearableGender
 } from '../../../../modules/nft/wearable/types'
 import { ContractName } from '../../../../modules/vendor/types'
-import { NFTCategory } from '../../../../modules/nft/types'
+import { NFTCategory } from '../../../../modules/vendor/decentraland/nft/types'
 import { getSearchCategory } from '../../../../modules/routing/search'
 import { NFTSidebar } from '../../NFTSidebar'
 import { TextFilter } from '../../NFTFilters/TextFilter'

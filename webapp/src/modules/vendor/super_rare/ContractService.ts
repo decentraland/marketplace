@@ -1,5 +1,5 @@
 import { ContractService as ContractServiceInterface } from '../services'
-import { NFTCategory } from '../../nft/types'
+import { NFTCategory } from './nft/types'
 
 const env = process.env
 
@@ -39,7 +39,7 @@ export class ContractService implements ContractServiceInterface {
   } as const
 
   contractCategories = {
-    [SuperRare]: NFTCategory.PICTURE_FRAME,
-    [SuperRareV2]: NFTCategory.PICTURE_FRAME
+    [SuperRare]: NFTCategory.ART,
+    [SuperRareV2]: NFTCategory.ART
   } as const
 }

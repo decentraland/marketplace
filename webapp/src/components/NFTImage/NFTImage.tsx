@@ -6,7 +6,7 @@ import {
   RARITY_COLOR_LIGHT
 } from '../../modules/nft/wearable/types'
 import { getNFTName } from '../../modules/nft/utils'
-import { NFTCategory } from '../../modules/nft/types'
+import { NFTCategory } from '../../modules/vendor/decentraland/nft/types'
 import { Props } from './NFTImage.types'
 import './NFTImage.css'
 

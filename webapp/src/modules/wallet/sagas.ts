@@ -9,7 +9,7 @@ import {
   CHANGE_NETWORK
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 
-import { NFTCategory } from '../nft/types'
+import { NFTCategory } from '../vendor/super_rare/nft/types'
 import { fetchAuthorizationRequest } from '../authorization/actions'
 import { AuthorizationsRequest } from '../authorization/types'
 import { contractAddresses, contractCategories } from '../contract/utils'
@@ -42,7 +42,7 @@ function* handleWallet(
     },
     approvals: {
       [Marketplace]: Object.keys(contractCategories).filter(
-        key => contractCategories[key] !== NFTCategory.PICTURE_FRAME
+        key => contractCategories[key] !== NFTCategory.ART
       )
     }
   }

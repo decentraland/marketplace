@@ -1,9 +1,9 @@
 import { takeEvery, put, select } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
 
-import { View } from '../ui/types'
+import { NFTCategory } from '../vendor/decentraland/nft/types'
 import { Vendors } from '../vendor/types'
-import { NFTCategory } from '../nft/types'
+import { View } from '../ui/types'
 import { getView } from '../ui/selectors'
 import { getVendor } from '../routing/selectors'
 import { fetchNFTsRequest } from '../nft/actions'
@@ -50,12 +50,12 @@ function* handleBrowse(action: BrowseAction) {
 
   const params = getSearchParams(searchOptions)
 
-  const offset = isLoadMore ? page! - 1 : 0
+  const offset = isLoadMore ? page - 1 : 0
   const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
-  const first = Math.min(page! * PAGE_SIZE - skip, MAX_QUERY_SIZE)
+  const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
 
-  const [orderBy, orderDirection] = getSortOrder(sortBy!)
-  const category = getSearchCategory(section!)
+  const [orderBy, orderDirection] = getSortOrder(sortBy)
+  const category = getSearchCategory(section)
 
   yield put(setIsLoadMore(isLoadMore))
   yield put(push(params ? `${pathname}?${params.toString()}` : pathname))
@@ -68,7 +68,7 @@ function* handleBrowse(action: BrowseAction) {
         skip,
         orderBy,
         orderDirection,
-        onlyOnSale: onlyOnSale!,
+        onlyOnSale: onlyOnSale,
         address,
         category,
         search
@@ -93,7 +93,7 @@ function* getNewSearchOptions(currentOptions: SearchOptions) {
   const view =
     previousOptions.page! < currentOptions.page!
       ? View.LOAD_MORE
-      : currentOptions.view || previousOptions.view!
+      : currentOptions.view || previousOptions.view
 
   const vendor =
     currentOptions.vendor || previousOptions.vendor || Vendors.DECENTRALAND
@@ -106,6 +106,7 @@ function* getNewSearchOptions(currentOptions: SearchOptions) {
   }
 }
 
+// TODO: Maybe this should live in vendor
 function* onSearchOptionsUpdate(
   previousOptions: SearchOptions,
   currentOptions: SearchOptions

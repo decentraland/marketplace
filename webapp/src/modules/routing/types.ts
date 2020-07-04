@@ -1,5 +1,6 @@
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
-import { Vendors, ContractName, Section } from '../vendor/types'
+import { Vendors, ContractName } from '../vendor/types'
+import { Section } from '../vendor/routing/types'
 import { View } from '../ui/types'
 
 export { Section }
