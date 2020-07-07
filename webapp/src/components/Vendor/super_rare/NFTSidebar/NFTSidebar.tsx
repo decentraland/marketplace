@@ -2,10 +2,8 @@ import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { locations } from '../../../../modules/routing/locations'
-import { Section } from '../../../../modules/vendor/super_rare/routing/types'
 import { Vendors } from '../../../../modules/vendor/types'
-import { Menu } from '../../../Menu'
-import { VendorMenuItem } from '../../../Vendor/VendorMenuItem'
+import { VendorMenu } from '../../../Vendor/VendorMenu'
 import { Props } from './NFTSidebar.types'
 import './NFTSidebar.css'
 
@@ -25,14 +23,7 @@ const NFTSidebar = (props: Props) => {
         {t('nft_sidebar.back')}
       </div>
 
-      <Menu>
-        <VendorMenuItem
-          vendor={vendor}
-          section={section}
-          sections={[Section.ALL]}
-          onClick={onMenuItemClick}
-        />
-      </Menu>
+      <VendorMenu vendor={vendor} section={section} onClick={onMenuItemClick} />
     </div>
   )
 }

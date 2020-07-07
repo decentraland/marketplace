@@ -3,12 +3,14 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Image } from 'decentraland-ui'
 
 import { Props } from './MenuItem.types'
+import './MenuItem.css'
 
 const MenuItem = <T extends unknown>(props: Props<T>) => {
   const {
     className = '',
     value,
     currentValue,
+    subtitle,
     image,
     isSub,
     withCaret,
@@ -30,11 +32,12 @@ const MenuItem = <T extends unknown>(props: Props<T>) => {
 
   return (
     <li className={classNames.join(' ')} onClick={handleOnClick}>
-      {image && (
-        <Image alt={image} src={image} width="20" spaced="right" circular />
-      )}
+      {image && <Image alt={image} src={image} width="20" circular />}
 
-      {t(`menu.${value}`)}
+      <div className="content">
+        {t(`menu.${value}`)}
+        <div className="subtitle">{subtitle ? subtitle : null}</div>
+      </div>
       {withCaret ? <i className="dropdown icon" /> : null}
     </li>
   )

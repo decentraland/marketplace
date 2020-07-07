@@ -18,13 +18,12 @@ import {
 } from '../../../../modules/nft/wearable/types'
 import { ContractName } from '../../../../modules/vendor/types'
 import { NFTCategory } from '../../../../modules/vendor/decentraland/nft/types'
+import { MAX_QUERY_SIZE } from '../../../../modules/vendor/decentraland/api'
 import { getSearchCategory } from '../../../../modules/routing/search'
 import { NFTSidebar } from '../../NFTSidebar'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
-
-const MAX_RESULTS = 1000
 
 const NFTFilters = (props: Props) => {
   const {
@@ -129,7 +128,7 @@ const NFTFilters = (props: Props) => {
       ? t('global.loading') + '...'
       : t('nft_filters.search', {
           suffix:
-            count < MAX_RESULTS
+            count < MAX_QUERY_SIZE
               ? t('nft_filters.results', {
                   count: count.toLocaleString()
                 })

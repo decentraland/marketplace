@@ -1,5 +1,5 @@
 import { gql } from 'apollo-boost'
-import { client } from '../apiClient'
+import { client } from '../api'
 import { OrderStatus } from '../../../order/types'
 import { BidFragment, bidFragment } from './fragments'
 

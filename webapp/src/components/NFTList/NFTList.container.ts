@@ -5,12 +5,13 @@ import { RootState } from '../../modules/reducer'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import { browse } from '../../modules/routing/actions'
 import { getNFTs, getAssetsCount } from '../../modules/ui/selectors'
-import { getPage } from '../../modules/routing/selectors'
+import { getVendor, getPage } from '../../modules/routing/selectors'
 import { getLoading } from '../../modules/nft/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './NFTList.types'
 import NFTList from './NFTList'
 
 const mapState = (state: RootState): MapStateProps => ({
+  vendor: getVendor(state),
   nfts: getNFTs(state),
   page: getPage(state),
   count: getAssetsCount(state),

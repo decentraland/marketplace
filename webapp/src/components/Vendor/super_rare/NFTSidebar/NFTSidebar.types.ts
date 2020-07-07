@@ -9,6 +9,6 @@ export type Props = {
   onMenuItemClick: (section: Section) => void
 }
 
-export type MapStateProps = Pick<Props, 'section'>
+export type MapStateProps = {}
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

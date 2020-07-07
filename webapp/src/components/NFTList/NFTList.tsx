@@ -2,19 +2,23 @@ import React, { useCallback } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { MAX_QUERY_SIZE, MAX_PAGE } from '../../modules/nft/utils'
+import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
 import { NFTCard } from '../NFTCard'
 import { Props } from './NFTList.types'
 
 const NFTList = (props: Props) => {
-  const { nfts, page, count, isLoading, onBrowse } = props
+  const { vendor, nfts, page, count, isLoading, onBrowse } = props
 
   const handleLoadMore = useCallback(() => {
     onBrowse({ page: page + 1 })
   }, [onBrowse, page])
 
+  const maxQuerySize = getMaxQuerySize(vendor)
+
   const hasExtraPages =
-    (nfts.length !== count || count === MAX_QUERY_SIZE) && page <= MAX_PAGE
+    (nfts.length !== count || count === maxQuerySize) && page <= MAX_PAGE
+
+  const isLoadingNewPage = isLoading && nfts.length >= PAGE_SIZE
 
   return (
     <>
@@ -37,7 +41,7 @@ const NFTList = (props: Props) => {
         <div className="empty">{t('nft_list.empty')}</div>
       ) : null}
 
-      {nfts.length > 0 && (isLoading || hasExtraPages) ? (
+      {nfts.length > 0 && hasExtraPages && (!isLoading || isLoadingNewPage) ? (
         <div className="load-more">
           <Button loading={isLoading} inverted primary onClick={handleLoadMore}>
             {t('global.load_more')}

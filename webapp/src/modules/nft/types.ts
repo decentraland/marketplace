@@ -43,9 +43,11 @@ export type NFTsFetchParams = {
   orderDirection?: SortDirection
   category?: NFTCategory
   address?: string
-  onlyOnSale: boolean
+  onlyOnSale?: boolean
   search?: string
 }
+
+export type NFTsCountParams = Omit<NFTsFetchParams, 'first' | 'skip'>
 
 export type NFTsFetchOptions = {
   vendor: Vendors

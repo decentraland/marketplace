@@ -13,11 +13,14 @@ type CoinTickers = {
 }
 
 export class MarketPrice {
+  public oneMillion: BN
   public feePerMillion: BN
 
   constructor() {
     const feePerMillion =
       process.env.REACT_APP_MARKETPLACE_ADAPTER_FEE_PER_MILLION
+
+    this.oneMillion = toBN('1000000')
 
     if (!feePerMillion) {
       throw new Error(`Invalid adapter fee ${feePerMillion}`)
@@ -26,13 +29,10 @@ export class MarketPrice {
   }
 
   addFee(manaWeiAmount: string | number) {
-    const ONE_MILLION = toBN('1000000')
-
     const bnAmount = toBN(manaWeiAmount.toString())
 
     return bnAmount
-      .add(bnAmount.add(this.feePerMillion))
-      .div(ONE_MILLION)
+      .add(bnAmount.mul(this.feePerMillion).div(this.oneMillion))
       .toString()
   }
 

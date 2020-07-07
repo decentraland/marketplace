@@ -3,40 +3,33 @@ import { gql } from 'apollo-boost'
 import { NFTsFetchParams } from '../../../nft/types'
 import { WearableGender } from '../../../nft/wearable/types'
 import { ContractService } from '../ContractService'
-import { client } from '../apiClient'
+import { client } from '../api'
 import { nftFragment, NFTFragment } from './fragments'
 import { NFTsFetchFilters } from './types'
 
 class NFTAPI {
   fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
     const query = getNFTsQuery(params, filters)
+    const variables = this.buildFetchVariables(params, filters)
+
+    const { data } = await client.query<{ nfts: NFTFragment[] }>({
+      query,
+      variables
+    })
+
+    return data.nfts
+  }
+
+  async count(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
     const countQuery = getNFTsCountQuery(params, filters)
+    const variables = this.buildFetchVariables(params, filters)
 
-    const variables = {
-      ...params,
-      ...filters,
-      expiresAt: Date.now().toString()
-    }
+    const { data } = await client.query<{ nfts: NFTFragment[] }>({
+      query: countQuery,
+      variables
+    })
 
-    const [{ data }, { data: countData }] = await Promise.all([
-      client.query<{ nfts: NFTFragment[] }>({
-        query,
-        variables
-      }),
-      client.query<{ nfts: NFTFragment[] }>({
-        query: countQuery,
-        variables: {
-          ...variables,
-          first: 1000,
-          skip: 0
-        }
-      })
-    ])
-
-    return {
-      nfts: data.nfts,
-      total: countData.nfts.length
-    }
+    return data.nfts.length
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
@@ -58,6 +51,17 @@ class NFTAPI {
     })
     const { tokenId } = data.parcels[0]
     return tokenId
+  }
+
+  private buildFetchVariables(
+    params: NFTsFetchParams,
+    filters?: NFTsFetchFilters
+  ) {
+    return {
+      ...params,
+      ...filters,
+      expiresAt: Date.now().toString()
+    }
   }
 }
 

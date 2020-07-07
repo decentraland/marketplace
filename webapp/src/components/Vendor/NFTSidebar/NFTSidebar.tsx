@@ -7,7 +7,7 @@ import { NFTSidebar as SuperRareNFTSidebar } from '../super_rare/NFTSidebar'
 import { Props } from './NFTSidebar.types'
 
 const NFTSidebar = (props: Props) => {
-  const { section, vendor, onBrowse } = props
+  const { vendor, section, onBrowse } = props
 
   const handleOnBrowse = useCallback(
     (section: Section) => {
@@ -18,7 +18,12 @@ const NFTSidebar = (props: Props) => {
 
   switch (vendor) {
     case Vendors.SUPER_RARE:
-      return <SuperRareNFTSidebar onMenuItemClick={handleOnBrowse} />
+      return (
+        <SuperRareNFTSidebar
+          section={section}
+          onMenuItemClick={handleOnBrowse}
+        />
+      )
     case Vendors.DECENTRALAND:
     default:
       return (

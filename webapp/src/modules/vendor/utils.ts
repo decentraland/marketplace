@@ -2,7 +2,7 @@ import { getSearchCategory, getSearchWearableCategory } from '../routing/search'
 import { SearchOptions } from '../routing/types'
 import { NFTCategory } from './decentraland/nft/types'
 import { Section } from './decentraland/routing/types'
-import { Vendors, Partners } from './types'
+import { Vendors, Partner } from './types'
 
 export function getFilters(vendor: Vendors, searchOptions: SearchOptions): any {
   switch (vendor) {
@@ -41,5 +41,5 @@ export function isVendor(vendor: string) {
 }
 
 export function isPartner(vendor: string) {
-  return Object.values(Partners).includes(vendor as Partners)
+  return Object.values(Partner).includes(vendor as Partner)
 }

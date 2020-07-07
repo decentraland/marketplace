@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
 import { Page, Responsive } from 'decentraland-ui'
 
-import { NFTFilters } from '../Vendor/NFTFilters'
 import { NFTList } from '../NFTList'
+import { AccountSidebar } from '../AccountSidebar'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
+import { NFTFilters } from '../Vendor/NFTFilters'
 import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './NFTBrowse.types'
 import './NFTBrowse.css'
@@ -12,21 +13,17 @@ import './NFTBrowse.css'
 const NFTBrowse = (props: Props) => {
   const { vendor, view, defaultOnlyOnSale, address, onBrowse } = props
 
-  // "Instance" variables
-  const onlyOnSale =
-    props.onlyOnSale === undefined ? defaultOnlyOnSale : props.onlyOnSale
-
   // Kick things off
   useEffect(() => {
-    onBrowse({ vendor, view, onlyOnSale, address })
-  }, [onBrowse, vendor, view, onlyOnSale, address])
+    onBrowse({ vendor, view, address, onlyOnSale: defaultOnlyOnSale })
+  }, [onBrowse, vendor, view, defaultOnlyOnSale, address])
 
   return (
     <Page className="NFTBrowse">
       <Row>
         <Column align="left">
           <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-            <NFTSidebar />
+            {address ? <AccountSidebar address={address} /> : <NFTSidebar />}
           </Responsive>
         </Column>
 

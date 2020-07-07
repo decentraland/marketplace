@@ -1,5 +1,6 @@
-import { toBN, toWei, fromWei } from 'web3x-es/utils'
-import { NFT, NFTsFetchParams } from '../../nft/types'
+import BN from 'bn.js'
+import { toBN, toWei } from 'web3x-es/utils'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -7,18 +8,24 @@ import { NFTService as NFTServiceInterface } from '../services'
 import { Vendors } from '../types'
 import { NFTCategory } from './nft/types'
 import { SuperRareAsset, SuperRareOrder, SuperRareOwner } from './types'
-import { superRareAPI } from './api'
+import { superRareAPI, MAX_QUERY_SIZE } from './api'
 import { MarketPrice } from '../MarketPrice'
 
 export class NFTService implements NFTServiceInterface {
   private marketPrice: MarketPrice
+  private oneEthInWei: BN
 
   constructor() {
     this.marketPrice = new MarketPrice()
+    this.oneEthInWei = new BN('1000000000000000000') // 10 ** 18
   }
 
   async fetch(params: NFTsFetchParams) {
-    const remoteOrders = await superRareAPI.fetchOrders(params)
+    const [remoteOrders, total] = await Promise.all([
+      superRareAPI.fetchOrders(params),
+      this.count(params)
+    ])
+
     const nfts: NFT[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
@@ -45,7 +52,17 @@ export class NFTService implements NFTServiceInterface {
       accounts.push(account)
     }
 
-    return [nfts, accounts, orders, 1000] as const
+    return [nfts, accounts, orders, total] as const
+  }
+
+  async count(countParams: NFTsCountParams) {
+    const params: NFTsFetchParams = {
+      ...countParams,
+      first: MAX_QUERY_SIZE,
+      skip: 0
+    }
+    const remoteOrders = await superRareAPI.fetchOrders(params)
+    return remoteOrders.length
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
@@ -93,8 +110,9 @@ export class NFTService implements NFTServiceInterface {
   toOrder(order: SuperRareOrder, oneEthInMANA: string): Order {
     const { asset, taker } = order
 
-    const totalWei = this.marketPrice.addFee(order.amountWithFee) // Superrare fee AND Marketplace fee
-    const price = toBN(totalWei).mul(toBN(oneEthInMANA))
+    const totalWei = this.marketPrice.addFee(order.amountWithFee) // Compounds the Superrare AND Marketplace fee
+    const weiPrice = toBN(totalWei).mul(toBN(oneEthInMANA))
+    const price = weiPrice.div(this.oneEthInWei)
 
     return {
       id: `${Vendors.SUPER_RARE}-order-${asset.id}`,
@@ -103,7 +121,7 @@ export class NFTService implements NFTServiceInterface {
       nftAddress: asset.contractAddress,
       owner: asset.owner.address,
       buyer: taker ? taker.address : null,
-      price: fromWei(price, 'ether').toString(),
+      price: price.toString(10),
       ethPrice: order.amountWithFee.toString(),
       status: OrderStatus.OPEN,
       createdAt: order.timestamp,

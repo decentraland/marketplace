@@ -2,24 +2,28 @@ import { Address } from 'web3x-es/address'
 
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
-import { NFT, NFTsFetchParams } from '../../nft/types'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order } from '../../order/types'
 import { Account } from '../../account/types'
 import { isExpired } from '../../order/utils'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from '../nft/types'
 import { Vendors } from '../types'
+import { MAX_QUERY_SIZE } from './api'
 import { nftAPI } from './nft/api'
 
 export class NFTService implements NFTServiceInterface {
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
-    const data = await nftAPI.fetch(params, filters)
+    const [remoteNFTs, total] = await Promise.all([
+      nftAPI.fetch(params, filters),
+      this.count(params, filters)
+    ])
 
     const nfts: NFT[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
-    for (const result of data.nfts) {
+    for (const result of remoteNFTs) {
       const { activeOrder: nestedOrder, ...rest } = result
 
       const nft: NFT = {
@@ -45,7 +49,16 @@ export class NFTService implements NFTServiceInterface {
       nfts.push(nft)
     }
 
-    return [nfts, accounts, orders, data.total] as const
+    return [nfts, accounts, orders, total] as const
+  }
+
+  async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {
+    const params: NFTsFetchParams = {
+      ...countParams,
+      first: MAX_QUERY_SIZE,
+      skip: 0
+    }
+    return nftAPI.count(params, filters)
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {

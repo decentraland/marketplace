@@ -1,6 +1,8 @@
 .Menu {
-  --menu-item-width: 232px;
+  --menu-item-width: 248px;
+  --menu-sub-item-width: 232px;
   margin-right: 24px;
+  width: var(--menu-item-width);
 }
 
 ul.Menu {
@@ -18,7 +20,6 @@ ul.Menu li {
   cursor: pointer;
   border-radius: 8px;
   text-transform: capitalize;
-  width: 248px;
 }
 
 ul.Menu li .ui.image {
@@ -26,9 +27,9 @@ ul.Menu li .ui.image {
 }
 
 ul.Menu li.sub {
-  color: var(--secondary-text);
   margin-left: 16px;
-  width: var(--menu-item-width);
+  width: var(--menu-sub-item-width);
+  color: var(--secondary-text);
 }
 
 ul.Menu li .dropdown.icon {
@@ -51,5 +52,5 @@ ul.Menu ul.submenu {
 }
 
 ul.Menu ul.submenu li.sub {
-  width: calc(var(--menu-item-width) - 16px);
+  width: calc(var(--menu-sub-item-width) - 16px);
 }

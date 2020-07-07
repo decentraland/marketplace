@@ -1,2 +1,2 @@
-import NFTSidebar from './NFTSidebar.container'
+import NFTSidebar from './NFTSidebar'
 export { NFTSidebar }

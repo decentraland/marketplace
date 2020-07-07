@@ -10,6 +10,8 @@ import {
 
 const API_URL = process.env.REACT_APP_SUPER_RARE_API_URL!
 
+export const MAX_QUERY_SIZE = 100
+
 class SuperRareAPI extends BaseAPI {
   public API_KEY: string = ''
 
@@ -59,19 +61,22 @@ class SuperRareAPI extends BaseAPI {
   }
 
   fetchOrders(params: NFTsFetchParams): Promise<SuperRareOrder[]> {
-    const orderBy =
+    const requestParams: SuperRareFetchOrderParams = {
+      name: params.search,
+      order: params.orderDirection,
+      offset: params.skip,
+      limit: params.first
+    }
+
+    requestParams.sort =
       params.orderBy === NFTSortBy.PRICE
         ? 'price'
         : params.orderBy === NFTSortBy.ORDER_CREATED_AT
         ? 'timestamp'
         : undefined
 
-    const requestParams: SuperRareFetchOrderParams = {
-      sort: orderBy,
-      name: params.search,
-      order: params.orderDirection,
-      offset: params.skip,
-      limit: params.first
+    if (params.address) {
+      requestParams.owner_addresses = [params.address]
     }
 
     return this.request('get', '/nfts/orders', requestParams)

@@ -10,7 +10,7 @@
     "estate": "Estate",
     "wearable": "Wearable",
     "ens": "Name",
-    "picture_frame":"Picture Frame",
+    "art":"Art",
     "cancel": "Cancel",
     "proceed": "Proceed",
     "nft": "NFT",
@@ -64,6 +64,11 @@
     "super_rare": "SuperRare",
     "known_origin": "KnownOrigin",
     "makers_place": "MakersPlace"
+  },
+  "vendor_menu":{
+    "no_assets": "No assets",
+    "assets_count": "{count} {count, plural, one {asset} other {assets}}",
+    "more_than_assets_count": "+{count} assets"
   },
   "filters": {
     "name": "Name",

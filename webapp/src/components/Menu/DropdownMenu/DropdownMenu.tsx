@@ -16,7 +16,7 @@ const DropdownMenu = <T extends unknown>(props: Props<T>) => {
         withCaret={true}
       />
       <ul className="submenu">
-        {values.includes(currentValue)
+        {values.includes(currentValue!)
           ? values
               .slice(1)
               .map((value, index) => (

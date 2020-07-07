@@ -10,10 +10,9 @@ import {
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { SortBy } from '../../../../modules/routing/types'
+import { MAX_QUERY_SIZE } from '../../../../modules/vendor/super_rare/api'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { Props } from './NFTFilters.types'
-
-const MAX_RESULTS = 1000
 
 const NFTFilters = (props: Props) => {
   const { search, count, onBrowse } = props
@@ -50,7 +49,7 @@ const NFTFilters = (props: Props) => {
       ? t('global.loading') + '...'
       : t('nft_filters.search', {
           suffix:
-            count < MAX_RESULTS
+            count < MAX_QUERY_SIZE
               ? t('nft_filters.results', {
                   count: count.toLocaleString()
                 })

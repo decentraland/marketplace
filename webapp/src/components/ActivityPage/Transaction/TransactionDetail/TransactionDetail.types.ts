@@ -1,3 +1,4 @@
+import React from 'react'
 import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
 import { NFT } from '../../../../modules/nft/types'
 

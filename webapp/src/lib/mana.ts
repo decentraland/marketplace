@@ -1,9 +1,11 @@
-import { fromWei } from 'web3x-es/utils'
+import BN from 'bn.js'
 
 const MANA_SYMBOL = '⏣'
 
+let oneEthInMANA: BN | undefined
+
 export function formatMANA(value: string) {
-  return Math.round(Number(fromWei(value, 'ether'))).toLocaleString()
+  return fromWei(value).toLocaleString()
 }
 
 export function toMANA(num: number) {
@@ -24,4 +26,11 @@ export function fromMANA(mana: string) {
   }
 
   return result
+}
+
+export function fromWei(value: BN | string) {
+  if (!oneEthInMANA) {
+    oneEthInMANA = new BN('1000000000000000000') // 10 ** 18
+  }
+  return new BN(value).divRound(oneEthInMANA)
 }

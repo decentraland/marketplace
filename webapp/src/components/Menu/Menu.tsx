@@ -4,9 +4,9 @@ import { Props } from './Menu.types'
 import './Menu.css'
 
 const Menu = (props: Props) => {
-  const { children } = props
+  const { className = '', children } = props
 
-  return <ul className="Menu">{children}</ul>
+  return <ul className={`Menu ${className}`}>{children}</ul>
 }
 
 export default React.memo(Menu)

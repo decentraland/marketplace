@@ -8,7 +8,8 @@ import { getView } from '../ui/selectors'
 import { getVendor } from '../routing/selectors'
 import { fetchNFTsRequest } from '../nft/actions'
 import { getFilters } from '../vendor/utils'
-import { MAX_QUERY_SIZE, MAX_PAGE, PAGE_SIZE, getSortOrder } from '../nft/utils'
+import { getSortOrder } from '../nft/utils'
+import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
 import {
   getPage,
   getSection,
@@ -52,7 +53,7 @@ function* handleBrowse(action: BrowseAction) {
 
   const offset = isLoadMore ? page - 1 : 0
   const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
-  const first = Math.min(page * PAGE_SIZE - skip, MAX_QUERY_SIZE)
+  const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
   const [orderBy, orderDirection] = getSortOrder(sortBy)
   const category = getSearchCategory(section)
