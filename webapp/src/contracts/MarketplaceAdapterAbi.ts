@@ -196,7 +196,50 @@ export default new ContractAbi([
   {
     "inputs": [
       {
-        "internalType": "contract IERC721",
+        "internalType": "contract ITransferableRegistry",
+        "name": "_registry",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_tokenId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_marketplace",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_encodedCallData",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_orderAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum MarketAdapter.TransferType",
+        "name": "_transferType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "address",
+        "name": "_beneficiary",
+        "type": "address"
+      }
+    ],
+    "name": "buy",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "contract ITransferableRegistry",
         "name": "_registry",
         "type": "address"
       },
@@ -224,39 +267,26 @@ export default new ContractAbi([
         "internalType": "contract IERC20",
         "name": "_paymentToken",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxPaymentTokenAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "enum MarketAdapter.TransferType",
+        "name": "_transferType",
+        "type": "uint8"
+      },
+      {
+        "internalType": "address",
+        "name": "_beneficiary",
+        "type": "address"
       }
     ],
     "name": "buy",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "contract IERC721",
-        "name": "_registry",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "address",
-        "name": "_marketplace",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes",
-        "name": "_encodedCallData",
-        "type": "bytes"
-      }
-    ],
-    "name": "buy",
-    "outputs": [],
-    "stateMutability": "payable",
     "type": "function"
   },
   {

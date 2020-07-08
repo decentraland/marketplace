@@ -14,7 +14,7 @@
     "MarketplaceAdapter": {
       "source": "etherscan",
       "net": "ropsten",
-      "address": "0x20e66474bb6178f32925b8ac27043d0e6d542b6f"
+      "address": "0x8512Fc051B3f8A3A5043F93278DEFe1389E2668C"
     },
     "Bids": {
       "source": "etherscan",
