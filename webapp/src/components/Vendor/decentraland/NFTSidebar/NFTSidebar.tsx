@@ -4,6 +4,7 @@ import { Header } from 'decentraland-ui'
 
 import { NFTSections } from '../NFTSections'
 import { Props } from './NFTSidebar.types'
+import './NFTSidebar.css'
 
 const NFTSidebar = (props: Props) => {
   const { section, onMenuItemClick } = props

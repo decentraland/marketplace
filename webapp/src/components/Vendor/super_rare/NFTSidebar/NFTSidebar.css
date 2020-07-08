@@ -1,4 +1,6 @@
 .NFTSidebar .go-back {
+  margin-top: 3px;
+  margin-bottom: 21px;
   display: flex;
   align-items: center;
   color: var(--secondary-text);

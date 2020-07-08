@@ -6,6 +6,7 @@ import { Partner } from '../../modules/vendor/types'
 import { Menu } from '../Menu'
 import { MenuItem } from '../Menu/MenuItem'
 import { Props } from './PartnersSidebar.types'
+import './PartnersSidebar.css'
 
 const PartnersSidebar = (props: Props) => {
   const { onMenuItemClick } = props
