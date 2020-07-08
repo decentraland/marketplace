@@ -29,77 +29,41 @@ class SuperRareAPI extends BaseAPI {
   }
 
   async fetchNFTs(params: NFTsFetchParams): Promise<SuperRareAsset[]> {
-    const requestParams: SuperRareFetchOrderParams = {
-      name: params.search,
-      order: params.orderDirection,
-      offset: params.skip,
-      limit: params.first
-    }
+    return this.request(
+      'get',
+      '/nfts/assets',
+      this.buildFetchManyParams(params)
+    )
+  }
 
-    requestParams.sort =
-      params.orderBy === NFTSortBy.PRICE
-        ? 'price'
-        : params.orderBy === NFTSortBy.ORDER_CREATED_AT
-        ? 'timestamp'
-        : undefined
-
-    if (params.address) {
-      requestParams.owner_addresses = [params.address]
-    }
-
-    return this.request('get', '/nfts/assets', requestParams)
+  async fetchOrders(params: NFTsFetchParams): Promise<SuperRareOrder[]> {
+    return this.request(
+      'get',
+      '/nfts/orders',
+      this.buildFetchManyParams(params)
+    )
   }
 
   async fetchNFT(
     contractAddress: string,
     tokenId: string
   ): Promise<SuperRareAsset> {
-    const requestParams: SuperRareFetchNFTOptions = {
-      asset_contract_addresses: [contractAddress],
-      asset_ids: [Number(tokenId)]
-    }
     const nfts: SuperRareAsset[] = await this.request(
       'get',
       '/nfts/assets',
-      requestParams
+      this.buildFetchOneParams(contractAddress, tokenId)
     )
     return nfts[0]
-  }
-
-  async fetchOrders(params: NFTsFetchParams): Promise<SuperRareOrder[]> {
-    const requestParams: SuperRareFetchOrderParams = {
-      name: params.search,
-      order: params.orderDirection,
-      offset: params.skip,
-      limit: params.first
-    }
-
-    requestParams.sort =
-      params.orderBy === NFTSortBy.PRICE
-        ? 'price'
-        : params.orderBy === NFTSortBy.ORDER_CREATED_AT
-        ? 'timestamp'
-        : undefined
-
-    if (params.address) {
-      requestParams.owner_addresses = [params.address]
-    }
-
-    return this.request('get', '/nfts/orders', requestParams)
   }
 
   async fetchOrder(
     contractAddress: string,
     tokenId: string
   ): Promise<SuperRareOrder> {
-    const requestParams: SuperRareFetchOrderParams = {
-      asset_contract_addresses: [contractAddress],
-      asset_ids: [Number(tokenId)]
-    }
     const orders: SuperRareOrder[] = await this.request(
       'get',
       '/nfts/orders',
-      requestParams
+      this.buildFetchOneParams(contractAddress, tokenId)
     )
     return orders[0]
   }
@@ -121,6 +85,40 @@ class SuperRareAPI extends BaseAPI {
     return {
       headers: { Authorization: `Bearer ${this.API_KEY}` }
     }
+  }
+
+  private buildFetchOneParams(
+    contractAddress: string,
+    tokenId: string
+  ): SuperRareFetchNFTOptions {
+    return {
+      asset_contract_addresses: [contractAddress],
+      asset_ids: [Number(tokenId)]
+    }
+  }
+
+  private buildFetchManyParams(
+    params: NFTsFetchParams
+  ): SuperRareFetchOrderParams {
+    const requestParams: SuperRareFetchOrderParams = {
+      name: params.search,
+      order: params.orderDirection,
+      offset: params.skip,
+      limit: params.first
+    }
+
+    requestParams.sort =
+      params.orderBy === NFTSortBy.PRICE
+        ? 'price'
+        : params.orderBy === NFTSortBy.ORDER_CREATED_AT
+        ? 'timestamp'
+        : undefined
+
+    if (params.address) {
+      requestParams.owner_addresses = [params.address]
+    }
+
+    return requestParams
   }
 }
 

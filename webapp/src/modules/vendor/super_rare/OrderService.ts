@@ -99,4 +99,8 @@ export class OrderService implements OrderServiceInterface {
   cancel(): any {
     throw new Error('Method: `cancel` is not implemented')
   }
+
+  canSell() {
+    return false
+  }
 }

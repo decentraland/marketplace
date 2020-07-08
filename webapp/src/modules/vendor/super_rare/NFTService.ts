@@ -1,5 +1,9 @@
 import BN from 'bn.js'
+import { Address } from 'web3x-es/address'
 import { toBN, toWei } from 'web3x-es/utils'
+
+import { ERC721 } from '../../../contracts/ERC721'
+import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
@@ -109,8 +113,19 @@ export class NFTService implements NFTServiceInterface {
     return [nft, order] as const
   }
 
-  transfer(): any {
-    throw new Error('Method: `transfer` is not implemented')
+  async transfer(fromAddress: string, toAddress: string, nft: NFT) {
+    const erc721 = ContractFactory.build(ERC721, nft.contractAddress)
+
+    if (!fromAddress) {
+      throw new Error('Invalid address. Wallet must be connected.')
+    }
+    const from = Address.fromString(fromAddress)
+    const to = Address.fromString(toAddress)
+
+    return erc721.methods
+      .transfer(to, nft.tokenId)
+      .send({ from })
+      .getTxHash()
   }
 
   toNFT(asset: SuperRareAsset): NFT {

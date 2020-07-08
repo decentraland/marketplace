@@ -40,6 +40,7 @@ export interface OrderService {
     fingerprint?: string
   ) => Promise<string>
   cancel: (nft: NFT, fromAddress: string) => Promise<string>
+  canSell(): boolean
 }
 export class OrderService {}
 

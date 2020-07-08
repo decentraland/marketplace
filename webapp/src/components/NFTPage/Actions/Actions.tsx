@@ -32,12 +32,15 @@ const Actions = (props: Props) => {
   )
 
   const isOwner = isOwnedBy(nft, wallet)
-  const hasBids = VendorFactory.build(nft.vendor).hasBids()
+
+  const { bidService, orderService } = VendorFactory.build(nft.vendor)
+  const hasBids = bidService !== undefined
+  const canSell = orderService.canSell()
 
   return (
     <>
       {order ? (
-        isOwner ? (
+        isOwner && canSell ? (
           <>
             <Button onClick={handleSell} primary>
               {t('nft_page.update')}
@@ -54,7 +57,7 @@ const Actions = (props: Props) => {
             ) : null}
           </>
         )
-      ) : isOwner ? (
+      ) : isOwner && canSell ? (
         <Button onClick={handleSell} primary>
           {t('nft_page.sell')}
         </Button>

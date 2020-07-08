@@ -99,7 +99,7 @@ function* getNewSearchOptions(current: SearchOptions) {
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
-    previous = {}
+    previous = { page: 1 }
   }
 
   return {

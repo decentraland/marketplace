@@ -110,15 +110,15 @@ function* handleFetchBidsByAddressRequest(
     let bidder: Bid[] = []
 
     for (const vendorName of Object.values(Vendors)) {
-      const vendor = VendorFactory.build(vendorName)
-      if (!vendor.hasBids()) {
+      const { bidService } = VendorFactory.build(vendorName)
+      if (bidService === undefined) {
         continue
       }
 
       const [sellerBids, bidderBids]: [Bid[], Bid[]] = yield call(() =>
         Promise.all([
-          vendor.bidService!.fetchBySeller(address),
-          vendor.bidService!.fetchByBidder(address)
+          bidService.fetchBySeller(address),
+          bidService.fetchByBidder(address)
         ])
       )
       seller = seller.concat(sellerBids)

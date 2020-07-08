@@ -89,6 +89,10 @@ export class OrderService implements OrderServiceInterface {
       .getTxHash()
   }
 
+  canSell() {
+    return true
+  }
+
   private getMarketplaceContract() {
     return ContractFactory.build(
       Marketplace,

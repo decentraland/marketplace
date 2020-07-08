@@ -37,11 +37,7 @@ export class Vendor {
     public type: Vendors,
     public contractService: ContractService,
     public nftService: NFTService,
-    public orderService?: OrderService,
+    public orderService: OrderService,
     public bidService?: BidService
   ) {}
-
-  hasBids(): boolean {
-    return this.bidService !== undefined
-  }
 }
