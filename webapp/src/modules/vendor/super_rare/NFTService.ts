@@ -8,19 +8,23 @@ import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
+import { TokenConverter } from '../TokenConverter'
+import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
-import { Vendors } from '../types'
+import { Vendors, TransferType } from '../types'
 import { NFTCategory } from './nft/types'
+import { ContractService } from './ContractService'
 import { SuperRareAsset, SuperRareOrder, SuperRareOwner } from './types'
 import { superRareAPI, MAX_QUERY_SIZE } from './api'
-import { MarketPrice } from '../MarketPrice'
 
 export class NFTService implements NFTServiceInterface {
-  private marketPrice: MarketPrice
+  private tokenConverter: TokenConverter
+  private marketplacePrice: MarketplacePrice
   private oneEthInWei: BN
 
   constructor() {
-    this.marketPrice = new MarketPrice()
+    this.tokenConverter = new TokenConverter()
+    this.marketplacePrice = new MarketplacePrice()
     this.oneEthInWei = new BN('1000000000000000000') // 10 ** 18
   }
 
@@ -114,18 +118,29 @@ export class NFTService implements NFTServiceInterface {
   }
 
   async transfer(fromAddress: string, toAddress: string, nft: NFT) {
-    const erc721 = ContractFactory.build(ERC721, nft.contractAddress)
-
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
     const from = Address.fromString(fromAddress)
     const to = Address.fromString(toAddress)
 
-    return erc721.methods
-      .transfer(to, nft.tokenId)
-      .send({ from })
-      .getTxHash()
+    const erc721 = ContractFactory.build(ERC721, nft.contractAddress)
+    const transferType = new ContractService().getTransferType(
+      nft.contractAddress
+    )
+    let transaction
+
+    switch (transferType) {
+      case TransferType.TRANSFER:
+        transaction = erc721.methods.transfer(to, nft.tokenId)
+        break
+      case TransferType.SAFE_TRANSFER_FROM:
+      default:
+        transaction = erc721.methods.transferFrom(from, to, nft.tokenId)
+        break
+    }
+
+    return transaction.send({ from }).getTxHash()
   }
 
   toNFT(asset: SuperRareAsset): NFT {
@@ -154,7 +169,7 @@ export class NFTService implements NFTServiceInterface {
   toOrder(order: SuperRareOrder, oneEthInMANA: string): Order {
     const { asset, taker } = order
 
-    const totalWei = this.marketPrice.addFee(order.amountWithFee) // Compounds the Superrare AND Marketplace fee
+    const totalWei = this.marketplacePrice.addFee(order.amountWithFee) // Compounds the Superrare AND Marketplace fee
     const weiPrice = toBN(totalWei).mul(toBN(oneEthInMANA))
     const price = weiPrice.div(this.oneEthInWei)
 
@@ -182,7 +197,8 @@ export class NFTService implements NFTServiceInterface {
   }
 
   private async getOneEthInMANA() {
-    const mana = await this.marketPrice.convertEthToMANA(1)
+    const mana = await this.tokenConverter.marketEthToMANA(1)
+    console.log(mana.toString())
     return toWei(mana.toString(), 'ether')
   }
 }

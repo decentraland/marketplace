@@ -13,3 +13,9 @@ export type Vendors = Partner | Base
 export const Vendors = { ...Partner, ...Base }
 
 export type ContractName = decentraland.ContractName | superRare.ContractName
+
+export enum TransferType {
+  SAFE_TRANSFER_FROM = 0,
+  TRANSFER_FROM = 1,
+  TRANSFER = 2
+}

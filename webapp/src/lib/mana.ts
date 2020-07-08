@@ -5,7 +5,11 @@ const MANA_SYMBOL = '⏣'
 let oneEthInMANA: BN | undefined
 
 export function formatMANA(value: string) {
-  return fromWei(value).toLocaleString()
+  if (!oneEthInMANA) {
+    oneEthInMANA = new BN('1000000000000000000') // 10 ** 18
+  }
+  const mana = new BN(value).divRound(oneEthInMANA)
+  return mana.toLocaleString()
 }
 
 export function toMANA(num: number) {
@@ -26,11 +30,4 @@ export function fromMANA(mana: string) {
   }
 
   return result
-}
-
-export function fromWei(value: BN | string) {
-  if (!oneEthInMANA) {
-    oneEthInMANA = new BN('1000000000000000000') // 10 ** 18
-  }
-  return new BN(value).divRound(oneEthInMANA)
 }

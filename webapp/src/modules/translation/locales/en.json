@@ -203,6 +203,7 @@
     "invalid_date": "This date has already passed",
     "submit": "List for sale",
     "update_submit": "Update",
+    "invalid": "Something roto",
     "confirm": {
       "title": "Please confirm",
       "line_one": "You are about to list {name} on sale for {amount}.",

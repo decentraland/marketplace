@@ -1,5 +1,6 @@
 import { ContractService as ContractServiceInterface } from '../services'
 import { NFTCategory } from './nft/types'
+import { TransferType } from '../types'
 
 const env = process.env
 
@@ -90,4 +91,8 @@ export class ContractService implements ContractServiceInterface {
     [StaySafeCollection]: NFTCategory.WEARABLE,
     [DCLRegistrar]: NFTCategory.ENS
   } as const
+
+  getTransferType(_address: string) {
+    return TransferType.SAFE_TRANSFER_FROM
+  }
 }

@@ -83,13 +83,13 @@ export class NFTService implements NFTServiceInterface {
   }
 
   async transfer(fromAddress: string, toAddress: string, nft: NFT) {
-    const erc721 = ContractFactory.build(ERC721, nft.contractAddress)
-
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
     const from = Address.fromString(fromAddress)
     const to = Address.fromString(toAddress)
+
+    const erc721 = ContractFactory.build(ERC721, nft.contractAddress)
 
     return erc721.methods
       .transferFrom(from, to, nft.tokenId)

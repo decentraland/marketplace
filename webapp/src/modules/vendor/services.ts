@@ -3,6 +3,7 @@ import { Account } from '../account/types'
 import { Bid } from '../bid/types'
 import { OrderStatus, Order } from '../order/types'
 import { NFTsFetchFilters, NFTCategory } from './nft/types'
+import { TransferType } from './types'
 
 export interface NFTService {
   fetch: (
@@ -65,5 +66,6 @@ export interface ContractService {
   contractSymbols: Record<string, string>
   contractNames: Record<string, string>
   contractCategories: Record<string, NFTCategory>
+  getTransferType: (address: string) => TransferType
 }
 export class ContractService {}

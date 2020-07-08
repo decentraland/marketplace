@@ -1,5 +1,6 @@
 import { ContractService as ContractServiceInterface } from '../services'
 import { NFTCategory } from './nft/types'
+import { TransferType } from '../types'
 
 const env = process.env
 
@@ -42,4 +43,26 @@ export class ContractService implements ContractServiceInterface {
     [SuperRare]: NFTCategory.ART,
     [SuperRareV2]: NFTCategory.ART
   } as const
+
+  getTransferType(address: string) {
+    switch (address) {
+      case SuperRare:
+        return TransferType.TRANSFER
+      case SuperRareV2:
+        return TransferType.SAFE_TRANSFER_FROM
+      default:
+        throw new Error(`Invalid SuperRare address ${address}`)
+    }
+  }
+
+  getMarketAddress(address: string) {
+    switch (address) {
+      case SuperRare:
+        return SuperRareMarket
+      case SuperRareV2:
+        return SuperRareMarketV2
+      default:
+        throw new Error(`Invalid SuperRare address ${address}`)
+    }
+  }
 }
