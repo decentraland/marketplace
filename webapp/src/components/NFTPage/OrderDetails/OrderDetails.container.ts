@@ -8,11 +8,9 @@ import {
 import { getCurrentOrder } from '../../../modules/order/selectors'
 import OrderDetails from './OrderDetails'
 
-const mapState = (state: RootState): MapStateProps => {
-  return {
-    order: getCurrentOrder(state)
-  }
-}
+const mapState = (state: RootState): MapStateProps => ({
+  order: getCurrentOrder(state)
+})
 
 const mapDispatch = (_: MapDispatch): MapDispatchProps => ({})
 

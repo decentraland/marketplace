@@ -12,6 +12,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { SortBy } from '../../../../modules/routing/types'
 import { MAX_QUERY_SIZE } from '../../../../modules/vendor/super_rare/api'
 import { TextFilter } from '../../NFTFilters/TextFilter'
+import { PriceChangeNotice } from './PriceChangeNotice'
 import { Props } from './NFTFilters.types'
 
 const NFTFilters = (props: Props) => {
@@ -76,6 +77,18 @@ const NFTFilters = (props: Props) => {
           onChange={handleDropdownChange}
         />
       </div>
+
+      <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+        <div
+          className="open-filters-wrapper"
+          onClick={() => setShowFiltersModal(!showFiltersModal)}
+        >
+          <div className="label">{t('nft_filters.filter')}</div>
+          <div className="open-filters" />
+        </div>
+      </Responsive>
+
+      <PriceChangeNotice />
 
       <Modal
         className="FiltersModal"

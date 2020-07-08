@@ -1,6 +1,9 @@
+.NFTFilters {
+  margin-bottom: 20px;
+}
+
 .NFTFilters .topbar {
   display: flex;
-  margin-bottom: 20px;
   font-size: 12px;
 }
 

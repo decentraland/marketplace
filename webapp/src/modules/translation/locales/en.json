@@ -318,5 +318,8 @@
   },
   "highlights": {
     "title": "Highlights"
+  },
+  "price_change_notice": {
+    "message": "The price may fluctuate due to market changes"
   }
 }

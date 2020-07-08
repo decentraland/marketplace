@@ -6,6 +6,7 @@ import { NFTFilters as SuperRareNFTFilters } from '../super_rare/NFTFilters'
 import { Props } from './NFTFilters.types'
 import './NFTFilters.css'
 
+// TODO: Code on each NFTFilters can be extracted
 const NFTFilters = (props: Props) => {
   const { vendor, onBrowse } = props
 
