@@ -28,6 +28,28 @@ class SuperRareAPI extends BaseAPI {
     }
   }
 
+  async fetchNFTs(params: NFTsFetchParams): Promise<SuperRareAsset[]> {
+    const requestParams: SuperRareFetchOrderParams = {
+      name: params.search,
+      order: params.orderDirection,
+      offset: params.skip,
+      limit: params.first
+    }
+
+    requestParams.sort =
+      params.orderBy === NFTSortBy.PRICE
+        ? 'price'
+        : params.orderBy === NFTSortBy.ORDER_CREATED_AT
+        ? 'timestamp'
+        : undefined
+
+    if (params.address) {
+      requestParams.owner_addresses = [params.address]
+    }
+
+    return this.request('get', '/nfts/assets', requestParams)
+  }
+
   async fetchNFT(
     contractAddress: string,
     tokenId: string
@@ -44,23 +66,7 @@ class SuperRareAPI extends BaseAPI {
     return nfts[0]
   }
 
-  async fetchOrder(
-    contractAddress: string,
-    tokenId: string
-  ): Promise<SuperRareOrder> {
-    const requestParams: SuperRareFetchOrderParams = {
-      asset_contract_addresses: [contractAddress],
-      asset_ids: [Number(tokenId)]
-    }
-    const orders: SuperRareOrder[] = await this.request(
-      'get',
-      '/nfts/orders',
-      requestParams
-    )
-    return orders[0]
-  }
-
-  fetchOrders(params: NFTsFetchParams): Promise<SuperRareOrder[]> {
+  async fetchOrders(params: NFTsFetchParams): Promise<SuperRareOrder[]> {
     const requestParams: SuperRareFetchOrderParams = {
       name: params.search,
       order: params.orderDirection,
@@ -80,6 +86,22 @@ class SuperRareAPI extends BaseAPI {
     }
 
     return this.request('get', '/nfts/orders', requestParams)
+  }
+
+  async fetchOrder(
+    contractAddress: string,
+    tokenId: string
+  ): Promise<SuperRareOrder> {
+    const requestParams: SuperRareFetchOrderParams = {
+      asset_contract_addresses: [contractAddress],
+      asset_ids: [Number(tokenId)]
+    }
+    const orders: SuperRareOrder[] = await this.request(
+      'get',
+      '/nfts/orders',
+      requestParams
+    )
+    return orders[0]
   }
 
   request(

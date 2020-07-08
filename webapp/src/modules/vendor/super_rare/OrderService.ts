@@ -5,6 +5,7 @@ import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
 import { Order } from '../../order/types'
+import { TransferType, MarketPrice } from '../MarketPrice'
 import { ContractService as DecentralandContractService } from '../decentraland/ContractService'
 import { ContractService } from './ContractService'
 import { OrderService as OrderServiceInterface } from '../services'
@@ -28,6 +29,7 @@ export class OrderService implements OrderServiceInterface {
     const from = Address.fromString(fromAddress)
 
     let calldata: string
+    let transferType: TransferType
     let assetMarketAddress: Address
 
     const abiCoder = new ABICoder()
@@ -42,6 +44,7 @@ export class OrderService implements OrderServiceInterface {
         },
         [nft.tokenId]
       )
+      transferType = TransferType.TRANSFER
 
       assetMarketAddress = Address.fromString(contractAddresses.SuperRareMarket)
     } else if (nft.contractAddress === contractAddresses.SuperRareV2) {
@@ -56,6 +59,7 @@ export class OrderService implements OrderServiceInterface {
         },
         [nft.contractAddress, nft.tokenId]
       )
+      transferType = TransferType.SAFE_TRANSFER_FROM
 
       assetMarketAddress = Address.fromString(
         contractAddresses.SuperRareMarketV2
@@ -73,6 +77,9 @@ export class OrderService implements OrderServiceInterface {
       MarketplaceAdapter,
       contractAddresses.MarketplaceAdapter
     )
+
+    const marketPrice = new MarketPrice()
+
     return marketplaceAdapter.methods
       .buy(
         assetContractAddress,
@@ -80,7 +87,10 @@ export class OrderService implements OrderServiceInterface {
         assetMarketAddress,
         calldata,
         order.ethPrice!.toString(),
-        manaTokenAddress
+        manaTokenAddress,
+        marketPrice.addMaxSlippage(order.price),
+        transferType,
+        from
       )
       .send({ from })
       .getTxHash()

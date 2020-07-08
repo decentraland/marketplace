@@ -9,10 +9,10 @@ const AccountSidebar = (props: Props) => {
   const { address, section, onBrowse } = props
 
   const handleOnBrowse = useCallback(
-    (section: Section) => {
-      onBrowse({ section })
+    (vendor: Vendors, section: Section) => {
+      onBrowse({ vendor, section, address })
     },
-    [onBrowse]
+    [address, onBrowse]
   )
 
   const decentraland = Vendors.DECENTRALAND
@@ -24,7 +24,7 @@ const AccountSidebar = (props: Props) => {
         address={address}
         vendor={decentraland}
         section={section}
-        onClick={handleOnBrowse}
+        onClick={section => handleOnBrowse(decentraland, section)}
       />
       {Object.values(Partner).map(partner => (
         <VendorMenu
@@ -32,7 +32,7 @@ const AccountSidebar = (props: Props) => {
           address={address}
           vendor={partner}
           section={section}
-          onClick={handleOnBrowse}
+          onClick={section => handleOnBrowse(partner, section)}
         />
       ))}
     </div>

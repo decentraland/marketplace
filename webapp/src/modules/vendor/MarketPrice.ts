@@ -12,6 +12,12 @@ type CoinTickers = {
   tickers: Ticker[]
 }
 
+export enum TransferType {
+  SAFE_TRANSFER_FROM = 0,
+  TRANSFER_FROM = 1,
+  TRANSFER = 2
+}
+
 export class MarketPrice {
   public oneMillion: BN
   public feePerMillion: BN
@@ -34,6 +40,12 @@ export class MarketPrice {
     return bnAmount
       .add(bnAmount.mul(this.feePerMillion).div(this.oneMillion))
       .toString()
+  }
+
+  addMaxSlippage(manaWeiAmount: string | number) {
+    return toBN(manaWeiAmount)
+      .mul(toBN(110))
+      .divRound(toBN(100)) // 10 percent increase
   }
 
   async convertEthToMANA(ethAmount: number) {

@@ -21,25 +21,43 @@ export class NFTService implements NFTServiceInterface {
   }
 
   async fetch(params: NFTsFetchParams) {
-    const [remoteOrders, total] = await Promise.all([
-      superRareAPI.fetchOrders(params),
-      this.count(params)
-    ])
+    let remoteNFTs: SuperRareAsset[]
+    let remoteOrders: SuperRareOrder[]
+
+    if (params.address) {
+      const result = await Promise.all([
+        superRareAPI.fetchNFTs(params),
+        superRareAPI.fetchOrders(params)
+      ])
+      remoteNFTs = result[0]
+      remoteOrders = result[1]
+    } else {
+      remoteOrders = await superRareAPI.fetchOrders(params)
+      remoteNFTs = remoteOrders.map(order => order.asset)
+    }
 
     const nfts: NFT[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
+    const total = await this.count(params)
     const oneEthInMANA = await this.getOneEthInMANA()
 
-    for (const remoteOrder of remoteOrders) {
-      const asset = remoteOrder.asset
-
+    for (const asset of remoteNFTs) {
       const nft = this.toNFT(asset)
-      const order = this.toOrder(remoteOrder, oneEthInMANA)
 
-      nft.activeOrderId = order.id
-      order.nftId = nft.id
+      const remoteOrder = remoteOrders.find(
+        order => order.asset.id === asset.id
+      )
+
+      if (remoteOrder) {
+        const order = this.toOrder(remoteOrder, oneEthInMANA)
+
+        nft.activeOrderId = order.id
+        order.nftId = nft.id
+
+        orders.push(order)
+      }
 
       let account = accounts.find(account => account.id === asset.owner.address)
       if (!account) {
@@ -48,7 +66,6 @@ export class NFTService implements NFTServiceInterface {
       account.nftIds.push(nft.id)
 
       nfts.push(nft)
-      orders.push(order)
       accounts.push(account)
     }
 
@@ -61,8 +78,15 @@ export class NFTService implements NFTServiceInterface {
       first: MAX_QUERY_SIZE,
       skip: 0
     }
-    const remoteOrders = await superRareAPI.fetchOrders(params)
-    return remoteOrders.length
+
+    let remoteElements
+    if (params.address) {
+      remoteElements = await superRareAPI.fetchNFTs(params)
+    } else {
+      remoteElements = await superRareAPI.fetchOrders(params)
+    }
+
+    return remoteElements.length
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
@@ -71,11 +95,16 @@ export class NFTService implements NFTServiceInterface {
       superRareAPI.fetchOrder(contractAddress, tokenId),
       this.getOneEthInMANA()
     ])
-    const nft = this.toNFT(remoteNFT)
-    const order = this.toOrder(remoteOrder, oneEthInMANA)
 
-    nft.activeOrderId = order.id
-    order.nftId = nft.id
+    const nft = this.toNFT(remoteNFT)
+    let order: Order | undefined
+
+    if (remoteOrder) {
+      order = this.toOrder(remoteOrder, oneEthInMANA)
+
+      nft.activeOrderId = order.id
+      order.nftId = nft.id
+    }
 
     return [nft, order] as const
   }
@@ -122,7 +151,7 @@ export class NFTService implements NFTServiceInterface {
       owner: asset.owner.address,
       buyer: taker ? taker.address : null,
       price: price.toString(10),
-      ethPrice: order.amountWithFee.toString(),
+      ethPrice: totalWei.toString(),
       status: OrderStatus.OPEN,
       createdAt: order.timestamp,
       updatedAt: order.timestamp

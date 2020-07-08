@@ -6,10 +6,14 @@ import { Vendors } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/selectors'
 import { getVendor } from '../routing/selectors'
+import { getAddress as getWalletAddress } from '../wallet/selectors'
+import { getAddress as getAccountAddress } from '../account/selectors'
 import { fetchNFTsRequest } from '../nft/actions'
 import { getFilters } from '../vendor/utils'
 import { getSortOrder } from '../nft/utils'
 import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
+import { locations } from './locations'
+import { getSearchParams, getSearchCategory } from './search'
 import {
   getPage,
   getSection,
@@ -20,7 +24,6 @@ import {
   getContracts,
   getSearch
 } from './selectors'
-import { getSearchParams, getSearchCategory } from './search'
 import { BROWSE, BrowseAction, setIsLoadMore } from './actions'
 import { SearchOptions } from './types'
 
@@ -79,46 +82,59 @@ function* handleBrowse(action: BrowseAction) {
   )
 }
 
-function* getNewSearchOptions(currentOptions: SearchOptions) {
-  const previousOptions: SearchOptions = {
+function* getNewSearchOptions(current: SearchOptions) {
+  let previous: SearchOptions = {
+    address: yield getAddress(),
     vendor: yield select(getVendor),
+    section: yield select(getSection),
     page: yield select(getPage),
     view: yield select(getView),
-    section: yield select(getSection),
     sortBy: yield select(getSortBy),
     search: yield select(getSearch),
     onlyOnSale: yield select(getOnlyOnSale)
   }
-  currentOptions = yield onSearchOptionsUpdate(previousOptions, currentOptions)
+  current = yield deriveCurrentOptions(previous, current)
 
-  const view =
-    previousOptions.page! < currentOptions.page!
-      ? View.LOAD_MORE
-      : currentOptions.view || previousOptions.view
+  const view = deriveView(previous, current)
+  const vendor = deriveVendor(previous, current)
 
-  const vendor =
-    currentOptions.vendor || previousOptions.vendor || Vendors.DECENTRALAND
+  if (shouldResetOptions(previous, current)) {
+    previous = {}
+  }
 
   return {
-    ...previousOptions,
-    ...currentOptions,
+    ...previous,
+    ...current,
     view,
     vendor
   }
 }
 
-// TODO: Maybe this should live in vendor
-function* onSearchOptionsUpdate(
-  previousOptions: SearchOptions,
-  currentOptions: SearchOptions
-) {
-  let newOptions = { ...currentOptions }
+function* getAddress() {
+  const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
+  let address: string | undefined
 
-  const nextCategory = getSearchCategory(currentOptions.section!)
+  if (pathname === locations.currentAccount()) {
+    address = yield select(getWalletAddress)
+  } else {
+    address = yield select(getAccountAddress)
+  }
+
+  return address
+}
+
+// TODO: Consider moving this should live to each vendor
+function* deriveCurrentOptions(
+  previous: SearchOptions,
+  current: SearchOptions
+) {
+  let newOptions = { ...current }
+
+  const nextCategory = getSearchCategory(current.section!)
 
   switch (nextCategory) {
     case NFTCategory.WEARABLE: {
-      const prevCategory = getSearchCategory(previousOptions.section!)
+      const prevCategory = getSearchCategory(previous.section!)
 
       // Category specific logic to keep filters if the category doesn't change
       if (prevCategory && prevCategory === nextCategory) {
@@ -134,4 +150,21 @@ function* onSearchOptionsUpdate(
   }
 
   return newOptions
+}
+
+function deriveView(previous: SearchOptions, current: SearchOptions) {
+  return previous.page! < current.page!
+    ? View.LOAD_MORE
+    : current.view || previous.view
+}
+
+function deriveVendor(previous: SearchOptions, current: SearchOptions) {
+  return current.vendor || previous.vendor || Vendors.DECENTRALAND
+}
+
+function shouldResetOptions(previous: SearchOptions, current: SearchOptions) {
+  return (
+    (current.vendor && current.vendor !== previous.vendor) ||
+    (current.section && current.section !== previous.section)
+  )
 }
