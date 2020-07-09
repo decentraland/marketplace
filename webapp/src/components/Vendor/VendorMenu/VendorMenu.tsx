@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useMemo } from 'react'
+import React, { useCallback, useState, useMemo, useEffect } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { getMaxQuerySize } from '../../../modules/vendor/api'
@@ -12,8 +12,9 @@ import './VendorMenu.css'
 const VendorMenu = (props: Props) => {
   const { count, currentVendor, address, vendor, section, onClick } = props
 
-  const isCurrentVendor = currentVendor === vendor
-
+  const [isCurrentVendor, setIsCurrentVendor] = useState(
+    currentVendor === vendor
+  )
   const [isOpen, setIsOpen] = useState(isCurrentVendor)
   const [currentCount, setCurrentCount] = useState(count)
 
@@ -25,8 +26,11 @@ const VendorMenu = (props: Props) => {
     }
   }, [isDisabled, isOpen, setIsOpen])
 
-  // TODO: Move this to redux and the UI reducer. We should also split it into multiple reducers
+  useEffect(() => {
+    setIsCurrentVendor(currentVendor === vendor)
+  }, [currentVendor, vendor])
 
+  // TODO: Move this to redux and the UI reducer. We should also split it into multiple reducers
   useMemo(async () => {
     if (isCurrentVendor) {
       setCurrentCount(count)
