@@ -73,12 +73,7 @@ class SuperRareAPI extends BaseAPI {
     path: string,
     params: SuperRareFetchOrderParams
   ) {
-    return super.request(
-      method,
-      path,
-      { ...params, type: 'sell' },
-      this.getHeaders()
-    )
+    return super.request(method, path, params, this.getHeaders())
   }
 
   private getHeaders() {
@@ -116,6 +111,10 @@ class SuperRareAPI extends BaseAPI {
 
     if (params.address) {
       requestParams.owner_addresses = [params.address]
+    }
+
+    if (params.onlyOnSale) {
+      requestParams.type = 'sell'
     }
 
     return requestParams

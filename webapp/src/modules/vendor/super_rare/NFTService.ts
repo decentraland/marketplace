@@ -32,7 +32,7 @@ export class NFTService implements NFTServiceInterface {
     let remoteNFTs: SuperRareAsset[]
     let remoteOrders: SuperRareOrder[]
 
-    if (params.address) {
+    if ((params.address && !params.onlyOnSale) || !params.onlyOnSale) {
       const result = await Promise.all([
         superRareAPI.fetchNFTs(params),
         superRareAPI.fetchOrders(params)
@@ -198,7 +198,6 @@ export class NFTService implements NFTServiceInterface {
 
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
-    console.log(mana.toString())
     return toWei(mana.toString(), 'ether')
   }
 }

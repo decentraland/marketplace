@@ -1,6 +1,5 @@
 import { Address } from 'web3x-es/address'
 import { ABICoder } from 'web3x-es/contract/abi-coder'
-import { fromWei } from 'web3x-es/utils'
 
 import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
 import { ContractFactory } from '../../contract/ContractFactory'
@@ -54,24 +53,6 @@ export class OrderService implements OrderServiceInterface {
       order.ethPrice!
     )
     const maxPrice = this.marketplacePrice.addMaxSlippage(manaPrice)
-
-    const oneEthInMANA = await this.tokenConverter.contractEthToMANA(
-      '1000000000000000000'
-    )
-
-    console.log({
-      assetContractAddress: assetContractAddress.toString(),
-      tokenId: nft.tokenId,
-      assetMarketAddress: assetMarketAddress.toString(),
-      calldata,
-      ethPrice: order.ethPrice!,
-      oneEthInMANA: oneEthInMANA.toString(),
-      manaTokenAddress: manaTokenAddress.toString(),
-      manaPrice: fromWei(manaPrice, 'ether').toString(),
-      maxPrice: fromWei(maxPrice, 'ether').toString(),
-      transferType,
-      from
-    })
 
     // Contract
     const marketplaceAdapter = ContractFactory.build(

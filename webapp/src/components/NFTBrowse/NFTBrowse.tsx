@@ -13,10 +13,13 @@ import './NFTBrowse.css'
 const NFTBrowse = (props: Props) => {
   const { vendor, view, defaultOnlyOnSale, address, onBrowse } = props
 
+  const onlyOnSale =
+    props.onlyOnSale === undefined ? defaultOnlyOnSale : props.onlyOnSale
+
   // Kick things off
   useEffect(() => {
-    onBrowse({ vendor, view, address, onlyOnSale: defaultOnlyOnSale })
-  }, [onBrowse, vendor, view, defaultOnlyOnSale, address])
+    onBrowse({ vendor, view, address, onlyOnSale })
+  }, [onBrowse, vendor, view, onlyOnSale, address])
 
   return (
     <Page className="NFTBrowse">
