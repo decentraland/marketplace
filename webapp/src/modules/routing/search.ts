@@ -1,6 +1,6 @@
-import { NFTCategory } from '../nft/types'
 import { WearableCategory } from '../nft/wearable/types'
 import { Vendors } from '../vendor/types'
+import { NFTCategory } from '../vendor/nft/types'
 import { Section } from '../vendor/routing/types'
 import { SearchOptions } from './types'
 

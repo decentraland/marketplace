@@ -24,6 +24,10 @@ export class TokenConverter {
     exchanges: string[] = ['uniswap']
   ) {
     const apiURL = process.env.REACT_APP_COINGECKO_API_URL!
+    if (!apiURL) {
+      throw new Error(`Invalid converter API URL "${apiURL}"`)
+    }
+
     const response = await window.fetch(
       `${apiURL}/coins/${coinId}/tickers?exchange_ids=${exchanges.join(',')}`
     )

@@ -8,8 +8,6 @@ import { NFTCategory, NFTsFetchFilters } from '../vendor/nft/types'
 import { Vendors } from '../vendor/types'
 import { SortDirection } from '../routing/types'
 
-export { NFTCategory }
-
 export enum NFTSortBy {
   NAME = 'name',
   CREATED_AT = 'createdAt',

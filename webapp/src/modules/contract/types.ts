@@ -1,4 +1,4 @@
-import { NFTCategory } from '../nft/types'
+import { NFTCategory } from '../vendor/nft/types'
 import { ContractName } from '../vendor/types'
 
 type Contract = {

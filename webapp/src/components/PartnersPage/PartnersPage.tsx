@@ -55,7 +55,7 @@ const PartnersPage = (props: Props) => {
               <PartnersSidebar onMenuItemClick={handleOnNavigate} />
             </Responsive>
           </Column>
-          <Column align="right" grow={isSuperRareLoading}>
+          <Column align="right" grow={true}>
             <Slideshow
               title={t('partners_page.latest_from', {
                 vendor: t('vendors.super_rare')
