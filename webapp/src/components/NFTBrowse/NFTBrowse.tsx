@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Page, Responsive } from 'decentraland-ui'
 
+import { Atlas } from '../Atlas'
 import { NFTList } from '../NFTList'
 import { AccountSidebar } from '../AccountSidebar'
 import { Row } from '../Layout/Row'
@@ -11,7 +12,7 @@ import { Props } from './NFTBrowse.types'
 import './NFTBrowse.css'
 
 const NFTBrowse = (props: Props) => {
-  const { vendor, view, defaultOnlyOnSale, address, onBrowse } = props
+  const { vendor, view, defaultOnlyOnSale, isMap, address, onBrowse } = props
 
   const onlyOnSale =
     props.onlyOnSale === undefined ? defaultOnlyOnSale : props.onlyOnSale
@@ -32,7 +33,7 @@ const NFTBrowse = (props: Props) => {
 
         <Column align="right" grow={true}>
           <NFTFilters />
-          <NFTList />
+          {isMap ? <Atlas withNavigation /> : <NFTList />}
         </Column>
       </Row>
     </Page>

@@ -11,14 +11,22 @@ export function getSearchParams(options?: SearchOptions) {
   if (options) {
     params = new URLSearchParams()
 
+    if (options.section) {
+      params.set('section', options.section)
+    }
+
+    // isMap is a standalone option so if it's selected all the other params don't matter and are discarded.
+    // We keep the section to signify we're on a land related option but that's it. Mind the early return
+    if (options.isMap !== undefined) {
+      params.set('isMap', options.isMap.toString())
+      return params
+    }
+
     if (options.vendor) {
       params.set('vendor', options.vendor)
     }
     if (options.page) {
       params.set('page', options.page.toString())
-    }
-    if (options.section) {
-      params.set('section', options.section)
     }
     if (options.sortBy) {
       params.set('sortBy', options.sortBy)

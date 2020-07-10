@@ -124,6 +124,14 @@
   background-size: 20px;
 }
 
+.NFTFilters .Chip.grid {
+  border-radius: 4px 0 0 4px;
+}
+
+.NFTFilters .Chip.atlas {
+  border-radius: 0 4px 4px 0;
+}
+
 /*------------------
   FiltersModal
  */

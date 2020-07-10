@@ -4,7 +4,6 @@ import { SearchOptions } from './types'
 export const locations = {
   root: () => '/',
   signIn: () => '/sign-in',
-  atlas: () => '/atlas',
   settings: () => '/settings',
   partners: () => '/partners',
   bids: () => '/bids',

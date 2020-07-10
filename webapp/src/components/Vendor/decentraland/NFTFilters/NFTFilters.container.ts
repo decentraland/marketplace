@@ -6,6 +6,7 @@ import {
   getSection,
   getSortBy,
   getOnlyOnSale,
+  getIsMap,
   getWearableRarities,
   getWearableGenders,
   getSearch,
@@ -20,6 +21,7 @@ const mapState = (state: RootState): MapStateProps => ({
   sortBy: getSortBy(state),
   search: getSearch(state),
   onlyOnSale: getOnlyOnSale(state),
+  isMap: getIsMap(state),
   wearableRarities: getWearableRarities(state),
   wearableGenders: getWearableGenders(state),
   contracts: getContracts(state)

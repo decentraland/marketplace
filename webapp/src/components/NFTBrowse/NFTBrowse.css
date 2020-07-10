@@ -28,8 +28,9 @@
   color: var(--secondary-text);
 }
 
-.NFTBrowse .results {
-  margin: 0px;
+.NFTBrowse .Atlas {
+  min-height: 700px;
+  height: 100%;
 }
 
 @media (max-width: 768px) {

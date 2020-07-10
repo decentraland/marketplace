@@ -62,6 +62,14 @@ export const getOnlyOnSale = createSelector<
   return onlyOnSale === null ? undefined : onlyOnSale === 'true'
 })
 
+export const getIsMap = createSelector<RootState, string, boolean | undefined>(
+  getRouterSearch,
+  search => {
+    const isMap = new URLSearchParams(search).get('isMap')
+    return isMap === null ? undefined : isMap === 'true'
+  }
+)
+
 export const getWearableRarities = createSelector<
   RootState,
   string,

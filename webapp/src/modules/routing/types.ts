@@ -24,6 +24,7 @@ export type SearchOptions = {
   section?: Section
   sortBy?: SortBy
   onlyOnSale?: boolean
+  isMap?: boolean
   wearableRarities?: WearableRarity[]
   wearableGenders?: WearableGender[]
   search?: string

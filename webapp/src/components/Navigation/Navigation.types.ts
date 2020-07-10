@@ -1,5 +1,4 @@
 export enum NavigationTab {
-  ATLAS = 'atlas',
   BROWSE = 'browse',
   PARTNERS = 'partners',
   PARTNER = 'partner',

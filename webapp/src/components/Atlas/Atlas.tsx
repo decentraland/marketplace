@@ -72,7 +72,9 @@ const Atlas = (props: Props) => {
 
   const handleClick = useCallback(
     async (x: number, y: number) => {
-      if (!withNavigation) return
+      if (!withNavigation) {
+        return
+      }
       const tile = tiles[getCoords(x, y)] as Tile
       if (!tile) {
         return
@@ -96,17 +98,19 @@ const Atlas = (props: Props) => {
   )
 
   return (
-    <AtlasComponent
-      {...props}
-      tiles={tiles}
-      onClick={handleClick}
-      layers={[
-        forSaleLayer,
-        ...(props.layers || []),
-        selectedStrokeLayer,
-        selectedFillLayer
-      ]}
-    />
+    <div className="Atlas">
+      <AtlasComponent
+        {...props}
+        tiles={tiles}
+        onClick={handleClick}
+        layers={[
+          forSaleLayer,
+          ...(props.layers || []),
+          selectedStrokeLayer,
+          selectedFillLayer
+        ]}
+      />
+    </div>
   )
 }
 

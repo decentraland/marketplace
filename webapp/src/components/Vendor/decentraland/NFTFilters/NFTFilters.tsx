@@ -17,10 +17,12 @@ import {
   WearableGender
 } from '../../../../modules/nft/wearable/types'
 import { ContractName } from '../../../../modules/vendor/types'
+import { Section } from '../../../../modules/vendor/decentraland/routing/types'
 import { NFTCategory } from '../../../../modules/vendor/decentraland/nft/types'
 import { MAX_QUERY_SIZE } from '../../../../modules/vendor/decentraland/api'
 import { getSearchCategory } from '../../../../modules/routing/search'
 import { NFTSidebar } from '../../NFTSidebar'
+import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
@@ -31,6 +33,7 @@ const NFTFilters = (props: Props) => {
     search,
     count,
     onlyOnSale,
+    isMap,
     wearableRarities,
     wearableGenders,
     contracts,
@@ -75,6 +78,13 @@ const NFTFilters = (props: Props) => {
   const handleOnlyOnSaleChange = useCallback(
     (_, props: CheckboxProps) => {
       onBrowse({ onlyOnSale: !!props.checked })
+    },
+    [onBrowse]
+  )
+
+  const handleIsMapChange = useCallback(
+    (isMap: boolean) => {
+      onBrowse({ isMap })
     },
     [onBrowse]
   )
@@ -165,6 +175,31 @@ const NFTFilters = (props: Props) => {
             label={t('nft_filters.on_sale')}
           />
         </Responsive>
+
+        {section === Section.LAND ||
+        section === Section.PARCELS ||
+        section === Section.ESTATES ? (
+          <Responsive
+            minWidth={Responsive.onlyTablet.minWidth}
+            className="topbar-filter"
+          >
+            <div className="toggle-map">
+              <Chip
+                className="grid"
+                icon="table"
+                isActive={!isMap}
+                onClick={() => handleIsMapChange(false)}
+              />
+              <Chip
+                className="atlas"
+                icon="map marker alternate"
+                isActive={isMap}
+                onClick={() => handleIsMapChange(true)}
+              />
+            </div>
+          </Responsive>
+        ) : null}
+
         {category === NFTCategory.WEARABLE ? (
           <Responsive
             minWidth={Responsive.onlyTablet.minWidth}

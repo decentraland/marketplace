@@ -19,6 +19,7 @@ import {
   getSection,
   getSortBy,
   getOnlyOnSale,
+  getIsMap,
   getWearableRarities,
   getWearableGenders,
   getContracts,
@@ -43,6 +44,7 @@ function* handleBrowse(action: BrowseAction) {
     sortBy,
     search,
     onlyOnSale,
+    isMap,
     address
   } = searchOptions
   const isLoadMore = view === View.LOAD_MORE
@@ -63,23 +65,26 @@ function* handleBrowse(action: BrowseAction) {
 
   yield put(setIsLoadMore(isLoadMore))
   yield put(push(params ? `${pathname}?${params.toString()}` : pathname))
-  yield put(
-    fetchNFTsRequest({
-      vendor,
-      view,
-      params: {
-        first,
-        skip,
-        orderBy,
-        orderDirection,
-        onlyOnSale: onlyOnSale,
-        address,
-        category,
-        search
-      },
-      filters: getFilters(vendor, searchOptions)
-    })
-  )
+
+  if (!isMap) {
+    yield put(
+      fetchNFTsRequest({
+        vendor,
+        view,
+        params: {
+          first,
+          skip,
+          orderBy,
+          orderDirection,
+          onlyOnSale,
+          address,
+          category,
+          search
+        },
+        filters: getFilters(vendor, searchOptions)
+      })
+    )
+  }
 }
 
 function* getNewSearchOptions(current: SearchOptions) {
@@ -91,7 +96,8 @@ function* getNewSearchOptions(current: SearchOptions) {
     view: yield select(getView),
     sortBy: yield select(getSortBy),
     search: yield select(getSearch),
-    onlyOnSale: yield select(getOnlyOnSale)
+    onlyOnSale: yield select(getOnlyOnSale),
+    isMap: yield select(getIsMap)
   }
   current = yield deriveCurrentOptions(previous, current)
 

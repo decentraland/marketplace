@@ -3,7 +3,6 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
 
 import { locations } from '../../modules/routing/locations'
-import { AtlasPage } from '../AtlasPage'
 import { BrowsePage } from '../BrowsePage'
 import { AccountPage } from '../AccountPage'
 import { SignInPage } from '../SignInPage'
@@ -25,7 +24,6 @@ const Routes = () => {
   return (
     <>
       <Switch>
-        <Route exact path={locations.atlas()} component={AtlasPage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
         <Route
           exact
