@@ -1,9 +1,10 @@
 .NFTFilters {
-  margin-bottom: 20px;
 }
 
 .NFTFilters .topbar {
+  margin-bottom: 28px;
   display: flex;
+  align-items: center;
   font-size: 12px;
 }
 
@@ -11,6 +12,7 @@
   margin-left: 20px;
 }
 
+.NFTFilters .topbar > .full-width,
 .NFTFilters .topbar > .TextFilter {
   flex: 1 0 auto;
   margin-right: 30px;
@@ -22,14 +24,9 @@
   background-position-y: 4px;
 }
 
-.NFTFilters .topbar > .ui.dropdown,
-.NFTFilters .topbar > .open-filters-wrapper {
-  height: 29px;
-}
-
-.NFTFilters .Filter {
+.NFTFilters .topbar .ui.dropdown {
   display: flex;
-  flex-direction: column;
+  line-height: 1;
 }
 
 .NFTFilters .Filter .ui.sub.header.name {

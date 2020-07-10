@@ -150,31 +150,39 @@ const NFTFilters = (props: Props) => {
   return (
     <div className="NFTFilters">
       <div className="topbar">
-        <TextFilter
-          value={search}
-          placeholder={searchPlaceholder}
-          onChange={handleSearch}
-        />
-        <Responsive
-          as={Dropdown}
-          className="topbar-filter"
-          minWidth={Responsive.onlyTablet.minWidth}
-          direction="left"
-          value={sortBy}
-          options={dropdownOptions}
-          onChange={handleDropdownChange}
-        />
-        <Responsive
-          minWidth={Responsive.onlyTablet.minWidth}
-          className="topbar-filter"
-        >
-          <Radio
-            toggle
-            checked={onlyOnSale}
-            onChange={handleOnlyOnSaleChange}
-            label={t('nft_filters.on_sale')}
-          />
-        </Responsive>
+        {isMap ? (
+          <div className="full-width" />
+        ) : (
+          <>
+            <TextFilter
+              value={search}
+              placeholder={searchPlaceholder}
+              onChange={handleSearch}
+            />
+            <Responsive
+              minWidth={Responsive.onlyTablet.minWidth}
+              className="topbar-filter"
+            >
+              <Dropdown
+                direction="left"
+                value={sortBy}
+                options={dropdownOptions}
+                onChange={handleDropdownChange}
+              />
+            </Responsive>
+            <Responsive
+              minWidth={Responsive.onlyTablet.minWidth}
+              className="topbar-filter"
+            >
+              <Radio
+                toggle
+                checked={onlyOnSale}
+                onChange={handleOnlyOnSaleChange}
+                label={t('nft_filters.on_sale')}
+              />
+            </Responsive>
+          </>
+        )}
 
         {section === Section.LAND ||
         section === Section.PARCELS ||
