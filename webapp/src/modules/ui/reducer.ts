@@ -5,15 +5,16 @@ import {
   FETCH_NFTS_REQUEST
 } from '../nft/actions'
 import {
+  FETCH_BIDS_BY_NFT_SUCCESS,
   FETCH_BIDS_BY_ADDRESS_SUCCESS,
+  ARCHIVE_BID,
+  UNARCHIVE_BID,
   FetchBidsByAddressSuccessAction,
   ArchiveBidAction,
   UnarchiveBidAction,
-  ARCHIVE_BID,
-  UNARCHIVE_BID,
-  FetchBidsByNFTSuccessAction,
-  FETCH_BIDS_BY_NFT_SUCCESS
+  FetchBidsByNFTSuccessAction
 } from '../bid/actions'
+import { SET_VIEW, SetViewAction } from './actions'
 import { View } from './types'
 
 export type UIState = {
@@ -47,6 +48,7 @@ const INITIAL_STATE: UIState = {
 }
 
 type UIReducerAction =
+  | SetViewAction
   | FetchNFTsRequestAction
   | FetchNFTsSuccessAction
   | FetchBidsByAddressSuccessAction
@@ -59,6 +61,12 @@ export function uiReducer(
   action: UIReducerAction
 ) {
   switch (action.type) {
+    case SET_VIEW: {
+      return {
+        ...state,
+        view: action.payload.view
+      }
+    }
     case FETCH_NFTS_REQUEST: {
       return {
         ...state,

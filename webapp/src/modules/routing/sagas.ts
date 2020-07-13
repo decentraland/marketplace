@@ -9,6 +9,7 @@ import { getVendor } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
 import { fetchNFTsRequest } from '../nft/actions'
+import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
 import { getSortOrder } from '../nft/utils'
 import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
@@ -66,7 +67,9 @@ function* handleBrowse(action: BrowseAction) {
   yield put(setIsLoadMore(isLoadMore))
   yield put(push(params ? `${pathname}?${params.toString()}` : pathname))
 
-  if (!isMap) {
+  if (isMap) {
+    yield put(setView(view))
+  } else {
     yield put(
       fetchNFTsRequest({
         vendor,

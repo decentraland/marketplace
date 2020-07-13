@@ -13,15 +13,23 @@ const Chip = (props: Props) => {
 
   const classNames = ['Chip', type]
 
-  if (className) classNames.push(className)
-  if (isActive) classNames.push('active')
-  if (isDisabled) classNames.push('disabled')
-  if (onClick && !isDisabled) classNames.push('clickeable')
+  if (className) {
+    classNames.push(className)
+  }
+  if (isActive) {
+    classNames.push('active')
+  }
+  if (isDisabled) {
+    classNames.push('disabled')
+  }
+  if (onClick && !isDisabled) {
+    classNames.push('clickeable')
+  }
 
   return (
     <div
       className={classNames.join(' ')}
-      onClick={isDisabled ? undefined : onClick}
+      onClick={isActive || isDisabled ? undefined : onClick}
     >
       {text ? (
         <span className="text">{text}</span>

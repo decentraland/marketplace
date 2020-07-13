@@ -33,17 +33,17 @@
   background: var(--bluish-steel);
 }
 
-.Chip.active {
-  background: rgba(var(--bluish-steel-raw), 0.32);
-  color: var(--primary);
-}
-.Chip.active {
-  background: rgba(var(--bluish-steel-raw), 0.32);
-  color: var(--primary);
-}
-
 .Chip.clickeable {
   cursor: pointer;
+}
+
+.Chip.active {
+  background: rgba(var(--bluish-steel-raw), 0.32);
+  color: var(--primary);
+  cursor: default;
+}
+.Chip.active:hover {
+  background: rgba(var(--bluish-steel-raw), 0.32);
 }
 
 .Chip.disabled {
