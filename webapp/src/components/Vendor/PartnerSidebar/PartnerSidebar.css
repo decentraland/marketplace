@@ -1,4 +1,4 @@
-.NFTSidebar .go-back {
+.PartnerSidebar .go-back {
   margin-top: 3px;
   margin-bottom: 21px;
   display: flex;
@@ -9,8 +9,8 @@
   cursor: pointer;
 }
 
-.NFTSidebar i.back.icon {
-  background-image: url(../../../../images/back.svg);
+.PartnerSidebar i.back.icon {
+  background-image: url(../../../images/back.svg);
   background-repeat: no-repeat;
   background-size: 6px;
 }

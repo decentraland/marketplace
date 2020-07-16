@@ -1,23 +1,20 @@
 import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { locations } from '../../../../modules/routing/locations'
-import { Vendors } from '../../../../modules/vendor/types'
-import { VendorMenu } from '../../../Vendor/VendorMenu'
-import { Props } from './NFTSidebar.types'
-import './NFTSidebar.css'
+import { locations } from '../../../modules/routing/locations'
+import { VendorMenu } from '../../Vendor/VendorMenu'
+import { Props } from './PartnerSidebar.types'
+import './PartnerSidebar.css'
 
-const NFTSidebar = (props: Props) => {
-  const { section, onMenuItemClick, onNavigate } = props
+const PartnerSidebar = (props: Props) => {
+  const { vendor, section, onMenuItemClick, onNavigate } = props
 
   const handleGoBack = useCallback(() => {
     onNavigate(locations.partners())
   }, [onNavigate])
 
-  const vendor = Vendors.SUPER_RARE
-
   return (
-    <div className="NFTSidebar">
+    <div className="PartnerSidebar">
       <div className="go-back" onClick={handleGoBack}>
         <i className="back icon" />
         {t('nft_sidebar.back')}
@@ -28,4 +25,4 @@ const NFTSidebar = (props: Props) => {
   )
 }
 
-export default React.memo(NFTSidebar)
+export default React.memo(PartnerSidebar)

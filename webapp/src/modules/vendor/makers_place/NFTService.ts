@@ -11,11 +11,10 @@ import { getNFTId } from '../../nft/utils'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
-import { Vendors, TransferType } from '../types'
+import { Vendors } from '../types'
 import { NFTCategory } from './nft/types'
-import { ContractService } from './ContractService'
-import { SuperRareAsset, SuperRareOrder, SuperRareOwner } from './types'
-import { superRareAPI, MAX_QUERY_SIZE } from './api'
+import { MakersPlaceAsset, FetchSuccessResponse } from './types'
+import { makersPlaceAPI } from './api'
 
 export class NFTService implements NFTServiceInterface {
   private tokenConverter: TokenConverter
@@ -29,37 +28,26 @@ export class NFTService implements NFTServiceInterface {
   }
 
   async fetch(params: NFTsFetchParams) {
-    let remoteNFTs: SuperRareAsset[]
-    let remoteOrders: SuperRareOrder[]
+    const [response, total, oneEthInMANA] = await Promise.all([
+      makersPlaceAPI.fetch(params),
+      this.count(params),
+      this.getOneEthInMANA()
+    ])
 
-    if ((params.address && !params.onlyOnSale) || !params.onlyOnSale) {
-      const result = await Promise.all([
-        superRareAPI.fetchNFTs(params),
-        superRareAPI.fetchOrders(params)
-      ])
-      remoteNFTs = result[0]
-      remoteOrders = result[1]
-    } else {
-      remoteOrders = await superRareAPI.fetchOrders(params)
-      remoteNFTs = remoteOrders.map(order => order.asset)
-    }
+    const remoteNFTs = response.items
 
     const nfts: NFT[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
-    const total = await this.count(params)
-    const oneEthInMANA = await this.getOneEthInMANA()
-
     for (const asset of remoteNFTs) {
+      if (!this.isValid(asset)) {
+        continue
+      }
       const nft = this.toNFT(asset)
 
-      const remoteOrder = remoteOrders.find(
-        order => order.asset.id === asset.id
-      )
-
-      if (remoteOrder) {
-        const order = this.toOrder(remoteOrder, oneEthInMANA)
+      if (this.isOnSale(asset)) {
+        const order = this.toOrder(asset, oneEthInMANA)
 
         nft.activeOrderId = order.id
         order.nftId = nft.id
@@ -67,7 +55,7 @@ export class NFTService implements NFTServiceInterface {
         orders.push(order)
       }
 
-      let account = accounts.find(account => account.id === asset.owner.address)
+      let account = accounts.find(account => account.id === asset.owner)
       if (!account) {
         account = this.toAccount(asset.owner)
       }
@@ -83,32 +71,31 @@ export class NFTService implements NFTServiceInterface {
   async count(countParams: NFTsCountParams) {
     const params: NFTsFetchParams = {
       ...countParams,
-      first: MAX_QUERY_SIZE,
+      first: 1,
       skip: 0
     }
-
-    let remoteElements
-    if (params.address) {
-      remoteElements = await superRareAPI.fetchNFTs(params)
-    } else {
-      remoteElements = await superRareAPI.fetchOrders(params)
-    }
-
-    return remoteElements.length
+    const response = await makersPlaceAPI.fetch(params)
+    return this.getTotal(response)
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
-    const [remoteNFT, remoteOrder, oneEthInMANA] = await Promise.all([
-      superRareAPI.fetchNFT(contractAddress, tokenId),
-      superRareAPI.fetchOrder(contractAddress, tokenId),
+    const [response, oneEthInMANA] = await Promise.all([
+      makersPlaceAPI.fetchOne(contractAddress, tokenId),
       this.getOneEthInMANA()
     ])
+
+    const remoteNFT = response.item
+    if (!this.isValid(remoteNFT)) {
+      throw new Error(
+        `Invalid asset for contract "${contractAddress}" and id "${tokenId}"`
+      )
+    }
 
     const nft = this.toNFT(remoteNFT)
     let order: Order | undefined
 
-    if (remoteOrder) {
-      order = this.toOrder(remoteOrder, oneEthInMANA)
+    if (this.isOnSale(remoteNFT)) {
+      order = this.toOrder(remoteNFT, oneEthInMANA)
 
       nft.activeOrderId = order.id
       order.nftId = nft.id
@@ -125,73 +112,63 @@ export class NFTService implements NFTServiceInterface {
     const to = Address.fromString(toAddress)
 
     const erc721 = ContractFactory.build(ERC721, nft.contractAddress)
-    const transferType = new ContractService().getTransferType(
-      nft.contractAddress
-    )
-    let transaction
 
-    switch (transferType) {
-      case TransferType.TRANSFER:
-        transaction = erc721.methods.transfer(to, nft.tokenId)
-        break
-      case TransferType.SAFE_TRANSFER_FROM:
-      default:
-        transaction = erc721.methods.transferFrom(from, to, nft.tokenId)
-        break
-    }
-
-    return transaction.send({ from }).getTxHash()
+    return erc721.methods
+      .transferFrom(from, to, nft.tokenId)
+      .send({ from })
+      .getTxHash()
   }
 
-  toNFT(asset: SuperRareAsset): NFT {
+  toNFT(asset: MakersPlaceAsset): NFT {
+    const tokenId = asset.token_id!.toString()
+    const contractAddress = asset.token_contract_address.toLowerCase()
     return {
-      id: getNFTId(asset.contractAddress, asset.id.toString())!,
-      tokenId: asset.id.toString(),
-      contractAddress: asset.contractAddress,
+      id: getNFTId(contractAddress, tokenId)!,
+      tokenId,
+      contractAddress,
       activeOrderId: '',
       owner: {
-        address: asset.owner.address
+        address: asset.owner
       },
       name: asset.name,
-      image: asset.image,
+      image: asset.image_url,
       parcel: null,
       estate: null,
       wearable: null,
       ens: null,
       pictureFrame: {
-        description: asset.description
-      },
+        description: asset.description,
+        marketContractAddress: asset.sale_contract_address // TODO: FIX makersplace
+      } as any,
       category: NFTCategory.ART,
-      vendor: Vendors.SUPER_RARE
+      vendor: Vendors.MAKERS_PLACE
     }
   }
 
-  toOrder(order: SuperRareOrder, oneEthInMANA: string): Order {
-    const { asset, taker } = order
-
-    const totalWei = this.marketplacePrice.addFee(order.amountWithFee)
+  toOrder(asset: MakersPlaceAsset, oneEthInMANA: string): Order {
+    const totalWei = this.marketplacePrice.addFee(asset.price_in_wei!)
     const weiPrice = toBN(totalWei).mul(toBN(oneEthInMANA))
     const price = weiPrice.div(this.oneEthInWei)
 
     return {
-      id: `${Vendors.SUPER_RARE}-order-${asset.id}`,
-      nftId: asset.id.toString(),
+      id: `${Vendors.MAKERS_PLACE}-order-${asset.token_id}`,
+      nftId: asset.token_id!.toString(),
       category: NFTCategory.ART,
-      nftAddress: asset.contractAddress,
-      owner: asset.owner.address,
-      buyer: taker ? taker.address : null,
+      nftAddress: asset.token_contract_address.toLowerCase(),
+      owner: asset.owner,
+      buyer: null,
       price: price.toString(10),
       ethPrice: totalWei.toString(),
       status: OrderStatus.OPEN,
-      createdAt: order.timestamp,
-      updatedAt: order.timestamp
+      createdAt: asset.sale_created_at!,
+      updatedAt: asset.sale_created_at!
     }
   }
 
-  toAccount(account: SuperRareOwner): Account {
+  toAccount(address: string): Account {
     return {
-      id: account.address,
-      address: account.address,
+      id: address,
+      address,
       nftIds: []
     }
   }
@@ -199,5 +176,22 @@ export class NFTService implements NFTServiceInterface {
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
     return toWei(mana.toString(), 'ether')
+  }
+
+  private isValid(asset: MakersPlaceAsset) {
+    // For some reason, the API *sometimes* returns null on token_ids
+    // We need to either skip or just throw when we found these
+    return asset.token_id !== null
+  }
+
+  private getTotal(response: FetchSuccessResponse): number {
+    return response.total_pages * response.page_size
+  }
+
+  private isOnSale(asset: MakersPlaceAsset): boolean {
+    return (
+      asset.price_in_wei !== undefined &&
+      asset.sale_contract_address !== undefined
+    )
   }
 }

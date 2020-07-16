@@ -19,6 +19,10 @@
   right: 0px;
 }
 
+.NFTImage .image-wrapper .Atlas {
+  height: 100%;
+}
+
 .NFTImage .image {
   margin: auto;
   max-height: 100%;

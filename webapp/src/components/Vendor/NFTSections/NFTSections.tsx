@@ -10,6 +10,7 @@ const NFTSections = (props: Props) => {
 
   switch (vendor) {
     case Vendors.SUPER_RARE:
+    case Vendors.MAKERS_PLACE:
       return (
         <SuperRareNFTSections
           section={section}

@@ -2,7 +2,8 @@ import * as decentraland from './decentraland'
 import * as superRare from './super_rare'
 
 export enum Partner {
-  SUPER_RARE = 'super_rare'
+  SUPER_RARE = 'super_rare',
+  MAKERS_PLACE = 'makers_place'
 }
 
 enum Base {

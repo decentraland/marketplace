@@ -9,11 +9,16 @@ import {
 export type Props = {
   superRare: NFT[]
   isSuperRareLoading: boolean
+  makersPlace: NFT[]
+  isMakersPlaceLoading: boolean
   onNavigate: (path: string) => void
   onFetchNFTs: typeof fetchNFTsRequest
 }
 
-export type MapStateProps = Pick<Props, 'superRare' | 'isSuperRareLoading'>
+export type MapStateProps = Pick<
+  Props,
+  'superRare' | 'isSuperRareLoading' | 'makersPlace' | 'isMakersPlaceLoading'
+>
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onFetchNFTs'>
 export type MapDispatch = Dispatch<
   CallHistoryMethodAction | FetchNFTsRequestAction

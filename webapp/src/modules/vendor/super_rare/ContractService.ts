@@ -62,7 +62,7 @@ export class ContractService implements ContractServiceInterface {
       case SuperRareV2:
         return SuperRareMarketV2
       default:
-        throw new Error(`Invalid SuperRare address ${address}`)
+        throw new Error(`Invalid SuperRare Market address ${address}`)
     }
   }
 }

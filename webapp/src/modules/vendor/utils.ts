@@ -31,6 +31,7 @@ export function getFilters(vendor: Vendors, searchOptions: SearchOptions): any {
         contracts
       }
     case Vendors.SUPER_RARE:
+    case Vendors.MAKERS_PLACE:
     default:
       return {}
   }

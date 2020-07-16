@@ -4,8 +4,6 @@ import {
   Header,
   Dropdown,
   DropdownProps,
-  CheckboxProps,
-  Radio,
   Responsive,
   Modal
 } from 'decentraland-ui'
@@ -18,7 +16,7 @@ import { PriceChangeNotice } from '../../PriceChangeNotice'
 import { Props } from './NFTFilters.types'
 
 const NFTFilters = (props: Props) => {
-  const { search, count, onlyOnSale, onBrowse } = props
+  const { search, count, onBrowse } = props
 
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
@@ -30,13 +28,6 @@ const NFTFilters = (props: Props) => {
   const sortBy = dropdownOptions.find(option => option.value === props.sortBy)
     ? props.sortBy
     : dropdownOptions[0].value
-
-  const handleOnlyOnSaleChange = useCallback(
-    (_, props: CheckboxProps) => {
-      onBrowse({ onlyOnSale: !!props.checked })
-    },
-    [onBrowse]
-  )
 
   const handleDropdownChange = useCallback(
     (_, props: DropdownProps) => {
@@ -76,28 +67,15 @@ const NFTFilters = (props: Props) => {
           placeholder={searchPlaceholder}
           onChange={handleSearch}
         />
-        {onlyOnSale ? (
-          <Responsive
-            as={Dropdown}
-            className="topbar-filter"
-            minWidth={Responsive.onlyTablet.minWidth}
-            direction="left"
-            value={sortBy}
-            options={dropdownOptions}
-            onChange={handleDropdownChange}
-          />
-        ) : null}
         <Responsive
-          minWidth={Responsive.onlyTablet.minWidth}
+          as={Dropdown}
           className="topbar-filter"
-        >
-          <Radio
-            toggle
-            checked={onlyOnSale}
-            onChange={handleOnlyOnSaleChange}
-            label={t('nft_filters.on_sale')}
-          />
-        </Responsive>
+          minWidth={Responsive.onlyTablet.minWidth}
+          direction="left"
+          value={sortBy}
+          options={dropdownOptions}
+          onChange={handleDropdownChange}
+        />
       </div>
 
       <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
@@ -121,21 +99,11 @@ const NFTFilters = (props: Props) => {
         <Modal.Content>
           <div className="filter-row">
             <Header sub>{t('nft_filters.order_by')}</Header>
-            {onlyOnSale ? (
-              <Dropdown
-                direction="left"
-                value={sortBy}
-                options={dropdownOptions}
-                onChange={handleDropdownChange}
-              />
-            ) : null}
-          </div>
-          <div className="filter-row">
-            <Header sub>{t('nft_filters.on_sale')}</Header>
-            <Radio
-              toggle
-              checked={onlyOnSale}
-              onChange={handleOnlyOnSaleChange}
+            <Dropdown
+              direction="left"
+              value={sortBy}
+              options={dropdownOptions}
+              onChange={handleDropdownChange}
             />
           </div>
           <Button

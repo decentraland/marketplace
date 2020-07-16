@@ -3,7 +3,7 @@ import React, { useCallback } from 'react'
 import { Section } from '../../../modules/routing/types'
 import { Vendors } from '../../../modules/vendor/types'
 import { NFTSidebar as DecentralandNFTSidebar } from '../decentraland/NFTSidebar'
-import { NFTSidebar as SuperRareNFTSidebar } from '../super_rare/NFTSidebar'
+import { PartnerSidebar } from '../PartnerSidebar'
 import { Props } from './NFTSidebar.types'
 
 const NFTSidebar = (props: Props) => {
@@ -18,9 +18,11 @@ const NFTSidebar = (props: Props) => {
 
   switch (vendor) {
     case Vendors.SUPER_RARE:
+    case Vendors.MAKERS_PLACE:
       return (
-        <SuperRareNFTSidebar
+        <PartnerSidebar
           section={section}
+          vendor={vendor}
           onMenuItemClick={handleOnBrowse}
         />
       )

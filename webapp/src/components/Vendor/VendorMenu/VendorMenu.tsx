@@ -27,7 +27,9 @@ const VendorMenu = (props: Props) => {
   }, [isDisabled, isOpen, setIsOpen])
 
   useEffect(() => {
-    setIsCurrentVendor(currentVendor === vendor)
+    const isCurrentVendor = currentVendor === vendor
+    setIsCurrentVendor(isCurrentVendor)
+    setIsOpen(isCurrentVendor)
   }, [currentVendor, vendor])
 
   // TODO: Move this to redux and the UI reducer. We should also split it into multiple reducers

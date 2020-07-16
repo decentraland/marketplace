@@ -96,18 +96,12 @@ class SuperRareAPI extends BaseAPI {
     params: NFTsFetchParams
   ): SuperRareFetchOrderParams {
     const requestParams: SuperRareFetchOrderParams = {
-      name: params.search,
-      order: params.orderDirection,
       offset: params.skip,
-      limit: params.first
+      limit: Math.min(params.first, MAX_QUERY_SIZE),
+      sort: this.getSort(params),
+      name: params.search,
+      order: params.orderDirection
     }
-
-    requestParams.sort =
-      params.orderBy === NFTSortBy.PRICE
-        ? 'price'
-        : params.orderBy === NFTSortBy.ORDER_CREATED_AT
-        ? 'timestamp'
-        : undefined
 
     if (params.address) {
       requestParams.owner_addresses = [params.address]
@@ -118,6 +112,17 @@ class SuperRareAPI extends BaseAPI {
     }
 
     return requestParams
+  }
+
+  private getSort(params: NFTsFetchParams) {
+    switch (params.orderBy) {
+      case NFTSortBy.PRICE:
+        return 'price'
+      case NFTSortBy.ORDER_CREATED_AT:
+        return 'timestamp'
+      default:
+        return undefined
+    }
   }
 }
 

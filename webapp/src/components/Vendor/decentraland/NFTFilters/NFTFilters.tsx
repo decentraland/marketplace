@@ -49,6 +49,10 @@ const NFTFilters = (props: Props) => {
     { value: SortBy.NAME, text: t('filters.name') }
   ]
 
+  const sortBy = dropdownOptions.find(option => option.value === props.sortBy)
+    ? props.sortBy
+    : dropdownOptions[0].value
+
   if (onlyOnSale) {
     dropdownOptions.unshift({
       value: SortBy.RECENTLY_LISTED,
@@ -59,10 +63,6 @@ const NFTFilters = (props: Props) => {
       text: t('filters.cheapest')
     })
   }
-
-  const sortBy = dropdownOptions.find(option => option.value === props.sortBy)
-    ? props.sortBy
-    : dropdownOptions[0].value
 
   const appliedFilters = []
   if (wearableRarities.length > 0) {

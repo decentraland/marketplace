@@ -5,7 +5,9 @@ import { RootState } from '../../modules/reducer'
 import { fetchNFTsRequest } from '../../modules/nft/actions'
 import {
   getPartnersSuperRare,
-  isPartnersSuperRareLoading
+  isPartnersSuperRareLoading,
+  getPartnersMakersPlace,
+  isPartnersMakersPlaceLoading
 } from '../../modules/ui/selectors'
 import {
   MapDispatch,
@@ -16,7 +18,9 @@ import PartnersPage from './PartnersPage'
 
 const mapState = (state: RootState): MapStateProps => ({
   superRare: getPartnersSuperRare(state),
-  isSuperRareLoading: isPartnersSuperRareLoading(state)
+  isSuperRareLoading: isPartnersSuperRareLoading(state),
+  makersPlace: getPartnersMakersPlace(state),
+  isMakersPlaceLoading: isPartnersMakersPlaceLoading(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

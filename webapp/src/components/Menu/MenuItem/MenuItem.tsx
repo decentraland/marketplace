@@ -32,7 +32,7 @@ const MenuItem = <T extends unknown>(props: Props<T>) => {
 
   return (
     <li className={classNames.join(' ')} onClick={handleOnClick}>
-      {image && <Image alt={image} src={image} width="20" circular />}
+      {image && <Image alt={image} src={image} width="25" circular />}
 
       <div className="content">
         {t(`menu.${value}`)}

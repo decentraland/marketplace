@@ -25,10 +25,10 @@ const ENSDetail = (props: Props) => {
       <Container className="ENSDetail">
         <Title
           left={
-            <>
-              <Header size="large">{getNFTName(nft)}</Header>
+            <Header size="large">
+              <div className="text">{getNFTName(nft)}</div>
               <Badge color="#37333d">{t('global.ens')}</Badge>
-            </>
+            </Header>
           }
           right={<Owner nft={nft} />}
         />

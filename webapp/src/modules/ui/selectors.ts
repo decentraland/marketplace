@@ -43,6 +43,9 @@ export const getHomepageENS = createGetNFTsSelector(ui => ui.homepageENSIds)
 export const getPartnersSuperRare = createGetNFTsSelector(
   ui => ui.partnersSuperRareIds
 )
+export const getPartnersMakersPlace = createGetNFTsSelector(
+  ui => ui.partnersMakersPlaceIds
+)
 
 export const isHomepageWearablesLoading = createNFTsLoadingSelector(
   View.HOME_WEARABLES
@@ -51,6 +54,9 @@ export const isHomepageENSLoading = createNFTsLoadingSelector(View.HOME_LAND)
 export const isHomepageLandLoading = createNFTsLoadingSelector(View.HOME_ENS)
 export const isPartnersSuperRareLoading = createNFTsLoadingSelector(
   View.PARTNERS_SUPER_RARE
+)
+export const isPartnersMakersPlaceLoading = createNFTsLoadingSelector(
+  View.PARTNERS_MAKERS_PLACE
 )
 
 export const getSellerBids = createSelector<

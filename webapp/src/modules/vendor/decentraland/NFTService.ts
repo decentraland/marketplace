@@ -5,6 +5,7 @@ import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order } from '../../order/types'
 import { Account } from '../../account/types'
+import { getNFTId } from '../../nft/utils'
 import { isExpired } from '../../order/utils'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from '../nft/types'
@@ -28,6 +29,7 @@ export class NFTService implements NFTServiceInterface {
 
       const nft: NFT = {
         ...rest,
+        id: getNFTId(rest.contractAddress, rest.tokenId)!,
         vendor: Vendors.DECENTRALAND,
         activeOrderId: null
       }
@@ -68,6 +70,7 @@ export class NFTService implements NFTServiceInterface {
 
     const nft: NFT = {
       ...rest,
+      id: getNFTId(rest.contractAddress, rest.tokenId)!,
       vendor: Vendors.DECENTRALAND,
       activeOrderId: null
     }

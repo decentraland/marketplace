@@ -19,7 +19,14 @@ import { Props } from './PartnersPage.types'
 import './PartnersPage.css'
 
 const PartnersPage = (props: Props) => {
-  const { superRare, isSuperRareLoading, onFetchNFTs, onNavigate } = props
+  const {
+    superRare,
+    isSuperRareLoading,
+    makersPlace,
+    isMakersPlaceLoading,
+    onFetchNFTs,
+    onNavigate
+  } = props
 
   const handleOnNavigate = useCallback(
     (vendor: Vendors) => {
@@ -33,6 +40,17 @@ const PartnersPage = (props: Props) => {
     onFetchNFTs({
       view: View.PARTNERS_SUPER_RARE,
       vendor: Vendors.SUPER_RARE,
+      params: {
+        first: 10,
+        skip: 0,
+        orderDirection: SortDirection.DESC,
+        orderBy: NFTSortBy.ORDER_CREATED_AT,
+        onlyOnSale: true
+      }
+    })
+    onFetchNFTs({
+      view: View.PARTNERS_MAKERS_PLACE,
+      vendor: Vendors.MAKERS_PLACE,
       params: {
         first: 10,
         skip: 0,
@@ -64,6 +82,15 @@ const PartnersPage = (props: Props) => {
               isSubHeader={true}
               isLoading={isSuperRareLoading}
               onViewAll={() => handleOnNavigate(Vendors.SUPER_RARE)}
+            />
+            <Slideshow
+              title={t('partners_page.latest_from', {
+                vendor: t('vendors.makers_place')
+              })}
+              nfts={makersPlace}
+              isSubHeader={true}
+              isLoading={isMakersPlaceLoading}
+              onViewAll={() => handleOnNavigate(Vendors.MAKERS_PLACE)}
             />
           </Column>
         </Row>

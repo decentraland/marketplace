@@ -14,6 +14,7 @@ import {
   UnarchiveBidAction,
   FetchBidsByNFTSuccessAction
 } from '../bid/actions'
+import { BROWSE, BrowseAction } from '../routing/actions'
 import { SET_VIEW, SetViewAction } from './actions'
 import { View } from './types'
 
@@ -25,6 +26,7 @@ export type UIState = {
   homepageLandIds: string[]
   homepageENSIds: string[]
   partnersSuperRareIds: string[]
+  partnersMakersPlaceIds: string[]
   sellerBidIds: string[]
   bidderBidIds: string[]
   archivedBidIds: string[]
@@ -39,6 +41,7 @@ const INITIAL_STATE: UIState = {
   homepageLandIds: [],
   homepageENSIds: [],
   partnersSuperRareIds: [],
+  partnersMakersPlaceIds: [],
   sellerBidIds: [],
   bidderBidIds: [],
   archivedBidIds: [],
@@ -55,6 +58,7 @@ type UIReducerAction =
   | FetchBidsByNFTSuccessAction
   | ArchiveBidAction
   | UnarchiveBidAction
+  | BrowseAction
 
 export function uiReducer(
   state: UIState = INITIAL_STATE,
@@ -65,6 +69,13 @@ export function uiReducer(
       return {
         ...state,
         view: action.payload.view
+      }
+    }
+    case BROWSE: {
+      const { view } = action.payload.searchOptions
+      return {
+        ...state,
+        nftIds: view ? [] : state.nftIds
       }
     }
     case FETCH_NFTS_REQUEST: {
@@ -115,6 +126,13 @@ export function uiReducer(
             ...state,
             view,
             partnersSuperRareIds: action.payload.nfts.map(nft => nft.id)
+          }
+        }
+        case View.PARTNERS_MAKERS_PLACE: {
+          return {
+            ...state,
+            view,
+            partnersMakersPlaceIds: action.payload.nfts.map(nft => nft.id)
           }
         }
         case View.LOAD_MORE: {

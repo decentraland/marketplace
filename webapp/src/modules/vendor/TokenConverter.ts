@@ -13,7 +13,19 @@ type CoinTickers = {
   tickers: Ticker[]
 }
 
+// { coinId: {ethAmount: result } }
+const pricesCache: Record<string, Record<number, number>> = {}
+
 export class TokenConverter {
+  apiURL: string
+  constructor() {
+    const apiURL = process.env.REACT_APP_COINGECKO_API_URL!
+    if (!apiURL) {
+      throw new Error(`Invalid converter API URL "${apiURL}"`)
+    }
+    this.apiURL = apiURL
+  }
+
   async marketEthToMANA(ethAmount: number) {
     return this.marketEthToToken(ethAmount, 'decentraland')
   }
@@ -23,18 +35,23 @@ export class TokenConverter {
     coinId: string,
     exchanges: string[] = ['uniswap']
   ) {
-    const apiURL = process.env.REACT_APP_COINGECKO_API_URL!
-    if (!apiURL) {
-      throw new Error(`Invalid converter API URL "${apiURL}"`)
+    if (!pricesCache[coinId]) {
+      pricesCache[coinId] = {}
     }
 
-    const response = await window.fetch(
-      `${apiURL}/coins/${coinId}/tickers?exchange_ids=${exchanges.join(',')}`
-    )
-    const coinTickers: CoinTickers = await response.json()
-    const uniswapTicker = coinTickers.tickers[0]
+    if (!pricesCache[coinId][ethAmount]) {
+      const exchangesList = exchanges.join(',')
+      const response = await window.fetch(
+        `${this.apiURL}/coins/${coinId}/tickers?exchange_ids=${exchangesList}`
+      )
+      const coinTickers: CoinTickers = await response.json()
+      const uniswapTicker = coinTickers.tickers[0]
 
-    return ethAmount / uniswapTicker.converted_last.eth
+      pricesCache[coinId][ethAmount] =
+        ethAmount / uniswapTicker.converted_last.eth
+    }
+
+    return pricesCache[coinId][ethAmount]
   }
 
   async contractEthToMANA(ethAmount: string) {
