@@ -31,7 +31,7 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
 
     const address = yield select(getAddress)
     const txHash = yield call(() =>
-      orderService!.create(nft, price, expiresAt, address)
+      orderService.create(nft, price, expiresAt, address)
     )
     yield put(createOrderSuccess(nft, price, expiresAt, txHash))
     yield put(push(locations.activity()))
@@ -43,14 +43,14 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
 function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   const { order, nft, fingerprint } = action.payload
   try {
-    if (order.nftId !== nft.id) {
+    if (nft.id !== order.nftId) {
       throw new Error('The order does not match the NFT')
     }
     const { orderService } = VendorFactory.build(nft.vendor)
 
     const address = yield select(getAddress)
     const txHash = yield call(() =>
-      orderService!.execute(nft, order.price, address, fingerprint)
+      orderService.execute(nft, order, address, fingerprint)
     )
 
     yield put(executeOrderSuccess(order, nft, txHash))
@@ -69,7 +69,7 @@ function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
     const { orderService } = VendorFactory.build(nft.vendor)
 
     const address = yield select(getAddress)
-    const txHash = yield call(() => orderService!.cancel(nft, address))
+    const txHash = yield call(() => orderService.cancel(nft, address))
     yield put(cancelOrderSuccess(order, nft, txHash))
     yield put(push(locations.activity()))
   } catch (error) {

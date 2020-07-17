@@ -4,7 +4,9 @@ import { NFT } from '../nft/types'
 import { getId } from '../nft/parcel/utils'
 
 export const getDistanceText = (distance: number) =>
-  distance === 0 ? t('detail.adjacent') : t('detail.distance', { distance })
+  distance === 0
+    ? t('proximity.adjacent')
+    : t('proximity.distance', { distance })
 
 export const getParcelProximity = (
   nft: NFT,

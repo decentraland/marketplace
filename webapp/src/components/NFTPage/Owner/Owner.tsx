@@ -12,7 +12,7 @@ const Owner = (props: Props) => {
   return (
     <div className="Owner">
       <Link to={locations.account(address)}>
-        <label>{t('detail.owner')}</label>
+        <label>{t('nft_page.owner')}</label>
         <Popup
           content={shortenAddress(address)}
           position="top center"

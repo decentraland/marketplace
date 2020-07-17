@@ -26,6 +26,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const orders = getOrders(state)
   const nft = getNFT(contractAddress, tokenId, nfts)
   const order = getActiveOrder(nft, orders)
+
   return {
     tokenId,
     contractAddress,

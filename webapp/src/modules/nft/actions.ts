@@ -1,12 +1,11 @@
 import { action } from 'typesafe-actions'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 
-import { SortDirection } from '../routing/search'
+import { SortDirection } from '../routing/types'
 import { Order } from '../order/types'
 import { Account } from '../account/types'
-import { FetchNFTsOptions } from '../vendor/types'
-import { NFT, NFTSortBy } from './types'
 import { getNFTName } from './utils'
+import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'
 
 // Fetch NFTs
 
@@ -14,22 +13,21 @@ export const FETCH_NFTS_REQUEST = '[Request] Fetch NFTs'
 export const FETCH_NFTS_SUCCESS = '[Success] Fetch NFTs'
 export const FETCH_NFTS_FAILURE = '[Failure] Fetch NFTs'
 
-export const DEFAULT_FETCH_NFTS_OPTIONS: FetchNFTsOptions = {
-  variables: {
-    first: 24,
-    skip: 0,
-    orderBy: NFTSortBy.CREATED_AT,
-    orderDirection: SortDirection.DESC,
-    onlyOnSale: false
-  },
-  vendor: undefined,
-  view: undefined
+export const DEFAULT_BASE_NFT_PARAMS: NFTsFetchParams = {
+  first: 24,
+  skip: 0,
+  orderBy: NFTSortBy.CREATED_AT,
+  orderDirection: SortDirection.DESC,
+  onlyOnSale: false
 }
 
-export const fetchNFTsRequest = (options: Partial<FetchNFTsOptions> = {}) =>
-  action(FETCH_NFTS_REQUEST, { options, timestamp: Date.now() })
+export const fetchNFTsRequest = (options: NFTsFetchOptions) =>
+  action(FETCH_NFTS_REQUEST, {
+    options,
+    timestamp: Date.now()
+  })
 export const fetchNFTsSuccess = (
-  options: FetchNFTsOptions,
+  options: NFTsFetchOptions,
   nfts: NFT[],
   accounts: Account[],
   orders: Order[],
@@ -45,7 +43,7 @@ export const fetchNFTsSuccess = (
     timestamp
   })
 export const fetchNFTsFailure = (
-  options: FetchNFTsOptions,
+  options: NFTsFetchOptions,
   error: string,
   timestamp: number
 ) => action(FETCH_NFTS_FAILURE, { options, error, timestamp })

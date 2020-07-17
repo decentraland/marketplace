@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { NFT, NFTCategory } from './types'
+import { NFTCategory } from '../vendor/decentraland/nft/types'
 import { getFingerprint } from './estate/utils'
+import { NFT } from './types'
 
 export const useFingerprint = (nft: NFT | null) => {
   const [fingerprint, setFingerprint] = useState<string>()
@@ -13,13 +14,13 @@ export const useFingerprint = (nft: NFT | null) => {
           setIsLoading(true)
           getFingerprint(nft.tokenId)
             .then(result => setFingerprint(result))
+            .finally(() => setIsLoading(false))
             .catch(error =>
               console.error(
                 `Error getting fingerprint for nft ${nft.tokenId}`,
                 error
               )
             )
-            .then(() => setIsLoading(false))
           break
         }
         default:

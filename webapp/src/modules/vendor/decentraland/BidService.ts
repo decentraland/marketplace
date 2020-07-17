@@ -1,15 +1,15 @@
 import { toWei } from 'web3x-es/utils'
-import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 
 import { Bids } from '../../../contracts/Bids'
 import { ERC721 } from '../../../contracts/ERC721'
-import { contractAddresses } from '../../contract/utils'
+import { ContractFactory } from '../../contract/ContractFactory'
 import { Bid } from '../../bid/types'
 import { NFT } from '../../nft/types'
 import { OrderStatus } from '../../order/types'
 import { getNFTName } from '../../nft/utils'
 import { BidService as BidServiceInterface } from '../services'
+import { ContractService } from './ContractService'
 import { bidAPI } from './bid/api'
 
 export class BidService implements BidServiceInterface {
@@ -104,17 +104,13 @@ export class BidService implements BidServiceInterface {
   }
 
   async accept(bid: Bid, fromAddress: string) {
-    const eth = Eth.fromCurrentProvider()
-    if (!eth) {
-      throw new Error('Could not connect to Ethereum')
-    }
-    const erc721 = new ERC721(eth, Address.fromString(bid.contractAddress))
+    const erc721 = ContractFactory.build(ERC721, bid.contractAddress)
 
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
     const from = Address.fromString(fromAddress)
-    const to = Address.fromString(contractAddresses.Bids)
+    const to = Address.fromString(ContractService.contractAddresses.Bids)
 
     return erc721.methods
       .safeTransferFrom(from, to, bid.tokenId, bid.id)
@@ -137,11 +133,6 @@ export class BidService implements BidServiceInterface {
   }
 
   private getBidContract() {
-    const eth = Eth.fromCurrentProvider()
-    if (!eth) {
-      throw new Error('Could not connect to Ethereum')
-    }
-
-    return new Bids(eth, Address.fromString(contractAddresses.Bids))
+    return ContractFactory.build(Bids, ContractService.contractAddresses.Bids)
   }
 }

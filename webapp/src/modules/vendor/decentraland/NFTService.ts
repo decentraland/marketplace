@@ -1,33 +1,40 @@
-import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 
-import { NFT } from '../../nft/types'
+import { ERC721 } from '../../../contracts/ERC721'
+import { ContractFactory } from '../../contract/ContractFactory'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order } from '../../order/types'
 import { Account } from '../../account/types'
+import { getNFTId } from '../../nft/utils'
 import { isExpired } from '../../order/utils'
-import { ERC721 } from '../../../contracts/ERC721'
 import { NFTService as NFTServiceInterface } from '../services'
-import { Vendors, FetchNFTsOptions } from '../types'
+import { NFTsFetchFilters } from '../nft/types'
+import { Vendors } from '../types'
+import { MAX_QUERY_SIZE } from './api'
 import { nftAPI } from './nft/api'
 
 export class NFTService implements NFTServiceInterface {
-  async fetch(options: FetchNFTsOptions) {
-    const data = await nftAPI.fetch(options)
+  async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
+    const [remoteNFTs, total] = await Promise.all([
+      nftAPI.fetch(params, filters),
+      this.count(params, filters)
+    ])
 
     const nfts: NFT[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
-    for (const result of data.nfts) {
+    for (const result of remoteNFTs) {
       const { activeOrder: nestedOrder, ...rest } = result
 
       const nft: NFT = {
         ...rest,
+        id: getNFTId(rest.contractAddress, rest.tokenId)!,
         vendor: Vendors.DECENTRALAND,
         activeOrderId: null
       }
 
-      if (nestedOrder && !isExpired(nestedOrder.expiresAt)) {
+      if (nestedOrder && !isExpired(nestedOrder.expiresAt!)) {
         const order = { ...nestedOrder, nftId: nft.id }
         nft.activeOrderId = order.id
         orders.push(order)
@@ -44,7 +51,16 @@ export class NFTService implements NFTServiceInterface {
       nfts.push(nft)
     }
 
-    return [nfts, accounts, orders, data.total] as const
+    return [nfts, accounts, orders, total] as const
+  }
+
+  async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {
+    const params: NFTsFetchParams = {
+      ...countParams,
+      first: MAX_QUERY_SIZE,
+      skip: 0
+    }
+    return nftAPI.count(params, filters)
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
@@ -54,13 +70,14 @@ export class NFTService implements NFTServiceInterface {
 
     const nft: NFT = {
       ...rest,
+      id: getNFTId(rest.contractAddress, rest.tokenId)!,
       vendor: Vendors.DECENTRALAND,
       activeOrderId: null
     }
 
     let order: Order | undefined
 
-    if (activeOrder && !isExpired(activeOrder.expiresAt)) {
+    if (activeOrder && !isExpired(activeOrder.expiresAt!)) {
       order = { ...activeOrder, nftId: nft.id }
       nft.activeOrderId = order.id
     }
@@ -69,18 +86,13 @@ export class NFTService implements NFTServiceInterface {
   }
 
   async transfer(fromAddress: string, toAddress: string, nft: NFT) {
-    const eth = Eth.fromCurrentProvider()
-    if (!eth) {
-      throw new Error('Could not connect to Ethereum')
-    }
-
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
     const from = Address.fromString(fromAddress)
     const to = Address.fromString(toAddress)
 
-    const erc721 = new ERC721(eth, Address.fromString(nft.contractAddress))
+    const erc721 = ContractFactory.build(ERC721, nft.contractAddress)
 
     return erc721.methods
       .transferFrom(from, to, nft.tokenId)

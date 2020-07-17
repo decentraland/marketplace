@@ -13,6 +13,7 @@ import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { hasAuthorization } from '../../../modules/authorization/utils'
 import { contractAddresses } from '../../../modules/contract/utils'
+import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.types'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { NFTAction } from '../../NFTAction'
@@ -33,8 +34,8 @@ const SellModal = (props: Props) => {
     isUpdate ? toMANA(+fromWei(order!.price, 'ether')) : ''
   )
   const [expiresAt, setExpiresAt] = useState(
-    isUpdate
-      ? dateFnsFormat(new Date(+order!.expiresAt), INPUT_FORMAT)
+    isUpdate && order!.expiresAt
+      ? dateFnsFormat(+order!.expiresAt, INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
   const [confirmPrice, setConfirmPrice] = useState('')
@@ -67,14 +68,21 @@ const SellModal = (props: Props) => {
     setShowAuthorizationModal
   ])
 
+  const { orderService } = VendorFactory.build(nft.vendor)
+
   const isInvalidDate = new Date(expiresAt).getTime() < Date.now()
+  const isDisabled =
+    !orderService.canSell() ||
+    !isOwnedBy(nft, wallet) ||
+    fromMANA(price) <= 0 ||
+    isInvalidDate
 
   // Clear confirm price when closing the confirm modal
   useEffect(() => {
     if (!showConfirm) {
       setConfirmPrice('')
     }
-  }, [showConfirm, setConfirmPrice])
+  }, [nft, showConfirm, setConfirmPrice])
 
   return (
     <NFTAction nft={nft}>
@@ -122,13 +130,7 @@ const SellModal = (props: Props) => {
           >
             {t('global.cancel')}
           </div>
-          <Button
-            type="submit"
-            primary
-            disabled={
-              !isOwnedBy(nft, wallet) || fromMANA(price) <= 0 || isInvalidDate
-            }
-          >
+          <Button type="submit" primary disabled={isDisabled}>
             {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
           </Button>
         </div>

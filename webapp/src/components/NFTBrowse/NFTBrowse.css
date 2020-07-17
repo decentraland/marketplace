@@ -1,0 +1,44 @@
+.NFTBrowse .Row .right.Column,
+.NFTBrowse .ui.cards {
+  position: relative;
+}
+
+.NFTBrowse .ui.cards {
+  min-height: 150px;
+}
+
+.NFTBrowse .overlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: var(--background);
+  opacity: 0.6;
+}
+
+.NFTBrowse .load-more {
+  text-align: center;
+  margin-top: 36px;
+  height: 46px;
+}
+
+.NFTBrowse .empty {
+  margin-top: 40px;
+  font-size: 16px;
+  text-align: center;
+  color: var(--secondary-text);
+}
+
+.NFTBrowse .Atlas {
+  min-height: 700px;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .NFTBrowse .Layout .right.column > div {
+    width: 100%;
+  }
+
+  .NFTBrowse .NFTSidebar ul.menu li {
+    width: calc(100% - 32px);
+  }
+}

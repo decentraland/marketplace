@@ -65,7 +65,6 @@ typings/
 
 # Built files
 dist
-public
 
 # Indexer generated data
 indexer/build

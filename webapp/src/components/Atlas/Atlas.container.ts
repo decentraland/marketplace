@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './Atlas.types'
 import { getTiles } from '../../modules/tile/selectors'
 import { RootState } from '../../modules/reducer'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './Atlas.types'
 import Atlas from './Atlas'
 
 const mapState = (state: RootState): MapStateProps => ({

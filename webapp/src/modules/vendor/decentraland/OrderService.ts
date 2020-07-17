@@ -1,12 +1,12 @@
 import { toWei } from 'web3x-es/utils'
-import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 
 import { Marketplace } from '../../../contracts/Marketplace'
-import { contractAddresses } from '../../contract/utils'
+import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
 import { Order } from '../../order/types'
 import { OrderService as OrderServiceInterface } from '../services'
+import { ContractService } from './ContractService'
 import { orderAPI } from './order/api'
 
 export class OrderService implements OrderServiceInterface {
@@ -41,11 +41,12 @@ export class OrderService implements OrderServiceInterface {
 
   async execute(
     nft: NFT,
-    price: string,
+    order: Order,
     fromAddress: string,
     fingerprint?: string
   ) {
     const marketplace = this.getMarketplaceContract()
+    const { price } = order
 
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
@@ -88,15 +89,14 @@ export class OrderService implements OrderServiceInterface {
       .getTxHash()
   }
 
-  private getMarketplaceContract() {
-    const eth = Eth.fromCurrentProvider()
-    if (!eth) {
-      throw new Error('Could not connect to Ethereum')
-    }
+  canSell() {
+    return true
+  }
 
-    return new Marketplace(
-      eth,
-      Address.fromString(contractAddresses.Marketplace)
+  private getMarketplaceContract() {
+    return ContractFactory.build(
+      Marketplace,
+      ContractService.contractAddresses.Marketplace
     )
   }
 }

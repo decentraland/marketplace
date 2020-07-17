@@ -1,0 +1,66 @@
+.Chip,
+.Chip.square {
+  min-width: 10px;
+  min-height: 26px;
+  padding: 3px 11px;
+}
+
+.Chip.rectangle {
+  min-width: 40px;
+  min-height: 24px;
+}
+
+.Chip.circle {
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 20px;
+  padding: 11px 11px;
+  background: var(--dark-two);
+}
+
+.Chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 4px;
+  background: rgba(var(--bluish-steel-raw), 0.64);
+  color: #fff;
+  display: inline-block;
+}
+
+.Chip.clickeable:hover {
+  background: var(--bluish-steel);
+}
+
+.Chip.clickeable {
+  cursor: pointer;
+}
+
+.Chip.active {
+  background: rgba(var(--bluish-steel-raw), 0.32);
+  color: var(--primary);
+  cursor: default;
+}
+.Chip.active:hover {
+  background: rgba(var(--bluish-steel-raw), 0.32);
+}
+
+.Chip.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.Chip.disabled .icon {
+  cursor: default;
+}
+
+.Chip .icon {
+  vertical-align: middle;
+  line-height: 1;
+  margin-right: 0;
+}
+
+.Chip .text {
+  font-size: 17px;
+}

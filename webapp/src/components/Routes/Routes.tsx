@@ -3,8 +3,6 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
 
 import { locations } from '../../modules/routing/locations'
-import { Vendors } from '../../modules/vendor/types'
-import { AtlasPage } from '../AtlasPage'
 import { BrowsePage } from '../BrowsePage'
 import { AccountPage } from '../AccountPage'
 import { SignInPage } from '../SignInPage'
@@ -16,6 +14,7 @@ import { BidPage } from '../BidPage'
 import { CancelSalePage } from '../CancelSalePage'
 import { TransferPage } from '../TransferPage'
 import { ActivityPage } from '../ActivityPage'
+import { PartnersPage } from '../PartnersPage'
 import { HomePage } from '../HomePage'
 import { MyBidsPage } from '../MyBidsPage'
 
@@ -25,7 +24,6 @@ const Routes = () => {
   return (
     <>
       <Switch>
-        <Route exact path={locations.atlas()} component={AtlasPage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
         <Route
           exact
@@ -42,11 +40,12 @@ const Routes = () => {
         <Route exact path={locations.transfer()} component={TransferPage} />
         <Route exact path={locations.ntf()} component={NFTPage} />
         <Route exact path={locations.settings()} component={SettingsPage} />
+        <Route exact path={locations.partners()} component={PartnersPage} />
         <Route exact path={locations.activity()} component={ActivityPage} />
         <Route exact path={locations.root()} component={HomePage} />
         <Redirect
           from="/browse"
-          to={locations.browse(Vendors.DECENTRALAND) + window.location.search}
+          to={locations.browse() + window.location.search}
           push
         />
         <Redirect to={locations.root()} />

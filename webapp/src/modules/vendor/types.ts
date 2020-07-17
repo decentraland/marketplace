@@ -1,41 +1,22 @@
-import { SortDirection } from '../routing/search'
-import { NFTSortBy, NFTCategory } from '../nft/types'
-import {
-  WearableCategory,
-  WearableRarity,
-  WearableGender
-} from '../nft/wearable/types'
-import { View } from '../ui/types'
 import * as decentraland from './decentraland'
-import * as superrare from './superrare'
+import * as superRare from './super_rare'
 
-export enum Vendors {
-  DECENTRALAND = 'decentraland',
-  SUPERRARE = 'superrare'
+export enum Partner {
+  SUPER_RARE = 'super_rare',
+  MAKERS_PLACE = 'makers_place'
 }
 
-export type ContractName =
-  | keyof typeof decentraland.ContractService['contractAddresses']
-  | keyof typeof superrare.ContractService['contractAddresses']
+enum Base {
+  DECENTRALAND = 'decentraland'
+}
 
-export type FetchNFTsOptions = {
-  variables: {
-    first: number
-    skip: number
-    orderBy?: NFTSortBy
-    orderDirection?: SortDirection
-    address?: string
-    onlyOnSale: boolean
-    isLand?: boolean
-    isWearableHead?: boolean
-    isWearableAccessory?: boolean
-    category?: NFTCategory
-    wearableCategory?: WearableCategory
-    wearableRarities?: WearableRarity[]
-    wearableGenders?: WearableGender[]
-    search?: string
-    contracts?: ContractName[]
-  }
-  vendor?: Vendors
-  view?: View
+export type Vendors = Partner | Base
+export const Vendors = { ...Partner, ...Base }
+
+export type ContractName = decentraland.ContractName | superRare.ContractName
+
+export enum TransferType {
+  SAFE_TRANSFER_FROM = 0,
+  TRANSFER_FROM = 1,
+  TRANSFER = 2
 }

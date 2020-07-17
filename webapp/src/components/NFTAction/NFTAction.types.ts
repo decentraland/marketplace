@@ -1,3 +1,4 @@
+import React from 'react'
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { NFT } from '../../modules/nft/types'

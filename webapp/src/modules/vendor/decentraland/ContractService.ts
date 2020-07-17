@@ -1,5 +1,6 @@
 import { ContractService as ContractServiceInterface } from '../services'
-import { NFTCategory } from '../../nft/types'
+import { NFTCategory } from './nft/types'
+import { TransferType } from '../types'
 
 const env = process.env
 
@@ -15,28 +16,33 @@ const DCLLaunchCollection = env.REACT_APP_DCL_LAUNCH_ADDRESS!
 const DCGCollection = env.REACT_APP_DCG_ADDRESS!
 const StaySafeCollection = env.REACT_APP_DCL_STAY_SAFE_ADDRESS!
 const DCLRegistrar = env.REACT_APP_DCL_REGISTRAR!
+
 const Marketplace = env.REACT_APP_MARKETPLACE_ADDRESS!
 const Bids = env.REACT_APP_BIDS_ADDRESS!
 
-export class ContractService implements ContractServiceInterface {
-  static contractAddresses = {
-    MANAToken,
-    LANDRegistry,
-    EstateRegistry,
-    ExclusiveMasksCollection,
-    Halloween2019Collection,
-    Xmas2019Collection,
-    MCHCollection,
-    CommunityContestCollection,
-    DCLLaunchCollection,
-    DCGCollection,
-    StaySafeCollection,
-    DCLRegistrar,
-    Marketplace,
-    Bids
-  } as const
+const contractAddresses = {
+  MANAToken,
+  LANDRegistry,
+  EstateRegistry,
+  ExclusiveMasksCollection,
+  Halloween2019Collection,
+  Xmas2019Collection,
+  MCHCollection,
+  CommunityContestCollection,
+  DCLLaunchCollection,
+  DCGCollection,
+  StaySafeCollection,
+  DCLRegistrar,
+  Marketplace,
+  Bids
+} as const
 
-  contractAddresses = ContractService.contractAddresses
+export type ContractName = keyof typeof contractAddresses
+
+export class ContractService implements ContractServiceInterface {
+  static contractAddresses = contractAddresses
+
+  contractAddresses = contractAddresses
 
   contractSymbols = {
     [MANAToken]: 'MANA',
@@ -85,4 +91,8 @@ export class ContractService implements ContractServiceInterface {
     [StaySafeCollection]: NFTCategory.WEARABLE,
     [DCLRegistrar]: NFTCategory.ENS
   } as const
+
+  getTransferType(_address: string) {
+    return TransferType.SAFE_TRANSFER_FROM
+  }
 }

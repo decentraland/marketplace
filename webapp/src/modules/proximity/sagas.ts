@@ -8,7 +8,7 @@ import {
 } from './actions'
 import { FETCH_TILES_SUCCESS, FetchTilesSuccessAction } from '../tile/actions'
 
-export function* proxmitySaga() {
+export function* proximitySaga() {
   yield takeEvery(FETCH_TILES_SUCCESS, handleFetchTilesSuccess)
   yield takeEvery(FETCH_PROXIMITY_REQUEST, handleFetchProximityRequest)
 }

@@ -1,15 +1,18 @@
 .Slideshow {
   margin-bottom: 70px;
+  width: 100%;
 }
 
 .Slideshow .nfts {
   display: flex;
+  flex-wrap: nowrap;
   overflow: auto;
+  position: relative;
   min-height: 336px;
 }
 
 .Slideshow .nfts .NFTCard {
-  flex: none;
+  flex: 0 0 auto;
   width: 220px;
   margin-right: 20px;
   height: 300px;

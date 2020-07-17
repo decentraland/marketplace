@@ -1,11 +1,9 @@
-import { Dispatch } from 'redux'
-import { CallHistoryMethodAction } from 'connected-react-router'
+import { Vendors } from '../../modules/vendor/types'
 
 export type Props = {
-  vendor: string
-  onNavigate: (path: string) => void
+  vendor: Vendors
 }
 
 export type MapStateProps = Pick<Props, 'vendor'>
-export type MapDispatchProps = Pick<Props, 'onNavigate'>
-export type MapDispatch = Dispatch<CallHistoryMethodAction>
+export type MapDispatchProps = {}
+export type MapDispatch = {}

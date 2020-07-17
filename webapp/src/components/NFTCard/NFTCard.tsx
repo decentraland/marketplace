@@ -33,7 +33,7 @@ const NFTCard = (props: Props) => {
           <div className="title">{title}</div>{' '}
           {order ? <Mana inline>{formatMANA(order.price)}</Mana> : null}
         </Card.Header>
-        {order ? (
+        {order && order.expiresAt ? (
           <Card.Meta>
             {t('nft_card.expires_at', {
               date: formatDistanceToNow(+order.expiresAt, {

@@ -1,0 +1,21 @@
+.MenuItem {
+  display: flex;
+}
+
+.MenuItem .content {
+  display: inline-block;
+  flex: 1 1 auto;
+  align-self: center;
+  line-height: 24px;
+}
+
+.MenuItem .ui.image {
+  margin-right: 15px;
+  vertical-align: middle;
+}
+
+.MenuItem .content .subtitle {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--secondary-text);
+}

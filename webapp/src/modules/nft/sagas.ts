@@ -1,7 +1,7 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
 import {
-  DEFAULT_FETCH_NFTS_OPTIONS,
+  DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
   FetchNFTsRequestAction,
   fetchNFTsSuccess,
@@ -28,18 +28,15 @@ export function* nftSaga() {
 }
 
 function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
-  const { timestamp } = action.payload
-  const options = {
-    ...DEFAULT_FETCH_NFTS_OPTIONS,
-    ...action.payload.options,
-    variables: {
-      ...DEFAULT_FETCH_NFTS_OPTIONS.variables,
-      ...action.payload.options.variables
-    }
+  const { options, timestamp } = action.payload
+  const { vendor, filters } = options
+  const params = {
+    ...DEFAULT_BASE_NFT_PARAMS,
+    ...action.payload.options.params
   }
 
   try {
-    const { nftService } = VendorFactory.build(options.vendor!)
+    const { nftService } = VendorFactory.build(vendor)
 
     const [
       nfts,
@@ -47,14 +44,13 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       orders,
       count
     ]: AwaitFn<typeof nftService.fetch> = yield call(() =>
-      nftService.fetch(options)
+      nftService.fetch(params, filters)
     )
 
     yield put(
       fetchNFTsSuccess(options, nfts, accounts, orders, count, timestamp)
     )
   } catch (error) {
-    console.log(error)
     yield put(fetchNFTsFailure(options, error.message, timestamp))
   }
 }

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { Tabs, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
-import { Vendors } from '../../modules/vendor/types'
 import { Props, NavigationTab } from './Navigation.types'
 
 const Navigation = (props: Props) => {
@@ -11,14 +10,19 @@ const Navigation = (props: Props) => {
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
-        <Link to={locations.atlas()}>
-          <Tabs.Tab active={activeTab === NavigationTab.ATLAS}>
-            {t('navigation.atlas')}
-          </Tabs.Tab>
-        </Link>
-        <Link to={locations.browse(Vendors.DECENTRALAND)}>
+        <Link to={locations.browse()}>
           <Tabs.Tab active={activeTab === NavigationTab.BROWSE}>
             {t('navigation.decentraland')}
+          </Tabs.Tab>
+        </Link>
+        <Link to={locations.partners()}>
+          <Tabs.Tab
+            active={
+              activeTab === NavigationTab.PARTNERS ||
+              activeTab === NavigationTab.PARTNER
+            }
+          >
+            {t('navigation.partners')}
           </Tabs.Tab>
         </Link>
         <Link to={locations.currentAccount()}>

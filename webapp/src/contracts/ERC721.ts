@@ -50,6 +50,7 @@ interface ERC721Methods {
     totalSupply(): TxCall<string>;
     InterfaceId_ERC165(): TxCall<string>;
     transferFrom(_from: Address, _to: Address, _tokenId: number | string | BN): TxSend<ERC721TransactionReceipt>;
+    transfer(_to: Address, _tokenId: number | string | BN): TxSend<ERC721TransactionReceipt>;
     tokenOfOwnerByIndex(_owner: Address, _index: number | string | BN): TxCall<string>;
     safeTransferFrom(_from: Address, _to: Address, _tokenId: number | string | BN): TxSend<ERC721TransactionReceipt>;
     exists(_tokenId: number | string | BN): TxCall<boolean>;
