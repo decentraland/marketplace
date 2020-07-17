@@ -42,8 +42,4 @@ export class ContractService implements ContractServiceInterface {
   getTransferType(_address: string) {
     return TransferType.SAFE_TRANSFER_FROM
   }
-
-  getMarketAddress(_address: string) {
-    return ''
-  }
 }

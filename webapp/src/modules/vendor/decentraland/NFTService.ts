@@ -10,8 +10,9 @@ import { isExpired } from '../../order/utils'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from '../nft/types'
 import { Vendors } from '../types'
-import { MAX_QUERY_SIZE } from './api'
 import { nftAPI } from './nft/api'
+import { ContractService } from './ContractService'
+import { MAX_QUERY_SIZE } from './api'
 
 export class NFTService implements NFTServiceInterface {
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
@@ -35,7 +36,11 @@ export class NFTService implements NFTServiceInterface {
       }
 
       if (nestedOrder && !isExpired(nestedOrder.expiresAt!)) {
-        const order = { ...nestedOrder, nftId: nft.id }
+        const order = {
+          ...nestedOrder,
+          marketAddress: ContractService.contractAddresses.Marketplace,
+          nftId: nft.id
+        }
         nft.activeOrderId = order.id
         orders.push(order)
       }
@@ -78,7 +83,11 @@ export class NFTService implements NFTServiceInterface {
     let order: Order | undefined
 
     if (activeOrder && !isExpired(activeOrder.expiresAt!)) {
-      order = { ...activeOrder, nftId: nft.id }
+      order = {
+        ...activeOrder,
+        marketAddress: ContractService.contractAddresses.Marketplace,
+        nftId: nft.id
+      }
       nft.activeOrderId = order.id
     }
 

@@ -11,6 +11,7 @@ export type Order = {
   nftId: string
   category: NFTCategory
   nftAddress: string
+  marketAddress: string
   owner: string
   buyer: string | null
   price: string

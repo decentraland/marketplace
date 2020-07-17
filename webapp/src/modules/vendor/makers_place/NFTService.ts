@@ -137,9 +137,8 @@ export class NFTService implements NFTServiceInterface {
       wearable: null,
       ens: null,
       pictureFrame: {
-        description: asset.description,
-        marketContractAddress: asset.sale_contract_address // TODO: FIX makersplace
-      } as any,
+        description: asset.description
+      },
       category: NFTCategory.ART,
       vendor: Vendors.MAKERS_PLACE
     }
@@ -155,6 +154,7 @@ export class NFTService implements NFTServiceInterface {
       nftId: asset.token_id!.toString(),
       category: NFTCategory.ART,
       nftAddress: asset.token_contract_address.toLowerCase(),
+      marketAddress: asset.sale_contract_address!,
       owner: asset.owner,
       buyer: null,
       price: price.toString(10),

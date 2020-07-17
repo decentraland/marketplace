@@ -36,9 +36,7 @@ export class OrderService implements OrderServiceInterface {
 
     // Addresses
     const assetContractAddress = Address.fromString(nft.contractAddress)
-    const assetMarketAddress: Address = Address.fromString(
-      (nft.pictureFrame! as any).marketContractAddress
-    )
+    const assetMarketAddress: Address = Address.fromString(order.marketAddress)
     const manaTokenAddress = Address.fromString(
       DecentralandContractService.contractAddresses.MANAToken
     )

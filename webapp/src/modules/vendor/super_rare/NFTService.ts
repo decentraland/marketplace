@@ -178,6 +178,7 @@ export class NFTService implements NFTServiceInterface {
       nftId: asset.id.toString(),
       category: NFTCategory.ART,
       nftAddress: asset.contractAddress,
+      marketAddress: order.marketContractAddress,
       owner: asset.owner.address,
       buyer: taker ? taker.address : null,
       price: price.toString(10),
