@@ -1,7 +1,7 @@
 import { ContractService as ContractServiceInterface } from '../services'
 import { Network } from '../../contract/types'
+import { NFTCategory } from '../../nft/types'
 import { TransferType } from '../types'
-import { NFTCategory } from './nft/types'
 
 const network = process.env.REACT_APP_NETWORK! as Network
 

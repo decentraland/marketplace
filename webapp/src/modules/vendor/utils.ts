@@ -1,10 +1,10 @@
+import { NFTCategory } from '../nft/types'
 import { getSearchCategory, getSearchWearableCategory } from '../routing/search'
 import { SearchOptions } from '../routing/types'
-import { NFTCategory } from './decentraland/nft/types'
 import { Section } from './decentraland/routing/types'
-import { Vendors, Partner } from './types'
+import { Vendors, Disabled } from './types'
 
-export function getFilters(vendor: Vendors, searchOptions: SearchOptions): any {
+export function getFilters(vendor: Vendors, searchOptions: SearchOptions) {
   switch (vendor) {
     case Vendors.DECENTRALAND:
       const { section } = searchOptions
@@ -55,5 +55,13 @@ export function isVendor(vendor: string) {
 }
 
 export function isPartner(vendor: string) {
-  return Object.values(Partner).includes(vendor as Partner)
+  return isVendor(vendor) && vendor !== Vendors.DECENTRALAND
+}
+
+export function getPartners(): Vendors[] {
+  const disabledVendors = Object.values(Disabled)
+
+  return Object.values(Vendors).filter(
+    vendor => isPartner(vendor) && !disabledVendors.includes(vendor)
+  )
 }

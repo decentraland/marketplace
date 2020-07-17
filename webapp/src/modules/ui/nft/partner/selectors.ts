@@ -4,12 +4,14 @@ import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NFTState } from '../../../nft/reducer'
 import { FETCH_NFTS_REQUEST } from '../../../nft/actions'
 import { NFT } from '../../../nft/types'
-import { Partner } from '../../../vendor/types'
+import { Vendors } from '../../../vendor/types'
 import {
   getData as getNFTData,
   getLoading as getNFTLoading
 } from '../../../nft/selectors'
+import { getPartners as getAllPartners } from '../../../vendor/utils'
 import { RootState } from '../../../reducer'
+import { PartnerView } from './types'
 import { PartnerUIState } from './reducer'
 
 export const getState = (state: RootState) => state.ui.nft.partner
@@ -18,27 +20,27 @@ export const getPartners = createSelector<
   RootState,
   PartnerUIState,
   NFTState['data'],
-  Record<Partner, NFT[]>
+  Record<Vendors, NFT[]>
 >(getState, getNFTData, (partnerState, nftsById) => {
-  const partners = Object.values(Partner) as Partner[]
   const result: Record<string, NFT[]> = {}
 
-  for (const partner of partners) {
-    result[partner] = partnerState[partner].map(id => nftsById[id])
+  for (const partner of getAllPartners()) {
+    result[partner] = partnerState[partner as PartnerView].map(
+      id => nftsById[id]
+    )
   }
 
-  return result as Record<Partner, NFT[]>
+  return result
 })
 
 export const getPartnersLoading = createSelector<
   RootState,
   LoadingState,
-  Record<Partner, boolean>
+  Record<Vendors, boolean>
 >(getNFTLoading, nftLoading => {
-  const partners = Object.values(Partner) as Partner[]
   const result: Record<string, boolean> = {}
 
-  for (const partner of partners) {
+  for (const partner of getAllPartners()) {
     result[partner] = nftLoading.some(
       action =>
         action.type === FETCH_NFTS_REQUEST &&
@@ -46,5 +48,5 @@ export const getPartnersLoading = createSelector<
     )
   }
 
-  return result as Record<Partner, boolean>
+  return result
 })

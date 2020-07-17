@@ -1,6 +1,6 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { NFTCategory } from '../vendor/decentraland/nft/types'
+import { NFTCategory } from '../nft/types'
 import { SortDirection, SortBy } from '../routing/types'
 import { contractCategories } from '../contract/utils'
 import { addressEquals } from '../wallet/utils'
@@ -25,7 +25,7 @@ export function getNFTName(nft: NFT) {
 
   switch (nft.category) {
     case NFTCategory.PARCEL:
-      return t('global.parcel_with_coords', nft.parcel)
+      return t('global.parcel_with_coords', nft.data.parcel)
 
     case NFTCategory.ESTATE:
       return t('global.estate')
@@ -35,6 +35,9 @@ export function getNFTName(nft: NFT) {
 
     case NFTCategory.ENS:
       return t('global.ens')
+
+    case NFTCategory.ART:
+      return t('global.art')
 
     default:
       return t('global.nft')
@@ -85,5 +88,5 @@ export function getNFT(
 }
 
 export function isOwnedBy(nft: NFT, wallet: Wallet | null) {
-  return addressEquals(wallet?.address, nft.owner.address)
+  return addressEquals(wallet?.address, nft.owner)
 }

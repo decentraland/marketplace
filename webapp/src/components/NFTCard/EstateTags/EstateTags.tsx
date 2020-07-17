@@ -7,7 +7,7 @@ const EstateTags = (props: Props) => {
   const { nft } = props
   return (
     <div className="EstateTags tags">
-      <div className="size">{nft.estate!.size.toLocaleString()} LAND</div>
+      <div className="size">{nft.data.estate!.size.toLocaleString()} LAND</div>
       <ProximityTags nft={nft} />
     </div>
   )

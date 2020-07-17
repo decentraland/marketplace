@@ -9,7 +9,7 @@ import './Owner.css'
 
 const Owner = (props: Props) => {
   const { nft } = props
-  const address = nft.owner.address
+  const address = nft.owner
   return (
     <div className="Owner">
       <Link to={locations.account(address, { vendor: nft.vendor })}>

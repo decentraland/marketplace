@@ -4,7 +4,12 @@ import { toBN, toWei } from 'web3x-es/utils'
 
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
-import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
+import {
+  NFT,
+  NFTCategory,
+  NFTsFetchParams,
+  NFTsCountParams
+} from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -12,7 +17,6 @@ import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
 import { Vendors, TransferType } from '../types'
-import { NFTCategory } from './nft/types'
 import { ContractService } from './ContractService'
 import { SuperRareAsset, SuperRareOrder, SuperRareOwner } from './types'
 import { superRareAPI, MAX_QUERY_SIZE } from './api'
@@ -44,7 +48,7 @@ export class NFTService implements NFTServiceInterface {
       remoteNFTs = remoteOrders.map(order => order.asset)
     }
 
-    const nfts: NFT[] = []
+    const nfts: NFT<Vendors.SUPER_RARE>[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
@@ -143,23 +147,17 @@ export class NFTService implements NFTServiceInterface {
     return transaction.send({ from }).getTxHash()
   }
 
-  toNFT(asset: SuperRareAsset): NFT {
+  toNFT(asset: SuperRareAsset): NFT<Vendors.SUPER_RARE> {
     return {
       id: getNFTId(asset.contractAddress, asset.id.toString()),
       tokenId: asset.id.toString(),
       contractAddress: asset.contractAddress,
       activeOrderId: '',
-      owner: {
-        address: asset.owner.address
-      },
+      owner: asset.owner.address,
       name: asset.name,
       image: asset.image,
       url: asset.url,
-      parcel: null,
-      estate: null,
-      wearable: null,
-      ens: null,
-      pictureFrame: {
+      data: {
         description: asset.description
       },
       category: NFTCategory.ART,

@@ -2,10 +2,10 @@ import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 import { contractAddresses } from '../../contract/utils'
 import { EstateRegistry } from '../../../contracts/EstateRegistry'
-import { NFT } from '../types'
+import { Estate } from './types'
 
-export const getSelection = (nft: NFT) => {
-  return nft.estate!.parcels.map(pair => ({
+export const getSelection = (estate: Estate) => {
+  return estate.parcels.map(pair => ({
     x: +pair.x,
     y: +pair.y
   }))

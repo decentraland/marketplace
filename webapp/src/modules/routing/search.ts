@@ -1,7 +1,7 @@
 import { WearableCategory } from '../nft/wearable/types'
 import { View } from '../ui/types'
+import { NFTCategory } from '../nft/types'
 import { Vendors } from '../vendor/types'
-import { NFTCategory } from '../vendor/decentraland/nft/types'
 import { Section } from '../vendor/routing/types'
 import { SearchOptions, SortBy } from './types'
 
@@ -72,7 +72,6 @@ export function getSearchParams(options?: SearchOptions) {
 export function getSearchCategory(section: Section) {
   // TODO: Move this to each vendor? Names shortened for brevity here
   const DclSection = Section[Vendors.DECENTRALAND]
-
   switch (section) {
     case DclSection.PARCELS:
       return NFTCategory.PARCEL

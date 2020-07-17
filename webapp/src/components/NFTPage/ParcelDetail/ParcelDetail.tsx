@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+
 import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
@@ -21,7 +22,8 @@ import './ParcelDetail.css'
 
 const ParcelDetail = (props: Props) => {
   const { nft } = props
-  const { x, y } = nft.parcel!
+  const parcel = nft.data.parcel!
+  const { x, y } = parcel
 
   return (
     <>
@@ -53,7 +55,7 @@ const ParcelDetail = (props: Props) => {
           }
           right={<Owner nft={nft} />}
         />
-        <Description text={nft.parcel!.data?.description} />
+        <Description text={parcel.data?.description} />
         <Row>
           <Column align="left" grow={true}>
             <OrderDetails nft={nft} />

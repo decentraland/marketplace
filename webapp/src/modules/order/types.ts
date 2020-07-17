@@ -1,4 +1,4 @@
-import { NFTCategory } from '../vendor/nft/types'
+import { NFTCategory } from '../nft/types'
 
 export enum OrderStatus {
   OPEN = 'open',

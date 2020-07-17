@@ -1,4 +1,4 @@
-import { NFTCategory } from '../vendor/nft/types'
+import { NFTCategory } from '../nft/types'
 import { OrderStatus } from '../order/types'
 
 export type Bid = {

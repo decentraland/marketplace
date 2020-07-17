@@ -3,8 +3,9 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Responsive } from 'decentraland-ui'
 
 import { locations } from '../../modules/routing/locations'
+import { View } from '../../modules/ui/types'
 import { SortBy } from '../../modules/routing/types'
-import { Vendors, Partner } from '../../modules/vendor/types'
+import { Vendors } from '../../modules/vendor/types'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
@@ -28,11 +29,11 @@ const PartnersPage = (props: Props) => {
 
   // Kick things off
   useEffect(() => {
-    for (const partner in partners) {
-      const view = partner as Partner
+    let partner: Vendors
+    for (partner in partners) {
       onFetchNFTsFromRoute({
-        view,
-        vendor: view,
+        view: partner as View,
+        vendor: partner,
         sortBy: SortBy.RECENTLY_LISTED,
         page: 1,
         onlyOnSale: true
@@ -41,7 +42,7 @@ const PartnersPage = (props: Props) => {
     // eslint-disable-next-line
   }, [onFetchNFTsFromRoute])
 
-  const views = Object.keys(partners) as Partner[]
+  const views = Object.keys(partners) as Vendors[]
 
   return (
     <>
@@ -65,7 +66,7 @@ const PartnersPage = (props: Props) => {
                 nfts={partners[view]}
                 isLoading={partners[view].length === 0 || partnersLoading[view]}
                 isSubHeader={true}
-                onViewAll={() => handleOnNavigate(view as Partner)}
+                onViewAll={() => handleOnNavigate(view)}
               />
             ))}
           </Column>

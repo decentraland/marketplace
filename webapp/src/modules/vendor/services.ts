@@ -1,9 +1,16 @@
-import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
+import {
+  NFT as GenericNFT,
+  NFTCategory,
+  NFTsFetchParams,
+  NFTsCountParams
+} from '../nft/types'
 import { Account } from '../account/types'
 import { Bid } from '../bid/types'
 import { OrderStatus, Order } from '../order/types'
-import { NFTsFetchFilters, NFTCategory } from './nft/types'
+import { NFTsFetchFilters } from './nft/types'
 import { TransferType } from './types'
+
+type NFT = GenericNFT<any>
 
 export interface NFTService {
   fetch: (

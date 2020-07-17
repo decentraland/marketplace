@@ -4,7 +4,12 @@ import { toBN, toWei } from 'web3x-es/utils'
 
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
-import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
+import {
+  NFT,
+  NFTCategory,
+  NFTsFetchParams,
+  NFTsCountParams
+} from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -13,7 +18,6 @@ import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
 import { getOriginURL } from '../utils'
 import { Vendors } from '../types'
-import { NFTCategory } from './nft/types'
 import { MakersPlaceAsset } from './types'
 import { makersPlaceAPI } from './api'
 
@@ -37,7 +41,7 @@ export class NFTService implements NFTServiceInterface {
 
     const remoteNFTs = response.items
 
-    const nfts: NFT[] = []
+    const nfts: NFT<Vendors.MAKERS_PLACE>[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
@@ -120,7 +124,7 @@ export class NFTService implements NFTServiceInterface {
       .getTxHash()
   }
 
-  toNFT(asset: MakersPlaceAsset): NFT {
+  toNFT(asset: MakersPlaceAsset): NFT<Vendors.MAKERS_PLACE> {
     const tokenId = asset.token_id!.toString()
     const contractAddress = asset.token_contract_address.toLowerCase()
     return {
@@ -128,17 +132,11 @@ export class NFTService implements NFTServiceInterface {
       tokenId,
       contractAddress,
       activeOrderId: '',
-      owner: {
-        address: asset.owner
-      },
+      owner: asset.owner,
       name: asset.name,
       image: asset.image_url,
       url: asset.url || this.getDefaultURL(asset),
-      parcel: null,
-      estate: null,
-      wearable: null,
-      ens: null,
-      pictureFrame: {
+      data: {
         description: asset.description
       },
       category: NFTCategory.ART,

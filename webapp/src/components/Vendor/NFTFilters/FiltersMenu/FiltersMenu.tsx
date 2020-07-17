@@ -11,8 +11,8 @@ import {
   WearableRarity,
   WearableGender
 } from '../../../../modules/nft/wearable/types'
+import { NFTCategory } from '../../../../modules/nft/types'
 import { ContractName } from '../../../../modules/vendor/types'
-import { NFTCategory } from '../../../../modules/vendor/decentraland/nft/types'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Page } from 'decentraland-ui'
 
+import { Vendors } from '../../modules/vendor/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
@@ -19,15 +20,21 @@ const NFTPage = () => {
       <Navigation isFullscreen />
       <Page className="NFTPage" isFullscreen>
         <NFTProviderPage>
-          {nft => (
-            <>
-              {nft.parcel ? <ParcelDetail nft={nft} /> : null}
-              {nft.estate ? <EstateDetail nft={nft} /> : null}
-              {nft.wearable ? <WearableDetail nft={nft} /> : null}
-              {nft.ens ? <ENSDetail nft={nft} /> : null}
-              {nft.pictureFrame ? <PictureFrameDetail nft={nft} /> : null}
-            </>
-          )}
+          {nft => {
+            // TODO: Move this to components/vendor
+            const { parcel, estate, wearable, ens } = nft.data as any
+            return (
+              <>
+                {parcel ? <ParcelDetail nft={nft} /> : null}
+                {estate ? <EstateDetail nft={nft} /> : null}
+                {wearable ? <WearableDetail nft={nft} /> : null}
+                {ens ? <ENSDetail nft={nft} /> : null}
+                {nft.vendor !== Vendors.DECENTRALAND ? (
+                  <PictureFrameDetail nft={nft} />
+                ) : null}
+              </>
+            )
+          }}
         </NFTProviderPage>
       </Page>
       <Footer />

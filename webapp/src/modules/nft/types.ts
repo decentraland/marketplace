@@ -2,9 +2,8 @@ import { Parcel } from './parcel/types'
 import { Estate } from './estate/types'
 import { Wearable } from './wearable/types'
 import { ENS } from './ens/types'
-import { PictureFrame } from './picture_frame/types'
 import { View } from '../ui/types'
-import { NFTCategory, NFTsFetchFilters } from '../vendor/nft/types'
+import { NFTsFetchFilters } from '../vendor/nft/types'
 import { Vendors } from '../vendor/types'
 import { SortDirection } from '../routing/types'
 
@@ -15,24 +14,49 @@ export enum NFTSortBy {
   PRICE = 'searchOrderPrice'
 }
 
-export type NFT = {
+export enum NFTCategory {
+  PARCEL = 'parcel',
+  ESTATE = 'estate',
+  WEARABLE = 'wearable',
+  ENS = 'ens',
+  ART = 'art'
+}
+
+type Art = {
+  description: string
+}
+
+type DecentralandNFT = {
+  parcel?: Parcel
+  estate?: Estate
+  wearable?: Wearable
+  ens?: ENS
+}
+type SuperRareNFT = Art
+type MakersPlaceNFT = Art
+
+export type Data<V extends Vendors> = V extends Vendors.DECENTRALAND
+  ? DecentralandNFT
+  : V extends Vendors.SUPER_RARE
+  ? SuperRareNFT
+  : V extends Vendors.MAKERS_PLACE
+  ? MakersPlaceNFT
+  : V extends any
+  ? DecentralandNFT | SuperRareNFT | MakersPlaceNFT
+  : never
+
+export type NFT<V extends Vendors = Vendors.DECENTRALAND> = {
   id: string
   contractAddress: string
   tokenId: string
   activeOrderId: string | null
-  owner: {
-    address: string
-  }
+  owner: string
   name: string
   category: NFTCategory
   image: string
   url: string
-  parcel: Parcel | null
-  estate: Estate | null
-  wearable: Wearable | null
-  ens: ENS | null
-  pictureFrame: PictureFrame | null
   vendor: Vendors
+  data: Data<V>
 }
 
 export type NFTsFetchParams = {

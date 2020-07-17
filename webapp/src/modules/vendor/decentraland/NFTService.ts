@@ -35,7 +35,7 @@ export class NFTService implements NFTServiceInterface {
         orders.push(order)
       }
 
-      const address = nft.owner.address.toLowerCase()
+      const address = nft.owner.toLowerCase()
       const account = accounts.find(account => account.id === address)
       if (account) {
         account.nftIds.push(nft.id)
@@ -86,7 +86,7 @@ export class NFTService implements NFTServiceInterface {
       .getTxHash()
   }
 
-  toNFT(nft: NFTFragment): NFT {
+  toNFT(nft: NFTFragment): NFT<Vendors.DECENTRALAND> {
     const { activeOrder, ...rest } = nft
     return {
       ...rest,
