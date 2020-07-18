@@ -10,7 +10,7 @@ const contractAddresses = {
   [Network.ROPSTEN]: {
     DigitalMediaCore: '0x2a46f2ffd99e19a89476e2f62270e0a35bbf0756',
     DigitalMediaCore2: '0x2d9E5de7D36f3830c010a28B29B3BDf5cA73198e',
-    MarketplaceAdapter: '0x8512Fc051B3f8A3A5043F93278DEFe1389E2668C'
+    MarketplaceAdapter: '0xd1e4e2880ff56cd0d5c68da9bed58bfbf0150948'
   },
   [Network.MAINNET]: {
     DigitalMediaCore: '0x2a46f2ffd99e19a89476e2f62270e0a35bbf0756',

@@ -83,6 +83,37 @@ export default new ContractAbi([
       {
         "indexed": true,
         "internalType": "address",
+        "name": "marketplace",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "orderValue",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "orderFees",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "bytes",
+        "name": "marketplaceData",
+        "type": "bytes"
+      }
+    ],
+    "name": "ExecutedOrder",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "collector",
         "type": "address"
       }
@@ -221,7 +252,7 @@ export default new ContractAbi([
         "type": "uint256"
       },
       {
-        "internalType": "enum MarketAdapter.TransferType",
+        "internalType": "enum BuyAdapter.TransferType",
         "name": "_transferType",
         "type": "uint8"
       },
@@ -274,7 +305,7 @@ export default new ContractAbi([
         "type": "uint256"
       },
       {
-        "internalType": "enum MarketAdapter.TransferType",
+        "internalType": "enum BuyAdapter.TransferType",
         "name": "_transferType",
         "type": "uint8"
       },
@@ -287,6 +318,62 @@ export default new ContractAbi([
     "name": "buy",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_marketplace",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_encodedCallData",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_orderAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "contract IERC20",
+        "name": "_paymentToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxPaymentTokenAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "buy",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_marketplace",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "_encodedCallData",
+        "type": "bytes"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_orderAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "buy",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -428,24 +515,6 @@ export default new ContractAbi([
     "inputs": [
       {
         "internalType": "address",
-        "name": "_marketplace",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "_action",
-        "type": "bool"
-      }
-    ],
-    "name": "setMarketplaceAllowance",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "newOwner",
         "type": "address"
       }
@@ -453,25 +522,6 @@ export default new ContractAbi([
     "name": "transferOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "whitelistedMarkets",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   }
 ]);

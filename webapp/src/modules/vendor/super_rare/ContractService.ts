@@ -11,7 +11,7 @@ const contractAddresses = {
     SuperRareV2: '0x84691657fd6bcf50764d9fef2a53b22c8bd2202e',
     SuperRareMarket: '0xa42e14b40bb22bc3daaf8ecad9d73bdf44056959',
     SuperRareMarketV2: '0x17d0234dc57ef236cdfc4fda76b0810265f44e1f',
-    MarketplaceAdapter: '0x8512Fc051B3f8A3A5043F93278DEFe1389E2668C'
+    MarketplaceAdapter: '0xd1e4e2880ff56cd0d5c68da9bed58bfbf0150948'
   },
   [Network.MAINNET]: {
     SuperRare: '0x41a322b28d0ff354040e2cbc676f0320d8c8850d',
