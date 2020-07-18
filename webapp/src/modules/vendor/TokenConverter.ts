@@ -60,7 +60,8 @@ export class TokenConverter {
   }
 
   async contractEthToToken(ethAmount: string, tokenAddress: string) {
-    const converterAddress = process.env.REACT_APP_CONVERTER_ADDRESS!
+    // TODO: Network
+    const converterAddress = '0x2782eb28Dcb1eF4E7632273cd4e347e130Ce4646'
     const converter = ContractFactory.build(Converter, converterAddress)
 
     return converter.methods

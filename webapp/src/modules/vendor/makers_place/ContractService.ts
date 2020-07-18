@@ -1,19 +1,29 @@
 import { ContractService as ContractServiceInterface } from '../services'
-import { NFTCategory } from './nft/types'
+import { Network } from '../../contract/types'
 import { TransferType } from '../types'
+import { NFTCategory } from './nft/types'
 
-const env = process.env
+const network = process.env.REACT_APP_NETWORK! as Network
 
-const DigitalMediaCore = env.REACT_APP_MAKERS_PLACE_DIGITAL_MEDIA_CORE_ADDRESS!
-const DigitalMediaCore2 = env.REACT_APP_MAKERS_PLACE_DIGITAL_MEDIA_CORE_2_ADDRESS!
-
-const MarketplaceAdapter = env.REACT_APP_MARKETPLACE_ADAPTER_ADDRESS!
-
+// No ropsten!
 const contractAddresses = {
+  [Network.ROPSTEN]: {
+    DigitalMediaCore: '0x2a46f2ffd99e19a89476e2f62270e0a35bbf0756',
+    DigitalMediaCore2: '0x2d9E5de7D36f3830c010a28B29B3BDf5cA73198e',
+    MarketplaceAdapter: '0x8512Fc051B3f8A3A5043F93278DEFe1389E2668C'
+  },
+  [Network.MAINNET]: {
+    DigitalMediaCore: '0x2a46f2ffd99e19a89476e2f62270e0a35bbf0756',
+    DigitalMediaCore2: '0x2d9E5de7D36f3830c010a28B29B3BDf5cA73198e',
+    MarketplaceAdapter: '0x20e66474bb6178f32925b8ac27043d0e6d542b6f'
+  }
+}[network]
+
+const {
   DigitalMediaCore,
   DigitalMediaCore2,
   MarketplaceAdapter
-} as const
+} = contractAddresses
 
 export type ContractName = keyof typeof contractAddresses
 
