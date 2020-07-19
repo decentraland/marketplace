@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
-import { browse } from '../../modules/routing/actions'
+import { fetchNFTsFromRoute } from '../../modules/routing/actions'
 import {
   getHomepageWearables,
   getHomepageLand,
@@ -24,7 +24,7 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
-  onBrowse: options => dispatch(browse(options))
+  onFetchNFTsFromRoute: options => dispatch(fetchNFTsFromRoute(options))
 })
 
 export default connect(mapState, mapDispatch)(HomePage)

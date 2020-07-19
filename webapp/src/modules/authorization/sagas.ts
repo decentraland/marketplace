@@ -71,8 +71,6 @@ function* handleFetchAuthorizationRequest(
       )
     ])
 
-    // ------------------------
-
     const authorization = { allowances, approvals }
 
     yield put(fetchAuthorizationSuccess(address, authorization))

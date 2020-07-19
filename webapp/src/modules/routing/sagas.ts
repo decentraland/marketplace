@@ -26,36 +26,50 @@ import {
   getContracts,
   getSearch
 } from './selectors'
-import { BROWSE, BrowseAction, setIsLoadMore } from './actions'
+import {
+  BROWSE,
+  BrowseAction,
+  FETCH_NFTS_FROM_ROUTE,
+  FetchNFTsFromRouteAction,
+  setIsLoadMore
+} from './actions'
 import { SearchOptions } from './types'
 
 export function* routingSaga() {
+  yield takeEvery(FETCH_NFTS_FROM_ROUTE, handleFetchNFTsFromRoute)
   yield takeEvery(BROWSE, handleBrowse)
 }
 
+function* handleFetchNFTsFromRoute(action: FetchNFTsFromRouteAction) {
+  const newSearchOptions = yield getNewSearchOptions(
+    action.payload.searchOptions
+  )
+  yield fetchNFTsFromRoute(newSearchOptions)
+}
+
 function* handleBrowse(action: BrowseAction) {
+  const newSearchOptions = yield getNewSearchOptions(
+    action.payload.searchOptions
+  )
+  yield fetchNFTsFromRoute(newSearchOptions)
+
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
+  const params = getSearchParams(newSearchOptions)
+  yield put(push(params ? `${pathname}?${params.toString()}` : pathname))
+}
 
-  const searchOptions = yield getNewSearchOptions(action.payload.searchOptions)
-  const {
-    view,
-    vendor,
-    page,
-    section,
-    sortBy,
-    search,
-    onlyOnSale,
-    isMap,
-    address
-  } = searchOptions
+// ------------------------------------------------
+// Utility functions, not handlers
+
+function* fetchNFTsFromRoute(searchOptions: SearchOptions) {
+  const view = searchOptions.view!
+  const vendor = searchOptions.vendor!
+  const page = searchOptions.page!
+  const section = searchOptions.section!
+  const sortBy = searchOptions.sortBy!
+  const { search, onlyOnSale, isMap, address } = searchOptions
+
   const isLoadMore = view === View.LOAD_MORE
-
-  if (isLoadMore) {
-    // Keep search if section is not changing
-    searchOptions.search = search
-  }
-
-  const params = getSearchParams(searchOptions)
 
   const offset = isLoadMore ? page - 1 : 0
   const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
@@ -65,7 +79,6 @@ function* handleBrowse(action: BrowseAction) {
   const category = getSearchCategory(section)
 
   yield put(setIsLoadMore(isLoadMore))
-  yield put(push(params ? `${pathname}?${params.toString()}` : pathname))
 
   if (isMap) {
     yield put(setView(view))
@@ -103,6 +116,8 @@ function* getNewSearchOptions(current: SearchOptions) {
     isMap: yield select(getIsMap)
   }
   current = yield deriveCurrentOptions(previous, current)
+  // console.log('previous', previous)
+  // console.log('current', current)
 
   const view = deriveView(previous, current)
   const vendor = deriveVendor(previous, current)

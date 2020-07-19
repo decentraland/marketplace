@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Page, Responsive } from 'decentraland-ui'
 
+import { getDefaultOptionsByView } from '../../modules/routing/search'
 import { Atlas } from '../Atlas'
 import { NFTList } from '../NFTList'
 import { AccountSidebar } from '../AccountSidebar'
@@ -12,15 +13,24 @@ import { Props } from './NFTBrowse.types'
 import './NFTBrowse.css'
 
 const NFTBrowse = (props: Props) => {
-  const { vendor, view, defaultOnlyOnSale, isMap, address, onBrowse } = props
+  const { vendor, view, isMap, address, onFetchNFTsFromRoute } = props
+
+  const defaultOptions = getDefaultOptionsByView(view)
 
   const onlyOnSale =
-    props.onlyOnSale === undefined ? defaultOnlyOnSale : props.onlyOnSale
+    props.onlyOnSale === undefined
+      ? defaultOptions.onlyOnSale
+      : props.onlyOnSale
 
   // Kick things off
   useEffect(() => {
-    onBrowse({ vendor, view, address, onlyOnSale })
-  }, [onBrowse, vendor, view, onlyOnSale, address])
+    onFetchNFTsFromRoute({
+      vendor,
+      view,
+      address,
+      onlyOnSale
+    })
+  }, [onFetchNFTsFromRoute, vendor, view, onlyOnSale, address])
 
   return (
     <Page className="NFTBrowse">

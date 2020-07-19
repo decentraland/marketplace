@@ -21,7 +21,7 @@ const BrowsePage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={activeTab} />
-      <NFTBrowse vendor={vendor} view={View.MARKET} defaultOnlyOnSale={true} />
+      <NFTBrowse vendor={vendor} view={View.MARKET} />
       <Footer />
     </>
   )

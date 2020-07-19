@@ -1,10 +1,17 @@
 import { WearableCategory } from '../nft/wearable/types'
+import { View } from '../ui/types'
 import { Vendors } from '../vendor/types'
 import { NFTCategory } from '../vendor/nft/types'
 import { Section } from '../vendor/routing/types'
 import { SearchOptions } from './types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
+
+export function getDefaultOptionsByView(view: View): SearchOptions {
+  return {
+    onlyOnSale: view !== View.ACCOUNT
+  }
+}
 
 export function getSearchParams(options?: SearchOptions) {
   let params: URLSearchParams | undefined
@@ -140,15 +147,24 @@ export function getSearchWearableCategory(section: Section) {
   }
 }
 
-export function getParamArray<T extends string>(
+export function getURLParamArray<T extends string>(
   search: string,
   paramName: string,
   validValues: string[] = []
 ) {
-  const param = new URLSearchParams(search).get(paramName)
+  const param = getURLParam<T>(search, paramName)
   return param === null
     ? []
     : (param
         .split(SEARCH_ARRAY_PARAM_SEPARATOR)
         .filter(item => validValues.includes(item as T)) as T[])
 }
+
+export function getURLParam<T extends string>(
+  search: string,
+  paramName: string
+) {
+  const param = new URLSearchParams(search).get(paramName) as T | null
+  return param
+}
+

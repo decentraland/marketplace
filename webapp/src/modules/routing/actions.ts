@@ -11,6 +11,15 @@ export const browse = (searchOptions: SearchOptions) =>
 
 export type BrowseAction = ReturnType<typeof browse>
 
+// Navigate
+
+export const FETCH_NFTS_FROM_ROUTE = 'Navigate'
+
+export const fetchNFTsFromRoute = (searchOptions: SearchOptions) =>
+  action(FETCH_NFTS_FROM_ROUTE, { searchOptions })
+
+export type FetchNFTsFromRouteAction = ReturnType<typeof fetchNFTsFromRoute>
+
 // Load More
 
 export const SET_IS_LOAD_MORE = 'Set is load more'

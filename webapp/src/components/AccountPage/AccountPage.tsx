@@ -44,7 +44,6 @@ const AccountPage = (props: Props) => {
           <NFTBrowse
             vendor={vendor}
             address={wallet.address}
-            defaultOnlyOnSale={false}
             view={View.ACCOUNT}
           />
         )
@@ -73,12 +72,7 @@ const AccountPage = (props: Props) => {
             </div>
           </PageHeader>
 
-          <NFTBrowse
-            vendor={vendor}
-            address={address}
-            defaultOnlyOnSale={false}
-            view={View.ACCOUNT}
-          />
+          <NFTBrowse vendor={vendor} address={address} view={View.ACCOUNT} />
         </>
       ) : null}
       <Footer />

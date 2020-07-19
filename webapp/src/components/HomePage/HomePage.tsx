@@ -21,8 +21,8 @@ const HomePage = (props: Props) => {
     isWearablesLoading,
     isENSLoading,
     isLandLoading,
-    onBrowse,
-    onNavigate
+    onNavigate,
+    onFetchNFTsFromRoute
   } = props
 
   const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
@@ -47,7 +47,7 @@ const HomePage = (props: Props) => {
   const vendor = Vendors.DECENTRALAND
 
   useEffect(() => {
-    onBrowse({
+    onFetchNFTsFromRoute({
       vendor,
       section: Section.WEARABLES,
       view: View.HOME_WEARABLES,
@@ -55,21 +55,23 @@ const HomePage = (props: Props) => {
       page: 1,
       onlyOnSale: true
     })
-    onBrowse({
+    onFetchNFTsFromRoute({
       vendor,
       section: Section.LAND,
       view: View.HOME_LAND,
       sortBy: SortBy.RECENTLY_LISTED,
-      page: 1
+      page: 1,
+      onlyOnSale: true
     })
-    onBrowse({
+    onFetchNFTsFromRoute({
       vendor,
       section: Section.ENS,
       view: View.HOME_ENS,
       sortBy: SortBy.RECENTLY_LISTED,
-      page: 1
+      page: 1,
+      onlyOnSale: true
     })
-  }, [vendor, onBrowse])
+  }, [vendor, onFetchNFTsFromRoute])
 
   return (
     <>

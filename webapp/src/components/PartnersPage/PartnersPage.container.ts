@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 
 import { RootState } from '../../modules/reducer'
-import { fetchNFTsRequest } from '../../modules/nft/actions'
+import { fetchNFTsFromRoute } from '../../modules/routing/actions'
 import {
   getPartnersSuperRare,
   isPartnersSuperRareLoading,
@@ -25,7 +25,7 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
-  onFetchNFTs: (...args) => dispatch(fetchNFTsRequest(...args))
+  onFetchNFTsFromRoute: options => dispatch(fetchNFTsFromRoute(options))
 })
 
 export default connect(mapState, mapDispatch)(PartnersPage)

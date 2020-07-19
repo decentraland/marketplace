@@ -3,9 +3,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Responsive } from 'decentraland-ui'
 
 import { locations } from '../../modules/routing/locations'
-import { SortDirection } from '../../modules/routing/types'
+import { SortBy } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
-import { NFTSortBy } from '../../modules/nft/types'
 import { Vendors } from '../../modules/vendor/types'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Row } from '../Layout/Row'
@@ -19,7 +18,12 @@ import { Props } from './PartnersPage.types'
 import './PartnersPage.css'
 
 const PartnersPage = (props: Props) => {
-  const { superRare, isSuperRareLoading, onFetchNFTs, onNavigate } = props
+  const {
+    superRare,
+    isSuperRareLoading,
+    onNavigate,
+    onFetchNFTsFromRoute
+  } = props
 
   const handleOnNavigate = useCallback(
     (vendor: Vendors) => {
@@ -32,18 +36,14 @@ const PartnersPage = (props: Props) => {
 
   // Kick things off
   useEffect(() => {
-    onFetchNFTs({
+    onFetchNFTsFromRoute({
       view: View.PARTNERS_SUPER_RARE,
       vendor: Vendors.SUPER_RARE,
-      params: {
-        first: 10,
-        skip: 0,
-        orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.ORDER_CREATED_AT,
-        onlyOnSale: true
-      }
+      sortBy: SortBy.RECENTLY_LISTED,
+      page: 1,
+      onlyOnSale: true
     })
-  }, [onFetchNFTs])
+  }, [onFetchNFTsFromRoute])
 
   return (
     <>
