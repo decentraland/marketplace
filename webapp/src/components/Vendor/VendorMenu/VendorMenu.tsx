@@ -18,7 +18,7 @@ const VendorMenu = (props: Props) => {
   const [isOpen, setIsOpen] = useState(isCurrentVendor)
   const [currentCount, setCurrentCount] = useState(count)
 
-  const isDisabled = !currentCount
+  const isDisabled = !currentCount && !isOpen
 
   const handleToggleOpen = useCallback(() => {
     if (!isDisabled) {
