@@ -15,7 +15,7 @@ const contractAddresses = {
   [Network.MAINNET]: {
     DigitalMediaCore: '0x2a46f2ffd99e19a89476e2f62270e0a35bbf0756',
     DigitalMediaCore2: '0x2d9E5de7D36f3830c010a28B29B3BDf5cA73198e',
-    MarketplaceAdapter: '0x20e66474bb6178f32925b8ac27043d0e6d542b6f'
+    MarketplaceAdapter: '0xf4fbd84193f9aaf9779dedbb415a806933eb1c95'
   }
 }[network]
 

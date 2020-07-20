@@ -18,12 +18,21 @@ const pricesCache: Record<string, Record<number, number>> = {}
 
 export class TokenConverter {
   apiURL: string
+  converterAddress: string
+
   constructor() {
     const apiURL = process.env.REACT_APP_COINGECKO_API_URL!
+    const converterAddress = process.env.REACT_APP_CONVERTER_ADDRESS!
+
     if (!apiURL) {
       throw new Error(`Invalid converter API URL "${apiURL}"`)
     }
+    if (!converterAddress) {
+      throw new Error(`Invalid converter address "${converterAddress}"`)
+    }
+
     this.apiURL = apiURL
+    this.converterAddress = converterAddress
   }
 
   async marketEthToMANA(ethAmount: number) {
@@ -60,9 +69,7 @@ export class TokenConverter {
   }
 
   async contractEthToToken(ethAmount: string, tokenAddress: string) {
-    // TODO: Network
-    const converterAddress = '0x2782eb28Dcb1eF4E7632273cd4e347e130Ce4646'
-    const converter = ContractFactory.build(Converter, converterAddress)
+    const converter = ContractFactory.build(Converter, this.converterAddress)
 
     return converter.methods
       .calcNeededTokensForEther(Address.fromString(tokenAddress), ethAmount)
