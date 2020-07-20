@@ -3,13 +3,14 @@ import { View } from '../ui/types'
 import { Vendors } from '../vendor/types'
 import { NFTCategory } from '../vendor/nft/types'
 import { Section } from '../vendor/routing/types'
-import { SearchOptions } from './types'
+import { SearchOptions, SortBy } from './types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
-export function getDefaultOptionsByView(view: View): SearchOptions {
+export function getDefaultOptionsByView(view?: View): SearchOptions {
   return {
-    onlyOnSale: view !== View.ACCOUNT
+    onlyOnSale: view !== View.ACCOUNT,
+    sortBy: view === View.ACCOUNT ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
   }
 }
 

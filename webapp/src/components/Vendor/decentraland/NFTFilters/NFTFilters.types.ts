@@ -9,7 +9,7 @@ import { ContractName } from '../../../../modules/vendor/types'
 export type Props = {
   count?: number
   section: Section
-  sortBy: SortBy
+  sortBy?: SortBy
   search: string
   onlyOnSale?: boolean
   isMap?: boolean

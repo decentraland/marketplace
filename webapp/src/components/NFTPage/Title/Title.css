@@ -5,6 +5,7 @@
 .Title .left .ui.large.header {
   display: flex;
   align-items: center;
+  margin-bottom: 0;
 }
 
 .Title .Column.left .ui.header > .text {

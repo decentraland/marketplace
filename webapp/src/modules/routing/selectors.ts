@@ -42,9 +42,17 @@ export const getPage = createSelector<RootState, string, number>(
   }
 )
 
-export const getSortBy = createSelector<RootState, string, SortBy>(
+export const getSortBy = createSelector<
+  RootState,
+  string,
+  View | undefined,
+  SortBy | undefined
+>(
   getRouterSearch,
-  search => getURLParam<SortBy>(search, 'sortBy') || SortBy.RECENTLY_LISTED
+  getView,
+  (search, view) =>
+    getURLParam<SortBy>(search, 'sortBy') ||
+    getDefaultOptionsByView(view).sortBy
 )
 
 export const getOnlyOnSale = createSelector<

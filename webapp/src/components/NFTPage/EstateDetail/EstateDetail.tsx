@@ -30,8 +30,8 @@ const EstateDetail = (props: Props) => {
       <Container className="EstateDetail">
         <Title
           left={
-            <>
-              <Header size="large">{getNFTName(nft)}</Header>
+            <Header size="large">
+              <div className="text">{getNFTName(nft)}</div>
               <Badge color="#37333d">
                 {nft.estate!.size.toLocaleString()} LAND
               </Badge>
@@ -45,7 +45,7 @@ const EstateDetail = (props: Props) => {
                   <i className="jump-in-icon" />
                 </a>
               </Badge>
-            </>
+            </Header>
           }
           right={<Owner nft={nft} />}
         />

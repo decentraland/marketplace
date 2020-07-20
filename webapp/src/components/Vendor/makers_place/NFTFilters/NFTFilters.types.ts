@@ -4,7 +4,7 @@ import { browse } from '../../../../modules/routing/actions'
 export type Props = {
   count?: number
   section: Section
-  sortBy: SortBy
+  sortBy?: SortBy
   search: string
   onlyOnSale?: boolean
   onBrowse: typeof browse

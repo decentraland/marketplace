@@ -182,7 +182,7 @@ export class NFTService implements NFTServiceInterface {
       owner: asset.owner.address,
       buyer: taker ? taker.address : null,
       price: price.toString(10),
-      ethPrice: totalWei.toString(),
+      ethPrice: order.amountWithFee.toString(),
       status: OrderStatus.OPEN,
       createdAt: order.timestamp,
       updatedAt: order.timestamp

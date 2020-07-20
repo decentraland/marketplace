@@ -36,7 +36,7 @@ export function getNFTName(nft: NFT) {
 }
 
 export function getSortOrder(sortBy: SortBy) {
-  let orderBy: NFTSortBy = NFTSortBy.NAME
+  let orderBy: NFTSortBy = NFTSortBy.CREATED_AT
   let orderDirection: SortDirection = SortDirection.DESC
 
   switch (sortBy) {

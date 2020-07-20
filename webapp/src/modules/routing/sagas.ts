@@ -14,7 +14,11 @@ import { getFilters } from '../vendor/utils'
 import { getSortOrder } from '../nft/utils'
 import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
 import { locations } from './locations'
-import { getSearchParams, getSearchCategory } from './search'
+import {
+  getSearchParams,
+  getSearchCategory,
+  getDefaultOptionsByView
+} from './search'
 import {
   getPage,
   getSection,
@@ -116,8 +120,6 @@ function* getNewSearchOptions(current: SearchOptions) {
     isMap: yield select(getIsMap)
   }
   current = yield deriveCurrentOptions(previous, current)
-  // console.log('previous', previous)
-  // console.log('current', current)
 
   const view = deriveView(previous, current)
   const vendor = deriveVendor(previous, current)
@@ -126,7 +128,10 @@ function* getNewSearchOptions(current: SearchOptions) {
     previous = { page: 1 }
   }
 
+  const defaults = getDefaultOptionsByView(view)
+
   return {
+    ...defaults,
     ...previous,
     ...current,
     view,

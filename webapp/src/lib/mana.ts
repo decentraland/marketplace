@@ -9,7 +9,7 @@ export function formatMANA(value: string) {
     oneEthInMANA = new BN('1000000000000000000') // 10 ** 18
   }
   const mana = new BN(value).divRound(oneEthInMANA)
-  return mana.toLocaleString()
+  return mana.toNumber().toLocaleString()
 }
 
 export function toMANA(num: number) {
