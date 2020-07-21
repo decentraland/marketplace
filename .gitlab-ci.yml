@@ -1,10 +1,10 @@
 image: decentraland/ci-node:latest
 
 build:
-  #only:
-  #  - master
-  #  - staging
-  #  - release
+  only:
+    - master
+    - staging
+    - release
   script:
     - cd webapp
     - ./setupEnv.sh
