@@ -1,5 +1,5 @@
 {
-  "name": "builder-static",
+  "name": "market-static",
   "devDependencies": {
     "@types/node": "^14.0.13"
   },
