@@ -192,13 +192,8 @@
 }
 
 @media (max-width: 768px) {
-  .NFTFilters {
-    display: flex;
-    overflow: hidden;
-  }
-
   .NFTFilters .topbar {
-    flex: 1 1 auto;
+    align-items: normal;
   }
 
   .FiltersModal .dcl.row {

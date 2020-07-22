@@ -221,22 +221,21 @@ const NFTFilters = (props: Props) => {
             />
           </Responsive>
         ) : null}
-      </div>
 
-      <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
-        <div
-          className="open-filters-wrapper"
-          onClick={() => setShowFiltersModal(!showFiltersModal)}
-        >
-          <div className="label">{t('nft_filters.filter')}</div>
+        <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
           <div
-            className={`open-filters ${
-              showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
-            }`}
-          />
-        </div>
-      </Responsive>
-
+            className="open-filters-wrapper"
+            onClick={() => setShowFiltersModal(!showFiltersModal)}
+          >
+            <div className="label">{t('nft_filters.filter')}</div>
+            <div
+              className={`open-filters ${
+                showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
+              }`}
+            />
+          </div>
+        </Responsive>
+      </div>
       {showFiltersMenu ? (
         <Responsive
           minWidth={Responsive.onlyTablet.minWidth}

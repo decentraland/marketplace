@@ -15,3 +15,9 @@
 .PriceChangeNotice.ui.card .icon.close {
   cursor: pointer;
 }
+
+@media (max-width: 768px) {
+  .PriceChangeNotice.ui.card {
+    flex: 1 1 auto;
+  }
+}

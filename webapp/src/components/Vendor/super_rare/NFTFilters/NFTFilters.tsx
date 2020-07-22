@@ -98,17 +98,17 @@ const NFTFilters = (props: Props) => {
             label={t('nft_filters.on_sale')}
           />
         </Responsive>
-      </div>
 
-      <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
-        <div
-          className="open-filters-wrapper"
-          onClick={() => setShowFiltersModal(!showFiltersModal)}
-        >
-          <div className="label">{t('nft_filters.filter')}</div>
-          <div className="open-filters" />
-        </div>
-      </Responsive>
+        <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+          <div
+            className="open-filters-wrapper"
+            onClick={() => setShowFiltersModal(!showFiltersModal)}
+          >
+            <div className="label">{t('nft_filters.filter')}</div>
+            <div className="open-filters" />
+          </div>
+        </Responsive>
+      </div>
 
       <PriceChangeNotice />
 
