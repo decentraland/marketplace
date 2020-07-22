@@ -8,10 +8,11 @@ import { Props } from './Owner.types'
 import './Owner.css'
 
 const Owner = (props: Props) => {
-  const address = props.nft.owner.address
+  const { nft } = props
+  const address = nft.owner.address
   return (
     <div className="Owner">
-      <Link to={locations.account(address)}>
+      <Link to={locations.account(address, { vendor: nft.vendor })}>
         <label>{t('nft_page.owner')}</label>
         <Popup
           content={shortenAddress(address)}

@@ -1,2 +1,2 @@
-import PriceChangeNotice from './PriceChangeNotice'
+import PriceChangeNotice from './PriceChangeNotice.container'
 export { PriceChangeNotice }

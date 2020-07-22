@@ -2,13 +2,18 @@ import React, { useCallback, useState } from 'react'
 import { Card, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
+import { View } from '../../../modules/ui/types'
+import { Props } from './PriceChangeNotice.types'
 import './PriceChangeNotice.css'
 
 const PRICE_CHANGE_NOTICE_KEY = 'price-change-notice'
 
-const PriceChangeNotice = () => {
+const PriceChangeNotice = (props: Props) => {
+  const { view } = props
+
   const [isVisible, setIsVisible] = useState(
-    localStorage.getItem(PRICE_CHANGE_NOTICE_KEY) === null
+    view !== View.ACCOUNT &&
+      localStorage.getItem(PRICE_CHANGE_NOTICE_KEY) === null
   )
 
   const handleClose = useCallback(() => {
