@@ -36,7 +36,7 @@ const MenuItem = <T extends unknown>(props: Props<T>) => {
 
       <div className="content">
         {t(`menu.${value}`)}
-        <div className="subtitle">{subtitle ? subtitle : null}</div>
+        {subtitle ? <div className="subtitle">{subtitle}</div> : null}
       </div>
       {withCaret ? <i className="dropdown icon" /> : null}
     </li>

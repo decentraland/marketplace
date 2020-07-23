@@ -1,7 +1,7 @@
 import { WearableCategory } from '../nft/wearable/types'
 import { View } from '../ui/types'
 import { Vendors } from '../vendor/types'
-import { NFTCategory } from '../vendor/nft/types'
+import { NFTCategory } from '../vendor/decentraland/nft/types'
 import { Section } from '../vendor/routing/types'
 import { SearchOptions, SortBy } from './types'
 
@@ -72,12 +72,12 @@ export function getSearchParams(options?: SearchOptions) {
 export function getSearchCategory(section: Section) {
   // TODO: Move this to each vendor? Names shortened for brevity here
   const DclSection = Section[Vendors.DECENTRALAND]
-  const DclNFTCategory = NFTCategory[Vendors.DECENTRALAND]
+
   switch (section) {
     case DclSection.PARCELS:
-      return DclNFTCategory.PARCEL
+      return NFTCategory.PARCEL
     case DclSection.ESTATES:
-      return DclNFTCategory.ESTATE
+      return NFTCategory.ESTATE
     case DclSection.WEARABLES:
     case DclSection.WEARABLES_HEAD:
     case DclSection.WEARABLES_EYEBROWS:
@@ -96,9 +96,9 @@ export function getSearchCategory(section: Section) {
     case DclSection.WEARABLES_MASK:
     case DclSection.WEARABLES_TIARA:
     case DclSection.WEARABLES_TOP_HEAD:
-      return DclNFTCategory.WEARABLE
+      return NFTCategory.WEARABLE
     case DclSection.ENS:
-      return DclNFTCategory.ENS
+      return NFTCategory.ENS
   }
 }
 

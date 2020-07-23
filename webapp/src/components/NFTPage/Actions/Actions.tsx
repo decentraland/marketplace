@@ -84,7 +84,7 @@ const Actions = (props: Props) => {
             <T
               id="nft_page.leaving_decentraland_description"
               values={{
-                vendor: vendor,
+                vendor: t(`vendors.${vendor}`),
                 vendor_link: (
                   <a
                     href={getOriginURL(vendor)}

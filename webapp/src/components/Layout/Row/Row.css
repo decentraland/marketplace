@@ -12,3 +12,9 @@
 .Row > .Column.shrink {
   flex: 0 0 auto;
 }
+
+@media (max-width: 768px) {
+  .Row > .Column.right {
+    overflow: hidden;
+  }
+}
