@@ -28,6 +28,7 @@ export type MakersPlaceAsset = {
   total_supply: number
   image_url: string
   owner: string
+  url?: string
   sale_created_at?: string
   price_in_wei?: string
   sale_contract_address?: string

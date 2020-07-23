@@ -154,6 +154,7 @@ export class NFTService implements NFTServiceInterface {
       },
       name: asset.name,
       image: asset.image,
+      url: asset.url,
       parcel: null,
       estate: null,
       wearable: null,

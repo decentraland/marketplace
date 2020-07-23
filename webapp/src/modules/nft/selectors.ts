@@ -17,7 +17,7 @@ const nftDetailMatchSelector = createMatchSelector<
     contractAddress: string
     tokenId: string
   }
->(locations.ntf(':contractAddress', ':tokenId'))
+>(locations.nft(':contractAddress', ':tokenId'))
 
 export const getContractAddress = createSelector<
   RootState,

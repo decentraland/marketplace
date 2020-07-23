@@ -34,7 +34,7 @@ const TransactionDetail = (props: Props) => {
           {nft === null ? (
             <Loader active size="small" />
           ) : nft ? (
-            <Link to={locations.ntf(nft.contractAddress, nft.tokenId)}>
+            <Link to={locations.nft(nft.contractAddress, nft.tokenId)}>
               <NFTImage nft={nft} isSmall />
             </Link>
           ) : (

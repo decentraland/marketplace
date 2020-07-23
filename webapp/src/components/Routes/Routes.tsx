@@ -38,7 +38,7 @@ const Routes = () => {
         <Route exact path={locations.bid()} component={BidPage} />
         <Route exact path={locations.cancel()} component={CancelSalePage} />
         <Route exact path={locations.transfer()} component={TransferPage} />
-        <Route exact path={locations.ntf()} component={NFTPage} />
+        <Route exact path={locations.nft()} component={NFTPage} />
         <Route exact path={locations.settings()} component={SettingsPage} />
         <Route exact path={locations.partners()} component={PartnersPage} />
         <Route exact path={locations.activity()} component={ActivityPage} />

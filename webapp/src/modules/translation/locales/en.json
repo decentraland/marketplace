@@ -126,7 +126,10 @@
     "transfer": "Transfer",
     "plaza": "Plaza",
     "road": "Road",
-    "district": "District"
+    "district": "District",
+    "leaving_decentraland": "Leaving Decentraland",
+    "leaving_decentraland_description": "You can't publish {vendor} assets to the Decentraland Marketplace yet. Do you want to proceed to {vendor_link} to publish it there?",
+    "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace"
   },
   "proximity": {
     "adjacent": "Adjacent",

@@ -109,7 +109,7 @@ const BuyPage = (props: Props) => {
       <div className="buttons">
         <Button
           onClick={() =>
-            onNavigate(locations.ntf(nft.contractAddress, nft.tokenId))
+            onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
           }
         >
           {t('global.cancel')}

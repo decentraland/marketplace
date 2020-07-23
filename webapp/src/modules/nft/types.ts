@@ -26,6 +26,7 @@ export type NFT = {
   name: string
   category: NFTCategory
   image: string
+  url: string
   parcel: Parcel | null
   estate: Estate | null
   wearable: Wearable | null

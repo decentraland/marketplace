@@ -55,14 +55,14 @@ const CancelSalePage = (props: Props) => {
                   )
                 }
                 return (
-                  <NFTAction nft={nft} onNavigate={onNavigate}>
+                  <NFTAction nft={nft}>
                     <Header size="large">{t('cancel_sale_page.title')}</Header>
                     <div className="subtitle">{subtitle}</div>
                     <div className="buttons">
                       <Button
                         onClick={() =>
                           onNavigate(
-                            locations.ntf(nft.contractAddress, nft.tokenId)
+                            locations.nft(nft.contractAddress, nft.tokenId)
                           )
                         }
                       >

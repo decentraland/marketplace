@@ -120,14 +120,16 @@ const NFTFilters = (props: Props) => {
         <Modal.Header>{t('nft_filters.filter')}</Modal.Header>
         <Modal.Content>
           <div className="filter-row">
-            <Header sub>{t('nft_filters.order_by')}</Header>
             {onlyOnSale ? (
-              <Dropdown
-                direction="left"
-                value={sortBy}
-                options={dropdownOptions}
-                onChange={handleDropdownChange}
-              />
+              <>
+                <Header sub>{t('nft_filters.order_by')}</Header>
+                <Dropdown
+                  direction="left"
+                  value={sortBy}
+                  options={dropdownOptions}
+                  onChange={handleDropdownChange}
+                />
+              </>
             ) : null}
           </div>
           <div className="filter-row">

@@ -11,6 +11,7 @@ import { getNFTId } from '../../nft/utils'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
+import { getOriginURL } from '../utils'
 import { Vendors } from '../types'
 import { NFTCategory } from './nft/types'
 import { MakersPlaceAsset, FetchSuccessResponse } from './types'
@@ -132,6 +133,7 @@ export class NFTService implements NFTServiceInterface {
       },
       name: asset.name,
       image: asset.image_url,
+      url: asset.url || this.getDefaultURL(asset),
       parcel: null,
       estate: null,
       wearable: null,
@@ -193,5 +195,10 @@ export class NFTService implements NFTServiceInterface {
       asset.price_in_wei !== undefined &&
       asset.sale_contract_address !== undefined
     )
+  }
+
+  private getDefaultURL(asset: MakersPlaceAsset): string {
+    const origin = getOriginURL(Vendors.MAKERS_PLACE)
+    return `${origin}/${asset.token_contract_address}/${asset.token_id}`
   }
 }

@@ -2,6 +2,7 @@ import { Address } from 'web3x-es/address'
 
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
+import { locations } from '../../routing/locations'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order } from '../../order/types'
 import { Account } from '../../account/types'
@@ -11,6 +12,7 @@ import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from '../nft/types'
 import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
+import { NFTFragment } from './nft/fragments'
 import { ContractService } from './ContractService'
 import { MAX_QUERY_SIZE } from './api'
 
@@ -25,22 +27,11 @@ export class NFTService implements NFTServiceInterface {
     const accounts: Account[] = []
     const orders: Order[] = []
 
-    for (const result of remoteNFTs) {
-      const { activeOrder: nestedOrder, ...rest } = result
+    for (const remoteNFT of remoteNFTs) {
+      const nft = this.toNFT(remoteNFT)
+      const order = this.toOrder(remoteNFT)
 
-      const nft: NFT = {
-        ...rest,
-        id: getNFTId(rest.contractAddress, rest.tokenId)!,
-        vendor: Vendors.DECENTRALAND,
-        activeOrderId: null
-      }
-
-      if (nestedOrder && !isExpired(nestedOrder.expiresAt!)) {
-        const order = {
-          ...nestedOrder,
-          marketAddress: ContractService.contractAddresses.Marketplace,
-          nftId: nft.id
-        }
+      if (order && !isExpired(order.expiresAt!)) {
         nft.activeOrderId = order.id
         orders.push(order)
       }
@@ -71,23 +62,10 @@ export class NFTService implements NFTServiceInterface {
   async fetchOne(contractAddress: string, tokenId: string) {
     const remoteNFT = await nftAPI.fetchOne(contractAddress, tokenId)
 
-    const { activeOrder, ...rest } = remoteNFT
+    const nft = this.toNFT(remoteNFT)
+    const order = this.toOrder(remoteNFT)
 
-    const nft: NFT = {
-      ...rest,
-      id: getNFTId(rest.contractAddress, rest.tokenId)!,
-      vendor: Vendors.DECENTRALAND,
-      activeOrderId: null
-    }
-
-    let order: Order | undefined
-
-    if (activeOrder && !isExpired(activeOrder.expiresAt!)) {
-      order = {
-        ...activeOrder,
-        marketAddress: ContractService.contractAddresses.Marketplace,
-        nftId: nft.id
-      }
+    if (order && !isExpired(order.expiresAt!)) {
       nft.activeOrderId = order.id
     }
 
@@ -107,5 +85,30 @@ export class NFTService implements NFTServiceInterface {
       .transferFrom(from, to, nft.tokenId)
       .send({ from })
       .getTxHash()
+  }
+
+  toNFT(nft: NFTFragment): NFT {
+    const { activeOrder, ...rest } = nft
+    return {
+      ...rest,
+      id: getNFTId(nft.contractAddress, nft.tokenId)!,
+      vendor: Vendors.DECENTRALAND,
+      url: locations.nft(nft.contractAddress, nft.tokenId),
+      activeOrderId: null
+    }
+  }
+
+  toOrder(nft: NFTFragment): Order | undefined {
+    let order: Order | undefined
+
+    if (nft.activeOrder) {
+      order = {
+        ...nft.activeOrder,
+        marketAddress: ContractService.contractAddresses.Marketplace,
+        nftId: nft.id
+      }
+    }
+
+    return order
   }
 }

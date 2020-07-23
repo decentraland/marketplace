@@ -6,6 +6,10 @@
   height: 100%;
 }
 
-.PartnersPage .Layout .right.column > div {
+.PartnersPage .Row > .Column.right {
+  overflow: hidden;
+}
+
+.PartnersPage .Layout .Column.right > div {
   align-self: start;
 }

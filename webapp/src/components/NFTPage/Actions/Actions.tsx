@@ -1,35 +1,19 @@
-import React, { useCallback } from 'react'
-import { Button } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Modal, Button } from 'decentraland-ui'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
+import { getOriginURL } from '../../../modules/vendor/utils'
 import { Props } from './Actions.types'
 
 const Actions = (props: Props) => {
-  const { wallet, nft, order, onNavigate } = props
+  const { wallet, nft, order } = props
+  const { vendor, contractAddress, tokenId } = nft
 
-  const handleSell = useCallback(
-    () => onNavigate(locations.sell(nft.contractAddress, nft.tokenId)),
-    [nft, onNavigate]
-  )
-  const handleBuy = useCallback(
-    () => onNavigate(locations.buy(nft.contractAddress, nft.tokenId)),
-    [nft, onNavigate]
-  )
-  const handleBid = useCallback(
-    () => onNavigate(locations.bid(nft.contractAddress, nft.tokenId)),
-    [nft, onNavigate]
-  )
-  const handleCancel = useCallback(
-    () => onNavigate(locations.cancel(nft.contractAddress, nft.tokenId)),
-    [nft, onNavigate]
-  )
-  const handleTransfer = useCallback(
-    () => onNavigate(locations.transfer(nft.contractAddress, nft.tokenId)),
-    [nft, onNavigate]
-  )
+  const [showLeavingSiteModal, setShowLeavingSiteModal] = useState(false)
 
   const isOwner = isOwnedBy(nft, wallet)
 
@@ -42,33 +26,99 @@ const Actions = (props: Props) => {
       {order ? (
         isOwner && canSell ? (
           <>
-            <Button onClick={handleSell} primary>
+            <Button
+              as={Link}
+              to={locations.sell(contractAddress, tokenId)}
+              primary
+            >
               {t('nft_page.update')}
             </Button>
-            <Button onClick={handleCancel}>{t('nft_page.cancel_sale')}</Button>
+            <Button as={Link} to={locations.cancel(contractAddress, tokenId)}>
+              {t('nft_page.cancel_sale')}
+            </Button>
           </>
         ) : (
           <>
-            <Button onClick={handleBuy} primary>
+            <Button
+              as={Link}
+              to={locations.buy(contractAddress, tokenId)}
+              primary
+            >
               {t('nft_page.buy')}
             </Button>
             {hasBids ? (
-              <Button onClick={handleBid}>{t('nft_page.bid')}</Button>
+              <Button as={Link} to={locations.bid(contractAddress, tokenId)}>
+                {t('nft_page.bid')}
+              </Button>
             ) : null}
           </>
         )
       ) : isOwner && canSell ? (
-        <Button onClick={handleSell} primary>
+        <Button as={Link} to={locations.sell(contractAddress, tokenId)} primary>
+          {t('nft_page.sell')}
+        </Button>
+      ) : isOwner && !canSell ? (
+        <Button onClick={() => setShowLeavingSiteModal(true)} primary>
           {t('nft_page.sell')}
         </Button>
       ) : hasBids ? (
-        <Button primary onClick={handleBid}>
+        <Button as={Link} to={locations.bid(contractAddress, tokenId)} primary>
           {t('nft_page.bid')}
         </Button>
       ) : null}
       {isOwner && !order ? (
-        <Button onClick={handleTransfer}>{t('nft_page.transfer')}</Button>
+        <Button as={Link} to={locations.transfer(contractAddress, tokenId)}>
+          {t('nft_page.transfer')}
+        </Button>
       ) : null}
+
+      <Modal
+        className="LeavingSiteModal"
+        size="small"
+        open={showLeavingSiteModal}
+        onClose={() => setShowLeavingSiteModal(false)}
+      >
+        <Modal.Header>{t('nft_page.leaving_decentraland')}</Modal.Header>
+        <Modal.Content>
+          <p>
+            <T
+              id="nft_page.leaving_decentraland_description"
+              values={{
+                vendor: vendor,
+                vendor_link: (
+                  <a
+                    href={getOriginURL(vendor)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {getOriginURL(vendor)}
+                  </a>
+                )
+              }}
+            />
+            <br />
+            <br />
+            <small>
+              <i>{t('nft_page.leaving_decentraland_disclaimer')}</i>
+            </small>
+          </p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setShowLeavingSiteModal(false)}>
+            {t('global.cancel')}
+          </Button>
+          <Button
+            primary
+            as="a"
+            href={nft.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setShowLeavingSiteModal(false)}
+          >
+            {t('global.proceed')}
+          </Button>
+        </Modal.Actions>
+      </Modal>
     </>
   )
 }

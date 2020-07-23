@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
+
 import { RootState } from '../../../modules/reducer'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './Actions.types'
 import { getWallet } from '../../../modules/wallet/selectors'
 import { getCurrentOrder } from '../../../modules/order/selectors'
+import { MapStateProps } from './Actions.types'
 import Actions from './Actions'
 
 const mapState = (state: RootState): MapStateProps => {
@@ -13,8 +13,6 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path))
-})
+const mapDispatch = () => ({})
 
 export default connect(mapState, mapDispatch)(Actions)

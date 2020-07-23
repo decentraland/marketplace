@@ -1,4 +1,6 @@
-import React, { useCallback } from 'react'
+import React from 'react'
+import { Link } from 'react-router-dom'
+
 import { locations } from '../../modules/routing/locations'
 import { NFTImage } from '../NFTImage'
 import { Row } from '../Layout/Row'
@@ -7,14 +9,12 @@ import { Props } from './NFTAction.types'
 import './NFTAction.css'
 
 const NFTAction = (props: Props) => {
-  const { nft, children, onNavigate } = props
-  const handleBack = useCallback(
-    () => onNavigate(locations.ntf(nft.contractAddress, nft.tokenId)),
-    [onNavigate, nft]
-  )
+  const { nft, children } = props
   return (
     <div className="NFTAction">
-      <div className="back" onClick={handleBack} />
+      <Link to={locations.nft(nft.contractAddress, nft.tokenId)}>
+        <div className="back" />
+      </Link>
       <Row>
         <Column align="left">
           <div className="nft-image-wrapper">

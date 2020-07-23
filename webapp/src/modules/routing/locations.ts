@@ -21,7 +21,7 @@ export const locations = {
       ? `/accounts/${address}?${params.toString()}`
       : `/accounts/${address}`
   },
-  ntf: (
+  nft: (
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
   ) => `/contracts/${contractAddress}/tokens/${tokenId}`,

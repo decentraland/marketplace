@@ -25,7 +25,7 @@ const NFTCard = (props: Props) => {
       className="NFTCard"
       link
       as={Link}
-      to={locations.ntf(nft.contractAddress, nft.tokenId)}
+      to={locations.nft(nft.contractAddress, nft.tokenId)}
     >
       <NFTImage nft={nft} showMonospace />
       <Card.Content>

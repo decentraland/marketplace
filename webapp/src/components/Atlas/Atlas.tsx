@@ -81,12 +81,12 @@ const Atlas = (props: Props) => {
       }
       if (tile.estate_id) {
         onNavigate(
-          locations.ntf(contractAddresses.EstateRegistry, tile.estate_id)
+          locations.nft(contractAddresses.EstateRegistry, tile.estate_id)
         )
       } else {
         try {
           const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
-          onNavigate(locations.ntf(contractAddresses.LANDRegistry, tokenId))
+          onNavigate(locations.nft(contractAddresses.LANDRegistry, tokenId))
         } catch (error) {
           console.warn(
             `Couldn't fetch parcel ${tile.x},${tile.y}: ${error.message}`

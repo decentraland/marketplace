@@ -96,7 +96,7 @@ const Transaction = (props: Props) => {
                   id="transaction.detail.create_order"
                   values={{
                     name: (
-                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                      <Link to={locations.nft(contractAddress, tokenId)}>
                         {name}
                       </Link>
                     ),
@@ -122,7 +122,7 @@ const Transaction = (props: Props) => {
                   id="transaction.detail.cancel_order"
                   values={{
                     name: (
-                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                      <Link to={locations.nft(contractAddress, tokenId)}>
                         {name}
                       </Link>
                     ),
@@ -148,7 +148,7 @@ const Transaction = (props: Props) => {
                   id="transaction.detail.execute_order"
                   values={{
                     name: (
-                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                      <Link to={locations.nft(contractAddress, tokenId)}>
                         {name}
                       </Link>
                     ),
@@ -174,7 +174,7 @@ const Transaction = (props: Props) => {
                   id="transaction.detail.transfer"
                   values={{
                     name: (
-                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                      <Link to={locations.nft(contractAddress, tokenId)}>
                         {name}
                       </Link>
                     ),
@@ -207,7 +207,7 @@ const Transaction = (props: Props) => {
                   id="transaction.detail.place_bid"
                   values={{
                     name: (
-                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                      <Link to={locations.nft(contractAddress, tokenId)}>
                         {name}
                       </Link>
                     ),
@@ -233,7 +233,7 @@ const Transaction = (props: Props) => {
                   id="transaction.detail.accept_bid"
                   values={{
                     name: (
-                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                      <Link to={locations.nft(contractAddress, tokenId)}>
                         {name}
                       </Link>
                     ),
@@ -259,7 +259,7 @@ const Transaction = (props: Props) => {
                   id="transaction.detail.cancel_bid"
                   values={{
                     name: (
-                      <Link to={locations.ntf(contractAddress, tokenId)}>
+                      <Link to={locations.nft(contractAddress, tokenId)}>
                         {name}
                       </Link>
                     ),

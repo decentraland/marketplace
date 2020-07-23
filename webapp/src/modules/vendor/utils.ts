@@ -37,6 +37,19 @@ export function getFilters(vendor: Vendors, searchOptions: SearchOptions): any {
   }
 }
 
+export function getOriginURL(vendor: Vendors) {
+  switch (vendor) {
+    case Vendors.DECENTRALAND:
+      return 'https://market.decentraland.org'
+    case Vendors.SUPER_RARE:
+      return 'https://www.superrare.co'
+    case Vendors.MAKERS_PLACE:
+      return 'https://makersplace.com'
+    default:
+      throw new Error(`Base URL for ${vendor} not implemented`)
+  }
+}
+
 export function isVendor(vendor: string) {
   return Object.values(Vendors).includes(vendor as Vendors)
 }
