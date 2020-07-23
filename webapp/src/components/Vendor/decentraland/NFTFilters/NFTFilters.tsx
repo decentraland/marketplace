@@ -236,6 +236,7 @@ const NFTFilters = (props: Props) => {
           </div>
         </Responsive>
       </div>
+
       {showFiltersMenu ? (
         <Responsive
           minWidth={Responsive.onlyTablet.minWidth}
