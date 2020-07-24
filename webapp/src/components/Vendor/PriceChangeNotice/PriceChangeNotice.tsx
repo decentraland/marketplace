@@ -16,9 +16,8 @@ const PriceChangeNotice = (props: Props) => {
     [view]
   )
 
-  const [isVisible, setIsVisible] = useState(
-    isValidView() && localStorage.getItem(PRICE_CHANGE_NOTICE_KEY) === null
-  )
+  const isDismissed = localStorage.getItem(PRICE_CHANGE_NOTICE_KEY) !== null
+  const [isVisible, setIsVisible] = useState(isValidView())
 
   useEffect(() => {
     setIsVisible(isValidView())
@@ -29,7 +28,7 @@ const PriceChangeNotice = (props: Props) => {
     localStorage.setItem(PRICE_CHANGE_NOTICE_KEY, '1')
   }, [setIsVisible])
 
-  return isVisible ? (
+  return !isDismissed && isVisible ? (
     <Card fluid className="PriceChangeNotice">
       <Card.Content>
         <Card.Meta>

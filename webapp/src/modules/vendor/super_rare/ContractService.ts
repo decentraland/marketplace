@@ -34,13 +34,13 @@ export class ContractService implements ContractServiceInterface {
   contractSymbols = {
     [SuperRare]: 'SR',
     [SuperRareV2]: 'SR',
-    [MarketplaceAdapter]: 'ThirdParty Marketplace'
+    [MarketplaceAdapter]: 'BuyAdapter'
   } as const
 
   contractNames = {
     [SuperRare]: 'SuperRare',
     [SuperRareV2]: 'SuperRareV2',
-    [MarketplaceAdapter]: 'MarketplaceAdapter'
+    [MarketplaceAdapter]: 'Partner Marketplace'
   } as const
 
   contractCategories = {

@@ -1,4 +1,3 @@
-// import React, { useEffect, useState } from 'react'
 import React, { useEffect } from 'react'
 import { Page, Responsive } from 'decentraland-ui'
 
@@ -16,25 +15,32 @@ import { Props } from './NFTBrowse.types'
 import './NFTBrowse.css'
 
 const NFTBrowse = (props: Props) => {
-  const { vendor, view, isMap, address, onFetchNFTsFromRoute } = props
+  const {
+    vendor,
+    view,
+    isMap,
+    address,
+    isLoading,
+    onSetView,
+    onFetchNFTsFromRoute
+  } = props
 
-  const defaultOptions = getDefaultOptionsByView(view)
-
-  const onlyOnSale =
-    props.onlyOnSale === undefined
-      ? defaultOptions.onlyOnSale
-      : props.onlyOnSale
+  const { onlyOnSale } = getDefaultOptionsByView(view)
 
   // Kick things off
   useEffect(() => {
-    onFetchNFTsFromRoute({
-      vendor,
-      view,
-      address,
-      onlyOnSale
-    })
+    onSetView(view)
+
+    if (!isLoading) {
+      onFetchNFTsFromRoute({
+        vendor,
+        view,
+        address,
+        onlyOnSale
+      })
+    }
     // eslint-disable-next-line
-  }, [onFetchNFTsFromRoute])
+  }, [vendor, onFetchNFTsFromRoute])
 
   return (
     <Page className="NFTBrowse">

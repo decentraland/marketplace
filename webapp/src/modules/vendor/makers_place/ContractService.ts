@@ -35,13 +35,13 @@ export class ContractService implements ContractServiceInterface {
   contractSymbols = {
     [DigitalMediaCore]: 'MakersTokenV2',
     [DigitalMediaCore2]: 'MakersTokenV2',
-    [MarketplaceAdapter]: 'ThirdParty Marketplace'
+    [MarketplaceAdapter]: 'Partner Marketplace'
   } as const
 
   contractNames = {
     [DigitalMediaCore]: 'MakersPlace',
     [DigitalMediaCore2]: 'MakersPlace',
-    [MarketplaceAdapter]: 'MarketplaceAdapter'
+    [MarketplaceAdapter]: 'BuyAdapter'
   } as const
 
   contractCategories = {

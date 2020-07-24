@@ -36,22 +36,22 @@ export class TokenConverter {
   }
 
   async marketEthToMANA(ethAmount: number) {
-    return this.marketEthToToken(ethAmount, 'decentraland')
+    const exchange = process.env.REACT_APP_CONVERTER_EXCHANGE!
+    return this.marketEthToToken(ethAmount, 'decentraland', exchange)
   }
 
   async marketEthToToken(
     ethAmount: number,
     coinId: string,
-    exchanges: string[] = ['uniswap']
+    exchange: string = ''
   ) {
     if (!pricesCache[coinId]) {
       pricesCache[coinId] = {}
     }
 
     if (!pricesCache[coinId][ethAmount]) {
-      const exchangesList = exchanges.join(',')
       const response = await window.fetch(
-        `${this.apiURL}/coins/${coinId}/tickers?exchange_ids=${exchangesList}`
+        `${this.apiURL}/coins/${coinId}/tickers?exchange_ids=${exchange}`
       )
       const coinTickers: CoinTickers = await response.json()
       const uniswapTicker = coinTickers.tickers[0]
