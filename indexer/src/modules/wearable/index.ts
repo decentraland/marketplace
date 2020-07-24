@@ -4,13 +4,18 @@ import { NFT, Wearable as WearableEntity } from '../../entities/schema'
 import {
   Wearable,
   community_contest,
+  dappcraft_moonminer,
   dcg_collection,
   dcl_launch,
+  dg_summer_2020,
+  dgtble_headspace,
   exclusive_masks,
   halloween_2019,
   mch_collection,
   moonshot_2020,
+  pm_outtathisworld,
   stay_safe,
+  wonderzone_meteorchaser,
   xmas_2019
 } from '../../data/wearables'
 import * as categories from '../../data/wearables/categories'
@@ -28,24 +33,34 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
 
   let allCollections: Wearable[][] = [
     community_contest,
+    dappcraft_moonminer,
     dcg_collection,
     dcl_launch,
+    dg_summer_2020,
+    dgtble_headspace,
     exclusive_masks,
     halloween_2019,
     mch_collection,
     moonshot_2020,
+    pm_outtathisworld,
     stay_safe,
+    wonderzone_meteorchaser,
     xmas_2019
   ]
   let collectionNames: string[] = [
     'community_contest',
+    'dappcraft_moonminer',
     'dcg_collection',
     'dcl_launch',
+    'dg_summer_2020',
+    'dgtble_headspace',
     'exclusive_masks',
     'halloween_2019',
     'mch_collection',
     'moonshot_2020',
+    'pm_outtathisworld',
     'stay_safe',
+    'wonderzone_meteorchaser',
     'xmas_2019'
   ]
   for (let i = 0; i < allCollections.length; i++) {
