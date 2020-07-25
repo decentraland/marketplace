@@ -8,7 +8,7 @@ const EstateRegistry = env.REACT_APP_ESTATE_ADDRESS!
 const DCLRegistrar = env.REACT_APP_DCL_REGISTRAR!
 
 const CommunityContestCollection = env.REACT_APP_COMMUNITY_CONTEST_ADDRESS!
-const DappCarftMoonminerCollection = env.REACT_APP_DAPP_CARFT_MOONMINER_ADDRESS!
+const DappCraftMoonminerCollection = env.REACT_APP_DAPP_CRAFT_MOONMINER_ADDRESS!
 const DCGCollection = env.REACT_APP_DCG_ADDRESS!
 const DCLLaunchCollection = env.REACT_APP_DCL_LAUNCH_ADDRESS!
 const DGSummer2020Collection = env.REACT_APP_DG_SUMMER_2020_ADDRESS!
@@ -18,7 +18,7 @@ const Halloween2019Collection = env.REACT_APP_HALLOWEEN_2019_ADDRESS!
 const MCHCollection = env.REACT_APP_MCH_ADDRESS!
 const Moonshot2020Collection = env.REACT_APP_MOONSHOT_2020_ADDRESS!
 const StaySafeCollection = env.REACT_APP_DCL_STAY_SAFE_ADDRESS!
-const PmoUttathisworldCollection = env.REACT_APP_PMO_UTTATHISWORLD_ADDRESS!
+const PMOUttathisworldCollection = env.REACT_APP_PMO_UTTATHISWORLD_ADDRESS!
 const WonderzoneMeteorchaserCollection = env.REACT_APP_WONDERZONE_METEORCHASER_ADDRESS!
 const Xmas2019Collection = env.REACT_APP_XMAS_2019_ADDRESS!
 
@@ -31,7 +31,7 @@ export const contractAddresses = {
   EstateRegistry,
   DCLRegistrar,
   CommunityContestCollection,
-  DappCarftMoonminerCollection,
+  DappCraftMoonminerCollection,
   DCGCollection,
   DCLLaunchCollection,
   ExclusiveMasksCollection,
@@ -42,7 +42,7 @@ export const contractAddresses = {
   Xmas2019Collection,
   DGSummer2020Collection,
   DgtbleHeadspaceCollection,
-  PmoUttathisworldCollection,
+  PMOUttathisworldCollection,
   WonderzoneMeteorchaserCollection,
   Marketplace,
   Bids
@@ -54,7 +54,7 @@ export const contractSymbols = {
   [EstateRegistry]: 'Estates',
   [DCLRegistrar]: 'Names',
   [CommunityContestCollection]: 'Community Contest',
-  [DappCarftMoonminerCollection]: 'Dapp Craft Moon Miner',
+  [DappCraftMoonminerCollection]: 'Dapp Craft Moon Miner',
   [DCGCollection]: 'DCG',
   [DCLLaunchCollection]: 'DCL Launch',
   [DGSummer2020Collection]: 'DG Summer',
@@ -63,7 +63,7 @@ export const contractSymbols = {
   [Halloween2019Collection]: 'Halloween',
   [MCHCollection]: 'MCH',
   [Moonshot2020Collection]: 'Moonshot',
-  [PmoUttathisworldCollection]: 'Pmo Uttathisworld',
+  [PMOUttathisworldCollection]: 'Pmo Uttathisworld',
   [StaySafeCollection]: 'Stay Safe',
   [WonderzoneMeteorchaserCollection]: 'Wonderzone Meteorcharser',
   [Xmas2019Collection]: 'Xmas',
@@ -76,7 +76,7 @@ export const contractCategories = {
   [EstateRegistry]: NFTCategory.ESTATE,
   [DCLRegistrar]: NFTCategory.ENS,
   [CommunityContestCollection]: NFTCategory.WEARABLE,
-  [DappCarftMoonminerCollection]: NFTCategory.WEARABLE,
+  [DappCraftMoonminerCollection]: NFTCategory.WEARABLE,
   [DCGCollection]: NFTCategory.WEARABLE,
   [DCLLaunchCollection]: NFTCategory.WEARABLE,
   [DGSummer2020Collection]: NFTCategory.WEARABLE,
@@ -85,7 +85,7 @@ export const contractCategories = {
   [Halloween2019Collection]: NFTCategory.WEARABLE,
   [MCHCollection]: NFTCategory.WEARABLE,
   [Moonshot2020Collection]: NFTCategory.WEARABLE,
-  [PmoUttathisworldCollection]: NFTCategory.WEARABLE,
+  [PMOUttathisworldCollection]: NFTCategory.WEARABLE,
   [StaySafeCollection]: NFTCategory.WEARABLE,
   [WonderzoneMeteorchaserCollection]: NFTCategory.WEARABLE,
   [Xmas2019Collection]: NFTCategory.WEARABLE
@@ -97,7 +97,7 @@ export const contractNames = {
   [EstateRegistry]: 'EstateRegistry',
   [DCLRegistrar]: 'DCLRegistrar',
   [CommunityContestCollection]: 'CommunityContestCollection',
-  [DappCarftMoonminerCollection]: 'DappCarftMoonminerCollection',
+  [DappCraftMoonminerCollection]: 'DappCraftMoonminerCollection',
   [DCGCollection]: 'DCGCollection',
   [DCLLaunchCollection]: 'DCLLaunchCollection',
   [DGSummer2020Collection]: 'DGSummer2020Collection',
@@ -106,7 +106,7 @@ export const contractNames = {
   [Halloween2019Collection]: 'Halloween2019Collection',
   [MCHCollection]: 'MCHCollection',
   [Moonshot2020Collection]: 'Moonshot2020Collection',
-  [PmoUttathisworldCollection]: 'PmoUttathisworldCollection',
+  [PMOUttathisworldCollection]: 'PMOUttathisworldCollection',
   [StaySafeCollection]: 'StaySafeCollection',
   [WonderzoneMeteorchaserCollection]: 'WonderzoneMeteorchaserCollection',
   [Xmas2019Collection]: 'Xmas2019Collection',
