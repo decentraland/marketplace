@@ -8,7 +8,7 @@ const EstateRegistry = env.REACT_APP_ESTATE_ADDRESS!
 const DCLRegistrar = env.REACT_APP_DCL_REGISTRAR!
 
 const CommunityContestCollection = env.REACT_APP_COMMUNITY_CONTEST_ADDRESS!
-const DappCraftMoonminerCollection = env.REACT_APP_DAPPCRAFT_MOONMINER_ADDRESS!
+const DappcraftMoonminerCollection = env.REACT_APP_DAPPCRAFT_MOONMINER_ADDRESS!
 const DCGCollection = env.REACT_APP_DCG_ADDRESS!
 const DCLLaunchCollection = env.REACT_APP_DCL_LAUNCH_ADDRESS!
 const DGSummer2020Collection = env.REACT_APP_DG_SUMMER_2020_ADDRESS!
@@ -31,7 +31,7 @@ export const contractAddresses = {
   EstateRegistry,
   DCLRegistrar,
   CommunityContestCollection,
-  DappCraftMoonminerCollection,
+  DappcraftMoonminerCollection,
   DCGCollection,
   DCLLaunchCollection,
   ExclusiveMasksCollection,
@@ -54,7 +54,7 @@ export const contractSymbols = {
   [EstateRegistry]: 'Estates',
   [DCLRegistrar]: 'Names',
   [CommunityContestCollection]: 'Community Contest',
-  [DappCraftMoonminerCollection]: 'Dapp Craft Moon Miner',
+  [DappcraftMoonminerCollection]: 'Dappcraft Moonminer',
   [DCGCollection]: 'DCG',
   [DCLLaunchCollection]: 'DCL Launch',
   [DGSummer2020Collection]: 'DG Summer',
@@ -76,7 +76,7 @@ export const contractCategories = {
   [EstateRegistry]: NFTCategory.ESTATE,
   [DCLRegistrar]: NFTCategory.ENS,
   [CommunityContestCollection]: NFTCategory.WEARABLE,
-  [DappCraftMoonminerCollection]: NFTCategory.WEARABLE,
+  [DappcraftMoonminerCollection]: NFTCategory.WEARABLE,
   [DCGCollection]: NFTCategory.WEARABLE,
   [DCLLaunchCollection]: NFTCategory.WEARABLE,
   [DGSummer2020Collection]: NFTCategory.WEARABLE,
@@ -97,7 +97,7 @@ export const contractNames = {
   [EstateRegistry]: 'EstateRegistry',
   [DCLRegistrar]: 'DCLRegistrar',
   [CommunityContestCollection]: 'CommunityContestCollection',
-  [DappCraftMoonminerCollection]: 'DappCraftMoonminerCollection',
+  [DappcraftMoonminerCollection]: 'DappcraftMoonminerCollection',
   [DCGCollection]: 'DCGCollection',
   [DCLLaunchCollection]: 'DCLLaunchCollection',
   [DGSummer2020Collection]: 'DGSummer2020Collection',
