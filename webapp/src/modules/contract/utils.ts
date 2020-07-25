@@ -63,7 +63,7 @@ export const contractSymbols = {
   [Halloween2019Collection]: 'Halloween',
   [MCHCollection]: 'MCH',
   [Moonshot2020Collection]: 'Moonshot',
-  [PMOUttathisworldCollection]: 'Pmo Uttathisworld',
+  [PMOUttathisworldCollection]: 'PMO Uttathisworld',
   [StaySafeCollection]: 'Stay Safe',
   [WonderzoneMeteorchaserCollection]: 'Wonderzone Meteorcharser',
   [Xmas2019Collection]: 'Xmas',
