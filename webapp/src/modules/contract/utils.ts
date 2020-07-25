@@ -8,7 +8,7 @@ const EstateRegistry = env.REACT_APP_ESTATE_ADDRESS!
 const DCLRegistrar = env.REACT_APP_DCL_REGISTRAR!
 
 const CommunityContestCollection = env.REACT_APP_COMMUNITY_CONTEST_ADDRESS!
-const DappCraftMoonminerCollection = env.REACT_APP_DAPP_CRAFT_MOONMINER_ADDRESS!
+const DappCraftMoonminerCollection = env.REACT_APP_DAPPCRAFT_MOONMINER_ADDRESS!
 const DCGCollection = env.REACT_APP_DCG_ADDRESS!
 const DCLLaunchCollection = env.REACT_APP_DCL_LAUNCH_ADDRESS!
 const DGSummer2020Collection = env.REACT_APP_DG_SUMMER_2020_ADDRESS!
