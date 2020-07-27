@@ -36,6 +36,7 @@ export type SuperRareOwner = {
 }
 
 export type SuperRareFetchNFTOptions = Partial<{
+  type: 'sell' | 'buy'
   asset_contract_addresses: string[]
   creator_addresses: string[]
   owner_addresses: string[]

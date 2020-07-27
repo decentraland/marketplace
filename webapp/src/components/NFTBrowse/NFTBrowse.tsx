@@ -20,7 +20,7 @@ const NFTBrowse = (props: Props) => {
     view,
     isMap,
     address,
-    isLoading,
+    // isLoading,
     onSetView,
     onFetchNFTsFromRoute
   } = props
@@ -31,14 +31,14 @@ const NFTBrowse = (props: Props) => {
   useEffect(() => {
     onSetView(view)
 
-    if (!isLoading) {
-      onFetchNFTsFromRoute({
-        vendor,
-        view,
-        address,
-        onlyOnSale
-      })
-    }
+    // if (!isLoading) {
+    onFetchNFTsFromRoute({
+      vendor,
+      view,
+      address,
+      onlyOnSale
+    })
+    // }
     // eslint-disable-next-line
   }, [vendor, onFetchNFTsFromRoute])
 
@@ -58,7 +58,13 @@ const NFTBrowse = (props: Props) => {
         <Column align="right" grow={true}>
           {view === View.ACCOUNT ? <VendorStrip address={address!} /> : null}
           <NFTFilters />
-          {isMap ? <Atlas withNavigation /> : <NFTList />}
+          {isMap ? (
+            <div className="Atlas">
+              <Atlas withNavigation />
+            </div>
+          ) : (
+            <NFTList />
+          )}
         </Column>
       </Row>
     </Page>

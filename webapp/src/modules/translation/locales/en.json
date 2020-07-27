@@ -216,7 +216,11 @@
     "title": "Buy {category}",
     "subtitle": "You are about to buy {name} for {amount}.",
     "not_for_sale": "{name} is not for sale.",
+    "price_too_high": "Given the current exchange rates buying this {category} will cost you over {percentageIncrease}% its normal price.",
+    "please_wait": "Please wait until prices normalize again",
+    "actual_price": "The price above is an approximation, given current exchange rates you'll end up paying around {computedPrice}",
     "buy": "Buy",
+    "proceed_anyways": "Proceed anyways",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name}."

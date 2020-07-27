@@ -98,19 +98,17 @@ const Atlas = (props: Props) => {
   )
 
   return (
-    <div className="Atlas">
-      <AtlasComponent
-        {...props}
-        tiles={tiles}
-        onClick={handleClick}
-        layers={[
-          forSaleLayer,
-          ...(props.layers || []),
-          selectedStrokeLayer,
-          selectedFillLayer
-        ]}
-      />
-    </div>
+    <AtlasComponent
+      {...props}
+      tiles={tiles}
+      onClick={handleClick}
+      layers={[
+        forSaleLayer,
+        ...(props.layers || []),
+        selectedStrokeLayer,
+        selectedFillLayer
+      ]}
+    />
   )
 }
 

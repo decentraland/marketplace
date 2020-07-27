@@ -88,8 +88,10 @@ export function uiReducer(
       }
     }
     case FETCH_NFTS_REQUEST: {
+      const { view } = action.payload.options
       return {
         ...state,
+        nftIds: view === View.LOAD_MORE ? state.nftIds : [],
         assetCount: undefined
       }
     }

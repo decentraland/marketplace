@@ -87,6 +87,7 @@ class SuperRareAPI extends BaseAPI {
     tokenId: string
   ): SuperRareFetchNFTOptions {
     return {
+      type: 'sell',
       asset_contract_addresses: [contractAddress],
       asset_ids: [Number(tokenId)]
     }
@@ -96,6 +97,7 @@ class SuperRareAPI extends BaseAPI {
     params: NFTsFetchParams
   ): SuperRareFetchOrderParams {
     const requestParams: SuperRareFetchOrderParams = {
+      type: 'sell',
       offset: params.skip,
       limit: Math.min(params.first, MAX_QUERY_SIZE),
       sort: this.getSort(params),
@@ -105,10 +107,6 @@ class SuperRareAPI extends BaseAPI {
 
     if (params.address) {
       requestParams.owner_addresses = [params.address]
-    }
-
-    if (params.onlyOnSale) {
-      requestParams.type = 'sell'
     }
 
     return requestParams

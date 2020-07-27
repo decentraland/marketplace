@@ -105,7 +105,7 @@ export class NFTService implements NFTServiceInterface {
       order = {
         ...nft.activeOrder,
         marketAddress: ContractService.contractAddresses.Marketplace,
-        nftId: nft.id
+        nftId: getNFTId(nft.contractAddress, nft.tokenId)!
       }
     }
 

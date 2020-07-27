@@ -19,10 +19,12 @@ const pricesCache: Record<string, Record<number, number>> = {}
 export class TokenConverter {
   apiURL: string
   converterAddress: string
+  converterExchange: string
 
   constructor() {
     const apiURL = process.env.REACT_APP_COINGECKO_API_URL!
     const converterAddress = process.env.REACT_APP_CONVERTER_ADDRESS!
+    const converterExchange = process.env.REACT_APP_CONVERTER_EXCHANGE!
 
     if (!apiURL) {
       throw new Error(`Invalid converter API URL "${apiURL}"`)
@@ -30,14 +32,21 @@ export class TokenConverter {
     if (!converterAddress) {
       throw new Error(`Invalid converter address "${converterAddress}"`)
     }
+    if (!converterExchange) {
+      throw new Error(`Invalid converter exchange ${converterExchange}`)
+    }
 
     this.apiURL = apiURL
     this.converterAddress = converterAddress
+    this.converterExchange = converterExchange
   }
 
   async marketEthToMANA(ethAmount: number) {
-    const exchange = process.env.REACT_APP_CONVERTER_EXCHANGE!
-    return this.marketEthToToken(ethAmount, 'decentraland', exchange)
+    return this.marketEthToToken(
+      ethAmount,
+      'decentraland',
+      this.converterExchange
+    )
   }
 
   async marketEthToToken(
@@ -54,10 +63,9 @@ export class TokenConverter {
         `${this.apiURL}/coins/${coinId}/tickers?exchange_ids=${exchange}`
       )
       const coinTickers: CoinTickers = await response.json()
-      const uniswapTicker = coinTickers.tickers[0]
+      const ticker = coinTickers.tickers[0]
 
-      pricesCache[coinId][ethAmount] =
-        ethAmount / uniswapTicker.converted_last.eth
+      pricesCache[coinId][ethAmount] = ethAmount / ticker.converted_last.eth
     }
 
     return pricesCache[coinId][ethAmount]

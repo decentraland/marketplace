@@ -2,10 +2,10 @@
   margin-bottom: 8px;
 }
 
-.BuyPage .subtitle {
-  margin-bottom: 32px;
+.BuyPage .buttons {
+  margin-top: 32px;
 }
 
-.BuyPage .subtitle.error {
+.BuyPage .error {
   color: var(--danger);
 }

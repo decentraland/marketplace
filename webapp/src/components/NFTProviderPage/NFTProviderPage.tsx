@@ -24,7 +24,7 @@ const NFTProviderPage = (props: Props) => {
         <>
           {isLoading ? <Loading /> : null}
           {!isLoading && !nft ? <NotFound /> : null}
-          {nft ? children(nft, order) : null}
+          {!isLoading && nft ? children(nft, order) : null}
         </>
       )}
     </NFTProvider>
