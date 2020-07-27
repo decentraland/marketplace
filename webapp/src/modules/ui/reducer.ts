@@ -1,5 +1,3 @@
-import { LOCATION_CHANGE, LocationChangeAction } from 'connected-react-router'
-
 import {
   FetchNFTsSuccessAction,
   FETCH_NFTS_SUCCESS,
@@ -53,7 +51,6 @@ const INITIAL_STATE: UIState = {
 }
 
 type UIReducerAction =
-  | LocationChangeAction
   | SetViewAction
   | FetchNFTsRequestAction
   | FetchNFTsSuccessAction
@@ -68,12 +65,6 @@ export function uiReducer(
   action: UIReducerAction
 ) {
   switch (action.type) {
-    case LOCATION_CHANGE: {
-      return {
-        ...state,
-        view: undefined
-      }
-    }
     case SET_VIEW: {
       return {
         ...state,
