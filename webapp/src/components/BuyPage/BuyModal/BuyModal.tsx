@@ -112,7 +112,14 @@ const BuyPage = (props: Props) => {
             {t('buy_page.please_wait')}
           </div>
         ) : percentageIncrease > 0 ? (
-          <div>{t('buy_page.actual_price', { computedPrice })}</div>
+          <div>
+            <T
+              id="buy_page.actual_price"
+              values={{
+                computedPrice: <Mana inline>{formatMANA(computedPrice)}</Mana>
+              }}
+            />
+          </div>
         ) : null}
       </>
     )
