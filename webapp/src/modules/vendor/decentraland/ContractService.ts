@@ -23,7 +23,7 @@ const contractAddresses = {
     Halloween2019Collection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     MCHCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     Moonshot2020Collection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
-    PMOUttathisworldCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
+    PMOuttathisworldCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     StaySafeCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     WonderzoneMeteorchaserCollection:
       '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
@@ -46,7 +46,7 @@ const contractAddresses = {
     Halloween2019Collection: '0xc1f4b0eea2bd6690930e6c66efd3e197d620b9c2',
     MCHCollection: '0xf64dc33a192e056bb5f0e5049356a0498b502d50',
     Moonshot2020Collection: '0x6a99abebb48819d2abe92c5e4dc4f48dc09a3ee8',
-    PMOUttathisworldCollection: '0x75a3752579dc2d63ca229eebbe3537fbabf85a12',
+    PMOuttathisworldCollection: '0x75a3752579dc2d63ca229eebbe3537fbabf85a12',
     StaySafeCollection: '0x201c3af8c471e5842428b74d1e7c0249adda2a92',
     WonderzoneMeteorchaserCollection:
       '0x34ed0aa248f60f54dd32fbc9883d6137a491f4f3',
@@ -71,7 +71,7 @@ const {
   Halloween2019Collection,
   MCHCollection,
   Moonshot2020Collection,
-  PMOUttathisworldCollection,
+  PMOuttathisworldCollection,
   StaySafeCollection,
   WonderzoneMeteorchaserCollection,
   Xmas2019Collection
@@ -101,7 +101,7 @@ export class ContractService implements ContractServiceInterface {
     [Halloween2019Collection]: 'Halloween',
     [MCHCollection]: 'MCH',
     [Moonshot2020Collection]: 'Moonshot',
-    [PMOUttathisworldCollection]: 'PMO Uttathisworld',
+    [PMOuttathisworldCollection]: 'PMO Uttathisworld',
     [StaySafeCollection]: 'Stay Safe',
     [WonderzoneMeteorchaserCollection]: 'Wonderzone Meteorcharser',
     [Xmas2019Collection]: 'Xmas'
@@ -124,7 +124,7 @@ export class ContractService implements ContractServiceInterface {
     [Halloween2019Collection]: 'Halloween2019Collection',
     [MCHCollection]: 'MCHCollection',
     [Moonshot2020Collection]: 'Moonshot2020Collection',
-    [PMOUttathisworldCollection]: 'PMOUttathisworldCollection',
+    [PMOuttathisworldCollection]: 'PMOuttathisworldCollection',
     [StaySafeCollection]: 'StaySafeCollection',
     [WonderzoneMeteorchaserCollection]: 'WonderzoneMeteorchaserCollection',
     [Xmas2019Collection]: 'Xmas2019Collection'
@@ -144,7 +144,7 @@ export class ContractService implements ContractServiceInterface {
     [Halloween2019Collection]: NFTCategory.WEARABLE,
     [MCHCollection]: NFTCategory.WEARABLE,
     [Moonshot2020Collection]: NFTCategory.WEARABLE,
-    [PMOUttathisworldCollection]: NFTCategory.WEARABLE,
+    [PMOuttathisworldCollection]: NFTCategory.WEARABLE,
     [StaySafeCollection]: NFTCategory.WEARABLE,
     [WonderzoneMeteorchaserCollection]: NFTCategory.WEARABLE,
     [Xmas2019Collection]: NFTCategory.WEARABLE
