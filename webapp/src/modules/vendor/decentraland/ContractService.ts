@@ -101,7 +101,7 @@ export class ContractService implements ContractServiceInterface {
     [Halloween2019Collection]: 'Halloween',
     [MCHCollection]: 'MCH',
     [Moonshot2020Collection]: 'Moonshot',
-    [PMOuttathisworldCollection]: 'PMO Uttathisworld',
+    [PMOuttathisworldCollection]: 'PM Outtathisworld',
     [StaySafeCollection]: 'Stay Safe',
     [WonderzoneMeteorchaserCollection]: 'Wonderzone Meteorcharser',
     [Xmas2019Collection]: 'Xmas'
