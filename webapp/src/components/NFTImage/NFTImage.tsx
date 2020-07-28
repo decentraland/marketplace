@@ -1,4 +1,7 @@
 import React, { useMemo } from 'react'
+import { Loader } from 'decentraland-ui'
+import { LazyImage } from 'react-lazy-images'
+
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import {
   RARITY_COLOR,
@@ -91,18 +94,35 @@ const NFTImage = (props: Props) => {
       )
     }
 
-    default:
-      return <img alt={getNFTName(nft)} className="image" src={nft.image} />
+    default: {
+      return (
+        <LazyImage
+          src={nft.image}
+          alt={getNFTName(nft)}
+          debounceDurationMs={1000}
+          placeholder={({ ref }) => (
+            <div ref={ref}>
+              <Loader size="small" active />
+            </div>
+          )}
+          actual={({ imageProps }) => (
+            <img className="image" alt={getNFTName(nft)} {...imageProps} />
+          )}
+        />
+      )
+    }
   }
 }
 
 // the purpose of this wrapper is to make the div always be square, by using a 1x1 transparent pixel
 const NFTImageWrapper = (props: Props) => {
   const { nft, className, ...rest } = props
+
   let classes = 'NFTImage'
   if (className) {
     classes += ' ' + className
   }
+
   return (
     <div className={classes}>
       <img src={PIXEL} alt="pixel" className="pixel" />
