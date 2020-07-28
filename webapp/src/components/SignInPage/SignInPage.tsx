@@ -4,12 +4,13 @@ import { Page } from 'decentraland-ui'
 
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
+import './SignInPage.css'
 
 const SignInPage = () => {
   return (
     <>
       <Navbar isFullscreen />
-      <Page isFullscreen>
+      <Page className="SignInPage" isFullscreen>
         <SignIn />
       </Page>
       <Footer isFullscreen />

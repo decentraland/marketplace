@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react'
-import { Atlas } from '../Atlas'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import {
   RARITY_COLOR,
   RARITY_COLOR_LIGHT
 } from '../../modules/nft/wearable/types'
 import { getNFTName } from '../../modules/nft/utils'
-import { NFTCategory } from '../../modules/nft/types'
+import { NFTCategory } from '../../modules/vendor/decentraland/nft/types'
+import { Atlas } from '../Atlas'
 import { Props } from './NFTImage.types'
 import './NFTImage.css'
 

@@ -1,10 +1,12 @@
-import { getSearchParams, SearchOptions } from './search'
+import { getSearchParams } from './search'
+import { SearchOptions } from './types'
 
 export const locations = {
   root: () => '/',
   signIn: () => '/sign-in',
-  atlas: () => '/atlas',
   settings: () => '/settings',
+  partners: () => '/partners',
+  bids: () => '/bids',
   browse: (options?: SearchOptions) => {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
@@ -19,11 +21,12 @@ export const locations = {
       ? `/accounts/${address}?${params.toString()}`
       : `/accounts/${address}`
   },
-  bids: () => '/bids',
-  ntf: (
+  nft: (
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
   ) => `/contracts/${contractAddress}/tokens/${tokenId}`,
+  parcel: (x: string = ':x', y: string = ':y') => `/parcels/${x}/${y}/detail`,
+  estate: (estateId: string = ':estateId') => `/estates/${estateId}/detail`,
   sell: (
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'

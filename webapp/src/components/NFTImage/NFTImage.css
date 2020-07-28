@@ -11,6 +11,7 @@
 }
 
 .NFTImage .image-wrapper {
+  text-align: center;
   position: absolute;
   top: 0px;
   bottom: 0px;

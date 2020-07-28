@@ -1,27 +1,17 @@
 .Title {
-  display: flex;
   margin-top: 35px;
-  margin-bottom: 48px;
 }
 
-.Title .left {
+.Title .left .ui.large.header {
   display: flex;
-  flex: 1 1 auto;
-  overflow: hidden;
-  white-space: nowrap;
-  margin-right: 34px;
+  align-items: center;
+  margin-bottom: 0;
 }
 
-.Title .right {
-  flex: none;
-  text-align: right;
-}
-
-.Title .left .ui.header {
-  display: inline-block;
-  flex: 0 1 auto;
+.Title .Column.left .ui.header > .text {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   margin-bottom: 0px;
 }
 
@@ -31,10 +21,6 @@
 }
 
 @media (max-width: 768px) {
-  .Title {
-    flex-direction: column;
-  }
-
   .Title .left {
     margin-right: 0px;
     margin-bottom: 24px;

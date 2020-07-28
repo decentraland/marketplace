@@ -1,0 +1,32 @@
+.TextFilter .text-input input {
+  font-size: 17px;
+  line-height: 20px;
+  background: none;
+  color: white;
+  font-weight: 600;
+  font-family: var(--font-family);
+  border: none;
+  border-radius: 6px;
+  padding: 6px 6px 6px 36px;
+  outline: none;
+  width: 100%;
+  background-image: url(../../../../images/search.svg);
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: 8px;
+}
+
+.TextFilter .text-input input::placeholder {
+  color: var(--secondary-text);
+  font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .TextFilter {
+    margin-bottom: 4px;
+  }
+
+  .TextFilter .ui.sub.header.name {
+    font-weight: normal;
+  }
+}

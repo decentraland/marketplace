@@ -1,22 +1,15 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { SortDirection, SortBy } from '../routing/search'
-import { contractCategories } from '../contract/utils'
+import { NFTCategory } from '../vendor/decentraland/nft/types'
+import { SortDirection, SortBy } from '../routing/types'
 import { addressEquals } from '../wallet/utils'
-import { NFT, NFTCategory, NFTSortBy } from './types'
+import { NFT, NFTSortBy } from './types'
 
 export function getNFTId(
   contractAddress: string | null,
   tokenId: string | null
 ) {
-  if (!contractAddress || !tokenId) return
-  const contractCategory = contractAddress
-    ? contractCategories[contractAddress]
-    : null
-  if (contractCategory) {
-    return contractCategory + '-' + contractAddress + '-' + tokenId
-  }
-  return null
+  return contractAddress && tokenId ? `${contractAddress}-${tokenId}` : null
 }
 
 export function getNFTName(nft: NFT) {
@@ -43,7 +36,7 @@ export function getNFTName(nft: NFT) {
 }
 
 export function getSortOrder(sortBy: SortBy) {
-  let orderBy: NFTSortBy = NFTSortBy.NAME
+  let orderBy: NFTSortBy = NFTSortBy.CREATED_AT
   let orderDirection: SortDirection = SortDirection.DESC
 
   switch (sortBy) {
@@ -76,13 +69,9 @@ export function getNFT(
   contractAddress: string | null,
   tokenId: string | null,
   nfts: Record<string, NFT>
-) {
-  let nft = null
+): NFT | null {
   const nftId = getNFTId(contractAddress, tokenId)
-  if (nftId && nftId in nfts) {
-    nft = nfts[nftId]
-  }
-  return nft
+  return nftId && nftId in nfts ? nfts[nftId] : null
 }
 
 export function isOwnedBy(nft: NFT, wallet: Wallet | null) {

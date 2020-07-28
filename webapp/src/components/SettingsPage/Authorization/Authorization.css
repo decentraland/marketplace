@@ -16,6 +16,7 @@
 .Authorization .radio-description {
   font-size: 15px;
   margin-left: 35px;
+  margin-top: 5px;
 }
 
 .Authorization .is-pending .loader-tooltip {

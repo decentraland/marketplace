@@ -1,0 +1,56 @@
+.Menu {
+  --menu-item-width: 248px;
+  --menu-sub-item-width: 232px;
+  margin-right: 24px;
+  width: var(--menu-item-width);
+}
+
+ul.Menu {
+  margin-left: -16px;
+  padding: 0px;
+}
+
+ul.Menu li {
+  font-size: 17px;
+  line-height: 26px;
+  letter-spacing: -0.2;
+  list-style: none;
+  padding: 9px 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  text-transform: capitalize;
+}
+
+ul.Menu li .ui.image {
+  vertical-align: text-bottom;
+}
+
+ul.Menu li.sub {
+  margin-left: 16px;
+  width: var(--menu-sub-item-width);
+  color: var(--secondary-text);
+}
+
+ul.Menu li .dropdown.icon {
+  float: right;
+}
+
+ul.Menu li:hover,
+ul.Menu li.active {
+  color: white;
+  font-weight: 600;
+  background-color: var(--card);
+}
+
+ul.Menu li.active {
+  cursor: default;
+}
+
+ul.Menu ul.submenu {
+  padding-left: 16px;
+}
+
+ul.Menu ul.submenu li.sub {
+  width: calc(var(--menu-sub-item-width) - 16px);
+}

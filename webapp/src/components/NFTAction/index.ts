@@ -1,2 +1,2 @@
-import NFTAction from './NFTAction.container'
+import NFTAction from './NFTAction'
 export { NFTAction }

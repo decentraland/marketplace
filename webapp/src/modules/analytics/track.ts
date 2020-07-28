@@ -194,8 +194,9 @@ track<FetchNFTsSuccessAction>(
   FETCH_NFTS_SUCCESS,
   'Fetch NFTs',
   ({ payload }) => ({
-    ...payload.options.variables,
+    ...payload.options.params,
     view: payload.options.view,
+    vendor: payload.options.vendor,
     count: payload.count
   })
 )

@@ -1,0 +1,16 @@
+.PartnerSidebar .go-back {
+  margin-top: 3px;
+  margin-bottom: 21px;
+  display: flex;
+  align-items: center;
+  color: var(--secondary-text);
+  text-transform: uppercase;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.PartnerSidebar i.back.icon {
+  background-image: url(../../../images/back.svg);
+  background-repeat: no-repeat;
+  background-size: 6px;
+}

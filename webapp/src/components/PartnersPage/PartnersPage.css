@@ -1,0 +1,15 @@
+.PartnersPage .Layout {
+  display: flex;
+}
+
+.PartnersPage .Layout .column {
+  height: 100%;
+}
+
+.PartnersPage .Row > .Column.right {
+  overflow: hidden;
+}
+
+.PartnersPage .Layout .Column.right > div {
+  align-self: start;
+}

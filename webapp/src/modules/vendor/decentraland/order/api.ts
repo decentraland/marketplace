@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost'
 
-import { client } from '../apiClient'
+import { client } from '../api'
 import { orderFragment, OrderFragment } from './fragments'
 
 class OrderAPI {

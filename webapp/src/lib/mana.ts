@@ -1,11 +1,19 @@
-export const MANA_SYMBOL = '⏣'
+import BN from 'bn.js'
+
+const MANA_SYMBOL = '⏣'
+
+let oneEthInMANA: BN | undefined
 
 export function formatMANA(value: string) {
-  return Math.abs(+value / 10 ** 18).toLocaleString()
+  if (!oneEthInMANA) {
+    oneEthInMANA = new BN('1000000000000000000') // 10 ** 18
+  }
+  const mana = new BN(value).divRound(oneEthInMANA)
+  return mana.toNumber().toLocaleString()
 }
 
 export function toMANA(num: number) {
-  return num > 0 ? MANA_SYMBOL + ' ' + num.toString() : ''
+  return num > 0 ? `${MANA_SYMBOL} ${num.toString()}` : ''
 }
 
 export function fromMANA(mana: string) {

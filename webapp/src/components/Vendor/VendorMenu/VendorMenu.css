@@ -1,0 +1,68 @@
+.VendorMenu > .Menu {
+  background-color: none;
+  border: 1px solid #35323b;
+  border-radius: 9px;
+  font-weight: 600;
+}
+
+.VendorMenu > .Menu .Menu {
+  margin: 0;
+}
+
+.VendorMenu.active > .Menu {
+  border: none;
+  background-color: var(--card);
+}
+
+.VendorMenu.disabled .MenuItem {
+  cursor: default;
+}
+
+.VendorMenu.disabled .MenuItem:hover {
+  background-color: transparent;
+}
+
+.VendorMenu .MenuItem .ui.image {
+  width: 50px;
+  height: 50px;
+}
+
+.VendorMenu .MenuItem {
+  margin-bottom: 0;
+}
+
+.VendorMenu.active > .Menu .MenuItem.active {
+  background-color: rgb(54, 51, 60);
+}
+
+.VendorMenu .MenuItem.vendor-menu-item {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.VendorMenu .NFTSections .MenuItem:not(:last-child) {
+  border-radius: 0;
+}
+
+.VendorMenu .NFTSections .MenuItem:after {
+  content: '';
+  display: none;
+  background-image: url(../../../images/back.svg);
+  background-repeat: no-repeat;
+  transform: scaleX(-1);
+  width: 8px;
+  height: 14px;
+  top: 6px;
+  position: relative;
+}
+
+.VendorMenu:hover .NFTSections .MenuItem:hover:after,
+.VendorMenu .NFTSections .MenuItem.active:after {
+  display: inline-block;
+  flex: 1 1 auto;
+}
+
+.VendorMenu:hover .NFTSections .MenuItem:hover .dropdown.icon,
+.VendorMenu .NFTSections .MenuItem.active .dropdown.icon {
+  display: none;
+}

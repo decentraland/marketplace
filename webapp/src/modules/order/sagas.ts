@@ -16,7 +16,7 @@ import {
 } from './actions'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
-import { VendorFactory, Vendors } from '../vendor'
+import { VendorFactory } from '../vendor/VendorFactory'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
@@ -27,11 +27,11 @@ export function* orderSaga() {
 function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
   const { nft, price, expiresAt } = action.payload
   try {
-    const { orderService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const { orderService } = VendorFactory.build(nft.vendor)
 
     const address = yield select(getAddress)
     const txHash = yield call(() =>
-      orderService!.create(nft, price, expiresAt, address)
+      orderService.create(nft, price, expiresAt, address)
     )
     yield put(createOrderSuccess(nft, price, expiresAt, txHash))
     yield put(push(locations.activity()))
@@ -43,14 +43,15 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
 function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   const { order, nft, fingerprint } = action.payload
   try {
-    if (order.nftId !== nft.id) {
+    console.log(nft, order)
+    if (nft.id !== order.nftId) {
       throw new Error('The order does not match the NFT')
     }
-    const { orderService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const { orderService } = VendorFactory.build(nft.vendor)
 
     const address = yield select(getAddress)
     const txHash = yield call(() =>
-      orderService!.execute(nft, order.price, address, fingerprint)
+      orderService.execute(nft, order, address, fingerprint)
     )
 
     yield put(executeOrderSuccess(order, nft, txHash))
@@ -66,10 +67,10 @@ function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
     if (order.nftId !== nft.id) {
       throw new Error('The order does not match the NFT')
     }
-    const { orderService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const { orderService } = VendorFactory.build(nft.vendor)
 
     const address = yield select(getAddress)
-    const txHash = yield call(() => orderService!.cancel(nft, address))
+    const txHash = yield call(() => orderService.cancel(nft, address))
     yield put(cancelOrderSuccess(order, nft, txHash))
     yield put(push(locations.activity()))
   } catch (error) {

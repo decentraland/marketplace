@@ -9,6 +9,7 @@ import {
   CHANGE_NETWORK
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 
+import { NFTCategory } from '../vendor/super_rare/nft/types'
 import { fetchAuthorizationRequest } from '../authorization/actions'
 import { AuthorizationsRequest } from '../authorization/types'
 import { contractAddresses, contractCategories } from '../contract/utils'
@@ -28,15 +29,21 @@ function* handleWallet(
 ) {
   const { address } = action.payload.wallet
 
-  const { MANAToken, Marketplace, Bids } = contractAddresses
+  const { MANAToken, Marketplace, MarketplaceAdapter, Bids } = contractAddresses
+
+  // TODO: VendorFactory.build().contractService.getAllowances()
+  // TODO: VendorFactory.build().contractService.getApprovals()
 
   const authorization: AuthorizationsRequest = {
     allowances: {
       [Marketplace]: [MANAToken],
+      [MarketplaceAdapter]: [MANAToken],
       [Bids]: [MANAToken]
     },
     approvals: {
-      [Marketplace]: Object.keys(contractCategories)
+      [Marketplace]: Object.keys(contractCategories).filter(
+        key => contractCategories[key] !== NFTCategory.ART
+      )
     }
   }
 

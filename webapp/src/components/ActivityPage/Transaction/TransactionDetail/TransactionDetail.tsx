@@ -13,6 +13,8 @@ import {
 import { formatDistanceToNow } from '../../../../lib/date'
 import { locations } from '../../../../modules/routing/locations'
 import { NFTImage } from '../../../NFTImage'
+import { Row } from '../../../Layout/Row'
+import { Column } from '../../../Layout/Column'
 import { Props } from './TransactionDetail.types'
 import './TransactionDetail.css'
 
@@ -26,13 +28,13 @@ const getHref = (tx: Transaction) => {
 const TransactionDetail = (props: Props) => {
   const { nft, text, tx } = props
   return (
-    <div className="TransactionDetail">
-      <div className="left">
+    <Row className="TransactionDetail">
+      <Column align="left" grow={true}>
         <div className="image">
           {nft === null ? (
             <Loader active size="small" />
           ) : nft ? (
-            <Link to={locations.ntf(nft.contractAddress, nft.tokenId)}>
+            <Link to={locations.nft(nft.contractAddress, nft.tokenId)}>
               <NFTImage nft={nft} isSmall />
             </Link>
           ) : (
@@ -43,8 +45,8 @@ const TransactionDetail = (props: Props) => {
           <div className="description">{text}</div>
           <div className="timestamp">{formatDistanceToNow(tx.timestamp)}.</div>
         </div>
-      </div>
-      <div className="right">
+      </Column>
+      <Column align="right">
         <a
           href={getHref(tx)}
           className={tx.status ? 'status ' + tx.status : 'status'}
@@ -65,8 +67,8 @@ const TransactionDetail = (props: Props) => {
             <Icon name="check" />
           ) : null}
         </a>
-      </div>
-    </div>
+      </Column>
+    </Row>
   )
 }
 

@@ -1,0 +1,23 @@
+.PriceChangeNotice.ui.card {
+  /* This margin top is compensating for the @margin on semantic UI's .ui.cards. Can't really access the LESS variable */
+  margin-top: -0.875em;
+  margin-bottom: 30px;
+}
+
+.PriceChangeNotice.ui.card .meta {
+  display: flex;
+}
+
+.PriceChangeNotice.ui.card .content .meta .message {
+  flex: 1 1 auto;
+}
+
+.PriceChangeNotice.ui.card .icon.close {
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .PriceChangeNotice.ui.card {
+    flex: 1 1 auto;
+  }
+}

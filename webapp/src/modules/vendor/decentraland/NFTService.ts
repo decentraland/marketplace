@@ -1,35 +1,37 @@
-import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 
-import { NFT } from '../../nft/types'
+import { ERC721 } from '../../../contracts/ERC721'
+import { ContractFactory } from '../../contract/ContractFactory'
+import { locations } from '../../routing/locations'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order } from '../../order/types'
 import { Account } from '../../account/types'
-import { FetchNFTsOptions } from '../../nft/actions'
+import { getNFTId } from '../../nft/utils'
 import { isExpired } from '../../order/utils'
-import { ERC721 } from '../../../contracts/ERC721'
 import { NFTService as NFTServiceInterface } from '../services'
+import { NFTsFetchFilters } from '../nft/types'
 import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
+import { NFTFragment } from './nft/fragments'
+import { ContractService } from './ContractService'
+import { MAX_QUERY_SIZE } from './api'
 
 export class NFTService implements NFTServiceInterface {
-  async fetch(options: FetchNFTsOptions) {
-    const data = await nftAPI.fetch(options)
+  async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
+    const [remoteNFTs, total] = await Promise.all([
+      nftAPI.fetch(params, filters),
+      this.count(params, filters)
+    ])
 
     const nfts: NFT[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
-    for (const result of data.nfts) {
-      const { activeOrder: nestedOrder, ...rest } = result
+    for (const remoteNFT of remoteNFTs) {
+      const nft = this.toNFT(remoteNFT)
+      const order = this.toOrder(remoteNFT)
 
-      const nft: NFT = {
-        ...rest,
-        vendor: Vendors.DECENTRALAND,
-        activeOrderId: null
-      }
-
-      if (nestedOrder && !isExpired(nestedOrder.expiresAt)) {
-        const order = { ...nestedOrder, nftId: nft.id }
+      if (order && !isExpired(order.expiresAt!)) {
         nft.activeOrderId = order.id
         orders.push(order)
       }
@@ -45,24 +47,25 @@ export class NFTService implements NFTServiceInterface {
       nfts.push(nft)
     }
 
-    return [nfts, accounts, orders, data.total] as const
+    return [nfts, accounts, orders, total] as const
+  }
+
+  async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {
+    const params: NFTsFetchParams = {
+      ...countParams,
+      first: MAX_QUERY_SIZE,
+      skip: 0
+    }
+    return nftAPI.count(params, filters)
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
     const remoteNFT = await nftAPI.fetchOne(contractAddress, tokenId)
 
-    const { activeOrder, ...rest } = remoteNFT
+    const nft = this.toNFT(remoteNFT)
+    const order = this.toOrder(remoteNFT)
 
-    const nft: NFT = {
-      ...rest,
-      vendor: Vendors.DECENTRALAND,
-      activeOrderId: null
-    }
-
-    let order: Order | undefined
-
-    if (activeOrder && !isExpired(activeOrder.expiresAt)) {
-      order = { ...activeOrder, nftId: nft.id }
+    if (order && !isExpired(order.expiresAt!)) {
       nft.activeOrderId = order.id
     }
 
@@ -70,22 +73,42 @@ export class NFTService implements NFTServiceInterface {
   }
 
   async transfer(fromAddress: string, toAddress: string, nft: NFT) {
-    const eth = Eth.fromCurrentProvider()
-    if (!eth) {
-      throw new Error('Could not connect to Ethereum')
-    }
-
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
     const from = Address.fromString(fromAddress)
     const to = Address.fromString(toAddress)
 
-    const erc721 = new ERC721(eth, Address.fromString(nft.contractAddress))
+    const erc721 = ContractFactory.build(ERC721, nft.contractAddress)
 
     return erc721.methods
       .transferFrom(from, to, nft.tokenId)
       .send({ from })
       .getTxHash()
+  }
+
+  toNFT(nft: NFTFragment): NFT {
+    const { activeOrder, ...rest } = nft
+    return {
+      ...rest,
+      id: getNFTId(nft.contractAddress, nft.tokenId)!,
+      vendor: Vendors.DECENTRALAND,
+      url: locations.nft(nft.contractAddress, nft.tokenId),
+      activeOrderId: null
+    }
+  }
+
+  toOrder(nft: NFTFragment): Order | undefined {
+    let order: Order | undefined
+
+    if (nft.activeOrder) {
+      order = {
+        ...nft.activeOrder,
+        marketAddress: ContractService.contractAddresses.Marketplace,
+        nftId: getNFTId(nft.contractAddress, nft.tokenId)!
+      }
+    }
+
+    return order
   }
 }

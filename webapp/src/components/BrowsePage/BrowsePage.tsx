@@ -1,34 +1,27 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 
+import { isVendor, isPartner } from '../../modules/vendor/utils'
+import { Vendors } from '../../modules/vendor/types'
+import { View } from '../../modules/ui/types'
+import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
-import { NFTListPage } from '../NFTListPage'
-import { NavigationTab } from '../Navigation/Navigation.types'
-import { SearchOptions } from '../../modules/routing/search'
-import { View } from '../../modules/ui/types'
-import { locations } from '../../modules/routing/locations'
+import { NFTBrowse } from '../NFTBrowse'
 import { Props } from './BrowsePage.types'
 
 const BrowsePage = (props: Props) => {
-  const { onNavigate } = props
+  const vendor = isVendor(props.vendor) ? props.vendor : Vendors.DECENTRALAND
 
-  const handleOnNavigate = useCallback(
-    (options?: SearchOptions) => {
-      onNavigate(locations.browse(options))
-    },
-    [onNavigate]
-  )
+  const activeTab = isPartner(vendor)
+    ? NavigationTab.PARTNER
+    : NavigationTab.BROWSE
 
   return (
     <>
       <Navbar isFullscreen />
-      <Navigation activeTab={NavigationTab.BROWSE} />
-      <NFTListPage
-        view={View.MARKET}
-        defaultOnlyOnSale={true}
-        onNavigate={handleOnNavigate}
-      />
+      <Navigation activeTab={activeTab} />
+      <NFTBrowse vendor={vendor} view={View.MARKET} />
       <Footer />
     </>
   )

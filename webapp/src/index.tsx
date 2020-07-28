@@ -14,8 +14,11 @@ import * as locales from './modules/translation/locales'
 import { store, history } from './modules/store'
 import { Routes } from './components/Routes'
 
+import { buildContracts } from './modules/contract/utils'
 import './modules/analytics/track'
 import './index.css'
+
+buildContracts()
 
 const component = (
   <Provider store={store}>

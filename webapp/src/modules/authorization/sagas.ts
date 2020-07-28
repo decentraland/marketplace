@@ -6,6 +6,7 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC20, ERC20TransactionReceipt } from '../../contracts/ERC20'
 import { ERC721, ERC721TransactionReceipt } from '../../contracts/ERC721'
 import { getWallet } from '../wallet/selectors'
+import { AwaitFn } from '../types'
 import {
   getAuthorizations,
   callAllowance,
@@ -38,12 +39,16 @@ function* handleFetchAuthorizationRequest(
 ) {
   try {
     const eth = Eth.fromCurrentProvider()
-    if (!eth) throw new Error('Could not connect to Ethereum')
+    if (!eth) {
+      throw new Error('Could not connect to Ethereum')
+    }
 
     const payload = action.payload
     const address = payload.address.toLowerCase()
 
-    const [allowances, approvals] = yield all([
+    const [allowances, approvals]: AwaitFn<
+      typeof getAuthorizations
+    >[] = yield all([
       getAuthorizations(
         payload.allowances,
         (tokenContractAddress: string, contractAddress: string) =>
@@ -65,8 +70,6 @@ function* handleFetchAuthorizationRequest(
           )
       )
     ])
-
-    // ------------------------
 
     const authorization = { allowances, approvals }
 

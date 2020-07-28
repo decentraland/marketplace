@@ -1,4 +1,4 @@
-import { NFTCategory } from '../nft/types'
+import { NFTCategory } from '../vendor/nft/types'
 
 export enum OrderStatus {
   OPEN = 'open',
@@ -11,11 +11,13 @@ export type Order = {
   nftId: string
   category: NFTCategory
   nftAddress: string
+  marketAddress: string
   owner: string
   buyer: string | null
   price: string
+  ethPrice?: string
   status: OrderStatus
-  expiresAt: string
+  expiresAt?: string
   createdAt: string
   updatedAt: string
 }

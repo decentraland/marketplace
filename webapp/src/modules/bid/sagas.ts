@@ -22,9 +22,11 @@ import {
   fetchBidsByNFTSuccess,
   fetchBidsByNFTFailure
 } from './actions'
+import { contractVendors } from '../contract/utils'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
-import { VendorFactory, Vendors } from '../vendor'
+import { VendorFactory } from '../vendor/VendorFactory'
+import { Vendors } from '../vendor/types'
 import { Bid } from './types'
 
 export function* bidSaga() {
@@ -41,7 +43,7 @@ export function* bidSaga() {
 function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
   const { nft, price, expiresAt, fingerprint } = action.payload
   try {
-    const { bidService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const { bidService } = VendorFactory.build(nft.vendor)
 
     const address = yield select(getAddress)
     const txHash = yield call(() =>
@@ -60,7 +62,13 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
 function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
   const { bid } = action.payload
   try {
-    const { bidService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const vendor = contractVendors[bid.contractAddress]
+    if (!vendor) {
+      throw new Error(
+        `Couldn't find a valid vendor for contract ${bid.contractAddress}`
+      )
+    }
+    const { bidService } = VendorFactory.build(vendor)
 
     const address = yield select(getAddress)
     const txHash = yield call(() => bidService!.accept(bid, address))
@@ -75,7 +83,13 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
 function* handleCancelBidRequest(action: CancelBidRequestAction) {
   const { bid } = action.payload
   try {
-    const { bidService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const vendor = contractVendors[bid.contractAddress]
+    if (!vendor) {
+      throw new Error(
+        `Couldn't find a valid vendor for contract ${bid.contractAddress}`
+      )
+    }
+    const { bidService } = VendorFactory.build(vendor)
 
     const address = yield select(getAddress)
     const txHash = yield call(() => bidService!.cancel(bid, address))
@@ -92,14 +106,24 @@ function* handleFetchBidsByAddressRequest(
 ) {
   const { address } = action.payload
   try {
-    const { bidService } = VendorFactory.build(Vendors.DECENTRALAND)
+    let seller: Bid[] = []
+    let bidder: Bid[] = []
 
-    const [seller, bidder]: [Bid[], Bid[]] = yield call(() =>
-      Promise.all([
-        bidService!.fetchBySeller(address),
-        bidService!.fetchByBidder(address)
-      ])
-    )
+    for (const vendorName of Object.values(Vendors)) {
+      const { bidService } = VendorFactory.build(vendorName)
+      if (bidService === undefined) {
+        continue
+      }
+
+      const [sellerBids, bidderBids]: [Bid[], Bid[]] = yield call(() =>
+        Promise.all([
+          bidService.fetchBySeller(address),
+          bidService.fetchByBidder(address)
+        ])
+      )
+      seller = seller.concat(sellerBids)
+      bidder = bidder.concat(bidderBids)
+    }
 
     yield put(fetchBidsByAddressSuccess(address, seller, bidder))
   } catch (error) {
@@ -110,7 +134,7 @@ function* handleFetchBidsByAddressRequest(
 function* handleFetchBidsByNFTRequest(action: FetchBidsByNFTRequestAction) {
   const { nft } = action.payload
   try {
-    const { bidService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const { bidService } = VendorFactory.build(nft.vendor)
 
     const bids = yield call(() => bidService!.fetchByNFT(nft.id))
 

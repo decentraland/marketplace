@@ -10,14 +10,19 @@ const Navigation = (props: Props) => {
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
-        <Link to={locations.atlas()}>
-          <Tabs.Tab active={activeTab === NavigationTab.ATLAS}>
-            {t('navigation.atlas')}
-          </Tabs.Tab>
-        </Link>
         <Link to={locations.browse()}>
           <Tabs.Tab active={activeTab === NavigationTab.BROWSE}>
-            {t('navigation.browse')}
+            {t('navigation.decentraland')}
+          </Tabs.Tab>
+        </Link>
+        <Link to={locations.partners()}>
+          <Tabs.Tab
+            active={
+              activeTab === NavigationTab.PARTNERS ||
+              activeTab === NavigationTab.PARTNER
+            }
+          >
+            {t('navigation.partners')}
           </Tabs.Tab>
         </Link>
         <Link to={locations.currentAccount()}>

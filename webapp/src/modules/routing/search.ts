@@ -1,75 +1,40 @@
-import { NFTCategory } from '../nft/types'
-import {
-  WearableCategory,
-  WearableRarity,
-  WearableGender
-} from '../nft/wearable/types'
-import { ContractName } from '../contract/types'
+import { WearableCategory } from '../nft/wearable/types'
+import { View } from '../ui/types'
+import { Vendors } from '../vendor/types'
+import { NFTCategory } from '../vendor/decentraland/nft/types'
+import { Section } from '../vendor/routing/types'
+import { SearchOptions, SortBy } from './types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
-export enum Section {
-  ALL = 'all',
-  LAND = 'land',
-  PARCELS = 'parcels',
-  ESTATES = 'estates',
-  WEARABLES = 'wearables',
-
-  WEARABLES_HEAD = 'wearables_head',
-  WEARABLES_EYEBROWS = 'wearables_eyebrows',
-  WEARABLES_EYES = 'wearables_eyes',
-  WEARABLES_FACIAL_HAIR = 'wearables_facial_hair',
-  WEARABLES_HAIR = 'wearables_hair',
-  WEARABLES_MOUTH = 'wearables_mouth',
-
-  WEARABLES_UPPER_BODY = 'wearables_upper_body',
-  WEARABLES_LOWER_BODY = 'wearables_lower_body',
-  WEARABLES_FEET = 'wearables_feet',
-
-  WEARABLES_ACCESORIES = 'wearables_accesories',
-  WEARABLES_EARRING = 'wearables_earring',
-  WEARABLES_EYEWEAR = 'wearables_eyewear',
-  WEARABLES_HAT = 'wearables_hat',
-  WEARABLES_HELMET = 'wearables_helmet',
-  WEARABLES_MASK = 'wearables_mask',
-  WEARABLES_TIARA = 'wearables_tiara',
-  WEARABLES_TOP_HEAD = 'wearables_top_head',
-
-  ENS = 'ens'
-}
-
-export enum SortBy {
-  NAME = 'name',
-  NEWEST = 'newest',
-  RECENTLY_LISTED = 'recently_listed',
-  CHEAPEST = 'cheapest'
-}
-
-export enum SortDirection {
-  ASC = 'asc',
-  DESC = 'desc'
-}
-
-export type SearchOptions = {
-  page?: number
-  section?: Section
-  sortBy?: SortBy
-  onlyOnSale?: boolean
-  wearableRarities?: WearableRarity[]
-  wearableGenders?: WearableGender[]
-  search?: string
-  contracts?: ContractName[]
+export function getDefaultOptionsByView(view?: View): SearchOptions {
+  return {
+    onlyOnSale: view !== View.ACCOUNT,
+    sortBy: view === View.ACCOUNT ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
+  }
 }
 
 export function getSearchParams(options?: SearchOptions) {
   let params: URLSearchParams | undefined
   if (options) {
     params = new URLSearchParams()
-    if (options.page) {
-      params.set('page', options.page.toString())
-    }
+
     if (options.section) {
       params.set('section', options.section)
+    }
+
+    // isMap is a standalone option so if it's selected all the other params don't matter and are discarded.
+    // We keep the section to signify we're on a land related option but that's it. Mind the early return
+    if (options.isMap !== undefined) {
+      params.set('isMap', options.isMap.toString())
+      return params
+    }
+
+    if (options.vendor) {
+      params.set('vendor', options.vendor)
+    }
+    if (options.page) {
+      params.set('page', options.page.toString())
     }
     if (options.sortBy) {
       params.set('sortBy', options.sortBy)
@@ -105,79 +70,102 @@ export function getSearchParams(options?: SearchOptions) {
 }
 
 export function getSearchCategory(section: Section) {
+  // TODO: Move this to each vendor? Names shortened for brevity here
+  const DclSection = Section[Vendors.DECENTRALAND]
+
   switch (section) {
-    case Section.PARCELS:
+    case DclSection.PARCELS:
       return NFTCategory.PARCEL
-    case Section.ESTATES:
+    case DclSection.ESTATES:
       return NFTCategory.ESTATE
-    case Section.WEARABLES:
-    case Section.WEARABLES_HEAD:
-    case Section.WEARABLES_EYEBROWS:
-    case Section.WEARABLES_EYES:
-    case Section.WEARABLES_FACIAL_HAIR:
-    case Section.WEARABLES_HAIR:
-    case Section.WEARABLES_MOUTH:
-    case Section.WEARABLES_UPPER_BODY:
-    case Section.WEARABLES_LOWER_BODY:
-    case Section.WEARABLES_FEET:
-    case Section.WEARABLES_ACCESORIES:
-    case Section.WEARABLES_EARRING:
-    case Section.WEARABLES_EYEWEAR:
-    case Section.WEARABLES_HAT:
-    case Section.WEARABLES_HELMET:
-    case Section.WEARABLES_MASK:
-    case Section.WEARABLES_TIARA:
-    case Section.WEARABLES_TOP_HEAD:
+    case DclSection.WEARABLES:
+    case DclSection.WEARABLES_HEAD:
+    case DclSection.WEARABLES_EYEBROWS:
+    case DclSection.WEARABLES_EYES:
+    case DclSection.WEARABLES_FACIAL_HAIR:
+    case DclSection.WEARABLES_HAIR:
+    case DclSection.WEARABLES_MOUTH:
+    case DclSection.WEARABLES_UPPER_BODY:
+    case DclSection.WEARABLES_LOWER_BODY:
+    case DclSection.WEARABLES_FEET:
+    case DclSection.WEARABLES_ACCESORIES:
+    case DclSection.WEARABLES_EARRING:
+    case DclSection.WEARABLES_EYEWEAR:
+    case DclSection.WEARABLES_HAT:
+    case DclSection.WEARABLES_HELMET:
+    case DclSection.WEARABLES_MASK:
+    case DclSection.WEARABLES_TIARA:
+    case DclSection.WEARABLES_TOP_HEAD:
       return NFTCategory.WEARABLE
-    case Section.ENS:
+    case DclSection.ENS:
       return NFTCategory.ENS
   }
 }
 
+export function getSearchWearableSection(category: WearableCategory) {
+  const DclSection = Section[Vendors.DECENTRALAND]
+  for (const section of Object.values(DclSection)) {
+    const sectionCategory = getSearchWearableCategory(section)
+    if (category === sectionCategory) {
+      return section
+    }
+  }
+}
+
 export function getSearchWearableCategory(section: Section) {
+  const DclSection = Section[Vendors.DECENTRALAND]
   switch (section) {
-    case Section.WEARABLES_EYEBROWS:
+    case DclSection.WEARABLES_EYEBROWS:
       return WearableCategory.EYEBROWS
-    case Section.WEARABLES_EYES:
+    case DclSection.WEARABLES_EYES:
       return WearableCategory.EYES
-    case Section.WEARABLES_FACIAL_HAIR:
+    case DclSection.WEARABLES_FACIAL_HAIR:
       return WearableCategory.FACIAL_HAIR
-    case Section.WEARABLES_HAIR:
+    case DclSection.WEARABLES_HAIR:
       return WearableCategory.HAIR
-    case Section.WEARABLES_MOUTH:
+    case DclSection.WEARABLES_MOUTH:
       return WearableCategory.MOUTH
-    case Section.WEARABLES_UPPER_BODY:
+    case DclSection.WEARABLES_UPPER_BODY:
       return WearableCategory.UPPER_BODY
-    case Section.WEARABLES_LOWER_BODY:
+    case DclSection.WEARABLES_LOWER_BODY:
       return WearableCategory.LOWER_BODY
-    case Section.WEARABLES_FEET:
+    case DclSection.WEARABLES_FEET:
       return WearableCategory.FEET
-    case Section.WEARABLES_EARRING:
+    case DclSection.WEARABLES_EARRING:
       return WearableCategory.EARRING
-    case Section.WEARABLES_EYEWEAR:
+    case DclSection.WEARABLES_EYEWEAR:
       return WearableCategory.EYEWEAR
-    case Section.WEARABLES_HAT:
+    case DclSection.WEARABLES_HAT:
       return WearableCategory.HAT
-    case Section.WEARABLES_HELMET:
+    case DclSection.WEARABLES_HELMET:
       return WearableCategory.HELMET
-    case Section.WEARABLES_MASK:
+    case DclSection.WEARABLES_MASK:
       return WearableCategory.MASK
-    case Section.WEARABLES_TIARA:
+    case DclSection.WEARABLES_TIARA:
       return WearableCategory.TIARA
-    case Section.WEARABLES_TOP_HEAD:
+    case DclSection.WEARABLES_TOP_HEAD:
       return WearableCategory.TOP_HEAD
   }
 }
 
-export function getParamArray<T extends string>(
+export function getURLParamArray<T extends string>(
   search: string,
   paramName: string,
   validValues: string[] = []
 ) {
-  const param = new URLSearchParams(search).get(paramName)
+  const param = getURLParam<T>(search, paramName)
   return param === null
     ? []
     : (param
         .split(SEARCH_ARRAY_PARAM_SEPARATOR)
         .filter(item => validValues.includes(item as T)) as T[])
 }
+
+export function getURLParam<T extends string>(
+  search: string,
+  paramName: string
+) {
+  const param = new URLSearchParams(search).get(paramName) as T | null
+  return param
+}
+

@@ -5,13 +5,13 @@ import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Page, Grid, Blockie, Mana, Loader, Form } from 'decentraland-ui'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
-import { Navbar } from '../Navbar'
-import { Navigation } from '../Navigation'
 import { locations } from '../../modules/routing/locations'
 import { contractAddresses } from '../../modules/contract/utils'
 import { hasAuthorization } from '../../modules/authorization/utils'
 import { shortenAddress } from '../../modules/wallet/utils'
 import { AuthorizationType } from '../AuthorizationModal/AuthorizationModal.types'
+import { Navbar } from '../Navbar'
+import { Navigation } from '../Navigation'
 import { Authorization } from './Authorization'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
@@ -64,10 +64,12 @@ const SettingsPage = (props: Props) => {
         ) : wallet ? (
           <Grid>
             <Grid.Row>
-              <Grid.Column computer={4} mobile={16}>
-                <div className="left-column secondary-text">
-                  {t('global.address')}
-                </div>
+              <Grid.Column
+                className="left-column secondary-text"
+                computer={4}
+                mobile={16}
+              >
+                {t('global.address')}
               </Grid.Column>
               <Grid.Column computer={12} mobile={16}>
                 <div className="blockie-container">
@@ -95,10 +97,12 @@ const SettingsPage = (props: Props) => {
             </Grid.Row>
 
             <Grid.Row>
-              <Grid.Column computer={4} mobile={16}>
-                <div className="left-column secondary-text">
-                  {t('global.balance')}
-                </div>
+              <Grid.Column
+                className="left-column secondary-text"
+                computer={4}
+                mobile={16}
+              >
+                {t('global.balance')}
               </Grid.Column>
               <Grid.Column computer={12} mobile={16}>
                 <div className="balance">
@@ -120,10 +124,12 @@ const SettingsPage = (props: Props) => {
             </Grid.Row>
 
             <Grid.Row>
-              <Grid.Column computer={4} mobile={16}>
-                <div className="left-column secondary-text">
-                  {t('settings_page.authorizations')}
-                </div>
+              <Grid.Column
+                className="left-column secondary-text"
+                computer={4}
+                mobile={16}
+              >
+                {t('settings_page.authorizations')}
               </Grid.Column>
               <Grid.Column computer={12} mobile={16}>
                 {isLoadingAuthorization ? (
@@ -152,6 +158,20 @@ const SettingsPage = (props: Props) => {
                               AuthorizationType.ALLOWANCE
                             )}
                             contractAddress={contractAddresses.Marketplace}
+                            tokenContractAddress={contractAddresses.MANAToken}
+                            pendingTransactions={pendingAllowTransactions}
+                            onChange={onAllowToken}
+                          />
+                          <Authorization
+                            checked={hasAuthorization(
+                              authorizations!,
+                              contractAddresses.MarketplaceAdapter,
+                              contractAddresses.MANAToken,
+                              AuthorizationType.ALLOWANCE
+                            )}
+                            contractAddress={
+                              contractAddresses.MarketplaceAdapter
+                            }
                             tokenContractAddress={contractAddresses.MANAToken}
                             pendingTransactions={pendingAllowTransactions}
                             onChange={onAllowToken}

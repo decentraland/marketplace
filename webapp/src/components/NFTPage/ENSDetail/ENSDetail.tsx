@@ -4,10 +4,13 @@ import { Container, Header } from 'decentraland-ui'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
+import { Row } from '../../Layout/Row'
+import { Column } from '../../Layout/Column'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
-import { Order } from '../Order'
+import { OrderDetails } from '../OrderDetails'
+import { Actions } from '../Actions'
 import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './ENSDetail.types'
@@ -22,14 +25,21 @@ const ENSDetail = (props: Props) => {
       <Container className="ENSDetail">
         <Title
           left={
-            <>
-              <Header size="large">{getNFTName(nft)}</Header>
+            <Header size="large">
+              <div className="text">{getNFTName(nft)}</div>
               <Badge color="#37333d">{t('global.ens')}</Badge>
-            </>
+            </Header>
           }
           right={<Owner nft={nft} />}
         />
-        <Order nft={nft} />
+        <Row>
+          <Column align="left" grow={true}>
+            <OrderDetails nft={nft} />
+          </Column>
+          <Column align="right">
+            <Actions nft={nft} />
+          </Column>
+        </Row>
         <Bids nft={nft} />
         <TransactionHistory nft={nft} />
       </Container>

@@ -1,9 +1,7 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
-import { fetchNFTsRequest } from '../../modules/nft/actions'
-import { MapStateProps, MapDispatchProps, MapDispatch } from './HomePage.types'
-import HomePage from './HomePage'
+import { fetchNFTsFromRoute } from '../../modules/routing/actions'
 import {
   getHomepageWearables,
   getHomepageLand,
@@ -12,6 +10,8 @@ import {
   isHomepageENSLoading,
   isHomepageLandLoading
 } from '../../modules/ui/selectors'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './HomePage.types'
+import HomePage from './HomePage'
 
 const mapState = (state: RootState): MapStateProps => ({
   wearables: getHomepageWearables(state),
@@ -24,7 +24,7 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
-  onFetchNFTs: options => dispatch(fetchNFTsRequest(options))
+  onFetchNFTsFromRoute: options => dispatch(fetchNFTsFromRoute(options))
 })
 
 export default connect(mapState, mapDispatch)(HomePage)

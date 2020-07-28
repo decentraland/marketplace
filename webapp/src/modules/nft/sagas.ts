@@ -1,7 +1,7 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
 import {
-  DEFAULT_FETCH_NFTS_OPTIONS,
+  DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
   FetchNFTsRequestAction,
   fetchNFTsSuccess,
@@ -17,7 +17,8 @@ import {
 } from './actions'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
-import { VendorFactory, Vendors } from '../vendor'
+import { VendorFactory } from '../vendor/VendorFactory'
+import { contractVendors } from '../contract/utils'
 import { AwaitFn } from '../types'
 
 export function* nftSaga() {
@@ -27,18 +28,15 @@ export function* nftSaga() {
 }
 
 function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
-  const { timestamp } = action.payload
-  const options = {
-    ...DEFAULT_FETCH_NFTS_OPTIONS,
-    ...action.payload.options,
-    variables: {
-      ...DEFAULT_FETCH_NFTS_OPTIONS.variables,
-      ...action.payload.options.variables
-    }
+  const { options, timestamp } = action.payload
+  const { vendor, filters } = options
+  const params = {
+    ...DEFAULT_BASE_NFT_PARAMS,
+    ...action.payload.options.params
   }
 
   try {
-    const { nftService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const { nftService } = VendorFactory.build(vendor)
 
     const [
       nfts,
@@ -46,7 +44,7 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       orders,
       count
     ]: AwaitFn<typeof nftService.fetch> = yield call(() =>
-      nftService.fetch(options)
+      nftService.fetch(params, filters)
     )
 
     yield put(
@@ -61,7 +59,14 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   const { contractAddress, tokenId } = action.payload
 
   try {
-    const { nftService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const vendor = contractVendors[contractAddress]
+    if (!vendor) {
+      throw new Error(
+        `Couldn't find a valid vendor for contract ${contractAddress}`
+      )
+    }
+
+    const { nftService } = VendorFactory.build(vendor)
 
     const [nft, order]: AwaitFn<typeof nftService.fetchOne> = yield call(() =>
       nftService.fetchOne(contractAddress, tokenId)
@@ -76,7 +81,7 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
 function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
   const { nft, address } = action.payload
   try {
-    const { nftService } = VendorFactory.build(Vendors.DECENTRALAND)
+    const { nftService } = VendorFactory.build(nft.vendor)
 
     const from = yield select(getAddress)
     const txHash = yield call(() => nftService.transfer(from, address, nft))

@@ -3,9 +3,10 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Page, Hero, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
-import { Section, SortDirection } from '../../modules/routing/search'
-import { NFTCategory, NFTSortBy } from '../../modules/nft/types'
 import { View } from '../../modules/ui/types'
+import { Vendors } from '../../modules/vendor/types'
+import { SortBy } from '../../modules/routing/types'
+import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Slideshow } from './Slideshow'
@@ -21,7 +22,7 @@ const HomePage = (props: Props) => {
     isENSLoading,
     isLandLoading,
     onNavigate,
-    onFetchNFTs
+    onFetchNFTsFromRoute
   } = props
 
   const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
@@ -43,41 +44,34 @@ const HomePage = (props: Props) => {
     [onNavigate]
   )
 
+  const vendor = Vendors.DECENTRALAND
+
   useEffect(() => {
-    onFetchNFTs({
-      variables: {
-        category: NFTCategory.WEARABLE,
-        first: 20,
-        skip: 0,
-        orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.ORDER_CREATED_AT,
-        onlyOnSale: true
-      },
-      view: View.HOME_WEARABLES
+    onFetchNFTsFromRoute({
+      vendor,
+      section: Section.WEARABLES,
+      view: View.HOME_WEARABLES,
+      sortBy: SortBy.RECENTLY_LISTED,
+      page: 1,
+      onlyOnSale: true
     })
-    onFetchNFTs({
-      variables: {
-        isLand: true,
-        first: 20,
-        skip: 0,
-        orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.ORDER_CREATED_AT,
-        onlyOnSale: true
-      },
-      view: View.HOME_LAND
+    onFetchNFTsFromRoute({
+      vendor,
+      section: Section.LAND,
+      view: View.HOME_LAND,
+      sortBy: SortBy.RECENTLY_LISTED,
+      page: 1,
+      onlyOnSale: true
     })
-    onFetchNFTs({
-      variables: {
-        category: NFTCategory.ENS,
-        first: 20,
-        skip: 0,
-        orderDirection: SortDirection.DESC,
-        orderBy: NFTSortBy.ORDER_CREATED_AT,
-        onlyOnSale: true
-      },
-      view: View.HOME_ENS
+    onFetchNFTsFromRoute({
+      vendor,
+      section: Section.ENS,
+      view: View.HOME_ENS,
+      sortBy: SortBy.RECENTLY_LISTED,
+      page: 1,
+      onlyOnSale: true
     })
-  }, [onFetchNFTs])
+  }, [vendor, onFetchNFTsFromRoute])
 
   return (
     <>
@@ -86,7 +80,7 @@ const HomePage = (props: Props) => {
         <Hero.Header>{t('home_page.title')}</Hero.Header>
         <Hero.Description>{t('home_page.subtitle')}</Hero.Description>
         <Hero.Content>
-          <div className="hero-image" />
+          <div className="hero-image" />{' '}
         </Hero.Content>
         <Hero.Actions>
           <Button primary onClick={handleGetStarted}>

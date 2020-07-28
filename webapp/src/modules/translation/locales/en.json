@@ -10,6 +10,7 @@
     "estate": "Estate",
     "wearable": "Wearable",
     "ens": "Name",
+    "art":"Art",
     "cancel": "Cancel",
     "proceed": "Proceed",
     "nft": "NFT",
@@ -21,50 +22,52 @@
     "apply": "Apply",
     "jump_in": "Jump In"
   },
+  "vendors": {
+    "decentraland": "Decentraland",
+    "super_rare": "SuperRare",
+    "known_origin": "KnownOrigin",
+    "makers_place": "MakersPlace"
+  },
   "navigation": {
-    "atlas": "Atlas",
-    "browse": "Browse",
+    "decentraland": "Decentraland",
+    "partners": "Partners",
     "my_assets": "My Assets",
     "my_bids": "My Bids",
     "activity": "Activity"
   },
-  "home_page": {
-    "title": "Decentraland Marketplace",
-    "subtitle": "Welcome to the virtual world’s one-stop-shop for the very best digital assets.",
-    "get_started": "Start Browsing",
-    "learn_more": "Learn More",
-    "view_all": "View All",
+  "menu": {
+    "all": "All Assets",
+    "land": "Land",
+    "parcels": "Parcels",
+    "estates": "Estates",
     "wearables": "Wearables",
-    "land": "Parcels and Estates",
-    "ens": "Names"
+    "wearables_head": "Head",
+    "wearables_eyebrows": "Eyebrows",
+    "wearables_eyes": "Eyes",
+    "wearables_facial_hair": "Facial hair",
+    "wearables_hair": "Hair",
+    "wearables_mouth": "Mouth",
+    "wearables_upper_body": "Upper body",
+    "wearables_lower_body": "Lower body",
+    "wearables_feet": "Feet",
+    "wearables_accesories": "Accesories",
+    "wearables_earring": "Earring",
+    "wearables_eyewear": "Eyewear",
+    "wearables_hat": "Hat",
+    "wearables_helmet": "Helmet",
+    "wearables_mask": "Mask",
+    "wearables_tiara": "Tiara",
+    "wearables_top_head": "Top head",
+    "ens": "Names",
+    "decentraland": "Decentraland",
+    "super_rare": "SuperRare",
+    "known_origin": "KnownOrigin",
+    "makers_place": "MakersPlace"
   },
-  "categories_menu": {
-    "categories": "Categories",
-    "menu_item": {
-      "all": "All Assets",
-      "land": "Land",
-      "parcels": "Parcels",
-      "estates": "Estates",
-      "wearables": "Wearables",
-      "wearables_head": "Head",
-      "wearables_eyebrows": "Eyebrows",
-      "wearables_eyes": "Eyes",
-      "wearables_facial_hair": "Facial hair",
-      "wearables_hair": "Hair",
-      "wearables_mouth": "Mouth",
-      "wearables_upper_body": "Upper body",
-      "wearables_lower_body": "Lower body",
-      "wearables_feet": "Feet",
-      "wearables_accesories": "Accesories",
-      "wearables_earring": "Earring",
-      "wearables_eyewear": "Eyewear",
-      "wearables_hat": "Hat",
-      "wearables_helmet": "Helmet",
-      "wearables_mask": "Mask",
-      "wearables_tiara": "Tiara",
-      "wearables_top_head": "Top head",
-      "ens": "Names"
-    }
+  "vendor_menu":{
+    "no_assets": "No assets",
+    "assets_count": "{count} {count, plural, one {asset} other {assets}}",
+    "more_than_assets_count": "+{count} assets"
   },
   "filters": {
     "name": "Name",
@@ -72,15 +75,32 @@
     "recently_listed": "Recently listed",
     "cheapest": "Cheapest"
   },
-  "nft_list_page": {
+  "home_page": {
+    "title": "Decentraland Marketplace",
+    "subtitle": "Welcome to the virtual world’s one-stop-shop for the very best digital assets.",
+    "get_started": "Start Browsing",
+    "learn_more": "Learn More",
+    "wearables": "Wearables",
+    "land": "Parcels and Estates",
+    "ens": "Names"
+  },
+  "partners_page": {
+    "partners": "Partners",
+    "latest_from": "Latest from {vendor}"
+  },
+  "partner_sidebar": {
+    "assets": "{count} {count, plural, one {asset} other {assets}}"
+  },
+  "nft_list": {
+    "empty": "No results"
+  },
+  "nft_filters": {
     "on_sale": "On sale",
-    "empty": "No results",
     "filter": "Filter",
     "order_by": "Order By",
     "results": "{count} {count, plural, one {result} other {results}}",
     "more_than_results": "+{count} results",
-    "search": "Search {category}...",
-    "multiple_filters": "{count} filters",
+    "search": "Search {suffix}...",
     "rarity": "Rarity",
     "gender": "Gender",
     "collection": "Collection",
@@ -88,6 +108,32 @@
   },
   "nft_card": {
     "expires_at": "Expires {date}"
+  },
+  "nft_sidebar": {
+    "categories": "Categories",
+    "back": "Back"
+  },
+  "nft_page": {
+    "description": "Description",
+    "owner": "Owner",
+    "price": "Price",
+    "expires": "Expires in",
+    "cancel_sale": "Remove listing",
+    "buy": "Buy",
+    "sell": "Sell",
+    "bid": "Bid",
+    "update": "Update price",
+    "transfer": "Transfer",
+    "plaza": "Plaza",
+    "road": "Road",
+    "district": "District",
+    "leaving_decentraland": "Leaving Decentraland",
+    "leaving_decentraland_description": "You can't publish {vendor} assets to the Decentraland Marketplace yet. Do you want to proceed to {vendor_link} to publish it there?",
+    "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace"
+  },
+  "proximity": {
+    "adjacent": "Adjacent",
+    "distance": "{distance} {distance, plural, one {parcel} other {parcels}} away"
   },
   "bid": {
     "from": "From",
@@ -98,24 +144,6 @@
     "invalid_seller": "You don't own this asset anymore",
     "not_enough_mana_on_bid_placed": "You don't have enough MANA to pay for this bid",
     "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it"
-  },
-  "detail": {
-    "description": "Description",
-    "highlights": "Highlights",
-    "owner": "Owner",
-    "price": "Price",
-    "expires": "Expires in",
-    "cancel_sale": "Remove listing",
-    "buy": "Buy",
-    "sell": "Sell",
-    "bid": "Bid",
-    "update": "Update price",
-    "transfer": "Transfer",
-    "adjacent": "Adjacent",
-    "distance": "{distance} {distance, plural, one {parcel} other {parcels}} away",
-    "plaza": "Plaza",
-    "road": "Road",
-    "district": "District"
   },
   "transaction_history": {
     "title": "Transaction History",
@@ -177,6 +205,7 @@
     "invalid_date": "This date has already passed",
     "submit": "List for sale",
     "update_submit": "Update",
+    "invalid": "Something roto",
     "confirm": {
       "title": "Please confirm",
       "line_one": "You are about to list {name} on sale for {amount}.",
@@ -187,7 +216,11 @@
     "title": "Buy {category}",
     "subtitle": "You are about to buy {name} for {amount}.",
     "not_for_sale": "{name} is not for sale.",
+    "price_too_high": "Given the current exchange rates buying this {category} will cost you over {percentageIncrease}% its normal price.",
+    "please_wait": "Please wait until prices normalize again",
+    "actual_price": "The price above is an approximation, given current exchange rates you'll end up paying around {computedPrice}",
     "buy": "Buy",
+    "proceed_anyways": "Proceed anyways",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name}."
@@ -286,5 +319,14 @@
   "banner": {
     "text": "Decentraland's marketplace has a new look!{br} We hope you enjoy it. You can still access the old interface {link}.",
     "link": "here"
+  },
+  "slideshow": {
+    "view_all": "View All"
+  },
+  "highlights": {
+    "title": "Highlights"
+  },
+  "price_change_notice": {
+    "message": "The price may fluctuate due to market changes"
   }
 }

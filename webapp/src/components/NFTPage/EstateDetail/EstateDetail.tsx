@@ -5,11 +5,14 @@ import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
+import { Row } from '../../Layout/Row'
+import { Column } from '../../Layout/Column'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
 import { Description } from '../Description'
-import { Order } from '../Order'
+import { OrderDetails } from '../OrderDetails'
+import { Actions } from '../Actions'
 import { ProximityHighlights } from '../ProximityHighlights'
 import { TransactionHistory } from '../TransactionHistory'
 import { Bids } from '../Bids'
@@ -27,8 +30,8 @@ const EstateDetail = (props: Props) => {
       <Container className="EstateDetail">
         <Title
           left={
-            <>
-              <Header size="large">{getNFTName(nft)}</Header>
+            <Header size="large">
+              <div className="text">{getNFTName(nft)}</div>
               <Badge color="#37333d">
                 {nft.estate!.size.toLocaleString()} LAND
               </Badge>
@@ -42,12 +45,19 @@ const EstateDetail = (props: Props) => {
                   <i className="jump-in-icon" />
                 </a>
               </Badge>
-            </>
+            </Header>
           }
           right={<Owner nft={nft} />}
         />
         <Description text={nft.estate!.data?.description} />
-        <Order nft={nft} />
+        <Row>
+          <Column align="left" grow={true}>
+            <OrderDetails nft={nft} />
+          </Column>
+          <Column align="right">
+            <Actions nft={nft} />
+          </Column>
+        </Row>
         <ProximityHighlights nft={nft} />
         <Bids nft={nft} />
         <TransactionHistory nft={nft} />

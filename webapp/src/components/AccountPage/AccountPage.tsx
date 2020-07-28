@@ -1,15 +1,14 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Page, Loader, Blockie, Popup } from 'decentraland-ui'
 import { EtherscanLink } from 'decentraland-dapps/dist/containers'
 
 import { Navbar } from '../Navbar'
 import { PageHeader } from '../PageHeader'
 import { Footer } from '../Footer'
-import { NFTListPage } from '../NFTListPage'
+import { NFTBrowse } from '../NFTBrowse'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { locations } from '../../modules/routing/locations'
-import { SearchOptions } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
 import { shortenAddress } from '../../modules/wallet/utils'
 import { contractNames } from '../../modules/contract/utils'
@@ -17,20 +16,10 @@ import { Props } from './AccountPage.types'
 import './AccountPage.css'
 
 const AccountPage = (props: Props) => {
-  const { address, wallet, isConnecting, onNavigate, onRedirect } = props
+  const { address, vendor, wallet, isConnecting, onRedirect } = props
 
   const isCurrentAccount =
     address === undefined || (wallet && wallet.address === address)
-
-  const handleOnNavigate = useCallback(
-    (options?: SearchOptions) =>
-      onNavigate(
-        isCurrentAccount
-          ? locations.currentAccount(options)
-          : locations.account(address, options)
-      ),
-    [isCurrentAccount, address, onNavigate]
-  )
 
   // Redirect to signIn if trying to access current account without a wallet
   useEffect(() => {
@@ -52,11 +41,10 @@ const AccountPage = (props: Props) => {
             <Loader size="massive" active />
           </Page>
         ) : (
-          <NFTListPage
+          <NFTBrowse
+            vendor={vendor}
             address={wallet.address}
-            defaultOnlyOnSale={false}
             view={View.ACCOUNT}
-            onNavigate={handleOnNavigate}
           />
         )
       ) : address !== undefined ? (
@@ -84,12 +72,7 @@ const AccountPage = (props: Props) => {
             </div>
           </PageHeader>
 
-          <NFTListPage
-            address={address}
-            defaultOnlyOnSale={false}
-            view={View.ACCOUNT}
-            onNavigate={handleOnNavigate}
-          />
+          <NFTBrowse vendor={vendor} address={address} view={View.ACCOUNT} />
         </>
       ) : null}
       <Footer />

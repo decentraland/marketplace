@@ -23,7 +23,7 @@ export const nftFields = () => gql`
     }
     estate {
       size
-      parcels(first: 1000) {
+      parcels {
         x
         y
       }

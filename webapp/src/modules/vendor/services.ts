@@ -1,13 +1,19 @@
-import { NFT } from '../nft/types'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
 import { Account } from '../account/types'
 import { Bid } from '../bid/types'
 import { OrderStatus, Order } from '../order/types'
-import { FetchNFTsOptions } from './types'
+import { NFTsFetchFilters, NFTCategory } from './nft/types'
+import { TransferType } from './types'
 
 export interface NFTService {
   fetch: (
-    options: FetchNFTsOptions
+    params: NFTsFetchParams,
+    filters?: NFTsFetchFilters
   ) => Promise<readonly [NFT[], Account[], Order[], number]>
+  count: (
+    params: NFTsCountParams,
+    filters?: NFTsFetchFilters
+  ) => Promise<number>
   fetchOne: (
     contractAddress: string,
     tokenId: string
@@ -30,11 +36,12 @@ export interface OrderService {
   ) => Promise<string>
   execute: (
     nft: NFT,
-    price: string,
+    order: Order,
     fromAddress: string,
     fingerprint?: string
   ) => Promise<string>
   cancel: (nft: NFT, fromAddress: string) => Promise<string>
+  canSell(): boolean
 }
 export class OrderService {}
 
@@ -53,3 +60,12 @@ export interface BidService {
   cancel: (bid: Bid, fromAddress: string) => Promise<string>
 }
 export class BidService {}
+
+export interface ContractService {
+  contractAddresses: Record<string, string>
+  contractSymbols: Record<string, string>
+  contractNames: Record<string, string>
+  contractCategories: Record<string, NFTCategory>
+  getTransferType: (address: string) => TransferType
+}
+export class ContractService {}

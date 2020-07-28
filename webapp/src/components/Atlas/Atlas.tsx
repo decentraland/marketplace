@@ -72,19 +72,21 @@ const Atlas = (props: Props) => {
 
   const handleClick = useCallback(
     async (x: number, y: number) => {
-      if (!withNavigation) return
+      if (!withNavigation) {
+        return
+      }
       const tile = tiles[getCoords(x, y)] as Tile
       if (!tile) {
         return
       }
       if (tile.estate_id) {
         onNavigate(
-          locations.ntf(contractAddresses.EstateRegistry, tile.estate_id)
+          locations.nft(contractAddresses.EstateRegistry, tile.estate_id)
         )
       } else {
         try {
           const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
-          onNavigate(locations.ntf(contractAddresses.LANDRegistry, tokenId))
+          onNavigate(locations.nft(contractAddresses.LANDRegistry, tokenId))
         } catch (error) {
           console.warn(
             `Couldn't fetch parcel ${tile.x},${tile.y}: ${error.message}`
