@@ -99,6 +99,7 @@ const NFTImage = (props: Props) => {
         <LazyImage
           src={nft.image}
           alt={getNFTName(nft)}
+          debounceDurationMs={1000}
           placeholder={({ ref }) => (
             <div ref={ref}>
               <Loader size="small" active />
