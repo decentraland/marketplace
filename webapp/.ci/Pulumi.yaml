@@ -1,0 +1,3 @@
+name: market-static
+runtime: nodejs
+description: Website for the market
