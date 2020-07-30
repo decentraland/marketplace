@@ -4,11 +4,9 @@ import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
 import { fetchNFTsFromRoute } from '../../modules/routing/actions'
 import {
-  getPartnersSuperRare,
-  isPartnersSuperRareLoading,
-  getPartnersMakersPlace,
-  isPartnersMakersPlaceLoading
-} from '../../modules/ui/selectors'
+  getPartners,
+  getPartnersLoading
+} from '../../modules/ui/nft/partner/selectors'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -17,10 +15,8 @@ import {
 import PartnersPage from './PartnersPage'
 
 const mapState = (state: RootState): MapStateProps => ({
-  superRare: getPartnersSuperRare(state),
-  isSuperRareLoading: isPartnersSuperRareLoading(state),
-  makersPlace: getPartnersMakersPlace(state),
-  isMakersPlaceLoading: isPartnersMakersPlaceLoading(state)
+  partners: getPartners(state),
+  partnersLoading: getPartnersLoading(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

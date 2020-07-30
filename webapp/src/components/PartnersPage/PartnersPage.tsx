@@ -4,8 +4,8 @@ import { Page, Responsive } from 'decentraland-ui'
 
 import { locations } from '../../modules/routing/locations'
 import { SortBy } from '../../modules/routing/types'
-import { View } from '../../modules/ui/types'
-import { Vendors } from '../../modules/vendor/types'
+import { PartnerView } from '../../modules/ui/nft/partner/types'
+import { Vendors, Partner } from '../../modules/vendor/types'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
@@ -18,12 +18,7 @@ import { Props } from './PartnersPage.types'
 import './PartnersPage.css'
 
 const PartnersPage = (props: Props) => {
-  const {
-    superRare,
-    isSuperRareLoading,
-    onNavigate,
-    onFetchNFTsFromRoute
-  } = props
+  const { partners, partnersLoading, onNavigate, onFetchNFTsFromRoute } = props
 
   const handleOnNavigate = useCallback(
     (vendor: Vendors) => {
@@ -32,18 +27,22 @@ const PartnersPage = (props: Props) => {
     [onNavigate]
   )
 
-  // TODO: Check if we can render this Component this just looping Partner
-
   // Kick things off
   useEffect(() => {
-    onFetchNFTsFromRoute({
-      view: View.PARTNERS_SUPER_RARE,
-      vendor: Vendors.SUPER_RARE,
-      sortBy: SortBy.RECENTLY_LISTED,
-      page: 1,
-      onlyOnSale: true
-    })
+    let view: Partner
+    for (view in partners) {
+      onFetchNFTsFromRoute({
+        view,
+        vendor: view,
+        sortBy: SortBy.RECENTLY_LISTED,
+        page: 1,
+        onlyOnSale: true
+      })
+    }
+    // eslint-disable-next-line
   }, [onFetchNFTsFromRoute])
+
+  const views = Object.keys(partners) as PartnerView[]
 
   return (
     <>
@@ -58,15 +57,18 @@ const PartnersPage = (props: Props) => {
             </Responsive>
           </Column>
           <Column align="right" grow={true}>
-            <Slideshow
-              title={t('partners_page.latest_from', {
-                vendor: t('vendors.super_rare')
-              })}
-              nfts={superRare}
-              isSubHeader={true}
-              isLoading={isSuperRareLoading}
-              onViewAll={() => handleOnNavigate(Vendors.SUPER_RARE)}
-            />
+            {views.map(view => (
+              <Slideshow
+                key={view}
+                title={t('partners_page.latest_from', {
+                  vendor: t(`vendors.${view}`)
+                })}
+                nfts={partners[view]}
+                isLoading={partners[view].length === 0 || partnersLoading[view]}
+                isSubHeader={true}
+                onViewAll={() => handleOnNavigate(view as Partner)}
+              />
+            ))}
           </Column>
         </Row>
       </Page>

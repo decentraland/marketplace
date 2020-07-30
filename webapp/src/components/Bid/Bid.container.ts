@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
-import { getArchivedBidIds } from '../../modules/ui/selectors'
+import { getArchivedBidIds } from '../../modules/ui/nft/bid/selectors'
 import { locations } from '../../modules/routing/locations'
 import {
   cancelBidRequest,

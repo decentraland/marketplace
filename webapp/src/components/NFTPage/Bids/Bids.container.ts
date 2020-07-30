@@ -1,6 +1,6 @@
 import { MapStateProps, MapDispatchProps, MapDispatch } from './Bids.types'
 import { RootState } from '../../../modules/reducer'
-import { getNFTBids } from '../../../modules/ui/selectors'
+import { getNFTBids } from '../../../modules/ui/nft/bid/selectors'
 import { fetchBidsByNFTRequest } from '../../../modules/bid/actions'
 import { connect } from 'react-redux'
 import Bids from './Bids'

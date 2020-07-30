@@ -1,31 +1,22 @@
 import { Dispatch } from 'redux'
-import { NFT } from '../../modules/nft/types'
 import { CallHistoryMethodAction } from 'connected-react-router'
+import {
+  getHomepage,
+  getHomepageLoading
+} from '../../modules/ui/nft/homepage/selectors'
 import {
   fetchNFTsFromRoute,
   FetchNFTsFromRouteAction
 } from '../../modules/routing/actions'
 
 export type Props = {
-  wearables: NFT[]
-  land: NFT[]
-  ens: NFT[]
-  isWearablesLoading: boolean
-  isENSLoading: boolean
-  isLandLoading: boolean
+  homepage: ReturnType<typeof getHomepage>
+  homepageLoading: ReturnType<typeof getHomepageLoading>
   onNavigate: (path: string) => void
   onFetchNFTsFromRoute: typeof fetchNFTsFromRoute
 }
 
-export type MapStateProps = Pick<
-  Props,
-  | 'wearables'
-  | 'land'
-  | 'ens'
-  | 'isWearablesLoading'
-  | 'isENSLoading'
-  | 'isLandLoading'
->
+export type MapStateProps = Pick<Props, 'homepage' | 'homepageLoading'>
 export type MapDispatchProps = Pick<
   Props,
   'onFetchNFTsFromRoute' | 'onNavigate'

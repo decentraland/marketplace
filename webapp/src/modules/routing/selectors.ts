@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { getSearch as getRouterSearch } from 'connected-react-router'
-import { getView } from '../ui/selectors'
+import { getView } from '../ui/nft/browse/selectors'
 import { View } from '../ui/types'
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
 import { ContractName, Vendors } from '../vendor/types'

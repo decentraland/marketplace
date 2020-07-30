@@ -37,7 +37,7 @@ const Actions = (props: Props) => {
               {t('nft_page.cancel_sale')}
             </Button>
           </>
-        ) : (
+        ) : !isOwner ? (
           <>
             <Button
               as={Link}
@@ -52,6 +52,10 @@ const Actions = (props: Props) => {
               </Button>
             ) : null}
           </>
+        ) : (
+          <Button onClick={() => setShowLeavingSiteModal(true)} primary>
+            {t('nft_page.see_listing')}
+          </Button>
         )
       ) : isOwner && canSell ? (
         <Button as={Link} to={locations.sell(contractAddress, tokenId)} primary>

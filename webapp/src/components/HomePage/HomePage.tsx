@@ -3,9 +3,10 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Page, Hero, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
-import { View } from '../../modules/ui/types'
 import { Vendors } from '../../modules/vendor/types'
 import { SortBy } from '../../modules/routing/types'
+import { View } from '../../modules/ui/types'
+import { HomepageView } from '../../modules/ui/nft/homepage/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -14,64 +15,42 @@ import { Props } from './HomePage.types'
 import './HomePage.css'
 
 const HomePage = (props: Props) => {
-  const {
-    wearables,
-    ens,
-    land,
-    isWearablesLoading,
-    isENSLoading,
-    isLandLoading,
-    onNavigate,
-    onFetchNFTsFromRoute
-  } = props
+  const { homepage, homepageLoading, onNavigate, onFetchNFTsFromRoute } = props
+
+  const sections = {
+    [View.HOME_WEARABLES]: Section.WEARABLES,
+    [View.HOME_LAND]: Section.LAND,
+    [View.HOME_ENS]: Section.ENS
+  }
 
   const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
     onNavigate
   ])
 
-  const handleViewWearables = useCallback(
-    () => onNavigate(locations.browse({ section: Section.WEARABLES })),
-    [onNavigate]
-  )
-
-  const handleViewLand = useCallback(
-    () => onNavigate(locations.browse({ section: Section.LAND })),
-    [onNavigate]
-  )
-
-  const handleViewEns = useCallback(
-    () => onNavigate(locations.browse({ section: Section.ENS })),
+  const handleViewAll = useCallback(
+    (section: Section) => onNavigate(locations.browse({ section })),
     [onNavigate]
   )
 
   const vendor = Vendors.DECENTRALAND
 
   useEffect(() => {
-    onFetchNFTsFromRoute({
-      vendor,
-      section: Section.WEARABLES,
-      view: View.HOME_WEARABLES,
-      sortBy: SortBy.RECENTLY_LISTED,
-      page: 1,
-      onlyOnSale: true
-    })
-    onFetchNFTsFromRoute({
-      vendor,
-      section: Section.LAND,
-      view: View.HOME_LAND,
-      sortBy: SortBy.RECENTLY_LISTED,
-      page: 1,
-      onlyOnSale: true
-    })
-    onFetchNFTsFromRoute({
-      vendor,
-      section: Section.ENS,
-      view: View.HOME_ENS,
-      sortBy: SortBy.RECENTLY_LISTED,
-      page: 1,
-      onlyOnSale: true
-    })
-  }, [vendor, onFetchNFTsFromRoute])
+    let view: HomepageView
+    for (view in homepage) {
+      const section = sections[view]
+      onFetchNFTsFromRoute({
+        vendor,
+        section,
+        view,
+        sortBy: SortBy.RECENTLY_LISTED,
+        page: 1,
+        onlyOnSale: true
+      })
+    }
+    // eslint-disable-next-line
+  }, [onFetchNFTsFromRoute])
+
+  const views = Object.keys(homepage) as HomepageView[]
 
   return (
     <>
@@ -89,24 +68,15 @@ const HomePage = (props: Props) => {
         </Hero.Actions>
       </Hero>
       <Page className="HomePage">
-        <Slideshow
-          title={t('home_page.wearables')}
-          nfts={wearables}
-          isLoading={isWearablesLoading}
-          onViewAll={handleViewWearables}
-        />
-        <Slideshow
-          title={t('home_page.land')}
-          nfts={land}
-          isLoading={isENSLoading}
-          onViewAll={handleViewLand}
-        />
-        <Slideshow
-          title={t('home_page.ens')}
-          nfts={ens}
-          isLoading={isLandLoading}
-          onViewAll={handleViewEns}
-        />
+        {views.map(view => (
+          <Slideshow
+            key={view}
+            title={t(`home_page.${view}`)}
+            nfts={homepage[view]}
+            isLoading={homepageLoading[view]}
+            onViewAll={() => handleViewAll(sections[view])}
+          />
+        ))}
       </Page>
       <Footer />
     </>
