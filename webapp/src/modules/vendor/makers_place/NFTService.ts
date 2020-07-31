@@ -14,7 +14,7 @@ import { NFTService as NFTServiceInterface } from '../services'
 import { getOriginURL } from '../utils'
 import { Vendors } from '../types'
 import { NFTCategory } from './nft/types'
-import { MakersPlaceAsset, FetchSuccessResponse } from './types'
+import { MakersPlaceAsset } from './types'
 import { makersPlaceAPI } from './api'
 
 export class NFTService implements NFTServiceInterface {
@@ -29,11 +29,11 @@ export class NFTService implements NFTServiceInterface {
   }
 
   async fetch(params: NFTsFetchParams) {
-    const [response, total, oneEthInMANA] = await Promise.all([
+    const [response, oneEthInMANA] = await Promise.all([
       makersPlaceAPI.fetch(params),
-      this.count(params),
       this.getOneEthInMANA()
     ])
+    const total = response.total_items
 
     const remoteNFTs = response.items
 
@@ -76,7 +76,7 @@ export class NFTService implements NFTServiceInterface {
       skip: 0
     }
     const response = await makersPlaceAPI.fetch(params)
-    return this.getTotal(response)
+    return response.total_items
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
@@ -184,10 +184,6 @@ export class NFTService implements NFTServiceInterface {
     // For some reason, the API *sometimes* returns null on token_ids
     // We need to either skip or just throw when we found these
     return asset.token_id !== null
-  }
-
-  private getTotal(response: FetchSuccessResponse): number {
-    return response.total_pages * response.page_size
   }
 
   private isOnSale(asset: MakersPlaceAsset): boolean {

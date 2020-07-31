@@ -20,7 +20,6 @@ const NFTBrowse = (props: Props) => {
     view,
     isMap,
     address,
-    // isLoading,
     onSetView,
     onFetchNFTsFromRoute
   } = props
@@ -31,14 +30,12 @@ const NFTBrowse = (props: Props) => {
   useEffect(() => {
     onSetView(view)
 
-    // if (!isLoading) {
     onFetchNFTsFromRoute({
       vendor,
       view,
       address,
       onlyOnSale
     })
-    // }
     // eslint-disable-next-line
   }, [vendor, onFetchNFTsFromRoute])
 

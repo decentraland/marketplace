@@ -50,6 +50,7 @@ export type FetchSuccessResponse = {
   page_num: number
   page_size: number
   total_pages: number
+  total_items: number
   status: 'success'
 }
 export type FetchFailureResponse = {

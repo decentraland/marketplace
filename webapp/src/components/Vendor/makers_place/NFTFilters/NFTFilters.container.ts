@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../../../modules/reducer'
-import { getAssetsCount } from '../../../../modules/ui/selectors'
+import { getAssetsCount } from '../../../../modules/ui/nft/browse/selectors'
 import {
   getSection,
   getSortBy,

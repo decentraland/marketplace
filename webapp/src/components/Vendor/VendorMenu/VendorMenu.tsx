@@ -33,6 +33,7 @@ const VendorMenu = (props: Props) => {
   }, [currentVendor, vendor])
 
   // TODO: Move this to redux and the UI reducer. We should also split it into multiple reducers
+  // TODO: Add catch
   useMemo(async () => {
     if (isCurrentVendor) {
       setCurrentCount(count)

@@ -25,8 +25,8 @@
   "vendors": {
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
-    "known_origin": "KnownOrigin",
-    "makers_place": "MakersPlace"
+    "makers_place": "MakersPlace",
+    "known_origin": "KnownOrigin"
   },
   "navigation": {
     "decentraland": "Decentraland",
@@ -80,9 +80,9 @@
     "subtitle": "Welcome to the virtual world’s one-stop-shop for the very best digital assets.",
     "get_started": "Start Browsing",
     "learn_more": "Learn More",
-    "wearables": "Wearables",
-    "land": "Parcels and Estates",
-    "ens": "Names"
+    "home_wearables": "Wearables",
+    "home_land": "Parcels and Estates",
+    "home_ens": "Names"
   },
   "partners_page": {
     "partners": "Partners",
@@ -121,6 +121,7 @@
     "cancel_sale": "Remove listing",
     "buy": "Buy",
     "sell": "Sell",
+    "see_listing": "See listing",
     "bid": "Bid",
     "update": "Update price",
     "transfer": "Transfer",
@@ -128,7 +129,7 @@
     "road": "Road",
     "district": "District",
     "leaving_decentraland": "Leaving Decentraland",
-    "leaving_decentraland_description": "You can't publish {vendor} assets to the Decentraland Marketplace yet. Do you want to proceed to {vendor_link} to publish it there?",
+    "leaving_decentraland_description": "You can't publish or update {vendor} assets to the Decentraland Marketplace yet. Do you want to proceed to {vendor_link} to publish it there?",
     "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace"
   },
   "proximity": {
