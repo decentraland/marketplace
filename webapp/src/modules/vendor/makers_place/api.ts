@@ -37,7 +37,7 @@ class MakersPlaceAPI extends BaseAPI {
       q: params.search,
       sort: this.getSort(params)
     }
-    return this.request('get', '/assets', requestParams)
+    return this.request('get', '/assets/', requestParams)
   }
 
   async fetchOne(
@@ -48,7 +48,7 @@ class MakersPlaceAPI extends BaseAPI {
       token_id: Number(tokenId),
       contract_address: contractAddress
     }
-    return this.request('get', '/asset', requestParams)
+    return this.request('get', '/asset/', requestParams)
   }
 
   async request<T extends Response>(
