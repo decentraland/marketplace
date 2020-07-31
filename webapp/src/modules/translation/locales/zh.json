@@ -2,124 +2,154 @@
   "global": {
     "assets": "资产",
     "address": "地址",
-    "balance": "余额",
-    "load_more": "加载更多",
+    "balance": "结余",
+    "load_more": "装载更多",
     "not_found": "未找到",
-    "parcel": "包裹",
-    "parcel_with_coords": "包裹{x},{y}",
-    "estate": "地产",
-    "wearable": "可穿戴设备",
+    "parcel": "地块",
+    "parcel_with_coords": "地块 {x},{y}",
+    "estate": "产业",
+    "wearable": "可穿戴",
     "ens": "名称",
+    "art":"艺术",
     "cancel": "取消",
     "proceed": "继续",
     "nft": "NFT",
-    "loading": "加载",
+    "loading": "载入中",
     "settings": "设定",
     "accept": "接受",
     "update": "更新",
-    "search": "搜索",
+    "search": "搜寻",
     "apply": "应用",
-    "jump_in": "进入"
+    "jump_in": "跳转"
+  },
+  "vendors": {
+    "decentraland": "Decentraland",
+    "super_rare": "SuperRare",
+    "makers_place": "MakersPlace",
+    "known_origin": "KnownOrigin"
   },
   "navigation": {
-    "browse": "浏览",
+    "decentraland": "Decentraland",
+    "partners": "伙伴",
     "my_assets": "我的资产",
     "my_bids": "我的出价",
     "activity": "活动"
   },
-  "home_page": {
-    "title": "Decentraland 市场",
-    "subtitle": "欢迎来到虚拟世界的一站式商店，以获取最棒的数字资产。",
-    "get_started": "开始浏览",
-    "learn_more": "了解更多",
-    "view_all": "查看全部",
-    "wearables": "可穿戴设备",
-    "land": "包裹和地产",
-    "ens": "名称"
+  "menu": {
+    "all": "所有资产",
+    "land": "土地",
+    "parcels": "地块",
+    "estates": "产业",
+    "wearables": "可穿戴",
+    "wearables_head": "头部",
+    "wearables_eyebrows": "眉毛",
+    "wearables_eyes": "眼睛",
+    "wearables_facial_hair": "胡子",
+    "wearables_hair": "头发",
+    "wearables_mouth": "嘴巴",
+    "wearables_upper_body": "上半身",
+    "wearables_lower_body": "下半身",
+    "wearables_feet": "腿部",
+    "wearables_accesories": "饰品",
+    "wearables_earring": "耳环",
+    "wearables_eyewear": "眼镜",
+    "wearables_hat": "帽子",
+    "wearables_helmet": "头盔",
+    "wearables_mask": "面具",
+    "wearables_tiara": "头饰",
+    "wearables_top_head": "头顶",
+    "ens": "名称",
+    "decentraland": "Decentraland",
+    "super_rare": "SuperRare",
+    "known_origin": "KnownOrigin",
+    "makers_place": "MakersPlace"
   },
-  "categories_menu": {
-    "categories": "类别",
-    "menu_item": {
-      "all": "全部资产",
-      "land": "土地",
-      "parcels": "包裹",
-      "estates": "地产",
-      "wearables": "可穿戴设备",
-      "wearables_head": "头部",
-      "wearables_eyebrows": "眉毛",
-      "wearables_eyes": "眼睛",
-      "wearables_facial_hair": "胡子",
-      "wearables_hair": "头发",
-      "wearables_mouth": "嘴巴",
-      "wearables_upper_body": "上半身",
-      "wearables_lower_body": "下半身",
-      "wearables_feet": "腿部",
-      "wearables_accesories": "配件",
-      "wearables_earring": "耳环",
-      "wearables_eyewear": "眼镜",
-      "wearables_hat": "帽子",
-      "wearables_helmet": "头盔",
-      "wearables_mask": "面具",
-      "wearables_tiara": "头饰",
-      "wearables_top_head": "头顶",
-      "ens": "名称"
-    }
+  "vendor_menu":{
+    "no_assets": "无资产",
+    "assets_count": "{count} {count, plural, one {asset} other {assets}}",
+    "more_than_assets_count": "+{count} assets"
   },
   "filters": {
     "name": "名称",
     "newest": "最新",
     "recently_listed": "最新上市",
-    "cheapest": "最便宜"
+    "cheapest": "最低价"
   },
-  "nft_list_page": {
+  "home_page": {
+    "title": "Decentraland Marketplace",
+    "subtitle": "欢迎来到虚拟世界的一站式商店，获取最好的数字资产。",
+    "get_started": "开始浏览",
+    "learn_more": "学习更多",
+    "home_wearables": "可穿戴",
+    "home_land": "地块和产业",
+    "home_ens": "名称"
+  },
+  "partners_page": {
+    "partners": "伙伴",
+    "latest_from": "来自{vendor}的最新消息"
+  },
+  "partner_sidebar": {
+    "assets": "{count} {count, plural, one {asset} other {assets}}"
+  },
+  "nft_list": {
+    "empty": "无结果"
+  },
+  "nft_filters": {
     "on_sale": "特价中",
-    "empty": "找不到任何资产",
-    "filter": "过滤",
-    "order_by": "订户",
-    "results": "{count}个结果",
-    "more_than_results": "+{count}个结果",
-    "search": "按文字过滤",
-    "multiple_filters": "{count}个过滤器",
-    "rarity": "稀有性",
+    "filter": "筛选",
+    "order_by": "排序",
+    "results": "{count} {count, plural, one {result} other {results}}",
+    "more_than_results": "+{count} results",
+    "search": "搜寻 {suffix}...",
+    "rarity": "稀有度",
     "gender": "性别",
-    "collection": "采集",
-    "all_collections": "所有收藏"
+    "collection": "珍藏",
+    "all_collections": "所有珍藏"
   },
   "nft_card": {
-    "expires_at": "{date} 到期"
+    "expires_at": "{date}到期"
   },
-  "bid": {
-    "from": "投标人",
-    "price": "价格",
-    "time_left": "剩下的时间",
-    "not_enough_mana": "投标人没有足够的MANA来支付此投标",
-    "invalid_fingerprint_on_bid_received": "此资产自进行出价以来已被修改，因此不再有效",
-    "invalid_seller": "您不再拥有此资产",
-    "not_enough_mana_on_bid_placed": "您没有足够的MANA来支付此出价",
-    "invalid_fingerprint_on_bid_placed": "此资产自进行出价以来已被修改，除非您对其进行更新，否则它将不再有效"
+  "nft_sidebar": {
+    "categories": "类别",
+    "back": "返回"
   },
-  "detail": {
+  "nft_page": {
     "description": "描述",
-    "highlights": "亮点",
-    "owner": "所有者",
+    "owner": "持有者",
     "price": "价格",
-    "expires": "失效",
-    "cancel_sale": "删除清单",
+    "expires": "到期时间",
+    "cancel_sale": "删除列表",
     "buy": "购买",
     "sell": "出售",
+    "see_listing": "查看清单",
     "bid": "出价",
     "update": "更新价格",
     "transfer": "转让",
-    "adjacent": "相邻",
-    "distance": "{distance} {distance, plural, one {parcel} other {parcels}} 距离",
     "plaza": "广场",
-    "road": "路",
-    "district": "区"
+    "road": "道路",
+    "district": "区域",
+    "leaving_decentraland": "离开Decentraland",
+    "leaving_decentraland_description": "您还无法将{vendor}资产发布或更新到Decentraland市场。您是否要继续{vendor_link}在此处发布？",
+    "leaving_decentraland_disclaimer": "您的NFT仍将列在Decentraland市场中"
+  },
+  "proximity": {
+    "adjacent": "相邻",
+    "distance": "{distance} {distance, plural, one {parcel} other {parcels}} 距离"
+  },
+  "bid": {
+    "from": "从",
+    "price": "价格",
+    "time_left": "剩下时间",
+    "not_enough_mana_on_bid_received": "投标人没有足够的MANA来支付此投标",
+    "invalid_fingerprint_on_bid_received": "此资产自此出价以来已被修改，因此不再有效",
+    "invalid_seller": "您不再拥有此资产",
+    "not_enough_mana_on_bid_placed": "您没有足够的MANA来支付此出价",
+    "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改，除非您对其进行更新，否则它将不再有效"
   },
   "transaction_history": {
     "title": "交易记录",
     "from": "从",
-    "to": "到",
+    "to": "至",
     "when": "时间",
     "price": "价格"
   },
@@ -134,8 +164,8 @@
       "mythic": "神话",
       "legendary": "传奇",
       "epic": "史诗",
-      "rare": "罕见",
-      "uncommon": "稀有",
+      "rare": "稀有",
+      "uncommon": "罕见",
       "common": "常见"
     },
     "rarity_tooltip": {
@@ -167,45 +197,50 @@
     }
   },
   "sell_page": {
-    "title": "待售清单",
-    "update_title": "更新您的清单",
-    "subtitle": "设置价格和有效日期 {name}.",
-    "update_subtitle": "设置新的价格和有效日期 {name}.",
+    "title": "待售列表",
+    "update_title": "更新您的列表",
+    "subtitle": "为{name}设置价格和到期日期。",
+    "update_subtitle": "为{name}设置一个新的价格和有效期。",
     "price": "价格",
-    "expiration_date": "失效日期",
-    "invalid_date": "这个日期已经过去了",
-    "submit": "待售清单",
-    "update_submit": "更新资料",
+    "expiration_date": "截止日期",
+    "invalid_date": "这个日期已过期",
+    "submit": "待售列表",
+    "update_submit": "更新",
+    "invalid": "无效",
     "confirm": {
       "title": "请确认",
-      "line_one": "您将以 {amount} 出售 {name} 。",
+      "line_one": "您将要列出{amount}待售的{name}。",
       "line_two": "请重新输入价格以确认："
     }
   },
   "buy_page": {
-    "title": "购买 {category}",
-    "subtitle": "您将以 {amount} 购买 {name} 。",
-    "not_for_sale": "{name} 不出售.",
+    "title": "购买{category}",
+    "subtitle": "您将以{amount}的价格购买{name}。",
+    "not_for_sale": "{name}为非卖品",
+    "price_too_high": "鉴于当前的汇率，购买此{category}将花费您超过其正常价格{percentageIncrease}％的费用。",
+    "please_wait": "请等待，直到价格再次正常化",
+    "actual_price": "鉴于当前汇率，您的最终价格约为{computedPrice}，因此上述价格是一个近似值",
     "buy": "购买",
+    "proceed_anyways": "仍然继续",
     "no_fingerprint": "无法加载指纹。",
-    "is_owner": "您是 {name} 的所有者",
-    "not_enough_mana": "您没有足够的MANA来购买 {name}."
+    "is_owner": "您是{name}的所有者。",
+    "not_enough_mana": "您没有足够的MANA来购买{name}。"
   },
   "bid_page": {
     "title": "出价",
-    "subtitle": "为您对 {name} 的出价设置价格和有效期。",
+    "subtitle": "为您在{name}上的出价设置价格和有效期。",
     "price": "价格",
-    "expiration_date": "失效日期",
-    "invalid_date": "这个日期已经过去了",
-    "not_enougn_mana": "您没有足够的MANA ",
+    "expiration_date": "截止日期",
+    "invalid_date": "这个日期已过期",
+    "not_enougn_mana": "您没有足够的MANA",
     "submit": "出价"
   },
   "my_bids_page": {
-    "bids_received": "已收到出价",
+    "bids_received": "收到的出价",
     "bids_placed": "出价",
     "bids_archived": "出价已存档",
-    "show_archived": "显示已存档 ({amount})",
-    "show_received": "显示已收到 ({amount})",
+    "show_archived": "显示已存档({amount})",
+    "show_received": "显示已收到({amount})",
     "empty_received": "您尚未收到任何出价...",
     "empty_archived": "您没有任何存档的出价...",
     "empty_placed": "您尚未设置任何出价...",
@@ -213,19 +248,19 @@
     "unarchive": "取消存档"
   },
   "cancel_sale_page": {
-    "title": "删除清单",
-    "subtitle": "您将要刪除 {amount} 的 {name} 的清单。",
-    "not_for_sale": " {name} 无活动列表。",
-    "invalid_owner": "您不是 {name} 的所有者。",
+    "title": "删除列表",
+    "subtitle": "您即将删除{amount}的{name}列表。",
+    "not_for_sale": "{name}无有效列表。",
+    "invalid_owner": "您不是{name}的持有者。",
     "submit": "确认"
   },
   "settings_page": {
     "authorizations": "授权",
     "buy_more_mana": "购买更多",
     "copy_address": "复制地址",
-    "copied": "已复制 ✔",
+    "copied": "已复制 :heavy_check_mark:",
     "authorization_error": "我们无法加载您的授权，请重试",
-    "authorization_error_contact": "如果错误仍然存在，请随时与我们联系",
+    "authorization_error_contact": "如果错误仍然存​​在，请随时与我们联系",
     "for_buying": "购买",
     "for_bidding": "出价",
     "authorization_Marketplace_MANAToken": "MANA",
@@ -233,21 +268,21 @@
     "pending_tx": "待处理的交易，请单击微调器以转到活动详细状态"
   },
   "authorization": {
-    "authorize": "授权 {contract_link} 合约代表您操作 {symbol} ",
-    "allowed": "您已授权 {contract_link} 合约代表您操作 {symbol} ",
-    "approved": "您已授权 {contract_link} 合约代表您操作 {symbol} ",
-    "disallowed": "您未授权 {contract_link} 合约代表您操作 {symbol} ",
-    "disapproved": "您未授权 {contract_link} 合约代表您操作 {symbol} "
+    "authorize": "授权{contract_link}合约代表您操作{symbol}",
+    "allowed": "您已授权{contract_link}合同代表您操作{symbol}",
+    "approved": "您已授权{contract_link}合同代表您操作{symbol}",
+    "disallowed": "您未授权{contract_link}合同代表您操作{symbol}",
+    "disapproved": "您未授权{contract_link}合同代表您操作{symbol}"
   },
   "authorization_modal": {
-    "title": "授权 {token}",
-    "description": "为了继续进行，您将需要授权 {contract} 合约代表您操作 {token} 代币。{br}这仅需要执行一次，并且您随时可从 {settings_link} 页上管理您的授权。"
+    "title": "授权{token}",
+    "description": "欲继续操作，您需要授权{contract}合同代表您操作{token}令牌。{br}只需执行一次，并且您随时可以在{settings_link}页上管理您的授权。"
   },
   "transfer_page": {
-    "title": "转让 {category}",
-    "subtitle": "您即将转让 {name}.",
-    "for_sale": "{name} 出售中，无法转让",
-    "invalid_owner": "您不是 {name} 的所有者。",
+    "title": "转让{category}",
+    "subtitle": "您即将转移{name}。",
+    "for_sale": "{name}正在销售中，因此无法转让。",
+    "invalid_owner": "您不是{name}的持有者。",
     "invalid_address": "这不是有效地址",
     "recipient": "收件人地址",
     "warning": "请记住，转让是不可逆的操作。{br}请仔细检查地址。",
@@ -268,22 +303,27 @@
       "not_approved": "未批准"
     },
     "detail": {
-      "approve_token": "您 {action} {contract} 合约代表您操作 {token} 。",
-      "create_order": "您以 {price} 的价格出售 {name} 。",
-      "cancel_order": "您删除了{price} 的 {name} 列表。",
-      "execute_order": "您以 {price} 购买了 {name} 。",
-      "transfer": "您已将 {name} 转移到 {address}.",
-      "place_bid": " 您对{name} 出价了 {price} 。",
-      "accept_bid": "您接受了 {name} 的 {price} 出价。",
-      "cancel_bid": "您接取消了 {name} 的 {price} 出价。"
+      "approve_token": "您{action} {contract}合同代表您操作{token}。",
+      "create_order": "您列出了以{price}出售的{name}。",
+      "cancel_order": "您删除了{价格}的{名称}列表。",
+      "execute_order": "您以{price}购买了{name}。",
+      "transfer": "您已将{name}转移到{address}。",
+      "place_bid": "您对{name}出价了{price}。",
+      "accept_bid": "您接受了{name}的{price}出价。",
+      "cancel_bid": "您取消了对{name}的{price}出价。"
     }
   },
   "wallet": {
-    "sign_in_required": "您需要 {sign_in} 才能访问此页面。",
+    "sign_in_required": "您需要{sign_in}才能访问此页面。",
     "sign_in": "登入"
   },
-  "banner": {
-    "text": "Decentraland的市场焕然一新！我们希望你喜欢它。您仍然可以在{link}访问旧界面。",
-    "link": "此处"
+  "slideshow": {
+    "view_all": "查看全部"
+  },
+  "highlights": {
+    "title": "亮点"
+  },
+  "price_change_notice": {
+    "message": "价格或因市场变化而波动"
   }
 }
