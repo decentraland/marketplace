@@ -92,7 +92,7 @@ export class OrderService implements OrderServiceInterface {
           { type: 'address', name: 'ADDRESS_CONTRACT' }
         ]
       },
-      [nft.contractAddress, nft.tokenId]
+      [nft.tokenId, nft.contractAddress]
     )
   }
 }
