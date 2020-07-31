@@ -160,7 +160,7 @@ export class NFTService implements NFTServiceInterface {
       owner: asset.owner,
       buyer: null,
       price: price.toString(10),
-      ethPrice: totalWei.toString(),
+      ethPrice: asset.price_in_wei!.toString(),
       status: OrderStatus.OPEN,
       createdAt: asset.sale_created_at!,
       updatedAt: asset.sale_created_at!
