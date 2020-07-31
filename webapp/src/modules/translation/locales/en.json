@@ -317,10 +317,6 @@
     "sign_in_required": "You need to {sign_in} to access this page.",
     "sign_in": "Sign In"
   },
-  "banner": {
-    "text": "Decentraland's marketplace has a new look!{br} We hope you enjoy it. You can still access the old interface {link}.",
-    "link": "here"
-  },
   "slideshow": {
     "view_all": "View All"
   },

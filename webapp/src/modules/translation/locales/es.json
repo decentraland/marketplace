@@ -7,9 +7,10 @@
     "not_found": "No se ha encontrado",
     "parcel": "Parcela",
     "parcel_with_coords": "Parcela {x},{y}",
-    "estate": "Propiedad",
+    "estate": "Estate",
     "wearable": "Vestimenta",
     "ens": "Nombre",
+    "art":"Arte",
     "cancel": "Cancelar",
     "proceed": "Aceptar",
     "nft": "NFT",
@@ -21,49 +22,52 @@
     "apply": "Aplicar",
     "jump_in": "Ingresar"
   },
+  "vendors": {
+    "decentraland": "Decentraland",
+    "super_rare": "SuperRare",
+    "makers_place": "MakersPlace",
+    "known_origin": "KnownOrigin"
+  },
   "navigation": {
-    "browse": "Explorar",
+    "decentraland": "Decentraland",
+    "partners": "Socios",
     "my_assets": "Mi Inventario",
     "my_bids": "Mis Ofertas",
     "activity": "Actividad"
   },
-  "home_page": {
-    "title": "Mercado de Decentraland",
-    "subtitle": "Bienvenido al mercado virtual de Decentraland, donde encontrarás los mejores ítems virtuales.",
-    "get_started": "Comienza a navegar",
-    "learn_more": "Aprende Más",
-    "view_all": "Ver Todos",
+  "menu": {
+    "all": "Todos",
+    "land": "Tierra",
+    "parcels": "Parcelas",
+    "estates": "Estates",
     "wearables": "Vestimenta",
-    "land": "Tierras",
-    "ens": "Nombres"
+    "wearables_head": "Cabeza",
+    "wearables_eyebrows": "Cejas",
+    "wearables_eyes": "Ojos",
+    "wearables_facial_hair": "Barba",
+    "wearables_hair": "Cabello",
+    "wearables_mouth": "Boca",
+    "wearables_upper_body": "Torso",
+    "wearables_lower_body": "Piernas",
+    "wearables_feet": "Piez",
+    "wearables_accesories": "Accesorios",
+    "wearables_earring": "Aros",
+    "wearables_eyewear": "Gafas",
+    "wearables_hat": "Sombreros",
+    "wearables_helmet": "Cascos",
+    "wearables_mask": "Mascaras",
+    "wearables_tiara": "Tiara",
+    "wearables_top_head": "Tope de la cabeza",
+    "ens": "Nombres",
+    "decentraland": "Decentraland",
+    "super_rare": "SuperRare",
+    "known_origin": "KnownOrigin",
+    "makers_place": "MakersPlace"
   },
-  "categories_menu": {
-    "categories": "Categorias",
-    "menu_item": {
-      "all": "Todos",
-      "land": "Tierras",
-      "parcels": "Parcelas",
-      "estates": "Propiedades",
-      "wearables": "Vestimenta",
-      "wearables_head": "Cabeza",
-      "wearables_eyebrows": "Cejas",
-      "wearables_eyes": "Ojos",
-      "wearables_facial_hair": "Barba",
-      "wearables_hair": "Cabello",
-      "wearables_mouth": "Boca",
-      "wearables_upper_body": "Torso",
-      "wearables_lower_body": "Piernas",
-      "wearables_feet": "Piez",
-      "wearables_accesories": "Accesorios",
-      "wearables_earring": "Aros",
-      "wearables_eyewear": "Gafas",
-      "wearables_hat": "Sombreros",
-      "wearables_helmet": "Cascos",
-      "wearables_mask": "Mascaras",
-      "wearables_tiara": "Tiara",
-      "wearables_top_head": "Sobre Cabeza",
-      "ens": "Nombres"
-    }
+  "vendor_menu":{
+    "no_assets": "Sin assets",
+    "assets_count": "{count} {count, plural, one {asset} other {assets}}",
+    "more_than_assets_count": "+{count} assets"
   },
   "filters": {
     "name": "Nombre",
@@ -71,15 +75,32 @@
     "recently_listed": "Listados recientemente",
     "cheapest": "Más baratos"
   },
-  "nft_list_page": {
+  "home_page": {
+    "title": "Mercado de Decentraland",
+    "subtitle": "Bienvenido al mercado virtual de Decentraland, donde encontrarás los mejores ítems virtuales.",
+    "get_started": "Comienza a navegar",
+    "learn_more": "Aprende Más",
+    "home_wearables": "Vestimenta",
+    "home_land": "Land",
+    "home_ens": "Nombres"
+  },
+  "partners_page": {
+    "partners": "Socios",
+    "latest_from": "Último de {vendor}"
+  },
+  "partner_sidebar": {
+    "assets": "{count} {count, plural, one {asset} other {assets}}"
+  },
+  "nft_list": {
+    "empty": "Sin resultados"
+  },
+  "nft_filters": {
     "on_sale": "En venta",
-    "empty": "No se ha encontrado",
     "filter": "Filtrar",
     "order_by": "Ordenar por",
     "results": "{count} {count, plural, one {resultado} other {resultados}}",
     "more_than_results": "+{count} resultados",
     "search": "Buscar {category}...",
-    "multiple_filters": "{count} filtros",
     "rarity": "Rareza",
     "gender": "Género",
     "collection": "Colección",
@@ -87,6 +108,33 @@
   },
   "nft_card": {
     "expires_at": "Expira {date}"
+  },
+  "nft_sidebar": {
+    "categories": "Categorías",
+    "back": "Atrás"
+  },
+  "nft_page": {
+    "description": "Descripción",
+    "owner": "Dueño",
+    "price": "Precio",
+    "expires": "Expira en",
+    "cancel_sale": "Borrar publicación",
+    "buy": "Comprar",
+    "sell": "Vender",
+    "see_listing": "Ver publicación",
+    "bid": "Ofertar",
+    "update": "Actualizar precio",
+    "transfer": "Transferir",
+    "plaza": "Plaza",
+    "road": "Calle",
+    "district": "Distrito",
+    "leaving_decentraland": "Saliendo de Decentraland",
+    "leaving_decentraland_description": "Aún no se pueden publicar o actualizar {vendor} assets en el Marketplace de Decentraland. ¿Quiere proceder a {vendor_link} para publicarlo ahí?",
+    "leaving_decentraland_disclaimer": "Tus NFTs van a listarse en el Marketplace de Decentraland"
+  },
+  "proximity": {
+    "adjacent": "Adyacente",
+    "distance": "{distance} {distance, plural, one {parcela} other {parcelas}} de distancia"
   },
   "bid": {
     "from": "Ofertante",
@@ -97,24 +145,6 @@
     "invalid_seller": "Ya no eres el dueño de este artículo",
     "not_enough_mana_on_bid_placed": "No tienes suficiente MANA para pagar por esta oferta",
     "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices"
-  },
-  "detail": {
-    "description": "Descripción",
-    "highlights": "Destacado",
-    "owner": "Dueño",
-    "price": "Precio",
-    "expires": "Expira en",
-    "cancel_sale": "Cancelar venta",
-    "buy": "Comprar",
-    "sell": "Vender",
-    "bid": "Ofertar",
-    "update": "Cambiar precio",
-    "transfer": "Transferir",
-    "adjacent": "Adjacente",
-    "distance": "A {distance} {distance, plural, one {parcela} other {parcelas}} de distancia",
-    "plaza": "Plaza",
-    "road": "Calle",
-    "district": "Distrito"
   },
   "transaction_history": {
     "title": "Historial de Transacciones",
@@ -162,7 +192,7 @@
       "mask": "Mascara",
       "mouth": "Boca",
       "tiara": "Tiara",
-      "top_head": "Sobre Cabeza",
+      "top_head": "Cabeza",
       "upper_body": "Torso"
     }
   },
@@ -186,8 +216,12 @@
     "title": "Comprar {category}",
     "subtitle": "Estás por comprar {name} por {amount}.",
     "not_for_sale": "{name} no esta en venta.",
+    "price_too_high": "Dados los precios de cambio actuales, comprar {category} te costará un {percentageIncrease}% más de su precio normal",
+    "please_wait": "Por favor espere a que los precios se normalicen nuevamente",
+    "actual_price": "El precio arriba es una aproximación, tomando los precios de cambio actuales terminarás pagando al rededor de {computedPrice}",
     "buy": "Comprar",
-    "no_fingerprint": "No se pudo cargar el fingerprint.",
+    "proceed_anyways": "Proceder",
+    "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
     "not_enough_mana": "No tienes suficiente MANA para comprar {name}."
   },
@@ -221,11 +255,11 @@
   },
   "settings_page": {
     "authorizations": "Autorizaciones",
-    "buy_more_mana": "COMPRAR MAS",
+    "buy_more_mana": "COMPRAR MÁS",
     "copy_address": "COPIAR DIRECCIÓN",
     "copied": "COPIADO ✔",
-    "authorization_error": "No pudimos cargar tu autorizaciones, intenta de vuelta.",
-    "authorization_error_contact": "Si el error continue no dudes en contactarnos",
+    "authorization_error": "No pudimos cargar tu autorizaciones, intenta nuevamente.",
+    "authorization_error_contact": "Si el error continua no dudes en contactarnos",
     "for_buying": "Para comprar",
     "for_bidding": "Para ofertar",
     "authorization_Marketplace_MANAToken": "MANA",
@@ -258,14 +292,14 @@
     "clear_history": "Limpiar Historial",
     "empty": "No tienes actividad aún.",
     "clear_history_modal": {
-      "title": "Estás seguro?",
-      "text": "Estas por limpiar tu historial de actividad. Deseas proseguir?"
+      "title": "̉̉̉̉̉̉̉¿Estás seguro?",
+      "text": "Estas por limpiar tu historial de actividad. ¿Deseas proseguir?"
     }
   },
   "transaction": {
     "action": {
-      "approved": "Aprobaste",
-      "not_approved": "Desaprobaste"
+      "approved": "Aprobada",
+      "not_approved": "Desaprobada"
     },
     "detail": {
       "approve_token": "{action} al contrato de {contract} para que opere tokens de {token} por tí.",
@@ -282,8 +316,13 @@
     "sign_in_required": "Necesitas {sign_in} para acceder a esta página.",
     "sign_in": "iniciar sesión"
   },
-  "banner": {
-    "text": "¡El mercado de Decentraland tiene un nuevo look! Esperamos que te guste. Aún puedes acceder a la antigua interfaz {link}.",
-    "link": "aquí"
+  "slideshow": {
+    "view_all": "Ver Todo"
+  },
+  "highlights": {
+    "title": "Destacados"
+  },
+  "price_change_notice": {
+    "message": "El precio puede variar debido a cambios en el mercado"
   }
 }
