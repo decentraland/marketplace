@@ -85,11 +85,11 @@ export class OrderService implements OrderServiceInterface {
     const abiCoder = new ABICoder()
     return abiCoder.encodeFunctionCall(
       {
-        name: 'buy',
+        name: 'purchase',
         type: 'function',
         inputs: [
-          { type: 'address', name: 'ADDRESS_CONTRACT' },
-          { type: 'uint256', name: 'TOKEN_ID' }
+          { type: 'uint256', name: 'TOKEN_ID' },
+          { type: 'address', name: 'ADDRESS_CONTRACT' }
         ]
       },
       [nft.contractAddress, nft.tokenId]
