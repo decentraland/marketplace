@@ -145,7 +145,7 @@ export class NFTService implements NFTServiceInterface {
 
   toNFT(asset: SuperRareAsset): NFT {
     return {
-      id: getNFTId(asset.contractAddress, asset.id.toString())!,
+      id: getNFTId(asset.contractAddress, asset.id.toString()),
       tokenId: asset.id.toString(),
       contractAddress: asset.contractAddress,
       activeOrderId: '',

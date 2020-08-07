@@ -6,7 +6,6 @@ import { locations } from '../../routing/locations'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order } from '../../order/types'
 import { Account } from '../../account/types'
-import { getNFTId } from '../../nft/utils'
 import { isExpired } from '../../order/utils'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from '../nft/types'
@@ -91,7 +90,6 @@ export class NFTService implements NFTServiceInterface {
     const { activeOrder, ...rest } = nft
     return {
       ...rest,
-      id: getNFTId(nft.contractAddress, nft.tokenId)!,
       vendor: Vendors.DECENTRALAND,
       url: locations.nft(nft.contractAddress, nft.tokenId),
       activeOrderId: null
@@ -105,7 +103,7 @@ export class NFTService implements NFTServiceInterface {
       order = {
         ...nft.activeOrder,
         marketAddress: ContractService.contractAddresses.Marketplace,
-        nftId: getNFTId(nft.contractAddress, nft.tokenId)!
+        nftId: nft.id
       }
     }
 

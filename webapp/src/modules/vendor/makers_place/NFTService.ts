@@ -124,7 +124,7 @@ export class NFTService implements NFTServiceInterface {
     const tokenId = asset.token_id!.toString()
     const contractAddress = asset.token_contract_address.toLowerCase()
     return {
-      id: getNFTId(contractAddress, tokenId)!,
+      id: getNFTId(contractAddress, tokenId),
       tokenId,
       contractAddress,
       activeOrderId: '',

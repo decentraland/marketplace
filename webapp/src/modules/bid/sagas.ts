@@ -136,7 +136,7 @@ function* handleFetchBidsByNFTRequest(action: FetchBidsByNFTRequestAction) {
   try {
     const { bidService } = VendorFactory.build(nft.vendor)
 
-    const bids = yield call(() => bidService!.fetchByNFT(nft.id))
+    const bids = yield call(() => bidService!.fetchByNFT(nft))
 
     yield put(fetchBidsByNFTSuccess(nft, bids))
   } catch (error) {

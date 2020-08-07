@@ -32,7 +32,7 @@ class BidAPI {
     const { data } = await client.query<{ bids: BidFragment[] }>({
       query: BIDS_BY_NFT_QUERY,
       variables: {
-        nft: nftId,
+        nftId,
         status: status.toString(),
         expiresAt: Date.now().toString()
       }
@@ -61,8 +61,8 @@ const BIDS_BY_BIDDER_QUERY = gql`
 `
 
 const BIDS_BY_NFT_QUERY = gql`
-  query BidsByNFT($nft: String, $status: OrderStatus, $expiresAt: String) {
-    bids(where: { nft: $nft, status: $status, expiresAt_gt: $expiresAt }) {
+  query BidsByNFT($nftId: String, $status: OrderStatus, $expiresAt: String) {
+    bids(where: { nft: $nftId, status: $status, expiresAt_gt: $expiresAt }) {
       ...bidFragment
     }
   }

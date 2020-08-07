@@ -46,8 +46,8 @@ export class BidService implements BidServiceInterface {
     return bids
   }
 
-  async fetchByNFT(nftId: string, status: OrderStatus = OrderStatus.OPEN) {
-    const remoteBids = await bidAPI.fetchByNFT(nftId, status)
+  async fetchByNFT(nft: NFT, status: OrderStatus = OrderStatus.OPEN) {
+    const remoteBids = await bidAPI.fetchByNFT(nft.id, status)
 
     let bids: Bid[] = []
     for (const result of remoteBids) {
