@@ -78,22 +78,26 @@ const WearableDetail = (props: Props) => {
           left={
             <>
               <Header size="large">
-                <div className="text">{getNFTName(nft)}</div>
-                <Popup
-                  position="top center"
-                  content={t(`wearable.rarity_tooltip.${nft.wearable!.rarity}`)}
-                  trigger={
-                    <div
-                      className="rarity"
-                      style={{
-                        backgroundColor: RARITY_COLOR[nft.wearable!.rarity]
-                      }}
-                      onClick={handleRarityClick}
-                    >
-                      {t(`wearable.rarity.${nft.wearable!.rarity}`)}
-                    </div>
-                  }
-                />
+                <div className="text">
+                  {getNFTName(nft)}
+                  <Popup
+                    position="top center"
+                    content={t(
+                      `wearable.rarity_tooltip.${nft.wearable!.rarity}`
+                    )}
+                    trigger={
+                      <div
+                        className="rarity"
+                        style={{
+                          backgroundColor: RARITY_COLOR[nft.wearable!.rarity]
+                        }}
+                        onClick={handleRarityClick}
+                      >
+                        {t(`wearable.rarity.${nft.wearable!.rarity}`)}
+                      </div>
+                    }
+                  />
+                </div>
               </Header>
             </>
           }

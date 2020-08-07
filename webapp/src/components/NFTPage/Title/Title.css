@@ -3,21 +3,17 @@
 }
 
 .Title .left .ui.large.header {
-  display: flex;
-  align-items: center;
   margin-bottom: 0;
+  margin-right: 10px;
 }
 
 .Title .Column.left .ui.header > .text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 0px;
+  display: flex;
 }
 
 .Title .Badge {
   margin-left: 16px;
-  margin-top: 1px;
+  margin-top: 6px;
 }
 
 @media (max-width: 768px) {

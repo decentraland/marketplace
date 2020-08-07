@@ -10,6 +10,22 @@
   background-size: 30px 30px;
 }
 
+.WearableDetail .rarity {
+  font-size: 13px;
+  line-height: 18px;
+  border-radius: 5px;
+  padding: 7px 12px;
+  font-weight: 600;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  cursor: default;
+  margin-left: 16px;
+  margin-top: 6px;
+  cursor: pointer;
+}
+
 .WearableDetail .Highlight .body_shape {
   background-image: url(../../../images//wearables/BodyShapeIcon.svg);
 }
@@ -87,20 +103,4 @@
 .WearableDetail .Highlight .left > .Unisex {
   background-image: url(../../../images//wearables/UnisexIcon.svg);
   background-size: 24px 24px;
-}
-
-.WearableDetail .rarity {
-  font-size: 13px;
-  line-height: 18px;
-  border-radius: 5px;
-  padding: 7px 12px;
-  font-weight: 600;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  text-transform: uppercase;
-  cursor: default;
-  margin-left: 16px;
-  margin-top: 1px;
-  cursor: pointer;
 }

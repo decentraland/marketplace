@@ -2,14 +2,20 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFTCategory } from '../vendor/decentraland/nft/types'
 import { SortDirection, SortBy } from '../routing/types'
+import { contractCategories } from '../contract/utils'
 import { addressEquals } from '../wallet/utils'
 import { NFT, NFTSortBy } from './types'
 
-export function getNFTId(
-  contractAddress: string | null,
-  tokenId: string | null
-) {
-  return contractAddress && tokenId ? `${contractAddress}-${tokenId}` : null
+export function getNFTId(contractAddress: string, tokenId: string) {
+  const contractCategory = contractCategories[contractAddress]
+
+  if (!contractCategory) {
+    throw new Error(
+      `Could not find a valid category for contract ${contractAddress}`
+    )
+  }
+
+  return contractCategory + '-' + contractAddress + '-' + tokenId
 }
 
 export function getNFTName(nft: NFT) {
@@ -70,8 +76,12 @@ export function getNFT(
   tokenId: string | null,
   nfts: Record<string, NFT>
 ): NFT | null {
+  if (!contractAddress || !tokenId) {
+    return null
+  }
+
   const nftId = getNFTId(contractAddress, tokenId)
-  return nftId && nftId in nfts ? nfts[nftId] : null
+  return nftId in nfts ? nfts[nftId] : null
 }
 
 export function isOwnedBy(nft: NFT, wallet: Wallet | null) {

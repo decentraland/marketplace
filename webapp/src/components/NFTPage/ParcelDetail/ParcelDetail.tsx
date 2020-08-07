@@ -32,21 +32,23 @@ const ParcelDetail = (props: Props) => {
         <Title
           left={
             <Header size="large">
-              <div className="text">{getNFTName(nft)}</div>
-              <Badge color="#37333d">
-                <i className="pin" />
-                {x},{y}
-              </Badge>
-              <Badge color="#ff2d55" className="jump-in-badge">
-                <a
-                  href={buildExplorerUrl(x, y)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {t('global.jump_in')}&nbsp;
-                  <i className="jump-in-icon" />
-                </a>
-              </Badge>
+              <div className="text">
+                {getNFTName(nft)}
+                <Badge color="#37333d">
+                  <i className="pin" />
+                  {x},{y}
+                </Badge>
+                <Badge color="#ff2d55" className="jump-in-badge">
+                  <a
+                    href={buildExplorerUrl(x, y)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t('nft_page.jump')}&nbsp;{t('nft_page.in')}
+                    <i className="jump-in-icon" />
+                  </a>
+                </Badge>
+              </div>
             </Header>
           }
           right={<Owner nft={nft} />}
