@@ -6,7 +6,6 @@ import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
-import { getOriginURL } from '../../../modules/vendor/utils'
 import { Props } from './Actions.types'
 
 const Actions = (props: Props) => {
@@ -90,12 +89,8 @@ const Actions = (props: Props) => {
               values={{
                 vendor: t(`vendors.${vendor}`),
                 vendor_link: (
-                  <a
-                    href={getOriginURL(vendor)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {getOriginURL(vendor)}
+                  <a href={nft.url} target="_blank" rel="noopener noreferrer">
+                    {nft.url}
                   </a>
                 )
               }}
