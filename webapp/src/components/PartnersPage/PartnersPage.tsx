@@ -4,7 +4,6 @@ import { Page, Responsive } from 'decentraland-ui'
 
 import { locations } from '../../modules/routing/locations'
 import { SortBy } from '../../modules/routing/types'
-import { PartnerView } from '../../modules/ui/nft/partner/types'
 import { Vendors, Partner } from '../../modules/vendor/types'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Row } from '../Layout/Row'
@@ -29,8 +28,8 @@ const PartnersPage = (props: Props) => {
 
   // Kick things off
   useEffect(() => {
-    let view: Partner
-    for (view in partners) {
+    for (const partner in partners) {
+      const view = partner as Partner
       onFetchNFTsFromRoute({
         view,
         vendor: view,
@@ -42,7 +41,7 @@ const PartnersPage = (props: Props) => {
     // eslint-disable-next-line
   }, [onFetchNFTsFromRoute])
 
-  const views = Object.keys(partners) as PartnerView[]
+  const views = Object.keys(partners) as Partner[]
 
   return (
     <>

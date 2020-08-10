@@ -4,12 +4,12 @@ import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NFTState } from '../../../nft/reducer'
 import { FETCH_NFTS_REQUEST } from '../../../nft/actions'
 import { NFT } from '../../../nft/types'
+import { Partner } from '../../../vendor/types'
 import {
   getData as getNFTData,
   getLoading as getNFTLoading
 } from '../../../nft/selectors'
 import { RootState } from '../../../reducer'
-import { PartnerView } from './types'
 import { PartnerUIState } from './reducer'
 
 export const getState = (state: RootState) => state.ui.nft.partner
@@ -18,33 +18,33 @@ export const getPartners = createSelector<
   RootState,
   PartnerUIState,
   NFTState['data'],
-  Record<PartnerView, NFT[]>
->(getState, getNFTData, (partner, nftsById) => {
+  Record<Partner, NFT[]>
+>(getState, getNFTData, (partnerState, nftsById) => {
+  const partners = Object.values(Partner) as Partner[]
   const result: Record<string, NFT[]> = {}
 
-  let view: PartnerView
-  for (view in partner) {
-    result[view] = partner[view].map(id => nftsById[id])
+  for (const partner of partners) {
+    result[partner] = partnerState[partner].map(id => nftsById[id])
   }
 
-  return result as Record<PartnerView, NFT[]>
+  return result as Record<Partner, NFT[]>
 })
 
 export const getPartnersLoading = createSelector<
   RootState,
-  PartnerUIState,
   LoadingState,
-  Record<PartnerView, boolean>
->(getState, getNFTLoading, (partner, nftLoading) => {
+  Record<Partner, boolean>
+>(getNFTLoading, nftLoading => {
+  const partners = Object.values(Partner) as Partner[]
   const result: Record<string, boolean> = {}
 
-  for (const view in partner) {
-    result[view] = nftLoading.some(
+  for (const partner of partners) {
+    result[partner] = nftLoading.some(
       action =>
         action.type === FETCH_NFTS_REQUEST &&
-        action.payload.options.view === view
+        action.payload.options.view === partner
     )
   }
 
-  return result as Record<PartnerView, boolean>
+  return result as Record<Partner, boolean>
 })
