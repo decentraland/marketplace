@@ -7,7 +7,7 @@ import { BrowseUIState } from './reducer'
 
 export const getState = (state: RootState) => state.ui.nft.browse
 export const getView = (state: RootState) => getState(state).view
-export const getAssetsCount = (state: RootState) => getState(state).assetCount
+export const getCount = (state: RootState) => getState(state).count
 
 export const getNFTs = createSelector<
   RootState,
@@ -15,5 +15,5 @@ export const getNFTs = createSelector<
   NFTState['data'],
   NFT[]
 >(getState, getNFTData, (browse, nftsById) =>
-  browse.nftIds.map(id => nftsById[id])
+  browse.ids.map(id => nftsById[id])
 )

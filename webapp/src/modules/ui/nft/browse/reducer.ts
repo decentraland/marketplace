@@ -10,15 +10,15 @@ import { View } from '../../types'
 
 export type BrowseUIState = {
   view?: View
-  nftIds: string[]
+  ids: string[]
   lastTimestamp: number
-  assetCount?: number
+  count?: number
 }
 
 const INITIAL_STATE: BrowseUIState = {
   view: undefined,
-  nftIds: [],
-  assetCount: undefined,
+  ids: [],
+  count: undefined,
   lastTimestamp: 0
 }
 
@@ -43,15 +43,15 @@ export function browseReducer(
       const { view } = action.payload.searchOptions
       return {
         ...state,
-        nftIds: view ? [] : [...state.nftIds]
+        ids: view ? [] : [...state.ids]
       }
     }
     case FETCH_NFTS_REQUEST: {
       const { view } = action.payload.options
       return {
         ...state,
-        nftIds: view === View.LOAD_MORE ? [...state.nftIds] : [],
-        assetCount: undefined
+        ids: view === View.LOAD_MORE ? [...state.ids] : [],
+        count: undefined
       }
     }
     case FETCH_NFTS_SUCCESS: {
@@ -65,16 +65,16 @@ export function browseReducer(
           return {
             ...state,
             view,
-            nftIds: action.payload.nfts.map(nft => nft.id),
-            assetCount: action.payload.count,
+            ids: action.payload.nfts.map(nft => nft.id),
+            count: action.payload.count,
             timestamp: action.payload.timestamp
           }
         }
         case View.LOAD_MORE: {
           return {
             ...state,
-            nfts: [...state.nftIds, ...action.payload.nfts.map(nft => nft.id)],
-            assetCount: action.payload.count,
+            ids: [...state.ids, ...action.payload.nfts.map(nft => nft.id)],
+            count: action.payload.count,
             timestamp: action.payload.timestamp
           }
         }

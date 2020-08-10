@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../../../modules/reducer'
-import { getAssetsCount } from '../../../../modules/ui/nft/browse/selectors'
+import { getCount } from '../../../../modules/ui/nft/browse/selectors'
 import {
   getSection,
   getSortBy,
@@ -12,7 +12,7 @@ import { MapStateProps } from './NFTFilters.types'
 import NFTFilters from './NFTFilters'
 
 const mapState = (state: RootState): MapStateProps => ({
-  count: getAssetsCount(state),
+  count: getCount(state),
   section: getSection(state),
   sortBy: getSortBy(state),
   search: getSearch(state),
