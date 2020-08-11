@@ -195,6 +195,6 @@ export class NFTService implements NFTServiceInterface {
 
   private getDefaultURL(asset: MakersPlaceAsset): string {
     const origin = getOriginURL(Vendors.MAKERS_PLACE)
-    return `${origin}/${asset.token_contract_address}/${asset.token_id}`
+    return `${origin}/authenticity/${asset.token_contract_address}/${asset.token_id}`
   }
 }
