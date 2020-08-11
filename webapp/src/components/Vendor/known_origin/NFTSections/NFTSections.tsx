@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Section } from '../../../../modules/vendor/super_rare/routing/types'
+import { Section } from '../../../../modules/vendor/known_origin/routing/types'
 import { Menu } from '../../../Menu'
 import { MenuItem } from '../../../Menu/MenuItem'
 import { Props } from './NFTSections.types'

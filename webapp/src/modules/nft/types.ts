@@ -22,18 +22,16 @@ export enum NFTCategory {
   ART = 'art'
 }
 
-type Art = {
-  description: string
-}
-
-type DecentralandNFT = {
+// TODO: Move this to their own vendor folders
+export type DecentralandNFT = {
   parcel?: Parcel
   estate?: Estate
   wearable?: Wearable
   ens?: ENS
 }
-type SuperRareNFT = Art
-type MakersPlaceNFT = Art
+export type SuperRareNFT = { description: string }
+export type MakersPlaceNFT = { description: string }
+export type KnownOriginNFT = { description: string; isEdition: boolean }
 
 export type Data<V extends Vendors> = V extends Vendors.DECENTRALAND
   ? DecentralandNFT
@@ -41,8 +39,10 @@ export type Data<V extends Vendors> = V extends Vendors.DECENTRALAND
   ? SuperRareNFT
   : V extends Vendors.MAKERS_PLACE
   ? MakersPlaceNFT
+  : V extends Vendors.KNOWN_ORIGIN
+  ? KnownOriginNFT
   : V extends any
-  ? DecentralandNFT | SuperRareNFT | MakersPlaceNFT
+  ? DecentralandNFT | SuperRareNFT | MakersPlaceNFT | KnownOriginNFT
   : never
 
 export type NFT<V extends Vendors = Vendors.DECENTRALAND> = {

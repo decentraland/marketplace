@@ -100,7 +100,7 @@ class SuperRareAPI extends BaseAPI {
       type: 'sell',
       offset: params.skip,
       limit: Math.min(params.first, MAX_QUERY_SIZE),
-      sort: this.getSort(params),
+      sort: this.getSort(params.orderBy),
       name: params.search,
       order: params.orderDirection
     }
@@ -112,8 +112,8 @@ class SuperRareAPI extends BaseAPI {
     return requestParams
   }
 
-  private getSort(params: NFTsFetchParams) {
-    switch (params.orderBy) {
+  private getSort(sortBy?: NFTSortBy) {
+    switch (sortBy) {
       case NFTSortBy.PRICE:
         return 'price'
       case NFTSortBy.ORDER_CREATED_AT:

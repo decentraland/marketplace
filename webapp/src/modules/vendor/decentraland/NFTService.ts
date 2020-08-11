@@ -35,13 +35,12 @@ export class NFTService implements NFTServiceInterface {
         orders.push(order)
       }
 
-      const address = nft.owner.toLowerCase()
-      const account = accounts.find(account => account.id === address)
-      if (account) {
-        account.nftIds.push(nft.id)
-      } else {
-        accounts.push({ id: address, address, nftIds: [nft.id] })
+      const address = nft.owner
+      let account = accounts.find(account => account.id === address)
+      if (!account) {
+        account = this.toAccount(address)
       }
+      account.nftIds.push(nft.id)
 
       nfts.push(nft)
     }
@@ -87,12 +86,23 @@ export class NFTService implements NFTServiceInterface {
   }
 
   toNFT(nft: NFTFragment): NFT<Vendors.DECENTRALAND> {
-    const { activeOrder, ...rest } = nft
     return {
-      ...rest,
-      vendor: Vendors.DECENTRALAND,
+      id: nft.id,
+      tokenId: nft.tokenId,
+      contractAddress: nft.contractAddress,
+      activeOrderId: '',
+      owner: nft.owner.address.toLowerCase(),
+      name: nft.name,
+      image: nft.image,
       url: locations.nft(nft.contractAddress, nft.tokenId),
-      activeOrderId: null
+      data: {
+        parcel: nft.parcel,
+        estate: nft.estate,
+        wearable: nft.wearable,
+        ens: nft.ens
+      },
+      category: nft.category,
+      vendor: Vendors.DECENTRALAND
     }
   }
 
@@ -108,5 +118,13 @@ export class NFTService implements NFTServiceInterface {
     }
 
     return order
+  }
+
+  toAccount(address: string): Account {
+    return {
+      id: address,
+      address,
+      nftIds: []
+    }
   }
 }

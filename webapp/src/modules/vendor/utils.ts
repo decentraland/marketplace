@@ -45,6 +45,8 @@ export function getOriginURL(vendor: Vendors) {
       return 'https://www.superrare.co'
     case Vendors.MAKERS_PLACE:
       return 'https://makersplace.com'
+    case Vendors.KNOWN_ORIGIN:
+      return 'https://knownorigin.io'
     default:
       throw new Error(`Base URL for ${vendor} not implemented`)
   }

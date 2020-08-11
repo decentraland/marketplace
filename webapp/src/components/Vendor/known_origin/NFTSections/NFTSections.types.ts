@@ -1,4 +1,4 @@
-import { Section } from '../../../../modules/vendor/decentraland/routing/types'
+import { Section } from '../../../../modules/vendor/known_origin/routing/types'
 
 export type Props = {
   section?: Section

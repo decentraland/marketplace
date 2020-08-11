@@ -21,7 +21,7 @@ export class BidService implements BidServiceInterface {
       const { nft, ...rest } = result
       bids.push({
         ...rest,
-        name: getNFTName(nft as NFT),
+        name: getNFTName(nft),
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId
       })
@@ -38,7 +38,7 @@ export class BidService implements BidServiceInterface {
       const { nft, ...rest } = result
       bids.push({
         ...rest,
-        name: getNFTName(nft as NFT),
+        name: getNFTName(nft),
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId
       })
@@ -54,7 +54,7 @@ export class BidService implements BidServiceInterface {
       const { nft, ...rest } = result
       bids.push({
         ...rest,
-        name: getNFTName(nft as NFT),
+        name: getNFTName(nft),
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId
       })
