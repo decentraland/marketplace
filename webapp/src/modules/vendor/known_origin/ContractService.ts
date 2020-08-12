@@ -9,12 +9,12 @@ const network = process.env.REACT_APP_NETWORK! as Network
 const contractAddresses = {
   [Network.ROPSTEN]: {
     DigitalAsset: '0xfbeef911dc5821886e1dda71586d90ed28174b7d',
-    BuyAdapter: '0xf4fbd84193f9aaf9779dedbb415a806933eb1c95',
+    BuyAdapter: '0xfbeef911dc5821886e1dda71586d90ed28174b7d',
     MarketplaceAdapter: '0xd1e4e2880ff56cd0d5c68da9bed58bfbf0150948'
   },
   [Network.MAINNET]: {
     DigitalAsset: '0xfbeef911dc5821886e1dda71586d90ed28174b7d',
-    BuyAdapter: '0xf4fbd84193f9aaf9779dedbb415a806933eb1c95',
+    BuyAdapter: '0xfbeef911dc5821886e1dda71586d90ed28174b7d',
     MarketplaceAdapter: '0xf4fbd84193f9aaf9779dedbb415a806933eb1c95'
   }
 }[network]
