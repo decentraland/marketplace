@@ -1,2 +1,2 @@
-import NFTFilters from './NFTFilters.container'
+import NFTFilters from './NFTFilters'
 export { NFTFilters }

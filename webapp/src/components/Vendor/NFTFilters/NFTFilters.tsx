@@ -4,6 +4,7 @@ import { Vendors } from '../../../modules/vendor/types'
 import { NFTFilters as DecentralandNFTFilters } from '../decentraland/NFTFilters'
 import { NFTFilters as SuperRareNFTFilters } from '../super_rare/NFTFilters'
 import { NFTFilters as MakersPlaceNFTFilters } from '../makers_place/NFTFilters'
+import { NFTFilters as KnownOriginNFTFilters } from '../known_origin/NFTFilters'
 import { Props } from './NFTFilters.types'
 import './NFTFilters.css'
 
@@ -15,8 +16,9 @@ const NFTFilters = (props: Props) => {
     case Vendors.SUPER_RARE:
       return <SuperRareNFTFilters onBrowse={onBrowse} />
     case Vendors.MAKERS_PLACE:
-    case Vendors.KNOWN_ORIGIN:
       return <MakersPlaceNFTFilters onBrowse={onBrowse} />
+    case Vendors.KNOWN_ORIGIN:
+      return <KnownOriginNFTFilters />
     case Vendors.DECENTRALAND:
     default:
       return <DecentralandNFTFilters onBrowse={onBrowse} />

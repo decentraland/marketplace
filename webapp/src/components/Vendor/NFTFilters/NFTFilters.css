@@ -1,6 +1,10 @@
 .NFTFilters {
 }
 
+.NFTFilters.empty {
+  margin-top: 12px;
+}
+
 .NFTFilters .topbar {
   margin-bottom: 28px;
   display: flex;

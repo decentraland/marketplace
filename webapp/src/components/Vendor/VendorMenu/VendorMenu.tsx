@@ -78,6 +78,7 @@ const VendorMenu = (props: Props) => {
         {isOpen ? (
           <NFTSections
             vendor={vendor}
+            address={address}
             section={isCurrentVendor ? section : undefined}
             onSectionClick={onClick}
           />

@@ -2,41 +2,41 @@ import { gql } from 'apollo-boost'
 
 import { NFTsFetchParams, NFTSortBy } from '../../../nft/types'
 import { client } from '../api'
-import { editionFragment, EditionFragment } from './fragments'
+import { tokenFragment, TokenFragment } from './fragments'
 
-class EditionAPI {
+class TokenAPI {
   fetch = async (params: NFTsFetchParams) => {
     const query = getNFTsQuery(params)
     const variables = this.buildVariables(params)
 
-    const { data } = await client.query<{ editions: EditionFragment[] }>({
+    const { data } = await client.query<{ tokens: TokenFragment[] }>({
       query,
       variables
     })
 
-    return data.editions
+    return data.tokens
   }
 
   async count(params: NFTsFetchParams) {
     const countQuery = getNFTsCountQuery(params)
     const variables = this.buildVariables(params)
 
-    const { data } = await client.query<{ editions: EditionFragment[] }>({
+    const { data } = await client.query<{ tokens: TokenFragment[] }>({
       query: countQuery,
       variables
     })
 
-    return data.editions.length
+    return data.tokens.length
   }
 
   async fetchOne(id: string) {
-    const { data } = await client.query<{ editions: EditionFragment[] }>({
-      query: EDITION_BY_ID_QUERY,
+    const { data } = await client.query<{ tokens: TokenFragment[] }>({
+      query: TOKEN_BY_ID_QUERY,
       variables: {
         id
       }
     })
-    return data.editions[0]
+    return data.tokens[0]
   }
 
   private buildVariables(params: NFTsFetchParams) {
@@ -48,19 +48,15 @@ class EditionAPI {
 
   private getSort(sortBy?: NFTSortBy) {
     switch (sortBy) {
-      case NFTSortBy.PRICE:
-        return 'priceInWei'
       case NFTSortBy.CREATED_AT:
-        return 'createdTimestamp'
-      case NFTSortBy.ORDER_CREATED_AT:
-        return 'startDate'
+        return 'birthTimestamp'
       default:
         return undefined
     }
   }
 }
 
-const EDITIONS_FILTERS = `
+const TOKENS_FILTERS = `
   $first: Int
   $skip: Int
   $orderBy: String
@@ -69,7 +65,7 @@ const EDITIONS_FILTERS = `
   $address: String
 `
 
-const EDITIONS_ARGUMENTS = `
+const TOKENS_ARGUMENTS = `
   first: $first
   skip: $skip
   orderBy: $orderBy
@@ -84,39 +80,36 @@ function getNFTsQuery(params: NFTsFetchParams, isCount = false) {
   let extraWhere: string[] = []
 
   if (params.address) {
-    extraWhere.push('artistAccount: $address')
+    extraWhere.push('currentOwner: $address')
   }
 
   // TODO: Search?
   // TODO: onlyOnSale?
 
   return gql`
-    query Editions(
-      ${EDITIONS_FILTERS}
+    query Tokens(
+      ${TOKENS_FILTERS}
     ) {
-      editions(
+      tokens(
         where: {
-          active: true,
-          offersOnly: false,
-          remainingSupply_gt: 0,
           ${extraWhere.join('\n')}
         }
-        ${EDITIONS_ARGUMENTS}
+        ${TOKENS_ARGUMENTS}
       ) {
-        ${isCount ? 'id' : '...editionFragment'}
+        ${isCount ? 'id' : '...tokenFragment'}
       }
     }
-    ${isCount ? '' : editionFragment()}
+    ${isCount ? '' : tokenFragment()}
   `
 }
 
-const EDITION_BY_ID_QUERY = gql`
-  query EditionById($id: String) {
-    editions(where: { id: $id }, first: 1) {
-      ...editionFragment
+const TOKEN_BY_ID_QUERY = gql`
+  query TokenById($id: String) {
+    tokens(where: { id: $id }, first: 1) {
+      ...tokenFragment
     }
   }
-  ${editionFragment()}
+  ${tokenFragment()}
 `
 
-export const editionAPI = new EditionAPI()
+export const tokenAPI = new TokenAPI()

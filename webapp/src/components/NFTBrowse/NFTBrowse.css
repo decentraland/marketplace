@@ -7,6 +7,13 @@
   min-height: 150px;
 }
 
+.NFTBrowse .ui.cards .empty {
+  margin-top: 40px;
+  font-size: 16px;
+  text-align: center;
+  color: var(--secondary-text);
+}
+
 .NFTBrowse .overlay {
   height: 100%;
   width: 100%;
@@ -19,13 +26,6 @@
   text-align: center;
   margin-top: 36px;
   height: 46px;
-}
-
-.NFTBrowse .empty {
-  margin-top: 40px;
-  font-size: 16px;
-  text-align: center;
-  color: var(--secondary-text);
 }
 
 .NFTBrowse .Atlas {

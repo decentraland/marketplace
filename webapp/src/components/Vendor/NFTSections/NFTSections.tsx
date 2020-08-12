@@ -12,7 +12,7 @@ import { MenuItem } from '../../Menu/MenuItem'
 import { Props } from './NFTSections.types'
 
 const NFTSections = (props: Props) => {
-  const { vendor, section, onSectionClick } = props
+  const { vendor, address, section, onSectionClick } = props
 
   // TODO: This should be on a generic path like PartnerSidebar
   switch (vendor) {
@@ -32,6 +32,7 @@ const NFTSections = (props: Props) => {
       return (
         <KnownOriginNFTSections
           section={section as KnownOriginSection}
+          address={address}
           onSectionClick={onSectionClick}
         />
       )
