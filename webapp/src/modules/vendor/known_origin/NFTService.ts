@@ -44,7 +44,7 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
     const fragments = await this.getAPI(filters).fetch(params)
     const [total, oneEthInMANA] = await Promise.all([
-      this.count(params),
+      this.count(params, filters),
       this.getOneEthInMANA()
     ])
 
@@ -77,13 +77,21 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
     return [nfts, accounts, orders, total] as const
   }
 
-  async count(countParams: NFTsCountParams) {
+  async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {
     const params: NFTsFetchParams = {
       ...countParams,
       first: MAX_QUERY_SIZE,
       skip: 0
     }
-    return editionAPI.count(params)
+    if (!filters) {
+      const [editionCount, tokenCount] = await Promise.all([
+        tokenAPI.count(params),
+        editionAPI.count(params)
+      ])
+      return editionCount + tokenCount
+    } else {
+      return this.getAPI(filters).count(params)
+    }
   }
 
   async fetchOne(_contractAddress: string, tokenId: string) {
