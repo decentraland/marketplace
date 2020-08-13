@@ -8,21 +8,21 @@ import { Order } from '../../order/types'
 import { Account } from '../../account/types'
 import { isExpired } from '../../order/utils'
 import { NFTService as NFTServiceInterface } from '../services'
-import { NFTsFetchFilters } from '../nft/types'
+import { NFTsFetchFilters } from './nft/types'
 import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
 import { NFTFragment } from './nft/fragments'
 import { ContractService } from './ContractService'
 import { MAX_QUERY_SIZE } from './api'
 
-export class NFTService implements NFTServiceInterface {
+export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
     const [remoteNFTs, total] = await Promise.all([
       nftAPI.fetch(params, filters),
       this.count(params, filters)
     ])
 
-    const nfts: NFT[] = []
+    const nfts: NFT<Vendors.DECENTRALAND>[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 

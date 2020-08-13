@@ -41,11 +41,11 @@ export type Data<V extends Vendors> = V extends Vendors.DECENTRALAND
   ? MakersPlaceNFT
   : V extends Vendors.KNOWN_ORIGIN
   ? KnownOriginNFT
-  : V extends any
+  : V extends void
   ? DecentralandNFT | SuperRareNFT | MakersPlaceNFT | KnownOriginNFT
   : never
 
-export type NFT<V extends Vendors = Vendors.DECENTRALAND> = {
+export type NFT<V extends Vendors = any> = {
   id: string
   contractAddress: string
   tokenId: string

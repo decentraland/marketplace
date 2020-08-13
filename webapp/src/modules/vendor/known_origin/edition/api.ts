@@ -2,6 +2,7 @@ import { gql } from 'apollo-boost'
 
 import { NFTsFetchParams, NFTSortBy } from '../../../nft/types'
 import { client } from '../api'
+import { AssetType } from '../types'
 import { editionFragment, EditionFragment } from './fragments'
 
 class EditionAPI {
@@ -14,7 +15,7 @@ class EditionAPI {
       variables
     })
 
-    return data.editions
+    return this.addType(data.editions)
   }
 
   async count(params: NFTsFetchParams) {
@@ -36,12 +37,17 @@ class EditionAPI {
         id
       }
     })
-    return data.editions[0]
+    return this.addType(data.editions)[0]
+  }
+
+  private addType(tokens: EditionFragment[]): EditionFragment[] {
+    return tokens.map(token => ({ ...token, type: AssetType.EDITION }))
   }
 
   private buildVariables(params: NFTsFetchParams) {
     return {
       ...params,
+      address: params.address,
       orderBy: this.getSort(params.orderBy)
     }
   }

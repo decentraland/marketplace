@@ -45,9 +45,9 @@ export function buildContracts() {
 
   contractVendors = {}
   for (const { type, contractService } of vendors) {
-    Object.values(contractService.contractAddresses).reduce((obj, address) => {
-      obj[address] = type
-      return obj
-    }, contractVendors)
+    const addresses: string[] = Object.values(contractService.contractAddresses)
+    for (const address of addresses) {
+      contractVendors[address] = type as Vendors
+    }
   }
 }

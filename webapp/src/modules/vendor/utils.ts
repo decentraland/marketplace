@@ -1,17 +1,24 @@
 import { NFTCategory } from '../nft/types'
 import { getSearchCategory, getSearchWearableCategory } from '../routing/search'
 import { SearchOptions } from '../routing/types'
-import { Section } from './decentraland/routing/types'
+import { Section } from './routing/types'
+import { NFTsFetchFilters } from './nft/types'
 import { Vendors, Disabled } from './types'
 
-export function getFilters(vendor: Vendors, searchOptions: SearchOptions) {
-  switch (vendor) {
-    case Vendors.DECENTRALAND:
-      const { section } = searchOptions
+export function getFilters(
+  vendor: Vendors,
+  searchOptions: SearchOptions
+): NFTsFetchFilters {
+  const { section } = searchOptions
 
-      const isLand = section === Section.LAND
-      const isWearableHead = section === Section.WEARABLES_HEAD
-      const isWearableAccessory = section === Section.WEARABLES_ACCESORIES
+  switch (vendor) {
+    case Vendors.DECENTRALAND: {
+      const currentSection = Section[Vendors.DECENTRALAND]
+
+      const isLand = section === currentSection.LAND
+      const isWearableHead = section === currentSection.WEARABLES_HEAD
+      const isWearableAccessory =
+        section === currentSection.WEARABLES_ACCESORIES
 
       const category = getSearchCategory(section!)
       const wearableCategory =
@@ -29,7 +36,16 @@ export function getFilters(vendor: Vendors, searchOptions: SearchOptions) {
         wearableRarities,
         wearableGenders,
         contracts
+      } as NFTsFetchFilters<Vendors.DECENTRALAND>
+    }
+    case Vendors.KNOWN_ORIGIN: {
+      const currentSection = Section[Vendors.KNOWN_ORIGIN]
+
+      return {
+        isEdition: section === currentSection.EDITIONS,
+        isToken: section === currentSection.TOKENS
       }
+    }
     case Vendors.SUPER_RARE:
     case Vendors.MAKERS_PLACE:
     default:

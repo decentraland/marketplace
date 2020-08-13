@@ -7,7 +7,8 @@ import {
   RARITY_COLOR,
   RARITY_COLOR_LIGHT
 } from '../../modules/nft/wearable/types'
-import { NFTCategory } from '../../modules/nft/types'
+import { NFT, NFTCategory } from '../../modules/nft/types'
+import { Vendors } from '../../modules/vendor/types'
 import { getNFTName } from '../../modules/nft/utils'
 import { Atlas } from '../Atlas'
 import { Props } from './NFTImage.types'
@@ -26,7 +27,9 @@ const NFTImage = (props: Props) => {
     isSmall,
     showMonospace
   } = props
-  const { parcel, estate, wearable, ens } = nft.data
+  const { parcel, estate, wearable, ens } = (nft as NFT<
+    Vendors.DECENTRALAND
+  >).data
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate

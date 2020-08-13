@@ -21,7 +21,7 @@ import { Vendors } from '../types'
 import { MakersPlaceAsset } from './types'
 import { makersPlaceAPI } from './api'
 
-export class NFTService implements NFTServiceInterface {
+export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
   private oneEthInWei: BN
@@ -109,7 +109,11 @@ export class NFTService implements NFTServiceInterface {
     return [nft, order] as const
   }
 
-  async transfer(fromAddress: string, toAddress: string, nft: NFT) {
+  async transfer(
+    fromAddress: string,
+    toAddress: string,
+    nft: NFT<Vendors.MAKERS_PLACE>
+  ) {
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
     }

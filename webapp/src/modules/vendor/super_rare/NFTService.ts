@@ -21,7 +21,7 @@ import { ContractService } from './ContractService'
 import { SuperRareAsset, SuperRareOrder, SuperRareOwner } from './types'
 import { superRareAPI, MAX_QUERY_SIZE } from './api'
 
-export class NFTService implements NFTServiceInterface {
+export class NFTService implements NFTServiceInterface<Vendors.SUPER_RARE> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
   private oneEthInWei: BN
@@ -121,7 +121,11 @@ export class NFTService implements NFTServiceInterface {
     return [nft, order] as const
   }
 
-  async transfer(fromAddress: string, toAddress: string, nft: NFT) {
+  async transfer(
+    fromAddress: string,
+    toAddress: string,
+    nft: NFT<Vendors.SUPER_RARE>
+  ) {
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
     }

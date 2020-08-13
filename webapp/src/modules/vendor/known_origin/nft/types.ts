@@ -1,2 +1,4 @@
-export type NFTsFetchFilters = {}
-
+export type NFTsFetchFilters = {
+  isEdition: boolean
+  isToken: boolean
+}

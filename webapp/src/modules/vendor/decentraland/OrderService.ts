@@ -6,10 +6,12 @@ import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
 import { Order } from '../../order/types'
 import { orderAPI } from './order/api'
+import { Vendors } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
 import { ContractService } from './ContractService'
 
-export class OrderService implements OrderServiceInterface {
+export class OrderService
+  implements OrderServiceInterface<Vendors.DECENTRALAND> {
   async fetchByNFT(nft: NFT) {
     const orders = await orderAPI.fetchByNFT(nft.id)
     return orders as Order[]

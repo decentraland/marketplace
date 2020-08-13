@@ -1,4 +1,5 @@
 import { gql } from 'apollo-boost'
+import { AssetType } from '../types'
 
 export const editionFragment = () => gql`
   fragment editionFragment on Edition {
@@ -17,10 +18,11 @@ export const editionFragment = () => gql`
 
 export type EditionFragment = {
   id: string
-  createdTimestamp: string
+  type: AssetType.EDITION
   artistAccount: string
   priceInWei: string
   totalSupply: string
+  createdTimestamp: string
   metadata: {
     name: string
     image: string

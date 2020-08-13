@@ -11,10 +11,10 @@ import {
 import { Vendors } from './types'
 
 export class VendorFactory {
-  static build(vendor: Vendors): Vendor {
+  static build(vendor: Vendors) {
     switch (vendor) {
       case Vendors.DECENTRALAND:
-        return new Vendor(
+        return new Vendor<Vendors.DECENTRALAND>(
           vendor,
           new decentraland.ContractService(),
           new decentraland.NFTService(),
@@ -48,12 +48,12 @@ export class VendorFactory {
   }
 }
 
-export class Vendor {
+export class Vendor<V extends Vendors> {
   constructor(
-    public type: Vendors,
+    public type: V,
     public contractService: ContractService,
-    public nftService: NFTService,
-    public orderService: OrderService,
-    public bidService?: BidService
+    public nftService: NFTService<V>,
+    public orderService: OrderService<V>,
+    public bidService?: BidService<V>
   ) {}
 }

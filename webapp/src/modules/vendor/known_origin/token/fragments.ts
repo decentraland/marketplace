@@ -1,4 +1,5 @@
 import { gql } from 'apollo-boost'
+import { AssetType } from '../types'
 
 export const tokenFragment = () => gql`
   fragment tokenFragment on Token {
@@ -18,6 +19,7 @@ export const tokenFragment = () => gql`
 
 export type TokenFragment = {
   id: string
+  type: AssetType.TOKEN
   editionNumber: string
   tokenId: string
   currentOwner: {

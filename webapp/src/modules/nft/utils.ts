@@ -21,7 +21,7 @@ export function getNFTId(contractAddress: string, tokenId: string) {
 }
 
 export function getNFTName(
-  nft: Pick<NFT<any>, 'vendor' | 'name' | 'category' | 'data'>
+  nft: Pick<NFT, 'vendor' | 'name' | 'category' | 'data'>
 ) {
   if (nft.name) {
     return nft.name

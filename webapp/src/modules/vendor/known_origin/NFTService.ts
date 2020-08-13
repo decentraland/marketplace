@@ -19,12 +19,18 @@ import { NFTService as NFTServiceInterface } from '../services'
 import { getOriginURL } from '../utils'
 import { Vendors } from '../types'
 
+import { NFTsFetchFilters } from './nft/types'
 import { ContractService } from './ContractService'
 import { EditionFragment } from './edition/fragments'
+import { TokenFragment } from './token/fragments'
 import { editionAPI } from './edition/api'
+import { tokenAPI } from './token/api'
 import { MAX_QUERY_SIZE } from './api'
+import { AssetType } from './types'
 
-export class NFTService implements NFTServiceInterface {
+type Fragment = TokenFragment | EditionFragment
+
+export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
   private oneEthInWei: BN
@@ -35,9 +41,9 @@ export class NFTService implements NFTServiceInterface {
     this.oneEthInWei = new BN('1000000000000000000') // 10 ** 18
   }
 
-  async fetch(params: NFTsFetchParams) {
-    const [editions, total, oneEthInMANA] = await Promise.all([
-      editionAPI.fetch(params),
+  async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
+    const fragments = await this.getAPI(filters).fetch(params)
+    const [total, oneEthInMANA] = await Promise.all([
       this.count(params),
       this.getOneEthInMANA()
     ])
@@ -46,21 +52,21 @@ export class NFTService implements NFTServiceInterface {
     const accounts: Account[] = []
     const orders: Order[] = []
 
-    for (const edition of editions) {
-      const nft = this.toNFT(edition)
+    for (const fragment of fragments) {
+      const nft = this.toNFT(fragment)
 
-      const order = this.toOrder(edition, oneEthInMANA)
+      if (fragment.type === AssetType.EDITION) {
+        const order = this.toOrder(fragment, oneEthInMANA)
 
-      nft.activeOrderId = order.id
-      order.nftId = nft.id
+        nft.activeOrderId = order.id
+        order.nftId = nft.id
 
-      orders.push(order)
+        orders.push(order)
+      }
 
-      let account = accounts.find(
-        account => account.id === edition.artistAccount
-      )
+      let account = accounts.find(account => account.id === nft.owner)
       if (!account) {
-        account = this.toAccount(edition.artistAccount)
+        account = this.toAccount(nft.owner)
       }
       account.nftIds.push(nft.id)
 
@@ -81,21 +87,27 @@ export class NFTService implements NFTServiceInterface {
   }
 
   async fetchOne(_contractAddress: string, tokenId: string) {
-    const [remoteNFT, oneEthInMANA] = await Promise.all([
-      editionAPI.fetchOne(tokenId),
-      this.getOneEthInMANA()
-    ])
+    const fragment = await this.getAPI().fetchOne(tokenId)
+    const oneEthInMANA = await this.getOneEthInMANA()
 
-    const nft = this.toNFT(remoteNFT)
-    const order: Order = this.toOrder(remoteNFT, oneEthInMANA)
+    const nft = this.toNFT(fragment)
+    let order: Order | undefined
 
-    nft.activeOrderId = order.id
-    order.nftId = nft.id
+    if (fragment.type === AssetType.EDITION) {
+      order = this.toOrder(fragment, oneEthInMANA)
+
+      nft.activeOrderId = order.id
+      order.nftId = nft.id
+    }
 
     return [nft, order] as const
   }
 
-  async transfer(fromAddress: string, toAddress: string, nft: NFT) {
+  async transfer(
+    fromAddress: string,
+    toAddress: string,
+    nft: NFT<Vendors.KNOWN_ORIGIN>
+  ) {
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
@@ -110,9 +122,9 @@ export class NFTService implements NFTServiceInterface {
       .getTxHash()
   }
 
-  toNFT(edition: EditionFragment): NFT<Vendors.KNOWN_ORIGIN> {
-    const tokenId = edition.id
-    const { name, description, image } = edition.metadata
+  toNFT(fragment: Fragment): NFT<Vendors.KNOWN_ORIGIN> {
+    const tokenId = fragment.id
+    const { name, description, image } = fragment.metadata
 
     const nftAddress = ContractService.contractAddresses.DigitalAsset
 
@@ -121,10 +133,10 @@ export class NFTService implements NFTServiceInterface {
       tokenId,
       contractAddress: nftAddress,
       activeOrderId: '',
-      owner: edition.artistAccount,
+      owner: this.getOwner(fragment),
       name,
       image,
-      url: this.getDefaultEditionURL(edition),
+      url: this.getDefaultURL(fragment),
       data: {
         description,
         isEdition: true
@@ -166,13 +178,23 @@ export class NFTService implements NFTServiceInterface {
     }
   }
 
+  private getAPI(filters?: NFTsFetchFilters) {
+    return filters && filters.isToken ? tokenAPI : editionAPI
+  }
+
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
     return toWei(mana.toString(), 'ether')
   }
 
-  private getDefaultEditionURL(edition: EditionFragment): string {
+  private getOwner(fragment: Fragment): string {
+    return fragment.type === AssetType.TOKEN
+      ? fragment.currentOwner.id
+      : fragment.artistAccount
+  }
+
+  private getDefaultURL(fragment: Fragment): string {
     const origin = getOriginURL(Vendors.KNOWN_ORIGIN)
-    return `${origin}/edition/${edition.id}`
+    return `${origin}/${fragment.type}/${fragment.id}`
   }
 }
