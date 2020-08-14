@@ -9,20 +9,29 @@ const NFTSections = (props: Props) => {
   const { section, address, onSectionClick } = props
 
   const isAccountPage = address !== undefined
-  console.log('address', address, isAccountPage)
 
   return (
     <Menu className="NFTSections">
-      <MenuItem
-        value={Section.EDITIONS}
-        currentValue={section}
-        onClick={onSectionClick}
-      />
-      <MenuItem
-        value={Section.TOKENS}
-        currentValue={section}
-        onClick={onSectionClick}
-      />
+      {isAccountPage ? (
+        <>
+          <MenuItem
+            value={Section.EDITIONS}
+            currentValue={section}
+            onClick={onSectionClick}
+          />
+          <MenuItem
+            value={Section.TOKENS}
+            currentValue={section}
+            onClick={onSectionClick}
+          />
+        </>
+      ) : (
+        <MenuItem
+          value={Section.ALL}
+          currentValue={section}
+          onClick={onSectionClick}
+        />
+      )}
     </Menu>
   )
 }

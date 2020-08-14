@@ -18,7 +18,7 @@ const NFTFilters = (props: Props) => {
     case Vendors.MAKERS_PLACE:
       return <MakersPlaceNFTFilters onBrowse={onBrowse} />
     case Vendors.KNOWN_ORIGIN:
-      return <KnownOriginNFTFilters />
+      return <KnownOriginNFTFilters onBrowse={onBrowse} />
     case Vendors.DECENTRALAND:
     default:
       return <DecentralandNFTFilters onBrowse={onBrowse} />
