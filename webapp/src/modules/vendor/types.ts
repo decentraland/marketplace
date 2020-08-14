@@ -11,9 +11,7 @@ export enum Vendors {
   KNOWN_ORIGIN = 'known_origin'
 }
 
-export const Disabled = {
-  MAKERS_PLACE: Vendors.MAKERS_PLACE
-}
+export const Disabled = {}
 
 export type ContractName =
   | decentraland.ContractName
