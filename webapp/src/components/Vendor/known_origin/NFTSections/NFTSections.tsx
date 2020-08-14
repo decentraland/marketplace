@@ -9,6 +9,8 @@ const NFTSections = (props: Props) => {
   const { section, address, onSectionClick } = props
 
   const isAccountPage = address !== undefined
+  const currentValue =
+    section === Section.ALL && isAccountPage ? Section.EDITIONS : section
 
   return (
     <Menu className="NFTSections">
@@ -16,19 +18,19 @@ const NFTSections = (props: Props) => {
         <>
           <MenuItem
             value={Section.EDITIONS}
-            currentValue={section}
+            currentValue={currentValue}
             onClick={onSectionClick}
           />
           <MenuItem
             value={Section.TOKENS}
-            currentValue={section}
+            currentValue={currentValue}
             onClick={onSectionClick}
           />
         </>
       ) : (
         <MenuItem
           value={Section.ALL}
-          currentValue={section}
+          currentValue={currentValue}
           onClick={onSectionClick}
         />
       )}
