@@ -25,6 +25,7 @@ const SellModal = (props: Props) => {
     order,
     wallet,
     authorizations,
+    isLoading,
     onNavigate,
     onCreateOrder
   } = props
@@ -123,15 +124,19 @@ const SellModal = (props: Props) => {
           />
         </div>
         <div className="buttons">
-          <div
-            className="ui button"
+          <Button
             onClick={() =>
               onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
             }
           >
             {t('global.cancel')}
-          </div>
-          <Button type="submit" primary disabled={isDisabled}>
+          </Button>
+          <Button
+            type="submit"
+            primary
+            disabled={isDisabled || isLoading}
+            loading={isLoading}
+          >
             {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
           </Button>
         </div>

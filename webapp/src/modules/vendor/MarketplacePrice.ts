@@ -46,6 +46,10 @@ export class MarketplacePrice {
   }
 
   getPercentageIncrease(computedPrice: string, price: string) {
+    if (Number(price) <= 0) {
+      return 0
+    }
+
     const percentage = toBN(computedPrice)
       .mul(toBN(100))
       .divRound(toBN(price))

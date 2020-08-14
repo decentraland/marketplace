@@ -105,6 +105,7 @@ function getNFTsQuery(params: NFTsFetchParams, isCount = false) {
           active: true,
           offersOnly: false,
           remainingSupply_gt: 0,
+          priceInWei_gt: 0,
           ${extraWhere.join('\n')}
         }
         ${EDITIONS_ARGUMENTS}

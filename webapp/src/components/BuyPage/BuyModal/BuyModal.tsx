@@ -19,6 +19,7 @@ const BuyPage = (props: Props) => {
     nft,
     order,
     authorizations,
+    isLoading,
     onNavigate,
     onExecuteOrder,
     isOwner,
@@ -153,11 +154,20 @@ const BuyPage = (props: Props) => {
         {isDisabled ||
         !isAboveMaxPercentage ||
         (isAboveMaxPercentage && wantsToProceed) ? (
-          <Button primary disabled={isDisabled} onClick={handleSubmit}>
+          <Button
+            primary
+            disabled={isDisabled || isLoading}
+            onClick={handleSubmit}
+            loading={isLoading}
+          >
             {t('buy_page.buy')}
           </Button>
         ) : (
-          <Button primary onClick={handleToggleWantsToProceed}>
+          <Button
+            primary
+            onClick={handleToggleWantsToProceed}
+            loading={isLoading}
+          >
             {t('buy_page.proceed_anyways')}
           </Button>
         )}

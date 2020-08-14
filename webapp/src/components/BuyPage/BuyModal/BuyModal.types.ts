@@ -7,6 +7,7 @@ export type Props = {
   nft: NFT
   order: Order | null
   authorizations: Authorizations
+  isLoading: boolean
   onNavigate: (path: string) => void
   onExecuteOrder: typeof executeOrderRequest
   isOwner?: boolean
