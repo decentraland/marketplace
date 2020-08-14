@@ -79,6 +79,9 @@ const BuyPage = (props: Props) => {
     (!fingerprint && order.category === NFTCategory.ESTATE)
 
   const name = <b>{getNFTName(nft)}</b>
+  const Price = (props: { price: string }) => (
+    <Mana inline>{formatMANA(props.price)}</Mana>
+  )
 
   let subtitle = null
   if (!order) {
@@ -92,7 +95,12 @@ const BuyPage = (props: Props) => {
   } else if (isOwner) {
     subtitle = <T id={'buy_page.is_owner'} values={{ name }} />
   } else if (notEnoughMana) {
-    subtitle = <T id={'buy_page.not_enough_mana'} values={{ name }} />
+    subtitle = (
+      <T
+        id={'buy_page.not_enough_mana'}
+        values={{ name, amount: <Price price={order.price} /> }}
+      />
+    )
   } else if (isPartner(nft.vendor) && computedPrice) {
     subtitle = (
       <>
@@ -100,7 +108,7 @@ const BuyPage = (props: Props) => {
           id={'buy_page.subtitle'}
           values={{
             name,
-            amount: <Mana inline>{formatMANA(order.price)}</Mana>
+            amount: <Price price={order.price} />
           }}
         />
         {isAboveMaxPercentage ? (
@@ -117,7 +125,7 @@ const BuyPage = (props: Props) => {
             <T
               id="buy_page.actual_price"
               values={{
-                computedPrice: <Mana inline>{formatMANA(computedPrice)}</Mana>
+                computedPrice: <Price price={computedPrice} />
               }}
             />
           </div>
@@ -130,7 +138,7 @@ const BuyPage = (props: Props) => {
         id={'buy_page.subtitle'}
         values={{
           name,
-          amount: <Mana inline>{formatMANA(order.price)}</Mana>
+          amount: <Price price={order.price} />
         }}
       />
     )

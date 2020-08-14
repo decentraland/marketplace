@@ -227,7 +227,7 @@
     "proceed_anyways": "Proceed anyways",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
-    "not_enough_mana": "You don't have enough MANA to buy {name}."
+    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
   },
   "bid_page": {
     "title": "Place a bid",
