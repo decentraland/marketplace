@@ -11,7 +11,6 @@ export function getNFTId(contractAddress: string, tokenId: string) {
   const contractCategory = contractCategories[contractAddress]
 
   if (!contractCategory) {
-    console.log('getNFTId', contractAddress)
     throw new Error(
       `Could not find a valid category for contract ${contractAddress}`
     )
