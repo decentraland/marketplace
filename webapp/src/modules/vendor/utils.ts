@@ -1,17 +1,24 @@
+import { NFTCategory } from '../nft/types'
 import { getSearchCategory, getSearchWearableCategory } from '../routing/search'
 import { SearchOptions } from '../routing/types'
-import { NFTCategory } from './decentraland/nft/types'
-import { Section } from './decentraland/routing/types'
-import { Vendors, Partner } from './types'
+import { Section } from './routing/types'
+import { NFTsFetchFilters } from './nft/types'
+import { Vendors, Disabled } from './types'
 
-export function getFilters(vendor: Vendors, searchOptions: SearchOptions): any {
+export function getFilters(
+  vendor: Vendors,
+  searchOptions: SearchOptions
+): NFTsFetchFilters {
+  const { section } = searchOptions
+
   switch (vendor) {
-    case Vendors.DECENTRALAND:
-      const { section } = searchOptions
+    case Vendors.DECENTRALAND: {
+      const currentSection = Section[Vendors.DECENTRALAND]
 
-      const isLand = section === Section.LAND
-      const isWearableHead = section === Section.WEARABLES_HEAD
-      const isWearableAccessory = section === Section.WEARABLES_ACCESORIES
+      const isLand = section === currentSection.LAND
+      const isWearableHead = section === currentSection.WEARABLES_HEAD
+      const isWearableAccessory =
+        section === currentSection.WEARABLES_ACCESORIES
 
       const category = getSearchCategory(section!)
       const wearableCategory =
@@ -29,7 +36,16 @@ export function getFilters(vendor: Vendors, searchOptions: SearchOptions): any {
         wearableRarities,
         wearableGenders,
         contracts
+      } as NFTsFetchFilters<Vendors.DECENTRALAND>
+    }
+    case Vendors.KNOWN_ORIGIN: {
+      const currentSection = Section[Vendors.KNOWN_ORIGIN]
+
+      return {
+        isEdition: section === currentSection.EDITIONS,
+        isToken: section === currentSection.TOKENS
       }
+    }
     case Vendors.SUPER_RARE:
     case Vendors.MAKERS_PLACE:
     default:
@@ -45,6 +61,8 @@ export function getOriginURL(vendor: Vendors) {
       return 'https://www.superrare.co'
     case Vendors.MAKERS_PLACE:
       return 'https://makersplace.com'
+    case Vendors.KNOWN_ORIGIN:
+      return 'https://knownorigin.io'
     default:
       throw new Error(`Base URL for ${vendor} not implemented`)
   }
@@ -55,5 +73,13 @@ export function isVendor(vendor: string) {
 }
 
 export function isPartner(vendor: string) {
-  return Object.values(Partner).includes(vendor as Partner)
+  return isVendor(vendor) && vendor !== Vendors.DECENTRALAND
+}
+
+export function getPartners(): Vendors[] {
+  const disabledVendors = Object.values(Disabled)
+
+  return Object.values(Vendors).filter(
+    vendor => isPartner(vendor) && !disabledVendors.includes(vendor)
+  )
 }

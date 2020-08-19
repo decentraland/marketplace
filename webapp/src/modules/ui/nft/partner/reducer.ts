@@ -7,11 +7,13 @@ import { View } from '../../types'
 export type PartnerUIState = {
   [View.PARTNERS_SUPER_RARE]: string[]
   [View.PARTNERS_MAKERS_PLACE]: string[]
+  [View.PARTNERS_KNOWN_ORIGIN]: string[]
 }
 
 const INITIAL_STATE: PartnerUIState = {
   [View.PARTNERS_SUPER_RARE]: [],
-  [View.PARTNERS_MAKERS_PLACE]: []
+  [View.PARTNERS_MAKERS_PLACE]: [],
+  [View.PARTNERS_KNOWN_ORIGIN]: []
 }
 
 type UIReducerAction = FetchNFTsSuccessAction
@@ -35,6 +37,12 @@ export function partnerReducer(
           return {
             ...state,
             [View.PARTNERS_MAKERS_PLACE]: nftIds
+          }
+        }
+        case View.PARTNERS_KNOWN_ORIGIN: {
+          return {
+            ...state,
+            [View.PARTNERS_KNOWN_ORIGIN]: nftIds
           }
         }
         default:

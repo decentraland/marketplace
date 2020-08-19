@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
-import { NFTCategory } from '../vendor/decentraland/nft/types'
 import { TokenConverter } from '../vendor/TokenConverter'
 import { MarketplacePrice } from '../vendor/MarketplacePrice'
 import { isPartner } from '../vendor/utils'
-import { getFingerprint } from './estate/utils'
 import { Order } from '../order/types'
-import { NFT } from './types'
+import { getFingerprint } from './estate/utils'
+import { NFT, NFTCategory } from './types'
 
 export const useFingerprint = (nft: NFT | null) => {
   const [fingerprint, setFingerprint] = useState<string>()

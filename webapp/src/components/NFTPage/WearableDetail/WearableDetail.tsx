@@ -29,35 +29,36 @@ import './WearableDetail.css'
 
 const WearableDetail = (props: Props) => {
   const { nft, onNavigate } = props
+  const wearable = nft.data.wearable!
 
   const handleCategoryClick = useCallback(() => {
-    const category = nft.wearable!.category
+    const category = wearable.category
     const section = getSearchWearableSection(category)
     if (!section) {
       throw new Error(`Invalid wearable category ${category}`)
     }
     onNavigate(locations.browse({ section }))
-  }, [nft, onNavigate])
+  }, [wearable, onNavigate])
 
   const handleGenderClick = useCallback(() => {
     onNavigate(
       locations.browse({
         section: Section.WEARABLES,
-        wearableGenders: isGender(nft, BodyShape.MALE)
+        wearableGenders: isGender(wearable, BodyShape.MALE)
           ? [WearableGender.MALE]
           : [WearableGender.FEMALE]
       })
     )
-  }, [nft, onNavigate])
+  }, [wearable, onNavigate])
 
   const handleRarityClick = useCallback(() => {
     onNavigate(
       locations.browse({
         section: Section.WEARABLES,
-        wearableRarities: [nft.wearable!.rarity]
+        wearableRarities: [wearable.rarity]
       })
     )
-  }, [nft, onNavigate])
+  }, [wearable, onNavigate])
 
   const handleUnisexClick = useCallback(() => {
     onNavigate(
@@ -76,34 +77,30 @@ const WearableDetail = (props: Props) => {
       <Container>
         <Title
           left={
-            <>
-              <Header size="large">
-                <div className="text">
-                  {getNFTName(nft)}
-                  <Popup
-                    position="top center"
-                    content={t(
-                      `wearable.rarity_tooltip.${nft.wearable!.rarity}`
-                    )}
-                    trigger={
-                      <div
-                        className="rarity"
-                        style={{
-                          backgroundColor: RARITY_COLOR[nft.wearable!.rarity]
-                        }}
-                        onClick={handleRarityClick}
-                      >
-                        {t(`wearable.rarity.${nft.wearable!.rarity}`)}
-                      </div>
-                    }
-                  />
-                </div>
-              </Header>
-            </>
+            <Header size="large">
+              <div className="text">
+                {getNFTName(nft)}
+                <Popup
+                  position="top center"
+                  content={t(`wearable.rarity_tooltip.${wearable.rarity}`)}
+                  trigger={
+                    <div
+                      className="rarity"
+                      style={{
+                        backgroundColor: RARITY_COLOR[wearable.rarity]
+                      }}
+                      onClick={handleRarityClick}
+                    >
+                      {t(`wearable.rarity.${wearable.rarity}`)}
+                    </div>
+                  }
+                />
+              </div>
+            </Header>
           }
           right={<Owner nft={nft} />}
         />
-        <Description text={nft.wearable!.description} />
+        <Description text={wearable.description} />
         <Row>
           <Column align="left" grow={true}>
             <OrderDetails nft={nft} />
@@ -114,11 +111,11 @@ const WearableDetail = (props: Props) => {
         </Row>
         <Highlights>
           <Highlight
-            icon={<div className={nft.wearable!.category} />}
-            name={t(`wearable.category.${nft.wearable!.category}`)}
+            icon={<div className={wearable.category} />}
+            name={t(`wearable.category.${wearable.category}`)}
             onClick={handleCategoryClick}
           />
-          {isUnisex(nft) ? (
+          {isUnisex(wearable) ? (
             <Highlight
               icon={<div className="Unisex" />}
               name={t('wearable.body_shape.unisex')}
@@ -126,9 +123,9 @@ const WearableDetail = (props: Props) => {
             />
           ) : (
             <Highlight
-              icon={<div className={nft.wearable!.bodyShapes[0]} />}
+              icon={<div className={wearable.bodyShapes[0]} />}
               name={
-                isGender(nft, BodyShape.MALE)
+                isGender(wearable, BodyShape.MALE)
                   ? t('wearable.body_shape.male')
                   : t('wearable.body_shape.female')
               }

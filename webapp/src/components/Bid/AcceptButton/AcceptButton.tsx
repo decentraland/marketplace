@@ -24,7 +24,7 @@ const AcceptButton = (props: Props) => {
   }, [bid])
 
   const isValidFingerprint = checkFingerprint(bid, fingerprint)
-  const isValidSeller = !!nft && nft.owner.address === bid.seller
+  const isValidSeller = !!nft && nft.owner === bid.seller
 
   const isDisabled =
     !nft ||

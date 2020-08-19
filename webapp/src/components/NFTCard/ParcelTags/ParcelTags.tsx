@@ -5,7 +5,7 @@ import './ParcelTags.css'
 
 const ParcelTags = (props: Props) => {
   const { nft } = props
-  const { x, y } = nft.parcel!
+  const { x, y } = nft.data.parcel!
   return (
     <div className="ParcelTags tags">
       <div className="coords">

@@ -2,12 +2,16 @@ import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
 import { createOrderRequest } from '../../modules/order/actions'
-import { getAuthorizations } from '../../modules/authorization/selectors'
+import {
+  getAuthorizations,
+  isLoading
+} from '../../modules/authorization/selectors'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './SellPage.types'
 import SellPage from './SellPage'
 
 const mapState = (state: RootState): MapStateProps => ({
-  authorizations: getAuthorizations(state)
+  authorizations: getAuthorizations(state),
+  isLoading: isLoading(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

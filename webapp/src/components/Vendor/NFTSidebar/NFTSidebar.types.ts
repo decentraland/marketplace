@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
 
-import { Section } from '../../../modules/vendor/decentraland/routing/types'
+import { Section } from '../../../modules/vendor/routing/types'
 import { browse, BrowseAction } from '../../../modules/routing/actions'
 
 export type Props = {

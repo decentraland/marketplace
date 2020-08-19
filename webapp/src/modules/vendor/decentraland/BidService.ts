@@ -8,11 +8,12 @@ import { Bid } from '../../bid/types'
 import { NFT } from '../../nft/types'
 import { OrderStatus } from '../../order/types'
 import { getNFTName } from '../../nft/utils'
+import { Vendors } from '../types'
 import { BidService as BidServiceInterface } from '../services'
 import { ContractService } from './ContractService'
 import { bidAPI } from './bid/api'
 
-export class BidService implements BidServiceInterface {
+export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
   async fetchBySeller(seller: string) {
     const remoteBids = await bidAPI.fetchBySeller(seller)
 
@@ -21,7 +22,7 @@ export class BidService implements BidServiceInterface {
       const { nft, ...rest } = result
       bids.push({
         ...rest,
-        name: getNFTName(nft as NFT),
+        name: getNFTName(nft),
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId
       })
@@ -38,7 +39,7 @@ export class BidService implements BidServiceInterface {
       const { nft, ...rest } = result
       bids.push({
         ...rest,
-        name: getNFTName(nft as NFT),
+        name: getNFTName(nft),
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId
       })
@@ -54,7 +55,7 @@ export class BidService implements BidServiceInterface {
       const { nft, ...rest } = result
       bids.push({
         ...rest,
-        name: getNFTName(nft as NFT),
+        name: getNFTName(nft),
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId
       })

@@ -20,5 +20,3 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
 })
 
 export default connect(mapState, mapDispatch)(NFTSidebar)
-
-

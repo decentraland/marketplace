@@ -8,26 +8,27 @@ import './WearableTags.css'
 
 const WearableTags = (props: Props) => {
   const { nft } = props
+  const wearable = nft.data.wearable!
   return (
     <div className="WearableTags tags">
       <div
-        title={t(`wearable.rarity_tooltip.${nft.wearable!.rarity}`)}
+        title={t(`wearable.rarity_tooltip.${wearable.rarity}`)}
         className="rarity"
-        style={{ backgroundColor: RARITY_COLOR[nft.wearable!.rarity] }}
+        style={{ backgroundColor: RARITY_COLOR[wearable.rarity] }}
       >
-        {t(`wearable.rarity.${nft.wearable!.rarity}`)}
+        {t(`wearable.rarity.${wearable.rarity}`)}
       </div>
       <div
-        className={'icon ' + nft.wearable!.category}
-        title={t(`wearable.category.${nft.wearable!.category}`)}
+        className={'icon ' + wearable.category}
+        title={t(`wearable.category.${wearable.category}`)}
       />
-      {isUnisex(nft) ? (
+      {isUnisex(wearable) ? (
         <div className="icon Unisex" title={t('wearable.body_shape.unisex')} />
       ) : (
         <div
-          className={'icon ' + nft.wearable!.bodyShapes[0]}
+          className={'icon ' + wearable.bodyShapes[0]}
           title={
-            isGender(nft, BodyShape.MALE)
+            isGender(wearable, BodyShape.MALE)
               ? t('wearable.body_shape.male')
               : t('wearable.body_shape.female')
           }

@@ -8,10 +8,12 @@ import { Order } from '../../order/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { ContractService as DecentralandContractService } from '../decentraland/ContractService'
+import { Vendors } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
 import { ContractService } from './ContractService'
 
-export class OrderService implements OrderServiceInterface {
+export class OrderService
+  implements OrderServiceInterface<Vendors.MAKERS_PLACE> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
 
@@ -28,7 +30,11 @@ export class OrderService implements OrderServiceInterface {
     throw new Error('Method: `create` is not implemented')
   }
 
-  async execute(nft: NFT, order: Order, fromAddress: string): Promise<string> {
+  async execute(
+    nft: NFT<Vendors.MAKERS_PLACE>,
+    order: Order,
+    fromAddress: string
+  ): Promise<string> {
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
@@ -81,7 +87,7 @@ export class OrderService implements OrderServiceInterface {
     return false
   }
 
-  private getCallData(nft: NFT) {
+  private getCallData(nft: NFT<Vendors.MAKERS_PLACE>) {
     const abiCoder = new ABICoder()
     return abiCoder.encodeFunctionCall(
       {

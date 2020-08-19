@@ -16,9 +16,9 @@ import {
   WearableRarity,
   WearableGender
 } from '../../../../modules/nft/wearable/types'
+import { NFTCategory } from '../../../../modules/nft/types'
 import { ContractName } from '../../../../modules/vendor/types'
 import { Section } from '../../../../modules/vendor/decentraland/routing/types'
-import { NFTCategory } from '../../../../modules/vendor/decentraland/nft/types'
 import { MAX_QUERY_SIZE } from '../../../../modules/vendor/decentraland/api'
 import { getSearchCategory } from '../../../../modules/routing/search'
 import { NFTSidebar } from '../../NFTSidebar'

@@ -1,13 +1,12 @@
-import { NFT } from '../types'
-import { BodyShape } from './types'
+import { Wearable, BodyShape } from './types'
 
-export function isGender(nft: NFT, gender: BodyShape) {
-  if (!nft.wearable) return false
-  if (nft.wearable.bodyShapes.length !== 1) return false
-  return nft.wearable.bodyShapes[0] === gender
+export function isGender(wearable: Wearable, gender: BodyShape) {
+  if (!wearable) return false
+  if (wearable.bodyShapes.length !== 1) return false
+  return wearable.bodyShapes[0] === gender
 }
 
-export function isUnisex(nft: NFT) {
-  if (!nft.wearable) return false
-  return nft.wearable.bodyShapes.length === 2
+export function isUnisex(wearable: Wearable) {
+  if (!wearable) return false
+  return wearable.bodyShapes.length === 2
 }

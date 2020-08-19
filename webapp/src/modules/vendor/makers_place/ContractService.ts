@@ -1,11 +1,11 @@
 import { ContractService as ContractServiceInterface } from '../services'
 import { Network } from '../../contract/types'
+import { NFTCategory } from '../../nft/types'
 import { TransferType } from '../types'
-import { NFTCategory } from './nft/types'
 
 const network = process.env.REACT_APP_NETWORK! as Network
 
-// No ropsten!
+// No Ropsten!
 const contractAddresses = {
   [Network.ROPSTEN]: {
     DigitalMediaCore: '0x2a46f2ffd99e19a89476e2f62270e0a35bbf0756',

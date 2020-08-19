@@ -1,5 +1,5 @@
-import { Partner } from '../../modules/vendor/types'
+import { Vendors } from '../../modules/vendor/types'
 
 export type Props = {
-  onMenuItemClick: (vendor: Partner) => void
+  onMenuItemClick: (vendor: Vendors) => void
 }

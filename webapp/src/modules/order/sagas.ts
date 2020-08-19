@@ -43,7 +43,6 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
 function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   const { order, nft, fingerprint } = action.payload
   try {
-    console.log(nft, order)
     if (nft.id !== order.nftId) {
       throw new Error('The order does not match the NFT')
     }

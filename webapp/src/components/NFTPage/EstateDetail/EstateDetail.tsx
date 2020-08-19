@@ -21,7 +21,8 @@ import './EstateDetail.css'
 
 const EstateDetail = (props: Props) => {
   const { nft } = props
-  const parcel = nft.estate!.parcels[0]
+  const estate = nft.data.estate!
+  const { x, y } = estate.parcels[0]
   return (
     <>
       <PageHeader>
@@ -31,29 +32,25 @@ const EstateDetail = (props: Props) => {
         <Title
           left={
             <Header size="large">
-              <div className="text">
-                {getNFTName(nft)}
-                <Badge color="#37333d">
-                  {nft.estate!.size.toLocaleString()}&nbsp;LAND
+              <div className="text">{getNFTName(nft)}</div>
+              <Badge color="#37333d">{estate.size.toLocaleString()} LAND</Badge>
+              {estate.size > 0 ? (
+                <Badge color="#ff2d55" className="jump-in-badge">
+                  <a
+                    href={buildExplorerUrl(x, y)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {t('global.jump_in')}&nbsp;
+                    <i className="jump-in-icon" />
+                  </a>
                 </Badge>
-                {nft.estate!.size > 0 ? (
-                  <Badge color="#ff2d55" className="jump-in-badge">
-                    <a
-                      href={buildExplorerUrl(parcel.x, parcel.y)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {t('nft_page.jump')}&nbsp;{t('nft_page.in')}
-                      <i className="jump-in-icon" />
-                    </a>
-                  </Badge>
-                ) : null}
-              </div>
+              ) : null}
             </Header>
           }
           right={<Owner nft={nft} />}
         />
-        <Description text={nft.estate!.data?.description} />
+        <Description text={estate.data?.description} />
         <Row>
           <Column align="left" grow={true}>
             <OrderDetails nft={nft} />

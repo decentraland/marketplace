@@ -1,19 +1,19 @@
 import { useMemo } from 'react'
-import { NFTCategory } from '../vendor/decentraland/nft/types'
-import { NFT } from '../nft/types'
+import { NFT, NFTCategory } from '../nft/types'
+import { Vendors } from '../vendor/types'
 import { getParcelProximity, getEstateProximity } from './utils'
 import { Proximity } from './types'
 
 export const useProximity = (
-  nft: NFT,
+  nft: NFT<Vendors.DECENTRALAND>,
   proximities: Record<string, Proximity>
 ) =>
   useMemo(() => {
     switch (nft.category) {
       case NFTCategory.PARCEL:
-        return getParcelProximity(nft, proximities)
+        return getParcelProximity(nft.data.parcel!, proximities)
       case NFTCategory.ESTATE:
-        return getEstateProximity(nft, proximities)
+        return getEstateProximity(nft.data.estate!, proximities)
       default:
         return
     }

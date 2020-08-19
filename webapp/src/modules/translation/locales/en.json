@@ -58,6 +58,8 @@
     "wearables_tiara": "Tiara",
     "wearables_top_head": "Top head",
     "ens": "Names",
+    "editions": "Editions",
+    "tokens": "Tokens",
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
     "known_origin": "KnownOrigin",
@@ -225,7 +227,7 @@
     "proceed_anyways": "Proceed anyways",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
-    "not_enough_mana": "You don't have enough MANA to buy {name}."
+    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
   },
   "bid_page": {
     "title": "Place a bid",

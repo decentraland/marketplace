@@ -7,8 +7,9 @@ import {
   RARITY_COLOR,
   RARITY_COLOR_LIGHT
 } from '../../modules/nft/wearable/types'
+import { NFT, NFTCategory } from '../../modules/nft/types'
+import { Vendors } from '../../modules/vendor/types'
 import { getNFTName } from '../../modules/nft/utils'
-import { NFTCategory } from '../../modules/vendor/decentraland/nft/types'
 import { Atlas } from '../Atlas'
 import { Props } from './NFTImage.types'
 import './NFTImage.css'
@@ -26,15 +27,18 @@ const NFTImage = (props: Props) => {
     isSmall,
     showMonospace
   } = props
+  const { parcel, estate, wearable, ens } = (nft as NFT<
+    Vendors.DECENTRALAND
+  >).data
 
-  const estateSelection = useMemo(() => (nft.estate ? getSelection(nft) : []), [
-    nft
+  const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
+    estate
   ])
 
   switch (nft.category) {
     case NFTCategory.PARCEL: {
-      const x = +nft.parcel!.x
-      const y = +nft.parcel!.y
+      const x = +parcel!.x
+      const y = +parcel!.y
       const selection = [{ x, y }]
       return (
         <Atlas
@@ -65,8 +69,8 @@ const NFTImage = (props: Props) => {
 
     case NFTCategory.WEARABLE: {
       const backgroundImage = `radial-gradient(${
-        RARITY_COLOR_LIGHT[nft.wearable!.rarity]
-      }, ${RARITY_COLOR[nft.wearable!.rarity]})`
+        RARITY_COLOR_LIGHT[wearable!.rarity]
+      }, ${RARITY_COLOR[wearable!.rarity]})`
       return (
         <div
           className="rarity-background"
@@ -80,7 +84,7 @@ const NFTImage = (props: Props) => {
     }
 
     case NFTCategory.ENS: {
-      let name = nft.ens!.subdomain
+      let name = ens!.subdomain
       let classes = ['ens-subdomain']
       if (isSmall) {
         name = name.slice(0, 2)

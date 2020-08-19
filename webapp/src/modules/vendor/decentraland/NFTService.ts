@@ -8,21 +8,21 @@ import { Order } from '../../order/types'
 import { Account } from '../../account/types'
 import { isExpired } from '../../order/utils'
 import { NFTService as NFTServiceInterface } from '../services'
-import { NFTsFetchFilters } from '../nft/types'
+import { NFTsFetchFilters } from './nft/types'
 import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
 import { NFTFragment } from './nft/fragments'
 import { ContractService } from './ContractService'
 import { MAX_QUERY_SIZE } from './api'
 
-export class NFTService implements NFTServiceInterface {
+export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
     const [remoteNFTs, total] = await Promise.all([
       nftAPI.fetch(params, filters),
       this.count(params, filters)
     ])
 
-    const nfts: NFT[] = []
+    const nfts: NFT<Vendors.DECENTRALAND>[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
@@ -35,13 +35,12 @@ export class NFTService implements NFTServiceInterface {
         orders.push(order)
       }
 
-      const address = nft.owner.address.toLowerCase()
-      const account = accounts.find(account => account.id === address)
-      if (account) {
-        account.nftIds.push(nft.id)
-      } else {
-        accounts.push({ id: address, address, nftIds: [nft.id] })
+      const address = nft.owner
+      let account = accounts.find(account => account.id === address)
+      if (!account) {
+        account = this.toAccount(address)
       }
+      account.nftIds.push(nft.id)
 
       nfts.push(nft)
     }
@@ -86,13 +85,24 @@ export class NFTService implements NFTServiceInterface {
       .getTxHash()
   }
 
-  toNFT(nft: NFTFragment): NFT {
-    const { activeOrder, ...rest } = nft
+  toNFT(nft: NFTFragment): NFT<Vendors.DECENTRALAND> {
     return {
-      ...rest,
-      vendor: Vendors.DECENTRALAND,
+      id: nft.id,
+      tokenId: nft.tokenId,
+      contractAddress: nft.contractAddress,
+      activeOrderId: '',
+      owner: nft.owner.address.toLowerCase(),
+      name: nft.name,
+      image: nft.image,
       url: locations.nft(nft.contractAddress, nft.tokenId),
-      activeOrderId: null
+      data: {
+        parcel: nft.parcel,
+        estate: nft.estate,
+        wearable: nft.wearable,
+        ens: nft.ens
+      },
+      category: nft.category,
+      vendor: Vendors.DECENTRALAND
     }
   }
 
@@ -108,5 +118,13 @@ export class NFTService implements NFTServiceInterface {
     }
 
     return order
+  }
+
+  toAccount(address: string): Account {
+    return {
+      id: address,
+      address,
+      nftIds: []
+    }
   }
 }

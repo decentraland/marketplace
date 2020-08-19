@@ -14,10 +14,3 @@ export type NFTsFetchFilters = {
   wearableGenders?: WearableGender[]
   contracts?: ContractName[]
 }
-
-export enum NFTCategory {
-  PARCEL = 'parcel',
-  ESTATE = 'estate',
-  WEARABLE = 'wearable',
-  ENS = 'ens'
-}

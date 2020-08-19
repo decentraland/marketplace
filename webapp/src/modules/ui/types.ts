@@ -8,6 +8,7 @@ export const View = {
   HOME_ENS: 'home_ens',
   PARTNERS_SUPER_RARE: Vendors.SUPER_RARE,
   PARTNERS_MAKERS_PLACE: Vendors.MAKERS_PLACE,
+  PARTNERS_KNOWN_ORIGIN: Vendors.KNOWN_ORIGIN,
   LOAD_MORE: 'load_more'
 } as const
 

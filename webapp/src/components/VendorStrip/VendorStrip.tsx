@@ -1,7 +1,8 @@
 import React, { useCallback } from 'react'
 import { Responsive } from 'decentraland-ui'
 
-import { Vendors, Partner } from '../../modules/vendor/types'
+import { getPartners } from '../../modules/vendor/utils'
+import { Vendors } from '../../modules/vendor/types'
 import { Menu } from '../Menu'
 import { MenuItem } from '../Menu/MenuItem'
 import { Props } from './VendorStrip.types'
@@ -29,7 +30,7 @@ const VendorStrip = (props: Props) => {
           image={`/${decentraland}.png`}
           onClick={() => handleClick(decentraland)}
         />
-        {Object.values(Partner).map(partner => (
+        {getPartners().map(partner => (
           <MenuItem
             key={partner}
             value={partner}

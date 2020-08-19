@@ -7,6 +7,8 @@ import { formatMANA } from '../../lib/mana'
 import { formatDistanceToNow } from '../../lib/date'
 import { locations } from '../../modules/routing/locations'
 import { getNFTName } from '../../modules/nft/utils'
+import { NFT } from '../../modules/nft/types'
+import { Vendors } from '../../modules/vendor/types'
 import { NFTImage } from '../NFTImage'
 import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
@@ -19,6 +21,9 @@ const NFTCard = (props: Props) => {
   const { nft, order } = props
 
   const title = getNFTName(nft)
+  const { parcel, estate, wearable, ens } = (nft as NFT<
+    Vendors.DECENTRALAND
+  >).data
 
   return (
     <Card
@@ -42,10 +47,10 @@ const NFTCard = (props: Props) => {
             })}
           </Card.Meta>
         ) : null}
-        {nft.parcel ? <ParcelTags nft={nft} /> : null}
-        {nft.estate ? <EstateTags nft={nft} /> : null}
-        {nft.wearable ? <WearableTags nft={nft} /> : null}
-        {nft.ens ? <ENSTags nft={nft} /> : null}
+        {parcel ? <ParcelTags nft={nft} /> : null}
+        {estate ? <EstateTags nft={nft} /> : null}
+        {wearable ? <WearableTags nft={nft} /> : null}
+        {ens ? <ENSTags nft={nft} /> : null}
       </Card.Content>
     </Card>
   )

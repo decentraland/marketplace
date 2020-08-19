@@ -223,7 +223,7 @@
     "proceed_anyways": "Proceder",
     "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
-    "not_enough_mana": "No tienes suficiente MANA para comprar {name}."
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
   },
   "bid_page": {
     "title": "Haz una oferta",
