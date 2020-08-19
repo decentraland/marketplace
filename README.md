@@ -2,7 +2,7 @@
 
 Decentraland's Marketplace
 
-## Fronted
+## Frontend
 
 It can be found under [/webapp](https://github.com/decentraland/marketplace/tree/master/webapp).
 
