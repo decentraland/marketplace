@@ -9,19 +9,25 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
+import { Section } from '../../../../modules/vendor/known_origin/routing/types'
 import { SortBy } from '../../../../modules/routing/types'
 import { PriceChangeNotice } from '../../PriceChangeNotice'
 import { Props } from './NFTFilters.types'
 
 const NFTFilters = (props: Props) => {
-  const { onBrowse } = props
+  const { section, onBrowse } = props
 
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
-  const dropdownOptions = [
-    { value: SortBy.RECENTLY_LISTED, text: t('filters.recently_listed') },
-    { value: SortBy.CHEAPEST, text: t('filters.cheapest') }
-  ]
+  const dropdownOptions =
+    section === Section.ALL || section === Section.EDITIONS
+      ? [
+          { value: SortBy.RECENTLY_LISTED, text: t('filters.recently_listed') },
+          { value: SortBy.CHEAPEST, text: t('filters.cheapest') }
+        ]
+      : section === Section.TOKENS
+      ? [{ value: SortBy.NEWEST, text: t('filters.newest') }]
+      : []
 
   const sortBy = dropdownOptions.find(option => option.value === props.sortBy)
     ? props.sortBy

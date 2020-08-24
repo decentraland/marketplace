@@ -57,9 +57,8 @@ class EditionAPI {
       case NFTSortBy.PRICE:
         return 'priceInWei'
       case NFTSortBy.CREATED_AT:
-        return 'createdTimestamp'
       case NFTSortBy.ORDER_CREATED_AT:
-        return 'startDate'
+        return 'createdTimestamp'
       default:
         return undefined
     }
