@@ -15,5 +15,4 @@ export type Bid = {
   updatedAt: string
   contractAddress: string
   tokenId: string
-  name: string
 }

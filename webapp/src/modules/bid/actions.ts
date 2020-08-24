@@ -1,7 +1,6 @@
 import { action } from 'typesafe-actions'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { NFT } from '../nft/types'
-import { getNFTName } from '../nft/utils'
 import { Bid } from './types'
 import { formatMANA } from '../../lib/mana'
 
@@ -33,7 +32,6 @@ export const placeBidSuccess = (
     ...buildTransactionPayload(txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
-      name: getNFTName(nft),
       price
     })
   })
@@ -79,7 +77,6 @@ export const acceptBidSuccess = (bid: Bid, txHash: string) =>
     ...buildTransactionPayload(txHash, {
       tokenId: bid.tokenId,
       contractAddress: bid.contractAddress,
-      name: bid.name,
       price: formatMANA(bid.price)
     })
   })
@@ -103,7 +100,6 @@ export const cancelBidSuccess = (bid: Bid, txHash: string) =>
     ...buildTransactionPayload(txHash, {
       tokenId: bid.tokenId,
       contractAddress: bid.contractAddress,
-      name: bid.name,
       price: formatMANA(bid.price)
     })
   })

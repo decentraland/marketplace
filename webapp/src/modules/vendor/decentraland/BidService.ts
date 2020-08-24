@@ -7,7 +7,6 @@ import { ContractFactory } from '../../contract/ContractFactory'
 import { Bid } from '../../bid/types'
 import { NFT } from '../../nft/types'
 import { OrderStatus } from '../../order/types'
-import { getNFTName } from '../../nft/utils'
 import { Vendors } from '../types'
 import { BidService as BidServiceInterface } from '../services'
 import { ContractService } from './ContractService'
@@ -22,7 +21,6 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
       const { nft, ...rest } = result
       bids.push({
         ...rest,
-        name: getNFTName(nft),
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId
       })
@@ -39,7 +37,6 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
       const { nft, ...rest } = result
       bids.push({
         ...rest,
-        name: getNFTName(nft),
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId
       })
@@ -55,7 +52,6 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
       const { nft, ...rest } = result
       bids.push({
         ...rest,
-        name: getNFTName(nft),
         contractAddress: nft.contractAddress,
         tokenId: nft.tokenId
       })

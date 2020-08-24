@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom'
 import { Mana, Popup } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { EtherscanLink } from 'decentraland-dapps/dist/containers'
+
+import { contractSymbols } from '../../../modules/contract/utils'
+import { getNFTName } from '../../../modules/nft/utils'
 import {
   APPROVE_TOKEN_SUCCESS,
   ALLOW_TOKEN_SUCCESS
 } from '../../../modules/authorization/actions'
-import { contractSymbols } from '../../../modules/contract/utils'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
@@ -196,7 +198,7 @@ const Transaction = (props: Props) => {
       )
     }
     case PLACE_BID_SUCCESS: {
-      const { tokenId, contractAddress, name, price } = tx.payload
+      const { tokenId, contractAddress, price } = tx.payload
       return (
         <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -208,7 +210,7 @@ const Transaction = (props: Props) => {
                   values={{
                     name: (
                       <Link to={locations.nft(contractAddress, tokenId)}>
-                        {name}
+                        {getNFTName(nft!)}
                       </Link>
                     ),
                     price: <Mana inline>{price.toLocaleString()}</Mana>
@@ -222,7 +224,7 @@ const Transaction = (props: Props) => {
       )
     }
     case ACCEPT_BID_SUCCESS: {
-      const { tokenId, contractAddress, name, price } = tx.payload
+      const { tokenId, contractAddress, price } = tx.payload
       return (
         <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -234,7 +236,7 @@ const Transaction = (props: Props) => {
                   values={{
                     name: (
                       <Link to={locations.nft(contractAddress, tokenId)}>
-                        {name}
+                        {getNFTName(nft!)}
                       </Link>
                     ),
                     price: <Mana inline>{price.toLocaleString()}</Mana>
@@ -248,7 +250,7 @@ const Transaction = (props: Props) => {
       )
     }
     case CANCEL_BID_SUCCESS: {
-      const { tokenId, contractAddress, name, price } = tx.payload
+      const { tokenId, contractAddress, price } = tx.payload
       return (
         <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -260,7 +262,7 @@ const Transaction = (props: Props) => {
                   values={{
                     name: (
                       <Link to={locations.nft(contractAddress, tokenId)}>
-                        {name}
+                        {getNFTName(nft!)}
                       </Link>
                     ),
                     price: <Mana inline>{price.toLocaleString()}</Mana>
