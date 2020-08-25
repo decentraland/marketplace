@@ -7,7 +7,7 @@
   min-height: 150px;
 }
 
-.NFTBrowse .ui.cards .empty {
+.NFTBrowse .ui.cards + .empty {
   margin-top: 40px;
   font-size: 16px;
   text-align: center;
