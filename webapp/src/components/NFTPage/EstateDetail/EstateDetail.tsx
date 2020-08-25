@@ -41,7 +41,7 @@ const EstateDetail = (props: Props) => {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {t('global.jump_in')}&nbsp;
+                    {t('nft_page.jump')}&nbsp;{t('nft_page.in')}
                     <i className="jump-in-icon" />
                   </a>
                 </Badge>
