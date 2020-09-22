@@ -10,6 +10,7 @@ import {
   LANDRegistry,
   EstateRegistry,
   DCLRegistrar,
+  BinanceUsCollection,
   CommunityContestCollection,
   DappcraftMoonminerCollection,
   DCGCollection,
@@ -35,6 +36,7 @@ export function handleInitialize(_: InitializeCall): void {
     ERC721.create(Address.fromString(LANDRegistry))
     ERC721.create(Address.fromString(EstateRegistry))
     ERC721.create(Address.fromString(DCLRegistrar))
+    ERC721.create(Address.fromString(BinanceUsCollection))
     ERC721.create(Address.fromString(CommunityContestCollection))
     ERC721.create(Address.fromString(DappcraftMoonminerCollection))
     ERC721.create(Address.fromString(DCGCollection))

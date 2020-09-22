@@ -1,5 +1,6 @@
 export * from './Wearable'
 
+export * from './binance_us_collection'
 export * from './community_contest'
 export * from './dappcraft_moonminer'
 export * from './dcg_collection'
