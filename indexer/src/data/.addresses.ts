@@ -7,6 +7,7 @@ export const Marketplace = '{{address:Marketplace}}'
 
 export const DCLRegistrar = '{{address:DCLRegistrar}}'
 
+export const BinanceUsCollection = '{{address:BinanceUsCollection}}'
 export const CommunityContestCollection =
   '{{address:CommunityContestCollection}}'
 export const DappcraftMoonminerCollection =

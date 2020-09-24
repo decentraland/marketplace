@@ -12,6 +12,7 @@ export function getCategory(contractAddress: string): string {
   } else if (contractAddress == addresses.DCLRegistrar) {
     category = categories.ENS
   } else if (
+    contractAddress == addresses.BinanceUsCollection ||
     contractAddress == addresses.CommunityContestCollection ||
     contractAddress == addresses.DappcraftMoonminerCollection ||
     contractAddress == addresses.DCGCollection ||
