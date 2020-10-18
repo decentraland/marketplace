@@ -8,7 +8,9 @@ import { addressEquals } from '../wallet/utils'
 import { NFT, NFTSortBy } from './types'
 
 export function getNFTId(contractAddress: string, tokenId: string) {
-  const contractCategory = contractCategories[contractAddress]
+  // TODO: added "wearable" as fallback so when a new collection is added to TheGraph that hasn't been added to the frontend yet, we can handle it without blowing up
+  const contractCategory =
+    contractCategories[contractAddress] || NFTCategory.WEARABLE
 
   if (!contractCategory) {
     throw new Error(
