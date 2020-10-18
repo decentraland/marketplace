@@ -15,6 +15,15 @@ import { NFTFragment } from './nft/fragments'
 import { ContractService } from './ContractService'
 import { MAX_QUERY_SIZE } from './api'
 
+// TODO: remove this once TheGraph is working again as expected
+const isBroken = (nft: NFT<Vendors.DECENTRALAND>) => {
+  return nft.data[nft.category as keyof typeof nft.data] == null
+}
+
+const removeBrokenNFTs = (nfts: NFT<Vendors.DECENTRALAND>[]) => {
+  return nfts.filter(nft => !isBroken(nft))
+}
+
 export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
     const [remoteNFTs, total] = await Promise.all([
@@ -45,7 +54,7 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       nfts.push(nft)
     }
 
-    return [nfts, accounts, orders, total] as const
+    return [removeBrokenNFTs(nfts), accounts, orders, total] as const
   }
 
   async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {
@@ -65,6 +74,10 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
 
     if (order && !isExpired(order.expiresAt!)) {
       nft.activeOrderId = order.id
+    }
+
+    if (isBroken(nft)) {
+      throw new Error('404')
     }
 
     return [nft, order] as const
