@@ -4,6 +4,26 @@ import { NFT } from '../../../nft/types'
 import { Wearable } from '../../../nft/wearable/types'
 import { orderFields, OrderFields } from '../order/fragments'
 
+export const collectionFields = () => gql`
+  fragment collectionFields on Collection {
+    id
+    name
+  }
+`
+
+export const collectionFragment = () => gql`
+  fragment collectionFragment on Collection {
+    ...collectionFields
+  }
+  ${collectionFields()}
+`
+
+export type CollectionFields = {
+  id: string
+  name: string
+}
+export type CollectionFragment = CollectionFields
+
 export const nftFields = () => gql`
   fragment nftFields on NFT {
     id

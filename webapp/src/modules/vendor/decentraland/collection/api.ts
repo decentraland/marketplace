@@ -4,11 +4,24 @@ import { NFTsFetchParams } from '../../../nft/types'
 import { WearableGender } from '../../../nft/wearable/types'
 import { ContractService, ContractName } from '../ContractService'
 import { collectionsClient } from '../api'
-import { nftFragment, NFTFragment } from './fragments'
+import {
+  nftFragment,
+  NFTFragment,
+  collectionFragment,
+  CollectionFragment
+} from './fragments'
 import { NFTsFetchFilters } from './types'
 
 class CollectionAPI {
-  fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
+  fetch = async () => {
+    const { data } = await collectionsClient.query<{
+      collections: CollectionFragment[]
+    }>({ query: COLLECTIONS_QUERY })
+
+    return data.collections
+  }
+
+  fetchNFTs = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
     const query = getNFTsQuery(params, filters)
     const variables = this.buildFetchVariables(params, filters)
 
@@ -20,7 +33,7 @@ class CollectionAPI {
     return data.nfts
   }
 
-  async count(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
+  async countNFTs(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
     const countQuery = getNFTsCountQuery(params, filters)
     const variables = this.buildFetchVariables(params, filters)
 
@@ -32,7 +45,7 @@ class CollectionAPI {
     return data.nfts.length
   }
 
-  async fetchOne(contractAddress: string, tokenId: string) {
+  async fetchOneNFT(contractAddress: string, tokenId: string) {
     const { data } = await collectionsClient.query<{ nfts: NFTFragment[] }>({
       query: NFT_BY_ADDRESS_AND_ID_QUERY,
       variables: {
@@ -175,6 +188,15 @@ const NFT_BY_ADDRESS_AND_ID_QUERY = gql`
     }
   }
   ${nftFragment()}
+`
+
+const COLLECTIONS_QUERY = gql`
+  query Collections {
+    collections {
+      ...collectionFragment
+    }
+  }
+  ${collectionFragment()}
 `
 
 export const collectionAPI = new CollectionAPI()

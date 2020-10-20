@@ -2,12 +2,9 @@ import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 import { MANA } from '../../contracts/MANA'
 import { contractAddresses } from '../contract/utils'
-import { getAddress } from '../wallet/selectors'
-import { store } from '../store'
-import { RootState } from '../reducer'
 import { Bid } from './types'
 
-export async function isInsufficientMANA(bid: Bid) {
+export async function isInsufficientMANA(address: string, bid: Bid) {
   try {
     const eth = Eth.fromCurrentProvider()
     if (!eth) {
@@ -15,8 +12,6 @@ export async function isInsufficientMANA(bid: Bid) {
     }
     const mana = new MANA(eth, Address.fromString(contractAddresses.MANAToken))
 
-    // TODO: Remove store from here, receive address as argument
-    const address = getAddress(store.getState() as RootState)
     if (!address) {
       throw new Error('Invalid address. Wallet must be connected.')
     }

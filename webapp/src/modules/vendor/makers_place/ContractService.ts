@@ -30,24 +30,32 @@ export type ContractName = keyof typeof contractAddresses
 export class ContractService implements ContractServiceInterface {
   static contractAddresses = contractAddresses
 
-  contractAddresses = contractAddresses
+  async getContractAddresses() {
+    return contractAddresses
+  }
 
-  contractSymbols = {
-    [DigitalMediaCore]: 'MakersTokenV2',
-    [DigitalMediaCore2]: 'MakersTokenV2',
-    [MarketplaceAdapter]: 'Partner Marketplace'
-  } as const
+  async getContractSymbols() {
+    return {
+      [DigitalMediaCore]: 'MakersTokenV2',
+      [DigitalMediaCore2]: 'MakersTokenV2',
+      [MarketplaceAdapter]: 'Partner Marketplace'
+    }
+  }
 
-  contractNames = {
-    [DigitalMediaCore]: 'MakersPlace',
-    [DigitalMediaCore2]: 'MakersPlace',
-    [MarketplaceAdapter]: 'BuyAdapter'
-  } as const
+  async getContractNames() {
+    return {
+      [DigitalMediaCore]: 'MakersPlace',
+      [DigitalMediaCore2]: 'MakersPlace',
+      [MarketplaceAdapter]: 'BuyAdapter'
+    }
+  }
 
-  contractCategories = {
-    [DigitalMediaCore]: NFTCategory.ART,
-    [DigitalMediaCore2]: NFTCategory.ART
-  } as const
+  async getContractCategories() {
+    return {
+      [DigitalMediaCore]: NFTCategory.ART,
+      [DigitalMediaCore2]: NFTCategory.ART
+    }
+  }
 
   getTransferType(_address: string) {
     return TransferType.SAFE_TRANSFER_FROM

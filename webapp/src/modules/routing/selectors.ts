@@ -101,6 +101,9 @@ export const getWearableGenders = createSelector<
   )
 )
 
+console.log('*********************************************')
+console.log(contractAddresses)
+console.log('*********************************************')
 export const getContracts = createSelector<RootState, string, string[]>(
   getRouterSearch,
   search =>

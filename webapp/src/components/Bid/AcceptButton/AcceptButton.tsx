@@ -10,18 +10,18 @@ import {
 import { Props } from './AcceptButton.types'
 
 const AcceptButton = (props: Props) => {
-  const { nft, bid, onClick } = props
+  const { address, nft, bid, onClick } = props
 
   const [fingerprint, isLoadingFingerprint] = useFingerprint(nft)
   const [notEnoughMana, setNotEnoughMana] = useState(false)
 
   useEffect(() => {
-    isInsufficientMANA(bid)
+    isInsufficientMANA(address, bid)
       .then(setNotEnoughMana)
       .catch(error =>
         console.error(`Could not get the MANA from bidder ${bid.bidder}`, error)
       )
-  }, [bid])
+  }, [address, bid])
 
   const isValidFingerprint = checkFingerprint(bid, fingerprint)
   const isValidSeller = !!nft && nft.owner === bid.seller

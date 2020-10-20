@@ -29,24 +29,32 @@ export type ContractName = keyof typeof contractAddresses
 export class ContractService implements ContractServiceInterface {
   static contractAddresses = contractAddresses
 
-  contractAddresses = contractAddresses
+  async getContractAddresses() {
+    return contractAddresses
+  }
 
-  contractSymbols = {
-    [SuperRare]: 'SR',
-    [SuperRareV2]: 'SR',
-    [MarketplaceAdapter]: 'BuyAdapter'
-  } as const
+  async getContractSymbols() {
+    return {
+      [SuperRare]: 'SR',
+      [SuperRareV2]: 'SR',
+      [MarketplaceAdapter]: 'BuyAdapter'
+    }
+  }
 
-  contractNames = {
-    [SuperRare]: 'SuperRare',
-    [SuperRareV2]: 'SuperRareV2',
-    [MarketplaceAdapter]: 'Partner Marketplace'
-  } as const
+  async getContractNames() {
+    return {
+      [SuperRare]: 'SuperRare',
+      [SuperRareV2]: 'SuperRareV2',
+      [MarketplaceAdapter]: 'Partner Marketplace'
+    }
+  }
 
-  contractCategories = {
-    [SuperRare]: NFTCategory.ART,
-    [SuperRareV2]: NFTCategory.ART
-  } as const
+  async getContractCategories() {
+    return {
+      [SuperRare]: NFTCategory.ART,
+      [SuperRareV2]: NFTCategory.ART
+    }
+  }
 
   getTransferType(address: string) {
     switch (address) {

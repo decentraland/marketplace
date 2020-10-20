@@ -1,51 +1,42 @@
+import { NFTCategory } from '../nft/types'
 import { VendorFactory } from '../vendor/VendorFactory'
-import { ContractService } from '../vendor/services'
 import { Vendors } from '../vendor/types'
 
-export let contractAddresses: ContractService['contractAddresses']
-export let contractSymbols: ContractService['contractSymbols']
-export let contractNames: ContractService['contractNames']
-export let contractCategories: ContractService['contractCategories']
-export let contractVendors: Record<string, Vendors>
+export let contractAddresses: Record<string, string> = {}
+export let contractSymbols: Record<string, string> = {}
+export let contractNames: Record<string, string> = {}
+export let contractCategories: Record<string, NFTCategory> = {}
+export let contractVendors: Record<string, Vendors> = {}
 
-export function buildContracts() {
+export async function buildContracts() {
   const vendors = Object.values(Vendors).map(VendorFactory.build)
 
-  contractAddresses = vendors.reduce(
-    (obj, { contractService }) => ({
-      ...obj,
-      ...contractService.contractAddresses
-    }),
-    {} as ContractService['contractAddresses']
-  ) as Record<string, string>
+  for (const vendor of vendors) {
+    const { type, contractService } = vendor
 
-  contractSymbols = vendors.reduce(
-    (obj, { contractService }) => ({
-      ...obj,
-      ...contractService.contractSymbols
-    }),
-    {} as ContractService['contractSymbols']
-  )
+    contractAddresses = {
+      ...contractAddresses,
+      ...(await contractService.getContractAddresses())
+    }
 
-  contractNames = vendors.reduce(
-    (obj, { contractService }) => ({
-      ...obj,
-      ...contractService.contractNames
-    }),
-    {} as ContractService['contractNames']
-  )
+    contractSymbols = {
+      ...contractSymbols,
+      ...(await contractService.getContractSymbols())
+    }
 
-  contractCategories = vendors.reduce(
-    (obj, { contractService }) => ({
-      ...obj,
-      ...contractService.contractCategories
-    }),
-    {} as ContractService['contractCategories']
-  )
+    contractNames = {
+      ...contractNames,
+      ...(await contractService.getContractNames())
+    }
 
-  contractVendors = {}
-  for (const { type, contractService } of vendors) {
-    const addresses: string[] = Object.values(contractService.contractAddresses)
+    contractCategories = {
+      ...contractCategories,
+      ...(await contractService.getContractCategories())
+    }
+
+    const addresses: string[] = Object.values(
+      await contractService.getContractAddresses()
+    )
     for (const address of addresses) {
       contractVendors[address] = type as Vendors
     }

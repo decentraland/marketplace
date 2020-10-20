@@ -31,7 +31,7 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   async fetch(params: NFTsFetchParams, filters?: Filters) {
     const [remoteNFTs, remoteCollectionNFTs, total] = await Promise.all([
       nftAPI.fetch(params, filters),
-      collectionAPI.fetch(params, filters),
+      collectionAPI.fetchNFTs(params, filters),
       this.count(params, filters)
     ])
 
@@ -69,7 +69,7 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
     }
     const counts = await Promise.all([
       nftAPI.count(params, filters),
-      collectionAPI.count(params, filters)
+      collectionAPI.countNFTs(params, filters)
     ])
     return counts.reduce((count, total) => count + total, 0)
   }

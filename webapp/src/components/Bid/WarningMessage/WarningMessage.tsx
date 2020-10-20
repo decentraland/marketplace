@@ -10,18 +10,18 @@ import { Props } from './WarningMessage.types'
 import './WarningMessage.css'
 
 const WarningMessage = (props: Props) => {
-  const { nft, bid } = props
+  const { address, nft, bid } = props
 
   const [fingerprint] = useFingerprint(nft)
   const [notEnoughMana, setNotEnoughMana] = useState(false)
 
   useEffect(() => {
-    isInsufficientMANA(bid)
+    isInsufficientMANA(address, bid)
       .then(setNotEnoughMana)
       .catch(error =>
         console.error(`Could not get the MANA from bidder ${bid.bidder}`, error)
       )
-  }, [bid])
+  }, [address, bid])
 
   const isValidFingerprint = checkFingerprint(bid, fingerprint)
 

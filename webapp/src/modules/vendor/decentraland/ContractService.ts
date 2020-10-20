@@ -1,7 +1,9 @@
 import { ContractService as ContractServiceInterface } from '../services'
+import { capitalize } from '../../../lib/text'
 import { Network } from '../../contract/types'
 import { NFTCategory } from '../../nft/types'
 import { TransferType } from '../types'
+import { collectionAPI } from './collection/api'
 
 const network = process.env.REACT_APP_NETWORK! as Network
 
@@ -38,6 +40,8 @@ export type ContractName = keyof typeof contractAddresses
 export class ContractService implements ContractServiceInterface {
   static contractAddresses = contractAddresses
 
+  isFilled: boolean = false
+
   contractAddresses = contractAddresses
 
   contractSymbols = {
@@ -47,7 +51,7 @@ export class ContractService implements ContractServiceInterface {
     [Marketplace]: 'Marketplace',
     [Bids]: 'Bids',
     [DCLRegistrar]: 'Names'
-  } as const
+  }
 
   contractNames = {
     [MANAToken]: 'MANAToken',
@@ -56,15 +60,75 @@ export class ContractService implements ContractServiceInterface {
     [DCLRegistrar]: 'DCLRegistrar',
     [Marketplace]: 'Marketplace',
     [Bids]: 'ERC721Bid'
-  } as const
+  }
 
   contractCategories = {
     [LANDRegistry]: NFTCategory.PARCEL,
     [EstateRegistry]: NFTCategory.ESTATE,
     [DCLRegistrar]: NFTCategory.ENS
-  } as const
+  }
+
+  async getContractAddresses() {
+    await this.fillValues()
+    return this.contractAddresses
+  }
+
+  async getContractSymbols() {
+    await this.fillValues()
+    return this.contractSymbols
+  }
+
+  async getContractNames() {
+    await this.fillValues()
+    return this.contractNames
+  }
+
+  async getContractCategories() {
+    await this.fillValues()
+    return this.contractCategories
+  }
 
   getTransferType(_address: string) {
     return TransferType.SAFE_TRANSFER_FROM
+  }
+
+  private async fillValues() {
+    if (this.isFilled) {
+      return
+    }
+
+    const collections = await collectionAPI.fetch()
+    for (const collection of collections) {
+      this.contractAddresses = {
+        ...this.contractAddresses,
+        [collection.name]: collection.id
+      }
+      this.contractNames = {
+        ...this.contractNames,
+        [collection.name]: this.getHumanName(collection.name)
+      }
+      this.contractSymbols = {
+        ...this.contractSymbols,
+        [collection.name]: this.getSymbol(collection.name)
+      }
+      this.contractCategories = {
+        ...this.contractCategories,
+        [collection.name]: NFTCategory.WEARABLE
+      }
+    }
+
+    this.isFilled = true
+  }
+
+  private getHumanName(name: string) {
+    return capitalize(name.replace('dcl://', '').replace('_', ' '))
+  }
+
+  private getSymbol(name: string) {
+    return name
+      .replace('dcl://', '')
+      .split('_')
+      .map(capitalize)
+      .join()
   }
 }

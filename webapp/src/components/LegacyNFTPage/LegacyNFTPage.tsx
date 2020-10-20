@@ -15,19 +15,23 @@ const LegacyNFTPage = (props: Props) => {
   const { contractService } = VendorFactory.build(Vendors.DECENTRALAND)
 
   useEffect(() => {
-    const { LANDRegistry, EstateRegistry } = contractService.contractAddresses
-    const { estateId, x, y } = params
+    contractService
+      .getContractAddresses()
+      .then(({ LANDRegistry, EstateRegistry }) => {
+        const { estateId, x, y } = params
 
-    if (estateId) {
-      history.push(locations.nft(EstateRegistry, estateId))
-    } else if (x && y) {
-      nftAPI
-        .fetchTokenId(Number(x), Number(y))
-        .then(tokenId => {
-          history.push(locations.nft(LANDRegistry, tokenId))
-        })
-        .catch(() => history.push(locations.root()))
-    }
+        if (estateId) {
+          history.push(locations.nft(EstateRegistry, estateId))
+        } else if (x && y) {
+          nftAPI
+            .fetchTokenId(Number(x), Number(y))
+            .then(tokenId => {
+              history.push(locations.nft(LANDRegistry, tokenId))
+            })
+            .catch(() => history.push(locations.root()))
+        }
+      })
+      .catch(error => console.log(error))
   }, [contractService, params, history])
 
   return (

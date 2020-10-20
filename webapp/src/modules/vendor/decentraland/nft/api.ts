@@ -129,6 +129,7 @@ function getNFTsQuery(
         where: {
           searchEstateSize_gt: 0
           searchParcelIsInBounds: true
+          category_not: wearable
           ${extraWhere.join('\n')}
         }
         ${NFTS_ARGUMENTS}

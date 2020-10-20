@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
+import { capitalize } from '../../../lib/text'
 import { SortDirection } from '../../routing/types'
 import { NFTsFetchParams, NFTSortBy } from '../../nft/types'
 import {
@@ -79,11 +80,7 @@ class MakersPlaceAPI extends BaseAPI {
     }
 
     const direction = params.orderDirection || SortDirection.DESC
-    return (sort + this.capitalize(direction)) as MakersPlaceSort
-  }
-
-  private capitalize(str: string) {
-    return str[0].toUpperCase() + str.slice(1).toLowerCase()
+    return (sort + capitalize(direction)) as MakersPlaceSort
   }
 }
 
