@@ -17,12 +17,6 @@ import {
   getParcelText,
   isInBounds
 } from '../modules/parcel'
-import {
-  buildWearableFromNFT,
-  getWearableImage,
-  isWearableHead,
-  isWearableAccessory
-} from '../modules/wearable'
 import { buildENSFromNFT } from '../modules/ens'
 import { createAccount } from '../modules/wallet'
 import { toLowerCase } from '../modules/utils'
@@ -88,20 +82,6 @@ export function handleTransfer(event: Transfer): void {
       nft.image = getEstateImage(estate)
       nft.searchIsLand = true
       nft.searchEstateSize = estate.size
-    } else if (category == categories.WEARABLE) {
-      let wearable = buildWearableFromNFT(nft)
-      if (wearable.id != '') {
-        wearable.save()
-        nft.wearable = id
-        nft.name = wearable.name
-        nft.image = getWearableImage(wearable)
-        nft.searchIsWearableHead = isWearableHead(wearable)
-        nft.searchIsWearableAccessory = isWearableAccessory(wearable)
-        nft.searchWearableCategory = wearable.category
-        nft.searchWearableBodyShapes = wearable.bodyShapes
-        nft.searchWearableRarity = wearable.rarity
-        nft.searchText = toLowerCase(wearable.name)
-      }
     } else if (category == categories.ENS) {
       let ens = buildENSFromNFT(nft)
       ens.save()

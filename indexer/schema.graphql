@@ -10,15 +10,10 @@ type Count @entity {
   orderTotal: Int!
   orderParcel: Int!
   orderEstate: Int!
-  orderWearable: Int!
   orderENS: Int!
 
   parcelTotal: Int!
-
   estateTotal: Int!
-
-  wearableTotal: Int!
-
   ensTotal: Int!
 
   started: Int!
@@ -103,18 +98,6 @@ type Data @entity {
   ipns: String
 }
 
-type Wearable @entity {
-  id: ID!
-  owner: Account!
-  representationId: String!
-  collection: String!
-  name: String!
-  description: String!
-  category: WearableCategory!
-  rarity: WearableRarity!
-  bodyShapes: [WearableBodyShape!]
-}
-
 type ENS @entity {
   id: ID!
   tokenId: BigInt!
@@ -143,7 +126,6 @@ type NFT @entity {
 
   parcel: Parcel
   estate: Estate
-  wearable: Wearable
   ens: ENS
 
   createdAt: BigInt!
@@ -165,12 +147,6 @@ type NFT @entity {
   searchParcelEstateId: String
 
   searchEstateSize: Int
-
-  searchIsWearableHead: Boolean
-  searchIsWearableAccessory: Boolean
-  searchWearableRarity: String # We're using String instead of WearableRarity here so we can later query this field via ()_in
-  searchWearableCategory: WearableCategory
-  searchWearableBodyShapes: [WearableBodyShape!]
 }
 
 # ---------------------------------------------------------
@@ -191,7 +167,6 @@ type Account @entity {
 enum Category @entity {
   parcel
   estate
-  wearable
   ens
 }
 
@@ -199,37 +174,4 @@ enum OrderStatus @entity {
   open
   sold
   cancelled
-}
-
-enum WearableCategory @entity {
-  eyebrows
-  eyes
-  facial_hair
-  hair
-  mouth
-  upper_body
-  lower_body
-  feet
-  earring
-  eyewear
-  hat
-  helmet
-  mask
-  tiara
-  top_head
-}
-
-enum WearableRarity @entity {
-  common
-  uncommon
-  rare
-  epic
-  legendary
-  mythic
-  unique
-}
-
-enum WearableBodyShape @entity {
-  BaseFemale
-  BaseMale
 }

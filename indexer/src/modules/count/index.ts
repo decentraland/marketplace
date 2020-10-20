@@ -12,15 +12,10 @@ export function buildCount(): Count {
     count.orderTotal = 0
     count.orderParcel = 0
     count.orderEstate = 0
-    count.orderWearable = 0
     count.orderENS = 0
 
     count.parcelTotal = 0
-
     count.estateTotal = 0
-
-    count.wearableTotal = 0
-
     count.ensTotal = 0
 
     count.started = 0
@@ -38,8 +33,6 @@ export function buildCountFromNFT(nft: NFT): Count {
     count.parcelTotal += 1
   } else if (category == categories.ESTATE) {
     count.estateTotal += 1
-  } else if (category == categories.WEARABLE) {
-    count.wearableTotal += 1
   } else if (category == categories.ENS) {
     count.ensTotal += 1
   }
@@ -56,8 +49,6 @@ export function buildCountFromOrder(order: Order): Count {
     count.orderParcel += 1
   } else if (category == categories.ESTATE) {
     count.orderEstate += 1
-  } else if (category == categories.WEARABLE) {
-    count.orderWearable += 1
   } else if (category == categories.ENS) {
     count.orderENS += 1
   }

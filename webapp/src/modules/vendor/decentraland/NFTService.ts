@@ -113,14 +113,8 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       }
       category = NFTCategory.WEARABLE
     } else {
-      const {
-        parcel,
-        estate,
-        wearable,
-        ens,
-        category: nftCategory
-      } = nft as NFTFragment
-      data = { parcel, estate, wearable, ens }
+      const { parcel, estate, ens, category: nftCategory } = nft as NFTFragment
+      data = { parcel, estate, ens }
       category = nftCategory
     }
 
