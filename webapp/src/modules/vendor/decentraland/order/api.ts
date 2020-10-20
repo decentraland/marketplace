@@ -1,14 +1,16 @@
 import { gql } from 'apollo-boost'
 
-import { client } from '../api'
+import { marketplaceClient } from '../api'
 import { orderFragment, OrderFragment } from './fragments'
 
 class OrderAPI {
   async fetchByNFT(nftId: string) {
-    const { data } = await client.query<{ orders: OrderFragment[] }>({
-      query: NFT_ORDERS_QUERY,
-      variables: { nftId }
-    })
+    const { data } = await marketplaceClient.query<{ orders: OrderFragment[] }>(
+      {
+        query: NFT_ORDERS_QUERY,
+        variables: { nftId }
+      }
+    )
     return data.orders
   }
 }

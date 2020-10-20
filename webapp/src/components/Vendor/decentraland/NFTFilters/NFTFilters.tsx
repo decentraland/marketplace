@@ -17,7 +17,6 @@ import {
   WearableGender
 } from '../../../../modules/nft/wearable/types'
 import { NFTCategory } from '../../../../modules/nft/types'
-import { ContractName } from '../../../../modules/vendor/types'
 import { Section } from '../../../../modules/vendor/decentraland/routing/types'
 import { MAX_QUERY_SIZE } from '../../../../modules/vendor/decentraland/api'
 import { getSearchCategory } from '../../../../modules/routing/search'
@@ -112,7 +111,7 @@ const NFTFilters = (props: Props) => {
 
   const handleCollectionsChange = useCallback(
     (contract: string) => {
-      onBrowse({ contracts: [contract as ContractName] })
+      onBrowse({ contracts: [contract] })
     },
     [onBrowse]
   )

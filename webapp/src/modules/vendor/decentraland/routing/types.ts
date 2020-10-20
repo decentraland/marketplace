@@ -1,5 +1,6 @@
+// TODO: We're hacking this type to keep a unified interface. All sections have the `ALL` prop so we keep it here and default to land
 export enum Section {
-  ALL = 'all',
+  ALL = 'land',
 
   LAND = 'land',
   PARCELS = 'parcels',

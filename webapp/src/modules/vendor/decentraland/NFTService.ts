@@ -3,31 +3,35 @@ import { Address } from 'web3x-es/address'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { locations } from '../../routing/locations'
-import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
+import {
+  NFT,
+  Data,
+  NFTsFetchParams,
+  NFTsCountParams,
+  NFTCategory
+} from '../../nft/types'
 import { Order } from '../../order/types'
 import { Account } from '../../account/types'
 import { isExpired } from '../../order/utils'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from './nft/types'
+import { NFTsFetchFilters as CollectionNFTsFetchFilters } from './collection/types'
 import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
+import { collectionAPI } from './collection/api'
 import { NFTFragment } from './nft/fragments'
+import { NFTFragment as CollectionNFTFragment } from './collection/fragments'
 import { ContractService } from './ContractService'
 import { MAX_QUERY_SIZE } from './api'
 
-// TODO: remove this once TheGraph is working again as expected
-const isBroken = (nft: NFT<Vendors.DECENTRALAND>) => {
-  return nft.data[nft.category as keyof typeof nft.data] == null
-}
-
-const removeBrokenNFTs = (nfts: NFT<Vendors.DECENTRALAND>[]) => {
-  return nfts.filter(nft => !isBroken(nft))
-}
+type Filters = NFTsFetchFilters & CollectionNFTsFetchFilters
+type Fragment = NFTFragment | CollectionNFTFragment
 
 export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
-  async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
-    const [remoteNFTs, total] = await Promise.all([
+  async fetch(params: NFTsFetchParams, filters?: Filters) {
+    const [remoteNFTs, remoteCollectionNFTs, total] = await Promise.all([
       nftAPI.fetch(params, filters),
+      collectionAPI.fetch(params, filters),
       this.count(params, filters)
     ])
 
@@ -35,7 +39,7 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
     const accounts: Account[] = []
     const orders: Order[] = []
 
-    for (const remoteNFT of remoteNFTs) {
+    for (const remoteNFT of [...remoteNFTs, ...remoteCollectionNFTs]) {
       const nft = this.toNFT(remoteNFT)
       const order = this.toOrder(remoteNFT)
 
@@ -54,16 +58,20 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       nfts.push(nft)
     }
 
-    return [removeBrokenNFTs(nfts), accounts, orders, total] as const
+    return [nfts, accounts, orders, total] as const
   }
 
-  async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {
+  async count(countParams: NFTsCountParams, filters?: Filters) {
     const params: NFTsFetchParams = {
       ...countParams,
       first: MAX_QUERY_SIZE,
       skip: 0
     }
-    return nftAPI.count(params, filters)
+    const counts = await Promise.all([
+      nftAPI.count(params, filters),
+      collectionAPI.count(params, filters)
+    ])
+    return counts.reduce((count, total) => count + total, 0)
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
@@ -74,10 +82,6 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
 
     if (order && !isExpired(order.expiresAt!)) {
       nft.activeOrderId = order.id
-    }
-
-    if (isBroken(nft)) {
-      throw new Error('404')
     }
 
     return [nft, order] as const
@@ -98,7 +102,28 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       .getTxHash()
   }
 
-  toNFT(nft: NFTFragment): NFT<Vendors.DECENTRALAND> {
+  toNFT(nft: Fragment): NFT<Vendors.DECENTRALAND> {
+    let data: Data<Vendors.DECENTRALAND>
+    let category: NFTCategory
+
+    if (this.isCollectionNFT(nft)) {
+      const { metadata } = nft as CollectionNFTFragment
+      data = {
+        wearable: metadata.wearable
+      }
+      category = NFTCategory.WEARABLE
+    } else {
+      const {
+        parcel,
+        estate,
+        wearable,
+        ens,
+        category: nftCategory
+      } = nft as NFTFragment
+      data = { parcel, estate, wearable, ens }
+      category = nftCategory
+    }
+
     return {
       id: nft.id,
       tokenId: nft.tokenId,
@@ -108,18 +133,13 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       name: nft.name,
       image: nft.image,
       url: locations.nft(nft.contractAddress, nft.tokenId),
-      data: {
-        parcel: nft.parcel,
-        estate: nft.estate,
-        wearable: nft.wearable,
-        ens: nft.ens
-      },
-      category: nft.category,
+      data,
+      category,
       vendor: Vendors.DECENTRALAND
     }
   }
 
-  toOrder(nft: NFTFragment): Order | undefined {
+  toOrder(nft: Fragment): Order | undefined {
     let order: Order | undefined
 
     if (nft.activeOrder) {
@@ -139,5 +159,9 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       address,
       nftIds: []
     }
+  }
+
+  private isCollectionNFT(nft: Fragment) {
+    return (nft as CollectionNFTFragment).itemBlockchainId !== undefined
   }
 }

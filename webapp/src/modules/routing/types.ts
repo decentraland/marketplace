@@ -1,5 +1,5 @@
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
-import { Vendors, ContractName } from '../vendor/types'
+import { Vendors } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
 import { View } from '../ui/types'
 
@@ -28,6 +28,6 @@ export type SearchOptions = {
   wearableRarities?: WearableRarity[]
   wearableGenders?: WearableGender[]
   search?: string
-  contracts?: ContractName[]
+  contracts?: string[]
   address?: string
 }

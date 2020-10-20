@@ -1,16 +1,18 @@
 import { gql } from 'apollo-boost'
 
 import { NFTsFetchParams } from '../../../nft/types'
-import { marketplaceClient } from '../api'
+import { WearableGender } from '../../../nft/wearable/types'
+import { ContractService, ContractName } from '../ContractService'
+import { collectionsClient } from '../api'
 import { nftFragment, NFTFragment } from './fragments'
 import { NFTsFetchFilters } from './types'
 
-class NFTAPI {
+class CollectionAPI {
   fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
     const query = getNFTsQuery(params, filters)
     const variables = this.buildFetchVariables(params, filters)
 
-    const { data } = await marketplaceClient.query<{ nfts: NFTFragment[] }>({
+    const { data } = await collectionsClient.query<{ nfts: NFTFragment[] }>({
       query,
       variables
     })
@@ -22,7 +24,7 @@ class NFTAPI {
     const countQuery = getNFTsCountQuery(params, filters)
     const variables = this.buildFetchVariables(params, filters)
 
-    const { data } = await marketplaceClient.query<{ nfts: NFTFragment[] }>({
+    const { data } = await collectionsClient.query<{ nfts: NFTFragment[] }>({
       query: countQuery,
       variables
     })
@@ -31,7 +33,7 @@ class NFTAPI {
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
-    const { data } = await marketplaceClient.query<{ nfts: NFTFragment[] }>({
+    const { data } = await collectionsClient.query<{ nfts: NFTFragment[] }>({
       query: NFT_BY_ADDRESS_AND_ID_QUERY,
       variables: {
         contractAddress,
@@ -39,18 +41,6 @@ class NFTAPI {
       }
     })
     return data.nfts[0]
-  }
-
-  async fetchTokenId(x: number, y: number) {
-    const { data } = await marketplaceClient.query<{
-      parcels: { tokenId: string }[]
-    }>({
-      query: PARCEL_TOKEN_ID_QUERY,
-      variables: { x, y },
-      fetchPolicy: 'cache-first'
-    })
-    const { tokenId } = data.parcels[0]
-    return tokenId
   }
 
   private buildFetchVariables(
@@ -73,8 +63,9 @@ const NFTS_FILTERS = `
 
   $expiresAt: String
   $address: String
-  $category: Category
-  $isLand: Boolean
+  $wearableCategory: String
+  $isWearableHead: Boolean
+  $isWearableAccessory: Boolean
 `
 
 const NFTS_ARGUMENTS = `
@@ -102,10 +93,6 @@ function getNFTsQuery(
     extraWhere.push('owner: $address')
   }
 
-  if (params.category) {
-    extraWhere.push('category: $category')
-  }
-
   if (params.onlyOnSale) {
     extraWhere.push('searchOrderStatus: open')
     extraWhere.push('searchOrderExpiresAt_gt: $expiresAt')
@@ -117,8 +104,48 @@ function getNFTsQuery(
     )
   }
 
-  if (filters.isLand) {
-    extraWhere.push('searchIsLand: $isLand')
+  if (filters.wearableCategory) {
+    extraWhere.push('searchWearableCategory: $wearableCategory')
+  }
+
+  if (filters.isWearableHead) {
+    extraWhere.push('searchIsWearableHead: $isWearableHead')
+  }
+
+  if (filters.isWearableAccessory) {
+    extraWhere.push('searchIsWearableAccessory: $isWearableAccessory')
+  }
+
+  if (filters.wearableRarities && filters.wearableRarities.length > 0) {
+    extraWhere.push(
+      `searchWearableRarity_in: [${filters.wearableRarities
+        .map(rarity => `"${rarity}"`)
+        .join(',')}]`
+    )
+  }
+
+  if (filters.wearableGenders && filters.wearableGenders.length > 0) {
+    const hasMale = filters.wearableGenders.includes(WearableGender.MALE)
+    const hasFemale = filters.wearableGenders.includes(WearableGender.FEMALE)
+
+    if (hasMale && !hasFemale) {
+      extraWhere.push(`searchWearableBodyShapes: [BaseMale]`)
+    } else if (hasFemale && !hasMale) {
+      extraWhere.push(`searchWearableBodyShapes: [BaseFemale]`)
+    } else if (hasMale && hasFemale) {
+      extraWhere.push(
+        `searchWearableBodyShapes_contains: [BaseMale, BaseFemale]`
+      )
+    }
+  }
+
+  if (filters.contracts && filters.contracts.length > 0) {
+    const { contractAddresses } = ContractService
+    extraWhere.push(
+      `contractAddress_in: [${filters.contracts
+        .map(contract => `"${contractAddresses[contract as ContractName]}"`)
+        .join(', ')}]`
+    )
   }
 
   return gql`
@@ -127,8 +154,6 @@ function getNFTsQuery(
     ) {
       nfts(
         where: {
-          searchEstateSize_gt: 0
-          searchParcelIsInBounds: true
           ${extraWhere.join('\n')}
         }
         ${NFTS_ARGUMENTS}
@@ -152,12 +177,4 @@ const NFT_BY_ADDRESS_AND_ID_QUERY = gql`
   ${nftFragment()}
 `
 
-const PARCEL_TOKEN_ID_QUERY = gql`
-  query ParcelTokenId($x: BigInt, $y: BigInt) {
-    parcels(where: { x: $x, y: $y }) {
-      tokenId
-    }
-  }
-`
-
-export const nftAPI = new NFTAPI()
+export const collectionAPI = new CollectionAPI()

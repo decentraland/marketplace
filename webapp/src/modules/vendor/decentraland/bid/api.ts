@@ -1,11 +1,11 @@
 import { gql } from 'apollo-boost'
-import { client } from '../api'
+import { marketplaceClient } from '../api'
 import { OrderStatus } from '../../../order/types'
 import { BidFragment, bidFragment } from './fragments'
 
 class BidAPI {
   async fetchBySeller(seller: string) {
-    const { data } = await client.query<{ bids: BidFragment[] }>({
+    const { data } = await marketplaceClient.query<{ bids: BidFragment[] }>({
       query: BIDS_BY_SELLER_QUERY,
       variables: {
         seller,
@@ -17,7 +17,7 @@ class BidAPI {
   }
 
   async fetchByBidder(bidder: string) {
-    const { data } = await client.query<{ bids: BidFragment[] }>({
+    const { data } = await marketplaceClient.query<{ bids: BidFragment[] }>({
       query: BIDS_BY_BIDDER_QUERY,
       variables: {
         bidder,
@@ -29,7 +29,7 @@ class BidAPI {
   }
 
   async fetchByNFT(nftId: string, status: OrderStatus = OrderStatus.OPEN) {
-    const { data } = await client.query<{ bids: BidFragment[] }>({
+    const { data } = await marketplaceClient.query<{ bids: BidFragment[] }>({
       query: BIDS_BY_NFT_QUERY,
       variables: {
         nftId,

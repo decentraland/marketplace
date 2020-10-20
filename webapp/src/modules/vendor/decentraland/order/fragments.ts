@@ -6,7 +6,6 @@ export type OrderFields = Omit<Order, 'nftId'>
 export const orderFields = () => gql`
   fragment orderFields on Order {
     id
-    category
     nftAddress
     owner
     buyer

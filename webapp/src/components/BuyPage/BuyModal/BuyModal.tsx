@@ -76,7 +76,7 @@ const BuyPage = (props: Props) => {
     !order ||
     isOwner ||
     notEnoughMana ||
-    (!fingerprint && order.category === NFTCategory.ESTATE)
+    (!fingerprint && nft.category === NFTCategory.ESTATE)
 
   const name = <b>{getNFTName(nft)}</b>
   const Price = (props: { price: string }) => (
@@ -88,7 +88,7 @@ const BuyPage = (props: Props) => {
     subtitle = <T id={'buy_page.not_for_sale'} values={{ name }} />
   } else if (
     !fingerprint &&
-    order.category === NFTCategory.ESTATE &&
+    nft.category === NFTCategory.ESTATE &&
     !isFingerprintLoading
   ) {
     subtitle = <T id={'buy_page.no_fingerprint'} />

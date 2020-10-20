@@ -12,7 +12,6 @@ import {
   WearableGender
 } from '../../../../modules/nft/wearable/types'
 import { NFTCategory } from '../../../../modules/nft/types'
-import { ContractName } from '../../../../modules/vendor/types'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
@@ -32,9 +31,9 @@ const FiltersMenu = (props: Props) => {
   const collectionOptions = useMemo(() => {
     const options = Object.keys(contractAddresses).filter(
       (contractName: string) =>
-        contractCategories[contractAddresses[contractName as ContractName]] ===
+        contractCategories[contractAddresses[contractName]] ===
         NFTCategory.WEARABLE
-    ) as ContractName[]
+    )
     return [
       {
         value: ALL_COLLECTIONS_FILTER_OPTION,

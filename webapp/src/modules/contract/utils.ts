@@ -1,6 +1,6 @@
 import { VendorFactory } from '../vendor/VendorFactory'
 import { ContractService } from '../vendor/services'
-import { ContractName, Vendors } from '../vendor/types'
+import { Vendors } from '../vendor/types'
 
 export let contractAddresses: ContractService['contractAddresses']
 export let contractSymbols: ContractService['contractSymbols']
@@ -17,7 +17,7 @@ export function buildContracts() {
       ...contractService.contractAddresses
     }),
     {} as ContractService['contractAddresses']
-  ) as Record<ContractName, string>
+  ) as Record<string, string>
 
   contractSymbols = vendors.reduce(
     (obj, { contractService }) => ({

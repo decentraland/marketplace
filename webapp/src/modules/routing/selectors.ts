@@ -3,7 +3,7 @@ import { getSearch as getRouterSearch } from 'connected-react-router'
 import { getView } from '../ui/nft/browse/selectors'
 import { View } from '../ui/types'
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
-import { ContractName, Vendors } from '../vendor/types'
+import { Vendors } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
 import { contractAddresses } from '../contract/utils'
 import { RootState } from '../reducer'
@@ -101,14 +101,10 @@ export const getWearableGenders = createSelector<
   )
 )
 
-export const getContracts = createSelector<RootState, string, ContractName[]>(
+export const getContracts = createSelector<RootState, string, string[]>(
   getRouterSearch,
   search =>
-    getURLParamArray<ContractName>(
-      search,
-      'contracts',
-      Object.keys(contractAddresses)
-    )
+    getURLParamArray(search, 'contracts', Object.keys(contractAddresses))
 )
 
 export const getSearch = createSelector<RootState, string, string>(
