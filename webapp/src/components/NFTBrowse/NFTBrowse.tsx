@@ -24,7 +24,10 @@ const NFTBrowse = (props: Props) => {
     onFetchNFTsFromRoute
   } = props
 
-  const { onlyOnSale } = getDefaultOptionsByView(view)
+  const onlyOnSale =
+    props.onlyOnSale === undefined
+      ? getDefaultOptionsByView(view).onlyOnSale
+      : props.onlyOnSale
 
   // Kick things off
   useEffect(() => {

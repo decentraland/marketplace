@@ -35,6 +35,11 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
     ...action.payload.options.params
   }
 
+  console.log('handleFetchNFTRequest', {
+    DEFAULT_BASE_NFT_PARAMS,
+    payload: action.payload.options.params
+  })
+
   try {
     const { nftService } = VendorFactory.build(vendor)
 
