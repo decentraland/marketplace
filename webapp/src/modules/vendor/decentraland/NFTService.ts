@@ -13,6 +13,7 @@ import {
 import { Order } from '../../order/types'
 import { Account } from '../../account/types'
 import { isExpired } from '../../order/utils'
+import { getNFTId } from '../../nft/utils'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from './nft/types'
 import { NFTsFetchFilters as CollectionNFTsFetchFilters } from './collection/types'
@@ -75,7 +76,11 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
-    const remoteNFT = await nftAPI.fetchOne(contractAddress, tokenId)
+    let remoteNFT: Fragment = await nftAPI.fetchOne(contractAddress, tokenId)
+
+    if (!remoteNFT) {
+      remoteNFT = await collectionAPI.fetchOneNFT(contractAddress, tokenId)
+    }
 
     const nft = this.toNFT(remoteNFT)
     const order = this.toOrder(remoteNFT)
@@ -119,7 +124,7 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
     }
 
     return {
-      id: nft.id,
+      id: getNFTId(nft.contractAddress, nft.tokenId),
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       activeOrderId: '',
