@@ -1,5 +1,6 @@
 import { NameRegistered } from '../entities/DCLRegistrar/DCLRegistrar'
 import { ENS, NFT } from '../entities/schema'
+import { createAccount } from '../modules/wallet'
 import { getNFTId } from '../modules/nft'
 import { getTokenIdFromLabelHash } from '../modules/ens'
 import { toLowerCase } from '../modules/utils'
@@ -25,4 +26,6 @@ export function handleNameRegistered(event: NameRegistered): void {
   nft.name = ens.subdomain
   nft.searchText = toLowerCase(ens.subdomain)
   nft.save()
+
+  createAccount(event.params._caller)
 }
