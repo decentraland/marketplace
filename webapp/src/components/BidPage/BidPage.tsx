@@ -16,10 +16,9 @@ const BidPage = (props: Props) => {
         <Wallet>
           {wallet => (
             <NFTProviderPage>
-              {(nft, order) => (
+              {nft => (
                 <BidModal
                   nft={nft}
-                  order={order}
                   wallet={wallet}
                   authorizations={authorizations}
                   onNavigate={onNavigate}
