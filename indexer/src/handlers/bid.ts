@@ -1,4 +1,4 @@
-import { log, BigInt, Address } from '@graphprotocol/graph-ts'
+import { BigInt, Address } from '@graphprotocol/graph-ts'
 import {
   BidCreated,
   BidAccepted,

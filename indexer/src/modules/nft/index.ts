@@ -1,4 +1,4 @@
-import { log, BigInt, Address } from '@graphprotocol/graph-ts'
+import { log, BigInt } from '@graphprotocol/graph-ts'
 import { NFT, Order, Bid } from '../../entities/schema'
 import { ERC721, Transfer } from '../../entities/templates/ERC721/ERC721'
 import * as status from '../order/status'

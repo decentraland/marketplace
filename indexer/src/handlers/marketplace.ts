@@ -73,7 +73,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
     order.save()
 
     nft.owner = event.params.buyer.toHex()
-    nft = updateNFTOrderProperties(nft!, order)
+    nft = updateNFTOrderProperties(nft!, order!)
     nft.save()
   }
 }
@@ -97,7 +97,7 @@ export function handleOrderCancelled(event: OrderCancelled): void {
     order.updatedAt = event.block.timestamp
     order.save()
 
-    nft = updateNFTOrderProperties(nft!, order)
+    nft = updateNFTOrderProperties(nft!, order!)
     nft.save()
   }
 }
