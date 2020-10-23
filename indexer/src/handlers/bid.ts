@@ -26,22 +26,24 @@ export function handleBidCreated(event: BidCreated): void {
   let nft = NFT.load(nftId)
   let bid = new Bid(id)
 
-  bid.status = status.OPEN
-  bid.category = category
-  bid.nftAddress = event.params._tokenAddress
-  bid.bidder = event.params._bidder
-  bid.price = event.params._price
-  bid.fingerprint = event.params._fingerprint
-  bid.blockchainId = event.params._id.toHexString()
-  bid.blockNumber = event.block.number
-  bid.expiresAt = event.params._expiresAt.times(BigInt.fromI32(1000))
-  bid.createdAt = event.block.timestamp
-  bid.updatedAt = event.block.timestamp
+  if (nft != null) {
+    bid.status = status.OPEN
+    bid.category = category
+    bid.nftAddress = event.params._tokenAddress
+    bid.bidder = event.params._bidder
+    bid.price = event.params._price
+    bid.fingerprint = event.params._fingerprint
+    bid.blockchainId = event.params._id.toHexString()
+    bid.blockNumber = event.block.number
+    bid.expiresAt = event.params._expiresAt.times(BigInt.fromI32(1000))
+    bid.createdAt = event.block.timestamp
+    bid.updatedAt = event.block.timestamp
 
-  bid.nft = nftId
-  bid.seller = Address.fromString(nft.owner)
+    bid.nft = nftId
+    bid.seller = Address.fromString(nft.owner)
 
-  bid.save()
+    bid.save()
+  }
 }
 
 export function handleBidAccepted(event: BidAccepted): void {
