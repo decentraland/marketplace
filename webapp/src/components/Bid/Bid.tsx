@@ -45,7 +45,6 @@ const Bid = (props: Props) => {
             >
               {(nft, isLoading) => (
                 <>
-                  <h1>ACA?</h1>
                   {!nft && isLoading ? <Loader active /> : null}
                   {nft ? (
                     <Link to={locations.nft(bid.contractAddress, bid.tokenId)}>
