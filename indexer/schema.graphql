@@ -63,6 +63,7 @@ type Bid @entity {
   price: BigInt!
   fingerprint: Bytes
   status: OrderStatus!
+  blockchainId: String!
   blockNumber: BigInt!
   expiresAt: BigInt!
   createdAt: BigInt!

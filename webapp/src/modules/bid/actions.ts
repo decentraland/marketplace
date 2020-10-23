@@ -120,9 +120,9 @@ export const fetchBidsByAddressRequest = (address: string) =>
 
 export const fetchBidsByAddressSuccess = (
   address: string,
-  seller: Bid[],
-  bidder: Bid[]
-) => action(FETCH_BIDS_BY_ADDRESS_SUCCESS, { address, seller, bidder })
+  sellerBids: Bid[],
+  bidderBids: Bid[]
+) => action(FETCH_BIDS_BY_ADDRESS_SUCCESS, { address, sellerBids, bidderBids })
 
 export const fetchBidsByAddressFailure = (address: string, error: string) =>
   action(FETCH_BIDS_BY_ADDRESS_FAILURE, { address, error })

@@ -1,11 +1,12 @@
-import { BigInt, Address } from '@graphprotocol/graph-ts'
+import { log, BigInt, Address } from '@graphprotocol/graph-ts'
 import {
   BidCreated,
   BidAccepted,
   BidCancelled
 } from '../entities/ERC721Bid/ERC721Bid'
 import { Bid, NFT } from '../entities/schema'
-import { getNFTId, cancelActiveBids } from '../modules/nft'
+import { getNFTId } from '../modules/nft'
+import { getBidId } from '../modules/bid'
 import { getCategory } from '../modules/category'
 import * as status from '../modules/order/status'
 
@@ -16,10 +17,14 @@ export function handleBidCreated(event: BidCreated): void {
     event.params._tokenAddress.toHexString(),
     event.params._tokenId.toString()
   )
-  let id = event.params._id.toHex()
+  let id = getBidId(
+    event.params._tokenAddress.toHexString(),
+    event.params._tokenId.toString(),
+    event.params._bidder.toHexString()
+  )
 
-  let bid = new Bid(id)
   let nft = NFT.load(nftId)
+  let bid = new Bid(id)
 
   bid.status = status.OPEN
   bid.category = category
@@ -27,6 +32,7 @@ export function handleBidCreated(event: BidCreated): void {
   bid.bidder = event.params._bidder
   bid.price = event.params._price
   bid.fingerprint = event.params._fingerprint
+  bid.blockchainId = event.params._id.toHexString()
   bid.blockNumber = event.block.number
   bid.expiresAt = event.params._expiresAt.times(BigInt.fromI32(1000))
   bid.createdAt = event.block.timestamp
@@ -36,12 +42,14 @@ export function handleBidCreated(event: BidCreated): void {
   bid.seller = Address.fromString(nft.owner)
 
   bid.save()
-
-  cancelActiveBids(nft!, event.block.timestamp)
 }
 
 export function handleBidAccepted(event: BidAccepted): void {
-  let id = event.params._id.toHex()
+  let id = getBidId(
+    event.params._tokenAddress.toHexString(),
+    event.params._tokenId.toString(),
+    event.params._bidder.toHexString()
+  )
 
   let bid = new Bid(id)
   bid.status = status.SOLD
@@ -52,7 +60,11 @@ export function handleBidAccepted(event: BidAccepted): void {
 }
 
 export function handleBidCancelled(event: BidCancelled): void {
-  let id = event.params._id.toHex()
+  let id = getBidId(
+    event.params._tokenAddress.toHexString(),
+    event.params._tokenId.toString(),
+    event.params._bidder.toHexString()
+  )
 
   let bid = new Bid(id)
   bid.status = status.CANCELLED

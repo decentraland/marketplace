@@ -24,8 +24,8 @@ import MyBidsPage from './MyBidsPage'
 const mapState = (state: RootState): MapStateProps => {
   return {
     wallet: getWallet(state),
-    seller: getSellerBids(state),
-    bidder: getBidderBids(state),
+    sellerBids: getSellerBids(state),
+    bidderBids: getBidderBids(state),
     archivedBidIds: getArchivedBidIds(state),
     isConnecting: isConnecting(state),
     isLoading: isLoadingType(getLoading(state), FETCH_BIDS_BY_ADDRESS_REQUEST)

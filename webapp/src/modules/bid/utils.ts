@@ -38,3 +38,10 @@ export function checkFingerprint(bid: Bid, fingerprint: string | undefined) {
   }
   return true
 }
+
+export function toBidObject(bids: Bid[]) {
+  return bids.reduce((obj, bid) => {
+    obj[bid.id] = bid
+    return obj
+  }, {} as Record<string, Bid>)
+}

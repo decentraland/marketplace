@@ -1,4 +1,4 @@
-import { log, BigInt } from '@graphprotocol/graph-ts'
+import { log, BigInt, Address } from '@graphprotocol/graph-ts'
 import { NFT, Order, Bid } from '../../entities/schema'
 import { ERC721, Transfer } from '../../entities/templates/ERC721/ERC721'
 import * as status from '../order/status'
@@ -75,17 +75,4 @@ export function cancelActiveOrder(nft: NFT, now: BigInt): boolean {
     return true
   }
   return false
-}
-
-export function cancelActiveBids(nft: NFT, now: BigInt): void {
-  let bids = nft.bids as Array<string>
-  for (let index = 0; index < bids.length; index++) {
-    let bid = Bid.load(bids[index])
-
-    if (bid != null && bid.nft == nft.id && bid.status == status.OPEN) {
-      bid.status = status.CANCELLED
-      bid.updatedAt = now
-      bid.save()
-    }
-  }
 }

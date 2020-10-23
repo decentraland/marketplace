@@ -9,16 +9,21 @@ import { VendorFactory } from '../../../modules/vendor'
 import { Props } from './Actions.types'
 
 const Actions = (props: Props) => {
-  const { wallet, nft, order } = props
+  const { wallet, nft, order, bids } = props
   const { vendor, contractAddress, tokenId } = nft
 
   const [showLeavingSiteModal, setShowLeavingSiteModal] = useState(false)
 
+  const { bidService, orderService } = VendorFactory.build(nft.vendor)
+  const isBiddable = bidService !== undefined
+
   const isOwner = isOwnedBy(nft, wallet)
 
-  const { bidService, orderService } = VendorFactory.build(nft.vendor)
-  const hasBids = bidService !== undefined
   const canSell = orderService.canSell()
+  const canBid =
+    !isOwner &&
+    isBiddable &&
+    (!wallet || !bids.some(bid => bid.bidder === wallet.address))
 
   return (
     <>
@@ -45,7 +50,7 @@ const Actions = (props: Props) => {
             >
               {t('nft_page.buy')}
             </Button>
-            {hasBids ? (
+            {canBid ? (
               <Button as={Link} to={locations.bid(contractAddress, tokenId)}>
                 {t('nft_page.bid')}
               </Button>
@@ -64,7 +69,7 @@ const Actions = (props: Props) => {
         <Button onClick={() => setShowLeavingSiteModal(true)} primary>
           {t('nft_page.sell')}
         </Button>
-      ) : hasBids ? (
+      ) : canBid ? (
         <Button as={Link} to={locations.bid(contractAddress, tokenId)} primary>
           {t('nft_page.bid')}
         </Button>

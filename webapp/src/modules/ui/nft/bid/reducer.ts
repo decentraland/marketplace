@@ -35,11 +35,11 @@ export function bidReducer(
 ) {
   switch (action.type) {
     case FETCH_BIDS_BY_ADDRESS_SUCCESS: {
-      const { seller, bidder } = action.payload
+      const { sellerBids, bidderBids } = action.payload
       return {
         ...state,
-        seller: seller.map(bid => bid.id),
-        bidder: bidder.map(bid => bid.id)
+        seller: sellerBids.map(bid => bid.id),
+        bidder: bidderBids.map(bid => bid.id)
       }
     }
     case FETCH_BIDS_BY_NFT_SUCCESS: {

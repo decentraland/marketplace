@@ -9,11 +9,11 @@ import {
 
 export type Props = {
   wallet: Wallet | null
-  seller: Bid[]
-  bidder: Bid[]
+  sellerBids: Bid[]
+  bidderBids: Bid[]
+  archivedBidIds: string[]
   isConnecting: boolean
   isLoading: boolean
-  archivedBidIds: string[]
   onNavigate: (path: string) => void
   onFetchBids: typeof fetchBidsByAddressRequest
 }
@@ -21,11 +21,11 @@ export type Props = {
 export type MapStateProps = Pick<
   Props,
   | 'wallet'
+  | 'sellerBids'
+  | 'bidderBids'
+  | 'archivedBidIds'
   | 'isConnecting'
   | 'isLoading'
-  | 'seller'
-  | 'bidder'
-  | 'archivedBidIds'
 >
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onFetchBids'>
 export type MapDispatch = Dispatch<

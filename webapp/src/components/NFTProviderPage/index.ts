@@ -1,2 +1,2 @@
-import NFTProviderPage from './NFTProviderPage'
+import NFTProviderPage from './NFTProviderPage.container'
 export { NFTProviderPage }

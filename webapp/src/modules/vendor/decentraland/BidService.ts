@@ -110,7 +110,7 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
     const to = Address.fromString(ContractService.contractAddresses.Bids)
 
     return erc721.methods
-      .safeTransferFrom(from, to, bid.tokenId, bid.id)
+      .safeTransferFrom(from, to, bid.tokenId, bid.blockchainId)
       .send({ from })
       .getTxHash()
   }

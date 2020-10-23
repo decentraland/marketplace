@@ -17,14 +17,14 @@ const NotFound = () => (
 )
 
 const NFTProviderPage = (props: Props) => {
-  const { children } = props
+  const { isConnecting, children } = props
   return (
     <NFTProvider>
       {(nft, order, isLoading) => (
         <>
-          {isLoading ? <Loading /> : null}
-          {!isLoading && !nft ? <NotFound /> : null}
-          {!isLoading && nft ? children(nft, order) : null}
+          {isConnecting || isLoading ? <Loading /> : null}
+          {!isConnecting && !isLoading && !nft ? <NotFound /> : null}
+          {!isConnecting && !isLoading && nft ? children(nft, order) : null}
         </>
       )}
     </NFTProvider>

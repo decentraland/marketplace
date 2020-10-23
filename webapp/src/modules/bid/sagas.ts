@@ -106,8 +106,8 @@ function* handleFetchBidsByAddressRequest(
 ) {
   const { address } = action.payload
   try {
-    let seller: Bid[] = []
-    let bidder: Bid[] = []
+    let sellerBids: Bid[] = []
+    let bidderBids: Bid[] = []
 
     for (const vendorName of Object.values(Vendors)) {
       const { bidService } = VendorFactory.build(vendorName)
@@ -115,17 +115,17 @@ function* handleFetchBidsByAddressRequest(
         continue
       }
 
-      const [sellerBids, bidderBids]: [Bid[], Bid[]] = yield call(() =>
+      const bids: [Bid[], Bid[]] = yield call(() =>
         Promise.all([
           bidService.fetchBySeller(address),
           bidService.fetchByBidder(address)
         ])
       )
-      seller = seller.concat(sellerBids)
-      bidder = bidder.concat(bidderBids)
+      sellerBids = sellerBids.concat(bids[0])
+      bidderBids = bidderBids.concat(bids[1])
     }
 
-    yield put(fetchBidsByAddressSuccess(address, seller, bidder))
+    yield put(fetchBidsByAddressSuccess(address, sellerBids, bidderBids))
   } catch (error) {
     yield put(fetchBidsByAddressFailure(address, error.message))
   }

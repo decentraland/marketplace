@@ -45,6 +45,7 @@ const Bid = (props: Props) => {
             >
               {(nft, isLoading) => (
                 <>
+                  <h1>ACA?</h1>
                   {!nft && isLoading ? <Loader active /> : null}
                   {nft ? (
                     <Link to={locations.nft(bid.contractAddress, bid.tokenId)}>
@@ -58,11 +59,9 @@ const Bid = (props: Props) => {
         ) : null}
         <div className="wrapper">
           <div className="info">
-            {!isBidder ? (
-              <Stats className="from" title={t('bid.from')}>
-                <Address address={bid.bidder} />
-              </Stats>
-            ) : null}
+            <Stats className="from" title={t('bid.from')}>
+              <Address address={bid.bidder} />
+            </Stats>
             <Stats title={t('bid.price')}>
               <Mana>{formatMANA(bid.price)}</Mana>
             </Stats>
