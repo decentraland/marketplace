@@ -58,12 +58,12 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
     event.params.nftAddress.toHexString(),
     event.params.assetId.toString()
   )
+  let orderId = event.params.id.toHex()
 
   let nft = NFT.load(nftId)
-  if (nft != null) {
-    let orderId = event.params.id.toHex()
+  let order = Order.load(orderId)
 
-    let order = new Order(orderId)
+  if (nft != null && order != null) {
     order.category = category
     order.status = status.SOLD
     order.buyer = event.params.buyer
@@ -85,12 +85,12 @@ export function handleOrderCancelled(event: OrderCancelled): void {
     event.params.nftAddress.toHexString(),
     event.params.assetId.toString()
   )
+  let orderId = event.params.id.toHex()
 
   let nft = NFT.load(nftId)
-  if (nft != null) {
-    let orderId = event.params.id.toHex()
+  let order = Order.load(orderId)
 
-    let order = new Order(orderId)
+  if (nft != null && order != null) {
     order.category = category
     order.status = status.CANCELLED
     order.blockNumber = event.block.number

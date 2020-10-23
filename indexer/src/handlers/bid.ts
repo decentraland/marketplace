@@ -53,7 +53,11 @@ export function handleBidAccepted(event: BidAccepted): void {
     event.params._bidder.toHexString()
   )
 
-  let bid = new Bid(id)
+  let bid = Bid.load(id)
+  if (bid == null) {
+    return
+  }
+
   bid.status = status.SOLD
   bid.seller = event.params._seller
   bid.blockNumber = event.block.number
@@ -68,7 +72,11 @@ export function handleBidCancelled(event: BidCancelled): void {
     event.params._bidder.toHexString()
   )
 
-  let bid = new Bid(id)
+  let bid = Bid.load(id)
+  if (bid == null) {
+    return
+  }
+
   bid.status = status.CANCELLED
   bid.blockNumber = event.block.number
   bid.updatedAt = event.block.timestamp
