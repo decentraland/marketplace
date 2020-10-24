@@ -5,6 +5,7 @@ import { NFTFields, nftFields } from '../nft/fragments'
 export const bidFields = () => gql`
   fragment bidFields on Bid {
     id
+    blockchainId
     category
     bidder
     seller
