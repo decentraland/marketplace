@@ -58,11 +58,9 @@ const Bid = (props: Props) => {
         ) : null}
         <div className="wrapper">
           <div className="info">
-            {!isBidder ? (
-              <Stats className="from" title={t('bid.from')}>
-                <Address address={bid.bidder} />
-              </Stats>
-            ) : null}
+            <Stats className="from" title={t('bid.from')}>
+              <Address address={bid.bidder} />
+            </Stats>
             <Stats title={t('bid.price')}>
               <Mana>{formatMANA(bid.price)}</Mana>
             </Stats>

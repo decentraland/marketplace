@@ -76,16 +76,3 @@ export function cancelActiveOrder(nft: NFT, now: BigInt): boolean {
   }
   return false
 }
-
-export function cancelActiveBids(nft: NFT, now: BigInt): void {
-  let bids = nft.bids as Array<string>
-  for (let index = 0; index < bids.length; index++) {
-    let bid = Bid.load(bids[index])
-
-    if (bid != null && bid.nft == nft.id && bid.status == status.OPEN) {
-      bid.status = status.CANCELLED
-      bid.updatedAt = now
-      bid.save()
-    }
-  }
-}

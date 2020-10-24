@@ -199,6 +199,7 @@ const Transaction = (props: Props) => {
     }
     case PLACE_BID_SUCCESS: {
       const { tokenId, contractAddress, price } = tx.payload
+
       return (
         <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -210,7 +211,7 @@ const Transaction = (props: Props) => {
                   values={{
                     name: (
                       <Link to={locations.nft(contractAddress, tokenId)}>
-                        {getNFTName(nft!)}
+                        {nft ? getNFTName(nft) : ''}
                       </Link>
                     ),
                     price: <Mana inline>{price.toLocaleString()}</Mana>
@@ -236,7 +237,7 @@ const Transaction = (props: Props) => {
                   values={{
                     name: (
                       <Link to={locations.nft(contractAddress, tokenId)}>
-                        {getNFTName(nft!)}
+                        {nft ? getNFTName(nft) : ''}
                       </Link>
                     ),
                     price: <Mana inline>{price.toLocaleString()}</Mana>
@@ -262,7 +263,7 @@ const Transaction = (props: Props) => {
                   values={{
                     name: (
                       <Link to={locations.nft(contractAddress, tokenId)}>
-                        {getNFTName(nft!)}
+                        {nft ? getNFTName(nft) : ''}
                       </Link>
                     ),
                     price: <Mana inline>{price.toLocaleString()}</Mana>

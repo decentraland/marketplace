@@ -16,11 +16,11 @@ const MyBidsPage = (props: Props) => {
     wallet,
     isConnecting,
     isLoading,
+    bidderBids,
+    sellerBids,
+    archivedBidIds,
     onNavigate,
-    onFetchBids,
-    bidder,
-    seller,
-    archivedBidIds
+    onFetchBids
   } = props
 
   const [showArchived, setShowArchivedSeller] = useState(false)
@@ -43,8 +43,8 @@ const MyBidsPage = (props: Props) => {
     }
   }, [wallet, onFetchBids])
 
-  const archived = seller.filter(bid => archivedBidIds.includes(bid.id))
-  const unarchived = seller.filter(bid => !archivedBidIds.includes(bid.id))
+  const archived = sellerBids.filter(bid => archivedBidIds.includes(bid.id))
+  const unarchived = sellerBids.filter(bid => !archivedBidIds.includes(bid.id))
   const filteredSeller = showArchived ? archived : unarchived
 
   return (
@@ -107,18 +107,18 @@ const MyBidsPage = (props: Props) => {
               </HeaderMenu.Left>
             </HeaderMenu>
             <div className="bids">
-              {bidder.length === 0 && isLoading ? (
+              {bidderBids.length === 0 && isLoading ? (
                 <div className="center">
                   <Loader active />
                 </div>
               ) : null}
-              {bidder.length === 0 && !isLoading ? (
+              {bidderBids.length === 0 && !isLoading ? (
                 <div className="center">
                   <div className="empty">{t('my_bids_page.empty_placed')}</div>
                 </div>
               ) : null}
-              {bidder.length > 0
-                ? bidder.map(bid => <Bid key={bid.id} bid={bid} />)
+              {bidderBids.length > 0
+                ? bidderBids.map(bid => <Bid key={bid.id} bid={bid} />)
                 : null}
             </div>
           </>

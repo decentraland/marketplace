@@ -2,6 +2,7 @@ import {
   LoadingState,
   loadingReducer
 } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { toBidObject } from './utils'
 import { Bid } from './types'
 import {
   FetchBidsByAddressRequestAction,
@@ -55,30 +56,21 @@ export function bidReducer(state = INITIAL_STATE, action: BidReducerAction) {
         error: null,
         data: {
           ...state.data,
-          ...action.payload.bids.reduce((obj, bid) => {
-            obj[bid.id] = bid
-            return obj
-          }, {} as Record<string, Bid>)
+          ...toBidObject(action.payload.bids)
         }
       }
     }
 
     case FETCH_BIDS_BY_ADDRESS_SUCCESS: {
-      const { seller, bidder } = action.payload
+      const { sellerBids, bidderBids } = action.payload
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
         data: {
           ...state.data,
-          ...seller.reduce((obj, bid) => {
-            obj[bid.id] = bid
-            return obj
-          }, {} as Record<string, Bid>),
-          ...bidder.reduce((obj, bid) => {
-            obj[bid.id] = bid
-            return obj
-          }, {} as Record<string, Bid>)
+          ...toBidObject(sellerBids),
+          ...toBidObject(bidderBids)
         }
       }
     }

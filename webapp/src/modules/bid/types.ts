@@ -9,6 +9,7 @@ export type Bid = {
   price: string
   fingerprint: 'string'
   status: OrderStatus
+  blockchainId: string
   blockNumber: string
   expiresAt: string
   createdAt: string
