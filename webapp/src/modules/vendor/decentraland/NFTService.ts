@@ -15,9 +15,9 @@ import { Account } from '../../account/types'
 import { isExpired } from '../../order/utils'
 import { getNFTId } from '../../nft/utils'
 import { NFTService as NFTServiceInterface } from '../services'
+import { Vendors } from '../types'
 import { NFTsFetchFilters } from './nft/types'
 import { NFTsFetchFilters as CollectionNFTsFetchFilters } from './collection/types'
-import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
 import { collectionAPI } from './collection/api'
 import { NFTFragment } from './nft/fragments'
@@ -30,9 +30,8 @@ type Fragment = NFTFragment | CollectionNFTFragment
 
 export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   async fetch(params: NFTsFetchParams, filters?: Filters) {
-    const [remoteNFTs, remoteCollectionNFTs, total] = await Promise.all([
-      nftAPI.fetch(params, filters),
-      collectionAPI.fetchNFTs(params, filters),
+    const [remoteNFTs, total] = await Promise.all([
+      this.fetchNFTS(params, filters),
       this.count(params, filters)
     ])
 
@@ -40,7 +39,7 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
     const accounts: Account[] = []
     const orders: Order[] = []
 
-    for (const remoteNFT of [...remoteNFTs, ...remoteCollectionNFTs]) {
+    for (const remoteNFT of remoteNFTs) {
       const nft = this.toNFT(remoteNFT)
       const order = this.toOrder(remoteNFT)
 
@@ -158,6 +157,12 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       address,
       nftIds: []
     }
+  }
+
+  private async fetchNFTS(params: NFTsFetchParams, filters?: Filters) {
+    return params.category === NFTCategory.WEARABLE
+      ? collectionAPI.fetchNFTs(params, filters)
+      : nftAPI.fetch(params, filters)
   }
 
   private isCollectionNFT(nft: Fragment) {

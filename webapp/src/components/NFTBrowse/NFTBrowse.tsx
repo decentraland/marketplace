@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Page, Responsive } from 'decentraland-ui'
 
 import { getDefaultOptionsByView } from '../../modules/routing/search'
@@ -14,6 +14,8 @@ import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './NFTBrowse.types'
 import './NFTBrowse.css'
 
+let isFirstLoad = true
+
 const NFTBrowse = (props: Props) => {
   const {
     vendor,
@@ -23,6 +25,7 @@ const NFTBrowse = (props: Props) => {
     onSetView,
     onFetchNFTsFromRoute
   } = props
+  const hasMount = useRef(false)
 
   const onlyOnSale =
     props.onlyOnSale === undefined
@@ -31,16 +34,33 @@ const NFTBrowse = (props: Props) => {
 
   // Kick things off
   useEffect(() => {
-    onSetView(view)
+    if (isFirstLoad) {
+      onFetchNFTsFromRoute({
+        vendor,
+        view,
+        address,
+        onlyOnSale
+      })
+      isFirstLoad = false
+    }
+  })
 
-    onFetchNFTsFromRoute({
-      vendor,
-      view,
-      address,
-      onlyOnSale
-    })
-    // eslint-disable-next-line
-  }, [vendor, onFetchNFTsFromRoute])
+  useEffect(() => {
+    onSetView(view)
+  }, [view, onSetView])
+
+  useEffect(() => {
+    if (hasMount.current) {
+      onFetchNFTsFromRoute({
+        vendor,
+        view,
+        address,
+        onlyOnSale
+      })
+    } else {
+      hasMount.current = true
+    }
+  }, [vendor, view, address, onlyOnSale, onFetchNFTsFromRoute])
 
   return (
     <Page className="NFTBrowse">
