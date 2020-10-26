@@ -22,6 +22,7 @@ export function getCategory(contractAddress: string): string {
     contractAddress == addresses.DgtbleHeadspaceCollection ||
     contractAddress == addresses.ExclusiveMasksCollection ||
     contractAddress == addresses.Halloween2019Collection ||
+    contractAddress == addresses.Halloween2020Collection ||
     contractAddress == addresses.MCHCollection ||
     contractAddress == addresses.Moonshot2020Collection ||
     contractAddress == addresses.PMOuttathisworldCollection ||
