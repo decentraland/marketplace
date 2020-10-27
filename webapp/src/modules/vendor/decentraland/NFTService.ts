@@ -67,19 +67,27 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       first: MAX_QUERY_SIZE,
       skip: 0
     }
-    const counts = await Promise.all([
-      nftAPI.count(params, filters),
-      collectionAPI.countNFTs(params, filters)
-    ])
-    return counts.reduce((count, total) => count + total, 0)
+    let count: number
+
+    if (countParams.address) {
+      const counts = await Promise.all([
+        nftAPI.count(params, filters),
+        collectionAPI.countNFTs(params, filters)
+      ])
+      count = counts.reduce((count, total) => count + total, 0)
+    } else if (this.isCollectionParams(params)) {
+      count = await collectionAPI.countNFTs(params, filters)
+    } else {
+      count = await nftAPI.count(params, filters)
+    }
+    return count
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
-    let remoteNFT: Fragment = await nftAPI.fetchOne(contractAddress, tokenId)
-
-    if (!remoteNFT) {
-      remoteNFT = await collectionAPI.fetchOneNFT(contractAddress, tokenId)
-    }
+    let remoteNFT: Fragment =
+      contractAddress in ContractService.contractAddresses
+        ? await nftAPI.fetchOne(contractAddress, tokenId)
+        : await collectionAPI.fetchOneNFT(contractAddress, tokenId)
 
     const nft = this.toNFT(remoteNFT)
     const order = this.toOrder(remoteNFT)
@@ -163,9 +171,13 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   }
 
   private async fetchNFTS(params: NFTsFetchParams, filters?: Filters) {
-    return params.category === NFTCategory.WEARABLE
+    return this.isCollectionParams(params)
       ? collectionAPI.fetchNFTs(params, filters)
       : nftAPI.fetch(params, filters)
+  }
+
+  private isCollectionParams(params: NFTsFetchParams) {
+    return params.category === NFTCategory.WEARABLE
   }
 
   private isCollectionNFT(nft: Fragment) {
