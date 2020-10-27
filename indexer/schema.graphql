@@ -167,6 +167,7 @@ type Account @entity {
 enum Category @entity {
   parcel
   estate
+  wearable
   ens
 }
 

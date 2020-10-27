@@ -107,17 +107,20 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   }
 
   toNFT(nft: Fragment): NFT<Vendors.DECENTRALAND> {
+    let name: string
     let data: Data<Vendors.DECENTRALAND>
     let category: NFTCategory
 
     if (this.isCollectionNFT(nft)) {
       const { metadata } = nft as CollectionNFTFragment
+      name = metadata.wearable!.name
       data = {
         wearable: metadata.wearable
       }
       category = NFTCategory.WEARABLE
     } else {
       const { parcel, estate, ens, category: nftCategory } = nft as NFTFragment
+      name = nft.name
       data = { parcel, estate, ens }
       category = nftCategory
     }
@@ -128,7 +131,7 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       contractAddress: nft.contractAddress,
       activeOrderId: '',
       owner: nft.owner.address.toLowerCase(),
-      name: nft.name,
+      name,
       image: nft.image,
       url: locations.nft(nft.contractAddress, nft.tokenId),
       data,

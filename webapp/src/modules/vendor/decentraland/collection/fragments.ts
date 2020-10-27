@@ -27,7 +27,6 @@ export type CollectionFragment = CollectionFields
 export const nftFields = () => gql`
   fragment nftFields on NFT {
     id
-    name
     image
     contractAddress
     tokenId
@@ -37,6 +36,7 @@ export const nftFields = () => gql`
     }
     metadata {
       wearable {
+        name
         category
         rarity
         bodyShapes
@@ -60,7 +60,7 @@ export type NFTFields = Omit<NFT, 'activeOrderId' | 'owner' | 'category'> & {
   owner: { address: string }
   itemBlockchainId: string
   metadata: {
-    wearable?: Wearable
+    wearable?: Wearable & { name: string }
   }
 }
 export type NFTFragment = Omit<NFTFields, 'vendor'> & {
