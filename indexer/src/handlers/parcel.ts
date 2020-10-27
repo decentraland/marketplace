@@ -27,6 +27,7 @@ import {
   EtheremonWearables,
   ExclusiveMasksCollection,
   Halloween2019Collection,
+  Halloween2020Collection,
   MCHCollection,
   MFSammichgamer,
   MLPekingopera,
@@ -61,6 +62,7 @@ export function handleInitialize(_: InitializeCall): void {
     ERC721.create(Address.fromString(DgtbleHeadspaceCollection))
     ERC721.create(Address.fromString(ExclusiveMasksCollection))
     ERC721.create(Address.fromString(Halloween2019Collection))
+    ERC721.create(Address.fromString(Halloween2020Collection))
     ERC721.create(Address.fromString(MCHCollection))
     ERC721.create(Address.fromString(Moonshot2020Collection))
     ERC721.create(Address.fromString(PMOuttathisworldCollection))

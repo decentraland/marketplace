@@ -18,9 +18,6 @@ type Count @entity {
   estateTotal: Int!
 
   wearableTotal: Int!
-  wearableHalloween2019: Int!
-  wearableExclusiveMasks: Int!
-  wearableXmas2019: Int!
 
   ensTotal: Int!
 
