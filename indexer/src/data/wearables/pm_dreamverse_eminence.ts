@@ -3,7 +3,7 @@ import { Wearable } from './Wearable'
 export let pm_dreamverse_eminence: Wearable[] = [
   new Wearable(
     'pm_dreamverse_eminence_boots',
-    'Boots Dreamverse Eminence collection',
+    'Ethereal Dreamer Boots',
     'Expanding the Polygonal Mind Collection adding now the Dreamverse Eminence set',
     'feet',
     'mythic',
@@ -11,7 +11,7 @@ export let pm_dreamverse_eminence: Wearable[] = [
   ),
   new Wearable(
     'pm_dreamverse_eminence_cap',
-    'Cap Dreamverse Eminence collection',
+    'Ethereal Sage Hat',
     'Expanding the Polygonal Mind Collection adding now the Dreamverse Eminence set',
     'hat',
     'mythic',
@@ -19,7 +19,7 @@ export let pm_dreamverse_eminence: Wearable[] = [
   ),
   new Wearable(
     'pm_dreamverse_eminence_hat_visor',
-    'Visor Dreamverse Eminence collection',
+    'Lucid Visionary Crown',
     'Expanding the Polygonal Mind Collection adding now the Dreamverse Eminence set',
     'hat',
     'mythic',
@@ -27,7 +27,7 @@ export let pm_dreamverse_eminence: Wearable[] = [
   ),
   new Wearable(
     'pm_dreamverse_eminence_pants',
-    'Pants Dreamverse Eminence collection',
+    'Dream Bourgeois Breeches',
     'Expanding the Polygonal Mind Collection adding now the Dreamverse Eminence set',
     'lower_body',
     'mythic',
@@ -35,7 +35,7 @@ export let pm_dreamverse_eminence: Wearable[] = [
   ),
   new Wearable(
     'pm_dreamverse_eminence_jacket',
-    'Jacket Dreamverse Eminence collection',
+    'Dream Oracle Jacket',
     'Expanding the Polygonal Mind Collection adding now the Dreamverse Eminence set',
     'upper_body',
     'mythic',
@@ -43,7 +43,7 @@ export let pm_dreamverse_eminence: Wearable[] = [
   ),
   new Wearable(
     'pm_dreamverse_eminence_sweater',
-    'Sweater Dreamverse Eminence collection',
+    'Lucid Meditation Tunic',
     'Expanding the Polygonal Mind Collection adding now the Dreamverse Eminence set',
     'upper_body',
     'mythic',
