@@ -31,7 +31,7 @@ type Fragment = NFTFragment | CollectionNFTFragment
 export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   async fetch(params: NFTsFetchParams, filters?: Filters) {
     const [remoteNFTs, total] = await Promise.all([
-      this.fetchNFTS(params, filters),
+      this.fetchNFTs(params, filters),
       this.count(params, filters)
     ])
 
@@ -67,20 +67,7 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       first: MAX_QUERY_SIZE,
       skip: 0
     }
-    let count: number
-
-    if (countParams.address) {
-      const counts = await Promise.all([
-        nftAPI.count(params, filters),
-        collectionAPI.countNFTs(params, filters)
-      ])
-      count = counts.reduce((count, total) => count + total, 0)
-    } else if (this.isCollectionParams(params)) {
-      count = await collectionAPI.countNFTs(params, filters)
-    } else {
-      count = await nftAPI.count(params, filters)
-    }
-    return count
+    return this.countNFTs(params, filters)
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
@@ -170,10 +157,16 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
     }
   }
 
-  private async fetchNFTS(params: NFTsFetchParams, filters?: Filters) {
+  private async fetchNFTs(params: NFTsFetchParams, filters?: Filters) {
     return this.isCollectionParams(params)
       ? collectionAPI.fetchNFTs(params, filters)
       : nftAPI.fetch(params, filters)
+  }
+
+  private async countNFTs(params: NFTsFetchParams, filters?: Filters) {
+    return this.isCollectionParams(params)
+      ? collectionAPI.countNFTs(params, filters)
+      : nftAPI.count(params, filters)
   }
 
   private isCollectionParams(params: NFTsFetchParams) {
