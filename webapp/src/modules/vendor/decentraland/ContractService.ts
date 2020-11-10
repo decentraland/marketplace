@@ -98,6 +98,7 @@ export class ContractService implements ContractServiceInterface {
     }
 
     const collections = await collectionAPI.fetch()
+
     for (const collection of collections) {
       this.contractAddresses = {
         ...this.contractAddresses,
@@ -105,15 +106,15 @@ export class ContractService implements ContractServiceInterface {
       }
       this.contractNames = {
         ...this.contractNames,
-        [collection.name]: this.getHumanName(collection.name)
+        [collection.id]: this.getHumanName(collection.name)
       }
       this.contractSymbols = {
         ...this.contractSymbols,
-        [collection.name]: this.getSymbol(collection.name)
+        [collection.id]: this.getSymbol(collection.name)
       }
       this.contractCategories = {
         ...this.contractCategories,
-        [collection.name]: NFTCategory.WEARABLE
+        [collection.id]: NFTCategory.WEARABLE
       }
     }
 
