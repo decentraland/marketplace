@@ -23,7 +23,7 @@ export class OrderService
     expiresAt: number,
     fromAddress: string
   ) {
-    const marketplace = this.getMarketplaceContract()
+    const marketplace = await this.getMarketplaceContract()
 
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
@@ -47,7 +47,7 @@ export class OrderService
     fromAddress: string,
     fingerprint?: string
   ) {
-    const marketplace = this.getMarketplaceContract()
+    const marketplace = await this.getMarketplaceContract()
     const { price } = order
 
     if (!fromAddress) {
@@ -78,7 +78,7 @@ export class OrderService
   }
 
   async cancel(nft: NFT, fromAddress: string) {
-    const marketplace = this.getMarketplaceContract()
+    const marketplace = await this.getMarketplaceContract()
 
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')

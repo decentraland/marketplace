@@ -77,7 +77,10 @@ export class TokenConverter {
   }
 
   async contractEthToToken(ethAmount: string, tokenAddress: string) {
-    const converter = ContractFactory.build(Converter, this.converterAddress)
+    const converter = await ContractFactory.build(
+      Converter,
+      this.converterAddress
+    )
 
     return converter.methods
       .calcNeededTokensForEther(Address.fromString(tokenAddress), ethAmount)

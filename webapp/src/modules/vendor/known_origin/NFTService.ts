@@ -122,7 +122,7 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
     const from = Address.fromString(fromAddress)
     const to = Address.fromString(toAddress)
 
-    const erc721 = ContractFactory.build(ERC721, nft.contractAddress)
+    const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
 
     return erc721.methods
       .transferFrom(from, to, nft.tokenId)

@@ -66,7 +66,7 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
     fromAddress: string,
     fingerprint?: string
   ) {
-    const bids = this.getBidContract()
+    const bids = await this.getBidContract()
 
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
@@ -101,7 +101,7 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
   }
 
   async accept(bid: Bid, fromAddress: string) {
-    const erc721 = ContractFactory.build(ERC721, bid.contractAddress)
+    const erc721 = await ContractFactory.build(ERC721, bid.contractAddress)
 
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
@@ -116,7 +116,7 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
   }
 
   async cancel(bid: Bid, fromAddress: string) {
-    const bids = this.getBidContract()
+    const bids = await this.getBidContract()
 
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
