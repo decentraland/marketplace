@@ -132,7 +132,7 @@ export class NFTService implements NFTServiceInterface<Vendors.SUPER_RARE> {
     const from = Address.fromString(fromAddress)
     const to = Address.fromString(toAddress)
 
-    const erc721 = ContractFactory.build(ERC721, nft.contractAddress)
+    const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
     const transferType = new ContractService().getTransferType(
       nft.contractAddress
     )

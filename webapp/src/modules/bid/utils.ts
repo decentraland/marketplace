@@ -1,5 +1,5 @@
-import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
+import { createEth } from 'decentraland-dapps/dist/lib/eth'
 import { MANA } from '../../contracts/MANA'
 import { contractAddresses } from '../contract/utils'
 import { getAddress } from '../wallet/selectors'
@@ -9,7 +9,7 @@ import { Bid } from './types'
 
 export async function isInsufficientMANA(bid: Bid) {
   try {
-    const eth = Eth.fromCurrentProvider()
+    const eth = await createEth()
     if (!eth) {
       throw new Error('Could not connect to Ethereum')
     }

@@ -56,7 +56,7 @@ export class OrderService
     const maxPrice = this.marketplacePrice.addMaxSlippage(manaPrice)
 
     // Contract
-    const marketplaceAdapter = ContractFactory.build(
+    const marketplaceAdapter = await ContractFactory.build(
       MarketplaceAdapter,
       ContractService.contractAddresses.MarketplaceAdapter
     )

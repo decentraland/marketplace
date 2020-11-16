@@ -2,6 +2,7 @@ import { Eth, SendTx } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 import { all, put, call, select, takeEvery } from 'redux-saga/effects'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { createEth } from 'decentraland-dapps/dist/lib/eth'
 
 import { ERC20, ERC20TransactionReceipt } from '../../contracts/ERC20'
 import { ERC721, ERC721TransactionReceipt } from '../../contracts/ERC721'
@@ -38,7 +39,7 @@ function* handleFetchAuthorizationRequest(
   action: FetchAuthorizationRequestAction
 ) {
   try {
-    const eth = Eth.fromCurrentProvider()
+    const eth: Eth | null = yield call(createEth)
     if (!eth) {
       throw new Error('Could not connect to Ethereum')
     }
@@ -83,7 +84,7 @@ function* handleAllowTokenRequest(action: AllowTokenRequestAction) {
   try {
     const { isAllowed, contractAddress, tokenContractAddress } = action.payload
 
-    const eth = Eth.fromCurrentProvider()
+    const eth: Eth | null = yield call(createEth)
     const wallet: Wallet | null = yield select(getWallet)
 
     if (!eth || !wallet) {
@@ -122,7 +123,7 @@ function* handleApproveTokenRequest(action: ApproveTokenRequestAction) {
   try {
     const { isApproved, contractAddress, tokenContractAddress } = action.payload
 
-    const eth = Eth.fromCurrentProvider()
+    const eth: Eth | null = yield call(createEth)
     const wallet: Wallet | null = yield select(getWallet)
 
     if (!eth || !wallet) {
