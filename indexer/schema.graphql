@@ -81,6 +81,7 @@ type Parcel @entity {
   estate: Estate
   data: Data
   rawData: String
+  nft: NFT @derivedFrom(field: "parcel")
 }
 
 type Estate @entity {
@@ -91,6 +92,7 @@ type Estate @entity {
   size: Int
   data: Data
   rawData: String
+  nft: NFT @derivedFrom(field: "estate")
 }
 
 type Data @entity {
@@ -113,6 +115,7 @@ type Wearable @entity {
   category: WearableCategory!
   rarity: WearableRarity!
   bodyShapes: [WearableBodyShape!]
+  nft: NFT @derivedFrom(field: "wearable")
 }
 
 type ENS @entity {
@@ -124,6 +127,7 @@ type ENS @entity {
   labelHash: Bytes
   subdomain: String
   createdAt: BigInt
+  nft: NFT @derivedFrom(field: "ens")
 }
 
 type NFT @entity {
