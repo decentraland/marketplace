@@ -6,8 +6,10 @@ import { getTransactions } from '../../modules/transaction/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './Navbar.types'
 import Navbar from './Navbar'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { isConnected } from '../../modules/wallet/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
+  isConnected: isConnected(state),
   pathname: getLocation(state).pathname,
   hasPendingTransactions: getTransactions(state).some(tx =>
     isPending(tx.status)

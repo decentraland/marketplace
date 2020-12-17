@@ -84,7 +84,7 @@ const NFTFilters = (props: Props) => {
 
   const handleIsMapChange = useCallback(
     (isMap: boolean) => {
-      onBrowse({ isMap })
+      onBrowse({ isMap, isFullscreen: false, search: '' })
     },
     [onBrowse]
   )
@@ -120,7 +120,7 @@ const NFTFilters = (props: Props) => {
   const handleSearch = useCallback(
     (newSearch: string) => {
       if (search !== newSearch) {
-        onBrowse({ search: newSearch })
+        onBrowse({ search: newSearch, isMap: false, isFullscreen: false })
       }
     },
     [search, onBrowse]
@@ -133,25 +133,43 @@ const NFTFilters = (props: Props) => {
 
   useEffect(() => setShowFiltersMenu(false), [category, setShowFiltersMenu])
 
-  const searchPlaceholder =
-    count === undefined
-      ? t('global.loading') + '...'
-      : t('nft_filters.search', {
-          suffix:
-            count < MAX_QUERY_SIZE
-              ? t('nft_filters.results', {
-                  count: count.toLocaleString()
-                })
-              : t('nft_filters.more_than_results', {
-                  count: count.toLocaleString()
-                })
-        })
+  const searchPlaceholder = isMap
+    ? t('nft_filters.search_land')
+    : count === undefined
+    ? t('global.loading') + '...'
+    : t('nft_filters.search', {
+        suffix:
+          count < MAX_QUERY_SIZE
+            ? t('nft_filters.results', {
+                count: count.toLocaleString()
+              })
+            : t('nft_filters.more_than_results', {
+                count: count.toLocaleString()
+              })
+      })
 
   return (
     <div className="NFTFilters">
       <div className="topbar">
         {isMap ? (
-          <div className="full-width" />
+          <>
+            <TextFilter
+              value={search}
+              placeholder={searchPlaceholder}
+              onChange={handleSearch}
+            />
+            <Responsive
+              minWidth={Responsive.onlyTablet.minWidth}
+              className="topbar-filter"
+            >
+              <Radio
+                toggle
+                checked={onlyOnSale}
+                onChange={handleOnlyOnSaleChange}
+                label={t('nft_filters.on_sale')}
+              />
+            </Responsive>
+          </>
         ) : (
           <>
             <TextFilter
@@ -184,30 +202,6 @@ const NFTFilters = (props: Props) => {
           </>
         )}
 
-        {section === Section.LAND ||
-        section === Section.PARCELS ||
-        section === Section.ESTATES ? (
-          <Responsive
-            minWidth={Responsive.onlyTablet.minWidth}
-            className="topbar-filter"
-          >
-            <div className="toggle-map">
-              <Chip
-                className="grid"
-                icon="table"
-                isActive={!isMap}
-                onClick={() => handleIsMapChange(false)}
-              />
-              <Chip
-                className="atlas"
-                icon="map marker alternate"
-                isActive={isMap}
-                onClick={() => handleIsMapChange(true)}
-              />
-            </div>
-          </Responsive>
-        ) : null}
-
         {category === NFTCategory.WEARABLE ? (
           <Responsive
             minWidth={Responsive.onlyTablet.minWidth}
@@ -235,6 +229,27 @@ const NFTFilters = (props: Props) => {
             />
           </div>
         </Responsive>
+
+        {section === Section.LAND ||
+        section === Section.PARCELS ||
+        section === Section.ESTATES ? (
+          <div className="topbar-filter">
+            <div className="toggle-map">
+              <Chip
+                className="grid"
+                icon="table"
+                isActive={!isMap}
+                onClick={() => handleIsMapChange(false)}
+              />
+              <Chip
+                className="atlas"
+                icon="map marker alternate"
+                isActive={isMap}
+                onClick={() => handleIsMapChange(true)}
+              />
+            </div>
+          </div>
+        ) : null}
       </div>
 
       {showFiltersMenu ? (
@@ -260,14 +275,16 @@ const NFTFilters = (props: Props) => {
       >
         <Modal.Header>{t('nft_filters.filter')}</Modal.Header>
         <Modal.Content>
-          <FiltersMenu
-            selectedCollection={contracts[0]}
-            selectedRarities={wearableRarities}
-            selectedGenders={wearableGenders}
-            onCollectionsChange={handleCollectionsChange}
-            onGendersChange={handleGendersChange}
-            onRaritiesChange={handleRaritiesChange}
-          />
+          {category === NFTCategory.WEARABLE ? (
+            <FiltersMenu
+              selectedCollection={contracts[0]}
+              selectedRarities={wearableRarities}
+              selectedGenders={wearableGenders}
+              onCollectionsChange={handleCollectionsChange}
+              onGendersChange={handleGendersChange}
+              onRaritiesChange={handleRaritiesChange}
+            />
+          ) : null}
           <div className="filter-row">
             <Header sub>{t('nft_filters.order_by')}</Header>
             <Dropdown

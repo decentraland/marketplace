@@ -5,7 +5,7 @@ import { NFTCategory } from '../nft/types'
 import { Vendors } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/nft/browse/selectors'
-import { getVendor } from '../routing/selectors'
+import { getIsFullscreen, getVendor } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
 import { fetchNFTsRequest } from '../nft/actions'
@@ -117,7 +117,8 @@ function* getNewSearchOptions(current: SearchOptions) {
     sortBy: yield select(getSortBy),
     search: yield select(getSearch),
     onlyOnSale: yield select(getOnlyOnSale),
-    isMap: yield select(getIsMap)
+    isMap: yield select(getIsMap),
+    isFullscreen: yield select(getIsFullscreen)
   }
   current = yield deriveCurrentOptions(previous, current)
 

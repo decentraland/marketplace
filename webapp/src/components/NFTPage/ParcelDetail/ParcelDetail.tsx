@@ -28,7 +28,12 @@ const ParcelDetail = (props: Props) => {
   return (
     <>
       <PageHeader>
-        <NFTImage nft={nft} isDraggable={true} withNavigation={true} />
+        <NFTImage
+          nft={nft}
+          isDraggable={true}
+          withNavigation={true}
+          hasPopup={true}
+        />
       </PageHeader>
       <Container className="ParcelDetail">
         <Title

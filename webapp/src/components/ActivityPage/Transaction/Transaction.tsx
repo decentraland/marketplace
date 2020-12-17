@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Mana, Popup } from 'decentraland-ui'
+import { Mana } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { EtherscanLink } from 'decentraland-dapps/dist/containers'
 
@@ -23,7 +23,7 @@ import {
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
 import { NFTProvider } from '../../NFTProvider'
-import { Address } from '../../Address'
+import Profile from '../../Profile'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
 
@@ -181,12 +181,9 @@ const Transaction = (props: Props) => {
                       </Link>
                     ),
                     address: (
-                      <Popup
-                        content={address}
-                        position="top center"
-                        on="hover"
-                        trigger={<Address address={address} />}
-                      />
+                      <Link to={locations.account(address)}>
+                        <Profile address={address} />
+                      </Link>
                     )
                   }}
                 />

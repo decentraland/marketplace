@@ -6,6 +6,7 @@ import { authorizationSaga } from './authorization/sagas'
 import { bidSaga } from './bid/sagas'
 import { nftSaga } from './nft/sagas'
 import { orderSaga } from './order/sagas'
+import { profileSaga } from './profile/sagas'
 import { proximitySaga } from './proximity/sagas'
 import { routingSaga } from './routing/sagas'
 import { tileSaga } from './tile/sagas'
@@ -23,6 +24,7 @@ export function* rootSaga() {
     bidSaga(),
     nftSaga(),
     orderSaga(),
+    profileSaga(),
     proximitySaga(),
     routingSaga(),
     tileSaga(),

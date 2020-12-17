@@ -13,12 +13,13 @@ export type Props = {
   vendor: Vendors
   wallet: Wallet | null
   isConnecting: boolean
+  isFullscreen?: boolean
   onRedirect: (path: string) => void
 }
 
 export type MapStateProps = Pick<
   Props,
-  'address' | 'vendor' | 'wallet' | 'isConnecting'
+  'address' | 'vendor' | 'wallet' | 'isConnecting' | 'isFullscreen'
 >
 export type MapDispatchProps = Pick<Props, 'onRedirect'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

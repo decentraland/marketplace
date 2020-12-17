@@ -1,0 +1,57 @@
+.Profile {
+  display: inline-block;
+}
+
+.Profile.inline {
+  display: inline;
+}
+
+.Profile.inline .dcl.avatar-face.inline {
+  vertical-align: -4px;
+  margin-right: 6px;
+}
+
+.Profile.inline .dcl.blockie {
+  margin-right: 6px;
+}
+
+.Profile .dcl.logo {
+  width: 20px;
+  height: 20px;
+  margin-right: 6px;
+  vertical-align: -4px;
+}
+
+.Profile.large .dcl.avatar-face,
+.Profile.large .dcl.logo {
+  width: 32px;
+  height: 32px;
+}
+
+.Profile.large.inline .dcl.blockie {
+  vertical-align: -6px;
+  margin-right: 12px;
+}
+
+.Profile.large .name {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.Profile.huge .dcl.avatar-face,
+.Profile.huge .dcl.logo {
+  width: 48px;
+  height: 48px;
+}
+
+.Profile.inline .dcl.avatar-face,
+.Profile.inline .dcl.logo {
+  vertical-align: -8px;
+  margin-right: 10px;
+}
+
+.Profile.massive .dcl.avatar-face,
+.Profile.massive .dcl.logo {
+  width: 180px;
+  height: 180px;
+}

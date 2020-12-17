@@ -1,6 +1,6 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 
-export const LAND_API_URL = process.env.REACT_APP_LAND_URL!
+export const ATLAS_URL = process.env.REACT_APP_ATLAS_URL!
 
 class LandAPI extends BaseAPI {
   fetchParcel(x: number | string, y: number | string) {
@@ -12,4 +12,4 @@ class LandAPI extends BaseAPI {
   }
 }
 
-export const landAPI = new LandAPI(LAND_API_URL)
+export const landAPI = new LandAPI(ATLAS_URL)

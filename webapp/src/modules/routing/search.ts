@@ -27,7 +27,9 @@ export function getSearchParams(options?: SearchOptions) {
     // We keep the section to signify we're on a land related option but that's it. Mind the early return
     if (options.isMap !== undefined) {
       params.set('isMap', options.isMap.toString())
-      return params
+      if (options.isFullscreen !== undefined) {
+        params.set('isFullscreen', options.isFullscreen.toString())
+      }
     }
 
     if (options.vendor) {
@@ -167,4 +169,3 @@ export function getURLParam<T extends string>(
   const param = new URLSearchParams(search).get(paramName) as T | null
   return param
 }
-

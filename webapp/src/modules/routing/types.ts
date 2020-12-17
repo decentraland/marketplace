@@ -25,6 +25,7 @@ export type SearchOptions = {
   sortBy?: SortBy
   onlyOnSale?: boolean
   isMap?: boolean
+  isFullscreen?: boolean
   wearableRarities?: WearableRarity[]
   wearableGenders?: WearableGender[]
   search?: string

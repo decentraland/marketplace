@@ -5,6 +5,7 @@ import { RootState } from '../reducer'
 import { NFTState } from './reducer'
 import { NFT } from './types'
 import { getNFT } from './utils'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
 export const getState = (state: RootState) => state.nft
 export const getData = (state: RootState) => getState(state).data
@@ -42,4 +43,42 @@ export const getCurrentNFT = createSelector<
   state => getTokenId(state),
   state => getData(state),
   (contractAddress, tokenId, nfts) => getNFT(contractAddress, tokenId, nfts)
+)
+
+export const getNFTsByOwner = createSelector<
+  RootState,
+  NFTState['data'],
+  Record<string, NFT[]>
+>(
+  state => getData(state),
+  data => {
+    let nftsByOwner: Record<string, NFT[]> = {}
+    for (const id of Object.keys(data)) {
+      const nft = data[id]
+      const key = nft.owner.toLowerCase()
+      if (!nftsByOwner[key]) {
+        nftsByOwner[key] = []
+      }
+      nftsByOwner[key].push(nft)
+    }
+    return nftsByOwner
+  }
+)
+
+export const getUserNFTs = createSelector<
+  RootState,
+  Record<string, NFT[]>,
+  string | undefined,
+  NFT[]
+>(
+  state => getNFTsByOwner(state),
+  state => getAddress(state),
+  (nftsByOwner, address) => {
+    console.log('cosolin', address, nftsByOwner)
+    if (address && address.toLowerCase() in nftsByOwner) {
+      console.log('cosopuki', nftsByOwner[address.toLowerCase()])
+      return nftsByOwner[address.toLowerCase()]
+    }
+    return []
+  }
 )
