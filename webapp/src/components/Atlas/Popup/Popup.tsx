@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Badge, Row, Section, Header, Mana } from 'decentraland-ui'
-// import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import Profile from '../../Profile'
+import { Profile } from 'decentraland-dapps/dist/containers'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './Popup.types'
 import './Popup.css'
 
@@ -18,7 +18,8 @@ export default class Popup extends React.PureComponent<Props> {
         <Section className="land-name">
           <Row className="name-row">
             <span className="name">
-              {tile.name || (!isEstate ? `Parcel` : `Estate`)}
+              {tile.name ||
+                (!isEstate ? t('global.parcel') : t('global.estate'))}
             </span>
             <Badge color="#37333D">
               <i className="pin" />
@@ -29,14 +30,14 @@ export default class Popup extends React.PureComponent<Props> {
 
         {tile.owner ? (
           <Section className="owner">
-            <Header sub>Owner</Header>
+            <Header sub>{t('nft_page.owner')}</Header>
             <Profile address={tile.owner} />
           </Section>
         ) : null}
 
         {tile.price ? (
           <Section className="price">
-            <Header sub>Price</Header>
+            <Header sub>{t('nft_page.price')}</Header>
             <Mana>{tile.price.toLocaleString()}</Mana>
           </Section>
         ) : null}

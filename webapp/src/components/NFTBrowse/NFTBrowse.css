@@ -61,10 +61,6 @@
   border-radius: 0px;
 }
 
-.NFTBrowse.fullscreen .left.sidebar {
-  display: none;
-}
-
 .NFTBrowse.fullscreen .fullscreen-button {
   display: none;
 }
@@ -89,7 +85,7 @@
   position: relative;
   background: rgba(22, 20, 26, 0.75);
   backdrop-filter: blur(20px);
-  z-index: 100;
+  z-index: 1;
 }
 
 .NFTBrowse.fullscreen .NFTFilters {

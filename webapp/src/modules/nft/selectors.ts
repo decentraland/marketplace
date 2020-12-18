@@ -74,9 +74,7 @@ export const getUserNFTs = createSelector<
   state => getNFTsByOwner(state),
   state => getAddress(state),
   (nftsByOwner, address) => {
-    console.log('cosolin', address, nftsByOwner)
     if (address && address.toLowerCase() in nftsByOwner) {
-      console.log('cosopuki', nftsByOwner[address.toLowerCase()])
       return nftsByOwner[address.toLowerCase()]
     }
     return []

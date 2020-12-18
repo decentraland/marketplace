@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Page, Loader } from 'decentraland-ui'
+import { Profile } from 'decentraland-dapps/dist/containers'
 
 import { Navbar } from '../Navbar'
 import { PageHeader } from '../PageHeader'
@@ -10,7 +11,6 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { locations } from '../../modules/routing/locations'
 import { View } from '../../modules/ui/types'
 import { Props } from './AccountPage.types'
-import Profile from '../Profile'
 import { Column } from '../Layout/Column'
 import './AccountPage.css'
 

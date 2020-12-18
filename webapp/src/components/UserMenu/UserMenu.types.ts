@@ -4,7 +4,7 @@ import {
   ConnectWalletRequestAction,
   DisconnectWalletAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-import { Profile } from '../../modules/profile/types'
+import { Profile } from 'decentraland-dapps/dist/modules/profile/types'
 
 export type Props = {
   isLoggedIn: boolean

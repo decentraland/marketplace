@@ -11,8 +11,7 @@ import {
   connectWalletRequest,
   disconnectWallet
 } from 'decentraland-dapps/dist/modules/wallet/actions'
-
-import { getData as getProfiles } from '../../modules/profile/selectors'
+import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
 import { getTransactions } from '../../modules/transaction/selectors'
 import { RootState } from '../../modules/reducer'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './UserMenu.types'

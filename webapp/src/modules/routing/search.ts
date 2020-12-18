@@ -23,10 +23,9 @@ export function getSearchParams(options?: SearchOptions) {
       params.set('section', options.section)
     }
 
-    // isMap is a standalone option so if it's selected all the other params don't matter and are discarded.
-    // We keep the section to signify we're on a land related option but that's it. Mind the early return
     if (options.isMap !== undefined) {
       params.set('isMap', options.isMap.toString())
+      // isFullscreen is only set if isMap is true
       if (options.isFullscreen !== undefined) {
         params.set('isFullscreen', options.isFullscreen.toString())
       }

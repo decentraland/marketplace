@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Mana } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { EtherscanLink } from 'decentraland-dapps/dist/containers'
+import { EtherscanLink, Profile } from 'decentraland-dapps/dist/containers'
 
 import { contractSymbols } from '../../../modules/contract/utils'
 import { getNFTName } from '../../../modules/nft/utils'
@@ -23,7 +23,6 @@ import {
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
 import { NFTProvider } from '../../NFTProvider'
-import Profile from '../../Profile'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
 

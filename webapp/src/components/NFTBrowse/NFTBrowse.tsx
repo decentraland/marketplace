@@ -59,15 +59,17 @@ const NFTBrowse = (props: Props) => {
   return (
     <Page className={classes.join(' ')} isFullscreen={isFullscreen}>
       <Row>
-        <Column align="left" className="sidebar">
-          <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-            {view === View.ACCOUNT ? (
-              <AccountSidebar address={address!} />
-            ) : (
-              <NFTSidebar />
-            )}
-          </Responsive>
-        </Column>
+        {isFullscreen ? null : (
+          <Column align="left" className="sidebar">
+            <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+              {view === View.ACCOUNT ? (
+                <AccountSidebar address={address!} />
+              ) : (
+                <NFTSidebar />
+              )}
+            </Responsive>
+          </Column>
+        )}
 
         <Column align="right" grow={true}>
           {view === View.ACCOUNT && !isFullscreen ? (
