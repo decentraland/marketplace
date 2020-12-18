@@ -112,17 +112,22 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     'halloween_2020',
     'mch_collection',
     'mf_sammichgamer',
+    'meme_dontbuythis',
     'ml_pekingopera',
     'moonshot_2020',
     'pm_dreamverse_eminence',
     'pm_outtathisworld',
+    'release_the_kraken',
     'stay_safe',
     'sugarclub_yumi',
     'tech_tribal_marc0matic',
+    'threelau_basics',
     'wonderzone_meteorchaser',
     'wonderzone_steampunk',
     'wz_wonderbot',
-    'xmas_2019'
+    'xmas_2019',
+    'xmas_2020',
+    'xmash_up_2020'
   ]
   for (let i = 0; i < allCollections.length; i++) {
     let wearable = findWearable(wearableId, allCollections[i])
