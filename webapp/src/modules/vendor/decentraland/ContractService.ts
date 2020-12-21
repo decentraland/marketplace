@@ -200,7 +200,7 @@ export class ContractService implements ContractServiceInterface {
     [WonderzoneMeteorchaserCollection]: 'Wonderzone Meteorcharser',
     [WonderzoneSteampunkCollection]: 'Wonderzone Steampunk',
     [WZWonderbotCollection]: 'WZ Wonderbot',
-    [Xmas2019Collection]: 'Xmas',
+    [Xmas2019Collection]: 'Xmas2019',
     [Xmas2020Collection]: 'Xmas2020',
     [XmashUp2020]: 'XmashUp'
   } as const
