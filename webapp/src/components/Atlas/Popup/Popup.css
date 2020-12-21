@@ -1,4 +1,4 @@
-.Popup {
+.AtlasPopup {
   position: absolute;
   z-index: 100;
   padding: 20px;
@@ -14,18 +14,18 @@
   text-align: left;
 }
 
-.Popup.right {
+.AtlasPopup.right {
   margin-left: 40px;
 }
 
-.Popup .land-name .name {
+.AtlasPopup .land-name .name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-weight: 600;
 }
 
-.Popup .dcl.badge {
+.AtlasPopup .dcl.badge {
   font-size: 12px;
   line-height: 13px;
   padding: 3px 5px;
@@ -35,7 +35,7 @@
   flex: none;
 }
 
-.Popup .pin {
+.AtlasPopup .pin {
   background-image: url(../../../images/pin-land.svg);
   width: 17px;
   height: 16px;
@@ -43,10 +43,10 @@
   background-position: -2px -1px;
 }
 
-.Popup .dcl.section.medium:last-child {
+.AtlasPopup .dcl.section.medium:last-child {
   margin-bottom: 0px;
 }
 
-.Popup .price .dcl.mana {
+.AtlasPopup .price .dcl.mana {
   font-size: 14px;
 }

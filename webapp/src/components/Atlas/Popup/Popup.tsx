@@ -12,7 +12,7 @@ export default class Popup extends React.PureComponent<Props> {
     const isEstate = !!tile.estate_id
     return (
       <div
-        className={`Popup ${position}`}
+        className={`AtlasPopup ${position}`}
         style={{ top: y, left: x, opacity: visible ? 1 : 0 }}
       >
         <Section className="land-name">
