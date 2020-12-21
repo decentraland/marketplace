@@ -19,7 +19,9 @@ export default class UserMenu extends React.Component<Props, State> {
       <Row>
         <Menu.Item
           className={
-            pathname === locations.activity() ? 'activity active' : 'activity'
+            pathname === locations.activity()
+              ? 'ActivityBell active'
+              : 'ActivityBell'
           }
         >
           <Icon

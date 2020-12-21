@@ -1,18 +1,18 @@
-.activity.item {
+.ActivityBell.item {
   margin-right: 24px;
 }
 
-.activity.item .bell {
+.ActivityBell.item .bell {
   color: var(--text);
   position: relative;
   cursor: pointer;
 }
 
-.activity.item.active .bell {
+.ActivityBell.item.active .bell {
   color: var(--primary);
 }
 
-.activity.item .bell.pending:after {
+.ActivityBell.item .bell.pending:after {
   content: '';
   width: 5px;
   height: 5px;
