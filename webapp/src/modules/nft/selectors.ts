@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
 import { NFTState } from './reducer'
 import { NFT } from './types'
 import { getNFT } from './utils'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
 export const getState = (state: RootState) => state.nft
 export const getData = (state: RootState) => getState(state).data
