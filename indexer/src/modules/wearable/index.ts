@@ -22,18 +22,23 @@ import {
   halloween_2019,
   halloween_2020,
   mch_collection,
+  meme_dontbuythis,
   mf_sammichgamer,
   ml_pekingopera,
   moonshot_2020,
   pm_dreamverse_eminence,
   pm_outtathisworld,
+  release_the_kraken,
   stay_safe,
   sugarclub_yumi,
   tech_tribal_marc0matic,
+  threelau_basics,
   wonderzone_meteorchaser,
   wonderzone_steampunk,
   wz_wonderbot,
-  xmas_2019
+  xmas_2019,
+  xmas_2020,
+  xmash_up_2020
 } from '../../data/wearables'
 import * as categories from '../../data/wearables/categories'
 
@@ -68,18 +73,23 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     halloween_2019,
     halloween_2020,
     mch_collection,
+    meme_dontbuythis,
     mf_sammichgamer,
     ml_pekingopera,
     moonshot_2020,
     pm_dreamverse_eminence,
     pm_outtathisworld,
+    release_the_kraken,
     stay_safe,
     sugarclub_yumi,
     tech_tribal_marc0matic,
+    threelau_basics,
     wonderzone_meteorchaser,
     wonderzone_steampunk,
     wz_wonderbot,
-    xmas_2019
+    xmas_2019,
+    xmas_2020,
+    xmash_up_2020
   ]
   let collectionNames: string[] = [
     'binance_us_collection',
@@ -102,17 +112,22 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     'halloween_2020',
     'mch_collection',
     'mf_sammichgamer',
+    'meme_dontbuythis',
     'ml_pekingopera',
     'moonshot_2020',
     'pm_dreamverse_eminence',
     'pm_outtathisworld',
+    'release_the_kraken',
     'stay_safe',
     'sugarclub_yumi',
     'tech_tribal_marc0matic',
+    'threelau_basics',
     'wonderzone_meteorchaser',
     'wonderzone_steampunk',
     'wz_wonderbot',
-    'xmas_2019'
+    'xmas_2019',
+    'xmas_2020',
+    'xmash_up_2020'
   ]
   for (let i = 0; i < allCollections.length; i++) {
     let wearable = findWearable(wearableId, allCollections[i])

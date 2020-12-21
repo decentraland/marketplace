@@ -34,21 +34,26 @@ const contractAddresses = {
     Halloween2019Collection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     Halloween2020Collection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     MCHCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
+    MemeDontBuyThis: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     MFSammichgamerCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     MLPekingoperaCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     Moonshot2020Collection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     PMDreamverseEminenceCollection:
       '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     PMOuttathisworldCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
+    ReleaseTheKraken: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     StaySafeCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     SugarclubYumiCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     TechTribalMarc0maticCollection:
       '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
+    ThreeLAUBasics: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     WonderzoneMeteorchaserCollection:
       '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     WonderzoneSteampunkCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     WZWonderbotCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
-    Xmas2019Collection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0'
+    Xmas2019Collection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
+    Xmas2020Collection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
+    XmashUp2020: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0'
   },
   [Network.MAINNET]: {
     MANAToken: '0x0f5d2fb29fb7d3cfee444a200298f468908cc942',
@@ -78,21 +83,26 @@ const contractAddresses = {
     Halloween2019Collection: '0xc1f4b0eea2bd6690930e6c66efd3e197d620b9c2',
     Halloween2020Collection: '0xfeb52cbf71b9adac957c6f948a6cf9980ac8c907',
     MCHCollection: '0xf64dc33a192e056bb5f0e5049356a0498b502d50',
+    MemeDontBuyThis: '0x1a57f6afc902d25792c53b8f19b7e17ef84222d5',
     MFSammichgamerCollection: '0x30d3387ff3de2a21bef7032f82d00ff7739e403c',
     MLPekingoperaCollection: '0x60d8271c501501c4b8cd9ed5343ac59d1b79d993',
     Moonshot2020Collection: '0x6a99abebb48819d2abe92c5e4dc4f48dc09a3ee8',
     PMDreamverseEminenceCollection:
       '0x09305998a531fade369ebe30adf868c96a34e813',
     PMOuttathisworldCollection: '0x75a3752579dc2d63ca229eebbe3537fbabf85a12',
+    ReleaseTheKraken: '0xffc5043d9a00865d089d5eefa5b3d1625aec6763',
     StaySafeCollection: '0x201c3af8c471e5842428b74d1e7c0249adda2a92',
     SugarclubYumiCollection: '0xb5d14052d1e2bce2a2d7459d0379256e632b855d',
     TechTribalMarc0maticCollection:
       '0x480a0f4e360e8964e68858dd231c2922f1df45ef',
+    ThreeLAUBasics: '0xe1ecb4e5130f493551c7d6df96ad19e5b431a0a9',
     WonderzoneMeteorchaserCollection:
       '0x34ed0aa248f60f54dd32fbc9883d6137a491f4f3',
     WonderzoneSteampunkCollection: '0xb96697fa4a3361ba35b774a42c58daccaad1b8e1',
     WZWonderbotCollection: '0x5df4602e7f38a91ea7724fc167f0c67f61604b1e',
-    Xmas2019Collection: '0xc3af02c0fd486c8e9da5788b915d6fff3f049866'
+    Xmas2019Collection: '0xc3af02c0fd486c8e9da5788b915d6fff3f049866',
+    Xmas2020Collection: '0xecf073f91101ce5628669c487aee8f5822a101b1',
+    XmashUp2020: '0xdd9c7bc159dacb19c9f6b9d7e23948c87aa2397f'
   }
 }[network]
 
@@ -123,18 +133,23 @@ const {
   Halloween2019Collection,
   Halloween2020Collection,
   MCHCollection,
+  MemeDontBuyThis,
   MFSammichgamerCollection,
   MLPekingoperaCollection,
   Moonshot2020Collection,
   PMDreamverseEminenceCollection,
   PMOuttathisworldCollection,
+  ReleaseTheKraken,
   StaySafeCollection,
   SugarclubYumiCollection,
   TechTribalMarc0maticCollection,
+  ThreeLAUBasics,
   WonderzoneMeteorchaserCollection,
   WonderzoneSteampunkCollection,
   WZWonderbotCollection,
-  Xmas2019Collection
+  Xmas2019Collection,
+  Xmas2020Collection,
+  XmashUp2020
 } = contractAddresses
 
 export type ContractName = keyof typeof contractAddresses
@@ -151,37 +166,43 @@ export class ContractService implements ContractServiceInterface {
     [Marketplace]: 'Marketplace',
     [Bids]: 'Bids',
     [DCLRegistrar]: 'Names',
+
     [BinanceUsCollection]: 'Binance Us',
+    [ChinaFlyingCollection]: 'China Flying',
     [CommunityContestCollection]: 'Community Contest',
+    [CybermikeCyberSoldierCollection]: 'Cybermike CyberSoldier Set',
+    [CZMercenaryMTZCollection]: 'CZ Mercenary MTZ',
     [DappcraftMoonminerCollection]: 'Dappcraft Moonminer',
     [DCGCollection]: 'DCG',
     [DCLLaunchCollection]: 'DCL Launch',
+    [DCMetaCollection]: 'DC Meta',
+    [DCNiftyblocksmithCollection]: 'DC Niftyblocksmith',
+    [DGFall2020Collection]: 'DG Fall 2020',
     [DGSummer2020Collection]: 'DG Summer',
     [DgtbleHeadspaceCollection]: 'Dgtble Headspace',
+    [DigitalAlchemyCollection]: 'Digital Alchemy',
+    [EtheremonWearablesCollection]: 'Ethermon Wearables',
     [ExclusiveMasksCollection]: 'Exclusive Masks',
     [Halloween2019Collection]: 'Halloween2019',
     [Halloween2020Collection]: 'Halloween2020',
     [MCHCollection]: 'MCH',
-    [Moonshot2020Collection]: 'Moonshot',
-    [PMOuttathisworldCollection]: 'PM Outtathisworld',
-    [StaySafeCollection]: 'Stay Safe',
-    [WonderzoneMeteorchaserCollection]: 'Wonderzone Meteorcharser',
-    [Xmas2019Collection]: 'Xmas',
-    [ChinaFlyingCollection]: 'China Flying',
-    [CybermikeCyberSoldierCollection]: 'Cybermike CyberSoldier Set',
-    [CZMercenaryMTZCollection]: 'CZ Mercenary MTZ',
-    [DCMetaCollection]: 'DC Meta',
-    [DCNiftyblocksmithCollection]: 'DC Niftyblocksmith',
-    [DGFall2020Collection]: 'DG Fall 2020',
-    [DigitalAlchemyCollection]: 'Digital Alchemy',
-    [EtheremonWearablesCollection]: 'Ethermon Wearables',
+    [MemeDontBuyThis]: "Meme don't buy this",
     [MFSammichgamerCollection]: 'MF Sammichgamer',
     [MLPekingoperaCollection]: 'ML Pekingopera',
+    [Moonshot2020Collection]: 'Moonshot',
     [PMDreamverseEminenceCollection]: 'PM Dreamverse Eminence',
+    [PMOuttathisworldCollection]: 'PM Outtathisworld',
+    [ReleaseTheKraken]: 'Release the Kraken',
+    [StaySafeCollection]: 'Stay Safe',
     [SugarclubYumiCollection]: 'Sugarclub Yumi',
     [TechTribalMarc0maticCollection]: 'Tech Tribal Marc0matic',
+    [ThreeLAUBasics]: '3LAUBasics',
+    [WonderzoneMeteorchaserCollection]: 'Wonderzone Meteorcharser',
     [WonderzoneSteampunkCollection]: 'Wonderzone Steampunk',
-    [WZWonderbotCollection]: 'WZ Wonderbot'
+    [WZWonderbotCollection]: 'WZ Wonderbot',
+    [Xmas2019Collection]: 'Xmas',
+    [Xmas2020Collection]: 'Xmas2020',
+    [XmashUp2020]: 'XmashUp'
   } as const
 
   contractNames = {
@@ -211,18 +232,23 @@ export class ContractService implements ContractServiceInterface {
     [Halloween2019Collection]: 'Halloween2019Collection',
     [Halloween2020Collection]: 'Halloween2020Collection',
     [MCHCollection]: 'MCHCollection',
+    [MemeDontBuyThis]: 'MemeDontBuyThis',
     [MFSammichgamerCollection]: 'MFSammichgamerCollection',
     [MLPekingoperaCollection]: 'MLPekingoperaCollection',
     [Moonshot2020Collection]: 'Moonshot2020Collection',
     [PMDreamverseEminenceCollection]: 'PMDreamverseEminenceCollection',
     [PMOuttathisworldCollection]: 'PMOuttathisworldCollection',
+    [ReleaseTheKraken]: 'ReleaseTheKraken',
     [StaySafeCollection]: 'StaySafeCollection',
     [SugarclubYumiCollection]: 'SugarclubYumiCollection',
     [TechTribalMarc0maticCollection]: 'TechTribalMarc0maticCollection',
+    [ThreeLAUBasics]: 'ThreeLAUBasics',
     [WonderzoneMeteorchaserCollection]: 'WonderzoneMeteorchaserCollection',
     [WonderzoneSteampunkCollection]: 'WonderzoneSteampunkCollection',
     [WZWonderbotCollection]: 'WZWonderbotCollection',
-    [Xmas2019Collection]: 'Xmas2019Collection'
+    [Xmas2019Collection]: 'Xmas2019Collection',
+    [Xmas2020Collection]: 'Xmas2020Collection',
+    [XmashUp2020]: 'XmashUp2020'
   } as const
 
   contractCategories = {
@@ -249,18 +275,23 @@ export class ContractService implements ContractServiceInterface {
     [Halloween2019Collection]: NFTCategory.WEARABLE,
     [Halloween2020Collection]: NFTCategory.WEARABLE,
     [MCHCollection]: NFTCategory.WEARABLE,
+    [MemeDontBuyThis]: NFTCategory.WEARABLE,
     [MFSammichgamerCollection]: NFTCategory.WEARABLE,
     [MLPekingoperaCollection]: NFTCategory.WEARABLE,
     [Moonshot2020Collection]: NFTCategory.WEARABLE,
     [PMDreamverseEminenceCollection]: NFTCategory.WEARABLE,
     [PMOuttathisworldCollection]: NFTCategory.WEARABLE,
+    [ReleaseTheKraken]: NFTCategory.WEARABLE,
     [StaySafeCollection]: NFTCategory.WEARABLE,
     [SugarclubYumiCollection]: NFTCategory.WEARABLE,
     [TechTribalMarc0maticCollection]: NFTCategory.WEARABLE,
+    [ThreeLAUBasics]: NFTCategory.WEARABLE,
     [WonderzoneMeteorchaserCollection]: NFTCategory.WEARABLE,
     [WonderzoneSteampunkCollection]: NFTCategory.WEARABLE,
     [WZWonderbotCollection]: NFTCategory.WEARABLE,
-    [Xmas2019Collection]: NFTCategory.WEARABLE
+    [Xmas2019Collection]: NFTCategory.WEARABLE,
+    [Xmas2020Collection]: NFTCategory.WEARABLE,
+    [XmashUp2020]: NFTCategory.WEARABLE
   } as const
 
   getTransferType(_address: string) {

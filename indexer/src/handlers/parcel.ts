@@ -29,18 +29,23 @@ import {
   Halloween2019Collection,
   Halloween2020Collection,
   MCHCollection,
+  MemeDontBuyThis,
   MFSammichgamer,
   MLPekingopera,
   Moonshot2020Collection,
   PMDreamverseEminence,
   PMOuttathisworldCollection,
+  ReleaseTheKraken,
   StaySafeCollection,
   SugarclubYumi,
   TechTribalMarc0matic,
+  ThreeLAUBasics,
   WonderzoneMeteorchaserCollection,
   WonderzoneSteampunk,
   WZWonderbot,
-  Xmas2019Collection
+  Xmas2019Collection,
+  Xmas2020Collection,
+  XmashUp2020
 } from '../data/addresses'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
@@ -84,6 +89,11 @@ export function handleInitialize(_: InitializeCall): void {
     ERC721.create(Address.fromString(TechTribalMarc0matic))
     ERC721.create(Address.fromString(WonderzoneSteampunk))
     ERC721.create(Address.fromString(WZWonderbot))
+    ERC721.create(Address.fromString(Xmas2020Collection))
+    ERC721.create(Address.fromString(XmashUp2020))
+    ERC721.create(Address.fromString(ReleaseTheKraken))
+    ERC721.create(Address.fromString(MemeDontBuyThis))
+    ERC721.create(Address.fromString(ThreeLAUBasics))
 
     count.started = 1
     count.save()

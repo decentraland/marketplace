@@ -42,7 +42,12 @@ export function getCategory(contractAddress: string): string {
     contractAddress == addresses.SugarclubYumi ||
     contractAddress == addresses.TechTribalMarc0matic ||
     contractAddress == addresses.WonderzoneSteampunk ||
-    contractAddress == addresses.WZWonderbot
+    contractAddress == addresses.WZWonderbot ||
+    contractAddress == addresses.Xmas2020Collection ||
+    contractAddress == addresses.XmashUp2020 ||
+    contractAddress == addresses.ReleaseTheKraken ||
+    contractAddress == addresses.MemeDontBuyThis ||
+    contractAddress == addresses.ThreeLAUBasics
   ) {
     category = categories.WEARABLE
   } else {
