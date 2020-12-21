@@ -65,7 +65,7 @@ export const getNFTsByOwner = createSelector<
   }
 )
 
-export const getUserNFTs = createSelector<
+export const getWalletNFTs = createSelector<
   RootState,
   Record<string, NFT[]>,
   string | undefined,
