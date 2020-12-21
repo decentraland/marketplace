@@ -43,12 +43,10 @@ const NFTBrowse = (props: Props) => {
   }, [vendor, onFetchNFTsFromRoute])
 
   // handlers
-
   const handleSetFullscreen = useCallback(
     () => onBrowse({ isMap: true, isFullscreen: true }),
     [onBrowse]
   )
-  // const handleUnsetFullscreen = useCallback(() => onSetFullscreen && onSetFullscreen(false), [onSetFullscreen])
 
   // classes
   let classes = ['NFTBrowse']
