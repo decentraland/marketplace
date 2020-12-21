@@ -57,10 +57,6 @@
   border-radius: 0px;
 }
 
-.NFTBrowse.fullscreen .Atlas canvas {
-  border-radius: 0px;
-}
-
 .NFTBrowse.fullscreen .fullscreen-button {
   display: none;
 }
