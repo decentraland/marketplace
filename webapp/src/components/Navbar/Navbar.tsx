@@ -9,7 +9,7 @@ import './Navbar.css'
 
 const Navbar = (props: Props) => {
   const { pathname, hasPendingTransactions, onNavigate, isConnected } = props
-  console.log(isConnected)
+
   if (isConnected) {
     props = { ...props, rightMenu: <UserMenu /> }
   }
