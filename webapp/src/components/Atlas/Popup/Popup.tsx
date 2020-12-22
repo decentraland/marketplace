@@ -1,10 +1,10 @@
 import * as React from 'react'
+import { Address } from 'web3x-es/address'
 import { Badge, Row, Section, Header, Mana } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './Popup.types'
 import './Popup.css'
-import { Address } from 'web3x-es/address'
 
 export default class Popup extends React.PureComponent<Props> {
   render() {
