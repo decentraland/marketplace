@@ -50,3 +50,11 @@
 .AtlasPopup .price .dcl.mana {
   font-size: 14px;
 }
+
+.AtlasPopup.no-owner .owner {
+  display: none;
+}
+
+.AtlasPopup.no-owner .land-name {
+  margin-bottom: 0px;
+}

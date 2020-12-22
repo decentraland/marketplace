@@ -4,6 +4,7 @@ import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './Popup.types'
 import './Popup.css'
+import { Address } from 'web3x-es/address'
 
 export default class Popup extends React.PureComponent<Props> {
   render() {
@@ -12,7 +13,9 @@ export default class Popup extends React.PureComponent<Props> {
     const isEstate = !!tile.estate_id
     return (
       <div
-        className={`AtlasPopup ${position}`}
+        className={`AtlasPopup ${position} ${
+          tile.owner ? 'has-owner' : 'no-owner'
+        }`}
         style={{ top: y, left: x, opacity: visible ? 1 : 0 }}
       >
         <Section className="land-name">
@@ -28,12 +31,13 @@ export default class Popup extends React.PureComponent<Props> {
           </Row>
         </Section>
 
-        {tile.owner ? (
-          <Section className="owner">
-            <Header sub>{t('nft_page.owner')}</Header>
-            <Profile address={tile.owner} />
-          </Section>
-        ) : null}
+        <Section className="owner">
+          <Header sub>{t('nft_page.owner')}</Header>
+          <Profile
+            address={tile.owner || Address.ZERO.toString()}
+            debounce={500}
+          />
+        </Section>
 
         {tile.price ? (
           <Section className="price">
