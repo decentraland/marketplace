@@ -10,7 +10,7 @@
     "estate": "Estate",
     "wearable": "Wearable",
     "ens": "Name",
-    "art":"Art",
+    "art": "Art",
     "cancel": "Cancel",
     "proceed": "Proceed",
     "nft": "NFT",
@@ -65,7 +65,7 @@
     "known_origin": "KnownOrigin",
     "makers_place": "MakersPlace"
   },
-  "vendor_menu":{
+  "vendor_menu": {
     "no_assets": "No assets",
     "assets_count": "{count} {count, plural, one {asset} other {assets}}",
     "more_than_assets_count": "+{count} assets"
@@ -102,6 +102,7 @@
     "results": "{count} {count, plural, one {result} other {results}}",
     "more_than_results": "+{count} results",
     "search": "Search {suffix}...",
+    "search_land": "Search land...",
     "rarity": "Rarity",
     "gender": "Gender",
     "collection": "Collection",

@@ -26,6 +26,7 @@ export const fetchNFTsRequest = (options: NFTsFetchOptions) =>
     options,
     timestamp: Date.now()
   })
+
 export const fetchNFTsSuccess = (
   options: NFTsFetchOptions,
   nfts: NFT[],

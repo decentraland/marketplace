@@ -10,7 +10,7 @@
     "estate": "产业",
     "wearable": "可穿戴",
     "ens": "名称",
-    "art":"艺术",
+    "art": "艺术",
     "cancel": "取消",
     "proceed": "继续",
     "nft": "NFT",
@@ -64,7 +64,7 @@
     "known_origin": "KnownOrigin",
     "makers_place": "MakersPlace"
   },
-  "vendor_menu":{
+  "vendor_menu": {
     "no_assets": "无资产",
     "assets_count": "{count} {count, plural, one {asset} other {assets}}",
     "more_than_assets_count": "+{count} assets"
@@ -101,6 +101,7 @@
     "results": "{count} {count, plural, one {result} other {results}}",
     "more_than_results": "+{count} results",
     "search": "搜寻 {suffix}...",
+    "search_land": "搜寻...",
     "rarity": "稀有度",
     "gender": "性别",
     "collection": "珍藏",

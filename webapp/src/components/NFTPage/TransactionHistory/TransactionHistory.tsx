@@ -1,14 +1,16 @@
+import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import { Header, Table, Mana, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Profile } from 'decentraland-dapps/dist/containers'
 import dateFnsFormat from 'date-fns/format'
 
+import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
 import { Bid } from '../../../modules/bid/types'
 import { Order, OrderStatus } from '../../../modules/order/types'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatMANA } from '../../../lib/mana'
-import { Address } from '../../Address'
 import { Props, HistoryEvent, UnionOrderBid } from './TransactionHistory.types'
 import './TransactionHistory.css'
 
@@ -96,10 +98,14 @@ const TransactionHistory = (props: Props) => {
                 {events.map((event, index) => (
                   <Table.Row key={index}>
                     <Table.Cell>
-                      <Address address={event.from} />
+                      <Link to={locations.account(event.from)}>
+                        <Profile address={event.from} />
+                      </Link>
                     </Table.Cell>
                     <Table.Cell>
-                      <Address address={event.to} />
+                      <Link to={locations.account(event.to)}>
+                        <Profile address={event.to} />
+                      </Link>
                     </Table.Cell>
                     <Table.Cell title={formatDateTitle(event.updatedAt)}>
                       {formatEventDate(event.updatedAt)}

@@ -5,6 +5,7 @@ export type Props = {
   className?: string
   isDraggable?: boolean
   withNavigation?: boolean
+  hasPopup?: boolean
   zoom?: number
   isSmall?: boolean
   showMonospace?: boolean

@@ -1,12 +1,15 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { getTiles } from '../../modules/tile/selectors'
+import { getTiles, getTilesByEstateId } from '../../modules/tile/selectors'
 import { RootState } from '../../modules/reducer'
+import { getWalletNFTs } from '../../modules/nft/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './Atlas.types'
 import Atlas from './Atlas'
 
 const mapState = (state: RootState): MapStateProps => ({
-  tiles: getTiles(state)
+  tiles: getTiles(state),
+  nfts: getWalletNFTs(state),
+  tilesByEstateId: getTilesByEstateId(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

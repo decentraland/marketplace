@@ -12,7 +12,7 @@ import {
   FETCH_TILES_FAILURE
 } from './actions'
 
-type TileState = {
+export type TileState = {
   data: Record<string, AtlasTile>
   loading: LoadingState
   error: string | null

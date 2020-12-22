@@ -10,7 +10,7 @@
     "estate": "Estate",
     "wearable": "Vestimenta",
     "ens": "Nombre",
-    "art":"Arte",
+    "art": "Arte",
     "cancel": "Cancelar",
     "proceed": "Aceptar",
     "nft": "NFT",
@@ -64,7 +64,7 @@
     "known_origin": "KnownOrigin",
     "makers_place": "MakersPlace"
   },
-  "vendor_menu":{
+  "vendor_menu": {
     "no_assets": "Sin assets",
     "assets_count": "{count} {count, plural, one {asset} other {assets}}",
     "more_than_assets_count": "+{count} assets"
@@ -100,7 +100,8 @@
     "order_by": "Ordenar por",
     "results": "{count} {count, plural, one {resultado} other {resultados}}",
     "more_than_results": "+{count} resultados",
-    "search": "Buscar {category}...",
+    "search": "Buscar {suffix}...",
+    "search_land": "Buscar tierras...",
     "rarity": "Rareza",
     "gender": "Género",
     "collection": "Colección",

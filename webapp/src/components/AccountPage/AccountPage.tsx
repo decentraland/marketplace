@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { Page, Loader, Blockie, Popup } from 'decentraland-ui'
-import { EtherscanLink } from 'decentraland-dapps/dist/containers'
+import { Page, Loader } from 'decentraland-ui'
+import { Profile } from 'decentraland-dapps/dist/containers'
 
 import { Navbar } from '../Navbar'
 import { PageHeader } from '../PageHeader'
@@ -10,13 +10,19 @@ import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { locations } from '../../modules/routing/locations'
 import { View } from '../../modules/ui/types'
-import { shortenAddress } from '../../modules/wallet/utils'
-import { contractNames } from '../../modules/contract/utils'
 import { Props } from './AccountPage.types'
+import { Column } from '../Layout/Column'
 import './AccountPage.css'
 
 const AccountPage = (props: Props) => {
-  const { address, vendor, wallet, isConnecting, onRedirect } = props
+  const {
+    address,
+    vendor,
+    wallet,
+    isConnecting,
+    onRedirect,
+    isFullscreen
+  } = props
 
   const isCurrentAccount =
     address === undefined || (wallet && wallet.address === address)
@@ -32,7 +38,7 @@ const AccountPage = (props: Props) => {
     <div className="AccountPage">
       <Navbar isFullscreen />
       <Navigation
-        isFullscreen={!isCurrentAccount}
+        isFullscreen={!isCurrentAccount || isFullscreen}
         activeTab={isCurrentAccount ? NavigationTab.MY_ASSETS : undefined}
       />
       {isCurrentAccount ? (
@@ -50,32 +56,23 @@ const AccountPage = (props: Props) => {
       ) : address !== undefined ? (
         <>
           <PageHeader>
-            <div>
-              <Blockie seed={address} scale={18} />
-              <Popup
-                content={address}
-                position="top center"
-                trigger={
-                  <div className="blockie-address secondary-text">
-                    {contractNames[address] ? (
-                      <EtherscanLink
-                        address={address}
-                        txHash={''}
-                        text={contractNames[address]}
-                      />
-                    ) : (
-                      shortenAddress(address)
-                    )}
-                  </div>
-                }
+            <Column>
+              <Profile
+                address={address}
+                size="massive"
+                imageOnly
+                inline={false}
               />
-            </div>
+              <div className="profile-name">
+                <Profile address={address} textOnly inline={false} />
+              </div>
+            </Column>
           </PageHeader>
 
           <NFTBrowse vendor={vendor} address={address} view={View.ACCOUNT} />
         </>
       ) : null}
-      <Footer />
+      <Footer isFullscreen={isFullscreen} />
     </div>
   )
 }

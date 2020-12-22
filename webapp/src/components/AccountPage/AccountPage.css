@@ -17,3 +17,9 @@
   margin-top: 16px;
   font-size: 17px;
 }
+
+.AccountPage .profile-name {
+  margin-top: 12px;
+  font-weight: 600;
+  font-size: 18px;
+}

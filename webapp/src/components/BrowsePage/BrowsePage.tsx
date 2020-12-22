@@ -11,6 +11,7 @@ import { NFTBrowse } from '../NFTBrowse'
 import { Props } from './BrowsePage.types'
 
 const BrowsePage = (props: Props) => {
+  const { isFullscreen } = props
   const vendor = isVendor(props.vendor) ? props.vendor : Vendors.DECENTRALAND
 
   const activeTab = isPartner(vendor)
@@ -20,9 +21,9 @@ const BrowsePage = (props: Props) => {
   return (
     <>
       <Navbar isFullscreen />
-      <Navigation activeTab={activeTab} />
+      <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
       <NFTBrowse vendor={vendor} view={View.MARKET} />
-      <Footer />
+      <Footer isFullscreen={isFullscreen} />
     </>
   )
 }

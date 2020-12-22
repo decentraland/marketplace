@@ -3,11 +3,16 @@ import { Menu, Icon } from 'decentraland-ui'
 import { Navbar as BaseNavbar } from 'decentraland-dapps/dist/containers'
 
 import { locations } from '../../modules/routing/locations'
+import UserMenu from '../UserMenu'
 import { Props } from './Navbar.types'
 import './Navbar.css'
 
 const Navbar = (props: Props) => {
-  const { pathname, hasPendingTransactions, onNavigate } = props
+  const { pathname, hasPendingTransactions, onNavigate, isConnected } = props
+
+  if (isConnected) {
+    props = { ...props, rightMenu: <UserMenu /> }
+  }
 
   const handleOnSignIn = useCallback(() => {
     onNavigate(locations.signIn())

@@ -1,9 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Blockie, Popup } from 'decentraland-ui'
+import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
-import { shortenAddress } from '../../../modules/wallet/utils'
 import { Props } from './Owner.types'
 import './Owner.css'
 
@@ -14,15 +13,15 @@ const Owner = (props: Props) => {
     <div className="Owner">
       <Link to={locations.account(address, { vendor: nft.vendor })}>
         <label>{t('nft_page.owner')}</label>
-        <Popup
-          content={shortenAddress(address)}
-          position="top center"
-          trigger={
-            <div className="blockie-wrapper">
-              <Blockie seed={address} />
-            </div>
-          }
-        />
+        <div className="blockie-wrapper">
+          <Profile
+            size="large"
+            address={address}
+            imageOnly
+            hasPopup
+            inline={false}
+          />
+        </div>
       </Link>
     </div>
   )

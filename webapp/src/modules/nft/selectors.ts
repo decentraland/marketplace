@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
 import { NFTState } from './reducer'
@@ -42,4 +43,40 @@ export const getCurrentNFT = createSelector<
   state => getTokenId(state),
   state => getData(state),
   (contractAddress, tokenId, nfts) => getNFT(contractAddress, tokenId, nfts)
+)
+
+export const getNFTsByOwner = createSelector<
+  RootState,
+  NFTState['data'],
+  Record<string, NFT[]>
+>(
+  state => getData(state),
+  data => {
+    let nftsByOwner: Record<string, NFT[]> = {}
+    for (const id of Object.keys(data)) {
+      const nft = data[id]
+      const key = nft.owner.toLowerCase()
+      if (!nftsByOwner[key]) {
+        nftsByOwner[key] = []
+      }
+      nftsByOwner[key].push(nft)
+    }
+    return nftsByOwner
+  }
+)
+
+export const getWalletNFTs = createSelector<
+  RootState,
+  Record<string, NFT[]>,
+  string | undefined,
+  NFT[]
+>(
+  state => getNFTsByOwner(state),
+  state => getAddress(state),
+  (nftsByOwner, address) => {
+    if (address && address.toLowerCase() in nftsByOwner) {
+      return nftsByOwner[address.toLowerCase()]
+    }
+    return []
+  }
 )

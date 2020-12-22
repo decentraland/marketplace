@@ -23,6 +23,7 @@ const NFTImage = (props: Props) => {
     nft,
     isDraggable,
     withNavigation,
+    hasPopup,
     zoom,
     isSmall,
     showMonospace
@@ -45,6 +46,7 @@ const NFTImage = (props: Props) => {
           x={x}
           y={y}
           isDraggable={isDraggable}
+          withPopup={hasPopup}
           withNavigation={withNavigation}
           selection={selection}
           zoom={zoom}
@@ -59,6 +61,7 @@ const NFTImage = (props: Props) => {
           x={x}
           y={y}
           isDraggable={isDraggable}
+          withPopup={hasPopup}
           withNavigation={withNavigation}
           selection={estateSelection}
           zoom={zoom}

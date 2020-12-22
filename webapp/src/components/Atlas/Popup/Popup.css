@@ -1,0 +1,60 @@
+.AtlasPopup {
+  position: absolute;
+  z-index: 100;
+  padding: 20px;
+  background: black;
+  margin-left: -320px;
+  margin-top: -60px;
+  max-width: 280px;
+  transition: opacity 0.2s ease, top 0.2s ease, left 0.2s ease,
+    margin-left 0.2s ease;
+  border-radius: 8px;
+  user-select: none;
+  pointer-events: none;
+  text-align: left;
+}
+
+.AtlasPopup.right {
+  margin-left: 40px;
+}
+
+.AtlasPopup .land-name .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.AtlasPopup .dcl.badge {
+  font-size: 12px;
+  line-height: 13px;
+  padding: 3px 5px;
+  margin-left: 8px;
+  height: 24px;
+  font-weight: 500;
+  flex: none;
+}
+
+.AtlasPopup .pin {
+  background-image: url(../../../images/pin-land.svg);
+  width: 17px;
+  height: 16px;
+  background-size: 19px;
+  background-position: -2px -1px;
+}
+
+.AtlasPopup .dcl.section.medium:last-child {
+  margin-bottom: 0px;
+}
+
+.AtlasPopup .price .dcl.mana {
+  font-size: 14px;
+}
+
+.AtlasPopup.no-owner .owner {
+  display: none;
+}
+
+.AtlasPopup.no-owner .land-name {
+  margin-bottom: 0px;
+}

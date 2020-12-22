@@ -77,6 +77,16 @@ export const getIsMap = createSelector<RootState, string, boolean | undefined>(
   }
 )
 
+export const getIsFullscreen = createSelector<
+  RootState,
+  string,
+  boolean | undefined,
+  boolean | undefined
+>(getRouterSearch, getIsMap, (search, isMap) => {
+  const isFullscreen = getURLParam(search, 'isFullscreen')
+  return isFullscreen === null ? undefined : isMap && isFullscreen === 'true'
+})
+
 export const getWearableRarities = createSelector<
   RootState,
   string,

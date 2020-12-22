@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Loader, Stats, Mana, Button } from 'decentraland-ui'
+import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { addressEquals } from '../../modules/wallet/utils'
 import { NFTProvider } from '../NFTProvider'
 import { NFTImage } from '../NFTImage'
-import { Address } from '../Address'
 import { AcceptButton } from './AcceptButton'
 import { WarningMessage } from './WarningMessage'
 import { formatMANA } from '../../lib/mana'
@@ -59,7 +59,9 @@ const Bid = (props: Props) => {
         <div className="wrapper">
           <div className="info">
             <Stats className="from" title={t('bid.from')}>
-              <Address address={bid.bidder} />
+              <Link to={locations.account(bid.bidder)}>
+                <Profile address={bid.bidder} />
+              </Link>
             </Stats>
             <Stats title={t('bid.price')}>
               <Mana>{formatMANA(bid.price)}</Mana>
