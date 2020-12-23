@@ -191,6 +191,11 @@
   color: var(--secondary-text);
 }
 
+.FiltersModal .ui.dropdown .visible.menu {
+  max-height: 500px;
+  overflow: auto;
+}
+
 .FiltersModal .ui.dropdown .text {
   flex: 1 0 auto;
   color: var(--text);
