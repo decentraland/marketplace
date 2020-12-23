@@ -74,6 +74,8 @@ const NFTImage = (props: Props) => {
       const backgroundImage = `radial-gradient(${
         RARITY_COLOR_LIGHT[wearable!.rarity]
       }, ${RARITY_COLOR[wearable!.rarity]})`
+      // HOTFIX: this is only needed for a short time, while thegraph indexes the blockchain using the correct name
+      const image = nft.image.replace('threelau_basics', '3lau_basics')
       return (
         <div
           className="rarity-background"
@@ -81,7 +83,7 @@ const NFTImage = (props: Props) => {
             backgroundImage
           }}
         >
-          <img alt={getNFTName(nft)} className="image" src={nft.image} />
+          <img alt={getNFTName(nft)} className="image" src={image} />
         </div>
       )
     }
