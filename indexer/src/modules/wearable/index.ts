@@ -121,7 +121,7 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     'stay_safe',
     'sugarclub_yumi',
     'tech_tribal_marc0matic',
-    'threelau_basics',
+    '3lau_basics', // threelau_basics
     'wonderzone_meteorchaser',
     'wonderzone_steampunk',
     'wz_wonderbot',
