@@ -14,7 +14,7 @@ export let release_the_kraken: Wearable[] = [
     'Kraken Hat',
     'The Kraken is released upon Decentraland',
     'hat',
-    'common',
+    'uncommon',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
@@ -35,18 +35,18 @@ export let release_the_kraken: Wearable[] = [
   ),
   new Wearable(
     'kraken_hoodie_upper_body',
-    'Kraken Logo Hoodie',
+    'Kraken Hoodie',
     'The Kraken is released upon Decentraland',
     'upper_body',
-    'common',
+    'uncommon',
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
     'kraken_tshirt_upper_body',
-    'Kraken Logo T- Shirt',
+    'Kraken T-Shirt',
     'The Kraken is released upon Decentraland',
     'upper_body',
-    'common',
+    'uncommon',
     ['BaseMale', 'BaseFemale']
   )
 ]

@@ -27,8 +27,8 @@ export let xmash_up_2020: Wearable[] = [
   ),
   new Wearable(
     'xmash_up_pants_lower_body',
-    'Free Money Pants - Guest Artists Collection',
-    'Free Money Pants. | Art by KJ Walker - 3D Design by vrglit.ch | Guest Artists Collection',
+    'Joelle Pants',
+    'Wash separately, colours may bleed. | Art by KJ Walker - 3D Design by vrglit.ch | Guest Artists Collection',
     'lower_body',
     'mythic',
     ['BaseMale', 'BaseFemale']

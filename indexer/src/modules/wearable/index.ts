@@ -111,8 +111,8 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     'halloween_2019',
     'halloween_2020',
     'mch_collection',
-    'mf_sammichgamer',
     'meme_dontbuythis',
+    'mf_sammichgamer',
     'ml_pekingopera',
     'moonshot_2020',
     'pm_dreamverse_eminence',
@@ -121,7 +121,7 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     'stay_safe',
     'sugarclub_yumi',
     'tech_tribal_marc0matic',
-    'threelau_basics',
+    '3lau_basics', // threelau_basics
     'wonderzone_meteorchaser',
     'wonderzone_steampunk',
     'wz_wonderbot',
