@@ -97,6 +97,11 @@
   text-transform: uppercase;
 }
 
+.NFTFilters .filters .ui.dropdown .visible.menu {
+  max-height: 500px;
+  overflow: auto;
+}
+
 .NFTFilters .open-filters-wrapper {
   display: flex;
   position: relative;
