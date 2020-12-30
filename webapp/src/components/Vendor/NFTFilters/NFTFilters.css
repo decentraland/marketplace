@@ -97,6 +97,11 @@
   text-transform: uppercase;
 }
 
+.NFTFilters .filters .ui.dropdown .visible.menu {
+  max-height: 500px;
+  overflow: auto;
+}
+
 .NFTFilters .open-filters-wrapper {
   display: flex;
   position: relative;
@@ -184,6 +189,11 @@
   border: 1px solid var(--divider);
   border-radius: 6px;
   color: var(--secondary-text);
+}
+
+.FiltersModal .ui.dropdown .visible.menu {
+  max-height: 500px;
+  overflow: auto;
 }
 
 .FiltersModal .ui.dropdown .text {
