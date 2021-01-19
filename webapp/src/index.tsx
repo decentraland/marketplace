@@ -8,14 +8,15 @@ import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 
 import './setup'
-import './themes'
+import './modules/analytics/track'
 
 import * as locales from './modules/translation/locales'
 import { store, history } from './modules/store'
 import { Routes } from './components/Routes'
 
 import { buildContracts } from './modules/contract/utils'
-import './modules/analytics/track'
+
+import './themes'
 import './index.css'
 
 buildContracts()
