@@ -10,6 +10,7 @@ import {
   LANDRegistry,
   EstateRegistry,
   DCLRegistrar,
+  AtariLaunch,
   BinanceUsCollection,
   ChinaFlying,
   CommunityContestCollection,
@@ -31,6 +32,7 @@ import {
   MCHCollection,
   MemeDontBuyThis,
   MFSammichgamer,
+  MLLiondance,
   MLPekingopera,
   Moonshot2020Collection,
   PMDreamverseEminence,
@@ -58,6 +60,7 @@ export function handleInitialize(_: InitializeCall): void {
     ERC721.create(Address.fromString(EstateRegistry))
     ERC721.create(Address.fromString(DCLRegistrar))
 
+    ERC721.create(Address.fromString(AtariLaunch))
     ERC721.create(Address.fromString(BinanceUsCollection))
     ERC721.create(Address.fromString(CommunityContestCollection))
     ERC721.create(Address.fromString(DappcraftMoonminerCollection))
@@ -83,6 +86,7 @@ export function handleInitialize(_: InitializeCall): void {
     ERC721.create(Address.fromString(DigitalAlchemy))
     ERC721.create(Address.fromString(EtheremonWearables))
     ERC721.create(Address.fromString(MFSammichgamer))
+    ERC721.create(Address.fromString(MLLiondance))
     ERC721.create(Address.fromString(MLPekingopera))
     ERC721.create(Address.fromString(PMDreamverseEminence))
     ERC721.create(Address.fromString(SugarclubYumi))

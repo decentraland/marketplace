@@ -7,6 +7,7 @@ export const Marketplace = '{{address:Marketplace}}'
 
 export const DCLRegistrar = '{{address:DCLRegistrar}}'
 
+export const AtariLaunch = '{{address:AtariLaunch}}'
 export const BinanceUsCollection = '{{address:BinanceUsCollection}}'
 export const ChinaFlying = '{{address:ChinaFlying}}'
 export const CommunityContestCollection =
@@ -30,6 +31,7 @@ export const Halloween2020Collection = '{{address:Halloween2020Collection}}'
 export const MCHCollection = '{{address:MCHCollection}}'
 export const MemeDontBuyThis = '{{address:MemeDontBuyThis}}'
 export const MFSammichgamer = '{{address:MFSammichgamer}}'
+export const MLLiondance = '{{address:MLLiondance}}'
 export const MLPekingopera = '{{address:MLPekingopera}}'
 export const Moonshot2020Collection = '{{address:Moonshot2020Collection}}'
 export const PMDreamverseEminence = '{{address:PMDreamverseEminence}}'
@@ -47,3 +49,5 @@ export const WZWonderbot = '{{address:WZWonderbot}}'
 export const Xmas2019Collection = '{{address:Xmas2019Collection}}'
 export const Xmas2020Collection = '{{address:Xmas2020Collection}}'
 export const XmashUp2020 = '{{address:XmashUp2020}}'
+
+

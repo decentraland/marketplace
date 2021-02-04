@@ -3,6 +3,7 @@ import { log } from '@graphprotocol/graph-ts'
 import { NFT, Wearable as WearableEntity } from '../../entities/schema'
 import {
   Wearable,
+  atari_launch,
   binance_us_collection,
   china_flying,
   community_contest,
@@ -24,6 +25,7 @@ import {
   mch_collection,
   meme_dontbuythis,
   mf_sammichgamer,
+  ml_liondance,
   ml_pekingopera,
   moonshot_2020,
   pm_dreamverse_eminence,
