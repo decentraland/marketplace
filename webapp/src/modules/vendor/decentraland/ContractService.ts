@@ -14,6 +14,7 @@ const contractAddresses = {
     Bids: '0x250fa138c0a994799c7a49df3097dc71e37b3d6f',
     DCLRegistrar: '0xeb6f5d94d79f0750781cc962908b161b95192f53',
 
+    AtariLaunch: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     BinanceUsCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     ChinaFlyingCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     CommunityContestCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
@@ -36,6 +37,7 @@ const contractAddresses = {
     MCHCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     MemeDontBuyThis: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     MFSammichgamerCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
+    MLLiondance: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     MLPekingoperaCollection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     Moonshot2020Collection: '0x30ae57840b0e9b8ea55334083d53d80b2cfe80e0',
     PMDreamverseEminenceCollection:
@@ -63,6 +65,7 @@ const contractAddresses = {
     Bids: '0xe479dfd9664c693b2e2992300930b00bfde08233',
     DCLRegistrar: '0x2a187453064356c898cae034eaed119e1663acb8',
 
+    AtariLaunch: '0x4c290f486bae507719c562b6b524bdb71a2570c9',
     BinanceUsCollection: '0xa8ee490e4c4da48cc1653502c1a77479d4d818de',
     ChinaFlyingCollection: '0x90958d4531258ca11d18396d4174a007edbc2b42',
     CommunityContestCollection: '0x32b7495895264ac9d0b12d32afd435453458b1c6',
@@ -85,6 +88,7 @@ const contractAddresses = {
     MCHCollection: '0xf64dc33a192e056bb5f0e5049356a0498b502d50',
     MemeDontBuyThis: '0x1a57f6afc902d25792c53b8f19b7e17ef84222d5',
     MFSammichgamerCollection: '0x30d3387ff3de2a21bef7032f82d00ff7739e403c',
+    MLLiondance: '0x0b1c6c75d511fae05e7dc696f4cf14129a9c43c9',
     MLPekingoperaCollection: '0x60d8271c501501c4b8cd9ed5343ac59d1b79d993',
     Moonshot2020Collection: '0x6a99abebb48819d2abe92c5e4dc4f48dc09a3ee8',
     PMDreamverseEminenceCollection:
@@ -114,6 +118,7 @@ const {
   Bids,
   DCLRegistrar,
 
+  AtariLaunch,
   BinanceUsCollection,
   ChinaFlyingCollection,
   CommunityContestCollection,
@@ -135,6 +140,7 @@ const {
   MCHCollection,
   MemeDontBuyThis,
   MFSammichgamerCollection,
+  MLLiondance,
   MLPekingoperaCollection,
   Moonshot2020Collection,
   PMDreamverseEminenceCollection,
@@ -167,6 +173,7 @@ export class ContractService implements ContractServiceInterface {
     [Bids]: 'Bids',
     [DCLRegistrar]: 'Names',
 
+    [AtariLaunch]: 'Atari Launch',
     [BinanceUsCollection]: 'Binance Us',
     [ChinaFlyingCollection]: 'China Flying',
     [CommunityContestCollection]: 'Community Contest',
@@ -188,6 +195,7 @@ export class ContractService implements ContractServiceInterface {
     [MCHCollection]: 'MCH',
     [MemeDontBuyThis]: "Meme don't buy this",
     [MFSammichgamerCollection]: 'MF Sammichgamer',
+    [MLLiondance]: 'ML Liondance',
     [MLPekingoperaCollection]: 'ML Pekingopera',
     [Moonshot2020Collection]: 'Moonshot',
     [PMDreamverseEminenceCollection]: 'PM Dreamverse Eminence',
@@ -213,6 +221,7 @@ export class ContractService implements ContractServiceInterface {
     [Marketplace]: 'Marketplace',
     [Bids]: 'ERC721Bid',
 
+    [AtariLaunch]: 'AtariLaunch',
     [BinanceUsCollection]: 'BinanceUsCollection',
     [ChinaFlyingCollection]: 'ChinaFlyingCollection',
     [CommunityContestCollection]: 'CommunityContestCollection',
@@ -234,6 +243,7 @@ export class ContractService implements ContractServiceInterface {
     [MCHCollection]: 'MCHCollection',
     [MemeDontBuyThis]: 'MemeDontBuyThis',
     [MFSammichgamerCollection]: 'MFSammichgamerCollection',
+    [MLLiondance]: 'MLLiondance',
     [MLPekingoperaCollection]: 'MLPekingoperaCollection',
     [Moonshot2020Collection]: 'Moonshot2020Collection',
     [PMDreamverseEminenceCollection]: 'PMDreamverseEminenceCollection',
@@ -256,6 +266,7 @@ export class ContractService implements ContractServiceInterface {
     [EstateRegistry]: NFTCategory.ESTATE,
     [DCLRegistrar]: NFTCategory.ENS,
 
+    [AtariLaunch]: NFTCategory.WEARABLE,
     [BinanceUsCollection]: NFTCategory.WEARABLE,
     [ChinaFlyingCollection]: NFTCategory.WEARABLE,
     [CommunityContestCollection]: NFTCategory.WEARABLE,
@@ -277,6 +288,7 @@ export class ContractService implements ContractServiceInterface {
     [MCHCollection]: NFTCategory.WEARABLE,
     [MemeDontBuyThis]: NFTCategory.WEARABLE,
     [MFSammichgamerCollection]: NFTCategory.WEARABLE,
+    [MLLiondance]: NFTCategory.WEARABLE,
     [MLPekingoperaCollection]: NFTCategory.WEARABLE,
     [Moonshot2020Collection]: NFTCategory.WEARABLE,
     [PMDreamverseEminenceCollection]: NFTCategory.WEARABLE,
