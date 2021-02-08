@@ -56,6 +56,7 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
   }
 
   let allCollections: Wearable[][] = [
+    atari_launch,
     binance_us_collection,
     china_flying,
     community_contest,
@@ -77,6 +78,7 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     mch_collection,
     meme_dontbuythis,
     mf_sammichgamer,
+    ml_liondance,
     ml_pekingopera,
     moonshot_2020,
     pm_dreamverse_eminence,
@@ -94,6 +96,7 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     xmash_up_2020
   ]
   let collectionNames: string[] = [
+    'atari_launch',
     'binance_us_collection',
     'china_flying',
     'community_contest',
@@ -115,6 +118,7 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
     'mch_collection',
     'meme_dontbuythis',
     'mf_sammichgamer',
+    'ml_liondance',
     'ml_pekingopera',
     'moonshot_2020',
     'pm_dreamverse_eminence',
