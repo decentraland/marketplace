@@ -48,10 +48,15 @@ export function browseReducer(
     }
     case FETCH_NFTS_REQUEST: {
       const { view } = action.payload.options
-      return {
-        ...state,
-        ids: view === View.LOAD_MORE ? [...state.ids] : [],
-        count: undefined
+      switch (view) {
+        case View.ATLAS:
+          return state
+        default:
+          return {
+            ...state,
+            ids: view === View.LOAD_MORE ? [...state.ids] : [],
+            count: undefined
+          }
       }
     }
     case FETCH_NFTS_SUCCESS: {
