@@ -4,7 +4,7 @@ import { Loader, Mana, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   isPending,
-  getEtherscanHref
+  getTransactionHref
 } from 'decentraland-dapps/dist/modules/transaction/utils'
 import {
   TransactionStatus,
@@ -22,7 +22,7 @@ const getHref = (tx: Transaction) => {
   if (tx.status === null) {
     return
   }
-  return getEtherscanHref({ txHash: tx.replacedBy || tx.hash })
+  return getTransactionHref({ txHash: tx.replacedBy || tx.hash })
 }
 
 const TransactionDetail = (props: Props) => {

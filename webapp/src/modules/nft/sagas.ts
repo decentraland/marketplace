@@ -15,11 +15,12 @@ import {
   transferNFTSuccess,
   transferNFTFailure
 } from './actions'
-import { getAddress } from '../wallet/selectors'
+import { getAddress, getChainId } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { contractVendors } from '../contract/utils'
 import { AwaitFn } from '../types'
+import { ChainId } from '@dcl/schemas'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -84,10 +85,12 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
   try {
     const { nftService } = VendorFactory.build(nft.vendor)
 
-    const from = yield select(getAddress)
-    const txHash = yield call(() => nftService.transfer(from, address, nft))
-
-    yield put(transferNFTSuccess(nft, address, txHash))
+    const from: ReturnType<typeof getAddress> = yield select(getAddress)
+    const txHash: string = yield call(() =>
+      nftService.transfer(from!, address, nft)
+    )
+    const chainId: ChainId = yield select(getChainId)
+    yield put(transferNFTSuccess(nft, address, chainId, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
     yield put(transferNFTFailure(nft, address, error.message))

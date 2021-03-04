@@ -1,4 +1,5 @@
 import { action } from 'typesafe-actions'
+import { ChainId } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist//modules/transaction/utils'
 import { Authorizations, AuthorizationsRequest, Address } from './types'
 
@@ -49,6 +50,7 @@ export const allowTokenRequest = (
   })
 
 export const allowTokenSuccess = (
+  chainId: ChainId,
   txHash: string,
   address: string,
   isAllowed: boolean,
@@ -56,7 +58,7 @@ export const allowTokenSuccess = (
   tokenContractAddress: Address
 ) =>
   action(ALLOW_TOKEN_SUCCESS, {
-    ...buildTransactionPayload(txHash, {
+    ...buildTransactionPayload(chainId, txHash, {
       address,
       isAllowed,
       contractAddress,
@@ -93,6 +95,7 @@ export const approveTokenRequest = (
   })
 
 export const approveTokenSuccess = (
+  chainId: ChainId,
   txHash: string,
   address: string,
   isApproved: boolean,
@@ -100,7 +103,7 @@ export const approveTokenSuccess = (
   tokenContractAddress: Address
 ) =>
   action(APPROVE_TOKEN_SUCCESS, {
-    ...buildTransactionPayload(txHash, {
+    ...buildTransactionPayload(chainId, txHash, {
       address,
       isApproved,
       contractAddress,

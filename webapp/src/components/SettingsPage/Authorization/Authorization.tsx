@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { EtherscanLink } from 'decentraland-dapps/dist/containers'
+import { TransactionLink } from 'decentraland-dapps/dist/containers'
 import { Form, CheckboxProps, Radio, Loader, Popup } from 'decentraland-ui'
 import { contractSymbols } from '../../../modules/contract/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -59,9 +59,9 @@ const Authorizations = (props: Props) => {
             id="authorization.authorize"
             values={{
               contract_link: (
-                <EtherscanLink address={contractAddress} txHash="">
+                <TransactionLink address={contractAddress} txHash="">
                   {contractSymbols[contractAddress]}
-                </EtherscanLink>
+                </TransactionLink>
               ),
               symbol: contractSymbols[tokenContractAddress]
             }}
