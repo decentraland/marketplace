@@ -51,10 +51,16 @@ export function browseReducer(
       switch (view) {
         case View.ATLAS:
           return state
+        case View.LOAD_MORE:
+          return {
+            ...state,
+            ids: [...state.ids],
+            count: undefined
+          }
         default:
           return {
             ...state,
-            ids: view === View.LOAD_MORE ? [...state.ids] : [],
+            ids: [],
             count: undefined
           }
       }
