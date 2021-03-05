@@ -1,5 +1,6 @@
 import { Address } from 'web3x-es/address'
-import { createEth } from 'decentraland-dapps/dist/lib/eth'
+import { Eth } from 'web3x-es/eth'
+import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { MANA } from '../../contracts/MANA'
 import { contractAddresses } from '../contract/utils'
 import { getAddress } from '../wallet/selectors'
@@ -9,10 +10,11 @@ import { Bid } from './types'
 
 export async function isInsufficientMANA(bid: Bid) {
   try {
-    const eth = await createEth()
-    if (!eth) {
-      throw new Error('Could not connect to Ethereum')
+    const provider = await getConnectedProvider()
+    if (!provider) {
+      throw new Error('Could not connect to provider')
     }
+    const eth = new Eth(provider)
     const mana = new MANA(eth, Address.fromString(contractAddresses.MANAToken))
 
     // TODO: Remove store from here, receive address as argument

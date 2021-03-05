@@ -1,8 +1,9 @@
+import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { Address } from 'web3x-es/address'
 import { contractAddresses } from '../../contract/utils'
 import { EstateRegistry } from '../../../contracts/EstateRegistry'
 import { Estate } from './types'
-import { createEth } from 'decentraland-dapps/dist/lib/eth'
+import { Eth } from 'web3x-es/eth'
 
 export const getSelection = (estate: Estate) => {
   return estate.parcels.map(pair => ({
@@ -20,8 +21,9 @@ export const getCenter = (selection: { x: number; y: number }[]) => {
 }
 
 export async function getFingerprint(estateId: string) {
-  const eth = await createEth()
-  if (eth) {
+  const provider = await getConnectedProvider()
+  if (provider) {
+    const eth = new Eth(provider)
     const estateRegistry = new EstateRegistry(
       eth,
       Address.fromString(contractAddresses.EstateRegistry)

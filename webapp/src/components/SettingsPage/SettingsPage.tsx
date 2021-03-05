@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
+// import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
@@ -15,6 +16,7 @@ import { Navigation } from '../Navigation'
 import { Authorization } from './Authorization'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
+import { Network } from '@dcl/schemas'
 
 const BUY_MANA_URL = process.env.REACT_APP_BUY_MANA_URL
 
@@ -107,7 +109,10 @@ const SettingsPage = (props: Props) => {
               <Grid.Column computer={12} mobile={16}>
                 <div className="balance">
                   <Mana inline>
-                    {parseInt(wallet.mana.toFixed(0), 10).toLocaleString()}
+                    {parseInt(
+                      wallet.networks[Network.ETHEREUM].mana.toFixed(0),
+                      10
+                    ).toLocaleString()}
                   </Mana>
                   {BUY_MANA_URL ? (
                     <a

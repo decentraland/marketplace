@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Mana } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { EtherscanLink, Profile } from 'decentraland-dapps/dist/containers'
+import { TransactionLink, Profile } from 'decentraland-dapps/dist/containers'
 
 import { contractSymbols } from '../../../modules/contract/utils'
 import { getNFTName } from '../../../modules/nft/utils'
@@ -41,14 +41,14 @@ const Transaction = (props: Props) => {
                   ? t('transaction.action.approved')
                   : t('transaction.action.not_approved'),
                 contract: (
-                  <EtherscanLink address={contractAddress} txHash="">
+                  <TransactionLink address={contractAddress} txHash="">
                     {contractSymbols[contractAddress]}
-                  </EtherscanLink>
+                  </TransactionLink>
                 ),
                 token: (
-                  <EtherscanLink address={tokenContractAddress} txHash="">
+                  <TransactionLink address={tokenContractAddress} txHash="">
                     {contractSymbols[tokenContractAddress]}
-                  </EtherscanLink>
+                  </TransactionLink>
                 )
               }}
             />
@@ -69,14 +69,14 @@ const Transaction = (props: Props) => {
                   ? t('transaction.action.approved')
                   : t('transaction.action.not_approved'),
                 contract: (
-                  <EtherscanLink address={contractAddress} txHash="">
+                  <TransactionLink address={contractAddress} txHash="">
                     {contractSymbols[contractAddress]}
-                  </EtherscanLink>
+                  </TransactionLink>
                 ),
                 token: (
-                  <EtherscanLink address={tokenContractAddress} txHash="">
+                  <TransactionLink address={tokenContractAddress} txHash="">
                     {contractSymbols[tokenContractAddress]}
-                  </EtherscanLink>
+                  </TransactionLink>
                 )
               }}
             />

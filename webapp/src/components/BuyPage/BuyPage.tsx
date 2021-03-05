@@ -1,4 +1,5 @@
 import React from 'react'
+import { Network } from '@dcl/schemas'
 import { fromWei } from 'web3x-es/utils'
 import { Page } from 'decentraland-ui'
 import { Navbar } from '../Navbar'
@@ -30,7 +31,9 @@ const BuyPage = (props: Props) => {
                   onExecuteOrder={onExecuteOrder}
                   isOwner={isOwnedBy(nft, wallet)}
                   notEnoughMana={
-                    !!order && wallet.mana < +fromWei(order.price, 'ether')
+                    !!order &&
+                    wallet.networks[Network.ETHEREUM].mana <
+                      +fromWei(order.price, 'ether')
                   }
                 />
               )}

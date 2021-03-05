@@ -1,4 +1,6 @@
 import { push } from 'connected-react-router'
+import { ChainId } from '@dcl/schemas'
+import { getChainId } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { takeEvery, put, select, call } from 'redux-saga/effects'
 import {
   PLACE_BID_REQUEST,
@@ -45,13 +47,21 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
   try {
     const { bidService } = VendorFactory.build(nft.vendor)
 
-    const address = yield select(getAddress)
-    const txHash = yield call(() =>
-      bidService!.place(nft, price, expiresAt, address, fingerprint)
+    const address: ReturnType<typeof getAddress> = yield select(getAddress)
+    const txHash: string = yield call(() =>
+      bidService!.place(nft, price, expiresAt, address!, fingerprint)
     )
-
+    const chainId: ChainId = yield select(getChainId)
     yield put(
-      placeBidSuccess(nft, price, expiresAt, txHash, address, fingerprint)
+      placeBidSuccess(
+        nft,
+        price,
+        expiresAt,
+        chainId,
+        txHash,
+        address!,
+        fingerprint
+      )
     )
     yield put(push(locations.activity()))
   } catch (error) {
@@ -70,10 +80,11 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
     }
     const { bidService } = VendorFactory.build(vendor)
 
-    const address = yield select(getAddress)
-    const txHash = yield call(() => bidService!.accept(bid, address))
+    const address: ReturnType<typeof getAddress> = yield select(getAddress)
+    const txHash: string = yield call(() => bidService!.accept(bid, address!))
 
-    yield put(acceptBidSuccess(bid, txHash))
+    const chainId: ChainId = yield select(getChainId)
+    yield put(acceptBidSuccess(bid, chainId, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
     yield put(acceptBidFailure(bid, error.message))
@@ -91,10 +102,11 @@ function* handleCancelBidRequest(action: CancelBidRequestAction) {
     }
     const { bidService } = VendorFactory.build(vendor)
 
-    const address = yield select(getAddress)
-    const txHash = yield call(() => bidService!.cancel(bid, address))
+    const address: ReturnType<typeof getAddress> = yield select(getAddress)
+    const chainId: ChainId = yield select(getChainId)
+    const txHash: string = yield call(() => bidService!.cancel(bid, address!))
 
-    yield put(cancelBidSuccess(bid, txHash))
+    yield put(cancelBidSuccess(bid, chainId, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
     yield put(cancelBidFailure(bid, error.message))
@@ -136,7 +148,7 @@ function* handleFetchBidsByNFTRequest(action: FetchBidsByNFTRequestAction) {
   try {
     const { bidService } = VendorFactory.build(nft.vendor)
 
-    const bids = yield call(() => bidService!.fetchByNFT(nft))
+    const bids: Bid[] = yield call(() => bidService!.fetchByNFT(nft))
 
     yield put(fetchBidsByNFTSuccess(nft, bids))
   } catch (error) {

@@ -126,7 +126,10 @@ export function authorizationReducer(
             ...state,
             data: {
               ...state.data,
-              [address]: { approvals: {}, ...state.data[address], allowances }
+              [address]: {
+                ...addressState,
+                allowances
+              }
             }
           }
         }
@@ -151,7 +154,10 @@ export function authorizationReducer(
             ...state,
             data: {
               ...state.data,
-              [address]: { allowances: {}, ...state.data[address], approvals }
+              [address]: {
+                ...addressState,
+                approvals
+              }
             }
           }
         }

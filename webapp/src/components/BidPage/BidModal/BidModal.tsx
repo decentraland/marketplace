@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react'
+import { Network } from '@dcl/schemas'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 
@@ -50,7 +51,10 @@ const BidModal = (props: Props) => {
   ])
 
   const isInvalidDate = +new Date(expiresAt) < Date.now()
-  const notEnoughMana = !!price && !!wallet && fromMANA(price) > wallet.mana
+  const notEnoughMana =
+    !!price &&
+    !!wallet &&
+    fromMANA(price) > wallet.networks[Network.ETHEREUM].mana
 
   return (
     <NFTAction nft={nft}>

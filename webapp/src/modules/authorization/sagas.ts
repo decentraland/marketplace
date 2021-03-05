@@ -1,8 +1,11 @@
 import { Eth, SendTx } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
 import { all, put, call, select, takeEvery } from 'redux-saga/effects'
+import { ChainId } from '@dcl/schemas'
+import { Provider } from 'decentraland-connect'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { createEth } from 'decentraland-dapps/dist/lib/eth'
+import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { getChainId } from 'decentraland-dapps/dist/modules/wallet/selectors'
 
 import { ERC20, ERC20TransactionReceipt } from '../../contracts/ERC20'
 import { ERC721, ERC721TransactionReceipt } from '../../contracts/ERC721'
@@ -39,10 +42,12 @@ function* handleFetchAuthorizationRequest(
   action: FetchAuthorizationRequestAction
 ) {
   try {
-    const eth: Eth | null = yield call(createEth)
-    if (!eth) {
-      throw new Error('Could not connect to Ethereum')
+    const provider: Provider | null = yield call(getConnectedProvider)
+    if (!provider) {
+      throw new Error('Could not connect to provider')
     }
+
+    const eth = new Eth(provider)
 
     const payload = action.payload
     const address = payload.address.toLowerCase()
@@ -84,14 +89,14 @@ function* handleAllowTokenRequest(action: AllowTokenRequestAction) {
   try {
     const { isAllowed, contractAddress, tokenContractAddress } = action.payload
 
-    const eth: Eth | null = yield call(createEth)
-    const wallet: Wallet | null = yield select(getWallet)
-
-    if (!eth || !wallet) {
-      throw new Error('Could not connect to Ethereum')
+    const provider: Provider | null = yield call(getConnectedProvider)
+    if (!provider) {
+      throw new Error('Could not connect to provider')
     }
+    const eth = new Eth(provider)
 
-    const { address } = wallet
+    const wallet: Wallet | null = yield select(getWallet)
+    const { address } = wallet!
     const amount = isAllowed ? getTokenAmountToApprove() : 0
 
     const tokenContract = new ERC20(
@@ -104,9 +109,10 @@ function* handleAllowTokenRequest(action: AllowTokenRequestAction) {
         .send({ from: Address.fromString(address) })
     )
     const transactionHash: string = yield call(() => transaction.getTxHash())
-
+    const chainId: ChainId = yield select(getChainId)
     yield put(
       allowTokenSuccess(
+        chainId,
         transactionHash,
         address,
         isAllowed,
@@ -123,14 +129,15 @@ function* handleApproveTokenRequest(action: ApproveTokenRequestAction) {
   try {
     const { isApproved, contractAddress, tokenContractAddress } = action.payload
 
-    const eth: Eth | null = yield call(createEth)
+    const provider: Provider | null = yield call(getConnectedProvider)
+    if (!provider) {
+      throw new Error('Could not connect to provider')
+    }
+    const eth = new Eth(provider)
+
     const wallet: Wallet | null = yield select(getWallet)
 
-    if (!eth || !wallet) {
-      throw new Error('Could not connect to Ethereum')
-    }
-
-    const { address } = wallet
+    const { address } = wallet!
     const tokenContract = new ERC721(
       eth,
       Address.fromString(tokenContractAddress)
@@ -142,8 +149,10 @@ function* handleApproveTokenRequest(action: ApproveTokenRequestAction) {
     )
     const transactionHash: string = yield call(() => transaction.getTxHash())
 
+    const chainId: ChainId = yield select(getChainId)
     yield put(
       approveTokenSuccess(
+        chainId,
         transactionHash,
         address,
         isApproved,

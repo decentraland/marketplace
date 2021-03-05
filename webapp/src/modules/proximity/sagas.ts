@@ -7,6 +7,7 @@ import {
   fetchProximityRequest
 } from './actions'
 import { FETCH_TILES_SUCCESS, FetchTilesSuccessAction } from '../tile/actions'
+import { Proximity } from './types'
 
 export function* proximitySaga() {
   yield takeEvery(FETCH_TILES_SUCCESS, handleFetchTilesSuccess)
@@ -15,7 +16,7 @@ export function* proximitySaga() {
 
 function* handleFetchProximityRequest(_action: FetchProximityRequestAction) {
   try {
-    const proximity = yield call(async () => {
+    const proximity: Record<string, Proximity> = yield call(async () => {
       const resp = await fetch('/proximity.json')
       return resp.json()
     })

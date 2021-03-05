@@ -38,3 +38,7 @@ code {
 .dcl.navbar .ui.secondary.stackable.menu .dcl.navbar-logo + .item {
   display: none;
 }
+
+.dcl.navbar .dcl.user-menu .dcl.mana .symbol {
+  color: var(--text);
+}
