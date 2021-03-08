@@ -11,7 +11,8 @@
   min-height: 336px;
 }
 
-.Slideshow .nfts .NFTCard {
+.Slideshow .nfts .NFTCard,
+.Slideshow .nfts .ui.card.NFTCard:first-child {
   flex: 0 0 auto;
   width: 220px;
   margin-right: 20px;

@@ -38,7 +38,7 @@
 }
 
 .ui.cards > .ui.card.NFTCard.link:hover .meta,
-.ui.card.link:hover .meta {
+a.ui.card.link:hover .meta {
   color: var(--secondary-text);
 }
 
