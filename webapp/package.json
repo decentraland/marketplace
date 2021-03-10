@@ -22,7 +22,7 @@
     "connected-react-router": "^6.6.1",
     "date-fns": "^2.8.1",
     "dcl-tslint-config-standard": "^2.0.0",
-    "decentraland-dapps": "^9.3.0",
+    "decentraland-dapps": "^9.5.0",
     "decentraland-ui": "^2.28.0",
     "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
