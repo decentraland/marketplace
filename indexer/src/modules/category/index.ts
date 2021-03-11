@@ -49,7 +49,10 @@ export function getCategory(contractAddress: string): string {
     contractAddress == addresses.MemeDontBuyThis ||
     contractAddress == addresses.ThreeLAUBasics ||
     contractAddress == addresses.MLLiondance ||
-    contractAddress == addresses.AtariLaunch
+    contractAddress == addresses.AtariLaunch ||
+    contractAddress == addresses.RTFKTXAtari ||
+    contractAddress == addresses.RACBasics ||
+    contractAddress == addresses.WinklevossCapital
   ) {
     category = categories.WEARABLE
   } else {

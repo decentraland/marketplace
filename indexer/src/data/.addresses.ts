@@ -37,11 +37,15 @@ export const Moonshot2020Collection = '{{address:Moonshot2020Collection}}'
 export const PMDreamverseEminence = '{{address:PMDreamverseEminence}}'
 export const PMOuttathisworldCollection =
   '{{address:PMOuttathisworldCollection}}'
+export const RACBasics = '{{address:RACBasics}}'
 export const ReleaseTheKraken = '{{address:ReleaseTheKraken}}'
+export const RTFKTXAtari = '{{address:RTFKTXAtari}}'
 export const StaySafeCollection = '{{address:StaySafeCollection}}'
 export const SugarclubYumi = '{{address:SugarclubYumi}}'
 export const TechTribalMarc0matic = '{{address:TechTribalMarc0matic}}'
 export const ThreeLAUBasics = '{{address:3LAUBasics}}'
+export const WinklevossCapital =
+  '{{address:WinklevossCapital}}'
 export const WonderzoneMeteorchaserCollection =
   '{{address:WonderzoneMeteorchaserCollection}}'
 export const WonderzoneSteampunk = '{{address:WonderzoneSteampunk}}'
