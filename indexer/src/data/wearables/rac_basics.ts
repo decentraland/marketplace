@@ -18,7 +18,7 @@ export let rac_basics: Wearable[] = [
     ['BaseMale', 'BaseFemale']
   ),
   new Wearable(
-    'RAC_upper_body',
+    'rac_upper_body',
     'RAC Outfit',
     "RAC's signature pink outfit with matching trousers and long coat.",
     'upper_body',
