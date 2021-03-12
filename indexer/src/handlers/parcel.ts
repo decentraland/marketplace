@@ -37,11 +37,14 @@ import {
   Moonshot2020Collection,
   PMDreamverseEminence,
   PMOuttathisworldCollection,
+  RACBasics,
   ReleaseTheKraken,
+  RTFKTXAtari,
   StaySafeCollection,
   SugarclubYumi,
   TechTribalMarc0matic,
   ThreeLAUBasics,
+  WinklevossCapital,
   WonderzoneMeteorchaserCollection,
   WonderzoneSteampunk,
   WZWonderbot,
@@ -98,6 +101,9 @@ export function handleInitialize(_: InitializeCall): void {
     ERC721.create(Address.fromString(ReleaseTheKraken))
     ERC721.create(Address.fromString(MemeDontBuyThis))
     ERC721.create(Address.fromString(ThreeLAUBasics))
+    ERC721.create(Address.fromString(RTFKTXAtari))
+    ERC721.create(Address.fromString(RACBasics))
+    ERC721.create(Address.fromString(WinklevossCapital))
 
     count.started = 1
     count.save()
