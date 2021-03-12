@@ -1,5 +1,5 @@
 import { takeEvery, all, put } from 'redux-saga/effects'
-import { walletSaga as baseWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
+import { createWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
 import {
   ConnectWalletSuccessAction,
   CONNECT_WALLET_SUCCESS,
@@ -13,6 +13,10 @@ import { NFTCategory } from '../nft/types'
 import { fetchAuthorizationRequest } from '../authorization/actions'
 import { AuthorizationsRequest } from '../authorization/types'
 import { contractAddresses, contractCategories } from '../contract/utils'
+
+const baseWalletSaga = createWalletSaga({
+  CHAIN_ID: +(process.env.REACT_APP_CHAIN_ID || 1)
+})
 
 export function* walletSaga() {
   yield all([baseWalletSaga(), fullWalletSaga()])
