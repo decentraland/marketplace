@@ -70,6 +70,9 @@ export function handleTransfer(event: Transfer): void {
     nft.searchText = ''
 
     nft.searchIsLand = false
+
+    let metric = buildCountFromNFT(nft)
+    metric.save()
   } else {
     let oldNFT = NFT.load(id)
     if (cancelActiveOrder(oldNFT!, event.block.timestamp)) {
@@ -137,9 +140,6 @@ export function handleTransfer(event: Transfer): void {
       ens.save()
     }
   }
-
-  let metric = buildCountFromNFT(nft)
-  metric.save()
 
   createAccount(event.params.to)
 
