@@ -92,7 +92,7 @@ export function handleTransfer(event: Transfer): void {
       nft.searchParcelY = parcel.y
       nft.searchText = getParcelText(parcel, '')
     } else {
-      let parcel = Parcel.load(nft.id)
+      let parcel = new Parcel(nft.id)
       parcel.owner = nft.owner
       parcel.save()
     }
@@ -105,7 +105,7 @@ export function handleTransfer(event: Transfer): void {
       nft.searchIsLand = true
       nft.searchEstateSize = estate.size
     } else {
-      let estate = Estate.load(nft.id)
+      let estate = new Estate(nft.id)
       estate.owner = nft.owner
       estate.save()
     }
@@ -126,7 +126,7 @@ export function handleTransfer(event: Transfer): void {
       }
     } else {
       let currentNFT = NFT.load(nft.id)
-      let wearable = Wearable.load(currentNFT.wearable)
+      let wearable = new Wearable(currentNFT.wearable)
       wearable.owner = nft.owner
       wearable.save()
     }
@@ -136,7 +136,7 @@ export function handleTransfer(event: Transfer): void {
       ens.save()
       nft.ens = ens.id
     } else {
-      let ens = ENS.load(nft.id)
+      let ens = new ENS(nft.id)
       ens.owner = nft.owner
       ens.save()
     }
