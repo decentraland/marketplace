@@ -81,9 +81,9 @@ export function handleTransfer(event: Transfer): void {
   }
 
   if (category == categories.PARCEL) {
+    let parcel: Parcel
     if (isMint(event)) {
-      let parcel = buildParcelFromNFT(nft)
-      parcel.save()
+      parcel = buildParcelFromNFT(nft)
       nft.parcel = id
       nft.image = getParcelImage(parcel)
       nft.searchIsLand = true
@@ -92,28 +92,28 @@ export function handleTransfer(event: Transfer): void {
       nft.searchParcelY = parcel.y
       nft.searchText = getParcelText(parcel, '')
     } else {
-      let parcel = new Parcel(nft.id)
+      parcel = new Parcel(nft.id)
       parcel.owner = nft.owner
-      parcel.save()
     }
+    parcel.save()
   } else if (category == categories.ESTATE) {
+    let estate: Estate
     if (isMint(event)) {
-      let estate = buildEstateFromNFT(nft)
-      estate.save()
+      estate = buildEstateFromNFT(nft)
       nft.estate = id
       nft.image = getEstateImage(estate)
       nft.searchIsLand = true
       nft.searchEstateSize = estate.size
     } else {
-      let estate = new Estate(nft.id)
+      estate = new Estate(nft.id)
       estate.owner = nft.owner
-      estate.save()
     }
+    estate.save()
   } else if (category == categories.WEARABLE) {
+    let wearable: Wearable
     if (isMint(event)) {
-      let wearable = buildWearableFromNFT(nft)
+      wearable = buildWearableFromNFT(nft)
       if (wearable.id != '') {
-        wearable.save()
         nft.wearable = id
         nft.name = wearable.name
         nft.image = getWearableImage(wearable)
@@ -126,20 +126,20 @@ export function handleTransfer(event: Transfer): void {
       }
     } else {
       let currentNFT = NFT.load(nft.id)
-      let wearable = new Wearable(currentNFT.wearable)
+      wearable = new Wearable(currentNFT.wearable)
       wearable.owner = nft.owner
-      wearable.save()
     }
+    wearable.save()
   } else if (category == categories.ENS) {
+    let ens: ENS
     if (isMint(event)) {
-      let ens = buildENSFromNFT(nft)
-      ens.save()
+      ens = buildENSFromNFT(nft)
       nft.ens = ens.id
     } else {
-      let ens = new ENS(nft.id)
+      ens = new ENS(nft.id)
       ens.owner = nft.owner
-      ens.save()
     }
+    ens.save()
   }
 
   createAccount(event.params.to)
