@@ -19,7 +19,6 @@ import {
 } from '../modules/parcel'
 import {
   buildWearableFromNFT,
-  getWearableIdFromTokenURI,
   getWearableImage,
   isWearableHead,
   isWearableAccessory
@@ -125,8 +124,7 @@ export function handleTransfer(event: Transfer): void {
         nft.searchText = toLowerCase(wearable.name)
       }
     } else {
-      let wearableId = getWearableIdFromTokenURI(nft.tokenURI)
-      wearable = new Wearable(wearableId)
+      wearable = new Wearable(nft.id)
       wearable.owner = nft.owner
     }
     wearable.save()
