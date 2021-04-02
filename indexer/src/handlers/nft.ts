@@ -1,6 +1,6 @@
 import { log } from '@graphprotocol/graph-ts'
 import { Transfer } from '../entities/templates/ERC721/ERC721'
-import { NFT, Parcel, Estate, Order } from '../entities/schema'
+import { NFT, Parcel, Estate, Order, ENS, Wearable } from '../entities/schema'
 import {
   isMint,
   getNFTId,
@@ -70,8 +70,15 @@ export function handleTransfer(event: Transfer): void {
     nft.searchText = ''
 
     nft.searchIsLand = false
+  } else {
+    let oldNFT = NFT.load(id)
+    if (cancelActiveOrder(oldNFT!, event.block.timestamp)) {
+      nft = clearNFTOrderProperties(nft!)
+    }
+  }
 
-    if (category == categories.PARCEL) {
+  if (category == categories.PARCEL) {
+    if (isMint(event)) {
       let parcel = buildParcelFromNFT(nft)
       parcel.save()
       nft.parcel = id
@@ -81,14 +88,26 @@ export function handleTransfer(event: Transfer): void {
       nft.searchParcelX = parcel.x
       nft.searchParcelY = parcel.y
       nft.searchText = getParcelText(parcel, '')
-    } else if (category == categories.ESTATE) {
+    } else {
+      let parcel = Parcel.load(nft.parcel)
+      parcel.owner = nft.owner
+      parcel.save()
+    }
+  } else if (category == categories.ESTATE) {
+    if (isMint(event)) {
       let estate = buildEstateFromNFT(nft)
       estate.save()
       nft.estate = id
       nft.image = getEstateImage(estate)
       nft.searchIsLand = true
       nft.searchEstateSize = estate.size
-    } else if (category == categories.WEARABLE) {
+    } else {
+      let estate = Estate.load(nft.estate)
+      estate.owner = nft.owner
+      estate.save()
+    }
+  } else if (category == categories.WEARABLE) {
+    if (isMint(event)) {
       let wearable = buildWearableFromNFT(nft)
       if (wearable.id != '') {
         wearable.save()
@@ -102,20 +121,25 @@ export function handleTransfer(event: Transfer): void {
         nft.searchWearableRarity = wearable.rarity
         nft.searchText = toLowerCase(wearable.name)
       }
-    } else if (category == categories.ENS) {
+    } else {
+      let wearable = Wearable.load(nft.wearable)
+      wearable.owner = nft.owner
+      wearable.save()
+    }
+  } else if (category == categories.ENS) {
+    if (isMint(event)) {
       let ens = buildENSFromNFT(nft)
       ens.save()
       nft.ens = ens.id
-    }
-
-    let metric = buildCountFromNFT(nft)
-    metric.save()
-  } else {
-    let oldNFT = NFT.load(id)
-    if (cancelActiveOrder(oldNFT!, event.block.timestamp)) {
-      nft = clearNFTOrderProperties(nft!)
+    } else {
+      let ens = ENS.load(nft.ens)
+      ens.owner = nft.owner
+      ens.save()
     }
   }
+
+  let metric = buildCountFromNFT(nft)
+  metric.save()
 
   createAccount(event.params.to)
 
