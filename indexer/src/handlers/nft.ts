@@ -19,6 +19,7 @@ import {
 } from '../modules/parcel'
 import {
   buildWearableFromNFT,
+  getWearableIdFromTokenURI,
   getWearableImage,
   isWearableHead,
   isWearableAccessory
@@ -28,7 +29,6 @@ import { createAccount } from '../modules/wallet'
 import { toLowerCase } from '../modules/utils'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
-import * as status from '../modules/order/status'
 
 export function handleTransfer(event: Transfer): void {
   if (event.params.tokenId.toString() == '') {
@@ -125,8 +125,8 @@ export function handleTransfer(event: Transfer): void {
         nft.searchText = toLowerCase(wearable.name)
       }
     } else {
-      let currentNFT = NFT.load(nft.id)
-      wearable = new Wearable(currentNFT.wearable)
+      let wearableId = getWearableIdFromTokenURI(nft.tokenURI)
+      wearable = new Wearable(wearableId)
       wearable.owner = nft.owner
     }
     wearable.save()
