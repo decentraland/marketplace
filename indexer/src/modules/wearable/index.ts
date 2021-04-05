@@ -214,7 +214,7 @@ function findWearable(id: string, collection: Wearable[]): WearableEntity {
   return new WearableEntity('')
 }
 
-function getWearableIdFromTokenURI(tokenURI: string): string {
+export function getWearableIdFromTokenURI(tokenURI: string): string {
   let splitted = tokenURI.split('/')
 
   // https://wearable-api.decentraland.org/v2/standards/erc721-metadata/collections/halloween_2019/wearables/funny_skull_mask/1

@@ -31,7 +31,6 @@ export function buildCount(): Count {
 
 export function buildCountFromNFT(nft: NFT): Count {
   let category = nft.category
-  let contractAddress = nft.contractAddress.toHexString()
   let count = buildCount()
 
   if (category == categories.PARCEL) {

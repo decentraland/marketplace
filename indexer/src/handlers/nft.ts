@@ -1,6 +1,6 @@
 import { log } from '@graphprotocol/graph-ts'
 import { Transfer } from '../entities/templates/ERC721/ERC721'
-import { NFT, Parcel, Estate, Order } from '../entities/schema'
+import { NFT, Parcel, Estate, Order, ENS, Wearable } from '../entities/schema'
 import {
   isMint,
   getNFTId,
@@ -28,7 +28,6 @@ import { createAccount } from '../modules/wallet'
 import { toLowerCase } from '../modules/utils'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
-import * as status from '../modules/order/status'
 
 export function handleTransfer(event: Transfer): void {
   if (event.params.tokenId.toString() == '') {
@@ -71,9 +70,19 @@ export function handleTransfer(event: Transfer): void {
 
     nft.searchIsLand = false
 
-    if (category == categories.PARCEL) {
-      let parcel = buildParcelFromNFT(nft)
-      parcel.save()
+    let metric = buildCountFromNFT(nft)
+    metric.save()
+  } else {
+    let oldNFT = NFT.load(id)
+    if (cancelActiveOrder(oldNFT!, event.block.timestamp)) {
+      nft = clearNFTOrderProperties(nft!)
+    }
+  }
+
+  if (category == categories.PARCEL) {
+    let parcel: Parcel
+    if (isMint(event)) {
+      parcel = buildParcelFromNFT(nft)
       nft.parcel = id
       nft.image = getParcelImage(parcel)
       nft.searchIsLand = true
@@ -81,17 +90,29 @@ export function handleTransfer(event: Transfer): void {
       nft.searchParcelX = parcel.x
       nft.searchParcelY = parcel.y
       nft.searchText = getParcelText(parcel, '')
-    } else if (category == categories.ESTATE) {
-      let estate = buildEstateFromNFT(nft)
-      estate.save()
+    } else {
+      parcel = new Parcel(nft.id)
+      parcel.owner = nft.owner
+    }
+    parcel.save()
+  } else if (category == categories.ESTATE) {
+    let estate: Estate
+    if (isMint(event)) {
+      estate = buildEstateFromNFT(nft)
       nft.estate = id
       nft.image = getEstateImage(estate)
       nft.searchIsLand = true
       nft.searchEstateSize = estate.size
-    } else if (category == categories.WEARABLE) {
-      let wearable = buildWearableFromNFT(nft)
+    } else {
+      estate = new Estate(nft.id)
+      estate.owner = nft.owner
+    }
+    estate.save()
+  } else if (category == categories.WEARABLE) {
+    let wearable: Wearable
+    if (isMint(event)) {
+      wearable = buildWearableFromNFT(nft)
       if (wearable.id != '') {
-        wearable.save()
         nft.wearable = id
         nft.name = wearable.name
         nft.image = getWearableImage(wearable)
@@ -102,19 +123,21 @@ export function handleTransfer(event: Transfer): void {
         nft.searchWearableRarity = wearable.rarity
         nft.searchText = toLowerCase(wearable.name)
       }
-    } else if (category == categories.ENS) {
-      let ens = buildENSFromNFT(nft)
-      ens.save()
+    } else {
+      wearable = new Wearable(nft.id)
+      wearable.owner = nft.owner
+    }
+    wearable.save()
+  } else if (category == categories.ENS) {
+    let ens: ENS
+    if (isMint(event)) {
+      ens = buildENSFromNFT(nft)
       nft.ens = ens.id
+    } else {
+      ens = new ENS(nft.id)
+      ens.owner = nft.owner
     }
-
-    let metric = buildCountFromNFT(nft)
-    metric.save()
-  } else {
-    let oldNFT = NFT.load(id)
-    if (cancelActiveOrder(oldNFT!, event.block.timestamp)) {
-      nft = clearNFTOrderProperties(nft!)
-    }
+    ens.save()
   }
 
   createAccount(event.params.to)
