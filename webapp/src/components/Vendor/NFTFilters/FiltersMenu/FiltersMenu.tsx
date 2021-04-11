@@ -16,17 +16,20 @@ import { ContractName } from '../../../../modules/vendor/types'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
+import { Network } from '@dcl/schemas'
 
-export const ALL_COLLECTIONS_FILTER_OPTION = 'all'
+export const ALL_FILTER_OPTION = 'ALL'
 
 const FiltersMenu = (props: Props) => {
   const {
     selectedCollection,
     selectedRarities,
     selectedGenders,
+    selectedNetwork,
     onCollectionsChange,
     onRaritiesChange,
-    onGendersChange
+    onGendersChange,
+    onNetworkChange
   } = props
 
   const collectionOptions = useMemo(() => {
@@ -37,7 +40,7 @@ const FiltersMenu = (props: Props) => {
     ) as ContractName[]
     return [
       {
-        value: ALL_COLLECTIONS_FILTER_OPTION,
+        value: ALL_FILTER_OPTION,
         text: t('nft_filters.all_collections')
       },
       ...options.map(collection => ({
@@ -65,14 +68,36 @@ const FiltersMenu = (props: Props) => {
     }))
   }, [])
 
+  const networkOptions = useMemo(() => {
+    const options = Object.values(Network).filter(
+      value => typeof value === 'string'
+    ) as Network[]
+    return [
+      {
+        value: ALL_FILTER_OPTION,
+        text: t('nft_filters.all_networks')
+      },
+      ...options.map(network => ({
+        value: network,
+        text: t(`networks.${network.toLowerCase()}`)
+      }))
+    ]
+  }, [])
+
   return (
     <>
       <Row>
         <SelectFilter
           name={t('nft_filters.collection')}
-          value={selectedCollection || ALL_COLLECTIONS_FILTER_OPTION}
+          value={selectedCollection || ALL_FILTER_OPTION}
           options={collectionOptions}
           onChange={onCollectionsChange}
+        />
+        <SelectFilter
+          name={t('nft_filters.network')}
+          value={selectedNetwork || ALL_FILTER_OPTION}
+          options={networkOptions}
+          onChange={network => onNetworkChange(network as Network)}
         />
       </Row>
       <Row>

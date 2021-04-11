@@ -52,7 +52,7 @@ export function getNFTName(
   }
 }
 
-export function getSortOrder(sortBy: SortBy) {
+export function getOrder(sortBy: SortBy) {
   let orderBy: NFTSortBy = NFTSortBy.CREATED_AT
   let orderDirection: SortDirection = SortDirection.DESC
 
@@ -80,6 +80,31 @@ export function getSortOrder(sortBy: SortBy) {
   }
 
   return [orderBy, orderDirection] as const
+}
+
+export function getSortBy(orderBy: NFTSortBy) {
+  let sortBy: SortBy = SortBy.NEWEST
+
+  switch (orderBy) {
+    case NFTSortBy.NAME: {
+      sortBy = SortBy.NAME
+      break
+    }
+    case NFTSortBy.CREATED_AT: {
+      sortBy = SortBy.NEWEST
+      break
+    }
+    case NFTSortBy.ORDER_CREATED_AT: {
+      sortBy = SortBy.RECENTLY_LISTED
+      break
+    }
+    case NFTSortBy.PRICE: {
+      sortBy = SortBy.CHEAPEST
+      break
+    }
+  }
+
+  return sortBy
 }
 
 export function getNFT(

@@ -26,7 +26,12 @@ export function getFilters(
           ? getSearchWearableCategory(section!)
           : undefined
 
-      const { wearableRarities, wearableGenders, contracts } = searchOptions
+      const {
+        wearableRarities,
+        wearableGenders,
+        contracts,
+        network
+      } = searchOptions
 
       return {
         isLand,
@@ -35,7 +40,8 @@ export function getFilters(
         wearableCategory,
         wearableRarities,
         wearableGenders,
-        contracts
+        contracts,
+        network
       } as NFTsFetchFilters<Vendors.DECENTRALAND>
     }
     case Vendors.KNOWN_ORIGIN: {
@@ -44,7 +50,7 @@ export function getFilters(
       return {
         isEdition: section === currentSection.EDITIONS,
         isToken: section === currentSection.TOKENS
-      }
+      } as NFTsFetchFilters<Vendors.KNOWN_ORIGIN>
     }
     case Vendors.SUPER_RARE:
     case Vendors.MAKERS_PLACE:

@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect'
 import { getSearch as getRouterSearch } from 'connected-react-router'
+import { Network } from '@dcl/schemas'
 import { getView } from '../ui/nft/browse/selectors'
 import { View } from '../ui/types'
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
@@ -62,11 +63,20 @@ export const getOnlyOnSale = createSelector<
   boolean | undefined
 >(getRouterSearch, getView, (search, view) => {
   const onlyOnSale = getURLParam(search, 'onlyOnSale')
-  return onlyOnSale === null
-    ? view
-      ? getDefaultOptionsByView(view).onlyOnSale
-      : undefined
-    : onlyOnSale === 'true'
+  let result: boolean
+  switch (onlyOnSale) {
+    case 'true':
+      result = true
+      break
+    case 'false':
+      result = false
+      break
+    default:
+      const defaultOptions = getDefaultOptionsByView(view)
+      result = defaultOptions.onlyOnSale!
+      break
+  }
+  return result
 })
 
 export const getIsMap = createSelector<RootState, string, boolean | undefined>(
@@ -124,4 +134,13 @@ export const getContracts = createSelector<RootState, string, ContractName[]>(
 export const getSearch = createSelector<RootState, string, string>(
   getRouterSearch,
   search => getURLParam(search, 'search') || ''
+)
+
+export const getNetwork = createSelector<
+  RootState,
+  string,
+  Network | undefined
+>(
+  getRouterSearch,
+  search => (getURLParam(search, 'network') as Network) || undefined
 )

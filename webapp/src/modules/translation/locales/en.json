@@ -106,7 +106,9 @@
     "rarity": "Rarity",
     "gender": "Gender",
     "collection": "Collection",
-    "all_collections": "All Collections"
+    "network": "Network",
+    "all_collections": "All Collections",
+    "all_networks": "All Networks"
   },
   "nft_card": {
     "expires_at": "Expires {date}"
@@ -329,5 +331,9 @@
   },
   "price_change_notice": {
     "message": "The price may fluctuate due to market changes"
+  },
+  "networks": {
+    "ethereum": "Ethereum",
+    "matic": "Polygon"
   }
 }

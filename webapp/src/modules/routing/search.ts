@@ -1,3 +1,4 @@
+import { Network } from '@dcl/schemas'
 import { WearableCategory } from '../nft/wearable/types'
 import { View } from '../ui/types'
 import { NFTCategory } from '../nft/types'
@@ -65,6 +66,10 @@ export function getSearchParams(options?: SearchOptions) {
 
     if (options.search) {
       params.set('search', options.search)
+    }
+
+    if (options.network && Object.values(Network).includes(options.network)) {
+      params.set('network', options.network)
     }
   }
   return params

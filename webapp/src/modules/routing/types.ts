@@ -1,3 +1,4 @@
+import { Network } from '@dcl/schemas'
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
 import { Vendors, ContractName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
@@ -31,4 +32,5 @@ export type SearchOptions = {
   search?: string
   contracts?: ContractName[]
   address?: string
+  network?: Network
 }

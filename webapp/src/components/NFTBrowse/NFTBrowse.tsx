@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { Container, Page, Responsive } from 'decentraland-ui'
 
-import { getDefaultOptionsByView } from '../../modules/routing/search'
 import { View } from '../../modules/ui/types'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
@@ -24,23 +23,26 @@ const NFTBrowse = (props: Props) => {
     onSetView,
     onFetchNFTsFromRoute,
     onBrowse,
-    showOnSale
+    onlyOnSale,
+    viewInState
   } = props
-
-  const { onlyOnSale } = getDefaultOptionsByView(view)
 
   // Kick things off
   useEffect(() => {
     onSetView(view)
-
-    onFetchNFTsFromRoute({
-      vendor,
-      view,
-      address,
-      onlyOnSale
-    })
     // eslint-disable-next-line
-  }, [vendor, onFetchNFTsFromRoute])
+  }, [view])
+
+  useEffect(() => {
+    if (viewInState === view) {
+      onFetchNFTsFromRoute({
+        vendor,
+        view,
+        address,
+        onlyOnSale
+      })
+    }
+  }, [viewInState, onFetchNFTsFromRoute])
 
   // handlers
   const handleSetFullscreen = useCallback(
@@ -84,7 +86,7 @@ const NFTBrowse = (props: Props) => {
           )}
           {isMap ? (
             <div className="Atlas">
-              <Atlas withNavigation withPopup showOnSale={showOnSale} />
+              <Atlas withNavigation withPopup showOnSale={onlyOnSale} />
               <div
                 className="fullscreen-button"
                 onClick={handleSetFullscreen}
