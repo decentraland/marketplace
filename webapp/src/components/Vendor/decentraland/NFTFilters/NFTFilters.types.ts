@@ -1,3 +1,4 @@
+import { Network } from '@dcl/schemas'
 import { Section, SortBy } from '../../../../modules/routing/types'
 import { browse } from '../../../../modules/routing/actions'
 import {
@@ -16,6 +17,7 @@ export type Props = {
   wearableRarities: WearableRarity[]
   wearableGenders: WearableGender[]
   contracts: ContractName[]
+  network?: Network
   onBrowse: typeof browse
 }
 
@@ -30,5 +32,6 @@ export type MapStateProps = Pick<
   | 'wearableRarities'
   | 'wearableGenders'
   | 'contracts'
+  | 'network'
 >
 export type OwnProps = Pick<Props, 'onBrowse'>

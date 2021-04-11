@@ -26,6 +26,7 @@ import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
+import { Network } from '@dcl/schemas'
 
 const NFTFilters = (props: Props) => {
   const {
@@ -37,6 +38,7 @@ const NFTFilters = (props: Props) => {
     wearableRarities,
     wearableGenders,
     contracts,
+    network,
     onBrowse
   } = props
 
@@ -124,6 +126,15 @@ const NFTFilters = (props: Props) => {
       }
     },
     [search, onBrowse]
+  )
+
+  const handleNetworkChange = useCallback(
+    (newNetwork: Network) => {
+      if (network !== newNetwork) {
+        onBrowse({ network: newNetwork })
+      }
+    },
+    [network, onBrowse]
   )
 
   const handleToggleFilterMenu = useCallback(
@@ -258,12 +269,14 @@ const NFTFilters = (props: Props) => {
           className="filters"
         >
           <FiltersMenu
+            selectedNetwork={network}
             selectedCollection={contracts[0]}
             selectedRarities={wearableRarities}
             selectedGenders={wearableGenders}
             onCollectionsChange={handleCollectionsChange}
             onGendersChange={handleGendersChange}
             onRaritiesChange={handleRaritiesChange}
+            onNetworkChange={handleNetworkChange}
           />
         </Responsive>
       ) : null}
@@ -277,12 +290,14 @@ const NFTFilters = (props: Props) => {
         <Modal.Content>
           {category === NFTCategory.WEARABLE ? (
             <FiltersMenu
+              selectedNetwork={network}
               selectedCollection={contracts[0]}
               selectedRarities={wearableRarities}
               selectedGenders={wearableGenders}
               onCollectionsChange={handleCollectionsChange}
               onGendersChange={handleGendersChange}
               onRaritiesChange={handleRaritiesChange}
+              onNetworkChange={handleNetworkChange}
             />
           ) : null}
           <div className="filter-row">

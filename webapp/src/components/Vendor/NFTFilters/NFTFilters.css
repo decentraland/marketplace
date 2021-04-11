@@ -1,6 +1,3 @@
-.NFTFilters {
-}
-
 .NFTFilters.empty {
   margin-top: 12px;
 }
@@ -72,6 +69,8 @@
   margin-left: 24px;
 }
 
+.NFTFilters .ui.toggle.checkbox input.hidden:focus + label,
+.NFTFilters .ui.toggle.checkbox.checked input.hidden + label,
 .NFTFilters .ui.toggle.checkbox input.hidden + label,
 .NFTFilters .ui.toggle.checkbox.checked input.hidden:focus + label {
   font-size: 12px;

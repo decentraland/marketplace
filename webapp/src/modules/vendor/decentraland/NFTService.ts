@@ -13,57 +13,35 @@ import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
 import { NFTFragment } from './nft/fragments'
 import { ContractService } from './ContractService'
-import { MAX_QUERY_SIZE } from './api'
-
-// TODO: remove this once TheGraph is working again as expected
-const isBroken = (nft: NFT<Vendors.DECENTRALAND>) => {
-  return nft.data[nft.category as keyof typeof nft.data] == null
-}
-
-const removeBrokenNFTs = (nfts: NFT<Vendors.DECENTRALAND>[]) => {
-  return nfts.filter(nft => !isBroken(nft))
-}
 
 export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
-    const [remoteNFTs, total] = await Promise.all([
-      nftAPI.fetch(params, filters),
-      this.count(params, filters)
-    ])
+    const { nfts, orders, total } = await nftAPI.fetch(params, filters)
 
-    const nfts: NFT<Vendors.DECENTRALAND>[] = []
     const accounts: Account[] = []
-    const orders: Order[] = []
-
-    for (const remoteNFT of remoteNFTs) {
-      const nft = this.toNFT(remoteNFT)
-      const order = this.toOrder(remoteNFT)
-
-      if (order && !isExpired(order.expiresAt!)) {
-        nft.activeOrderId = order.id
-        orders.push(order)
-      }
-
+    for (const nft of nfts) {
       const address = nft.owner
       let account = accounts.find(account => account.id === address)
       if (!account) {
         account = this.toAccount(address)
       }
       account.nftIds.push(nft.id)
-
-      nfts.push(nft)
     }
 
-    return [removeBrokenNFTs(nfts), accounts, orders, total] as const
+    return [
+      nfts.map(nft => ({ ...nft, vendor: Vendors.DECENTRALAND })),
+      accounts,
+      orders,
+      total
+    ] as const
   }
 
   async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {
-    const params: NFTsFetchParams = {
-      ...countParams,
-      first: MAX_QUERY_SIZE,
-      skip: 0
-    }
-    return nftAPI.count(params, filters)
+    const result = await nftAPI.fetch(
+      { ...countParams, first: 0, skip: 0 },
+      filters
+    )
+    return result.total
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
@@ -74,10 +52,6 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
 
     if (order && !isExpired(order.expiresAt!)) {
       nft.activeOrderId = order.id
-    }
-
-    if (isBroken(nft)) {
-      throw new Error('404')
     }
 
     return [nft, order] as const
