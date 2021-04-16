@@ -179,7 +179,6 @@ export class NFTService implements NFTServiceInterface<Vendors.SUPER_RARE> {
     return {
       id: `${Vendors.SUPER_RARE}-order-${asset.id}`,
       nftId: asset.id.toString(),
-      category: NFTCategory.ART,
       nftAddress: asset.contractAddress,
       marketAddress: order.marketContractAddress,
       owner: asset.owner.address,

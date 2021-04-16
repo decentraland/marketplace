@@ -13,7 +13,7 @@ import { ContractService } from './ContractService'
 export class OrderService
   implements OrderServiceInterface<Vendors.DECENTRALAND> {
   async fetchByNFT(nft: NFT) {
-    const orders = await orderAPI.fetchByNFT(nft.id)
+    const orders = await orderAPI.fetchByNFT(nft.contractAddress, nft.tokenId)
     return orders as Order[]
   }
 

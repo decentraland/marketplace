@@ -147,9 +147,8 @@ track<PlaceBidSuccessAction>(
 
 track<AcceptBidSuccessAction>(
   ACCEPT_BID_SUCCESS,
-  ({ payload }) => withCategory('Accept bid', payload.bid),
+  'Accept bid',
   ({ payload }) => ({
-    category: payload.bid.category,
     tokenId: payload.bid.tokenId,
     bidId: payload.bid.id,
     bidder: payload.bid.bidder,
@@ -159,36 +158,25 @@ track<AcceptBidSuccessAction>(
 
 track<CancelBidSuccessAction>(
   CANCEL_BID_SUCCESS,
-  ({ payload }) => withCategory('Cancel bid', payload.bid),
+  'Cancel bid',
   ({ payload }) => ({
-    category: payload.bid.category,
     tokenId: payload.bid.tokenId,
     bidId: payload.bid.id,
     bidder: payload.bid.bidder
   })
 )
 
-track<ArchiveBidAction>(
-  ARCHIVE_BID,
-  ({ payload }) => withCategory('Archive Bid', payload.bid),
-  ({ payload }) => ({
-    category: payload.bid.category,
-    tokenId: payload.bid.tokenId,
-    bidId: payload.bid.id,
-    price: payload.bid.price
-  })
-)
+track<ArchiveBidAction>(ARCHIVE_BID, 'Archive Bid', ({ payload }) => ({
+  tokenId: payload.bid.tokenId,
+  bidId: payload.bid.id,
+  price: payload.bid.price
+}))
 
-track<UnarchiveBidAction>(
-  UNARCHIVE_BID,
-  ({ payload }) => withCategory('Unarchive Bid', payload.bid),
-  ({ payload }) => ({
-    category: payload.bid.category,
-    tokenId: payload.bid.tokenId,
-    bidId: payload.bid.id,
-    price: payload.bid.price
-  })
-)
+track<UnarchiveBidAction>(UNARCHIVE_BID, 'Unarchive Bid', ({ payload }) => ({
+  tokenId: payload.bid.tokenId,
+  bidId: payload.bid.id,
+  price: payload.bid.price
+}))
 
 track<FetchNFTsSuccessAction>(
   FETCH_NFTS_SUCCESS,

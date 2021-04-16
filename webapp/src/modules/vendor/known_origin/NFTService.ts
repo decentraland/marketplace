@@ -165,7 +165,6 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
     return {
       id: `${Vendors.KNOWN_ORIGIN}-order-${edition.id}`,
       nftId: edition.id,
-      category: NFTCategory.ART,
       nftAddress,
       marketAddress,
       owner: edition.artistAccount,

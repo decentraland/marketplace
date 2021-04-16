@@ -14,48 +14,17 @@ import { bidAPI } from './bid/api'
 
 export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
   async fetchBySeller(seller: string) {
-    const remoteBids = await bidAPI.fetchBySeller(seller)
-
-    let bids: Bid[] = []
-    for (const result of remoteBids) {
-      const { nft, ...rest } = result
-      bids.push({
-        ...rest,
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId
-      })
-    }
-
+    const bids = await bidAPI.fetchBySeller(seller)
     return bids
   }
 
   async fetchByBidder(bidder: string) {
-    const remoteBids = await bidAPI.fetchByBidder(bidder)
-
-    let bids: Bid[] = []
-    for (const result of remoteBids) {
-      const { nft, ...rest } = result
-      bids.push({
-        ...rest,
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId
-      })
-    }
+    const bids = await bidAPI.fetchByBidder(bidder)
     return bids
   }
 
   async fetchByNFT(nft: NFT, status: OrderStatus = OrderStatus.OPEN) {
-    const remoteBids = await bidAPI.fetchByNFT(nft.id, status)
-
-    let bids: Bid[] = []
-    for (const result of remoteBids) {
-      const { nft, ...rest } = result
-      bids.push({
-        ...rest,
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId
-      })
-    }
+    const bids = await bidAPI.fetchByNFT(nft.id, status)
     return bids
   }
 

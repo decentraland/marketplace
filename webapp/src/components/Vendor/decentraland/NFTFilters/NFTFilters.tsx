@@ -9,6 +9,7 @@ import {
   Responsive,
   Modal
 } from 'decentraland-ui'
+import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { SortBy } from '../../../../modules/routing/types'
@@ -19,14 +20,13 @@ import {
 import { NFTCategory } from '../../../../modules/nft/types'
 import { ContractName } from '../../../../modules/vendor/types'
 import { Section } from '../../../../modules/vendor/decentraland/routing/types'
-import { MAX_QUERY_SIZE } from '../../../../modules/vendor/decentraland/api'
 import { getSearchCategory } from '../../../../modules/routing/search'
+import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
 import { NFTSidebar } from '../../NFTSidebar'
 import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
-import { Network } from '@dcl/schemas'
 
 const NFTFilters = (props: Props) => {
   const {

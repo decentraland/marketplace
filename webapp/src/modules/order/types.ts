@@ -1,5 +1,3 @@
-import { NFTCategory } from '../nft/types'
-
 export enum OrderStatus {
   OPEN = 'open',
   SOLD = 'sold',
@@ -9,7 +7,6 @@ export enum OrderStatus {
 export type Order = {
   id: string
   nftId: string
-  category: NFTCategory
   nftAddress: string
   marketAddress: string
   owner: string

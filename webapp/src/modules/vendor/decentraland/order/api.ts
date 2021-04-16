@@ -1,29 +1,12 @@
-import { gql } from 'apollo-boost'
-
-import { client } from '../api'
-import { orderFragment, OrderFragment } from './fragments'
+import { Order } from '../../../order/types'
 
 class OrderAPI {
-  async fetchByNFT(nftId: string) {
-    const { data } = await client.query<{ orders: OrderFragment[] }>({
-      query: NFT_ORDERS_QUERY,
-      variables: { nftId }
-    })
-    return data.orders
+  async fetchByNFT(contractAddress: string, tokenId: string) {
+    const orders: Order[] = await fetch(
+      `http://localhost:5000/v1/contracts/${contractAddress}/tokens/${tokenId}/history`
+    ).then(resp => resp.json())
+    return orders
   }
 }
-
-const NFT_ORDERS_QUERY = gql`
-  query NFTOrders($nftId: String!) {
-    orders(
-      where: { nft: $nftId, status: sold }
-      orderBy: createdAt
-      orderDirection: desc
-    ) {
-      ...orderFragment
-    }
-  }
-  ${orderFragment()}
-`
 
 export const orderAPI = new OrderAPI()

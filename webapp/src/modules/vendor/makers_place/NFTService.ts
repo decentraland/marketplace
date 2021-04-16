@@ -156,7 +156,6 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
     return {
       id: `${Vendors.MAKERS_PLACE}-order-${asset.token_id}`,
       nftId: asset.token_id!.toString(),
-      category: NFTCategory.ART,
       nftAddress: asset.token_contract_address.toLowerCase(),
       marketAddress: asset.sale_contract_address!,
       owner: asset.owner,
