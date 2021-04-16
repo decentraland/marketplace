@@ -20,8 +20,13 @@ export type NFTsFetchFilters = {
   network?: Network
 }
 
-export type NFTsFetchResponse = {
+export type NFTListFetchResponse = {
   nfts: Omit<NFT<Vendors.DECENTRALAND>, 'vendor'>[]
   orders: Order[]
   total: number
+}
+
+export type NFTFetchReponse = {
+  nft: Omit<NFT<Vendors.DECENTRALAND>, 'vendor'>
+  order: Order | null
 }

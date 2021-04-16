@@ -12,7 +12,7 @@ const MenuItem = <T extends unknown>(props: Props<T>) => {
     currentValue,
     subtitle,
     image,
-    isSub,
+    nestedLevel,
     withCaret,
     onClick
   } = props
@@ -22,8 +22,8 @@ const MenuItem = <T extends unknown>(props: Props<T>) => {
   if (currentValue === value) {
     classNames.push('active')
   }
-  if (isSub) {
-    classNames.push('sub')
+  if (nestedLevel) {
+    classNames.push('sub sub-' + nestedLevel)
   }
 
   const handleOnClick = useCallback(() => {

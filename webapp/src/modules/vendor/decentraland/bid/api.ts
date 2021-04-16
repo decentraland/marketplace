@@ -1,72 +1,32 @@
-import { gql } from 'apollo-boost'
-import { client } from '../api'
 import { OrderStatus } from '../../../order/types'
-import { BidFragment, bidFragment } from './fragments'
+import { Bid } from '../../../bid/types'
 
 class BidAPI {
+  async fetch(options: Record<string, string>) {
+    const queryParams = new URLSearchParams()
+    for (const key of Object.keys(options)) {
+      queryParams.append(key, options[key])
+    }
+    try {
+      const bids: Bid[] = await fetch(
+        `http://localhost:5000/v1/bids?${queryParams.toString()}`
+      ).then(resp => resp.json())
+      return bids
+    } catch (error) {
+      return []
+    }
+  }
   async fetchBySeller(seller: string) {
-    const { data } = await client.query<{ bids: BidFragment[] }>({
-      query: BIDS_BY_SELLER_QUERY,
-      variables: {
-        seller,
-        expiresAt: Date.now().toString()
-      }
-    })
-
-    return data.bids
+    return this.fetch({ seller })
   }
 
   async fetchByBidder(bidder: string) {
-    const { data } = await client.query<{ bids: BidFragment[] }>({
-      query: BIDS_BY_BIDDER_QUERY,
-      variables: {
-        bidder,
-        expiresAt: Date.now().toString()
-      }
-    })
-
-    return data.bids
+    return this.fetch({ bidder })
   }
 
   async fetchByNFT(nftId: string, status: OrderStatus = OrderStatus.OPEN) {
-    const { data } = await client.query<{ bids: BidFragment[] }>({
-      query: BIDS_BY_NFT_QUERY,
-      variables: {
-        nftId,
-        status: status.toString(),
-        expiresAt: Date.now().toString()
-      }
-    })
-
-    return data.bids
+    return this.fetch({ nftId, status })
   }
 }
-
-const BIDS_BY_SELLER_QUERY = gql`
-  query BidsBySeller($seller: String, $expiresAt: String) {
-    bids(where: { seller: $seller, status: open, expiresAt_gt: $expiresAt }) {
-      ...bidFragment
-    }
-  }
-  ${bidFragment()}
-`
-
-const BIDS_BY_BIDDER_QUERY = gql`
-  query BidsByBidder($bidder: String, $expiresAt: String) {
-    bids(where: { bidder: $bidder, status: open, expiresAt_gt: $expiresAt }) {
-      ...bidFragment
-    }
-  }
-  ${bidFragment()}
-`
-
-const BIDS_BY_NFT_QUERY = gql`
-  query BidsByNFT($nftId: String, $status: OrderStatus, $expiresAt: String) {
-    bids(where: { nft: $nftId, status: $status, expiresAt_gt: $expiresAt }) {
-      ...bidFragment
-    }
-  }
-  ${bidFragment()}
-`
 
 export const bidAPI = new BidAPI()

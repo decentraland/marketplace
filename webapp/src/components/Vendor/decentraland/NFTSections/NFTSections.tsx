@@ -27,7 +27,7 @@ const NFTSections = (props: Props) => {
               value={menuSection}
               currentValue={section}
               onClick={onSectionClick}
-              isSub
+              nestedLevel={1}
             />
           ))
         : null}
@@ -75,7 +75,7 @@ const NFTSections = (props: Props) => {
               value={menuSection}
               currentValue={section}
               onClick={onSectionClick}
-              isSub
+              nestedLevel={1}
             />
           ))}
 

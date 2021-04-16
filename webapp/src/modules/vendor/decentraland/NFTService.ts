@@ -2,17 +2,12 @@ import { Address } from 'web3x-es/address'
 
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
-import { locations } from '../../routing/locations'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
-import { Order } from '../../order/types'
 import { Account } from '../../account/types'
-import { isExpired } from '../../order/utils'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from './nft/types'
 import { Vendors } from '../types'
 import { nftAPI } from './nft/api'
-import { NFTFragment } from './nft/fragments'
-import { ContractService } from './ContractService'
 
 export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
@@ -45,16 +40,9 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
-    const remoteNFT = await nftAPI.fetchOne(contractAddress, tokenId)
-
-    const nft = this.toNFT(remoteNFT)
-    const order = this.toOrder(remoteNFT)
-
-    if (order && !isExpired(order.expiresAt!)) {
-      nft.activeOrderId = order.id
-    }
-
-    return [nft, order] as const
+    const response = await nftAPI.fetchOne(contractAddress, tokenId)
+    const nft: NFT = { ...response.nft, vendor: Vendors.DECENTRALAND }
+    return [nft, response.order || undefined] as const
   }
 
   async transfer(fromAddress: string, toAddress: string, nft: NFT) {
@@ -70,41 +58,6 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
       .transferFrom(from, to, nft.tokenId)
       .send({ from })
       .getTxHash()
-  }
-
-  toNFT(nft: NFTFragment): NFT<Vendors.DECENTRALAND> {
-    return {
-      id: nft.id,
-      tokenId: nft.tokenId,
-      contractAddress: nft.contractAddress,
-      activeOrderId: '',
-      owner: nft.owner.address.toLowerCase(),
-      name: nft.name,
-      image: nft.image,
-      url: locations.nft(nft.contractAddress, nft.tokenId),
-      data: {
-        parcel: nft.parcel,
-        estate: nft.estate,
-        wearable: nft.wearable,
-        ens: nft.ens
-      },
-      category: nft.category,
-      vendor: Vendors.DECENTRALAND
-    }
-  }
-
-  toOrder(nft: NFTFragment): Order | undefined {
-    let order: Order | undefined
-
-    if (nft.activeOrder) {
-      order = {
-        ...nft.activeOrder,
-        marketAddress: ContractService.contractAddresses.Marketplace,
-        nftId: nft.id
-      }
-    }
-
-    return order
   }
 
   toAccount(address: string): Account {
