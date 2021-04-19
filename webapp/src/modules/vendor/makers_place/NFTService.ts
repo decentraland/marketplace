@@ -20,6 +20,7 @@ import { getOriginURL } from '../utils'
 import { Vendors } from '../types'
 import { MakersPlaceAsset } from './types'
 import { makersPlaceAPI } from './api'
+import { Network } from '@dcl/schemas'
 
 export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
   private tokenConverter: TokenConverter
@@ -144,7 +145,8 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
         description: asset.description
       },
       category: NFTCategory.ART,
-      vendor: Vendors.MAKERS_PLACE
+      vendor: Vendors.MAKERS_PLACE,
+      network: Network.ETHEREUM
     }
   }
 

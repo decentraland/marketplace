@@ -31,11 +31,26 @@ ul.Menu li.sub {
 }
 
 ul.Menu li.sub.sub-1 {
-  padding-left: 32px;
+  margin-left: 16px;
+  padding-left: 16px;
+  width: calc(var(--menu-item-width) - 16px);
 }
 
 ul.Menu li.sub.sub-2 {
+  margin-left: 32px;
+  padding-left: 16px;
+  width: calc(var(--menu-item-width) - 32px);
+}
+.VendorMenu ul.Menu li.sub.sub-1 {
+  margin-left: 0px;
+  padding-left: 32px;
+  width: var(--menu-item-width);
+}
+
+.VendorMenu ul.Menu li.sub.sub-2 {
+  margin-left: 0px;
   padding-left: 48px;
+  width: var(--menu-item-width);
 }
 
 ul.Menu li .dropdown.icon {
@@ -55,8 +70,4 @@ ul.Menu li.active {
 
 ul.Menu ul.submenu {
   padding-left: 0px;
-}
-
-ul.Menu ul.submenu li.sub {
-  width: var(--menu-item-width);
 }

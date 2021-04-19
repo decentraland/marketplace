@@ -1,3 +1,4 @@
+import { Network } from '@dcl/schemas'
 import { Parcel } from './parcel/types'
 import { Estate } from './estate/types'
 import { Wearable } from './wearable/types'
@@ -56,6 +57,7 @@ export type NFT<V extends Vendors = any> = {
   image: string
   url: string
   vendor: Vendors
+  network: Network
   data: Data<V>
 }
 
