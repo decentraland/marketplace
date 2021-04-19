@@ -27,6 +27,7 @@ import { editionAPI } from './edition/api'
 import { tokenAPI } from './token/api'
 import { MAX_QUERY_SIZE } from './api'
 import { AssetType } from './types'
+import { Network } from '@dcl/schemas'
 
 type Fragment = TokenFragment | EditionFragment
 
@@ -150,7 +151,8 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
         isEdition: true
       },
       category: NFTCategory.ART,
-      vendor: Vendors.KNOWN_ORIGIN
+      vendor: Vendors.KNOWN_ORIGIN,
+      network: Network.ETHEREUM
     }
   }
 

@@ -1,6 +1,7 @@
 import BN from 'bn.js'
 import { Address } from 'web3x-es/address'
 import { toBN, toWei } from 'web3x-es/utils'
+import { Network } from '@dcl/schemas'
 
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
@@ -165,7 +166,8 @@ export class NFTService implements NFTServiceInterface<Vendors.SUPER_RARE> {
         description: asset.description
       },
       category: NFTCategory.ART,
-      vendor: Vendors.SUPER_RARE
+      vendor: Vendors.SUPER_RARE,
+      network: Network.ETHEREUM
     }
   }
 

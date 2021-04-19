@@ -40,6 +40,14 @@
   padding-bottom: 12px;
 }
 
+.NFTSections .MenuItem {
+  border-radius: 8px;
+}
+
+.VendorMenu .NFTSections .MenuItem {
+  border-radius: 0px;
+}
+
 .VendorMenu .NFTSections > .MenuItem:last-child {
   border-radius: 0px 0px 8px 8px;
 }
