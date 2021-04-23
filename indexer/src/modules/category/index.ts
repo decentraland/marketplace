@@ -52,7 +52,8 @@ export function getCategory(contractAddress: string): string {
     contractAddress == addresses.AtariLaunch ||
     contractAddress == addresses.RTFKTXAtari ||
     contractAddress == addresses.RACBasics ||
-    contractAddress == addresses.WinklevossCapital
+    contractAddress == addresses.WinklevossCapital ||
+    contractAddress == addresses.DGAtariDillonFrancis
   ) {
     category = categories.WEARABLE
   } else {

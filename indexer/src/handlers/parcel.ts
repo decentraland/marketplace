@@ -21,6 +21,7 @@ import {
   DCLLaunchCollection,
   DCMeta,
   DCNiftyblocksmith,
+  DGAtariDillonFrancis,
   DGFall2020,
   DGSummer2020Collection,
   DgtbleHeadspaceCollection,
@@ -104,7 +105,7 @@ export function handleInitialize(_: InitializeCall): void {
     ERC721.create(Address.fromString(RTFKTXAtari))
     ERC721.create(Address.fromString(RACBasics))
     ERC721.create(Address.fromString(WinklevossCapital))
-
+    ERC721.create(Address.fromString(DGAtariDillonFrancis))
     count.started = 1
     count.save()
   }
