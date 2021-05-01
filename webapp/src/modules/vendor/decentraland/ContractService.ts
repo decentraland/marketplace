@@ -3,7 +3,6 @@ import { Network as ContractsNetwork } from '../../contract/types'
 import { NFTCategory } from '../../nft/types'
 import { TransferType } from '../types'
 import { nftAPI } from './nft'
-import { capitalize } from '../../../lib/text'
 import { Network } from '@dcl/schemas'
 
 const network = process.env.REACT_APP_NETWORK! as ContractsNetwork
@@ -124,7 +123,7 @@ export class ContractService implements ContractServiceInterface {
       }
       this.contractSymbols = {
         ...this.contractSymbols,
-        [collection.address]: this.getSymbol(collection.name)
+        [collection.address]: collection.name
       }
       this.contractCategories = {
         ...this.contractCategories,
@@ -137,12 +136,5 @@ export class ContractService implements ContractServiceInterface {
     }
 
     this.isFilled = true
-  }
-
-  private getSymbol(name: string) {
-    return name
-      .split(' ')
-      .map(capitalize)
-      .join()
   }
 }
