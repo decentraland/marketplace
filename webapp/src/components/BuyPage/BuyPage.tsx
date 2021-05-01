@@ -25,6 +25,7 @@ const BuyPage = (props: Props) => {
                 <BuyModal
                   nft={nft}
                   order={order}
+                  wallet={wallet}
                   authorizations={authorizations}
                   isLoading={isLoading}
                   onNavigate={onNavigate}

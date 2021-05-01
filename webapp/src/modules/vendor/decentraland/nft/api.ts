@@ -2,7 +2,8 @@ import { NFTsFetchParams } from '../../../nft/types'
 import {
   NFTsFetchFilters,
   NFTListFetchResponse,
-  NFTFetchReponse
+  NFTFetchReponse,
+  Collection
 } from './types'
 import { getSortBy } from '../../../nft/utils'
 import { contractAddresses } from '../../../contract/utils'
@@ -33,6 +34,17 @@ class NFTAPI {
       return id
     } catch (error) {
       return null
+    }
+  }
+
+  async fetchCollections() {
+    try {
+      const collections: Collection[] = await fetch(
+        `http://localhost:5000/v1/collections`
+      ).then(resp => resp.json())
+      return collections
+    } catch (error) {
+      return []
     }
   }
 

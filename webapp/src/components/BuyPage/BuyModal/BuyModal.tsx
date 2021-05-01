@@ -5,19 +5,23 @@ import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { isPartner } from '../../../modules/vendor/utils'
 import { getNFTName } from '../../../modules/nft/utils'
-import { hasAuthorization } from '../../../modules/authorization/utils'
 import { contractAddresses } from '../../../modules/contract/utils'
 import { useFingerprint, useComputedPrice } from '../../../modules/nft/hooks'
 import { NFTCategory } from '../../../modules/nft/types'
 import { NFTAction } from '../../NFTAction'
 import { AuthorizationModal } from '../../AuthorizationModal'
-import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.types'
 import { Props } from './BuyModal.types'
+import { isAuthorized } from '../../SettingsPage/Authorization/utils'
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
 
 const BuyPage = (props: Props) => {
   const {
     nft,
     order,
+    wallet,
     authorizations,
     isLoading,
     onNavigate,
@@ -44,33 +48,31 @@ const BuyPage = (props: Props) => {
     ? contractAddresses.MarketplaceAdapter
     : contractAddresses.Marketplace
 
-  const handleToggleWantsToProceed = useCallback(() => {
-    setWantsToProceed(!wantsToProceed)
-  }, [wantsToProceed, setWantsToProceed])
+  if (!wallet) {
+    return null
+  }
 
-  const handleSubmit = useCallback(() => {
-    if (
-      hasAuthorization(
-        authorizations,
-        marketplaceAddress,
-        contractAddresses.MANAToken,
-        AuthorizationType.ALLOWANCE
-      )
-    ) {
+  const authorization: Authorization = {
+    address: wallet.address,
+    authorizedAddress: marketplaceAddress,
+    tokenAddress: contractAddresses.MANAToken,
+    chainId: wallet.chainId,
+    type: AuthorizationType.ALLOWANCE
+  }
+
+  const handleToggleWantsToProceed = () => {
+    setWantsToProceed(!wantsToProceed)
+  }
+
+  const handleSubmit = () => {
+    if (isAuthorized(authorization, authorizations)) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [
-    marketplaceAddress,
-    authorizations,
-    handleExecuteOrder,
-    setShowAuthorizationModal
-  ])
+  }
 
-  const handleClose = useCallback(() => setShowAuthorizationModal(false), [
-    setShowAuthorizationModal
-  ])
+  const handleClose = () => setShowAuthorizationModal(false)
 
   const isDisabled =
     !order ||
@@ -182,9 +184,7 @@ const BuyPage = (props: Props) => {
       </div>
       <AuthorizationModal
         open={showAuthorizationModal}
-        contractAddress={marketplaceAddress}
-        tokenAddress={contractAddresses.MANAToken}
-        type={AuthorizationType.ALLOWANCE}
+        authorization={authorization}
         onProceed={handleExecuteOrder}
         onCancel={handleClose}
       />

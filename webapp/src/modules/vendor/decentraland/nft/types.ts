@@ -30,3 +30,9 @@ export type NFTFetchReponse = {
   nft: Omit<NFT<Vendors.DECENTRALAND>, 'vendor'>
   order: Order | null
 }
+
+export type Collection = {
+  name: string
+  address: string
+  network: Network
+}

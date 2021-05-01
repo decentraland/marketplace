@@ -1,3 +1,4 @@
+import { Network } from '@dcl/schemas'
 import {
   NFT,
   NFTCategory,
@@ -67,10 +68,11 @@ export interface BidService<V extends Vendors> {
 export class BidService<V> {}
 
 export interface ContractService {
-  contractAddresses: Record<string, string>
-  contractSymbols: Record<string, string>
-  contractNames: Record<string, string>
-  contractCategories: Record<string, NFTCategory>
+  getContractAddresses(): Promise<Record<string, string>>
+  getContractSymbols(): Promise<Record<string, string>>
+  getContractNames(): Promise<Record<string, string>>
+  getContractCategories(): Promise<Record<string, NFTCategory>>
+  getContractNetworks(): Promise<Record<string, Network>>
   getTransferType: (address: string) => TransferType
 }
 export class ContractService {}

@@ -1,4 +1,4 @@
-import { takeEvery, all, put } from 'redux-saga/effects'
+import { takeEvery, all, put, select } from 'redux-saga/effects'
 import { createWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
 import {
   ConnectWalletSuccessAction,
@@ -8,11 +8,21 @@ import {
   CHANGE_ACCOUNT,
   CHANGE_NETWORK
 } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { getChainId } from 'decentraland-dapps/dist/modules/wallet/selectors'
+import { fetchAuthorizationsRequest } from 'decentraland-dapps/dist/modules/authorization/actions'
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 
 import { NFTCategory } from '../nft/types'
-import { fetchAuthorizationRequest } from '../authorization/actions'
-import { AuthorizationsRequest } from '../authorization/types'
-import { contractAddresses, contractCategories } from '../contract/utils'
+import {
+  contractAddresses,
+  contractCategories,
+  contractNetworks
+} from '../contract/utils'
+import { Network } from '@dcl/schemas'
 
 const baseWalletSaga = createWalletSaga({
   CHAIN_ID: +(process.env.REACT_APP_CHAIN_ID || 1)
@@ -35,21 +45,52 @@ function* handleWallet(
 
   const { MANAToken, Marketplace, MarketplaceAdapter, Bids } = contractAddresses
 
-  // TODO: VendorFactory.build().contractService.getAllowances()
-  // TODO: VendorFactory.build().contractService.getApprovals()
+  const chainId: ReturnType<typeof getChainId> = yield select(getChainId)
+  if (chainId) {
+    const config = getChainConfiguration(chainId)
 
-  const authorization: AuthorizationsRequest = {
-    allowances: {
-      [Marketplace]: [MANAToken],
-      [MarketplaceAdapter]: [MANAToken],
-      [Bids]: [MANAToken]
-    },
-    approvals: {
-      [Marketplace]: Object.keys(contractCategories).filter(
-        key => contractCategories[key] !== NFTCategory.ART
-      )
+    const authorizations: Authorization[] = []
+
+    authorizations.push({
+      address,
+      authorizedAddress: Marketplace,
+      tokenAddress: MANAToken,
+      type: AuthorizationType.ALLOWANCE,
+      chainId: config.networkMapping[Network.ETHEREUM]
+    })
+
+    authorizations.push({
+      address,
+      authorizedAddress: MarketplaceAdapter,
+      tokenAddress: MANAToken,
+      type: AuthorizationType.ALLOWANCE,
+      chainId: config.networkMapping[Network.ETHEREUM]
+    })
+
+    authorizations.push({
+      address,
+      authorizedAddress: Bids,
+      tokenAddress: MANAToken,
+      type: AuthorizationType.ALLOWANCE,
+      chainId: config.networkMapping[Network.ETHEREUM]
+    })
+
+    const contracts = Object.keys(contractCategories).filter(
+      key => contractCategories[key] !== NFTCategory.ART
+    )
+
+    for (const contract of contracts) {
+      authorizations.push({
+        address,
+        authorizedAddress: Marketplace,
+        tokenAddress: contract,
+        type: AuthorizationType.APPROVAL,
+        chainId: config.networkMapping[contractNetworks[contract]]
+      })
     }
-  }
 
-  yield put(fetchAuthorizationRequest(address, authorization))
+    yield put(fetchAuthorizationsRequest(authorizations))
+  } else {
+    console.error('Error: undefined chainId')
+  }
 }

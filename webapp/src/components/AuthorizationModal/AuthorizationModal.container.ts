@@ -1,13 +1,14 @@
 import { connect } from 'react-redux'
+import {
+  grantTokenRequest,
+  revokeTokenRequest
+} from 'decentraland-dapps/dist/modules/authorization/actions'
+import {
+  getData as getAuthorizations,
+  getTransactions
+} from 'decentraland-dapps/dist/modules/authorization/selectors'
+import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { RootState } from '../../modules/reducer'
-import {
-  allowTokenRequest,
-  approveTokenRequest
-} from '../../modules/authorization/actions'
-import {
-  getAuthorizations,
-  getPendingTransactions
-} from '../../modules/authorization/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -17,14 +18,12 @@ import AuthorizationModal from './AuthorizationModal'
 
 const mapState = (state: RootState): MapStateProps => ({
   authorizations: getAuthorizations(state),
-  pendingTransactions: getPendingTransactions(state)
+  pendingTransactions: getTransactions(state).filter(tx => isPending(tx.status))
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onAllow: (isAllowed, contractAddress, tokenAddress) =>
-    dispatch(allowTokenRequest(isAllowed, contractAddress, tokenAddress)),
-  onApprove: (isAllowed, contractAddress, tokenAddress) =>
-    dispatch(approveTokenRequest(isAllowed, contractAddress, tokenAddress))
+  onGrant: authorization => dispatch(grantTokenRequest(authorization)),
+  onRevoke: authorization => dispatch(revokeTokenRequest(authorization))
 })
 
 export default connect(mapState, mapDispatch)(AuthorizationModal)
