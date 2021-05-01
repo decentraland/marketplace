@@ -11,7 +11,7 @@ import {
 import { Vendors } from './types'
 
 export class VendorFactory {
-  static build(vendor: Vendors) {
+  static build(vendor: Vendors): Vendor<Vendors> {
     switch (vendor) {
       case Vendors.DECENTRALAND:
         return new Vendor<Vendors.DECENTRALAND>(

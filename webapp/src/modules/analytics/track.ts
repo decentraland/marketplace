@@ -27,12 +27,6 @@ import {
   FETCH_NFTS_SUCCESS,
   FetchNFTsSuccessAction
 } from '../nft/actions'
-import {
-  ALLOW_TOKEN_SUCCESS,
-  APPROVE_TOKEN_SUCCESS,
-  AllowTokenSuccessAction,
-  ApproveTokenSuccessAction
-} from '../authorization/actions'
 import { contractNames } from '../contract/utils'
 import {
   PLACE_BID_SUCCESS,
@@ -46,6 +40,12 @@ import {
   ArchiveBidAction,
   UnarchiveBidAction
 } from '../bid/actions'
+import {
+  GrantTokenSuccessAction,
+  GRANT_TOKEN_SUCCESS,
+  RevokeTokenSuccessAction,
+  REVOKE_TOKEN_SUCCESS
+} from 'decentraland-dapps/dist/modules/authorization/actions'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -118,20 +118,16 @@ track<ReplaceTransactionSuccessAction>(
   'Transaction Replaced'
 )
 
-track<AllowTokenSuccessAction>(ALLOW_TOKEN_SUCCESS, ({ payload }) => {
-  const contractName = contractNames[payload.contractAddress]
-  const tokenContractName = contractNames[payload.tokenContractAddress]
-  return payload.isAllowed
-    ? `Authorize ${contractName} for ${tokenContractName}`
-    : `Unauthorize ${contractName} for ${tokenContractName}`
+track<GrantTokenSuccessAction>(GRANT_TOKEN_SUCCESS, ({ payload }) => {
+  const contractName = contractNames[payload.authorization.authorizedAddress]
+  const tokenContractName = contractNames[payload.authorization.tokenAddress]
+  return `Authorize ${contractName} for ${tokenContractName}`
 })
 
-track<ApproveTokenSuccessAction>(APPROVE_TOKEN_SUCCESS, ({ payload }) => {
-  const contractName = contractNames[payload.contractAddress]
-  const tokenContractName = contractNames[payload.tokenContractAddress]
-  return payload.isApproved
-    ? `Authorize ${contractName} for ${tokenContractName}`
-    : `Unauthorize ${contractName} for ${tokenContractName}`
+track<RevokeTokenSuccessAction>(REVOKE_TOKEN_SUCCESS, ({ payload }) => {
+  const contractName = contractNames[payload.authorization.authorizedAddress]
+  const tokenContractName = contractNames[payload.authorization.tokenAddress]
+  return `Unauthorize ${contractName} for ${tokenContractName}`
 })
 
 track<PlaceBidSuccessAction>(

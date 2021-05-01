@@ -3,45 +3,36 @@ import { Link } from 'react-router-dom'
 import { Modal, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { contractNames, contractSymbols } from '../../modules/contract/utils'
-import { hasAuthorization } from '../../modules/authorization/utils'
 import { locations } from '../../modules/routing/locations'
+import { isAuthorized } from '../SettingsPage/Authorization/utils'
 import { Authorization } from '../SettingsPage/Authorization'
-import { Props, AuthorizationType } from './AuthorizationModal.types'
+import { Props } from './AuthorizationModal.types'
 
 const AuthorizationModal = (props: Props) => {
   const {
     open,
-    contractAddress,
-    tokenAddress,
-    type,
+    authorization,
     authorizations,
     pendingTransactions,
-    onAllow,
-    onApprove,
+    onGrant,
+    onRevoke,
     onCancel,
     onProceed
   } = props
-
-  const isAuthorized = hasAuthorization(
-    authorizations,
-    contractAddress,
-    tokenAddress,
-    type
-  )
 
   return (
     <Modal open={open} size="small" className="AuthorizationModal">
       <Modal.Header>
         {t('authorization_modal.title', {
-          token: contractSymbols[tokenAddress]
+          token: contractSymbols[authorization.tokenAddress]
         })}
       </Modal.Header>
       <Modal.Description>
         <T
           id="authorization_modal.description"
           values={{
-            contract: contractNames[contractAddress],
-            token: contractSymbols[tokenAddress],
+            contract: contractNames[authorization.authorizedAddress],
+            token: contractSymbols[authorization.tokenAddress],
             settings_link: (
               <Link to={locations.settings()}>{t('global.settings')}</Link>
             ),
@@ -56,17 +47,21 @@ const AuthorizationModal = (props: Props) => {
       </Modal.Description>
       <Modal.Content>
         <Authorization
-          key={contractAddress}
-          checked={isAuthorized}
-          contractAddress={contractAddress}
-          tokenContractAddress={tokenAddress}
+          key={authorization.authorizedAddress}
+          authorization={authorization}
+          authorizations={authorizations}
           pendingTransactions={pendingTransactions}
-          onChange={type === AuthorizationType.ALLOWANCE ? onAllow : onApprove}
+          onGrant={onGrant}
+          onRevoke={onRevoke}
         />
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={onCancel}>{t('global.cancel')}</Button>
-        <Button disabled={!isAuthorized} primary onClick={onProceed}>
+        <Button
+          disabled={!isAuthorized(authorization, authorizations)}
+          primary
+          onClick={onProceed}
+        >
           {t('global.proceed')}
         </Button>
       </Modal.Actions>

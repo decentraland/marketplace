@@ -13,58 +13,61 @@ import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 
-const isDev = process.env.NODE_ENV === 'development'
-const anyWindow = window as any
-
-const composeEnhancers =
-  isDev && anyWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-    ? anyWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        stateSanitizer: (state: RootState) => {
-          const { tile, proximity, ...sanitized } = { ...state }
-          return sanitized
-        }
-      })
-    : compose
-
 export const history = require('history').createBrowserHistory()
-const rootReducer = storageReducerWrapper(createRootReducer(history))
 
-const sagasMiddleware = createSagasMiddleware()
-const loggerMiddleware = createLogger({
-  collapsed: () => true,
-  predicate: (_: any, action) => isDev || action.type.includes('Failure')
-})
-const transactionMiddleware = createTransactionMiddleware()
-const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
-  storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
-  paths: [['ui', 'archivedBidIds']], // array of paths from state to be persisted (optional)
-  actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID], // array of actions types that will trigger a SAVE (optional)
-  migrations: {} // migration object that will migrate your localstorage (optional)
-})
-const analyticsMiddleware = createAnalyticsMiddleware(
-  process.env.REACT_APP_SEGMENT_API_KEY || ''
-)
+export function initStore() {
+  const isDev = process.env.NODE_ENV === 'development'
+  const anyWindow = window as any
 
-const middleware = applyMiddleware(
-  sagasMiddleware,
-  routerMiddleware(history),
-  loggerMiddleware,
-  transactionMiddleware,
-  storageMiddleware,
-  analyticsMiddleware
-)
-const enhancer = composeEnhancers(middleware)
-const store = createStore(rootReducer, enhancer)
+  const composeEnhancers =
+    isDev && anyWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+      ? anyWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+          stateSanitizer: (state: RootState) => {
+            const { tile, proximity, ...sanitized } = { ...state }
+            return sanitized
+          }
+        })
+      : compose
 
-sagasMiddleware.run(rootSaga)
-loadStorageMiddleware(store)
+  const rootReducer = storageReducerWrapper(createRootReducer(history))
 
-if (isDev) {
-  const _window = window as any
-  _window.getState = store.getState
+  const sagasMiddleware = createSagasMiddleware()
+  const loggerMiddleware = createLogger({
+    collapsed: () => true,
+    predicate: (_: any, action) => isDev || action.type.includes('Failure')
+  })
+  const transactionMiddleware = createTransactionMiddleware()
+  const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
+    storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
+    paths: [['ui', 'archivedBidIds']], // array of paths from state to be persisted (optional)
+    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID], // array of actions types that will trigger a SAVE (optional)
+    migrations: {} // migration object that will migrate your localstorage (optional)
+  })
+  const analyticsMiddleware = createAnalyticsMiddleware(
+    process.env.REACT_APP_SEGMENT_API_KEY || ''
+  )
+
+  const middleware = applyMiddleware(
+    sagasMiddleware,
+    routerMiddleware(history),
+    loggerMiddleware,
+    transactionMiddleware,
+    storageMiddleware,
+    analyticsMiddleware
+  )
+  const enhancer = composeEnhancers(middleware)
+  const store = createStore(rootReducer, enhancer)
+
+  sagasMiddleware.run(rootSaga)
+  loadStorageMiddleware(store)
+
+  if (isDev) {
+    const _window = window as any
+    _window.getState = store.getState
+  }
+
+  // fetch tiles
+  store.dispatch(fetchTilesRequest())
+
+  return store
 }
-
-// fetch tiles
-store.dispatch(fetchTilesRequest())
-
-export { store }

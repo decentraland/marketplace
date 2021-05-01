@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import { Mana } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink, Profile } from 'decentraland-dapps/dist/containers'
+import {
+  GrantTokenSuccessAction,
+  GRANT_TOKEN_SUCCESS,
+  REVOKE_TOKEN_SUCCESS
+} from 'decentraland-dapps/dist/modules/authorization/actions'
 
 import { contractSymbols } from '../../../modules/contract/utils'
 import { getNFTName } from '../../../modules/nft/utils'
-import {
-  APPROVE_TOKEN_SUCCESS,
-  ALLOW_TOKEN_SUCCESS
-} from '../../../modules/authorization/actions'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
@@ -29,25 +30,29 @@ import { Props } from './Transaction.types'
 const Transaction = (props: Props) => {
   const { tx } = props
   switch (tx.actionType) {
-    case ALLOW_TOKEN_SUCCESS: {
-      const { isAllowed, contractAddress, tokenContractAddress } = tx.payload
+    case GRANT_TOKEN_SUCCESS: {
+      const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
       return (
         <TransactionDetail
           text={
             <T
               id="transaction.detail.approve_token"
               values={{
-                action: isAllowed
-                  ? t('transaction.action.approved')
-                  : t('transaction.action.not_approved'),
+                action: t('transaction.action.approved'),
                 contract: (
-                  <TransactionLink address={contractAddress} txHash="">
-                    {contractSymbols[contractAddress]}
+                  <TransactionLink
+                    address={authorization.authorizedAddress}
+                    txHash=""
+                  >
+                    {contractSymbols[authorization.authorizedAddress]}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink address={tokenContractAddress} txHash="">
-                    {contractSymbols[tokenContractAddress]}
+                  <TransactionLink
+                    address={authorization.tokenAddress}
+                    txHash=""
+                  >
+                    {contractSymbols[authorization.tokenAddress]}
                   </TransactionLink>
                 )
               }}
@@ -57,25 +62,29 @@ const Transaction = (props: Props) => {
         />
       )
     }
-    case APPROVE_TOKEN_SUCCESS: {
-      const { isApproved, contractAddress, tokenContractAddress } = tx.payload
+    case REVOKE_TOKEN_SUCCESS: {
+      const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
       return (
         <TransactionDetail
           text={
             <T
               id="transaction.detail.approve_token"
               values={{
-                action: isApproved
-                  ? t('transaction.action.approved')
-                  : t('transaction.action.not_approved'),
+                action: t('transaction.action.not_approved'),
                 contract: (
-                  <TransactionLink address={contractAddress} txHash="">
-                    {contractSymbols[contractAddress]}
+                  <TransactionLink
+                    address={authorization.authorizedAddress}
+                    txHash=""
+                  >
+                    {contractSymbols[authorization.authorizedAddress]}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink address={tokenContractAddress} txHash="">
-                    {contractSymbols[tokenContractAddress]}
+                  <TransactionLink
+                    address={authorization.tokenAddress}
+                    txHash=""
+                  >
+                    {contractSymbols[authorization.tokenAddress]}
                   </TransactionLink>
                 )
               }}

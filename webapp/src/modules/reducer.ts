@@ -6,9 +6,9 @@ import { translationReducer as translation } from 'decentraland-dapps/dist/modul
 import { storageReducer as storage } from 'decentraland-dapps/dist/modules/storage/reducer'
 import { transactionReducer as transaction } from 'decentraland-dapps/dist/modules/transaction/reducer'
 import { profileReducer as profile } from 'decentraland-dapps/dist/modules/profile/reducer'
+import { authorizationReducer as authorization } from 'decentraland-dapps/dist/modules/authorization/reducer'
 
 import { accountReducer as account } from './account/reducer'
-import { authorizationReducer as authorization } from './authorization/reducer'
 import { bidReducer as bid } from './bid/reducer'
 import { nftReducer as nft } from './nft/reducer'
 import { orderReducer as order } from './order/reducer'

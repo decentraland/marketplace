@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { fromWei } from 'web3x-es/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
@@ -11,13 +11,16 @@ import {
 } from '../../../modules/order/utils'
 import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
-import { hasAuthorization } from '../../../modules/authorization/utils'
 import { contractAddresses } from '../../../modules/contract/utils'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
-import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.types'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { NFTAction } from '../../NFTAction'
 import { Props } from './SellModal.types'
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { isAuthorized } from '../../SettingsPage/Authorization/utils'
 
 const SellModal = (props: Props) => {
   const {
@@ -44,30 +47,38 @@ const SellModal = (props: Props) => {
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
-  const handleCreateOrder = useCallback(
-    () => onCreateOrder(nft, fromMANA(price), new Date(expiresAt).getTime()),
-    [nft, price, expiresAt, onCreateOrder]
-  )
+  // Clear confirm price when closing the confirm modal
+  useEffect(() => {
+    if (!showConfirm) {
+      setConfirmPrice('')
+    }
+  }, [nft, showConfirm, setConfirmPrice])
 
-  const handleSubmit = useCallback(() => {
-    if (
-      hasAuthorization(
-        authorizations,
-        contractAddresses.Marketplace,
-        nft.contractAddress,
-        AuthorizationType.APPROVAL
-      )
-    ) {
+  if (!wallet) {
+    return null
+  }
+
+  const authorization: Authorization = {
+    address: wallet.address,
+    authorizedAddress: nft.contractAddress,
+    tokenAddress: contractAddresses.MANAToken,
+    chainId: wallet.chainId,
+    type: AuthorizationType.APPROVAL
+  }
+
+  const handleCreateOrder = () =>
+    onCreateOrder(nft, fromMANA(price), new Date(expiresAt).getTime())
+
+  const handleSubmit = () => {
+    if (isAuthorized(authorization, authorizations)) {
       handleCreateOrder()
     } else {
       setShowAuthorizationModal(true)
       setShowConfirm(false)
     }
-  }, [authorizations, nft, handleCreateOrder, setShowAuthorizationModal])
+  }
 
-  const handleClose = useCallback(() => setShowAuthorizationModal(false), [
-    setShowAuthorizationModal
-  ])
+  const handleClose = () => setShowAuthorizationModal(false)
 
   const { orderService } = VendorFactory.build(nft.vendor)
 
@@ -77,13 +88,6 @@ const SellModal = (props: Props) => {
     !isOwnedBy(nft, wallet) ||
     fromMANA(price) <= 0 ||
     isInvalidDate
-
-  // Clear confirm price when closing the confirm modal
-  useEffect(() => {
-    if (!showConfirm) {
-      setConfirmPrice('')
-    }
-  }, [nft, showConfirm, setConfirmPrice])
 
   return (
     <NFTAction nft={nft}>
@@ -187,9 +191,7 @@ const SellModal = (props: Props) => {
       </Modal>
       <AuthorizationModal
         open={showAuthorizationModal}
-        contractAddress={contractAddresses.Marketplace}
-        tokenAddress={nft.contractAddress}
-        type={AuthorizationType.APPROVAL}
+        authorization={authorization}
         onProceed={handleCreateOrder}
         onCancel={handleClose}
       />

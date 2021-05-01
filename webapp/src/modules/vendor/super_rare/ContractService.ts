@@ -1,19 +1,20 @@
-import { Network } from '../../contract/types'
+import { Network } from '@dcl/schemas'
+import { Network as ContractsNetwork } from '../../contract/types'
 import { NFTCategory } from '../../nft/types'
 import { ContractService as ContractServiceInterface } from '../services'
 import { TransferType } from '../types'
 
-const network = process.env.REACT_APP_NETWORK! as Network
+const network = process.env.REACT_APP_NETWORK! as ContractsNetwork
 
 const contractAddresses = {
-  [Network.ROPSTEN]: {
+  [ContractsNetwork.ROPSTEN]: {
     SuperRare: '0xa42e14b40bb22bc3daaf8ecad9d73bdf44056959',
     SuperRareV2: '0x84691657fd6bcf50764d9fef2a53b22c8bd2202e',
     SuperRareMarket: '0xa42e14b40bb22bc3daaf8ecad9d73bdf44056959',
     SuperRareMarketV2: '0x17d0234dc57ef236cdfc4fda76b0810265f44e1f',
     MarketplaceAdapter: '0xd1e4e2880ff56cd0d5c68da9bed58bfbf0150948'
   },
-  [Network.MAINNET]: {
+  [ContractsNetwork.MAINNET]: {
     SuperRare: '0x41a322b28d0ff354040e2cbc676f0320d8c8850d',
     SuperRareV2: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
     SuperRareMarket: '0x41a322b28d0ff354040e2cbc676f0320d8c8850d',
@@ -29,24 +30,40 @@ export type ContractName = keyof typeof contractAddresses
 export class ContractService implements ContractServiceInterface {
   static contractAddresses = contractAddresses
 
-  contractAddresses = contractAddresses
+  async getContractAddresses() {
+    return contractAddresses
+  }
 
-  contractSymbols = {
-    [SuperRare]: 'SR',
-    [SuperRareV2]: 'SR',
-    [MarketplaceAdapter]: 'BuyAdapter'
-  } as const
+  async getContractSymbols() {
+    return {
+      [SuperRare]: 'SR',
+      [SuperRareV2]: 'SR',
+      [MarketplaceAdapter]: 'BuyAdapter'
+    }
+  }
 
-  contractNames = {
-    [SuperRare]: 'SuperRare',
-    [SuperRareV2]: 'SuperRareV2',
-    [MarketplaceAdapter]: 'Partner Marketplace'
-  } as const
+  async getContractNames() {
+    return {
+      [SuperRare]: 'SuperRare',
+      [SuperRareV2]: 'SuperRareV2',
+      [MarketplaceAdapter]: 'Partner Marketplace'
+    }
+  }
 
-  contractCategories = {
-    [SuperRare]: NFTCategory.ART,
-    [SuperRareV2]: NFTCategory.ART
-  } as const
+  async getContractCategories() {
+    return {
+      [SuperRare]: NFTCategory.ART,
+      [SuperRareV2]: NFTCategory.ART
+    }
+  }
+
+  async getContractNetworks() {
+    return {
+      [SuperRare]: Network.ETHEREUM,
+      [SuperRareV2]: Network.ETHEREUM,
+      [MarketplaceAdapter]: Network.ETHEREUM
+    }
+  }
 
   getTransferType(address: string) {
     switch (address) {

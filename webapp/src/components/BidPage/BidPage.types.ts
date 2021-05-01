@@ -1,13 +1,13 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import { Authorizations } from '../../modules/authorization/types'
+import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
   placeBidRequest,
   PlaceBidRequestAction
 } from '../../modules/bid/actions'
 
 export type Props = {
-  authorizations: Authorizations
+  authorizations: Authorization[]
   onPlaceBid: typeof placeBidRequest
   onNavigate: (path: string) => void
 }
