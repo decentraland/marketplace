@@ -111,27 +111,27 @@ export class ContractService implements ContractServiceInterface {
       return
     }
 
-    const collections = await nftAPI.fetchCollections()
-    for (const collection of collections) {
+    const contracts = await nftAPI.fetchContracts()
+    for (const contract of contracts) {
       this.contractAddresses = {
         ...this.contractAddresses,
-        [collection.name]: collection.address
+        [contract.name]: contract.address
       }
       this.contractNames = {
         ...this.contractNames,
-        [collection.address]: collection.name
+        [contract.address]: contract.name
       }
       this.contractSymbols = {
         ...this.contractSymbols,
-        [collection.address]: collection.name
+        [contract.address]: contract.name
       }
       this.contractCategories = {
         ...this.contractCategories,
-        [collection.address]: NFTCategory.WEARABLE
+        [contract.address]: NFTCategory.WEARABLE
       }
       this.contractNetworks = {
         ...this.contractNetworks,
-        [collection.address]: collection.network
+        [contract.address]: contract.network
       }
     }
 

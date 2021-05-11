@@ -1,5 +1,5 @@
-import { Network } from '@dcl/schemas'
-import { NFT } from '../../../nft/types'
+import { ChainId, Network } from '@dcl/schemas'
+import { NFT, NFTCategory } from '../../../nft/types'
 import {
   WearableCategory,
   WearableRarity,
@@ -31,8 +31,10 @@ export type NFTFetchReponse = {
   order: Order | null
 }
 
-export type Collection = {
+export type Contract = {
   name: string
   address: string
+  category: NFTCategory
   network: Network
+  chainId: ChainId
 }

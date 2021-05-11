@@ -3,17 +3,20 @@ import {
   NFTsFetchFilters,
   NFTListFetchResponse,
   NFTFetchReponse,
-  Collection
+  Contract
 } from './types'
 import { getSortBy } from '../../../nft/utils'
 import { contractAddresses } from '../../../contract/utils'
+import { ATLAS_SERVER_URL } from '../land'
+
+export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
 
 class NFTAPI {
   fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
     const queryParams = this.buildQueryString(params, filters)
 
     const response: NFTListFetchResponse = await fetch(
-      `http://localhost:5000/v1/browse?${queryParams}`
+      `${NFT_SERVER_URL}/v1/browse?${queryParams}`
     ).then(resp => resp.json())
 
     return response
@@ -21,7 +24,7 @@ class NFTAPI {
 
   async fetchOne(contractAddress: string, tokenId: string) {
     const response: NFTFetchReponse = await fetch(
-      `http://localhost:5000/v1/contracts/${contractAddress}/tokens/${tokenId}`
+      `${NFT_SERVER_URL}/v1/contracts/${contractAddress}/tokens/${tokenId}`
     ).then(resp => resp.json())
     return response
   }
@@ -29,7 +32,7 @@ class NFTAPI {
   async fetchTokenId(x: number, y: number) {
     try {
       const { id } = await fetch(
-        `https://api.decentraland.org/v2/parcels/${x}/${y}`
+        `${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`
       ).then(resp => resp.json())
       return id
     } catch (error) {
@@ -37,12 +40,12 @@ class NFTAPI {
     }
   }
 
-  async fetchCollections() {
+  async fetchContracts() {
     try {
-      const collections: Collection[] = await fetch(
-        `http://localhost:5000/v1/collections`
+      const contracts: Contract[] = await fetch(
+        `${NFT_SERVER_URL}/v1/contracts`
       ).then(resp => resp.json())
-      return collections
+      return contracts
     } catch (error) {
       return []
     }
