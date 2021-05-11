@@ -131,7 +131,6 @@ const SellModal = (props: Props) => {
               setExpiresAt(props.value || getDefaultExpirationDate())
             }
             error={isInvalidDate}
-            nft
             message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
           />
         </div>

@@ -1,7 +1,7 @@
 import { toWei } from 'web3x-es/utils'
 import { Address } from 'web3x-es/address'
 import { Network } from '@dcl/schemas'
-
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Marketplace } from '../../../contracts/Marketplace'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
@@ -19,17 +19,20 @@ export class OrderService
   }
 
   async create(
+    wallet: Wallet | null,
     nft: NFT,
     price: number,
-    expiresAt: number,
-    fromAddress: string
+    expiresAt: number
   ) {
     const marketplace = await this.getMarketplaceContract(nft.network)
 
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
+
+    console.log('create order for nft', nft, { price, expiresAt, from })
+    // throw new Error('not implemented')
 
     return marketplace.methods
       .createOrder(
@@ -43,18 +46,18 @@ export class OrderService
   }
 
   async execute(
+    wallet: Wallet | null,
     nft: NFT,
     order: Order,
-    fromAddress: string,
     fingerprint?: string
   ) {
     const marketplace = await this.getMarketplaceContract(nft.network)
     const { price } = order
 
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
 
     if (fingerprint) {
       return marketplace.methods
@@ -78,14 +81,14 @@ export class OrderService
     }
   }
 
-  async cancel(nft: NFT, fromAddress: string) {
+  async cancel(wallet: Wallet | null, nft: NFT) {
     const marketplace = await this.getMarketplaceContract(nft.network)
 
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
 
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
     return marketplace.methods
       .cancelOrder(Address.fromString(nft.contractAddress), nft.tokenId)
       .send({ from })

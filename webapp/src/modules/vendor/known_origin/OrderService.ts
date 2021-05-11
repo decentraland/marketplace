@@ -1,6 +1,6 @@
 import { Address } from 'web3x-es/address'
 import { ABICoder } from 'web3x-es/contract/abi-coder'
-
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
@@ -30,11 +30,11 @@ export class OrderService
   }
 
   async execute(
+    wallet: Wallet | null,
     nft: NFT<VendorName.KNOWN_ORIGIN>,
-    order: Order,
-    fromAddress: string
+    order: Order
   ): Promise<string> {
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
 
@@ -45,10 +45,10 @@ export class OrderService
     const manaTokenAddress = Address.fromString(
       getContract({ name: contractNames.MANA }).address
     )
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
 
     // Data
-    const calldata = this.getCallData(fromAddress, nft)
+    const calldata = this.getCallData(wallet.address, nft)
 
     // Price
     const manaPrice = await this.tokenConverter.contractEthToMANA(

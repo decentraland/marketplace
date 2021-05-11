@@ -15,7 +15,7 @@ import {
   cancelOrderSuccess,
   cancelOrderFailure
 } from './actions'
-import { getAddress, getChainId } from '../wallet/selectors'
+import { getChainId, getWallet } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
 
@@ -30,9 +30,9 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
   try {
     const { orderService } = VendorFactory.build(nft.vendor)
 
-    const address: ReturnType<typeof getAddress> = yield select(getAddress)
+    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const txHash: string = yield call(() =>
-      orderService.create(nft, price, expiresAt, address!)
+      orderService.create(wallet, nft, price, expiresAt)
     )
     const chainId: ChainId = yield select(getChainId)
     yield put(createOrderSuccess(nft, price, expiresAt, chainId, txHash))
@@ -50,9 +50,9 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
     }
     const { orderService } = VendorFactory.build(nft.vendor)
 
-    const address: ReturnType<typeof getAddress> = yield select(getAddress)
+    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const txHash: string = yield call(() =>
-      orderService.execute(nft, order, address!, fingerprint)
+      orderService.execute(wallet, nft, order, fingerprint)
     )
 
     const chainId: ChainId = yield select(getChainId)
@@ -71,8 +71,8 @@ function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
     }
     const { orderService } = VendorFactory.build(nft.vendor)
 
-    const address: ReturnType<typeof getAddress> = yield select(getAddress)
-    const txHash: string = yield call(() => orderService.cancel(nft, address!))
+    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
+    const txHash: string = yield call(() => orderService.cancel(wallet, nft))
     const chainId: ChainId = yield select(getChainId)
     yield put(cancelOrderSuccess(order, nft, chainId, txHash))
     yield put(push(locations.activity()))

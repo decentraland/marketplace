@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import { Address } from 'web3x-es/address'
 import { toBN, toWei } from 'web3x-es/utils'
-
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
 import {
@@ -18,7 +18,6 @@ import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
 import { getOriginURL } from '../utils'
 import { getContractNames, VendorName } from '../types'
-
 import { NFTsFetchFilters } from './nft/types'
 import { EditionFragment } from './edition/fragments'
 import { TokenFragment } from './token/fragments'
@@ -114,14 +113,14 @@ export class NFTService
   }
 
   async transfer(
-    fromAddress: string,
+    wallet: Wallet | null,
     toAddress: string,
     nft: NFT<VendorName.KNOWN_ORIGIN>
   ) {
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
     const to = Address.fromString(toAddress)
 
     const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
