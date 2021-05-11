@@ -1,6 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
 import { Atlas, AtlasTile } from 'decentraland-ui'
-import { ATLAS_URL } from '../../modules/vendor/decentraland'
+import { ATLAS_SERVER_URL } from '../../modules/vendor/decentraland'
 import {
   FETCH_TILES_REQUEST,
   FetchTilesRequestAction,
@@ -23,7 +23,7 @@ export function* tileSaga() {
 function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
   try {
     const tiles: Record<string, AtlasTile> = yield call(() =>
-      Atlas.fetchTiles(ATLAS_URL + '/tiles')
+      Atlas.fetchTiles(ATLAS_SERVER_URL + '/v1/tiles')
     )
     yield put(fetchTilesSuccess(tiles))
   } catch (error) {
