@@ -1,7 +1,7 @@
 import BN from 'bn.js'
 import { Address } from 'web3x-es/address'
 import { toBN, toWei } from 'web3x-es/utils'
-import { ChainId, Network } from '@dcl/schemas'
+import { Network } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
@@ -167,7 +167,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
       },
       category: NFTCategory.ART,
       vendor: VendorName.SUPER_RARE,
-      chainId: ChainId.ETHEREUM_MAINNET,
+      chainId: Number(process.env.REACT_APP_CHAIN_ID),
       network: Network.ETHEREUM
     }
   }

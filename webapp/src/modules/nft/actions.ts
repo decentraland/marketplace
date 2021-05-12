@@ -1,5 +1,4 @@
 import { action } from 'typesafe-actions'
-import { ChainId } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 
 import { SortDirection } from '../routing/types'
@@ -82,16 +81,11 @@ export const TRANSFER_NFT_FAILURE = '[Failure] Transfer NFT'
 
 export const transferNFTRequest = (nft: NFT, address: string) =>
   action(TRANSFER_NFT_REQUEST, { nft, address })
-export const transferNFTSuccess = (
-  nft: NFT,
-  address: string,
-  chainId: ChainId,
-  txHash: string
-) =>
+export const transferNFTSuccess = (nft: NFT, address: string, txHash: string) =>
   action(TRANSFER_NFT_SUCCESS, {
     nft,
     address,
-    ...buildTransactionPayload(chainId, txHash, {
+    ...buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       name: getNFTName(nft),

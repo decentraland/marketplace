@@ -2,6 +2,7 @@ import BN from 'bn.js'
 import { Address } from 'web3x-es/address'
 import { toBN, toWei } from 'web3x-es/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { Network } from '@dcl/schemas'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
 import {
@@ -18,6 +19,7 @@ import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
 import { getOriginURL } from '../utils'
 import { getContractNames, VendorName } from '../types'
+import { getContract } from '../../contract/utils'
 import { NFTsFetchFilters } from './nft/types'
 import { EditionFragment } from './edition/fragments'
 import { TokenFragment } from './token/fragments'
@@ -25,8 +27,6 @@ import { editionAPI } from './edition/api'
 import { tokenAPI } from './token/api'
 import { MAX_QUERY_SIZE } from './api'
 import { AssetType } from './types'
-import { ChainId, Network } from '@dcl/schemas'
-import { getContract } from '../../contract/utils'
 
 type Fragment = TokenFragment | EditionFragment
 
@@ -156,7 +156,7 @@ export class NFTService
       },
       category: NFTCategory.ART,
       vendor: VendorName.KNOWN_ORIGIN,
-      chainId: ChainId.ETHEREUM_MAINNET,
+      chainId: Number(process.env.REACT_APP_CHAIN_ID),
       network: Network.ETHEREUM
     }
   }

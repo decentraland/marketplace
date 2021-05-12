@@ -1,3 +1,4 @@
+import { Network } from '@dcl/schemas'
 import BN from 'bn.js'
 import { Address } from 'web3x-es/address'
 import { toBN, toWei } from 'web3x-es/utils'
@@ -20,7 +21,6 @@ import { getOriginURL } from '../utils'
 import { VendorName } from '../types'
 import { MakersPlaceAsset } from './types'
 import { makersPlaceAPI } from './api'
-import { ChainId, Network } from '@dcl/schemas'
 
 export class NFTService
   implements NFTServiceInterface<VendorName.MAKERS_PLACE> {
@@ -147,7 +147,7 @@ export class NFTService
       },
       category: NFTCategory.ART,
       vendor: VendorName.MAKERS_PLACE,
-      chainId: ChainId.ETHEREUM_MAINNET,
+      chainId: Number(process.env.REACT_APP_CHAIN_ID),
       network: Network.ETHEREUM
     }
   }

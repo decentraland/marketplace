@@ -2,7 +2,11 @@ import React, { useState, useCallback } from 'react'
 import { Network } from '@dcl/schemas'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { toMANA, fromMANA } from '../../../lib/mana'
 import { NFTAction } from '../../NFTAction'
 import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
@@ -12,11 +16,6 @@ import { useFingerprint } from '../../../modules/nft/hooks'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './BidModal.types'
 import './BidModal.css'
-import {
-  Authorization,
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
-import { isAuthorized } from '../../SettingsPage/Authorization/utils'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 
@@ -60,7 +59,7 @@ const BidModal = (props: Props) => {
   }
 
   const handleSubmit = () => {
-    if (isAuthorized(authorization, authorizations)) {
+    if (hasAuthorization(authorizations, authorization)) {
       handlePlaceBid()
     } else {
       setShowAuthorizationModal(true)

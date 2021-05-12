@@ -15,11 +15,10 @@ import {
   transferNFTSuccess,
   transferNFTFailure
 } from './actions'
-import { getChainId, getWallet } from '../wallet/selectors'
+import { getWallet } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { AwaitFn } from '../types'
-import { ChainId } from '@dcl/schemas'
 import { VendorName } from '../vendor'
 import { getContract } from '../contract/utils'
 
@@ -86,8 +85,7 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
     const txHash: string = yield call(() =>
       nftService.transfer(wallet, address, nft)
     )
-    const chainId: ChainId = yield select(getChainId)
-    yield put(transferNFTSuccess(nft, address, chainId, txHash))
+    yield put(transferNFTSuccess(nft, address, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
     yield put(transferNFTFailure(nft, address, error.message))

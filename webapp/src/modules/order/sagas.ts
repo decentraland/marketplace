@@ -1,6 +1,5 @@
 import { put, call, takeEvery, select } from 'redux-saga/effects'
 import { push } from 'connected-react-router'
-import { ChainId } from '@dcl/schemas'
 import {
   CREATE_ORDER_REQUEST,
   CreateOrderRequestAction,
@@ -15,7 +14,7 @@ import {
   cancelOrderSuccess,
   cancelOrderFailure
 } from './actions'
-import { getChainId, getWallet } from '../wallet/selectors'
+import { getWallet } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
 
@@ -34,8 +33,7 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
     const txHash: string = yield call(() =>
       orderService.create(wallet, nft, price, expiresAt)
     )
-    const chainId: ChainId = yield select(getChainId)
-    yield put(createOrderSuccess(nft, price, expiresAt, chainId, txHash))
+    yield put(createOrderSuccess(nft, price, expiresAt, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
     yield put(createOrderFailure(nft, price, expiresAt, error.message))
@@ -55,8 +53,7 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
       orderService.execute(wallet, nft, order, fingerprint)
     )
 
-    const chainId: ChainId = yield select(getChainId)
-    yield put(executeOrderSuccess(order, nft, chainId, txHash))
+    yield put(executeOrderSuccess(order, nft, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
     yield put(executeOrderFailure(order, nft, error.message))
@@ -73,8 +70,7 @@ function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const txHash: string = yield call(() => orderService.cancel(wallet, nft))
-    const chainId: ChainId = yield select(getChainId)
-    yield put(cancelOrderSuccess(order, nft, chainId, txHash))
+    yield put(cancelOrderSuccess(order, nft, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
     yield put(cancelOrderFailure(order, nft, error.message))

@@ -9,6 +9,7 @@ export type Props = {
   authorization: Authorization
   authorizations: Authorization[]
   pendingTransactions: Transaction[]
+  isLoading?: boolean
   onGrant: typeof grantTokenRequest
   onRevoke: typeof revokeTokenRequest
 }
