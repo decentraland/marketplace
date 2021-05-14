@@ -7,12 +7,14 @@ import { ContractFactory } from '../../contract/ContractFactory'
 import { Bid } from '../../bid/types'
 import { NFT } from '../../nft/types'
 import { OrderStatus } from '../../order/types'
-import { Vendors } from '../types'
+import { VendorName } from '../types'
 import { BidService as BidServiceInterface } from '../services'
-import { ContractService } from './ContractService'
+import { ContractName } from './ContractService'
 import { bidAPI } from './bid/api'
+import { getContract } from '../../contract/utils'
 
-export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
+export class BidService
+  implements BidServiceInterface<VendorName.DECENTRALAND> {
   async fetchBySeller(seller: string) {
     const bids = await bidAPI.fetchBySeller(seller)
     return bids
@@ -76,7 +78,8 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
       throw new Error('Invalid address. Wallet must be connected.')
     }
     const from = Address.fromString(fromAddress)
-    const to = Address.fromString(ContractService.contractAddresses.Bids)
+    const bids = getContract({ name: ContractName.BIDS })
+    const to = Address.fromString(bids.address)
 
     return erc721.methods
       .safeTransferFrom(from, to, bid.tokenId, bid.blockchainId)
@@ -99,6 +102,7 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
   }
 
   private getBidContract() {
-    return ContractFactory.build(Bids, ContractService.contractAddresses.Bids)
+    const bids = getContract({ name: ContractName.BIDS })
+    return ContractFactory.build(Bids, bids.address)
   }
 }

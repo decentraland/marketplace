@@ -9,7 +9,6 @@ import {
   REVOKE_TOKEN_SUCCESS
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 
-import { contractSymbols } from '../../../modules/contract/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import {
   CREATE_ORDER_SUCCESS,
@@ -23,6 +22,7 @@ import {
   CANCEL_BID_SUCCESS
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
+import { getContract } from '../../../modules/contract/utils'
 import { NFTProvider } from '../../NFTProvider'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
@@ -32,6 +32,12 @@ const Transaction = (props: Props) => {
   switch (tx.actionType) {
     case GRANT_TOKEN_SUCCESS: {
       const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
+      const contract = getContract({
+        address: authorization.authorizedAddress
+      })
+      const token = getContract({
+        address: authorization.tokenAddress
+      })
       return (
         <TransactionDetail
           text={
@@ -40,19 +46,13 @@ const Transaction = (props: Props) => {
               values={{
                 action: t('transaction.action.approved'),
                 contract: (
-                  <TransactionLink
-                    address={authorization.authorizedAddress}
-                    txHash=""
-                  >
-                    {contractSymbols[authorization.authorizedAddress]}
+                  <TransactionLink address={contract.address} txHash="">
+                    {contract.name}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink
-                    address={authorization.tokenAddress}
-                    txHash=""
-                  >
-                    {contractSymbols[authorization.tokenAddress]}
+                  <TransactionLink address={token.address} txHash="">
+                    {token.name}
                   </TransactionLink>
                 )
               }}
@@ -64,6 +64,12 @@ const Transaction = (props: Props) => {
     }
     case REVOKE_TOKEN_SUCCESS: {
       const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
+      const contract = getContract({
+        address: authorization.authorizedAddress
+      })
+      const token = getContract({
+        address: authorization.tokenAddress
+      })
       return (
         <TransactionDetail
           text={
@@ -72,19 +78,13 @@ const Transaction = (props: Props) => {
               values={{
                 action: t('transaction.action.not_approved'),
                 contract: (
-                  <TransactionLink
-                    address={authorization.authorizedAddress}
-                    txHash=""
-                  >
-                    {contractSymbols[authorization.authorizedAddress]}
+                  <TransactionLink address={contract.address} txHash="">
+                    {contract.name}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink
-                    address={authorization.tokenAddress}
-                    txHash=""
-                  >
-                    {contractSymbols[authorization.tokenAddress]}
+                  <TransactionLink address={token.address} txHash="">
+                    {token.name}
                   </TransactionLink>
                 )
               }}

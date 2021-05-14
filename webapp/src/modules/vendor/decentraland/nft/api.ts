@@ -2,12 +2,12 @@ import { NFTsFetchParams } from '../../../nft/types'
 import {
   NFTsFetchFilters,
   NFTListFetchResponse,
-  NFTFetchReponse,
-  Contract
+  NFTFetchReponse
 } from './types'
 import { getSortBy } from '../../../nft/utils'
-import { contractAddresses } from '../../../contract/utils'
 import { ATLAS_SERVER_URL } from '../land'
+import { Contract } from '../../services'
+import { contracts } from '../../../contract/utils'
 
 export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
 
@@ -98,10 +98,9 @@ class NFTAPI {
         }
       }
       if (filters.contracts) {
-        for (const contract of filters.contracts) {
-          if (contract in contractAddresses) {
-            const address = contractAddresses[contract]
-            queryParams.append('contracts', address)
+        for (const address of filters.contracts) {
+          if (contracts.some(contract => contract.address === address)) {
+            queryParams.append('contract', address)
           }
         }
       }

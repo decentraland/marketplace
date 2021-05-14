@@ -12,7 +12,7 @@ import {
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { fetchNFTsRequest } from '../nft/actions'
-import { Vendors } from '../vendor'
+import { VendorName } from '../vendor'
 import { View } from '../ui/types'
 
 export function* tileSaga() {
@@ -34,7 +34,7 @@ function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
 function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
   yield put(
     fetchNFTsRequest({
-      vendor: Vendors.DECENTRALAND,
+      vendor: VendorName.DECENTRALAND,
       view: View.ATLAS,
       params: {
         first: 1000,

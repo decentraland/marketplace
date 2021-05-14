@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Vendors } from '../../../modules/vendor/types'
+import { VendorName } from '../../../modules/vendor/types'
 import { Section } from '../../../modules/vendor/routing/types'
 import { Section as KnownOriginSection } from '../../../modules/vendor/known_origin/routing/types'
 import { Section as DecentralandSection } from '../../../modules/vendor/decentraland/routing/types'
@@ -16,8 +16,8 @@ const NFTSections = (props: Props) => {
 
   // TODO: This should be on a generic path like PartnerSidebar
   switch (vendor) {
-    case Vendors.SUPER_RARE:
-    case Vendors.MAKERS_PLACE:
+    case VendorName.SUPER_RARE:
+    case VendorName.MAKERS_PLACE:
       const all = Section[vendor].ALL
       return (
         <Menu className="NFTSections">
@@ -28,7 +28,7 @@ const NFTSections = (props: Props) => {
           />
         </Menu>
       )
-    case Vendors.KNOWN_ORIGIN:
+    case VendorName.KNOWN_ORIGIN:
       return (
         <KnownOriginNFTSections
           section={section as KnownOriginSection}
@@ -36,7 +36,7 @@ const NFTSections = (props: Props) => {
           onSectionClick={onSectionClick}
         />
       )
-    case Vendors.DECENTRALAND:
+    case VendorName.DECENTRALAND:
     default:
       return (
         <DecentralandNFTSections

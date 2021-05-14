@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Atlas as AtlasComponent, Color, Layer } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
-import { contractAddresses } from '../../modules/contract/utils'
 import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import { Props, Tile } from './Atlas.types'
-import { Vendors } from '../../modules/vendor'
+import { VendorName } from '../../modules/vendor'
+import { getContract } from '../../modules/contract/utils'
 import { NFT, NFTCategory } from '../../modules/nft/types'
 import Popup from './Popup'
 import './Atlas.css'
@@ -43,10 +43,10 @@ const Atlas: React.FC<Props> = (props: Props) => {
   const userTiles = useMemo(
     () =>
       nfts.reduce((lands, nft) => {
-        if (nft.vendor === Vendors.DECENTRALAND) {
+        if (nft.vendor === VendorName.DECENTRALAND) {
           switch (nft.category) {
             case NFTCategory.PARCEL: {
-              const parcel = (nft as NFT<Vendors.DECENTRALAND>).data.parcel!
+              const parcel = (nft as NFT<VendorName.DECENTRALAND>).data.parcel!
               lands.set(getCoords(parcel.x, parcel.y), {
                 color: Color.SUMMER_RED
               })
@@ -138,13 +138,17 @@ const Atlas: React.FC<Props> = (props: Props) => {
         return
       }
       if (tile.estate_id) {
-        onNavigate(
-          locations.nft(contractAddresses.EstateRegistry, tile.estate_id)
-        )
+        const estates = getContract({
+          category: NFTCategory.ESTATE
+        })
+        onNavigate(locations.nft(estates.address, tile.estate_id))
       } else {
         try {
+          const land = getContract({
+            category: NFTCategory.PARCEL
+          })
           const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
-          onNavigate(locations.nft(contractAddresses.LANDRegistry, tokenId))
+          onNavigate(locations.nft(land.address, tokenId))
         } catch (error) {
           console.warn(
             `Couldn't fetch parcel ${tile.x},${tile.y}: ${error.message}`

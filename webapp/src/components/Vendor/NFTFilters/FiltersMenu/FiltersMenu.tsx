@@ -1,22 +1,15 @@
 import React, { useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Row } from 'decentraland-ui'
-
-import {
-  contractAddresses,
-  contractCategories,
-  contractSymbols
-} from '../../../../modules/contract/utils'
 import {
   WearableRarity,
   WearableGender
 } from '../../../../modules/nft/wearable/types'
-import { NFTCategory } from '../../../../modules/nft/types'
-import { ContractName } from '../../../../modules/vendor/types'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
 import { Network } from '@dcl/schemas'
+import { contracts } from '../../../../modules/contract/utils'
 
 export const ALL_FILTER_OPTION = 'ALL'
 
@@ -33,19 +26,14 @@ const FiltersMenu = (props: Props) => {
   } = props
 
   const collectionOptions = useMemo(() => {
-    const options = Object.keys(contractAddresses).filter(
-      (contractName: string) =>
-        contractCategories[contractAddresses[contractName as ContractName]] ===
-        NFTCategory.WEARABLE
-    ) as ContractName[]
     return [
       {
         value: ALL_FILTER_OPTION,
         text: t('nft_filters.all_collections')
       },
-      ...options.map(collection => ({
-        value: collection,
-        text: contractSymbols[contractAddresses[collection]]
+      ...contracts.map(contract => ({
+        value: contract.address,
+        text: contract.name
       }))
     ]
   }, [])

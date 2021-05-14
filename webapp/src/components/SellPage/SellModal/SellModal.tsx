@@ -11,7 +11,6 @@ import {
 } from '../../../modules/order/utils'
 import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
-import { contractAddresses } from '../../../modules/contract/utils'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { NFTAction } from '../../NFTAction'
@@ -21,6 +20,8 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { isAuthorized } from '../../SettingsPage/Authorization/utils'
+import { getContractNames } from '../../../modules/vendor'
+import { getContract } from '../../../modules/contract/utils'
 
 const SellModal = (props: Props) => {
   const {
@@ -58,11 +59,18 @@ const SellModal = (props: Props) => {
     return null
   }
 
+  const contractNames = getContractNames()
+
+  const marketplace = getContract({
+    name: contractNames.MARKETPLACE,
+    network: nft.network
+  })
+
   const authorization: Authorization = {
     address: wallet.address,
-    authorizedAddress: nft.contractAddress,
-    tokenAddress: contractAddresses.MANAToken,
-    chainId: wallet.chainId,
+    authorizedAddress: marketplace.address,
+    tokenAddress: nft.contractAddress,
+    chainId: nft.chainId,
     type: AuthorizationType.APPROVAL
   }
 

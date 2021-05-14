@@ -4,9 +4,9 @@ import { Network } from '@dcl/schemas'
 import { getView } from '../ui/nft/browse/selectors'
 import { View } from '../ui/types'
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
-import { ContractName, Vendors } from '../vendor/types'
+import { VendorName } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
-import { contractAddresses } from '../contract/utils'
+import { contracts } from '../contract/utils'
 import { RootState } from '../reducer'
 import {
   getDefaultOptionsByView,
@@ -17,18 +17,23 @@ import { SortBy, Section } from './types'
 
 export const getState = (state: RootState) => state.routing
 
-export const getVendor = createSelector<RootState, string, Vendors>(
+export const getVendor = createSelector<RootState, string, VendorName>(
   getRouterSearch,
   search => {
-    const vendor = getURLParam<Vendors>(search, 'vendor')
+    const vendor = getURLParam<VendorName>(search, 'vendor')
     if (vendor && isVendor(vendor)) {
       return vendor
     }
-    return Vendors.DECENTRALAND
+    return VendorName.DECENTRALAND
   }
 )
 
-export const getSection = createSelector<RootState, string, Vendors, Section>(
+export const getSection = createSelector<
+  RootState,
+  string,
+  VendorName,
+  Section
+>(
   getRouterSearch,
   getVendor,
   (search, vendor) =>
@@ -121,13 +126,13 @@ export const getWearableGenders = createSelector<
   )
 )
 
-export const getContracts = createSelector<RootState, string, ContractName[]>(
+export const getContracts = createSelector<RootState, string, string[]>(
   getRouterSearch,
   search =>
-    getURLParamArray<ContractName>(
+    getURLParamArray<string>(
       search,
       'contracts',
-      Object.keys(contractAddresses)
+      contracts.map(contract => contract.address)
     )
 )
 

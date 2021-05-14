@@ -1,13 +1,12 @@
-import { ChainId, Network } from '@dcl/schemas'
-import { NFT, NFTCategory } from '../../../nft/types'
+import { Network } from '@dcl/schemas'
+import { NFT } from '../../../nft/types'
 import {
   WearableCategory,
   WearableRarity,
   WearableGender
 } from '../../../nft/wearable/types'
 import { Order } from '../../../order/types'
-import { Vendors } from '../../types'
-import { ContractName } from '../ContractService'
+import { VendorName } from '../../types'
 
 export type NFTsFetchFilters = {
   isLand?: boolean
@@ -16,25 +15,17 @@ export type NFTsFetchFilters = {
   wearableCategory?: WearableCategory
   wearableRarities?: WearableRarity[]
   wearableGenders?: WearableGender[]
-  contracts?: ContractName[]
+  contracts?: string[]
   network?: Network
 }
 
 export type NFTListFetchResponse = {
-  nfts: Omit<NFT<Vendors.DECENTRALAND>, 'vendor'>[]
+  nfts: Omit<NFT<VendorName.DECENTRALAND>, 'vendor'>[]
   orders: Order[]
   total: number
 }
 
 export type NFTFetchReponse = {
-  nft: Omit<NFT<Vendors.DECENTRALAND>, 'vendor'>
+  nft: Omit<NFT<VendorName.DECENTRALAND>, 'vendor'>
   order: Order | null
-}
-
-export type Contract = {
-  name: string
-  address: string
-  category: NFTCategory
-  network: Network
-  chainId: ChainId
 }

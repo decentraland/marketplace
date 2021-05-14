@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import { Vendors } from '../../modules/vendor/types'
+import { VendorName } from '../../modules/vendor/types'
 import { Section } from '../../modules/routing/types'
 import { getPartners } from '../../modules/vendor/utils'
 import { VendorMenu } from '../Vendor/VendorMenu'
@@ -10,13 +10,13 @@ const AccountSidebar = (props: Props) => {
   const { address, section, onBrowse } = props
 
   const handleOnBrowse = useCallback(
-    (vendor: Vendors, section: Section) => {
+    (vendor: VendorName, section: Section) => {
       onBrowse({ vendor, section, address })
     },
     [address, onBrowse]
   )
 
-  const decentraland = Vendors.DECENTRALAND
+  const decentraland = VendorName.DECENTRALAND
 
   return (
     <div className="NFTSidebar">

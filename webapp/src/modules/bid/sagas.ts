@@ -24,11 +24,11 @@ import {
   fetchBidsByNFTSuccess,
   fetchBidsByNFTFailure
 } from './actions'
-import { contractVendors } from '../contract/utils'
 import { getAddress } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
-import { Vendors } from '../vendor/types'
+import { getContract } from '../contract/utils'
+import { VendorName } from '../vendor/types'
 import { Bid } from './types'
 
 export function* bidSaga() {
@@ -72,13 +72,13 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
 function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
   const { bid } = action.payload
   try {
-    const vendor = contractVendors[bid.contractAddress]
-    if (!vendor) {
+    const contract = getContract({ address: bid.contractAddress })
+    if (!contract.vendor) {
       throw new Error(
         `Couldn't find a valid vendor for contract ${bid.contractAddress}`
       )
     }
-    const { bidService } = VendorFactory.build(vendor)
+    const { bidService } = VendorFactory.build(contract.vendor)
 
     const address: ReturnType<typeof getAddress> = yield select(getAddress)
     const txHash: string = yield call(() => bidService!.accept(bid, address!))
@@ -94,13 +94,13 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
 function* handleCancelBidRequest(action: CancelBidRequestAction) {
   const { bid } = action.payload
   try {
-    const vendor = contractVendors[bid.contractAddress]
-    if (!vendor) {
+    const contract = getContract({ address: bid.contractAddress })
+    if (!contract.vendor) {
       throw new Error(
         `Couldn't find a valid vendor for contract ${bid.contractAddress}`
       )
     }
-    const { bidService } = VendorFactory.build(vendor)
+    const { bidService } = VendorFactory.build(contract.vendor)
 
     const address: ReturnType<typeof getAddress> = yield select(getAddress)
     const chainId: ChainId = yield select(getChainId)
@@ -121,7 +121,7 @@ function* handleFetchBidsByAddressRequest(
     let sellerBids: Bid[] = []
     let bidderBids: Bid[] = []
 
-    for (const vendorName of Object.values(Vendors)) {
+    for (const vendorName of Object.values(VendorName)) {
       const { bidService } = VendorFactory.build(vendorName)
       if (bidService === undefined) {
         continue

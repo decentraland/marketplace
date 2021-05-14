@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink } from 'decentraland-dapps/dist/containers'
 import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
-import { contractSymbols } from '../../../modules/contract/utils'
 import { locations } from '../../../modules/routing/locations'
 import { hasTransactionPending } from '../../../modules/transaction/utils'
+import { getContract } from '../../../modules/contract/utils'
 import { Props } from './Authorization.types'
 import './Authorization.css'
 import { isAuthorized } from './utils'
@@ -26,6 +26,9 @@ const Authorizations = (props: Props) => {
   )
 
   const { tokenAddress, authorizedAddress } = authorization
+
+  const contract = getContract({ address: authorizedAddress })
+  const token = getContract({ address: tokenAddress })
 
   return (
     <div className="Authorization">
@@ -52,7 +55,7 @@ const Authorizations = (props: Props) => {
         />
         <Radio
           checked={isAuthorized(authorization, authorizations)}
-          label={contractSymbols[tokenAddress]}
+          label={contract.name}
           onClick={(_, props: RadioProps) => handleOnChange(!!props.checked)}
         />
         <div className="radio-description secondary-text">
@@ -61,10 +64,10 @@ const Authorizations = (props: Props) => {
             values={{
               contract_link: (
                 <TransactionLink address={authorizedAddress} txHash="">
-                  {contractSymbols[authorizedAddress]}
+                  {contract.name}
                 </TransactionLink>
               ),
-              symbol: contractSymbols[tokenAddress]
+              symbol: token.name
             }}
           />
         </div>

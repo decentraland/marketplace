@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
 
 import { View } from '../../modules/ui/types'
-import { Vendors } from '../../modules/vendor/types'
+import { VendorName } from '../../modules/vendor/types'
 import { setView, SetViewAction } from '../../modules/ui/actions'
 import {
   browse,
@@ -11,7 +11,7 @@ import {
 } from '../../modules/routing/actions'
 
 export type Props = {
-  vendor: Vendors
+  vendor: VendorName
   view: View
   viewInState?: View // This is used to know when the view prop has been set in the app state
   address?: string

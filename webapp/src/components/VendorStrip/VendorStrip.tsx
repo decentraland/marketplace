@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { Responsive } from 'decentraland-ui'
 
 import { getPartners } from '../../modules/vendor/utils'
-import { Vendors } from '../../modules/vendor/types'
+import { VendorName } from '../../modules/vendor/types'
 import { Menu } from '../Menu'
 import { MenuItem } from '../Menu/MenuItem'
 import { Props } from './VendorStrip.types'
@@ -12,13 +12,13 @@ const VendorStrip = (props: Props) => {
   const { vendor, address, onBrowse } = props
 
   const handleClick = useCallback(
-    (vendor: Vendors) => {
+    (vendor: VendorName) => {
       onBrowse({ vendor, address })
     },
     [onBrowse, address]
   )
 
-  const decentraland = Vendors.DECENTRALAND
+  const decentraland = VendorName.DECENTRALAND
 
   return (
     <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>

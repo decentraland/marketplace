@@ -5,7 +5,7 @@ import { Page, Responsive } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { View } from '../../modules/ui/types'
 import { SortBy } from '../../modules/routing/types'
-import { Vendors } from '../../modules/vendor/types'
+import { VendorName } from '../../modules/vendor/types'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
@@ -21,7 +21,7 @@ const PartnersPage = (props: Props) => {
   const { partners, partnersLoading, onNavigate, onFetchNFTsFromRoute } = props
 
   const handleOnNavigate = useCallback(
-    (vendor: Vendors) => {
+    (vendor: VendorName) => {
       onNavigate(locations.browse({ vendor }))
     },
     [onNavigate]
@@ -29,7 +29,7 @@ const PartnersPage = (props: Props) => {
 
   // Kick things off
   useEffect(() => {
-    let partner: Vendors
+    let partner: VendorName
     for (partner in partners) {
       onFetchNFTsFromRoute({
         view: partner as View,
@@ -42,7 +42,7 @@ const PartnersPage = (props: Props) => {
     // eslint-disable-next-line
   }, [onFetchNFTsFromRoute])
 
-  const views = Object.keys(partners) as Vendors[]
+  const views = Object.keys(partners) as VendorName[]
 
   return (
     <>

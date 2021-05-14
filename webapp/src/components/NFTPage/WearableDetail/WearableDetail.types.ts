@@ -1,14 +1,14 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { NFT } from '../../../modules/nft/types'
-import { Vendors } from '../../../modules/vendor/types'
+import { VendorName } from '../../../modules/vendor/types'
 import {
   WearableCategory,
   WearableRarity
 } from '../../../modules/nft/wearable/types'
 
 export type Props = {
-  nft: NFT<Vendors.DECENTRALAND>
+  nft: NFT<VendorName.DECENTRALAND>
   onNavigate: (path: string) => void
 }
 

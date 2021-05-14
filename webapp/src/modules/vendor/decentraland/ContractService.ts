@@ -1,140 +1,130 @@
-import { ContractService as ContractServiceInterface } from '../services'
-import { Network as ContractsNetwork } from '../../contract/types'
-import { NFTCategory } from '../../nft/types'
+import { ChainId, Network } from '@dcl/schemas'
+import {
+  Contract,
+  ContractService as ContractServiceInterface
+} from '../services'
+import { Network as AppNetwork } from '../../contract/types'
 import { TransferType } from '../types'
 import { nftAPI } from './nft'
-import { Network } from '@dcl/schemas'
 
-const network = process.env.REACT_APP_NETWORK! as ContractsNetwork
+const network = process.env.REACT_APP_NETWORK! as AppNetwork
 
-const contractAddresses = {
-  [ContractsNetwork.ROPSTEN]: {
-    MANAToken: '0x2a8fd99c19271f4f04b1b7b9c4f7cf264b626edb',
-    LANDRegistry: '0x7a73483784ab79257bb11b96fd62a2c3ae4fb75b',
-    EstateRegistry: '0x124bf28a423b2ca80b3846c3aa0eb944fe7ebb95',
-    Marketplace: '0x5424912699dabaa5f2998750c1c66e73d67ad219',
-    Bids: '0x250fa138c0a994799c7a49df3097dc71e37b3d6f',
-    DCLRegistrar: '0xeb6f5d94d79f0750781cc962908b161b95192f53'
-  },
-  [ContractsNetwork.MAINNET]: {
-    MANAToken: '0x0f5d2fb29fb7d3cfee444a200298f468908cc942',
-    LANDRegistry: '0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d',
-    EstateRegistry: '0x959e104e1a4db6317fa58f8295f586e1a978c297',
-    Marketplace: '0x8e5660b4ab70168b5a6feea0e0315cb49c8cd539',
-    Bids: '0xe479dfd9664c693b2e2992300930b00bfde08233',
-    DCLRegistrar: '0x2a187453064356c898cae034eaed119e1663acb8'
-  }
-}[network]
+export enum ContractName {
+  MANA = 'MANA',
+  MARKETPLACE = 'Marketplace',
+  BIDS = 'Bids'
+}
 
-const {
-  MANAToken,
-  LANDRegistry,
-  EstateRegistry,
-  Marketplace,
-  Bids,
-  DCLRegistrar
-} = contractAddresses
-
-export type ContractName = keyof typeof contractAddresses
+const contracts = ({
+  [AppNetwork.ROPSTEN]: [
+    {
+      name: ContractName.MANA,
+      address: '0x2a8fd99c19271f4f04b1b7b9c4f7cf264b626edb',
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_ROPSTEN
+    },
+    {
+      name: ContractName.MARKETPLACE,
+      address: '0x5424912699dabaa5f2998750c1c66e73d67ad219',
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_ROPSTEN
+    },
+    {
+      name: ContractName.BIDS,
+      address: '0x250fa138c0a994799c7a49df3097dc71e37b3d6f',
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_ROPSTEN
+    },
+    {
+      name: ContractName.MANA,
+      address: '0x882Da5967c435eA5cC6b09150d55E8304B838f45',
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      name: ContractName.MARKETPLACE,
+      address: '0x5424912699dabaa5f2998750c1c66e73d67ad219',
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    }
+  ],
+  [AppNetwork.MAINNET]: [
+    {
+      name: ContractName.MANA,
+      address: '0x0f5d2fb29fb7d3cfee444a200298f468908cc942',
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
+    },
+    {
+      name: ContractName.MARKETPLACE,
+      address: '0x8e5660b4ab70168b5a6feea0e0315cb49c8cd539',
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
+    },
+    {
+      name: ContractName.BIDS,
+      address: '0xe479dfd9664c693b2e2992300930b00bfde08233',
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_ROPSTEN
+    },
+    {
+      name: ContractName.MANA,
+      address: '0xA1c57f48F0Deb89f569dFbE6E2B7f46D33606fD4', // TODO: add contract address
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MAINNET
+    },
+    {
+      name: ContractName.MARKETPLACE,
+      address: '0x0000000000000000000000000000000000000000', // TODO: add contract address
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MAINNET
+    }
+  ]
+} as Record<AppNetwork, Contract[]>)[network]
 
 export class ContractService implements ContractServiceInterface {
-  static contractAddresses = contractAddresses
+  contracts = contracts
 
-  isFilled = false
+  hasFetched = false
 
-  contractAddresses = contractAddresses
-
-  contractSymbols = {
-    [MANAToken]: 'MANA',
-    [LANDRegistry]: 'LAND',
-    [EstateRegistry]: 'Estates',
-    [Marketplace]: 'Marketplace',
-    [Bids]: 'Bids',
-    [DCLRegistrar]: 'Names'
-  }
-
-  contractNames = {
-    [MANAToken]: 'MANAToken',
-    [LANDRegistry]: 'LANDRegistry',
-    [EstateRegistry]: 'EstateRegistry',
-    [DCLRegistrar]: 'DCLRegistrar',
-    [Marketplace]: 'Marketplace',
-    [Bids]: 'ERC721Bid'
-  }
-
-  contractCategories = {
-    [LANDRegistry]: NFTCategory.PARCEL,
-    [EstateRegistry]: NFTCategory.ESTATE,
-    [DCLRegistrar]: NFTCategory.ENS
-  }
-
-  contractNetworks = {
-    [MANAToken]: Network.ETHEREUM,
-    [LANDRegistry]: Network.ETHEREUM,
-    [EstateRegistry]: Network.ETHEREUM,
-    [Marketplace]: Network.ETHEREUM,
-    [Bids]: Network.ETHEREUM,
-    [DCLRegistrar]: Network.ETHEREUM
-  }
-
-  async getContractAddresses() {
-    await this.fillValues()
-    return this.contractAddresses
-  }
-
-  async getContractSymbols() {
-    await this.fillValues()
-    return this.contractSymbols
-  }
-
-  async getContractNames() {
-    await this.fillValues()
-    return this.contractNames
-  }
-
-  async getContractCategories() {
-    await this.fillValues()
-    return this.contractCategories
-  }
-
-  async getContractNetworks() {
-    await this.fillValues()
-    return this.contractNetworks
-  }
-
-  getTransferType(_address: string) {
-    return TransferType.SAFE_TRANSFER_FROM
-  }
-
-  private async fillValues() {
-    if (this.isFilled) {
+  async build() {
+    if (this.hasFetched) {
       return
     }
 
     const contracts = await nftAPI.fetchContracts()
     for (const contract of contracts) {
-      this.contractAddresses = {
-        ...this.contractAddresses,
-        [contract.name]: contract.address
-      }
-      this.contractNames = {
-        ...this.contractNames,
-        [contract.address]: contract.name
-      }
-      this.contractSymbols = {
-        ...this.contractSymbols,
-        [contract.address]: contract.name
-      }
-      this.contractCategories = {
-        ...this.contractCategories,
-        [contract.address]: NFTCategory.WEARABLE
-      }
-      this.contractNetworks = {
-        ...this.contractNetworks,
-        [contract.address]: contract.network
-      }
+      this.contracts.push(contract)
     }
 
-    this.isFilled = true
+    this.hasFetched = true
+  }
+
+  getContracts() {
+    return this.contracts
+  }
+
+  getTransferType(_address: string) {
+    return TransferType.SAFE_TRANSFER_FROM
   }
 }

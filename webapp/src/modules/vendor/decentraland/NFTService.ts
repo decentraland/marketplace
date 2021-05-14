@@ -6,10 +6,11 @@ import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from './nft/types'
-import { Vendors } from '../types'
+import { VendorName } from '../types'
 import { nftAPI } from './nft/api'
 
-export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
+export class NFTService
+  implements NFTServiceInterface<VendorName.DECENTRALAND> {
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
     const { nfts, orders, total } = await nftAPI.fetch(params, filters)
 
@@ -24,7 +25,7 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
     }
 
     return [
-      nfts.map(nft => ({ ...nft, vendor: Vendors.DECENTRALAND })),
+      nfts.map(nft => ({ ...nft, vendor: VendorName.DECENTRALAND })),
       accounts,
       orders,
       total
@@ -41,7 +42,7 @@ export class NFTService implements NFTServiceInterface<Vendors.DECENTRALAND> {
 
   async fetchOne(contractAddress: string, tokenId: string) {
     const response = await nftAPI.fetchOne(contractAddress, tokenId)
-    const nft: NFT = { ...response.nft, vendor: Vendors.DECENTRALAND }
+    const nft: NFT = { ...response.nft, vendor: VendorName.DECENTRALAND }
     return [nft, response.order || undefined] as const
   }
 

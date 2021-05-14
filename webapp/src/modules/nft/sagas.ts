@@ -18,10 +18,10 @@ import {
 import { getAddress, getChainId } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
-import { contractVendors } from '../contract/utils'
 import { AwaitFn } from '../types'
 import { ChainId } from '@dcl/schemas'
-import { Vendors } from '../vendor'
+import { VendorName } from '../vendor'
+import { getContract } from '../contract/utils'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -62,10 +62,8 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   const { contractAddress, tokenId } = action.payload
 
   try {
-    let vendor = contractVendors[contractAddress]
-    if (!vendor) {
-      vendor = Vendors.DECENTRALAND
-    }
+    const contract = getContract({ address: contractAddress })
+    const vendor = contract.vendor || VendorName.DECENTRALAND
 
     const { nftService } = VendorFactory.build(vendor)
 

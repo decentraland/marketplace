@@ -6,9 +6,11 @@ export function isAuthorized(
 ) {
   return authorizations.some(
     a =>
-      a.address === authorization.address &&
-      a.authorizedAddress === authorization.authorizedAddress &&
-      a.tokenAddress === authorization.tokenAddress &&
+      a.address.toLocaleLowerCase() === authorization.address.toLowerCase() &&
+      a.authorizedAddress.toLowerCase() ===
+        authorization.authorizedAddress.toLowerCase() &&
+      a.tokenAddress.toLowerCase() ===
+        authorization.tokenAddress.toLowerCase() &&
       a.chainId === authorization.chainId &&
       a.type === authorization.type
   )

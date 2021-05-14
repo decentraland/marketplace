@@ -1,61 +1,48 @@
-import { ContractService as ContractServiceInterface } from '../services'
-import { Network as ContractsNetwork } from '../../contract/types'
-import { NFTCategory } from '../../nft/types'
+import { ChainId, Network } from '@dcl/schemas'
+import {
+  Contract,
+  ContractService as ContractServiceInterface
+} from '../services'
+import { Network as AppNetwork } from '../../contract/types'
 import { TransferType } from '../types'
-import { Network } from '@dcl/schemas'
+import { NFTCategory } from '../../nft/types'
 
-const network = process.env.REACT_APP_NETWORK! as ContractsNetwork
+const network = process.env.REACT_APP_NETWORK! as AppNetwork
 
-// No Ropsten!
-const contractAddresses = {
-  [ContractsNetwork.ROPSTEN]: {
-    DigitalAsset: '0xfbeef911dc5821886e1dda71586d90ed28174b7d',
-    BuyAdapter: '0xfbeef911dc5821886e1dda71586d90ed28174b7d',
-    MarketplaceAdapter: '0xd1e4e2880ff56cd0d5c68da9bed58bfbf0150948'
-  },
-  [ContractsNetwork.MAINNET]: {
-    DigitalAsset: '0xfbeef911dc5821886e1dda71586d90ed28174b7d',
-    BuyAdapter: '0xfbeef911dc5821886e1dda71586d90ed28174b7d',
-    MarketplaceAdapter: '0xf4fbd84193f9aaf9779dedbb415a806933eb1c95'
-  }
-}[network]
+export enum ContractName {
+  DIGITAL_ASSET = 'DigitalAssset',
+  MARKETPLACE_ADAPTER = 'MarketplaceAdapter'
+}
 
-const { DigitalAsset, MarketplaceAdapter } = contractAddresses
-
-export type ContractName = keyof typeof contractAddresses
+const contracts = ({
+  [AppNetwork.ROPSTEN]: [],
+  [AppNetwork.MAINNET]: [
+    {
+      name: ContractName.DIGITAL_ASSET,
+      address: '0xfbeef911dc5821886e1dda71586d90ed28174b7d',
+      vendor: 'known_origin',
+      category: NFTCategory.ART,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
+    },
+    {
+      name: ContractName.MARKETPLACE_ADAPTER,
+      address: '0xf4fbd84193f9aaf9779dedbb415a806933eb1c95',
+      vendor: 'known_origin',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
+    }
+  ]
+} as Record<AppNetwork, Contract[]>)[network]
 
 export class ContractService implements ContractServiceInterface {
-  static contractAddresses = contractAddresses
+  contracts = contracts
 
-  async getContractAddresses() {
-    return contractAddresses
-  }
+  async build() {}
 
-  async getContractSymbols() {
-    return {
-      [DigitalAsset]: 'KnownOriginDigitalAssetV2',
-      [MarketplaceAdapter]: 'Partner Marketplace'
-    }
-  }
-
-  async getContractNames() {
-    return {
-      [DigitalAsset]: 'KnownOrigin',
-      [MarketplaceAdapter]: 'Partner Marketplace'
-    }
-  }
-
-  async getContractCategories() {
-    return {
-      [DigitalAsset]: NFTCategory.ART
-    }
-  }
-
-  async getContractNetworks() {
-    return {
-      [DigitalAsset]: Network.ETHEREUM,
-      [MarketplaceAdapter]: Network.ETHEREUM
-    }
+  getContracts() {
+    return this.contracts
   }
 
   getTransferType(_address: string) {
