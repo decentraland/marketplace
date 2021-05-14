@@ -3,12 +3,9 @@ import {
   grantTokenRequest,
   revokeTokenRequest
 } from 'decentraland-dapps/dist/modules/authorization/actions'
-import {
-  getData as getAuthorizations,
-  getTransactions
-} from 'decentraland-dapps/dist/modules/authorization/selectors'
-import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { RootState } from '../../modules/reducer'
+import { getPendingAuthorizationTransactions } from '../../modules/transaction/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -18,7 +15,7 @@ import AuthorizationModal from './AuthorizationModal'
 
 const mapState = (state: RootState): MapStateProps => ({
   authorizations: getAuthorizations(state),
-  pendingTransactions: getTransactions(state).filter(tx => isPending(tx.status))
+  pendingTransactions: getPendingAuthorizationTransactions(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

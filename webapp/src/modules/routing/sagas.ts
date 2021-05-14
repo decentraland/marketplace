@@ -2,7 +2,7 @@ import { takeEvery, put, select } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
 
 import { NFTCategory } from '../nft/types'
-import { Vendors } from '../vendor/types'
+import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/nft/browse/selectors'
 import { getIsFullscreen, getNetwork, getVendor } from '../routing/selectors'
@@ -200,7 +200,7 @@ function deriveView(previous: SearchOptions, current: SearchOptions) {
 }
 
 function deriveVendor(previous: SearchOptions, current: SearchOptions) {
-  return current.vendor || previous.vendor || Vendors.DECENTRALAND
+  return current.vendor || previous.vendor || VendorName.DECENTRALAND
 }
 
 function shouldResetOptions(previous: SearchOptions, current: SearchOptions) {

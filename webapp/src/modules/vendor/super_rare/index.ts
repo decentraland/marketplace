@@ -2,6 +2,8 @@ import { NFTService } from './NFTService'
 import { ContractService } from './ContractService'
 import { OrderService } from './OrderService'
 
+export const VendorName = 'super_rare'
+
 export * from './types'
 export * from './nft'
 export * from './routing'

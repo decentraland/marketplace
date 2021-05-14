@@ -3,7 +3,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Page, Hero, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
-import { Vendors } from '../../modules/vendor/types'
+import { VendorName } from '../../modules/vendor/types'
 import { SortBy } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
 import { HomepageView } from '../../modules/ui/nft/homepage/types'
@@ -32,7 +32,7 @@ const HomePage = (props: Props) => {
     [onNavigate]
   )
 
-  const vendor = Vendors.DECENTRALAND
+  const vendor = VendorName.DECENTRALAND
 
   useEffect(() => {
     let view: HomepageView

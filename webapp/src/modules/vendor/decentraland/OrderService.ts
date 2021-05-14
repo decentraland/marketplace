@@ -1,17 +1,18 @@
 import { toWei } from 'web3x-es/utils'
 import { Address } from 'web3x-es/address'
+import { Network } from '@dcl/schemas'
 
 import { Marketplace } from '../../../contracts/Marketplace'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
 import { Order } from '../../order/types'
 import { orderAPI } from './order/api'
-import { Vendors } from '../types'
+import { getContractNames, VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
-import { ContractService } from './ContractService'
+import { getContract } from '../../contract/utils'
 
 export class OrderService
-  implements OrderServiceInterface<Vendors.DECENTRALAND> {
+  implements OrderServiceInterface<VendorName.DECENTRALAND> {
   async fetchByNFT(nft: NFT) {
     const orders = await orderAPI.fetchByNFT(nft.contractAddress, nft.tokenId)
     return orders as Order[]
@@ -23,7 +24,7 @@ export class OrderService
     expiresAt: number,
     fromAddress: string
   ) {
-    const marketplace = await this.getMarketplaceContract()
+    const marketplace = await this.getMarketplaceContract(nft.network)
 
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
@@ -47,7 +48,7 @@ export class OrderService
     fromAddress: string,
     fingerprint?: string
   ) {
-    const marketplace = await this.getMarketplaceContract()
+    const marketplace = await this.getMarketplaceContract(nft.network)
     const { price } = order
 
     if (!fromAddress) {
@@ -78,7 +79,7 @@ export class OrderService
   }
 
   async cancel(nft: NFT, fromAddress: string) {
-    const marketplace = await this.getMarketplaceContract()
+    const marketplace = await this.getMarketplaceContract(nft.network)
 
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
@@ -95,10 +96,11 @@ export class OrderService
     return true
   }
 
-  private getMarketplaceContract() {
+  private getMarketplaceContract(network: Network) {
+    const contractNames = getContractNames()
     return ContractFactory.build(
       Marketplace,
-      ContractService.contractAddresses.Marketplace
+      getContract({ name: contractNames.MARKETPLACE, network }).address
     )
   }
 }

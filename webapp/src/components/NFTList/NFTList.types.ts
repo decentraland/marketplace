@@ -1,11 +1,11 @@
 import { Dispatch } from 'redux'
 
 import { NFT } from '../../modules/nft/types'
-import { Vendors } from '../../modules/vendor/types'
+import { VendorName } from '../../modules/vendor/types'
 import { browse, BrowseAction } from '../../modules/routing/actions'
 
 export type Props = {
-  vendor: Vendors
+  vendor: VendorName
   nfts: NFT[]
   page: number
   count?: number

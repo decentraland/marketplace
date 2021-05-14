@@ -5,7 +5,6 @@ import {
   WearableRarity,
   WearableGender
 } from '../../../../modules/nft/wearable/types'
-import { ContractName } from '../../../../modules/vendor/types'
 
 export type Props = {
   count?: number
@@ -16,7 +15,7 @@ export type Props = {
   isMap?: boolean
   wearableRarities: WearableRarity[]
   wearableGenders: WearableGender[]
-  contracts: ContractName[]
+  contracts: string[]
   network?: Network
   onBrowse: typeof browse
 }

@@ -1,51 +1,31 @@
-import { Network } from '@dcl/schemas'
 import { VendorFactory } from '../vendor/VendorFactory'
-import { Vendors } from '../vendor/types'
-import { NFTCategory } from '../nft/types'
+import { VendorName } from '../vendor/types'
+import { Contract } from '../vendor/services'
 
-export let contractAddresses: Record<string, string> = {}
-export let contractSymbols: Record<string, string> = {}
-export let contractNames: Record<string, string> = {}
-export let contractCategories: Record<string, NFTCategory> = {}
-export let contractVendors: Record<string, Vendors> = {}
-export let contractNetworks: Record<string, Network> = {}
+export let contracts: Contract[] = []
 
 export async function buildContracts() {
-  const vendors = Object.values(Vendors).map(VendorFactory.build)
+  const vendors = Object.values(VendorName).map(VendorFactory.build)
 
   for (const vendor of vendors) {
-    const { type, contractService } = vendor
+    const { contractService } = vendor
 
-    contractAddresses = {
-      ...contractAddresses,
-      ...(await contractService.getContractAddresses())
-    }
+    await contractService.build()
 
-    contractSymbols = {
-      ...contractSymbols,
-      ...(await contractService.getContractSymbols())
-    }
-
-    contractNames = {
-      ...contractNames,
-      ...(await contractService.getContractNames())
-    }
-
-    contractCategories = {
-      ...contractCategories,
-      ...(await contractService.getContractCategories())
-    }
-
-    contractNetworks = {
-      ...contractNetworks,
-      ...(await contractService.getContractNetworks())
-    }
-
-    const addresses: string[] = Object.values(
-      await contractService.getContractAddresses()
-    )
-    for (const address of addresses) {
-      contractVendors[address] = type as Vendors
-    }
+    contracts = [...contracts, ...contractService.getContracts()]
   }
+}
+
+export function getContract(query: Partial<Contract>): Contract {
+  const found = contracts.find(contract =>
+    Object.keys(query).every(
+      key =>
+        query[key as keyof Contract]?.toString().toLowerCase() ===
+        contract[key as keyof Contract]?.toString().toLowerCase()
+    )
+  )
+  if (!found) {
+    throw new Error(`Contract not found, query=${JSON.stringify(query)}`)
+  }
+  return found
 }

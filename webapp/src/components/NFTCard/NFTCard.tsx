@@ -8,7 +8,7 @@ import { formatDistanceToNow } from '../../lib/date'
 import { locations } from '../../modules/routing/locations'
 import { getNFTName } from '../../modules/nft/utils'
 import { NFT } from '../../modules/nft/types'
-import { Vendors } from '../../modules/vendor/types'
+import { VendorName } from '../../modules/vendor/types'
 import { NFTImage } from '../NFTImage'
 import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
@@ -22,7 +22,7 @@ const NFTCard = (props: Props) => {
 
   const title = getNFTName(nft)
   const { parcel, estate, wearable, ens } = (nft as NFT<
-    Vendors.DECENTRALAND
+    VendorName.DECENTRALAND
   >).data
 
   return (

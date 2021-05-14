@@ -1,10 +1,9 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 import {
   getData as getAuthorizations,
-  getTransactions,
-  getLoading
+  getLoading,
+  getError
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import {
   FETCH_AUTHORIZATIONS_REQUEST,
@@ -13,6 +12,8 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 
 import { RootState } from '../../modules/reducer'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { getPendingAuthorizationTransactions } from '../../modules/transaction/selectors'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import {
   MapStateProps,
@@ -20,22 +21,24 @@ import {
   MapDispatchProps
 } from './SettingsPage.types'
 import SettingsPage from './SettingsPage'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
 
+  const error = getError(state)
+
+  const hasError = !!error && !error.includes('denied transaction signature')
+
   return {
     wallet,
     authorizations: getAuthorizations(state),
-    pendingTransactions: getTransactions(state).filter(tx =>
-      isPending(tx.status)
-    ),
+    pendingTransactions: getPendingAuthorizationTransactions(state),
     isLoadingAuthorization: isLoadingType(
       getLoading(state),
       FETCH_AUTHORIZATIONS_REQUEST
     ),
-    isConnecting: isConnecting(state)
+    isConnecting: isConnecting(state),
+    hasError
   }
 }
 

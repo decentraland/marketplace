@@ -17,12 +17,13 @@ import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
 import { getOriginURL } from '../utils'
-import { Vendors } from '../types'
+import { VendorName } from '../types'
 import { MakersPlaceAsset } from './types'
 import { makersPlaceAPI } from './api'
-import { Network } from '@dcl/schemas'
+import { ChainId, Network } from '@dcl/schemas'
 
-export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
+export class NFTService
+  implements NFTServiceInterface<VendorName.MAKERS_PLACE> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
   private oneEthInWei: BN
@@ -42,7 +43,7 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
 
     const remoteNFTs = response.items
 
-    const nfts: NFT<Vendors.MAKERS_PLACE>[] = []
+    const nfts: NFT<VendorName.MAKERS_PLACE>[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
@@ -113,7 +114,7 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
   async transfer(
     fromAddress: string,
     toAddress: string,
-    nft: NFT<Vendors.MAKERS_PLACE>
+    nft: NFT<VendorName.MAKERS_PLACE>
   ) {
     if (!fromAddress) {
       throw new Error('Invalid address. Wallet must be connected.')
@@ -129,7 +130,7 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
       .getTxHash()
   }
 
-  toNFT(asset: MakersPlaceAsset): NFT<Vendors.MAKERS_PLACE> {
+  toNFT(asset: MakersPlaceAsset): NFT<VendorName.MAKERS_PLACE> {
     const tokenId = asset.token_id!.toString()
     const contractAddress = asset.token_contract_address.toLowerCase()
     return {
@@ -145,7 +146,8 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
         description: asset.description
       },
       category: NFTCategory.ART,
-      vendor: Vendors.MAKERS_PLACE,
+      vendor: VendorName.MAKERS_PLACE,
+      chainId: ChainId.ETHEREUM_MAINNET,
       network: Network.ETHEREUM
     }
   }
@@ -156,7 +158,7 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
     const price = weiPrice.div(this.oneEthInWei)
 
     return {
-      id: `${Vendors.MAKERS_PLACE}-order-${asset.token_id}`,
+      id: `${VendorName.MAKERS_PLACE}-order-${asset.token_id}`,
       nftId: asset.token_id!.toString(),
       nftAddress: asset.token_contract_address.toLowerCase(),
       marketAddress: asset.sale_contract_address!,
@@ -197,7 +199,7 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
   }
 
   private getDefaultURL(asset: MakersPlaceAsset): string {
-    const origin = getOriginURL(Vendors.MAKERS_PLACE)
+    const origin = getOriginURL(VendorName.MAKERS_PLACE)
     return `${origin}/authenticity/${asset.token_contract_address}/${asset.token_id}`
   }
 }

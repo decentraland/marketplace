@@ -5,7 +5,6 @@ import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { isPartner } from '../../../modules/vendor/utils'
 import { getNFTName } from '../../../modules/nft/utils'
-import { contractAddresses } from '../../../modules/contract/utils'
 import { useFingerprint, useComputedPrice } from '../../../modules/nft/hooks'
 import { NFTCategory } from '../../../modules/nft/types'
 import { NFTAction } from '../../NFTAction'
@@ -16,6 +15,8 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
+import { getContractNames } from '../../../modules/vendor'
+import { getContract } from '../../../modules/contract/utils'
 
 const BuyPage = (props: Props) => {
   const {
@@ -43,19 +44,28 @@ const BuyPage = (props: Props) => {
     onExecuteOrder(order!, nft, fingerprint)
   }, [order, nft, fingerprint, onExecuteOrder])
 
-  // TODO: VendorFactory.build().nftService.getMarketpaceAddress() ??
-  const marketplaceAddress = isPartner(nft.vendor)
-    ? contractAddresses.MarketplaceAdapter
-    : contractAddresses.Marketplace
-
   if (!wallet) {
     return null
   }
 
+  const contractNames = getContractNames()
+
+  const mana = getContract({
+    name: contractNames.MANA,
+    network: nft.network
+  })
+
+  const marketplace = getContract({
+    name: isPartner(nft.vendor)
+      ? contractNames.MARKETPLACE_ADAPTER
+      : contractNames.MARKETPLACE,
+    network: nft.network
+  })
+
   const authorization: Authorization = {
     address: wallet.address,
-    authorizedAddress: marketplaceAddress,
-    tokenAddress: contractAddresses.MANAToken,
+    authorizedAddress: marketplace.address,
+    tokenAddress: mana.address,
     chainId: wallet.chainId,
     type: AuthorizationType.ALLOWANCE
   }

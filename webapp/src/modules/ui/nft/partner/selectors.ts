@@ -4,7 +4,7 @@ import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NFTState } from '../../../nft/reducer'
 import { FETCH_NFTS_REQUEST } from '../../../nft/actions'
 import { NFT } from '../../../nft/types'
-import { Vendors } from '../../../vendor/types'
+import { VendorName } from '../../../vendor/types'
 import {
   getData as getNFTData,
   getLoading as getNFTLoading
@@ -20,7 +20,7 @@ export const getPartners = createSelector<
   RootState,
   PartnerUIState,
   NFTState['data'],
-  Record<Vendors, NFT[]>
+  Record<VendorName, NFT[]>
 >(getState, getNFTData, (partnerState, nftsById) => {
   const result: Record<string, NFT[]> = {}
 
@@ -36,7 +36,7 @@ export const getPartners = createSelector<
 export const getPartnersLoading = createSelector<
   RootState,
   LoadingState,
-  Record<Vendors, boolean>
+  Record<VendorName, boolean>
 >(getNFTLoading, nftLoading => {
   const result: Record<string, boolean> = {}
 

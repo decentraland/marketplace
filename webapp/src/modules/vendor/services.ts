@@ -1,17 +1,26 @@
-import { Network } from '@dcl/schemas'
+import { ChainId, Network } from '@dcl/schemas'
 import {
   NFT,
-  NFTCategory,
   NFTsFetchParams,
-  NFTsCountParams
+  NFTsCountParams,
+  NFTCategory
 } from '../nft/types'
 import { Account } from '../account/types'
 import { Bid } from '../bid/types'
 import { OrderStatus, Order } from '../order/types'
 import { NFTsFetchFilters } from './nft/types'
-import { Vendors, TransferType } from './types'
+import { VendorName, TransferType } from './types'
 
-export interface NFTService<V extends Vendors> {
+export type Contract = {
+  name: string
+  address: string
+  category: NFTCategory | null
+  vendor: VendorName | null
+  network: Network
+  chainId: ChainId
+}
+
+export interface NFTService<V extends VendorName> {
   fetch: (
     params: NFTsFetchParams,
     filters?: NFTsFetchFilters<V>
@@ -32,7 +41,7 @@ export interface NFTService<V extends Vendors> {
 }
 export class NFTService<V> {}
 
-export interface OrderService<V extends Vendors> {
+export interface OrderService<V extends VendorName> {
   fetchByNFT: (nft: NFT<V>) => Promise<Order[]>
   create: (
     nft: NFT<V>,
@@ -51,7 +60,7 @@ export interface OrderService<V extends Vendors> {
 }
 export class OrderService<V> {}
 
-export interface BidService<V extends Vendors> {
+export interface BidService<V extends VendorName> {
   fetchBySeller: (seller: string) => Promise<Bid[]>
   fetchByBidder: (bidder: string) => Promise<Bid[]>
   fetchByNFT: (nft: NFT<V>, status?: OrderStatus) => Promise<Bid[]>
@@ -68,11 +77,8 @@ export interface BidService<V extends Vendors> {
 export class BidService<V> {}
 
 export interface ContractService {
-  getContractAddresses(): Promise<Record<string, string>>
-  getContractSymbols(): Promise<Record<string, string>>
-  getContractNames(): Promise<Record<string, string>>
-  getContractCategories(): Promise<Record<string, NFTCategory>>
-  getContractNetworks(): Promise<Record<string, Network>>
+  build(): Promise<void>
+  getContracts(): Contract[]
   getTransferType: (address: string) => TransferType
 }
 export class ContractService {}

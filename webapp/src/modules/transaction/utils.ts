@@ -14,8 +14,9 @@ export function hasTransactionPending(
       | GrantTokenRequestAction['payload']
       | RevokeTokenRequestAction['payload']
     return (
-      authorization.authorizedAddress === authorizedAddress &&
-      transaction.payload.tokenAddress === tokenAddress
+      authorization.authorizedAddress.toLowerCase() ===
+        authorizedAddress.toLowerCase() &&
+      authorization.tokenAddress.toLowerCase() === tokenAddress.toLowerCase()
     )
   })
 }

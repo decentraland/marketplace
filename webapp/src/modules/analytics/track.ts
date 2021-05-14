@@ -27,7 +27,6 @@ import {
   FETCH_NFTS_SUCCESS,
   FetchNFTsSuccessAction
 } from '../nft/actions'
-import { contractNames } from '../contract/utils'
 import {
   PLACE_BID_SUCCESS,
   ACCEPT_BID_SUCCESS,
@@ -118,16 +117,12 @@ track<ReplaceTransactionSuccessAction>(
   'Transaction Replaced'
 )
 
-track<GrantTokenSuccessAction>(GRANT_TOKEN_SUCCESS, ({ payload }) => {
-  const contractName = contractNames[payload.authorization.authorizedAddress]
-  const tokenContractName = contractNames[payload.authorization.tokenAddress]
-  return `Authorize ${contractName} for ${tokenContractName}`
+track<GrantTokenSuccessAction>(GRANT_TOKEN_SUCCESS, () => {
+  return `Authorize`
 })
 
-track<RevokeTokenSuccessAction>(REVOKE_TOKEN_SUCCESS, ({ payload }) => {
-  const contractName = contractNames[payload.authorization.authorizedAddress]
-  const tokenContractName = contractNames[payload.authorization.tokenAddress]
-  return `Unauthorize ${contractName} for ${tokenContractName}`
+track<RevokeTokenSuccessAction>(REVOKE_TOKEN_SUCCESS, () => {
+  return `Unauthorize`
 })
 
 track<PlaceBidSuccessAction>(

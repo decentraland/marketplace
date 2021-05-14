@@ -8,7 +8,6 @@ import { NFTAction } from '../../NFTAction'
 import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
-import { contractAddresses } from '../../../modules/contract/utils'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './BidModal.types'
@@ -18,6 +17,8 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { isAuthorized } from '../../SettingsPage/Authorization/utils'
+import { getContractNames } from '../../../modules/vendor'
+import { getContract } from '../../../modules/contract/utils'
 
 const BidModal = (props: Props) => {
   const { nft, wallet, authorizations, onNavigate, onPlaceBid } = props
@@ -38,10 +39,22 @@ const BidModal = (props: Props) => {
     return null
   }
 
+  const contractNames = getContractNames()
+
+  const mana = getContract({
+    name: contractNames.MANA,
+    network: nft.network
+  })
+
+  const bids = getContract({
+    name: contractNames.BIDS,
+    network: nft.network
+  })
+
   const authorization: Authorization = {
     address: wallet.address,
-    authorizedAddress: contractAddresses.Bids,
-    tokenAddress: contractAddresses.MANAToken,
+    authorizedAddress: bids.address,
+    tokenAddress: mana.address,
     chainId: wallet.chainId,
     type: AuthorizationType.ALLOWANCE
   }

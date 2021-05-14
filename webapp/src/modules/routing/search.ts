@@ -2,7 +2,7 @@ import { Network } from '@dcl/schemas'
 import { WearableCategory } from '../nft/wearable/types'
 import { View } from '../ui/types'
 import { NFTCategory } from '../nft/types'
-import { Vendors } from '../vendor/types'
+import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
 import { SearchOptions, SortBy } from './types'
 
@@ -77,7 +77,7 @@ export function getSearchParams(options?: SearchOptions) {
 
 export function getSearchCategory(section: Section) {
   // TODO: Move this to each vendor? Names shortened for brevity here
-  const DclSection = Section[Vendors.DECENTRALAND]
+  const DclSection = Section[VendorName.DECENTRALAND]
   switch (section) {
     case DclSection.PARCELS:
       return NFTCategory.PARCEL
@@ -108,7 +108,7 @@ export function getSearchCategory(section: Section) {
 }
 
 export function getSearchWearableSection(category: WearableCategory) {
-  const DclSection = Section[Vendors.DECENTRALAND]
+  const DclSection = Section[VendorName.DECENTRALAND]
   for (const section of Object.values(DclSection)) {
     const sectionCategory = getSearchWearableCategory(section)
     if (category === sectionCategory) {
@@ -118,7 +118,7 @@ export function getSearchWearableSection(category: WearableCategory) {
 }
 
 export function getSearchWearableCategory(section: Section) {
-  const DclSection = Section[Vendors.DECENTRALAND]
+  const DclSection = Section[VendorName.DECENTRALAND]
   switch (section) {
     case DclSection.WEARABLES_EYEBROWS:
       return WearableCategory.EYEBROWS
