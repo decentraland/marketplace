@@ -18,6 +18,8 @@ import {
 import { getContractNames } from '../vendor'
 import { contracts, getContract } from '../contract/utils'
 import { isPartner } from '../vendor/utils'
+import { ContractName } from 'decentraland-transactions'
+import { NFTCategory } from '../nft/types'
 
 const baseWalletSaga = createWalletSaga({
   CHAIN_ID: +(process.env.REACT_APP_CHAIN_ID || 1)
@@ -73,7 +75,8 @@ function* handleWallet(
   authorizations.push({
     address,
     authorizedAddress: marketplaceEthereum.address,
-    tokenAddress: manaEthereum.address,
+    contractAddress: manaEthereum.address,
+    contractName: ContractName.MANAToken,
     chainId: manaEthereum.chainId,
     type: AuthorizationType.ALLOWANCE
   })
@@ -81,7 +84,8 @@ function* handleWallet(
   authorizations.push({
     address,
     authorizedAddress: marketplaceMatic.address,
-    tokenAddress: manaMatic.address,
+    contractAddress: manaMatic.address,
+    contractName: ContractName.MANAToken,
     chainId: manaMatic.chainId,
     type: AuthorizationType.ALLOWANCE
   })
@@ -89,7 +93,8 @@ function* handleWallet(
   authorizations.push({
     address,
     authorizedAddress: marketplaceAdapter.address,
-    tokenAddress: manaEthereum.address,
+    contractAddress: manaEthereum.address,
+    contractName: ContractName.MANAToken,
     chainId: manaEthereum.chainId,
     type: AuthorizationType.ALLOWANCE
   })
@@ -97,7 +102,8 @@ function* handleWallet(
   authorizations.push({
     address,
     authorizedAddress: bids.address,
-    tokenAddress: manaEthereum.address,
+    contractAddress: manaEthereum.address,
+    contractName: ContractName.MANAToken,
     chainId: manaEthereum.chainId,
     type: AuthorizationType.ALLOWANCE
   })
@@ -114,7 +120,11 @@ function* handleWallet(
     authorizations.push({
       address,
       authorizedAddress: marketplace.address,
-      tokenAddress: contract.address,
+      contractAddress: contract.address,
+      contractName:
+        contract.category === NFTCategory.WEARABLE
+          ? ContractName.ERC721CollectionV2
+          : ContractName.ERC721,
       chainId: contract.chainId,
       type: AuthorizationType.APPROVAL
     })

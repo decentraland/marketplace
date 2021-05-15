@@ -17,6 +17,7 @@ import { getContract } from '../../../modules/contract/utils'
 import { NFTAction } from '../../NFTAction'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './BuyModal.types'
+import { ContractName } from 'decentraland-transactions'
 
 const BuyPage = (props: Props) => {
   const {
@@ -65,7 +66,8 @@ const BuyPage = (props: Props) => {
   const authorization: Authorization = {
     address: wallet.address,
     authorizedAddress: marketplace.address,
-    tokenAddress: mana.address,
+    contractAddress: mana.address,
+    contractName: ContractName.MANAToken,
     chainId: wallet.chainId,
     type: AuthorizationType.ALLOWANCE
   }

@@ -36,7 +36,7 @@ const Transaction = (props: Props) => {
         address: authorization.authorizedAddress
       })
       const token = getContract({
-        address: authorization.tokenAddress
+        address: authorization.contractAddress
       })
       return (
         <TransactionDetail
@@ -68,7 +68,7 @@ const Transaction = (props: Props) => {
         address: authorization.authorizedAddress
       })
       const token = getContract({
-        address: authorization.tokenAddress
+        address: authorization.contractAddress
       })
       return (
         <TransactionDetail

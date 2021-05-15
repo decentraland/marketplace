@@ -25,7 +25,7 @@ const AuthorizationModal = (props: Props) => {
     address: authorization.authorizedAddress
   })
   const token = getContract({
-    address: authorization.tokenAddress
+    address: authorization.contractAddress
   })
 
   return (

@@ -21,6 +21,8 @@ import { NFTAction } from '../../NFTAction'
 import { Props } from './SellModal.types'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
+import { ContractName } from 'decentraland-transactions'
+import { NFTCategory } from '../../../modules/nft/types'
 
 const SellModal = (props: Props) => {
   const {
@@ -68,7 +70,11 @@ const SellModal = (props: Props) => {
   const authorization: Authorization = {
     address: wallet.address,
     authorizedAddress: marketplace.address,
-    tokenAddress: nft.contractAddress,
+    contractAddress: nft.contractAddress,
+    contractName:
+      nft.category === NFTCategory.WEARABLE
+        ? ContractName.ERC721CollectionV2
+        : ContractName.ERC721,
     chainId: nft.chainId,
     type: AuthorizationType.APPROVAL
   }

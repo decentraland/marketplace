@@ -18,6 +18,7 @@ import { Props } from './BidModal.types'
 import './BidModal.css'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
+import { ContractName } from 'decentraland-transactions'
 
 const BidModal = (props: Props) => {
   const { nft, wallet, authorizations, onNavigate, onPlaceBid } = props
@@ -53,7 +54,8 @@ const BidModal = (props: Props) => {
   const authorization: Authorization = {
     address: wallet.address,
     authorizedAddress: bids.address,
-    tokenAddress: mana.address,
+    contractAddress: mana.address,
+    contractName: ContractName.MANAToken,
     chainId: wallet.chainId,
     type: AuthorizationType.ALLOWANCE
   }

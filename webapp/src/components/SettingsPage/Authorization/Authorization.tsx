@@ -25,17 +25,24 @@ const Authorizations = (props: Props) => {
     [authorization, onGrant, onRevoke]
   )
 
-  const { tokenAddress, authorizedAddress } = authorization
+  const { contractAddress, authorizedAddress } = authorization
   const isLoading =
     props.isLoading ||
-    hasTransactionPending(pendingTransactions, authorizedAddress, tokenAddress)
+    hasTransactionPending(
+      pendingTransactions,
+      authorizedAddress,
+      contractAddress
+    )
 
   const contract = getContract({ address: authorizedAddress })
-  const token = getContract({ address: tokenAddress })
+  const token = getContract({ address: contractAddress })
 
   return (
     <div className="Authorization">
-      <Form.Field key={tokenAddress} className={isLoading ? 'is-pending' : ''}>
+      <Form.Field
+        key={contractAddress}
+        className={isLoading ? 'is-pending' : ''}
+      >
         <Popup
           content={t('settings_page.pending_tx')}
           position="top left"
