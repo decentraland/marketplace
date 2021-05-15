@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { Network } from '@dcl/schemas'
 import { fromWei } from 'web3x-es/utils'
 import dateFnsFormat from 'date-fns/format'
 import {
@@ -72,7 +73,7 @@ const SellModal = (props: Props) => {
     authorizedAddress: marketplace.address,
     contractAddress: nft.contractAddress,
     contractName:
-      nft.category === NFTCategory.WEARABLE
+      nft.category === NFTCategory.WEARABLE && nft.network === Network.MATIC
         ? ContractName.ERC721CollectionV2
         : ContractName.ERC721,
     chainId: nft.chainId,

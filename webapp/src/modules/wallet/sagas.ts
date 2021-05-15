@@ -122,7 +122,8 @@ function* handleWallet(
       authorizedAddress: marketplace.address,
       contractAddress: contract.address,
       contractName:
-        contract.category === NFTCategory.WEARABLE
+        contract.category === NFTCategory.WEARABLE &&
+        contract.network === Network.MATIC
           ? ContractName.ERC721CollectionV2
           : ContractName.ERC721,
       chainId: contract.chainId,
