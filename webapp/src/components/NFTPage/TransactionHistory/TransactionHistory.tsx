@@ -70,6 +70,8 @@ const TransactionHistory = (props: Props) => {
     .sort(sortByUpdatedAt)
     .map(toEvent)
 
+  const network = nft ? nft.network : undefined
+
   return (
     <div className="TransactionHistory">
       {isLoading ? null : events.length > 0 ? (
@@ -111,7 +113,9 @@ const TransactionHistory = (props: Props) => {
                       {formatEventDate(event.updatedAt)}
                     </Table.Cell>
                     <Table.Cell>
-                      <Mana inline>{formatMANA(event.price)}</Mana>
+                      <Mana network={network} inline>
+                        {formatMANA(event.price)}
+                      </Mana>
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -123,7 +127,9 @@ const TransactionHistory = (props: Props) => {
               {events.map((event, index) => (
                 <div className="mobile-tx-history-row" key={index}>
                   <div className="price">
-                    <Mana inline>{formatMANA(event.price)}</Mana>
+                    <Mana network={network} inline>
+                      {formatMANA(event.price)}
+                    </Mana>
                   </div>
                   <div className="when">{formatEventDate(event.updatedAt)}</div>
                 </div>

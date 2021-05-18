@@ -49,7 +49,11 @@ const CancelSalePage = (props: Props) => {
                       id="cancel_sale_page.subtitle"
                       values={{
                         name: <b>{name}</b>,
-                        amount: <Mana inline>{formatMANA(order.price)}</Mana>
+                        amount: (
+                          <Mana network={nft.network} inline>
+                            {formatMANA(order.price)}
+                          </Mana>
+                        )
                       }}
                     />
                   )

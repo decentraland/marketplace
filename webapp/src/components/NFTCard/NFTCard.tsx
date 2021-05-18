@@ -36,7 +36,11 @@ const NFTCard = (props: Props) => {
       <Card.Content>
         <Card.Header>
           <div className="title">{title}</div>{' '}
-          {order ? <Mana inline>{formatMANA(order.price)}</Mana> : null}
+          {order ? (
+            <Mana network={nft.network} inline>
+              {formatMANA(order.price)}
+            </Mana>
+          ) : null}
         </Card.Header>
         {order && order.expiresAt ? (
           <Card.Meta>

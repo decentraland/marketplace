@@ -167,7 +167,11 @@ const SellModal = (props: Props) => {
               id="sell_page.confirm.line_one"
               values={{
                 name: <b>{getNFTName(nft)}</b>,
-                amount: <Mana inline>{fromMANA(price).toLocaleString()}</Mana>
+                amount: (
+                  <Mana network={nft.network} inline>
+                    {fromMANA(price).toLocaleString()}
+                  </Mana>
+                )
               }}
             />
             <br />

@@ -14,7 +14,7 @@ const OrderDetails = (props: Props) => {
     <>
       {order ? (
         <Stats title={t('nft_page.price')}>
-          <Mana>{formatMANA(order.price)}</Mana>
+          <Mana network={nft.network}>{formatMANA(order.price)}</Mana>
           {isPartner(nft.vendor) ? (
             <div className="secondary-text">
               {t('price_change_notice.message')}
