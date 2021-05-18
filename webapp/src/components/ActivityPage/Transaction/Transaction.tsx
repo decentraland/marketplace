@@ -65,9 +65,6 @@ const Transaction = (props: Props) => {
       const contract = getContract({
         address: authorization.authorizedAddress
       })
-      const token = getContract({
-        address: authorization.contractAddress
-      })
       return (
         <TransactionDetail
           text={
@@ -81,8 +78,11 @@ const Transaction = (props: Props) => {
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink address={token.address} txHash="">
-                    {token.name}
+                  <TransactionLink
+                    address={authorization.contractAddress}
+                    txHash=""
+                  >
+                    {authorization.contractName}
                   </TransactionLink>
                 )
               }}
@@ -93,7 +93,7 @@ const Transaction = (props: Props) => {
       )
     }
     case CREATE_ORDER_SUCCESS: {
-      const { tokenId, contractAddress, name, price } = tx.payload
+      const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
         <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -108,7 +108,11 @@ const Transaction = (props: Props) => {
                         {name}
                       </Link>
                     ),
-                    price: <Mana inline>{price.toLocaleString()}</Mana>
+                    price: (
+                      <Mana network={network} inline>
+                        {price.toLocaleString()}
+                      </Mana>
+                    )
                   }}
                 />
               }
@@ -119,7 +123,7 @@ const Transaction = (props: Props) => {
       )
     }
     case CANCEL_ORDER_SUCCESS: {
-      const { tokenId, contractAddress, name, price } = tx.payload
+      const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
         <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -134,7 +138,11 @@ const Transaction = (props: Props) => {
                         {name}
                       </Link>
                     ),
-                    price: <Mana inline>{price.toLocaleString()}</Mana>
+                    price: (
+                      <Mana network={network} inline>
+                        {price.toLocaleString()}
+                      </Mana>
+                    )
                   }}
                 />
               }
@@ -145,7 +153,7 @@ const Transaction = (props: Props) => {
       )
     }
     case EXECUTE_ORDER_SUCCESS: {
-      const { tokenId, contractAddress, name, price } = tx.payload
+      const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
         <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -160,7 +168,11 @@ const Transaction = (props: Props) => {
                         {name}
                       </Link>
                     ),
-                    price: <Mana inline>{price.toLocaleString()}</Mana>
+                    price: (
+                      <Mana network={network} inline>
+                        {price.toLocaleString()}
+                      </Mana>
+                    )
                   }}
                 />
               }
