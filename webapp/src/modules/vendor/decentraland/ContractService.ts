@@ -51,7 +51,7 @@ const contracts = ({
     },
     {
       name: ContractName.MARKETPLACE,
-      address: '0x5424912699dabaa5f2998750c1c66e73d67ad219',
+      address: '0x4D005B77334E36cD53843e9bABDf10340862C7f2',
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -85,7 +85,7 @@ const contracts = ({
     },
     {
       name: ContractName.MANA,
-      address: '0xA1c57f48F0Deb89f569dFbE6E2B7f46D33606fD4', // TODO: add contract address
+      address: '0xA1c57f48F0Deb89f569dFbE6E2B7f46D33606fD4',
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,

@@ -1,22 +1,23 @@
 import React, { useState, useCallback } from 'react'
 import { Header, Mana, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { isPartner } from '../../../modules/vendor/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { useFingerprint, useComputedPrice } from '../../../modules/nft/hooks'
 import { NFTCategory } from '../../../modules/nft/types'
+import { getContractNames } from '../../../modules/vendor'
+import { getContract } from '../../../modules/contract/utils'
 import { NFTAction } from '../../NFTAction'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './BuyModal.types'
-import { isAuthorized } from '../../SettingsPage/Authorization/utils'
-import {
-  Authorization,
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
-import { getContractNames } from '../../../modules/vendor'
-import { getContract } from '../../../modules/contract/utils'
+import { ContractName } from 'decentraland-transactions'
 
 const BuyPage = (props: Props) => {
   const {
@@ -65,8 +66,9 @@ const BuyPage = (props: Props) => {
   const authorization: Authorization = {
     address: wallet.address,
     authorizedAddress: marketplace.address,
-    tokenAddress: mana.address,
-    chainId: wallet.chainId,
+    contractAddress: mana.address,
+    contractName: ContractName.MANAToken,
+    chainId: nft.chainId,
     type: AuthorizationType.ALLOWANCE
   }
 
@@ -75,7 +77,7 @@ const BuyPage = (props: Props) => {
   }
 
   const handleSubmit = () => {
-    if (isAuthorized(authorization, authorizations)) {
+    if (hasAuthorization(authorizations, authorization)) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)

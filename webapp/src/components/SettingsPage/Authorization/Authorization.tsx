@@ -6,9 +6,9 @@ import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
 import { hasTransactionPending } from '../../../modules/transaction/utils'
 import { getContract } from '../../../modules/contract/utils'
+import { isAuthorized } from './utils'
 import { Props } from './Authorization.types'
 import './Authorization.css'
-import { isAuthorized } from './utils'
 
 const Authorizations = (props: Props) => {
   const {
@@ -25,24 +25,23 @@ const Authorizations = (props: Props) => {
     [authorization, onGrant, onRevoke]
   )
 
-  const { tokenAddress, authorizedAddress } = authorization
+  const { contractAddress, authorizedAddress } = authorization
+  const isLoading =
+    props.isLoading ||
+    hasTransactionPending(
+      pendingTransactions,
+      authorizedAddress,
+      contractAddress
+    )
 
   const contract = getContract({ address: authorizedAddress })
-  const token = getContract({ address: tokenAddress })
+  const token = getContract({ address: contractAddress })
 
   return (
     <div className="Authorization">
       <Form.Field
-        key={tokenAddress}
-        className={
-          hasTransactionPending(
-            pendingTransactions,
-            authorizedAddress,
-            tokenAddress
-          )
-            ? 'is-pending'
-            : ''
-        }
+        key={contractAddress}
+        className={isLoading ? 'is-pending' : ''}
       >
         <Popup
           content={t('settings_page.pending_tx')}

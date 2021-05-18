@@ -7,7 +7,7 @@ import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
 export function hasTransactionPending(
   transactions: Transaction[],
   authorizedAddress: string,
-  tokenAddress: string
+  contractAddress: string
 ) {
   return transactions.some((transaction: any) => {
     const { authorization } = transaction.payload as
@@ -16,7 +16,8 @@ export function hasTransactionPending(
     return (
       authorization.authorizedAddress.toLowerCase() ===
         authorizedAddress.toLowerCase() &&
-      authorization.tokenAddress.toLowerCase() === tokenAddress.toLowerCase()
+      authorization.contractAddress.toLowerCase() ===
+        contractAddress.toLowerCase()
     )
   })
 }

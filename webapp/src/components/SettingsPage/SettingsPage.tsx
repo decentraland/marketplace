@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react'
-// import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
@@ -17,6 +16,7 @@ import { Network } from '@dcl/schemas'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { getContractNames } from '../../modules/vendor'
 import { getContract } from '../../modules/contract/utils'
+import { ContractName } from 'decentraland-transactions'
 
 const BUY_MANA_URL = process.env.REACT_APP_BUY_MANA_URL
 
@@ -84,7 +84,7 @@ const SettingsPage = (props: Props) => {
   })
 
   const authorizationsForSelling = authorizations.filter(authorization => {
-    const contract = getContract({ address: authorization.tokenAddress })
+    const contract = getContract({ address: authorization.contractAddress })
     return contract.category != null
   })
 
@@ -191,7 +191,8 @@ const SettingsPage = (props: Props) => {
                             authorization={{
                               address: wallet.address,
                               authorizedAddress: marketplaceEthereum.address,
-                              tokenAddress: manaEthereum.address,
+                              contractAddress: manaEthereum.address,
+                              contractName: ContractName.MANAToken,
                               chainId: manaEthereum.chainId,
                               type: AuthorizationType.ALLOWANCE
                             }}
@@ -204,7 +205,8 @@ const SettingsPage = (props: Props) => {
                             authorization={{
                               address: wallet.address,
                               authorizedAddress: marketplaceAdapter.address,
-                              tokenAddress: manaEthereum.address,
+                              contractAddress: manaEthereum.address,
+                              contractName: ContractName.MANAToken,
                               chainId: manaEthereum.chainId,
                               type: AuthorizationType.ALLOWANCE
                             }}
@@ -217,7 +219,8 @@ const SettingsPage = (props: Props) => {
                             authorization={{
                               address: wallet.address,
                               authorizedAddress: marketplaceMatic.address,
-                              tokenAddress: manaMatic.address,
+                              contractAddress: manaMatic.address,
+                              contractName: ContractName.MANAToken,
                               chainId: manaMatic.chainId,
                               type: AuthorizationType.ALLOWANCE
                             }}
@@ -236,8 +239,9 @@ const SettingsPage = (props: Props) => {
                             authorization={{
                               address: wallet.address,
                               authorizedAddress: bids.address,
-                              tokenAddress: manaEthereum.address,
-                              chainId: wallet.chainId,
+                              contractAddress: manaEthereum.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaEthereum.chainId,
                               type: AuthorizationType.ALLOWANCE
                             }}
                             pendingTransactions={pendingTransactions}
@@ -258,7 +262,7 @@ const SettingsPage = (props: Props) => {
                                 <Authorization
                                   key={
                                     authorization.authorizedAddress +
-                                    authorization.tokenAddress
+                                    authorization.contractAddress
                                   }
                                   authorization={authorization}
                                   pendingTransactions={pendingTransactions}

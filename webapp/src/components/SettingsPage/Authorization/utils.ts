@@ -9,8 +9,8 @@ export function isAuthorized(
       a.address.toLocaleLowerCase() === authorization.address.toLowerCase() &&
       a.authorizedAddress.toLowerCase() ===
         authorization.authorizedAddress.toLowerCase() &&
-      a.tokenAddress.toLowerCase() ===
-        authorization.tokenAddress.toLowerCase() &&
+      a.contractAddress.toLowerCase() ===
+        authorization.contractAddress.toLowerCase() &&
       a.chainId === authorization.chainId &&
       a.type === authorization.type
   )

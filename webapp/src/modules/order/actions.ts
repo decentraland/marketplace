@@ -5,7 +5,6 @@ import { NFT } from '../nft/types'
 import { Order } from './types'
 import { getNFTName } from '../nft/utils'
 import { formatMANA } from '../../lib/mana'
-import { ChainId } from '@dcl/schemas'
 
 // Create Order (aka Sell)
 
@@ -22,14 +21,13 @@ export const createOrderSuccess = (
   nft: NFT,
   price: number,
   expiresAt: number,
-  chainId: ChainId,
   txHash: string
 ) =>
   action(CREATE_ORDER_SUCCESS, {
     nft,
     price,
     expiresAt,
-    ...buildTransactionPayload(chainId, txHash, {
+    ...buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       name: getNFTName(nft),
@@ -58,16 +56,11 @@ export const executeOrderRequest = (
   nft: NFT,
   fingerprint?: string
 ) => action(EXECUTE_ORDER_REQUEST, { order, nft, fingerprint })
-export const executeOrderSuccess = (
-  order: Order,
-  nft: NFT,
-  chainId: ChainId,
-  txHash: string
-) =>
+export const executeOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
   action(EXECUTE_ORDER_SUCCESS, {
     order,
     nft,
-    ...buildTransactionPayload(chainId, txHash, {
+    ...buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       name: getNFTName(nft),
@@ -89,16 +82,11 @@ export const CANCEL_ORDER_FAILURE = '[Failure] Cancel Order'
 
 export const cancelOrderRequest = (order: Order, nft: NFT) =>
   action(CANCEL_ORDER_REQUEST, { order, nft })
-export const cancelOrderSuccess = (
-  order: Order,
-  nft: NFT,
-  chainId: ChainId,
-  txHash: string
-) =>
+export const cancelOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
   action(CANCEL_ORDER_SUCCESS, {
     order,
     nft,
-    ...buildTransactionPayload(chainId, txHash, {
+    ...buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       name: getNFTName(nft),

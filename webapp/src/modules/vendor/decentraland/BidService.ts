@@ -1,6 +1,6 @@
 import { toWei } from 'web3x-es/utils'
 import { Address } from 'web3x-es/address'
-
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Bids } from '../../../contracts/Bids'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
@@ -31,18 +31,18 @@ export class BidService
   }
 
   async place(
+    wallet: Wallet | null,
     nft: NFT,
     price: number,
     expiresAt: number,
-    fromAddress: string,
     fingerprint?: string
   ) {
     const bids = await this.getBidContract()
 
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
 
     const priceInWei = toWei(price.toString(), 'ether')
     const expiresIn = Math.round((expiresAt - Date.now()) / 1000)
@@ -71,13 +71,13 @@ export class BidService
     }
   }
 
-  async accept(bid: Bid, fromAddress: string) {
+  async accept(wallet: Wallet | null, bid: Bid) {
     const erc721 = await ContractFactory.build(ERC721, bid.contractAddress)
 
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
     const bids = getContract({ name: ContractName.BIDS })
     const to = Address.fromString(bids.address)
 
@@ -87,13 +87,13 @@ export class BidService
       .getTxHash()
   }
 
-  async cancel(bid: Bid, fromAddress: string) {
+  async cancel(wallet: Wallet | null, bid: Bid) {
     const bids = await this.getBidContract()
 
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
 
     return bids.methods
       .cancelBid(Address.fromString(bid.contractAddress), bid.tokenId)

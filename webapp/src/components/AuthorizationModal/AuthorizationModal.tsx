@@ -14,6 +14,7 @@ const AuthorizationModal = (props: Props) => {
     authorization,
     authorizations,
     pendingTransactions,
+    isLoading,
     onGrant,
     onRevoke,
     onCancel,
@@ -24,7 +25,7 @@ const AuthorizationModal = (props: Props) => {
     address: authorization.authorizedAddress
   })
   const token = getContract({
-    address: authorization.tokenAddress
+    address: authorization.contractAddress
   })
 
   return (
@@ -58,6 +59,7 @@ const AuthorizationModal = (props: Props) => {
           authorization={authorization}
           authorizations={authorizations}
           pendingTransactions={pendingTransactions}
+          isLoading={isLoading}
           onGrant={onGrant}
           onRevoke={onRevoke}
         />
@@ -65,8 +67,9 @@ const AuthorizationModal = (props: Props) => {
       <Modal.Actions>
         <Button onClick={onCancel}>{t('global.cancel')}</Button>
         <Button
-          disabled={!isAuthorized(authorization, authorizations)}
           primary
+          loading={isLoading}
+          disabled={!isAuthorized(authorization, authorizations)}
           onClick={onProceed}
         >
           {t('global.proceed')}

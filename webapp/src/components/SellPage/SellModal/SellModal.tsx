@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react'
+import { Network } from '@dcl/schemas'
 import { fromWei } from 'web3x-es/utils'
-import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header, Form, Field, Button, Modal, Mana } from 'decentraland-ui'
-
 import { toMANA, fromMANA } from '../../../lib/mana'
 import {
   INPUT_FORMAT,
@@ -15,13 +20,10 @@ import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { NFTAction } from '../../NFTAction'
 import { Props } from './SellModal.types'
-import {
-  Authorization,
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
-import { isAuthorized } from '../../SettingsPage/Authorization/utils'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
+import { ContractName } from 'decentraland-transactions'
+import { NFTCategory } from '../../../modules/nft/types'
 
 const SellModal = (props: Props) => {
   const {
@@ -69,7 +71,11 @@ const SellModal = (props: Props) => {
   const authorization: Authorization = {
     address: wallet.address,
     authorizedAddress: marketplace.address,
-    tokenAddress: nft.contractAddress,
+    contractAddress: nft.contractAddress,
+    contractName:
+      nft.category === NFTCategory.WEARABLE && nft.network === Network.MATIC
+        ? ContractName.ERC721CollectionV2
+        : ContractName.ERC721,
     chainId: nft.chainId,
     type: AuthorizationType.APPROVAL
   }
@@ -78,7 +84,7 @@ const SellModal = (props: Props) => {
     onCreateOrder(nft, fromMANA(price), new Date(expiresAt).getTime())
 
   const handleSubmit = () => {
-    if (isAuthorized(authorization, authorizations)) {
+    if (hasAuthorization(authorizations, authorization)) {
       handleCreateOrder()
     } else {
       setShowAuthorizationModal(true)
@@ -131,7 +137,6 @@ const SellModal = (props: Props) => {
               setExpiresAt(props.value || getDefaultExpirationDate())
             }
             error={isInvalidDate}
-            nft
             message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
           />
         </div>

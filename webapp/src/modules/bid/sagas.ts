@@ -24,7 +24,7 @@ import {
   fetchBidsByNFTSuccess,
   fetchBidsByNFTFailure
 } from './actions'
-import { getAddress } from '../wallet/selectors'
+import { getWallet } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { getContract } from '../contract/utils'
@@ -47,9 +47,9 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
   try {
     const { bidService } = VendorFactory.build(nft.vendor)
 
-    const address: ReturnType<typeof getAddress> = yield select(getAddress)
+    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const txHash: string = yield call(() =>
-      bidService!.place(nft, price, expiresAt, address!, fingerprint)
+      bidService!.place(wallet, nft, price, expiresAt, fingerprint)
     )
     const chainId: ChainId = yield select(getChainId)
     yield put(
@@ -59,7 +59,7 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
         expiresAt,
         chainId,
         txHash,
-        address!,
+        wallet!.address,
         fingerprint
       )
     )
@@ -80,8 +80,8 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
     }
     const { bidService } = VendorFactory.build(contract.vendor)
 
-    const address: ReturnType<typeof getAddress> = yield select(getAddress)
-    const txHash: string = yield call(() => bidService!.accept(bid, address!))
+    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
+    const txHash: string = yield call(() => bidService!.accept(wallet, bid))
 
     const chainId: ChainId = yield select(getChainId)
     yield put(acceptBidSuccess(bid, chainId, txHash))
@@ -102,9 +102,9 @@ function* handleCancelBidRequest(action: CancelBidRequestAction) {
     }
     const { bidService } = VendorFactory.build(contract.vendor)
 
-    const address: ReturnType<typeof getAddress> = yield select(getAddress)
+    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const chainId: ChainId = yield select(getChainId)
-    const txHash: string = yield call(() => bidService!.cancel(bid, address!))
+    const txHash: string = yield call(() => bidService!.cancel(wallet, bid))
 
     yield put(cancelBidSuccess(bid, chainId, txHash))
     yield put(push(locations.activity()))
