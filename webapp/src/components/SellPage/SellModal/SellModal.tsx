@@ -84,6 +84,7 @@ const SellModal = (props: Props) => {
     onCreateOrder(nft, fromMANA(price), new Date(expiresAt).getTime())
 
   const handleSubmit = () => {
+    console.log('HOLA HERERERERRERER')
     if (hasAuthorization(authorizations, authorization)) {
       handleCreateOrder()
     } else {
@@ -124,6 +125,7 @@ const SellModal = (props: Props) => {
             type="text"
             placeholder={toMANA(1000)}
             value={price}
+            focus={true}
             onChange={(_event, props) => {
               const newPrice = fromMANA(props.value)
               setPrice(toMANA(newPrice))
@@ -142,6 +144,7 @@ const SellModal = (props: Props) => {
         </div>
         <div className="buttons">
           <Button
+            as="div"
             onClick={() =>
               onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
             }

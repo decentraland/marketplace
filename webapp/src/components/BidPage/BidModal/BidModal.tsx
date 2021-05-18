@@ -112,14 +112,14 @@ const BidModal = (props: Props) => {
           />
         </div>
         <div className="buttons">
-          <div
-            className="ui button"
+          <Button
+            as="div"
             onClick={() =>
               onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
             }
           >
             {t('global.cancel')}
-          </div>
+          </Button>
           <Button
             type="submit"
             primary
