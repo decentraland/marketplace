@@ -319,6 +319,9 @@
       "cancel_bid": "You cancelled a bid of {price} on {name}."
     }
   },
+  "mana": {
+    "running_on": "This is MANA running in the {network} Network"
+  },
   "wallet": {
     "sign_in_required": "You need to {sign_in} to access this page.",
     "sign_in": "Sign In"

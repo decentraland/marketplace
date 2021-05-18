@@ -10,8 +10,8 @@ export type Props = {
   wallet: Wallet | null
   authorizations: Authorization[]
   isLoading: boolean
+  isOwner: boolean
+  hasInsufficientMANA: boolean
   onNavigate: (path: string) => void
   onExecuteOrder: typeof executeOrderRequest
-  isOwner?: boolean
-  notEnoughMana?: boolean
 }

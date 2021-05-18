@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Mana } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink, Profile } from 'decentraland-dapps/dist/containers'
 import {
@@ -24,6 +23,7 @@ import {
 import { locations } from '../../../modules/routing/locations'
 import { getContract } from '../../../modules/contract/utils'
 import { NFTProvider } from '../../NFTProvider'
+import { Mana } from '../../Mana'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
 

@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
-import { Header, Table, Mana, Responsive } from 'decentraland-ui'
+import { Header, Table, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import dateFnsFormat from 'date-fns/format'
 
+import { Mana } from '../../Mana'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
 import { Bid } from '../../../modules/bid/types'
@@ -70,6 +71,8 @@ const TransactionHistory = (props: Props) => {
     .sort(sortByUpdatedAt)
     .map(toEvent)
 
+  const network = nft ? nft.network : undefined
+
   return (
     <div className="TransactionHistory">
       {isLoading ? null : events.length > 0 ? (
@@ -111,7 +114,9 @@ const TransactionHistory = (props: Props) => {
                       {formatEventDate(event.updatedAt)}
                     </Table.Cell>
                     <Table.Cell>
-                      <Mana inline>{formatMANA(event.price)}</Mana>
+                      <Mana network={network} inline>
+                        {formatMANA(event.price)}
+                      </Mana>
                     </Table.Cell>
                   </Table.Row>
                 ))}
@@ -123,7 +128,9 @@ const TransactionHistory = (props: Props) => {
               {events.map((event, index) => (
                 <div className="mobile-tx-history-row" key={index}>
                   <div className="price">
-                    <Mana inline>{formatMANA(event.price)}</Mana>
+                    <Mana network={network} inline>
+                      {formatMANA(event.price)}
+                    </Mana>
                   </div>
                   <div className="when">{formatEventDate(event.updatedAt)}</div>
                 </div>
