@@ -10,6 +10,12 @@ import {
   FixRevertedTransactionAction,
   ReplaceTransactionSuccessAction
 } from 'decentraland-dapps/dist/modules/transaction/actions'
+import {
+  GrantTokenSuccessAction,
+  GRANT_TOKEN_SUCCESS,
+  RevokeTokenSuccessAction,
+  REVOKE_TOKEN_SUCCESS
+} from 'decentraland-dapps/dist/modules/authorization/actions'
 import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { PayloadAction } from 'typesafe-actions'
@@ -39,12 +45,6 @@ import {
   ArchiveBidAction,
   UnarchiveBidAction
 } from '../bid/actions'
-import {
-  GrantTokenSuccessAction,
-  GRANT_TOKEN_SUCCESS,
-  RevokeTokenSuccessAction,
-  REVOKE_TOKEN_SUCCESS
-} from 'decentraland-dapps/dist/modules/authorization/actions'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -117,13 +117,9 @@ track<ReplaceTransactionSuccessAction>(
   'Transaction Replaced'
 )
 
-track<GrantTokenSuccessAction>(GRANT_TOKEN_SUCCESS, () => {
-  return `Authorize`
-})
+track<GrantTokenSuccessAction>(GRANT_TOKEN_SUCCESS, () => 'Authorize')
 
-track<RevokeTokenSuccessAction>(REVOKE_TOKEN_SUCCESS, () => {
-  return `Unauthorize`
-})
+track<RevokeTokenSuccessAction>(REVOKE_TOKEN_SUCCESS, () => 'Unauthorize')
 
 track<PlaceBidSuccessAction>(
   PLACE_BID_SUCCESS,
