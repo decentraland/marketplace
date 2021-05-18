@@ -211,7 +211,7 @@ const BuyPage = (props: Props) => {
 const Name = (props: { nft: NFT }) => <b>{getNFTName(props.nft)}</b>
 
 const Price = (props: { network?: Network; price: string }) => (
-  <Mana network={props.network} inline>
+  <Mana network={props.network} inline withTooltip>
     {formatMANA(props.price)}
   </Mana>
 )
