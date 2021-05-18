@@ -1,23 +1,29 @@
 import React, { useState, useCallback } from 'react'
 import { Header, Mana, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { isPartner } from '../../../modules/vendor/utils'
 import { getNFTName } from '../../../modules/nft/utils'
-import { hasAuthorization } from '../../../modules/authorization/utils'
-import { contractAddresses } from '../../../modules/contract/utils'
 import { useFingerprint, useComputedPrice } from '../../../modules/nft/hooks'
 import { NFTCategory } from '../../../modules/nft/types'
+import { getContractNames } from '../../../modules/vendor'
+import { getContract } from '../../../modules/contract/utils'
 import { NFTAction } from '../../NFTAction'
 import { AuthorizationModal } from '../../AuthorizationModal'
-import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.types'
 import { Props } from './BuyModal.types'
+import { ContractName } from 'decentraland-transactions'
 
 const BuyPage = (props: Props) => {
   const {
     nft,
     order,
+    wallet,
     authorizations,
     isLoading,
     onNavigate,
@@ -39,44 +45,52 @@ const BuyPage = (props: Props) => {
     onExecuteOrder(order!, nft, fingerprint)
   }, [order, nft, fingerprint, onExecuteOrder])
 
-  // TODO: VendorFactory.build().nftService.getMarketpaceAddress() ??
-  const marketplaceAddress = isPartner(nft.vendor)
-    ? contractAddresses.MarketplaceAdapter
-    : contractAddresses.Marketplace
+  if (!wallet) {
+    return null
+  }
 
-  const handleToggleWantsToProceed = useCallback(() => {
+  const contractNames = getContractNames()
+
+  const mana = getContract({
+    name: contractNames.MANA,
+    network: nft.network
+  })
+
+  const marketplace = getContract({
+    name: isPartner(nft.vendor)
+      ? contractNames.MARKETPLACE_ADAPTER
+      : contractNames.MARKETPLACE,
+    network: nft.network
+  })
+
+  const authorization: Authorization = {
+    address: wallet.address,
+    authorizedAddress: marketplace.address,
+    contractAddress: mana.address,
+    contractName: ContractName.MANAToken,
+    chainId: nft.chainId,
+    type: AuthorizationType.ALLOWANCE
+  }
+
+  const handleToggleWantsToProceed = () => {
     setWantsToProceed(!wantsToProceed)
-  }, [wantsToProceed, setWantsToProceed])
+  }
 
-  const handleSubmit = useCallback(() => {
-    if (
-      hasAuthorization(
-        authorizations,
-        marketplaceAddress,
-        contractAddresses.MANAToken,
-        AuthorizationType.ALLOWANCE
-      )
-    ) {
+  const handleSubmit = () => {
+    if (hasAuthorization(authorizations, authorization)) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [
-    marketplaceAddress,
-    authorizations,
-    handleExecuteOrder,
-    setShowAuthorizationModal
-  ])
+  }
 
-  const handleClose = useCallback(() => setShowAuthorizationModal(false), [
-    setShowAuthorizationModal
-  ])
+  const handleClose = () => setShowAuthorizationModal(false)
 
   const isDisabled =
     !order ||
     isOwner ||
     notEnoughMana ||
-    (!fingerprint && order.category === NFTCategory.ESTATE)
+    (!fingerprint && nft.category === NFTCategory.ESTATE)
 
   const name = <b>{getNFTName(nft)}</b>
   const Price = (props: { price: string }) => (
@@ -88,7 +102,7 @@ const BuyPage = (props: Props) => {
     subtitle = <T id={'buy_page.not_for_sale'} values={{ name }} />
   } else if (
     !fingerprint &&
-    order.category === NFTCategory.ESTATE &&
+    nft.category === NFTCategory.ESTATE &&
     !isFingerprintLoading
   ) {
     subtitle = <T id={'buy_page.no_fingerprint'} />
@@ -182,9 +196,7 @@ const BuyPage = (props: Props) => {
       </div>
       <AuthorizationModal
         open={showAuthorizationModal}
-        contractAddress={marketplaceAddress}
-        tokenAddress={contractAddresses.MANAToken}
-        type={AuthorizationType.ALLOWANCE}
+        authorization={authorization}
         onProceed={handleExecuteOrder}
         onCancel={handleClose}
       />

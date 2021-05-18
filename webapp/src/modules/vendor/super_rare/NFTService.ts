@@ -1,7 +1,8 @@
 import BN from 'bn.js'
 import { Address } from 'web3x-es/address'
 import { toBN, toWei } from 'web3x-es/utils'
-
+import { Network } from '@dcl/schemas'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
 import {
@@ -16,12 +17,12 @@ import { getNFTId } from '../../nft/utils'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
-import { Vendors, TransferType } from '../types'
+import { VendorName, TransferType } from '../types'
 import { ContractService } from './ContractService'
 import { SuperRareAsset, SuperRareOrder, SuperRareOwner } from './types'
 import { superRareAPI, MAX_QUERY_SIZE } from './api'
 
-export class NFTService implements NFTServiceInterface<Vendors.SUPER_RARE> {
+export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
   private oneEthInWei: BN
@@ -48,7 +49,7 @@ export class NFTService implements NFTServiceInterface<Vendors.SUPER_RARE> {
       remoteNFTs = remoteOrders.map(order => order.asset)
     }
 
-    const nfts: NFT<Vendors.SUPER_RARE>[] = []
+    const nfts: NFT<VendorName.SUPER_RARE>[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
@@ -122,14 +123,14 @@ export class NFTService implements NFTServiceInterface<Vendors.SUPER_RARE> {
   }
 
   async transfer(
-    fromAddress: string,
+    wallet: Wallet | null,
     toAddress: string,
-    nft: NFT<Vendors.SUPER_RARE>
+    nft: NFT<VendorName.SUPER_RARE>
   ) {
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
     const to = Address.fromString(toAddress)
 
     const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
@@ -151,7 +152,7 @@ export class NFTService implements NFTServiceInterface<Vendors.SUPER_RARE> {
     return transaction.send({ from }).getTxHash()
   }
 
-  toNFT(asset: SuperRareAsset): NFT<Vendors.SUPER_RARE> {
+  toNFT(asset: SuperRareAsset): NFT<VendorName.SUPER_RARE> {
     return {
       id: getNFTId(asset.contractAddress, asset.id.toString()),
       tokenId: asset.id.toString(),
@@ -165,7 +166,9 @@ export class NFTService implements NFTServiceInterface<Vendors.SUPER_RARE> {
         description: asset.description
       },
       category: NFTCategory.ART,
-      vendor: Vendors.SUPER_RARE
+      vendor: VendorName.SUPER_RARE,
+      chainId: Number(process.env.REACT_APP_CHAIN_ID),
+      network: Network.ETHEREUM
     }
   }
 
@@ -177,9 +180,8 @@ export class NFTService implements NFTServiceInterface<Vendors.SUPER_RARE> {
     const price = weiPrice.div(this.oneEthInWei)
 
     return {
-      id: `${Vendors.SUPER_RARE}-order-${asset.id}`,
+      id: `${VendorName.SUPER_RARE}-order-${asset.id}`,
       nftId: asset.id.toString(),
-      category: NFTCategory.ART,
       nftAddress: asset.contractAddress,
       marketAddress: order.marketContractAddress,
       owner: asset.owner.address,

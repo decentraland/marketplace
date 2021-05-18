@@ -1,1 +1,1 @@
-export const ATLAS_URL = process.env.REACT_APP_ATLAS_URL!
+export const ATLAS_SERVER_URL = process.env.REACT_APP_ATLAS_SERVER_URL!

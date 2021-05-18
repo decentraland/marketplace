@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 import { Mana } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink, Profile } from 'decentraland-dapps/dist/containers'
-
-import { contractSymbols } from '../../../modules/contract/utils'
-import { getNFTName } from '../../../modules/nft/utils'
 import {
-  APPROVE_TOKEN_SUCCESS,
-  ALLOW_TOKEN_SUCCESS
-} from '../../../modules/authorization/actions'
+  GrantTokenSuccessAction,
+  GRANT_TOKEN_SUCCESS,
+  REVOKE_TOKEN_SUCCESS
+} from 'decentraland-dapps/dist/modules/authorization/actions'
+
+import { getNFTName } from '../../../modules/nft/utils'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
@@ -22,6 +22,7 @@ import {
   CANCEL_BID_SUCCESS
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
+import { getContract } from '../../../modules/contract/utils'
 import { NFTProvider } from '../../NFTProvider'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
@@ -29,25 +30,27 @@ import { Props } from './Transaction.types'
 const Transaction = (props: Props) => {
   const { tx } = props
   switch (tx.actionType) {
-    case ALLOW_TOKEN_SUCCESS: {
-      const { isAllowed, contractAddress, tokenContractAddress } = tx.payload
+    case GRANT_TOKEN_SUCCESS: {
+      const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
+      const contract = getContract({ address: authorization.authorizedAddress })
       return (
         <TransactionDetail
           text={
             <T
               id="transaction.detail.approve_token"
               values={{
-                action: isAllowed
-                  ? t('transaction.action.approved')
-                  : t('transaction.action.not_approved'),
+                action: t('transaction.action.approved'),
                 contract: (
-                  <TransactionLink address={contractAddress} txHash="">
-                    {contractSymbols[contractAddress]}
+                  <TransactionLink address={contract.address} txHash="">
+                    {contract.name}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink address={tokenContractAddress} txHash="">
-                    {contractSymbols[tokenContractAddress]}
+                  <TransactionLink
+                    address={authorization.contractAddress}
+                    txHash=""
+                  >
+                    {authorization.contractName}
                   </TransactionLink>
                 )
               }}
@@ -57,25 +60,29 @@ const Transaction = (props: Props) => {
         />
       )
     }
-    case APPROVE_TOKEN_SUCCESS: {
-      const { isApproved, contractAddress, tokenContractAddress } = tx.payload
+    case REVOKE_TOKEN_SUCCESS: {
+      const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
+      const contract = getContract({
+        address: authorization.authorizedAddress
+      })
       return (
         <TransactionDetail
           text={
             <T
               id="transaction.detail.approve_token"
               values={{
-                action: isApproved
-                  ? t('transaction.action.approved')
-                  : t('transaction.action.not_approved'),
+                action: t('transaction.action.not_approved'),
                 contract: (
-                  <TransactionLink address={contractAddress} txHash="">
-                    {contractSymbols[contractAddress]}
+                  <TransactionLink address={contract.address} txHash="">
+                    {contract.name}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink address={tokenContractAddress} txHash="">
-                    {contractSymbols[tokenContractAddress]}
+                  <TransactionLink
+                    address={authorization.contractAddress}
+                    txHash=""
+                  >
+                    {authorization.contractName}
                   </TransactionLink>
                 )
               }}
@@ -86,7 +93,7 @@ const Transaction = (props: Props) => {
       )
     }
     case CREATE_ORDER_SUCCESS: {
-      const { tokenId, contractAddress, name, price } = tx.payload
+      const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
         <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -101,7 +108,11 @@ const Transaction = (props: Props) => {
                         {name}
                       </Link>
                     ),
-                    price: <Mana inline>{price.toLocaleString()}</Mana>
+                    price: (
+                      <Mana network={network} inline>
+                        {price.toLocaleString()}
+                      </Mana>
+                    )
                   }}
                 />
               }
@@ -112,7 +123,7 @@ const Transaction = (props: Props) => {
       )
     }
     case CANCEL_ORDER_SUCCESS: {
-      const { tokenId, contractAddress, name, price } = tx.payload
+      const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
         <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -127,7 +138,11 @@ const Transaction = (props: Props) => {
                         {name}
                       </Link>
                     ),
-                    price: <Mana inline>{price.toLocaleString()}</Mana>
+                    price: (
+                      <Mana network={network} inline>
+                        {price.toLocaleString()}
+                      </Mana>
+                    )
                   }}
                 />
               }
@@ -138,7 +153,7 @@ const Transaction = (props: Props) => {
       )
     }
     case EXECUTE_ORDER_SUCCESS: {
-      const { tokenId, contractAddress, name, price } = tx.payload
+      const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
         <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
@@ -153,7 +168,11 @@ const Transaction = (props: Props) => {
                         {name}
                       </Link>
                     ),
-                    price: <Mana inline>{price.toLocaleString()}</Mana>
+                    price: (
+                      <Mana network={network} inline>
+                        {price.toLocaleString()}
+                      </Mana>
+                    )
                   }}
                 />
               }

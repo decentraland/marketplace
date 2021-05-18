@@ -1,7 +1,8 @@
 import BN from 'bn.js'
 import { Address } from 'web3x-es/address'
 import { toBN, toWei } from 'web3x-es/utils'
-
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { Network } from '@dcl/schemas'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
 import {
@@ -17,10 +18,9 @@ import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
 import { getOriginURL } from '../utils'
-import { Vendors } from '../types'
-
+import { getContractNames, VendorName } from '../types'
+import { getContract } from '../../contract/utils'
 import { NFTsFetchFilters } from './nft/types'
-import { ContractService } from './ContractService'
 import { EditionFragment } from './edition/fragments'
 import { TokenFragment } from './token/fragments'
 import { editionAPI } from './edition/api'
@@ -30,7 +30,8 @@ import { AssetType } from './types'
 
 type Fragment = TokenFragment | EditionFragment
 
-export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
+export class NFTService
+  implements NFTServiceInterface<VendorName.KNOWN_ORIGIN> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
   private oneEthInWei: BN
@@ -48,7 +49,7 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
       this.getOneEthInMANA()
     ])
 
-    const nfts: NFT<Vendors.KNOWN_ORIGIN>[] = []
+    const nfts: NFT<VendorName.KNOWN_ORIGIN>[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
@@ -112,14 +113,14 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
   }
 
   async transfer(
-    fromAddress: string,
+    wallet: Wallet | null,
     toAddress: string,
-    nft: NFT<Vendors.KNOWN_ORIGIN>
+    nft: NFT<VendorName.KNOWN_ORIGIN>
   ) {
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
     const to = Address.fromString(toAddress)
 
     const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
@@ -130,11 +131,15 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
       .getTxHash()
   }
 
-  toNFT(fragment: Fragment): NFT<Vendors.KNOWN_ORIGIN> {
+  toNFT(fragment: Fragment): NFT<VendorName.KNOWN_ORIGIN> {
     const tokenId = fragment.id
     const { name, description, image } = fragment.metadata
 
-    const nftAddress = ContractService.contractAddresses.DigitalAsset
+    const contractNames = getContractNames()
+
+    const nftAddress = getContract({
+      name: contractNames.DIGITAL_ASSET
+    }).address
 
     return {
       id: getNFTId(nftAddress, tokenId),
@@ -150,7 +155,9 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
         isEdition: true
       },
       category: NFTCategory.ART,
-      vendor: Vendors.KNOWN_ORIGIN
+      vendor: VendorName.KNOWN_ORIGIN,
+      chainId: Number(process.env.REACT_APP_CHAIN_ID),
+      network: Network.ETHEREUM
     }
   }
 
@@ -159,13 +166,18 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
     const weiPrice = toBN(totalWei).mul(toBN(oneEthInMANA))
     const price = weiPrice.div(this.oneEthInWei)
 
-    const nftAddress = ContractService.contractAddresses.DigitalAsset
-    const marketAddress = ContractService.contractAddresses.BuyAdapter
+    const contractNames = getContractNames()
+
+    const nftAddress = getContract({
+      name: contractNames.DIGITAL_ASSET
+    }).address
+    const marketAddress = getContract({
+      name: contractNames.MARKETPLACE_ADAPTER
+    }).address
 
     return {
-      id: `${Vendors.KNOWN_ORIGIN}-order-${edition.id}`,
+      id: `${VendorName.KNOWN_ORIGIN}-order-${edition.id}`,
       nftId: edition.id,
-      category: NFTCategory.ART,
       nftAddress,
       marketAddress,
       owner: edition.artistAccount,
@@ -202,7 +214,7 @@ export class NFTService implements NFTServiceInterface<Vendors.KNOWN_ORIGIN> {
   }
 
   private getDefaultURL(fragment: Fragment): string {
-    const origin = getOriginURL(Vendors.KNOWN_ORIGIN)
+    const origin = getOriginURL(VendorName.KNOWN_ORIGIN)
     return `${origin}/${fragment.type}/${fragment.id}`
   }
 }

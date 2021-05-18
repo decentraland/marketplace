@@ -1,13 +1,13 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import { Authorizations } from '../../modules/authorization/types'
+import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
   createOrderRequest,
   CreateOrderRequestAction
 } from '../../modules/order/actions'
 
 export type Props = {
-  authorizations: Authorizations
+  authorizations: Authorization[]
   isLoading: boolean
   onCreateOrder: typeof createOrderRequest
   onNavigate: (path: string) => void

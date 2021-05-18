@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { NFT, NFTCategory } from '../nft/types'
-import { Vendors } from '../vendor/types'
+import { VendorName } from '../vendor/types'
 import { getParcelProximity, getEstateProximity } from './utils'
 import { Proximity } from './types'
 
 export const useProximity = (
-  nft: NFT<Vendors.DECENTRALAND>,
+  nft: NFT<VendorName.DECENTRALAND>,
   proximities: Record<string, Proximity>
 ) =>
   useMemo(() => {

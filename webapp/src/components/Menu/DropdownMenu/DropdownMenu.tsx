@@ -12,7 +12,7 @@ const DropdownMenu = <T extends unknown>(props: Props<T>) => {
         value={values[0]}
         currentValue={currentValue}
         onClick={onMenuItemClick}
-        isSub={true}
+        nestedLevel={1}
         withCaret={true}
       />
       <ul className="submenu">
@@ -25,7 +25,7 @@ const DropdownMenu = <T extends unknown>(props: Props<T>) => {
                   value={value}
                   currentValue={currentValue}
                   onClick={onMenuItemClick}
-                  isSub={true}
+                  nestedLevel={2}
                 />
               ))
           : null}

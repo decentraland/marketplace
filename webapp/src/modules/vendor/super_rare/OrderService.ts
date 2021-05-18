@@ -1,18 +1,19 @@
 import { Address } from 'web3x-es/address'
 import { ABICoder } from 'web3x-es/contract/abi-coder'
-
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
 import { Order } from '../../order/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
-import { ContractService as DecentralandContractService } from '../decentraland/ContractService'
-import { Vendors } from '../types'
+import { getContractNames, VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
 import { ContractService } from './ContractService'
+import { getContract } from '../../contract/utils'
 
-export class OrderService implements OrderServiceInterface<Vendors.SUPER_RARE> {
+export class OrderService
+  implements OrderServiceInterface<VendorName.SUPER_RARE> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
 
@@ -30,22 +31,24 @@ export class OrderService implements OrderServiceInterface<Vendors.SUPER_RARE> {
   }
 
   async execute(
-    nft: NFT<Vendors.SUPER_RARE>,
-    order: Order,
-    fromAddress: string
+    wallet: Wallet | null,
+    nft: NFT<VendorName.SUPER_RARE>,
+    order: Order
   ): Promise<string> {
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
     const contractService = new ContractService()
+
+    const contractNames = getContractNames()
 
     // Addresses
     const assetContractAddress = Address.fromString(nft.contractAddress)
     const assetMarketAddress: Address = Address.fromString(order.marketAddress)
     const manaTokenAddress = Address.fromString(
-      DecentralandContractService.contractAddresses.MANAToken
+      getContract({ name: contractNames.MANA }).address
     )
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
 
     // Data
     const calldata = this.getCallData(nft)
@@ -60,7 +63,7 @@ export class OrderService implements OrderServiceInterface<Vendors.SUPER_RARE> {
     // Contract
     const marketplaceAdapter = await ContractFactory.build(
       MarketplaceAdapter,
-      ContractService.contractAddresses.MarketplaceAdapter
+      getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address
     )
     return marketplaceAdapter.methods
       .buy(
@@ -86,12 +89,16 @@ export class OrderService implements OrderServiceInterface<Vendors.SUPER_RARE> {
     return false
   }
 
-  private getCallData(nft: NFT<Vendors.SUPER_RARE>) {
-    const { SuperRare, SuperRareV2 } = ContractService.contractAddresses
+  private getCallData(nft: NFT<VendorName.SUPER_RARE>) {
+    const contractNames = getContractNames()
+    const superRare = getContract({ name: contractNames.SUPER_RARE })
+    const superRareV2 = getContract({
+      name: contractNames.SUPER_RARE_V2
+    })
     const abiCoder = new ABICoder()
 
     switch (nft.contractAddress) {
-      case SuperRare:
+      case superRare.address:
         return abiCoder.encodeFunctionCall(
           {
             name: 'buy',
@@ -100,7 +107,7 @@ export class OrderService implements OrderServiceInterface<Vendors.SUPER_RARE> {
           },
           [nft.tokenId]
         )
-      case SuperRareV2:
+      case superRareV2.address:
         return abiCoder.encodeFunctionCall(
           {
             name: 'buy',

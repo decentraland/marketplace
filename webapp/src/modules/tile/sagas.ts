@@ -1,6 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
 import { Atlas, AtlasTile } from 'decentraland-ui'
-import { ATLAS_URL } from '../../modules/vendor/decentraland'
+import { ATLAS_SERVER_URL } from '../../modules/vendor/decentraland'
 import {
   FETCH_TILES_REQUEST,
   FetchTilesRequestAction,
@@ -12,7 +12,7 @@ import {
   CONNECT_WALLET_SUCCESS
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { fetchNFTsRequest } from '../nft/actions'
-import { Vendors } from '../vendor'
+import { VendorName } from '../vendor'
 import { View } from '../ui/types'
 
 export function* tileSaga() {
@@ -23,7 +23,7 @@ export function* tileSaga() {
 function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
   try {
     const tiles: Record<string, AtlasTile> = yield call(() =>
-      Atlas.fetchTiles(ATLAS_URL + '/tiles')
+      Atlas.fetchTiles(ATLAS_SERVER_URL + '/v1/tiles')
     )
     yield put(fetchTilesSuccess(tiles))
   } catch (error) {
@@ -34,7 +34,7 @@ function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
 function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
   yield put(
     fetchNFTsRequest({
-      vendor: Vendors.DECENTRALAND,
+      vendor: VendorName.DECENTRALAND,
       view: View.ATLAS,
       params: {
         first: 1000,

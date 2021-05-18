@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react'
-// import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
@@ -7,16 +6,17 @@ import { Page, Grid, Blockie, Mana, Loader, Form } from 'decentraland-ui'
 import CopyToClipboard from 'react-copy-to-clipboard'
 
 import { locations } from '../../modules/routing/locations'
-import { contractAddresses } from '../../modules/contract/utils'
-import { hasAuthorization } from '../../modules/authorization/utils'
 import { shortenAddress } from '../../modules/wallet/utils'
-import { AuthorizationType } from '../AuthorizationModal/AuthorizationModal.types'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { Authorization } from './Authorization'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
 import { Network } from '@dcl/schemas'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import { getContractNames } from '../../modules/vendor'
+import { getContract } from '../../modules/contract/utils'
+import { ContractName } from 'decentraland-transactions'
 
 const BUY_MANA_URL = process.env.REACT_APP_BUY_MANA_URL
 
@@ -24,12 +24,12 @@ const SettingsPage = (props: Props) => {
   const {
     wallet,
     authorizations,
-    pendingAllowTransactions,
-    pendingApproveTransactions,
+    pendingTransactions,
     isLoadingAuthorization,
     isConnecting,
-    onAllowToken,
-    onApproveToken,
+    hasError,
+    onGrant,
+    onRevoke,
     onNavigate
   } = props
 
@@ -53,8 +53,40 @@ const SettingsPage = (props: Props) => {
     }
   }, [isConnecting, wallet, onNavigate])
 
-  const hasEmptyAuthorizations =
-    authorizations === undefined || Object.keys(authorizations).length === 0
+  const contractNames = getContractNames()
+
+  const marketplaceEthereum = getContract({
+    name: contractNames.MARKETPLACE,
+    network: Network.ETHEREUM
+  })
+
+  const marketplaceMatic = getContract({
+    name: contractNames.MARKETPLACE,
+    network: Network.MATIC
+  })
+
+  const marketplaceAdapter = getContract({
+    name: contractNames.MARKETPLACE_ADAPTER
+  })
+
+  const bids = getContract({
+    name: contractNames.BIDS
+  })
+
+  const manaEthereum = getContract({
+    name: contractNames.MANA,
+    network: Network.ETHEREUM
+  })
+
+  const manaMatic = getContract({
+    name: contractNames.MANA,
+    network: Network.MATIC
+  })
+
+  const authorizationsForSelling = authorizations.filter(authorization => {
+    const contract = getContract({ address: authorization.contractAddress })
+    return contract.category != null
+  })
 
   return (
     <>
@@ -141,7 +173,7 @@ const SettingsPage = (props: Props) => {
                   <Loader size="massive" active />
                 ) : (
                   <div className="authorization-checks-container">
-                    {hasEmptyAuthorizations ? (
+                    {hasError ? (
                       <div className="authorization-checks">
                         <p className="danger-text">
                           {t('settings_page.authorization_error')}
@@ -156,30 +188,46 @@ const SettingsPage = (props: Props) => {
                             {t('settings_page.for_buying')}
                           </label>
                           <Authorization
-                            checked={hasAuthorization(
-                              authorizations!,
-                              contractAddresses.Marketplace,
-                              contractAddresses.MANAToken,
-                              AuthorizationType.ALLOWANCE
-                            )}
-                            contractAddress={contractAddresses.Marketplace}
-                            tokenContractAddress={contractAddresses.MANAToken}
-                            pendingTransactions={pendingAllowTransactions}
-                            onChange={onAllowToken}
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: marketplaceEthereum.address,
+                              contractAddress: manaEthereum.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaEthereum.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                            pendingTransactions={pendingTransactions}
+                            authorizations={authorizations}
+                            onGrant={onGrant}
+                            onRevoke={onRevoke}
                           />
                           <Authorization
-                            checked={hasAuthorization(
-                              authorizations!,
-                              contractAddresses.MarketplaceAdapter,
-                              contractAddresses.MANAToken,
-                              AuthorizationType.ALLOWANCE
-                            )}
-                            contractAddress={
-                              contractAddresses.MarketplaceAdapter
-                            }
-                            tokenContractAddress={contractAddresses.MANAToken}
-                            pendingTransactions={pendingAllowTransactions}
-                            onChange={onAllowToken}
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: marketplaceAdapter.address,
+                              contractAddress: manaEthereum.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaEthereum.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                            authorizations={authorizations}
+                            pendingTransactions={pendingTransactions}
+                            onGrant={onGrant}
+                            onRevoke={onRevoke}
+                          />
+                          <Authorization
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: marketplaceMatic.address,
+                              contractAddress: manaMatic.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaMatic.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                            pendingTransactions={pendingTransactions}
+                            authorizations={authorizations}
+                            onGrant={onGrant}
+                            onRevoke={onRevoke}
                           />
                         </div>
 
@@ -188,52 +236,44 @@ const SettingsPage = (props: Props) => {
                             {t('settings_page.for_bidding')}
                           </label>
                           <Authorization
-                            checked={hasAuthorization(
-                              authorizations!,
-                              contractAddresses.Bids,
-                              contractAddresses.MANAToken,
-                              AuthorizationType.ALLOWANCE
-                            )}
-                            contractAddress={contractAddresses.Bids}
-                            tokenContractAddress={contractAddresses.MANAToken}
-                            pendingTransactions={pendingAllowTransactions}
-                            onChange={onAllowToken}
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: bids.address,
+                              contractAddress: manaEthereum.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaEthereum.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                            pendingTransactions={pendingTransactions}
+                            authorizations={authorizations}
+                            onGrant={onGrant}
+                            onRevoke={onRevoke}
                           />
                         </div>
 
-                        <div className="authorization-checks">
-                          <label className="secondary-text">
-                            {t('settings_page.for_selling')}
-                          </label>
+                        {authorizationsForSelling.length > 0 ? (
+                          <div className="authorization-checks">
+                            <label className="secondary-text">
+                              {t('settings_page.for_selling')}
+                            </label>
 
-                          {Object.keys(authorizations!.approvals).map(
-                            contractAddress => {
-                              const privilege = authorizations!.approvals[
-                                contractAddress
-                              ]
-                              return !privilege
-                                ? null
-                                : Object.keys(
-                                    privilege
-                                  ).map(tokenContractAddress => (
-                                    <Authorization
-                                      key={
-                                        contractAddress + tokenContractAddress
-                                      }
-                                      checked={privilege[tokenContractAddress]}
-                                      contractAddress={contractAddress}
-                                      tokenContractAddress={
-                                        tokenContractAddress
-                                      }
-                                      pendingTransactions={
-                                        pendingApproveTransactions
-                                      }
-                                      onChange={onApproveToken}
-                                    />
-                                  ))
-                            }
-                          )}
-                        </div>
+                            {authorizationsForSelling.map(authorization => {
+                              return (
+                                <Authorization
+                                  key={
+                                    authorization.authorizedAddress +
+                                    authorization.contractAddress
+                                  }
+                                  authorization={authorization}
+                                  pendingTransactions={pendingTransactions}
+                                  authorizations={authorizations}
+                                  onGrant={onGrant}
+                                  onRevoke={onRevoke}
+                                />
+                              )
+                            })}
+                          </div>
+                        ) : null}
                       </Form>
                     )}
                   </div>

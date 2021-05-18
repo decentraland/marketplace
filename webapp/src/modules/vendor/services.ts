@@ -1,16 +1,27 @@
+import { ChainId, Network } from '@dcl/schemas'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
   NFT,
-  NFTCategory,
   NFTsFetchParams,
-  NFTsCountParams
+  NFTsCountParams,
+  NFTCategory
 } from '../nft/types'
 import { Account } from '../account/types'
 import { Bid } from '../bid/types'
 import { OrderStatus, Order } from '../order/types'
 import { NFTsFetchFilters } from './nft/types'
-import { Vendors, TransferType } from './types'
+import { VendorName, TransferType } from './types'
 
-export interface NFTService<V extends Vendors> {
+export type Contract = {
+  name: string
+  address: string
+  category: NFTCategory | null
+  vendor: VendorName | null
+  network: Network
+  chainId: ChainId
+}
+
+export interface NFTService<V extends VendorName> {
   fetch: (
     params: NFTsFetchParams,
     filters?: NFTsFetchFilters<V>
@@ -24,53 +35,51 @@ export interface NFTService<V extends Vendors> {
     tokenId: string
   ) => Promise<readonly [NFT<V>, Order | undefined]>
   transfer: (
-    fromAddress: string,
+    wallet: Wallet | null,
     toAddress: string,
     nft: NFT<V>
   ) => Promise<string>
 }
 export class NFTService<V> {}
 
-export interface OrderService<V extends Vendors> {
+export interface OrderService<V extends VendorName> {
   fetchByNFT: (nft: NFT<V>) => Promise<Order[]>
   create: (
+    wallet: Wallet | null,
     nft: NFT<V>,
     price: number,
-    expiresAt: number,
-    fromAddress: string
+    expiresAt: number
   ) => Promise<string>
   execute: (
+    wallet: Wallet | null,
     nft: NFT<V>,
     order: Order,
-    fromAddress: string,
     fingerprint?: string
   ) => Promise<string>
-  cancel: (nft: NFT<V>, fromAddress: string) => Promise<string>
+  cancel: (wallet: Wallet | null, nft: NFT<V>) => Promise<string>
   canSell(): boolean
 }
 export class OrderService<V> {}
 
-export interface BidService<V extends Vendors> {
+export interface BidService<V extends VendorName> {
   fetchBySeller: (seller: string) => Promise<Bid[]>
   fetchByBidder: (bidder: string) => Promise<Bid[]>
   fetchByNFT: (nft: NFT<V>, status?: OrderStatus) => Promise<Bid[]>
   place: (
+    wallet: Wallet | null,
     nft: NFT<V>,
     price: number,
     expiresAt: number,
-    fromAddress: string,
     fingerprint?: string
   ) => Promise<string>
-  accept: (bid: Bid, fromAddress: string) => Promise<string>
-  cancel: (bid: Bid, fromAddress: string) => Promise<string>
+  accept: (wallet: Wallet | null, bid: Bid) => Promise<string>
+  cancel: (wallet: Wallet | null, bid: Bid) => Promise<string>
 }
 export class BidService<V> {}
 
 export interface ContractService {
-  contractAddresses: Record<string, string>
-  contractSymbols: Record<string, string>
-  contractNames: Record<string, string>
-  contractCategories: Record<string, NFTCategory>
+  build(): Promise<void>
+  getContracts(): Contract[]
   getTransferType: (address: string) => TransferType
 }
 export class ContractService {}

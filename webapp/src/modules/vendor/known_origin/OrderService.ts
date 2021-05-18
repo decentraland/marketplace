@@ -1,19 +1,18 @@
 import { Address } from 'web3x-es/address'
 import { ABICoder } from 'web3x-es/contract/abi-coder'
-
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
 import { Order } from '../../order/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
-import { ContractService as DecentralandContractService } from '../decentraland/ContractService'
-import { Vendors } from '../types'
+import { getContractNames, VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
-import { ContractService } from './ContractService'
+import { getContract } from '../../contract/utils'
 
 export class OrderService
-  implements OrderServiceInterface<Vendors.KNOWN_ORIGIN> {
+  implements OrderServiceInterface<VendorName.KNOWN_ORIGIN> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
 
@@ -31,23 +30,25 @@ export class OrderService
   }
 
   async execute(
-    nft: NFT<Vendors.KNOWN_ORIGIN>,
-    order: Order,
-    fromAddress: string
+    wallet: Wallet | null,
+    nft: NFT<VendorName.KNOWN_ORIGIN>,
+    order: Order
   ): Promise<string> {
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
+
+    const contractNames = getContractNames()
 
     // Addresses
     const assetMarketAddress: Address = Address.fromString(order.marketAddress)
     const manaTokenAddress = Address.fromString(
-      DecentralandContractService.contractAddresses.MANAToken
+      getContract({ name: contractNames.MANA }).address
     )
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
 
     // Data
-    const calldata = this.getCallData(fromAddress, nft)
+    const calldata = this.getCallData(wallet.address, nft)
 
     // Price
     const manaPrice = await this.tokenConverter.contractEthToMANA(
@@ -58,7 +59,7 @@ export class OrderService
     // Contract
     const marketplaceAdapter = await ContractFactory.build(
       MarketplaceAdapter,
-      ContractService.contractAddresses.MarketplaceAdapter
+      getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address
     )
     return marketplaceAdapter.methods
       .buy(
@@ -80,7 +81,7 @@ export class OrderService
     return false
   }
 
-  private getCallData(to: string, nft: NFT<Vendors.KNOWN_ORIGIN>) {
+  private getCallData(to: string, nft: NFT<VendorName.KNOWN_ORIGIN>) {
     const abiCoder = new ABICoder()
     return abiCoder.encodeFunctionCall(
       {

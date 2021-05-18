@@ -28,13 +28,6 @@ import {
   FetchNFTsSuccessAction
 } from '../nft/actions'
 import {
-  ALLOW_TOKEN_SUCCESS,
-  APPROVE_TOKEN_SUCCESS,
-  AllowTokenSuccessAction,
-  ApproveTokenSuccessAction
-} from '../authorization/actions'
-import { contractNames } from '../contract/utils'
-import {
   PLACE_BID_SUCCESS,
   ACCEPT_BID_SUCCESS,
   CANCEL_BID_SUCCESS,
@@ -46,6 +39,12 @@ import {
   ArchiveBidAction,
   UnarchiveBidAction
 } from '../bid/actions'
+import {
+  GrantTokenSuccessAction,
+  GRANT_TOKEN_SUCCESS,
+  RevokeTokenSuccessAction,
+  REVOKE_TOKEN_SUCCESS
+} from 'decentraland-dapps/dist/modules/authorization/actions'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -118,20 +117,12 @@ track<ReplaceTransactionSuccessAction>(
   'Transaction Replaced'
 )
 
-track<AllowTokenSuccessAction>(ALLOW_TOKEN_SUCCESS, ({ payload }) => {
-  const contractName = contractNames[payload.contractAddress]
-  const tokenContractName = contractNames[payload.tokenContractAddress]
-  return payload.isAllowed
-    ? `Authorize ${contractName} for ${tokenContractName}`
-    : `Unauthorize ${contractName} for ${tokenContractName}`
+track<GrantTokenSuccessAction>(GRANT_TOKEN_SUCCESS, () => {
+  return `Authorize`
 })
 
-track<ApproveTokenSuccessAction>(APPROVE_TOKEN_SUCCESS, ({ payload }) => {
-  const contractName = contractNames[payload.contractAddress]
-  const tokenContractName = contractNames[payload.tokenContractAddress]
-  return payload.isApproved
-    ? `Authorize ${contractName} for ${tokenContractName}`
-    : `Unauthorize ${contractName} for ${tokenContractName}`
+track<RevokeTokenSuccessAction>(REVOKE_TOKEN_SUCCESS, () => {
+  return `Unauthorize`
 })
 
 track<PlaceBidSuccessAction>(
@@ -147,9 +138,8 @@ track<PlaceBidSuccessAction>(
 
 track<AcceptBidSuccessAction>(
   ACCEPT_BID_SUCCESS,
-  ({ payload }) => withCategory('Accept bid', payload.bid),
+  'Accept bid',
   ({ payload }) => ({
-    category: payload.bid.category,
     tokenId: payload.bid.tokenId,
     bidId: payload.bid.id,
     bidder: payload.bid.bidder,
@@ -159,36 +149,25 @@ track<AcceptBidSuccessAction>(
 
 track<CancelBidSuccessAction>(
   CANCEL_BID_SUCCESS,
-  ({ payload }) => withCategory('Cancel bid', payload.bid),
+  'Cancel bid',
   ({ payload }) => ({
-    category: payload.bid.category,
     tokenId: payload.bid.tokenId,
     bidId: payload.bid.id,
     bidder: payload.bid.bidder
   })
 )
 
-track<ArchiveBidAction>(
-  ARCHIVE_BID,
-  ({ payload }) => withCategory('Archive Bid', payload.bid),
-  ({ payload }) => ({
-    category: payload.bid.category,
-    tokenId: payload.bid.tokenId,
-    bidId: payload.bid.id,
-    price: payload.bid.price
-  })
-)
+track<ArchiveBidAction>(ARCHIVE_BID, 'Archive Bid', ({ payload }) => ({
+  tokenId: payload.bid.tokenId,
+  bidId: payload.bid.id,
+  price: payload.bid.price
+}))
 
-track<UnarchiveBidAction>(
-  UNARCHIVE_BID,
-  ({ payload }) => withCategory('Unarchive Bid', payload.bid),
-  ({ payload }) => ({
-    category: payload.bid.category,
-    tokenId: payload.bid.tokenId,
-    bidId: payload.bid.id,
-    price: payload.bid.price
-  })
-)
+track<UnarchiveBidAction>(UNARCHIVE_BID, 'Unarchive Bid', ({ payload }) => ({
+  tokenId: payload.bid.tokenId,
+  bidId: payload.bid.id,
+  price: payload.bid.price
+}))
 
 track<FetchNFTsSuccessAction>(
   FETCH_NFTS_SUCCESS,

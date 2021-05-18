@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Vendors } from '../../../modules/vendor/types'
+import { VendorName } from '../../../modules/vendor/types'
 import { NFTFilters as DecentralandNFTFilters } from '../decentraland/NFTFilters'
 import { NFTFilters as SuperRareNFTFilters } from '../super_rare/NFTFilters'
 import { NFTFilters as MakersPlaceNFTFilters } from '../makers_place/NFTFilters'
@@ -13,13 +13,13 @@ const NFTFilters = (props: Props) => {
   const { vendor, onBrowse } = props
 
   switch (vendor) {
-    case Vendors.SUPER_RARE:
+    case VendorName.SUPER_RARE:
       return <SuperRareNFTFilters onBrowse={onBrowse} />
-    case Vendors.MAKERS_PLACE:
+    case VendorName.MAKERS_PLACE:
       return <MakersPlaceNFTFilters onBrowse={onBrowse} />
-    case Vendors.KNOWN_ORIGIN:
+    case VendorName.KNOWN_ORIGIN:
       return <KnownOriginNFTFilters onBrowse={onBrowse} />
-    case Vendors.DECENTRALAND:
+    case VendorName.DECENTRALAND:
     default:
       return <DecentralandNFTFilters onBrowse={onBrowse} />
   }

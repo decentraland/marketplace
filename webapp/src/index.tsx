@@ -11,7 +11,7 @@ import './setup'
 import './modules/analytics/track'
 
 import * as locales from './modules/translation/locales'
-import { store, history } from './modules/store'
+import { initStore, history } from './modules/store'
 import { Routes } from './components/Routes'
 
 import { buildContracts } from './modules/contract/utils'
@@ -19,19 +19,23 @@ import { buildContracts } from './modules/contract/utils'
 import './themes'
 import './index.css'
 
-buildContracts()
+async function main() {
+  await buildContracts()
 
-const component = (
-  <Provider store={store}>
-    <TranslationProvider locales={Object.keys(locales)}>
-      <WalletProvider>
-        <ConnectedRouter history={history}>
-          <ScrollToTop />
-          <Routes />
-        </ConnectedRouter>
-      </WalletProvider>
-    </TranslationProvider>
-  </Provider>
-)
+  const component = (
+    <Provider store={initStore()}>
+      <TranslationProvider locales={Object.keys(locales)}>
+        <WalletProvider>
+          <ConnectedRouter history={history}>
+            <ScrollToTop />
+            <Routes />
+          </ConnectedRouter>
+        </WalletProvider>
+      </TranslationProvider>
+    </Provider>
+  )
 
-ReactDOM.render(component, document.getElementById('root'))
+  ReactDOM.render(component, document.getElementById('root'))
+}
+
+main()

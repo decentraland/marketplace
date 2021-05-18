@@ -18,14 +18,14 @@ const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000
 
 const formatEventDate = (updatedAt: string) => {
-  const newUpdatedAt = new Date(+updatedAt * 1000)
+  const newUpdatedAt = new Date(+updatedAt)
   return Date.now() - newUpdatedAt.getTime() > WEEK_IN_MILLISECONDS
     ? dateFnsFormat(newUpdatedAt, INPUT_FORMAT)
     : formatDistanceToNow(newUpdatedAt, { addSuffix: true })
 }
 
 const formatDateTitle = (updatedAt: string) => {
-  return new Date(+updatedAt * 1000).toLocaleString()
+  return new Date(+updatedAt).toLocaleString()
 }
 
 const sortByUpdatedAt = (a: { updatedAt: string }, b: { updatedAt: string }) =>

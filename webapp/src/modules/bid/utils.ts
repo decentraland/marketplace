@@ -1,12 +1,11 @@
 import { Address } from 'web3x-es/address'
 import { Eth } from 'web3x-es/eth'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { Network } from '@dcl/schemas'
 import { MANA } from '../../contracts/MANA'
-import { contractAddresses } from '../contract/utils'
-import { getAddress } from '../wallet/selectors'
-import { store } from '../store'
-import { RootState } from '../reducer'
 import { Bid } from './types'
+import { getContractNames } from '../vendor'
+import { getContract } from '../contract/utils'
 
 export async function isInsufficientMANA(bid: Bid) {
   try {
@@ -15,13 +14,15 @@ export async function isInsufficientMANA(bid: Bid) {
       throw new Error('Could not connect to provider')
     }
     const eth = new Eth(provider)
-    const mana = new MANA(eth, Address.fromString(contractAddresses.MANAToken))
 
-    // TODO: Remove store from here, receive address as argument
-    const address = getAddress(store.getState() as RootState)
-    if (!address) {
-      throw new Error('Invalid address. Wallet must be connected.')
-    }
+    const contractNames = getContractNames()
+
+    const { address } = getContract({
+      name: contractNames.MANA,
+      network: Network.ETHEREUM
+    })
+
+    const mana = new MANA(eth, Address.fromString(address))
 
     const balance = await mana.methods
       .balanceOf(Address.fromString(bid.bidder))

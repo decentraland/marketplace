@@ -2,16 +2,16 @@ import { takeEvery, put, select } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
 
 import { NFTCategory } from '../nft/types'
-import { Vendors } from '../vendor/types'
+import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/nft/browse/selectors'
-import { getIsFullscreen, getVendor } from '../routing/selectors'
+import { getIsFullscreen, getNetwork, getVendor } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
 import { fetchNFTsRequest } from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
-import { getSortOrder } from '../nft/utils'
+import { getOrder } from '../nft/utils'
 import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
 import { locations } from './locations'
 import {
@@ -79,7 +79,7 @@ function* fetchNFTsFromRoute(searchOptions: SearchOptions) {
   const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
   const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
-  const [orderBy, orderDirection] = getSortOrder(sortBy)
+  const [orderBy, orderDirection] = getOrder(sortBy)
   const category = getSearchCategory(section)
 
   yield put(setIsLoadMore(isLoadMore))
@@ -118,7 +118,11 @@ function* getNewSearchOptions(current: SearchOptions) {
     search: yield select(getSearch),
     onlyOnSale: yield select(getOnlyOnSale),
     isMap: yield select(getIsMap),
-    isFullscreen: yield select(getIsFullscreen)
+    isFullscreen: yield select(getIsFullscreen),
+    wearableRarities: yield select(getWearableRarities),
+    wearableGenders: yield select(getWearableGenders),
+    contracts: yield select(getContracts),
+    network: yield select(getNetwork)
   }
   current = yield deriveCurrentOptions(previous, current)
 
@@ -126,18 +130,24 @@ function* getNewSearchOptions(current: SearchOptions) {
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
-    previous = { page: 1 }
+    previous = {
+      page: 1,
+      onlyOnSale: previous.onlyOnSale,
+      sortBy: previous.sortBy
+    }
   }
 
   const defaults = getDefaultOptionsByView(view)
 
-  return {
+  const result: SearchOptions = {
     ...defaults,
     ...previous,
     ...current,
     view,
     vendor
   }
+
+  return result
 }
 
 function* getAddress() {
@@ -173,6 +183,7 @@ function* deriveCurrentOptions(
           wearableGenders: yield select(getWearableGenders),
           contracts: yield select(getContracts),
           search: yield select(getSearch),
+          network: yield select(getNetwork),
           ...newOptions
         }
       }
@@ -189,7 +200,7 @@ function deriveView(previous: SearchOptions, current: SearchOptions) {
 }
 
 function deriveVendor(previous: SearchOptions, current: SearchOptions) {
-  return current.vendor || previous.vendor || Vendors.DECENTRALAND
+  return current.vendor || previous.vendor || VendorName.DECENTRALAND
 }
 
 function shouldResetOptions(previous: SearchOptions, current: SearchOptions) {

@@ -3,6 +3,8 @@ import { ContractService } from './ContractService'
 import { NFTService } from './NFTService'
 import { OrderService } from './OrderService'
 
+export const VendorName = 'decentraland' as const
+
 export * from './bid'
 export * from './land'
 export * from './nft'

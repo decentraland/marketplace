@@ -2,7 +2,7 @@ import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 
-import { Vendors } from '../../modules/vendor/types'
+import { VendorName } from '../../modules/vendor/types'
 
 export type Params = {
   address?: string
@@ -10,7 +10,7 @@ export type Params = {
 
 export type Props = {
   address?: string
-  vendor: Vendors
+  vendor: VendorName
   wallet: Wallet | null
   isConnecting: boolean
   isFullscreen?: boolean

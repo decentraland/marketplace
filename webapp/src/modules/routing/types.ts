@@ -1,5 +1,6 @@
+import { Network } from '@dcl/schemas'
 import { WearableRarity, WearableGender } from '../nft/wearable/types'
-import { Vendors, ContractName } from '../vendor/types'
+import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
 import { View } from '../ui/types'
 
@@ -19,7 +20,7 @@ export enum SortDirection {
 
 export type SearchOptions = {
   view?: View
-  vendor?: Vendors
+  vendor?: VendorName
   page?: number
   section?: Section
   sortBy?: SortBy
@@ -29,6 +30,7 @@ export type SearchOptions = {
   wearableRarities?: WearableRarity[]
   wearableGenders?: WearableGender[]
   search?: string
-  contracts?: ContractName[]
+  contracts?: string[]
   address?: string
+  network?: Network
 }

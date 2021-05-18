@@ -4,7 +4,7 @@ export type Props<T = string> = {
   currentValue?: T
   subtitle?: string
   image?: string
-  isSub?: boolean
+  nestedLevel?: number
   withCaret?: boolean
   onClick: (value: T) => void
 }

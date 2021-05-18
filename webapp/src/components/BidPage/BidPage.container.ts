@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
-import { getAuthorizations } from '../../modules/authorization/selectors'
+import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { placeBidRequest } from '../../modules/bid/actions'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './BidPage.types'
 import BidPage from './BidPage'

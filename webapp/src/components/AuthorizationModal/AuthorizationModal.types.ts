@@ -1,40 +1,31 @@
 import { Dispatch } from 'redux'
 import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
-import { Authorizations } from '../../modules/authorization/types'
+import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
-  allowTokenRequest,
-  approveTokenRequest,
-  AllowTokenRequestAction,
-  ApproveTokenRequestAction
-} from '../../modules/authorization/actions'
-
-export enum AuthorizationType {
-  ALLOWANCE = 'allowance',
-  APPROVAL = 'approval'
-}
+  grantTokenRequest,
+  GrantTokenRequestAction,
+  revokeTokenRequest,
+  RevokeTokenRequestAction
+} from 'decentraland-dapps/dist/modules/authorization/actions'
 
 export type Props = {
   open: boolean
-  contractAddress: string
-  tokenAddress: string
-  type: AuthorizationType
-  authorizations: Authorizations
+  authorization: Authorization
+  authorizations: Authorization[]
   pendingTransactions: Transaction[]
-  onAllow: typeof allowTokenRequest
-  onApprove: typeof approveTokenRequest
+  isLoading: boolean
+  onGrant: typeof grantTokenRequest
+  onRevoke: typeof revokeTokenRequest
   onCancel: () => void
   onProceed: () => void
 }
 
 export type MapStateProps = Pick<
   Props,
-  'authorizations' | 'pendingTransactions'
+  'authorizations' | 'pendingTransactions' | 'isLoading'
 >
-export type MapDispatchProps = Pick<Props, 'onAllow' | 'onApprove'>
+export type MapDispatchProps = Pick<Props, 'onGrant' | 'onRevoke'>
 export type MapDispatch = Dispatch<
-  AllowTokenRequestAction | ApproveTokenRequestAction
+  GrantTokenRequestAction | RevokeTokenRequestAction
 >
-export type OwnProps = Pick<
-  Props,
-  'open' | 'contractAddress' | 'tokenAddress' | 'type' | 'onProceed'
->
+export type OwnProps = Pick<Props, 'open' | 'authorization' | 'onProceed'>

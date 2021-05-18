@@ -2,41 +2,46 @@ import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink } from 'decentraland-dapps/dist/containers'
-import { Form, CheckboxProps, Radio, Loader, Popup } from 'decentraland-ui'
-import { contractSymbols } from '../../../modules/contract/utils'
+import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
 import { hasTransactionPending } from '../../../modules/transaction/utils'
+import { getContract } from '../../../modules/contract/utils'
+import { isAuthorized } from './utils'
 import { Props } from './Authorization.types'
 import './Authorization.css'
 
 const Authorizations = (props: Props) => {
   const {
-    checked,
-    tokenContractAddress,
-    contractAddress,
+    authorization,
+    authorizations,
     pendingTransactions,
-    onChange
+    onGrant,
+    onRevoke
   } = props
 
   const handleOnChange = useCallback(
-    (tokenContractAddress: string, isChecked: boolean) =>
-      onChange(isChecked, contractAddress, tokenContractAddress),
-    [contractAddress, onChange]
+    (isChecked: boolean) =>
+      isChecked ? onGrant(authorization) : onRevoke(authorization),
+    [authorization, onGrant, onRevoke]
   )
+
+  const { contractAddress, authorizedAddress } = authorization
+  const isLoading =
+    props.isLoading ||
+    hasTransactionPending(
+      pendingTransactions,
+      authorizedAddress,
+      contractAddress
+    )
+
+  const contract = getContract({ address: authorizedAddress })
+  const token = getContract({ address: contractAddress })
 
   return (
     <div className="Authorization">
       <Form.Field
-        key={tokenContractAddress}
-        className={
-          hasTransactionPending(
-            pendingTransactions,
-            contractAddress,
-            tokenContractAddress
-          )
-            ? 'is-pending'
-            : ''
-        }
+        key={contractAddress}
+        className={isLoading ? 'is-pending' : ''}
       >
         <Popup
           content={t('settings_page.pending_tx')}
@@ -48,22 +53,20 @@ const Authorizations = (props: Props) => {
           }
         />
         <Radio
-          checked={checked}
-          label={contractSymbols[tokenContractAddress]}
-          onClick={(_, data: CheckboxProps) =>
-            handleOnChange(tokenContractAddress, !!data.checked)
-          }
+          checked={isAuthorized(authorization, authorizations)}
+          label={token.name}
+          onClick={(_, props: RadioProps) => handleOnChange(!!props.checked)}
         />
         <div className="radio-description secondary-text">
           <T
             id="authorization.authorize"
             values={{
               contract_link: (
-                <TransactionLink address={contractAddress} txHash="">
-                  {contractSymbols[contractAddress]}
+                <TransactionLink address={authorizedAddress} txHash="">
+                  {contract.name}
                 </TransactionLink>
               ),
-              symbol: contractSymbols[tokenContractAddress]
+              symbol: token.name
             }}
           />
         </div>

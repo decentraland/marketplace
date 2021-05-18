@@ -1,7 +1,7 @@
 import React from 'react'
 import { Page } from 'decentraland-ui'
 
-import { Vendors } from '../../modules/vendor/types'
+import { VendorName } from '../../modules/vendor/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
@@ -29,7 +29,7 @@ const NFTPage = () => {
                 {estate ? <EstateDetail nft={nft} /> : null}
                 {wearable ? <WearableDetail nft={nft} /> : null}
                 {ens ? <ENSDetail nft={nft} /> : null}
-                {nft.vendor !== Vendors.DECENTRALAND ? (
+                {nft.vendor !== VendorName.DECENTRALAND ? (
                   <PictureFrameDetail nft={nft} />
                 ) : null}
               </>

@@ -9,6 +9,7 @@ import {
   Responsive,
   Modal
 } from 'decentraland-ui'
+import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { SortBy } from '../../../../modules/routing/types'
@@ -17,10 +18,9 @@ import {
   WearableGender
 } from '../../../../modules/nft/wearable/types'
 import { NFTCategory } from '../../../../modules/nft/types'
-import { ContractName } from '../../../../modules/vendor/types'
 import { Section } from '../../../../modules/vendor/decentraland/routing/types'
-import { MAX_QUERY_SIZE } from '../../../../modules/vendor/decentraland/api'
 import { getSearchCategory } from '../../../../modules/routing/search'
+import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
 import { NFTSidebar } from '../../NFTSidebar'
 import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
@@ -37,6 +37,7 @@ const NFTFilters = (props: Props) => {
     wearableRarities,
     wearableGenders,
     contracts,
+    network,
     onBrowse
   } = props
 
@@ -112,7 +113,7 @@ const NFTFilters = (props: Props) => {
 
   const handleCollectionsChange = useCallback(
     (contract: string) => {
-      onBrowse({ contracts: [contract as ContractName] })
+      onBrowse({ contracts: [contract] })
     },
     [onBrowse]
   )
@@ -124,6 +125,15 @@ const NFTFilters = (props: Props) => {
       }
     },
     [search, onBrowse]
+  )
+
+  const handleNetworkChange = useCallback(
+    (newNetwork: Network) => {
+      if (network !== newNetwork) {
+        onBrowse({ network: newNetwork })
+      }
+    },
+    [network, onBrowse]
   )
 
   const handleToggleFilterMenu = useCallback(
@@ -258,12 +268,14 @@ const NFTFilters = (props: Props) => {
           className="filters"
         >
           <FiltersMenu
+            selectedNetwork={network}
             selectedCollection={contracts[0]}
             selectedRarities={wearableRarities}
             selectedGenders={wearableGenders}
             onCollectionsChange={handleCollectionsChange}
             onGendersChange={handleGendersChange}
             onRaritiesChange={handleRaritiesChange}
+            onNetworkChange={handleNetworkChange}
           />
         </Responsive>
       ) : null}
@@ -277,12 +289,14 @@ const NFTFilters = (props: Props) => {
         <Modal.Content>
           {category === NFTCategory.WEARABLE ? (
             <FiltersMenu
+              selectedNetwork={network}
               selectedCollection={contracts[0]}
               selectedRarities={wearableRarities}
               selectedGenders={wearableGenders}
               onCollectionsChange={handleCollectionsChange}
               onGendersChange={handleGendersChange}
               onRaritiesChange={handleRaritiesChange}
+              onNetworkChange={handleNetworkChange}
             />
           ) : null}
           <div className="filter-row">

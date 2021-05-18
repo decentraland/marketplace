@@ -1,61 +1,101 @@
-import { Network } from '../../contract/types'
+import { ChainId, Network } from '@dcl/schemas'
+import { Network as AppNetwork } from '../../contract/types'
+import { getContract } from '../../contract/utils'
 import { NFTCategory } from '../../nft/types'
-import { ContractService as ContractServiceInterface } from '../services'
+import {
+  Contract,
+  ContractService as ContractServiceInterface
+} from '../services'
 import { TransferType } from '../types'
 
-const network = process.env.REACT_APP_NETWORK! as Network
+const network = process.env.REACT_APP_NETWORK! as AppNetwork
 
-const contractAddresses = {
-  [Network.ROPSTEN]: {
-    SuperRare: '0xa42e14b40bb22bc3daaf8ecad9d73bdf44056959',
-    SuperRareV2: '0x84691657fd6bcf50764d9fef2a53b22c8bd2202e',
-    SuperRareMarket: '0xa42e14b40bb22bc3daaf8ecad9d73bdf44056959',
-    SuperRareMarketV2: '0x17d0234dc57ef236cdfc4fda76b0810265f44e1f',
-    MarketplaceAdapter: '0xd1e4e2880ff56cd0d5c68da9bed58bfbf0150948'
-  },
-  [Network.MAINNET]: {
-    SuperRare: '0x41a322b28d0ff354040e2cbc676f0320d8c8850d',
-    SuperRareV2: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
-    SuperRareMarket: '0x41a322b28d0ff354040e2cbc676f0320d8c8850d',
-    SuperRareMarketV2: '0x2947f98c42597966a0ec25e92843c09ac17fbaa7',
-    MarketplaceAdapter: '0xf4fbd84193f9aaf9779dedbb415a806933eb1c95'
-  }
-}[network]
+export enum ContractName {
+  SUPER_RARE = 'SuperRare',
+  SUPER_RARE_V2 = 'SuperRareV2',
+  SUPER_RARE_MARKET = 'SuperRareMarket',
+  SUPER_RARE_MARKET_V2 = 'SuperRareMarketV2',
+  MARKETPLACE_ADAPTER = 'MarketplaceAdapter'
+}
 
-const { SuperRare, SuperRareV2, MarketplaceAdapter } = contractAddresses
-
-export type ContractName = keyof typeof contractAddresses
+const contracts = ({
+  [AppNetwork.ROPSTEN]: [
+    {
+      name: ContractName.MARKETPLACE_ADAPTER,
+      address: '0xd1e4e2880ff56cd0d5c68da9bed58bfbf0150948',
+      vendor: 'super_rare',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_ROPSTEN
+    }
+  ],
+  [AppNetwork.MAINNET]: [
+    {
+      name: ContractName.SUPER_RARE,
+      address: '0x41a322b28d0ff354040e2cbc676f0320d8c8850d',
+      vendor: 'super_rare',
+      category: NFTCategory.ART,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
+    },
+    {
+      name: ContractName.SUPER_RARE_V2,
+      address: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
+      vendor: 'super_rare',
+      category: NFTCategory.ART,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
+    },
+    {
+      name: ContractName.SUPER_RARE_MARKET,
+      address: '0x41a322b28d0ff354040e2cbc676f0320d8c8850d',
+      vendor: 'super_rare',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
+    },
+    {
+      name: ContractName.SUPER_RARE_MARKET_V2,
+      address: '0x2947f98c42597966a0ec25e92843c09ac17fbaa7',
+      vendor: 'super_rare',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
+    },
+    {
+      name: ContractName.MARKETPLACE_ADAPTER,
+      address: '0xf4fbd84193f9aaf9779dedbb415a806933eb1c95',
+      vendor: 'super_rare',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
+    }
+  ]
+} as Record<AppNetwork, Contract[]>)[network]
 
 export class ContractService implements ContractServiceInterface {
-  static contractAddresses = contractAddresses
+  contracts = contracts
 
-  contractAddresses = contractAddresses
+  async build() {}
 
-  contractSymbols = {
-    [SuperRare]: 'SR',
-    [SuperRareV2]: 'SR',
-    [MarketplaceAdapter]: 'BuyAdapter'
-  } as const
-
-  contractNames = {
-    [SuperRare]: 'SuperRare',
-    [SuperRareV2]: 'SuperRareV2',
-    [MarketplaceAdapter]: 'Partner Marketplace'
-  } as const
-
-  contractCategories = {
-    [SuperRare]: NFTCategory.ART,
-    [SuperRareV2]: NFTCategory.ART
-  } as const
+  getContracts() {
+    return this.contracts
+  }
 
   getTransferType(address: string) {
-    switch (address) {
-      case SuperRare:
+    const contract = getContract({ address })
+    if (!contract) {
+      throw new Error('Invalid address: not found in contracts')
+    }
+    switch (contract.name) {
+      case ContractName.SUPER_RARE:
         return TransferType.TRANSFER
-      case SuperRareV2:
+      case ContractName.SUPER_RARE_V2:
         return TransferType.SAFE_TRANSFER_FROM
       default:
-        throw new Error(`Invalid SuperRare address ${address}`)
+        throw new Error(
+          `Invalid contract name: expected "${ContractName.SUPER_RARE}" or "${ContractName.SUPER_RARE_V2}" but got "${contract.name}" instead`
+        )
     }
   }
 }

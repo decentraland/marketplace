@@ -1,210 +1,116 @@
-import { gql } from 'apollo-boost'
-
 import { NFTsFetchParams } from '../../../nft/types'
-import { WearableGender } from '../../../nft/wearable/types'
-import { ContractService } from '../ContractService'
-import { client } from '../api'
-import { nftFragment, NFTFragment } from './fragments'
-import { NFTsFetchFilters } from './types'
+import {
+  NFTsFetchFilters,
+  NFTListFetchResponse,
+  NFTFetchReponse
+} from './types'
+import { getSortBy } from '../../../nft/utils'
+import { ATLAS_SERVER_URL } from '../land'
+import { Contract } from '../../services'
+import { contracts } from '../../../contract/utils'
+
+export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
 
 class NFTAPI {
   fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
-    const query = getNFTsQuery(params, filters)
-    const variables = this.buildFetchVariables(params, filters)
+    const queryParams = this.buildQueryString(params, filters)
 
-    const { data } = await client.query<{ nfts: NFTFragment[] }>({
-      query,
-      variables
-    })
+    const response: NFTListFetchResponse = await fetch(
+      `${NFT_SERVER_URL}/v1/browse?${queryParams}`
+    ).then(resp => resp.json())
 
-    return data.nfts
-  }
-
-  async count(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
-    const countQuery = getNFTsCountQuery(params, filters)
-    const variables = this.buildFetchVariables(params, filters)
-
-    const { data } = await client.query<{ nfts: NFTFragment[] }>({
-      query: countQuery,
-      variables
-    })
-
-    return data.nfts.length
+    return response
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
-    const { data } = await client.query<{ nfts: NFTFragment[] }>({
-      query: NFT_BY_ADDRESS_AND_ID_QUERY,
-      variables: {
-        contractAddress,
-        tokenId
-      }
-    })
-    return data.nfts[0]
+    const response: NFTFetchReponse = await fetch(
+      `${NFT_SERVER_URL}/v1/contracts/${contractAddress}/tokens/${tokenId}`
+    ).then(resp => resp.json())
+    return response
   }
 
   async fetchTokenId(x: number, y: number) {
-    const { data } = await client.query<{ parcels: { tokenId: string }[] }>({
-      query: PARCEL_TOKEN_ID_QUERY,
-      variables: { x, y },
-      fetchPolicy: 'cache-first'
-    })
-    const { tokenId } = data.parcels[0]
-    return tokenId
+    try {
+      const { id } = await fetch(
+        `${ATLAS_SERVER_URL}/v2/parcels/${x}/${y}`
+      ).then(resp => resp.json())
+      return id
+    } catch (error) {
+      return null
+    }
   }
 
-  private buildFetchVariables(
+  async fetchContracts() {
+    try {
+      const contracts: Contract[] = await fetch(
+        `${NFT_SERVER_URL}/v1/contracts`
+      ).then(resp => resp.json())
+      return contracts
+    } catch (error) {
+      return []
+    }
+  }
+
+  private buildQueryString(
     params: NFTsFetchParams,
     filters?: NFTsFetchFilters
-  ) {
-    return {
-      ...params,
-      ...filters,
-      expiresAt: Date.now().toString()
+  ): string {
+    const queryParams = new URLSearchParams()
+    queryParams.append('first', params.first.toString())
+    queryParams.append('skip', params.skip.toString())
+    if (params.orderBy) {
+      queryParams.append('sortBy', getSortBy(params.orderBy))
     }
-  }
-}
-
-const NFTS_FILTERS = `
-  $first: Int
-  $skip: Int
-  $orderBy: String
-  $orderDirection: String
-
-  $expiresAt: String
-  $address: String
-  $category: Category
-  $wearableCategory: WearableCategory
-  $isLand: Boolean
-  $isWearableHead: Boolean
-  $isWearableAccessory: Boolean
-`
-
-const NFTS_ARGUMENTS = `
-  first: $first
-  skip: $skip
-  orderBy: $orderBy
-  orderDirection: $orderDirection
-`
-
-function getNFTsCountQuery(
-  params: NFTsFetchParams,
-  filters: NFTsFetchFilters = {}
-) {
-  return getNFTsQuery(params, filters, true)
-}
-
-function getNFTsQuery(
-  params: NFTsFetchParams,
-  filters: NFTsFetchFilters = {},
-  isCount = false
-) {
-  let extraWhere: string[] = []
-
-  if (params.address) {
-    extraWhere.push('owner: $address')
-  }
-
-  if (params.category) {
-    extraWhere.push('category: $category')
-  }
-
-  if (params.onlyOnSale) {
-    extraWhere.push('searchOrderStatus: open')
-    extraWhere.push('searchOrderExpiresAt_gt: $expiresAt')
-  }
-
-  if (params.search) {
-    extraWhere.push(
-      `searchText_contains: "${params.search.trim().toLowerCase()}"`
-    )
-  }
-
-  if (filters.wearableCategory) {
-    extraWhere.push('searchWearableCategory: $wearableCategory')
-  }
-
-  if (filters.isLand) {
-    extraWhere.push('searchIsLand: $isLand')
-  }
-
-  if (filters.isWearableHead) {
-    extraWhere.push('searchIsWearableHead: $isWearableHead')
-  }
-
-  if (filters.isWearableAccessory) {
-    extraWhere.push('searchIsWearableAccessory: $isWearableAccessory')
-  }
-
-  if (filters.wearableRarities && filters.wearableRarities.length > 0) {
-    extraWhere.push(
-      `searchWearableRarity_in: [${filters.wearableRarities
-        .map(rarity => `"${rarity}"`)
-        .join(',')}]`
-    )
-  }
-
-  if (filters.wearableGenders && filters.wearableGenders.length > 0) {
-    const hasMale = filters.wearableGenders.includes(WearableGender.MALE)
-    const hasFemale = filters.wearableGenders.includes(WearableGender.FEMALE)
-
-    if (hasMale && !hasFemale) {
-      extraWhere.push(`searchWearableBodyShapes: [BaseMale]`)
-    } else if (hasFemale && !hasMale) {
-      extraWhere.push(`searchWearableBodyShapes: [BaseFemale]`)
-    } else if (hasMale && hasFemale) {
-      extraWhere.push(
-        `searchWearableBodyShapes_contains: [BaseMale, BaseFemale]`
-      )
+    if (params.category) {
+      queryParams.append('category', params.category)
     }
-  }
+    if (params.address) {
+      queryParams.append('address', params.address)
+    }
+    if (params.onlyOnSale) {
+      queryParams.append('isOnSale', 'true')
+    }
 
-  if (filters.contracts && filters.contracts.length > 0) {
-    const { contractAddresses } = ContractService
-    extraWhere.push(
-      `contractAddress_in: [${filters.contracts
-        .map(contract => `"${contractAddresses[contract]}"`)
-        .join(', ')}]`
-    )
-  }
-
-  return gql`
-    query NFTs(
-      ${NFTS_FILTERS}
-    ) {
-      nfts(
-        where: {
-          searchEstateSize_gt: 0
-          searchParcelIsInBounds: true
-          ${extraWhere.join('\n')}
+    if (params.search) {
+      queryParams.set('search', params.search)
+    }
+    if (filters) {
+      if (filters.isLand) {
+        queryParams.append('isLand', 'true')
+      }
+      if (filters.isWearableHead) {
+        queryParams.append('isWearableHead', 'true')
+      }
+      if (filters.isWearableAccessory) {
+        queryParams.append('isWearableAccessory', 'true')
+      }
+      if (filters.wearableCategory) {
+        queryParams.append('wearableCategory', filters.wearableCategory)
+      }
+      if (filters.wearableRarities) {
+        for (const wearableRarity of filters.wearableRarities) {
+          queryParams.append('wearableRarity', wearableRarity)
         }
-        ${NFTS_ARGUMENTS}
-      ) {
-        ${isCount ? 'id' : '...nftFragment'}
+      }
+      if (filters.wearableGenders) {
+        for (const wearableGender of filters.wearableGenders) {
+          queryParams.append('wearableGender', wearableGender)
+        }
+      }
+      if (filters.contracts) {
+        for (const address of filters.contracts) {
+          if (contracts.some(contract => contract.address === address)) {
+            queryParams.append('contract', address)
+          }
+        }
+      }
+      if (filters.network) {
+        queryParams.append('network', filters.network)
       }
     }
-    ${isCount ? '' : nftFragment()}
-  `
+
+    return queryParams.toString()
+  }
 }
-
-const NFT_BY_ADDRESS_AND_ID_QUERY = gql`
-  query NFTByTokenId($contractAddress: String, $tokenId: String) {
-    nfts(
-      where: { contractAddress: $contractAddress, tokenId: $tokenId }
-      first: 1
-    ) {
-      ...nftFragment
-    }
-  }
-  ${nftFragment()}
-`
-
-const PARCEL_TOKEN_ID_QUERY = gql`
-  query ParcelTokenId($x: BigInt, $y: BigInt) {
-    parcels(where: { x: $x, y: $y }) {
-      tokenId
-    }
-  }
-`
 
 export const nftAPI = new NFTAPI()

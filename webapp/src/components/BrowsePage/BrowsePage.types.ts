@@ -1,7 +1,7 @@
-import { Vendors } from '../../modules/vendor/types'
+import { VendorName } from '../../modules/vendor/types'
 
 export type Props = {
-  vendor: Vendors
+  vendor: VendorName
   isFullscreen?: boolean
 }
 

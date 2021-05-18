@@ -1,21 +1,18 @@
-import { MAX_QUERY_SIZE as decentralandMaxQuerySize } from './decentraland/api'
-import { MAX_QUERY_SIZE as superRareMaxQuerySize } from './super_rare/api'
-import { MAX_QUERY_SIZE as makersPlaceMaxQuerySize } from './makers_place/api'
-import { MAX_QUERY_SIZE as knownOriginMaxQuerySize } from './known_origin/api'
-import { Vendors } from './types'
+import { VendorName } from './types'
 
+export const MAX_QUERY_SIZE = 1000
 export const MAX_PAGE = 10000
 export const PAGE_SIZE = 24
 
-export function getMaxQuerySize(vendor: Vendors) {
+export function getMaxQuerySize(vendor: VendorName) {
   switch (vendor) {
-    case Vendors.DECENTRALAND:
-      return decentralandMaxQuerySize
-    case Vendors.SUPER_RARE:
-      return superRareMaxQuerySize
-    case Vendors.MAKERS_PLACE:
-      return makersPlaceMaxQuerySize
-    case Vendors.KNOWN_ORIGIN:
-      return knownOriginMaxQuerySize
+    case VendorName.DECENTRALAND:
+      return MAX_QUERY_SIZE
+    case VendorName.SUPER_RARE:
+      return MAX_QUERY_SIZE
+    case VendorName.MAKERS_PLACE:
+      return MAX_QUERY_SIZE
+    case VendorName.KNOWN_ORIGIN:
+      return MAX_QUERY_SIZE
   }
 }

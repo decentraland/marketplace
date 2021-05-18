@@ -40,6 +40,14 @@
   height: 1.8rem;
 }
 
+.Authorization .ui.checkbox input.hidden + label,
+.Authorization .ui.checkbox input.hidden:focus + label,
+.Authorization .ui.checkbox input.hidden:active + label {
+  font-weight: 700;
+  font-size: 17px;
+  padding-left: 35px;
+}
+
 @media (max-width: 768px) {
   .Authorization .ui.radio.checkbox {
     margin-bottom: 0px;

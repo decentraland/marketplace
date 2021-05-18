@@ -2,19 +2,23 @@ import React, { useState, useCallback } from 'react'
 import { Network } from '@dcl/schemas'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { toMANA, fromMANA } from '../../../lib/mana'
 import { NFTAction } from '../../NFTAction'
 import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
-import { hasAuthorization } from '../../../modules/authorization/utils'
-import { contractAddresses } from '../../../modules/contract/utils'
 import { useFingerprint } from '../../../modules/nft/hooks'
-import { AuthorizationType } from '../../AuthorizationModal/AuthorizationModal.types'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './BidModal.types'
 import './BidModal.css'
+import { getContractNames } from '../../../modules/vendor'
+import { getContract } from '../../../modules/contract/utils'
+import { ContractName } from 'decentraland-transactions'
 
 const BidModal = (props: Props) => {
   const { nft, wallet, authorizations, onNavigate, onPlaceBid } = props
@@ -31,24 +35,40 @@ const BidModal = (props: Props) => {
     [nft, price, expiresAt, fingerprint, onPlaceBid]
   )
 
-  const handleSubmit = useCallback(() => {
-    if (
-      hasAuthorization(
-        authorizations,
-        contractAddresses.Bids,
-        contractAddresses.MANAToken,
-        AuthorizationType.ALLOWANCE
-      )
-    ) {
+  if (!wallet) {
+    return null
+  }
+
+  const contractNames = getContractNames()
+
+  const mana = getContract({
+    name: contractNames.MANA,
+    network: nft.network
+  })
+
+  const bids = getContract({
+    name: contractNames.BIDS,
+    network: nft.network
+  })
+
+  const authorization: Authorization = {
+    address: wallet.address,
+    authorizedAddress: bids.address,
+    contractAddress: mana.address,
+    contractName: ContractName.MANAToken,
+    chainId: nft.chainId,
+    type: AuthorizationType.ALLOWANCE
+  }
+
+  const handleSubmit = () => {
+    if (hasAuthorization(authorizations, authorization)) {
       handlePlaceBid()
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [authorizations, handlePlaceBid, setShowAuthorizationModal])
+  }
 
-  const handleClose = useCallback(() => setShowAuthorizationModal(false), [
-    setShowAuthorizationModal
-  ])
+  const handleClose = () => setShowAuthorizationModal(false)
 
   const isInvalidDate = +new Date(expiresAt) < Date.now()
   const notEnoughMana =
@@ -117,9 +137,7 @@ const BidModal = (props: Props) => {
       </Form>
       <AuthorizationModal
         open={showAuthorizationModal}
-        contractAddress={contractAddresses.Bids}
-        tokenAddress={contractAddresses.MANAToken}
-        type={AuthorizationType.ALLOWANCE}
+        authorization={authorization}
         onProceed={handlePlaceBid}
         onCancel={handleClose}
       />

@@ -1,24 +1,13 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { Vendors } from '../vendor/types'
+import { VendorName } from '../vendor/types'
 import { NFTCategory } from '../nft/types'
 import { SortDirection, SortBy } from '../routing/types'
-import { contractCategories } from '../contract/utils'
 import { addressEquals } from '../wallet/utils'
 import { NFT, NFTSortBy } from './types'
 
 export function getNFTId(contractAddress: string, tokenId: string) {
-  // TODO: added "wearable" as fallback so when a new collection is added to TheGraph that hasn't been added to the frontend yet, we can handle it without blowing up
-  const contractCategory =
-    contractCategories[contractAddress] || NFTCategory.WEARABLE
-
-  if (!contractCategory) {
-    throw new Error(
-      `Could not find a valid category for contract ${contractAddress}`
-    )
-  }
-
-  return contractCategory + '-' + contractAddress + '-' + tokenId
+  return contractAddress + '-' + tokenId
 }
 
 export function getNFTName(
@@ -32,7 +21,7 @@ export function getNFTName(
     case NFTCategory.PARCEL:
       return t(
         'global.parcel_with_coords',
-        (nft as NFT<Vendors.DECENTRALAND>).data.parcel
+        (nft as NFT<VendorName.DECENTRALAND>).data.parcel
       )
 
     case NFTCategory.ESTATE:
@@ -52,7 +41,7 @@ export function getNFTName(
   }
 }
 
-export function getSortOrder(sortBy: SortBy) {
+export function getOrder(sortBy: SortBy) {
   let orderBy: NFTSortBy = NFTSortBy.CREATED_AT
   let orderDirection: SortDirection = SortDirection.DESC
 
@@ -80,6 +69,31 @@ export function getSortOrder(sortBy: SortBy) {
   }
 
   return [orderBy, orderDirection] as const
+}
+
+export function getSortBy(orderBy: NFTSortBy) {
+  let sortBy: SortBy = SortBy.NEWEST
+
+  switch (orderBy) {
+    case NFTSortBy.NAME: {
+      sortBy = SortBy.NAME
+      break
+    }
+    case NFTSortBy.CREATED_AT: {
+      sortBy = SortBy.NEWEST
+      break
+    }
+    case NFTSortBy.ORDER_CREATED_AT: {
+      sortBy = SortBy.RECENTLY_LISTED
+      break
+    }
+    case NFTSortBy.PRICE: {
+      sortBy = SortBy.CHEAPEST
+      break
+    }
+  }
+
+  return sortBy
 }
 
 export function getNFT(

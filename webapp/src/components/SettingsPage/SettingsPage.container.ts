@@ -1,20 +1,20 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
-import { isPending as isTransactionPending } from 'decentraland-dapps/dist/modules/transaction/utils'
+import {
+  getData as getAuthorizations,
+  getLoading,
+  getError
+} from 'decentraland-dapps/dist/modules/authorization/selectors'
+import {
+  FETCH_AUTHORIZATIONS_REQUEST,
+  grantTokenRequest,
+  revokeTokenRequest
+} from 'decentraland-dapps/dist/modules/authorization/actions'
 
 import { RootState } from '../../modules/reducer'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { getPendingAuthorizationTransactions } from '../../modules/transaction/selectors'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
-import {
-  getData as getAuthorizationsData,
-  isLoading as isLoadingAuthorization,
-  getAllowTransactions,
-  getApproveTransactions
-} from '../../modules/authorization/selectors'
-import {
-  allowTokenRequest,
-  approveTokenRequest
-} from '../../modules/authorization/actions'
 import {
   MapStateProps,
   MapDispatch,
@@ -25,47 +25,26 @@ import SettingsPage from './SettingsPage'
 const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
 
-  let authorizations = undefined
-  let pendingAllowTransactions: Transaction[] = []
-  let pendingApproveTransactions: Transaction[] = []
-  if (wallet) {
-    const allAuthorizations = getAuthorizationsData(state)
-    authorizations = allAuthorizations[wallet.address]
+  const error = getError(state)
 
-    pendingAllowTransactions = getAllowTransactions(
-      state
-    ).filter((transaction: Transaction) =>
-      isTransactionPending(transaction.status)
-    )
-    pendingApproveTransactions = getApproveTransactions(
-      state
-    ).filter((transaction: Transaction) =>
-      isTransactionPending(transaction.status)
-    )
-  }
+  const hasError = !!error && !error.includes('denied transaction signature')
 
   return {
     wallet,
-    authorizations,
-    pendingAllowTransactions,
-    pendingApproveTransactions,
-    isLoadingAuthorization: isLoadingAuthorization(state),
-    isConnecting: isConnecting(state)
+    authorizations: getAuthorizations(state),
+    pendingTransactions: getPendingAuthorizationTransactions(state),
+    isLoadingAuthorization: isLoadingType(
+      getLoading(state),
+      FETCH_AUTHORIZATIONS_REQUEST
+    ),
+    isConnecting: isConnecting(state),
+    hasError
   }
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onAllowToken: (
-    isAllowed: boolean,
-    contractName: string,
-    tokenContractName: string
-  ) => dispatch(allowTokenRequest(isAllowed, contractName, tokenContractName)),
-  onApproveToken: (
-    isApproved: boolean,
-    contractName: string,
-    tokenContractName: string
-  ) =>
-    dispatch(approveTokenRequest(isApproved, contractName, tokenContractName)),
+  onGrant: authorization => dispatch(grantTokenRequest(authorization)),
+  onRevoke: authorization => dispatch(revokeTokenRequest(authorization)),
   onNavigate: path => dispatch(push(path))
 })
 

@@ -1,13 +1,15 @@
-import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
 import {
-  allowTokenRequest,
-  approveTokenRequest
-} from '../../../modules/authorization/actions'
+  grantTokenRequest,
+  revokeTokenRequest
+} from 'decentraland-dapps/dist/modules/authorization/actions'
+import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
+import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
 
 export type Props = {
-  checked: boolean
-  contractAddress: string
-  tokenContractAddress: string
+  authorization: Authorization
+  authorizations: Authorization[]
   pendingTransactions: Transaction[]
-  onChange: typeof allowTokenRequest | typeof approveTokenRequest
+  isLoading?: boolean
+  onGrant: typeof grantTokenRequest
+  onRevoke: typeof revokeTokenRequest
 }

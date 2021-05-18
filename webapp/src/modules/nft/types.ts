@@ -1,10 +1,11 @@
+import { ChainId, Network } from '@dcl/schemas'
 import { Parcel } from './parcel/types'
 import { Estate } from './estate/types'
 import { Wearable } from './wearable/types'
 import { ENS } from './ens/types'
 import { View } from '../ui/types'
 import { NFTsFetchFilters } from '../vendor/nft/types'
-import { Vendors } from '../vendor/types'
+import { VendorName } from '../vendor/types'
 import { SortDirection } from '../routing/types'
 
 export enum NFTSortBy {
@@ -33,19 +34,19 @@ export type SuperRareNFT = { description: string }
 export type MakersPlaceNFT = { description: string }
 export type KnownOriginNFT = { description: string; isEdition: boolean }
 
-export type Data<V extends Vendors> = V extends Vendors.DECENTRALAND
+export type Data<V extends VendorName> = V extends VendorName.DECENTRALAND
   ? DecentralandNFT
-  : V extends Vendors.SUPER_RARE
+  : V extends VendorName.SUPER_RARE
   ? SuperRareNFT
-  : V extends Vendors.MAKERS_PLACE
+  : V extends VendorName.MAKERS_PLACE
   ? MakersPlaceNFT
-  : V extends Vendors.KNOWN_ORIGIN
+  : V extends VendorName.KNOWN_ORIGIN
   ? KnownOriginNFT
   : V extends void
   ? DecentralandNFT | SuperRareNFT | MakersPlaceNFT | KnownOriginNFT
   : never
 
-export type NFT<V extends Vendors = any> = {
+export type NFT<V extends VendorName = any> = {
   id: string
   contractAddress: string
   tokenId: string
@@ -55,7 +56,9 @@ export type NFT<V extends Vendors = any> = {
   category: NFTCategory
   image: string
   url: string
-  vendor: Vendors
+  vendor: VendorName
+  network: Network
+  chainId: ChainId
   data: Data<V>
 }
 
@@ -73,7 +76,7 @@ export type NFTsFetchParams = {
 export type NFTsCountParams = Omit<NFTsFetchParams, 'first' | 'skip'>
 
 export type NFTsFetchOptions = {
-  vendor: Vendors
+  vendor: VendorName
   view: View
   params: NFTsFetchParams
   filters?: NFTsFetchFilters

@@ -1,4 +1,5 @@
-.Highlights > .ui.header {
+.Highlights > .ui.header,
+.Highlights > .ui.sub.header {
   margin-bottom: 13px;
 }
 

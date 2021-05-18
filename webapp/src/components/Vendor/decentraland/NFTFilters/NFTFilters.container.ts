@@ -10,7 +10,8 @@ import {
   getWearableRarities,
   getWearableGenders,
   getSearch,
-  getContracts
+  getContracts,
+  getNetwork
 } from '../../../../modules/routing/selectors'
 import { MapStateProps } from './NFTFilters.types'
 import NFTFilters from './NFTFilters'
@@ -24,7 +25,8 @@ const mapState = (state: RootState): MapStateProps => ({
   isMap: getIsMap(state),
   wearableRarities: getWearableRarities(state),
   wearableGenders: getWearableGenders(state),
-  contracts: getContracts(state)
+  contracts: getContracts(state),
+  network: getNetwork(state)
 })
 
 const mapDispatch = () => ({})

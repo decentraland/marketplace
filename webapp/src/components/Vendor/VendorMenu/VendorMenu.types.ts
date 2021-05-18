@@ -1,11 +1,11 @@
 import { Section } from '../../../modules/routing/types'
-import { Vendors } from '../../../modules/vendor/types'
+import { VendorName } from '../../../modules/vendor/types'
 
 export type Props = {
   count?: number
-  currentVendor: Vendors
+  currentVendor: VendorName
   address?: string
-  vendor: Vendors
+  vendor: VendorName
   section: Section
   onClick: (value: Section) => void
 }

@@ -1,77 +1,48 @@
 import { toWei } from 'web3x-es/utils'
 import { Address } from 'web3x-es/address'
-
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Bids } from '../../../contracts/Bids'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { Bid } from '../../bid/types'
 import { NFT } from '../../nft/types'
 import { OrderStatus } from '../../order/types'
-import { Vendors } from '../types'
+import { VendorName } from '../types'
 import { BidService as BidServiceInterface } from '../services'
-import { ContractService } from './ContractService'
+import { ContractName } from './ContractService'
 import { bidAPI } from './bid/api'
+import { getContract } from '../../contract/utils'
 
-export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
+export class BidService
+  implements BidServiceInterface<VendorName.DECENTRALAND> {
   async fetchBySeller(seller: string) {
-    const remoteBids = await bidAPI.fetchBySeller(seller)
-
-    let bids: Bid[] = []
-    for (const result of remoteBids) {
-      const { nft, ...rest } = result
-      bids.push({
-        ...rest,
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId
-      })
-    }
-
+    const bids = await bidAPI.fetchBySeller(seller)
     return bids
   }
 
   async fetchByBidder(bidder: string) {
-    const remoteBids = await bidAPI.fetchByBidder(bidder)
-
-    let bids: Bid[] = []
-    for (const result of remoteBids) {
-      const { nft, ...rest } = result
-      bids.push({
-        ...rest,
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId
-      })
-    }
+    const bids = await bidAPI.fetchByBidder(bidder)
     return bids
   }
 
   async fetchByNFT(nft: NFT, status: OrderStatus = OrderStatus.OPEN) {
-    const remoteBids = await bidAPI.fetchByNFT(nft.id, status)
-
-    let bids: Bid[] = []
-    for (const result of remoteBids) {
-      const { nft, ...rest } = result
-      bids.push({
-        ...rest,
-        contractAddress: nft.contractAddress,
-        tokenId: nft.tokenId
-      })
-    }
+    const bids = await bidAPI.fetchByNFT(nft.id, status)
     return bids
   }
 
   async place(
+    wallet: Wallet | null,
     nft: NFT,
     price: number,
     expiresAt: number,
-    fromAddress: string,
     fingerprint?: string
   ) {
     const bids = await this.getBidContract()
 
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
 
     const priceInWei = toWei(price.toString(), 'ether')
     const expiresIn = Math.round((expiresAt - Date.now()) / 1000)
@@ -100,14 +71,15 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
     }
   }
 
-  async accept(bid: Bid, fromAddress: string) {
+  async accept(wallet: Wallet | null, bid: Bid) {
     const erc721 = await ContractFactory.build(ERC721, bid.contractAddress)
 
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
-    const to = Address.fromString(ContractService.contractAddresses.Bids)
+    const from = Address.fromString(wallet.address)
+    const bids = getContract({ name: ContractName.BIDS })
+    const to = Address.fromString(bids.address)
 
     return erc721.methods
       .safeTransferFrom(from, to, bid.tokenId, bid.blockchainId)
@@ -115,13 +87,13 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
       .getTxHash()
   }
 
-  async cancel(bid: Bid, fromAddress: string) {
+  async cancel(wallet: Wallet | null, bid: Bid) {
     const bids = await this.getBidContract()
 
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
 
     return bids.methods
       .cancelBid(Address.fromString(bid.contractAddress), bid.tokenId)
@@ -130,6 +102,7 @@ export class BidService implements BidServiceInterface<Vendors.DECENTRALAND> {
   }
 
   private getBidContract() {
-    return ContractFactory.build(Bids, ContractService.contractAddresses.Bids)
+    const bids = getContract({ name: ContractName.BIDS })
+    return ContractFactory.build(Bids, bids.address)
   }
 }

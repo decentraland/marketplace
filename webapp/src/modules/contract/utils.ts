@@ -1,53 +1,31 @@
 import { VendorFactory } from '../vendor/VendorFactory'
-import { ContractService } from '../vendor/services'
-import { ContractName, Vendors } from '../vendor/types'
+import { VendorName } from '../vendor/types'
+import { Contract } from '../vendor/services'
 
-export let contractAddresses: ContractService['contractAddresses']
-export let contractSymbols: ContractService['contractSymbols']
-export let contractNames: ContractService['contractNames']
-export let contractCategories: ContractService['contractCategories']
-export let contractVendors: Record<string, Vendors>
+export let contracts: Contract[] = []
 
-export function buildContracts() {
-  const vendors = Object.values(Vendors).map(VendorFactory.build)
+export async function buildContracts() {
+  const vendors = Object.values(VendorName).map(VendorFactory.build)
 
-  contractAddresses = vendors.reduce(
-    (obj, { contractService }) => ({
-      ...obj,
-      ...contractService.contractAddresses
-    }),
-    {} as ContractService['contractAddresses']
-  ) as Record<ContractName, string>
+  for (const vendor of vendors) {
+    const { contractService } = vendor
 
-  contractSymbols = vendors.reduce(
-    (obj, { contractService }) => ({
-      ...obj,
-      ...contractService.contractSymbols
-    }),
-    {} as ContractService['contractSymbols']
-  )
+    await contractService.build()
 
-  contractNames = vendors.reduce(
-    (obj, { contractService }) => ({
-      ...obj,
-      ...contractService.contractNames
-    }),
-    {} as ContractService['contractNames']
-  )
-
-  contractCategories = vendors.reduce(
-    (obj, { contractService }) => ({
-      ...obj,
-      ...contractService.contractCategories
-    }),
-    {} as ContractService['contractCategories']
-  )
-
-  contractVendors = {}
-  for (const { type, contractService } of vendors) {
-    const addresses: string[] = Object.values(contractService.contractAddresses)
-    for (const address of addresses) {
-      contractVendors[address] = type as Vendors
-    }
+    contracts = [...contracts, ...contractService.getContracts()]
   }
+}
+
+export function getContract(query: Partial<Contract>): Contract {
+  const found = contracts.find(contract =>
+    Object.keys(query).every(
+      key =>
+        query[key as keyof Contract]?.toString().toLowerCase() ===
+        contract[key as keyof Contract]?.toString().toLowerCase()
+    )
+  )
+  if (!found) {
+    throw new Error(`Contract not found, query=${JSON.stringify(query)}`)
+  }
+  return found
 }

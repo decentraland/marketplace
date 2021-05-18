@@ -1,7 +1,8 @@
+import { Network } from '@dcl/schemas'
 import BN from 'bn.js'
 import { Address } from 'web3x-es/address'
 import { toBN, toWei } from 'web3x-es/utils'
-
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
 import {
@@ -17,11 +18,12 @@ import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { NFTService as NFTServiceInterface } from '../services'
 import { getOriginURL } from '../utils'
-import { Vendors } from '../types'
+import { VendorName } from '../types'
 import { MakersPlaceAsset } from './types'
 import { makersPlaceAPI } from './api'
 
-export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
+export class NFTService
+  implements NFTServiceInterface<VendorName.MAKERS_PLACE> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
   private oneEthInWei: BN
@@ -41,7 +43,7 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
 
     const remoteNFTs = response.items
 
-    const nfts: NFT<Vendors.MAKERS_PLACE>[] = []
+    const nfts: NFT<VendorName.MAKERS_PLACE>[] = []
     const accounts: Account[] = []
     const orders: Order[] = []
 
@@ -110,14 +112,14 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
   }
 
   async transfer(
-    fromAddress: string,
+    wallet: Wallet | null,
     toAddress: string,
-    nft: NFT<Vendors.MAKERS_PLACE>
+    nft: NFT<VendorName.MAKERS_PLACE>
   ) {
-    if (!fromAddress) {
+    if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(fromAddress)
+    const from = Address.fromString(wallet.address)
     const to = Address.fromString(toAddress)
 
     const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
@@ -128,7 +130,7 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
       .getTxHash()
   }
 
-  toNFT(asset: MakersPlaceAsset): NFT<Vendors.MAKERS_PLACE> {
+  toNFT(asset: MakersPlaceAsset): NFT<VendorName.MAKERS_PLACE> {
     const tokenId = asset.token_id!.toString()
     const contractAddress = asset.token_contract_address.toLowerCase()
     return {
@@ -144,7 +146,9 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
         description: asset.description
       },
       category: NFTCategory.ART,
-      vendor: Vendors.MAKERS_PLACE
+      vendor: VendorName.MAKERS_PLACE,
+      chainId: Number(process.env.REACT_APP_CHAIN_ID),
+      network: Network.ETHEREUM
     }
   }
 
@@ -154,9 +158,8 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
     const price = weiPrice.div(this.oneEthInWei)
 
     return {
-      id: `${Vendors.MAKERS_PLACE}-order-${asset.token_id}`,
+      id: `${VendorName.MAKERS_PLACE}-order-${asset.token_id}`,
       nftId: asset.token_id!.toString(),
-      category: NFTCategory.ART,
       nftAddress: asset.token_contract_address.toLowerCase(),
       marketAddress: asset.sale_contract_address!,
       owner: asset.owner,
@@ -196,7 +199,7 @@ export class NFTService implements NFTServiceInterface<Vendors.MAKERS_PLACE> {
   }
 
   private getDefaultURL(asset: MakersPlaceAsset): string {
-    const origin = getOriginURL(Vendors.MAKERS_PLACE)
+    const origin = getOriginURL(VendorName.MAKERS_PLACE)
     return `${origin}/authenticity/${asset.token_contract_address}/${asset.token_id}`
   }
 }
