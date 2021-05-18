@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { Header, Mana, Button } from 'decentraland-ui'
+import { Header, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Authorization,
@@ -17,6 +17,7 @@ import { NFT, NFTCategory } from '../../../modules/nft/types'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { NFTAction } from '../../NFTAction'
+import { Mana } from '../../Mana'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './BuyModal.types'
 

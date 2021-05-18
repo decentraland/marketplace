@@ -8,7 +8,8 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Header, Form, Field, Button, Modal, Mana } from 'decentraland-ui'
+import { Header, Form, Field, Button, Modal } from 'decentraland-ui'
+import { ContractName } from 'decentraland-transactions'
 import { toMANA, fromMANA } from '../../../lib/mana'
 import {
   INPUT_FORMAT,
@@ -19,11 +20,11 @@ import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { NFTAction } from '../../NFTAction'
-import { Props } from './SellModal.types'
+import { Mana } from '../../Mana'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
-import { ContractName } from 'decentraland-transactions'
 import { NFTCategory } from '../../../modules/nft/types'
+import { Props } from './SellModal.types'
 
 const SellModal = (props: Props) => {
   const {

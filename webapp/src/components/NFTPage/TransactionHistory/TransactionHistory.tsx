@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
-import { Header, Table, Mana, Responsive } from 'decentraland-ui'
+import { Header, Table, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import dateFnsFormat from 'date-fns/format'
 
+import { Mana } from '../../Mana'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
 import { Bid } from '../../../modules/bid/types'

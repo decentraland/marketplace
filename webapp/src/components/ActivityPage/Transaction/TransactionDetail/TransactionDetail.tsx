@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Loader, Mana, Icon } from 'decentraland-ui'
+import { Loader, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   isPending,
@@ -15,6 +15,7 @@ import { locations } from '../../../../modules/routing/locations'
 import { NFTImage } from '../../../NFTImage'
 import { Row } from '../../../Layout/Row'
 import { Column } from '../../../Layout/Column'
+import { Mana } from '../../../Mana'
 import { Props } from './TransactionDetail.types'
 import './TransactionDetail.css'
 
