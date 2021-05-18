@@ -56,7 +56,7 @@ const BidModal = (props: Props) => {
     authorizedAddress: bids.address,
     contractAddress: mana.address,
     contractName: ContractName.MANAToken,
-    chainId: wallet.chainId,
+    chainId: nft.chainId,
     type: AuthorizationType.ALLOWANCE
   }
 

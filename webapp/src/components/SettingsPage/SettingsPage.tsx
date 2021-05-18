@@ -241,7 +241,7 @@ const SettingsPage = (props: Props) => {
                               authorizedAddress: bids.address,
                               contractAddress: manaEthereum.address,
                               contractName: ContractName.MANAToken,
-                              chainId: wallet.chainId,
+                              chainId: manaEthereum.chainId,
                               type: AuthorizationType.ALLOWANCE
                             }}
                             pendingTransactions={pendingTransactions}

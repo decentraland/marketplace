@@ -68,7 +68,7 @@ const BuyPage = (props: Props) => {
     authorizedAddress: marketplace.address,
     contractAddress: mana.address,
     contractName: ContractName.MANAToken,
-    chainId: wallet.chainId,
+    chainId: nft.chainId,
     type: AuthorizationType.ALLOWANCE
   }
 
