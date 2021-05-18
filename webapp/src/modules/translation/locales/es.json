@@ -313,6 +313,9 @@
       "cancel_bid": "Cancelaste una oferta de {price} por {name}."
     }
   },
+  "mana": {
+    "running_on": "MANA en la red {network}"
+  },
   "wallet": {
     "sign_in_required": "Necesitas {sign_in} para acceder a esta página.",
     "sign_in": "iniciar sesión"
