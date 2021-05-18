@@ -32,12 +32,7 @@ const Transaction = (props: Props) => {
   switch (tx.actionType) {
     case GRANT_TOKEN_SUCCESS: {
       const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
-      const contract = getContract({
-        address: authorization.authorizedAddress
-      })
-      const token = getContract({
-        address: authorization.contractAddress
-      })
+      const contract = getContract({ address: authorization.authorizedAddress })
       return (
         <TransactionDetail
           text={
@@ -51,8 +46,11 @@ const Transaction = (props: Props) => {
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink address={token.address} txHash="">
-                    {token.name}
+                  <TransactionLink
+                    address={authorization.contractAddress}
+                    txHash=""
+                  >
+                    {authorization.contractName}
                   </TransactionLink>
                 )
               }}
