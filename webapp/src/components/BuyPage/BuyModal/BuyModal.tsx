@@ -31,7 +31,7 @@ const BuyPage = (props: Props) => {
     onNavigate,
     onExecuteOrder,
     isOwner,
-    notEnoughMana
+    hasInsufficientMANA
   } = props
 
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
@@ -91,7 +91,7 @@ const BuyPage = (props: Props) => {
   const isDisabled =
     !order ||
     isOwner ||
-    notEnoughMana ||
+    hasInsufficientMANA ||
     (!fingerprint && nft.category === NFTCategory.ESTATE)
 
   const name = <Name nft={nft} />
@@ -107,7 +107,7 @@ const BuyPage = (props: Props) => {
     subtitle = <T id={'buy_page.no_fingerprint'} />
   } else if (isOwner) {
     subtitle = <T id={'buy_page.is_owner'} values={{ name }} />
-  } else if (notEnoughMana) {
+  } else if (hasInsufficientMANA) {
     subtitle = (
       <T
         id={'buy_page.not_enough_mana'}

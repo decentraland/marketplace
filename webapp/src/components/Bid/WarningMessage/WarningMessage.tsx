@@ -13,11 +13,11 @@ const WarningMessage = (props: Props) => {
   const { nft, bid } = props
 
   const [fingerprint] = useFingerprint(nft)
-  const [notEnoughMana, setNotEnoughMana] = useState(false)
+  const [hasInsufficientMANA, setHasInsufficientMANA] = useState(false)
 
   useEffect(() => {
     isInsufficientMANA(bid)
-      .then(setNotEnoughMana)
+      .then(setHasInsufficientMANA)
       .catch(error =>
         console.error(`Could not get the MANA from bidder ${bid.bidder}`, error)
       )
@@ -25,7 +25,7 @@ const WarningMessage = (props: Props) => {
 
   const isValidFingerprint = checkFingerprint(bid, fingerprint)
 
-  if (notEnoughMana) {
+  if (hasInsufficientMANA) {
     return (
       <div className="WarningMessage">
         {t('bid.not_enough_mana_on_bid_placed')}
