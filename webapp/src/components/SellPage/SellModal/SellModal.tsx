@@ -84,7 +84,6 @@ const SellModal = (props: Props) => {
     onCreateOrder(nft, fromMANA(price), new Date(expiresAt).getTime())
 
   const handleSubmit = () => {
-    console.log('HOLA HERERERERRERER')
     if (hasAuthorization(authorizations, authorization)) {
       handleCreateOrder()
     } else {
