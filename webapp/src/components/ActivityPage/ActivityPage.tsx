@@ -21,7 +21,6 @@ const ActivityPage = (props: Props) => {
 
   const handleClear = useCallback(() => {
     if (address) {
-      console.log('ADDRESSSSSO', address)
       onClearHistory(address)
     }
     setShowConfirmation(false)
