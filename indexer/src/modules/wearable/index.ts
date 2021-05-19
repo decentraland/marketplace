@@ -48,7 +48,7 @@ import {
 } from '../../data/wearables'
 import * as categories from '../../data/wearables/categories'
 import { getCatalystBase } from '../catalyst'
-import { getNetwork } from '../network'
+import { getURNNetwork } from '../network'
 
 export function buildWearableFromNFT(nft: NFT): WearableEntity {
   // https://wearable-api.decentraland.org/v2/standards/erc721-metadata/collections/halloween_2019/wearables/funny_skull_mask/1
@@ -168,9 +168,14 @@ export function buildWearableFromNFT(nft: NFT): WearableEntity {
 
 export function getWearableImage(wearable: WearableEntity): string {
   let baseURI = getCatalystBase()
-  let urn = 'urn:decentraland:' + getNetwork() + ':collections-v1:' + wearable.collection + ':' + wearable.representationId
+  let urn = getWearableURN(wearable)
 
   return baseURI + '/lambdas/collections/contents/' + urn + '/thumbnail'
+
+}
+
+export function getWearableURN(wearable: WearableEntity): string {
+  return 'urn:decentraland:' + getURNNetwork() + ':collections-v1:' + wearable.collection + ':' + wearable.representationId
 }
 
 export function isWearableHead(wearable: WearableEntity): boolean {
