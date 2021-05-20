@@ -47,3 +47,13 @@
 .IntroPopup .content {
   margin-bottom: 24px;
 }
+
+@media (max-width: 768px) {
+  .IntroPopup.ui.bottom.center.popup:before {
+    margin-left: 120px;
+  }
+
+  .IntroPopupTarget {
+    bottom: 8px;
+  }
+}
