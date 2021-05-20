@@ -5,7 +5,6 @@ import { Props } from './Mana.types'
 
 const Mana = (props: Props) => {
   const { withTooltip, ...manaProps } = props
-  const Component = <BaseMana {...manaProps} />
 
   if (withTooltip && !manaProps.network) {
     throw new Error(
@@ -13,16 +12,15 @@ const Mana = (props: Props) => {
     )
   }
 
-  return withTooltip ? (
+  return (
     <Popup
       content={t('mana.running_on', {
         network: t(`networks.${manaProps.network?.toLowerCase()}`)
       })}
+      disabled={!withTooltip}
       position="top center"
-      trigger={Component}
+      trigger={<BaseMana {...manaProps} />}
     />
-  ) : (
-    Component
   )
 }
 
