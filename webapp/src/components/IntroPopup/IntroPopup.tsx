@@ -29,33 +29,36 @@ export default class IntroPopup extends PureComponent<Props, State> {
             <Column>
               <Header>{t('intro_popup.title')}</Header>
               <p className="content">
-                {
-                  <T
-                    id="intro_popup.content"
-                    values={{
-                      br: <br />,
-                      blog_link: (
-                        <a
-                          href="https://decentraland.org/blog/announcements/polygon-mana/"
-                          target="_blank"
-                          rel="no:opener no:referrer"
-                        >
-                          {t('intro_popup.blog_link')}
-                        </a>
-                      ),
-                      account_link: (
-                        <a
-                          href="https://account.decentraland.org"
-                          target="_blank"
-                          rel="no:opener no:referrer"
-                        >
-                          {t('intro_popup.account_link')}
-                        </a>
-                      ),
-                      manage_account: <b>{t('intro_popup.manage_account')}</b>
-                    }}
-                  />
-                }
+                <T
+                  id="intro_popup.content"
+                  values={{
+                    br: (
+                      <>
+                        <br />
+                        <br />
+                      </>
+                    ),
+                    blog_link: (
+                      <a
+                        href="https://decentraland.org/blog/announcements/polygon-mana/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {t('intro_popup.blog_link')}
+                      </a>
+                    ),
+                    account_link: (
+                      <a
+                        href="https://account.decentraland.org"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {t('intro_popup.account_link')}
+                      </a>
+                    ),
+                    manage_account: <b>{t('intro_popup.manage_account')}</b>
+                  }}
+                />
               </p>
               <Button primary size="small" onClick={this.handleDismiss}>
                 {t('intro_popup.dismiss')}
