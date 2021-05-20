@@ -325,5 +325,13 @@
   },
   "price_change_notice": {
     "message": "El precio puede variar debido a cambios en el mercado"
+  },
+  "intro_popup": {
+    "title": "Introducimos Polygon MANA",
+    "blog_link": "blog post",
+    "account_link": "dApp de Account",
+    "manage_account": "Mi Cuenta",
+    "content": "Polygon MANA te permitirá hacer transacciones mas rápido y barato.{br}Puedes aprender mas sobre Polygon MANA en nuestro {blog_link}.{br}Puedes gestionar tus tokens desde la {account_link}.{br}Haz click en tu avatar, luego en {manage_account} y comienza a conquistar el Metaverso.",
+    "dismiss": "Entendido!"
   }
 }

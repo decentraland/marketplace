@@ -1,0 +1,59 @@
+:root {
+  --intro-dimmer-z-index: 2000; /* for reference, modal dimmer is 3000 */
+  --polygon-mana-z-index: 2001; /* +1 than the dimmer so it stands out */
+}
+
+.dcl.navbar .dcl.navbar-account {
+  position: relative;
+}
+
+.dcl.navbar .dcl.user-menu .mana:last-child {
+  z-index: var(--polygon-mana-z-index);
+}
+
+.IntroPopupTarget {
+  position: absolute;
+  right: 85px;
+  bottom: 12px;
+}
+
+.IntroPopupOverlay {
+  z-index: var(--intro-dimmer-z-index);
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.IntroPopup.ui.popup {
+  max-width: 420px;
+  background-color: #37333d;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.IntroPopup.ui.bottom.popup:before {
+  background-color: #37333d;
+}
+
+.IntroPopup .ui.header {
+  font-size: 21px;
+  line-height: 30px;
+  margin-bottom: 12px;
+}
+
+.IntroPopup .content {
+  margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  .IntroPopup.ui.bottom.center.popup:before {
+    margin-left: 120px;
+  }
+
+  .IntroPopupTarget {
+    bottom: 8px;
+  }
+}
