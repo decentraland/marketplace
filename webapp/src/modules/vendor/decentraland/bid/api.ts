@@ -1,7 +1,6 @@
 import { OrderStatus } from '../../../order/types'
 import { Bid } from '../../../bid/types'
-
-const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
+import { NFT_SERVER_URL } from '../nft'
 
 class BidAPI {
   async fetch(options: Record<string, string>) {
