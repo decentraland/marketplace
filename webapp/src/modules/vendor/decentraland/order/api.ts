@@ -1,6 +1,6 @@
 import { Order } from '../../../order/types'
 
-export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
+const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
 
 class OrderAPI {
   async fetchByNFT(contractAddress: string, tokenId: string) {
