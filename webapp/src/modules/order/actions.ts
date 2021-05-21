@@ -30,6 +30,7 @@ export const createOrderSuccess = (
     ...buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
+      network: nft.network,
       name: getNFTName(nft),
       price
     })
@@ -63,6 +64,7 @@ export const executeOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
     ...buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
+      network: nft.network,
       name: getNFTName(nft),
       price: formatMANA(order.price)
     })
@@ -89,6 +91,7 @@ export const cancelOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
     ...buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
+      network: nft.network,
       name: getNFTName(nft),
       price: formatMANA(order.price)
     })

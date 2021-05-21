@@ -71,7 +71,7 @@ const BidModal = (props: Props) => {
   const handleClose = () => setShowAuthorizationModal(false)
 
   const isInvalidDate = +new Date(expiresAt) < Date.now()
-  const notEnoughMana =
+  const hasInsufficientMANA =
     !!price &&
     !!wallet &&
     fromMANA(price) > wallet.networks[Network.ETHEREUM].mana
@@ -97,8 +97,10 @@ const BidModal = (props: Props) => {
               const newPrice = fromMANA(props.value)
               setPrice(toMANA(newPrice))
             }}
-            error={notEnoughMana}
-            message={notEnoughMana ? t('bid_page.not_enougn_mana') : undefined}
+            error={hasInsufficientMANA}
+            message={
+              hasInsufficientMANA ? t('bid_page.not_enougn_mana') : undefined
+            }
           />
           <Field
             label={t('bid_page.expiration_date')}
@@ -127,7 +129,7 @@ const BidModal = (props: Props) => {
               isOwnedBy(nft, wallet) ||
               fromMANA(price) <= 0 ||
               isInvalidDate ||
-              notEnoughMana ||
+              hasInsufficientMANA ||
               isLoading
             }
           >

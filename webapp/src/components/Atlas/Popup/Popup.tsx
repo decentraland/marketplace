@@ -1,8 +1,9 @@
 import * as React from 'react'
 import { Address } from 'web3x-es/address'
-import { Badge, Row, Section, Header, Mana } from 'decentraland-ui'
+import { Badge, Row, Section, Header } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Mana } from '../../Mana'
 import { Props } from './Popup.types'
 import './Popup.css'
 

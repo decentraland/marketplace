@@ -13,11 +13,11 @@ const AcceptButton = (props: Props) => {
   const { nft, bid, onClick } = props
 
   const [fingerprint, isLoadingFingerprint] = useFingerprint(nft)
-  const [notEnoughMana, setNotEnoughMana] = useState(false)
+  const [hasInsufficientMANA, setHasInsufficientMANA] = useState(false)
 
   useEffect(() => {
     isInsufficientMANA(bid)
-      .then(setNotEnoughMana)
+      .then(setHasInsufficientMANA)
       .catch(error =>
         console.error(`Could not get the MANA from bidder ${bid.bidder}`, error)
       )
@@ -29,7 +29,7 @@ const AcceptButton = (props: Props) => {
   const isDisabled =
     !nft ||
     isLoadingFingerprint ||
-    notEnoughMana ||
+    hasInsufficientMANA ||
     !isValidFingerprint ||
     !isValidSeller
 
@@ -39,7 +39,7 @@ const AcceptButton = (props: Props) => {
     </Button>
   )
 
-  if (notEnoughMana) {
+  if (hasInsufficientMANA) {
     button = (
       <Popup
         content={t('bid.not_enough_mana_on_bid_received')}

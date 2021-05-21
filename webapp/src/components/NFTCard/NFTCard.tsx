@@ -1,7 +1,7 @@
 import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
-import { Card, Mana } from 'decentraland-ui'
+import { Card } from 'decentraland-ui'
 
 import { formatMANA } from '../../lib/mana'
 import { formatDistanceToNow } from '../../lib/date'
@@ -10,6 +10,7 @@ import { getNFTName } from '../../modules/nft/utils'
 import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
 import { NFTImage } from '../NFTImage'
+import { Mana } from '../Mana'
 import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
@@ -36,7 +37,11 @@ const NFTCard = (props: Props) => {
       <Card.Content>
         <Card.Header>
           <div className="title">{title}</div>{' '}
-          {order ? <Mana inline>{formatMANA(order.price)}</Mana> : null}
+          {order ? (
+            <Mana network={nft.network} inline>
+              {formatMANA(order.price)}
+            </Mana>
+          ) : null}
         </Card.Header>
         {order && order.expiresAt ? (
           <Card.Meta>

@@ -1,22 +1,23 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import CopyToClipboard from 'react-copy-to-clipboard'
+import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
-import { Page, Grid, Blockie, Mana, Loader, Form } from 'decentraland-ui'
-import CopyToClipboard from 'react-copy-to-clipboard'
+import { Page, Grid, Blockie, Loader, Form } from 'decentraland-ui'
+import { ContractName } from 'decentraland-transactions'
 
 import { locations } from '../../modules/routing/locations'
 import { shortenAddress } from '../../modules/wallet/utils'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
+import { Mana } from '../Mana'
 import { Authorization } from './Authorization'
-import { Props } from './SettingsPage.types'
-import './SettingsPage.css'
-import { Network } from '@dcl/schemas'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { getContractNames } from '../../modules/vendor'
 import { getContract } from '../../modules/contract/utils'
-import { ContractName } from 'decentraland-transactions'
+import { Props } from './SettingsPage.types'
+import './SettingsPage.css'
 
 const BUY_MANA_URL = process.env.REACT_APP_BUY_MANA_URL
 
@@ -142,7 +143,7 @@ const SettingsPage = (props: Props) => {
                 <div className="balance">
                   <Mana inline>
                     {parseInt(
-                      wallet.networks[Network.ETHEREUM].mana.toFixed(0),
+                      wallet.networks.ETHEREUM.mana.toFixed(0),
                       10
                     ).toLocaleString()}
                   </Mana>

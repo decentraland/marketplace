@@ -1,12 +1,14 @@
 import React from 'react'
-import { Network } from '@dcl/schemas'
 import { fromWei } from 'web3x-es/utils'
 import { Page } from 'decentraland-ui'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
-import { Wallet } from '../Wallet'
+import { Wallet as WalletProvider } from '../Wallet'
 import { NFTProviderPage } from '../NFTProviderPage'
 import { isOwnedBy } from '../../modules/nft/utils'
+import { Order } from '../../modules/order/types'
+import { NFT } from '../../modules/nft/types'
 import { BuyModal } from './BuyModal'
 import { Props } from './BuyPage.types'
 import './BuyPage.css'
@@ -14,11 +16,15 @@ import './BuyPage.css'
 const BuyPage = (props: Props) => {
   const { authorizations, isLoading, onNavigate, onExecuteOrder } = props
 
+  const isInsufficientMANA = (wallet: Wallet, nft: NFT, order: Order | null) =>
+    !!order &&
+    wallet.networks[nft.network].mana < +fromWei(order.price, 'ether')
+
   return (
     <>
       <Navbar isFullscreen />
       <Page className="BuyPage">
-        <Wallet>
+        <WalletProvider>
           {wallet => (
             <NFTProviderPage>
               {(nft, order) => (
@@ -31,16 +37,12 @@ const BuyPage = (props: Props) => {
                   onNavigate={onNavigate}
                   onExecuteOrder={onExecuteOrder}
                   isOwner={isOwnedBy(nft, wallet)}
-                  notEnoughMana={
-                    !!order &&
-                    wallet.networks[Network.ETHEREUM].mana <
-                      +fromWei(order.price, 'ether')
-                  }
+                  hasInsufficientMANA={isInsufficientMANA(wallet, nft, order)}
                 />
               )}
             </NFTProviderPage>
           )}
-        </Wallet>
+        </WalletProvider>
       </Page>
       <Footer />
     </>

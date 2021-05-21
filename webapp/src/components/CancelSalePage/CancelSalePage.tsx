@@ -1,6 +1,6 @@
 import React from 'react'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Page, Header, Button, Mana } from 'decentraland-ui'
+import { Page, Header, Button } from 'decentraland-ui'
 
 import { locations } from '../../modules/routing/locations'
 import { getNFTName } from '../../modules/nft/utils'
@@ -8,6 +8,7 @@ import { formatMANA } from '../../lib/mana'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
+import { Mana } from '../Mana'
 import { NFTProviderPage } from '../NFTProviderPage'
 import NFTAction from '../NFTAction/NFTAction'
 import { Props } from './CancelSalePage.types'
@@ -49,7 +50,11 @@ const CancelSalePage = (props: Props) => {
                       id="cancel_sale_page.subtitle"
                       values={{
                         name: <b>{name}</b>,
-                        amount: <Mana inline>{formatMANA(order.price)}</Mana>
+                        amount: (
+                          <Mana network={nft.network} inline>
+                            {formatMANA(order.price)}
+                          </Mana>
+                        )
                       }}
                     />
                   )

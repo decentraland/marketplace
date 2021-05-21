@@ -1,23 +1,25 @@
 import React, { useState, useCallback } from 'react'
-import { Header, Mana, Button } from 'decentraland-ui'
+import { Header, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { Network } from '@dcl/schemas'
+import { ContractName } from 'decentraland-transactions'
 import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { isPartner } from '../../../modules/vendor/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { useFingerprint, useComputedPrice } from '../../../modules/nft/hooks'
-import { NFTCategory } from '../../../modules/nft/types'
+import { NFT, NFTCategory } from '../../../modules/nft/types'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { NFTAction } from '../../NFTAction'
+import { Mana } from '../../Mana'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './BuyModal.types'
-import { ContractName } from 'decentraland-transactions'
 
 const BuyPage = (props: Props) => {
   const {
@@ -29,7 +31,7 @@ const BuyPage = (props: Props) => {
     onNavigate,
     onExecuteOrder,
     isOwner,
-    notEnoughMana
+    hasInsufficientMANA
   } = props
 
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
@@ -89,13 +91,10 @@ const BuyPage = (props: Props) => {
   const isDisabled =
     !order ||
     isOwner ||
-    notEnoughMana ||
+    hasInsufficientMANA ||
     (!fingerprint && nft.category === NFTCategory.ESTATE)
 
-  const name = <b>{getNFTName(nft)}</b>
-  const Price = (props: { price: string }) => (
-    <Mana inline>{formatMANA(props.price)}</Mana>
-  )
+  const name = <Name nft={nft} />
 
   let subtitle = null
   if (!order) {
@@ -108,11 +107,14 @@ const BuyPage = (props: Props) => {
     subtitle = <T id={'buy_page.no_fingerprint'} />
   } else if (isOwner) {
     subtitle = <T id={'buy_page.is_owner'} values={{ name }} />
-  } else if (notEnoughMana) {
+  } else if (hasInsufficientMANA) {
     subtitle = (
       <T
         id={'buy_page.not_enough_mana'}
-        values={{ name, amount: <Price price={order.price} /> }}
+        values={{
+          name,
+          amount: <Price network={nft.network} price={order.price} />
+        }}
       />
     )
   } else if (isPartner(nft.vendor) && computedPrice) {
@@ -122,7 +124,7 @@ const BuyPage = (props: Props) => {
           id={'buy_page.subtitle'}
           values={{
             name,
-            amount: <Price price={order.price} />
+            amount: <Price network={nft.network} price={order.price} />
           }}
         />
         {isAboveMaxPercentage ? (
@@ -139,7 +141,9 @@ const BuyPage = (props: Props) => {
             <T
               id="buy_page.actual_price"
               values={{
-                computedPrice: <Price price={computedPrice} />
+                computedPrice: (
+                  <Price network={nft.network} price={computedPrice} />
+                )
               }}
             />
           </div>
@@ -152,7 +156,7 @@ const BuyPage = (props: Props) => {
         id={'buy_page.subtitle'}
         values={{
           name,
-          amount: <Price price={order.price} />
+          amount: <Price network={nft.network} price={order.price} />
         }}
       />
     )
@@ -203,5 +207,13 @@ const BuyPage = (props: Props) => {
     </NFTAction>
   )
 }
+
+const Name = (props: { nft: NFT }) => <b>{getNFTName(props.nft)}</b>
+
+const Price = (props: { network?: Network; price: string }) => (
+  <Mana network={props.network} inline withTooltip>
+    {formatMANA(props.price)}
+  </Mana>
+)
 
 export default React.memo(BuyPage)
