@@ -1,6 +1,8 @@
 import { OrderStatus } from '../../../order/types'
 import { Bid } from '../../../bid/types'
 
+export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
+
 class BidAPI {
   async fetch(options: Record<string, string>) {
     const queryParams = new URLSearchParams()
@@ -9,7 +11,7 @@ class BidAPI {
     }
     try {
       const bids: Bid[] = await fetch(
-        `http://localhost:5000/v1/bids?${queryParams.toString()}`
+        `${NFT_SERVER_URL}/v1/bids?${queryParams.toString()}`
       ).then(resp => resp.json())
       return bids
     } catch (error) {
