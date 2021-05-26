@@ -3,8 +3,9 @@
   padding-left: 36px !important;
 }
 
-.ManaField .dcl.mana {
+.ManaField .dcl.mana.ui.header {
   position: absolute;
   left: 8px;
   bottom: 12px;
+  margin-bottom: 0px;
 }
