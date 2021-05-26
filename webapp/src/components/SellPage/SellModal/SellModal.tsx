@@ -21,6 +21,7 @@ import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { NFTAction } from '../../NFTAction'
 import { Mana } from '../../Mana'
+import { ManaField } from '../../ManaField'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { NFTCategory } from '../../../modules/nft/types'
@@ -120,10 +121,11 @@ const SellModal = (props: Props) => {
 
       <Form onSubmit={() => setShowConfirm(true)}>
         <div className="form-fields">
-          <Field
+          <ManaField
             label={t('sell_page.price')}
             type="text"
             placeholder={toMANA(1000)}
+            network={nft.network}
             value={price}
             focus={true}
             onChange={(_event, props) => {
@@ -179,8 +181,10 @@ const SellModal = (props: Props) => {
             />
             <br />
             <T id="sell_page.confirm.line_two" />
-            <Field
+            <ManaField
+              className="mana-input"
               label={t('sell_page.price')}
+              network={nft.network}
               placeholder={price}
               value={confirmPrice}
               onChange={(_event, props) => {

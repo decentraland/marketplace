@@ -1,7 +1,5 @@
 import BN from 'bn.js'
 
-const MANA_SYMBOL = '⏣'
-
 let oneEthInMANA: BN | undefined
 
 export function formatMANA(value: string) {
@@ -13,15 +11,11 @@ export function formatMANA(value: string) {
 }
 
 export function toMANA(num: number) {
-  return num > 0 ? `${MANA_SYMBOL} ${num.toString()}` : ''
+  return num > 0 ? num.toString() : ''
 }
 
 export function fromMANA(mana: string) {
-  const num = mana
-    .split(MANA_SYMBOL + ' ')
-    .join('')
-    .split(/[,|.]/)
-    .join('')
+  const num = mana.split(/[,|.]/).join('')
 
   const result = parseInt(num, 10)
 
