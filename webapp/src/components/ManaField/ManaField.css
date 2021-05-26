@@ -1,0 +1,11 @@
+.dcl.field .ManaField.ui.input input,
+.ui.form .dcl.field .ManaField.ui.input input {
+  padding-left: 36px !important;
+}
+
+.ManaField .dcl.mana.ui.header {
+  position: absolute;
+  left: 8px;
+  bottom: 12px;
+  margin-bottom: 0px;
+}
