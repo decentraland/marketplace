@@ -7,6 +7,7 @@ import { getContract } from '../../modules/contract/utils'
 import { isAuthorized } from '../SettingsPage/Authorization/utils'
 import { Authorization } from '../SettingsPage/Authorization'
 import { Props } from './AuthorizationModal.types'
+import { hasTransactionPending } from '../../modules/transaction/utils'
 
 const AuthorizationModal = (props: Props) => {
   const {
@@ -14,7 +15,6 @@ const AuthorizationModal = (props: Props) => {
     authorization,
     authorizations,
     pendingTransactions,
-    isLoading,
     onGrant,
     onRevoke,
     onCancel,
@@ -27,6 +27,14 @@ const AuthorizationModal = (props: Props) => {
   const token = getContract({
     address: authorization.contractAddress
   })
+
+  const isLoading =
+    props.isLoading ||
+    hasTransactionPending(
+      pendingTransactions,
+      authorization.authorizedAddress,
+      authorization.contractAddress
+    )
 
   return (
     <Modal open={open} size="small" className="AuthorizationModal">
@@ -69,7 +77,7 @@ const AuthorizationModal = (props: Props) => {
         <Button
           primary
           loading={isLoading}
-          disabled={!isAuthorized(authorization, authorizations)}
+          disabled={isLoading || !isAuthorized(authorization, authorizations)}
           onClick={onProceed}
         >
           {t('global.proceed')}
