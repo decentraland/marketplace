@@ -10,6 +10,7 @@ export type Props = {
   wallet: Wallet | null
   authorizations: Authorization[]
   isLoading: boolean
+  isCreatingOrder: boolean
   onNavigate: (path: string) => void
   onCreateOrder: typeof createOrderRequest
 }

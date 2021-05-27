@@ -9,11 +9,15 @@ import {
 export type Props = {
   authorizations: Authorization[]
   isLoading: boolean
+  isCreatingOrder: boolean
   onCreateOrder: typeof createOrderRequest
   onNavigate: (path: string) => void
 }
 
-export type MapStateProps = Pick<Props, 'authorizations' | 'isLoading'>
+export type MapStateProps = Pick<
+  Props,
+  'authorizations' | 'isLoading' | 'isCreatingOrder'
+>
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onCreateOrder'>
 export type MapDispatch = Dispatch<
   CallHistoryMethodAction | CreateOrderRequestAction

@@ -25,12 +25,9 @@ const SettingsPage = (props: Props) => {
   const {
     wallet,
     authorizations,
-    pendingTransactions,
     isLoadingAuthorization,
     isConnecting,
     hasError,
-    onGrant,
-    onRevoke,
     onNavigate
   } = props
 
@@ -197,10 +194,6 @@ const SettingsPage = (props: Props) => {
                               chainId: manaEthereum.chainId,
                               type: AuthorizationType.ALLOWANCE
                             }}
-                            pendingTransactions={pendingTransactions}
-                            authorizations={authorizations}
-                            onGrant={onGrant}
-                            onRevoke={onRevoke}
                           />
                           <Authorization
                             authorization={{
@@ -211,10 +204,6 @@ const SettingsPage = (props: Props) => {
                               chainId: manaEthereum.chainId,
                               type: AuthorizationType.ALLOWANCE
                             }}
-                            authorizations={authorizations}
-                            pendingTransactions={pendingTransactions}
-                            onGrant={onGrant}
-                            onRevoke={onRevoke}
                           />
                           <Authorization
                             authorization={{
@@ -225,10 +214,6 @@ const SettingsPage = (props: Props) => {
                               chainId: manaMatic.chainId,
                               type: AuthorizationType.ALLOWANCE
                             }}
-                            pendingTransactions={pendingTransactions}
-                            authorizations={authorizations}
-                            onGrant={onGrant}
-                            onRevoke={onRevoke}
                           />
                         </div>
 
@@ -245,10 +230,6 @@ const SettingsPage = (props: Props) => {
                               chainId: manaEthereum.chainId,
                               type: AuthorizationType.ALLOWANCE
                             }}
-                            pendingTransactions={pendingTransactions}
-                            authorizations={authorizations}
-                            onGrant={onGrant}
-                            onRevoke={onRevoke}
                           />
                         </div>
 
@@ -266,10 +247,6 @@ const SettingsPage = (props: Props) => {
                                     authorization.contractAddress
                                   }
                                   authorization={authorization}
-                                  pendingTransactions={pendingTransactions}
-                                  authorizations={authorizations}
-                                  onGrant={onGrant}
-                                  onRevoke={onRevoke}
                                 />
                               )
                             })}
