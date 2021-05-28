@@ -12,7 +12,7 @@ import { Props } from './TransferPage.types'
 import './TransferPage.css'
 
 const TransferPage = (props: Props) => {
-  const { onNavigate, onTransfer } = props
+  const { onNavigate, onTransfer, isTransfering } = props
 
   const [address, setAddress] = useState('')
   const [isInvalidAddress, setIsInvalidAddress] = useState(false)
@@ -26,7 +26,7 @@ const TransferPage = (props: Props) => {
             <NFTProviderPage>
               {(nft, order) => {
                 let subtitle
-                let isDisabled = !address || isInvalidAddress
+                let isDisabled = !address || isInvalidAddress || isTransfering
                 let canTransfer = true
                 const subtitleClasses = ['subtitle']
                 const name = getNFTName(nft)
@@ -108,7 +108,12 @@ const TransferPage = (props: Props) => {
                         >
                           {t('global.cancel')}
                         </Button>
-                        <Button type="submit" primary disabled={isDisabled}>
+                        <Button
+                          type="submit"
+                          primary
+                          loading={isTransfering}
+                          disabled={isDisabled}
+                        >
                           {t('transfer_page.submit')}
                         </Button>
                       </div>
