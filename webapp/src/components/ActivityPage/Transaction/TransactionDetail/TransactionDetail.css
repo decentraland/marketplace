@@ -16,14 +16,14 @@
   margin-left: 16px;
 }
 
-.TransactionDetail .left .image {
+.TransactionDetail .left div.image {
   width: 48px;
   height: 48px;
   position: relative;
   border-radius: 8px;
   overflow: hidden;
-  margin-right: 16px;
   flex: none;
+  margin-right: 16px;
 }
 
 .TransactionDetail .left .image .dcl.mana {
