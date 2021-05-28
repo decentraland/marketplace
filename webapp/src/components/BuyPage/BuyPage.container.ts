@@ -2,10 +2,11 @@ import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import {
   getData as getAuthorizations,
-  getLoading
+  getLoading as getLoadingAuthorizations
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { RootState } from '../../modules/reducer'
-import { executeOrderRequest } from '../../modules/order/actions'
+import { executeOrderRequest, EXECUTE_ORDER_REQUEST } from '../../modules/order/actions'
+import { getLoading as getLoadingOrders } from '../../modules/order/selectors'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './BuyPage.types'
 import BuyPage from './BuyPage'
 import { getWallet } from '../../modules/wallet/selectors'
@@ -15,7 +16,8 @@ import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/au
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),
   authorizations: getAuthorizations(state),
-  isLoading: isLoadingType(getLoading(state), FETCH_AUTHORIZATIONS_REQUEST)
+  isLoading: isLoadingType(getLoadingAuthorizations(state), FETCH_AUTHORIZATIONS_REQUEST),
+  isExecutingOrder: isLoadingType(getLoadingOrders(state), EXECUTE_ORDER_REQUEST)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
