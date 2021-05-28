@@ -32,7 +32,10 @@ const Transaction = (props: Props) => {
   switch (tx.actionType) {
     case GRANT_TOKEN_SUCCESS: {
       const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
-      const contract = getContract({ address: authorization.authorizedAddress })
+      const authorized = getContract({
+        address: authorization.authorizedAddress
+      })
+      const contract = getContract({ address: authorization.contractAddress })
       return (
         <TransactionDetail
           text={
@@ -41,16 +44,13 @@ const Transaction = (props: Props) => {
               values={{
                 action: t('transaction.action.approved'),
                 contract: (
-                  <TransactionLink address={contract.address} txHash="">
-                    {contract.name}
+                  <TransactionLink address={authorized.address} txHash="">
+                    {authorized.name}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink
-                    address={authorization.contractAddress}
-                    txHash=""
-                  >
-                    {authorization.contractName}
+                  <TransactionLink address={contract.address} txHash="">
+                    {contract.name}
                   </TransactionLink>
                 )
               }}
@@ -62,9 +62,10 @@ const Transaction = (props: Props) => {
     }
     case REVOKE_TOKEN_SUCCESS: {
       const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
-      const contract = getContract({
+      const authorized = getContract({
         address: authorization.authorizedAddress
       })
+      const contract = getContract({ address: authorization.contractAddress })
       return (
         <TransactionDetail
           text={
@@ -73,16 +74,13 @@ const Transaction = (props: Props) => {
               values={{
                 action: t('transaction.action.not_approved'),
                 contract: (
-                  <TransactionLink address={contract.address} txHash="">
-                    {contract.name}
+                  <TransactionLink address={authorized.address} txHash="">
+                    {authorized.name}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink
-                    address={authorization.contractAddress}
-                    txHash=""
-                  >
-                    {authorization.contractName}
+                  <TransactionLink address={contract.name} txHash="">
+                    {contract.name}
                   </TransactionLink>
                 )
               }}
