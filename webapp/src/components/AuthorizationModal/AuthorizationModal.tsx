@@ -13,10 +13,8 @@ const AuthorizationModal = (props: Props) => {
     open,
     authorization,
     authorizations,
-    pendingTransactions,
     isLoading,
-    onGrant,
-    onRevoke,
+    isAuthorizing,
     onCancel,
     onProceed
   } = props
@@ -57,11 +55,6 @@ const AuthorizationModal = (props: Props) => {
         <Authorization
           key={authorization.authorizedAddress}
           authorization={authorization}
-          authorizations={authorizations}
-          pendingTransactions={pendingTransactions}
-          isLoading={isLoading}
-          onGrant={onGrant}
-          onRevoke={onRevoke}
         />
       </Modal.Content>
       <Modal.Actions>
@@ -69,7 +62,11 @@ const AuthorizationModal = (props: Props) => {
         <Button
           primary
           loading={isLoading}
-          disabled={!isAuthorized(authorization, authorizations)}
+          disabled={
+            isLoading ||
+            isAuthorizing ||
+            !isAuthorized(authorization, authorizations)
+          }
           onClick={onProceed}
         >
           {t('global.proceed')}

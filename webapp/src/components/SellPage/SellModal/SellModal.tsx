@@ -34,6 +34,7 @@ const SellModal = (props: Props) => {
     wallet,
     authorizations,
     isLoading,
+    isCreatingOrder,
     onNavigate,
     onCreateOrder
   } = props
@@ -206,7 +207,10 @@ const SellModal = (props: Props) => {
             <Button
               type="submit"
               primary
-              disabled={fromMANA(price) !== fromMANA(confirmPrice)}
+              disabled={
+                isCreatingOrder || fromMANA(price) !== fromMANA(confirmPrice)
+              }
+              loading={isCreatingOrder}
             >
               {t('global.proceed')}
             </Button>
@@ -216,6 +220,7 @@ const SellModal = (props: Props) => {
       <AuthorizationModal
         open={showAuthorizationModal}
         authorization={authorization}
+        isLoading={isCreatingOrder}
         onProceed={handleCreateOrder}
         onCancel={handleClose}
       />

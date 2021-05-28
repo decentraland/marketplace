@@ -1,2 +1,2 @@
-import Authorization from './Authorization'
+import Authorization from './Authorization.container'
 export { Authorization }

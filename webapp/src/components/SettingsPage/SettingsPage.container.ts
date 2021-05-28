@@ -5,15 +5,10 @@ import {
   getLoading,
   getError
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
-import {
-  FETCH_AUTHORIZATIONS_REQUEST,
-  grantTokenRequest,
-  revokeTokenRequest
-} from 'decentraland-dapps/dist/modules/authorization/actions'
+import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
 
 import { RootState } from '../../modules/reducer'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { getPendingAuthorizationTransactions } from '../../modules/transaction/selectors'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import {
   MapStateProps,
@@ -32,7 +27,6 @@ const mapState = (state: RootState): MapStateProps => {
   return {
     wallet,
     authorizations: getAuthorizations(state),
-    pendingTransactions: getPendingAuthorizationTransactions(state),
     isLoadingAuthorization: isLoadingType(
       getLoading(state),
       FETCH_AUTHORIZATIONS_REQUEST
@@ -43,8 +37,6 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onGrant: authorization => dispatch(grantTokenRequest(authorization)),
-  onRevoke: authorization => dispatch(revokeTokenRequest(authorization)),
   onNavigate: path => dispatch(push(path))
 })
 

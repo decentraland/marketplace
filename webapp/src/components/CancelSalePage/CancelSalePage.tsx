@@ -15,7 +15,7 @@ import { Props } from './CancelSalePage.types'
 import './CancelSalePage.css'
 
 const CancelSalePage = (props: Props) => {
-  const { onNavigate, onCancelOrder } = props
+  const { isLoading, onNavigate, onCancelOrder } = props
 
   return (
     <>
@@ -75,7 +75,8 @@ const CancelSalePage = (props: Props) => {
                       </Button>
                       <Button
                         primary
-                        disabled={isDisabled}
+                        loading={isLoading}
+                        disabled={isDisabled || isLoading}
                         onClick={() => onCancelOrder(order!, nft)}
                       >
                         {t('cancel_sale_page.submit')}
