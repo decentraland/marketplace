@@ -8,7 +8,7 @@ import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
 
 const BidPage = (props: Props) => {
-  const { authorizations, onNavigate, onPlaceBid } = props
+  const { authorizations, onNavigate, onPlaceBid, isPlacingBid } = props
   return (
     <>
       <Navbar isFullscreen />
@@ -23,6 +23,7 @@ const BidPage = (props: Props) => {
                   authorizations={authorizations}
                   onNavigate={onNavigate}
                   onPlaceBid={onPlaceBid}
+                  isPlacingBid={isPlacingBid}
                 />
               )}
             </NFTProviderPage>

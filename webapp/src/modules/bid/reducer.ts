@@ -16,7 +16,25 @@ import {
   FetchBidsByNFTFailureAction,
   FETCH_BIDS_BY_NFT_REQUEST,
   FETCH_BIDS_BY_NFT_SUCCESS,
-  FETCH_BIDS_BY_NFT_FAILURE
+  FETCH_BIDS_BY_NFT_FAILURE,
+  ACCEPT_BID_REQUEST,
+  CANCEL_BID_REQUEST,
+  PLACE_BID_REQUEST,
+  PLACE_BID_SUCCESS,
+  ACCEPT_BID_SUCCESS,
+  CANCEL_BID_SUCCESS,
+  PLACE_BID_FAILURE,
+  ACCEPT_BID_FAILURE,
+  CANCEL_BID_FAILURE,
+  PlaceBidRequestAction,
+  PlaceBidFailureAction,
+  PlaceBidSuccessAction,
+  AcceptBidRequestAction,
+  AcceptBidFailureAction,
+  AcceptBidSuccessAction,
+  CancelBidRequestAction,
+  CancelBidFailureAction,
+  CancelBidSuccessAction
 } from './actions'
 
 export type BidState = {
@@ -38,9 +56,21 @@ type BidReducerAction =
   | FetchBidsByNFTRequestAction
   | FetchBidsByNFTSuccessAction
   | FetchBidsByNFTFailureAction
+  | PlaceBidRequestAction
+  | PlaceBidFailureAction
+  | PlaceBidSuccessAction
+  | AcceptBidRequestAction
+  | AcceptBidFailureAction
+  | AcceptBidSuccessAction
+  | CancelBidRequestAction
+  | CancelBidFailureAction
+  | CancelBidSuccessAction
 
 export function bidReducer(state = INITIAL_STATE, action: BidReducerAction) {
   switch (action.type) {
+    case PLACE_BID_REQUEST:
+    case ACCEPT_BID_REQUEST:
+    case CANCEL_BID_REQUEST:
     case FETCH_BIDS_BY_NFT_REQUEST:
     case FETCH_BIDS_BY_ADDRESS_REQUEST: {
       return {
@@ -75,6 +105,19 @@ export function bidReducer(state = INITIAL_STATE, action: BidReducerAction) {
       }
     }
 
+    case PLACE_BID_SUCCESS:
+    case ACCEPT_BID_SUCCESS:
+    case CANCEL_BID_SUCCESS: {
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error: null
+      }
+    }
+
+    case PLACE_BID_FAILURE:
+    case ACCEPT_BID_FAILURE:
+    case CANCEL_BID_FAILURE:
     case FETCH_BIDS_BY_NFT_FAILURE:
     case FETCH_BIDS_BY_ADDRESS_FAILURE: {
       return {

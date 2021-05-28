@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { Network } from '@dcl/schemas'
 import { Header, Form, Field, Button } from 'decentraland-ui'
+import { ContractName } from 'decentraland-transactions'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Authorization,
@@ -14,14 +15,21 @@ import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { AuthorizationModal } from '../../AuthorizationModal'
+import { getContract } from '../../../modules/contract/utils'
+import { getContractNames } from '../../../modules/vendor'
+import { ManaField } from '../../ManaField'
 import { Props } from './BidModal.types'
 import './BidModal.css'
-import { getContractNames } from '../../../modules/vendor'
-import { getContract } from '../../../modules/contract/utils'
-import { ContractName } from 'decentraland-transactions'
 
 const BidModal = (props: Props) => {
-  const { nft, wallet, authorizations, onNavigate, onPlaceBid } = props
+  const {
+    nft,
+    wallet,
+    authorizations,
+    onNavigate,
+    onPlaceBid,
+    isPlacingBid
+  } = props
 
   const [price, setPrice] = useState('')
   const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
@@ -56,7 +64,7 @@ const BidModal = (props: Props) => {
     authorizedAddress: bids.address,
     contractAddress: mana.address,
     contractName: ContractName.MANAToken,
-    chainId: nft.chainId,
+    chainId: mana.chainId,
     type: AuthorizationType.ALLOWANCE
   }
 
@@ -89,7 +97,8 @@ const BidModal = (props: Props) => {
       </p>
       <Form onSubmit={handleSubmit}>
         <div className="form-fields">
-          <Field
+          <ManaField
+            network={Network.ETHEREUM}
             label={t('bid_page.price')}
             placeholder={toMANA(1000)}
             value={price}
@@ -103,6 +112,7 @@ const BidModal = (props: Props) => {
             }
           />
           <Field
+            network={Network.ETHEREUM}
             label={t('bid_page.expiration_date')}
             type="date"
             value={expiresAt}
@@ -125,12 +135,14 @@ const BidModal = (props: Props) => {
           <Button
             type="submit"
             primary
+            loading={isPlacingBid}
             disabled={
               isOwnedBy(nft, wallet) ||
               fromMANA(price) <= 0 ||
               isInvalidDate ||
               hasInsufficientMANA ||
-              isLoading
+              isLoading ||
+              isPlacingBid
             }
           >
             {t('bid_page.submit')}
@@ -140,6 +152,7 @@ const BidModal = (props: Props) => {
       <AuthorizationModal
         open={showAuthorizationModal}
         authorization={authorization}
+        isLoading={isPlacingBid}
         onProceed={handlePlaceBid}
         onCancel={handleClose}
       />
