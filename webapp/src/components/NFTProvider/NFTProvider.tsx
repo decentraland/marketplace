@@ -14,10 +14,10 @@ const NFTProvider = (props: Props) => {
   } = props
 
   useEffect(() => {
-    if (!nft && contractAddress && tokenId) {
+    if (contractAddress && tokenId) {
       onFetchNFT(contractAddress, tokenId)
     }
-  }, [nft, contractAddress, tokenId, onFetchNFT])
+  }, [contractAddress, tokenId, onFetchNFT])
 
   return <>{children(nft, order, isLoading)}</>
 }

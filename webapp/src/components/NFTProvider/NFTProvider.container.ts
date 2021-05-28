@@ -32,7 +32,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     contractAddress,
     nft,
     order,
-    isLoading: isLoadingType(getLoading(state), FETCH_NFT_REQUEST)
+    isLoading: !nft && isLoadingType(getLoading(state), FETCH_NFT_REQUEST)
   }
 }
 
