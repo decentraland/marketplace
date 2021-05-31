@@ -1,4 +1,5 @@
 import React from 'react'
+import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana as BaseMana, Popup } from 'decentraland-ui'
 import { Props } from './Mana.types'
@@ -15,7 +16,9 @@ const Mana = (props: Props) => {
   return (
     <Popup
       content={t('mana.running_on', {
-        network: t(`networks.${manaProps.network?.toLowerCase()}`)
+        network: t(
+          `networks.${(manaProps.network || Network.ETHEREUM).toLowerCase()}`
+        )
       })}
       disabled={!withTooltip}
       position="top center"

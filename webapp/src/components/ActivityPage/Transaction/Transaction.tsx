@@ -44,12 +44,20 @@ const Transaction = (props: Props) => {
               values={{
                 action: t('transaction.action.approved'),
                 contract: (
-                  <TransactionLink address={authorized.address} txHash="">
+                  <TransactionLink
+                    chainId={authorization.chainId}
+                    address={authorized.address}
+                    txHash=""
+                  >
                     {authorized.name}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink address={contract.address} txHash="">
+                  <TransactionLink
+                    chainId={authorization.chainId}
+                    address={contract.address}
+                    txHash=""
+                  >
                     {contract.name}
                   </TransactionLink>
                 )
@@ -74,12 +82,20 @@ const Transaction = (props: Props) => {
               values={{
                 action: t('transaction.action.not_approved'),
                 contract: (
-                  <TransactionLink address={authorized.address} txHash="">
+                  <TransactionLink
+                    chainId={authorization.chainId}
+                    address={authorized.address}
+                    txHash=""
+                  >
                     {authorized.name}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink address={contract.name} txHash="">
+                  <TransactionLink
+                    chainId={authorization.chainId}
+                    address={contract.address}
+                    txHash=""
+                  >
                     {contract.name}
                   </TransactionLink>
                 )
