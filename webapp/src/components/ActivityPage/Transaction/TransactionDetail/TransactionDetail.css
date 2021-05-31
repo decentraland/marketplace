@@ -35,6 +35,12 @@
   display: flex;
 }
 
+.TransactionDetail .left .image .dcl.mana .matic {
+  width: 41px;
+  background-repeat: no-repeat;
+  margin-top: -9px;
+}
+
 .TransactionDetail .left .text {
   display: flex;
   align-items: baseline;

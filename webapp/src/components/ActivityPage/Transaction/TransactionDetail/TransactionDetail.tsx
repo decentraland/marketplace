@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Loader, Icon } from 'decentraland-ui'
+import { Network } from '@dcl/schemas'
+import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   isPending,
@@ -23,7 +25,7 @@ const getHref = (tx: Transaction) => {
   if (tx.status === null) {
     return
   }
-  return getTransactionHref({ txHash: tx.replacedBy || tx.hash })
+  return getTransactionHref({ txHash: tx.replacedBy || tx.hash }, tx.chainId)
 }
 
 const TransactionDetail = (props: Props) => {
@@ -39,7 +41,13 @@ const TransactionDetail = (props: Props) => {
               <NFTImage nft={nft} isSmall />
             </Link>
           ) : (
-            <Mana />
+            <Mana
+              network={
+                tx.chainId
+                  ? getChainConfiguration(tx.chainId).network
+                  : Network.ETHEREUM
+              }
+            />
           )}
         </div>
         <div className="text">
