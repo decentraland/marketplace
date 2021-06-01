@@ -18,11 +18,11 @@ class BidAPI {
     }
   }
   async fetchBySeller(seller: string) {
-    return this.fetch({ seller })
+    return this.fetch({ seller, status: OrderStatus.OPEN })
   }
 
   async fetchByBidder(bidder: string) {
-    return this.fetch({ bidder })
+    return this.fetch({ bidder, status: OrderStatus.OPEN })
   }
 
   async fetchByNFT(nftId: string, status: OrderStatus = OrderStatus.OPEN) {
