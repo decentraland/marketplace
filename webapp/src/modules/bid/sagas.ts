@@ -73,8 +73,12 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
   const { bid } = action.payload
   try {
     const contract = getContract({ address: bid.contractAddress })
-    const vendor = contract.vendor || VendorName.DECENTRALAND
-    const { bidService } = VendorFactory.build(vendor)
+    if (!contract.vendor) {
+      throw new Error(
+        `Couldn't find a valid vendor for contract ${contract.address}`
+      )
+    }
+    const { bidService } = VendorFactory.build(contract.vendor)
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const txHash: string = yield call(() => bidService!.accept(wallet, bid))
@@ -91,8 +95,12 @@ function* handleCancelBidRequest(action: CancelBidRequestAction) {
   const { bid } = action.payload
   try {
     const contract = getContract({ address: bid.contractAddress })
-    const vendor = contract.vendor || VendorName.DECENTRALAND
-    const { bidService } = VendorFactory.build(vendor)
+    if (!contract.vendor) {
+      throw new Error(
+        `Couldn't find a valid vendor for contract ${contract.address}`
+      )
+    }
+    const { bidService } = VendorFactory.build(contract.vendor)
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const chainId: ChainId = yield select(getChainId)
