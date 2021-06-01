@@ -14,7 +14,13 @@ import { Props } from './BuyPage.types'
 import './BuyPage.css'
 
 const BuyPage = (props: Props) => {
-  const { authorizations, isLoading, onNavigate, onExecuteOrder } = props
+  const {
+    authorizations,
+    isLoading,
+    onNavigate,
+    onExecuteOrder,
+    isExecutingOrder
+  } = props
 
   const isInsufficientMANA = (wallet: Wallet, nft: NFT, order: Order | null) =>
     !!order &&
@@ -33,7 +39,7 @@ const BuyPage = (props: Props) => {
                   order={order}
                   wallet={wallet}
                   authorizations={authorizations}
-                  isLoading={isLoading}
+                  isLoading={isLoading || isExecutingOrder}
                   onNavigate={onNavigate}
                   onExecuteOrder={onExecuteOrder}
                   isOwner={isOwnedBy(nft, wallet)}

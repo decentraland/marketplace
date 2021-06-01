@@ -1,7 +1,12 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../../modules/reducer'
-import { transferNFTRequest } from '../../modules/nft/actions'
+import { getLoading } from '../../modules/nft/selectors'
+import {
+  transferNFTRequest,
+  TRANSFER_NFT_REQUEST
+} from '../../modules/nft/actions'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -9,7 +14,9 @@ import {
 } from './TransferPage.types'
 import TransferPage from './TransferPage'
 
-const mapState = (_state: RootState): MapStateProps => ({})
+const mapState = (state: RootState): MapStateProps => ({
+  isTransfering: isLoadingType(getLoading(state), TRANSFER_NFT_REQUEST)
+})
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),

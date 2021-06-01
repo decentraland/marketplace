@@ -7,10 +7,11 @@ import {
 
 export type Props = {
   onTransfer: typeof transferNFTRequest
+  isTransfering: boolean
   onNavigate: (path: string) => void
 }
 
-export type MapStateProps = {}
+export type MapStateProps = Pick<Props, 'isTransfering'>
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onTransfer'>
 export type MapDispatch = Dispatch<
   CallHistoryMethodAction | TransferNFTRequestAction

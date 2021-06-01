@@ -1,11 +1,17 @@
 import { Address } from 'web3x-es/address'
+import { Network } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { ContractName, getContract } from 'decentraland-transactions'
+import {
+  ContractData,
+  ContractName,
+  getContract
+} from 'decentraland-transactions'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { sendTransaction } from '../../wallet/utils'
 import { Account } from '../../account/types'
+import ERC721Abi from '../../../contracts/ERC721Abi'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName } from '../types'
@@ -56,10 +62,19 @@ export class NFTService
     const to = Address.fromString(toAddress)
 
     const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
-    const contract = {
-      ...getContract(ContractName.ERC721CollectionV2, nft.chainId),
-      address: nft.contractAddress
-    }
+    const contract: ContractData =
+      nft.network !== Network.ETHEREUM
+        ? {
+            ...getContract(ContractName.ERC721CollectionV2, nft.chainId),
+            address: nft.contractAddress
+          }
+        : {
+            name: 'ERC721',
+            abi: ERC721Abi as any,
+            address: nft.contractAddress,
+            chainId: nft.chainId,
+            version: '1'
+          }
 
     const transferFrom = erc721.methods.transferFrom(from, to, nft.tokenId)
     return sendTransaction(transferFrom, contract, from)

@@ -8,6 +8,7 @@ import { getSortBy } from '../../../nft/utils'
 import { ATLAS_SERVER_URL } from '../land'
 import { Contract } from '../../services'
 import { contracts } from '../../../contract/utils'
+import { VendorName } from '../../types'
 
 export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
 
@@ -42,9 +43,15 @@ class NFTAPI {
 
   async fetchContracts() {
     try {
-      const contracts: Contract[] = await fetch(
+      const contractsWithoutVendor: Omit<Contract, 'vendor'>[] = await fetch(
         `${NFT_SERVER_URL}/v1/contracts`
       ).then(resp => resp.json())
+      const contracts: Contract[] = contractsWithoutVendor.map(
+        contractWithoutVendor => ({
+          ...contractWithoutVendor,
+          vendor: VendorName.DECENTRALAND
+        })
+      )
       return contracts
     } catch (error) {
       return []

@@ -19,7 +19,6 @@ import { getWallet } from '../wallet/selectors'
 import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { AwaitFn } from '../types'
-import { VendorName } from '../vendor'
 import { getContract } from '../contract/utils'
 
 export function* nftSaga() {
@@ -62,9 +61,13 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
 
   try {
     const contract = getContract({ address: contractAddress })
-    const vendor = contract.vendor || VendorName.DECENTRALAND
+    if (!contract.vendor) {
+      throw new Error(
+        `Couldn't find a valid vendor for contract ${contract.address}`
+      )
+    }
 
-    const { nftService } = VendorFactory.build(vendor)
+    const { nftService } = VendorFactory.build(contract.vendor)
 
     const [nft, order]: AwaitFn<typeof nftService.fetchOne> = yield call(() =>
       nftService.fetchOne(contractAddress, tokenId)

@@ -8,11 +8,12 @@ import {
 
 export type Props = {
   authorizations: Authorization[]
+  isPlacingBid: boolean
   onPlaceBid: typeof placeBidRequest
   onNavigate: (path: string) => void
 }
 
-export type MapStateProps = Pick<Props, 'authorizations'>
+export type MapStateProps = Pick<Props, 'authorizations' | 'isPlacingBid'>
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onPlaceBid'>
 export type MapDispatch = Dispatch<
   CallHistoryMethodAction | PlaceBidRequestAction

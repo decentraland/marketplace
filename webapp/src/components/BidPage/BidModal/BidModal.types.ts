@@ -9,4 +9,5 @@ export type Props = {
   authorizations: Authorization[]
   onNavigate: (path: string) => void
   onPlaceBid: typeof placeBidRequest
+  isPlacingBid: boolean
 }

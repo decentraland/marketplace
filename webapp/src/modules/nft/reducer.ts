@@ -16,7 +16,13 @@ import {
   FetchNFTsFailureAction,
   FETCH_NFTS_REQUEST,
   FETCH_NFTS_SUCCESS,
-  FETCH_NFTS_FAILURE
+  FETCH_NFTS_FAILURE,
+  TRANSFER_NFT_REQUEST,
+  TRANSFER_NFT_FAILURE,
+  TRANSFER_NFT_SUCCESS,
+  TransferNFTRequestAction,
+  TransferNFTSuccessAction,
+  TransferNFTFailureAction
 } from './actions'
 
 export type NFTState = {
@@ -38,12 +44,16 @@ type NFTReducerAction =
   | FetchNFTsRequestAction
   | FetchNFTsSuccessAction
   | FetchNFTsFailureAction
+  | TransferNFTRequestAction
+  | TransferNFTSuccessAction
+  | TransferNFTFailureAction
 
 export function nftReducer(
   state: NFTState = INITIAL_STATE,
   action: NFTReducerAction
 ) {
   switch (action.type) {
+    case TRANSFER_NFT_REQUEST:
     case FETCH_NFTS_REQUEST:
     case FETCH_NFT_REQUEST: {
       return {
@@ -51,6 +61,7 @@ export function nftReducer(
         loading: loadingReducer(state.loading, action)
       }
     }
+    case TRANSFER_NFT_FAILURE:
     case FETCH_NFTS_FAILURE:
     case FETCH_NFT_FAILURE: {
       return {
@@ -82,6 +93,13 @@ export function nftReducer(
             return obj
           }, {} as Record<string, NFT>)
         }
+      }
+    }
+    case TRANSFER_NFT_SUCCESS: {
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error: null
       }
     }
     default:

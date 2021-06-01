@@ -11,13 +11,14 @@ export type Props = {
   wallet: Wallet | null
   authorizations: Authorization[]
   isLoading: boolean
+  isExecutingOrder: boolean
   onExecuteOrder: typeof executeOrderRequest
   onNavigate: (path: string) => void
 }
 
 export type MapStateProps = Pick<
   Props,
-  'wallet' | 'authorizations' | 'isLoading'
+  'wallet' | 'authorizations' | 'isLoading' | 'isExecutingOrder'
 >
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onExecuteOrder'>
 export type MapDispatch = Dispatch<

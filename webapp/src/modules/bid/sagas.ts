@@ -75,7 +75,7 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
     const contract = getContract({ address: bid.contractAddress })
     if (!contract.vendor) {
       throw new Error(
-        `Couldn't find a valid vendor for contract ${bid.contractAddress}`
+        `Couldn't find a valid vendor for contract ${contract.address}`
       )
     }
     const { bidService } = VendorFactory.build(contract.vendor)
@@ -97,7 +97,7 @@ function* handleCancelBidRequest(action: CancelBidRequestAction) {
     const contract = getContract({ address: bid.contractAddress })
     if (!contract.vendor) {
       throw new Error(
-        `Couldn't find a valid vendor for contract ${bid.contractAddress}`
+        `Couldn't find a valid vendor for contract ${contract.address}`
       )
     }
     const { bidService } = VendorFactory.build(contract.vendor)
