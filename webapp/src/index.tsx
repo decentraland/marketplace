@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
 import { ScrollToTop } from './components/ScrollToTop'
 import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
+import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 
 import './setup'
@@ -25,12 +26,14 @@ async function main() {
   const component = (
     <Provider store={initStore()}>
       <TranslationProvider locales={Object.keys(locales)}>
-        <WalletProvider>
-          <ConnectedRouter history={history}>
-            <ScrollToTop />
-            <Routes />
-          </ConnectedRouter>
-        </WalletProvider>
+        <ToastProvider>
+          <WalletProvider>
+            <ConnectedRouter history={history}>
+              <ScrollToTop />
+              <Routes />
+            </ConnectedRouter>
+          </WalletProvider>
+        </ToastProvider>
       </TranslationProvider>
     </Provider>
   )

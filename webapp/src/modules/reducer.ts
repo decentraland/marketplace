@@ -7,6 +7,7 @@ import { storageReducer as storage } from 'decentraland-dapps/dist/modules/stora
 import { transactionReducer as transaction } from 'decentraland-dapps/dist/modules/transaction/reducer'
 import { profileReducer as profile } from 'decentraland-dapps/dist/modules/profile/reducer'
 import { authorizationReducer as authorization } from 'decentraland-dapps/dist/modules/authorization/reducer'
+import { toastReducer as toast } from 'decentraland-dapps/dist/modules/toast/reducer'
 
 import { accountReducer as account } from './account/reducer'
 import { bidReducer as bid } from './bid/reducer'
@@ -26,13 +27,14 @@ export const createRootReducer = (history: History) =>
     order,
     profile,
     proximity,
-    routing,
-    tile,
-    ui,
     router: connectRouter(history),
+    routing,
     storage,
+    tile,
+    toast,
     transaction,
     translation,
+    ui,
     wallet
   })
 
