@@ -34,7 +34,7 @@ export function initStore() {
   const sagasMiddleware = createSagasMiddleware()
   const loggerMiddleware = createLogger({
     collapsed: () => true,
-    predicate: (_: any, action) => action.type.includes('Toast') //isDev || action.type.includes('Failure')
+    predicate: (_: any, action) => isDev || action.type.includes('Failure')
   })
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
