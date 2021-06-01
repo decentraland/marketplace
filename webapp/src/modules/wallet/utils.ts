@@ -11,6 +11,8 @@ import {
   getNetworkProvider
 } from 'decentraland-dapps/dist/lib/eth'
 
+export const TRANSACTIONS_API_URL = process.env.REACT_APP_TRANSACTIONS_API_URL
+
 export function shortenAddress(address: string) {
   if (address) {
     return address.slice(0, 6) + '...' + address.slice(42 - 5)
@@ -54,7 +56,9 @@ export async function sendMetaTransaction(
   }
   const metaTxProvider = await getNetworkProvider(contract.chainId)
   const txData = getMethodData(method, from)
-  return baseSendMetaTransaction(provider, metaTxProvider, txData, contract)
+  return baseSendMetaTransaction(provider, metaTxProvider, txData, contract, {
+    serverURL: TRANSACTIONS_API_URL
+  })
 }
 
 export function getMethodData(method: TxSend<any>, from: Address): string {
