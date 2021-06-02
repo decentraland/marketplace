@@ -270,7 +270,7 @@
     "pending_tx": "Transaccion pendiente, haz click aquí para ir a tu pantalla de actividad y ver más información"
   },
   "authorization": {
-    "authorize": "Autoriza al contrato de {contract_link} a operar {symbol} por tí",
+    "authorize": "Autoriza al contrato de {contract_link} a operar {symbol} por tí en {network}",
     "allowed": "Haz autorizado al contrato de {contract_link} a operar {symbol} por tí",
     "approved": "Haz autorizado al contrato de {contract_link} a operar {symbol} por tí",
     "disallowed": "Haz desautorizado al contrato de {contract_link} a operar {symbol} por tí",

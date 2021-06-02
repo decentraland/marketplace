@@ -271,7 +271,7 @@
     "pending_tx": "待处理的交易，请单击微调器以转到活动详细状态"
   },
   "authorization": {
-    "authorize": "授权{contract_link}合约代表您操作{symbol}",
+    "authorize": "授权 {contract_link} 合约代表您在 {network} 上操作 {symbol}",
     "allowed": "您已授权{contract_link}合同代表您操作{symbol}",
     "approved": "您已授权{contract_link}合同代表您操作{symbol}",
     "disallowed": "您未授权{contract_link}合同代表您操作{symbol}",

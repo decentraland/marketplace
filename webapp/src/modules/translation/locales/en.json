@@ -275,7 +275,7 @@
     "pending_tx": "Transaction pending, click the spinner to go to your activity for a detailed status"
   },
   "authorization": {
-    "authorize": "Authorize the {contract_link} contract to operate {symbol} on your behalf",
+    "authorize": "Authorize the {contract_link} contract to operate {symbol} on your behalf on {network}",
     "allowed": "You authorized the {contract_link} contract to operate {symbol} on your behalf",
     "approved": "You authorized the {contract_link} contract to operate {symbol} on your behalf",
     "disallowed": "You unauthorized the {contract_link} contract to operate {symbol} on your behalf",

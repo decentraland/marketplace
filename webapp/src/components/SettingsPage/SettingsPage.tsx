@@ -11,15 +11,12 @@ import { locations } from '../../modules/routing/locations'
 import { shortenAddress } from '../../modules/wallet/utils'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
-import { Mana } from '../Mana'
 import { Authorization } from './Authorization'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { getContractNames } from '../../modules/vendor'
 import { getContract } from '../../modules/contract/utils'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
-
-const BUY_MANA_URL = process.env.REACT_APP_BUY_MANA_URL
 
 const SettingsPage = (props: Props) => {
   const {
@@ -127,37 +124,6 @@ const SettingsPage = (props: Props) => {
                 </div>
               </Grid.Column>
             </Grid.Row>
-
-            <Grid.Row>
-              <Grid.Column
-                className="left-column secondary-text"
-                computer={4}
-                mobile={16}
-              >
-                {t('global.balance')}
-              </Grid.Column>
-              <Grid.Column computer={12} mobile={16}>
-                <div className="balance">
-                  <Mana inline>
-                    {parseInt(
-                      wallet.networks.ETHEREUM.mana.toFixed(0),
-                      10
-                    ).toLocaleString()}
-                  </Mana>
-                  {BUY_MANA_URL ? (
-                    <a
-                      className="buy-more"
-                      href={BUY_MANA_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {t('settings_page.buy_more_mana')}
-                    </a>
-                  ) : null}
-                </div>
-              </Grid.Column>
-            </Grid.Row>
-
             <Grid.Row>
               <Grid.Column
                 className="left-column secondary-text"
