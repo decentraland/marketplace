@@ -343,5 +343,11 @@
     "manage_account": "管理帐户",
     "content": "Polygon MANA将使您更快地进行购买。{br}您可以在我们的{blog_link}中了解有关Polygon MANA的更多信息。{br}您还可以在新的{ account_link}。{br}点击您的头像，选择{manage_account}，然后开始征服Metaverse。",
     "dismiss": "知道了！"
+  },
+  "toast": {
+    "meta_transaction_failure": {
+      "title": "元交易",
+      "body": "发送元交易时出错。{br}请重试或加入我们的{discord_link}以获取支持。"
+    }
   }
 }

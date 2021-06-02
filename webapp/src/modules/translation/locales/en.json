@@ -347,5 +347,11 @@
     "manage_account": "Account",
     "content": "Polygon MANA will allow you to make transactions much cheaper and faster.{br}You can learn more about Polygon MANA in our {blog_link}, and don't forget you can start managing your coins in our new {account_link}.{br}Click your avatar, select {manage_account} and start conquering the Metaverse.",
     "dismiss": "Got It!"
+  },
+  "toast": {
+    "meta_transaction_failure": {
+      "title": "Meta transaction",
+      "body": "There was an error sending the meta transaction.{br}Please try again or join our {discord_link} to get support."
+    }
   }
 }
