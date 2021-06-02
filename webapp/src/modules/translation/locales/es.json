@@ -20,7 +20,7 @@
     "update": "Actualizar",
     "search": "Buscar",
     "apply": "Aplicar",
-    "jump_in": "Ingresar"
+    "network": "Red"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -105,7 +105,9 @@
     "rarity": "Rareza",
     "gender": "Género",
     "collection": "Colección",
-    "all_collections": "Todas las colecciones"
+    "all_collections": "Todas las colecciones",
+    "network": "Red",
+    "all_networks": "Todas las redes"
   },
   "nft_card": {
     "expires_at": "Expira {date}"
@@ -328,6 +330,10 @@
   },
   "price_change_notice": {
     "message": "El precio puede variar debido a cambios en el mercado"
+  },
+  "networks": {
+    "ethereum": "Ethereum",
+    "matic": "Polygon"
   },
   "intro_popup": {
     "title": "Introducimos Polygon MANA",
