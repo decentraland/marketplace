@@ -16,6 +16,7 @@ import { areEqual } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { isAuthorized } from './utils'
 import { Props } from './Authorization.types'
 import './Authorization.css'
+import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 
 const Authorization = (props: Props) => {
   const {
@@ -55,6 +56,8 @@ const Authorization = (props: Props) => {
   const contract = getContract({ address: authorizedAddress })
   const token = getContract({ address: contractAddress })
 
+  const { network } = getChainConfiguration(token.chainId)
+
   return (
     <div className="Authorization">
       <Form.Field
@@ -84,7 +87,8 @@ const Authorization = (props: Props) => {
                   {contract.name}
                 </TransactionLink>
               ),
-              symbol: token.name
+              symbol: token.name,
+              network: t(`networks.${network.toLowerCase()}`)
             }}
           />
         </div>
