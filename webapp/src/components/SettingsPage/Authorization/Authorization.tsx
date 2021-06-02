@@ -2,21 +2,21 @@ import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink } from 'decentraland-dapps/dist/containers'
-import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
-import { locations } from '../../../modules/routing/locations'
-import { hasTransactionPending } from '../../../modules/transaction/utils'
-import { getContract } from '../../../modules/contract/utils'
 import {
   GrantTokenRequestAction,
   GRANT_TOKEN_REQUEST,
   RevokeTokenRequestAction,
   REVOKE_TOKEN_REQUEST
 } from 'decentraland-dapps/dist/modules/authorization/actions'
+import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { areEqual } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
+import { locations } from '../../../modules/routing/locations'
+import { hasTransactionPending } from '../../../modules/transaction/utils'
+import { getContract } from '../../../modules/contract/utils'
 import { isAuthorized } from './utils'
 import { Props } from './Authorization.types'
 import './Authorization.css'
-import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 
 const Authorization = (props: Props) => {
   const {
