@@ -19,7 +19,8 @@
     "accept": "Accept",
     "update": "Update",
     "search": "Search",
-    "apply": "Apply"
+    "apply": "Apply",
+    "network": "Network"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -106,8 +107,8 @@
     "rarity": "Rarity",
     "gender": "Gender",
     "collection": "Collection",
-    "network": "Network",
     "all_collections": "All Collections",
+    "network": "Network",
     "all_networks": "All Networks"
   },
   "nft_card": {

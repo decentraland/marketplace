@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import { Card } from 'decentraland-ui'
 
 import { formatMANA } from '../../lib/mana'
-import { formatDistanceToNow } from '../../lib/date'
 import { locations } from '../../modules/routing/locations'
 import { getNFTName } from '../../modules/nft/utils'
 import { NFT } from '../../modules/nft/types'
@@ -43,15 +42,7 @@ const NFTCard = (props: Props) => {
             </Mana>
           ) : null}
         </Card.Header>
-        {order && order.expiresAt ? (
-          <Card.Meta>
-            {t('nft_card.expires_at', {
-              date: formatDistanceToNow(+order.expiresAt, {
-                addSuffix: true
-              })
-            })}
-          </Card.Meta>
-        ) : null}
+        <Card.Meta>{t(`networks.${nft.network.toLowerCase()}`)}</Card.Meta>
         {parcel ? <ParcelTags nft={nft} /> : null}
         {estate ? <EstateTags nft={nft} /> : null}
         {wearable ? <WearableTags nft={nft} /> : null}

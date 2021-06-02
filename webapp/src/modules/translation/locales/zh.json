@@ -20,7 +20,7 @@
     "update": "更新",
     "search": "搜寻",
     "apply": "应用",
-    "jump_in": "跳转"
+    "network": "网络"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -105,7 +105,9 @@
     "rarity": "稀有度",
     "gender": "性别",
     "collection": "珍藏",
-    "all_collections": "所有珍藏"
+    "all_collections": "所有珍藏",
+    "network": "网络",
+    "all_networks": "所有网络"
   },
   "nft_card": {
     "expires_at": "{date}到期"
@@ -329,6 +331,10 @@
   },
   "price_change_notice": {
     "message": "价格或因市场变化而波动"
+  },
+  "networks": {
+    "ethereum": "Ethereum",
+    "matic": "Polygon"
   },
   "intro_popup": {
     "title": "介绍Polygon MANA",
