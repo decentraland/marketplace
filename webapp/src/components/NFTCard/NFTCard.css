@@ -22,9 +22,9 @@
 }
 
 .ui.card.NFTCard > .content > .header:not(.ui),
-.ui.cards > .card > .content > .header:not(.ui) {
+.ui.cards > .card.NFTCard > .content > .header:not(.ui) {
   display: flex;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .NFTCard .dcl.mana.inline {
