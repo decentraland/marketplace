@@ -41,8 +41,6 @@ const FiltersMenu = (props: Props) => {
     ]
   }, [])
 
-  console.log('-----------------------', contracts)
-
   const rarityOptions = useMemo(() => {
     const options = Object.values(WearableRarity)
       .filter(x => x !== WearableRarity.COMMON && x !== WearableRarity.UNIQUE)
