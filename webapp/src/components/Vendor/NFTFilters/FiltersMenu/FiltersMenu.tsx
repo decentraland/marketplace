@@ -10,6 +10,7 @@ import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
 import { Network } from '@dcl/schemas'
 import { contracts } from '../../../../modules/contract/utils'
+import { NFTCategory } from '../../../../modules/nft/types'
 
 export const ALL_FILTER_OPTION = 'ALL'
 
@@ -31,12 +32,16 @@ const FiltersMenu = (props: Props) => {
         value: ALL_FILTER_OPTION,
         text: t('nft_filters.all_collections')
       },
-      ...contracts.map(contract => ({
-        value: contract.address,
-        text: contract.name
-      }))
+      ...contracts
+        .filter(contract => contract.category === NFTCategory.WEARABLE)
+        .map(contract => ({
+          value: contract.address,
+          text: contract.name
+        }))
     ]
   }, [])
+
+  console.log('-----------------------', contracts)
 
   const rarityOptions = useMemo(() => {
     const options = Object.values(WearableRarity)
