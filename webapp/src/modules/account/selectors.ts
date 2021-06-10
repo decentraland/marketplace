@@ -18,4 +18,4 @@ export const getAddress = createSelector<
   RootState,
   ReturnType<typeof accountMatchSelector>,
   string | undefined
->(accountMatchSelector, match => match?.params.address)
+>(accountMatchSelector, match => match?.params.address?.toLowerCase())
