@@ -31,7 +31,7 @@ type UIReducerAction =
 export function browseReducer(
   state: BrowseUIState = INITIAL_STATE,
   action: UIReducerAction
-) {
+): BrowseUIState {
   switch (action.type) {
     case SET_VIEW: {
       return {
@@ -78,7 +78,7 @@ export function browseReducer(
             view,
             ids: action.payload.nfts.map(nft => nft.id),
             count: action.payload.count,
-            timestamp: action.payload.timestamp
+            lastTimestamp: action.payload.timestamp
           }
         }
         case View.LOAD_MORE: {
@@ -86,7 +86,7 @@ export function browseReducer(
             ...state,
             ids: [...state.ids, ...action.payload.nfts.map(nft => nft.id)],
             count: action.payload.count,
-            timestamp: action.payload.timestamp
+            lastTimestamp: action.payload.timestamp
           }
         }
         default:
