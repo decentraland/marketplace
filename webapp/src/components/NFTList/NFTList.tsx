@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
 import { NFTCard } from '../NFTCard'
@@ -10,7 +11,9 @@ const NFTList = (props: Props) => {
   const { vendor, nfts, page, count, isLoading, onBrowse } = props
 
   const handleLoadMore = useCallback(() => {
-    onBrowse({ page: page + 1 })
+    const newPage = page + 1
+    onBrowse({ page: newPage })
+    getAnalytics().track('Load more', { page: newPage })
   }, [onBrowse, page])
 
   const maxQuerySize = getMaxQuerySize(vendor)
