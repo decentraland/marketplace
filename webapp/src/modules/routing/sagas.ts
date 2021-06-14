@@ -160,7 +160,7 @@ function* getAddress() {
     address = yield select(getAccountAddress)
   }
 
-  return address
+  return address ? address.toLowerCase() : undefined
 }
 
 // TODO: Consider moving this should live to each vendor
