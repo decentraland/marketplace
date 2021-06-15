@@ -69,14 +69,16 @@ class TemplateFile {
   constructor(public ethereum: Ethereum) {}
 
   async write(src: string, destination: string) {
-    const contents = await readFile(src)
+    const contents = fs.readFileSync(src, 'utf-8')
 
     try {
       const newContents = new Parser(contents, this.ethereum).parse()
 
-      await writeFile(destination, newContents)
+      fs.writeFileSync(destination, newContents, 'utf-8')
     } catch (error) {
-      await deleteFile(destination)
+      if (fs.existsSync(destination)) {
+        fs.unlinkSync(destination)
+      }
       throw error
     }
   }
@@ -208,32 +210,6 @@ async function fetch(uri: string, method = 'GET'): Promise<any> {
 
     req.on('error', err => reject(err))
     req.end()
-  })
-}
-
-// ------------------------------------------------------------------
-// File -------------------------------------------------------------
-
-async function readFile(path: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf-8', (err, data) =>
-      err ? reject(err) : resolve(data)
-    )
-  })
-}
-
-async function deleteFile(path: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (!fs.existsSync(path)) {
-      resolve()
-    }
-    fs.unlink(path, err => (err ? reject(err) : resolve()))
-  })
-}
-
-async function writeFile(path: string, data: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(path, data, 'utf-8', err => (err ? reject(err) : resolve()))
   })
 }
 
