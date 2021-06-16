@@ -6,6 +6,7 @@ import { Order } from '../order/types'
 import { Account } from '../account/types'
 import { getNFTName } from './utils'
 import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'
+import { MetaTransactionError } from 'decentraland-transactions'
 
 // Fetch NFTs
 
@@ -92,8 +93,11 @@ export const transferNFTSuccess = (nft: NFT, address: string, txHash: string) =>
       address
     })
   })
-export const transferNFTFailure = (nft: NFT, address: string, error: string) =>
-  action(TRANSFER_NFT_FAILURE, { nft, address, error })
+export const transferNFTFailure = (
+  nft: NFT,
+  address: string,
+  error: MetaTransactionError
+) => action(TRANSFER_NFT_FAILURE, { nft, address, error })
 
 export type TransferNFTRequestAction = ReturnType<typeof transferNFTRequest>
 export type TransferNFTSuccessAction = ReturnType<typeof transferNFTSuccess>

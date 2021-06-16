@@ -1,5 +1,6 @@
 import { action } from 'typesafe-actions'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { MetaTransactionError } from 'decentraland-transactions'
 
 import { NFT } from '../nft/types'
 import { Order } from './types'
@@ -39,7 +40,7 @@ export const createOrderFailure = (
   nft: NFT,
   price: number,
   expiresAt: number,
-  error: string
+  error: MetaTransactionError
 ) => action(CREATE_ORDER_FAILURE, { nft, price, expiresAt, error })
 
 export type CreateOrderRequestAction = ReturnType<typeof createOrderRequest>
@@ -69,8 +70,11 @@ export const executeOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
       price: formatMANA(order.price)
     })
   })
-export const executeOrderFailure = (order: Order, nft: NFT, error: string) =>
-  action(EXECUTE_ORDER_FAILURE, { order, nft, error })
+export const executeOrderFailure = (
+  order: Order,
+  nft: NFT,
+  error: MetaTransactionError
+) => action(EXECUTE_ORDER_FAILURE, { order, nft, error })
 
 export type ExecuteOrderRequestAction = ReturnType<typeof executeOrderRequest>
 export type ExecuteOrderSuccessAction = ReturnType<typeof executeOrderSuccess>
@@ -96,8 +100,11 @@ export const cancelOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
       price: formatMANA(order.price)
     })
   })
-export const cancelOrderFailure = (order: Order, nft: NFT, error: string) =>
-  action(CANCEL_ORDER_FAILURE, { order, nft, error })
+export const cancelOrderFailure = (
+  order: Order,
+  nft: NFT,
+  error: MetaTransactionError
+) => action(CANCEL_ORDER_FAILURE, { order, nft, error })
 
 export type CancelOrderRequestAction = ReturnType<typeof cancelOrderRequest>
 export type CancelOrderSuccessAction = ReturnType<typeof cancelOrderSuccess>

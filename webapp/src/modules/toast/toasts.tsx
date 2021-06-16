@@ -25,3 +25,13 @@ export function getMetaTransactionFailureToast() {
     closable: true
   }
 }
+
+export function getContractAccountFailureToast() {
+  return {
+    type: ToastType.ERROR,
+    title: t('toast.contract_account.title'),
+    body: t('toast.contract_account.body'),
+    timeout: 6000,
+    closable: true
+  }
+}

@@ -100,7 +100,13 @@ export function orderReducer(
     }
     case CREATE_ORDER_FAILURE:
     case EXECUTE_ORDER_FAILURE:
-    case CANCEL_ORDER_FAILURE:
+    case CANCEL_ORDER_FAILURE: {
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error: action.payload.error.message
+      }
+    }
     case FETCH_NFTS_FAILURE: {
       return {
         ...state,
