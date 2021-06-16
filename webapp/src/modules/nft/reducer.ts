@@ -61,13 +61,19 @@ export function nftReducer(
         loading: loadingReducer(state.loading, action)
       }
     }
-    case TRANSFER_NFT_FAILURE:
     case FETCH_NFTS_FAILURE:
     case FETCH_NFT_FAILURE: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error: action.payload.error
+      }
+    }
+    case TRANSFER_NFT_FAILURE: {
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error: action.payload.error.message
       }
     }
     case FETCH_NFT_SUCCESS: {
