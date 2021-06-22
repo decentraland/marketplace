@@ -19,6 +19,7 @@ import {
 import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { PayloadAction } from 'typesafe-actions'
+import { capitalize } from '../../lib/text'
 import {
   EXECUTE_ORDER_SUCCESS,
   CREATE_ORDER_SUCCESS,
@@ -55,7 +56,7 @@ function track<T extends PayloadAction<string, any>>(
 }
 
 function withCategory(eventName: string, item: { category: string }) {
-  const category = item.category[0].toUpperCase() + item.category.slice(1)
+  const category = capitalize(item.category)
   return `${eventName} ${category}`
 }
 
