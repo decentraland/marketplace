@@ -22,7 +22,8 @@ import { ContractName } from 'decentraland-transactions'
 import { NFTCategory } from '../nft/types'
 
 const baseWalletSaga = createWalletSaga({
-  CHAIN_ID: +(process.env.REACT_APP_CHAIN_ID || 1)
+  CHAIN_ID: +(process.env.REACT_APP_CHAIN_ID || 1),
+  POLL_INTERVAL: 0
 })
 
 export function* walletSaga() {
