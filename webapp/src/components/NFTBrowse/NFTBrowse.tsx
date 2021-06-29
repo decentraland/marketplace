@@ -42,7 +42,7 @@ const NFTBrowse = (props: Props) => {
         onlyOnSale
       })
     }
-  }, [viewInState, onFetchNFTsFromRoute])
+  }, [view, vendor, address, onlyOnSale, viewInState, onFetchNFTsFromRoute])
 
   // handlers
   const handleSetFullscreen = useCallback(

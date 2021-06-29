@@ -10,6 +10,7 @@ export type Section =
   | makersPlace.Section
   | knownOrigin.Section
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare -- Intentionally naming the variable the same as the type
 export const Section = {
   [VendorName.DECENTRALAND]: { ...decentraland.Section },
   [VendorName.SUPER_RARE]: { ...superRare.Section },

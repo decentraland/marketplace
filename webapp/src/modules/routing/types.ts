@@ -4,7 +4,7 @@ import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
 import { View } from '../ui/types'
 
-export { Section }
+export { Section } from '../vendor/routing/types'
 
 export enum SortBy {
   NAME = 'name',
