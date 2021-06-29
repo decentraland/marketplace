@@ -1,10 +1,14 @@
 import { Network } from '@dcl/schemas'
-import { NFT } from '../../../nft/types'
+import { ENS } from '../../../nft/ens/types'
+import { Estate } from '../../../nft/estate/types'
+import { Parcel } from '../../../nft/parcel/types'
 import {
   WearableCategory,
   WearableRarity,
-  WearableGender
+  WearableGender,
+  Wearable
 } from '../../../nft/wearable/types'
+import { NFT } from '../../../nft/types'
 import { Order } from '../../../order/types'
 import { VendorName } from '../../types'
 
@@ -28,4 +32,11 @@ export type NFTListFetchResponse = {
 export type NFTFetchReponse = {
   nft: Omit<NFT<VendorName.DECENTRALAND>, 'vendor'>
   order: Order | null
+}
+
+export type NFTData = {
+  parcel?: Parcel
+  estate?: Estate
+  wearable?: Wearable
+  ens?: ENS
 }
