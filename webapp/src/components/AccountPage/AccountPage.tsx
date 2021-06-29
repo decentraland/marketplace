@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { Page, Loader, Popup } from 'decentraland-ui'
+import { Page, Loader } from 'decentraland-ui'
 import { Icon } from 'semantic-ui-react'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { shortenAddress } from '../../modules/wallet/utils'
 import { View } from '../../modules/ui/types'
 import { useTimer } from '../../lib/timer'
 import { Navbar } from '../Navbar'
@@ -18,10 +17,6 @@ import { locations } from '../../modules/routing/locations'
 import { Props } from './AccountPage.types'
 import { Column } from '../Layout/Column'
 import './AccountPage.css'
-
-const ShortenedAddress = (address: string) => {
-  return <div className="profile-address-hash">{shortenAddress(address)}</div>
-}
 
 const AccountPage = (props: Props) => {
   const {
@@ -77,12 +72,7 @@ const AccountPage = (props: Props) => {
                 <Profile address={address} textOnly inline={false} />
               </div>
               <div className="profile-address">
-                <Popup
-                  content={address}
-                  position="bottom center"
-                  trigger={ShortenedAddress(address)}
-                  on="hover"
-                />
+                <div className="profile-address-hash">{address}</div>
                 <div>
                   <CopyToClipboard text={address} onCopy={handleCopying}>
                     <Icon
