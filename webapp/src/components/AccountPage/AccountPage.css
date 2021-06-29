@@ -35,12 +35,19 @@
   margin-right: 5px;
 }
 
-.AccountPage .profile-address-copy-icon {
+.AccountPage .copy {
   color: var(--primary);
   cursor: pointer;
 }
 
-.AccountPage .profile-address-copied-text {
+.AccountPage .copied {
   color: var(--primary);
+}
+
+.AccountPage .profile-copied-text-desktop {
   position: absolute;
+}
+
+.AccountPage .profile-copy-text-mobile {
+  margin-top: 5px;
 }

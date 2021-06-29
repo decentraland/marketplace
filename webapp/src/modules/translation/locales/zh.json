@@ -257,6 +257,9 @@
     "invalid_owner": "您不是{name}的持有者。",
     "submit": "确认"
   },
+  "account_page": {
+    "copied": "已复制 :heavy_check_mark:"
+  },
   "settings_page": {
     "authorizations": "授权",
     "buy_more_mana": "购买更多",

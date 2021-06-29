@@ -3,6 +3,7 @@ import CopyToClipboard from 'react-copy-to-clipboard'
 import { Page, Loader } from 'decentraland-ui'
 import { Icon } from 'semantic-ui-react'
 import { Profile } from 'decentraland-dapps/dist/containers'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { View } from '../../modules/ui/types'
@@ -17,6 +18,44 @@ import { locations } from '../../modules/routing/locations'
 import { Props } from './AccountPage.types'
 import { Column } from '../Layout/Column'
 import './AccountPage.css'
+
+const copyAddressDesktop = (
+  address: string,
+  hasCopiedAddress: boolean,
+  handleCopying: () => void
+) => (
+  <div>
+    <CopyToClipboard text={address} onCopy={handleCopying}>
+      <Icon
+        aria-label="Copy address"
+        aria-hidden="false"
+        className="copy"
+        name="copy outline"
+      />
+    </CopyToClipboard>
+    {hasCopiedAddress && (
+      <span className="profile-copied-text-desktop copied">
+        {t('account_page.copied')}
+      </span>
+    )}
+  </div>
+)
+
+const copyAddressMobile = (
+  address: string,
+  hasCopiedAddress: boolean,
+  handleCopying: () => void
+) => (
+  <div className="profile-copy-text-mobile">
+    <CopyToClipboard text={address} onCopy={handleCopying}>
+      {hasCopiedAddress ? (
+        <span className="copied">{t('settings_page.copied')}</span>
+      ) : (
+        <span className="copy">{t('settings_page.copy_address')}</span>
+      )}
+    </CopyToClipboard>
+  </div>
+)
 
 const AccountPage = (props: Props) => {
   const {
@@ -73,22 +112,11 @@ const AccountPage = (props: Props) => {
               </div>
               <div className="profile-address">
                 <div className="profile-address-hash">{address}</div>
-                <div>
-                  <CopyToClipboard text={address} onCopy={handleCopying}>
-                    <Icon
-                      aria-label="Copy address"
-                      aria-hidden="false"
-                      className="profile-address-copy-icon"
-                      name="copy outline"
-                    />
-                  </CopyToClipboard>
-                  {hasCopiedAddress && (
-                    <span className="profile-address-copied-text">
-                      {t('account_page.copied')}
-                    </span>
-                  )}
-                </div>
+                {!isMobile() &&
+                  copyAddressDesktop(address, hasCopiedAddress, handleCopying)}
               </div>
+              {isMobile() &&
+                copyAddressMobile(address, hasCopiedAddress, handleCopying)}
             </Column>
           </PageHeader>
 
