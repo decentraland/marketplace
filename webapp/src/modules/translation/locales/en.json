@@ -261,6 +261,9 @@
     "invalid_owner": "You are not the owner of {name}.",
     "submit": "Confirm"
   },
+  "account_page": {
+    "copied": "Copied ✔"
+  },
   "settings_page": {
     "authorizations": "Authorizations",
     "buy_more_mana": "BUY MORE",
