@@ -44,12 +44,12 @@
     "@types/redux-logger": "^3.0.7",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
     "@typescript-eslint/parser": "^4.13.0",
+    "dcl-tslint-config-standard": "^2.0.0",
+    "prettier": "^1.19.1",
     "tslint": "^5.20.1",
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^4.1.0",
-    "dcl-tslint-config-standard": "^2.0.0",
-    "typescript": "^4.2.2",
-    "prettier": "^1.19.1"
+    "typescript": "^4.2.2"
   },
   "scripts": {
     "start": "react-scripts start",
