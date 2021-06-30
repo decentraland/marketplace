@@ -9,7 +9,7 @@ export const BROWSE_NFTS = 'Browse NFTs'
 export const browseNFTs = (searchOptions: SearchOptions) =>
   action(BROWSE_NFTS, { searchOptions })
 
-export type BrowseActionNFTsAction = ReturnType<typeof browseNFTs>
+export type BrowseNFTsAction = ReturnType<typeof browseNFTs>
 
 // Navigate
 

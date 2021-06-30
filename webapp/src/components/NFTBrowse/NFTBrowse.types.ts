@@ -5,7 +5,7 @@ import { VendorName } from '../../modules/vendor/types'
 import { setView, SetViewAction } from '../../modules/ui/actions'
 import {
   browseNFTs,
-  BrowseActionNFTsAction,
+  BrowseNFTsAction,
   fetchNFTsFromRoute,
   FetchNFTsFromRouteAction
 } from '../../modules/routing/actions'
@@ -33,6 +33,6 @@ export type MapDispatchProps = Pick<
   'onSetView' | 'onFetchNFTsFromRoute' | 'onBrowse'
 >
 export type MapDispatch = Dispatch<
-  SetViewAction | FetchNFTsFromRouteAction | BrowseActionNFTsAction
+  SetViewAction | FetchNFTsFromRouteAction | BrowseNFTsAction
 >
 export type OwnProps = Pick<Props, 'vendor' | 'address'>
