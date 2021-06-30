@@ -1,0 +1,8 @@
+.ParcelCoordinates .coordinates {
+  flex-wrap: wrap;
+  margin-top: 13px;
+}
+
+.ParcelCoordinates .coordinate {
+  margin: 5px;
+}

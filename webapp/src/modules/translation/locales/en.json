@@ -333,6 +333,9 @@
   "highlights": {
     "title": "Highlights"
   },
+  "parcel_coordinates": {
+    "title": "LANDs"
+  },
   "price_change_notice": {
     "message": "The price may fluctuate due to market changes"
   },
