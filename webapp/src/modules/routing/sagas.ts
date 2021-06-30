@@ -32,7 +32,7 @@ import {
 } from './selectors'
 import {
   BROWSE_NFTS,
-  BrowseActionNFTsAction,
+  BrowseNFTsAction,
   FETCH_NFTS_FROM_ROUTE,
   FetchNFTsFromRouteAction,
   setIsLoadMore
@@ -51,7 +51,7 @@ function* handleFetchNFTsFromRoute(action: FetchNFTsFromRouteAction) {
   yield fetchNFTsFromRoute(newSearchOptions)
 }
 
-function* handleBrowse(action: BrowseActionNFTsAction) {
+function* handleBrowse(action: BrowseNFTsAction) {
   const newSearchOptions: SearchOptions = yield getNewSearchOptions(
     action.payload.searchOptions
   )
