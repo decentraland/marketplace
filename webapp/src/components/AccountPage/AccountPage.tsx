@@ -19,44 +19,6 @@ import { Props } from './AccountPage.types'
 import { Column } from '../Layout/Column'
 import './AccountPage.css'
 
-const copyAddressDesktop = (
-  address: string,
-  hasCopiedAddress: boolean,
-  handleCopying: () => void
-) => (
-  <div>
-    <CopyToClipboard text={address} onCopy={handleCopying}>
-      <Icon
-        aria-label="Copy address"
-        aria-hidden="false"
-        className="copy"
-        name="copy outline"
-      />
-    </CopyToClipboard>
-    {hasCopiedAddress && (
-      <span className="profile-copied-text-desktop copied">
-        {t('account_page.copied')}
-      </span>
-    )}
-  </div>
-)
-
-const copyAddressMobile = (
-  address: string,
-  hasCopiedAddress: boolean,
-  handleCopying: () => void
-) => (
-  <div className="profile-copy-text-mobile">
-    <CopyToClipboard text={address} onCopy={handleCopying}>
-      {hasCopiedAddress ? (
-        <span className="copied">{t('settings_page.copied')}</span>
-      ) : (
-        <span className="copy">{t('settings_page.copy_address')}</span>
-      )}
-    </CopyToClipboard>
-  </div>
-)
-
 const AccountPage = (props: Props) => {
   const {
     address,
@@ -70,7 +32,7 @@ const AccountPage = (props: Props) => {
   const isCurrentAccount =
     address === undefined || (wallet && wallet.address === address)
 
-  const [hasCopiedAddress, handleCopying] = useTimer(1200)
+  const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
   // Redirect to signIn if trying to access current account without a wallet
   useEffect(() => {
     if (isCurrentAccount && !isConnecting && !wallet) {
@@ -112,11 +74,42 @@ const AccountPage = (props: Props) => {
               </div>
               <div className="profile-address">
                 <div className="profile-address-hash">{address}</div>
-                {!isMobile() &&
-                  copyAddressDesktop(address, hasCopiedAddress, handleCopying)}
+                {!isMobile() && (
+                  <div>
+                    <CopyToClipboard
+                      text={address}
+                      onCopy={setHasCopiedAddress}
+                    >
+                      <Icon
+                        aria-label="Copy address"
+                        aria-hidden="false"
+                        className="copy"
+                        name="copy outline"
+                      />
+                    </CopyToClipboard>
+                    {hasCopiedAddress && (
+                      <span className="profile-copied-text-desktop copied">
+                        {t('account_page.copied')}
+                      </span>
+                    )}
+                  </div>
+                )}
               </div>
-              {isMobile() &&
-                copyAddressMobile(address, hasCopiedAddress, handleCopying)}
+              {isMobile() && (
+                <div className="profile-copy-text-mobile">
+                  <CopyToClipboard text={address} onCopy={setHasCopiedAddress}>
+                    {hasCopiedAddress ? (
+                      <span className="copied">
+                        {t('account_page.copied_capitalized')}
+                      </span>
+                    ) : (
+                      <span className="copy">
+                        {t('account_page.copy_address')}
+                      </span>
+                    )}
+                  </CopyToClipboard>
+                </div>
+              )}
             </Column>
           </PageHeader>
 

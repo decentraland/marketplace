@@ -257,7 +257,9 @@
     "submit": "Confirmar"
   },
   "account_page": {
-    "copied": "Copiado ✔"
+    "copied": "Copiado ✔",
+    "copied_capitalized": "COPIADO ✔",
+    "copy_address": "COPIAR DIRECCIÓN"
   },
   "settings_page": {
     "authorizations": "Autorizaciones",

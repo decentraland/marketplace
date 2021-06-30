@@ -29,7 +29,7 @@ const SettingsPage = (props: Props) => {
     onNavigate
   } = props
 
-  const [hasCopiedText, handleOnCopy] = useTimer(1200)
+  const [hasCopiedText, setHasCopiedAddress] = useTimer(1200)
 
   useEffect(() => {
     if (!isConnecting && !wallet) {
@@ -99,7 +99,10 @@ const SettingsPage = (props: Props) => {
                       ? shortenAddress(wallet.address)
                       : wallet.address}
                   </div>
-                  <CopyToClipboard text={wallet.address} onCopy={handleOnCopy}>
+                  <CopyToClipboard
+                    text={wallet.address}
+                    onCopy={setHasCopiedAddress}
+                  >
                     {hasCopiedText ? (
                       <span className="copy-text">
                         {t('settings_page.copied')}
