@@ -1,7 +1,9 @@
 import React from 'react'
 import { Header } from 'decentraland-ui'
+import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
+import { locations } from '../../../../modules/routing/locations'
 import { Row } from '../../../Layout/Row'
 import Coordinate from '../../../Coordinate/Coordinate'
 import { Props } from './ParcelCoordinates.types'
@@ -13,12 +15,14 @@ const ParcelCoordinates = (props: Props) => {
       <Header sub>{t('parcel_coordinates.title')}</Header>
       <Row className="coordinates">
         {props.estate.parcels.map((parcel, index) => (
-          <Coordinate
-            className="coordinate"
-            key={index}
-            x={parcel.x}
-            y={parcel.y}
-          />
+          <Link to={locations.parcel(parcel.x.toString(), parcel.y.toString())}>
+            <Coordinate
+              className="coordinate"
+              key={index}
+              x={parcel.x}
+              y={parcel.y}
+            />
+          </Link>
         ))}
       </Row>
     </div>

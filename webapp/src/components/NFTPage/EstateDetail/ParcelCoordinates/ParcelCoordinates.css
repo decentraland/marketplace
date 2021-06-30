@@ -3,6 +3,11 @@
   margin-top: 13px;
 }
 
+.ParcelCoordinates .coordinates a {
+  color: var(--text);
+}
+
 .ParcelCoordinates .coordinate {
   margin: 5px;
+  cursor: pointer !important;
 }
