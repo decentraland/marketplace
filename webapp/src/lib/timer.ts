@@ -1,19 +1,16 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 
 export const useTimer = (delay: number): [boolean, () => void] => {
   const [isRunning, setRunningStatus] = useState(false)
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
-    undefined
-  )
+  const timeoutRef = useRef<NodeJS.Timeout>()
 
   const startTimer = useCallback(() => {
-    if (timeoutId) {
-      clearTimeout(timeoutId)
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
     }
     setRunningStatus(true)
-    const newTimeoutId = setTimeout(() => setRunningStatus(false), delay)
-    setTimeoutId(newTimeoutId)
-  }, [timeoutId])
+    timeoutRef.current = setTimeout(() => setRunningStatus(false), delay)
+  }, [timeoutRef.current])
 
   return [isRunning, startTimer]
 }
