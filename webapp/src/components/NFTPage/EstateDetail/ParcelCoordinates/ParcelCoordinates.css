@@ -3,11 +3,20 @@
   margin-top: 13px;
 }
 
-.ParcelCoordinates .coordinates a {
+.ParcelCoordinates .coordinates a .coordinate {
   color: var(--text);
+}
+
+.ParcelCoordinates .coordinates a .coordinate:hover {
+  background-color: var(--primary-hover) !important;
+}
+
+.ParcelCoordinates .coordinates a:visited .coordinate {
+  background-color: #d87b8c !important;
 }
 
 .ParcelCoordinates .coordinate {
   margin: 5px;
   cursor: pointer !important;
+  border: 1px solid #37333d;
 }
