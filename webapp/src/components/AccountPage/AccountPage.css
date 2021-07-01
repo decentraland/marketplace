@@ -23,3 +23,31 @@
   font-weight: 600;
   font-size: 18px;
 }
+
+.AccountPage .profile-address {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.AccountPage .profile-address-hash {
+  color: var(--secondary-text);
+  margin-right: 5px;
+}
+
+.AccountPage .copy {
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.AccountPage .copied {
+  color: var(--primary);
+}
+
+.AccountPage .profile-copied-text-desktop {
+  position: absolute;
+}
+
+.AccountPage .profile-copy-text-mobile {
+  margin-top: 5px;
+}
