@@ -1,6 +1,6 @@
 import { Network } from '@dcl/schemas'
 import { Section, SortBy } from '../../../../modules/routing/types'
-import { browse } from '../../../../modules/routing/actions'
+import { browseNFTs } from '../../../../modules/routing/actions'
 import {
   WearableRarity,
   WearableGender
@@ -17,7 +17,7 @@ export type Props = {
   wearableGenders: WearableGender[]
   contracts: string[]
   network?: Network
-  onBrowse: typeof browse
+  onBrowse: typeof browseNFTs
 }
 
 export type MapStateProps = Pick<

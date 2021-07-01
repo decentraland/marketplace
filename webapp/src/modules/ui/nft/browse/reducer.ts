@@ -4,7 +4,7 @@ import {
   FetchNFTsRequestAction,
   FETCH_NFTS_REQUEST
 } from '../../../nft/actions'
-import { BROWSE, BrowseAction } from '../../../routing/actions'
+import { BROWSE_NFTS, BrowseNFTsAction } from '../../../routing/actions'
 import { SET_VIEW, SetViewAction } from '../../actions'
 import { View } from '../../types'
 
@@ -26,7 +26,7 @@ type UIReducerAction =
   | SetViewAction
   | FetchNFTsRequestAction
   | FetchNFTsSuccessAction
-  | BrowseAction
+  | BrowseNFTsAction
 
 export function browseReducer(
   state: BrowseUIState = INITIAL_STATE,
@@ -39,7 +39,7 @@ export function browseReducer(
         view: action.payload.view
       }
     }
-    case BROWSE: {
+    case BROWSE_NFTS: {
       const { view } = action.payload.searchOptions
       return {
         ...state,

@@ -31,8 +31,8 @@ import {
   getSearch
 } from './selectors'
 import {
-  BROWSE,
-  BrowseAction,
+  BROWSE_NFTS,
+  BrowseNFTsAction,
   FETCH_NFTS_FROM_ROUTE,
   FetchNFTsFromRouteAction,
   setIsLoadMore
@@ -41,7 +41,7 @@ import { SearchOptions } from './types'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_NFTS_FROM_ROUTE, handleFetchNFTsFromRoute)
-  yield takeEvery(BROWSE, handleBrowse)
+  yield takeEvery(BROWSE_NFTS, handleBrowse)
 }
 
 function* handleFetchNFTsFromRoute(action: FetchNFTsFromRouteAction) {
@@ -51,7 +51,7 @@ function* handleFetchNFTsFromRoute(action: FetchNFTsFromRouteAction) {
   yield fetchNFTsFromRoute(newSearchOptions)
 }
 
-function* handleBrowse(action: BrowseAction) {
+function* handleBrowse(action: BrowseNFTsAction) {
   const newSearchOptions: SearchOptions = yield getNewSearchOptions(
     action.payload.searchOptions
   )
