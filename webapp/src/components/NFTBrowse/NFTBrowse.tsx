@@ -30,8 +30,7 @@ const NFTBrowse = (props: Props) => {
   // Kick things off
   useEffect(() => {
     onSetView(view)
-    // eslint-disable-next-line
-  }, [view])
+  }, [onSetView, view])
 
   useEffect(() => {
     if (viewInState === view) {
