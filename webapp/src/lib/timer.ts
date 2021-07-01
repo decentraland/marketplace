@@ -10,7 +10,7 @@ export const useTimer = (delay: number): [boolean, () => void] => {
     }
     setRunningStatus(true)
     timeoutRef.current = setTimeout(() => setRunningStatus(false), delay)
-  }, [timeoutRef.current])
+  }, [delay, timeoutRef])
 
   return [isRunning, startTimer]
 }

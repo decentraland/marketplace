@@ -46,16 +46,16 @@ export const RARITY_COLOR = {
   [WearableRarity.COMMON]: '#ABC1C1'
 }
 
+export enum BodyShape {
+  MALE = 'BaseMale',
+  FEMALE = 'BaseFemale'
+}
+
 export type Wearable = {
   description: string
   category: WearableCategory
   rarity: WearableRarity
   bodyShapes: BodyShape[]
-}
-
-export enum BodyShape {
-  MALE = 'BaseMale',
-  FEMALE = 'BaseFemale'
 }
 
 export enum WearableGender {
