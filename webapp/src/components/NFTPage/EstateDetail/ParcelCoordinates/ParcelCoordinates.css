@@ -8,7 +8,7 @@
 }
 
 .ParcelCoordinates .coordinates a .coordinate:hover {
-  background-color: var(--primary-hover) !important;
+  background-color: rgba(var(--bluish-steel-raw), 0.8) !important;
 }
 
 .ParcelCoordinates .coordinates a:visited .coordinate {
