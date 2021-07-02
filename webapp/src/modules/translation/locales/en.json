@@ -261,6 +261,11 @@
     "invalid_owner": "You are not the owner of {name}.",
     "submit": "Confirm"
   },
+  "account_page": {
+    "copied": "Copied ✔",
+    "copied_capitalized": "COPIED ✔",
+    "copy_address": "COPY ADDRESS"
+  },
   "settings_page": {
     "authorizations": "Authorizations",
     "buy_more_mana": "BUY MORE",

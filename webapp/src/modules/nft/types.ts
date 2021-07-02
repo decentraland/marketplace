@@ -1,12 +1,12 @@
 import { ChainId, Network } from '@dcl/schemas'
-import { Parcel } from './parcel/types'
-import { Estate } from './estate/types'
-import { Wearable } from './wearable/types'
-import { ENS } from './ens/types'
 import { View } from '../ui/types'
 import { NFTsFetchFilters } from '../vendor/nft/types'
 import { VendorName } from '../vendor/types'
 import { SortDirection } from '../routing/types'
+import { NFTData as DecentralandData } from '../vendor/decentraland/nft/types'
+import { NFTData as SuperRareData } from '../vendor/super_rare/nft/types'
+import { NFTData as MakersPlaceData } from '../vendor/makers_place/nft/types'
+import { NFTData as KnownOriginData } from '../vendor/known_origin/nft/types'
 
 export enum NFTSortBy {
   NAME = 'name',
@@ -23,27 +23,16 @@ export enum NFTCategory {
   ART = 'art'
 }
 
-// TODO: Move this to their own vendor folders
-export type DecentralandNFT = {
-  parcel?: Parcel
-  estate?: Estate
-  wearable?: Wearable
-  ens?: ENS
-}
-export type SuperRareNFT = { description: string }
-export type MakersPlaceNFT = { description: string }
-export type KnownOriginNFT = { description: string; isEdition: boolean }
-
 export type Data<V extends VendorName> = V extends VendorName.DECENTRALAND
-  ? DecentralandNFT
+  ? DecentralandData
   : V extends VendorName.SUPER_RARE
-  ? SuperRareNFT
+  ? SuperRareData
   : V extends VendorName.MAKERS_PLACE
-  ? MakersPlaceNFT
+  ? MakersPlaceData
   : V extends VendorName.KNOWN_ORIGIN
-  ? KnownOriginNFT
+  ? KnownOriginData
   : V extends void
-  ? DecentralandNFT | SuperRareNFT | MakersPlaceNFT | KnownOriginNFT
+  ? DecentralandData | SuperRareData | MakersPlaceData | KnownOriginData
   : never
 
 export type NFT<V extends VendorName = any> = {

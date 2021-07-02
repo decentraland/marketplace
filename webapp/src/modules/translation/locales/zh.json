@@ -257,11 +257,16 @@
     "invalid_owner": "您不是{name}的持有者。",
     "submit": "确认"
   },
+  "account_page": {
+    "copied": "已复制 ✔",
+    "copied_capitalized": "已复制 ✔",
+    "copy_address": "复制地址"
+  },
   "settings_page": {
     "authorizations": "授权",
     "buy_more_mana": "购买更多",
     "copy_address": "复制地址",
-    "copied": "已复制 :heavy_check_mark:",
+    "copied": "已复制 ✔",
     "authorization_error": "我们无法加载您的授权，请重试",
     "authorization_error_contact": "如果错误仍然存​​在，请随时与我们联系",
     "for_buying": "购买",

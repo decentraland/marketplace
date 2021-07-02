@@ -2,14 +2,14 @@ import { action } from 'typesafe-actions'
 
 import { SearchOptions } from './types'
 
-// Browse
+// Browse NFTs
 
-export const BROWSE = 'Browse'
+export const BROWSE_NFTS = 'Browse NFTs'
 
-export const browse = (searchOptions: SearchOptions) =>
-  action(BROWSE, { searchOptions })
+export const browseNFTs = (searchOptions: SearchOptions) =>
+  action(BROWSE_NFTS, { searchOptions })
 
-export type BrowseAction = ReturnType<typeof browse>
+export type BrowseNFTsAction = ReturnType<typeof browseNFTs>
 
 // Navigate
 

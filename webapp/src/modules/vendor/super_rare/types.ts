@@ -1,11 +1,11 @@
-export type SuperRareOrder = {
-  asset: SuperRareAsset
-  taker: SuperRareOwner | null
-  maker: SuperRareOwner | null
-  marketContractAddress: string
-  timestamp: string
-  amount: number
-  amountWithFee: number
+export type SuperRareOwner = {
+  address: string
+  user: {
+    username: string
+    ethereumAddress: string
+    superRareUrl: string
+    avatar: string | null
+  }
 }
 
 export type SuperRareAsset = {
@@ -25,14 +25,14 @@ export type SuperRareAsset = {
   tags: string[]
 }
 
-export type SuperRareOwner = {
-  address: string
-  user: {
-    username: string
-    ethereumAddress: string
-    superRareUrl: string
-    avatar: string | null
-  }
+export type SuperRareOrder = {
+  asset: SuperRareAsset
+  taker: SuperRareOwner | null
+  maker: SuperRareOwner | null
+  marketContractAddress: string
+  timestamp: string
+  amount: number
+  amountWithFee: number
 }
 
 export type SuperRareFetchNFTOptions = Partial<{

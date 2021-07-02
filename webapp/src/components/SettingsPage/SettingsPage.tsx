@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { Page, Grid, Blockie, Loader, Form } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 
@@ -12,9 +13,9 @@ import { shortenAddress } from '../../modules/wallet/utils'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { Authorization } from './Authorization'
-import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { getContractNames } from '../../modules/vendor'
 import { getContract } from '../../modules/contract/utils'
+import { useTimer } from '../../lib/timer'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
 
@@ -28,19 +29,7 @@ const SettingsPage = (props: Props) => {
     onNavigate
   } = props
 
-  const [hasCopiedText, setHasCopiedText] = useState(false)
-  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | undefined>(
-    undefined
-  )
-
-  const handleOnCopy = useCallback(() => {
-    if (timeoutId) {
-      clearTimeout(timeoutId)
-    }
-    setHasCopiedText(true)
-    const newTimeoutId = setTimeout(() => setHasCopiedText(false), 1200)
-    setTimeoutId(newTimeoutId)
-  }, [timeoutId])
+  const [hasCopiedText, setHasCopiedAddress] = useTimer(1200)
 
   useEffect(() => {
     if (!isConnecting && !wallet) {
@@ -110,7 +99,10 @@ const SettingsPage = (props: Props) => {
                       ? shortenAddress(wallet.address)
                       : wallet.address}
                   </div>
-                  <CopyToClipboard text={wallet.address} onCopy={handleOnCopy}>
+                  <CopyToClipboard
+                    text={wallet.address}
+                    onCopy={setHasCopiedAddress}
+                  >
                     {hasCopiedText ? (
                       <span className="copy-text">
                         {t('settings_page.copied')}

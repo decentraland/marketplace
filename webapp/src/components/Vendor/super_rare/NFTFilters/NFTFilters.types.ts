@@ -1,5 +1,5 @@
 import { Section, SortBy } from '../../../../modules/routing/types'
-import { browse } from '../../../../modules/routing/actions'
+import { browseNFTs } from '../../../../modules/routing/actions'
 
 export type Props = {
   count?: number
@@ -7,7 +7,7 @@ export type Props = {
   sortBy?: SortBy
   search: string
   onlyOnSale?: boolean
-  onBrowse: typeof browse
+  onBrowse: typeof browseNFTs
 }
 
 export type MapStateProps = Pick<

@@ -34,7 +34,6 @@ export type MakersPlaceAsset = {
   sale_contract_address?: string
 }
 
-export type FetchOneResponse = FetchOneSuccessResponse | FetchOneFailureResponse
 export type FetchOneSuccessResponse = {
   item: MakersPlaceAsset
   status: 'success'
@@ -43,8 +42,8 @@ export type FetchOneFailureResponse = {
   status: 'failure'
   errors: Record<string, string[]>
 }
+export type FetchOneResponse = FetchOneSuccessResponse | FetchOneFailureResponse
 
-export type FetchResponse = FetchSuccessResponse | FetchFailureResponse
 export type FetchSuccessResponse = {
   items: MakersPlaceAsset[]
   page_num: number
@@ -57,5 +56,6 @@ export type FetchFailureResponse = {
   status: 'failure'
   errors: string[]
 }
+export type FetchResponse = FetchSuccessResponse | FetchFailureResponse
 
 export type Response = FetchOneResponse | FetchResponse

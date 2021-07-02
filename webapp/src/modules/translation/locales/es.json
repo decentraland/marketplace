@@ -256,6 +256,11 @@
     "invalid_owner": "No eres el dueño de {name}.",
     "submit": "Confirmar"
   },
+  "account_page": {
+    "copied": "Copiado ✔",
+    "copied_capitalized": "COPIADO ✔",
+    "copy_address": "COPIAR DIRECCIÓN"
+  },
   "settings_page": {
     "authorizations": "Autorizaciones",
     "buy_more_mana": "COMPRAR MÁS",

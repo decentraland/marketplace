@@ -4,8 +4,8 @@ import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor/types'
 import { setView, SetViewAction } from '../../modules/ui/actions'
 import {
-  browse,
-  BrowseAction,
+  browseNFTs,
+  BrowseNFTsAction,
   fetchNFTsFromRoute,
   FetchNFTsFromRouteAction
 } from '../../modules/routing/actions'
@@ -20,7 +20,7 @@ export type Props = {
   isLoading: boolean
   onSetView: typeof setView
   onFetchNFTsFromRoute: typeof fetchNFTsFromRoute
-  onBrowse: typeof browse
+  onBrowse: typeof browseNFTs
   onlyOnSale?: boolean
 }
 
@@ -33,6 +33,6 @@ export type MapDispatchProps = Pick<
   'onSetView' | 'onFetchNFTsFromRoute' | 'onBrowse'
 >
 export type MapDispatch = Dispatch<
-  SetViewAction | FetchNFTsFromRouteAction | BrowseAction
+  SetViewAction | FetchNFTsFromRouteAction | BrowseNFTsAction
 >
 export type OwnProps = Pick<Props, 'vendor' | 'address'>

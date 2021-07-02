@@ -30,8 +30,7 @@ const NFTBrowse = (props: Props) => {
   // Kick things off
   useEffect(() => {
     onSetView(view)
-    // eslint-disable-next-line
-  }, [view])
+  }, [onSetView, view])
 
   useEffect(() => {
     if (viewInState === view) {
@@ -42,7 +41,7 @@ const NFTBrowse = (props: Props) => {
         onlyOnSale
       })
     }
-  }, [viewInState, onFetchNFTsFromRoute])
+  }, [view, vendor, address, onlyOnSale, viewInState, onFetchNFTsFromRoute])
 
   // handlers
   const handleSetFullscreen = useCallback(
