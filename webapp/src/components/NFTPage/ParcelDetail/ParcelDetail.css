@@ -24,6 +24,20 @@
   align-items: center;
 }
 
+.ParcelDetail .estate-information {
+  font-size: 20px;
+}
+
+/* Add classes to this */
+.ParcelDetail .left {
+  flex: 1 0 auto !important;
+}
+
+.ParcelDetail .right {
+  overflow-wrap: break-word;
+  overflow: hidden;
+}
+
 @media (max-width: 768px) {
   .ParcelDetail .jump-in-badge {
     display: none;
