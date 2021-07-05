@@ -25,16 +25,22 @@
 }
 
 .ParcelDetail .estate-information {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: 20px;
 }
 
+.ParcelDetail .parcel-detail-title {
+  align-items: center;
+}
+
 /* Add classes to this */
-.ParcelDetail .left {
+.ParcelDetail .left-title {
   flex: 1 0 auto !important;
 }
 
-.ParcelDetail .right {
-  overflow-wrap: break-word;
+.ParcelDetail .right-title {
   overflow: hidden;
 }
 

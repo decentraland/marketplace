@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { NFTCategory } from '../../../modules/nft/types'
@@ -41,6 +41,8 @@ const ParcelDetail = (props: Props) => {
       </PageHeader>
       <Container className="ParcelDetail">
         <Title
+          className="parcel-detail-title"
+          leftClassName="left-title"
           left={
             <Header size="large">
               <div className="text">
@@ -62,13 +64,24 @@ const ParcelDetail = (props: Props) => {
               </div>
             </Header>
           }
+          rightClassName="right-title"
           right={
             isPartOfEstate ? (
               <div className="estate-information">
-                {t('nft_page.estate_link')}{' '}
-                <Link to={locations.nft(nft.owner, parcel.estate!.tokenId)}>
-                  {parcel.estate!.name}
-                </Link>
+                <T
+                  id="nft_page.part_of_estate"
+                  values={{
+                    estate_name: (
+                      <Link
+                        to={locations.nft(nft.owner, parcel.estate!.tokenId)}
+                      >
+                        <span title={parcel.estate!.name}>
+                          {parcel.estate!.name}
+                        </span>
+                      </Link>
+                    )
+                  }}
+                />
               </div>
             ) : (
               <Owner nft={nft} />

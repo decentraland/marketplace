@@ -36,14 +36,16 @@ const EstateDetail = (props: Props) => {
       <Container className="EstateDetail">
         <Title
           left={
-            <Header size="large">
-              <div className="text">
-                {getNFTName(nft)}
+            <Header className="estate-title" size="large">
+              <div className="estate-title-name">{getNFTName(nft)}</div>
+              <div className="estate-title-land">
                 <Badge color="#37333d">
                   {estate.size.toLocaleString()} LAND
                 </Badge>
-                {estate.size > 0 ? (
-                  <Badge color="#ff2d55" className="jump-in-badge">
+              </div>
+              {estate.size > 0 ? (
+                <div className="estate-title-jump-in">
+                  <Badge className="jump-in-badge" color="#ff2d55">
                     <a
                       href={buildExplorerUrl(x, y)}
                       target="_blank"
@@ -53,8 +55,8 @@ const EstateDetail = (props: Props) => {
                       <i className="jump-in-icon" />
                     </a>
                   </Badge>
-                ) : null}
-              </div>
+                </div>
+              ) : null}
             </Header>
           }
           right={<Owner nft={nft} />}
