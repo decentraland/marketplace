@@ -1,4 +1,4 @@
-.ParcelCoordinates .coordinates {
+/* .ParcelCoordinates .coordinates {
   display: grid;
   justify-content: space-between;
   grid-template-columns: repeat(auto-fill, 110px);
@@ -18,6 +18,30 @@
 }
 
 .ParcelCoordinates .coordinate {
+  margin: 6px;
+  cursor: pointer !important;
+} */
+
+.coordinates {
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: repeat(auto-fill, 110px);
+  margin-top: 13px;
+}
+
+.coordinates a .coordinate {
+  color: var(--text);
+}
+
+.coordinates a .coordinate:hover {
+  background-color: var(--primary) !important;
+}
+
+.coordinates a:visited .coordinate {
+  background-color: #242129 !important;
+}
+
+.coordinate {
   margin: 6px;
   cursor: pointer !important;
 }

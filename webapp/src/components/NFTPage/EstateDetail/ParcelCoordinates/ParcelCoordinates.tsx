@@ -7,17 +7,17 @@ import { locations } from '../../../../modules/routing/locations'
 import { Row } from '../../../Layout/Row'
 import Coordinate from '../../../Coordinate/Coordinate'
 import { Props } from './ParcelCoordinates.types'
-import './ParcelCoordinates.css'
+import styles from './ParcelCoordinates.module.css'
 
 const ParcelCoordinates = (props: Props) => {
   return (
-    <div className="ParcelCoordinates">
+    <div className={styles.ParcelCoordinates}>
       <Header sub>{t('parcel_coordinates.title')}</Header>
-      <Row className="coordinates">
+      <Row className={styles.coordinates}>
         {props.estate.parcels.map((parcel, index) => (
           <Link to={locations.parcel(parcel.x.toString(), parcel.y.toString())}>
             <Coordinate
-              className="coordinate"
+              className={styles.coordinate}
               key={index}
               x={parcel.x}
               y={parcel.y}
