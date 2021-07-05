@@ -1,19 +1,19 @@
 import React from 'react'
 import { Badge } from 'decentraland-ui'
 import { Props } from './Coordinate.types'
-import './Coordinate.css'
+import styles from './Coordinate.module.css'
 
 const Coordinate = (props: Props) => {
-  const classes = ['Coordinate']
   const { x, y, className } = props
+  // const classes = ['Coordinate']
 
-  if (className) {
-    classes.push(className)
-  }
+  // if (className) {
+  //   classes.push(className)
+  // }
 
   return (
-    <Badge className={classes.join(' ')} color="#37333D">
-      <i className="pin" />
+    <Badge className={className} color="#37333D">
+      <i className={styles.pin} />
       {`${x},${y}`}
     </Badge>
   )
