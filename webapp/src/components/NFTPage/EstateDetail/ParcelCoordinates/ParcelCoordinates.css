@@ -1,5 +1,7 @@
 .ParcelCoordinates .coordinates {
-  flex-wrap: wrap;
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: repeat(auto-fill, 110px);
   margin-top: 13px;
 }
 
@@ -8,8 +10,7 @@
 }
 
 .ParcelCoordinates .coordinates a .coordinate:hover {
-  /* background-color: rgba(var(--bluish-steel-raw), 0.8) !important; */
-  background-color: #ff2d55 !important;
+  background-color: var(--primary) !important;
 }
 
 .ParcelCoordinates .coordinates a:visited .coordinate {
@@ -19,5 +20,4 @@
 .ParcelCoordinates .coordinate {
   margin: 6px;
   cursor: pointer !important;
-  /* border: 1px solid #37333d; */
 }
