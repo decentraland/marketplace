@@ -1,0 +1,25 @@
+.Collapsible {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.showMore {
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.showMore span {
+  font-size: 15px;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.children {
+  width: 100%;
+}
+
+.collapsibleWrapper {
+  overflow: hidden;
+  width: 100%;
+}

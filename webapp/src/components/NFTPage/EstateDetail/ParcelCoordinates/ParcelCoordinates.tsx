@@ -1,3 +1,4 @@
+// import React, { useCallback, useState } from 'react'
 import React from 'react'
 import { Header } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
@@ -8,38 +9,32 @@ import { Row } from '../../../Layout/Row'
 import Coordinate from '../../../Coordinate/Coordinate'
 import { Props } from './ParcelCoordinates.types'
 import styles from './ParcelCoordinates.module.css'
-import { useState } from 'react'
 import classNames from 'classnames'
+import { Collapsible } from '../../../Collapsible'
 
 const ParcelCoordinates = (props: Props) => {
-  const [isShowingMore, setShowMore] = useState(false)
-  const coordinatesClasses = classNames(styles.coordinates, {
-    [styles.expanded]: isShowingMore,
-    [styles.collapsed]: !isShowingMore
-  })
+  const { estate } = props
+  const coordinatesClasses = classNames(styles.coordinates)
 
   return (
     <div className={styles.ParcelCoordinates}>
       <Header sub>{t('parcel_coordinates.title')}</Header>
-      <Row className={coordinatesClasses}>
-        {props.estate.parcels.map((parcel, index) => (
-          <Link to={locations.parcel(parcel.x.toString(), parcel.y.toString())}>
-            <Coordinate
-              className={styles.coordinate}
-              key={index}
-              x={parcel.x}
-              y={parcel.y}
-            />
-          </Link>
-        ))}
-      </Row>
-      <Row className={styles.showMore}>
-        <span onClick={() => setShowMore(!isShowingMore)}>
-          {isShowingMore
-            ? t('parcel_coordinates.show_less')
-            : t('parcel_coordinates.show_more')}
-        </span>
-      </Row>
+      <Collapsible collapsedHeight={60}>
+        <Row className={coordinatesClasses}>
+          {estate.parcels.map((parcel, index) => (
+            <Link
+              to={locations.parcel(parcel.x.toString(), parcel.y.toString())}
+            >
+              <Coordinate
+                className={styles.coordinate}
+                key={index}
+                x={parcel.x}
+                y={parcel.y}
+              />
+            </Link>
+          ))}
+        </Row>
+      </Collapsible>
     </div>
   )
 }
