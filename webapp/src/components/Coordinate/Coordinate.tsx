@@ -5,11 +5,6 @@ import styles from './Coordinate.module.css'
 
 const Coordinate = (props: Props) => {
   const { x, y, className } = props
-  // const classes = ['Coordinate']
-
-  // if (className) {
-  //   classes.push(className)
-  // }
 
   return (
     <Badge className={className} color="#37333D">
