@@ -1,5 +1,4 @@
 import React from 'react'
-// import { Button, Header } from 'decentraland-ui'
 import { Header } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
