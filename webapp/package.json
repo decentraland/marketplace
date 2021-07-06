@@ -7,7 +7,7 @@
     "apollo-boost": "^0.4.7",
     "connected-react-router": "^6.6.1",
     "date-fns": "^2.8.1",
-    "decentraland-dapps": "^12.13.2",
+    "decentraland-dapps": "^12.15.0-hotfix-multical",
     "decentraland-transactions": "^1.12.1",
     "decentraland-ui": "^3.5.2",
     "dotenv": "^8.2.0",
@@ -28,12 +28,12 @@
     "web3x-es": "^4.0.6"
   },
   "devDependencies": {
-    "@testing-library/react-hooks": "^7.0.0",
-    "@types/jest": "^24.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
+    "@testing-library/react-hooks": "^7.0.0",
     "@testing-library/user-event": "^7.1.2",
     "@types/history": "^4.7.3",
+    "@types/jest": "^24.9.1",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-copy-to-clipboard": "^4.3.0",
