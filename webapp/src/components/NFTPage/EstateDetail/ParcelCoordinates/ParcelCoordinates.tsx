@@ -1,16 +1,15 @@
-// import React, { useCallback, useState } from 'react'
 import React from 'react'
 import { Header } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import classNames from 'classnames'
 
 import { locations } from '../../../../modules/routing/locations'
 import { Row } from '../../../Layout/Row'
 import Coordinate from '../../../Coordinate/Coordinate'
+import { Collapsible } from '../../../Collapsible'
 import { Props } from './ParcelCoordinates.types'
 import styles from './ParcelCoordinates.module.css'
-import classNames from 'classnames'
-import { Collapsible } from '../../../Collapsible'
 
 const ParcelCoordinates = (props: Props) => {
   const { estate } = props
