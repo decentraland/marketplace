@@ -14,6 +14,10 @@ const Collapsible = (props: Props) => {
   ])
 
   useEffect(() => {
+    setIsCollapsed(true)
+  }, [children])
+
+  useEffect(() => {
     function setCollapsableUsingHeight() {
       if (!mainElement.current) return
 
