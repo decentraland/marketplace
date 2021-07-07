@@ -1,6 +1,5 @@
+import React, { useCallback, useRef, useState, useEffect } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import React, { useCallback, useRef, useState } from 'react'
-import { useEffect } from 'react'
 import { Row } from '../Layout/Row'
 import styles from './Collapsible.module.css'
 import { Props } from './Collapsible.types'
