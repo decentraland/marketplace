@@ -35,14 +35,6 @@
   flex: none;
 }
 
-.AtlasPopup .pin {
-  background-image: url(../../../images/pin-land.svg);
-  width: 17px;
-  height: 16px;
-  background-size: 19px;
-  background-position: -2px -1px;
-}
-
 .AtlasPopup .dcl.section.medium:last-child {
   margin-bottom: 0px;
 }
