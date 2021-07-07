@@ -1,5 +1,5 @@
 import React from 'react'
-import { Badge } from 'decentraland-ui'
+import { Badge } from '../NFTPage/Badge'
 import { Props } from './Coordinate.types'
 import styles from './Coordinate.module.css'
 
