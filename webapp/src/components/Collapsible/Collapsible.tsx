@@ -23,7 +23,7 @@ const Collapsible = (props: Props) => {
     setCollapsableUsingHeight()
     window.addEventListener('resize', setCollapsableUsingHeight)
     return () => window.removeEventListener('resize', setCollapsableUsingHeight)
-  }, [collapsedHeight, setIsCollapsible])
+  }, [collapsedHeight, children, setIsCollapsible])
 
   return (
     <div className={styles.Collapsible}>
