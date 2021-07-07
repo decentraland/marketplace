@@ -7,7 +7,7 @@
     "apollo-boost": "^0.4.7",
     "connected-react-router": "^6.6.1",
     "date-fns": "^2.8.1",
-    "decentraland-dapps": "^12.15.0-hotfix-multical",
+    "decentraland-dapps": "^12.15.0",
     "decentraland-transactions": "^1.12.1",
     "decentraland-ui": "^3.5.2",
     "dotenv": "^8.2.0",
