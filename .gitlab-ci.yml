@@ -10,7 +10,7 @@ build:
     - ./setupEnv.sh
     - npm install && npm run build
     - dcl-lock-sync
-    - cd .ci && npm install && dcl-up website-market
+    - cd .ci && npm ci && dcl-up website-market
     - dcl-sync-release && cd ..
     - dcl-upload build
     - cd .ci && dcl-cache-invalidation
