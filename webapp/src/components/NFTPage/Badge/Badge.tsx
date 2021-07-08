@@ -5,7 +5,7 @@ import './Badge.css'
 const Badge = (props: Props) => {
   const { color, className = '', children } = props
   return (
-    <div className={`Badge ${className}`} style={{ backgroundColor: color }}>
+    <div className={`${className} Badge`} style={{ backgroundColor: color }}>
       {children}
     </div>
   )

@@ -25,22 +25,13 @@
   font-weight: 600;
 }
 
-.AtlasPopup .dcl.badge {
-  font-size: 12px;
-  line-height: 13px;
-  padding: 3px 5px;
+.AtlasPopup .coordinates {
+  font-size: 12px !important;
+  line-height: 13px !important;
+  padding: 3px 5px !important;
   margin-left: 8px;
-  height: 24px;
-  font-weight: 500;
-  flex: none;
-}
-
-.AtlasPopup .pin {
-  background-image: url(../../../images/pin-land.svg);
-  width: 17px;
-  height: 16px;
-  background-size: 19px;
-  background-position: -2px -1px;
+  height: 24px !important;
+  font-weight: 500 !important;
 }
 
 .AtlasPopup .dcl.section.medium:last-child {

@@ -333,6 +333,11 @@
   "highlights": {
     "title": "Destacados"
   },
+  "parcel_coordinates": {
+    "title": "Parcelas",
+    "show_more": "MOSTRAR MÁS",
+    "show_less": "MOSTRAR MENOS"
+  },
   "price_change_notice": {
     "message": "El precio puede variar debido a cambios en el mercado"
   },
