@@ -8,7 +8,7 @@ build:
   script:
     - cd webapp
     - ./setupEnv.sh
-    - npm install && npm run build
+    - npm ci && npm run build
     - dcl-lock-sync
     - cd .ci && npm ci && dcl-up website-market
     - dcl-sync-release && cd ..
