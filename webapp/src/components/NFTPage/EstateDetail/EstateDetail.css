@@ -1,22 +1,7 @@
-.EstateDetail .jump-in-icon {
-  background: url(../../../images/jump_in.svg);
-  background-size: 16px 16px;
-  width: 16px;
-  height: 16px;
-  background-repeat: no-repeat;
-  display: inline-block;
-  margin-left: 6px;
-}
-
-.EstateDetail .Badge a {
-  color: var(--text);
-  display: flex;
-  align-items: center;
-}
-
 .EstateDetail .estate-title {
   max-width: 70%;
   display: flex;
+  align-items: center;
 }
 
 .EstateDetail .estate-title-name {
@@ -25,6 +10,11 @@
 
 .EstateDetail .estate-title-land {
   flex: 0 0 auto;
+}
+
+.EstateDetail .estate-title-jump-in {
+  flex: 0 0 auto;
+  margin-left: 16px;
 }
 
 @media (max-width: 768px) {

@@ -1,7 +1,11 @@
-.Badge a {
+.JumpIn a {
   color: var(--text);
   display: flex;
   align-items: center;
+}
+
+.JumpIn a:hover {
+  color: var(--text);
 }
 
 .jumpInIcon {

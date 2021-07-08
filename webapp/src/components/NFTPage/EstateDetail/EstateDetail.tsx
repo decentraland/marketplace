@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
+// import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+// import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
@@ -19,6 +19,7 @@ import { Bids } from '../Bids'
 import { Props } from './EstateDetail.types'
 import { ParcelCoordinates } from './ParcelCoordinates'
 import './EstateDetail.css'
+import { JumpIn } from '../JumpIn'
 
 const EstateDetail = (props: Props) => {
   const { nft } = props
@@ -39,24 +40,11 @@ const EstateDetail = (props: Props) => {
           left={
             <Header className="estate-title" size="large">
               <div className="estate-title-name">{getNFTName(nft)}</div>
-              <div className="estate-title-land">
-                <Badge color="#37333d">
-                  {estate.size.toLocaleString()} LAND
-                </Badge>
-              </div>
+              <Badge className="estate-title-land" color="#37333d">
+                {estate.size.toLocaleString()} LAND
+              </Badge>
               {estate.size > 0 ? (
-                <div className="estate-title-jump-in">
-                  <Badge className="jump-in-badge" color="#ff2d55">
-                    <a
-                      href={buildExplorerUrl(x, y)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {t('nft_page.jump')}&nbsp;{t('nft_page.in')}
-                      <i className="jump-in-icon" />
-                    </a>
-                  </Badge>
-                </div>
+                <JumpIn className="estate-title-jump-in" x={x} y={y} />
               ) : null}
             </Header>
           }
