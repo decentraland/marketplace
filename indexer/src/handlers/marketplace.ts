@@ -31,6 +31,7 @@ export function handleOrderCreated(event: OrderCreated): void {
     order.category = category
     order.nft = nftId
     order.nftAddress = event.params.nftAddress
+    order.tokenId = event.params.assetId
     order.txHash = event.transaction.hash
     order.owner = event.params.seller
     order.price = event.params.priceInWei

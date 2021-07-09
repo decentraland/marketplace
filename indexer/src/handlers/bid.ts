@@ -33,6 +33,7 @@ export function handleBidCreated(event: BidCreated): void {
     bid.bidder = event.params._bidder
     bid.price = event.params._price
     bid.fingerprint = event.params._fingerprint
+    bid.tokenId = event.params._tokenId
     bid.blockchainId = event.params._id.toHexString()
     bid.blockNumber = event.block.number
     bid.expiresAt = event.params._expiresAt.times(BigInt.fromI32(1000))
