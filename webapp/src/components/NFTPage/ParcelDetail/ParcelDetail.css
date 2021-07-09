@@ -1,27 +1,32 @@
-.ParcelDetail .pin {
-  background-image: url(../../../images/pin.svg);
-  width: 12px;
-  height: 14px;
-  display: inline-block;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin-right: 4px;
-}
-
-.ParcelDetail .jump-in-icon {
-  background: url(../../../images/jump_in.svg);
-  background-size: 16px 16px;
-  width: 16px;
-  height: 16px;
-  background-repeat: no-repeat;
-  display: inline-block;
-  margin-left: 6px;
-}
-
-.ParcelDetail .Badge a {
-  color: var(--text);
+.ParcelDetail .left-title {
+  flex: 1 1 auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+}
+
+.ParcelDetail .right-title {
+  flex: 1 1 auto;
+  max-width: 400px;
+  overflow: hidden;
+  padding-left: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ParcelDetail .parcel-title-name {
+  flex: 0 1 auto;
+  word-wrap: break-word;
+}
+
+.ParcelDetail .parcel-title-coordinate {
+  margin-left: 16px;
+  margin-top: 0px;
+  flex: 0 0 auto;
+}
+
+.ParcelDetail .parcel-title-jump-in {
+  flex: 0 0 auto;
+  margin-left: 16px;
 }
 
 .ParcelDetail .estate-information {
@@ -29,23 +34,15 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 20px;
-}
-
-.ParcelDetail .parcel-detail-title {
-  align-items: center;
-}
-
-/* Add classes to this */
-.ParcelDetail .left-title {
-  flex: 1 0 auto !important;
-}
-
-.ParcelDetail .right-title {
-  overflow: hidden;
+  line-height: 30px;
 }
 
 @media (max-width: 768px) {
   .ParcelDetail .jump-in-badge {
     display: none;
+  }
+
+  .ParcelDetail .right-title {
+    padding-left: 0px;
   }
 }

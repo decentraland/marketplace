@@ -1,4 +1,5 @@
 import React from 'react'
+import classnames from 'classnames'
 
 import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
@@ -7,14 +8,9 @@ import './Title.css'
 
 const Title = (props: Props) => {
   const { left, right, className, leftClassName, rightClassName } = props
-  const classes = ['Title']
-
-  if (className) {
-    classes.push(className)
-  }
 
   return (
-    <Row className={classes.join(' ')}>
+    <Row className={classnames(['Title', className])}>
       <Column className={leftClassName} align="left" grow={true}>
         {left}
       </Column>

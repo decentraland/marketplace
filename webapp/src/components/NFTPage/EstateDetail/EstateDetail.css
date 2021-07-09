@@ -1,24 +1,39 @@
-.EstateDetail .estate-title {
-  max-width: 70%;
+.EstateDetail .left-title {
+  flex: 1 1 auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+}
+
+.EstateDetail .right-title {
+  flex: 1 1 auto;
+  padding-left: 30px;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .EstateDetail .estate-title-name {
-  flex: 1 0 auto;
+  flex: 0 1 auto;
+  word-wrap: break-word;
 }
 
 .EstateDetail .estate-title-land {
+  margin-left: 16px;
+  margin-top: 3px;
   flex: 0 0 auto;
 }
 
 .EstateDetail .estate-title-jump-in {
   flex: 0 0 auto;
+  margin-top: 3px;
   margin-left: 16px;
 }
 
 @media (max-width: 768px) {
-  .EstateDetail .jump-in-badge {
+  .EstateDetail .estate-title-jump-in {
     display: none;
+  }
+
+  .EstateDetail .right-title {
+    padding-left: 0px;
   }
 }

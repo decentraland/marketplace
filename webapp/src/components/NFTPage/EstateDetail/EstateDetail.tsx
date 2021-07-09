@@ -37,17 +37,21 @@ const EstateDetail = (props: Props) => {
       </PageHeader>
       <Container className="EstateDetail">
         <Title
+          leftClassName="left-title"
           left={
-            <Header className="estate-title" size="large">
-              <div className="estate-title-name">{getNFTName(nft)}</div>
+            <>
+              <Header className="estate-title-name" size="large">
+                {getNFTName(nft)}
+              </Header>
               <Badge className="estate-title-land" color="#37333d">
                 {estate.size.toLocaleString()} LAND
               </Badge>
               {estate.size > 0 ? (
                 <JumpIn className="estate-title-jump-in" x={x} y={y} />
               ) : null}
-            </Header>
+            </>
           }
+          rightClassName={'right-title'}
           right={<Owner nft={nft} />}
         />
         <Description text={estate.data?.description} />

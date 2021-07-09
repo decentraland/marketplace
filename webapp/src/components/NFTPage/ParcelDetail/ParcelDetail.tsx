@@ -1,8 +1,9 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Link } from 'react-router-dom'
+import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
+// import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { NFTCategory } from '../../../modules/nft/types'
 import { getNFTName } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -12,16 +13,17 @@ import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
-import { Badge } from '../Badge'
+// import { Badge } from '../Badge'
 import { Description } from '../Description'
 import { OrderDetails } from '../OrderDetails'
 import { Actions } from '../Actions'
 import { ProximityHighlights } from '../ProximityHighlights'
 import { TransactionHistory } from '../TransactionHistory'
 import { Bids } from '../Bids'
+import { JumpIn } from '../JumpIn'
 import { Props } from './ParcelDetail.types'
 import './ParcelDetail.css'
-import { Link } from 'react-router-dom'
+import { Coordinate } from '../../Coordinate'
 
 const ParcelDetail = (props: Props) => {
   const { nft } = props
@@ -41,28 +43,23 @@ const ParcelDetail = (props: Props) => {
       </PageHeader>
       <Container className="ParcelDetail">
         <Title
-          className="parcel-detail-title"
           leftClassName="left-title"
           left={
-            <Header size="large">
-              <div className="text">
+            <>
+              <Header className="parcel-title-name" size="large">
                 {getNFTName(nft)}
-                <Badge color="#37333d">
-                  <i className="pin" />
-                  {x},{y}
-                </Badge>
-                <Badge color="#ff2d55" className="jump-in-badge">
-                  <a
-                    href={buildExplorerUrl(x, y)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {t('nft_page.jump')}&nbsp;{t('nft_page.in')}
-                    <i className="jump-in-icon" />
-                  </a>
-                </Badge>
-              </div>
-            </Header>
+              </Header>
+              <Coordinate
+                className={'parcel-title-coordinate'}
+                x={Number(x)}
+                y={Number(y)}
+              />
+              <JumpIn
+                className="parcel-title-jump-in"
+                x={Number(x)}
+                y={Number(y)}
+              />
+            </>
           }
           rightClassName="right-title"
           right={
