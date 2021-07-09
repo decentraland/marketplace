@@ -15,7 +15,7 @@
 
 .ParcelDetail .parcel-title-name {
   flex: 0 1 auto;
-  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .ParcelDetail .parcel-title-coordinate {
@@ -38,11 +38,13 @@
 }
 
 @media (max-width: 768px) {
-  .ParcelDetail .jump-in-badge {
-    display: none;
+  .ParcelDetail .parcel-title-jump-in {
+    display: none !important;
   }
 
   .ParcelDetail .right-title {
     padding-left: 0px;
+    max-width: auto;
+    justify-content: flex-end;
   }
 }

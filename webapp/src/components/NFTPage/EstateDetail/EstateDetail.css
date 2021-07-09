@@ -13,7 +13,7 @@
 
 .EstateDetail .estate-title-name {
   flex: 0 1 auto;
-  word-wrap: break-word;
+  word-break: break-word;
 }
 
 .EstateDetail .estate-title-land {
@@ -30,10 +30,11 @@
 
 @media (max-width: 768px) {
   .EstateDetail .estate-title-jump-in {
-    display: none;
+    display: none !important;
   }
 
   .EstateDetail .right-title {
     padding-left: 0px;
+    justify-content: flex-start;
   }
 }

@@ -1,7 +1,5 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
-// import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-// import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
@@ -15,11 +13,11 @@ import { OrderDetails } from '../OrderDetails'
 import { Actions } from '../Actions'
 import { ProximityHighlights } from '../ProximityHighlights'
 import { TransactionHistory } from '../TransactionHistory'
+import { JumpIn } from '../JumpIn'
 import { Bids } from '../Bids'
 import { Props } from './EstateDetail.types'
 import { ParcelCoordinates } from './ParcelCoordinates'
 import './EstateDetail.css'
-import { JumpIn } from '../JumpIn'
 
 const EstateDetail = (props: Props) => {
   const { nft } = props
