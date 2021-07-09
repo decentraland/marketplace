@@ -1,0 +1,43 @@
+.coordinates {
+  display: grid;
+  justify-content: space-between;
+  grid-template-columns: repeat(auto-fill, 110px);
+  margin-top: 13px;
+  overflow: hidden;
+}
+
+.collapsed {
+  height: 88px;
+}
+
+.expanded {
+  height: auto;
+}
+
+.coordinates a .coordinate {
+  color: var(--text);
+}
+
+.coordinates a .coordinate:hover {
+  background-color: var(--primary) !important;
+}
+
+.coordinates a:visited .coordinate {
+  background-color: #242129 !important;
+}
+
+.coordinate {
+  margin: 6px;
+  cursor: pointer !important;
+}
+
+.showMore {
+  margin-top: 15px;
+  justify-content: center;
+}
+
+.showMore span {
+  font-size: 15px;
+  color: var(--primary);
+  cursor: pointer;
+}

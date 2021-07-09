@@ -334,6 +334,11 @@
   "highlights": {
     "title": "亮点"
   },
+  "parcel_coordinates": {
+    "title": "地块",
+    "show_more": "展示更多",
+    "show_less": "显示较少"
+  },
   "price_change_notice": {
     "message": "价格或因市场变化而波动"
   },
