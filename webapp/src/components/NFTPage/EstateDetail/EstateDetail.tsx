@@ -71,7 +71,7 @@ const EstateDetail = (props: Props) => {
         </Row>
         <ProximityHighlights nft={nft} />
         <Bids nft={nft} />
-        <ParcelCoordinates estate={estate} />
+        <ParcelCoordinates estateId={nft.tokenId} />
         <TransactionHistory nft={nft} />
       </Container>
     </>
