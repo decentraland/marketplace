@@ -133,7 +133,8 @@
     "district": "Distrito",
     "leaving_decentraland": "Saliendo de Decentraland",
     "leaving_decentraland_description": "Aún no se pueden publicar o actualizar {vendor} assets en el Marketplace de Decentraland. ¿Quiere proceder a {vendor_link} para publicarlo ahí?",
-    "leaving_decentraland_disclaimer": "Tus NFTs van a listarse en el Marketplace de Decentraland"
+    "leaving_decentraland_disclaimer": "Tus NFTs van a listarse en el Marketplace de Decentraland",
+    "part_of_estate": "Parte de {estate_name}"
   },
   "proximity": {
     "adjacent": "Adyacente",

@@ -1,24 +1,18 @@
 import React from 'react'
+import classnames from 'classnames'
 
 import { Props } from './Column.types'
 import './Column.css'
 
 const Column = (props: Props) => {
   const { className, align, grow, shrink, children, onClick } = props
-
-  const classNames = ['Column', align]
-  if (className) {
-    classNames.push(className)
-  }
-  if (grow) {
-    classNames.push('grow')
-  }
-  if (shrink) {
-    classNames.push('shrink')
-  }
+  const classes = classnames('Column', align, className, {
+    grow,
+    shrink
+  })
 
   return (
-    <div className={classNames.join(' ')} onClick={onClick}>
+    <div className={classes} onClick={onClick}>
       {children}
     </div>
   )

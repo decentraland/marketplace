@@ -1,0 +1,19 @@
+.ParcelTags {
+  display: flex;
+}
+
+.coordinates {
+  font-size: 12px !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  color: white;
+  line-height: 14px !important;
+  height: auto !important;
+}
+
+.coordinates i {
+  width: 14px;
+  height: 12px;
+  background-size: 18px;
+  background-position: -4px -3px;
+}

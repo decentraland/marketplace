@@ -4,4 +4,8 @@ export type Parcel = {
   data: {
     description: string
   } | null
+  estate: {
+    tokenId: string
+    name: string
+  } | null
 }

@@ -43,7 +43,7 @@ const NFTCard = (props: Props) => {
           ) : null}
         </Card.Header>
         <Card.Meta>{t(`networks.${nft.network.toLowerCase()}`)}</Card.Meta>
-        {parcel ? <ParcelTags nft={nft} /> : null}
+        {parcel ? <ParcelTags className="tags" nft={nft} /> : null}
         {estate ? <EstateTags nft={nft} /> : null}
         {wearable ? <WearableTags nft={nft} /> : null}
         {ens ? <ENSTags nft={nft} /> : null}

@@ -20,11 +20,11 @@ const ParcelCoordinates = (props: Props) => {
         <Row className={styles.coordinates}>
           {parcelCoordinates.map((parcel, index) => (
             <Link
+              key={index}
               to={locations.parcel(parcel.x.toString(), parcel.y.toString())}
             >
               <Coordinate
                 className={styles.coordinate}
-                key={index}
                 x={parcel.x}
                 y={parcel.y}
               />

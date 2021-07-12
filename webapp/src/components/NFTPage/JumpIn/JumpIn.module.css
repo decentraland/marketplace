@@ -1,0 +1,19 @@
+.JumpIn a {
+  color: var(--text);
+  display: flex;
+  align-items: center;
+}
+
+.JumpIn a:hover {
+  color: var(--text);
+}
+
+.jumpInIcon {
+  background: url(../../../images/jump_in.svg);
+  background-size: 16px 16px;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  display: inline-block;
+  margin-left: 6px;
+}

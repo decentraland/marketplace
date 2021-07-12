@@ -133,7 +133,8 @@
     "district": "区域",
     "leaving_decentraland": "离开Decentraland",
     "leaving_decentraland_description": "您还无法将{vendor}资产发布或更新到Decentraland市场。您是否要继续{vendor_link}在此处发布？",
-    "leaving_decentraland_disclaimer": "您的NFT仍将列在Decentraland市场中"
+    "leaving_decentraland_disclaimer": "您的NFT仍将列在Decentraland市场中",
+    "part_of_estate": "{estate_name}一部分"
   },
   "proximity": {
     "adjacent": "相邻",

@@ -25,7 +25,7 @@ export default class Popup extends React.PureComponent<Props> {
               {tile.name ||
                 (!isEstate ? t('global.parcel') : t('global.estate'))}
             </span>
-            <Coordinate className={'coordinates'} x={tile.x} y={tile.y} />
+            <Coordinate className="coordinates" x={tile.x} y={tile.y} />
           </Row>
         </Section>
 

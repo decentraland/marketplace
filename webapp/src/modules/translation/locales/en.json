@@ -137,7 +137,8 @@
     "in": "In",
     "leaving_decentraland": "Leaving Decentraland",
     "leaving_decentraland_description": "You can't publish or update {vendor} assets to the Decentraland Marketplace yet. Do you want to proceed to {vendor_link} to publish it there?",
-    "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace"
+    "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace",
+    "part_of_estate": "Part of {estate_name}"
   },
   "proximity": {
     "adjacent": "Adjacent",

@@ -1,7 +1,5 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { buildExplorerUrl } from '../../../modules/nft/parcel/utils'
 import { getNFTName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
 import { NFTImage } from '../../NFTImage'
@@ -15,6 +13,7 @@ import { OrderDetails } from '../OrderDetails'
 import { Actions } from '../Actions'
 import { ProximityHighlights } from '../ProximityHighlights'
 import { TransactionHistory } from '../TransactionHistory'
+import { JumpIn } from '../JumpIn'
 import { Bids } from '../Bids'
 import { Props } from './EstateDetail.types'
 import { ParcelCoordinates } from './ParcelCoordinates'
@@ -36,28 +35,25 @@ const EstateDetail = (props: Props) => {
       </PageHeader>
       <Container className="EstateDetail">
         <Title
+          leftClassName="left-title"
           left={
-            <Header size="large">
-              <div className="text">
+            <>
+              <Header className="estate-title-name" size="large">
                 {getNFTName(nft)}
-                <Badge color="#37333d">
-                  {estate.size.toLocaleString()} LAND
-                </Badge>
-                {estate.size > 0 ? (
-                  <Badge color="#ff2d55" className="jump-in-badge">
-                    <a
-                      href={buildExplorerUrl(x, y)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {t('nft_page.jump')}&nbsp;{t('nft_page.in')}
-                      <i className="jump-in-icon" />
-                    </a>
-                  </Badge>
-                ) : null}
-              </div>
-            </Header>
+              </Header>
+              <Badge className="estate-title-badge" color="#37333d">
+                {estate.size.toLocaleString()} LAND
+              </Badge>
+              {estate.size > 0 ? (
+                <JumpIn
+                  className="estate-title-badge estate-title-jump-in"
+                  x={x}
+                  y={y}
+                />
+              ) : null}
+            </>
           }
+          rightClassName="right-title"
           right={<Owner nft={nft} />}
         />
         <Description text={estate.data?.description} />

@@ -1,31 +1,45 @@
-.ParcelDetail .pin {
-  background-image: url(../../../images/pin.svg);
-  width: 12px;
-  height: 14px;
-  display: inline-block;
-  background-repeat: no-repeat;
-  background-position: center;
-  margin-right: 4px;
-}
-
-.ParcelDetail .jump-in-icon {
-  background: url(../../../images/jump_in.svg);
-  background-size: 16px 16px;
-  width: 16px;
-  height: 16px;
-  background-repeat: no-repeat;
-  display: inline-block;
-  margin-left: 6px;
-}
-
-.ParcelDetail .Badge a {
-  color: var(--text);
+.ParcelDetail .left-title {
+  flex: 1 1 auto;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+}
+
+.ParcelDetail .right-title {
+  flex: 1 1 auto;
+  max-width: 400px;
+  overflow: hidden;
+  padding-left: 30px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ParcelDetail .parcel-title-name {
+  flex: 0 1 auto;
+  word-break: break-word;
+}
+
+.ParcelDetail .parcel-title-badge {
+  margin-left: 16px;
+  flex: 0 0 auto;
+}
+
+.ParcelDetail .estate-information {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 20px;
+  line-height: 30px;
+  color: var(--secondary-text);
 }
 
 @media (max-width: 768px) {
-  .ParcelDetail .jump-in-badge {
-    display: none;
+  .ParcelDetail .parcel-title-jump-in {
+    display: none !important;
+  }
+
+  .ParcelDetail .right-title {
+    padding-left: 0px;
+    max-width: auto;
+    justify-content: flex-start;
   }
 }
