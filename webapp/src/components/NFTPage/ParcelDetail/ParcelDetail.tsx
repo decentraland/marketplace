@@ -53,7 +53,7 @@ const ParcelDetail = (props: Props) => {
                 y={Number(y)}
               />
               <JumpIn
-                className="parcel-title-badge"
+                className="parcel-title-badge parcel-title-jump-in"
                 x={Number(x)}
                 y={Number(y)}
               />

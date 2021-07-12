@@ -45,7 +45,11 @@ const EstateDetail = (props: Props) => {
                 {estate.size.toLocaleString()} LAND
               </Badge>
               {estate.size > 0 ? (
-                <JumpIn className="estate-title-badge" x={x} y={y} />
+                <JumpIn
+                  className="estate-title-badge estate-title-jump-in"
+                  x={x}
+                  y={y}
+                />
               ) : null}
             </>
           }
