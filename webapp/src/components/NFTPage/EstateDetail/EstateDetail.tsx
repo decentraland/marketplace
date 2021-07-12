@@ -49,7 +49,7 @@ const EstateDetail = (props: Props) => {
               ) : null}
             </>
           }
-          rightClassName={'right-title'}
+          rightClassName="right-title"
           right={<Owner nft={nft} />}
         />
         <Description text={estate.data?.description} />
