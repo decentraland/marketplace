@@ -1,5 +1,10 @@
-import { Estate } from '../../../../modules/nft/estate/types'
+import { Tile } from '../../../Atlas/Atlas.types'
 
 export type Props = {
-  estate: Estate
+  estateId: string
+  parcelCoordinates: Tile[]
 }
+
+export type OwnProps = Pick<Props, 'estateId'>
+
+export type MapStateProps = Pick<Props, 'parcelCoordinates'>
