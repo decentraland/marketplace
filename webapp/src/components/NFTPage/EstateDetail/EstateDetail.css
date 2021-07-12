@@ -16,16 +16,10 @@
   word-break: break-word;
 }
 
-.EstateDetail .estate-title-land {
+.EstateDetail .estate-title-badge {
   margin-left: 16px;
   margin-top: 3px;
   flex: 0 0 auto;
-}
-
-.EstateDetail .estate-title-jump-in {
-  flex: 0 0 auto;
-  margin-top: 3px;
-  margin-left: 16px;
 }
 
 @media (max-width: 768px) {

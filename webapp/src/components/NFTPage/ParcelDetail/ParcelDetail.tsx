@@ -48,12 +48,12 @@ const ParcelDetail = (props: Props) => {
                 {getNFTName(nft)}
               </Header>
               <Coordinate
-                className="parcel-title-coordinate"
+                className="parcel-title-badge"
                 x={Number(x)}
                 y={Number(y)}
               />
               <JumpIn
-                className="parcel-title-jump-in"
+                className="parcel-title-badge"
                 x={Number(x)}
                 y={Number(y)}
               />

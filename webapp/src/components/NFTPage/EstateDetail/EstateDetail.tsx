@@ -41,11 +41,11 @@ const EstateDetail = (props: Props) => {
               <Header className="estate-title-name" size="large">
                 {getNFTName(nft)}
               </Header>
-              <Badge className="estate-title-land" color="#37333d">
+              <Badge className="estate-title-badge" color="#37333d">
                 {estate.size.toLocaleString()} LAND
               </Badge>
               {estate.size > 0 ? (
-                <JumpIn className="estate-title-jump-in" x={x} y={y} />
+                <JumpIn className="estate-title-badge" x={x} y={y} />
               ) : null}
             </>
           }

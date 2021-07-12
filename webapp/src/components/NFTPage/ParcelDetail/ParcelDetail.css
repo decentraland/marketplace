@@ -18,15 +18,9 @@
   word-break: break-word;
 }
 
-.ParcelDetail .parcel-title-coordinate {
+.ParcelDetail .parcel-title-badge {
   margin-left: 16px;
-  margin-top: 0px;
   flex: 0 0 auto;
-}
-
-.ParcelDetail .parcel-title-jump-in {
-  flex: 0 0 auto;
-  margin-left: 16px;
 }
 
 .ParcelDetail .estate-information {
@@ -35,6 +29,7 @@
   white-space: nowrap;
   font-size: 20px;
   line-height: 30px;
+  color: var(--secondary-text);
 }
 
 @media (max-width: 768px) {
