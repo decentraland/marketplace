@@ -68,11 +68,10 @@ const ParcelDetail = (props: Props) => {
                   values={{
                     estate_name: (
                       <Link
+                        title={parcel.estate!.name}
                         to={locations.nft(nft.owner, parcel.estate!.tokenId)}
                       >
-                        <span title={parcel.estate!.name}>
-                          {parcel.estate!.name}
-                        </span>
+                        {parcel.estate!.name}
                       </Link>
                     )
                   }}
