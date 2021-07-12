@@ -6,7 +6,7 @@
   font-size: 12px !important;
   padding: 4px 8px !important;
   border-radius: 4px !important;
-  color: white !important;
+  color: white;
   line-height: 14px !important;
   height: auto !important;
 }
