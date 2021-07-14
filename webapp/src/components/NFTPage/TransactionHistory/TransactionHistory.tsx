@@ -18,18 +18,18 @@ import './TransactionHistory.css'
 const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000
 
-const formatEventDate = (updatedAt: string) => {
-  const newUpdatedAt = new Date(+updatedAt)
+const formatEventDate = (updatedAt: number) => {
+  const newUpdatedAt = new Date(updatedAt)
   return Date.now() - newUpdatedAt.getTime() > WEEK_IN_MILLISECONDS
     ? dateFnsFormat(newUpdatedAt, INPUT_FORMAT)
     : formatDistanceToNow(newUpdatedAt, { addSuffix: true })
 }
 
-const formatDateTitle = (updatedAt: string) => {
-  return new Date(+updatedAt).toLocaleString()
+const formatDateTitle = (updatedAt: number) => {
+  return new Date(updatedAt).toLocaleString()
 }
 
-const sortByUpdatedAt = (a: { updatedAt: string }, b: { updatedAt: string }) =>
+const sortByUpdatedAt = (a: { updatedAt: number }, b: { updatedAt: number }) =>
   a.updatedAt > b.updatedAt ? -1 : 1
 
 const toEvent = (orderOrBid: UnionOrderBid): HistoryEvent => ({
@@ -53,7 +53,7 @@ const TransactionHistory = (props: Props) => {
 
       setIsLoading(true)
       Promise.all([
-        orderService.fetchByNFT(nft),
+        orderService.fetchByNFT(nft, OrderStatus.SOLD),
         bidService ? bidService.fetchByNFT(nft, OrderStatus.SOLD) : []
       ])
         .then(([orders, bids]) => {

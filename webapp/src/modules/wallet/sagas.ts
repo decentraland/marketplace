@@ -118,13 +118,18 @@ function* handleWallet(
       network: contract.network
     })!
 
+    // Skip SuperRare contract since it's not ERC721 compliant (lacks approveForAll)
+    if (contract.name === contractNames.SUPER_RARE) {
+      continue
+    }
+
     authorizations.push({
       address,
       authorizedAddress: marketplace.address,
       contractAddress: contract.address,
       contractName:
         contract.category === NFTCategory.WEARABLE &&
-          contract.network === Network.MATIC
+        contract.network === Network.MATIC
           ? ContractName.ERC721CollectionV2
           : ContractName.ERC721,
       chainId: contract.chainId,

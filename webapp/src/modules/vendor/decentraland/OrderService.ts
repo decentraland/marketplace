@@ -5,7 +5,7 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Marketplace } from '../../../contracts/Marketplace'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
-import { Order } from '../../order/types'
+import { Order, OrderStatus } from '../../order/types'
 import { orderAPI } from './order/api'
 import { VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
@@ -13,8 +13,12 @@ import { sendTransaction } from '../../wallet/utils'
 
 export class OrderService
   implements OrderServiceInterface<VendorName.DECENTRALAND> {
-  async fetchByNFT(nft: NFT) {
-    const orders = await orderAPI.fetchByNFT(nft.contractAddress, nft.tokenId)
+  async fetchByNFT(nft: NFT, status?: OrderStatus) {
+    const orders = await orderAPI.fetchByNFT(
+      nft.contractAddress,
+      nft.tokenId,
+      status
+    )
     return orders as Order[]
   }
 

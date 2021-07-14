@@ -16,28 +16,30 @@ import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName } from '../types'
 import { nftAPI } from './nft/api'
+import { Order } from '../../order/types'
 
 export class NFTService
   implements NFTServiceInterface<VendorName.DECENTRALAND> {
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
-    const { nfts, orders, total } = await nftAPI.fetch(params, filters)
+    const { data: results, total } = await nftAPI.fetch(params, filters)
 
     const accounts: Account[] = []
-    for (const nft of nfts) {
-      const address = nft.owner
+    const nfts: NFT[] = []
+    const orders: Order[] = []
+    for (const result of results) {
+      const address = result.nft.owner
       let account = accounts.find(account => account.id === address)
       if (!account) {
         account = this.toAccount(address)
       }
-      account.nftIds.push(nft.id)
+      account.nftIds.push(result.nft.id)
+      nfts.push({ ...result.nft, vendor: VendorName.DECENTRALAND })
+      if (result.order) {
+        orders.push(result.order)
+      }
     }
 
-    return [
-      nfts.map(nft => ({ ...nft, vendor: VendorName.DECENTRALAND })),
-      accounts,
-      orders,
-      total
-    ] as const
+    return [nfts, accounts, orders, total] as const
   }
 
   async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {

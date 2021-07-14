@@ -57,7 +57,6 @@ export class NFTService
         const order = this.toOrder(asset, oneEthInMANA)
 
         nft.activeOrderId = order.id
-        order.nftId = nft.id
 
         orders.push(order)
       }
@@ -105,7 +104,6 @@ export class NFTService
       order = this.toOrder(remoteNFT, oneEthInMANA)
 
       nft.activeOrderId = order.id
-      order.nftId = nft.id
     }
 
     return [nft, order] as const
@@ -159,16 +157,19 @@ export class NFTService
 
     return {
       id: `${VendorName.MAKERS_PLACE}-order-${asset.token_id}`,
-      nftId: asset.token_id!.toString(),
-      nftAddress: asset.token_contract_address.toLowerCase(),
+      tokenId: asset.token_id!.toString(),
+      contractAddress: asset.token_contract_address.toLowerCase(),
       marketAddress: asset.sale_contract_address!,
       owner: asset.owner,
       buyer: null,
       price: price.toString(10),
       ethPrice: asset.price_in_wei!.toString(),
       status: OrderStatus.OPEN,
-      createdAt: asset.sale_created_at!,
-      updatedAt: asset.sale_created_at!
+      createdAt: +asset.sale_created_at!,
+      updatedAt: +asset.sale_created_at!,
+      expiresAt: Infinity,
+      network: Network.ETHEREUM,
+      chainId: Number(process.env.REACT_APP_CHAIN_ID)
     }
   }
 

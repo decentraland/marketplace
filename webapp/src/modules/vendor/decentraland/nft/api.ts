@@ -1,9 +1,5 @@
 import { NFTsFetchParams } from '../../../nft/types'
-import {
-  NFTsFetchFilters,
-  NFTListFetchResponse,
-  NFTFetchReponse
-} from './types'
+import { NFTsFetchFilters, NFTResponse } from './types'
 import { getSortBy } from '../../../nft/utils'
 import { ATLAS_SERVER_URL } from '../land'
 import { Contract } from '../../services'
@@ -16,18 +12,21 @@ class NFTAPI {
   fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
     const queryParams = this.buildQueryString(params, filters)
 
-    const response: NFTListFetchResponse = await fetch(
-      `${NFT_SERVER_URL}/v1/browse?${queryParams}`
+    const response: NFTResponse = await fetch(
+      `${NFT_SERVER_URL}/v1/nfts?${queryParams}`
     ).then(resp => resp.json())
 
     return response
   }
 
   async fetchOne(contractAddress: string, tokenId: string) {
-    const response: NFTFetchReponse = await fetch(
-      `${NFT_SERVER_URL}/v1/contracts/${contractAddress}/tokens/${tokenId}`
+    const response: NFTResponse = await fetch(
+      `${NFT_SERVER_URL}/v1/nfts?contractAddress=${contractAddress}&tokenId=${tokenId}`
     ).then(resp => resp.json())
-    return response
+    if (response.data.length === 0) {
+      throw new Error('Not found')
+    }
+    return response.data[0]
   }
 
   async fetchTokenId(x: number, y: number) {
@@ -43,10 +42,13 @@ class NFTAPI {
 
   async fetchContracts() {
     try {
-      const contractsWithoutVendor: Omit<Contract, 'vendor'>[] = await fetch(
-        `${NFT_SERVER_URL}/v1/contracts`
+      const response: {
+        data: Omit<Contract, 'vendor'>[]
+        total: number
+      } = await fetch(
+        `${NFT_SERVER_URL}/v1/contracts?first=0` // first=0 so it returns all the results
       ).then(resp => resp.json())
-      const contracts: Contract[] = contractsWithoutVendor.map(
+      const contracts: Contract[] = response.data.map(
         contractWithoutVendor => ({
           ...contractWithoutVendor,
           vendor: VendorName.DECENTRALAND
@@ -72,7 +74,7 @@ class NFTAPI {
       queryParams.append('category', params.category)
     }
     if (params.address) {
-      queryParams.append('address', params.address)
+      queryParams.append('owner', params.address)
     }
     if (params.onlyOnSale) {
       queryParams.append('isOnSale', 'true')
@@ -107,7 +109,7 @@ class NFTAPI {
       if (filters.contracts) {
         for (const address of filters.contracts) {
           if (contracts.some(contract => contract.address === address)) {
-            queryParams.append('contract', address)
+            queryParams.append('contractAddress', address)
           }
         }
       }

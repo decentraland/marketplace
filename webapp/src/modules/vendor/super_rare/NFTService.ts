@@ -67,7 +67,6 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
         const order = this.toOrder(remoteOrder, oneEthInMANA)
 
         nft.activeOrderId = order.id
-        order.nftId = nft.id
 
         orders.push(order)
       }
@@ -116,7 +115,6 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
       order = this.toOrder(remoteOrder, oneEthInMANA)
 
       nft.activeOrderId = order.id
-      order.nftId = nft.id
     }
 
     return [nft, order] as const
@@ -181,16 +179,19 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
 
     return {
       id: `${VendorName.SUPER_RARE}-order-${asset.id}`,
-      nftId: asset.id.toString(),
-      nftAddress: asset.contractAddress,
+      tokenId: asset.id.toString(),
+      contractAddress: asset.contractAddress,
       marketAddress: order.marketContractAddress,
       owner: asset.owner.address,
       buyer: taker ? taker.address : null,
       price: price.toString(10),
       ethPrice: order.amountWithFee.toString(),
       status: OrderStatus.OPEN,
-      createdAt: order.timestamp,
-      updatedAt: order.timestamp
+      createdAt: +order.timestamp,
+      updatedAt: +order.timestamp,
+      expiresAt: Infinity,
+      chainId: Number(process.env.REACT_APP_CHAIN_ID),
+      network: Network.ETHEREUM
     }
   }
 

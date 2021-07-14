@@ -43,7 +43,7 @@ export interface NFTService<V extends VendorName> {
 export class NFTService<V> {}
 
 export interface OrderService<V extends VendorName> {
-  fetchByNFT: (nft: NFT<V>) => Promise<Order[]>
+  fetchByNFT: (nft: NFT<V>, status?: OrderStatus) => Promise<Order[]>
   create: (
     wallet: Wallet | null,
     nft: NFT<V>,
