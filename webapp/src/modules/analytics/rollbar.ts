@@ -10,11 +10,10 @@ let _rollbarConfig = {
     environment: process.env.NODE_ENV
   },
   checkIgnore: function () {
-    console.log(isDevelopment)
-    // if (window.location.hostname === 'localhost' || isDevelopment) {
-    //   // Ignore development
-    //   return true
-    // }
+    if (window.location.hostname === 'localhost' || isDevelopment) {
+      // Ignore development
+      return true
+    }
 
     // no other ignores
     return false
