@@ -7,9 +7,9 @@ let _rollbarConfig = {
   captureUncaught: true,
   captureUnhandledRejections: true,
   payload: {
-    environment: process.env.NODE_ENV
+    environment: process.env.REACT_APP_ENVIRONMENT
   },
-  checkIgnore: function () {
+  checkIgnore: function() {
     if (window.location.hostname === 'localhost' || isDevelopment) {
       // Ignore development
       return true
