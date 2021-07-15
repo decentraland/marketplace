@@ -12,15 +12,15 @@ import { createRootReducer, RootState } from './reducer'
 import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
+import { isDevelopment } from '../lib/environment'
 
 export const history = require('history').createBrowserHistory()
 
 export function initStore() {
-  const isDev = process.env.NODE_ENV === 'development'
   const anyWindow = window as any
 
   const composeEnhancers =
-    isDev && anyWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    isDevelopment && anyWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
       ? anyWindow.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
           stateSanitizer: (state: RootState) => {
             const { tile, proximity, ...sanitized } = { ...state }
@@ -34,7 +34,7 @@ export function initStore() {
   const sagasMiddleware = createSagasMiddleware()
   const loggerMiddleware = createLogger({
     collapsed: () => true,
-    predicate: (_: any, action) => isDev || action.type.includes('Failure')
+    predicate: (_: any, action) => isDevelopment || action.type.includes('Failure')
   })
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
@@ -61,7 +61,7 @@ export function initStore() {
   sagasMiddleware.run(rootSaga)
   loadStorageMiddleware(store)
 
-  if (isDev) {
+  if (isDevelopment) {
     const _window = window as any
     _window.getState = store.getState
   }
