@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Page, Loader } from 'decentraland-ui'
+import { NFTCategory } from '@dcl/schemas'
 
 import { locations } from '../../modules/routing/locations'
 import { VendorFactory } from '../../modules/vendor/VendorFactory'
@@ -8,7 +9,6 @@ import { VendorName } from '../../modules/vendor/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Props } from './LegacyNFTPage.types'
-import { NFTCategory } from '../../modules/nft/types'
 import { getContract } from '../../modules/contract/utils'
 
 const LegacyNFTPage = (props: Props) => {

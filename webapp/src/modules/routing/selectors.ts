@@ -1,9 +1,9 @@
 import { createSelector } from 'reselect'
 import { getSearch as getRouterSearch } from 'connected-react-router'
-import { Network } from '@dcl/schemas'
+import { Network, Rarity } from '@dcl/schemas'
 import { getView } from '../ui/nft/browse/selectors'
 import { View } from '../ui/types'
-import { WearableRarity, WearableGender } from '../nft/wearable/types'
+import { WearableGender } from '../nft/wearable/types'
 import { VendorName } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
 import { contracts } from '../contract/utils'
@@ -102,16 +102,16 @@ export const getIsFullscreen = createSelector<
   return isFullscreen === null ? undefined : isMap && isFullscreen === 'true'
 })
 
-export const getWearableRarities = createSelector<
-  RootState,
-  string,
-  WearableRarity[]
->(getRouterSearch, search =>
-  getURLParamArray<WearableRarity>(
-    search,
-    'rarities',
-    Object.values(WearableRarity)
-  )
+export const getWearableRarities = createSelector<RootState, string, Rarity[]>(
+  getRouterSearch,
+  search =>
+    getURLParamArray<Rarity>(
+      search,
+      'rarities',
+      Object.values(Rarity).filter(
+        value => typeof value === 'string'
+      ) as string[]
+    )
 )
 
 export const getWearableGenders = createSelector<

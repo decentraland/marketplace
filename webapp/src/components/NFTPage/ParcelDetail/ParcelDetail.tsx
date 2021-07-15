@@ -1,9 +1,9 @@
 import React from 'react'
-import { Container, Header } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
+import { NFTCategory } from '@dcl/schemas'
+import { Container, Header } from 'decentraland-ui'
 import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { NFTCategory } from '../../../modules/nft/types'
 import { getNFTName } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { PageHeader } from '../../PageHeader'
@@ -82,7 +82,7 @@ const ParcelDetail = (props: Props) => {
             )
           }
         />
-        <Description text={parcel.data?.description} />
+        <Description text={parcel.description} />
         <Row>
           <Column align="left" grow={true}>
             <OrderDetails nft={nft} />

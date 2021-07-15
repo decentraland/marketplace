@@ -5,7 +5,6 @@ import {
 } from '../services'
 import { Network as AppNetwork } from '../../contract/types'
 import { TransferType } from '../types'
-import { NFTCategory } from '../../nft/types'
 
 const network = process.env.REACT_APP_NETWORK! as AppNetwork
 
@@ -21,7 +20,7 @@ const contracts = ({
       name: ContractName.DIGITAL_ASSET,
       address: '0xfbeef911dc5821886e1dda71586d90ed28174b7d',
       vendor: 'known_origin',
-      category: NFTCategory.ART,
+      category: 'art',
       network: Network.ETHEREUM,
       chainId: ChainId.ETHEREUM_MAINNET
     },

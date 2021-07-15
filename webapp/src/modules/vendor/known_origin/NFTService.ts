@@ -5,12 +5,7 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Network } from '@dcl/schemas'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
-import {
-  NFT,
-  NFTCategory,
-  NFTsFetchParams,
-  NFTsCountParams
-} from '../../nft/types'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -152,10 +147,14 @@ export class NFTService
         description,
         isEdition: true
       },
-      category: NFTCategory.ART,
+      category: 'art',
       vendor: VendorName.KNOWN_ORIGIN,
       chainId: Number(process.env.REACT_APP_CHAIN_ID),
-      network: Network.ETHEREUM
+      network: Network.ETHEREUM,
+      issuedId: null,
+      itemId: null,
+      createdAt: 0,
+      updatedAt: 0
     }
   }
 

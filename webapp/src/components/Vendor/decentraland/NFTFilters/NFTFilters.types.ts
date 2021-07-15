@@ -1,10 +1,7 @@
-import { Network } from '@dcl/schemas'
+import { Network, Rarity } from '@dcl/schemas'
 import { Section, SortBy } from '../../../../modules/routing/types'
 import { browseNFTs } from '../../../../modules/routing/actions'
-import {
-  WearableRarity,
-  WearableGender
-} from '../../../../modules/nft/wearable/types'
+import { WearableGender } from '../../../../modules/nft/wearable/types'
 
 export type Props = {
   count?: number
@@ -13,7 +10,7 @@ export type Props = {
   search: string
   onlyOnSale?: boolean
   isMap?: boolean
-  wearableRarities: WearableRarity[]
+  wearableRarities: Rarity[]
   wearableGenders: WearableGender[]
   contracts: string[]
   network?: Network

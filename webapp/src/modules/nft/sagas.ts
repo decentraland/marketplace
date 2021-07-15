@@ -20,6 +20,7 @@ import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { AwaitFn } from '../types'
 import { getContract } from '../contract/utils'
+import { NFT } from './types'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -49,7 +50,14 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
     )
 
     yield put(
-      fetchNFTsSuccess(options, nfts, accounts, orders, count, timestamp)
+      fetchNFTsSuccess(
+        options,
+        nfts as NFT[],
+        accounts,
+        orders,
+        count,
+        timestamp
+      )
     )
   } catch (error) {
     yield put(fetchNFTsFailure(options, error.message, timestamp))
@@ -73,7 +81,7 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
       nftService.fetchOne(contractAddress, tokenId)
     )
 
-    yield put(fetchNFTSuccess(nft, order))
+    yield put(fetchNFTSuccess(nft as NFT, order))
   } catch (error) {
     yield put(fetchNFTFailure(contractAddress, tokenId, error.message))
   }

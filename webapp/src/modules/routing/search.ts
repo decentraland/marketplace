@@ -1,7 +1,5 @@
-import { Network } from '@dcl/schemas'
-import { WearableCategory } from '../nft/wearable/types'
+import { Network, NFTCategory, WearableCategory } from '@dcl/schemas'
 import { View } from '../ui/types'
-import { NFTCategory } from '../nft/types'
 import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
 import { SearchOptions, SortBy } from './types'

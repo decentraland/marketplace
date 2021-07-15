@@ -1,4 +1,5 @@
-import { Wearable, BodyShape } from './types'
+import { BodyShape } from '@dcl/schemas'
+import { Wearable } from './types'
 
 export function isGender(wearable: Wearable, gender: BodyShape) {
   if (!wearable) return false

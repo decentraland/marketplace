@@ -1,8 +1,8 @@
-import { Network } from '@dcl/schemas'
-import { WearableRarity, WearableGender } from '../nft/wearable/types'
+import { Network, Rarity } from '@dcl/schemas'
 import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
 import { View } from '../ui/types'
+import { WearableGender } from '../nft/wearable/types'
 
 export { Section } from '../vendor/routing/types'
 
@@ -27,7 +27,7 @@ export type SearchOptions = {
   onlyOnSale?: boolean
   isMap?: boolean
   isFullscreen?: boolean
-  wearableRarities?: WearableRarity[]
+  wearableRarities?: Rarity[]
   wearableGenders?: WearableGender[]
   search?: string
   contracts?: string[]

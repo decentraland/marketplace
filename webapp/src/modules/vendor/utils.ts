@@ -1,4 +1,4 @@
-import { NFTCategory } from '../nft/types'
+import { NFTCategory } from '@dcl/schemas'
 import { getSearchCategory, getSearchWearableCategory } from '../routing/search'
 import { SearchOptions } from '../routing/types'
 import { Section } from './routing/types'

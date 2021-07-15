@@ -1,7 +1,6 @@
 import { ChainId, Network } from '@dcl/schemas'
 import { Network as AppNetwork } from '../../contract/types'
 import { getContract } from '../../contract/utils'
-import { NFTCategory } from '../../nft/types'
 import {
   Contract,
   ContractService as ContractServiceInterface
@@ -34,7 +33,7 @@ const contracts = ({
       name: ContractName.SUPER_RARE,
       address: '0x41a322b28d0ff354040e2cbc676f0320d8c8850d',
       vendor: 'super_rare',
-      category: NFTCategory.ART,
+      category: 'art',
       network: Network.ETHEREUM,
       chainId: ChainId.ETHEREUM_MAINNET
     },
@@ -42,7 +41,7 @@ const contracts = ({
       name: ContractName.SUPER_RARE_V2,
       address: '0xb932a70a57673d89f4acffbe830e8ed7f75fb9e0',
       vendor: 'super_rare',
-      category: NFTCategory.ART,
+      category: 'art',
       network: Network.ETHEREUM,
       chainId: ChainId.ETHEREUM_MAINNET
     },

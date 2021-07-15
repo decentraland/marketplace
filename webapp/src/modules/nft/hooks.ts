@@ -1,10 +1,11 @@
+import { NFTCategory } from '@dcl/schemas'
 import { useEffect, useState } from 'react'
 import { TokenConverter } from '../vendor/TokenConverter'
 import { MarketplacePrice } from '../vendor/MarketplacePrice'
 import { isPartner } from '../vendor/utils'
 import { Order } from '../order/types'
 import { getFingerprint } from './estate/utils'
-import { NFT, NFTCategory } from './types'
+import { NFT } from './types'
 
 export const useFingerprint = (nft: NFT | null) => {
   const [fingerprint, setFingerprint] = useState<string>()

@@ -1,13 +1,10 @@
 import React, { useMemo } from 'react'
+import { NFTCategory, Rarity } from '@dcl/schemas'
 import { Loader } from 'decentraland-ui'
 import { LazyImage } from 'react-lazy-images'
 
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
-import {
-  RARITY_COLOR,
-  RARITY_COLOR_LIGHT
-} from '../../modules/nft/wearable/types'
-import { NFT, NFTCategory } from '../../modules/nft/types'
+import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
 import { getNFTName } from '../../modules/nft/utils'
 import { Atlas } from '../Atlas'
@@ -71,9 +68,8 @@ const NFTImage = (props: Props) => {
     }
 
     case NFTCategory.WEARABLE: {
-      const backgroundImage = `radial-gradient(${
-        RARITY_COLOR_LIGHT[wearable!.rarity]
-      }, ${RARITY_COLOR[wearable!.rarity]})`
+      const [light, dark] = Rarity.getGradient(wearable!.rarity)
+      const backgroundImage = `radial-gradient(${light}, ${dark})`
       return (
         <div
           className="rarity-background"

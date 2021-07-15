@@ -1,7 +1,7 @@
+import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { VendorName } from '../vendor/types'
-import { NFTCategory } from '../nft/types'
 import { SortDirection, SortBy } from '../routing/types'
 import { addressEquals } from '../wallet/utils'
 import { NFT, NFTSortBy } from './types'
@@ -33,7 +33,7 @@ export function getNFTName(
     case NFTCategory.ENS:
       return t('global.ens')
 
-    case NFTCategory.ART:
+    case 'art':
       return t('global.art')
 
     default:
