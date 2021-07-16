@@ -1,5 +1,5 @@
 import { takeEvery, all, put } from 'redux-saga/effects'
-import { Network } from '@dcl/schemas'
+import { Network, NFTCategory } from '@dcl/schemas'
 import { createWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
 import {
   ConnectWalletSuccessAction,
@@ -19,7 +19,6 @@ import { getContractNames } from '../vendor'
 import { contracts, getContract } from '../contract/utils'
 import { isPartner } from '../vendor/utils'
 import { ContractName } from 'decentraland-transactions'
-import { NFTCategory } from '../nft/types'
 
 const baseWalletSaga = createWalletSaga({
   CHAIN_ID: +(process.env.REACT_APP_CHAIN_ID || 1),
@@ -118,13 +117,18 @@ function* handleWallet(
       network: contract.network
     })!
 
+    // Skip SuperRare contract since it's not ERC721 compliant (lacks approveForAll)
+    if (contract.name === contractNames.SUPER_RARE) {
+      continue
+    }
+
     authorizations.push({
       address,
       authorizedAddress: marketplace.address,
       contractAddress: contract.address,
       contractName:
         contract.category === NFTCategory.WEARABLE &&
-          contract.network === Network.MATIC
+        contract.network === Network.MATIC
           ? ContractName.ERC721CollectionV2
           : ContractName.ERC721,
       chainId: contract.chainId,

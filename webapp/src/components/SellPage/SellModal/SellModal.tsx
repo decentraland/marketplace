@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Network } from '@dcl/schemas'
+import { Network, NFTCategory } from '@dcl/schemas'
 import { fromWei } from 'web3x-es/utils'
 import dateFnsFormat from 'date-fns/format'
 import {
@@ -24,7 +24,6 @@ import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
-import { NFTCategory } from '../../../modules/nft/types'
 import { Props } from './SellModal.types'
 
 const SellModal = (props: Props) => {

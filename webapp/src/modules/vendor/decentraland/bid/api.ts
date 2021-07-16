@@ -1,7 +1,6 @@
 import { OrderStatus } from '../../../order/types'
 import { Bid } from '../../../bid/types'
 import { NFT_SERVER_URL } from '../nft'
-import { NFT } from '../../../nft/types'
 
 class BidAPI {
   async fetch(options: Record<string, string>) {
@@ -10,10 +9,10 @@ class BidAPI {
       queryParams.append(key, options[key])
     }
     try {
-      const bids: Bid[] = await fetch(
+      const response: { data: Bid[]; total: number } = await fetch(
         `${NFT_SERVER_URL}/v1/bids?${queryParams.toString()}`
       ).then(resp => resp.json())
-      return bids
+      return response.data
     } catch (error) {
       return []
     }
@@ -26,10 +25,12 @@ class BidAPI {
     return this.fetch({ bidder, status: OrderStatus.OPEN })
   }
 
-  async fetchByNFT(nft: NFT, status: OrderStatus = OrderStatus.OPEN) {
-    // TODO: we have to use the legacy id (still present in the marketplace subgraph) because it's the only property in the Bid schema that allows us to query by contractAddress+tokenId
-    const nftId = nft.category + '-' + nft.contractAddress + '-' + nft.tokenId
-    return this.fetch({ nftId, status })
+  async fetchByNFT(
+    contractAddress: string,
+    tokenId: string,
+    status: OrderStatus = OrderStatus.OPEN
+  ) {
+    return this.fetch({ contractAddress, tokenId, status })
   }
 }
 

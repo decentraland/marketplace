@@ -1,24 +1,15 @@
-import { ChainId, Network } from '@dcl/schemas'
+import { Contract as BaseContract, NFTCategory } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import {
-  NFT,
-  NFTsFetchParams,
-  NFTsCountParams,
-  NFTCategory
-} from '../nft/types'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
 import { Account } from '../account/types'
 import { Bid } from '../bid/types'
 import { OrderStatus, Order } from '../order/types'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName, TransferType } from './types'
 
-export type Contract = {
-  name: string
-  address: string
-  category: NFTCategory | null
+export type Contract = Omit<BaseContract, 'category'> & {
+  category: NFTCategory | 'art' | null
   vendor: VendorName | null
-  network: Network
-  chainId: ChainId
 }
 
 export interface NFTService<V extends VendorName> {
@@ -43,7 +34,7 @@ export interface NFTService<V extends VendorName> {
 export class NFTService<V> {}
 
 export interface OrderService<V extends VendorName> {
-  fetchByNFT: (nft: NFT<V>) => Promise<Order[]>
+  fetchByNFT: (nft: NFT<V>, status?: OrderStatus) => Promise<Order[]>
   create: (
     wallet: Wallet | null,
     nft: NFT<V>,

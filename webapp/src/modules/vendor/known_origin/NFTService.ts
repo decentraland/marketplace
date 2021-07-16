@@ -5,12 +5,7 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Network } from '@dcl/schemas'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
-import {
-  NFT,
-  NFTCategory,
-  NFTsFetchParams,
-  NFTsCountParams
-} from '../../nft/types'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -60,7 +55,6 @@ export class NFTService
         const order = this.toOrder(fragment, oneEthInMANA)
 
         nft.activeOrderId = order.id
-        order.nftId = nft.id
 
         orders.push(order)
       }
@@ -106,7 +100,6 @@ export class NFTService
       order = this.toOrder(fragment, oneEthInMANA)
 
       nft.activeOrderId = order.id
-      order.nftId = nft.id
     }
 
     return [nft, order] as const
@@ -137,14 +130,14 @@ export class NFTService
 
     const contractNames = getContractNames()
 
-    const nftAddress = getContract({
+    const contractAddress = getContract({
       name: contractNames.DIGITAL_ASSET
     }).address
 
     return {
-      id: getNFTId(nftAddress, tokenId),
+      id: getNFTId(contractAddress, tokenId),
       tokenId,
-      contractAddress: nftAddress,
+      contractAddress,
       activeOrderId: '',
       owner: this.getOwner(fragment),
       name,
@@ -154,10 +147,14 @@ export class NFTService
         description,
         isEdition: true
       },
-      category: NFTCategory.ART,
+      category: 'art',
       vendor: VendorName.KNOWN_ORIGIN,
       chainId: Number(process.env.REACT_APP_CHAIN_ID),
-      network: Network.ETHEREUM
+      network: Network.ETHEREUM,
+      issuedId: null,
+      itemId: null,
+      createdAt: 0,
+      updatedAt: 0
     }
   }
 
@@ -168,7 +165,7 @@ export class NFTService
 
     const contractNames = getContractNames()
 
-    const nftAddress = getContract({
+    const contractAddress = getContract({
       name: contractNames.DIGITAL_ASSET
     }).address
     const marketAddress = getContract({
@@ -177,16 +174,19 @@ export class NFTService
 
     return {
       id: `${VendorName.KNOWN_ORIGIN}-order-${edition.id}`,
-      nftId: edition.id,
-      nftAddress,
+      tokenId: edition.id,
+      contractAddress,
       marketAddress,
       owner: edition.artistAccount,
       buyer: null,
       price: price.toString(10),
       ethPrice: edition.priceInWei.toString(),
       status: OrderStatus.OPEN,
-      createdAt: edition.createdTimestamp,
-      updatedAt: edition.createdTimestamp
+      createdAt: +edition.createdTimestamp,
+      updatedAt: +edition.createdTimestamp,
+      expiresAt: Infinity,
+      network: Network.ETHEREUM,
+      chainId: Number(process.env.REACT_APP_CHAIN_ID)
     }
   }
 

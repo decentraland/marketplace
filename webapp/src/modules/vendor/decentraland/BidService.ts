@@ -26,7 +26,11 @@ export class BidService
   }
 
   async fetchByNFT(nft: NFT, status: OrderStatus = OrderStatus.OPEN) {
-    const bids = await bidAPI.fetchByNFT(nft, status)
+    const bids = await bidAPI.fetchByNFT(
+      nft.contractAddress,
+      nft.tokenId,
+      status
+    )
     return bids
   }
 

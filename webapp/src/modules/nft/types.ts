@@ -1,4 +1,4 @@
-import { ChainId, Network } from '@dcl/schemas'
+import { NFT as BaseNFT, NFTCategory } from '@dcl/schemas'
 import { View } from '../ui/types'
 import { NFTsFetchFilters } from '../vendor/nft/types'
 import { VendorName } from '../vendor/types'
@@ -15,14 +15,6 @@ export enum NFTSortBy {
   PRICE = 'searchOrderPrice'
 }
 
-export enum NFTCategory {
-  PARCEL = 'parcel',
-  ESTATE = 'estate',
-  WEARABLE = 'wearable',
-  ENS = 'ens',
-  ART = 'art'
-}
-
 export type Data<V extends VendorName> = V extends VendorName.DECENTRALAND
   ? DecentralandData
   : V extends VendorName.SUPER_RARE
@@ -35,19 +27,12 @@ export type Data<V extends VendorName> = V extends VendorName.DECENTRALAND
   ? DecentralandData | SuperRareData | MakersPlaceData | KnownOriginData
   : never
 
-export type NFT<V extends VendorName = any> = {
-  id: string
-  contractAddress: string
-  tokenId: string
-  activeOrderId: string | null
-  owner: string
-  name: string
-  category: NFTCategory
-  image: string
-  url: string
+export type NFT<V extends VendorName = VendorName.DECENTRALAND> = Omit<
+  BaseNFT,
+  'category' | 'data'
+> & {
+  category: NFTCategory | 'art'
   vendor: VendorName
-  network: Network
-  chainId: ChainId
   data: Data<V>
 }
 

@@ -1,7 +1,6 @@
 import { takeEvery, put, select } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
-
-import { NFTCategory } from '../nft/types'
+import { NFTCategory } from '@dcl/schemas'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/nft/browse/selectors'

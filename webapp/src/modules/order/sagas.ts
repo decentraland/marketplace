@@ -43,7 +43,10 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
 function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   const { order, nft, fingerprint } = action.payload
   try {
-    if (nft.id !== order.nftId) {
+    if (
+      nft.contractAddress !== order.contractAddress &&
+      nft.tokenId !== order.tokenId
+    ) {
       throw new Error('The order does not match the NFT')
     }
     const { orderService } = VendorFactory.build(nft.vendor)
@@ -63,7 +66,10 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
 function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
   const { order, nft } = action.payload
   try {
-    if (order.nftId !== nft.id) {
+    if (
+      nft.contractAddress !== order.contractAddress &&
+      nft.tokenId !== order.tokenId
+    ) {
       throw new Error('The order does not match the NFT')
     }
     const { orderService } = VendorFactory.build(nft.vendor)

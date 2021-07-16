@@ -9,15 +9,11 @@ import {
   Responsive,
   Modal
 } from 'decentraland-ui'
-import { Network } from '@dcl/schemas'
+import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { SortBy } from '../../../../modules/routing/types'
-import {
-  WearableRarity,
-  WearableGender
-} from '../../../../modules/nft/wearable/types'
-import { NFTCategory } from '../../../../modules/nft/types'
+import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { Section } from '../../../../modules/vendor/decentraland/routing/types'
 import { getSearchCategory } from '../../../../modules/routing/search'
 import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
@@ -99,7 +95,7 @@ const NFTFilters = (props: Props) => {
 
   const handleRaritiesChange = useCallback(
     (options: string[]) => {
-      onBrowse({ wearableRarities: options as WearableRarity[] })
+      onBrowse({ wearableRarities: options as Rarity[] })
     },
     [onBrowse]
   )

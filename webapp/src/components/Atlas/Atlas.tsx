@@ -1,11 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Atlas as AtlasComponent, Color, Layer } from 'decentraland-ui'
+import { NFTCategory } from '@dcl/schemas'
+import {
+  Atlas as AtlasComponent,
+  AtlasTile,
+  Color,
+  Layer
+} from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import { Props, Tile } from './Atlas.types'
 import { VendorName } from '../../modules/vendor'
 import { getContract } from '../../modules/contract/utils'
-import { NFT, NFTCategory } from '../../modules/nft/types'
+import { NFT } from '../../modules/nft/types'
 import Popup from './Popup'
 import './Atlas.css'
 
@@ -99,10 +105,14 @@ const Atlas: React.FC<Props> = (props: Props) => {
   const forSaleLayer: Layer = useCallback(
     (x, y) => {
       const key = getCoords(x, y)
-      const tile = tiles[key]
+      const tile = tiles[key] as AtlasTile & { price?: string }
       if (tile && 'price' in tile) {
-        const { left, top, topLeft } = tile
-        return { color: '#00d3ff', left, top, topLeft }
+        return {
+          color: '#00d3ff',
+          left: !!tile.left,
+          top: !!tile.top,
+          topLeft: !!tile.topLeft
+        }
       }
       return null
     },

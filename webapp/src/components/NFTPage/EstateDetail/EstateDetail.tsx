@@ -56,7 +56,7 @@ const EstateDetail = (props: Props) => {
           rightClassName="right-title"
           right={<Owner nft={nft} />}
         />
-        <Description text={estate.data?.description} />
+        <Description text={estate.description} />
         <Row>
           <Column align="left" grow={true}>
             <OrderDetails nft={nft} />

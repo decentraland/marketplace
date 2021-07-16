@@ -1,16 +1,12 @@
 import React, { useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Row } from 'decentraland-ui'
-import {
-  WearableRarity,
-  WearableGender
-} from '../../../../modules/nft/wearable/types'
+import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
-import { Network } from '@dcl/schemas'
+import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { contracts } from '../../../../modules/contract/utils'
-import { NFTCategory } from '../../../../modules/nft/types'
 
 export const ALL_FILTER_OPTION = 'ALL'
 
@@ -42,9 +38,9 @@ const FiltersMenu = (props: Props) => {
   }, [])
 
   const rarityOptions = useMemo(() => {
-    const options = Object.values(WearableRarity)
-      .filter(x => x !== WearableRarity.COMMON && x !== WearableRarity.UNIQUE)
-      .reverse()
+    const options = Object.values(Rarity)
+      .filter(value => typeof value === 'string')
+      .reverse() as string[]
     return options.map(rarity => ({
       value: rarity,
       text: t(`wearable.rarity.${rarity}`)

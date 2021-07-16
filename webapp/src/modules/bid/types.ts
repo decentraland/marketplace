@@ -1,3 +1,4 @@
+import { ChainId, Network } from '@dcl/schemas'
 import { OrderStatus } from '../order/types'
 
 export type Bid = {
@@ -5,13 +6,15 @@ export type Bid = {
   bidder: string
   seller: string
   price: string
-  fingerprint: 'string'
+  fingerprint: string
   status: OrderStatus
   blockchainId: string
   blockNumber: string
-  expiresAt: string
-  createdAt: string
-  updatedAt: string
+  expiresAt: number
+  createdAt: number
+  updatedAt: number
   contractAddress: string
   tokenId: string
+  network: Network
+  chainId: ChainId
 }

@@ -1,11 +1,7 @@
 import React, { useCallback } from 'react'
 import { Container, Header, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  RARITY_COLOR,
-  BodyShape,
-  WearableGender
-} from '../../../modules/nft/wearable/types'
+import { WearableGender } from '../../../modules/nft/wearable/types'
 import { getNFTName } from '../../../modules/nft/utils'
 import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -26,6 +22,7 @@ import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './WearableDetail.types'
 import './WearableDetail.css'
+import { BodyShape, Rarity } from '@dcl/schemas'
 
 const WearableDetail = (props: Props) => {
   const { nft, onNavigate } = props
@@ -87,7 +84,7 @@ const WearableDetail = (props: Props) => {
                     <div
                       className="rarity"
                       style={{
-                        backgroundColor: RARITY_COLOR[wearable.rarity]
+                        backgroundColor: Rarity.getColor(wearable.rarity)
                       }}
                       onClick={handleRarityClick}
                     >

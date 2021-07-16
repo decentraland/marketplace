@@ -5,12 +5,7 @@ import { toBN, toWei } from 'web3x-es/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
-import {
-  NFT,
-  NFTCategory,
-  NFTsFetchParams,
-  NFTsCountParams
-} from '../../nft/types'
+import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -57,7 +52,6 @@ export class NFTService
         const order = this.toOrder(asset, oneEthInMANA)
 
         nft.activeOrderId = order.id
-        order.nftId = nft.id
 
         orders.push(order)
       }
@@ -105,7 +99,6 @@ export class NFTService
       order = this.toOrder(remoteNFT, oneEthInMANA)
 
       nft.activeOrderId = order.id
-      order.nftId = nft.id
     }
 
     return [nft, order] as const
@@ -145,10 +138,14 @@ export class NFTService
       data: {
         description: asset.description
       },
-      category: NFTCategory.ART,
+      category: 'art',
       vendor: VendorName.MAKERS_PLACE,
       chainId: Number(process.env.REACT_APP_CHAIN_ID),
-      network: Network.ETHEREUM
+      network: Network.ETHEREUM,
+      issuedId: null,
+      itemId: null,
+      createdAt: 0,
+      updatedAt: 0
     }
   }
 
@@ -159,16 +156,19 @@ export class NFTService
 
     return {
       id: `${VendorName.MAKERS_PLACE}-order-${asset.token_id}`,
-      nftId: asset.token_id!.toString(),
-      nftAddress: asset.token_contract_address.toLowerCase(),
+      tokenId: asset.token_id!.toString(),
+      contractAddress: asset.token_contract_address.toLowerCase(),
       marketAddress: asset.sale_contract_address!,
       owner: asset.owner,
       buyer: null,
       price: price.toString(10),
       ethPrice: asset.price_in_wei!.toString(),
       status: OrderStatus.OPEN,
-      createdAt: asset.sale_created_at!,
-      updatedAt: asset.sale_created_at!
+      createdAt: +asset.sale_created_at!,
+      updatedAt: +asset.sale_created_at!,
+      expiresAt: Infinity,
+      network: Network.ETHEREUM,
+      chainId: Number(process.env.REACT_APP_CHAIN_ID)
     }
   }
 

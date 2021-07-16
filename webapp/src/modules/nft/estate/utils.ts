@@ -1,13 +1,13 @@
 import { Eth } from 'web3x-es/eth'
 import { Address } from 'web3x-es/address'
+import { NFTCategory } from '@dcl/schemas'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { EstateRegistry } from '../../../contracts/EstateRegistry'
-import { Estate } from './types'
-import { NFTCategory } from '../types'
+import { NFT } from '../types'
 import { getContract } from '../../contract/utils'
 
-export const getSelection = (estate: Estate) => {
-  return estate.parcels.map(pair => ({
+export const getSelection = (estate: NFT['data']['estate']) => {
+  return estate!.parcels.map(pair => ({
     x: +pair.x,
     y: +pair.y
   }))

@@ -10,7 +10,7 @@ export type HistoryEvent = {
   from: string
   to: string
   price: string
-  updatedAt: string
+  updatedAt: number
 }
 
 export type UnionOrderBid = Partial<Order & Bid>
