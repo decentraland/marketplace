@@ -6,8 +6,6 @@ import { Card } from 'decentraland-ui'
 import { formatMANA } from '../../lib/mana'
 import { locations } from '../../modules/routing/locations'
 import { getNFTName } from '../../modules/nft/utils'
-import { NFT } from '../../modules/nft/types'
-import { VendorName } from '../../modules/vendor/types'
 import { NFTImage } from '../NFTImage'
 import { Mana } from '../Mana'
 import { ParcelTags } from './ParcelTags'
@@ -21,9 +19,7 @@ const NFTCard = (props: Props) => {
   const { nft, order } = props
 
   const title = getNFTName(nft)
-  const { parcel, estate, wearable, ens } = (nft as NFT<
-    VendorName.DECENTRALAND
-  >).data
+  const { parcel, estate, wearable, ens } = nft.data
 
   return (
     <Card
@@ -43,18 +39,9 @@ const NFTCard = (props: Props) => {
           ) : null}
         </Card.Header>
         <Card.Meta>{t(`networks.${nft.network.toLowerCase()}`)}</Card.Meta>
-        {parcel ? (
-          <ParcelTags
-            className="tags"
-            nft={nft as NFT<VendorName.DECENTRALAND>}
-          />
-        ) : null}
-        {estate ? (
-          <EstateTags nft={nft as NFT<VendorName.DECENTRALAND>} />
-        ) : null}
-        {wearable ? (
-          <WearableTags nft={nft as NFT<VendorName.DECENTRALAND>} />
-        ) : null}
+        {parcel ? <ParcelTags className="tags" nft={nft} /> : null}
+        {estate ? <EstateTags nft={nft} /> : null}
+        {wearable ? <WearableTags nft={nft} /> : null}
         {ens ? <ENSTags nft={nft} /> : null}
       </Card.Content>
     </Card>

@@ -1,6 +1,6 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { NFT } from '@dcl/schemas'
 import { getId } from '../nft/parcel/utils'
+import { NFT } from '../nft/types'
 import { Proximity } from './types'
 
 export const getDistanceText = (distance: number) =>
