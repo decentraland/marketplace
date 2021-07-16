@@ -1,16 +1,18 @@
 /* eslint-disable */
 
-import { isDevelopment } from '../../lib/environment'
+import { environment } from '../../lib/environment'
+
+console.log(process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN)
 
 let _rollbarConfig = {
   accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN || '',
   captureUncaught: true,
   captureUnhandledRejections: true,
   payload: {
-    environment: process.env.REACT_APP_ENVIRONMENT
+    environment
   },
   checkIgnore: function() {
-    if (window.location.hostname === 'localhost' || isDevelopment) {
+    if (window.location.hostname === 'localhost') {
       // Ignore development
       return true
     }
