@@ -9,15 +9,7 @@ let _rollbarConfig = {
   payload: {
     environment
   },
-  checkIgnore: function() {
-    // Ignore localhost and dev environments
-    if (isDevelopment) {
-      return true
-    }
-
-    // Allow recording in staging and production environments
-    return false
-  }
+  enabled: !isDevelopment
 }
 
 // prettier-ignore
