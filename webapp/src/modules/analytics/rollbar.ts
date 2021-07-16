@@ -2,8 +2,6 @@
 
 import { environment } from '../../lib/environment'
 
-console.log(process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN)
-
 let _rollbarConfig = {
   accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN || '',
   captureUncaught: true,
