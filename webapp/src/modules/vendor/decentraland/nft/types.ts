@@ -11,6 +11,7 @@ export type NFTsFetchFilters = {
   wearableCategory?: WearableCategory
   wearableRarities?: Rarity[]
   wearableGenders?: WearableGender[]
+  itemId?: string
   contracts?: string[]
   network?: Network
 }
