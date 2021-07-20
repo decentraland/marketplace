@@ -36,6 +36,8 @@ export function handleCreateEstate(event: CreateEstate): void {
     let nft = new NFT(id)
     nft.name = estateData.name
     nft.searchText = toLowerCase(estateData.name)
+    nft.createdAt = event.block.timestamp
+    nft.updatedAt = event.block.timestamp
     nft.save()
   }
 
@@ -149,6 +151,7 @@ export function handleUpdate(event: Update): void {
 
     let nft = new NFT(id)
     nft.name = estateData.name
+    nft.updatedAt = event.block.timestamp
     nft.save()
   }
 
