@@ -12,7 +12,7 @@ const Navigation = (props: Props) => {
       <Tabs.Left>
         <Link to={locations.browse()}>
           <Tabs.Tab active={activeTab === NavigationTab.BROWSE}>
-            {t('navigation.decentraland')}
+            {t('navigation.collectibles')}
           </Tabs.Tab>
         </Link>
         <Link to={locations.partners()}>
