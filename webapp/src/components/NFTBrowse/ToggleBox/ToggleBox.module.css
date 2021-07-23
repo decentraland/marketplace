@@ -12,11 +12,11 @@
 }
 
 .item:hover {
-  background: #242129;
+  background: var(--secondary);
 }
 
 .active {
-  background: #242129;
+  background: var(--secondary);
 }
 
 .title {
