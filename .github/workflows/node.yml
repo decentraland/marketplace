@@ -1,6 +1,6 @@
 name: CI
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   Build-and-test-webapp:
@@ -21,6 +21,15 @@ jobs:
       - name: Test
         run: npm test -- --coverage
         if: ${{ always() }}
+    finish:
+      needs: test
+      runs-on: ubuntu-latest
+      steps:
+        - name: Coveralls Finished
+          uses: coverallsapp/github-action@master
+          with:
+            github-token: ${{ secrets.github_token }}
+            parallel-finished: true
   Build-and-test-indexer:
     runs-on: ubuntu-latest
     defaults:
