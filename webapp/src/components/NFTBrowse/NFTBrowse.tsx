@@ -11,6 +11,7 @@ import { Column } from '../Layout/Column'
 import { NFTFilters } from '../Vendor/NFTFilters'
 import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './NFTBrowse.types'
+import { ToggleBox } from './ToggleBox'
 import './NFTBrowse.css'
 
 const NFTBrowse = (props: Props) => {
@@ -66,6 +67,21 @@ const NFTBrowse = (props: Props) => {
               ) : (
                 <NFTSidebar />
               )}
+              <ToggleBox
+                header="Type"
+                items={[
+                  {
+                    title: 'Originals',
+                    description: 'Original creations by users',
+                    onClick: () => undefined
+                  },
+                  {
+                    title: 'Offers',
+                    description: 'Collectibles being reselled',
+                    onClick: () => undefined
+                  }
+                ]}
+              />
             </Responsive>
           </Column>
         )}
