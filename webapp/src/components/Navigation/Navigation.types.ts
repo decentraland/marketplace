@@ -1,5 +1,6 @@
 export enum NavigationTab {
   BROWSE = 'browse',
+  COLLECTIBLES = 'collectibles',
   PARTNERS = 'partners',
   PARTNER = 'partner',
   MY_ASSETS = 'my_assets',
