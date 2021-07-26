@@ -1,7 +1,7 @@
 import React from 'react'
 import { HeaderMenu, Header, Button, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { NFTCard } from '../../NFTCard'
+import { AssetCard } from '../../AssetCard'
 import { Props } from './Slideshow.types'
 import './Slideshow.css'
 
@@ -9,7 +9,7 @@ const Slideshow = (props: Props) => {
   const { title, nfts, isSubHeader, isLoading, onViewAll } = props
 
   const renderNfts = () =>
-    nfts.map((nft, index) => <NFTCard key={index} nft={nft} />)
+    nfts.map((nft, index) => <AssetCard key={index} asset={nft} />)
 
   return (
     <div className="Slideshow">

@@ -11,7 +11,7 @@ import { ContractName } from 'decentraland-transactions'
 import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { isPartner } from '../../../modules/vendor/utils'
-import { getNFTName } from '../../../modules/nft/utils'
+import { getAssetName } from '../../../modules/nft/utils'
 import { useFingerprint, useComputedPrice } from '../../../modules/nft/hooks'
 import { NFT } from '../../../modules/nft/types'
 import { getContractNames } from '../../../modules/vendor'
@@ -208,7 +208,7 @@ const BuyPage = (props: Props) => {
   )
 }
 
-const Name = (props: { nft: NFT }) => <b>{getNFTName(props.nft)}</b>
+const Name = (props: { nft: NFT }) => <b>{getAssetName(props.nft)}</b>
 
 const Price = (props: { network?: Network; price: string }) => (
   <Mana network={props.network} inline withTooltip>

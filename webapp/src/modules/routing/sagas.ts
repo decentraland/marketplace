@@ -1,10 +1,16 @@
 import { takeEvery, put, select } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
-import { NFTCategory } from '@dcl/schemas'
+import { NFTCategory, Rarity } from '@dcl/schemas'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
-import { getView } from '../ui/nft/browse/selectors'
-import { getIsFullscreen, getNetwork, getVendor } from '../routing/selectors'
+import { getView } from '../ui/browse/selectors'
+import {
+  getIsFullscreen,
+  getIsSoldOut,
+  getItemId,
+  getNetwork,
+  getVendor
+} from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
 import { fetchNFTsRequest } from '../nft/actions'
@@ -15,8 +21,9 @@ import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
 import { locations } from './locations'
 import {
   getSearchParams,
-  getSearchCategory,
-  getDefaultOptionsByView
+  getCategoryFromSection,
+  getDefaultOptionsByView,
+  getSearchWearableCategory
 } from './search'
 import {
   getPage,
@@ -34,37 +41,61 @@ import {
   BrowseNFTsAction,
   FETCH_NFTS_FROM_ROUTE,
   FetchNFTsFromRouteAction,
-  setIsLoadMore
+  setIsLoadMore,
+  FETCH_ITEMS_FROM_ROUTE,
+  FetchItemsFromRouteAction,
+  BROWSE_ITEMS,
+  BrowseItemsAction
 } from './actions'
-import { SearchOptions } from './types'
+import { NFTBrowseOptions, Section } from './types'
+import { ItemBrowseOptions } from '../item/types'
+import { fetchItemsRequest } from '../item/actions'
+import { ItemSortBy } from '../vendor/decentraland/item/types'
+import { WearableGender } from '../nft/wearable/types'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_NFTS_FROM_ROUTE, handleFetchNFTsFromRoute)
-  yield takeEvery(BROWSE_NFTS, handleBrowse)
+  yield takeEvery(FETCH_ITEMS_FROM_ROUTE, handleFetchItemsFromRoute)
+  yield takeEvery(BROWSE_NFTS, handleBrowseNFTs)
+  yield takeEvery(BROWSE_ITEMS, handleBrowseItems)
 }
 
 function* handleFetchNFTsFromRoute(action: FetchNFTsFromRouteAction) {
-  const newSearchOptions: SearchOptions = yield getNewSearchOptions(
+  const newSearchOptions: NFTBrowseOptions = yield getNFTBrowseOptions(
     action.payload.searchOptions
   )
   yield fetchNFTsFromRoute(newSearchOptions)
 }
 
-function* handleBrowse(action: BrowseNFTsAction) {
-  const newSearchOptions: SearchOptions = yield getNewSearchOptions(
+function* handleBrowseNFTs(action: BrowseNFTsAction) {
+  const options: NFTBrowseOptions = yield getNFTBrowseOptions(
     action.payload.searchOptions
   )
-  yield fetchNFTsFromRoute(newSearchOptions)
+  yield fetchNFTsFromRoute(options)
 
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-  const params = getSearchParams(newSearchOptions)
+  const params = getSearchParams(options)
+  yield put(push(params ? `${pathname}?${params.toString()}` : pathname))
+}
+
+function* handleFetchItemsFromRoute(action: FetchItemsFromRouteAction) {
+  const options: ItemBrowseOptions = yield getItemBrowseOptions(action.payload)
+  yield fetchItemsFromRoute(options)
+}
+
+function* handleBrowseItems(action: BrowseItemsAction) {
+  const options: ItemBrowseOptions = yield getItemBrowseOptions(action.payload)
+  yield fetchItemsFromRoute(options)
+
+  const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
+  const params = getSearchParams(options)
   yield put(push(params ? `${pathname}?${params.toString()}` : pathname))
 }
 
 // ------------------------------------------------
 // Utility functions, not handlers
 
-function* fetchNFTsFromRoute(searchOptions: SearchOptions) {
+function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
   const view = searchOptions.view!
   const vendor = searchOptions.vendor!
   const page = searchOptions.page!
@@ -79,7 +110,7 @@ function* fetchNFTsFromRoute(searchOptions: SearchOptions) {
   const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
   const [orderBy, orderDirection] = getOrder(sortBy)
-  const category = getSearchCategory(section)
+  const category = getCategoryFromSection(section)
 
   yield put(setIsLoadMore(isLoadMore))
 
@@ -106,8 +137,8 @@ function* fetchNFTsFromRoute(searchOptions: SearchOptions) {
   }
 }
 
-function* getNewSearchOptions(current: SearchOptions) {
-  let previous: SearchOptions = {
+function* getNFTBrowseOptions(current: NFTBrowseOptions) {
+  let previous: NFTBrowseOptions = {
     address: yield getAddress(),
     vendor: yield select(getVendor),
     section: yield select(getSection),
@@ -138,7 +169,7 @@ function* getNewSearchOptions(current: SearchOptions) {
 
   const defaults = getDefaultOptionsByView(view)
 
-  const result: SearchOptions = {
+  const result: NFTBrowseOptions = {
     ...defaults,
     ...previous,
     ...current,
@@ -147,6 +178,62 @@ function* getNewSearchOptions(current: SearchOptions) {
   }
 
   return result
+}
+
+function* fetchItemsFromRoute(options: ItemBrowseOptions) {
+  const view = options.view!
+  const page = options.page!
+
+  const isLoadMore = view === View.LOAD_MORE
+
+  const offset = isLoadMore ? page - 1 : 0
+  const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
+  const first = Math.min(page * PAGE_SIZE - skip, 1000)
+
+  yield put(setIsLoadMore(isLoadMore))
+  yield put(
+    fetchItemsRequest({
+      view,
+      page,
+      filters: {
+        first,
+        skip,
+        ...options.filters
+      }
+    })
+  )
+}
+
+function* getItemBrowseOptions(_current: ItemBrowseOptions) {
+  const section: Section | undefined = yield select(getSection)
+  const isWearableHead =
+    section === Section[VendorName.DECENTRALAND].WEARABLES_HEAD
+  const isWearableAccessory =
+    section === Section[VendorName.DECENTRALAND].WEARABLES_ACCESORIES
+  const wearableCategory = !isWearableAccessory
+    ? getSearchWearableCategory(section!)
+    : undefined
+  const options: ItemBrowseOptions = {
+    page: yield select(getPage),
+    view: yield select(getView),
+    filters: {
+      creator: (yield getAddress()) as string,
+      sortBy: (yield select(getSortBy)) as ItemSortBy,
+      search: (yield select(getSearch)) as string,
+      isOnSale: (yield select(getOnlyOnSale)) as boolean,
+      rarities: (yield select(getWearableRarities)) as Rarity[],
+      wearableGenders: (yield select(getWearableGenders)) as WearableGender[],
+      isWearableHead,
+      isWearableAccessory,
+      wearableCategory,
+      isSoldOut: (yield select(getIsSoldOut)) as boolean,
+      itemId: (yield select(getItemId)) as string,
+      contractAddress: ((yield select(getContracts)) as string[])[0],
+      network: yield select(getNetwork)
+    }
+  }
+
+  return options
 }
 
 function* getAddress() {
@@ -164,16 +251,16 @@ function* getAddress() {
 
 // TODO: Consider moving this should live to each vendor
 function* deriveCurrentOptions(
-  previous: SearchOptions,
-  current: SearchOptions
+  previous: NFTBrowseOptions,
+  current: NFTBrowseOptions
 ) {
   let newOptions = { ...current }
 
-  const nextCategory = getSearchCategory(current.section!)
+  const nextCategory = getCategoryFromSection(current.section!)
 
   switch (nextCategory) {
     case NFTCategory.WEARABLE: {
-      const prevCategory = getSearchCategory(previous.section!)
+      const prevCategory = getCategoryFromSection(previous.section!)
 
       // Category specific logic to keep filters if the category doesn't change
       if (prevCategory && prevCategory === nextCategory) {
@@ -192,17 +279,20 @@ function* deriveCurrentOptions(
   return newOptions
 }
 
-function deriveView(previous: SearchOptions, current: SearchOptions) {
+function deriveView(previous: NFTBrowseOptions, current: NFTBrowseOptions) {
   return previous.page! < current.page!
     ? View.LOAD_MORE
     : current.view || previous.view
 }
 
-function deriveVendor(previous: SearchOptions, current: SearchOptions) {
+function deriveVendor(previous: NFTBrowseOptions, current: NFTBrowseOptions) {
   return current.vendor || previous.vendor || VendorName.DECENTRALAND
 }
 
-function shouldResetOptions(previous: SearchOptions, current: SearchOptions) {
+function shouldResetOptions(
+  previous: NFTBrowseOptions,
+  current: NFTBrowseOptions
+) {
   return (
     (current.vendor && current.vendor !== previous.vendor) ||
     (current.section && current.section !== previous.section)

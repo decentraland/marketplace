@@ -4,20 +4,18 @@ import { Loader } from 'decentraland-ui'
 import { LazyImage } from 'react-lazy-images'
 
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
-import { NFT } from '../../modules/nft/types'
-import { VendorName } from '../../modules/vendor/types'
-import { getNFTName } from '../../modules/nft/utils'
+import { getAssetImage, getAssetName } from '../../modules/nft/utils'
 import { Atlas } from '../Atlas'
-import { Props } from './NFTImage.types'
-import './NFTImage.css'
+import { Props } from './AssetImage.types'
+import './AssetImage.css'
 
 // 1x1 transparent pixel
 const PIXEL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
 
-const NFTImage = (props: Props) => {
+const AssetImage = (props: Props) => {
   const {
-    nft,
+    asset,
     isDraggable,
     withNavigation,
     hasPopup,
@@ -25,15 +23,13 @@ const NFTImage = (props: Props) => {
     isSmall,
     showMonospace
   } = props
-  const { parcel, estate, wearable, ens } = (nft as NFT<
-    VendorName.DECENTRALAND
-  >).data
+  const { parcel, estate, wearable, ens } = asset.data
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
   ])
 
-  switch (nft.category) {
+  switch (asset.category) {
     case NFTCategory.PARCEL: {
       const x = +parcel!.x
       const y = +parcel!.y
@@ -77,7 +73,11 @@ const NFTImage = (props: Props) => {
             backgroundImage
           }}
         >
-          <img alt={getNFTName(nft)} className="image" src={nft.image} />
+          <img
+            alt={getAssetName(asset)}
+            className="image"
+            src={getAssetImage(asset)}
+          />
         </div>
       )
     }
@@ -100,8 +100,8 @@ const NFTImage = (props: Props) => {
     default: {
       return (
         <LazyImage
-          src={nft.image}
-          alt={getNFTName(nft)}
+          src={getAssetImage(asset)}
+          alt={getAssetName(asset)}
           debounceDurationMs={1000}
           placeholder={({ ref }) => (
             <div ref={ref}>
@@ -109,7 +109,7 @@ const NFTImage = (props: Props) => {
             </div>
           )}
           actual={({ imageProps }) => (
-            <img className="image" alt={getNFTName(nft)} {...imageProps} />
+            <img className="image" alt={getAssetName(asset)} {...imageProps} />
           )}
         />
       )
@@ -118,10 +118,10 @@ const NFTImage = (props: Props) => {
 }
 
 // the purpose of this wrapper is to make the div always be square, by using a 1x1 transparent pixel
-const NFTImageWrapper = (props: Props) => {
-  const { nft, className, ...rest } = props
+const AssetImageWrapper = (props: Props) => {
+  const { asset, className, ...rest } = props
 
-  let classes = 'NFTImage'
+  let classes = 'AssetImage'
   if (className) {
     classes += ' ' + className
   }
@@ -130,13 +130,13 @@ const NFTImageWrapper = (props: Props) => {
     <div className={classes}>
       <img src={PIXEL} alt="pixel" className="pixel" />
       <div className="image-wrapper">
-        <NFTImage nft={nft} {...rest} />
+        <AssetImage asset={asset} {...rest} />
       </div>
     </div>
   )
 }
 
-NFTImage.defaultProps = {
+AssetImage.defaultProps = {
   isDraggable: false,
   withNavigation: false,
   zoom: 0.5,
@@ -144,4 +144,4 @@ NFTImage.defaultProps = {
   showMonospace: false
 }
 
-export default React.memo(NFTImageWrapper)
+export default React.memo(AssetImageWrapper)

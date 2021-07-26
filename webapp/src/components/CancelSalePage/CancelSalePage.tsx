@@ -3,7 +3,7 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Header, Button } from 'decentraland-ui'
 
 import { locations } from '../../modules/routing/locations'
-import { getNFTName } from '../../modules/nft/utils'
+import { getAssetName } from '../../modules/nft/utils'
 import { formatMANA } from '../../lib/mana'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -27,7 +27,7 @@ const CancelSalePage = (props: Props) => {
               {(nft, order) => {
                 let subtitle
                 let isDisabled = false
-                const name = getNFTName(nft)
+                const name = getAssetName(nft)
                 if (!order) {
                   isDisabled = true
                   subtitle = (

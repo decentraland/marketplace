@@ -2,18 +2,18 @@ import { Network, NFTCategory, WearableCategory } from '@dcl/schemas'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
-import { SearchOptions, SortBy } from './types'
+import { NFTBrowseOptions, SortBy } from './types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
-export function getDefaultOptionsByView(view?: View): SearchOptions {
+export function getDefaultOptionsByView(view?: View): NFTBrowseOptions {
   return {
     onlyOnSale: view !== View.ACCOUNT,
     sortBy: view === View.ACCOUNT ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
   }
 }
 
-export function getSearchParams(options?: SearchOptions) {
+export function getSearchParams(options?: NFTBrowseOptions) {
   let params: URLSearchParams | undefined
   if (options) {
     params = new URLSearchParams()
@@ -73,7 +73,7 @@ export function getSearchParams(options?: SearchOptions) {
   return params
 }
 
-export function getSearchCategory(section: Section) {
+export function getCategoryFromSection(section: Section) {
   // TODO: Move this to each vendor? Names shortened for brevity here
   const DclSection = Section[VendorName.DECENTRALAND]
   switch (section) {

@@ -1,27 +1,26 @@
-import { NFTCategory } from '@dcl/schemas'
+import { Item, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { VendorName } from '../vendor/types'
 import { SortDirection, SortBy } from '../routing/types'
 import { addressEquals } from '../wallet/utils'
 import { NFT, NFTSortBy } from './types'
+import { locations } from '../routing/locations'
 
 export function getNFTId(contractAddress: string, tokenId: string) {
   return contractAddress + '-' + tokenId
 }
 
-export function getNFTName(
-  nft: Pick<NFT, 'vendor' | 'name' | 'category' | 'data'>
-) {
-  if (nft.name) {
-    return nft.name
+export function getAssetName(asset: NFT | Item) {
+  if (asset.name) {
+    return asset.name
   }
 
-  switch (nft.category) {
+  switch (asset.category) {
     case NFTCategory.PARCEL:
       return t(
         'global.parcel_with_coords',
-        (nft as NFT<VendorName.DECENTRALAND>).data.parcel
+        (asset as NFT<VendorName.DECENTRALAND>).data.parcel
       )
 
     case NFTCategory.ESTATE:
@@ -39,6 +38,26 @@ export function getNFTName(
     default:
       return t('global.nft')
   }
+}
+
+export function getAssetImage(asset: NFT | Item) {
+  if ('image' in asset) {
+    return asset.image
+  }
+  if ('thumbnail' in asset) {
+    return asset.thumbnail
+  }
+  return ''
+}
+
+export function getAssetUrl(asset: NFT | Item) {
+  if ('image' in asset) {
+    return locations.nft(asset.contractAddress, asset.tokenId)
+  }
+  if ('thumbnail' in asset) {
+    return locations.item(asset.contractAddress, asset.itemId)
+  }
+  return ''
 }
 
 export function getOrder(sortBy: SortBy) {

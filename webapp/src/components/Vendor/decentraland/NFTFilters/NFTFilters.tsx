@@ -15,7 +15,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { SortBy } from '../../../../modules/routing/types'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { Section } from '../../../../modules/vendor/decentraland/routing/types'
-import { getSearchCategory } from '../../../../modules/routing/search'
+import { getCategoryFromSection } from '../../../../modules/routing/search'
 import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
 import { NFTSidebar } from '../../NFTSidebar'
 import { Chip } from '../../../Chip'
@@ -40,7 +40,7 @@ const NFTFilters = (props: Props) => {
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
-  const category = section ? getSearchCategory(section) : undefined
+  const category = section ? getCategoryFromSection(section) : undefined
   const dropdownOptions = [
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') }

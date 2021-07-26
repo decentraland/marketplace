@@ -3,7 +3,7 @@ import { NFT_SERVER_URL } from '../nft'
 import { ItemFilters } from './types'
 
 class ItemAPI {
-  fetchItems = async (filters: ItemFilters) => {
+  fetchItems = async (filters: ItemFilters = {}) => {
     const queryParams = this.buildItemsQueryString(filters)
 
     const response: { data: Item[]; total: number } = await fetch(
@@ -15,18 +15,24 @@ class ItemAPI {
 
   private buildItemsQueryString(filters: ItemFilters): string {
     const queryParams = new URLSearchParams()
-    if (filters.first) {
-      queryParams.append('first', filters.first.toString())
-    }
+    // if (filters.first) {
+    //   queryParams.append('first', filters.first.toString())
+    // }
+
+    queryParams.append('first', '1000')
+
     if (filters.skip) {
       queryParams.append('skip', filters.skip.toString())
     }
+
     if (filters.sortBy) {
       queryParams.append('sortBy', filters.sortBy)
     }
+
     if (filters.creator) {
       queryParams.append('owner', filters.creator)
     }
+
     if (filters.isSoldOut) {
       queryParams.append('isSoldOut', 'true')
     }

@@ -1,5 +1,5 @@
 import { getSearchParams } from './search'
-import { SearchOptions } from './types'
+import { NFTBrowseOptions } from './types'
 
 export const locations = {
   root: () => '/',
@@ -7,15 +7,15 @@ export const locations = {
   settings: () => '/settings',
   partners: () => '/partners',
   bids: () => '/bids',
-  browse: (options?: SearchOptions) => {
+  browse: (options?: NFTBrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
   },
-  currentAccount: (options?: SearchOptions) => {
+  currentAccount: (options?: NFTBrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/account?${params.toString()}` : '/account'
   },
-  account: (address: string = ':address', options?: SearchOptions) => {
+  account: (address: string = ':address', options?: NFTBrowseOptions) => {
     const params = getSearchParams(options)
     return params
       ? `/accounts/${address}?${params.toString()}`
@@ -25,6 +25,10 @@ export const locations = {
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
   ) => `/contracts/${contractAddress}/tokens/${tokenId}`,
+  item: (
+    contractAddress: string = ':contractAddress',
+    itemId: string = ':itemId'
+  ) => `/contracts/${contractAddress}/items/${itemId}`,
   parcel: (x: string = ':x', y: string = ':y') => `/parcels/${x}/${y}/detail`,
   estate: (estateId: string = ':estateId') => `/estates/${estateId}/detail`,
   sell: (

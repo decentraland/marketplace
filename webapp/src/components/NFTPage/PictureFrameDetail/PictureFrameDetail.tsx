@@ -1,9 +1,9 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 
-import { getNFTName } from '../../../modules/nft/utils'
+import { getAssetName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
-import { NFTImage } from '../../NFTImage'
+import { AssetImage } from '../../AssetImage'
 import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { Title } from '../Title'
@@ -18,11 +18,11 @@ const PictureFrameDetail = (props: Props) => {
   return (
     <>
       <PageHeader>
-        <NFTImage nft={nft} />
+        <AssetImage asset={nft} />
       </PageHeader>
       <Container className="PictureFrameDetail">
         <Title
-          left={<Header size="large">{getNFTName(nft)}</Header>}
+          left={<Header size="large">{getAssetName(nft)}</Header>}
           right={<Owner nft={nft} />}
         />
         <Row>
