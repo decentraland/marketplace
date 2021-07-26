@@ -1,13 +1,7 @@
-import BN from 'bn.js'
-
-let oneEthInMANA: BN | undefined
+import { fromWei } from 'web3x-es/utils'
 
 export function formatMANA(value: string) {
-  if (!oneEthInMANA) {
-    oneEthInMANA = new BN('1000000000000000000') // 10 ** 18
-  }
-  const mana = new BN(value).divRound(oneEthInMANA)
-  return mana.toNumber().toLocaleString()
+  return Number(fromWei(value, 'ether')).toLocaleString()
 }
 
 export function toMANA(num: number) {
