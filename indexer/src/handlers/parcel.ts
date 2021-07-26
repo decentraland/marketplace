@@ -132,6 +132,7 @@ export function handleUpdate(event: Update): void {
     let nft = new NFT(id)
     nft.name = parcelData.name
     nft.searchText = getParcelText(parcel, parcelData.name)
+    nft.updatedAt = event.block.timestamp
     nft.save()
   }
 
