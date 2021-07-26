@@ -25,6 +25,7 @@ const Routes = () => {
   return (
     <>
       <Switch>
+        <Route exact path={locations.lands()} component={BrowsePage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
         <Route
           exact

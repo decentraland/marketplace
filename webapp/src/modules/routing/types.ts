@@ -18,6 +18,15 @@ export enum SortDirection {
   DESC = 'desc'
 }
 
+export type LandsSearchOptions = {
+  page?: number
+  sortBy?: SortBy
+  onlyOnSale?: boolean
+  isMap?: boolean
+  isFullscreen?: boolean
+  search?: string
+}
+
 export type SearchOptions = {
   view?: View
   vendor?: VendorName
