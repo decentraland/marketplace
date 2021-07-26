@@ -15,7 +15,7 @@ import {
   INPUT_FORMAT,
   getDefaultExpirationDate
 } from '../../../modules/order/utils'
-import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
+import { getAssetName, isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { AuthorizationModal } from '../../AuthorizationModal'
@@ -114,7 +114,7 @@ const SellModal = (props: Props) => {
         <T
           id={isUpdate ? 'sell_page.update_subtitle' : 'sell_page.subtitle'}
           values={{
-            name: <b className="primary-text">{getNFTName(nft)}</b>
+            name: <b className="primary-text">{getAssetName(nft)}</b>
           }}
         />
       </p>
@@ -171,7 +171,7 @@ const SellModal = (props: Props) => {
             <T
               id="sell_page.confirm.line_one"
               values={{
-                name: <b>{getNFTName(nft)}</b>,
+                name: <b>{getAssetName(nft)}</b>,
                 amount: (
                   <Mana network={nft.network} inline>
                     {fromMANA(price).toLocaleString()}

@@ -14,6 +14,7 @@ import { toastSaga } from './toast/sagas'
 import { translationSaga } from './translation/sagas'
 import { uiSaga } from './ui/sagas'
 import { walletSaga } from './wallet/sagas'
+import { itemSaga } from './item/sagas'
 
 import { TRANSACTIONS_API_URL } from './wallet/utils'
 
@@ -30,6 +31,7 @@ export function* rootSaga() {
     analyticsSaga(),
     authorizationSaga(),
     bidSaga(),
+    itemSaga(),
     nftSaga(),
     orderSaga(),
     profileSaga(),

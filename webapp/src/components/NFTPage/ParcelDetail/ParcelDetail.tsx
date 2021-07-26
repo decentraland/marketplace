@@ -4,10 +4,10 @@ import { NFTCategory } from '@dcl/schemas'
 import { Container, Header } from 'decentraland-ui'
 import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { getNFTName } from '../../../modules/nft/utils'
+import { getAssetName } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { PageHeader } from '../../PageHeader'
-import { NFTImage } from '../../NFTImage'
+import { AssetImage } from '../../AssetImage'
 import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { Coordinate } from '../../Coordinate'
@@ -32,8 +32,8 @@ const ParcelDetail = (props: Props) => {
   return (
     <>
       <PageHeader>
-        <NFTImage
-          nft={nft}
+        <AssetImage
+          asset={nft}
           isDraggable={true}
           withNavigation={true}
           hasPopup={true}
@@ -45,7 +45,7 @@ const ParcelDetail = (props: Props) => {
           left={
             <>
               <Header className="parcel-title-name" size="large">
-                {getNFTName(nft)}
+                {getAssetName(nft)}
               </Header>
               <Coordinate
                 className="parcel-title-badge"

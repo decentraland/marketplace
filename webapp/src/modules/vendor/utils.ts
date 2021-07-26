@@ -1,13 +1,16 @@
 import { NFTCategory } from '@dcl/schemas'
-import { getSearchCategory, getSearchWearableCategory } from '../routing/search'
-import { SearchOptions } from '../routing/types'
+import {
+  getCategoryFromSection,
+  getSearchWearableCategory
+} from '../routing/search'
+import { NFTBrowseOptions } from '../routing/types'
 import { Section } from './routing/types'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName, Disabled } from './types'
 
 export function getFilters(
   vendor: VendorName,
-  searchOptions: SearchOptions
+  searchOptions: NFTBrowseOptions
 ): NFTsFetchFilters {
   const { section } = searchOptions
 
@@ -20,7 +23,7 @@ export function getFilters(
       const isWearableAccessory =
         section === currentSection.WEARABLES_ACCESORIES
 
-      const category = getSearchCategory(section!)
+      const category = getCategoryFromSection(section!)
       const wearableCategory =
         !isWearableAccessory && category === NFTCategory.WEARABLE
           ? getSearchWearableCategory(section!)

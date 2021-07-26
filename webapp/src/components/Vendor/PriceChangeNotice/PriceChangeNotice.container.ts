@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../../modules/reducer'
-import { getView } from '../../../modules/ui/nft/browse/selectors'
+import { getView } from '../../../modules/ui/browse/selectors'
 import { MapStateProps } from './PriceChangeNotice.types'
 import PriceChangeNotice from './PriceChangeNotice'
 

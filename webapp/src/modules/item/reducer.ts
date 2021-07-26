@@ -66,5 +66,7 @@ export function itemReducer(
         error
       }
     }
+    default:
+      return state
   }
 }

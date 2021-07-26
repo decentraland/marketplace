@@ -1,13 +1,13 @@
 import React from 'react'
+import { BodyShape, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
 import { Props } from './WearableTags.types'
 import './WearableTags.css'
-import { BodyShape, Rarity } from '@dcl/schemas'
 
 const WearableTags = (props: Props) => {
-  const { nft } = props
-  const wearable = nft.data.wearable!
+  const { asset } = props
+  const wearable = asset.data.wearable!
   return (
     <div className="WearableTags tags">
       <div

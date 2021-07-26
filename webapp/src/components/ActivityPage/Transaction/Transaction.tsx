@@ -8,7 +8,7 @@ import {
   REVOKE_TOKEN_SUCCESS
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 
-import { getNFTName } from '../../../modules/nft/utils'
+import { getAssetName } from '../../../modules/nft/utils'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
@@ -240,7 +240,7 @@ const Transaction = (props: Props) => {
                   values={{
                     name: (
                       <Link to={locations.nft(contractAddress, tokenId)}>
-                        {nft ? getNFTName(nft) : ''}
+                        {nft ? getAssetName(nft) : ''}
                       </Link>
                     ),
                     price: <Mana inline>{price.toLocaleString()}</Mana>
@@ -266,7 +266,7 @@ const Transaction = (props: Props) => {
                   values={{
                     name: (
                       <Link to={locations.nft(contractAddress, tokenId)}>
-                        {nft ? getNFTName(nft) : ''}
+                        {nft ? getAssetName(nft) : ''}
                       </Link>
                     ),
                     price: <Mana inline>{price.toLocaleString()}</Mana>
@@ -292,7 +292,7 @@ const Transaction = (props: Props) => {
                   values={{
                     name: (
                       <Link to={locations.nft(contractAddress, tokenId)}>
-                        {nft ? getNFTName(nft) : ''}
+                        {nft ? getAssetName(nft) : ''}
                       </Link>
                     ),
                     price: <Mana inline>{price.toLocaleString()}</Mana>

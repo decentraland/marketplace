@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../../../modules/reducer'
-import { getCount } from '../../../../modules/ui/nft/browse/selectors'
+import { getCount } from '../../../../modules/ui/browse/selectors'
 import {
   getSection,
   getSortBy,

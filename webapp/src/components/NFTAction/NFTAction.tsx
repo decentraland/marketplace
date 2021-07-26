@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { locations } from '../../modules/routing/locations'
-import { NFTImage } from '../NFTImage'
+import { AssetImage } from '../AssetImage'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
 import { Props } from './NFTAction.types'
@@ -18,7 +18,7 @@ const NFTAction = (props: Props) => {
       <Row>
         <Column align="left">
           <div className="nft-image-wrapper">
-            <NFTImage nft={nft} zoom={1} />
+            <AssetImage asset={nft} zoom={1} />
           </div>
         </Column>
         <Column align="right">{children}</Column>

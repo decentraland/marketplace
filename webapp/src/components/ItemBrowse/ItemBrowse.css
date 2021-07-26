@@ -1,0 +1,130 @@
+.ItemBrowse .Row .right.Column,
+.ItemBrowse .ui.cards {
+  position: relative;
+}
+
+.ItemBrowse .ui.cards {
+  min-height: 150px;
+}
+
+.ItemBrowse .ui.cards + .empty {
+  margin-top: 40px;
+  font-size: 16px;
+  text-align: center;
+  color: var(--secondary-text);
+}
+
+.ItemBrowse .overlay {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  background: var(--background);
+  opacity: 0.6;
+}
+
+.ItemBrowse .load-more {
+  text-align: center;
+  margin-top: 36px;
+  height: 46px;
+}
+
+.ItemBrowse .Atlas {
+  min-height: 700px;
+  height: 100%;
+  position: relative;
+}
+
+.ItemBrowse .Atlas canvas {
+  border-radius: 8px;
+}
+
+.ItemBrowse .fullscreen-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 48px;
+  height: 48px;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-image: url(../../images/fullscreen.svg);
+  background-position: center;
+  background-size: auto;
+  background-repeat: no-repeat;
+  border-radius: 100%;
+  cursor: pointer;
+}
+
+.ItemBrowse.fullscreen .Atlas canvas {
+  border-radius: 0px;
+}
+
+.ItemBrowse.fullscreen .fullscreen-button {
+  display: none;
+}
+
+.ItemBrowse .topbar {
+  margin-bottom: 24px;
+}
+
+.ItemBrowse.fullscreen > .Row,
+.ItemBrowse.fullscreen > .Row > .Column,
+.ItemBrowse.fullscreen .Atlas {
+  display: block;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  min-height: auto;
+  margin-top: 0px;
+}
+.ItemBrowse.fullscreen .blur-background {
+  position: relative;
+  background: rgba(22, 20, 26, 0.75);
+  backdrop-filter: blur(20px);
+  z-index: 1;
+}
+
+.ItemBrowse.fullscreen .NFTFilters {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ItemBrowse.fullscreen .NFTFilters .topbar {
+  margin-bottom: 0px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.ItemBrowse.fullscreen .NFTFilters .TextFilter {
+  margin-bottom: 0px;
+}
+
+.ItemBrowse.fullscreen .NFTFilters .TextFilter input {
+  padding-bottom: 0px;
+}
+
+.ItemBrowse.fullscreen .NFTFilters .TextFilter input::placeholder {
+  color: var(--text);
+  opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+  .ItemBrowse .Layout .right.column > div {
+    width: 100%;
+  }
+
+  .ItemBrowse .NFTSidebar ul.menu li {
+    width: calc(100% - 32px);
+  }
+
+  .ItemBrowse .NFTFilters .topbar {
+    align-items: center;
+  }
+}

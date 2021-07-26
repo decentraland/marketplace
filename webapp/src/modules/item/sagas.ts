@@ -9,7 +9,7 @@ import {
   FETCH_ITEMS_REQUEST
 } from './actions'
 
-export default function* itemSaga() {
+export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
 }
 
@@ -19,8 +19,8 @@ function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
     const { data, total }: { data: Item[]; total: number } = yield call(() =>
       itemAPI.fetchItems(filters)
     )
-    yield put(fetchItemsSuccess(data, total, filters))
+    yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
   } catch (error) {
-    yield put(fetchItemsFailure(error.message, filters))
+    yield put(fetchItemsFailure(error.message, action.payload))
   }
 }

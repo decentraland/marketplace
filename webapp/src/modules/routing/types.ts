@@ -18,7 +18,7 @@ export enum SortDirection {
   DESC = 'desc'
 }
 
-export type SearchOptions = {
+export type NFTBrowseOptions = {
   view?: View
   vendor?: VendorName
   page?: number
@@ -33,4 +33,9 @@ export type SearchOptions = {
   contracts?: string[]
   address?: string
   network?: Network
+}
+
+export enum ResultType {
+  ITEM = 'item',
+  NFT = 'nft'
 }

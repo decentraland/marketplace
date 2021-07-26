@@ -14,7 +14,7 @@ import {
 } from 'decentraland-dapps/dist/modules/transaction/types'
 import { formatDistanceToNow } from '../../../../lib/date'
 import { locations } from '../../../../modules/routing/locations'
-import { NFTImage } from '../../../NFTImage'
+import { AssetImage } from '../../../AssetImage'
 import { Row } from '../../../Layout/Row'
 import { Column } from '../../../Layout/Column'
 import { Mana } from '../../../Mana'
@@ -38,7 +38,7 @@ const TransactionDetail = (props: Props) => {
             <Loader active size="small" />
           ) : nft ? (
             <Link to={locations.nft(nft.contractAddress, nft.tokenId)}>
-              <NFTImage nft={nft} isSmall />
+              <AssetImage asset={nft} isSmall />
             </Link>
           ) : (
             <Mana

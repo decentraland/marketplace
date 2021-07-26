@@ -7,7 +7,7 @@ import { Wallet } from '../Wallet'
 import { NFTProviderPage } from '../NFTProviderPage'
 import { NFTAction } from '../NFTAction'
 import { locations } from '../../modules/routing/locations'
-import { getNFTName, isOwnedBy } from '../../modules/nft/utils'
+import { getAssetName, isOwnedBy } from '../../modules/nft/utils'
 import { Props } from './TransferPage.types'
 import './TransferPage.css'
 
@@ -29,7 +29,7 @@ const TransferPage = (props: Props) => {
                 let isDisabled = !address || isInvalidAddress || isTransfering
                 let canTransfer = true
                 const subtitleClasses = ['subtitle']
-                const name = getNFTName(nft)
+                const name = getAssetName(nft)
                 if (order) {
                   isDisabled = true
                   canTransfer = false

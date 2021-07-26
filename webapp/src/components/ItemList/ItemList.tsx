@@ -3,12 +3,12 @@ import { Card, Button, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
-import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
+import { MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
+import { Props } from './ItemList.types'
 import { AssetCard } from '../AssetCard'
-import { Props } from './NFTList.types'
 
-const NFTList = (props: Props) => {
-  const { vendor, nfts, page, count, isLoading, onBrowse } = props
+const ItemList = (props: Props) => {
+  const { items, page, count, isLoading, onBrowse } = props
 
   const handleLoadMore = useCallback(() => {
     const newPage = page + 1
@@ -16,20 +16,16 @@ const NFTList = (props: Props) => {
     getAnalytics().track('Load more', { page: newPage })
   }, [onBrowse, page])
 
-  const maxQuerySize = getMaxQuerySize(vendor)
-
   const hasExtraPages =
-    (nfts.length !== count || count === maxQuerySize) && page <= MAX_PAGE
+    (items.length !== count || count === 1000) && page <= MAX_PAGE
 
-  const isLoadingNewPage = isLoading && nfts.length >= PAGE_SIZE
+  const isLoadingNewPage = isLoading && items.length >= PAGE_SIZE
 
   return (
     <>
       <Card.Group>
-        {nfts.length > 0
-          ? nfts.map((nft, index) => (
-              <AssetCard key={nft.id + '-' + index} asset={nft} />
-            ))
+        {items.length > 0
+          ? items.map(item => <AssetCard key={item.id} asset={item} />)
           : null}
 
         {isLoading ? (
@@ -40,11 +36,11 @@ const NFTList = (props: Props) => {
         ) : null}
       </Card.Group>
 
-      {nfts.length === 0 && !isLoading ? (
+      {items.length === 0 && !isLoading ? (
         <div className="empty">{t('nft_list.empty')}</div>
       ) : null}
 
-      {nfts.length > 0 && hasExtraPages && (!isLoading || isLoadingNewPage) ? (
+      {items.length > 0 && hasExtraPages && (!isLoading || isLoadingNewPage) ? (
         <div className="load-more">
           <Button loading={isLoading} inverted primary onClick={handleLoadMore}>
             {t('global.load_more')}
@@ -55,4 +51,4 @@ const NFTList = (props: Props) => {
   )
 }
 
-export default React.memo(NFTList)
+export default React.memo(ItemList)
