@@ -94,11 +94,11 @@ const NFTBrowse = (props: Props) => {
           {isMap && isFullscreen ? (
             <div className="blur-background">
               <Container>
-                <NFTFilters />
+                <NFTFilters isMap={isMap} />
               </Container>
             </div>
           ) : (
-            <NFTFilters />
+            <NFTFilters isMap={Boolean(isMap)} />
           )}
           {isMap ? (
             <div className="Atlas">

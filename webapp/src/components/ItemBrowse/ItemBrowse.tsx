@@ -54,7 +54,7 @@ const NFTBrowse = (props: Props) => {
         </Column>
 
         <Column align="right" grow={true}>
-          <NFTFilters />
+          <NFTFilters isMap={false} />
           <ItemList />
         </Column>
       </Row>

@@ -30,4 +30,5 @@ export type MapStateProps = Pick<
   | 'contracts'
   | 'network'
 >
-export type OwnProps = Pick<Props, 'onBrowse'>
+export type MapDispatchProps = {}
+export type OwnProps = Pick<Props, 'onBrowse' | 'isMap'>
