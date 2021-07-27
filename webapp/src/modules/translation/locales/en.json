@@ -29,6 +29,7 @@
     "known_origin": "KnownOrigin"
   },
   "navigation": {
+    "land": "Land",
     "decentraland": "Decentraland",
     "partners": "Partners",
     "my_assets": "My Assets",

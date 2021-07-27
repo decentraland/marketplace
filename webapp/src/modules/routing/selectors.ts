@@ -1,5 +1,8 @@
 import { createSelector } from 'reselect'
-import { getSearch as getRouterSearch } from 'connected-react-router'
+import {
+  getSearch as getRouterSearch,
+  getLocation
+} from 'connected-react-router'
 import { Network, Rarity } from '@dcl/schemas'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
@@ -14,8 +17,15 @@ import {
   getURLParam
 } from './search'
 import { SortBy, Section, ResultType } from './types'
+import { locations } from './locations'
 
 export const getState = (state: RootState) => state.routing
+
+const getPathName = createSelector<
+  RootState,
+  ReturnType<typeof getLocation>,
+  string
+>(getLocation, location => location.pathname)
 
 export const getVendor = createSelector<RootState, string, VendorName>(
   getRouterSearch,
@@ -31,14 +41,17 @@ export const getVendor = createSelector<RootState, string, VendorName>(
 export const getSection = createSelector<
   RootState,
   string,
+  ReturnType<typeof getPathName>,
   VendorName,
   Section
->(
-  getRouterSearch,
-  getVendor,
-  (search, vendor) =>
-    getURLParam<Section>(search, 'section') || Section[vendor].ALL
-)
+>(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
+  const section = getURLParam<Section>(search, 'section')
+  if (!section && pathname === locations.lands()) {
+    return Section.decentraland.LAND
+  }
+
+  return getURLParam<Section>(search, 'section') || Section[vendor].ALL
+})
 
 export const getPage = createSelector<RootState, string, number>(
   getRouterSearch,

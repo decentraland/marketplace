@@ -29,6 +29,7 @@
     "known_origin": "KnownOrigin"
   },
   "navigation": {
+    "land": "土地",
     "decentraland": "Decentraland",
     "partners": "伙伴",
     "my_assets": "我的资产",

@@ -41,6 +41,7 @@ const NFTSections = (props: Props) => {
       return (
         <DecentralandNFTSections
           section={section as DecentralandSection}
+          sections={[Section.decentraland.ALL]}
           onSectionClick={onSectionClick}
         />
       )

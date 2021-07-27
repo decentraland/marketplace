@@ -137,7 +137,9 @@ function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
   }
 }
 
-function* getNFTBrowseOptions(current: NFTBrowseOptions) {
+function* getNFTBrowseOptions(
+  current: NFTBrowseOptions
+): Generator<unknown, NFTBrowseOptions, any> {
   let previous: NFTBrowseOptions = {
     address: yield getAddress(),
     vendor: yield select(getVendor),
@@ -163,21 +165,21 @@ function* getNFTBrowseOptions(current: NFTBrowseOptions) {
     previous = {
       page: 1,
       onlyOnSale: previous.onlyOnSale,
-      sortBy: previous.sortBy
+      sortBy: previous.sortBy,
+      isMap: previous.isMap,
+      isFullscreen: previous.isFullscreen
     }
   }
 
   const defaults = getDefaultOptionsByView(view)
 
-  const result: NFTBrowseOptions = {
+  return {
     ...defaults,
     ...previous,
     ...current,
     view,
     vendor
   }
-
-  return result
 }
 
 function* fetchItemsFromRoute(options: ItemBrowseOptions) {

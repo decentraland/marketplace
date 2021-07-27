@@ -57,6 +57,7 @@ const AccountPage = (props: Props) => {
             vendor={vendor}
             address={wallet.address}
             view={View.ACCOUNT}
+            isFullscreen={Boolean(isFullscreen)}
           />
         )
       ) : address !== undefined ? (
@@ -113,7 +114,12 @@ const AccountPage = (props: Props) => {
             </Column>
           </PageHeader>
 
-          <NFTBrowse vendor={vendor} address={address} view={View.ACCOUNT} />
+          <NFTBrowse
+            vendor={vendor}
+            address={address}
+            view={View.ACCOUNT}
+            isFullscreen={Boolean(isFullscreen)}
+          />
         </>
       ) : null}
       <Footer isFullscreen={isFullscreen} />

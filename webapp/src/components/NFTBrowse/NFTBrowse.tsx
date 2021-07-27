@@ -24,6 +24,7 @@ const NFTBrowse = (props: Props) => {
     onSetView,
     onFetchNFTsFromRoute,
     onBrowse,
+    sections,
     onlyOnSale,
     viewInState
   } = props
@@ -65,7 +66,7 @@ const NFTBrowse = (props: Props) => {
               {view === View.ACCOUNT ? (
                 <AccountSidebar address={address!} />
               ) : (
-                <NFTSidebar />
+                <NFTSidebar sections={sections} />
               )}
               <ToggleBox
                 header="Type"
