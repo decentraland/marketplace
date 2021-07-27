@@ -13,6 +13,34 @@ import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './NFTBrowse.types'
 import { ToggleBox } from './ToggleBox'
 import './NFTBrowse.css'
+import { Section } from '../../modules/vendor/decentraland'
+
+const hasPrimarySales = (section?: Section) => {
+  switch (section) {
+    case Section.WEARABLES:
+    case Section.WEARABLES_HEAD:
+    case Section.WEARABLES_EYEBROWS:
+    case Section.WEARABLES_EYES:
+    case Section.WEARABLES_FACIAL_HAIR:
+    case Section.WEARABLES_HAIR:
+    case Section.WEARABLES_MOUTH:
+    case Section.WEARABLES_UPPER_BODY:
+    case Section.WEARABLES_LOWER_BODY:
+    case Section.WEARABLES_FEET:
+    case Section.WEARABLES_ACCESORIES:
+    case Section.WEARABLES_EARRING:
+    case Section.WEARABLES_EYEWEAR:
+    case Section.WEARABLES_HAT:
+    case Section.WEARABLES_HELMET:
+    case Section.WEARABLES_MASK:
+    case Section.WEARABLES_TIARA:
+    case Section.WEARABLES_TOP_HEAD: {
+      return true
+    }
+    default:
+      return false
+  }
+}
 
 const NFTBrowse = (props: Props) => {
   const {
@@ -24,6 +52,7 @@ const NFTBrowse = (props: Props) => {
     onSetView,
     onFetchNFTsFromRoute,
     onBrowse,
+    section,
     sections,
     onlyOnSale,
     viewInState
@@ -62,12 +91,7 @@ const NFTBrowse = (props: Props) => {
       <Row>
         {isFullscreen ? null : (
           <Column align="left" className="sidebar">
-            <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-              {view === View.ACCOUNT ? (
-                <AccountSidebar address={address!} />
-              ) : (
-                <NFTSidebar sections={sections} />
-              )}
+            {hasPrimarySales(section) ? (
               <ToggleBox
                 header="Type"
                 items={[
@@ -83,6 +107,13 @@ const NFTBrowse = (props: Props) => {
                   }
                 ]}
               />
+            ) : null}
+            <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+              {view === View.ACCOUNT ? (
+                <AccountSidebar address={address!} />
+              ) : (
+                <NFTSidebar sections={sections} />
+              )}
             </Responsive>
           </Column>
         )}

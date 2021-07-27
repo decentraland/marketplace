@@ -4,6 +4,7 @@ import { isVendor, isPartner } from '../../modules/vendor/utils'
 import { VendorName } from '../../modules/vendor/types'
 import { View } from '../../modules/ui/types'
 import { ResultType } from '../../modules/routing/types'
+import { Section } from '../../modules/vendor/decentraland'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -28,6 +29,7 @@ const BrowsePage = (props: Props) => {
           vendor={vendor}
           isFullscreen={Boolean(isFullscreen)}
           view={View.MARKET}
+          sections={[Section.WEARABLES, Section.ENS]}
         />
       )
       break
