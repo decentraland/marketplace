@@ -12,7 +12,6 @@ import { Props } from './LandsPage.types'
 
 const LandsPage = (props: Props) => {
   const { isFullscreen, isMap } = props
-
   return (
     <>
       <Navbar isFullscreen />
