@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'
 import { Tabs, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
+import { VendorName } from '../../modules/vendor'
+import { SortBy } from '../../modules/routing/types'
+import * as decentraland from '../../modules/vendor/decentraland'
 import { Props, NavigationTab } from './Navigation.types'
 
 const Navigation = (props: Props) => {
@@ -10,8 +13,21 @@ const Navigation = (props: Props) => {
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
-        <Link to={locations.browse()}>
-          <Tabs.Tab active={activeTab === NavigationTab.BROWSE}>
+        <Link to={locations.lands()}>
+          <Tabs.Tab active={activeTab === NavigationTab.LANDS}>
+            {t('navigation.land')}
+          </Tabs.Tab>
+        </Link>
+        <Link
+          to={locations.browse({
+            section: decentraland.Section.WEARABLES,
+            vendor: VendorName.DECENTRALAND,
+            page: 1,
+            sortBy: SortBy.RECENTLY_LISTED,
+            onlyOnSale: true
+          })}
+        >
+          <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>
             {t('navigation.collectibles')}
           </Tabs.Tab>
         </Link>

@@ -7,6 +7,8 @@ export const locations = {
   settings: () => '/settings',
   partners: () => '/partners',
   bids: () => '/bids',
+  lands: () => '/lands',
+  collectibles: () => '/collectibles',
   browse: (options?: NFTBrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'

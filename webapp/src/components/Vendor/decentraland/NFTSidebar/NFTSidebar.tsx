@@ -7,12 +7,16 @@ import { Props } from './NFTSidebar.types'
 import './NFTSidebar.css'
 
 const NFTSidebar = (props: Props) => {
-  const { section, onMenuItemClick } = props
+  const { section, onMenuItemClick, sections } = props
 
   return (
     <div className="NFTSidebar">
       <Header sub>{t('nft_sidebar.categories')}</Header>
-      <NFTSections section={section} onSectionClick={onMenuItemClick} />
+      <NFTSections
+        section={section}
+        sections={sections}
+        onSectionClick={onMenuItemClick}
+      />
     </div>
   )
 }

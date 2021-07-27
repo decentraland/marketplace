@@ -18,12 +18,18 @@ const BrowsePage = (props: Props) => {
 
   const activeTab = isPartner(vendor)
     ? NavigationTab.PARTNER
-    : NavigationTab.BROWSE
+    : NavigationTab.COLLECTIBLES
 
   let result = null
   switch (resultType) {
     case ResultType.NFT:
-      result = <NFTBrowse vendor={vendor} view={View.MARKET} />
+      result = (
+        <NFTBrowse
+          vendor={vendor}
+          isFullscreen={Boolean(isFullscreen)}
+          view={View.MARKET}
+        />
+      )
       break
     case ResultType.ITEM:
       result = <ItemBrowse view={View.MARKET} />

@@ -29,6 +29,7 @@
     "known_origin": "KnownOrigin"
   },
   "navigation": {
+    "land": "土地",
     "collectibles": "藏品",
     "partners": "伙伴",
     "my_assets": "我的资产",
