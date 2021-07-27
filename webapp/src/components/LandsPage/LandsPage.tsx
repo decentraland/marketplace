@@ -10,7 +10,7 @@ import { Navigation } from '../Navigation'
 import { NFTBrowse } from '../NFTBrowse'
 import { Props } from './LandsPage.types'
 
-const BrowsePage = (props: Props) => {
+const LandsPage = (props: Props) => {
   const { isFullscreen, isMap } = props
 
   return (
@@ -29,4 +29,4 @@ const BrowsePage = (props: Props) => {
   )
 }
 
-export default React.memo(BrowsePage)
+export default React.memo(LandsPage)
