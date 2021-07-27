@@ -106,7 +106,9 @@ function* fetchNFTsFromRoute(searchOptions: SearchOptions) {
   }
 }
 
-function* getNewSearchOptions(current: SearchOptions) {
+function* getNewSearchOptions(
+  current: SearchOptions
+): Generator<unknown, SearchOptions, any> {
   let previous: SearchOptions = {
     address: yield getAddress(),
     vendor: yield select(getVendor),
@@ -132,21 +134,21 @@ function* getNewSearchOptions(current: SearchOptions) {
     previous = {
       page: 1,
       onlyOnSale: previous.onlyOnSale,
-      sortBy: previous.sortBy
+      sortBy: previous.sortBy,
+      isMap: previous.isMap,
+      isFullscreen: previous.isFullscreen
     }
   }
 
   const defaults = getDefaultOptionsByView(view)
 
-  const result: SearchOptions = {
+  return {
     ...defaults,
     ...previous,
     ...current,
     view,
     vendor
   }
-
-  return result
 }
 
 function* getAddress() {

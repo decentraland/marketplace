@@ -23,12 +23,18 @@ const HomePage = (props: Props) => {
     [View.HOME_ENS]: Section.ENS
   }
 
-  const handleGetStarted = useCallback(() => onNavigate(locations.browse()), [
+  const handleGetStarted = useCallback(() => onNavigate(locations.lands()), [
     onNavigate
   ])
 
   const handleViewAll = useCallback(
-    (section: Section) => onNavigate(locations.browse({ section })),
+    (section: Section) => {
+      if (Section.LAND === section) {
+        onNavigate(locations.lands())
+      } else {
+        onNavigate(locations.browse({ section }))
+      }
+    },
     [onNavigate]
   )
 

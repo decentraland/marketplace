@@ -13,16 +13,8 @@ const Navigation = (props: Props) => {
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
-        <Link
-          to={locations.browse({
-            section: decentraland.Section.LAND,
-            vendor: VendorName.DECENTRALAND,
-            page: 1,
-            sortBy: SortBy.RECENTLY_LISTED,
-            onlyOnSale: true
-          })}
-        >
-          <Tabs.Tab active={activeTab === NavigationTab.BROWSE}>
+        <Link to={locations.lands()}>
+          <Tabs.Tab active={activeTab === NavigationTab.LANDS}>
             {t('navigation.land')}
           </Tabs.Tab>
         </Link>

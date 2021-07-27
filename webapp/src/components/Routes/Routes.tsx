@@ -18,6 +18,7 @@ import { PartnersPage } from '../PartnersPage'
 import { HomePage } from '../HomePage'
 import { MyBidsPage } from '../MyBidsPage'
 import { LegacyNFTPage } from '../LegacyNFTPage'
+import { LandsPage } from '../LandsPage'
 
 const Routes = () => {
   const APP_ID = process.env.REACT_APP_INTERCOM_APP_ID
@@ -25,7 +26,7 @@ const Routes = () => {
   return (
     <>
       <Switch>
-        <Route exact path={locations.lands()} component={BrowsePage} />
+        <Route exact path={locations.lands()} component={LandsPage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
         <Route
           exact

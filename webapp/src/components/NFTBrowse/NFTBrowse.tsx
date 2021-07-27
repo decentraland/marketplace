@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from 'react'
 import { Container, Page, Responsive } from 'decentraland-ui'
 
 import { View } from '../../modules/ui/types'
-import { Section } from '../../modules/vendor/decentraland/routing'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { NFTList } from '../NFTList'
@@ -24,6 +23,7 @@ const NFTBrowse = (props: Props) => {
     onSetView,
     onFetchNFTsFromRoute,
     onBrowse,
+    sections,
     onlyOnSale,
     viewInState
   } = props
@@ -56,15 +56,6 @@ const NFTBrowse = (props: Props) => {
     classes.push('is-map')
   }
 
-  let sidebarSections: Section[]
-  if (view === View.LAND) {
-    sidebarSections = [Section.LAND]
-  } else if (View.COLLECTIBLES) {
-    sidebarSections = [Section.WEARABLES, Section.ENS]
-  } else {
-    sidebarSections = [Section.ALL]
-  }
-
   return (
     <Page className={classes.join(' ')} isFullscreen={isFullscreen}>
       <Row>
@@ -74,7 +65,7 @@ const NFTBrowse = (props: Props) => {
               {view === View.ACCOUNT ? (
                 <AccountSidebar address={address!} />
               ) : (
-                <NFTSidebar sections={sidebarSections} />
+                <NFTSidebar sections={sections} />
               )}
             </Responsive>
           </Column>

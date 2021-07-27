@@ -41,6 +41,7 @@ const NFTFilters = (props: Props) => {
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
   const category = section ? getSearchCategory(section) : undefined
+
   const dropdownOptions = [
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') }

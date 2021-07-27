@@ -1,31 +1,28 @@
 import React from 'react'
 
-import { isVendor, isPartner } from '../../modules/vendor/utils'
 import { VendorName } from '../../modules/vendor/types'
 import { View } from '../../modules/ui/types'
 import { NavigationTab } from '../Navigation/Navigation.types'
+import { Section } from '../../modules/vendor/decentraland'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { NFTBrowse } from '../NFTBrowse'
-import { Props } from './BrowsePage.types'
+import { Props } from './LandsPage.types'
 
 const BrowsePage = (props: Props) => {
-  const { isFullscreen } = props
-  const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
-
-  const activeTab = isPartner(vendor)
-    ? NavigationTab.PARTNER
-    : NavigationTab.COLLECTIBLES
+  const { isFullscreen, isMap } = props
 
   return (
     <>
       <Navbar isFullscreen />
-      <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
+      <Navigation activeTab={NavigationTab.LANDS} isFullscreen={isFullscreen} />
       <NFTBrowse
-        vendor={vendor}
-        isFullscreen={Boolean(isFullscreen)}
+        vendor={VendorName.DECENTRALAND}
         view={View.MARKET}
+        isFullscreen={isFullscreen}
+        isMap={isMap}
+        sections={[Section.LAND]}
       />
       <Footer isFullscreen={isFullscreen} />
     </>
