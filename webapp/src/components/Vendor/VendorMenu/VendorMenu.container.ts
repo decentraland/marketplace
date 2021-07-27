@@ -2,7 +2,7 @@ import { connect } from 'react-redux'
 
 import { RootState } from '../../../modules/reducer'
 import { getVendor } from '../../../modules/routing/selectors'
-import { getCount } from '../../../modules/ui/nft/browse/selectors'
+import { getCount } from '../../../modules/ui/browse/selectors'
 import { MapStateProps } from './VendorMenu.types'
 import VendorMenu from './VendorMenu'
 

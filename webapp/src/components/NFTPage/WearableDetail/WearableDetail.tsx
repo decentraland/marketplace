@@ -2,13 +2,13 @@ import React, { useCallback } from 'react'
 import { Container, Header, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { WearableGender } from '../../../modules/nft/wearable/types'
-import { getNFTName } from '../../../modules/nft/utils'
+import { getAssetName } from '../../../modules/nft/utils'
 import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
 import { locations } from '../../../modules/routing/locations'
 import { getSearchWearableSection } from '../../../modules/routing/search'
 import { Section } from '../../../modules/vendor/decentraland/routing/types'
 import { PageHeader } from '../../PageHeader'
-import { NFTImage } from '../../NFTImage'
+import { AssetImage } from '../../AssetImage'
 import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { Title } from '../Title'
@@ -69,14 +69,14 @@ const WearableDetail = (props: Props) => {
   return (
     <div className="WearableDetail">
       <PageHeader>
-        <NFTImage nft={nft} />
+        <AssetImage asset={nft} />
       </PageHeader>
       <Container>
         <Title
           left={
             <Header size="large">
               <div className="text">
-                {getNFTName(nft)}
+                {getAssetName(nft)}
                 <Popup
                   position="top center"
                   content={t(`wearable.rarity_tooltip.${wearable.rarity}`)}

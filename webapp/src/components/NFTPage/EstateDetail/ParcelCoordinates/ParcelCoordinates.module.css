@@ -23,7 +23,7 @@
 }
 
 .coordinates a:visited .coordinate {
-  background-color: #242129 !important;
+  background-color: var(--secondary) !important;
 }
 
 .coordinate {

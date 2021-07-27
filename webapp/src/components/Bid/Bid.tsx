@@ -6,7 +6,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { addressEquals } from '../../modules/wallet/utils'
 import { NFTProvider } from '../NFTProvider'
-import { NFTImage } from '../NFTImage'
+import { AssetImage } from '../AssetImage'
 import { Mana } from '../Mana'
 import { AcceptButton } from './AcceptButton'
 import { WarningMessage } from './WarningMessage'
@@ -49,7 +49,7 @@ const Bid = (props: Props) => {
                   {!nft && isLoading ? <Loader active /> : null}
                   {nft ? (
                     <Link to={locations.nft(bid.contractAddress, bid.tokenId)}>
-                      <NFTImage nft={nft} />{' '}
+                      <AssetImage asset={nft} />{' '}
                     </Link>
                   ) : null}
                 </>

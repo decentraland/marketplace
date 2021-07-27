@@ -7,6 +7,7 @@ import { browseNFTs, fetchNFTsFromRoute } from '../../modules/routing/actions'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import { getLoading } from '../../modules/nft/selectors'
 import { getIsMap, getOnlyOnSale } from '../../modules/routing/selectors'
+import { getView } from '../../modules/ui/browse/selectors'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -15,7 +16,6 @@ import {
   Props
 } from './NFTBrowse.types'
 import NFTBrowse from './NFTBrowse'
-import { getView } from '../../modules/ui/nft/browse/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
   isMap: getIsMap(state),

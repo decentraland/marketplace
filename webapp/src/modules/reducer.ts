@@ -11,6 +11,7 @@ import { toastReducer as toast } from 'decentraland-dapps/dist/modules/toast/red
 
 import { accountReducer as account } from './account/reducer'
 import { bidReducer as bid } from './bid/reducer'
+import { itemReducer as item } from './item/reducer'
 import { nftReducer as nft } from './nft/reducer'
 import { orderReducer as order } from './order/reducer'
 import { proximityReducer as proximity } from './proximity/reducer'
@@ -23,11 +24,11 @@ export const createRootReducer = (history: History) =>
     account,
     authorization,
     bid,
+    item,
     nft,
     order,
     profile,
     proximity,
-    router: connectRouter(history),
     routing,
     storage,
     tile,
@@ -35,7 +36,8 @@ export const createRootReducer = (history: History) =>
     transaction,
     translation,
     ui,
-    wallet
+    wallet,
+    router: connectRouter(history)
   })
 
 export type RootState = ReturnType<ReturnType<typeof createRootReducer>>

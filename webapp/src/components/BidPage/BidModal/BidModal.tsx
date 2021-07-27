@@ -10,7 +10,7 @@ import {
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { toMANA, fromMANA } from '../../../lib/mana'
 import { NFTAction } from '../../NFTAction'
-import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
+import { getAssetName, isOwnedBy } from '../../../modules/nft/utils'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
@@ -91,7 +91,7 @@ const BidModal = (props: Props) => {
         <T
           id={'bid_page.subtitle'}
           values={{
-            name: <b className="primary-text">{getNFTName(nft)}</b>
+            name: <b className="primary-text">{getAssetName(nft)}</b>
           }}
         />
       </p>

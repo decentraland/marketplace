@@ -1,8 +1,8 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
-import { getNFTName } from '../../../modules/nft/utils'
+import { getAssetName } from '../../../modules/nft/utils'
 import { PageHeader } from '../../PageHeader'
-import { NFTImage } from '../../NFTImage'
+import { AssetImage } from '../../AssetImage'
 import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { Title } from '../Title'
@@ -26,8 +26,8 @@ const EstateDetail = (props: Props) => {
   return (
     <>
       <PageHeader>
-        <NFTImage
-          nft={nft}
+        <AssetImage
+          asset={nft}
           isDraggable={true}
           withNavigation={true}
           hasPopup={true}
@@ -39,7 +39,7 @@ const EstateDetail = (props: Props) => {
           left={
             <>
               <Header className="estate-title-name" size="large">
-                {getNFTName(nft)}
+                {getAssetName(nft)}
               </Header>
               <Badge className="estate-title-badge" color="#37333d">
                 {estate.size.toLocaleString()} LAND

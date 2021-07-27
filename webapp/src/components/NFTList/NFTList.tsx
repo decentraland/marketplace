@@ -4,7 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
-import { NFTCard } from '../NFTCard'
+import { AssetCard } from '../AssetCard'
 import { Props } from './NFTList.types'
 
 const NFTList = (props: Props) => {
@@ -28,7 +28,7 @@ const NFTList = (props: Props) => {
       <Card.Group>
         {nfts.length > 0
           ? nfts.map((nft, index) => (
-              <NFTCard key={nft.id + '-' + index} nft={nft} />
+              <AssetCard key={nft.id + '-' + index} asset={nft} />
             ))
           : null}
 

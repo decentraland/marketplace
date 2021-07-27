@@ -10,7 +10,7 @@ export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
 
 class NFTAPI {
   fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
-    const queryParams = this.buildQueryString(params, filters)
+    const queryParams = this.buildNFTQueryString(params, filters)
 
     const response: NFTResponse = await fetch(
       `${NFT_SERVER_URL}/v1/nfts?${queryParams}`
@@ -60,7 +60,7 @@ class NFTAPI {
     }
   }
 
-  private buildQueryString(
+  private buildNFTQueryString(
     params: NFTsFetchParams,
     filters?: NFTsFetchFilters
   ): string {
@@ -84,6 +84,11 @@ class NFTAPI {
       queryParams.set('search', params.search)
     }
     if (filters) {
+      if (filters.wearableRarities) {
+        for (const wearableRarity of filters.wearableRarities) {
+          queryParams.append('rarity', wearableRarity)
+        }
+      }
       if (filters.isLand) {
         queryParams.append('isLand', 'true')
       }
@@ -95,11 +100,6 @@ class NFTAPI {
       }
       if (filters.wearableCategory) {
         queryParams.append('wearableCategory', filters.wearableCategory)
-      }
-      if (filters.wearableRarities) {
-        for (const wearableRarity of filters.wearableRarities) {
-          queryParams.append('wearableRarity', wearableRarity)
-        }
       }
       if (filters.wearableGenders) {
         for (const wearableGender of filters.wearableGenders) {

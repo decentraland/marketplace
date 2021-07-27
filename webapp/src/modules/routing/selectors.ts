@@ -4,7 +4,7 @@ import {
   getLocation
 } from 'connected-react-router'
 import { Network, Rarity } from '@dcl/schemas'
-import { getView } from '../ui/nft/browse/selectors'
+import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
 import { WearableGender } from '../nft/wearable/types'
 import { VendorName } from '../vendor/types'
@@ -16,7 +16,7 @@ import {
   getURLParamArray,
   getURLParam
 } from './search'
-import { SortBy, Section } from './types'
+import { SortBy, Section, ResultType } from './types'
 import { locations } from './locations'
 
 export const getState = (state: RootState) => state.routing
@@ -97,11 +97,28 @@ export const getOnlyOnSale = createSelector<
   return result
 })
 
+export const getIsSoldOut = createSelector<
+  RootState,
+  string,
+  boolean | undefined
+>(getRouterSearch, search => {
+  const isSoldOut = getURLParam(search, 'isSoldOut')
+  return isSoldOut === 'true'
+})
+
 export const getIsMap = createSelector<RootState, string, boolean | undefined>(
   getRouterSearch,
   search => {
     const isMap = getURLParam(search, 'isMap')
     return isMap === null ? undefined : isMap === 'true'
+  }
+)
+
+export const getItemId = createSelector<RootState, string, string | undefined>(
+  getRouterSearch,
+  search => {
+    const itemId = getURLParam(search, 'isSoldOut')
+    return itemId ? itemId : undefined
   }
 )
 
@@ -161,4 +178,9 @@ export const getNetwork = createSelector<
 >(
   getRouterSearch,
   search => (getURLParam(search, 'network') as Network) || undefined
+)
+
+export const getResultType = createSelector<RootState, string, ResultType>(
+  getRouterSearch,
+  search => (getURLParam(search, 'results') as ResultType) || ResultType.NFT
 )
