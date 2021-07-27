@@ -56,6 +56,9 @@ const NFTSections = (props: Props) => {
             Section.WEARABLES_HEAD,
             Section.WEARABLES_FACIAL_HAIR,
             Section.WEARABLES_HAIR,
+            Section.WEARABLES_EYES,
+            Section.WEARABLES_EYEBROWS,
+            Section.WEARABLES_MOUTH,
             Section.WEARABLES_UPPER_BODY,
             Section.WEARABLES_LOWER_BODY,
             Section.WEARABLES_FEET,
@@ -73,7 +76,10 @@ const NFTSections = (props: Props) => {
                 values={[
                   Section.WEARABLES_HEAD,
                   Section.WEARABLES_FACIAL_HAIR,
-                  Section.WEARABLES_HAIR
+                  Section.WEARABLES_HAIR,
+                  Section.WEARABLES_EYES,
+                  Section.WEARABLES_EYEBROWS,
+                  Section.WEARABLES_MOUTH
                 ]}
                 currentValue={section}
                 onMenuItemClick={onSectionClick}

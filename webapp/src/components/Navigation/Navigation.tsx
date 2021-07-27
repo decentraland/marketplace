@@ -28,7 +28,7 @@ const Navigation = (props: Props) => {
           })}
         >
           <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>
-            {t('navigation.decentraland')}
+            {t('navigation.collectibles')}
           </Tabs.Tab>
         </Link>
         <Link to={locations.partners()}>
