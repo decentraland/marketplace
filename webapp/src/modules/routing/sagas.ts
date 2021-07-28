@@ -104,7 +104,9 @@ function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
   const page = searchOptions.page!
   const section = searchOptions.section!
   const sortBy = searchOptions.sortBy!
-  const { search, onlyOnSale, isMap, address } = searchOptions
+  const { search, onlyOnSale, isMap } = searchOptions
+
+  const address = searchOptions.address || ((yield getAddress()) as string)
 
   const isLoadMore = view === View.LOAD_MORE
 
@@ -128,6 +130,8 @@ function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
       ? getSearchWearableCategory(section!)
       : undefined
 
+    const { wearableRarities, wearableGenders } = searchOptions
+
     yield put(
       fetchItemsRequest({
         view,
@@ -141,7 +145,9 @@ function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
           wearableCategory,
           isWearableHead,
           isWearableAccessory,
-          search
+          search,
+          rarities: wearableRarities,
+          wearableGenders
         }
       })
     )
@@ -199,8 +205,7 @@ function* getNFTBrowseOptions(
       onlyOnSale: previous.onlyOnSale,
       sortBy: previous.sortBy,
       isMap: previous.isMap,
-      isFullscreen: previous.isFullscreen,
-      resultType: current.resultType || previous.resultType
+      isFullscreen: previous.isFullscreen
     }
   }
 
@@ -289,9 +294,13 @@ function* deriveCurrentOptions(
   previous: NFTBrowseOptions,
   current: NFTBrowseOptions
 ) {
-  let newOptions = { ...current }
+  let newOptions = {
+    ...current,
+    resultType: current.resultType || previous.resultType,
+    section: current.section || previous.section
+  }
 
-  const nextCategory = getCategoryFromSection(current.section!)
+  const nextCategory = getCategoryFromSection(newOptions.section!)
 
   switch (nextCategory) {
     case NFTCategory.WEARABLE: {
@@ -308,6 +317,10 @@ function* deriveCurrentOptions(
           ...newOptions
         }
       }
+      break
+    }
+    default: {
+      newOptions = { ...newOptions, resultType: ResultType.NFT }
     }
   }
 

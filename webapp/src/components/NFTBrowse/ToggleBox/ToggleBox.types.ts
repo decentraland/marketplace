@@ -2,6 +2,7 @@ export type Item = {
   title: string
   description: string
   active?: boolean
+  disabled?: boolean
   onClick: (item: Item, index: number) => unknown
 }
 

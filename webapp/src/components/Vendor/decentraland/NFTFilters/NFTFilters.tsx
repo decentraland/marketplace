@@ -34,7 +34,8 @@ const NFTFilters = (props: Props) => {
     wearableGenders,
     contracts,
     network,
-    onBrowse
+    onBrowse,
+    resultType
   } = props
 
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
@@ -264,6 +265,7 @@ const NFTFilters = (props: Props) => {
           className="filters"
         >
           <FiltersMenu
+            resultType={resultType}
             selectedNetwork={network}
             selectedCollection={contracts[0]}
             selectedRarities={wearableRarities}
@@ -285,6 +287,7 @@ const NFTFilters = (props: Props) => {
         <Modal.Content>
           {category === NFTCategory.WEARABLE ? (
             <FiltersMenu
+              resultType={resultType}
               selectedNetwork={network}
               selectedCollection={contracts[0]}
               selectedRarities={wearableRarities}

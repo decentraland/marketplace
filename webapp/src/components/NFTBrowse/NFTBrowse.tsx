@@ -92,12 +92,12 @@ const NFTBrowse = (props: Props) => {
   )
 
   const hanldeBrowseItems = useCallback(
-    () => onBrowse({ resultType: ResultType.ITEM, section: Section.WEARABLES }),
+    () => onBrowse({ resultType: ResultType.ITEM }),
     [onBrowse]
   )
 
   const handleBrowseNFTs = useCallback(
-    () => onBrowse({ resultType: ResultType.NFT, section: Section.WEARABLES }),
+    () => onBrowse({ resultType: ResultType.NFT }),
     [onBrowse]
   )
 
@@ -106,32 +106,31 @@ const NFTBrowse = (props: Props) => {
   if (isMap) {
     classes.push('is-map')
   }
-  console.log(resultType, ResultType)
+
   return (
     <Page className={classes.join(' ')} isFullscreen={isFullscreen}>
       <Row>
         {isFullscreen ? null : (
           <Column align="left" className="sidebar">
-            {hasPrimarySales(section) ? (
-              <ToggleBox
-                className="result-type-toggle"
-                header="Type"
-                items={[
-                  {
-                    title: 'Originals',
-                    active: resultType === ResultType.ITEM,
-                    description: 'Original creations by users',
-                    onClick: hanldeBrowseItems
-                  },
-                  {
-                    title: 'Offers',
-                    active: resultType === ResultType.NFT,
-                    description: 'Collectibles being reselled',
-                    onClick: handleBrowseNFTs
-                  }
-                ]}
-              />
-            ) : null}
+            <ToggleBox
+              className="result-type-toggle"
+              header="Type"
+              items={[
+                {
+                  title: 'Originals',
+                  active: resultType === ResultType.ITEM,
+                  description: 'Original creations by users',
+                  disabled: !hasPrimarySales(section),
+                  onClick: hanldeBrowseItems
+                },
+                {
+                  title: 'Offers',
+                  active: resultType === ResultType.NFT,
+                  description: 'Collectibles being reselled',
+                  onClick: handleBrowseNFTs
+                }
+              ]}
+            />
             <Responsive minWidth={Responsive.onlyTablet.minWidth}>
               {view === View.ACCOUNT ? (
                 <AccountSidebar address={address!} />

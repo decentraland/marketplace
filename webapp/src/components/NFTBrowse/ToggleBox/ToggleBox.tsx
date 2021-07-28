@@ -12,9 +12,10 @@ const ToggleBox = (props: Props) => {
         <div
           key={index}
           className={classNames(styles.item, {
-            [styles.active]: !!item.active
+            [styles.active]: !!item.active,
+            [styles.disabled]: !!item.disabled
           })}
-          onClick={() => item.onClick(item, index)}
+          onClick={() => !item.disabled && item.onClick(item, index)}
         >
           <div className={styles.title}>{item.title}</div>
           <div className={styles.description}>{item.description}</div>

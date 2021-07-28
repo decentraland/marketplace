@@ -24,6 +24,15 @@
   background: var(--secondary);
 }
 
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.disabled:hover {
+  background: none;
+}
+
 .title {
   font-style: normal;
   font-weight: 600;

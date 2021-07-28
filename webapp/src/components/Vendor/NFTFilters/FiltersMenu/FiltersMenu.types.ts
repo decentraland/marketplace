@@ -1,6 +1,8 @@
 import { Network } from '@dcl/schemas'
+import { ResultType } from '../../../../modules/routing/types'
 
 export type Props = {
+  resultType: ResultType
   selectedCollection?: string
   selectedRarities: string[]
   selectedGenders: string[]

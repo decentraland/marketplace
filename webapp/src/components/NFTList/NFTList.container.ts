@@ -10,9 +10,11 @@ import {
   getPage,
   getResultType
 } from '../../modules/routing/selectors'
-import { getLoading } from '../../modules/nft/selectors'
+import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
+import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './NFTList.types'
 import NFTList from './NFTList'
+import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 
 const mapState = (state: RootState): MapStateProps => ({
   vendor: getVendor(state),
@@ -21,7 +23,9 @@ const mapState = (state: RootState): MapStateProps => ({
   items: getItems(state),
   page: getPage(state),
   count: getCount(state),
-  isLoading: isLoadingType(getLoading(state), FETCH_NFTS_REQUEST)
+  isLoading:
+    isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST) ||
+    isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
