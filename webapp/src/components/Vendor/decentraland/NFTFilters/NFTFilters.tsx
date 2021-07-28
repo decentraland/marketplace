@@ -81,7 +81,7 @@ const NFTFilters = (props: Props) => {
 
   const handleIsMapChange = useCallback(
     (isMap: boolean) => {
-      onBrowse({ isMap, isFullscreen: true, search: '' })
+      onBrowse({ isMap, isFullscreen: isMap, search: '' })
     },
     [onBrowse]
   )

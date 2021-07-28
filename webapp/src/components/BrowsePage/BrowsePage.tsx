@@ -3,46 +3,33 @@ import React from 'react'
 import { isVendor, isPartner } from '../../modules/vendor/utils'
 import { VendorName } from '../../modules/vendor/types'
 import { View } from '../../modules/ui/types'
-import { ResultType } from '../../modules/routing/types'
 import { Section } from '../../modules/vendor/decentraland'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { NFTBrowse } from '../NFTBrowse'
-import { ItemBrowse } from '../ItemBrowse'
 import { Props } from './BrowsePage.types'
 
 const BrowsePage = (props: Props) => {
-  const { isFullscreen, resultType } = props
+  const { isFullscreen, section } = props
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
   const activeTab = isPartner(vendor)
     ? NavigationTab.PARTNER
     : NavigationTab.COLLECTIBLES
 
-  let result = null
-  switch (resultType) {
-    case ResultType.NFT:
-      result = (
-        <NFTBrowse
-          vendor={vendor}
-          isFullscreen={Boolean(isFullscreen)}
-          view={View.MARKET}
-          sections={[Section.WEARABLES, Section.ENS]}
-        />
-      )
-      break
-    case ResultType.ITEM:
-      result = <ItemBrowse view={View.MARKET} />
-      break
-  }
-
   return (
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
-      {result}
+      <NFTBrowse
+        vendor={vendor}
+        isFullscreen={Boolean(isFullscreen)}
+        view={View.MARKET}
+        section={section}
+        sections={[Section.WEARABLES, Section.ENS]}
+      />
       <Footer isFullscreen={isFullscreen} />
     </>
   )

@@ -10,10 +10,12 @@ import {
   FetchNFTsFromRouteAction
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/decentraland'
+import { ResultType } from '../../modules/routing/types'
 
 export type Props = {
   vendor: VendorName
   view: View
+  resultType: ResultType
   viewInState?: View // This is used to know when the view prop has been set in the app state
   address?: string
   isMap?: boolean
@@ -29,7 +31,12 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'isMap' | 'isLoading' | 'onlyOnSale' | 'viewInState' | 'section'
+  | 'isMap'
+  | 'isLoading'
+  | 'onlyOnSale'
+  | 'viewInState'
+  | 'section'
+  | 'resultType'
 >
 export type MapDispatchProps = Pick<
   Props,
@@ -40,5 +47,11 @@ export type MapDispatch = Dispatch<
 >
 export type OwnProps = Pick<
   Props,
-  'vendor' | 'address' | 'isFullscreen' | 'isMap' | 'view' | 'sections'
+  | 'vendor'
+  | 'address'
+  | 'isFullscreen'
+  | 'isMap'
+  | 'view'
+  | 'sections'
+  | 'section'
 >

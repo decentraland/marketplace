@@ -3,6 +3,7 @@ import { View } from '../ui/types'
 import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
 import { NFTBrowseOptions, SortBy } from './types'
+import { ItemSortBy } from '../vendor/decentraland/item/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -17,6 +18,10 @@ export function getSearchParams(options?: NFTBrowseOptions) {
   let params: URLSearchParams | undefined
   if (options) {
     params = new URLSearchParams()
+
+    if (options.resultType) {
+      params.set('results', options.resultType)
+    }
 
     if (options.section) {
       params.set('section', options.section)
@@ -148,6 +153,21 @@ export function getSearchWearableCategory(section: Section) {
       return WearableCategory.TIARA
     case DclSection.WEARABLES_TOP_HEAD:
       return WearableCategory.TOP_HEAD
+  }
+}
+
+export function getItemSortBy(sortBy: SortBy): ItemSortBy {
+  switch (sortBy) {
+    case SortBy.CHEAPEST:
+      return ItemSortBy.CHEAPEST
+    case SortBy.NAME:
+      return ItemSortBy.NAME
+    case SortBy.NEWEST:
+      return ItemSortBy.NEWEST
+    case SortBy.RECENTLY_LISTED:
+      return ItemSortBy.NEWEST
+    default:
+      return ItemSortBy.NEWEST
   }
 }
 

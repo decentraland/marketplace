@@ -5,13 +5,16 @@ import { RootState } from '../../modules/reducer'
 import { setView } from '../../modules/ui/actions'
 import { browseNFTs, fetchNFTsFromRoute } from '../../modules/routing/actions'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
-import { getLoading } from '../../modules/nft/selectors'
+import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
+import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import {
   getIsMap,
   getOnlyOnSale,
+  getResultType,
   getSection
 } from '../../modules/routing/selectors'
 import { getView } from '../../modules/ui/browse/selectors'
+import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -26,7 +29,10 @@ const mapState = (state: RootState): MapStateProps => ({
   isMap: getIsMap(state),
   onlyOnSale: getOnlyOnSale(state),
   section: getSection(state) as Section,
-  isLoading: isLoadingType(getLoading(state), FETCH_NFTS_REQUEST),
+  isLoading:
+    isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST) ||
+    isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST),
+  resultType: getResultType(state),
   viewInState: getView(state)
 })
 
@@ -44,6 +50,7 @@ const mergeProps = (
   ...stateProps,
   ...dispatchProps,
   ...ownProps,
+  section: ownProps.section ?? stateProps.section,
   isMap: stateProps.isMap ?? ownProps.isMap
 })
 

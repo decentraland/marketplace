@@ -6,9 +6,23 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
 import { AssetCard } from '../AssetCard'
 import { Props } from './NFTList.types'
+import { ResultType } from '../../modules/routing/types'
+import { NFT } from '../../modules/nft/types'
+import { Item } from '@dcl/schemas'
 
 const NFTList = (props: Props) => {
-  const { vendor, nfts, page, count, isLoading, onBrowse } = props
+  const {
+    vendor,
+    resultType,
+    items,
+    nfts,
+    page,
+    count,
+    isLoading,
+    onBrowse
+  } = props
+
+  const assets: (NFT | Item)[] = resultType === ResultType.ITEM ? items : nfts
 
   const handleLoadMore = useCallback(() => {
     const newPage = page + 1
@@ -19,17 +33,15 @@ const NFTList = (props: Props) => {
   const maxQuerySize = getMaxQuerySize(vendor)
 
   const hasExtraPages =
-    (nfts.length !== count || count === maxQuerySize) && page <= MAX_PAGE
+    (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
 
   const isLoadingNewPage = isLoading && nfts.length >= PAGE_SIZE
 
   return (
     <>
       <Card.Group>
-        {nfts.length > 0
-          ? nfts.map((nft, index) => (
-              <AssetCard key={nft.id + '-' + index} asset={nft} />
-            ))
+        {assets.length > 0
+          ? assets.map(assets => <AssetCard key={assets.id} asset={assets} />)
           : null}
 
         {isLoading ? (
@@ -40,11 +52,13 @@ const NFTList = (props: Props) => {
         ) : null}
       </Card.Group>
 
-      {nfts.length === 0 && !isLoading ? (
+      {assets.length === 0 && !isLoading ? (
         <div className="empty">{t('nft_list.empty')}</div>
       ) : null}
 
-      {nfts.length > 0 && hasExtraPages && (!isLoading || isLoadingNewPage) ? (
+      {assets.length > 0 &&
+      hasExtraPages &&
+      (!isLoading || isLoadingNewPage) ? (
         <div className="load-more">
           <Button loading={isLoading} inverted primary onClick={handleLoadMore}>
             {t('global.load_more')}

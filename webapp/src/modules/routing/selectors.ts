@@ -182,5 +182,9 @@ export const getNetwork = createSelector<
 
 export const getResultType = createSelector<RootState, string, ResultType>(
   getRouterSearch,
-  search => (getURLParam(search, 'results') as ResultType) || ResultType.NFT
+  search => {
+    const res = (getURLParam(search, 'results') as ResultType) || ResultType.NFT
+    console.log('res', res)
+    return res
+  }
 )

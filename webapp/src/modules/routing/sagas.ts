@@ -9,6 +9,7 @@ import {
   getIsSoldOut,
   getItemId,
   getNetwork,
+  getResultType,
   getVendor
 } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
@@ -23,7 +24,8 @@ import {
   getSearchParams,
   getCategoryFromSection,
   getDefaultOptionsByView,
-  getSearchWearableCategory
+  getSearchWearableCategory,
+  getItemSortBy
 } from './search'
 import {
   getPage,
@@ -47,7 +49,7 @@ import {
   BROWSE_ITEMS,
   BrowseItemsAction
 } from './actions'
-import { NFTBrowseOptions, Section } from './types'
+import { NFTBrowseOptions, ResultType, Section } from './types'
 import { ItemBrowseOptions } from '../item/types'
 import { fetchItemsRequest } from '../item/actions'
 import { ItemSortBy } from '../vendor/decentraland/item/types'
@@ -96,6 +98,7 @@ function* handleBrowseItems(action: BrowseItemsAction) {
 // Utility functions, not handlers
 
 function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
+  const isItems = searchOptions.resultType === ResultType.ITEM
   const view = searchOptions.view!
   const vendor = searchOptions.vendor!
   const page = searchOptions.page!
@@ -109,14 +112,42 @@ function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
   const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
   const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
-  const [orderBy, orderDirection] = getOrder(sortBy)
-  const category = getCategoryFromSection(section)
-
   yield put(setIsLoadMore(isLoadMore))
 
   if (isMap) {
     yield put(setView(view))
+  }
+  if (isItems) {
+    // TODO: clean up
+    const isWearableHead =
+      section === Section[VendorName.DECENTRALAND].WEARABLES_HEAD
+    const isWearableAccessory =
+      section === Section[VendorName.DECENTRALAND].WEARABLES_ACCESORIES
+
+    const wearableCategory = !isWearableAccessory
+      ? getSearchWearableCategory(section!)
+      : undefined
+
+    yield put(
+      fetchItemsRequest({
+        view,
+        page,
+        filters: {
+          first,
+          skip,
+          sortBy: getItemSortBy(sortBy),
+          isOnSale: onlyOnSale,
+          creator: address,
+          wearableCategory,
+          isWearableHead,
+          isWearableAccessory,
+          search
+        }
+      })
+    )
   } else {
+    const [orderBy, orderDirection] = getOrder(sortBy)
+    const category = getCategoryFromSection(section)
     yield put(
       fetchNFTsRequest({
         vendor,
@@ -131,7 +162,7 @@ function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
           category,
           search
         },
-        filters: getFilters(vendor, searchOptions)
+        filters: getFilters(vendor, searchOptions) // TODO: move to routing
       })
     )
   }
@@ -141,6 +172,7 @@ function* getNFTBrowseOptions(
   current: NFTBrowseOptions
 ): Generator<unknown, NFTBrowseOptions, any> {
   let previous: NFTBrowseOptions = {
+    resultType: yield select(getResultType),
     address: yield getAddress(),
     vendor: yield select(getVendor),
     section: yield select(getSection),
@@ -167,7 +199,8 @@ function* getNFTBrowseOptions(
       onlyOnSale: previous.onlyOnSale,
       sortBy: previous.sortBy,
       isMap: previous.isMap,
-      isFullscreen: previous.isFullscreen
+      isFullscreen: previous.isFullscreen,
+      resultType: current.resultType || previous.resultType
     }
   }
 
@@ -297,6 +330,7 @@ function shouldResetOptions(
 ) {
   return (
     (current.vendor && current.vendor !== previous.vendor) ||
-    (current.section && current.section !== previous.section)
+    (current.section && current.section !== previous.section) ||
+    (current.resultType && current.resultType !== previous.resultType)
   )
 }

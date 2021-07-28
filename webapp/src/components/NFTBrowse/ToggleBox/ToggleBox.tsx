@@ -5,15 +5,14 @@ import { Props } from './ToggleBox.types'
 import styles from './ToggleBox.module.css'
 
 const ToggleBox = (props: Props) => {
-  const { items, active } = props
-
+  const { className, items } = props
   return (
-    <Box header={props.header}>
+    <Box header={props.header} className={className}>
       {items.map((item, index) => (
         <div
           key={index}
           className={classNames(styles.item, {
-            [styles.active]: index === active
+            [styles.active]: !!item.active
           })}
           onClick={() => item.onClick(item, index)}
         >
