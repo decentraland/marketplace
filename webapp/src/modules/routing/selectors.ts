@@ -180,11 +180,18 @@ export const getNetwork = createSelector<
   search => (getURLParam(search, 'network') as Network) || undefined
 )
 
-export const getResultType = createSelector<RootState, string, ResultType>(
-  getRouterSearch,
-  search => {
-    const res = (getURLParam(search, 'results') as ResultType) || ResultType.NFT
-    console.log('res', res)
-    return res
+export const getResultType = createSelector<
+  RootState,
+  string,
+  string,
+  ResultType
+>(getRouterSearch, getPathName, (search, pathname) => {
+  // TODO: make me pretty
+  console.log('pathname', pathname, locations.browse())
+  let results = getURLParam(search, 'results') as ResultType
+  if (!results) {
+    results = pathname === locations.browse() ? ResultType.ITEM : ResultType.NFT // TODO: i need a isAccountPage or sth helper
   }
-)
+  console.log('results', results)
+  return results
+})
