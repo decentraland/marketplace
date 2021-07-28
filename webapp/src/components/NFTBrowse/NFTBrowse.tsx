@@ -14,6 +14,7 @@ import { Props } from './NFTBrowse.types'
 import { ToggleBox } from './ToggleBox'
 import './NFTBrowse.css'
 import { Section } from '../../modules/vendor/decentraland'
+import { ResultType } from '../../modules/routing/types'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
@@ -54,6 +55,7 @@ const NFTBrowse = (props: Props) => {
     onBrowse,
     section,
     sections,
+    resultType,
     onlyOnSale,
     viewInState
   } = props
@@ -68,15 +70,34 @@ const NFTBrowse = (props: Props) => {
       onFetchNFTsFromRoute({
         vendor,
         view,
+        section,
         address,
         onlyOnSale
       })
     }
-  }, [view, vendor, address, onlyOnSale, viewInState, onFetchNFTsFromRoute])
+  }, [
+    view,
+    vendor,
+    section,
+    address,
+    onlyOnSale,
+    viewInState,
+    onFetchNFTsFromRoute
+  ])
 
   // handlers
   const handleSetFullscreen = useCallback(
     () => onBrowse({ isMap: true, isFullscreen: true }),
+    [onBrowse]
+  )
+
+  const hanldeBrowseItems = useCallback(
+    () => onBrowse({ resultType: ResultType.ITEM, section: Section.WEARABLES }),
+    [onBrowse]
+  )
+
+  const handleBrowseNFTs = useCallback(
+    () => onBrowse({ resultType: ResultType.NFT, section: Section.WEARABLES }),
     [onBrowse]
   )
 
@@ -85,7 +106,7 @@ const NFTBrowse = (props: Props) => {
   if (isMap) {
     classes.push('is-map')
   }
-
+  console.log(resultType, ResultType)
   return (
     <Page className={classes.join(' ')} isFullscreen={isFullscreen}>
       <Row>
@@ -93,17 +114,20 @@ const NFTBrowse = (props: Props) => {
           <Column align="left" className="sidebar">
             {hasPrimarySales(section) ? (
               <ToggleBox
+                className="result-type-toggle"
                 header="Type"
                 items={[
                   {
                     title: 'Originals',
+                    active: resultType === ResultType.ITEM,
                     description: 'Original creations by users',
-                    onClick: () => undefined
+                    onClick: hanldeBrowseItems
                   },
                   {
                     title: 'Offers',
+                    active: resultType === ResultType.NFT,
                     description: 'Collectibles being reselled',
-                    onClick: () => undefined
+                    onClick: handleBrowseNFTs
                   }
                 ]}
               />
@@ -112,7 +136,7 @@ const NFTBrowse = (props: Props) => {
               {view === View.ACCOUNT ? (
                 <AccountSidebar address={address!} />
               ) : (
-                <NFTSidebar sections={sections} />
+                <NFTSidebar section={section} sections={sections} />
               )}
             </Responsive>
           </Column>

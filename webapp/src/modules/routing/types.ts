@@ -19,6 +19,7 @@ export enum SortDirection {
 }
 
 export type NFTBrowseOptions = {
+  resultType?: ResultType
   view?: View
   vendor?: VendorName
   page?: number

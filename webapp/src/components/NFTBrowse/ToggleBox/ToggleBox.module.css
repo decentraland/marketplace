@@ -9,6 +9,11 @@
   padding-top: 9px;
   padding-bottom: 9px;
   cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.item:last-child {
+  margin-bottom: 0px;
 }
 
 .item:hover {

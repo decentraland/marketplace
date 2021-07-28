@@ -6,13 +6,14 @@ import { getVendor, getSection } from '../../../modules/routing/selectors'
 import {
   MapStateProps,
   MapDispatch,
-  MapDispatchProps
+  MapDispatchProps,
+  OwnProps
 } from './NFTSidebar.types'
 import NFTSidebar from './NFTSidebar'
 
-const mapState = (state: RootState): MapStateProps => ({
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   vendor: getVendor(state),
-  section: getSection(state)
+  section: ownProps.section || getSection(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

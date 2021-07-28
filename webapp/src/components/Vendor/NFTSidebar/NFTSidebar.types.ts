@@ -14,3 +14,4 @@ export type Props = {
 export type MapStateProps = Pick<Props, 'vendor' | 'section'>
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
 export type MapDispatch = Dispatch<BrowseNFTsAction>
+export type OwnProps = Partial<Pick<Props, 'section'>>
