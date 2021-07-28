@@ -257,7 +257,7 @@ function* getItemBrowseOptions(_current: ItemBrowseOptions) {
     page: yield select(getPage),
     view: yield select(getView),
     filters: {
-      creator: (yield getAddress()) as string,
+      creator: (yield getAddress()) as string, //TODO: fix me, this only works in /account but not in /account/:address
       sortBy: (yield select(getSortBy)) as ItemSortBy,
       search: (yield select(getSearch)) as string,
       isOnSale: (yield select(getOnlyOnSale)) as boolean,
