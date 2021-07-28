@@ -1,9 +1,10 @@
 import { Network, Rarity } from '@dcl/schemas'
-import { Section, SortBy } from '../../../../modules/routing/types'
+import { ResultType, Section, SortBy } from '../../../../modules/routing/types'
 import { browseNFTs } from '../../../../modules/routing/actions'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 
 export type Props = {
+  resultType: ResultType
   count?: number
   section: Section
   sortBy?: SortBy
@@ -19,6 +20,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
+  | 'resultType'
   | 'count'
   | 'section'
   | 'sortBy'

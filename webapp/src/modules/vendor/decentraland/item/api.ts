@@ -15,11 +15,13 @@ class ItemAPI {
 
   private buildItemsQueryString(filters: ItemFilters): string {
     const queryParams = new URLSearchParams()
-    // if (filters.first) {
-    //   queryParams.append('first', filters.first.toString())
-    // }
 
-    queryParams.append('first', '1000')
+    if (filters.first) {
+      queryParams.append('first', filters.first.toString())
+    }
+
+    // TODO: remove
+    // queryParams.append('first', '1000')
 
     if (filters.skip) {
       queryParams.append('skip', filters.skip.toString())
@@ -30,7 +32,7 @@ class ItemAPI {
     }
 
     if (filters.creator) {
-      queryParams.append('owner', filters.creator)
+      queryParams.append('creator', filters.creator)
     }
 
     if (filters.isSoldOut) {
@@ -47,7 +49,7 @@ class ItemAPI {
 
     if (filters.rarities) {
       for (const rarity of filters.rarities) {
-        queryParams.append('rarity', rarity)
+        queryParams.append('wearableRarity', rarity)
       }
     }
     if (filters.isWearableHead) {
