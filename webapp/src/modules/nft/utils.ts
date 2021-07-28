@@ -11,6 +11,7 @@ export function getNFTId(contractAddress: string, tokenId: string) {
   return contractAddress + '-' + tokenId
 }
 
+// TODO: Move all  (..)Asset(..) functions to an asset module
 export function getAssetName(asset: NFT | Item) {
   if (asset.name) {
     return asset.name

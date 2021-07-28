@@ -21,8 +21,9 @@ import {
   CANCEL_BID_SUCCESS
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
+import { ResultType } from '../../../modules/routing/types'
 import { getContract } from '../../../modules/contract/utils'
-import { NFTProvider } from '../../NFTProvider'
+import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
@@ -109,7 +110,11 @@ const Transaction = (props: Props) => {
     case CREATE_ORDER_SUCCESS: {
       const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
-        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+        <AssetProvider
+          type={ResultType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
           {nft => (
             <TransactionDetail
               nft={nft}
@@ -133,13 +138,17 @@ const Transaction = (props: Props) => {
               tx={tx}
             />
           )}
-        </NFTProvider>
+        </AssetProvider>
       )
     }
     case CANCEL_ORDER_SUCCESS: {
       const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
-        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+        <AssetProvider
+          type={ResultType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
           {nft => (
             <TransactionDetail
               nft={nft}
@@ -163,13 +172,17 @@ const Transaction = (props: Props) => {
               tx={tx}
             />
           )}
-        </NFTProvider>
+        </AssetProvider>
       )
     }
     case EXECUTE_ORDER_SUCCESS: {
       const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
-        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+        <AssetProvider
+          type={ResultType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
           {nft => (
             <TransactionDetail
               nft={nft}
@@ -193,13 +206,17 @@ const Transaction = (props: Props) => {
               tx={tx}
             />
           )}
-        </NFTProvider>
+        </AssetProvider>
       )
     }
     case TRANSFER_NFT_SUCCESS: {
       const { tokenId, contractAddress, name, address } = tx.payload
       return (
-        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+        <AssetProvider
+          type={ResultType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
           {nft => (
             <TransactionDetail
               nft={nft}
@@ -223,14 +240,18 @@ const Transaction = (props: Props) => {
               tx={tx}
             />
           )}
-        </NFTProvider>
+        </AssetProvider>
       )
     }
     case PLACE_BID_SUCCESS: {
       const { tokenId, contractAddress, price } = tx.payload
 
       return (
-        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+        <AssetProvider
+          type={ResultType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
           {nft => (
             <TransactionDetail
               nft={nft}
@@ -250,13 +271,17 @@ const Transaction = (props: Props) => {
               tx={tx}
             />
           )}
-        </NFTProvider>
+        </AssetProvider>
       )
     }
     case ACCEPT_BID_SUCCESS: {
       const { tokenId, contractAddress, price } = tx.payload
       return (
-        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+        <AssetProvider
+          type={ResultType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
           {nft => (
             <TransactionDetail
               nft={nft}
@@ -276,13 +301,17 @@ const Transaction = (props: Props) => {
               tx={tx}
             />
           )}
-        </NFTProvider>
+        </AssetProvider>
       )
     }
     case CANCEL_BID_SUCCESS: {
       const { tokenId, contractAddress, price } = tx.payload
       return (
-        <NFTProvider contractAddress={contractAddress} tokenId={tokenId}>
+        <AssetProvider
+          type={ResultType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
           {nft => (
             <TransactionDetail
               nft={nft}
@@ -302,7 +331,7 @@ const Transaction = (props: Props) => {
               tx={tx}
             />
           )}
-        </NFTProvider>
+        </AssetProvider>
       )
     }
     default:
