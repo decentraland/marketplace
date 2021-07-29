@@ -32,7 +32,7 @@ const ENSDetail = (props: Props) => {
               </div>
             </Header>
           }
-          right={<Owner nft={nft} />}
+          right={<Owner asset={nft} />}
         />
         <Row>
           <Column align="left" grow={true}>

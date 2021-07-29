@@ -37,10 +37,10 @@ const Actions = (props: Props) => {
               to={locations.sell(contractAddress, tokenId)}
               primary
             >
-              {t('nft_page.update')}
+              {t('asset_page.actions.update')}
             </Button>
             <Button as={Link} to={locations.cancel(contractAddress, tokenId)}>
-              {t('nft_page.cancel_sale')}
+              {t('asset_page.actions.cancel_sale')}
             </Button>
           </>
         ) : !isOwner ? (
@@ -50,35 +50,35 @@ const Actions = (props: Props) => {
               to={locations.buy(contractAddress, tokenId)}
               primary
             >
-              {t('nft_page.buy')}
+              {t('asset_page.actions.buy')}
             </Button>
             {canBid ? (
               <Button as={Link} to={locations.bid(contractAddress, tokenId)}>
-                {t('nft_page.bid')}
+                {t('asset_page.actions.bid')}
               </Button>
             ) : null}
           </>
         ) : (
           <Button onClick={() => setShowLeavingSiteModal(true)} primary>
-            {t('nft_page.see_listing')}
+            {t('asset_page.actions.see_listing')}
           </Button>
         )
       ) : isOwner && canSell ? (
         <Button as={Link} to={locations.sell(contractAddress, tokenId)} primary>
-          {t('nft_page.sell')}
+          {t('asset_page.actions.sell')}
         </Button>
       ) : isOwner && !canSell ? (
         <Button onClick={() => setShowLeavingSiteModal(true)} primary>
-          {t('nft_page.sell')}
+          {t('asset_page.actions.sell')}
         </Button>
       ) : canBid ? (
         <Button as={Link} to={locations.bid(contractAddress, tokenId)} primary>
-          {t('nft_page.bid')}
+          {t('asset_page.actions.bid')}
         </Button>
       ) : null}
       {isOwner && !order ? (
         <Button as={Link} to={locations.transfer(contractAddress, tokenId)}>
-          {t('nft_page.transfer')}
+          {t('asset_page.actions.transfer')}
         </Button>
       ) : null}
 
@@ -88,11 +88,13 @@ const Actions = (props: Props) => {
         open={showLeavingSiteModal}
         onClose={() => setShowLeavingSiteModal(false)}
       >
-        <Modal.Header>{t('nft_page.leaving_decentraland')}</Modal.Header>
+        <Modal.Header>
+          {t('asset_page.actions.leaving_decentraland')}
+        </Modal.Header>
         <Modal.Content>
           <p>
             <T
-              id="nft_page.leaving_decentraland_description"
+              id="asset_page.actions.leaving_decentraland_description"
               values={{
                 vendor: t(`vendors.${vendor}`),
                 vendor_link: (
@@ -105,7 +107,7 @@ const Actions = (props: Props) => {
             <br />
             <br />
             <small>
-              <i>{t('nft_page.leaving_decentraland_disclaimer')}</i>
+              <i>{t('asset_page.actions.leaving_decentraland_disclaimer')}</i>
             </small>
           </p>
         </Modal.Content>

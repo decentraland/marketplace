@@ -17,7 +17,7 @@ const JumpIn = (props: Props) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        {t('nft_page.jump')}&nbsp;{t('nft_page.in')}
+        {t('asset_page.jump')}&nbsp;{t('asset_page.in')}
         <i className={styles.jumpInIcon} />
       </a>
     </Badge>

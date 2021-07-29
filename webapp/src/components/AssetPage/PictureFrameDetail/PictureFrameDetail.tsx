@@ -23,7 +23,7 @@ const PictureFrameDetail = (props: Props) => {
       <Container className="PictureFrameDetail">
         <Title
           left={<Header size="large">{getAssetName(nft)}</Header>}
-          right={<Owner nft={nft} />}
+          right={<Owner asset={nft} />}
         />
         <Row>
           <Column align="left" grow={true}>

@@ -17,7 +17,7 @@ const OrderDetails = (props: Props) => {
         {t(`networks.${nft.network.toLowerCase()}`)}
       </Stats>
       {order ? (
-        <Stats title={t('nft_page.price')}>
+        <Stats title={t('asset_page.price')}>
           <Mana network={nft.network} withTooltip>
             {formatMANA(order.price)}
           </Mana>
@@ -29,7 +29,7 @@ const OrderDetails = (props: Props) => {
         </Stats>
       ) : null}
       {order && order.expiresAt ? (
-        <Stats title={t('nft_page.expires')}>
+        <Stats title={t('asset_page.expires')}>
           {formatDistanceToNow(+order.expiresAt, {
             addSuffix: true
           })}

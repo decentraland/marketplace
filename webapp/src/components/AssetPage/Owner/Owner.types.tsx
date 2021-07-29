@@ -1,5 +1,5 @@
-import { NFT } from '../../../modules/nft/types'
+import { Asset } from '../../../modules/routing/types'
 
 export type Props = {
-  nft: NFT
+  asset: Asset
 }

@@ -64,7 +64,7 @@ const ParcelDetail = (props: Props) => {
             isPartOfEstate ? (
               <div className="estate-information">
                 <T
-                  id="nft_page.part_of_estate"
+                  id="asset_page.part_of_estate"
                   values={{
                     estate_name: (
                       <Link
@@ -78,7 +78,7 @@ const ParcelDetail = (props: Props) => {
                 />
               </div>
             ) : (
-              <Owner nft={nft} />
+              <Owner asset={nft} />
             )
           }
         />

@@ -1,13 +1,13 @@
-.AssetPage .NFTImage .pixel {
+.AssetPage .AssetImage .pixel {
   display: none;
 }
 
-.AssetPage .NFTImage .ens-subdomain {
+.AssetPage .AssetImage .ens-subdomain {
   font-size: 64px;
   background-size: 2016px;
 }
 
-.AssetPage .NFTImage .ens-subdomain .name {
+.AssetPage .AssetImage .ens-subdomain .name {
   padding: 25px;
 }
 

@@ -23,21 +23,21 @@ const ProximityHighlights = (props: Props) => {
           {proximity?.plaza !== undefined ? (
             <Highlight
               icon={<div className="plaza" />}
-              name={t('nft_page.plaza')}
+              name={t('asset_page.plaza')}
               description={getDistanceText(proximity?.plaza)}
             />
           ) : null}
           {proximity?.road !== undefined ? (
             <Highlight
               icon={<div className="road" />}
-              name={t('nft_page.road')}
+              name={t('asset_page.road')}
               description={getDistanceText(proximity?.road)}
             />
           ) : null}
           {proximity?.district !== undefined ? (
             <Highlight
               icon={<div className="district" />}
-              name={t('nft_page.district')}
+              name={t('asset_page.district')}
               description={getDistanceText(proximity?.district)}
             />
           ) : null}
