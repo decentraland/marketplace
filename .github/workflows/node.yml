@@ -22,15 +22,15 @@ jobs:
         run: npm test -- --coverage
         if: ${{ always() }}
 
-    Build-and-test-webapp-coveralls:
-      needs: Build-and-test-webapp
-      runs-on: ubuntu-latest
-      steps:
-        - name: Coveralls Finished
-          uses: coverallsapp/github-action@master
-          with:
-            github-token: ${{ secrets.github_token }}
-            parallel-finished: true
+  Build-and-test-webapp-coveralls:
+    needs: Build-and-test-webapp
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
 
   Build-and-test-indexer:
     runs-on: ubuntu-latest
