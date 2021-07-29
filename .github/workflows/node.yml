@@ -21,8 +21,9 @@ jobs:
       - name: Test
         run: npm test -- --coverage
         if: ${{ always() }}
-    finish:
-      needs: test
+
+    Build-and-test-webapp-coveralls:
+      needs: Build-and-test-webapp
       runs-on: ubuntu-latest
       steps:
         - name: Coveralls Finished
@@ -30,6 +31,7 @@ jobs:
           with:
             github-token: ${{ secrets.github_token }}
             parallel-finished: true
+
   Build-and-test-indexer:
     runs-on: ubuntu-latest
     defaults:
