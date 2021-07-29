@@ -21,16 +21,13 @@ jobs:
       - name: Test
         run: npm test -- --coverage
         if: ${{ always() }}
-
-  Build-and-test-webapp-coveralls:
-    needs: Build-and-test-webapp
-    runs-on: ubuntu-latest
-    steps:
-      - name: Coveralls Finished
+      - name: List directorties
+        run: ls coverage
+      - name: report coverage
         uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.github_token }}
-          parallel-finished: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./webapp/coverage/lcov.info
 
   Build-and-test-indexer:
     runs-on: ubuntu-latest
@@ -49,4 +46,3 @@ jobs:
         run: |
           npm run build-data -- --network mainnet
           npm run codegen
-          npm run build
