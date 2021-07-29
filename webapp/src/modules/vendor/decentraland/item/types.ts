@@ -1,4 +1,4 @@
-import { Network, Rarity, WearableCategory } from '@dcl/schemas'
+import { Item, Network, Rarity, WearableCategory } from '@dcl/schemas'
 import { WearableGender } from '../../../nft/wearable/types'
 
 export type ItemFilters = {
@@ -17,6 +17,11 @@ export type ItemFilters = {
   contractAddress?: string
   itemId?: string
   network?: Network
+}
+
+export type ItemResponse = {
+  data: Item[]
+  total: number
 }
 
 export enum ItemSortBy {

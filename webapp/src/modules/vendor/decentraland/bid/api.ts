@@ -1,17 +1,19 @@
+import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { OrderStatus } from '../../../order/types'
 import { Bid } from '../../../bid/types'
 import { NFT_SERVER_URL } from '../nft'
 
-class BidAPI {
-  async fetch(options: Record<string, string>) {
+class BidAPI extends BaseAPI {
+  async fetch(options: Record<string, string>): Promise<Bid[]> {
     const queryParams = new URLSearchParams()
     for (const key of Object.keys(options)) {
       queryParams.append(key, options[key])
     }
     try {
-      const response: { data: Bid[]; total: number } = await fetch(
-        `${NFT_SERVER_URL}/v1/bids?${queryParams.toString()}`
-      ).then(resp => resp.json())
+      const response: { data: Bid[]; total: number } = await this.request(
+        'get',
+        `/bids?${queryParams.toString()}`
+      )
       return response.data
     } catch (error) {
       return []
@@ -34,4 +36,4 @@ class BidAPI {
   }
 }
 
-export const bidAPI = new BidAPI()
+export const bidAPI = new BidAPI(NFT_SERVER_URL)

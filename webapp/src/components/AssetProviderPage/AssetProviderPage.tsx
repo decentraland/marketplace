@@ -21,8 +21,9 @@ const AssetProviderPage = (props: Props) => {
   const { type, isConnecting, children } = props
   return (
     <AssetProvider type={type}>
-      {(asset, order, isNFTLoading) => {
-        const isLoading = isConnecting || isNFTLoading
+      {(asset, order, isAssetLoading) => {
+        const isLoading = isConnecting || isAssetLoading
+
         return (
           <>
             {isLoading ? <Loading /> : null}

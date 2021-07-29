@@ -6,15 +6,21 @@ import {
   fetchItemRequest,
   FETCH_ITEM_REQUEST
 } from '../../modules/item/actions'
-import { getLoading as getItemLoading } from '../../modules/nft/selectors'
 import {
-  getTokenId,
-  getContractAddress,
+  getContractAddress as getNFTContractAddress,
+  getTokenId as getNFTTokenId,
   getLoading as getNFTLoading,
   getData as getNFTs
 } from '../../modules/nft/selectors'
+import {
+  getContractAddress as getItemContractAddress,
+  getTokenId as getItemTokenId,
+  getLoading as getItemLoading,
+  getData as getItems
+} from '../../modules/item/selectors'
 import { getData as getOrders } from '../../modules/order/selectors'
 import { getNFT } from '../../modules/nft/utils'
+import { getItem } from '../../modules/item/utils'
 import { getActiveOrder } from '../../modules/order/utils'
 import { Asset, ResultType } from '../../modules/routing/types'
 import {
@@ -26,8 +32,8 @@ import {
 import AssetProvider from './AssetProvider'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const contractAddress = ownProps.contractAddress || getContractAddress(state)
-  const tokenId = ownProps.tokenId || getTokenId(state)
+  let contractAddress = ownProps.contractAddress
+  let tokenId = ownProps.tokenId
   const orders = getOrders(state)
 
   let asset: Asset | null = null
@@ -35,13 +41,17 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   switch (ownProps.type) {
     case ResultType.NFT: {
       const nfts = getNFTs(state)
+      contractAddress = contractAddress || getNFTContractAddress(state)
+      tokenId = tokenId || getNFTTokenId(state)
       asset = getNFT(contractAddress, tokenId, nfts)
       isLoading = isLoadingType(getNFTLoading(state), FETCH_NFT_REQUEST)
       break
     }
     case ResultType.ITEM: {
-      // TODO: getItem selector
-      asset = null
+      const items = getItems(state)
+      contractAddress = contractAddress || getItemContractAddress(state)
+      tokenId = tokenId || getItemTokenId(state)
+      asset = getItem(contractAddress, tokenId, items)
       isLoading = isLoadingType(getItemLoading(state), FETCH_ITEM_REQUEST)
       break
     }

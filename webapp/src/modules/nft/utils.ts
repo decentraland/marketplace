@@ -116,6 +116,7 @@ export function getSortBy(orderBy: NFTSortBy) {
   return sortBy
 }
 
+// TODO: Both getNFTId and this method are repeated on item/utils and can be moved to asset/utils
 export function getNFT(
   contractAddress: string | null,
   tokenId: string | null,
