@@ -7,10 +7,11 @@
     "codegen": "graph codegen --debug --output-dir src/entities/",
     "build": "graph build",
     "build-data": "ts-node ./scripts/buildData.ts",
-    "deploy": "ts-node ./scripts/deploy.ts"
+    "deploy": "ts-node ./scripts/deploy.ts",
+    "deploy-studio:mainnet": "graph deploy --studio decentraland-marketplace-ethereum-mainnet"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.16.0",
+    "@graphprotocol/graph-cli": "^0.21.1",
     "@graphprotocol/graph-ts": "^0.16.0",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.4"
