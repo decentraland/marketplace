@@ -5,10 +5,11 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet as WalletProvider } from '../Wallet'
-import { NFTProviderPage } from '../NFTProviderPage'
+import { AssetProviderPage } from '../AssetProviderPage'
 import { isOwnedBy } from '../../modules/nft/utils'
 import { Order } from '../../modules/order/types'
 import { NFT } from '../../modules/nft/types'
+import { ResultType } from '../../modules/routing/types'
 import { BuyModal } from './BuyModal'
 import { Props } from './BuyPage.types'
 import './BuyPage.css'
@@ -32,7 +33,7 @@ const BuyPage = (props: Props) => {
       <Page className="BuyPage">
         <WalletProvider>
           {wallet => (
-            <NFTProviderPage>
+            <AssetProviderPage type={ResultType.NFT}>
               {(nft, order) => (
                 <BuyModal
                   nft={nft}
@@ -46,7 +47,7 @@ const BuyPage = (props: Props) => {
                   hasInsufficientMANA={isInsufficientMANA(wallet, nft, order)}
                 />
               )}
-            </NFTProviderPage>
+            </AssetProviderPage>
           )}
         </WalletProvider>
       </Page>

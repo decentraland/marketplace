@@ -1,0 +1,84 @@
+.WearableHighlights .left > div {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 30px 30px;
+}
+
+.WearableHighlights .left > .BaseMale {
+  background-image: url(../../../images/wearables/MaleIcon.svg);
+  background-size: 24px 24px;
+}
+
+.WearableHighlights .left > .BaseFemale {
+  background-image: url(../../../images/wearables/FemaleIcon.svg);
+  background-size: 24px 24px;
+}
+
+.WearableHighlights .left > .Unisex {
+  background-image: url(../../../images/wearables/UnisexIcon.svg);
+  background-size: 24px 24px;
+}
+
+.WearableHighlights .body_shape {
+  background-image: url(../../../images/wearables/BodyShapeIcon.svg);
+}
+
+.WearableHighlights .earring {
+  background-image: url(../../../images/wearables/EarringsIcon.svg);
+}
+
+.WearableHighlights .eyebrows {
+  background-image: url(../../../images/wearables/EyebrowIcon.svg);
+}
+
+.WearableHighlights .eyes {
+  background-image: url(../../../images/wearables/EyesIcon.svg);
+}
+
+.WearableHighlights .eyewear {
+  background-image: url(../../../images/wearables/EyewearIcon.svg);
+}
+
+.WearableHighlights .facial_hair {
+  background-image: url(../../../images/wearables/FacilHairIcon.svg);
+}
+
+.WearableHighlights .feet {
+  background-image: url(../../../images/wearables/FeetIcon.svg);
+}
+
+.WearableHighlights .hair {
+  background-image: url(../../../images/wearables/HairIcon.svg);
+}
+
+.WearableHighlights .hat {
+  background-image: url(../../../images/wearables/HatIcon.svg);
+}
+
+.WearableHighlights .helmet {
+  background-image: url(../../../images/wearables/HelmetIcon.svg);
+}
+
+.WearableHighlights .lower_body {
+  background-image: url(../../../images/wearables/LowerBodyIcon.svg);
+}
+
+.WearableHighlights .mask {
+  background-image: url(../../../images/wearables/MaskIcon.svg);
+}
+
+.WearableHighlights .mouth {
+  background-image: url(../../../images/wearables/MouthIcon.svg);
+}
+
+.WearableHighlights .tiara {
+  background-image: url(../../../images/wearables/TiaraIcon.svg);
+}
+
+.WearableHighlights .top_head {
+  background-image: url(../../../images/wearables/TopHeadIcon.svg);
+}
+
+.WearableHighlights .upper_body {
+  background-image: url(../../../images/wearables/UpperBodyIcon.svg);
+}

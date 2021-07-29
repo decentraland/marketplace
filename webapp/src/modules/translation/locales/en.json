@@ -119,26 +119,28 @@
     "categories": "Categories",
     "back": "Back"
   },
-  "nft_page": {
+  "asset_page": {
+    "actions": {
+      "cancel_sale": "Remove listing",
+      "update": "Update price",
+      "buy": "Buy",
+      "bid": "Bid",
+      "see_listing": "See listing",
+      "sell": "Sell",
+      "transfer": "Transfer",
+      "leaving_decentraland": "Leaving Decentraland",
+      "leaving_decentraland_description": "You can't publish or update {vendor} assets to the Decentraland Marketplace yet. Do you want to proceed to {vendor_link} to publish it there?",
+      "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace"
+    },
     "description": "Description",
     "owner": "Owner",
     "price": "Price",
     "expires": "Expires in",
-    "cancel_sale": "Remove listing",
-    "buy": "Buy",
-    "sell": "Sell",
-    "see_listing": "See listing",
-    "bid": "Bid",
-    "update": "Update price",
-    "transfer": "Transfer",
     "plaza": "Plaza",
     "road": "Road",
     "district": "District",
     "jump": "Jump",
     "in": "In",
-    "leaving_decentraland": "Leaving Decentraland",
-    "leaving_decentraland_description": "You can't publish or update {vendor} assets to the Decentraland Marketplace yet. Do you want to proceed to {vendor_link} to publish it there?",
-    "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace",
     "part_of_estate": "Part of {estate_name}"
   },
   "proximity": {

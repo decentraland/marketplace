@@ -1,16 +1,28 @@
+import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { Item } from '@dcl/schemas'
 import { NFT_SERVER_URL } from '../nft'
-import { ItemFilters } from './types'
+import { ItemFilters, ItemResponse } from './types'
 
-class ItemAPI {
-  fetchItems = async (filters: ItemFilters = {}) => {
+class ItemAPI extends BaseAPI {
+  fetch = async (filters: ItemFilters = {}): Promise<ItemResponse> => {
     const queryParams = this.buildItemsQueryString(filters)
+    return this.request('get', `/items?${queryParams}`)
+  }
 
-    const response: { data: Item[]; total: number } = await fetch(
-      `${NFT_SERVER_URL}/v1/items?${queryParams}`
-    ).then(resp => resp.json())
+  fetchOne = async (
+    contractAddress: string,
+    tokenId: string
+  ): Promise<Item> => {
+    const response: ItemResponse = await this.request(
+      'get',
+      `/items?contractAddress=${contractAddress}&tokenId=${tokenId}`
+    )
 
-    return response
+    if (response.data.length === 0) {
+      throw new Error('Not found')
+    }
+
+    return response.data[0]
   }
 
   private buildItemsQueryString(filters: ItemFilters): string {
@@ -82,4 +94,4 @@ class ItemAPI {
   }
 }
 
-export const itemAPI = new ItemAPI()
+export const itemAPI = new ItemAPI(NFT_SERVER_URL)

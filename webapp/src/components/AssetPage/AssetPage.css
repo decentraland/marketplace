@@ -1,0 +1,32 @@
+.AssetPage .AssetImage .pixel {
+  display: none;
+}
+
+.AssetPage .AssetImage .ens-subdomain {
+  font-size: 64px;
+  background-size: 2016px;
+}
+
+.AssetPage .AssetImage .ens-subdomain .name {
+  padding: 25px;
+}
+
+.AssetPage .ui.container > div {
+  margin-bottom: 48px;
+}
+
+@media (max-width: 768px) {
+  .AssetPage .ui.container > .Row {
+    flex-direction: column;
+  }
+
+  .AssetPage .ui.container > .Row .dcl.stats,
+  .AssetPage .ui.container > .Row .ui.button {
+    width: 100%;
+  }
+
+  .AssetPage .ui.container > .Row .ui.button {
+    margin-left: 0px;
+    margin-top: 24px;
+  }
+}
