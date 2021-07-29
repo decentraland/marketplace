@@ -1,0 +1,11 @@
+.center {
+  position: relative;
+  top: 100px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 350px);
+}

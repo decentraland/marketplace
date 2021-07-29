@@ -46,16 +46,16 @@ a.ui.card.link:hover .meta {
   margin-top: 12px;
 }
 
-.AssetCard .NFTImage {
+.AssetCard .AssetImage {
   overflow: hidden;
 }
 
-.AssetCard .NFTImage .ens-subdomain {
+.AssetCard .AssetImage .ens-subdomain {
   background-size: 557px;
   background-position-y: -133px;
 }
 
-.AssetCard .NFTImage .ens-subdomain .monospace {
+.AssetCard .AssetImage .ens-subdomain .monospace {
   margin-top: 0px;
 }
 

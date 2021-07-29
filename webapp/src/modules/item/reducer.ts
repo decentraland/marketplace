@@ -9,13 +9,19 @@ import {
   FetchItemsSuccessAction,
   FETCH_ITEMS_FAILURE,
   FETCH_ITEMS_REQUEST,
-  FETCH_ITEMS_SUCCESS
+  FETCH_ITEMS_SUCCESS,
+  FetchItemFailureAction,
+  FetchItemRequestAction,
+  FetchItemSuccessAction,
+  FETCH_ITEM_FAILURE,
+  FETCH_ITEM_REQUEST,
+  FETCH_ITEM_SUCCESS
 } from './actions'
 
 export type ItemState = {
   data: Record<string, Item>
   loading: LoadingState
-  total: number
+  total: number // TODO: Should we move this elsewhere? UI maybe?
   error: string | null
 }
 
@@ -30,13 +36,17 @@ type ItemReducerAction =
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
   | FetchItemsFailureAction
+  | FetchItemFailureAction
+  | FetchItemRequestAction
+  | FetchItemSuccessAction
 
 export function itemReducer(
   state = INITIAL_STATE,
   action: ItemReducerAction
 ): ItemState {
   switch (action.type) {
-    case FETCH_ITEMS_REQUEST: {
+    case FETCH_ITEMS_REQUEST:
+    case FETCH_ITEM_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
@@ -58,7 +68,20 @@ export function itemReducer(
         error: null
       }
     }
-    case FETCH_ITEMS_FAILURE: {
+    case FETCH_ITEM_SUCCESS: {
+      const { item } = action.payload
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        data: {
+          ...state.data,
+          [item.id]: { ...item }
+        },
+        error: null
+      }
+    }
+    case FETCH_ITEMS_FAILURE:
+    case FETCH_ITEM_FAILURE: {
       const { error } = action.payload
       return {
         ...state,

@@ -11,6 +11,7 @@ export function getNFTId(contractAddress: string, tokenId: string) {
   return contractAddress + '-' + tokenId
 }
 
+// TODO: Move all  (..)Asset(..) functions to an asset module
 export function getAssetName(asset: NFT | Item) {
   if (asset.name) {
     return asset.name
@@ -115,6 +116,7 @@ export function getSortBy(orderBy: NFTSortBy) {
   return sortBy
 }
 
+// TODO: Both getNFTId and this method are repeated on item/utils and can be moved to asset/utils
 export function getNFT(
   contractAddress: string | null,
   tokenId: string | null,

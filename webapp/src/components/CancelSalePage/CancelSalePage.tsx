@@ -3,13 +3,14 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Header, Button } from 'decentraland-ui'
 
 import { locations } from '../../modules/routing/locations'
+import { ResultType } from '../../modules/routing/types'
 import { getAssetName } from '../../modules/nft/utils'
 import { formatMANA } from '../../lib/mana'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
 import { Mana } from '../Mana'
-import { NFTProviderPage } from '../NFTProviderPage'
+import { AssetProviderPage } from '../AssetProviderPage'
 import NFTAction from '../NFTAction/NFTAction'
 import { Props } from './CancelSalePage.types'
 import './CancelSalePage.css'
@@ -23,7 +24,7 @@ const CancelSalePage = (props: Props) => {
       <Page className="CancelSalePage">
         <Wallet>
           {wallet => (
-            <NFTProviderPage>
+            <AssetProviderPage type={ResultType.NFT}>
               {(nft, order) => {
                 let subtitle
                 let isDisabled = false
@@ -85,7 +86,7 @@ const CancelSalePage = (props: Props) => {
                   </NFTAction>
                 )
               }}
-            </NFTProviderPage>
+            </AssetProviderPage>
           )}
         </Wallet>
       </Page>

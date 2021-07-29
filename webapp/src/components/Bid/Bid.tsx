@@ -5,11 +5,12 @@ import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { addressEquals } from '../../modules/wallet/utils'
-import { NFTProvider } from '../NFTProvider'
+import { AssetProvider } from '../AssetProvider'
 import { AssetImage } from '../AssetImage'
 import { Mana } from '../Mana'
 import { AcceptButton } from './AcceptButton'
 import { WarningMessage } from './WarningMessage'
+import { ResultType } from '../../modules/routing/types'
 import { formatMANA } from '../../lib/mana'
 import { formatDistanceToNow } from '../../lib/date'
 import { Props } from './Bid.types'
@@ -40,7 +41,8 @@ const Bid = (props: Props) => {
       <div className="bid-row">
         {hasImage ? (
           <div className="image">
-            <NFTProvider
+            <AssetProvider
+              type={ResultType.NFT}
               contractAddress={bid.contractAddress}
               tokenId={bid.tokenId}
             >
@@ -54,7 +56,7 @@ const Bid = (props: Props) => {
                   ) : null}
                 </>
               )}
-            </NFTProvider>
+            </AssetProvider>
           </div>
         ) : null}
         <div className="wrapper">
@@ -85,7 +87,8 @@ const Bid = (props: Props) => {
               ) : null}
               {isSeller ? (
                 <>
-                  <NFTProvider
+                  <AssetProvider
+                    type={ResultType.NFT}
                     contractAddress={bid.contractAddress}
                     tokenId={bid.tokenId}
                   >
@@ -96,7 +99,7 @@ const Bid = (props: Props) => {
                         onClick={handleAccept}
                       />
                     )}
-                  </NFTProvider>
+                  </AssetProvider>
 
                   {isArchivable ? (
                     !isArchived ? (
@@ -116,12 +119,13 @@ const Bid = (props: Props) => {
         </div>
       </div>
       {isBidder ? (
-        <NFTProvider
+        <AssetProvider
+          type={ResultType.NFT}
           contractAddress={bid.contractAddress}
           tokenId={bid.tokenId}
         >
           {nft => <WarningMessage nft={nft} bid={bid} />}
-        </NFTProvider>
+        </AssetProvider>
       ) : null}
     </div>
   )
