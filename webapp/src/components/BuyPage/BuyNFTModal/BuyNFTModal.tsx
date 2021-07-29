@@ -6,22 +6,20 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
-import { Network, NFTCategory } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
-import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { isPartner } from '../../../modules/vendor/utils'
-import { getAssetName } from '../../../modules/nft/utils'
 import { useFingerprint, useComputedPrice } from '../../../modules/nft/hooks'
-import { NFT } from '../../../modules/nft/types'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
-import { NFTAction } from '../../NFTAction'
-import { Mana } from '../../Mana'
+import { AssetAction } from '../../AssetAction'
+import { Name } from '../Name'
+import { Price } from '../Price'
 import { AuthorizationModal } from '../../AuthorizationModal'
-import { Props } from './BuyModal.types'
+import { Props } from './BuyNFTModal.types'
 
-const BuyPage = (props: Props) => {
+const BuyNFTModal = (props: Props) => {
   const {
     nft,
     order,
@@ -94,7 +92,7 @@ const BuyPage = (props: Props) => {
     hasInsufficientMANA ||
     (!fingerprint && nft.category === NFTCategory.ESTATE)
 
-  const name = <Name nft={nft} />
+  const name = <Name asset={nft} />
 
   let subtitle = null
   if (!order) {
@@ -163,7 +161,7 @@ const BuyPage = (props: Props) => {
   }
 
   return (
-    <NFTAction nft={nft}>
+    <AssetAction asset={nft}>
       <Header size="large">
         {t('buy_page.title', { category: t(`global.${nft.category}`) })}
       </Header>
@@ -204,16 +202,8 @@ const BuyPage = (props: Props) => {
         onProceed={handleExecuteOrder}
         onCancel={handleClose}
       />
-    </NFTAction>
+    </AssetAction>
   )
 }
 
-const Name = (props: { nft: NFT }) => <b>{getAssetName(props.nft)}</b>
-
-const Price = (props: { network?: Network; price: string }) => (
-  <Mana network={props.network} inline withTooltip>
-    {formatMANA(props.price)}
-  </Mana>
-)
-
-export default React.memo(BuyPage)
+export default React.memo(BuyNFTModal)

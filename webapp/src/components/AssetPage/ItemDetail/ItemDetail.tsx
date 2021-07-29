@@ -1,8 +1,12 @@
 import React from 'react'
-import { Container, Header } from 'decentraland-ui'
+import { Link } from 'react-router-dom'
+import { Button, Container, Header, Mana, Stats } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { getAssetName } from '../../../modules/nft/utils'
+import { getAssetName, isOwnedBy } from '../../../modules/nft/utils'
 import { ResultType } from '../../../modules/routing/types'
+import { formatMANA } from '../../../lib/mana'
+import { locations } from '../../../modules/routing/locations'
 import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { AssetImage } from '../../AssetImage'
@@ -15,8 +19,9 @@ import { WearableHighlights } from '../WearableHighlights'
 import { Props } from './ItemDetail.types'
 
 const ItemDetail = (props: Props) => {
-  const { item } = props
+  const { item, wallet } = props
   const wearable = item.data.wearable!
+  const canBuy = isOwnedBy(item, wallet) && !!item.price
 
   return (
     <div className="ItemDetail">
@@ -38,9 +43,29 @@ const ItemDetail = (props: Props) => {
         <Description text={wearable.description} />
         <Row>
           <Column align="left" grow={true}>
-            Order details here
+            {item.price ? (
+              <Stats title={t('asset_page.price')}>
+                <Mana network={item.network} withTooltip>
+                  {formatMANA(item.price)}
+                </Mana>
+              </Stats>
+            ) : null}
           </Column>
-          <Column align="right">Actions here</Column>
+          <Column align="right">
+            {canBuy ? (
+              <Button
+                as={Link}
+                to={locations.buy(
+                  ResultType.ITEM,
+                  item.contractAddress,
+                  item.itemId
+                )}
+                primary
+              >
+                {t('asset_page.actions.buy')}
+              </Button>
+            ) : null}
+          </Column>
         </Row>
         <WearableHighlights type={ResultType.ITEM} wearable={wearable} />
       </Container>

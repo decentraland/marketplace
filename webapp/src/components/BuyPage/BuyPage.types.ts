@@ -6,8 +6,10 @@ import {
   executeOrderRequest,
   ExecuteOrderRequestAction
 } from '../../modules/order/actions'
+import { ResultType } from '../../modules/routing/types'
 
 export type Props = {
+  type: ResultType
   wallet: Wallet | null
   authorizations: Authorization[]
   isLoading: boolean
@@ -24,3 +26,4 @@ export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onExecuteOrder'>
 export type MapDispatch = Dispatch<
   CallHistoryMethodAction | ExecuteOrderRequestAction
 >
+export type OwnProps = Pick<Props, 'type'>
