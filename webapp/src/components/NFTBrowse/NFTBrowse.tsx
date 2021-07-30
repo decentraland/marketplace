@@ -16,6 +16,7 @@ import './NFTBrowse.css'
 import { Section } from '../../modules/vendor/decentraland'
 import { ResultType } from '../../modules/routing/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { useState } from 'react'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
@@ -61,13 +62,16 @@ const NFTBrowse = (props: Props) => {
     viewInState
   } = props
 
+  // Prevent fetching more than once while browsing
+  const [hasFetched, setHasFetched] = useState(false)
+
   // Kick things off
   useEffect(() => {
     onSetView(view)
   }, [onSetView, view])
 
   useEffect(() => {
-    if (viewInState === view) {
+    if (viewInState === view && !hasFetched) {
       onFetchNFTsFromRoute({
         vendor,
         view,
@@ -75,6 +79,7 @@ const NFTBrowse = (props: Props) => {
         address,
         onlyOnSale
       })
+      setHasFetched(true)
     }
   }, [
     view,
@@ -83,7 +88,8 @@ const NFTBrowse = (props: Props) => {
     address,
     onlyOnSale,
     viewInState,
-    onFetchNFTsFromRoute
+    onFetchNFTsFromRoute,
+    hasFetched
   ])
 
   // handlers
