@@ -21,8 +21,6 @@ jobs:
       - name: Test
         run: npm test -- --coverage
         if: ${{ always() }}
-      - name: List directorties
-        run: ls coverage
       - name: report coverage
         uses: coverallsapp/github-action@master
         with:
