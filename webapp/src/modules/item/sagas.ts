@@ -54,8 +54,10 @@ function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
 function* handleFetchItemRequest(action: FetchItemRequestAction) {
   const { contractAddress, tokenId } = action.payload
   try {
-    const item: Item = yield call(() =>
-      itemAPI.fetchOne(contractAddress, tokenId)
+    const item: Item = yield call(
+      [itemAPI, 'fetchOne'],
+      contractAddress,
+      tokenId
     )
     yield put(fetchItemSuccess(item))
   } catch (error) {

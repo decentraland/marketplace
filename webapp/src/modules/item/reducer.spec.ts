@@ -5,9 +5,12 @@ import {
   buyItemFailure,
   buyItemRequest,
   buyItemSuccess,
+  fetchItemFailure,
+  fetchItemRequest,
   fetchItemsFailure,
   fetchItemsRequest,
-  fetchItemsSuccess
+  fetchItemsSuccess,
+  fetchItemSuccess
 } from './actions'
 import { INITIAL_STATE, itemReducer } from './reducer'
 
@@ -19,6 +22,7 @@ const itemBrowseOptions = {
 const item = {
   id: 'anId',
   itemId: 'anItemId',
+  contractAddress: 'aContractAddress',
   price: '324234'
 } as Item
 
@@ -35,7 +39,9 @@ const anErrorMessage = 'An error'
 
 const requestActions = [
   fetchItemsRequest(itemBrowseOptions),
-  buyItemRequest(item)
+  fetchItemRequest(item.contractAddress, item.itemId),
+  buyItemRequest(item),
+  buyItemSuccess(chainId, txHash, item)
 ]
 
 requestActions.forEach(action => {
@@ -62,6 +68,10 @@ const failureActions = [
   {
     request: fetchItemsRequest(itemBrowseOptions),
     failure: fetchItemsFailure(anErrorMessage, itemBrowseOptions)
+  },
+  {
+    request: fetchItemRequest(item.contractAddress, item.itemId),
+    failure: fetchItemFailure(item.contractAddress, item.itemId, anErrorMessage)
   }
 ]
 
@@ -83,23 +93,6 @@ failureActions.forEach(action => {
   })
 })
 
-describe('when reducing the successful action of buying an item', () => {
-  const requestAction = buyItemRequest(item)
-  const succesAction = buyItemSuccess(chainId, txHash, item)
-
-  const initialState = {
-    ...INITIAL_STATE,
-    loading: loadingReducer([], requestAction)
-  }
-
-  it('should return a state with the the loading state cleared', () => {
-    expect(itemReducer(initialState, succesAction)).toEqual({
-      ...INITIAL_STATE,
-      loading: []
-    })
-  })
-})
-
 describe('when reducing the successful action of fetching items', () => {
   const requestAction = fetchItemsRequest(itemBrowseOptions)
   const successAction = fetchItemsSuccess(
@@ -116,6 +109,25 @@ describe('when reducing the successful action of fetching items', () => {
   }
 
   it('should return a state with the the loaded items and the loading state cleared', () => {
+    expect(itemReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: { ...initialState.data, [item.id]: item }
+    })
+  })
+})
+
+describe('when reducing the successful action of fetching an item', () => {
+  const requestAction = fetchItemRequest(item.contractAddress, item.itemId)
+  const successAction = fetchItemSuccess(item)
+
+  const initialState = {
+    ...INITIAL_STATE,
+    data: { anotherId: anotherItem },
+    loading: loadingReducer([], requestAction)
+  }
+
+  it('should return a state with the the loaded items plus the fetched item and the loading state cleared', () => {
     expect(itemReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
