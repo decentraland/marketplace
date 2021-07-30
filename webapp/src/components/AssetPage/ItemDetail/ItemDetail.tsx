@@ -21,7 +21,7 @@ import { Props } from './ItemDetail.types'
 const ItemDetail = (props: Props) => {
   const { item, wallet } = props
   const wearable = item.data.wearable!
-  const canBuy = isOwnedBy(item, wallet) && !!item.price
+  const canBuy = item.isOnSale && item.available > 0 && !isOwnedBy(item, wallet)
 
   return (
     <div className="ItemDetail">
@@ -43,7 +43,7 @@ const ItemDetail = (props: Props) => {
         <Description text={wearable.description} />
         <Row>
           <Column align="left" grow={true}>
-            {item.price ? (
+            {item.isOnSale ? (
               <>
                 <Stats title={t('asset_page.price')}>
                   <Mana network={item.network} withTooltip>
@@ -51,7 +51,9 @@ const ItemDetail = (props: Props) => {
                   </Mana>
                 </Stats>
                 <Stats title={t('asset_page.available')}>
-                  {item.available.toString()}
+                  {item.available > 0
+                    ? item.available.toLocaleString()
+                    : t('asset_page.sold_out')}
                 </Stats>
               </>
             ) : null}

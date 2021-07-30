@@ -74,7 +74,7 @@ const BuyItemModal = (props: Props) => {
   const name = <Name asset={item} />
 
   let subtitle = null
-  if (!item.price) {
+  if (!item.isOnSale) {
     subtitle = <T id={'buy_page.not_for_sale'} values={{ name }} />
   } else if (isOwner) {
     subtitle = <T id={'buy_page.is_owner'} values={{ name }} />
