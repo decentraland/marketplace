@@ -9,13 +9,17 @@ import './Owner.css'
 
 const Owner = (props: Props) => {
   const { asset } = props
+
+  let label: string
   let address: string
   let vendor: VendorName
 
   if ('owner' in asset) {
+    label = t('asset_page.owner')
     address = asset.owner
     vendor = asset.vendor
   } else {
+    label = t('asset_page.creator')
     address = asset.creator
     vendor = VendorName.DECENTRALAND
   }
@@ -23,7 +27,7 @@ const Owner = (props: Props) => {
   return (
     <div className="Owner">
       <Link to={locations.account(address, { vendor: vendor })}>
-        <label>{t('asset_page.owner')}</label>
+        <label>{label}</label>
         <div className="blockie-wrapper">
           <Profile
             size="large"

@@ -44,11 +44,16 @@ const ItemDetail = (props: Props) => {
         <Row>
           <Column align="left" grow={true}>
             {item.price ? (
-              <Stats title={t('asset_page.price')}>
-                <Mana network={item.network} withTooltip>
-                  {formatMANA(item.price)}
-                </Mana>
-              </Stats>
+              <>
+                <Stats title={t('asset_page.price')}>
+                  <Mana network={item.network} withTooltip>
+                    {formatMANA(item.price)}
+                  </Mana>
+                </Stats>
+                <Stats title={t('asset_page.available')}>
+                  {item.available.toString()}
+                </Stats>
+              </>
             ) : null}
           </Column>
           <Column align="right">
