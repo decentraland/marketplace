@@ -4,7 +4,7 @@ import { action } from 'typesafe-actions'
 import { getAssetName } from '../nft/utils'
 import { ItemBrowseOptions } from './types'
 
-// Fetch Item
+// Fetch Items
 
 export const FETCH_ITEMS_REQUEST = '[Request] Fetch Items'
 export const FETCH_ITEMS_SUCCESS = '[Success] Fetch Items'
@@ -51,3 +51,24 @@ export const buyItemFailure = (error: string) =>
 export type buyItemRequestAction = ReturnType<typeof buyItemRequest>
 export type buyItemSuccessAction = ReturnType<typeof buyItemSuccess>
 export type buyItemFailureAction = ReturnType<typeof buyItemFailure>
+
+// Fetch Item
+
+export const FETCH_ITEM_REQUEST = '[Request] Fetch Item'
+export const FETCH_ITEM_SUCCESS = '[Success] Fetch Item'
+export const FETCH_ITEM_FAILURE = '[Failure] Fetch Item'
+
+// TODO: Implement Saga + reducer
+export const fetchItemRequest = (contractAddress: string, tokenId: string) =>
+  action(FETCH_ITEM_REQUEST, { contractAddress, tokenId })
+export const fetchItemSuccess = (item: Item) =>
+  action(FETCH_ITEM_SUCCESS, { item })
+export const fetchItemFailure = (
+  contractAddress: string,
+  tokenId: string,
+  error: string
+) => action(FETCH_ITEM_FAILURE, { contractAddress, tokenId, error })
+
+export type FetchItemRequestAction = ReturnType<typeof fetchItemRequest>
+export type FetchItemSuccessAction = ReturnType<typeof fetchItemSuccess>
+export type FetchItemFailureAction = ReturnType<typeof fetchItemFailure>

@@ -1,5 +1,6 @@
+import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFTsFetchParams } from '../../../nft/types'
-import { NFTsFetchFilters, NFTResponse } from './types'
+import { NFTsFetchFilters, NFTResponse, NFTResult } from './types'
 import { getSortBy } from '../../../nft/utils'
 import { ATLAS_SERVER_URL } from '../land'
 import { Contract } from '../../services'
@@ -8,24 +9,25 @@ import { VendorName } from '../../types'
 
 export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
 
-class NFTAPI {
-  fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
+class NFTAPI extends BaseAPI {
+  fetch = async (
+    params: NFTsFetchParams,
+    filters?: NFTsFetchFilters
+  ): Promise<NFTResponse> => {
     const queryParams = this.buildNFTQueryString(params, filters)
-
-    const response: NFTResponse = await fetch(
-      `${NFT_SERVER_URL}/v1/nfts?${queryParams}`
-    ).then(resp => resp.json())
-
-    return response
+    return this.request('get', `/nfts?${queryParams}`)
   }
 
-  async fetchOne(contractAddress: string, tokenId: string) {
-    const response: NFTResponse = await fetch(
-      `${NFT_SERVER_URL}/v1/nfts?contractAddress=${contractAddress}&tokenId=${tokenId}`
-    ).then(resp => resp.json())
+  async fetchOne(contractAddress: string, tokenId: string): Promise<NFTResult> {
+    const response: NFTResponse = await this.request(
+      'get',
+      `/nfts?contractAddress=${contractAddress}&tokenId=${tokenId}`
+    )
+
     if (response.data.length === 0) {
       throw new Error('Not found')
     }
+
     return response.data[0]
   }
 
@@ -40,14 +42,12 @@ class NFTAPI {
     }
   }
 
-  async fetchContracts() {
+  async fetchContracts(): Promise<Contract[]> {
     try {
       const response: {
         data: Omit<Contract, 'vendor'>[]
         total: number
-      } = await fetch(
-        `${NFT_SERVER_URL}/v1/contracts?first=0` // first=0 so it returns all the results
-      ).then(resp => resp.json())
+      } = await this.request('get', '/contracts?first=0')
       const contracts: Contract[] = response.data.map(
         contractWithoutVendor => ({
           ...contractWithoutVendor,
@@ -86,7 +86,7 @@ class NFTAPI {
     if (filters) {
       if (filters.wearableRarities) {
         for (const wearableRarity of filters.wearableRarities) {
-          queryParams.append('rarity', wearableRarity)
+          queryParams.append('itemRarity', wearableRarity)
         }
       }
       if (filters.isLand) {
@@ -122,4 +122,4 @@ class NFTAPI {
   }
 }
 
-export const nftAPI = new NFTAPI()
+export const nftAPI = new NFTAPI(NFT_SERVER_URL)
