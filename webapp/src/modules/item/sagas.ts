@@ -66,10 +66,6 @@ function* handleBuyItem(action: buyItemRequestAction) {
       collectionStoreContractConfig.address
     )
 
-    if (!collectionStoreContract.address) {
-      throw new Error('No address is set for the collection store contract')
-    }
-
     const txBuy: TxSend<CollectionStoreTransactionReceipt> = yield call(
       collectionStoreContract.methods.buy,
       [
