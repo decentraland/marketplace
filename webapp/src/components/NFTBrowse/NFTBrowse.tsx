@@ -15,6 +15,7 @@ import { ToggleBox } from './ToggleBox'
 import './NFTBrowse.css'
 import { Section } from '../../modules/vendor/decentraland'
 import { ResultType } from '../../modules/routing/types'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
@@ -117,16 +118,32 @@ const NFTBrowse = (props: Props) => {
               header="Type"
               items={[
                 {
-                  title: 'Originals',
+                  title: t(
+                    view === View.ACCOUNT
+                      ? 'account_page.primary_market_title'
+                      : 'browse_page.primary_market_title'
+                  ),
                   active: resultType === ResultType.ITEM,
-                  description: 'Original creations by users',
+                  description: t(
+                    view === View.ACCOUNT
+                      ? 'account_page.primary_market_subtitle'
+                      : 'browse_page.primary_market_subtitle'
+                  ),
                   disabled: !hasPrimarySales(section),
                   onClick: hanldeBrowseItems
                 },
                 {
-                  title: 'Offers',
+                  title: t(
+                    view === View.ACCOUNT
+                      ? 'account_page.secondary_market_title'
+                      : 'browse_page.secondary_market_title'
+                  ),
                   active: resultType === ResultType.NFT,
-                  description: 'Collectibles being reselled',
+                  description: t(
+                    view === View.ACCOUNT
+                      ? 'account_page.secondary_market_subtitle'
+                      : 'browse_page.secondary_market_subtitle'
+                  ),
                   onClick: handleBrowseNFTs
                 }
               ]}
