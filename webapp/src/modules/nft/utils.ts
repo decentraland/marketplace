@@ -53,10 +53,10 @@ export function getAssetImage(asset: Asset) {
 }
 
 export function getAssetUrl(asset: Asset) {
-  if ('image' in asset) {
+  if ('tokenId' in asset) {
     return locations.nft(asset.contractAddress, asset.tokenId)
   }
-  if ('thumbnail' in asset) {
+  if ('itemId' in asset) {
     return locations.item(asset.contractAddress, asset.itemId)
   }
   return ''

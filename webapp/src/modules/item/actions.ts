@@ -58,7 +58,6 @@ export const FETCH_ITEM_REQUEST = '[Request] Fetch Item'
 export const FETCH_ITEM_SUCCESS = '[Success] Fetch Item'
 export const FETCH_ITEM_FAILURE = '[Failure] Fetch Item'
 
-// TODO: Implement Saga + reducer
 export const fetchItemRequest = (contractAddress: string, tokenId: string) =>
   action(FETCH_ITEM_REQUEST, { contractAddress, tokenId })
 export const fetchItemSuccess = (item: Item) =>
@@ -72,3 +71,10 @@ export const fetchItemFailure = (
 export type FetchItemRequestAction = ReturnType<typeof fetchItemRequest>
 export type FetchItemSuccessAction = ReturnType<typeof fetchItemSuccess>
 export type FetchItemFailureAction = ReturnType<typeof fetchItemFailure>
+
+// Buy Item
+
+export const BUY_ITEM_SUCCESS = '[Success] Buy Item'
+
+export const buyItemSuccess = (item: Item) => action(BUY_ITEM_SUCCESS, { item })
+export type BuyItemSuccess = ReturnType<typeof fetchItemSuccess>

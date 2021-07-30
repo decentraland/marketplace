@@ -9,6 +9,7 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 
 import { getAssetName } from '../../../modules/nft/utils'
+import { BUY_ITEM_SUCCESS } from '../../../modules/item/actions'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
@@ -117,7 +118,7 @@ const Transaction = (props: Props) => {
         >
           {nft => (
             <TransactionDetail
-              nft={nft}
+              asset={nft}
               text={
                 <T
                   id="transaction.detail.create_order"
@@ -151,7 +152,7 @@ const Transaction = (props: Props) => {
         >
           {nft => (
             <TransactionDetail
-              nft={nft}
+              asset={nft}
               text={
                 <T
                   id="transaction.detail.cancel_order"
@@ -175,26 +176,40 @@ const Transaction = (props: Props) => {
         </AssetProvider>
       )
     }
+    case BUY_ITEM_SUCCESS:
     case EXECUTE_ORDER_SUCCESS: {
-      const { tokenId, contractAddress, network, name, price } = tx.payload
+      const {
+        itemId,
+        tokenId,
+        contractAddress,
+        network,
+        name,
+        price
+      } = tx.payload
+
+      let type: ResultType
+      let url: string
+      if (itemId) {
+        type = ResultType.ITEM
+        url = locations.item(contractAddress, itemId)
+      } else {
+        type = ResultType.NFT
+        url = locations.nft(contractAddress, tokenId)
+      }
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={type}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
-          {nft => (
+          {asset => (
             <TransactionDetail
-              nft={nft}
+              asset={asset}
               text={
                 <T
                   id="transaction.detail.execute_order"
                   values={{
-                    name: (
-                      <Link to={locations.nft(contractAddress, tokenId)}>
-                        {name}
-                      </Link>
-                    ),
+                    name: <Link to={url}>{name}</Link>,
                     price: (
                       <Mana network={network} inline>
                         {price.toLocaleString()}
@@ -219,7 +234,7 @@ const Transaction = (props: Props) => {
         >
           {nft => (
             <TransactionDetail
-              nft={nft}
+              asset={nft}
               text={
                 <T
                   id="transaction.detail.transfer"
@@ -254,7 +269,7 @@ const Transaction = (props: Props) => {
         >
           {nft => (
             <TransactionDetail
-              nft={nft}
+              asset={nft}
               text={
                 <T
                   id="transaction.detail.place_bid"
@@ -284,7 +299,7 @@ const Transaction = (props: Props) => {
         >
           {nft => (
             <TransactionDetail
-              nft={nft}
+              asset={nft}
               text={
                 <T
                   id="transaction.detail.accept_bid"
@@ -314,7 +329,7 @@ const Transaction = (props: Props) => {
         >
           {nft => (
             <TransactionDetail
-              nft={nft}
+              asset={nft}
               text={
                 <T
                   id="transaction.detail.cancel_bid"
