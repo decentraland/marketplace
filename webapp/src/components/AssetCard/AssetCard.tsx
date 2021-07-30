@@ -4,7 +4,11 @@ import { Link } from 'react-router-dom'
 import { Card } from 'decentraland-ui'
 
 import { formatMANA } from '../../lib/mana'
-import { getAssetName, getAssetUrl } from '../../modules/nft/utils'
+import {
+  getAssetName,
+  getAssetPrice,
+  getAssetUrl
+} from '../../modules/nft/utils'
 import { NFT } from '../../modules/nft/types'
 import { Mana } from '../Mana'
 import { ParcelTags } from './ParcelTags'
@@ -21,7 +25,7 @@ const AssetCard = (props: Props) => {
   const title = getAssetName(asset)
   const { parcel, estate, wearable, ens } = asset.data
 
-  const price = 'price' in asset ? asset.price : order ? order.price : null
+  const price = getAssetPrice(asset, order)
 
   return (
     <Card className="AssetCard" link as={Link} to={getAssetUrl(asset)}>

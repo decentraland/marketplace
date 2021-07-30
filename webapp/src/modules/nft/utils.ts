@@ -2,10 +2,11 @@ import { Item, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { VendorName } from '../vendor/types'
-import { SortDirection, SortBy } from '../routing/types'
+import { SortDirection, SortBy, Asset } from '../routing/types'
 import { addressEquals } from '../wallet/utils'
 import { NFT, NFTSortBy } from './types'
 import { locations } from '../routing/locations'
+import { Order } from '../order/types'
 
 export function getNFTId(contractAddress: string, tokenId: string) {
   return contractAddress + '-' + tokenId
@@ -59,6 +60,16 @@ export function getAssetUrl(asset: NFT | Item) {
     return locations.item(asset.contractAddress, asset.itemId)
   }
   return ''
+}
+
+export function getAssetPrice(asset: Asset, order?: Order) {
+  return 'price' in asset
+    ? asset.isOnSale
+      ? asset.price
+      : null
+    : order
+    ? order.price
+    : null
 }
 
 export function getOrder(sortBy: SortBy) {
