@@ -53,7 +53,7 @@ function* handleBuyItem(action: buyItemRequestAction) {
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
 
     if (!wallet) {
-      throw new Error('A defined wallet is required to but an item')
+      throw new Error('A defined wallet is required to buy an item')
     }
 
     const collectionStoreContractConfig: ContractData = getContract(

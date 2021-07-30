@@ -1,6 +1,7 @@
 import { ChainId, Item } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { action } from 'typesafe-actions'
+import { getAssetName } from '../nft/utils'
 import { ItemBrowseOptions } from './types'
 
 // Fetch Item
@@ -35,7 +36,13 @@ export const buyItemRequest = (item: Item) => action(BUY_ITEM_REQUEST, { item })
 
 export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
   action(BUY_ITEM_SUCCESS, {
-    ...buildTransactionPayload(chainId, txHash, { item })
+    ...buildTransactionPayload(chainId, txHash, {
+      tokenId: item.itemId,
+      contractAddress: item.contractAddress,
+      network: item.network,
+      name: getAssetName(item),
+      price: item.price
+    })
   })
 
 export const buyItemFailure = (error: string) =>

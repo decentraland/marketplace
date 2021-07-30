@@ -1,5 +1,6 @@
-import { ChainId, Item } from '@dcl/schemas'
+import { ChainId, Item, Network } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { getAssetName } from '../nft/utils'
 import { View } from '../ui/types'
 import {
   buyItemFailure,
@@ -22,8 +23,11 @@ const itemBrowseOptions = {
 }
 
 const item = {
+  name: 'aName',
+  contractAddress: 'anAddress',
   itemId: 'anItemId',
-  price: '324234'
+  price: '324234',
+  network: Network.ETHEREUM
 } as Item
 
 const anErrorMessage = 'An error'
@@ -82,7 +86,13 @@ describe('when creating the action to signal a successful item request', () => {
     expect(buyItemSuccess(chainId, txHash, item)).toEqual({
       type: BUY_ITEM_SUCCESS,
       meta: undefined,
-      payload: buildTransactionPayload(chainId, txHash, { item })
+      payload: buildTransactionPayload(chainId, txHash, {
+        tokenId: item.itemId,
+        contractAddress: item.contractAddress,
+        network: item.network,
+        name: getAssetName(item),
+        price: item.price
+      })
     })
   })
 })
