@@ -265,10 +265,20 @@
     "invalid_owner": "You are not the owner of {name}.",
     "submit": "Confirm"
   },
+  "browse_page": {
+    "primary_market_title": "Store",
+    "primary_market_subtitle": "Original creations by users",
+    "secondary_market_title": "Listings",
+    "secondary_market_subtitle": "Items being resold"
+  },
   "account_page": {
     "copied": "Copied ✔",
     "copied_capitalized": "COPIED ✔",
-    "copy_address": "COPY ADDRESS"
+    "copy_address": "COPY ADDRESS",
+    "primary_market_title": "Creations",
+    "primary_market_subtitle": "Items created by this user",
+    "secondary_market_title": "Collectibles",
+    "secondary_market_subtitle": "Items collected by this user"
   },
   "settings_page": {
     "authorizations": "Authorizations",

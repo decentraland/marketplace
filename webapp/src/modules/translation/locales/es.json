@@ -260,10 +260,20 @@
     "invalid_owner": "No eres el dueño de {name}.",
     "submit": "Confirmar"
   },
+  "browse_page": {
+    "primary_market_title": "Tienda",
+    "primary_market_subtitle": "Creados por los usuarios",
+    "secondary_market_title": "Clasificados",
+    "secondary_market_subtitle": "Artículos de reventa"
+  },
   "account_page": {
     "copied": "Copiado ✔",
     "copied_capitalized": "COPIADO ✔",
-    "copy_address": "COPIAR DIRECCIÓN"
+    "copy_address": "COPIAR DIRECCIÓN",
+    "primary_market_title": "Creaciones",
+    "primary_market_subtitle": "Creado por este usuario",
+    "secondary_market_title": "Colecciones",
+    "secondary_market_subtitle": "Colleccionado por este usuario"
   },
   "settings_page": {
     "authorizations": "Autorizaciones",

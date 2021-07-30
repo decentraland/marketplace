@@ -261,10 +261,20 @@
     "invalid_owner": "您不是{name}的持有者。",
     "submit": "确认"
   },
+  "browse_page": {
+    "primary_market_title": "商店",
+    "primary_market_subtitle": "用户原创",
+    "secondary_market_title": "列表",
+    "secondary_market_subtitle": "被转售的物品"
+  },
   "account_page": {
     "copied": "已复制 ✔",
     "copied_capitalized": "已复制 ✔",
-    "copy_address": "复制地址"
+    "copy_address": "复制地址",
+    "primary_market_title": "创作",
+    "primary_market_subtitle": "此用户创建的项目",
+    "secondary_market_title": "收藏品",
+    "secondary_market_subtitle": "该用户收集的物品"
   },
   "settings_page": {
     "authorizations": "授权",
