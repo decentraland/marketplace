@@ -4,6 +4,12 @@ import {
   LoadingState
 } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
+  buyItemFailureAction,
+  buyItemRequestAction,
+  buyItemSuccessAction,
+  BUY_ITEM_FAILURE,
+  BUY_ITEM_REQUEST,
+  BUY_ITEM_SUCCESS,
   FetchItemsFailureAction,
   FetchItemsRequestAction,
   FetchItemsSuccessAction,
@@ -19,7 +25,7 @@ export type ItemState = {
   error: string | null
 }
 
-const INITIAL_STATE: ItemState = {
+export const INITIAL_STATE: ItemState = {
   data: {},
   loading: [],
   total: 0,
@@ -30,12 +36,17 @@ type ItemReducerAction =
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
   | FetchItemsFailureAction
+  | buyItemRequestAction
+  | buyItemSuccessAction
+  | buyItemFailureAction
 
 export function itemReducer(
   state = INITIAL_STATE,
   action: ItemReducerAction
 ): ItemState {
   switch (action.type) {
+    case BUY_ITEM_REQUEST:
+    case BUY_ITEM_SUCCESS:
     case FETCH_ITEMS_REQUEST: {
       return {
         ...state,
@@ -43,7 +54,7 @@ export function itemReducer(
       }
     }
     case FETCH_ITEMS_SUCCESS: {
-      const { items, total } = action.payload
+      const { items } = action.payload
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
@@ -54,10 +65,10 @@ export function itemReducer(
             return obj
           }, {} as Record<string, Item>)
         },
-        total,
         error: null
       }
     }
+    case BUY_ITEM_FAILURE:
     case FETCH_ITEMS_FAILURE: {
       const { error } = action.payload
       return {

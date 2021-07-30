@@ -38,6 +38,10 @@
     "ERC721": {
       "source": "files",
       "abiFile": "./src/contracts/ERC721.json"
+    },
+    "CollectionStore": {
+      "source": "files",
+      "abiFile": "./src/contracts/CollectionStore.json"
     }
   }
 }

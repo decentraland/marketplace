@@ -57,6 +57,14 @@ const contracts = ({
       category: null,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      name: CN.CollectionStore,
+      address: getContract(CN.CollectionStore, ChainId.MATIC_MUMBAI).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
     }
   ],
   [AppNetwork.MAINNET]: [
@@ -99,6 +107,14 @@ const contracts = ({
       category: null,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MAINNET
+    },
+    {
+      name: CN.CollectionStore,
+      address: getContract(CN.CollectionStore, ChainId.MATIC_MUMBAI).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
     }
   ]
 } as Record<AppNetwork, Contract[]>)[network]
