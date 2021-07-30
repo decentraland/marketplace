@@ -5,7 +5,7 @@ import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
 import { AssetProviderPage } from '../AssetProviderPage'
-import { NFTAction } from '../NFTAction'
+import { AssetAction } from '../AssetAction'
 import { locations } from '../../modules/routing/locations'
 import { ResultType } from '../../modules/routing/types'
 import { getAssetName, isOwnedBy } from '../../modules/nft/utils'
@@ -60,7 +60,7 @@ const TransferPage = (props: Props) => {
                   )
                 }
                 return (
-                  <NFTAction nft={nft}>
+                  <AssetAction asset={nft}>
                     <Header size="large">
                       {t('transfer_page.title', {
                         category: t(`global.${nft.category}`)
@@ -119,7 +119,7 @@ const TransferPage = (props: Props) => {
                         </Button>
                       </div>
                     </Form>
-                  </NFTAction>
+                  </AssetAction>
                 )
               }}
             </AssetProviderPage>

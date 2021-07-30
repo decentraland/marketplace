@@ -1,4 +1,4 @@
-import { Item, NFTCategory } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { VendorName } from '../vendor/types'
@@ -13,7 +13,7 @@ export function getNFTId(contractAddress: string, tokenId: string) {
 }
 
 // TODO: Move all  (..)Asset(..) functions to an asset module
-export function getAssetName(asset: NFT | Item) {
+export function getAssetName(asset: Asset) {
   if (asset.name) {
     return asset.name
   }
@@ -42,7 +42,7 @@ export function getAssetName(asset: NFT | Item) {
   }
 }
 
-export function getAssetImage(asset: NFT | Item) {
+export function getAssetImage(asset: Asset) {
   if ('image' in asset) {
     return asset.image
   }
@@ -52,7 +52,7 @@ export function getAssetImage(asset: NFT | Item) {
   return ''
 }
 
-export function getAssetUrl(asset: NFT | Item) {
+export function getAssetUrl(asset: Asset) {
   if ('image' in asset) {
     return locations.nft(asset.contractAddress, asset.tokenId)
   }
@@ -127,7 +127,9 @@ export function getSortBy(orderBy: NFTSortBy) {
   return sortBy
 }
 
-// TODO: Both getNFTId and this method are repeated on item/utils and can be moved to asset/utils
+// TODO: These methods are repeated on item/utils and can be moved to asset/utils:
+//   - getNFT
+//   - getNFTId
 export function getNFT(
   contractAddress: string | null,
   tokenId: string | null,
@@ -141,6 +143,8 @@ export function getNFT(
   return nftId in nfts ? nfts[nftId] : null
 }
 
-export function isOwnedBy(nft: NFT, wallet: Wallet | null) {
-  return addressEquals(wallet?.address, nft.owner)
+// TODO: This should be moved to asset/utils:
+export function isOwnedBy(asset: Asset, wallet: Wallet | null) {
+  const assetAddress = 'owner' in asset ? asset.owner : asset.creator
+  return addressEquals(wallet?.address, assetAddress)
 }

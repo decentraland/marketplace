@@ -38,10 +38,19 @@ const Routes = () => {
         <Route exact path={locations.bids()} component={MyBidsPage} />
         <Route exact path={locations.signIn()} component={SignInPage} />
         <Route exact path={locations.sell()} component={SellPage} />
-        <Route exact path={locations.buy()} component={BuyPage} />
         <Route exact path={locations.bid()} component={BidPage} />
         <Route exact path={locations.cancel()} component={CancelSalePage} />
         <Route exact path={locations.transfer()} component={TransferPage} />
+        <Route
+          exact
+          path={locations.buy(ResultType.NFT)}
+          component={() => <BuyPage type={ResultType.NFT} />}
+        />
+        <Route
+          exact
+          path={locations.buy(ResultType.ITEM)}
+          component={() => <BuyPage type={ResultType.ITEM} />}
+        />
         <Route
           exact
           path={locations.nft()}
