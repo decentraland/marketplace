@@ -9,7 +9,7 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { toMANA, fromMANA } from '../../../lib/mana'
-import { NFTAction } from '../../NFTAction'
+import { AssetAction } from '../../AssetAction'
 import { getAssetName, isOwnedBy } from '../../../modules/nft/utils'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -85,7 +85,7 @@ const BidModal = (props: Props) => {
     fromMANA(price) > wallet.networks[Network.ETHEREUM].mana
 
   return (
-    <NFTAction nft={nft}>
+    <AssetAction asset={nft}>
       <Header size="large">{t('bid_page.title')}</Header>
       <p className="subtitle">
         <T
@@ -156,7 +156,7 @@ const BidModal = (props: Props) => {
         onProceed={handlePlaceBid}
         onCancel={handleClose}
       />
-    </NFTAction>
+    </AssetAction>
   )
 }
 

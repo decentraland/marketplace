@@ -19,7 +19,7 @@ import { getAssetName, isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { AuthorizationModal } from '../../AuthorizationModal'
-import { NFTAction } from '../../NFTAction'
+import { AssetAction } from '../../AssetAction'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { getContractNames } from '../../../modules/vendor'
@@ -106,7 +106,7 @@ const SellModal = (props: Props) => {
     isInvalidDate
 
   return (
-    <NFTAction nft={nft}>
+    <AssetAction asset={nft}>
       <Header size="large">
         {t(isUpdate ? 'sell_page.update_title' : 'sell_page.title')}
       </Header>
@@ -223,7 +223,7 @@ const SellModal = (props: Props) => {
         onProceed={handleCreateOrder}
         onCancel={handleClose}
       />
-    </NFTAction>
+    </AssetAction>
   )
 }
 

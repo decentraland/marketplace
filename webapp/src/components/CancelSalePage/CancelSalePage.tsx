@@ -11,7 +11,7 @@ import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
 import { Mana } from '../Mana'
 import { AssetProviderPage } from '../AssetProviderPage'
-import NFTAction from '../NFTAction/NFTAction'
+import { AssetAction } from '../AssetAction'
 import { Props } from './CancelSalePage.types'
 import './CancelSalePage.css'
 
@@ -61,7 +61,7 @@ const CancelSalePage = (props: Props) => {
                   )
                 }
                 return (
-                  <NFTAction nft={nft}>
+                  <AssetAction asset={nft}>
                     <Header size="large">{t('cancel_sale_page.title')}</Header>
                     <div className="subtitle">{subtitle}</div>
                     <div className="buttons">
@@ -83,7 +83,7 @@ const CancelSalePage = (props: Props) => {
                         {t('cancel_sale_page.submit')}
                       </Button>
                     </div>
-                  </NFTAction>
+                  </AssetAction>
                 )
               }}
             </AssetProviderPage>

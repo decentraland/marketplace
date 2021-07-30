@@ -1,4 +1,4 @@
-.NFTAction .back {
+.AssetAction .back {
   background-image: url(../../images/back.svg);
   background-repeat: no-repeat;
   background-position-x: 10px;
@@ -14,21 +14,21 @@
   margin-left: 2px;
 }
 
-.NFTAction .back:hover {
+.AssetAction .back:hover {
   border: solid 1px rgba(255, 255, 255, 0.5);
 }
 
-.NFTAction .Row .left {
+.AssetAction .Row .left {
   flex: 0.75 1 auto;
   text-align: right;
   margin-right: 80px;
 }
 
-.NFTAction .Row .right {
+.AssetAction .Row .right {
   flex: 1.25 1 auto;
 }
 
-.NFTAction .nft-image-wrapper {
+.AssetAction .nft-image-wrapper {
   width: 240px;
   border-radius: 16px;
   overflow: hidden;
@@ -36,23 +36,23 @@
 }
 
 @media (max-width: 768px) {
-  .NFTAction > .Row {
+  .AssetAction > .Row {
     flex-direction: column;
   }
 
-  .NFTAction > .Row .Column.left,
-  .NFTAction > .Row .nft-image-wrapper,
-  .NFTAction > .Row .ui.button {
+  .AssetAction > .Row .Column.left,
+  .AssetAction > .Row .nft-image-wrapper,
+  .AssetAction > .Row .ui.button {
     width: 100%;
   }
 
-  .NFTAction > .Row .buttons {
+  .AssetAction > .Row .buttons {
     display: flex;
     flex-direction: column-reverse;
   }
 
-  .NFTAction > .Row .nft-image-wrapper,
-  .NFTAction > .Row .ui.button + .ui.button {
+  .AssetAction > .Row .nft-image-wrapper,
+  .AssetAction > .Row .ui.button + .ui.button {
     margin-left: 0px;
     margin-bottom: 24px;
   }

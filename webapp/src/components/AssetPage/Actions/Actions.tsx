@@ -4,6 +4,7 @@ import { Network } from '@dcl/schemas'
 import { Modal, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 
+import { ResultType } from '../../../modules/routing/types'
 import { isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
@@ -47,7 +48,7 @@ const Actions = (props: Props) => {
           <>
             <Button
               as={Link}
-              to={locations.buy(contractAddress, tokenId)}
+              to={locations.buy(ResultType.NFT, contractAddress, tokenId)}
               primary
             >
               {t('asset_page.actions.buy')}
