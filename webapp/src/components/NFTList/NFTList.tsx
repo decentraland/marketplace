@@ -41,8 +41,11 @@ const NFTList = (props: Props) => {
     <>
       <Card.Group>
         {assets.length > 0
-          ? assets.map(assets => (
-              <AssetCard key={resultType + '-' + assets.id} asset={assets} />
+          ? assets.map((assets, index) => (
+              <AssetCard
+                key={resultType + '-' + assets.id + '-' + index}
+                asset={assets}
+              />
             ))
           : null}
 
