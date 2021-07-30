@@ -61,7 +61,7 @@ class ItemAPI extends BaseAPI {
 
     if (filters.rarities) {
       for (const rarity of filters.rarities) {
-        queryParams.append('wearableRarity', rarity)
+        queryParams.append('rarity', rarity)
       }
     }
     if (filters.isWearableHead) {

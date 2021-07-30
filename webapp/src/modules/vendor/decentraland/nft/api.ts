@@ -86,7 +86,7 @@ class NFTAPI extends BaseAPI {
     if (filters) {
       if (filters.wearableRarities) {
         for (const wearableRarity of filters.wearableRarities) {
-          queryParams.append('rarity', wearableRarity)
+          queryParams.append('itemRarity', wearableRarity)
         }
       }
       if (filters.isLand) {
