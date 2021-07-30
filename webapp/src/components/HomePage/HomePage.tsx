@@ -4,38 +4,62 @@ import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Page, Hero, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor/types'
-import { SortBy } from '../../modules/routing/types'
+import { ResultType, SortBy } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
-import { HomepageView } from '../../modules/ui/nft/homepage/types'
+import { HomepageView } from '../../modules/ui/asset/homepage/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Slideshow } from './Slideshow'
 import { Props } from './HomePage.types'
 import './HomePage.css'
+import { useMemo } from 'react'
 
 const HomePage = (props: Props) => {
-  const { homepage, homepageLoading, onNavigate, onFetchNFTsFromRoute } = props
+  const {
+    homepage,
+    homepageLoading,
+    onNavigate,
+    onFetchNFTsFromRoute,
+    onFetchItemsFromRoute
+  } = props
 
-  const sections = {
-    [View.HOME_WEARABLES]: Section.WEARABLES,
-    [View.HOME_LAND]: Section.LAND,
-    [View.HOME_ENS]: Section.ENS
-  }
+  const sections: Partial<Record<View, Section>> = useMemo(
+    () => ({
+      [View.HOME_ITEMS]: Section.WEARABLES,
+      [View.HOME_WEARABLES]: Section.WEARABLES,
+      [View.HOME_LAND]: Section.LAND,
+      [View.HOME_ENS]: Section.ENS
+    }),
+    []
+  )
 
-  const handleGetStarted = useCallback(() => onNavigate(locations.lands()), [
-    onNavigate
-  ])
+  const resultTypes: Partial<Record<View, ResultType>> = useMemo(
+    () => ({
+      [View.HOME_ITEMS]: ResultType.ITEM,
+      [View.HOME_WEARABLES]: ResultType.NFT,
+      [View.HOME_LAND]: ResultType.NFT,
+      [View.HOME_ENS]: ResultType.NFT
+    }),
+    []
+  )
+
+  const handleGetStarted = useCallback(() => {
+    onNavigate(locations.lands())
+  }, [onNavigate])
 
   const handleViewAll = useCallback(
-    (section: Section) => {
+    (view: View) => {
+      const section = sections[view]
+      const resultType = resultTypes[view]
+
       if (Section.LAND === section) {
         onNavigate(locations.lands())
       } else {
-        onNavigate(locations.browse({ section }))
+        onNavigate(locations.browse({ section, resultType }))
       }
     },
-    [onNavigate]
+    [sections, resultTypes, onNavigate]
   )
 
   const vendor = VendorName.DECENTRALAND
@@ -43,18 +67,24 @@ const HomePage = (props: Props) => {
   useEffect(() => {
     let view: HomepageView
     for (view in homepage) {
+      const resultType = resultTypes[view]
       const section = sections[view]
-      onFetchNFTsFromRoute({
-        vendor,
-        section,
-        view,
-        sortBy: SortBy.RECENTLY_LISTED,
-        page: 1,
-        onlyOnSale: true
-      })
+
+      if (resultType === ResultType.NFT) {
+        onFetchNFTsFromRoute({
+          vendor,
+          section,
+          view,
+          sortBy: SortBy.RECENTLY_LISTED,
+          page: 1,
+          onlyOnSale: true
+        })
+      } else if (resultType === ResultType.ITEM) {
+        onFetchItemsFromRoute({ view, page: 1 })
+      }
     }
     // eslint-disable-next-line
-  }, [onFetchNFTsFromRoute])
+  }, [onFetchNFTsFromRoute, onFetchItemsFromRoute])
 
   const views = Object.keys(homepage) as HomepageView[]
 
@@ -78,9 +108,9 @@ const HomePage = (props: Props) => {
           <Slideshow
             key={view}
             title={t(`home_page.${view}`)}
-            nfts={homepage[view]}
+            assets={homepage[view]}
             isLoading={homepageLoading[view]}
-            onViewAll={() => handleViewAll(sections[view])}
+            onViewAll={() => handleViewAll(view)}
           />
         ))}
       </Page>
