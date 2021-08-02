@@ -10,9 +10,8 @@ class OrderAPI extends BaseAPI {
   ): Promise<Order[]> {
     const response: { data: Order[]; total: number } = await this.request(
       'get',
-      `/orders?contractAddress=${contractAddress}&tokenId=${tokenId}${
-        status ? `&status=${status}` : ``
-      }`
+      '/orders',
+      { contractAddress, tokenId, status }
     )
     return response.data
   }

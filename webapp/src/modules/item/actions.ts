@@ -37,7 +37,7 @@ export const buyItemRequest = (item: Item) => action(BUY_ITEM_REQUEST, { item })
 export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
   action(BUY_ITEM_SUCCESS, {
     ...buildTransactionPayload(chainId, txHash, {
-      tokenId: item.itemId,
+      itemId: item.itemId,
       contractAddress: item.contractAddress,
       network: item.network,
       name: getAssetName(item),
@@ -58,7 +58,6 @@ export const FETCH_ITEM_REQUEST = '[Request] Fetch Item'
 export const FETCH_ITEM_SUCCESS = '[Success] Fetch Item'
 export const FETCH_ITEM_FAILURE = '[Failure] Fetch Item'
 
-// TODO: Implement Saga + reducer
 export const fetchItemRequest = (contractAddress: string, tokenId: string) =>
   action(FETCH_ITEM_REQUEST, { contractAddress, tokenId })
 export const fetchItemSuccess = (item: Item) =>

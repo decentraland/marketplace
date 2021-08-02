@@ -9,14 +9,11 @@ class ItemAPI extends BaseAPI {
     return this.request('get', `/items?${queryParams}`)
   }
 
-  fetchOne = async (
-    contractAddress: string,
-    tokenId: string
-  ): Promise<Item> => {
-    const response: ItemResponse = await this.request(
-      'get',
-      `/items?contractAddress=${contractAddress}&tokenId=${tokenId}`
-    )
+  fetchOne = async (contractAddress: string, itemId: string): Promise<Item> => {
+    const response: ItemResponse = await this.request('get', '/items', {
+      contractAddress,
+      itemId
+    })
 
     if (response.data.length === 0) {
       throw new Error('Not found')

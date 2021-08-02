@@ -13,7 +13,7 @@ import {
   Transaction
 } from 'decentraland-dapps/dist/modules/transaction/types'
 import { formatDistanceToNow } from '../../../../lib/date'
-import { locations } from '../../../../modules/routing/locations'
+import { getAssetUrl } from '../../../../modules/nft/utils'
 import { AssetImage } from '../../../AssetImage'
 import { Row } from '../../../Layout/Row'
 import { Column } from '../../../Layout/Column'
@@ -29,16 +29,16 @@ const getHref = (tx: Transaction) => {
 }
 
 const TransactionDetail = (props: Props) => {
-  const { nft, text, tx } = props
+  const { asset, text, tx } = props
   return (
     <Row className="TransactionDetail">
       <Column align="left" grow={true}>
         <div className="image">
-          {nft === null ? (
+          {asset === null ? (
             <Loader active size="small" />
-          ) : nft ? (
-            <Link to={locations.nft(nft.contractAddress, nft.tokenId)}>
-              <AssetImage asset={nft} isSmall />
+          ) : asset ? (
+            <Link to={getAssetUrl(asset)}>
+              <AssetImage asset={asset} isSmall />
             </Link>
           ) : (
             <Mana
