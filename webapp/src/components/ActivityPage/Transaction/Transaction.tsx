@@ -179,28 +179,32 @@ const Transaction = (props: Props) => {
     case BUY_ITEM_SUCCESS:
     case EXECUTE_ORDER_SUCCESS: {
       const {
-        itemId,
         tokenId,
+        itemId,
         contractAddress,
         network,
         name,
         price
       } = tx.payload
 
+      let assetTokenId: string
       let type: ResultType
       let url: string
       if (itemId) {
         type = ResultType.ITEM
-        url = locations.item(contractAddress, itemId)
+        assetTokenId = itemId
+        url = locations.item(contractAddress, assetTokenId)
       } else {
         type = ResultType.NFT
-        url = locations.nft(contractAddress, tokenId)
+        assetTokenId = tokenId
+        url = locations.nft(contractAddress, assetTokenId)
       }
+
       return (
         <AssetProvider
           type={type}
           contractAddress={contractAddress}
-          tokenId={tokenId}
+          tokenId={assetTokenId}
         >
           {asset => (
             <TransactionDetail

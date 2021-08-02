@@ -19,10 +19,10 @@ class NFTAPI extends BaseAPI {
   }
 
   async fetchOne(contractAddress: string, tokenId: string): Promise<NFTResult> {
-    const response: NFTResponse = await this.request(
-      'get',
-      `/nfts?contractAddress=${contractAddress}&tokenId=${tokenId}`
-    )
+    const response: NFTResponse = await this.request('get', '/nfts', {
+      contractAddress,
+      tokenId
+    })
 
     if (response.data.length === 0) {
       throw new Error('Not found')
@@ -47,7 +47,7 @@ class NFTAPI extends BaseAPI {
       const response: {
         data: Omit<Contract, 'vendor'>[]
         total: number
-      } = await this.request('get', '/contracts?first=0')
+      } = await this.request('get', '/contracts', { first: 0 })
       const contracts: Contract[] = response.data.map(
         contractWithoutVendor => ({
           ...contractWithoutVendor,

@@ -13,10 +13,10 @@ class ItemAPI extends BaseAPI {
     contractAddress: string,
     tokenId: string
   ): Promise<Item> => {
-    const response: ItemResponse = await this.request(
-      'get',
-      `/items?contractAddress=${contractAddress}&tokenId=${tokenId}`
-    )
+    const response: ItemResponse = await this.request('get', '/items', {
+      contractAddress,
+      tokenId
+    })
 
     if (response.data.length === 0) {
       throw new Error('Not found')

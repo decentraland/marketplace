@@ -37,7 +37,7 @@ export const buyItemRequest = (item: Item) => action(BUY_ITEM_REQUEST, { item })
 export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
   action(BUY_ITEM_SUCCESS, {
     ...buildTransactionPayload(chainId, txHash, {
-      tokenId: item.itemId,
+      itemId: item.itemId,
       contractAddress: item.contractAddress,
       network: item.network,
       name: getAssetName(item),
@@ -71,10 +71,3 @@ export const fetchItemFailure = (
 export type FetchItemRequestAction = ReturnType<typeof fetchItemRequest>
 export type FetchItemSuccessAction = ReturnType<typeof fetchItemSuccess>
 export type FetchItemFailureAction = ReturnType<typeof fetchItemFailure>
-
-// Buy Item
-
-export const BUY_ITEM_SUCCESS = '[Success] Buy Item'
-
-export const buyItemSuccess = (item: Item) => action(BUY_ITEM_SUCCESS, { item })
-export type BuyItemSuccess = ReturnType<typeof fetchItemSuccess>
