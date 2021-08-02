@@ -4,9 +4,9 @@ import {
   LoadingState
 } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
-  buyItemFailureAction,
-  buyItemRequestAction,
-  buyItemSuccessAction,
+  BuyItemFailureAction,
+  BuyItemRequestAction,
+  BuyItemSuccessAction,
   BUY_ITEM_FAILURE,
   BUY_ITEM_REQUEST,
   BUY_ITEM_SUCCESS,
@@ -45,9 +45,9 @@ type ItemReducerAction =
   | FetchItemFailureAction
   | FetchItemRequestAction
   | FetchItemSuccessAction
-  | buyItemRequestAction
-  | buyItemSuccessAction
-  | buyItemFailureAction
+  | BuyItemRequestAction
+  | BuyItemSuccessAction
+  | BuyItemFailureAction
 
 export function itemReducer(
   state = INITIAL_STATE,

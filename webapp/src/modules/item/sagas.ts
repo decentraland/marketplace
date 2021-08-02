@@ -15,7 +15,7 @@ import { itemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
 import {
   buyItemFailure,
-  buyItemRequestAction,
+  BuyItemRequestAction,
   buyItemSuccess,
   BUY_ITEM_REQUEST,
   fetchItemsFailure,
@@ -25,16 +25,20 @@ import {
   fetchItemFailure,
   FetchItemRequestAction,
   fetchItemSuccess,
-  FETCH_ITEM_REQUEST
+  FETCH_ITEM_REQUEST,
+  BUY_ITEM_SUCCESS
 } from './actions'
 import { Address } from 'web3x-es/address'
 import { sendTransaction } from '../wallet/utils'
 import { TxSend } from 'web3x-es/contract'
+import { push } from 'connected-react-router'
+import { locations } from '../routing/locations'
 
 export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
+  yield takeEvery(BUY_ITEM_SUCCESS, handleBuyItemSuccess)
 }
 
 function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
@@ -65,7 +69,7 @@ function* handleFetchItemRequest(action: FetchItemRequestAction) {
   }
 }
 
-function* handleBuyItem(action: buyItemRequestAction) {
+function* handleBuyItem(action: BuyItemRequestAction) {
   try {
     const { item } = action.payload
 
@@ -108,4 +112,8 @@ function* handleBuyItem(action: buyItemRequestAction) {
   } catch (error) {
     yield put(buyItemFailure(error.message))
   }
+}
+
+function* handleBuyItemSuccess() {
+  yield put(push(locations.activity()))
 }

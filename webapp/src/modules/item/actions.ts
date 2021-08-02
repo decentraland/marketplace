@@ -48,9 +48,9 @@ export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
 export const buyItemFailure = (error: string) =>
   action(BUY_ITEM_FAILURE, { error })
 
-export type buyItemRequestAction = ReturnType<typeof buyItemRequest>
-export type buyItemSuccessAction = ReturnType<typeof buyItemSuccess>
-export type buyItemFailureAction = ReturnType<typeof buyItemFailure>
+export type BuyItemRequestAction = ReturnType<typeof buyItemRequest>
+export type BuyItemSuccessAction = ReturnType<typeof buyItemSuccess>
+export type BuyItemFailureAction = ReturnType<typeof buyItemFailure>
 
 // Fetch Item
 

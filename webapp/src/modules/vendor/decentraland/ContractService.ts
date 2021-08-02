@@ -13,7 +13,8 @@ const network = process.env.REACT_APP_NETWORK! as AppNetwork
 export enum ContractName {
   MANA = 'MANA',
   MARKETPLACE = 'Marketplace',
-  BIDS = 'Bids'
+  BIDS = 'Bids',
+  COLLECTION_STORE = 'CollectionStore'
 }
 
 const contracts = ({
@@ -110,11 +111,11 @@ const contracts = ({
     },
     {
       name: CN.CollectionStore,
-      address: getContract(CN.CollectionStore, ChainId.MATIC_MUMBAI).address,
+      address: getContract(CN.CollectionStore, ChainId.MATIC_MAINNET).address,
       vendor: 'decentraland',
       category: null,
-      network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_MAINNET
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MAINNET
     }
   ]
 } as Record<AppNetwork, Contract[]>)[network]

@@ -1,2 +1,2 @@
-import BuyItemModal from './BuyItemModal'
+import BuyItemModal from './BuyItemModal.containter'
 export { BuyItemModal }

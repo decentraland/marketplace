@@ -1,5 +1,6 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { Header, Button } from 'decentraland-ui'
+import { Link } from 'react-router-dom'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Authorization,
@@ -14,9 +15,9 @@ import { useFingerprint, useComputedPrice } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { AssetAction } from '../../AssetAction'
+import { AuthorizationModal } from '../../AuthorizationModal'
 import { Name } from '../Name'
 import { Price } from '../Price'
-import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './BuyNFTModal.types'
 
 const BuyNFTModal = (props: Props) => {
@@ -26,7 +27,6 @@ const BuyNFTModal = (props: Props) => {
     wallet,
     authorizations,
     isLoading,
-    onNavigate,
     onExecuteOrder,
     isOwner,
     hasInsufficientMANA
@@ -45,46 +45,51 @@ const BuyNFTModal = (props: Props) => {
     onExecuteOrder(order!, nft, fingerprint)
   }, [order, nft, fingerprint, onExecuteOrder])
 
-  if (!wallet) {
-    return null
-  }
+  const authorization: Authorization = useMemo(() => {
+    const contractNames = getContractNames()
 
-  const contractNames = getContractNames()
+    const mana = getContract({
+      name: contractNames.MANA,
+      network: nft.network
+    })
 
-  const mana = getContract({
-    name: contractNames.MANA,
-    network: nft.network
-  })
+    const marketplace = getContract({
+      name: isPartner(nft.vendor)
+        ? contractNames.MARKETPLACE_ADAPTER
+        : contractNames.MARKETPLACE,
+      network: nft.network
+    })
 
-  const marketplace = getContract({
-    name: isPartner(nft.vendor)
-      ? contractNames.MARKETPLACE_ADAPTER
-      : contractNames.MARKETPLACE,
-    network: nft.network
-  })
+    return {
+      address: wallet.address,
+      authorizedAddress: marketplace.address,
+      contractAddress: mana.address,
+      contractName: ContractName.MANAToken,
+      chainId: nft.chainId,
+      type: AuthorizationType.ALLOWANCE
+    }
+  }, [wallet, nft])
 
-  const authorization: Authorization = {
-    address: wallet.address,
-    authorizedAddress: marketplace.address,
-    contractAddress: mana.address,
-    contractName: ContractName.MANAToken,
-    chainId: nft.chainId,
-    type: AuthorizationType.ALLOWANCE
-  }
-
-  const handleToggleWantsToProceed = () => {
+  const handleToggleWantsToProceed = useCallback(() => {
     setWantsToProceed(!wantsToProceed)
-  }
+  }, [setWantsToProceed, wantsToProceed])
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (hasAuthorization(authorizations, authorization)) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
     }
-  }
+  }, [
+    authorizations,
+    authorization,
+    handleExecuteOrder,
+    setShowAuthorizationModal
+  ])
 
-  const handleClose = () => setShowAuthorizationModal(false)
+  const handleClose = useCallback(() => setShowAuthorizationModal(false), [
+    setShowAuthorizationModal
+  ])
 
   const isDisabled =
     !order ||
@@ -167,11 +172,7 @@ const BuyNFTModal = (props: Props) => {
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
       <div className="buttons">
-        <Button
-          onClick={() =>
-            onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
-          }
-        >
+        <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
           {t('global.cancel')}
         </Button>
 

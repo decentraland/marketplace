@@ -70,6 +70,11 @@ function* handleWallet(
     network: Network.MATIC
   })
 
+  const collectionStore = getContract({
+    name: contractNames.COLLECTION_STORE,
+    network: Network.MATIC
+  })
+
   const authorizations: Authorization[] = []
 
   authorizations.push({
@@ -105,6 +110,15 @@ function* handleWallet(
     contractAddress: manaEthereum.address,
     contractName: ContractName.MANAToken,
     chainId: manaEthereum.chainId,
+    type: AuthorizationType.ALLOWANCE
+  })
+
+  authorizations.push({
+    address,
+    authorizedAddress: collectionStore.address,
+    contractAddress: manaMatic.address,
+    contractName: ContractName.MANAToken,
+    chainId: manaMatic.chainId,
     type: AuthorizationType.ALLOWANCE
   })
 
