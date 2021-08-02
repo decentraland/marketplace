@@ -1,5 +1,7 @@
-import { Item } from '@dcl/schemas'
+import { ChainId, Item } from '@dcl/schemas'
+import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { action } from 'typesafe-actions'
+import { getAssetName } from '../nft/utils'
 import { ItemBrowseOptions } from './types'
 
 // Fetch Items
@@ -24,6 +26,31 @@ export const fetchItemsFailure = (error: string, options: ItemBrowseOptions) =>
 export type FetchItemsRequestAction = ReturnType<typeof fetchItemsRequest>
 export type FetchItemsSuccessAction = ReturnType<typeof fetchItemsSuccess>
 export type FetchItemsFailureAction = ReturnType<typeof fetchItemsFailure>
+
+// Buy Item
+export const BUY_ITEM_REQUEST = '[Request] Buy item'
+export const BUY_ITEM_SUCCESS = '[Success] Buy item'
+export const BUY_ITEM_FAILURE = '[Failure] Buy item'
+
+export const buyItemRequest = (item: Item) => action(BUY_ITEM_REQUEST, { item })
+
+export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
+  action(BUY_ITEM_SUCCESS, {
+    ...buildTransactionPayload(chainId, txHash, {
+      tokenId: item.itemId,
+      contractAddress: item.contractAddress,
+      network: item.network,
+      name: getAssetName(item),
+      price: item.price
+    })
+  })
+
+export const buyItemFailure = (error: string) =>
+  action(BUY_ITEM_FAILURE, { error })
+
+export type BuyItemRequestAction = ReturnType<typeof buyItemRequest>
+export type BuyItemSuccessAction = ReturnType<typeof buyItemSuccess>
+export type BuyItemFailureAction = ReturnType<typeof buyItemFailure>
 
 // Fetch Item
 
