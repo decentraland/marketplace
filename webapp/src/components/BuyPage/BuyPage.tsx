@@ -17,14 +17,7 @@ import { Props } from './BuyPage.types'
 import './BuyPage.css'
 
 const BuyPage = (props: Props) => {
-  const {
-    type,
-    authorizations,
-    isLoading,
-    onNavigate,
-    onExecuteOrder,
-    isExecutingOrder
-  } = props
+  const { type } = props
 
   const isInsufficientMANA = (
     wallet: Wallet,
@@ -42,11 +35,8 @@ const BuyPage = (props: Props) => {
           {wallet => (
             <AssetProviderPage type={type}>
               {(asset, order) => {
-                const props = {
+                const modalProps = {
                   wallet: wallet,
-                  authorizations: authorizations,
-                  isLoading: isLoading || isExecutingOrder,
-                  onNavigate: onNavigate,
                   isOwner: isOwnedBy(asset, wallet),
                   hasInsufficientMANA: isInsufficientMANA(wallet, asset, order)
                 }
@@ -54,15 +44,10 @@ const BuyPage = (props: Props) => {
                   <BuyNFTModal
                     nft={asset as NFT}
                     order={order}
-                    onExecuteOrder={onExecuteOrder}
-                    {...props}
+                    {...modalProps}
                   />
                 ) : type === ResultType.ITEM ? (
-                  <BuyItemModal
-                    item={asset as Item}
-                    onExecuteOrder={() => {}}
-                    {...props}
-                  />
+                  <BuyItemModal item={asset as Item} {...modalProps} />
                 ) : null
               }}
             </AssetProviderPage>

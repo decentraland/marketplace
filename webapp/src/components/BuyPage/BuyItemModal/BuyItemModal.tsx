@@ -5,16 +5,18 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
-import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ContractName } from 'decentraland-transactions'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { locations } from '../../../modules/routing/locations'
-import { getContractNames } from '../../../modules/vendor'
-import { getContract } from '../../../modules/contract/utils'
 import { AssetAction } from '../../AssetAction'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { Props } from './BuyItemModal.types'
+import { useMemo } from 'react'
+import { getContract } from '../../../modules/contract/utils'
+import { getContractNames } from '../../../modules/vendor'
+import { Link } from 'react-router-dom'
 
 const BuyItemModal = (props: Props) => {
   const {
@@ -22,52 +24,56 @@ const BuyItemModal = (props: Props) => {
     wallet,
     authorizations,
     isLoading,
-    onNavigate,
-    onExecuteOrder,
+    onBuyItem,
     isOwner,
     hasInsufficientMANA
   } = props
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
-  const handleExecuteOrder = useCallback(() => {
-    onExecuteOrder(/*item*/)
-  }, [onExecuteOrder])
+  const handleExecuteOrder = useCallback(() => onBuyItem(item), [
+    onBuyItem,
+    item
+  ])
 
-  if (!wallet) {
-    return null
-  }
+  const authorization: Authorization = useMemo(() => {
+    const contractNames = getContractNames()
+    const mana = getContract({
+      name: contractNames.MANA,
+      network: item.network
+    })
 
-  const contractNames = getContractNames()
+    const collectionStore = getContract({
+      name: contractNames.COLLECTION_STORE,
+      network: item.network
+    })
 
-  const mana = getContract({
-    name: contractNames.MANA,
-    network: item.network
-  })
+    return {
+      address: wallet.address,
+      authorizedAddress: collectionStore.address,
+      contractAddress: mana.address,
+      contractName: ContractName.MANAToken,
+      chainId: item.chainId,
+      type: AuthorizationType.ALLOWANCE
+    }
+  }, [wallet, item])
 
-  const marketplace = getContract({
-    name: contractNames.MARKETPLACE,
-    network: item.network
-  })
-
-  const authorization: Authorization = {
-    address: wallet.address,
-    authorizedAddress: marketplace.address,
-    contractAddress: mana.address,
-    contractName: ContractName.MANAToken,
-    chainId: item.chainId,
-    type: AuthorizationType.ALLOWANCE
-  }
-
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(() => {
     if (hasAuthorization(authorizations, authorization)) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
     }
-  }
+  }, [
+    authorizations,
+    authorization,
+    handleExecuteOrder,
+    setShowAuthorizationModal
+  ])
 
-  const handleClose = () => setShowAuthorizationModal(false)
+  const handleClose = useCallback(() => setShowAuthorizationModal(false), [
+    setShowAuthorizationModal
+  ])
 
   const isDisabled = !item.price || isOwner || hasInsufficientMANA
 
@@ -108,9 +114,8 @@ const BuyItemModal = (props: Props) => {
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
       <div className="buttons">
         <Button
-          onClick={() =>
-            onNavigate(locations.item(item.contractAddress, item.itemId))
-          }
+          as={Link}
+          to={locations.item(item.contractAddress, item.itemId)}
         >
           {t('global.cancel')}
         </Button>
@@ -125,6 +130,7 @@ const BuyItemModal = (props: Props) => {
         </Button>
       </div>
       <AuthorizationModal
+        isLoading={isLoading}
         open={showAuthorizationModal}
         authorization={authorization}
         onProceed={handleExecuteOrder}
