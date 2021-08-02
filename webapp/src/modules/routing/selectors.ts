@@ -187,11 +187,9 @@ export const getResultType = createSelector<
   ResultType
 >(getRouterSearch, getPathName, (search, pathname) => {
   // TODO: make me pretty
-  console.log('pathname', pathname, locations.browse())
   let results = getURLParam(search, 'results') as ResultType
   if (!results) {
     results = pathname === locations.browse() ? ResultType.ITEM : ResultType.NFT // TODO: i need a isAccountPage or sth helper
   }
-  console.log('results', results)
   return results
 })

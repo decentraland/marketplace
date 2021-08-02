@@ -5,7 +5,7 @@ import { fetchNFTsFromRoute } from '../../modules/routing/actions'
 import {
   getHomepage,
   getHomepageLoading
-} from '../../modules/ui/nft/homepage/selectors'
+} from '../../modules/ui/asset/homepage/selectors'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './HomePage.types'
 import HomePage from './HomePage'
 

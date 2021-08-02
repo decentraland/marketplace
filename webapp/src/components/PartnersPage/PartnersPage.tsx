@@ -63,7 +63,7 @@ const PartnersPage = (props: Props) => {
                 title={t('partners_page.latest_from', {
                   vendor: t(`vendors.${view}`)
                 })}
-                nfts={partners[view]}
+                assets={partners[view]}
                 isLoading={partners[view].length === 0 || partnersLoading[view]}
                 isSubHeader={true}
                 onViewAll={() => handleOnNavigate(view)}
