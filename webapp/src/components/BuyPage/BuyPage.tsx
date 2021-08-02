@@ -23,6 +23,7 @@ const BuyPage = (props: Props) => {
     isLoading,
     onNavigate,
     onExecuteOrder,
+    onBuyItem,
     isExecutingOrder
   } = props
 
@@ -60,7 +61,7 @@ const BuyPage = (props: Props) => {
                 ) : type === ResultType.ITEM ? (
                   <BuyItemModal
                     item={asset as Item}
-                    onExecuteOrder={() => {}}
+                    onBuyItem={onBuyItem}
                     {...props}
                   />
                 ) : null

@@ -7,6 +7,10 @@ import {
   ExecuteOrderRequestAction
 } from '../../modules/order/actions'
 import { ResultType } from '../../modules/routing/types'
+import {
+  buyItemRequest,
+  buyItemRequestAction
+} from '../../modules/item/actions'
 
 export type Props = {
   type: ResultType
@@ -15,6 +19,7 @@ export type Props = {
   isLoading: boolean
   isExecutingOrder: boolean
   onExecuteOrder: typeof executeOrderRequest
+  onBuyItem: typeof buyItemRequest
   onNavigate: (path: string) => void
 }
 
@@ -22,8 +27,11 @@ export type MapStateProps = Pick<
   Props,
   'wallet' | 'authorizations' | 'isLoading' | 'isExecutingOrder'
 >
-export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onExecuteOrder'>
+export type MapDispatchProps = Pick<
+  Props,
+  'onNavigate' | 'onExecuteOrder' | 'onBuyItem'
+>
 export type MapDispatch = Dispatch<
-  CallHistoryMethodAction | ExecuteOrderRequestAction
+  CallHistoryMethodAction | ExecuteOrderRequestAction | buyItemRequestAction
 >
 export type OwnProps = Pick<Props, 'type'>

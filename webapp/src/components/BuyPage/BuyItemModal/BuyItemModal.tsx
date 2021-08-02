@@ -23,16 +23,17 @@ const BuyItemModal = (props: Props) => {
     authorizations,
     isLoading,
     onNavigate,
-    onExecuteOrder,
+    onBuyItem,
     isOwner,
     hasInsufficientMANA
   } = props
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
-  const handleExecuteOrder = useCallback(() => {
-    onExecuteOrder(/*item*/)
-  }, [onExecuteOrder])
+  const handleExecuteOrder = useCallback(() => onBuyItem(item), [
+    onBuyItem,
+    item
+  ])
 
   if (!wallet) {
     return null

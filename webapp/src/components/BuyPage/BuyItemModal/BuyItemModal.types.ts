@@ -10,5 +10,5 @@ export type Props = {
   isOwner: boolean
   hasInsufficientMANA: boolean
   onNavigate: (path: string) => void
-  onExecuteOrder: () => void
+  onBuyItem: (item: Item) => void
 }
