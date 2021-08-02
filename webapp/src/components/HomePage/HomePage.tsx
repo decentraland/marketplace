@@ -16,13 +16,7 @@ import './HomePage.css'
 import { useMemo } from 'react'
 
 const HomePage = (props: Props) => {
-  const {
-    homepage,
-    homepageLoading,
-    onNavigate,
-    onFetchNFTsFromRoute,
-    onFetchItemsFromRoute
-  } = props
+  const { homepage, homepageLoading, onNavigate, onFetchNFTsFromRoute } = props
 
   const sections: Partial<Record<View, Section>> = useMemo(
     () => ({
@@ -69,22 +63,18 @@ const HomePage = (props: Props) => {
     for (view in homepage) {
       const resultType = resultTypes[view]
       const section = sections[view]
-
-      if (resultType === ResultType.NFT) {
-        onFetchNFTsFromRoute({
-          vendor,
-          section,
-          view,
-          sortBy: SortBy.RECENTLY_LISTED,
-          page: 1,
-          onlyOnSale: true
-        })
-      } else if (resultType === ResultType.ITEM) {
-        onFetchItemsFromRoute({ view, page: 1 })
-      }
+      onFetchNFTsFromRoute({
+        vendor,
+        section,
+        view,
+        resultType,
+        sortBy: SortBy.RECENTLY_LISTED,
+        page: 1,
+        onlyOnSale: true
+      })
     }
     // eslint-disable-next-line
-  }, [onFetchNFTsFromRoute, onFetchItemsFromRoute])
+  }, [onFetchNFTsFromRoute])
 
   const views = Object.keys(homepage) as HomepageView[]
 

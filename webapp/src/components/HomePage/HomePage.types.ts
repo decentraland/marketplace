@@ -5,8 +5,6 @@ import {
   getHomepageLoading
 } from '../../modules/ui/asset/homepage/selectors'
 import {
-  fetchItemsFromRoute,
-  FetchItemsFromRouteAction,
   fetchNFTsFromRoute,
   FetchNFTsFromRouteAction
 } from '../../modules/routing/actions'
@@ -16,14 +14,13 @@ export type Props = {
   homepageLoading: ReturnType<typeof getHomepageLoading>
   onNavigate: (path: string) => void
   onFetchNFTsFromRoute: typeof fetchNFTsFromRoute
-  onFetchItemsFromRoute: typeof fetchItemsFromRoute
 }
 
 export type MapStateProps = Pick<Props, 'homepage' | 'homepageLoading'>
 export type MapDispatchProps = Pick<
   Props,
-  'onNavigate' | 'onFetchNFTsFromRoute' | 'onFetchItemsFromRoute'
+  'onNavigate' | 'onFetchNFTsFromRoute'
 >
 export type MapDispatch = Dispatch<
-  CallHistoryMethodAction | FetchNFTsFromRouteAction | FetchItemsFromRouteAction
+  CallHistoryMethodAction | FetchNFTsFromRouteAction
 >

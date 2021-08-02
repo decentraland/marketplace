@@ -1,10 +1,7 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
-import {
-  fetchItemsFromRoute,
-  fetchNFTsFromRoute
-} from '../../modules/routing/actions'
+import { fetchNFTsFromRoute } from '../../modules/routing/actions'
 import {
   getHomepage,
   getHomepageLoading
@@ -19,8 +16,7 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
-  onFetchNFTsFromRoute: options => dispatch(fetchNFTsFromRoute(options)),
-  onFetchItemsFromRoute: options => dispatch(fetchItemsFromRoute(options))
+  onFetchNFTsFromRoute: options => dispatch(fetchNFTsFromRoute(options))
 })
 
 export default connect(mapState, mapDispatch)(HomePage)
