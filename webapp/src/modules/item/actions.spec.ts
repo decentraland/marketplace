@@ -87,13 +87,16 @@ describe('when creating the action to signal a successful item request', () => {
     expect(buyItemSuccess(chainId, txHash, item)).toEqual({
       type: BUY_ITEM_SUCCESS,
       meta: undefined,
-      payload: buildTransactionPayload(chainId, txHash, {
-        itemId: item.itemId,
-        contractAddress: item.contractAddress,
-        network: item.network,
-        name: getAssetName(item),
-        price: formatMANA(item.price)
-      })
+      payload: {
+        item,
+        ...buildTransactionPayload(chainId, txHash, {
+          itemId: item.itemId,
+          contractAddress: item.contractAddress,
+          network: item.network,
+          name: getAssetName(item),
+          price: formatMANA(item.price)
+        })
+      }
     })
   })
 })

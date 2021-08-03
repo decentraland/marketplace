@@ -46,6 +46,13 @@ import {
   ArchiveBidAction,
   UnarchiveBidAction
 } from '../bid/actions'
+import {
+  BuyItemSuccessAction,
+  BUY_ITEM_SUCCESS,
+  FetchItemsSuccessAction,
+  FETCH_ITEMS_SUCCESS
+} from '../item/actions'
+import { fromWei } from 'web3x-es/utils'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -176,3 +183,22 @@ track<FetchNFTsSuccessAction>(
     count: payload.count
   })
 )
+
+track<FetchItemsSuccessAction>(
+  FETCH_ITEMS_SUCCESS,
+  'Fetch Items',
+  ({ payload }) => ({
+    options: payload.options,
+    total: payload.total
+  })
+)
+
+track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, 'Buy Item', ({ payload }) => ({
+  itemId: payload.item.itemId,
+  contractAddress: payload.item.contractAddress,
+  rarity: payload.item.rarity,
+  network: payload.item.network,
+  chainId: payload.item.chainId,
+  price: Number(fromWei(payload.item.price, 'ether')),
+  data: payload.item.data
+}))
