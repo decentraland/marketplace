@@ -1,6 +1,7 @@
 import { ChainId, Item } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { action } from 'typesafe-actions'
+import { formatMANA } from '../../lib/mana'
 import { getAssetName } from '../nft/utils'
 import { ItemBrowseOptions } from './types'
 
@@ -41,7 +42,7 @@ export const buyItemSuccess = (chainId: ChainId, txHash: string, item: Item) =>
       contractAddress: item.contractAddress,
       network: item.network,
       name: getAssetName(item),
-      price: item.price
+      price: formatMANA(item.price)
     })
   })
 

@@ -23,13 +23,13 @@ const item = {
   id: 'anId',
   itemId: 'anItemId',
   contractAddress: 'aContractAddress',
-  price: '324234'
+  price: '5000000000000000000'
 } as Item
 
 const anotherItem = {
   id: 'anotherId',
   itemId: 'anotherItemId',
-  price: '1212312'
+  price: '1500000000000000000000'
 } as Item
 
 const chainId = ChainId.MATIC_MAINNET

@@ -1,5 +1,6 @@
 import { ChainId, Item, Network } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { formatMANA } from '../../lib/mana'
 import { getAssetName } from '../nft/utils'
 import { View } from '../ui/types'
 import {
@@ -26,7 +27,7 @@ const item = {
   name: 'aName',
   contractAddress: 'anAddress',
   itemId: 'anItemId',
-  price: '324234',
+  price: '1500000000000000000000',
   network: Network.ETHEREUM
 } as Item
 
@@ -91,7 +92,7 @@ describe('when creating the action to signal a successful item request', () => {
         contractAddress: item.contractAddress,
         network: item.network,
         name: getAssetName(item),
-        price: item.price
+        price: formatMANA(item.price)
       })
     })
   })
