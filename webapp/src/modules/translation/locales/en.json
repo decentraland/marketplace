@@ -73,6 +73,9 @@
     "more_than_assets_count": "+{count} assets"
   },
   "filters": {
+    "type": "Type",
+    "item": "Original creations",
+    "nft": "Items being resold",
     "name": "Name",
     "newest": "Newest",
     "recently_listed": "Recently listed",

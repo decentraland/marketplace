@@ -71,6 +71,9 @@
     "more_than_assets_count": "+{count} assets"
   },
   "filters": {
+    "type": "Tipo",
+    "item": "Creaciones originales",
+    "nft": "Artículos de reventa",
     "name": "Nombre",
     "newest": "Más nuevos",
     "recently_listed": "Listados recientemente",
@@ -83,7 +86,6 @@
     "learn_more": "Aprende Más",
     "home_items": "Últimos items",
     "home_wearables": "Listado recientemente",
-    "home_wearables": "Vestimenta",
     "home_land": "Land",
     "home_ens": "Nombres"
   },

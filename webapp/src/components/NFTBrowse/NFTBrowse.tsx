@@ -121,7 +121,7 @@ const NFTBrowse = (props: Props) => {
           <Column align="left" className="sidebar">
             <ToggleBox
               className="result-type-toggle"
-              header="Type"
+              header={t('filters.type')}
               items={[
                 {
                   title: t(
