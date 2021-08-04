@@ -71,6 +71,9 @@
     "more_than_assets_count": "+{count} assets"
   },
   "filters": {
+    "type": "物品类型",
+    "item": "原创作品",
+    "nft": "被转售的物品",
     "name": "名称",
     "newest": "最新",
     "recently_listed": "最新上市",
