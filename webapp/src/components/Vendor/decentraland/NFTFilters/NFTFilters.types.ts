@@ -5,7 +5,7 @@ import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { AssetType } from '../../../../modules/asset/types'
 
 export type Props = {
-  resultType: AssetType
+  assetType: AssetType
   count?: number
   section: Section
   sortBy?: SortBy
@@ -21,7 +21,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  | 'resultType'
+  | 'assetType'
   | 'count'
   | 'section'
   | 'sortBy'

@@ -36,10 +36,10 @@ const NFTFilters = (props: Props) => {
     contracts,
     network,
     onBrowse,
-    resultType
+    assetType
   } = props
 
-  console.log('RESULT TYPE', resultType)
+  console.log('RESULT TYPE', assetType)
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
@@ -104,7 +104,7 @@ const NFTFilters = (props: Props) => {
 
   const handleTypeByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
-      onBrowse({ resultType: props.value as AssetType })
+      onBrowse({ assetType: props.value as AssetType })
     },
     [onBrowse]
   )
@@ -280,7 +280,7 @@ const NFTFilters = (props: Props) => {
           className="filters"
         >
           <FiltersMenu
-            resultType={resultType}
+            assetType={assetType}
             selectedNetwork={network}
             selectedCollection={contracts[0]}
             selectedRarities={wearableRarities}
@@ -306,13 +306,13 @@ const NFTFilters = (props: Props) => {
                 <Header sub>{t('filters.type')}</Header>
                 <Dropdown
                   direction="left"
-                  value={resultType}
+                  value={assetType}
                   options={typeDropdownOptions}
                   onChange={handleTypeByDropdownChange}
                 />
               </div>
               <FiltersMenu
-                resultType={resultType}
+                assetType={assetType}
                 selectedNetwork={network}
                 selectedCollection={contracts[0]}
                 selectedRarities={wearableRarities}

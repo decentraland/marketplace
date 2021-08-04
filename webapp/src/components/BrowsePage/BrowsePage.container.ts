@@ -18,7 +18,7 @@ const mapState = (state: RootState): MapStateProps => {
   }
   return {
     vendor: getVendor(state),
-    resultType: getResultType(state),
+    assetType: getResultType(state),
     section,
     isFullscreen: getIsFullscreen(state)
   }

@@ -13,7 +13,7 @@ import { Props } from './NFTList.types'
 const NFTList = (props: Props) => {
   const {
     vendor,
-    resultType,
+    assetType,
     items,
     nfts,
     page,
@@ -22,7 +22,7 @@ const NFTList = (props: Props) => {
     onBrowse
   } = props
 
-  const assets: (NFT | Item)[] = resultType === AssetType.ITEM ? items : nfts
+  const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts
 
   const handleLoadMore = useCallback(() => {
     const newPage = page + 1
@@ -43,7 +43,7 @@ const NFTList = (props: Props) => {
         {assets.length > 0
           ? assets.map((assets, index) => (
               <AssetCard
-                key={resultType + '-' + assets.id + '-' + index}
+                key={assetType + '-' + assets.id + '-' + index}
                 asset={assets}
               />
             ))

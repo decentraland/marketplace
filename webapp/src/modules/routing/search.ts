@@ -19,8 +19,8 @@ export function getSearchParams(options?: NFTBrowseOptions) {
   if (options) {
     params = new URLSearchParams()
 
-    if (options.resultType) {
-      params.set('results', options.resultType)
+    if (options.assetType) {
+      params.set('results', options.assetType)
     }
 
     if (options.section) {

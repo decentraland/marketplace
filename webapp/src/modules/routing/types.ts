@@ -22,7 +22,7 @@ export enum SortDirection {
 }
 
 export type NFTBrowseOptions = {
-  resultType?: AssetType
+  assetType?: AssetType
   view?: View
   vendor?: VendorName
   page?: number

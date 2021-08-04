@@ -32,7 +32,7 @@ const mapState = (state: RootState): MapStateProps => ({
   isLoading:
     isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST) ||
     isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST),
-  resultType: getResultType(state),
+  assetType: getResultType(state),
   viewInState: getView(state)
 })
 

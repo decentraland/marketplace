@@ -8,7 +8,7 @@ import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
   vendor: VendorName
-  resultType: AssetType
+  assetType: AssetType
   nfts: NFT[]
   items: Item[]
   page: number
@@ -19,7 +19,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'vendor' | 'nfts' | 'items' | 'page' | 'count' | 'isLoading' | 'resultType'
+  'vendor' | 'nfts' | 'items' | 'page' | 'count' | 'isLoading' | 'assetType'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
 export type MapDispatch = Dispatch<BrowseNFTsAction>

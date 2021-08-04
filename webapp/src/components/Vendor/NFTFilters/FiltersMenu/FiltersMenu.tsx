@@ -13,7 +13,7 @@ export const ALL_FILTER_OPTION = 'ALL'
 
 const FiltersMenu = (props: Props) => {
   const {
-    resultType,
+    assetType,
     selectedCollection,
     selectedRarities,
     selectedGenders,
@@ -75,7 +75,7 @@ const FiltersMenu = (props: Props) => {
 
   return (
     <>
-      {resultType === AssetType.NFT ? (
+      {assetType === AssetType.NFT ? (
         <Row>
           <SelectFilter
             name={t('nft_filters.collection')}

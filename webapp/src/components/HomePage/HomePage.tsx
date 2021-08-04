@@ -28,7 +28,7 @@ const HomePage = (props: Props) => {
     []
   )
 
-  const resultTypes: Partial<Record<View, AssetType>> = useMemo(
+  const assetTypes: Partial<Record<View, AssetType>> = useMemo(
     () => ({
       [View.HOME_ITEMS]: AssetType.ITEM,
       [View.HOME_WEARABLES]: AssetType.NFT,
@@ -45,15 +45,15 @@ const HomePage = (props: Props) => {
   const handleViewAll = useCallback(
     (view: View) => {
       const section = sections[view]
-      const resultType = resultTypes[view]
+      const assetType = assetTypes[view]
 
       if (Section.LAND === section) {
         onNavigate(locations.lands())
       } else {
-        onNavigate(locations.browse({ section, resultType }))
+        onNavigate(locations.browse({ section, assetType }))
       }
     },
-    [sections, resultTypes, onNavigate]
+    [sections, assetTypes, onNavigate]
   )
 
   const vendor = VendorName.DECENTRALAND
@@ -61,13 +61,13 @@ const HomePage = (props: Props) => {
   useEffect(() => {
     let view: HomepageView
     for (view in homepage) {
-      const resultType = resultTypes[view]
+      const assetType = assetTypes[view]
       const section = sections[view]
       onFetchNFTsFromRoute({
         vendor,
         section,
         view,
-        resultType,
+        assetType,
         sortBy: SortBy.RECENTLY_LISTED,
         page: 1,
         onlyOnSale: true

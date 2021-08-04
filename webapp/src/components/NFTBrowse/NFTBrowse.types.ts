@@ -15,7 +15,7 @@ import { AssetType } from '../../modules/asset/types'
 export type Props = {
   vendor: VendorName
   view: View
-  resultType: AssetType
+  assetType: AssetType
   viewInState?: View // This is used to know when the view prop has been set in the app state
   address?: string
   isMap?: boolean
@@ -31,12 +31,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  | 'isMap'
-  | 'isLoading'
-  | 'onlyOnSale'
-  | 'viewInState'
-  | 'section'
-  | 'resultType'
+  'isMap' | 'isLoading' | 'onlyOnSale' | 'viewInState' | 'section' | 'assetType'
 >
 export type MapDispatchProps = Pick<
   Props,

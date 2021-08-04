@@ -23,7 +23,7 @@ import {
 import NFTFilters from './NFTFilters'
 
 const mapState = (state: RootState): MapStateProps => ({
-  resultType: getResultType(state),
+  assetType: getResultType(state),
   count: getCount(state),
   section: getSection(state),
   sortBy: getSortBy(state),

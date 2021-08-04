@@ -4,14 +4,14 @@ import { VendorName } from '../../modules/vendor/types'
 
 export type Props = {
   vendor: VendorName
-  resultType: AssetType
+  assetType: AssetType
   section: Section
   isFullscreen?: boolean
 }
 
 export type MapStateProps = Pick<
   Props,
-  'vendor' | 'isFullscreen' | 'resultType' | 'section'
+  'vendor' | 'isFullscreen' | 'assetType' | 'section'
 >
 export type MapDispatchProps = {}
 export type MapDispatch = {}

@@ -20,7 +20,7 @@ const Owner = (props: Props) => {
     label = t('asset_page.owner')
     address = asset.owner
     browseOptions = {
-      resultType: AssetType.ITEM,
+      assetType: AssetType.ITEM,
       vendor: asset.vendor,
       section: Section[asset.vendor].ALL
     }
@@ -28,7 +28,7 @@ const Owner = (props: Props) => {
     label = t('asset_page.creator')
     address = asset.creator
     browseOptions = {
-      resultType: AssetType.ITEM,
+      assetType: AssetType.ITEM,
       section: Section[VendorName.DECENTRALAND].WEARABLES
     }
   }

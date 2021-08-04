@@ -24,13 +24,13 @@ const WearableHighlights = (props: Props) => {
     if (!section) {
       throw new Error(`Invalid wearable category ${category}`)
     }
-    onNavigate(locations.browse({ resultType: type, section }))
+    onNavigate(locations.browse({ assetType: type, section }))
   }, [type, wearable, onNavigate])
 
   const handleGenderClick = useCallback(() => {
     onNavigate(
       locations.browse({
-        resultType: type,
+        assetType: type,
         section: Section.WEARABLES,
         wearableGenders: isGender(wearable, BodyShape.MALE)
           ? [WearableGender.MALE]
@@ -42,7 +42,7 @@ const WearableHighlights = (props: Props) => {
   const handleUnisexClick = useCallback(() => {
     onNavigate(
       locations.browse({
-        resultType: type,
+        assetType: type,
         section: Section.WEARABLES,
         wearableGenders: [WearableGender.MALE, WearableGender.FEMALE]
       })

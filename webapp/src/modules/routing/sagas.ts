@@ -99,7 +99,7 @@ function* handleBrowseItems(action: BrowseItemsAction) {
 // Utility functions, not handlers
 
 function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
-  const isItems = searchOptions.resultType === AssetType.ITEM
+  const isItems = searchOptions.assetType === AssetType.ITEM
   const view = searchOptions.view!
   const vendor = searchOptions.vendor!
   const page = searchOptions.page!
@@ -179,7 +179,7 @@ function* getNFTBrowseOptions(
   current: NFTBrowseOptions
 ): Generator<unknown, NFTBrowseOptions, any> {
   let previous: NFTBrowseOptions = {
-    resultType: yield select(getResultType),
+    assetType: yield select(getResultType),
     address: yield getAddress(),
     vendor: yield select(getVendor),
     section: yield select(getSection),
@@ -297,7 +297,7 @@ function* deriveCurrentOptions(
 ) {
   let newOptions = {
     ...current,
-    resultType: current.resultType || previous.resultType,
+    assetType: current.assetType || previous.assetType,
     section: current.section || previous.section
   }
 
@@ -321,7 +321,7 @@ function* deriveCurrentOptions(
       break
     }
     default: {
-      newOptions = { ...newOptions, resultType: AssetType.NFT }
+      newOptions = { ...newOptions, assetType: AssetType.NFT }
     }
   }
 
@@ -345,6 +345,6 @@ function shouldResetOptions(
   return (
     (current.vendor && current.vendor !== previous.vendor) ||
     (current.section && current.section !== previous.section) ||
-    (current.resultType && current.resultType !== previous.resultType)
+    (current.assetType && current.assetType !== previous.assetType)
   )
 }

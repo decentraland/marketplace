@@ -56,7 +56,7 @@ const NFTBrowse = (props: Props) => {
     onBrowse,
     section,
     sections,
-    resultType,
+    assetType,
     onlyOnSale,
     viewInState
   } = props
@@ -98,12 +98,12 @@ const NFTBrowse = (props: Props) => {
   )
 
   const hanldeBrowseItems = useCallback(
-    () => onBrowse({ resultType: AssetType.ITEM }),
+    () => onBrowse({ assetType: AssetType.ITEM }),
     [onBrowse]
   )
 
   const handleBrowseNFTs = useCallback(
-    () => onBrowse({ resultType: AssetType.NFT }),
+    () => onBrowse({ assetType: AssetType.NFT }),
     [onBrowse]
   )
 
@@ -128,7 +128,7 @@ const NFTBrowse = (props: Props) => {
                       ? 'account_page.primary_market_title'
                       : 'browse_page.primary_market_title'
                   ),
-                  active: resultType === AssetType.ITEM,
+                  active: assetType === AssetType.ITEM,
                   description: t(
                     view === View.ACCOUNT
                       ? 'account_page.primary_market_subtitle'
@@ -143,7 +143,7 @@ const NFTBrowse = (props: Props) => {
                       ? 'account_page.secondary_market_title'
                       : 'browse_page.secondary_market_title'
                   ),
-                  active: resultType === AssetType.NFT,
+                  active: assetType === AssetType.NFT,
                   description: t(
                     view === View.ACCOUNT
                       ? 'account_page.secondary_market_subtitle'

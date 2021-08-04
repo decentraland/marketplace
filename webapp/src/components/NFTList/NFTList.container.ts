@@ -18,7 +18,7 @@ import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 
 const mapState = (state: RootState): MapStateProps => ({
   vendor: getVendor(state),
-  resultType: getResultType(state),
+  assetType: getResultType(state),
   nfts: getNFTs(state),
   items: getItems(state),
   page: getPage(state),
