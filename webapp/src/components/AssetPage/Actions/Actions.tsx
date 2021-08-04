@@ -6,7 +6,7 @@ import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
-import { ResultType } from '../../../modules/asset/types'
+import { AssetType } from '../../../modules/asset/types'
 import { VendorFactory } from '../../../modules/vendor'
 import { Props } from './Actions.types'
 
@@ -48,7 +48,7 @@ const Actions = (props: Props) => {
           <>
             <Button
               as={Link}
-              to={locations.buy(ResultType.NFT, contractAddress, tokenId)}
+              to={locations.buy(AssetType.NFT, contractAddress, tokenId)}
               primary
             >
               {t('asset_page.actions.buy')}

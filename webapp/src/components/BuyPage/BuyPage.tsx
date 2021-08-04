@@ -11,7 +11,7 @@ import { NFT } from '../../modules/nft/types'
 import { isOwnedBy } from '../../modules/nft/utils'
 import { Order } from '../../modules/order/types'
 import { Asset } from '../../modules/routing/types'
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 import { BuyNFTModal } from './BuyNFTModal'
 import { BuyItemModal } from './BuyItemModal'
 import { Props } from './BuyPage.types'
@@ -41,13 +41,13 @@ const BuyPage = (props: Props) => {
                   isOwner: isOwnedBy(asset, wallet),
                   hasInsufficientMANA: isInsufficientMANA(wallet, asset, order)
                 }
-                return type === ResultType.NFT ? (
+                return type === AssetType.NFT ? (
                   <BuyNFTModal
                     nft={asset as NFT}
                     order={order}
                     {...modalProps}
                   />
-                ) : type === ResultType.ITEM ? (
+                ) : type === AssetType.ITEM ? (
                   <BuyItemModal item={asset as Item} {...modalProps} />
                 ) : null
               }}

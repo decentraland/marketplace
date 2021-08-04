@@ -2,10 +2,10 @@ import { Network, Rarity } from '@dcl/schemas'
 import { Section, SortBy } from '../../../../modules/routing/types'
 import { browseNFTs } from '../../../../modules/routing/actions'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
-import { ResultType } from '../../../../modules/asset/types'
+import { AssetType } from '../../../../modules/asset/types'
 
 export type Props = {
-  resultType: ResultType
+  resultType: AssetType
   count?: number
   section: Section
   sortBy?: SortBy

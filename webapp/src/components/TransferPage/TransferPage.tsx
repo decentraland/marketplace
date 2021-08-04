@@ -8,7 +8,7 @@ import { AssetProviderPage } from '../AssetProviderPage'
 import { AssetAction } from '../AssetAction'
 import { locations } from '../../modules/routing/locations'
 import { getAssetName, isOwnedBy } from '../../modules/nft/utils'
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 import { Props } from './TransferPage.types'
 import './TransferPage.css'
 
@@ -24,7 +24,7 @@ const TransferPage = (props: Props) => {
       <Page className="TransferPage">
         <Wallet>
           {wallet => (
-            <AssetProviderPage type={ResultType.NFT}>
+            <AssetProviderPage type={AssetType.NFT}>
               {(nft, order) => {
                 let subtitle
                 let isDisabled = !address || isInvalidAddress || isTransfering

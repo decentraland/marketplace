@@ -18,7 +18,7 @@ import {
 } from './search'
 import { SortBy, Section } from './types'
 import { locations } from './locations'
-import { ResultType } from '../asset/types'
+import { AssetType } from '../asset/types'
 
 export const getState = (state: RootState) => state.routing
 
@@ -185,12 +185,12 @@ export const getResultType = createSelector<
   RootState,
   string,
   string,
-  ResultType
+  AssetType
 >(getRouterSearch, getPathName, (search, pathname) => {
   // TODO: make me pretty
-  let results = getURLParam(search, 'results') as ResultType
+  let results = getURLParam(search, 'results') as AssetType
   if (!results) {
-    results = pathname === locations.browse() ? ResultType.ITEM : ResultType.NFT // TODO: i need a isAccountPage or sth helper
+    results = pathname === locations.browse() ? AssetType.ITEM : AssetType.NFT // TODO: i need a isAccountPage or sth helper
   }
   return results
 })

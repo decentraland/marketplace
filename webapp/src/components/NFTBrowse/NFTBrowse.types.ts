@@ -10,12 +10,12 @@ import {
   FetchNFTsFromRouteAction
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/decentraland'
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
   vendor: VendorName
   view: View
-  resultType: ResultType
+  resultType: AssetType
   viewInState?: View // This is used to know when the view prop has been set in the app state
   address?: string
   isMap?: boolean

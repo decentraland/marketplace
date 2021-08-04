@@ -6,7 +6,7 @@ import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor/types'
 import { SortBy } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 import { HomepageView } from '../../modules/ui/asset/homepage/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { Navbar } from '../Navbar'
@@ -28,12 +28,12 @@ const HomePage = (props: Props) => {
     []
   )
 
-  const resultTypes: Partial<Record<View, ResultType>> = useMemo(
+  const resultTypes: Partial<Record<View, AssetType>> = useMemo(
     () => ({
-      [View.HOME_ITEMS]: ResultType.ITEM,
-      [View.HOME_WEARABLES]: ResultType.NFT,
-      [View.HOME_LAND]: ResultType.NFT,
-      [View.HOME_ENS]: ResultType.NFT
+      [View.HOME_ITEMS]: AssetType.ITEM,
+      [View.HOME_WEARABLES]: AssetType.NFT,
+      [View.HOME_LAND]: AssetType.NFT,
+      [View.HOME_ENS]: AssetType.NFT
     }),
     []
   )

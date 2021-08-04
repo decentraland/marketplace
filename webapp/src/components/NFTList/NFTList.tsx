@@ -5,7 +5,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { AssetCard } from '../AssetCard'
 import { Props } from './NFTList.types'
@@ -22,7 +22,7 @@ const NFTList = (props: Props) => {
     onBrowse
   } = props
 
-  const assets: (NFT | Item)[] = resultType === ResultType.ITEM ? items : nfts
+  const assets: (NFT | Item)[] = resultType === AssetType.ITEM ? items : nfts
 
   const handleLoadMore = useCallback(() => {
     const newPage = page + 1

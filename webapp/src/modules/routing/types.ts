@@ -1,6 +1,6 @@
 import { Network, Rarity } from '@dcl/schemas'
 import { Item } from '@dcl/schemas'
-import { ResultType } from '../asset/types'
+import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
 import { View } from '../ui/types'
@@ -22,7 +22,7 @@ export enum SortDirection {
 }
 
 export type NFTBrowseOptions = {
-  resultType?: ResultType
+  resultType?: AssetType
   view?: View
   vendor?: VendorName
   page?: number
@@ -40,8 +40,8 @@ export type NFTBrowseOptions = {
 }
 
 // TODO: Rename this to ASSET_TYPE and move it to an asset module
-export type Asset<T extends ResultType = ResultType> = T extends ResultType.NFT
+export type Asset<T extends AssetType = AssetType> = T extends AssetType.NFT
   ? NFT
-  : T extends ResultType.ITEM
+  : T extends AssetType.ITEM
   ? Item
   : NFT | Item

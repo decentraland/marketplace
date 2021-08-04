@@ -1,10 +1,10 @@
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { VendorName } from '../../modules/vendor/types'
 
 export type Props = {
   vendor: VendorName
-  resultType: ResultType
+  resultType: AssetType
   section: Section
   isFullscreen?: boolean
 }

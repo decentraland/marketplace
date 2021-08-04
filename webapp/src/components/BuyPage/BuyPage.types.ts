@@ -1,5 +1,5 @@
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
-  type: ResultType
+  type: AssetType
 }

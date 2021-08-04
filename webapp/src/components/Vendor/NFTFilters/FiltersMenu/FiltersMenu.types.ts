@@ -1,8 +1,8 @@
 import { Network } from '@dcl/schemas'
-import { ResultType } from '../../../../modules/asset/types'
+import { AssetType } from '../../../../modules/asset/types'
 
 export type Props = {
-  resultType: ResultType
+  resultType: AssetType
   selectedCollection?: string
   selectedRarities: string[]
   selectedGenders: string[]

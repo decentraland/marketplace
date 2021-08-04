@@ -4,7 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/decentraland'
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { NFTList } from '../NFTList'
@@ -98,12 +98,12 @@ const NFTBrowse = (props: Props) => {
   )
 
   const hanldeBrowseItems = useCallback(
-    () => onBrowse({ resultType: ResultType.ITEM }),
+    () => onBrowse({ resultType: AssetType.ITEM }),
     [onBrowse]
   )
 
   const handleBrowseNFTs = useCallback(
-    () => onBrowse({ resultType: ResultType.NFT }),
+    () => onBrowse({ resultType: AssetType.NFT }),
     [onBrowse]
   )
 
@@ -128,7 +128,7 @@ const NFTBrowse = (props: Props) => {
                       ? 'account_page.primary_market_title'
                       : 'browse_page.primary_market_title'
                   ),
-                  active: resultType === ResultType.ITEM,
+                  active: resultType === AssetType.ITEM,
                   description: t(
                     view === View.ACCOUNT
                       ? 'account_page.primary_market_subtitle'
@@ -143,7 +143,7 @@ const NFTBrowse = (props: Props) => {
                       ? 'account_page.secondary_market_title'
                       : 'browse_page.secondary_market_title'
                   ),
-                  active: resultType === ResultType.NFT,
+                  active: resultType === AssetType.NFT,
                   description: t(
                     view === View.ACCOUNT
                       ? 'account_page.secondary_market_subtitle'

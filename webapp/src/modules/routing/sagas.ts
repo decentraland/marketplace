@@ -50,7 +50,7 @@ import {
   BrowseItemsAction
 } from './actions'
 import { NFTBrowseOptions, Section } from './types'
-import { ResultType } from '../asset/types'
+import { AssetType } from '../asset/types'
 import { ItemBrowseOptions } from '../item/types'
 import { fetchItemsRequest } from '../item/actions'
 import { ItemSortBy } from '../vendor/decentraland/item/types'
@@ -99,7 +99,7 @@ function* handleBrowseItems(action: BrowseItemsAction) {
 // Utility functions, not handlers
 
 function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
-  const isItems = searchOptions.resultType === ResultType.ITEM
+  const isItems = searchOptions.resultType === AssetType.ITEM
   const view = searchOptions.view!
   const vendor = searchOptions.vendor!
   const page = searchOptions.page!
@@ -321,7 +321,7 @@ function* deriveCurrentOptions(
       break
     }
     default: {
-      newOptions = { ...newOptions, resultType: ResultType.NFT }
+      newOptions = { ...newOptions, resultType: AssetType.NFT }
     }
   }
 

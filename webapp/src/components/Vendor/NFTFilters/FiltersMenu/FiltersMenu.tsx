@@ -7,7 +7,7 @@ import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
 import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { contracts } from '../../../../modules/contract/utils'
-import { ResultType } from '../../../../modules/asset/types'
+import { AssetType } from '../../../../modules/asset/types'
 
 export const ALL_FILTER_OPTION = 'ALL'
 
@@ -75,7 +75,7 @@ const FiltersMenu = (props: Props) => {
 
   return (
     <>
-      {resultType === ResultType.NFT ? (
+      {resultType === AssetType.NFT ? (
         <Row>
           <SelectFilter
             name={t('nft_filters.collection')}

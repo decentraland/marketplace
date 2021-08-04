@@ -27,7 +27,7 @@ import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
-import { ResultType } from '../../../modules/asset/types'
+import { AssetType } from '../../../modules/asset/types'
 
 const Transaction = (props: Props) => {
   const { tx } = props
@@ -112,7 +112,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
@@ -146,7 +146,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
@@ -188,14 +188,14 @@ const Transaction = (props: Props) => {
       } = tx.payload
 
       let assetTokenId: string
-      let type: ResultType
+      let type: AssetType
       let url: string
       if (itemId) {
-        type = ResultType.ITEM
+        type = AssetType.ITEM
         assetTokenId = itemId
         url = locations.item(contractAddress, assetTokenId)
       } else {
-        type = ResultType.NFT
+        type = AssetType.NFT
         assetTokenId = tokenId
         url = locations.nft(contractAddress, assetTokenId)
       }
@@ -232,7 +232,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, name, address } = tx.payload
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
@@ -267,7 +267,7 @@ const Transaction = (props: Props) => {
 
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
@@ -297,7 +297,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, price } = tx.payload
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
@@ -327,7 +327,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, price } = tx.payload
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >

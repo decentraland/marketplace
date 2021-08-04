@@ -1,4 +1,4 @@
-export enum ResultType {
+export enum AssetType {
   ITEM = 'item',
   NFT = 'nft'
 }

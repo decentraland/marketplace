@@ -16,7 +16,7 @@ import { Description } from '../Description'
 import { WearableRarity } from '../WearableRarity'
 import { WearableHighlights } from '../WearableHighlights'
 import { Props } from './ItemDetail.types'
-import { ResultType } from '../../../modules/asset/types'
+import { AssetType } from '../../../modules/asset/types'
 
 const ItemDetail = (props: Props) => {
   const { item, wallet } = props
@@ -34,7 +34,7 @@ const ItemDetail = (props: Props) => {
             <Header size="large">
               <div className="text">
                 {getAssetName(item)}
-                <WearableRarity type={ResultType.ITEM} wearable={wearable} />
+                <WearableRarity type={AssetType.ITEM} wearable={wearable} />
               </div>
             </Header>
           }
@@ -63,7 +63,7 @@ const ItemDetail = (props: Props) => {
               <Button
                 as={Link}
                 to={locations.buy(
-                  ResultType.ITEM,
+                  AssetType.ITEM,
                   item.contractAddress,
                   item.itemId
                 )}
@@ -74,7 +74,7 @@ const ItemDetail = (props: Props) => {
             ) : null}
           </Column>
         </Row>
-        <WearableHighlights type={ResultType.ITEM} wearable={wearable} />
+        <WearableHighlights type={AssetType.ITEM} wearable={wearable} />
       </Container>
     </div>
   )

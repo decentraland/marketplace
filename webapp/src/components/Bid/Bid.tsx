@@ -5,7 +5,7 @@ import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { addressEquals } from '../../modules/wallet/utils'
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 import { AssetProvider } from '../AssetProvider'
 import { AssetImage } from '../AssetImage'
 import { Mana } from '../Mana'
@@ -42,7 +42,7 @@ const Bid = (props: Props) => {
         {hasImage ? (
           <div className="image">
             <AssetProvider
-              type={ResultType.NFT}
+              type={AssetType.NFT}
               contractAddress={bid.contractAddress}
               tokenId={bid.tokenId}
             >
@@ -88,7 +88,7 @@ const Bid = (props: Props) => {
               {isSeller ? (
                 <>
                   <AssetProvider
-                    type={ResultType.NFT}
+                    type={AssetType.NFT}
                     contractAddress={bid.contractAddress}
                     tokenId={bid.tokenId}
                   >
@@ -120,7 +120,7 @@ const Bid = (props: Props) => {
       </div>
       {isBidder ? (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={bid.contractAddress}
           tokenId={bid.tokenId}
         >

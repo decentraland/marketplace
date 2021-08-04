@@ -4,11 +4,11 @@ import { Item } from '@dcl/schemas'
 import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
 import { browseNFTs, BrowseNFTsAction } from '../../modules/routing/actions'
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
   vendor: VendorName
-  resultType: ResultType
+  resultType: AssetType
   nfts: NFT[]
   items: Item[]
   page: number

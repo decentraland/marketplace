@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { NFT } from '@dcl/schemas'
-import { ResultType } from '../../../modules/asset/types'
+import { AssetType } from '../../../modules/asset/types'
 
 export type Props = {
-  type: ResultType
+  type: AssetType
   wearable: NFT['data']['wearable']
   onNavigate: (path: string) => void
 }

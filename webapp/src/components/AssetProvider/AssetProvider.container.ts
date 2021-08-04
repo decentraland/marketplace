@@ -23,7 +23,7 @@ import { getNFT } from '../../modules/nft/utils'
 import { getItem } from '../../modules/item/utils'
 import { getActiveOrder } from '../../modules/order/utils'
 import { Asset } from '../../modules/routing/types'
-import { ResultType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -40,7 +40,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   let asset: Asset | null = null
   let isLoading = false
   switch (ownProps.type) {
-    case ResultType.NFT: {
+    case AssetType.NFT: {
       const nfts = getNFTs(state)
       contractAddress = contractAddress || getNFTContractAddress(state)
       tokenId = tokenId || getNFTTokenId(state)
@@ -48,7 +48,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       isLoading = isLoadingType(getNFTLoading(state), FETCH_NFT_REQUEST)
       break
     }
-    case ResultType.ITEM: {
+    case AssetType.ITEM: {
       const items = getItems(state)
       contractAddress = contractAddress || getItemContractAddress(state)
       tokenId = tokenId || getItemTokenId(state)
@@ -88,7 +88,7 @@ const mergeProps = (
 })
 
 export default connect(mapState, mapDispatch, mergeProps)(AssetProvider) as <
-  T extends ResultType = ResultType
+  T extends AssetType = AssetType
 >(
   props: OwnProps<T>
 ) => JSX.Element

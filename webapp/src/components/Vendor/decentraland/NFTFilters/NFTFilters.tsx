@@ -22,7 +22,7 @@ import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
-import { ResultType } from '../../../../modules/asset/types'
+import { AssetType } from '../../../../modules/asset/types'
 
 const NFTFilters = (props: Props) => {
   const {
@@ -49,8 +49,8 @@ const NFTFilters = (props: Props) => {
     { value: SortBy.NAME, text: t('filters.name') }
   ]
   const typeDropdownOptions = [
-    { value: ResultType.ITEM, text: t('filters.item') },
-    { value: ResultType.NFT, text: t('filters.nft') }
+    { value: AssetType.ITEM, text: t('filters.item') },
+    { value: AssetType.NFT, text: t('filters.nft') }
   ]
 
   if (onlyOnSale) {
@@ -104,7 +104,7 @@ const NFTFilters = (props: Props) => {
 
   const handleTypeByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
-      onBrowse({ resultType: props.value as ResultType })
+      onBrowse({ resultType: props.value as AssetType })
     },
     [onBrowse]
   )

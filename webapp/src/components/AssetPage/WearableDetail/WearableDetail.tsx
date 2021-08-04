@@ -16,7 +16,7 @@ import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './WearableDetail.types'
 import './WearableDetail.css'
-import { ResultType } from '../../../modules/asset/types'
+import { AssetType } from '../../../modules/asset/types'
 
 const WearableDetail = (props: Props) => {
   const { nft } = props
@@ -33,7 +33,7 @@ const WearableDetail = (props: Props) => {
             <Header size="large">
               <div className="text">
                 {getAssetName(nft)}
-                <WearableRarity type={ResultType.NFT} wearable={wearable} />
+                <WearableRarity type={AssetType.NFT} wearable={wearable} />
               </div>
             </Header>
           }
@@ -48,7 +48,7 @@ const WearableDetail = (props: Props) => {
             <Actions nft={nft} />
           </Column>
         </Row>
-        <WearableHighlights type={ResultType.ITEM} wearable={wearable} />
+        <WearableHighlights type={AssetType.ITEM} wearable={wearable} />
         <Bids nft={nft} />
         <TransactionHistory nft={nft} />
       </Container>
