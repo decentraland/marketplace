@@ -188,7 +188,7 @@ export const getResultType = createSelector<
   AssetType
 >(getRouterSearch, getPathName, (search, pathname) => {
   // TODO: make me pretty
-  let results = getURLParam(search, 'results') as AssetType
+  let results = getURLParam(search, 'assetType') as AssetType
   if (!results) {
     results = pathname === locations.browse() ? AssetType.ITEM : AssetType.NFT // TODO: i need a isAccountPage or sth helper
   }
