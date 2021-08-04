@@ -130,6 +130,10 @@
 }
 
 @media (max-width: 768px) {
+  .NFTBrowse .Row .right.Column {
+    max-width: 100%;
+  }
+
   .NFTBrowse .Layout .right.column > div {
     width: 100%;
   }
