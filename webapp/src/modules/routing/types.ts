@@ -1,5 +1,6 @@
 import { Network, Rarity } from '@dcl/schemas'
 import { Item } from '@dcl/schemas'
+import { ResultType } from '../asset/types'
 import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
 import { View } from '../ui/types'
@@ -44,9 +45,3 @@ export type Asset<T extends ResultType = ResultType> = T extends ResultType.NFT
   : T extends ResultType.ITEM
   ? Item
   : NFT | Item
-
-// TODO: Rename this to ASSET_TYPE and move it to an asset module
-export enum ResultType {
-  ITEM = 'item',
-  NFT = 'nft'
-}

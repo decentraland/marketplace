@@ -4,9 +4,9 @@ import { Network } from '@dcl/schemas'
 import { Modal, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { ResultType } from '../../../modules/routing/types'
 import { isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
+import { ResultType } from '../../../modules/asset/types'
 import { VendorFactory } from '../../../modules/vendor'
 import { Props } from './Actions.types'
 

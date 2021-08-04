@@ -4,7 +4,6 @@ import { Button, Container, Header, Mana, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { getAssetName, isOwnedBy } from '../../../modules/nft/utils'
-import { ResultType } from '../../../modules/routing/types'
 import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { Row } from '../../Layout/Row'
@@ -17,6 +16,7 @@ import { Description } from '../Description'
 import { WearableRarity } from '../WearableRarity'
 import { WearableHighlights } from '../WearableHighlights'
 import { Props } from './ItemDetail.types'
+import { ResultType } from '../../../modules/asset/types'
 
 const ItemDetail = (props: Props) => {
   const { item, wallet } = props

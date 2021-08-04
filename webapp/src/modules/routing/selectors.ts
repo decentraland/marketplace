@@ -16,8 +16,9 @@ import {
   getURLParamArray,
   getURLParam
 } from './search'
-import { SortBy, Section, ResultType } from './types'
+import { SortBy, Section } from './types'
 import { locations } from './locations'
+import { ResultType } from '../asset/types'
 
 export const getState = (state: RootState) => state.routing
 

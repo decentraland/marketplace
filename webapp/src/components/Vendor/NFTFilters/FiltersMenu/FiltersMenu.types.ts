@@ -1,5 +1,5 @@
 import { Network } from '@dcl/schemas'
-import { ResultType } from '../../../../modules/routing/types'
+import { ResultType } from '../../../../modules/asset/types'
 
 export type Props = {
   resultType: ResultType

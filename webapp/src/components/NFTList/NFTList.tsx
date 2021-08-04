@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
+import { Item } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
+import { ResultType } from '../../modules/asset/types'
+import { NFT } from '../../modules/nft/types'
 import { AssetCard } from '../AssetCard'
 import { Props } from './NFTList.types'
-import { ResultType } from '../../modules/routing/types'
-import { NFT } from '../../modules/nft/types'
-import { Item } from '@dcl/schemas'
 
 const NFTList = (props: Props) => {
   const {

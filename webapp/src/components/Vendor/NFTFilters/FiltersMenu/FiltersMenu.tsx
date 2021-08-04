@@ -7,7 +7,7 @@ import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
 import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { contracts } from '../../../../modules/contract/utils'
-import { ResultType } from '../../../../modules/routing/types'
+import { ResultType } from '../../../../modules/asset/types'
 
 export const ALL_FILTER_OPTION = 'ALL'
 

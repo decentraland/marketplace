@@ -1,7 +1,10 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Container, Page, Responsive } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { View } from '../../modules/ui/types'
+import { Section } from '../../modules/vendor/decentraland'
+import { ResultType } from '../../modules/asset/types'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { NFTList } from '../NFTList'
@@ -13,10 +16,6 @@ import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './NFTBrowse.types'
 import { ToggleBox } from './ToggleBox'
 import './NFTBrowse.css'
-import { Section } from '../../modules/vendor/decentraland'
-import { ResultType } from '../../modules/routing/types'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { useState } from 'react'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {

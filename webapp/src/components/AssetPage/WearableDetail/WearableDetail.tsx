@@ -1,7 +1,6 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { getAssetName } from '../../../modules/nft/utils'
-import { ResultType } from '../../../modules/routing/types'
 import { PageHeader } from '../../PageHeader'
 import { AssetImage } from '../../AssetImage'
 import { Row } from '../../Layout/Row'
@@ -17,6 +16,7 @@ import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './WearableDetail.types'
 import './WearableDetail.css'
+import { ResultType } from '../../../modules/asset/types'
 
 const WearableDetail = (props: Props) => {
   const { nft } = props

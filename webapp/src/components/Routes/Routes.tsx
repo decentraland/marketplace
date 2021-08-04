@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
 
-import { ResultType } from '../../modules/routing/types'
+import { ResultType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
 import { BrowsePage } from '../BrowsePage'
 import { AccountPage } from '../AccountPage'

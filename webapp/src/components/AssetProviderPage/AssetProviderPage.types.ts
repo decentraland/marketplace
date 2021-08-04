@@ -1,5 +1,6 @@
+import { ResultType } from '../../modules/asset/types'
 import { Order } from '../../modules/order/types'
-import { Asset, ResultType } from '../../modules/routing/types'
+import { Asset } from '../../modules/routing/types'
 
 export type Props<T extends ResultType = ResultType> = {
   type: T

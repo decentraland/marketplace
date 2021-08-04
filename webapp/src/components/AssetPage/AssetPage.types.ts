@@ -1,4 +1,4 @@
-import { ResultType } from '../../modules/routing/types'
+import { ResultType } from '../../modules/asset/types'
 
 export type Props = {
   type: ResultType

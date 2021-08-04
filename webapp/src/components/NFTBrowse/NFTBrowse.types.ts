@@ -10,7 +10,7 @@ import {
   FetchNFTsFromRouteAction
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/decentraland'
-import { ResultType } from '../../modules/routing/types'
+import { ResultType } from '../../modules/asset/types'
 
 export type Props = {
   vendor: VendorName

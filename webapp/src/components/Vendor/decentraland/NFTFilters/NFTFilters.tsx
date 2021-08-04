@@ -12,7 +12,7 @@ import {
 import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { ResultType, SortBy } from '../../../../modules/routing/types'
+import { SortBy } from '../../../../modules/routing/types'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { Section } from '../../../../modules/vendor/decentraland/routing/types'
 import { getCategoryFromSection } from '../../../../modules/routing/search'
@@ -22,6 +22,7 @@ import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
+import { ResultType } from '../../../../modules/asset/types'
 
 const NFTFilters = (props: Props) => {
   const {

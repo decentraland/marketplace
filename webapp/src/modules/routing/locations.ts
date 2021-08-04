@@ -1,5 +1,6 @@
+import { ResultType } from '../asset/types'
 import { getSearchParams } from './search'
-import { NFTBrowseOptions, ResultType } from './types'
+import { NFTBrowseOptions } from './types'
 
 export const locations = {
   root: () => '/',

@@ -9,7 +9,8 @@ import {
   FetchItemRequestAction
 } from '../../modules/item/actions'
 import { Order } from '../../modules/order/types'
-import { Asset, ResultType } from '../../modules/routing/types'
+import { Asset } from '../../modules/routing/types'
+import { ResultType } from '../../modules/asset/types'
 
 export type Props<T extends ResultType = ResultType> = {
   type: T

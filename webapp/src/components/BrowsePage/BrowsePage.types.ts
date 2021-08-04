@@ -1,4 +1,4 @@
-import { ResultType } from '../../modules/routing/types'
+import { ResultType } from '../../modules/asset/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { VendorName } from '../../modules/vendor/types'
 

@@ -22,7 +22,8 @@ import { getData as getOrders } from '../../modules/order/selectors'
 import { getNFT } from '../../modules/nft/utils'
 import { getItem } from '../../modules/item/utils'
 import { getActiveOrder } from '../../modules/order/utils'
-import { Asset, ResultType } from '../../modules/routing/types'
+import { Asset } from '../../modules/routing/types'
+import { ResultType } from '../../modules/asset/types'
 import {
   MapDispatch,
   MapDispatchProps,

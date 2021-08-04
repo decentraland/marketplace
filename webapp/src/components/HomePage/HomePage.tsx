@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Page, Hero, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor/types'
-import { ResultType, SortBy } from '../../modules/routing/types'
+import { SortBy } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
+import { ResultType } from '../../modules/asset/types'
 import { HomepageView } from '../../modules/ui/asset/homepage/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { Navbar } from '../Navbar'
@@ -13,7 +14,6 @@ import { Footer } from '../Footer'
 import { Slideshow } from './Slideshow'
 import { Props } from './HomePage.types'
 import './HomePage.css'
-import { useMemo } from 'react'
 
 const HomePage = (props: Props) => {
   const { homepage, homepageLoading, onNavigate, onFetchNFTsFromRoute } = props

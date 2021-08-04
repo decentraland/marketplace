@@ -49,7 +49,8 @@ import {
   BROWSE_ITEMS,
   BrowseItemsAction
 } from './actions'
-import { NFTBrowseOptions, ResultType, Section } from './types'
+import { NFTBrowseOptions, Section } from './types'
+import { ResultType } from '../asset/types'
 import { ItemBrowseOptions } from '../item/types'
 import { fetchItemsRequest } from '../item/actions'
 import { ItemSortBy } from '../vendor/decentraland/item/types'

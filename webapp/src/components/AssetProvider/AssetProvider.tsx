@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { ResultType } from '../../modules/routing/types'
+import { ResultType } from '../../modules/asset/types'
 import { Props } from './AssetProvider.types'
 
 const AssetProvider = (props: Props) => {
