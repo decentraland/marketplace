@@ -8,7 +8,7 @@ import {
   getAssetName,
   getAssetPrice,
   getAssetUrl
-} from '../../modules/nft/utils'
+} from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
 import { Mana } from '../Mana'
 import { ParcelTags } from './ParcelTags'

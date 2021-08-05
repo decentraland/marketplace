@@ -3,7 +3,7 @@ import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transac
 
 import { NFT } from '../nft/types'
 import { Order } from './types'
-import { getAssetName } from '../nft/utils'
+import { getAssetName } from '../asset/utils'
 import { formatMANA } from '../../lib/mana'
 
 // Create Order (aka Sell)

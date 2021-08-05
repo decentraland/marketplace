@@ -27,14 +27,12 @@ import {
 export type ItemState = {
   data: Record<string, Item>
   loading: LoadingState
-  total: number // TODO: Should we move this elsewhere? UI maybe?
   error: string | null
 }
 
 export const INITIAL_STATE: ItemState = {
   data: {},
   loading: [],
-  total: 0,
   error: null
 }
 

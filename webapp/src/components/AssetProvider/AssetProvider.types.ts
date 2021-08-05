@@ -9,8 +9,7 @@ import {
   FetchItemRequestAction
 } from '../../modules/item/actions'
 import { Order } from '../../modules/order/types'
-import { Asset } from '../../modules/routing/types'
-import { AssetType } from '../../modules/asset/types'
+import { Asset, AssetType } from '../../modules/asset/types'
 
 export type Props<T extends AssetType = AssetType> = {
   type: T

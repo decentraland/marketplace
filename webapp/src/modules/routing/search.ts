@@ -2,8 +2,9 @@ import { Network, NFTCategory, WearableCategory } from '@dcl/schemas'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
-import { NFTBrowseOptions, SortBy } from './types'
+import { NFTBrowseOptions, SortBy, SortDirection } from './types'
 import { ItemSortBy } from '../vendor/decentraland/item/types'
+import { NFTSortBy } from '../nft/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -165,10 +166,65 @@ export function getItemSortBy(sortBy: SortBy): ItemSortBy {
     case SortBy.NEWEST:
       return ItemSortBy.NEWEST
     case SortBy.RECENTLY_LISTED:
-      return ItemSortBy.NEWEST
+      return ItemSortBy.RECENTLY_REVIEWED
     default:
-      return ItemSortBy.NEWEST
+      return ItemSortBy.RECENTLY_REVIEWED
   }
+}
+
+export function getAssetOrderBy(sortBy: SortBy) {
+  let orderBy: NFTSortBy = NFTSortBy.CREATED_AT
+  let orderDirection: SortDirection = SortDirection.DESC
+
+  switch (sortBy) {
+    case SortBy.NAME: {
+      orderBy = NFTSortBy.NAME
+      orderDirection = SortDirection.ASC
+      break
+    }
+    case SortBy.NEWEST: {
+      orderBy = NFTSortBy.CREATED_AT
+      orderDirection = SortDirection.DESC
+      break
+    }
+    case SortBy.RECENTLY_LISTED: {
+      orderBy = NFTSortBy.ORDER_CREATED_AT
+      orderDirection = SortDirection.DESC
+      break
+    }
+    case SortBy.CHEAPEST: {
+      orderBy = NFTSortBy.PRICE
+      orderDirection = SortDirection.ASC
+      break
+    }
+  }
+
+  return [orderBy, orderDirection] as const
+}
+
+export function getNFTSortBy(orderBy: NFTSortBy) {
+  let sortBy: SortBy = SortBy.NEWEST
+
+  switch (orderBy) {
+    case NFTSortBy.NAME: {
+      sortBy = SortBy.NAME
+      break
+    }
+    case NFTSortBy.CREATED_AT: {
+      sortBy = SortBy.NEWEST
+      break
+    }
+    case NFTSortBy.ORDER_CREATED_AT: {
+      sortBy = SortBy.RECENTLY_LISTED
+      break
+    }
+    case NFTSortBy.PRICE: {
+      sortBy = SortBy.CHEAPEST
+      break
+    }
+  }
+
+  return sortBy
 }
 
 export function getURLParamArray<T extends string>(

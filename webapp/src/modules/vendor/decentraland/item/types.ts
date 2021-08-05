@@ -27,5 +27,6 @@ export type ItemResponse = {
 export enum ItemSortBy {
   NAME = 'name',
   NEWEST = 'newest',
-  CHEAPEST = 'cheapest'
+  CHEAPEST = 'cheapest',
+  RECENTLY_REVIEWED = 'recently_reviewed'
 }

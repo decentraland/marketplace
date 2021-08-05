@@ -8,13 +8,13 @@ import {
   REVOKE_TOKEN_SUCCESS
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 
-import { getAssetName } from '../../../modules/nft/utils'
-import { BUY_ITEM_SUCCESS } from '../../../modules/item/actions'
+import { getAssetName } from '../../../modules/asset/utils'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
   EXECUTE_ORDER_SUCCESS
 } from '../../../modules/order/actions'
+import { BUY_ITEM_SUCCESS } from '../../../modules/item/actions'
 import { TRANSFER_NFT_SUCCESS } from '../../../modules/nft/actions'
 import {
   PLACE_BID_SUCCESS,

@@ -4,7 +4,7 @@ import { Page, Header, Button } from 'decentraland-ui'
 
 import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
-import { getAssetName } from '../../modules/nft/utils'
+import { getAssetName } from '../../modules/asset/utils'
 import { formatMANA } from '../../lib/mana'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'

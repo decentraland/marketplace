@@ -1,10 +1,8 @@
 import { Network, Rarity } from '@dcl/schemas'
-import { Item } from '@dcl/schemas'
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor/types'
 import { Section } from '../vendor/routing/types'
 import { View } from '../ui/types'
-import { NFT } from '..//nft/types'
 import { WearableGender } from '../nft/wearable/types'
 
 export { Section } from '../vendor/routing/types'
@@ -38,10 +36,3 @@ export type NFTBrowseOptions = {
   address?: string
   network?: Network
 }
-
-// TODO: Rename this to ASSET_TYPE and move it to an asset module
-export type Asset<T extends AssetType = AssetType> = T extends AssetType.NFT
-  ? NFT
-  : T extends AssetType.ITEM
-  ? Item
-  : NFT | Item

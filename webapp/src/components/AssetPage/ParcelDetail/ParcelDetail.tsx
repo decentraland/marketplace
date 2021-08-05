@@ -4,7 +4,7 @@ import { NFTCategory } from '@dcl/schemas'
 import { Container, Header } from 'decentraland-ui'
 import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { getAssetName } from '../../../modules/nft/utils'
+import { getAssetName } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { PageHeader } from '../../PageHeader'
 import { AssetImage } from '../../AssetImage'

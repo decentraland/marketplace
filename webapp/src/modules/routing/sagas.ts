@@ -17,7 +17,6 @@ import { getAddress as getAccountAddress } from '../account/selectors'
 import { fetchNFTsRequest } from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
-import { getOrder } from '../nft/utils'
 import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
 import { locations } from './locations'
 import {
@@ -25,7 +24,8 @@ import {
   getCategoryFromSection,
   getDefaultOptionsByView,
   getSearchWearableCategory,
-  getItemSortBy
+  getItemSortBy,
+  getAssetOrderBy
 } from './search'
 import {
   getPage,
@@ -153,7 +153,7 @@ function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
       })
     )
   } else {
-    const [orderBy, orderDirection] = getOrder(sortBy)
+    const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
     const category = getCategoryFromSection(section)
     yield put(
       fetchNFTsRequest({

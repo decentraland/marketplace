@@ -1,6 +1,5 @@
-import { AssetType } from '../../modules/asset/types'
+import { Asset, AssetType } from '../../modules/asset/types'
 import { Order } from '../../modules/order/types'
-import { Asset } from '../../modules/routing/types'
 
 export type Props<T extends AssetType = AssetType> = {
   type: T

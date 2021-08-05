@@ -4,10 +4,10 @@ import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { NFTBrowseOptions, Section } from '../../../modules/routing/types'
+import { AssetType } from '../../../modules/asset/types'
 import { VendorName } from '../../../modules/vendor'
 import { Props } from './Owner.types'
 import './Owner.css'
-import { AssetType } from '../../../modules/asset/types'
 
 const Owner = (props: Props) => {
   const { asset } = props

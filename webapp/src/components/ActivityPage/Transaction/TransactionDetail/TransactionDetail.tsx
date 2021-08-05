@@ -13,7 +13,7 @@ import {
   Transaction
 } from 'decentraland-dapps/dist/modules/transaction/types'
 import { formatDistanceToNow } from '../../../../lib/date'
-import { getAssetUrl } from '../../../../modules/nft/utils'
+import { getAssetUrl } from '../../../../modules/asset/utils'
 import { AssetImage } from '../../../AssetImage'
 import { Row } from '../../../Layout/Row'
 import { Column } from '../../../Layout/Column'
