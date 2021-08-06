@@ -6,8 +6,7 @@ import { BrowseOptions } from './types'
 
 export const BROWSE = 'Browse'
 
-export const browse = (searchOptions: BrowseOptions) =>
-  action(BROWSE, { searchOptions })
+export const browse = (options: BrowseOptions) => action(BROWSE, { options })
 
 export type BrowseAction = ReturnType<typeof browse>
 
@@ -15,8 +14,8 @@ export type BrowseAction = ReturnType<typeof browse>
 
 export const FETCH_ASSETS_FROM_ROUTE = 'Fetch assets from route'
 
-export const fetchAssetsFromRoute = (searchOptions: BrowseOptions) =>
-  action(FETCH_ASSETS_FROM_ROUTE, { searchOptions })
+export const fetchAssetsFromRoute = (options: BrowseOptions) =>
+  action(FETCH_ASSETS_FROM_ROUTE, { options })
 
 export type FetchAssetsFromRouteAction = ReturnType<typeof fetchAssetsFromRoute>
 

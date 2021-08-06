@@ -53,15 +53,15 @@ export function* routingSaga() {
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
-  const newSearchOptions: BrowseOptions = yield getNFTBrowseOptions(
-    action.payload.searchOptions
+  const newOptions: BrowseOptions = yield getNewBrowseOptions(
+    action.payload.options
   )
-  yield fetchAssetsFromRoute(newSearchOptions)
+  yield fetchAssetsFromRoute(newOptions)
 }
 
 function* handleBrowse(action: BrowseAction) {
-  const options: BrowseOptions = yield getNFTBrowseOptions(
-    action.payload.searchOptions
+  const options: BrowseOptions = yield getNewBrowseOptions(
+    action.payload.options
   )
   yield fetchAssetsFromRoute(options)
 
@@ -73,16 +73,16 @@ function* handleBrowse(action: BrowseAction) {
 // ------------------------------------------------
 // Utility functions, not handlers
 
-function* fetchAssetsFromRoute(searchOptions: BrowseOptions) {
-  const isItems = searchOptions.assetType === AssetType.ITEM
-  const view = searchOptions.view!
-  const vendor = searchOptions.vendor!
-  const page = searchOptions.page!
-  const section = searchOptions.section!
-  const sortBy = searchOptions.sortBy!
-  const { search, onlyOnSale, isMap } = searchOptions
+function* fetchAssetsFromRoute(options: BrowseOptions) {
+  const isItems = options.assetType === AssetType.ITEM
+  const view = options.view!
+  const vendor = options.vendor!
+  const page = options.page!
+  const section = options.section!
+  const sortBy = options.sortBy!
+  const { search, onlyOnSale, isMap } = options
 
-  const address = searchOptions.address || ((yield getAddress()) as string)
+  const address = options.address || ((yield getAddress()) as string)
 
   const isLoadMore = view === View.LOAD_MORE
 
@@ -106,7 +106,7 @@ function* fetchAssetsFromRoute(searchOptions: BrowseOptions) {
       ? getSearchWearableCategory(section!)
       : undefined
 
-    const { wearableRarities, wearableGenders } = searchOptions
+    const { wearableRarities, wearableGenders } = options
 
     yield put(
       fetchItemsRequest({
@@ -144,13 +144,13 @@ function* fetchAssetsFromRoute(searchOptions: BrowseOptions) {
           category,
           search
         },
-        filters: getFilters(vendor, searchOptions) // TODO: move to routing
+        filters: getFilters(vendor, options) // TODO: move to routing
       })
     )
   }
 }
 
-function* getNFTBrowseOptions(
+function* getNewBrowseOptions(
   current: BrowseOptions
 ): Generator<unknown, BrowseOptions, any> {
   let previous: BrowseOptions = {

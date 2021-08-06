@@ -50,7 +50,7 @@ export function browseReducer(
       }
     }
     case BROWSE: {
-      const { view } = action.payload.searchOptions
+      const { view } = action.payload.options
       return {
         ...state,
         nftIds: view ? [] : [...state.nftIds]
