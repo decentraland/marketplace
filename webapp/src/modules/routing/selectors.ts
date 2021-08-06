@@ -44,14 +44,14 @@ export const getSection = createSelector<
   string,
   ReturnType<typeof getPathName>,
   VendorName,
-  Section
+  string
 >(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
-  const section = getURLParam<Section>(search, 'section')
+  const section = getURLParam<string>(search, 'section')
   if (!section && pathname === locations.lands()) {
     return Section.decentraland.LAND
   }
 
-  return getURLParam<Section>(search, 'section') || Section[vendor].ALL
+  return getURLParam<string>(search, 'section') || Section[vendor].ALL
 })
 
 export const getPage = createSelector<RootState, string, number>(
@@ -181,7 +181,7 @@ export const getNetwork = createSelector<
   search => (getURLParam(search, 'network') as Network) || undefined
 )
 
-export const getResultType = createSelector<
+export const getAssetType = createSelector<
   RootState,
   string,
   string,

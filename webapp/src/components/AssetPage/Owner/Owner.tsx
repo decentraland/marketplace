@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
-import { NFTBrowseOptions, Section } from '../../../modules/routing/types'
+import { NFTBrowseOptions } from '../../../modules/routing/types'
+import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
-import { VendorName } from '../../../modules/vendor'
 import { Props } from './Owner.types'
 import './Owner.css'
 
@@ -22,14 +22,14 @@ const Owner = (props: Props) => {
     browseOptions = {
       assetType: AssetType.ITEM,
       vendor: asset.vendor,
-      section: Section[asset.vendor].ALL
+      section: Section.ALL
     }
   } else {
     label = t('asset_page.creator')
     address = asset.creator
     browseOptions = {
       assetType: AssetType.ITEM,
-      section: Section[VendorName.DECENTRALAND].WEARABLES
+      section: Section.WEARABLES
     }
   }
 

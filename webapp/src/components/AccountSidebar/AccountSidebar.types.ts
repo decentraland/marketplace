@@ -1,9 +1,8 @@
 import { Dispatch } from 'redux'
-import { Section } from '../../modules/routing/types'
 import { browseNFTs, BrowseNFTsAction } from '../../modules/routing/actions'
 
 export type Props = {
-  section: Section
+  section: string
   address: string
   onBrowse: typeof browseNFTs
 }

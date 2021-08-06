@@ -11,7 +11,7 @@ const NFTSidebar = (props: Props) => {
   const { vendor, section, sections, onBrowse } = props
 
   const handleOnBrowse = useCallback(
-    (section: Section) => {
+    (section: string) => {
       onBrowse({ section })
     },
     [onBrowse]

@@ -1,9 +1,9 @@
-import { Section, SortBy } from '../../../../modules/routing/types'
+import { SortBy } from '../../../../modules/routing/types'
 import { browseNFTs } from '../../../../modules/routing/actions'
 
 export type Props = {
   count?: number
-  section: Section
+  section: string
   sortBy?: SortBy
   search: string
   onlyOnSale?: boolean

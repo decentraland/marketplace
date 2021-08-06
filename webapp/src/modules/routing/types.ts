@@ -1,7 +1,6 @@
 import { Network, Rarity } from '@dcl/schemas'
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor/types'
-import { Section } from '../vendor/routing/types'
 import { View } from '../ui/types'
 import { WearableGender } from '../nft/wearable/types'
 
@@ -24,7 +23,7 @@ export type NFTBrowseOptions = {
   view?: View
   vendor?: VendorName
   page?: number
-  section?: Section
+  section?: string
   sortBy?: SortBy
   onlyOnSale?: boolean
   isMap?: boolean

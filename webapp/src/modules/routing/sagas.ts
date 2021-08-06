@@ -9,7 +9,7 @@ import {
   getIsSoldOut,
   getItemId,
   getNetwork,
-  getResultType,
+  getAssetType,
   getVendor
 } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
@@ -179,7 +179,7 @@ function* getNFTBrowseOptions(
   current: NFTBrowseOptions
 ): Generator<unknown, NFTBrowseOptions, any> {
   let previous: NFTBrowseOptions = {
-    assetType: yield select(getResultType),
+    assetType: yield select(getAssetType),
     address: yield getAddress(),
     vendor: yield select(getVendor),
     section: yield select(getSection),
@@ -196,7 +196,6 @@ function* getNFTBrowseOptions(
     network: yield select(getNetwork)
   }
   current = yield deriveCurrentOptions(previous, current)
-
   const view = deriveView(previous, current)
   const vendor = deriveVendor(previous, current)
 
@@ -211,7 +210,6 @@ function* getNFTBrowseOptions(
   }
 
   const defaults = getDefaultOptionsByView(view)
-
   return {
     ...defaults,
     ...previous,
@@ -246,7 +244,7 @@ function* fetchItemsFromRoute(options: ItemBrowseOptions) {
 }
 
 function* getItemBrowseOptions(_current: ItemBrowseOptions) {
-  const section: Section | undefined = yield select(getSection)
+  const section: string | undefined = yield select(getSection)
   const isWearableHead =
     section === Section[VendorName.DECENTRALAND].WEARABLES_HEAD
   const isWearableAccessory =
@@ -302,7 +300,7 @@ function* deriveCurrentOptions(
   }
 
   const nextCategory = getCategoryFromSection(newOptions.section!)
-
+  debugger
   switch (nextCategory) {
     case NFTCategory.WEARABLE: {
       const prevCategory = getCategoryFromSection(previous.section!)

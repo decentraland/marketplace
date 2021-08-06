@@ -8,7 +8,7 @@ import { getNFTs, getCount, getItems } from '../../modules/ui/browse/selectors'
 import {
   getVendor,
   getPage,
-  getResultType
+  getAssetType
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
@@ -18,7 +18,7 @@ import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 
 const mapState = (state: RootState): MapStateProps => ({
   vendor: getVendor(state),
-  assetType: getResultType(state),
+  assetType: getAssetType(state),
   nfts: getNFTs(state),
   items: getItems(state),
   page: getPage(state),

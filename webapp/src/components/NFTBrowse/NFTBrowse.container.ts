@@ -10,7 +10,7 @@ import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import {
   getIsMap,
   getOnlyOnSale,
-  getResultType,
+  getAssetType,
   getSection
 } from '../../modules/routing/selectors'
 import { getView } from '../../modules/ui/browse/selectors'
@@ -32,7 +32,7 @@ const mapState = (state: RootState): MapStateProps => ({
   isLoading:
     isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST) ||
     isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST),
-  assetType: getResultType(state),
+  assetType: getAssetType(state),
   viewInState: getView(state)
 })
 
