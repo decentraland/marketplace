@@ -1,13 +1,11 @@
 import { takeEvery, put, select } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
-import { NFTCategory, Rarity } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/browse/selectors'
 import {
   getIsFullscreen,
-  getIsSoldOut,
-  getItemId,
   getNetwork,
   getAssetType,
   getVendor
@@ -43,24 +41,15 @@ import {
   BrowseNFTsAction,
   FETCH_NFTS_FROM_ROUTE,
   FetchNFTsFromRouteAction,
-  setIsLoadMore,
-  FETCH_ITEMS_FROM_ROUTE,
-  FetchItemsFromRouteAction,
-  BROWSE_ITEMS,
-  BrowseItemsAction
+  setIsLoadMore
 } from './actions'
 import { NFTBrowseOptions, Section } from './types'
 import { AssetType } from '../asset/types'
-import { ItemBrowseOptions } from '../item/types'
 import { fetchItemsRequest } from '../item/actions'
-import { ItemSortBy } from '../vendor/decentraland/item/types'
-import { WearableGender } from '../nft/wearable/types'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_NFTS_FROM_ROUTE, handleFetchNFTsFromRoute)
-  yield takeEvery(FETCH_ITEMS_FROM_ROUTE, handleFetchItemsFromRoute)
   yield takeEvery(BROWSE_NFTS, handleBrowseNFTs)
-  yield takeEvery(BROWSE_ITEMS, handleBrowseItems)
 }
 
 function* handleFetchNFTsFromRoute(action: FetchNFTsFromRouteAction) {
@@ -75,20 +64,6 @@ function* handleBrowseNFTs(action: BrowseNFTsAction) {
     action.payload.searchOptions
   )
   yield fetchNFTsFromRoute(options)
-
-  const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-  const params = getSearchParams(options)
-  yield put(push(params ? `${pathname}?${params.toString()}` : pathname))
-}
-
-function* handleFetchItemsFromRoute(action: FetchItemsFromRouteAction) {
-  const options: ItemBrowseOptions = yield getItemBrowseOptions(action.payload)
-  yield fetchItemsFromRoute(options)
-}
-
-function* handleBrowseItems(action: BrowseItemsAction) {
-  const options: ItemBrowseOptions = yield getItemBrowseOptions(action.payload)
-  yield fetchItemsFromRoute(options)
 
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
   const params = getSearchParams(options)
@@ -219,62 +194,6 @@ function* getNFTBrowseOptions(
   }
 }
 
-function* fetchItemsFromRoute(options: ItemBrowseOptions) {
-  const view = options.view!
-  const page = options.page!
-
-  const isLoadMore = view === View.LOAD_MORE
-
-  const offset = isLoadMore ? page - 1 : 0
-  const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
-  const first = Math.min(page * PAGE_SIZE - skip, 1000)
-
-  yield put(setIsLoadMore(isLoadMore))
-  yield put(
-    fetchItemsRequest({
-      view,
-      page,
-      filters: {
-        first,
-        skip,
-        ...options.filters
-      }
-    })
-  )
-}
-
-function* getItemBrowseOptions(_current: ItemBrowseOptions) {
-  const section: string | undefined = yield select(getSection)
-  const isWearableHead =
-    section === Section[VendorName.DECENTRALAND].WEARABLES_HEAD
-  const isWearableAccessory =
-    section === Section[VendorName.DECENTRALAND].WEARABLES_ACCESORIES
-  const wearableCategory = !isWearableAccessory
-    ? getSearchWearableCategory(section!)
-    : undefined
-  const options: ItemBrowseOptions = {
-    page: yield select(getPage),
-    view: yield select(getView),
-    filters: {
-      creator: (yield getAddress()) as string, //TODO: fix me, this only works in /account but not in /account/:address
-      sortBy: (yield select(getSortBy)) as ItemSortBy,
-      search: (yield select(getSearch)) as string,
-      isOnSale: (yield select(getOnlyOnSale)) as boolean,
-      rarities: (yield select(getWearableRarities)) as Rarity[],
-      wearableGenders: (yield select(getWearableGenders)) as WearableGender[],
-      isWearableHead,
-      isWearableAccessory,
-      wearableCategory,
-      isSoldOut: (yield select(getIsSoldOut)) as boolean,
-      itemId: (yield select(getItemId)) as string,
-      contractAddress: ((yield select(getContracts)) as string[])[0],
-      network: yield select(getNetwork)
-    }
-  }
-
-  return options
-}
-
 function* getAddress() {
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
   let address: string | undefined
@@ -300,7 +219,7 @@ function* deriveCurrentOptions(
   }
 
   const nextCategory = getCategoryFromSection(newOptions.section!)
-  debugger
+
   switch (nextCategory) {
     case NFTCategory.WEARABLE: {
       const prevCategory = getCategoryFromSection(previous.section!)
