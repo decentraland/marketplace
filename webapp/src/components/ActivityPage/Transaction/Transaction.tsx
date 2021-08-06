@@ -8,13 +8,13 @@ import {
   REVOKE_TOKEN_SUCCESS
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 
-import { getAssetName } from '../../../modules/nft/utils'
-import { BUY_ITEM_SUCCESS } from '../../../modules/item/actions'
+import { getAssetName } from '../../../modules/asset/utils'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
   EXECUTE_ORDER_SUCCESS
 } from '../../../modules/order/actions'
+import { BUY_ITEM_SUCCESS } from '../../../modules/item/actions'
 import { TRANSFER_NFT_SUCCESS } from '../../../modules/nft/actions'
 import {
   PLACE_BID_SUCCESS,
@@ -22,8 +22,8 @@ import {
   CANCEL_BID_SUCCESS
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
-import { ResultType } from '../../../modules/routing/types'
 import { getContract } from '../../../modules/contract/utils'
+import { AssetType } from '../../../modules/asset/types'
 import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'
 import { TransactionDetail } from './TransactionDetail'
@@ -112,7 +112,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
@@ -146,7 +146,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
@@ -188,14 +188,14 @@ const Transaction = (props: Props) => {
       } = tx.payload
 
       let assetTokenId: string
-      let type: ResultType
+      let type: AssetType
       let url: string
       if (itemId) {
-        type = ResultType.ITEM
+        type = AssetType.ITEM
         assetTokenId = itemId
         url = locations.item(contractAddress, assetTokenId)
       } else {
-        type = ResultType.NFT
+        type = AssetType.NFT
         assetTokenId = tokenId
         url = locations.nft(contractAddress, assetTokenId)
       }
@@ -232,7 +232,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, name, address } = tx.payload
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
@@ -267,7 +267,7 @@ const Transaction = (props: Props) => {
 
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
@@ -297,7 +297,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, price } = tx.payload
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >
@@ -327,7 +327,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, price } = tx.payload
       return (
         <AssetProvider
-          type={ResultType.NFT}
+          type={AssetType.NFT}
           contractAddress={contractAddress}
           tokenId={tokenId}
         >

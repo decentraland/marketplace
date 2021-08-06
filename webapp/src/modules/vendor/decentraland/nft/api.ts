@@ -1,11 +1,11 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFTsFetchParams } from '../../../nft/types'
 import { NFTsFetchFilters, NFTResponse, NFTResult } from './types'
-import { getSortBy } from '../../../nft/utils'
 import { ATLAS_SERVER_URL } from '../land'
 import { Contract } from '../../services'
 import { contracts } from '../../../contract/utils'
 import { VendorName } from '../../types'
+import { getNFTSortBy } from '../../../routing/search'
 
 export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
 
@@ -68,7 +68,7 @@ class NFTAPI extends BaseAPI {
     queryParams.append('first', params.first.toString())
     queryParams.append('skip', params.skip.toString())
     if (params.orderBy) {
-      queryParams.append('sortBy', getSortBy(params.orderBy))
+      queryParams.append('sortBy', getNFTSortBy(params.orderBy))
     }
     if (params.category) {
       queryParams.append('category', params.category)

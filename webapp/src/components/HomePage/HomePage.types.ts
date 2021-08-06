@@ -5,22 +5,22 @@ import {
   getHomepageLoading
 } from '../../modules/ui/asset/homepage/selectors'
 import {
-  fetchNFTsFromRoute,
-  FetchNFTsFromRouteAction
+  fetchAssetsFromRoute,
+  FetchAssetsFromRouteAction
 } from '../../modules/routing/actions'
 
 export type Props = {
   homepage: ReturnType<typeof getHomepage>
   homepageLoading: ReturnType<typeof getHomepageLoading>
   onNavigate: (path: string) => void
-  onFetchNFTsFromRoute: typeof fetchNFTsFromRoute
+  onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
 }
 
 export type MapStateProps = Pick<Props, 'homepage' | 'homepageLoading'>
 export type MapDispatchProps = Pick<
   Props,
-  'onNavigate' | 'onFetchNFTsFromRoute'
+  'onNavigate' | 'onFetchAssetsFromRoute'
 >
 export type MapDispatch = Dispatch<
-  CallHistoryMethodAction | FetchNFTsFromRouteAction
+  CallHistoryMethodAction | FetchAssetsFromRouteAction
 >

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { getAssetUrl } from '../../modules/nft/utils'
+import { getAssetUrl } from '../../modules/asset/utils'
 import { AssetImage } from '../AssetImage'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'

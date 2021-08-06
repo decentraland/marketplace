@@ -1,19 +1,19 @@
 import React, { useCallback } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
+import { Item } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
-import { AssetCard } from '../AssetCard'
-import { Props } from './NFTList.types'
-import { ResultType } from '../../modules/routing/types'
+import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
-import { Item } from '@dcl/schemas'
+import { AssetCard } from '../AssetCard'
+import { Props } from './AssetList.types'
 
-const NFTList = (props: Props) => {
+const AssetList = (props: Props) => {
   const {
     vendor,
-    resultType,
+    assetType,
     items,
     nfts,
     page,
@@ -22,7 +22,7 @@ const NFTList = (props: Props) => {
     onBrowse
   } = props
 
-  const assets: (NFT | Item)[] = resultType === ResultType.ITEM ? items : nfts
+  const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts
 
   const handleLoadMore = useCallback(() => {
     const newPage = page + 1
@@ -43,7 +43,7 @@ const NFTList = (props: Props) => {
         {assets.length > 0
           ? assets.map((assets, index) => (
               <AssetCard
-                key={resultType + '-' + assets.id + '-' + index}
+                key={assetType + '-' + assets.id + '-' + index}
                 asset={assets}
               />
             ))
@@ -74,4 +74,4 @@ const NFTList = (props: Props) => {
   )
 }
 
-export default React.memo(NFTList)
+export default React.memo(AssetList)

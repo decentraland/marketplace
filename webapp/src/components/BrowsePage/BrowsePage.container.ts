@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { RootState } from '../../modules/reducer'
 import {
   getIsFullscreen,
-  getResultType,
+  getAssetType,
   getSection,
   getVendor
 } from '../../modules/routing/selectors'
@@ -18,7 +18,7 @@ const mapState = (state: RootState): MapStateProps => {
   }
   return {
     vendor: getVendor(state),
-    resultType: getResultType(state),
+    assetType: getAssetType(state),
     section,
     isFullscreen: getIsFullscreen(state)
   }

@@ -12,7 +12,7 @@ import {
   getSearch,
   getContracts,
   getNetwork,
-  getResultType
+  getAssetType
 } from '../../../../modules/routing/selectors'
 import {
   MapStateProps,
@@ -23,7 +23,7 @@ import {
 import NFTFilters from './NFTFilters'
 
 const mapState = (state: RootState): MapStateProps => ({
-  resultType: getResultType(state),
+  assetType: getAssetType(state),
   count: getCount(state),
   section: getSection(state),
   sortBy: getSortBy(state),

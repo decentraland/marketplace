@@ -2,7 +2,7 @@ import { ChainId, Item } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { action } from 'typesafe-actions'
 import { formatMANA } from '../../lib/mana'
-import { getAssetName } from '../nft/utils'
+import { getAssetName } from '../asset/utils'
 import { ItemBrowseOptions } from './types'
 
 // Fetch Items

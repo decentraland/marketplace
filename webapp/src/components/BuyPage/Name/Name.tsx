@@ -1,5 +1,5 @@
 import React from 'react'
-import { getAssetName } from '../../../modules/nft/utils'
+import { getAssetName } from '../../../modules/asset/utils'
 import { Props } from './Name.types'
 
 const Name = (props: Props) => {

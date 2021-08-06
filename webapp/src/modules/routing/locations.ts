@@ -1,5 +1,6 @@
+import { AssetType } from '../asset/types'
 import { getSearchParams } from './search'
-import { NFTBrowseOptions, ResultType } from './types'
+import { BrowseOptions } from './types'
 
 export const locations = {
   root: () => '/',
@@ -9,15 +10,15 @@ export const locations = {
   bids: () => '/bids',
   lands: () => '/lands',
   collectibles: () => '/collectibles',
-  browse: (options?: NFTBrowseOptions) => {
+  browse: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
   },
-  currentAccount: (options?: NFTBrowseOptions) => {
+  currentAccount: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/account?${params.toString()}` : '/account'
   },
-  account: (address: string = ':address', options?: NFTBrowseOptions) => {
+  account: (address: string = ':address', options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params
       ? `/accounts/${address}?${params.toString()}`
@@ -34,7 +35,7 @@ export const locations = {
   parcel: (x: string = ':x', y: string = ':y') => `/parcels/${x}/${y}/detail`,
   estate: (estateId: string = ':estateId') => `/estates/${estateId}/detail`,
   buy: (
-    type: ResultType,
+    type: AssetType,
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
   ) => `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy`,
@@ -57,11 +58,11 @@ export const locations = {
   activity: () => `/activity`
 }
 
-function getResource(type: ResultType) {
+function getResource(type: AssetType) {
   switch (type) {
-    case ResultType.NFT:
+    case AssetType.NFT:
       return 'tokens'
-    case ResultType.ITEM:
+    case AssetType.ITEM:
       return 'items'
     default:
       throw new Error(`Invalid type ${type}`)

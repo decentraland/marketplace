@@ -16,8 +16,9 @@ import {
   getURLParamArray,
   getURLParam
 } from './search'
-import { SortBy, Section, ResultType } from './types'
+import { SortBy, Section } from './types'
 import { locations } from './locations'
+import { AssetType } from '../asset/types'
 
 export const getState = (state: RootState) => state.routing
 
@@ -43,14 +44,14 @@ export const getSection = createSelector<
   string,
   ReturnType<typeof getPathName>,
   VendorName,
-  Section
+  string
 >(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
-  const section = getURLParam<Section>(search, 'section')
+  const section = getURLParam<string>(search, 'section')
   if (!section && pathname === locations.lands()) {
     return Section.decentraland.LAND
   }
 
-  return getURLParam<Section>(search, 'section') || Section[vendor].ALL
+  return getURLParam<string>(search, 'section') || Section[vendor].ALL
 })
 
 export const getPage = createSelector<RootState, string, number>(
@@ -180,16 +181,15 @@ export const getNetwork = createSelector<
   search => (getURLParam(search, 'network') as Network) || undefined
 )
 
-export const getResultType = createSelector<
+export const getAssetType = createSelector<
   RootState,
   string,
   string,
-  ResultType
+  AssetType
 >(getRouterSearch, getPathName, (search, pathname) => {
-  // TODO: make me pretty
-  let results = getURLParam(search, 'results') as ResultType
+  let results = getURLParam(search, 'assetType') as AssetType
   if (!results) {
-    results = pathname === locations.browse() ? ResultType.ITEM : ResultType.NFT // TODO: i need a isAccountPage or sth helper
+    results = pathname === locations.browse() ? AssetType.ITEM : AssetType.NFT
   }
   return results
 })

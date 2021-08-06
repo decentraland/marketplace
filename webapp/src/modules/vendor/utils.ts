@@ -3,16 +3,16 @@ import {
   getCategoryFromSection,
   getSearchWearableCategory
 } from '../routing/search'
-import { NFTBrowseOptions } from '../routing/types'
+import { BrowseOptions } from '../routing/types'
 import { Section } from './routing/types'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName, Disabled } from './types'
 
 export function getFilters(
   vendor: VendorName,
-  searchOptions: NFTBrowseOptions
+  options: BrowseOptions
 ): NFTsFetchFilters {
-  const { section } = searchOptions
+  const { section } = options
 
   switch (vendor) {
     case VendorName.DECENTRALAND: {
@@ -29,12 +29,7 @@ export function getFilters(
           ? getSearchWearableCategory(section!)
           : undefined
 
-      const {
-        wearableRarities,
-        wearableGenders,
-        contracts,
-        network
-      } = searchOptions
+      const { wearableRarities, wearableGenders, contracts, network } = options
 
       return {
         isLand,

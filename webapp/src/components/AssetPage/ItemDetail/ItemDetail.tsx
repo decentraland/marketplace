@@ -3,10 +3,9 @@ import { Link } from 'react-router-dom'
 import { Button, Container, Header, Mana, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { getAssetName, isOwnedBy } from '../../../modules/nft/utils'
-import { ResultType } from '../../../modules/routing/types'
 import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
+import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { AssetImage } from '../../AssetImage'
@@ -17,6 +16,7 @@ import { Description } from '../Description'
 import { WearableRarity } from '../WearableRarity'
 import { WearableHighlights } from '../WearableHighlights'
 import { Props } from './ItemDetail.types'
+import { AssetType } from '../../../modules/asset/types'
 
 const ItemDetail = (props: Props) => {
   const { item, wallet } = props
@@ -34,7 +34,7 @@ const ItemDetail = (props: Props) => {
             <Header size="large">
               <div className="text">
                 {getAssetName(item)}
-                <WearableRarity type={ResultType.ITEM} wearable={wearable} />
+                <WearableRarity type={AssetType.ITEM} wearable={wearable} />
               </div>
             </Header>
           }
@@ -63,7 +63,7 @@ const ItemDetail = (props: Props) => {
               <Button
                 as={Link}
                 to={locations.buy(
-                  ResultType.ITEM,
+                  AssetType.ITEM,
                   item.contractAddress,
                   item.itemId
                 )}
@@ -74,7 +74,7 @@ const ItemDetail = (props: Props) => {
             ) : null}
           </Column>
         </Row>
-        <WearableHighlights type={ResultType.ITEM} wearable={wearable} />
+        <WearableHighlights type={AssetType.ITEM} wearable={wearable} />
       </Container>
     </div>
   )

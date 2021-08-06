@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { ResultType } from '../../modules/routing/types'
+import { AssetType } from '../../modules/asset/types'
 import { Props } from './AssetProvider.types'
 
 const AssetProvider = (props: Props) => {
@@ -18,10 +18,10 @@ const AssetProvider = (props: Props) => {
   useEffect(() => {
     if (contractAddress && tokenId) {
       switch (type) {
-        case ResultType.NFT:
+        case AssetType.NFT:
           onFetchNFT(contractAddress, tokenId)
           break
-        case ResultType.ITEM:
+        case AssetType.ITEM:
           onFetchItem(contractAddress, tokenId)
           break
         default:

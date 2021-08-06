@@ -9,9 +9,9 @@ import {
   FetchItemRequestAction
 } from '../../modules/item/actions'
 import { Order } from '../../modules/order/types'
-import { Asset, ResultType } from '../../modules/routing/types'
+import { Asset, AssetType } from '../../modules/asset/types'
 
-export type Props<T extends ResultType = ResultType> = {
+export type Props<T extends AssetType = AssetType> = {
   type: T
   contractAddress: string | null
   tokenId: string | null
@@ -35,7 +35,7 @@ export type MapDispatchProps = Pick<Props, 'onFetchNFT' | 'onFetchItem'>
 export type MapDispatch = Dispatch<
   FetchNFTRequestAction | FetchItemRequestAction
 >
-export type OwnProps<T extends ResultType = ResultType> = Pick<
+export type OwnProps<T extends AssetType = AssetType> = Pick<
   Props<T>,
   'type' | 'children'
 > &

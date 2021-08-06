@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
 
-import { ResultType } from '../../modules/routing/types'
+import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
 import { BrowsePage } from '../BrowsePage'
 import { AccountPage } from '../AccountPage'
@@ -43,23 +43,23 @@ const Routes = () => {
         <Route exact path={locations.transfer()} component={TransferPage} />
         <Route
           exact
-          path={locations.buy(ResultType.NFT)}
-          component={() => <BuyPage type={ResultType.NFT} />}
+          path={locations.buy(AssetType.NFT)}
+          component={() => <BuyPage type={AssetType.NFT} />}
         />
         <Route
           exact
-          path={locations.buy(ResultType.ITEM)}
-          component={() => <BuyPage type={ResultType.ITEM} />}
+          path={locations.buy(AssetType.ITEM)}
+          component={() => <BuyPage type={AssetType.ITEM} />}
         />
         <Route
           exact
           path={locations.nft()}
-          component={() => <AssetPage type={ResultType.NFT} />}
+          component={() => <AssetPage type={AssetType.NFT} />}
         />
         <Route
           exact
           path={locations.item()}
-          component={() => <AssetPage type={ResultType.ITEM} />}
+          component={() => <AssetPage type={AssetType.ITEM} />}
         />
         <Route exact path={locations.settings()} component={SettingsPage} />
         <Route exact path={locations.partners()} component={PartnersPage} />

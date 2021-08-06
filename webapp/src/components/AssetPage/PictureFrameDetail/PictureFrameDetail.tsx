@@ -1,7 +1,7 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 
-import { getAssetName } from '../../../modules/nft/utils'
+import { getAssetName } from '../../../modules/asset/utils'
 import { PageHeader } from '../../PageHeader'
 import { AssetImage } from '../../AssetImage'
 import { Row } from '../../Layout/Row'

@@ -1,6 +1,6 @@
 import addDays from 'date-fns/addDays'
 import dateFnsFormat from 'date-fns/format'
-import { Asset } from '../routing/types'
+import { Asset } from '../asset/types'
 import { Order } from './types'
 
 export const DEFAULT_EXPIRATION_IN_DAYS = 30

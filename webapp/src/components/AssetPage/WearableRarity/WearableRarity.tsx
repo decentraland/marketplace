@@ -15,7 +15,7 @@ const WearableRarity = (props: Props) => {
     if (wearable) {
       onNavigate(
         locations.browse({
-          resultType: type,
+          assetType: type,
           section: Section.WEARABLES,
           wearableRarities: [wearable.rarity]
         })

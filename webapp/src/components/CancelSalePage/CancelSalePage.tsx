@@ -2,9 +2,9 @@ import React from 'react'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Header, Button } from 'decentraland-ui'
 
+import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
-import { ResultType } from '../../modules/routing/types'
-import { getAssetName } from '../../modules/nft/utils'
+import { getAssetName } from '../../modules/asset/utils'
 import { formatMANA } from '../../lib/mana'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -24,7 +24,7 @@ const CancelSalePage = (props: Props) => {
       <Page className="CancelSalePage">
         <Wallet>
           {wallet => (
-            <AssetProviderPage type={ResultType.NFT}>
+            <AssetProviderPage type={AssetType.NFT}>
               {(nft, order) => {
                 let subtitle
                 let isDisabled = false

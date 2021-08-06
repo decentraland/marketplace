@@ -1,6 +1,6 @@
 import React from 'react'
 import { Page } from 'decentraland-ui'
-import { ResultType } from '../../modules/routing/types'
+import { AssetType } from '../../modules/asset/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
@@ -23,7 +23,7 @@ const SellPage = (props: Props) => {
       <Page className="SellPage">
         <Wallet>
           {wallet => (
-            <AssetProviderPage type={ResultType.NFT}>
+            <AssetProviderPage type={AssetType.NFT}>
               {(nft, order) => (
                 <SellModal
                   nft={nft}

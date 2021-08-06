@@ -15,9 +15,9 @@ import {
   INPUT_FORMAT,
   getDefaultExpirationDate
 } from '../../../modules/order/utils'
-import { getAssetName, isOwnedBy } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
+import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { AssetAction } from '../../AssetAction'
 import { Mana } from '../../Mana'

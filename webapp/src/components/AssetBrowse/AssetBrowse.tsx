@@ -1,22 +1,21 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Container, Page, Responsive } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { View } from '../../modules/ui/types'
+import { Section } from '../../modules/vendor/decentraland'
+import { AssetType } from '../../modules/asset/types'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
-import { NFTList } from '../NFTList'
+import { AssetList } from '../AssetList'
 import { VendorStrip } from '../VendorStrip'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
 import { NFTFilters } from '../Vendor/NFTFilters'
 import { NFTSidebar } from '../Vendor/NFTSidebar'
-import { Props } from './NFTBrowse.types'
+import { Props } from './AssetBrowse.types'
 import { ToggleBox } from './ToggleBox'
-import './NFTBrowse.css'
-import { Section } from '../../modules/vendor/decentraland'
-import { ResultType } from '../../modules/routing/types'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { useState } from 'react'
+import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
@@ -45,7 +44,7 @@ const hasPrimarySales = (section?: Section) => {
   }
 }
 
-const NFTBrowse = (props: Props) => {
+const AssetBrowse = (props: Props) => {
   const {
     vendor,
     view,
@@ -53,11 +52,11 @@ const NFTBrowse = (props: Props) => {
     isFullscreen,
     address,
     onSetView,
-    onFetchNFTsFromRoute,
+    onFetchAssetsFromRoute,
     onBrowse,
     section,
     sections,
-    resultType,
+    assetType,
     onlyOnSale,
     viewInState
   } = props
@@ -72,7 +71,7 @@ const NFTBrowse = (props: Props) => {
 
   useEffect(() => {
     if (viewInState === view && !hasFetched) {
-      onFetchNFTsFromRoute({
+      onFetchAssetsFromRoute({
         vendor,
         view,
         section,
@@ -88,7 +87,7 @@ const NFTBrowse = (props: Props) => {
     address,
     onlyOnSale,
     viewInState,
-    onFetchNFTsFromRoute,
+    onFetchAssetsFromRoute,
     hasFetched
   ])
 
@@ -99,17 +98,17 @@ const NFTBrowse = (props: Props) => {
   )
 
   const hanldeBrowseItems = useCallback(
-    () => onBrowse({ resultType: ResultType.ITEM }),
+    () => onBrowse({ assetType: AssetType.ITEM }),
     [onBrowse]
   )
 
-  const handleBrowseNFTs = useCallback(
-    () => onBrowse({ resultType: ResultType.NFT }),
+  const handleBrowse = useCallback(
+    () => onBrowse({ assetType: AssetType.NFT }),
     [onBrowse]
   )
 
   // classes
-  let classes = ['NFTBrowse']
+  let classes = ['AssetBrowse']
   if (isMap) {
     classes.push('is-map')
   }
@@ -129,7 +128,7 @@ const NFTBrowse = (props: Props) => {
                       ? 'account_page.primary_market_title'
                       : 'browse_page.primary_market_title'
                   ),
-                  active: resultType === ResultType.ITEM,
+                  active: assetType === AssetType.ITEM,
                   description: t(
                     view === View.ACCOUNT
                       ? 'account_page.primary_market_subtitle'
@@ -144,13 +143,13 @@ const NFTBrowse = (props: Props) => {
                       ? 'account_page.secondary_market_title'
                       : 'browse_page.secondary_market_title'
                   ),
-                  active: resultType === ResultType.NFT,
+                  active: assetType === AssetType.NFT,
                   description: t(
                     view === View.ACCOUNT
                       ? 'account_page.secondary_market_subtitle'
                       : 'browse_page.secondary_market_subtitle'
                   ),
-                  onClick: handleBrowseNFTs
+                  onClick: handleBrowse
                 }
               ]}
             />
@@ -186,7 +185,7 @@ const NFTBrowse = (props: Props) => {
               />
             </div>
           ) : (
-            <NFTList />
+            <AssetList />
           )}
         </Column>
       </Row>
@@ -194,4 +193,4 @@ const NFTBrowse = (props: Props) => {
   )
 }
 
-export default React.memo(NFTBrowse)
+export default React.memo(AssetBrowse)

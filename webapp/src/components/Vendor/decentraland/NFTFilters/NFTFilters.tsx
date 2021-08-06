@@ -12,7 +12,7 @@ import {
 import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import { ResultType, SortBy } from '../../../../modules/routing/types'
+import { SortBy } from '../../../../modules/routing/types'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { Section } from '../../../../modules/vendor/decentraland/routing/types'
 import { getCategoryFromSection } from '../../../../modules/routing/search'
@@ -22,6 +22,7 @@ import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
+import { AssetType } from '../../../../modules/asset/types'
 
 const NFTFilters = (props: Props) => {
   const {
@@ -35,10 +36,10 @@ const NFTFilters = (props: Props) => {
     contracts,
     network,
     onBrowse,
-    resultType
+    assetType
   } = props
 
-  console.log('RESULT TYPE', resultType)
+  console.log('RESULT TYPE', assetType)
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
@@ -48,8 +49,8 @@ const NFTFilters = (props: Props) => {
     { value: SortBy.NAME, text: t('filters.name') }
   ]
   const typeDropdownOptions = [
-    { value: ResultType.ITEM, text: t('filters.item') },
-    { value: ResultType.NFT, text: t('filters.nft') }
+    { value: AssetType.ITEM, text: t('filters.item') },
+    { value: AssetType.NFT, text: t('filters.nft') }
   ]
 
   if (onlyOnSale) {
@@ -103,7 +104,7 @@ const NFTFilters = (props: Props) => {
 
   const handleTypeByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
-      onBrowse({ resultType: props.value as ResultType })
+      onBrowse({ assetType: props.value as AssetType })
     },
     [onBrowse]
   )
@@ -279,7 +280,7 @@ const NFTFilters = (props: Props) => {
           className="filters"
         >
           <FiltersMenu
-            resultType={resultType}
+            assetType={assetType}
             selectedNetwork={network}
             selectedCollection={contracts[0]}
             selectedRarities={wearableRarities}
@@ -305,13 +306,13 @@ const NFTFilters = (props: Props) => {
                 <Header sub>{t('filters.type')}</Header>
                 <Dropdown
                   direction="left"
-                  value={resultType}
+                  value={assetType}
                   options={typeDropdownOptions}
                   onChange={handleTypeByDropdownChange}
                 />
               </div>
               <FiltersMenu
-                resultType={resultType}
+                assetType={assetType}
                 selectedNetwork={network}
                 selectedCollection={contracts[0]}
                 selectedRarities={wearableRarities}

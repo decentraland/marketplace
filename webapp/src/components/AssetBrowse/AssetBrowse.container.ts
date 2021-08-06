@@ -3,14 +3,14 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 
 import { RootState } from '../../modules/reducer'
 import { setView } from '../../modules/ui/actions'
-import { browseNFTs, fetchNFTsFromRoute } from '../../modules/routing/actions'
+import { browse, fetchAssetsFromRoute } from '../../modules/routing/actions'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import {
   getIsMap,
   getOnlyOnSale,
-  getResultType,
+  getAssetType,
   getSection
 } from '../../modules/routing/selectors'
 import { getView } from '../../modules/ui/browse/selectors'
@@ -21,8 +21,8 @@ import {
   MapStateProps,
   OwnProps,
   Props
-} from './NFTBrowse.types'
-import NFTBrowse from './NFTBrowse'
+} from './AssetBrowse.types'
+import AssetBrowse from './AssetBrowse'
 import { Section } from '../../modules/vendor/decentraland'
 
 const mapState = (state: RootState): MapStateProps => ({
@@ -32,14 +32,14 @@ const mapState = (state: RootState): MapStateProps => ({
   isLoading:
     isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST) ||
     isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST),
-  resultType: getResultType(state),
+  assetType: getAssetType(state),
   viewInState: getView(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onSetView: view => dispatch(setView(view)),
-  onFetchNFTsFromRoute: options => dispatch(fetchNFTsFromRoute(options)),
-  onBrowse: options => dispatch(browseNFTs(options))
+  onFetchAssetsFromRoute: options => dispatch(fetchAssetsFromRoute(options)),
+  onBrowse: options => dispatch(browse(options))
 })
 
 const mergeProps = (
@@ -54,4 +54,4 @@ const mergeProps = (
   isMap: stateProps.isMap ?? ownProps.isMap
 })
 
-export default connect(mapState, mapDispatch, mergeProps)(NFTBrowse)
+export default connect(mapState, mapDispatch, mergeProps)(AssetBrowse)

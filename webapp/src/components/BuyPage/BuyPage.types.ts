@@ -1,5 +1,5 @@
-import { ResultType } from '../../modules/routing/types'
+import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
-  type: ResultType
+  type: AssetType
 }

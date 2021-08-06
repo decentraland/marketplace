@@ -4,7 +4,7 @@ import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transac
 import { SortDirection } from '../routing/types'
 import { Order } from '../order/types'
 import { Account } from '../account/types'
-import { getAssetName } from './utils'
+import { getAssetName } from '../asset/utils'
 import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'
 
 // Fetch NFTs

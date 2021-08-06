@@ -3,22 +3,22 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 
 import { RootState } from '../../modules/reducer'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
-import { browseNFTs } from '../../modules/routing/actions'
+import { browse } from '../../modules/routing/actions'
 import { getNFTs, getCount, getItems } from '../../modules/ui/browse/selectors'
 import {
   getVendor,
   getPage,
-  getResultType
+  getAssetType
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './NFTList.types'
-import NFTList from './NFTList'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
+import AssetList from './AssetList'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 
 const mapState = (state: RootState): MapStateProps => ({
   vendor: getVendor(state),
-  resultType: getResultType(state),
+  assetType: getAssetType(state),
   nfts: getNFTs(state),
   items: getItems(state),
   page: getPage(state),
@@ -29,7 +29,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onBrowse: options => dispatch(browseNFTs(options))
+  onBrowse: options => dispatch(browse(options))
 })
 
-export default connect(mapState, mapDispatch)(NFTList)
+export default connect(mapState, mapDispatch)(AssetList)

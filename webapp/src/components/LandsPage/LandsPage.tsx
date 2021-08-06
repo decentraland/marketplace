@@ -7,7 +7,7 @@ import { Section } from '../../modules/vendor/decentraland'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
-import { NFTBrowse } from '../NFTBrowse'
+import { AssetBrowse } from '../AssetBrowse'
 import { Props } from './LandsPage.types'
 
 const LandsPage = (props: Props) => {
@@ -16,7 +16,7 @@ const LandsPage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.LANDS} isFullscreen={isFullscreen} />
-      <NFTBrowse
+      <AssetBrowse
         vendor={VendorName.DECENTRALAND}
         view={View.MARKET}
         isFullscreen={isFullscreen}

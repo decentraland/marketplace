@@ -8,7 +8,7 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
-import { NFTBrowse } from '../NFTBrowse'
+import { AssetBrowse } from '../AssetBrowse'
 import { Props } from './BrowsePage.types'
 
 const BrowsePage = (props: Props) => {
@@ -23,7 +23,7 @@ const BrowsePage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
-      <NFTBrowse
+      <AssetBrowse
         vendor={vendor}
         isFullscreen={Boolean(isFullscreen)}
         view={View.MARKET}

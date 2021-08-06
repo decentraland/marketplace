@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../modules/reducer'
-import { ResultType } from '../../modules/routing/types'
+import { AssetType } from '../../modules/asset/types'
 import { isConnecting } from '../../modules/wallet/selectors'
 import { MapStateProps, OwnProps } from './AssetProviderPage.types'
 import AssetProviderPage from './AssetProviderPage'
@@ -13,7 +13,7 @@ const mapState = (state: RootState): MapStateProps => ({
 const mapDispatch = () => ({})
 
 export default connect(mapState, mapDispatch)(AssetProviderPage) as <
-  T extends ResultType = ResultType
+  T extends AssetType = AssetType
 >(
   props: OwnProps<T>
 ) => JSX.Element

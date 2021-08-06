@@ -4,18 +4,18 @@ import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor/types'
 import { setView, SetViewAction } from '../../modules/ui/actions'
 import {
-  browseNFTs,
-  BrowseNFTsAction,
-  fetchNFTsFromRoute,
-  FetchNFTsFromRouteAction
+  browse,
+  BrowseAction,
+  fetchAssetsFromRoute,
+  FetchAssetsFromRouteAction
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/decentraland'
-import { ResultType } from '../../modules/routing/types'
+import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
   vendor: VendorName
   view: View
-  resultType: ResultType
+  assetType: AssetType
   viewInState?: View // This is used to know when the view prop has been set in the app state
   address?: string
   isMap?: boolean
@@ -24,26 +24,21 @@ export type Props = {
   isFullscreen: boolean
   isLoading: boolean
   onSetView: typeof setView
-  onFetchNFTsFromRoute: typeof fetchNFTsFromRoute
-  onBrowse: typeof browseNFTs
+  onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
+  onBrowse: typeof browse
   onlyOnSale?: boolean
 }
 
 export type MapStateProps = Pick<
   Props,
-  | 'isMap'
-  | 'isLoading'
-  | 'onlyOnSale'
-  | 'viewInState'
-  | 'section'
-  | 'resultType'
+  'isMap' | 'isLoading' | 'onlyOnSale' | 'viewInState' | 'section' | 'assetType'
 >
 export type MapDispatchProps = Pick<
   Props,
-  'onSetView' | 'onFetchNFTsFromRoute' | 'onBrowse'
+  'onSetView' | 'onFetchAssetsFromRoute' | 'onBrowse'
 >
 export type MapDispatch = Dispatch<
-  SetViewAction | FetchNFTsFromRouteAction | BrowseNFTsAction
+  SetViewAction | FetchAssetsFromRouteAction | BrowseAction
 >
 export type OwnProps = Pick<
   Props,

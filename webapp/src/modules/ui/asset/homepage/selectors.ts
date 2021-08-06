@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 
-import { Asset } from '../../../routing/types'
 import { NFTState } from '../../../nft/reducer'
 import { ItemState } from '../../../item/reducer'
 import { FETCH_NFTS_REQUEST } from '../../../nft/actions'
@@ -14,6 +13,7 @@ import {
   getData as getItemData,
   getLoading as getItemLoading
 } from '../../../item/selectors'
+import { Asset } from '../../../asset/types'
 import { RootState } from '../../../reducer'
 import { HomepageView } from './types'
 import { HomepageUIState } from './reducer'

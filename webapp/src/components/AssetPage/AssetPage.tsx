@@ -1,7 +1,7 @@
 import React from 'react'
 import { Page } from 'decentraland-ui'
 
-import { Asset, ResultType } from '../../modules/routing/types'
+import { Asset, AssetType } from '../../modules/asset/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
@@ -20,10 +20,10 @@ const AssetPage = (props: Props) => {
       <Page className="AssetPage" isFullscreen>
         <AssetProviderPage type={type}>
           {asset =>
-            type === ResultType.NFT ? (
-              <NFTDetail nft={asset as Asset<ResultType.NFT>} />
-            ) : ResultType.ITEM ? (
-              <ItemDetail item={asset as Asset<ResultType.ITEM>} />
+            type === AssetType.NFT ? (
+              <NFTDetail nft={asset as Asset<AssetType.NFT>} />
+            ) : AssetType.ITEM ? (
+              <ItemDetail item={asset as Asset<AssetType.ITEM>} />
             ) : null
           }
         </AssetProviderPage>

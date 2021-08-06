@@ -8,9 +8,9 @@ import { Footer } from '../Footer'
 import { Wallet as WalletProvider } from '../Wallet'
 import { AssetProviderPage } from '../AssetProviderPage'
 import { NFT } from '../../modules/nft/types'
-import { isOwnedBy } from '../../modules/nft/utils'
+import { isOwnedBy } from '../../modules/asset/utils'
 import { Order } from '../../modules/order/types'
-import { Asset, ResultType } from '../../modules/routing/types'
+import { Asset, AssetType } from '../../modules/asset/types'
 import { BuyNFTModal } from './BuyNFTModal'
 import { BuyItemModal } from './BuyItemModal'
 import { Props } from './BuyPage.types'
@@ -40,13 +40,13 @@ const BuyPage = (props: Props) => {
                   isOwner: isOwnedBy(asset, wallet),
                   hasInsufficientMANA: isInsufficientMANA(wallet, asset, order)
                 }
-                return type === ResultType.NFT ? (
+                return type === AssetType.NFT ? (
                   <BuyNFTModal
                     nft={asset as NFT}
                     order={order}
                     {...modalProps}
                   />
-                ) : type === ResultType.ITEM ? (
+                ) : type === AssetType.ITEM ? (
                   <BuyItemModal item={asset as Item} {...modalProps} />
                 ) : null
               }}
