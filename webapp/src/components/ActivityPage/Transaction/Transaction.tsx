@@ -23,11 +23,11 @@ import {
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
 import { getContract } from '../../../modules/contract/utils'
+import { AssetType } from '../../../modules/asset/types'
 import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
-import { AssetType } from '../../../modules/asset/types'
 
 const Transaction = (props: Props) => {
   const { tx } = props
