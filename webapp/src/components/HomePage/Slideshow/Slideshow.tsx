@@ -1,15 +1,15 @@
 import React from 'react'
 import { HeaderMenu, Header, Button, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { NFTCard } from '../../NFTCard'
+import { AssetCard } from '../../AssetCard'
 import { Props } from './Slideshow.types'
 import './Slideshow.css'
 
 const Slideshow = (props: Props) => {
-  const { title, nfts, isSubHeader, isLoading, onViewAll } = props
+  const { title, assets, isSubHeader, isLoading, onViewAll } = props
 
   const renderNfts = () =>
-    nfts.map((nft, index) => <NFTCard key={index} nft={nft} />)
+    assets.map((asset, index) => <AssetCard key={index} asset={asset} />)
 
   return (
     <div className="Slideshow">
@@ -24,14 +24,14 @@ const Slideshow = (props: Props) => {
           </Button>
         </HeaderMenu.Right>
       </HeaderMenu>
-      <div className="nfts">
+      <div className="assets">
         {isLoading ? (
-          nfts.length === 0 ? (
+          assets.length === 0 ? (
             <Loader active size="massive" />
           ) : (
             renderNfts()
           )
-        ) : nfts.length > 0 ? (
+        ) : assets.length > 0 ? (
           renderNfts()
         ) : null}
       </div>

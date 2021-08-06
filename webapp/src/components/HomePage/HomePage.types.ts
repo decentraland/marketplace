@@ -3,24 +3,24 @@ import { CallHistoryMethodAction } from 'connected-react-router'
 import {
   getHomepage,
   getHomepageLoading
-} from '../../modules/ui/nft/homepage/selectors'
+} from '../../modules/ui/asset/homepage/selectors'
 import {
-  fetchNFTsFromRoute,
-  FetchNFTsFromRouteAction
+  fetchAssetsFromRoute,
+  FetchAssetsFromRouteAction
 } from '../../modules/routing/actions'
 
 export type Props = {
   homepage: ReturnType<typeof getHomepage>
   homepageLoading: ReturnType<typeof getHomepageLoading>
   onNavigate: (path: string) => void
-  onFetchNFTsFromRoute: typeof fetchNFTsFromRoute
+  onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
 }
 
 export type MapStateProps = Pick<Props, 'homepage' | 'homepageLoading'>
 export type MapDispatchProps = Pick<
   Props,
-  'onFetchNFTsFromRoute' | 'onNavigate'
+  'onNavigate' | 'onFetchAssetsFromRoute'
 >
 export type MapDispatch = Dispatch<
-  CallHistoryMethodAction | FetchNFTsFromRouteAction
+  CallHistoryMethodAction | FetchAssetsFromRouteAction
 >

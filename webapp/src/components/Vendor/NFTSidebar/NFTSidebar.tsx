@@ -8,10 +8,10 @@ import { PartnerSidebar } from '../PartnerSidebar'
 import { Props } from './NFTSidebar.types'
 
 const NFTSidebar = (props: Props) => {
-  const { vendor, section, onBrowse } = props
+  const { vendor, section, sections, onBrowse } = props
 
   const handleOnBrowse = useCallback(
-    (section: Section) => {
+    (section: string) => {
       onBrowse({ section })
     },
     [onBrowse]
@@ -33,6 +33,7 @@ const NFTSidebar = (props: Props) => {
       return (
         <DecentralandNFTSidebar
           section={section as DecentralandSection}
+          sections={sections ?? [Section.decentraland.ALL]}
           onMenuItemClick={handleOnBrowse}
         />
       )

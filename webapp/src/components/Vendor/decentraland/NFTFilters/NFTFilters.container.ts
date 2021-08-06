@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../../../modules/reducer'
-import { getCount } from '../../../../modules/ui/nft/browse/selectors'
+import { getCount } from '../../../../modules/ui/browse/selectors'
 import {
   getSection,
   getSortBy,
@@ -11,12 +11,19 @@ import {
   getWearableGenders,
   getSearch,
   getContracts,
-  getNetwork
+  getNetwork,
+  getAssetType
 } from '../../../../modules/routing/selectors'
-import { MapStateProps } from './NFTFilters.types'
+import {
+  MapStateProps,
+  MapDispatchProps,
+  OwnProps,
+  Props
+} from './NFTFilters.types'
 import NFTFilters from './NFTFilters'
 
 const mapState = (state: RootState): MapStateProps => ({
+  assetType: getAssetType(state),
   count: getCount(state),
   section: getSection(state),
   sortBy: getSortBy(state),
@@ -31,4 +38,14 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = () => ({})
 
-export default connect(mapState, mapDispatch)(NFTFilters)
+const mergeProps = (
+  stateProps: MapStateProps,
+  dispatchProps: MapDispatchProps,
+  ownProps: OwnProps
+): Props => ({
+  ...stateProps,
+  ...dispatchProps,
+  ...ownProps
+})
+
+export default connect(mapState, mapDispatch, mergeProps)(NFTFilters)

@@ -1,9 +1,9 @@
 import React from 'react'
 import { Transaction } from 'decentraland-dapps/dist/modules/transaction/types'
-import { NFT } from '../../../../modules/nft/types'
+import { Asset } from '../../../../modules/asset/types'
 
 export type Props = {
-  nft?: NFT | null
+  asset?: Asset | null
   text: React.ReactNode
   tx: Transaction
 }

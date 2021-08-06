@@ -3,7 +3,7 @@
   width: 100%;
 }
 
-.Slideshow .nfts {
+.Slideshow .assets {
   display: flex;
   flex-wrap: nowrap;
   overflow: auto;
@@ -11,8 +11,8 @@
   min-height: 336px;
 }
 
-.Slideshow .nfts .NFTCard,
-.Slideshow .nfts .ui.card.NFTCard:first-child {
+.Slideshow .assets .AssetCard,
+.Slideshow .assets .ui.card.AssetCard:first-child {
   flex: 0 0 auto;
   width: 220px;
   margin-right: 20px;

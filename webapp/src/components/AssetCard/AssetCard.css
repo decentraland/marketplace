@@ -1,0 +1,85 @@
+.AssetCard {
+  overflow: hidden;
+}
+
+.AssetCard .header,
+.AssetCard .dcl.mana.inline {
+  font-size: 17px;
+  line-height: 26px;
+  letter-spacing: -0.2px;
+}
+
+.AssetCard .header .title {
+  flex: 1 2 auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  margin-right: 20px;
+}
+
+.ui.card.AssetCard > .content {
+  flex: none;
+}
+
+.ui.card.AssetCard > .content > .header:not(.ui),
+.ui.cards > .card.AssetCard > .content > .header:not(.ui) {
+  display: flex;
+  margin-bottom: 6px;
+}
+
+.AssetCard .dcl.mana.inline {
+  margin: 0px;
+  flex: none;
+}
+
+.ui.cards > .ui.card.AssetCard.link .meta,
+.ui.card.link .meta {
+  margin-bottom: 4px;
+}
+
+.ui.cards > .ui.card.AssetCard.link:hover .meta,
+a.ui.card.link:hover .meta {
+  color: var(--secondary-text);
+}
+
+.AssetCard .tags {
+  margin-top: 12px;
+}
+
+.AssetCard .AssetImage {
+  overflow: hidden;
+}
+
+.AssetCard .AssetImage .ens-subdomain {
+  background-size: 557px;
+  background-position-y: -133px;
+}
+
+.AssetCard .AssetImage .ens-subdomain .monospace {
+  margin-top: 0px;
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .AssetCard .header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .AssetCard .header .title {
+    margin-right: 0;
+  }
+
+  .AssetCard .dcl.mana.inline {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .AssetCard.ui.card > .content,
+  .ui.cards > .AssetCard.card > .content {
+    display: block;
+  }
+}

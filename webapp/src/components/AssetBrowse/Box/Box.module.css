@@ -1,0 +1,20 @@
+.box {
+  border: 2px solid var(--secondary);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-left: 20px;
+  margin-top: 13px;
+  margin-bottom: 13px;
+  text-transform: uppercase;
+  color: #736e7d;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.children {
+  margin-bottom: 8px;
+}

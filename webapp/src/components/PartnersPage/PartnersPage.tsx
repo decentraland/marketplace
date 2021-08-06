@@ -18,7 +18,12 @@ import { Props } from './PartnersPage.types'
 import './PartnersPage.css'
 
 const PartnersPage = (props: Props) => {
-  const { partners, partnersLoading, onNavigate, onFetchNFTsFromRoute } = props
+  const {
+    partners,
+    partnersLoading,
+    onNavigate,
+    onFetchAssetsFromRoute
+  } = props
 
   const handleOnNavigate = useCallback(
     (vendor: VendorName) => {
@@ -31,7 +36,7 @@ const PartnersPage = (props: Props) => {
   useEffect(() => {
     let partner: VendorName
     for (partner in partners) {
-      onFetchNFTsFromRoute({
+      onFetchAssetsFromRoute({
         view: partner as View,
         vendor: partner,
         sortBy: SortBy.RECENTLY_LISTED,
@@ -40,7 +45,7 @@ const PartnersPage = (props: Props) => {
       })
     }
     // eslint-disable-next-line
-  }, [onFetchNFTsFromRoute])
+  }, [onFetchAssetsFromRoute])
 
   const views = Object.keys(partners) as VendorName[]
 
@@ -63,7 +68,7 @@ const PartnersPage = (props: Props) => {
                 title={t('partners_page.latest_from', {
                   vendor: t(`vendors.${view}`)
                 })}
-                nfts={partners[view]}
+                assets={partners[view]}
                 isLoading={partners[view].length === 0 || partnersLoading[view]}
                 isSubHeader={true}
                 onViewAll={() => handleOnNavigate(view)}

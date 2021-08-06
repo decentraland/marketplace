@@ -2,15 +2,16 @@ import React from 'react'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Header, Button } from 'decentraland-ui'
 
+import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
-import { getNFTName } from '../../modules/nft/utils'
+import { getAssetName } from '../../modules/asset/utils'
 import { formatMANA } from '../../lib/mana'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
 import { Mana } from '../Mana'
-import { NFTProviderPage } from '../NFTProviderPage'
-import NFTAction from '../NFTAction/NFTAction'
+import { AssetProviderPage } from '../AssetProviderPage'
+import { AssetAction } from '../AssetAction'
 import { Props } from './CancelSalePage.types'
 import './CancelSalePage.css'
 
@@ -23,11 +24,11 @@ const CancelSalePage = (props: Props) => {
       <Page className="CancelSalePage">
         <Wallet>
           {wallet => (
-            <NFTProviderPage>
+            <AssetProviderPage type={AssetType.NFT}>
               {(nft, order) => {
                 let subtitle
                 let isDisabled = false
-                const name = getNFTName(nft)
+                const name = getAssetName(nft)
                 if (!order) {
                   isDisabled = true
                   subtitle = (
@@ -60,7 +61,7 @@ const CancelSalePage = (props: Props) => {
                   )
                 }
                 return (
-                  <NFTAction nft={nft}>
+                  <AssetAction asset={nft}>
                     <Header size="large">{t('cancel_sale_page.title')}</Header>
                     <div className="subtitle">{subtitle}</div>
                     <div className="buttons">
@@ -82,10 +83,10 @@ const CancelSalePage = (props: Props) => {
                         {t('cancel_sale_page.submit')}
                       </Button>
                     </div>
-                  </NFTAction>
+                  </AssetAction>
                 )
               }}
-            </NFTProviderPage>
+            </AssetProviderPage>
           )}
         </Wallet>
       </Page>

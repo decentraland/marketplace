@@ -1,12 +1,14 @@
 import { Dispatch } from 'redux'
 
-import { browseNFTs, BrowseNFTsAction } from '../../../modules/routing/actions'
+import { browse, BrowseAction } from '../../../modules/routing/actions'
 
 export type Props = {
   vendor?: string
-  onBrowse: typeof browseNFTs
+  onBrowse: typeof browse
+  isMap: boolean
 }
 
 export type MapStateProps = Pick<Props, 'vendor'>
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
-export type MapDispatch = Dispatch<BrowseNFTsAction>
+export type MapDispatch = Dispatch<BrowseAction>
+export type OwnProps = Pick<Props, 'isMap'>

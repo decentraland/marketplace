@@ -4,7 +4,7 @@ import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transac
 import { SortDirection } from '../routing/types'
 import { Order } from '../order/types'
 import { Account } from '../account/types'
-import { getNFTName } from './utils'
+import { getAssetName } from '../asset/utils'
 import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'
 
 // Fetch NFTs
@@ -88,7 +88,7 @@ export const transferNFTSuccess = (nft: NFT, address: string, txHash: string) =>
     ...buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
-      name: getNFTName(nft),
+      name: getAssetName(nft),
       address
     })
   })

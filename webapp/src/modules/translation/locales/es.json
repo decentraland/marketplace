@@ -29,6 +29,7 @@
     "known_origin": "KnownOrigin"
   },
   "navigation": {
+    "land": "Land",
     "collectibles": "Coleccionables",
     "partners": "Socios",
     "my_assets": "Mi Inventario",
@@ -70,6 +71,9 @@
     "more_than_assets_count": "+{count} assets"
   },
   "filters": {
+    "type": "Tipo",
+    "item": "Creaciones originales",
+    "nft": "Artículos de reventa",
     "name": "Nombre",
     "newest": "Más nuevos",
     "recently_listed": "Listados recientemente",
@@ -80,7 +84,8 @@
     "subtitle": "Bienvenido al mercado virtual de Decentraland, donde encontrarás los mejores ítems virtuales.",
     "get_started": "Comienza a navegar",
     "learn_more": "Aprende Más",
-    "home_wearables": "Vestimenta",
+    "home_items": "Últimos items",
+    "home_wearables": "Listado recientemente",
     "home_land": "Land",
     "home_ens": "Nombres"
   },
@@ -116,24 +121,28 @@
     "categories": "Categorías",
     "back": "Atrás"
   },
-  "nft_page": {
+  "asset_page": {
+    "actions": {
+      "cancel_sale": "Borrar publicación",
+      "update": "Actualizar precio",
+      "buy": "Comprar",
+      "bid": "Ofertar",
+      "see_listing": "Ver publicación",
+      "sell": "Vender",
+      "transfer": "Transferir",
+      "leaving_decentraland": "Saliendo de Decentraland",
+      "leaving_decentraland_description": "Aún no se pueden publicar o actualizar {vendor} assets en el Marketplace de Decentraland. ¿Quiere proceder a {vendor_link} para publicarlo ahí?",
+      "leaving_decentraland_disclaimer": "Tus NFTs van a listarse en el Marketplace de Decentraland"
+    },
     "description": "Descripción",
     "owner": "Dueño",
+    "creator": "Creador",
     "price": "Precio",
+    "available": "Disponible",
     "expires": "Expira en",
-    "cancel_sale": "Borrar publicación",
-    "buy": "Comprar",
-    "sell": "Vender",
-    "see_listing": "Ver publicación",
-    "bid": "Ofertar",
-    "update": "Actualizar precio",
-    "transfer": "Transferir",
     "plaza": "Plaza",
     "road": "Calle",
     "district": "Distrito",
-    "leaving_decentraland": "Saliendo de Decentraland",
-    "leaving_decentraland_description": "Aún no se pueden publicar o actualizar {vendor} assets en el Marketplace de Decentraland. ¿Quiere proceder a {vendor_link} para publicarlo ahí?",
-    "leaving_decentraland_disclaimer": "Tus NFTs van a listarse en el Marketplace de Decentraland",
     "part_of_estate": "Parte de {estate_name}"
   },
   "proximity": {
@@ -257,10 +266,20 @@
     "invalid_owner": "No eres el dueño de {name}.",
     "submit": "Confirmar"
   },
+  "browse_page": {
+    "primary_market_title": "Tienda",
+    "primary_market_subtitle": "Creados por los usuarios",
+    "secondary_market_title": "Clasificados",
+    "secondary_market_subtitle": "Artículos de reventa"
+  },
   "account_page": {
     "copied": "Copiado ✔",
     "copied_capitalized": "COPIADO ✔",
-    "copy_address": "COPIAR DIRECCIÓN"
+    "copy_address": "COPIAR DIRECCIÓN",
+    "primary_market_title": "Creaciones",
+    "primary_market_subtitle": "Creado por este usuario",
+    "secondary_market_title": "Colecciones",
+    "secondary_market_subtitle": "Colleccionado por este usuario"
   },
   "settings_page": {
     "authorizations": "Autorizaciones",

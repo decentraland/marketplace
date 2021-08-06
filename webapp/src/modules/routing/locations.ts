@@ -1,5 +1,6 @@
+import { AssetType } from '../asset/types'
 import { getSearchParams } from './search'
-import { SearchOptions } from './types'
+import { BrowseOptions } from './types'
 
 export const locations = {
   root: () => '/',
@@ -7,15 +8,17 @@ export const locations = {
   settings: () => '/settings',
   partners: () => '/partners',
   bids: () => '/bids',
-  browse: (options?: SearchOptions) => {
+  lands: () => '/lands',
+  collectibles: () => '/collectibles',
+  browse: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
   },
-  currentAccount: (options?: SearchOptions) => {
+  currentAccount: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/account?${params.toString()}` : '/account'
   },
-  account: (address: string = ':address', options?: SearchOptions) => {
+  account: (address: string = ':address', options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params
       ? `/accounts/${address}?${params.toString()}`
@@ -25,16 +28,21 @@ export const locations = {
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
   ) => `/contracts/${contractAddress}/tokens/${tokenId}`,
+  item: (
+    contractAddress: string = ':contractAddress',
+    itemId: string = ':itemId'
+  ) => `/contracts/${contractAddress}/items/${itemId}`,
   parcel: (x: string = ':x', y: string = ':y') => `/parcels/${x}/${y}/detail`,
   estate: (estateId: string = ':estateId') => `/estates/${estateId}/detail`,
+  buy: (
+    type: AssetType,
+    contractAddress: string = ':contractAddress',
+    tokenId: string = ':tokenId'
+  ) => `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy`,
   sell: (
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
   ) => `/contracts/${contractAddress}/tokens/${tokenId}/sell`,
-  buy: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/buy`,
   cancel: (
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
@@ -48,4 +56,15 @@ export const locations = {
     tokenId: string = ':tokenId'
   ) => `/contracts/${contractAddress}/tokens/${tokenId}/bid`,
   activity: () => `/activity`
+}
+
+function getResource(type: AssetType) {
+  switch (type) {
+    case AssetType.NFT:
+      return 'tokens'
+    case AssetType.ITEM:
+      return 'items'
+    default:
+      throw new Error(`Invalid type ${type}`)
+  }
 }

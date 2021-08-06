@@ -1,9 +1,10 @@
 import React from 'react'
 import { Page } from 'decentraland-ui'
+import { AssetType } from '../../modules/asset/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
-import { NFTProviderPage } from '../NFTProviderPage'
+import { AssetProviderPage } from '../AssetProviderPage'
 import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
 
@@ -15,7 +16,7 @@ const BidPage = (props: Props) => {
       <Page className="BidPage">
         <Wallet>
           {wallet => (
-            <NFTProviderPage>
+            <AssetProviderPage type={AssetType.NFT}>
               {nft => (
                 <BidModal
                   nft={nft}
@@ -26,7 +27,7 @@ const BidPage = (props: Props) => {
                   isPlacingBid={isPlacingBid}
                 />
               )}
-            </NFTProviderPage>
+            </AssetProviderPage>
           )}
         </Wallet>
       </Page>

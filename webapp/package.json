@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
-    "@dcl/schemas": "^1.3.0",
+    "@dcl/schemas": "^1.4.0",
     "apollo-boost": "^0.4.7",
     "classnames": "^2.3.1",
     "connected-react-router": "^6.6.1",
@@ -48,6 +48,7 @@
     "@typescript-eslint/parser": "^4.13.0",
     "dcl-tslint-config-standard": "^2.0.0",
     "prettier": "^1.19.1",
+    "redux-saga-test-plan": "^4.0.3",
     "tslint": "^5.20.1",
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^4.1.0",
@@ -79,6 +80,12 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\](?!web3x-es).*\\.(js|jsx|mjs|cjs|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
     ]
   }
 }

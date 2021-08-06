@@ -15,13 +15,14 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { SortBy } from '../../../../modules/routing/types'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { Section } from '../../../../modules/vendor/decentraland/routing/types'
-import { getSearchCategory } from '../../../../modules/routing/search'
+import { getCategoryFromSection } from '../../../../modules/routing/search'
 import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
 import { NFTSidebar } from '../../NFTSidebar'
 import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
+import { AssetType } from '../../../../modules/asset/types'
 
 const NFTFilters = (props: Props) => {
   const {
@@ -34,32 +35,40 @@ const NFTFilters = (props: Props) => {
     wearableGenders,
     contracts,
     network,
-    onBrowse
+    onBrowse,
+    assetType
   } = props
 
+  console.log('RESULT TYPE', assetType)
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
-  const category = section ? getSearchCategory(section) : undefined
-  const dropdownOptions = [
+  const category = section ? getCategoryFromSection(section) : undefined
+  const orderBydropdownOptions = [
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') }
   ]
+  const typeDropdownOptions = [
+    { value: AssetType.ITEM, text: t('filters.item') },
+    { value: AssetType.NFT, text: t('filters.nft') }
+  ]
 
   if (onlyOnSale) {
-    dropdownOptions.unshift({
+    orderBydropdownOptions.unshift({
       value: SortBy.RECENTLY_LISTED,
       text: t('filters.recently_listed')
     })
-    dropdownOptions.unshift({
+    orderBydropdownOptions.unshift({
       value: SortBy.CHEAPEST,
       text: t('filters.cheapest')
     })
   }
 
-  const sortBy = dropdownOptions.find(option => option.value === props.sortBy)
+  const sortBy = orderBydropdownOptions.find(
+    option => option.value === props.sortBy
+  )
     ? props.sortBy
-    : dropdownOptions[0].value
+    : orderBydropdownOptions[0].value
 
   const appliedFilters = []
   if (wearableRarities.length > 0) {
@@ -81,14 +90,21 @@ const NFTFilters = (props: Props) => {
 
   const handleIsMapChange = useCallback(
     (isMap: boolean) => {
-      onBrowse({ isMap, isFullscreen: false, search: '' })
+      onBrowse({ isMap, isFullscreen: isMap, search: '' })
     },
     [onBrowse]
   )
 
-  const handleDropdownChange = useCallback(
+  const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
       onBrowse({ sortBy: props.value as SortBy })
+    },
+    [onBrowse]
+  )
+
+  const handleTypeByDropdownChange = useCallback(
+    (_, props: DropdownProps) => {
+      onBrowse({ assetType: props.value as AssetType })
     },
     [onBrowse]
   )
@@ -190,8 +206,8 @@ const NFTFilters = (props: Props) => {
               <Dropdown
                 direction="left"
                 value={sortBy}
-                options={dropdownOptions}
-                onChange={handleDropdownChange}
+                options={orderBydropdownOptions}
+                onChange={handleOrderByDropdownChange}
               />
             </Responsive>
             <Responsive
@@ -264,6 +280,7 @@ const NFTFilters = (props: Props) => {
           className="filters"
         >
           <FiltersMenu
+            assetType={assetType}
             selectedNetwork={network}
             selectedCollection={contracts[0]}
             selectedRarities={wearableRarities}
@@ -284,24 +301,36 @@ const NFTFilters = (props: Props) => {
         <Modal.Header>{t('nft_filters.filter')}</Modal.Header>
         <Modal.Content>
           {category === NFTCategory.WEARABLE ? (
-            <FiltersMenu
-              selectedNetwork={network}
-              selectedCollection={contracts[0]}
-              selectedRarities={wearableRarities}
-              selectedGenders={wearableGenders}
-              onCollectionsChange={handleCollectionsChange}
-              onGendersChange={handleGendersChange}
-              onRaritiesChange={handleRaritiesChange}
-              onNetworkChange={handleNetworkChange}
-            />
+            <>
+              <div className="filter-row">
+                <Header sub>{t('filters.type')}</Header>
+                <Dropdown
+                  direction="left"
+                  value={assetType}
+                  options={typeDropdownOptions}
+                  onChange={handleTypeByDropdownChange}
+                />
+              </div>
+              <FiltersMenu
+                assetType={assetType}
+                selectedNetwork={network}
+                selectedCollection={contracts[0]}
+                selectedRarities={wearableRarities}
+                selectedGenders={wearableGenders}
+                onCollectionsChange={handleCollectionsChange}
+                onGendersChange={handleGendersChange}
+                onRaritiesChange={handleRaritiesChange}
+                onNetworkChange={handleNetworkChange}
+              />
+            </>
           ) : null}
           <div className="filter-row">
             <Header sub>{t('nft_filters.order_by')}</Header>
             <Dropdown
               direction="left"
               value={sortBy}
-              options={dropdownOptions}
-              onChange={handleDropdownChange}
+              options={orderBydropdownOptions}
+              onChange={handleOrderByDropdownChange}
             />
           </div>
           <div className="filter-row">

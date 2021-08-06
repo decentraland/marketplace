@@ -1,11 +1,11 @@
 import React from 'react'
 
 import { VendorName } from '../../../modules/vendor/types'
-import { ENSDetail } from '../../NFTPage/ENSDetail'
-import { EstateDetail } from '../../NFTPage/EstateDetail'
-import { ParcelDetail } from '../../NFTPage/ParcelDetail'
-import { PictureFrameDetail } from '../../NFTPage/PictureFrameDetail'
-import { WearableDetail } from '../../NFTPage/WearableDetail'
+import { ENSDetail } from '../../AssetPage/ENSDetail'
+import { EstateDetail } from '../../AssetPage/EstateDetail'
+import { ParcelDetail } from '../../AssetPage/ParcelDetail'
+import { PictureFrameDetail } from '../../AssetPage/PictureFrameDetail'
+import { WearableDetail } from '../../AssetPage/WearableDetail'
 import { Props } from './NFTDetail.types'
 
 const NFTDetail = (props: Props) => {

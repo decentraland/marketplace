@@ -1,22 +1,27 @@
 import { Network, NFTCategory, WearableCategory } from '@dcl/schemas'
 import { View } from '../ui/types'
-import { VendorName } from '../vendor/types'
-import { Section } from '../vendor/routing/types'
-import { SearchOptions, SortBy } from './types'
+import { BrowseOptions, SortBy, SortDirection } from './types'
+import { Section } from '../vendor/decentraland'
+import { ItemSortBy } from '../vendor/decentraland/item/types'
+import { NFTSortBy } from '../nft/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
-export function getDefaultOptionsByView(view?: View): SearchOptions {
+export function getDefaultOptionsByView(view?: View): BrowseOptions {
   return {
     onlyOnSale: view !== View.ACCOUNT,
     sortBy: view === View.ACCOUNT ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
   }
 }
 
-export function getSearchParams(options?: SearchOptions) {
+export function getSearchParams(options?: BrowseOptions) {
   let params: URLSearchParams | undefined
   if (options) {
     params = new URLSearchParams()
+
+    if (options.assetType) {
+      params.set('assetType', options.assetType)
+    }
 
     if (options.section) {
       params.set('section', options.section)
@@ -73,41 +78,38 @@ export function getSearchParams(options?: SearchOptions) {
   return params
 }
 
-export function getSearchCategory(section: Section) {
-  // TODO: Move this to each vendor? Names shortened for brevity here
-  const DclSection = Section[VendorName.DECENTRALAND]
+export function getCategoryFromSection(section: string) {
   switch (section) {
-    case DclSection.PARCELS:
+    case Section.PARCELS:
       return NFTCategory.PARCEL
-    case DclSection.ESTATES:
+    case Section.ESTATES:
       return NFTCategory.ESTATE
-    case DclSection.WEARABLES:
-    case DclSection.WEARABLES_HEAD:
-    case DclSection.WEARABLES_EYEBROWS:
-    case DclSection.WEARABLES_EYES:
-    case DclSection.WEARABLES_FACIAL_HAIR:
-    case DclSection.WEARABLES_HAIR:
-    case DclSection.WEARABLES_MOUTH:
-    case DclSection.WEARABLES_UPPER_BODY:
-    case DclSection.WEARABLES_LOWER_BODY:
-    case DclSection.WEARABLES_FEET:
-    case DclSection.WEARABLES_ACCESORIES:
-    case DclSection.WEARABLES_EARRING:
-    case DclSection.WEARABLES_EYEWEAR:
-    case DclSection.WEARABLES_HAT:
-    case DclSection.WEARABLES_HELMET:
-    case DclSection.WEARABLES_MASK:
-    case DclSection.WEARABLES_TIARA:
-    case DclSection.WEARABLES_TOP_HEAD:
+    case Section.WEARABLES:
+    case Section.WEARABLES_HEAD:
+    case Section.WEARABLES_EYEBROWS:
+    case Section.WEARABLES_EYES:
+    case Section.WEARABLES_FACIAL_HAIR:
+    case Section.WEARABLES_HAIR:
+    case Section.WEARABLES_MOUTH:
+    case Section.WEARABLES_UPPER_BODY:
+    case Section.WEARABLES_LOWER_BODY:
+    case Section.WEARABLES_FEET:
+    case Section.WEARABLES_ACCESORIES:
+    case Section.WEARABLES_EARRING:
+    case Section.WEARABLES_EYEWEAR:
+    case Section.WEARABLES_HAT:
+    case Section.WEARABLES_HELMET:
+    case Section.WEARABLES_MASK:
+    case Section.WEARABLES_TIARA:
+    case Section.WEARABLES_TOP_HEAD:
       return NFTCategory.WEARABLE
-    case DclSection.ENS:
+    case Section.ENS:
       return NFTCategory.ENS
   }
 }
 
 export function getSearchWearableSection(category: WearableCategory) {
-  const DclSection = Section[VendorName.DECENTRALAND]
-  for (const section of Object.values(DclSection)) {
+  for (const section of Object.values(Section)) {
     const sectionCategory = getSearchWearableCategory(section)
     if (category === sectionCategory) {
       return section
@@ -115,40 +117,109 @@ export function getSearchWearableSection(category: WearableCategory) {
   }
 }
 
-export function getSearchWearableCategory(section: Section) {
-  const DclSection = Section[VendorName.DECENTRALAND]
+export function getSearchWearableCategory(section: string) {
   switch (section) {
-    case DclSection.WEARABLES_EYEBROWS:
+    case Section.WEARABLES_EYEBROWS:
       return WearableCategory.EYEBROWS
-    case DclSection.WEARABLES_EYES:
+    case Section.WEARABLES_EYES:
       return WearableCategory.EYES
-    case DclSection.WEARABLES_FACIAL_HAIR:
+    case Section.WEARABLES_FACIAL_HAIR:
       return WearableCategory.FACIAL_HAIR
-    case DclSection.WEARABLES_HAIR:
+    case Section.WEARABLES_HAIR:
       return WearableCategory.HAIR
-    case DclSection.WEARABLES_MOUTH:
+    case Section.WEARABLES_MOUTH:
       return WearableCategory.MOUTH
-    case DclSection.WEARABLES_UPPER_BODY:
+    case Section.WEARABLES_UPPER_BODY:
       return WearableCategory.UPPER_BODY
-    case DclSection.WEARABLES_LOWER_BODY:
+    case Section.WEARABLES_LOWER_BODY:
       return WearableCategory.LOWER_BODY
-    case DclSection.WEARABLES_FEET:
+    case Section.WEARABLES_FEET:
       return WearableCategory.FEET
-    case DclSection.WEARABLES_EARRING:
+    case Section.WEARABLES_EARRING:
       return WearableCategory.EARRING
-    case DclSection.WEARABLES_EYEWEAR:
+    case Section.WEARABLES_EYEWEAR:
       return WearableCategory.EYEWEAR
-    case DclSection.WEARABLES_HAT:
+    case Section.WEARABLES_HAT:
       return WearableCategory.HAT
-    case DclSection.WEARABLES_HELMET:
+    case Section.WEARABLES_HELMET:
       return WearableCategory.HELMET
-    case DclSection.WEARABLES_MASK:
+    case Section.WEARABLES_MASK:
       return WearableCategory.MASK
-    case DclSection.WEARABLES_TIARA:
+    case Section.WEARABLES_TIARA:
       return WearableCategory.TIARA
-    case DclSection.WEARABLES_TOP_HEAD:
+    case Section.WEARABLES_TOP_HEAD:
       return WearableCategory.TOP_HEAD
   }
+}
+
+export function getItemSortBy(sortBy: SortBy): ItemSortBy {
+  switch (sortBy) {
+    case SortBy.CHEAPEST:
+      return ItemSortBy.CHEAPEST
+    case SortBy.NAME:
+      return ItemSortBy.NAME
+    case SortBy.NEWEST:
+      return ItemSortBy.NEWEST
+    case SortBy.RECENTLY_LISTED:
+      return ItemSortBy.RECENTLY_REVIEWED
+    default:
+      return ItemSortBy.RECENTLY_REVIEWED
+  }
+}
+
+export function getAssetOrderBy(sortBy: SortBy) {
+  let orderBy: NFTSortBy = NFTSortBy.CREATED_AT
+  let orderDirection: SortDirection = SortDirection.DESC
+
+  switch (sortBy) {
+    case SortBy.NAME: {
+      orderBy = NFTSortBy.NAME
+      orderDirection = SortDirection.ASC
+      break
+    }
+    case SortBy.NEWEST: {
+      orderBy = NFTSortBy.CREATED_AT
+      orderDirection = SortDirection.DESC
+      break
+    }
+    case SortBy.RECENTLY_LISTED: {
+      orderBy = NFTSortBy.ORDER_CREATED_AT
+      orderDirection = SortDirection.DESC
+      break
+    }
+    case SortBy.CHEAPEST: {
+      orderBy = NFTSortBy.PRICE
+      orderDirection = SortDirection.ASC
+      break
+    }
+  }
+
+  return [orderBy, orderDirection] as const
+}
+
+export function getNFTSortBy(orderBy: NFTSortBy) {
+  let sortBy: SortBy = SortBy.NEWEST
+
+  switch (orderBy) {
+    case NFTSortBy.NAME: {
+      sortBy = SortBy.NAME
+      break
+    }
+    case NFTSortBy.CREATED_AT: {
+      sortBy = SortBy.NEWEST
+      break
+    }
+    case NFTSortBy.ORDER_CREATED_AT: {
+      sortBy = SortBy.RECENTLY_LISTED
+      break
+    }
+    case NFTSortBy.PRICE: {
+      sortBy = SortBy.CHEAPEST
+      break
+    }
+  }
+
+  return sortBy
 }
 
 export function getURLParamArray<T extends string>(

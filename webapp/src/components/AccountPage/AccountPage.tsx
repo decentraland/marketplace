@@ -11,7 +11,7 @@ import { useTimer } from '../../lib/timer'
 import { Navbar } from '../Navbar'
 import { PageHeader } from '../PageHeader'
 import { Footer } from '../Footer'
-import { NFTBrowse } from '../NFTBrowse'
+import { AssetBrowse } from '../AssetBrowse'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { locations } from '../../modules/routing/locations'
@@ -53,10 +53,11 @@ const AccountPage = (props: Props) => {
             <Loader size="massive" active />
           </Page>
         ) : (
-          <NFTBrowse
+          <AssetBrowse
             vendor={vendor}
             address={wallet.address}
             view={View.ACCOUNT}
+            isFullscreen={Boolean(isFullscreen)}
           />
         )
       ) : address !== undefined ? (
@@ -113,7 +114,12 @@ const AccountPage = (props: Props) => {
             </Column>
           </PageHeader>
 
-          <NFTBrowse vendor={vendor} address={address} view={View.ACCOUNT} />
+          <AssetBrowse
+            vendor={vendor}
+            address={address}
+            view={View.ACCOUNT}
+            isFullscreen={Boolean(isFullscreen)}
+          />
         </>
       ) : null}
       <Footer isFullscreen={isFullscreen} />

@@ -29,7 +29,8 @@
     "known_origin": "KnownOrigin"
   },
   "navigation": {
-    "collectibles": "藏品",
+    "land": "土地",
+    "collectibles": "收藏品",
     "partners": "伙伴",
     "my_assets": "我的资产",
     "my_bids": "我的出价",
@@ -70,6 +71,9 @@
     "more_than_assets_count": "+{count} assets"
   },
   "filters": {
+    "type": "物品类型",
+    "item": "原创作品",
+    "nft": "被转售的物品",
     "name": "名称",
     "newest": "最新",
     "recently_listed": "最新上市",
@@ -80,7 +84,8 @@
     "subtitle": "欢迎来到虚拟世界的一站式商店，获取最好的数字资产。",
     "get_started": "开始浏览",
     "learn_more": "学习更多",
-    "home_wearables": "可穿戴",
+    "home_items": "最新商品",
+    "home_wearables": "最新上市",
     "home_land": "地块和产业",
     "home_ens": "名称"
   },
@@ -116,24 +121,28 @@
     "categories": "类别",
     "back": "返回"
   },
-  "nft_page": {
+  "asset_page": {
+    "actions": {
+      "cancel_sale": "删除列表",
+      "update": "更新价格",
+      "buy": "购买",
+      "bid": "出价",
+      "see_listing": "查看清单",
+      "sell": "出售",
+      "transfer": "转让",
+      "leaving_decentraland": "离开Decentraland",
+      "leaving_decentraland_description": "您还无法将{vendor}资产发布或更新到Decentraland市场。您是否要继续{vendor_link}在此处发布？",
+      "leaving_decentraland_disclaimer": "您的NFT仍将列在Decentraland市场中"
+    },
     "description": "描述",
     "owner": "持有者",
+    "creator": "创造者",
     "price": "价格",
+    "available": "可用的",
     "expires": "到期时间",
-    "cancel_sale": "删除列表",
-    "buy": "购买",
-    "sell": "出售",
-    "see_listing": "查看清单",
-    "bid": "出价",
-    "update": "更新价格",
-    "transfer": "转让",
     "plaza": "广场",
     "road": "道路",
     "district": "区域",
-    "leaving_decentraland": "离开Decentraland",
-    "leaving_decentraland_description": "您还无法将{vendor}资产发布或更新到Decentraland市场。您是否要继续{vendor_link}在此处发布？",
-    "leaving_decentraland_disclaimer": "您的NFT仍将列在Decentraland市场中",
     "part_of_estate": "{estate_name}一部分"
   },
   "proximity": {
@@ -258,10 +267,20 @@
     "invalid_owner": "您不是{name}的持有者。",
     "submit": "确认"
   },
+  "browse_page": {
+    "primary_market_title": "商店",
+    "primary_market_subtitle": "用户原创",
+    "secondary_market_title": "列表",
+    "secondary_market_subtitle": "被转售的物品"
+  },
   "account_page": {
     "copied": "已复制 ✔",
     "copied_capitalized": "已复制 ✔",
-    "copy_address": "复制地址"
+    "copy_address": "复制地址",
+    "primary_market_title": "创作",
+    "primary_market_subtitle": "此用户创建的项目",
+    "secondary_market_title": "收藏品",
+    "secondary_market_subtitle": "该用户收集的物品"
   },
   "settings_page": {
     "authorizations": "授权",

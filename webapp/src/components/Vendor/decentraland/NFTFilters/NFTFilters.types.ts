@@ -1,11 +1,13 @@
 import { Network, Rarity } from '@dcl/schemas'
-import { Section, SortBy } from '../../../../modules/routing/types'
-import { browseNFTs } from '../../../../modules/routing/actions'
+import { SortBy } from '../../../../modules/routing/types'
+import { browse } from '../../../../modules/routing/actions'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
+import { AssetType } from '../../../../modules/asset/types'
 
 export type Props = {
+  assetType: AssetType
   count?: number
-  section: Section
+  section: string
   sortBy?: SortBy
   search: string
   onlyOnSale?: boolean
@@ -14,11 +16,12 @@ export type Props = {
   wearableGenders: WearableGender[]
   contracts: string[]
   network?: Network
-  onBrowse: typeof browseNFTs
+  onBrowse: typeof browse
 }
 
 export type MapStateProps = Pick<
   Props,
+  | 'assetType'
   | 'count'
   | 'section'
   | 'sortBy'
@@ -30,4 +33,5 @@ export type MapStateProps = Pick<
   | 'contracts'
   | 'network'
 >
-export type OwnProps = Pick<Props, 'onBrowse'>
+export type MapDispatchProps = {}
+export type OwnProps = Pick<Props, 'onBrowse' | 'isMap'>

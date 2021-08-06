@@ -31,7 +31,7 @@ const Wallet = (props: Props) => {
     <>
       {isLoading ? <Loading /> : null}
       {!wallet && !isLoading ? <NotConnected /> : null}
-      {wallet ? children(wallet) : null}
+      {wallet && !isLoading ? children(wallet) : null}
     </>
   )
 }

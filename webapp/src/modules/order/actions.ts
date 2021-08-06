@@ -3,7 +3,7 @@ import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transac
 
 import { NFT } from '../nft/types'
 import { Order } from './types'
-import { getNFTName } from '../nft/utils'
+import { getAssetName } from '../asset/utils'
 import { formatMANA } from '../../lib/mana'
 
 // Create Order (aka Sell)
@@ -31,7 +31,7 @@ export const createOrderSuccess = (
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       network: nft.network,
-      name: getNFTName(nft),
+      name: getAssetName(nft),
       price
     })
   })
@@ -65,7 +65,7 @@ export const executeOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       network: nft.network,
-      name: getNFTName(nft),
+      name: getAssetName(nft),
       price: formatMANA(order.price)
     })
   })
@@ -92,7 +92,7 @@ export const cancelOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       network: nft.network,
-      name: getNFTName(nft),
+      name: getAssetName(nft),
       price: formatMANA(order.price)
     })
   })

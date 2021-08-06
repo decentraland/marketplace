@@ -7,11 +7,13 @@ import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
 import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { contracts } from '../../../../modules/contract/utils'
+import { AssetType } from '../../../../modules/asset/types'
 
 export const ALL_FILTER_OPTION = 'ALL'
 
 const FiltersMenu = (props: Props) => {
   const {
+    assetType,
     selectedCollection,
     selectedRarities,
     selectedGenders,
@@ -73,20 +75,22 @@ const FiltersMenu = (props: Props) => {
 
   return (
     <>
-      <Row>
-        <SelectFilter
-          name={t('nft_filters.collection')}
-          value={selectedCollection || ALL_FILTER_OPTION}
-          options={collectionOptions}
-          onChange={onCollectionsChange}
-        />
-        <SelectFilter
-          name={t('nft_filters.network')}
-          value={selectedNetwork || ALL_FILTER_OPTION}
-          options={networkOptions}
-          onChange={network => onNetworkChange(network as Network)}
-        />
-      </Row>
+      {assetType === AssetType.NFT ? (
+        <Row>
+          <SelectFilter
+            name={t('nft_filters.collection')}
+            value={selectedCollection || ALL_FILTER_OPTION}
+            options={collectionOptions}
+            onChange={onCollectionsChange}
+          />
+          <SelectFilter
+            name={t('nft_filters.network')}
+            value={selectedNetwork || ALL_FILTER_OPTION}
+            options={networkOptions}
+            onChange={network => onNetworkChange(network as Network)}
+          />
+        </Row>
+      ) : null}
       <Row>
         <ArrayFilter
           name={t('nft_filters.rarity')}

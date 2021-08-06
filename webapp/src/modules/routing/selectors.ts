@@ -1,7 +1,10 @@
 import { createSelector } from 'reselect'
-import { getSearch as getRouterSearch } from 'connected-react-router'
+import {
+  getSearch as getRouterSearch,
+  getLocation
+} from 'connected-react-router'
 import { Network, Rarity } from '@dcl/schemas'
-import { getView } from '../ui/nft/browse/selectors'
+import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
 import { WearableGender } from '../nft/wearable/types'
 import { VendorName } from '../vendor/types'
@@ -14,8 +17,16 @@ import {
   getURLParam
 } from './search'
 import { SortBy, Section } from './types'
+import { locations } from './locations'
+import { AssetType } from '../asset/types'
 
 export const getState = (state: RootState) => state.routing
+
+const getPathName = createSelector<
+  RootState,
+  ReturnType<typeof getLocation>,
+  string
+>(getLocation, location => location.pathname)
 
 export const getVendor = createSelector<RootState, string, VendorName>(
   getRouterSearch,
@@ -31,14 +42,17 @@ export const getVendor = createSelector<RootState, string, VendorName>(
 export const getSection = createSelector<
   RootState,
   string,
+  ReturnType<typeof getPathName>,
   VendorName,
-  Section
->(
-  getRouterSearch,
-  getVendor,
-  (search, vendor) =>
-    getURLParam<Section>(search, 'section') || Section[vendor].ALL
-)
+  string
+>(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
+  const section = getURLParam<string>(search, 'section')
+  if (!section && pathname === locations.lands()) {
+    return Section.decentraland.LAND
+  }
+
+  return getURLParam<string>(search, 'section') || Section[vendor].ALL
+})
 
 export const getPage = createSelector<RootState, string, number>(
   getRouterSearch,
@@ -84,11 +98,28 @@ export const getOnlyOnSale = createSelector<
   return result
 })
 
+export const getIsSoldOut = createSelector<
+  RootState,
+  string,
+  boolean | undefined
+>(getRouterSearch, search => {
+  const isSoldOut = getURLParam(search, 'isSoldOut')
+  return isSoldOut === 'true'
+})
+
 export const getIsMap = createSelector<RootState, string, boolean | undefined>(
   getRouterSearch,
   search => {
     const isMap = getURLParam(search, 'isMap')
     return isMap === null ? undefined : isMap === 'true'
+  }
+)
+
+export const getItemId = createSelector<RootState, string, string | undefined>(
+  getRouterSearch,
+  search => {
+    const itemId = getURLParam(search, 'isSoldOut')
+    return itemId ? itemId : undefined
   }
 )
 
@@ -149,3 +180,16 @@ export const getNetwork = createSelector<
   getRouterSearch,
   search => (getURLParam(search, 'network') as Network) || undefined
 )
+
+export const getAssetType = createSelector<
+  RootState,
+  string,
+  string,
+  AssetType
+>(getRouterSearch, getPathName, (search, pathname) => {
+  let results = getURLParam(search, 'assetType') as AssetType
+  if (!results) {
+    results = pathname === locations.browse() ? AssetType.ITEM : AssetType.NFT
+  }
+  return results
+})

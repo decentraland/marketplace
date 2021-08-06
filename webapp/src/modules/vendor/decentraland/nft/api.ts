@@ -1,31 +1,33 @@
+import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFTsFetchParams } from '../../../nft/types'
-import { NFTsFetchFilters, NFTResponse } from './types'
-import { getSortBy } from '../../../nft/utils'
+import { NFTsFetchFilters, NFTResponse, NFTResult } from './types'
 import { ATLAS_SERVER_URL } from '../land'
 import { Contract } from '../../services'
 import { contracts } from '../../../contract/utils'
 import { VendorName } from '../../types'
+import { getNFTSortBy } from '../../../routing/search'
 
 export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
 
-class NFTAPI {
-  fetch = async (params: NFTsFetchParams, filters?: NFTsFetchFilters) => {
-    const queryParams = this.buildQueryString(params, filters)
-
-    const response: NFTResponse = await fetch(
-      `${NFT_SERVER_URL}/v1/nfts?${queryParams}`
-    ).then(resp => resp.json())
-
-    return response
+class NFTAPI extends BaseAPI {
+  fetch = async (
+    params: NFTsFetchParams,
+    filters?: NFTsFetchFilters
+  ): Promise<NFTResponse> => {
+    const queryParams = this.buildNFTQueryString(params, filters)
+    return this.request('get', `/nfts?${queryParams}`)
   }
 
-  async fetchOne(contractAddress: string, tokenId: string) {
-    const response: NFTResponse = await fetch(
-      `${NFT_SERVER_URL}/v1/nfts?contractAddress=${contractAddress}&tokenId=${tokenId}`
-    ).then(resp => resp.json())
+  async fetchOne(contractAddress: string, tokenId: string): Promise<NFTResult> {
+    const response: NFTResponse = await this.request('get', '/nfts', {
+      contractAddress,
+      tokenId
+    })
+
     if (response.data.length === 0) {
       throw new Error('Not found')
     }
+
     return response.data[0]
   }
 
@@ -40,14 +42,12 @@ class NFTAPI {
     }
   }
 
-  async fetchContracts() {
+  async fetchContracts(): Promise<Contract[]> {
     try {
       const response: {
         data: Omit<Contract, 'vendor'>[]
         total: number
-      } = await fetch(
-        `${NFT_SERVER_URL}/v1/contracts?first=0` // first=0 so it returns all the results
-      ).then(resp => resp.json())
+      } = await this.request('get', '/contracts', { first: 0 })
       const contracts: Contract[] = response.data.map(
         contractWithoutVendor => ({
           ...contractWithoutVendor,
@@ -60,7 +60,7 @@ class NFTAPI {
     }
   }
 
-  private buildQueryString(
+  private buildNFTQueryString(
     params: NFTsFetchParams,
     filters?: NFTsFetchFilters
   ): string {
@@ -68,7 +68,7 @@ class NFTAPI {
     queryParams.append('first', params.first.toString())
     queryParams.append('skip', params.skip.toString())
     if (params.orderBy) {
-      queryParams.append('sortBy', getSortBy(params.orderBy))
+      queryParams.append('sortBy', getNFTSortBy(params.orderBy))
     }
     if (params.category) {
       queryParams.append('category', params.category)
@@ -84,6 +84,11 @@ class NFTAPI {
       queryParams.set('search', params.search)
     }
     if (filters) {
+      if (filters.wearableRarities) {
+        for (const wearableRarity of filters.wearableRarities) {
+          queryParams.append('itemRarity', wearableRarity)
+        }
+      }
       if (filters.isLand) {
         queryParams.append('isLand', 'true')
       }
@@ -95,11 +100,6 @@ class NFTAPI {
       }
       if (filters.wearableCategory) {
         queryParams.append('wearableCategory', filters.wearableCategory)
-      }
-      if (filters.wearableRarities) {
-        for (const wearableRarity of filters.wearableRarities) {
-          queryParams.append('wearableRarity', wearableRarity)
-        }
       }
       if (filters.wearableGenders) {
         for (const wearableGender of filters.wearableGenders) {
@@ -122,4 +122,4 @@ class NFTAPI {
   }
 }
 
-export const nftAPI = new NFTAPI()
+export const nftAPI = new NFTAPI(NFT_SERVER_URL)

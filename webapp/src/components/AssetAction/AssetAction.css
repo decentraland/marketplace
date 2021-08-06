@@ -1,0 +1,59 @@
+.AssetAction .back {
+  background-image: url(../../images/back.svg);
+  background-repeat: no-repeat;
+  background-position-x: 10px;
+  background-position-y: 9px;
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  border: solid 1px rgba(115, 110, 125, 0.4);
+  background-size: 7px;
+  margin-top: 5vh;
+  margin-bottom: 10vh;
+  cursor: pointer;
+  margin-left: 2px;
+}
+
+.AssetAction .back:hover {
+  border: solid 1px rgba(255, 255, 255, 0.5);
+}
+
+.AssetAction .Row .left {
+  flex: 0.75 1 auto;
+  text-align: right;
+  margin-right: 80px;
+}
+
+.AssetAction .Row .right {
+  flex: 1.25 1 auto;
+}
+
+.AssetAction .nft-image-wrapper {
+  width: 240px;
+  border-radius: 16px;
+  overflow: hidden;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .AssetAction > .Row {
+    flex-direction: column;
+  }
+
+  .AssetAction > .Row .Column.left,
+  .AssetAction > .Row .nft-image-wrapper,
+  .AssetAction > .Row .ui.button {
+    width: 100%;
+  }
+
+  .AssetAction > .Row .buttons {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .AssetAction > .Row .nft-image-wrapper,
+  .AssetAction > .Row .ui.button + .ui.button {
+    margin-left: 0px;
+    margin-bottom: 24px;
+  }
+}

@@ -8,9 +8,9 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { toMANA, fromMANA } from '../../../lib/mana'
-import { NFTAction } from '../../NFTAction'
-import { getNFTName, isOwnedBy } from '../../../modules/nft/utils'
+import { AssetAction } from '../../AssetAction'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
@@ -85,13 +85,13 @@ const BidModal = (props: Props) => {
     fromMANA(price) > wallet.networks[Network.ETHEREUM].mana
 
   return (
-    <NFTAction nft={nft}>
+    <AssetAction asset={nft}>
       <Header size="large">{t('bid_page.title')}</Header>
       <p className="subtitle">
         <T
           id={'bid_page.subtitle'}
           values={{
-            name: <b className="primary-text">{getNFTName(nft)}</b>
+            name: <b className="primary-text">{getAssetName(nft)}</b>
           }}
         />
       </p>
@@ -156,7 +156,7 @@ const BidModal = (props: Props) => {
         onProceed={handlePlaceBid}
         onCancel={handleClose}
       />
-    </NFTAction>
+    </AssetAction>
   )
 }
 

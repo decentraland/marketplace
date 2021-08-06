@@ -4,10 +4,11 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
-import { NFTProviderPage } from '../NFTProviderPage'
-import { NFTAction } from '../NFTAction'
+import { AssetProviderPage } from '../AssetProviderPage'
+import { AssetAction } from '../AssetAction'
 import { locations } from '../../modules/routing/locations'
-import { getNFTName, isOwnedBy } from '../../modules/nft/utils'
+import { getAssetName, isOwnedBy } from '../../modules/asset/utils'
+import { AssetType } from '../../modules/asset/types'
 import { Props } from './TransferPage.types'
 import './TransferPage.css'
 
@@ -23,13 +24,13 @@ const TransferPage = (props: Props) => {
       <Page className="TransferPage">
         <Wallet>
           {wallet => (
-            <NFTProviderPage>
+            <AssetProviderPage type={AssetType.NFT}>
               {(nft, order) => {
                 let subtitle
                 let isDisabled = !address || isInvalidAddress || isTransfering
                 let canTransfer = true
                 const subtitleClasses = ['subtitle']
-                const name = getNFTName(nft)
+                const name = getAssetName(nft)
                 if (order) {
                   isDisabled = true
                   canTransfer = false
@@ -59,7 +60,7 @@ const TransferPage = (props: Props) => {
                   )
                 }
                 return (
-                  <NFTAction nft={nft}>
+                  <AssetAction asset={nft}>
                     <Header size="large">
                       {t('transfer_page.title', {
                         category: t(`global.${nft.category}`)
@@ -118,10 +119,10 @@ const TransferPage = (props: Props) => {
                         </Button>
                       </div>
                     </Form>
-                  </NFTAction>
+                  </AssetAction>
                 )
               }}
-            </NFTProviderPage>
+            </AssetProviderPage>
           )}
         </Wallet>
       </Page>

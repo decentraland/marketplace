@@ -1,9 +1,10 @@
 import React from 'react'
 import { Page } from 'decentraland-ui'
+import { AssetType } from '../../modules/asset/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
-import { NFTProviderPage } from '../NFTProviderPage'
+import { AssetProviderPage } from '../AssetProviderPage'
 import { SellModal } from './SellModal'
 import { Props } from './SellPage.types'
 import './SellPage.css'
@@ -22,7 +23,7 @@ const SellPage = (props: Props) => {
       <Page className="SellPage">
         <Wallet>
           {wallet => (
-            <NFTProviderPage>
+            <AssetProviderPage type={AssetType.NFT}>
               {(nft, order) => (
                 <SellModal
                   nft={nft}
@@ -35,7 +36,7 @@ const SellPage = (props: Props) => {
                   onCreateOrder={onCreateOrder}
                 />
               )}
-            </NFTProviderPage>
+            </AssetProviderPage>
           )}
         </Wallet>
       </Page>
