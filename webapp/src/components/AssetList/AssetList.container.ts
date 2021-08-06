@@ -12,8 +12,8 @@ import {
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './NFTList.types'
-import NFTList from './NFTList'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
+import AssetList from './AssetList'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 
 const mapState = (state: RootState): MapStateProps => ({
@@ -32,4 +32,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBrowse: options => dispatch(browse(options))
 })
 
-export default connect(mapState, mapDispatch)(NFTList)
+export default connect(mapState, mapDispatch)(AssetList)

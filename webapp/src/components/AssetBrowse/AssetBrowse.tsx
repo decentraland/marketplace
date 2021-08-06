@@ -7,7 +7,7 @@ import { Section } from '../../modules/vendor/decentraland'
 import { AssetType } from '../../modules/asset/types'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
-import { NFTList } from '../NFTList'
+import { AssetList } from '../AssetList'
 import { VendorStrip } from '../VendorStrip'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
@@ -185,7 +185,7 @@ const AssetBrowse = (props: Props) => {
               />
             </div>
           ) : (
-            <NFTList />
+            <AssetList />
           )}
         </Column>
       </Row>

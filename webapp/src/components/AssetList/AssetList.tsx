@@ -8,9 +8,9 @@ import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
 import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { AssetCard } from '../AssetCard'
-import { Props } from './NFTList.types'
+import { Props } from './AssetList.types'
 
-const NFTList = (props: Props) => {
+const AssetList = (props: Props) => {
   const {
     vendor,
     assetType,
@@ -74,4 +74,4 @@ const NFTList = (props: Props) => {
   )
 }
 
-export default React.memo(NFTList)
+export default React.memo(AssetList)
