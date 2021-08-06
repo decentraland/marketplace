@@ -18,7 +18,7 @@ export enum SortDirection {
   DESC = 'desc'
 }
 
-export type NFTBrowseOptions = {
+export type BrowseOptions = {
   assetType?: AssetType
   view?: View
   vendor?: VendorName

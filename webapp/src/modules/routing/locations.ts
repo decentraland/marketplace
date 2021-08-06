@@ -1,6 +1,6 @@
 import { AssetType } from '../asset/types'
 import { getSearchParams } from './search'
-import { NFTBrowseOptions } from './types'
+import { BrowseOptions } from './types'
 
 export const locations = {
   root: () => '/',
@@ -10,15 +10,15 @@ export const locations = {
   bids: () => '/bids',
   lands: () => '/lands',
   collectibles: () => '/collectibles',
-  browse: (options?: NFTBrowseOptions) => {
+  browse: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
   },
-  currentAccount: (options?: NFTBrowseOptions) => {
+  currentAccount: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/account?${params.toString()}` : '/account'
   },
-  account: (address: string = ':address', options?: NFTBrowseOptions) => {
+  account: (address: string = ':address', options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params
       ? `/accounts/${address}?${params.toString()}`

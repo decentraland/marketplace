@@ -4,10 +4,10 @@ import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor/types'
 import { setView, SetViewAction } from '../../modules/ui/actions'
 import {
-  browseNFTs,
-  BrowseNFTsAction,
-  fetchNFTsFromRoute,
-  FetchNFTsFromRouteAction
+  browse,
+  BrowseAction,
+  fetchAssetsFromRoute,
+  FetchAssetsFromRouteAction
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/decentraland'
 import { AssetType } from '../../modules/asset/types'
@@ -24,8 +24,8 @@ export type Props = {
   isFullscreen: boolean
   isLoading: boolean
   onSetView: typeof setView
-  onFetchNFTsFromRoute: typeof fetchNFTsFromRoute
-  onBrowse: typeof browseNFTs
+  onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
+  onBrowse: typeof browse
   onlyOnSale?: boolean
 }
 
@@ -35,10 +35,10 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<
   Props,
-  'onSetView' | 'onFetchNFTsFromRoute' | 'onBrowse'
+  'onSetView' | 'onFetchAssetsFromRoute' | 'onBrowse'
 >
 export type MapDispatch = Dispatch<
-  SetViewAction | FetchNFTsFromRouteAction | BrowseNFTsAction
+  SetViewAction | FetchAssetsFromRouteAction | BrowseAction
 >
 export type OwnProps = Pick<
   Props,

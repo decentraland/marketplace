@@ -16,7 +16,12 @@ import { Props } from './HomePage.types'
 import './HomePage.css'
 
 const HomePage = (props: Props) => {
-  const { homepage, homepageLoading, onNavigate, onFetchNFTsFromRoute } = props
+  const {
+    homepage,
+    homepageLoading,
+    onNavigate,
+    onFetchAssetsFromRoute
+  } = props
 
   const sections: Partial<Record<View, Section>> = useMemo(
     () => ({
@@ -63,7 +68,7 @@ const HomePage = (props: Props) => {
     for (view in homepage) {
       const assetType = assetTypes[view]
       const section = sections[view]
-      onFetchNFTsFromRoute({
+      onFetchAssetsFromRoute({
         vendor,
         section,
         view,
@@ -74,7 +79,7 @@ const HomePage = (props: Props) => {
       })
     }
     // eslint-disable-next-line
-  }, [onFetchNFTsFromRoute])
+  }, [onFetchAssetsFromRoute])
 
   const views = Object.keys(homepage) as HomepageView[]
 

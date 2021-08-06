@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../../modules/reducer'
-import { browseNFTs } from '../../../modules/routing/actions'
+import { browse } from '../../../modules/routing/actions'
 import { getVendor } from '../../../modules/routing/selectors'
 import {
   MapStateProps,
@@ -17,7 +17,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onBrowse: options => dispatch(browseNFTs(options))
+  onBrowse: options => dispatch(browse(options))
 })
 
 const mergeProps = (

@@ -1,24 +1,24 @@
 import { action } from 'typesafe-actions'
 
-import { NFTBrowseOptions } from './types'
+import { BrowseOptions } from './types'
 
 // Browse NFTs
 
-export const BROWSE_NFTS = 'Browse NFTs'
+export const BROWSE = 'Browse'
 
-export const browseNFTs = (searchOptions: NFTBrowseOptions) =>
-  action(BROWSE_NFTS, { searchOptions })
+export const browse = (searchOptions: BrowseOptions) =>
+  action(BROWSE, { searchOptions })
 
-export type BrowseNFTsAction = ReturnType<typeof browseNFTs>
+export type BrowseAction = ReturnType<typeof browse>
 
 // Navigate
 
-export const FETCH_NFTS_FROM_ROUTE = 'Fetch NFTs from route'
+export const FETCH_ASSETS_FROM_ROUTE = 'Fetch assets from route'
 
-export const fetchNFTsFromRoute = (searchOptions: NFTBrowseOptions) =>
-  action(FETCH_NFTS_FROM_ROUTE, { searchOptions })
+export const fetchAssetsFromRoute = (searchOptions: BrowseOptions) =>
+  action(FETCH_ASSETS_FROM_ROUTE, { searchOptions })
 
-export type FetchNFTsFromRouteAction = ReturnType<typeof fetchNFTsFromRoute>
+export type FetchAssetsFromRouteAction = ReturnType<typeof fetchAssetsFromRoute>
 
 // Load More
 

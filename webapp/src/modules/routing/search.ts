@@ -1,20 +1,20 @@
 import { Network, NFTCategory, WearableCategory } from '@dcl/schemas'
 import { View } from '../ui/types'
-import { NFTBrowseOptions, SortBy, SortDirection } from './types'
+import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
 import { ItemSortBy } from '../vendor/decentraland/item/types'
 import { NFTSortBy } from '../nft/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
-export function getDefaultOptionsByView(view?: View): NFTBrowseOptions {
+export function getDefaultOptionsByView(view?: View): BrowseOptions {
   return {
     onlyOnSale: view !== View.ACCOUNT,
     sortBy: view === View.ACCOUNT ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
   }
 }
 
-export function getSearchParams(options?: NFTBrowseOptions) {
+export function getSearchParams(options?: BrowseOptions) {
   let params: URLSearchParams | undefined
   if (options) {
     params = new URLSearchParams()

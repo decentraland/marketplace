@@ -52,7 +52,7 @@ const NFTBrowse = (props: Props) => {
     isFullscreen,
     address,
     onSetView,
-    onFetchNFTsFromRoute,
+    onFetchAssetsFromRoute,
     onBrowse,
     section,
     sections,
@@ -71,7 +71,7 @@ const NFTBrowse = (props: Props) => {
 
   useEffect(() => {
     if (viewInState === view && !hasFetched) {
-      onFetchNFTsFromRoute({
+      onFetchAssetsFromRoute({
         vendor,
         view,
         section,
@@ -87,7 +87,7 @@ const NFTBrowse = (props: Props) => {
     address,
     onlyOnSale,
     viewInState,
-    onFetchNFTsFromRoute,
+    onFetchAssetsFromRoute,
     hasFetched
   ])
 
@@ -102,7 +102,7 @@ const NFTBrowse = (props: Props) => {
     [onBrowse]
   )
 
-  const handleBrowseNFTs = useCallback(
+  const handleBrowse = useCallback(
     () => onBrowse({ assetType: AssetType.NFT }),
     [onBrowse]
   )
@@ -149,7 +149,7 @@ const NFTBrowse = (props: Props) => {
                       ? 'account_page.secondary_market_subtitle'
                       : 'browse_page.secondary_market_subtitle'
                   ),
-                  onClick: handleBrowseNFTs
+                  onClick: handleBrowse
                 }
               ]}
             />

@@ -37,33 +37,33 @@ import {
   getSearch
 } from './selectors'
 import {
-  BROWSE_NFTS,
-  BrowseNFTsAction,
-  FETCH_NFTS_FROM_ROUTE,
-  FetchNFTsFromRouteAction,
+  BROWSE,
+  BrowseAction,
+  FETCH_ASSETS_FROM_ROUTE,
+  FetchAssetsFromRouteAction,
   setIsLoadMore
 } from './actions'
-import { NFTBrowseOptions, Section } from './types'
+import { BrowseOptions, Section } from './types'
 import { AssetType } from '../asset/types'
 import { fetchItemsRequest } from '../item/actions'
 
 export function* routingSaga() {
-  yield takeEvery(FETCH_NFTS_FROM_ROUTE, handleFetchNFTsFromRoute)
-  yield takeEvery(BROWSE_NFTS, handleBrowseNFTs)
+  yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
+  yield takeEvery(BROWSE, handleBrowse)
 }
 
-function* handleFetchNFTsFromRoute(action: FetchNFTsFromRouteAction) {
-  const newSearchOptions: NFTBrowseOptions = yield getNFTBrowseOptions(
+function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
+  const newSearchOptions: BrowseOptions = yield getNFTBrowseOptions(
     action.payload.searchOptions
   )
-  yield fetchNFTsFromRoute(newSearchOptions)
+  yield fetchAssetsFromRoute(newSearchOptions)
 }
 
-function* handleBrowseNFTs(action: BrowseNFTsAction) {
-  const options: NFTBrowseOptions = yield getNFTBrowseOptions(
+function* handleBrowse(action: BrowseAction) {
+  const options: BrowseOptions = yield getNFTBrowseOptions(
     action.payload.searchOptions
   )
-  yield fetchNFTsFromRoute(options)
+  yield fetchAssetsFromRoute(options)
 
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
   const params = getSearchParams(options)
@@ -73,7 +73,7 @@ function* handleBrowseNFTs(action: BrowseNFTsAction) {
 // ------------------------------------------------
 // Utility functions, not handlers
 
-function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
+function* fetchAssetsFromRoute(searchOptions: BrowseOptions) {
   const isItems = searchOptions.assetType === AssetType.ITEM
   const view = searchOptions.view!
   const vendor = searchOptions.vendor!
@@ -151,9 +151,9 @@ function* fetchNFTsFromRoute(searchOptions: NFTBrowseOptions) {
 }
 
 function* getNFTBrowseOptions(
-  current: NFTBrowseOptions
-): Generator<unknown, NFTBrowseOptions, any> {
-  let previous: NFTBrowseOptions = {
+  current: BrowseOptions
+): Generator<unknown, BrowseOptions, any> {
+  let previous: BrowseOptions = {
     assetType: yield select(getAssetType),
     address: yield getAddress(),
     vendor: yield select(getVendor),
@@ -209,8 +209,8 @@ function* getAddress() {
 
 // TODO: Consider moving this should live to each vendor
 function* deriveCurrentOptions(
-  previous: NFTBrowseOptions,
-  current: NFTBrowseOptions
+  previous: BrowseOptions,
+  current: BrowseOptions
 ) {
   let newOptions = {
     ...current,
@@ -245,20 +245,17 @@ function* deriveCurrentOptions(
   return newOptions
 }
 
-function deriveView(previous: NFTBrowseOptions, current: NFTBrowseOptions) {
+function deriveView(previous: BrowseOptions, current: BrowseOptions) {
   return previous.page! < current.page!
     ? View.LOAD_MORE
     : current.view || previous.view
 }
 
-function deriveVendor(previous: NFTBrowseOptions, current: NFTBrowseOptions) {
+function deriveVendor(previous: BrowseOptions, current: BrowseOptions) {
   return current.vendor || previous.vendor || VendorName.DECENTRALAND
 }
 
-function shouldResetOptions(
-  previous: NFTBrowseOptions,
-  current: NFTBrowseOptions
-) {
+function shouldResetOptions(previous: BrowseOptions, current: BrowseOptions) {
   return (
     (current.vendor && current.vendor !== previous.vendor) ||
     (current.section && current.section !== previous.section) ||

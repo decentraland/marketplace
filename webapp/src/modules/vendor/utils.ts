@@ -3,14 +3,14 @@ import {
   getCategoryFromSection,
   getSearchWearableCategory
 } from '../routing/search'
-import { NFTBrowseOptions } from '../routing/types'
+import { BrowseOptions } from '../routing/types'
 import { Section } from './routing/types'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName, Disabled } from './types'
 
 export function getFilters(
   vendor: VendorName,
-  searchOptions: NFTBrowseOptions
+  searchOptions: BrowseOptions
 ): NFTsFetchFilters {
   const { section } = searchOptions
 

@@ -3,7 +3,7 @@ import { Item } from '@dcl/schemas'
 
 import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
-import { browseNFTs, BrowseNFTsAction } from '../../modules/routing/actions'
+import { browse, BrowseAction } from '../../modules/routing/actions'
 import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
@@ -14,7 +14,7 @@ export type Props = {
   page: number
   count?: number
   isLoading: boolean
-  onBrowse: typeof browseNFTs
+  onBrowse: typeof browse
 }
 
 export type MapStateProps = Pick<
@@ -22,4 +22,4 @@ export type MapStateProps = Pick<
   'vendor' | 'nfts' | 'items' | 'page' | 'count' | 'isLoading' | 'assetType'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
-export type MapDispatch = Dispatch<BrowseNFTsAction>
+export type MapDispatch = Dispatch<BrowseAction>
