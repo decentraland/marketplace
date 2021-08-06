@@ -13,9 +13,9 @@ import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
 import { NFTFilters } from '../Vendor/NFTFilters'
 import { NFTSidebar } from '../Vendor/NFTSidebar'
-import { Props } from './NFTBrowse.types'
+import { Props } from './AssetBrowse.types'
 import { ToggleBox } from './ToggleBox'
-import './NFTBrowse.css'
+import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
@@ -44,7 +44,7 @@ const hasPrimarySales = (section?: Section) => {
   }
 }
 
-const NFTBrowse = (props: Props) => {
+const AssetBrowse = (props: Props) => {
   const {
     vendor,
     view,
@@ -108,7 +108,7 @@ const NFTBrowse = (props: Props) => {
   )
 
   // classes
-  let classes = ['NFTBrowse']
+  let classes = ['AssetBrowse']
   if (isMap) {
     classes.push('is-map')
   }
@@ -193,4 +193,4 @@ const NFTBrowse = (props: Props) => {
   )
 }
 
-export default React.memo(NFTBrowse)
+export default React.memo(AssetBrowse)

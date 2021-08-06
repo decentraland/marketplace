@@ -1,28 +1,28 @@
-.NFTBrowse .Row .right.Column {
+.AssetBrowse .Row .right.Column {
   position: relative;
   max-width: calc(100% - 256px);
 }
 
-.NFTBrowse.is-map .Row .right.Column {
+.AssetBrowse.is-map .Row .right.Column {
   max-width: none;
 }
 
-.NFTBrowse .ui.cards {
+.AssetBrowse .ui.cards {
   position: relative;
 }
 
-.NFTBrowse .ui.cards {
+.AssetBrowse .ui.cards {
   min-height: 150px;
 }
 
-.NFTBrowse .ui.cards + .empty {
+.AssetBrowse .ui.cards + .empty {
   margin-top: 40px;
   font-size: 16px;
   text-align: center;
   color: var(--secondary-text);
 }
 
-.NFTBrowse .overlay {
+.AssetBrowse .overlay {
   height: 100%;
   width: 100%;
   position: absolute;
@@ -30,23 +30,23 @@
   opacity: 0.6;
 }
 
-.NFTBrowse .load-more {
+.AssetBrowse .load-more {
   text-align: center;
   margin-top: 36px;
   height: 46px;
 }
 
-.NFTBrowse .Atlas {
+.AssetBrowse .Atlas {
   min-height: 700px;
   height: 100%;
   position: relative;
 }
 
-.NFTBrowse .Atlas canvas {
+.AssetBrowse .Atlas canvas {
   border-radius: 8px;
 }
 
-.NFTBrowse .fullscreen-button {
+.AssetBrowse .fullscreen-button {
   position: absolute;
   top: 16px;
   right: 16px;
@@ -61,21 +61,21 @@
   cursor: pointer;
 }
 
-.NFTBrowse.fullscreen .Atlas canvas {
+.AssetBrowse.fullscreen .Atlas canvas {
   border-radius: 0px;
 }
 
-.NFTBrowse.fullscreen .fullscreen-button {
+.AssetBrowse.fullscreen .fullscreen-button {
   display: none;
 }
 
-.NFTBrowse .topbar {
+.AssetBrowse .topbar {
   margin-bottom: 24px;
 }
 
-.NFTBrowse.fullscreen > .Row,
-.NFTBrowse.fullscreen > .Row > .Column,
-.NFTBrowse.fullscreen .Atlas {
+.AssetBrowse.fullscreen > .Row,
+.AssetBrowse.fullscreen > .Row > .Column,
+.AssetBrowse.fullscreen .Atlas {
   display: block;
   position: absolute;
   top: 0px;
@@ -85,14 +85,14 @@
   min-height: auto;
   margin-top: 0px;
 }
-.NFTBrowse.fullscreen .blur-background {
+.AssetBrowse.fullscreen .blur-background {
   position: relative;
   background: rgba(22, 20, 26, 0.75);
   backdrop-filter: blur(20px);
   z-index: 1;
 }
 
-.NFTBrowse.fullscreen .NFTFilters {
+.AssetBrowse.fullscreen .NFTFilters {
   position: relative;
   top: 0px;
   left: 0px;
@@ -103,50 +103,50 @@
   justify-content: center;
 }
 
-.NFTBrowse.fullscreen .NFTFilters .topbar {
+.AssetBrowse.fullscreen .NFTFilters .topbar {
   margin-bottom: 0px;
   width: 100%;
   display: flex;
   align-items: center;
 }
 
-.NFTBrowse.fullscreen .NFTFilters .TextFilter {
+.AssetBrowse.fullscreen .NFTFilters .TextFilter {
   margin-bottom: 0px;
 }
 
-.NFTBrowse.fullscreen .NFTFilters .TextFilter input {
+.AssetBrowse.fullscreen .NFTFilters .TextFilter input {
   padding-bottom: 0px;
 }
 
-.NFTBrowse.fullscreen .NFTFilters .TextFilter input::placeholder {
+.AssetBrowse.fullscreen .NFTFilters .TextFilter input::placeholder {
   color: var(--text);
   opacity: 0.5;
 }
 
-.NFTBrowse .result-type-toggle {
+.AssetBrowse .result-type-toggle {
   margin-bottom: 24px;
   margin-left: -16px;
   margin-right: 24px;
 }
 
 @media (max-width: 768px) {
-  .NFTBrowse .Row .right.Column {
+  .AssetBrowse .Row .right.Column {
     max-width: 100%;
   }
 
-  .NFTBrowse .Layout .right.column > div {
+  .AssetBrowse .Layout .right.column > div {
     width: 100%;
   }
 
-  .NFTBrowse .NFTSidebar ul.menu li {
+  .AssetBrowse .NFTSidebar ul.menu li {
     width: calc(100% - 32px);
   }
 
-  .NFTBrowse .NFTFilters .topbar {
+  .AssetBrowse .NFTFilters .topbar {
     align-items: center;
   }
 
-  .NFTBrowse .result-type-toggle {
+  .AssetBrowse .result-type-toggle {
     display: none;
   }
 }

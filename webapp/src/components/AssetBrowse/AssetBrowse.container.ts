@@ -21,8 +21,8 @@ import {
   MapStateProps,
   OwnProps,
   Props
-} from './NFTBrowse.types'
-import NFTBrowse from './NFTBrowse'
+} from './AssetBrowse.types'
+import AssetBrowse from './AssetBrowse'
 import { Section } from '../../modules/vendor/decentraland'
 
 const mapState = (state: RootState): MapStateProps => ({
@@ -54,4 +54,4 @@ const mergeProps = (
   isMap: stateProps.isMap ?? ownProps.isMap
 })
 
-export default connect(mapState, mapDispatch, mergeProps)(NFTBrowse)
+export default connect(mapState, mapDispatch, mergeProps)(AssetBrowse)
