@@ -12,7 +12,6 @@ const SelectFilter = (props: Props) => {
         {name}
       </Header>
       <Dropdown
-        search
         clearable={clearable}
         value={value}
         options={options}
