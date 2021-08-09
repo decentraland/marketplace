@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Container, Header, Mana, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Rarity } from '@dcl/schemas'
 
 import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
@@ -19,6 +20,7 @@ import { WearableRarity } from '../WearableRarity'
 import { WearableHighlights } from '../WearableHighlights'
 import { WearableCollection } from '../WearableCollection'
 import { Props } from './ItemDetail.types'
+import './ItemDetail.css'
 
 const ItemDetail = (props: Props) => {
   const { item, wallet } = props
@@ -55,7 +57,7 @@ const ItemDetail = (props: Props) => {
                 </Stats>
                 <Stats title={t('asset_page.available')}>
                   {item.available > 0
-                    ? item.available.toLocaleString()
+                    ? <Header>{item.available.toLocaleString()}<span className="supply">/{Rarity.getMaxSupply(item.rarity).toLocaleString()}</span></Header>
                     : t('asset_page.sold_out')}
                 </Stats>
               </>
