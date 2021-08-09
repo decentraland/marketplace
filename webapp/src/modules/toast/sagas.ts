@@ -23,6 +23,10 @@ import {
   getMetaTransactionFailureToast,
   getContractAccountFailureToast
 } from './toasts'
+import {
+  isContractAccountError,
+  isUserDeniedSignatureError
+} from '../transaction/utils'
 
 export function* toastSaga() {
   yield all([baseToastSaga(), customToastSaga()])
@@ -73,11 +77,12 @@ function* handleAuthorizationMetaTransactionFailure(
   const { authorization, error } = action.payload
 
   const { network } = getChainConfiguration(authorization.chainId)
-  if (network === Network.MATIC && !isUserDeniedSignature(error)) {
-    yield put(showToast(getMetaTransactionFailureToast()))
-  }
-}
 
-function isUserDeniedSignature(message: string) {
-  return message.indexOf('User denied message signature') !== -1
+  if (network === Network.MATIC && !isUserDeniedSignatureError(error)) {
+    if (isContractAccountError(error)) {
+      yield put(showToast(getContractAccountFailureToast()))
+    } else {
+      yield put(showToast(getMetaTransactionFailureToast()))
+    }
+  }
 }
