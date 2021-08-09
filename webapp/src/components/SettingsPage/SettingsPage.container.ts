@@ -25,9 +25,8 @@ const mapState = (state: RootState): MapStateProps => {
   // TODO: Change this to use ErrorCodes. Needs an overhaul on decentraland-dapps
   const hasError =
     !!error &&
-    !['denied transaction signature', 'accounts are not supported'].includes(
-      error
-    )
+    error.search(/denied transaction signature|accounts are not supported/) ===
+      -1
 
   return {
     wallet,
