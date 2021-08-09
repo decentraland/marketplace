@@ -13,9 +13,6 @@ const OrderDetails = (props: Props) => {
 
   return (
     <>
-      <Stats title={t('global.network')}>
-        {t(`networks.${nft.network.toLowerCase()}`)}
-      </Stats>
       {order ? (
         <Stats title={t('asset_page.price')}>
           <Mana network={nft.network} withTooltip>

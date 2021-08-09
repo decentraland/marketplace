@@ -1,19 +1,17 @@
 import React, { useMemo } from 'react'
+import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Row } from 'decentraland-ui'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
+import { contracts } from '../../../../modules/contract/utils'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
-import { Network, NFTCategory, Rarity } from '@dcl/schemas'
-import { contracts } from '../../../../modules/contract/utils'
-import { AssetType } from '../../../../modules/asset/types'
 
 export const ALL_FILTER_OPTION = 'ALL'
 
 const FiltersMenu = (props: Props) => {
   const {
-    assetType,
     selectedCollection,
     selectedRarities,
     selectedGenders,
@@ -75,22 +73,22 @@ const FiltersMenu = (props: Props) => {
 
   return (
     <>
-      {assetType === AssetType.NFT ? (
-        <Row>
-          <SelectFilter
-            name={t('nft_filters.collection')}
-            value={selectedCollection || ALL_FILTER_OPTION}
-            options={collectionOptions}
-            onChange={onCollectionsChange}
-          />
-          <SelectFilter
-            name={t('nft_filters.network')}
-            value={selectedNetwork || ALL_FILTER_OPTION}
-            options={networkOptions}
-            onChange={network => onNetworkChange(network as Network)}
-          />
-        </Row>
-      ) : null}
+      <Row>
+        <SelectFilter
+          name={t('nft_filters.collection')}
+          value={selectedCollection || ALL_FILTER_OPTION}
+          clearable={!!selectedCollection}
+          options={collectionOptions}
+          onChange={onCollectionsChange}
+        />
+        <SelectFilter
+          name={t('nft_filters.network')}
+          value={selectedNetwork || ALL_FILTER_OPTION}
+          clearable={!!selectedNetwork}
+          options={networkOptions}
+          onChange={network => onNetworkChange(network as Network)}
+        />
+      </Row>
       <Row>
         <ArrayFilter
           name={t('nft_filters.rarity')}

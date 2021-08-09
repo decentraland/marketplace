@@ -80,7 +80,7 @@ function* fetchAssetsFromRoute(options: BrowseOptions) {
   const page = options.page!
   const section = options.section!
   const sortBy = options.sortBy!
-  const { search, onlyOnSale, isMap } = options
+  const { search, onlyOnSale, isMap, contracts } = options
 
   const address = options.address || ((yield getAddress()) as string)
 
@@ -123,6 +123,7 @@ function* fetchAssetsFromRoute(options: BrowseOptions) {
           isWearableAccessory,
           search,
           rarities: wearableRarities,
+          contractAddress: contracts && contracts[0],
           wearableGenders
         }
       })
@@ -229,9 +230,9 @@ function* deriveCurrentOptions(
         newOptions = {
           wearableRarities: yield select(getWearableRarities),
           wearableGenders: yield select(getWearableGenders),
-          contracts: yield select(getContracts),
           search: yield select(getSearch),
           network: yield select(getNetwork),
+          contracts: yield select(getContracts),
           ...newOptions
         }
       }

@@ -6,17 +6,19 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
+import { AssetType } from '../../../modules/asset/types'
 import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { AssetImage } from '../../AssetImage'
 import { PageHeader } from '../../PageHeader'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
+import { Network } from '../Network'
 import { Description } from '../Description'
 import { WearableRarity } from '../WearableRarity'
 import { WearableHighlights } from '../WearableHighlights'
+import { WearableCollection } from '../WearableCollection'
 import { Props } from './ItemDetail.types'
-import { AssetType } from '../../../modules/asset/types'
 
 const ItemDetail = (props: Props) => {
   const { item, wallet } = props
@@ -43,6 +45,7 @@ const ItemDetail = (props: Props) => {
         <Description text={wearable.description} />
         <Row>
           <Column align="left" grow={true}>
+            <Network asset={item} />
             {item.isOnSale ? (
               <>
                 <Stats title={t('asset_page.price')}>
@@ -72,6 +75,11 @@ const ItemDetail = (props: Props) => {
                 {t('asset_page.actions.buy')}
               </Button>
             ) : null}
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <WearableCollection type={AssetType.ITEM} asset={item} />
           </Column>
         </Row>
         <WearableHighlights type={AssetType.ITEM} wearable={wearable} />

@@ -39,7 +39,6 @@ const NFTFilters = (props: Props) => {
     assetType
   } = props
 
-  console.log('RESULT TYPE', assetType)
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
