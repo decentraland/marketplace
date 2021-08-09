@@ -20,7 +20,7 @@ const Owner = (props: Props) => {
     label = t('asset_page.owner')
     address = asset.owner
     browseOptions = {
-      assetType: AssetType.ITEM,
+      assetType: AssetType.NFT,
       vendor: asset.vendor,
       section: Section.ALL
     }
