@@ -20,7 +20,8 @@
     "update": "Update",
     "search": "Search",
     "apply": "Apply",
-    "network": "Network"
+    "network": "Network",
+    "issue_number": "Issue Number"
   },
   "vendors": {
     "decentraland": "Decentraland",
