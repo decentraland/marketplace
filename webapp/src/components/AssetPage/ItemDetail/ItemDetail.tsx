@@ -5,8 +5,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
-import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { AssetType } from '../../../modules/asset/types'
+import { getAssetName } from '../../../modules/asset/utils'
 import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { AssetImage } from '../../AssetImage'
@@ -21,9 +21,9 @@ import { WearableCollection } from '../WearableCollection'
 import { Props } from './ItemDetail.types'
 
 const ItemDetail = (props: Props) => {
-  const { item, wallet } = props
+  const { item } = props
   const wearable = item.data.wearable!
-  const canBuy = item.isOnSale && item.available > 0 && !isOwnedBy(item, wallet)
+  const canBuy = item.isOnSale && item.available > 0
 
   return (
     <div className="ItemDetail">
