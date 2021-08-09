@@ -141,6 +141,7 @@
     "creator": "Creator",
     "price": "Price",
     "available": "Available",
+    "collection": "Collection",
     "expires": "Expires in",
     "plaza": "Plaza",
     "road": "Road",

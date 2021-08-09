@@ -8,6 +8,7 @@ import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
+import { Network } from '../Network'
 import { OrderDetails } from '../OrderDetails'
 import { Actions } from '../Actions'
 import { Props } from './PictureFrameDetail.types'
@@ -27,6 +28,7 @@ const PictureFrameDetail = (props: Props) => {
         />
         <Row>
           <Column align="left" grow={true}>
+            <Network asset={nft} />
             <OrderDetails nft={nft} />
           </Column>
           <Column align="right">

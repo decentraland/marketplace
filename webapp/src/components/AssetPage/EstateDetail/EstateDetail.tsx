@@ -9,6 +9,7 @@ import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
 import { Description } from '../Description'
+import { Network } from '../Network'
 import { OrderDetails } from '../OrderDetails'
 import { Actions } from '../Actions'
 import { ProximityHighlights } from '../ProximityHighlights'
@@ -59,6 +60,7 @@ const EstateDetail = (props: Props) => {
         <Description text={estate.description} />
         <Row>
           <Column align="left" grow={true}>
+            <Network asset={nft} />
             <OrderDetails nft={nft} />
           </Column>
           <Column align="right">

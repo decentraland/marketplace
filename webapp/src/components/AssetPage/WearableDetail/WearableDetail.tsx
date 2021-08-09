@@ -1,6 +1,7 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
 import { getAssetName } from '../../../modules/asset/utils'
+import { AssetType } from '../../../modules/asset/types'
 import { PageHeader } from '../../PageHeader'
 import { AssetImage } from '../../AssetImage'
 import { Row } from '../../Layout/Row'
@@ -10,13 +11,14 @@ import { WearableRarity } from '../WearableRarity'
 import { WearableHighlights } from '../WearableHighlights'
 import { Owner } from '../Owner'
 import { Description } from '../Description'
+import { Network } from '../Network'
 import { OrderDetails } from '../OrderDetails'
 import { Actions } from '../Actions'
 import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
+import { WearableCollection } from '../WearableCollection'
 import { Props } from './WearableDetail.types'
 import './WearableDetail.css'
-import { AssetType } from '../../../modules/asset/types'
 
 const WearableDetail = (props: Props) => {
   const { nft } = props
@@ -42,10 +44,16 @@ const WearableDetail = (props: Props) => {
         <Description text={wearable.description} />
         <Row>
           <Column align="left" grow={true}>
+            <Network asset={nft} />
             <OrderDetails nft={nft} />
           </Column>
           <Column align="right">
             <Actions nft={nft} />
+          </Column>
+        </Row>
+        <Row>
+          <Column>
+            <WearableCollection type={AssetType.NFT} asset={nft} />
           </Column>
         </Row>
         <WearableHighlights type={AssetType.ITEM} wearable={wearable} />

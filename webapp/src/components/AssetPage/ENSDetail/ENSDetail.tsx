@@ -9,6 +9,7 @@ import { Column } from '../../Layout/Column'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Badge } from '../Badge'
+import { Network } from '../Network'
 import { OrderDetails } from '../OrderDetails'
 import { Actions } from '../Actions'
 import { Bids } from '../Bids'
@@ -36,6 +37,7 @@ const ENSDetail = (props: Props) => {
         />
         <Row>
           <Column align="left" grow={true}>
+            <Network asset={nft} />
             <OrderDetails nft={nft} />
           </Column>
           <Column align="right">

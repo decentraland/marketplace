@@ -14,6 +14,7 @@ import { Coordinate } from '../../Coordinate'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Description } from '../Description'
+import { Network } from '../Network'
 import { OrderDetails } from '../OrderDetails'
 import { Actions } from '../Actions'
 import { ProximityHighlights } from '../ProximityHighlights'
@@ -85,6 +86,7 @@ const ParcelDetail = (props: Props) => {
         <Description text={parcel.description} />
         <Row>
           <Column align="left" grow={true}>
+            <Network asset={nft} />
             <OrderDetails nft={nft} />
           </Column>
           <Column align="right">

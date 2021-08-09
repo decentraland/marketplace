@@ -98,12 +98,12 @@ const AssetBrowse = (props: Props) => {
   )
 
   const hanldeBrowseItems = useCallback(
-    () => onBrowse({ assetType: AssetType.ITEM }),
+    () => onBrowse({ assetType: AssetType.ITEM, contracts: [] }),
     [onBrowse]
   )
 
   const handleBrowse = useCallback(
-    () => onBrowse({ assetType: AssetType.NFT }),
+    () => onBrowse({ assetType: AssetType.NFT, contracts: [] }),
     [onBrowse]
   )
 
