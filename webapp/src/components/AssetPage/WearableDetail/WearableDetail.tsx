@@ -1,5 +1,7 @@
 import React from 'react'
-import { Container, Header } from 'decentraland-ui'
+import { Container, Header, Stats } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Rarity } from '@dcl/schemas'
 import { getAssetName } from '../../../modules/asset/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { PageHeader } from '../../PageHeader'
@@ -52,9 +54,11 @@ const WearableDetail = (props: Props) => {
           </Column>
         </Row>
         <Row>
-          <Column>
-            <WearableCollection type={AssetType.NFT} asset={nft} />
-          </Column>
+          <WearableCollection type={AssetType.NFT} asset={nft} />
+          {nft.issuedId ?
+            <Stats title={t('global.issue_number')}>
+              <Header>{Number(nft.issuedId).toLocaleString()}<span className="issue-number">/{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}</span></Header>
+            </Stats> : null}
         </Row>
         <WearableHighlights type={AssetType.ITEM} wearable={wearable} />
         <Bids nft={nft} />

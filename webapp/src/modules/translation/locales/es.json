@@ -20,7 +20,8 @@
     "update": "Actualizar",
     "search": "Buscar",
     "apply": "Aplicar",
-    "network": "Red"
+    "network": "Red",
+    "issue_number": "Número de emisión"
   },
   "vendors": {
     "decentraland": "Decentraland",

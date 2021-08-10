@@ -20,7 +20,8 @@
     "update": "更新",
     "search": "搜寻",
     "apply": "应用",
-    "network": "网络"
+    "network": "网络",
+    "issue_number": "发行数量"
   },
   "vendors": {
     "decentraland": "Decentraland",
