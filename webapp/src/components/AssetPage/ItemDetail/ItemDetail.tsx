@@ -20,7 +20,7 @@ import { WearableRarity } from '../WearableRarity'
 import { WearableHighlights } from '../WearableHighlights'
 import { WearableCollection } from '../WearableCollection'
 import { Props } from './ItemDetail.types'
-import './ItemDetail.css'
+import styles from './ItemDetail.module.css'
 
 const ItemDetail = (props: Props) => {
   const { item, wallet } = props
@@ -28,7 +28,7 @@ const ItemDetail = (props: Props) => {
   const canBuy = item.isOnSale && item.available > 0 && !isOwnedBy(item, wallet)
 
   return (
-    <div className="ItemDetail">
+    <div className={styles.detail}>
       <PageHeader>
         <AssetImage asset={item} />
       </PageHeader>
@@ -57,7 +57,7 @@ const ItemDetail = (props: Props) => {
                 </Stats>
                 <Stats title={t('asset_page.available')}>
                   {item.available > 0
-                    ? <Header>{item.available.toLocaleString()}<span className="supply">/{Rarity.getMaxSupply(item.rarity).toLocaleString()}</span></Header>
+                    ? <Header>{item.available.toLocaleString()}<span className={styles.supply}>/{Rarity.getMaxSupply(item.rarity).toLocaleString()}</span></Header>
                     : t('asset_page.sold_out')}
                 </Stats>
               </>
