@@ -1,4 +1,3 @@
-import * as React from 'react'
 import { ToastType } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 

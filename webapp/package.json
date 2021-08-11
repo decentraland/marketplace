@@ -4,14 +4,15 @@
   "dependencies": {
     "@dcl/schemas": "^1.5.1",
     "apollo-boost": "^0.4.7",
+    "bn.js": "^5.2.0",
     "classnames": "^2.3.1",
-    "connected-react-router": "^6.6.1",
-    "date-fns": "^2.8.1",
+    "connected-react-router": "^6.9.1",
+    "date-fns": "^2.23.0",
     "decentraland-dapps": "^12.17.1",
     "decentraland-transactions": "^1.22.2",
     "decentraland-ui": "file:./decentraland-ui-3.8.1.tgz",
-    "dotenv": "^8.2.0",
-    "graphql": "^14.5.8",
+    "dotenv": "^10.0.0",
+    "graphql": "^14.7.0",
     "history": "^4.10.1",
     "react": "^17.0.2",
     "react-copy-to-clipboard": "^5.0.2",
@@ -49,7 +50,7 @@
     "tslint": "^5.20.1",
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^4.1.0",
-    "typescript": "^4.2.2"
+    "typescript": "^4.3.5"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,4 +1,3 @@
-import React from 'react'
 import { BodyShape, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'

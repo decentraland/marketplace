@@ -25,8 +25,8 @@ export class MarketplacePrice {
       )
     }
 
-    this.feePerMillion = toBN(feePerMillion)
-    this.oneMillion = toBN('1000000')
+    this.feePerMillion = new BN(feePerMillion)
+    this.oneMillion = new BN('1000000')
 
     this.maxPriceIncreasePercentage = maxPriceIncreasePercentage
   }
@@ -40,9 +40,7 @@ export class MarketplacePrice {
   }
 
   addMaxSlippage(manaWeiAmount: string | number) {
-    return toBN(manaWeiAmount)
-      .mul(toBN(110))
-      .divRound(toBN(100)) // 10 percent increase
+    return new BN(manaWeiAmount).mul(new BN(110)).divRound(new BN(100)) // 10 percent increase
   }
 
   getPercentageIncrease(computedPrice: string, price: string) {

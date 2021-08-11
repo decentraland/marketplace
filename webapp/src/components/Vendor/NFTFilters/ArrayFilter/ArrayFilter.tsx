@@ -1,4 +1,3 @@
-import React from 'react'
 import { Header } from 'decentraland-ui'
 
 import { Props } from './ArrayFilter.types'

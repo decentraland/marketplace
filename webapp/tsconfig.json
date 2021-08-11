@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -16,8 +20,12 @@
     "isolatedModules": true,
     "noFallthroughCasesInSwitch": true,
     "noEmit": true,
-    "jsx": "react",
-    "types": ["jest"]
+    "jsx": "react-jsx",
+    "types": [
+      "jest"
+    ]
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }

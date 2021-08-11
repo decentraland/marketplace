@@ -1,4 +1,3 @@
-import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
 

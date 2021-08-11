@@ -1,4 +1,3 @@
-import React from 'react'
 import classnames from 'classnames'
 import { Coordinate } from '../../Coordinate'
 import { ProximityTags } from '../ProximityTags'

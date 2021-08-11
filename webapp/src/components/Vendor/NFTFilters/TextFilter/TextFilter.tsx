@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { Header } from 'decentraland-ui'
 
 import { useInput } from '../../../../lib/input'

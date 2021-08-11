@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { useProximity } from '../../../modules/proximity/hooks'
 import { getDistanceText } from '../../../modules/proximity/utils'
 import { Props } from './ProximityTags.types'
