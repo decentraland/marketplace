@@ -334,7 +334,7 @@
   "transaction": {
     "action": {
       "approved": "approved",
-      "not_approved": "unapproved"
+      "unapproved": "unapproved"
     },
     "detail": {
       "approve_token": "You {action} the {contract} contract to operate {token} on your behalf.",
