@@ -328,8 +328,8 @@
   },
   "transaction": {
     "action": {
-      "approved": "Aprobada",
-      "not_approved": "Desaprobada"
+      "approved": "aprobadó",
+      "unapproved": "desaprobó"
     },
     "detail": {
       "approve_token": "{action} al contrato de {contract} para que opere tokens de {token} por tí.",

@@ -330,7 +330,7 @@
   "transaction": {
     "action": {
       "approved": "已批准",
-      "not_approved": "未批准"
+      "unapproved": "未批准"
     },
     "detail": {
       "approve_token": "您{action} {contract}合同代表您操作{token}。",

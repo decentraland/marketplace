@@ -4,6 +4,7 @@ import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink, Profile } from 'decentraland-dapps/dist/containers'
 import {
   GrantTokenSuccessAction,
+  RevokeTokenSuccessAction,
   GRANT_TOKEN_SUCCESS,
   REVOKE_TOKEN_SUCCESS
 } from 'decentraland-dapps/dist/modules/authorization/actions'
@@ -32,57 +33,26 @@ import { Props } from './Transaction.types'
 const Transaction = (props: Props) => {
   const { tx } = props
   switch (tx.actionType) {
-    case GRANT_TOKEN_SUCCESS: {
-      const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
-      const authorized = getContract({
-        address: authorization.authorizedAddress
-      })
-      const contract = getContract({ address: authorization.contractAddress })
-      return (
-        <TransactionDetail
-          text={
-            <T
-              id="transaction.detail.approve_token"
-              values={{
-                action: t('transaction.action.approved'),
-                contract: (
-                  <TransactionLink
-                    chainId={authorization.chainId}
-                    address={authorized.address}
-                    txHash=""
-                  >
-                    {authorized.name}
-                  </TransactionLink>
-                ),
-                token: (
-                  <TransactionLink
-                    chainId={authorization.chainId}
-                    address={contract.address}
-                    txHash=""
-                  >
-                    {contract.name}
-                  </TransactionLink>
-                )
-              }}
-            />
-          }
-          tx={tx}
-        />
-      )
-    }
+    case GRANT_TOKEN_SUCCESS:
     case REVOKE_TOKEN_SUCCESS: {
-      const { authorization } = tx.payload as GrantTokenSuccessAction['payload']
+      const { authorization } = tx.payload as
+        | GrantTokenSuccessAction['payload']
+        | RevokeTokenSuccessAction['payload']
       const authorized = getContract({
         address: authorization.authorizedAddress
       })
       const contract = getContract({ address: authorization.contractAddress })
+      const action =
+        tx.actionType === GRANT_TOKEN_SUCCESS
+          ? t('transaction.action.approved')
+          : t('transaction.action.unapproved')
       return (
         <TransactionDetail
           text={
             <T
               id="transaction.detail.approve_token"
               values={{
-                action: t('transaction.action.not_approved'),
+                action,
                 contract: (
                   <TransactionLink
                     chainId={authorization.chainId}
