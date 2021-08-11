@@ -382,8 +382,12 @@
   },
   "toast": {
     "meta_transaction_failure": {
-      "title": "Meta transaction",
+      "title": "Meta transaction error",
       "body": "There was an error sending the meta transaction.{br}Please try again or join our {discord_link} to get support."
+    },
+    "contract_account": {
+      "title": "Not supported",
+      "body": "Smart contract wallets don't support meta-transactions."
     }
   }
 }

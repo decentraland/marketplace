@@ -380,6 +380,10 @@
     "meta_transaction_failure": {
       "title": "元交易",
       "body": "发送元交易时出错。{br}请重试或加入我们的{discord_link}以获取支持。"
+    },
+    "contract_account": {
+      "title": "不支持",
+      "body": "智能合约钱包不支持元交易。"
     }
   }
 }
