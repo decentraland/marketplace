@@ -99,6 +99,6 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
     yield put(transferNFTSuccess(nft, address, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
-    yield put(transferNFTFailure(nft, address, error.message))
+    yield put(transferNFTFailure(nft, address, error.message, error.code))
   }
 }

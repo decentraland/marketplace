@@ -36,7 +36,9 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
     yield put(createOrderSuccess(nft, price, expiresAt, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
-    yield put(createOrderFailure(nft, price, expiresAt, error.message))
+    yield put(
+      createOrderFailure(nft, price, expiresAt, error.message, error.code)
+    )
   }
 }
 
@@ -59,7 +61,7 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
     yield put(executeOrderSuccess(order, nft, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
-    yield put(executeOrderFailure(order, nft, error.message))
+    yield put(executeOrderFailure(order, nft, error.message, error.code))
   }
 }
 
@@ -79,6 +81,6 @@ function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
     yield put(cancelOrderSuccess(order, nft, txHash))
     yield put(push(locations.activity()))
   } catch (error) {
-    yield put(cancelOrderFailure(order, nft, error.message))
+    yield put(cancelOrderFailure(order, nft, error.message, error.code))
   }
 }

@@ -377,8 +377,12 @@
   },
   "toast": {
     "meta_transaction_failure": {
-      "title": "Meta transacción",
+      "title": "Error de Meta transacción",
       "body": "Ocurrió un error publicando la meta transacción.{br}Intentelo de nuevo o ingrese a nuestro {discord_link} para obtener más información."
+    },
+    "contract_account": {
+      "title": "No soportado",
+      "body": "Las billeteras basadas en smart contracts no soportan meta-transacciones"
     }
   }
 }
