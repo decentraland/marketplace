@@ -39,10 +39,11 @@ const NFTFilters = (props: Props) => {
     assetType
   } = props
 
+  const category = section ? getCategoryFromSection(section) : undefined
+
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
-  const category = section ? getCategoryFromSection(section) : undefined
   const orderBydropdownOptions = [
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') }
@@ -147,12 +148,10 @@ const NFTFilters = (props: Props) => {
     [network, onBrowse]
   )
 
-  const handleToggleFilterMenu = useCallback(
-    () => setShowFiltersMenu(!showFiltersMenu),
-    [showFiltersMenu, setShowFiltersMenu]
-  )
-
-  useEffect(() => setShowFiltersMenu(false), [category, setShowFiltersMenu])
+  useEffect(() => setShowFiltersMenu(category === NFTCategory.WEARABLE), [
+    category,
+    setShowFiltersMenu
+  ])
 
   const searchPlaceholder = isMap
     ? t('nft_filters.search_land')
@@ -222,20 +221,6 @@ const NFTFilters = (props: Props) => {
             </Responsive>
           </>
         )}
-
-        {category === NFTCategory.WEARABLE ? (
-          <Responsive
-            minWidth={Responsive.onlyTablet.minWidth}
-            className="open-filters-wrapper topbar-filter"
-            onClick={handleToggleFilterMenu}
-          >
-            <div
-              className={`open-filters ${
-                showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
-              }`}
-            />
-          </Responsive>
-        ) : null}
 
         <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
           <div
