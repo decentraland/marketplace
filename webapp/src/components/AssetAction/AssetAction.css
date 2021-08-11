@@ -28,7 +28,7 @@
   flex: 1.25 1 auto;
 }
 
-.AssetAction .nft-image-wrapper {
+.AssetAction .asset-image-wrapper {
   width: 240px;
   border-radius: 16px;
   overflow: hidden;
@@ -41,7 +41,7 @@
   }
 
   .AssetAction > .Row .Column.left,
-  .AssetAction > .Row .nft-image-wrapper,
+  .AssetAction > .Row .asset-image-wrapper,
   .AssetAction > .Row .ui.button {
     width: 100%;
   }
@@ -51,7 +51,7 @@
     flex-direction: column-reverse;
   }
 
-  .AssetAction > .Row .nft-image-wrapper,
+  .AssetAction > .Row .asset-image-wrapper,
   .AssetAction > .Row .ui.button + .ui.button {
     margin-left: 0px;
     margin-bottom: 24px;
