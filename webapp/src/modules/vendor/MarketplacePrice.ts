@@ -1,6 +1,4 @@
 import BN from 'bn.js'
-import { toBN } from 'web3x-es/utils'
-
 export class MarketplacePrice {
   public oneMillion: BN
   public feePerMillion: BN
@@ -32,7 +30,7 @@ export class MarketplacePrice {
   }
 
   addFee(manaWeiAmount: string | number) {
-    const bnAmount = toBN(manaWeiAmount.toString())
+    const bnAmount = new BN(manaWeiAmount.toString())
 
     return bnAmount
       .add(bnAmount.mul(this.feePerMillion).div(this.oneMillion))
@@ -48,9 +46,9 @@ export class MarketplacePrice {
       return 0
     }
 
-    const percentage = toBN(computedPrice)
-      .mul(toBN(100))
-      .divRound(toBN(price))
+    const percentage = new BN(computedPrice)
+      .mul(new BN(100))
+      .divRound(new BN(price))
       .toNumber()
 
     return percentage <= 100 ? 0 : percentage - 100
