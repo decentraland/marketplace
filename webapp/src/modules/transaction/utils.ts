@@ -24,7 +24,11 @@ export function hasTransactionPending(
 
 // TODO: This is a replacement for future `ErrorCode`s. Needs an overhaul on decentraland-dapps
 export function isUserDeniedSignatureError(error: string) {
-  return error.search(/User denied (transaction|message) signature/) !== -1
+  return (
+    error.search(
+      /User (denied|rejected the) (transaction|message) signature/
+    ) !== -1
+  )
 }
 
 // TODO: This is a replacement for future `ErrorCode`s. Needs an overhaul on decentraland-dapps
