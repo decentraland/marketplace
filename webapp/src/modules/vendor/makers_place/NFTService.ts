@@ -1,7 +1,7 @@
-import { Network } from '@dcl/schemas'
 import BN from 'bn.js'
+import { Network } from '@dcl/schemas'
 import { Address } from 'web3x-es/address'
-import { toBN, toWei } from 'web3x-es/utils'
+import { toWei } from 'web3x-es/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
@@ -151,7 +151,7 @@ export class NFTService
 
   toOrder(asset: MakersPlaceAsset, oneEthInMANA: string): Order {
     const totalWei = this.marketplacePrice.addFee(asset.price_in_wei!)
-    const weiPrice = toBN(totalWei).mul(toBN(oneEthInMANA))
+    const weiPrice = new BN(totalWei).mul(new BN(oneEthInMANA))
     const price = weiPrice.div(this.oneEthInWei)
 
     return {

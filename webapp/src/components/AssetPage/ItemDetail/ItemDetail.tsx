@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Container, Header, Mana, Stats } from 'decentraland-ui'
+import { Button, Container, Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Rarity } from '@dcl/schemas'
 
@@ -12,6 +12,7 @@ import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
 import { AssetImage } from '../../AssetImage'
 import { PageHeader } from '../../PageHeader'
+import { Mana } from '../../Mana'
 import { Title } from '../Title'
 import { Owner } from '../Owner'
 import { Network } from '../Network'
@@ -56,9 +57,16 @@ const ItemDetail = (props: Props) => {
                   </Mana>
                 </Stats>
                 <Stats title={t('asset_page.available')}>
-                  {item.available > 0
-                    ? <Header>{item.available.toLocaleString()}<span className={styles.supply}>/{Rarity.getMaxSupply(item.rarity).toLocaleString()}</span></Header>
-                    : t('asset_page.sold_out')}
+                  {item.available > 0 ? (
+                    <Header>
+                      {item.available.toLocaleString()}
+                      <span className={styles.supply}>
+                        /{Rarity.getMaxSupply(item.rarity).toLocaleString()}
+                      </span>
+                    </Header>
+                  ) : (
+                    t('asset_page.sold_out')
+                  )}
                 </Stats>
               </>
             ) : null}

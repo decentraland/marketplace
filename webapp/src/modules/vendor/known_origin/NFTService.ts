@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import { Address } from 'web3x-es/address'
-import { toBN, toWei } from 'web3x-es/utils'
+import { toWei } from 'web3x-es/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Network } from '@dcl/schemas'
 import { ERC721 } from '../../../contracts/ERC721'
@@ -160,7 +160,7 @@ export class NFTService
 
   toOrder(edition: EditionFragment, oneEthInMANA: string): Order {
     const totalWei = this.marketplacePrice.addFee(edition.priceInWei)
-    const weiPrice = toBN(totalWei).mul(toBN(oneEthInMANA))
+    const weiPrice = new BN(totalWei).mul(new BN(oneEthInMANA))
     const price = weiPrice.div(this.oneEthInWei)
 
     const contractNames = getContractNames()

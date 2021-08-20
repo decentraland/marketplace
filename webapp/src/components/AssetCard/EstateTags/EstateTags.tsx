@@ -1,4 +1,3 @@
-import React from 'react'
 import { ProximityTags } from '../ProximityTags'
 import { Props } from './EstateTags.types'
 import './EstateTags.css'

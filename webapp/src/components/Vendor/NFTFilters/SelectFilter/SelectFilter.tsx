@@ -1,4 +1,3 @@
-import React from 'react'
 import { Header, Dropdown } from 'decentraland-ui'
 
 import { Props } from './SelectFilter.types'

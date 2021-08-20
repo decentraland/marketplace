@@ -1,4 +1,3 @@
-import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './ENSTags.types'
 import './ENSTags.css'

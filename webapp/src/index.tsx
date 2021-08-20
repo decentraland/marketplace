@@ -1,5 +1,3 @@
-import React from 'react'
-
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
@@ -10,7 +8,7 @@ import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationPr
 
 import './setup'
 import './modules/analytics/track'
-import "./modules/analytics/rollbar"
+import './modules/analytics/rollbar'
 
 import * as locales from './modules/translation/locales'
 import { initStore, history } from './modules/store'
