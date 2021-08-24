@@ -1,6 +1,7 @@
 import { takeEvery, put, select, call } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
 import { NFTCategory } from '@dcl/schemas'
+import { utils } from 'decentraland-commons'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/browse/selectors'
@@ -65,15 +66,16 @@ function* handleClearFilters() {
   const browseOptions: BrowseOptions = yield call(getCurrentBrowseOptions)
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
-  // Delete filters and reset the page number.
-  delete browseOptions.wearableRarities
-  delete browseOptions.wearableGenders
-  delete browseOptions.network
-  delete browseOptions.contracts
-  delete browseOptions.page
+  const clearedBrowseOptions: BrowseOptions = utils.omit(browseOptions, [
+    'wearableRarities',
+    'wearableGenders',
+    'network',
+    'contracts',
+    'page'
+  ])
 
   yield call(fetchAssetsFromRoute, browseOptions)
-  yield put(push(buildBrowseURL(pathname, browseOptions)))
+  yield put(push(buildBrowseURL(pathname, clearedBrowseOptions)))
 }
 
 function* handleBrowse(action: BrowseAction) {
