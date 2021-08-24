@@ -1,4 +1,4 @@
-import { takeEvery, put, select } from 'redux-saga/effects'
+import { takeEvery, put, select, call } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
 import { NFTCategory } from '@dcl/schemas'
 import { VendorName } from '../vendor/types'
@@ -62,7 +62,7 @@ function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
 }
 
 function* handleClearFilters() {
-  const browseOptions: BrowseOptions = yield getCurrentBrowseOptions()
+  const browseOptions: BrowseOptions = yield call(getCurrentBrowseOptions)
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
   // Delete filters and reset the page number.
@@ -72,7 +72,7 @@ function* handleClearFilters() {
   delete browseOptions.contracts
   delete browseOptions.page
 
-  yield fetchAssetsFromRoute(browseOptions)
+  yield call(fetchAssetsFromRoute, browseOptions)
   yield put(push(buildBrowseURL(pathname, browseOptions)))
 }
 
@@ -89,7 +89,7 @@ function* handleBrowse(action: BrowseAction) {
 // ------------------------------------------------
 // Utility functions, not handlers
 
-function buildBrowseURL(
+export function buildBrowseURL(
   pathname: string,
   browseOptions: BrowseOptions
 ): string {
@@ -97,7 +97,7 @@ function buildBrowseURL(
   return params ? `${pathname}?${params.toString()}` : pathname
 }
 
-function* fetchAssetsFromRoute(options: BrowseOptions) {
+export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const isItems = options.assetType === AssetType.ITEM
   const view = options.view!
   const vendor = options.vendor!
@@ -175,7 +175,7 @@ function* fetchAssetsFromRoute(options: BrowseOptions) {
   }
 }
 
-function* getCurrentBrowseOptions(): Generator<
+export function* getCurrentBrowseOptions(): Generator<
   unknown,
   BrowseOptions,
   unknown
