@@ -7,7 +7,9 @@ import {
   Dropdown,
   DropdownProps,
   Responsive,
-  Modal
+  Modal,
+  Icon,
+  NotMobile
 } from 'decentraland-ui'
 import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -36,7 +38,9 @@ const NFTFilters = (props: Props) => {
     contracts,
     network,
     onBrowse,
-    assetType
+    assetType,
+    hasFiltersEnabled,
+    onClearFilters
   } = props
 
   const category = section ? getCategoryFromSection(section) : undefined
@@ -197,6 +201,18 @@ const NFTFilters = (props: Props) => {
               placeholder={searchPlaceholder}
               onChange={handleSearch}
             />
+            <NotMobile>
+              {hasFiltersEnabled && (
+                <div className="clear-filters" onClick={onClearFilters}>
+                  <Icon
+                    aria-label="Clear filters"
+                    aria-hidden="false"
+                    name="close"
+                  />
+                  <span>{t('filters.clear')}</span>
+                </div>
+              )}
+            </NotMobile>
             <Responsive
               minWidth={Responsive.onlyTablet.minWidth}
               className="topbar-filter"
@@ -284,6 +300,18 @@ const NFTFilters = (props: Props) => {
       >
         <Modal.Header>{t('nft_filters.filter')}</Modal.Header>
         <Modal.Content>
+          {hasFiltersEnabled && (
+            <div className="filter-row">
+              <div className="clear-filters-modal" onClick={onClearFilters}>
+                <Icon
+                  aria-label="Clear filters"
+                  aria-hidden="false"
+                  name="close"
+                />
+                <span>{t('filters.clear')}</span>
+              </div>
+            </div>
+          )}
           {category === NFTCategory.WEARABLE ? (
             <>
               <div className="filter-row">

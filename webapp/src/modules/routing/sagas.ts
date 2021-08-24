@@ -41,7 +41,8 @@ import {
   BrowseAction,
   FETCH_ASSETS_FROM_ROUTE,
   FetchAssetsFromRouteAction,
-  setIsLoadMore
+  setIsLoadMore,
+  CLEAR_FILTERS
 } from './actions'
 import { BrowseOptions, Section } from './types'
 import { AssetType } from '../asset/types'
@@ -50,6 +51,7 @@ import { fetchItemsRequest } from '../item/actions'
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
   yield takeEvery(BROWSE, handleBrowse)
+  yield takeEvery(CLEAR_FILTERS, handleClearFilters)
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
@@ -59,19 +61,41 @@ function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
   yield fetchAssetsFromRoute(newOptions)
 }
 
+function* handleClearFilters() {
+  const browseOptions: BrowseOptions = yield getCurrentBrowseOptions()
+  const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
+
+  // Delete filters and reset the page number.
+  delete browseOptions.wearableRarities
+  delete browseOptions.wearableGenders
+  delete browseOptions.network
+  delete browseOptions.contracts
+  delete browseOptions.page
+
+  yield fetchAssetsFromRoute(browseOptions)
+  yield put(push(buildBrowseURL(pathname, browseOptions)))
+}
+
 function* handleBrowse(action: BrowseAction) {
   const options: BrowseOptions = yield getNewBrowseOptions(
     action.payload.options
   )
-  yield fetchAssetsFromRoute(options)
-
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-  const params = getSearchParams(options)
-  yield put(push(params ? `${pathname}?${params.toString()}` : pathname))
+
+  yield fetchAssetsFromRoute(options)
+  yield put(push(buildBrowseURL(pathname, options)))
 }
 
 // ------------------------------------------------
 // Utility functions, not handlers
+
+function buildBrowseURL(
+  pathname: string,
+  browseOptions: BrowseOptions
+): string {
+  const params = getSearchParams(browseOptions)
+  return params ? `${pathname}?${params.toString()}` : pathname
+}
 
 function* fetchAssetsFromRoute(options: BrowseOptions) {
   const isItems = options.assetType === AssetType.ITEM
@@ -151,10 +175,12 @@ function* fetchAssetsFromRoute(options: BrowseOptions) {
   }
 }
 
-function* getNewBrowseOptions(
-  current: BrowseOptions
-): Generator<unknown, BrowseOptions, any> {
-  let previous: BrowseOptions = {
+function* getCurrentBrowseOptions(): Generator<
+  unknown,
+  BrowseOptions,
+  unknown
+> {
+  return {
     assetType: yield select(getAssetType),
     address: yield getAddress(),
     vendor: yield select(getVendor),
@@ -170,7 +196,13 @@ function* getNewBrowseOptions(
     wearableGenders: yield select(getWearableGenders),
     contracts: yield select(getContracts),
     network: yield select(getNetwork)
-  }
+  } as BrowseOptions
+}
+
+function* getNewBrowseOptions(
+  current: BrowseOptions
+): Generator<unknown, BrowseOptions, any> {
+  let previous = yield getCurrentBrowseOptions()
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
   const vendor = deriveVendor(previous, current)
