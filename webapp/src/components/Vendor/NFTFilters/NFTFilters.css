@@ -142,7 +142,7 @@
   line-height: 12px;
   text-transform: uppercase;
   cursor: pointer;
-  color: var(--primary) !important;
+  color: var(--primary);
 }
 
 /*------------------
