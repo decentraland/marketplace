@@ -1,7 +1,9 @@
 import { takeEvery, put, select, call } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
 import { NFTCategory } from '@dcl/schemas'
-import { utils } from 'decentraland-commons'
+import { omit } from '../../lib/utils'
+import { AssetType } from '../asset/types'
+import { fetchItemsRequest } from '../item/actions'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/browse/selectors'
@@ -46,8 +48,6 @@ import {
   CLEAR_FILTERS
 } from './actions'
 import { BrowseOptions, Section } from './types'
-import { AssetType } from '../asset/types'
-import { fetchItemsRequest } from '../item/actions'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -66,7 +66,7 @@ function* handleClearFilters() {
   const browseOptions: BrowseOptions = yield call(getCurrentBrowseOptions)
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
-  const clearedBrowseOptions: BrowseOptions = utils.omit(browseOptions, [
+  const clearedBrowseOptions: BrowseOptions = omit(browseOptions, [
     'wearableRarities',
     'wearableGenders',
     'network',
@@ -74,7 +74,7 @@ function* handleClearFilters() {
     'page'
   ])
 
-  yield call(fetchAssetsFromRoute, browseOptions)
+  yield call(fetchAssetsFromRoute, clearedBrowseOptions)
   yield put(push(buildBrowseURL(pathname, clearedBrowseOptions)))
 }
 
