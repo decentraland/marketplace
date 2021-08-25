@@ -78,7 +78,8 @@
     "name": "名称",
     "newest": "最新",
     "recently_listed": "最新上市",
-    "cheapest": "最低价"
+    "cheapest": "最低价",
+    "clear": "清除过滤器"
   },
   "home_page": {
     "title": "Decentraland Marketplace",
