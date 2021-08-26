@@ -137,6 +137,14 @@
   border-radius: 0 4px 4px 0;
 }
 
+.NFTFilters .clear-filters {
+  font-size: 12px;
+  line-height: 12px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--primary);
+}
+
 /*------------------
   FiltersModal
  */
@@ -201,6 +209,11 @@
 }
 
 .FiltersModal .ui.dropdown .dropdown.icon {
+  color: var(--text);
+}
+
+.FiltersModal .clear-filters-modal > span {
+  text-transform: uppercase;
   color: var(--text);
 }
 

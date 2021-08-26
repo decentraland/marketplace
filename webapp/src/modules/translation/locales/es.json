@@ -78,7 +78,8 @@
     "name": "Nombre",
     "newest": "Más nuevos",
     "recently_listed": "Listados recientemente",
-    "cheapest": "Más baratos"
+    "cheapest": "Más baratos",
+    "clear": "Borrar filtros"
   },
   "home_page": {
     "title": "Mercado de Decentraland",

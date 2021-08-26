@@ -1,6 +1,11 @@
+import { Dispatch } from 'redux'
 import { Network, Rarity } from '@dcl/schemas'
 import { SortBy } from '../../../../modules/routing/types'
-import { browse } from '../../../../modules/routing/actions'
+import {
+  browse,
+  clearFilters,
+  ClearFiltersAction
+} from '../../../../modules/routing/actions'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { AssetType } from '../../../../modules/asset/types'
 
@@ -16,7 +21,9 @@ export type Props = {
   wearableGenders: WearableGender[]
   contracts: string[]
   network?: Network
+  hasFiltersEnabled: boolean
   onBrowse: typeof browse
+  onClearFilters: typeof clearFilters
 }
 
 export type MapStateProps = Pick<
@@ -32,6 +39,8 @@ export type MapStateProps = Pick<
   | 'wearableGenders'
   | 'contracts'
   | 'network'
+  | 'hasFiltersEnabled'
 >
-export type MapDispatchProps = {}
+export type MapDispatchProps = Pick<Props, 'onClearFilters'>
+export type MapDispatch = Dispatch<ClearFiltersAction>
 export type OwnProps = Pick<Props, 'onBrowse' | 'isMap'>
