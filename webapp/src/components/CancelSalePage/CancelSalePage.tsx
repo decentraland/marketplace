@@ -1,5 +1,6 @@
 import React from 'react'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Page, Header, Button } from 'decentraland-ui'
 
 import { AssetType } from '../../modules/asset/types'
@@ -74,14 +75,15 @@ const CancelSalePage = (props: Props) => {
                       >
                         {t('global.cancel')}
                       </Button>
-                      <Button
+                      <ChainButton
                         primary
                         loading={isLoading}
                         disabled={isDisabled || isLoading}
                         onClick={() => onCancelOrder(order!, nft)}
+                        chainId={nft.chainId}
                       >
                         {t('cancel_sale_page.submit')}
-                      </Button>
+                      </ChainButton>
                     </div>
                   </AssetAction>
                 )

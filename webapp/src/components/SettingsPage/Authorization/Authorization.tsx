@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { TransactionLink } from 'decentraland-dapps/dist/containers'
+import { ChainCheck, TransactionLink } from 'decentraland-dapps/dist/containers'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
@@ -41,11 +41,14 @@ const Authorization = (props: Props) => {
             </Link>
           }
         />
-        <Radio
-          checked={isAuthorized(authorization, authorizations)}
-          label={token.name}
-          onClick={(_, props: RadioProps) => handleOnChange(!!props.checked)}
-        />
+        <ChainCheck chainId={authorization.chainId}>
+          {isEnabled => <Radio
+            checked={isAuthorized(authorization, authorizations)}
+            label={token.name}
+            disabled={!isEnabled}
+            onClick={(_, props: RadioProps) => handleOnChange(!!props.checked)}
+          />}
+        </ChainCheck>
         <div className="radio-description secondary-text">
           <T
             id="authorization.authorize"

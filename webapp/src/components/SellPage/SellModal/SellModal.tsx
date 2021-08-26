@@ -8,6 +8,7 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Header, Form, Field, Button, Modal } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { toMANA, fromMANA } from '../../../lib/mana'
@@ -153,14 +154,15 @@ const SellModal = (props: Props) => {
           >
             {t('global.cancel')}
           </Button>
-          <Button
+          <ChainButton
             type="submit"
             primary
             disabled={isDisabled || isLoading}
             loading={isLoading}
+            chainId={nft.chainId}
           >
             {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
-          </Button>
+          </ChainButton>
         </div>
       </Form>
 
