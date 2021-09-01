@@ -1,6 +1,8 @@
 import { connect } from 'react-redux'
 
 import { RootState } from '../../../../modules/reducer'
+import { clearFilters } from '../../../../modules/routing/actions'
+import { hasFiltersEnabled } from '../../../../modules/routing/selectors'
 import { getCount } from '../../../../modules/ui/browse/selectors'
 import {
   getSection,
@@ -18,7 +20,8 @@ import {
   MapStateProps,
   MapDispatchProps,
   OwnProps,
-  Props
+  Props,
+  MapDispatch
 } from './NFTFilters.types'
 import NFTFilters from './NFTFilters'
 
@@ -33,10 +36,13 @@ const mapState = (state: RootState): MapStateProps => ({
   wearableRarities: getWearableRarities(state),
   wearableGenders: getWearableGenders(state),
   contracts: getContracts(state),
-  network: getNetwork(state)
+  network: getNetwork(state),
+  hasFiltersEnabled: hasFiltersEnabled(state)
 })
 
-const mapDispatch = () => ({})
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onClearFilters: () => dispatch(clearFilters())
+})
 
 const mergeProps = (
   stateProps: MapStateProps,

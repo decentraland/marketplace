@@ -27,3 +27,10 @@ export const setIsLoadMore = (isLoadMore: boolean) =>
   action(SET_IS_LOAD_MORE, { isLoadMore })
 
 export type SetIsLoadMoreAction = ReturnType<typeof setIsLoadMore>
+
+// Clear filters
+export const CLEAR_FILTERS = 'Clear filters'
+
+export const clearFilters = () => action(CLEAR_FILTERS)
+
+export type ClearFiltersAction = ReturnType<typeof clearFilters>

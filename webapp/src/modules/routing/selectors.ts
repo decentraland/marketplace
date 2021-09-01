@@ -193,3 +193,29 @@ export const getAssetType = createSelector<
   }
   return results
 })
+
+export const hasFiltersEnabled = createSelector<
+  RootState,
+  string | undefined,
+  WearableGender[],
+  Rarity[],
+  string[],
+  boolean
+>(
+  getNetwork,
+  getWearableGenders,
+  getWearableRarities,
+  getContracts,
+  (network, genders, rarities, contracts) => {
+    const hasNetworkFilter = network !== undefined
+    const hasGenderFilter = genders.length > 0
+    const hasRarityFilter = rarities.length > 0
+    const hasContractsFilter = contracts.length > 0
+    return (
+      hasNetworkFilter ||
+      hasGenderFilter ||
+      hasRarityFilter ||
+      hasContractsFilter
+    )
+  }
+)
