@@ -80,7 +80,8 @@
     "name": "Name",
     "newest": "Newest",
     "recently_listed": "Recently listed",
-    "cheapest": "Cheapest"
+    "cheapest": "Cheapest",
+    "no_results": "No results were found."
   },
   "home_page": {
     "title": "Decentraland Marketplace",
