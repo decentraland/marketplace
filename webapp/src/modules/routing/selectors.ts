@@ -185,13 +185,17 @@ export const getAssetType = createSelector<
   RootState,
   string,
   string,
+  VendorName,
   AssetType
->(getRouterSearch, getPathName, (search, pathname) => {
-  let results = getURLParam(search, 'assetType') as AssetType
-  if (!results) {
-    results = pathname === locations.browse() ? AssetType.ITEM : AssetType.NFT
+>(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
+  let assetTypeParam = getURLParam(search, 'assetType') as AssetType
+  if (!assetTypeParam) {
+    if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
+      return AssetType.ITEM
+    }
+    return AssetType.NFT
   }
-  return results
+  return assetTypeParam
 })
 
 export const hasFiltersEnabled = createSelector<

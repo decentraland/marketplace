@@ -5,6 +5,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/decentraland'
 import { AssetType } from '../../modules/asset/types'
+import { VendorName } from '../../modules/vendor'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
@@ -134,7 +135,9 @@ const AssetBrowse = (props: Props) => {
                       ? 'account_page.primary_market_subtitle'
                       : 'browse_page.primary_market_subtitle'
                   ),
-                  disabled: !hasPrimarySales(section),
+                  disabled:
+                    !hasPrimarySales(section) ||
+                    vendor !== VendorName.DECENTRALAND,
                   onClick: hanldeBrowseItems
                 },
                 {
@@ -143,7 +146,9 @@ const AssetBrowse = (props: Props) => {
                       ? 'account_page.secondary_market_title'
                       : 'browse_page.secondary_market_title'
                   ),
-                  active: assetType === AssetType.NFT,
+                  active:
+                    assetType === AssetType.NFT ||
+                    vendor !== VendorName.DECENTRALAND,
                   description: t(
                     view === View.ACCOUNT
                       ? 'account_page.secondary_market_subtitle'

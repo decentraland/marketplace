@@ -59,6 +59,8 @@ function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
   const newOptions: BrowseOptions = yield getNewBrowseOptions(
     action.payload.options
   )
+  console.log('Actual options', action.payload.options)
+  console.log('New options', newOptions)
   yield fetchAssetsFromRoute(newOptions)
 }
 
@@ -83,7 +85,8 @@ function* handleBrowse(action: BrowseAction) {
     action.payload.options
   )
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-
+  console.log('Actual options', action.payload.options)
+  console.log('New options', options)
   yield fetchAssetsFromRoute(options)
   yield put(push(buildBrowseURL(pathname, options)))
 }
