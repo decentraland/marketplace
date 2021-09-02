@@ -17,6 +17,7 @@ const SelectFilter = (props: Props) => {
         clearable={clearable}
         selection
         search
+        selectOnNavigation={false}
         fluid
         noResultsMessage={t('filters.no_results')}
         onChange={(_event, props) => onChange(props.value as string)}
