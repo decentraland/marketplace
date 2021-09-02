@@ -26,7 +26,7 @@ export function hasTransactionPending(
 export function isUserDeniedSignatureError(error: string) {
   return (
     error.search(
-      /User (denied|rejected the) (transaction|message) signature/
+      /User (denied|rejected the) (transaction|message)( signature)?/
     ) !== -1
   )
 }

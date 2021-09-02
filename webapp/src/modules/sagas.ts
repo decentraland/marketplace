@@ -16,15 +16,11 @@ import { uiSaga } from './ui/sagas'
 import { walletSaga } from './wallet/sagas'
 import { itemSaga } from './item/sagas'
 
-import { TRANSACTIONS_API_URL } from './wallet/utils'
-
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({
   peerUrl: process.env.REACT_APP_PEER_URL!
 })
-const authorizationSaga = createAuthorizationSaga({
-  metaTransactionServerUrl: TRANSACTIONS_API_URL
-})
+const authorizationSaga = createAuthorizationSaga()
 
 export function* rootSaga() {
   yield all([
