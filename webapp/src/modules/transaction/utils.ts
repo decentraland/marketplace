@@ -23,6 +23,10 @@ export function hasTransactionPending(
 }
 
 // TODO: This is a replacement for future `ErrorCode`s. Needs an overhaul on decentraland-dapps
+export function isUserCanceled(error: string) {
+  return error.search(/User canceled/) !== -1
+}
+
 export function isUserDeniedSignatureError(error: string) {
   return (
     error.search(
