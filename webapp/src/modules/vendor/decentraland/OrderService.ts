@@ -30,7 +30,7 @@ export class OrderService
       marketplace.createOrder(
         nft.contractAddress,
         nft.tokenId,
-        utils.formatUnits(price.toString(), 'wei'),
+        utils.parseEther(price.toString()),
         expiresAt
       )
     )
