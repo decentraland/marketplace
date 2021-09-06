@@ -14,15 +14,17 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
+import { ContractName } from 'decentraland-transactions'
 
 import { getContractNames } from '../vendor'
 import { contracts, getContract } from '../contract/utils'
 import { isPartner } from '../vendor/utils'
-import { ContractName } from 'decentraland-transactions'
+import { TRANSACTIONS_API_URL } from './utils'
 
 const baseWalletSaga = createWalletSaga({
   CHAIN_ID: +(process.env.REACT_APP_CHAIN_ID || 1),
-  POLL_INTERVAL: 0
+  POLL_INTERVAL: 0,
+  TRANSACTIONS_API_URL
 })
 
 export function* walletSaga() {
