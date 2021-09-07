@@ -1,11 +1,9 @@
 import React from 'react'
-import { UserMenuProps } from 'decentraland-ui'
 import { UserMenu as BaseUserMenu } from 'decentraland-dapps/dist/containers'
 import { IntroPopup } from '../IntroPopup'
+import { Props } from './UserMenu.types'
 
-export default class UserMenu extends React.PureComponent<
-  Partial<UserMenuProps>
-> {
+export default class UserMenu extends React.PureComponent<Props> {
   render() {
     return (
       <>

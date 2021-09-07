@@ -1,16 +1,9 @@
 import { Item } from '@dcl/schemas'
 import { put, takeEvery } from '@redux-saga/core/effects'
-import {
-  ContractData,
-  ContractName,
-  getContract
-} from 'decentraland-transactions'
+import { ContractName, getContract } from 'decentraland-transactions'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { call, select } from 'redux-saga/effects'
-import {
-  CollectionStore,
-  CollectionStoreTransactionReceipt
-} from '../../contracts/CollectionStore'
-import { ContractFactory } from '../contract/ContractFactory'
+import { push } from 'connected-react-router'
 import { itemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -28,10 +21,6 @@ import {
   FETCH_ITEM_REQUEST,
   BUY_ITEM_SUCCESS
 } from './actions'
-import { Address } from 'web3x-es/address'
-import { sendTransaction } from '../wallet/utils'
-import { TxSend } from 'web3x-es/contract'
-import { push } from 'connected-react-router'
 import { locations } from '../routing/locations'
 
 export function* itemSaga() {
@@ -79,33 +68,15 @@ function* handleBuyItem(action: BuyItemRequestAction) {
       throw new Error('A defined wallet is required to buy an item')
     }
 
-    const collectionStoreContractConfig: ContractData = getContract(
-      ContractName.CollectionStore,
-      item.chainId
-    )
-    const collectionStoreContract: CollectionStore = yield call(
-      [ContractFactory, 'build'],
-      CollectionStore,
-      collectionStoreContractConfig.address
-    )
-
-    const txBuy: TxSend<CollectionStoreTransactionReceipt> = yield call(
-      collectionStoreContract.methods.buy,
-      [
-        {
-          collection: Address.fromString(item.contractAddress),
-          ids: [item.itemId],
-          prices: [item.price],
-          beneficiaries: [Address.fromString(wallet.address)]
-        }
-      ]
-    )
+    const contract = getContract(ContractName.CollectionStore, item.chainId)
 
     const txHash: string = yield call(
       sendTransaction,
-      txBuy,
-      collectionStoreContractConfig,
-      Address.fromString(wallet.address)
+      contract,
+      collectionStore =>
+        collectionStore.buy([
+          [item.contractAddress, [item.itemId], [item.price], [wallet.address]]
+        ])
     )
 
     yield put(buyItemSuccess(item.chainId, txHash, item))

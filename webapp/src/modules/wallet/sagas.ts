@@ -15,7 +15,6 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
-
 import { getContractNames } from '../vendor'
 import { contracts, getContract } from '../contract/utils'
 import { isPartner } from '../vendor/utils'

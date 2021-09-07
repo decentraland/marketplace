@@ -8,6 +8,7 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { toMANA, fromMANA } from '../../../lib/mana'
 import { AssetAction } from '../../AssetAction'
@@ -132,7 +133,7 @@ const BidModal = (props: Props) => {
           >
             {t('global.cancel')}
           </Button>
-          <Button
+          <ChainButton
             type="submit"
             primary
             loading={isPlacingBid}
@@ -144,9 +145,10 @@ const BidModal = (props: Props) => {
               isLoading ||
               isPlacingBid
             }
+            chainId={nft.chainId}
           >
             {t('bid_page.submit')}
-          </Button>
+          </ChainButton>
         </div>
       </Form>
       <AuthorizationModal

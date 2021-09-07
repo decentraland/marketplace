@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Page, Header, Form, Field, Button } from 'decentraland-ui'
+import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -109,14 +110,15 @@ const TransferPage = (props: Props) => {
                         >
                           {t('global.cancel')}
                         </Button>
-                        <Button
+                        <ChainButton
                           type="submit"
                           primary
                           loading={isTransfering}
                           disabled={isDisabled}
+                          chainId={nft.chainId}
                         >
                           {t('transfer_page.submit')}
-                        </Button>
+                        </ChainButton>
                       </div>
                     </Form>
                   </AssetAction>

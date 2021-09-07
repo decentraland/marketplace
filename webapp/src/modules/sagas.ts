@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects'
-import { createAuthorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
+import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
 import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
@@ -20,7 +20,6 @@ const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({
   peerUrl: process.env.REACT_APP_PEER_URL!
 })
-const authorizationSaga = createAuthorizationSaga()
 
 export function* rootSaga() {
   yield all([

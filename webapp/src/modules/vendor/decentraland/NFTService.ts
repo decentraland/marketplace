@@ -1,15 +1,12 @@
-import { Address } from 'web3x-es/address'
 import { Network } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import {
   ContractData,
   ContractName,
   getContract
 } from 'decentraland-transactions'
-import { ERC721 } from '../../../contracts/ERC721'
-import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
-import { sendTransaction } from '../../wallet/utils'
 import { Account } from '../../account/types'
 import ERC721Abi from '../../../contracts/ERC721Abi'
 import { NFTService as NFTServiceInterface } from '../services'
@@ -56,14 +53,11 @@ export class NFTService
     return [nft, response.order || undefined] as const
   }
 
-  async transfer(wallet: Wallet | null, toAddress: string, nft: NFT) {
+  async transfer(wallet: Wallet | null, to: string, nft: NFT) {
     if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(wallet.address)
-    const to = Address.fromString(toAddress)
 
-    const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
     const contract: ContractData =
       nft.network !== Network.ETHEREUM
         ? {
@@ -78,8 +72,9 @@ export class NFTService
             version: '1'
           }
 
-    const transferFrom = erc721.methods.transferFrom(from, to, nft.tokenId)
-    return sendTransaction(transferFrom, contract, from)
+    return sendTransaction(contract, erc721 =>
+      erc721.transferFrom(wallet.address, to, nft.tokenId)
+    )
   }
 
   toAccount(address: string): Account {
