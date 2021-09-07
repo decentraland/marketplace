@@ -47,7 +47,7 @@ export const getSection = createSelector<
   VendorName,
   Section
 >(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
-  const section = getURLParam<string>(search, 'section')
+  const section = getURLParam<string>(search, 'section') ?? ''
   if (!section && pathname === locations.lands()) {
     return Sections.decentraland.LAND
   }
@@ -59,7 +59,7 @@ export const getSection = createSelector<
     return Sections.decentraland.WEARABLES
   }
 
-  if (!section || !(section in Sections[vendor])) {
+  if (!section || !(section.toUpperCase() in Sections[vendor])) {
     return Sections[vendor].ALL
   }
 
@@ -200,14 +200,15 @@ export const getAssetType = createSelector<
   VendorName,
   AssetType
 >(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
-  let assetTypeParam = getURLParam(search, 'assetType') as AssetType
-  if (!assetTypeParam) {
+  let assetTypeParam = getURLParam(search, 'assetType') ?? ''
+
+  if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
     if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
       return AssetType.ITEM
     }
     return AssetType.NFT
   }
-  return assetTypeParam
+  return assetTypeParam as AssetType
 })
 
 export const hasFiltersEnabled = createSelector<

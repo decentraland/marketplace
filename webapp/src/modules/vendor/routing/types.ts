@@ -1,7 +1,7 @@
-import * as decentraland from '../decentraland'
-import * as superRare from '../super_rare'
-import * as makersPlace from '../makers_place'
-import * as knownOrigin from '../known_origin'
+import * as decentraland from '../decentraland/routing/types'
+import * as superRare from '../super_rare/routing/types'
+import * as makersPlace from '../makers_place/routing/types'
+import * as knownOrigin from '../known_origin/routing/types'
 
 export type Sections = typeof Sections
 

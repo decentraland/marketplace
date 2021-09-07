@@ -1,8 +1,9 @@
 import { Rarity } from '@dcl/schemas'
+import { AssetType } from '../asset/types'
 import { WearableGender } from '../nft/wearable/types'
 import { VendorName } from '../vendor'
 import { locations } from './locations'
-import { getSection, hasFiltersEnabled } from './selectors'
+import { getAssetType, getSection, hasFiltersEnabled } from './selectors'
 import { Sections } from './types'
 
 describe('when getting if the are filters set', () => {
@@ -64,7 +65,7 @@ describe('when getting the section', () => {
     it("should return the decentraland's WEARABLES section", () => {
       expect(
         getSection.resultFunc(
-          'section=ALL',
+          'section=all',
           locations.browse(),
           VendorName.DECENTRALAND
         )
@@ -89,6 +90,92 @@ describe('when getting the section', () => {
           VendorName.SUPER_RARE
         )
       ).toBe(Sections.super_rare.ALL)
+    })
+  })
+
+  describe('when the section URL param exists in the vendor', () => {
+    it("should return the vendor's section", () => {
+      expect(
+        getSection.resultFunc(
+          'section=land',
+          locations.lands(),
+          VendorName.DECENTRALAND
+        )
+      ).toBe(Sections.decentraland.LAND)
+    })
+  })
+})
+
+describe('when getting the asset type', () => {
+  describe("when there's no assetType URL param and the vendor is not DECENTRALAND", () => {
+    it('should return NFT as the assetType', () => {
+      expect(
+        getAssetType.resultFunc('', locations.browse(), VendorName.KNOWN_ORIGIN)
+      ).toBe(AssetType.NFT)
+    })
+  })
+
+  describe("when there's no assetType URL param and the vendor is DECENTRALAND but the location is not in browse", () => {
+    it('should return NFT as the assetType', () => {
+      expect(
+        getAssetType.resultFunc('', locations.lands(), VendorName.KNOWN_ORIGIN)
+      ).toBe(AssetType.NFT)
+    })
+  })
+
+  describe("when there's no assetType URL param and the vendor is DECENTRALAND and the location is in browse", () => {
+    it('should return ITEM as the assetType', () => {
+      expect(
+        getAssetType.resultFunc('', locations.browse(), VendorName.DECENTRALAND)
+      ).toBe(AssetType.ITEM)
+    })
+  })
+
+  describe("when there's assetType URL param, the assetType is not NFT or ITEM and the vendor is DECENTRALAND but the location is not in browse", () => {
+    it('should return NFT as the assetType', () => {
+      expect(
+        getAssetType.resultFunc(
+          'assetType=something',
+          locations.lands(),
+          VendorName.DECENTRALAND
+        )
+      ).toBe(AssetType.NFT)
+    })
+  })
+
+  describe("when there's assetType URL param, the assetType is not NFT or ITEM and the vendor is DECENTRALAND and the location is in browse", () => {
+    it('should return ITEM as the assetType', () => {
+      expect(
+        getAssetType.resultFunc(
+          'assetType=something',
+          locations.browse(),
+          VendorName.DECENTRALAND
+        )
+      ).toBe(AssetType.ITEM)
+    })
+  })
+
+  describe("when there's assetType URL param and the assetType is NFT", () => {
+    it('should return NFT as the assetType', () => {
+      expect(
+        getAssetType.resultFunc(
+          'assetType=nft',
+          locations.browse(),
+          VendorName.DECENTRALAND
+        )
+      ).toBe(AssetType.NFT)
+    })
+  })
+
+  describe("when there's assetType URL param and the assetType is ITEM", () => {
+    it('should return ITEM as the assetType', () => {
+      expect(
+        getAssetType.resultFunc(
+          'assetType=item',
+          locations.lands(),
+          VendorName.KNOWN_ORIGIN
+        )
+      ).toBe(AssetType.ITEM)
     })
   })
 })
