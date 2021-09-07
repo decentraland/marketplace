@@ -1,5 +1,6 @@
 import { takeEvery, all, put } from 'redux-saga/effects'
-import { Network, NFTCategory } from '@dcl/schemas'
+import { ChainId, Network, NFTCategory } from '@dcl/schemas'
+import { ContractName } from 'decentraland-transactions'
 import { createWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
 import {
   ConnectWalletSuccessAction,
@@ -14,15 +15,13 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
-import { ContractName } from 'decentraland-transactions'
-
 import { getContractNames } from '../vendor'
 import { contracts, getContract } from '../contract/utils'
 import { isPartner } from '../vendor/utils'
 import { TRANSACTIONS_API_URL } from './utils'
 
 const baseWalletSaga = createWalletSaga({
-  CHAIN_ID: +(process.env.REACT_APP_CHAIN_ID || 1),
+  CHAIN_ID: Number(process.env.REACT_APP_CHAIN_ID) || ChainId.ETHEREUM_MAINNET,
   POLL_INTERVAL: 0,
   TRANSACTIONS_API_URL
 })
