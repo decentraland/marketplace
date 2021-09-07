@@ -4,7 +4,7 @@ import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
 import { WearableGender } from '../nft/wearable/types'
 
-export { Section } from '../vendor/routing/types'
+export { Sections } from '../vendor/routing/types'
 
 export enum SortBy {
   NAME = 'name',

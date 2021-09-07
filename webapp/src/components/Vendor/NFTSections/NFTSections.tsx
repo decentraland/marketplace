@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { VendorName } from '../../../modules/vendor/types'
-import { Section } from '../../../modules/vendor/routing/types'
+import { Sections } from '../../../modules/vendor/routing/types'
 import { Section as KnownOriginSection } from '../../../modules/vendor/known_origin/routing/types'
 import { Section as DecentralandSection } from '../../../modules/vendor/decentraland/routing/types'
 import { NFTSections as KnownOriginNFTSections } from '../known_origin/NFTSections'
@@ -18,7 +18,7 @@ const NFTSections = (props: Props) => {
   switch (vendor) {
     case VendorName.SUPER_RARE:
     case VendorName.MAKERS_PLACE:
-      const all = Section[vendor].ALL
+      const all = Sections[vendor].ALL
       return (
         <Menu className="NFTSections">
           <MenuItem
@@ -41,7 +41,7 @@ const NFTSections = (props: Props) => {
       return (
         <DecentralandNFTSections
           section={section as DecentralandSection}
-          sections={[Section.decentraland.ALL]}
+          sections={[Sections.decentraland.ALL]}
           onSectionClick={onSectionClick}
         />
       )

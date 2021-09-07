@@ -4,7 +4,7 @@ import {
   getSearchWearableCategory
 } from '../routing/search'
 import { BrowseOptions } from '../routing/types'
-import { Section } from './routing/types'
+import { Sections } from './routing/types'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName, Disabled } from './types'
 
@@ -16,7 +16,7 @@ export function getFilters(
 
   switch (vendor) {
     case VendorName.DECENTRALAND: {
-      const currentSection = Section[VendorName.DECENTRALAND]
+      const currentSection = Sections[VendorName.DECENTRALAND]
 
       const isLand = section === currentSection.LAND
       const isWearableHead = section === currentSection.WEARABLES_HEAD
@@ -43,7 +43,7 @@ export function getFilters(
       } as NFTsFetchFilters<VendorName.DECENTRALAND>
     }
     case VendorName.KNOWN_ORIGIN: {
-      const currentSection = Section[VendorName.KNOWN_ORIGIN]
+      const currentSection = Sections[VendorName.KNOWN_ORIGIN]
 
       return {
         isEdition: section === currentSection.EDITIONS,

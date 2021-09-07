@@ -9,6 +9,7 @@ import { View } from '../ui/types'
 import { WearableGender } from '../nft/wearable/types'
 import { VendorName } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
+import { Section, Sections } from '../vendor/routing/types'
 import { contracts } from '../contract/utils'
 import { RootState } from '../reducer'
 import {
@@ -16,7 +17,7 @@ import {
   getURLParamArray,
   getURLParam
 } from './search'
-import { SortBy, Section } from './types'
+import { SortBy } from './types'
 import { locations } from './locations'
 import { AssetType } from '../asset/types'
 
@@ -44,14 +45,25 @@ export const getSection = createSelector<
   string,
   ReturnType<typeof getPathName>,
   VendorName,
-  string
+  Section
 >(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
   const section = getURLParam<string>(search, 'section')
   if (!section && pathname === locations.lands()) {
-    return Section.decentraland.LAND
+    return Sections.decentraland.LAND
   }
 
-  return getURLParam<string>(search, 'section') || Section[vendor].ALL
+  if (
+    (!section || section === Sections[vendor].ALL) &&
+    vendor === VendorName.DECENTRALAND
+  ) {
+    return Sections.decentraland.WEARABLES
+  }
+
+  if (!section || !(section in Sections[vendor])) {
+    return Sections[vendor].ALL
+  }
+
+  return section as Section
 })
 
 export const getPage = createSelector<RootState, string, number>(

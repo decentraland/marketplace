@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import { Section } from '../../../modules/vendor/routing/types'
+import { Sections } from '../../../modules/vendor/routing/types'
 import { Section as DecentralandSection } from '../../../modules/vendor/decentraland/routing/types'
 import { VendorName } from '../../../modules/vendor/types'
 import { NFTSidebar as DecentralandNFTSidebar } from '../decentraland/NFTSidebar'
@@ -33,7 +33,9 @@ const NFTSidebar = (props: Props) => {
       return (
         <DecentralandNFTSidebar
           section={section as DecentralandSection}
-          sections={sections ?? [Section.decentraland.ALL]}
+          sections={
+            (sections as DecentralandSection[]) ?? [Sections.decentraland.ALL]
+          }
           onMenuItemClick={handleOnBrowse}
         />
       )

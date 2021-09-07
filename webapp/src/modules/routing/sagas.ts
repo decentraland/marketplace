@@ -47,7 +47,7 @@ import {
   setIsLoadMore,
   CLEAR_FILTERS
 } from './actions'
-import { BrowseOptions, Section } from './types'
+import { BrowseOptions, Sections } from './types'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -59,8 +59,6 @@ function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
   const newOptions: BrowseOptions = yield getNewBrowseOptions(
     action.payload.options
   )
-  console.log('Actual options', action.payload.options)
-  console.log('New options', newOptions)
   yield fetchAssetsFromRoute(newOptions)
 }
 
@@ -85,8 +83,6 @@ function* handleBrowse(action: BrowseAction) {
     action.payload.options
   )
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-  console.log('Actual options', action.payload.options)
-  console.log('New options', options)
   yield fetchAssetsFromRoute(options)
   yield put(push(buildBrowseURL(pathname, options)))
 }
@@ -127,9 +123,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   if (isItems) {
     // TODO: clean up
     const isWearableHead =
-      section === Section[VendorName.DECENTRALAND].WEARABLES_HEAD
+      section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
     const isWearableAccessory =
-      section === Section[VendorName.DECENTRALAND].WEARABLES_ACCESORIES
+      section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESORIES
 
     const wearableCategory = !isWearableAccessory
       ? getSearchWearableCategory(section!)
