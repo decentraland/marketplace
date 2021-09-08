@@ -10,7 +10,7 @@
     "date-fns": "^2.23.0",
     "decentraland-dapps": "^12.25.0",
     "decentraland-transactions": "^1.22.2",
-    "decentraland-ui": "^3.10.0",
+    "decentraland-ui": "^3.11.0",
     "dotenv": "^10.0.0",
     "graphql": "^14.7.0",
     "history": "^4.10.1",
