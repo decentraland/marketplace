@@ -128,7 +128,7 @@ const NFTFilters = (props: Props) => {
   )
 
   const handleCollectionsChange = useCallback(
-    (contract: string | undefined) => {
+    (contract?: string) => {
       onBrowse({ contracts: contract ? [contract] : undefined })
     },
     [onBrowse]

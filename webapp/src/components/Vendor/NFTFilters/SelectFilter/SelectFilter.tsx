@@ -7,7 +7,7 @@ import './SelectFilter.css'
 const SelectFilter = (props: Props) => {
   const { name, options, value, clearable, onChange } = props
   return (
-    <div className="SelectFilterTwo Filter">
+    <div className="SelectFilter Filter">
       <Header sub className="name">
         {name}
       </Header>
