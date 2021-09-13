@@ -1,6 +1,6 @@
 import BN from 'bn.js'
-import { Address } from 'web3x-es/address'
-import { toWei } from 'web3x-es/utils'
+import { Address } from 'web3x/address'
+import { toWei } from 'web3x/utils'
 import { Network } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721 } from '../../../contracts/ERC721'

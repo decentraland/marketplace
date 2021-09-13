@@ -52,7 +52,7 @@ import {
   FetchItemsSuccessAction,
   FETCH_ITEMS_SUCCESS
 } from '../item/actions'
-import { fromWei } from 'web3x-es/utils'
+import { fromWei } from 'web3x/utils'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,

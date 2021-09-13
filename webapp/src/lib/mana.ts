@@ -1,4 +1,4 @@
-import { fromWei } from 'web3x-es/utils'
+import { fromWei } from 'web3x/utils'
 
 export function formatMANA(value: string) {
   return Number(fromWei(value, 'ether')).toLocaleString()

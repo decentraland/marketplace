@@ -1,5 +1,5 @@
-import { Address } from 'web3x-es/address'
-import { Eth } from 'web3x-es/eth'
+import { Address } from 'web3x/address'
+import { Eth } from 'web3x/eth'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { Network } from '@dcl/schemas'
 import { MANA } from '../../contracts/MANA'
