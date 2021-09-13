@@ -1,94 +1,94 @@
-import { ContractAbi} from 'web3x-es/contract';
+import { ContractAbi } from 'web3x/contract'
 export default new ContractAbi([
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "address",
-        "name": "_uniswapV2Router",
-        "type": "address"
+        internalType: 'address',
+        name: '_uniswapV2Router',
+        type: 'address'
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    stateMutability: 'nonpayable',
+    type: 'constructor'
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "contract IERC20",
-        "name": "_dstToken",
-        "type": "address"
+        internalType: 'contract IERC20',
+        name: '_dstToken',
+        type: 'address'
       },
       {
-        "internalType": "uint256",
-        "name": "_etherAmount",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: '_etherAmount',
+        type: 'uint256'
       }
     ],
-    "name": "calcEtherToToken",
-    "outputs": [
+    name: 'calcEtherToToken',
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "inputs": [],
-    "name": "getTrader",
-    "outputs": [
+    inputs: [],
+    name: 'getTrader',
+    outputs: [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        internalType: 'address',
+        name: '',
+        type: 'address'
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
+    stateMutability: 'view',
+    type: 'function'
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "contract IERC20",
-        "name": "_dstToken",
-        "type": "address"
+        internalType: 'contract IERC20',
+        name: '_dstToken',
+        type: 'address'
       }
     ],
-    "name": "swapEtherToToken",
-    "outputs": [
+    name: 'swapEtherToToken',
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
       }
     ],
-    "stateMutability": "payable",
-    "type": "function"
+    stateMutability: 'payable',
+    type: 'function'
   },
   {
-    "inputs": [
+    inputs: [
       {
-        "internalType": "contract IERC20",
-        "name": "_srcToken",
-        "type": "address"
+        internalType: 'contract IERC20',
+        name: '_srcToken',
+        type: 'address'
       },
       {
-        "internalType": "uint256",
-        "name": "_srcAmount",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: '_srcAmount',
+        type: 'uint256'
       }
     ],
-    "name": "swapTokenToEther",
-    "outputs": [
+    name: 'swapTokenToEther',
+    outputs: [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256'
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
+    stateMutability: 'nonpayable',
+    type: 'function'
   }
-]);
+])

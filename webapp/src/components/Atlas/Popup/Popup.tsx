@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Address } from 'web3x-es/address'
+import { Address } from 'web3x/address'
 import { Row, Section, Header } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
