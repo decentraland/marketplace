@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Network, NFTCategory } from '@dcl/schemas'
-import { fromWei } from 'web3x-es/utils'
+import { fromWei } from 'web3x/utils'
 import dateFnsFormat from 'date-fns/format'
 import {
   Authorization,

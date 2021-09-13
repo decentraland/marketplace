@@ -98,7 +98,6 @@
 
 .NFTFilters .filters .ui.dropdown .visible.menu {
   max-height: 500px;
-  overflow: auto;
 }
 
 .NFTFilters .open-filters-wrapper {
@@ -200,7 +199,6 @@
 
 .FiltersModal .ui.dropdown .visible.menu {
   max-height: 500px;
-  overflow: auto;
 }
 
 .FiltersModal .ui.dropdown .text {
@@ -227,4 +225,9 @@
     flex-direction: column;
     justify-content: stretch;
   }
+}
+
+/* SelectFields */
+.NFTFilters .dcl.select-field .ui.sub.header {
+  font-weight: 600;
 }

@@ -1,6 +1,6 @@
-import { Eth } from 'web3x-es/eth'
-import { Address } from 'web3x-es/address'
-import { ContractOptions } from 'web3x-es/contract'
+import { Eth } from 'web3x/eth'
+import { Address } from 'web3x/address'
+import { ContractOptions } from 'web3x/contract'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 
 type ContractConstructor<T> = {

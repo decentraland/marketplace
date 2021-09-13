@@ -1,4 +1,4 @@
-import { Address } from 'web3x-es/address'
+import { Address } from 'web3x/address'
 import { Converter } from '../../contracts/Converter'
 import { ContractFactory } from '../contract/ContractFactory'
 
