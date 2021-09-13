@@ -73,7 +73,9 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   const { contractAddress, tokenId } = action.payload
 
   try {
-    const contract = getContract({ address: contractAddress })
+    const contract: ReturnType<typeof getContract> = yield call(getContract, {
+      address: contractAddress
+    })
     if (!contract.vendor) {
       throw new Error(
         `Couldn't find a valid vendor for contract ${contract.address}`
