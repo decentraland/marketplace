@@ -8,6 +8,9 @@ jobs:
     defaults:
       run:
         working-directory: ./webapp
+    env:
+      NODE_COVERALLS_DEBUG: 1
+      COVERALLS_DEBUG: true
     steps:
       - uses: actions/checkout@master
       - name: Use Node.js 14.x
