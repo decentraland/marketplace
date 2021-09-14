@@ -27,9 +27,9 @@ jobs:
       - name: Report coverage
         uses: coverallsapp/github-action@master
         with:
-          base-path: 'webapp'
+          base-path: webapp
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage/lcov.info
+          path-to-lcov: webapp/coverage/lcov.info
 
   Build-and-test-indexer:
     runs-on: ubuntu-latest
