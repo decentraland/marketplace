@@ -21,11 +21,11 @@ jobs:
       - name: Test
         run: npm test -- --coverage
         if: ${{ always() }}
-      - name: report coverage
+      - name: Report coverage
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./coverage/lcov.info
+          path-to-lcov: ${{ github.workspace }}/webapp/coverage/lcov.info
 
   Build-and-test-indexer:
     runs-on: ubuntu-latest
