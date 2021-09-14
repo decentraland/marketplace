@@ -25,7 +25,7 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: ./webapp/coverage/lcov.info
+          path-to-lcov: ./coverage/lcov.info
 
   Build-and-test-indexer:
     runs-on: ubuntu-latest
