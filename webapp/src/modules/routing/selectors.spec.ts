@@ -53,7 +53,7 @@ describe('when getting the section', () => {
     })
   })
 
-  describe("when there's no section URL param and the vendor is Decentraland", () => {
+  describe("when there's no section URL param, the vendor is Decentraland and the pathname is browse", () => {
     it("should return the decentraland's WEARABLES section", () => {
       expect(
         getSection.resultFunc('', locations.browse(), VendorName.DECENTRALAND)
@@ -61,7 +61,7 @@ describe('when getting the section', () => {
     })
   })
 
-  describe('when the section URL param is ALL and the vendor is Decentraland', () => {
+  describe('when the section URL param is ALL, the vendor is Decentraland and the pathname is browse', () => {
     it("should return the decentraland's WEARABLES section", () => {
       expect(
         getSection.resultFunc(
@@ -70,6 +70,26 @@ describe('when getting the section', () => {
           VendorName.DECENTRALAND
         )
       ).toBe(Sections.decentraland.WEARABLES)
+    })
+  })
+
+  describe("when there's no section URL param, the vendor is Decentraland and the pathname is not browse but account", () => {
+    it("should return the decentraland's ALL section", () => {
+      expect(
+        getSection.resultFunc('', locations.account(), VendorName.DECENTRALAND)
+      ).toBe(Sections.decentraland.ALL)
+    })
+  })
+
+  describe('when the section URL param is ALL, the vendor is Decentraland and the pathname is not browse but account', () => {
+    it("should return the decentraland's ALL section", () => {
+      expect(
+        getSection.resultFunc(
+          'section=all',
+          locations.account(),
+          VendorName.DECENTRALAND
+        )
+      ).toBe(Sections.decentraland.ALL)
     })
   })
 

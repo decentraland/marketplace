@@ -54,6 +54,7 @@ export const getSection = createSelector<
 
   if (
     (!section || section === Sections[vendor].ALL) &&
+    pathname === locations.browse() &&
     vendor === VendorName.DECENTRALAND
   ) {
     return Sections.decentraland.WEARABLES
