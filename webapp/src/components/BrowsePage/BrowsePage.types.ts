@@ -1,5 +1,5 @@
 import { AssetType } from '../../modules/asset/types'
-import { Section } from '../../modules/vendor/decentraland/routing/types'
+import { Section } from '../../modules/vendor/routing/types'
 import { VendorName } from '../../modules/vendor/types'
 
 export type Props = {

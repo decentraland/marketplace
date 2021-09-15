@@ -1,12 +1,12 @@
 import { Dispatch } from 'redux'
 
-import { Section as DecentralandSection } from '../../../modules/vendor/decentraland/routing/types'
 import { browse, BrowseAction } from '../../../modules/routing/actions'
+import { Section } from '../../../modules/vendor/routing/types'
 
 export type Props = {
   vendor?: string
   section: string
-  sections?: DecentralandSection[]
+  sections?: Section[]
   onBrowse: typeof browse
 }
 

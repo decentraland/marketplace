@@ -9,6 +9,7 @@ import { View } from '../ui/types'
 import { WearableGender } from '../nft/wearable/types'
 import { VendorName } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
+import { Section, Sections } from '../vendor/routing/types'
 import { contracts } from '../contract/utils'
 import { RootState } from '../reducer'
 import {
@@ -16,7 +17,7 @@ import {
   getURLParamArray,
   getURLParam
 } from './search'
-import { SortBy, Section } from './types'
+import { SortBy } from './types'
 import { locations } from './locations'
 import { AssetType } from '../asset/types'
 
@@ -44,14 +45,26 @@ export const getSection = createSelector<
   string,
   ReturnType<typeof getPathName>,
   VendorName,
-  string
+  Section
 >(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
-  const section = getURLParam<string>(search, 'section')
+  const section = getURLParam<string>(search, 'section') ?? ''
   if (!section && pathname === locations.lands()) {
-    return Section.decentraland.LAND
+    return Sections.decentraland.LAND
   }
 
-  return getURLParam<string>(search, 'section') || Section[vendor].ALL
+  if (
+    (!section || section === Sections[vendor].ALL) &&
+    pathname === locations.browse() &&
+    vendor === VendorName.DECENTRALAND
+  ) {
+    return Sections.decentraland.WEARABLES
+  }
+
+  if (!section || !(section.toUpperCase() in Sections[vendor])) {
+    return Sections[vendor].ALL
+  }
+
+  return section as Section
 })
 
 export const getPage = createSelector<RootState, string, number>(
@@ -185,13 +198,18 @@ export const getAssetType = createSelector<
   RootState,
   string,
   string,
+  VendorName,
   AssetType
->(getRouterSearch, getPathName, (search, pathname) => {
-  let results = getURLParam(search, 'assetType') as AssetType
-  if (!results) {
-    results = pathname === locations.browse() ? AssetType.ITEM : AssetType.NFT
+>(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
+  let assetTypeParam = getURLParam(search, 'assetType') ?? ''
+
+  if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
+    if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
+      return AssetType.ITEM
+    }
+    return AssetType.NFT
   }
-  return results
+  return assetTypeParam as AssetType
 })
 
 export const hasFiltersEnabled = createSelector<

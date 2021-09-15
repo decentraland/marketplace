@@ -3,8 +3,10 @@ import { Container, Page, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { View } from '../../modules/ui/types'
-import { Section } from '../../modules/vendor/decentraland'
+import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { AssetType } from '../../modules/asset/types'
+import { VendorName } from '../../modules/vendor'
+import { Section } from '../../modules/vendor/routing/types'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
@@ -19,24 +21,24 @@ import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
-    case Section.WEARABLES:
-    case Section.WEARABLES_HEAD:
-    case Section.WEARABLES_EYEBROWS:
-    case Section.WEARABLES_EYES:
-    case Section.WEARABLES_FACIAL_HAIR:
-    case Section.WEARABLES_HAIR:
-    case Section.WEARABLES_MOUTH:
-    case Section.WEARABLES_UPPER_BODY:
-    case Section.WEARABLES_LOWER_BODY:
-    case Section.WEARABLES_FEET:
-    case Section.WEARABLES_ACCESORIES:
-    case Section.WEARABLES_EARRING:
-    case Section.WEARABLES_EYEWEAR:
-    case Section.WEARABLES_HAT:
-    case Section.WEARABLES_HELMET:
-    case Section.WEARABLES_MASK:
-    case Section.WEARABLES_TIARA:
-    case Section.WEARABLES_TOP_HEAD: {
+    case DecentralandSection.WEARABLES:
+    case DecentralandSection.WEARABLES_HEAD:
+    case DecentralandSection.WEARABLES_EYEBROWS:
+    case DecentralandSection.WEARABLES_EYES:
+    case DecentralandSection.WEARABLES_FACIAL_HAIR:
+    case DecentralandSection.WEARABLES_HAIR:
+    case DecentralandSection.WEARABLES_MOUTH:
+    case DecentralandSection.WEARABLES_UPPER_BODY:
+    case DecentralandSection.WEARABLES_LOWER_BODY:
+    case DecentralandSection.WEARABLES_FEET:
+    case DecentralandSection.WEARABLES_ACCESORIES:
+    case DecentralandSection.WEARABLES_EARRING:
+    case DecentralandSection.WEARABLES_EYEWEAR:
+    case DecentralandSection.WEARABLES_HAT:
+    case DecentralandSection.WEARABLES_HELMET:
+    case DecentralandSection.WEARABLES_MASK:
+    case DecentralandSection.WEARABLES_TIARA:
+    case DecentralandSection.WEARABLES_TOP_HEAD: {
       return true
     }
     default:
@@ -134,7 +136,9 @@ const AssetBrowse = (props: Props) => {
                       ? 'account_page.primary_market_subtitle'
                       : 'browse_page.primary_market_subtitle'
                   ),
-                  disabled: !hasPrimarySales(section),
+                  disabled:
+                    !hasPrimarySales(section) ||
+                    vendor !== VendorName.DECENTRALAND,
                   onClick: hanldeBrowseItems
                 },
                 {
@@ -143,7 +147,9 @@ const AssetBrowse = (props: Props) => {
                       ? 'account_page.secondary_market_title'
                       : 'browse_page.secondary_market_title'
                   ),
-                  active: assetType === AssetType.NFT,
+                  active:
+                    assetType === AssetType.NFT ||
+                    vendor !== VendorName.DECENTRALAND,
                   description: t(
                     view === View.ACCOUNT
                       ? 'account_page.secondary_market_subtitle'

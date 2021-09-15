@@ -9,7 +9,7 @@ import {
   fetchAssetsFromRoute,
   FetchAssetsFromRouteAction
 } from '../../modules/routing/actions'
-import { Section } from '../../modules/vendor/decentraland'
+import { Section } from '../../modules/vendor/routing/types'
 import { AssetType } from '../../modules/asset/types'
 
 export type Props = {

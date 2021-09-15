@@ -23,12 +23,11 @@ import {
   Props
 } from './AssetBrowse.types'
 import AssetBrowse from './AssetBrowse'
-import { Section } from '../../modules/vendor/decentraland'
 
 const mapState = (state: RootState): MapStateProps => ({
   isMap: getIsMap(state),
   onlyOnSale: getOnlyOnSale(state),
-  section: getSection(state) as Section,
+  section: getSection(state),
   isLoading:
     isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST) ||
     isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST),
