@@ -1,5 +1,5 @@
 import { all } from 'redux-saga/effects'
-import { createAuthorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
+import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
 import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
@@ -16,14 +16,9 @@ import { uiSaga } from './ui/sagas'
 import { walletSaga } from './wallet/sagas'
 import { itemSaga } from './item/sagas'
 
-import { TRANSACTIONS_API_URL } from './wallet/utils'
-
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({
   peerUrl: process.env.REACT_APP_PEER_URL!
-})
-const authorizationSaga = createAuthorizationSaga({
-  metaTransactionServerUrl: TRANSACTIONS_API_URL
 })
 
 export function* rootSaga() {

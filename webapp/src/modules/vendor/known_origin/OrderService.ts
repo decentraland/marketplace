@@ -1,5 +1,5 @@
-import { Address } from 'web3x-es/address'
-import { ABICoder } from 'web3x-es/contract/abi-coder'
+import { Address } from 'web3x/address'
+import { ABICoder } from 'web3x/contract/abi-coder'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
 import { ContractFactory } from '../../contract/ContractFactory'

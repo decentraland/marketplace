@@ -7,6 +7,7 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ContractName } from 'decentraland-transactions'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { locations } from '../../../modules/routing/locations'
 import { AssetAction } from '../../AssetAction'
 import { Name } from '../Name'
@@ -120,14 +121,15 @@ const BuyItemModal = (props: Props) => {
           {t('global.cancel')}
         </Button>
 
-        <Button
+        <ChainButton
           primary
           disabled={isDisabled || isLoading}
           onClick={handleSubmit}
           loading={isLoading}
+          chainId={item.chainId}
         >
           {t('buy_page.buy')}
-        </Button>
+        </ChainButton>
       </div>
       <AuthorizationModal
         isLoading={isLoading}

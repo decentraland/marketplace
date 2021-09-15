@@ -7,6 +7,7 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { NFTCategory } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
 import { locations } from '../../../modules/routing/locations'
@@ -177,16 +178,17 @@ const BuyNFTModal = (props: Props) => {
         </Button>
 
         {isDisabled ||
-        !isAboveMaxPercentage ||
-        (isAboveMaxPercentage && wantsToProceed) ? (
-          <Button
+          !isAboveMaxPercentage ||
+          (isAboveMaxPercentage && wantsToProceed) ? (
+          <ChainButton
             primary
             disabled={isDisabled || isLoading}
             onClick={handleSubmit}
             loading={isLoading}
+            chainId={nft.chainId}
           >
             {t('buy_page.buy')}
-          </Button>
+          </ChainButton>
         ) : (
           <Button
             primary

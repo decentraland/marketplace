@@ -1,13 +1,8 @@
 import { expectSaga } from 'redux-saga-test-plan'
-import { Address } from 'web3x-es/address'
-import { getWallet } from '../wallet/selectors'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { ChainId, Item } from '@dcl/schemas'
 import { call, select } from 'redux-saga/effects'
-import { ContractName, getContract } from 'decentraland-transactions'
-import { CollectionStore } from '../../contracts/CollectionStore'
-import { ContractFactory } from '../contract/ContractFactory'
-import { sendTransaction } from '../wallet/utils'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import {
   buyItemRequest,
   buyItemFailure,
@@ -19,10 +14,10 @@ import {
   fetchItemRequest,
   fetchItemFailure
 } from './actions'
-import { itemSaga } from './sagas'
-import { TxSend } from 'web3x-es/contract'
+import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { itemAPI } from '../vendor/decentraland/item/api'
+import { itemSaga } from './sagas'
 
 const item = {
   itemId: 'anItemId',
@@ -34,15 +29,6 @@ const item = {
 const wallet = {
   address: '0x32be343b94f860124dc4fee278fdcbd38c102d88'
 }
-
-const collectionStoreContractConfig = getContract(
-  ContractName.CollectionStore,
-  item.chainId
-)
-const collectionStoreContract = new CollectionStore(
-  jest.fn() as any,
-  Address.fromString(collectionStoreContractConfig.address)
-)
 
 const txHash =
   '0x9fc518261399c1bd236997706347f8b117a061cef5518073b1c3eefd5efbff84'
@@ -66,28 +52,11 @@ describe('when handling the buy items request action', () => {
     })
   })
 
-  describe("when there's an error while building the store contract", () => {
-    it('should dispatch an action signaling the failure of the action handling', () => {
-      return expectSaga(itemSaga)
-        .provide([
-          [select(getWallet), wallet],
-          [matchers.call.fn(ContractFactory.build), Promise.reject(anError)]
-        ])
-        .put(buyItemFailure(anError.message))
-        .dispatch(buyItemRequest(item))
-        .run({ silenceTimeout: true })
-    })
-  })
-
   describe('when sending the meta transaction fails', () => {
     it('should dispatch an action signaling the failure of the action handling', () => {
       return expectSaga(itemSaga)
         .provide([
           [select(getWallet), wallet],
-          [
-            matchers.call.fn(ContractFactory.build),
-            Promise.resolve(collectionStoreContract)
-          ],
           [matchers.call.fn(sendTransaction), Promise.reject(anError)]
         ])
         .put(buyItemFailure(anError.message))
@@ -97,38 +66,11 @@ describe('when handling the buy items request action', () => {
   })
 
   describe('when the meta transaction is sent succesfully', () => {
-    const buyTransactionParameters = [
-      {
-        collection: Address.fromString(item.contractAddress),
-        ids: [item.itemId],
-        prices: [item.price],
-        beneficiaries: [Address.fromString(wallet.address)]
-      }
-    ]
-
-    const txBuy = {} as TxSend
-
     it('should send a meta transaction to the collection store contract living in the chain provided by the item and dispatch the success action', () => {
       return expectSaga(itemSaga)
         .provide([
           [select(getWallet), wallet],
-          [
-            matchers.call.fn(ContractFactory.build),
-            Promise.resolve(collectionStoreContract)
-          ],
-          [
-            call(collectionStoreContract.methods.buy, buyTransactionParameters),
-            txBuy
-          ],
-          [
-            call(
-              sendTransaction,
-              txBuy,
-              collectionStoreContractConfig,
-              Address.fromString(wallet.address)
-            ),
-            Promise.resolve(txHash)
-          ]
+          [matchers.call.fn(sendTransaction), Promise.resolve(txHash)]
         ])
         .put(buyItemSuccess(item.chainId, txHash, item))
         .dispatch(buyItemRequest(item))

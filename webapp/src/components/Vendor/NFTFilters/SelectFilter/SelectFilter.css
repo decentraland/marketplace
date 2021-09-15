@@ -1,21 +1,3 @@
-.SelectFilter .ui.dropdown {
-  display: flex;
-  align-items: center;
-  padding: 6px 10px;
-  border: 1px solid var(--divider);
-  border-radius: 6px;
-  color: var(--secondary-text);
-}
-
-.SelectFilter .ui.dropdown .text {
-  flex: 1 0 auto;
-  color: var(--text);
-}
-
-.SelectFilter .ui.dropdown .dropdown.icon {
-  color: var(--text);
-}
-
 @media (max-width: 768px) {
   .SelectFilter {
     margin-bottom: 24px;
@@ -24,5 +6,101 @@
 
   .SelectFilter .ui.sub.header.name {
     font-weight: normal;
+    margin-bottom: 12px;
   }
+
+  .SelectFilter .ui.fluid.search.selection.dropdown {
+    padding: 0.53em 2.1em 0.53em 0.6em;
+    min-height: 37px;
+  }
+
+  .SelectFilter .ui.search.selection.dropdown > input.search {
+    padding: 0.43em 2.1em 0.43em 0.6em;
+    right: 0.74em;
+  }
+
+  .SelectFilter .ui.selection.dropdown > .dropdown.icon {
+    padding: 0.63em;
+  }
+}
+
+.SelectFilter .ui.dropdown .text {
+  color: var(--text);
+  font-weight: 500;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-family: var(--font-family);
+}
+
+@media (min-width: 769px) {
+  .SelectFilter .ui.selection.dropdown > .dropdown.icon {
+    color: var(--text);
+    padding: 0.71em;
+  }
+
+  .SelectFilter .ui.fluid.search.selection.dropdown {
+    min-height: 33px;
+  }
+}
+
+.SelectFilter .ui.selection.dropdown .menu {
+  border-radius: 6px;
+  margin-top: 13px;
+  border-color: transparent !important;
+  box-shadow: var(--shadow-2);
+}
+
+.SelectFilter .ui.fluid.search.selection.dropdown {
+  display: flex;
+  border-radius: 6px !important;
+  padding: 0.58571429em 2.1em 0.58571429em 0.6em;
+  padding: 0.53em 2.1em 0.53em 0.6em;
+  color: var(--secondary-text);
+  border: 1px solid var(--divider) !important;
+  background-color: transparent;
+}
+
+.SelectFilter .ui.search.selection.dropdown > input.search {
+  color: var(--text);
+  font-weight: 500;
+  font-family: var(--font-family);
+  padding: 0.47857143em 2.1em 0.47857143em 0.6em;
+}
+
+.SelectFilter .ui.search.selection.dropdown > input.search::selection {
+  color: var(--text);
+}
+
+.SelectFilter .ui.dropdown.visible .menu.wrapper {
+  overflow-y: hidden;
+  height: auto;
+  display: flex !important;
+  flex-direction: column;
+}
+
+.SelectFilter .ui.dropdown .options-wrapper {
+  flex: 1;
+  width: 100% !important;
+}
+
+.SelectFilter .ui.dropdown:hover .menu {
+  border-color: transparent !important;
+  box-shadow: var(--shadow-2) !important;
+}
+
+.SelectFilter .ui.selection.dropdown .menu > .item {
+  border-top: none;
+}
+
+.SelectFilter .ui.selection.dropdown .menu > .item::selection .text {
+  border-top: none;
+  color: var(--text);
+}
+
+.SelectFilter .ui.selection.dropdown .menu > .message:not(.ui) {
+  color: var(--text);
+}
+
+.SelectFilter .ui.selection.visible.dropdown > .text:not(.default) {
+  color: var(--text);
 }
