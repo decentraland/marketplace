@@ -70,12 +70,11 @@ describe("Decentraland's NFTService", () => {
     })
 
     describe('when the fetch is successful', () => {
-      let total: number
+      const total = 3
       let nftResults: NFTResult[]
       let anotherNFT: NFT
 
       beforeEach(() => {
-        total = 3
         anotherNFT = { ...nft, owner: 'anotherAddress', id: 'anotherNFTID' }
         nftResults = [
           { nft, order },
@@ -138,10 +137,9 @@ describe("Decentraland's NFTService", () => {
     })
 
     describe('when the fetch is successful', () => {
-      let total: number
+      const total = 1
 
       beforeEach(() => {
-        total = 1
         ;(api.nftAPI.fetch as jest.Mock).mockResolvedValueOnce({ total })
       })
 
