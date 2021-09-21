@@ -217,15 +217,9 @@ describe("Decentraland's OrderService", () => {
   })
 
   describe('when creating an order', () => {
-    let priceInEther: number
-    let priceInWei: ReturnType<typeof utils.parseEther>
-    let expiresAt: number
-
-    beforeEach(() => {
-      priceInEther = 1
-      priceInWei = utils.parseEther(priceInEther.toString())
-      expiresAt = 123023432
-    })
+    const priceInEther = 1
+    const priceInWei = utils.parseEther(priceInEther.toString())
+    const expiresAt = 123023432
 
     describe("when the market's contract doesn't exist for the NFT's chainId", () => {
       it('should reject into an exception', () => {
