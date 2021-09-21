@@ -10,13 +10,8 @@ import { OrderService as OrderServiceInterface } from '../services'
 
 export class OrderService
   implements OrderServiceInterface<VendorName.DECENTRALAND> {
-  async fetchByNFT(nft: NFT, status?: OrderStatus) {
-    const orders = await orderAPI.fetchByNFT(
-      nft.contractAddress,
-      nft.tokenId,
-      status
-    )
-    return orders as Order[]
+  fetchByNFT(nft: NFT, status?: OrderStatus): Promise<Order[]> {
+    return orderAPI.fetchByNFT(nft.contractAddress, nft.tokenId, status)
   }
 
   async create(
