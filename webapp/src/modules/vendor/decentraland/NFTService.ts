@@ -10,7 +10,7 @@ import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
 import ERC721Abi from '../../../contracts/ERC721Abi'
 import { NFTService as NFTServiceInterface } from '../services'
-import { NFTResult, NFTsFetchFilters } from './nft/types'
+import { NFTsFetchFilters } from './nft/types'
 import { VendorName } from '../types'
 import { nftAPI } from './nft/api'
 import { Order } from '../../order/types'
@@ -20,19 +20,16 @@ export class NFTService
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
     const { data: results, total } = await nftAPI.fetch(params, filters)
 
-    const accounts: Account[] = results.reduce(
-      (accumulator: Account[], nftResult: NFTResult) => {
-        const address = nftResult.nft.owner
-        let account = accumulator.find(account => account.id === address)
-        if (!account) {
-          account = this.toAccount(address)
-          accumulator.push(account)
-        }
-        account.nftIds.push(nftResult.nft.id)
-        return accumulator
-      },
-      [] as Account[]
-    )
+    const accounts: Account[] = results.reduce((accumulator, nftResult) => {
+      const address = nftResult.nft.owner
+      let account = accumulator.find(account => account.id === address)
+      if (!account) {
+        account = this.toAccount(address)
+        accumulator.push(account)
+      }
+      account.nftIds.push(nftResult.nft.id)
+      return accumulator
+    }, [] as Account[])
 
     const nfts: NFT[] = results.map(nftResult => ({
       ...nftResult.nft,
