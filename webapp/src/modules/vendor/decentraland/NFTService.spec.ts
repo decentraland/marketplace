@@ -241,14 +241,16 @@ describe("Decentraland's NFTService", () => {
 
         it("should have called send transaction with the erc721's crafted contract using the nft's chain id, the contract address and the ABI", async () => {
           await nftService.transfer(wallet, anAddress, nft)
-          expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
-
-          const firstParameter = (walletUtils.sendTransaction as jest.Mock).mock
-            .calls[0][0] as ContractData
-          expect(firstParameter.chainId).toBe(nft.chainId)
-          expect(firstParameter.name).toBe('ERC721')
-          expect(firstParameter.abi).toBe(ERC721Abi)
-          expect(firstParameter.address).toBe(nft.contractAddress)
+          expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalledWith(
+            {
+              name: 'ERC721',
+              abi: ERC721Abi,
+              address: nft.contractAddress,
+              chainId: nft.chainId,
+              version: '1'
+            },
+            expect.any(Function)
+          )
         })
 
         it("should have called send transaction with the contract's createOrder order operation", async () => {
@@ -305,13 +307,14 @@ describe("Decentraland's NFTService", () => {
 
         it("should have called send transaction with the erc721's contract using the nft's chain id and contract address", async () => {
           await nftService.transfer(wallet, anAddress, nft)
-          expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
-
-          const firstParameter = (walletUtils.sendTransaction as jest.Mock).mock
-            .calls[0][0] as ContractData
-          expect(firstParameter.chainId).toBe(nft.chainId)
-          expect(firstParameter.name).toBe('Decentraland Collection')
-          expect(firstParameter.address).toBe(nft.contractAddress)
+          expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalledWith(
+            expect.objectContaining({
+              chainId: nft.chainId,
+              name: 'Decentraland Collection',
+              address: nft.contractAddress
+            }),
+            expect.any(Function)
+          )
         })
 
         it("should have called send transaction with the contract's createOrder order operation", async () => {
