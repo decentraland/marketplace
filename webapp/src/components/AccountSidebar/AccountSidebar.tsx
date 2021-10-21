@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 
 import { VendorName } from '../../modules/vendor/types'
-import { getPartners } from '../../modules/vendor/utils'
 import { VendorMenu } from '../Vendor/VendorMenu'
 import { Props } from './AccountSidebar.types'
 
@@ -26,15 +25,6 @@ const AccountSidebar = (props: Props) => {
         section={section}
         onClick={section => handleOnBrowse(decentraland, section)}
       />
-      {getPartners().map(partner => (
-        <VendorMenu
-          key={partner}
-          address={address}
-          vendor={partner}
-          section={section}
-          onClick={section => handleOnBrowse(partner, section)}
-        />
-      ))}
     </div>
   )
 }
