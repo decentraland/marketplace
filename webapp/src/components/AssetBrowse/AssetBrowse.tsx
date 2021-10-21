@@ -120,31 +120,45 @@ const AssetBrowse = (props: Props) => {
       <Row>
         {isFullscreen ? null : (
           <Column align="left" className="sidebar">
-            {view === View.MARKET && (
-              <ToggleBox
-                className="result-type-toggle"
-                header={t('filters.type')}
-                items={[
-                  {
-                    title: t('browse_page.primary_market_title'),
-                    active: assetType === AssetType.ITEM,
-                    description: t('browse_page.primary_market_subtitle'),
-                    disabled:
-                      !hasPrimarySales(section) ||
-                      vendor !== VendorName.DECENTRALAND,
-                    onClick: hanldeBrowseItems
-                  },
-                  {
-                    title: t('browse_page.secondary_market_title'),
-                    active:
-                      assetType === AssetType.NFT ||
-                      vendor !== VendorName.DECENTRALAND,
-                    description: t('browse_page.secondary_market_subtitle'),
-                    onClick: handleBrowse
-                  }
-                ]}
-              />
-            )}
+            <ToggleBox
+              className="result-type-toggle"
+              header={t('filters.type')}
+              items={[
+                {
+                  title: t(
+                    view === View.ACCOUNT
+                      ? 'account_page.primary_market_title'
+                      : 'browse_page.primary_market_title'
+                  ),
+                  active: assetType === AssetType.ITEM,
+                  description: t(
+                    view === View.ACCOUNT
+                      ? 'account_page.primary_market_subtitle'
+                      : 'browse_page.primary_market_subtitle'
+                  ),
+                  disabled:
+                    !hasPrimarySales(section) ||
+                    vendor !== VendorName.DECENTRALAND,
+                  onClick: hanldeBrowseItems
+                },
+                {
+                  title: t(
+                    view === View.ACCOUNT
+                      ? 'account_page.secondary_market_title'
+                      : 'browse_page.secondary_market_title'
+                  ),
+                  active:
+                    assetType === AssetType.NFT ||
+                    vendor !== VendorName.DECENTRALAND,
+                  description: t(
+                    view === View.ACCOUNT
+                      ? 'account_page.secondary_market_subtitle'
+                      : 'browse_page.secondary_market_subtitle'
+                  ),
+                  onClick: handleBrowse
+                }
+              ]}
+            />
             <Responsive minWidth={Responsive.onlyTablet.minWidth}>
               {view === View.ACCOUNT ? (
                 <AccountSidebar address={address!} />
