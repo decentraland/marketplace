@@ -42,8 +42,8 @@ const Navigation = (props: Props) => {
           </Tabs.Tab>
         </Link>
         <Link to={locations.currentAccount()}>
-          <Tabs.Tab active={activeTab === NavigationTab.MY_ASSETS}>
-            {t('navigation.my_assets')}
+          <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>
+            {t('navigation.my_store')}
           </Tabs.Tab>
         </Link>
         <Link to={locations.bids()}>
