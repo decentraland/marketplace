@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 import { Header } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Sections } from '../../modules/routing/types'
 import { Section } from '../../modules/vendor/decentraland'
 import { VendorName } from '../../modules/vendor/types'
@@ -65,7 +66,7 @@ const CurrentAccountSidebar = ({
 }) => (
   <div className="CurrentAccountSidebar">
     <Menu>
-      <Header sub>MY ASSETS</Header>
+      <Header sub>{t('account_sidebar.my_assets')}</Header>
       <MenuItem
         key={Sections.decentraland.COLLECTIONS}
         value={Sections.decentraland.COLLECTIONS}
@@ -83,7 +84,7 @@ const CurrentAccountSidebar = ({
       />
     </Menu>
     <Menu>
-      <Header sub>MY STORE</Header>
+      <Header sub>{t('account_sidebar.my_store')}</Header>
       <MenuItem
         key={Sections.decentraland.ON_SALE}
         value={Sections.decentraland.ON_SALE}

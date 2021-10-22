@@ -130,6 +130,10 @@
     "categories": "Categories",
     "back": "Back"
   },
+  "account_sidebar": {
+    "my_assets": "MY ASSETS",
+    "my_store": "MY STORE"
+  },
   "asset_page": {
     "actions": {
       "cancel_sale": "Remove listing",
