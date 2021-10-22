@@ -151,8 +151,10 @@ const AssetBrowse = (props: Props) => {
               />
             )}
             <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-              {view === View.ACCOUNT || view === View.CURRENT_ACCOUNT ? (
+              {view === View.ACCOUNT ? (
                 <AccountSidebar address={address!} />
+              ) : view === View.CURRENT_ACCOUNT ? (
+                <AccountSidebar address={address!} isCurrentAddress />
               ) : (
                 <NFTSidebar section={section} sections={sections} />
               )}
