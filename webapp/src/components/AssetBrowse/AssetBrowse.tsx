@@ -18,6 +18,7 @@ import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './AssetBrowse.types'
 import { ToggleBox } from './ToggleBox'
 import './AssetBrowse.css'
+import classNames from 'classnames'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
@@ -109,58 +110,48 @@ const AssetBrowse = (props: Props) => {
     [onBrowse]
   )
 
-  // classes
-  let classes = ['AssetBrowse']
-  if (isMap) {
-    classes.push('is-map')
-  }
+  const toggleBoxI18nKey =
+    view === View.ACCOUNT ? 'account_page' : 'browse_page'
 
   return (
-    <Page className={classes.join(' ')} isFullscreen={isFullscreen}>
+    <Page
+      className={classNames('AssetBrowse', isMap && 'is-map')}
+      isFullscreen={isFullscreen}
+    >
       <Row>
         {isFullscreen ? null : (
           <Column align="left" className="sidebar">
-            <ToggleBox
-              className="result-type-toggle"
-              header={t('filters.type')}
-              items={[
-                {
-                  title: t(
-                    view === View.ACCOUNT
-                      ? 'account_page.primary_market_title'
-                      : 'browse_page.primary_market_title'
-                  ),
-                  active: assetType === AssetType.ITEM,
-                  description: t(
-                    view === View.ACCOUNT
-                      ? 'account_page.primary_market_subtitle'
-                      : 'browse_page.primary_market_subtitle'
-                  ),
-                  disabled:
-                    !hasPrimarySales(section) ||
-                    vendor !== VendorName.DECENTRALAND,
-                  onClick: hanldeBrowseItems
-                },
-                {
-                  title: t(
-                    view === View.ACCOUNT
-                      ? 'account_page.secondary_market_title'
-                      : 'browse_page.secondary_market_title'
-                  ),
-                  active:
-                    assetType === AssetType.NFT ||
-                    vendor !== VendorName.DECENTRALAND,
-                  description: t(
-                    view === View.ACCOUNT
-                      ? 'account_page.secondary_market_subtitle'
-                      : 'browse_page.secondary_market_subtitle'
-                  ),
-                  onClick: handleBrowse
-                }
-              ]}
-            />
+            {view !== View.CURRENT_ACCOUNT && (
+              <ToggleBox
+                className="result-type-toggle"
+                header={t('filters.type')}
+                items={[
+                  {
+                    title: t(`${toggleBoxI18nKey}.primary_market_title`),
+                    active: assetType === AssetType.ITEM,
+                    description: t(
+                      `${toggleBoxI18nKey}.primary_market_subtitle`
+                    ),
+                    disabled:
+                      !hasPrimarySales(section) ||
+                      vendor !== VendorName.DECENTRALAND,
+                    onClick: hanldeBrowseItems
+                  },
+                  {
+                    title: t(`${toggleBoxI18nKey}.secondary_market_title`),
+                    active:
+                      assetType === AssetType.NFT ||
+                      vendor !== VendorName.DECENTRALAND,
+                    description: t(
+                      `${toggleBoxI18nKey}.secondary_market_subtitle`
+                    ),
+                    onClick: handleBrowse
+                  }
+                ]}
+              />
+            )}
             <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-              {view === View.ACCOUNT ? (
+              {view === View.ACCOUNT || view === View.CURRENT_ACCOUNT ? (
                 <AccountSidebar address={address!} />
               ) : (
                 <NFTSidebar section={section} sections={sections} />

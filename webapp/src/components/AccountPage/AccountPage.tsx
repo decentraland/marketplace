@@ -56,7 +56,7 @@ const AccountPage = (props: Props) => {
           <AssetBrowse
             vendor={vendor}
             address={wallet.address}
-            view={View.ACCOUNT}
+            view={View.CURRENT_ACCOUNT}
             isFullscreen={Boolean(isFullscreen)}
           />
         )
