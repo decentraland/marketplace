@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { Header } from 'decentraland-ui'
 import { Sections } from '../../modules/routing/types'
 import { Section } from '../../modules/vendor/decentraland'
 import { VendorName } from '../../modules/vendor/types'
@@ -8,6 +9,8 @@ import { MenuItem } from '../Menu/MenuItem'
 import { NFTSectionsMenuItems } from '../Vendor/decentraland/NFTSections/NFTSections'
 import { VendorMenu } from '../Vendor/VendorMenu'
 import { Props } from './AccountSidebar.types'
+
+import './AccountSidebar.css'
 
 const AccountSidebar = ({
   address,
@@ -24,14 +27,12 @@ const AccountSidebar = ({
 
   const decentraland = VendorName.DECENTRALAND
 
-  console.log(section)
-
   return (
     <div className="NFTSidebar">
       {isCurrentAddress ? (
-        <div className="foo">
+        <div className="CurrentAccountSidebar">
           <Menu>
-            <div className="bar">My Assets</div>
+            <Header sub>MY ASSETS</Header>
             <MenuItem
               key={Sections.decentraland.COLLECTIONS}
               value={Sections.decentraland.COLLECTIONS}

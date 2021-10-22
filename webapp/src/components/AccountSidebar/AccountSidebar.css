@@ -1,0 +1,20 @@
+.CurrentAccountSidebar .Menu {
+  background-color: var(--card);
+  border-radius: 10px;
+  margin-left: 0px !important;
+  padding-bottom: 21px;
+}
+
+.CurrentAccountSidebar .ui.sub.header {
+  padding-left: 24px;
+  padding-top: 17px;
+  padding-bottom: 22px;
+}
+
+.CurrentAccountSidebar .MenuItem {
+  padding-left: 24px !important;
+}
+
+.CurrentAccountSidebar .MenuItem.active {
+  background-color: #37333d;
+}
