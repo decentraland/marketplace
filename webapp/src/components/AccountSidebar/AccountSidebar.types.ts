@@ -4,7 +4,7 @@ import { browse, BrowseAction } from '../../modules/routing/actions'
 export type Props = {
   section: string
   address: string
-  isCurrentAddress?: boolean
+  isCurrentAccount?: boolean
   onBrowse: typeof browse
 }
 

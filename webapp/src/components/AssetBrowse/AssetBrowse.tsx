@@ -154,7 +154,7 @@ const AssetBrowse = (props: Props) => {
               {view === View.ACCOUNT ? (
                 <AccountSidebar address={address!} />
               ) : view === View.CURRENT_ACCOUNT ? (
-                <AccountSidebar address={address!} isCurrentAddress />
+                <AccountSidebar address={address!} isCurrentAccount />
               ) : (
                 <NFTSidebar section={section} sections={sections} />
               )}

@@ -17,7 +17,7 @@ const decentraland = VendorName.DECENTRALAND
 const AccountSidebar = ({
   address,
   section,
-  isCurrentAddress,
+  isCurrentAccount,
   onBrowse
 }: Props) => {
   const handleOnBrowse = useCallback(
@@ -29,8 +29,8 @@ const AccountSidebar = ({
 
   return (
     <div className="NFTSidebar">
-      {isCurrentAddress ? (
-        <CurrentAddressSidebar section={section} onBrowse={handleOnBrowse} />
+      {isCurrentAccount ? (
+        <CurrentAccountSidebar section={section} onBrowse={handleOnBrowse} />
       ) : (
         <>
           <VendorMenu
@@ -40,7 +40,7 @@ const AccountSidebar = ({
             section={section}
             onClick={section => handleOnBrowse(decentraland, section)}
           />
-          {!isCurrentAddress &&
+          {!isCurrentAccount &&
             getPartners().map(partner => (
               <VendorMenu
                 key={partner}
@@ -56,7 +56,7 @@ const AccountSidebar = ({
   )
 }
 
-const CurrentAddressSidebar = ({
+const CurrentAccountSidebar = ({
   section,
   onBrowse
 }: {
