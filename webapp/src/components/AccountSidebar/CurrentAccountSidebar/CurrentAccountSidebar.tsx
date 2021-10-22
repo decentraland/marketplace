@@ -6,27 +6,33 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { VendorName } from '../../../modules/vendor/types'
 import { Menu } from '../../Menu'
 import { MenuItem } from '../../Menu/MenuItem'
-import { NFTSectionsMenuItems } from '../../Vendor/decentraland/NFTSections/NFTSections'
 import { Props } from './CurrentAccountSidebar.types'
+import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 
 const decentraland = VendorName.DECENTRALAND
+
+const {
+  COLLECTIONS,
+  LAND,
+  WEARABLES,
+  ENS,
+  ON_SALE,
+  SALES,
+  SETTINGS
+} = Sections.decentraland
 
 const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
   <div className="CurrentAccountSidebar">
     <Menu>
       <Header sub>{t('account_sidebar.my_assets')}</Header>
       <MenuItem
-        key={Sections.decentraland.COLLECTIONS}
-        value={Sections.decentraland.COLLECTIONS}
+        key={COLLECTIONS}
+        value={COLLECTIONS}
         currentValue={section}
         onClick={section => onBrowse(decentraland, section)}
       />
       <NFTSectionsMenuItems
-        sections={[
-          Sections.decentraland.LAND,
-          Sections.decentraland.WEARABLES,
-          Sections.decentraland.ENS
-        ]}
+        sections={[LAND, WEARABLES, ENS]}
         section={section as Section}
         onSectionClick={section => onBrowse(decentraland, section)}
       />
@@ -34,20 +40,20 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
     <Menu>
       <Header sub>{t('account_sidebar.my_store')}</Header>
       <MenuItem
-        key={Sections.decentraland.ON_SALE}
-        value={Sections.decentraland.ON_SALE}
+        key={ON_SALE}
+        value={ON_SALE}
         currentValue={section}
         onClick={section => onBrowse(decentraland, section)}
       />
       <MenuItem
-        key={Sections.decentraland.SALES}
-        value={Sections.decentraland.SALES}
+        key={SALES}
+        value={SALES}
         currentValue={section}
         onClick={section => onBrowse(decentraland, section)}
       />
       <MenuItem
-        key={Sections.decentraland.SETTINGS}
-        value={Sections.decentraland.SETTINGS}
+        key={SETTINGS}
+        value={SETTINGS}
         currentValue={section}
         onClick={section => onBrowse(decentraland, section)}
       />
