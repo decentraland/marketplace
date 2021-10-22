@@ -17,8 +17,8 @@ import { NFTFilters } from '../Vendor/NFTFilters'
 import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './AssetBrowse.types'
 import { ToggleBox } from './ToggleBox'
-import './AssetBrowse.css'
 import classNames from 'classnames'
+import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {

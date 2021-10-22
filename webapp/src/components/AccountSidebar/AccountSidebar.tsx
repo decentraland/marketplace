@@ -1,14 +1,20 @@
 import React, { useCallback } from 'react'
-
+import { Sections } from '../../modules/routing/types'
+import { Section } from '../../modules/vendor/decentraland'
 import { VendorName } from '../../modules/vendor/types'
 import { getPartners } from '../../modules/vendor/utils'
-import { NFTSections } from '../Vendor/NFTSections'
+import { Menu } from '../Menu'
+import { MenuItem } from '../Menu/MenuItem'
+import { NFTSectionsMenuItems } from '../Vendor/decentraland/NFTSections/NFTSections'
 import { VendorMenu } from '../Vendor/VendorMenu'
 import { Props } from './AccountSidebar.types'
 
-const AccountSidebar = (props: Props) => {
-  const { address, section, isCurrentAddress, onBrowse } = props
-
+const AccountSidebar = ({
+  address,
+  section,
+  isCurrentAddress,
+  onBrowse
+}: Props) => {
   const handleOnBrowse = useCallback(
     (vendor: VendorName, section: string) => {
       onBrowse({ vendor, section, address })
@@ -18,16 +24,30 @@ const AccountSidebar = (props: Props) => {
 
   const decentraland = VendorName.DECENTRALAND
 
+  console.log(section)
+
   return (
     <div className="NFTSidebar">
       {isCurrentAddress ? (
         <div className="foo">
-          <NFTSections
-            vendor={VendorName.DECENTRALAND}
-            address={address}
-            section={section}
-            onSectionClick={section => handleOnBrowse(decentraland, section)}
-          />
+          <Menu>
+            <div className="bar">My Assets</div>
+            <MenuItem
+              key={Sections.decentraland.COLLECTIONS}
+              value={Sections.decentraland.COLLECTIONS}
+              currentValue={section}
+              onClick={section => handleOnBrowse(decentraland, section)}
+            />
+            <NFTSectionsMenuItems
+              sections={[
+                Sections.decentraland.LAND,
+                Sections.decentraland.WEARABLES,
+                Sections.decentraland.ENS
+              ]}
+              section={section as Section}
+              onSectionClick={section => handleOnBrowse(decentraland, section)}
+            />
+          </Menu>
         </div>
       ) : (
         <VendorMenu
