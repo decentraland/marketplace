@@ -12,6 +12,8 @@ import { Props } from './AccountSidebar.types'
 
 import './AccountSidebar.css'
 
+const decentraland = VendorName.DECENTRALAND
+
 const AccountSidebar = ({
   address,
   section,
@@ -25,73 +27,83 @@ const AccountSidebar = ({
     [address, onBrowse]
   )
 
-  const decentraland = VendorName.DECENTRALAND
-
   return (
     <div className="NFTSidebar">
       {isCurrentAddress ? (
-        <div className="CurrentAccountSidebar">
-          <Menu>
-            <Header sub>MY ASSETS</Header>
-            <MenuItem
-              key={Sections.decentraland.COLLECTIONS}
-              value={Sections.decentraland.COLLECTIONS}
-              currentValue={section}
-              onClick={section => handleOnBrowse(decentraland, section)}
-            />
-            <NFTSectionsMenuItems
-              sections={[
-                Sections.decentraland.LAND,
-                Sections.decentraland.WEARABLES,
-                Sections.decentraland.ENS
-              ]}
-              section={section as Section}
-              onSectionClick={section => handleOnBrowse(decentraland, section)}
-            />
-          </Menu>
-          <Menu>
-            <Header sub>MY STORE</Header>
-            <MenuItem
-              key={Sections.decentraland.ON_SALE}
-              value={Sections.decentraland.ON_SALE}
-              currentValue={section}
-              onClick={section => handleOnBrowse(decentraland, section)}
-            />
-            <MenuItem
-              key={Sections.decentraland.SALES}
-              value={Sections.decentraland.SALES}
-              currentValue={section}
-              onClick={section => handleOnBrowse(decentraland, section)}
-            />
-            <MenuItem
-              key={Sections.decentraland.SETTINGS}
-              value={Sections.decentraland.SETTINGS}
-              currentValue={section}
-              onClick={section => handleOnBrowse(decentraland, section)}
-            />
-          </Menu>
-        </div>
+        <CurrentAddressSidebar section={section} onBrowse={handleOnBrowse} />
       ) : (
-        <VendorMenu
-          key={decentraland}
-          address={address}
-          vendor={decentraland}
-          section={section}
-          onClick={section => handleOnBrowse(decentraland, section)}
-        />
-      )}
-      {!isCurrentAddress &&
-        getPartners().map(partner => (
+        <>
           <VendorMenu
-            key={partner}
+            key={decentraland}
             address={address}
-            vendor={partner}
+            vendor={decentraland}
             section={section}
-            onClick={section => handleOnBrowse(partner, section)}
+            onClick={section => handleOnBrowse(decentraland, section)}
           />
-        ))}
+          {!isCurrentAddress &&
+            getPartners().map(partner => (
+              <VendorMenu
+                key={partner}
+                address={address}
+                vendor={partner}
+                section={section}
+                onClick={section => handleOnBrowse(partner, section)}
+              />
+            ))}
+        </>
+      )}
     </div>
   )
 }
+
+const CurrentAddressSidebar = ({
+  section,
+  onBrowse
+}: {
+  section: string
+  onBrowse: (vendor: VendorName, section: string) => void
+}) => (
+  <div className="CurrentAccountSidebar">
+    <Menu>
+      <Header sub>MY ASSETS</Header>
+      <MenuItem
+        key={Sections.decentraland.COLLECTIONS}
+        value={Sections.decentraland.COLLECTIONS}
+        currentValue={section}
+        onClick={section => onBrowse(decentraland, section)}
+      />
+      <NFTSectionsMenuItems
+        sections={[
+          Sections.decentraland.LAND,
+          Sections.decentraland.WEARABLES,
+          Sections.decentraland.ENS
+        ]}
+        section={section as Section}
+        onSectionClick={section => onBrowse(decentraland, section)}
+      />
+    </Menu>
+    <Menu>
+      <Header sub>MY STORE</Header>
+      <MenuItem
+        key={Sections.decentraland.ON_SALE}
+        value={Sections.decentraland.ON_SALE}
+        currentValue={section}
+        onClick={section => onBrowse(decentraland, section)}
+      />
+      <MenuItem
+        key={Sections.decentraland.SALES}
+        value={Sections.decentraland.SALES}
+        currentValue={section}
+        onClick={section => onBrowse(decentraland, section)}
+      />
+      <MenuItem
+        key={Sections.decentraland.SETTINGS}
+        value={Sections.decentraland.SETTINGS}
+        currentValue={section}
+        onClick={section => onBrowse(decentraland, section)}
+      />
+    </Menu>
+  </div>
+)
 
 export default React.memo(AccountSidebar)
