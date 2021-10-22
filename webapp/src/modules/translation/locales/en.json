@@ -67,7 +67,10 @@
     "super_rare": "SuperRare",
     "known_origin": "KnownOrigin",
     "makers_place": "MakersPlace",
-    "collections": "Collections"
+    "collections": "Collections",
+    "on_sale": "On Sale",
+    "sales": "Sales",
+    "settings": "Settings"
   },
   "vendor_menu": {
     "no_assets": "No assets",

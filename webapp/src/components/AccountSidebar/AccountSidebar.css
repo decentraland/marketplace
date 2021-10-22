@@ -9,10 +9,15 @@
   padding-left: 24px;
   padding-top: 17px;
   padding-bottom: 22px;
+  margin-bottom: 0px;
 }
 
 .CurrentAccountSidebar .MenuItem {
   padding-left: 24px !important;
+}
+
+.CurrentAccountSidebar .Menu > .MenuItem:last-child {
+  margin-bottom: 0;
 }
 
 .CurrentAccountSidebar .MenuItem.active {

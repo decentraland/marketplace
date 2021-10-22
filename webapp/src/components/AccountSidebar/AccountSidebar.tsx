@@ -49,6 +49,27 @@ const AccountSidebar = ({
               onSectionClick={section => handleOnBrowse(decentraland, section)}
             />
           </Menu>
+          <Menu>
+            <Header sub>MY STORE</Header>
+            <MenuItem
+              key={Sections.decentraland.ON_SALE}
+              value={Sections.decentraland.ON_SALE}
+              currentValue={section}
+              onClick={section => handleOnBrowse(decentraland, section)}
+            />
+            <MenuItem
+              key={Sections.decentraland.SALES}
+              value={Sections.decentraland.SALES}
+              currentValue={section}
+              onClick={section => handleOnBrowse(decentraland, section)}
+            />
+            <MenuItem
+              key={Sections.decentraland.SETTINGS}
+              value={Sections.decentraland.SETTINGS}
+              currentValue={section}
+              onClick={section => handleOnBrowse(decentraland, section)}
+            />
+          </Menu>
         </div>
       ) : (
         <VendorMenu
