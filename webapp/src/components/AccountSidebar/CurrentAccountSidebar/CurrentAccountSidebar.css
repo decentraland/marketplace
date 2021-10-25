@@ -1,4 +1,4 @@
-.CurrentAccountSidebar .Menu {
+.CurrentAccountSidebar ul.Menu {
   background-color: var(--card);
   border-radius: 10px;
   margin-left: 0px !important;
@@ -13,13 +13,25 @@
 }
 
 .CurrentAccountSidebar .MenuItem {
-  padding-left: 24px !important;
+  padding-left: 24px;
 }
 
-.CurrentAccountSidebar .Menu > .MenuItem:last-child {
+.CurrentAccountSidebar ul.Menu > .MenuItem:last-child {
   margin-bottom: 0;
 }
 
 .CurrentAccountSidebar .MenuItem.active {
   background-color: #37333d;
+}
+
+.CurrentAccountSidebar ul.Menu li.sub.sub-1 {
+  margin-left: 0px;
+  padding-left: 32px;
+  width: var(--menu-item-width);
+}
+
+.CurrentAccountSidebar ul.Menu li.sub.sub-2 {
+  margin-left: 0px;
+  padding-left: 48px;
+  width: var(--menu-item-width);
 }

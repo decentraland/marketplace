@@ -5,8 +5,6 @@ import { VendorMenu } from '../Vendor/VendorMenu'
 import { Props } from './AccountSidebar.types'
 import CurrentAccountSidebar from './CurrentAccountSidebar'
 
-import './AccountSidebar.css'
-
 const decentraland = VendorName.DECENTRALAND
 
 const AccountSidebar = ({

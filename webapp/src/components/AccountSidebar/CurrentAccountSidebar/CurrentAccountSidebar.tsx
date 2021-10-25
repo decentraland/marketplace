@@ -9,6 +9,8 @@ import { MenuItem } from '../../Menu/MenuItem'
 import { Props } from './CurrentAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 
+import './CurrentAccountSidebar.css'
+
 const decentraland = VendorName.DECENTRALAND
 
 const {
