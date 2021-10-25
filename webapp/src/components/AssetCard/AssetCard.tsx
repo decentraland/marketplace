@@ -3,11 +3,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { Card } from 'decentraland-ui'
 import { formatMANA } from '../../lib/mana'
-import {
-  getAssetName,
-  getAssetPrice,
-  getAssetUrl
-} from '../../modules/asset/utils'
+import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
 import { Mana } from '../Mana'
 import { ParcelTags } from './ParcelTags'
@@ -20,17 +16,15 @@ import listedSvg from '../../images/listed.svg'
 import './AssetCard.css'
 
 const AssetCard = (props: Props) => {
-  const { asset, order } = props
+  const { asset, price, showListedTag } = props
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, ens } = asset.data
 
-  const price = getAssetPrice(asset, order)
-
   return (
     <Card className="AssetCard" link as={Link} to={getAssetUrl(asset)}>
       <AssetImage asset={asset} showMonospace />
-      {price && (
+      {showListedTag && (
         <img className={'listed-tag'} src={listedSvg} alt="listed tag" />
       )}
       <Card.Content>
