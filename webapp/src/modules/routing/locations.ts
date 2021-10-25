@@ -1,4 +1,5 @@
 import { AssetType } from '../asset/types'
+import { Section } from '../vendor/decentraland'
 import { getSearchParams } from './search'
 import { BrowseOptions } from './types'
 
@@ -17,6 +18,11 @@ export const locations = {
   currentAccount: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/account?${params.toString()}` : '/account'
+  },
+  defaultCurrentAccount: function() {
+    return this.currentAccount({
+      section: Section.COLLECTIONS
+    })
   },
   account: (address: string = ':address', options?: BrowseOptions) => {
     const params = getSearchParams(options)

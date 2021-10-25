@@ -41,11 +41,7 @@ const Navigation = (props: Props) => {
             {t('navigation.partners')}
           </Tabs.Tab>
         </Link>
-        <Link
-          to={locations.currentAccount({
-            section: decentraland.Section.COLLECTIONS
-          })}
-        >
+        <Link to={locations.defaultCurrentAccount()}>
           <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>
             {t('navigation.my_store')}
           </Tabs.Tab>
