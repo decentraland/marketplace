@@ -18,6 +18,7 @@ import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './AssetBrowse.types'
 import { ToggleBox } from './ToggleBox'
 import classNames from 'classnames'
+import { isAccountView } from '../../modules/ui/utils'
 import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
@@ -110,8 +111,7 @@ const AssetBrowse = (props: Props) => {
     [onBrowse]
   )
 
-  const toggleBoxI18nKey =
-    view === View.ACCOUNT ? 'account_page' : 'browse_page'
+  const toggleBoxI18nKey = isAccountView(view) ? 'account_page' : 'browse_page'
 
   return (
     <Page

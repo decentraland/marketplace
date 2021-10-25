@@ -4,13 +4,14 @@ import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
 import { ItemSortBy } from '../vendor/decentraland/item/types'
 import { NFTSortBy } from '../nft/types'
+import { isAccountView } from '../ui/utils'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
 export function getDefaultOptionsByView(view?: View): BrowseOptions {
   return {
-    onlyOnSale: view !== View.ACCOUNT,
-    sortBy: view === View.ACCOUNT ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
+    onlyOnSale: !view || !isAccountView(view),
+    sortBy: view && isAccountView(view) ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
   }
 }
 
