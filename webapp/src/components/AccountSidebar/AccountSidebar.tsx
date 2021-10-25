@@ -35,16 +35,15 @@ const AccountSidebar = ({
             section={section}
             onClick={section => handleOnBrowse(decentraland, section)}
           />
-          {!isCurrentAccount &&
-            getPartners().map(partner => (
-              <VendorMenu
-                key={partner}
-                address={address}
-                vendor={partner}
-                section={section}
-                onClick={section => handleOnBrowse(partner, section)}
-              />
-            ))}
+          {getPartners().map(partner => (
+            <VendorMenu
+              key={partner}
+              address={address}
+              vendor={partner}
+              section={section}
+              onClick={section => handleOnBrowse(partner, section)}
+            />
+          ))}
         </>
       )}
     </div>
