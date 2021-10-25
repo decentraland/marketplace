@@ -2,7 +2,6 @@ import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { Card } from 'decentraland-ui'
-
 import { formatMANA } from '../../lib/mana'
 import {
   getAssetName,
@@ -17,6 +16,7 @@ import { WearableTags } from './WearableTags'
 import { ENSTags } from './ENSTags'
 import { AssetImage } from '../AssetImage'
 import { Props } from './AssetCard.types'
+import listedSvg from '../../images/listed.svg'
 import './AssetCard.css'
 
 const AssetCard = (props: Props) => {
@@ -30,6 +30,9 @@ const AssetCard = (props: Props) => {
   return (
     <Card className="AssetCard" link as={Link} to={getAssetUrl(asset)}>
       <AssetImage asset={asset} showMonospace />
+      {price && (
+        <img className={'listed-tag'} src={listedSvg} alt="listed tag" />
+      )}
       <Card.Content>
         <Card.Header>
           <div className="title">{title}</div>

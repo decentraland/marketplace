@@ -59,6 +59,14 @@ a.ui.card.link:hover .meta {
   margin-top: 0px;
 }
 
+.AssetCard .listed-tag {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+}
+
 @media (min-width: 768px) and (max-width: 992px) {
   .AssetCard .header {
     display: flex;
