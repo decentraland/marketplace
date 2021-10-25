@@ -82,6 +82,7 @@ export function browseReducer(
       const view = action.payload.options.view
       switch (view) {
         case View.MARKET:
+        case View.CURRENT_ACCOUNT:
         case View.ACCOUNT: {
           return {
             ...state,
@@ -132,6 +133,7 @@ export function browseReducer(
       const view = action.payload.options.view
       switch (view) {
         case View.MARKET:
+        case View.CURRENT_ACCOUNT:
         case View.ACCOUNT: {
           return {
             ...state,
