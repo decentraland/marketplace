@@ -33,7 +33,7 @@
     "land": "Land",
     "collectibles": "Collectibles",
     "partners": "Partners",
-    "my_assets": "My Assets",
+    "my_store": "My Store",
     "my_bids": "My Bids",
     "activity": "Activity"
   },
@@ -66,7 +66,11 @@
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
     "known_origin": "KnownOrigin",
-    "makers_place": "MakersPlace"
+    "makers_place": "MakersPlace",
+    "collections": "Collections",
+    "on_sale": "On Sale",
+    "sales": "Sales",
+    "settings": "Settings"
   },
   "vendor_menu": {
     "no_assets": "No assets",
@@ -125,6 +129,10 @@
   "nft_sidebar": {
     "categories": "Categories",
     "back": "Back"
+  },
+  "account_sidebar": {
+    "my_assets": "MY ASSETS",
+    "my_store": "MY STORE"
   },
   "asset_page": {
     "actions": {

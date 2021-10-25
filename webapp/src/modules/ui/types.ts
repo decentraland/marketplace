@@ -1,6 +1,7 @@
 export const View = {
   MARKET: 'market',
   ACCOUNT: 'account',
+  CURRENT_ACCOUNT: 'current_account',
   HOME_ITEMS: 'home_items',
   HOME_WEARABLES: 'home_wearables',
   HOME_LAND: 'home_land',

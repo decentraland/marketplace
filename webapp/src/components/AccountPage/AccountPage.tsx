@@ -45,7 +45,7 @@ const AccountPage = (props: Props) => {
       <Navbar isFullscreen />
       <Navigation
         isFullscreen={!isCurrentAccount || isFullscreen}
-        activeTab={isCurrentAccount ? NavigationTab.MY_ASSETS : undefined}
+        activeTab={isCurrentAccount ? NavigationTab.MY_STORE : undefined}
       />
       {isCurrentAccount ? (
         isConnecting || !wallet ? (
@@ -56,7 +56,7 @@ const AccountPage = (props: Props) => {
           <AssetBrowse
             vendor={vendor}
             address={wallet.address}
-            view={View.ACCOUNT}
+            view={View.CURRENT_ACCOUNT}
             isFullscreen={Boolean(isFullscreen)}
           />
         )

@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Card, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
-import { View } from '../../../modules/ui/types'
 import { Props } from './PriceChangeNotice.types'
+import { isAccountView } from '../../../modules/ui/utils'
 import './PriceChangeNotice.css'
 
 const PRICE_CHANGE_NOTICE_KEY = 'price-change-notice'
@@ -12,7 +11,7 @@ const PriceChangeNotice = (props: Props) => {
   const { view } = props
 
   const isValidView = useCallback(
-    () => view !== undefined && view !== View.ACCOUNT,
+    () => view !== undefined && !isAccountView(view),
     [view]
   )
 

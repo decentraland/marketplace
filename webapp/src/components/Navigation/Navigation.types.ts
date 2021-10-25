@@ -4,7 +4,7 @@ export enum NavigationTab {
   COLLECTIBLES = 'collectibles',
   PARTNERS = 'partners',
   PARTNER = 'partner',
-  MY_ASSETS = 'my_assets',
+  MY_STORE = 'my_store',
   MY_BIDS = 'my_bids',
   ACTIVITY = 'activity'
 }

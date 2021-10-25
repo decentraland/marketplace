@@ -33,7 +33,7 @@
     "land": "土地",
     "collectibles": "收藏品",
     "partners": "伙伴",
-    "my_assets": "我的资产",
+    "my_store": "我的商店",
     "my_bids": "我的出价",
     "activity": "活动"
   },
@@ -64,7 +64,11 @@
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
     "known_origin": "KnownOrigin",
-    "makers_place": "MakersPlace"
+    "makers_place": "MakersPlace",
+    "collections": "收集",
+    "on_sale": "出售",
+    "sales": "销售",
+    "settings": "配置"
   },
   "vendor_menu": {
     "no_assets": "无资产",
@@ -123,6 +127,10 @@
   "nft_sidebar": {
     "categories": "类别",
     "back": "返回"
+  },
+  "account_sidebar": {
+    "my_assets": "我的库存",
+    "my_store": "我的店"
   },
   "asset_page": {
     "actions": {
