@@ -48,6 +48,8 @@ import {
   CLEAR_FILTERS
 } from './actions'
 import { BrowseOptions, Sections } from './types'
+import { isNFTSection } from '../vendor/decentraland/routing/utils'
+import { Section } from '../vendor/decentraland'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -83,7 +85,11 @@ function* handleBrowse(action: BrowseAction) {
     action.payload.options
   )
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-  yield fetchAssetsFromRoute(options)
+
+  if (isNFTSection(options.section as Section)) {
+    yield fetchAssetsFromRoute(options)
+  }
+
   yield put(push(buildBrowseURL(pathname, options)))
 }
 
