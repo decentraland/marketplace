@@ -23,3 +23,5 @@ export type Item = Wearable | Other
 export type Props = {
   items: Item[]
 }
+
+export type MapStateProps = Pick<Props, 'items'>
