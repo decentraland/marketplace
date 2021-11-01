@@ -1,5 +1,6 @@
 import React from 'react'
 import { Table } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './OnSaleList.types'
 import OnSaleListItem from './OnSaleListItem'
 
@@ -8,10 +9,10 @@ const OnSaleList = ({ items }: Props) => {
     <Table basic="very">
       <Table.Header>
         <Table.Row>
-          <Table.HeaderCell>Item</Table.HeaderCell>
-          <Table.HeaderCell>Type</Table.HeaderCell>
-          <Table.HeaderCell>Sale type</Table.HeaderCell>
-          <Table.HeaderCell>Sell price</Table.HeaderCell>
+          <Table.HeaderCell>{t('global.item')}</Table.HeaderCell>
+          <Table.HeaderCell>{t('global.type')}</Table.HeaderCell>
+          <Table.HeaderCell>{t('global.sale_type')}</Table.HeaderCell>
+          <Table.HeaderCell>{t('global.sell_price')}</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>

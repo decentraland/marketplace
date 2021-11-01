@@ -23,7 +23,11 @@
     "network": "Network",
     "issue_number": "Issue Number",
     "primary": "Primary",
-    "secondary": "Secondary"
+    "secondary": "Secondary",
+    "item": "Item",
+    "type": "Type",
+    "sale_type": "Sale type",
+    "sell_price": "Sell price"
   },
   "vendors": {
     "decentraland": "Decentraland",
