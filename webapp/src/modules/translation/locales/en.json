@@ -21,7 +21,9 @@
     "search": "Search",
     "apply": "Apply",
     "network": "Network",
-    "issue_number": "Issue Number"
+    "issue_number": "Issue Number",
+    "primary": "Primary",
+    "secondary": "Secondary"
   },
   "vendors": {
     "decentraland": "Decentraland",
