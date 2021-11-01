@@ -4,7 +4,7 @@ import { log } from '@graphprotocol/graph-ts'
 export function getCatalystBase(): string {
   let network = dataSource.network()
   if (network == 'mainnet' || network == 'matic') {
-    return 'https://peer.decentraland.org'
+    return 'https://peer-lb.decentraland.org'
   }
 
   if (network == 'ropsten' || network == 'goerli' || network == 'mumbai') {
