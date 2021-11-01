@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Table } from 'decentraland-ui'
 import { Mana } from '../Mana'
 import { Network, NFTCategory, Rarity } from '@dcl/schemas'
@@ -43,94 +43,95 @@ const OnSaleList = ({ items }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {items.map(item => {
-            const backgroundImage = (() => {
-              if (item.type !== NFTCategory.WEARABLE) {
-                return undefined
-              }
-              const [light, dark] = Rarity.getGradient(Rarity.MYTHIC)
-              return `radial-gradient(${light}, ${dark})`
-            })()
-
-            const img = (() => {
-              switch (item.type) {
-                case NFTCategory.WEARABLE:
-                  return (
-                    <img
-                      src={item.src}
-                      height={40.19}
-                      width={40.19}
-                      alt="foo"
-                    />
-                  )
-                case NFTCategory.ENS:
-                  return <img src={userSVG} alt="foo" />
-                case NFTCategory.PARCEL:
-                  return (
-                    <div
-                      style={{
-                        width: 10,
-                        height: 10,
-                        backgroundColor: '#FF2D55'
-                      }}
-                    />
-                  )
-                case NFTCategory.ESTATE:
-                  return (
-                    <div
-                      style={{
-                        width: 28,
-                        height: 28,
-                        backgroundColor: '#FF2D55'
-                      }}
-                    />
-                  )
-              }
-            })()
-
-            return (
-              <Table.Row>
-                <Table.Cell>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center'
-                    }}
-                  >
-                    <div
-                      style={{
-                        marginRight: '1rem',
-                        borderRadius: 4,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        width: 48,
-                        height: 48,
-                        backgroundColor: '#242129',
-                        backgroundImage
-                      }}
-                    >
-                      {img}
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: 600 }}>{item.title}</div>
-                      {item.subtitle && <div>{item.subtitle}</div>}
-                    </div>
-                  </div>
-                </Table.Cell>
-                <Table.Cell>{t(`global.${item.type}`)}</Table.Cell>
-                <Table.Cell>{t(`global.${item.saleType}`)}</Table.Cell>
-                <Table.Cell>
-                  <Mana network={item.network} inline>
-                    {formatMANA(item.price)}
-                  </Mana>
-                </Table.Cell>
-              </Table.Row>
-            )
-          })}
+          {items.map(item => (
+            <OnSaleListItem item={item} />
+          ))}
         </Table.Body>
       </Table>
     </div>
+  )
+}
+
+type OnSaleListItemProps = { item: Item }
+
+const OnSaleListItem = ({ item }: OnSaleListItemProps) => {
+  let backgroundImage: string | undefined
+
+  if (item.type === NFTCategory.WEARABLE) {
+    const [light, dark] = Rarity.getGradient(Rarity.MYTHIC)
+    backgroundImage = `radial-gradient(${light}, ${dark})`
+  }
+
+  let img: ReactNode
+
+  switch (item.type) {
+    case NFTCategory.WEARABLE:
+      img = <img src={item.src} height={40.19} width={40.19} alt="foo" />
+      break
+    case NFTCategory.ENS:
+      img = <img src={userSVG} alt="foo" />
+      break
+    case NFTCategory.PARCEL:
+      img = (
+        <div
+          style={{
+            width: 10,
+            height: 10,
+            backgroundColor: '#FF2D55'
+          }}
+        />
+      )
+      break
+    case NFTCategory.ESTATE:
+      img = (
+        <div
+          style={{
+            width: 28,
+            height: 28,
+            backgroundColor: '#FF2D55'
+          }}
+        />
+      )
+  }
+
+  return (
+    <Table.Row>
+      <Table.Cell>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center'
+          }}
+        >
+          <div
+            style={{
+              marginRight: '1rem',
+              borderRadius: 4,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: 48,
+              height: 48,
+              backgroundColor: '#242129',
+              backgroundImage
+            }}
+          >
+            {img}
+          </div>
+          <div>
+            <div style={{ fontWeight: 600 }}>{item.title}</div>
+            {item.subtitle && <div>{item.subtitle}</div>}
+          </div>
+        </div>
+      </Table.Cell>
+      <Table.Cell>{t(`global.${item.type}`)}</Table.Cell>
+      <Table.Cell>{t(`global.${item.saleType}`)}</Table.Cell>
+      <Table.Cell>
+        <Mana network={item.network} inline>
+          {formatMANA(item.price)}
+        </Mana>
+      </Table.Cell>
+    </Table.Row>
   )
 }
 
