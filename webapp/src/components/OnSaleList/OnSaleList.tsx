@@ -55,24 +55,24 @@ const OnSaleList = ({ items }: Props) => {
 type OnSaleListItemProps = { item: Item }
 
 const OnSaleListItem = ({ item }: OnSaleListItemProps) => {
-  let backgroundImage: string | undefined
+  let wearableImageBackground: string | undefined
 
   if (item.type === NFTCategory.WEARABLE) {
     const [light, dark] = Rarity.getGradient(Rarity.MYTHIC)
-    backgroundImage = `radial-gradient(${light}, ${dark})`
+    wearableImageBackground = `radial-gradient(${light}, ${dark})`
   }
 
-  let img: ReactNode
+  let itemImage: ReactNode
 
   switch (item.type) {
     case NFTCategory.WEARABLE:
-      img = <img src={item.src} height={40.19} width={40.19} alt="foo" />
+      itemImage = <img src={item.src} height={40.19} width={40.19} alt="foo" />
       break
     case NFTCategory.ENS:
-      img = <img src={userSVG} alt="foo" />
+      itemImage = <img src={userSVG} alt="foo" />
       break
     case NFTCategory.PARCEL:
-      img = (
+      itemImage = (
         <div
           style={{
             width: 10,
@@ -83,7 +83,7 @@ const OnSaleListItem = ({ item }: OnSaleListItemProps) => {
       )
       break
     case NFTCategory.ESTATE:
-      img = (
+      itemImage = (
         <div
           style={{
             width: 28,
@@ -113,10 +113,10 @@ const OnSaleListItem = ({ item }: OnSaleListItemProps) => {
               width: 48,
               height: 48,
               backgroundColor: '#242129',
-              backgroundImage
+              backgroundImage: wearableImageBackground
             }}
           >
-            {img}
+            {itemImage}
           </div>
           <div>
             <div style={{ fontWeight: 600 }}>{item.title}</div>
