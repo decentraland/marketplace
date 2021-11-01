@@ -6,6 +6,7 @@ import { Mana } from '../../Mana'
 import { formatMANA } from '../../../lib/mana'
 import userSVG from '../../../images/user.svg'
 import { Props } from './OnSaleListItem.types'
+import styles from './OnSaleListItem.module.css'
 
 const OnSaleListItem = ({ item }: Props) => {
   let wearableImageBackground: string | undefined
@@ -25,54 +26,26 @@ const OnSaleListItem = ({ item }: Props) => {
       itemImage = <img src={userSVG} alt="foo" />
       break
     case NFTCategory.PARCEL:
-      itemImage = (
-        <div
-          style={{
-            width: 10,
-            height: 10,
-            backgroundColor: '#FF2D55'
-          }}
-        />
-      )
+      itemImage = <div className={styles.parcel} />
       break
     case NFTCategory.ESTATE:
-      itemImage = (
-        <div
-          style={{
-            width: 28,
-            height: 28,
-            backgroundColor: '#FF2D55'
-          }}
-        />
-      )
+      itemImage = <div className={styles.estate} />
   }
 
   return (
     <Table.Row>
       <Table.Cell>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
+        <div className={styles['first-cell']}>
           <div
+            className={styles['image-container']}
             style={{
-              marginRight: '1rem',
-              borderRadius: 4,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: 48,
-              height: 48,
-              backgroundColor: '#242129',
               backgroundImage: wearableImageBackground
             }}
           >
             {itemImage}
           </div>
           <div>
-            <div style={{ fontWeight: 600 }}>{item.title}</div>
+            <div className={styles.title}>{item.title}</div>
             {item.subtitle && <div>{item.subtitle}</div>}
           </div>
         </div>

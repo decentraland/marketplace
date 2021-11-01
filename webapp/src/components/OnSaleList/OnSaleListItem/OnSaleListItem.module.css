@@ -1,0 +1,31 @@
+.parcel {
+  width: 10px;
+  height: 10px;
+  background-color: #ff2d55;
+}
+
+.estate {
+  width: 28px;
+  height: 28px;
+  background-color: #ff2d55;
+}
+
+.first-cell {
+  display: flex;
+  align-items: center;
+}
+
+.image-container {
+  margin-right: 1rem;
+  border-radius: 4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  background-color: #242129;
+}
+
+.title {
+  font-weight: 600;
+}
