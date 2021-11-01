@@ -20,19 +20,11 @@ type Wearable = Base & {
   src: string
 }
 
-type Parcel = Base & {
-  type: NFTCategory.PARCEL
+type Other = Base & {
+  type: NFTCategory.PARCEL | NFTCategory.ESTATE | NFTCategory.ENS
 }
 
-type Estate = Base & {
-  type: NFTCategory.ESTATE
-}
-
-type ENS = Base & {
-  type: NFTCategory.ENS
-}
-
-type Item = Wearable | Parcel | Estate | ENS
+type Item = Wearable | Other
 
 type Props = {
   items: Item[]
@@ -52,186 +44,89 @@ const OnSaleList = ({ items }: Props) => {
         </Table.Header>
         <Table.Body>
           {items.map(item => {
-            switch (item.type) {
-              case NFTCategory.WEARABLE:
-                const [light, dark] = Rarity.getGradient(Rarity.MYTHIC)
-                const backgroundImage = `radial-gradient(${light}, ${dark})`
+            const backgroundImage = (() => {
+              if (item.type !== NFTCategory.WEARABLE) {
+                return undefined
+              }
+              const [light, dark] = Rarity.getGradient(Rarity.MYTHIC)
+              return `radial-gradient(${light}, ${dark})`
+            })()
 
-                return (
-                  <Table.Row>
-                    <Table.Cell>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <div
-                          style={{
-                            marginRight: '1rem',
-                            backgroundImage,
-                            borderRadius: 4,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: 48,
-                            height: 48
-                          }}
-                        >
-                          <img
-                            src={item.src}
-                            height={40.19}
-                            width={40.19}
-                            alt="foo"
-                          />
-                        </div>
-                        <div>
-                          <div style={{ fontWeight: 600 }}>{item.title}</div>
-                          {item.subtitle && <div>{item.subtitle}</div>}
-                        </div>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell>{t(`global.${item.type}`)}</Table.Cell>
-                    <Table.Cell>{t(`global.${item.saleType}`)}</Table.Cell>
-                    <Table.Cell>
-                      <Mana network={item.network} inline>
-                        {formatMANA(item.price)}
-                      </Mana>
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              case NFTCategory.ENS:
-                return (
-                  <Table.Row>
-                    <Table.Cell>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <div
-                          style={{
-                            marginRight: '1rem',
-                            borderRadius: 4,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: 48,
-                            height: 48,
-                            backgroundColor: '#242129'
-                          }}
-                        >
-                          <img src={userSVG} alt="foo" />
-                        </div>
-                        <div>
-                          <div style={{ fontWeight: 600 }}>{item.title}</div>
-                          {item.subtitle && <div>{item.subtitle}</div>}
-                        </div>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell>{t(`global.${item.type}`)}</Table.Cell>
-                    <Table.Cell>{t(`global.${item.saleType}`)}</Table.Cell>
-                    <Table.Cell>
-                      <Mana network={item.network} inline>
-                        {formatMANA(item.price)}
-                      </Mana>
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              case NFTCategory.PARCEL:
-                return (
-                  <Table.Row>
-                    <Table.Cell>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <div
-                          style={{
-                            marginRight: '1rem',
-                            borderRadius: 4,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: 48,
-                            height: 48,
-                            backgroundColor: '#242129'
-                          }}
-                        >
-                          <div
-                            style={{
-                              width: 10,
-                              height: 10,
-                              backgroundColor: '#FF2D55'
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <div style={{ fontWeight: 600 }}>{item.title}</div>
-                          {item.subtitle && <div>{item.subtitle}</div>}
-                        </div>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell>{t(`global.${item.type}`)}</Table.Cell>
-                    <Table.Cell>{t(`global.${item.saleType}`)}</Table.Cell>
-                    <Table.Cell>
-                      <Mana network={item.network} inline>
-                        {formatMANA(item.price)}
-                      </Mana>
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              case NFTCategory.ESTATE:
-                return (
-                  <Table.Row>
-                    <Table.Cell>
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}
-                      >
-                        <div
-                          style={{
-                            marginRight: '1rem',
-                            borderRadius: 4,
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: 48,
-                            height: 48,
-                            backgroundColor: '#242129'
-                          }}
-                        >
-                          <div
-                            style={{
-                              width: 28,
-                              height: 28,
-                              backgroundColor: '#FF2D55'
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <div style={{ fontWeight: 600 }}>{item.title}</div>
-                          {item.subtitle && <div>{item.subtitle}</div>}
-                        </div>
-                      </div>
-                    </Table.Cell>
-                    <Table.Cell>{t(`global.${item.type}`)}</Table.Cell>
-                    <Table.Cell>{t(`global.${item.saleType}`)}</Table.Cell>
-                    <Table.Cell>
-                      <Mana network={item.network} inline>
-                        {formatMANA(item.price)}
-                      </Mana>
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              default:
-                throw new Error('Invalid type')
-            }
+            const img = (() => {
+              switch (item.type) {
+                case NFTCategory.WEARABLE:
+                  return (
+                    <img
+                      src={item.src}
+                      height={40.19}
+                      width={40.19}
+                      alt="foo"
+                    />
+                  )
+                case NFTCategory.ENS:
+                  return <img src={userSVG} alt="foo" />
+                case NFTCategory.PARCEL:
+                  return (
+                    <div
+                      style={{
+                        width: 10,
+                        height: 10,
+                        backgroundColor: '#FF2D55'
+                      }}
+                    />
+                  )
+                case NFTCategory.ESTATE:
+                  return (
+                    <div
+                      style={{
+                        width: 28,
+                        height: 28,
+                        backgroundColor: '#FF2D55'
+                      }}
+                    />
+                  )
+              }
+            })()
+
+            return (
+              <Table.Row>
+                <Table.Cell>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <div
+                      style={{
+                        marginRight: '1rem',
+                        borderRadius: 4,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        width: 48,
+                        height: 48,
+                        backgroundColor: '#242129',
+                        backgroundImage
+                      }}
+                    >
+                      {img}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600 }}>{item.title}</div>
+                      {item.subtitle && <div>{item.subtitle}</div>}
+                    </div>
+                  </div>
+                </Table.Cell>
+                <Table.Cell>{t(`global.${item.type}`)}</Table.Cell>
+                <Table.Cell>{t(`global.${item.saleType}`)}</Table.Cell>
+                <Table.Cell>
+                  <Mana network={item.network} inline>
+                    {formatMANA(item.price)}
+                  </Mana>
+                </Table.Cell>
+              </Table.Row>
+            )
           })}
         </Table.Body>
       </Table>
