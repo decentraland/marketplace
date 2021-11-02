@@ -12,7 +12,7 @@ const OnSaleListItem = ({ item }: Props) => {
   let wearableImageBackground: string | undefined
 
   if (item.type === NFTCategory.WEARABLE) {
-    const [light, dark] = Rarity.getGradient(Rarity.MYTHIC)
+    const [light, dark] = Rarity.getGradient(item.rarity)
     wearableImageBackground = `radial-gradient(${light}, ${dark})`
   }
 
