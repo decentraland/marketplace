@@ -16,8 +16,8 @@ const OnSaleList = ({ items }: Props) => {
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {items.map(item => (
-          <OnSaleListItem item={item} />
+        {items.map((item, i) => (
+          <OnSaleListItem key={i} item={item} />
         ))}
       </Table.Body>
     </Table>
