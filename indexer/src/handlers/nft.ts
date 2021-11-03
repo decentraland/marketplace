@@ -1,4 +1,4 @@
-import { log } from '@graphprotocol/graph-ts'
+import { BigInt } from '@graphprotocol/graph-ts'
 import { Transfer } from '../entities/templates/ERC721/ERC721'
 import { NFT, Parcel, Estate, Order, ENS, Wearable } from '../entities/schema'
 import {
@@ -6,7 +6,7 @@ import {
   getNFTId,
   getTokenURI,
   cancelActiveOrder,
-  clearNFTOrderProperties
+  clearNFTOrderProperties,
 } from '../modules/nft'
 import { getCategory } from '../modules/category'
 import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
@@ -15,19 +15,19 @@ import {
   buildParcelFromNFT,
   getParcelImage,
   getParcelText,
-  isInBounds
+  isInBounds,
 } from '../modules/parcel'
 import {
   buildWearableFromNFT,
   getWearableImage,
   isWearableHead,
-  isWearableAccessory
+  isWearableAccessory,
 } from '../modules/wearable'
 import { buildENSFromNFT } from '../modules/ens'
-import { createAccount } from '../modules/wallet'
 import { toLowerCase } from '../modules/utils'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
+import { createOrLoadAccount } from '../modules/account'
 
 export function handleTransfer(event: Transfer): void {
   if (event.params.tokenId.toString() == '') {
@@ -49,6 +49,9 @@ export function handleTransfer(event: Transfer): void {
   nft.contractAddress = event.address
   nft.category = category
   nft.updatedAt = event.block.timestamp
+  nft.soldAt = null
+  nft.sales = 0
+  nft.volume = BigInt.fromI32(0)
 
   if (contractAddress != addresses.LANDRegistry) {
     // The LANDRegistry contract does not have a tokenURI method
@@ -140,7 +143,7 @@ export function handleTransfer(event: Transfer): void {
     ens.save()
   }
 
-  createAccount(event.params.to)
+  createOrLoadAccount(event.params.to)
 
   nft.save()
 }

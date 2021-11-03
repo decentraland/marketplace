@@ -1,15 +1,15 @@
-import { ValueKind } from '@graphprotocol/graph-ts'
+import { BigInt, ValueKind } from '@graphprotocol/graph-ts'
 import {
   CreateEstate,
   AddLand,
   RemoveLand,
-  Update
+  Update,
 } from '../entities/EstateRegistry/EstateRegistry'
 import { NFT, Parcel, Estate } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { decodeTokenId } from '../modules/parcel'
-import { createAccount } from '../modules/wallet'
 import { buildData, DataType } from '../modules/data'
+import { createOrLoadAccount } from '../modules/account'
 import { toLowerCase } from '../modules/utils'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
@@ -38,12 +38,15 @@ export function handleCreateEstate(event: CreateEstate): void {
     nft.searchText = toLowerCase(estateData.name)
     nft.createdAt = event.block.timestamp
     nft.updatedAt = event.block.timestamp
+    nft.soldAt = null
+    nft.sales = 0
+    nft.volume = BigInt.fromI32(0)
     nft.save()
   }
 
   estate.save()
 
-  createAccount(event.params._owner)
+  createOrLoadAccount(event.params._owner)
 }
 
 export function handleAddLand(event: AddLand): void {
