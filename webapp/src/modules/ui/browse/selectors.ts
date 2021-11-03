@@ -78,7 +78,7 @@ export const getOnSaleProcessedElements = createSelector<
   RootState,
   ReturnType<typeof getAddress>,
   ReturnType<typeof getOnSaleElements>,
-  string,
+  ReturnType<typeof getSearch>,
   OnSaleElement[]
 >(getAddress, getOnSaleElements, getSearch, (address, elements, search) => {
   if (!address) {
