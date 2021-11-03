@@ -91,18 +91,15 @@ export const getOnSaleElements = createSelector<
         const [nft, order] = lastNft
         switch (nft.category) {
           case NFTCategory.WEARABLE:
-            const item = itemsById[nft.contractAddress + '-0']
-            if (item) {
-              both.push({
-                title: nft.name,
-                type: nft.category,
-                src: nft.image,
-                network: nft.network,
-                price: order.price,
-                rarity: item.rarity,
-                saleType: 'secondary'
-              })
-            }
+            both.push({
+              title: nft.name,
+              type: nft.category,
+              src: nft.image,
+              network: nft.network,
+              price: order.price,
+              rarity: nft.data.wearable!.rarity,
+              saleType: 'secondary'
+            })
             nfts.pop()
             break
           case NFTCategory.ENS:
@@ -117,30 +114,26 @@ export const getOnSaleElements = createSelector<
             break
           case NFTCategory.PARCEL:
             const { parcel } = nft.data
-            if (parcel) {
-              both.push({
-                title: nft.name,
-                subtitle: `${parcel.x}/${parcel.y}`,
-                type: nft.category,
-                network: nft.network,
-                price: order.price,
-                saleType: 'secondary'
-              })
-            }
+            both.push({
+              title: nft.name,
+              subtitle: `${parcel!.x}/${parcel!.y}`,
+              type: nft.category,
+              network: nft.network,
+              price: order.price,
+              saleType: 'secondary'
+            })
             nfts.pop()
             break
           case NFTCategory.ESTATE:
             const { estate } = nft.data
-            if (estate) {
-              both.push({
-                title: nft.name,
-                subtitle: `${estate.parcels.length} Parcels`,
-                type: nft.category,
-                network: nft.network,
-                price: order.price,
-                saleType: 'secondary'
-              })
-            }
+            both.push({
+              title: nft.name,
+              subtitle: `${estate!.parcels.length} Parcels`,
+              type: nft.category,
+              network: nft.network,
+              price: order.price,
+              saleType: 'secondary'
+            })
             nfts.pop()
             break
           default:
