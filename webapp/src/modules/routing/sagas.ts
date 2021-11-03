@@ -18,7 +18,12 @@ import { getAddress as getAccountAddress } from '../account/selectors'
 import { fetchNFTsRequest } from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
-import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
+import {
+  MAX_PAGE,
+  PAGE_SIZE,
+  getMaxQuerySize,
+  MAX_QUERY_SIZE
+} from '../vendor/api'
 import { locations } from './locations'
 import {
   getSearchParams,
@@ -102,7 +107,7 @@ function* handleBrowse(action: BrowseAction) {
 // Utility functions, not handlers
 
 export function* handleOnSaleBrowse(action: BrowseAction) {
-  const address: string = yield select(getAddress)
+  const address: string = yield select(getWalletAddress)
   const options: BrowseOptions = yield getNewBrowseOptions(
     action.payload.options
   )
@@ -115,7 +120,7 @@ export function* handleOnSaleBrowse(action: BrowseAction) {
     fetchNFTsRequest({
       view: options.view!,
       vendor: VendorName.DECENTRALAND,
-      params: { first: 100, skip: 0, onlyOnSale: true }
+      params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
     })
   )
 }
