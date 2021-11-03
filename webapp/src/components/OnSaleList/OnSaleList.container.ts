@@ -8,6 +8,8 @@ import { Item as ComponentItem, MapStateProps } from './OnSaleList.types'
 import { NFTCategory } from '@dcl/schemas'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { Order } from '../../modules/order/types'
+import { NFT } from '../../modules/nft/types'
+import { VendorName } from '../../modules/vendor/types'
 
 const mapState = (state: RootState): MapStateProps => {
   const address = getAddress(state)
@@ -17,21 +19,19 @@ const mapState = (state: RootState): MapStateProps => {
   const nftsById = getNFTs(state)
 
   const items = Object.values(itemsById)
-    .filter(item => item.creator === address)
-    .sort((a, b) => (a.updatedAt < b.updatedAt ? -1 : 0))
+    .filter(item => item.isOnSale && item.creator === address)
+    .sort((itemA, itemB) => (itemA.updatedAt < itemB.updatedAt ? -1 : 0))
 
   const nfts = Object.values(nftsById)
-    .filter(
-      nft =>
-        nft.owner === address &&
-        nft.activeOrderId &&
-        ordersById[nft.activeOrderId]
-    )
-    .sort((a, b) =>
-      ordersById[a.activeOrderId!].updatedAt <
-      ordersById[b.activeOrderId!].updatedAt
-        ? -1
-        : 0
+    .reduce((acc, nft) => {
+      if (nft.activeOrderId && ordersById[nft.activeOrderId]) {
+        acc.push([nft, ordersById[nft.activeOrderId]])
+      }
+      return acc
+    }, [] as [NFT<VendorName.DECENTRALAND>, Order][])
+    .filter(([nft]) => nft.owner === address)
+    .sort(([_nftA, orderA], [_nftB, orderB]) =>
+      orderA.updatedAt < orderB.updatedAt ? -1 : 0
     )
 
   const both: ComponentItem[] = []
@@ -53,16 +53,17 @@ const mapState = (state: RootState): MapStateProps => {
       items.pop()
     }
 
-    const pushNft = (order: Order) => {
-      switch (lastNft.category) {
+    const pushNft = () => {
+      const [nft, order] = lastNft
+      switch (nft.category) {
         case NFTCategory.WEARABLE:
-          const item = itemsById[lastNft.contractAddress + '-0']
+          const item = itemsById[nft.contractAddress + '-0']
           if (item) {
             both.push({
-              title: lastNft.name,
-              type: lastNft.category,
-              src: lastNft.image,
-              network: lastNft.network,
+              title: nft.name,
+              type: nft.category,
+              src: nft.image,
+              network: nft.network,
               price: order.price,
               rarity: item.rarity,
               saleType: 'secondary'
@@ -72,22 +73,22 @@ const mapState = (state: RootState): MapStateProps => {
           break
         case NFTCategory.ENS:
           both.push({
-            title: lastNft.name,
-            type: lastNft.category,
-            network: lastNft.network,
+            title: nft.name,
+            type: nft.category,
+            network: nft.network,
             price: order.price,
             saleType: 'secondary'
           })
           nfts.pop()
           break
         case NFTCategory.PARCEL:
-          const { parcel } = lastNft.data
+          const { parcel } = nft.data
           if (parcel) {
             both.push({
-              title: lastNft.name,
+              title: nft.name,
               subtitle: `${parcel.x}/${parcel.y}`,
-              type: lastNft.category,
-              network: lastNft.network,
+              type: nft.category,
+              network: nft.network,
               price: order.price,
               saleType: 'secondary'
             })
@@ -95,13 +96,13 @@ const mapState = (state: RootState): MapStateProps => {
           nfts.pop()
           break
         case NFTCategory.ESTATE:
-          const { estate } = lastNft.data
+          const { estate } = nft.data
           if (estate) {
             both.push({
-              title: lastNft.name,
+              title: nft.name,
               subtitle: `${estate.parcels.length} Parcels`,
-              type: lastNft.category,
-              network: lastNft.network,
+              type: nft.category,
+              network: nft.network,
               price: order.price,
               saleType: 'secondary'
             })
@@ -116,15 +117,11 @@ const mapState = (state: RootState): MapStateProps => {
     if (lastItem && !lastNft) {
       pushItem()
     } else if (!lastItem && lastNft) {
-      pushNft(ordersById[lastNft.activeOrderId!])
+      pushNft()
+    } else if (lastItem.updatedAt >= lastNft[1].updatedAt) {
+      pushItem()
     } else {
-      const order = ordersById[lastNft.activeOrderId!]
-
-      if (lastItem.updatedAt >= order.updatedAt) {
-        pushItem()
-      } else {
-        pushNft(order)
-      }
+      pushNft()
     }
   }
 
