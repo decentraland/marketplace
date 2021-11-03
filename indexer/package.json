@@ -7,8 +7,9 @@
     "codegen": "graph codegen --debug --output-dir src/entities/",
     "build": "graph build",
     "build-data": "ts-node ./scripts/buildData.ts",
-    "deploy": "ts-node ./scripts/deploy.ts",
-    "deploy-studio:mainnet": "graph deploy --studio decentraland-marketplace-ethereum-mainnet"
+    "deploy-studio:mainnet": "graph deploy --studio decentraland-marketplace-ethereum-mainnet",
+    "deploy:ropsten": "ts-node ./scripts/buildData.ts --network ropsten && ts-node ./scripts/deploy.ts --network ropsten",
+    "deploy:mainnet": "ts-node ./scripts/buildData.ts --network mainnet && ts-node ./scripts/deploy.ts --network mainnet"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.19.0",
