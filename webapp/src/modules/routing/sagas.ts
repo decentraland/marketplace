@@ -1,6 +1,14 @@
-import { takeEvery, put, select, call } from 'redux-saga/effects'
+import {
+  takeEvery,
+  put,
+  select,
+  call,
+  race,
+  take,
+  fork
+} from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
-import { NFTCategory } from '@dcl/schemas'
+import { NFTCategory, Item } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
 import { fetchItemsRequest } from '../item/actions'
@@ -15,7 +23,13 @@ import {
 } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
-import { fetchNFTsRequest } from '../nft/actions'
+import {
+  FetchNFTsFailureAction,
+  fetchNFTsRequest,
+  FetchNFTsSuccessAction,
+  FETCH_NFTS_FAILURE,
+  FETCH_NFTS_SUCCESS
+} from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
 import {
@@ -55,6 +69,9 @@ import {
 import { BrowseOptions, Sections } from './types'
 import { isNFTSection } from '../vendor/decentraland/routing/utils'
 import { Section } from '../vendor/decentraland'
+import { getData as getItemsById } from '../item/selectors'
+import { getData as getNFTsById } from '../nft/selectors'
+import { NFT } from '../nft/types'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -96,7 +113,7 @@ function* handleBrowse(action: BrowseAction) {
   } else {
     switch (options.section) {
       case Section.ON_SALE:
-        yield handleOnSaleBrowse(action)
+        yield fork(handleOnSaleBrowse, action)
     }
   }
 
@@ -113,7 +130,9 @@ export function* handleOnSaleBrowse(action: BrowseAction) {
   )
 
   yield put(
-    fetchItemsRequest({ filters: { creator: address, isOnSale: true } })
+    fetchItemsRequest({
+      filters: { creator: address, isOnSale: true }
+    })
   )
 
   yield put(
@@ -123,6 +142,35 @@ export function* handleOnSaleBrowse(action: BrowseAction) {
       params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
     })
   )
+
+  const res: {
+    success: FetchNFTsSuccessAction
+    failure: FetchNFTsFailureAction
+  } = yield race({
+    success: take(FETCH_NFTS_SUCCESS),
+    failure: take(FETCH_NFTS_FAILURE)
+  })
+
+  if (!res.success) {
+    return
+  }
+
+  const itemsById: Record<string, Item> = yield select(getItemsById)
+  const nftsById: Record<string, NFT> = yield select(getNFTsById)
+
+  const contractAddresses = new Set(
+    Object.values(nftsById)
+      .map(nft => nft.contractAddress)
+      .filter(contractAddress => !itemsById[contractAddress + '-0'])
+  )
+
+  for (let contractAddress of contractAddresses) {
+    yield put(
+      fetchItemsRequest({
+        filters: { contractAddress: contractAddress }
+      })
+    )
+  }
 }
 
 export function buildBrowseURL(
