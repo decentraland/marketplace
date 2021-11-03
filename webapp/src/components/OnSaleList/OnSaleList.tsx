@@ -25,7 +25,7 @@ const OnSaleList = ({ items, isLoading }: Props) => {
       </Table.Header>
       <Table.Body>
         {items.map((item, i) => (
-          <OnSaleListItem key={i} item={item} />
+          <OnSaleListItem key={i} {...item} />
         ))}
       </Table.Body>
     </Table>

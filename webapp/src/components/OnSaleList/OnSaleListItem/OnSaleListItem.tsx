@@ -1,26 +1,36 @@
 import React, { ReactNode } from 'react'
 import { Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { NFTCategory, Rarity } from '@dcl/schemas'
 import { Mana } from '../../Mana'
 import { formatMANA } from '../../../lib/mana'
-import userSVG from '../../../images/user.svg'
 import { Props } from './OnSaleListItem.types'
+import { NFTCategory, Rarity } from '@dcl/schemas'
+import userSVG from '../../../images/user.svg'
 import styles from './OnSaleListItem.module.css'
 
-const OnSaleListItem = ({ item }: Props) => {
+const OnSaleListItem = ({ nft, item, order }: Props) => {
   let wearableImageBackground: string | undefined
 
-  if (item.type === NFTCategory.WEARABLE) {
-    const [light, dark] = Rarity.getGradient(item.rarity)
+  const category = item?.category || nft!.category
+
+  if (category === NFTCategory.WEARABLE) {
+    const rarity = item?.rarity || nft!.data.wearable!.rarity
+    const [light, dark] = Rarity.getGradient(rarity)
     wearableImageBackground = `radial-gradient(${light}, ${dark})`
   }
 
   let itemImage: ReactNode
 
-  switch (item.type) {
+  switch (category) {
     case NFTCategory.WEARABLE:
-      itemImage = <img src={item.src} height={40.19} width={40.19} alt="foo" />
+      itemImage = (
+        <img
+          src={item?.thumbnail || nft!.image}
+          height={40.19}
+          width={40.19}
+          alt="foo"
+        />
+      )
       break
     case NFTCategory.ENS:
       itemImage = <img src={userSVG} alt="foo" />
@@ -30,6 +40,31 @@ const OnSaleListItem = ({ item }: Props) => {
       break
     case NFTCategory.ESTATE:
       itemImage = <div className={styles.estate} />
+  }
+
+  let title = ''
+
+  switch (category) {
+    case NFTCategory.WEARABLE:
+      title = item?.name || nft!.name
+      break
+    case NFTCategory.ESTATE:
+    case NFTCategory.ENS:
+      title = nft!.name
+      break
+    case NFTCategory.PARCEL:
+      title = 'Parcer'
+  }
+
+  let subtitle: string | undefined
+
+  switch (category) {
+    case NFTCategory.ESTATE:
+      subtitle = nft!.data.estate!.parcels.length + ' Parcels'
+      break
+    case NFTCategory.PARCEL:
+      const { x, y } = nft!.data.parcel!
+      subtitle = `${x}/${y}`
   }
 
   return (
@@ -45,16 +80,16 @@ const OnSaleListItem = ({ item }: Props) => {
             {itemImage}
           </div>
           <div>
-            <div className={styles.title}>{item.title}</div>
-            {item.subtitle && <div>{item.subtitle}</div>}
+            <div className={styles.title}>{title}</div>
+            {subtitle && <div>{subtitle}</div>}
           </div>
         </div>
       </Table.Cell>
-      <Table.Cell>{t(`global.${item.type}`)}</Table.Cell>
-      <Table.Cell>{t(`global.${item.saleType}`)}</Table.Cell>
+      <Table.Cell>{t(`global.${category}`)}</Table.Cell>
+      <Table.Cell>{t(`global.${item ? 'primary' : 'secondary'}`)}</Table.Cell>
       <Table.Cell>
-        <Mana network={item.network} inline>
-          {formatMANA(item.price)}
+        <Mana network={item?.network || nft!.network} inline>
+          {formatMANA(item?.price || order!.price)}
         </Mana>
       </Table.Cell>
     </Table.Row>

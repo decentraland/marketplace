@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect'
-import { Item, NFTCategory } from '@dcl/schemas'
+import { Item } from '@dcl/schemas'
 import { getData as getNFTData } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
@@ -11,7 +11,7 @@ import { ItemState } from '../../item/reducer'
 import { Order } from '../../order/types'
 import { VendorName } from '../../vendor'
 import { getAddress } from '../../wallet/selectors'
-import { Item as ComponentItem } from '../../../components/OnSaleList/OnSaleList.types'
+import { Props as OnSaleListItem } from '../../../components/OnSaleList/OnSaleListItem/OnSaleListItem.types'
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState) => getState(state).view
@@ -41,7 +41,7 @@ export const getOnSaleElements = createSelector<
   Record<string, Item>,
   Record<string, NFT>,
   Record<string, Order>,
-  ComponentItem[]
+  OnSaleListItem[]
 >(
   getAddress,
   getItemData,
@@ -52,7 +52,7 @@ export const getOnSaleElements = createSelector<
       return []
     }
 
-    const both: ComponentItem[] = []
+    const both: OnSaleListItem[] = []
 
     const items = Object.values(itemsById)
       .filter(item => item.isOnSale && item.creator === address)
@@ -75,70 +75,14 @@ export const getOnSaleElements = createSelector<
       const lastNft = nfts[nfts.length - 1]
 
       const pushItem = () => {
-        both.push({
-          title: lastItem.name,
-          saleType: 'primary',
-          rarity: lastItem.rarity,
-          price: lastItem.price,
-          network: lastItem.network,
-          src: lastItem.thumbnail,
-          type: lastItem.category
-        })
+        both.push({ item: lastItem })
         items.pop()
       }
 
       const pushNft = () => {
         const [nft, order] = lastNft
-        switch (nft.category) {
-          case NFTCategory.WEARABLE:
-            both.push({
-              title: nft.name,
-              type: nft.category,
-              src: nft.image,
-              network: nft.network,
-              price: order.price,
-              rarity: nft.data.wearable!.rarity,
-              saleType: 'secondary'
-            })
-            nfts.pop()
-            break
-          case NFTCategory.ENS:
-            both.push({
-              title: nft.name,
-              type: nft.category,
-              network: nft.network,
-              price: order.price,
-              saleType: 'secondary'
-            })
-            nfts.pop()
-            break
-          case NFTCategory.PARCEL:
-            const { parcel } = nft.data
-            both.push({
-              title: nft.name,
-              subtitle: `${parcel!.x}/${parcel!.y}`,
-              type: nft.category,
-              network: nft.network,
-              price: order.price,
-              saleType: 'secondary'
-            })
-            nfts.pop()
-            break
-          case NFTCategory.ESTATE:
-            const { estate } = nft.data
-            both.push({
-              title: nft.name,
-              subtitle: `${estate!.parcels.length} Parcels`,
-              type: nft.category,
-              network: nft.network,
-              price: order.price,
-              saleType: 'secondary'
-            })
-            nfts.pop()
-            break
-          default:
-            throw new Error('Invalid Category')
-        }
+        both.push({ nft, order })
+        nfts.pop()
       }
 
       if (lastItem && !lastNft) {
