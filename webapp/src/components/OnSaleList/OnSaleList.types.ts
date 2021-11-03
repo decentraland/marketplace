@@ -22,6 +22,7 @@ export type Item = Wearable | Other
 
 export type Props = {
   items: Item[]
+  isLoading: boolean
 }
 
-export type MapStateProps = Pick<Props, 'items'>
+export type MapStateProps = Pick<Props, 'items' | 'isLoading'>

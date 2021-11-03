@@ -1,7 +1,13 @@
 import { connect } from 'react-redux'
 import { getData as getOrders } from '../../modules/order/selectors'
-import { getData as getItems } from '../../modules/item/selectors'
-import { getData as getNFTs } from '../../modules/nft/selectors'
+import {
+  getData as getItems,
+  getLoading as getItemsLoading
+} from '../../modules/item/selectors'
+import {
+  getData as getNFTs,
+  getLoading as getNFTsLoading
+} from '../../modules/nft/selectors'
 import { RootState } from '../../modules/reducer'
 import OnSaleList from './OnSaleList'
 import { Item as ComponentItem, MapStateProps } from './OnSaleList.types'
@@ -10,6 +16,9 @@ import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { Order } from '../../modules/order/types'
 import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
+import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   const address = getAddress(state)
@@ -126,7 +135,10 @@ const mapState = (state: RootState): MapStateProps => {
   }
 
   return {
-    items: both
+    items: both,
+    isLoading:
+      isLoadingType(getItemsLoading(state), FETCH_ITEMS_REQUEST) ||
+      isLoadingType(getNFTsLoading(state), FETCH_NFTS_REQUEST)
   }
 }
 

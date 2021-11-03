@@ -1,10 +1,18 @@
 import React from 'react'
-import { Table } from 'decentraland-ui'
+import { Table, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './OnSaleList.types'
 import OnSaleListItem from './OnSaleListItem'
 
-const OnSaleList = ({ items }: Props) => {
+const OnSaleList = ({ items, isLoading }: Props) => {
+  if (isLoading) {
+    return (
+      <>
+        <div className="overlay" />
+        <Loader size="massive" active />
+      </>
+    )
+  }
   return (
     <Table basic="very">
       <Table.Header>
