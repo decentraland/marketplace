@@ -35,9 +35,6 @@ const mapState = (state: RootState): MapStateProps => {
     const lastItem = items[items.length - 1]
     const lastNft = nfts[nfts.length - 1]
 
-    console.log(lastItem)
-    console.log(lastNft)
-
     const pushItem = () => {
       both.push({
         title: lastItem.name,
