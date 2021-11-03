@@ -8,7 +8,7 @@ import {
   fork
 } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
-import { NFTCategory, Item } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
 import { fetchItemsRequest } from '../item/actions'
@@ -69,7 +69,6 @@ import {
 import { BrowseOptions, Sections } from './types'
 import { isNFTSection } from '../vendor/decentraland/routing/utils'
 import { Section } from '../vendor/decentraland'
-import { getData as getItemsById } from '../item/selectors'
 import { getData as getNFTsById } from '../nft/selectors'
 import { NFT } from '../nft/types'
 
@@ -155,13 +154,10 @@ export function* handleOnSaleBrowse(action: BrowseAction) {
     return
   }
 
-  const itemsById: Record<string, Item> = yield select(getItemsById)
   const nftsById: Record<string, NFT> = yield select(getNFTsById)
 
   const contractAddresses = new Set(
-    Object.values(nftsById)
-      .map(nft => nft.contractAddress)
-      .filter(contractAddress => !itemsById[contractAddress + '-0'])
+    Object.values(nftsById).map(nft => nft.contractAddress)
   )
 
   for (let contractAddress of contractAddresses) {
