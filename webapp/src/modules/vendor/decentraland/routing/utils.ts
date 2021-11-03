@@ -5,6 +5,7 @@ const nftSections = new Set([
   Section.LAND,
   Section.PARCELS,
   Section.ESTATES,
+  Section.ENS,
   Section.WEARABLES,
   Section.WEARABLES_HEAD,
   Section.WEARABLES_EYEBROWS,
