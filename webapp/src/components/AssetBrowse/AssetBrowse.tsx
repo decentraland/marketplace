@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import { Container, Page, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
@@ -113,87 +113,88 @@ const AssetBrowse = (props: Props) => {
 
   const toggleBoxI18nKey = isAccountView(view) ? 'account_page' : 'browse_page'
 
-  const left = (() => {
-    return (
-      <>
-        {view !== View.CURRENT_ACCOUNT && (
-          <ToggleBox
-            className="result-type-toggle"
-            header={t('filters.type')}
-            items={[
-              {
-                title: t(`${toggleBoxI18nKey}.primary_market_title`),
-                active: assetType === AssetType.ITEM,
-                description: t(`${toggleBoxI18nKey}.primary_market_subtitle`),
-                disabled:
-                  !hasPrimarySales(section) ||
-                  vendor !== VendorName.DECENTRALAND,
-                onClick: hanldeBrowseItems
-              },
-              {
-                title: t(`${toggleBoxI18nKey}.secondary_market_title`),
-                active:
-                  assetType === AssetType.NFT ||
-                  vendor !== VendorName.DECENTRALAND,
-                description: t(`${toggleBoxI18nKey}.secondary_market_subtitle`),
-                onClick: handleBrowse
-              }
-            ]}
-          />
+  const left = (
+    <>
+      {view !== View.CURRENT_ACCOUNT && (
+        <ToggleBox
+          className="result-type-toggle"
+          header={t('filters.type')}
+          items={[
+            {
+              title: t(`${toggleBoxI18nKey}.primary_market_title`),
+              active: assetType === AssetType.ITEM,
+              description: t(`${toggleBoxI18nKey}.primary_market_subtitle`),
+              disabled:
+                !hasPrimarySales(section) || vendor !== VendorName.DECENTRALAND,
+              onClick: hanldeBrowseItems
+            },
+            {
+              title: t(`${toggleBoxI18nKey}.secondary_market_title`),
+              active:
+                assetType === AssetType.NFT ||
+                vendor !== VendorName.DECENTRALAND,
+              description: t(`${toggleBoxI18nKey}.secondary_market_subtitle`),
+              onClick: handleBrowse
+            }
+          ]}
+        />
+      )}
+      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+        {view === View.ACCOUNT ? (
+          <AccountSidebar address={address!} />
+        ) : view === View.CURRENT_ACCOUNT ? (
+          <AccountSidebar address={address!} isCurrentAccount />
+        ) : (
+          <NFTSidebar section={section} sections={sections} />
         )}
-        <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-          {view === View.ACCOUNT ? (
-            <AccountSidebar address={address!} />
-          ) : view === View.CURRENT_ACCOUNT ? (
-            <AccountSidebar address={address!} isCurrentAccount />
-          ) : (
-            <NFTSidebar section={section} sections={sections} />
-          )}
-        </Responsive>
-      </>
-    )
-  })()
+      </Responsive>
+    </>
+  )
 
-  const right = (() => {
-    switch (section) {
-      case DecentralandSection.COLLECTIONS:
-        return <div>COLLECTIONS</div>
-      case DecentralandSection.ON_SALE:
-        return <OnSaleList />
-      case DecentralandSection.SALES:
-        return <div>SALES</div>
-      case DecentralandSection.SETTINGS:
-        return <div>SETTINGS</div>
-      default:
-        return (
-          <>
-            {view === View.ACCOUNT && !isFullscreen ? (
-              <VendorStrip address={address!} />
-            ) : null}
-            {isMap && isFullscreen ? (
-              <div className="blur-background">
-                <Container>
-                  <NFTFilters isMap={isMap} />
-                </Container>
-              </div>
-            ) : (
-              <NFTFilters isMap={Boolean(isMap)} />
-            )}
-            {isMap ? (
-              <div className="Atlas">
-                <Atlas withNavigation withPopup showOnSale={onlyOnSale} />
-                <div
-                  className="fullscreen-button"
-                  onClick={handleSetFullscreen}
-                />
-              </div>
-            ) : (
-              <AssetList />
-            )}
-          </>
-        )
-    }
-  })()
+  let right: ReactNode
+
+  switch (section) {
+    case DecentralandSection.COLLECTIONS:
+      right = <div>COLLECTIONS</div>
+      break
+    case DecentralandSection.ON_SALE:
+      right = <OnSaleList />
+      break
+    case DecentralandSection.SALES:
+      right = <div>SALES</div>
+      break
+    case DecentralandSection.SETTINGS:
+      right = <div>SETTINGS</div>
+      break
+    default:
+      right = (
+        <>
+          {view === View.ACCOUNT && !isFullscreen ? (
+            <VendorStrip address={address!} />
+          ) : null}
+          {isMap && isFullscreen ? (
+            <div className="blur-background">
+              <Container>
+                <NFTFilters isMap={isMap} />
+              </Container>
+            </div>
+          ) : (
+            <NFTFilters isMap={Boolean(isMap)} />
+          )}
+          {isMap ? (
+            <div className="Atlas">
+              <Atlas withNavigation withPopup showOnSale={onlyOnSale} />
+              <div
+                className="fullscreen-button"
+                onClick={handleSetFullscreen}
+              />
+            </div>
+          ) : (
+            <AssetList />
+          )}
+        </>
+      )
+  }
 
   return (
     <Page
