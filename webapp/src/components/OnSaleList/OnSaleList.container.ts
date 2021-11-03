@@ -67,8 +67,8 @@ const mapState = (state: RootState): MapStateProps => {
               rarity: item.rarity,
               saleType: 'secondary'
             })
-            nfts.pop()
           }
+          nfts.pop()
           break
         case NFTCategory.ENS:
           both.push({
@@ -91,8 +91,8 @@ const mapState = (state: RootState): MapStateProps => {
               price: order.price,
               saleType: 'secondary'
             })
-            nfts.pop()
           }
+          nfts.pop()
           break
         case NFTCategory.ESTATE:
           const { estate } = lastNft.data
@@ -105,26 +105,24 @@ const mapState = (state: RootState): MapStateProps => {
               price: order.price,
               saleType: 'secondary'
             })
-            nfts.pop()
           }
+          nfts.pop()
           break
+        default:
+          throw new Error('Invalid Category')
       }
     }
 
     if (lastItem && !lastNft) {
-      console.log('lastItem && !lastNft')
       pushItem()
     } else if (!lastItem && lastNft) {
-      console.log('!lastItem && lastNft')
       pushNft(ordersById[lastNft.activeOrderId!])
     } else {
       const order = ordersById[lastNft.activeOrderId!]
 
       if (lastItem.updatedAt >= order.updatedAt) {
-        console.log('lastItem.updatedAt <= order.updatedAt')
         pushItem()
       } else {
-        console.log('!(lastItem.updatedAt <= order.updatedAt)')
         pushNft(order)
       }
     }
