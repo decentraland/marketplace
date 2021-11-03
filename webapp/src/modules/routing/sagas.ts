@@ -88,6 +88,11 @@ function* handleBrowse(action: BrowseAction) {
 
   if (isNFTSection(options.section as Section)) {
     yield fetchAssetsFromRoute(options)
+  } else {
+    switch (options.section) {
+      case Section.ON_SALE:
+        yield handleOnSaleBrowse(action)
+    }
   }
 
   yield put(push(buildBrowseURL(pathname, options)))
@@ -95,6 +100,25 @@ function* handleBrowse(action: BrowseAction) {
 
 // ------------------------------------------------
 // Utility functions, not handlers
+
+export function* handleOnSaleBrowse(action: BrowseAction) {
+  const address: string = yield select(getAddress)
+  const options: BrowseOptions = yield getNewBrowseOptions(
+    action.payload.options
+  )
+
+  yield put(
+    fetchItemsRequest({ filters: { creator: address, isOnSale: true } })
+  )
+
+  yield put(
+    fetchNFTsRequest({
+      view: options.view!,
+      vendor: VendorName.DECENTRALAND,
+      params: { first: 100, skip: 0, onlyOnSale: true }
+    })
+  )
+}
 
 export function buildBrowseURL(
   pathname: string,
