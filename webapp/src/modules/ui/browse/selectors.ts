@@ -11,11 +11,13 @@ import { ItemState } from '../../item/reducer'
 import { Order } from '../../order/types'
 import { VendorName } from '../../vendor'
 import { getAddress } from '../../wallet/selectors'
-import { Props as OnSaleListItem } from '../../../components/OnSaleList/OnSaleListItem/OnSaleListItem.types'
+import { OnSaleElement, OnSaleNFT } from './types'
+import { handleOnSaleElement } from './utils'
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState) => getState(state).view
 export const getCount = (state: RootState) => getState(state).count
+export const getSearch = (state: RootState) => state.ui.browse.search
 
 export const getNFTs = createSelector<
   RootState,
@@ -35,67 +37,69 @@ export const getItems = createSelector<
   browse.itemIds.map(id => itemsById[id])
 )
 
+export const getOnSaleItems = createSelector<
+  RootState,
+  ReturnType<typeof getAddress>,
+  ReturnType<typeof getItemData>,
+  Item[]
+>(getAddress, getItemData, (address, itemsById) =>
+  Object.values(itemsById).filter(
+    item => item.isOnSale && item.creator === address
+  )
+)
+
+export const getOnSaleNFTs = createSelector<
+  RootState,
+  ReturnType<typeof getAddress>,
+  ReturnType<typeof getNFTData>,
+  ReturnType<typeof getOrderData>,
+  OnSaleNFT[]
+>(getAddress, getNFTData, getOrderData, (address, nftsById, ordersById) =>
+  Object.values(nftsById)
+    .reduce((acc, nft) => {
+      const { activeOrderId } = nft
+      const order = activeOrderId ? ordersById[activeOrderId] : undefined
+      if (order) {
+        acc.push([nft, order])
+      }
+      return acc
+    }, [] as [NFT<VendorName.DECENTRALAND>, Order][])
+    .filter(([nft]) => nft.owner === address)
+)
+
 export const getOnSaleElements = createSelector<
   RootState,
-  string | undefined,
-  Record<string, Item>,
-  Record<string, NFT>,
-  Record<string, Order>,
-  OnSaleListItem[]
->(
-  getAddress,
-  getItemData,
-  getNFTData,
-  getOrderData,
-  (address, itemsById, nftsById, ordersById) => {
-    if (!address) {
-      return []
-    }
+  ReturnType<typeof getOnSaleItems>,
+  ReturnType<typeof getOnSaleNFTs>,
+  OnSaleElement[]
+>(getOnSaleItems, getOnSaleNFTs, (items, nfts) => [...items, ...nfts])
 
-    const both: OnSaleListItem[] = []
-
-    const items = Object.values(itemsById)
-      .filter(item => item.isOnSale && item.creator === address)
-      .sort((itemA, itemB) => (itemA.updatedAt < itemB.updatedAt ? -1 : 0))
-
-    const nfts = Object.values(nftsById)
-      .reduce((acc, nft) => {
-        if (nft.activeOrderId && ordersById[nft.activeOrderId]) {
-          acc.push([nft, ordersById[nft.activeOrderId]])
-        }
-        return acc
-      }, [] as [NFT<VendorName.DECENTRALAND>, Order][])
-      .filter(([nft]) => nft.owner === address)
-      .sort(([_nftA, orderA], [_nftB, orderB]) =>
-        orderA.updatedAt < orderB.updatedAt ? -1 : 0
-      )
-
-    while (items.length + nfts.length > 0) {
-      const lastItem = items[items.length - 1]
-      const lastNft = nfts[nfts.length - 1]
-
-      const pushItem = () => {
-        both.push({ item: lastItem })
-        items.pop()
-      }
-
-      const pushNft = () => {
-        const [nft, order] = lastNft
-        both.push({ nft, order })
-        nfts.pop()
-      }
-
-      if (lastItem && !lastNft) {
-        pushItem()
-      } else if (!lastItem && lastNft) {
-        pushNft()
-      } else if (lastItem.updatedAt >= lastNft[1].updatedAt) {
-        pushItem()
-      } else {
-        pushNft()
-      }
-    }
-
-    return both
+export const getOnSaleProcessedElements = createSelector<
+  RootState,
+  ReturnType<typeof getAddress>,
+  ReturnType<typeof getOnSaleElements>,
+  string,
+  OnSaleElement[]
+>(getAddress, getOnSaleElements, getSearch, (address, elements, search) => {
+  if (!address) {
+    return []
   }
-)
+
+  return elements
+    .filter(element =>
+      handleOnSaleElement(
+        element,
+        item => item.name.toLowerCase().includes(search.toLowerCase()),
+        ([nft]) => nft.name.toLowerCase().includes(search.toLowerCase())
+      )
+    )
+    .sort((elementA, elementB) => {
+      const getUpdatedAt = (element: any) =>
+        handleOnSaleElement(
+          element,
+          item => item.updatedAt,
+          ([_nft, order]) => order.updatedAt
+        )
+      return getUpdatedAt(elementA) > getUpdatedAt(elementB) ? -1 : 0
+    })
+})

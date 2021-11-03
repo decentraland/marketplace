@@ -140,6 +140,9 @@
     "my_assets": "MY ASSETS",
     "my_store": "MY STORE"
   },
+  "on_sale_list": {
+    "search": "Search {count} items..."
+  },
   "asset_page": {
     "actions": {
       "cancel_sale": "Remove listing",

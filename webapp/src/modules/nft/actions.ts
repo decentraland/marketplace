@@ -103,3 +103,11 @@ export const transferNFTFailure = (
 export type TransferNFTRequestAction = ReturnType<typeof transferNFTRequest>
 export type TransferNFTSuccessAction = ReturnType<typeof transferNFTSuccess>
 export type TransferNFTFailureAction = ReturnType<typeof transferNFTFailure>
+
+// Set search
+
+export const SET_SEARCH = 'Set Search'
+
+export const setSearch = (value: string) => action(SET_SEARCH, { value })
+
+export type SetSearchAction = ReturnType<typeof setSearch>
