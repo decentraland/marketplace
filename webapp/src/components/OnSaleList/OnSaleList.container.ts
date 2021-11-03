@@ -18,7 +18,7 @@ const mapState = (state: RootState): MapStateProps => {
 
   const items = Object.values(itemsById)
     .filter(item => item.creator === address)
-    .sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : 0))
+    .sort((a, b) => (a.updatedAt < b.updatedAt ? -1 : 0))
 
   const nfts = Object.values(nftsById)
     .filter(
@@ -27,7 +27,12 @@ const mapState = (state: RootState): MapStateProps => {
         nft.activeOrderId &&
         ordersById[nft.activeOrderId]
     )
-    .sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : 0))
+    .sort((a, b) =>
+      ordersById[a.activeOrderId!].updatedAt <
+      ordersById[b.activeOrderId!].updatedAt
+        ? -1
+        : 0
+    )
 
   const both: ComponentItem[] = []
 
@@ -107,15 +112,19 @@ const mapState = (state: RootState): MapStateProps => {
     }
 
     if (lastItem && !lastNft) {
+      console.log('lastItem && !lastNft')
       pushItem()
     } else if (!lastItem && lastNft) {
+      console.log('!lastItem && lastNft')
       pushNft(ordersById[lastNft.activeOrderId!])
     } else {
       const order = ordersById[lastNft.activeOrderId!]
 
-      if (lastItem.updatedAt <= order.updatedAt) {
+      if (lastItem.updatedAt >= order.updatedAt) {
+        console.log('lastItem.updatedAt <= order.updatedAt')
         pushItem()
       } else {
+        console.log('!(lastItem.updatedAt <= order.updatedAt)')
         pushNft(order)
       }
     }
