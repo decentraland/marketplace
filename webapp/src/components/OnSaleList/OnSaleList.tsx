@@ -13,9 +13,8 @@ import { SortBy } from '../../modules/routing/types'
 import styles from './OnSaleList.module.css'
 import { useProcessedElements } from './utils'
 
-export const PER_PAGE = 12
-
 const OnSaleList = ({ elements, isLoading }: Props) => {
+  const perPage = useRef(12)
   const sortOptions = useRef([
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') }
@@ -25,8 +24,14 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
   const [sort, setSort] = useState(SortBy.NEWEST)
   const [page, setPage] = useState(1)
 
-  const processedElements = useProcessedElements(elements, search, sort, page)
-  const showPagination = processedElements.total / PER_PAGE > 1
+  const processedElements = useProcessedElements(
+    elements,
+    search,
+    sort,
+    page,
+    perPage.current
+  )
+  const showPagination = processedElements.total / perPage.current
 
   const searchNode = useMemo(
     () => (
@@ -82,7 +87,9 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
           {showPagination && (
             <div className={styles.pagination}>
               <Pagination
-                totalPages={Math.ceil(processedElements.total / PER_PAGE)}
+                totalPages={Math.ceil(
+                  processedElements.total / perPage.current
+                )}
                 activePage={page}
                 onPageChange={(_, data) => setPage(Number(data.activePage))}
               />

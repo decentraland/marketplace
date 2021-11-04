@@ -4,18 +4,21 @@ import { Order } from '../../modules/order/types'
 import { useMemo } from 'react'
 import { SortBy } from '../../modules/routing/types'
 import { Props as Element } from './OnSaleListElement/OnSaleListElement.types'
-import { PER_PAGE } from './OnSaleList'
 
 export const useProcessedElements = (
   elems: Element[],
   search: string,
   sortBy: SortBy,
-  page: number
+  page: number,
+  perPage: number
 ) => {
   const filtered = useMemo(() => filterByName(elems, search), [elems, search])
   const total = useMemo(() => filtered.length, [filtered])
   const sorted = useMemo(() => sort(filtered, sortBy), [filtered, sortBy])
-  const paginated = useMemo(() => paginate(sorted, page), [sorted, page])
+  const paginated = useMemo(() => paginate(sorted, page, perPage), [
+    sorted,
+    page
+  ])
 
   return {
     paginated,
@@ -44,9 +47,13 @@ export const sort = (elements: Element[], sortBy: SortBy) =>
     }
   })
 
-export const paginate = (elements: Element[], page: number) => {
-  const start = (page - 1) * PER_PAGE
-  const end = Math.min(start + PER_PAGE, elements.length)
+export const paginate = (
+  elements: Element[],
+  page: number,
+  perPage: number
+) => {
+  const start = (page - 1) * perPage
+  const end = Math.min(start + perPage, elements.length)
   return elements.slice(start, end)
 }
 
