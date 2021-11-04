@@ -17,7 +17,8 @@ export const useProcessedElements = (
   const sorted = useMemo(() => sort(filtered, sortBy), [filtered, sortBy])
   const paginated = useMemo(() => paginate(sorted, page, perPage), [
     sorted,
-    page
+    page,
+    perPage
   ])
 
   return {
