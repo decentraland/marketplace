@@ -1,11 +1,19 @@
-import React, { useRef, useState } from 'react'
-import { Table, Loader, TextFilter, Dropdown } from 'decentraland-ui'
+import React, { useMemo, useRef, useState } from 'react'
+import {
+  Table,
+  Loader,
+  TextFilter,
+  Dropdown,
+  Pagination
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './OnSaleList.types'
 import OnSaleListElement from './OnSaleListElement'
 import { SortBy } from '../../modules/routing/types'
 import styles from './OnSaleList.module.css'
 import { useProcessedElements } from './utils'
+
+export const PER_PAGE = 12
 
 const OnSaleList = ({ elements, isLoading }: Props) => {
   const sortOptions = useRef([
@@ -15,28 +23,30 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
 
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState(SortBy.NEWEST)
+  const [page, setPage] = useState(1)
 
-  const processedElements = useProcessedElements(elements, search, sort)
+  const processedElements = useProcessedElements(elements, search, sort, page)
+  const showPagination = processedElements.total / PER_PAGE > 1
 
-  if (isLoading) {
-    return (
-      <>
-        <div className="overlay" />
-        <Loader size="massive" active />
-      </>
-    )
-  }
+  const searchNode = useMemo(
+    () => (
+      <TextFilter
+        value={search}
+        onChange={val => {
+          console.log('why')
+          setSearch(val)
+          setPage(1)
+        }}
+        placeholder={t('on_sale_list.search', { count: elements.length })}
+      />
+    ),
+    [elements.length, search]
+  )
 
   return (
     <>
       <div className={styles.filters}>
-        <div className={styles.search}>
-          <TextFilter
-            value={search}
-            onChange={setSearch}
-            placeholder={t('on_sale_list.search', { count: elements.length })}
-          />
-        </div>
+        <div className={styles.search}>{searchNode}</div>
         <Dropdown
           direction="left"
           value={sort}
@@ -44,24 +54,42 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
           onChange={(_, data) => setSort(data.value as any)}
         />
       </div>
-      <Table basic="very">
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell>{t('global.item')}</Table.HeaderCell>
-            <Table.HeaderCell>{t('global.type')}</Table.HeaderCell>
-            <Table.HeaderCell>{t('global.sale_type')}</Table.HeaderCell>
-            <Table.HeaderCell>{t('global.sell_price')}</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {processedElements.map(element => (
-            <OnSaleListElement
-              key={element.item?.id || element.nft!.id}
-              {...element}
-            />
-          ))}
-        </Table.Body>
-      </Table>
+      {isLoading ? (
+        <>
+          <div className="overlay" />
+          <Loader size="massive" active />
+        </>
+      ) : (
+        <>
+          <Table basic="very">
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>{t('global.item')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('global.type')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('global.sale_type')}</Table.HeaderCell>
+                <Table.HeaderCell>{t('global.sell_price')}</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {processedElements.paginated.map(element => (
+                <OnSaleListElement
+                  key={element.item?.id || element.nft!.id}
+                  {...element}
+                />
+              ))}
+            </Table.Body>
+          </Table>
+          {showPagination && (
+            <div className={styles.pagination}>
+              <Pagination
+                totalPages={Math.ceil(processedElements.total / PER_PAGE)}
+                activePage={page}
+                onPageChange={(_, data) => setPage(Number(data.activePage))}
+              />
+            </div>
+          )}
+        </>
+      )}
     </>
   )
 }
