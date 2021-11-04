@@ -12,12 +12,10 @@ import { Order } from '../../order/types'
 import { VendorName } from '../../vendor'
 import { getAddress } from '../../wallet/selectors'
 import { OnSaleElement, OnSaleNFT } from './types'
-import { handleOnSaleElement } from './utils'
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState) => getState(state).view
 export const getCount = (state: RootState) => getState(state).count
-export const getSearch = (state: RootState) => state.ui.browse.search
 
 export const getNFTs = createSelector<
   RootState,
@@ -73,33 +71,3 @@ export const getOnSaleElements = createSelector<
   ReturnType<typeof getOnSaleNFTs>,
   OnSaleElement[]
 >(getOnSaleItems, getOnSaleNFTs, (items, nfts) => [...items, ...nfts])
-
-export const getOnSaleProcessedElements = createSelector<
-  RootState,
-  ReturnType<typeof getAddress>,
-  ReturnType<typeof getOnSaleElements>,
-  ReturnType<typeof getSearch>,
-  OnSaleElement[]
->(getAddress, getOnSaleElements, getSearch, (address, elements, search) => {
-  if (!address) {
-    return []
-  }
-
-  return elements
-    .filter(element =>
-      handleOnSaleElement(
-        element,
-        item => item.name.toLowerCase().includes(search.toLowerCase()),
-        ([nft]) => nft.name.toLowerCase().includes(search.toLowerCase())
-      )
-    )
-    .sort((elementA, elementB) => {
-      const getUpdatedAt = (element: any) =>
-        handleOnSaleElement(
-          element,
-          item => item.updatedAt,
-          ([_nft, order]) => order.updatedAt
-        )
-      return getUpdatedAt(elementA) > getUpdatedAt(elementB) ? -1 : 0
-    })
-})

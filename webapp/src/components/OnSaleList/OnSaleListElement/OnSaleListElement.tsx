@@ -3,12 +3,12 @@ import { Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana } from '../../Mana'
 import { formatMANA } from '../../../lib/mana'
-import { Props } from './OnSaleListItem.types'
+import { Props } from './OnSaleListElement.types'
 import { NFTCategory, Rarity } from '@dcl/schemas'
 import userSVG from '../../../images/user.svg'
-import styles from './OnSaleListItem.module.css'
+import styles from './OnSaleListElement.module.css'
 
-const OnSaleListItem = ({ nft, item, order }: Props) => {
+const OnSaleListElement = ({ nft, item, order }: Props) => {
   let wearableImageBackground: string | undefined
 
   const category = item?.category || nft!.category
@@ -25,15 +25,14 @@ const OnSaleListItem = ({ nft, item, order }: Props) => {
     case NFTCategory.WEARABLE:
       itemImage = (
         <img
+          className={styles.wearable}
           src={item?.thumbnail || nft!.image}
-          height={40.19}
-          width={40.19}
-          alt="foo"
+          alt={'Wearable ' + item?.name || nft!.name}
         />
       )
       break
     case NFTCategory.ENS:
-      itemImage = <img src={userSVG} alt="foo" />
+      itemImage = <img src={userSVG} alt={'Name ' + nft!.name} />
       break
     case NFTCategory.PARCEL:
       itemImage = <div className={styles.parcel} />
@@ -96,4 +95,4 @@ const OnSaleListItem = ({ nft, item, order }: Props) => {
   )
 }
 
-export default React.memo(OnSaleListItem)
+export default React.memo(OnSaleListElement)

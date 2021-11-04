@@ -1,16 +1,22 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { Table, Loader, TextFilter, Dropdown } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './OnSaleList.types'
-import OnSaleListItem from './OnSaleListItem'
+import OnSaleListElement from './OnSaleListElement'
 import { SortBy } from '../../modules/routing/types'
 import styles from './OnSaleList.module.css'
+import { useProcessedElements } from './utils'
 
-const OnSaleList = ({ items, isLoading, search, count, onSearch }: Props) => {
-  const orderBydropdownOptions = [
+const OnSaleList = ({ elements: items, isLoading }: Props) => {
+  const sortOptions = useRef([
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') }
-  ]
+  ])
+
+  const [search, setSearch] = useState('')
+  const [sort, setSort] = useState(SortBy.NEWEST)
+
+  const processedElements = useProcessedElements(items, search, sort)
 
   if (isLoading) {
     return (
@@ -27,15 +33,15 @@ const OnSaleList = ({ items, isLoading, search, count, onSearch }: Props) => {
         <div className={styles.search}>
           <TextFilter
             value={search}
-            onChange={onSearch}
-            placeholder={t('on_sale_list.search', { count })}
+            onChange={setSearch}
+            placeholder={t('on_sale_list.search', { count: items.length })}
           />
         </div>
         <Dropdown
           direction="left"
-          value={orderBydropdownOptions[0].value}
-          options={orderBydropdownOptions}
-          onChange={() => {}}
+          value={sort}
+          options={sortOptions.current}
+          onChange={(_, data) => setSort(data.value as any)}
         />
       </div>
       <Table basic="very">
@@ -48,8 +54,11 @@ const OnSaleList = ({ items, isLoading, search, count, onSearch }: Props) => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {items.map((item, i) => (
-            <OnSaleListItem key={i} {...item} />
+          {processedElements.map(element => (
+            <OnSaleListElement
+              key={element.item?.id || element.nft!.id}
+              {...element}
+            />
           ))}
         </Table.Body>
       </Table>
