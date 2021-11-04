@@ -106,10 +106,11 @@ function* handleBrowse(action: BrowseAction) {
 // ------------------------------------------------
 // Utility functions, not handlers
 
-export function* handleOnSaleBrowse(action: BrowseAction) {
+export function* handleOnSaleBrowse({ payload }: BrowseAction) {
   const address: string = yield select(getWalletAddress)
-  const options: BrowseOptions = yield getNewBrowseOptions(
-    action.payload.options
+  const options: BrowseOptions = yield call(
+    getNewBrowseOptions,
+    payload.options
   )
 
   yield put(
@@ -237,7 +238,7 @@ export function* getCurrentBrowseOptions(): Generator<
   } as BrowseOptions
 }
 
-function* getNewBrowseOptions(
+export function* getNewBrowseOptions(
   current: BrowseOptions
 ): Generator<unknown, BrowseOptions, any> {
   let previous = yield getCurrentBrowseOptions()
