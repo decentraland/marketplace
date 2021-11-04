@@ -31,7 +31,7 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
     page,
     perPage.current
   )
-  const showPagination = processedElements.total / perPage.current
+  const showPagination = processedElements.total / perPage.current > 1
 
   const searchNode = useMemo(
     () => (
