@@ -7,7 +7,7 @@ import { SortBy } from '../../modules/routing/types'
 import styles from './OnSaleList.module.css'
 import { useProcessedElements } from './utils'
 
-const OnSaleList = ({ elements: items, isLoading }: Props) => {
+const OnSaleList = ({ elements, isLoading }: Props) => {
   const sortOptions = useRef([
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') }
@@ -16,7 +16,7 @@ const OnSaleList = ({ elements: items, isLoading }: Props) => {
   const [search, setSearch] = useState('')
   const [sort, setSort] = useState(SortBy.NEWEST)
 
-  const processedElements = useProcessedElements(items, search, sort)
+  const processedElements = useProcessedElements(elements, search, sort)
 
   if (isLoading) {
     return (
@@ -34,7 +34,7 @@ const OnSaleList = ({ elements: items, isLoading }: Props) => {
           <TextFilter
             value={search}
             onChange={setSearch}
-            placeholder={t('on_sale_list.search', { count: items.length })}
+            placeholder={t('on_sale_list.search', { count: elements.length })}
           />
         </div>
         <Dropdown
