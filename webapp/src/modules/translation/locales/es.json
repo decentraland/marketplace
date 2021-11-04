@@ -6,6 +6,7 @@
     "load_more": "Cargar Más",
     "not_found": "No se ha encontrado",
     "parcel": "Parcela",
+    "parcel_count": "{count} {count, plural, one {Parcela} other {Parcelas}}",
     "parcel_with_coords": "Parcela {x},{y}",
     "estate": "Estate",
     "wearable": "Vestimenta",
@@ -21,7 +22,13 @@
     "search": "Buscar",
     "apply": "Aplicar",
     "network": "Red",
-    "issue_number": "Número de emisión"
+    "issue_number": "Número de emisión",
+    "primary": "Primaria",
+    "secondary": "Secundaria",
+    "item": "Item",
+    "type": "Tipo",
+    "sale_type": "Tipo de venta",
+    "sell_price": "Precio de venta"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -131,6 +138,9 @@
   "account_sidebar": {
     "my_assets": "MI INVENTARIO",
     "my_store": "MI TIENDA"
+  },
+  "on_sale_list": {
+    "search": "Buscar entre {count} items..."
   },
   "asset_page": {
     "actions": {
