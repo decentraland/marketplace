@@ -85,8 +85,9 @@ function* handleClearFilters() {
   yield put(push(buildBrowseURL(pathname, clearedBrowseOptions)))
 }
 
-function* handleBrowse(action: BrowseAction) {
-  const options: BrowseOptions = yield getNewBrowseOptions(
+export function* handleBrowse(action: BrowseAction) {
+  const options: BrowseOptions = yield call(
+    getNewBrowseOptions,
     action.payload.options
   )
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
@@ -96,7 +97,7 @@ function* handleBrowse(action: BrowseAction) {
   } else {
     switch (options.section) {
       case Section.ON_SALE:
-        yield fork(handleOnSaleBrowse, action)
+        yield fork(handleOnSaleBrowse, options)
     }
   }
 
@@ -106,12 +107,8 @@ function* handleBrowse(action: BrowseAction) {
 // ------------------------------------------------
 // Utility functions, not handlers
 
-export function* handleOnSaleBrowse({ payload }: BrowseAction) {
+export function* handleOnSaleBrowse(options: BrowseOptions) {
   const address: string = yield select(getWalletAddress)
-  const options: BrowseOptions = yield call(
-    getNewBrowseOptions,
-    payload.options
-  )
 
   yield put(
     fetchItemsRequest({
