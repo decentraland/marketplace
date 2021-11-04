@@ -70,7 +70,7 @@ describe('when handling the on sale browse', () => {
     const sampleAddress = 'some-address'
     const sampleView = View.CURRENT_ACCOUNT
 
-    return expectSaga(handleOnSaleBrowse as any, browse({}))
+    return expectSaga(handleOnSaleBrowse, browse({}))
       .provide([
         [select(getAddress), sampleAddress],
         [call(getNewBrowseOptions, {}), { view: sampleView }]
