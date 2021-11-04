@@ -1,10 +1,17 @@
 import React from 'react'
-import { Table, Loader, TextFilter } from 'decentraland-ui'
+import { Table, Loader, TextFilter, Dropdown } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './OnSaleList.types'
 import OnSaleListItem from './OnSaleListItem'
+import { SortBy } from '../../modules/routing/types'
+import styles from './OnSaleList.module.css'
 
 const OnSaleList = ({ items, isLoading, search, count, onSearch }: Props) => {
+  const orderBydropdownOptions = [
+    { value: SortBy.NEWEST, text: t('filters.newest') },
+    { value: SortBy.NAME, text: t('filters.name') }
+  ]
+
   if (isLoading) {
     return (
       <>
@@ -16,11 +23,21 @@ const OnSaleList = ({ items, isLoading, search, count, onSearch }: Props) => {
 
   return (
     <>
-      <TextFilter
-        value={search}
-        onChange={onSearch}
-        placeholder={t('on_sale_list.search', { count })}
-      />
+      <div className={styles.filters}>
+        <div className={styles.search}>
+          <TextFilter
+            value={search}
+            onChange={onSearch}
+            placeholder={t('on_sale_list.search', { count })}
+          />
+        </div>
+        <Dropdown
+          direction="left"
+          value={orderBydropdownOptions[0].value}
+          options={orderBydropdownOptions}
+          onChange={() => {}}
+        />
+      </div>
       <Table basic="very">
         <Table.Header>
           <Table.Row>

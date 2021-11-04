@@ -1,0 +1,7 @@
+.filters {
+  display: flex;
+}
+
+.search {
+  flex: 1;
+}
