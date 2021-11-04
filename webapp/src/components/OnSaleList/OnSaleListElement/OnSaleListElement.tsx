@@ -36,7 +36,7 @@ const OnSaleListElement = ({ nft, item, order }: Props) => {
       break
     case NFTCategory.PARCEL:
       const { x, y } = nft!.data.parcel!
-      subtitle = `${x}/${y}`
+      subtitle = `${x},${y}`
   }
 
   return (
