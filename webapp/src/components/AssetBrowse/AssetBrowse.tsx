@@ -31,7 +31,7 @@ const hasPrimarySales = (section?: Section) => {
     case DecentralandSection.WEARABLES_UPPER_BODY:
     case DecentralandSection.WEARABLES_LOWER_BODY:
     case DecentralandSection.WEARABLES_FEET:
-    case DecentralandSection.WEARABLES_ACCESORIES:
+    case DecentralandSection.WEARABLES_ACCESSORIES:
     case DecentralandSection.WEARABLES_EARRING:
     case DecentralandSection.WEARABLES_EYEWEAR:
     case DecentralandSection.WEARABLES_HAT:

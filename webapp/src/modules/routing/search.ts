@@ -94,7 +94,7 @@ export function getCategoryFromSection(section: string) {
     case Section.WEARABLES_UPPER_BODY:
     case Section.WEARABLES_LOWER_BODY:
     case Section.WEARABLES_FEET:
-    case Section.WEARABLES_ACCESORIES:
+    case Section.WEARABLES_ACCESSORIES:
     case Section.WEARABLES_EARRING:
     case Section.WEARABLES_EYEWEAR:
     case Section.WEARABLES_HAT:
