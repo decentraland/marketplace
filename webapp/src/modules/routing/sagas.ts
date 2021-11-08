@@ -125,7 +125,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     const isWearableHead =
       section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
     const isWearableAccessory =
-      section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESORIES
+      section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
 
     const wearableCategory = !isWearableAccessory
       ? getSearchWearableCategory(section!)

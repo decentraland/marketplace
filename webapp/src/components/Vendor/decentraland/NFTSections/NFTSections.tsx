@@ -62,7 +62,7 @@ const NFTSections = (props: Props) => {
             Section.WEARABLES_UPPER_BODY,
             Section.WEARABLES_LOWER_BODY,
             Section.WEARABLES_FEET,
-            Section.WEARABLES_ACCESORIES,
+            Section.WEARABLES_ACCESSORIES,
             Section.WEARABLES_EARRING,
             Section.WEARABLES_EYEWEAR,
             Section.WEARABLES_HAT,
@@ -101,7 +101,7 @@ const NFTSections = (props: Props) => {
 
               <DropdownMenu
                 values={[
-                  Section.WEARABLES_ACCESORIES,
+                  Section.WEARABLES_ACCESSORIES,
                   Section.WEARABLES_EARRING,
                   Section.WEARABLES_EYEWEAR,
                   Section.WEARABLES_HAT,
