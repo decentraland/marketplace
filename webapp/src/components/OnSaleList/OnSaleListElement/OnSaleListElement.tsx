@@ -1,30 +1,15 @@
 import React from 'react'
 import { Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { NFTCategory } from '@dcl/schemas'
 import { Mana } from '../../Mana'
 import { formatMANA } from '../../../lib/mana'
 import { Props } from './OnSaleListElement.types'
-import { NFTCategory } from '@dcl/schemas'
-
-import styles from './OnSaleListElement.module.css'
 import { AssetImage } from '../../AssetImage'
+import styles from './OnSaleListElement.module.css'
 
 const OnSaleListElement = ({ nft, item, order }: Props) => {
   const category = item?.category || nft!.category
-
-  let title = ''
-
-  switch (category) {
-    case NFTCategory.WEARABLE:
-      title = item?.name || nft!.name
-      break
-    case NFTCategory.ESTATE:
-    case NFTCategory.ENS:
-      title = nft!.name
-      break
-    case NFTCategory.PARCEL:
-      title = t(`global.parcel`)
-  }
 
   let subtitle: string | undefined
 
@@ -47,7 +32,11 @@ const OnSaleListElement = ({ nft, item, order }: Props) => {
             <AssetImage asset={item || nft!} isSmall />
           </div>
           <div>
-            <div className={styles.title}>{title}</div>
+            <div className={styles.title}>
+              {category === NFTCategory.PARCEL
+                ? t(`global.parcel`)
+                : item?.name || nft!.name}
+            </div>
             {subtitle && <div>{subtitle}</div>}
           </div>
         </div>
