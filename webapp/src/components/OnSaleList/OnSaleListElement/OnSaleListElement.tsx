@@ -32,11 +32,7 @@ const OnSaleListElement = ({ nft, item, order }: Props) => {
             <AssetImage asset={item || nft!} isSmall />
           </div>
           <div>
-            <div className={styles.title}>
-              {category === NFTCategory.PARCEL
-                ? t(`global.parcel`)
-                : item?.name || nft!.name}
-            </div>
+            <div className={styles.title}>{item?.name || nft!.name}</div>
             {subtitle && <div>{subtitle}</div>}
           </div>
         </div>
