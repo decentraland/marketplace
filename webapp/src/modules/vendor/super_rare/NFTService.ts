@@ -165,7 +165,8 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
       issuedId: null,
       itemId: null,
       createdAt: 0,
-      updatedAt: 0
+      updatedAt: 0,
+      soldAt: 0
     }
   }
 

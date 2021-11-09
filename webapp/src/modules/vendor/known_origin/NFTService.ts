@@ -154,7 +154,8 @@ export class NFTService
       issuedId: null,
       itemId: null,
       createdAt: 0,
-      updatedAt: 0
+      updatedAt: 0,
+      soldAt: 0
     }
   }
 
