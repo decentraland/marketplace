@@ -20,21 +20,25 @@ export class NFTService
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
     const { data: results, total } = await nftAPI.fetch(params, filters)
 
-    const accounts: Account[] = []
-    const nfts: NFT[] = []
-    const orders: Order[] = []
-    for (const result of results) {
-      const address = result.nft.owner
-      let account = accounts.find(account => account.id === address)
+    const accounts: Account[] = results.reduce((accumulator, nftResult) => {
+      const address = nftResult.nft.owner
+      let account = accumulator.find(account => account.id === address)
       if (!account) {
         account = this.toAccount(address)
+        accumulator.push(account)
       }
-      account.nftIds.push(result.nft.id)
-      nfts.push({ ...result.nft, vendor: VendorName.DECENTRALAND })
-      if (result.order) {
-        orders.push(result.order)
-      }
-    }
+      account.nftIds.push(nftResult.nft.id)
+      return accumulator
+    }, [] as Account[])
+
+    const nfts: NFT[] = results.map(nftResult => ({
+      ...nftResult.nft,
+      vendor: VendorName.DECENTRALAND
+    }))
+
+    const orders: Order[] = results
+      .filter(nftResult => nftResult.order)
+      .map(nftResult => nftResult.order as Order)
 
     return [nfts, accounts, orders, total] as const
   }
