@@ -15,6 +15,11 @@ export function trackSale(
   timestamp: BigInt,
   txHash: Bytes
 ): void {
+  // ignore zero price sales
+  if (price.isZero()) {
+    return
+  }
+
   // count sale
   let count = buildCountFromSale(price)
   count.save()
