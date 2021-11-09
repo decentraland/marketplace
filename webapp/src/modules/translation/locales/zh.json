@@ -6,6 +6,7 @@
     "load_more": "装载更多",
     "not_found": "未找到",
     "parcel": "地块",
+    "parcel_count": "{count, plural, one {地块} other {情节}} {count}",
     "parcel_with_coords": "地块 {x},{y}",
     "estate": "产业",
     "wearable": "可穿戴",
@@ -21,7 +22,13 @@
     "search": "搜寻",
     "apply": "应用",
     "network": "网络",
-    "issue_number": "发行数量"
+    "issue_number": "发行数量",
+    "primary": "主要",
+    "secondary": "二 次",
+    "item": "项目",
+    "type": "类型",
+    "sale_type": "销售类型",
+    "sell_price": "销售价格"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -131,6 +138,9 @@
   "account_sidebar": {
     "my_assets": "我的库存",
     "my_store": "我的店"
+  },
+  "on_sale_list": {
+    "search": "搜索 {count} 项目..."
   },
   "asset_page": {
     "actions": {

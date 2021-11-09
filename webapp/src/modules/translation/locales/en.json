@@ -6,6 +6,7 @@
     "load_more": "Load more",
     "not_found": "Not found",
     "parcel": "Parcel",
+    "parcel_count": "{count} {count, plural, one {Parcel} other {Parcels}}",
     "parcel_with_coords": "Parcel {x},{y}",
     "estate": "Estate",
     "wearable": "Wearable",
@@ -21,7 +22,13 @@
     "search": "Search",
     "apply": "Apply",
     "network": "Network",
-    "issue_number": "Issue Number"
+    "issue_number": "Issue Number",
+    "primary": "Primary",
+    "secondary": "Secondary",
+    "item": "Item",
+    "type": "Type",
+    "sale_type": "Sale type",
+    "sell_price": "Sell price"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -133,6 +140,9 @@
   "account_sidebar": {
     "my_assets": "MY ASSETS",
     "my_store": "MY STORE"
+  },
+  "on_sale_list": {
+    "search": "Search {count} items..."
   },
   "asset_page": {
     "actions": {

@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import { Container, Page, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { AssetType } from '../../modules/asset/types'
@@ -19,6 +18,7 @@ import { Props } from './AssetBrowse.types'
 import { ToggleBox } from './ToggleBox'
 import classNames from 'classnames'
 import { isAccountView } from '../../modules/ui/utils'
+import OnSaleList from '../OnSaleList'
 import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
@@ -113,56 +113,62 @@ const AssetBrowse = (props: Props) => {
 
   const toggleBoxI18nKey = isAccountView(view) ? 'account_page' : 'browse_page'
 
-  return (
-    <Page
-      className={classNames('AssetBrowse', isMap && 'is-map')}
-      isFullscreen={isFullscreen}
-    >
-      <Row>
-        {isFullscreen ? null : (
-          <Column align="left" className="sidebar">
-            {view !== View.CURRENT_ACCOUNT && (
-              <ToggleBox
-                className="result-type-toggle"
-                header={t('filters.type')}
-                items={[
-                  {
-                    title: t(`${toggleBoxI18nKey}.primary_market_title`),
-                    active: assetType === AssetType.ITEM,
-                    description: t(
-                      `${toggleBoxI18nKey}.primary_market_subtitle`
-                    ),
-                    disabled:
-                      !hasPrimarySales(section) ||
-                      vendor !== VendorName.DECENTRALAND,
-                    onClick: hanldeBrowseItems
-                  },
-                  {
-                    title: t(`${toggleBoxI18nKey}.secondary_market_title`),
-                    active:
-                      assetType === AssetType.NFT ||
-                      vendor !== VendorName.DECENTRALAND,
-                    description: t(
-                      `${toggleBoxI18nKey}.secondary_market_subtitle`
-                    ),
-                    onClick: handleBrowse
-                  }
-                ]}
-              />
-            )}
-            <Responsive minWidth={Responsive.onlyTablet.minWidth}>
-              {view === View.ACCOUNT ? (
-                <AccountSidebar address={address!} />
-              ) : view === View.CURRENT_ACCOUNT ? (
-                <AccountSidebar address={address!} isCurrentAccount />
-              ) : (
-                <NFTSidebar section={section} sections={sections} />
-              )}
-            </Responsive>
-          </Column>
+  const left = (
+    <>
+      {view !== View.CURRENT_ACCOUNT && (
+        <ToggleBox
+          className="result-type-toggle"
+          header={t('filters.type')}
+          items={[
+            {
+              title: t(`${toggleBoxI18nKey}.primary_market_title`),
+              active: assetType === AssetType.ITEM,
+              description: t(`${toggleBoxI18nKey}.primary_market_subtitle`),
+              disabled:
+                !hasPrimarySales(section) || vendor !== VendorName.DECENTRALAND,
+              onClick: hanldeBrowseItems
+            },
+            {
+              title: t(`${toggleBoxI18nKey}.secondary_market_title`),
+              active:
+                assetType === AssetType.NFT ||
+                vendor !== VendorName.DECENTRALAND,
+              description: t(`${toggleBoxI18nKey}.secondary_market_subtitle`),
+              onClick: handleBrowse
+            }
+          ]}
+        />
+      )}
+      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+        {view === View.ACCOUNT ? (
+          <AccountSidebar address={address!} />
+        ) : view === View.CURRENT_ACCOUNT ? (
+          <AccountSidebar address={address!} isCurrentAccount />
+        ) : (
+          <NFTSidebar section={section} sections={sections} />
         )}
+      </Responsive>
+    </>
+  )
 
-        <Column align="right" grow={true}>
+  let right: ReactNode
+
+  switch (section) {
+    case DecentralandSection.COLLECTIONS:
+      right = <div>COLLECTIONS</div>
+      break
+    case DecentralandSection.ON_SALE:
+      right = <OnSaleList />
+      break
+    case DecentralandSection.SALES:
+      right = <div>SALES</div>
+      break
+    case DecentralandSection.SETTINGS:
+      right = <div>SETTINGS</div>
+      break
+    default:
+      right = (
+        <>
           {view === View.ACCOUNT && !isFullscreen ? (
             <VendorStrip address={address!} />
           ) : null}
@@ -186,6 +192,23 @@ const AssetBrowse = (props: Props) => {
           ) : (
             <AssetList />
           )}
+        </>
+      )
+  }
+
+  return (
+    <Page
+      className={classNames('AssetBrowse', isMap && 'is-map')}
+      isFullscreen={isFullscreen}
+    >
+      <Row>
+        {!isFullscreen && (
+          <Column align="left" className="sidebar">
+            {left}
+          </Column>
+        )}
+        <Column align="right" grow={true}>
+          {right}
         </Column>
       </Row>
     </Page>

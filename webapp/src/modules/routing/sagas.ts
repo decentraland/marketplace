@@ -1,4 +1,4 @@
-import { takeEvery, put, select, call } from 'redux-saga/effects'
+import { takeEvery, put, select, call, fork } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
 import { NFTCategory } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
@@ -18,7 +18,12 @@ import { getAddress as getAccountAddress } from '../account/selectors'
 import { fetchNFTsRequest } from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
-import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
+import {
+  MAX_PAGE,
+  PAGE_SIZE,
+  getMaxQuerySize,
+  MAX_QUERY_SIZE
+} from '../vendor/api'
 import { locations } from './locations'
 import {
   getSearchParams,
@@ -48,6 +53,8 @@ import {
   CLEAR_FILTERS
 } from './actions'
 import { BrowseOptions, Sections } from './types'
+import { isNFTSection } from '../vendor/decentraland/routing/utils'
+import { Section } from '../vendor/decentraland'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -78,17 +85,45 @@ function* handleClearFilters() {
   yield put(push(buildBrowseURL(pathname, clearedBrowseOptions)))
 }
 
-function* handleBrowse(action: BrowseAction) {
-  const options: BrowseOptions = yield getNewBrowseOptions(
+export function* handleBrowse(action: BrowseAction) {
+  const options: BrowseOptions = yield call(
+    getNewBrowseOptions,
     action.payload.options
   )
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-  yield fetchAssetsFromRoute(options)
+
+  if (isNFTSection(options.section as Section)) {
+    yield fetchAssetsFromRoute(options)
+  } else {
+    switch (options.section) {
+      case Section.ON_SALE:
+        yield fork(handleOnSaleBrowse, options)
+    }
+  }
+
   yield put(push(buildBrowseURL(pathname, options)))
 }
 
 // ------------------------------------------------
 // Utility functions, not handlers
+
+export function* handleOnSaleBrowse(options: BrowseOptions) {
+  const address: string = yield select(getWalletAddress)
+
+  yield put(
+    fetchItemsRequest({
+      filters: { creator: address, isOnSale: true }
+    })
+  )
+
+  yield put(
+    fetchNFTsRequest({
+      view: options.view!,
+      vendor: VendorName.DECENTRALAND,
+      params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
+    })
+  )
+}
 
 export function buildBrowseURL(
   pathname: string,
@@ -200,7 +235,7 @@ export function* getCurrentBrowseOptions(): Generator<
   } as BrowseOptions
 }
 
-function* getNewBrowseOptions(
+export function* getNewBrowseOptions(
   current: BrowseOptions
 ): Generator<unknown, BrowseOptions, any> {
   let previous = yield getCurrentBrowseOptions()
