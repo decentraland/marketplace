@@ -1,3 +1,4 @@
+import { Collection } from '@dcl/schemas'
 import {
   loadingReducer,
   LoadingState
@@ -10,7 +11,6 @@ import {
   FETCH_COLLECTIONS_REQUEST,
   FETCH_COLLECTIONS_SUCCESS
 } from './actions'
-import { Collection } from './types'
 
 export type CollectionState = {
   data: Record<string, Collection>

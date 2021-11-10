@@ -1,5 +1,5 @@
+import { Collection } from '@dcl/schemas'
 import { action } from 'typesafe-actions'
-import { Collection } from './types'
 
 export const FETCH_COLLECTIONS_REQUEST = '[Request] Fetch collections'
 export const FETCH_COLLECTIONS_SUCCESS = '[Success] Fetch collections'

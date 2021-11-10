@@ -10,6 +10,7 @@ export * from './land'
 export * from './nft'
 export * from './order'
 export * from './routing'
+export * from './collection'
 
 export * from './BidService'
 export * from './ContractService'
