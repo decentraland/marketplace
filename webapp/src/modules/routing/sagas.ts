@@ -1,4 +1,4 @@
-import { takeEvery, put, select, call, fork } from 'redux-saga/effects'
+import { takeEvery, put, select, call } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
 import { NFTCategory } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
@@ -55,6 +55,7 @@ import {
 import { BrowseOptions, Sections } from './types'
 import { isNFTSection } from '../vendor/decentraland/routing/utils'
 import { Section } from '../vendor/decentraland'
+import { fetchCollectionsRequest } from '../collection/actions'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -97,7 +98,10 @@ export function* handleBrowse(action: BrowseAction) {
   } else {
     switch (options.section) {
       case Section.ON_SALE:
-        yield fork(handleOnSaleBrowse, options)
+        yield call(handleOnSaleBrowse, options)
+        break
+      case Section.COLLECTIONS:
+        yield call(handleCollectionsBrowse)
     }
   }
 
@@ -123,6 +127,11 @@ export function* handleOnSaleBrowse(options: BrowseOptions) {
       params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
     })
   )
+}
+
+export function* handleCollectionsBrowse() {
+  const address: string = yield select(getWalletAddress)
+  yield put(fetchCollectionsRequest({ creator: address }))
 }
 
 export function buildBrowseURL(

@@ -1,19 +1,24 @@
 import { Collection, CollectionFilters } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFT_SERVER_URL } from '../nft'
-
-type Response = { data: Collection[]; total: number }
+import { CollectionResponse } from './types'
 
 class CollectionAPI extends BaseAPI {
-  fetch = async (filters: CollectionFilters = {}): Promise<Response> => {
+  fetch = async (
+    filters: CollectionFilters = {}
+  ): Promise<CollectionResponse> => {
     const queryParams = this.buildCollectionsQueryString(filters)
     return this.request('get', `/collections?${queryParams}`)
   }
 
   fetchOne = async (collectionUrn: string): Promise<Collection> => {
-    const { data }: Response = await this.request('get', '/collections', {
-      urn: collectionUrn
-    })
+    const { data }: CollectionResponse = await this.request(
+      'get',
+      '/collections',
+      {
+        urn: collectionUrn
+      }
+    )
 
     if (data.length === 0) {
       throw new Error('Not found')

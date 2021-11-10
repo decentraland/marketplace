@@ -40,14 +40,22 @@ export function collectionReducer(
         loading: loadingReducer(state.loading, action)
       }
     case FETCH_COLLECTIONS_SUCCESS:
+      const { collections } = action.payload
       return {
         ...state,
-        loading: loadingReducer(state.loading, action)
+        loading: loadingReducer(state.loading, action),
+        error: null,
+        data: collections.reduce((acc, collection) => {
+          acc[collection.urn] = collection
+          return acc
+        }, {} as CollectionState['data'])
       }
     case FETCH_COLLECTIONS_FAILURE:
+      const { error } = action.payload
       return {
         ...state,
-        loading: loadingReducer(state.loading, action)
+        loading: loadingReducer(state.loading, action),
+        error
       }
     default:
       return state
