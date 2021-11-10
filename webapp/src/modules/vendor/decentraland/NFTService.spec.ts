@@ -1,14 +1,17 @@
 import { Network, ChainId } from '@dcl/schemas'
-import { ContractData } from 'decentraland-transactions'
 import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import ERC721Abi from '../../../contracts/ERC721Abi'
 import { NFT, NFTsCountParams, NFTsFetchParams } from '../../nft/types'
 import { VendorName } from '../types'
 import { NFTService } from './NFTService'
 import * as api from './nft/api'
 import { NFTResult, NFTsFetchFilters } from './nft'
 import { Order } from '../../order/types'
+import {
+  ContractData,
+  ContractName,
+  getContract
+} from 'decentraland-transactions'
 
 jest.mock('decentraland-dapps/dist/modules/wallet/utils')
 jest.mock('./nft/api')
@@ -240,15 +243,13 @@ describe("Decentraland's NFTService", () => {
         })
 
         it("should have called send transaction with the erc721's crafted contract using the nft's chain id, the contract address and the ABI", async () => {
+          const contract: ContractData = {
+            ...getContract(ContractName.ERC721, nft.chainId),
+            address: nft.contractAddress
+          }
           await nftService.transfer(wallet, anAddress, nft)
           expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalledWith(
-            {
-              name: 'ERC721',
-              abi: ERC721Abi,
-              address: nft.contractAddress,
-              chainId: nft.chainId,
-              version: '1'
-            },
+            contract,
             expect.any(Function)
           )
         })
@@ -306,13 +307,13 @@ describe("Decentraland's NFTService", () => {
         })
 
         it("should have called send transaction with the erc721's contract using the nft's chain id and contract address", async () => {
+          const contract: ContractData = {
+            ...getContract(ContractName.ERC721, nft.chainId),
+            address: nft.contractAddress
+          }
           await nftService.transfer(wallet, anAddress, nft)
           expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalledWith(
-            expect.objectContaining({
-              chainId: nft.chainId,
-              name: 'Decentraland Collection',
-              address: nft.contractAddress
-            }),
+            contract,
             expect.any(Function)
           )
         })

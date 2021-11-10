@@ -1,4 +1,3 @@
-import { Network } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import {
@@ -8,7 +7,6 @@ import {
 } from 'decentraland-transactions'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
-import ERC721Abi from '../../../contracts/ERC721Abi'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName } from '../types'
@@ -62,19 +60,10 @@ export class NFTService
       throw new Error('Invalid address. Wallet must be connected.')
     }
 
-    const contract: ContractData =
-      nft.network !== Network.ETHEREUM
-        ? {
-            ...getContract(ContractName.ERC721CollectionV2, nft.chainId),
-            address: nft.contractAddress
-          }
-        : {
-            name: 'ERC721',
-            abi: ERC721Abi as any,
-            address: nft.contractAddress,
-            chainId: nft.chainId,
-            version: '1'
-          }
+    const contract: ContractData = {
+      ...getContract(ContractName.ERC721, nft.chainId),
+      address: nft.contractAddress
+    }
 
     return sendTransaction(contract, erc721 =>
       erc721.transferFrom(wallet.address, to, nft.tokenId)
