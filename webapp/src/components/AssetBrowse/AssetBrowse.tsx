@@ -19,8 +19,8 @@ import { ToggleBox } from './ToggleBox'
 import classNames from 'classnames'
 import { isAccountView } from '../../modules/ui/utils'
 import OnSaleList from '../OnSaleList'
-import './AssetBrowse.css'
 import CollectionList from '../CollectionList'
+import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
