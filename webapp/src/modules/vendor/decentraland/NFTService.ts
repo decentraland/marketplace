@@ -1,3 +1,4 @@
+import { Network } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import {
@@ -60,10 +61,20 @@ export class NFTService
       throw new Error('Invalid address. Wallet must be connected.')
     }
 
-    const contract: ContractData = {
-      ...getContract(ContractName.ERC721, nft.chainId),
-      address: nft.contractAddress
-    }
+    const contract: ContractData =
+      /*  We need to use the ERC721CollectionV2 instead of ERC721 for non-ethereum transfers otherwise 
+        the meta-tx would fail due to wrong domain and version.
+        If some day we have other types of NFTs other than ERC721CollectionV2 we will need to handle them appropiately too.
+      */
+      nft.network !== Network.ETHEREUM
+        ? {
+            ...getContract(ContractName.ERC721CollectionV2, nft.chainId),
+            address: nft.contractAddress
+          }
+        : {
+            ...getContract(ContractName.ERC721, nft.chainId),
+            address: nft.contractAddress
+          }
 
     return sendTransaction(contract, erc721 =>
       erc721.transferFrom(wallet.address, to, nft.tokenId)

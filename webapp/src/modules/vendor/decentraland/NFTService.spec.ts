@@ -308,7 +308,7 @@ describe("Decentraland's NFTService", () => {
 
         it("should have called send transaction with the erc721's contract using the nft's chain id and contract address", async () => {
           const contract: ContractData = {
-            ...getContract(ContractName.ERC721, nft.chainId),
+            ...getContract(ContractName.ERC721CollectionV2, nft.chainId),
             address: nft.contractAddress
           }
           await nftService.transfer(wallet, anAddress, nft)
