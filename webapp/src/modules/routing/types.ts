@@ -10,7 +10,9 @@ export enum SortBy {
   NAME = 'name',
   NEWEST = 'newest',
   RECENTLY_LISTED = 'recently_listed',
-  CHEAPEST = 'cheapest'
+  CHEAPEST = 'cheapest',
+  RECENTLY_REVIEWED = 'recently_reviewed',
+  SIZE = 'size'
 }
 
 export enum SortDirection {

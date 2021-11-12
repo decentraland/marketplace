@@ -41,8 +41,10 @@ const CollectionList = ({
           direction="left"
           value={sortBy}
           options={sortOptions.current}
-          onChange={(_, _data) => {
-            // setSort(data.value as any)
+          onChange={(_, data) => {
+            if (sortBy !== data.value) {
+              onBrowse({ sortBy: data.value as SortBy })
+            }
           }}
         />
       </div>

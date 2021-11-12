@@ -31,7 +31,8 @@ import {
   getDefaultOptionsByView,
   getSearchWearableCategory,
   getItemSortBy,
-  getAssetOrderBy
+  getAssetOrderBy,
+  getCollectionSortBy
 } from './search'
 import {
   getPage,
@@ -159,7 +160,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           first,
           skip,
           creator: address,
-          search
+          search,
+          sortBy: getCollectionSortBy(sortBy)
         })
       )
       break
