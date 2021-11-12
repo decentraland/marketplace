@@ -1,3 +1,16 @@
+.filters {
+  display: flex;
+}
+
+.search {
+  flex: 1;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
 .card {
 }
 

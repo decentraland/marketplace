@@ -42,6 +42,10 @@ class CollectionAPI extends BaseAPI {
       queryParams.append('sortBy', filters.sortBy)
     }
 
+    if (filters.search) {
+      queryParams.set('search', filters.search)
+    }
+
     if (filters.creator) {
       queryParams.append('creator', filters.creator)
     }

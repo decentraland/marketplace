@@ -158,7 +158,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         fetchCollectionsRequest({
           first,
           skip,
-          creator: address
+          creator: address,
+          search
         })
       )
       break
