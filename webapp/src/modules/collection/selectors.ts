@@ -4,6 +4,8 @@ import { RootState } from '../reducer'
 
 export const getState = (state: RootState) => state.collection
 export const getCollectionsByUrn = (state: RootState) => getState(state).data
+export const getCount = (state: RootState) => getState(state).count
+export const getTotal = (state: RootState) => getState(state).total
 export const getError = (state: RootState) => getState(state).error
 export const getLoading = (state: RootState) => getState(state).loading
 

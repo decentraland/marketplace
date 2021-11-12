@@ -56,6 +56,7 @@ import {
 import { BrowseOptions, Sections } from './types'
 import { Section } from '../vendor/decentraland'
 import { fetchCollectionsRequest } from '../collection/actions'
+import { COLLECTIONS_PER_PAGE } from './utils'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -129,8 +130,10 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const isLoadMore = view === View.LOAD_MORE
 
   const offset = isLoadMore ? page - 1 : 0
-  const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
-  const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
+  const pageSize =
+    section === Section.COLLECTIONS ? COLLECTIONS_PER_PAGE : PAGE_SIZE
+  const skip = Math.min(offset, MAX_PAGE) * pageSize
+  const first = Math.min(page * pageSize - skip, getMaxQuerySize(vendor))
 
   yield put(setIsLoadMore(isLoadMore))
 
