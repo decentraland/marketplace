@@ -129,12 +129,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const isLoadMore = view === View.LOAD_MORE
 
-  const offset = isLoadMore ? page - 1 : 0
-  const pageSize =
-    section === Section.COLLECTIONS ? COLLECTIONS_PER_PAGE : PAGE_SIZE
-  const skip = Math.min(offset, MAX_PAGE) * pageSize
-  const first = Math.min(page * pageSize - skip, getMaxQuerySize(vendor))
-
   yield put(setIsLoadMore(isLoadMore))
 
   if (isMap) {
@@ -160,8 +154,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     case Section.COLLECTIONS:
       yield put(
         fetchCollectionsRequest({
-          first,
-          skip,
+          first: COLLECTIONS_PER_PAGE,
+          skip: (page - 1) * COLLECTIONS_PER_PAGE,
           creator: address,
           search,
           sortBy: getCollectionSortBy(sortBy)
@@ -169,6 +163,10 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       )
       break
     default:
+      const offset = isLoadMore ? page - 1 : 0
+      const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
+      const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
+
       if (isItems) {
         // TODO: clean up
         const isWearableHead =
