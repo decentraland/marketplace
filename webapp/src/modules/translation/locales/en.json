@@ -93,7 +93,9 @@
     "recently_listed": "Recently listed",
     "cheapest": "Cheapest",
     "no_results": "No results were found.",
-    "clear": "Clear filters"
+    "clear": "Clear filters",
+    "recently_reviewed": "Recently reviewed",
+    "size": "Size"
   },
   "home_page": {
     "title": "Decentraland Marketplace",
@@ -143,6 +145,10 @@
   },
   "on_sale_list": {
     "search": "Search {count} items..."
+  },
+  "collection_list": {
+    "search": "Search {count} collections...",
+    "item_count": "{count} items"
   },
   "asset_page": {
     "actions": {

@@ -78,7 +78,11 @@ const CollectionList = ({
                   </div>
                   <div className={styles.detailsRight}>
                     <div className={styles.name}>{collection.name}</div>
-                    <div className={styles.count}>4 Items</div>
+                    <div className={styles.count}>
+                      {t('collection_list.item_count', {
+                        count: collection.size
+                      })}
+                    </div>
                   </div>
                 </div>
                 {collection.isOnSale && (

@@ -91,7 +91,9 @@
     "recently_listed": "Listados recientemente",
     "cheapest": "Más baratos",
     "no_results": "No se encontraron resultados.",
-    "clear": "Borrar filtros"
+    "clear": "Borrar filtros",
+    "recently_reviewed": "Revisado recientemente",
+    "size": "Tamaño"
   },
   "home_page": {
     "title": "Mercado de Decentraland",
@@ -141,6 +143,10 @@
   },
   "on_sale_list": {
     "search": "Buscar entre {count} items..."
+  },
+  "collection_list": {
+    "search": "Buscar {count} collecciones...",
+    "item_count": "{count} items"
   },
   "asset_page": {
     "actions": {
