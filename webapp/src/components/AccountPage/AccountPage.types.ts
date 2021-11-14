@@ -14,6 +14,7 @@ export type Props = {
   wallet: Wallet | null
   isConnecting: boolean
   isFullscreen?: boolean
+  isValidAddress: boolean
   onRedirect: (path: string) => void
 }
 

@@ -18,7 +18,6 @@ const mapState = (
   ownProps: RouteComponentProps<Params>
 ): MapStateProps => {
   const { address } = ownProps.match.params
-
   return {
     address: address?.toLowerCase(),
     vendor: getVendor(state),

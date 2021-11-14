@@ -5,7 +5,7 @@ import { Icon } from 'semantic-ui-react'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
+import { checkValidAddress, parseAddress } from '../../modules/account/selectors'
 
 import { View } from '../../modules/ui/types'
 import { useTimer } from '../../lib/timer'
@@ -33,28 +33,22 @@ const AccountPage = (props: Props) => {
   const isCurrentAccount =
     address === undefined || (wallet && wallet.address === address)
 
-  const checkValidAddress = async () => {
-    const API_URL = process.env.REACT_APP_MAKERS_PLACE_API_URL!
-    const baseAPI = new BaseAPI(API_URL)
-    const params = {
-      owner_address: address
-    }
-    const response = baseAPI.request('get', '/assets/', params)
-    return await response
-  }
-  const isValidAddress = checkValidAddress()
+  const parsedAddress = parseAddress(address!)
+
   const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
   useEffect(() => {
     if (isCurrentAccount && !isConnecting && !wallet) {
       onRedirect(locations.signIn())
     }
-    isValidAddress.then((res) => {
-      if (res.errors.owner_address && res.errors.owner_address[0] === 'Invalid address.') {
+    parsedAddress.then((res) => {
+      if (!checkValidAddress(res!)) {
         onRedirect(locations.root())
       }
-    }
-    )
-  }, [isCurrentAccount, isConnecting, wallet, onRedirect, isValidAddress])
+      else if (res !== address) {
+        onRedirect(locations.account(res!))
+      }
+    })
+  }, [isCurrentAccount, isConnecting, wallet, onRedirect, address, parsedAddress])
   return (
     <div className="AccountPage">
       <Navbar isFullscreen />
