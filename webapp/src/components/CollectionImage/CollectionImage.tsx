@@ -1,50 +1,47 @@
-import * as React from 'react'
+import React from 'react'
 import { Loader } from 'decentraland-ui'
-import { Props } from './CollectionImage.types'
-import './CollectionImage.css'
-import { AssetImage } from '../AssetImage'
 import { Item } from '@dcl/schemas'
+import { Props } from './CollectionImage.types'
+import { AssetImage } from '../AssetImage'
+import './CollectionImage.css'
 
-export default class CollectionImage extends React.PureComponent<Props> {
-  renderItemRow(items: Item[]) {
-    return items.map((item, index) => <AssetImage key={index} asset={item} />)
-  }
+const CollectionImage = ({ items, isLoading }: Props) => {
+  const row1 = items.slice(0, 2)
+  const row2 = items.slice(2, 4)
+  const rowHeight = { height: row2.length ? '50%' : '100%' }
 
-  render() {
-    let { items, isLoading } = this.props
+  const renderRow = (items: Item[]) =>
+    items.map((item, index) => <AssetImage key={index} asset={item} />)
 
-    const firstItemRow = items.slice(0, 2)
-    const secondItemRow = items.slice(2, 4)
-    const itemRowStyle = { height: secondItemRow.length ? '50%' : '100%' }
-
-    return (
-      <div className="CollectionImage">
-        {isLoading ? (
-          <div className="item-row">
-            <Loader active size="tiny" inline />
-          </div>
-        ) : items.length === 0 ? (
-          <div className="item-row empty" />
-        ) : (
-          <>
-            {firstItemRow.length > 0 ? (
-              <div
-                className={
-                  'item-row' + (items.length === 2 ? ' full-width-image' : '')
-                }
-                style={itemRowStyle}
-              >
-                {this.renderItemRow(firstItemRow)}
-              </div>
-            ) : null}
-            {secondItemRow.length > 0 ? (
-              <div className="item-row" style={itemRowStyle}>
-                {this.renderItemRow(secondItemRow)}
-              </div>
-            ) : null}
-          </>
-        )}
-      </div>
-    )
-  }
+  return (
+    <div className="CollectionImage">
+      {isLoading ? (
+        <div className="item-row">
+          <Loader active size="tiny" inline />
+        </div>
+      ) : items.length === 0 ? (
+        <div className="item-row empty" />
+      ) : (
+        <>
+          {row1.length > 0 ? (
+            <div
+              className={
+                'item-row' + (items.length === 2 ? ' full-width-image' : '')
+              }
+              style={rowHeight}
+            >
+              {renderRow(row1)}
+            </div>
+          ) : null}
+          {row2.length > 0 ? (
+            <div className="item-row" style={rowHeight}>
+              {renderRow(row2)}
+            </div>
+          ) : null}
+        </>
+      )}
+    </div>
+  )
 }
+
+export default React.memo(CollectionImage)
