@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
 import listedSvg from '../../images/listed.svg'
 import { Props } from './CollectionList.types'
@@ -9,16 +9,13 @@ import { COLLECTIONS_PER_PAGE } from '../../modules/routing/utils'
 import CollectionImage from '../CollectionImage'
 
 const CollectionList = ({
-  address,
   collections,
   count,
-  total,
   isLoading,
   search,
   sortBy,
   page,
-  onBrowse,
-  onFetchCollectionTotal
+  onBrowse
 }: Props) => {
   const sortOptions = useRef([
     { value: SortBy.NAME, text: t('filters.name') },
@@ -30,9 +27,17 @@ const CollectionList = ({
     { value: SortBy.SIZE, text: t('filters.size') }
   ])
 
+  // Amount of collections without applying any filters.
+  const [total, setTotal] = useState<number>(0)
+
+  // Total is being set only when it has not been set before.
+  // This is because count will be affected by search so we only need set it
+  // the first time when no filters are applied to display the real total
   useEffect(() => {
-    onFetchCollectionTotal({ creator: address })
-  }, [onFetchCollectionTotal, address])
+    if (!total) {
+      setTotal(count)
+    }
+  }, [count, total])
 
   const pages = Math.ceil(count / COLLECTIONS_PER_PAGE)
 
