@@ -27,26 +27,3 @@ export type FetchCollectionsSuccessAction = ReturnType<
 export type FetchCollectionsFailureAction = ReturnType<
   typeof fetchCollectionsFailure
 >
-
-export const FETCH_COLLECTION_TOTAL_REQUEST = '[Request] Fetch collection total'
-export const FETCH_COLLECTION_TOTAL_SUCCESS = '[Success] Fetch collection total'
-export const FETCH_COLLECTION_TOTAL_FAILURE = '[Failure] Fetch collection total'
-
-export const fetchCollectionTotalRequest = (filters: CollectionFilters) =>
-  action(FETCH_COLLECTION_TOTAL_REQUEST, { filters })
-export const fetchCollectionTotalSuccess = (total: number) =>
-  action(FETCH_COLLECTION_TOTAL_SUCCESS, { total })
-export const fetchCollectionTotalFailure = (
-  filters: CollectionFilters,
-  error: string
-) => action(FETCH_COLLECTION_TOTAL_FAILURE, { error, filters })
-
-export type FetchCollectionTotalRequestAction = ReturnType<
-  typeof fetchCollectionTotalRequest
->
-export type FetchCollectionTotalSuccessAction = ReturnType<
-  typeof fetchCollectionTotalSuccess
->
-export type FetchCollectionTotalFailureAction = ReturnType<
-  typeof fetchCollectionTotalFailure
->

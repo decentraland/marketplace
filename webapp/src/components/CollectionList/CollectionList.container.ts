@@ -4,8 +4,7 @@ import { FETCH_COLLECTIONS_REQUEST } from '../../modules/collection/actions'
 import {
   getCollections,
   getCount,
-  getLoading,
-  getTotal
+  getLoading
 } from '../../modules/collection/selectors'
 import { RootState } from '../../modules/reducer'
 import { browse } from '../../modules/routing/actions'
@@ -20,7 +19,6 @@ import {
 const mapState = (state: RootState): MapStateProps => ({
   collections: getCollections(state),
   count: getCount(state),
-  total: getTotal(state),
   isLoading: isLoadingType(getLoading(state), FETCH_COLLECTIONS_REQUEST),
   search: getSearch(state),
   sortBy: getSortBy(state),

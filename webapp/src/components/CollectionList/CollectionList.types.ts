@@ -6,7 +6,6 @@ import { SortBy } from '../../modules/routing/types'
 export type Props = {
   collections: Collection[]
   count: number
-  total: number
   isLoading: boolean
   search: string
   page: number
@@ -16,7 +15,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'collections' | 'count' | 'total' | 'isLoading' | 'search' | 'sortBy' | 'page'
+  'collections' | 'count' | 'isLoading' | 'search' | 'sortBy' | 'page'
 >
 
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
