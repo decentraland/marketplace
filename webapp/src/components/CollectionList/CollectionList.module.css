@@ -11,9 +11,6 @@
   justify-content: center;
 }
 
-.card {
-}
-
 .cardContent {
   padding: 24px !important;
 }
@@ -30,10 +27,8 @@
 .image {
   height: 72px;
   width: 72px;
-  background-color: red;
-}
-
-.detailsRight {
+  overflow: hidden;
+  border-radius: 8px;
 }
 
 .name {

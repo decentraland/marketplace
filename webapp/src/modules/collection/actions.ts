@@ -5,8 +5,10 @@ export const FETCH_COLLECTIONS_REQUEST = '[Request] Fetch collections'
 export const FETCH_COLLECTIONS_SUCCESS = '[Success] Fetch collections'
 export const FETCH_COLLECTIONS_FAILURE = '[Failure] Fetch collections'
 
-export const fetchCollectionsRequest = (filters: CollectionFilters) =>
-  action(FETCH_COLLECTIONS_REQUEST, { filters })
+export const fetchCollectionsRequest = (
+  filters: CollectionFilters,
+  shouldFetchItems?: boolean
+) => action(FETCH_COLLECTIONS_REQUEST, { filters, shouldFetchItems })
 export const fetchCollectionsSuccess = (
   collections: Collection[],
   count: number

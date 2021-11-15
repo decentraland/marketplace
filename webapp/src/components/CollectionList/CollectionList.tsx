@@ -6,6 +6,7 @@ import styles from './CollectionList.module.css'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { SortBy } from '../../modules/routing/types'
 import { COLLECTIONS_PER_PAGE } from '../../modules/routing/utils'
+import CollectionImage from '../CollectionImage'
 
 const CollectionList = ({
   address,
@@ -74,7 +75,11 @@ const CollectionList = ({
               <Card.Content className={styles.cardContent}>
                 <div className={styles.detailsContainer}>
                   <div className={styles.detailsLeft}>
-                    <div className={styles.image}></div>
+                    <div className={styles.image}>
+                      <CollectionImage
+                        collectionId={collection.contractAddress}
+                      />
+                    </div>
                   </div>
                   <div className={styles.detailsRight}>
                     <div className={styles.name}>{collection.name}</div>

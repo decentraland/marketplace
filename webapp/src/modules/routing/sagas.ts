@@ -153,13 +153,16 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       break
     case Section.COLLECTIONS:
       yield put(
-        fetchCollectionsRequest({
-          first: COLLECTIONS_PER_PAGE,
-          skip: (page - 1) * COLLECTIONS_PER_PAGE,
-          creator: address,
-          search,
-          sortBy: getCollectionSortBy(sortBy)
-        })
+        fetchCollectionsRequest(
+          {
+            first: COLLECTIONS_PER_PAGE,
+            skip: (page - 1) * COLLECTIONS_PER_PAGE,
+            creator: address,
+            search,
+            sortBy: getCollectionSortBy(sortBy)
+          },
+          true
+        )
       )
       break
     default:
