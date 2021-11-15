@@ -4,6 +4,7 @@ import { Item } from '@dcl/schemas'
 import { Props } from './CollectionImage.types'
 import { AssetImage } from '../AssetImage'
 import './CollectionImage.css'
+import classNames from 'classnames'
 
 const CollectionImage = ({ items, isLoading }: Props) => {
   const row1 = items.slice(0, 2)
@@ -25,9 +26,10 @@ const CollectionImage = ({ items, isLoading }: Props) => {
         <>
           {row1.length > 0 ? (
             <div
-              className={
-                'item-row' + (items.length === 2 ? ' full-width-image' : '')
-              }
+              className={classNames(
+                'item-row',
+                items.length === 2 && 'full-width-image'
+              )}
               style={rowHeight}
             >
               {renderRow(row1)}
