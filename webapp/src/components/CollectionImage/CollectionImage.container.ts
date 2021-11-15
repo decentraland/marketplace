@@ -12,9 +12,11 @@ import {
   FETCH_ITEM_REQUEST
 } from '../../modules/item/actions'
 
-const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const { collectionId } = ownProps
-  const items = getItemsByContractAddress(state)[collectionId] || []
+const mapState = (
+  state: RootState,
+  { contractAddress }: OwnProps
+): MapStateProps => {
+  const items = getItemsByContractAddress(state)[contractAddress] || []
   return {
     items,
     isLoading:
@@ -24,6 +26,4 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   }
 }
 
-const mapDispatch = () => ({})
-
-export default connect(mapState, mapDispatch)(CollectionImage)
+export default connect(mapState)(CollectionImage)

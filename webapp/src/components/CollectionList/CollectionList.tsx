@@ -77,7 +77,7 @@ const CollectionList = ({
                   <div className={styles.detailsLeft}>
                     <div className={styles.image}>
                       <CollectionImage
-                        collectionId={collection.contractAddress}
+                        contractAddress={collection.contractAddress}
                       />
                     </div>
                   </div>

@@ -1,10 +1,10 @@
 import { Item } from '@dcl/schemas'
 
 export type Props = {
-  collectionId: string
+  contractAddress: string
   items: Item[]
   isLoading: boolean
 }
 
 export type MapStateProps = Pick<Props, 'items' | 'isLoading'>
-export type OwnProps = Pick<Props, 'collectionId'>
+export type OwnProps = Pick<Props, 'contractAddress'>
