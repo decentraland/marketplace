@@ -1,24 +1,16 @@
 import { Network, Rarity } from '@dcl/schemas'
 import { getLocation, push } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
-import { call, select, fork } from 'redux-saga/effects'
+import { call, select } from 'redux-saga/effects'
 import { AssetType } from '../asset/types'
-import { fetchItemsRequest } from '../item/actions'
-import { fetchNFTsRequest } from '../nft/actions'
 import { WearableGender } from '../nft/wearable/types'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
-import { MAX_QUERY_SIZE } from '../vendor/api'
-import { Section } from '../vendor/decentraland'
-import { getAddress } from '../wallet/selectors'
-import { browse, clearFilters } from './actions'
+import { clearFilters } from './actions'
 import {
   buildBrowseURL,
   fetchAssetsFromRoute,
   getCurrentBrowseOptions,
-  getNewBrowseOptions,
-  handleBrowse,
-  handleOnSaleBrowse,
   routingSaga
 } from './sagas'
 import { BrowseOptions, SortBy } from './types'
