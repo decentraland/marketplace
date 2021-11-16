@@ -28,7 +28,8 @@
     "item": "Item",
     "type": "Tipo",
     "sale_type": "Tipo de venta",
-    "sell_price": "Precio de venta"
+    "sell_price": "Precio de venta",
+    "no_results": "Sin resultados"
   },
   "vendors": {
     "decentraland": "Decentraland",

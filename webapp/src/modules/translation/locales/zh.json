@@ -28,7 +28,8 @@
     "item": "项目",
     "type": "类型",
     "sale_type": "销售类型",
-    "sell_price": "销售价格"
+    "sell_price": "销售价格",
+    "no_results": "无结果"
   },
   "vendors": {
     "decentraland": "Decentraland",
