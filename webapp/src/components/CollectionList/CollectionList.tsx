@@ -75,32 +75,40 @@ const CollectionList = ({
         </>
       ) : (
         <>
-          {collections.map(collection => (
-            <Card key={collection.urn} className={styles.card} fluid>
-              <Card.Content className={styles.cardContent}>
-                <div className={styles.detailsContainer}>
-                  <div className={styles.detailsLeft}>
-                    <div className={styles.image}>
-                      <CollectionImage
-                        contractAddress={collection.contractAddress}
-                      />
+          {collections.length === 0 ? (
+            <div className={styles.empty}>{t('global.no_results')}</div>
+          ) : (
+            collections.map(collection => (
+              <Card key={collection.urn} className={styles.card} fluid>
+                <Card.Content className={styles.cardContent}>
+                  <div className={styles.detailsContainer}>
+                    <div className={styles.detailsLeft}>
+                      <div className={styles.image}>
+                        <CollectionImage
+                          contractAddress={collection.contractAddress}
+                        />
+                      </div>
+                    </div>
+                    <div className={styles.detailsRight}>
+                      <div className={styles.name}>{collection.name}</div>
+                      <div className={styles.count}>
+                        {t('collection_list.item_count', {
+                          count: collection.size
+                        })}
+                      </div>
                     </div>
                   </div>
-                  <div className={styles.detailsRight}>
-                    <div className={styles.name}>{collection.name}</div>
-                    <div className={styles.count}>
-                      {t('collection_list.item_count', {
-                        count: collection.size
-                      })}
-                    </div>
-                  </div>
-                </div>
-                {collection.isOnSale && (
-                  <img className={styles.listed} src={listedSvg} alt="listed" />
-                )}
-              </Card.Content>
-            </Card>
-          ))}
+                  {collection.isOnSale && (
+                    <img
+                      className={styles.listed}
+                      src={listedSvg}
+                      alt="listed"
+                    />
+                  )}
+                </Card.Content>
+              </Card>
+            ))
+          )}
           {hasPagination && (
             <div className={styles.pagination}>
               <Pagination
