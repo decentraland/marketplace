@@ -84,6 +84,7 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
               ))}
             </Table.Body>
           </Table>
+          {<div className={styles.empty}>{t('global.no_results')}</div>}
           {showPagination && (
             <div className={styles.pagination}>
               <Pagination
