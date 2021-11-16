@@ -108,6 +108,11 @@
     "home_land": "Parcels and Estates",
     "home_ens": "Names"
   },
+  "collection_page": {
+    "unlist_from_market": "Unlist from market",
+    "edit_in_builder": "Edit in builder",
+    "on_sale": "On Sale"
+  },
   "partners_page": {
     "partners": "Partners",
     "latest_from": "Latest from {vendor}"
