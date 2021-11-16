@@ -11,6 +11,7 @@ export const locations = {
   bids: () => '/bids',
   lands: () => '/lands',
   collectibles: () => '/collectibles',
+  collection: (contractAddress: string) => `/collections/${contractAddress}`,
   browse: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
