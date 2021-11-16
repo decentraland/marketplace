@@ -18,8 +18,13 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import styles from './CollectionPage.module.css'
+import { Props } from './CollectionPage.types'
 
-const CollectionPage = () => {
+const CollectionPage = ({
+  collection,
+  // items,
+  onBack
+}: Props) => {
   return (
     <div>
       <Navbar isFullscreen />
@@ -27,12 +32,12 @@ const CollectionPage = () => {
       <Page className={styles.page}>
         <Section>
           <Column>
-            <Back absolute />
+            <Back absolute onClick={onBack} />
             <Narrow>
               <Row stacked>
                 <Column>
                   <Row>
-                    <Header size="large">Season 2</Header>
+                    <Header size="large">{collection.name}</Header>
                     <Badge color={Color.SUMMER_RED}>
                       <Icon name="tag" />
                       <span className={styles.badge}>
