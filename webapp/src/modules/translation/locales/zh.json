@@ -28,7 +28,8 @@
     "item": "项目",
     "type": "类型",
     "sale_type": "销售类型",
-    "sell_price": "销售价格"
+    "sell_price": "销售价格",
+    "no_results": "无结果"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -91,7 +92,9 @@
     "recently_listed": "最新上市",
     "cheapest": "最低价",
     "no_results": "未找到结果。",
-    "clear": "清除过滤器"
+    "clear": "清除过滤器",
+    "recently_reviewed": "最近审查",
+    "size": "大小"
   },
   "home_page": {
     "title": "Decentraland Marketplace",
@@ -141,6 +144,10 @@
   },
   "on_sale_list": {
     "search": "搜索 {count} 项目..."
+  },
+  "collection_list": {
+    "search": "搜索 {count} 个收藏品...",
+    "item_count": "{count} 项"
   },
   "asset_page": {
     "actions": {

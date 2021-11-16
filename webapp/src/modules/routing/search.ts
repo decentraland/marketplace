@@ -1,4 +1,9 @@
-import { Network, NFTCategory, WearableCategory } from '@dcl/schemas'
+import {
+  CollectionSortBy,
+  Network,
+  NFTCategory,
+  WearableCategory
+} from '@dcl/schemas'
 import { View } from '../ui/types'
 import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
@@ -165,6 +170,21 @@ export function getItemSortBy(sortBy: SortBy): ItemSortBy {
       return ItemSortBy.RECENTLY_REVIEWED
     default:
       return ItemSortBy.RECENTLY_REVIEWED
+  }
+}
+
+export function getCollectionSortBy(sortBy: SortBy): CollectionSortBy {
+  switch (sortBy) {
+    case SortBy.NAME:
+      return CollectionSortBy.NAME
+    case SortBy.NEWEST:
+      return CollectionSortBy.NEWEST
+    case SortBy.RECENTLY_REVIEWED:
+      return CollectionSortBy.RECENTLY_REVIEWED
+    case SortBy.SIZE:
+      return CollectionSortBy.SIZE
+    default:
+      return CollectionSortBy.NEWEST
   }
 }
 

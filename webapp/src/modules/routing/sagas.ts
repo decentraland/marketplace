@@ -1,4 +1,4 @@
-import { takeEvery, put, select, call, fork } from 'redux-saga/effects'
+import { takeEvery, put, select, call } from 'redux-saga/effects'
 import { push, getLocation } from 'connected-react-router'
 import { NFTCategory } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
@@ -31,7 +31,8 @@ import {
   getDefaultOptionsByView,
   getSearchWearableCategory,
   getItemSortBy,
-  getAssetOrderBy
+  getAssetOrderBy,
+  getCollectionSortBy
 } from './search'
 import {
   getPage,
@@ -52,9 +53,10 @@ import {
   setIsLoadMore,
   CLEAR_FILTERS
 } from './actions'
-import { BrowseOptions, Sections } from './types'
-import { isNFTSection } from '../vendor/decentraland/routing/utils'
+import { BrowseOptions, Sections, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
+import { fetchCollectionsRequest } from '../collection/actions'
+import { COLLECTIONS_PER_PAGE } from './utils'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -92,44 +94,25 @@ export function* handleBrowse(action: BrowseAction) {
   )
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
-  if (isNFTSection(options.section as Section)) {
-    yield fetchAssetsFromRoute(options)
-  } else {
-    switch (options.section) {
-      case Section.ON_SALE:
-        yield fork(handleOnSaleBrowse, options)
-    }
-  }
-
+  yield fetchAssetsFromRoute(options)
   yield put(push(buildBrowseURL(pathname, options)))
 }
 
 // ------------------------------------------------
 // Utility functions, not handlers
 
-export function* handleOnSaleBrowse(options: BrowseOptions) {
-  const address: string = yield select(getWalletAddress)
-
-  yield put(
-    fetchItemsRequest({
-      filters: { creator: address, isOnSale: true }
-    })
-  )
-
-  yield put(
-    fetchNFTsRequest({
-      view: options.view!,
-      vendor: VendorName.DECENTRALAND,
-      params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
-    })
-  )
-}
-
 export function buildBrowseURL(
   pathname: string,
   browseOptions: BrowseOptions
 ): string {
-  const params = getSearchParams(browseOptions)
+  let params: URLSearchParams | undefined
+
+  if (browseOptions.section === Section.ON_SALE) {
+    params = getSearchParams({ section: Section.ON_SALE })
+  } else {
+    params = getSearchParams(browseOptions)
+  }
+
   return params ? `${pathname}?${params.toString()}` : pathname
 }
 
@@ -146,68 +129,78 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const isLoadMore = view === View.LOAD_MORE
 
-  const offset = isLoadMore ? page - 1 : 0
-  const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
-  const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
-
   yield put(setIsLoadMore(isLoadMore))
 
   if (isMap) {
     yield put(setView(view))
   }
-  if (isItems) {
-    // TODO: clean up
-    const isWearableHead =
-      section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
-    const isWearableAccessory =
-      section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESORIES
 
-    const wearableCategory = !isWearableAccessory
-      ? getSearchWearableCategory(section!)
-      : undefined
+  switch (section) {
+    case Section.ON_SALE:
+      yield handleFetchOnSale(address, options.view!)
+      break
+    case Section.COLLECTIONS:
+      yield handleFetchCollections(page, address, sortBy, search)
+      break
+    default:
+      const offset = isLoadMore ? page - 1 : 0
+      const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
+      const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
-    const { wearableRarities, wearableGenders } = options
+      if (isItems) {
+        // TODO: clean up
+        const isWearableHead =
+          section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
+        const isWearableAccessory =
+          section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESORIES
 
-    yield put(
-      fetchItemsRequest({
-        view,
-        page,
-        filters: {
-          first,
-          skip,
-          sortBy: getItemSortBy(sortBy),
-          isOnSale: onlyOnSale,
-          creator: address,
-          wearableCategory,
-          isWearableHead,
-          isWearableAccessory,
-          search,
-          rarities: wearableRarities,
-          contractAddress: contracts && contracts[0],
-          wearableGenders
-        }
-      })
-    )
-  } else {
-    const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
-    const category = getCategoryFromSection(section)
-    yield put(
-      fetchNFTsRequest({
-        vendor,
-        view,
-        params: {
-          first,
-          skip,
-          orderBy,
-          orderDirection,
-          onlyOnSale,
-          address,
-          category,
-          search
-        },
-        filters: getFilters(vendor, options) // TODO: move to routing
-      })
-    )
+        const wearableCategory = !isWearableAccessory
+          ? getSearchWearableCategory(section!)
+          : undefined
+
+        const { wearableRarities, wearableGenders } = options
+
+        yield put(
+          fetchItemsRequest({
+            view,
+            page,
+            filters: {
+              first,
+              skip,
+              sortBy: getItemSortBy(sortBy),
+              isOnSale: onlyOnSale,
+              creator: address,
+              wearableCategory,
+              isWearableHead,
+              isWearableAccessory,
+              search,
+              rarities: wearableRarities,
+              contractAddress: contracts && contracts[0],
+              wearableGenders
+            }
+          })
+        )
+      } else {
+        const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
+        const category = getCategoryFromSection(section)
+        yield put(
+          fetchNFTsRequest({
+            vendor,
+            view,
+            params: {
+              first,
+              skip,
+              orderBy,
+              orderDirection,
+              onlyOnSale,
+              address,
+              category,
+              search
+            },
+            filters: getFilters(vendor, options) // TODO: move to routing
+          })
+        )
+      }
   }
 }
 
@@ -261,6 +254,42 @@ export function* getNewBrowseOptions(
     view,
     vendor
   }
+}
+
+function* handleFetchOnSale(address: string, view: View) {
+  yield put(
+    fetchItemsRequest({
+      filters: { creator: address, isOnSale: true }
+    })
+  )
+
+  yield put(
+    fetchNFTsRequest({
+      view,
+      vendor: VendorName.DECENTRALAND,
+      params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
+    })
+  )
+}
+
+function* handleFetchCollections(
+  page: number,
+  creator: string,
+  sortBy: SortBy,
+  search?: string
+) {
+  yield put(
+    fetchCollectionsRequest(
+      {
+        first: COLLECTIONS_PER_PAGE,
+        skip: (page - 1) * COLLECTIONS_PER_PAGE,
+        creator,
+        search,
+        sortBy: getCollectionSortBy(sortBy)
+      },
+      true
+    )
+  )
 }
 
 function* getAddress() {

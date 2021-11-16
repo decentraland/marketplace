@@ -19,6 +19,7 @@ import { ToggleBox } from './ToggleBox'
 import classNames from 'classnames'
 import { isAccountView } from '../../modules/ui/utils'
 import OnSaleList from '../OnSaleList'
+import CollectionList from '../CollectionList'
 import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
@@ -155,7 +156,7 @@ const AssetBrowse = (props: Props) => {
 
   switch (section) {
     case DecentralandSection.COLLECTIONS:
-      right = <div>COLLECTIONS</div>
+      right = <CollectionList />
       break
     case DecentralandSection.ON_SALE:
       right = <OnSaleList />
