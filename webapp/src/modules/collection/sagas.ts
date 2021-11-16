@@ -20,19 +20,19 @@ export function* handleFetchCollectionsRequest(
   const { filters, shouldFetchItems } = action.payload
 
   try {
-    const res: CollectionResponse = yield call(
+    const { data: collections, total }: CollectionResponse = yield call(
       [collectionAPI, collectionAPI.fetch],
       filters
     )
 
-    yield put(fetchCollectionsSuccess(res.data, res.total))
+    yield put(fetchCollectionsSuccess(collections, total))
 
     if (shouldFetchItems) {
       const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(
         getItemsByContractAddress
       )
 
-      for (let collection of res.data) {
+      for (let collection of collections) {
         const items = itemsByContractAddress[collection.contractAddress]
 
         if (!items || items.length !== collection.size) {
