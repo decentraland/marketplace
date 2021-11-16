@@ -53,7 +53,7 @@ import {
   setIsLoadMore,
   CLEAR_FILTERS
 } from './actions'
-import { BrowseOptions, Sections } from './types'
+import { BrowseOptions, Sections, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
 import { fetchCollectionsRequest } from '../collection/actions'
 import { COLLECTIONS_PER_PAGE } from './utils'
@@ -137,33 +137,10 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   switch (section) {
     case Section.ON_SALE:
-      yield put(
-        fetchItemsRequest({
-          filters: { creator: address, isOnSale: true }
-        })
-      )
-
-      yield put(
-        fetchNFTsRequest({
-          view: options.view!,
-          vendor: VendorName.DECENTRALAND,
-          params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
-        })
-      )
+      yield handleFetchOnSale(address, options.view!)
       break
     case Section.COLLECTIONS:
-      yield put(
-        fetchCollectionsRequest(
-          {
-            first: COLLECTIONS_PER_PAGE,
-            skip: (page - 1) * COLLECTIONS_PER_PAGE,
-            creator: address,
-            search,
-            sortBy: getCollectionSortBy(sortBy)
-          },
-          true
-        )
-      )
+      yield handleFetchCollections(page, address, sortBy, search)
       break
     default:
       const offset = isLoadMore ? page - 1 : 0
@@ -277,6 +254,42 @@ export function* getNewBrowseOptions(
     view,
     vendor
   }
+}
+
+function* handleFetchOnSale(address: string, view: View) {
+  yield put(
+    fetchItemsRequest({
+      filters: { creator: address, isOnSale: true }
+    })
+  )
+
+  yield put(
+    fetchNFTsRequest({
+      view,
+      vendor: VendorName.DECENTRALAND,
+      params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
+    })
+  )
+}
+
+function* handleFetchCollections(
+  page: number,
+  creator: string,
+  sortBy: SortBy,
+  search?: string
+) {
+  yield put(
+    fetchCollectionsRequest(
+      {
+        first: COLLECTIONS_PER_PAGE,
+        skip: (page - 1) * COLLECTIONS_PER_PAGE,
+        creator,
+        search,
+        sortBy: getCollectionSortBy(sortBy)
+      },
+      true
+    )
+  )
 }
 
 function* getAddress() {
