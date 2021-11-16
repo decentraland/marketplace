@@ -19,7 +19,7 @@ export type CollectionState = {
   error: string | null
 }
 
-const INITIAL_STATE: CollectionState = {
+export const INITIAL_STATE: CollectionState = {
   data: {},
   count: 0,
   loading: [],
