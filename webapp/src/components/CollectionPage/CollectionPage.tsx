@@ -24,6 +24,7 @@ import { AssetImage } from '../AssetImage'
 import { Mana } from '../Mana'
 import { formatMANA } from '../../lib/mana'
 import styles from './CollectionPage.module.css'
+import { Rarity } from '@dcl/schemas'
 
 const CollectionPage = (props: Props) => {
   const { collection, items, isLoading, onFetchCollections, onBack } = props
@@ -107,7 +108,8 @@ const CollectionPage = (props: Props) => {
                           {t(`wearable.rarity.${item.rarity}`)}
                         </Table.Cell>
                         <Table.Cell>
-                          {item.available}/{1000}
+                          {item.available.toLocaleString()}/
+                          {Rarity.getMaxSupply(item.rarity).toLocaleString()}
                         </Table.Cell>
                         <Table.Cell>
                           <Mana network={item.network} inline>
