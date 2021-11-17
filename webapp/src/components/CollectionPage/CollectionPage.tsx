@@ -1,8 +1,4 @@
 import React, { useEffect } from 'react'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
-import { Navigation } from '../Navigation'
-import { NavigationTab } from '../Navigation/Navigation.types'
 import {
   Back,
   Column,
@@ -19,22 +15,22 @@ import {
   Table
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import styles from './CollectionPage.module.css'
+import { Navbar } from '../Navbar'
+import { Footer } from '../Footer'
+import { Navigation } from '../Navigation'
+import { NavigationTab } from '../Navigation/Navigation.types'
 import { Props } from './CollectionPage.types'
 import { AssetImage } from '../AssetImage'
 import { Mana } from '../Mana'
 import { formatMANA } from '../../lib/mana'
+import styles from './CollectionPage.module.css'
 
-const CollectionPage = ({
-  collection,
-  items,
-  isLoading,
-  onInit,
-  onBack
-}: Props) => {
+const CollectionPage = (props: Props) => {
+  const { collection, items, isLoading, onFetchCollections, onBack } = props
+
   useEffect(() => {
-    onInit()
-  }, [onInit])
+    onFetchCollections()
+  }, [onFetchCollections])
 
   return (
     <div>
@@ -43,6 +39,8 @@ const CollectionPage = ({
       <Page className={styles.page}>
         {isLoading ? (
           <Loader size="massive" active />
+        ) : !collection ? (
+          <div>No Collection</div>
         ) : (
           <>
             <Section>
