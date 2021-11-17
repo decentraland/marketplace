@@ -48,8 +48,7 @@
 .listed {
   position: absolute;
   right: 24px;
-  width: 32px;
-  height: 32px;
+  top: 24px;
 }
 
 .empty {
@@ -57,4 +56,10 @@
   font-size: 16px;
   text-align: center;
   color: var(--secondary-text);
+}
+
+.link:hover,
+.link {
+  color: unset;
+  font-weight: unset;
 }

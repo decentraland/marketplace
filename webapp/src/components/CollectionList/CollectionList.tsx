@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
+import { Link } from 'react-router-dom'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import listedSvg from '../../images/listed.svg'
 import { Props } from './CollectionList.types'
-import styles from './CollectionList.module.css'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { SortBy } from '../../modules/routing/types'
 import { COLLECTIONS_PER_PAGE } from '../../modules/routing/utils'
 import CollectionImage from '../CollectionImage'
+import { locations } from '../../modules/routing/locations'
+import styles from './CollectionList.module.css'
 
 const CollectionList = ({
   collections,
@@ -79,33 +81,39 @@ const CollectionList = ({
             <div className={styles.empty}>{t('global.no_results')}</div>
           ) : (
             collections.map(collection => (
-              <Card key={collection.urn} className={styles.card} fluid>
-                <Card.Content className={styles.cardContent}>
-                  <div className={styles.detailsContainer}>
-                    <div className={styles.detailsLeft}>
-                      <div className={styles.image}>
-                        <CollectionImage
-                          contractAddress={collection.contractAddress}
-                        />
+              <Card className={styles.card} fluid>
+                <Link
+                  className={styles.link}
+                  key={collection.contractAddress}
+                  to={locations.collection(collection.contractAddress)}
+                >
+                  <Card.Content className={styles.cardContent}>
+                    <div className={styles.detailsContainer}>
+                      <div className={styles.detailsLeft}>
+                        <div className={styles.image}>
+                          <CollectionImage
+                            contractAddress={collection.contractAddress}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.detailsRight}>
+                        <div className={styles.name}>{collection.name}</div>
+                        <div className={styles.count}>
+                          {t('collection_list.item_count', {
+                            count: collection.size
+                          })}
+                        </div>
                       </div>
                     </div>
-                    <div className={styles.detailsRight}>
-                      <div className={styles.name}>{collection.name}</div>
-                      <div className={styles.count}>
-                        {t('collection_list.item_count', {
-                          count: collection.size
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                  {collection.isOnSale && (
-                    <img
-                      className={styles.listed}
-                      src={listedSvg}
-                      alt="listed"
-                    />
-                  )}
-                </Card.Content>
+                    {collection.isOnSale && (
+                      <img
+                        className={styles.listed}
+                        src={listedSvg}
+                        alt="listed"
+                      />
+                    )}
+                  </Card.Content>
+                </Link>
               </Card>
             ))
           )}
