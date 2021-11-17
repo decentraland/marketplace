@@ -51,12 +51,14 @@ const CollectionPage = (props: Props) => {
                     <Column>
                       <Row>
                         <Header size="large">{collection.name}</Header>
-                        <Badge color={Color.SUMMER_RED}>
-                          <Icon name="tag" />
-                          <span className={styles.badge}>
-                            {t('collection_page.on_sale')}
-                          </span>
-                        </Badge>
+                        {collection.isOnSale && (
+                          <Badge color={Color.SUMMER_RED}>
+                            <Icon name="tag" />
+                            <span className={styles.badge}>
+                              {t('collection_page.on_sale')}
+                            </span>
+                          </Badge>
+                        )}
                       </Row>
                     </Column>
                     <Column align="right">
@@ -65,7 +67,9 @@ const CollectionPage = (props: Props) => {
                           {t('collection_page.edit_in_builder')}
                         </Button>
                         <Button primary inverted compact>
-                          {t('collection_page.unlist_from_market')}
+                          {collection.isOnSale
+                            ? t('collection_page.unlist_from_market')
+                            : t('collection_page.list_on_market')}
                         </Button>
                       </Row>
                     </Column>
