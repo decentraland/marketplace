@@ -4,5 +4,6 @@ export type Props = {
   collection: Collection
   items: Item[]
   isLoading: boolean
+  onInit: () => void
   onBack: () => void
 }

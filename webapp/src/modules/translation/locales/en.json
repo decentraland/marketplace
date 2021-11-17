@@ -29,7 +29,11 @@
     "type": "Type",
     "sale_type": "Sale type",
     "sell_price": "Sell price",
-    "no_results": "No results"
+    "no_results": "No results",
+    "category": "Category",
+    "rarity": "Rarity",
+    "stock": "Stock",
+    "price": "Price"
   },
   "vendors": {
     "decentraland": "Decentraland",

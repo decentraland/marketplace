@@ -7,10 +7,11 @@ const mapState = () => ({})
 const mapDispatch = () => ({})
 
 const mergeProps = (): Props => ({
-  onBack: () => {},
   collection: { name: 'Season 1' } as any,
   items: [],
-  isLoading: true
+  isLoading: false,
+  onInit: () => {},
+  onBack: () => {}
 })
 
 export default connect(mapState, mapDispatch, mergeProps)(CollectionPage)
