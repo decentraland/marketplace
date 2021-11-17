@@ -27,3 +27,13 @@
 .title {
   font-weight: 600;
 }
+
+.ellipsis {
+  visibility: hidden;
+  color: var(--summer-red);
+  cursor: pointer;
+}
+
+.row:hover .ellipsis {
+  visibility: visible;
+}

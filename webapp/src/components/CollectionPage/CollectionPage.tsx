@@ -12,7 +12,8 @@ import {
   Color,
   Button,
   Loader,
-  Table
+  Table,
+  Dropdown
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
@@ -90,11 +91,12 @@ const CollectionPage = (props: Props) => {
                       <Table.HeaderCell>{t('global.rarity')}</Table.HeaderCell>
                       <Table.HeaderCell>{t('global.stock')}</Table.HeaderCell>
                       <Table.HeaderCell>{t('global.price')}</Table.HeaderCell>
+                      <Table.HeaderCell />
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
                     {items.map(item => (
-                      <Table.Row>
+                      <Table.Row className={styles.row}>
                         <Table.Cell>
                           <div className={styles.firstCell}>
                             <div className={styles.imageContainer}>
@@ -115,6 +117,22 @@ const CollectionPage = (props: Props) => {
                           <Mana network={item.network} inline>
                             {formatMANA(item.price)}
                           </Mana>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <Dropdown
+                            className={styles.ellipsis}
+                            icon="ellipsis horizontal"
+                            direction="left"
+                          >
+                            <Dropdown.Menu>
+                              <Dropdown.Item
+                                text={t('collection_page.edit_price')}
+                              />
+                              <Dropdown.Item
+                                text={t('collection_page.mint_item')}
+                              />
+                            </Dropdown.Menu>
+                          </Dropdown>
                         </Table.Cell>
                       </Table.Row>
                     ))}
