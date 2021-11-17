@@ -1,0 +1,10 @@
+.badge {
+  color: white;
+  width: 32px;
+  height: 32px;
+}
+
+.icon {
+  position: relative;
+  right: 2px;
+}

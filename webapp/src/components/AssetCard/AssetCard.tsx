@@ -12,7 +12,7 @@ import { WearableTags } from './WearableTags'
 import { ENSTags } from './ENSTags'
 import { AssetImage } from '../AssetImage'
 import { Props } from './AssetCard.types'
-import listedSvg from '../../images/listed.svg'
+import ListedBadge from '../ListedBadge'
 import './AssetCard.css'
 
 const AssetCard = (props: Props) => {
@@ -24,9 +24,7 @@ const AssetCard = (props: Props) => {
   return (
     <Card className="AssetCard" link as={Link} to={getAssetUrl(asset)}>
       <AssetImage asset={asset} showMonospace />
-      {showListedTag && (
-        <img className={'listed-tag'} src={listedSvg} alt="listed tag" />
-      )}
+      {showListedTag && <ListedBadge className="listed-badge" />}
       <Card.Content>
         <Card.Header>
           <div className="title">{title}</div>

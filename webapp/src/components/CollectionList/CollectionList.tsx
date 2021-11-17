@@ -2,13 +2,13 @@ import React, { useRef } from 'react'
 import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import listedSvg from '../../images/listed.svg'
 import { Props } from './CollectionList.types'
 import { SortBy } from '../../modules/routing/types'
 import { COLLECTIONS_PER_PAGE } from '../../modules/routing/utils'
 import CollectionImage from '../CollectionImage'
 import { locations } from '../../modules/routing/locations'
 import styles from './CollectionList.module.css'
+import ListedBadge from '../ListedBadge'
 
 const CollectionList = ({
   collections,
@@ -96,11 +96,7 @@ const CollectionList = ({
                       </div>
                     </div>
                     {collection.isOnSale && (
-                      <img
-                        className={styles.listed}
-                        src={listedSvg}
-                        alt="listed"
-                      />
+                      <ListedBadge className={styles.listedBadge} />
                     )}
                   </Card.Content>
                 </Link>
