@@ -27,8 +27,8 @@ const OnSaleListElement = ({ nft, item, order }: Props) => {
   return (
     <Table.Row>
       <Table.Cell>
-        <div className={styles['first-cell']}>
-          <div className={styles['image-container']}>
+        <div className={styles.firstCell}>
+          <div className={styles.imageContainer}>
             <AssetImage asset={item || nft!} isSmall />
           </div>
           <div>

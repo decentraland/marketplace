@@ -1,9 +1,9 @@
-.first-cell {
+.firstCell {
   display: flex;
   align-items: center;
 }
 
-.image-container {
+.imageContainer {
   display: flex;
   justify-content: center;
   align-items: center;
