@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -29,18 +29,6 @@ const CollectionList = ({
     { value: SortBy.SIZE, text: t('filters.size') }
   ])
 
-  // Amount of collections without applying any filters.
-  const [total, setTotal] = useState<number>(0)
-
-  // Total is being set only when it has not been set before.
-  // This is because count will be affected by search so we only need set it
-  // the first time when no filters are applied to display the real total
-  useEffect(() => {
-    if (!total) {
-      setTotal(count)
-    }
-  }, [count, total])
-
   const pages = Math.ceil(count / COLLECTIONS_PER_PAGE)
 
   const hasPagination = pages > 1
@@ -56,7 +44,9 @@ const CollectionList = ({
                 onBrowse({ search: newSearch, page: 1 })
               }
             }}
-            placeholder={t('collection_list.search', { count: total })}
+            placeholder={t('collection_list.search', {
+              count: isLoading ? 0 : count
+            })}
           />
         </div>
         <Dropdown
