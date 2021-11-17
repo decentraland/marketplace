@@ -91,15 +91,17 @@ const CollectionPage = (props: Props) => {
                     {items.map(item => (
                       <Table.Row>
                         <Table.Cell>
-                          <div className={styles['first-cell']}>
-                            <div className={styles['image-container']}>
+                          <div className={styles.firstCell}>
+                            <div className={styles.imageContainer}>
                               <AssetImage asset={item} isSmall />
                             </div>
                             <div className={styles.title}>{item.name}</div>
                           </div>
                         </Table.Cell>
                         <Table.Cell>{t(`global.${item.category}`)}</Table.Cell>
-                        <Table.Cell>{t(`global.${item.rarity}`)}</Table.Cell>
+                        <Table.Cell>
+                          {t(`wearable.rarity.${item.rarity}`)}
+                        </Table.Cell>
                         <Table.Cell>
                           {item.available}/{1000}
                         </Table.Cell>
