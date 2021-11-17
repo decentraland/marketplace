@@ -27,11 +27,11 @@ import styles from './CollectionPage.module.css'
 import { Rarity } from '@dcl/schemas'
 
 const CollectionPage = (props: Props) => {
-  const { collection, items, isLoading, onFetchCollections, onBack } = props
+  const { collection, items, isLoading, onFetchCollection, onBack } = props
 
   useEffect(() => {
-    onFetchCollections()
-  }, [onFetchCollections])
+    onFetchCollection()
+  }, [onFetchCollection])
 
   return (
     <div>

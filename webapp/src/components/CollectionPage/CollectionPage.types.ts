@@ -5,9 +5,9 @@ export type Props = {
   collection?: Collection
   items: Item[]
   isLoading: boolean
-  onFetchCollections: () => void
+  onFetchCollection: () => void
   onBack: () => void
 } & RouteChildrenProps
 
 export type MapStateProps = Pick<Props, 'collection' | 'items' | 'isLoading'>
-export type MapDispatchProps = Pick<Props, 'onFetchCollections' | 'onBack'>
+export type MapDispatchProps = Pick<Props, 'onFetchCollection' | 'onBack'>

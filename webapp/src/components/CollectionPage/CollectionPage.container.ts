@@ -37,7 +37,7 @@ const mapDispatch = (
   dispatch: Dispatch,
   ownProps: Props
 ): MapDispatchProps => ({
-  onFetchCollections: () =>
+  onFetchCollection: () =>
     dispatch(
       fetchCollectionsRequest(
         {
