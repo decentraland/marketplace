@@ -28,6 +28,7 @@ export function handleBidCreated(event: BidCreated): void {
   let bid = new Bid(id)
 
   if (nft != null) {
+    bid.bidAddress = event.address
     bid.status = status.OPEN
     bid.category = category
     bid.nftAddress = event.params._tokenAddress
