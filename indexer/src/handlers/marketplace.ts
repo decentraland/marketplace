@@ -28,6 +28,7 @@ export function handleOrderCreated(event: OrderCreated): void {
     let orderId = event.params.id.toHex()
 
     let order = new Order(orderId)
+    order.marketplaceAddress = event.address
     order.status = status.OPEN
     order.category = category
     order.nft = nftId

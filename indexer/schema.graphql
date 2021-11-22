@@ -29,6 +29,7 @@ type Count @entity {
 # we need from each NFT type to the Order, in order to search for them, prefixing them with search_[nft]_[prop]
 type Order @entity {
   id: ID!
+  marketplaceAddress: Bytes!
   category: Category!
   nft: NFT
   nftAddress: Bytes!
@@ -50,6 +51,7 @@ type Order @entity {
 
 type Bid @entity {
   id: ID!
+  bidAddress: Bytes!
   category: Category!
   nft: NFT
   nftAddress: Bytes!
