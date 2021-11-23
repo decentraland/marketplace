@@ -26,8 +26,7 @@ import { Mana } from '../Mana'
 import { formatMANA } from '../../lib/mana'
 import styles from './CollectionPage.module.css'
 import { Rarity } from '@dcl/schemas'
-
-const BUILDER_URL = process.env.REACT_APP_BUILDER_URL
+import { getBuilderCollectionDetailUrl } from './utils'
 
 const CollectionPage = (props: Props) => {
   const { collection, items, isLoading, onFetchCollection, onBack } = props
@@ -37,10 +36,7 @@ const CollectionPage = (props: Props) => {
   }, [onFetchCollection])
 
   const builderCollectionUrl = useMemo(
-    () =>
-      collection && BUILDER_URL
-        ? `${BUILDER_URL}/collections/${collection.contractAddress}`
-        : '',
+    () => getBuilderCollectionDetailUrl(collection?.contractAddress || ''),
     [collection]
   )
 
