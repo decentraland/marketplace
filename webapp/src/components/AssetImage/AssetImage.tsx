@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { NFTCategory, Rarity } from '@dcl/schemas'
-import { Loader } from 'decentraland-ui'
+import { Loader, WearablePreview } from 'decentraland-ui'
 import { LazyImage } from 'react-lazy-images'
 
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
@@ -64,6 +64,24 @@ const AssetImage = (props: Props) => {
     }
 
     case NFTCategory.WEARABLE: {
+      if (isDraggable) {
+        let tokenId = ''
+        let itemId = ''
+        if ('tokenId' in asset) {
+          tokenId = asset.tokenId
+        }
+        if (!tokenId && 'itemId' in asset && asset.itemId) {
+          itemId = asset.itemId
+        }
+        console.log(WearablePreview, asset, tokenId, itemId)
+        return (
+          <WearablePreview
+            contractAddress={asset.contractAddress}
+            tokenId={tokenId}
+            itemId={itemId}
+          />
+        )
+      }
       const [light, dark] = Rarity.getGradient(wearable!.rarity)
       const backgroundImage = `radial-gradient(${light}, ${dark})`
       return (

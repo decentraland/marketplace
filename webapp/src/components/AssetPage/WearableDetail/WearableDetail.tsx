@@ -29,7 +29,7 @@ const WearableDetail = (props: Props) => {
   return (
     <div className="WearableDetail">
       <PageHeader>
-        <AssetImage asset={nft} />
+        <AssetImage asset={nft} isDraggable />
       </PageHeader>
       <Container>
         <Title
@@ -55,10 +55,16 @@ const WearableDetail = (props: Props) => {
         </Row>
         <Row>
           <WearableCollection type={AssetType.NFT} asset={nft} />
-          {nft.issuedId ?
+          {nft.issuedId ? (
             <Stats title={t('global.issue_number')}>
-              <Header>{Number(nft.issuedId).toLocaleString()}<span className="issue-number">/{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}</span></Header>
-            </Stats> : null}
+              <Header>
+                {Number(nft.issuedId).toLocaleString()}
+                <span className="issue-number">
+                  /{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}
+                </span>
+              </Header>
+            </Stats>
+          ) : null}
         </Row>
         <WearableHighlights type={AssetType.ITEM} wearable={wearable} />
         <Bids nft={nft} />
