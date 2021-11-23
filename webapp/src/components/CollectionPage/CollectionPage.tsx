@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import {
   Back,
   Column,
@@ -27,12 +27,22 @@ import { formatMANA } from '../../lib/mana'
 import styles from './CollectionPage.module.css'
 import { Rarity } from '@dcl/schemas'
 
+const BUILDER_URL = process.env.REACT_APP_BUILDER_URL
+
 const CollectionPage = (props: Props) => {
   const { collection, items, isLoading, onFetchCollection, onBack } = props
 
   useEffect(() => {
     onFetchCollection()
   }, [onFetchCollection])
+
+  const builderCollectionUrl = useMemo(
+    () =>
+      collection && BUILDER_URL
+        ? `${BUILDER_URL}/collections/${collection.contractAddress}`
+        : '',
+    [collection]
+  )
 
   return (
     <div>
@@ -65,10 +75,22 @@ const CollectionPage = (props: Props) => {
                     </Column>
                     <Column align="right">
                       <Row align="right">
-                        <Button primary inverted compact>
+                        <Button
+                          primary
+                          inverted
+                          compact
+                          as="a"
+                          href={builderCollectionUrl}
+                        >
                           {t('collection_page.edit_in_builder')}
                         </Button>
-                        <Button primary inverted compact>
+                        <Button
+                          primary
+                          inverted
+                          compact
+                          as="a"
+                          href={builderCollectionUrl}
+                        >
                           {collection.isOnSale
                             ? t('collection_page.unlist_from_market')
                             : t('collection_page.list_on_market')}
@@ -96,7 +118,7 @@ const CollectionPage = (props: Props) => {
                   </Table.Header>
                   <Table.Body>
                     {items.map(item => (
-                      <Table.Row className={styles.row}>
+                      <Table.Row key={item.id} className={styles.row}>
                         <Table.Cell>
                           <div className={styles.firstCell}>
                             <div className={styles.imageContainer}>
@@ -127,9 +149,13 @@ const CollectionPage = (props: Props) => {
                             <Dropdown.Menu>
                               <Dropdown.Item
                                 text={t('collection_page.edit_price')}
+                                as="a"
+                                href={builderCollectionUrl}
                               />
                               <Dropdown.Item
                                 text={t('collection_page.mint_item')}
+                                as="a"
+                                href={builderCollectionUrl}
                               />
                             </Dropdown.Menu>
                           </Dropdown>
