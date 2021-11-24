@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { NFTCategory, Rarity } from '@dcl/schemas'
 import { Center, Loader, WearablePreview } from 'decentraland-ui'
 import { LazyImage } from 'react-lazy-images'
@@ -28,6 +28,7 @@ const AssetImage = (props: Props) => {
   const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(
     isDraggable
   )
+  const handleLoad = useCallback(() => setIsLoadingWearablePreview(false), [])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
@@ -69,14 +70,28 @@ const AssetImage = (props: Props) => {
 
     case NFTCategory.WEARABLE: {
       let wearablePreview = null
+      const isDev = process.env.REACT_APP_NETWORK !== 'mainnet'
+
       if (isDraggable) {
-        let tokenId = ''
-        let itemId = ''
-        if ('tokenId' in asset) {
-          tokenId = asset.tokenId
-        }
-        if (!tokenId && 'itemId' in asset && asset.itemId) {
-          itemId = asset.itemId
+        let component: React.ReactNode
+        if ('itemId' in asset && asset.itemId) {
+          component = (
+            <WearablePreview
+              contractAddress={asset.contractAddress}
+              itemId={asset.itemId}
+              dev={isDev}
+              onLoad={handleLoad}
+            />
+          )
+        } else if ('tokenId' in asset && asset.tokenId) {
+          component = (
+            <WearablePreview
+              contractAddress={asset.contractAddress}
+              tokenId={asset.tokenId}
+              dev={isDev}
+              onLoad={handleLoad}
+            />
+          )
         }
         wearablePreview = (
           <>
@@ -85,16 +100,7 @@ const AssetImage = (props: Props) => {
                 <Loader active size="large" />
               </Center>
             )}
-            <WearablePreview
-              contractAddress={asset.contractAddress}
-              tokenId={tokenId}
-              itemId={itemId}
-              dev={process.env.REACT_APP_NETWORK !== 'mainnet'}
-              onLoad={() => {
-                console.log('pepe')
-                setIsLoadingWearablePreview(false)
-              }}
-            />
+            {component}
           </>
         )
       }
