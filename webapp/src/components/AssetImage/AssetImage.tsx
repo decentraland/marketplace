@@ -73,12 +73,12 @@ const AssetImage = (props: Props) => {
         if (!tokenId && 'itemId' in asset && asset.itemId) {
           itemId = asset.itemId
         }
-        console.log(WearablePreview, asset, tokenId, itemId)
         return (
           <WearablePreview
             contractAddress={asset.contractAddress}
             tokenId={tokenId}
             itemId={itemId}
+            dev={process.env.REACT_APP_NETWORK !== 'mainnet'}
           />
         )
       }
