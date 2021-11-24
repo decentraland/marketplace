@@ -73,3 +73,13 @@
   white-space: nowrap;
   text-transform: lowercase;
 }
+
+.AssetImage .WearablePreview {
+  position: absolute;
+  opacity: 1;
+  transition: opacity ease 0.2s;
+}
+
+.AssetImage .is-loading-wearable-preview .WearablePreview {
+  opacity: 0;
+}

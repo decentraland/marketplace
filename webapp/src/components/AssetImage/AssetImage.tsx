@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { NFTCategory, Rarity } from '@dcl/schemas'
-import { Loader, WearablePreview } from 'decentraland-ui'
+import { Center, Loader, WearablePreview } from 'decentraland-ui'
 import { LazyImage } from 'react-lazy-images'
 
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
@@ -24,6 +24,10 @@ const AssetImage = (props: Props) => {
     showMonospace
   } = props
   const { parcel, estate, wearable, ens } = asset.data
+
+  const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(
+    isDraggable
+  )
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
@@ -64,6 +68,7 @@ const AssetImage = (props: Props) => {
     }
 
     case NFTCategory.WEARABLE: {
+      let wearablePreview = null
       if (isDraggable) {
         let tokenId = ''
         let itemId = ''
@@ -73,24 +78,39 @@ const AssetImage = (props: Props) => {
         if (!tokenId && 'itemId' in asset && asset.itemId) {
           itemId = asset.itemId
         }
-        return (
-          <WearablePreview
-            contractAddress={asset.contractAddress}
-            tokenId={tokenId}
-            itemId={itemId}
-            dev={process.env.REACT_APP_NETWORK !== 'mainnet'}
-          />
+        wearablePreview = (
+          <>
+            {isLoadingWearablePreview && (
+              <Center>
+                <Loader active size="large" />
+              </Center>
+            )}
+            <WearablePreview
+              contractAddress={asset.contractAddress}
+              tokenId={tokenId}
+              itemId={itemId}
+              dev={process.env.REACT_APP_NETWORK !== 'mainnet'}
+              onLoad={() => {
+                console.log('pepe')
+                setIsLoadingWearablePreview(false)
+              }}
+            />
+          </>
         )
       }
       const [light, dark] = Rarity.getGradient(wearable!.rarity)
       const backgroundImage = `radial-gradient(${light}, ${dark})`
+      const classes =
+        'rarity-background ' +
+        (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
       return (
         <div
-          className="rarity-background"
+          className={classes}
           style={{
             backgroundImage
           }}
         >
+          {wearablePreview}
           <img
             alt={getAssetName(asset)}
             className="image"
