@@ -57,18 +57,19 @@ describe('when handling a fetch collections request', () => {
       const contractAddress1 = 'contract address 1'
       const contractAddress2 = 'contract address 2'
       const contractAddress3 = 'contract address 3'
+      const size = 3
       const collections = [
         {
           contractAddress: contractAddress1,
-          size: 3
+          size
         },
         {
           contractAddress: contractAddress2,
-          size: 3
+          size
         },
         {
           contractAddress: contractAddress3,
-          size: 3
+          size
         }
       ]
 
@@ -94,13 +95,13 @@ describe('when handling a fetch collections request', () => {
           // Fetches items for contract address 2 because sizes are different
           .put(
             fetchItemsRequest({
-              filters: { contractAddress: contractAddress2 }
+              filters: { contractAddress: contractAddress2, first: size }
             })
           )
           // Fetches items for contract address 3 because there are no items for that collection stored
           .put(
             fetchItemsRequest({
-              filters: { contractAddress: contractAddress3 }
+              filters: { contractAddress: contractAddress3, first: size }
             })
           )
           .dispatch(fetchCollectionsRequest(filters, true))
