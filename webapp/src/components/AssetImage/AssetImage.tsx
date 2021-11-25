@@ -97,7 +97,11 @@ const AssetImage = (props: Props) => {
           <>
             {isLoadingWearablePreview && (
               <Center>
-                <Loader active size="large" />
+                <Loader
+                  className="wearable-preview-loader"
+                  active
+                  size="large"
+                />
               </Center>
             )}
             {component}
