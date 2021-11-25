@@ -31,7 +31,7 @@ const ItemDetail = (props: Props) => {
   return (
     <div className={styles.detail}>
       <PageHeader>
-        <AssetImage asset={item} />
+        <AssetImage asset={item} isDraggable />
       </PageHeader>
       <Container>
         <Title
