@@ -17,7 +17,7 @@ const CollectionProvider = ({
     if (!collection || (withItems && !items)) {
       onFetchCollections()
     }
-  }, [collection, items, isLoading, onFetchCollections])
+  }, [collection, items, withItems, isLoading, onFetchCollections])
 
   return <>{children({ collection, items, isLoading })}</>
 }
