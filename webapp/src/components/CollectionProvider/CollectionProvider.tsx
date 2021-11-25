@@ -14,7 +14,10 @@ const CollectionProvider = ({
       return
     }
 
-    if (!collection || (withItems && !items)) {
+    if (
+      !collection ||
+      (withItems && (!items || items.length !== collection.size))
+    ) {
       onFetchCollections()
     }
   }, [collection, items, withItems, isLoading, onFetchCollections])
