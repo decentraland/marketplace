@@ -2,15 +2,11 @@
 
 It uses [thegraph](https://thegraph.com)
 
-**Run**
+**Deploy**
 
 ```bash
-npm run build-data -- --network mainnet
-
 npm run codegen
-npm run build
-
-npm run deploy -- --network mainnet
+npm run deploy:ropsten # or deploy:mainnet
 ```
 
 If a new collection in Ethereum is added you will need to add it as following
