@@ -15,6 +15,7 @@ import {
   Table,
   Dropdown
 } from 'decentraland-ui'
+import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -24,9 +25,10 @@ import { Props } from './CollectionPage.types'
 import { AssetImage } from '../AssetImage'
 import { Mana } from '../Mana'
 import { formatMANA } from '../../lib/mana'
-import styles from './CollectionPage.module.css'
 import { Rarity } from '@dcl/schemas'
 import { getBuilderCollectionDetailUrl } from './utils'
+import { locations } from '../../modules/routing/locations'
+import styles from './CollectionPage.module.css'
 
 const CollectionPage = (props: Props) => {
   const { collection, items, isLoading, onFetchCollection, onBack } = props
@@ -116,12 +118,19 @@ const CollectionPage = (props: Props) => {
                     {items.map(item => (
                       <Table.Row key={item.id} className={styles.row}>
                         <Table.Cell>
-                          <div className={styles.firstCell}>
-                            <div className={styles.imageContainer}>
-                              <AssetImage asset={item} isSmall />
+                          <Link
+                            to={locations.item(
+                              item.contractAddress,
+                              item.itemId
+                            )}
+                          >
+                            <div className={styles.firstCell}>
+                              <div className={styles.imageContainer}>
+                                <AssetImage asset={item} isSmall />
+                              </div>
+                              <div className={styles.title}>{item.name}</div>
                             </div>
-                            <div className={styles.title}>{item.name}</div>
-                          </div>
+                          </Link>
                         </Table.Cell>
                         <Table.Cell>{t(`global.${item.category}`)}</Table.Cell>
                         <Table.Cell>
