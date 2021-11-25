@@ -73,3 +73,21 @@
   white-space: nowrap;
   text-transform: lowercase;
 }
+
+.AssetImage .WearablePreview {
+  position: absolute;
+  opacity: 1;
+  transition: opacity ease 0.2s;
+}
+
+.AssetImage .is-loading-wearable-preview .WearablePreview {
+  opacity: 0;
+}
+
+.AssetImage .ui.loader.wearable-preview-loader:before {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.AssetImage .ui.loader.wearable-preview-loader:after {
+  border-color: white transparent transparent !important;
+}

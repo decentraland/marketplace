@@ -8,7 +8,6 @@ import {
 } from 'decentraland-transactions'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
-import ERC721Abi from '../../../contracts/ERC721Abi'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName } from '../types'
@@ -20,21 +19,25 @@ export class NFTService
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
     const { data: results, total } = await nftAPI.fetch(params, filters)
 
-    const accounts: Account[] = []
-    const nfts: NFT[] = []
-    const orders: Order[] = []
-    for (const result of results) {
-      const address = result.nft.owner
-      let account = accounts.find(account => account.id === address)
+    const accounts: Account[] = results.reduce((accumulator, nftResult) => {
+      const address = nftResult.nft.owner
+      let account = accumulator.find(account => account.id === address)
       if (!account) {
         account = this.toAccount(address)
+        accumulator.push(account)
       }
-      account.nftIds.push(result.nft.id)
-      nfts.push({ ...result.nft, vendor: VendorName.DECENTRALAND })
-      if (result.order) {
-        orders.push(result.order)
-      }
-    }
+      account.nftIds.push(nftResult.nft.id)
+      return accumulator
+    }, [] as Account[])
+
+    const nfts: NFT[] = results.map(nftResult => ({
+      ...nftResult.nft,
+      vendor: VendorName.DECENTRALAND
+    }))
+
+    const orders: Order[] = results
+      .filter(nftResult => nftResult.order)
+      .map(nftResult => nftResult.order as Order)
 
     return [nfts, accounts, orders, total] as const
   }
@@ -59,17 +62,18 @@ export class NFTService
     }
 
     const contract: ContractData =
+      /*  We need to use the ERC721CollectionV2 instead of ERC721 for non-ethereum transfers otherwise 
+        the meta-tx would fail due to wrong domain and version.
+        If some day we have other types of NFTs other than ERC721CollectionV2 we will need to handle them appropiately too.
+      */
       nft.network !== Network.ETHEREUM
         ? {
             ...getContract(ContractName.ERC721CollectionV2, nft.chainId),
             address: nft.contractAddress
           }
         : {
-            name: 'ERC721',
-            abi: ERC721Abi as any,
-            address: nft.contractAddress,
-            chainId: nft.chainId,
-            version: '1'
+            ...getContract(ContractName.ERC721, nft.chainId),
+            address: nft.contractAddress
           }
 
     return sendTransaction(contract, erc721 =>

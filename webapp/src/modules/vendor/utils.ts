@@ -21,7 +21,7 @@ export function getFilters(
       const isLand = section === currentSection.LAND
       const isWearableHead = section === currentSection.WEARABLES_HEAD
       const isWearableAccessory =
-        section === currentSection.WEARABLES_ACCESORIES
+        section === currentSection.WEARABLES_ACCESSORIES
 
       const category = getCategoryFromSection(section!)
       const wearableCategory =

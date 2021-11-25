@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Row } from 'decentraland-ui'
+import { Row, Column } from 'decentraland-ui'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { contracts } from '../../../../modules/contract/utils'
 import { ArrayFilter } from '../ArrayFilter'
@@ -90,18 +90,22 @@ const FiltersMenu = (props: Props) => {
         />
       </Row>
       <Row>
-        <ArrayFilter
-          name={t('nft_filters.rarity')}
-          values={selectedRarities}
-          options={rarityOptions}
-          onChange={onRaritiesChange}
-        />
-        <ArrayFilter
-          name={t('nft_filters.gender')}
-          values={selectedGenders}
-          options={genderOptions}
-          onChange={onGendersChange}
-        />
+        <Column>
+          <ArrayFilter
+            name={t('nft_filters.rarity')}
+            values={selectedRarities}
+            options={rarityOptions}
+            onChange={onRaritiesChange}
+          />
+        </Column>
+        <Column>
+          <ArrayFilter
+            name={t('nft_filters.gender')}
+            values={selectedGenders}
+            options={genderOptions}
+            onChange={onGendersChange}
+          />
+        </Column>
       </Row>
     </>
   )
