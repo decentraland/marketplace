@@ -116,12 +116,13 @@ const AssetImage = (props: Props) => {
             backgroundImage
           }}
         >
-          {wearablePreview}
-          <img
-            alt={getAssetName(asset)}
-            className="image"
-            src={getAssetImage(asset)}
-          />
+          {wearablePreview || (
+            <img
+              alt={getAssetName(asset)}
+              className="image"
+              src={getAssetImage(asset)}
+            />
+          )}
         </div>
       )
     }
