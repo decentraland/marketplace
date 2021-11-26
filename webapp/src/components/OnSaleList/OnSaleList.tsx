@@ -38,7 +38,6 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
       <TextFilter
         value={search}
         onChange={val => {
-          console.log('why')
           setSearch(val)
           setPage(1)
         }}
