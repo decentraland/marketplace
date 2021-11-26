@@ -2,13 +2,13 @@ import React from 'react'
 import { Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTCategory } from '@dcl/schemas'
+import { Link } from 'react-router-dom'
 import { Mana } from '../../Mana'
 import { formatMANA } from '../../../lib/mana'
 import { Props } from './OnSaleListElement.types'
 import { AssetImage } from '../../AssetImage'
-import styles from './OnSaleListElement.module.css'
 import { locations } from '../../../modules/routing/locations'
-import { Link } from 'react-router-dom'
+import styles from './OnSaleListElement.module.css'
 
 const OnSaleListElement = ({ nft, item, order }: Props) => {
   const category = item?.category || nft!.category
