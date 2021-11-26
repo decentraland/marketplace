@@ -2,10 +2,12 @@ import React from 'react'
 import { Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTCategory } from '@dcl/schemas'
+import { Link } from 'react-router-dom'
 import { Mana } from '../../Mana'
 import { formatMANA } from '../../../lib/mana'
 import { Props } from './OnSaleListElement.types'
 import { AssetImage } from '../../AssetImage'
+import { locations } from '../../../modules/routing/locations'
 import styles from './OnSaleListElement.module.css'
 
 const OnSaleListElement = ({ nft, item, order }: Props) => {
@@ -24,18 +26,24 @@ const OnSaleListElement = ({ nft, item, order }: Props) => {
       subtitle = `${x},${y}`
   }
 
+  const link = item
+    ? locations.item(item.contractAddress, item.itemId)
+    : locations.nft(nft!.contractAddress, nft!.tokenId)
+
   return (
     <Table.Row>
       <Table.Cell>
-        <div className={styles['first-cell']}>
-          <div className={styles['image-container']}>
-            <AssetImage asset={item || nft!} isSmall />
+        <Link to={link}>
+          <div className={styles['first-cell']}>
+            <div className={styles['image-container']}>
+              <AssetImage asset={item || nft!} isSmall />
+            </div>
+            <div>
+              <div className={styles.title}>{item?.name || nft!.name}</div>
+              {subtitle && <div>{subtitle}</div>}
+            </div>
           </div>
-          <div>
-            <div className={styles.title}>{item?.name || nft!.name}</div>
-            {subtitle && <div>{subtitle}</div>}
-          </div>
-        </div>
+        </Link>
       </Table.Cell>
       <Table.Cell>{t(`global.${category}`)}</Table.Cell>
       <Table.Cell>{t(`global.${item ? 'primary' : 'secondary'}`)}</Table.Cell>
