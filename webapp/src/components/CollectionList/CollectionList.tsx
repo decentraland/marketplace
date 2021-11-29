@@ -1,12 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
-import listedSvg from '../../images/listed.svg'
-import { Props } from './CollectionList.types'
-import styles from './CollectionList.module.css'
+import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Props } from './CollectionList.types'
 import { SortBy } from '../../modules/routing/types'
 import { COLLECTIONS_PER_PAGE } from '../../modules/routing/utils'
 import CollectionImage from '../CollectionImage'
+import { locations } from '../../modules/routing/locations'
+import styles from './CollectionList.module.css'
+import ListedBadge from '../ListedBadge'
 
 const CollectionList = ({
   collections,
@@ -27,18 +29,6 @@ const CollectionList = ({
     { value: SortBy.SIZE, text: t('filters.size') }
   ])
 
-  // Amount of collections without applying any filters.
-  const [total, setTotal] = useState<number>(0)
-
-  // Total is being set only when it has not been set before.
-  // This is because count will be affected by search so we only need set it
-  // the first time when no filters are applied to display the real total
-  useEffect(() => {
-    if (!total) {
-      setTotal(count)
-    }
-  }, [count, total])
-
   const pages = Math.ceil(count / COLLECTIONS_PER_PAGE)
 
   const hasPagination = pages > 1
@@ -54,7 +44,9 @@ const CollectionList = ({
                 onBrowse({ search: newSearch, page: 1 })
               }
             }}
-            placeholder={t('collection_list.search', { count: total })}
+            placeholder={t('collection_list.search', {
+              count: isLoading ? 0 : count
+            })}
           />
         </div>
         <Dropdown
@@ -79,33 +71,35 @@ const CollectionList = ({
             <div className={styles.empty}>{t('global.no_results')}</div>
           ) : (
             collections.map(collection => (
-              <Card key={collection.urn} className={styles.card} fluid>
-                <Card.Content className={styles.cardContent}>
-                  <div className={styles.detailsContainer}>
-                    <div className={styles.detailsLeft}>
-                      <div className={styles.image}>
-                        <CollectionImage
-                          contractAddress={collection.contractAddress}
-                        />
+              <Card className={styles.card} fluid>
+                <Link
+                  className={styles.link}
+                  key={collection.contractAddress}
+                  to={locations.collection(collection.contractAddress)}
+                >
+                  <Card.Content className={styles.cardContent}>
+                    <div className={styles.detailsContainer}>
+                      <div className={styles.detailsLeft}>
+                        <div className={styles.image}>
+                          <CollectionImage
+                            contractAddress={collection.contractAddress}
+                          />
+                        </div>
+                      </div>
+                      <div className={styles.detailsRight}>
+                        <div className={styles.name}>{collection.name}</div>
+                        <div className={styles.count}>
+                          {t('collection_list.item_count', {
+                            count: collection.size
+                          })}
+                        </div>
                       </div>
                     </div>
-                    <div className={styles.detailsRight}>
-                      <div className={styles.name}>{collection.name}</div>
-                      <div className={styles.count}>
-                        {t('collection_list.item_count', {
-                          count: collection.size
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                  {collection.isOnSale && (
-                    <img
-                      className={styles.listed}
-                      src={listedSvg}
-                      alt="listed"
-                    />
-                  )}
-                </Card.Content>
+                    {collection.isOnSale && (
+                      <ListedBadge className={styles.listedBadge} />
+                    )}
+                  </Card.Content>
+                </Link>
               </Card>
             ))
           )}

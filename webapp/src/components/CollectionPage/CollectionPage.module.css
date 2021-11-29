@@ -1,3 +1,13 @@
+.page {
+  margin-top: 39px;
+}
+
+.badge {
+  font-size: 12px;
+  font-weight: 400;
+  margin-left: 8px;
+}
+
 .firstCell {
   display: flex;
   align-items: center;
@@ -16,4 +26,14 @@
 
 .title {
   font-weight: 600;
+}
+
+.ellipsis {
+  visibility: hidden;
+  color: var(--summer-red);
+  cursor: pointer;
+}
+
+.row:hover .ellipsis {
+  visibility: visible;
 }

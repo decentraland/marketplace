@@ -38,7 +38,10 @@ export function* handleFetchCollectionsRequest(
         if (!items || items.length !== collection.size) {
           yield put(
             fetchItemsRequest({
-              filters: { contractAddress: collection.contractAddress }
+              filters: {
+                first: collection.size,
+                contractAddress: collection.contractAddress
+              }
             })
           )
         }

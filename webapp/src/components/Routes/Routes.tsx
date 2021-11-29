@@ -19,6 +19,7 @@ import { HomePage } from '../HomePage'
 import { MyBidsPage } from '../MyBidsPage'
 import { LegacyNFTPage } from '../LegacyNFTPage'
 import { LandsPage } from '../LandsPage'
+import CollectionPage from '../CollectionPage'
 
 const Routes = () => {
   const APP_ID = process.env.REACT_APP_INTERCOM_APP_ID
@@ -40,6 +41,7 @@ const Routes = () => {
         <Route exact path={locations.bid()} component={BidPage} />
         <Route exact path={locations.cancel()} component={CancelSalePage} />
         <Route exact path={locations.transfer()} component={TransferPage} />
+        <Route exact path={locations.collection()} component={CollectionPage} />
         <Route
           exact
           path={locations.buy(AssetType.NFT)}

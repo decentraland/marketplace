@@ -29,7 +29,11 @@
     "type": "Type",
     "sale_type": "Sale type",
     "sell_price": "Sell price",
-    "no_results": "No results"
+    "no_results": "No results",
+    "category": "Category",
+    "rarity": "Rarity",
+    "stock": "Stock",
+    "price": "Price"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -107,6 +111,14 @@
     "home_wearables": "Latest listings",
     "home_land": "Parcels and Estates",
     "home_ens": "Names"
+  },
+  "collection_page": {
+    "unlist_from_market": "Unlist from market",
+    "list_on_market": "List on market",
+    "edit_in_builder": "Edit in builder",
+    "on_sale": "On Sale",
+    "edit_price": "Edit price",
+    "mint_item": "Mint item"
   },
   "partners_page": {
     "partners": "Partners",

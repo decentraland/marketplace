@@ -13,6 +13,7 @@
       "REACT_APP_ATLAS_SERVER_URL": "https://api.decentraland.io",
       "REACT_APP_PEER_URL": "https://peer.decentraland.zone",
       "REACT_APP_TRANSACTIONS_API_URL": "https://transactions-api.decentraland.io/v1",
+      "REACT_APP_BUILDER_URL": "https://builder.decentraland.io",
       "REACT_APP_COINGECKO_API_URL": "https://api.coingecko.com/api/v3",
       "REACT_APP_SUPER_RARE_API_URL": "https://dev.pixura.io/sr-json/v0",
       "REACT_APP_SUPER_RARE_API_KEY": "eyJhbGciOiJIUzUxMiJ9.eyJkYXQiOiJEQ0wifQ.UADwL-MaLbS4NmMIGc87iztzGIttxQ0rVCRCRYBHYMs4CKySywpb0esh68lgcHxb6hODxLHEJjNxgwdPATLkfg",

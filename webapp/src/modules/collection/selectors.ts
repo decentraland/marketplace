@@ -13,3 +13,14 @@ export const getCollections = createSelector<
   ReturnType<typeof getCollectionsByUrn>,
   Collection[]
 >(getCollectionsByUrn, collectionsByUrn => Object.values(collectionsByUrn))
+
+export const getCollectionsByAddress = createSelector<
+  RootState,
+  ReturnType<typeof getCollections>,
+  Record<string, Collection>
+>(getCollections, collections =>
+  Object.values(collections).reduce((acc, collection) => {
+    acc[collection.contractAddress] = collection
+    return acc
+  }, {} as Record<string, Collection>)
+)
