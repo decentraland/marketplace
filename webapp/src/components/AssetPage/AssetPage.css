@@ -15,6 +15,15 @@
   margin-bottom: 48px;
 }
 
+.AssetPage .back {
+  top: 0px;
+}
+
+.AssetPage .AssetImage {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
 @media (max-width: 768px) {
   .AssetPage .ui.container > .Row {
     flex-direction: column;

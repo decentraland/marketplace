@@ -1,5 +1,5 @@
 import React from 'react'
-import { Page } from 'decentraland-ui'
+import { Page, Back, Section, Column, Narrow } from 'decentraland-ui'
 
 import { Asset, AssetType } from '../../modules/asset/types'
 import { Navbar } from '../Navbar'
@@ -16,17 +16,24 @@ const AssetPage = (props: Props) => {
   return (
     <>
       <Navbar isFullscreen />
-      <Navigation isFullscreen />
-      <Page className="AssetPage" isFullscreen>
-        <AssetProviderPage type={type}>
-          {asset =>
-            type === AssetType.NFT ? (
-              <NFTDetail nft={asset as Asset<AssetType.NFT>} />
-            ) : AssetType.ITEM ? (
-              <ItemDetail item={asset as Asset<AssetType.ITEM>} />
-            ) : null
-          }
-        </AssetProviderPage>
+      <Navigation />
+      <Page className="AssetPage">
+        <Section>
+          <Column>
+            <Back className="back" absolute />
+            <Narrow>
+              <AssetProviderPage type={type}>
+                {asset =>
+                  type === AssetType.NFT ? (
+                    <NFTDetail nft={asset as Asset<AssetType.NFT>} />
+                  ) : AssetType.ITEM ? (
+                    <ItemDetail item={asset as Asset<AssetType.ITEM>} />
+                  ) : null
+                }
+              </AssetProviderPage>
+            </Narrow>
+          </Column>
+        </Section>
       </Page>
       <Footer />
     </>
