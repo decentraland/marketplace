@@ -1,3 +1,11 @@
+.AssetPage {
+  margin-top: 39px;
+}
+
+.AssetPage .back {
+  top: 5px;
+}
+
 .AssetPage .AssetImage .pixel {
   display: none;
 }
@@ -13,10 +21,6 @@
 
 .AssetPage .ui.container > div {
   margin-bottom: 48px;
-}
-
-.AssetPage .back {
-  top: 0px;
 }
 
 .AssetPage .AssetImage {

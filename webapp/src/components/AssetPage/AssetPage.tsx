@@ -11,8 +11,7 @@ import { ItemDetail } from './ItemDetail'
 import { Props } from './AssetPage.types'
 import './AssetPage.css'
 
-const AssetPage = (props: Props) => {
-  const { type } = props
+const AssetPage = ({ type, onBack }: Props) => {
   return (
     <>
       <Navbar isFullscreen />
@@ -20,7 +19,7 @@ const AssetPage = (props: Props) => {
       <Page className="AssetPage">
         <Section>
           <Column>
-            <Back className="back" absolute />
+            <Back className="back" absolute onClick={onBack} />
             <Narrow>
               <AssetProviderPage type={type}>
                 {asset =>
