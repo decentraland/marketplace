@@ -1,37 +1,37 @@
 import React from 'react'
-// import { Container, Header, Stats } from 'decentraland-ui'
-// import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-// import { Rarity } from '@dcl/schemas'
-// import { getAssetName } from '../../../modules/asset/utils'
-// import { AssetType } from '../../../modules/asset/types'
+import { Container, Header, Stats } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Rarity } from '@dcl/schemas'
+import { getAssetName } from '../../../modules/asset/utils'
+import { AssetType } from '../../../modules/asset/types'
 import { PageHeader } from '../../PageHeader'
 import { AssetImage } from '../../AssetImage'
-// import { Row } from '../../Layout/Row'
-// import { Column } from '../../Layout/Column'
-// import { Title } from '../Title'
-// import { WearableRarity } from '../WearableRarity'
-// import { WearableHighlights } from '../WearableHighlights'
-// import { Owner } from '../Owner'
-// import { Description } from '../Description'
-// import { Network } from '../Network'
-// import { OrderDetails } from '../OrderDetails'
-// import { Actions } from '../Actions'
-// import { Bids } from '../Bids'
-// import { TransactionHistory } from '../TransactionHistory'
-// import { WearableCollection } from '../WearableCollection'
+import { Row } from '../../Layout/Row'
+import { Column } from '../../Layout/Column'
+import { Title } from '../Title'
+import { WearableRarity } from '../WearableRarity'
+import { WearableHighlights } from '../WearableHighlights'
+import { Owner } from '../Owner'
+import { Description } from '../Description'
+import { Network } from '../Network'
+import { OrderDetails } from '../OrderDetails'
+import { Actions } from '../Actions'
+import { Bids } from '../Bids'
+import { TransactionHistory } from '../TransactionHistory'
+import { WearableCollection } from '../WearableCollection'
 import { Props } from './WearableDetail.types'
 import './WearableDetail.css'
 
 const WearableDetail = (props: Props) => {
   const { nft } = props
-  // const wearable = nft.data.wearable!
+  const wearable = nft.data.wearable!
 
   return (
     <div className="WearableDetail">
       <PageHeader>
         <AssetImage asset={nft} isDraggable />
       </PageHeader>
-      {/*<Container>
+      <Container>
         <Title
           left={
             <Header size="large">
@@ -69,7 +69,7 @@ const WearableDetail = (props: Props) => {
         <WearableHighlights type={AssetType.ITEM} wearable={wearable} />
         <Bids nft={nft} />
         <TransactionHistory nft={nft} />
-      </Container> */}
+      </Container>
     </div>
   )
 }
