@@ -9,5 +9,5 @@ export function isGender(wearable: NFT['data']['wearable'], gender: BodyShape) {
 
 export function isUnisex(wearable: NFT['data']['wearable']) {
   if (!wearable) return false
-  return wearable.bodyShapes.length === 2
+  return wearable.bodyShapes === null || wearable.bodyShapes.length === 2
 }
