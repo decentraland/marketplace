@@ -21,7 +21,7 @@ import { Mana } from '../../Mana'
 // import { Title } from '../Title'
 // import { Owner } from '../Owner'
 import { Network } from '../Network'
-// import { Description } from '../Description'
+import { Description } from '../Description'
 // import { WearableRarity } from '../WearableRarity'
 // import { WearableHighlights } from '../WearableHighlights'
 // import { WearableCollection } from '../WearableCollection'
@@ -49,7 +49,7 @@ const ItemDetail = (props: Props) => {
       </PageHeader>
       <Container>
         <Row>
-          <Column grow>
+          <Column className={styles.left} grow>
             <div>
               <Title asset={item} />
               <div className={styles.badges}>
@@ -58,29 +58,32 @@ const ItemDetail = (props: Props) => {
                 <GenderBadge wearable={wearable} assetType={AssetType.ITEM} />
               </div>
             </div>
+            <Description text={wearable.description} />
           </Column>
           <Column>
             <Box className={styles.box}>
-              <Row className={styles.row}>
+              <Row>
                 <Stats title={t('asset_page.price')}>
                   <Mana network={item.network} withTooltip>
                     {formatMANA(item.price)}
                   </Mana>
                 </Stats>
               </Row>
-              <Stats title={t('asset_page.available')}>
-                {item.available > 0 ? (
-                  <Header>
-                    {item.available.toLocaleString()}
-                    <span className={styles.supply}>
-                      /{Rarity.getMaxSupply(item.rarity).toLocaleString()}
-                    </span>
-                  </Header>
-                ) : (
-                  t('asset_page.sold_out')
-                )}
-              </Stats>
-              <Network asset={item} />
+              <Row>
+                <Stats title={t('asset_page.available')}>
+                  {item.available > 0 ? (
+                    <Header>
+                      {item.available.toLocaleString()}
+                      <span className={styles.supply}>
+                        /{Rarity.getMaxSupply(item.rarity).toLocaleString()}
+                      </span>
+                    </Header>
+                  ) : (
+                    t('asset_page.sold_out')
+                  )}
+                </Stats>
+                <Network asset={item} />
+              </Row>
             </Box>
           </Column>
         </Row>

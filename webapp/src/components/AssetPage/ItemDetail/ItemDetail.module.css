@@ -2,6 +2,12 @@
   color: var(--secondary-text);
 }
 
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
 .title {
   font-size: 34px;
   font-style: normal;
@@ -19,10 +25,10 @@
 
 .box {
   padding: 20px 24px;
-  display: flex;
-  flex-direction: column;
 }
 
-.box .row {
-  margin-bottom: 20px;
+.box > div {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
