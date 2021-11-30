@@ -1,32 +1,40 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Container, Header, Stats } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Rarity } from '@dcl/schemas'
-
-import { formatMANA } from '../../../lib/mana'
-import { locations } from '../../../modules/routing/locations'
-import { AssetType } from '../../../modules/asset/types'
-import { getAssetName } from '../../../modules/asset/utils'
-import { Row } from '../../Layout/Row'
-import { Column } from '../../Layout/Column'
+// import { Link } from 'react-router-dom'
+import {
+  // Button,
+  Container
+  // Header,
+  // Stats,
+  // Popup
+} from 'decentraland-ui'
+// import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+// import { Rarity } from '@dcl/schemas'
+// import { formatMANA } from '../../../lib/mana'
+// import { locations } from '../../../modules/routing/locations'
+// import { AssetType } from '../../../modules/asset/types'
+// import { getAssetName } from '../../../modules/asset/utils'
+// import { Row } from '../../Layout/Row'
+// import { Column } from '../../Layout/Column'
 import { AssetImage } from '../../AssetImage'
 import { PageHeader } from '../../PageHeader'
-import { Mana } from '../../Mana'
+// import { Mana } from '../../Mana'
 // import { Title } from '../Title'
 // import { Owner } from '../Owner'
-import { Network } from '../Network'
-import { Description } from '../Description'
-import { WearableRarity } from '../WearableRarity'
-import { WearableHighlights } from '../WearableHighlights'
-import { WearableCollection } from '../WearableCollection'
+// import { Network } from '../Network'
+// import { Description } from '../Description'
+// import { WearableRarity } from '../WearableRarity'
+// import { WearableHighlights } from '../WearableHighlights'
+// import { WearableCollection } from '../WearableCollection'
 import { Props } from './ItemDetail.types'
+import Title from '../V2/Title'
 import styles from './ItemDetail.module.css'
+import RarityBadge from '../V2/RarityBadge'
+import { AssetType } from '../../../modules/asset/types'
 
 const ItemDetail = (props: Props) => {
   const { item } = props
-  const wearable = item.data.wearable!
-  const canBuy = item.isOnSale && item.available > 0
+  // const wearable = item.data.wearable!
+  // const canBuy = item.isOnSale && item.available > 0
 
   return (
     <div className={styles.detail}>
@@ -35,9 +43,13 @@ const ItemDetail = (props: Props) => {
       </PageHeader>
       <Container>
         <div>
-          <div className={styles.title}>{getAssetName(item)}</div>
+          <Title asset={item} />
+          {/* <div className={styles.title}>{getAssetName(item)}</div> */}
           <div className={styles.badges}>
-            <WearableRarity type={AssetType.ITEM} wearable={wearable} />
+            <RarityBadge rarity={item.rarity} assetType={AssetType.ITEM} />
+
+            {/* <WearableRarity type={AssetType.ITEM} wearable={wearable} />
+            <WearableHighlights type={AssetType.ITEM} wearable={wearable} /> */}
           </div>
         </div>
         {/* <Title
@@ -51,7 +63,7 @@ const ItemDetail = (props: Props) => {
           }
           right={<Owner asset={item} />}
         /> */}
-        <Description text={wearable.description} />
+        {/* <Description text={wearable.description} />
         <Row>
           <Column align="left" grow={true}>
             <Network asset={item} />
@@ -98,7 +110,7 @@ const ItemDetail = (props: Props) => {
             <WearableCollection type={AssetType.ITEM} asset={item} />
           </Column>
         </Row>
-        <WearableHighlights type={AssetType.ITEM} wearable={wearable} />
+        <WearableHighlights type={AssetType.ITEM} wearable={wearable} /> */}
       </Container>
     </div>
   )
