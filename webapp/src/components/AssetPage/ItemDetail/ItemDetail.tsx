@@ -30,10 +30,15 @@ import Title from '../V2/Title'
 import styles from './ItemDetail.module.css'
 import RarityBadge from '../V2/RarityBadge'
 import { AssetType } from '../../../modules/asset/types'
+// import IconBadge from '../V2/IconBadge'
+// import { isGender, isUnisex } from '../../../modules/nft/wearable/utils'
+// import { BodyShape } from '@dcl/schemas'
+import GenderBadge from '../V2/GenderBadge'
+import CategoryBadge from '../V2/CategoryBadge'
 
 const ItemDetail = (props: Props) => {
   const { item } = props
-  // const wearable = item.data.wearable!
+  const wearable = item.data.wearable!
   // const canBuy = item.isOnSale && item.available > 0
 
   return (
@@ -47,7 +52,8 @@ const ItemDetail = (props: Props) => {
           {/* <div className={styles.title}>{getAssetName(item)}</div> */}
           <div className={styles.badges}>
             <RarityBadge rarity={item.rarity} assetType={AssetType.ITEM} />
-
+            <CategoryBadge wearable={wearable} assetType={AssetType.ITEM} />
+            <GenderBadge wearable={wearable} assetType={AssetType.ITEM} />
             {/* <WearableRarity type={AssetType.ITEM} wearable={wearable} />
             <WearableHighlights type={AssetType.ITEM} wearable={wearable} /> */}
           </div>

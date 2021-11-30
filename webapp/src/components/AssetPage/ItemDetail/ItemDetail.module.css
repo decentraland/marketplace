@@ -13,4 +13,6 @@
 
 .badges {
   margin-top: 15px;
+  display: flex;
+  gap: 8px;
 }

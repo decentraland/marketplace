@@ -1,0 +1,21 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #37333d;
+}
+
+.text {
+  font-size: 15px;
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
