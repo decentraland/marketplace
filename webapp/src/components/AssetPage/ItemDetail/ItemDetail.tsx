@@ -13,8 +13,8 @@ import { Column } from '../../Layout/Column'
 import { AssetImage } from '../../AssetImage'
 import { PageHeader } from '../../PageHeader'
 import { Mana } from '../../Mana'
-import { Title } from '../Title'
-import { Owner } from '../Owner'
+// import { Title } from '../Title'
+// import { Owner } from '../Owner'
 import { Network } from '../Network'
 import { Description } from '../Description'
 import { WearableRarity } from '../WearableRarity'
@@ -34,7 +34,13 @@ const ItemDetail = (props: Props) => {
         <AssetImage asset={item} isDraggable />
       </PageHeader>
       <Container>
-        <Title
+        <div>
+          <div className={styles.title}>{getAssetName(item)}</div>
+          <div className={styles.badges}>
+            <WearableRarity type={AssetType.ITEM} wearable={wearable} />
+          </div>
+        </div>
+        {/* <Title
           left={
             <Header size="large">
               <div className="text">
@@ -44,7 +50,7 @@ const ItemDetail = (props: Props) => {
             </Header>
           }
           right={<Owner asset={item} />}
-        />
+        /> */}
         <Description text={wearable.description} />
         <Row>
           <Column align="left" grow={true}>
