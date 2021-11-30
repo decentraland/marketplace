@@ -3,11 +3,11 @@ import classNames from 'classnames'
 import { Props } from './Box.types'
 import styles from './Box.module.css'
 
-const Box = (props: Props) => {
+const Box = ({ className, header, children }: Props) => {
   return (
-    <div className={classNames(styles.box, props.className)}>
-      <div className={styles.header}>{props.header}</div>
-      <div className={styles.children}>{props.children}</div>
+    <div className={classNames(styles.box, className)}>
+      {header && <div className={styles.header}>{header}</div>}
+      <div className={styles.children}>{children}</div>
     </div>
   )
 }
