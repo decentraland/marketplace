@@ -1,0 +1,15 @@
+.Owner .Profile {
+  display: flex !important;
+  align-items: center;
+}
+
+.Owner .Profile .name {
+  margin-left: 6px;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0.3149999976158142px;
+  text-align: left;
+  color: var(--text);
+}
