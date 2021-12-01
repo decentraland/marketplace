@@ -13,8 +13,8 @@ import Expiration from '../V2/Expiration'
 import { Actions } from '../Actions'
 import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
-import styles from './ENSDetail.module.css'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import styles from './ENSDetail.module.css'
 
 const ENSDetail = ({ nft }: Props) => {
   return (
@@ -32,9 +32,7 @@ const ENSDetail = ({ nft }: Props) => {
                 <Badge color="#37333d">{t('global.ens')}</Badge>
               </div>
             </div>
-            <div className={styles.ownerAndCollection}>
-              <Owner asset={nft} />
-            </div>
+            <Owner asset={nft} />
           </div>
           <div className={styles.right}>
             <Box className={styles.box}>

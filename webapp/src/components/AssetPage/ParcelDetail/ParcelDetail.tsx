@@ -45,9 +45,7 @@ const ParcelDetail = ({ nft }: Props) => {
               </div>
             </div>
             <Description text={parcel.description} />
-            <div className={styles.ownerAndCollection}>
-              <Owner asset={nft} />
-            </div>
+            <Owner asset={nft} />
             <ProximityHighlights nft={nft} />
           </div>
           <div className={styles.right}>
