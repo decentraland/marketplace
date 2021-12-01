@@ -2,8 +2,9 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import {
-  fetchCollectionsRequest,
-  FETCH_COLLECTIONS_REQUEST
+  fetchSingleCollectionRequest,
+  FETCH_COLLECTIONS_REQUEST,
+  FETCH_SINGLE_COLLECTION_REQUEST
 } from '../../modules/collection/actions'
 import {
   getLoading,
@@ -27,24 +28,17 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   items: getItemsByContractAddress(state)[ownProps.contractAddress],
   isLoading:
     isLoadingType(getLoading(state), FETCH_COLLECTIONS_REQUEST) ||
+    isLoadingType(getLoading(state), FETCH_SINGLE_COLLECTION_REQUEST) ||
     (!!ownProps.withItems &&
       isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST))
 })
 
 const mapDispatch = (
   dispatch: Dispatch,
-  ownProps: OwnProps
+  { contractAddress, withItems }: OwnProps
 ): MapDispatchProps => ({
-  onFetchCollections: () =>
-    dispatch(
-      fetchCollectionsRequest(
-        {
-          first: 1,
-          contractAddress: ownProps.contractAddress
-        },
-        ownProps.withItems
-      )
-    )
+  onFetchCollection: () =>
+    dispatch(fetchSingleCollectionRequest(contractAddress, withItems))
 })
 
 export default connect(mapState, mapDispatch)(CollectionProvider)
