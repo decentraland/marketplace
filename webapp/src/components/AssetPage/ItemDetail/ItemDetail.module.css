@@ -2,7 +2,20 @@
   color: var(--secondary-text);
 }
 
+.info {
+  width: 100%;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .info {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
 .left {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 48px;
@@ -26,10 +39,29 @@
 
 .box {
   padding: 20px 24px;
+  min-width: 320px;
 }
 
 .box > div {
   display: flex;
   flex-direction: column;
   gap: 24px;
+}
+
+.ownerAndCollection {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .ownerAndCollection {
+    flex-direction: column;
+  }
+}
+
+.stockAndNetwork {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }

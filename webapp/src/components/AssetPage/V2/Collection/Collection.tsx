@@ -18,18 +18,16 @@ const Collection = (props: Props) => {
         }
 
         return (
-          <div>
+          <Stats title={'COLLECTION'}>
             <Link to={locations.collection(asset.contractAddress)}>
-              <Stats title={'COLLECTION'}>
-                <div className={styles.container}>
-                  <div className={styles.image}>
-                    <CollectionImage contractAddress={asset.contractAddress} />
-                  </div>
-                  <span className={styles.name}>{collection.name}</span>
+              <div className={styles.container}>
+                <div className={styles.image}>
+                  <CollectionImage contractAddress={asset.contractAddress} />
                 </div>
-              </Stats>
+                <span className={styles.name}>{collection.name}</span>
+              </div>
             </Link>
-          </div>
+          </Stats>
         )
       }}
     </CollectionProvider>

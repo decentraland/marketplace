@@ -36,13 +36,13 @@ const Owner = (props: Props) => {
   }
 
   return (
-    <div className="Owner">
+    <Stats title={label}>
       <Link to={locations.account(address, browseOptions)}>
-        <Stats title={label}>
+        <div className="Owner">
           <Profile size="huge" address={address} />
-        </Stats>
+        </div>
       </Link>
-    </div>
+    </Stats>
   )
 }
 

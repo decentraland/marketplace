@@ -1,7 +1,7 @@
 import React from 'react'
 // import { Link } from 'react-router-dom'
 import {
-  // Button,
+  Button,
   Container,
   Header,
   Stats
@@ -9,15 +9,15 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Rarity } from '@dcl/schemas'
-import { formatMANA } from '../../../lib/mana'
+// import { formatMANA } from '../../../lib/mana'
 // import { locations } from '../../../modules/routing/locations'
 // import { AssetType } from '../../../modules/asset/types'
 // import { getAssetName } from '../../../modules/asset/utils'
-import { Row } from '../../Layout/Row'
-import { Column } from '../../Layout/Column'
+// import { Row } from '../../Layout/Row'
+// import { Column } from '../../Layout/Column'
 import { AssetImage } from '../../AssetImage'
 import { PageHeader } from '../../PageHeader'
-import { Mana } from '../../Mana'
+// import { Mana } from '../../Mana'
 // import { Title } from '../Title'
 import { Network } from '../Network'
 import { Description } from '../Description'
@@ -38,9 +38,9 @@ import { Owner } from '../V2/Owner'
 import Collection from '../V2/Collection'
 import styles from './ItemDetail.module.css'
 
-const ItemDetail = (props: Props) => {
-  const { item } = props
+const ItemDetail = ({ item, wallet }: Props) => {
   const wearable = item.data.wearable!
+  const isOwner = wallet?.address === item.creator
   // const canBuy = item.isOnSale && item.available > 0
 
   return (
@@ -49,8 +49,8 @@ const ItemDetail = (props: Props) => {
         <AssetImage asset={item} isDraggable />
       </PageHeader>
       <Container>
-        <Row>
-          <Column className={styles.left} grow>
+        <div className={styles.info}>
+          <div className={styles.left}>
             <div>
               <Title asset={item} />
               <div className={styles.badges}>
@@ -60,18 +60,58 @@ const ItemDetail = (props: Props) => {
               </div>
             </div>
             <Description text={wearable.description} />
-            <Row>
-              <Column grow>
-                <Owner asset={item} />
-              </Column>
-              <Column>
-                <Collection asset={item} />
-              </Column>
-            </Row>
-          </Column>
-          <Column>
+            <div className={styles.ownerAndCollection}>
+              <Owner asset={item} />
+              <Collection asset={item} />
+            </div>
+          </div>
+          <div className={styles.right}>
             <Box className={styles.box}>
-              <Row>
+              {isOwner ? (
+                !item.isOnSale ? (
+                  <>
+                    <div className={styles.stockAndNetwork}>
+                      <Stats title={t('asset_page.available')}>
+                        {item.available > 0 ? (
+                          <Header>
+                            {item.available.toLocaleString()}
+                            <span className={styles.supply}>
+                              /
+                              {Rarity.getMaxSupply(
+                                item.rarity
+                              ).toLocaleString()}
+                            </span>
+                          </Header>
+                        ) : (
+                          t('asset_page.sold_out')
+                        )}
+                      </Stats>
+                      <Network asset={item} />
+                    </div>
+                    <Button>OPEN IN EDITOR</Button>
+                  </>
+                ) : (
+                  <>
+                    <Stats title={t('asset_page.available')}>
+                      {item.available > 0 ? (
+                        <Header>
+                          {item.available.toLocaleString()}
+                          <span className={styles.supply}>
+                            /{Rarity.getMaxSupply(item.rarity).toLocaleString()}
+                          </span>
+                        </Header>
+                      ) : (
+                        t('asset_page.sold_out')
+                      )}
+                    </Stats>
+                    <Network asset={item} />
+                    <Button>OPEN IN EDITOR</Button>
+                  </>
+                )
+              ) : (
+                <></>
+              )}
+              {/* <Row>
                 <Stats title={t('asset_page.price')}>
                   <Mana network={item.network} withTooltip>
                     {formatMANA(item.price)}
@@ -92,10 +132,14 @@ const ItemDetail = (props: Props) => {
                   )}
                 </Stats>
                 <Network asset={item} />
-              </Row>
+              </Row> */}
             </Box>
-          </Column>
-        </Row>
+          </div>
+        </div>
+
+        {/* <Row>
+          <Column></Column>
+        </Row> */}
         {/* <Title
           left={
             <Header size="large">

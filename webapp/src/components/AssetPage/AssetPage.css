@@ -28,6 +28,21 @@
   overflow: hidden;
 }
 
+.AssetPage .dcl.stats + .dcl.stats {
+  margin-left: 0px;
+}
+
+.AssetPage .dcl.stats {
+  display: block;
+  margin-right: 24px;
+  margin-bottom: 24px;
+  width: unset;
+}
+
+.AssetPage .dcl.stats:nth-last-child(1) {
+  margin-right: 0px;
+}
+
 @media (max-width: 768px) {
   .AssetPage .ui.container > .Row {
     flex-direction: column;
@@ -38,8 +53,8 @@
     width: 100%;
   }
 
-  .AssetPage .ui.container > .Row .ui.button {
+  /* .AssetPage .ui.container > .Row .ui.button {
     margin-left: 0px;
     margin-top: 24px;
-  }
+  } */
 }
