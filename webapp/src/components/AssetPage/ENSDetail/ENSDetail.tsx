@@ -1,53 +1,54 @@
 import React from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Container, Header } from 'decentraland-ui'
-import { getAssetName } from '../../../modules/asset/utils'
-import { PageHeader } from '../../PageHeader'
+import { Badge, Container } from 'decentraland-ui'
 import { AssetImage } from '../../AssetImage'
-import { Row } from '../../Layout/Row'
-import { Column } from '../../Layout/Column'
-import { Title } from '../Title'
-import { Owner } from '../Owner'
-import { Badge } from '../Badge'
+import { PageHeader } from '../../PageHeader'
 import { Network } from '../Network'
-import { OrderDetails } from '../OrderDetails'
+import { Props } from './ENSDetail.types'
+import Title from '../V2/Title'
+import { Box } from '../../AssetBrowse/Box'
+import { Owner } from '../V2/Owner'
+import ListedBadge from '../../ListedBadge'
+import Price from '../V2/Price'
+import Expiration from '../V2/Expiration'
 import { Actions } from '../Actions'
 import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
-import { Props } from './ENSDetail.types'
+import styles from './ENSDetail.module.css'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-const ENSDetail = (props: Props) => {
-  const { nft } = props
+const ENSDetail = ({ nft }: Props) => {
   return (
-    <>
+    <div className={styles.detail}>
       <PageHeader>
         <AssetImage asset={nft} showMonospace />
+        {!!nft.activeOrderId && <ListedBadge className={styles.listedBadge} />}
       </PageHeader>
-      <Container className="ENSDetail">
-        <Title
-          left={
-            <Header size="large">
-              <div className="text">
-                {getAssetName(nft)}
+      <Container>
+        <div className={styles.info}>
+          <div className={styles.left}>
+            <div>
+              <Title asset={nft} />
+              <div className={styles.badges}>
                 <Badge color="#37333d">{t('global.ens')}</Badge>
               </div>
-            </Header>
-          }
-          right={<Owner asset={nft} />}
-        />
-        <Row>
-          <Column align="left" grow={true}>
-            <Network asset={nft} />
-            <OrderDetails nft={nft} />
-          </Column>
-          <Column align="right">
-            <Actions nft={nft} />
-          </Column>
-        </Row>
+            </div>
+            <div className={styles.ownerAndCollection}>
+              <Owner asset={nft} />
+            </div>
+          </div>
+          <div className={styles.right}>
+            <Box className={styles.box}>
+              <Price asset={nft} />
+              <Network asset={nft} />
+              <Actions nft={nft} />
+              <Expiration />
+            </Box>
+          </div>
+        </div>
         <Bids nft={nft} />
         <TransactionHistory nft={nft} />
       </Container>
-    </>
+    </div>
   )
 }
 
