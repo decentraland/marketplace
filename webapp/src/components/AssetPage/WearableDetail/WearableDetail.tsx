@@ -29,6 +29,7 @@ import ListedBadge from '../../ListedBadge'
 import styles from './WearableDetail.module.css'
 import Price from '../V2/Price'
 import Expiration from '../V2/Expiration'
+import { Actions } from '../Actions'
 
 const WearableDetail = ({ nft }: Props) => {
   const wearable = nft.data.wearable!
@@ -64,7 +65,6 @@ const WearableDetail = ({ nft }: Props) => {
           <div className={styles.right}>
             <Box className={styles.box}>
               <Price asset={nft} />
-              {/* <OrderDetails nft={nft} /> */}
               <div className={styles.stockAndNetwork}>
                 {nft.issuedId ? (
                   <Stats title={t('global.issue_number')}>
@@ -78,28 +78,7 @@ const WearableDetail = ({ nft }: Props) => {
                 ) : null}
                 <Network asset={nft} />
               </div>
-              {/* {isOwner ? (
-                <div className={styles.ownerButtons}>
-                  <Button fluid>EDIT PRICE</Button>
-                  <Button fluid>CHANGE BENEFICIARY</Button>
-                  <Button fluid>MINT ITEM</Button>
-                </div>
-              ) : (
-                canBuy && (
-                  <Button
-                    fluid
-                    as={Link}
-                    to={locations.buy(
-                      AssetType.ITEM,
-                      nft.contractAddress,
-                      nft.itemId
-                    )}
-                    primary
-                  >
-                    {t('asset_page.actions.buy')}
-                  </Button>
-                )
-              )} */}
+              <Actions nft={nft} />
               <Expiration />
             </Box>
           </div>
