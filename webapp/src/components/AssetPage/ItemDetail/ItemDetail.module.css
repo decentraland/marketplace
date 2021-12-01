@@ -42,12 +42,6 @@
   min-width: 320px;
 }
 
-.box > div {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-
 .ownerAndCollection {
   display: flex;
   justify-content: space-between;

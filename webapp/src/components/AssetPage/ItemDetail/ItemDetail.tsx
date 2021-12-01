@@ -1,5 +1,5 @@
 import React from 'react'
-// import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import {
   Button,
   Container,
@@ -9,15 +9,15 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Rarity } from '@dcl/schemas'
-// import { formatMANA } from '../../../lib/mana'
-// import { locations } from '../../../modules/routing/locations'
+import { formatMANA } from '../../../lib/mana'
+import { locations } from '../../../modules/routing/locations'
 // import { AssetType } from '../../../modules/asset/types'
 // import { getAssetName } from '../../../modules/asset/utils'
 // import { Row } from '../../Layout/Row'
 // import { Column } from '../../Layout/Column'
 import { AssetImage } from '../../AssetImage'
 import { PageHeader } from '../../PageHeader'
-// import { Mana } from '../../Mana'
+import { Mana } from '../../Mana'
 // import { Title } from '../Title'
 import { Network } from '../Network'
 import { Description } from '../Description'
@@ -41,7 +41,7 @@ import styles from './ItemDetail.module.css'
 const ItemDetail = ({ item, wallet }: Props) => {
   const wearable = item.data.wearable!
   const isOwner = wallet?.address === item.creator
-  // const canBuy = item.isOnSale && item.available > 0
+  const canBuy = !isOwner && item.isOnSale && item.available > 0
 
   return (
     <div className={styles.detail}>
@@ -88,10 +88,19 @@ const ItemDetail = ({ item, wallet }: Props) => {
                       </Stats>
                       <Network asset={item} />
                     </div>
-                    <Button>OPEN IN EDITOR</Button>
+                    <Button fluid>OPEN IN EDITOR</Button>
                   </>
                 ) : (
-                  <>
+                  <></>
+                )
+              ) : item.isOnSale ? (
+                <>
+                  <Stats title={t('asset_page.price')}>
+                    <Mana network={item.network} withTooltip>
+                      {formatMANA(item.price)}
+                    </Mana>
+                  </Stats>
+                  <div className={styles.stockAndNetwork}>
                     <Stats title={t('asset_page.available')}>
                       {item.available > 0 ? (
                         <Header>
@@ -105,9 +114,22 @@ const ItemDetail = ({ item, wallet }: Props) => {
                       )}
                     </Stats>
                     <Network asset={item} />
-                    <Button>OPEN IN EDITOR</Button>
-                  </>
-                )
+                  </div>
+                  {canBuy ? (
+                    <Button
+                      fluid
+                      as={Link}
+                      to={locations.buy(
+                        AssetType.ITEM,
+                        item.contractAddress,
+                        item.itemId
+                      )}
+                      primary
+                    >
+                      {t('asset_page.actions.buy')}
+                    </Button>
+                  ) : null}
+                </>
               ) : (
                 <></>
               )}
