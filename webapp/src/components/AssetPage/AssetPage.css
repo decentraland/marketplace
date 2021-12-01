@@ -6,16 +6,16 @@
   top: 5px;
 }
 
-.AssetPage .AssetImage .pixel {
+.AssetPage .PageHeader > .AssetImage .pixel {
   display: none;
 }
 
-.AssetPage .AssetImage .ens-subdomain {
+.AssetPage .PageHeader > .AssetImage .ens-subdomain {
   font-size: 64px;
   background-size: 2016px;
 }
 
-.AssetPage .AssetImage .ens-subdomain .name {
+.AssetPage .PageHeader > .AssetImage .ens-subdomain .name {
   padding: 25px;
 }
 
@@ -23,7 +23,7 @@
   margin-bottom: 48px;
 }
 
-.AssetPage .AssetImage {
+.AssetPage .PageHeader > .AssetImage {
   border-radius: 12px;
   overflow: hidden;
 }

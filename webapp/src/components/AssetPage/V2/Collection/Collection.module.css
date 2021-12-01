@@ -1,10 +1,10 @@
-.Owner .Profile {
-  display: flex !important;
+.container {
+  display: flex;
   align-items: center;
 }
 
-.Owner .Profile .name {
-  margin-left: 10px;
+.name {
+  margin-left: 16px;
   font-size: 21px;
   font-style: normal;
   font-weight: 600;
@@ -12,4 +12,11 @@
   letter-spacing: 0.3149999976158142px;
   text-align: left;
   color: var(--text);
+}
+
+.image {
+  width: 48px;
+  height: 48px;
+  border-radius: 5px;
+  overflow: hidden;
 }

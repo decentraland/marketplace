@@ -26,7 +26,6 @@ import { Description } from '../Description'
 // import { WearableCollection } from '../WearableCollection'
 import { Props } from './ItemDetail.types'
 import Title from '../V2/Title'
-import styles from './ItemDetail.module.css'
 import RarityBadge from '../V2/RarityBadge'
 import { AssetType } from '../../../modules/asset/types'
 // import IconBadge from '../V2/IconBadge'
@@ -36,6 +35,8 @@ import GenderBadge from '../V2/GenderBadge'
 import CategoryBadge from '../V2/CategoryBadge'
 import { Box } from '../../AssetBrowse/Box'
 import { Owner } from '../V2/Owner'
+import Collection from '../V2/Collection'
+import styles from './ItemDetail.module.css'
 
 const ItemDetail = (props: Props) => {
   const { item } = props
@@ -59,7 +60,14 @@ const ItemDetail = (props: Props) => {
               </div>
             </div>
             <Description text={wearable.description} />
-            <Owner asset={item} />
+            <Row>
+              <Column grow>
+                <Owner asset={item} />
+              </Column>
+              <Column>
+                <Collection asset={item} />
+              </Column>
+            </Row>
           </Column>
           <Column>
             <Box className={styles.box}>
