@@ -3,11 +3,9 @@ import { Link } from 'react-router-dom'
 import { Button, Container, Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Rarity } from '@dcl/schemas'
-import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { AssetImage } from '../../AssetImage'
 import { PageHeader } from '../../PageHeader'
-import { Mana } from '../../Mana'
 import { Network } from '../Network'
 import { Description } from '../Description'
 import { Props } from './ItemDetail.types'
@@ -19,8 +17,9 @@ import CategoryBadge from '../V2/CategoryBadge'
 import { Box } from '../../AssetBrowse/Box'
 import { Owner } from '../V2/Owner'
 import Collection from '../V2/Collection'
-import styles from './ItemDetail.module.css'
 import ListedBadge from '../../ListedBadge'
+import Price from '../V2/Price'
+import styles from './ItemDetail.module.css'
 
 const ItemDetail = ({ item, wallet }: Props) => {
   const wearable = item.data.wearable!
@@ -52,11 +51,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
           </div>
           <div className={styles.right}>
             <Box className={styles.box}>
-              <Stats title={t('asset_page.price')}>
-                <Mana network={item.network} withTooltip>
-                  {formatMANA(item.price)}
-                </Mana>
-              </Stats>
+              <Price asset={item} />
               <div className={styles.stockAndNetwork}>
                 <Stats title={t('asset_page.available')}>
                   {item.available > 0 ? (

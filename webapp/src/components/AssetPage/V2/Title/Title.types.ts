@@ -1,5 +1,5 @@
-import { getAssetName } from '../../../../modules/asset/utils'
+import { Asset } from '../../../../modules/asset/types'
 
 export type Props = {
-  asset: Parameters<typeof getAssetName>[0]
+  asset: Asset
 }

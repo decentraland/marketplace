@@ -1,74 +1,107 @@
 import React from 'react'
-import { Container, Header, Stats } from 'decentraland-ui'
+// import { Link } from 'react-router-dom'
+import {
+  // Button,
+  Container,
+  Header,
+  Stats
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Rarity } from '@dcl/schemas'
-import { getAssetName } from '../../../modules/asset/utils'
-import { AssetType } from '../../../modules/asset/types'
-import { PageHeader } from '../../PageHeader'
+// import { formatMANA } from '../../../lib/mana'
+// import { locations } from '../../../modules/routing/locations'
 import { AssetImage } from '../../AssetImage'
-import { Row } from '../../Layout/Row'
-import { Column } from '../../Layout/Column'
-import { Title } from '../Title'
-import { WearableRarity } from '../WearableRarity'
-import { WearableHighlights } from '../WearableHighlights'
-import { Owner } from '../Owner'
-import { Description } from '../Description'
+import { PageHeader } from '../../PageHeader'
+// import { Mana } from '../../Mana'
 import { Network } from '../Network'
-import { OrderDetails } from '../OrderDetails'
-import { Actions } from '../Actions'
-import { Bids } from '../Bids'
-import { TransactionHistory } from '../TransactionHistory'
-import { WearableCollection } from '../WearableCollection'
+import { Description } from '../Description'
 import { Props } from './WearableDetail.types'
-import './WearableDetail.css'
+import Title from '../V2/Title'
+import RarityBadge from '../V2/RarityBadge'
+import { AssetType } from '../../../modules/asset/types'
+import GenderBadge from '../V2/GenderBadge'
+import CategoryBadge from '../V2/CategoryBadge'
+import { Box } from '../../AssetBrowse/Box'
+import { Owner } from '../V2/Owner'
+import Collection from '../V2/Collection'
+import ListedBadge from '../../ListedBadge'
+// import { OrderDetails } from '../OrderDetails'
+import styles from './WearableDetail.module.css'
+import Price from '../V2/Price'
 
-const WearableDetail = (props: Props) => {
-  const { nft } = props
+const WearableDetail = ({ nft }: Props) => {
   const wearable = nft.data.wearable!
+  // const isOwner = wallet?.address === item.creator
+  // const canBuy = item.isOnSale && item.available > 0
 
   return (
-    <div className="WearableDetail">
+    <div className={styles.detail}>
       <PageHeader>
         <AssetImage asset={nft} isDraggable />
+        {!!nft.activeOrderId && <ListedBadge className={styles.listedBadge} />}
       </PageHeader>
       <Container>
-        <Title
-          left={
-            <Header size="large">
-              <div className="text">
-                {getAssetName(nft)}
-                <WearableRarity type={AssetType.NFT} wearable={wearable} />
+        <div className={styles.info}>
+          <div className={styles.left}>
+            <div>
+              <Title asset={nft} />
+              <div className={styles.badges}>
+                <RarityBadge
+                  rarity={wearable.rarity}
+                  assetType={AssetType.NFT}
+                />
+                <CategoryBadge wearable={wearable} assetType={AssetType.NFT} />
+                <GenderBadge wearable={wearable} assetType={AssetType.NFT} />
               </div>
-            </Header>
-          }
-          right={<Owner asset={nft} />}
-        />
-        <Description text={wearable.description} />
-        <Row>
-          <Column align="left" grow={true}>
-            <Network asset={nft} />
-            <OrderDetails nft={nft} />
-          </Column>
-          <Column align="right">
-            <Actions nft={nft} />
-          </Column>
-        </Row>
-        <Row>
-          <WearableCollection type={AssetType.NFT} asset={nft} />
-          {nft.issuedId ? (
-            <Stats title={t('global.issue_number')}>
-              <Header>
-                {Number(nft.issuedId).toLocaleString()}
-                <span className="issue-number">
-                  /{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}
-                </span>
-              </Header>
-            </Stats>
-          ) : null}
-        </Row>
-        <WearableHighlights type={AssetType.ITEM} wearable={wearable} />
-        <Bids nft={nft} />
-        <TransactionHistory nft={nft} />
+            </div>
+            <Description text={wearable.description} />
+            <div className={styles.ownerAndCollection}>
+              <Owner asset={nft} />
+              <Collection asset={nft} />
+            </div>
+          </div>
+          <div className={styles.right}>
+            <Box className={styles.box}>
+              <Price asset={nft} />
+              {/* <OrderDetails nft={nft} /> */}
+              <div className={styles.stockAndNetwork}>
+                {nft.issuedId ? (
+                  <Stats title={t('global.issue_number')}>
+                    <Header>
+                      {Number(nft.issuedId).toLocaleString()}
+                      <span className="issue-number">
+                        /{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}
+                      </span>
+                    </Header>
+                  </Stats>
+                ) : null}
+                <Network asset={nft} />
+              </div>
+              {/* {isOwner ? (
+                <div className={styles.ownerButtons}>
+                  <Button fluid>EDIT PRICE</Button>
+                  <Button fluid>CHANGE BENEFICIARY</Button>
+                  <Button fluid>MINT ITEM</Button>
+                </div>
+              ) : (
+                canBuy && (
+                  <Button
+                    fluid
+                    as={Link}
+                    to={locations.buy(
+                      AssetType.ITEM,
+                      nft.contractAddress,
+                      nft.itemId
+                    )}
+                    primary
+                  >
+                    {t('asset_page.actions.buy')}
+                  </Button>
+                )
+              )} */}
+            </Box>
+          </div>
+        </div>
       </Container>
     </div>
   )
