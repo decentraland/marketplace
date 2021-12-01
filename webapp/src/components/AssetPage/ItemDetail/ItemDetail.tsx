@@ -1,12 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import {
-  Button,
-  Container,
-  Header,
-  Stats
-  // Popup
-} from 'decentraland-ui'
+import { Button, Container, Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Rarity } from '@dcl/schemas'
 import { formatMANA } from '../../../lib/mana'
