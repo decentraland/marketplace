@@ -29,7 +29,7 @@
 }
 
 .AssetPage .dcl.stats + .dcl.stats {
-  margin-left: 0px;
+  margin-left: unset;
 }
 
 .AssetPage .dcl.stats {
@@ -40,7 +40,11 @@
 }
 
 .AssetPage .dcl.stats:nth-last-child(1) {
-  margin-right: 0px;
+  margin-right: unset;
+}
+
+.AssetPage .ui.button + .ui.button {
+  margin-left: unset;
 }
 
 @media (max-width: 768px) {
