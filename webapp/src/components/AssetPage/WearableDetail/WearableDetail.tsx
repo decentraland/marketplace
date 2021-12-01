@@ -1,18 +1,9 @@
 import React from 'react'
-// import { Link } from 'react-router-dom'
-import {
-  // Button,
-  Container,
-  Header,
-  Stats
-} from 'decentraland-ui'
+import { Container, Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Rarity } from '@dcl/schemas'
-// import { formatMANA } from '../../../lib/mana'
-// import { locations } from '../../../modules/routing/locations'
 import { AssetImage } from '../../AssetImage'
 import { PageHeader } from '../../PageHeader'
-// import { Mana } from '../../Mana'
 import { Network } from '../Network'
 import { Description } from '../Description'
 import { Props } from './WearableDetail.types'
@@ -25,16 +16,15 @@ import { Box } from '../../AssetBrowse/Box'
 import { Owner } from '../V2/Owner'
 import Collection from '../V2/Collection'
 import ListedBadge from '../../ListedBadge'
-// import { OrderDetails } from '../OrderDetails'
 import styles from './WearableDetail.module.css'
 import Price from '../V2/Price'
 import Expiration from '../V2/Expiration'
 import { Actions } from '../Actions'
+import { Bids } from '../Bids'
+import { TransactionHistory } from '../TransactionHistory'
 
 const WearableDetail = ({ nft }: Props) => {
   const wearable = nft.data.wearable!
-  // const isOwner = wallet?.address === item.creator
-  // const canBuy = item.isOnSale && item.available > 0
 
   return (
     <div className={styles.detail}>
@@ -83,6 +73,8 @@ const WearableDetail = ({ nft }: Props) => {
             </Box>
           </div>
         </div>
+        <Bids nft={nft} />
+        <TransactionHistory nft={nft} />
       </Container>
     </div>
   )
