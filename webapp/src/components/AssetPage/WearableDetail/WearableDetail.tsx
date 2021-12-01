@@ -28,6 +28,7 @@ import ListedBadge from '../../ListedBadge'
 // import { OrderDetails } from '../OrderDetails'
 import styles from './WearableDetail.module.css'
 import Price from '../V2/Price'
+import Expiration from '../V2/Expiration'
 
 const WearableDetail = ({ nft }: Props) => {
   const wearable = nft.data.wearable!
@@ -99,6 +100,7 @@ const WearableDetail = ({ nft }: Props) => {
                   </Button>
                 )
               )} */}
+              <Expiration />
             </Box>
           </div>
         </div>
