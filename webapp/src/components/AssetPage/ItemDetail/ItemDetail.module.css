@@ -65,3 +65,9 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.listedBadge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}

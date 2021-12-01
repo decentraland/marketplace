@@ -20,6 +20,7 @@ import { Box } from '../../AssetBrowse/Box'
 import { Owner } from '../V2/Owner'
 import Collection from '../V2/Collection'
 import styles from './ItemDetail.module.css'
+import ListedBadge from '../../ListedBadge'
 
 const ItemDetail = ({ item, wallet }: Props) => {
   const wearable = item.data.wearable!
@@ -30,6 +31,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
     <div className={styles.detail}>
       <PageHeader>
         <AssetImage asset={item} isDraggable />
+        {item.isOnSale && <ListedBadge className={styles.listedBadge} />}
       </PageHeader>
       <Container>
         <div className={styles.info}>
