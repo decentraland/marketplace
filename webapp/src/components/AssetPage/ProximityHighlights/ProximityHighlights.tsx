@@ -16,35 +16,33 @@ const ProximityHighlights = (props: Props) => {
     proximities
   )
 
-  return (
+  return proximity ? (
     <div className="ProximityHighlights">
-      {proximity ? (
-        <Highlights>
-          {proximity?.plaza !== undefined ? (
-            <Highlight
-              icon={<div className="plaza" />}
-              name={t('asset_page.plaza')}
-              description={getDistanceText(proximity?.plaza)}
-            />
-          ) : null}
-          {proximity?.road !== undefined ? (
-            <Highlight
-              icon={<div className="road" />}
-              name={t('asset_page.road')}
-              description={getDistanceText(proximity?.road)}
-            />
-          ) : null}
-          {proximity?.district !== undefined ? (
-            <Highlight
-              icon={<div className="district" />}
-              name={t('asset_page.district')}
-              description={getDistanceText(proximity?.district)}
-            />
-          ) : null}
-        </Highlights>
-      ) : null}
+      <Highlights>
+        {proximity?.plaza !== undefined ? (
+          <Highlight
+            icon={<div className="plaza" />}
+            name={t('asset_page.plaza')}
+            description={getDistanceText(proximity?.plaza)}
+          />
+        ) : null}
+        {proximity?.road !== undefined ? (
+          <Highlight
+            icon={<div className="road" />}
+            name={t('asset_page.road')}
+            description={getDistanceText(proximity?.road)}
+          />
+        ) : null}
+        {proximity?.district !== undefined ? (
+          <Highlight
+            icon={<div className="district" />}
+            name={t('asset_page.district')}
+            description={getDistanceText(proximity?.district)}
+          />
+        ) : null}
+      </Highlights>
     </div>
-  )
+  ) : null
 }
 
 export default React.memo(ProximityHighlights)

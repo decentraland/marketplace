@@ -8,7 +8,6 @@ import { Props } from './ParcelDetail.types'
 import Title from '../V2/Title'
 import { Box } from '../../AssetBrowse/Box'
 import { Owner } from '../V2/Owner'
-import Collection from '../V2/Collection'
 import ListedBadge from '../../ListedBadge'
 import Price from '../V2/Price'
 import Expiration from '../V2/Expiration'
@@ -48,7 +47,6 @@ const ParcelDetail = ({ nft }: Props) => {
             <Description text={parcel.description} />
             <div className={styles.ownerAndCollection}>
               <Owner asset={nft} />
-              <Collection asset={nft} />
             </div>
             <ProximityHighlights nft={nft} />
           </div>

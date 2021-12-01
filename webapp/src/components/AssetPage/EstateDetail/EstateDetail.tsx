@@ -1,78 +1,66 @@
 import React from 'react'
-import { Container, Header } from 'decentraland-ui'
-import { getAssetName } from '../../../modules/asset/utils'
-import { PageHeader } from '../../PageHeader'
+import { Badge, Container } from 'decentraland-ui'
 import { AssetImage } from '../../AssetImage'
-import { Row } from '../../Layout/Row'
-import { Column } from '../../Layout/Column'
-import { Title } from '../Title'
-import { Owner } from '../Owner'
-import { Badge } from '../Badge'
-import { Description } from '../Description'
+import { PageHeader } from '../../PageHeader'
 import { Network } from '../Network'
-import { OrderDetails } from '../OrderDetails'
+import { Description } from '../Description'
+import { Props } from './EstateDetail.types'
+import Title from '../V2/Title'
+import { Box } from '../../AssetBrowse/Box'
+import { Owner } from '../V2/Owner'
+import ListedBadge from '../../ListedBadge'
+import Price from '../V2/Price'
+import Expiration from '../V2/Expiration'
 import { Actions } from '../Actions'
-import { ProximityHighlights } from '../ProximityHighlights'
+import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
 import { JumpIn } from '../JumpIn'
-import { Bids } from '../Bids'
-import { Props } from './EstateDetail.types'
+import { ProximityHighlights } from '../ProximityHighlights'
+import styles from './EstateDetail.module.css'
 import { ParcelCoordinates } from './ParcelCoordinates'
-import './EstateDetail.css'
 
-const EstateDetail = (props: Props) => {
-  const { nft } = props
+const EstateDetail = ({ nft }: Props) => {
   const estate = nft.data.estate!
   const { x, y } = estate.parcels[0]
+
   return (
-    <>
+    <div className={styles.detail}>
       <PageHeader>
-        <AssetImage
-          asset={nft}
-          isDraggable={true}
-          withNavigation={true}
-          hasPopup={true}
-        />
+        <AssetImage asset={nft} isDraggable />
+        {!!nft.activeOrderId && <ListedBadge className={styles.listedBadge} />}
       </PageHeader>
-      <Container className="EstateDetail">
-        <Title
-          leftClassName="left-title"
-          left={
-            <>
-              <Header className="estate-title-name" size="large">
-                {getAssetName(nft)}
-              </Header>
-              <Badge className="estate-title-badge" color="#37333d">
-                {estate.size.toLocaleString()} LAND
-              </Badge>
-              {estate.size > 0 ? (
-                <JumpIn
-                  className="estate-title-badge estate-title-jump-in"
-                  x={x}
-                  y={y}
-                />
-              ) : null}
-            </>
-          }
-          rightClassName="right-title"
-          right={<Owner asset={nft} />}
-        />
-        <Description text={estate.description} />
-        <Row>
-          <Column align="left" grow={true}>
-            <Network asset={nft} />
-            <OrderDetails nft={nft} />
-          </Column>
-          <Column align="right">
-            <Actions nft={nft} />
-          </Column>
-        </Row>
-        <ProximityHighlights nft={nft} />
+      <Container>
+        <div className={styles.info}>
+          <div className={styles.left}>
+            <div>
+              <Title asset={nft} />
+              <div className={styles.badges}>
+                <Badge color="#37333d">
+                  {estate.size.toLocaleString()} LAND
+                </Badge>
+                {estate.size > 0 ? <JumpIn x={x} y={y} /> : null}
+              </div>
+            </div>
+            <Description text={estate.description} />
+            <div className={styles.ownerAndCollection}>
+              <Owner asset={nft} />
+            </div>
+            <ProximityHighlights nft={nft} />
+          </div>
+          <div className={styles.right}>
+            <Box className={styles.box}>
+              <Price asset={nft} />
+              <Network asset={nft} />
+              <Actions nft={nft} />
+              <Expiration />
+            </Box>
+          </div>
+        </div>
         <Bids nft={nft} />
         <ParcelCoordinates estateId={nft.tokenId} />
         <TransactionHistory nft={nft} />
       </Container>
-    </>
+    </div>
   )
 }
 
