@@ -26,7 +26,7 @@ const EstateDetail = ({ nft }: Props) => {
   return (
     <div className={styles.detail}>
       <PageHeader>
-        <AssetImage asset={nft} isDraggable />
+        <AssetImage asset={nft} isDraggable withNavigation hasPopup />
         {!!nft.activeOrderId && <ListedBadge className={styles.listedBadge} />}
       </PageHeader>
       <Container>
