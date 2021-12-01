@@ -1,20 +1,11 @@
 import React from 'react'
-import {
-  Container
-  // Header, Stats
-} from 'decentraland-ui'
-// import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-// import { Rarity } from '@dcl/schemas'
+import { Container } from 'decentraland-ui'
 import { AssetImage } from '../../AssetImage'
 import { PageHeader } from '../../PageHeader'
 import { Network } from '../Network'
 import { Description } from '../Description'
 import { Props } from './ParcelDetail.types'
 import Title from '../V2/Title'
-// import RarityBadge from '../V2/RarityBadge'
-// import { AssetType } from '../../../modules/asset/types'
-// import GenderBadge from '../V2/GenderBadge'
-// import CategoryBadge from '../V2/CategoryBadge'
 import { Box } from '../../AssetBrowse/Box'
 import { Owner } from '../V2/Owner'
 import Collection from '../V2/Collection'
@@ -24,7 +15,6 @@ import Expiration from '../V2/Expiration'
 import { Actions } from '../Actions'
 import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
-import styles from './ParcelDetail.module.css'
 import { Coordinate } from '../../Coordinate'
 import { JumpIn } from '../JumpIn'
 import { ProximityHighlights } from '../ProximityHighlights'
@@ -32,6 +22,7 @@ import { Link } from 'react-router-dom'
 import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { NFTCategory } from '@dcl/schemas'
+import styles from './ParcelDetail.module.css'
 
 const ParcelDetail = ({ nft }: Props) => {
   const parcel = nft.data.parcel!
