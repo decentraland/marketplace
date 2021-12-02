@@ -1,8 +1,8 @@
 import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { locations } from '../../../../modules/routing/locations'
-import { getSearchWearableSection } from '../../../../modules/routing/search'
+import { locations } from '../../../modules/routing/locations'
+import { getSearchWearableSection } from '../../../modules/routing/search'
 import CategoryBadge from './CategoryBadge'
 import { MapDispatchProps, OwnProps } from './CategoryBadge.types'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { getAssetName } from '../../../../modules/asset/utils'
+import { getAssetName } from '../../../modules/asset/utils'
 import { Props } from './Title.types'
 import styles from './Title.module.css'
 

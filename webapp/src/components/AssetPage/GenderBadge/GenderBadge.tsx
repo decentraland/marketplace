@@ -4,7 +4,7 @@ import React from 'react'
 import {
   isGender,
   isUnisex as getIsUnisex
-} from '../../../../modules/nft/wearable/utils'
+} from '../../../modules/nft/wearable/utils'
 import IconBadge from '../IconBadge'
 import { Props } from './GenderBadge.types'
 

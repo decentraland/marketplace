@@ -1,7 +1,7 @@
 import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana, Stats } from 'decentraland-ui'
-import { formatMANA } from '../../../../lib/mana'
+import { formatMANA } from '../../../lib/mana'
 import { Props } from './Price.types'
 
 const Price = ({ asset, price }: Props) => {
