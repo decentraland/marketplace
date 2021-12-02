@@ -53,7 +53,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
             <Box className={styles.box}>
               <Price asset={item} />
               <div className={styles.stockAndNetwork}>
-                <Stats title={t('asset_page.available')}>
+                <Stats title={t('asset_page.stock')}>
                   {item.available > 0 ? (
                     <Header>
                       {item.available.toLocaleString()}
@@ -69,9 +69,11 @@ const ItemDetail = ({ item, wallet }: Props) => {
               </div>
               {isOwner ? (
                 <div className={styles.ownerButtons}>
-                  <Button fluid>EDIT PRICE</Button>
-                  <Button fluid>CHANGE BENEFICIARY</Button>
-                  <Button fluid>MINT ITEM</Button>
+                  <Button fluid>{t('asset_page.actions.edit_price')}</Button>
+                  <Button fluid>
+                    {t('asset_page.actions.change_beneficiary')}
+                  </Button>
+                  <Button fluid>{t('asset_page.actions.mint_item')}</Button>
                 </div>
               ) : (
                 canBuy && (
