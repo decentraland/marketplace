@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { VendorName } from '../../../modules/vendor/types'
 import { ENSDetail } from '../../AssetPage/ENSDetail'
 import { EstateDetail } from '../../AssetPage/EstateDetail'
 import { ParcelDetail } from '../../AssetPage/ParcelDetail'
-import { PictureFrameDetail } from '../../AssetPage/PictureFrameDetail'
 import { WearableDetail } from '../../AssetPage/WearableDetail'
 import { Props } from './NFTDetail.types'
 
@@ -17,9 +15,6 @@ const NFTDetail = (props: Props) => {
       {estate ? <EstateDetail nft={nft} /> : null}
       {wearable ? <WearableDetail nft={nft} /> : null}
       {ens ? <ENSDetail nft={nft} /> : null}
-      {nft.vendor !== VendorName.DECENTRALAND ? (
-        <PictureFrameDetail nft={nft} />
-      ) : null}
     </>
   )
 }
