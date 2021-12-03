@@ -16,11 +16,15 @@ import Collection from '../Collection'
 import Price from '../Price'
 import BaseDetail from '../BaseDetail'
 import styles from './ItemDetail.module.css'
+import { getBuilderCollectionDetailUrl } from '../../CollectionPage/utils'
 
 const ItemDetail = ({ item, wallet }: Props) => {
   const wearable = item.data.wearable!
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
+  const builderCollectionUrl = getBuilderCollectionDetailUrl(
+    item.contractAddress
+  )
 
   return (
     <BaseDetail
@@ -63,11 +67,15 @@ const ItemDetail = ({ item, wallet }: Props) => {
           </div>
           {isOwner ? (
             <div className={styles.ownerButtons}>
-              <Button fluid>{t('asset_page.actions.edit_price')}</Button>
-              <Button fluid>
+              <Button as="a" href={builderCollectionUrl} fluid>
+                {t('asset_page.actions.edit_price')}
+              </Button>
+              <Button as="a" href={builderCollectionUrl} fluid>
                 {t('asset_page.actions.change_beneficiary')}
               </Button>
-              <Button fluid>{t('asset_page.actions.mint_item')}</Button>
+              <Button as="a" href={builderCollectionUrl} fluid>
+                {t('asset_page.actions.mint_item')}
+              </Button>
             </div>
           ) : (
             canBuy && (
