@@ -15,8 +15,8 @@ import { Owner } from '../Owner'
 import Collection from '../Collection'
 import Price from '../Price'
 import BaseDetail from '../BaseDetail'
+import { getBuilderCollectionDetailUrl } from '../../../modules/collection/utils'
 import styles from './ItemDetail.module.css'
-import { getBuilderCollectionDetailUrl } from '../../CollectionPage/utils'
 
 const ItemDetail = ({ item, wallet }: Props) => {
   const wearable = item.data.wearable!
