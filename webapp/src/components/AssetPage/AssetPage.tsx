@@ -11,12 +11,13 @@ import { ENSDetail } from './ENSDetail'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { Footer } from '../Footer'
+import './AssetPage.css'
 
 const AssetPage = ({ type, onBack }: Props) => (
   <>
     <Navbar isFullscreen />
     <Navigation />
-    <Page className="BaseDetail">
+    <Page className="AssetPage">
       <Section>
         <Column>
           <Back className="back" absolute onClick={onBack} />

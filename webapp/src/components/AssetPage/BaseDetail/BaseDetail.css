@@ -1,13 +1,11 @@
-.BaseDetail {
-  margin-top: 39px;
-}
-
-.BaseDetail .back {
-  top: 5px;
-}
-
 .BaseDetail .PageHeader > .AssetImage .pixel {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .BaseDetail .PageHeader > .AssetImage {
+    margin-top: 20px;
+  }
 }
 
 .BaseDetail .PageHeader > .AssetImage .ens-subdomain {

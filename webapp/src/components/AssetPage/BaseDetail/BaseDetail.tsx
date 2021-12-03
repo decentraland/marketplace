@@ -8,6 +8,7 @@ import ListedBadge from '../../ListedBadge'
 import { Props } from './BaseDetail.types'
 import styles from './BaseDetail.module.css'
 import './BaseDetail.css'
+import classNames from 'classnames'
 
 const BaseDetail = ({
   asset,
@@ -19,7 +20,7 @@ const BaseDetail = ({
   below
 }: Props) => {
   return (
-    <div className={styles.detail}>
+    <div className={classNames('BaseDetail', styles.detail)}>
       <PageHeader>
         <AssetImage asset={asset} {...assetImageProps} />
         {isOnSale && <ListedBadge className={styles.listedBadge} />}
