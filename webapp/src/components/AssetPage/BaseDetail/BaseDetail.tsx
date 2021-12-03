@@ -34,7 +34,9 @@ const BaseDetail = ({
             {left}
           </div>
           <div className={styles.right}>
-            <Box className={styles.box}>{box}</Box>
+            <Box className={styles.box} childrenClassName={styles.boxChildren}>
+              {box}
+            </Box>
           </div>
         </div>
         {below}

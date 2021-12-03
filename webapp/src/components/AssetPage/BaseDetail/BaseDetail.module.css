@@ -42,28 +42,10 @@
   min-width: 320px;
 }
 
-.ownerAndCollection {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  .ownerAndCollection {
-    flex-direction: column;
-  }
-}
-
-.stockAndNetwork {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.ownerButtons {
+.boxChildren {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 24px;
 }
 
 .listedBadge {

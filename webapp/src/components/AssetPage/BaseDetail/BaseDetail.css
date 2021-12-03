@@ -35,7 +35,6 @@
 .BaseDetail .dcl.stats {
   display: block;
   margin-right: 24px;
-  margin-bottom: 24px;
   width: unset;
 }
 
@@ -50,6 +49,7 @@
 .BaseDetail .row {
   display: flex;
   justify-content: space-between;
+  gap: 20px;
   flex-wrap: wrap;
 }
 

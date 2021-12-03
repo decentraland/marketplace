@@ -3,3 +3,7 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.container:empty {
+  display: none;
+}
