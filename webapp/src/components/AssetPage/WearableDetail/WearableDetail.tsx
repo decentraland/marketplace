@@ -17,6 +17,7 @@ import { Actions } from '../Actions'
 import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
 import BaseDetail from '../BaseDetail'
+import styles from './WearableDetail.module.css'
 
 const WearableDetail = ({ nft }: Props) => {
   const wearable = nft.data.wearable!
@@ -50,7 +51,7 @@ const WearableDetail = ({ nft }: Props) => {
               <Stats title={t('global.issue_number')}>
                 <Header>
                   {Number(nft.issuedId).toLocaleString()}
-                  <span className="issue-number">
+                  <span className={styles.issued}>
                     /{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}
                   </span>
                 </Header>
