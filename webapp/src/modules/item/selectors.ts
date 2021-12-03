@@ -15,7 +15,7 @@ export const getItems = createSelector<
   Item[]
 >(getData, itemsById => Object.values(itemsById))
 
-const itemDetailMatchSelector = createMatchSelector<
+const ItemDetailMatchSelector = createMatchSelector<
   RootState,
   {
     contractAddress: string
@@ -25,15 +25,15 @@ const itemDetailMatchSelector = createMatchSelector<
 
 export const getContractAddress = createSelector<
   RootState,
-  ReturnType<typeof itemDetailMatchSelector>,
+  ReturnType<typeof ItemDetailMatchSelector>,
   string | null
->(itemDetailMatchSelector, match => match?.params.contractAddress || null)
+>(ItemDetailMatchSelector, match => match?.params.contractAddress || null)
 
 export const getTokenId = createSelector<
   RootState,
-  ReturnType<typeof itemDetailMatchSelector>,
+  ReturnType<typeof ItemDetailMatchSelector>,
   string | null
->(itemDetailMatchSelector, match => match?.params.tokenId || null)
+>(ItemDetailMatchSelector, match => match?.params.tokenId || null)
 
 export const getItemsByContractAddress = createSelector(getItems, items =>
   items.reduce((acc, item) => {

@@ -1,2 +1,2 @@
-import ENSDetail from './ENSDetail.container'
+import ENSDetail from './ENSDetail'
 export { ENSDetail }

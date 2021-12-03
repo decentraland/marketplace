@@ -1,2 +1,3 @@
-import EstateDetail from './EstateDetail.container'
+import EstateDetail from './EstateDetail'
+
 export { EstateDetail }

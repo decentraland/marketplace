@@ -1,0 +1,65 @@
+.BaseDetail {
+  margin-top: 39px;
+}
+
+.BaseDetail .back {
+  top: 5px;
+}
+
+.BaseDetail .PageHeader > .AssetImage .pixel {
+  display: none;
+}
+
+.BaseDetail .PageHeader > .AssetImage .ens-subdomain {
+  font-size: 64px;
+  background-size: 2016px;
+}
+
+.BaseDetail .PageHeader > .AssetImage .ens-subdomain .name {
+  padding: 25px;
+}
+
+.BaseDetail .ui.container > div {
+  margin-bottom: 48px;
+}
+
+.BaseDetail .PageHeader > .AssetImage {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.BaseDetail .dcl.stats + .dcl.stats {
+  margin-left: unset;
+}
+
+.BaseDetail .dcl.stats {
+  display: block;
+  margin-right: 24px;
+  margin-bottom: 24px;
+  width: unset;
+}
+
+.BaseDetail .dcl.stats:nth-last-child(1) {
+  margin-right: unset;
+}
+
+.BaseDetail .ui.button + .ui.button {
+  margin-left: unset;
+}
+
+.BaseDetail .row {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .BaseDetail .ui.container > .Row {
+    flex-direction: column;
+  }
+
+  .BaseDetail .ui.container > .Row .dcl.stats,
+  .BaseDetail .ui.container > .Row .ui.button {
+    width: 100%;
+  }
+}

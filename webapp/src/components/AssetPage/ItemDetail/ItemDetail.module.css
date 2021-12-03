@@ -1,73 +1,9 @@
-.detail .supply {
+.supply {
   color: var(--secondary-text);
-}
-
-.info {
-  width: 100%;
-  display: flex;
-}
-
-@media (max-width: 768px) {
-  .info {
-    flex-direction: column;
-    gap: 24px;
-  }
-}
-
-.left {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-  margin-right: 48px;
-}
-
-.title {
-  font-size: 34px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 42px;
-  letter-spacing: 0.4000000059604645px;
-  text-align: left;
-}
-
-.badges {
-  margin-top: 15px;
-  display: flex;
-  gap: 8px;
-}
-
-.box {
-  padding: 20px 24px;
-  min-width: 320px;
-}
-
-.ownerAndCollection {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  .ownerAndCollection {
-    flex-direction: column;
-  }
-}
-
-.stockAndNetwork {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
 }
 
 .ownerButtons {
   display: flex;
   flex-direction: column;
   gap: 8px;
-}
-
-.listedBadge {
-  position: absolute;
-  top: 24px;
-  right: 24px;
 }
