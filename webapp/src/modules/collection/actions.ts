@@ -12,22 +12,15 @@ export const fetchCollectionsRequest = (
   shouldFetchItems?: boolean
 ) => action(FETCH_COLLECTIONS_REQUEST, { filters, shouldFetchItems })
 export const fetchCollectionsSuccess = (
-  filters: CollectionFilters,
   collections: Collection[],
-  count: number,
-  shouldFetchItems?: boolean
+  count: number
 ) =>
   action(FETCH_COLLECTIONS_SUCCESS, {
-    filters,
-    shouldFetchItems,
     collections,
     count
   })
-export const fetchCollectionsFailure = (
-  filters: CollectionFilters,
-  error: string,
-  shouldFetchItems?: boolean
-) => action(FETCH_COLLECTIONS_FAILURE, { filters, shouldFetchItems, error })
+export const fetchCollectionsFailure = (error: string) =>
+  action(FETCH_COLLECTIONS_FAILURE, { error })
 
 export type FetchCollectionsRequestAction = ReturnType<
   typeof fetchCollectionsRequest
@@ -53,24 +46,12 @@ export const fetchSingleCollectionRequest = (
   shouldFetchItems?: boolean
 ) =>
   action(FETCH_SINGLE_COLLECTION_REQUEST, { contractAddress, shouldFetchItems })
-export const fetchSingleCollectionSuccess = (
-  contractAddress: string,
-  collection: Collection,
-  shouldFetchItems?: boolean
-) =>
+export const fetchSingleCollectionSuccess = (collection: Collection) =>
   action(FETCH_SINGLE_COLLECTION_SUCCESS, {
-    contractAddress,
-    shouldFetchItems,
     collection
   })
-export const fetchSingleCollectionFailure = (
-  contractAddress: string,
-  error: string,
-  shouldFetchItems?: boolean
-) =>
+export const fetchSingleCollectionFailure = (error: string) =>
   action(FETCH_SINGLE_COLLECTION_FAILURE, {
-    contractAddress,
-    shouldFetchItems,
     error
   })
 

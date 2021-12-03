@@ -33,9 +33,7 @@ export function* handleFetchCollectionsRequest(
       filters
     )
 
-    yield put(
-      fetchCollectionsSuccess(filters, collections, total, shouldFetchItems)
-    )
+    yield put(fetchCollectionsSuccess(collections, total))
 
     if (shouldFetchItems) {
       const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(
@@ -58,7 +56,7 @@ export function* handleFetchCollectionsRequest(
       }
     }
   } catch (error) {
-    yield put(fetchCollectionsFailure(filters, error.message, shouldFetchItems))
+    yield put(fetchCollectionsFailure(error.message))
   }
 }
 
@@ -76,7 +74,6 @@ export function* handleFetchSingleCollectionRequest(
     if (collections.length === 0) {
       yield put(
         fetchSingleCollectionFailure(
-          contractAddress,
           `Could not get Collection "${contractAddress}"`
         )
       )
@@ -85,13 +82,7 @@ export function* handleFetchSingleCollectionRequest(
 
     const [collection] = collections
 
-    yield put(
-      fetchSingleCollectionSuccess(
-        contractAddress,
-        collection,
-        shouldFetchItems
-      )
-    )
+    yield put(fetchSingleCollectionSuccess(collection))
 
     if (shouldFetchItems) {
       const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(
@@ -112,12 +103,6 @@ export function* handleFetchSingleCollectionRequest(
       }
     }
   } catch (error) {
-    yield put(
-      fetchSingleCollectionFailure(
-        contractAddress,
-        error.message,
-        shouldFetchItems
-      )
-    )
+    yield put(fetchSingleCollectionFailure(error.message))
   }
 }

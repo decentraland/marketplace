@@ -52,7 +52,7 @@ describe('when fetch collection failure action is received', () => {
         error: 'some error',
         data: {}
       },
-      fetchCollectionsFailure({}, 'some other error')
+      fetchCollectionsFailure('some other error')
     )
     expect(newState.loading.length).toBe(0)
     expect(newState.error).toBe('some other error')

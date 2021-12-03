@@ -45,7 +45,7 @@ describe('when handling a fetch collections request', () => {
               Promise.reject(new Error('some error'))
             ]
           ])
-          .put(fetchCollectionsFailure(filters, 'some error'))
+          .put(fetchCollectionsFailure('some error'))
           .dispatch(fetchCollectionsRequest(filters))
           .silentRun()
       })
