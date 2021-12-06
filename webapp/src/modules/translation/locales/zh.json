@@ -29,7 +29,12 @@
     "type": "类型",
     "sale_type": "销售类型",
     "sell_price": "销售价格",
-    "no_results": "无结果"
+    "no_results": "无结果",
+    "category": "类别",
+    "rarity": "稀罕",
+    "stock": "股票",
+    "price": "价格",
+    "collection": "珍藏"
   },
   "vendors": {
     "decentraland": "Decentraland",

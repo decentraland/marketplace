@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Props } from './Collection.types'
 import CollectionImage from '../../CollectionImage'
@@ -18,7 +19,7 @@ const Collection = (props: Props) => {
         }
 
         return (
-          <Stats title={'COLLECTION'}>
+          <Stats title={t('global.collection')}>
             <Link to={locations.collection(asset.contractAddress)}>
               <div className={styles.container}>
                 <div className={styles.image}>

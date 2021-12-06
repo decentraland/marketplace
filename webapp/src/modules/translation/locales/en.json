@@ -33,7 +33,8 @@
     "category": "Category",
     "rarity": "Rarity",
     "stock": "Stock",
-    "price": "Price"
+    "price": "Price",
+    "collection": "Collection"
   },
   "vendors": {
     "decentraland": "Decentraland",

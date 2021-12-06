@@ -29,7 +29,12 @@
     "type": "Tipo",
     "sale_type": "Tipo de venta",
     "sell_price": "Precio de venta",
-    "no_results": "Sin resultados"
+    "no_results": "Sin resultados",
+    "category": "Categoria",
+    "rarity": "Rareza",
+    "stock": "Stock",
+    "price": "Precio",
+    "collection": "Colección"
   },
   "vendors": {
     "decentraland": "Decentraland",
