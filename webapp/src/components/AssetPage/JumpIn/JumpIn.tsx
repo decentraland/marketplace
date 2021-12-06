@@ -17,7 +17,7 @@ const JumpIn = (props: Props) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        {t('asset_page.jump')}&nbsp;{t('asset_page.in')}
+        {t('asset_page.jump_in')}
         <i className={styles.jumpInIcon} />
       </a>
     </Badge>
