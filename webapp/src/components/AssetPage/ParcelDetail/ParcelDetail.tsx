@@ -16,6 +16,7 @@ import { JumpIn } from '../JumpIn'
 import { ProximityHighlights } from '../ProximityHighlights'
 import { locations } from '../../../modules/routing/locations'
 import BaseDetail from '../BaseDetail'
+import { AssetImage } from '../../AssetImage'
 import styles from './ParcelDetail.module.css'
 
 const ParcelDetail = ({ nft }: Props) => {
@@ -26,11 +27,9 @@ const ParcelDetail = ({ nft }: Props) => {
   return (
     <BaseDetail
       asset={nft}
-      assetImageProps={{
-        isDraggable: true,
-        withNavigation: true,
-        hasPopup: true
-      }}
+      assetImage={
+        <AssetImage asset={nft} isDraggable withNavigation hasPopup />
+      }
       isOnSale={!!nft.activeOrderId}
       badges={
         <>

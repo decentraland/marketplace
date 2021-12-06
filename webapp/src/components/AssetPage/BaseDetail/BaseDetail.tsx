@@ -1,6 +1,5 @@
 import React from 'react'
 import { Container } from 'decentraland-ui'
-import { AssetImage } from '../../AssetImage'
 import { PageHeader } from '../../PageHeader'
 import Title from '../Title'
 import { Box } from '../../AssetBrowse/Box'
@@ -10,7 +9,7 @@ import './BaseDetail.css'
 
 const BaseDetail = ({
   asset,
-  assetImageProps,
+  assetImage,
   isOnSale,
   badges,
   left,
@@ -20,7 +19,7 @@ const BaseDetail = ({
   return (
     <div className="BaseDetail">
       <PageHeader>
-        <AssetImage asset={asset} {...assetImageProps} />
+        {assetImage}
         {isOnSale && <ListedBadge className="listedBadge" />}
       </PageHeader>
       <Container>

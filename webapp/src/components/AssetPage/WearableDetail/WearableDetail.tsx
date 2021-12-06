@@ -17,6 +17,7 @@ import { Actions } from '../Actions'
 import { Bids } from '../Bids'
 import { TransactionHistory } from '../TransactionHistory'
 import BaseDetail from '../BaseDetail'
+import { AssetImage } from '../../AssetImage'
 import styles from './WearableDetail.module.css'
 
 const WearableDetail = ({ nft }: Props) => {
@@ -25,7 +26,7 @@ const WearableDetail = ({ nft }: Props) => {
   return (
     <BaseDetail
       asset={nft}
-      assetImageProps={{ isDraggable: true }}
+      assetImage={<AssetImage asset={nft} isDraggable />}
       isOnSale={!!nft.activeOrderId}
       badges={
         <>

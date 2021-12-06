@@ -1,10 +1,9 @@
-import { ComponentProps, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { Asset } from '../../../modules/asset/types'
-import { AssetImage } from '../../AssetImage'
 
 export type Props = {
   asset: Asset
-  assetImageProps: Omit<ComponentProps<typeof AssetImage>, 'asset'>
+  assetImage: ReactNode
   isOnSale: boolean
   badges: ReactNode
   left: ReactNode
