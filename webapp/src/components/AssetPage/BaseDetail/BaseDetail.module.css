@@ -53,3 +53,11 @@
   top: 24px;
   right: 24px;
 }
+
+@media (max-width: 768px) {
+  .listedBadge {
+    position: absolute;
+    top: 44px;
+    right: 24px;
+  }
+}
