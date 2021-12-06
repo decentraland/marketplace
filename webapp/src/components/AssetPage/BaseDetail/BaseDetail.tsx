@@ -6,9 +6,7 @@ import Title from '../Title'
 import { Box } from '../../AssetBrowse/Box'
 import ListedBadge from '../../ListedBadge'
 import { Props } from './BaseDetail.types'
-import styles from './BaseDetail.module.css'
 import './BaseDetail.css'
-import classNames from 'classnames'
 
 const BaseDetail = ({
   asset,
@@ -20,22 +18,22 @@ const BaseDetail = ({
   below
 }: Props) => {
   return (
-    <div className={classNames('BaseDetail', styles.detail)}>
+    <div className="BaseDetail">
       <PageHeader>
         <AssetImage asset={asset} {...assetImageProps} />
-        {isOnSale && <ListedBadge className={styles.listedBadge} />}
+        {isOnSale && <ListedBadge className="listedBadge" />}
       </PageHeader>
       <Container>
-        <div className={styles.info}>
-          <div className={styles.left}>
+        <div className="info">
+          <div className="left">
             <div>
               <Title asset={asset} />
-              <div className={styles.badges}>{badges}</div>
+              <div className="badges">{badges}</div>
             </div>
             {left}
           </div>
-          <div className={styles.right}>
-            <Box className={styles.box} childrenClassName={styles.boxChildren}>
+          <div className="right">
+            <Box className="box" childrenClassName="boxChildren">
               {box}
             </Box>
           </div>

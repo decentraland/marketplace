@@ -1,3 +1,76 @@
+.BaseDetail .info {
+  width: 100%;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .BaseDetail .info {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+.BaseDetail .left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  margin-right: 48px;
+}
+
+.BaseDetail .title {
+  font-size: 34px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 42px;
+  letter-spacing: 0.4000000059604645px;
+  text-align: left;
+}
+
+.BaseDetail .badges {
+  margin-top: 15px;
+  display: flex;
+  gap: 8px;
+}
+
+.BaseDetail .box {
+  padding: 20px 24px;
+  min-width: 320px;
+}
+
+.BaseDetail .boxChildren {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.BaseDetail .listedBadge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+
+@media (max-width: 768px) {
+  .BaseDetail .listedBadge {
+    position: absolute;
+    top: 44px;
+    right: 24px;
+  }
+}
+
+.BaseDetail .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.BaseDetail .supply {
+  color: var(--secondary-text);
+}
+
+/* Override ui asset image */
+
 .BaseDetail .PageHeader > .AssetImage .pixel {
   display: none;
 }
@@ -6,6 +79,11 @@
   .BaseDetail .PageHeader > .AssetImage {
     margin-top: 20px;
   }
+}
+
+.BaseDetail .PageHeader > .AssetImage {
+  border-radius: 12px;
+  overflow: hidden;
 }
 
 .BaseDetail .PageHeader > .AssetImage .ens-subdomain {
@@ -21,10 +99,7 @@
   margin-bottom: 48px;
 }
 
-.BaseDetail .PageHeader > .AssetImage {
-  border-radius: 12px;
-  overflow: hidden;
-}
+/* Override ui stats */
 
 .BaseDetail .dcl.stats + .dcl.stats {
   margin-left: unset;
@@ -36,28 +111,19 @@
   width: unset;
 }
 
+@media (max-width: 768px) {
+  .BaseDetail .dcl.stats {
+    margin-right: unset;
+    margin-bottom: unset;
+  }
+}
+
 .BaseDetail .dcl.stats:nth-last-child(1) {
   margin-right: unset;
 }
 
+/* Override ui buttons */
+
 .BaseDetail .ui.button + .ui.button {
   margin-left: unset;
-}
-
-.BaseDetail .row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  .BaseDetail .ui.container > .Row {
-    flex-direction: column;
-  }
-
-  .BaseDetail .ui.container > .Row .dcl.stats,
-  .BaseDetail .ui.container > .Row .ui.button {
-    width: 100%;
-  }
 }
