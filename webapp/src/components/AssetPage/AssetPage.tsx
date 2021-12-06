@@ -1,36 +1,65 @@
 import React from 'react'
-import { Page } from 'decentraland-ui'
-
+import { Page, Section, Column, Back, Narrow } from 'decentraland-ui'
 import { Asset, AssetType } from '../../modules/asset/types'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
-import { Navigation } from '../Navigation'
 import { AssetProviderPage } from '../AssetProviderPage'
-import { NFTDetail } from '../Vendor/NFTDetail'
 import { ItemDetail } from './ItemDetail'
 import { Props } from './AssetPage.types'
+import { ParcelDetail } from './ParcelDetail'
+import { EstateDetail } from './EstateDetail'
+import { WearableDetail } from './WearableDetail'
+import { ENSDetail } from './ENSDetail'
+import { Navbar } from '../Navbar'
+import { Navigation } from '../Navigation'
+import { Footer } from '../Footer'
 import './AssetPage.css'
 
-const AssetPage = (props: Props) => {
-  const { type } = props
-  return (
-    <>
-      <Navbar isFullscreen />
-      <Navigation isFullscreen />
-      <Page className="AssetPage" isFullscreen>
-        <AssetProviderPage type={type}>
-          {asset =>
-            type === AssetType.NFT ? (
-              <NFTDetail nft={asset as Asset<AssetType.NFT>} />
-            ) : AssetType.ITEM ? (
-              <ItemDetail item={asset as Asset<AssetType.ITEM>} />
-            ) : null
-          }
-        </AssetProviderPage>
-      </Page>
-      <Footer />
-    </>
-  )
-}
+const AssetPage = ({ type, onBack }: Props) => (
+  <>
+    <Navbar isFullscreen />
+    <Navigation />
+    <Page className="AssetPage">
+      <Section>
+        <Column>
+          <Back className="back" absolute onClick={onBack} />
+          <Narrow>
+            <AssetProviderPage type={type}>
+              {asset => {
+                switch (type) {
+                  case AssetType.ITEM:
+                    const item = asset as Asset<AssetType.ITEM>
+
+                    return <ItemDetail item={item} />
+
+                  case AssetType.NFT:
+                    const nft = asset as Asset<AssetType.NFT>
+                    const { parcel, estate, wearable, ens } = nft.data as any
+
+                    if (parcel) {
+                      return <ParcelDetail nft={nft} />
+                    }
+
+                    if (estate) {
+                      return <EstateDetail nft={nft} />
+                    }
+
+                    if (wearable) {
+                      return <WearableDetail nft={nft} />
+                    }
+
+                    if (ens) {
+                      return <ENSDetail nft={nft} />
+                    }
+                }
+
+                return null
+              }}
+            </AssetProviderPage>
+          </Narrow>
+        </Column>
+      </Section>
+    </Page>
+    <Footer />
+  </>
+)
 
 export default React.memo(AssetPage)

@@ -1,24 +1,10 @@
 import React from 'react'
-import classnames from 'classnames'
-
-import { Row } from '../../Layout/Row'
-import { Column } from '../../Layout/Column'
+import { getAssetName } from '../../../modules/asset/utils'
 import { Props } from './Title.types'
-import './Title.css'
+import styles from './Title.module.css'
 
-const Title = (props: Props) => {
-  const { left, right, className, leftClassName, rightClassName } = props
-
-  return (
-    <Row className={classnames(['Title', className])}>
-      <Column className={leftClassName} align="left" grow={true}>
-        {left}
-      </Column>
-      <Column className={rightClassName} align="right">
-        {right}
-      </Column>
-    </Row>
-  )
+const Title = ({ asset }: Props) => {
+  return <div className={styles.title}>{getAssetName(asset)}</div>
 }
 
 export default React.memo(Title)

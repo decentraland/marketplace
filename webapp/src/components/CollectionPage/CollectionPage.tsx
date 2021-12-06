@@ -26,12 +26,10 @@ import { AssetImage } from '../AssetImage'
 import { Mana } from '../Mana'
 import { formatMANA } from '../../lib/mana'
 import { Rarity } from '@dcl/schemas'
-import {
-  getBuilderCollectionDetailUrl,
-  getContractAddressFromProps
-} from './utils'
+import { getContractAddressFromProps } from './utils'
 import { locations } from '../../modules/routing/locations'
 import CollectionProvider from '../CollectionProvider'
+import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import styles from './CollectionPage.module.css'
 
 const CollectionPage = (props: Props) => {

@@ -29,7 +29,12 @@
     "type": "Tipo",
     "sale_type": "Tipo de venta",
     "sell_price": "Precio de venta",
-    "no_results": "Sin resultados"
+    "no_results": "Sin resultados",
+    "category": "Categoria",
+    "rarity": "Rareza",
+    "stock": "Stock",
+    "price": "Precio",
+    "collection": "Colección"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -160,7 +165,10 @@
       "transfer": "Transferir",
       "leaving_decentraland": "Saliendo de Decentraland",
       "leaving_decentraland_description": "Aún no se pueden publicar o actualizar {vendor} assets en el Marketplace de Decentraland. ¿Quiere proceder a {vendor_link} para publicarlo ahí?",
-      "leaving_decentraland_disclaimer": "Tus NFTs van a listarse en el Marketplace de Decentraland"
+      "leaving_decentraland_disclaimer": "Tus NFTs van a listarse en el Marketplace de Decentraland",
+      "edit_price": "Editar precio",
+      "change_beneficiary": "Cambiar de beneficiario",
+      "mint_item": "Acuñar item"
     },
     "description": "Descripción",
     "owner": "Dueño",
@@ -168,10 +176,12 @@
     "price": "Precio",
     "collection": "Colección",
     "available": "Disponible",
-    "expires": "Expira en",
+    "stock": "Stock",
+    "expires": "Expira",
     "plaza": "Plaza",
     "road": "Calle",
     "district": "Distrito",
+    "jump_in": "Ingresar",
     "part_of_estate": "Parte de {estate_name}"
   },
   "proximity": {

@@ -1,0 +1,99 @@
+.IconBadge {
+  display: inline-flex;
+  align-items: center;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #37333d;
+}
+
+.IconBadge .text {
+  font-size: 15px;
+}
+
+.IconBadge .icon {
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Icons */
+
+.IconBadge .BaseMale {
+  background-image: url(../../../images/wearables/MaleIcon.svg);
+}
+
+.IconBadge .BaseFemale {
+  background-image: url(../../../images/wearables/FemaleIcon.svg);
+}
+
+.IconBadge .Unisex {
+  background-image: url(../../../images/wearables/UnisexIcon.svg);
+}
+
+.IconBadge .body_shape {
+  background-image: url(../../../images/wearables/BodyShapeIcon.svg);
+}
+
+.IconBadge .earring {
+  background-image: url(../../../images/wearables/EarringsIcon.svg);
+}
+
+.IconBadge .eyebrows {
+  background-image: url(../../../images/wearables/EyebrowIcon.svg);
+}
+
+.IconBadge .eyes {
+  background-image: url(../../../images/wearables/EyesIcon.svg);
+}
+
+.IconBadge .eyewear {
+  background-image: url(../../../images/wearables/EyewearIcon.svg);
+}
+
+.IconBadge .facial_hair {
+  background-image: url(../../../images/wearables/FacilHairIcon.svg);
+}
+
+.IconBadge .feet {
+  background-image: url(../../../images/wearables/FeetIcon.svg);
+}
+
+.IconBadge .hair {
+  background-image: url(../../../images/wearables/HairIcon.svg);
+}
+
+.IconBadge .hat {
+  background-image: url(../../../images/wearables/HatIcon.svg);
+}
+
+.IconBadge .helmet {
+  background-image: url(../../../images/wearables/HelmetIcon.svg);
+}
+
+.IconBadge .lower_body {
+  background-image: url(../../../images/wearables/LowerBodyIcon.svg);
+}
+
+.IconBadge .mask {
+  background-image: url(../../../images/wearables/MaskIcon.svg);
+}
+
+.IconBadge .mouth {
+  background-image: url(../../../images/wearables/MouthIcon.svg);
+}
+
+.IconBadge .tiara {
+  background-image: url(../../../images/wearables/TiaraIcon.svg);
+}
+
+.IconBadge .top_head {
+  background-image: url(../../../images/wearables/TopHeadIcon.svg);
+}
+
+.IconBadge .upper_body {
+  background-image: url(../../../images/wearables/UpperBodyIcon.svg);
+}

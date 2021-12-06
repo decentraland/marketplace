@@ -1,3 +1,3 @@
-import CollectionImage from './CollectionImage.container'
+import CollectionImage from './CollectionImage'
 
 export default CollectionImage

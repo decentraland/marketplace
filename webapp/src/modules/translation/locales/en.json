@@ -33,7 +33,8 @@
     "category": "Category",
     "rarity": "Rarity",
     "stock": "Stock",
-    "price": "Price"
+    "price": "Price",
+    "collection": "Collection"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -174,20 +175,23 @@
       "transfer": "Transfer",
       "leaving_decentraland": "Leaving Decentraland",
       "leaving_decentraland_description": "You can't publish or update {vendor} assets to the Decentraland Marketplace yet. Do you want to proceed to {vendor_link} to publish it there?",
-      "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace"
+      "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace",
+      "edit_price": "Edit price",
+      "change_beneficiary": "Change beneficiary",
+      "mint_item": "Mint item"
     },
     "description": "Description",
     "owner": "Owner",
     "creator": "Creator",
     "price": "Price",
     "available": "Available",
+    "stock": "Stock",
     "collection": "Collection",
-    "expires": "Expires in",
+    "expires": "Expires",
     "plaza": "Plaza",
     "road": "Road",
     "district": "District",
-    "jump": "Jump",
-    "in": "In",
+    "jump_in": "Jump In",
     "part_of_estate": "Part of {estate_name}"
   },
   "proximity": {

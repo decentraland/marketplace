@@ -6,7 +6,7 @@ const CollectionProvider = ({
   items,
   isLoading,
   withItems,
-  onFetchCollections,
+  onFetchCollection,
   children
 }: Props) => {
   useEffect(() => {
@@ -18,9 +18,9 @@ const CollectionProvider = ({
       !collection ||
       (withItems && (!items || items.length !== collection.size))
     ) {
-      onFetchCollections()
+      onFetchCollection()
     }
-  }, [collection, items, withItems, isLoading, onFetchCollections])
+  }, [collection, items, withItems, isLoading, onFetchCollection])
 
   return <>{children({ collection, items, isLoading })}</>
 }

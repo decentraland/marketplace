@@ -1,24 +1,15 @@
-.Owner > a {
-  display: flex;
+.Owner .Profile {
+  display: flex !important;
   align-items: center;
 }
 
-.Owner label {
-  text-transform: uppercase;
-  color: var(--secondary-text);
-  margin-right: 20px;
-}
-
-@media (max-width: 768px) {
-  .Owner > a {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .Owner label {
-    margin-right: 0px;
-    margin-bottom: 12px;
-    font-size: 13px;
-    line-height: 18px;
-  }
+.Owner .Profile .name {
+  margin-left: 10px;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0.3149999976158142px;
+  text-align: left;
+  color: var(--text);
 }

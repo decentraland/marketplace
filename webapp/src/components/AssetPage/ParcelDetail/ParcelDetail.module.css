@@ -1,0 +1,9 @@
+.estateInfo {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 20px;
+  line-height: 30px;
+  color: var(--secondary-text);
+  margin-bottom: 24px;
+}

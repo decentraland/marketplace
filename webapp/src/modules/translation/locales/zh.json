@@ -29,7 +29,12 @@
     "type": "类型",
     "sale_type": "销售类型",
     "sell_price": "销售价格",
-    "no_results": "无结果"
+    "no_results": "无结果",
+    "category": "类别",
+    "rarity": "稀罕",
+    "stock": "股票",
+    "price": "价格",
+    "collection": "珍藏"
   },
   "vendors": {
     "decentraland": "Decentraland",
@@ -160,7 +165,10 @@
       "transfer": "转让",
       "leaving_decentraland": "离开Decentraland",
       "leaving_decentraland_description": "您还无法将{vendor}资产发布或更新到Decentraland市场。您是否要继续{vendor_link}在此处发布？",
-      "leaving_decentraland_disclaimer": "您的NFT仍将列在Decentraland市场中"
+      "leaving_decentraland_disclaimer": "您的NFT仍将列在Decentraland市场中",
+      "edit_price": "编辑价格",
+      "change_beneficiary": "变更受益人",
+      "mint_item": "薄荷项目"
     },
     "description": "描述",
     "owner": "持有者",
@@ -168,10 +176,12 @@
     "price": "价格",
     "collection": "珍藏",
     "available": "可用的",
-    "expires": "到期时间",
+    "stock": "股票",
+    "expires": "到期",
     "plaza": "广场",
     "road": "道路",
     "district": "区域",
+    "jump_in": "进入",
     "part_of_estate": "{estate_name}一部分"
   },
   "proximity": {

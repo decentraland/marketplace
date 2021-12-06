@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  margin-left: 16px;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0.3149999976158142px;
+  text-align: left;
+  color: var(--text);
+}
+
+.image {
+  width: 48px;
+  height: 48px;
+  border-radius: 5px;
+  overflow: hidden;
+}

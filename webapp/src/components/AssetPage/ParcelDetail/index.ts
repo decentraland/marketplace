@@ -1,2 +1,3 @@
-import ParcelDetail from './ParcelDetail.container'
+import ParcelDetail from './ParcelDetail'
+
 export { ParcelDetail }

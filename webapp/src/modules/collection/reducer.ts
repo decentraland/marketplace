@@ -7,9 +7,15 @@ import {
   FetchCollectionsFailureAction,
   FetchCollectionsRequestAction,
   FetchCollectionsSuccessAction,
+  FetchSingleCollectionFailureAction,
+  FetchSingleCollectionRequestAction,
+  FetchSingleCollectionSuccessAction,
   FETCH_COLLECTIONS_FAILURE,
   FETCH_COLLECTIONS_REQUEST,
-  FETCH_COLLECTIONS_SUCCESS
+  FETCH_COLLECTIONS_SUCCESS,
+  FETCH_SINGLE_COLLECTION_FAILURE,
+  FETCH_SINGLE_COLLECTION_REQUEST,
+  FETCH_SINGLE_COLLECTION_SUCCESS
 } from './actions'
 
 export type CollectionState = {
@@ -30,6 +36,9 @@ type CollectionReducerAction =
   | FetchCollectionsRequestAction
   | FetchCollectionsSuccessAction
   | FetchCollectionsFailureAction
+  | FetchSingleCollectionRequestAction
+  | FetchSingleCollectionSuccessAction
+  | FetchSingleCollectionFailureAction
 
 export function collectionReducer(
   state = INITIAL_STATE,
@@ -37,12 +46,15 @@ export function collectionReducer(
 ): CollectionState {
   switch (action.type) {
     case FETCH_COLLECTIONS_REQUEST:
+    case FETCH_SINGLE_COLLECTION_REQUEST:
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
+
     case FETCH_COLLECTIONS_SUCCESS:
       const { collections, count } = action.payload
+
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
@@ -54,8 +66,20 @@ export function collectionReducer(
         count
       }
 
+    case FETCH_SINGLE_COLLECTION_SUCCESS:
+      const { collection } = action.payload
+
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error: null,
+        data: { ...state.data, [collection.urn]: collection }
+      }
+
     case FETCH_COLLECTIONS_FAILURE:
+    case FETCH_SINGLE_COLLECTION_FAILURE:
       const { error } = action.payload
+
       return {
         ...state,
         loading: loadingReducer(state.loading, action),

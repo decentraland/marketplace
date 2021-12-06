@@ -7,12 +7,12 @@ export type Props = {
   collection?: Collection
   items?: Item[]
   isLoading: boolean
-  onFetchCollections: () => void
+  onFetchCollection: () => void
   children: (
     data: Pick<Props, 'collection' | 'items' | 'isLoading'>
   ) => ReactNode
 }
 
 export type MapStateProps = Pick<Props, 'collection' | 'items' | 'isLoading'>
-export type MapDispatchProps = Pick<Props, 'onFetchCollections'>
+export type MapDispatchProps = Pick<Props, 'onFetchCollection'>
 export type OwnProps = Pick<Props, 'contractAddress' | 'withItems'>

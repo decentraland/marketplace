@@ -7,11 +7,19 @@ import {
   fetchCollectionsFailure,
   FetchCollectionsRequestAction,
   fetchCollectionsSuccess,
-  FETCH_COLLECTIONS_REQUEST
+  fetchSingleCollectionFailure,
+  FetchSingleCollectionRequestAction,
+  fetchSingleCollectionSuccess,
+  FETCH_COLLECTIONS_REQUEST,
+  FETCH_SINGLE_COLLECTION_REQUEST
 } from './actions'
 
 export function* collectionSaga() {
   yield takeEvery(FETCH_COLLECTIONS_REQUEST, handleFetchCollectionsRequest)
+  yield takeEvery(
+    FETCH_SINGLE_COLLECTION_REQUEST,
+    handleFetchSingleCollectionRequest
+  )
 }
 
 export function* handleFetchCollectionsRequest(
@@ -48,6 +56,53 @@ export function* handleFetchCollectionsRequest(
       }
     }
   } catch (error) {
-    yield put(fetchCollectionsFailure(filters, error.message))
+    yield put(fetchCollectionsFailure(error.message))
+  }
+}
+
+export function* handleFetchSingleCollectionRequest(
+  action: FetchSingleCollectionRequestAction
+) {
+  const { contractAddress, shouldFetchItems } = action.payload
+
+  try {
+    const { data: collections }: CollectionResponse = yield call(
+      [collectionAPI, collectionAPI.fetch],
+      { contractAddress }
+    )
+
+    if (collections.length === 0) {
+      yield put(
+        fetchSingleCollectionFailure(
+          `Could not get Collection "${contractAddress}"`
+        )
+      )
+      return
+    }
+
+    const [collection] = collections
+
+    yield put(fetchSingleCollectionSuccess(collection))
+
+    if (shouldFetchItems) {
+      const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(
+        getItemsByContractAddress
+      )
+
+      const items = itemsByContractAddress[collection.contractAddress]
+
+      if (!items || items.length !== collection.size) {
+        yield put(
+          fetchItemsRequest({
+            filters: {
+              first: collection.size,
+              contractAddress: collection.contractAddress
+            }
+          })
+        )
+      }
+    }
+  } catch (error) {
+    yield put(fetchSingleCollectionFailure(error.message))
   }
 }
