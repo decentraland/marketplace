@@ -38,7 +38,7 @@ const WearableDetail = ({ nft }: Props) => {
       left={
         <>
           <Description text={wearable.description} />
-          <div className="row">
+          <div className="BaseDetail row">
             <Owner asset={nft} />
             <Collection asset={nft} />
           </div>
@@ -47,7 +47,7 @@ const WearableDetail = ({ nft }: Props) => {
       box={
         <>
           <Price asset={nft} />
-          <div className="row">
+          <div className="BaseDetail row">
             {nft.issuedId ? (
               <Stats title={t('global.issue_number')}>
                 <Header>

@@ -42,7 +42,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
       left={
         <>
           <Description text={wearable.description} />
-          <div className="row">
+          <div className="BaseDetail row">
             <Owner asset={item} />
             <Collection asset={item} />
           </div>
@@ -51,7 +51,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
       box={
         <>
           <Price asset={item} />
-          <div className="row">
+          <div className="BaseDetail row">
             <Stats title={t('asset_page.stock')}>
               {item.available > 0 ? (
                 <Header>

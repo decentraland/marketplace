@@ -1,16 +1,16 @@
-.BaseDetail .info {
+.BaseDetail.info {
   width: 100%;
   display: flex;
 }
 
 @media (max-width: 768px) {
-  .BaseDetail .info {
+  .BaseDetail.info {
     flex-direction: column;
     gap: 24px;
   }
 }
 
-.BaseDetail .left {
+.BaseDetail.left {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -18,7 +18,7 @@
   margin-right: 48px;
 }
 
-.BaseDetail .title {
+.BaseDetail.title {
   font-size: 34px;
   font-style: normal;
   font-weight: 600;
@@ -27,46 +27,42 @@
   text-align: left;
 }
 
-.BaseDetail .badges {
+.BaseDetail.badges {
   margin-top: 15px;
   display: flex;
   gap: 8px;
 }
 
-.BaseDetail .box {
+.BaseDetail.box {
   padding: 20px 24px;
   min-width: 320px;
 }
 
-.BaseDetail .boxChildren {
+.BaseDetail.box-children {
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-.BaseDetail .listedBadge {
+.BaseDetail.listed-badge {
   position: absolute;
   top: 24px;
   right: 24px;
 }
 
 @media (max-width: 768px) {
-  .BaseDetail .listedBadge {
+  .BaseDetail.listedBadge {
     position: absolute;
     top: 44px;
     right: 24px;
   }
 }
 
-.BaseDetail .row {
+.BaseDetail.row {
   display: flex;
   justify-content: space-between;
   gap: 20px;
   flex-wrap: wrap;
-}
-
-.BaseDetail .supply {
-  color: var(--secondary-text);
 }
 
 /* Override ui asset image */
