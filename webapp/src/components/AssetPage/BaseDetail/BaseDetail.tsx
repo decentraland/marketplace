@@ -20,22 +20,19 @@ const BaseDetail = ({
     <div className="BaseDetail">
       <PageHeader>
         {assetImage}
-        {isOnSale && <ListedBadge className="BaseDetail listed-badge" />}
+        {isOnSale && <ListedBadge className="listed-badge" />}
       </PageHeader>
       <Container>
-        <div className="BaseDetail info">
-          <div className="BaseDetail left">
+        <div className="info">
+          <div className="left">
             <div>
               <Title asset={asset} />
-              <div className="BaseDetail badges">{badges}</div>
+              <div className="badges">{badges}</div>
             </div>
             {left}
           </div>
-          <div className="BaseDetail right">
-            <Box
-              className="BaseDetail box"
-              childrenClassName="BaseDetail box-children"
-            >
+          <div className="right">
+            <Box className="box" childrenClassName="box-children">
               {box}
             </Box>
           </div>
