@@ -1,5 +1,19 @@
-import { takeEvery, put, select, call } from 'redux-saga/effects'
-import { push, getLocation, goBack as crrGoBack } from 'connected-react-router'
+import {
+  takeEvery,
+  put,
+  select,
+  call,
+  take,
+  delay,
+  race
+} from 'redux-saga/effects'
+import {
+  push,
+  getLocation,
+  goBack,
+  LOCATION_CHANGE,
+  replace
+} from 'connected-react-router'
 import { NFTCategory } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
@@ -52,7 +66,8 @@ import {
   FetchAssetsFromRouteAction,
   setIsLoadMore,
   CLEAR_FILTERS,
-  GO_BACK
+  GO_BACK,
+  GoBackAction
 } from './actions'
 import { BrowseOptions, Sections, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
@@ -100,11 +115,18 @@ export function* handleBrowse(action: BrowseAction) {
   yield put(push(buildBrowseURL(pathname, options)))
 }
 
-function* handleGoBack() {
-  if (window.history.length > 1) {
-    yield put(crrGoBack())
-  } else {
-    yield put(push(locations.root()))
+function* handleGoBack(action: GoBackAction) {
+  const { defaultLocation } = action.payload
+
+  yield put(goBack())
+
+  const { timeout }: { timeout?: boolean } = yield race({
+    changed: take(LOCATION_CHANGE),
+    timeout: delay(250)
+  })
+
+  if (timeout) {
+    yield put(replace(defaultLocation || locations.root()))
   }
 }
 

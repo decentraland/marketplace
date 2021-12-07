@@ -40,6 +40,11 @@ export type ClearFiltersAction = ReturnType<typeof clearFilters>
 
 export const GO_BACK = 'Go back'
 
-export const goBack = () => action(GO_BACK)
+/**
+ * @param defaultLocation location to which the router will navigate in case there is no more back history.
+ * defaults to root.
+ */
+export const goBack = (defaultLocation?: string) =>
+  action(GO_BACK, { defaultLocation })
 
 export type GoBackAction = ReturnType<typeof goBack>
