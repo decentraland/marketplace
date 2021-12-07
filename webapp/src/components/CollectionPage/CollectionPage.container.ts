@@ -1,12 +1,11 @@
-import { push } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { locations } from '../../modules/routing/locations'
+import { goBack } from '../../modules/routing/actions'
 import CollectionPage from './CollectionPage'
 import { MapDispatchProps } from './CollectionPage.types'
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
-  onBack: () => dispatch(push(locations.defaultCurrentAccount()))
+  onBack: () => dispatch(goBack())
 })
 
 export default connect(null, mapDispatch)(CollectionPage)
