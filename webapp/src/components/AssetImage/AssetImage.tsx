@@ -28,7 +28,9 @@ const AssetImage = (props: Props) => {
   const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(
     isDraggable
   )
+  const [wearablePreviewError, setWearablePreviewError] = useState(false)
   const handleLoad = useCallback(() => setIsLoadingWearablePreview(false), [])
+  const handleError = useCallback(() => setWearablePreviewError(true), [])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
@@ -81,6 +83,7 @@ const AssetImage = (props: Props) => {
               itemId={asset.itemId}
               dev={isDev}
               onLoad={handleLoad}
+              onError={handleError}
             />
           )
         } else if ('tokenId' in asset && asset.tokenId) {
@@ -90,6 +93,7 @@ const AssetImage = (props: Props) => {
               tokenId={asset.tokenId}
               dev={isDev}
               onLoad={handleLoad}
+              onError={handleError}
             />
           )
         }
@@ -113,6 +117,7 @@ const AssetImage = (props: Props) => {
       const classes =
         'rarity-background ' +
         (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
+      const showWearablePreview = !!wearablePreview && !wearablePreviewError
       return (
         <div
           className={classes}
@@ -120,7 +125,9 @@ const AssetImage = (props: Props) => {
             backgroundImage
           }}
         >
-          {wearablePreview || (
+          {showWearablePreview ? (
+            wearablePreview
+          ) : (
             <img
               alt={getAssetName(asset)}
               className="image"
