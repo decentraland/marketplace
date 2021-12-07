@@ -2,7 +2,7 @@ import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
   type: AssetType
-  onBack: () => void
+  onBack: (location?: string) => void
 }
 
 export type MapDispatchProps = Pick<Props, 'onBack'>

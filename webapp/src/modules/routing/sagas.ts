@@ -11,8 +11,7 @@ import {
   push,
   getLocation,
   goBack,
-  LOCATION_CHANGE,
-  replace
+  LOCATION_CHANGE
 } from 'connected-react-router'
 import { NFTCategory } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
@@ -126,7 +125,7 @@ function* handleGoBack(action: GoBackAction) {
   })
 
   if (timeout) {
-    yield put(replace(defaultLocation || locations.root()))
+    yield put(push(defaultLocation || locations.root()))
   }
 }
 
