@@ -33,7 +33,7 @@ import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import styles from './CollectionPage.module.css'
 
 const CollectionPage = (props: Props) => {
-  const { onBack } = props
+  const { onBack, currentAddress } = props
 
   const contractAddress = getContractAddressFromProps(props)
   const builderCollectionUrl = getBuilderCollectionDetailUrl(contractAddress)
@@ -44,8 +44,13 @@ const CollectionPage = (props: Props) => {
       <Navigation activeTab={NavigationTab.MY_STORE} />
       <Page className={styles.page}>
         <CollectionProvider contractAddress={contractAddress} withItems>
-          {({ collection, items, isLoading }) =>
-            isLoading ? (
+          {({ collection, items, isLoading }) => {
+            const isCollectionOwner =
+              !!collection &&
+              !!currentAddress &&
+              collection.creator.toLowerCase() === currentAddress
+
+            return isLoading ? (
               <Loader size="massive" active />
             ) : !collection || !items ? (
               <div>No Collection</div>
@@ -69,30 +74,32 @@ const CollectionPage = (props: Props) => {
                             )}
                           </Row>
                         </Column>
-                        <Column align="right">
-                          <Row align="right">
-                            <Button
-                              primary
-                              inverted
-                              compact
-                              as="a"
-                              href={builderCollectionUrl}
-                            >
-                              {t('collection_page.edit_in_builder')}
-                            </Button>
-                            <Button
-                              primary
-                              inverted
-                              compact
-                              as="a"
-                              href={builderCollectionUrl}
-                            >
-                              {collection.isOnSale
-                                ? t('collection_page.unlist_from_market')
-                                : t('collection_page.list_on_market')}
-                            </Button>
-                          </Row>
-                        </Column>
+                        {isCollectionOwner && (
+                          <Column align="right">
+                            <Row align="right">
+                              <Button
+                                primary
+                                inverted
+                                compact
+                                as="a"
+                                href={builderCollectionUrl}
+                              >
+                                {t('collection_page.edit_in_builder')}
+                              </Button>
+                              <Button
+                                primary
+                                inverted
+                                compact
+                                as="a"
+                                href={builderCollectionUrl}
+                              >
+                                {collection.isOnSale
+                                  ? t('collection_page.unlist_from_market')
+                                  : t('collection_page.list_on_market')}
+                              </Button>
+                            </Row>
+                          </Column>
+                        )}
                       </Row>
                     </Narrow>
                   </Column>
@@ -117,7 +124,7 @@ const CollectionPage = (props: Props) => {
                           <Table.HeaderCell>
                             {t('global.price')}
                           </Table.HeaderCell>
-                          <Table.HeaderCell />
+                          {isCollectionOwner && <Table.HeaderCell />}
                         </Table.Row>
                       </Table.Header>
                       <Table.Body>
@@ -157,26 +164,28 @@ const CollectionPage = (props: Props) => {
                                 {formatMANA(item.price)}
                               </Mana>
                             </Table.Cell>
-                            <Table.Cell>
-                              <Dropdown
-                                className={styles.ellipsis}
-                                icon="ellipsis horizontal"
-                                direction="left"
-                              >
-                                <Dropdown.Menu>
-                                  <Dropdown.Item
-                                    text={t('collection_page.edit_price')}
-                                    as="a"
-                                    href={builderCollectionUrl}
-                                  />
-                                  <Dropdown.Item
-                                    text={t('collection_page.mint_item')}
-                                    as="a"
-                                    href={builderCollectionUrl}
-                                  />
-                                </Dropdown.Menu>
-                              </Dropdown>
-                            </Table.Cell>
+                            {isCollectionOwner && (
+                              <Table.Cell>
+                                <Dropdown
+                                  className={styles.ellipsis}
+                                  icon="ellipsis horizontal"
+                                  direction="left"
+                                >
+                                  <Dropdown.Menu>
+                                    <Dropdown.Item
+                                      text={t('collection_page.edit_price')}
+                                      as="a"
+                                      href={builderCollectionUrl}
+                                    />
+                                    <Dropdown.Item
+                                      text={t('collection_page.mint_item')}
+                                      as="a"
+                                      href={builderCollectionUrl}
+                                    />
+                                  </Dropdown.Menu>
+                                </Dropdown>
+                              </Table.Cell>
+                            )}
                           </Table.Row>
                         ))}
                       </Table.Body>
@@ -185,7 +194,7 @@ const CollectionPage = (props: Props) => {
                 </Section>
               </>
             )
-          }
+          }}
         </CollectionProvider>
       </Page>
       <Footer />
