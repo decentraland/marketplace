@@ -1,14 +1,14 @@
 import React from 'react'
 import { Header, Row, Column } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
-import styles from './Settings.module.css'
 import Element from './Element'
 import CoverElement from './CoverElement'
+import './Settings.css'
 
 const Settings = () => {
   return (
-    <div>
-      <Row className={styles.top}>
+    <div className="Settings">
+      <Row className="top">
         <Column>
           <Header>Settings</Header>
         </Column>
@@ -16,7 +16,7 @@ const Settings = () => {
           <Link to="#">SEE STORE AS GUEST</Link>
         </Column>
       </Row>
-      <div className={styles.elements}>
+      <div className="elements">
         <CoverElement title="Store cover" src="" onChange={() => {}} />
         <Element
           inputType="textarea"

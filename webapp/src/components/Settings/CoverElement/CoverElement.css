@@ -1,15 +1,22 @@
-.CoverElement {
-}
-
 .CoverElement .title {
   color: var(--secondary-text);
   margin-bottom: 8px;
+  font-size: 15px;
 }
 
-.CoverElement .image {
+.CoverElement .empty {
+  height: 240px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--secondary);
+  border-radius: 6px;
+  width: 100%;
+}
+
+.CoverElement img {
   border-radius: 10px;
   overflow: hidden;
-  max-height: 240px;
+  height: 240px;
   width: 100%;
   object-fit: cover;
 }
@@ -24,10 +31,10 @@
   right: 16px;
 }
 
-.CoverElement .button {
-  min-width: unset !important;
-  line-height: 1em !important;
-  padding: 0px !important;
+.CoverElement .ui.button {
+  min-width: unset;
+  line-height: 1em;
+  padding: 0px;
   width: 48px;
   height: 48px;
 }

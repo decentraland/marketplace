@@ -1,8 +1,12 @@
-.top {
+.Settings > .top {
   margin-bottom: 21px;
 }
 
-.elements {
+.Settings > .top .header {
+  font-size: 17px;
+}
+
+.Settings > .elements {
   display: flex;
   flex-direction: column;
   gap: 32px;

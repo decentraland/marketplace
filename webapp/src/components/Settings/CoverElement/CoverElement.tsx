@@ -1,24 +1,33 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Props } from './CoverElement.types'
 import { Button } from 'decentraland-ui'
 import './CoverElement.css'
 
-const CoverElement = ({ title, onChange }: Props) => {
+const CoverElement = ({ title, src, onChange }: Props) => {
+  const inputRef = useRef<HTMLInputElement>(null)
+
   return (
     <div className="CoverElement">
       <div className="title">{title}</div>
       <div className="image-container">
-        <img
-          className="image"
+        <div className="empty"></div>
+        {/* <img
           src="https://static3.srcdn.com/wordpress/wp-content/uploads/2020/06/One-Piece.jpg"
-        ></img>
-        <div className="buttons">
-          <Button className="button" circular icon="camera" />
-          <Button className="button" circular icon="cancel" />
-        </div>
+          alt="cover"
+        ></img> */}
+        {src && (
+          <div className="buttons">
+            <Button
+              circular
+              icon="camera"
+              onClick={() => inputRef.current?.click()}
+            />
+            <Button circular icon="cancel" />
+          </div>
+        )}
       </div>
       {/* <img src={src} /> */}
-      <input type="file" onChange={onChange} hidden />
+      <input ref={inputRef} type="file" onChange={onChange} hidden />
     </div>
   )
 }
