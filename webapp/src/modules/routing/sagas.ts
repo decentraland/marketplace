@@ -1,5 +1,18 @@
-import { takeEvery, put, select, call } from 'redux-saga/effects'
-import { push, getLocation } from 'connected-react-router'
+import {
+  takeEvery,
+  put,
+  select,
+  call,
+  take,
+  delay,
+  race
+} from 'redux-saga/effects'
+import {
+  push,
+  getLocation,
+  goBack,
+  LOCATION_CHANGE
+} from 'connected-react-router'
 import { NFTCategory } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
@@ -51,7 +64,9 @@ import {
   FETCH_ASSETS_FROM_ROUTE,
   FetchAssetsFromRouteAction,
   setIsLoadMore,
-  CLEAR_FILTERS
+  CLEAR_FILTERS,
+  GO_BACK,
+  GoBackAction
 } from './actions'
 import { BrowseOptions, Sections, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
@@ -62,6 +77,7 @@ export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
   yield takeEvery(BROWSE, handleBrowse)
   yield takeEvery(CLEAR_FILTERS, handleClearFilters)
+  yield takeEvery(GO_BACK, handleGoBack)
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
@@ -96,6 +112,21 @@ export function* handleBrowse(action: BrowseAction) {
 
   yield fetchAssetsFromRoute(options)
   yield put(push(buildBrowseURL(pathname, options)))
+}
+
+function* handleGoBack(action: GoBackAction) {
+  const { defaultLocation } = action.payload
+
+  yield put(goBack())
+
+  const { timeout }: { timeout?: boolean } = yield race({
+    changed: take(LOCATION_CHANGE),
+    timeout: delay(250)
+  })
+
+  if (timeout) {
+    yield put(push(defaultLocation || locations.root()))
+  }
 }
 
 // ------------------------------------------------

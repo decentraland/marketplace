@@ -9,7 +9,10 @@ export const locations = {
   settings: () => '/settings',
   partners: () => '/partners',
   bids: () => '/bids',
-  lands: () => '/lands',
+  lands: (options?: BrowseOptions) => {
+    const params = getSearchParams(options)
+    return params ? `/lands?${params.toString()}` : '/lands'
+  },
   collectibles: () => '/collectibles',
   collection: (contractAddress: string = ':contractAddress') =>
     `/collections/${contractAddress}`,
