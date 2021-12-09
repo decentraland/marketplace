@@ -1,0 +1,15 @@
+.element {
+}
+
+.title {
+  color: var(--secondary-text);
+  margin-bottom: 8px;
+}
+
+.input {
+  all: unset;
+  padding: 10px 12px;
+  border: 1px solid var(--secondary);
+  border-radius: 6px;
+  width: 100%;
+}

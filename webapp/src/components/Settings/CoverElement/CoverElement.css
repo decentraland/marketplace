@@ -1,0 +1,33 @@
+.CoverElement {
+}
+
+.CoverElement .title {
+  color: var(--secondary-text);
+  margin-bottom: 8px;
+}
+
+.CoverElement .image {
+  border-radius: 10px;
+  overflow: hidden;
+  max-height: 240px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.CoverElement .image-container {
+  position: relative;
+}
+
+.CoverElement .buttons {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.CoverElement .button {
+  min-width: unset !important;
+  line-height: 1em !important;
+  padding: 0px !important;
+  width: 48px;
+  height: 48px;
+}
