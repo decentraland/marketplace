@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Header, Row, Column, Button } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
-import DataContainer from './DataContainer'
-import Cover from './Cover'
-import Input from './Input'
+import InputContainer from './InputContainer'
+import CoverPicker from './CoverPicker'
+import TextInput from './TextInput'
 import './StoreSettings.css'
 
 const StoreSettings = () => {
@@ -25,28 +25,28 @@ const StoreSettings = () => {
         </Column>
       </Row>
       <div className="elements">
-        <DataContainer title="Store cover">
-          <Cover src={src} onChange={setSrc} />
-        </DataContainer>
-        <DataContainer title="Description">
-          <Input
+        <InputContainer title="Store cover">
+          <CoverPicker src={src} onChange={setSrc} />
+        </InputContainer>
+        <InputContainer title="Description">
+          <TextInput
             type="textarea"
             value={description}
             onChange={setDescription}
           />
-        </DataContainer>
-        <DataContainer title="Website">
-          <Input type="input" value={website} onChange={setWebsite} />
-        </DataContainer>
-        <DataContainer title="Facebook">
-          <Input type="input" value={facebook} onChange={setFacebook} />
-        </DataContainer>
-        <DataContainer title="Twitter">
-          <Input type="input" value={twitter} onChange={setTwitter} />
-        </DataContainer>
-        <DataContainer title="Discord">
-          <Input type="input" value={discord} onChange={setDiscord} />
-        </DataContainer>
+        </InputContainer>
+        <InputContainer title="Website">
+          <TextInput type="input" value={website} onChange={setWebsite} />
+        </InputContainer>
+        <InputContainer title="Facebook">
+          <TextInput type="input" value={facebook} onChange={setFacebook} />
+        </InputContainer>
+        <InputContainer title="Twitter">
+          <TextInput type="input" value={twitter} onChange={setTwitter} />
+        </InputContainer>
+        <InputContainer title="Discord">
+          <TextInput type="input" value={discord} onChange={setDiscord} />
+        </InputContainer>
       </div>
       <div className="bottom">
         <Button primary>Save</Button>

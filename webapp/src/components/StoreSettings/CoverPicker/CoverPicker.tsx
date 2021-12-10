@@ -1,13 +1,13 @@
 import React, { useRef } from 'react'
-import { Props } from './Cover.types'
+import { Props } from './CoverPicker.types'
 import { Button, Center, Empty } from 'decentraland-ui'
-import './Cover.css'
+import './CoverPicker.css'
 
-const Cover = ({ src, onChange }: Props) => {
+const CoverPicker = ({ src, onChange }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   return (
-    <div className="Cover">
+    <div className="CoverPicker">
       <div className="image-container">
         {src ? (
           <img src={src} alt="cover"></img>
@@ -66,4 +66,4 @@ const Cover = ({ src, onChange }: Props) => {
   )
 }
 
-export default React.memo(Cover)
+export default React.memo(CoverPicker)
