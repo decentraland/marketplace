@@ -8,6 +8,11 @@ import './Settings.css'
 
 const Settings = () => {
   const [src, setSrc] = useState<string>()
+  const [description, setDescription] = useState('')
+  const [website, setWebsite] = useState('')
+  const [facebook, setFacebook] = useState('')
+  const [twitter, setTwitter] = useState('')
+  const [discord, setDiscord] = useState('')
 
   return (
     <div className="Settings">
@@ -26,33 +31,21 @@ const Settings = () => {
         <DataContainer title="Description">
           <Input
             type="textarea"
-            value="I’m mat, here are my awesome creations, pls buy them so i can get more video games"
-            onChange={() => {}}
+            value={description}
+            onChange={setDescription}
           />
         </DataContainer>
         <DataContainer title="Website">
-          <Input type="input" value="matstore.com" onChange={() => {}} />
+          <Input type="input" value={website} onChange={setWebsite} />
         </DataContainer>
         <DataContainer title="Facebook">
-          <Input
-            type="input"
-            value="facebook.com/matstore"
-            onChange={() => {}}
-          />
+          <Input type="input" value={facebook} onChange={setFacebook} />
         </DataContainer>
         <DataContainer title="Twitter">
-          <Input
-            type="input"
-            value="twitter.com/matstore"
-            onChange={() => {}}
-          />
+          <Input type="input" value={twitter} onChange={setTwitter} />
         </DataContainer>
         <DataContainer title="Discord">
-          <Input
-            type="input"
-            value="discord.com/matstore"
-            onChange={() => {}}
-          />
+          <Input type="input" value={discord} onChange={setDiscord} />
         </DataContainer>
       </div>
       <div className="bottom">
