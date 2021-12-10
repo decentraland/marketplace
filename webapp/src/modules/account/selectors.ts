@@ -4,10 +4,8 @@ import { createMatchSelector } from 'connected-react-router'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
 
+import { ethers } from 'ethers'
 import { Address } from 'web3x/address'
-import { ENS } from 'web3x/ens'
-import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
-import { Eth } from 'web3x/eth'
 
 export const getState = (state: RootState) => state.account
 export const getData = (state: RootState) => getState(state).data
@@ -31,12 +29,12 @@ export const parseAddress = async (address: string) => {
     return undefined
   }
   var parsedAddress = address
-  const provider = await getConnectedProvider()
-  const eth = new Eth(provider!)
-  const ens = new ENS(eth)
-  await ens.getResolver(address).then((res) => {
-    if (res.address?.toString() !== '0x0000000000000000000000000000000000000000') {
+  const provider = await ethers.getDefaultProvider()
+  await provider.getResolver(address).then((res) => {
+    console.log('res', res)
+    if (res) {
       parsedAddress = res.address?.toString()!
+      console.log('parsed address', parsedAddress)
     }
   })
   return parsedAddress
