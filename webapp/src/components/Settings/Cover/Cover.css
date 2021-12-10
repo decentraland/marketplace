@@ -15,6 +15,13 @@
   cursor: pointer;
 }
 
+.Cover .watermelon {
+  background-image: url('../../../images/watermelon.svg');
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+}
+
 .Cover .image-container {
   position: relative;
   height: 240px;

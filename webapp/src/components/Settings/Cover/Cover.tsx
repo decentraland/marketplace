@@ -14,6 +14,7 @@ const Cover = ({ src, onChange }: Props) => {
         ) : (
           <Empty>
             <Center>
+              <div className="watermelon" />
               <button
                 className="add-cover"
                 onClick={e => {
