@@ -54,8 +54,8 @@ const CoverPicker = ({ src, onChange }: Props) => {
           const file = e.target.files?.[0]
 
           if (file) {
-            const newSrc = URL.createObjectURL(file)
-            onChange(newSrc)
+            const src = URL.createObjectURL(file)
+            onChange({ src, file })
           } else {
             onChange()
           }

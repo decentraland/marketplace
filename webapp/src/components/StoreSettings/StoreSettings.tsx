@@ -7,7 +7,7 @@ import TextInput from './TextInput'
 import './StoreSettings.css'
 
 const StoreSettings = () => {
-  const [src, setSrc] = useState<string>()
+  const [cover, serCover] = useState<{ src: string; file: File }>()
   const [description, setDescription] = useState('')
   const [website, setWebsite] = useState('')
   const [facebook, setFacebook] = useState('')
@@ -26,7 +26,7 @@ const StoreSettings = () => {
       </Row>
       <div className="elements">
         <InputContainer title="Store cover">
-          <CoverPicker src={src} onChange={setSrc} />
+          <CoverPicker src={cover?.src} onChange={serCover} />
         </InputContainer>
         <InputContainer title="Description">
           <TextInput
