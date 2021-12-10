@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom'
 import DataContainer from './DataContainer'
 import Cover from './Cover'
 import Input from './Input'
-import './Settings.css'
+import './StoreSettings.css'
 
-const Settings = () => {
+const StoreSettings = () => {
   const [src, setSrc] = useState<string>()
   const [description, setDescription] = useState('')
   const [website, setWebsite] = useState('')
@@ -15,7 +15,7 @@ const Settings = () => {
   const [discord, setDiscord] = useState('')
 
   return (
-    <div className="Settings">
+    <div className="StoreSettings">
       <Row className="top">
         <Column>
           <Header>Settings</Header>
@@ -56,4 +56,4 @@ const Settings = () => {
   )
 }
 
-export default React.memo(Settings)
+export default React.memo(StoreSettings)

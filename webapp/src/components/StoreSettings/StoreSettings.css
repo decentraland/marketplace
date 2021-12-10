@@ -1,18 +1,18 @@
-.Settings > .top {
+.StoreSettings > .top {
   margin-bottom: 21px;
 }
 
-.Settings > .top .header {
+.StoreSettings > .top .header {
   font-size: 17px;
 }
 
-.Settings > .elements {
+.StoreSettings > .elements {
   display: flex;
   flex-direction: column;
   gap: 32px;
   max-width: 560px;
 }
 
-.Settings > .bottom {
+.StoreSettings > .bottom {
   margin-top: 48px;
 }
