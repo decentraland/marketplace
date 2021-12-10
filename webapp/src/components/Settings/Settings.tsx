@@ -1,11 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Header, Row, Column } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
-import Element from './Element'
-import CoverElement from './CoverElement'
+import DataContainer from './DataContainer'
+import Cover from './Cover'
+import Input from './Input'
 import './Settings.css'
 
 const Settings = () => {
+  const [src, setSrc] = useState<string>()
+
   return (
     <div className="Settings">
       <Row className="top">
@@ -17,37 +20,40 @@ const Settings = () => {
         </Column>
       </Row>
       <div className="elements">
-        <CoverElement title="Store cover" src="" onChange={() => {}} />
-        <Element
-          inputType="textarea"
-          title="Description"
-          input="I’m mat, here are my awesome creations, pls buy them so i can get more video games"
-          onChange={() => {}}
-        />
-        <Element
-          inputType="input"
-          title="Website"
-          input="matstore.com"
-          onChange={() => {}}
-        />
-        <Element
-          inputType="input"
-          title="Facebook"
-          input="facebook.com/matstore"
-          onChange={() => {}}
-        />
-        <Element
-          inputType="input"
-          title="Twitter"
-          input="twitter.com/matstore"
-          onChange={() => {}}
-        />
-        <Element
-          inputType="input"
-          title="Discord"
-          input="discord.com/matstore"
-          onChange={() => {}}
-        />
+        <DataContainer title="Store cover">
+          <Cover src={src} onChange={setSrc} />
+        </DataContainer>
+        <DataContainer title="Description">
+          <Input
+            type="textarea"
+            value="I’m mat, here are my awesome creations, pls buy them so i can get more video games"
+            onChange={() => {}}
+          />
+        </DataContainer>
+        <DataContainer title="Website">
+          <Input type="input" value="matstore.com" onChange={() => {}} />
+        </DataContainer>
+        <DataContainer title="Facebook">
+          <Input
+            type="input"
+            value="facebook.com/matstore"
+            onChange={() => {}}
+          />
+        </DataContainer>
+        <DataContainer title="Twitter">
+          <Input
+            type="input"
+            value="twitter.com/matstore"
+            onChange={() => {}}
+          />
+        </DataContainer>
+        <DataContainer title="Discord">
+          <Input
+            type="input"
+            value="discord.com/matstore"
+            onChange={() => {}}
+          />
+        </DataContainer>
       </div>
     </div>
   )

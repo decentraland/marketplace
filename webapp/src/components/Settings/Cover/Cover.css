@@ -1,37 +1,40 @@
-.CoverElement .title {
+.Cover .title {
   color: var(--secondary-text);
   margin-bottom: 8px;
   font-size: 15px;
 }
 
-.CoverElement .empty {
-  height: 240px;
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--secondary);
-  border-radius: 6px;
-  width: 100%;
+.Cover .empty {
+  height: 100%;
+  border: 1px solid var(--secondary) !important;
 }
 
-.CoverElement img {
+.Cover .add-cover {
+  all: unset;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.Cover .image-container {
+  position: relative;
+  height: 240px;
+}
+
+.Cover img {
   border-radius: 10px;
   overflow: hidden;
-  height: 240px;
+  height: 100%;
   width: 100%;
   object-fit: cover;
 }
 
-.CoverElement .image-container {
-  position: relative;
-}
-
-.CoverElement .buttons {
+.Cover .buttons {
   position: absolute;
   top: 16px;
   right: 16px;
 }
 
-.CoverElement .ui.button {
+.Cover .ui.button {
   min-width: unset;
   line-height: 1em;
   padding: 0px;
