@@ -6,6 +6,10 @@
   font-size: 17px;
 }
 
+.StoreSettings .see-store-as-guest {
+  text-transform: uppercase;
+}
+
 .StoreSettings > .elements {
   display: flex;
   flex-direction: column;

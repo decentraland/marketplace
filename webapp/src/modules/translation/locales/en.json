@@ -121,6 +121,19 @@
     "edit_price": "Edit price",
     "mint_item": "Mint item"
   },
+  "store_settings": {
+    "settings": "Settings",
+    "see_store_as_guest": "See store as guest",
+    "store_cover": "Store cover",
+    "description": "Description",
+    "website": "Website",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "discord": "Discord",
+    "save": "Save",
+    "revert": "Revert",
+    "add_cover_picture": "Click here to add a cover picture"
+  },
   "partners_page": {
     "partners": "Partners",
     "latest_from": "Latest from {vendor}"

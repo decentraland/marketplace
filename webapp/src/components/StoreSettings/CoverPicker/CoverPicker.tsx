@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import { Props } from './CoverPicker.types'
 import { Button, Center, Empty } from 'decentraland-ui'
 import './CoverPicker.css'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 const CoverPicker = ({ src, onChange }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -22,7 +23,7 @@ const CoverPicker = ({ src, onChange }: Props) => {
                   inputRef.current?.click()
                 }}
               >
-                Click here to add a cover picture
+                {t('store_settings.add_cover_picture')}
               </button>
             </Center>
           </Empty>
