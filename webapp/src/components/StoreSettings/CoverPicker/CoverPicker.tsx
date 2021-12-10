@@ -18,10 +18,7 @@ const CoverPicker = ({ src, onChange }: Props) => {
               <div className="watermelon" />
               <button
                 className="add-cover"
-                onClick={e => {
-                  e.stopPropagation()
-                  inputRef.current?.click()
-                }}
+                onClick={() => inputRef.current?.click()}
               >
                 {t('store_settings.add_cover_picture')}
               </button>
