@@ -31,6 +31,7 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
     page,
     perPage.current
   )
+
   const showPagination = processedElements.total / perPage.current > 1
 
   const searchNode = useMemo(
@@ -77,7 +78,11 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
             <Table.Body>
               {processedElements.paginated.map(element => (
                 <OnSaleListElement
-                  key={element.item?.id || element.nft!.id}
+                  key={
+                    element.item
+                      ? `i-${element.item.id}`
+                      : `n-${element.nft!.id}`
+                  }
                   {...element}
                 />
               ))}
