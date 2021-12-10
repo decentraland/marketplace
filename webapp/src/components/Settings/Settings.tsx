@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Header, Row, Column } from 'decentraland-ui'
+import { Header, Row, Column, Button } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import DataContainer from './DataContainer'
 import Cover from './Cover'
@@ -54,6 +54,10 @@ const Settings = () => {
             onChange={() => {}}
           />
         </DataContainer>
+      </div>
+      <div className="bottom">
+        <Button primary>Save</Button>
+        <Button>Revert</Button>
       </div>
     </div>
   )

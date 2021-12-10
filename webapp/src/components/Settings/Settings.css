@@ -12,3 +12,7 @@
   gap: 32px;
   max-width: 560px;
 }
+
+.Settings > .bottom {
+  margin-top: 48px;
+}
