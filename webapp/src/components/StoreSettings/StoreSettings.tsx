@@ -8,7 +8,7 @@ import './StoreSettings.css'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 const StoreSettings = () => {
-  const [cover, serCover] = useState<{ src: string; file: File }>()
+  const [cover, setCover] = useState<{ src: string; file: File }>()
   const [description, setDescription] = useState('')
   const [website, setWebsite] = useState('')
   const [facebook, setFacebook] = useState('')
@@ -29,7 +29,7 @@ const StoreSettings = () => {
       </Row>
       <div className="elements">
         <InputContainer title={t('store_settings.store_cover')}>
-          <CoverPicker src={cover?.src} onChange={serCover} />
+          <CoverPicker src={cover?.src} onChange={setCover} />
         </InputContainer>
         <InputContainer title={t('store_settings.description')}>
           <TextInput
