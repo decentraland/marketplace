@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { Header, Row, Column, Button } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import InputContainer from './InputContainer'
 import CoverPicker from './CoverPicker'
 import TextInput from './TextInput'
 import './StoreSettings.css'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 const StoreSettings = () => {
   const [cover, setCover] = useState<{ src: string; file: File }>()
