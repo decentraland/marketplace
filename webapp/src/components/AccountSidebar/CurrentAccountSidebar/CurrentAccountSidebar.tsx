@@ -20,7 +20,7 @@ const {
   ENS,
   ON_SALE,
   SALES,
-  SETTINGS
+  STORE_SETTINGS
 } = Sections.decentraland
 
 const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
@@ -54,8 +54,8 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
         onClick={section => onBrowse(decentraland, section)}
       />
       <MenuItem
-        key={SETTINGS}
-        value={SETTINGS}
+        key={STORE_SETTINGS}
+        value={STORE_SETTINGS}
         currentValue={section}
         onClick={section => onBrowse(decentraland, section)}
       />

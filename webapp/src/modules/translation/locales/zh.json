@@ -81,7 +81,7 @@
     "collections": "收集",
     "on_sale": "出售",
     "sales": "销售",
-    "settings": "配置"
+    "store_settings": "配置"
   },
   "vendor_menu": {
     "no_assets": "无资产",
@@ -110,6 +110,27 @@
     "home_wearables": "最新上市",
     "home_land": "地块和产业",
     "home_ens": "名称"
+  },
+  "collection_page": {
+    "unlist_from_market": "取消销售",
+    "list_on_market": "待售",
+    "edit_in_builder": "在构建器中编辑",
+    "on_sale": "在售",
+    "edit_price": "编辑价格",
+    "mint_item": "硬币物品"
+  },
+  "store_settings": {
+    "settings": "配置",
+    "see_store_as_guest": "以访客身份查看商店",
+    "store_cover": "店铺图片",
+    "description": "描述",
+    "website": "网站",
+    "facebook": "Facebook",
+    "twitter": "Twitter",
+    "discord": "Discord",
+    "save": "救",
+    "revert": "恢复",
+    "add_cover_picture": "单击此处将图像放入您的商店"
   },
   "partners_page": {
     "partners": "伙伴",
