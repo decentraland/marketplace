@@ -178,8 +178,8 @@ const BuyNFTModal = (props: Props) => {
         </Button>
 
         {isDisabled ||
-          !isAboveMaxPercentage ||
-          (isAboveMaxPercentage && wantsToProceed) ? (
+        !isAboveMaxPercentage ||
+        (isAboveMaxPercentage && wantsToProceed) ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}

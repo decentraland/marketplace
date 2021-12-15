@@ -1,3 +1,4 @@
+import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
@@ -6,7 +7,6 @@ import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName } from '../types'
 import { nftAPI } from './nft/api'
-import { Order } from '../../order/types'
 import { getERC721ContractData } from './utils'
 
 export class NFTService

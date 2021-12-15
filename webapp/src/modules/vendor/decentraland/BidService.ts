@@ -1,5 +1,5 @@
 import { parseUnits } from '@ethersproject/units'
-import { Bid, Network } from '@dcl/schemas'
+import { Bid, ListingStatus, Network } from '@dcl/schemas'
 import {
   ContractData,
   ContractName,
@@ -8,7 +8,6 @@ import {
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NFT } from '../../nft/types'
-import { OrderStatus } from '../../order/types'
 import { VendorName } from '../types'
 import { BidService as BidServiceInterface } from '../services'
 import { bidAPI } from './bid/api'
@@ -26,7 +25,7 @@ export class BidService
     return bids
   }
 
-  async fetchByNFT(nft: NFT, status: OrderStatus = OrderStatus.OPEN) {
+  async fetchByNFT(nft: NFT, status: ListingStatus = ListingStatus.OPEN) {
     const bids = await bidAPI.fetchByNFT(
       nft.contractAddress,
       nft.tokenId,

@@ -1,7 +1,6 @@
-import { Bid } from '@dcl/schemas'
+import { Bid, Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules//wallet/types'
 import { NFT } from '../../../modules/nft/types'
-import { Order } from '../../../modules/order/types'
 
 export type Props = {
   wallet: Wallet | null

@@ -4,7 +4,7 @@ import { ContractData } from 'decentraland-transactions'
 import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
 import * as order from './order/api'
 import { NFT } from '../../nft/types'
-import { Order, OrderStatus } from '../../order/types'
+import { Order, ListingStatus } from '../../order/types'
 
 jest.mock('decentraland-dapps/dist/modules/wallet/utils')
 jest.mock('./order/api')
@@ -42,7 +42,7 @@ describe("Decentraland's OrderService", () => {
   })
 
   describe('when fetching orders by NFT', () => {
-    const status = OrderStatus.OPEN
+    const status = ListingStatus.OPEN
 
     describe('when the fetch fails', () => {
       beforeEach(() => {

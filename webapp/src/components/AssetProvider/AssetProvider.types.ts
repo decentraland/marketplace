@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux'
 import React from 'react'
+import { Order } from '@dcl/schemas'
 import {
   fetchNFTRequest,
   FetchNFTRequestAction
@@ -8,7 +9,6 @@ import {
   fetchItemRequest,
   FetchItemRequestAction
 } from '../../modules/item/actions'
-import { Order } from '../../modules/order/types'
 import { Asset, AssetType } from '../../modules/asset/types'
 
 export type Props<T extends AssetType = AssetType> = {

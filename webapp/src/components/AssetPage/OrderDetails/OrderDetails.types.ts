@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
+import { Order } from '@dcl/schemas'
 import { NFT } from '../../../modules/nft/types'
-import { Order } from '../../../modules/order/types'
 
 export type Props = {
   nft: NFT
