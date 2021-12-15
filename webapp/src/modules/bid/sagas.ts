@@ -1,5 +1,5 @@
 import { push } from 'connected-react-router'
-import { ChainId } from '@dcl/schemas'
+import { Bid, ChainId } from '@dcl/schemas'
 import { getChainId } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { takeEvery, put, select, call } from 'redux-saga/effects'
 import {
@@ -29,7 +29,6 @@ import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { getContract } from '../contract/utils'
 import { VendorName } from '../vendor/types'
-import { Bid } from './types'
 
 export function* bidSaga() {
   yield takeEvery(PLACE_BID_REQUEST, handlePlaceBidRequest)

@@ -1,8 +1,7 @@
 import { action } from 'typesafe-actions'
-import { ChainId } from '@dcl/schemas'
+import { Bid, ChainId } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { NFT } from '../nft/types'
-import { Bid } from './types'
 import { formatMANA } from '../../lib/mana'
 
 // Place Bid

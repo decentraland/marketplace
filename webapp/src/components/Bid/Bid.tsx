@@ -67,7 +67,7 @@ const Bid = (props: Props) => {
               </Link>
             </Stats>
             <Stats title={t('bid.price')}>
-              <Mana>{formatMANA(bid.price)}</Mana>
+              <Mana network={bid.network}>{formatMANA(bid.price)}</Mana>
             </Stats>
             <Stats title={t('bid.time_left')}>
               {formatDistanceToNow(+bid.expiresAt)}

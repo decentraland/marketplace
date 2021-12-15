@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react'
-import { Network } from '@dcl/schemas'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -81,9 +80,7 @@ const BidModal = (props: Props) => {
 
   const isInvalidDate = +new Date(expiresAt) < Date.now()
   const hasInsufficientMANA =
-    !!price &&
-    !!wallet &&
-    fromMANA(price) > wallet.networks[Network.ETHEREUM].mana
+    !!price && !!wallet && fromMANA(price) > wallet.networks[nft.network].mana
 
   return (
     <AssetAction asset={nft}>
@@ -99,7 +96,7 @@ const BidModal = (props: Props) => {
       <Form onSubmit={handleSubmit}>
         <div className="form-fields">
           <ManaField
-            network={Network.ETHEREUM}
+            network={nft.network}
             label={t('bid_page.price')}
             placeholder={toMANA(1000)}
             value={price}
@@ -113,7 +110,7 @@ const BidModal = (props: Props) => {
             }
           />
           <Field
-            network={Network.ETHEREUM}
+            network={nft.network}
             label={t('bid_page.expiration_date')}
             type="date"
             value={expiresAt}

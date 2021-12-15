@@ -1,4 +1,4 @@
-import { Bid } from '../../../modules/bid/types'
+import { Bid } from '@dcl/schemas'
 import { NFT } from '../../../modules/nft/types'
 
 export type Props = {
