@@ -3,7 +3,7 @@ import { VendorName } from '../../../modules/vendor'
 
 export type Props = {
   section: string
-  assetType: string
+  assetType: AssetType
   onBrowse: (vendor: VendorName, section: string, assetType: AssetType) => void
 }
 
