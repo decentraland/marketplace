@@ -80,6 +80,10 @@ export function getSearchParams(options?: BrowseOptions) {
     if (options.network && Object.values(Network).includes(options.network)) {
       params.set('network', options.network)
     }
+
+    if (options.viewAsGuest !== undefined) {
+      params.set('viewAsGuest', options.viewAsGuest.toString())
+    }
   }
   return params
 }

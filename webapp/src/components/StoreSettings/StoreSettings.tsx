@@ -21,7 +21,7 @@ const StoreSettings = ({ store, onChange }: Props) => {
         <Column align="right">
           <Link
             className="see-store-as-guest"
-            to={locations.currentAccount({ isGuest: true })}
+            to={locations.currentAccount({ viewAsGuest: true })}
           >
             {t('store_settings.see_store_as_guest')}
           </Link>
