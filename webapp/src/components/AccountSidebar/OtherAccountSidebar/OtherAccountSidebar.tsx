@@ -8,12 +8,11 @@ import { Menu } from '../../Menu'
 import { Props } from './OtherAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { AssetType } from '../../../modules/asset/types'
-import './OtherAccountSidebar.css'
 
 const { ALL, LAND, WEARABLES, ENS } = Sections.decentraland
 
 const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
-  <div className="OtherAccountSidebar">
+  <>
     <Menu>
       <Header sub>{t('account_sidebar.my_store')}</Header>
       <div
@@ -50,12 +49,10 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
             : [ALL, WEARABLES, LAND, ENS]
         }
         section={section as Section}
-        onSectionClick={section =>
-          onBrowse({ section, assetType: AssetType.NFT })
-        }
+        onSectionClick={section => onBrowse({ section, assetType })}
       />
     </Menu>
-  </div>
+  </>
 )
 
 export default React.memo(OtherAccountSidebar)

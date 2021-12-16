@@ -4,6 +4,7 @@ import { VendorName } from '../../modules/vendor/types'
 import { Props } from './AccountSidebar.types'
 import CurrentAccountSidebar from './CurrentAccountSidebar'
 import OtherAccountSidebar from './OtherAccountSidebar'
+import './AccountSidebar.css'
 
 const AccountSidebar = ({
   address,
@@ -19,7 +20,7 @@ const AccountSidebar = ({
   )
 
   return (
-    <div className="NFTSidebar">
+    <div className="AccountSidebar">
       {isCurrentAccount ? (
         <CurrentAccountSidebar section={section} onBrowse={handleOnBrowse} />
       ) : (

@@ -9,8 +9,6 @@ import { MenuItem } from '../../Menu/MenuItem'
 import { Props } from './CurrentAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 
-import './CurrentAccountSidebar.css'
-
 const decentraland = VendorName.DECENTRALAND
 
 const {
@@ -24,7 +22,7 @@ const {
 } = Sections.decentraland
 
 const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
-  <div className="CurrentAccountSidebar">
+  <>
     <Menu>
       <Header sub>{t('account_sidebar.my_assets')}</Header>
       <MenuItem
@@ -60,7 +58,7 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
         onClick={section => onBrowse(decentraland, section)}
       />
     </Menu>
-  </div>
+  </>
 )
 
 export default React.memo(CurrentAccountSidebar)

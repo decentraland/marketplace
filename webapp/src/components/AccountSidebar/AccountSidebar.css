@@ -1,58 +1,58 @@
-.OtherAccountSidebar .ui.sub.header {
+.AccountSidebar .ui.sub.header {
   padding-left: 24px;
   padding-top: 17px;
   padding-bottom: 22px;
   margin-bottom: 0px;
 }
 
-.OtherAccountSidebar ul.Menu {
+.AccountSidebar ul.Menu {
   background-color: var(--card);
   border-radius: 10px;
   padding-bottom: 21px;
 }
 
-.OtherAccountSidebar ul.Menu > .MenuItem {
+.AccountSidebar ul.Menu > .MenuItem {
   padding-left: 24px;
 }
 
-.OtherAccountSidebar ul.Menu > .MenuItem:last-child {
+.AccountSidebar ul.Menu > .MenuItem:last-child {
   margin-bottom: 0;
 }
 
-.OtherAccountSidebar ul.Menu > .MenuItem.active {
+.AccountSidebar ul.Menu > .MenuItem.active {
   background-color: #37333d;
 }
 
-.OtherAccountSidebar ul.Menu > .MenuItem.sub-1 {
+.AccountSidebar ul.Menu > .MenuItem.sub-1 {
   margin-left: 0px;
   padding-left: 32px;
   width: var(--menu-item-width);
 }
 
-.OtherAccountSidebar ul.Menu > .MenuItem.sub-2 {
+.AccountSidebar ul.Menu > .MenuItem.sub-2 {
   margin-left: 0px;
   padding-left: 48px;
   width: var(--menu-item-width);
 }
 
-.OtherAccountSidebar .item {
+.AccountSidebar .item {
   margin: 0 12px;
   padding: 8px 12px;
   margin-bottom: 8px;
 }
 
-.OtherAccountSidebar .item:hover,
-.OtherAccountSidebar .item.selected {
+.AccountSidebar .item:hover,
+.AccountSidebar .item.selected {
   background-color: #37333d;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.OtherAccountSidebar .item:last-child {
+.AccountSidebar .item:last-child {
   margin-bottom: 0px;
 }
 
-.OtherAccountSidebar .primary {
+.AccountSidebar .item .primary {
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
@@ -61,7 +61,7 @@
   text-align: left;
 }
 
-.OtherAccountSidebar .secondary {
+.AccountSidebar .item .secondary {
   font-size: 15px;
   font-style: normal;
   font-weight: 400;
