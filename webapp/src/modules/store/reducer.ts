@@ -1,4 +1,3 @@
-import { Store } from '@dcl/schemas'
 import {
   loadingReducer,
   LoadingState
@@ -10,6 +9,8 @@ import {
   FETCH_STORE_FAILURE,
   FETCH_STORE_REQUEST,
   FETCH_STORE_SUCCESS,
+  UpdateLocalStoreAction,
+  UPDATE_LOCAL_STORE,
   UpsertStoreFailureAction,
   UpsertStoreRequestAction,
   UpsertStoreSuccessAction,
@@ -17,15 +18,18 @@ import {
   UPSERT_STORE_REQUEST,
   UPSERT_STORE_SUCCESS
 } from './actions'
+import { Store } from './types'
 
 export type StoreState = {
   data: Record<string, Store>
+  localStore: Store | null
   loading: LoadingState
   error: string | null
 }
 
 export const INITIAL_STATE: StoreState = {
   data: {},
+  localStore: null,
   loading: [],
   error: null
 }
@@ -37,19 +41,26 @@ type StoreReducerAction =
   | UpsertStoreRequestAction
   | UpsertStoreSuccessAction
   | UpsertStoreFailureAction
+  | UpdateLocalStoreAction
 
 export function storeReducer(
   state = INITIAL_STATE,
   action: StoreReducerAction
 ): StoreState {
   switch (action.type) {
+    case UPDATE_LOCAL_STORE: {
+      const { store } = action.payload
+      return {
+        ...state,
+        localStore: store
+      }
+    }
     case FETCH_STORE_REQUEST:
     case UPSERT_STORE_REQUEST:
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
-
     case FETCH_STORE_SUCCESS:
     case UPSERT_STORE_SUCCESS:
       const { store } = action.payload
@@ -60,7 +71,6 @@ export function storeReducer(
         error: null,
         data: { ...state.data, [store.owner]: store }
       }
-
     case FETCH_STORE_FAILURE:
     case UPSERT_STORE_FAILURE:
       const { error } = action.payload

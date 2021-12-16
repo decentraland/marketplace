@@ -1,5 +1,5 @@
-import { Store } from '@dcl/schemas'
 import { action } from 'typesafe-actions'
+import { Store } from './types'
 
 // Fetch Store
 
@@ -34,3 +34,12 @@ export const upsertStoreFailure = (error: string) =>
 export type UpsertStoreRequestAction = ReturnType<typeof upsertStoreRequest>
 export type UpsertStoreSuccessAction = ReturnType<typeof upsertStoreSuccess>
 export type UpsertStoreFailureAction = ReturnType<typeof upsertStoreFailure>
+
+// Update Local Store
+
+export const UPDATE_LOCAL_STORE = 'Update local store'
+
+export const updateLocalStore = (store: Store | null) =>
+  action(UPDATE_LOCAL_STORE, { store: store })
+
+export type UpdateLocalStoreAction = ReturnType<typeof updateLocalStore>
