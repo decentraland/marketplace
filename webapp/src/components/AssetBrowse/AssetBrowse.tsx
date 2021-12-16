@@ -117,7 +117,7 @@ const AssetBrowse = (props: Props) => {
 
   const left = (
     <>
-      {view !== View.CURRENT_ACCOUNT && (
+      {!isAccountView(view) && (
         <ToggleBox
           className="result-type-toggle"
           header={t('filters.type')}
