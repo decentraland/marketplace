@@ -1,10 +1,11 @@
 import { AssetType } from '../../../modules/asset/types'
-import { VendorName } from '../../../modules/vendor'
+import { BrowseOptions } from '../../../modules/routing/types'
 
 export type Props = {
   section: string
   assetType: AssetType
-  onBrowse: (vendor: VendorName, section: string, assetType: AssetType) => void
+  onBrowse: (options: BrowseOptions) => void
 }
 
 export type MapStateProps = Pick<Props, 'assetType'>
+export type MapDispatchProps = Pick<Props, 'onBrowse'>

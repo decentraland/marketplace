@@ -4,14 +4,11 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import classNames from 'classnames'
 import { Sections } from '../../../modules/routing/types'
 import { Section } from '../../../modules/vendor/decentraland'
-import { VendorName } from '../../../modules/vendor/types'
 import { Menu } from '../../Menu'
 import { Props } from './OtherAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { AssetType } from '../../../modules/asset/types'
 import './OtherAccountSidebar.css'
-
-const decentraland = VendorName.DECENTRALAND
 
 const { ALL, LAND, WEARABLES, ENS } = Sections.decentraland
 
@@ -24,7 +21,9 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
           'item',
           assetType === AssetType.ITEM && 'selected'
         )}
-        onClick={() => onBrowse(decentraland, WEARABLES, AssetType.ITEM)}
+        onClick={() =>
+          onBrowse({ section: WEARABLES, assetType: AssetType.ITEM })
+        }
       >
         <div className="primary">Originals</div>
         <div className="secondary">Original creations by users</div>
@@ -34,7 +33,7 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
           'item',
           assetType === AssetType.NFT && 'selected'
         )}
-        onClick={() => onBrowse(decentraland, ALL, AssetType.NFT)}
+        onClick={() => onBrowse({ section: ALL, assetType: AssetType.NFT })}
       >
         <div className="primary">Listings</div>
         <div className="secondary">Items being resold</div>
@@ -51,7 +50,9 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
             : [ALL, WEARABLES, LAND, ENS]
         }
         section={section as Section}
-        onSectionClick={section => onBrowse(decentraland, section, assetType)}
+        onSectionClick={section =>
+          onBrowse({ section, assetType: AssetType.NFT })
+        }
       />
     </Menu>
   </div>
