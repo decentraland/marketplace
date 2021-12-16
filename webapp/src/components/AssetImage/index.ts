@@ -1,2 +1,2 @@
-import AssetImage from './AssetImage'
+import AssetImage from './AssetImage.container'
 export { AssetImage }

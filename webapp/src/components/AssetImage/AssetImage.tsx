@@ -13,6 +13,12 @@ import './AssetImage.css'
 const PIXEL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
 
+const valueToHex = (value: number) =>
+  ('00' + Math.min(255, (value * 255) | 0).toString(16)).slice(-2)
+
+const colorToHex = (color: { r: number; g: number; b: number }) =>
+  valueToHex(color.r) + valueToHex(color.g) + valueToHex(color.b)
+
 const AssetImage = (props: Props) => {
   const {
     asset,
@@ -21,7 +27,8 @@ const AssetImage = (props: Props) => {
     hasPopup,
     zoom,
     isSmall,
-    showMonospace
+    showMonospace,
+    avatar
   } = props
   const { parcel, estate, wearable, ens } = asset.data
 
@@ -75,28 +82,24 @@ const AssetImage = (props: Props) => {
       const isDev = process.env.REACT_APP_NETWORK !== 'mainnet'
 
       if (isDraggable) {
-        let component: React.ReactNode
+        let itemId: string | undefined
+        let tokenId: string | undefined
+        let skin = 'bbbbbb'
+        let hair = 'bbbbbb'
+        let shape: 'male' | 'female' = 'male'
         if ('itemId' in asset && asset.itemId) {
-          component = (
-            <WearablePreview
-              contractAddress={asset.contractAddress}
-              itemId={asset.itemId}
-              dev={isDev}
-              onLoad={handleLoad}
-              onError={handleError}
-            />
-          )
+          itemId = asset.itemId
         } else if ('tokenId' in asset && asset.tokenId) {
-          component = (
-            <WearablePreview
-              contractAddress={asset.contractAddress}
-              tokenId={asset.tokenId}
-              dev={isDev}
-              onLoad={handleLoad}
-              onError={handleError}
-            />
-          )
+          tokenId = asset.tokenId
         }
+        if (avatar) {
+          skin = colorToHex(avatar.avatar.skin.color)
+          hair = colorToHex(avatar.avatar.hair.color)
+          shape = avatar.avatar.bodyShape.toLowerCase().includes('female')
+            ? 'female'
+            : 'male'
+        }
+
         wearablePreview = (
           <>
             {isLoadingWearablePreview && (
@@ -108,7 +111,17 @@ const AssetImage = (props: Props) => {
                 />
               </Center>
             )}
-            {component}
+            <WearablePreview
+              contractAddress={asset.contractAddress}
+              itemId={itemId}
+              tokenId={tokenId}
+              skin={skin}
+              hair={hair}
+              shape={shape}
+              dev={isDev}
+              onLoad={handleLoad}
+              onError={handleError}
+            />
           </>
         )
       }
