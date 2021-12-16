@@ -9,6 +9,4 @@ export type Props = {
 }
 
 export type MapStateProps = Pick<Props, 'store' | 'canSubmit' | 'address'>
-export type MapDispatchProps = Pick<Props, 'onChange'> & {
-  onRevert: (address?: string) => void
-}
+export type MapDispatchProps = Pick<Props, 'onChange' | 'onRevert'>

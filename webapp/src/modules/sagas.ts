@@ -16,7 +16,6 @@ import { uiSaga } from './ui/sagas'
 import { walletSaga } from './wallet/sagas'
 import { itemSaga } from './item/sagas'
 import { collectionSaga } from './collection/sagas'
-import { storeSaga } from './store/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({
@@ -40,7 +39,6 @@ export function* rootSaga() {
     translationSaga(),
     uiSaga(),
     walletSaga(),
-    collectionSaga(),
-    storeSaga()
+    collectionSaga()
   ])
 }

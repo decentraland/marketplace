@@ -1,96 +1,37 @@
 import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
-import {
-  FetchStoreFailureAction,
-  FetchStoreRequestAction,
-  FetchStoreSuccessAction,
-  FETCH_STORE_FAILURE,
-  FETCH_STORE_REQUEST,
-  FETCH_STORE_SUCCESS,
   RevertLocalStoreAction,
   REVERT_LOCAL_STORE,
   UpdateLocalStoreAction,
-  UPDATE_LOCAL_STORE,
-  UpsertStoreFailureAction,
-  UpsertStoreRequestAction,
-  UpsertStoreSuccessAction,
-  UPSERT_STORE_FAILURE,
-  UPSERT_STORE_REQUEST,
-  UPSERT_STORE_SUCCESS
+  UPDATE_LOCAL_STORE
 } from './actions'
 import { Store } from './types'
 import { getEmptyLocalStore } from './utils'
 
 export type StoreState = {
-  data: Record<string, Store>
   localStore: Store | null
-  loading: LoadingState
-  error: string | null
 }
 
 export const INITIAL_STATE: StoreState = {
-  data: {},
-  localStore: null,
-  loading: [],
-  error: null
+  localStore: null
 }
 
-type StoreReducerAction =
-  | FetchStoreRequestAction
-  | FetchStoreSuccessAction
-  | FetchStoreFailureAction
-  | UpsertStoreRequestAction
-  | UpsertStoreSuccessAction
-  | UpsertStoreFailureAction
-  | UpdateLocalStoreAction
-  | RevertLocalStoreAction
+type StoreReducerAction = UpdateLocalStoreAction | RevertLocalStoreAction
 
 export function storeReducer(
   state = INITIAL_STATE,
   action: StoreReducerAction
 ): StoreState {
   switch (action.type) {
-    case UPDATE_LOCAL_STORE: {
+    case UPDATE_LOCAL_STORE:
       const { store } = action.payload
       return {
         ...state,
         localStore: store
       }
-    }
-    case REVERT_LOCAL_STORE: {
-      const { address } = action.payload
-      const store = (address && state.data[address]) || getEmptyLocalStore()
+    case REVERT_LOCAL_STORE:
       return {
         ...state,
-        localStore: { ...store }
-      }
-    }
-    case FETCH_STORE_REQUEST:
-    case UPSERT_STORE_REQUEST:
-      return {
-        ...state,
-        loading: loadingReducer(state.loading, action)
-      }
-    case FETCH_STORE_SUCCESS:
-    case UPSERT_STORE_SUCCESS:
-      const { store } = action.payload
-
-      return {
-        ...state,
-        loading: loadingReducer(state.loading, action),
-        error: null,
-        data: { ...state.data, [store.owner]: store }
-      }
-    case FETCH_STORE_FAILURE:
-    case UPSERT_STORE_FAILURE:
-      const { error } = action.payload
-
-      return {
-        ...state,
-        loading: loadingReducer(state.loading, action),
-        error
+        localStore: getEmptyLocalStore()
       }
     default:
       return state
