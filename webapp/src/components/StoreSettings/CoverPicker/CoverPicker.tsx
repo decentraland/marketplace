@@ -1,8 +1,8 @@
 import React, { useRef } from 'react'
-import { Props } from './CoverPicker.types'
-import { Button, Center, Empty } from 'decentraland-ui'
-import './CoverPicker.css'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Center, Empty } from 'decentraland-ui'
+import { Props } from './CoverPicker.types'
+import './CoverPicker.css'
 
 const CoverPicker = ({ src, onChange }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null)
@@ -53,7 +53,7 @@ const CoverPicker = ({ src, onChange }: Props) => {
 
           if (file) {
             const src = URL.createObjectURL(file)
-            onChange({ src, file })
+            onChange(src)
           } else {
             onChange()
           }
