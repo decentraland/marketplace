@@ -24,7 +24,8 @@ import {
   getIsFullscreen,
   getNetwork,
   getAssetType,
-  getVendor
+  getVendor,
+  getViewAsGuest
 } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
@@ -255,14 +256,15 @@ export function* getCurrentBrowseOptions(): Generator<
     wearableRarities: yield select(getWearableRarities),
     wearableGenders: yield select(getWearableGenders),
     contracts: yield select(getContracts),
-    network: yield select(getNetwork)
+    network: yield select(getNetwork),
+    viewAsGuest: yield select(getViewAsGuest)
   } as BrowseOptions
 }
 
 export function* getNewBrowseOptions(
   current: BrowseOptions
 ): Generator<unknown, BrowseOptions, any> {
-  let previous = yield getCurrentBrowseOptions()
+  let previous: BrowseOptions = yield getCurrentBrowseOptions()
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
   const vendor = deriveVendor(previous, current)
@@ -273,7 +275,8 @@ export function* getNewBrowseOptions(
       onlyOnSale: previous.onlyOnSale,
       sortBy: previous.sortBy,
       isMap: previous.isMap,
-      isFullscreen: previous.isFullscreen
+      isFullscreen: previous.isFullscreen,
+      viewAsGuest: previous.viewAsGuest
     }
   }
 
