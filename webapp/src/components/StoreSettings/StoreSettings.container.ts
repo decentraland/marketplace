@@ -3,16 +3,14 @@ import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { RootState } from '../../modules/reducer'
 import { MapStateProps, MapDispatchProps, Props } from './StoreSettings.types'
 import StoreSettings from './StoreSettings'
-import { getLocalStore, getStoresByOwner } from '../../modules/store/selectors'
-import { getEmptyLocalStore } from '../../modules/store/utils'
+import { getBaseStore, getLocalStore } from '../../modules/store/selectors'
 import { Dispatch } from 'redux'
 import { Store } from '../../modules/store/types'
 import { revertLocalStore, updateLocalStore } from '../../modules/store/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   const address = getAddress(state)
-  const baseStore =
-    (address && getStoresByOwner(state)[address]) || getEmptyLocalStore()
+  const baseStore = getBaseStore(state)
   const store = getLocalStore(state) || baseStore
   const canSubmit = JSON.stringify(store) !== JSON.stringify(baseStore)
 
