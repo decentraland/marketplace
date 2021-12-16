@@ -24,8 +24,8 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
           onBrowse({ section: WEARABLES, assetType: AssetType.ITEM })
         }
       >
-        <div className="primary">Originals</div>
-        <div className="secondary">Original creations by users</div>
+        <div className="primary">{t('account_sidebar.originals')}</div>
+        <div className="secondary">{t('account_sidebar.originals_detail')}</div>
       </div>
       <div
         className={classNames(
@@ -34,8 +34,8 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
         )}
         onClick={() => onBrowse({ section: ALL, assetType: AssetType.NFT })}
       >
-        <div className="primary">Listings</div>
-        <div className="secondary">Items being resold</div>
+        <div className="primary">{t('account_sidebar.listings')}</div>
+        <div className="secondary">{t('account_sidebar.listings_detail')}</div>
       </div>
     </Menu>
     <Menu>

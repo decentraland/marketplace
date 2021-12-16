@@ -168,7 +168,11 @@
   },
   "account_sidebar": {
     "my_assets": "MY ASSETS",
-    "my_store": "MY STORE"
+    "my_store": "MY STORE",
+    "originals": "Originals",
+    "originals_detail": "Original creations by the user",
+    "listings": "Listings",
+    "listings_detail": "Items being resold"
   },
   "on_sale_list": {
     "search": "Search {count} items..."

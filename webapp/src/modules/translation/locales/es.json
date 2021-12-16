@@ -166,7 +166,11 @@
   },
   "account_sidebar": {
     "my_assets": "MI INVENTARIO",
-    "my_store": "MI TIENDA"
+    "my_store": "MI TIENDA",
+    "originals": "Originales",
+    "originals_detail": "Creaciones originales por el usuario",
+    "listings": "Publicaciones",
+    "listings_detail": "Items siendo revendidos"
   },
   "on_sale_list": {
     "search": "Buscar entre {count} items..."
