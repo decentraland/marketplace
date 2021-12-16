@@ -34,3 +34,40 @@
   padding-left: 48px;
   width: var(--menu-item-width);
 }
+
+.OtherAccountSidebar .item {
+  margin: 0 12px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+}
+
+.OtherAccountSidebar .item:hover,
+.OtherAccountSidebar .item.selected {
+  background-color: #37333d;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.OtherAccountSidebar .item:last-child {
+  margin-bottom: 0px;
+}
+
+.OtherAccountSidebar .primary {
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+
+.OtherAccountSidebar .secondary {
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+
+  color: var(--secondary-text);
+}

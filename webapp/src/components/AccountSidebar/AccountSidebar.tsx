@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { AssetType } from '../../modules/asset/types'
 import { VendorName } from '../../modules/vendor/types'
 import { Props } from './AccountSidebar.types'
 import CurrentAccountSidebar from './CurrentAccountSidebar'
@@ -11,8 +12,8 @@ const AccountSidebar = ({
   onBrowse
 }: Props) => {
   const handleOnBrowse = useCallback(
-    (vendor: VendorName, section: string) => {
-      onBrowse({ vendor, section, address })
+    (vendor: VendorName, section: string, assetType?: AssetType) => {
+      onBrowse({ vendor, section, address, assetType })
     },
     [address, onBrowse]
   )

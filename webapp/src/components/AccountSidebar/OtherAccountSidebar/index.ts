@@ -1,3 +1,3 @@
-import OtherAccountSidebar from './OtherAccountSidebar'
+import OtherAccountSidebar from './OtherAccountSidebar.container'
 
 export default OtherAccountSidebar
