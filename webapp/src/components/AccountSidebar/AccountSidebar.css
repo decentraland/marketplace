@@ -35,39 +35,32 @@
   width: var(--menu-item-width);
 }
 
-.AccountSidebar .item {
+.AccountSidebar .alternative-menu-item {
   margin: 0 12px;
   padding: 8px 12px;
   margin-bottom: 8px;
 }
 
-.AccountSidebar .item:hover,
-.AccountSidebar .item.selected {
+.AccountSidebar .alternative-menu-item:hover,
+.AccountSidebar .alternative-menu-item.selected {
   background-color: #37333d;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.AccountSidebar .item:last-child {
+.AccountSidebar .alternative-menu-item:last-child {
   margin-bottom: 0px;
 }
 
-.AccountSidebar .item .primary {
+.AccountSidebar .alternative-menu-item .main-text {
   font-size: 15px;
-  font-style: normal;
   font-weight: 600;
   line-height: 24px;
-  letter-spacing: 0px;
-  text-align: left;
 }
 
-.AccountSidebar .item .secondary {
+.AccountSidebar .alternative-menu-item .detail-text {
   font-size: 15px;
-  font-style: normal;
   font-weight: 400;
   line-height: 24px;
-  letter-spacing: 0px;
-  text-align: left;
-
   color: var(--secondary-text);
 }

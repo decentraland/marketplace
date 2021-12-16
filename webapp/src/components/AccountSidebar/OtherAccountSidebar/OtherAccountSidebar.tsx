@@ -17,25 +17,29 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
       <Header sub>{t('account_sidebar.my_store')}</Header>
       <div
         className={classNames(
-          'item',
+          'alternative-menu-item',
           assetType === AssetType.ITEM && 'selected'
         )}
         onClick={() =>
           onBrowse({ section: WEARABLES, assetType: AssetType.ITEM })
         }
       >
-        <div className="primary">{t('account_sidebar.originals')}</div>
-        <div className="secondary">{t('account_sidebar.originals_detail')}</div>
+        <div className="main-text">{t('account_sidebar.originals')}</div>
+        <div className="detail-text">
+          {t('account_sidebar.originals_detail')}
+        </div>
       </div>
       <div
         className={classNames(
-          'item',
+          'alternative-menu-item',
           assetType === AssetType.NFT && 'selected'
         )}
         onClick={() => onBrowse({ section: ALL, assetType: AssetType.NFT })}
       >
-        <div className="primary">{t('account_sidebar.listings')}</div>
-        <div className="secondary">{t('account_sidebar.listings_detail')}</div>
+        <div className="main-text">{t('account_sidebar.listings')}</div>
+        <div className="detail-text">
+          {t('account_sidebar.listings_detail')}
+        </div>
       </div>
     </Menu>
     <Menu>
