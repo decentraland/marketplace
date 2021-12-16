@@ -43,3 +43,12 @@ export const updateLocalStore = (store: Store | null) =>
   action(UPDATE_LOCAL_STORE, { store: store })
 
 export type UpdateLocalStoreAction = ReturnType<typeof updateLocalStore>
+
+// Revert Local Store
+
+export const REVERT_LOCAL_STORE = 'Revert local store'
+
+export const revertLocalStore = (address?: string) =>
+  action(REVERT_LOCAL_STORE, { address })
+
+export type RevertLocalStoreAction = ReturnType<typeof revertLocalStore>

@@ -9,6 +9,8 @@ import {
   FETCH_STORE_FAILURE,
   FETCH_STORE_REQUEST,
   FETCH_STORE_SUCCESS,
+  RevertLocalStoreAction,
+  REVERT_LOCAL_STORE,
   UpdateLocalStoreAction,
   UPDATE_LOCAL_STORE,
   UpsertStoreFailureAction,
@@ -19,6 +21,7 @@ import {
   UPSERT_STORE_SUCCESS
 } from './actions'
 import { Store } from './types'
+import { getEmptyLocalStore } from './utils'
 
 export type StoreState = {
   data: Record<string, Store>
@@ -42,6 +45,7 @@ type StoreReducerAction =
   | UpsertStoreSuccessAction
   | UpsertStoreFailureAction
   | UpdateLocalStoreAction
+  | RevertLocalStoreAction
 
 export function storeReducer(
   state = INITIAL_STATE,
@@ -53,6 +57,14 @@ export function storeReducer(
       return {
         ...state,
         localStore: store
+      }
+    }
+    case REVERT_LOCAL_STORE: {
+      const { address } = action.payload
+      const store = (address && state.data[address]) || getEmptyLocalStore()
+      return {
+        ...state,
+        localStore: { ...store }
       }
     }
     case FETCH_STORE_REQUEST:
