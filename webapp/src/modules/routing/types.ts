@@ -36,4 +36,5 @@ export type BrowseOptions = {
   contracts?: string[]
   address?: string
   network?: Network
+  viewAsGuest?: boolean
 }

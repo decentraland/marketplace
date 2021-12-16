@@ -1,3 +1,3 @@
-import StoreSettings from './StoreSettings'
+import StoreSettings from './StoreSettings.container'
 
 export default StoreSettings

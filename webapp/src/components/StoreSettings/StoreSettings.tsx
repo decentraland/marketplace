@@ -1,19 +1,16 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Header, Row, Column, Button } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import InputContainer from './InputContainer'
 import CoverPicker from './CoverPicker'
 import TextInput from './TextInput'
+import { Props } from './StoreSettings.types'
+import { locations } from '../../modules/routing/locations'
 import './StoreSettings.css'
 
-const StoreSettings = () => {
-  const [cover, setCover] = useState<{ src: string; file: File }>()
-  const [description, setDescription] = useState('')
-  const [website, setWebsite] = useState('')
-  const [facebook, setFacebook] = useState('')
-  const [twitter, setTwitter] = useState('')
-  const [discord, setDiscord] = useState('')
+const StoreSettings = ({ store, canSubmit, onChange, onRevert }: Props) => {
+  const { cover, description, website, facebook, twitter, discord } = store
 
   return (
     <div className="StoreSettings">
@@ -22,38 +19,64 @@ const StoreSettings = () => {
           <Header>{t('store_settings.settings')}</Header>
         </Column>
         <Column align="right">
-          <Link className="see-store-as-guest" to="#">
+          <Link
+            className="see-store-as-guest"
+            to={locations.currentAccount({ viewAsGuest: true })}
+          >
             {t('store_settings.see_store_as_guest')}
           </Link>
         </Column>
       </Row>
       <div className="elements">
         <InputContainer title={t('store_settings.store_cover')}>
-          <CoverPicker src={cover?.src} onChange={setCover} />
+          <CoverPicker
+            src={cover}
+            onChange={src => onChange({ ...store, cover: src || '' })}
+          />
         </InputContainer>
         <InputContainer title={t('store_settings.description')}>
           <TextInput
             type="textarea"
             value={description}
-            onChange={setDescription}
+            onChange={description => onChange({ ...store, description })}
           />
         </InputContainer>
         <InputContainer title={t('store_settings.website')}>
-          <TextInput type="input" value={website} onChange={setWebsite} />
+          <TextInput
+            type="input"
+            value={website}
+            onChange={website => onChange({ ...store, website })}
+          />
         </InputContainer>
         <InputContainer title={t('store_settings.facebook')}>
-          <TextInput type="input" value={facebook} onChange={setFacebook} />
+          <TextInput
+            type="input"
+            value={facebook}
+            onChange={facebook => onChange({ ...store, facebook })}
+          />
         </InputContainer>
         <InputContainer title={t('store_settings.twitter')}>
-          <TextInput type="input" value={twitter} onChange={setTwitter} />
+          <TextInput
+            type="input"
+            value={twitter}
+            onChange={twitter => onChange({ ...store, twitter })}
+          />
         </InputContainer>
         <InputContainer title={t('store_settings.discord')}>
-          <TextInput type="input" value={discord} onChange={setDiscord} />
+          <TextInput
+            type="input"
+            value={discord}
+            onChange={discord => onChange({ ...store, discord })}
+          />
         </InputContainer>
       </div>
       <div className="bottom">
-        <Button primary>{t('store_settings.save')}</Button>
-        <Button>{t('store_settings.revert')}</Button>
+        <Button primary disabled={!canSubmit}>
+          {t('store_settings.save')}
+        </Button>
+        <Button onClick={onRevert} disabled={!canSubmit}>
+          {t('store_settings.revert')}
+        </Button>
       </div>
     </div>
   )
