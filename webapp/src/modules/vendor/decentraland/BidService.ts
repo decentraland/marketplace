@@ -49,17 +49,15 @@ export class BidService
     const priceInWei = parseUnits(price.toString(), 'ether')
     const expiresIn = Math.round((expiresAt - Date.now()) / 1000)
 
-    console.log(priceInWei, priceInWei.toString())
-
     switch (nft.network) {
       case Network.ETHEREUM: {
         const contract: ContractData = getContract(
           ContractName.Bid,
           nft.chainId
         )
-        return sendTransaction(contract, bid => {
+        return sendTransaction(contract, bids => {
           if (fingerprint) {
-            return bid['placeBid(address,uint256,uint256,uint256,bytes)'](
+            return bids['placeBid(address,uint256,uint256,uint256,bytes)'](
               nft.contractAddress,
               nft.tokenId,
               priceInWei,
@@ -67,7 +65,7 @@ export class BidService
               fingerprint
             )
           } else {
-            return bid['placeBid(address,uint256,uint256,uint256)'](
+            return bids['placeBid(address,uint256,uint256,uint256)'](
               nft.contractAddress,
               nft.tokenId,
               priceInWei,
@@ -101,7 +99,12 @@ export class BidService
     const contract: ContractData = getERC721ContractData(bid)
 
     return sendTransaction(contract, erc721 =>
-      erc721.transferFrom(wallet.address, bid.bidAddress, bid.tokenId)
+      erc721['safeTransferFrom(address,address,uint256,bytes)'](
+        wallet.address,
+        bid.bidAddress,
+        bid.tokenId,
+        bid.blockchainId
+      )
     )
   }
 
@@ -114,9 +117,8 @@ export class BidService
       bid.network === Network.ETHEREUM
         ? getContract(ContractName.Bid, bid.chainId)
         : getContract(ContractName.BidV2, bid.chainId)
-
     return sendTransaction(contract, bids =>
-      bids.cancelBid(bid.contractAddress, bid.tokenId)
+      bids['cancelBid(address,uint256)'](bid.contractAddress, bid.tokenId)
     )
   }
 }
