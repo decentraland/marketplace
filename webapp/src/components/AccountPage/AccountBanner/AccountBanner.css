@@ -1,0 +1,72 @@
+.AccountBanner .PageHeader {
+  overflow: hidden;
+  position: relative;
+}
+
+.AccountBanner .PageHeader > * {
+  position: relative;
+}
+
+.AccountBanner .PageHeader > .cover {
+  position: absolute;
+  object-fit: cover;
+  width: 100%;
+  opacity: 0.4;
+  background: linear-gradient(
+      0deg,
+      rgba(22, 20, 25, 0.4),
+      rgba(22, 20, 25, 0.4)
+    ),
+    #242129;
+}
+
+.AccountBanner .PageHeader > .Column {
+  padding: 0 16px;
+}
+
+.AccountBanner .Profile.avatar .avatar-face {
+  width: 96px;
+  height: 96px;
+}
+
+.AccountBanner .profile-name {
+  margin-top: 16px;
+  font-size: 28px;
+  line-height: 34px;
+}
+
+/* Account Banner - profile address */
+
+.AccountBanner .profile-address {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.AccountBanner .profile-address-hash {
+  margin-right: 5px;
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.AccountBanner .copy {
+  cursor: pointer;
+}
+
+.AccountBanner .profile-copied-text-desktop {
+  position: absolute;
+}
+
+.AccountBanner .profile-copy-text-mobile {
+  margin-top: 5px;
+}
+
+/* AccountBanner - description */
+
+.AccountBanner .description {
+  margin-top: 12px;
+  max-width: 420px;
+  font-size: 17px;
+  line-height: 26px;
+}

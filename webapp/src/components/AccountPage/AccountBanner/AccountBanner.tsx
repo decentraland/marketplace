@@ -9,12 +9,13 @@ import { Column } from '../../Layout/Column'
 import { Props } from './AccountBanner.types'
 import { useTimer } from '../../../lib/timer'
 import { shortenAddress } from '../../../modules/wallet/utils'
+import './AccountBanner.css'
 
 const AccountBanner = ({ address, store }: Props) => {
   const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
 
   return (
-    <PageHeader>
+    <PageHeader className="AccountBanner">
       {store?.cover && <img className="cover" src={store.cover} alt="cover" />}
       <Column>
         <Profile address={address} imageOnly inline={false} />
