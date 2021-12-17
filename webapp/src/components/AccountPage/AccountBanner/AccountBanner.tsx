@@ -8,6 +8,7 @@ import { PageHeader } from '../../PageHeader'
 import { Column } from '../../Layout/Column'
 import { Props } from './AccountBanner.types'
 import { useTimer } from '../../../lib/timer'
+import { shortenAddress } from '../../../modules/wallet/utils'
 
 const AccountBanner = ({ address }: Props) => {
   const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
@@ -15,12 +16,12 @@ const AccountBanner = ({ address }: Props) => {
   return (
     <PageHeader>
       <Column>
-        <Profile address={address} size="massive" imageOnly inline={false} />
+        <Profile address={address} imageOnly inline={false} />
         <div className="profile-name">
           <Profile address={address} textOnly inline={false} />
         </div>
         <div className="profile-address">
-          <div className="profile-address-hash">{address}</div>
+          <div className="profile-address-hash">{shortenAddress(address)}</div>
           {!isMobile() && (
             <div>
               <CopyToClipboard text={address} onCopy={setHasCopiedAddress}>
@@ -52,6 +53,12 @@ const AccountBanner = ({ address }: Props) => {
             </CopyToClipboard>
           </div>
         )}
+        <div className="description">
+          Dolor reprehenderit ea qui ad enim aute veniam laboris consequat
+          commodo et reprehenderit. Enim consectetur consectetur occaecat
+          excepteur qui commodo laborum. Nulla irure fugiat veniam voluptate
+          nostrud magna.
+        </div>
       </Column>
     </PageHeader>
   )

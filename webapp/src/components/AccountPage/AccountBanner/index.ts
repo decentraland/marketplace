@@ -1,3 +1,3 @@
-import AccountBanner from './AccountBanner'
+import AccountBanner from './AccountBanner.container'
 
 export default AccountBanner
