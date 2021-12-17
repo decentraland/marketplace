@@ -1,6 +1,8 @@
 import React from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { Back, Icon, Container } from 'decentraland-ui'
+import { Back, Container } from 'decentraland-ui'
+import { Icon } from 'semantic-ui-react'
+import classNames from 'classnames'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -14,12 +16,26 @@ import './AccountBanner.css'
 const AccountBanner = ({ address, store }: Props) => {
   const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
 
+  const renderLink = (type: 'website' | 'facebook' | 'twitter' | 'discord') =>
+    store?.[type] && (
+      <a href={store[type]} target={'_blank'} rel="noreferrer">
+        <div className={classNames('icon', type)} />
+      </a>
+    )
+
   return (
     <PageHeader className="AccountBanner">
       {store?.cover && <img className="cover" src={store.cover} alt="cover" />}
-      <Container className="cover-top">
-        <Back />
-        <div></div>
+      <Container>
+        <div className="cover-top">
+          <Back />
+          <div className="icons">
+            {renderLink('website')}
+            {renderLink('facebook')}
+            {renderLink('twitter')}
+            {renderLink('discord')}
+          </div>
+        </div>
       </Container>
       <Column>
         <Profile address={address} imageOnly inline={false} />

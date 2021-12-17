@@ -3,15 +3,42 @@
   position: relative;
 }
 
-.AccountBanner .cover-top {
+.AccountBanner .ui.container {
   position: absolute;
   top: 32px;
   left: 0;
   right: 0;
 }
 
-.AccountBanner .back {
-  position: absolute;
+.AccountBanner .cover-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.AccountBanner .icons {
+  display: flex;
+  gap: 8px;
+}
+
+.AccountBanner .icons .icon {
+  width: 32px;
+  height: 32px;
+}
+
+.AccountBanner .icons .icon.website {
+  background-image: url('../../../images/icon-website.svg');
+}
+
+.AccountBanner .icons .icon.facebook {
+  background-image: url('../../../images/icon-facebook.svg');
+}
+
+.AccountBanner .icons .icon.twitter {
+  background-image: url('../../../images/icon-twitter.svg');
+}
+
+.AccountBanner .icons .icon.discord {
+  background-image: url('../../../images/icon-discord.svg');
 }
 
 .AccountBanner > .cover {
