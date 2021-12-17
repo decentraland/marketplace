@@ -1,6 +1,6 @@
 import React from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { Icon } from 'semantic-ui-react'
+import { Back, Icon, Container } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -17,6 +17,10 @@ const AccountBanner = ({ address, store }: Props) => {
   return (
     <PageHeader className="AccountBanner">
       {store?.cover && <img className="cover" src={store.cover} alt="cover" />}
+      <Container className="cover-top">
+        <Back />
+        <div></div>
+      </Container>
       <Column>
         <Profile address={address} imageOnly inline={false} />
         <div className="profile-name">

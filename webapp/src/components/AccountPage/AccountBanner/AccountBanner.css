@@ -3,8 +3,15 @@
   position: relative;
 }
 
-.AccountBanner > * {
-  position: relative;
+.AccountBanner .cover-top {
+  position: absolute;
+  top: 32px;
+  left: 0;
+  right: 0;
+}
+
+.AccountBanner .back {
+  position: absolute;
 }
 
 .AccountBanner > .cover {
@@ -12,16 +19,11 @@
   object-fit: cover;
   width: 100%;
   opacity: 0.4;
-  background: linear-gradient(
-      0deg,
-      rgba(22, 20, 25, 0.4),
-      rgba(22, 20, 25, 0.4)
-    ),
-    #242129;
 }
 
 .AccountBanner > .Column {
   padding: 0 16px;
+  position: relative;
 }
 
 .AccountBanner .Profile.avatar .avatar-face {
@@ -34,8 +36,6 @@
   font-size: 28px;
   line-height: 34px;
 }
-
-/* Account Banner - profile address */
 
 .AccountBanner .profile-address {
   display: flex;
@@ -56,13 +56,12 @@
 
 .AccountBanner .profile-copied-text-desktop {
   position: absolute;
+  white-space: nowrap;
 }
 
 .AccountBanner .profile-copy-text-mobile {
   margin-top: 5px;
 }
-
-/* AccountBanner - description */
 
 .AccountBanner .description {
   margin-top: 12px;
