@@ -13,7 +13,7 @@ import { useTimer } from '../../../lib/timer'
 import { shortenAddress } from '../../../modules/wallet/utils'
 import './AccountBanner.css'
 
-const AccountBanner = ({ address, store }: Props) => {
+const AccountBanner = ({ address, store, onBack }: Props) => {
   const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
 
   const renderLink = (type: 'website' | 'facebook' | 'twitter' | 'discord') =>
@@ -28,7 +28,7 @@ const AccountBanner = ({ address, store }: Props) => {
       {store?.cover && <img className="cover" src={store.cover} alt="cover" />}
       <Container>
         <div className="cover-top">
-          <Back />
+          <Back onClick={onBack} />
           <div className="icons">
             {renderLink('website')}
             {renderLink('facebook')}
