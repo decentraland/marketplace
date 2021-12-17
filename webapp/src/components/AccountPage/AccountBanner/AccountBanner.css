@@ -1,13 +1,13 @@
-.AccountBanner .PageHeader {
+.AccountBanner {
   overflow: hidden;
   position: relative;
 }
 
-.AccountBanner .PageHeader > * {
+.AccountBanner > * {
   position: relative;
 }
 
-.AccountBanner .PageHeader > .cover {
+.AccountBanner > .cover {
   position: absolute;
   object-fit: cover;
   width: 100%;
@@ -20,7 +20,7 @@
     #242129;
 }
 
-.AccountBanner .PageHeader > .Column {
+.AccountBanner > .Column {
   padding: 0 16px;
 }
 
