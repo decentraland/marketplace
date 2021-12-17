@@ -15,6 +15,7 @@ const AccountBanner = ({ address, store }: Props) => {
 
   return (
     <PageHeader>
+      {store?.cover && <img className="cover" src={store.cover} alt="cover" />}
       <Column>
         <Profile address={address} imageOnly inline={false} />
         <div className="profile-name">

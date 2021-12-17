@@ -20,6 +20,32 @@
 
 /* AccountBanner */
 
+.AccountPage .PageHeader {
+  overflow: hidden;
+  position: relative;
+}
+
+.AccountPage .PageHeader > * {
+  position: relative;
+}
+
+.AccountPage .PageHeader > .cover {
+  position: absolute;
+  object-fit: cover;
+  width: 100%;
+  opacity: 0.4;
+  background: linear-gradient(
+      0deg,
+      rgba(22, 20, 25, 0.4),
+      rgba(22, 20, 25, 0.4)
+    ),
+    #242129;
+}
+
+.AccountPage .PageHeader > .Column {
+  padding: 0 16px;
+}
+
 .AccountPage .Profile.avatar .avatar-face {
   width: 96px;
   height: 96px;
