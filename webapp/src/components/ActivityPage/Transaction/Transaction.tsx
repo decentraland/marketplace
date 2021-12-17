@@ -287,7 +287,11 @@ const Transaction = (props: Props) => {
                         {nft ? getAssetName(nft) : ''}
                       </Link>
                     ),
-                    price: <Mana inline>{price.toLocaleString()}</Mana>
+                    price: (
+                      <Mana inline network={nft?.network}>
+                        {price.toLocaleString()}
+                      </Mana>
+                    )
                   }}
                 />
               }
@@ -317,7 +321,11 @@ const Transaction = (props: Props) => {
                         {nft ? getAssetName(nft) : ''}
                       </Link>
                     ),
-                    price: <Mana inline>{price.toLocaleString()}</Mana>
+                    price: (
+                      <Mana inline network={nft?.network}>
+                        {price.toLocaleString()}
+                      </Mana>
+                    )
                   }}
                 />
               }
