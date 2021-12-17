@@ -14,7 +14,7 @@ const mapState = (state: RootState): MapStateProps => {
   const profiles = getProfiles(state)
   const wallet = getWallet(state)
   let avatar: Avatar | undefined = undefined
-  if (wallet && wallet.address in profiles) {
+  if (wallet && !!profiles[wallet.address]) {
     const profile = profiles[wallet.address]
     avatar = profile.avatars[0]
   }
