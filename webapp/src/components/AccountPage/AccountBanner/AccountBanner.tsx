@@ -10,7 +10,7 @@ import { Props } from './AccountBanner.types'
 import { useTimer } from '../../../lib/timer'
 import { shortenAddress } from '../../../modules/wallet/utils'
 
-const AccountBanner = ({ address }: Props) => {
+const AccountBanner = ({ address, store }: Props) => {
   const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
 
   return (
@@ -53,12 +53,9 @@ const AccountBanner = ({ address }: Props) => {
             </CopyToClipboard>
           </div>
         )}
-        <div className="description">
-          Dolor reprehenderit ea qui ad enim aute veniam laboris consequat
-          commodo et reprehenderit. Enim consectetur consectetur occaecat
-          excepteur qui commodo laborum. Nulla irure fugiat veniam voluptate
-          nostrud magna.
-        </div>
+        {store?.description && (
+          <div className="description">{store.description}</div>
+        )}
       </Column>
     </PageHeader>
   )
