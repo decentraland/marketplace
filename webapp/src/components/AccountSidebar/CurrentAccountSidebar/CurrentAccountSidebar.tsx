@@ -24,7 +24,7 @@ const {
 const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
   <>
     <Menu>
-      <Header sub>{t('account_sidebar.my_assets')}</Header>
+      <Header sub>{t('account_sidebar.assets')}</Header>
       <MenuItem
         key={COLLECTIONS}
         value={COLLECTIONS}
@@ -38,7 +38,7 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
       />
     </Menu>
     <Menu>
-      <Header sub>{t('account_sidebar.my_store')}</Header>
+      <Header sub>{t('account_sidebar.store')}</Header>
       <MenuItem
         key={ON_SALE}
         value={ON_SALE}
