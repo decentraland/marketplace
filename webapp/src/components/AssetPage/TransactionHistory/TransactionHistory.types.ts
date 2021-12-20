@@ -1,5 +1,5 @@
+import { Bid } from '@dcl/schemas'
 import { NFT } from '../../../modules/nft/types'
-import { Bid } from '../../../modules/bid/types'
 import { Order } from '../../../modules/order/types'
 
 export type Props = {

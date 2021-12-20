@@ -57,8 +57,14 @@ function* handleWallet(
     name: contractNames.MARKETPLACE_ADAPTER
   })
 
-  const bids = getContract({
-    name: contractNames.BIDS
+  const bidsEthereum = getContract({
+    name: contractNames.BIDS,
+    network: Network.ETHEREUM
+  })
+
+  const bidsMatic = getContract({
+    name: contractNames.BIDS,
+    network: Network.MATIC
   })
 
   const manaEthereum = getContract({
@@ -107,10 +113,19 @@ function* handleWallet(
 
   authorizations.push({
     address,
-    authorizedAddress: bids.address,
+    authorizedAddress: bidsEthereum.address,
     contractAddress: manaEthereum.address,
     contractName: ContractName.MANAToken,
     chainId: manaEthereum.chainId,
+    type: AuthorizationType.ALLOWANCE
+  })
+
+  authorizations.push({
+    address,
+    authorizedAddress: bidsMatic.address,
+    contractAddress: manaMatic.address,
+    contractName: ContractName.MANAToken,
+    chainId: manaMatic.chainId,
     type: AuthorizationType.ALLOWANCE
   })
 

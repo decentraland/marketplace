@@ -1,9 +1,8 @@
 import { Address } from 'web3x/address'
 import { Eth } from 'web3x/eth'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
-import { Network } from '@dcl/schemas'
+import { Bid, Network } from '@dcl/schemas'
 import { MANA } from '../../contracts/MANA'
-import { Bid } from './types'
 import { getContractNames } from '../vendor'
 import { getContract } from '../contract/utils'
 

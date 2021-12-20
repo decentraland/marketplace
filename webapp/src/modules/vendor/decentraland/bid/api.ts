@@ -1,6 +1,6 @@
+import { Bid } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { OrderStatus } from '../../../order/types'
-import { Bid } from '../../../bid/types'
 import { NFT_SERVER_URL } from '../nft'
 
 class BidAPI extends BaseAPI {
