@@ -17,11 +17,11 @@
   gap: 12px;
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .Sales .simple-stats {
     flex-direction: column;
   }
-}
+} */
 
 .Sales .simple-stat {
   flex: 1;
