@@ -22,6 +22,7 @@ import OnSaleList from '../OnSaleList'
 import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import './AssetBrowse.css'
+import Sales from '../Sales'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
@@ -163,7 +164,7 @@ const AssetBrowse = (props: Props) => {
       right = <OnSaleList />
       break
     case DecentralandSection.SALES:
-      right = <div>SALES</div>
+      right = <Sales />
       break
     case DecentralandSection.STORE_SETTINGS:
       right = <StoreSettings />
