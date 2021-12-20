@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
+import { Bid } from '@dcl/schemas'
 import { Header, Table, Responsive } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
@@ -8,11 +9,10 @@ import dateFnsFormat from 'date-fns/format'
 import { Mana } from '../../Mana'
 import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor'
-import { Bid } from '../../../modules/bid/types'
 import { Order, OrderStatus } from '../../../modules/order/types'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatMANA } from '../../../lib/mana'
-import { Props, HistoryEvent, UnionOrderBid } from './TransactionHistory.types'
+import { Props, HistoryEvent } from './TransactionHistory.types'
 import './TransactionHistory.css'
 
 const INPUT_FORMAT = 'PPP'
@@ -32,7 +32,7 @@ const formatDateTitle = (updatedAt: number) => {
 const sortByUpdatedAt = (a: { updatedAt: number }, b: { updatedAt: number }) =>
   a.updatedAt > b.updatedAt ? -1 : 1
 
-const toEvent = (orderOrBid: UnionOrderBid): HistoryEvent => ({
+const toEvent = (orderOrBid: any): HistoryEvent => ({
   from: orderOrBid.owner! || orderOrBid.seller!,
   to: orderOrBid.buyer! || orderOrBid.bidder!,
   price: orderOrBid.price!,

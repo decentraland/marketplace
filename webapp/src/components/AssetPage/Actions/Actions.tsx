@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Network } from '@dcl/schemas'
 import { Modal, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 
@@ -25,7 +24,6 @@ const Actions = (props: Props) => {
   const canBid =
     !isOwner &&
     isBiddable &&
-    nft.network === Network.ETHEREUM &&
     (!wallet || !bids.some(bid => bid.bidder === wallet.address))
 
   return (

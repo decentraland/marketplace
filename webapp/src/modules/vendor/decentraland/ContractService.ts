@@ -66,6 +66,14 @@ const contracts = ({
       category: null,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      name: ContractName.BIDS,
+      address: getContract(CN.BidV2, ChainId.MATIC_MUMBAI).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
     }
   ],
   [AppNetwork.MAINNET]: [
@@ -91,7 +99,7 @@ const contracts = ({
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_ROPSTEN
+      chainId: ChainId.ETHEREUM_MAINNET
     },
     {
       name: ContractName.MANA,
@@ -112,6 +120,14 @@ const contracts = ({
     {
       name: CN.CollectionStore,
       address: getContract(CN.CollectionStore, ChainId.MATIC_MAINNET).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MAINNET
+    },
+    {
+      name: ContractName.BIDS,
+      address: getContract(CN.BidV2, ChainId.MATIC_MAINNET).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,

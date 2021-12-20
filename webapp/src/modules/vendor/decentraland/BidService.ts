@@ -1,17 +1,18 @@
-import { toWei } from 'web3x/utils'
-import { Address } from 'web3x/address'
+import { parseUnits } from '@ethersproject/units'
+import { Bid, Network } from '@dcl/schemas'
+import {
+  ContractData,
+  ContractName,
+  getContract
+} from 'decentraland-transactions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { Bids } from '../../../contracts/Bids'
-import { ERC721 } from '../../../contracts/ERC721'
-import { ContractFactory } from '../../contract/ContractFactory'
-import { Bid } from '../../bid/types'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NFT } from '../../nft/types'
 import { OrderStatus } from '../../order/types'
 import { VendorName } from '../types'
 import { BidService as BidServiceInterface } from '../services'
-import { ContractName } from './ContractService'
 import { bidAPI } from './bid/api'
-import { getContract } from '../../contract/utils'
+import { getERC721ContractData } from './utils'
 
 export class BidService
   implements BidServiceInterface<VendorName.DECENTRALAND> {
@@ -41,72 +42,83 @@ export class BidService
     expiresAt: number,
     fingerprint?: string
   ) {
-    const bids = await this.getBidContract()
-
     if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(wallet.address)
 
-    const priceInWei = toWei(price.toString(), 'ether')
+    const priceInWei = parseUnits(price.toString(), 'ether')
     const expiresIn = Math.round((expiresAt - Date.now()) / 1000)
 
-    if (fingerprint) {
-      return bids.methods
-        .placeBid(
-          Address.fromString(nft.contractAddress),
-          nft.tokenId,
-          priceInWei,
-          expiresIn,
-          fingerprint
+    switch (nft.network) {
+      case Network.ETHEREUM: {
+        const contract: ContractData = getContract(
+          ContractName.Bid,
+          nft.chainId
         )
-        .send({ from })
-        .getTxHash()
-    } else {
-      return bids.methods
-        .placeBid(
-          Address.fromString(nft.contractAddress),
-          nft.tokenId,
-          priceInWei,
-          expiresIn
+        return sendTransaction(contract, bids => {
+          if (fingerprint) {
+            return bids['placeBid(address,uint256,uint256,uint256,bytes)'](
+              nft.contractAddress,
+              nft.tokenId,
+              priceInWei,
+              expiresIn,
+              fingerprint
+            )
+          } else {
+            return bids['placeBid(address,uint256,uint256,uint256)'](
+              nft.contractAddress,
+              nft.tokenId,
+              priceInWei,
+              expiresIn
+            )
+          }
+        })
+      }
+      case Network.MATIC: {
+        const contract: ContractData = getContract(
+          ContractName.BidV2,
+          nft.chainId
         )
-        .send({ from })
-        .getTxHash()
+        return sendTransaction(contract, bids =>
+          bids['placeBid(address,uint256,uint256,uint256)'](
+            nft.contractAddress,
+            nft.tokenId,
+            priceInWei,
+            expiresIn
+          )
+        )
+      }
     }
   }
 
   async accept(wallet: Wallet | null, bid: Bid) {
-    const erc721 = await ContractFactory.build(ERC721, bid.contractAddress)
-
     if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(wallet.address)
-    const bids = getContract({ name: ContractName.BIDS })
-    const to = Address.fromString(bids.address)
 
-    return erc721.methods
-      .safeTransferFrom(from, to, bid.tokenId, bid.blockchainId)
-      .send({ from })
-      .getTxHash()
+    const contract: ContractData = getERC721ContractData(bid)
+
+    return sendTransaction(contract, erc721 =>
+      erc721['safeTransferFrom(address,address,uint256,bytes)'](
+        wallet.address,
+        bid.bidAddress,
+        bid.tokenId,
+        bid.blockchainId
+      )
+    )
   }
 
   async cancel(wallet: Wallet | null, bid: Bid) {
-    const bids = await this.getBidContract()
-
     if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(wallet.address)
 
-    return bids.methods
-      .cancelBid(Address.fromString(bid.contractAddress), bid.tokenId)
-      .send({ from })
-      .getTxHash()
-  }
-
-  private getBidContract() {
-    const bids = getContract({ name: ContractName.BIDS })
-    return ContractFactory.build(Bids, bids.address)
+    const contract: ContractData =
+      bid.network === Network.ETHEREUM
+        ? getContract(ContractName.Bid, bid.chainId)
+        : getContract(ContractName.BidV2, bid.chainId)
+    return sendTransaction(contract, bids =>
+      bids['cancelBid(address,uint256)'](bid.contractAddress, bid.tokenId)
+    )
   }
 }

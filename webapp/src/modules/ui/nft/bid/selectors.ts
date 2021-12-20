@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect'
+import { Bid } from '@dcl/schemas'
 import { getData as getBidData } from '../../../bid/selectors'
 import { RootState } from '../../../reducer'
 import { BidState } from '../../../bid/reducer'
-import { Bid } from '../../../bid/types'
 import { BidUIState } from './reducer'
 
 export const getState = (state: RootState) => state.ui.nft.bid
