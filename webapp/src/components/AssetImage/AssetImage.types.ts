@@ -1,3 +1,5 @@
+import { Dispatch } from 'redux'
+import { Avatar } from 'decentraland-ui'
 import { Item } from '@dcl/schemas'
 import { NFT } from '../../modules/nft/types'
 
@@ -10,4 +12,9 @@ export type Props = {
   zoom?: number
   isSmall?: boolean
   showMonospace?: boolean
+  avatar?: Avatar
 }
+
+export type MapStateProps = Pick<Props, 'avatar'>
+export type MapDispatchProps = {}
+export type MapDispatch = Dispatch
