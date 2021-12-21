@@ -23,6 +23,7 @@ const Sales = () => {
         <SimpleStat subtitle="Ethereum earnings" value="11,235" />
         <SimpleStat subtitle="Polygon earnings" value="30,600" />
       </div>
+      <div className="activity"></div>
     </div>
   )
 }
