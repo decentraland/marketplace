@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
-import { Dropdown, Header } from 'decentraland-ui'
+import { Dropdown, Header, Table } from 'decentraland-ui'
 import './Sales.css'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 const Sales = () => {
   const options = useRef([{ value: 'allTime', text: 'All Time' }])
@@ -23,7 +24,29 @@ const Sales = () => {
         <SimpleStat subtitle="Ethereum earnings" value="11,235" />
         <SimpleStat subtitle="Polygon earnings" value="30,600" />
       </div>
-      <div className="activity"></div>
+      <div className="activity">
+        <Header>Activity</Header>
+        <Table basic="very">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>{t('global.item')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('global.time')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('global.buyer')}</Table.HeaderCell>
+              <Table.HeaderCell>{t('global.price')}</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          {/* <Table.Body>
+            {processedElements.paginated.map(element => (
+              <OnSaleListElement
+                key={
+                  element.item ? `i-${element.item.id}` : `n-${element.nft!.id}`
+                }
+                {...element}
+              />
+            ))}
+          </Table.Body> */}
+        </Table>
+      </div>
     </div>
   )
 }
