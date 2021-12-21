@@ -17,11 +17,11 @@
   gap: 12px;
 }
 
-/* @media (max-width: 768px) {
+@media (max-width: 768px) {
   .Sales .simple-stats {
     flex-direction: column;
   }
-} */
+}
 
 .Sales .simple-stat {
   flex: 1;
@@ -35,6 +35,8 @@
 .Sales .simple-stat-icon {
   width: 48px;
   height: 48px;
+  min-width: 48px;
+  min-height: 48px;
   background-color: #37333d;
   border-radius: 50%;
   margin-right: 16px;
