@@ -5,11 +5,15 @@ import { Dispatch } from 'redux'
 import { fetchSalesRequest } from '../../modules/sale/actions'
 import { getAddress } from '../../modules/wallet/selectors'
 import { RootState } from '../../modules/reducer'
+import { getSalesBySeller } from '../../modules/sale/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
+  const address = getAddress(state)!
+  const sales = getSalesBySeller(state)[address]
+
   return {
-    address: getAddress(state)!,
-    sales: []
+    address,
+    sales
   }
 }
 
