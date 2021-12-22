@@ -167,8 +167,8 @@
     "back": "Back"
   },
   "account_sidebar": {
-    "my_assets": "MY ASSETS",
-    "my_store": "MY STORE",
+    "assets": "ASSETS",
+    "store": "STORE",
     "originals": "Originals",
     "originals_detail": "Created by the user",
     "listings": "Listings",

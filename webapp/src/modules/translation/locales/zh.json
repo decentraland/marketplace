@@ -165,8 +165,8 @@
     "back": "返回"
   },
   "account_sidebar": {
-    "my_assets": "我的库存",
-    "my_store": "我的店",
+    "assets": "资产",
+    "store": "商店",
     "originals": "源语言",
     "originals_detail": "用户原创作品",
     "listings": "出版物",

@@ -165,8 +165,8 @@
     "back": "Atrás"
   },
   "account_sidebar": {
-    "my_assets": "MI INVENTARIO",
-    "my_store": "MI TIENDA",
+    "assets": "INVENTARIO",
+    "store": "TIENDA",
     "originals": "Originales",
     "originals_detail": "Creaciones del usuario",
     "listings": "Publicaciones",

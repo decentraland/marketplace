@@ -14,7 +14,7 @@ const { ALL, LAND, WEARABLES, ENS } = Sections.decentraland
 const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
   <>
     <Menu>
-      <Header sub>{t('account_sidebar.my_store')}</Header>
+      <Header sub>{t('account_sidebar.store')}</Header>
       <div
         className={classNames(
           'alternative-menu-item',
