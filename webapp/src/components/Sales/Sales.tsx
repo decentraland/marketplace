@@ -56,11 +56,9 @@ const Sales = ({ sales, assets }: Props) => {
                       <Profile address={sale.buyer} />
                     </Table.Cell>
                     <Table.Cell>
-                      {
-                        <Mana network={sale.network} inline>
-                          {formatMANA(sale.price)}
-                        </Mana>
-                      }
+                      <Mana network={sale.network} inline>
+                        {formatMANA(sale.price)}
+                      </Mana>
                     </Table.Cell>
                   </Table.Row>
                 )
