@@ -1,12 +1,18 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Dropdown, Header, Table } from 'decentraland-ui'
-import './Sales.css'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { SaleSortBy } from '@dcl/schemas'
+import { Props } from './Sales.types'
+import './Sales.css'
 
-const Sales = () => {
+const Sales = ({ address, sales, onFetchSales }: Props) => {
   const options = useRef([{ value: 'allTime', text: 'All Time' }])
 
   const [current, setCurrent] = useState(options.current[0].value)
+
+  useEffect(() => {
+    onFetchSales({ seller: address, sortBy: SaleSortBy.RECENTLY_SOLD })
+  }, [address, onFetchSales])
 
   return (
     <div className="Sales">
@@ -35,16 +41,11 @@ const Sales = () => {
               <Table.HeaderCell>{t('global.price')}</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
-          {/* <Table.Body>
-            {processedElements.paginated.map(element => (
-              <OnSaleListElement
-                key={
-                  element.item ? `i-${element.item.id}` : `n-${element.nft!.id}`
-                }
-                {...element}
-              />
+          <Table.Body>
+            {sales.map(sale => (
+              <div>{sale.id}</div>
             ))}
-          </Table.Body> */}
+          </Table.Body>
         </Table>
       </div>
     </div>
