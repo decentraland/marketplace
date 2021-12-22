@@ -1,10 +1,12 @@
-import React, { useRef, useState } from 'react'
+import React, { ReactNode, useRef, useState } from 'react'
 import { Dropdown, Header, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './Sales.types'
+import AssetCell from '../OnSaleList/AssetCell'
+import { formatDistanceToNow } from '../../lib/date'
 import './Sales.css'
 
-const Sales = ({ sales }: Props) => {
+const Sales = ({ sales, assets }: Props) => {
   const options = useRef([{ value: 'allTime', text: 'All Time' }])
 
   const [current, setCurrent] = useState(options.current[0].value)
@@ -37,9 +39,24 @@ const Sales = ({ sales }: Props) => {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {sales.map(sale => (
-              <div>{sale.id}</div>
-            ))}
+            {sales.reduce((acc, sale) => {
+              const asset = assets[sale.id]
+              if (asset) {
+                acc.push(
+                  <Table.Row>
+                    <AssetCell asset={assets[sale.id]} />
+                    <Table.Cell>
+                      {formatDistanceToNow(sale.timestamp, {
+                        addSuffix: true
+                      })}
+                    </Table.Cell>
+                    <Table.Cell>x</Table.Cell>
+                    <Table.Cell>x</Table.Cell>
+                  </Table.Row>
+                )
+              }
+              return acc
+            }, [] as ReactNode[])}
           </Table.Body>
         </Table>
       </div>
