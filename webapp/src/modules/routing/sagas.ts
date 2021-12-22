@@ -5,7 +5,8 @@ import {
   call,
   take,
   delay,
-  race
+  race,
+  spawn
 } from 'redux-saga/effects'
 import {
   push,
@@ -179,7 +180,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       yield handleFetchOnSale(address, options.view!)
       break
     case Section.SALES:
-      yield handleFetchSales(address)
+      yield spawn(handleFetchSales, address)
       break
     case Section.COLLECTIONS:
       yield handleFetchCollections(page, address, sortBy, search)
