@@ -21,8 +21,8 @@ import { isAccountView } from '../../modules/ui/utils'
 import OnSaleList from '../OnSaleList'
 import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
-import './AssetBrowse.css'
 import Sales from '../Sales'
+import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {

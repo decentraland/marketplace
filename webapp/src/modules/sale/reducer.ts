@@ -47,13 +47,10 @@ export function saleReducer(
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
-        data: sales.reduce(
-          (acc, sale) => {
-            acc[sale.id] = sale
-            return acc
-          },
-          { ...state.data }
-        ),
+        data: sales.reduce((acc, sale) => {
+          acc[sale.id] = sale
+          return acc
+        }, {} as Record<string, Sale>),
         count
       }
     case FETCH_SALES_FAILURE:

@@ -13,7 +13,7 @@ import {
   goBack,
   LOCATION_CHANGE
 } from 'connected-react-router'
-import { NFTCategory } from '@dcl/schemas'
+import { NFTCategory, SaleSortBy } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
 import { fetchItemsRequest } from '../item/actions'
@@ -73,6 +73,7 @@ import { BrowseOptions, Sections, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
 import { fetchCollectionsRequest } from '../collection/actions'
 import { COLLECTIONS_PER_PAGE } from './utils'
+import { fetchSalesRequest } from '../sale/actions'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -170,6 +171,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   switch (section) {
     case Section.ON_SALE:
       yield handleFetchOnSale(address, options.view!)
+      break
+    case Section.SALES:
+      yield handleFetchSales(address)
       break
     case Section.COLLECTIONS:
       yield handleFetchCollections(page, address, sortBy, search)
@@ -303,6 +307,12 @@ function* handleFetchOnSale(address: string, view: View) {
       vendor: VendorName.DECENTRALAND,
       params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
     })
+  )
+}
+
+function* handleFetchSales(address: string) {
+  yield put(
+    fetchSalesRequest({ seller: address, sortBy: SaleSortBy.RECENTLY_SOLD })
   )
 }
 

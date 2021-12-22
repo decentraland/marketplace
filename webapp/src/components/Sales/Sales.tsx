@@ -1,18 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Dropdown, Header, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { SaleSortBy } from '@dcl/schemas'
 import { Props } from './Sales.types'
 import './Sales.css'
 
-const Sales = ({ address, sales, onFetchSales }: Props) => {
+const Sales = ({ sales }: Props) => {
   const options = useRef([{ value: 'allTime', text: 'All Time' }])
 
   const [current, setCurrent] = useState(options.current[0].value)
-
-  useEffect(() => {
-    onFetchSales({ seller: address, sortBy: SaleSortBy.RECENTLY_SOLD })
-  }, [address, onFetchSales])
 
   return (
     <div className="Sales">

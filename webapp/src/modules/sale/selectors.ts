@@ -15,19 +15,3 @@ export const getSales = createSelector<
 >(getData, data => {
   return Object.values(data)
 })
-
-export const getSalesBySeller = createSelector<
-  RootState,
-  ReturnType<typeof getSales>,
-  Record<string, Sale[]>
->(getSales, sales => {
-  return sales.reduce((acc, sale) => {
-    const { seller } = sale
-    const exists = !!acc[seller]
-    if (!exists) {
-      acc[seller] = []
-    }
-    acc[seller].push(sale)
-    return acc
-  }, {} as Record<string, Sale[]>)
-})
