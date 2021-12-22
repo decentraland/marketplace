@@ -37,11 +37,32 @@ export function saleReducer(
 ): SaleState {
   switch (action.type) {
     case FETCH_SALES_REQUEST:
-      return { ...state, loading: loadingReducer(state.loading, action) }
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action)
+      }
     case FETCH_SALES_SUCCESS:
-      return { ...state, loading: loadingReducer(state.loading, action) }
+      const { sales, count } = action.payload
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error: null,
+        data: sales.reduce(
+          (acc, sale) => {
+            acc[sale.id] = sale
+            return acc
+          },
+          { ...state.data }
+        ),
+        count
+      }
     case FETCH_SALES_FAILURE:
-      return { ...state, loading: loadingReducer(state.loading, action) }
+      const { error } = action.payload
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error
+      }
     default:
       return state
   }
