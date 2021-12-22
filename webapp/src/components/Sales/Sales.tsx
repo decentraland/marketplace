@@ -1,9 +1,11 @@
 import React, { ReactNode, useRef, useState } from 'react'
-import { Dropdown, Header, Table } from 'decentraland-ui'
+import { Dropdown, Header, Profile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './Sales.types'
 import AssetCell from '../OnSaleList/AssetCell'
 import { formatDistanceToNow } from '../../lib/date'
+import { Mana } from '../Mana'
+import { formatMANA } from '../../lib/mana'
 import './Sales.css'
 
 const Sales = ({ sales, assets }: Props) => {
@@ -50,8 +52,16 @@ const Sales = ({ sales, assets }: Props) => {
                         addSuffix: true
                       })}
                     </Table.Cell>
-                    <Table.Cell>x</Table.Cell>
-                    <Table.Cell>x</Table.Cell>
+                    <Table.Cell>
+                      <Profile address={sale.buyer} />
+                    </Table.Cell>
+                    <Table.Cell>
+                      {
+                        <Mana network={sale.network} inline>
+                          {formatMANA(sale.price)}
+                        </Mana>
+                      }
+                    </Table.Cell>
                   </Table.Row>
                 )
               }
