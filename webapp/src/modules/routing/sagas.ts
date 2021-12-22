@@ -13,10 +13,10 @@ import {
   goBack,
   LOCATION_CHANGE
 } from 'connected-react-router'
-import { NFTCategory, SaleSortBy } from '@dcl/schemas'
+import { NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
-import { fetchItemsRequest } from '../item/actions'
+import { fetchItemRequest, fetchItemsRequest } from '../item/actions'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/browse/selectors'
@@ -29,7 +29,7 @@ import {
 } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
-import { fetchNFTsRequest } from '../nft/actions'
+import { fetchNFTRequest, fetchNFTsRequest } from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
 import {
@@ -73,7 +73,13 @@ import { BrowseOptions, Sections, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
 import { fetchCollectionsRequest } from '../collection/actions'
 import { COLLECTIONS_PER_PAGE } from './utils'
-import { fetchSalesRequest } from '../sale/actions'
+import {
+  FetchSalesFailureAction,
+  fetchSalesRequest,
+  FETCH_SALES_FAILURE,
+  FETCH_SALES_SUCCESS
+} from '../sale/actions'
+import { getSales } from '../sale/selectors'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -314,6 +320,37 @@ function* handleFetchSales(address: string) {
   yield put(
     fetchSalesRequest({ seller: address, sortBy: SaleSortBy.RECENTLY_SOLD })
   )
+
+  const result: { failure: FetchSalesFailureAction } = yield race({
+    success: take(FETCH_SALES_SUCCESS),
+    failure: take(FETCH_SALES_FAILURE)
+  })
+
+  if (result.failure) {
+    return
+  }
+
+  const sales: ReturnType<typeof getSales> = yield select(getSales)
+
+  const { itemSales, tokenSales } = sales.reduce(
+    (acc: { itemSales: Sale[]; tokenSales: Sale[] }, sale) => {
+      if (sale.itemId) {
+        acc.itemSales.push(sale)
+      } else if (sale.tokenId) {
+        acc.tokenSales.push(sale)
+      }
+      return acc
+    },
+    { itemSales: [], tokenSales: [] }
+  )
+
+  for (const itemSale of itemSales) {
+    yield put(fetchItemRequest(itemSale.contractAddress, itemSale.itemId!))
+  }
+
+  for (const tokenSale of tokenSales) {
+    yield put(fetchNFTRequest(tokenSale.contractAddress, tokenSale.tokenId))
+  }
 }
 
 function* handleFetchCollections(
