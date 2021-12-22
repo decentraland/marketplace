@@ -35,7 +35,7 @@ const AssetCell = ({ asset }: Props) => {
           </div>
           <div>
             <div className={styles.title}>{asset.name}</div>
-            {subtitle && <div>{subtitle}</div>}
+            {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
           </div>
         </div>
       </Link>
