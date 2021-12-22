@@ -25,4 +25,4 @@ class SaleAPI extends BaseAPI {
   }
 }
 
-export const collectionAPI = new SaleAPI(NFT_SERVER_URL)
+export const saleAPI = new SaleAPI(NFT_SERVER_URL)
