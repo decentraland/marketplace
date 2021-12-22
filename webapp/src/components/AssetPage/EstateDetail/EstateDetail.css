@@ -22,6 +22,37 @@
   flex: 0 0 auto;
 }
 
+.AssetImage.dissolved {
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.AssetImage.dissolved .atlas-wrapper {
+  filter: blur(5px);
+}
+
+.dissolved-wrapper {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dissolved-notice {
+  background: var(--background);
+  padding: 8px;
+  border-radius: 8px;
+  position: absolute;
+  color: var(--text);
+}
+
+.AssetPage .PageHeader {
+  position: relative;
+}
+
 @media (max-width: 768px) {
   .EstateDetail .estate-title-jump-in {
     display: none !important;

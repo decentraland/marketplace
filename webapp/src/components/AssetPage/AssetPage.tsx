@@ -8,6 +8,7 @@ import { Navigation } from '../Navigation'
 import { AssetProviderPage } from '../AssetProviderPage'
 import { NFTDetail } from '../Vendor/NFTDetail'
 import { ItemDetail } from './ItemDetail'
+import { ErrorBoundary } from './ErrorBoundary'
 import { Props } from './AssetPage.types'
 import './AssetPage.css'
 
@@ -18,15 +19,17 @@ const AssetPage = (props: Props) => {
       <Navbar isFullscreen />
       <Navigation isFullscreen />
       <Page className="AssetPage" isFullscreen>
-        <AssetProviderPage type={type}>
-          {asset =>
-            type === AssetType.NFT ? (
-              <NFTDetail nft={asset as Asset<AssetType.NFT>} />
-            ) : AssetType.ITEM ? (
-              <ItemDetail item={asset as Asset<AssetType.ITEM>} />
-            ) : null
-          }
-        </AssetProviderPage>
+        <ErrorBoundary>
+          <AssetProviderPage type={type}>
+            {asset =>
+              type === AssetType.NFT ? (
+                <NFTDetail nft={asset as Asset<AssetType.NFT>} />
+              ) : AssetType.ITEM ? (
+                <ItemDetail item={asset as Asset<AssetType.ITEM>} />
+              ) : null
+            }
+          </AssetProviderPage>
+        </ErrorBoundary>
       </Page>
       <Footer />
     </>

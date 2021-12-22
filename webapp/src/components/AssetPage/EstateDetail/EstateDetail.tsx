@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Header } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAssetName } from '../../../modules/asset/utils'
 import { PageHeader } from '../../PageHeader'
 import { AssetImage } from '../../AssetImage'
@@ -23,16 +24,31 @@ import './EstateDetail.css'
 const EstateDetail = (props: Props) => {
   const { nft } = props
   const estate = nft.data.estate!
-  const { x, y } = estate.parcels[0]
+  let x = 0
+  let y = 0
+
+  if (estate.size > 0) {
+    x = estate.parcels[0].x
+    y = estate.parcels[0].y
+  }
+
   return (
     <>
       <PageHeader>
         <AssetImage
+          className={estate.size === 0 ? 'dissolved' : ''}
           asset={nft}
           isDraggable={true}
           withNavigation={true}
           hasPopup={true}
         />
+        {estate.size === 0 && (
+          <div className="dissolved-wrapper">
+            <div className="dissolved-notice">
+              {t('estate_detail.dissolved')}
+            </div>
+          </div>
+        )}
       </PageHeader>
       <Container className="EstateDetail">
         <Title
@@ -69,7 +85,7 @@ const EstateDetail = (props: Props) => {
         </Row>
         <ProximityHighlights nft={nft} />
         <Bids nft={nft} />
-        <ParcelCoordinates estateId={nft.tokenId} />
+        {estate.size > 0 && <ParcelCoordinates estateId={nft.tokenId} />}
         <TransactionHistory nft={nft} />
       </Container>
     </>
