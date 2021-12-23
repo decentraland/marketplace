@@ -1,3 +1,3 @@
-import Sales from './Sales.container'
+import Sales from './Sales'
 
 export default Sales
