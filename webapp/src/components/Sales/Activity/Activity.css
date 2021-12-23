@@ -1,0 +1,18 @@
+.Activity {
+  margin-top: 12px;
+  background-color: var(--secondary);
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.Activity .pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.Activity .loader-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
