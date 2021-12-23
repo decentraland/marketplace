@@ -3,7 +3,7 @@ import { push, getLocation } from 'connected-react-router'
 import { NFTCategory } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
-import { fetchItemsRequest } from '../item/actions'
+import { BUY_ITEM_SUCCESS, fetchItemsRequest } from '../item/actions'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/browse/selectors'
@@ -15,7 +15,7 @@ import {
 } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
-import { fetchNFTsRequest } from '../nft/actions'
+import { fetchNFTsRequest, TRANSFER_NFT_SUCCESS } from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
 import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
@@ -48,11 +48,34 @@ import {
   CLEAR_FILTERS
 } from './actions'
 import { BrowseOptions, Sections } from './types'
+import {
+  CANCEL_ORDER_SUCCESS,
+  CREATE_ORDER_SUCCESS,
+  EXECUTE_ORDER_SUCCESS
+} from '../order/actions'
+import {
+  ACCEPT_BID_SUCCESS,
+  CANCEL_BID_SUCCESS,
+  PLACE_BID_SUCCESS
+} from '../bid/actions'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
   yield takeEvery(BROWSE, handleBrowse)
   yield takeEvery(CLEAR_FILTERS, handleClearFilters)
+  yield takeEvery(
+    [
+      CREATE_ORDER_SUCCESS,
+      EXECUTE_ORDER_SUCCESS,
+      CANCEL_ORDER_SUCCESS,
+      PLACE_BID_SUCCESS,
+      ACCEPT_BID_SUCCESS,
+      CANCEL_BID_SUCCESS,
+      BUY_ITEM_SUCCESS,
+      TRANSFER_NFT_SUCCESS
+    ],
+    handleRedirectToActivity
+  )
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
@@ -295,4 +318,8 @@ function shouldResetOptions(previous: BrowseOptions, current: BrowseOptions) {
     (current.section && current.section !== previous.section) ||
     (current.assetType && current.assetType !== previous.assetType)
   )
+}
+
+function* handleRedirectToActivity() {
+  yield put(push(locations.activity()))
 }
