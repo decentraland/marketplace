@@ -142,6 +142,13 @@
     "revert": "Revert",
     "add_cover_picture": "Click here to add a cover picture"
   },
+  "sales": {
+    "stats": "Stats",
+    "total_sales": "Total sales",
+    "ethereum_earnings": "Ethereum earnings",
+    "polygon_earnings": "Polygon earnings",
+    "activity": "Activity"
+  },
   "partners_page": {
     "partners": "Partners",
     "latest_from": "Latest from {vendor}"

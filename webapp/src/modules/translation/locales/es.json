@@ -140,6 +140,13 @@
     "revert": "Revertir",
     "add_cover_picture": "Haga click aquí para ponerle una imagen a la tienda"
   },
+  "sales": {
+    "stats": "Estadisticas",
+    "total_sales": "Cantidad de ventas",
+    "ethereum_earnings": "Ganancias en Ethereum",
+    "polygon_earnings": "Ganancias en Polygon",
+    "activity": "Actividad"
+  },
   "partners_page": {
     "partners": "Socios",
     "latest_from": "Último de {vendor}"

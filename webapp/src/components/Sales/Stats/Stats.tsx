@@ -1,5 +1,6 @@
-import { Loader } from 'decentraland-ui'
 import React, { useEffect } from 'react'
+import { Loader } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatMANA } from '../../../lib/mana'
 import { Props } from './Stats.types'
 import './Stats.css'
@@ -17,17 +18,17 @@ const Stats = ({
   return (
     <div className="Stats">
       <Stat
-        subtitle="Total sales"
+        subtitle={t('sales.total_sales')}
         value={totalSales.toLocaleString()}
         isLoading={isLoading}
       />
       <Stat
-        subtitle="Ethereum earnings"
+        subtitle={t('sales.ethereum_earnings')}
         value={formatMANA(ethereumEarned)}
         isLoading={isLoading}
       />
       <Stat
-        subtitle="Polygon earnings"
+        subtitle={t('sales.polygon_earnings')}
         value={formatMANA(maticEarned)}
         isLoading={isLoading}
       />

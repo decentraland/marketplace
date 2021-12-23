@@ -140,6 +140,13 @@
     "revert": "恢复",
     "add_cover_picture": "单击此处将图像放入您的商店"
   },
+  "sales": {
+    "stats": "统计学",
+    "total_sales": "销售额",
+    "ethereum_earnings": "Ethereum 收入",
+    "polygon_earnings": "Polygon 收入",
+    "activity": "活动"
+  },
   "partners_page": {
     "partners": "伙伴",
     "latest_from": "来自{vendor}的最新消息"

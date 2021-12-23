@@ -24,7 +24,7 @@ const Activity = ({
 
   return (
     <div className="Activity">
-      <Header>Activity</Header>
+      <Header>{t('sales.activity')}</Header>
       {isLoading ? (
         <div className="loader-container">
           <Loader active inline />
@@ -45,7 +45,7 @@ const Activity = ({
                 const asset = assets[sale.id]
                 if (asset) {
                   acc.push(
-                    <Table.Row>
+                    <Table.Row key={sale.id}>
                       <AssetCell asset={assets[sale.id]} />
                       <Table.Cell>
                         {formatDistanceToNow(sale.timestamp, {
