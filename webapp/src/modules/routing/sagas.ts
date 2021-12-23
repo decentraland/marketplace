@@ -81,6 +81,7 @@ import {
   FETCH_SALES_SUCCESS
 } from '../sale/actions'
 import { getSales } from '../sale/selectors'
+import { fetchAccountMetricsRequest } from '../account/actions'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -318,6 +319,8 @@ function* handleFetchOnSale(address: string, view: View) {
 }
 
 function* handleFetchSales(address: string, page: number) {
+  yield put(fetchAccountMetricsRequest({ address }))
+
   yield put(
     fetchSalesRequest({
       first: SALES_PER_PAGE,
