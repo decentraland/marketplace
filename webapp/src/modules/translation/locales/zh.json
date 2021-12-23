@@ -34,7 +34,9 @@
     "rarity": "稀罕",
     "stock": "股票",
     "price": "价格",
-    "collection": "珍藏"
+    "collection": "珍藏",
+    "time": "时间",
+    "buyer": "买方"
   },
   "error_boundary": {
     "message": "糟糕！出了点问题......"

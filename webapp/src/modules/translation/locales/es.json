@@ -34,7 +34,9 @@
     "rarity": "Rareza",
     "stock": "Stock",
     "price": "Precio",
-    "collection": "Colección"
+    "collection": "Colección",
+    "time": "Tiempo",
+    "buyer": "Comprador"
   },
   "error_boundary": {
     "message": "Oops! Algo salió mal..."
