@@ -61,25 +61,28 @@ export function accountReducer(
     case FETCH_ACCOUNT_METRICS_SUCCESS: {
       const { accountMetrics } = action.payload
 
+      const metrics = {
+        [Network.ETHEREUM]: accountMetrics.ETHEREUM.reduce(
+          (acc, metrics) => {
+            acc[metrics.address] = metrics
+            return acc
+          },
+          { ...state.metrics.ETHEREUM }
+        ),
+        [Network.MATIC]: accountMetrics.MATIC.reduce(
+          (acc, metrics) => {
+            acc[metrics.address] = metrics
+            return acc
+          },
+          { ...state.metrics.MATIC }
+        )
+      }
+
       return {
         ...state,
-        metrics: {
-          [Network.ETHEREUM]: accountMetrics.ETHEREUM.reduce(
-            (acc, metrics) => {
-              acc[metrics.address] = metrics
-              return acc
-            },
-            { ...state.metrics.ETHEREUM }
-          ),
-          [Network.MATIC]: accountMetrics.MATIC.reduce(
-            (acc, metrics) => {
-              acc[metrics.address] = metrics
-              return acc
-            },
-            { ...state.metrics.MATIC }
-          )
-        },
-        error: null
+        metrics,
+        error: null,
+        loading: loadingReducer(state.loading, action)
       }
     }
     case FETCH_NFTS_SUCCESS: {

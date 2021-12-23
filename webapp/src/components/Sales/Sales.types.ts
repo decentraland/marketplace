@@ -10,6 +10,7 @@ export type Props = {
   ethereumEarned: string
   maticEarned: string
   totalSales: number
+  isLoading: boolean
   onBrowse: (options: BrowseOptions) => void
 }
 
@@ -22,5 +23,6 @@ export type MapStateProps = Pick<
   | 'ethereumEarned'
   | 'maticEarned'
   | 'totalSales'
+  | 'isLoading'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
