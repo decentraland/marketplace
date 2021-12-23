@@ -7,8 +7,20 @@ export type Props = {
   assets: Record<string, Asset>
   count: number
   page: number
+  ethereumEarned: string
+  maticEarned: string
+  totalSales: number
   onBrowse: (options: BrowseOptions) => void
 }
 
-export type MapStateProps = Pick<Props, 'sales' | 'assets' | 'count' | 'page'>
+export type MapStateProps = Pick<
+  Props,
+  | 'sales'
+  | 'assets'
+  | 'count'
+  | 'page'
+  | 'ethereumEarned'
+  | 'maticEarned'
+  | 'totalSales'
+>
 export type MapDispatchProps = Pick<Props, 'onBrowse'>

@@ -9,7 +9,16 @@ import { formatMANA } from '../../lib/mana'
 import { SALES_PER_PAGE } from '../../modules/routing/utils'
 import './Sales.css'
 
-const Sales = ({ sales, count, assets, page, onBrowse }: Props) => {
+const Sales = ({
+  sales,
+  count,
+  assets,
+  page,
+  totalSales,
+  ethereumEarned,
+  maticEarned,
+  onBrowse
+}: Props) => {
   const options = useRef([{ value: 'allTime', text: 'All Time' }])
 
   const [current, setCurrent] = useState(options.current[0].value)
@@ -30,9 +39,18 @@ const Sales = ({ sales, count, assets, page, onBrowse }: Props) => {
         />
       </div>
       <div className="simple-stats">
-        <SimpleStat subtitle="Total sales" value="4" />
-        <SimpleStat subtitle="Ethereum earnings" value="11,235" />
-        <SimpleStat subtitle="Polygon earnings" value="30,600" />
+        <SimpleStat
+          subtitle="Total sales"
+          value={totalSales.toLocaleString()}
+        />
+        <SimpleStat
+          subtitle="Ethereum earnings"
+          value={formatMANA(ethereumEarned)}
+        />
+        <SimpleStat
+          subtitle="Polygon earnings"
+          value={formatMANA(maticEarned)}
+        />
       </div>
       <div className="activity">
         <Header>Activity</Header>
