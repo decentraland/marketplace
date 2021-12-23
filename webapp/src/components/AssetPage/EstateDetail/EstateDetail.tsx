@@ -31,6 +31,7 @@ const EstateDetail = ({ nft }: Props) => {
 
   return (
     <BaseDetail
+      className="EstateDetail"
       asset={nft}
       assetImage={
         <>
@@ -68,14 +69,14 @@ const EstateDetail = ({ nft }: Props) => {
         <>
           <Price asset={nft} />
           <Network asset={nft} />
-          <Actions nft={nft} />
+          {estate.size > 0 && <Actions nft={nft} />}
           <Expiration />
         </>
       }
       below={
         <>
           <Bids nft={nft} />
-          <ParcelCoordinates estateId={nft.tokenId} />
+          {estate.size > 0 && <ParcelCoordinates estateId={nft.tokenId} />}
           <TransactionHistory nft={nft} />
         </>
       }

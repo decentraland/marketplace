@@ -9,4 +9,5 @@ export type Props = {
   left: ReactNode
   box: ReactNode
   below?: ReactNode
+  className?: string
 }

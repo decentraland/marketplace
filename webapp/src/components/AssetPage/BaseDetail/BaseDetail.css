@@ -58,6 +58,10 @@
 
 /* Override ui asset image */
 
+.BaseDetail .PageHeader {
+  position: relative;
+}
+
 .BaseDetail .PageHeader > .AssetImage .pixel {
   display: none;
 }
