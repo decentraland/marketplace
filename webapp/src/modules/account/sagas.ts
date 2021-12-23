@@ -33,8 +33,6 @@ export function* handleFetchAccountMetricsRequest(
       })
     ])
 
-    console.log(results)
-
     yield put(
       fetchAccountMetricsSuccess(filters, {
         [Network.ETHEREUM]: results[0].data,

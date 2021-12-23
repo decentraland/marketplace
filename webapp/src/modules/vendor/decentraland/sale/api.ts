@@ -14,10 +14,7 @@ class SaleAPI extends BaseAPI {
 
     const entries = Object.entries(filters)
 
-    console.log(entries)
-
     for (let [key, value] of entries) {
-      console.log(key, value)
       queryParams.append(key, value.toString())
     }
 
