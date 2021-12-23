@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import { Container } from 'decentraland-ui'
 import { PageHeader } from '../../PageHeader'
 import Title from '../Title'
@@ -6,7 +7,6 @@ import { Box } from '../../AssetBrowse/Box'
 import ListedBadge from '../../ListedBadge'
 import { Props } from './BaseDetail.types'
 import './BaseDetail.css'
-import classNames from 'classnames'
 
 const BaseDetail = ({
   asset,
