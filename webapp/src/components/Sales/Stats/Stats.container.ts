@@ -1,12 +1,16 @@
 import { connect } from 'react-redux'
 import { RootState } from '../../../modules/reducer'
-import { MapStateProps } from './Stats.types'
+import { MapStateProps, MapDispatchProps } from './Stats.types'
 import Stats from './Stats'
 import { getMetricsByAddress } from '../../../modules/account/selectors'
 import { getAddress } from '../../../modules/wallet/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getLoading } from '../../../modules/account/selectors'
-import { FETCH_ACCOUNT_METRICS_REQUEST } from '../../../modules/account/actions'
+import {
+  fetchAccountMetricsRequest,
+  FETCH_ACCOUNT_METRICS_REQUEST
+} from '../../../modules/account/actions'
+import { Dispatch } from 'redux'
 
 const getEmptyMetrics = (address: string) => ({
   address,
@@ -27,6 +31,7 @@ const mapState = (state: RootState): MapStateProps => {
   )
 
   return {
+    address,
     ethereumEarned: metrics?.ETHEREUM?.earned || emptyMetrics.earned,
     maticEarned: metrics?.MATIC?.earned || emptyMetrics.earned,
     totalSales: metrics?.aggregated?.sales || emptyMetrics.sales,
@@ -34,4 +39,10 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-export default connect(mapState)(Stats)
+const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
+  return {
+    onFetchMetrics: address => dispatch(fetchAccountMetricsRequest({ address }))
+  }
+}
+
+export default connect(mapState, mapDispatch)(Stats)

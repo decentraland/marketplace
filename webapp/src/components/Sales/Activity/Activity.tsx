@@ -25,7 +25,6 @@ const Activity = ({
   return (
     <div className="Activity">
       <Header>Activity</Header>
-
       {isLoading ? (
         <div className="loader-container">
           <Loader active inline />

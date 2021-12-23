@@ -1,15 +1,19 @@
 import { Loader } from 'decentraland-ui'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { formatMANA } from '../../../lib/mana'
 import { Props } from './Stats.types'
 import './Stats.css'
 
 const Stats = ({
+  address,
   totalSales,
   ethereumEarned,
   maticEarned,
-  isLoading
+  isLoading,
+  onFetchMetrics
 }: Props) => {
+  useEffect(() => onFetchMetrics(address), [address, onFetchMetrics])
+
   return (
     <div className="Stats">
       <Stat
