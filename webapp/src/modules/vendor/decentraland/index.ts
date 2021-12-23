@@ -12,6 +12,7 @@ export * from './order'
 export * from './routing'
 export * from './collection'
 export * from './sale'
+export * from './account'
 
 export * from './BidService'
 export * from './ContractService'
