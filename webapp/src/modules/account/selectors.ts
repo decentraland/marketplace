@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
-import BigNumber from 'web3x/ethers/bignumber'
+import { toBN } from 'web3x/utils'
 import { Network } from 'decentraland-dapps/node_modules/@dcl/schemas'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
@@ -52,8 +52,8 @@ export const getAggregatedMetricsByAddress = createSelector(
     const res: Record<string, AccountMetrics> = {}
 
     const addStrings = (a: string, b: string) => {
-      const bnA = BigNumber.bigNumberify(a)
-      const bnB = BigNumber.bigNumberify(b)
+      const bnA = toBN(a)
+      const bnB = toBN(b)
 
       return bnA.add(bnB).toString()
     }
