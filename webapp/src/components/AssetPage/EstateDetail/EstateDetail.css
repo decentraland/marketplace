@@ -1,0 +1,27 @@
+.EstateDetail .AssetImage.dissolved {
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.EstateDetail .AssetImage.dissolved .atlas-wrapper {
+  filter: blur(5px);
+}
+
+.EstateDetail .dissolved-wrapper {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.EstateDetail .dissolved-notice {
+  background: var(--background);
+  padding: 8px;
+  border-radius: 8px;
+  position: absolute;
+  color: var(--text);
+}

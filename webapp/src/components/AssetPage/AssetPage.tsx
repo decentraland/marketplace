@@ -3,6 +3,7 @@ import { Page, Section, Column, Back, Narrow } from 'decentraland-ui'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { AssetProviderPage } from '../AssetProviderPage'
 import { ItemDetail } from './ItemDetail'
+import { ErrorBoundary } from './ErrorBoundary'
 import { Props } from './AssetPage.types'
 import { ParcelDetail } from './ParcelDetail'
 import { EstateDetail } from './EstateDetail'
@@ -72,21 +73,23 @@ const AssetPage = ({ type, onBack }: Props) => {
               )}
             </AssetProvider>
             <Narrow>
-              <AssetProviderPage type={type}>
-                {asset =>
-                  mapAsset(
-                    asset,
-                    {
-                      item: item => <ItemDetail item={item} />,
-                      ens: nft => <ENSDetail nft={nft} />,
-                      estate: nft => <EstateDetail nft={nft} />,
-                      parcel: nft => <ParcelDetail nft={nft} />,
-                      wearable: nft => <WearableDetail nft={nft} />
-                    },
-                    () => null
-                  )
-                }
-              </AssetProviderPage>
+              <ErrorBoundary>
+                <AssetProviderPage type={type}>
+                  {asset =>
+                    mapAsset(
+                      asset,
+                      {
+                        item: item => <ItemDetail item={item} />,
+                        ens: nft => <ENSDetail nft={nft} />,
+                        estate: nft => <EstateDetail nft={nft} />,
+                        parcel: nft => <ParcelDetail nft={nft} />,
+                        wearable: nft => <WearableDetail nft={nft} />
+                      },
+                      () => null
+                    )
+                  }
+                </AssetProviderPage>
+              </ErrorBoundary>
             </Narrow>
           </Column>
         </Section>

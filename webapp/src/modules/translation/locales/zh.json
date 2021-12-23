@@ -36,6 +36,12 @@
     "price": "价格",
     "collection": "珍藏"
   },
+  "error_boundary": {
+    "message": "糟糕！出了点问题......"
+  },
+  "estate_detail": {
+    "dissolved": "这个庄园已经解散了"
+  },
   "vendors": {
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
