@@ -1,9 +1,0 @@
-{
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "prettier.printWidth": 80,
-  "prettier.singleQuote": true,
-  "prettier.semi": false,
-  "search.followSymlinks": false,
-  "editor.tabSize": 2,
-  "editor.formatOnSave": true
-}

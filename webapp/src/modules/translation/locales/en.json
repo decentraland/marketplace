@@ -36,6 +36,12 @@
     "price": "Price",
     "collection": "Collection"
   },
+  "error_boundary": {
+    "message": "Oops! Something went wrong..."
+  },
+  "estate_detail": {
+    "dissolved": "This Estate has been dissolved"
+  },
   "vendors": {
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",

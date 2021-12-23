@@ -1,5 +1,7 @@
 import React from 'react'
 import { Badge } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import classNames from 'classnames'
 import { Network } from '../Network'
 import { Description } from '../Description'
 import { Props } from './EstateDetail.types'
@@ -14,16 +16,40 @@ import { ProximityHighlights } from '../ProximityHighlights'
 import { ParcelCoordinates } from './ParcelCoordinates'
 import BaseDetail from '../BaseDetail'
 import { AssetImage } from '../../AssetImage'
+import './EstateDetail.css'
 
 const EstateDetail = ({ nft }: Props) => {
   const estate = nft.data.estate!
-  const { x, y } = estate.parcels[0]
+
+  let x = 0
+  let y = 0
+
+  if (estate.size > 0) {
+    x = estate.parcels[0].x
+    y = estate.parcels[0].y
+  }
 
   return (
     <BaseDetail
+      className="EstateDetail"
       asset={nft}
       assetImage={
-        <AssetImage asset={nft} isDraggable withNavigation hasPopup />
+        <>
+          <AssetImage
+            className={classNames(estate.size === 0 && 'dissolved')}
+            asset={nft}
+            isDraggable
+            withNavigation
+            hasPopup
+          />
+          {estate.size === 0 && (
+            <div className="dissolved-wrapper">
+              <div className="dissolved-notice">
+                {t('estate_detail.dissolved')}
+              </div>
+            </div>
+          )}
+        </>
       }
       isOnSale={!!nft.activeOrderId}
       badges={
@@ -43,14 +69,14 @@ const EstateDetail = ({ nft }: Props) => {
         <>
           <Price asset={nft} />
           <Network asset={nft} />
-          <Actions nft={nft} />
+          {estate.size > 0 && <Actions nft={nft} />}
           <Expiration />
         </>
       }
       below={
         <>
           <Bids nft={nft} />
-          <ParcelCoordinates estateId={nft.tokenId} />
+          {estate.size > 0 && <ParcelCoordinates estateId={nft.tokenId} />}
           <TransactionHistory nft={nft} />
         </>
       }

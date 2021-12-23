@@ -3,6 +3,7 @@ import { Page, Section, Column, Back, Narrow } from 'decentraland-ui'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { AssetProviderPage } from '../AssetProviderPage'
 import { ItemDetail } from './ItemDetail'
+import { ErrorBoundary } from './ErrorBoundary'
 import { Props } from './AssetPage.types'
 import { ParcelDetail } from './ParcelDetail'
 import { EstateDetail } from './EstateDetail'
@@ -22,74 +23,76 @@ const AssetPage = ({ type, onBack }: Props) => {
       <Navbar isFullscreen />
       <Navigation />
       <Page className="AssetPage">
-        <Section>
-          <Column>
-            <AssetProvider type={type}>
-              {asset => (
-                <Back
-                  className="back"
-                  absolute
-                  onClick={() =>
-                    onBack(
-                      mapAsset(
-                        asset,
-                        {
-                          item: () =>
-                            locations.browse({
-                              assetType: type,
-                              section: Sections.decentraland.WEARABLES
-                            }),
-                          ens: () =>
-                            locations.browse({
-                              assetType: type,
-                              section: Sections.decentraland.ENS
-                            }),
-                          estate: () =>
-                            locations.lands({
-                              assetType: type,
-                              section: Sections.decentraland.ESTATES,
-                              isMap: false,
-                              isFullscreen: false
-                            }),
-                          parcel: () =>
-                            locations.lands({
-                              assetType: type,
-                              section: Sections.decentraland.PARCELS,
-                              isMap: false,
-                              isFullscreen: false
-                            }),
-                          wearable: () =>
-                            locations.browse({
-                              assetType: type,
-                              section: Sections.decentraland.WEARABLES
-                            })
-                        },
-                        () => undefined
+        <ErrorBoundary>
+          <Section>
+            <Column>
+              <AssetProvider type={type}>
+                {asset => (
+                  <Back
+                    className="back"
+                    absolute
+                    onClick={() =>
+                      onBack(
+                        mapAsset(
+                          asset,
+                          {
+                            item: () =>
+                              locations.browse({
+                                assetType: type,
+                                section: Sections.decentraland.WEARABLES
+                              }),
+                            ens: () =>
+                              locations.browse({
+                                assetType: type,
+                                section: Sections.decentraland.ENS
+                              }),
+                            estate: () =>
+                              locations.lands({
+                                assetType: type,
+                                section: Sections.decentraland.ESTATES,
+                                isMap: false,
+                                isFullscreen: false
+                              }),
+                            parcel: () =>
+                              locations.lands({
+                                assetType: type,
+                                section: Sections.decentraland.PARCELS,
+                                isMap: false,
+                                isFullscreen: false
+                              }),
+                            wearable: () =>
+                              locations.browse({
+                                assetType: type,
+                                section: Sections.decentraland.WEARABLES
+                              })
+                          },
+                          () => undefined
+                        )
                       )
+                    }
+                  />
+                )}
+              </AssetProvider>
+              <Narrow>
+                <AssetProviderPage type={type}>
+                  {asset =>
+                    mapAsset(
+                      asset,
+                      {
+                        item: item => <ItemDetail item={item} />,
+                        ens: nft => <ENSDetail nft={nft} />,
+                        estate: nft => <EstateDetail nft={nft} />,
+                        parcel: nft => <ParcelDetail nft={nft} />,
+                        wearable: nft => <WearableDetail nft={nft} />
+                      },
+                      () => null
                     )
                   }
-                />
-              )}
-            </AssetProvider>
-            <Narrow>
-              <AssetProviderPage type={type}>
-                {asset =>
-                  mapAsset(
-                    asset,
-                    {
-                      item: item => <ItemDetail item={item} />,
-                      ens: nft => <ENSDetail nft={nft} />,
-                      estate: nft => <EstateDetail nft={nft} />,
-                      parcel: nft => <ParcelDetail nft={nft} />,
-                      wearable: nft => <WearableDetail nft={nft} />
-                    },
-                    () => null
-                  )
-                }
-              </AssetProviderPage>
-            </Narrow>
-          </Column>
-        </Section>
+                </AssetProviderPage>
+              </Narrow>
+            </Column>
+          </Section>
+        </ErrorBoundary>
       </Page>
       <Footer />
     </>

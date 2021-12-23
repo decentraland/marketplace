@@ -1,4 +1,5 @@
 import React from 'react'
+import classNames from 'classnames'
 import { Container } from 'decentraland-ui'
 import { PageHeader } from '../../PageHeader'
 import Title from '../Title'
@@ -14,10 +15,11 @@ const BaseDetail = ({
   badges,
   left,
   box,
-  below
+  below,
+  className
 }: Props) => {
   return (
-    <div className="BaseDetail">
+    <div className={classNames('BaseDetail', className)}>
       <PageHeader>
         {assetImage}
         {isOnSale && <ListedBadge className="listed-badge" />}
