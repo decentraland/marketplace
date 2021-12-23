@@ -73,7 +73,13 @@
 .Sales .activity {
   margin-top: 12px;
   background-color: var(--secondary);
-  /* min-height: 96px; */
   border-radius: 10px;
   padding: 24px;
+}
+
+/* Pagination */
+
+.pagination {
+  display: flex;
+  justify-content: center;
 }

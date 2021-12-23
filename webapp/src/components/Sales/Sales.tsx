@@ -1,17 +1,22 @@
 import React, { ReactNode, useRef, useState } from 'react'
-import { Dropdown, Header, Profile, Table } from 'decentraland-ui'
+import { Dropdown, Header, Pagination, Profile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './Sales.types'
 import AssetCell from '../OnSaleList/AssetCell'
 import { formatDistanceToNow } from '../../lib/date'
 import { Mana } from '../Mana'
 import { formatMANA } from '../../lib/mana'
+import { SALES_PER_PAGE } from '../../modules/routing/utils'
 import './Sales.css'
 
-const Sales = ({ sales, assets }: Props) => {
+const Sales = ({ sales, count, assets, page, onBrowse }: Props) => {
   const options = useRef([{ value: 'allTime', text: 'All Time' }])
 
   const [current, setCurrent] = useState(options.current[0].value)
+
+  const pages = Math.ceil(count / SALES_PER_PAGE)
+
+  const hasPagination = pages > 1
 
   return (
     <div className="Sales">
@@ -67,6 +72,19 @@ const Sales = ({ sales, assets }: Props) => {
             }, [] as ReactNode[])}
           </Table.Body>
         </Table>
+        {hasPagination && (
+          <div className="pagination">
+            <Pagination
+              totalPages={pages}
+              activePage={page}
+              onPageChange={(_, data) => {
+                if (page !== data.activePage) {
+                  onBrowse({ page: Number(data.activePage) })
+                }
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   )

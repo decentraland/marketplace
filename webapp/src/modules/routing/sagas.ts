@@ -73,7 +73,7 @@ import {
 import { BrowseOptions, Sections, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
 import { fetchCollectionsRequest } from '../collection/actions'
-import { COLLECTIONS_PER_PAGE } from './utils'
+import { COLLECTIONS_PER_PAGE, SALES_PER_PAGE } from './utils'
 import {
   FetchSalesFailureAction,
   fetchSalesRequest,
@@ -180,7 +180,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       yield handleFetchOnSale(address, options.view!)
       break
     case Section.SALES:
-      yield spawn(handleFetchSales, address)
+      yield spawn(handleFetchSales, address, page)
       break
     case Section.COLLECTIONS:
       yield handleFetchCollections(page, address, sortBy, search)
@@ -317,9 +317,14 @@ function* handleFetchOnSale(address: string, view: View) {
   )
 }
 
-function* handleFetchSales(address: string) {
+function* handleFetchSales(address: string, page: number) {
   yield put(
-    fetchSalesRequest({ seller: address, sortBy: SaleSortBy.RECENTLY_SOLD })
+    fetchSalesRequest({
+      first: SALES_PER_PAGE,
+      skip: (page - 1) * SALES_PER_PAGE,
+      seller: address,
+      sortBy: SaleSortBy.RECENTLY_SOLD
+    })
   )
 
   const result: { failure: FetchSalesFailureAction } = yield race({
