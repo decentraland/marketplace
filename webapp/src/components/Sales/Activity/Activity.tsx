@@ -3,12 +3,15 @@ import { formatDistanceToNow } from 'date-fns'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header, Loader, Pagination, Table } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
+import { Link } from 'react-router-dom'
 import { SALES_PER_PAGE } from '../../../modules/routing/utils'
 import AssetCell from '../../OnSaleList/AssetCell'
 import { Props } from './Activity.types'
 import { Mana } from '../../Mana'
 import { formatMANA } from '../../../lib/mana'
+import { locations } from '../../../modules/routing/locations'
 import './Activity.css'
+
 
 const Activity = ({
   count,
@@ -53,7 +56,9 @@ const Activity = ({
                         })}
                       </Table.Cell>
                       <Table.Cell>
-                        <Profile address={sale.buyer} />
+                        <Link to={locations.account(sale.buyer)}>
+                          <Profile address={sale.buyer} inline />
+                        </Link>
                       </Table.Cell>
                       <Table.Cell>
                         <Mana network={sale.network} inline>
