@@ -72,10 +72,10 @@ export const ACCEPT_BID_FAILURE = '[Failure] Accept Bid'
 
 export const acceptBidRequest = (bid: Bid) =>
   action(ACCEPT_BID_REQUEST, { bid })
-export const acceptBidSuccess = (bid: Bid, chainId: ChainId, txHash: string) =>
+export const acceptBidSuccess = (bid: Bid, txHash: string) =>
   action(ACCEPT_BID_SUCCESS, {
     bid,
-    ...buildTransactionPayload(chainId, txHash, {
+    ...buildTransactionPayload(bid.chainId, txHash, {
       tokenId: bid.tokenId,
       contractAddress: bid.contractAddress,
       price: formatMANA(bid.price)
@@ -95,10 +95,10 @@ export const CANCEL_BID_FAILURE = '[Failure] Cancel Bid'
 
 export const cancelBidRequest = (bid: Bid) =>
   action(CANCEL_BID_REQUEST, { bid })
-export const cancelBidSuccess = (bid: Bid, chainId: ChainId, txHash: string) =>
+export const cancelBidSuccess = (bid: Bid, txHash: string) =>
   action(CANCEL_BID_SUCCESS, {
     bid,
-    ...buildTransactionPayload(chainId, txHash, {
+    ...buildTransactionPayload(bid.chainId, txHash, {
       tokenId: bid.tokenId,
       contractAddress: bid.contractAddress,
       price: formatMANA(bid.price)

@@ -1,12 +1,11 @@
 import BN from 'bn.js'
 import { Address } from 'web3x/address'
 import { toWei } from 'web3x/utils'
-import { Network } from '@dcl/schemas'
+import { ListingStatus, Network, Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
-import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
 import { TokenConverter } from '../TokenConverter'
@@ -170,7 +169,10 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
     }
   }
 
-  toOrder(order: SuperRareOrder, oneEthInMANA: string): Order {
+  toOrder(
+    order: SuperRareOrder,
+    oneEthInMANA: string
+  ): Order & { ethPrice: string } {
     const { asset, taker } = order
 
     const totalWei = this.marketplacePrice.addFee(order.amountWithFee)
@@ -181,12 +183,12 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
       id: `${VendorName.SUPER_RARE}-order-${asset.id}`,
       tokenId: asset.id.toString(),
       contractAddress: asset.contractAddress,
-      marketAddress: order.marketContractAddress,
+      marketplaceAddress: order.marketContractAddress,
       owner: asset.owner.address,
       buyer: taker ? taker.address : null,
       price: price.toString(10),
       ethPrice: order.amountWithFee.toString(),
-      status: OrderStatus.OPEN,
+      status: ListingStatus.OPEN,
       createdAt: +order.timestamp,
       updatedAt: +order.timestamp,
       expiresAt: Infinity,

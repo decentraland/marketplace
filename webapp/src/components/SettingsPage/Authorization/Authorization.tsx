@@ -42,20 +42,28 @@ const Authorization = (props: Props) => {
           }
         />
         <ChainCheck chainId={authorization.chainId}>
-          {isEnabled => <Radio
-            checked={isAuthorized(authorization, authorizations)}
-            label={token.name}
-            disabled={!isEnabled}
-            onClick={(_, props: RadioProps) => handleOnChange(!!props.checked)}
-          />}
+          {isEnabled => (
+            <Radio
+              checked={isAuthorized(authorization, authorizations)}
+              label={token.name}
+              disabled={!isEnabled}
+              onClick={(_, props: RadioProps) =>
+                handleOnChange(!!props.checked)
+              }
+            />
+          )}
         </ChainCheck>
         <div className="radio-description secondary-text">
           <T
             id="authorization.authorize"
             values={{
               contract_link: (
-                <TransactionLink address={authorizedAddress} txHash="">
-                  {contract.name}
+                <TransactionLink
+                  address={authorizedAddress}
+                  txHash=""
+                  chainId={authorization.chainId}
+                >
+                  {contract.label || contract.name}
                 </TransactionLink>
               ),
               symbol: token.name,

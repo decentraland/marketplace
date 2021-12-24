@@ -1,9 +1,9 @@
 import { action } from 'typesafe-actions'
+import { Order } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ErrorCode } from 'decentraland-transactions'
 
 import { SortDirection } from '../routing/types'
-import { Order } from '../order/types'
 import { Account } from '../account/types'
 import { getAssetName } from '../asset/utils'
 import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'

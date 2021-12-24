@@ -59,7 +59,7 @@ const Transaction = (props: Props) => {
                     address={authorized.address}
                     txHash=""
                   >
-                    {authorized.name}
+                    {authorized.label || authorized.name}
                   </TransactionLink>
                 ),
                 token: (
@@ -68,7 +68,7 @@ const Transaction = (props: Props) => {
                     address={contract.address}
                     txHash=""
                   >
-                    {contract.name}
+                    {contract.label || contract.name}
                   </TransactionLink>
                 )
               }}

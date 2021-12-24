@@ -2,11 +2,10 @@ import BN from 'bn.js'
 import { Address } from 'web3x/address'
 import { toWei } from 'web3x/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { Network } from '@dcl/schemas'
+import { ListingStatus, Network, Order } from '@dcl/schemas'
 import { ERC721 } from '../../../contracts/ERC721'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
-import { Order, OrderStatus } from '../../order/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
 import { TokenConverter } from '../TokenConverter'
@@ -159,7 +158,10 @@ export class NFTService
     }
   }
 
-  toOrder(edition: EditionFragment, oneEthInMANA: string): Order {
+  toOrder(
+    edition: EditionFragment,
+    oneEthInMANA: string
+  ): Order & { ethPrice: string } {
     const totalWei = this.marketplacePrice.addFee(edition.priceInWei)
     const weiPrice = new BN(totalWei).mul(new BN(oneEthInMANA))
     const price = weiPrice.div(this.oneEthInWei)
@@ -169,7 +171,7 @@ export class NFTService
     const contractAddress = getContract({
       name: contractNames.DIGITAL_ASSET
     }).address
-    const marketAddress = getContract({
+    const marketplaceAddress = getContract({
       name: contractNames.MARKETPLACE_ADAPTER
     }).address
 
@@ -177,12 +179,12 @@ export class NFTService
       id: `${VendorName.KNOWN_ORIGIN}-order-${edition.id}`,
       tokenId: edition.id,
       contractAddress,
-      marketAddress,
+      marketplaceAddress,
       owner: edition.artistAccount,
       buyer: null,
       price: price.toString(10),
       ethPrice: edition.priceInWei.toString(),
-      status: OrderStatus.OPEN,
+      status: ListingStatus.OPEN,
       createdAt: +edition.createdTimestamp,
       updatedAt: +edition.createdTimestamp,
       expiresAt: Infinity,

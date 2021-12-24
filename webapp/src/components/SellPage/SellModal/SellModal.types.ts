@@ -1,7 +1,7 @@
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { Order } from '@dcl/schemas'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { NFT } from '../../../modules/nft/types'
-import { Order } from '../../../modules/order/types'
 import { createOrderRequest } from '../../../modules/order/actions'
 
 export type Props = {

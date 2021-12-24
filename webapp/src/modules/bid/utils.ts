@@ -1,33 +1,22 @@
-import { Address } from 'web3x/address'
-import { Eth } from 'web3x/eth'
-import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
-import { Bid, Network } from '@dcl/schemas'
-import { MANA } from '../../contracts/MANA'
-import { getContractNames } from '../vendor'
-import { getContract } from '../contract/utils'
+import { Contract, providers, utils } from 'ethers'
+import { Bid } from '@dcl/schemas'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
+import { ContractName, getContract } from 'decentraland-transactions'
 
 export async function isInsufficientMANA(bid: Bid) {
   try {
-    const provider = await getConnectedProvider()
-    if (!provider) {
-      throw new Error('Could not connect to provider')
-    }
-    const eth = new Eth(provider)
+    const provider = await getNetworkProvider(bid.chainId)
+    const contract = getContract(ContractName.MANAToken, bid.chainId)
+    const mana = new Contract(
+      contract.address,
+      contract.abi,
+      new providers.Web3Provider(provider)
+    )
+    const balanceRaw = await mana.balanceOf(bid.bidder)
+    const balance = parseFloat(utils.formatEther(balanceRaw))
+    const price = parseFloat(utils.formatEther(bid.price))
 
-    const contractNames = getContractNames()
-
-    const { address } = getContract({
-      name: contractNames.MANA,
-      network: Network.ETHEREUM
-    })
-
-    const mana = new MANA(eth, Address.fromString(address))
-
-    const balance = await mana.methods
-      .balanceOf(Address.fromString(bid.bidder))
-      .call()
-
-    return +balance < +bid.price
+    return balance < price
   } catch (error) {
     console.warn(error.message)
   }

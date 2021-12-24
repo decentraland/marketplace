@@ -1,6 +1,5 @@
-import { Bid } from '@dcl/schemas'
+import { Bid, ListingStatus } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { OrderStatus } from '../../../order/types'
 import { NFT_SERVER_URL } from '../nft'
 
 class BidAPI extends BaseAPI {
@@ -20,17 +19,17 @@ class BidAPI extends BaseAPI {
     }
   }
   async fetchBySeller(seller: string) {
-    return this.fetch({ seller, status: OrderStatus.OPEN })
+    return this.fetch({ seller, status: ListingStatus.OPEN })
   }
 
   async fetchByBidder(bidder: string) {
-    return this.fetch({ bidder, status: OrderStatus.OPEN })
+    return this.fetch({ bidder, status: ListingStatus.OPEN })
   }
 
   async fetchByNFT(
     contractAddress: string,
     tokenId: string,
-    status: OrderStatus = OrderStatus.OPEN
+    status: ListingStatus = ListingStatus.OPEN
   ) {
     return this.fetch({ contractAddress, tokenId, status })
   }

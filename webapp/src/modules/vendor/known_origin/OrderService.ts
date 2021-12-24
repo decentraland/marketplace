@@ -1,10 +1,10 @@
 import { Address } from 'web3x/address'
 import { ABICoder } from 'web3x/contract/abi-coder'
+import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
-import { Order } from '../../order/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { getContractNames, VendorName } from '../types'
@@ -41,7 +41,9 @@ export class OrderService
     const contractNames = getContractNames()
 
     // Addresses
-    const assetMarketAddress: Address = Address.fromString(order.marketAddress)
+    const assetMarketAddress: Address = Address.fromString(
+      order.marketplaceAddress
+    )
     const manaTokenAddress = Address.fromString(
       getContract({ name: contractNames.MANA }).address
     )
@@ -52,7 +54,7 @@ export class OrderService
 
     // Price
     const manaPrice = await this.tokenConverter.contractEthToMANA(
-      order.ethPrice!
+      (order as Order & { ethPrice: string }).ethPrice!
     )
     const maxPrice = this.marketplacePrice.addMaxSlippage(manaPrice)
 
@@ -65,7 +67,7 @@ export class OrderService
       .buy(
         assetMarketAddress,
         calldata,
-        order.ethPrice!,
+        (order as Order & { ethPrice: string }).ethPrice!,
         manaTokenAddress,
         maxPrice
       )

@@ -1,9 +1,8 @@
-import { NFTCategory } from '@dcl/schemas'
 import { useEffect, useState } from 'react'
+import { NFTCategory, Order } from '@dcl/schemas'
 import { TokenConverter } from '../vendor/TokenConverter'
 import { MarketplacePrice } from '../vendor/MarketplacePrice'
 import { isPartner } from '../vendor/utils'
-import { Order } from '../order/types'
 import { getFingerprint } from './estate/utils'
 import { NFT } from './types'
 
@@ -49,7 +48,7 @@ export const useComputedPrice = (nft: NFT, order: Order | null) => {
 
       setIsLoading(true)
       tokenConverter
-        .contractEthToMANA(order.ethPrice!)
+        .contractEthToMANA((order as Order & { ethPrice: string }).ethPrice!)
         .then(computedPrice => {
           const percentage = marketPrice.getPercentageIncrease(
             computedPrice,
