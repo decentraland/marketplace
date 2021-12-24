@@ -31,7 +31,13 @@ const Stats = ({
         subtitle={t('sales.total_earnings')}
         value={formatMANA(totalEarnings)}
         isLoading={isLoading}
-        icon={<Icon className="total-sales-icon" name="shopping bag" size="large" />}
+        icon={
+          <Icon
+            className="total-earnings-icon"
+            name="shopping bag"
+            size="large"
+          />
+        }
       />
       <Stat
         subtitle={t('sales.royalties')}
