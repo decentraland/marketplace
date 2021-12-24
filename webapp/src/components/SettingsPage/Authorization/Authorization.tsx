@@ -63,7 +63,7 @@ const Authorization = (props: Props) => {
                   txHash=""
                   chainId={authorization.chainId}
                 >
-                  {contract.name}
+                  {contract.label || contract.name}
                 </TransactionLink>
               ),
               symbol: token.name,

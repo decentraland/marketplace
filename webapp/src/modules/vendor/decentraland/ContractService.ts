@@ -55,6 +55,7 @@ const contracts = ({
     {
       name: ContractName.MARKETPLACE,
       address: getContract(CN.MarketplaceV2, ChainId.MATIC_MUMBAI).address,
+      label: 'MarketplaceV2',
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,
@@ -63,6 +64,7 @@ const contracts = ({
     {
       name: ContractName.LEGACY_MARKETPLACE,
       address: getContract(CN.Marketplace, ChainId.MATIC_MUMBAI).address,
+      label: 'MarketplaceV1',
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,

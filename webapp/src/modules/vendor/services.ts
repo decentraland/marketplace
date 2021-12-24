@@ -12,6 +12,7 @@ import { NFTsFetchFilters } from './nft/types'
 import { VendorName, TransferType } from './types'
 
 export type Contract = Omit<BaseContract, 'category'> & {
+  label?: string
   category: NFTCategory | 'art' | null
   vendor: VendorName | null
 }
