@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
-import { toBN } from 'web3x/utils'
 import { Network } from 'decentraland-dapps/node_modules/@dcl/schemas'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
 import { AccountMetrics } from './types'
+import { sumAccountMetrics } from './utils'
 
 export const getState = (state: RootState) => state.account
 export const getData = (state: RootState) => getState(state).data
@@ -51,13 +51,6 @@ export const getAggregatedMetricsByAddress = createSelector(
     const addresses = Object.keys(metrics)
     const res: Record<string, AccountMetrics> = {}
 
-    const addStrings = (a: string, b: string) => {
-      const bnA = toBN(a)
-      const bnB = toBN(b)
-
-      return bnA.add(bnB).toString()
-    }
-
     for (const address of addresses) {
       const eth = metrics[address].ETHEREUM
       const mat = metrics[address].MATIC
@@ -67,14 +60,7 @@ export const getAggregatedMetricsByAddress = createSelector(
       } else if (!eth && mat) {
         res[address] = mat
       } else if (eth && mat) {
-        res[address] = {
-          ...eth,
-          purchases: eth.purchases + mat.purchases,
-          sales: eth.sales + mat.sales,
-          earned: addStrings(eth.earned, mat.earned),
-          royalties: addStrings(eth.royalties, mat.royalties),
-          spent: addStrings(eth.spent, mat.spent)
-        }
+        res[address] = sumAccountMetrics(eth, mat)
       }
     }
 
