@@ -143,6 +143,8 @@
   "sales": {
     "stats": "统计学",
     "total_sales": "销售额",
+    "total_earnings": "利润总额",
+    "royalties": "津贴",
     "ethereum_earnings": "Ethereum 收入",
     "polygon_earnings": "Polygon 收入",
     "activity": "活动"

@@ -143,6 +143,8 @@
   "sales": {
     "stats": "Estadisticas",
     "total_sales": "Cantidad de ventas",
+    "total_earnings": "Ganancias totales",
+    "royalties": "Regalias",
     "ethereum_earnings": "Ganancias en Ethereum",
     "polygon_earnings": "Ganancias en Polygon",
     "activity": "Actividad"
