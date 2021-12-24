@@ -53,6 +53,11 @@ function* handleWallet(
     network: Network.MATIC
   })
 
+  const legacyMarketplaceMatic = getContract({
+    name: contractNames.LEGACY_MARKETPLACE,
+    network: Network.MATIC
+  })
+
   const marketplaceAdapter = getContract({
     name: contractNames.MARKETPLACE_ADAPTER
   })
@@ -96,6 +101,15 @@ function* handleWallet(
   authorizations.push({
     address,
     authorizedAddress: marketplaceMatic.address,
+    contractAddress: manaMatic.address,
+    contractName: ContractName.MANAToken,
+    chainId: manaMatic.chainId,
+    type: AuthorizationType.ALLOWANCE
+  })
+
+  authorizations.push({
+    address,
+    authorizedAddress: legacyMarketplaceMatic.address,
     contractAddress: manaMatic.address,
     contractName: ContractName.MANAToken,
     chainId: manaMatic.chainId,
