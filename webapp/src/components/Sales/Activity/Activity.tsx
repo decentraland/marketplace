@@ -12,7 +12,6 @@ import { formatMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import './Activity.css'
 
-
 const Activity = ({
   count,
   sales,

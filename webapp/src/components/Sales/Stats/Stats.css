@@ -1,25 +1,16 @@
 .Stats {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
 }
 
 @media (max-width: 768px) {
   .Stats {
-    flex-direction: column;
-  }
-}
-
-.Stats > *:not(:last-child) {
-  margin: 0 12px 0 0;
-}
-
-@media (max-width: 768px) {
-  .Stats > *:not(:last-child) {
-    margin: 0 0 12px 0;
+    grid-template-columns: 1fr;
   }
 }
 
 .Stats .Stat {
-  flex: 1;
   display: flex;
   background-color: var(--secondary);
   min-height: 96px;
@@ -51,6 +42,16 @@
   position: relative;
   left: 3px;
   top: 1px;
+}
+
+.Stats .Stat > .icon .total-earnings-icon {
+  position: relative;
+  left: 2px;
+}
+
+.Stats .Stat > .icon .royalties-icon {
+  position: relative;
+  left: 2px;
 }
 
 .Stats .Stat > .icon .ethereum-earnings-icon {

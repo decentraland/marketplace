@@ -10,8 +10,10 @@ import './Stats.css'
 const Stats = ({
   address,
   totalSales,
+  totalEarnings,
   ethereumEarned,
   maticEarned,
+  royalties,
   isLoading,
   onFetchMetrics
 }: Props) => {
@@ -24,6 +26,18 @@ const Stats = ({
         value={totalSales.toLocaleString()}
         isLoading={isLoading}
         icon={<Icon className="total-sales-icon" name="tag" size="large" />}
+      />
+      <Stat
+        subtitle={t('sales.total_earnings')}
+        value={formatMANA(totalEarnings)}
+        isLoading={isLoading}
+        icon={<Icon className="total-sales-icon" name="shopping bag" size="large" />}
+      />
+      <Stat
+        subtitle={t('sales.royalties')}
+        value={formatMANA(royalties)}
+        isLoading={isLoading}
+        icon={<Icon className="royalties-icon" name="star" size="large" />}
       />
       <Stat
         subtitle={t('sales.ethereum_earnings')}

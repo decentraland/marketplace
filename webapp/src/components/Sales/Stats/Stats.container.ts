@@ -32,9 +32,11 @@ const mapState = (state: RootState): MapStateProps => {
 
   return {
     address,
+    totalSales: metrics?.aggregated?.sales || emptyMetrics.sales,
+    totalEarnings: metrics?.aggregated?.earned || emptyMetrics.earned,
     ethereumEarned: metrics?.ETHEREUM?.earned || emptyMetrics.earned,
     maticEarned: metrics?.MATIC?.earned || emptyMetrics.earned,
-    totalSales: metrics?.aggregated?.sales || emptyMetrics.sales,
+    royalties: metrics?.aggregated?.royalties || emptyMetrics.royalties,
     isLoading
   }
 }
