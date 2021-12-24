@@ -29,7 +29,7 @@ const Stats = ({
       />
       <Stat
         subtitle={t('sales.total_earnings')}
-        value={formatMANA(totalEarnings)}
+        value={formatMANA(totalEarnings, 2)}
         isLoading={isLoading}
         icon={
           <Icon
@@ -41,13 +41,13 @@ const Stats = ({
       />
       <Stat
         subtitle={t('sales.royalties')}
-        value={formatMANA(royalties)}
+        value={formatMANA(royalties, 2)}
         isLoading={isLoading}
         icon={<Icon className="royalties-icon" name="star" size="large" />}
       />
       <Stat
         subtitle={t('sales.ethereum_earnings')}
-        value={formatMANA(ethereumEarned)}
+        value={formatMANA(ethereumEarned, 2)}
         isLoading={isLoading}
         icon={
           <Mana
@@ -59,7 +59,7 @@ const Stats = ({
       />
       <Stat
         subtitle={t('sales.polygon_earnings')}
-        value={formatMANA(maticEarned)}
+        value={formatMANA(maticEarned, 2)}
         isLoading={isLoading}
         icon={
           <Mana

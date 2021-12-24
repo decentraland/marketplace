@@ -1,7 +1,9 @@
 import { fromWei } from 'web3x/utils'
 
-export function formatMANA(value: string) {
-  return Number(fromWei(value, 'ether')).toLocaleString()
+export function formatMANA(value: string, fixed?: number) {
+  return Number(fromWei(value, 'ether')).toLocaleString(undefined, {
+    maximumFractionDigits: fixed
+  })
 }
 
 export function toMANA(num: number) {
