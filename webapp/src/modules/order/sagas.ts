@@ -73,7 +73,7 @@ function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
     const { orderService } = VendorFactory.build(nft.vendor)
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call(() => orderService.cancel(wallet, nft))
+    const txHash: string = yield call(() => orderService.cancel(wallet, order))
     yield put(cancelOrderSuccess(order, nft, txHash))
   } catch (error) {
     yield put(cancelOrderFailure(order, nft, error.message, error.code))

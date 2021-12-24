@@ -53,6 +53,14 @@ const contracts = ({
     },
     {
       name: ContractName.MARKETPLACE,
+      address: getContract(CN.MarketplaceV2, ChainId.MATIC_MUMBAI).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      name: ContractName.MARKETPLACE,
       address: getContract(CN.Marketplace, ChainId.MATIC_MUMBAI).address,
       vendor: 'decentraland',
       category: null,
@@ -104,6 +112,14 @@ const contracts = ({
     {
       name: ContractName.MANA,
       address: getContract(CN.MANAToken, ChainId.MATIC_MAINNET).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MAINNET
+    },
+    {
+      name: ContractName.MARKETPLACE,
+      address: getContract(CN.MarketplaceV2, ChainId.MATIC_MAINNET).address,
       vendor: 'decentraland',
       category: null,
       network: Network.MATIC,

@@ -51,7 +51,7 @@ export interface OrderService<V extends VendorName> {
     order: Order,
     fingerprint?: string
   ) => Promise<string>
-  cancel: (wallet: Wallet | null, nft: NFT<V>) => Promise<string>
+  cancel: (wallet: Wallet | null, order: Order) => Promise<string>
   canSell(): boolean
 }
 export class OrderService<V> {}
