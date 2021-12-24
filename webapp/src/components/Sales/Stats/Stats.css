@@ -34,7 +34,7 @@
   align-items: center;
 }
 
-.Stats .Stat .icon {
+.Stats .Stat > .icon {
   width: 48px;
   height: 48px;
   min-width: 48px;
@@ -42,6 +42,31 @@
   background-color: #37333d;
   border-radius: 50%;
   margin-right: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Stats .Stat > .icon .total-sales-icon {
+  position: relative;
+  left: 3px;
+  top: 1px;
+}
+
+.Stats .Stat > .icon .ethereum-earnings-icon {
+  position: relative;
+  left: 6px;
+  margin-bottom: unset;
+}
+
+.Stats .Stat > .icon .polygon-earnings-icon {
+  position: relative;
+  left: 3px;
+  top: 1px;
+}
+
+.Stats .Stat > .icon .polygon-earnings-icon .ui.header.medium {
+  font-size: 21px;
 }
 
 .Stats .Stat .value {
