@@ -12,6 +12,8 @@ import { accountSaga } from './sagas'
 
 let account: Account
 let filters: AccountFilters
+let ethereumFilters: AccountFilters
+let maticFilters: AccountFilters
 
 beforeEach(() => {
   account = {
@@ -27,28 +29,32 @@ beforeEach(() => {
   filters = {
     address: 'address'
   }
+
+  ethereumFilters = {
+    ...filters,
+    network: Network.ETHEREUM
+  }
+
+  maticFilters = {
+    ...filters,
+    network: Network.MATIC
+  }
 })
 
 describe('when handling the request to fetch account metrics', () => {
   describe('when a call to the accountApi fails', () => {
+    const error = 'request failed with error'
+
     describe('when the call with ETHEREUM as network fails', () => {
       it('should signal that the request has failed with the request error', () => {
-        const error = 'request with ethereum failed'
-
         return expectSaga(accountSaga)
           .provide([
             [
-              call([accountAPI, accountAPI.fetch], {
-                ...filters,
-                network: Network.ETHEREUM
-              }),
+              call([accountAPI, accountAPI.fetch], ethereumFilters),
               Promise.reject(new Error(error))
             ],
             [
-              call([accountAPI, accountAPI.fetch], {
-                ...filters,
-                network: Network.MATIC
-              }),
+              call([accountAPI, accountAPI.fetch], maticFilters),
               {
                 data: [account],
                 total: 10
@@ -63,25 +69,17 @@ describe('when handling the request to fetch account metrics', () => {
 
     describe('when the call with MATIC as network fails', () => {
       it('should signal that the request has failed with the request error', () => {
-        const error = 'request with matic failed'
-
         return expectSaga(accountSaga)
           .provide([
             [
-              call([accountAPI, accountAPI.fetch], {
-                ...filters,
-                network: Network.ETHEREUM
-              }),
+              call([accountAPI, accountAPI.fetch], ethereumFilters),
               {
                 data: [account],
                 total: 10
               } as AccountResponse
             ],
             [
-              call([accountAPI, accountAPI.fetch], {
-                ...filters,
-                network: Network.MATIC
-              }),
+              call([accountAPI, accountAPI.fetch], maticFilters),
               Promise.reject(new Error(error))
             ]
           ])
