@@ -18,6 +18,8 @@ import { itemSaga } from './item/sagas'
 import { collectionSaga } from './collection/sagas'
 import { saleSaga } from './sale/sagas'
 import { accountSaga } from './account/sagas'
+import { storeSaga } from './store/sagas'
+import { identitySaga } from './identity/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({
@@ -43,6 +45,9 @@ export function* rootSaga() {
     walletSaga(),
     collectionSaga(),
     saleSaga(),
-    accountSaga()
+    accountSaga(),
+    collectionSaga(),
+    storeSaga(),
+    identitySaga()
   ])
 }
