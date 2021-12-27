@@ -6,7 +6,7 @@ import StoreSettings from './StoreSettings'
 import { getLocalStore } from '../../modules/store/selectors'
 import { Dispatch } from 'redux'
 import { Store } from '../../modules/store/types'
-import { revertLocalStore, updateLocalStore } from '../../modules/store/actions'
+import { revertLocalStore, updateLocalStore, updateStoreRequest } from '../../modules/store/actions'
 import { getEmptyLocalStore } from '../../modules/store/utils'
 
 const mapState = (state: RootState): MapStateProps => {
@@ -25,7 +25,8 @@ const mapState = (state: RootState): MapStateProps => {
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
   return {
     onChange: (store: Store) => dispatch(updateLocalStore(store)),
-    onRevert: () => dispatch(revertLocalStore())
+    onRevert: () => dispatch(revertLocalStore()),
+    onSave: () => dispatch(updateStoreRequest())
   }
 }
 
