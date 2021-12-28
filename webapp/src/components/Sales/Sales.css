@@ -1,0 +1,12 @@
+/* Header with filters */
+
+.Sales .header-with-filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+}
+
+.Sales .header-with-filter .ui.header {
+  margin-bottom: unset;
+}

@@ -1,0 +1,84 @@
+.Stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .Stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.Stats .Stat {
+  display: flex;
+  background-color: var(--secondary);
+  min-height: 96px;
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.Stats .Stat .loader-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Stats .Stat > .icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  background-color: #37333d;
+  border-radius: 50%;
+  margin-right: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Stats .Stat > .icon .total-sales-icon {
+  position: relative;
+  left: 3px;
+  top: 1px;
+}
+
+.Stats .Stat > .icon .total-earnings-icon {
+  position: relative;
+  left: 2px;
+}
+
+.Stats .Stat > .icon .royalties-icon {
+  position: relative;
+  left: 2px;
+}
+
+.Stats .Stat > .icon .ethereum-earnings-icon {
+  position: relative;
+  left: 6px;
+  margin-bottom: unset;
+}
+
+.Stats .Stat > .icon .polygon-earnings-icon {
+  position: relative;
+  left: 3px;
+  top: 1px;
+}
+
+.Stats .Stat > .icon .polygon-earnings-icon .ui.header.medium {
+  font-size: 21px;
+}
+
+.Stats .Stat .value {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 26px;
+}
+
+.Stats .Stat .subtitle {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--secondary-text);
+}

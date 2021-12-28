@@ -34,7 +34,9 @@
     "rarity": "稀罕",
     "stock": "股票",
     "price": "价格",
-    "collection": "珍藏"
+    "collection": "珍藏",
+    "time": "时间",
+    "buyer": "买方"
   },
   "error_boundary": {
     "message": "糟糕！出了点问题......"
@@ -137,6 +139,15 @@
     "save": "救",
     "revert": "恢复",
     "add_cover_picture": "单击此处将图像放入您的商店"
+  },
+  "sales": {
+    "stats": "统计学",
+    "total_sales": "销售额",
+    "total_earnings": "利润总额",
+    "royalties": "特许权使用费收入",
+    "ethereum_earnings": "Ethereum 收入",
+    "polygon_earnings": "Polygon 收入",
+    "activity": "活动"
   },
   "partners_page": {
     "partners": "伙伴",

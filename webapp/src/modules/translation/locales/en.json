@@ -34,7 +34,9 @@
     "rarity": "Rarity",
     "stock": "Stock",
     "price": "Price",
-    "collection": "Collection"
+    "collection": "Collection",
+    "time": "Time",
+    "buyer": "Buyer"
   },
   "error_boundary": {
     "message": "Oops! Something went wrong..."
@@ -139,6 +141,15 @@
     "save": "Save",
     "revert": "Revert",
     "add_cover_picture": "Click here to add a cover picture"
+  },
+  "sales": {
+    "stats": "Stats",
+    "total_sales": "Total sales",
+    "total_earnings": "Total earnings",
+    "royalties": "Royalty earnings",
+    "ethereum_earnings": "Ethereum earnings",
+    "polygon_earnings": "Polygon earnings",
+    "activity": "Activity"
   },
   "partners_page": {
     "partners": "Partners",
