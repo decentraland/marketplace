@@ -1,4 +1,4 @@
-.MyBidsPage .center {
+.Bids .center {
   position: relative;
   height: 96px;
   display: flex;
@@ -8,23 +8,23 @@
   margin-bottom: 20px;
 }
 
-.MyBidsPage .bids {
+.Bids .bids {
   margin-bottom: 48px;
 }
 
 @media (min-width: 768px) and (max-width: 992px) {
-  .MyBidsPage .Bid .image {
+  .Bids .Bid .image {
     display: none;
   }
   .Bid .wrapper .info .dcl.stats.from {
     width: 35%;
   }
 
-  .MyBidsPage .Bid .actions {
+  .Bids .Bid .actions {
     margin-left: 10px;
   }
 
-  .MyBidsPage .Bid .actions .ui.button {
+  .Bids .Bid .actions .ui.button {
     width: 116px;
     min-width: 116px;
   }

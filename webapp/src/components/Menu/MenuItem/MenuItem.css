@@ -19,3 +19,7 @@
   font-weight: 400;
   color: var(--secondary-text);
 }
+
+.NFTSidebar .MenuItem {
+  border-radius: 6px;
+}

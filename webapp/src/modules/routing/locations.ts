@@ -7,8 +7,6 @@ export const locations = {
   root: () => '/',
   signIn: () => '/sign-in',
   settings: () => '/settings',
-  partners: () => '/partners',
-  bids: () => '/bids',
   lands: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/lands?${params.toString()}` : '/lands'

@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Header } from 'decentraland-ui'
-import { Props } from './Bids.types'
+import { Props } from './BidList.types'
 import { Bid } from '../../Bid'
-import './Bids.css'
+import './BidList.css'
 
-const Bids = (props: Props) => {
+const BidList = (props: Props) => {
   const { nft, bids, onFetchBids } = props
 
   const [hasFetched, setHasFetched] = useState(false)
@@ -35,7 +35,7 @@ const Bids = (props: Props) => {
   }, [nft])
 
   return bids.length > 0 ? (
-    <div className="Bids">
+    <div className="BidList">
       <Header sub>Bids</Header>
       <div className="list">
         {filteredBids.map(bid => (
@@ -46,4 +46,4 @@ const Bids = (props: Props) => {
   ) : null
 }
 
-export default React.memo(Bids)
+export default React.memo(BidList)

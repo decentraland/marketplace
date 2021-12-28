@@ -9,7 +9,7 @@ import { Owner } from '../Owner'
 import Price from '../Price'
 import Expiration from '../Expiration'
 import { Actions } from '../Actions'
-import { Bids } from '../Bids'
+import { BidList } from '../BidList'
 import { TransactionHistory } from '../TransactionHistory'
 import { JumpIn } from '../JumpIn'
 import { ProximityHighlights } from '../ProximityHighlights'
@@ -74,7 +74,7 @@ const EstateDetail = ({ nft }: Props) => {
       }
       below={
         <>
-          <Bids nft={nft} />
+          <BidList nft={nft} />
           {estate.size > 0 && <ParcelCoordinates estateId={nft.tokenId} />}
           <TransactionHistory nft={nft} />
         </>

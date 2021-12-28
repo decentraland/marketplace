@@ -14,12 +14,8 @@ import {
   fetchBidsByAddressRequest,
   FETCH_BIDS_BY_ADDRESS_REQUEST
 } from '../../modules/bid/actions'
-import {
-  MapStateProps,
-  MapDispatch,
-  MapDispatchProps
-} from './MyBidsPage.types'
-import MyBidsPage from './MyBidsPage'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './Bids.types'
+import Bids from './Bids'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
@@ -37,4 +33,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onFetchBids: address => dispatch(fetchBidsByAddressRequest(address))
 })
 
-export default connect(mapState, mapDispatch)(MyBidsPage)
+export default connect(mapState, mapDispatch)(Bids)

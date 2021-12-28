@@ -44,12 +44,6 @@
   "estate_detail": {
     "dissolved": "Este Estate ha sido disuelto"
   },
-  "error_boundary": {
-    "message": "Oops! Algo salió mal..."
-  },
-  "estate_detail": {
-    "dissolved": "Este Estate ha sido disuelto"
-  },
   "vendors": {
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
@@ -95,6 +89,7 @@
     "collections": "Colecciones",
     "on_sale": "En venta",
     "sales": "Ventas",
+    "bids": "Ofertas",
     "store_settings": "Configuración"
   },
   "vendor_menu": {

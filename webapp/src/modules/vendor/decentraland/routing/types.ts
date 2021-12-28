@@ -31,5 +31,6 @@ export enum Section {
   COLLECTIONS = 'collections',
   ON_SALE = 'on_sale',
   SALES = 'sales',
+  BIDS = 'bids',
   STORE_SETTINGS = 'store_settings'
 }
