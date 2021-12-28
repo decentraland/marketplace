@@ -14,7 +14,7 @@ import {
   goBack,
   LOCATION_CHANGE
 } from 'connected-react-router'
-import { NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
+import { NFTCategory, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
 import { fetchItemRequest, fetchItemsRequest } from '../item/actions'
@@ -340,9 +340,9 @@ function* handleFetchSales(address: string, page: number) {
 
   const { itemSales, tokenSales } = sales.reduce(
     (acc: { itemSales: Sale[]; tokenSales: Sale[] }, sale) => {
-      if (sale.itemId) {
+      if (sale.type === SaleType.MINT) {
         acc.itemSales.push(sale)
-      } else if (sale.tokenId) {
+      } else {
         acc.tokenSales.push(sale)
       }
       return acc

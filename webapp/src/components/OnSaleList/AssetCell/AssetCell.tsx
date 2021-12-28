@@ -22,9 +22,10 @@ const AssetCell = ({ asset }: Props) => {
       subtitle = `${x},${y}`
   }
 
-  const link = asset.itemId
-    ? locations.item(asset.contractAddress, asset.itemId!)
-    : locations.nft(asset.contractAddress, asset.id)
+  const link =
+    'tokenId' in asset
+      ? locations.nft(asset.contractAddress, asset.tokenId)
+      : locations.item(asset.contractAddress, asset.itemId!)
 
   return (
     <Table.Cell>

@@ -1,4 +1,4 @@
-import { Item, Sale } from '@dcl/schemas'
+import { Item, Sale, SaleType } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { connect } from 'react-redux'
 import { NFT } from '../../../modules/nft/types'
@@ -32,13 +32,14 @@ const getAssets = (
   nfts: Record<string, NFT>
 ) =>
   sales.reduce((acc, sale) => {
-    const { contractAddress, itemId, tokenId } = sale
+    const { contractAddress, itemId, tokenId, type } = sale
+
     const item = items[`${contractAddress}-${itemId}`]
     const nft = nfts[`${contractAddress}-${tokenId}`]
 
-    if (itemId && item) {
+    if (type === SaleType.MINT && item) {
       acc[sale.id] = item
-    } else if (tokenId && nft) {
+    } else if (nft) {
       acc[sale.id] = nft
     }
 
