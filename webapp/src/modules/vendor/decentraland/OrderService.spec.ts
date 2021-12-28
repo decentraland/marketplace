@@ -1,10 +1,10 @@
-import { OrderService } from './OrderService'
 import { utils } from 'ethers'
+import { ChainId, ListingStatus, Order } from '@dcl/schemas'
 import { ContractData } from 'decentraland-transactions'
 import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
-import * as order from './order/api'
+import * as orderAPI from './order/api'
 import { NFT } from '../../nft/types'
-import { Order, OrderStatus } from '../../order/types'
+import { OrderService } from './OrderService'
 
 jest.mock('decentraland-dapps/dist/modules/wallet/utils')
 jest.mock('./order/api')
@@ -25,7 +25,7 @@ describe("Decentraland's OrderService", () => {
   beforeEach(() => {
     orderService = new OrderService()
     nft = {
-      chainId: 1,
+      chainId: ChainId.MATIC_MUMBAI,
       contractAddress: '0x2323233423',
       tokenId: 'aTokenId'
     } as NFT
@@ -42,11 +42,11 @@ describe("Decentraland's OrderService", () => {
   })
 
   describe('when fetching orders by NFT', () => {
-    const status = OrderStatus.OPEN
+    const status = ListingStatus.OPEN
 
     describe('when the fetch fails', () => {
       beforeEach(() => {
-        ;(order.orderAPI.fetchByNFT as jest.Mock).mockRejectedValueOnce(
+        ;(orderAPI.orderAPI.fetchByNFT as jest.Mock).mockRejectedValueOnce(
           aBasicErrorMessage
         )
       })
@@ -62,7 +62,9 @@ describe("Decentraland's OrderService", () => {
       const orders = [{ id: 'anOrderId' }] as Order[]
 
       beforeEach(() => {
-        ;(order.orderAPI.fetchByNFT as jest.Mock).mockResolvedValueOnce(orders)
+        ;(orderAPI.orderAPI.fetchByNFT as jest.Mock).mockResolvedValueOnce(
+          orders
+        )
       })
 
       it('should reject into an exception', () => {
@@ -76,17 +78,21 @@ describe("Decentraland's OrderService", () => {
     let fingerprint: string | undefined
 
     beforeEach(() => {
-      order = { price: '10000000000000000000' } as Order
+      order = {
+        price: '10000000000000000000',
+        marketplaceAddress: '0x2a09a000224f5dbe0E17214cA95CDe506DA7CB74',
+        chainId: ChainId.MATIC_MUMBAI
+      } as Order
     })
 
-    describe("when the market's contract doesn't exist for the NFT's chainId", () => {
+    describe("when the market's contract doesn't exist for the order's chainId", () => {
       it('should reject into an exception', () => {
-        nft.chainId = 234234
+        order.chainId = 234234
         return expect(
           orderService.execute(null, nft, order, fingerprint)
         ).rejects.toEqual(
           new Error(
-            `Could not get a valid contract for Marketplace using chain ${nft.chainId}`
+            `Could not get a valid contract for Marketplace using chain ${order.chainId}`
           )
         )
       })
@@ -118,13 +124,13 @@ describe("Decentraland's OrderService", () => {
           )
         })
 
-        it("should have called send transaction with the marketplace's contract using the nft's chain id", async () => {
+        it("should have called send transaction with the marketplace's contract using the order's chain id", async () => {
           await orderService.execute(null, nft, order, fingerprint)
           expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
 
           const firstParameter = (walletUtils.sendTransaction as jest.Mock).mock
             .calls[0][0] as ContractData
-          expect(firstParameter.chainId).toBe(nft.chainId)
+          expect(firstParameter.chainId).toBe(order.chainId)
           expect(firstParameter.name).toBe('Decentraland Marketplace')
         })
 
@@ -180,13 +186,13 @@ describe("Decentraland's OrderService", () => {
           )
         })
 
-        it("should have called send transaction with the marketplace's contract using the nft's chain id", async () => {
+        it("should have called send transaction with the marketplace's contract using the order's chain id", async () => {
           await orderService.execute(null, nft, order, fingerprint)
           expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
 
           const firstParameter = (walletUtils.sendTransaction as jest.Mock).mock
             .calls[0][0] as ContractData
-          expect(firstParameter.chainId).toBe(nft.chainId)
+          expect(firstParameter.chainId).toBe(order.chainId)
           expect(firstParameter.name).toBe('Decentraland Marketplace')
         })
 
@@ -228,7 +234,7 @@ describe("Decentraland's OrderService", () => {
           orderService.create(null, nft, priceInEther, expiresAt)
         ).rejects.toEqual(
           new Error(
-            `Could not get a valid contract for Marketplace using chain ${nft.chainId}`
+            `Could not get a valid contract for MarketplaceV2 using chain ${nft.chainId}`
           )
         )
       })
@@ -292,12 +298,24 @@ describe("Decentraland's OrderService", () => {
   })
 
   describe('when cancelling the order', () => {
-    describe("when the market's contract doesn't exist for the NFT's chainId", () => {
+    let order: Order
+
+    beforeEach(() => {
+      order = {
+        price: '10000000000000000000',
+        contractAddress: '0x2323233423',
+        tokenId: '1',
+        marketplaceAddress: '0x2a09a000224f5dbe0E17214cA95CDe506DA7CB74',
+        chainId: ChainId.MATIC_MUMBAI
+      } as Order
+    })
+
+    describe("when the market's contract doesn't exist for the order's chainId", () => {
       it('should reject into an exception', () => {
-        nft.chainId = 234234
-        return expect(orderService.cancel(null, nft)).rejects.toEqual(
+        order.chainId = 234234
+        return expect(orderService.cancel(null, order)).rejects.toEqual(
           new Error(
-            `Could not get a valid contract for Marketplace using chain ${nft.chainId}`
+            `Could not get a valid contract for Marketplace using chain ${order.chainId}`
           )
         )
       })
@@ -311,7 +329,7 @@ describe("Decentraland's OrderService", () => {
       })
 
       it('should reject into an exception', () => {
-        return expect(orderService.cancel(null, nft)).rejects.toEqual(
+        return expect(orderService.cancel(null, order)).rejects.toEqual(
           aBasicErrorMessage
         )
       })
@@ -324,18 +342,18 @@ describe("Decentraland's OrderService", () => {
         )
       })
 
-      it("should have called send transaction with the marketplace's contract using the nft's chain id", async () => {
-        await orderService.cancel(null, nft)
+      it("should have called send transaction with the marketplace's contract using the order's chain id", async () => {
+        await orderService.cancel(null, order)
         expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
 
         const firstParameter = (walletUtils.sendTransaction as jest.Mock).mock
           .calls[0][0] as ContractData
-        expect(firstParameter.chainId).toBe(nft.chainId)
+        expect(firstParameter.chainId).toBe(order.chainId)
         expect(firstParameter.name).toBe('Decentraland Marketplace')
       })
 
       it("should have called send transaction with the contract's cancel order operation", async () => {
-        await orderService.cancel(null, nft)
+        await orderService.cancel(null, order)
         expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
 
         const secondParameter = (walletUtils.sendTransaction as jest.Mock).mock
@@ -345,13 +363,13 @@ describe("Decentraland's OrderService", () => {
         )
         expect(parametrizedContractExecutionResult).toBe('cancelOrder')
         expect(marketplaceContract.cancelOrder).toHaveBeenCalledWith(
-          nft.contractAddress,
-          nft.tokenId
+          order.contractAddress,
+          order.tokenId
         )
       })
 
       it('should have returned the transaction hash', () => {
-        return expect(orderService.cancel(null, nft)).resolves.toBe(aTxHash)
+        return expect(orderService.cancel(null, order)).resolves.toBe(aTxHash)
       })
     })
   })

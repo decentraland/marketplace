@@ -1,8 +1,8 @@
+import { Order } from '@dcl/schemas'
 import {
   LoadingState,
   loadingReducer
 } from 'decentraland-dapps/dist/modules/loading/reducer'
-import { Order } from './types'
 import {
   FetchNFTsRequestAction,
   FetchNFTsSuccessAction,

@@ -1,7 +1,7 @@
 import React from 'react'
+import classNames from 'classnames'
 import { Badge } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import classNames from 'classnames'
 import { Network } from '../Network'
 import { Description } from '../Description'
 import { Props } from './EstateDetail.types'
@@ -20,7 +20,6 @@ import './EstateDetail.css'
 
 const EstateDetail = ({ nft }: Props) => {
   const estate = nft.data.estate!
-
   let x = 0
   let y = 0
 

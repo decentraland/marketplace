@@ -8,7 +8,7 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
-import { NFTCategory } from '@dcl/schemas'
+import { Network, NFTCategory } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
 import { locations } from '../../../modules/routing/locations'
 import { isPartner } from '../../../modules/vendor/utils'
@@ -54,22 +54,20 @@ const BuyNFTModal = (props: Props) => {
       network: nft.network
     })
 
-    const marketplace = getContract({
-      name: isPartner(nft.vendor)
-        ? contractNames.MARKETPLACE_ADAPTER
-        : contractNames.MARKETPLACE,
-      network: nft.network
-    })
-
     return {
       address: wallet.address,
-      authorizedAddress: marketplace.address,
+      authorizedAddress: isPartner(nft.vendor)
+        ? getContract({
+            name: contractNames.MARKETPLACE_ADAPTER,
+            network: Network.ETHEREUM
+          }).address
+        : order!.marketplaceAddress,
       contractAddress: mana.address,
       contractName: ContractName.MANAToken,
       chainId: nft.chainId,
       type: AuthorizationType.ALLOWANCE
     }
-  }, [wallet, nft])
+  }, [wallet, nft, order])
 
   const handleToggleWantsToProceed = useCallback(() => {
     setWantsToProceed(!wantsToProceed)
@@ -178,8 +176,8 @@ const BuyNFTModal = (props: Props) => {
         </Button>
 
         {isDisabled ||
-          !isAboveMaxPercentage ||
-          (isAboveMaxPercentage && wantsToProceed) ? (
+        !isAboveMaxPercentage ||
+        (isAboveMaxPercentage && wantsToProceed) ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}

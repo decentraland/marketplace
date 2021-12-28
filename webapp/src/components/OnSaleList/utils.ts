@@ -1,6 +1,5 @@
-import { Item } from '@dcl/schemas'
+import { Item, Order } from '@dcl/schemas'
 import { NFT } from '../../modules/nft/types'
-import { Order } from '../../modules/order/types'
 import { useMemo } from 'react'
 import { SortBy } from '../../modules/routing/types'
 import { Props as Element } from './OnSaleListElement/OnSaleListElement.types'

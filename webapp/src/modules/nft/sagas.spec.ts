@@ -1,12 +1,11 @@
-import { push } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { throwError } from 'redux-saga-test-plan/providers'
 import * as matchers from 'redux-saga-test-plan/matchers'
+import { NFTCategory, Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { VendorFactory, VendorName } from '../vendor'
 import { getWallet } from '../wallet/selectors'
-import { locations } from '../routing/locations'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   fetchNFTFailure,
@@ -23,9 +22,7 @@ import { nftSaga } from './sagas'
 import { NFT, NFTsFetchOptions, NFTsFetchParams } from './types'
 import { View } from '../ui/types'
 import { Account } from '../account/types'
-import { Order } from '../order/types'
 import { getContract } from '../contract/utils'
-import { NFTCategory } from '@dcl/schemas'
 
 describe('when handling the fetch NFTs requets action', () => {
   let dateSpy: jest.SpyInstance<number, []>
@@ -307,7 +304,7 @@ describe('when handling the transfer NFT request action', () => {
   })
 
   describe('when the transfer is successful', () => {
-    it('should dispatch an action signaling the success of the action handling and the change of the location', () => {
+    it('should dispatch an action signaling the success of the action handling', () => {
       const nft = {
         vendor: VendorName.DECENTRALAND
       } as NFT
@@ -326,7 +323,6 @@ describe('when handling the transfer NFT request action', () => {
           ]
         ])
         .put(transferNFTSuccess(nft, address, txHash))
-        .put(push(locations.activity()))
         .dispatch(transferNFTRequest(nft, address))
         .run({ silenceTimeout: true })
     })

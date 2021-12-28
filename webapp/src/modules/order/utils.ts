@@ -1,7 +1,7 @@
+import { Order } from '@dcl/schemas'
 import addDays from 'date-fns/addDays'
 import dateFnsFormat from 'date-fns/format'
 import { Asset } from '../asset/types'
-import { Order } from './types'
 
 export const DEFAULT_EXPIRATION_IN_DAYS = 30
 export const INPUT_FORMAT = 'yyyy-MM-dd'

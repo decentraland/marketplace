@@ -1,5 +1,4 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
-import { push } from 'connected-react-router'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -16,7 +15,6 @@ import {
   transferNFTFailure
 } from './actions'
 import { getWallet } from '../wallet/selectors'
-import { locations } from '../routing/locations'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { AwaitFn } from '../types'
 import { getContract } from '../contract/utils'
@@ -120,7 +118,6 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
     )
 
     yield put(transferNFTSuccess(nft, address, txHash))
-    yield put(push(locations.activity()))
   } catch (error) {
     yield put(transferNFTFailure(nft, address, error.message, error.code))
   }

@@ -1,4 +1,3 @@
-import { push } from 'connected-react-router'
 import { Bid } from '@dcl/schemas'
 import { takeEvery, put, select, call } from 'redux-saga/effects'
 import {
@@ -24,7 +23,6 @@ import {
   fetchBidsByNFTFailure
 } from './actions'
 import { getWallet } from '../wallet/selectors'
-import { locations } from '../routing/locations'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { getContract } from '../contract/utils'
 import { VendorName } from '../vendor/types'
@@ -60,7 +58,6 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
         fingerprint
       )
     )
-    yield put(push(locations.activity()))
   } catch (error) {
     yield put(placeBidFailure(nft, price, expiresAt, error, fingerprint))
   }
@@ -80,8 +77,7 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const txHash: string = yield call(() => bidService!.accept(wallet, bid))
 
-    yield put(acceptBidSuccess(bid, bid.chainId, txHash))
-    yield put(push(locations.activity()))
+    yield put(acceptBidSuccess(bid, txHash))
   } catch (error) {
     yield put(acceptBidFailure(bid, error.message))
   }
@@ -101,8 +97,7 @@ function* handleCancelBidRequest(action: CancelBidRequestAction) {
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const txHash: string = yield call(() => bidService!.cancel(wallet, bid))
 
-    yield put(cancelBidSuccess(bid, bid.chainId, txHash))
-    yield put(push(locations.activity()))
+    yield put(cancelBidSuccess(bid, txHash))
   } catch (error) {
     yield put(cancelBidFailure(bid, error.message))
   }

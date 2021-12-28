@@ -1,8 +1,8 @@
+import { Order } from '@dcl/schemas'
 import { RootState } from '../reducer'
 import { createSelector } from 'reselect'
 import { getCurrentNFT } from '../nft/selectors'
 import { NFT } from '../nft/types'
-import { Order } from './types'
 import { OrderState } from './reducer'
 import { getActiveOrder } from './utils'
 

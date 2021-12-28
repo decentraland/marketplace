@@ -3,7 +3,6 @@ import { put, takeEvery } from '@redux-saga/core/effects'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { call, select } from 'redux-saga/effects'
-import { push } from 'connected-react-router'
 import { itemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -18,16 +17,13 @@ import {
   fetchItemFailure,
   FetchItemRequestAction,
   fetchItemSuccess,
-  FETCH_ITEM_REQUEST,
-  BUY_ITEM_SUCCESS
+  FETCH_ITEM_REQUEST
 } from './actions'
-import { locations } from '../routing/locations'
 
 export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
-  yield takeEvery(BUY_ITEM_SUCCESS, handleBuyItemSuccess)
 }
 
 function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
@@ -83,8 +79,4 @@ function* handleBuyItem(action: BuyItemRequestAction) {
   } catch (error) {
     yield put(buyItemFailure(error.message))
   }
-}
-
-function* handleBuyItemSuccess() {
-  yield put(push(locations.activity()))
 }

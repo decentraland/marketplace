@@ -1,5 +1,5 @@
+import { Order } from '@dcl/schemas'
 import { Asset } from '../../modules/asset/types'
-import { Order } from '../../modules/order/types'
 
 export type Props = {
   asset: Asset
