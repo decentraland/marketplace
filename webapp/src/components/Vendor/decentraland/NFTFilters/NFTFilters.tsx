@@ -49,6 +49,7 @@ const NFTFilters = (props: Props) => {
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
   const orderBydropdownOptions = [
+    { value: SortBy.RECENTLY_SOLD, text: t('filters.recently_sold') },
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') }
   ]

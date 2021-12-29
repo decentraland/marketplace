@@ -104,6 +104,7 @@
     "name": "名称",
     "newest": "最新",
     "recently_listed": "最新上市",
+    "recently_sold": "最近售出",
     "cheapest": "最低价",
     "no_results": "未找到结果。",
     "clear": "清除过滤器",
@@ -115,7 +116,8 @@
     "subtitle": "欢迎来到虚拟世界的一站式商店，获取最好的数字资产。",
     "get_started": "开始浏览",
     "learn_more": "学习更多",
-    "home_items": "最新商品",
+    "home_new_items": "最新商品",
+    "home_sold_items": "最新销售",
     "home_wearables": "最新上市",
     "home_land": "地块和产业",
     "home_ens": "名称"

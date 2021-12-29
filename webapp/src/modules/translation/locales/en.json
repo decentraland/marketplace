@@ -106,6 +106,7 @@
     "name": "Name",
     "newest": "Newest",
     "recently_listed": "Recently listed",
+    "recently_sold": "Recently sold",
     "cheapest": "Cheapest",
     "no_results": "No results were found.",
     "clear": "Clear filters",
@@ -117,7 +118,8 @@
     "subtitle": "Welcome to the virtual world’s one-stop-shop for the very best digital assets.",
     "get_started": "Start Browsing",
     "learn_more": "Learn More",
-    "home_items": "Newest items",
+    "home_new_items": "Newest items",
+    "home_sold_items": "Latest sales",
     "home_wearables": "Latest listings",
     "home_land": "Parcels and Estates",
     "home_ens": "Names"

@@ -104,6 +104,7 @@
     "name": "Nombre",
     "newest": "Más nuevos",
     "recently_listed": "Listados recientemente",
+    "recently_sold": "Vendidos recientemente",
     "cheapest": "Más baratos",
     "no_results": "No se encontraron resultados.",
     "clear": "Borrar filtros",
@@ -116,6 +117,7 @@
     "get_started": "Comienza a navegar",
     "learn_more": "Aprende Más",
     "home_items": "Últimos items",
+    "home_sold_items": "Últimas ventas",
     "home_wearables": "Listado recientemente",
     "home_land": "Land",
     "home_ens": "Nombres"
