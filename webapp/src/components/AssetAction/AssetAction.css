@@ -1,21 +1,7 @@
-.AssetAction .back {
-  background-image: url(../../images/back.svg);
-  background-repeat: no-repeat;
-  background-position-x: 10px;
-  background-position-y: 9px;
-  width: 32px;
-  height: 32px;
-  border-radius: 100%;
-  border: solid 1px rgba(115, 110, 125, 0.4);
-  background-size: 7px;
+.AssetAction .dcl.back {
   margin-top: 5vh;
   margin-bottom: 10vh;
-  cursor: pointer;
   margin-left: 2px;
-}
-
-.AssetAction .back:hover {
-  border: solid 1px rgba(255, 255, 255, 0.5);
 }
 
 .AssetAction .Row .left {

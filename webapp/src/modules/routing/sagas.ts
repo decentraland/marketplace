@@ -12,7 +12,8 @@ import {
   push,
   getLocation,
   goBack,
-  LOCATION_CHANGE
+  LOCATION_CHANGE,
+  replace
 } from 'connected-react-router'
 import { NFTCategory, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
@@ -165,7 +166,7 @@ function* handleGoBack(action: GoBackAction) {
   })
 
   if (timeout) {
-    yield put(push(defaultLocation || locations.root()))
+    yield put(replace(defaultLocation || locations.root()))
   }
 }
 
@@ -207,6 +208,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   }
 
   switch (section) {
+    case Section.BIDS:
+    case Section.STORE_SETTINGS:
+      break
     case Section.ON_SALE:
       yield handleFetchOnSale(address, options.view!)
       break

@@ -12,8 +12,8 @@ import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch
-} from './BuyItemModal.types'
-import BuyItemModal from './BuyItemModal'
+} from './MintItemModal.types'
+import MintItemModal from './MintItemModal'
 
 const mapState = (state: RootState): MapStateProps => ({
   authorizations: getAuthorizations(state),
@@ -27,4 +27,4 @@ const mapState = (state: RootState): MapStateProps => ({
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBuyItem: item => dispatch(buyItemRequest(item))
 })
-export default connect(mapState, mapDispatch)(BuyItemModal)
+export default connect(mapState, mapDispatch)(MintItemModal)

@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { Header, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -9,17 +10,17 @@ import { ContractName } from 'decentraland-transactions'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { locations } from '../../../modules/routing/locations'
+import { AuthorizationModal } from '../../AuthorizationModal'
+import { getContract } from '../../../modules/contract/utils'
+import { getContractNames } from '../../../modules/vendor'
+import { Section } from '../../../modules/vendor/decentraland'
+import { AssetType } from '../../../modules/asset/types'
 import { AssetAction } from '../../AssetAction'
 import { Name } from '../Name'
 import { Price } from '../Price'
-import { AuthorizationModal } from '../../AuthorizationModal'
-import { Props } from './BuyItemModal.types'
-import { useMemo } from 'react'
-import { getContract } from '../../../modules/contract/utils'
-import { getContractNames } from '../../../modules/vendor'
-import { Link } from 'react-router-dom'
+import { Props } from './MintItemModal.types'
 
-const BuyItemModal = (props: Props) => {
+const MintItemModal = (props: Props) => {
   const {
     item,
     wallet,
@@ -82,13 +83,31 @@ const BuyItemModal = (props: Props) => {
 
   let subtitle = null
   if (!item.isOnSale) {
-    subtitle = <T id={'buy_page.not_for_sale'} values={{ name }} />
+    subtitle = (
+      <T
+        id={'mint_page.not_for_sale'}
+        values={{
+          name,
+          secondary_market_link: (
+            <Link
+              to={locations.browse({
+                section: Section.WEARABLES,
+                assetType: AssetType.NFT,
+                search: item.name
+              })}
+            >
+              {t('mint_page.secondary_market')}
+            </Link>
+          )
+        }}
+      />
+    )
   } else if (isOwner) {
-    subtitle = <T id={'buy_page.is_owner'} values={{ name }} />
+    subtitle = <T id={'mint_page.is_owner'} values={{ name }} />
   } else if (hasInsufficientMANA) {
     subtitle = (
       <T
-        id={'buy_page.not_enough_mana'}
+        id={'mint_page.not_enough_mana'}
         values={{
           name,
           amount: <Price network={item.network} price={item.price} />
@@ -98,7 +117,7 @@ const BuyItemModal = (props: Props) => {
   } else {
     subtitle = (
       <T
-        id={'buy_page.subtitle'}
+        id={'mint_page.subtitle'}
         values={{
           name,
           amount: <Price network={item.network} price={item.price} />
@@ -110,7 +129,7 @@ const BuyItemModal = (props: Props) => {
   return (
     <AssetAction asset={item}>
       <Header size="large">
-        {t('buy_page.title', { category: t(`global.${item.category}`) })}
+        {t('mint_page.title', { category: t(`global.${item.category}`) })}
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
       <div className="buttons">
@@ -128,7 +147,7 @@ const BuyItemModal = (props: Props) => {
           loading={isLoading}
           chainId={item.chainId}
         >
-          {t('buy_page.buy')}
+          {t('mint_page.mint')}
         </ChainButton>
       </div>
       <AuthorizationModal
@@ -142,4 +161,4 @@ const BuyItemModal = (props: Props) => {
   )
 }
 
-export default React.memo(BuyItemModal)
+export default React.memo(MintItemModal)

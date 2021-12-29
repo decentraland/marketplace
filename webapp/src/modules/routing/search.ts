@@ -1,5 +1,6 @@
 import {
   CollectionSortBy,
+  ItemSortBy,
   Network,
   NFTCategory,
   WearableCategory
@@ -7,7 +8,6 @@ import {
 import { View } from '../ui/types'
 import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
-import { ItemSortBy } from '../vendor/decentraland/item/types'
 import { NFTSortBy } from '../nft/types'
 import { isAccountView } from '../ui/utils'
 
@@ -172,6 +172,8 @@ export function getItemSortBy(sortBy: SortBy): ItemSortBy {
       return ItemSortBy.NEWEST
     case SortBy.RECENTLY_LISTED:
       return ItemSortBy.RECENTLY_REVIEWED
+    case SortBy.RECENTLY_SOLD:
+      return ItemSortBy.RECENTLY_SOLD
     default:
       return ItemSortBy.RECENTLY_REVIEWED
   }
