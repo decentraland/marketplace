@@ -44,7 +44,12 @@ const HomePage = (props: Props) => {
   )
 
   const handleGetStarted = useCallback(() => {
-    onNavigate(locations.lands())
+    onNavigate(
+      locations.browse({
+        section: Section.WEARABLES,
+        assetType: AssetType.ITEM
+      })
+    )
   }, [onNavigate])
 
   const handleViewAll = useCallback(
