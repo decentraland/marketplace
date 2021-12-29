@@ -6,7 +6,7 @@ export type Props = {
   canSubmit: boolean
   onChange: (store: Store) => void
   onRevert: () => void
-  onSave: () => void
+  onSave: (store: Store) => void
 }
 
 export type MapStateProps = Pick<Props, 'store' | 'canSubmit' | 'address'>

@@ -9,7 +9,13 @@ import { Props } from './StoreSettings.types'
 import { locations } from '../../modules/routing/locations'
 import './StoreSettings.css'
 
-const StoreSettings = ({ store, canSubmit, onChange, onRevert, onSave }: Props) => {
+const StoreSettings = ({
+  store,
+  canSubmit,
+  onChange,
+  onRevert,
+  onSave
+}: Props) => {
   const { cover, description, website, facebook, twitter, discord } = store
 
   return (
@@ -71,7 +77,7 @@ const StoreSettings = ({ store, canSubmit, onChange, onRevert, onSave }: Props) 
         </InputContainer>
       </div>
       <div className="bottom">
-        <Button onClick={onSave} primary disabled={!canSubmit}>
+        <Button onClick={() => onSave(store)} primary disabled={!canSubmit}>
           {t('store_settings.save')}
         </Button>
         <Button onClick={onRevert} disabled={!canSubmit}>
