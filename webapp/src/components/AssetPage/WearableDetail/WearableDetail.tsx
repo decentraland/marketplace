@@ -14,7 +14,7 @@ import Collection from '../Collection'
 import Price from '../Price'
 import Expiration from '../Expiration'
 import { Actions } from '../Actions'
-import { Bids } from '../Bids'
+import { BidList } from '../BidList'
 import { TransactionHistory } from '../TransactionHistory'
 import BaseDetail from '../BaseDetail'
 import { AssetImage } from '../../AssetImage'
@@ -66,7 +66,7 @@ const WearableDetail = ({ nft }: Props) => {
       }
       below={
         <>
-          <Bids nft={nft} />
+          <BidList nft={nft} />
           <TransactionHistory nft={nft} />
         </>
       }

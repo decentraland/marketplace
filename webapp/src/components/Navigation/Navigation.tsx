@@ -31,24 +31,9 @@ const Navigation = (props: Props) => {
             {t('navigation.collectibles')}
           </Tabs.Tab>
         </Link>
-        <Link to={locations.partners()}>
-          <Tabs.Tab
-            active={
-              activeTab === NavigationTab.PARTNERS ||
-              activeTab === NavigationTab.PARTNER
-            }
-          >
-            {t('navigation.partners')}
-          </Tabs.Tab>
-        </Link>
         <Link to={locations.defaultCurrentAccount()}>
           <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>
             {t('navigation.my_store')}
-          </Tabs.Tab>
-        </Link>
-        <Link to={locations.bids()}>
-          <Tabs.Tab active={activeTab === NavigationTab.MY_BIDS}>
-            {t('navigation.my_bids')}
           </Tabs.Tab>
         </Link>
         <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>

@@ -44,12 +44,6 @@
   "estate_detail": {
     "dissolved": "这个庄园已经解散了"
   },
-  "error_boundary": {
-    "message": "糟糕！出了点问题......"
-  },
-  "estate_detail": {
-    "dissolved": "这个庄园已经解散了"
-  },
   "vendors": {
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
@@ -95,6 +89,7 @@
     "collections": "收集",
     "on_sale": "出售",
     "sales": "销售",
+    "bids": "出价",
     "store_settings": "配置"
   },
   "vendor_menu": {

@@ -9,7 +9,6 @@ import { Section } from '../../modules/vendor/routing/types'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
-import { VendorStrip } from '../VendorStrip'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
 import { NFTFilters } from '../Vendor/NFTFilters'
@@ -22,6 +21,7 @@ import OnSaleList from '../OnSaleList'
 import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
+import { Bids } from '../Bids'
 import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
@@ -166,15 +166,15 @@ const AssetBrowse = (props: Props) => {
     case DecentralandSection.SALES:
       right = <Sales />
       break
+    case DecentralandSection.BIDS:
+      right = <Bids />
+      break
     case DecentralandSection.STORE_SETTINGS:
       right = <StoreSettings />
       break
     default:
       right = (
         <>
-          {view === View.ACCOUNT && !isFullscreen ? (
-            <VendorStrip address={address!} />
-          ) : null}
           {isMap && isFullscreen ? (
             <div className="blur-background">
               <Container>

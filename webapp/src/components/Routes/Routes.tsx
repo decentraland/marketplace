@@ -14,9 +14,7 @@ import { BidPage } from '../BidPage'
 import { CancelSalePage } from '../CancelSalePage'
 import { TransferPage } from '../TransferPage'
 import { ActivityPage } from '../ActivityPage'
-import { PartnersPage } from '../PartnersPage'
 import { HomePage } from '../HomePage'
-import { MyBidsPage } from '../MyBidsPage'
 import { LegacyNFTPage } from '../LegacyNFTPage'
 import { LandsPage } from '../LandsPage'
 import CollectionPage from '../CollectionPage'
@@ -35,7 +33,6 @@ const Routes = () => {
           component={AccountPage}
         />
         <Route exact path={locations.account()} component={AccountPage} />
-        <Route exact path={locations.bids()} component={MyBidsPage} />
         <Route exact path={locations.signIn()} component={SignInPage} />
         <Route exact path={locations.sell()} component={SellPage} />
         <Route exact path={locations.bid()} component={BidPage} />
@@ -63,7 +60,6 @@ const Routes = () => {
           component={() => <AssetPage type={AssetType.ITEM} />}
         />
         <Route exact path={locations.settings()} component={SettingsPage} />
-        <Route exact path={locations.partners()} component={PartnersPage} />
         <Route exact path={locations.activity()} component={ActivityPage} />
         <Route exact path={locations.root()} component={HomePage} />
         <Route exact path={locations.parcel()} component={LegacyNFTPage} />

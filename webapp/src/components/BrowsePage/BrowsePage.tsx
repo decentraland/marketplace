@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { isVendor, isPartner } from '../../modules/vendor/utils'
+import { isVendor } from '../../modules/vendor/utils'
 import { VendorName } from '../../modules/vendor/types'
 import { View } from '../../modules/ui/types'
 import { Section } from '../../modules/vendor/decentraland'
@@ -15,9 +15,7 @@ const BrowsePage = (props: Props) => {
   const { isFullscreen, section } = props
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
-  const activeTab = isPartner(vendor)
-    ? NavigationTab.PARTNER
-    : NavigationTab.COLLECTIBLES
+  const activeTab = NavigationTab.COLLECTIBLES
 
   return (
     <>
