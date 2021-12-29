@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Header, Row, Column, Button } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -10,13 +10,19 @@ import { locations } from '../../modules/routing/locations'
 import './StoreSettings.css'
 
 const StoreSettings = ({
+  address,
   store,
   canSubmit,
   onChange,
   onRevert,
-  onSave
+  onSave,
+  onFetchStore
 }: Props) => {
   const { cover, description, website, facebook, twitter, discord } = store
+
+  useEffect(() => {
+    onFetchStore(address)
+  }, [onFetchStore, address])
 
   return (
     <div className="StoreSettings">
