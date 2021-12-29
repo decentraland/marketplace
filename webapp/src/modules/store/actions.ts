@@ -7,9 +7,12 @@ export const UPDATE_STORE_REQUEST = '[Request] Update store'
 export const UPDATE_STORE_SUCCESS = '[Success] Update store'
 export const UPDATE_STORE_FAILURE = '[Failure] Update store'
 
-export const updateStoreRequest = () => action(UPDATE_STORE_REQUEST)
-export const updateStoreSuccess = () => action(UPDATE_STORE_SUCCESS)
-export const updateStoreFailure = () => action(UPDATE_STORE_FAILURE)
+export const updateStoreRequest = (store: Store) =>
+  action(UPDATE_STORE_REQUEST, { store })
+export const updateStoreSuccess = (store: Store) =>
+  action(UPDATE_STORE_SUCCESS, { store })
+export const updateStoreFailure = (error: string) =>
+  action(UPDATE_STORE_FAILURE, { error })
 
 export type UpdateStoreRequestAction = ReturnType<typeof updateStoreRequest>
 export type UpdateStoreSuccessAction = ReturnType<typeof updateStoreSuccess>
