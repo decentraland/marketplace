@@ -37,7 +37,13 @@ const StoreSettings = ({
         <InputContainer title={t('store_settings.store_cover')}>
           <CoverPicker
             src={cover}
-            onChange={src => onChange({ ...store, cover: src || '' })}
+            onChange={(src, name) =>
+              onChange({
+                ...store,
+                cover: src || '',
+                coverName: name || ''
+              })
+            }
           />
         </InputContainer>
         <InputContainer title={t('store_settings.description')}>
