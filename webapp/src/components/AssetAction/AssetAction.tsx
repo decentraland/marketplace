@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
+import { Back } from 'decentraland-ui'
 import { getAssetUrl } from '../../modules/asset/utils'
 import { AssetImage } from '../AssetImage'
 import { Row } from '../Layout/Row'
@@ -9,12 +9,10 @@ import { Props } from './AssetAction.types'
 import './AssetAction.css'
 
 const AssetAction = (props: Props) => {
-  const { asset, children } = props
+  const { asset, children, onBack } = props
   return (
     <div className="AssetAction">
-      <Link to={getAssetUrl(asset)}>
-        <div className="back" />
-      </Link>
+      <Back onClick={() => onBack(getAssetUrl(asset))} />
       <Row>
         <Column align="left">
           <div className="asset-image-wrapper">
