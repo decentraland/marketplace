@@ -207,6 +207,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   }
 
   switch (section) {
+    case Section.BIDS:
+    case Section.STORE_SETTINGS:
+      break
     case Section.ON_SALE:
       yield handleFetchOnSale(address, options.view!)
       break
