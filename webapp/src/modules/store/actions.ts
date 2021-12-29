@@ -1,6 +1,23 @@
 import { action } from 'typesafe-actions'
 import { Store } from './types'
 
+// Fetch Store
+
+export const FETCH_STORE_REQUEST = '[Request] Fetch store'
+export const FETCH_STORE_SUCCESS = '[Success] Fetch store'
+export const FETCH_STORE_FAILURE = '[Failure] Fetch store'
+
+export const fetchStoreRequest = (address: string) =>
+  action(FETCH_STORE_REQUEST, { address })
+export const fetchStoreSuccess = (store?: Store) =>
+  action(FETCH_STORE_SUCCESS, { store })
+export const fetchStoreFailure = (error: string) =>
+  action(FETCH_STORE_FAILURE, { error })
+
+export type FetchStoreRequestAction = ReturnType<typeof fetchStoreRequest>
+export type FetchStoreSuccessAction = ReturnType<typeof fetchStoreSuccess>
+export type FetchStoreFailureAction = ReturnType<typeof fetchStoreFailure>
+
 // Update Store
 
 export const UPDATE_STORE_REQUEST = '[Request] Update store'

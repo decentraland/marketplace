@@ -8,6 +8,10 @@ import {
 } from 'dcl-catalyst-client'
 import { getIdentity } from '../identity/utils'
 import {
+  fetchStoreFailure,
+  FetchStoreRequestAction,
+  fetchStoreSuccess,
+  FETCH_STORE_REQUEST,
   updateStoreFailure,
   UpdateStoreRequestAction,
   updateStoreSuccess,
@@ -19,7 +23,66 @@ import { Store } from './types'
 import { getData as getStoresByOwner } from './selectors'
 
 export function* storeSaga() {
+  yield takeLatest(FETCH_STORE_REQUEST, handleFetchStoreRequest)
   yield takeLatest(UPDATE_STORE_REQUEST, handleUpdateStoreRequest)
+}
+
+function* handleFetchStoreRequest(action: FetchStoreRequestAction) {
+  try {
+    const address = action.payload.address
+    const peerUrl = process.env.REACT_APP_PEER_URL!
+    const client: CatalystClient = new CatalystClient(peerUrl, 'Market')
+    const result = ((yield client.fetchEntitiesByPointers('store' as any, [
+      address
+    ])) as unknown) as any[]
+
+    if (result.length === 0) {
+      yield put(fetchStoreSuccess())
+      return
+    }
+
+    const catalystStoreEntity = result[0]
+    const catalystStoreMetadata: CatalystStore = catalystStoreEntity.metadata
+
+    let cover: string = ''
+
+    const metadataCoverImage = catalystStoreMetadata.images.find(
+      image => image.name === 'cover'
+    )
+
+    if (metadataCoverImage) {
+      const contentCoverImageHash = catalystStoreEntity.content.find(
+        (cont: any) => cont.file === metadataCoverImage.file
+      )
+
+      if (contentCoverImageHash) {
+        cover = `${peerUrl}/content/contents/${contentCoverImageHash.hash}`
+      }
+    }
+
+    const store: Store = {
+      cover,
+      coverName: '',
+      description: catalystStoreMetadata.description,
+      website:
+        catalystStoreMetadata.links.find(link => link.name === 'website')
+          ?.url || '',
+      facebook:
+        catalystStoreMetadata.links.find(link => link.name === 'facebook')
+          ?.url || '',
+      twitter:
+        catalystStoreMetadata.links.find(link => link.name === 'twitter')
+          ?.url || '',
+      discord:
+        catalystStoreMetadata.links.find(link => link.name === 'discord')
+          ?.url || '',
+      owner: catalystStoreMetadata.owner
+    }
+
+    yield put(fetchStoreSuccess(store))
+  } catch (e) {
+    yield put(fetchStoreFailure(e.message))
+  }
 }
 
 function* handleUpdateStoreRequest(action: UpdateStoreRequestAction) {

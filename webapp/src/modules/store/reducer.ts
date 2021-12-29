@@ -3,6 +3,12 @@ import {
   LoadingState
 } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
+  FetchStoreFailureAction,
+  FetchStoreRequestAction,
+  FetchStoreSuccessAction,
+  FETCH_STORE_FAILURE,
+  FETCH_STORE_REQUEST,
+  FETCH_STORE_SUCCESS,
   RevertLocalStoreAction,
   REVERT_LOCAL_STORE,
   UpdateLocalStoreAction,
@@ -37,16 +43,34 @@ type StoreReducerAction =
   | UpdateStoreRequestAction
   | UpdateStoreSuccessAction
   | UpdateStoreFailureAction
+  | FetchStoreRequestAction
+  | FetchStoreSuccessAction
+  | FetchStoreFailureAction
 
 export function storeReducer(
   state = INITIAL_STATE,
   action: StoreReducerAction
 ): StoreState {
   switch (action.type) {
+    case FETCH_STORE_REQUEST:
     case UPDATE_STORE_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
+      }
+    }
+    case FETCH_STORE_SUCCESS: {
+      const { store } = action.payload
+      return {
+        ...state,
+        data: !store
+          ? state.data
+          : {
+              ...state.data,
+              [store.owner]: store
+            },
+        loading: loadingReducer(state.loading, action),
+        error: null
       }
     }
     case UPDATE_STORE_SUCCESS: {
@@ -61,6 +85,7 @@ export function storeReducer(
         error: null
       }
     }
+    case FETCH_STORE_FAILURE:
     case UPDATE_STORE_FAILURE: {
       const { error } = action.payload
       return {
