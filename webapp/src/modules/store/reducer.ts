@@ -50,15 +50,23 @@ export function storeReducer(
       }
     }
     case UPDATE_STORE_SUCCESS: {
+      const { store } = action.payload
       return {
         ...state,
-        loading: loadingReducer(state.loading, action)
+        data: {
+          ...state.data,
+          [store.owner]: store
+        },
+        loading: loadingReducer(state.loading, action),
+        error: null
       }
     }
     case UPDATE_STORE_FAILURE: {
+      const { error } = action.payload
       return {
         ...state,
-        loading: loadingReducer(state.loading, action)
+        loading: loadingReducer(state.loading, action),
+        error
       }
     }
     case UPDATE_LOCAL_STORE:
