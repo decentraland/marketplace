@@ -90,7 +90,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
                 )}
                 primary
               >
-                {t('asset_page.actions.buy')}
+                {t('asset_page.actions.mint')}
               </Button>
             )
           )}

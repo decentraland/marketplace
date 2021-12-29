@@ -101,7 +101,7 @@
   },
   "filters": {
     "type": "Type",
-    "item": "Original creations",
+    "item": "Items available for minting",
     "nft": "Items being resold",
     "name": "Name",
     "newest": "Newest",
@@ -204,6 +204,7 @@
       "cancel_sale": "Remove listing",
       "update": "Update price",
       "buy": "Buy",
+      "mint": "Mint",
       "bid": "Bid",
       "see_listing": "See listing",
       "sell": "Sell",
@@ -314,14 +315,20 @@
     "title": "Buy {category}",
     "subtitle": "You are about to buy {name} for {amount}.",
     "not_for_sale": "{name} is not for sale.",
-    "price_too_high": "Given the current exchange rates buying this {category} will cost you over {percentageIncrease}% its normal price.",
-    "please_wait": "Please wait until prices normalize again",
-    "actual_price": "The price above is an approximation, given current exchange rates you'll end up paying around {computedPrice}",
     "buy": "Buy",
-    "proceed_anyways": "Proceed anyways",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
+  },
+  "mint_page": {
+    "title": "Mint {category}",
+    "subtitle": "You are about to mint {name} for {amount}.",
+    "not_for_sale": "{name} is not available for minting, but you can search for it on the {secondary_market_link}.",
+    "secondary_market": "secondary market",
+    "mint": "Mint",
+    "no_fingerprint": "Could not load fingerprint.",
+    "is_owner": "You are the owner of {name}.",
+    "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}."
   },
   "bid_page": {
     "title": "Place a bid",
@@ -353,7 +360,7 @@
   },
   "browse_page": {
     "primary_market_title": "Store",
-    "primary_market_subtitle": "Original creations by users",
+    "primary_market_subtitle": "Items available for minting",
     "secondary_market_title": "Listings",
     "secondary_market_subtitle": "Items being resold"
   },
