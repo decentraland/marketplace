@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Header, Row, Column, Button } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -7,6 +7,7 @@ import CoverPicker from './CoverPicker'
 import TextInput from './TextInput'
 import { Props } from './StoreSettings.types'
 import { locations } from '../../modules/routing/locations'
+import { Store } from '../../modules/store/types'
 import './StoreSettings.css'
 
 const StoreSettings = ({
@@ -20,6 +21,33 @@ const StoreSettings = ({
 }: Props) => {
   const { cover, description, website, facebook, twitter, discord } = store
 
+  const [errors, setErrors] = useState<{ [key in keyof Store]?: string }>({})
+
+  const hasErrors = useMemo(
+    () => Object.values(errors).some(error => !!error),
+    [errors]
+  )
+
+  useEffect(() => {
+    const newErrors: typeof errors = {}
+
+    const validateSocialUrl = (
+      name: 'website' | 'facebook' | 'twitter' | 'discord',
+      startsWith: string
+    ) => {
+      if (store[name] && !store[name].startsWith(startsWith)) {
+        newErrors[name] = `Link must start with ${startsWith}`
+      }
+    }
+
+    validateSocialUrl('website', 'https://')
+    validateSocialUrl('facebook', 'https://www.facebook.com/')
+    validateSocialUrl('twitter', 'https://www.twitter.com/')
+    validateSocialUrl('discord', 'https://discord.com/channels/')
+
+    setErrors(newErrors)
+  }, [store])
+
   useEffect(() => {
     onFetchStore(address)
   }, [onFetchStore, address])
@@ -32,7 +60,7 @@ const StoreSettings = ({
         </Column>
         <Column align="right">
           <Link
-            className="see-store-as-guest"
+            className={'see-store-as-guest'}
             to={locations.currentAccount({ viewAsGuest: true })}
           >
             {t('store_settings.see_store_as_guest')}
@@ -65,6 +93,7 @@ const StoreSettings = ({
             value={website}
             onChange={website => onChange({ ...store, website })}
           />
+          {errors.website && <div className="error">{errors.website}</div>}
         </InputContainer>
         <InputContainer title={t('store_settings.facebook')}>
           <TextInput
@@ -72,6 +101,7 @@ const StoreSettings = ({
             value={facebook}
             onChange={facebook => onChange({ ...store, facebook })}
           />
+          {errors.facebook && <div className="error">{errors.facebook}</div>}
         </InputContainer>
         <InputContainer title={t('store_settings.twitter')}>
           <TextInput
@@ -79,6 +109,7 @@ const StoreSettings = ({
             value={twitter}
             onChange={twitter => onChange({ ...store, twitter })}
           />
+          {errors.twitter && <div className="error">{errors.twitter}</div>}
         </InputContainer>
         <InputContainer title={t('store_settings.discord')}>
           <TextInput
@@ -86,13 +117,18 @@ const StoreSettings = ({
             value={discord}
             onChange={discord => onChange({ ...store, discord })}
           />
+          {errors.discord && <div className="error">{errors.discord}</div>}
         </InputContainer>
       </div>
       <div className="bottom">
-        <Button onClick={() => onSave(store)} primary disabled={!canSubmit}>
+        <Button
+          onClick={() => onSave(store)}
+          primary
+          disabled={!canSubmit || hasErrors}
+        >
           {t('store_settings.save')}
         </Button>
-        <Button onClick={onRevert} disabled={!canSubmit}>
+        <Button onClick={() => onRevert(address)} disabled={!canSubmit}>
           {t('store_settings.revert')}
         </Button>
       </div>

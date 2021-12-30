@@ -21,7 +21,6 @@ import {
   UPDATE_STORE_SUCCESS
 } from './actions'
 import { Store } from './types'
-import { getEmptyLocalStore } from './utils'
 
 export type StoreState = {
   data: Record<string, Store>
@@ -101,11 +100,15 @@ export function storeReducer(
         ...state,
         localStore: store
       }
-    case REVERT_LOCAL_STORE:
+    case REVERT_LOCAL_STORE: {
+      const { address } = action.payload
+      const previous = state.data[address]
+
       return {
         ...state,
-        localStore: getEmptyLocalStore()
+        localStore: previous ? { ...previous } : null
       }
+    }
     default:
       return state
   }

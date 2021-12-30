@@ -5,7 +5,7 @@ export type Props = {
   store: Store
   canSubmit: boolean
   onChange: (store: Store) => void
-  onRevert: () => void
+  onRevert: (address: string) => void
   onSave: (store: Store) => void
   onFetchStore: (address: string) => void
 }

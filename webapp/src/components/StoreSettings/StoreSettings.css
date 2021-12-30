@@ -20,3 +20,10 @@
 .StoreSettings > .bottom {
   margin-top: 48px;
 }
+
+.StoreSettings .InputContainer .error {
+  position: absolute;
+  color: var(--error);
+  margin-top: 2px;
+  font-size: 12px;
+}

@@ -34,7 +34,7 @@ const mapState = (state: RootState): MapStateProps => {
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
   return {
     onChange: (store: Store) => dispatch(updateLocalStore(store)),
-    onRevert: () => dispatch(revertLocalStore()),
+    onRevert: (address: string) => dispatch(revertLocalStore(address)),
     onSave: (store: Store) => dispatch(updateStoreRequest(store)),
     onFetchStore: (address: string) => dispatch(fetchStoreRequest(address))
   }
