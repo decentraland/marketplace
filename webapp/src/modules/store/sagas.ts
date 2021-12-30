@@ -5,6 +5,7 @@ import {
   CatalystClient,
   DeploymentPreparationData
 } from 'dcl-catalyst-client'
+import { Entity } from 'dcl-catalyst-commons'
 import { getIdentity } from '../identity/utils'
 import {
   fetchStoreFailure,
@@ -28,17 +29,21 @@ export function* storeSaga(client: CatalystClient) {
     payload: { address }
   }: FetchStoreRequestAction) {
     try {
-      const result = ((yield client.fetchEntitiesByPointers('store' as any, [
-        address
-      ])) as unknown) as any[]
+      const storeEntity: Entity | null = yield fetchStoreEntity()
 
-      if (result.length === 0) {
+      if (!storeEntity) {
         yield put(fetchStoreFailure('Store not found'))
       } else {
-        yield put(fetchStoreSuccess(toStore(result[0])))
+        yield put(fetchStoreSuccess(toStore(storeEntity)))
       }
     } catch (e) {
       yield put(fetchStoreFailure(e.message))
+    }
+
+    async function fetchStoreEntity(): Promise<Entity | null> {
+      const type: any = 'store'
+      const entities = await client.fetchEntitiesByPointers(type, [address])
+      return entities.length === 0 ? null : entities[0]
     }
   }
 
@@ -53,7 +58,7 @@ export function* storeSaga(client: CatalystClient) {
       )
       const hasDifferentCover = storesByOwner[address]?.cover !== store.cover
       const metadata = toCatalystStore(store, address, hasDifferentCover)
-      
+
       const options: BuildEntityWithoutFilesOptions = {
         type: 'store' as any,
         pointers: [address],
@@ -61,17 +66,7 @@ export function* storeSaga(client: CatalystClient) {
         timestamp: Date.now()
       }
 
-      const files = new Map<string, Buffer>()
-
-      if (store.cover) {
-        const response: Response = yield fetch(store.cover)
-        const arrayBuffer: Blob = yield response.arrayBuffer()
-        const key = hasDifferentCover
-          ? `cover/${store.coverName}`
-          : store.coverName
-
-        files.set(key, Buffer.from(arrayBuffer))
-      }
+      const files: Map<string, Buffer> = yield getFiles(hasDifferentCover)
 
       const entity: DeploymentPreparationData =
         files.size === 0
@@ -85,6 +80,20 @@ export function* storeSaga(client: CatalystClient) {
       yield put(updateStoreSuccess(store))
     } catch (e) {
       yield put(updateStoreFailure(e.message))
+    }
+
+    async function getFiles(hasDifferentCover: boolean) {
+      const files = new Map<string, Buffer>()
+
+      if (store.cover) {
+        const response: Response = await fetch(store.cover)
+        const arrayBuffer: ArrayBuffer = await response.arrayBuffer()
+        const key = (hasDifferentCover ? 'cover/' : '') + store.coverName
+
+        files.set(key, Buffer.from(arrayBuffer))
+      }
+
+      return files
     }
   }
 }
