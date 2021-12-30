@@ -146,6 +146,11 @@
     "revert": "Revertir",
     "add_cover_picture": "Haga click aquí para ponerle una imagen a la tienda"
   },
+  "external_link_modal": {
+    "header": "Estas saliendo de Decentraland",
+    "before_link": "Al hacer clic en ACEPTAR, serás redirigido a:",
+    "after_link": "Por favor, fíjese que el link no contenga nada sospechoso para así no ser víctima de un ataque."
+  },
   "sales": {
     "stats": "Estadisticas",
     "total_sales": "Cantidad de ventas",

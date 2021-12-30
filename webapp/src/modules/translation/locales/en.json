@@ -149,6 +149,11 @@
     "revert": "Revert",
     "add_cover_picture": "Click here to add a cover picture"
   },
+  "external_link_modal": {
+    "header": "You are exiting Decentraland",
+    "before_link": "By clicking PROCEED, you will be redirected to:",
+    "after_link": "Please check twice that the link has nothing suspicious on it to avoid being the victim of an attack."
+  },
   "sales": {
     "stats": "Stats",
     "total_sales": "Total sales",

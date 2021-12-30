@@ -146,6 +146,11 @@
     "revert": "恢复",
     "add_cover_picture": "单击此处将图像放入您的商店"
   },
+  "external_link_modal": {
+    "header": "您将离开Decentraland",
+    "before_link": "通过单击\"确定\"，您将被重定向到：",
+    "after_link": "请注意，该链接不包含任何可疑内容，以免成为攻击的受害者。"
+  },
   "sales": {
     "stats": "统计学",
     "total_sales": "销售额",

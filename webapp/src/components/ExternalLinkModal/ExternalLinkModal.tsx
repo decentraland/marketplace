@@ -9,18 +9,12 @@ const ExternalLinkModal = ({ link, onClose }: Props) => {
     <Modal className="ExternalLinkModal" open onClose={onClose} size="small">
       <Modal.Header>
         <Icon name="warning sign" />
-        <span>You are exiting Decentraland</span>
+        <span>{t('external_link_modal.header')}</span>
       </Modal.Header>
       <Modal.Content>
-        <p>
-          By clicking <span className="bold">PROCEED</span>, you will be
-          redirected to:
-        </p>
+        <p>{t('external_link_modal.before_link')}</p>
         <p className="bold">{link}</p>
-        <p>
-          Please check twice that the link has nothing suspicious on it to avoid
-          being the victim of an attack.
-        </p>
+        <p>{t('external_link_modal.after_link')}</p>
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={onClose}>{t('global.cancel')}</Button>
