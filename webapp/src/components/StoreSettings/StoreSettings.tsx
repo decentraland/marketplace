@@ -33,7 +33,9 @@ const StoreSettings = ({
 
     const validateSocialUrl = (type: LinkType) => {
       if (store[type] && !isValidLink(type, store[type])) {
-        newErrors[type] = `Link must start with ${linkStartWiths[type]}`
+        newErrors[type] = t('store_settings.link_start_with_error', {
+          value: linkStartWiths[type]
+        })
       }
     }
 

@@ -141,6 +141,7 @@
     "store_cover": "Store cover",
     "description": "Description",
     "website": "Website",
+    "link_start_with_error": "Link should start with {value}",
     "facebook": "Facebook Handle",
     "twitter": "Twitter Handle",
     "discord": "Discord Channel ID",
