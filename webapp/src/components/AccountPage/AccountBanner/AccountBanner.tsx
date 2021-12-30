@@ -10,6 +10,8 @@ import { PageHeader } from '../../PageHeader'
 import { Column } from '../../Layout/Column'
 import { Props } from './AccountBanner.types'
 import { useTimer } from '../../../lib/timer'
+import { isValidLink } from '../../../modules/store/utils'
+import { LinkType } from '../../../modules/store/types'
 import { shortenAddress } from '../../../modules/wallet/utils'
 import './AccountBanner.css'
 
@@ -17,11 +19,12 @@ const AccountBanner = ({ address, store, onBack, onFetchStore }: Props) => {
   const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
 
   useEffect(() => {
-onFetchStore(address)
+    onFetchStore(address)
   }, [onFetchStore, address])
 
-  const renderLink = (type: 'website' | 'facebook' | 'twitter' | 'discord') =>
-    store?.[type] && (
+  const renderLink = (type: LinkType) =>
+    store?.[type] &&
+    isValidLink(type, store[type]) && (
       <a href={store[type]} target={'_blank'} rel="noreferrer">
         <div className={classNames('icon', type)} />
       </a>
@@ -34,10 +37,10 @@ onFetchStore(address)
         <div className="cover-top">
           <Back onClick={onBack} />
           <div className="icons">
-            {renderLink('website')}
-            {renderLink('facebook')}
-            {renderLink('twitter')}
-            {renderLink('discord')}
+            {renderLink(LinkType.WEBSITE)}
+            {renderLink(LinkType.FACEBOOK)}
+            {renderLink(LinkType.TWITTER)}
+            {renderLink(LinkType.DISCORD)}
           </div>
         </div>
       </Container>

@@ -7,7 +7,8 @@ import CoverPicker from './CoverPicker'
 import TextInput from './TextInput'
 import { Props } from './StoreSettings.types'
 import { locations } from '../../modules/routing/locations'
-import { Store } from '../../modules/store/types'
+import { LinkType, Store } from '../../modules/store/types'
+import { isValidLink, linkStartWiths } from '../../modules/store/utils'
 import './StoreSettings.css'
 
 const StoreSettings = ({
@@ -31,19 +32,16 @@ const StoreSettings = ({
   useEffect(() => {
     const newErrors: typeof errors = {}
 
-    const validateSocialUrl = (
-      name: 'website' | 'facebook' | 'twitter' | 'discord',
-      startsWith: string
-    ) => {
-      if (store[name] && !store[name].startsWith(startsWith)) {
-        newErrors[name] = `Link must start with ${startsWith}`
+    const validateSocialUrl = (type: LinkType) => {
+      if (store[type] && !isValidLink(type, store[type])) {
+        newErrors[type] = `Link must start with ${linkStartWiths[type]}`
       }
     }
 
-    validateSocialUrl('website', 'https://')
-    validateSocialUrl('facebook', 'https://www.facebook.com/')
-    validateSocialUrl('twitter', 'https://www.twitter.com/')
-    validateSocialUrl('discord', 'https://discord.com/channels/')
+    validateSocialUrl(LinkType.WEBSITE)
+    validateSocialUrl(LinkType.FACEBOOK)
+    validateSocialUrl(LinkType.TWITTER)
+    validateSocialUrl(LinkType.DISCORD)
 
     setErrors(newErrors)
   }, [store])

@@ -1,4 +1,4 @@
-import { Store } from './types'
+import { LinkType, Store } from './types'
 import { Store as CatalystStore } from '@dcl/schemas'
 import { peerUrl } from '../../lib/environment'
 
@@ -22,10 +22,10 @@ export const toStore = (entity: any): Store => {
     cover,
     coverName,
     description: metadata.description,
-    website: getLink('website'),
-    facebook: getLink('facebook'),
-    twitter: getLink('twitter'),
-    discord: getLink('discord'),
+    website: getLink(LinkType.WEBSITE),
+    facebook: getLink(LinkType.FACEBOOK),
+    twitter: getLink(LinkType.TWITTER),
+    discord: getLink(LinkType.DISCORD),
     owner: metadata.owner
   }
 
@@ -45,8 +45,8 @@ export const toStore = (entity: any): Store => {
     return ['', '']
   }
 
-  function getLink(name: string) {
-    return metadata.links.find(link => link.name === name)?.url || ''
+  function getLink(type: LinkType) {
+    return metadata.links.find(link => link.name === type)?.url || ''
   }
 }
 
@@ -67,23 +67,18 @@ export const toCatalystStore = (
   function getLinks() {
     const links: CatalystStore['links'] = []
 
-    if (store.website) {
-      links.push({ name: 'website', url: store.website })
-    }
-
-    if (store.facebook) {
-      links.push({ name: 'facebook', url: store.facebook })
-    }
-
-    if (store.twitter) {
-      links.push({ name: 'twitter', url: store.twitter })
-    }
-
-    if (store.discord) {
-      links.push({ name: 'discord', url: store.discord })
-    }
+    pushLink(LinkType.WEBSITE)
+    pushLink(LinkType.FACEBOOK)
+    pushLink(LinkType.TWITTER)
+    pushLink(LinkType.DISCORD)
 
     return links
+
+    function pushLink(type: LinkType) {
+      if (store[type]) {
+        links.push({ name: type, url: store[type] })
+      }
+    }
   }
 
   function getImages() {
@@ -98,5 +93,27 @@ export const toCatalystStore = (
     }
 
     return images
+  }
+}
+
+export const linkStartWiths: Record<LinkType, string> = {
+  [LinkType.WEBSITE]: 'https://',
+  [LinkType.FACEBOOK]: 'https://www.facebook.com/',
+  [LinkType.TWITTER]: 'https://www.twitter.com/',
+  [LinkType.DISCORD]: 'https://discord.com/channels/'
+}
+
+export const isValidLink = (type: LinkType, link: string) => {
+  switch (type) {
+    case LinkType.WEBSITE:
+      return link.startsWith(linkStartWiths.website)
+    case LinkType.FACEBOOK:
+      return link.startsWith(linkStartWiths.facebook)
+    case LinkType.TWITTER:
+      return link.startsWith(linkStartWiths.twitter)
+    case LinkType.DISCORD:
+      return link.startsWith(linkStartWiths.discord)
+    default:
+      throw new Error(`Invalid LinkType '${type}'`)
   }
 }

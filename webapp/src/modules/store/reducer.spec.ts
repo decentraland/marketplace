@@ -1,17 +1,19 @@
 import { revertLocalStore, updateLocalStore } from './actions'
 import { StoreState, storeReducer } from './reducer'
 import { Store } from './types'
-import { getEmptyLocalStore } from './utils'
 
 let state: StoreState
 let filledLocalStore: Store
-let emptyLocalStore: Store
 
 beforeEach(() => {
   state = {
+    data: {},
+    error: null,
+    loading: [],
     localStore: {
       owner: '',
       cover: '',
+      coverName: '',
       description: '',
       discord: '',
       website: '',
@@ -23,14 +25,13 @@ beforeEach(() => {
   filledLocalStore = {
     owner: 'owner',
     cover: 'cover',
+    coverName: 'coverName',
     description: 'description',
     discord: 'discord',
     website: 'website',
     twitter: 'twitter',
     facebook: 'facebook'
   }
-
-  emptyLocalStore = getEmptyLocalStore()
 })
 
 describe('when reducing the action that signals an update to the local store', () => {
@@ -38,6 +39,7 @@ describe('when reducing the action that signals an update to the local store', (
     const result = storeReducer(state, updateLocalStore(filledLocalStore))
 
     expect(result).toStrictEqual({
+      ...state,
       localStore: filledLocalStore
     })
   })
@@ -45,14 +47,18 @@ describe('when reducing the action that signals an update to the local store', (
 
 describe('when reducing the action that signals a revert of the local store', () => {
   beforeEach(() => {
-    state = { localStore: filledLocalStore }
+    state = {
+      ...state,
+      localStore: filledLocalStore
+    }
   })
 
   it('should return a state where the local store was updated', () => {
-    const result = storeReducer(state, revertLocalStore())
+    const result = storeReducer(state, revertLocalStore('address'))
 
     expect(result).toStrictEqual({
-      localStore: emptyLocalStore
+      ...state,
+      localStore: null
     })
   })
 })

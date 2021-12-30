@@ -8,3 +8,10 @@ export type Store = {
   twitter: string
   discord: string
 }
+
+export enum LinkType {
+  WEBSITE = 'website',
+  FACEBOOK = 'facebook',
+  TWITTER = 'twitter',
+  DISCORD = 'discord'
+}
