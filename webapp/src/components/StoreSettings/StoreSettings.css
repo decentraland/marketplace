@@ -27,3 +27,10 @@
   margin-top: 2px;
   font-size: 12px;
 }
+
+.StoreSettings .InputContainer .info {
+  position: absolute;
+  color: var(--secondary-text);
+  margin-top: 2px;
+  font-size: 12px;
+}

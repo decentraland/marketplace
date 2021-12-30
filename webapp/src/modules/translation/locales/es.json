@@ -139,9 +139,9 @@
     "store_cover": "Imagen de la tienda",
     "description": "Descripción",
     "website": "Pagina Web",
-    "facebook": "Facebook",
-    "twitter": "Twitter",
-    "discord": "Discord",
+    "facebook": "Handle de Facebook",
+    "twitter": "Handle de Twitter",
+    "discord": "ID del canal de Discord",
     "save": "Guardar",
     "revert": "Revertir",
     "add_cover_picture": "Haga click aquí para ponerle una imagen a la tienda"

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Header, Row, Column, Button } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -24,10 +24,9 @@ const StoreSettings = ({
 
   const [errors, setErrors] = useState<{ [key in keyof Store]?: string }>({})
 
-  const hasErrors = useMemo(
-    () => Object.values(errors).some(error => !!error),
-    [errors]
-  )
+  useEffect(() => {
+    onFetchStore(address)
+  }, [onFetchStore, address])
 
   useEffect(() => {
     const newErrors: typeof errors = {}
@@ -39,16 +38,28 @@ const StoreSettings = ({
     }
 
     validateSocialUrl(LinkType.WEBSITE)
-    validateSocialUrl(LinkType.FACEBOOK)
-    validateSocialUrl(LinkType.TWITTER)
-    validateSocialUrl(LinkType.DISCORD)
 
     setErrors(newErrors)
   }, [store])
 
-  useEffect(() => {
-    onFetchStore(address)
-  }, [onFetchStore, address])
+  const hasErrors = useMemo(
+    () => Object.values(errors).some(error => !!error),
+    [errors]
+  )
+
+  const getInputValue = useCallback(
+    (type: LinkType) => store[type].replace(linkStartWiths[type], ''),
+    [store]
+  )
+
+  const handleInputOnChange = useCallback(
+    (type: LinkType, value: string) =>
+      onChange({
+        ...store,
+        [type]: (!value ? '' : linkStartWiths[type] + value).replaceAll(' ', '')
+      }),
+    [store, onChange]
+  )
 
   return (
     <div className="StoreSettings">
@@ -96,26 +107,26 @@ const StoreSettings = ({
         <InputContainer title={t('store_settings.facebook')}>
           <TextInput
             type="input"
-            value={facebook}
-            onChange={facebook => onChange({ ...store, facebook })}
+            value={getInputValue(LinkType.FACEBOOK)}
+            onChange={value => handleInputOnChange(LinkType.FACEBOOK, value)}
           />
-          {errors.facebook && <div className="error">{errors.facebook}</div>}
+          <div className="info">{facebook}</div>
         </InputContainer>
         <InputContainer title={t('store_settings.twitter')}>
           <TextInput
             type="input"
-            value={twitter}
-            onChange={twitter => onChange({ ...store, twitter })}
+            value={getInputValue(LinkType.TWITTER)}
+            onChange={value => handleInputOnChange(LinkType.TWITTER, value)}
           />
-          {errors.twitter && <div className="error">{errors.twitter}</div>}
+          <div className="info">{twitter}</div>
         </InputContainer>
         <InputContainer title={t('store_settings.discord')}>
           <TextInput
             type="input"
-            value={discord}
-            onChange={discord => onChange({ ...store, discord })}
+            value={getInputValue(LinkType.DISCORD)}
+            onChange={value => handleInputOnChange(LinkType.DISCORD, value)}
           />
-          {errors.discord && <div className="error">{errors.discord}</div>}
+          <div className="info">{discord}</div>
         </InputContainer>
       </div>
       <div className="bottom">

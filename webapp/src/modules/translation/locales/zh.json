@@ -139,9 +139,9 @@
     "store_cover": "店铺图片",
     "description": "描述",
     "website": "网站",
-    "facebook": "Facebook",
-    "twitter": "Twitter",
-    "discord": "Discord",
+    "facebook": "处理 Facebook",
+    "twitter": "处理 Twitter",
+    "discord": "通道编号 Discord",
     "save": "救",
     "revert": "恢复",
     "add_cover_picture": "单击此处将图像放入您的商店"

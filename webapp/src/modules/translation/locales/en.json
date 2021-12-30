@@ -141,9 +141,9 @@
     "store_cover": "Store cover",
     "description": "Description",
     "website": "Website",
-    "facebook": "Facebook",
-    "twitter": "Twitter",
-    "discord": "Discord",
+    "facebook": "Facebook Handle",
+    "twitter": "Twitter Handle",
+    "discord": "Discord Channel ID",
     "save": "Save",
     "revert": "Revert",
     "add_cover_picture": "Click here to add a cover picture"
