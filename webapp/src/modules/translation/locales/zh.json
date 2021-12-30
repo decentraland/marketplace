@@ -36,7 +36,10 @@
     "price": "价格",
     "collection": "珍藏",
     "time": "时间",
-    "buyer": "买方"
+    "buyer": "买方",
+    "bid": "投标",
+    "order": "清单",
+    "mint": "薄荷"
   },
   "error_boundary": {
     "message": "糟糕！出了点问题......"
@@ -245,9 +248,10 @@
     "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改，除非您对其进行更新，否则它将不再有效"
   },
   "transaction_history": {
-    "title": "交易记录",
+    "title": "最新销售",
     "from": "从",
     "to": "至",
+    "type": "类型",
     "when": "时间",
     "price": "价格"
   },

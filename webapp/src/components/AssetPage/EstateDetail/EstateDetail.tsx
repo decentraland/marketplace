@@ -76,7 +76,7 @@ const EstateDetail = ({ nft }: Props) => {
         <>
           <BidList nft={nft} />
           {estate.size > 0 && <ParcelCoordinates estateId={nft.tokenId} />}
-          <TransactionHistory nft={nft} />
+          <TransactionHistory asset={nft} />
         </>
       }
     />

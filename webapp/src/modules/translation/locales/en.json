@@ -36,7 +36,10 @@
     "price": "Price",
     "collection": "Collection",
     "time": "Time",
-    "buyer": "Buyer"
+    "buyer": "Buyer",
+    "bid": "Bid",
+    "order": "Listing",
+    "mint": "Mint"
   },
   "error_boundary": {
     "message": "Oops! Something went wrong..."
@@ -247,9 +250,10 @@
     "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it"
   },
   "transaction_history": {
-    "title": "Transaction History",
+    "title": "Latest Sales",
     "from": "From",
     "to": "To",
+    "type": "Type",
     "when": "When",
     "price": "Price"
   },

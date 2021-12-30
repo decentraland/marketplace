@@ -1,18 +1,8 @@
-import { Bid, Order } from '@dcl/schemas'
-import { NFT } from '../../../modules/nft/types'
+import { Asset } from '../../../modules/asset/types'
 
 export type Props = {
-  nft: NFT | null
+  asset: Asset | null
 }
-
-export type HistoryEvent = {
-  from: string
-  to: string
-  price: string
-  updatedAt: number
-}
-
-export type UnionOrderBid = Partial<Order & Bid>
 
 export type MapStateProps = {}
 export type MapDispatchProps = {}

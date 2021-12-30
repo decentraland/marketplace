@@ -1,11 +1,11 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
-import { Container, Page, Responsive } from 'decentraland-ui'
+import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { AssetType } from '../../modules/asset/types'
 import { VendorName } from '../../modules/vendor'
-import { Section } from '../../modules/vendor/routing/types'
+import { Section, Sections } from '../../modules/vendor/routing/types'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
@@ -142,7 +142,7 @@ const AssetBrowse = (props: Props) => {
           ]}
         />
       )}
-      <Responsive minWidth={Responsive.onlyTablet.minWidth}>
+      <NotMobile>
         {view === View.ACCOUNT ? (
           <AccountSidebar address={address!} />
         ) : view === View.CURRENT_ACCOUNT ? (
@@ -150,7 +150,7 @@ const AssetBrowse = (props: Props) => {
         ) : (
           <NFTSidebar section={section} sections={sections} />
         )}
-      </Responsive>
+      </NotMobile>
     </>
   )
 
@@ -199,22 +199,49 @@ const AssetBrowse = (props: Props) => {
       )
   }
 
+  const mobileSections = [
+    Sections.decentraland.COLLECTIONS,
+    Sections.decentraland.LAND,
+    Sections.decentraland.WEARABLES,
+    Sections.decentraland.ENS,
+    Sections.decentraland.ON_SALE,
+    Sections.decentraland.SALES,
+    Sections.decentraland.BIDS,
+    Sections.decentraland.STORE_SETTINGS
+  ]
+
   return (
-    <Page
-      className={classNames('AssetBrowse', isMap && 'is-map')}
-      isFullscreen={isFullscreen}
-    >
-      <Row>
-        {!isFullscreen && (
-          <Column align="left" className="sidebar">
-            {left}
+    <>
+      <Mobile>
+        <Tabs isFullscreen>
+          <Tabs.Left>
+            {mobileSections.map(value => (
+              <Tabs.Tab
+                active={section === value}
+                onClick={() => onBrowse({ section: value })}
+              >
+                {t(`menu.${value}`)}
+              </Tabs.Tab>
+            ))}
+          </Tabs.Left>
+        </Tabs>
+      </Mobile>
+      <Page
+        className={classNames('AssetBrowse', isMap && 'is-map')}
+        isFullscreen={isFullscreen}
+      >
+        <Row>
+          {!isFullscreen && (
+            <Column align="left" className="sidebar">
+              {left}
+            </Column>
+          )}
+          <Column align="right" grow={true}>
+            {right}
           </Column>
-        )}
-        <Column align="right" grow={true}>
-          {right}
-        </Column>
-      </Row>
-    </Page>
+        </Row>
+      </Page>
+    </>
   )
 }
 

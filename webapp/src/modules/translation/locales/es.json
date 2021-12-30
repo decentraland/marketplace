@@ -36,7 +36,10 @@
     "price": "Precio",
     "collection": "Colección",
     "time": "Tiempo",
-    "buyer": "Comprador"
+    "buyer": "Comprador",
+    "bid": "Oferta",
+    "order": "Clasificado",
+    "mint": "Venta"
   },
   "error_boundary": {
     "message": "Oops! Algo salió mal..."
@@ -245,9 +248,10 @@
     "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices"
   },
   "transaction_history": {
-    "title": "Historial de Transacciones",
+    "title": "Últimas ventas",
     "from": "Vendedor",
     "to": "Comprador",
+    "type": "Tipo",
     "when": "Fecha",
     "price": "Precio"
   },
