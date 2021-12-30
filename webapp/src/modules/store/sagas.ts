@@ -45,6 +45,7 @@ function* handleFetchStoreRequest(action: FetchStoreRequestAction) {
     const catalystStoreMetadata: CatalystStore = catalystStoreEntity.metadata
 
     let cover: string = ''
+    let coverName: string = ''
 
     const metadataCoverImage = catalystStoreMetadata.images.find(
       image => image.name === 'cover'
@@ -57,12 +58,13 @@ function* handleFetchStoreRequest(action: FetchStoreRequestAction) {
 
       if (contentCoverImageHash) {
         cover = `${peerUrl}/content/contents/${contentCoverImageHash.hash}`
+        coverName = contentCoverImageHash.file
       }
     }
 
     const store: Store = {
       cover,
-      coverName: '',
+      coverName,
       description: catalystStoreMetadata.description,
       website:
         catalystStoreMetadata.links.find(link => link.name === 'website')
@@ -93,13 +95,18 @@ function* handleUpdateStoreRequest(action: UpdateStoreRequestAction) {
     const address: string = (yield select(getAddress))!
     const peerUrl = process.env.REACT_APP_PEER_URL!
     const client: CatalystClient = new CatalystClient(peerUrl, 'Market')
-    const metadata: CatalystStore = toCatalystStore(store, address)
 
     const storesByOwner: ReturnType<typeof getStoresByOwner> = yield select(
       getStoresByOwner
     )
 
     const hasDifferentCover = storesByOwner[address]?.cover !== store.cover
+
+    const metadata: CatalystStore = toCatalystStore(
+      store,
+      address,
+      hasDifferentCover
+    )
 
     let entity: DeploymentPreparationData
 
@@ -123,7 +130,11 @@ function* handleUpdateStoreRequest(action: UpdateStoreRequestAction) {
 
       entity = yield client.buildEntity(optionsWithFiles)
     } else {
-      entity = yield client.buildEntityWithoutNewFiles(baseOptions)
+      const files = new Map<string, Buffer>()
+      const response: Response = yield fetch(store.cover)
+      const arrayBuffer: Blob = yield response.arrayBuffer()
+      files.set(store.coverName, Buffer.from(arrayBuffer))
+      entity = yield client.buildEntity({ ...baseOptions, files })
     }
 
     const authChain = Authenticator.signPayload(identity, entity.entityId)
@@ -136,7 +147,11 @@ function* handleUpdateStoreRequest(action: UpdateStoreRequestAction) {
   }
 }
 
-const toCatalystStore = (store: Store, address: string): CatalystStore => {
+const toCatalystStore = (
+  store: Store,
+  address: string,
+  hasDifferentCover: boolean
+): CatalystStore => {
   const links: CatalystStore['links'] = []
 
   if (store.website) {
@@ -158,7 +173,11 @@ const toCatalystStore = (store: Store, address: string): CatalystStore => {
   let images: CatalystStore['images'] = []
 
   if (store.cover && store.coverName) {
-    images.push({ name: 'cover', file: `cover/${store.coverName}` })
+    if (hasDifferentCover) {
+      images.push({ name: 'cover', file: `cover/${store.coverName}` })
+    } else {
+      images.push({ name: 'cover', file: store.coverName })
+    }
   }
 
   return {
