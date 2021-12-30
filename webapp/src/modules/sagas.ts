@@ -3,6 +3,7 @@ import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization
 import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
+import { CatalystClient } from 'dcl-catalyst-client'
 
 import { bidSaga } from './bid/sagas'
 import { nftSaga } from './nft/sagas'
@@ -20,11 +21,11 @@ import { saleSaga } from './sale/sagas'
 import { accountSaga } from './account/sagas'
 import { storeSaga } from './store/sagas'
 import { identitySaga } from './identity/sagas'
+import { peerUrl } from '../lib/environment'
 
 const analyticsSaga = createAnalyticsSaga()
-const profileSaga = createProfileSaga({
-  peerUrl: process.env.REACT_APP_PEER_URL!
-})
+const profileSaga = createProfileSaga({ peerUrl })
+const catalystClient = new CatalystClient(peerUrl, 'Market')
 
 export function* rootSaga() {
   yield all([
@@ -47,7 +48,7 @@ export function* rootSaga() {
     saleSaga(),
     accountSaga(),
     collectionSaga(),
-    storeSaga(),
+    storeSaga(catalystClient),
     identitySaga()
   ])
 }

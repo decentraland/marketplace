@@ -21,129 +21,126 @@ import { Store as CatalystStore } from '@dcl/schemas'
 import { getAddress } from '../wallet/selectors'
 import { Store } from './types'
 import { getData as getStoresByOwner } from './selectors'
+import { peerUrl } from '../../lib/environment'
 
-export function* storeSaga() {
+export function* storeSaga(client: CatalystClient) {
   yield takeLatest(FETCH_STORE_REQUEST, handleFetchStoreRequest)
   yield takeLatest(UPDATE_STORE_REQUEST, handleUpdateStoreRequest)
-}
 
-function* handleFetchStoreRequest(action: FetchStoreRequestAction) {
-  try {
-    const address = action.payload.address
-    const peerUrl = process.env.REACT_APP_PEER_URL!
-    const client: CatalystClient = new CatalystClient(peerUrl, 'Market')
-    const result = ((yield client.fetchEntitiesByPointers('store' as any, [
-      address
-    ])) as unknown) as any[]
+  function* handleFetchStoreRequest(action: FetchStoreRequestAction) {
+    try {
+      const address = action.payload.address
+      const result = ((yield client.fetchEntitiesByPointers('store' as any, [
+        address
+      ])) as unknown) as any[]
 
-    if (result.length === 0) {
-      yield put(fetchStoreSuccess())
-      return
-    }
+      if (result.length === 0) {
+        yield put(fetchStoreSuccess())
+        return
+      }
 
-    const catalystStoreEntity = result[0]
-    const catalystStoreMetadata: CatalystStore = catalystStoreEntity.metadata
+      const catalystStoreEntity = result[0]
+      const catalystStoreMetadata: CatalystStore = catalystStoreEntity.metadata
 
-    let cover: string = ''
-    let coverName: string = ''
+      let cover: string = ''
+      let coverName: string = ''
 
-    const metadataCoverImage = catalystStoreMetadata.images.find(
-      image => image.name === 'cover'
-    )
-
-    if (metadataCoverImage) {
-      const contentCoverImageHash = catalystStoreEntity.content.find(
-        (cont: any) => cont.file === metadataCoverImage.file
+      const metadataCoverImage = catalystStoreMetadata.images.find(
+        image => image.name === 'cover'
       )
 
-      if (contentCoverImageHash) {
-        cover = `${peerUrl}/content/contents/${contentCoverImageHash.hash}`
-        coverName = contentCoverImageHash.file
+      if (metadataCoverImage) {
+        const contentCoverImageHash = catalystStoreEntity.content.find(
+          (cont: any) => cont.file === metadataCoverImage.file
+        )
+
+        if (contentCoverImageHash) {
+          cover = `${peerUrl}/content/contents/${contentCoverImageHash.hash}`
+          coverName = contentCoverImageHash.file
+        }
       }
-    }
 
-    const store: Store = {
-      cover,
-      coverName,
-      description: catalystStoreMetadata.description,
-      website:
-        catalystStoreMetadata.links.find(link => link.name === 'website')
-          ?.url || '',
-      facebook:
-        catalystStoreMetadata.links.find(link => link.name === 'facebook')
-          ?.url || '',
-      twitter:
-        catalystStoreMetadata.links.find(link => link.name === 'twitter')
-          ?.url || '',
-      discord:
-        catalystStoreMetadata.links.find(link => link.name === 'discord')
-          ?.url || '',
-      owner: catalystStoreMetadata.owner
-    }
+      const store: Store = {
+        cover,
+        coverName,
+        description: catalystStoreMetadata.description,
+        website:
+          catalystStoreMetadata.links.find(link => link.name === 'website')
+            ?.url || '',
+        facebook:
+          catalystStoreMetadata.links.find(link => link.name === 'facebook')
+            ?.url || '',
+        twitter:
+          catalystStoreMetadata.links.find(link => link.name === 'twitter')
+            ?.url || '',
+        discord:
+          catalystStoreMetadata.links.find(link => link.name === 'discord')
+            ?.url || '',
+        owner: catalystStoreMetadata.owner
+      }
 
-    yield put(fetchStoreSuccess(store))
-  } catch (e) {
-    yield put(fetchStoreFailure(e.message))
+      yield put(fetchStoreSuccess(store))
+    } catch (e) {
+      yield put(fetchStoreFailure(e.message))
+    }
   }
-}
 
-function* handleUpdateStoreRequest(action: UpdateStoreRequestAction) {
-  try {
-    const { store } = action.payload
+  function* handleUpdateStoreRequest(action: UpdateStoreRequestAction) {
+    try {
+      const { store } = action.payload
 
-    const identity: AuthIdentity = yield call(getIdentity)
-    const address: string = (yield select(getAddress))!
-    const peerUrl = process.env.REACT_APP_PEER_URL!
-    const client: CatalystClient = new CatalystClient(peerUrl, 'Market')
+      const identity: AuthIdentity = yield call(getIdentity)
+      const address: string = (yield select(getAddress))!
 
-    const storesByOwner: ReturnType<typeof getStoresByOwner> = yield select(
-      getStoresByOwner
-    )
+      const storesByOwner: ReturnType<typeof getStoresByOwner> = yield select(
+        getStoresByOwner
+      )
 
-    const hasDifferentCover = storesByOwner[address]?.cover !== store.cover
+      const hasDifferentCover = storesByOwner[address]?.cover !== store.cover
 
-    const metadata: CatalystStore = toCatalystStore(
-      store,
-      address,
-      hasDifferentCover
-    )
+      const metadata: CatalystStore = toCatalystStore(
+        store,
+        address,
+        hasDifferentCover
+      )
 
-    let entity: DeploymentPreparationData
+      let entity: DeploymentPreparationData
 
-    const baseOptions: BuildEntityWithoutFilesOptions = {
-      type: 'store' as any,
-      pointers: [address],
-      metadata,
-      timestamp: Date.now()
-    }
+      const baseOptions: BuildEntityWithoutFilesOptions = {
+        type: 'store' as any,
+        pointers: [address],
+        metadata,
+        timestamp: Date.now()
+      }
 
-    if (hasDifferentCover) {
-      const files = new Map<string, Buffer>()
+      if (hasDifferentCover) {
+        const files = new Map<string, Buffer>()
 
-      if (store.cover && store.coverName) {
+        if (store.cover && store.coverName) {
+          const response: Response = yield fetch(store.cover)
+          const arrayBuffer: Blob = yield response.arrayBuffer()
+          files.set(`cover/${store.coverName}`, Buffer.from(arrayBuffer))
+        }
+
+        const optionsWithFiles: BuildEntityOptions = { ...baseOptions, files }
+
+        entity = yield client.buildEntity(optionsWithFiles)
+      } else {
+        const files = new Map<string, Buffer>()
         const response: Response = yield fetch(store.cover)
         const arrayBuffer: Blob = yield response.arrayBuffer()
-        files.set(`cover/${store.coverName}`, Buffer.from(arrayBuffer))
+        files.set(store.coverName, Buffer.from(arrayBuffer))
+        entity = yield client.buildEntity({ ...baseOptions, files })
       }
 
-      const optionsWithFiles: BuildEntityOptions = { ...baseOptions, files }
+      const authChain = Authenticator.signPayload(identity, entity.entityId)
 
-      entity = yield client.buildEntity(optionsWithFiles)
-    } else {
-      const files = new Map<string, Buffer>()
-      const response: Response = yield fetch(store.cover)
-      const arrayBuffer: Blob = yield response.arrayBuffer()
-      files.set(store.coverName, Buffer.from(arrayBuffer))
-      entity = yield client.buildEntity({ ...baseOptions, files })
+      yield client.deployEntity({ ...entity, authChain })
+
+      yield put(updateStoreSuccess(store))
+    } catch (e) {
+      yield put(updateStoreFailure(e.message))
     }
-
-    const authChain = Authenticator.signPayload(identity, entity.entityId)
-
-    yield client.deployEntity({ ...entity, authChain })
-
-    yield put(updateStoreSuccess(store))
-  } catch (e) {
-    yield put(updateStoreFailure(e.message))
   }
 }
 
