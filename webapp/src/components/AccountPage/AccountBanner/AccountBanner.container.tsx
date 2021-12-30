@@ -1,20 +1,29 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
+import { getAddress as getAddressFromUrl } from '../../../modules/account/selectors'
 import { RootState } from '../../../modules/reducer'
 import { goBack } from '../../../modules/routing/actions'
 import { getViewAsGuest } from '../../../modules/routing/selectors'
-import { getLocalStore } from '../../../modules/store/selectors'
+import { fetchStoreRequest } from '../../../modules/store/actions'
+import {
+  getData as getStoresByOwner,
+  getLocalStore
+} from '../../../modules/store/selectors'
 import { Store } from '../../../modules/store/types'
+import { getAddress as getAddressFromWallet } from '../../../modules/wallet/selectors'
 import AccountBanner from './AccountBanner'
 import { MapStateProps, MapDispatchProps } from './AccountBanner.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const viewAsGuest = getViewAsGuest(state)
+  const address = getAddressFromUrl(state) || getAddressFromWallet(state)
 
-  let store: Store | undefined
+  let store: Store | undefined = address
+    ? getStoresByOwner(state)[address]
+    : undefined
 
   if (viewAsGuest) {
-    store = getLocalStore(state) || undefined
+    store = getLocalStore(state) || store
   }
 
   return {
@@ -24,7 +33,8 @@ const mapState = (state: RootState): MapStateProps => {
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
   return {
-    onBack: () => dispatch(goBack())
+    onBack: () => dispatch(goBack()),
+    onFetchStore: (address: string) => dispatch(fetchStoreRequest(address))
   }
 }
 

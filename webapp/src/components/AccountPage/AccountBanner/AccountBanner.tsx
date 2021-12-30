@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { Back, Container } from 'decentraland-ui'
 import { Icon } from 'semantic-ui-react'
@@ -13,8 +13,12 @@ import { useTimer } from '../../../lib/timer'
 import { shortenAddress } from '../../../modules/wallet/utils'
 import './AccountBanner.css'
 
-const AccountBanner = ({ address, store, onBack }: Props) => {
+const AccountBanner = ({ address, store, onBack, onFetchStore }: Props) => {
   const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
+
+  useEffect(() => {
+onFetchStore(address)
+  }, [onFetchStore, address])
 
   const renderLink = (type: 'website' | 'facebook' | 'twitter' | 'discord') =>
     store?.[type] && (
