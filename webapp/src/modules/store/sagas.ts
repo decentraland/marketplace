@@ -1,8 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
 import { AuthIdentity, Authenticator } from 'dcl-crypto'
-import { Store as CatalystStore } from '@dcl/schemas'
 import {
-  BuildEntityOptions,
   BuildEntityWithoutFilesOptions,
   CatalystClient,
   DeploymentPreparationData
@@ -44,53 +42,41 @@ export function* storeSaga(client: CatalystClient) {
     }
   }
 
-  function* handleUpdateStoreRequest(action: UpdateStoreRequestAction) {
+  function* handleUpdateStoreRequest({
+    payload: { store }
+  }: UpdateStoreRequestAction) {
     try {
-      const { store } = action.payload
-
       const identity: AuthIdentity = yield call(getIdentity)
       const address: string = (yield select(getAddress))!
-
       const storesByOwner: ReturnType<typeof getStoresByOwner> = yield select(
         getStoresByOwner
       )
-
       const hasDifferentCover = storesByOwner[address]?.cover !== store.cover
-
-      const metadata: CatalystStore = toCatalystStore(
-        store,
-        address,
-        hasDifferentCover
-      )
-
-      let entity: DeploymentPreparationData
-
-      const baseOptions: BuildEntityWithoutFilesOptions = {
+      const metadata = toCatalystStore(store, address, hasDifferentCover)
+      
+      const options: BuildEntityWithoutFilesOptions = {
         type: 'store' as any,
         pointers: [address],
         metadata,
         timestamp: Date.now()
       }
 
-      if (hasDifferentCover) {
-        const files = new Map<string, Buffer>()
+      const files = new Map<string, Buffer>()
 
-        if (store.cover && store.coverName) {
-          const response: Response = yield fetch(store.cover)
-          const arrayBuffer: Blob = yield response.arrayBuffer()
-          files.set(`cover/${store.coverName}`, Buffer.from(arrayBuffer))
-        }
-
-        const optionsWithFiles: BuildEntityOptions = { ...baseOptions, files }
-
-        entity = yield client.buildEntity(optionsWithFiles)
-      } else {
-        const files = new Map<string, Buffer>()
+      if (store.cover) {
         const response: Response = yield fetch(store.cover)
         const arrayBuffer: Blob = yield response.arrayBuffer()
-        files.set(store.coverName, Buffer.from(arrayBuffer))
-        entity = yield client.buildEntity({ ...baseOptions, files })
+        const key = hasDifferentCover
+          ? `cover/${store.coverName}`
+          : store.coverName
+
+        files.set(key, Buffer.from(arrayBuffer))
       }
+
+      const entity: DeploymentPreparationData =
+        files.size === 0
+          ? yield client.buildEntityWithoutNewFiles(options)
+          : yield client.buildEntity({ ...options, files })
 
       const authChain = Authenticator.signPayload(identity, entity.entityId)
 
