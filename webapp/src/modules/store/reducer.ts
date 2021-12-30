@@ -81,6 +81,7 @@ export function storeReducer(
           ...state.data,
           [store.owner]: store
         },
+        localStore: null,
         loading: loadingReducer(state.loading, action),
         error: null
       }
