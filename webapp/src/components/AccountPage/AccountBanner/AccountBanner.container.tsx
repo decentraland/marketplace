@@ -1,13 +1,18 @@
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { getAddress as getAddressFromUrl } from '../../../modules/account/selectors'
 import { RootState } from '../../../modules/reducer'
 import { goBack } from '../../../modules/routing/actions'
 import { getViewAsGuest } from '../../../modules/routing/selectors'
-import { fetchStoreRequest } from '../../../modules/store/actions'
+import {
+  fetchStoreRequest,
+  FETCH_STORE_REQUEST
+} from '../../../modules/store/actions'
 import {
   getData as getStoresByOwner,
-  getLocalStore
+  getLocalStore,
+  getLoading as getStoreLoading
 } from '../../../modules/store/selectors'
 import { Store } from '../../../modules/store/types'
 import { getAddress as getAddressFromWallet } from '../../../modules/wallet/selectors'
@@ -17,6 +22,7 @@ import { MapStateProps, MapDispatchProps } from './AccountBanner.types'
 const mapState = (state: RootState): MapStateProps => {
   const viewAsGuest = getViewAsGuest(state)
   const address = getAddressFromUrl(state) || getAddressFromWallet(state)
+  const isLoading = isLoadingType(getStoreLoading(state), FETCH_STORE_REQUEST)
 
   let store: Store | undefined = address
     ? getStoresByOwner(state)[address]
@@ -27,7 +33,8 @@ const mapState = (state: RootState): MapStateProps => {
   }
 
   return {
-    store
+    store,
+    isLoading
   }
 }
 
