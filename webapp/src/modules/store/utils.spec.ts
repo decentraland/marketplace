@@ -1,45 +1,53 @@
 import { Store as CatalystStore } from '@dcl/schemas'
 import { Entity } from 'dcl-catalyst-commons'
 import { Store } from './types'
-import { toStore } from './utils'
+import { toCatalystStore, toStore } from './utils'
 
 jest.mock('../../lib/environment', () => ({
   peerUrl: 'http://peer.com'
 }))
 
+const facebook = 'http://www.facebook.com'
+const discord = 'http://www.discord.com'
+const twitter = 'http://www.twitter.com'
+const website = 'http://www.website.com'
+
+let mockMetadata: CatalystStore
+let mockEntity: Entity
+let mockStore: Store
+
+beforeEach(() => {
+  mockMetadata = {
+    images: [],
+    description: 'description',
+    id: 'id',
+    links: [],
+    owner: 'owner',
+    version: 1
+  }
+
+  mockEntity = {
+    id: 'id',
+    pointers: ['id'],
+    timestamp: 100,
+    type: 'store' as any,
+    content: [],
+    metadata: mockMetadata
+  }
+
+  mockStore = {
+    cover: '',
+    coverName: '',
+    description: mockMetadata.description,
+    discord: '',
+    facebook: '',
+    owner: mockMetadata.owner,
+    twitter: '',
+    website: ''
+  }
+})
+
 describe('when mapping am entity to a store', () => {
-  let mockEntity: Entity
-  let mockStore: Store
-
-  beforeEach(() => {
-    mockEntity = {
-      id: 'id',
-      pointers: ['id'],
-      timestamp: 100,
-      type: 'store' as any,
-      content: [],
-      metadata: {
-        images: [],
-        description: 'description',
-        id: 'id',
-        links: [],
-        owner: 'owner',
-        version: 1
-      } as CatalystStore
-    }
-
-    mockStore = {
-      cover: '',
-      coverName: '',
-      description: mockEntity.metadata.description,
-      discord: '',
-      facebook: '',
-      owner: mockEntity.metadata.owner,
-      twitter: '',
-      website: ''
-    }
-  })
-
   describe('when metadata is not present in the entity', () => {
     it('should throw with metadata not present error', () => {
       const error = 'Metadata not found'
@@ -91,11 +99,6 @@ describe('when mapping am entity to a store', () => {
   })
 
   describe('when facebook, discord, twitter and website links can be obtained from entity', () => {
-    const facebook = 'http://www.facebook.com'
-    const discord = 'http://www.discord.com'
-    const twitter = 'http://www.twitter.com'
-    const website = 'http://www.website.com'
-
     beforeEach(() => {
       mockEntity = {
         ...mockEntity,
@@ -121,6 +124,83 @@ describe('when mapping am entity to a store', () => {
 
     it('should complete cover and coverName', () => {
       expect(toStore(mockEntity)).toEqual(mockStore)
+    })
+  })
+})
+
+describe('when mapping a store to entity metadata', () => {
+  describe('when facebook, discord, twitter and website links are present in the store', () => {
+    beforeEach(() => {
+      mockStore = {
+        ...mockStore,
+        facebook,
+        discord,
+        twitter,
+        website
+      }
+
+      mockMetadata = {
+        ...mockMetadata,
+        id: 'urn:decentraland:marketplace:store:owner',
+        links: [
+          { name: 'website', url: website },
+          { name: 'facebook', url: facebook },
+          { name: 'twitter', url: twitter },
+          { name: 'discord', url: discord }
+        ]
+      }
+    })
+
+    it('should return entity metadata containing them as links', () => {
+      expect(toCatalystStore(mockStore, 'owner', false)).toEqual(mockMetadata)
+    })
+  })
+
+  describe('when cover and coverName are present in the store', () => {
+    beforeEach(() => {
+      mockStore = {
+        ...mockStore,
+        cover: 'foo',
+        coverName: 'bar'
+      }
+    })
+
+    describe('when argument for has different covers is false', () => {
+      beforeEach(() => {
+        mockMetadata = {
+          ...mockMetadata,
+          id: 'urn:decentraland:marketplace:store:owner',
+          images: [
+            {
+              name: 'cover',
+              file: 'bar'
+            }
+          ]
+        }
+      })
+
+      it('should return entity metadata containing an object in the images array with cover as name and bar as file', () => {
+        expect(toCatalystStore(mockStore, 'owner', false)).toEqual(mockMetadata)
+      })
+    })
+
+    describe('when argument for has different covers is false', () => {
+      beforeEach(() => {
+        mockMetadata = {
+          ...mockMetadata,
+          id: 'urn:decentraland:marketplace:store:owner',
+          images: [
+            {
+              name: 'cover',
+              file: 'cover/bar'
+            }
+          ]
+        }
+      })
+
+      it('should return entity metadata containing an object in the images array with cover as name and cover/bar as file', () => {
+        expect(toCatalystStore(mockStore, 'owner', true)).toEqual(mockMetadata)
+      })
     })
   })
 })
