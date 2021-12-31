@@ -54,7 +54,8 @@
   position: relative;
 }
 
-.AccountBanner .Profile.avatar .avatar-face {
+.AccountBanner .Profile.avatar.huge .avatar-face,
+.AccountBanner .Profile.blockie .dcl.blockie {
   width: 96px;
   height: 96px;
 }
