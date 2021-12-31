@@ -50,10 +50,43 @@ describe('when mapping am entity to a store', () => {
   })
 
   describe('when reference cannot be determined from metadata image', () => {
-    it('should leave cover and coverName empty', () => {
-      const store = toStore(mockEntity)
+    it('should return a store with cover and coverName empty', () => {
+      expect(toStore(mockEntity)).toEqual(mockStore)
+    })
+  })
 
-      expect(store).toEqual(mockStore)
+  describe('when reference can be determined from metadata image', () => {
+    const file = 'cover/cover-file.png'
+
+    beforeEach(() => {
+      mockEntity = {
+        ...mockEntity,
+        content: [
+          {
+            file,
+            hash: 'hash'
+          }
+        ],
+        metadata: {
+          ...mockEntity.metadata,
+          images: [
+            {
+              file,
+              name: 'cover'
+            }
+          ]
+        } as CatalystStore
+      }
+
+      mockStore = {
+        ...mockStore,
+        cover: 'http://peer.com/content/contents/hash',
+        coverName: 'cover/cover-file.png'
+      }
+    })
+
+    it('should return a store with cover and coverName with values', () => {
+      expect(toStore(mockEntity)).toEqual(mockStore)
     })
   })
 
@@ -87,9 +120,7 @@ describe('when mapping am entity to a store', () => {
     })
 
     it('should complete cover and coverName', () => {
-      const store = toStore(mockEntity)
-
-      expect(store).toEqual(mockStore)
+      expect(toStore(mockEntity)).toEqual(mockStore)
     })
   })
 })
