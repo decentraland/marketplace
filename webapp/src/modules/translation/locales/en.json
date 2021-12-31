@@ -142,6 +142,7 @@
     "description": "Description",
     "website": "Website",
     "link_start_with_error": "Link should start with {value}",
+    "size_error": "Maximum file size allowed is of {max}, the file you selected has {current}",
     "facebook": "Facebook Handle",
     "twitter": "Twitter Handle",
     "discord": "Discord Channel ID",

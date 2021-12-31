@@ -47,9 +47,10 @@ const StoreSettings = ({
     }
 
     if (coverSize !== undefined && coverSize > MAX_FILE_SIZE) {
-      newErrors.size = `Maximum file size allowed is of ${sizeInMbs(
-        MAX_FILE_SIZE
-      )}, the file you selected has ${sizeInMbs(coverSize)}`
+      newErrors.size = t(`store_settings.size_error`, {
+        max: sizeInMbs(MAX_FILE_SIZE),
+        current: sizeInMbs(coverSize)
+      })
     }
 
     setErrors(newErrors)
@@ -168,7 +169,10 @@ const StoreSettings = ({
               {t('store_settings.save')}
             </Button>
             <Button
-              onClick={() => onRevert(address)}
+              onClick={() => {
+                setErrors({})
+                onRevert(address)
+              }}
               disabled={isSaving || !canSubmit}
             >
               {t('store_settings.revert')}
