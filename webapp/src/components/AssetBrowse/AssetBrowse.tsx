@@ -212,20 +212,22 @@ const AssetBrowse = (props: Props) => {
 
   return (
     <>
-      <Mobile>
-        <Tabs isFullscreen>
-          <Tabs.Left>
-            {mobileSections.map(value => (
-              <Tabs.Tab
-                active={section === value}
-                onClick={() => onBrowse({ section: value })}
-              >
-                {t(`menu.${value}`)}
-              </Tabs.Tab>
-            ))}
-          </Tabs.Left>
-        </Tabs>
-      </Mobile>
+      {view === View.CURRENT_ACCOUNT ? (
+        <Mobile>
+          <Tabs isFullscreen>
+            <Tabs.Left>
+              {mobileSections.map(value => (
+                <Tabs.Tab
+                  active={section === value}
+                  onClick={() => onBrowse({ section: value })}
+                >
+                  {t(`menu.${value}`)}
+                </Tabs.Tab>
+              ))}
+            </Tabs.Left>
+          </Tabs>
+        </Mobile>
+      ) : null}
       <Page
         className={classNames('AssetBrowse', isMap && 'is-map')}
         isFullscreen={isFullscreen}
