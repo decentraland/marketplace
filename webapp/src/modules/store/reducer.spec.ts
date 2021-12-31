@@ -92,7 +92,7 @@ describe('when reducing the action that signals fetching a user store', () => {
   })
 })
 
-describe('when reducing the action that signals fetching a user store successfuly', () => {
+describe('when reducing the action that signals fetching a user store successfully', () => {
   beforeEach(() => {
     state = {
       ...state,
@@ -112,7 +112,7 @@ describe('when reducing the action that signals fetching a user store successful
   })
 })
 
-describe('when reducing the action that signals fetching a user store unsuccessfuly', () => {
+describe('when reducing the action that signals fetching a user store unsuccessfully', () => {
   it('should set the error to the one provided in the action', () => {
     const error = 'some error'
     const action = fetchStoreFailure(error)
