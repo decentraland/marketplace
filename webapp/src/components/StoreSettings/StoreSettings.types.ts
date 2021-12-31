@@ -3,6 +3,7 @@ import { Store } from '../../modules/store/types'
 export type Props = {
   address: string
   store: Store
+  error: string | null
   canSubmit: boolean
   isLoading: boolean
   isSaving: boolean
@@ -14,7 +15,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'store' | 'canSubmit' | 'address' | 'isLoading' | 'isSaving'
+  'store' | 'canSubmit' | 'address' | 'isLoading' | 'isSaving' | 'error'
 >
 export type MapDispatchProps = Pick<
   Props,

@@ -34,3 +34,9 @@
   margin-top: 2px;
   font-size: 12px;
 }
+
+.StoreSettings .store-request-error {
+  color: var(--error);
+  margin-top: 6px;
+  font-size: 12px;
+}

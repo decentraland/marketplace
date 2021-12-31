@@ -15,6 +15,7 @@ const StoreSettings = ({
   address,
   store,
   canSubmit,
+  error,
   isLoading,
   isSaving,
   onChange,
@@ -155,6 +156,7 @@ const StoreSettings = ({
               {t('store_settings.revert')}
             </Button>
           </div>
+          {error && <div className="store-request-error">{error}</div>}
         </>
       )}
     </div>

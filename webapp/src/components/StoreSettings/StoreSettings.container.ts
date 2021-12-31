@@ -6,7 +6,8 @@ import StoreSettings from './StoreSettings'
 import {
   getData as getStoresByOwner,
   getLocalStore,
-  getLoading as getStoreLoading
+  getLoading as getStoreLoading,
+  getError
 } from '../../modules/store/selectors'
 import { Dispatch } from 'redux'
 import { Store } from '../../modules/store/types'
@@ -31,10 +32,12 @@ const mapState = (state: RootState): MapStateProps => {
   const canSubmit = JSON.stringify(store) !== JSON.stringify(baseStore)
   const isLoading = isLoadingType(getStoreLoading(state), FETCH_STORE_REQUEST)
   const isSaving = isLoadingType(getStoreLoading(state), UPDATE_STORE_REQUEST)
+  const error = getError(state)
 
   return {
     address,
     store,
+    error,
     canSubmit,
     isLoading,
     isSaving
