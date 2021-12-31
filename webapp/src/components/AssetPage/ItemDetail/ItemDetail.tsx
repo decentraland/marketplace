@@ -16,6 +16,7 @@ import Collection from '../Collection'
 import Price from '../Price'
 import BaseDetail from '../BaseDetail'
 import { getBuilderCollectionDetailUrl } from '../../../modules/collection/utils'
+import { TransactionHistory } from '../TransactionHistory'
 import { AssetImage } from '../../AssetImage'
 import styles from './ItemDetail.module.css'
 
@@ -96,6 +97,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
           )}
         </>
       }
+      below={<TransactionHistory asset={item} />}
     />
   )
 }

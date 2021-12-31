@@ -18,3 +18,7 @@
 .TransactionHistory .mobile-tx-history-row .when {
   color: var(--secondary-text);
 }
+
+.TransactionHistory tbody.is-loading tr {
+  opacity: 0.5;
+}

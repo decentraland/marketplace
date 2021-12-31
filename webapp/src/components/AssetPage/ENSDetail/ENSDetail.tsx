@@ -30,7 +30,7 @@ const ENSDetail = ({ nft }: Props) => (
     below={
       <>
         <BidList nft={nft} />
-        <TransactionHistory nft={nft} />
+        <TransactionHistory asset={nft} />
       </>
     }
   />

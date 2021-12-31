@@ -4,14 +4,15 @@ import {
   Loader,
   TextFilter,
   Dropdown,
-  Pagination
+  Pagination,
+  NotMobile
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './OnSaleList.types'
 import OnSaleListElement from './OnSaleListElement'
 import { SortBy } from '../../modules/routing/types'
-import styles from './OnSaleList.module.css'
 import { useProcessedElements } from './utils'
+import styles from './OnSaleList.module.css'
 
 const OnSaleList = ({ elements, isLoading }: Props) => {
   const perPage = useRef(12)
@@ -67,14 +68,16 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
       ) : (
         <>
           <Table basic="very">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>{t('global.item')}</Table.HeaderCell>
-                <Table.HeaderCell>{t('global.type')}</Table.HeaderCell>
-                <Table.HeaderCell>{t('global.sale_type')}</Table.HeaderCell>
-                <Table.HeaderCell>{t('global.sell_price')}</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
+            <NotMobile>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>{t('global.item')}</Table.HeaderCell>
+                  <Table.HeaderCell>{t('global.type')}</Table.HeaderCell>
+                  <Table.HeaderCell>{t('global.sale_type')}</Table.HeaderCell>
+                  <Table.HeaderCell>{t('global.sell_price')}</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+            </NotMobile>
             <Table.Body>
               {processedElements.paginated.map(element => (
                 <OnSaleListElement

@@ -1,5 +1,4 @@
 import React from 'react'
-import { Table } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -28,19 +27,17 @@ const AssetCell = ({ asset }: Props) => {
       : locations.item(asset.contractAddress, asset.itemId!)
 
   return (
-    <Table.Cell>
-      <Link to={link}>
-        <div className={styles.firstCell}>
-          <div className={styles.imageContainer}>
-            <AssetImage asset={asset} isSmall />
-          </div>
-          <div>
-            <div className={styles.title}>{asset.name}</div>
-            {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
-          </div>
+    <Link to={link}>
+      <div className={styles.firstCell}>
+        <div className={styles.imageContainer}>
+          <AssetImage asset={asset} isSmall />
         </div>
-      </Link>
-    </Table.Cell>
+        <div>
+          <div className={styles.title}>{asset.name}</div>
+          {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
+        </div>
+      </div>
+    </Link>
   )
 }
 

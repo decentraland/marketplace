@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Tabs, Responsive } from 'decentraland-ui'
+import { Tabs, Mobile } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor'
@@ -36,13 +36,13 @@ const Navigation = (props: Props) => {
             {t('navigation.my_store')}
           </Tabs.Tab>
         </Link>
-        <Responsive maxWidth={Responsive.onlyMobile.maxWidth}>
+        <Mobile>
           <Link to={locations.activity()}>
             <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>
               {t('navigation.activity')}
             </Tabs.Tab>
           </Link>
-        </Responsive>
+        </Mobile>
       </Tabs.Left>
     </Tabs>
   )
