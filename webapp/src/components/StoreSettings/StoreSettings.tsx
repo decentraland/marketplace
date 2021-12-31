@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Header, Row, Column, Button } from 'decentraland-ui'
+import { Header, Row, Column, Button, Loader } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import InputContainer from './InputContainer'
@@ -15,6 +15,8 @@ const StoreSettings = ({
   address,
   store,
   canSubmit,
+  isLoading,
+  isSaving,
   onChange,
   onRevert,
   onSave,
@@ -78,71 +80,83 @@ const StoreSettings = ({
           </Link>
         </Column>
       </Row>
-      <div className="elements">
-        <InputContainer title={t('store_settings.store_cover')}>
-          <CoverPicker
-            src={cover}
-            onChange={(src, name) =>
-              onChange({
-                ...store,
-                cover: src || '',
-                coverName: name || ''
-              })
-            }
-          />
-        </InputContainer>
-        <InputContainer title={t('store_settings.description')}>
-          <TextInput
-            type="textarea"
-            value={description}
-            onChange={description => onChange({ ...store, description })}
-          />
-        </InputContainer>
-        <InputContainer title={t('store_settings.website')}>
-          <TextInput
-            type="input"
-            value={website}
-            onChange={website => onChange({ ...store, website })}
-          />
-          {errors.website && <div className="error">{errors.website}</div>}
-        </InputContainer>
-        <InputContainer title={t('store_settings.facebook')}>
-          <TextInput
-            type="input"
-            value={getInputValue(LinkType.FACEBOOK)}
-            onChange={value => handleInputOnChange(LinkType.FACEBOOK, value)}
-          />
-          <div className="info">{facebook}</div>
-        </InputContainer>
-        <InputContainer title={t('store_settings.twitter')}>
-          <TextInput
-            type="input"
-            value={getInputValue(LinkType.TWITTER)}
-            onChange={value => handleInputOnChange(LinkType.TWITTER, value)}
-          />
-          <div className="info">{twitter}</div>
-        </InputContainer>
-        <InputContainer title={t('store_settings.discord')}>
-          <TextInput
-            type="input"
-            value={getInputValue(LinkType.DISCORD)}
-            onChange={value => handleInputOnChange(LinkType.DISCORD, value)}
-          />
-          <div className="info">{discord}</div>
-        </InputContainer>
-      </div>
-      <div className="bottom">
-        <Button
-          onClick={() => onSave(store)}
-          primary
-          disabled={!canSubmit || hasErrors}
-        >
-          {t('store_settings.save')}
-        </Button>
-        <Button onClick={() => onRevert(address)} disabled={!canSubmit}>
-          {t('store_settings.revert')}
-        </Button>
-      </div>
+      {isLoading ? (
+        <Loader size="massive" active />
+      ) : (
+        <>
+          <div className="elements">
+            <InputContainer title={t('store_settings.store_cover')}>
+              <CoverPicker
+                src={cover}
+                onChange={(src, name) =>
+                  onChange({
+                    ...store,
+                    cover: src || '',
+                    coverName: name || ''
+                  })
+                }
+              />
+            </InputContainer>
+            <InputContainer title={t('store_settings.description')}>
+              <TextInput
+                type="textarea"
+                value={description}
+                onChange={description => onChange({ ...store, description })}
+              />
+            </InputContainer>
+            <InputContainer title={t('store_settings.website')}>
+              <TextInput
+                type="input"
+                value={website}
+                onChange={website => onChange({ ...store, website })}
+              />
+              {errors.website && <div className="error">{errors.website}</div>}
+            </InputContainer>
+            <InputContainer title={t('store_settings.facebook')}>
+              <TextInput
+                type="input"
+                value={getInputValue(LinkType.FACEBOOK)}
+                onChange={value =>
+                  handleInputOnChange(LinkType.FACEBOOK, value)
+                }
+              />
+              <div className="info">{facebook}</div>
+            </InputContainer>
+            <InputContainer title={t('store_settings.twitter')}>
+              <TextInput
+                type="input"
+                value={getInputValue(LinkType.TWITTER)}
+                onChange={value => handleInputOnChange(LinkType.TWITTER, value)}
+              />
+              <div className="info">{twitter}</div>
+            </InputContainer>
+            <InputContainer title={t('store_settings.discord')}>
+              <TextInput
+                type="input"
+                value={getInputValue(LinkType.DISCORD)}
+                onChange={value => handleInputOnChange(LinkType.DISCORD, value)}
+              />
+              <div className="info">{discord}</div>
+            </InputContainer>
+          </div>
+          <div className="bottom">
+            <Button
+              onClick={() => onSave(store)}
+              primary
+              disabled={!canSubmit || hasErrors || isSaving}
+              loading={isSaving}
+            >
+              {t('store_settings.save')}
+            </Button>
+            <Button
+              onClick={() => onRevert(address)}
+              disabled={isSaving || !canSubmit}
+            >
+              {t('store_settings.revert')}
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   )
 }

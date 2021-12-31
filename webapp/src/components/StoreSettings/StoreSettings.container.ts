@@ -5,29 +5,39 @@ import { MapStateProps, MapDispatchProps } from './StoreSettings.types'
 import StoreSettings from './StoreSettings'
 import {
   getData as getStoresByOwner,
-  getLocalStore
+  getLocalStore,
+  getLoading as getStoreLoading
 } from '../../modules/store/selectors'
 import { Dispatch } from 'redux'
 import { Store } from '../../modules/store/types'
 import {
   fetchStoreRequest,
+  FETCH_STORE_REQUEST,
   revertLocalStore,
   updateLocalStore,
-  updateStoreRequest
+  updateStoreRequest,
+  UPDATE_STORE_REQUEST
 } from '../../modules/store/actions'
 import { getEmptyLocalStore } from '../../modules/store/utils'
+import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
   const address = getAddress(state)!
-  const baseStore = getStoresByOwner(state)[address!] || getEmptyLocalStore()
-  const store =
-    getLocalStore(state) || getStoresByOwner(state)[address!] || baseStore
+  const savedStore = getStoresByOwner(state)[address!]
+  const emptyStore = getEmptyLocalStore()
+  const localStore = getLocalStore(state)
+  const baseStore = savedStore || emptyStore
+  const store = localStore || savedStore || baseStore
   const canSubmit = JSON.stringify(store) !== JSON.stringify(baseStore)
+  const isLoading = isLoadingType(getStoreLoading(state), FETCH_STORE_REQUEST)
+  const isSaving = isLoadingType(getStoreLoading(state), UPDATE_STORE_REQUEST)
 
   return {
     address,
     store,
-    canSubmit
+    canSubmit,
+    isLoading,
+    isSaving
   }
 }
 
