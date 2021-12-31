@@ -139,6 +139,8 @@
     "store_cover": "Imagen de la tienda",
     "description": "Descripción",
     "website": "Pagina Web",
+    "link_start_with_error": "El link debe comenzar con {value}",
+    "size_error": "El tamaño máximo permitido es de {max}, el archivo seleccionado tiene {current}",
     "facebook": "Handle de Facebook",
     "twitter": "Handle de Twitter",
     "discord": "ID del canal de Discord",

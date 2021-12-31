@@ -139,6 +139,8 @@
     "store_cover": "店铺图片",
     "description": "描述",
     "website": "网站",
+    "link_start_with_error": "链接应以 {value} 开头",
+    "size_error": "允许的最大文件大小为 {max}，您选择的文件具有 {current}",
     "facebook": "处理 Facebook",
     "twitter": "处理 Twitter",
     "discord": "通道编号 Discord",
