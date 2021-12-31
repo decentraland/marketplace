@@ -48,6 +48,7 @@ const CoverPicker = ({ src, onChange }: Props) => {
       <input
         ref={inputRef}
         type="file"
+        accept="image/*"
         onChange={async e => {
           const file = e.target.files?.[0]
 
