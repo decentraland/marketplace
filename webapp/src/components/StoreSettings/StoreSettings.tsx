@@ -11,6 +11,8 @@ import { LinkType, Store } from '../../modules/store/types'
 import { isValidLink, linkStartWiths } from '../../modules/store/utils'
 import './StoreSettings.css'
 
+const MAX_FILE_SIZE = 1000000
+
 const StoreSettings = ({
   address,
   store,
@@ -25,7 +27,11 @@ const StoreSettings = ({
 }: Props) => {
   const { cover, description, website, facebook, twitter, discord } = store
 
-  const [errors, setErrors] = useState<{ [key in keyof Store]?: string }>({})
+  const [coverSize, setCoverSize] = useState<number>()
+
+  const [errors, setErrors] = useState<
+    { [key in keyof Store]?: string } & { size?: string }
+  >({})
 
   useEffect(() => {
     onFetchStore(address)
@@ -34,18 +40,28 @@ const StoreSettings = ({
   useEffect(() => {
     const newErrors: typeof errors = {}
 
-    const validateSocialUrl = (type: LinkType) => {
-      if (store[type] && !isValidLink(type, store[type])) {
-        newErrors[type] = t('store_settings.link_start_with_error', {
-          value: linkStartWiths[type]
-        })
-      }
+    if (website && !isValidLink(LinkType.WEBSITE, website)) {
+      newErrors[LinkType.WEBSITE] = t('store_settings.link_start_with_error', {
+        value: linkStartWiths[LinkType.WEBSITE]
+      })
     }
 
-    validateSocialUrl(LinkType.WEBSITE)
+    if (coverSize !== undefined && coverSize > MAX_FILE_SIZE) {
+      newErrors.size = `Maximum file size allowed is of ${sizeInMbs(
+        MAX_FILE_SIZE
+      )}, the file you selected has ${sizeInMbs(coverSize)}`
+    }
 
     setErrors(newErrors)
-  }, [store])
+
+    function sizeInMbs(size: number) {
+      return (
+        (size / 1000000).toLocaleString(undefined, {
+          maximumFractionDigits: 2
+        }) + 'MB'
+      )
+    }
+  }, [coverSize, website])
 
   const hasErrors = useMemo(
     () => Object.values(errors).some(error => !!error),
@@ -89,14 +105,16 @@ const StoreSettings = ({
             <InputContainer title={t('store_settings.store_cover')}>
               <CoverPicker
                 src={cover}
-                onChange={(src, name) =>
+                onChange={(src, name, size) => {
+                  setCoverSize(size)
                   onChange({
                     ...store,
                     cover: src || '',
                     coverName: name || ''
                   })
-                }
+                }}
               />
+              {errors.size && <div className="error">{errors.size}</div>}
             </InputContainer>
             <InputContainer title={t('store_settings.description')}>
               <TextInput
