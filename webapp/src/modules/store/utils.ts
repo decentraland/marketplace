@@ -1,6 +1,7 @@
 import { LinkType, Store } from './types'
 import { Store as CatalystStore } from '@dcl/schemas'
 import { peerUrl } from '../../lib/environment'
+import { Entity, EntityContentItemReference } from 'dcl-catalyst-commons'
 
 export const getEmptyLocalStore = (): Store => ({
   owner: '',
@@ -13,10 +14,31 @@ export const getEmptyLocalStore = (): Store => ({
   discord: ''
 })
 
-export const toStore = (entity: any): Store => {
-  const metadata: CatalystStore = entity.metadata
+export const toStore = (entity: Entity): Store => {
+  const metadata: CatalystStore | undefined = entity.metadata
+  const content: EntityContentItemReference[] | undefined = entity.content
 
-  const [cover, coverName] = getCoverAndName()
+  if (!metadata) {
+    throw new Error('Metadata not found')
+  }
+
+  let cover = ''
+  let coverName = ''
+
+  const image = metadata.images.find(image => image.name === 'cover')
+
+  const reference =
+    image && content
+      ? content.find((cont: any) => cont.file === image.file)
+      : undefined
+
+  if (reference) {
+    cover = `${peerUrl}/content/contents/${reference.hash}`
+    coverName = reference.file
+  }
+
+  const getLink = (type: LinkType) =>
+    metadata.links.find(link => link.name === type)?.url || ''
 
   return {
     cover,
@@ -28,26 +50,6 @@ export const toStore = (entity: any): Store => {
     discord: getLink(LinkType.DISCORD),
     owner: metadata.owner
   }
-
-  function getCoverAndName(): [string, string] {
-    const image = metadata.images.find(image => image.name === 'cover')
-
-    if (image) {
-      const content = entity.content.find(
-        (cont: any) => cont.file === image.file
-      )
-
-      if (content) {
-        return [`${peerUrl}/content/contents/${content.hash}`, content.file]
-      }
-    }
-
-    return ['', '']
-  }
-
-  function getLink(type: LinkType) {
-    return metadata.links.find(link => link.name === type)?.url || ''
-  }
 }
 
 export const toCatalystStore = (
@@ -55,44 +57,34 @@ export const toCatalystStore = (
   address: string,
   hasDifferentCover: boolean
 ): CatalystStore => {
+  const links: CatalystStore['links'] = []
+
+  const pushLink = (type: LinkType) => {
+    if (store[type]) {
+      links.push({ name: type, url: store[type] })
+    }
+  }
+
+  pushLink(LinkType.WEBSITE)
+  pushLink(LinkType.FACEBOOK)
+  pushLink(LinkType.TWITTER)
+  pushLink(LinkType.DISCORD)
+
+  const images: CatalystStore['images'] = []
+
+  if (store.cover && store.coverName) {
+    hasDifferentCover
+      ? images.push({ name: 'cover', file: `cover/${store.coverName}` })
+      : images.push({ name: 'cover', file: store.coverName })
+  }
+
   return {
     id: `urn:decentraland:marketplace:store:${address}`,
     description: store.description,
-    images: getImages(),
-    links: getLinks(),
+    images,
+    links,
     owner: address,
     version: 1
-  }
-
-  function getLinks() {
-    const links: CatalystStore['links'] = []
-
-    pushLink(LinkType.WEBSITE)
-    pushLink(LinkType.FACEBOOK)
-    pushLink(LinkType.TWITTER)
-    pushLink(LinkType.DISCORD)
-
-    return links
-
-    function pushLink(type: LinkType) {
-      if (store[type]) {
-        links.push({ name: type, url: store[type] })
-      }
-    }
-  }
-
-  function getImages() {
-    let images: CatalystStore['images'] = []
-
-    if (store.cover && store.coverName) {
-      if (hasDifferentCover) {
-        images.push({ name: 'cover', file: `cover/${store.coverName}` })
-      } else {
-        images.push({ name: 'cover', file: store.coverName })
-      }
-    }
-
-    return images
   }
 }
 
