@@ -50,7 +50,7 @@ describe('when reducing the action that signals a revert of the local store', ()
     })
 
     it('should return a state where the local store is null', () => {
-      const action = revertLocalStore('owner')
+      const action = revertLocalStore(mockStore.owner)
       const result = storeReducer(state, action)
 
       expect(result).toStrictEqual({
@@ -69,7 +69,7 @@ describe('when reducing the action that signals a revert of the local store', ()
     })
 
     it('should return a state where the local store is null', () => {
-      const action = revertLocalStore('address')
+      const action = revertLocalStore(mockStore.owner)
       const result = storeReducer(state, action)
 
       expect(result).toStrictEqual({
