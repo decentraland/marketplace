@@ -38,7 +38,7 @@ const AccountBanner = ({ address, store, onBack }: Props) => {
         </div>
       </Container>
       <Column>
-        <Profile address={address} imageOnly inline={false} />
+        <Profile address={address} imageOnly inline={false} size="huge" />
         <div className="profile-name">
           <Profile address={address} textOnly inline={false} />
         </div>
