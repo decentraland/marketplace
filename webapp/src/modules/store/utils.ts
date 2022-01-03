@@ -2,6 +2,7 @@ import { LinkType, Store } from './types'
 import { Store as CatalystStore } from '@dcl/schemas'
 import { peerUrl } from '../../lib/environment'
 import { Entity, EntityContentItemReference } from 'dcl-catalyst-commons'
+import { CatalystClient } from 'dcl-catalyst-client'
 
 export const getEmptyLocalStore = (): Store => ({
   owner: '',
@@ -13,6 +14,15 @@ export const getEmptyLocalStore = (): Store => ({
   twitter: '',
   discord: ''
 })
+
+export const fetchStoreEntity = async (
+  client: CatalystClient,
+  address: string
+): Promise<Entity | null> => {
+  const type: any = 'store'
+  const entities = await client.fetchEntitiesByPointers(type, [address])
+  return entities.length === 0 ? null : entities[0]
+}
 
 export const toStore = (entity: Entity): Store => {
   const metadata: CatalystStore | undefined = entity.metadata
@@ -33,7 +43,7 @@ export const toStore = (entity: Entity): Store => {
       : undefined
 
   if (reference) {
-    cover = `${peerUrl}/content/contents/${reference.hash}`
+    cover = getPeerCoverUrl(reference.hash)
     coverName = reference.file
   }
 
@@ -51,6 +61,9 @@ export const toStore = (entity: Entity): Store => {
     owner: metadata.owner
   }
 }
+
+export const getPeerCoverUrl = (hash: string) =>
+  `${peerUrl}/content/contents/${hash}`
 
 export const toCatalystStore = (
   store: Store,
@@ -79,7 +92,7 @@ export const toCatalystStore = (
   }
 
   return {
-    id: `urn:decentraland:marketplace:store:${address}`,
+    id: getStoreUrn(address),
     description: store.description,
     images,
     links,
@@ -87,6 +100,9 @@ export const toCatalystStore = (
     version: 1
   }
 }
+
+export const getStoreUrn = (address: string) =>
+  `urn:decentraland:marketplace:store:${address}`
 
 export const linkStartWiths: Record<LinkType, string> = {
   [LinkType.WEBSITE]: 'https://',

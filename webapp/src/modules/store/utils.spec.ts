@@ -1,7 +1,7 @@
 import { Store as CatalystStore } from '@dcl/schemas'
 import { Entity } from 'dcl-catalyst-commons'
 import { Store } from './types'
-import { toCatalystStore, toStore } from './utils'
+import { getPeerCoverUrl, getStoreUrn, toCatalystStore, toStore } from './utils'
 
 jest.mock('../../lib/environment', () => ({
   peerUrl: 'http://peer.com'
@@ -88,7 +88,7 @@ describe('when mapping am entity to a store', () => {
 
       mockStore = {
         ...mockStore,
-        cover: 'http://peer.com/content/contents/hash',
+        cover: getPeerCoverUrl('hash'),
         coverName: 'cover/cover-file.png'
       }
     })
@@ -141,7 +141,7 @@ describe('when mapping a store to entity metadata', () => {
 
       mockMetadata = {
         ...mockMetadata,
-        id: 'urn:decentraland:marketplace:store:owner',
+        id: getStoreUrn('owner'),
         links: [
           { name: 'website', url: website },
           { name: 'facebook', url: facebook },
@@ -169,7 +169,7 @@ describe('when mapping a store to entity metadata', () => {
       beforeEach(() => {
         mockMetadata = {
           ...mockMetadata,
-          id: 'urn:decentraland:marketplace:store:owner',
+          id: getStoreUrn('owner'),
           images: [
             {
               name: 'cover',
@@ -188,7 +188,7 @@ describe('when mapping a store to entity metadata', () => {
       beforeEach(() => {
         mockMetadata = {
           ...mockMetadata,
-          id: 'urn:decentraland:marketplace:store:owner',
+          id: getStoreUrn('owner'),
           images: [
             {
               name: 'cover',

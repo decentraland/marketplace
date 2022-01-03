@@ -19,7 +19,7 @@ import {
 } from './actions'
 import { getAddress } from '../wallet/selectors'
 import { getData as getStoresByOwner } from './selectors'
-import { toCatalystStore, toStore } from './utils'
+import { fetchStoreEntity, toCatalystStore, toStore } from './utils'
 
 export function* storeSaga(client: CatalystClient) {
   yield takeLatest(FETCH_STORE_REQUEST, handleFetchStoreRequest)
@@ -29,7 +29,11 @@ export function* storeSaga(client: CatalystClient) {
     payload: { address }
   }: FetchStoreRequestAction) {
     try {
-      const storeEntity: Entity | null = yield fetchStoreEntity()
+      const storeEntity: Entity | null = yield call(
+        fetchStoreEntity,
+        client,
+        address
+      )
 
       if (!storeEntity) {
         yield put(fetchStoreFailure('Store not found'))
@@ -38,12 +42,6 @@ export function* storeSaga(client: CatalystClient) {
       }
     } catch (e) {
       yield put(fetchStoreFailure(e.message))
-    }
-
-    async function fetchStoreEntity(): Promise<Entity | null> {
-      const type: any = 'store'
-      const entities = await client.fetchEntitiesByPointers(type, [address])
-      return entities.length === 0 ? null : entities[0]
     }
   }
 
