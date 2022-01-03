@@ -14,12 +14,13 @@ import {
   UPDATE_STORE_REQUEST
 } from './actions'
 import { getAddress } from '../wallet/selectors'
-import { getData as getStoresByOwner } from './selectors'
+import { getStoresByOwner } from './selectors'
 import {
   deployStoreEntity,
   fetchStoreEntity,
   getStoreFromEntity
 } from './utils'
+import { Store } from './types'
 
 export function* storeSaga(client: CatalystClient) {
   yield takeLatest(FETCH_STORE_REQUEST, handleFetchStoreRequest)
@@ -51,7 +52,7 @@ export function* storeSaga(client: CatalystClient) {
     try {
       const identity: AuthIdentity = yield call(getIdentity)
       const address: string = (yield select(getAddress))!
-      const storesByOwner: ReturnType<typeof getStoresByOwner> = yield select(
+      const storesByOwner: Record<string, Store> = yield select(
         getStoresByOwner
       )
 

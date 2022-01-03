@@ -6,7 +6,7 @@ import { RootState } from '../../modules/reducer'
 import { MapStateProps, MapDispatchProps } from './StoreSettings.types'
 import StoreSettings from './StoreSettings'
 import {
-  getData as getStoresByOwner,
+  getStoresByOwner,
   getLocalStore,
   getLoading as getStoreLoading,
   getError

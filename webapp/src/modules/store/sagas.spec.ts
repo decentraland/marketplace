@@ -1,38 +1,54 @@
 import { CatalystClient } from 'dcl-catalyst-client'
 import { Entity } from 'dcl-catalyst-commons'
+import { AuthIdentity } from 'dcl-crypto'
 import { expectSaga } from 'redux-saga-test-plan'
-import { call } from 'redux-saga/effects'
+import { call, select } from 'redux-saga/effects'
+import { getIdentity } from '../identity/utils'
+import { getAddress } from '../wallet/selectors'
 import {
   fetchStoreFailure,
   fetchStoreRequest,
-  fetchStoreSuccess
+  fetchStoreSuccess,
+  updateStoreRequest,
+  updateStoreSuccess
 } from './actions'
 import { storeSaga } from './sagas'
-import { StoreEntityMetadata } from './types'
-import { fetchStoreEntity, getPeerCoverUrl } from './utils'
+import { getStoresByOwner } from './selectors'
+import { Store, StoreEntityMetadata } from './types'
+import {
+  deployStoreEntity,
+  fetchStoreEntity,
+  getEmptyStore,
+  getPeerCoverUrl
+} from './utils'
 
 jest.mock('../../lib/environment', () => ({
   peerUrl: 'http://peer.com'
 }))
 
+let mockAddress: string
+let mockClient: CatalystClient
+let mockStore: Store
+
+beforeEach(() => {
+  mockAddress = 'address'
+  mockClient = new CatalystClient('some-url', 'some-origin')
+  mockStore = getEmptyStore()
+})
+
 describe('when handling the fetch of a user store', () => {
-  const address = 'address'
-
-  let client: CatalystClient
-
-  beforeEach(() => {
-    client = new CatalystClient('some-url', 'some-origin')
-  })
-
   describe('when fetch store entity fails to return', () => {
     it('should put a fetch store failure action with a not found error', () => {
       const error = new Error('Failed to fetch')
 
-      return expectSaga(storeSaga, client)
+      return expectSaga(storeSaga, mockClient)
         .provide([
-          [call(fetchStoreEntity, client, address), Promise.reject(error)]
+          [
+            call(fetchStoreEntity, mockClient, mockAddress),
+            Promise.reject(error)
+          ]
         ])
-        .dispatch(fetchStoreRequest(address))
+        .dispatch(fetchStoreRequest(mockAddress))
         .put(fetchStoreFailure(error.message))
         .silentRun()
     })
@@ -40,9 +56,9 @@ describe('when handling the fetch of a user store', () => {
 
   describe('when fetch store entity returns null', () => {
     it('should put a fetch store failure action with a not found error', () => {
-      return expectSaga(storeSaga, client)
-        .provide([[call(fetchStoreEntity, client, address), null]])
-        .dispatch(fetchStoreRequest(address))
+      return expectSaga(storeSaga, mockClient)
+        .provide([[call(fetchStoreEntity, mockClient, mockAddress), null]])
+        .dispatch(fetchStoreRequest(mockAddress))
         .put(fetchStoreFailure('Store not found'))
         .silentRun()
     })
@@ -50,10 +66,10 @@ describe('when handling the fetch of a user store', () => {
 
   describe('when fetch store entity returns an entity', () => {
     it('should put a fetch store success action with the entity mapped to a user store', () => {
-      return expectSaga(storeSaga, client)
+      return expectSaga(storeSaga, mockClient)
         .provide([
           [
-            call(fetchStoreEntity, client, address),
+            call(fetchStoreEntity, mockClient, mockAddress),
             {
               id: 'id',
               pointers: ['owner'],
@@ -76,7 +92,7 @@ describe('when handling the fetch of a user store', () => {
             } as Entity
           ]
         ])
-        .dispatch(fetchStoreRequest(address))
+        .dispatch(fetchStoreRequest(mockAddress))
         .put(
           fetchStoreSuccess({
             cover: getPeerCoverUrl('hash'),
@@ -91,5 +107,32 @@ describe('when handling the fetch of a user store', () => {
         )
         .silentRun()
     })
+  })
+})
+
+describe('when handling the update of a store', () => {
+  it('should put an update store success action', () => {
+    const identity = {} as AuthIdentity
+    const storesByOwner = {} as Record<string, Store>
+    return expectSaga(storeSaga, mockClient)
+      .provide([
+        [call(getIdentity), identity],
+        [select(getAddress), mockAddress],
+        [select(getStoresByOwner), {}],
+        [
+          call(
+            deployStoreEntity,
+            mockClient,
+            identity,
+            mockAddress,
+            mockStore,
+            storesByOwner
+          ),
+          {}
+        ]
+      ])
+      .dispatch(updateStoreRequest(mockStore))
+      .put(updateStoreSuccess(mockStore))
+      .silentRun()
   })
 })

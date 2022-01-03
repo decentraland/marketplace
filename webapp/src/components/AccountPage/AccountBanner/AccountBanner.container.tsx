@@ -10,7 +10,7 @@ import {
   FETCH_STORE_REQUEST
 } from '../../../modules/store/actions'
 import {
-  getData as getStoresByOwner,
+  getStoresByOwner,
   getLocalStore,
   getLoading as getStoreLoading
 } from '../../../modules/store/selectors'
