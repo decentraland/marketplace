@@ -1,4 +1,3 @@
-import { Store as CatalystStore } from '@dcl/schemas'
 import { CatalystClient } from 'dcl-catalyst-client'
 import { Entity } from 'dcl-catalyst-commons'
 import { expectSaga } from 'redux-saga-test-plan'
@@ -9,6 +8,7 @@ import {
   fetchStoreSuccess
 } from './actions'
 import { storeSaga } from './sagas'
+import { StoreEntityMetadata } from './types'
 import { fetchStoreEntity, getPeerCoverUrl } from './utils'
 
 jest.mock('../../lib/environment', () => ({
@@ -72,7 +72,7 @@ describe('when handling the fetch of a user store', () => {
                 ],
                 owner: 'owner',
                 version: 1
-              } as CatalystStore
+              } as StoreEntityMetadata
             } as Entity
           ]
         ])

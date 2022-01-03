@@ -10,7 +10,7 @@ import { PageHeader } from '../../PageHeader'
 import { Column } from '../../Layout/Column'
 import { Props } from './AccountBanner.types'
 import { useTimer } from '../../../lib/timer'
-import { isValidLink } from '../../../modules/store/utils'
+import { getIsValidLink } from '../../../modules/store/utils'
 import { LinkType } from '../../../modules/store/types'
 import { shortenAddress } from '../../../modules/wallet/utils'
 import ExternalLinkModal from '../../ExternalLinkModal'
@@ -32,7 +32,7 @@ const AccountBanner = ({
 
   const renderLink = (type: LinkType) =>
     store?.[type] &&
-    isValidLink(type, store[type]) && (
+    getIsValidLink(type, store[type]) && (
       <div
         className={classNames('icon', type)}
         onClick={() => setOpenExternalLinkModal(store[type])}

@@ -1,3 +1,5 @@
+import { Store as CommonsStore } from '@dcl/schemas'
+
 export type Store = {
   owner: string
   cover: string
@@ -15,3 +17,5 @@ export enum LinkType {
   TWITTER = 'twitter',
   DISCORD = 'discord'
 }
+
+export type StoreEntityMetadata = CommonsStore

@@ -8,7 +8,7 @@ import TextInput from './TextInput'
 import { Props } from './StoreSettings.types'
 import { locations } from '../../modules/routing/locations'
 import { LinkType, Store } from '../../modules/store/types'
-import { isValidLink, linkStartWiths } from '../../modules/store/utils'
+import { getIsValidLink, linkStartWiths } from '../../modules/store/utils'
 import './StoreSettings.css'
 
 const MAX_FILE_SIZE = 1000000
@@ -40,7 +40,7 @@ const StoreSettings = ({
   useEffect(() => {
     const newErrors: typeof errors = {}
 
-    if (website && !isValidLink(LinkType.WEBSITE, website)) {
+    if (website && !getIsValidLink(LinkType.WEBSITE, website)) {
       newErrors[LinkType.WEBSITE] = t('store_settings.link_start_with_error', {
         value: linkStartWiths[LinkType.WEBSITE]
       })

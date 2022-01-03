@@ -1,10 +1,15 @@
-import { LinkType, Store } from './types'
-import { Store as CatalystStore } from '@dcl/schemas'
-import { peerUrl } from '../../lib/environment'
-import { Entity, EntityContentItemReference } from 'dcl-catalyst-commons'
 import { CatalystClient } from 'dcl-catalyst-client'
+import { Entity, EntityContentItemReference } from 'dcl-catalyst-commons'
+import { LinkType, Store, StoreEntityMetadata } from './types'
+import { peerUrl } from '../../lib/environment'
 
-export const getEmptyLocalStore = (): Store => ({
+export const getPeerCoverUrl = (hash: string) =>
+  `${peerUrl}/content/contents/${hash}`
+
+export const getStoreUrn = (address: string) =>
+  `urn:decentraland:marketplace:store:${address}`
+
+export const getEmptyStore = (): Store => ({
   owner: '',
   cover: '',
   coverName: '',
@@ -24,8 +29,8 @@ export const fetchStoreEntity = async (
   return entities.length === 0 ? null : entities[0]
 }
 
-export const toStore = (entity: Entity): Store => {
-  const metadata: CatalystStore | undefined = entity.metadata
+export const getStoreFromEntity = (entity: Entity): Store => {
+  const metadata: StoreEntityMetadata | undefined = entity.metadata
   const content: EntityContentItemReference[] | undefined = entity.content
 
   if (!metadata) {
@@ -62,15 +67,12 @@ export const toStore = (entity: Entity): Store => {
   }
 }
 
-export const getPeerCoverUrl = (hash: string) =>
-  `${peerUrl}/content/contents/${hash}`
-
-export const toCatalystStore = (
+export const getEntityMetadataFromStore = (
   store: Store,
   address: string,
   hasDifferentCover: boolean
-): CatalystStore => {
-  const links: CatalystStore['links'] = []
+): StoreEntityMetadata => {
+  const links: StoreEntityMetadata['links'] = []
 
   const pushLink = (type: LinkType) => {
     if (store[type]) {
@@ -83,7 +85,7 @@ export const toCatalystStore = (
   pushLink(LinkType.TWITTER)
   pushLink(LinkType.DISCORD)
 
-  const images: CatalystStore['images'] = []
+  const images: StoreEntityMetadata['images'] = []
 
   if (store.cover && store.coverName) {
     hasDifferentCover
@@ -101,9 +103,6 @@ export const toCatalystStore = (
   }
 }
 
-export const getStoreUrn = (address: string) =>
-  `urn:decentraland:marketplace:store:${address}`
-
 export const linkStartWiths: Record<LinkType, string> = {
   [LinkType.WEBSITE]: 'https://',
   [LinkType.FACEBOOK]: 'https://www.facebook.com/',
@@ -111,7 +110,7 @@ export const linkStartWiths: Record<LinkType, string> = {
   [LinkType.DISCORD]: 'https://discord.com/channels/'
 }
 
-export const isValidLink = (type: LinkType, link: string) => {
+export const getIsValidLink = (type: LinkType, link: string) => {
   switch (type) {
     case LinkType.WEBSITE:
       return link.startsWith(linkStartWiths.website)

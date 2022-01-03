@@ -19,7 +19,7 @@ import {
 } from './actions'
 import { getAddress } from '../wallet/selectors'
 import { getData as getStoresByOwner } from './selectors'
-import { fetchStoreEntity, toCatalystStore, toStore } from './utils'
+import { fetchStoreEntity, getEntityMetadataFromStore, getStoreFromEntity } from './utils'
 
 export function* storeSaga(client: CatalystClient) {
   yield takeLatest(FETCH_STORE_REQUEST, handleFetchStoreRequest)
@@ -38,7 +38,7 @@ export function* storeSaga(client: CatalystClient) {
       if (!storeEntity) {
         yield put(fetchStoreFailure('Store not found'))
       } else {
-        yield put(fetchStoreSuccess(toStore(storeEntity)))
+        yield put(fetchStoreSuccess(getStoreFromEntity(storeEntity)))
       }
     } catch (e) {
       yield put(fetchStoreFailure(e.message))
@@ -55,7 +55,7 @@ export function* storeSaga(client: CatalystClient) {
         getStoresByOwner
       )
       const hasDifferentCover = storesByOwner[address]?.cover !== store.cover
-      const metadata = toCatalystStore(store, address, hasDifferentCover)
+      const metadata = getEntityMetadataFromStore(store, address, hasDifferentCover)
 
       const options: BuildEntityWithoutFilesOptions = {
         type: 'store' as any,
@@ -64,7 +64,15 @@ export function* storeSaga(client: CatalystClient) {
         timestamp: Date.now()
       }
 
-      const files: Map<string, Buffer> = yield getFiles(hasDifferentCover)
+      const files = new Map<string, Buffer>()
+
+      if (store.cover) {
+        const response: Response = yield fetch(store.cover)
+        const arrayBuffer: ArrayBuffer = yield response.arrayBuffer()
+        const key = (hasDifferentCover ? 'cover/' : '') + store.coverName
+
+        files.set(key, Buffer.from(arrayBuffer))
+      }
 
       const entity: DeploymentPreparationData =
         files.size === 0
@@ -78,20 +86,6 @@ export function* storeSaga(client: CatalystClient) {
       yield put(updateStoreSuccess(store))
     } catch (e) {
       yield put(updateStoreFailure(e.message))
-    }
-
-    async function getFiles(hasDifferentCover: boolean) {
-      const files = new Map<string, Buffer>()
-
-      if (store.cover) {
-        const response: Response = await fetch(store.cover)
-        const arrayBuffer: ArrayBuffer = await response.arrayBuffer()
-        const key = (hasDifferentCover ? 'cover/' : '') + store.coverName
-
-        files.set(key, Buffer.from(arrayBuffer))
-      }
-
-      return files
     }
   }
 }

@@ -1,7 +1,11 @@
-import { Store as CatalystStore } from '@dcl/schemas'
 import { Entity } from 'dcl-catalyst-commons'
-import { Store } from './types'
-import { getPeerCoverUrl, getStoreUrn, toCatalystStore, toStore } from './utils'
+import { Store, StoreEntityMetadata } from './types'
+import {
+  getPeerCoverUrl,
+  getStoreUrn,
+  getEntityMetadataFromStore,
+  getStoreFromEntity
+} from './utils'
 
 jest.mock('../../lib/environment', () => ({
   peerUrl: 'http://peer.com'
@@ -12,7 +16,7 @@ const discord = 'http://www.discord.com'
 const twitter = 'http://www.twitter.com'
 const website = 'http://www.website.com'
 
-let mockMetadata: CatalystStore
+let mockMetadata: StoreEntityMetadata
 let mockEntity: Entity
 let mockStore: Store
 
@@ -47,19 +51,19 @@ beforeEach(() => {
   }
 })
 
-describe('when mapping am entity to a store', () => {
+describe('when getting a store from an entity', () => {
   describe('when metadata is not present in the entity', () => {
     it('should throw with metadata not present error', () => {
       const error = 'Metadata not found'
       const entity = { ...mockEntity, metadata: undefined }
 
-      expect(() => toStore(entity)).toThrow(error)
+      expect(() => getStoreFromEntity(entity)).toThrow(error)
     })
   })
 
   describe('when reference cannot be determined from metadata image', () => {
     it('should return a store with cover and coverName empty', () => {
-      expect(toStore(mockEntity)).toEqual(mockStore)
+      expect(getStoreFromEntity(mockEntity)).toEqual(mockStore)
     })
   })
 
@@ -83,7 +87,7 @@ describe('when mapping am entity to a store', () => {
               name: 'cover'
             }
           ]
-        } as CatalystStore
+        } as StoreEntityMetadata
       }
 
       mockStore = {
@@ -94,7 +98,7 @@ describe('when mapping am entity to a store', () => {
     })
 
     it('should return a store with cover and coverName with values', () => {
-      expect(toStore(mockEntity)).toEqual(mockStore)
+      expect(getStoreFromEntity(mockEntity)).toEqual(mockStore)
     })
   })
 
@@ -110,7 +114,7 @@ describe('when mapping am entity to a store', () => {
             { name: 'twitter', url: twitter },
             { name: 'website', url: website }
           ]
-        } as CatalystStore
+        } as StoreEntityMetadata
       }
 
       mockStore = {
@@ -122,13 +126,13 @@ describe('when mapping am entity to a store', () => {
       }
     })
 
-    it('should complete cover and coverName', () => {
-      expect(toStore(mockEntity)).toEqual(mockStore)
+    it('should return a store with cover and coverName with values', () => {
+      expect(getStoreFromEntity(mockEntity)).toEqual(mockStore)
     })
   })
 })
 
-describe('when mapping a store to entity metadata', () => {
+describe('when getting an entity metadata from a store', () => {
   describe('when facebook, discord, twitter and website links are present in the store', () => {
     beforeEach(() => {
       mockStore = {
@@ -152,7 +156,9 @@ describe('when mapping a store to entity metadata', () => {
     })
 
     it('should return entity metadata containing them as links', () => {
-      expect(toCatalystStore(mockStore, 'owner', false)).toEqual(mockMetadata)
+      expect(getEntityMetadataFromStore(mockStore, 'owner', false)).toEqual(
+        mockMetadata
+      )
     })
   })
 
@@ -180,7 +186,9 @@ describe('when mapping a store to entity metadata', () => {
       })
 
       it('should return entity metadata containing an object in the images array with cover as name and bar as file', () => {
-        expect(toCatalystStore(mockStore, 'owner', false)).toEqual(mockMetadata)
+        expect(getEntityMetadataFromStore(mockStore, 'owner', false)).toEqual(
+          mockMetadata
+        )
       })
     })
 
@@ -199,7 +207,9 @@ describe('when mapping a store to entity metadata', () => {
       })
 
       it('should return entity metadata containing an object in the images array with cover as name and cover/bar as file', () => {
-        expect(toCatalystStore(mockStore, 'owner', true)).toEqual(mockMetadata)
+        expect(getEntityMetadataFromStore(mockStore, 'owner', true)).toEqual(
+          mockMetadata
+        )
       })
     })
   })
