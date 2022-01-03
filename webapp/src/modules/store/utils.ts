@@ -1,7 +1,12 @@
-import { CatalystClient } from 'dcl-catalyst-client'
+import {
+  BuildEntityWithoutFilesOptions,
+  CatalystClient,
+  DeploymentPreparationData
+} from 'dcl-catalyst-client'
 import { Entity, EntityContentItemReference } from 'dcl-catalyst-commons'
 import { LinkType, Store, StoreEntityMetadata } from './types'
 import { peerUrl } from '../../lib/environment'
+import { Authenticator, AuthIdentity } from 'dcl-crypto'
 
 export const getPeerCoverUrl = (hash: string) =>
   `${peerUrl}/content/contents/${hash}`
@@ -20,14 +25,7 @@ export const getEmptyStore = (): Store => ({
   discord: ''
 })
 
-export const fetchStoreEntity = async (
-  client: CatalystClient,
-  address: string
-): Promise<Entity | null> => {
-  const type: any = 'store'
-  const entities = await client.fetchEntitiesByPointers(type, [address])
-  return entities.length === 0 ? null : entities[0]
-}
+// Mappings
 
 export const getStoreFromEntity = (entity: Entity): Store => {
   const metadata: StoreEntityMetadata | undefined = entity.metadata
@@ -102,6 +100,64 @@ export const getEntityMetadataFromStore = (
     version: 1
   }
 }
+
+export const getEntityMetadataFilesFromStore = async (
+  store: Store,
+  hasDifferentCover: boolean
+) => {
+  const files = new Map<string, Buffer>()
+
+  if (store.cover) {
+    const response: Response = await fetch(store.cover)
+    const arrayBuffer: ArrayBuffer = await response.arrayBuffer()
+    const key = (hasDifferentCover ? 'cover/' : '') + store.coverName
+
+    files.set(key, Buffer.from(arrayBuffer))
+  }
+
+  return files
+}
+
+// Requests
+
+export const fetchStoreEntity = async (
+  client: CatalystClient,
+  address: string
+): Promise<Entity | null> => {
+  const type: any = 'store'
+  const entities = await client.fetchEntitiesByPointers(type, [address])
+  return entities.length === 0 ? null : entities[0]
+}
+
+export const deployStoreEntity = async (
+  client: CatalystClient,
+  identity: AuthIdentity,
+  address: string,
+  store: Store,
+  storesByOwner: Record<string, Store>
+) => {
+  const hasDifferentCover = storesByOwner[address]?.cover !== store.cover
+  const metadata = getEntityMetadataFromStore(store, address, hasDifferentCover)
+  const files = await getEntityMetadataFilesFromStore(store, hasDifferentCover)
+
+  const options: BuildEntityWithoutFilesOptions = {
+    type: 'store' as any,
+    pointers: [address],
+    metadata,
+    timestamp: Date.now()
+  }
+
+  const entity: DeploymentPreparationData =
+    files.size === 0
+      ? await client.buildEntityWithoutNewFiles(options)
+      : await client.buildEntity({ ...options, files })
+
+  const authChain = Authenticator.signPayload(identity, entity.entityId)
+
+  return client.deployEntity({ ...entity, authChain })
+}
+
+// Validations
 
 export const linkStartWiths: Record<LinkType, string> = {
   [LinkType.WEBSITE]: 'https://',
