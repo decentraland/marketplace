@@ -1,10 +1,6 @@
 import { call, put, select, takeLatest } from 'redux-saga/effects'
-import { AuthIdentity, Authenticator } from 'dcl-crypto'
-import {
-  BuildEntityWithoutFilesOptions,
-  CatalystClient,
-  DeploymentPreparationData
-} from 'dcl-catalyst-client'
+import { AuthIdentity } from 'dcl-crypto'
+import { CatalystClient } from 'dcl-catalyst-client'
 import { Entity } from 'dcl-catalyst-commons'
 import { getIdentity } from '../identity/utils'
 import {
@@ -19,7 +15,11 @@ import {
 } from './actions'
 import { getAddress } from '../wallet/selectors'
 import { getData as getStoresByOwner } from './selectors'
-import { fetchStoreEntity, getEntityMetadataFromStore, getStoreFromEntity } from './utils'
+import {
+  deployStoreEntity,
+  fetchStoreEntity,
+  getStoreFromEntity
+} from './utils'
 
 export function* storeSaga(client: CatalystClient) {
   yield takeLatest(FETCH_STORE_REQUEST, handleFetchStoreRequest)
@@ -54,34 +54,15 @@ export function* storeSaga(client: CatalystClient) {
       const storesByOwner: ReturnType<typeof getStoresByOwner> = yield select(
         getStoresByOwner
       )
-      const hasDifferentCover = storesByOwner[address]?.cover !== store.cover
-      const metadata = getEntityMetadataFromStore(store, address, hasDifferentCover)
 
-      const options: BuildEntityWithoutFilesOptions = {
-        type: 'store' as any,
-        pointers: [address],
-        metadata,
-        timestamp: Date.now()
-      }
-
-      const files = new Map<string, Buffer>()
-
-      if (store.cover) {
-        const response: Response = yield fetch(store.cover)
-        const arrayBuffer: ArrayBuffer = yield response.arrayBuffer()
-        const key = (hasDifferentCover ? 'cover/' : '') + store.coverName
-
-        files.set(key, Buffer.from(arrayBuffer))
-      }
-
-      const entity: DeploymentPreparationData =
-        files.size === 0
-          ? yield client.buildEntityWithoutNewFiles(options)
-          : yield client.buildEntity({ ...options, files })
-
-      const authChain = Authenticator.signPayload(identity, entity.entityId)
-
-      yield client.deployEntity({ ...entity, authChain })
+      yield call(
+        deployStoreEntity,
+        client,
+        identity,
+        address,
+        store,
+        storesByOwner
+      )
 
       yield put(updateStoreSuccess(store))
     } catch (e) {

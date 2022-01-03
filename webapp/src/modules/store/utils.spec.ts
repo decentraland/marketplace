@@ -4,8 +4,12 @@ import {
   getPeerCoverUrl,
   getStoreUrn,
   getEntityMetadataFromStore,
-  getStoreFromEntity
+  getStoreFromEntity,
+  getEntityMetadataFilesFromStore
 } from './utils'
+
+global.fetch = jest.fn()
+const mockFetch = fetch as jest.MockedFunction<typeof fetch>
 
 jest.mock('../../lib/environment', () => ({
   peerUrl: 'http://peer.com'
@@ -132,7 +136,7 @@ describe('when getting a store from an entity', () => {
   })
 })
 
-describe('when getting an entity metadata from a store', () => {
+describe('when getting entity metadata from a store', () => {
   describe('when facebook, discord, twitter and website links are present in the store', () => {
     beforeEach(() => {
       mockStore = {
@@ -209,6 +213,49 @@ describe('when getting an entity metadata from a store', () => {
       it('should return entity metadata containing an object in the images array with cover as name and cover/bar as file', () => {
         expect(getEntityMetadataFromStore(mockStore, 'owner', true)).toEqual(
           mockMetadata
+        )
+      })
+    })
+  })
+})
+
+describe('when getting entity files from store', () => {
+  describe('when the store has no cover', () => {
+    it('should return an empty map', async () => {
+      const result = await getEntityMetadataFilesFromStore(mockStore, false)
+      expect(result).toEqual(new Map<string, Store>())
+    })
+  })
+
+  describe('when the store has cover', () => {
+    beforeEach(() => {
+      mockStore = {
+        ...mockStore,
+        cover: 'some-cover',
+        coverName: 'some-cover-name'
+      }
+
+      mockFetch.mockResolvedValueOnce({
+        arrayBuffer: () => Promise.resolve([])
+      } as any)
+    })
+
+    describe('when the cover is different from what is currently', () => {
+      it('should return a map with an entry with the store coverName prefixed with cover/ as key', async () => {
+        const result = await getEntityMetadataFilesFromStore(mockStore, true)
+        expect(result).toEqual(
+          new Map<string, Buffer>([
+            ['cover/some-cover-name', expect.anything()]
+          ])
+        )
+      })
+    })
+
+    describe('when the cover is not different from what is currently', () => {
+      it('should return a map with an entry with the store coverName as key', async () => {
+        const result = await getEntityMetadataFilesFromStore(mockStore, false)
+        expect(result).toEqual(
+          new Map<string, Buffer>([['some-cover-name', expect.anything()]])
         )
       })
     })
