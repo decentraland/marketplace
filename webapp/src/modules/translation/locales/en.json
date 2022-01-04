@@ -327,11 +327,11 @@
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
   },
   "mint_page": {
-    "title": "Mint {category}",
-    "subtitle": "You are about to mint {name} for {amount}.",
+    "title": "Buy {category}",
+    "subtitle": "You are about to buy {name} for {amount}.",
     "not_for_sale": "{name} is not available for minting, but you can search for it on the {secondary_market_link}.",
     "secondary_market": "secondary market",
-    "mint": "Mint",
+    "action": "Buy",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}."

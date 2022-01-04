@@ -147,7 +147,7 @@ const MintItemModal = (props: Props) => {
           loading={isLoading}
           chainId={item.chainId}
         >
-          {t('mint_page.mint')}
+          {t('mint_page.action')}
         </ChainButton>
       </div>
       <AuthorizationModal
