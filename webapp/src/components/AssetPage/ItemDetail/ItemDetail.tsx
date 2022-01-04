@@ -51,7 +51,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
       }
       box={
         <>
-          <Price asset={item} />
+          {item.isOnSale && <Price asset={item} />}
           <div className="BaseDetail row">
             <Stats title={t('asset_page.stock')}>
               {item.available > 0 ? (
