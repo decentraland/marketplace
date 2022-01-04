@@ -139,12 +139,19 @@
     "store_cover": "店铺图片",
     "description": "描述",
     "website": "网站",
-    "facebook": "Facebook",
-    "twitter": "Twitter",
-    "discord": "Discord",
+    "link_start_with_error": "链接应以 {value} 开头",
+    "size_error": "允许的最大文件大小为 {max}，您选择的文件具有 {current}",
+    "facebook": "处理 Facebook",
+    "twitter": "处理 Twitter",
+    "discord": "通道编号 Discord",
     "save": "救",
     "revert": "恢复",
     "add_cover_picture": "单击此处将图像放入您的商店"
+  },
+  "external_link_modal": {
+    "header": "您将离开Decentraland",
+    "before_link": "通过单击\"确定\"，您将被重定向到：",
+    "after_link": "请注意，该链接不包含任何可疑内容，以免成为攻击的受害者。"
   },
   "sales": {
     "stats": "统计学",

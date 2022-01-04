@@ -141,12 +141,19 @@
     "store_cover": "Store cover",
     "description": "Description",
     "website": "Website",
-    "facebook": "Facebook",
-    "twitter": "Twitter",
-    "discord": "Discord",
+    "link_start_with_error": "Link should start with {value}",
+    "size_error": "Maximum file size allowed is of {max}, the file you selected has {current}",
+    "facebook": "Facebook Handle",
+    "twitter": "Twitter Handle",
+    "discord": "Discord Channel ID",
     "save": "Save",
     "revert": "Revert",
     "add_cover_picture": "Click here to add a cover picture"
+  },
+  "external_link_modal": {
+    "header": "You are exiting Decentraland",
+    "before_link": "By clicking PROCEED, you will be redirected to:",
+    "after_link": "Please check twice that the link has nothing suspicious on it to avoid being the victim of an attack."
   },
   "sales": {
     "stats": "Stats",

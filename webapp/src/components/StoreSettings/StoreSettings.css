@@ -20,3 +20,23 @@
 .StoreSettings > .bottom {
   margin-top: 48px;
 }
+
+.StoreSettings .InputContainer .error {
+  position: absolute;
+  color: var(--error);
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+.StoreSettings .InputContainer .info {
+  position: absolute;
+  color: var(--secondary-text);
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+.StoreSettings .store-request-error {
+  color: var(--error);
+  margin-top: 6px;
+  font-size: 12px;
+}
