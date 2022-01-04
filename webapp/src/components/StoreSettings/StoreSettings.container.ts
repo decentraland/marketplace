@@ -28,7 +28,7 @@ const mapState = (state: RootState): MapStateProps => {
   const emptyStore = getEmptyStore()
   const localStore = getLocalStore(state)
   const baseStore = savedStore || emptyStore
-  const store = localStore || savedStore || baseStore
+  const store = localStore || baseStore
   const canSubmit = JSON.stringify(store) !== JSON.stringify(baseStore)
   const isLoading = isLoadingType(getStoreLoading(state), FETCH_STORE_REQUEST)
   const isSaving = isLoadingType(getStoreLoading(state), UPDATE_STORE_REQUEST)
