@@ -83,7 +83,6 @@ const AssetBrowse = (props: Props) => {
   }, [view, viewInState])
 
   useEffect(() => {
-    console.log(section, view, viewInState, hasFetched)
     if (viewInState === view && !hasFetched) {
       onFetchAssetsFromRoute({
         vendor,
