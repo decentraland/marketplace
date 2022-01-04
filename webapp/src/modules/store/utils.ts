@@ -14,6 +14,9 @@ export const getPeerCoverUrl = (hash: string) =>
 export const getStoreUrn = (address: string) =>
   `urn:decentraland:marketplace:store:${address}`
 
+export const getPrefixedCoverName = (coverName: string) =>
+  coverName.startsWith('cover/') ? coverName : `cover/${coverName}`
+
 export const getEmptyStore = (): Store => ({
   owner: '',
   cover: '',
@@ -67,8 +70,7 @@ export const getStoreFromEntity = (entity: Entity): Store => {
 
 export const getEntityMetadataFromStore = (
   store: Store,
-  address: string,
-  hasDifferentCover: boolean
+  address: string
 ): StoreEntityMetadata => {
   const links: StoreEntityMetadata['links'] = []
 
@@ -86,9 +88,7 @@ export const getEntityMetadataFromStore = (
   const images: StoreEntityMetadata['images'] = []
 
   if (store.cover && store.coverName) {
-    hasDifferentCover
-      ? images.push({ name: 'cover', file: `cover/${store.coverName}` })
-      : images.push({ name: 'cover', file: store.coverName })
+    images.push({ name: 'cover', file: store.coverName })
   }
 
   return {
@@ -101,16 +101,13 @@ export const getEntityMetadataFromStore = (
   }
 }
 
-export const getEntityMetadataFilesFromStore = async (
-  store: Store,
-  hasDifferentCover: boolean
-) => {
+export const getEntityMetadataFilesFromStore = async (store: Store) => {
   const files = new Map<string, Buffer>()
 
   if (store.cover) {
     const response: Response = await fetch(store.cover)
     const arrayBuffer: ArrayBuffer = await response.arrayBuffer()
-    const key = (hasDifferentCover ? 'cover/' : '') + store.coverName
+    const key = store.coverName
 
     files.set(key, Buffer.from(arrayBuffer))
   }
@@ -133,12 +130,10 @@ export const deployStoreEntity = async (
   client: CatalystClient,
   identity: AuthIdentity,
   address: string,
-  store: Store,
-  storesByOwner: Record<string, Store>
+  store: Store
 ) => {
-  const hasDifferentCover = storesByOwner[address]?.cover !== store.cover
-  const metadata = getEntityMetadataFromStore(store, address, hasDifferentCover)
-  const files = await getEntityMetadataFilesFromStore(store, hasDifferentCover)
+  const metadata = getEntityMetadataFromStore(store, address)
+  const files = await getEntityMetadataFilesFromStore(store)
 
   const options: BuildEntityWithoutFilesOptions = {
     type: 'store' as any,

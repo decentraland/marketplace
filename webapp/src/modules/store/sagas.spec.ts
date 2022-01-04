@@ -13,7 +13,6 @@ import {
   updateStoreSuccess
 } from './actions'
 import { storeSaga } from './sagas'
-import { getStoresByOwner } from './selectors'
 import { Store, StoreEntityMetadata } from './types'
 import {
   deployStoreEntity,
@@ -38,7 +37,7 @@ beforeEach(() => {
 
 describe('when handling the fetch of a user store', () => {
   describe('when fetch store entity fails to return', () => {
-    it('should put a fetch store failure action with a not found error', () => {
+    it('should put a fetch store failure action with a failed to fetch', () => {
       const error = new Error('Failed to fetch')
 
       return expectSaga(storeSaga, mockClient)
@@ -65,7 +64,7 @@ describe('when handling the fetch of a user store', () => {
   })
 
   describe('when fetch store entity returns an entity', () => {
-    it('should put a fetch store success action with the entity mapped to a user store', () => {
+    it('should put a fetch store success action with a store', () => {
       return expectSaga(storeSaga, mockClient)
         .provide([
           [
@@ -111,23 +110,14 @@ describe('when handling the fetch of a user store', () => {
 })
 
 describe('when handling the update of a store', () => {
-  it('should put an update store success action', () => {
+  it('should put an update store success action with the provided store', () => {
     const identity = {} as AuthIdentity
-    const storesByOwner = {} as Record<string, Store>
     return expectSaga(storeSaga, mockClient)
       .provide([
         [call(getIdentity), identity],
         [select(getAddress), mockAddress],
-        [select(getStoresByOwner), {}],
         [
-          call(
-            deployStoreEntity,
-            mockClient,
-            identity,
-            mockAddress,
-            mockStore,
-            storesByOwner
-          ),
+          call(deployStoreEntity, mockClient, identity, mockAddress, mockStore),
           {}
         ]
       ])

@@ -130,7 +130,7 @@ describe('when getting a store from an entity', () => {
       }
     })
 
-    it('should return a store with cover and coverName with values', () => {
+    it('should return a store those links in it', () => {
       expect(getStoreFromEntity(mockEntity)).toEqual(mockStore)
     })
   })
@@ -160,7 +160,7 @@ describe('when getting entity metadata from a store', () => {
     })
 
     it('should return entity metadata containing them as links', () => {
-      expect(getEntityMetadataFromStore(mockStore, 'owner', false)).toEqual(
+      expect(getEntityMetadataFromStore(mockStore, 'owner')).toEqual(
         mockMetadata
       )
     })
@@ -173,48 +173,23 @@ describe('when getting entity metadata from a store', () => {
         cover: 'foo',
         coverName: 'bar'
       }
+
+      mockMetadata = {
+        ...mockMetadata,
+        id: getStoreUrn('owner'),
+        images: [
+          {
+            name: 'cover',
+            file: 'bar'
+          }
+        ]
+      }
     })
 
-    describe('when argument for has different covers is false', () => {
-      beforeEach(() => {
-        mockMetadata = {
-          ...mockMetadata,
-          id: getStoreUrn('owner'),
-          images: [
-            {
-              name: 'cover',
-              file: 'bar'
-            }
-          ]
-        }
-      })
-
-      it('should return entity metadata containing an object in the images array with cover as name and bar as file', () => {
-        expect(getEntityMetadataFromStore(mockStore, 'owner', false)).toEqual(
-          mockMetadata
-        )
-      })
-    })
-
-    describe('when argument for has different covers is false', () => {
-      beforeEach(() => {
-        mockMetadata = {
-          ...mockMetadata,
-          id: getStoreUrn('owner'),
-          images: [
-            {
-              name: 'cover',
-              file: 'cover/bar'
-            }
-          ]
-        }
-      })
-
-      it('should return entity metadata containing an object in the images array with cover as name and cover/bar as file', () => {
-        expect(getEntityMetadataFromStore(mockStore, 'owner', true)).toEqual(
-          mockMetadata
-        )
-      })
+    it('should return entity metadata with the file array with an entry', () => {
+      expect(getEntityMetadataFromStore(mockStore, 'owner')).toEqual(
+        mockMetadata
+      )
     })
   })
 })
@@ -222,7 +197,7 @@ describe('when getting entity metadata from a store', () => {
 describe('when getting entity files from store', () => {
   describe('when the store has no cover', () => {
     it('should return an empty map', async () => {
-      const result = await getEntityMetadataFilesFromStore(mockStore, false)
+      const result = await getEntityMetadataFilesFromStore(mockStore)
       expect(result).toEqual(new Map<string, Store>())
     })
   })
@@ -240,24 +215,11 @@ describe('when getting entity files from store', () => {
       } as any)
     })
 
-    describe('when the cover is different from what is currently', () => {
-      it('should return a map with an entry with the store coverName prefixed with cover/ as key', async () => {
-        const result = await getEntityMetadataFilesFromStore(mockStore, true)
-        expect(result).toEqual(
-          new Map<string, Buffer>([
-            ['cover/some-cover-name', expect.anything()]
-          ])
-        )
-      })
-    })
-
-    describe('when the cover is not different from what is currently', () => {
-      it('should return a map with an entry with the store coverName as key', async () => {
-        const result = await getEntityMetadataFilesFromStore(mockStore, false)
-        expect(result).toEqual(
-          new Map<string, Buffer>([['some-cover-name', expect.anything()]])
-        )
-      })
+    it('should return a map with an entry with the store coverName as key', async () => {
+      const result = await getEntityMetadataFilesFromStore(mockStore)
+      expect(result).toEqual(
+        new Map<string, Buffer>([['some-cover-name', expect.anything()]])
+      )
     })
   })
 })

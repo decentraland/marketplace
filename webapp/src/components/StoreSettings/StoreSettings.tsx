@@ -8,7 +8,11 @@ import TextInput from './TextInput'
 import { Props } from './StoreSettings.types'
 import { locations } from '../../modules/routing/locations'
 import { LinkType, Store } from '../../modules/store/types'
-import { getIsValidLink, linkStartWiths } from '../../modules/store/utils'
+import {
+  getIsValidLink,
+  getPrefixedCoverName,
+  linkStartWiths
+} from '../../modules/store/utils'
 import './StoreSettings.css'
 
 const MAX_FILE_SIZE = 1000000
@@ -111,7 +115,7 @@ const StoreSettings = ({
                   onChange({
                     ...store,
                     cover: src || '',
-                    coverName: name || ''
+                    coverName: name ? getPrefixedCoverName(name) : ''
                   })
                 }}
               />
