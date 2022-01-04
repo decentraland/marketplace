@@ -51,7 +51,7 @@ const TransactionHistory = (props: Props) => {
       setIsLoading(true)
       let params: Record<string, string | number> = {
         contractAddress: asset.contractAddress,
-        first: page * ROWS_PER_PAGE,
+        first: ROWS_PER_PAGE,
         skip: (page - 1) * ROWS_PER_PAGE
       }
       if ('tokenId' in asset) {
