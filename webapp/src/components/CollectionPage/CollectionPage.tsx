@@ -13,24 +13,24 @@ import {
   Button,
   Loader,
   Table,
-  Dropdown
+  Dropdown,
+  Mobile,
+  NotMobile
 } from 'decentraland-ui'
-import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Props } from './CollectionPage.types'
-import { AssetImage } from '../AssetImage'
 import { Mana } from '../Mana'
 import { formatMANA } from '../../lib/mana'
 import { Rarity } from '@dcl/schemas'
 import { getContractAddressFromProps } from './utils'
-import { locations } from '../../modules/routing/locations'
 import CollectionProvider from '../CollectionProvider'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import styles from './CollectionPage.module.css'
+import AssetCell from '../OnSaleList/AssetCell'
 
 const CollectionPage = (props: Props) => {
   const { onBack, currentAddress } = props
@@ -75,7 +75,7 @@ const CollectionPage = (props: Props) => {
                           </Row>
                         </Column>
                         {isCollectionOwner && (
-                          <Column align="right">
+                          <Column align="right" className={styles.columnRight}>
                             <Row align="right">
                               <Button
                                 primary
@@ -108,86 +108,86 @@ const CollectionPage = (props: Props) => {
                   <Narrow>
                     <Table basic="very">
                       <Table.Header>
-                        <Table.Row>
-                          <Table.HeaderCell>
-                            {t('global.item')}
-                          </Table.HeaderCell>
-                          <Table.HeaderCell>
-                            {t('global.category')}
-                          </Table.HeaderCell>
-                          <Table.HeaderCell>
-                            {t('global.rarity')}
-                          </Table.HeaderCell>
-                          <Table.HeaderCell>
-                            {t('global.stock')}
-                          </Table.HeaderCell>
-                          <Table.HeaderCell>
-                            {t('global.price')}
-                          </Table.HeaderCell>
-                          {isCollectionOwner && <Table.HeaderCell />}
-                        </Table.Row>
+                        <NotMobile>
+                          <Table.Row>
+                            <Table.HeaderCell>
+                              {t('global.item')}
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                              {t('global.category')}
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                              {t('global.rarity')}
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                              {t('global.stock')}
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                              {t('global.price')}
+                            </Table.HeaderCell>
+                            {isCollectionOwner && <Table.HeaderCell />}
+                          </Table.Row>
+                        </NotMobile>
                       </Table.Header>
                       <Table.Body>
-                        {items.map(item => (
-                          <Table.Row key={item.id} className={styles.row}>
-                            <Table.Cell>
-                              <Link
-                                to={locations.item(
-                                  item.contractAddress,
-                                  item.itemId
-                                )}
-                              >
-                                <div className={styles.firstCell}>
-                                  <div className={styles.imageContainer}>
-                                    <AssetImage asset={item} isSmall />
-                                  </div>
-                                  <div className={styles.title}>
-                                    {item.name}
-                                  </div>
-                                </div>
-                              </Link>
-                            </Table.Cell>
-                            <Table.Cell>
-                              {t(`global.${item.category}`)}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {t(`wearable.rarity.${item.rarity}`)}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {item.available.toLocaleString()}/
-                              {Rarity.getMaxSupply(
-                                item.rarity
-                              ).toLocaleString()}
-                            </Table.Cell>
-                            <Table.Cell>
+                        <Mobile>
+                          {items.map(item => (
+                            <div className="mobile-row">
+                              <AssetCell asset={item} />
                               <Mana network={item.network} inline>
                                 {formatMANA(item.price)}
                               </Mana>
-                            </Table.Cell>
-                            {isCollectionOwner && (
+                            </div>
+                          ))}
+                        </Mobile>
+                        <NotMobile>
+                          {items.map(item => (
+                            <Table.Row key={item.id} className={styles.row}>
                               <Table.Cell>
-                                <Dropdown
-                                  className={styles.ellipsis}
-                                  icon="ellipsis horizontal"
-                                  direction="left"
-                                >
-                                  <Dropdown.Menu>
-                                    <Dropdown.Item
-                                      text={t('collection_page.edit_price')}
-                                      as="a"
-                                      href={builderCollectionUrl}
-                                    />
-                                    <Dropdown.Item
-                                      text={t('collection_page.mint_item')}
-                                      as="a"
-                                      href={builderCollectionUrl}
-                                    />
-                                  </Dropdown.Menu>
-                                </Dropdown>
+                                <AssetCell asset={item} />
                               </Table.Cell>
-                            )}
-                          </Table.Row>
-                        ))}
+                              <Table.Cell>
+                                {t(`global.${item.category}`)}
+                              </Table.Cell>
+                              <Table.Cell>
+                                {t(`wearable.rarity.${item.rarity}`)}
+                              </Table.Cell>
+                              <Table.Cell>
+                                {item.available.toLocaleString()}/
+                                {Rarity.getMaxSupply(
+                                  item.rarity
+                                ).toLocaleString()}
+                              </Table.Cell>
+                              <Table.Cell>
+                                <Mana network={item.network} inline>
+                                  {formatMANA(item.price)}
+                                </Mana>
+                              </Table.Cell>
+                              {isCollectionOwner && (
+                                <Table.Cell>
+                                  <Dropdown
+                                    className={styles.ellipsis}
+                                    icon="ellipsis horizontal"
+                                    direction="left"
+                                  >
+                                    <Dropdown.Menu>
+                                      <Dropdown.Item
+                                        text={t('collection_page.edit_price')}
+                                        as="a"
+                                        href={builderCollectionUrl}
+                                      />
+                                      <Dropdown.Item
+                                        text={t('collection_page.mint_item')}
+                                        as="a"
+                                        href={builderCollectionUrl}
+                                      />
+                                    </Dropdown.Menu>
+                                  </Dropdown>
+                                </Table.Cell>
+                              )}
+                            </Table.Row>
+                          ))}
+                        </NotMobile>
                       </Table.Body>
                     </Table>
                   </Narrow>

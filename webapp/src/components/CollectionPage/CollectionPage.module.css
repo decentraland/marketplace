@@ -37,3 +37,9 @@
 .row:hover .ellipsis {
   visibility: visible;
 }
+
+@media (max-width: 768px) {
+  .columnRight {
+    margin-top: 12px;
+  }
+}
