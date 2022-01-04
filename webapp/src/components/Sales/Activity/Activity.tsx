@@ -101,6 +101,7 @@ const Activity = ({
               </Table.Body>
             </Table>
           </NotMobile>
+          {count === 0 && <div className="empty">{t('global.no_results')}</div>}
           {hasPagination && (
             <div className="pagination">
               <Pagination

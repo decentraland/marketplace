@@ -36,3 +36,10 @@
 .Activity .mobile-row .dcl.mana {
   margin: 0;
 }
+
+.Activity .empty {
+  margin-top: 40px;
+  font-size: 16px;
+  text-align: center;
+  color: var(--secondary-text);
+}
