@@ -335,7 +335,7 @@
     "subtitle": "Estás por comprar {name} por {amount}.",
     "not_for_sale": "{name} no esta disponible, pero puedes buscarlo en el {secondary_market_link}.",
     "secondary_market": "mercado secundario",
-    "mint": "Comprar",
+    "action": "Comprar",
     "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
     "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."

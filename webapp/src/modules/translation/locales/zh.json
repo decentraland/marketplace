@@ -336,7 +336,7 @@
     "subtitle": "您将以{amount}的价格购买{name}。",
     "not_for_sale": "{name} 不可用于铸造，但您可以在 {secondary_market_link} 上搜索它。",
     "secondary_market": "二级市场",
-    "mint": "购买",
+    "action": "购买",
     "no_fingerprint": "无法加载指纹。",
     "is_owner": "您是{name}的所有者。",
     "not_enough_mana": "您没有足够的MANA来购买{name}。"
