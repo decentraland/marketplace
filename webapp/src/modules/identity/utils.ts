@@ -32,8 +32,7 @@ const IDENTITY_ERROR = 'Could not get identity'
 // Helper that always yields a valid identity
 // If the wallet is not connected it will try to connect
 // If the identity is invalid or has not been generated. It will try to generate it
-// TODO: Type this accordingly
-export function* getIdentity(): unknown {
+export function* getIdentity(): Generator<any, AuthIdentity, any> {
   const address: ReturnType<typeof getAddress> = yield select(getAddress)
 
   if (!address) {
