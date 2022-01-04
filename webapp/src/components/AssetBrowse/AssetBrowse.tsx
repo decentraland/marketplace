@@ -75,6 +75,13 @@ const AssetBrowse = (props: Props) => {
     onSetView(view)
   }, [onSetView, view])
 
+  // When the view changes, we unset the hasFetched flag
+  useEffect(() => {
+    if (view !== viewInState) {
+      setHasFetched(false)
+    }
+  }, [view, viewInState])
+
   useEffect(() => {
     if (viewInState === view && !hasFetched) {
       onFetchAssetsFromRoute({
@@ -249,4 +256,3 @@ const AssetBrowse = (props: Props) => {
 }
 
 export default React.memo(AssetBrowse)
-
