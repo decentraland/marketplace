@@ -238,7 +238,8 @@
     "road": "Calle",
     "district": "Distrito",
     "jump_in": "Ingresar",
-    "part_of_estate": "Parte de {estate_name}"
+    "part_of_estate": "Parte de {estate_name}",
+    "sold_out": "Sin Stock"
   },
   "proximity": {
     "adjacent": "Adyacente",
