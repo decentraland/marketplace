@@ -206,8 +206,9 @@ const AssetBrowse = (props: Props) => {
     Sections.decentraland.ENS,
     Sections.decentraland.ON_SALE,
     Sections.decentraland.SALES,
-    Sections.decentraland.BIDS,
-    Sections.decentraland.STORE_SETTINGS
+    Sections.decentraland.BIDS
+    // TODO: Uncomment when Store Settings can be released
+    // Sections.decentraland.STORE_SETTINGS
   ]
 
   return (
