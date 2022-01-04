@@ -10,7 +10,10 @@ export enum SortBy {
   NAME = 'name',
   NEWEST = 'newest',
   RECENTLY_LISTED = 'recently_listed',
-  CHEAPEST = 'cheapest'
+  CHEAPEST = 'cheapest',
+  RECENTLY_REVIEWED = 'recently_reviewed',
+  RECENTLY_SOLD = 'recently_sold',
+  SIZE = 'size'
 }
 
 export enum SortDirection {
@@ -34,4 +37,5 @@ export type BrowseOptions = {
   contracts?: string[]
   address?: string
   network?: Network
+  viewAsGuest?: boolean
 }

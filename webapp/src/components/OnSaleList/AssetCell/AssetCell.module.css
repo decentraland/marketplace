@@ -1,0 +1,23 @@
+.firstCell {
+  display: flex;
+  align-items: center;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 48px;
+  height: 48px;
+  margin-right: 1rem;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.subtitle {
+  font-weight: 400;
+}

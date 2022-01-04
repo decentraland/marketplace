@@ -1,37 +1,13 @@
-.EstateDetail .left-title {
-  flex: 1 1 auto;
-  display: flex;
-  align-items: flex-start;
-}
-
-.EstateDetail .right-title {
-  flex: 1 1 auto;
-  padding-left: 30px;
-  display: flex;
-  justify-content: flex-end;
-}
-
-.EstateDetail .estate-title-name {
-  flex: 0 1 auto;
-  word-break: break-word;
-}
-
-.EstateDetail .estate-title-badge {
-  margin-left: 16px;
-  margin-top: 3px;
-  flex: 0 0 auto;
-}
-
-.AssetImage.dissolved {
+.EstateDetail .AssetImage.dissolved {
   pointer-events: none;
   overflow: hidden;
 }
 
-.AssetImage.dissolved .atlas-wrapper {
+.EstateDetail .AssetImage.dissolved .atlas-wrapper {
   filter: blur(5px);
 }
 
-.dissolved-wrapper {
+.EstateDetail .dissolved-wrapper {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -41,25 +17,11 @@
   align-items: center;
   justify-content: center;
 }
-.dissolved-notice {
+
+.EstateDetail .dissolved-notice {
   background: var(--background);
   padding: 8px;
   border-radius: 8px;
   position: absolute;
   color: var(--text);
-}
-
-.AssetPage .PageHeader {
-  position: relative;
-}
-
-@media (max-width: 768px) {
-  .EstateDetail .estate-title-jump-in {
-    display: none !important;
-  }
-
-  .EstateDetail .right-title {
-    padding-left: 0px;
-    justify-content: flex-start;
-  }
 }

@@ -1,0 +1,42 @@
+.StoreSettings > .top {
+  margin-bottom: 21px;
+}
+
+.StoreSettings > .top .header {
+  font-size: 17px;
+}
+
+.StoreSettings .see-store-as-guest {
+  text-transform: uppercase;
+}
+
+.StoreSettings > .elements {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 560px;
+}
+
+.StoreSettings > .bottom {
+  margin-top: 48px;
+}
+
+.StoreSettings .InputContainer .error {
+  position: absolute;
+  color: var(--error);
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+.StoreSettings .InputContainer .info {
+  position: absolute;
+  color: var(--secondary-text);
+  margin-top: 2px;
+  font-size: 12px;
+}
+
+.StoreSettings .store-request-error {
+  color: var(--error);
+  margin-top: 6px;
+  font-size: 12px;
+}

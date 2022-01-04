@@ -1,0 +1,19 @@
+.filters {
+  display: flex;
+}
+
+.search {
+  flex: 1;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.empty {
+  margin-top: 40px;
+  font-size: 16px;
+  text-align: center;
+  color: var(--secondary-text);
+}

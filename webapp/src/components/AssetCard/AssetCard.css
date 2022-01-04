@@ -59,6 +59,12 @@ a.ui.card.link:hover .meta {
   margin-top: 0px;
 }
 
+.AssetCard .listed-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
 @media (min-width: 768px) and (max-width: 992px) {
   .AssetCard .header {
     display: flex;

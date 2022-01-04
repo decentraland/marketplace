@@ -1,40 +1,31 @@
 import React, { useCallback } from 'react'
-
+import { AssetType } from '../../modules/asset/types'
 import { VendorName } from '../../modules/vendor/types'
-import { getPartners } from '../../modules/vendor/utils'
-import { VendorMenu } from '../Vendor/VendorMenu'
 import { Props } from './AccountSidebar.types'
+import CurrentAccountSidebar from './CurrentAccountSidebar'
+import OtherAccountSidebar from './OtherAccountSidebar'
+import './AccountSidebar.css'
 
-const AccountSidebar = (props: Props) => {
-  const { address, section, onBrowse } = props
-
+const AccountSidebar = ({
+  address,
+  section,
+  isCurrentAccount,
+  onBrowse
+}: Props) => {
   const handleOnBrowse = useCallback(
-    (vendor: VendorName, section: string) => {
-      onBrowse({ vendor, section, address })
+    (vendor: VendorName, section: string, assetType?: AssetType) => {
+      onBrowse({ vendor, section, address, assetType })
     },
     [address, onBrowse]
   )
 
-  const decentraland = VendorName.DECENTRALAND
-
   return (
-    <div className="NFTSidebar">
-      <VendorMenu
-        key={decentraland}
-        address={address}
-        vendor={decentraland}
-        section={section}
-        onClick={section => handleOnBrowse(decentraland, section)}
-      />
-      {getPartners().map(partner => (
-        <VendorMenu
-          key={partner}
-          address={address}
-          vendor={partner}
-          section={section}
-          onClick={section => handleOnBrowse(partner, section)}
-        />
-      ))}
+    <div className="AccountSidebar">
+      {isCurrentAccount ? (
+        <CurrentAccountSidebar section={section} onBrowse={handleOnBrowse} />
+      ) : (
+        <OtherAccountSidebar section={section} />
+      )}
     </div>
   )
 }

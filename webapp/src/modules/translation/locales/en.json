@@ -6,6 +6,7 @@
     "load_more": "Load more",
     "not_found": "Not found",
     "parcel": "Parcel",
+    "parcel_count": "{count} {count, plural, one {Parcel} other {Parcels}}",
     "parcel_with_coords": "Parcel {x},{y}",
     "estate": "Estate",
     "wearable": "Wearable",
@@ -21,7 +22,24 @@
     "search": "Search",
     "apply": "Apply",
     "network": "Network",
-    "issue_number": "Issue Number"
+    "issue_number": "Issue Number",
+    "primary": "Primary",
+    "secondary": "Secondary",
+    "item": "Item",
+    "type": "Type",
+    "sale_type": "Sale type",
+    "sell_price": "Sell price",
+    "no_results": "No results",
+    "category": "Category",
+    "rarity": "Rarity",
+    "stock": "Stock",
+    "price": "Price",
+    "collection": "Collection",
+    "time": "Time",
+    "buyer": "Buyer",
+    "bid": "Bid",
+    "order": "Listing",
+    "mint": "Mint"
   },
   "error_boundary": {
     "message": "Oops! Something went wrong..."
@@ -39,7 +57,7 @@
     "land": "Land",
     "collectibles": "Collectibles",
     "partners": "Partners",
-    "my_assets": "My Assets",
+    "my_store": "My Store",
     "my_bids": "My Bids",
     "activity": "Activity"
   },
@@ -72,7 +90,12 @@
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
     "known_origin": "KnownOrigin",
-    "makers_place": "MakersPlace"
+    "makers_place": "MakersPlace",
+    "collections": "Collections",
+    "on_sale": "On Sale",
+    "sales": "Sales",
+    "bids": "Bids",
+    "store_settings": "Settings"
   },
   "vendor_menu": {
     "no_assets": "No assets",
@@ -81,24 +104,65 @@
   },
   "filters": {
     "type": "Type",
-    "item": "Original creations",
+    "item": "Items available for minting",
     "nft": "Items being resold",
     "name": "Name",
     "newest": "Newest",
     "recently_listed": "Recently listed",
+    "recently_sold": "Recently sold",
     "cheapest": "Cheapest",
     "no_results": "No results were found.",
-    "clear": "Clear filters"
+    "clear": "Clear filters",
+    "recently_reviewed": "Recently reviewed",
+    "size": "Size"
   },
   "home_page": {
     "title": "Decentraland Marketplace",
     "subtitle": "Welcome to the virtual world’s one-stop-shop for the very best digital assets.",
     "get_started": "Start Browsing",
     "learn_more": "Learn More",
-    "home_items": "Newest items",
+    "home_new_items": "Newest items",
+    "home_sold_items": "Latest sales",
     "home_wearables": "Latest listings",
     "home_land": "Parcels and Estates",
     "home_ens": "Names"
+  },
+  "collection_page": {
+    "unlist_from_market": "Unlist from market",
+    "list_on_market": "List on market",
+    "edit_in_builder": "Edit in builder",
+    "on_sale": "On Sale",
+    "edit_price": "Edit price",
+    "mint_item": "Mint item"
+  },
+  "store_settings": {
+    "settings": "Settings",
+    "see_store_as_guest": "See store as guest",
+    "store_cover": "Store cover",
+    "description": "Description",
+    "website": "Website",
+    "link_start_with_error": "Link should start with {value}",
+    "size_error": "Maximum file size allowed is of {max}, the file you selected has {current}",
+    "facebook": "Facebook Handle",
+    "twitter": "Twitter Handle",
+    "discord": "Discord Channel ID",
+    "save": "Save",
+    "revert": "Revert",
+    "add_cover_picture": "Click here to add a cover picture"
+  },
+  "external_link_modal": {
+    "header": "You are exiting Decentraland",
+    "before_link": "By clicking PROCEED, you will be redirected to:",
+    "after_link": "Please check twice that the link has nothing suspicious on it to avoid being the victim of an attack."
+  },
+  "sales": {
+    "stats": "Stats",
+    "total_sales": "Total sales",
+    "total_earnings": "Total earnings",
+    "royalties": "Royalty earnings",
+    "ethereum_earnings": "Ethereum earnings",
+    "polygon_earnings": "Polygon earnings",
+    "activity": "Activity"
   },
   "partners_page": {
     "partners": "Partners",
@@ -132,32 +196,52 @@
     "categories": "Categories",
     "back": "Back"
   },
+  "account_sidebar": {
+    "assets": "ASSETS",
+    "store": "STORE",
+    "originals": "Originals",
+    "originals_detail": "Created by the user",
+    "listings": "Listings",
+    "listings_detail": "Items being resold"
+  },
+  "on_sale_list": {
+    "search": "Search {count} items..."
+  },
+  "collection_list": {
+    "search": "Search {count} collections...",
+    "item_count": "{count} items"
+  },
   "asset_page": {
     "actions": {
       "cancel_sale": "Remove listing",
       "update": "Update price",
       "buy": "Buy",
+      "mint": "Mint",
       "bid": "Bid",
       "see_listing": "See listing",
       "sell": "Sell",
       "transfer": "Transfer",
       "leaving_decentraland": "Leaving Decentraland",
       "leaving_decentraland_description": "You can't publish or update {vendor} assets to the Decentraland Marketplace yet. Do you want to proceed to {vendor_link} to publish it there?",
-      "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace"
+      "leaving_decentraland_disclaimer": "Your NFTs will still be listed in the Decentraland Marketplace",
+      "edit_price": "Edit price",
+      "change_beneficiary": "Change beneficiary",
+      "mint_item": "Mint item"
     },
     "description": "Description",
     "owner": "Owner",
     "creator": "Creator",
     "price": "Price",
     "available": "Available",
+    "stock": "Stock",
     "collection": "Collection",
-    "expires": "Expires in",
+    "expires": "Expires",
     "plaza": "Plaza",
     "road": "Road",
     "district": "District",
-    "jump": "Jump",
-    "in": "In",
-    "part_of_estate": "Part of {estate_name}"
+    "jump_in": "Jump In",
+    "part_of_estate": "Part of {estate_name}",
+    "sold_out": "Sold Out"
   },
   "proximity": {
     "adjacent": "Adjacent",
@@ -174,9 +258,10 @@
     "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it"
   },
   "transaction_history": {
-    "title": "Transaction History",
+    "title": "Latest Sales",
     "from": "From",
     "to": "To",
+    "type": "Type",
     "when": "When",
     "price": "Price"
   },
@@ -244,14 +329,20 @@
     "title": "Buy {category}",
     "subtitle": "You are about to buy {name} for {amount}.",
     "not_for_sale": "{name} is not for sale.",
-    "price_too_high": "Given the current exchange rates buying this {category} will cost you over {percentageIncrease}% its normal price.",
-    "please_wait": "Please wait until prices normalize again",
-    "actual_price": "The price above is an approximation, given current exchange rates you'll end up paying around {computedPrice}",
     "buy": "Buy",
-    "proceed_anyways": "Proceed anyways",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
+  },
+  "mint_page": {
+    "title": "Buy {category}",
+    "subtitle": "You are about to buy {name} for {amount}.",
+    "not_for_sale": "{name} is not available for minting, but you can search for it on the {secondary_market_link}.",
+    "secondary_market": "secondary market",
+    "action": "Buy",
+    "no_fingerprint": "Could not load fingerprint.",
+    "is_owner": "You are the owner of {name}.",
+    "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}."
   },
   "bid_page": {
     "title": "Place a bid",
@@ -283,7 +374,7 @@
   },
   "browse_page": {
     "primary_market_title": "Store",
-    "primary_market_subtitle": "Original creations by users",
+    "primary_market_subtitle": "Items available for minting",
     "secondary_market_title": "Listings",
     "secondary_market_subtitle": "Items being resold"
   },

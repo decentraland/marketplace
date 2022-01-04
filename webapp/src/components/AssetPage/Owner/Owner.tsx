@@ -2,11 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Stats } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
 import { BrowseOptions } from '../../../modules/routing/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
 import { Props } from './Owner.types'
+
 import './Owner.css'
 
 const Owner = (props: Props) => {
@@ -34,20 +36,13 @@ const Owner = (props: Props) => {
   }
 
   return (
-    <div className="Owner">
+    <Stats title={label}>
       <Link to={locations.account(address, browseOptions)}>
-        <label>{label}</label>
-        <div className="blockie-wrapper">
-          <Profile
-            size="large"
-            address={address}
-            imageOnly
-            hasPopup
-            inline={false}
-          />
+        <div className="Owner">
+          <Profile size="huge" address={address} />
         </div>
       </Link>
-    </div>
+    </Stats>
   )
 }
 

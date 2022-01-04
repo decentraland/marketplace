@@ -1,76 +1,76 @@
 import React from 'react'
-import { Container, Header, Stats } from 'decentraland-ui'
+import { Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Rarity } from '@dcl/schemas'
-import { getAssetName } from '../../../modules/asset/utils'
-import { AssetType } from '../../../modules/asset/types'
-import { PageHeader } from '../../PageHeader'
-import { AssetImage } from '../../AssetImage'
-import { Row } from '../../Layout/Row'
-import { Column } from '../../Layout/Column'
-import { Title } from '../Title'
-import { WearableRarity } from '../WearableRarity'
-import { WearableHighlights } from '../WearableHighlights'
-import { Owner } from '../Owner'
-import { Description } from '../Description'
 import { Network } from '../Network'
-import { OrderDetails } from '../OrderDetails'
-import { Actions } from '../Actions'
-import { Bids } from '../Bids'
-import { TransactionHistory } from '../TransactionHistory'
-import { WearableCollection } from '../WearableCollection'
+import { Description } from '../Description'
 import { Props } from './WearableDetail.types'
-import './WearableDetail.css'
+import RarityBadge from '../RarityBadge'
+import { AssetType } from '../../../modules/asset/types'
+import GenderBadge from '../GenderBadge'
+import CategoryBadge from '../CategoryBadge'
+import { Owner } from '../Owner'
+import Collection from '../Collection'
+import Price from '../Price'
+import Expiration from '../Expiration'
+import { Actions } from '../Actions'
+import { BidList } from '../BidList'
+import { TransactionHistory } from '../TransactionHistory'
+import BaseDetail from '../BaseDetail'
+import { AssetImage } from '../../AssetImage'
+import styles from './WearableDetail.module.css'
 
-const WearableDetail = (props: Props) => {
-  const { nft } = props
+const WearableDetail = ({ nft }: Props) => {
   const wearable = nft.data.wearable!
 
   return (
-    <div className="WearableDetail">
-      <PageHeader>
-        <AssetImage asset={nft} isDraggable />
-      </PageHeader>
-      <Container>
-        <Title
-          left={
-            <Header size="large">
-              <div className="text">
-                {getAssetName(nft)}
-                <WearableRarity type={AssetType.NFT} wearable={wearable} />
-              </div>
-            </Header>
-          }
-          right={<Owner asset={nft} />}
-        />
-        <Description text={wearable.description} />
-        <Row>
-          <Column align="left" grow={true}>
+    <BaseDetail
+      asset={nft}
+      assetImage={<AssetImage asset={nft} isDraggable />}
+      isOnSale={!!nft.activeOrderId}
+      badges={
+        <>
+          <RarityBadge rarity={wearable.rarity} assetType={AssetType.NFT} />
+          <CategoryBadge wearable={wearable} assetType={AssetType.NFT} />
+          <GenderBadge wearable={wearable} assetType={AssetType.NFT} />
+        </>
+      }
+      left={
+        <>
+          <Description text={wearable.description} />
+          <div className="BaseDetail row">
+            <Owner asset={nft} />
+            <Collection asset={nft} />
+          </div>
+        </>
+      }
+      box={
+        <>
+          <Price asset={nft} />
+          <div className="BaseDetail row">
+            {nft.issuedId ? (
+              <Stats title={t('global.issue_number')}>
+                <Header>
+                  {Number(nft.issuedId).toLocaleString()}
+                  <span className={styles.issued}>
+                    /{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}
+                  </span>
+                </Header>
+              </Stats>
+            ) : null}
             <Network asset={nft} />
-            <OrderDetails nft={nft} />
-          </Column>
-          <Column align="right">
-            <Actions nft={nft} />
-          </Column>
-        </Row>
-        <Row>
-          <WearableCollection type={AssetType.NFT} asset={nft} />
-          {nft.issuedId ? (
-            <Stats title={t('global.issue_number')}>
-              <Header>
-                {Number(nft.issuedId).toLocaleString()}
-                <span className="issue-number">
-                  /{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}
-                </span>
-              </Header>
-            </Stats>
-          ) : null}
-        </Row>
-        <WearableHighlights type={AssetType.ITEM} wearable={wearable} />
-        <Bids nft={nft} />
-        <TransactionHistory nft={nft} />
-      </Container>
-    </div>
+          </div>
+          <Actions nft={nft} />
+          <Expiration />
+        </>
+      }
+      below={
+        <>
+          <BidList nft={nft} />
+          <TransactionHistory asset={nft} />
+        </>
+      }
+    />
   )
 }
 

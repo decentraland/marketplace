@@ -15,6 +15,14 @@ import {
 } from './sagas'
 import { BrowseOptions, SortBy } from './types'
 
+beforeEach(() => {
+  jest.spyOn(Date, 'now').mockReturnValue(100)
+})
+
+afterEach(() => {
+  jest.clearAllMocks()
+})
+
 describe('when handling the clear filters request action', () => {
   it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter", () => {
     const browseOptions: BrowseOptions = {

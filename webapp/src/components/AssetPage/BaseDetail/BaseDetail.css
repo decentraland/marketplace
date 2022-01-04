@@ -1,0 +1,120 @@
+.BaseDetail .ui.container > .info {
+  width: 100%;
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .BaseDetail .ui.container > .info {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+.BaseDetail .info > .left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  margin-right: 48px;
+}
+
+.BaseDetail .left .badges {
+  margin-top: 15px;
+  display: flex;
+  gap: 8px;
+}
+
+.BaseDetail .right > .box {
+  padding: 20px 24px;
+  min-width: 320px;
+}
+
+.BaseDetail .box .box-children {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.BaseDetail .listed-badge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+}
+
+@media (max-width: 768px) {
+  .BaseDetail .listed-badge {
+    position: absolute;
+    top: 44px;
+    right: 24px;
+  }
+}
+
+.BaseDetail .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Override ui asset image */
+
+.BaseDetail .PageHeader {
+  position: relative;
+}
+
+.BaseDetail .PageHeader > .AssetImage .pixel {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .BaseDetail .PageHeader > .AssetImage {
+    margin-top: 20px;
+  }
+}
+
+.BaseDetail .PageHeader > .AssetImage {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.BaseDetail .PageHeader > .AssetImage .ens-subdomain {
+  font-size: 64px;
+  background-size: 2016px;
+}
+
+.BaseDetail .PageHeader > .AssetImage .ens-subdomain .name {
+  padding: 25px;
+}
+
+.BaseDetail .ui.container > div {
+  margin-bottom: 48px;
+}
+
+/* Override ui stats */
+
+.BaseDetail .dcl.stats + .dcl.stats {
+  margin-left: unset;
+}
+
+.BaseDetail .dcl.stats {
+  display: block;
+  margin-right: 24px;
+  width: unset;
+}
+
+@media (max-width: 768px) {
+  .BaseDetail .dcl.stats {
+    margin-right: unset;
+    margin-bottom: unset;
+  }
+}
+
+.BaseDetail .dcl.stats:nth-last-child(1) {
+  margin-right: unset;
+}
+
+/* Override ui buttons */
+
+.BaseDetail .ui.button + .ui.button {
+  margin-left: unset;
+}

@@ -6,6 +6,7 @@
     "load_more": "Cargar Más",
     "not_found": "No se ha encontrado",
     "parcel": "Parcela",
+    "parcel_count": "{count} {count, plural, one {Parcela} other {Parcelas}}",
     "parcel_with_coords": "Parcela {x},{y}",
     "estate": "Estate",
     "wearable": "Vestimenta",
@@ -21,7 +22,24 @@
     "search": "Buscar",
     "apply": "Aplicar",
     "network": "Red",
-    "issue_number": "Número de emisión"
+    "issue_number": "Número de emisión",
+    "primary": "Primaria",
+    "secondary": "Secundaria",
+    "item": "Item",
+    "type": "Tipo",
+    "sale_type": "Tipo de venta",
+    "sell_price": "Precio de venta",
+    "no_results": "Sin resultados",
+    "category": "Categoria",
+    "rarity": "Rareza",
+    "stock": "Stock",
+    "price": "Precio",
+    "collection": "Colección",
+    "time": "Tiempo",
+    "buyer": "Comprador",
+    "bid": "Oferta",
+    "order": "Clasificado",
+    "mint": "Venta"
   },
   "error_boundary": {
     "message": "Oops! Algo salió mal..."
@@ -39,7 +57,7 @@
     "land": "Land",
     "collectibles": "Coleccionables",
     "partners": "Socios",
-    "my_assets": "Mi Inventario",
+    "my_store": "Mi Tienda",
     "my_bids": "Mis Ofertas",
     "activity": "Actividad"
   },
@@ -70,7 +88,12 @@
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
     "known_origin": "KnownOrigin",
-    "makers_place": "MakersPlace"
+    "makers_place": "MakersPlace",
+    "collections": "Colecciones",
+    "on_sale": "En venta",
+    "sales": "Ventas",
+    "bids": "Ofertas",
+    "store_settings": "Configuración"
   },
   "vendor_menu": {
     "no_assets": "Sin assets",
@@ -84,9 +107,12 @@
     "name": "Nombre",
     "newest": "Más nuevos",
     "recently_listed": "Listados recientemente",
+    "recently_sold": "Vendidos recientemente",
     "cheapest": "Más baratos",
     "no_results": "No se encontraron resultados.",
-    "clear": "Borrar filtros"
+    "clear": "Borrar filtros",
+    "recently_reviewed": "Revisado recientemente",
+    "size": "Tamaño"
   },
   "home_page": {
     "title": "Mercado de Decentraland",
@@ -94,9 +120,47 @@
     "get_started": "Comienza a navegar",
     "learn_more": "Aprende Más",
     "home_items": "Últimos items",
+    "home_sold_items": "Últimas ventas",
     "home_wearables": "Listado recientemente",
     "home_land": "Land",
     "home_ens": "Nombres"
+  },
+  "collection_page": {
+    "unlist_from_market": "Cancelar venta",
+    "list_on_market": "Poner en venta",
+    "edit_in_builder": "Editar en el builder",
+    "on_sale": "En Venta",
+    "edit_price": "Editar precio",
+    "mint_item": "Acuñar item"
+  },
+  "store_settings": {
+    "settings": "Configuración",
+    "see_store_as_guest": "Ver tienda como invitado",
+    "store_cover": "Imagen de la tienda",
+    "description": "Descripción",
+    "website": "Pagina Web",
+    "link_start_with_error": "El link debe comenzar con {value}",
+    "size_error": "El tamaño máximo permitido es de {max}, el archivo seleccionado tiene {current}",
+    "facebook": "Handle de Facebook",
+    "twitter": "Handle de Twitter",
+    "discord": "ID del canal de Discord",
+    "save": "Guardar",
+    "revert": "Revertir",
+    "add_cover_picture": "Haga click aquí para ponerle una imagen a la tienda"
+  },
+  "external_link_modal": {
+    "header": "Estas saliendo de Decentraland",
+    "before_link": "Al hacer clic en ACEPTAR, serás redirigido a:",
+    "after_link": "Por favor, fíjese que el link no contenga nada sospechoso para así no ser víctima de un ataque."
+  },
+  "sales": {
+    "stats": "Estadisticas",
+    "total_sales": "Cantidad de ventas",
+    "total_earnings": "Ganancias totales",
+    "royalties": "Ganancias por regalias",
+    "ethereum_earnings": "Ganancias en Ethereum",
+    "polygon_earnings": "Ganancias en Polygon",
+    "activity": "Actividad"
   },
   "partners_page": {
     "partners": "Socios",
@@ -130,18 +194,37 @@
     "categories": "Categorías",
     "back": "Atrás"
   },
+  "account_sidebar": {
+    "assets": "INVENTARIO",
+    "store": "TIENDA",
+    "originals": "Originales",
+    "originals_detail": "Creaciones del usuario",
+    "listings": "Publicaciones",
+    "listings_detail": "Items en reventa"
+  },
+  "on_sale_list": {
+    "search": "Buscar entre {count} items..."
+  },
+  "collection_list": {
+    "search": "Buscar {count} collecciones...",
+    "item_count": "{count} items"
+  },
   "asset_page": {
     "actions": {
       "cancel_sale": "Borrar publicación",
       "update": "Actualizar precio",
       "buy": "Comprar",
+      "mint": "Comprar",
       "bid": "Ofertar",
       "see_listing": "Ver publicación",
       "sell": "Vender",
       "transfer": "Transferir",
       "leaving_decentraland": "Saliendo de Decentraland",
       "leaving_decentraland_description": "Aún no se pueden publicar o actualizar {vendor} assets en el Marketplace de Decentraland. ¿Quiere proceder a {vendor_link} para publicarlo ahí?",
-      "leaving_decentraland_disclaimer": "Tus NFTs van a listarse en el Marketplace de Decentraland"
+      "leaving_decentraland_disclaimer": "Tus NFTs van a listarse en el Marketplace de Decentraland",
+      "edit_price": "Editar precio",
+      "change_beneficiary": "Cambiar de beneficiario",
+      "mint_item": "Acuñar item"
     },
     "description": "Descripción",
     "owner": "Dueño",
@@ -149,11 +232,14 @@
     "price": "Precio",
     "collection": "Colección",
     "available": "Disponible",
-    "expires": "Expira en",
+    "stock": "Stock",
+    "expires": "Expira",
     "plaza": "Plaza",
     "road": "Calle",
     "district": "Distrito",
-    "part_of_estate": "Parte de {estate_name}"
+    "jump_in": "Ingresar",
+    "part_of_estate": "Parte de {estate_name}",
+    "sold_out": "Sin Stock"
   },
   "proximity": {
     "adjacent": "Adyacente",
@@ -170,9 +256,10 @@
     "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices"
   },
   "transaction_history": {
-    "title": "Historial de Transacciones",
+    "title": "Últimas ventas",
     "from": "Vendedor",
     "to": "Comprador",
+    "type": "Tipo",
     "when": "Fecha",
     "price": "Precio"
   },
@@ -239,11 +326,17 @@
     "title": "Comprar {category}",
     "subtitle": "Estás por comprar {name} por {amount}.",
     "not_for_sale": "{name} no esta en venta.",
-    "price_too_high": "Dados los precios de cambio actuales, comprar {category} te costará un {percentageIncrease}% más de su precio normal",
-    "please_wait": "Por favor espere a que los precios se normalicen nuevamente",
-    "actual_price": "El precio arriba es una aproximación, tomando los precios de cambio actuales terminarás pagando al rededor de {computedPrice}",
     "buy": "Comprar",
-    "proceed_anyways": "Proceder",
+    "no_fingerprint": "No se pudo cargar la identificación del Estate.",
+    "is_owner": "Ya eres el dueño de {name}.",
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
+  },
+  "mint_page": {
+    "title": "Comprar {category}",
+    "subtitle": "Estás por comprar {name} por {amount}.",
+    "not_for_sale": "{name} no esta disponible, pero puedes buscarlo en el {secondary_market_link}.",
+    "secondary_market": "mercado secundario",
+    "action": "Comprar",
     "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
     "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."

@@ -1,0 +1,16 @@
+.CollectionImage {
+  width: 100%;
+  height: 100%;
+}
+
+.CollectionImage .item-row {
+  width: inherit;
+  height: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.CollectionImage .item-row.full-width-image > .AssetImage .image {
+  width: 100%;
+}

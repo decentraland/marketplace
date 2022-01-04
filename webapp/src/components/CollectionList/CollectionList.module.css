@@ -1,0 +1,65 @@
+.filters {
+  display: flex;
+}
+
+.search {
+  flex: 1;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.cardContent {
+  padding: 24px !important;
+}
+
+.detailsContainer {
+  display: flex;
+  align-items: center;
+}
+
+.detailsLeft {
+  margin-right: 1rem;
+}
+
+.image {
+  height: 72px;
+  width: 72px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.name {
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0.30000001192092896px;
+}
+
+.count {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 26px;
+  letter-spacing: -0.20000000298023224px;
+}
+
+.listedBadge {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+}
+
+.empty {
+  margin-top: 40px;
+  font-size: 16px;
+  text-align: center;
+  color: var(--secondary-text);
+}
+
+.link:hover,
+.link {
+  color: unset;
+  font-weight: unset;
+}

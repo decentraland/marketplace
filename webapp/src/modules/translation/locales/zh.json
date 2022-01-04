@@ -6,6 +6,7 @@
     "load_more": "装载更多",
     "not_found": "未找到",
     "parcel": "地块",
+    "parcel_count": "{count, plural, one {地块} other {情节}} {count}",
     "parcel_with_coords": "地块 {x},{y}",
     "estate": "产业",
     "wearable": "可穿戴",
@@ -21,7 +22,24 @@
     "search": "搜寻",
     "apply": "应用",
     "network": "网络",
-    "issue_number": "发行数量"
+    "issue_number": "发行数量",
+    "primary": "主要",
+    "secondary": "二 次",
+    "item": "项目",
+    "type": "类型",
+    "sale_type": "销售类型",
+    "sell_price": "销售价格",
+    "no_results": "无结果",
+    "category": "类别",
+    "rarity": "稀罕",
+    "stock": "股票",
+    "price": "价格",
+    "collection": "珍藏",
+    "time": "时间",
+    "buyer": "买方",
+    "bid": "投标",
+    "order": "清单",
+    "mint": "薄荷"
   },
   "error_boundary": {
     "message": "糟糕！出了点问题......"
@@ -39,7 +57,7 @@
     "land": "土地",
     "collectibles": "收藏品",
     "partners": "伙伴",
-    "my_assets": "我的资产",
+    "my_store": "我的商店",
     "my_bids": "我的出价",
     "activity": "活动"
   },
@@ -70,7 +88,12 @@
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
     "known_origin": "KnownOrigin",
-    "makers_place": "MakersPlace"
+    "makers_place": "MakersPlace",
+    "collections": "收集",
+    "on_sale": "出售",
+    "sales": "销售",
+    "bids": "出价",
+    "store_settings": "配置"
   },
   "vendor_menu": {
     "no_assets": "无资产",
@@ -84,19 +107,60 @@
     "name": "名称",
     "newest": "最新",
     "recently_listed": "最新上市",
+    "recently_sold": "最近售出",
     "cheapest": "最低价",
     "no_results": "未找到结果。",
-    "clear": "清除过滤器"
+    "clear": "清除过滤器",
+    "recently_reviewed": "最近审查",
+    "size": "大小"
   },
   "home_page": {
     "title": "Decentraland Marketplace",
     "subtitle": "欢迎来到虚拟世界的一站式商店，获取最好的数字资产。",
     "get_started": "开始浏览",
     "learn_more": "学习更多",
-    "home_items": "最新商品",
+    "home_new_items": "最新商品",
+    "home_sold_items": "最新销售",
     "home_wearables": "最新上市",
     "home_land": "地块和产业",
     "home_ens": "名称"
+  },
+  "collection_page": {
+    "unlist_from_market": "取消销售",
+    "list_on_market": "待售",
+    "edit_in_builder": "在构建器中编辑",
+    "on_sale": "在售",
+    "edit_price": "编辑价格",
+    "mint_item": "硬币物品"
+  },
+  "store_settings": {
+    "settings": "配置",
+    "see_store_as_guest": "以访客身份查看商店",
+    "store_cover": "店铺图片",
+    "description": "描述",
+    "website": "网站",
+    "link_start_with_error": "链接应以 {value} 开头",
+    "size_error": "允许的最大文件大小为 {max}，您选择的文件具有 {current}",
+    "facebook": "处理 Facebook",
+    "twitter": "处理 Twitter",
+    "discord": "通道编号 Discord",
+    "save": "救",
+    "revert": "恢复",
+    "add_cover_picture": "单击此处将图像放入您的商店"
+  },
+  "external_link_modal": {
+    "header": "您将离开Decentraland",
+    "before_link": "通过单击\"确定\"，您将被重定向到：",
+    "after_link": "请注意，该链接不包含任何可疑内容，以免成为攻击的受害者。"
+  },
+  "sales": {
+    "stats": "统计学",
+    "total_sales": "销售额",
+    "total_earnings": "利润总额",
+    "royalties": "特许权使用费收入",
+    "ethereum_earnings": "Ethereum 收入",
+    "polygon_earnings": "Polygon 收入",
+    "activity": "活动"
   },
   "partners_page": {
     "partners": "伙伴",
@@ -130,18 +194,37 @@
     "categories": "类别",
     "back": "返回"
   },
+  "account_sidebar": {
+    "assets": "资产",
+    "store": "商店",
+    "originals": "源语言",
+    "originals_detail": "用户原创作品",
+    "listings": "出版物",
+    "listings_detail": "正在转售的商品"
+  },
+  "on_sale_list": {
+    "search": "搜索 {count} 项目..."
+  },
+  "collection_list": {
+    "search": "搜索 {count} 个收藏品...",
+    "item_count": "{count} 项"
+  },
   "asset_page": {
     "actions": {
       "cancel_sale": "删除列表",
       "update": "更新价格",
       "buy": "购买",
+      "mint": "购买",
       "bid": "出价",
       "see_listing": "查看清单",
       "sell": "出售",
       "transfer": "转让",
       "leaving_decentraland": "离开Decentraland",
       "leaving_decentraland_description": "您还无法将{vendor}资产发布或更新到Decentraland市场。您是否要继续{vendor_link}在此处发布？",
-      "leaving_decentraland_disclaimer": "您的NFT仍将列在Decentraland市场中"
+      "leaving_decentraland_disclaimer": "您的NFT仍将列在Decentraland市场中",
+      "edit_price": "编辑价格",
+      "change_beneficiary": "变更受益人",
+      "mint_item": "薄荷项目"
     },
     "description": "描述",
     "owner": "持有者",
@@ -149,11 +232,14 @@
     "price": "价格",
     "collection": "珍藏",
     "available": "可用的",
-    "expires": "到期时间",
+    "stock": "股票",
+    "expires": "到期",
     "plaza": "广场",
     "road": "道路",
     "district": "区域",
-    "part_of_estate": "{estate_name}一部分"
+    "jump_in": "进入",
+    "part_of_estate": "{estate_name}一部分",
+    "sold_out": "无库存"
   },
   "proximity": {
     "adjacent": "相邻",
@@ -170,9 +256,10 @@
     "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改，除非您对其进行更新，否则它将不再有效"
   },
   "transaction_history": {
-    "title": "交易记录",
+    "title": "最新销售",
     "from": "从",
     "to": "至",
+    "type": "类型",
     "when": "时间",
     "price": "价格"
   },
@@ -240,11 +327,17 @@
     "title": "购买{category}",
     "subtitle": "您将以{amount}的价格购买{name}。",
     "not_for_sale": "{name}为非卖品",
-    "price_too_high": "鉴于当前的汇率，购买此{category}将花费您超过其正常价格{percentageIncrease}％的费用。",
-    "please_wait": "请等待，直到价格再次正常化",
-    "actual_price": "鉴于当前汇率，您的最终价格约为{computedPrice}，因此上述价格是一个近似值",
     "buy": "购买",
-    "proceed_anyways": "仍然继续",
+    "no_fingerprint": "无法加载指纹。",
+    "is_owner": "您是{name}的所有者。",
+    "not_enough_mana": "您没有足够的MANA来购买{name}。"
+  },
+  "mint_page": {
+    "title": "购买{category}",
+    "subtitle": "您将以{amount}的价格购买{name}。",
+    "not_for_sale": "{name} 不可用于铸造，但您可以在 {secondary_market_link} 上搜索它。",
+    "secondary_market": "二级市场",
+    "action": "购买",
     "no_fingerprint": "无法加载指纹。",
     "is_owner": "您是{name}的所有者。",
     "not_enough_mana": "您没有足够的MANA来购买{name}。"

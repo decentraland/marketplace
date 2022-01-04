@@ -9,14 +9,16 @@ import {
 import { View } from '../../types'
 
 export type HomepageUIState = {
-  [View.HOME_ITEMS]: string[]
+  [View.HOME_NEW_ITEMS]: string[]
+  [View.HOME_SOLD_ITEMS]: string[]
   [View.HOME_WEARABLES]: string[]
   [View.HOME_LAND]: string[]
   [View.HOME_ENS]: string[]
 }
 
 const INITIAL_STATE: HomepageUIState = {
-  [View.HOME_ITEMS]: [],
+  [View.HOME_NEW_ITEMS]: [],
+  [View.HOME_SOLD_ITEMS]: [],
   [View.HOME_WEARABLES]: [],
   [View.HOME_LAND]: [],
   [View.HOME_ENS]: []
@@ -34,10 +36,16 @@ export function homepageReducer(
       const itemIds = items.map(items => items.id)
 
       switch (options.view) {
-        case View.HOME_ITEMS: {
+        case View.HOME_NEW_ITEMS: {
           return {
             ...state,
-            [View.HOME_ITEMS]: itemIds
+            [View.HOME_NEW_ITEMS]: itemIds
+          }
+        }
+        case View.HOME_SOLD_ITEMS: {
+          return {
+            ...state,
+            [View.HOME_SOLD_ITEMS]: itemIds
           }
         }
         default:

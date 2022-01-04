@@ -212,6 +212,11 @@ export const getAssetType = createSelector<
   return assetTypeParam as AssetType
 })
 
+export const getViewAsGuest = createSelector<RootState, string, boolean>(
+  getRouterSearch,
+  search => getURLParam(search, 'viewAsGuest') === 'true'
+)
+
 export const hasFiltersEnabled = createSelector<
   RootState,
   string | undefined,

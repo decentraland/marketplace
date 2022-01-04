@@ -1,0 +1,50 @@
+.CoverPicker .title {
+  color: var(--secondary-text);
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.CoverPicker .empty {
+  height: 100%;
+  border: 1px solid var(--secondary) !important;
+}
+
+.CoverPicker .add-cover {
+  all: unset;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.CoverPicker .watermelon {
+  background-image: url('../../../images/watermelon.svg');
+  width: 64px;
+  height: 64px;
+  margin-bottom: 16px;
+}
+
+.CoverPicker .image-container {
+  position: relative;
+  height: 240px;
+}
+
+.CoverPicker img {
+  border-radius: 10px;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.CoverPicker .buttons {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.CoverPicker .ui.button {
+  min-width: unset;
+  line-height: 1em;
+  padding: 0px;
+  width: 48px;
+  height: 48px;
+}

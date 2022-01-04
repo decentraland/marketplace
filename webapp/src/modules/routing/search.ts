@@ -1,16 +1,22 @@
-import { Network, NFTCategory, WearableCategory } from '@dcl/schemas'
+import {
+  CollectionSortBy,
+  ItemSortBy,
+  Network,
+  NFTCategory,
+  WearableCategory
+} from '@dcl/schemas'
 import { View } from '../ui/types'
 import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
-import { ItemSortBy } from '../vendor/decentraland/item/types'
 import { NFTSortBy } from '../nft/types'
+import { isAccountView } from '../ui/utils'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
 export function getDefaultOptionsByView(view?: View): BrowseOptions {
   return {
-    onlyOnSale: view !== View.ACCOUNT,
-    sortBy: view === View.ACCOUNT ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
+    onlyOnSale: !view || !isAccountView(view),
+    sortBy: view && isAccountView(view) ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
   }
 }
 
@@ -73,6 +79,10 @@ export function getSearchParams(options?: BrowseOptions) {
 
     if (options.network && Object.values(Network).includes(options.network)) {
       params.set('network', options.network)
+    }
+
+    if (options.viewAsGuest !== undefined) {
+      params.set('viewAsGuest', options.viewAsGuest.toString())
     }
   }
   return params
@@ -162,8 +172,25 @@ export function getItemSortBy(sortBy: SortBy): ItemSortBy {
       return ItemSortBy.NEWEST
     case SortBy.RECENTLY_LISTED:
       return ItemSortBy.RECENTLY_REVIEWED
+    case SortBy.RECENTLY_SOLD:
+      return ItemSortBy.RECENTLY_SOLD
     default:
       return ItemSortBy.RECENTLY_REVIEWED
+  }
+}
+
+export function getCollectionSortBy(sortBy: SortBy): CollectionSortBy {
+  switch (sortBy) {
+    case SortBy.NAME:
+      return CollectionSortBy.NAME
+    case SortBy.NEWEST:
+      return CollectionSortBy.NEWEST
+    case SortBy.RECENTLY_REVIEWED:
+      return CollectionSortBy.RECENTLY_REVIEWED
+    case SortBy.SIZE:
+      return CollectionSortBy.SIZE
+    default:
+      return CollectionSortBy.NEWEST
   }
 }
 

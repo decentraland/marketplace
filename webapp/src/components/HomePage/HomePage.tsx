@@ -25,7 +25,8 @@ const HomePage = (props: Props) => {
 
   const sections: Partial<Record<View, Section>> = useMemo(
     () => ({
-      [View.HOME_ITEMS]: Section.WEARABLES,
+      [View.HOME_NEW_ITEMS]: Section.WEARABLES,
+      [View.HOME_SOLD_ITEMS]: Section.WEARABLES,
       [View.HOME_WEARABLES]: Section.WEARABLES,
       [View.HOME_LAND]: Section.LAND,
       [View.HOME_ENS]: Section.ENS
@@ -35,7 +36,8 @@ const HomePage = (props: Props) => {
 
   const assetTypes: Partial<Record<View, AssetType>> = useMemo(
     () => ({
-      [View.HOME_ITEMS]: AssetType.ITEM,
+      [View.HOME_NEW_ITEMS]: AssetType.ITEM,
+      [View.HOME_SOLD_ITEMS]: AssetType.ITEM,
       [View.HOME_WEARABLES]: AssetType.NFT,
       [View.HOME_LAND]: AssetType.NFT,
       [View.HOME_ENS]: AssetType.NFT
@@ -43,22 +45,39 @@ const HomePage = (props: Props) => {
     []
   )
 
+  const sort: Partial<Record<View, SortBy>> = useMemo(
+    () => ({
+      [View.HOME_NEW_ITEMS]: SortBy.RECENTLY_REVIEWED,
+      [View.HOME_SOLD_ITEMS]: SortBy.RECENTLY_SOLD,
+      [View.HOME_WEARABLES]: SortBy.RECENTLY_LISTED,
+      [View.HOME_LAND]: SortBy.RECENTLY_LISTED,
+      [View.HOME_ENS]: SortBy.RECENTLY_LISTED
+    }),
+    []
+  )
+
   const handleGetStarted = useCallback(() => {
-    onNavigate(locations.lands())
+    onNavigate(
+      locations.browse({
+        section: Section.WEARABLES,
+        assetType: AssetType.ITEM
+      })
+    )
   }, [onNavigate])
 
   const handleViewAll = useCallback(
     (view: View) => {
       const section = sections[view]
       const assetType = assetTypes[view]
+      const sortBy = sort[view]
 
       if (Section.LAND === section) {
         onNavigate(locations.lands())
       } else {
-        onNavigate(locations.browse({ section, assetType }))
+        onNavigate(locations.browse({ section, assetType, sortBy }))
       }
     },
-    [sections, assetTypes, onNavigate]
+    [sections, assetTypes, sort, onNavigate]
   )
 
   const vendor = VendorName.DECENTRALAND
@@ -68,12 +87,13 @@ const HomePage = (props: Props) => {
     for (view in homepage) {
       const assetType = assetTypes[view]
       const section = sections[view]
+      const sortBy = sort[view]
       onFetchAssetsFromRoute({
         vendor,
         section,
         view,
         assetType,
-        sortBy: SortBy.RECENTLY_LISTED,
+        sortBy,
         page: 1,
         onlyOnSale: true
       })

@@ -8,6 +8,7 @@ import { locations } from '../../../modules/routing/locations'
 import { AssetType } from '../../../modules/asset/types'
 import { VendorFactory } from '../../../modules/vendor'
 import { Props } from './Actions.types'
+import styles from './Actions.module.css'
 
 const Actions = (props: Props) => {
   const { wallet, nft, order, bids } = props
@@ -27,7 +28,7 @@ const Actions = (props: Props) => {
     (!wallet || !bids.some(bid => bid.bidder === wallet.address))
 
   return (
-    <>
+    <div className={styles.container}>
       {order ? (
         isOwner && canSell ? (
           <>
@@ -35,10 +36,15 @@ const Actions = (props: Props) => {
               as={Link}
               to={locations.sell(contractAddress, tokenId)}
               primary
+              fluid
             >
               {t('asset_page.actions.update')}
             </Button>
-            <Button as={Link} to={locations.cancel(contractAddress, tokenId)}>
+            <Button
+              as={Link}
+              to={locations.cancel(contractAddress, tokenId)}
+              fluid
+            >
               {t('asset_page.actions.cancel_sale')}
             </Button>
           </>
@@ -48,35 +54,54 @@ const Actions = (props: Props) => {
               as={Link}
               to={locations.buy(AssetType.NFT, contractAddress, tokenId)}
               primary
+              fluid
             >
               {t('asset_page.actions.buy')}
             </Button>
             {canBid ? (
-              <Button as={Link} to={locations.bid(contractAddress, tokenId)}>
+              <Button
+                as={Link}
+                to={locations.bid(contractAddress, tokenId)}
+                fluid
+              >
                 {t('asset_page.actions.bid')}
               </Button>
             ) : null}
           </>
         ) : (
-          <Button onClick={() => setShowLeavingSiteModal(true)} primary>
+          <Button onClick={() => setShowLeavingSiteModal(true)} primary fluid>
             {t('asset_page.actions.see_listing')}
           </Button>
         )
       ) : isOwner && canSell ? (
-        <Button as={Link} to={locations.sell(contractAddress, tokenId)} primary>
+        <Button
+          as={Link}
+          to={locations.sell(contractAddress, tokenId)}
+          primary
+          fluid
+        >
           {t('asset_page.actions.sell')}
         </Button>
       ) : isOwner && !canSell ? (
-        <Button onClick={() => setShowLeavingSiteModal(true)} primary>
+        <Button onClick={() => setShowLeavingSiteModal(true)} primary fluid>
           {t('asset_page.actions.sell')}
         </Button>
       ) : canBid ? (
-        <Button as={Link} to={locations.bid(contractAddress, tokenId)} primary>
+        <Button
+          as={Link}
+          to={locations.bid(contractAddress, tokenId)}
+          primary
+          fluid
+        >
           {t('asset_page.actions.bid')}
         </Button>
       ) : null}
       {isOwner && !order ? (
-        <Button as={Link} to={locations.transfer(contractAddress, tokenId)}>
+        <Button
+          as={Link}
+          to={locations.transfer(contractAddress, tokenId)}
+          fluid
+        >
           {t('asset_page.actions.transfer')}
         </Button>
       ) : null}
@@ -126,7 +151,7 @@ const Actions = (props: Props) => {
           </Button>
         </Modal.Actions>
       </Modal>
-    </>
+    </div>
   )
 }
 

@@ -1,21 +1,30 @@
 import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
-import { Bid, ListingStatus, Order } from '@dcl/schemas'
-import { Header, Table, Responsive } from 'decentraland-ui'
+import { Sale } from '@dcl/schemas'
+import {
+  Header,
+  Table,
+  Mobile,
+  NotMobile,
+  Pagination,
+  Loader,
+  Row
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import dateFnsFormat from 'date-fns/format'
 
 import { Mana } from '../../Mana'
 import { locations } from '../../../modules/routing/locations'
-import { VendorFactory } from '../../../modules/vendor'
+import { saleAPI } from '../../../modules/vendor/decentraland'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatMANA } from '../../../lib/mana'
-import { Props, HistoryEvent } from './TransactionHistory.types'
+import { Props } from './TransactionHistory.types'
 import './TransactionHistory.css'
 
 const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000
+const ROWS_PER_PAGE = 12
 
 const formatEventDate = (updatedAt: number) => {
   const newUpdatedAt = new Date(updatedAt)
@@ -28,56 +37,49 @@ const formatDateTitle = (updatedAt: number) => {
   return new Date(updatedAt).toLocaleString()
 }
 
-const sortByUpdatedAt = (a: { updatedAt: number }, b: { updatedAt: number }) =>
-  a.updatedAt > b.updatedAt ? -1 : 1
-
-const toEvent = (orderOrBid: any): HistoryEvent => ({
-  from: orderOrBid.owner! || orderOrBid.seller!,
-  to: orderOrBid.buyer! || orderOrBid.bidder!,
-  price: orderOrBid.price!,
-  updatedAt: orderOrBid.updatedAt!
-})
-
 const TransactionHistory = (props: Props) => {
-  const { nft } = props
+  const { asset } = props
 
-  const [orders, setOrders] = useState([] as Order[])
-  const [bids, setBids] = useState([] as Bid[])
+  const [sales, setSales] = useState([] as Sale[])
+  const [page, setPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the last open one
   useEffect(() => {
-    if (nft) {
-      const { orderService, bidService } = VendorFactory.build(nft.vendor)
-
+    if (asset) {
       setIsLoading(true)
-      Promise.all([
-        orderService.fetchByNFT(nft, ListingStatus.SOLD),
-        bidService ? bidService.fetchByNFT(nft, ListingStatus.SOLD) : []
-      ])
-        .then(([orders, bids]) => {
-          setOrders(orders)
-          setBids(bids)
+      let params: Record<string, string | number> = {
+        contractAddress: asset.contractAddress,
+        first: page * ROWS_PER_PAGE,
+        skip: (page - 1) * ROWS_PER_PAGE
+      }
+      if ('tokenId' in asset) {
+        params.tokenId = asset.tokenId
+      } else {
+        params.itemId = asset.itemId
+      }
+      saleAPI
+        .fetch(params)
+        .then(response => {
+          setSales(response.data)
+          setTotalPages((response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => setIsLoading(false))
         .catch(error => {
           console.error(error)
         })
     }
-  }, [nft, setIsLoading, setOrders, setBids])
+  }, [asset, setIsLoading, setSales, page])
 
-  const events: HistoryEvent[] = [...orders, ...bids]
-    .sort(sortByUpdatedAt)
-    .map(toEvent)
-
-  const network = nft ? nft.network : undefined
+  const network = asset ? asset.network : undefined
 
   return (
     <div className="TransactionHistory">
-      {isLoading ? null : events.length > 0 ? (
+      {isLoading && sales.length === 0 ? null : sales.length > 0 ? (
         <>
           <Header sub>{t('transaction_history.title')}</Header>
-          <Responsive minWidth={Responsive.onlyComputer.minWidth}>
+          <NotMobile>
             <Table basic="very">
               <Table.Header>
                 <Table.Row>
@@ -88,6 +90,9 @@ const TransactionHistory = (props: Props) => {
                     {t('transaction_history.to')}
                   </Table.HeaderCell>
                   <Table.HeaderCell>
+                    {t('transaction_history.type')}
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
                     {t('transaction_history.when')}
                   </Table.HeaderCell>
                   <Table.HeaderCell>
@@ -96,46 +101,59 @@ const TransactionHistory = (props: Props) => {
                 </Table.Row>
               </Table.Header>
 
-              <Table.Body>
-                {events.map((event, index) => (
-                  <Table.Row key={index}>
+              <Table.Body className={isLoading ? 'is-loading' : ''}>
+                {sales.map(sale => (
+                  <Table.Row key={sale.id}>
                     <Table.Cell>
-                      <Link to={locations.account(event.from)}>
-                        <Profile address={event.from} />
+                      <Link to={locations.account(sale.seller)}>
+                        <Profile address={sale.seller} />
                       </Link>
                     </Table.Cell>
                     <Table.Cell>
-                      <Link to={locations.account(event.to)}>
-                        <Profile address={event.to} />
+                      <Link to={locations.account(sale.buyer)}>
+                        <Profile address={sale.buyer} />
                       </Link>
                     </Table.Cell>
-                    <Table.Cell title={formatDateTitle(event.updatedAt)}>
-                      {formatEventDate(event.updatedAt)}
+                    <Table.Cell>{t(`global.${sale.type}`)}</Table.Cell>
+                    <Table.Cell title={formatDateTitle(sale.timestamp)}>
+                      {formatEventDate(sale.timestamp)}
                     </Table.Cell>
                     <Table.Cell>
                       <Mana network={network} inline>
-                        {formatMANA(event.price)}
+                        {formatMANA(sale.price)}
                       </Mana>
                     </Table.Cell>
                   </Table.Row>
                 ))}
+                {isLoading ? <Loader active /> : null}
               </Table.Body>
             </Table>
-          </Responsive>
-          <Responsive maxWidth={Responsive.onlyTablet.maxWidth}>
+          </NotMobile>
+          <Mobile>
             <div className="mobile-tx-history">
-              {events.map((event, index) => (
-                <div className="mobile-tx-history-row" key={index}>
+              {sales.map(sale => (
+                <div className="mobile-tx-history-row" key={sale.id}>
                   <div className="price">
                     <Mana network={network} inline>
-                      {formatMANA(event.price)}
+                      {formatMANA(sale.price)}
                     </Mana>
                   </div>
-                  <div className="when">{formatEventDate(event.updatedAt)}</div>
+                  <div className="when">{formatEventDate(sale.timestamp)}</div>
                 </div>
               ))}
             </div>
-          </Responsive>
+          </Mobile>
+          {totalPages > 1 ? (
+            <Row center>
+              <Pagination
+                activePage={page}
+                totalPages={totalPages}
+                onPageChange={(_event, props) => setPage(+props.activePage!)}
+                firstItem={null}
+                lastItem={null}
+              />
+            </Row>
+          ) : null}
         </>
       ) : null}
     </div>

@@ -11,7 +11,7 @@ import { NFT } from '../../modules/nft/types'
 import { isOwnedBy } from '../../modules/asset/utils'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { BuyNFTModal } from './BuyNFTModal'
-import { BuyItemModal } from './BuyItemModal'
+import { MintItemModal } from './MintItemModal'
 import { Props } from './BuyPage.types'
 import './BuyPage.css'
 
@@ -46,7 +46,7 @@ const BuyPage = (props: Props) => {
                     {...modalProps}
                   />
                 ) : type === AssetType.ITEM ? (
-                  <BuyItemModal item={asset as Item} {...modalProps} />
+                  <MintItemModal item={asset as Item} {...modalProps} />
                 ) : null
               }}
             </AssetProviderPage>

@@ -12,7 +12,7 @@ import { Network, NFTCategory } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
 import { locations } from '../../../modules/routing/locations'
 import { isPartner } from '../../../modules/vendor/utils'
-import { useFingerprint, useComputedPrice } from '../../../modules/nft/hooks'
+import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { AssetAction } from '../../AssetAction'
@@ -34,13 +34,7 @@ const BuyNFTModal = (props: Props) => {
   } = props
 
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
-  const [
-    computedPrice,
-    percentageIncrease,
-    isAboveMaxPercentage
-  ] = useComputedPrice(nft, order)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
-  const [wantsToProceed, setWantsToProceed] = useState(false)
 
   const handleExecuteOrder = useCallback(() => {
     onExecuteOrder(order!, nft, fingerprint)
@@ -68,10 +62,6 @@ const BuyNFTModal = (props: Props) => {
       type: AuthorizationType.ALLOWANCE
     }
   }, [wallet, nft, order])
-
-  const handleToggleWantsToProceed = useCallback(() => {
-    setWantsToProceed(!wantsToProceed)
-  }, [setWantsToProceed, wantsToProceed])
 
   const handleSubmit = useCallback(() => {
     if (hasAuthorization(authorizations, authorization)) {
@@ -119,39 +109,6 @@ const BuyNFTModal = (props: Props) => {
         }}
       />
     )
-  } else if (isPartner(nft.vendor) && computedPrice) {
-    subtitle = (
-      <>
-        <T
-          id={'buy_page.subtitle'}
-          values={{
-            name,
-            amount: <Price network={nft.network} price={order.price} />
-          }}
-        />
-        {isAboveMaxPercentage ? (
-          <div className="error">
-            {t('buy_page.price_too_high', {
-              category: t(`global.${nft.category}`),
-              percentageIncrease
-            })}
-            <br />
-            {t('buy_page.please_wait')}
-          </div>
-        ) : percentageIncrease > 0 ? (
-          <div>
-            <T
-              id="buy_page.actual_price"
-              values={{
-                computedPrice: (
-                  <Price network={nft.network} price={computedPrice} />
-                )
-              }}
-            />
-          </div>
-        ) : null}
-      </>
-    )
   } else {
     subtitle = (
       <T
@@ -174,28 +131,15 @@ const BuyNFTModal = (props: Props) => {
         <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
           {t('global.cancel')}
         </Button>
-
-        {isDisabled ||
-        !isAboveMaxPercentage ||
-        (isAboveMaxPercentage && wantsToProceed) ? (
-          <ChainButton
-            primary
-            disabled={isDisabled || isLoading}
-            onClick={handleSubmit}
-            loading={isLoading}
-            chainId={nft.chainId}
-          >
-            {t('buy_page.buy')}
-          </ChainButton>
-        ) : (
-          <Button
-            primary
-            onClick={handleToggleWantsToProceed}
-            loading={isLoading}
-          >
-            {t('buy_page.proceed_anyways')}
-          </Button>
-        )}
+        <ChainButton
+          primary
+          disabled={isDisabled || isLoading}
+          onClick={handleSubmit}
+          loading={isLoading}
+          chainId={nft.chainId}
+        >
+          {t('buy_page.buy')}
+        </ChainButton>
       </div>
       <AuthorizationModal
         open={showAuthorizationModal}

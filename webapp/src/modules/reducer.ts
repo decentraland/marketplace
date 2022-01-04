@@ -18,6 +18,10 @@ import { proximityReducer as proximity } from './proximity/reducer'
 import { routingReducer as routing } from './routing/reducer'
 import { tileReducer as tile } from './tile/reducer'
 import { uiReducer as ui } from './ui/reducer'
+import { collectionReducer as collection } from './collection/reducer'
+import { storeReducer as store } from './store/reducer'
+import { saleReducer as sale } from './sale/reducer'
+import { identityReducer as identity } from './identity/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({
@@ -37,7 +41,11 @@ export const createRootReducer = (history: History) =>
     translation,
     ui,
     wallet,
-    router: connectRouter(history)
+    router: connectRouter(history),
+    collection,
+    store,
+    sale,
+    identity
   })
 
 export type RootState = ReturnType<ReturnType<typeof createRootReducer>>

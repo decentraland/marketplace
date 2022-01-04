@@ -1,9 +1,28 @@
-import { takeEvery, put, select, call } from 'redux-saga/effects'
-import { push, getLocation } from 'connected-react-router'
-import { NFTCategory } from '@dcl/schemas'
+import {
+  takeEvery,
+  put,
+  select,
+  call,
+  take,
+  delay,
+  race,
+  spawn
+} from 'redux-saga/effects'
+import {
+  push,
+  getLocation,
+  goBack,
+  LOCATION_CHANGE,
+  replace
+} from 'connected-react-router'
+import { NFTCategory, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
-import { BUY_ITEM_SUCCESS, fetchItemsRequest } from '../item/actions'
+import {
+  BUY_ITEM_SUCCESS,
+  fetchItemRequest,
+  fetchItemsRequest
+} from '../item/actions'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
 import { getView } from '../ui/browse/selectors'
@@ -11,14 +30,24 @@ import {
   getIsFullscreen,
   getNetwork,
   getAssetType,
-  getVendor
+  getVendor,
+  getViewAsGuest
 } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
-import { fetchNFTsRequest, TRANSFER_NFT_SUCCESS } from '../nft/actions'
+import {
+  fetchNFTRequest,
+  fetchNFTsRequest,
+  TRANSFER_NFT_SUCCESS
+} from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
-import { MAX_PAGE, PAGE_SIZE, getMaxQuerySize } from '../vendor/api'
+import {
+  MAX_PAGE,
+  PAGE_SIZE,
+  getMaxQuerySize,
+  MAX_QUERY_SIZE
+} from '../vendor/api'
 import { locations } from './locations'
 import {
   getSearchParams,
@@ -26,7 +55,8 @@ import {
   getDefaultOptionsByView,
   getSearchWearableCategory,
   getItemSortBy,
-  getAssetOrderBy
+  getAssetOrderBy,
+  getCollectionSortBy
 } from './search'
 import {
   getPage,
@@ -45,9 +75,21 @@ import {
   FETCH_ASSETS_FROM_ROUTE,
   FetchAssetsFromRouteAction,
   setIsLoadMore,
-  CLEAR_FILTERS
+  CLEAR_FILTERS,
+  GO_BACK,
+  GoBackAction
 } from './actions'
-import { BrowseOptions, Sections } from './types'
+import { BrowseOptions, Sections, SortBy } from './types'
+import { Section } from '../vendor/decentraland'
+import { fetchCollectionsRequest } from '../collection/actions'
+import { COLLECTIONS_PER_PAGE, SALES_PER_PAGE } from './utils'
+import {
+  FetchSalesFailureAction,
+  fetchSalesRequest,
+  FETCH_SALES_FAILURE,
+  FETCH_SALES_SUCCESS
+} from '../sale/actions'
+import { getSales } from '../sale/selectors'
 import {
   CANCEL_ORDER_SUCCESS,
   CREATE_ORDER_SUCCESS,
@@ -63,6 +105,7 @@ export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
   yield takeEvery(BROWSE, handleBrowse)
   yield takeEvery(CLEAR_FILTERS, handleClearFilters)
+  yield takeEvery(GO_BACK, handleGoBack)
   yield takeEvery(
     [
       CREATE_ORDER_SUCCESS,
@@ -101,13 +144,30 @@ function* handleClearFilters() {
   yield put(push(buildBrowseURL(pathname, clearedBrowseOptions)))
 }
 
-function* handleBrowse(action: BrowseAction) {
-  const options: BrowseOptions = yield getNewBrowseOptions(
+export function* handleBrowse(action: BrowseAction) {
+  const options: BrowseOptions = yield call(
+    getNewBrowseOptions,
     action.payload.options
   )
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
+
   yield fetchAssetsFromRoute(options)
   yield put(push(buildBrowseURL(pathname, options)))
+}
+
+function* handleGoBack(action: GoBackAction) {
+  const { defaultLocation } = action.payload
+
+  yield put(goBack())
+
+  const { timeout }: { timeout?: boolean } = yield race({
+    changed: take(LOCATION_CHANGE),
+    timeout: delay(250)
+  })
+
+  if (timeout) {
+    yield put(replace(defaultLocation || locations.root()))
+  }
 }
 
 // ------------------------------------------------
@@ -117,7 +177,14 @@ export function buildBrowseURL(
   pathname: string,
   browseOptions: BrowseOptions
 ): string {
-  const params = getSearchParams(browseOptions)
+  let params: URLSearchParams | undefined
+
+  if (browseOptions.section === Section.ON_SALE) {
+    params = getSearchParams({ section: Section.ON_SALE })
+  } else {
+    params = getSearchParams(browseOptions)
+  }
+
   return params ? `${pathname}?${params.toString()}` : pathname
 }
 
@@ -134,68 +201,84 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const isLoadMore = view === View.LOAD_MORE
 
-  const offset = isLoadMore ? page - 1 : 0
-  const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
-  const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
-
   yield put(setIsLoadMore(isLoadMore))
 
   if (isMap) {
     yield put(setView(view))
   }
-  if (isItems) {
-    // TODO: clean up
-    const isWearableHead =
-      section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
-    const isWearableAccessory =
-      section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
 
-    const wearableCategory = !isWearableAccessory
-      ? getSearchWearableCategory(section!)
-      : undefined
+  switch (section) {
+    case Section.BIDS:
+    case Section.STORE_SETTINGS:
+      break
+    case Section.ON_SALE:
+      yield handleFetchOnSale(address, options.view!)
+      break
+    case Section.SALES:
+      yield spawn(handleFetchSales, address, page)
+      break
+    case Section.COLLECTIONS:
+      yield handleFetchCollections(page, address, sortBy, search)
+      break
+    default:
+      const offset = isLoadMore ? page - 1 : 0
+      const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
+      const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
-    const { wearableRarities, wearableGenders } = options
+      if (isItems) {
+        // TODO: clean up
+        const isWearableHead =
+          section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
+        const isWearableAccessory =
+          section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
 
-    yield put(
-      fetchItemsRequest({
-        view,
-        page,
-        filters: {
-          first,
-          skip,
-          sortBy: getItemSortBy(sortBy),
-          isOnSale: onlyOnSale,
-          creator: address,
-          wearableCategory,
-          isWearableHead,
-          isWearableAccessory,
-          search,
-          rarities: wearableRarities,
-          contractAddress: contracts && contracts[0],
-          wearableGenders
-        }
-      })
-    )
-  } else {
-    const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
-    const category = getCategoryFromSection(section)
-    yield put(
-      fetchNFTsRequest({
-        vendor,
-        view,
-        params: {
-          first,
-          skip,
-          orderBy,
-          orderDirection,
-          onlyOnSale,
-          address,
-          category,
-          search
-        },
-        filters: getFilters(vendor, options) // TODO: move to routing
-      })
-    )
+        const wearableCategory = !isWearableAccessory
+          ? getSearchWearableCategory(section!)
+          : undefined
+
+        const { wearableRarities, wearableGenders } = options
+
+        yield put(
+          fetchItemsRequest({
+            view,
+            page,
+            filters: {
+              first,
+              skip,
+              sortBy: getItemSortBy(sortBy),
+              isOnSale: onlyOnSale,
+              creator: address,
+              wearableCategory,
+              isWearableHead,
+              isWearableAccessory,
+              search,
+              rarities: wearableRarities,
+              contractAddress: contracts && contracts[0],
+              wearableGenders
+            }
+          })
+        )
+      } else {
+        const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
+        const category = getCategoryFromSection(section)
+        yield put(
+          fetchNFTsRequest({
+            vendor,
+            view,
+            params: {
+              first,
+              skip,
+              orderBy,
+              orderDirection,
+              onlyOnSale,
+              address,
+              category,
+              search
+            },
+            filters: getFilters(vendor, options) // TODO: move to routing
+          })
+        )
+      }
   }
 }
 
@@ -219,14 +302,15 @@ export function* getCurrentBrowseOptions(): Generator<
     wearableRarities: yield select(getWearableRarities),
     wearableGenders: yield select(getWearableGenders),
     contracts: yield select(getContracts),
-    network: yield select(getNetwork)
+    network: yield select(getNetwork),
+    viewAsGuest: yield select(getViewAsGuest)
   } as BrowseOptions
 }
 
-function* getNewBrowseOptions(
+export function* getNewBrowseOptions(
   current: BrowseOptions
 ): Generator<unknown, BrowseOptions, any> {
-  let previous = yield getCurrentBrowseOptions()
+  let previous: BrowseOptions = yield getCurrentBrowseOptions()
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
   const vendor = deriveVendor(previous, current)
@@ -237,7 +321,8 @@ function* getNewBrowseOptions(
       onlyOnSale: previous.onlyOnSale,
       sortBy: previous.sortBy,
       isMap: previous.isMap,
-      isFullscreen: previous.isFullscreen
+      isFullscreen: previous.isFullscreen,
+      viewAsGuest: previous.viewAsGuest
     }
   }
 
@@ -249,6 +334,84 @@ function* getNewBrowseOptions(
     view,
     vendor
   }
+}
+
+function* handleFetchOnSale(address: string, view: View) {
+  yield put(
+    fetchItemsRequest({
+      filters: { creator: address, isOnSale: true }
+    })
+  )
+
+  yield put(
+    fetchNFTsRequest({
+      view,
+      vendor: VendorName.DECENTRALAND,
+      params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
+    })
+  )
+}
+
+function* handleFetchSales(address: string, page: number) {
+  yield put(
+    fetchSalesRequest({
+      first: SALES_PER_PAGE,
+      skip: (page - 1) * SALES_PER_PAGE,
+      seller: address,
+      sortBy: SaleSortBy.RECENTLY_SOLD
+    })
+  )
+
+  const result: { failure: FetchSalesFailureAction } = yield race({
+    success: take(FETCH_SALES_SUCCESS),
+    failure: take(FETCH_SALES_FAILURE)
+  })
+
+  if (result.failure) {
+    return
+  }
+
+  const sales: ReturnType<typeof getSales> = yield select(getSales)
+
+  const { itemSales, tokenSales } = sales.reduce(
+    (acc: { itemSales: Sale[]; tokenSales: Sale[] }, sale) => {
+      if (sale.type === SaleType.MINT) {
+        acc.itemSales.push(sale)
+      } else {
+        acc.tokenSales.push(sale)
+      }
+      return acc
+    },
+    { itemSales: [], tokenSales: [] }
+  )
+
+  for (const itemSale of itemSales) {
+    yield put(fetchItemRequest(itemSale.contractAddress, itemSale.itemId!))
+  }
+
+  for (const tokenSale of tokenSales) {
+    yield put(fetchNFTRequest(tokenSale.contractAddress, tokenSale.tokenId))
+  }
+}
+
+function* handleFetchCollections(
+  page: number,
+  creator: string,
+  sortBy: SortBy,
+  search?: string
+) {
+  yield put(
+    fetchCollectionsRequest(
+      {
+        first: COLLECTIONS_PER_PAGE,
+        skip: (page - 1) * COLLECTIONS_PER_PAGE,
+        creator,
+        search,
+        sortBy: getCollectionSortBy(sortBy)
+      },
+      true
+    )
+  )
 }
 
 function* getAddress() {

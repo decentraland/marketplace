@@ -1,0 +1,38 @@
+.Activity {
+  margin-top: 12px;
+  background-color: var(--secondary);
+  border-radius: 10px;
+  padding: 24px;
+}
+
+.Activity .pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.Activity .loader-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+  margin-bottom: 18px;
+}
+
+.Activity .mobile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.Activity .mobile-row:last-child {
+  margin-bottom: 0px;
+}
+
+.Activity .mobile-row a {
+  color: var(--text);
+}
+
+.Activity .mobile-row .dcl.mana {
+  margin: 0;
+}

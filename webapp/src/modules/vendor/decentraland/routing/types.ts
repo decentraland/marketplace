@@ -26,5 +26,11 @@ export enum Section {
   WEARABLES_TIARA = 'wearables_tiara',
   WEARABLES_TOP_HEAD = 'wearables_top_head',
 
-  ENS = 'ens'
+  ENS = 'ens',
+
+  COLLECTIONS = 'collections',
+  ON_SALE = 'on_sale',
+  SALES = 'sales',
+  BIDS = 'bids',
+  STORE_SETTINGS = 'store_settings'
 }

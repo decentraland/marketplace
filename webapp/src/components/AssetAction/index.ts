@@ -1,2 +1,2 @@
-import AssetAction from './AssetAction'
+import AssetAction from './AssetAction.container'
 export { AssetAction }

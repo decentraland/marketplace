@@ -13,6 +13,7 @@ import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { isDevelopment } from '../lib/environment'
+import { GENERATE_IDENTITY_SUCCESS } from './identity/actions'
 
 export const history = require('history').createBrowserHistory()
 
@@ -34,13 +35,22 @@ export function initStore() {
   const sagasMiddleware = createSagasMiddleware()
   const loggerMiddleware = createLogger({
     collapsed: () => true,
-    predicate: (_: any, action) => isDevelopment || action.type.includes('Failure')
+    predicate: (_: any, action) =>
+      isDevelopment || action.type.includes('Failure')
   })
   const transactionMiddleware = createTransactionMiddleware()
   const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
     storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
-    paths: [['ui', 'archivedBidIds']], // array of paths from state to be persisted (optional)
-    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID], // array of actions types that will trigger a SAVE (optional)
+    paths: [
+      ['ui', 'archivedBidIds'],
+      ['identity', 'data']
+    ], // array of paths from state to be persisted (optional)
+    actions: [
+      CLEAR_TRANSACTIONS,
+      ARCHIVE_BID,
+      UNARCHIVE_BID,
+      GENERATE_IDENTITY_SUCCESS
+    ], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   })
   const analyticsMiddleware = createAnalyticsMiddleware(

@@ -2,10 +2,11 @@ import React from 'react'
 
 import { Props } from './PageHeader.types'
 import './PageHeader.css'
+import classNames from 'classnames'
 
-const PageHeader = (props: Props) => (
-  <div className="PageHeader" style={props.style}>
-    {props.children}
+const PageHeader = ({ style, className, children }: Props) => (
+  <div className={classNames('PageHeader', className)} style={style}>
+    {children}
   </div>
 )
 

@@ -1,0 +1,31 @@
+.Bids .center {
+  position: relative;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary-text);
+  margin-bottom: 20px;
+}
+
+.Bids .bids {
+  margin-bottom: 48px;
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .Bids .Bid .image {
+    display: none;
+  }
+  .Bid .wrapper .info .dcl.stats.from {
+    width: 35%;
+  }
+
+  .Bids .Bid .actions {
+    margin-left: 10px;
+  }
+
+  .Bids .Bid .actions .ui.button {
+    width: 116px;
+    min-width: 116px;
+  }
+}

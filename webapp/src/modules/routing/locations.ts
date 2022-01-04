@@ -1,4 +1,5 @@
 import { AssetType } from '../asset/types'
+import { Section } from '../vendor/decentraland'
 import { getSearchParams } from './search'
 import { BrowseOptions } from './types'
 
@@ -6,10 +7,13 @@ export const locations = {
   root: () => '/',
   signIn: () => '/sign-in',
   settings: () => '/settings',
-  partners: () => '/partners',
-  bids: () => '/bids',
-  lands: () => '/lands',
+  lands: (options?: BrowseOptions) => {
+    const params = getSearchParams(options)
+    return params ? `/lands?${params.toString()}` : '/lands'
+  },
   collectibles: () => '/collectibles',
+  collection: (contractAddress: string = ':contractAddress') =>
+    `/collections/${contractAddress}`,
   browse: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
@@ -17,6 +21,11 @@ export const locations = {
   currentAccount: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/account?${params.toString()}` : '/account'
+  },
+  defaultCurrentAccount: function() {
+    return this.currentAccount({
+      section: Section.COLLECTIONS
+    })
   },
   account: (address: string = ':address', options?: BrowseOptions) => {
     const params = getSearchParams(options)
