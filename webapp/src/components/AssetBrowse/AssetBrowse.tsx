@@ -16,7 +16,7 @@ import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './AssetBrowse.types'
 import { ToggleBox } from './ToggleBox'
 import classNames from 'classnames'
-import { isAccountView } from '../../modules/ui/utils'
+import { isAccountView, isLandSection } from '../../modules/ui/utils'
 import OnSaleList from '../OnSaleList'
 import CollectionList from '../CollectionList'
 import Sales from '../Sales'
@@ -124,7 +124,7 @@ const AssetBrowse = (props: Props) => {
 
   const left = (
     <>
-      {!isAccountView(view) && (
+      {!isAccountView(view) && !isLandSection(section) && (
         <ToggleBox
           className="result-type-toggle"
           header={t('filters.type')}
