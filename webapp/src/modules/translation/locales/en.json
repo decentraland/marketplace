@@ -201,8 +201,8 @@
     "store": "STORE",
     "originals": "Originals",
     "originals_detail": "Created by the user",
-    "listings": "Listings",
-    "listings_detail": "Items being resold"
+    "listings": "Collectibles",
+    "listings_detail": "Collected by the user"
   },
   "on_sale_list": {
     "search": "Search {count} items..."

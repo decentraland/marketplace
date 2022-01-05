@@ -199,8 +199,8 @@
     "store": "TIENDA",
     "originals": "Originales",
     "originals_detail": "Creaciones del usuario",
-    "listings": "Publicaciones",
-    "listings_detail": "Items en reventa"
+    "listings": "Coleccionables",
+    "listings_detail": "Adquiridos por el usuario"
   },
   "on_sale_list": {
     "search": "Buscar entre {count} items..."

@@ -199,8 +199,8 @@
     "store": "商店",
     "originals": "源语言",
     "originals_detail": "用户原创作品",
-    "listings": "出版物",
-    "listings_detail": "正在转售的商品"
+    "listings": "收藏品",
+    "listings_detail": "由用户收集"
   },
   "on_sale_list": {
     "search": "搜索 {count} 项目..."
