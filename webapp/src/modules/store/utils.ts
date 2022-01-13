@@ -12,7 +12,7 @@ export const getPeerCoverUrl = (hash: string) =>
   `${peerUrl}/content/contents/${hash}`
 
 export const getStoreUrn = (address: string) =>
-  `urn:decentraland:marketplace:store:${address}`
+  `urn:decentraland:off-chain:marketplace-stores:${address}`
 
 export const getPrefixedCoverName = (coverName: string) =>
   coverName.startsWith('cover/') ? coverName : `cover/${coverName}`
@@ -122,7 +122,8 @@ export const fetchStoreEntity = async (
   address: string
 ): Promise<Entity | null> => {
   const type: any = 'store'
-  const entities = await client.fetchEntitiesByPointers(type, [address])
+  const urn = getStoreUrn(address)
+  const entities = await client.fetchEntitiesByPointers(type, [urn])
   return entities.length === 0 ? null : entities[0]
 }
 
@@ -137,7 +138,7 @@ export const deployStoreEntity = async (
 
   const options: BuildEntityWithoutFilesOptions = {
     type: 'store' as any,
-    pointers: [address],
+    pointers: [getStoreUrn(address)],
     metadata,
     timestamp: Date.now()
   }
