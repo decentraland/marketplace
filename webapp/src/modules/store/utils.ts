@@ -17,7 +17,7 @@ export const getStoreUrn = (address: string) =>
 export const getPrefixedCoverName = (coverName: string) =>
   coverName.startsWith('cover/') ? coverName : `cover/${coverName}`
 
-export const getEmptyStore = (): Store => ({
+export const getEmptyStore = (props: Partial<Store> = {}): Store => ({
   owner: '',
   cover: '',
   coverName: '',
@@ -25,7 +25,8 @@ export const getEmptyStore = (): Store => ({
   website: '',
   facebook: '',
   twitter: '',
-  discord: ''
+  discord: '',
+  ...props
 })
 
 // Mappings

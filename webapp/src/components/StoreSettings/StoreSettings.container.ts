@@ -25,7 +25,7 @@ import { getEmptyStore } from '../../modules/store/utils'
 const mapState = (state: RootState): MapStateProps => {
   const address = getAddress(state)!
   const savedStore = getStoresByOwner(state)[address!]
-  const emptyStore = getEmptyStore()
+  const emptyStore = getEmptyStore({ owner: address })
   const localStore = getLocalStore(state)
   const baseStore = savedStore || emptyStore
   const store = localStore || baseStore

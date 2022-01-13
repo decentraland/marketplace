@@ -54,11 +54,11 @@ describe('when handling the fetch of a user store', () => {
   })
 
   describe('when fetch store entity returns null', () => {
-    it('should put a fetch store failure action with a not found error', () => {
+    it('should put a fetch store success action with an undefined store', () => {
       return expectSaga(storeSaga, mockClient)
         .provide([[call(fetchStoreEntity, mockClient, mockAddress), null]])
         .dispatch(fetchStoreRequest(mockAddress))
-        .put(fetchStoreFailure('Store not found'))
+        .put(fetchStoreSuccess(undefined))
         .silentRun()
     })
   })

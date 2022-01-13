@@ -34,11 +34,11 @@ export function* storeSaga(client: CatalystClient) {
         address
       )
 
-      if (!storeEntity) {
-        yield put(fetchStoreFailure('Store not found'))
-      } else {
-        yield put(fetchStoreSuccess(getStoreFromEntity(storeEntity)))
-      }
+      yield put(
+        fetchStoreSuccess(
+          storeEntity ? getStoreFromEntity(storeEntity) : undefined
+        )
+      )
     } catch (e) {
       yield put(fetchStoreFailure(e.message))
     }
