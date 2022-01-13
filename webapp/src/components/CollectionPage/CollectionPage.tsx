@@ -41,7 +41,7 @@ const CollectionPage = (props: Props) => {
   return (
     <div>
       <Navbar isFullscreen />
-      <Navigation activeTab={NavigationTab.COLLECTIBLES} />
+      <Navigation />
       <Page className={styles.page}>
         <CollectionProvider contractAddress={contractAddress} withItems>
           {({ collection, items, isLoading }) => {
