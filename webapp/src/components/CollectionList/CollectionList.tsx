@@ -71,10 +71,13 @@ const CollectionList = ({
             <div className={styles.empty}>{t('global.no_results')}</div>
           ) : (
             collections.map(collection => (
-              <Card className={styles.card} fluid>
+              <Card
+                key={collection.contractAddress}
+                className={styles.card}
+                fluid
+              >
                 <Link
                   className={styles.link}
-                  key={collection.contractAddress}
                   to={locations.collection(collection.contractAddress)}
                 >
                   <Card.Content className={styles.cardContent}>
