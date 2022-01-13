@@ -32,7 +32,7 @@ let mockStore: Store
 beforeEach(() => {
   mockAddress = 'address'
   mockClient = new CatalystClient('some-url', 'some-origin')
-  mockStore = getEmptyStore()
+  mockStore = getEmptyStore({ owner: mockAddress })
 })
 
 describe('when handling the fetch of a user store', () => {
@@ -116,10 +116,7 @@ describe('when handling the update of a store', () => {
       .provide([
         [call(getIdentity), identity],
         [select(getAddress), mockAddress],
-        [
-          call(deployStoreEntity, mockClient, identity, mockAddress, mockStore),
-          {}
-        ]
+        [call(deployStoreEntity, mockClient, identity, mockStore), {}]
       ])
       .dispatch(updateStoreRequest(mockStore))
       .put(updateStoreSuccess(mockStore))

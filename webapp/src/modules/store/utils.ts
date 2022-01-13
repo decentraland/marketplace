@@ -70,8 +70,7 @@ export const getStoreFromEntity = (entity: Entity): Store => {
 }
 
 export const getEntityMetadataFromStore = (
-  store: Store,
-  address: string
+  store: Store
 ): StoreEntityMetadata => {
   const links: StoreEntityMetadata['links'] = []
 
@@ -92,12 +91,14 @@ export const getEntityMetadataFromStore = (
     images.push({ name: 'cover', file: store.coverName })
   }
 
+  const { owner } = store
+
   return {
-    id: getStoreUrn(address),
+    id: getStoreUrn(owner),
     description: store.description,
     images,
     links,
-    owner: address,
+    owner,
     version: 1
   }
 }
@@ -131,15 +132,15 @@ export const fetchStoreEntity = async (
 export const deployStoreEntity = async (
   client: CatalystClient,
   identity: AuthIdentity,
-  address: string,
   store: Store
 ) => {
-  const metadata = getEntityMetadataFromStore(store, address)
+  const { owner } = store
+  const metadata = getEntityMetadataFromStore(store)
   const files = await getEntityMetadataFilesFromStore(store)
 
   const options: BuildEntityWithoutFilesOptions = {
     type: 'store' as any,
-    pointers: [getStoreUrn(address)],
+    pointers: [getStoreUrn(owner)],
     metadata,
     timestamp: Date.now()
   }
