@@ -16,6 +16,7 @@ export type Props = {
   sortBy?: SortBy
   search: string
   onlyOnSale?: boolean
+  onlySmart?: boolean
   isMap?: boolean
   wearableRarities: Rarity[]
   wearableGenders: WearableGender[]
@@ -34,6 +35,7 @@ export type MapStateProps = Pick<
   | 'sortBy'
   | 'search'
   | 'onlyOnSale'
+  | 'onlySmart'
   | 'isMap'
   | 'wearableRarities'
   | 'wearableGenders'

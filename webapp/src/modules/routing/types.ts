@@ -29,6 +29,7 @@ export type BrowseOptions = {
   section?: string
   sortBy?: SortBy
   onlyOnSale?: boolean
+  onlySmart?: boolean
   isMap?: boolean
   isFullscreen?: boolean
   wearableRarities?: Rarity[]

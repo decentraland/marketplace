@@ -2,7 +2,10 @@ import { connect } from 'react-redux'
 
 import { RootState } from '../../../../modules/reducer'
 import { clearFilters } from '../../../../modules/routing/actions'
-import { hasFiltersEnabled } from '../../../../modules/routing/selectors'
+import {
+  getOnlySmart,
+  hasFiltersEnabled
+} from '../../../../modules/routing/selectors'
 import { getCount } from '../../../../modules/ui/browse/selectors'
 import {
   getSection,
@@ -32,6 +35,7 @@ const mapState = (state: RootState): MapStateProps => ({
   sortBy: getSortBy(state),
   search: getSearch(state),
   onlyOnSale: getOnlyOnSale(state),
+  onlySmart: getOnlySmart(state),
   isMap: getIsMap(state),
   wearableRarities: getWearableRarities(state),
   wearableGenders: getWearableGenders(state),

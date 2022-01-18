@@ -11,7 +11,8 @@ import {
   getIsMap,
   getOnlyOnSale,
   getAssetType,
-  getSection
+  getSection,
+  getOnlySmart
 } from '../../modules/routing/selectors'
 import { getView } from '../../modules/ui/browse/selectors'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
@@ -32,7 +33,8 @@ const mapState = (state: RootState): MapStateProps => ({
     isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST) ||
     isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST),
   assetType: getAssetType(state),
-  viewInState: getView(state)
+  viewInState: getView(state),
+  onlySmart: getOnlySmart(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

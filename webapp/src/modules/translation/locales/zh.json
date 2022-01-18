@@ -185,7 +185,8 @@
     "collection": "珍藏",
     "all_collections": "所有珍藏",
     "network": "网络",
-    "all_networks": "所有网络"
+    "all_networks": "所有网络",
+    "smart_wearables": "智能穿戴"
   },
   "nft_card": {
     "expires_at": "{date}到期"
@@ -304,7 +305,9 @@
       "tiara": "头饰",
       "top_head": "头顶",
       "upper_body": "上半身"
-    }
+    },
+    "smart": "智能穿戴",
+    "smart_badge": "聪明的"
   },
   "sell_page": {
     "title": "待售列表",

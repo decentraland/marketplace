@@ -31,7 +31,8 @@ import {
   getNetwork,
   getAssetType,
   getVendor,
-  getViewAsGuest
+  getViewAsGuest,
+  getOnlySmart
 } from '../routing/selectors'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
@@ -195,7 +196,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const page = options.page!
   const section = options.section!
   const sortBy = options.sortBy!
-  const { search, onlyOnSale, isMap, contracts } = options
+  const { search, onlyOnSale, onlySmart, isMap, contracts } = options
 
   const address = options.address || ((yield getAddress()) as string)
 
@@ -251,6 +252,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               wearableCategory,
               isWearableHead,
               isWearableAccessory,
+              isWearableSmart: onlySmart,
               search,
               rarities: wearableRarities,
               contractAddress: contracts && contracts[0],
@@ -297,6 +299,7 @@ export function* getCurrentBrowseOptions(): Generator<
     sortBy: yield select(getSortBy),
     search: yield select(getSearch),
     onlyOnSale: yield select(getOnlyOnSale),
+    onlySmart: yield select(getOnlySmart),
     isMap: yield select(getIsMap),
     isFullscreen: yield select(getIsFullscreen),
     wearableRarities: yield select(getWearableRarities),
@@ -452,6 +455,7 @@ function* deriveCurrentOptions(
           search: yield select(getSearch),
           network: yield select(getNetwork),
           contracts: yield select(getContracts),
+          onlySmart: yield select(getOnlySmart),
           ...newOptions
         }
       }

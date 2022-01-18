@@ -32,6 +32,7 @@ const NFTFilters = (props: Props) => {
     search,
     count,
     onlyOnSale,
+    onlySmart,
     isMap,
     wearableRarities,
     wearableGenders,
@@ -85,6 +86,11 @@ const NFTFilters = (props: Props) => {
   if (contracts.length > 0) {
     appliedFilters.push(t('nft_filters.collection'))
   }
+
+  const handleToggleOnlySmart = useCallback(
+    (newOnlySmart: boolean) => onBrowse({ onlySmart: newOnlySmart }),
+    [onBrowse]
+  )
 
   const handleOnlyOnSaleChange = useCallback(
     (_, props: CheckboxProps) => {
@@ -286,10 +292,12 @@ const NFTFilters = (props: Props) => {
             selectedCollection={contracts[0]}
             selectedRarities={wearableRarities}
             selectedGenders={wearableGenders}
+            isOnlySmart={!!onlySmart}
             onCollectionsChange={handleCollectionsChange}
             onGendersChange={handleGendersChange}
             onRaritiesChange={handleRaritiesChange}
             onNetworkChange={handleNetworkChange}
+            onOnlySmartChange={handleToggleOnlySmart}
           />
         </Responsive>
       ) : null}
@@ -330,10 +338,12 @@ const NFTFilters = (props: Props) => {
                 selectedCollection={contracts[0]}
                 selectedRarities={wearableRarities}
                 selectedGenders={wearableGenders}
+                isOnlySmart={!!onlySmart}
                 onCollectionsChange={handleCollectionsChange}
                 onGendersChange={handleGendersChange}
                 onRaritiesChange={handleRaritiesChange}
                 onNetworkChange={handleNetworkChange}
+                onOnlySmartChange={handleToggleOnlySmart}
               />
             </>
           ) : null}

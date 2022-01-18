@@ -20,6 +20,10 @@
   background-repeat: no-repeat;
 }
 
+.IconBadge .custom-icon {
+  margin-right: 10px;
+}
+
 /* Icons */
 
 .IconBadge .BaseMale {

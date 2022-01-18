@@ -1,4 +1,5 @@
 import { BodyShape, Rarity } from '@dcl/schemas'
+import { SmartIcon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
 import { Props } from './WearableTags.types'
@@ -32,6 +33,11 @@ const WearableTags = (props: Props) => {
           }
         />
       )}
+      {wearable.isSmart ? (
+        <div className="icon smart" title={t(`wearable.smart`)}>
+          <SmartIcon />
+        </div>
+      ) : null}
     </div>
   )
 }

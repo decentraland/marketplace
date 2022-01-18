@@ -98,6 +98,9 @@ class NFTAPI extends BaseAPI {
       if (filters.isWearableAccessory) {
         queryParams.append('isWearableAccessory', 'true')
       }
+      if (filters.isWearableSmart) {
+        queryParams.append('isWearableSmart', 'true')
+      }
       if (filters.wearableCategory) {
         queryParams.append('wearableCategory', filters.wearableCategory)
       }

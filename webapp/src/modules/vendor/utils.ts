@@ -29,12 +29,19 @@ export function getFilters(
           ? getSearchWearableCategory(section!)
           : undefined
 
-      const { wearableRarities, wearableGenders, contracts, network } = options
+      const {
+        wearableRarities,
+        wearableGenders,
+        contracts,
+        network,
+        onlySmart
+      } = options
 
       return {
         isLand,
         isWearableHead,
         isWearableAccessory,
+        isWearableSmart: onlySmart,
         wearableCategory,
         wearableRarities,
         wearableGenders,

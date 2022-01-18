@@ -27,11 +27,18 @@ export type Props = {
   onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
   onBrowse: typeof browse
   onlyOnSale?: boolean
+  onlySmart?: boolean
 }
 
 export type MapStateProps = Pick<
   Props,
-  'isMap' | 'isLoading' | 'onlyOnSale' | 'viewInState' | 'section' | 'assetType'
+  | 'isMap'
+  | 'isLoading'
+  | 'onlyOnSale'
+  | 'viewInState'
+  | 'section'
+  | 'assetType'
+  | 'onlySmart'
 >
 export type MapDispatchProps = Pick<
   Props,
