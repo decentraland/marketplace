@@ -48,7 +48,7 @@ const AccountPage = ({
   // Resolves ENS name if needed
   useEffect(() => {
     let cancel = false
-    ;(async () => {
+    const resolveAddress = async () => {
       if (preloadedAddress && isENS) {
         const resolvedAddress = await resolveENSname(preloadedAddress)
         if (!resolvedAddress) {
@@ -57,7 +57,8 @@ const AccountPage = ({
         }
         if (!cancel) setAddress(resolvedAddress)
       }
-    })()
+    }
+    resolveAddress()
     return () => {
       cancel = true
     }
