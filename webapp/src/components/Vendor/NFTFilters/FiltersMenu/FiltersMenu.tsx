@@ -113,14 +113,6 @@ const FiltersMenu = (props: Props) => {
             checked={isOnlySmart}
             onChange={handleOnlySmartClick}
           />
-          {/* <div
-            className={classNames(`smart-toggle`, {
-              'is-enabled': isOnlySmart
-            })}
-            onClick={handleOnlySmartClick}
-          >
-            <SmartIcon />
-          </div> */}
         </Mobile>
         <NotMobile>
           <Popup
