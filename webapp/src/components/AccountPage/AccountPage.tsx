@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react'
+import { utils } from 'ethers'
 import { Page, Loader } from 'decentraland-ui'
 import { View } from '../../modules/ui/types'
 import { Navbar } from '../Navbar'
@@ -31,6 +32,13 @@ const AccountPage = ({
       onRedirect(locations.signIn())
     }
   }, [addressInUrl, isConnecting, wallet, onRedirect])
+
+  // Redirect to root page if the address provided is not a valid one
+  useEffect(() => {
+    if (address && !utils.isAddress(address)) {
+      onRedirect(locations.root())
+    }
+  }, [address, onRedirect])
 
   const content = useMemo(() => {
     if (!address) {
