@@ -24,11 +24,9 @@ const AccountPage = ({
 }: Props) => {
   const preloadedAddress = addressInUrl || wallet?.address
   const isENS = preloadedAddress && isENSAddress(preloadedAddress)
-  console.log('isENS: ', isENS)
   const [address, setAddress] = useState(
     preloadedAddress && !isENS ? preloadedAddress : null
   )
-  console.log('address: ', address)
 
   const isCurrentAccount =
     (!addressInUrl || wallet?.address === addressInUrl) && !viewAsGuest
