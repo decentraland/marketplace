@@ -12,12 +12,12 @@ export const getPeerCoverUrl = (hash: string) =>
   `${peerUrl}/content/contents/${hash}`
 
 export const getStoreUrn = (address: string) =>
-  `urn:decentraland:marketplace:store:${address}`
+  `urn:decentraland:off-chain:marketplace-stores:${address}`
 
 export const getPrefixedCoverName = (coverName: string) =>
   coverName.startsWith('cover/') ? coverName : `cover/${coverName}`
 
-export const getEmptyStore = (): Store => ({
+export const getEmptyStore = (props: Partial<Store> = {}): Store => ({
   owner: '',
   cover: '',
   coverName: '',
@@ -25,7 +25,8 @@ export const getEmptyStore = (): Store => ({
   website: '',
   facebook: '',
   twitter: '',
-  discord: ''
+  discord: '',
+  ...props
 })
 
 // Mappings
@@ -69,8 +70,7 @@ export const getStoreFromEntity = (entity: Entity): Store => {
 }
 
 export const getEntityMetadataFromStore = (
-  store: Store,
-  address: string
+  store: Store
 ): StoreEntityMetadata => {
   const links: StoreEntityMetadata['links'] = []
 
@@ -91,12 +91,14 @@ export const getEntityMetadataFromStore = (
     images.push({ name: 'cover', file: store.coverName })
   }
 
+  const { owner } = store
+
   return {
-    id: getStoreUrn(address),
+    id: getStoreUrn(owner),
     description: store.description,
     images,
     links,
-    owner: address,
+    owner,
     version: 1
   }
 }
@@ -122,22 +124,23 @@ export const fetchStoreEntity = async (
   address: string
 ): Promise<Entity | null> => {
   const type: any = 'store'
-  const entities = await client.fetchEntitiesByPointers(type, [address])
+  const urn = getStoreUrn(address)
+  const entities = await client.fetchEntitiesByPointers(type, [urn])
   return entities.length === 0 ? null : entities[0]
 }
 
 export const deployStoreEntity = async (
   client: CatalystClient,
   identity: AuthIdentity,
-  address: string,
   store: Store
 ) => {
-  const metadata = getEntityMetadataFromStore(store, address)
+  const { owner } = store
+  const metadata = getEntityMetadataFromStore(store)
   const files = await getEntityMetadataFilesFromStore(store)
 
   const options: BuildEntityWithoutFilesOptions = {
     type: 'store' as any,
-    pointers: [address],
+    pointers: [getStoreUrn(owner)],
     metadata,
     timestamp: Date.now()
   }

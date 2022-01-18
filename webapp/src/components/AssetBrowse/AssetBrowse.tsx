@@ -19,6 +19,7 @@ import classNames from 'classnames'
 import { isAccountView, isLandSection } from '../../modules/ui/utils'
 import OnSaleList from '../OnSaleList'
 import CollectionList from '../CollectionList'
+import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
 import './AssetBrowse.css'
@@ -175,10 +176,9 @@ const AssetBrowse = (props: Props) => {
     case DecentralandSection.BIDS:
       right = <Bids />
       break
-    // TODO: Uncomment when Store Settings can be released
-    // case DecentralandSection.STORE_SETTINGS:
-    //   right = <StoreSettings />
-    //   break
+    case DecentralandSection.STORE_SETTINGS:
+      right = <StoreSettings />
+      break
     default:
       right = (
         <>
@@ -213,9 +213,8 @@ const AssetBrowse = (props: Props) => {
     Sections.decentraland.ENS,
     Sections.decentraland.ON_SALE,
     Sections.decentraland.SALES,
-    Sections.decentraland.BIDS
-    // TODO: Uncomment when Store Settings can be released
-    // Sections.decentraland.STORE_SETTINGS
+    Sections.decentraland.BIDS,
+    Sections.decentraland.STORE_SETTINGS
   ]
 
   return (

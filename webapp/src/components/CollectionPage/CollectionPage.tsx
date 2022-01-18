@@ -29,8 +29,8 @@ import { Rarity } from '@dcl/schemas'
 import { getContractAddressFromProps } from './utils'
 import CollectionProvider from '../CollectionProvider'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
-import styles from './CollectionPage.module.css'
 import AssetCell from '../OnSaleList/AssetCell'
+import styles from './CollectionPage.module.css'
 
 const CollectionPage = (props: Props) => {
   const { onBack, currentAddress } = props
@@ -132,7 +132,7 @@ const CollectionPage = (props: Props) => {
                       <Table.Body>
                         <Mobile>
                           {items.map(item => (
-                            <div className="mobile-row">
+                            <div key={item.id} className="mobile-row">
                               <AssetCell asset={item} />
                               <Mana network={item.network} inline>
                                 {formatMANA(item.price)}

@@ -1,4 +1,4 @@
-import { call, put, select, takeLatest } from 'redux-saga/effects'
+import { call, put, takeLatest } from 'redux-saga/effects'
 import { AuthIdentity } from 'dcl-crypto'
 import { CatalystClient } from 'dcl-catalyst-client'
 import { Entity } from 'dcl-catalyst-commons'
@@ -13,7 +13,6 @@ import {
   updateStoreSuccess,
   UPDATE_STORE_REQUEST
 } from './actions'
-import { getAddress } from '../wallet/selectors'
 import {
   deployStoreEntity,
   fetchStoreEntity,
@@ -34,11 +33,11 @@ export function* storeSaga(client: CatalystClient) {
         address
       )
 
-      if (!storeEntity) {
-        yield put(fetchStoreFailure('Store not found'))
-      } else {
-        yield put(fetchStoreSuccess(getStoreFromEntity(storeEntity)))
-      }
+      yield put(
+        fetchStoreSuccess(
+          storeEntity ? getStoreFromEntity(storeEntity) : undefined
+        )
+      )
     } catch (e) {
       yield put(fetchStoreFailure(e.message))
     }
@@ -49,9 +48,8 @@ export function* storeSaga(client: CatalystClient) {
   }: UpdateStoreRequestAction) {
     try {
       const identity: AuthIdentity = yield call(getIdentity)
-      const address: string = (yield select(getAddress))!
 
-      yield call(deployStoreEntity, client, identity, address, store)
+      yield call(deployStoreEntity, client, identity, store)
 
       yield put(updateStoreSuccess(store))
     } catch (e) {

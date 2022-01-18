@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import { Back, Container, Loader } from 'decentraland-ui'
 import { Icon } from 'semantic-ui-react'
@@ -16,14 +16,19 @@ import { shortenAddress } from '../../../modules/wallet/utils'
 import ExternalLinkModal from '../../ExternalLinkModal'
 import './AccountBanner.css'
 
-const AccountBanner = ({ address, store, isLoading, onBack }: Props) => {
+const AccountBanner = ({
+  address,
+  store,
+  isLoading,
+  onBack,
+  onFetchStore
+}: Props) => {
   const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
   const [openExternalLinkModal, setOpenExternalLinkModal] = useState<string>()
 
-  // TODO: Uncomment when Store Settings can be released
-  // useEffect(() => {
-  //   onFetchStore(address)
-  // }, [onFetchStore, address])
+  useEffect(() => {
+    onFetchStore(address)
+  }, [onFetchStore, address])
 
   const renderLink = (type: LinkType) =>
     store?.[type] &&
