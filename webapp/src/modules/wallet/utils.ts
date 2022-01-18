@@ -2,8 +2,20 @@ import { Eth } from 'web3x/eth'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { LegacyProviderAdapter } from 'web3x/providers'
+import { ethers } from 'ethers'
 
 export const TRANSACTIONS_API_URL = process.env.REACT_APP_TRANSACTIONS_API_URL
+
+export const isENSAddress = (address: string) => {
+  return address.includes('.eth')
+}
+
+export const resolveENSname = async (name: string) => {
+  const connectedProvider = await getConnectedProvider()
+  if (!connectedProvider) return null
+  const ethersProvider = new ethers.providers.Web3Provider(connectedProvider)
+  return await ethersProvider.resolveName(name)
+}
 
 export function shortenAddress(address: string) {
   if (address) {

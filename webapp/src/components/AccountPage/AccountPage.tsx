@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { utils } from 'ethers'
 import { Page, Loader } from 'decentraland-ui'
+import { isENSAddress, resolveENSname } from '../../modules/wallet/utils'
 import { View } from '../../modules/ui/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -21,7 +22,13 @@ const AccountPage = ({
   viewAsGuest,
   onRedirect
 }: Props) => {
-  const address = addressInUrl || wallet?.address
+  const preloadedAddress = addressInUrl || wallet?.address
+  const isENS = preloadedAddress && isENSAddress(preloadedAddress)
+  console.log('isENS: ', isENS)
+  const [address, setAddress] = useState(
+    preloadedAddress && !isENS ? preloadedAddress : null
+  )
+  console.log('address: ', address)
 
   const isCurrentAccount =
     (!addressInUrl || wallet?.address === addressInUrl) && !viewAsGuest
@@ -35,14 +42,33 @@ const AccountPage = ({
 
   // Redirect to root page if the address provided is not a valid one
   useEffect(() => {
-    if (address && !utils.isAddress(address)) {
+    if (address && !utils.isAddress(address) && !isENS) {
       onRedirect(locations.root())
     }
-  }, [address, onRedirect])
+  }, [address, isENS, onRedirect])
+
+  // Resolves ENS name if needed
+  useEffect(() => {
+    let cancel = false
+    ;(async () => {
+      if (preloadedAddress && isENS && !cancel) {
+        const resolvedAddress = await resolveENSname(preloadedAddress)
+        if (!resolvedAddress) {
+          onRedirect(locations.root())
+          return
+        }
+        setAddress(resolvedAddress)
+      }
+    })()
+    return () => {
+      cancel = true
+    }
+  }, [isENS, onRedirect, preloadedAddress])
 
   const content = useMemo(() => {
     if (!address) {
-      if (isConnecting) {
+      // if there is preloadedAddress but not address, it's being resolved
+      if (preloadedAddress || isConnecting) {
         return (
           <Page>
             <Loader size="massive" active />
@@ -64,7 +90,14 @@ const AccountPage = ({
         />
       </>
     )
-  }, [address, isConnecting, isCurrentAccount, isFullscreen, vendor])
+  }, [
+    address,
+    isConnecting,
+    isCurrentAccount,
+    isFullscreen,
+    preloadedAddress,
+    vendor
+  ])
 
   return (
     <div className="AccountPage">
