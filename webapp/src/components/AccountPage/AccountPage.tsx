@@ -51,11 +51,12 @@ const AccountPage = ({
     const resolveAddress = async () => {
       if (preloadedAddress && isENS) {
         const resolvedAddress = await resolveENSname(preloadedAddress)
+        if (cancel) return
         if (!resolvedAddress) {
           onRedirect(locations.root())
           return
         }
-        if (!cancel) setAddress(resolvedAddress)
+        setAddress(resolvedAddress)
       }
     }
     resolveAddress()
