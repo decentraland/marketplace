@@ -22,6 +22,7 @@
   margin-top: 15px;
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .BaseDetail .right > .box {
