@@ -49,13 +49,13 @@ const AccountPage = ({
   useEffect(() => {
     let cancel = false
     ;(async () => {
-      if (preloadedAddress && isENS && !cancel) {
+      if (preloadedAddress && isENS) {
         const resolvedAddress = await resolveENSname(preloadedAddress)
         if (!resolvedAddress) {
           onRedirect(locations.root())
           return
         }
-        setAddress(resolvedAddress)
+        if (!cancel) setAddress(resolvedAddress)
       }
     })()
     return () => {
