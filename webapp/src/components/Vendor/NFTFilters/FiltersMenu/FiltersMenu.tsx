@@ -1,7 +1,17 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
+import classNames from 'classnames'
 import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Row, Column } from 'decentraland-ui'
+import {
+  Row,
+  Column,
+  SmartIcon,
+  Popup,
+  Mobile,
+  NotMobile,
+  Header,
+  Radio
+} from 'decentraland-ui'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { contracts } from '../../../../modules/contract/utils'
 import { ArrayFilter } from '../ArrayFilter'
@@ -16,10 +26,12 @@ const FiltersMenu = (props: Props) => {
     selectedRarities,
     selectedGenders,
     selectedNetwork,
+    isOnlySmart,
     onCollectionsChange,
     onRaritiesChange,
     onGendersChange,
-    onNetworkChange
+    onNetworkChange,
+    onOnlySmartChange
   } = props
 
   const collectionOptions = useMemo(() => {
@@ -71,6 +83,11 @@ const FiltersMenu = (props: Props) => {
     ]
   }, [])
 
+  const handleOnlySmartClick = useCallback(
+    () => onOnlySmartChange(!isOnlySmart),
+    [onOnlySmartChange, isOnlySmart]
+  )
+
   return (
     <>
       <Row>
@@ -88,6 +105,31 @@ const FiltersMenu = (props: Props) => {
           options={networkOptions}
           onChange={network => onNetworkChange(network as Network)}
         />
+        <Mobile>
+          <Header sub>{t('nft_filters.smart_wearables')}</Header>
+          <Radio
+            className="smart-toggle-mobile"
+            toggle
+            checked={isOnlySmart}
+            onChange={handleOnlySmartClick}
+          />
+        </Mobile>
+        <NotMobile>
+          <Popup
+            content={t('nft_filters.smart_wearables')}
+            position="top center"
+            trigger={
+              <div
+                className={classNames(`smart-toggle`, {
+                  'is-enabled': isOnlySmart
+                })}
+                onClick={handleOnlySmartClick}
+              >
+                <SmartIcon />
+              </div>
+            }
+          ></Popup>
+        </NotMobile>
       </Row>
       <Row>
         <Column>

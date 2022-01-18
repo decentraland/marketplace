@@ -60,6 +60,11 @@
 
 .NFTFilters .filters .dcl.row .Filter {
   flex: 1 0 auto;
+  margin-left: auto;
+}
+
+.NFTFilters .filters .dcl.row .dcl.column:first-child .Filter {
+  margin-left: 0px;
 }
 
 .NFTFilters .filters .dcl.row .Filter + .Filter {
@@ -215,6 +220,21 @@
   color: var(--text);
 }
 
+.NFTFilters .smart-toggle {
+  background: #37333d;
+  padding: 8px;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  margin-left: 20px;
+  margin-top: 27px;
+  cursor: pointer;
+}
+
+.NFTFilters .smart-toggle.is-enabled {
+  background: var(--primary);
+}
+
 @media (max-width: 768px) {
   .NFTFilters .topbar {
     align-items: normal;
@@ -224,6 +244,12 @@
     align-items: flex-start;
     flex-direction: column;
     justify-content: stretch;
+  }
+
+  .FiltersModal .smart-toggle-mobile {
+    margin-top: 12px;
+    margin-left: 0px;
+    margin-bottom: 20px;
   }
 }
 

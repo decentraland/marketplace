@@ -11,6 +11,7 @@ import RarityBadge from '../RarityBadge'
 import { AssetType } from '../../../modules/asset/types'
 import GenderBadge from '../GenderBadge'
 import CategoryBadge from '../CategoryBadge'
+import SmartBadge from '../SmartBadge'
 import { Owner } from '../Owner'
 import Collection from '../Collection'
 import Price from '../Price'
@@ -38,6 +39,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
           <RarityBadge rarity={item.rarity} assetType={AssetType.ITEM} />
           <CategoryBadge wearable={wearable} assetType={AssetType.ITEM} />
           <GenderBadge wearable={wearable} assetType={AssetType.ITEM} />
+          {wearable.isSmart ? <SmartBadge assetType={AssetType.ITEM} /> : null}
         </>
       }
       left={

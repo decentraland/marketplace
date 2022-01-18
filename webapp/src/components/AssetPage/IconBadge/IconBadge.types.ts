@@ -1,5 +1,9 @@
+import React from 'react'
+
 export type Props = {
-  icon: string
+  className?: string
+  icon?: string
   text: string
   onClick: () => void
+  children?: React.ReactNode
 }

@@ -17,6 +17,7 @@ export type ItemFilters = {
   search?: string
   isWearableHead?: boolean
   isWearableAccessory?: boolean
+  isWearableSmart?: boolean
   wearableCategory?: WearableCategory
   rarities?: Rarity[]
   wearableGenders?: WearableGender[]

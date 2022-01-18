@@ -8,6 +8,7 @@ import { Props } from './WearableDetail.types'
 import RarityBadge from '../RarityBadge'
 import { AssetType } from '../../../modules/asset/types'
 import GenderBadge from '../GenderBadge'
+import SmartBadge from '../SmartBadge'
 import CategoryBadge from '../CategoryBadge'
 import { Owner } from '../Owner'
 import Collection from '../Collection'
@@ -33,6 +34,7 @@ const WearableDetail = ({ nft }: Props) => {
           <RarityBadge rarity={wearable.rarity} assetType={AssetType.NFT} />
           <CategoryBadge wearable={wearable} assetType={AssetType.NFT} />
           <GenderBadge wearable={wearable} assetType={AssetType.NFT} />
+          {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}
         </>
       }
       left={

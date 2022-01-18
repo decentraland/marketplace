@@ -65,6 +65,7 @@ const AssetBrowse = (props: Props) => {
     sections,
     assetType,
     onlyOnSale,
+    onlySmart,
     viewInState
   } = props
 
@@ -90,7 +91,8 @@ const AssetBrowse = (props: Props) => {
         view,
         section,
         address,
-        onlyOnSale
+        onlyOnSale,
+        onlySmart
       })
       setHasFetched(true)
     }
@@ -100,6 +102,7 @@ const AssetBrowse = (props: Props) => {
     section,
     address,
     onlyOnSale,
+    onlySmart,
     viewInState,
     onFetchAssetsFromRoute,
     hasFetched

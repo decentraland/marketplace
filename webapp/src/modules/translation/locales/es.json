@@ -185,7 +185,8 @@
     "collection": "Colección",
     "all_collections": "Todas las colecciones",
     "network": "Red",
-    "all_networks": "Todas las redes"
+    "all_networks": "Todas las redes",
+    "smart_wearables": "Vestimentas Interactivas"
   },
   "nft_card": {
     "expires_at": "Expira {date}"
@@ -304,7 +305,9 @@
       "tiara": "Tiara",
       "top_head": "Cabeza",
       "upper_body": "Torso"
-    }
+    },
+    "smart": "Vestimenta Interactiva",
+    "smart_badge": "Interactivo"
   },
   "sell_page": {
     "title": "Poner en venta",

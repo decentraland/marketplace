@@ -216,6 +216,10 @@ export const getViewAsGuest = createSelector<RootState, string, boolean>(
   getRouterSearch,
   search => getURLParam(search, 'viewAsGuest') === 'true'
 )
+export const getOnlySmart = createSelector<RootState, string, boolean>(
+  getRouterSearch,
+  search => getURLParam(search, 'onlySmart') === 'true'
+)
 
 export const hasFiltersEnabled = createSelector<
   RootState,

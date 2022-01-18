@@ -84,6 +84,10 @@ export function getSearchParams(options?: BrowseOptions) {
     if (options.viewAsGuest !== undefined) {
       params.set('viewAsGuest', options.viewAsGuest.toString())
     }
+
+    if (options.onlySmart !== undefined) {
+      params.set('onlySmart', options.onlySmart.toString())
+    }
   }
   return params
 }

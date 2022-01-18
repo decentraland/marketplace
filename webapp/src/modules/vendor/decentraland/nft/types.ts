@@ -13,6 +13,7 @@ export type NFTsFetchFilters = {
   isLand?: boolean
   isWearableHead?: boolean
   isWearableAccessory?: boolean
+  isWearableSmart?: boolean
   wearableCategory?: WearableCategory
   wearableRarities?: Rarity[]
   wearableGenders?: WearableGender[]
