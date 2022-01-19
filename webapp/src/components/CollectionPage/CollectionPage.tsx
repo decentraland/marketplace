@@ -15,7 +15,7 @@ import {
   Table,
   Dropdown,
   Mobile,
-  NotMobile,
+  NotMobile
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
@@ -130,7 +130,7 @@ const CollectionPage = (props: Props) => {
                       </Table.Header>
                       <Table.Body>
                         <Mobile>
-                          {items.map((item) => (
+                          {items.map(item => (
                             <div className="mobile-row">
                               <AssetCell asset={item} />
                               <Mana network={item.network} inline>
@@ -140,7 +140,7 @@ const CollectionPage = (props: Props) => {
                           ))}
                         </Mobile>
                         <NotMobile>
-                          {items.map((item) => (
+                          {items.map(item => (
                             <Table.Row key={item.id} className={styles.row}>
                               <Table.Cell>
                                 <AssetCell asset={item} />
