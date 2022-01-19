@@ -10,7 +10,6 @@ const AddressProvider = (props: Props) => {
   const [isLoading, setIsLoading] = useState(!!isENS)
   const [error, setError] = useState<AddressError>()
 
-  // Redirect to root page if the address provided is not a valid one
   useEffect(() => {
     if (address && !utils.isAddress(address) && !isENS) {
       setError(AddressError.INVALID)

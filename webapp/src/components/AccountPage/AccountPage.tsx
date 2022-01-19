@@ -46,15 +46,13 @@ const AccountPage = ({
               <Page>
                 <Loader size="massive" active />
               </Page>
-            ) : null}
-            {error ? (
+            ) : error ? (
               <Page>
                 <Center>
                   <p className="secondary-text">{t(`address.${error}`)}</p>
                 </Center>
               </Page>
-            ) : null}
-            {address && !error ? (
+            ) : address ? (
               <>
                 {!isCurrentAccount ? <AccountBanner address={address} /> : null}
                 <AssetBrowse
