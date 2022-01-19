@@ -41,6 +41,10 @@
     "order": "Listing",
     "mint": "Mint"
   },
+  "address": {
+    "invalid_address": "That's not a valid address",
+    "ens_not_resolved": "That's not a valid ENS name"
+  },
   "error_boundary": {
     "message": "Oops! Something went wrong..."
   },

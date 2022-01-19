@@ -1,6 +1,9 @@
 import { Eth } from 'web3x/eth'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
-import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import {
+  getConnectedProvider,
+  getNetworkProvider
+} from 'decentraland-dapps/dist/lib/eth'
 import { LegacyProviderAdapter } from 'web3x/providers'
 import { ethers } from 'ethers'
 
@@ -11,8 +14,9 @@ export const isENSAddress = (address: string) => {
 }
 
 export const resolveENSname = async (name: string) => {
-  const connectedProvider = await getConnectedProvider()
-  if (!connectedProvider) return null
+  const connectedProvider = await getNetworkProvider(
+    Number(process.env.REACT_APP_CHAIN_ID)
+  )
   const ethersProvider = new ethers.providers.Web3Provider(connectedProvider)
   return await ethersProvider.resolveName(name)
 }

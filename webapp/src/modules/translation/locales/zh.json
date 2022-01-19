@@ -41,6 +41,10 @@
     "order": "清单",
     "mint": "薄荷"
   },
+  "address": {
+    "invalid_address": "这不是一个有效的地址",
+    "ens_not_resolved": "这不是有效的 ENS 名称"
+  },
   "error_boundary": {
     "message": "糟糕！出了点问题......"
   },
