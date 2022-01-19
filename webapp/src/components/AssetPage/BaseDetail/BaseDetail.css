@@ -42,14 +42,6 @@
   right: 24px;
 }
 
-@media (max-width: 768px) {
-  .BaseDetail .listed-badge {
-    position: absolute;
-    top: 44px;
-    right: 24px;
-  }
-}
-
 .BaseDetail .row {
   display: flex;
   justify-content: space-between;
