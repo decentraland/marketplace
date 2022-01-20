@@ -356,7 +356,13 @@
     "expiration_date": "截止日期",
     "invalid_date": "这个日期已过期",
     "not_enougn_mana": "您没有足够的MANA",
-    "submit": "出价"
+    "submit": "出价",
+    "confirm": {
+      "title": "请确认",
+      "create_bid_line_one": "您即将为 {name} 出价 {amount}。",
+      "accept_bid_line_one": "您即将接受对 {name} 的 {amount} 出价。",
+      "line_two": "请重新输入价格以确认："
+    }
   },
   "my_bids_page": {
     "bids_received": "收到的出价",

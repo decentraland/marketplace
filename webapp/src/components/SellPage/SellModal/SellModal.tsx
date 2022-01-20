@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { fromWei } from 'web3x/utils'
 import dateFnsFormat from 'date-fns/format'
@@ -9,7 +9,7 @@ import {
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
-import { Header, Form, Field, Button, Modal } from 'decentraland-ui'
+import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { toMANA, fromMANA } from '../../../lib/mana'
 import {
@@ -25,6 +25,7 @@ import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
+import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Props } from './SellModal.types'
 
 const SellModal = (props: Props) => {
@@ -48,17 +49,9 @@ const SellModal = (props: Props) => {
       ? dateFnsFormat(+order!.expiresAt, INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
-  const [confirmPrice, setConfirmPrice] = useState('')
   const [showConfirm, setShowConfirm] = useState(false)
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
-
-  // Clear confirm price when closing the confirm modal
-  useEffect(() => {
-    if (!showConfirm) {
-      setConfirmPrice('')
-    }
-  }, [nft, showConfirm, setConfirmPrice])
 
   if (!wallet) {
     return null
@@ -165,11 +158,11 @@ const SellModal = (props: Props) => {
           </ChainButton>
         </div>
       </Form>
-
-      <Modal size="small" open={showConfirm} className="ConfirmPriceModal">
-        <Modal.Header>{t('sell_page.confirm.title')}</Modal.Header>
-        <Form onSubmit={handleSubmit}>
-          <Modal.Content>
+      <ConfirmInputValueModal
+        open={showConfirm}
+        headerTitle={t('sell_page.confirm.title')}
+        content={
+          <>
             <T
               id="sell_page.confirm.line_one"
               values={{
@@ -183,41 +176,15 @@ const SellModal = (props: Props) => {
             />
             <br />
             <T id="sell_page.confirm.line_two" />
-            <ManaField
-              className="mana-input"
-              label={t('sell_page.price')}
-              network={nft.network}
-              placeholder={price}
-              value={confirmPrice}
-              onChange={(_event, props) => {
-                const newPrice = fromMANA(props.value)
-                setConfirmPrice(toMANA(newPrice))
-              }}
-            />
-          </Modal.Content>
-          <Modal.Actions>
-            <div
-              className="ui button"
-              onClick={() => {
-                setConfirmPrice('')
-                setShowConfirm(false)
-              }}
-            >
-              {t('global.cancel')}
-            </div>
-            <Button
-              type="submit"
-              primary
-              disabled={
-                isCreatingOrder || fromMANA(price) !== fromMANA(confirmPrice)
-              }
-              loading={isCreatingOrder}
-            >
-              {t('global.proceed')}
-            </Button>
-          </Modal.Actions>
-        </Form>
-      </Modal>
+          </>
+        }
+        onConfirm={handleSubmit}
+        valueToConfirm={price}
+        network={nft.network}
+        onCancel={() => setShowConfirm(false)}
+        loading={isCreatingOrder}
+        disabled={isCreatingOrder}
+      />
       <AuthorizationModal
         open={showAuthorizationModal}
         authorization={authorization}

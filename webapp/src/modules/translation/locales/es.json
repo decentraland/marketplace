@@ -355,7 +355,13 @@
     "expiration_date": "Fecha de expiración",
     "invalid_date": "Esta fecha ya pasó",
     "not_enougn_mana": "No tienes suficiente MANA",
-    "submit": "Ofertar"
+    "submit": "Ofertar",
+    "confirm": {
+      "title": "Por favor confirma",
+      "create_bid_line_one": "Estás por hacer una oferta en {name} por {amount}.",
+      "accept_bid_line_one": "Estás por aceptar una oferta en {name} por {amount}.",
+      "accept_bid_line_two": "Por favor vuelve a escribir el precio para confirmar:"
+    }
   },
   "my_bids_page": {
     "bids_received": "Ofertas recibidas",

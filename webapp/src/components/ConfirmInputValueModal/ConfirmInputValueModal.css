@@ -1,0 +1,10 @@
+.ConfirmInputValueModal .dcl.field .ui.sub.header {
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .ConfirmInputValueModal .dcl.field {
+    width: 100%;
+    min-width: auto;
+  }
+}
