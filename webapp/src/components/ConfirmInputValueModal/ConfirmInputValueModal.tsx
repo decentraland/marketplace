@@ -6,18 +6,17 @@ import { fromMANA, toMANA } from '../../lib/mana'
 import { ManaField } from '../ManaField'
 import './ConfirmInputValueModal.css'
 
-const ConfirmInputValueModal = (props: Props) => {
-  const {
-    open,
-    content,
-    headerTitle,
-    valueToConfirm,
-    onCancel,
-    onConfirm,
-    loading = false,
-    disabled = false,
-    network
-  } = props
+const ConfirmInputValueModal = ({
+  open,
+  content,
+  headerTitle,
+  valueToConfirm,
+  onCancel,
+  onConfirm,
+  loading = false,
+  disabled = false,
+  network
+}: Props) => {
   const [confirmedInput, setConfirmedInput] = useState<string>('')
 
   return (
