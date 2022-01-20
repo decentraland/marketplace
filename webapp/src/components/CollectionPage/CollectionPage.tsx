@@ -21,7 +21,6 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
-import { NavigationTab } from '../Navigation/Navigation.types'
 import { Props } from './CollectionPage.types'
 import { Mana } from '../Mana'
 import { formatMANA } from '../../lib/mana'
@@ -41,7 +40,7 @@ const CollectionPage = (props: Props) => {
   return (
     <div>
       <Navbar isFullscreen />
-      <Navigation activeTab={NavigationTab.MY_STORE} />
+      <Navigation />
       <Page className={styles.page}>
         <CollectionProvider contractAddress={contractAddress} withItems>
           {({ collection, items, isLoading }) => {
