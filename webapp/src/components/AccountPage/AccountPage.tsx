@@ -39,7 +39,7 @@ const AccountPage = ({
         isFullscreen={!isCurrentAccount || isFullscreen}
         activeTab={isCurrentAccount ? NavigationTab.MY_STORE : undefined}
       />
-      <AddressProvider input={addressInUrl || wallet?.address}>
+      <AddressProvider input={addressInUrl || wallet?.address || ''}>
         {({ address, isLoading, error }) => (
           <>
             {isLoading || isConnecting ? (
