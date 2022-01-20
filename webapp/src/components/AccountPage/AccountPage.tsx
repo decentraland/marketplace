@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Page, Loader, Center } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { AddressProvider } from 'decentraland-dapps/dist/containers/AddressProvider'
 import { View } from '../../modules/ui/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -10,7 +11,6 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { locations } from '../../modules/routing/locations'
 import { Props } from './AccountPage.types'
 import AccountBanner from './AccountBanner'
-import { AddressProvider } from '../AddressProvider'
 import './AccountPage.css'
 
 const AccountPage = ({
