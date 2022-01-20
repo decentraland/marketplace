@@ -41,6 +41,10 @@
     "order": "Clasificado",
     "mint": "Venta"
   },
+  "address": {
+    "invalid_address": "Dirección inválida",
+    "ens_not_resolved": "Nombre ENS inválido"
+  },
   "error_boundary": {
     "message": "Oops! Algo salió mal..."
   },

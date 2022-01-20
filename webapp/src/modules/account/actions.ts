@@ -1,5 +1,5 @@
 import { AccountFilters as AccountMetricsFilters } from '@dcl/schemas'
-import { Network } from 'decentraland-dapps/node_modules/@dcl/schemas'
+import { Network } from '@dcl/schemas'
 import { action } from 'typesafe-actions'
 import { AccountMetrics } from './types'
 

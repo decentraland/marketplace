@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { createMatchSelector } from 'connected-react-router'
-import { Network } from 'decentraland-dapps/node_modules/@dcl/schemas'
+import { Network } from '@dcl/schemas'
 import { RootState } from '../reducer'
 import { locations } from '../routing/locations'
 import { AccountMetrics } from './types'

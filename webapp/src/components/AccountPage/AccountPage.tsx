@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo } from 'react'
-import { utils } from 'ethers'
-import { Page, Loader } from 'decentraland-ui'
+import React, { useEffect } from 'react'
+import { Page, Loader, Center } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { AddressProvider } from 'decentraland-dapps/dist/containers/AddressProvider'
 import { View } from '../../modules/ui/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -21,8 +22,6 @@ const AccountPage = ({
   viewAsGuest,
   onRedirect
 }: Props) => {
-  const address = addressInUrl || wallet?.address
-
   const isCurrentAccount =
     (!addressInUrl || wallet?.address === addressInUrl) && !viewAsGuest
 
@@ -33,39 +32,6 @@ const AccountPage = ({
     }
   }, [addressInUrl, isConnecting, wallet, onRedirect])
 
-  // Redirect to root page if the address provided is not a valid one
-  useEffect(() => {
-    if (address && !utils.isAddress(address)) {
-      onRedirect(locations.root())
-    }
-  }, [address, onRedirect])
-
-  const content = useMemo(() => {
-    if (!address) {
-      if (isConnecting) {
-        return (
-          <Page>
-            <Loader size="massive" active />
-          </Page>
-        )
-      } else {
-        return null
-      }
-    }
-
-    return (
-      <>
-        {!isCurrentAccount && <AccountBanner address={address} />}
-        <AssetBrowse
-          vendor={vendor}
-          address={address}
-          view={isCurrentAccount ? View.CURRENT_ACCOUNT : View.ACCOUNT}
-          isFullscreen={Boolean(isFullscreen)}
-        />
-      </>
-    )
-  }, [address, isConnecting, isCurrentAccount, isFullscreen, vendor])
-
   return (
     <div className="AccountPage">
       <Navbar isFullscreen />
@@ -73,7 +39,33 @@ const AccountPage = ({
         isFullscreen={!isCurrentAccount || isFullscreen}
         activeTab={isCurrentAccount ? NavigationTab.MY_STORE : undefined}
       />
-      {content}
+      <AddressProvider input={addressInUrl || wallet?.address || ''}>
+        {({ address, isLoading, error }) => (
+          <>
+            {isLoading || isConnecting ? (
+              <Page>
+                <Loader size="massive" active />
+              </Page>
+            ) : error ? (
+              <Page>
+                <Center>
+                  <p className="secondary-text">{t(`address.${error}`)}</p>
+                </Center>
+              </Page>
+            ) : address ? (
+              <>
+                {!isCurrentAccount ? <AccountBanner address={address} /> : null}
+                <AssetBrowse
+                  vendor={vendor}
+                  address={address}
+                  view={isCurrentAccount ? View.CURRENT_ACCOUNT : View.ACCOUNT}
+                  isFullscreen={Boolean(isFullscreen)}
+                />
+              </>
+            ) : null}
+          </>
+        )}
+      </AddressProvider>
       <Footer isFullscreen={isFullscreen} />
     </div>
   )

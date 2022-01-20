@@ -11,7 +11,7 @@
     "dcl-catalyst-client": "^5.1.1",
     "dcl-catalyst-commons": "^4.0.1",
     "dcl-crypto": "^2.2.0",
-    "decentraland-dapps": "^12.33.2",
+    "decentraland-dapps": "^12.35.0",
     "decentraland-transactions": "^1.29.1",
     "decentraland-ui": "^3.17.0",
     "dotenv": "^10.0.0",

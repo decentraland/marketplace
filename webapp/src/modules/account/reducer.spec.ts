@@ -1,4 +1,4 @@
-import { Network } from 'decentraland-dapps/node_modules/@dcl/schemas'
+import { Network } from '@dcl/schemas'
 import {
   fetchAccountMetricsFailure,
   fetchAccountMetricsRequest,
