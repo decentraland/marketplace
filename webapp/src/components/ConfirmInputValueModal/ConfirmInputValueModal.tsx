@@ -38,15 +38,15 @@ const ConfirmInputValueModal = (props: Props) => {
           />
         </Modal.Content>
         <Modal.Actions>
-          <div
-            className="ui button"
+          <Button
+            type="button"
             onClick={() => {
               setConfirmedInput('')
               onCancel()
             }}
           >
             {t('global.cancel')}
-          </div>
+          </Button>
           <Button
             type="submit"
             primary
