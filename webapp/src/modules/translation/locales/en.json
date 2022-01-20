@@ -358,7 +358,13 @@
     "expiration_date": "Expiration date",
     "invalid_date": "This date has already passed",
     "not_enougn_mana": "You don't have enough MANA",
-    "submit": "Bid"
+    "submit": "Bid",
+    "confirm": {
+      "title": "Please confirm",
+      "create_bid_line_one": "You are about to bid on {name} for {amount}.",
+      "accept_bid_line_one": "You are about to accept a bid on {name} for {amount}.",
+      "accept_bid_line_two": "Please re-enter the price to confirm:"
+    }
   },
   "my_bids_page": {
     "bids_received": "Bids received",

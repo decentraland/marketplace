@@ -18,6 +18,8 @@ import { AuthorizationModal } from '../../AuthorizationModal'
 import { getContract } from '../../../modules/contract/utils'
 import { getContractNames } from '../../../modules/vendor'
 import { ManaField } from '../../ManaField'
+import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
+import { Mana } from '../../Mana'
 import { Props } from './BidModal.types'
 import './BidModal.css'
 
@@ -37,6 +39,7 @@ const BidModal = (props: Props) => {
   const [fingerprint, isLoading] = useFingerprint(nft)
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
   const handlePlaceBid = useCallback(
     () => onPlaceBid(nft, fromMANA(price), +new Date(expiresAt), fingerprint),
@@ -69,6 +72,10 @@ const BidModal = (props: Props) => {
   }
 
   const handleSubmit = () => {
+    setShowConfirmationModal(true)
+  }
+
+  const handleConfirmBid = () => {
     if (hasAuthorization(authorizations, authorization)) {
       handlePlaceBid()
     } else {
@@ -155,6 +162,35 @@ const BidModal = (props: Props) => {
         onProceed={handlePlaceBid}
         onCancel={handleClose}
       />
+      {showConfirmationModal ? (
+        <ConfirmInputValueModal
+          open={showConfirmationModal}
+          headerTitle={t('bid_page.confirm.title')}
+          content={
+            <>
+              <T
+                id="bid_page.confirm.create_bid_line_one"
+                values={{
+                  name: <b>{getAssetName(nft)}</b>,
+                  amount: (
+                    <Mana network={nft.network} inline>
+                      {price}
+                    </Mana>
+                  )
+                }}
+              />
+              <br />
+              <T id="bid_page.confirm.accept_bid_line_two" />
+            </>
+          }
+          onConfirm={handleConfirmBid}
+          valueToConfirm={price}
+          network={nft.network}
+          onCancel={() => setShowConfirmationModal(false)}
+          loading={isPlacingBid}
+          disabled={isPlacingBid}
+        />
+      ) : null}
     </AssetAction>
   )
 }

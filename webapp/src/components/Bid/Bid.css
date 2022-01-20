@@ -35,11 +35,15 @@
 }
 
 .Bid .wrapper .info .dcl.stats {
-  width: 20%;
+  width: 25%;
 }
 
 .Bid .wrapper .info .dcl.stats.from {
   width: 30%;
+}
+
+.Bid .wrapper .info .dcl.stats.price {
+  width: 35%;
 }
 
 .Bid .wrapper .info .dcl.stats .ui.header {
@@ -121,7 +125,8 @@
   }
 
   .Bid .wrapper .info .dcl.stats,
-  .Bid .wrapper .info .dcl.stats.from {
+  .Bid .wrapper .info .dcl.stats.from,
+  .Bid .wrapper .info .dcl.stats.price {
     width: 100%;
   }
 
