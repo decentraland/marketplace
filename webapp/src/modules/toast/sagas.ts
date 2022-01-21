@@ -21,18 +21,28 @@ import {
 } from '../order/actions'
 import {
   getMetaTransactionFailureToast,
-  getContractAccountFailureToast
+  getContractAccountFailureToast,
+  getStoreUpdateSucessToast
 } from './toasts'
 import {
   isContractAccountError,
   isUserDeniedSignatureError
 } from '../transaction/utils'
+import { UPDATE_STORE_SUCCESS } from '../store/actions'
 
 export function* toastSaga() {
   yield all([baseToastSaga(), customToastSaga()])
 }
 
 function* customToastSaga() {
+  yield all([successToastSagas(), failureToastSagas()])
+}
+
+function* successToastSagas() {
+  yield takeEvery(UPDATE_STORE_SUCCESS, handleStoreUpdateSuccess)
+}
+
+function* failureToastSagas() {
   yield takeEvery(TRANSFER_NFT_FAILURE, handleNFTMetaTransactionFailure)
   yield takeEvery(CREATE_ORDER_FAILURE, handleNFTMetaTransactionFailure)
   yield takeEvery(EXECUTE_ORDER_FAILURE, handleNFTMetaTransactionFailure)
@@ -85,4 +95,8 @@ function* handleAuthorizationMetaTransactionFailure(
       yield put(showToast(getMetaTransactionFailureToast()))
     }
   }
+}
+
+function* handleStoreUpdateSuccess() {
+  yield put(showToast(getStoreUpdateSucessToast()))
 }
