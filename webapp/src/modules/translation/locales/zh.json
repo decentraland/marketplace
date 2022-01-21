@@ -498,6 +498,10 @@
     "contract_account": {
       "title": "不支持",
       "body": "智能合约钱包不支持元交易。"
+    },
+    "store_update_success": {
+      "title": "成功",
+      "body": "存储数据正确更新"
     }
   }
 }

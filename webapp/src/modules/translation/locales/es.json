@@ -497,6 +497,10 @@
     "contract_account": {
       "title": "No soportado",
       "body": "Las billeteras basadas en smart contracts no soportan meta-transacciones"
+    },
+    "store_update_success": {
+      "title": "Éxito",
+      "body": "Configuración de tienda actualizada correctamente"
     }
   }
 }

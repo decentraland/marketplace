@@ -500,6 +500,10 @@
     "contract_account": {
       "title": "Not supported",
       "body": "Smart contract wallets don't support meta-transactions."
+    },
+    "store_update_success": {
+      "title": "Success",
+      "body": "Store data updated correctly"
     }
   }
 }
