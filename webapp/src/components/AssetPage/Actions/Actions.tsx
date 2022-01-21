@@ -12,7 +12,7 @@ import styles from './Actions.module.css'
 
 const Actions = (props: Props) => {
   const { wallet, nft, order, bids } = props
-  const { vendor, contractAddress, tokenId } = nft
+  const { vendor, contractAddress, tokenId, data } = nft
 
   const [showLeavingSiteModal, setShowLeavingSiteModal] = useState(false)
 
@@ -20,6 +20,7 @@ const Actions = (props: Props) => {
   const isBiddable = bidService !== undefined
 
   const isOwner = isOwnedBy(nft, wallet)
+  const isENSName = !!data.ens
 
   const canSell = orderService.canSell()
   const canBid =
@@ -105,6 +106,15 @@ const Actions = (props: Props) => {
           {t('asset_page.actions.transfer')}
         </Button>
       ) : null}
+      {isOwner && isENSName && (
+        <Button
+          as="a"
+          href={`${process.env.REACT_APP_BUILDER_URL}/names`}
+          fluid
+        >
+          {t('asset_page.actions.manage')}
+        </Button>
+      )}
 
       <Modal
         className="LeavingSiteModal"

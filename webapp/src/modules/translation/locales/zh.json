@@ -217,6 +217,7 @@
   "asset_page": {
     "actions": {
       "cancel_sale": "删除列表",
+      "manage": "管理",
       "update": "更新价格",
       "buy": "购买",
       "mint": "购买",

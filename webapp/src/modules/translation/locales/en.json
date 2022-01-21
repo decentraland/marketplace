@@ -219,6 +219,7 @@
   "asset_page": {
     "actions": {
       "cancel_sale": "Remove listing",
+      "manage": "Manage",
       "update": "Update price",
       "buy": "Buy",
       "mint": "Mint",
