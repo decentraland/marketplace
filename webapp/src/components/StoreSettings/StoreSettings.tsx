@@ -94,6 +94,9 @@ const StoreSettings = ({
     } else {
       window.onbeforeunload = null
     }
+    return () => {
+      window.onbeforeunload = null
+    }
   }, [canSubmit])
 
   // returns true to allow the navigation to the next location
