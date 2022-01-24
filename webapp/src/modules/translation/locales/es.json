@@ -217,6 +217,7 @@
   "asset_page": {
     "actions": {
       "cancel_sale": "Borrar publicación",
+      "manage": "Gestionar",
       "update": "Actualizar precio",
       "buy": "Comprar",
       "mint": "Comprar",
