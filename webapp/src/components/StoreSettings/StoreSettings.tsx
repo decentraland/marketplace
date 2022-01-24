@@ -96,14 +96,15 @@ const StoreSettings = ({
     }
   }, [canSubmit])
 
-  const shouldPrompt = (location: Location<unknown>) => {
+  // returns true to allow the navigation to the next location
+  const getPromptMessage = (location: Location<unknown>) => {
     if (location.search.includes('viewAsGuest=true')) return true
     return t('store_settings.unsaved_changes')
   }
 
   return (
     <div className="StoreSettings">
-      <Prompt when={canSubmit} message={shouldPrompt} />
+      <Prompt when={canSubmit} message={getPromptMessage} />
       <Row className="top">
         <Column>
           <Header>{t('store_settings.settings')}</Header>
