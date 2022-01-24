@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Header, Row, Column, Button, Loader } from 'decentraland-ui'
 import { Link, Prompt } from 'react-router-dom'
+import { Location } from 'history'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import InputContainer from './InputContainer'
 import CoverPicker from './CoverPicker'
@@ -95,9 +96,14 @@ const StoreSettings = ({
     }
   }, [canSubmit])
 
+  const shouldPrompt = (location: Location<unknown>) => {
+    if (location.search.includes('viewAsGuest=true')) return true
+    return t('store_settings.unsaved_changes')
+  }
+
   return (
     <div className="StoreSettings">
-      <Prompt when={canSubmit} message={t('store_settings.unsaved_changes')} />
+      <Prompt when={canSubmit} message={shouldPrompt} />
       <Row className="top">
         <Column>
           <Header>{t('store_settings.settings')}</Header>
