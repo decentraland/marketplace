@@ -9,6 +9,7 @@ import { AssetType } from '../../../modules/asset/types'
 import { VendorFactory } from '../../../modules/vendor'
 import { Props } from './Actions.types'
 import styles from './Actions.module.css'
+import { builderUrl } from '../../../lib/environment'
 
 const Actions = (props: Props) => {
   const { wallet, nft, order, bids } = props
@@ -107,11 +108,7 @@ const Actions = (props: Props) => {
         </Button>
       ) : null}
       {isOwner && isENSName && (
-        <Button
-          as="a"
-          href={`${process.env.REACT_APP_BUILDER_URL}/names`}
-          fluid
-        >
+        <Button as="a" href={`${builderUrl}/names`} fluid>
           {t('asset_page.actions.manage')}
         </Button>
       )}
