@@ -29,7 +29,6 @@ const StoreSettings = ({
   onSave,
   onFetchStore
 }: Props) => {
-  console.log('canSubmit: ', canSubmit)
   const { cover, description, website, facebook, twitter, discord } = store
 
   const [coverSize, setCoverSize] = useState<number>()
@@ -80,13 +79,12 @@ const StoreSettings = ({
   )
 
   const handleInputOnChange = useCallback(
-    (type: LinkType, value: string) => {
+    (type: LinkType, value: string) =>
       onChange({
         ...store,
         [type]: (!value ? '' : linkStartWiths[type] + value).replaceAll(' ', '')
-      })
-    },
-    [onChange, store]
+      }),
+    [store, onChange]
   )
 
   useEffect(() => {
