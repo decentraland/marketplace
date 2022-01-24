@@ -150,7 +150,8 @@
     "discord": "ID del canal de Discord",
     "save": "Guardar",
     "revert": "Revertir",
-    "add_cover_picture": "Haga click aquí para ponerle una imagen a la tienda"
+    "add_cover_picture": "Haga click aquí para ponerle una imagen a la tienda",
+    "unsaved_changes": "Perderá todos los cambios no guardados, ¿está seguro de que desea continuar?"
   },
   "external_link_modal": {
     "header": "Estas saliendo de Decentraland",

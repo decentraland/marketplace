@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Header, Row, Column, Button, Loader } from 'decentraland-ui'
-import { Link } from 'react-router-dom'
+import { Link, Prompt } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import InputContainer from './InputContainer'
 import CoverPicker from './CoverPicker'
@@ -29,7 +29,17 @@ const StoreSettings = ({
   onSave,
   onFetchStore
 }: Props) => {
+  console.log('canSubmit: ', canSubmit)
   const { cover, description, website, facebook, twitter, discord } = store
+  console.log('store: ', store)
+
+  const [originalStoreValues, setOriginalStoreValues] = useState<Store>()
+  console.log('originalStoreValues: ', originalStoreValues)
+
+  console.log('isLoading: ', isLoading)
+  useEffect(() => {
+    if (!isLoading) setOriginalStoreValues(store)
+  }, [isLoading, store])
 
   const [coverSize, setCoverSize] = useState<number>()
 
@@ -78,17 +88,31 @@ const StoreSettings = ({
     [store]
   )
 
+  const [isDirty, setIsDirty] = useState(false)
+
+  const handleOnChangeWithDirty = useCallback(
+    (store: Store) => {
+      setIsDirty(true)
+      onChange(store)
+    },
+    [onChange]
+  )
+
   const handleInputOnChange = useCallback(
-    (type: LinkType, value: string) =>
-      onChange({
+    (type: LinkType, value: string) => {
+      handleOnChangeWithDirty({
         ...store,
         [type]: (!value ? '' : linkStartWiths[type] + value).replaceAll(' ', '')
-      }),
-    [store, onChange]
+      })
+    },
+    [handleOnChangeWithDirty, store]
   )
+
+  console.log('isDirty: ', isDirty)
 
   return (
     <div className="StoreSettings">
+      <Prompt when={canSubmit} message={t('store_settings.unsaved_changes')} />
       <Row className="top">
         <Column>
           <Header>{t('store_settings.settings')}</Header>
@@ -112,6 +136,7 @@ const StoreSettings = ({
                 src={cover}
                 onChange={(src, name, size) => {
                   setCoverSize(size)
+                  setIsDirty(true)
                   onChange({
                     ...store,
                     cover: src || '',
@@ -125,14 +150,18 @@ const StoreSettings = ({
               <TextInput
                 type="textarea"
                 value={description}
-                onChange={description => onChange({ ...store, description })}
+                onChange={description =>
+                  handleOnChangeWithDirty({ ...store, description })
+                }
               />
             </InputContainer>
             <InputContainer title={t('store_settings.website')}>
               <TextInput
                 type="input"
                 value={website}
-                onChange={website => onChange({ ...store, website })}
+                onChange={website =>
+                  handleOnChangeWithDirty({ ...store, website })
+                }
               />
               {errors.website && <div className="error">{errors.website}</div>}
             </InputContainer>
