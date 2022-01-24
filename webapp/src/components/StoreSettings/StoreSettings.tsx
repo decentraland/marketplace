@@ -31,15 +31,6 @@ const StoreSettings = ({
 }: Props) => {
   console.log('canSubmit: ', canSubmit)
   const { cover, description, website, facebook, twitter, discord } = store
-  console.log('store: ', store)
-
-  const [originalStoreValues, setOriginalStoreValues] = useState<Store>()
-  console.log('originalStoreValues: ', originalStoreValues)
-
-  console.log('isLoading: ', isLoading)
-  useEffect(() => {
-    if (!isLoading) setOriginalStoreValues(store)
-  }, [isLoading, store])
 
   const [coverSize, setCoverSize] = useState<number>()
 
@@ -88,27 +79,23 @@ const StoreSettings = ({
     [store]
   )
 
-  const [isDirty, setIsDirty] = useState(false)
-
-  const handleOnChangeWithDirty = useCallback(
-    (store: Store) => {
-      setIsDirty(true)
-      onChange(store)
-    },
-    [onChange]
-  )
-
   const handleInputOnChange = useCallback(
     (type: LinkType, value: string) => {
-      handleOnChangeWithDirty({
+      onChange({
         ...store,
         [type]: (!value ? '' : linkStartWiths[type] + value).replaceAll(' ', '')
       })
     },
-    [handleOnChangeWithDirty, store]
+    [onChange, store]
   )
 
-  console.log('isDirty: ', isDirty)
+  useEffect(() => {
+    if (canSubmit) {
+      window.onbeforeunload = () => true
+    } else {
+      window.onbeforeunload = null
+    }
+  }, [canSubmit])
 
   return (
     <div className="StoreSettings">
@@ -136,7 +123,6 @@ const StoreSettings = ({
                 src={cover}
                 onChange={(src, name, size) => {
                   setCoverSize(size)
-                  setIsDirty(true)
                   onChange({
                     ...store,
                     cover: src || '',
@@ -150,18 +136,14 @@ const StoreSettings = ({
               <TextInput
                 type="textarea"
                 value={description}
-                onChange={description =>
-                  handleOnChangeWithDirty({ ...store, description })
-                }
+                onChange={description => onChange({ ...store, description })}
               />
             </InputContainer>
             <InputContainer title={t('store_settings.website')}>
               <TextInput
                 type="input"
                 value={website}
-                onChange={website =>
-                  handleOnChangeWithDirty({ ...store, website })
-                }
+                onChange={website => onChange({ ...store, website })}
               />
               {errors.website && <div className="error">{errors.website}</div>}
             </InputContainer>
