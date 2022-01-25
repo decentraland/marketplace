@@ -21,6 +21,8 @@ import {
   fetchStoreEntity,
   getStoreFromEntity
 } from './utils'
+import { Store } from './types'
+import { getIsLocalStoreDirty } from './selectors'
 
 export function* storeSaga(client: CatalystClient) {
   yield takeLatest(FETCH_STORE_REQUEST, handleFetchStoreRequest)
@@ -30,12 +32,16 @@ export function* storeSaga(client: CatalystClient) {
   function* handleLocationChange({
     payload: { location }
   }: LocationChangeAction) {
+    const isLocalStoreDirty: Store | null = yield select(getIsLocalStoreDirty)
+    if (!isLocalStoreDirty) {
+      return
+    }
+
     const address: string = yield select(getAddress)
-    if (
-      !location.search.includes('section=store_settings&') &&
-      !location.search.includes('viewAsGuest=true')
-    )
+    const allowed = ['section=store_settings&', 'viewAsGuest=true']
+    if (!allowed.some(value => location.search.includes(value))) {
       yield put(revertLocalStore(address))
+    }
   }
 
   function* handleFetchStoreRequest({
