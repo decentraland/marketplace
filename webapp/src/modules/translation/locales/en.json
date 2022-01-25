@@ -152,7 +152,8 @@
     "discord": "Discord Channel ID",
     "save": "Save",
     "revert": "Revert",
-    "add_cover_picture": "Click here to add a cover picture"
+    "add_cover_picture": "Click here to add a cover picture",
+    "unsaved_changes": "You will lose any unsaved changes, are you sure you want to leave?"
   },
   "external_link_modal": {
     "header": "You are exiting Decentraland",

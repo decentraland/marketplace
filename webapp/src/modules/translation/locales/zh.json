@@ -150,7 +150,8 @@
     "discord": "通道编号 Discord",
     "save": "救",
     "revert": "恢复",
-    "add_cover_picture": "单击此处将图像放入您的商店"
+    "add_cover_picture": "单击此处将图像放入您的商店",
+    "unsaved_changes": "您将丢失所有未保存的更改，您确定要离开吗？"
   },
   "external_link_modal": {
     "header": "您将离开Decentraland",

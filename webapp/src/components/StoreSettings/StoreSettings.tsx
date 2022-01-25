@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Header, Row, Column, Button, Loader } from 'decentraland-ui'
-import { Link } from 'react-router-dom'
+import { Link, Prompt } from 'react-router-dom'
+import { Location } from 'history'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import InputContainer from './InputContainer'
 import CoverPicker from './CoverPicker'
@@ -87,8 +88,26 @@ const StoreSettings = ({
     [store, onChange]
   )
 
+  useEffect(() => {
+    if (canSubmit) {
+      window.onbeforeunload = () => true
+    } else {
+      window.onbeforeunload = null
+    }
+    return () => {
+      window.onbeforeunload = null
+    }
+  }, [canSubmit])
+
+  // returns true to allow the navigation to the next location
+  const getPromptMessage = (location: Location<unknown>) => {
+    if (location.search.includes('viewAsGuest=true')) return true
+    return t('store_settings.unsaved_changes')
+  }
+
   return (
     <div className="StoreSettings">
+      <Prompt when={canSubmit} message={getPromptMessage} />
       <Row className="top">
         <Column>
           <Header>{t('store_settings.settings')}</Header>
