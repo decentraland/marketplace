@@ -21,7 +21,6 @@ import {
   fetchStoreEntity,
   getStoreFromEntity
 } from './utils'
-import { Store } from './types'
 import { getIsLocalStoreDirty } from './selectors'
 
 export function* storeSaga(client: CatalystClient) {
@@ -32,7 +31,7 @@ export function* storeSaga(client: CatalystClient) {
   function* handleLocationChange({
     payload: { location }
   }: LocationChangeAction) {
-    const isLocalStoreDirty: Store | null = yield select(getIsLocalStoreDirty)
+    const isLocalStoreDirty: boolean = yield select(getIsLocalStoreDirty)
     if (!isLocalStoreDirty) {
       return
     }
