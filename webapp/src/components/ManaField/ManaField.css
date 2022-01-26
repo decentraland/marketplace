@@ -9,3 +9,7 @@
   bottom: 12px;
   margin-bottom: 0px;
 }
+
+.ManaField .dcl.mana {
+  transform: translateY(-0.15em);
+}
