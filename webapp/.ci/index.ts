@@ -17,10 +17,13 @@ async function main() {
     const zoneId = config.requireSecret('cloudflare_zone_id')
     new cloudflare.PageRule(`marketplace-sitemaps-proxy`, {
       zoneId,
+      priority: 1,
       target: domain + '/sitemap/*',
       actions: {
         ssl: 'flexible',
         alwaysOnline: 'on',
+        cacheLevel: 'cacheEverything',
+        edgeCacheTtl: 3600,
         hostHeaderOverride
       }
     })
