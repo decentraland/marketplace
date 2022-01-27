@@ -22,7 +22,7 @@ async function main() {
       actions: {
         ssl: 'flexible',
         alwaysOnline: 'on',
-        cacheLevel: 'cacheEverything',
+        cacheLevel: 'cache_everything',
         edgeCacheTtl: 3600,
         hostHeaderOverride
       }
