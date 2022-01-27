@@ -231,6 +231,7 @@ enum WearableCategory @entity {
   mask
   tiara
   top_head
+  skin
 }
 
 enum WearableRarity @entity {
