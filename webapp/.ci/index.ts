@@ -11,27 +11,10 @@ async function main() {
     defaultPath: 'index.html',
   })
 
-  if (env === 'prd') {
-    const config = new pulumi.Config()
-    const hostHeaderOverride = config.requireSecret('sitemaps_target')
-    const zoneId = config.requireSecret('cloudflare_zone_id')
-    new cloudflare.PageRule(`marketplace-sitemaps-proxy`, {
-      zoneId,
-      priority: 1,
-      target: domain + '/sitemap/*',
-      actions: {
-        ssl: 'flexible',
-        alwaysOnline: 'on',
-        cacheLevel: 'cache_everything',
-        edgeCacheTtl: 3600,
-        hostHeaderOverride
-      }
-    })
-  }
-
   return {
     cloudfrontDistribution: market.cloudfrontDistribution,
     bucketName: market.contentBucket,
   }
 }
+
 export = main

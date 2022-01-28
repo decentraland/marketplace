@@ -12,5 +12,7 @@ build:
     - dcl-lock-sync
     - cd .ci && npm ci && dcl-up website-market
     - dcl-sync-release && cd ..
+    - curl http://marketplace-sitemap-export-eb8a2fa.s3-website-us-east-1.amazonaws.com/sitemaps.zip > sitemaps.zip
+    - unzip -u build sitemaps.zip
     - dcl-upload build
     - cd .ci && dcl-cache-invalidation
