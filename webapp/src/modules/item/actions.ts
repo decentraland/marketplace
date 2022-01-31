@@ -73,3 +73,49 @@ export const fetchItemFailure = (
 export type FetchItemRequestAction = ReturnType<typeof fetchItemRequest>
 export type FetchItemSuccessAction = ReturnType<typeof fetchItemSuccess>
 export type FetchItemFailureAction = ReturnType<typeof fetchItemFailure>
+
+// Edit On Chain Sale Data
+
+export const SET_PRICE_AND_BENEFICIARY_REQUEST =
+  '[Request] Set price and beneficiary'
+export const SET_PRICE_AND_BENEFICIARY_SUCCESS =
+  '[Success] Set price and beneficiary'
+export const SET_PRICE_AND_BENEFICIARY_FAILURE =
+  '[Failure] Set price and beneficiary'
+
+export const setPriceAndBeneficiaryRequest = (
+  itemId: string,
+  price: string,
+  beneficiary: string
+) => action(SET_PRICE_AND_BENEFICIARY_REQUEST, { itemId, price, beneficiary })
+export const setPriceAndBeneficiarySuccess = (
+  item: Item,
+  chainId: ChainId,
+  txHash: string
+) =>
+  action(SET_PRICE_AND_BENEFICIARY_SUCCESS, {
+    item,
+    ...buildTransactionPayload(chainId, txHash, { item })
+  })
+export const setPriceAndBeneficiaryFailure = (
+  itemId: string,
+  price: string,
+  beneficiary: string,
+  error: string
+) =>
+  action(SET_PRICE_AND_BENEFICIARY_FAILURE, {
+    itemId,
+    price,
+    beneficiary,
+    error
+  })
+
+export type SetPriceAndBeneficiaryRequestAction = ReturnType<
+  typeof setPriceAndBeneficiaryRequest
+>
+export type SetPriceAndBeneficiarySuccessAction = ReturnType<
+  typeof setPriceAndBeneficiarySuccess
+>
+export type SetPriceAndBeneficiaryFailureAction = ReturnType<
+  typeof setPriceAndBeneficiaryFailure
+>

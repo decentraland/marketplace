@@ -137,6 +137,14 @@
     "edit_price": "编辑价格",
     "mint_item": "硬币物品"
   },
+  "edit_price_and_beneficiary_modal": {
+    "title": "设置{name}的价格和地址",
+    "for_me": "我是受益人",
+    "free": "免费",
+    "price_label": "价格",
+    "beneficiary_label": "受益人",
+    "beneficiary_popup": "这是第一次出售物品时将收到 MANA 和有人转售时收取版税的钱包地址。 您可以为集合中的每个项目设置不同的收款人地址。"
+  },
   "store_settings": {
     "settings": "配置",
     "see_store_as_guest": "以访客身份查看商店",

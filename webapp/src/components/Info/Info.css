@@ -1,0 +1,14 @@
+.ui.popup.inverted.info-popup {
+  z-index: 3001; /* Over modals, which have a z-index of 3000 */
+}
+
+.Info {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  background-image: url(../../images/info.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  display: inline-block;
+}

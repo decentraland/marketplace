@@ -21,7 +21,8 @@ import { AssetType } from '../asset/types'
 import {
   BUY_ITEM_SUCCESS,
   fetchItemRequest,
-  fetchItemsRequest
+  fetchItemsRequest,
+  SET_PRICE_AND_BENEFICIARY_SUCCESS
 } from '../item/actions'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
@@ -116,7 +117,8 @@ export function* routingSaga() {
       ACCEPT_BID_SUCCESS,
       CANCEL_BID_SUCCESS,
       BUY_ITEM_SUCCESS,
-      TRANSFER_NFT_SUCCESS
+      TRANSFER_NFT_SUCCESS,
+      SET_PRICE_AND_BENEFICIARY_SUCCESS
     ],
     handleRedirectToActivity
   )

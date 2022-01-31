@@ -1,6 +1,6 @@
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { ChainId, Item } from '@dcl/schemas'
+import { ChainId, Item, Network, Rarity, WearableCategory } from '@dcl/schemas'
 import { call, select } from 'redux-saga/effects'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import {
@@ -12,12 +12,16 @@ import {
   fetchItemsFailure,
   fetchItemSuccess,
   fetchItemRequest,
-  fetchItemFailure
+  fetchItemFailure,
+  setPriceAndBeneficiarySuccess,
+  setPriceAndBeneficiaryRequest
 } from './actions'
 import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { itemAPI } from '../vendor/decentraland/item/api'
 import { itemSaga } from './sagas'
+import { getItems } from './selectors'
+import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 
 const item = {
   itemId: 'anItemId',
@@ -109,6 +113,111 @@ describe('when handling the fetch items request action', () => {
           )
         )
         .dispatch(fetchItemsRequest(itemBrowseOptions))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when the request fails', () => {
+    it('should dispatching a failing action with the error and the options', () => {
+      return expectSaga(itemSaga)
+        .provide([
+          [
+            call([itemAPI, 'fetch'], itemBrowseOptions.filters),
+            Promise.reject(anError)
+          ]
+        ])
+        .put(fetchItemsFailure(anError.message, itemBrowseOptions))
+        .dispatch(fetchItemsRequest(itemBrowseOptions))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when handling the fetch item request action', () => {
+    describe('when the request is successful', () => {
+      it('should dispatch a successful action with the fetched items', () => {
+        return expectSaga(itemSaga)
+          .provide([
+            [
+              call([itemAPI, 'fetchOne'], item.contractAddress, item.itemId),
+              item
+            ]
+          ])
+          .put(fetchItemSuccess(item))
+          .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('when the request fails', () => {
+      it('should dispatching a failing action with the contract address, the token id and the error message', () => {
+        return expectSaga(itemSaga)
+          .provide([
+            [
+              call([itemAPI, 'fetchOne'], item.contractAddress, item.itemId),
+              Promise.reject(anError)
+            ]
+          ])
+          .put(
+            fetchItemFailure(item.contractAddress, item.itemId, anError.message)
+          )
+          .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
+          .run({ silenceTimeout: true })
+      })
+    })
+  })
+})
+
+describe('when handling setting the price/beneficiary request action', () => {
+  describe('when the request is successful', () => {
+    let dateNowSpy: jest.SpyInstance
+    const nowTimestamp = 1487076708000
+    const fetchResult = { data: [item], total: 1 }
+
+    beforeEach(() => {
+      dateNowSpy = jest
+        .spyOn(Date, 'now')
+        .mockImplementation(() => nowTimestamp)
+    })
+
+    afterEach(() => {
+      dateNowSpy.mockRestore()
+    })
+
+    fit('should dispatch a successful action with the updated item data', () => {
+      const mockedItem = {
+        ...item,
+        updatedAt: nowTimestamp,
+        data: {
+          wearable: {
+            bodyShapes: [],
+            category: WearableCategory.HAT,
+            isSmart: true,
+            description: '',
+            rarity: Rarity.COMMON
+          }
+        }
+      }
+      const newItemPrice = '324235'
+      const newItemBeneficiary = '0x01'
+      return expectSaga(itemSaga)
+        .provide([
+          [select(getItems), [mockedItem]],
+          [call([itemAPI, 'fetch'], itemBrowseOptions.filters), fetchResult],
+          [matchers.call.fn(sendTransaction), Promise.resolve(txHash)],
+          [call(getChainIdByNetwork, Network.MATIC), ChainId.MATIC_MAINNET]
+        ])
+        .put(
+          setPriceAndBeneficiarySuccess(
+            {
+              ...mockedItem,
+              beneficiary: newItemBeneficiary,
+              price: newItemPrice
+            },
+            ChainId.MATIC_MAINNET,
+            txHash
+          )
+        )
+        .dispatch(setPriceAndBeneficiaryRequest(item.id, newItemPrice, '0x01'))
         .run({ silenceTimeout: true })
     })
   })

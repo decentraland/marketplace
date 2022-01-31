@@ -39,7 +39,8 @@
     "buyer": "Buyer",
     "bid": "Bid",
     "order": "Listing",
-    "mint": "Mint"
+    "mint": "Mint",
+    "submit": "Submit"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -138,6 +139,14 @@
     "on_sale": "On Sale",
     "edit_price": "Edit price",
     "mint_item": "Mint item"
+  },
+  "edit_price_and_beneficiary_modal": {
+    "title": "Set price and address for \"{name}\"",
+    "for_me": "I'm the beneficiary",
+    "free": "Make it free",
+    "price_label": "Price",
+    "beneficiary_label": "Beneficiary",
+    "beneficiary_popup": "This is the wallet address that will receive MANA when the item is sold for the first time and Royalties when it is resold. You can set a different beneficiary address for each item in a collection."
   },
   "store_settings": {
     "settings": "Settings",
@@ -451,6 +460,7 @@
       "unapproved": "unapproved"
     },
     "detail": {
+      "set_price_and_beneficiary": "You edited the price and/or beneficiary of {name}",
       "approve_token": "You {action} the {contract} contract to operate {token} on your behalf.",
       "create_order": "You listed {name} on sale for {price}.",
       "cancel_order": "You removed the listing of {name} for {price}.",

@@ -21,8 +21,15 @@ import {
   FetchItemSuccessAction,
   FETCH_ITEM_FAILURE,
   FETCH_ITEM_REQUEST,
-  FETCH_ITEM_SUCCESS
+  FETCH_ITEM_SUCCESS,
+  SetPriceAndBeneficiaryRequestAction,
+  SetPriceAndBeneficiarySuccessAction,
+  SetPriceAndBeneficiaryFailureAction,
+  SET_PRICE_AND_BENEFICIARY_REQUEST,
+  SET_PRICE_AND_BENEFICIARY_SUCCESS,
+  SET_PRICE_AND_BENEFICIARY_FAILURE
 } from './actions'
+import { toItemObject } from './utils'
 
 export type ItemState = {
   data: Record<string, Item>
@@ -43,6 +50,9 @@ type ItemReducerAction =
   | FetchItemFailureAction
   | FetchItemRequestAction
   | FetchItemSuccessAction
+  | SetPriceAndBeneficiaryRequestAction
+  | SetPriceAndBeneficiarySuccessAction
+  | SetPriceAndBeneficiaryFailureAction
   | BuyItemRequestAction
   | BuyItemSuccessAction
   | BuyItemFailureAction
@@ -55,6 +65,7 @@ export function itemReducer(
     case BUY_ITEM_REQUEST:
     case BUY_ITEM_SUCCESS:
     case FETCH_ITEMS_REQUEST:
+    case SET_PRICE_AND_BENEFICIARY_REQUEST:
     case FETCH_ITEM_REQUEST: {
       return {
         ...state,
@@ -89,8 +100,22 @@ export function itemReducer(
       }
     }
 
+    case SET_PRICE_AND_BENEFICIARY_SUCCESS: {
+      const { item } = action.payload
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          ...toItemObject([item])
+        },
+        loading: loadingReducer(state.loading, action),
+        error: null
+      }
+    }
+
     case BUY_ITEM_FAILURE:
     case FETCH_ITEMS_FAILURE:
+    case SET_PRICE_AND_BENEFICIARY_FAILURE:
     case FETCH_ITEM_FAILURE: {
       const { error } = action.payload
       return {

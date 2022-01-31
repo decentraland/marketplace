@@ -1,0 +1,32 @@
+.EditPriceAndBeneficiaryModal.ui.modal .dcl.modal-navigation-title {
+  padding-right: 15px;
+}
+
+.EditPriceAndBeneficiaryModal.ui.modal .actions .ui.active.button {
+  background-color: rgba(var(--bluish-steel-raw), 0.8);
+  color: var(--text-on-secondary);
+}
+
+.EditPriceAndBeneficiaryModal .ui.form .price-field {
+  position: relative;
+}
+
+.EditPriceAndBeneficiaryModal .ui.form .price-field .dcl.mana.inline {
+  position: absolute;
+  top: 24px;
+  margin: 0;
+}
+
+.EditPriceAndBeneficiaryModal .ui.form .price-field .disabled + .dcl.mana.inline {
+  opacity: 0.45;
+}
+
+.EditPriceAndBeneficiaryModal .ui.form .price-field .dcl.field .ui.input > input {
+  padding-left: 18px;
+}
+
+.EditPriceAndBeneficiaryModal .Info {
+  width: 11px;
+  height: 11px;
+  margin-left: 8px;
+}

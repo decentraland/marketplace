@@ -1,4 +1,4 @@
-import { Item } from '@dcl/schemas'
+import { ChainId, Item, Network } from '@dcl/schemas'
 import { put, takeEvery } from '@redux-saga/core/effects'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
@@ -17,17 +17,67 @@ import {
   fetchItemFailure,
   FetchItemRequestAction,
   fetchItemSuccess,
-  FETCH_ITEM_REQUEST
+  FETCH_ITEM_REQUEST,
+  setPriceAndBeneficiarySuccess,
+  setPriceAndBeneficiaryFailure,
+  SetPriceAndBeneficiaryRequestAction,
+  SET_PRICE_AND_BENEFICIARY_REQUEST
 } from './actions'
+import { getItems } from './selectors'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
+import { getMetadata } from './utils'
 
 export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
+  yield takeEvery(
+    SET_PRICE_AND_BENEFICIARY_REQUEST,
+    handleSetPriceAndBeneficiaryRequest
+  )
+}
+
+function* handleSetPriceAndBeneficiaryRequest(
+  action: SetPriceAndBeneficiaryRequestAction
+) {
+  const { itemId, price, beneficiary } = action.payload
+  try {
+    const items: ReturnType<typeof getItems> = yield select(getItems)
+    const item = items.find(item => item.id === itemId)
+
+    if (!item) {
+      throw new Error(yield call(t, 'sagas.item.not_found'))
+    }
+
+    const newItem = { ...item, price, beneficiary, updatedAt: Date.now() }
+
+    const metadata = getMetadata(newItem)
+    const chainId: ChainId = yield call(getChainIdByNetwork, Network.MATIC)
+    const contract = {
+      ...getContract(ContractName.ERC721CollectionV2, chainId),
+      address: item.contractAddress!
+    }
+    const txHash: string = yield call(sendTransaction, contract, collection =>
+      collection.editItemsData(
+        [newItem.itemId!],
+        [newItem.price!],
+        [newItem.beneficiary!],
+        [metadata]
+      )
+    )
+
+    yield put(setPriceAndBeneficiarySuccess(newItem, chainId, txHash))
+  } catch (error) {
+    yield put(
+      setPriceAndBeneficiaryFailure(itemId, price, beneficiary, error.message)
+    )
+  }
 }
 
 function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
   const { filters } = action.payload
+  console.log('filters: ', filters)
   try {
     const { data, total }: { data: Item[]; total: number } = yield call(
       [itemAPI, 'fetch'],

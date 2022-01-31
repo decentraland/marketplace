@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Item, Rarity } from '@dcl/schemas'
 import {
   Back,
   Column,
@@ -24,16 +25,17 @@ import { Navigation } from '../Navigation'
 import { Props } from './CollectionPage.types'
 import { Mana } from '../Mana'
 import { formatMANA } from '../../lib/mana'
-import { Rarity } from '@dcl/schemas'
 import { getContractAddressFromProps } from './utils'
 import CollectionProvider from '../CollectionProvider'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import AssetCell from '../OnSaleList/AssetCell'
 import styles from './CollectionPage.module.css'
+import EditPriceAndBeneficiaryModalContainer from '../EditPriceAndBeneficiaryModal'
 
 const CollectionPage = (props: Props) => {
   const { onBack, currentAddress } = props
 
+  const [editingItem, setEditingItem] = useState<Item>()
   const contractAddress = getContractAddressFromProps(props)
   const builderCollectionUrl = getBuilderCollectionDetailUrl(contractAddress)
 
@@ -172,8 +174,7 @@ const CollectionPage = (props: Props) => {
                                     <Dropdown.Menu>
                                       <Dropdown.Item
                                         text={t('collection_page.edit_price')}
-                                        as="a"
-                                        href={builderCollectionUrl}
+                                        onClick={() => setEditingItem(item)}
                                       />
                                       <Dropdown.Item
                                         text={t('collection_page.mint_item')}
@@ -195,6 +196,12 @@ const CollectionPage = (props: Props) => {
             )
           }}
         </CollectionProvider>
+        {editingItem ? (
+          <EditPriceAndBeneficiaryModalContainer
+            item={editingItem}
+            onClose={() => setEditingItem(undefined)}
+          />
+        ) : null}
       </Page>
       <Footer />
     </div>

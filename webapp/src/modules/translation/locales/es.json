@@ -137,6 +137,14 @@
     "edit_price": "Editar precio",
     "mint_item": "Acuñar item"
   },
+  "edit_price_and_beneficiary_modal": {
+    "title": "Asignar un precio y un beneficiario para \"{name}\"",
+      "for_me": "Soy el beneficiario",
+      "free": "Hacerlo gratuito",
+      "price_label": "Precio",
+      "beneficiary_label": "Beneficiario",
+      "beneficiary_popup": "Esta es la dirección de la billetera que recibirá MANA cuando se venda este item por primera vez y Regalías cuando sea revendido. Puede establecer una dirección de beneficiario diferente para cada item de una colección."
+  },
   "store_settings": {
     "settings": "Configuración",
     "see_store_as_guest": "Ver tienda como invitado",

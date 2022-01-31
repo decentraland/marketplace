@@ -1,0 +1,3 @@
+import EditPriceAndBeneficiaryModal from './EditPriceAndBeneficiaryModal.container'
+
+export default EditPriceAndBeneficiaryModal

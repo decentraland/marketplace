@@ -15,7 +15,10 @@ import {
   CANCEL_ORDER_SUCCESS,
   EXECUTE_ORDER_SUCCESS
 } from '../../../modules/order/actions'
-import { BUY_ITEM_SUCCESS } from '../../../modules/item/actions'
+import {
+  BUY_ITEM_SUCCESS,
+  SET_PRICE_AND_BENEFICIARY_SUCCESS
+} from '../../../modules/item/actions'
 import { TRANSFER_NFT_SUCCESS } from '../../../modules/nft/actions'
 import {
   PLACE_BID_SUCCESS,
@@ -144,6 +147,25 @@ const Transaction = (props: Props) => {
             />
           )}
         </AssetProvider>
+      )
+    }
+    case SET_PRICE_AND_BENEFICIARY_SUCCESS: {
+      const { item } = tx.payload
+      return (
+        <TransactionDetail
+          asset={item}
+          text={
+            <T
+              id="transaction.detail.set_price_and_beneficiary"
+              values={{
+                name: (
+                  <Link to={locations.collection(item.contractAddress)}>{item.name}</Link>
+                )
+              }}
+            />
+          }
+          tx={tx}
+        />
       )
     }
     case BUY_ITEM_SUCCESS:
