@@ -140,7 +140,7 @@
   "edit_price_and_beneficiary_modal": {
     "title": "Asignar un precio y un beneficiario para \"{name}\"",
       "for_me": "Soy el beneficiario",
-      "free": "Hacerlo gratuito",
+      "not_for_sale": "No para la venta",
       "price_label": "Precio",
       "beneficiary_label": "Beneficiario",
       "beneficiary_popup": "Esta es la dirección de la billetera que recibirá MANA cuando se venda este item por primera vez y Regalías cuando sea revendido. Puede establecer una dirección de beneficiario diferente para cada item de una colección."

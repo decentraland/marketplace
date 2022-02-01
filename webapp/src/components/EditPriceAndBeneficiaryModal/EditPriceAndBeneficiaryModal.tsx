@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Address } from 'web3x/address'
+// import { Address } from 'web3x/address'
 import { fromWei, toWei } from 'web3x/utils'
 import { Network } from '@dcl/schemas'
 import {
@@ -43,9 +43,9 @@ export default function EditPriceAndBeneficiaryModal({
     return item.price ? fromWei(item.price, 'ether') : undefined
   }
 
-  const handleIsFreeToggle = () => {
+  const handleIsNotForSaleToggle = () => {
     setItemProps(prevItemProps => ({
-      beneficiary: prevItemProps.isFree ? undefined : Address.ZERO.toString(),
+      beneficiary: prevItemProps.isFree ? undefined : item.creator,
       price: prevItemProps.isFree ? undefined : '0',
       isFree: !prevItemProps.isFree
     }))
@@ -84,7 +84,7 @@ export default function EditPriceAndBeneficiaryModal({
     const numberPrice = Number(price)
     return (
       Number(numberPrice) > 0 ||
-      (numberPrice === 0 && beneficiary === Address.ZERO.toString())
+      (numberPrice === 0 && beneficiary === item.creator)
     )
   }
 
@@ -107,8 +107,12 @@ export default function EditPriceAndBeneficiaryModal({
             <Button size="mini" onClick={handleIsGiftToggle} active={!isGift}>
               {t('edit_price_and_beneficiary_modal.for_me')}
             </Button>
-            <Button size="mini" onClick={handleIsFreeToggle} active={isFree}>
-              {t('edit_price_and_beneficiary_modal.free')}
+            <Button
+              size="mini"
+              onClick={handleIsNotForSaleToggle}
+              active={isFree}
+            >
+              {t('edit_price_and_beneficiary_modal.not_for_sale')}
             </Button>
           </div>
         }
@@ -124,7 +128,7 @@ export default function EditPriceAndBeneficiaryModal({
               value={price}
               onChange={registerHandleFieldChange('price')}
               disabled={isFree}
-              error={!!price && !isValidPrice()}
+              error={!!price && !isFree && !isValidPrice()}
             />
             <Mana network={Network.MATIC} inline />
           </div>

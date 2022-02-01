@@ -159,11 +159,13 @@ const CollectionPage = (props: Props) => {
                                   item.rarity
                                 ).toLocaleString()}
                               </Table.Cell>
-                              <Table.Cell>
-                                <Mana network={item.network} inline>
-                                  {formatMANA(item.price)}
-                                </Mana>
-                              </Table.Cell>
+                              {+item.price > 0 ? (
+                                <Table.Cell>
+                                  <Mana network={item.network} inline>
+                                    {formatMANA(item.price)}
+                                  </Mana>
+                                </Table.Cell>
+                              ) : null}
                               {isCollectionOwner && (
                                 <Table.Cell>
                                   <Dropdown

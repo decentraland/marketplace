@@ -143,7 +143,7 @@
   "edit_price_and_beneficiary_modal": {
     "title": "Set price and address for \"{name}\"",
     "for_me": "I'm the beneficiary",
-    "free": "Make it free",
+    "not_for_sale": "Not for sale",
     "price_label": "Price",
     "beneficiary_label": "Beneficiary",
     "beneficiary_popup": "This is the wallet address that will receive MANA when the item is sold for the first time and Royalties when it is resold. You can set a different beneficiary address for each item in a collection."

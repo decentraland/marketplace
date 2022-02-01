@@ -27,6 +27,7 @@ import { getItems } from './selectors'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 import { getMetadata } from './utils'
+import { constants } from 'ethers'
 
 export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
@@ -58,10 +59,11 @@ function* handleSetPriceAndBeneficiaryRequest(
       ...getContract(ContractName.ERC721CollectionV2, chainId),
       address: item.contractAddress!
     }
+    const newPrice = newItem.price === '0' ? constants.MaxUint256.sub(1) : newItem.price!;
     const txHash: string = yield call(sendTransaction, contract, collection =>
       collection.editItemsData(
         [newItem.itemId!],
-        [newItem.price!],
+        [newPrice],
         [newItem.beneficiary!],
         [metadata]
       )
