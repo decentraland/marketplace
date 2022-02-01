@@ -80,9 +80,6 @@ const ItemDetail = ({ item, wallet }: Props) => {
                   {t('asset_page.actions.edit_price')}
                 </Button>
                 <Button as="a" href={builderCollectionUrl} fluid>
-                  {t('asset_page.actions.change_beneficiary')}
-                </Button>
-                <Button as="a" href={builderCollectionUrl} fluid>
                   {t('asset_page.actions.mint_item')}
                 </Button>
               </div>

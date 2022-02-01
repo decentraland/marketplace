@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-// import { Address } from 'web3x/address'
-import { fromWei, toWei } from 'web3x/utils'
+import { utils } from 'ethers'
 import { Network } from '@dcl/schemas'
 import {
   ModalNavigation,
@@ -16,18 +15,15 @@ import {
 import { NetworkButton } from 'decentraland-dapps/dist/containers'
 import Modal from 'decentraland-dapps/dist/containers/Modal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { utils } from 'ethers'
 import Info from '../Info'
 import { Props } from './EditPriceAndBeneficiaryModal.types'
 import './EditPriceAndBeneficiaryModal.css'
 
 interface ModalState {
-  price?: string
-  beneficiary?: string
-  isFree: boolean
+  price: string
+  beneficiary: string
+  isOnSale: boolean
 }
-
-const MAX_ITEM_PRICE = 2 ** 256 - 1
 
 export default function EditPriceAndBeneficiaryModal({
   item,
@@ -36,35 +32,30 @@ export default function EditPriceAndBeneficiaryModal({
   onClose
 }: Props) {
   const [itemProps, setItemProps] = useState<ModalState>({
-    price: item.price
-      ? +item.price === MAX_ITEM_PRICE
-        ? '0'
-        : fromWei(item.price, 'ether')
-      : undefined,
+    price: Number(utils.formatEther(item.price)).toFixed(0),
     beneficiary: item.beneficiary || item.creator,
-    isFree: false
+    isOnSale: +item.price > 0
   })
 
-  const getItemPrice = () => {
-    return item.price ? fromWei(item.price, 'ether') : undefined
-  }
-
   const handleIsNotForSaleToggle = () => {
-    setItemProps(prevItemProps => ({
-      beneficiary: prevItemProps.isFree ? undefined : item.creator,
-      price: prevItemProps.isFree ? undefined : '0',
-      isFree: !prevItemProps.isFree
-    }))
+    setItemProps(prevItemProps => {
+      const isItemOnSale = !prevItemProps.isOnSale
+      return {
+        beneficiary: isItemOnSale ? '' : item.creator,
+        price: isItemOnSale ? '' : '0',
+        isOnSale: isItemOnSale
+      }
+    })
   }
 
   const isGift = itemProps.beneficiary !== item.creator
 
   const handleIsGiftToggle = () => {
-    setItemProps({
+    setItemProps(prevProps => ({
+      ...prevProps,
       beneficiary: isGift ? item.creator : '',
-      price: getItemPrice(),
-      isFree: false
-    })
+      isOnSale: true
+    }))
   }
 
   const registerHandleFieldChange = (field: 'price' | 'beneficiary') => (
@@ -76,13 +67,13 @@ export default function EditPriceAndBeneficiaryModal({
 
   const handleSubmit = () => {
     const { price, beneficiary } = itemProps
-    const priceInWei = toWei(price!, 'ether')
+    const priceInWei = utils.parseEther(price!).toString()
 
     onSetPriceAndBeneficiary(item.id, priceInWei, beneficiary!)
   }
 
   const isValidBeneficiary = () => {
-    return utils.isAddress(itemProps.beneficiary || '')
+    return utils.isAddress(itemProps.beneficiary)
   }
 
   const isValidPrice = () => {
@@ -98,7 +89,7 @@ export default function EditPriceAndBeneficiaryModal({
     return !isValidPrice() || !isValidBeneficiary() || isLoading
   }
 
-  const { price, isFree, beneficiary } = itemProps
+  const { price, isOnSale, beneficiary } = itemProps
 
   return (
     <Modal
@@ -116,7 +107,7 @@ export default function EditPriceAndBeneficiaryModal({
             <Button
               size="mini"
               onClick={handleIsNotForSaleToggle}
-              active={isFree}
+              active={!isOnSale}
             >
               {t('edit_price_and_beneficiary_modal.not_for_sale')}
             </Button>
@@ -133,8 +124,8 @@ export default function EditPriceAndBeneficiaryModal({
               placeholder={100}
               value={price}
               onChange={registerHandleFieldChange('price')}
-              disabled={isFree}
-              error={!!price && !isFree && !isValidPrice()}
+              disabled={!isOnSale}
+              error={!!price && isOnSale && !isValidPrice()}
             />
             <Mana network={Network.MATIC} inline />
           </div>
@@ -154,7 +145,7 @@ export default function EditPriceAndBeneficiaryModal({
             type="address"
             placeholder="0x..."
             value={beneficiary}
-            disabled={isFree}
+            disabled={!isOnSale}
             onChange={registerHandleFieldChange('beneficiary')}
             error={!!beneficiary && !isValidBeneficiary()}
           />

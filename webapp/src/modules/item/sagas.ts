@@ -59,10 +59,11 @@ function* handleSetPriceAndBeneficiaryRequest(
       ...getContract(ContractName.ERC721CollectionV2, chainId),
       address: item.contractAddress!
     }
-    const newPrice = newItem.price === '0' ? constants.MaxUint256.sub(1) : newItem.price!;
+    const newPrice =
+      newItem.price === '0' ? constants.MaxUint256 : newItem.price
     const txHash: string = yield call(sendTransaction, contract, collection =>
       collection.editItemsData(
-        [newItem.itemId!],
+        [newItem.itemId],
         [newPrice],
         [newItem.beneficiary!],
         [metadata]

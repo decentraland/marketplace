@@ -238,7 +238,6 @@
       "leaving_decentraland_description": "Aún no se pueden publicar o actualizar {vendor} assets en el Marketplace de Decentraland. ¿Quiere proceder a {vendor_link} para publicarlo ahí?",
       "leaving_decentraland_disclaimer": "Tus NFTs van a listarse en el Marketplace de Decentraland",
       "edit_price": "Editar precio",
-      "change_beneficiary": "Cambiar de beneficiario",
       "mint_item": "Acuñar item"
     },
     "description": "Descripción",
