@@ -27,6 +27,8 @@ interface ModalState {
   isFree: boolean
 }
 
+const MAX_ITEM_PRICE = 2 ** 256 - 1
+
 export default function EditPriceAndBeneficiaryModal({
   item,
   isLoading,
@@ -34,7 +36,11 @@ export default function EditPriceAndBeneficiaryModal({
   onClose
 }: Props) {
   const [itemProps, setItemProps] = useState<ModalState>({
-    price: item.price ? fromWei(item.price, 'ether') : undefined,
+    price: item.price
+      ? +item.price === MAX_ITEM_PRICE
+        ? '0'
+        : fromWei(item.price, 'ether')
+      : undefined,
     beneficiary: item.beneficiary || item.creator,
     isFree: false
   })
