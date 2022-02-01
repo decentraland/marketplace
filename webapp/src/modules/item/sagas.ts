@@ -77,7 +77,6 @@ function* handleSetPriceAndBeneficiaryRequest(
 
 function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
   const { filters } = action.payload
-  console.log('filters: ', filters)
   try {
     const { data, total }: { data: Item[]; total: number } = yield call(
       [itemAPI, 'fetch'],
