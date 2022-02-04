@@ -88,6 +88,7 @@
     "wearables_mask": "Mascaras",
     "wearables_tiara": "Tiara",
     "wearables_top_head": "Tope de la cabeza",
+    "wearables_skin": "Skin",
     "ens": "Nombres",
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
@@ -310,7 +311,8 @@
       "mouth": "Boca",
       "tiara": "Tiara",
       "top_head": "Cabeza",
-      "upper_body": "Torso"
+      "upper_body": "Torso",
+      "skin": "Skin"
     },
     "smart": "Vestimenta Interactiva",
     "smart_badge": "Interactivo"

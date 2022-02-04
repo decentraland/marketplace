@@ -88,6 +88,7 @@
     "wearables_mask": "面具",
     "wearables_tiara": "头饰",
     "wearables_top_head": "头顶",
+    "wearables_skin": "皮肤",
     "ens": "名称",
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
@@ -310,7 +311,8 @@
       "mouth": "嘴巴",
       "tiara": "头饰",
       "top_head": "头顶",
-      "upper_body": "上半身"
+      "upper_body": "上半身",
+      "skin": "皮肤"
     },
     "smart": "智能穿戴",
     "smart_badge": "聪明的"

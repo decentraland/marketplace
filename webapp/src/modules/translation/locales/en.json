@@ -88,6 +88,7 @@
     "wearables_mask": "Mask",
     "wearables_tiara": "Tiara",
     "wearables_top_head": "Top head",
+    "wearables_skin": "Skins",
     "ens": "Names",
     "editions": "Editions",
     "tokens": "Tokens",
@@ -312,7 +313,8 @@
       "mouth": "Mouth",
       "tiara": "Tiara",
       "top_head": "Top Head",
-      "upper_body": "Upper Body"
+      "upper_body": "Upper Body",
+      "skin": "Skin"
     },
     "smart": "Smart Wearable",
     "smart_badge": "Smart"

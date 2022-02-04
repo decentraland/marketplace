@@ -116,6 +116,7 @@ export function getCategoryFromSection(section: string) {
     case Section.WEARABLES_MASK:
     case Section.WEARABLES_TIARA:
     case Section.WEARABLES_TOP_HEAD:
+    case Section.WEARABLES_SKIN:
       return NFTCategory.WEARABLE
     case Section.ENS:
       return NFTCategory.ENS
@@ -163,6 +164,8 @@ export function getSearchWearableCategory(section: string) {
       return WearableCategory.TIARA
     case Section.WEARABLES_TOP_HEAD:
       return WearableCategory.TOP_HEAD
+    case Section.WEARABLES_SKIN:
+      return WearableCategory.SKIN
   }
 }
 

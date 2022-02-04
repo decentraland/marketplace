@@ -86,6 +86,10 @@
   background-image: url(../../../images/wearables/UpperBodyIcon.svg);
 }
 
+.WearableTags .icon.skin {
+  background-image: url(../../../images/wearables/SkinIcon.svg);
+}
+
 .WearableTags .icon.BaseMale {
   background-image: url(../../../images/wearables/MaleIcon.svg);
   background-size: 14px 14px;

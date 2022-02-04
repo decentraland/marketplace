@@ -101,3 +101,7 @@
 .IconBadge .upper_body {
   background-image: url(../../../images/wearables/UpperBodyIcon.svg);
 }
+
+.IconBadge .skin {
+  background-image: url(../../../images/wearables/SkinIcon.svg);
+}

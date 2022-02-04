@@ -43,7 +43,8 @@ const hasPrimarySales = (section?: Section) => {
     case DecentralandSection.WEARABLES_HELMET:
     case DecentralandSection.WEARABLES_MASK:
     case DecentralandSection.WEARABLES_TIARA:
-    case DecentralandSection.WEARABLES_TOP_HEAD: {
+    case DecentralandSection.WEARABLES_TOP_HEAD:
+    case DecentralandSection.WEARABLES_SKIN: {
       return true
     }
     default:

@@ -47,7 +47,7 @@ const HomePage = (props: Props) => {
 
   const sort: Partial<Record<View, SortBy>> = useMemo(
     () => ({
-      [View.HOME_NEW_ITEMS]: SortBy.RECENTLY_REVIEWED,
+      [View.HOME_NEW_ITEMS]: SortBy.RECENTLY_LISTED,
       [View.HOME_SOLD_ITEMS]: SortBy.RECENTLY_SOLD,
       [View.HOME_WEARABLES]: SortBy.RECENTLY_LISTED,
       [View.HOME_LAND]: SortBy.RECENTLY_LISTED,
