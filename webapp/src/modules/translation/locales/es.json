@@ -319,6 +319,13 @@
     "smart": "Vestimenta Interactiva",
     "smart_badge": "Interactivo"
   },
+  "wearable_preview": {
+    "missing_representation_error": {
+      "male": "hombre",
+      "female": "mujer",
+      "message": "Esta vestimenta no tiene representación de {bodyShape}"
+    }
+  },
   "sell_page": {
     "title": "Poner en venta",
     "update_title": "Actualizar venta",

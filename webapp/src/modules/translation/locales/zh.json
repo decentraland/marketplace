@@ -319,6 +319,13 @@
     "smart": "智能穿戴",
     "smart_badge": "聪明的"
   },
+  "wearable_preview": {
+    "missing_representation_error": {
+      "male": "男",
+      "female": "女",
+      "message": "这个可穿戴设备没有 {bodyShape} 表示"
+    }
+  },
   "sell_page": {
     "title": "待售列表",
     "update_title": "更新您的列表",

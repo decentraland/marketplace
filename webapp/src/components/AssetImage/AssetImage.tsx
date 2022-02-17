@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
-import { Button, Center, Loader, Popup, WearablePreview } from 'decentraland-ui'
 import { LazyImage } from 'react-lazy-images'
+import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Center, Loader, Popup, WearablePreview } from 'decentraland-ui'
 
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import { Atlas } from '../Atlas'
 import { Props } from './AssetImage.types'
 import './AssetImage.css'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 // 1x1 transparent pixel
 const PIXEL =
@@ -124,13 +124,13 @@ const AssetImage = (props: Props) => {
           hasRepresentation || !avatar
             ? null
             : avatar.avatar.bodyShape.includes(BodyShape.MALE)
-            ? t('wearable.body_shape.male')
-            : t('wearable.body_shape.female')
+            ? t('wearable_preview.missing_representation_error.male')
+            : t('wearable_preview.missing_representation_error.female')
 
         wearablePreview = (
           <>
             <WearablePreview
-              baseUrl="http://localhost:3000"
+              baseUrl="http://localhost:3000" // TODO: REMOVE THIS BEFORE MERGING!!!1
               contractAddress={asset.contractAddress}
               itemId={itemId}
               tokenId={tokenId}
@@ -153,10 +153,10 @@ const AssetImage = (props: Props) => {
             ) : avatar ? (
               <Popup
                 content={
-                  <div>
-                    This item doesn't have a <b>{missingBodyShape}</b>{' '}
-                    representation
-                  </div>
+                  <T
+                    id="wearable_preview.missing_representation_error.message"
+                    values={{ bodyShape: <b>{missingBodyShape}</b> }}
+                  />
                 }
                 trigger={
                   <Button

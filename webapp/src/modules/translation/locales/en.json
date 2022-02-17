@@ -321,6 +321,13 @@
     "smart": "Smart Wearable",
     "smart_badge": "Smart"
   },
+  "wearable_preview": {
+    "missing_representation_error": {
+      "male": "male",
+      "female": "female",
+      "message": "This wearable doesn't have a {bodyShape} representation"
+    }
+  },
   "sell_page": {
     "title": "List for sale",
     "update_title": "Update your listing",
