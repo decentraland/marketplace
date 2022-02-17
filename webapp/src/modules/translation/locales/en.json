@@ -39,7 +39,9 @@
     "buyer": "Buyer",
     "bid": "Bid",
     "order": "Listing",
-    "mint": "Mint"
+    "mint": "Mint",
+    "try_it": "Try It",
+    "back": "Back"
   },
   "address": {
     "invalid_address": "That's not a valid address",

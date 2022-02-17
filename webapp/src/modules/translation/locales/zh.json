@@ -39,7 +39,9 @@
     "buyer": "买方",
     "bid": "投标",
     "order": "清单",
-    "mint": "薄荷"
+    "mint": "薄荷",
+    "try_it": "试试看",
+    "back": "背部"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",

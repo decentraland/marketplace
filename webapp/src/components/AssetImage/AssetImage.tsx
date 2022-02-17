@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { NFTCategory, Rarity } from '@dcl/schemas'
-import { Center, Loader, WearablePreview } from 'decentraland-ui'
+import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
+import { Button, Center, Loader, Popup, WearablePreview } from 'decentraland-ui'
 import { LazyImage } from 'react-lazy-images'
 
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
@@ -8,6 +8,7 @@ import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import { Atlas } from '../Atlas'
 import { Props } from './AssetImage.types'
 import './AssetImage.css'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 // 1x1 transparent pixel
 const PIXEL =
@@ -36,8 +37,20 @@ const AssetImage = (props: Props) => {
     isDraggable
   )
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
-  const handleLoad = useCallback(() => setIsLoadingWearablePreview(false), [])
-  const handleError = useCallback(() => setWearablePreviewError(true), [])
+  const [isTrying, setIsTrying] = useState(false)
+  const handleLoad = useCallback(() => {
+    setIsLoadingWearablePreview(false)
+    setWearablePreviewError(false)
+  }, [])
+  const handleError = useCallback(error => {
+    console.warn(error)
+    setWearablePreviewError(true)
+    setIsLoadingWearablePreview(false)
+  }, [])
+  const handleTryOut = useCallback(() => {
+    setIsTrying(!isTrying)
+    setIsLoadingWearablePreview(true)
+  }, [isTrying])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
@@ -86,7 +99,7 @@ const AssetImage = (props: Props) => {
         let tokenId: string | undefined
         let skin = 'bbbbbb'
         let hair = 'bbbbbb'
-        let shape: 'male' | 'female' = 'male'
+        let bodyShape: 'male' | 'female' = 'male'
         if ('itemId' in asset && asset.itemId) {
           itemId = asset.itemId
         } else if ('tokenId' in asset && asset.tokenId) {
@@ -95,14 +108,41 @@ const AssetImage = (props: Props) => {
         if (avatar) {
           skin = colorToHex(avatar.avatar.skin.color)
           hair = colorToHex(avatar.avatar.hair.color)
-          shape = avatar.avatar.bodyShape.toLowerCase().includes('female')
+          bodyShape = avatar.avatar.bodyShape.toLowerCase().includes('female')
             ? 'female'
             : 'male'
         }
 
+        const hasRepresentation =
+          wearable &&
+          avatar &&
+          wearable.bodyShapes.some(shape =>
+            avatar.avatar.bodyShape.includes(shape)
+          )
+
+        const missingBodyShape =
+          hasRepresentation || !avatar
+            ? null
+            : avatar.avatar.bodyShape.includes(BodyShape.MALE)
+            ? t('wearable.body_shape.male')
+            : t('wearable.body_shape.female')
+
         wearablePreview = (
           <>
-            {isLoadingWearablePreview && (
+            <WearablePreview
+              baseUrl="http://localhost:3000"
+              contractAddress={asset.contractAddress}
+              itemId={itemId}
+              tokenId={tokenId}
+              profile={isTrying && avatar ? avatar.ethAddress : undefined}
+              skin={skin}
+              hair={hair}
+              bodyShape={bodyShape}
+              onLoad={handleLoad}
+              onError={handleError}
+              dev={isDev}
+            />
+            {isLoadingWearablePreview ? (
               <Center>
                 <Loader
                   className="wearable-preview-loader"
@@ -110,18 +150,31 @@ const AssetImage = (props: Props) => {
                   size="large"
                 />
               </Center>
-            )}
-            <WearablePreview
-              contractAddress={asset.contractAddress}
-              itemId={itemId}
-              tokenId={tokenId}
-              skin={skin}
-              hair={hair}
-              bodyShape={shape}
-              dev={isDev}
-              onLoad={handleLoad}
-              onError={handleError}
-            />
+            ) : avatar ? (
+              <Popup
+                content={
+                  <div>
+                    This item doesn't have a <b>{missingBodyShape}</b>{' '}
+                    representation
+                  </div>
+                }
+                trigger={
+                  <Button
+                    size="small"
+                    className={
+                      hasRepresentation
+                        ? 'try-out'
+                        : 'try-out no-representation'
+                    }
+                    onClick={handleTryOut}
+                  >
+                    {!isTrying ? t('global.try_it') : t('global.back')}
+                  </Button>
+                }
+                position="top center"
+                disabled={hasRepresentation}
+              />
+            ) : null}
           </>
         )
       }

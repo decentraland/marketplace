@@ -39,7 +39,9 @@
     "buyer": "Comprador",
     "bid": "Oferta",
     "order": "Clasificado",
-    "mint": "Venta"
+    "mint": "Venta",
+    "try_it": "Pruébatelo",
+    "back": "Volver"
   },
   "address": {
     "invalid_address": "Dirección inválida",
