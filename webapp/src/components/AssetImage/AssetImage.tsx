@@ -166,7 +166,7 @@ const AssetImage = (props: Props) => {
                         ? 'try-out'
                         : 'try-out no-representation'
                     }
-                    onClick={handleTryOut}
+                    onClick={hasRepresentation ? handleTryOut : undefined}
                   >
                     {!isTrying ? t('global.try_it') : t('global.back')}
                   </Button>
