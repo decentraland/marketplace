@@ -130,7 +130,6 @@ const AssetImage = (props: Props) => {
         wearablePreview = (
           <>
             <WearablePreview
-              baseUrl="http://localhost:3000" // TODO: REMOVE THIS BEFORE MERGING!!!1
               contractAddress={asset.contractAddress}
               itemId={itemId}
               tokenId={tokenId}
@@ -138,6 +137,7 @@ const AssetImage = (props: Props) => {
               skin={skin}
               hair={hair}
               bodyShape={bodyShape}
+              emote="fashion"
               onLoad={handleLoad}
               onError={handleError}
               dev={isDev}
