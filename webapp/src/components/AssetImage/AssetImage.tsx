@@ -14,11 +14,33 @@ import './AssetImage.css'
 const PIXEL =
   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
 
+const DEFAULT_COLOR = 'bbbbbb'
+
+type Color = { r: number; g: number; b: number }
+type WrappedColor = { color: Color }
+
 const valueToHex = (value: number) =>
   ('00' + Math.min(255, (value * 255) | 0).toString(16)).slice(-2)
 
-const colorToHex = (color: { r: number; g: number; b: number }) =>
-  valueToHex(color.r) + valueToHex(color.g) + valueToHex(color.b)
+const colorToHex = (color: Color): string => {
+  if (isColor(color)) {
+    return valueToHex(color.r) + valueToHex(color.g) + valueToHex(color.b)
+  }
+  const maybeWrapped = (color as unknown) as Partial<WrappedColor>
+  if (isWrapped(maybeWrapped)) {
+    return colorToHex(maybeWrapped.color!)
+  }
+
+  return DEFAULT_COLOR
+}
+
+// sometimes the color come from the catalyst wrapped in an extra "color": { } object
+const isWrapped = (maybeWrapped: Partial<WrappedColor>) =>
+  maybeWrapped.color && isColor(maybeWrapped.color)
+const isColor = (maybeColor: Partial<Color>) =>
+  typeof maybeColor.r === 'number' &&
+  typeof maybeColor.g === 'number' &&
+  typeof maybeColor.b === 'number'
 
 const AssetImage = (props: Props) => {
   const {
@@ -97,8 +119,8 @@ const AssetImage = (props: Props) => {
       if (isDraggable) {
         let itemId: string | undefined
         let tokenId: string | undefined
-        let skin = 'bbbbbb'
-        let hair = 'bbbbbb'
+        let skin = DEFAULT_COLOR
+        let hair = DEFAULT_COLOR
         let bodyShape: 'male' | 'female' = 'male'
         if ('itemId' in asset && asset.itemId) {
           itemId = asset.itemId
