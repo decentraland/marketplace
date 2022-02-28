@@ -1,5 +1,3 @@
-import * as pulumi from '@pulumi/pulumi'
-import * as cloudflare from '@pulumi/cloudflare'
 import { env, envTLD } from 'dcl-ops-lib/domain'
 import { buildStatic } from 'dcl-ops-lib/buildStatic'
 
@@ -10,24 +8,6 @@ async function main() {
     domain,
     defaultPath: 'index.html',
   })
-
-  if (env === 'prd') {
-    const config = new pulumi.Config()
-    const hostHeaderOverride = config.requireSecret('sitemaps_target')
-    const zoneId = config.requireSecret('cloudflare_zone_id')
-    new cloudflare.PageRule(`marketplace-sitemaps-proxy`, {
-      zoneId,
-      priority: 1,
-      target: domain + '/sitemap/*',
-      actions: {
-        ssl: 'flexible',
-        alwaysOnline: 'on',
-        cacheLevel: 'cache_everything',
-        edgeCacheTtl: 3600,
-        hostHeaderOverride
-      }
-    })
-  }
 
   return {
     cloudfrontDistribution: market.cloudfrontDistribution,
