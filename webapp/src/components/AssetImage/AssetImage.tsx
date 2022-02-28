@@ -117,7 +117,7 @@ const AssetImage = (props: Props) => {
               tokenId={tokenId}
               skin={skin}
               hair={hair}
-              shape={shape}
+              bodyShape={shape}
               dev={isDev}
               onLoad={handleLoad}
               onError={handleError}
