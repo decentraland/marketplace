@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { Avatar } from 'decentraland-ui'
+import { Avatar } from '@dcl/schemas'
 import { Item } from '@dcl/schemas'
 import { NFT } from '../../modules/nft/types'
 
