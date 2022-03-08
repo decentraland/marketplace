@@ -13,7 +13,7 @@
     "dcl-crypto": "^2.2.0",
     "decentraland-dapps": "^12.38.1",
     "decentraland-transactions": "^1.29.1",
-    "decentraland-ui": "^3.21.0",
+    "decentraland-ui": "^3.22.0",
     "dotenv": "^10.0.0",
     "graphql": "^14.7.0",
     "history": "^4.10.1",

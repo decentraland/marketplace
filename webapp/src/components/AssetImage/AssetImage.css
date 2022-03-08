@@ -93,15 +93,47 @@
   border-color: white transparent transparent !important;
 }
 
-.AssetImage .try-out {
+.AssetImage .preview-toggle-wrapper {
   z-index: 1;
   position: absolute;
   right: 24px;
-  bottom: 24px;
+  top: 24px;
 }
 
-.AssetImage .try-out.no-representation {
-  opacity: 0.5;
-  cursor: not-allowed;
+.AssetImage .preview-toggle-wrapper .preview-toggle {
+  width: 40px;
+  min-width: 40px !important;
+  height: 32px;
+  border-radius: 0px;
+  background-repeat: no-repeat;
+  background-position: center;
   transform: none !important;
+}
+
+.AssetImage .preview-toggle-wrapper .preview-toggle:first-child {
+  border-radius: 8px 0px 0px 8px;
+}
+
+.AssetImage .preview-toggle-wrapper .preview-toggle:last-child {
+  border-radius: 0px 8px 8px 0px;
+}
+
+.AssetImage .preview-toggle-wrapper .preview-toggle.preview-toggle-wearable {
+  background-image: url(../../images/preview-wearable-icon.svg);
+}
+
+.AssetImage .preview-toggle-wrapper .preview-toggle.preview-toggle-avatar {
+  background-image: url(../../images/preview-avatar-icon.svg);
+}
+
+.AssetImage .preview-toggle-wrapper .preview-toggle.is-active {
+  background-color: var(--primary);
+}
+
+.AssetImage .preview-toggle-wrapper .preview-toggle.is-disabled {
+  cursor: not-allowed;
+}
+
+.AssetImage .preview-toggle-wrapper .preview-toggle.is-disabled:hover {
+  background-color: var(--secondary);
 }

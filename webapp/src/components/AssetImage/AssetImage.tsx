@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { LazyImage } from 'react-lazy-images'
+import classNames from 'classnames'
 import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Center, Loader, Popup, WearablePreview } from 'decentraland-ui'
@@ -70,8 +71,16 @@ const AssetImage = (props: Props) => {
     setIsLoadingWearablePreview(false)
   }, [])
   const handleTryOut = useCallback(() => {
-    setIsTrying(!isTrying)
-    setIsLoadingWearablePreview(true)
+    if (!isTrying) {
+      setIsTrying(true)
+      setIsLoadingWearablePreview(true)
+    }
+  }, [isTrying])
+  const handleShowWearable = useCallback(() => {
+    if (isTrying) {
+      setIsTrying(false)
+      setIsLoadingWearablePreview(true)
+    }
   }, [isTrying])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
@@ -149,6 +158,7 @@ const AssetImage = (props: Props) => {
             ? t('wearable_preview.missing_representation_error.male')
             : t('wearable_preview.missing_representation_error.female')
 
+        console.log(avatar)
         wearablePreview = (
           <>
             <WearablePreview
@@ -159,7 +169,7 @@ const AssetImage = (props: Props) => {
               skin={skin}
               hair={hair}
               bodyShape={bodyShape}
-              emote="fashion"
+              emote="fashion-2"
               onLoad={handleLoad}
               onError={handleError}
               dev={isDev}
@@ -172,7 +182,8 @@ const AssetImage = (props: Props) => {
                   size="large"
                 />
               </Center>
-            ) : avatar ? (
+            ) : null}
+            {avatar ? (
               <Popup
                 content={
                   <T
@@ -181,17 +192,31 @@ const AssetImage = (props: Props) => {
                   />
                 }
                 trigger={
-                  <Button
-                    size="small"
-                    className={
-                      hasRepresentation
-                        ? 'try-out'
-                        : 'try-out no-representation'
-                    }
-                    onClick={hasRepresentation ? handleTryOut : undefined}
-                  >
-                    {!isTrying ? t('global.try_it') : t('global.back')}
-                  </Button>
+                  <div className="preview-toggle-wrapper">
+                    <Button
+                      size="small"
+                      className={classNames(
+                        'preview-toggle',
+                        'preview-toggle-wearable',
+                        {
+                          'is-active': !isTrying
+                        }
+                      )}
+                      onClick={handleShowWearable}
+                    />
+                    <Button
+                      size="small"
+                      className={classNames(
+                        'preview-toggle',
+                        'preview-toggle-avatar',
+                        {
+                          'is-active': isTrying,
+                          'is-disabled': !hasRepresentation
+                        }
+                      )}
+                      onClick={hasRepresentation ? handleTryOut : undefined}
+                    />
+                  </div>
                 }
                 position="top center"
                 disabled={hasRepresentation}
