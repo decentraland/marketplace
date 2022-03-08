@@ -86,7 +86,7 @@ const AssetImage = (props: Props) => {
         let tokenId: string | undefined
         let skin = 'bbbbbb'
         let hair = 'bbbbbb'
-        let shape: 'male' | 'female' = 'male'
+        let bodyShape: 'male' | 'female' = 'male'
         if ('itemId' in asset && asset.itemId) {
           itemId = asset.itemId
         } else if ('tokenId' in asset && asset.tokenId) {
@@ -95,7 +95,7 @@ const AssetImage = (props: Props) => {
         if (avatar) {
           skin = colorToHex(avatar.avatar.skin.color)
           hair = colorToHex(avatar.avatar.hair.color)
-          shape = avatar.avatar.bodyShape.toLowerCase().includes('female')
+          bodyShape = avatar.avatar.bodyShape.toLowerCase().includes('female')
             ? 'female'
             : 'male'
         }
@@ -117,7 +117,7 @@ const AssetImage = (props: Props) => {
               tokenId={tokenId}
               skin={skin}
               hair={hair}
-              shape={shape}
+              bodyShape={bodyShape}
               dev={isDev}
               onLoad={handleLoad}
               onError={handleError}

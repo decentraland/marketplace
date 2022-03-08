@@ -1,5 +1,5 @@
+import { Avatar } from '@dcl/schemas'
 import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
-import { Avatar } from 'decentraland-ui'
 import { connect } from 'react-redux'
 import { RootState } from '../../modules/reducer'
 import { getWallet } from '../../modules/wallet/selectors'
