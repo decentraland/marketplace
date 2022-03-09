@@ -128,8 +128,8 @@ const AssetImage = (props: Props) => {
       if (isDraggable) {
         let itemId: string | undefined
         let tokenId: string | undefined
-        let skin = DEFAULT_COLOR
-        let hair = DEFAULT_COLOR
+        let skin
+        let hair
         let bodyShape: 'male' | 'female' = 'male'
         if ('itemId' in asset && asset.itemId) {
           itemId = asset.itemId
@@ -144,12 +144,12 @@ const AssetImage = (props: Props) => {
             : 'male'
         }
 
-        const hasRepresentation =
-          wearable &&
-          avatar &&
-          wearable.bodyShapes.some(shape =>
-            avatar.avatar.bodyShape.includes(shape)
-          )
+        const hasRepresentation = avatar
+          ? wearable &&
+            wearable.bodyShapes.some(shape =>
+              avatar.avatar.bodyShape.includes(shape)
+            )
+          : true
 
         const missingBodyShape =
           hasRepresentation || !avatar
@@ -164,7 +164,9 @@ const AssetImage = (props: Props) => {
               contractAddress={asset.contractAddress}
               itemId={itemId}
               tokenId={tokenId}
-              profile={isTrying && avatar ? avatar.ethAddress : undefined}
+              profile={
+                isTrying ? (avatar ? avatar.ethAddress : 'default') : undefined
+              }
               skin={skin}
               hair={hair}
               bodyShape={bodyShape}
@@ -182,59 +184,57 @@ const AssetImage = (props: Props) => {
                 />
               </Center>
             ) : null}
-            {avatar ? (
-              <Popup
-                content={
-                  <T
-                    id="wearable_preview.missing_representation_error.message"
-                    values={{ bodyShape: <b>{missingBodyShape}</b> }}
+            <Popup
+              content={
+                <T
+                  id="wearable_preview.missing_representation_error.message"
+                  values={{ bodyShape: <b>{missingBodyShape}</b> }}
+                />
+              }
+              trigger={
+                <div className="preview-toggle-wrapper">
+                  <Popup
+                    position="top center"
+                    content={<T id="wearable_preview.toggle_wearable" />}
+                    trigger={
+                      <Button
+                        size="small"
+                        className={classNames(
+                          'preview-toggle',
+                          'preview-toggle-wearable',
+                          {
+                            'is-active': !isTrying
+                          }
+                        )}
+                        onClick={handleShowWearable}
+                      />
+                    }
+                    disabled={!hasRepresentation}
                   />
-                }
-                trigger={
-                  <div className="preview-toggle-wrapper">
-                    <Popup
-                      position="top center"
-                      content={<T id="wearable_preview.toggle_wearable" />}
-                      trigger={
-                        <Button
-                          size="small"
-                          className={classNames(
-                            'preview-toggle',
-                            'preview-toggle-wearable',
-                            {
-                              'is-active': !isTrying
-                            }
-                          )}
-                          onClick={handleShowWearable}
-                        />
-                      }
-                      disabled={!hasRepresentation}
-                    />
-                    <Popup
-                      position="top center"
-                      content={<T id="wearable_preview.toggle_avatar" />}
-                      trigger={
-                        <Button
-                          size="small"
-                          className={classNames(
-                            'preview-toggle',
-                            'preview-toggle-avatar',
-                            {
-                              'is-active': isTrying,
-                              'is-disabled': !hasRepresentation
-                            }
-                          )}
-                          onClick={hasRepresentation ? handleTryOut : undefined}
-                        />
-                      }
-                      disabled={!hasRepresentation}
-                    />
-                  </div>
-                }
-                position="top center"
-                disabled={hasRepresentation}
-              />
-            ) : null}
+                  <Popup
+                    position="top center"
+                    content={<T id="wearable_preview.toggle_avatar" />}
+                    trigger={
+                      <Button
+                        size="small"
+                        className={classNames(
+                          'preview-toggle',
+                          'preview-toggle-avatar',
+                          {
+                            'is-active': isTrying,
+                            'is-disabled': !hasRepresentation
+                          }
+                        )}
+                        onClick={hasRepresentation ? handleTryOut : undefined}
+                      />
+                    }
+                    disabled={!hasRepresentation}
+                  />
+                </div>
+              }
+              position="top center"
+              disabled={hasRepresentation}
+            />
           </>
         )
       }
