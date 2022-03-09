@@ -40,7 +40,6 @@
     "bid": "Bid",
     "order": "Listing",
     "mint": "Mint",
-    "try_it": "Try It",
     "back": "Back"
   },
   "address": {
@@ -322,6 +321,8 @@
     "smart_badge": "Smart"
   },
   "wearable_preview": {
+    "toggle_wearable": "Wearable",
+    "toggle_avatar": "Try On",
     "missing_representation_error": {
       "male": "male",
       "female": "female",

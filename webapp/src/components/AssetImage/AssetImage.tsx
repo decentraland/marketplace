@@ -158,7 +158,6 @@ const AssetImage = (props: Props) => {
             ? t('wearable_preview.missing_representation_error.male')
             : t('wearable_preview.missing_representation_error.female')
 
-        console.log(avatar)
         wearablePreview = (
           <>
             <WearablePreview
@@ -193,28 +192,42 @@ const AssetImage = (props: Props) => {
                 }
                 trigger={
                   <div className="preview-toggle-wrapper">
-                    <Button
-                      size="small"
-                      className={classNames(
-                        'preview-toggle',
-                        'preview-toggle-wearable',
-                        {
-                          'is-active': !isTrying
-                        }
-                      )}
-                      onClick={handleShowWearable}
+                    <Popup
+                      position="top center"
+                      content={<T id="wearable_preview.toggle_wearable" />}
+                      trigger={
+                        <Button
+                          size="small"
+                          className={classNames(
+                            'preview-toggle',
+                            'preview-toggle-wearable',
+                            {
+                              'is-active': !isTrying
+                            }
+                          )}
+                          onClick={handleShowWearable}
+                        />
+                      }
+                      disabled={!hasRepresentation}
                     />
-                    <Button
-                      size="small"
-                      className={classNames(
-                        'preview-toggle',
-                        'preview-toggle-avatar',
-                        {
-                          'is-active': isTrying,
-                          'is-disabled': !hasRepresentation
-                        }
-                      )}
-                      onClick={hasRepresentation ? handleTryOut : undefined}
+                    <Popup
+                      position="top center"
+                      content={<T id="wearable_preview.toggle_avatar" />}
+                      trigger={
+                        <Button
+                          size="small"
+                          className={classNames(
+                            'preview-toggle',
+                            'preview-toggle-avatar',
+                            {
+                              'is-active': isTrying,
+                              'is-disabled': !hasRepresentation
+                            }
+                          )}
+                          onClick={hasRepresentation ? handleTryOut : undefined}
+                        />
+                      }
+                      disabled={!hasRepresentation}
                     />
                   </div>
                 }

@@ -40,7 +40,6 @@
     "bid": "Oferta",
     "order": "Clasificado",
     "mint": "Venta",
-    "try_it": "Pruébatelo",
     "back": "Volver"
   },
   "address": {
@@ -320,6 +319,8 @@
     "smart_badge": "Interactivo"
   },
   "wearable_preview": {
+    "toggle_wearable": "Vestimenta",
+    "toggle_avatar": "Pruébatelo",
     "missing_representation_error": {
       "male": "hombre",
       "female": "mujer",
