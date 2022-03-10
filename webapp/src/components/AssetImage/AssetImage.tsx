@@ -3,7 +3,14 @@ import { LazyImage } from 'react-lazy-images'
 import classNames from 'classnames'
 import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Center, Loader, Popup, WearablePreview } from 'decentraland-ui'
+import {
+  AvatarEmote,
+  Button,
+  Center,
+  Loader,
+  Popup,
+  WearablePreview
+} from 'decentraland-ui'
 
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
@@ -170,7 +177,7 @@ const AssetImage = (props: Props) => {
               skin={skin}
               hair={hair}
               bodyShape={bodyShape}
-              emote="fashion-2"
+              emote={AvatarEmote.FASHION_2}
               onLoad={handleLoad}
               onError={handleError}
               dev={isDev}
