@@ -39,7 +39,8 @@
     "buyer": "买方",
     "bid": "投标",
     "order": "清单",
-    "mint": "薄荷"
+    "mint": "薄荷",
+    "back": "背部"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -316,6 +317,15 @@
     },
     "smart": "智能穿戴",
     "smart_badge": "聪明的"
+  },
+  "wearable_preview": {
+    "toggle_wearable": "可穿戴",
+    "toggle_avatar": "试试看",
+    "missing_representation_error": {
+      "male": "男",
+      "female": "女",
+      "message": "这个可穿戴设备没有 {bodyShape} 表示"
+    }
   },
   "sell_page": {
     "title": "待售列表",

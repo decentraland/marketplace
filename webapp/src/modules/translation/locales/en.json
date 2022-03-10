@@ -39,7 +39,8 @@
     "buyer": "Buyer",
     "bid": "Bid",
     "order": "Listing",
-    "mint": "Mint"
+    "mint": "Mint",
+    "back": "Back"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -318,6 +319,15 @@
     },
     "smart": "Smart Wearable",
     "smart_badge": "Smart"
+  },
+  "wearable_preview": {
+    "toggle_wearable": "Wearable",
+    "toggle_avatar": "Try On",
+    "missing_representation_error": {
+      "male": "male",
+      "female": "female",
+      "message": "This wearable doesn't have a {bodyShape} representation"
+    }
   },
   "sell_page": {
     "title": "List for sale",

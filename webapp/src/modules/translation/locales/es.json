@@ -39,7 +39,8 @@
     "buyer": "Comprador",
     "bid": "Oferta",
     "order": "Clasificado",
-    "mint": "Venta"
+    "mint": "Venta",
+    "back": "Volver"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -316,6 +317,15 @@
     },
     "smart": "Vestimenta Interactiva",
     "smart_badge": "Interactivo"
+  },
+  "wearable_preview": {
+    "toggle_wearable": "Vestimenta",
+    "toggle_avatar": "Pruébatelo",
+    "missing_representation_error": {
+      "male": "hombre",
+      "female": "mujer",
+      "message": "Esta vestimenta no tiene representación de {bodyShape}"
+    }
   },
   "sell_page": {
     "title": "Poner en venta",
