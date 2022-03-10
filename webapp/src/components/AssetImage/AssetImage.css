@@ -132,6 +132,7 @@
 
 .AssetImage .preview-toggle-wrapper .preview-toggle.is-disabled {
   cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .AssetImage .preview-toggle-wrapper .preview-toggle.is-disabled:hover {
