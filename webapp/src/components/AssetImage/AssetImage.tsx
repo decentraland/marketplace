@@ -59,7 +59,9 @@ const AssetImage = (props: Props) => {
     zoom,
     isSmall,
     showMonospace,
-    avatar
+    avatar,
+    isTryingOn,
+    onSetIsTryingOn
   } = props
   const { parcel, estate, wearable, ens } = asset.data
 
@@ -67,7 +69,6 @@ const AssetImage = (props: Props) => {
     isDraggable
   )
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
-  const [isTrying, setIsTrying] = useState(false)
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
@@ -78,17 +79,17 @@ const AssetImage = (props: Props) => {
     setIsLoadingWearablePreview(false)
   }, [])
   const handleTryOut = useCallback(() => {
-    if (!isTrying) {
-      setIsTrying(true)
+    if (!isTryingOn) {
+      onSetIsTryingOn(true)
       setIsLoadingWearablePreview(true)
     }
-  }, [isTrying])
+  }, [isTryingOn, onSetIsTryingOn])
   const handleShowWearable = useCallback(() => {
-    if (isTrying) {
-      setIsTrying(false)
+    if (isTryingOn) {
+      onSetIsTryingOn(false)
       setIsLoadingWearablePreview(true)
     }
-  }, [isTrying])
+  }, [isTryingOn, onSetIsTryingOn])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
@@ -172,7 +173,11 @@ const AssetImage = (props: Props) => {
               itemId={itemId}
               tokenId={tokenId}
               profile={
-                isTrying ? (avatar ? avatar.ethAddress : 'default') : undefined
+                isTryingOn
+                  ? avatar
+                    ? avatar.ethAddress
+                    : 'default'
+                  : undefined
               }
               skin={skin}
               hair={hair}
@@ -210,7 +215,7 @@ const AssetImage = (props: Props) => {
                           'preview-toggle',
                           'preview-toggle-wearable',
                           {
-                            'is-active': !isTrying
+                            'is-active': !isTryingOn
                           }
                         )}
                         onClick={handleShowWearable}
@@ -228,7 +233,7 @@ const AssetImage = (props: Props) => {
                           'preview-toggle',
                           'preview-toggle-avatar',
                           {
-                            'is-active': isTrying,
+                            'is-active': isTryingOn,
                             'is-disabled': !hasRepresentation
                           }
                         )}
