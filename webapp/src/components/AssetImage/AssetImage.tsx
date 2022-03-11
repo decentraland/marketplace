@@ -177,7 +177,7 @@ const AssetImage = (props: Props) => {
               skin={skin}
               hair={hair}
               bodyShape={bodyShape}
-              emote={AvatarEmote.FASHION_2}
+              emote={AvatarEmote.FASHION}
               onLoad={handleLoad}
               onError={handleError}
               dev={isDev}
