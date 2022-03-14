@@ -52,6 +52,7 @@ import {
   FetchItemsSuccessAction,
   FETCH_ITEMS_SUCCESS
 } from '../item/actions'
+import { SetIsTryingOnAction, SET_IS_TRYING_ON } from '../ui/preview/actions'
 import { fromWei } from 'web3x/utils'
 
 function track<T extends PayloadAction<string, any>>(
@@ -202,3 +203,11 @@ track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, 'Buy Item', ({ payload }) => ({
   price: Number(fromWei(payload.item.price, 'ether')),
   data: payload.item.data
 }))
+
+track<SetIsTryingOnAction>(
+  SET_IS_TRYING_ON,
+  'Toggle Preview Mode',
+  ({ payload }) => ({
+    mode: payload.value ? 'avatar' : 'wearable'
+  })
+)

@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyImage } from 'react-lazy-images'
 import classNames from 'classnames'
 import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
   AvatarEmote,
   Button,
@@ -59,7 +60,9 @@ const AssetImage = (props: Props) => {
     zoom,
     isSmall,
     showMonospace,
-    avatar
+    avatar,
+    isTryingOn,
+    onSetIsTryingOn
   } = props
   const { parcel, estate, wearable, ens } = asset.data
 
@@ -67,7 +70,6 @@ const AssetImage = (props: Props) => {
     isDraggable
   )
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
-  const [isTrying, setIsTrying] = useState(false)
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
@@ -78,21 +80,33 @@ const AssetImage = (props: Props) => {
     setIsLoadingWearablePreview(false)
   }, [])
   const handleTryOut = useCallback(() => {
-    if (!isTrying) {
-      setIsTrying(true)
+    if (!isTryingOn) {
+      onSetIsTryingOn(true)
       setIsLoadingWearablePreview(true)
     }
-  }, [isTrying])
+  }, [isTryingOn, onSetIsTryingOn])
   const handleShowWearable = useCallback(() => {
-    if (isTrying) {
-      setIsTrying(false)
+    if (isTryingOn) {
+      onSetIsTryingOn(false)
       setIsLoadingWearablePreview(true)
     }
-  }, [isTrying])
+  }, [isTryingOn, onSetIsTryingOn])
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
   ])
+
+  const [isTracked, setIsTracked] = useState(false)
+
+  useEffect(() => {
+    const isPreview = asset.category === NFTCategory.WEARABLE && isDraggable
+    if (!isTracked && isPreview) {
+      getAnalytics().track('Init Preview', {
+        mode: isTryingOn ? 'avatar' : 'wearable'
+      })
+      setIsTracked(true)
+    }
+  }, []) // eslint-disable-line
 
   switch (asset.category) {
     case NFTCategory.PARCEL: {
@@ -137,7 +151,6 @@ const AssetImage = (props: Props) => {
         let tokenId: string | undefined
         let skin
         let hair
-        let bodyShape: 'male' | 'female' = 'male'
         if ('itemId' in asset && asset.itemId) {
           itemId = asset.itemId
         } else if ('tokenId' in asset && asset.tokenId) {
@@ -146,9 +159,6 @@ const AssetImage = (props: Props) => {
         if (avatar) {
           skin = colorToHex(avatar.avatar.skin.color)
           hair = colorToHex(avatar.avatar.hair.color)
-          bodyShape = avatar.avatar.bodyShape.toLowerCase().includes('female')
-            ? 'female'
-            : 'male'
         }
 
         const hasRepresentation = avatar
@@ -165,6 +175,8 @@ const AssetImage = (props: Props) => {
             ? t('wearable_preview.missing_representation_error.male')
             : t('wearable_preview.missing_representation_error.female')
 
+        const isTryingOnEnabled = isTryingOn && hasRepresentation
+
         wearablePreview = (
           <>
             <WearablePreview
@@ -172,12 +184,15 @@ const AssetImage = (props: Props) => {
               itemId={itemId}
               tokenId={tokenId}
               profile={
-                isTrying ? (avatar ? avatar.ethAddress : 'default') : undefined
+                isTryingOnEnabled
+                  ? avatar
+                    ? avatar.ethAddress
+                    : 'default'
+                  : undefined
               }
               skin={skin}
               hair={hair}
-              bodyShape={bodyShape}
-              emote={AvatarEmote.FASHION_2}
+              emote={AvatarEmote.FASHION}
               onLoad={handleLoad}
               onError={handleError}
               dev={isDev}
@@ -210,7 +225,7 @@ const AssetImage = (props: Props) => {
                           'preview-toggle',
                           'preview-toggle-wearable',
                           {
-                            'is-active': !isTrying
+                            'is-active': !isTryingOnEnabled
                           }
                         )}
                         onClick={handleShowWearable}
@@ -228,7 +243,7 @@ const AssetImage = (props: Props) => {
                           'preview-toggle',
                           'preview-toggle-avatar',
                           {
-                            'is-active': isTrying,
+                            'is-active': isTryingOnEnabled,
                             'is-disabled': !hasRepresentation
                           }
                         )}
