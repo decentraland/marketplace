@@ -138,7 +138,6 @@ const AssetImage = (props: Props) => {
         let tokenId: string | undefined
         let skin
         let hair
-        let bodyShape: 'male' | 'female' = 'male'
         if ('itemId' in asset && asset.itemId) {
           itemId = asset.itemId
         } else if ('tokenId' in asset && asset.tokenId) {
@@ -147,9 +146,6 @@ const AssetImage = (props: Props) => {
         if (avatar) {
           skin = colorToHex(avatar.avatar.skin.color)
           hair = colorToHex(avatar.avatar.hair.color)
-          bodyShape = avatar.avatar.bodyShape.toLowerCase().includes('female')
-            ? 'female'
-            : 'male'
         }
 
         const hasRepresentation = avatar
@@ -181,7 +177,6 @@ const AssetImage = (props: Props) => {
               }
               skin={skin}
               hair={hair}
-              bodyShape={bodyShape}
               emote={AvatarEmote.FASHION}
               onLoad={handleLoad}
               onError={handleError}
