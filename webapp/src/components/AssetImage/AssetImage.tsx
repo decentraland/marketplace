@@ -98,6 +98,17 @@ const AssetImage = (props: Props) => {
 
   const [isTracked, setIsTracked] = useState(false)
 
+  // pick a random emote
+  const emote = useMemo(() => {
+    const poses = [
+      AvatarEmote.FASHION,
+      AvatarEmote.FASHION_2,
+      AvatarEmote.FASHION_3
+    ]
+    return isTryingOn ? poses[(Math.random() * poses.length) | 0] : undefined
+  }, [isTryingOn])
+
+  // This effect is here just to track on which mode the preview is initialized, that's why it has an empty dependency array, so this is triggered once on mount
   useEffect(() => {
     const isPreview = asset.category === NFTCategory.WEARABLE && isDraggable
     if (!isTracked && isPreview) {
@@ -192,7 +203,7 @@ const AssetImage = (props: Props) => {
               }
               skin={skin}
               hair={hair}
-              emote={AvatarEmote.FASHION}
+              emote={emote}
               onLoad={handleLoad}
               onError={handleError}
               dev={isDev}
