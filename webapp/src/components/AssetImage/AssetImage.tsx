@@ -175,6 +175,8 @@ const AssetImage = (props: Props) => {
             ? t('wearable_preview.missing_representation_error.male')
             : t('wearable_preview.missing_representation_error.female')
 
+        const isTryingOnEnabled = isTryingOn && hasRepresentation
+
         wearablePreview = (
           <>
             <WearablePreview
@@ -182,7 +184,7 @@ const AssetImage = (props: Props) => {
               itemId={itemId}
               tokenId={tokenId}
               profile={
-                isTryingOn
+                isTryingOnEnabled
                   ? avatar
                     ? avatar.ethAddress
                     : 'default'
@@ -223,7 +225,7 @@ const AssetImage = (props: Props) => {
                           'preview-toggle',
                           'preview-toggle-wearable',
                           {
-                            'is-active': !isTryingOn
+                            'is-active': !isTryingOnEnabled
                           }
                         )}
                         onClick={handleShowWearable}
@@ -241,7 +243,7 @@ const AssetImage = (props: Props) => {
                           'preview-toggle',
                           'preview-toggle-avatar',
                           {
-                            'is-active': isTryingOn,
+                            'is-active': isTryingOnEnabled,
                             'is-disabled': !hasRepresentation
                           }
                         )}
