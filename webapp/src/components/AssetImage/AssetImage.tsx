@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyImage } from 'react-lazy-images'
 import classNames from 'classnames'
 import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
   AvatarEmote,
   Button,
@@ -94,6 +95,18 @@ const AssetImage = (props: Props) => {
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
   ])
+
+  const [isTracked, setIsTracked] = useState(false)
+
+  useEffect(() => {
+    const isPreview = asset.category === NFTCategory.WEARABLE && isDraggable
+    if (!isTracked && isPreview) {
+      getAnalytics().track('Init Preview', {
+        mode: isTryingOn ? 'avatar' : 'wearable'
+      })
+      setIsTracked(true)
+    }
+  }, []) // eslint-disable-line
 
   switch (asset.category) {
     case NFTCategory.PARCEL: {
