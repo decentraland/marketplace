@@ -17,10 +17,10 @@ const GenderBadge = ({ bodyShapes, withText, onClick }: Props) => {
       icon={icon}
       text={
         isUnisex
-          ? t('wearable.body_shape.unisex')
+          ? t('body_shape.unisex')
           : isGender(bodyShapes, BodyShape.MALE)
-          ? t('wearable.body_shape.male')
-          : t('wearable.body_shape.female')
+          ? t('body_shape.male')
+          : t('body_shape.female')
       }
       onClick={onClick}
     />

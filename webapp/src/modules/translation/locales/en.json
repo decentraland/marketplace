@@ -275,6 +275,11 @@
     "when": "When",
     "price": "Price"
   },
+  "body_shape": {
+    "male": "Male",
+    "female": "Female",
+    "unisex": "Unisex"
+  },
   "rarity": {
     "unique": "Unique",
     "mythic": "Mythic",
@@ -294,11 +299,6 @@
     "common": "Max supply: 100,000"
   },
   "wearable": {
-    "body_shape": {
-      "male": "Male",
-      "female": "Female",
-      "unisex": "Unisex"
-    },
     "category": {
       "body_shape": "Body Shape",
       "earring": "Earring",

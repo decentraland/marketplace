@@ -63,7 +63,7 @@ const FiltersMenu = (props: Props) => {
     const options = Object.values(WearableGender)
     return options.map(gender => ({
       value: gender,
-      text: t(`wearable.body_shape.${gender}`)
+      text: t(`body_shape.${gender}`)
     }))
   }, [])
 
