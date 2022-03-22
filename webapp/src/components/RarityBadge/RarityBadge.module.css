@@ -15,6 +15,7 @@
 
 .small {
   padding: 3px 6px;
+  height: 24px;
 }
 .small .text {
   font-size: 13px;

@@ -7,9 +7,9 @@ import { locations } from '../../../modules/routing/locations'
 import { Network } from '../Network'
 import { Description } from '../Description'
 import { Props } from './ItemDetail.types'
-import RarityBadge from '../RarityBadge'
+import RarityBadge from '../../RarityBadge'
 import { AssetType } from '../../../modules/asset/types'
-import GenderBadge from '../GenderBadge'
+import GenderBadge from '../../GenderBadge'
 import CategoryBadge from '../CategoryBadge'
 import SmartBadge from '../SmartBadge'
 import { Owner } from '../Owner'
@@ -42,7 +42,10 @@ const ItemDetail = ({ item, wallet }: Props) => {
             category={NFTCategory.WEARABLE}
           />
           <CategoryBadge wearable={wearable} assetType={AssetType.ITEM} />
-          <GenderBadge wearable={wearable} assetType={AssetType.ITEM} />
+          <GenderBadge
+            bodyShapes={wearable.bodyShapes}
+            assetType={AssetType.ITEM}
+          />
           {wearable.isSmart ? <SmartBadge assetType={AssetType.ITEM} /> : null}
         </>
       }

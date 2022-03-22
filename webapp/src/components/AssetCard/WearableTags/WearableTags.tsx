@@ -1,40 +1,34 @@
-import { BodyShape, NFTCategory } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { SmartIcon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import RarityBadge from '../../AssetPage/RarityBadge'
-import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
+import RarityBadge from '../../RarityBadge'
+import GenderBadge from '../../GenderBadge/GenderBadge'
 import { AssetType } from '../../../modules/asset/types'
 import { Props } from './WearableTags.types'
 import './WearableTags.css'
 
 const WearableTags = (props: Props) => {
   const { asset } = props
-  const wearable = asset.data.wearable!
+  const { rarity, category, bodyShapes, isSmart } = asset.data.wearable!
   return (
     <div className="WearableTags tags">
       <RarityBadge
         size="small"
-        rarity={wearable.rarity}
+        rarity={rarity}
         assetType={AssetType.NFT}
         category={NFTCategory.EMOTE}
+        withTooltip={false}
       />
       <div
-        className={'icon ' + wearable.category}
-        title={t(`wearable.category.${wearable.category}`)}
+        className={'icon ' + category}
+        title={t(`wearable.category.${category}`)}
       />
-      {isUnisex(wearable) ? (
-        <div className="icon Unisex" title={t('wearable.body_shape.unisex')} />
-      ) : (
-        <div
-          className={'icon ' + wearable.bodyShapes[0]}
-          title={
-            isGender(wearable, BodyShape.MALE)
-              ? t('wearable.body_shape.male')
-              : t('wearable.body_shape.female')
-          }
-        />
-      )}
-      {wearable.isSmart ? (
+      <GenderBadge
+        bodyShapes={bodyShapes}
+        assetType={AssetType.NFT}
+        withText={false}
+      />
+      {isSmart ? (
         <div className="icon smart" title={t(`wearable.smart`)}>
           <SmartIcon />
         </div>

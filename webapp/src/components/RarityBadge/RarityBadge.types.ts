@@ -1,12 +1,12 @@
 import { NFTCategory, Rarity } from '@dcl/schemas'
-import { AssetType } from '../../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
   rarity: Rarity
   assetType: AssetType
   category: NFTCategory
   size: 'medium' | 'small'
-  withTooltip?: boolean
+  withTooltip: boolean
   onClick: () => void
 }
 

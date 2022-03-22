@@ -7,29 +7,32 @@ import { Props } from './RarityBadge.types'
 import styles from './RarityBadge.module.css'
 
 const RarityBadge = ({ rarity, size, withTooltip, onClick }: Props) => {
-  return (
+  const trigger = (
+    <div
+      className={classnames([styles.badge, styles[size]])}
+      style={{
+        backgroundColor: Rarity.getColor(rarity)
+      }}
+      title={!withTooltip ? t(`rarity_description.${rarity}`) : ''}
+      onClick={onClick}
+    >
+      <span className={styles.text}>{t(`rarity.${rarity}`)}</span>
+    </div>
+  )
+
+  return withTooltip ? (
     <Popup
       position="top center"
       content={t(`rarity_description.${rarity}`)}
-      disabled={!withTooltip}
-      trigger={
-        <div
-          className={classnames([styles.badge, styles[size]])}
-          style={{
-            backgroundColor: Rarity.getColor(rarity)
-          }}
-          title={!withTooltip ? t(`rarity_description.${rarity}`) : ''}
-          onClick={onClick}
-        >
-          <span className={styles.text}>{t(`rarity.${rarity}`)}</span>
-        </div>
-      }
+      trigger={trigger}
     />
+  ) : (
+    trigger
   )
 }
 
 RarityBadge.defaultProps = {
-  size: 'small',
+  size: 'medium',
   withTooltip: true
 }
 
