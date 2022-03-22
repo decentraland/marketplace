@@ -9,7 +9,7 @@ import { Props } from './OtherAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { AssetType } from '../../../modules/asset/types'
 
-const { ALL, LAND, WEARABLES, ENS } = Sections.decentraland
+const { ALL, LAND, WEARABLES, EMOTES, ENS } = Sections.decentraland
 
 const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
   <>
@@ -50,7 +50,7 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
         sections={
           assetType === AssetType.ITEM
             ? [WEARABLES]
-            : [ALL, WEARABLES, LAND, ENS]
+            : [ALL, WEARABLES, LAND, EMOTES, ENS]
         }
         section={section as Section}
         onSectionClick={section => onBrowse({ section, assetType })}

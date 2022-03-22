@@ -7,7 +7,7 @@ import { Props } from './NFTSidebar.types'
 import './NFTSidebar.css'
 
 const NFTSidebar = (props: Props) => {
-  const { section, onMenuItemClick, sections } = props
+  const { section, sections, onMenuItemClick } = props
 
   return (
     <div className="NFTSidebar">

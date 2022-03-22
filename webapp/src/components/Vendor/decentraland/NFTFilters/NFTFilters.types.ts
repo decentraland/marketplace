@@ -18,7 +18,7 @@ export type Props = {
   onlyOnSale?: boolean
   onlySmart?: boolean
   isMap?: boolean
-  wearableRarities: Rarity[]
+  rarities: Rarity[]
   wearableGenders: WearableGender[]
   contracts: string[]
   network?: Network
@@ -37,7 +37,7 @@ export type MapStateProps = Pick<
   | 'onlyOnSale'
   | 'onlySmart'
   | 'isMap'
-  | 'wearableRarities'
+  | 'rarities'
   | 'wearableGenders'
   | 'contracts'
   | 'network'

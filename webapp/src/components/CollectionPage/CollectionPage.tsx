@@ -149,7 +149,7 @@ const CollectionPage = (props: Props) => {
                                 {t(`global.${item.category}`)}
                               </Table.Cell>
                               <Table.Cell>
-                                {t(`wearable.rarity.${item.rarity}`)}
+                                {t(`rarity.${item.rarity}`)}
                               </Table.Cell>
                               <Table.Cell>
                                 {item.available.toLocaleString()}/

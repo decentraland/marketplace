@@ -1,7 +1,7 @@
 import React from 'react'
 import { Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Rarity } from '@dcl/schemas'
+import { NFTCategory, Rarity } from '@dcl/schemas'
 import { Network } from '../Network'
 import { Description } from '../Description'
 import { Props } from './WearableDetail.types'
@@ -31,7 +31,11 @@ const WearableDetail = ({ nft }: Props) => {
       isOnSale={!!nft.activeOrderId}
       badges={
         <>
-          <RarityBadge rarity={wearable.rarity} assetType={AssetType.NFT} />
+          <RarityBadge
+            rarity={wearable.rarity}
+            assetType={AssetType.NFT}
+            category={NFTCategory.WEARABLE}
+          />
           <CategoryBadge wearable={wearable} assetType={AssetType.NFT} />
           <GenderBadge wearable={wearable} assetType={AssetType.NFT} />
           {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}

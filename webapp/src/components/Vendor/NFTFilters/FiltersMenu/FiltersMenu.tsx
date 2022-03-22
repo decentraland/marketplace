@@ -55,7 +55,7 @@ const FiltersMenu = (props: Props) => {
       .reverse() as string[]
     return options.map(rarity => ({
       value: rarity,
-      text: t(`wearable.rarity.${rarity}`)
+      text: t(`rarity.${rarity}`)
     }))
   }, [])
 

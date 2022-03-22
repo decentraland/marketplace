@@ -8,7 +8,8 @@ import { Props } from './NFTDetail.types'
 
 const NFTDetail = (props: Props) => {
   const { nft } = props
-  const { parcel, estate, wearable, ens } = nft.data as any
+  const { parcel, estate, wearable, emote, ens } = nft.data as any
+  console.log('NFTDetail', emote)
   return (
     <>
       {parcel ? <ParcelDetail nft={nft} /> : null}

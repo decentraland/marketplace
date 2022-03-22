@@ -37,14 +37,14 @@ describe('when handling the clear filters request action', () => {
       onlyOnSale: true,
       isMap: false,
       isFullscreen: false,
-      wearableRarities: [Rarity.EPIC],
+      rarities: [Rarity.EPIC],
       wearableGenders: [WearableGender.FEMALE],
       contracts: ['aContract'],
       network: Network.ETHEREUM
     }
 
     const browseOptionsWithoutFilters: BrowseOptions = { ...browseOptions }
-    delete browseOptionsWithoutFilters.wearableRarities
+    delete browseOptionsWithoutFilters.rarities
     delete browseOptionsWithoutFilters.wearableGenders
     delete browseOptionsWithoutFilters.network
     delete browseOptionsWithoutFilters.contracts

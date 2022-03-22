@@ -214,6 +214,7 @@ const AssetBrowse = (props: Props) => {
     Sections.decentraland.COLLECTIONS,
     Sections.decentraland.LAND,
     Sections.decentraland.WEARABLES,
+    Sections.decentraland.EMOTES,
     Sections.decentraland.ENS,
     Sections.decentraland.ON_SALE,
     Sections.decentraland.SALES,

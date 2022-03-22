@@ -2,11 +2,24 @@
   display: inline-flex;
   align-items: center;
   text-transform: uppercase;
-  padding: 4px 12px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.text {
+.medium {
+  padding: 4px 12px;
+}
+.medium .text {
   font-size: 15px;
+}
+
+.small {
+  padding: 3px 6px;
+}
+.small .text {
+  font-size: 13px;
+}
+
+.text {
+  color: var(--text);
 }

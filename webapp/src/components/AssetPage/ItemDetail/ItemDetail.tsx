@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Rarity } from '@dcl/schemas'
+import { NFTCategory, Rarity } from '@dcl/schemas'
 import { locations } from '../../../modules/routing/locations'
 import { Network } from '../Network'
 import { Description } from '../Description'
@@ -36,7 +36,11 @@ const ItemDetail = ({ item, wallet }: Props) => {
       isOnSale={item.isOnSale}
       badges={
         <>
-          <RarityBadge rarity={item.rarity} assetType={AssetType.ITEM} />
+          <RarityBadge
+            rarity={item.rarity}
+            assetType={AssetType.ITEM}
+            category={NFTCategory.WEARABLE}
+          />
           <CategoryBadge wearable={wearable} assetType={AssetType.ITEM} />
           <GenderBadge wearable={wearable} assetType={AssetType.ITEM} />
           {wearable.isSmart ? <SmartBadge assetType={AssetType.ITEM} /> : null}

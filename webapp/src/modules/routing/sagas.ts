@@ -65,7 +65,7 @@ import {
   getSortBy,
   getOnlyOnSale,
   getIsMap,
-  getWearableRarities,
+  getRarities,
   getWearableGenders,
   getContracts,
   getSearch
@@ -134,7 +134,7 @@ function* handleClearFilters() {
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
   const clearedBrowseOptions: BrowseOptions = omit(browseOptions, [
-    'wearableRarities',
+    'rarities',
     'wearableGenders',
     'network',
     'contracts',
@@ -237,7 +237,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           ? getSearchWearableCategory(section!)
           : undefined
 
-        const { wearableRarities, wearableGenders } = options
+        const { rarities, wearableGenders } = options
 
         yield put(
           fetchItemsRequest({
@@ -254,7 +254,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               isWearableAccessory,
               isWearableSmart: onlySmart,
               search,
-              rarities: wearableRarities,
+              rarities: rarities,
               contractAddress: contracts && contracts[0],
               wearableGenders
             }
@@ -302,7 +302,7 @@ export function* getCurrentBrowseOptions(): Generator<
     onlySmart: yield select(getOnlySmart),
     isMap: yield select(getIsMap),
     isFullscreen: yield select(getIsFullscreen),
-    wearableRarities: yield select(getWearableRarities),
+    rarities: yield select(getRarities),
     wearableGenders: yield select(getWearableGenders),
     contracts: yield select(getContracts),
     network: yield select(getNetwork),
@@ -450,7 +450,7 @@ function* deriveCurrentOptions(
       // Category specific logic to keep filters if the category doesn't change
       if (prevCategory && prevCategory === nextCategory) {
         newOptions = {
-          wearableRarities: yield select(getWearableRarities),
+          rarities: yield select(getRarities),
           wearableGenders: yield select(getWearableGenders),
           search: yield select(getSearch),
           network: yield select(getNetwork),

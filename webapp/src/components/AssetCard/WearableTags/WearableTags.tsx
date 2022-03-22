@@ -1,7 +1,9 @@
-import { BodyShape, Rarity } from '@dcl/schemas'
+import { BodyShape, NFTCategory } from '@dcl/schemas'
 import { SmartIcon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import RarityBadge from '../../AssetPage/RarityBadge'
 import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
+import { AssetType } from '../../../modules/asset/types'
 import { Props } from './WearableTags.types'
 import './WearableTags.css'
 
@@ -10,13 +12,12 @@ const WearableTags = (props: Props) => {
   const wearable = asset.data.wearable!
   return (
     <div className="WearableTags tags">
-      <div
-        title={t(`wearable.rarity_tooltip.${wearable.rarity}`)}
-        className="rarity"
-        style={{ backgroundColor: Rarity.getColor(wearable.rarity) }}
-      >
-        {t(`wearable.rarity.${wearable.rarity}`)}
-      </div>
+      <RarityBadge
+        size="small"
+        rarity={wearable.rarity}
+        assetType={AssetType.NFT}
+        category={NFTCategory.EMOTE}
+      />
       <div
         className={'icon ' + wearable.category}
         title={t(`wearable.category.${wearable.category}`)}
