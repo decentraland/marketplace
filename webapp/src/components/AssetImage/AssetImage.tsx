@@ -51,6 +51,19 @@ const isColor = (maybeColor: Partial<Color>) =>
   typeof maybeColor.g === 'number' &&
   typeof maybeColor.b === 'number'
 
+function getEmoteFromItemId(itemId?: string) {
+  switch (itemId) {
+    case '0':
+      return AvatarEmote.FASHION_2
+    case '1':
+      return AvatarEmote.FASHION_3
+    case '2':
+      return 'fashion-4' as AvatarEmote
+    default:
+      return AvatarEmote.FASHION_2
+  }
+}
+
 const AssetImage = (props: Props) => {
   const {
     asset,
@@ -64,7 +77,7 @@ const AssetImage = (props: Props) => {
     isTryingOn,
     onSetIsTryingOn
   } = props
-  const { parcel, estate, wearable, ens } = asset.data
+  const { parcel, estate, wearable, emote, ens } = asset.data
 
   const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(
     isDraggable
@@ -99,7 +112,7 @@ const AssetImage = (props: Props) => {
   const [isTracked, setIsTracked] = useState(false)
 
   // pick a random emote
-  const emote = useMemo(() => {
+  const previewEmote = useMemo(() => {
     const poses = [
       AvatarEmote.FASHION,
       AvatarEmote.FASHION_2,
@@ -203,7 +216,7 @@ const AssetImage = (props: Props) => {
               }
               skin={skin}
               hair={hair}
-              emote={emote}
+              emote={previewEmote}
               onLoad={handleLoad}
               onError={handleError}
               dev={isDev}
@@ -272,6 +285,68 @@ const AssetImage = (props: Props) => {
         )
       }
       const [light, dark] = Rarity.getGradient(wearable!.rarity)
+      const backgroundImage = `radial-gradient(${light}, ${dark})`
+      const classes =
+        'rarity-background ' +
+        (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
+      const showWearablePreview = !!wearablePreview && !wearablePreviewError
+      return (
+        <div
+          className={classes}
+          style={{
+            backgroundImage
+          }}
+        >
+          {showWearablePreview ? (
+            wearablePreview
+          ) : (
+            <img
+              alt={getAssetName(asset)}
+              className="image"
+              src={getAssetImage(asset)}
+            />
+          )}
+        </div>
+      )
+    }
+
+    case NFTCategory.EMOTE: {
+      let wearablePreview = null
+      const isDev = process.env.REACT_APP_NETWORK !== 'mainnet'
+      let itemId: string | undefined
+      let tokenId: string | undefined
+      if ('itemId' in asset && asset.itemId) {
+        itemId = asset.itemId
+      } else if ('tokenId' in asset && asset.tokenId) {
+        tokenId = asset.tokenId
+      }
+
+      if (isDraggable) {
+        wearablePreview = (
+          <>
+            <WearablePreview
+              contractAddress={asset.contractAddress}
+              itemId={itemId}
+              tokenId={tokenId}
+              profile={avatar ? avatar.ethAddress : 'default'}
+              emote={getEmoteFromItemId(itemId)}
+              onLoad={handleLoad}
+              onError={handleError}
+              dev={isDev}
+            />
+            {isLoadingWearablePreview ? (
+              <Center>
+                <Loader
+                  className="wearable-preview-loader"
+                  active
+                  size="large"
+                />
+              </Center>
+            ) : null}
+          </>
+        )
+      }
+      const [light, dark] = Rarity.getGradient(emote!.rarity)
       const backgroundImage = `radial-gradient(${light}, ${dark})`
       const classes =
         'rarity-background ' +

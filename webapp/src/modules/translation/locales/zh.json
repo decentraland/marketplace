@@ -40,7 +40,8 @@
     "bid": "投标",
     "order": "清单",
     "mint": "薄荷",
-    "back": "背部"
+    "back": "背部",
+    "emote": "表情"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",

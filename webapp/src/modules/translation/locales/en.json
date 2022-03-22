@@ -40,7 +40,8 @@
     "bid": "Bid",
     "order": "Listing",
     "mint": "Mint",
-    "back": "Back"
+    "back": "Back",
+    "emote": "Emote"
   },
   "address": {
     "invalid_address": "That's not a valid address",

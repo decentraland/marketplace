@@ -4,20 +4,19 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { isGender, isUnisex } from '../../modules/nft/utils'
 import { locations } from '../../modules/routing/locations'
-import { Section } from '../../modules/vendor/decentraland'
 import GenderBadge from './GenderBadge'
 import { MapDispatchProps, OwnProps } from './GenderBadge.types'
 
 const mapDispatch = (
   dispatch: Dispatch,
-  { bodyShapes, assetType }: OwnProps
+  { bodyShapes, assetType, section }: OwnProps
 ): MapDispatchProps => ({
   onClick: () =>
     dispatch(
       push(
         locations.browse({
           assetType,
-          section: Section.WEARABLES,
+          section,
           wearableGenders: isUnisex(bodyShapes)
             ? [WearableGender.MALE, WearableGender.FEMALE]
             : isGender(bodyShapes, BodyShape.MALE)

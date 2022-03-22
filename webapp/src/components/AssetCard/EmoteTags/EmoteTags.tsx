@@ -5,6 +5,7 @@ import RarityBadge from '../../RarityBadge'
 import GenderBadge from '../../GenderBadge'
 import { Props } from './EmoteTags.types'
 import styles from './EmoteTags.module.css'
+import { Section } from '../../../modules/vendor/decentraland'
 
 const EmoteTags = (props: Props) => {
   const { nft } = props
@@ -21,6 +22,7 @@ const EmoteTags = (props: Props) => {
       <GenderBadge
         bodyShapes={bodyShapes}
         assetType={AssetType.NFT}
+        section={Section.EMOTES}
         withText={false}
       />
     </div>

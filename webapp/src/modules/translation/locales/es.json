@@ -40,7 +40,8 @@
     "bid": "Oferta",
     "order": "Clasificado",
     "mint": "Venta",
-    "back": "Volver"
+    "back": "Volver",
+    "emote": "Emote"
   },
   "address": {
     "invalid_address": "Dirección inválida",

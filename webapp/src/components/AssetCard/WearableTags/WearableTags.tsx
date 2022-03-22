@@ -6,6 +6,7 @@ import GenderBadge from '../../GenderBadge/GenderBadge'
 import { AssetType } from '../../../modules/asset/types'
 import { Props } from './WearableTags.types'
 import './WearableTags.css'
+import { Section } from '../../../modules/vendor/decentraland'
 
 const WearableTags = (props: Props) => {
   const { asset } = props
@@ -27,6 +28,7 @@ const WearableTags = (props: Props) => {
         bodyShapes={bodyShapes}
         assetType={AssetType.NFT}
         withText={false}
+        section={Section.WEARABLES}
       />
       {isSmart ? (
         <div className="icon smart" title={t(`wearable.smart`)}>

@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { NFTCategory, Rarity } from '@dcl/schemas'
+import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
 import { locations } from '../../../modules/routing/locations'
 import { Network } from '../Network'
 import { Description } from '../Description'
@@ -20,14 +20,27 @@ import { getBuilderCollectionDetailUrl } from '../../../modules/collection/utils
 import { TransactionHistory } from '../TransactionHistory'
 import { AssetImage } from '../../AssetImage'
 import styles from './ItemDetail.module.css'
+import { Section } from '../../../modules/vendor/decentraland'
 
 const ItemDetail = ({ item, wallet }: Props) => {
-  const wearable = item.data.wearable!
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
   const builderCollectionUrl = getBuilderCollectionDetailUrl(
     item.contractAddress
   )
+
+  let description = ''
+  let bodyShapes: BodyShape[] = []
+  switch (item.category) {
+    case NFTCategory.WEARABLE:
+      description = item.data.wearable!.description
+      bodyShapes = item.data.wearable!.bodyShapes
+      break
+    case NFTCategory.EMOTE:
+      description = item.data.emote!.description
+      bodyShapes = item.data.emote!.bodyShapes
+      break
+  }
 
   return (
     <BaseDetail
@@ -41,17 +54,32 @@ const ItemDetail = ({ item, wallet }: Props) => {
             assetType={AssetType.ITEM}
             category={NFTCategory.WEARABLE}
           />
-          <CategoryBadge wearable={wearable} assetType={AssetType.ITEM} />
-          <GenderBadge
-            bodyShapes={wearable.bodyShapes}
-            assetType={AssetType.ITEM}
-          />
-          {wearable.isSmart ? <SmartBadge assetType={AssetType.ITEM} /> : null}
+          {item.category === NFTCategory.WEARABLE && (
+            <CategoryBadge
+              wearable={item.data.wearable!}
+              assetType={AssetType.ITEM}
+            />
+          )}
+          {bodyShapes.length > 0 && (
+            <GenderBadge
+              bodyShapes={bodyShapes}
+              assetType={AssetType.ITEM}
+              section={
+                item.category === NFTCategory.WEARABLE
+                  ? Section.WEARABLES
+                  : Section.EMOTES
+              }
+            />
+          )}
+          {item.category === NFTCategory.WEARABLE &&
+            item.data.wearable!.isSmart && (
+              <SmartBadge assetType={AssetType.ITEM} />
+            )}
         </>
       }
       left={
         <>
-          <Description text={wearable.description} />
+          <Description text={description} />
           <div className="BaseDetail row">
             <Owner asset={item} />
             <Collection asset={item} />
