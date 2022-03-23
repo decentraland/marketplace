@@ -40,7 +40,8 @@
     "bid": "投标",
     "order": "清单",
     "mint": "薄荷",
-    "back": "背部"
+    "back": "背部",
+    "emote": "表情"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -90,6 +91,7 @@
     "wearables_tiara": "头饰",
     "wearables_top_head": "头顶",
     "wearables_skin": "皮肤",
+    "emotes": "表情",
     "ens": "名称",
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
@@ -272,30 +274,30 @@
     "when": "时间",
     "price": "价格"
   },
+  "body_shape": {
+    "male": "男性",
+    "female": "女性",
+    "unisex": "中性"
+  },
+  "rarity": {
+    "unique": "独特",
+    "mythic": "神话",
+    "legendary": "传奇",
+    "epic": "史诗",
+    "rare": "稀有",
+    "uncommon": "罕见",
+    "common": "常见"
+  },
+  "rarity_tooltip": {
+    "unique": "像圣杯一样：独一无二",
+    "mythic": "给幸运的人：最多10个",
+    "legendary": "限量供应：最多100个",
+    "epic": "最大供应量：1000个",
+    "rare": "最大供应量：5000个",
+    "uncommon": "最大供应量：10,000个",
+    "common": "最大供应量：100,000个"
+  },
   "wearable": {
-    "body_shape": {
-      "male": "男性",
-      "female": "女性",
-      "unisex": "中性"
-    },
-    "rarity": {
-      "unique": "独特",
-      "mythic": "神话",
-      "legendary": "传奇",
-      "epic": "史诗",
-      "rare": "稀有",
-      "uncommon": "罕见",
-      "common": "常见"
-    },
-    "rarity_tooltip": {
-      "unique": "像圣杯一样：独一无二",
-      "mythic": "给幸运的人：最多10个",
-      "legendary": "限量供应：最多100个",
-      "epic": "最大供应量：1000个",
-      "rare": "最大供应量：5000个",
-      "uncommon": "最大供应量：10,000个",
-      "common": "最大供应量：100,000个"
-    },
     "category": {
       "body_shape": "身材",
       "earring": "耳环",

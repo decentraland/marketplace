@@ -40,7 +40,8 @@
     "bid": "Oferta",
     "order": "Clasificado",
     "mint": "Venta",
-    "back": "Volver"
+    "back": "Volver",
+    "emote": "Emote"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -90,6 +91,7 @@
     "wearables_tiara": "Tiara",
     "wearables_top_head": "Tope de la cabeza",
     "wearables_skin": "Skin",
+    "emotes": "Emotes",
     "ens": "Nombres",
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
@@ -272,30 +274,30 @@
     "when": "Fecha",
     "price": "Precio"
   },
+  "body_shape": {
+    "male": "Hombre",
+    "female": "Mujer",
+    "unisex": "Unisex"
+  },
+  "rarity": {
+    "unique": "Único",
+    "mythic": "Mítico",
+    "legendary": "Legendario",
+    "epic": "Épico",
+    "rare": "Raro",
+    "uncommon": "Poco común",
+    "common": "Común"
+  },
+  "rarity_tooltip": {
+    "unique": "Único en su tipo: uno solo en existencia",
+    "mythic": "Para algunos pocos: máximo 10",
+    "legendary": "Edición limitada: máximo 100",
+    "epic": "Suministro máximo: 1000",
+    "rare": "Suministro máximo: 5000",
+    "uncommon": "Suministro máximo: 10.000",
+    "common": "Suministro máximo: 100.000"
+  },
   "wearable": {
-    "body_shape": {
-      "male": "Hombre",
-      "female": "Mujer",
-      "unisex": "Unisex"
-    },
-    "rarity": {
-      "unique": "Único",
-      "mythic": "Mítico",
-      "legendary": "Legendario",
-      "epic": "Épico",
-      "rare": "Raro",
-      "uncommon": "Poco común",
-      "common": "Común"
-    },
-    "rarity_tooltip": {
-      "unique": "Único en su tipo: uno solo en existencia",
-      "mythic": "Para algunos pocos: máximo 10",
-      "legendary": "Edición limitada: máximo 100",
-      "epic": "Suministro máximo: 1000",
-      "rare": "Suministro máximo: 5000",
-      "uncommon": "Suministro máximo: 10.000",
-      "common": "Suministro máximo: 100.000"
-    },
     "category": {
       "body_shape": "Cuerpo",
       "earring": "Aros",

@@ -32,7 +32,7 @@ export type BrowseOptions = {
   onlySmart?: boolean
   isMap?: boolean
   isFullscreen?: boolean
-  wearableRarities?: Rarity[]
+  rarities?: Rarity[]
   wearableGenders?: WearableGender[]
   search?: string
   contracts?: string[]

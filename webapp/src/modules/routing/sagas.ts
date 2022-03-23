@@ -65,7 +65,7 @@ import {
   getSortBy,
   getOnlyOnSale,
   getIsMap,
-  getWearableRarities,
+  getRarities,
   getWearableGenders,
   getContracts,
   getSearch
@@ -134,7 +134,7 @@ function* handleClearFilters() {
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
   const clearedBrowseOptions: BrowseOptions = omit(browseOptions, [
-    'wearableRarities',
+    'rarities',
     'wearableGenders',
     'network',
     'contracts',
@@ -208,6 +208,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     yield put(setView(view))
   }
 
+  const category = getCategoryFromSection(section)
+
   switch (section) {
     case Section.BIDS:
     case Section.STORE_SETTINGS:
@@ -237,7 +239,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           ? getSearchWearableCategory(section!)
           : undefined
 
-        const { wearableRarities, wearableGenders } = options
+        const { rarities, wearableGenders } = options
 
         yield put(
           fetchItemsRequest({
@@ -254,7 +256,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               isWearableAccessory,
               isWearableSmart: onlySmart,
               search,
-              rarities: wearableRarities,
+              category,
+              rarities: rarities,
               contractAddress: contracts && contracts[0],
               wearableGenders
             }
@@ -262,7 +265,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         )
       } else {
         const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
-        const category = getCategoryFromSection(section)
         yield put(
           fetchNFTsRequest({
             vendor,
@@ -302,7 +304,7 @@ export function* getCurrentBrowseOptions(): Generator<
     onlySmart: yield select(getOnlySmart),
     isMap: yield select(getIsMap),
     isFullscreen: yield select(getIsFullscreen),
-    wearableRarities: yield select(getWearableRarities),
+    rarities: yield select(getRarities),
     wearableGenders: yield select(getWearableGenders),
     contracts: yield select(getContracts),
     network: yield select(getNetwork),
@@ -450,12 +452,24 @@ function* deriveCurrentOptions(
       // Category specific logic to keep filters if the category doesn't change
       if (prevCategory && prevCategory === nextCategory) {
         newOptions = {
-          wearableRarities: yield select(getWearableRarities),
+          rarities: yield select(getRarities),
           wearableGenders: yield select(getWearableGenders),
           search: yield select(getSearch),
           network: yield select(getNetwork),
           contracts: yield select(getContracts),
           onlySmart: yield select(getOnlySmart),
+          ...newOptions
+        }
+      }
+      break
+    }
+    case NFTCategory.EMOTE: {
+      const prevCategory = getCategoryFromSection(previous.section!)
+
+      // Category specific logic to keep filters if the category doesn't change
+      if (prevCategory && prevCategory === nextCategory) {
+        newOptions = {
+          rarities: yield select(getRarities),
           ...newOptions
         }
       }
