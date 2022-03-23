@@ -1,12 +1,12 @@
 import { NFTCategory } from '@dcl/schemas'
 import { SmartIcon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'
 import GenderBadge from '../../GenderBadge/GenderBadge'
 import { AssetType } from '../../../modules/asset/types'
 import { Props } from './WearableTags.types'
 import './WearableTags.css'
-import { Section } from '../../../modules/vendor/decentraland'
 
 const WearableTags = (props: Props) => {
   const { asset } = props

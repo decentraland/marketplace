@@ -12,11 +12,11 @@ import { ENSDetail } from './ENSDetail'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { Footer } from '../Footer'
+import { EmoteDetail } from './EmoteDetail'
 import { AssetProvider } from '../AssetProvider'
 import { locations } from '../../modules/routing/locations'
 import { Sections } from '../../modules/routing/types'
 import './AssetPage.css'
-import { EmoteDetail } from './EmoteDetail'
 
 const AssetPage = ({ type, onBack }: Props) => {
   return (

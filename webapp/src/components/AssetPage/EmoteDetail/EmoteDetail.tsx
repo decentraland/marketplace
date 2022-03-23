@@ -7,6 +7,7 @@ import { Description } from '../Description'
 import { Props } from './EmoteDetail.types'
 import RarityBadge from '../../RarityBadge'
 import { AssetType } from '../../../modules/asset/types'
+import { Section } from '../../../modules/vendor/decentraland'
 import GenderBadge from '../../GenderBadge'
 import { Owner } from '../Owner'
 import Collection from '../Collection'
@@ -18,7 +19,6 @@ import { TransactionHistory } from '../TransactionHistory'
 import BaseDetail from '../BaseDetail'
 import { AssetImage } from '../../AssetImage'
 import styles from './EmoteDetail.module.css'
-import { Section } from '../../../modules/vendor/decentraland'
 
 const EmoteDetail = ({ nft }: Props) => {
   const emote = nft.data.emote!

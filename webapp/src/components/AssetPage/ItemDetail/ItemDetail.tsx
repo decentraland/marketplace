@@ -16,11 +16,11 @@ import { Owner } from '../Owner'
 import Collection from '../Collection'
 import Price from '../Price'
 import BaseDetail from '../BaseDetail'
+import { Section } from '../../../modules/vendor/decentraland'
 import { getBuilderCollectionDetailUrl } from '../../../modules/collection/utils'
 import { TransactionHistory } from '../TransactionHistory'
 import { AssetImage } from '../../AssetImage'
 import styles from './ItemDetail.module.css'
-import { Section } from '../../../modules/vendor/decentraland'
 
 const ItemDetail = ({ item, wallet }: Props) => {
   const isOwner = wallet?.address === item.creator
