@@ -51,19 +51,6 @@ const isColor = (maybeColor: Partial<Color>) =>
   typeof maybeColor.g === 'number' &&
   typeof maybeColor.b === 'number'
 
-function getEmoteFromItemId(itemId?: string) {
-  switch (itemId) {
-    case '0':
-      return AvatarEmote.FASHION_2
-    case '1':
-      return AvatarEmote.FASHION_3
-    case '2':
-      return 'fashion-4' as AvatarEmote
-    default:
-      return AvatarEmote.FASHION_2
-  }
-}
-
 const AssetImage = (props: Props) => {
   const {
     asset,
@@ -329,7 +316,6 @@ const AssetImage = (props: Props) => {
               itemId={itemId}
               tokenId={tokenId}
               profile={avatar ? avatar.ethAddress : 'default'}
-              emote={getEmoteFromItemId(itemId)}
               onLoad={handleLoad}
               onError={handleError}
               dev={isDev}
