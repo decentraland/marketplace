@@ -35,21 +35,13 @@ const BuyPage = (props: Props) => {
           {wallet => (
             <AssetProviderPage type={type}>
               {(asset, order) => {
-                // Don't display the page if the cost of the item/nft is 0
-                switch (type) {
-                  case AssetType.NFT:
-                    if (order?.price === '0') {
-                      return <NotFound />
-                    }
+                // Don't display the page if the cost of the item is 0
+                if (type === AssetType.ITEM) {
+                  const { price } = asset as Item
 
-                    break
-
-                  case AssetType.ITEM:
-                    const { price } = asset as Item
-                    
-                    if (price === '0') {
-                      return <NotFound />
-                    }
+                  if (price === '0') {
+                    return <NotFound />
+                  }
                 }
 
                 const modalProps = {
