@@ -1,17 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyImage } from 'react-lazy-images'
 import classNames from 'classnames'
-import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
+import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import {
-  AvatarEmote,
-  Button,
-  Center,
-  Loader,
-  Popup,
-  WearablePreview
-} from 'decentraland-ui'
+import { Button, Center, Loader, Popup, WearablePreview } from 'decentraland-ui'
 
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
@@ -101,9 +94,9 @@ const AssetImage = (props: Props) => {
   // pick a random emote
   const previewEmote = useMemo(() => {
     const poses = [
-      AvatarEmote.FASHION,
-      AvatarEmote.FASHION_2,
-      AvatarEmote.FASHION_3
+      PreviewEmote.FASHION,
+      PreviewEmote.FASHION_2,
+      PreviewEmote.FASHION_3
     ]
     return isTryingOn ? poses[(Math.random() * poses.length) | 0] : undefined
   }, [isTryingOn])
