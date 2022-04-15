@@ -227,8 +227,9 @@ const AssetBrowse = (props: Props) => {
         <Mobile>
           <Tabs isFullscreen>
             <Tabs.Left>
-              {mobileSections.map(value => (
+              {mobileSections.map((value, key) => (
                 <Tabs.Tab
+                  key={key}
                   active={section === value}
                   onClick={() => onBrowse({ section: value })}
                 >
