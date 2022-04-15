@@ -4,12 +4,11 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTCategory, Rarity } from '@dcl/schemas'
 import { Network } from '../Network'
 import { Description } from '../Description'
-import { Props } from './WearableDetail.types'
+import { Props } from './EmoteDetail.types'
 import RarityBadge from '../../RarityBadge'
 import { AssetType } from '../../../modules/asset/types'
+import { Section } from '../../../modules/vendor/decentraland'
 import GenderBadge from '../../GenderBadge'
-import SmartBadge from '../SmartBadge'
-import CategoryBadge from '../CategoryBadge'
 import { Owner } from '../Owner'
 import Collection from '../Collection'
 import Price from '../Price'
@@ -19,11 +18,10 @@ import { BidList } from '../BidList'
 import { TransactionHistory } from '../TransactionHistory'
 import BaseDetail from '../BaseDetail'
 import { AssetImage } from '../../AssetImage'
-import styles from './WearableDetail.module.css'
-import { Section } from '../../../modules/vendor/decentraland'
+import styles from './EmoteDetail.module.css'
 
-const WearableDetail = ({ nft }: Props) => {
-  const wearable = nft.data.wearable!
+const EmoteDetail = ({ nft }: Props) => {
+  const emote = nft.data.emote!
 
   return (
     <BaseDetail
@@ -33,22 +31,20 @@ const WearableDetail = ({ nft }: Props) => {
       badges={
         <>
           <RarityBadge
-            rarity={wearable.rarity}
+            rarity={emote.rarity}
             assetType={AssetType.NFT}
-            category={NFTCategory.WEARABLE}
+            category={NFTCategory.EMOTE}
           />
-          <CategoryBadge wearable={wearable} assetType={AssetType.NFT} />
           <GenderBadge
-            bodyShapes={wearable.bodyShapes}
+            bodyShapes={emote.bodyShapes}
             assetType={AssetType.NFT}
-            section={Section.WEARABLES}
+            section={Section.EMOTES}
           />
-          {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}
         </>
       }
       left={
         <>
-          <Description text={wearable.description} />
+          <Description text={emote.description} />
           <div className="BaseDetail row">
             <Owner asset={nft} />
             <Collection asset={nft} />
@@ -64,7 +60,7 @@ const WearableDetail = ({ nft }: Props) => {
                 <Header>
                   {Number(nft.issuedId).toLocaleString()}
                   <span className={styles.issued}>
-                    /{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}
+                    /{Rarity.getMaxSupply(emote.rarity).toLocaleString()}
                   </span>
                 </Header>
               </Stats>
@@ -85,4 +81,4 @@ const WearableDetail = ({ nft }: Props) => {
   )
 }
 
-export default React.memo(WearableDetail)
+export default React.memo(EmoteDetail)

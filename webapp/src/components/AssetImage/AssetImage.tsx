@@ -1,17 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyImage } from 'react-lazy-images'
 import classNames from 'classnames'
-import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
+import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import {
-  AvatarEmote,
-  Button,
-  Center,
-  Loader,
-  Popup,
-  WearablePreview
-} from 'decentraland-ui'
+import { Button, Center, Loader, Popup, WearablePreview } from 'decentraland-ui'
 
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
@@ -64,7 +57,7 @@ const AssetImage = (props: Props) => {
     isTryingOn,
     onSetIsTryingOn
   } = props
-  const { parcel, estate, wearable, ens } = asset.data
+  const { parcel, estate, wearable, emote, ens } = asset.data
 
   const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(
     isDraggable
@@ -99,11 +92,11 @@ const AssetImage = (props: Props) => {
   const [isTracked, setIsTracked] = useState(false)
 
   // pick a random emote
-  const emote = useMemo(() => {
+  const previewEmote = useMemo(() => {
     const poses = [
-      AvatarEmote.FASHION,
-      AvatarEmote.FASHION_2,
-      AvatarEmote.FASHION_3
+      PreviewEmote.FASHION,
+      PreviewEmote.FASHION_2,
+      PreviewEmote.FASHION_3
     ]
     return isTryingOn ? poses[(Math.random() * poses.length) | 0] : undefined
   }, [isTryingOn])
@@ -203,7 +196,7 @@ const AssetImage = (props: Props) => {
               }
               skin={skin}
               hair={hair}
-              emote={emote}
+              emote={previewEmote}
               onLoad={handleLoad}
               onError={handleError}
               dev={isDev}
@@ -272,6 +265,67 @@ const AssetImage = (props: Props) => {
         )
       }
       const [light, dark] = Rarity.getGradient(wearable!.rarity)
+      const backgroundImage = `radial-gradient(${light}, ${dark})`
+      const classes =
+        'rarity-background ' +
+        (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
+      const showWearablePreview = !!wearablePreview && !wearablePreviewError
+      return (
+        <div
+          className={classes}
+          style={{
+            backgroundImage
+          }}
+        >
+          {showWearablePreview ? (
+            wearablePreview
+          ) : (
+            <img
+              alt={getAssetName(asset)}
+              className="image"
+              src={getAssetImage(asset)}
+            />
+          )}
+        </div>
+      )
+    }
+
+    case NFTCategory.EMOTE: {
+      let wearablePreview = null
+      const isDev = process.env.REACT_APP_NETWORK !== 'mainnet'
+      let itemId: string | undefined
+      let tokenId: string | undefined
+      if ('itemId' in asset && asset.itemId) {
+        itemId = asset.itemId
+      } else if ('tokenId' in asset && asset.tokenId) {
+        tokenId = asset.tokenId
+      }
+
+      if (isDraggable) {
+        wearablePreview = (
+          <>
+            <WearablePreview
+              contractAddress={asset.contractAddress}
+              itemId={itemId}
+              tokenId={tokenId}
+              profile={avatar ? avatar.ethAddress : 'default'}
+              onLoad={handleLoad}
+              onError={handleError}
+              dev={isDev}
+            />
+            {isLoadingWearablePreview ? (
+              <Center>
+                <Loader
+                  className="wearable-preview-loader"
+                  active
+                  size="large"
+                />
+              </Center>
+            ) : null}
+          </>
+        )
+      }
+      const [light, dark] = Rarity.getGradient(emote!.rarity)
       const backgroundImage = `radial-gradient(${light}, ${dark})`
       const classes =
         'rarity-background ' +

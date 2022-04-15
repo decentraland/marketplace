@@ -146,7 +146,7 @@ export const getIsFullscreen = createSelector<
   return isFullscreen === null ? undefined : isMap && isFullscreen === 'true'
 })
 
-export const getWearableRarities = createSelector<RootState, string, Rarity[]>(
+export const getRarities = createSelector<RootState, string, Rarity[]>(
   getRouterSearch,
   search =>
     getURLParamArray<Rarity>(
@@ -231,7 +231,7 @@ export const hasFiltersEnabled = createSelector<
 >(
   getNetwork,
   getWearableGenders,
-  getWearableRarities,
+  getRarities,
   getContracts,
   (network, genders, rarities, contracts) => {
     const hasNetworkFilter = network !== undefined

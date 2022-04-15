@@ -12,6 +12,7 @@ import { ENSDetail } from './ENSDetail'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { Footer } from '../Footer'
+import { EmoteDetail } from './EmoteDetail'
 import { AssetProvider } from '../AssetProvider'
 import { locations } from '../../modules/routing/locations'
 import { Sections } from '../../modules/routing/types'
@@ -36,11 +37,18 @@ const AssetPage = ({ type, onBack }: Props) => {
                         mapAsset(
                           asset,
                           {
-                            item: () =>
+                            wearable: () =>
                               locations.browse({
                                 assetType: type,
                                 section: Sections.decentraland.WEARABLES
                               }),
+                            emote: () =>
+                              locations.browse({
+                                assetType: type,
+                                section: Sections.decentraland.EMOTES
+                              })
+                          },
+                          {
                             ens: () =>
                               locations.browse({
                                 assetType: type,
@@ -64,6 +72,11 @@ const AssetPage = ({ type, onBack }: Props) => {
                               locations.browse({
                                 assetType: type,
                                 section: Sections.decentraland.WEARABLES
+                              }),
+                            emote: () =>
+                              locations.browse({
+                                assetType: type,
+                                section: Sections.decentraland.EMOTES
                               })
                           },
                           () => undefined
@@ -76,14 +89,18 @@ const AssetPage = ({ type, onBack }: Props) => {
               <Narrow>
                 <AssetProviderPage type={type}>
                   {asset =>
-                    mapAsset(
+                    mapAsset<React.ReactNode>(
                       asset,
                       {
-                        item: item => <ItemDetail item={item} />,
+                        wearable: item => <ItemDetail item={item} />,
+                        emote: item => <ItemDetail item={item} />
+                      },
+                      {
                         ens: nft => <ENSDetail nft={nft} />,
                         estate: nft => <EstateDetail nft={nft} />,
                         parcel: nft => <ParcelDetail nft={nft} />,
-                        wearable: nft => <WearableDetail nft={nft} />
+                        wearable: nft => <WearableDetail nft={nft} />,
+                        emote: nft => <EmoteDetail nft={nft} />
                       },
                       () => null
                     )
@@ -100,9 +117,13 @@ const AssetPage = ({ type, onBack }: Props) => {
 
   function mapAsset<T>(
     asset: Asset | null,
-    mappers: {
-      item: (asset: Asset<AssetType.ITEM>) => T
+    itemMappers: {
+      wearable: (asset: Asset<AssetType.ITEM>) => T
+      emote: (asset: Asset<AssetType.ITEM>) => T
+    },
+    nftMappers: {
       wearable: (asset: Asset<AssetType.NFT>) => T
+      emote: (asset: Asset<AssetType.NFT>) => T
       parcel: (asset: Asset<AssetType.NFT>) => T
       estate: (asset: Asset<AssetType.NFT>) => T
       ens: (asset: Asset<AssetType.NFT>) => T
@@ -114,29 +135,46 @@ const AssetPage = ({ type, onBack }: Props) => {
     }
 
     switch (type) {
-      case AssetType.ITEM:
+      case AssetType.ITEM: {
         const item = asset as Asset<AssetType.ITEM>
-        return mappers.item(item)
+        const { wearable, emote } = item.data as any
+        if (wearable) {
+          return itemMappers.wearable(item)
+        }
 
-      case AssetType.NFT:
+        if (emote) {
+          return itemMappers.emote(item)
+        }
+
+        break
+      }
+
+      case AssetType.NFT: {
         const nft = asset as Asset<AssetType.NFT>
-        const { parcel, estate, wearable, ens } = nft.data as any
+        const { parcel, estate, wearable, emote, ens } = nft.data as any
 
         if (parcel) {
-          return mappers.parcel(nft)
+          return nftMappers.parcel(nft)
         }
 
         if (estate) {
-          return mappers.estate(nft)
+          return nftMappers.estate(nft)
         }
 
         if (wearable) {
-          return mappers.wearable(nft)
+          return nftMappers.wearable(nft)
         }
 
         if (ens) {
-          return mappers.ens(nft)
+          return nftMappers.ens(nft)
         }
+
+        if (emote) {
+          return nftMappers.emote(nft)
+        }
+
+        break
+      }
     }
 
     return fallback()

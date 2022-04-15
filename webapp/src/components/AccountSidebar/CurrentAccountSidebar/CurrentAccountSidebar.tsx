@@ -15,6 +15,7 @@ const {
   COLLECTIONS,
   LAND,
   WEARABLES,
+  EMOTES,
   ENS,
   ON_SALE,
   SALES,
@@ -33,7 +34,7 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
         onClick={section => onBrowse(decentraland, section)}
       />
       <NFTSectionsMenuItems
-        sections={[LAND, WEARABLES, ENS]}
+        sections={[LAND, WEARABLES, EMOTES, ENS]}
         section={section as Section}
         onSectionClick={section => onBrowse(decentraland, section)}
       />

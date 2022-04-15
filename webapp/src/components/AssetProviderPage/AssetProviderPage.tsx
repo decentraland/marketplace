@@ -11,7 +11,8 @@ const Loading = () => (
   </div>
 )
 
-const NotFound = () => (
+// Exporting to reuse in the BuyPage as a quick fix
+export const NotFound = () => (
   <div className={styles.center}>
     <p className="secondary-text">{t('global.not_found')}&hellip;</p>
   </div>

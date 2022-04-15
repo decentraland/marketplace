@@ -40,7 +40,8 @@
     "bid": "Bid",
     "order": "Listing",
     "mint": "Mint",
-    "back": "Back"
+    "back": "Back",
+    "emote": "Emote"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -90,6 +91,7 @@
     "wearables_tiara": "Tiara",
     "wearables_top_head": "Top head",
     "wearables_skin": "Skins",
+    "emotes": "Emotes",
     "ens": "Names",
     "editions": "Editions",
     "tokens": "Tokens",
@@ -274,30 +276,30 @@
     "when": "When",
     "price": "Price"
   },
+  "body_shape": {
+    "male": "Male",
+    "female": "Female",
+    "unisex": "Unisex"
+  },
+  "rarity": {
+    "unique": "Unique",
+    "mythic": "Mythic",
+    "legendary": "Legendary",
+    "epic": "Epic",
+    "rare": "Rare",
+    "uncommon": "Uncommon",
+    "common": "Common"
+  },
+  "rarity_description": {
+    "unique": "Grail-like: One-of-a-kind",
+    "mythic": "For the lucky few: max 10",
+    "legendary": "Limited supply: max 100",
+    "epic": "Max supply: 1000",
+    "rare": "Max supply: 5000",
+    "uncommon": "Max supply: 10,000",
+    "common": "Max supply: 100,000"
+  },
   "wearable": {
-    "body_shape": {
-      "male": "Male",
-      "female": "Female",
-      "unisex": "Unisex"
-    },
-    "rarity": {
-      "unique": "Unique",
-      "mythic": "Mythic",
-      "legendary": "Legendary",
-      "epic": "Epic",
-      "rare": "Rare",
-      "uncommon": "Uncommon",
-      "common": "Common"
-    },
-    "rarity_tooltip": {
-      "unique": "Grail-like: One-of-a-kind",
-      "mythic": "For the lucky few: max 10",
-      "legendary": "Limited supply: max 100",
-      "epic": "Max supply: 1000",
-      "rare": "Max supply: 5000",
-      "uncommon": "Max supply: 10,000",
-      "common": "Max supply: 100,000"
-    },
     "category": {
       "body_shape": "Body Shape",
       "earring": "Earring",
