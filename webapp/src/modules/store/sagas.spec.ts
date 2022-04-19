@@ -31,7 +31,7 @@ let mockStore: Store
 
 beforeEach(() => {
   mockAddress = 'address'
-  mockClient = new CatalystClient('some-url', 'some-origin')
+  mockClient = new CatalystClient({ catalystUrl: 'some-url' })
   mockStore = getEmptyStore({ owner: mockAddress })
 })
 
