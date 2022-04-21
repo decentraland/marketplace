@@ -13,7 +13,6 @@ import { Asset, AssetType } from '../../modules/asset/types'
 import { BuyNFTModal } from './BuyNFTModal'
 import { MintItemModal } from './MintItemModal'
 import { Props } from './BuyPage.types'
-import { NotFound } from '../AssetProviderPage/AssetProviderPage'
 import './BuyPage.css'
 
 const BuyPage = (props: Props) => {
@@ -35,15 +34,6 @@ const BuyPage = (props: Props) => {
           {wallet => (
             <AssetProviderPage type={type}>
               {(asset, order) => {
-                // Don't display the page if the cost of the item is 0
-                if (type === AssetType.ITEM) {
-                  const { price } = asset as Item
-
-                  if (price === '0') {
-                    return <NotFound />
-                  }
-                }
-
                 const modalProps = {
                   wallet: wallet,
                   isOwner: isOwnedBy(asset, wallet),
