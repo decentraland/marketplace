@@ -17,9 +17,11 @@ import {
   getURLParamArray,
   getURLParam
 } from './search'
-import { SortBy } from './types'
+import { BrowseOptions, SortBy } from './types'
 import { locations } from './locations'
 import { AssetType } from '../asset/types'
+import { getAddress as getWalletAddress } from '../wallet/selectors'
+import { getAddress as getAccountAddress } from '../account/selectors'
 
 export const getState = (state: RootState) => state.routing
 
@@ -246,3 +248,95 @@ export const hasFiltersEnabled = createSelector<
     )
   }
 )
+
+export const getCurrentLocationAddress = createSelector<
+  RootState,
+  string,
+  string | undefined,
+  string | undefined,
+  string | undefined
+>(
+  getPathName,
+  getWalletAddress,
+  getAccountAddress,
+  (pathname, walletAddess, accountAddress) => {
+    let address: string | undefined
+
+    if (pathname === locations.currentAccount()) {
+      address = walletAddess
+    } else {
+      address = accountAddress
+    }
+
+    return address ? address.toLowerCase() : undefined
+  }
+)
+
+export const getPaginationUrlParams = createSelector (
+  getPage,
+  getSortBy,
+  getSearch,
+  (page, sortBy, search) => ({page, sortBy, search})
+)
+
+export const getAssetsUrlParams = createSelector(
+  getOnlyOnSale,
+  getOnlySmart,
+  getIsSoldOut,
+  getItemId,
+  getContracts,
+  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts) => ({
+    onlyOnSale, onlySmart, isSoldOut, itemId, contracts
+  })
+)
+
+export const getLandsUrlParams = createSelector (
+  getIsMap,
+  getIsFullscreen,
+  (isMap, isFullscreen) => ({ isMap, isFullscreen })
+)
+
+export const getWearablesUrlParams = createSelector (
+  getRarities,
+  getWearableGenders,
+  getView,
+  getViewAsGuest,
+  (
+    rarities, wearableGenders, view, viewAsGuest
+  ) => ({
+    rarities, wearableGenders, view, viewAsGuest
+  })
+)
+
+export const getCurrentBrowseOptions = createSelector (
+  getAssetType,
+  getCurrentLocationAddress,
+  getVendor,
+  getSection,
+  getNetwork,
+  getPaginationUrlParams,
+  getAssetsUrlParams,
+  getLandsUrlParams,
+  getWearablesUrlParams,
+  (
+    assetType,
+    address,
+    vendor,
+    section,
+    network,
+    paginationUrlParams,
+    AssetsUrlParams,
+    landsUrlParams,
+    wearablesUrlParams
+) => ({
+    assetType,
+    address,
+    vendor,
+    section,
+    network,
+    ...AssetsUrlParams,
+    ...paginationUrlParams,
+    ...landsUrlParams,
+    ...wearablesUrlParams
+  } as BrowseOptions
+))
