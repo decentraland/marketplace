@@ -8,12 +8,12 @@ import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { clearFilters } from './actions'
 import {
-  buildBrowseURL,
   fetchAssetsFromRoute,
-  getCurrentBrowseOptions,
   routingSaga
 } from './sagas'
+import { getCurrentBrowseOptions } from './selectors'
 import { BrowseOptions, SortBy } from './types'
+import { buildBrowseURL } from './utils'
 
 beforeEach(() => {
   jest.spyOn(Date, 'now').mockReturnValue(100)
@@ -54,7 +54,7 @@ describe('when handling the clear filters request action', () => {
 
     return expectSaga(routingSaga)
       .provide([
-        [call(getCurrentBrowseOptions), browseOptions],
+        [select(getCurrentBrowseOptions), browseOptions],
         [select(getLocation), { pathname }],
         [
           call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
