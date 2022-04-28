@@ -32,7 +32,7 @@ export function parseMANANumber(
 }
 
 /**
- * Get's value and tries to parse it with the supplied amount of decimals.
+ * Gets value and tries to parse it with the supplied amount of decimals.
  * It'll return the value as is if it's an invalid number or it doesn't have more than decimals than the upper limit.
  */
 export function toFixedMANAValue(
