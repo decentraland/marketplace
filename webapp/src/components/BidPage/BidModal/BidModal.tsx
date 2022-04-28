@@ -9,7 +9,7 @@ import {
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
-import { toMANA, fromMANA } from '../../../lib/mana'
+import { parseMANANumber, toFixedMANAValue } from '../../../lib/mana'
 import { AssetAction } from '../../AssetAction'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -42,7 +42,13 @@ const BidModal = (props: Props) => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
   const handlePlaceBid = useCallback(
-    () => onPlaceBid(nft, fromMANA(price), +new Date(expiresAt), fingerprint),
+    () =>
+      onPlaceBid(
+        nft,
+        parseMANANumber(price),
+        +new Date(expiresAt),
+        fingerprint
+      ),
     [nft, price, expiresAt, fingerprint, onPlaceBid]
   )
 
@@ -85,9 +91,19 @@ const BidModal = (props: Props) => {
 
   const handleClose = () => setShowAuthorizationModal(false)
 
+  const isInvalidPrice = parseMANANumber(price) <= 0
   const isInvalidDate = +new Date(expiresAt) < Date.now()
   const hasInsufficientMANA =
-    !!price && !!wallet && fromMANA(price) > wallet.networks[nft.network].mana
+    !!price &&
+    !!wallet &&
+    parseMANANumber(price) > wallet.networks[nft.network].mana
+  const isDisabled =
+    isOwnedBy(nft, wallet) ||
+    isInvalidPrice ||
+    isInvalidDate ||
+    hasInsufficientMANA ||
+    isLoading ||
+    isPlacingBid
 
   return (
     <AssetAction asset={nft}>
@@ -105,13 +121,12 @@ const BidModal = (props: Props) => {
           <ManaField
             network={nft.network}
             label={t('bid_page.price')}
-            placeholder={toMANA(1000)}
+            placeholder={1000}
             value={price}
+            error={price !== '' && (isInvalidPrice || hasInsufficientMANA)}
             onChange={(_event, props) => {
-              const newPrice = fromMANA(props.value)
-              setPrice(toMANA(newPrice))
+              setPrice(toFixedMANAValue(props.value))
             }}
-            error={hasInsufficientMANA}
             message={
               hasInsufficientMANA ? t('bid_page.not_enougn_mana') : undefined
             }
@@ -141,14 +156,7 @@ const BidModal = (props: Props) => {
             type="submit"
             primary
             loading={isPlacingBid}
-            disabled={
-              isOwnedBy(nft, wallet) ||
-              fromMANA(price) <= 0 ||
-              isInvalidDate ||
-              hasInsufficientMANA ||
-              isLoading ||
-              isPlacingBid
-            }
+            disabled={isDisabled}
             chainId={nft.chainId}
           >
             {t('bid_page.submit')}

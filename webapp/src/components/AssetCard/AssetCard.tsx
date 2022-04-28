@@ -2,7 +2,7 @@ import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { Card } from 'decentraland-ui'
-import { formatMANA } from '../../lib/mana'
+import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
 import { Mana } from '../Mana'
@@ -31,7 +31,7 @@ const AssetCard = (props: Props) => {
           <div className="title">{title}</div>
           {price ? (
             <Mana network={asset.network} inline>
-              {formatMANA(price)}
+              {formatWeiMANA(price)}
             </Mana>
           ) : null}
         </Card.Header>

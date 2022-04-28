@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect } from 'react'
 import { Icon, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { formatMANA } from '../../../lib/mana'
+import { formatWeiMANA } from '../../../lib/mana'
 import { Props } from './Stats.types'
 import { Mana } from '../../Mana'
 import { Network } from '@dcl/schemas'
@@ -29,7 +29,7 @@ const Stats = ({
       />
       <Stat
         subtitle={t('sales.total_earnings')}
-        value={formatMANA(totalEarnings, 2)}
+        value={formatWeiMANA(totalEarnings, 2)}
         isLoading={isLoading}
         icon={
           <Icon
@@ -41,13 +41,13 @@ const Stats = ({
       />
       <Stat
         subtitle={t('sales.royalties')}
-        value={formatMANA(royalties, 2)}
+        value={formatWeiMANA(royalties, 2)}
         isLoading={isLoading}
         icon={<Icon className="royalties-icon" name="star" size="large" />}
       />
       <Stat
         subtitle={t('sales.ethereum_earnings')}
-        value={formatMANA(ethereumEarned, 2)}
+        value={formatWeiMANA(ethereumEarned, 2)}
         isLoading={isLoading}
         icon={
           <Mana
@@ -59,7 +59,7 @@ const Stats = ({
       />
       <Stat
         subtitle={t('sales.polygon_earnings')}
-        value={formatMANA(maticEarned, 2)}
+        value={formatWeiMANA(maticEarned, 2)}
         isLoading={isLoading}
         icon={
           <Mana

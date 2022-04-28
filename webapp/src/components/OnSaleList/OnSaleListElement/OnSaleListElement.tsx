@@ -2,7 +2,7 @@ import React from 'react'
 import { Mobile, NotMobile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana } from '../../Mana'
-import { formatMANA } from '../../../lib/mana'
+import { formatWeiMANA } from '../../../lib/mana'
 import { Props } from './OnSaleListElement.types'
 import AssetCell from '../AssetCell'
 import './OnSaleListElement.css'
@@ -16,7 +16,7 @@ const OnSaleListElement = ({ nft, item, order }: Props) => {
         <div className="mobile-row">
           <AssetCell asset={item || nft!} />
           <Mana network={item?.network || nft!.network} inline>
-            {formatMANA(item?.price || order!.price)}
+            {formatWeiMANA(item?.price || order!.price)}
           </Mana>
         </div>
       </Mobile>
@@ -31,7 +31,7 @@ const OnSaleListElement = ({ nft, item, order }: Props) => {
           </Table.Cell>
           <Table.Cell>
             <Mana network={item?.network || nft!.network} inline>
-              {formatMANA(item?.price || order!.price)}
+              {formatWeiMANA(item?.price || order!.price)}
             </Mana>
           </Table.Cell>
         </Table.Row>
