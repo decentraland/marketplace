@@ -97,6 +97,7 @@ const BidModal = (props: Props) => {
     !!price &&
     !!wallet &&
     parseMANANumber(price) > wallet.networks[nft.network].mana
+
   const isDisabled =
     isOwnedBy(nft, wallet) ||
     isInvalidPrice ||
@@ -182,7 +183,7 @@ const BidModal = (props: Props) => {
                   name: <b>{getAssetName(nft)}</b>,
                   amount: (
                     <Mana network={nft.network} inline>
-                      {price}
+                      {parseMANANumber(price).toLocaleString()}
                     </Mana>
                   )
                 }}

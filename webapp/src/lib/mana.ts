@@ -1,6 +1,6 @@
 import { fromWei, unitMap } from 'web3x/utils'
 
-const MAXIMUM_FRACTION_DIGITS = 2
+const MAXIMUM_FRACTION_DIGITS = 5
 
 export function formatWeiMANA(
   wei: string,
