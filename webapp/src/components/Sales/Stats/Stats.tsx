@@ -29,7 +29,7 @@ const Stats = ({
       />
       <Stat
         subtitle={t('sales.total_earnings')}
-        value={formatWeiMANA(totalEarnings, 2)}
+        value={formatWeiMANA(totalEarnings)}
         isLoading={isLoading}
         icon={
           <Icon
@@ -41,13 +41,13 @@ const Stats = ({
       />
       <Stat
         subtitle={t('sales.royalties')}
-        value={formatWeiMANA(royalties, 2)}
+        value={formatWeiMANA(royalties)}
         isLoading={isLoading}
         icon={<Icon className="royalties-icon" name="star" size="large" />}
       />
       <Stat
         subtitle={t('sales.ethereum_earnings')}
-        value={formatWeiMANA(ethereumEarned, 2)}
+        value={formatWeiMANA(ethereumEarned)}
         isLoading={isLoading}
         icon={
           <Mana
@@ -59,7 +59,7 @@ const Stats = ({
       />
       <Stat
         subtitle={t('sales.polygon_earnings')}
-        value={formatWeiMANA(maticEarned, 2)}
+        value={formatWeiMANA(maticEarned)}
         isLoading={isLoading}
         icon={
           <Mana

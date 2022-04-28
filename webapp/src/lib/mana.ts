@@ -1,10 +1,12 @@
 import { fromWei, unitMap } from 'web3x/utils'
 
-const MAXIMUM_FRACTION_DIGITS = 5
+// Careful! We're using `.toLocaleString` somewhat freely in the codebase, but if this number ever goes above 3 (the default min maximumFractionDigits),
+// we should review every call to toLocaleString as it will round up values beyond that decimal point
+const MAXIMUM_FRACTION_DIGITS = 2
 
 export function formatWeiMANA(
   wei: string,
-  maximumFractionDigits?: number,
+  maximumFractionDigits: number = MAXIMUM_FRACTION_DIGITS,
   unit: keyof typeof unitMap = 'ether'
 ): string {
   return Number(fromWei(wei, unit)).toLocaleString(undefined, {
