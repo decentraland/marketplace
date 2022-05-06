@@ -1,5 +1,5 @@
 import React from 'react'
-import { fromWei } from 'web3x/utils'
+import { toBN, fromWei } from 'web3x/utils'
 import { Item, Order } from '@dcl/schemas'
 import { Page } from 'decentraland-ui'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -10,6 +10,7 @@ import { AssetProviderPage } from '../AssetProviderPage'
 import { NFT } from '../../modules/nft/types'
 import { isOwnedBy } from '../../modules/asset/utils'
 import { Asset, AssetType } from '../../modules/asset/types'
+import { NotFound } from '../AssetProviderPage/AssetProviderPage'
 import { BuyNFTModal } from './BuyNFTModal'
 import { MintItemModal } from './MintItemModal'
 import { Props } from './BuyPage.types'
@@ -34,6 +35,17 @@ const BuyPage = (props: Props) => {
           {wallet => (
             <AssetProviderPage type={type}>
               {(asset, order) => {
+                if (type === AssetType.ITEM) {
+                  const { price } = asset as Item
+                  const minValueInWei = Number(
+                    process.env.REACT_APP_MIN_SALE_VALUE_IN_WEI
+                  )
+
+                  if (toBN(price).lte(toBN(minValueInWei))) {
+                    return <NotFound />
+                  }
+                }
+
                 const modalProps = {
                   wallet: wallet,
                   isOwner: isOwnedBy(asset, wallet),
