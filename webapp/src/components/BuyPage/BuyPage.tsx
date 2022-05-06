@@ -1,5 +1,5 @@
 import React from 'react'
-import { toBN, fromWei } from 'web3x/utils'
+import { fromWei } from 'web3x/utils'
 import { Item, Order } from '@dcl/schemas'
 import { Page } from 'decentraland-ui'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
