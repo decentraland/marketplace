@@ -11,11 +11,11 @@ import { NFT } from '../../modules/nft/types'
 import { isOwnedBy } from '../../modules/asset/utils'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { NotFound } from '../AssetProviderPage/AssetProviderPage'
+import { isValidSalePrice } from './BuyNFTModal/utils'
 import { BuyNFTModal } from './BuyNFTModal'
 import { MintItemModal } from './MintItemModal'
 import { Props } from './BuyPage.types'
 import './BuyPage.css'
-import { isValidSalePrice } from './BuyNFTModal/utils'
 
 const BuyPage = (props: Props) => {
   const { type } = props
