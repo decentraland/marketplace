@@ -15,6 +15,7 @@ import { BuyNFTModal } from './BuyNFTModal'
 import { MintItemModal } from './MintItemModal'
 import { Props } from './BuyPage.types'
 import './BuyPage.css'
+import { isValidSalePrice } from './BuyNFTModal/utils'
 
 const BuyPage = (props: Props) => {
   const { type } = props
@@ -35,15 +36,8 @@ const BuyPage = (props: Props) => {
           {wallet => (
             <AssetProviderPage type={type}>
               {(asset, order) => {
-                if (type === AssetType.ITEM) {
-                  const { price } = asset as Item
-                  const minValueInWei = Number(
-                    process.env.REACT_APP_MIN_SALE_VALUE_IN_WEI
-                  )
-
-                  if (toBN(price).lte(toBN(minValueInWei))) {
-                    return <NotFound />
-                  }
+                if (!isValidSalePrice(type, asset)) {
+                  return <NotFound />
                 }
 
                 const modalProps = {
