@@ -10,6 +10,8 @@ import { AssetProviderPage } from '../AssetProviderPage'
 import { NFT } from '../../modules/nft/types'
 import { isOwnedBy } from '../../modules/asset/utils'
 import { Asset, AssetType } from '../../modules/asset/types'
+import { NotFound } from '../AssetProviderPage/AssetProviderPage'
+import { isValidSalePrice } from './BuyNFTModal/utils'
 import { BuyNFTModal } from './BuyNFTModal'
 import { MintItemModal } from './MintItemModal'
 import { Props } from './BuyPage.types'
@@ -34,6 +36,10 @@ const BuyPage = (props: Props) => {
           {wallet => (
             <AssetProviderPage type={type}>
               {(asset, order) => {
+                if (!isValidSalePrice(type, asset)) {
+                  return <NotFound />
+                }
+
                 const modalProps = {
                   wallet: wallet,
                   isOwner: isOwnedBy(asset, wallet),
