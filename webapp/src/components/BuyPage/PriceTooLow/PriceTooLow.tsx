@@ -12,18 +12,14 @@ const PriceTooLow = (props: Props) => {
   const network = t(`networks.${item.network.toLowerCase()}`)
   const token = t(`tokens.${item.network.toLowerCase()}`)
 
+  // We're confident the minimum price exists here, otherwise the component wouldn't be rendered
+  const price = <Price network={item.network} price={getMinSaleValueInWei()!} />
+
   return (
     <Card className={styles.card}>
       <Card.Content>
         <div className={styles.paragraph}>
-          <T
-            id="price_too_low.minimum_price"
-            values={{
-              price: (
-                <Price network={item.network} price={getMinSaleValueInWei()!} />
-              )
-            }}
-          />
+          <T id="price_too_low.minimum_price" values={{ price }} />
           <br />
           {t('price_too_low.get_item_in_network', { network, token })}
         </div>
