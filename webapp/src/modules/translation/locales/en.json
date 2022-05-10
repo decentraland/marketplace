@@ -30,6 +30,7 @@
     "sale_type": "Sale type",
     "sell_price": "Sell price",
     "no_results": "No results",
+    "learn_more": "Learn More",
     "category": "Category",
     "rarity": "Rarity",
     "stock": "Stock",
@@ -126,9 +127,8 @@
   },
   "home_page": {
     "title": "Decentraland Marketplace",
-    "subtitle": "Welcome to the virtual world’s one-stop-shop for the very best digital assets.",
+    "subtitle": "Welcome to the virtual world's one-stop-shop for the very best digital assets.",
     "get_started": "Start Browsing",
-    "learn_more": "Learn More",
     "home_new_items": "Newest items",
     "home_sold_items": "Latest sales",
     "home_wearables": "Latest listings",
@@ -357,6 +357,11 @@
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
   },
+  "price_too_low": {
+    "minimum_price": "The minimun amount supported for costless transactions is {price}",
+    "get_item_in_network": "In order to get this item you'll need to switch your network to {network} and then cover the transaction cost with {token}.",
+    "switch_network": "Switch to {network}"
+  },
   "mint_page": {
     "title": "Buy {category}",
     "subtitle": "You are about to buy {name} for {amount}.",
@@ -499,6 +504,10 @@
   "networks": {
     "ethereum": "Ethereum",
     "matic": "Polygon"
+  },
+  "tokens": {
+    "ethereum": "ETH",
+    "matic": "MATIC"
   },
   "intro_popup": {
     "title": "Introducing Polygon MANA",

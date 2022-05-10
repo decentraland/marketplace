@@ -16,8 +16,10 @@ import { getContractNames } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
 import { AssetAction } from '../../AssetAction'
+import { isValidSalePrice } from '../utils'
 import { Name } from '../Name'
 import { Price } from '../Price'
+import { PriceTooLow } from '../PriceTooLow'
 import { Props } from './MintItemModal.types'
 
 const MintItemModal = (props: Props) => {
@@ -26,9 +28,9 @@ const MintItemModal = (props: Props) => {
     wallet,
     authorizations,
     isLoading,
-    onBuyItem,
     isOwner,
-    hasInsufficientMANA
+    hasInsufficientMANA,
+    onBuyItem
   } = props
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
@@ -77,6 +79,9 @@ const MintItemModal = (props: Props) => {
     setShowAuthorizationModal
   ])
 
+  const isInDifferentChainId = wallet.chainId !== item.chainId
+  const hasInvalidSalePrice =
+    !isValidSalePrice(AssetType.ITEM, item) && isInDifferentChainId
   const isDisabled = !item.price || isOwner || hasInsufficientMANA
 
   const name = <Name asset={item} />
@@ -132,6 +137,7 @@ const MintItemModal = (props: Props) => {
         {t('mint_page.title', { category: t(`global.${item.category}`) })}
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
+      {hasInvalidSalePrice ? <PriceTooLow item={item} /> : null}
       <div className="buttons">
         <Button
           as={Link}
@@ -139,16 +145,17 @@ const MintItemModal = (props: Props) => {
         >
           {t('global.cancel')}
         </Button>
-
-        <ChainButton
-          primary
-          disabled={isDisabled || isLoading}
-          onClick={handleSubmit}
-          loading={isLoading}
-          chainId={item.chainId}
-        >
-          {t('mint_page.action')}
-        </ChainButton>
+        {!hasInvalidSalePrice ? (
+          <ChainButton
+            primary
+            disabled={isDisabled || isLoading}
+            onClick={handleSubmit}
+            loading={isLoading}
+            chainId={item.chainId}
+          >
+            {t('mint_page.action')}
+          </ChainButton>
+        ) : null}
       </div>
       <AuthorizationModal
         isLoading={isLoading}
