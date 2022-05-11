@@ -34,11 +34,11 @@ describe('isPriceTooLow', () => {
     })
 
     it('should return true', () => {
-      expect(isPriceTooLow(AssetType.ITEM, {} as Item)).toBe(true)
+      expect(isPriceTooLow(AssetType.ITEM, {} as Item)).toBe(false)
     })
   })
 
-  describe('when there a min sale value', () => {
+  describe('when there is a min sale value', () => {
     const minSaleValue = '1000000000000000000'
 
     beforeEach(() => {
@@ -47,7 +47,7 @@ describe('isPriceTooLow', () => {
 
     describe('and the asset type is NFT', () => {
       it('should return true', () => {
-        expect(isPriceTooLow(AssetType.NFT, {} as Item)).toBe(true)
+        expect(isPriceTooLow(AssetType.NFT, {} as Item)).toBe(false)
       })
     })
 
@@ -57,13 +57,13 @@ describe('isPriceTooLow', () => {
           isPriceTooLow(AssetType.ITEM, {
             price: '9900000000000000000'
           } as Item)
-        ).toBe(true)
+        ).toBe(false)
       })
 
       it('should return false if the price is equal than the minimum', () => {
         expect(
           isPriceTooLow(AssetType.ITEM, { price: minSaleValue } as Item)
-        ).toBe(true)
+        ).toBe(false)
       })
 
       it('should return false if the price is lower than the minimum', () => {
@@ -71,7 +71,7 @@ describe('isPriceTooLow', () => {
           isPriceTooLow(AssetType.ITEM, {
             price: '500000000000000000'
           } as Item)
-        ).toBe(false)
+        ).toBe(true)
       })
     })
   })

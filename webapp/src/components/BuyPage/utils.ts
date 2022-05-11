@@ -10,10 +10,10 @@ export function isPriceTooLow(type: AssetType, asset: Asset) {
     const { price } = asset as Item
     const minSaleValue = getMinSaleValueInWei()
     if (minSaleValue) {
-      return toBN(price).gte(toBN(minSaleValue))
+      return toBN(price).lt(toBN(minSaleValue))
     }
   }
-  return true
+  return false
 }
 
 /**

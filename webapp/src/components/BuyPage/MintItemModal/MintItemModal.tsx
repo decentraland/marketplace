@@ -81,7 +81,7 @@ const MintItemModal = (props: Props) => {
 
   const isInDifferentChainId = wallet.chainId !== item.chainId
   const hasLowPrice =
-    !isPriceTooLow(AssetType.ITEM, item) && isInDifferentChainId
+    isPriceTooLow(AssetType.ITEM, item) && isInDifferentChainId
   const isDisabled = !item.price || isOwner || hasInsufficientMANA
 
   const name = <Name asset={item} />
