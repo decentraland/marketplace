@@ -1,12 +1,13 @@
 import { Dispatch } from 'redux'
-import { Item } from '@dcl/schemas'
+import { ChainId, Network } from '@dcl/schemas'
 import {
   switchNetworkRequest,
   SwitchNetworkRequestAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 
 export type Props = {
-  item: Item
+  chainId: ChainId
+  network: Network
   onSwitchNetwork: typeof switchNetworkRequest
 }
 

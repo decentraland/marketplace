@@ -16,7 +16,6 @@ import { getContractNames } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
 import { AssetAction } from '../../AssetAction'
-import { isPriceTooLow } from '../utils'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { PriceTooLow } from '../PriceTooLow'
@@ -30,6 +29,7 @@ const MintItemModal = (props: Props) => {
     isLoading,
     isOwner,
     hasInsufficientMANA,
+    hasLowPrice,
     onBuyItem
   } = props
 
@@ -79,9 +79,6 @@ const MintItemModal = (props: Props) => {
     setShowAuthorizationModal
   ])
 
-  const isInDifferentChainId = wallet.chainId !== item.chainId
-  const hasLowPrice =
-    isPriceTooLow(AssetType.ITEM, item) && isInDifferentChainId
   const isDisabled = !item.price || isOwner || hasInsufficientMANA
 
   const name = <Name asset={item} />
@@ -137,7 +134,9 @@ const MintItemModal = (props: Props) => {
         {t('mint_page.title', { category: t(`global.${item.category}`) })}
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
-      {hasLowPrice ? <PriceTooLow item={item} /> : null}
+      {hasLowPrice ? (
+        <PriceTooLow chainId={item.chainId} network={item.network} />
+      ) : null}
       <div className="buttons">
         <Button
           as={Link}

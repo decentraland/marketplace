@@ -1,17 +1,12 @@
-import { Item } from '@dcl/schemas'
 import { toBN } from 'web3x/utils'
-import { Asset, AssetType } from '../../modules/asset/types'
 
 /**
  * Checks against the min value of costless item sales
  */
-export function isPriceTooLow(type: AssetType, asset: Asset) {
-  if (type === AssetType.ITEM) {
-    const { price } = asset as Item
-    const minSaleValue = getMinSaleValueInWei()
-    if (minSaleValue) {
-      return toBN(price).lt(toBN(minSaleValue))
-    }
+export function isPriceTooLow(price: string) {
+  const minSaleValue = getMinSaleValueInWei()
+  if (!isNaN(parseInt(price, 10)) && minSaleValue) {
+    return toBN(price).lt(toBN(minSaleValue))
   }
   return false
 }

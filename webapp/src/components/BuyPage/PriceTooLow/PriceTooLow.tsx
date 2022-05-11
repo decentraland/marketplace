@@ -7,13 +7,13 @@ import { Props } from './PriceTooLow.types'
 import styles from './PriceTooLow.module.css'
 
 const PriceTooLow = (props: Props) => {
-  const { item, onSwitchNetwork } = props
+  const { chainId, network, onSwitchNetwork } = props
 
-  const network = t(`networks.${item.network.toLowerCase()}`)
-  const token = t(`tokens.${item.network.toLowerCase()}`)
+  const humanNetwork = t(`networks.${network.toLowerCase()}`)
+  const humanToken = t(`tokens.${network.toLowerCase()}`)
 
   // We're confident the minimum price exists here, otherwise the component wouldn't be rendered
-  const price = <Price network={item.network} price={getMinSaleValueInWei()!} />
+  const price = <Price network={network} price={getMinSaleValueInWei()!} />
 
   return (
     <Card className={styles.card}>
@@ -21,7 +21,10 @@ const PriceTooLow = (props: Props) => {
         <div className={styles.paragraph}>
           <T id="price_too_low.minimum_price" values={{ price }} />
           <br />
-          {t('price_too_low.get_item_in_network', { network, token })}
+          {t('price_too_low.get_item_in_network', {
+            network: humanNetwork,
+            token: humanToken
+          })}
         </div>
         <div className="buttons">
           <Button
@@ -37,9 +40,9 @@ const PriceTooLow = (props: Props) => {
             primary
             inverted
             size="small"
-            onClick={() => onSwitchNetwork(item.chainId)}
+            onClick={() => onSwitchNetwork(chainId)}
           >
-            {t('price_too_low.switch_network', { network })}
+            {t('price_too_low.switch_network', { network: humanNetwork })}
           </Button>
         </div>
       </Card.Content>

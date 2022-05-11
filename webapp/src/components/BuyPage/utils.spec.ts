@@ -33,8 +33,8 @@ describe('isPriceTooLow', () => {
       process.env.REACT_APP_MIN_SALE_VALUE_IN_WEI = ''
     })
 
-    it('should return true', () => {
-      expect(isPriceTooLow(AssetType.ITEM, {} as Item)).toBe(false)
+    it('should return false', () => {
+      expect(isPriceTooLow('1001010')).toBe(false)
     })
   })
 
@@ -45,33 +45,23 @@ describe('isPriceTooLow', () => {
       process.env.REACT_APP_MIN_SALE_VALUE_IN_WEI = minSaleValue
     })
 
-    describe('and the asset type is NFT', () => {
-      it('should return true', () => {
-        expect(isPriceTooLow(AssetType.NFT, {} as Item)).toBe(false)
+    describe("and there's no price", () => {
+      it('should return false', () => {
+        expect(isPriceTooLow('')).toBe(false)
       })
     })
 
-    describe('and the asset type is ITEM', () => {
-      it('should return true if the price is greater than the minimum', () => {
-        expect(
-          isPriceTooLow(AssetType.ITEM, {
-            price: '9900000000000000000'
-          } as Item)
-        ).toBe(false)
+    describe("and ther's a price", () => {
+      it('should return false if the price is greater than the minimum', () => {
+        expect(isPriceTooLow('9900000000000000000')).toBe(false)
       })
 
       it('should return false if the price is equal than the minimum', () => {
-        expect(
-          isPriceTooLow(AssetType.ITEM, { price: minSaleValue } as Item)
-        ).toBe(false)
+        expect(isPriceTooLow(minSaleValue)).toBe(false)
       })
 
-      it('should return false if the price is lower than the minimum', () => {
-        expect(
-          isPriceTooLow(AssetType.ITEM, {
-            price: '500000000000000000'
-          } as Item)
-        ).toBe(true)
+      it('should return true if the price is lower than the minimum', () => {
+        expect(isPriceTooLow('500000000000000000')).toBe(true)
       })
     })
   })
