@@ -60,17 +60,17 @@ describe('isValidSalePrice', () => {
         ).toBe(true)
       })
 
+      it('should return false if the price is equal than the minimum', () => {
+        expect(
+          isValidSalePrice(AssetType.ITEM, { price: minSaleValue } as Item)
+        ).toBe(true)
+      })
+
       it('should return false if the price is lower than the minimum', () => {
         expect(
           isValidSalePrice(AssetType.ITEM, {
             price: '500000000000000000'
           } as Item)
-        ).toBe(false)
-      })
-
-      it('should return false if the price equal lower than the minimum', () => {
-        expect(
-          isValidSalePrice(AssetType.ITEM, { price: minSaleValue } as Item)
         ).toBe(false)
       })
     })

@@ -7,7 +7,7 @@ export function isValidSalePrice(type: AssetType, asset: Asset) {
     const { price } = asset as Item
     const minSaleValue = getMinSaleValueInWei()
     if (minSaleValue) {
-      return toBN(price).gt(toBN(minSaleValue))
+      return toBN(price).gte(toBN(minSaleValue))
     }
   }
   return true
