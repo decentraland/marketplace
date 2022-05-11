@@ -1,6 +1,6 @@
 import { Item } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
-import { getMinSaleValueInWei, isValidSalePrice } from './utils'
+import { getMinSaleValueInWei, isPriceTooLow } from './utils'
 
 describe('getMinSaleValueInWei', () => {
   const env = process.env
@@ -21,7 +21,7 @@ describe('getMinSaleValueInWei', () => {
   })
 })
 
-describe('isValidSalePrice', () => {
+describe('isPriceTooLow', () => {
   const env = process.env
 
   afterEach(() => {
@@ -34,7 +34,7 @@ describe('isValidSalePrice', () => {
     })
 
     it('should return true', () => {
-      expect(isValidSalePrice(AssetType.ITEM, {} as Item)).toBe(true)
+      expect(isPriceTooLow(AssetType.ITEM, {} as Item)).toBe(true)
     })
   })
 
@@ -47,14 +47,14 @@ describe('isValidSalePrice', () => {
 
     describe('and the asset type is NFT', () => {
       it('should return true', () => {
-        expect(isValidSalePrice(AssetType.NFT, {} as Item)).toBe(true)
+        expect(isPriceTooLow(AssetType.NFT, {} as Item)).toBe(true)
       })
     })
 
     describe('and the asset type is ITEM', () => {
       it('should return true if the price is greater than the minimum', () => {
         expect(
-          isValidSalePrice(AssetType.ITEM, {
+          isPriceTooLow(AssetType.ITEM, {
             price: '9900000000000000000'
           } as Item)
         ).toBe(true)
@@ -62,13 +62,13 @@ describe('isValidSalePrice', () => {
 
       it('should return false if the price is equal than the minimum', () => {
         expect(
-          isValidSalePrice(AssetType.ITEM, { price: minSaleValue } as Item)
+          isPriceTooLow(AssetType.ITEM, { price: minSaleValue } as Item)
         ).toBe(true)
       })
 
       it('should return false if the price is lower than the minimum', () => {
         expect(
-          isValidSalePrice(AssetType.ITEM, {
+          isPriceTooLow(AssetType.ITEM, {
             price: '500000000000000000'
           } as Item)
         ).toBe(false)

@@ -2,7 +2,10 @@ import { Item } from '@dcl/schemas'
 import { toBN } from 'web3x/utils'
 import { Asset, AssetType } from '../../modules/asset/types'
 
-export function isValidSalePrice(type: AssetType, asset: Asset) {
+/**
+ * Checks against the min value of costless item sales
+ */
+export function isPriceTooLow(type: AssetType, asset: Asset) {
   if (type === AssetType.ITEM) {
     const { price } = asset as Item
     const minSaleValue = getMinSaleValueInWei()
@@ -14,7 +17,7 @@ export function isValidSalePrice(type: AssetType, asset: Asset) {
 }
 
 /**
- * It returns the minimum sale value allowed for item sales.
+ * It returns the minimum sale value allowed for costless item sales.
  * The price is expected to be used as an inclusive cap, meaning that prices that equal the value SHOULD be filtered
  */
 export function getMinSaleValueInWei(): string | undefined {
