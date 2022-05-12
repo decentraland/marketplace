@@ -30,6 +30,7 @@
     "sale_type": "销售类型",
     "sell_price": "销售价格",
     "no_results": "无结果",
+    "learn_more": "学习更多",
     "category": "类别",
     "rarity": "稀罕",
     "stock": "股票",
@@ -126,7 +127,6 @@
     "title": "Decentraland Marketplace",
     "subtitle": "欢迎来到虚拟世界的一站式商店，获取最好的数字资产。",
     "get_started": "开始浏览",
-    "learn_more": "学习更多",
     "home_new_items": "最新商品",
     "home_sold_items": "最新销售",
     "home_wearables": "最新上市",
@@ -355,6 +355,11 @@
     "is_owner": "您是{name}的所有者。",
     "not_enough_mana": "您没有足够的MANA来购买{name}。"
   },
+  "price_too_low": {
+    "minimum_price": "无成本交易支持的最低金额为 {price}",
+    "get_item_in_network": "为了获得这个物品，您需要将您的网络切换到 {network}，然后用 {token} 支付交易成本。",
+    "switch_network": "切换到 {network}"
+  },
   "mint_page": {
     "title": "购买{category}",
     "subtitle": "您将以{amount}的价格购买{name}。",
@@ -497,6 +502,10 @@
   "networks": {
     "ethereum": "Ethereum",
     "matic": "Polygon"
+  },
+  "tokens": {
+    "ethereum": "ETH",
+    "matic": "MATIC"
   },
   "intro_popup": {
     "title": "介绍Polygon MANA",

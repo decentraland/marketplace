@@ -30,6 +30,7 @@
     "sale_type": "Tipo de venta",
     "sell_price": "Precio de venta",
     "no_results": "Sin resultados",
+    "learn_more": "Aprende Más",
     "category": "Categoria",
     "rarity": "Rareza",
     "stock": "Stock",
@@ -126,7 +127,6 @@
     "title": "Mercado de Decentraland",
     "subtitle": "Bienvenido al mercado virtual de Decentraland, donde encontrarás los mejores ítems virtuales.",
     "get_started": "Comienza a navegar",
-    "learn_more": "Aprende Más",
     "home_items": "Últimos items",
     "home_sold_items": "Últimas ventas",
     "home_wearables": "Listado recientemente",
@@ -354,6 +354,11 @@
     "is_owner": "Ya eres el dueño de {name}.",
     "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
   },
+  "price_too_low": {
+    "minimum_price": "La cantidad mínima admitida para transacciones sin costo es {price}",
+    "get_item_in_network": "Para obtener este item, deberá cambiar su red a {network} y luego cubrir el costo de la transacción con {token}.",
+    "switch_network": "Cambiar a {red}"
+  },
   "mint_page": {
     "title": "Comprar {category}",
     "subtitle": "Estás por comprar {name} por {amount}.",
@@ -496,6 +501,10 @@
   "networks": {
     "ethereum": "Ethereum",
     "matic": "Polygon"
+  },
+  "tokens": {
+    "ethereum": "ETH",
+    "matic": "MATIC"
   },
   "intro_popup": {
     "title": "Introducimos Polygon MANA",
