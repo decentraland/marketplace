@@ -58,6 +58,7 @@
     "known_origin": "KnownOrigin"
   },
   "navigation": {
+    "overview": "Overview",
     "land": "Land",
     "collectibles": "Collectibles",
     "partners": "Partners",
