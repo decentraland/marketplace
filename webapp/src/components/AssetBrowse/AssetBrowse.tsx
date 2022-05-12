@@ -110,7 +110,7 @@ const AssetBrowse = (props: Props) => {
     hasFetched
   ])
 
-  // handlers
+  // Handlers
   const handleSetFullscreen = useCallback(
     () => onBrowse({ isMap: true, isFullscreen: true }),
     [onBrowse]
