@@ -13,6 +13,11 @@ const Navigation = (props: Props) => {
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
+        <Link to={locations.root()}>
+          <Tabs.Tab active={activeTab === NavigationTab.OVERVIEW}>
+            {t('navigation.overview')}
+          </Tabs.Tab>
+        </Link>
         <Link to={locations.lands()}>
           <Tabs.Tab active={activeTab === NavigationTab.LANDS}>
             {t('navigation.land')}
