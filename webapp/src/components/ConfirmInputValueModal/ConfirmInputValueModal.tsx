@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Modal, Button, Form } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './ConfirmInputValueModal.types'
-import { fromMANA } from '../../lib/mana'
+import { fromMANA, toMANA } from '../../lib/mana'
 import { ManaField } from '../ManaField'
 import './ConfirmInputValueModal.css'
 
@@ -31,7 +31,8 @@ const ConfirmInputValueModal = ({
             placeholder={valueToConfirm}
             value={confirmedInput}
             onChange={(_event, props) => {
-              setConfirmedInput(props.value)
+              const newPrice = fromMANA(props.value)
+              setConfirmedInput(toMANA(newPrice))
             }}
           />
         </Modal.Content>
