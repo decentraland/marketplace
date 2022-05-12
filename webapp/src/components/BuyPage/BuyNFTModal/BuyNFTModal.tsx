@@ -17,10 +17,10 @@ import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { AssetAction } from '../../AssetAction'
 import { AuthorizationModal } from '../../AuthorizationModal'
+import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { Props } from './BuyNFTModal.types'
-import { PriceTooLow } from '../PriceTooLow'
 
 const BuyNFTModal = (props: Props) => {
   const {

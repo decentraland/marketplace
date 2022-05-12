@@ -51,7 +51,7 @@ describe('isPriceTooLow', () => {
       })
     })
 
-    describe("and ther's a price", () => {
+    describe("and there's a price", () => {
       it('should return false if the price is greater than the minimum', () => {
         expect(isPriceTooLow('9900000000000000000')).toBe(false)
       })

@@ -123,7 +123,8 @@ const SellModal = (props: Props) => {
             value={price}
             focus={true}
             onChange={(_event, props) => {
-              setPrice(props.value)
+              const newPrice = fromMANA(props.value)
+              setPrice(toMANA(newPrice))
             }}
           />
           <Field

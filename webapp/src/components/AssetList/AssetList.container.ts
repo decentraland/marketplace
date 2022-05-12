@@ -21,7 +21,7 @@ import { getLocation } from 'connected-react-router'
 
 const mapState = (state: RootState): MapStateProps => {
   const page = getPage(state)
-  return ({
+  return {
     vendor: getVendor(state),
     assetType: getAssetType(state),
     nfts: getNFTs(state),
@@ -31,11 +31,11 @@ const mapState = (state: RootState): MapStateProps => {
     isLoading:
       isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST) ||
       isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST),
-    urlNext: buildBrowseURL(
-      getLocation(state).pathname, 
-      { ...getCurrentBrowseOptions(state), page: (page + 1)}
-    )  
-  })
+    urlNext: buildBrowseURL(getLocation(state).pathname, {
+      ...getCurrentBrowseOptions(state),
+      page: page + 1
+    })
+  }
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
