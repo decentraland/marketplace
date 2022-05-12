@@ -7,8 +7,6 @@ export type Props = {
   withText: boolean
   assetType: AssetType
   section: Section
-  onClick: () => void
 }
 
-export type MapDispatchProps = Pick<Props, 'onClick'>
 export type OwnProps = Pick<Props, 'bodyShapes' | 'assetType' | 'section'>
