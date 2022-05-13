@@ -11,7 +11,7 @@ const INITIAL_PAGE = 1
 const Slideshow = (props: Props) => {
   const slideRef = useRef<HTMLDivElement>(null)
   const { title, assets, isSubHeader, isLoading, onViewAll } = props
-  const [showArrows, setShowArrows] = useState(true)
+  const [showArrows, setShowArrows] = useState(false)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [assetsToRender, setAssetsToRender] = useState(
     assets.slice(0, PAGE_SIZE)
@@ -45,15 +45,20 @@ const Slideshow = (props: Props) => {
     setCurrentPage(currentPage - 1 === 0 ? totalPages : currentPage - 1)
   }
 
-  const showArrowsHandlers = {
-    onMouseEnter: () => setShowArrows(true),
-    onMouseLeave: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      const contained = slideRef.current?.contains?.(
-        event.relatedTarget as Node
-      )
-      !contained && setShowArrows(false)
-    }
-  }
+  const showArrowsHandlers = useMemo(
+    () => ({
+      onMouseEnter: () => setShowArrows(true),
+      onMouseLeave: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const contained =
+          event.relatedTarget instanceof Node &&
+          slideRef.current?.contains(event.relatedTarget as Node)
+        if (!contained) {
+          setShowArrows(false)
+        }
+      }
+    }),
+    []
+  )
 
   return (
     <div className="Slideshow" ref={slideRef} {...showArrowsHandlers}>
