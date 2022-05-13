@@ -45,20 +45,20 @@ const Slideshow = (props: Props) => {
     setCurrentPage(currentPage - 1 === 0 ? totalPages : currentPage - 1)
   }
 
-  const showArrowsHandlers = useMemo(
-    () => ({
-      onMouseEnter: () => setShowArrows(true),
-      onMouseLeave: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        const contained =
-          event.relatedTarget instanceof Node &&
-          slideRef.current?.contains(event.relatedTarget as Node)
-        if (!contained) {
-          setShowArrows(false)
-        }
+  const onMouseEnter = useCallback(() => setShowArrows(true), [])
+  const onMouseLeave = useCallback(
+    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      const contained =
+        event.relatedTarget instanceof Node &&
+        slideRef.current?.contains(event.relatedTarget as Node)
+      if (!contained) {
+        setShowArrows(false)
       }
-    }),
+    },
     []
   )
+
+  const showArrowsHandlers = { onMouseEnter, onMouseLeave }
 
   return (
     <div className="Slideshow" ref={slideRef} {...showArrowsHandlers}>
