@@ -1,9 +1,9 @@
+import { MAXIMUM_FRACTION_DIGITS } from 'decentraland-dapps/dist/lib/mana'
 import { fromWei, unitMap } from 'web3x/utils'
 
-// Careful! We're using `.toLocaleString` somewhat freely in the codebase, but if this number ever goes above 3 (the default min maximumFractionDigits),
-// we should review every call to toLocaleString as it will round up values beyond that decimal point
-const MAXIMUM_FRACTION_DIGITS = 2
-
+/**
+ * Format wei to a supported unit ('ether' by default) and localizes it with the desired fraction digits (2 by default)
+ */
 export function formatWeiMANA(
   wei: string,
   maximumFractionDigits: number = MAXIMUM_FRACTION_DIGITS,
@@ -29,26 +29,4 @@ export function parseMANANumber(
   }
 
   return parseFloat(mana.toFixed(maximumFractionDigits))
-}
-
-/**
- * Gets value and tries to parse it with the supplied amount of decimals.
- * It'll return the value as is if it's an invalid number or it doesn't have more than decimals than the upper limit.
- */
-export function toFixedMANAValue(
-  strValue: string,
-  maximumFractionDigits = MAXIMUM_FRACTION_DIGITS
-): string {
-  const value = parseFloat(strValue)
-
-  if (!isNaN(value)) {
-    const decimals = value.toString().split('.')[1]
-    const decimalsCount = decimals ? decimals.length : 0
-
-    if (decimalsCount >= maximumFractionDigits) {
-      return value.toFixed(maximumFractionDigits)
-    }
-  }
-
-  return strValue
 }

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Network, NFTCategory } from '@dcl/schemas'
 import dateFnsFormat from 'date-fns/format'
+import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
   Authorization,
   AuthorizationType
@@ -10,11 +11,7 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
-import {
-  parseMANANumber,
-  toFixedMANAValue,
-  formatWeiMANA
-} from '../../../lib/mana'
+import { parseMANANumber, formatWeiMANA } from '../../../lib/mana'
 import {
   INPUT_FORMAT,
   getDefaultExpirationDate

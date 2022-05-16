@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
   Authorization,
   AuthorizationType
@@ -9,7 +10,7 @@ import {
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
-import { parseMANANumber, toFixedMANAValue } from '../../../lib/mana'
+import { parseMANANumber } from '../../../lib/mana'
 import { AssetAction } from '../../AssetAction'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'

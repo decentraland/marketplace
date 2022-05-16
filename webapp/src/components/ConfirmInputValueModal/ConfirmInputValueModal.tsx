@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Modal, Button, Form } from 'decentraland-ui'
+import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './ConfirmInputValueModal.types'
-import { toFixedMANAValue } from '../../lib/mana'
 import { ManaField } from '../ManaField'
 import './ConfirmInputValueModal.css'
 
