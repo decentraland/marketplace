@@ -1,26 +1,30 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { BodyShape, WearableGender } from '@dcl/schemas'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isGender, isUnisex as getIsUnisex } from '../../modules/nft/utils'
+import { locations } from '../../modules/routing/locations'
 import IconBadge from '../AssetPage/IconBadge'
 import { Props } from './GenderBadge.types'
 import styles from './GenderBadge.module.css'
-import { locations } from '../../modules/routing/locations'
 
 const GenderBadge = ({ bodyShapes, withText, assetType, section }: Props) => {
   const isUnisex = getIsUnisex(bodyShapes)
   const isGenderBodyShape = isGender(bodyShapes, BodyShape.MALE)
 
-  const href = React.useMemo(() => locations.browse({
-    assetType: assetType,
-    section: section,
-    wearableGenders: isUnisex
-      ? [WearableGender.MALE, WearableGender.FEMALE]
-      : isGenderBodyShape
-        ? [WearableGender.MALE]
-        : [WearableGender.FEMALE]
-  }), [assetType, section, isUnisex, isGenderBodyShape])  
+  const href = useMemo(
+    () =>
+      locations.browse({
+        assetType: assetType,
+        section: section,
+        wearableGenders: isUnisex
+          ? [WearableGender.MALE, WearableGender.FEMALE]
+          : isGenderBodyShape
+          ? [WearableGender.MALE]
+          : [WearableGender.FEMALE]
+      }),
+    [assetType, section, isUnisex, isGenderBodyShape]
+  )
 
   const icon = isUnisex ? 'Unisex' : bodyShapes[0]
 

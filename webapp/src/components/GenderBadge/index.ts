@@ -1,3 +1,3 @@
-import GenderBadge from './GenderBadge.container'
+import GenderBadge from './GenderBadge'
 
 export default GenderBadge

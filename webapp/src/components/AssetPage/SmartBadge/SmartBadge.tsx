@@ -1,19 +1,22 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { SmartIcon } from 'decentraland-ui'
+import { Section } from '../../../modules/vendor/decentraland'
+import { locations } from '../../../modules/routing/locations'
 import IconBadge from '../IconBadge'
 import { Props } from './SmartBadge.types'
 import './SmartBadge.css'
-import { Section } from '../../../modules/vendor/decentraland'
-import { locations } from '../../../modules/routing/locations'
 
 const SmartBadge = ({ assetType }: Props) => {
-  
-  const href = React.useMemo(() => locations.browse({
-    assetType: assetType,
-    section: Section.WEARABLES,
-    onlySmart: true
-  }), [assetType])
+  const href = useMemo(
+    () =>
+      locations.browse({
+        assetType: assetType,
+        section: Section.WEARABLES,
+        onlySmart: true
+      }),
+    [assetType]
+  )
 
   return (
     <IconBadge
