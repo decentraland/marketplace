@@ -2,7 +2,7 @@ import { action } from 'typesafe-actions'
 import { Bid, ChainId } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { NFT } from '../nft/types'
-import { formatMANA } from '../../lib/mana'
+import { formatWeiMANA } from '../../lib/mana'
 
 // Place Bid
 export const PLACE_BID_REQUEST = '[Request] Place Bid'
@@ -78,7 +78,7 @@ export const acceptBidSuccess = (bid: Bid, txHash: string) =>
     ...buildTransactionPayload(bid.chainId, txHash, {
       tokenId: bid.tokenId,
       contractAddress: bid.contractAddress,
-      price: formatMANA(bid.price)
+      price: formatWeiMANA(bid.price)
     })
   })
 export const acceptBidFailure = (bid: Bid, error: string) =>
@@ -101,7 +101,7 @@ export const cancelBidSuccess = (bid: Bid, txHash: string) =>
     ...buildTransactionPayload(bid.chainId, txHash, {
       tokenId: bid.tokenId,
       contractAddress: bid.contractAddress,
-      price: formatMANA(bid.price)
+      price: formatWeiMANA(bid.price)
     })
   })
 export const cancelBidFailure = (bid: Bid, error: string) =>

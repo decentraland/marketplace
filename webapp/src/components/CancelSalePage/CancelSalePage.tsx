@@ -6,7 +6,7 @@ import { Page, Header, Button } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
 import { getAssetName } from '../../modules/asset/utils'
-import { formatMANA } from '../../lib/mana'
+import { formatWeiMANA } from '../../lib/mana'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Wallet } from '../Wallet'
@@ -54,7 +54,7 @@ const CancelSalePage = (props: Props) => {
                         name: <b>{name}</b>,
                         amount: (
                           <Mana network={nft.network} inline>
-                            {formatMANA(order.price)}
+                            {formatWeiMANA(order.price)}
                           </Mana>
                         )
                       }}

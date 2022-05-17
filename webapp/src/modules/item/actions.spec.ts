@@ -1,6 +1,6 @@
 import { ChainId, Item, Network } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { formatMANA } from '../../lib/mana'
+import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName } from '../asset/utils'
 import { View } from '../ui/types'
 import {
@@ -94,7 +94,7 @@ describe('when creating the action to signal a successful item request', () => {
           contractAddress: item.contractAddress,
           network: item.network,
           name: getAssetName(item),
-          price: formatMANA(item.price)
+          price: formatWeiMANA(item.price)
         })
       }
     })

@@ -23,7 +23,7 @@ import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { Props } from './CollectionPage.types'
 import { Mana } from '../Mana'
-import { formatMANA } from '../../lib/mana'
+import { formatWeiMANA } from '../../lib/mana'
 import { Rarity } from '@dcl/schemas'
 import { getContractAddressFromProps } from './utils'
 import CollectionProvider from '../CollectionProvider'
@@ -134,7 +134,7 @@ const CollectionPage = (props: Props) => {
                             <div key={item.id} className="mobile-row">
                               <AssetCell asset={item} />
                               <Mana network={item.network} inline>
-                                {formatMANA(item.price)}
+                                {formatWeiMANA(item.price)}
                               </Mana>
                             </div>
                           ))}
@@ -159,7 +159,7 @@ const CollectionPage = (props: Props) => {
                               </Table.Cell>
                               <Table.Cell>
                                 <Mana network={item.network} inline>
-                                  {formatMANA(item.price)}
+                                  {formatWeiMANA(item.price)}
                                 </Mana>
                               </Table.Cell>
                               {isCollectionOwner && (
