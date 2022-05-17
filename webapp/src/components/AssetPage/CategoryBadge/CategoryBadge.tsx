@@ -3,8 +3,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getSearchWearableSection } from '../../../modules/routing/search'
 import { locations } from '../../../modules/routing/locations'
 import IconBadge from '../IconBadge'
-import { Props } from './CategoryBadge.types'
 import { BrowseOptions } from '../../../modules/routing/types'
+import { Props } from './CategoryBadge.types'
 
 const CategoryBadge = ({ wearable, assetType }: Props) => {
   const section = getSearchWearableSection(wearable.category)
