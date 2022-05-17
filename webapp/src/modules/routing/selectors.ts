@@ -272,11 +272,11 @@ export const getCurrentLocationAddress = createSelector<
   }
 )
 
-export const getPaginationUrlParams = createSelector (
+export const getPaginationUrlParams = createSelector(
   getPage,
   getSortBy,
   getSearch,
-  (page, sortBy, search) => ({page, sortBy, search})
+  (page, sortBy, search) => ({ page, sortBy, search })
 )
 
 export const getAssetsUrlParams = createSelector(
@@ -286,29 +286,34 @@ export const getAssetsUrlParams = createSelector(
   getItemId,
   getContracts,
   (onlyOnSale, onlySmart, isSoldOut, itemId, contracts) => ({
-    onlyOnSale, onlySmart, isSoldOut, itemId, contracts
+    onlyOnSale,
+    onlySmart,
+    isSoldOut,
+    itemId,
+    contracts
   })
 )
 
-export const getLandsUrlParams = createSelector (
+export const getLandsUrlParams = createSelector(
   getIsMap,
   getIsFullscreen,
   (isMap, isFullscreen) => ({ isMap, isFullscreen })
 )
 
-export const getWearablesUrlParams = createSelector (
+export const getWearablesUrlParams = createSelector(
   getRarities,
   getWearableGenders,
   getView,
   getViewAsGuest,
-  (
-    rarities, wearableGenders, view, viewAsGuest
-  ) => ({
-    rarities, wearableGenders, view, viewAsGuest
+  (rarities, wearableGenders, view, viewAsGuest) => ({
+    rarities,
+    wearableGenders,
+    view,
+    viewAsGuest
   })
 )
 
-export const getCurrentBrowseOptions = createSelector (
+export const getCurrentBrowseOptions = createSelector(
   getAssetType,
   getCurrentLocationAddress,
   getVendor,
@@ -328,15 +333,16 @@ export const getCurrentBrowseOptions = createSelector (
     AssetsUrlParams,
     landsUrlParams,
     wearablesUrlParams
-) => ({
-    assetType,
-    address,
-    vendor,
-    section,
-    network,
-    ...AssetsUrlParams,
-    ...paginationUrlParams,
-    ...landsUrlParams,
-    ...wearablesUrlParams
-  } as BrowseOptions
-))
+  ) =>
+    ({
+      assetType,
+      address,
+      vendor,
+      section,
+      network,
+      ...AssetsUrlParams,
+      ...paginationUrlParams,
+      ...landsUrlParams,
+      ...wearablesUrlParams
+    } as BrowseOptions)
+)

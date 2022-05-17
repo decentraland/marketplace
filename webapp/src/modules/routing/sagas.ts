@@ -170,7 +170,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const sortBy = options.sortBy!
   const { search, onlyOnSale, onlySmart, isMap, contracts } = options
 
-  const address = options.address || ((yield select(getCurrentLocationAddress)) as string)
+  const address =
+    options.address || ((yield select(getCurrentLocationAddress)) as string)
 
   const isLoadMore = view === View.LOAD_MORE
 
@@ -208,7 +209,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
 
         const wearableCategory = !isWearableAccessory
-          ? getSearchWearableCategory(section!)
+          ? getSearchWearableCategory(section)
           : undefined
 
         const { rarities, wearableGenders } = options
