@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { isMobile } from 'decentraland-dapps/dist/lib/utils'
-import { Page, Hero, Button } from 'decentraland-ui'
+import { Page } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor/types'
 import { SortBy } from '../../modules/routing/types'
@@ -9,6 +8,8 @@ import { View } from '../../modules/ui/types'
 import { AssetType } from '../../modules/asset/types'
 import { HomepageView } from '../../modules/ui/asset/homepage/types'
 import { Section } from '../../modules/vendor/decentraland/routing/types'
+import { Navigation } from '../Navigation'
+import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Slideshow } from './Slideshow'
@@ -56,15 +57,6 @@ const HomePage = (props: Props) => {
     []
   )
 
-  const handleGetStarted = useCallback(() => {
-    onNavigate(
-      locations.browse({
-        section: Section.WEARABLES,
-        assetType: AssetType.ITEM
-      })
-    )
-  }, [onNavigate])
-
   const handleViewAll = useCallback(
     (view: View) => {
       const section = sections[view]
@@ -105,19 +97,8 @@ const HomePage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen isOverlay />
-      <Hero centered={isMobile()} className="HomePageHero">
-        <Hero.Header>{t('home_page.title')}</Hero.Header>
-        <Hero.Description>{t('home_page.subtitle')}</Hero.Description>
-        <Hero.Content>
-          <div className="hero-image" />{' '}
-        </Hero.Content>
-        <Hero.Actions>
-          <Button primary onClick={handleGetStarted}>
-            {t('home_page.get_started')}
-          </Button>
-        </Hero.Actions>
-      </Hero>
+      <Navbar isFullscreen />
+      <Navigation activeTab={NavigationTab.OVERVIEW} />
       <Page className="HomePage">
         {views.map(view => (
           <Slideshow
