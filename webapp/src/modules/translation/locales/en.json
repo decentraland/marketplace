@@ -30,6 +30,7 @@
     "sale_type": "Sale type",
     "sell_price": "Sell price",
     "no_results": "No results",
+    "learn_more": "Learn More",
     "category": "Category",
     "rarity": "Rarity",
     "stock": "Stock",
@@ -39,7 +40,9 @@
     "buyer": "Buyer",
     "bid": "Bid",
     "order": "Listing",
-    "mint": "Mint"
+    "mint": "Mint",
+    "back": "Back",
+    "emote": "Emote"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -90,6 +93,7 @@
     "wearables_tiara": "Tiara",
     "wearables_top_head": "Top head",
     "wearables_skin": "Skins",
+    "emotes": "Emotes",
     "ens": "Names",
     "editions": "Editions",
     "tokens": "Tokens",
@@ -124,9 +128,8 @@
   },
   "home_page": {
     "title": "Decentraland Marketplace",
-    "subtitle": "Welcome to the virtual world’s one-stop-shop for the very best digital assets.",
+    "subtitle": "Welcome to the virtual world's one-stop-shop for the very best digital assets.",
     "get_started": "Start Browsing",
-    "learn_more": "Learn More",
     "home_new_items": "Newest items",
     "home_sold_items": "Latest sales",
     "home_wearables": "Latest listings",
@@ -274,30 +277,30 @@
     "when": "When",
     "price": "Price"
   },
+  "body_shape": {
+    "male": "Male",
+    "female": "Female",
+    "unisex": "Unisex"
+  },
+  "rarity": {
+    "unique": "Unique",
+    "mythic": "Mythic",
+    "legendary": "Legendary",
+    "epic": "Epic",
+    "rare": "Rare",
+    "uncommon": "Uncommon",
+    "common": "Common"
+  },
+  "rarity_description": {
+    "unique": "Grail-like: One-of-a-kind",
+    "mythic": "For the lucky few: max 10",
+    "legendary": "Limited supply: max 100",
+    "epic": "Max supply: 1000",
+    "rare": "Max supply: 5000",
+    "uncommon": "Max supply: 10,000",
+    "common": "Max supply: 100,000"
+  },
   "wearable": {
-    "body_shape": {
-      "male": "Male",
-      "female": "Female",
-      "unisex": "Unisex"
-    },
-    "rarity": {
-      "unique": "Unique",
-      "mythic": "Mythic",
-      "legendary": "Legendary",
-      "epic": "Epic",
-      "rare": "Rare",
-      "uncommon": "Uncommon",
-      "common": "Common"
-    },
-    "rarity_tooltip": {
-      "unique": "Grail-like: One-of-a-kind",
-      "mythic": "For the lucky few: max 10",
-      "legendary": "Limited supply: max 100",
-      "epic": "Max supply: 1000",
-      "rare": "Max supply: 5000",
-      "uncommon": "Max supply: 10,000",
-      "common": "Max supply: 100,000"
-    },
     "category": {
       "body_shape": "Body Shape",
       "earring": "Earring",
@@ -319,6 +322,15 @@
     },
     "smart": "Smart Wearable",
     "smart_badge": "Smart"
+  },
+  "wearable_preview": {
+    "toggle_wearable": "Wearable",
+    "toggle_avatar": "Try On",
+    "missing_representation_error": {
+      "male": "male",
+      "female": "female",
+      "message": "This wearable doesn't have a {bodyShape} representation"
+    }
   },
   "sell_page": {
     "title": "List for sale",
@@ -345,6 +357,11 @@
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
+  },
+  "price_too_low": {
+    "minimum_price": "The minimun amount supported for costless transactions is {price}",
+    "get_item_in_network": "In order to get this item you'll need to switch your network to {network} and then cover the transaction cost with {token}.",
+    "switch_network": "Switch to {network}"
   },
   "mint_page": {
     "title": "Buy {category}",
@@ -488,6 +505,10 @@
   "networks": {
     "ethereum": "Ethereum",
     "matic": "Polygon"
+  },
+  "tokens": {
+    "ethereum": "ETH",
+    "matic": "MATIC"
   },
   "intro_popup": {
     "title": "Introducing Polygon MANA",

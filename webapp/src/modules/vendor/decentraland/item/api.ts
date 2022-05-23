@@ -40,6 +40,10 @@ class ItemAPI extends BaseAPI {
       queryParams.append('sortBy', filters.sortBy)
     }
 
+    if (filters.category) {
+      queryParams.append('category', filters.category)
+    }
+
     if (filters.creator) {
       queryParams.append('creator', filters.creator)
     }

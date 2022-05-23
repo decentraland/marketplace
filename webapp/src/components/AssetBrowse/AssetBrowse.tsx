@@ -44,7 +44,8 @@ const hasPrimarySales = (section?: Section) => {
     case DecentralandSection.WEARABLES_MASK:
     case DecentralandSection.WEARABLES_TIARA:
     case DecentralandSection.WEARABLES_TOP_HEAD:
-    case DecentralandSection.WEARABLES_SKIN: {
+    case DecentralandSection.WEARABLES_SKIN:
+    case DecentralandSection.EMOTES: {
       return true
     }
     default:
@@ -109,7 +110,7 @@ const AssetBrowse = (props: Props) => {
     hasFetched
   ])
 
-  // handlers
+  // Handlers
   const handleSetFullscreen = useCallback(
     () => onBrowse({ isMap: true, isFullscreen: true }),
     [onBrowse]
@@ -214,6 +215,7 @@ const AssetBrowse = (props: Props) => {
     Sections.decentraland.COLLECTIONS,
     Sections.decentraland.LAND,
     Sections.decentraland.WEARABLES,
+    Sections.decentraland.EMOTES,
     Sections.decentraland.ENS,
     Sections.decentraland.ON_SALE,
     Sections.decentraland.SALES,
@@ -227,8 +229,9 @@ const AssetBrowse = (props: Props) => {
         <Mobile>
           <Tabs isFullscreen>
             <Tabs.Left>
-              {mobileSections.map(value => (
+              {mobileSections.map((value, key) => (
                 <Tabs.Tab
+                  key={key}
                   active={section === value}
                   onClick={() => onBrowse({ section: value })}
                 >

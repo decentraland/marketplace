@@ -3,12 +3,14 @@ import { Avatar } from '@dcl/schemas'
 import { connect } from 'react-redux'
 import { RootState } from '../../modules/reducer'
 import { getWallet } from '../../modules/wallet/selectors'
+import { getIsTryingOn } from '../../modules/ui/preview/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch
 } from './AssetImage.types'
 import AssetImage from './AssetImage'
+import { setIsTryingOn } from '../../modules/ui/preview/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   const profiles = getProfiles(state)
@@ -19,10 +21,13 @@ const mapState = (state: RootState): MapStateProps => {
     avatar = profile.avatars[0]
   }
   return {
-    avatar
+    avatar,
+    isTryingOn: getIsTryingOn(state)
   }
 }
 
-const mapDispatch = (_dispatch: MapDispatch): MapDispatchProps => ({})
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onSetIsTryingOn: value => dispatch(setIsTryingOn(value))
+})
 
 export default connect(mapState, mapDispatch)(AssetImage)

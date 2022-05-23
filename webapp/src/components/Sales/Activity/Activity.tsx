@@ -15,7 +15,7 @@ import { SALES_PER_PAGE } from '../../../modules/routing/utils'
 import AssetCell from '../../OnSaleList/AssetCell'
 import { Props } from './Activity.types'
 import { Mana } from '../../Mana'
-import { formatMANA } from '../../../lib/mana'
+import { formatWeiMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import './Activity.css'
 
@@ -49,7 +49,7 @@ const Activity = ({
                     <AssetCell asset={assets[sale.id]} />
 
                     <Mana network={sale.network} inline>
-                      {formatMANA(sale.price)}
+                      {formatWeiMANA(sale.price)}
                     </Mana>
                   </div>
                 )
@@ -90,7 +90,7 @@ const Activity = ({
                         <Table.Cell>{t(`global.${sale.type}`)}</Table.Cell>
                         <Table.Cell>
                           <Mana network={sale.network} inline>
-                            {formatMANA(sale.price)}
+                            {formatWeiMANA(sale.price)}
                           </Mana>
                         </Table.Cell>
                       </Table.Row>

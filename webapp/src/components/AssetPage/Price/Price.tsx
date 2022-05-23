@@ -1,7 +1,7 @@
 import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana, Stats } from 'decentraland-ui'
-import { formatMANA } from '../../../lib/mana'
+import { formatWeiMANA } from '../../../lib/mana'
 import { Props } from './Price.types'
 
 const Price = ({ asset, price }: Props) => {
@@ -12,7 +12,7 @@ const Price = ({ asset, price }: Props) => {
   return (
     <Stats title={t('asset_page.price')}>
       <Mana network={asset.network} withTooltip>
-        {formatMANA(price)}
+        {formatWeiMANA(price)}
       </Mana>
     </Stats>
   )

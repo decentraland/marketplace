@@ -34,7 +34,7 @@ const NFTFilters = (props: Props) => {
     onlyOnSale,
     onlySmart,
     isMap,
-    wearableRarities,
+    rarities,
     wearableGenders,
     contracts,
     network,
@@ -77,7 +77,7 @@ const NFTFilters = (props: Props) => {
     : orderBydropdownOptions[0].value
 
   const appliedFilters = []
-  if (wearableRarities.length > 0) {
+  if (rarities.length > 0) {
     appliedFilters.push(t('nft_filters.rarity'))
   }
   if (wearableGenders.length > 0) {
@@ -122,7 +122,7 @@ const NFTFilters = (props: Props) => {
 
   const handleRaritiesChange = useCallback(
     (options: string[]) => {
-      onBrowse({ wearableRarities: options as Rarity[] })
+      onBrowse({ rarities: options as Rarity[] })
     },
     [onBrowse]
   )
@@ -290,7 +290,7 @@ const NFTFilters = (props: Props) => {
             assetType={assetType}
             selectedNetwork={network}
             selectedCollection={contracts[0]}
-            selectedRarities={wearableRarities}
+            selectedRarities={rarities}
             selectedGenders={wearableGenders}
             isOnlySmart={!!onlySmart}
             onCollectionsChange={handleCollectionsChange}
@@ -336,7 +336,7 @@ const NFTFilters = (props: Props) => {
                 assetType={assetType}
                 selectedNetwork={network}
                 selectedCollection={contracts[0]}
-                selectedRarities={wearableRarities}
+                selectedRarities={rarities}
                 selectedGenders={wearableGenders}
                 isOnlySmart={!!onlySmart}
                 onCollectionsChange={handleCollectionsChange}

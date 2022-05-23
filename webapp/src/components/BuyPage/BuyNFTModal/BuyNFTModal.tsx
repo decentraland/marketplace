@@ -17,6 +17,7 @@ import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { AssetAction } from '../../AssetAction'
 import { AuthorizationModal } from '../../AuthorizationModal'
+import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { Props } from './BuyNFTModal.types'
@@ -28,9 +29,10 @@ const BuyNFTModal = (props: Props) => {
     wallet,
     authorizations,
     isLoading,
-    onExecuteOrder,
     isOwner,
-    hasInsufficientMANA
+    hasInsufficientMANA,
+    hasLowPrice,
+    onExecuteOrder
   } = props
 
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
@@ -127,19 +129,24 @@ const BuyNFTModal = (props: Props) => {
         {t('buy_page.title', { category: t(`global.${nft.category}`) })}
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
+      {hasLowPrice ? (
+        <PriceTooLow chainId={nft.chainId} network={nft.network} />
+      ) : null}
       <div className="buttons">
         <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
           {t('global.cancel')}
         </Button>
-        <ChainButton
-          primary
-          disabled={isDisabled || isLoading}
-          onClick={handleSubmit}
-          loading={isLoading}
-          chainId={nft.chainId}
-        >
-          {t('buy_page.buy')}
-        </ChainButton>
+        {!hasLowPrice ? (
+          <ChainButton
+            primary
+            disabled={isDisabled || isLoading}
+            onClick={handleSubmit}
+            loading={isLoading}
+            chainId={nft.chainId}
+          >
+            {t('buy_page.buy')}
+          </ChainButton>
+        ) : null}
       </div>
       <AuthorizationModal
         open={showAuthorizationModal}

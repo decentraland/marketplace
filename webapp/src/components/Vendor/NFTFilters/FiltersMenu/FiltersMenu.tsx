@@ -55,7 +55,7 @@ const FiltersMenu = (props: Props) => {
       .reverse() as string[]
     return options.map(rarity => ({
       value: rarity,
-      text: t(`wearable.rarity.${rarity}`)
+      text: t(`rarity.${rarity}`)
     }))
   }, [])
 
@@ -63,7 +63,7 @@ const FiltersMenu = (props: Props) => {
     const options = Object.values(WearableGender)
     return options.map(gender => ({
       value: gender,
-      text: t(`wearable.body_shape.${gender}`)
+      text: t(`body_shape.${gender}`)
     }))
   }, [])
 
