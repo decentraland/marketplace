@@ -274,3 +274,13 @@ type Sale @entity {
   searchTokenId: BigInt!
   searchContractAddress: Bytes!
 }
+
+# Data accumulated and condensed into day stats for all of the Marketplace activity
+type VolumeDayData @entity {
+  id: ID! # timestamp rounded to current day by dividing by 86400
+  date: Int!
+  dailySales: Int!
+  dailyVolumeMANA: BigInt!
+  dailyCreatorsEarnings: BigInt!
+  dailyDAOEarnings: BigInt!
+}

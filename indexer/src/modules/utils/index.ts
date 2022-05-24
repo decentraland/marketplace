@@ -1,3 +1,7 @@
+import { BigInt } from "@graphprotocol/graph-ts";
+
+export let ONE_MILLION = BigInt.fromI32(1000000);
+
 export function toLowerCase(str: string): string {
   let result = ''
 
