@@ -1,5 +1,5 @@
 import { Address, BigInt, Bytes, log } from '@graphprotocol/graph-ts'
-import { NFT, Sale, VolumeDayData } from '../../entities/schema'
+import { NFT, Sale, AnalyticsDayData } from '../../entities/schema'
 import { createOrLoadAccount } from '../account'
 import { buildCountFromSale } from '../count'
 import { ONE_MILLION } from '../utils'
@@ -66,33 +66,33 @@ export function trackSale(
   volumeDayData.save()
 }
 
-function getOrCreateVolumeData(blockTimestamp: BigInt): VolumeDayData {
+function getOrCreateAnalyticsDayData(blockTimestamp: BigInt): AnalyticsDayData {
   let timestamp = blockTimestamp.toI32()
   let dayID = timestamp / 86400 // unix timestamp for start of day / 86400 giving a unique day index
   let dayStartTimestamp = dayID * 86400
-  let volumeDayData = VolumeDayData.load(dayID.toString())
+  let volumeDayData = AnalyticsDayData.load(dayID.toString())
   if (volumeDayData === null) {
-    volumeDayData = new VolumeDayData(dayID.toString())
+    volumeDayData = new AnalyticsDayData(dayID.toString())
     volumeDayData.date = dayStartTimestamp // unix timestamp for start of day
-    volumeDayData.dailySales = 0
-    volumeDayData.dailyVolumeMANA = BigInt.fromI32(0)
-    volumeDayData.dailyCreatorsEarnings = BigInt.fromI32(0) // won't be used at all, the bids and transfer from here have no fees for creators
-    volumeDayData.dailyDAOEarnings = BigInt.fromI32(0)
+    volumeDayData.sales = 0
+    volumeDayData.volume = BigInt.fromI32(0)
+    volumeDayData.creatorsEarnings = BigInt.fromI32(0) // won't be used at all, the bids and transfer from here have no fees for creators
+    volumeDayData.daoEarnings = BigInt.fromI32(0)
   }
-  return volumeDayData as VolumeDayData
+  return volumeDayData as AnalyticsDayData
 }
 
 export function updateVolumeDayData(
   sale: Sale,
   blockTimestamp: BigInt,
   feesCollectorCut: BigInt
-): VolumeDayData {
-  let volumeDayData = getOrCreateVolumeData(blockTimestamp)
-  volumeDayData.dailySales += 1
-  volumeDayData.dailyVolumeMANA = volumeDayData.dailyVolumeMANA.plus(sale.price)
-  volumeDayData.dailyDAOEarnings = volumeDayData.dailyDAOEarnings.plus(
+): AnalyticsDayData {
+  let volumeDayData = getOrCreateAnalyticsDayData(blockTimestamp)
+  volumeDayData.sales += 1
+  volumeDayData.volume = volumeDayData.volume.plus(sale.price)
+  volumeDayData.daoEarnings = volumeDayData.daoEarnings.plus(
     feesCollectorCut.times(sale.price).div(ONE_MILLION)
   )
 
-  return volumeDayData as VolumeDayData
+  return volumeDayData as AnalyticsDayData
 }
