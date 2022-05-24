@@ -1,5 +1,5 @@
 specVersion: 0.0.2
-description: Decentraland's Marketplace
+description: Decentraland's Marketplace subgraph
 repository: https://github.com/decentraland/decentraland
 schema:
   file: ./schema.graphql
