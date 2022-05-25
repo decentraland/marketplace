@@ -132,6 +132,7 @@ const SellModal = (props: Props) => {
           <Field
             label={t('sell_page.expiration_date')}
             type="date"
+            value={expiresAt}
             onChange={(_event, props) =>
               setExpiresAt(props.value || getDefaultExpirationDate())
             }
