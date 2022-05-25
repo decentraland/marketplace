@@ -62,7 +62,7 @@ export function trackSale(
   nft.updatedAt = timestamp
   nft.save()
 
-  let volumeDayData = updateVolumeDayData(sale, timestamp, feesCollectorCut)
+  let volumeDayData = updateVolumeDayData(sale, feesCollectorCut)
   volumeDayData.save()
 }
 
@@ -71,7 +71,7 @@ function getOrCreateAnalyticsDayData(blockTimestamp: BigInt): AnalyticsDayData {
   let dayID = timestamp / 86400 // unix timestamp for start of day / 86400 giving a unique day index
   let dayStartTimestamp = dayID * 86400
   let volumeDayData = AnalyticsDayData.load(dayID.toString())
-  if (volumeDayData === null) {
+  if (volumeDayData == null) {
     volumeDayData = new AnalyticsDayData(dayID.toString())
     volumeDayData.date = dayStartTimestamp // unix timestamp for start of day
     volumeDayData.sales = 0
@@ -84,10 +84,9 @@ function getOrCreateAnalyticsDayData(blockTimestamp: BigInt): AnalyticsDayData {
 
 export function updateVolumeDayData(
   sale: Sale,
-  blockTimestamp: BigInt,
   feesCollectorCut: BigInt
 ): AnalyticsDayData {
-  let volumeDayData = getOrCreateAnalyticsDayData(blockTimestamp)
+  let volumeDayData = getOrCreateAnalyticsDayData(sale.timestamp)
   volumeDayData.sales += 1
   volumeDayData.volume = volumeDayData.volume.plus(sale.price)
   volumeDayData.daoEarnings = volumeDayData.daoEarnings.plus(

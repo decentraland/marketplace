@@ -90,7 +90,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
 
   // Bind contract
   let marketplaceContract = Marketplace.bind(event.address)
-  // On ropsten we hace a different version of the marketplace where the method is ownerCutPercentage
+  // On ropsten we have a different version of the marketplace where the method is ownerCutPercentage
   let ownerCutPerMillion = marketplaceContract.try_ownerCutPerMillion()
 
   // analytics
