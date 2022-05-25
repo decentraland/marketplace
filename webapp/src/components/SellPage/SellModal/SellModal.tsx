@@ -11,7 +11,8 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
-import { parseMANANumber, formatWeiMANA } from '../../../lib/mana'
+import { parseMANANumber } from '../../../lib/mana'
+import { fromWei } from 'web3x/utils'
 import {
   INPUT_FORMAT,
   getDefaultExpirationDate
@@ -42,7 +43,7 @@ const SellModal = (props: Props) => {
 
   const isUpdate = order !== null
   const [price, setPrice] = useState<string>(
-    isUpdate ? formatWeiMANA(order!.price) : ''
+    isUpdate ? fromWei(order!.price, 'ether') : ''
   )
   const [expiresAt, setExpiresAt] = useState(
     isUpdate && order!.expiresAt
