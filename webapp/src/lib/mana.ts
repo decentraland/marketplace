@@ -24,7 +24,7 @@ export function parseMANANumber(
 ): number {
   const mana = parseFloat(strMana)
 
-  if (isNaN(Number(strMana)) || mana < 0) {
+  if (strMana.length === 0 || isNaN(Number(strMana)) || mana < 0) {
     return 0
   }
 

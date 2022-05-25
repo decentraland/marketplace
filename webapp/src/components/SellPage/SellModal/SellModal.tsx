@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { Network, NFTCategory } from '@dcl/schemas'
+import { fromWei } from 'web3x/utils'
+import { addDays } from 'date-fns'
 import dateFnsFormat from 'date-fns/format'
+import { Network, NFTCategory } from '@dcl/schemas'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
   Authorization,
@@ -11,7 +13,7 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
-import { parseMANANumber, formatWeiMANA } from '../../../lib/mana'
+import { parseMANANumber } from '../../../lib/mana'
 import {
   INPUT_FORMAT,
   getDefaultExpirationDate
@@ -42,11 +44,11 @@ const SellModal = (props: Props) => {
 
   const isUpdate = order !== null
   const [price, setPrice] = useState<string>(
-    isUpdate ? formatWeiMANA(order!.price) : ''
+    isUpdate ? fromWei(order!.price, 'ether') : ''
   )
   const [expiresAt, setExpiresAt] = useState(
     isUpdate && order!.expiresAt
-      ? dateFnsFormat(+order!.expiresAt, INPUT_FORMAT)
+      ? dateFnsFormat(addDays(new Date(+order!.expiresAt), 1), INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
   const [showConfirm, setShowConfirm] = useState(false)
@@ -131,6 +133,7 @@ const SellModal = (props: Props) => {
           <Field
             label={t('sell_page.expiration_date')}
             type="date"
+            value={expiresAt}
             onChange={(_event, props) =>
               setExpiresAt(props.value || getDefaultExpirationDate())
             }
