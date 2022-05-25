@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
-import { Network, NFTCategory } from '@dcl/schemas'
+import { fromWei } from 'web3x/utils'
+import { addDays } from 'date-fns'
 import dateFnsFormat from 'date-fns/format'
+import { Network, NFTCategory } from '@dcl/schemas'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
   Authorization,
@@ -12,7 +14,6 @@ import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { parseMANANumber } from '../../../lib/mana'
-import { fromWei } from 'web3x/utils'
 import {
   INPUT_FORMAT,
   getDefaultExpirationDate
@@ -28,7 +29,6 @@ import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Props } from './SellModal.types'
-import { addDays } from 'date-fns'
 
 const SellModal = (props: Props) => {
   const {
