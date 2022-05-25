@@ -28,6 +28,7 @@ import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Props } from './SellModal.types'
+import { addDays } from 'date-fns'
 
 const SellModal = (props: Props) => {
   const {
@@ -47,7 +48,7 @@ const SellModal = (props: Props) => {
   )
   const [expiresAt, setExpiresAt] = useState(
     isUpdate && order!.expiresAt
-      ? dateFnsFormat(+order!.expiresAt, INPUT_FORMAT)
+      ? dateFnsFormat(addDays(new Date(+order!.expiresAt), 1), INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
   const [showConfirm, setShowConfirm] = useState(false)
