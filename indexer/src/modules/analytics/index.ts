@@ -62,36 +62,36 @@ export function trackSale(
   nft.updatedAt = timestamp
   nft.save()
 
-  let volumeDayData = updateVolumeDayData(sale, feesCollectorCut)
-  volumeDayData.save()
+  let analyticsDayData = updateAnalyticsDayData(sale, feesCollectorCut)
+  analyticsDayData.save()
 }
 
 function getOrCreateAnalyticsDayData(blockTimestamp: BigInt): AnalyticsDayData {
   let timestamp = blockTimestamp.toI32()
   let dayID = timestamp / 86400 // unix timestamp for start of day / 86400 giving a unique day index
   let dayStartTimestamp = dayID * 86400
-  let volumeDayData = AnalyticsDayData.load(dayID.toString())
-  if (volumeDayData == null) {
-    volumeDayData = new AnalyticsDayData(dayID.toString())
-    volumeDayData.date = dayStartTimestamp // unix timestamp for start of day
-    volumeDayData.sales = 0
-    volumeDayData.volume = BigInt.fromI32(0)
-    volumeDayData.creatorsEarnings = BigInt.fromI32(0) // won't be used at all, the bids and transfer from here have no fees for creators
-    volumeDayData.daoEarnings = BigInt.fromI32(0)
+  let analyticsDayData = AnalyticsDayData.load(dayID.toString())
+  if (analyticsDayData == null) {
+    analyticsDayData = new AnalyticsDayData(dayID.toString())
+    analyticsDayData.date = dayStartTimestamp // unix timestamp for start of day
+    analyticsDayData.sales = 0
+    analyticsDayData.volume = BigInt.fromI32(0)
+    analyticsDayData.creatorsEarnings = BigInt.fromI32(0) // won't be used at all, the bids and transfer from here have no fees for creators
+    analyticsDayData.daoEarnings = BigInt.fromI32(0)
   }
-  return volumeDayData as AnalyticsDayData
+  return analyticsDayData as AnalyticsDayData
 }
 
-export function updateVolumeDayData(
+export function updateAnalyticsDayData(
   sale: Sale,
   feesCollectorCut: BigInt
 ): AnalyticsDayData {
-  let volumeDayData = getOrCreateAnalyticsDayData(sale.timestamp)
-  volumeDayData.sales += 1
-  volumeDayData.volume = volumeDayData.volume.plus(sale.price)
-  volumeDayData.daoEarnings = volumeDayData.daoEarnings.plus(
+  let analyticsDayData = getOrCreateAnalyticsDayData(sale.timestamp)
+  analyticsDayData.sales += 1
+  analyticsDayData.volume = analyticsDayData.volume.plus(sale.price)
+  analyticsDayData.daoEarnings = analyticsDayData.daoEarnings.plus(
     feesCollectorCut.times(sale.price).div(ONE_MILLION)
   )
 
-  return volumeDayData as AnalyticsDayData
+  return analyticsDayData as AnalyticsDayData
 }
