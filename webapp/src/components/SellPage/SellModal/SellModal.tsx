@@ -94,7 +94,7 @@ const SellModal = (props: Props) => {
   const { orderService } = VendorFactory.build(nft.vendor)
 
   const isInvalidDate = new Date(expiresAt).getTime() < Date.now()
-  const isInvalidPrice = parseMANANumber(price) <= 0
+  const isInvalidPrice = price.length === 0 || parseMANANumber(price) <= 0
   const isDisabled =
     !orderService.canSell() ||
     !isOwnedBy(nft, wallet) ||
