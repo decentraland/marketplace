@@ -12,7 +12,7 @@
     "dcl-catalyst-commons": "^8.2.0",
     "dcl-crypto": "^2.2.0",
     "decentraland-connect": "^3.3.0",
-    "decentraland-dapps": "^12.50.0",
+    "decentraland-dapps": "^12.52.3",
     "decentraland-transactions": "^1.29.1",
     "decentraland-ui": "^3.33.0",
     "dotenv": "^10.0.0",
