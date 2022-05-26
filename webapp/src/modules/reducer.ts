@@ -22,6 +22,7 @@ import { collectionReducer as collection } from './collection/reducer'
 import { storeReducer as store } from './store/reducer'
 import { saleReducer as sale } from './sale/reducer'
 import { identityReducer as identity } from './identity/reducer'
+import { analyticsReducer as analytics } from './analytics/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({
@@ -45,7 +46,8 @@ export const createRootReducer = (history: History) =>
     collection,
     store,
     sale,
-    identity
+    identity,
+    analytics
   })
 
 export type RootState = ReturnType<ReturnType<typeof createRootReducer>>

@@ -5,6 +5,7 @@ import { ContractFactory } from '../contract/ContractFactory'
 type Ticker = {
   converted_last: {
     eth: number
+    usd: number
   }
 }
 
@@ -69,6 +70,14 @@ export class TokenConverter {
     }
 
     return pricesCache[coinId][ethAmount]
+  }
+
+  async marketMANAToUSD(amount: number) {
+    const response = await window.fetch(
+      `${this.apiURL}/coins/decentraland/tickers?exchange_ids=${this.converterExchange}`
+    )
+    const coinTickers: CoinTickers = await response.json()
+    return coinTickers.tickers[0].converted_last.usd * amount
   }
 
   async contractEthToMANA(ethAmount: string) {
