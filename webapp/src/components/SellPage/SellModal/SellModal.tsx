@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
-import { Network, NFTCategory } from '@dcl/schemas'
 import { fromWei } from 'web3x/utils'
+import { addDays } from 'date-fns'
 import dateFnsFormat from 'date-fns/format'
+import { Network, NFTCategory } from '@dcl/schemas'
+import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
   Authorization,
   AuthorizationType
@@ -11,7 +13,7 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
-import { toMANA, fromMANA } from '../../../lib/mana'
+import { parseMANANumber } from '../../../lib/mana'
 import {
   INPUT_FORMAT,
   getDefaultExpirationDate
@@ -41,12 +43,12 @@ const SellModal = (props: Props) => {
   } = props
 
   const isUpdate = order !== null
-  const [price, setPrice] = useState(
-    isUpdate ? toMANA(+fromWei(order!.price, 'ether')) : ''
+  const [price, setPrice] = useState<string>(
+    isUpdate ? fromWei(order!.price, 'ether') : ''
   )
   const [expiresAt, setExpiresAt] = useState(
     isUpdate && order!.expiresAt
-      ? dateFnsFormat(+order!.expiresAt, INPUT_FORMAT)
+      ? dateFnsFormat(addDays(new Date(+order!.expiresAt), 1), INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
   const [showConfirm, setShowConfirm] = useState(false)
@@ -77,7 +79,7 @@ const SellModal = (props: Props) => {
   }
 
   const handleCreateOrder = () =>
-    onCreateOrder(nft, fromMANA(price), new Date(expiresAt).getTime())
+    onCreateOrder(nft, parseMANANumber(price), new Date(expiresAt).getTime())
 
   const handleSubmit = () => {
     if (hasAuthorization(authorizations, authorization)) {
@@ -93,10 +95,11 @@ const SellModal = (props: Props) => {
   const { orderService } = VendorFactory.build(nft.vendor)
 
   const isInvalidDate = new Date(expiresAt).getTime() < Date.now()
+  const isInvalidPrice = parseMANANumber(price) <= 0
   const isDisabled =
     !orderService.canSell() ||
     !isOwnedBy(nft, wallet) ||
-    fromMANA(price) <= 0 ||
+    isInvalidPrice ||
     isInvalidDate
 
   return (
@@ -118,13 +121,13 @@ const SellModal = (props: Props) => {
           <ManaField
             label={t('sell_page.price')}
             type="text"
-            placeholder={toMANA(1000)}
+            placeholder={1000}
             network={nft.network}
             value={price}
             focus={true}
+            error={price !== '' && isInvalidPrice}
             onChange={(_event, props) => {
-              const newPrice = fromMANA(props.value)
-              setPrice(toMANA(newPrice))
+              setPrice(toFixedMANAValue(props.value))
             }}
           />
           <Field
@@ -169,7 +172,7 @@ const SellModal = (props: Props) => {
                 name: <b>{getAssetName(nft)}</b>,
                 amount: (
                   <Mana network={nft.network} inline>
-                    {fromMANA(price).toLocaleString()}
+                    {parseMANANumber(price).toLocaleString()}
                   </Mana>
                 )
               }}

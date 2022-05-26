@@ -16,6 +16,7 @@ export type Props = {
   isLoading: boolean
   isOwner: boolean
   hasInsufficientMANA: boolean
+  hasLowPrice: boolean
   onExecuteOrder: typeof executeOrderRequest
 }
 

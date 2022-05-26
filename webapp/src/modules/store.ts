@@ -14,6 +14,7 @@ import { fetchTilesRequest } from './tile/actions'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { isDevelopment } from '../lib/environment'
 import { GENERATE_IDENTITY_SUCCESS } from './identity/actions'
+import { SET_IS_TRYING_ON } from './ui/preview/actions'
 
 export const history = require('history').createBrowserHistory()
 
@@ -43,13 +44,15 @@ export function initStore() {
     storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
     paths: [
       ['ui', 'archivedBidIds'],
+      ['ui', 'preview', 'isTryingOn'],
       ['identity', 'data']
     ], // array of paths from state to be persisted (optional)
     actions: [
       CLEAR_TRANSACTIONS,
       ARCHIVE_BID,
       UNARCHIVE_BID,
-      GENERATE_IDENTITY_SUCCESS
+      GENERATE_IDENTITY_SUCCESS,
+      SET_IS_TRYING_ON
     ], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   })

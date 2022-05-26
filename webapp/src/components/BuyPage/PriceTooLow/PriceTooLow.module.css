@@ -1,0 +1,16 @@
+.card {
+  /* Override semantic UI's width */
+  width: 460px !important;
+}
+
+.paragraph {
+  margin-bottom: 10px;
+}
+
+
+@media (max-width: 768px) {
+  .card {
+    /* Override semantic UI's width */
+    width: 100% !important;
+  }
+}

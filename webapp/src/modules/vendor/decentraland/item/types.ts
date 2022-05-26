@@ -2,6 +2,7 @@ import {
   Item,
   ItemSortBy,
   Network,
+  NFTCategory,
   Rarity,
   WearableCategory
 } from '@dcl/schemas'
@@ -12,6 +13,7 @@ export type ItemFilters = {
   skip?: number
   sortBy?: ItemSortBy
   creator?: string
+  category?: NFTCategory
   isSoldOut?: boolean
   isOnSale?: boolean
   search?: string

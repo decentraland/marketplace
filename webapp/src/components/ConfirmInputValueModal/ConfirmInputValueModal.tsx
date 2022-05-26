@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Modal, Button, Form } from 'decentraland-ui'
+import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './ConfirmInputValueModal.types'
-import { fromMANA, toMANA } from '../../lib/mana'
 import { ManaField } from '../ManaField'
 import './ConfirmInputValueModal.css'
 
@@ -19,6 +19,8 @@ const ConfirmInputValueModal = ({
 }: Props) => {
   const [confirmedInput, setConfirmedInput] = useState<string>('')
 
+  const isDisabled = disabled || valueToConfirm !== confirmedInput
+
   return (
     <Modal size="small" open={open} className="ConfirmInputValueModal">
       <Modal.Header>{headerTitle}</Modal.Header>
@@ -31,8 +33,7 @@ const ConfirmInputValueModal = ({
             placeholder={valueToConfirm}
             value={confirmedInput}
             onChange={(_event, props) => {
-              const newPrice = fromMANA(props.value)
-              setConfirmedInput(toMANA(newPrice))
+              setConfirmedInput(toFixedMANAValue(props.value))
             }}
           />
         </Modal.Content>
@@ -46,14 +47,7 @@ const ConfirmInputValueModal = ({
           >
             {t('global.cancel')}
           </Button>
-          <Button
-            type="submit"
-            primary
-            disabled={
-              disabled || fromMANA(valueToConfirm) !== fromMANA(confirmedInput)
-            }
-            loading={loading}
-          >
+          <Button type="submit" primary disabled={isDisabled} loading={loading}>
             {t('global.proceed')}
           </Button>
         </Modal.Actions>

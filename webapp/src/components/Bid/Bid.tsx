@@ -11,7 +11,7 @@ import { AssetImage } from '../AssetImage'
 import { Mana } from '../Mana'
 import { AcceptButton } from './AcceptButton'
 import { WarningMessage } from './WarningMessage'
-import { formatMANA } from '../../lib/mana'
+import { formatWeiMANA } from '../../lib/mana'
 import { formatDistanceToNow } from '../../lib/date'
 import { Props } from './Bid.types'
 import { ConfirmInputValueModal } from '../ConfirmInputValueModal'
@@ -75,7 +75,7 @@ const Bid = (props: Props) => {
                 </Link>
               </Stats>
               <Stats className="price" title={t('bid.price')}>
-                <Mana network={bid.network}>{formatMANA(bid.price)}</Mana>
+                <Mana network={bid.network}>{formatWeiMANA(bid.price)}</Mana>
               </Stats>
               <Stats title={t('bid.time_left')}>
                 {formatDistanceToNow(+bid.expiresAt)}
@@ -155,7 +155,7 @@ const Bid = (props: Props) => {
                         name: <b>{getAssetName(nft)}</b>,
                         amount: (
                           <Mana network={nft.network} inline>
-                            {formatMANA(bid.price).toLocaleString()}
+                            {formatWeiMANA(bid.price).toLocaleString()}
                           </Mana>
                         )
                       }}
@@ -165,7 +165,7 @@ const Bid = (props: Props) => {
                   </>
                 }
                 onConfirm={handleConfirm}
-                valueToConfirm={formatMANA(bid.price)}
+                valueToConfirm={formatWeiMANA(bid.price)}
                 network={nft.network}
                 onCancel={() => setShowConfirmationModal(false)}
                 loading={isAcceptingBid}

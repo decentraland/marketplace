@@ -1,0 +1,31 @@
+.icon {
+  margin-left: 8px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 16px 16px;
+  width: 24px;
+  height: 24px;
+  background-color: #37333d;
+  border-radius: 4px;
+}
+
+.BaseMale {
+  background-image: url(../../images/wearables/MaleIcon.svg);
+  background-size: 14px 14px;
+}
+
+.BaseFemale {
+  background-image: url(../../images/wearables/FemaleIcon.svg);
+  background-size: 14px 14px;
+}
+
+.Unisex {
+  background-image: url(../../images/wearables/UnisexIcon.svg);
+  background-size: 14px 14px;
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .icon {
+    display: none;
+  }
+}

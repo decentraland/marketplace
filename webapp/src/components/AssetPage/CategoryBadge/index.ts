@@ -1,3 +1,3 @@
-import CategoryBadge from './CategoryBadge.container'
+import CategoryBadge from './CategoryBadge'
 
 export default CategoryBadge

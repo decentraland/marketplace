@@ -53,10 +53,10 @@ export function getSearchParams(options?: BrowseOptions) {
     if (options.onlyOnSale !== undefined) {
       params.set('onlyOnSale', options.onlyOnSale.toString())
     }
-    if (options.wearableRarities && options.wearableRarities.length > 0) {
+    if (options.rarities && options.rarities.length > 0) {
       params.set(
         'rarities',
-        options.wearableRarities.join(SEARCH_ARRAY_PARAM_SEPARATOR)
+        options.rarities.join(SEARCH_ARRAY_PARAM_SEPARATOR)
       )
     }
     if (options.wearableGenders && options.wearableGenders.length > 0) {
@@ -98,6 +98,10 @@ export function getCategoryFromSection(section: string) {
       return NFTCategory.PARCEL
     case Section.ESTATES:
       return NFTCategory.ESTATE
+    case Section.ENS:
+      return NFTCategory.ENS
+    case Section.EMOTES:
+      return NFTCategory.EMOTE
     case Section.WEARABLES:
     case Section.WEARABLES_HEAD:
     case Section.WEARABLES_EYEBROWS:
@@ -118,8 +122,21 @@ export function getCategoryFromSection(section: string) {
     case Section.WEARABLES_TOP_HEAD:
     case Section.WEARABLES_SKIN:
       return NFTCategory.WEARABLE
-    case Section.ENS:
-      return NFTCategory.ENS
+  }
+}
+
+export function getSectionFromCategory(category: NFTCategory) {
+  switch (category) {
+    case NFTCategory.PARCEL:
+      return Section.PARCELS
+    case NFTCategory.ESTATE:
+      return Section.ESTATES
+    case NFTCategory.ENS:
+      return Section.ENS
+    case NFTCategory.EMOTE:
+      return Section.EMOTES
+    case NFTCategory.WEARABLE:
+      return Section.WEARABLES
   }
 }
 

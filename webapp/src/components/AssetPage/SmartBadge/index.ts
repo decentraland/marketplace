@@ -1,3 +1,3 @@
-import SmartBadge from './SmartBadge.container'
+import SmartBadge from './SmartBadge'
 
 export default SmartBadge
