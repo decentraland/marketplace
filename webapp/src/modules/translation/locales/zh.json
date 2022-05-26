@@ -30,6 +30,7 @@
     "sale_type": "销售类型",
     "sell_price": "销售价格",
     "no_results": "无结果",
+    "learn_more": "学习更多",
     "category": "类别",
     "rarity": "稀罕",
     "stock": "股票",
@@ -39,7 +40,9 @@
     "buyer": "买方",
     "bid": "投标",
     "order": "清单",
-    "mint": "薄荷"
+    "mint": "薄荷",
+    "back": "背部",
+    "emote": "表情"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -90,6 +93,7 @@
     "wearables_tiara": "头饰",
     "wearables_top_head": "头顶",
     "wearables_skin": "皮肤",
+    "emotes": "表情",
     "ens": "名称",
     "decentraland": "Decentraland",
     "super_rare": "SuperRare",
@@ -124,7 +128,6 @@
     "title": "Decentraland Marketplace",
     "subtitle": "欢迎来到虚拟世界的一站式商店，获取最好的数字资产。",
     "get_started": "开始浏览",
-    "learn_more": "学习更多",
     "home_new_items": "最新商品",
     "home_sold_items": "最新销售",
     "home_wearables": "最新上市",
@@ -272,30 +275,30 @@
     "when": "时间",
     "price": "价格"
   },
+  "body_shape": {
+    "male": "男性",
+    "female": "女性",
+    "unisex": "中性"
+  },
+  "rarity": {
+    "unique": "独特",
+    "mythic": "神话",
+    "legendary": "传奇",
+    "epic": "史诗",
+    "rare": "稀有",
+    "uncommon": "罕见",
+    "common": "常见"
+  },
+  "rarity_tooltip": {
+    "unique": "像圣杯一样：独一无二",
+    "mythic": "给幸运的人：最多10个",
+    "legendary": "限量供应：最多100个",
+    "epic": "最大供应量：1000个",
+    "rare": "最大供应量：5000个",
+    "uncommon": "最大供应量：10,000个",
+    "common": "最大供应量：100,000个"
+  },
   "wearable": {
-    "body_shape": {
-      "male": "男性",
-      "female": "女性",
-      "unisex": "中性"
-    },
-    "rarity": {
-      "unique": "独特",
-      "mythic": "神话",
-      "legendary": "传奇",
-      "epic": "史诗",
-      "rare": "稀有",
-      "uncommon": "罕见",
-      "common": "常见"
-    },
-    "rarity_tooltip": {
-      "unique": "像圣杯一样：独一无二",
-      "mythic": "给幸运的人：最多10个",
-      "legendary": "限量供应：最多100个",
-      "epic": "最大供应量：1000个",
-      "rare": "最大供应量：5000个",
-      "uncommon": "最大供应量：10,000个",
-      "common": "最大供应量：100,000个"
-    },
     "category": {
       "body_shape": "身材",
       "earring": "耳环",
@@ -317,6 +320,15 @@
     },
     "smart": "智能穿戴",
     "smart_badge": "聪明的"
+  },
+  "wearable_preview": {
+    "toggle_wearable": "可穿戴",
+    "toggle_avatar": "试试看",
+    "missing_representation_error": {
+      "male": "男",
+      "female": "女",
+      "message": "这个可穿戴设备没有 {bodyShape} 表示"
+    }
   },
   "sell_page": {
     "title": "待售列表",
@@ -343,6 +355,11 @@
     "no_fingerprint": "无法加载指纹。",
     "is_owner": "您是{name}的所有者。",
     "not_enough_mana": "您没有足够的MANA来购买{name}。"
+  },
+  "price_too_low": {
+    "minimum_price": "无成本交易支持的最低金额为 {price}",
+    "get_item_in_network": "为了获得这个物品，您需要将您的网络切换到 {network}，然后用 {token} 支付交易成本。",
+    "switch_network": "切换到 {network}"
   },
   "mint_page": {
     "title": "购买{category}",
@@ -486,6 +503,10 @@
   "networks": {
     "ethereum": "Ethereum",
     "matic": "Polygon"
+  },
+  "tokens": {
+    "ethereum": "ETH",
+    "matic": "MATIC"
   },
   "intro_popup": {
     "title": "介绍Polygon MANA",

@@ -12,6 +12,7 @@ import { isOwnedBy } from '../../modules/asset/utils'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { BuyNFTModal } from './BuyNFTModal'
 import { MintItemModal } from './MintItemModal'
+import { isPriceTooLow } from './utils'
 import { Props } from './BuyPage.types'
 import './BuyPage.css'
 
@@ -34,11 +35,21 @@ const BuyPage = (props: Props) => {
           {wallet => (
             <AssetProviderPage type={type}>
               {(asset, order) => {
+                const price =
+                  type === AssetType.ITEM
+                    ? (asset as Item).price
+                    : order
+                    ? order.price
+                    : ''
+
                 const modalProps = {
                   wallet: wallet,
                   isOwner: isOwnedBy(asset, wallet),
-                  hasInsufficientMANA: isInsufficientMANA(wallet, asset, order)
+                  hasInsufficientMANA: isInsufficientMANA(wallet, asset, order),
+                  hasLowPrice:
+                    wallet.chainId !== asset.chainId && isPriceTooLow(price)
                 }
+
                 return type === AssetType.NFT ? (
                   <BuyNFTModal
                     nft={asset as NFT}

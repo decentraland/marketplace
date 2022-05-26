@@ -1,4 +1,4 @@
-import { Entity } from 'dcl-catalyst-commons'
+import { Entity, EntityVersion } from 'dcl-catalyst-commons'
 import { Store, StoreEntityMetadata } from './types'
 import {
   getPeerCoverUrl,
@@ -40,7 +40,8 @@ beforeEach(() => {
     timestamp: 100,
     type: 'store' as any,
     content: [],
-    metadata: mockMetadata
+    metadata: mockMetadata,
+    version: EntityVersion.V2
   }
 
   mockStore = {

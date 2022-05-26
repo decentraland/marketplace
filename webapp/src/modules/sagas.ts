@@ -25,7 +25,9 @@ import { peerUrl } from '../lib/environment'
 
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({ peerUrl })
-const catalystClient = new CatalystClient(peerUrl, 'Market')
+const catalystClient = new CatalystClient({
+  catalystUrl: peerUrl
+})
 
 export function* rootSaga() {
   yield all([

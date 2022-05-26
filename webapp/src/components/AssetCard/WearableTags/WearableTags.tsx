@@ -1,39 +1,36 @@
-import { BodyShape, Rarity } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { SmartIcon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { isUnisex, isGender } from '../../../modules/nft/wearable/utils'
+import { Section } from '../../../modules/vendor/decentraland'
+import RarityBadge from '../../RarityBadge'
+import GenderBadge from '../../GenderBadge/GenderBadge'
+import { AssetType } from '../../../modules/asset/types'
 import { Props } from './WearableTags.types'
 import './WearableTags.css'
 
 const WearableTags = (props: Props) => {
   const { asset } = props
-  const wearable = asset.data.wearable!
+  const { rarity, category, bodyShapes, isSmart } = asset.data.wearable!
   return (
     <div className="WearableTags tags">
-      <div
-        title={t(`wearable.rarity_tooltip.${wearable.rarity}`)}
-        className="rarity"
-        style={{ backgroundColor: Rarity.getColor(wearable.rarity) }}
-      >
-        {t(`wearable.rarity.${wearable.rarity}`)}
-      </div>
-      <div
-        className={'icon ' + wearable.category}
-        title={t(`wearable.category.${wearable.category}`)}
+      <RarityBadge
+        size="small"
+        rarity={rarity}
+        assetType={AssetType.NFT}
+        category={NFTCategory.EMOTE}
+        withTooltip={false}
       />
-      {isUnisex(wearable) ? (
-        <div className="icon Unisex" title={t('wearable.body_shape.unisex')} />
-      ) : (
-        <div
-          className={'icon ' + wearable.bodyShapes[0]}
-          title={
-            isGender(wearable, BodyShape.MALE)
-              ? t('wearable.body_shape.male')
-              : t('wearable.body_shape.female')
-          }
-        />
-      )}
-      {wearable.isSmart ? (
+      <div
+        className={'icon ' + category}
+        title={t(`wearable.category.${category}`)}
+      />
+      <GenderBadge
+        bodyShapes={bodyShapes}
+        assetType={AssetType.NFT}
+        withText={false}
+        section={Section.WEARABLES}
+      />
+      {isSmart ? (
         <div className="icon smart" title={t(`wearable.smart`)}>
           <SmartIcon />
         </div>

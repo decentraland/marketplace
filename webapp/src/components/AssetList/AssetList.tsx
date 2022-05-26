@@ -19,12 +19,14 @@ const AssetList = (props: Props) => {
     page,
     count,
     isLoading,
-    onBrowse
+    onBrowse,
+    urlNext
   } = props
 
   const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts
 
-  const handleLoadMore = useCallback(() => {
+  const handleLoadMore = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
     const newPage = page + 1
     onBrowse({ page: newPage })
     getAnalytics().track('Load more', { page: newPage })
@@ -65,7 +67,14 @@ const AssetList = (props: Props) => {
       hasExtraPages &&
       (!isLoading || isLoadingNewPage) ? (
         <div className="load-more">
-          <Button loading={isLoading} inverted primary onClick={handleLoadMore}>
+          <Button 
+            as="a" 
+            href={urlNext} 
+            loading={isLoading} 
+            inverted
+            primary
+            onClick={handleLoadMore}
+          >
             {t('global.load_more')}
           </Button>
         </div>

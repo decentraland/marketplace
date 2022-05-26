@@ -30,7 +30,7 @@ export function getFilters(
           : undefined
 
       const {
-        wearableRarities,
+        rarities,
         wearableGenders,
         contracts,
         network,
@@ -43,7 +43,7 @@ export function getFilters(
         isWearableAccessory,
         isWearableSmart: onlySmart,
         wearableCategory,
-        wearableRarities,
+        rarities,
         wearableGenders,
         contracts,
         network

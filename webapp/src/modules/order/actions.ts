@@ -5,7 +5,7 @@ import { ErrorCode } from 'decentraland-transactions'
 
 import { NFT } from '../nft/types'
 import { getAssetName } from '../asset/utils'
-import { formatMANA } from '../../lib/mana'
+import { formatWeiMANA } from '../../lib/mana'
 
 // Create Order (aka Sell)
 
@@ -68,7 +68,7 @@ export const executeOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
       contractAddress: nft.contractAddress,
       network: nft.network,
       name: getAssetName(nft),
-      price: formatMANA(order.price)
+      price: formatWeiMANA(order.price)
     })
   })
 export const executeOrderFailure = (
@@ -99,7 +99,7 @@ export const cancelOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
       contractAddress: nft.contractAddress,
       network: nft.network,
       name: getAssetName(nft),
-      price: formatMANA(order.price)
+      price: formatWeiMANA(order.price)
     })
   })
 export const cancelOrderFailure = (

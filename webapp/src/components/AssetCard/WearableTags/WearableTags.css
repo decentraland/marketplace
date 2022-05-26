@@ -90,29 +90,8 @@
   background-image: url(../../../images/wearables/SkinIcon.svg);
 }
 
-.WearableTags .icon.BaseMale {
-  background-image: url(../../../images/wearables/MaleIcon.svg);
-  background-size: 14px 14px;
-}
-
-.WearableTags .icon.BaseFemale {
-  background-image: url(../../../images/wearables/FemaleIcon.svg);
-  background-size: 14px 14px;
-}
-
-.WearableTags .icon.Unisex {
-  background-image: url(../../../images/wearables/UnisexIcon.svg);
-  background-size: 14px 14px;
-}
-
 .WearableTags .dcl.smart-icon {
   width: 14px;
   height: 14px;
   margin: 5px;
-}
-
-@media (min-width: 768px) and (max-width: 992px) {
-  .WearableTags .icon {
-    display: none;
-  }
 }

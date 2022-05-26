@@ -18,6 +18,7 @@ import { AssetType } from '../../../modules/asset/types'
 import { AssetAction } from '../../AssetAction'
 import { Name } from '../Name'
 import { Price } from '../Price'
+import { PriceTooLow } from '../PriceTooLow'
 import { Props } from './MintItemModal.types'
 
 const MintItemModal = (props: Props) => {
@@ -26,9 +27,10 @@ const MintItemModal = (props: Props) => {
     wallet,
     authorizations,
     isLoading,
-    onBuyItem,
     isOwner,
-    hasInsufficientMANA
+    hasInsufficientMANA,
+    hasLowPrice,
+    onBuyItem
   } = props
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
@@ -132,6 +134,9 @@ const MintItemModal = (props: Props) => {
         {t('mint_page.title', { category: t(`global.${item.category}`) })}
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
+      {hasLowPrice ? (
+        <PriceTooLow chainId={item.chainId} network={item.network} />
+      ) : null}
       <div className="buttons">
         <Button
           as={Link}
@@ -139,16 +144,17 @@ const MintItemModal = (props: Props) => {
         >
           {t('global.cancel')}
         </Button>
-
-        <ChainButton
-          primary
-          disabled={isDisabled || isLoading}
-          onClick={handleSubmit}
-          loading={isLoading}
-          chainId={item.chainId}
-        >
-          {t('mint_page.action')}
-        </ChainButton>
+        {!hasLowPrice ? (
+          <ChainButton
+            primary
+            disabled={isDisabled || isLoading}
+            onClick={handleSubmit}
+            loading={isLoading}
+            chainId={item.chainId}
+          >
+            {t('mint_page.action')}
+          </ChainButton>
+        ) : null}
       </div>
       <AuthorizationModal
         isLoading={isLoading}

@@ -18,7 +18,7 @@ import { Mana } from '../../Mana'
 import { locations } from '../../../modules/routing/locations'
 import { saleAPI } from '../../../modules/vendor/decentraland'
 import { formatDistanceToNow } from '../../../lib/date'
-import { formatMANA } from '../../../lib/mana'
+import { formatWeiMANA } from '../../../lib/mana'
 import { Props } from './TransactionHistory.types'
 import './TransactionHistory.css'
 
@@ -120,7 +120,7 @@ const TransactionHistory = (props: Props) => {
                     </Table.Cell>
                     <Table.Cell>
                       <Mana network={network} inline>
-                        {formatMANA(sale.price)}
+                        {formatWeiMANA(sale.price)}
                       </Mana>
                     </Table.Cell>
                   </Table.Row>
@@ -135,7 +135,7 @@ const TransactionHistory = (props: Props) => {
                 <div className="mobile-tx-history-row" key={sale.id}>
                   <div className="price">
                     <Mana network={network} inline>
-                      {formatMANA(sale.price)}
+                      {formatWeiMANA(sale.price)}
                     </Mana>
                   </div>
                   <div className="when">{formatEventDate(sale.timestamp)}</div>
