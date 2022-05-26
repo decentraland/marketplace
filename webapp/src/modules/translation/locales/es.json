@@ -342,7 +342,8 @@
     "confirm": {
       "title": "Por favor confirma",
       "line_one": "Estás por poner en venta {name} por {amount}.",
-      "line_two": "Por favor vuelve a escribir el precio para confirmar:"
+      "line_two": "Por favor vuelve a escribir el precio para confirmar:",
+      "warning": "Cuidado: este precio esta muy por debajo al valor de mercado"
     }
   },
   "buy_page": {

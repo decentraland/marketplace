@@ -345,7 +345,8 @@
     "confirm": {
       "title": "Please confirm",
       "line_one": "You are about to list {name} on sale for {amount}.",
-      "line_two": "Please re-enter the price to confirm:"
+      "line_two": "Please re-enter the price to confirm:",
+      "warning": "Warning: this price is way below market value"
     }
   },
   "buy_page": {
