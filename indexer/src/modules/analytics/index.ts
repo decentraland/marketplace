@@ -23,7 +23,7 @@ export function trackSale(
   }
 
   // count sale
-  let count = buildCountFromSale(price)
+  let count = buildCountFromSale(price, feesCollectorCut)
   count.save()
 
   // load entities

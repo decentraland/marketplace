@@ -19,6 +19,8 @@ type Count @entity {
   started: Int!
   salesTotal: Int!
   salesManaTotal: BigInt!
+  creatorEarningsManaTotal: BigInt!
+  daoEarningsManaTotal: BigInt!
 }
 
 # ---------------------------------------------------------
