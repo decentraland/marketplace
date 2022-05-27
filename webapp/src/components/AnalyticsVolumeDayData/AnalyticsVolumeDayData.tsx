@@ -74,7 +74,12 @@ const AnalyticsVolumeDayData = (props: Props) => {
                     formattingFn={formatAnalyticsVolume}
                   />
                   <span className="stats-usd">
-                    {formatDailySales(data.sales, currentTimeframe)}
+                    <CountUp
+                      end={data.sales}
+                      formattingFn={number =>
+                        formatDailySales(number, currentTimeframe)
+                      }
+                    />
                   </span>
                 </div>
               </Stats>
@@ -90,7 +95,12 @@ const AnalyticsVolumeDayData = (props: Props) => {
                     />
                   </Mana>
                   <span className="stats-usd">
-                    ${formatAnalyticsVolume(data.volumeUSD)}
+                    <CountUp
+                      end={data.volumeUSD}
+                      formattingFn={number =>
+                        `$${formatAnalyticsVolume(number)}`
+                      }
+                    />
                   </span>
                 </div>
               </Stats>
@@ -106,7 +116,12 @@ const AnalyticsVolumeDayData = (props: Props) => {
                     />
                   </Mana>
                   <span className="stats-usd">
-                    ${formatAnalyticsVolume(data.creatorsEarningsUSD)}
+                    <CountUp
+                      end={data.creatorsEarningsUSD}
+                      formattingFn={number =>
+                        `$${formatAnalyticsVolume(number)}`
+                      }
+                    />
                   </span>
                 </div>
               </Stats>
@@ -122,7 +137,12 @@ const AnalyticsVolumeDayData = (props: Props) => {
                     />
                   </Mana>
                   <span className="stats-usd">
-                    ${formatAnalyticsVolume(data.daoEarningsUSD)}
+                    <CountUp
+                      end={data.daoEarningsUSD}
+                      formattingFn={number =>
+                        `$${formatAnalyticsVolume(number)}`
+                      }
+                    />
                   </span>
                 </div>
               </Stats>
