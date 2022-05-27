@@ -343,7 +343,8 @@
     "confirm": {
       "title": "请确认",
       "line_one": "您将要列出{amount}待售的{name}。",
-      "line_two": "请重新输入价格以确认："
+      "line_two": "请重新输入价格以确认：",
+      "warning": "警告：此价格远低于市场价值"
     }
   },
   "buy_page": {
