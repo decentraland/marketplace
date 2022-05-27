@@ -125,6 +125,19 @@
     "size": "Tamaño"
   },
   "home_page": {
+    "analytics": {
+      "volume": {
+        "title": "Volumen del Marketplace",
+        "subtitle": "Incluye tierras, wearables, emotes and nombres",
+        "total_sales": "Ventas totales",
+        "total_volume": "Volumen total",
+        "creators_earnings": "Ganancias de creadores",
+        "dao_revenue": "Ganancias de la DAO",
+        "seven_days": "7 días",
+        "thirty_days": "30 días",
+        "all": "Todo"
+      }
+    },
     "title": "Mercado de Decentraland",
     "subtitle": "Bienvenido al mercado virtual de Decentraland, donde encontrarás los mejores ítems virtuales.",
     "get_started": "Comienza a navegar",
