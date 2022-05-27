@@ -134,6 +134,7 @@
     "home_ens": "名称"
   },
   "collection_page": {
+    "no_collection": "没有收藏",
     "unlist_from_market": "取消销售",
     "list_on_market": "待售",
     "edit_in_builder": "在构建器中编辑",

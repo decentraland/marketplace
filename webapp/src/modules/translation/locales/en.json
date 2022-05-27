@@ -136,6 +136,7 @@
     "home_ens": "Names"
   },
   "collection_page": {
+    "no_collection": "No Collection",
     "unlist_from_market": "Unlist from market",
     "list_on_market": "List on market",
     "edit_in_builder": "Edit in builder",
