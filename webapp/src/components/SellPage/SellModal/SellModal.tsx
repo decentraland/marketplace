@@ -181,7 +181,6 @@ const SellModal = (props: Props) => {
             {showPriceBelowMarketValueWarning(nft, parseMANANumber(price)) && (
               <>
                 <br />
-                <br />
                 <p className="danger-text">
                   <T id="sell_page.confirm.warning" />
                 </p>
