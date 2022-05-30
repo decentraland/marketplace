@@ -134,6 +134,7 @@
     "home_ens": "Nombres"
   },
   "collection_page": {
+    "no_collection": "No Collection",
     "unlist_from_market": "Cancelar venta",
     "list_on_market": "Poner en venta",
     "edit_in_builder": "Editar en el builder",
