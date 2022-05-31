@@ -127,6 +127,19 @@
     "size": "Size"
   },
   "home_page": {
+    "analytics": {
+      "volume": {
+        "title": "Marketplace Volume",
+        "subtitle": "Includes land, wearables, emotes and names",
+        "total_sales": "Total sales",
+        "total_volume": "Total volume",
+        "creators_earnings": "creators earnings",
+        "dao_revenue": "dao revenue",
+        "seven_days": "7 DAYS",
+        "thirty_days": "30 DAYS",
+        "all": "all"
+      }
+    },
     "title": "Decentraland Marketplace",
     "subtitle": "Welcome to the virtual world's one-stop-shop for the very best digital assets.",
     "get_started": "Start Browsing",

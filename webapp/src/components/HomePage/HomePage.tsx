@@ -12,6 +12,7 @@ import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
+import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
 import { Slideshow } from './Slideshow'
 import { Props } from './HomePage.types'
 import './HomePage.css'
@@ -100,6 +101,7 @@ const HomePage = (props: Props) => {
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.OVERVIEW} />
       <Page className="HomePage">
+        <AnalyticsVolumeDayData />
         {views.map(view => (
           <Slideshow
             key={view}
