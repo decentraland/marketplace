@@ -1,5 +1,5 @@
 specVersion: 0.0.2
-description: Decentraland's Marketplace
+description: Decentraland's Marketplace subgraph
 repository: https://github.com/decentraland/decentraland
 schema:
   file: ./schema.graphql
@@ -16,7 +16,7 @@ dataSources:
       startBlock: {{startBlock:LANDRegistry}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/handlers/parcel.ts
       entities:
@@ -45,7 +45,7 @@ dataSources:
       startBlock: {{startBlock:EstateRegistry}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/handlers/estate.ts
       entities:
@@ -79,7 +79,7 @@ dataSources:
   #     startBlock: {{startBlock:MANAToken}}
   #   mapping:
   #     kind: ethereum/events
-  #     apiVersion: 0.0.3
+  #     apiVersion: 0.0.4
   #     language: wasm/assemblyscript
   #     file: ./src/handlers/manaToken.ts
   #     entities:
@@ -107,7 +107,7 @@ dataSources:
       startBlock: {{startBlock:Marketplace}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/handlers/marketplace.ts
       entities:
@@ -136,7 +136,7 @@ dataSources:
       startBlock: {{startBlock:DCLRegistrar}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/handlers/ens.ts
       entities:
@@ -160,7 +160,7 @@ dataSources:
       startBlock: {{startBlock:ERC721Bid}}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/handlers/bid.ts
       entities:
@@ -188,7 +188,7 @@ templates:
       abi: ERC721
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.3
+      apiVersion: 0.0.4
       language: wasm/assemblyscript
       file: ./src/handlers/nft.ts
       entities:
