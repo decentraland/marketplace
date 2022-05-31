@@ -21,7 +21,8 @@ import { AssetType } from '../asset/types'
 import {
   BUY_ITEM_SUCCESS,
   fetchItemRequest,
-  fetchItemsRequest
+  fetchItemsRequest,
+  fetchTrendingItemsRequest
 } from '../item/actions'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
@@ -189,6 +190,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       break
     case Section.ON_SALE:
       yield handleFetchOnSale(address, options.view!)
+      break
+    case Section.WEARABLES_TRENDING:
+      yield put(fetchTrendingItemsRequest())
       break
     case Section.SALES:
       yield spawn(handleFetchSales, address, page)
