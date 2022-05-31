@@ -27,7 +27,10 @@ export const getContractAddress = createSelector<
   RootState,
   ReturnType<typeof ItemDetailMatchSelector>,
   string | null
->(ItemDetailMatchSelector, match => match?.params.contractAddress || null)
+>(
+  ItemDetailMatchSelector,
+  match => match?.params.contractAddress.toLowerCase() || null
+)
 
 export const getTokenId = createSelector<
   RootState,
