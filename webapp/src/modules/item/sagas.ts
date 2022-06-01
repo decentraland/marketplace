@@ -17,11 +17,16 @@ import {
   fetchItemFailure,
   FetchItemRequestAction,
   fetchItemSuccess,
-  FETCH_ITEM_REQUEST
+  FETCH_ITEM_REQUEST,
+  FETCH_TRENDING_ITEMS_REQUEST,
+  FetchTrendingItemsRequestAction,
+  fetchTrendingItemsSuccess,
+  fetchTrendingItemsFailure
 } from './actions'
 
 export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
+  yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
 }
@@ -37,6 +42,21 @@ function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
     yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
   } catch (error) {
     yield put(fetchItemsFailure(error.message, action.payload))
+  }
+}
+
+function* handleFetchTrendingItemsRequest(
+  action: FetchTrendingItemsRequestAction
+) {
+  const { size } = action.payload
+  try {
+    const { data }: { data: Item[] } = yield call(
+      [itemAPI, 'fetchTrendings'],
+      size
+    )
+    yield put(fetchTrendingItemsSuccess(data))
+  } catch (error) {
+    yield put(fetchTrendingItemsFailure(error.message))
   }
 }
 

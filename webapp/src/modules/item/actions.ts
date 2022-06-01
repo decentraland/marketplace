@@ -28,6 +28,31 @@ export type FetchItemsRequestAction = ReturnType<typeof fetchItemsRequest>
 export type FetchItemsSuccessAction = ReturnType<typeof fetchItemsSuccess>
 export type FetchItemsFailureAction = ReturnType<typeof fetchItemsFailure>
 
+// Fetch trending Items
+
+export const FETCH_TRENDING_ITEMS_REQUEST = '[Request] Fetch Trending Items'
+export const FETCH_TRENDING_ITEMS_SUCCESS = '[Success] Fetch Trending Items'
+export const FETCH_TRENDING_ITEMS_FAILURE = '[Failure] Fetch Trending Items'
+
+export const fetchTrendingItemsRequest = (size?: number) =>
+  action(FETCH_TRENDING_ITEMS_REQUEST, { size })
+
+export const fetchTrendingItemsSuccess = (items: Item[]) =>
+  action(FETCH_TRENDING_ITEMS_SUCCESS, { items })
+
+export const fetchTrendingItemsFailure = (error: string) =>
+  action(FETCH_TRENDING_ITEMS_FAILURE, { error })
+
+export type FetchTrendingItemsRequestAction = ReturnType<
+  typeof fetchTrendingItemsRequest
+>
+export type FetchTrendingItemsSuccessAction = ReturnType<
+  typeof fetchTrendingItemsSuccess
+>
+export type FetchTrendingItemsFailureAction = ReturnType<
+  typeof fetchTrendingItemsFailure
+>
+
 // Buy Item
 export const BUY_ITEM_REQUEST = '[Request] Buy item'
 export const BUY_ITEM_SUCCESS = '[Success] Buy item'
