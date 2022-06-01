@@ -25,7 +25,9 @@ import {
   FETCH_TRENDING_ITEMS_SUCCESS,
   FetchTrendingItemsRequestAction,
   FetchTrendingItemsSuccessAction,
-  FetchTrendingItemsFailureAction
+  FetchTrendingItemsFailureAction,
+  FETCH_TRENDING_ITEMS_REQUEST,
+  FETCH_TRENDING_ITEMS_FAILURE
 } from './actions'
 
 export type ItemState = {
@@ -62,6 +64,7 @@ export function itemReducer(
     case BUY_ITEM_REQUEST:
     case BUY_ITEM_SUCCESS:
     case FETCH_ITEMS_REQUEST:
+    case FETCH_TRENDING_ITEMS_REQUEST:
     case FETCH_ITEM_REQUEST: {
       return {
         ...state,
@@ -99,6 +102,7 @@ export function itemReducer(
 
     case BUY_ITEM_FAILURE:
     case FETCH_ITEMS_FAILURE:
+    case FETCH_TRENDING_ITEMS_FAILURE:
     case FETCH_ITEM_FAILURE: {
       const { error } = action.payload
       return {

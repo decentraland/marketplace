@@ -19,7 +19,7 @@ export type HomepageUIState = {
   [View.HOME_ENS]: string[]
 }
 
-const INITIAL_STATE: HomepageUIState = {
+export const INITIAL_STATE: HomepageUIState = {
   [View.HOME_TRENDING_ITEMS]: [],
   [View.HOME_NEW_ITEMS]: [],
   [View.HOME_SOLD_ITEMS]: [],

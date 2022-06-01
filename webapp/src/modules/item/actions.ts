@@ -37,8 +37,8 @@ export const FETCH_TRENDING_ITEMS_FAILURE = '[Failure] Fetch Trending Items'
 export const fetchTrendingItemsRequest = (size?: number) =>
   action(FETCH_TRENDING_ITEMS_REQUEST, { size })
 
-export const fetchTrendingItemsSuccess = (items: Item[], total: number) =>
-  action(FETCH_TRENDING_ITEMS_SUCCESS, { items, total })
+export const fetchTrendingItemsSuccess = (items: Item[]) =>
+  action(FETCH_TRENDING_ITEMS_SUCCESS, { items })
 
 export const fetchTrendingItemsFailure = (error: string) =>
   action(FETCH_TRENDING_ITEMS_FAILURE, { error })

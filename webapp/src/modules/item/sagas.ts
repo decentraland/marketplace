@@ -50,12 +50,11 @@ function* handleFetchTrendingItemsRequest(
 ) {
   const { size } = action.payload
   try {
-    const { data, total }: { data: Item[]; total: number } = yield call(
+    const { data }: { data: Item[] } = yield call(
       [itemAPI, 'fetchTrendings'],
       size
     )
-
-    yield put(fetchTrendingItemsSuccess(data, total))
+    yield put(fetchTrendingItemsSuccess(data))
   } catch (error) {
     yield put(fetchTrendingItemsFailure(error.message))
   }

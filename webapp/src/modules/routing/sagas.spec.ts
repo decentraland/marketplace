@@ -3,14 +3,16 @@ import { getLocation, push } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { AssetType } from '../asset/types'
+import { fetchTrendingItemsRequest } from '../item/actions'
 import { WearableGender } from '../nft/wearable/types'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
-import { clearFilters } from './actions'
+import { Section } from '../vendor/decentraland'
 import {
-  fetchAssetsFromRoute,
-  routingSaga
-} from './sagas'
+  clearFilters,
+  fetchAssetsFromRoute as FetchAssetsFromRouteAction
+} from './actions'
+import { fetchAssetsFromRoute, routingSaga } from './sagas'
 import { getCurrentBrowseOptions } from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
@@ -63,6 +65,22 @@ describe('when handling the clear filters request action', () => {
       ])
       .put(push(buildBrowseURL(pathname, browseOptionsWithoutFilters)))
       .dispatch(clearFilters())
+      .run({ silenceTimeout: true })
+  })
+})
+
+describe('when handling the fetchAssetsFromRoute request action', () => {
+  it('should fetch trending items when providing the WEARABLES_TRENDING section', () => {
+    const browseOptions: BrowseOptions = {
+      address: '0x...',
+      vendor: VendorName.DECENTRALAND,
+      section: Section.WEARABLES_TRENDING
+    } as BrowseOptions
+
+    return expectSaga(routingSaga)
+      .provide([[select(getCurrentBrowseOptions), browseOptions]])
+      .put(fetchTrendingItemsRequest())
+      .dispatch(FetchAssetsFromRouteAction(browseOptions))
       .run({ silenceTimeout: true })
   })
 })
