@@ -1,8 +1,6 @@
-import { Address } from 'web3x/address'
-import { ABICoder } from 'web3x/contract/abi-coder'
 import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
+import MarketplaceAdapter from '../../../contracts/MarketplaceAdapter.json'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT } from '../../nft/types'
 import { TokenConverter } from '../TokenConverter'
@@ -10,6 +8,7 @@ import { MarketplacePrice } from '../MarketplacePrice'
 import { getContractNames, VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
 import { getContract } from '../../contract/utils'
+import { utils } from 'ethers'
 
 export class OrderService
   implements OrderServiceInterface<VendorName.KNOWN_ORIGIN> {
@@ -41,13 +40,9 @@ export class OrderService
     const contractNames = getContractNames()
 
     // Addresses
-    const assetMarketAddress: Address = Address.fromString(
-      order.marketplaceAddress
-    )
-    const manaTokenAddress = Address.fromString(
-      getContract({ name: contractNames.MANA }).address
-    )
-    const from = Address.fromString(wallet.address)
+    const assetMarketAddress = order.marketplaceAddress
+    const manaTokenAddress = getContract({ name: contractNames.MANA }).address
+    const from = wallet.address
 
     // Data
     const calldata = this.getCallData(wallet.address, nft)
@@ -63,7 +58,7 @@ export class OrderService
       MarketplaceAdapter,
       getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address
     )
-    return marketplaceAdapter.methods
+    return marketplaceAdapter
       .buy(
         assetMarketAddress,
         calldata,
@@ -84,17 +79,8 @@ export class OrderService
   }
 
   private getCallData(to: string, nft: NFT<VendorName.KNOWN_ORIGIN>) {
-    const abiCoder = new ABICoder()
-    return abiCoder.encodeFunctionCall(
-      {
-        name: 'purchaseTo',
-        type: 'function',
-        inputs: [
-          { type: 'address', name: '_to' },
-          { type: 'uint256', name: '_editionNumber' }
-        ]
-      },
-      [to, nft.tokenId]
-    )
+    const abiCoder = utils.defaultAbiCoder
+    // purchaseTo
+    return abiCoder.encode(['address', 'uint256'], [to, nft.tokenId])
   }
 }

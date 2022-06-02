@@ -1,4 +1,4 @@
-import { toBN } from 'web3x/utils'
+import { BigNumber } from 'ethers'
 
 /**
  * Checks against the min value of costless sales
@@ -6,7 +6,7 @@ import { toBN } from 'web3x/utils'
 export function isPriceTooLow(price: string) {
   const minSaleValue = getMinSaleValueInWei()
   if (!isNaN(parseInt(price, 10)) && minSaleValue) {
-    return toBN(price).lt(toBN(minSaleValue))
+    return BigNumber.from(price).lt(minSaleValue)
   }
   return false
 }

@@ -1,4 +1,12 @@
 import { select, put, race, take, call } from 'redux-saga/effects'
+import { AuthIdentity } from '@dcl/crypto'
+import {
+  connectWalletRequest,
+  CONNECT_WALLET_SUCCESS,
+  CONNECT_WALLET_FAILURE,
+  ConnectWalletSuccessAction
+} from 'decentraland-dapps/dist/modules/wallet/actions'
+import { getAddress } from '../wallet/selectors'
 import { getCurrentIdentity } from './selectors'
 import {
   generateIdentityRequest,
@@ -6,14 +14,6 @@ import {
   GENERATE_IDENTITY_FAILURE,
   GENERATE_IDENTITY_SUCCESS
 } from './actions'
-import { getAddress } from '../wallet/selectors'
-import {
-  connectWalletRequest,
-  CONNECT_WALLET_SUCCESS,
-  CONNECT_WALLET_FAILURE,
-  ConnectWalletSuccessAction
-} from 'decentraland-dapps/dist/modules/wallet/actions'
-import { AuthIdentity } from 'dcl-crypto'
 
 const ONE_MONTH_IN_MINUTES = 31 * 24 * 60
 
