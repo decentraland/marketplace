@@ -1,9 +1,8 @@
 import BN from 'bn.js'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
-import { Address } from 'web3x/address'
-import { toWei } from 'web3x/utils'
+import { formatEther } from 'ethers/lib/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { ERC721 } from '../../../contracts/ERC721'
+import ERC721 from '../../../contracts/ERC721.json'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
@@ -112,12 +111,12 @@ export class NFTService
     if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(wallet.address)
-    const to = Address.fromString(toAddress)
+    const from = wallet.address
+    const to = toAddress
 
     const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
 
-    return erc721.methods
+    return erc721
       .transferFrom(from, to, nft.tokenId)
       .send({ from })
       .getTxHash()
@@ -186,7 +185,7 @@ export class NFTService
 
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
-    return toWei(mana.toString(), 'ether')
+    return formatEther(mana.toString())
   }
 
   private isValid(asset: MakersPlaceAsset) {

@@ -1,6 +1,5 @@
-import { Address } from 'web3x/address'
 import { config } from '../../config'
-import { Converter } from '../../contracts/Converter'
+import Converter from '../../contracts/Converter.json'
 import { ContractFactory } from '../contract/ContractFactory'
 
 type Ticker = {
@@ -83,8 +82,6 @@ export class TokenConverter {
       this.converterAddress
     )
 
-    return converter.methods
-      .calcNeededTokensForEther(Address.fromString(tokenAddress), ethAmount)
-      .call()
+    return converter.calcNeededTokensForEther(tokenAddress, ethAmount)
   }
 }

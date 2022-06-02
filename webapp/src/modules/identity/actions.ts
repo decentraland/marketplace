@@ -1,5 +1,5 @@
 import { action } from 'typesafe-actions'
-import { AuthIdentity } from 'dcl-crypto'
+import { AuthIdentity } from '@dcl/crypto'
 
 // Generate identity
 

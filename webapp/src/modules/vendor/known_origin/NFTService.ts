@@ -1,9 +1,8 @@
-import BN from 'bn.js'
-import { Address } from 'web3x/address'
-import { toWei } from 'web3x/utils'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { BigNumber } from 'ethers'
+import { formatEther } from 'ethers/lib/utils'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
-import { ERC721 } from '../../../contracts/ERC721'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import ERC721 from '../../../contracts/ERC721.json'
 import { ContractFactory } from '../../contract/ContractFactory'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
@@ -29,12 +28,12 @@ export class NFTService
   implements NFTServiceInterface<VendorName.KNOWN_ORIGIN> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
-  private oneEthInWei: BN
+  private oneEthInWei: BigNumber
 
   constructor() {
     this.tokenConverter = new TokenConverter()
     this.marketplacePrice = new MarketplacePrice()
-    this.oneEthInWei = new BN('1000000000000000000') // 10 ** 18
+    this.oneEthInWei = BigNumber.from('1000000000000000000') // 10 ** 18
   }
 
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
@@ -113,12 +112,12 @@ export class NFTService
     if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(wallet.address)
-    const to = Address.fromString(toAddress)
+    const from = wallet.address
+    const to = toAddress
 
     const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
 
-    return erc721.methods
+    return erc721
       .transferFrom(from, to, nft.tokenId)
       .send({ from })
       .getTxHash()
@@ -164,7 +163,7 @@ export class NFTService
     oneEthInMANA: string
   ): Order & { ethPrice: string } {
     const totalWei = this.marketplacePrice.addFee(edition.priceInWei)
-    const weiPrice = new BN(totalWei).mul(new BN(oneEthInMANA))
+    const weiPrice = BigNumber.from(totalWei).mul(oneEthInMANA)
     const price = weiPrice.div(this.oneEthInWei)
 
     const contractNames = getContractNames()
@@ -183,7 +182,7 @@ export class NFTService
       marketplaceAddress,
       owner: edition.artistAccount,
       buyer: null,
-      price: price.toString(10),
+      price: price.toString(),
       ethPrice: edition.priceInWei.toString(),
       status: ListingStatus.OPEN,
       createdAt: +edition.createdTimestamp,
@@ -208,7 +207,7 @@ export class NFTService
 
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
-    return toWei(mana.toString(), 'ether')
+    return formatEther(mana.toString())
   }
 
   private getOwner(fragment: Fragment): string {

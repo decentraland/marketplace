@@ -1,16 +1,15 @@
-import { Address } from 'web3x/address'
-import { ABICoder } from 'web3x/contract/abi-coder'
+import { utils } from 'ethers'
 import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
+import MarketplaceAdapter from '../../../contracts/MarketplaceAdapter.json'
 import { ContractFactory } from '../../contract/ContractFactory'
+import { getContract } from '../../contract/utils'
 import { NFT } from '../../nft/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { getContractNames, VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
 import { ContractService } from './ContractService'
-import { getContract } from '../../contract/utils'
 
 export class OrderService
   implements OrderServiceInterface<VendorName.SUPER_RARE> {
@@ -43,14 +42,10 @@ export class OrderService
     const contractNames = getContractNames()
 
     // Addresses
-    const assetContractAddress = Address.fromString(nft.contractAddress)
-    const assetMarketAddress: Address = Address.fromString(
-      order.marketplaceAddress
-    )
-    const manaTokenAddress = Address.fromString(
-      getContract({ name: contractNames.MANA }).address
-    )
-    const from = Address.fromString(wallet.address)
+    const assetContractAddress = nft.contractAddress
+    const assetMarketAddress = order.marketplaceAddress
+    const manaTokenAddress = getContract({ name: contractNames.MANA }).address
+    const from = wallet.address
 
     // Data
     const calldata = this.getCallData(nft)
@@ -97,28 +92,14 @@ export class OrderService
     const superRareV2 = getContract({
       name: contractNames.SUPER_RARE_V2
     })
-    const abiCoder = new ABICoder()
+    const abiCoder = utils.defaultAbiCoder
 
     switch (nft.contractAddress) {
       case superRare.address:
-        return abiCoder.encodeFunctionCall(
-          {
-            name: 'buy',
-            type: 'function',
-            inputs: [{ type: 'uint256', name: 'TOKEN_ID' }]
-          },
-          [nft.tokenId]
-        )
+        return abiCoder.encode(['uint256'], [nft.tokenId])
       case superRareV2.address:
-        return abiCoder.encodeFunctionCall(
-          {
-            name: 'buy',
-            type: 'function',
-            inputs: [
-              { type: 'address', name: 'ADDRESS_CONTRACT' },
-              { type: 'uint256', name: 'TOKEN_ID' }
-            ]
-          },
+        return abiCoder.encode(
+          ['address', 'uint256'],
           [nft.contractAddress, nft.tokenId]
         )
       default:

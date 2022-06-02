@@ -1,15 +1,14 @@
+import { formatEther } from 'ethers/lib/utils'
 import { MAXIMUM_FRACTION_DIGITS } from 'decentraland-dapps/dist/lib/mana'
-import { fromWei, unitMap } from 'web3x/utils'
 
 /**
  * Format wei to a supported unit ('ether' by default) and localizes it with the desired fraction digits (2 by default)
  */
 export function formatWeiMANA(
   wei: string,
-  maximumFractionDigits: number = MAXIMUM_FRACTION_DIGITS,
-  unit: keyof typeof unitMap = 'ether'
+  maximumFractionDigits: number = MAXIMUM_FRACTION_DIGITS
 ): string {
-  return Number(fromWei(wei, unit)).toLocaleString(undefined, {
+  return Number(formatEther(wei)).toLocaleString(undefined, {
     maximumFractionDigits
   })
 }
