@@ -54,37 +54,31 @@ export class BidService
           ContractName.Bid,
           nft.chainId
         )
-        return sendTransaction(contract, bids => {
-          if (fingerprint) {
-            return bids['placeBid(address,uint256,uint256,uint256,bytes)'](
-              nft.contractAddress,
-              nft.tokenId,
-              priceInWei,
-              expiresIn,
-              fingerprint
-            )
-          } else {
-            return bids['placeBid(address,uint256,uint256,uint256)'](
-              nft.contractAddress,
-              nft.tokenId,
-              priceInWei,
-              expiresIn
-            )
-          }
-        })
+        const method = fingerprint
+          ? 'placeBid(address,uint256,uint256,uint256,bytes)'
+          : 'placeBid(address,uint256,uint256,uint256)'
+        return sendTransaction(
+          contract,
+          method,
+          nft.contractAddress,
+          nft.tokenId,
+          priceInWei,
+          expiresIn,
+          fingerprint
+        )
       }
       case Network.MATIC: {
         const contract: ContractData = getContract(
           ContractName.BidV2,
           nft.chainId
         )
-        return sendTransaction(contract, bids =>
-          bids['placeBid(address,uint256,uint256,uint256)'](
-            nft.contractAddress,
-            nft.tokenId,
-            priceInWei,
-            expiresIn
-          )
+        return sendTransaction(
+          contract,
+          'placeBid(address,uint256,uint256,uint256)',
+          nft.contractAddress,
+          nft.tokenId,
+          priceInWei,
+          expiresIn
         )
       }
     }
@@ -97,13 +91,13 @@ export class BidService
 
     const contract: ContractData = getERC721ContractData(bid)
 
-    return sendTransaction(contract, erc721 =>
-      erc721['safeTransferFrom(address,address,uint256,bytes)'](
-        wallet.address,
-        bid.bidAddress,
-        bid.tokenId,
-        bid.blockchainId
-      )
+    return sendTransaction(
+      contract,
+      'safeTransferFrom(address,address,uint256,bytes)',
+      wallet.address,
+      bid.bidAddress,
+      bid.tokenId,
+      bid.blockchainId
     )
   }
 
@@ -116,8 +110,7 @@ export class BidService
       bid.network === Network.ETHEREUM
         ? getContract(ContractName.Bid, bid.chainId)
         : getContract(ContractName.BidV2, bid.chainId)
-    return sendTransaction(contract, bids =>
-      bids['cancelBid(address,uint256)'](bid.contractAddress, bid.tokenId)
+    return sendTransaction(contract,'cancelBid(address,uint256)',bid.contractAddress, bid.tokenId)
     )
   }
 }
