@@ -130,9 +130,13 @@
         "title": "Volumen del Marketplace",
         "subtitle": "Incluye tierras, wearables, emotes and nombres",
         "total_sales": "Ventas totales",
+        "total_sales_tooltip": "Número de ventas, incluidos los mercados primario y secundario",
         "total_volume": "Volumen total",
+        "total_volume_tooltip": "Volume of sales in MANA",
         "creators_earnings": "Ganancias de creadores",
+        "creators_earnings_tooltip": "Los creadores de wearables ganan el 97,5% de las ventas primarias y el 2,5% de cada venta secundaria",
         "dao_revenue": "Ganancias de la DAO",
+        "dao_revenue_tooltip": "Representado por el 2,5% de las ventas primarias de terrenos y wearables, y la tarifa de publicación del wearable",
         "seven_days": "7 días",
         "thirty_days": "30 días",
         "all": "Todo"

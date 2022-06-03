@@ -16,6 +16,7 @@
 .AnalyticsVolumeDayData .stats-container {
   display: flex;
   min-width: 260px;
+  align-items: center;
 }
 
 .AnalyticsVolumeDayData .stats-container:first-of-type {
@@ -86,4 +87,19 @@
 
 .AnalyticsVolumeDayData .dcl.stats .ui.header.sub {
   margin-bottom: 4px;
+}
+
+.AnalyticsVolumeDayData .info-logo {
+  cursor: pointer;
+  margin: 3px;
+  width: 14px;
+  height: 14px;
+  background-image: url('../../images/info.svg');
+  margin-bottom: 6px;
+  margin-left: 6px;
+}
+
+.AnalyticsVolumeDayData .stat-title-container {
+  display: flex;
+  align-items: end;
 }

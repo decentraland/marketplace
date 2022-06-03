@@ -130,9 +130,13 @@
         "title": "交易量市场",
         "subtitle": "包括土地、可穿戴设备、表情和名称",
         "total_sales": "总销售额",
+        "total_sales_tooltip": "销售数量，包括一级和二级市场",
         "total_volume": "总体积",
+        "total_volume_tooltip": "MANA 销售额",
         "creators_earnings": "创作者收益",
+        "creators_earnings_tooltip": "可穿戴设备创作者获得 97.5% 的初级销售额和 2.5% 的二级销售额",
         "dao_revenue": "道收入",
+        "dao_revenue_tooltip": "以2.5%的土地和可穿戴设备初级销售额和可穿戴设备的出版费为代表",
         "seven_days": "7天",
         "thirty_days": "30天",
         "all": "全部"
