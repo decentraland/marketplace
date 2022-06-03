@@ -17,7 +17,6 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { getContractNames } from '../vendor'
 import { contracts, getContract } from '../contract/utils'
-import { isPartner } from '../vendor/utils'
 import { TRANSACTIONS_API_URL } from './utils'
 
 const baseWalletSaga = createWalletSaga({
@@ -56,10 +55,6 @@ function* handleWallet(
   const legacyMarketplaceMatic = getContract({
     name: contractNames.LEGACY_MARKETPLACE,
     network: Network.MATIC
-  })
-
-  const marketplaceAdapter = getContract({
-    name: contractNames.MARKETPLACE_ADAPTER
   })
 
   const bidsEthereum = getContract({
@@ -118,15 +113,6 @@ function* handleWallet(
 
   authorizations.push({
     address,
-    authorizedAddress: marketplaceAdapter.address,
-    contractAddress: manaEthereum.address,
-    contractName: ContractName.MANAToken,
-    chainId: manaEthereum.chainId,
-    type: AuthorizationType.ALLOWANCE
-  })
-
-  authorizations.push({
-    address,
     authorizedAddress: bidsEthereum.address,
     contractAddress: manaEthereum.address,
     contractName: ContractName.MANAToken,
@@ -153,18 +139,11 @@ function* handleWallet(
   })
 
   for (const contract of contracts.filter(c => c.category !== null)) {
+    // if the contract is a partner we might need to use a different contract name
     const marketplace = getContract({
-      name:
-        contract.vendor && isPartner(contract.vendor)
-          ? contractNames.MARKETPLACE_ADAPTER
-          : contractNames.MARKETPLACE,
+      name: contractNames.MARKETPLACE,
       network: contract.network
-    })!
-
-    // Skip SuperRare contract since it's not ERC721 compliant (lacks approveForAll)
-    if (contract.name === contractNames.SUPER_RARE) {
-      continue
-    }
+    })
 
     authorizations.push({
       address,

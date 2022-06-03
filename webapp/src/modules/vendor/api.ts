@@ -8,11 +8,5 @@ export function getMaxQuerySize(vendor: VendorName) {
   switch (vendor) {
     case VendorName.DECENTRALAND:
       return MAX_QUERY_SIZE
-    case VendorName.SUPER_RARE:
-      return MAX_QUERY_SIZE
-    case VendorName.MAKERS_PLACE:
-      return MAX_QUERY_SIZE
-    case VendorName.KNOWN_ORIGIN:
-      return MAX_QUERY_SIZE
   }
 }
