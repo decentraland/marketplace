@@ -1,9 +1,8 @@
 import { utils } from 'ethers'
 import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import MarketplaceAdapter from '../../../contracts/MarketplaceAdapter.json'
-import { ContractFactory } from '../../contract/ContractFactory'
-import { getContract } from '../../contract/utils'
+import { MarketplaceAdapter__factory } from '../../../contracts'
+import { getContract, getCurrentSigner } from '../../contract/utils'
 import { NFT } from '../../nft/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
@@ -58,24 +57,25 @@ export class OrderService
     const maxPrice = this.marketplacePrice.addMaxSlippage(manaPrice)
 
     // Contract
-    const marketplaceAdapter = await ContractFactory.build(
-      MarketplaceAdapter,
-      getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address
+    const marketplaceAdapter = MarketplaceAdapter__factory.connect(
+      getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address,
+      await getCurrentSigner()
     )
-    return marketplaceAdapter.methods
-      .buy(
-        assetContractAddress,
-        nft.tokenId,
-        assetMarketAddress,
-        calldata,
-        (order as Order & { ethPrice: string }).ethPrice!,
-        manaTokenAddress,
-        maxPrice,
-        transferType,
-        from
-      )
-      .send({ from })
-      .getTxHash()
+
+    const transaction = await marketplaceAdapter[
+      'buy(address,uint256,address,bytes,uint256,address,uint256,uint8,address)'
+    ](
+      assetContractAddress,
+      nft.tokenId,
+      assetMarketAddress,
+      calldata,
+      (order as Order & { ethPrice: string }).ethPrice!,
+      manaTokenAddress,
+      maxPrice,
+      transferType,
+      from
+    )
+    return transaction.hash
   }
 
   cancel(): any {

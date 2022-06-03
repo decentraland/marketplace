@@ -1,6 +1,10 @@
 import { utils } from 'ethers'
 import { ChainId, ListingStatus, Order } from '@dcl/schemas'
-import { ContractData } from 'decentraland-transactions'
+import {
+  ContractData,
+  ContractName,
+  getContract
+} from 'decentraland-transactions'
 import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
 import * as orderAPI from './order/api'
 import { NFT } from '../../nft/types'
@@ -136,15 +140,9 @@ describe("Decentraland's OrderService", () => {
 
         it("should have called send transaction with the contract's createOrder order operation", async () => {
           await orderService.execute(null, nft, order, fingerprint)
-          expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
-
-          const secondParameter = (walletUtils.sendTransaction as jest.Mock)
-            .mock.calls[0][1]
-          const parametrizedContractExecutionResult = secondParameter(
-            marketplaceContract
-          )
-          expect(parametrizedContractExecutionResult).toBe('safeExecuteOrder')
-          expect(marketplaceContract.safeExecuteOrder).toHaveBeenCalledWith(
+          expect(walletUtils.sendTransaction).toHaveBeenCalledWith(
+            getContract(ContractName.Marketplace, order.chainId),
+            'safeExecuteOrder',
             nft.contractAddress,
             nft.tokenId,
             order.price,
@@ -198,15 +196,9 @@ describe("Decentraland's OrderService", () => {
 
         it("should have called send transaction with the contract's createOrder order operation", async () => {
           await orderService.execute(null, nft, order, fingerprint)
-          expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
-
-          const secondParameter = (walletUtils.sendTransaction as jest.Mock)
-            .mock.calls[0][1]
-          const parametrizedContractExecutionResult = secondParameter(
-            marketplaceContract
-          )
-          expect(parametrizedContractExecutionResult).toBe('executeOrder')
-          expect(marketplaceContract.executeOrder).toHaveBeenCalledWith(
+          expect(walletUtils.sendTransaction).toHaveBeenCalledWith(
+            getContract(ContractName.Marketplace, order.chainId),
+            'executeOrder',
             nft.contractAddress,
             nft.tokenId,
             order.price
@@ -273,15 +265,9 @@ describe("Decentraland's OrderService", () => {
 
       it("should have called send transaction with the contract's createOrder order operation", async () => {
         await orderService.create(null, nft, priceInEther, expiresAt)
-        expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
-
-        const secondParameter = (walletUtils.sendTransaction as jest.Mock).mock
-          .calls[0][1]
-        const parametrizedContractExecutionResult = secondParameter(
-          marketplaceContract
-        )
-        expect(parametrizedContractExecutionResult).toBe('createOrder')
-        expect(marketplaceContract.createOrder).toHaveBeenCalledWith(
+        expect(walletUtils.sendTransaction).toHaveBeenCalledWith(
+          getContract(ContractName.MarketplaceV2, nft.chainId),
+          'createOrder',
           nft.contractAddress,
           nft.tokenId,
           priceInWei,
@@ -354,15 +340,9 @@ describe("Decentraland's OrderService", () => {
 
       it("should have called send transaction with the contract's cancel order operation", async () => {
         await orderService.cancel(null, order)
-        expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
-
-        const secondParameter = (walletUtils.sendTransaction as jest.Mock).mock
-          .calls[0][1]
-        const parametrizedContractExecutionResult = secondParameter(
-          marketplaceContract
-        )
-        expect(parametrizedContractExecutionResult).toBe('cancelOrder')
-        expect(marketplaceContract.cancelOrder).toHaveBeenCalledWith(
+        expect(walletUtils.sendTransaction).toHaveBeenCalledWith(
+          getContract(ContractName.Marketplace, order.chainId),
+          'cancelOrder',
           order.contractAddress,
           order.tokenId
         )
