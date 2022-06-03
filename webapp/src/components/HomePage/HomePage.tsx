@@ -37,6 +37,13 @@ const HomePage = (props: Props) => {
     []
   )
 
+  const sectionsSubtitles: Partial<Record<View, string>> = useMemo(
+    () => ({
+      [View.HOME_TRENDING_ITEMS]: t('home_page.home_trending_items_subtitle')
+    }),
+    []
+  )
+
   const assetTypes: Partial<Record<View, AssetType>> = useMemo(
     () => ({
       [View.HOME_TRENDING_ITEMS]: AssetType.ITEM,
@@ -108,6 +115,7 @@ const HomePage = (props: Props) => {
           <Slideshow
             key={view}
             title={t(`home_page.${view}`)}
+            subtitle={sectionsSubtitles[view]}
             assets={homepage[view]}
             isLoading={homepageLoading[view]}
             onViewAll={() => handleViewAll(view)}

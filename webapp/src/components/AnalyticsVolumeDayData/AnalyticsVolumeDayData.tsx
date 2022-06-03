@@ -30,7 +30,10 @@ const AnalyticsVolumeDayData = (props: Props) => {
     <div className="AnalyticsVolumeDayData">
       <HeaderMenu>
         <HeaderMenu.Left>
-          <Header>{t('home_page.analytics.volume.title')}</Header>
+          <div>
+            <Header>{t('home_page.analytics.volume.title')}</Header>
+            <Header sub>{t('home_page.analytics.volume.subtitle')}</Header>
+          </div>
         </HeaderMenu.Left>
         <HeaderMenu.Right>
           <Button
@@ -85,7 +88,7 @@ const AnalyticsVolumeDayData = (props: Props) => {
               </Stats>
             </div>
             <div className="stats-container">
-              <Icon className="stat-icon" name="clone outline" />
+              <Icon className="stat-icon" name="chart line" />
               <Stats title={t('home_page.analytics.volume.total_volume')}>
                 <div className="stats">
                   <Mana>

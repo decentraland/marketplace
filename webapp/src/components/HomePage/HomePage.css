@@ -17,3 +17,16 @@
   margin-bottom: 24px;
   color: var(--secondary-text);
 }
+
+.HomePage .ui.header {
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: bold;
+}
+
+.HomePage .ui.sub.header {
+  font-size: 17px;
+  line-height: 26px;
+  margin-top: 6px;
+  text-transform: none;
+}
