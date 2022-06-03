@@ -1,14 +1,13 @@
+import { utils } from 'ethers'
 import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import MarketplaceAdapter from '../../../contracts/MarketplaceAdapter.json'
-import { ContractFactory } from '../../contract/ContractFactory'
+import { MarketplaceAdapter__factory } from '../../../contracts'
+import { getContract, getCurrentSigner } from '../../contract/utils'
 import { NFT } from '../../nft/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { getContractNames, VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
-import { getContract } from '../../contract/utils'
-import { utils } from 'ethers'
 
 export class OrderService
   implements OrderServiceInterface<VendorName.KNOWN_ORIGIN> {
@@ -42,7 +41,6 @@ export class OrderService
     // Addresses
     const assetMarketAddress = order.marketplaceAddress
     const manaTokenAddress = getContract({ name: contractNames.MANA }).address
-    const from = wallet.address
 
     // Data
     const calldata = this.getCallData(wallet.address, nft)
@@ -54,20 +52,22 @@ export class OrderService
     const maxPrice = this.marketplacePrice.addMaxSlippage(manaPrice)
 
     // Contract
-    const marketplaceAdapter = await ContractFactory.build(
-      MarketplaceAdapter,
-      getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address
+    const marketplaceAdapter = MarketplaceAdapter__factory.connect(
+      getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address,
+      await getCurrentSigner()
     )
-    return marketplaceAdapter
-      .buy(
-        assetMarketAddress,
-        calldata,
-        (order as Order & { ethPrice: string }).ethPrice!,
-        manaTokenAddress,
-        maxPrice
-      )
-      .send({ from })
-      .getTxHash()
+
+    const transaction = await marketplaceAdapter[
+      'buy(address,bytes,uint256,address,uint256)'
+    ](
+      assetMarketAddress,
+      calldata,
+      (order as Order & { ethPrice: string }).ethPrice!,
+      manaTokenAddress,
+      maxPrice
+    )
+
+    return transaction.hash
   }
 
   cancel(): any {

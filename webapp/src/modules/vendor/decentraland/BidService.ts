@@ -57,6 +57,7 @@ export class BidService
         const method = fingerprint
           ? 'placeBid(address,uint256,uint256,uint256,bytes)'
           : 'placeBid(address,uint256,uint256,uint256)'
+
         return sendTransaction(
           contract,
           method,
@@ -110,7 +111,11 @@ export class BidService
       bid.network === Network.ETHEREUM
         ? getContract(ContractName.Bid, bid.chainId)
         : getContract(ContractName.BidV2, bid.chainId)
-    return sendTransaction(contract,'cancelBid(address,uint256)',bid.contractAddress, bid.tokenId)
+    return sendTransaction(
+      contract,
+      'cancelBid(address,uint256)',
+      bid.contractAddress,
+      bid.tokenId
     )
   }
 }

@@ -12,6 +12,7 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { getERC721ContractData } from './utils'
 
 jest.mock('decentraland-dapps/dist/modules/wallet/utils')
 jest.mock('./nft/api')
@@ -250,21 +251,19 @@ describe("Decentraland's NFTService", () => {
           await nftService.transfer(wallet, anAddress, nft)
           expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalledWith(
             contract,
-            expect.any(Function)
+            'transferFrom',
+            wallet?.address,
+            anAddress,
+            nft.tokenId
           )
         })
 
         it("should have called send transaction with the contract's createOrder order operation", async () => {
           await nftService.transfer(wallet, anAddress, nft)
-          expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
 
-          const secondParameter = (walletUtils.sendTransaction as jest.Mock)
-            .mock.calls[0][1]
-          const parametrizedContractExecutionResult = secondParameter(
-            erc721Contract
-          )
-          expect(parametrizedContractExecutionResult).toBe('transferFrom')
-          expect(erc721Contract.transferFrom).toHaveBeenCalledWith(
+          expect(walletUtils.sendTransaction).toHaveBeenCalledWith(
+            getERC721ContractData(nft),
+            'transferFrom',
             wallet!.address,
             anAddress,
             nft.tokenId
@@ -314,21 +313,19 @@ describe("Decentraland's NFTService", () => {
           await nftService.transfer(wallet, anAddress, nft)
           expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalledWith(
             contract,
-            expect.any(Function)
+            'transferFrom',
+            wallet?.address,
+            anAddress,
+            nft.tokenId
           )
         })
 
         it("should have called send transaction with the contract's createOrder order operation", async () => {
           await nftService.transfer(wallet, anAddress, nft)
-          expect(walletUtils.sendTransaction as jest.Mock).toHaveBeenCalled()
 
-          const secondParameter = (walletUtils.sendTransaction as jest.Mock)
-            .mock.calls[0][1]
-          const parametrizedContractExecutionResult = secondParameter(
-            erc721Contract
-          )
-          expect(parametrizedContractExecutionResult).toBe('transferFrom')
-          expect(erc721Contract.transferFrom).toHaveBeenCalledWith(
+          expect(walletUtils.sendTransaction).toHaveBeenCalledWith(
+            getERC721ContractData(nft),
+            'transferFrom',
             wallet!.address,
             anAddress,
             nft.tokenId

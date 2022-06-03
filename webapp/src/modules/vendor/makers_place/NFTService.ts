@@ -2,8 +2,8 @@ import BN from 'bn.js'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
 import { formatEther } from 'ethers/lib/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import ERC721 from '../../../contracts/ERC721.json'
-import { ContractFactory } from '../../contract/ContractFactory'
+import { ERC721__factory } from '../../../contracts'
+import { getCurrentSigner } from '../../contract/utils'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -114,12 +114,13 @@ export class NFTService
     const from = wallet.address
     const to = toAddress
 
-    const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
+    const erc721 = ERC721__factory.connect(
+      nft.contractAddress,
+      await getCurrentSigner()
+    )
 
-    return erc721
-      .transferFrom(from, to, nft.tokenId)
-      .send({ from })
-      .getTxHash()
+    const transaction = await erc721.transferFrom(from, to, nft.tokenId)
+    return transaction.hash
   }
 
   toNFT(asset: MakersPlaceAsset): NFT<VendorName.MAKERS_PLACE> {

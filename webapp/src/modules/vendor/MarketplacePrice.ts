@@ -1,9 +1,9 @@
-import BN from 'bn.js'
+import { BigNumber } from 'ethers'
 import { config } from '../../config'
 
 export class MarketplacePrice {
-  public oneMillion: BN
-  public feePerMillion: BN
+  public oneMillion: BigNumber
+  public feePerMillion: BigNumber
 
   public maxPriceIncreasePercentage: number
 
@@ -24,14 +24,14 @@ export class MarketplacePrice {
       )
     }
 
-    this.feePerMillion = new BN(feePerMillion)
-    this.oneMillion = new BN('1000000')
+    this.feePerMillion = BigNumber.from(feePerMillion)
+    this.oneMillion = BigNumber.from('1000000')
 
     this.maxPriceIncreasePercentage = maxPriceIncreasePercentage
   }
 
   addFee(manaWeiAmount: string | number) {
-    const bnAmount = new BN(manaWeiAmount.toString())
+    const bnAmount = BigNumber.from(manaWeiAmount.toString())
 
     return bnAmount
       .add(bnAmount.mul(this.feePerMillion).div(this.oneMillion))
@@ -39,20 +39,9 @@ export class MarketplacePrice {
   }
 
   addMaxSlippage(manaWeiAmount: string | number) {
-    return new BN(manaWeiAmount).mul(new BN(110)).divRound(new BN(100)) // 10 percent increase
-  }
-
-  getPercentageIncrease(computedPrice: string, price: string) {
-    if (Number(price) <= 0) {
-      return 0
-    }
-
-    const percentage = new BN(computedPrice)
-      .mul(new BN(100))
-      .divRound(new BN(price))
-      .toNumber()
-
-    return percentage <= 100 ? 0 : percentage - 100
+    return BigNumber.from(manaWeiAmount)
+      .mul(110)
+      .div(100) // 10 percent increase
   }
 
   isAboveMaxIncreasePercentage(percentage: number) {

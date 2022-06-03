@@ -1,6 +1,6 @@
 import { config } from '../../config'
-import Converter from '../../contracts/Converter.json'
-import { ContractFactory } from '../contract/ContractFactory'
+import { Converter__factory } from '../../contracts'
+import { getCurrentSigner } from '../contract/utils'
 
 type Ticker = {
   converted_last: {
@@ -76,12 +76,18 @@ export class TokenConverter {
     return this.contractEthToToken(ethAmount, manaAddress)
   }
 
-  async contractEthToToken(ethAmount: string, tokenAddress: string) {
-    const converter = await ContractFactory.build(
-      Converter,
-      this.converterAddress
+  async contractEthToToken(
+    ethAmount: string,
+    tokenAddress: string
+  ): Promise<string> {
+    const converter = Converter__factory.connect(
+      this.converterAddress,
+      await getCurrentSigner()
     )
-
-    return converter.calcNeededTokensForEther(tokenAddress, ethAmount)
+    const tokens = await converter.calcNeededTokensForEther(
+      tokenAddress,
+      ethAmount
+    )
+    return tokens.toString()
   }
 }

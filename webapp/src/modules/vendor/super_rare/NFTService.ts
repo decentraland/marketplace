@@ -2,8 +2,8 @@ import { BigNumber } from 'ethers'
 import { formatEther } from 'ethers/lib/utils'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import ERC721 from '../../../contracts/ERC721.json'
-import { ContractFactory } from '../../contract/ContractFactory'
+import { ERC721__factory } from '../../../contracts'
+import { getCurrentSigner } from '../../contract/utils'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -125,7 +125,10 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
     const from = wallet.address
     const to = toAddress
 
-    const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
+    const erc721 = ERC721__factory.connect(
+      nft.contractAddress,
+      await getCurrentSigner()
+    )
     const transferType = new ContractService().getTransferType(
       nft.contractAddress
     )
@@ -133,15 +136,15 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
 
     switch (transferType) {
       case TransferType.TRANSFER:
-        transaction = erc721.methods.transfer(to, nft.tokenId)
+        transaction = await erc721.transfer(to, nft.tokenId)
         break
       case TransferType.SAFE_TRANSFER_FROM:
       default:
-        transaction = erc721.methods.transferFrom(from, to, nft.tokenId)
+        transaction = await erc721.transferFrom(from, to, nft.tokenId)
         break
     }
 
-    return transaction.send({ from }).getTxHash()
+    return transaction.hash
   }
 
   toNFT(asset: SuperRareAsset): NFT<VendorName.SUPER_RARE> {
