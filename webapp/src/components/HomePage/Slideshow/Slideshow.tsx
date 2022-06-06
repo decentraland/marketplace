@@ -29,8 +29,8 @@ const Slideshow = (props: Props) => {
 
   const renderNfts = useCallback(
     () =>
-      assetsToRender.map((asset, index) => (
-        <AssetCard key={index} asset={asset} />
+      assetsToRender.map((asset) => (
+        <AssetCard key={asset.id} asset={asset} />
       )),
     [assetsToRender]
   )
