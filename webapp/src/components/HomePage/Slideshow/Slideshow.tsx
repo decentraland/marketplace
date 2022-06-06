@@ -10,7 +10,7 @@ const INITIAL_PAGE = 1
 
 const Slideshow = (props: Props) => {
   const slideRef = useRef<HTMLDivElement>(null)
-  const { title, assets, isSubHeader, isLoading, onViewAll } = props
+  const { title, subtitle, assets, isSubHeader, isLoading, onViewAll } = props
   const [showArrows, setShowArrows] = useState(false)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [assetsToRender, setAssetsToRender] = useState(
@@ -64,7 +64,10 @@ const Slideshow = (props: Props) => {
     <div className="Slideshow" ref={slideRef} {...showArrowsHandlers}>
       <HeaderMenu>
         <HeaderMenu.Left>
-          <Header sub={isSubHeader}>{title}</Header>
+          <div>
+            <Header sub={isSubHeader}>{title}</Header>
+            <Header sub>{subtitle}</Header>
+          </div>
         </HeaderMenu.Left>
         <HeaderMenu.Right>
           <Button basic onClick={onViewAll}>
