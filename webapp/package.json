@@ -51,6 +51,7 @@
     "@typescript-eslint/parser": "^4.13.0",
     "dcl-tslint-config-standard": "^2.0.0",
     "prettier": "^1.19.1",
+    "react-error-overlay": "^6.0.9",
     "redux-saga-test-plan": "^4.0.3",
     "tslint": "^5.20.1",
     "tslint-plugin-prettier": "^2.0.1",

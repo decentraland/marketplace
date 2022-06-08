@@ -14,6 +14,7 @@ import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
 import { Slideshow } from './Slideshow'
+import { RankingsTable } from '../RankingsTable'
 import { Props } from './HomePage.types'
 import './HomePage.css'
 
@@ -96,7 +97,10 @@ const HomePage = (props: Props) => {
     // eslint-disable-next-line
   }, [onFetchAssetsFromRoute])
 
-  const views = Object.keys(homepage) as HomepageView[]
+  // trending and newest sections
+  const firstViewsSection = Object.keys(homepage).slice(0, 2) as HomepageView[]
+  // rest of the sections
+  const secondViewsSection = Object.keys(homepage).slice(2) as HomepageView[]
 
   return (
     <>
@@ -104,7 +108,17 @@ const HomePage = (props: Props) => {
       <Navigation activeTab={NavigationTab.OVERVIEW} />
       <Page className="HomePage">
         <AnalyticsVolumeDayData />
-        {views.map(view => (
+        {firstViewsSection.map(view => (
+          <Slideshow
+            key={view}
+            title={t(`home_page.${view}`)}
+            assets={homepage[view]}
+            isLoading={homepageLoading[view]}
+            onViewAll={() => handleViewAll(view)}
+          />
+        ))}
+        <RankingsTable />
+        {secondViewsSection.map(view => (
           <Slideshow
             key={view}
             title={t(`home_page.${view}`)}

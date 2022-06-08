@@ -1,5 +1,11 @@
 import { action } from 'typesafe-actions'
-import { AnalyticsTimeframe, AnalyticsVolumeData } from './types'
+import {
+  AnalyticsTimeframe,
+  AnalyticsVolumeData,
+  RankingEntities,
+  RankingEntity,
+  RankingsFilters
+} from './types'
 
 export const FETCH_ANALYTICS_VOLUME_DATA_REQUEST = '[Request] Fetch Volume Data'
 export const FETCH_ANALYTICS_VOLUME_DATA_SUCCESS = '[Success] Fetch Volume Data'
@@ -23,3 +29,25 @@ export type FetchAnalyticsDayDataSuccessAction = ReturnType<
 export type FetchAnalyticsDayDataFailureAction = ReturnType<
   typeof fetchAnalyticsVolumeDataFailure
 >
+
+// Fetch Rankings
+
+export const FETCH_RANKINGS_REQUEST = '[Request] Fetch Rankings'
+export const FETCH_RANKINGS_SUCCESS = '[Success] Fetch Rankings'
+export const FETCH_RANKINGS_FAILURE = '[Failure] Fetch Rankings'
+
+export const fetchRankingsRequest = (
+  entity: RankingEntities,
+  timeframe: AnalyticsTimeframe,
+  filters?: RankingsFilters
+) => action(FETCH_RANKINGS_REQUEST, { entity, timeframe, filters })
+
+export const fetchRankingsSuccess = (results: RankingEntity[]) =>
+  action(FETCH_RANKINGS_SUCCESS, { results })
+
+export const fetchRankingsFailure = (error: string) =>
+  action(FETCH_RANKINGS_FAILURE, { error })
+
+export type FetchRankingsRequestAction = ReturnType<typeof fetchRankingsRequest>
+export type FetchRankingsSuccessAction = ReturnType<typeof fetchRankingsSuccess>
+export type FetchRankingsFailureAction = ReturnType<typeof fetchRankingsFailure>
