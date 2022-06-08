@@ -145,10 +145,10 @@ export const deployStoreEntity = async (
     timestamp: Date.now()
   }
 
-  const entity: DeploymentPreparationData =
-    files.size === 0
-      ? await client.buildEntityWithoutNewFiles(options)
-      : await client.buildEntity({ ...options, files })
+  const entity: DeploymentPreparationData = await client.buildEntity({
+    ...options,
+    files
+  })
 
   const authChain = Authenticator.signPayload(identity, entity.entityId)
 
