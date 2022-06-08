@@ -10,7 +10,15 @@ const INITIAL_PAGE = 1
 
 const Slideshow = (props: Props) => {
   const slideRef = useRef<HTMLDivElement>(null)
-  const { title, subtitle, assets, isSubHeader, isLoading, onViewAll } = props
+  const {
+    title,
+    subtitle,
+    viewAllTitle,
+    assets,
+    isSubHeader,
+    isLoading,
+    onViewAll
+  } = props
   const [showArrows, setShowArrows] = useState(false)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [assetsToRender, setAssetsToRender] = useState(
@@ -29,9 +37,7 @@ const Slideshow = (props: Props) => {
 
   const renderNfts = useCallback(
     () =>
-      assetsToRender.map((asset) => (
-        <AssetCard key={asset.id} asset={asset} />
-      )),
+      assetsToRender.map(asset => <AssetCard key={asset.id} asset={asset} />),
     [assetsToRender]
   )
 
@@ -71,7 +77,7 @@ const Slideshow = (props: Props) => {
         </HeaderMenu.Left>
         <HeaderMenu.Right>
           <Button basic onClick={onViewAll}>
-            {t('slideshow.view_all')}
+            {viewAllTitle ? viewAllTitle : t('slideshow.view_all')}
             <i className="caret" />
           </Button>
         </HeaderMenu.Right>
