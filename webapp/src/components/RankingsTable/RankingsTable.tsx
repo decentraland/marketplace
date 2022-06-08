@@ -206,6 +206,9 @@ const RankingsTable = (props: Props) => {
               tokenId={entity.id.split('-')[1]}
             >
               {(item, order, isLoading) => {
+                if (!isLoading && !item) {
+                  return null
+                }
                 return (
                   <Table.Row>
                     <>
@@ -256,9 +259,9 @@ const RankingsTable = (props: Props) => {
                               </span>
                             </div>
                           </div>
-                        ) : (
+                        ) : isLoading ? (
                           <Loader active inline />
-                        )}
+                        ) : null}
                       </Table.Cell>
                       <Table.Cell width={2}>
                         {item
@@ -285,7 +288,9 @@ const RankingsTable = (props: Props) => {
                           </Mana>
                         ) : null}
                       </Table.Cell>
-                      <Table.Cell width={2}>{entity.sales}</Table.Cell>
+                      <Table.Cell width={2}>
+                        {item ? entity.sales : null}
+                      </Table.Cell>
                       <Table.Cell>
                         {item ? (
                           <>
