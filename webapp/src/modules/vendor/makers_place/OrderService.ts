@@ -3,7 +3,7 @@ import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { MarketplaceAdapter__factory } from '../../../contracts'
 import { getContract } from '../../contract/utils'
-import { getCurrentSigner } from '../../wallet/utils'
+import { getSigner } from '../../wallet/utils'
 import { NFT } from '../../nft/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
@@ -59,7 +59,7 @@ export class OrderService
     // Contract
     const marketplaceAdapter = MarketplaceAdapter__factory.connect(
       getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address,
-      await getCurrentSigner()
+      await getSigner()
     )
 
     const transaction = await marketplaceAdapter[
