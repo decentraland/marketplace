@@ -1,4 +1,4 @@
-import { providers } from 'ethers'
+import { ethers } from 'ethers'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { config } from '../../config'
@@ -19,12 +19,12 @@ export function addressEquals(address1?: string, address2?: string) {
   )
 }
 
-export async function getEth(): Promise<providers.Web3Provider> {
+export async function getEth(): Promise<ethers.providers.Web3Provider> {
   const provider: Provider | null = await getConnectedProvider()
 
   if (!provider) {
     throw new Error('Could not get a valid connected Wallet')
   }
 
-  return new providers.Web3Provider(provider)
+  return new ethers.providers.Web3Provider(provider)
 }

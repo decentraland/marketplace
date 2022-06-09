@@ -1,5 +1,4 @@
-import { BigNumber } from 'ethers'
-import { formatEther } from 'ethers/lib/utils'
+import { ethers } from 'ethers'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721__factory } from '../../../contracts'
@@ -27,12 +26,12 @@ export class NFTService
   implements NFTServiceInterface<VendorName.KNOWN_ORIGIN> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
-  private oneEthInWei: BigNumber
+  private oneEthInWei: ethers.BigNumber
 
   constructor() {
     this.tokenConverter = new TokenConverter()
     this.marketplacePrice = new MarketplacePrice()
-    this.oneEthInWei = BigNumber.from('1000000000000000000') // 10 ** 18
+    this.oneEthInWei = ethers.BigNumber.from('1000000000000000000') // 10 ** 18
   }
 
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
@@ -164,7 +163,7 @@ export class NFTService
     oneEthInMANA: string
   ): Order & { ethPrice: string } {
     const totalWei = this.marketplacePrice.addFee(edition.priceInWei)
-    const weiPrice = BigNumber.from(totalWei).mul(oneEthInMANA)
+    const weiPrice = ethers.BigNumber.from(totalWei).mul(oneEthInMANA)
     const price = weiPrice.div(this.oneEthInWei)
 
     const contractNames = getContractNames()
@@ -208,7 +207,7 @@ export class NFTService
 
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
-    return formatEther(mana.toString())
+    return ethers.utils.formatEther(mana.toString())
   }
 
   private getOwner(fragment: Fragment): string {

@@ -1,5 +1,5 @@
 import { PayloadAction } from 'typesafe-actions'
-import { formatEther } from 'ethers/lib/utils'
+import { ethers } from 'ethers'
 import {
   EventName,
   GetPayload
@@ -200,7 +200,7 @@ track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, 'Buy Item', ({ payload }) => ({
   rarity: payload.item.rarity,
   network: payload.item.network,
   chainId: payload.item.chainId,
-  price: Number(formatEther(payload.item.price)),
+  price: Number(ethers.utils.formatEther(payload.item.price)),
   data: payload.item.data
 }))
 

@@ -1,9 +1,9 @@
-import { BigNumber } from 'ethers'
+import { ethers } from 'ethers'
 import { config } from '../../config'
 
 export class MarketplacePrice {
-  public oneMillion: BigNumber
-  public feePerMillion: BigNumber
+  public oneMillion: ethers.BigNumber
+  public feePerMillion: ethers.BigNumber
 
   public maxPriceIncreasePercentage: number
 
@@ -24,14 +24,14 @@ export class MarketplacePrice {
       )
     }
 
-    this.feePerMillion = BigNumber.from(feePerMillion)
-    this.oneMillion = BigNumber.from('1000000')
+    this.feePerMillion = ethers.BigNumber.from(feePerMillion)
+    this.oneMillion = ethers.BigNumber.from('1000000')
 
     this.maxPriceIncreasePercentage = maxPriceIncreasePercentage
   }
 
   addFee(manaWeiAmount: string | number) {
-    const bnAmount = BigNumber.from(manaWeiAmount.toString())
+    const bnAmount = ethers.BigNumber.from(manaWeiAmount.toString())
 
     return bnAmount
       .add(bnAmount.mul(this.feePerMillion).div(this.oneMillion))
@@ -39,7 +39,7 @@ export class MarketplacePrice {
   }
 
   addMaxSlippage(manaWeiAmount: string | number) {
-    return BigNumber.from(manaWeiAmount)
+    return ethers.BigNumber.from(manaWeiAmount)
       .mul(110)
       .div(100) // 10 percent increase
   }

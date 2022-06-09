@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { formatEther } from 'ethers/lib/utils'
+import { ethers } from 'ethers'
 import addDays from 'date-fns/addDays'
 import formatDate from 'date-fns/format'
 import { Network, NFTCategory } from '@dcl/schemas'
@@ -45,7 +45,7 @@ const SellModal = (props: Props) => {
 
   const isUpdate = order !== null
   const [price, setPrice] = useState<string>(
-    isUpdate ? formatEther(order!.price) : ''
+    isUpdate ? ethers.utils.formatEther(order!.price) : ''
   )
   const [expiresAt, setExpiresAt] = useState(
     isUpdate && order!.expiresAt

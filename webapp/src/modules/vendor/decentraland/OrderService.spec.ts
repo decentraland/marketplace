@@ -1,4 +1,4 @@
-import { utils } from 'ethers'
+import { ethers } from 'ethers'
 import { ChainId, ListingStatus, Order } from '@dcl/schemas'
 import {
   ContractData,
@@ -19,12 +19,6 @@ const aBasicErrorMessage = 'error'
 describe("Decentraland's OrderService", () => {
   let orderService: OrderService
   let nft: NFT
-  let marketplaceContract: {
-    createOrder: jest.Mock
-    cancelOrder: jest.Mock
-    safeExecuteOrder: jest.Mock
-    executeOrder: jest.Mock
-  }
 
   beforeEach(() => {
     orderService = new OrderService()
@@ -33,12 +27,6 @@ describe("Decentraland's OrderService", () => {
       contractAddress: '0x2323233423',
       tokenId: 'aTokenId'
     } as NFT
-    marketplaceContract = {
-      createOrder: jest.fn().mockReturnValue('createOrder'),
-      cancelOrder: jest.fn().mockReturnValue('cancelOrder'),
-      safeExecuteOrder: jest.fn().mockReturnValue('safeExecuteOrder'),
-      executeOrder: jest.fn().mockReturnValue('executeOrder')
-    }
   })
 
   afterEach(() => {
@@ -216,7 +204,7 @@ describe("Decentraland's OrderService", () => {
 
   describe('when creating an order', () => {
     const priceInEther = 1
-    const priceInWei = utils.parseEther(priceInEther.toString())
+    const priceInWei = ethers.utils.parseEther(priceInEther.toString())
     const expiresAt = 123023432
 
     describe("when the market's contract doesn't exist for the NFT's chainId", () => {
