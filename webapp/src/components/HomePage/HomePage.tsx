@@ -102,31 +102,25 @@ const HomePage = (props: Props) => {
   // rest of the sections
   const secondViewsSection = Object.keys(homepage).slice(2) as HomepageView[]
 
+  const renderSlideshow = (view: HomepageView) => (
+    <Slideshow
+      key={view}
+      title={t(`home_page.${view}`)}
+      assets={homepage[view]}
+      isLoading={homepageLoading[view]}
+      onViewAll={() => handleViewAll(view)}
+    />
+  )
+
   return (
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.OVERVIEW} />
       <Page className="HomePage">
         <AnalyticsVolumeDayData />
-        {firstViewsSection.map(view => (
-          <Slideshow
-            key={view}
-            title={t(`home_page.${view}`)}
-            assets={homepage[view]}
-            isLoading={homepageLoading[view]}
-            onViewAll={() => handleViewAll(view)}
-          />
-        ))}
+        {firstViewsSection.map(renderSlideshow)}
         <RankingsTable />
-        {secondViewsSection.map(view => (
-          <Slideshow
-            key={view}
-            title={t(`home_page.${view}`)}
-            assets={homepage[view]}
-            isLoading={homepageLoading[view]}
-            onViewAll={() => handleViewAll(view)}
-          />
-        ))}
+        {secondViewsSection.map(renderSlideshow)}
       </Page>
       <Footer />
     </>

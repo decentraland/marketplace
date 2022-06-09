@@ -54,10 +54,10 @@ const RankingsTable = (props: Props) => {
     _event: React.SyntheticEvent<HTMLElement, Event>,
     { value }: DropdownProps
   ) => {
-    setCurrentFilters(prevValues => ({
-      ...prevValues,
+    setCurrentFilters({
+      ...currentFilters,
       [filterName]: value !== ALL_FILTER ? value : undefined
-    }))
+    })
   }
 
   const renderTableTabs = () => {
@@ -84,12 +84,12 @@ const RankingsTable = (props: Props) => {
               options={[
                 ALL_FILTER,
                 ...Object.values(WearableCategory.schema.enum)
-              ].map(cat => ({
-                value: cat as string,
+              ].map(category => ({
+                value: category as string,
                 text:
-                  cat === ALL_FILTER
+                  category === ALL_FILTER
                     ? t('home_page.analytics.rankings.items.all_categories')
-                    : t(`wearable.category.${cat}`)
+                    : t(`wearable.category.${category}`)
               }))}
               onChange={registerHandleFilterChange('category')}
             />
@@ -195,9 +195,12 @@ const RankingsTable = (props: Props) => {
 
   const renderTableContent = () => {
     const { data } = props
+    if (!data) {
+      return null
+    }
     switch (currentEntity) {
       case RankingEntities.ITEMS:
-        return (data as ItemRank[])?.map(entity => {
+        return (data as ItemRank[]).map(entity => {
           return (
             <AssetProvider
               key={entity.id}
@@ -211,99 +214,95 @@ const RankingsTable = (props: Props) => {
                 }
                 return (
                   <Table.Row>
-                    <>
-                      <Table.Cell width={5}>
-                        {item ? (
-                          <div className="rankings-item-cell">
+                    <Table.Cell width={5}>
+                      {item ? (
+                        <div className="rankings-item-cell">
+                          <Link
+                            to={locations.item(
+                              item.contractAddress,
+                              item.itemId
+                            )}
+                          >
+                            <img
+                              src={item.thumbnail}
+                              alt={`${item.name}-thumbnail`}
+                            />
+                          </Link>
+
+                          <div className="rankings-item-data">
                             <Link
                               to={locations.item(
                                 item.contractAddress,
                                 item.itemId
                               )}
                             >
-                              <img
-                                src={item.thumbnail}
-                                alt={`${item.name}-thumbnail`}
-                              />
+                              {item.name}
                             </Link>
 
-                            <div className="rankings-item-data">
-                              <Link
-                                to={locations.item(
-                                  item.contractAddress,
-                                  item.itemId
-                                )}
-                              >
-                                {item.name}
-                              </Link>
-
-                              <span>
-                                <T
-                                  id="home_page.analytics.rankings.items.by_creator"
-                                  values={{
-                                    creator: (
-                                      <span className="rankings-item-data-creator">
-                                        <Link
-                                          to={locations.account(item.creator)}
-                                        >
-                                          <Profile
-                                            address={item.creator}
-                                            textOnly
-                                            inline={false}
-                                          />
-                                        </Link>
-                                      </span>
-                                    )
-                                  }}
-                                />
-                              </span>
-                            </div>
-                          </div>
-                        ) : isLoading ? (
-                          <Loader active inline />
-                        ) : null}
-                      </Table.Cell>
-                      <Table.Cell width={2}>
-                        {item
-                          ? t(
-                              `wearable.category.${item.data.wearable?.category}`
-                            )
-                          : null}
-                      </Table.Cell>
-                      <Table.Cell width={2}>
-                        {item ? (
-                          <RarityBadge
-                            size="small"
-                            rarity={item.rarity}
-                            assetType={AssetType.NFT}
-                            category={NFTCategory.WEARABLE}
-                            withTooltip={false}
-                          />
-                        ) : null}
-                      </Table.Cell>
-                      <Table.Cell width={2}>
-                        {item ? (
-                          <Mana network={item?.network} inline>
-                            {formatWeiMANA(item?.price || order!.price)}
-                          </Mana>
-                        ) : null}
-                      </Table.Cell>
-                      <Table.Cell width={2}>
-                        {item ? entity.sales : null}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {item ? (
-                          <>
-                            <Mana network={item?.network} inline>
-                              {formatWeiMANA(entity.volume)}
-                            </Mana>
-                            <span className="rankings-fiat-price">
-                              (<ManaToFiat mana={entity.volume} />)
+                            <span>
+                              <T
+                                id="home_page.analytics.rankings.items.by_creator"
+                                values={{
+                                  creator: (
+                                    <span className="rankings-item-data-creator">
+                                      <Link
+                                        to={locations.account(item.creator)}
+                                      >
+                                        <Profile
+                                          address={item.creator}
+                                          textOnly
+                                          inline={false}
+                                        />
+                                      </Link>
+                                    </span>
+                                  )
+                                }}
+                              />
                             </span>
-                          </>
-                        ) : null}
-                      </Table.Cell>
-                    </>
+                          </div>
+                        </div>
+                      ) : isLoading ? (
+                        <Loader active inline />
+                      ) : null}
+                    </Table.Cell>
+                    <Table.Cell width={2}>
+                      {item
+                        ? t(`wearable.category.${item.data.wearable?.category}`)
+                        : null}
+                    </Table.Cell>
+                    <Table.Cell width={2}>
+                      {item ? (
+                        <RarityBadge
+                          size="small"
+                          rarity={item.rarity}
+                          assetType={AssetType.NFT}
+                          category={NFTCategory.WEARABLE}
+                          withTooltip={false}
+                        />
+                      ) : null}
+                    </Table.Cell>
+                    <Table.Cell width={2}>
+                      {item ? (
+                        <Mana network={item?.network} inline>
+                          {formatWeiMANA(item?.price || order!.price)}
+                        </Mana>
+                      ) : null}
+                    </Table.Cell>
+                    <Table.Cell width={2}>
+                      {item ? entity.sales : null}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {item ? (
+                        <>
+                          <Mana network={item?.network} inline>
+                            {formatWeiMANA(entity.volume)}
+                          </Mana>
+                          <span className="rankings-fiat-price">
+                            (<ManaToFiat mana={entity.volume} />)
+                          </span>
+                        </>
+                      ) : null}
+                    </Table.Cell>
                   </Table.Row>
                 )
               }}
@@ -413,7 +412,6 @@ const RankingsTable = (props: Props) => {
       </HeaderMenu>
       <div className="rankings-card">
         {renderTableTabs()}
-        <Loader active={isLoading} size="large" />
 
         {isLoading ? (
           <Loader active size="large" />

@@ -8,15 +8,9 @@ const ManaToFiat = (props: Props) => {
   const [fiatValue, setFiatValue] = React.useState<number>()
 
   useEffect(() => {
-    ;(async () => {
-      try {
-        setFiatValue(
-          await new TokenConverter().marketMANAToUSD(
-            parseFloat(utils.formatEther(mana))
-          )
-        )
-      } catch (error) {}
-    })()
+    new TokenConverter()
+      .marketMANAToUSD(parseFloat(utils.formatEther(mana)))
+      .then(usd => setFiatValue(usd))
   }, [mana])
 
   return fiatValue ? <>${fiatValue.toFixed(digits)}</> : null
