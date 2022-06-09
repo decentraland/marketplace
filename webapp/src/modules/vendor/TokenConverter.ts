@@ -1,5 +1,5 @@
 import { Converter__factory } from '../../contracts'
-import { getCurrentSigner } from '../contract/utils'
+import { getCurrentSigner } from '../wallet/utils'
 
 type Ticker = {
   converted_last: {
