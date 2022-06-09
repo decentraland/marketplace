@@ -29,7 +29,7 @@ export async function getEth(): Promise<ethers.providers.Web3Provider> {
   return new ethers.providers.Web3Provider(provider)
 }
 
-export async function getCurrentSigner() {
+export async function getCurrentSigner(): Promise<ethers.Signer> {
   const provider = await getConnectedProvider()
   if (!provider) {
     throw new Error('Could not connect to provider')
