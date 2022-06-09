@@ -31,13 +31,3 @@ export function getContract(query: Partial<Contract>): Contract {
   }
   return found
 }
-
-export async function getCurrentSigner() {
-  const provider = await getConnectedProvider()
-  if (!provider) {
-    throw new Error('Could not connect to provider')
-  }
-
-  const eth = new ethers.providers.Web3Provider(provider)
-  return eth.getSigner()
-}

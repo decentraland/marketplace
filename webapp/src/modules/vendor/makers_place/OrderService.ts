@@ -2,13 +2,14 @@ import { utils } from 'ethers'
 import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { MarketplaceAdapter__factory } from '../../../contracts'
+import { getContract } from '../../contract/utils'
+import { getCurrentSigner } from '../../wallet/utils'
 import { NFT } from '../../nft/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { getContractNames, VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
 import { ContractService } from './ContractService'
-import { getContract, getCurrentSigner } from '../../contract/utils'
 
 export class OrderService
   implements OrderServiceInterface<VendorName.MAKERS_PLACE> {
