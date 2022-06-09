@@ -126,15 +126,19 @@ const Slideshow = (props: Props) => {
         </div>
       </>
 
-      <div className="page-indicator-container">
+      <div className="page-indicators-container">
         {Array.from({ length: totalPages }).map((_, index) => (
           <div
             key={index}
-            className={`page-indicator ${
-              currentPage === index + 1 ? 'active' : ''
-            }`}
+            className="page-indicator-container"
             onClick={() => setCurrentPage(index + 1)}
-          ></div>
+          >
+            <div
+              className={`page-indicator ${
+                currentPage === index + 1 ? 'active' : ''
+              }`}
+            />
+          </div>
         ))}
       </div>
     </div>
