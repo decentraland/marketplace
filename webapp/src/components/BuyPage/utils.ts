@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers'
+import { ethers } from 'ethers'
 
 /**
  * Checks against the min value of costless sales
@@ -6,7 +6,7 @@ import { BigNumber } from 'ethers'
 export function isPriceTooLow(price: string) {
   const minSaleValue = getMinSaleValueInWei()
   if (!isNaN(parseInt(price, 10)) && minSaleValue) {
-    return BigNumber.from(price).lt(minSaleValue)
+    return ethers.BigNumber.from(price).lt(minSaleValue)
   }
   return false
 }

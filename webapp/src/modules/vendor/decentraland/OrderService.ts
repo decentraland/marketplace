@@ -1,4 +1,4 @@
-import { utils } from 'ethers'
+import { ethers } from 'ethers'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
 import {
   ContractName,
@@ -35,7 +35,7 @@ export class OrderService
       'createOrder',
       nft.contractAddress,
       nft.tokenId,
-      utils.parseEther(price.toString()),
+      ethers.utils.parseEther(price.toString()),
       expiresAt
     )
   }

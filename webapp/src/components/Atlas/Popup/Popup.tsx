@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { constants } from 'ethers'
+import { ethers } from 'ethers'
 import { Row, Section, Header } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -32,7 +32,7 @@ export default class Popup extends React.PureComponent<Props> {
         <Section className="owner">
           <Header sub>{t('asset_page.owner')}</Header>
           <Profile
-            address={tile.owner || constants.AddressZero}
+            address={tile.owner || ethers.constants.AddressZero}
             debounce={500}
           />
         </Section>

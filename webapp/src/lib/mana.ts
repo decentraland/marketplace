@@ -1,4 +1,4 @@
-import { formatEther } from 'ethers/lib/utils'
+import { ethers } from 'ethers'
 import { MAXIMUM_FRACTION_DIGITS } from 'decentraland-dapps/dist/lib/mana'
 
 /**
@@ -8,7 +8,7 @@ export function formatWeiMANA(
   wei: string,
   maximumFractionDigits: number = MAXIMUM_FRACTION_DIGITS
 ): string {
-  return Number(formatEther(wei)).toLocaleString(undefined, {
+  return Number(ethers.utils.formatEther(wei)).toLocaleString(undefined, {
     maximumFractionDigits
   })
 }

@@ -1,4 +1,4 @@
-import { providers } from 'ethers'
+import { ethers } from 'ethers'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { VendorName } from '../vendor/types'
@@ -38,6 +38,6 @@ export async function getCurrentSigner() {
     throw new Error('Could not connect to provider')
   }
 
-  const eth = new providers.Web3Provider(provider)
+  const eth = new ethers.providers.Web3Provider(provider)
   return eth.getSigner()
 }

@@ -1,4 +1,4 @@
-import { BigNumber } from 'ethers'
+import { ethers } from 'ethers'
 import { AccountMetrics } from './types'
 
 export function sumAccountMetrics(a: AccountMetrics, b: AccountMetrics) {
@@ -13,7 +13,7 @@ export function sumAccountMetrics(a: AccountMetrics, b: AccountMetrics) {
 }
 
 function addStrings(a: string, b: string) {
-  return BigNumber.from(a)
+  return ethers.BigNumber.from(a)
     .add(b)
     .toString()
 }

@@ -1,5 +1,5 @@
 import { takeLatest, put, call } from 'redux-saga/effects'
-import { providers, utils, Wallet } from 'ethers'
+import { ethers } from 'ethers'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
 import { getEth } from '../wallet/utils'
 
@@ -19,13 +19,13 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
   const address = action.payload.address.toLowerCase()
 
   try {
-    const eth: providers.Web3Provider = yield call(getEth)
-    const account = Wallet.createRandom()
+    const eth: ethers.providers.Web3Provider = yield call(getEth)
+    const account = ethers.Wallet.createRandom()
 
     const payload = {
       address: account.address.toString(),
-      publicKey: utils.hexlify(account.publicKey),
-      privateKey: utils.hexlify(account.privateKey)
+      publicKey: ethers.utils.hexlify(account.publicKey),
+      privateKey: ethers.utils.hexlify(account.privateKey)
     }
 
     const signer = eth.getSigner()

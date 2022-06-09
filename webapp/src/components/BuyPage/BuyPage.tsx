@@ -1,5 +1,5 @@
 import React from 'react'
-import { formatEther } from 'ethers/lib/utils'
+import { ethers } from 'ethers'
 import { Item, Order } from '@dcl/schemas'
 import { Page } from 'decentraland-ui'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -24,7 +24,8 @@ const BuyPage = (props: Props) => {
     asset: Asset,
     order: Order | null
   ) =>
-    !!order && wallet.networks[asset.network].mana < +formatEther(order.price)
+    !!order &&
+    wallet.networks[asset.network].mana < +ethers.utils.formatEther(order.price)
 
   return (
     <>
