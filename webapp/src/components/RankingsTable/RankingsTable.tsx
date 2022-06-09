@@ -27,6 +27,7 @@ import { TimeframeSelector } from '../Rankings/TimeframeSelector'
 import { AssetProvider } from '../AssetProvider'
 import { AssetType } from '../../modules/asset/types'
 import { formatWeiMANA } from '../../lib/mana'
+import { parseItemId } from '../../modules/item/utils'
 import { locations } from '../../modules/routing/locations'
 import RarityBadge from '../RarityBadge'
 import { ManaToFiat } from '../ManaToFiat'
@@ -205,8 +206,8 @@ const RankingsTable = (props: Props) => {
             <AssetProvider
               key={entity.id}
               type={AssetType.ITEM}
-              contractAddress={entity.id.split('-')[0]}
-              tokenId={entity.id.split('-')[1]}
+              contractAddress={parseItemId(entity.id).contractAddress}
+              tokenId={parseItemId(entity.id).tokenId}
             >
               {(item, order, isLoading) => {
                 if (!isLoading && !item) {
