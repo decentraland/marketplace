@@ -1,5 +1,3 @@
-import { ethers } from 'ethers'
-import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { VendorName } from '../vendor/types'
 import { Contract } from '../vendor/services'
