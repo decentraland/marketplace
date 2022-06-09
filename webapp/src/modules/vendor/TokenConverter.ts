@@ -1,6 +1,6 @@
 import { config } from '../../config'
 import { Converter__factory } from '../../contracts'
-import { getCurrentSigner } from '../wallet/utils'
+import { getSigner } from '../wallet/utils'
 
 type Ticker = {
   converted_last: {
@@ -82,7 +82,7 @@ export class TokenConverter {
   ): Promise<string> {
     const converter = Converter__factory.connect(
       this.converterAddress,
-      await getCurrentSigner()
+      await getSigner()
     )
     const tokens = await converter.calcNeededTokensForEther(
       tokenAddress,

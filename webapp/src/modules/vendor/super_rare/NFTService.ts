@@ -3,7 +3,7 @@ import { formatEther } from 'ethers/lib/utils'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721__factory } from '../../../contracts'
-import { getCurrentSigner } from '../../wallet/utils'
+import { getSigner } from '../../wallet/utils'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -127,7 +127,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
 
     const erc721 = ERC721__factory.connect(
       nft.contractAddress,
-      await getCurrentSigner()
+      await getSigner()
     )
     const transferType = new ContractService().getTransferType(
       nft.contractAddress

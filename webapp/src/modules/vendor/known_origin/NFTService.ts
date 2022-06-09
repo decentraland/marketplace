@@ -11,7 +11,7 @@ import { NFTService as NFTServiceInterface } from '../services'
 import { getOriginURL } from '../utils'
 import { getContractNames, VendorName } from '../types'
 import { getContract } from '../../contract/utils'
-import { getCurrentSigner } from '../../wallet/utils'
+import { getSigner } from '../../wallet/utils'
 import { NFTsFetchFilters } from './nft/types'
 import { EditionFragment } from './edition/fragments'
 import { TokenFragment } from './token/fragments'
@@ -116,7 +116,7 @@ export class NFTService
 
     const erc721 = ERC721__factory.connect(
       nft.contractAddress,
-      await getCurrentSigner()
+      await getSigner()
     )
 
     const transaction = await erc721.transferFrom(from, to, nft.tokenId)
