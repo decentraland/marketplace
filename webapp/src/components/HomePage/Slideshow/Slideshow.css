@@ -97,10 +97,15 @@
   height: 100%;
 }
 
-.Slideshow .page-indicator-container {
+.Slideshow .page-indicators-container {
   display: flex;
   justify-content: center;
   margin: auto;
+}
+
+.Slideshow .page-indicator-container {
+  cursor: pointer;
+  padding: 12px 0;
 }
 
 .Slideshow .page-indicator {
