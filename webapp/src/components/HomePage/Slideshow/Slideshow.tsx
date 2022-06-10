@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import { HeaderMenu, Header, Button, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { Asset } from '../../../modules/asset/types'
 import { AssetCard } from '../../AssetCard'
 import { Props } from './Slideshow.types'
 import './Slideshow.css'
@@ -35,10 +37,26 @@ const Slideshow = (props: Props) => {
     )
   }, [currentPage, assets, setAssetsToRender])
 
+  const handleOnAssetCardClick = useCallback(
+    (asset: Asset) => {
+      getAnalytics().track('Asset click', {
+        id: asset.id,
+        section: title
+      })
+    },
+    [title]
+  )
+
   const renderNfts = useCallback(
     () =>
-      assetsToRender.map(asset => <AssetCard key={asset.id} asset={asset} />),
-    [assetsToRender]
+      assetsToRender.map(asset => (
+        <AssetCard
+          key={asset.id}
+          asset={asset}
+          onClick={() => handleOnAssetCardClick(asset)}
+        />
+      )),
+    [assetsToRender, handleOnAssetCardClick]
   )
 
   const handleOnNextPage = () => {
