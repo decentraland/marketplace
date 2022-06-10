@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Page } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor/types'
@@ -40,7 +41,8 @@ const HomePage = (props: Props) => {
   const sectionsSubtitles: Partial<Record<View, string>> = useMemo(
     () => ({
       [View.HOME_TRENDING_ITEMS]: t('home_page.home_trending_items_subtitle'),
-      [View.HOME_WEARABLES]: t('home_page.home_recently_listed_items_subtitle')
+      [View.HOME_WEARABLES]: t('home_page.home_recently_listed_items_subtitle'),
+      [View.HOME_SOLD_ITEMS]: t('home_page.home_latest_sales_items_subtitle')
     }),
     []
   )
@@ -84,6 +86,7 @@ const HomePage = (props: Props) => {
       if (Section.LAND === section) {
         onNavigate(locations.lands())
       } else if (Section.WEARABLES_TRENDING === section) {
+        getAnalytics().track('Explore all trending wearables')
         onNavigate(
           locations.browse({
             section: Section.WEARABLES,
@@ -91,6 +94,7 @@ const HomePage = (props: Props) => {
           })
         )
       } else {
+        getAnalytics().track(`View all ${section} section`)
         onNavigate(locations.browse({ section, assetType, sortBy }))
       }
     },

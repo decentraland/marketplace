@@ -39,14 +39,6 @@ const StatSections = [
     formatUSDVolume: (number: number) => `$${formatAnalyticsVolume(number)}`
   },
   {
-    key: 'creators_earnings',
-    icon: 'star',
-    isMana: true,
-    getData: (data: AnalyticsVolumeData) => data.creatorsEarnings,
-    getUSDData: (data: AnalyticsVolumeData) => data.creatorsEarningsUSD,
-    formatUSDVolume: (number: number) => `$${formatAnalyticsVolume(number)}`
-  },
-  {
     key: 'dao_revenue',
     icon: 'balance scale',
     isMana: true,
