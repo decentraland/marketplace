@@ -60,7 +60,7 @@ export type CreatorRank = Pick<Account, 'id'> & {
 export type CollectorRank = Pick<Account, 'id'> & {
   purchases: number
   volume: string
-  uniqueItems: number
+  uniqueAndMythicItems: number
   creatorsSupported: number
 }
 

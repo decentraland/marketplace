@@ -38,6 +38,21 @@ const HomePage = (props: Props) => {
     []
   )
 
+  const sectionsSubtitles: Partial<Record<View, string>> = useMemo(
+    () => ({
+      [View.HOME_TRENDING_ITEMS]: t('home_page.home_trending_items_subtitle'),
+      [View.HOME_WEARABLES]: t('home_page.home_recently_listed_items_subtitle')
+    }),
+    []
+  )
+
+  const sectionsViewAllTitle: Partial<Record<View, string>> = useMemo(
+    () => ({
+      [View.HOME_TRENDING_ITEMS]: t('home_page.home_trending_items_explore_all')
+    }),
+    []
+  )
+
   const assetTypes: Partial<Record<View, AssetType>> = useMemo(
     () => ({
       [View.HOME_TRENDING_ITEMS]: AssetType.ITEM,
@@ -69,6 +84,13 @@ const HomePage = (props: Props) => {
 
       if (Section.LAND === section) {
         onNavigate(locations.lands())
+      } else if (Section.WEARABLES_TRENDING === section) {
+        onNavigate(
+          locations.browse({
+            section: Section.WEARABLES,
+            assetType: AssetType.ITEM
+          })
+        )
       } else {
         onNavigate(locations.browse({ section, assetType, sortBy }))
       }
@@ -106,6 +128,8 @@ const HomePage = (props: Props) => {
     <Slideshow
       key={view}
       title={t(`home_page.${view}`)}
+      subtitle={sectionsSubtitles[view]}
+      viewAllTitle={sectionsViewAllTitle[view]}
       assets={homepage[view]}
       isLoading={homepageLoading[view]}
       onViewAll={() => handleViewAll(view)}

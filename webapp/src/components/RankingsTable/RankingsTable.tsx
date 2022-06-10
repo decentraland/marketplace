@@ -368,7 +368,7 @@ const RankingsTable = (props: Props) => {
                   </Table.Cell>
                   <Table.Cell width={2}>{entity.purchases}</Table.Cell>
                   <Table.Cell width={3}>{entity.creatorsSupported}</Table.Cell>
-                  <Table.Cell width={3}>{entity.uniqueItems}</Table.Cell>
+                  <Table.Cell width={3}>{entity.uniqueAndMythicItems}</Table.Cell>
                   <Table.Cell>
                     <Mana network={Network.MATIC} inline>
                       {formatWeiMANA(entity.volume)}
