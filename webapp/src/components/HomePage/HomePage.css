@@ -32,3 +32,7 @@
   text-transform: none;
   font-weight: normal;
 }
+
+.HomePage .ui.sub.header {
+  color: #A09BA8
+}
