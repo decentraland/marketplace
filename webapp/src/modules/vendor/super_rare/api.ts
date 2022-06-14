@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
+import { config } from '../../../config'
 import { NFTsFetchParams, NFTSortBy } from '../../nft/types'
 import {
   SuperRareOrder,
@@ -8,7 +9,7 @@ import {
   SuperRareFetchOrderParams
 } from './types'
 
-const API_URL = process.env.REACT_APP_SUPER_RARE_API_URL!
+const API_URL = config.get('SUPER_RARE_API_URL')!
 
 export const MAX_QUERY_SIZE = 100
 
@@ -22,7 +23,7 @@ class SuperRareAPI extends BaseAPI {
       throw new Error(`Invalid SuperRare API URL "${url}"`)
     }
 
-    this.API_KEY = process.env.REACT_APP_SUPER_RARE_API_KEY!
+    this.API_KEY = config.get('SUPER_RARE_API_KEY')!
     if (!this.API_KEY) {
       throw new Error(`Invalid SuperRare API KEY "${this.API_KEY}"`)
     }

@@ -14,11 +14,12 @@ import {
   ConnectWalletSuccessAction
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { AuthIdentity } from 'dcl-crypto'
+import { config } from '../../config'
 
 const ONE_MONTH_IN_MINUTES = 31 * 24 * 60
 
 export const IDENTITY_EXPIRATION_IN_MINUTES = (() => {
-  const expiration = process.env.REACT_APP_IDENTITY_EXPIRATION_MINUTES
+  const expiration = config.get('IDENTITY_EXPIRATION_MINUTES')
 
   if (!expiration) {
     return ONE_MONTH_IN_MINUTES

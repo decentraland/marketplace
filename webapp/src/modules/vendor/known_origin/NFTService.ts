@@ -21,6 +21,7 @@ import { editionAPI } from './edition/api'
 import { tokenAPI } from './token/api'
 import { MAX_QUERY_SIZE } from './api'
 import { AssetType } from './types'
+import { config } from '../../../config'
 
 type Fragment = TokenFragment | EditionFragment
 
@@ -148,7 +149,7 @@ export class NFTService
       },
       category: 'art',
       vendor: VendorName.KNOWN_ORIGIN,
-      chainId: Number(process.env.REACT_APP_CHAIN_ID),
+      chainId: Number(config.get('CHAIN_ID')!),
       network: Network.ETHEREUM,
       issuedId: null,
       itemId: null,
@@ -189,7 +190,7 @@ export class NFTService
       updatedAt: +edition.createdTimestamp,
       expiresAt: Infinity,
       network: Network.ETHEREUM,
-      chainId: Number(process.env.REACT_APP_CHAIN_ID)
+      chainId: Number(config.get('CHAIN_ID')!)
     }
   }
 
