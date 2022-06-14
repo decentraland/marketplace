@@ -1,8 +1,9 @@
-import { log } from '@graphprotocol/graph-ts'
+import { log, BigInt } from '@graphprotocol/graph-ts'
 import {
   OrderCreated,
   OrderSuccessful,
   OrderCancelled,
+  Marketplace,
 } from '../entities/Marketplace/Marketplace'
 import { Order, NFT } from '../entities/schema'
 import {
@@ -87,6 +88,11 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
   nft = updateNFTOrderProperties(nft!, order!)
   nft.save()
 
+  // Bind contract
+  let marketplaceContract = Marketplace.bind(event.address)
+  // On ropsten we have a different version of the marketplace where the method is ownerCutPercentage
+  let ownerCutPerMillion = marketplaceContract.try_ownerCutPerMillion()
+
   // analytics
   trackSale(
     ORDER_SALE_TYPE,
@@ -94,6 +100,7 @@ export function handleOrderSuccessful(event: OrderSuccessful): void {
     event.params.seller,
     nft.id,
     order.price,
+    ownerCutPerMillion.reverted ? BigInt.fromI32(0) : ownerCutPerMillion.value,
     event.block.timestamp,
     event.transaction.hash
   )
