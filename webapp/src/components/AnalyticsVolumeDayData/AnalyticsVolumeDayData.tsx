@@ -110,7 +110,7 @@ const AnalyticsVolumeDayData = (props: Props) => {
         {!isLoading && data ? (
           <>
             {StatSections.map(statSection => (
-              <div className="stats-container">
+              <div className="stats-container" key={statSection.key}>
                 <Icon
                   className="stat-icon"
                   name={statSection.icon as SemanticICONS}

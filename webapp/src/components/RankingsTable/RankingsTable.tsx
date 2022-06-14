@@ -24,6 +24,7 @@ import {
   RankingsSortBy
 } from '../../modules/analytics/types'
 import { TimeframeSelector } from '../Rankings/TimeframeSelector'
+import { InfoTooltip } from '../InfoTooltip'
 import { AssetProvider } from '../AssetProvider'
 import { AssetType } from '../../modules/asset/types'
 import { formatWeiMANA } from '../../lib/mana'
@@ -137,6 +138,11 @@ const RankingsTable = (props: Props) => {
               </Table.HeaderCell>
               <Table.HeaderCell>
                 {t('home_page.analytics.rankings.total_volume')}
+                <InfoTooltip
+                  content={t(
+                    'home_page.analytics.rankings.total_volume_tooltip'
+                  )}
+                />
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -156,9 +162,19 @@ const RankingsTable = (props: Props) => {
               </Table.HeaderCell>
               <Table.HeaderCell>
                 {t('home_page.analytics.rankings.creators.unique_collectors')}
+                <InfoTooltip
+                  content={t(
+                    'home_page.analytics.rankings.creators.unique_collectors_tooltip'
+                  )}
+                />
               </Table.HeaderCell>
               <Table.HeaderCell>
-                {t('home_page.analytics.rankings.total_volume')}
+                {t('home_page.analytics.rankings.creators.total_volume_sales')}
+                <InfoTooltip
+                  content={t(
+                    'home_page.analytics.rankings.creators.total_volume_sales_tooltip'
+                  )}
+                />
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -177,14 +193,29 @@ const RankingsTable = (props: Props) => {
                 {t(
                   'home_page.analytics.rankings.collectors.creators_supported'
                 )}
+                <InfoTooltip
+                  content={t(
+                    'home_page.analytics.rankings.collectors.creators_supported_tooltip'
+                  )}
+                />
               </Table.HeaderCell>
               <Table.HeaderCell>
                 {t(
                   'home_page.analytics.rankings.collectors.unique_items_bought'
                 )}
+                <InfoTooltip
+                  content={t(
+                    'home_page.analytics.rankings.collectors.unique_items_bought_tooltip'
+                  )}
+                />
               </Table.HeaderCell>
               <Table.HeaderCell>
                 {t('home_page.analytics.rankings.collectors.total_spent')}
+                <InfoTooltip
+                  content={t(
+                    'home_page.analytics.rankings.collectors.total_spent_tooltip'
+                  )}
+                />
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
@@ -335,10 +366,10 @@ const RankingsTable = (props: Props) => {
                   <Table.Cell width={3}>{entity.uniqueCollectors}</Table.Cell>
                   <Table.Cell>
                     <Mana network={Network.MATIC} inline>
-                      {formatWeiMANA(entity.volume)}
+                      {entity.earned && formatWeiMANA(entity.earned)}
                     </Mana>
                     <span className="rankings-fiat-price">
-                      (<ManaToFiat mana={entity.volume} />)
+                      {entity.earned && <ManaToFiat mana={entity.earned} />}
                     </span>
                   </Table.Cell>
                 </>
@@ -368,13 +399,15 @@ const RankingsTable = (props: Props) => {
                   </Table.Cell>
                   <Table.Cell width={2}>{entity.purchases}</Table.Cell>
                   <Table.Cell width={3}>{entity.creatorsSupported}</Table.Cell>
-                  <Table.Cell width={3}>{entity.uniqueAndMythicItems}</Table.Cell>
+                  <Table.Cell width={3}>
+                    {entity.uniqueAndMythicItems}
+                  </Table.Cell>
                   <Table.Cell>
                     <Mana network={Network.MATIC} inline>
-                      {formatWeiMANA(entity.volume)}
+                      {entity.spent && formatWeiMANA(entity.spent)}
                     </Mana>
                     <span className="rankings-fiat-price">
-                      (<ManaToFiat mana={entity.volume} />)
+                      {entity.spent && <ManaToFiat mana={entity.spent} />}
                     </span>
                   </Table.Cell>
                 </>

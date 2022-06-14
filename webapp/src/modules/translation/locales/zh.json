@@ -162,16 +162,23 @@
           "creator": "创作者",
           "collections": "收藏品",
           "items_sold": "出售的物品",
-          "unique_collectors": "独特的收藏家"
+          "unique_collectors": "独特的收藏家",
+          "unique_collectors_tooltip": "从创建者那里拥有至少 1 个项目的用户数量。",
+          "total_volume_sales": "总销量",
+          "total_volume_sales_tooltip": "包括一级和二级销售"
         },
         "total_volume": "总容积",
+        "total_volume_tooltip": "包括一级销售和二级销售。",
         "collectors": {
           "tab_title": "收藏家",
           "collector": "集电极",
           "items_bought": "购买的物品",
           "creators_supported": "支持的创作者",
+          "creators_supported_tooltip": "用户至少购买了 1 件商品的创作者数量。",
           "unique_items_bought": "购买的独特物品",
-          "total_spent": "总花费"
+          "unique_items_bought_tooltip": "用户购买的神话或传奇物品的数量。",
+          "total_spent": "总花费",
+          "total_spent_tooltip": "在一级市场和二级市场上花费的 MANA 总量。"
         }
       }
     },
