@@ -1,4 +1,5 @@
 import { Address } from 'web3x/address'
+import { config } from '../../config'
 import { Converter } from '../../contracts/Converter'
 import { ContractFactory } from '../contract/ContractFactory'
 
@@ -22,9 +23,9 @@ export class TokenConverter {
   converterExchange: string
 
   constructor() {
-    const apiURL = process.env.REACT_APP_COINGECKO_API_URL!
-    const converterAddress = process.env.REACT_APP_CONVERTER_ADDRESS!
-    const converterExchange = process.env.REACT_APP_CONVERTER_EXCHANGE!
+    const apiURL = config.get('COINGECKO_API_URL')!
+    const converterAddress = config.get('CONVERTER_ADDRESS')!
+    const converterExchange = config.get('CONVERTER_EXCHANGE')!
 
     if (!apiURL) {
       throw new Error(`Invalid converter API URL "${apiURL}"`)
@@ -72,7 +73,7 @@ export class TokenConverter {
   }
 
   async contractEthToMANA(ethAmount: string) {
-    const manaAddress = process.env.REACT_APP_MANA_ADDRESS!
+    const manaAddress = config.get('MANA_ADDRESS')!
     return this.contractEthToToken(ethAmount, manaAddress)
   }
 
