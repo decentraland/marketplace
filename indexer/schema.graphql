@@ -273,4 +273,5 @@ type Sale @entity {
   # search
   searchTokenId: BigInt!
   searchContractAddress: Bytes!
+  searchCategory: String!
 }

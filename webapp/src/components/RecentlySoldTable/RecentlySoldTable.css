@@ -1,0 +1,116 @@
+.RecentlySoldTable {
+  margin-bottom: 60px;
+}
+
+.RecentlySoldTable .recently-sold-card {
+  background: #242129;
+  padding-top: 0;
+  border-radius: 10px;
+  position: relative;
+  min-height: 575px;
+}
+
+.RecentlySoldTable .recently-sold-card-tabs {
+  display: flex;
+  background-color: #2f2b35;
+  padding: 0 24px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  align-items: center;
+}
+
+.RecentlySoldTable .ui.very.basic.table {
+  padding: 0 24px;
+}
+
+.RecentlySoldTable .dcl.tabs.fullscreen {
+  width: 70%;
+}
+
+.RecentlySoldTable .ui.dropdown {
+  margin-left: auto;
+  align-self: center;
+}
+
+.RecentlySoldTable .rankings-item-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.RecentlySoldTable .recently-sold-item-cell {
+  display: flex;
+  align-items: center;
+}
+
+.RecentlySoldTable .rankings-creator-cell .Profile {
+  display: flex;
+  align-items: center;
+}
+
+.RecentlySoldTable .rankings-creator-cell .Profile .name {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.RecentlySoldTable .rankings-creator-cell .Profile .dcl.avatar-face,
+.RecentlySoldTable .rankings-creator-cell .Profile .dcl.blockie {
+  margin-right: 16px;
+  width: 45px;
+  height: 45px;
+}
+
+.RecentlySoldTable .ui.dropdown.sort-by-dropdown {
+  border: 1px solid rgba(115, 110, 125, 0.4);
+  border-radius: 5px;
+  padding: 6px 16px;
+  margin-right: 12px;
+}
+
+.RecentlySoldTable .recently-sold-item-cell .AssetImage,
+.RecentlySoldTable .recently-sold-item-cell img {
+  width: 48px;
+  height: 48px;
+  margin-right: 20px;
+  background-color: rgba(115, 110, 125, 0.24);
+  border-radius: 5px;
+}
+
+.RecentlySoldTable .recently-sold-item-cell .AssetImage {
+  overflow: hidden;
+}
+
+.RecentlySoldTable .ui.table .rankings-item-data-creator a {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.RecentlySoldTable .dcl.header-menu .dcl.header-menu-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.RecentlySoldTable .dcl .header-menu-left .subtitle {
+  color: #736e7d;
+  margin-top: 6px;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.RecentlySoldTable .rankings-fiat-price {
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 24px;
+  color: #736e7d;
+  padding-left: 4px;
+}
+
+.RecentlySoldTable .recently-sold-timestamp {
+  color: #736e7d;
+  margin-left: auto;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 24px;
+}

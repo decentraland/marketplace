@@ -42,7 +42,8 @@
     "order": "Listing",
     "mint": "Mint",
     "back": "Back",
-    "emote": "Emote"
+    "emote": "Emote",
+    "time_ago": "{time} ago"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -182,6 +183,29 @@
           "total_spent": "Total Spent",
           "total_spent_tooltip": "Total amount of MANA spent in both primary and secondary markets."
         }
+      }
+    },
+    "recently_sold": {
+      "title": "Recently Sold",
+      "last_updated": "Last updated: {date}",
+      "tabs": {
+        "wearable": "Wearables",
+        "parcel": "Land",
+        "emote": "Emotes",
+        "ens": "Names"
+      },
+      "wearables": {
+        "item": "Item",
+        "seller": "Seller",
+        "buyer": "Buyer",
+        "type": "Type",
+        "time": "Time",
+        "price": "Price"
+      },
+      "parcel": {
+        "parcel": "Parcel",
+        "time": "Time",
+        "price": "Price"
       }
     },
     "title": "Decentraland Marketplace",

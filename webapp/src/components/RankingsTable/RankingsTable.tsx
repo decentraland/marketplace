@@ -299,7 +299,13 @@ const RankingsTable = (props: Props) => {
                     </Table.Cell>
                     <Table.Cell width={2}>
                       {item
-                        ? t(`wearable.category.${item.data.wearable?.category}`)
+                        ? item.data.wearable?.category
+                          ? t(
+                              `wearable.category.${item.data.wearable.category}`
+                            )
+                          : t(
+                              `global.emote`
+                            )
                         : null}
                     </Table.Cell>
                     <Table.Cell width={2}>
