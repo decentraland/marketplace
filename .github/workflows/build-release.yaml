@@ -23,6 +23,7 @@ jobs:
       - name: Set package.json version
         uses: menduz/oddish-action@master
         with:
+          cwd: ./webapp
           deterministic-snapshot: true
           only-update-versions: true
       - name: Install
