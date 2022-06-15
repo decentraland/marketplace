@@ -7,12 +7,13 @@
     "codegen": "graph codegen --debug --output-dir src/entities/",
     "build": "graph build",
     "build-data": "ts-node ./scripts/buildData.ts",
-    "deploy-studio:mainnet": "graph deploy --studio decentraland-marketplace-ethereum-mainnet",
+    "auth:studio": "graph auth https://api.studio.thegraph.com/deploy/",
+    "deploy-studio:mainnet": "graph deploy --node https://api.studio.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ decentraland-marketplace-ethereum-mainnet",
     "deploy:ropsten": "ts-node ./scripts/buildData.ts --network ropsten && ts-node ./scripts/deploy.ts --network ropsten",
     "deploy:mainnet": "ts-node ./scripts/buildData.ts --network mainnet && ts-node ./scripts/deploy.ts --network mainnet"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.19.0",
+    "@graphprotocol/graph-cli": "^0.21.1",
     "@graphprotocol/graph-ts": "^0.19.0",
     "ts-node": "^8.5.4",
     "typescript": "^3.7.4"

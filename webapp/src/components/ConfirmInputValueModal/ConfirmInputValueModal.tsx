@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Modal, Button, Form } from 'decentraland-ui'
-import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './ConfirmInputValueModal.types'
 import { ManaField } from '../ManaField'
@@ -19,7 +18,9 @@ const ConfirmInputValueModal = ({
 }: Props) => {
   const [confirmedInput, setConfirmedInput] = useState<string>('')
 
-  const isDisabled = disabled || valueToConfirm !== confirmedInput
+  const parsedValueToConfirm = parseFloat(valueToConfirm).toString()
+
+  const isDisabled = disabled || parsedValueToConfirm !== confirmedInput
 
   return (
     <Modal size="small" open={open} className="ConfirmInputValueModal">
@@ -30,10 +31,10 @@ const ConfirmInputValueModal = ({
           <ManaField
             label={t('global.price')}
             network={network}
-            placeholder={valueToConfirm}
+            placeholder={parsedValueToConfirm}
             value={confirmedInput}
             onChange={(_event, props) => {
-              setConfirmedInput(toFixedMANAValue(props.value))
+              setConfirmedInput(props.value)
             }}
           />
         </Modal.Content>

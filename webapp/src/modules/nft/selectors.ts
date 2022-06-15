@@ -24,7 +24,10 @@ export const getContractAddress = createSelector<
   RootState,
   ReturnType<typeof nftDetailMatchSelector>,
   string | null
->(nftDetailMatchSelector, match => match?.params.contractAddress || null)
+>(
+  nftDetailMatchSelector,
+  match => match?.params.contractAddress.toLowerCase() || null
+)
 
 export const getTokenId = createSelector<
   RootState,
