@@ -32,7 +32,7 @@ jobs:
       - name: Publish
         uses: menduz/oddish-action@master
         with:
-          cwd: "./build"
+          cwd: ./webapp/build
           deterministic-snapshot: true
           registry-url: "https://registry.npmjs.org"
           access: public
