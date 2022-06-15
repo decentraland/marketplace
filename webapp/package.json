@@ -1,5 +1,5 @@
 {
-  "name": "marketplace-ui",
+  "name": "@dcl/marketplace-site",
   "version": "0.0.0-development",
   "dependencies": {
     "@dcl/schemas": "^4.5.0",
