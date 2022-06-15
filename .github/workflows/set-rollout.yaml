@@ -1,0 +1,51 @@
+name: Set rollout
+
+on: [deployment_status]
+
+jobs:
+  set-rollout:
+    if: ${{ github.event.deployment.task == 'upload-to-cdn' && github.event.deployment_status.state == 'success' }}
+    runs-on: ubuntu-18.04
+    defaults:
+      run:
+        working-directory: ./webapp
+    steps:
+      - uses: hmarr/debug-action@v2
+
+      # Dev
+      - name: Set Rollout - Development
+        uses: decentraland/set-rollout-action@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Repo deployment info
+          ref: ${{ github.event.deployment.ref }}
+          sha: ${{ github.event.deployment.sha }}
+
+          # CDN information
+          packageName: ${{ github.event.deployment.payload.packageName }}
+          packageVersion: ${{ github.event.deployment.payload.packageVersion }}
+
+          # Rollout information
+          deploymentDomain: "marketplace.decentraland.zone"
+          deploymentName: "_site"
+          percentage: 100
+
+      # Stg
+      - name: Set Rollout - Staging
+        uses: decentraland/set-rollout-action@main
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Repo deployment info
+          ref: ${{ github.event.deployment.ref }}
+          sha: ${{ github.event.deployment.sha }}
+
+          # CDN information
+          packageName: ${{ github.event.deployment.payload.packageName }}
+          packageVersion: ${{ github.event.deployment.payload.packageVersion }}
+
+          # Rollout information
+          deploymentDomain: "marketplace.decentraland.today"
+          deploymentName: "_site"
+          percentage: 100
