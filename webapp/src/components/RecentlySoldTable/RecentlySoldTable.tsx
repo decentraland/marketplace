@@ -22,7 +22,7 @@ import { formatDistanceToNow } from '../../lib/date'
 import { Props } from './RecentlySoldTable.types'
 import './RecentlySoldTable.css'
 
-const TABLE_SIZE = 5
+const TABLE_SIZE = 7
 
 const RecentlySoldTable = (props: Props) => {
   const { isLoading, onFetchRecentSales, data } = props
