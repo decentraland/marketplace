@@ -10,6 +10,14 @@
   min-height: 575px;
 }
 
+.RecentlySoldTable .recently-sold-card .ui.table td {
+  padding: 16px 0;
+}
+
+.RecentlySoldTable .recently-sold-card table.table td {
+  height: 80px;
+}
+
 .RecentlySoldTable .recently-sold-card-tabs {
   display: flex;
   background-color: #2f2b35;
@@ -40,6 +48,10 @@
 .RecentlySoldTable .recently-sold-item-cell {
   display: flex;
   align-items: center;
+}
+
+.RecentlySoldTable .recently-sold-item-cell-thumbnail {
+  height: 48px;
 }
 
 .RecentlySoldTable .rankings-creator-cell .Profile {

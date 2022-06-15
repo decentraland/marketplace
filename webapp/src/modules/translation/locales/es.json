@@ -42,7 +42,8 @@
     "order": "Clasificado",
     "mint": "Venta",
     "back": "Volver",
-    "emote": "Emote"
+    "emote": "Emote",
+    "time_ago": "Hace {time}"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -179,6 +180,29 @@
           "total_spent": "Total gastado",
           "total_spent_tooltip": "Total de MANA gastado en los mercados primarios y secundarios"
         }
+      }
+    },
+    "recently_sold": {
+      "title": "Vendido recientemente",
+      "last_updated": "Última actualización: {date}",
+      "tabs": {
+        "wearable": "Vestimenta",
+        "parcel": "Land",
+        "emote": "Emotes",
+        "ens": "Nombres"
+      },
+      "wearables": {
+        "item": "Item",
+        "seller": "Vendedor",
+        "buyer": "Comprador",
+        "type": "Tipo",
+        "time": "Fecha",
+        "price": "Precio"
+      },
+      "parcel": {
+        "parcel": "Parcela",
+        "time": "Fecha",
+        "price": "Precio"
       }
     },
     "title": "Mercado de Decentraland",

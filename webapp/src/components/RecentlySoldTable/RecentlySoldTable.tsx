@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
   HeaderMenu,
@@ -36,6 +36,8 @@ const RecentlySoldTable = (props: Props) => {
     })
   }, [currentCategory, onFetchRecentSales])
 
+  const timestamp = useMemo(() => new Date().toLocaleString(), [])
+
   const renderTableTabs = () => {
     return (
       <div className="recently-sold-card-tabs">
@@ -59,7 +61,7 @@ const RecentlySoldTable = (props: Props) => {
         </Tabs>
         <span className="recently-sold-timestamp">
           {t('home_page.recently_sold.last_updated', {
-            date: new Date().toLocaleString()
+            date: timestamp
           })}
         </span>
       </div>
@@ -146,10 +148,11 @@ const RecentlySoldTable = (props: Props) => {
                 }
                 return (
                   <Table.Row key={sale.id}>
-                    <Table.Cell width={5}>
+                    <Table.Cell width={4}>
                       {item ? (
                         <div className="recently-sold-item-cell">
                           <Link
+                            className="recently-sold-item-cell-thumbnail"
                             to={locations.item(
                               item.contractAddress,
                               item.itemId
@@ -203,7 +206,9 @@ const RecentlySoldTable = (props: Props) => {
                     <Table.Cell width={2}>
                       <Profile address={sale.buyer} textOnly inline={false} />
                     </Table.Cell>
-                    <Table.Cell width={2}>{sale.type}</Table.Cell>
+                    <Table.Cell width={1}>
+                      {t(`global.${sale.type}`)}
+                    </Table.Cell>
                     <Table.Cell width={2}>
                       {t('global.time_ago', {
                         time: formatDistanceToNow(sale.timestamp)
@@ -226,7 +231,6 @@ const RecentlySoldTable = (props: Props) => {
       case NFTCategory.ENS:
       case NFTCategory.PARCEL:
         return data.map(sale => {
-          console.log('sale: ', sale)
           return (
             <AssetProvider
               key={sale.id}
@@ -235,7 +239,6 @@ const RecentlySoldTable = (props: Props) => {
               tokenId={sale.tokenId}
             >
               {(item, _order, isLoading) => {
-                console.log('item: ', item)
                 if (!isLoading && !item) {
                   return null
                 }
@@ -244,7 +247,10 @@ const RecentlySoldTable = (props: Props) => {
                     <Table.Cell width={4}>
                       {item ? (
                         <div className="recently-sold-item-cell">
-                          <Link to={locations.item(item.contractAddress)}>
+                          <Link
+                            className="recently-sold-item-cell-thumbnail"
+                            to={locations.item(item.contractAddress)}
+                          >
                             <AssetImage asset={item} showMonospace />
                           </Link>
                           <div className="rankings-item-data">
@@ -263,13 +269,15 @@ const RecentlySoldTable = (props: Props) => {
                     <Table.Cell width={2}>
                       <Profile address={sale.buyer} textOnly inline={false} />
                     </Table.Cell>
-                    <Table.Cell width={2}>{sale.type}</Table.Cell>
+                    <Table.Cell width={1}>
+                      {t(`global.${sale.type}`)}
+                    </Table.Cell>
                     <Table.Cell width={2}>
                       {t('global.time_ago', {
                         time: formatDistanceToNow(sale.timestamp)
                       })}
                     </Table.Cell>
-                    <Table.Cell width={3}>
+                    <Table.Cell width={2}>
                       <Mana network={item?.network} inline>
                         {formatWeiMANA(sale.price)}
                       </Mana>

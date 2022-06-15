@@ -42,7 +42,8 @@
     "order": "清单",
     "mint": "薄荷",
     "back": "背部",
-    "emote": "表情"
+    "emote": "表情",
+    "time_ago": "{time} 前"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -180,6 +181,29 @@
           "total_spent": "总花费",
           "total_spent_tooltip": "在一级市场和二级市场上花费的 MANA 总量。"
         }
+      }
+    },
+    "recently_sold": {
+      "title": "最近售出",
+      "last_updated": "最后更新：{日期}",
+      "tabs": {
+        "wearable": "可穿戴设备",
+        "parcel": "土地",
+        "emote": "表情",
+        "ens": "名称"
+      },
+      "wearables": {
+        "item": "物品",
+        "seller": "卖方",
+        "buyer": "买方",
+        "type": "类型",
+        "time": "时间",
+        "price": "价格"
+      },
+      "parcel": {
+        "parcel": "包裹",
+        "time": "时间",
+        "price": "价格"
       }
     },
     "title": "Decentraland Marketplace",
