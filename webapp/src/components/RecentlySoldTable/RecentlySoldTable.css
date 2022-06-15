@@ -50,6 +50,10 @@
   align-items: center;
 }
 
+.RecentlySoldTable .recently-sold-item-cell a:hover {
+  text-decoration: underline;
+}
+
 .RecentlySoldTable .recently-sold-item-cell-thumbnail {
   height: 48px;
 }
@@ -125,4 +129,9 @@
   font-weight: 400;
   font-size: 15px;
   line-height: 24px;
+}
+
+.RecentlySoldTable .ui.table a.account-link {
+  color: var(--primary);
+  font-weight: bold;
 }

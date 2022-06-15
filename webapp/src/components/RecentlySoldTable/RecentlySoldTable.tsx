@@ -76,7 +76,11 @@ const RecentlySoldTable = (props: Props) => {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                {t('home_page.recently_sold.wearables.item')}
+                {t(
+                  `global.${
+                    currentCategory === NFTCategory.WEARABLE ? 'item' : 'emote'
+                  }`
+                )}
               </Table.HeaderCell>
               <Table.HeaderCell>
                 {t('home_page.recently_sold.wearables.seller')}
@@ -102,7 +106,11 @@ const RecentlySoldTable = (props: Props) => {
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>
-                {t('home_page.recently_sold.parcel.parcel')}
+                {t(
+                  `global.${
+                    currentCategory === NFTCategory.PARCEL ? 'parcel' : 'ens'
+                  }`
+                )}
               </Table.HeaderCell>
               <Table.HeaderCell>
                 {t('home_page.recently_sold.wearables.seller')}
@@ -153,10 +161,7 @@ const RecentlySoldTable = (props: Props) => {
                         <div className="recently-sold-item-cell">
                           <Link
                             className="recently-sold-item-cell-thumbnail"
-                            to={locations.item(
-                              item.contractAddress,
-                              item.itemId
-                            )}
+                            to={item.url}
                           >
                             <img
                               src={item.thumbnail}
@@ -165,14 +170,7 @@ const RecentlySoldTable = (props: Props) => {
                           </Link>
 
                           <div className="rankings-item-data">
-                            <Link
-                              to={locations.item(
-                                item.contractAddress,
-                                item.itemId
-                              )}
-                            >
-                              {item.name}
-                            </Link>
+                            <Link to={item.url}>{item.name}</Link>
 
                             <span>
                               <T
@@ -201,10 +199,24 @@ const RecentlySoldTable = (props: Props) => {
                       ) : null}
                     </Table.Cell>
                     <Table.Cell width={2}>
-                      <Profile address={sale.seller} textOnly inline={false} />
+                      <Link
+                        to={locations.account(sale.seller)}
+                        className="account-link"
+                      >
+                        <Profile
+                          address={sale.seller}
+                          textOnly
+                          inline={false}
+                        />
+                      </Link>
                     </Table.Cell>
                     <Table.Cell width={2}>
-                      <Profile address={sale.buyer} textOnly inline={false} />
+                      <Link
+                        to={locations.account(sale.buyer)}
+                        className="account-link"
+                      >
+                        <Profile address={sale.buyer} textOnly inline={false} />
+                      </Link>
                     </Table.Cell>
                     <Table.Cell width={1}>
                       {t(`global.${sale.type}`)}
@@ -238,25 +250,23 @@ const RecentlySoldTable = (props: Props) => {
               contractAddress={sale.contractAddress}
               tokenId={sale.tokenId}
             >
-              {(item, _order, isLoading) => {
-                if (!isLoading && !item) {
+              {(asset, _order, isLoading) => {
+                if (!isLoading && !asset) {
                   return null
                 }
                 return (
                   <Table.Row key={sale.id}>
                     <Table.Cell width={4}>
-                      {item ? (
+                      {asset ? (
                         <div className="recently-sold-item-cell">
                           <Link
                             className="recently-sold-item-cell-thumbnail"
-                            to={locations.item(item.contractAddress)}
+                            to={asset.url}
                           >
-                            <AssetImage asset={item} showMonospace />
+                            <AssetImage asset={asset} showMonospace isSmall />
                           </Link>
                           <div className="rankings-item-data">
-                            <Link to={locations.item(item.contractAddress)}>
-                              {item.name}
-                            </Link>
+                            <Link to={asset.url}>{asset.name}</Link>
                           </div>
                         </div>
                       ) : isLoading ? (
@@ -264,10 +274,24 @@ const RecentlySoldTable = (props: Props) => {
                       ) : null}
                     </Table.Cell>
                     <Table.Cell width={2}>
-                      <Profile address={sale.seller} textOnly inline={false} />
+                      <Link
+                        to={locations.account(sale.seller)}
+                        className="account-link"
+                      >
+                        <Profile
+                          address={sale.seller}
+                          textOnly
+                          inline={false}
+                        />
+                      </Link>
                     </Table.Cell>
                     <Table.Cell width={2}>
-                      <Profile address={sale.buyer} textOnly inline={false} />
+                      <Link
+                        to={locations.account(sale.buyer)}
+                        className="account-link"
+                      >
+                        <Profile address={sale.buyer} textOnly inline={false} />
+                      </Link>
                     </Table.Cell>
                     <Table.Cell width={1}>
                       {t(`global.${sale.type}`)}
@@ -278,7 +302,7 @@ const RecentlySoldTable = (props: Props) => {
                       })}
                     </Table.Cell>
                     <Table.Cell width={2}>
-                      <Mana network={item?.network} inline>
+                      <Mana network={asset?.network} inline>
                         {formatWeiMANA(sale.price)}
                       </Mana>
                       <span className="rankings-fiat-price">
