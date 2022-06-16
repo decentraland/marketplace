@@ -1,9 +1,8 @@
-import { RouteChildrenProps } from 'react-router'
-
 export type Props = {
-  onBack: () => void
+  contractAddress: string | null
   currentAddress?: string
-} & RouteChildrenProps
+  onBack: () => void
+}
 
-export type MapStateProps = Pick<Props, 'currentAddress'>
+export type MapStateProps = Pick<Props, 'contractAddress' | 'currentAddress'>
 export type MapDispatchProps = Pick<Props, 'onBack'>

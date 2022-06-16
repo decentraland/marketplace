@@ -159,6 +159,7 @@
     "home_ens": "Names"
   },
   "collection_page": {
+    "no_collection": "No Collection",
     "unlist_from_market": "Unlist from market",
     "list_on_market": "List on market",
     "edit_in_builder": "Edit in builder",
@@ -368,7 +369,8 @@
     "confirm": {
       "title": "Please confirm",
       "line_one": "You are about to list {name} on sale for {amount}.",
-      "line_two": "Please re-enter the price to confirm:"
+      "line_two": "Please re-enter the price to confirm:",
+      "warning": "Warning: this price is way below market value"
     }
   },
   "buy_page": {

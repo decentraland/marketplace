@@ -2,8 +2,9 @@ import { Eth } from 'web3x/eth'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { LegacyProviderAdapter } from 'web3x/providers'
+import { config } from '../../config'
 
-export const TRANSACTIONS_API_URL = process.env.REACT_APP_TRANSACTIONS_API_URL
+export const TRANSACTIONS_API_URL = config.get('TRANSACTIONS_API_URL')
 
 export function shortenAddress(address: string) {
   if (address) {

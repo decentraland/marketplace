@@ -157,6 +157,7 @@
     "home_ens": "名称"
   },
   "collection_page": {
+    "no_collection": "没有收藏",
     "unlist_from_market": "取消销售",
     "list_on_market": "待售",
     "edit_in_builder": "在构建器中编辑",
@@ -366,7 +367,8 @@
     "confirm": {
       "title": "请确认",
       "line_one": "您将要列出{amount}待售的{name}。",
-      "line_two": "请重新输入价格以确认："
+      "line_two": "请重新输入价格以确认：",
+      "warning": "警告：此价格远低于市场价值"
     }
   },
   "buy_page": {

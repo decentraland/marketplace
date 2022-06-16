@@ -15,6 +15,7 @@ import { VendorName, TransferType } from '../types'
 import { ContractService } from './ContractService'
 import { SuperRareAsset, SuperRareOrder, SuperRareOwner } from './types'
 import { superRareAPI, MAX_QUERY_SIZE } from './api'
+import { config } from '../../../config'
 
 export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
   private tokenConverter: TokenConverter
@@ -159,7 +160,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
       },
       category: 'art',
       vendor: VendorName.SUPER_RARE,
-      chainId: Number(process.env.REACT_APP_CHAIN_ID),
+      chainId: Number(config.get('CHAIN_ID')!),
       network: Network.ETHEREUM,
       issuedId: null,
       itemId: null,
@@ -192,7 +193,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
       createdAt: +order.timestamp,
       updatedAt: +order.timestamp,
       expiresAt: Infinity,
-      chainId: Number(process.env.REACT_APP_CHAIN_ID),
+      chainId: Number(config.get('CHAIN_ID')!),
       network: Network.ETHEREUM
     }
   }

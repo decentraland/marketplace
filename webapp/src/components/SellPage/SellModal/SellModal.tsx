@@ -29,6 +29,7 @@ import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Props } from './SellModal.types'
+import { showPriceBelowMarketValueWarning } from './utils'
 
 const SellModal = (props: Props) => {
   const {
@@ -177,6 +178,14 @@ const SellModal = (props: Props) => {
                 )
               }}
             />
+            {showPriceBelowMarketValueWarning(nft, parseMANANumber(price)) && (
+              <>
+                <br />
+                <p className="danger-text">
+                  <T id="sell_page.confirm.warning" />
+                </p>
+              </>
+            )}
             <br />
             <T id="sell_page.confirm.line_two" />
           </>

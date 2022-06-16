@@ -1,5 +1,5 @@
 import { takeEvery, all, put } from 'redux-saga/effects'
-import { ChainId, Network, NFTCategory } from '@dcl/schemas'
+import { Network, NFTCategory } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
 import { createWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
 import {
@@ -19,9 +19,10 @@ import { getContractNames } from '../vendor'
 import { contracts, getContract } from '../contract/utils'
 import { isPartner } from '../vendor/utils'
 import { TRANSACTIONS_API_URL } from './utils'
+import { config } from '../../config'
 
 const baseWalletSaga = createWalletSaga({
-  CHAIN_ID: Number(process.env.REACT_APP_CHAIN_ID) || ChainId.ETHEREUM_MAINNET,
+  CHAIN_ID: Number(config.get('CHAIN_ID')!),
   POLL_INTERVAL: 0,
   TRANSACTIONS_API_URL
 })

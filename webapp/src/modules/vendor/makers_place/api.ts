@@ -11,8 +11,9 @@ import {
   MakersPlaceFetchOneParams,
   MakersPlaceSort
 } from './types'
+import { config } from '../../../config'
 
-const API_URL = process.env.REACT_APP_MAKERS_PLACE_API_URL!
+const API_URL = config.get('MAKERS_PLACE_API_URL')!
 
 export const MAX_QUERY_SIZE = 50
 
