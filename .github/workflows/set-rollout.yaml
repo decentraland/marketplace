@@ -27,7 +27,7 @@ jobs:
           packageVersion: ${{ github.event.deployment.payload.packageVersion }}
 
           # Rollout information
-          deploymentDomain: "marketplace.decentraland.zone"
+          deploymentDomain: "market.decentraland.zone"
           deploymentName: "_site"
           percentage: 100
 
@@ -46,6 +46,6 @@ jobs:
           packageVersion: ${{ github.event.deployment.payload.packageVersion }}
 
           # Rollout information
-          deploymentDomain: "marketplace.decentraland.today"
+          deploymentDomain: "market.decentraland.today"
           deploymentName: "_site"
           percentage: 100
