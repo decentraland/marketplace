@@ -1,7 +1,7 @@
 # Blockchain indexer
 
-- Mainnet: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace (QmapfJhM9m3Jguo2xQwMsrCQANpurunQSAv5U9a2TwEVLb)
-- Ropsten: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-ropsten (QmY9m5dzbQDwWyn5wQig5MwufkTw7rb9QbnthBiqprZ5ZD)
+- Mainnet: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace (QmWF9uXD9KokRU1hA5Gnmc3VKU5mPU3cAYmD15cfa8YDTT)
+- Ropsten: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-ropsten (QmfHCGhLTZV8v2duxDkKtPZKMEdJM7X8YGRj2UvqmrAUBB)
 
 It uses [thegraph](https://thegraph.com)
 
