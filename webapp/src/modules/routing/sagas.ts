@@ -327,7 +327,7 @@ function* handleFetchSales({
       first: pageSize,
       skip: (page - 1) * SALES_PER_PAGE,
       sortBy: SaleSortBy.RECENTLY_SOLD,
-      category: category || NFTCategory.WEARABLE,
+      categories: [category || NFTCategory.WEARABLE],
       ...(address && { seller: address })
     })
   )

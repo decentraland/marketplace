@@ -30,7 +30,10 @@ const RecentlySoldTable = (props: Props) => {
 
   useEffect(() => {
     onFetchRecentSales({
-      category: currentCategory,
+      categories:
+        currentCategory === NFTCategory.PARCEL
+          ? [NFTCategory.ESTATE, NFTCategory.PARCEL]
+          : [currentCategory],
       first: TABLE_SIZE,
       sortBy: SaleSortBy.RECENTLY_SOLD
     })
