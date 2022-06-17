@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import {
   HeaderMenu,
   Header,
@@ -39,10 +39,14 @@ const ALL_FILTER = 'all'
 const INITIAL_FILTERS = {
   sortBy: RankingsSortBy.MOST_VOLUME
 }
+const TABS_PREFIX = '#rankings-'
 
 const RankingsTable = (props: Props) => {
   const { isLoading, onFetchRankings, data } = props
 
+  const history = useHistory()
+  const location = useLocation()
+  const rankingCardRef = useRef<HTMLDivElement>(null)
   const [currentEntity, setCurrentEntity] = useState(RankingEntities.ITEMS)
   const [currentFilters, setCurrentFilters] = useState<RankingsFilters>(
     INITIAL_FILTERS
@@ -65,14 +69,27 @@ const RankingsTable = (props: Props) => {
     })
   }
 
+  useEffect(() => {
+    if (location.hash && location.hash.includes(TABS_PREFIX)) {
+      rankingCardRef.current?.scrollIntoView({ behavior: 'smooth' })
+      setCurrentEntity(
+        location.hash.replace(TABS_PREFIX, '') as RankingEntities
+      )
+    }
+  }, [])
+
   const handleTabChange = (entity: RankingEntities) => {
     setCurrentEntity(entity)
     setCurrentFilters(INITIAL_FILTERS)
+    history.replace({
+      pathname: location.pathname,
+      hash: `${TABS_PREFIX}${entity}`
+    })
   }
 
   const renderTableTabs = () => {
     return (
-      <div className="rankings-card-tabs">
+      <div className="rankings-card-tabs" ref={rankingCardRef}>
         <Tabs isFullscreen>
           <Tabs.Left>
             {Object.values(RankingEntities).map(entity => (
@@ -81,7 +98,9 @@ const RankingsTable = (props: Props) => {
                 active={currentEntity === entity}
                 onClick={() => handleTabChange(entity)}
               >
-                {t(`home_page.analytics.rankings.${entity}.tab_title`)}
+                <div id={entity}>
+                  {t(`home_page.analytics.rankings.${entity}.tab_title`)}
+                </div>
               </Tabs.Tab>
             ))}
           </Tabs.Left>
