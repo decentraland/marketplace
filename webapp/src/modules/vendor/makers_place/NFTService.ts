@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
-import { formatEther } from 'ethers/lib/utils'
+import { ethers } from 'ethers'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721__factory } from '../../../contracts'
 import { getSigner } from '../../wallet/utils'
@@ -186,7 +186,7 @@ export class NFTService
 
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
-    return formatEther(mana.toString())
+    return ethers.utils.parseEther(mana.toString())
   }
 
   private isValid(asset: MakersPlaceAsset) {

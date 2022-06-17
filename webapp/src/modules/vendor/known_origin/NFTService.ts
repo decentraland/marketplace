@@ -208,7 +208,7 @@ export class NFTService
 
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
-    return ethers.utils.formatEther(mana.toString())
+    return ethers.utils.parseEther(mana.toString())
   }
 
   private getOwner(fragment: Fragment): string {

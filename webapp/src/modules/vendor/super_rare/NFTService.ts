@@ -1,5 +1,5 @@
 import { BigNumber } from 'ethers'
-import { formatEther } from 'ethers/lib/utils'
+import { ethers } from 'ethers'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ERC721__factory } from '../../../contracts'
@@ -210,6 +210,6 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
 
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
-    return formatEther(mana.toString())
+    return ethers.utils.parseEther(mana.toString())
   }
 }
