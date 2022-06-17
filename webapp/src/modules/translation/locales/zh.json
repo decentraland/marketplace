@@ -147,6 +147,9 @@
         "subtitle": "仅包括可穿戴设备和表情",
         "most_volume": "音量 (MANA)",
         "most_sales": "销售数量",
+        "no_results_title": "没有找到这些过滤器的结果",
+        "no_results_action": "{link} 或选择不同的",
+        "clear_filters": "清除过滤器",
         "items": {
           "all_categories": "所有类别",
           "all_rarities": "所有稀有物品",

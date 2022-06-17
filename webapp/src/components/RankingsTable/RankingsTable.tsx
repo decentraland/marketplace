@@ -36,14 +36,17 @@ import { Props } from './RankingsTable.types'
 import './RankingsTable.css'
 
 const ALL_FILTER = 'all'
+const INITIAL_FILTERS = {
+  sortBy: RankingsSortBy.MOST_VOLUME
+}
 
 const RankingsTable = (props: Props) => {
-  const { isLoading, onFetchRankings } = props
+  const { isLoading, onFetchRankings, data } = props
 
   const [currentEntity, setCurrentEntity] = useState(RankingEntities.ITEMS)
-  const [currentFilters, setCurrentFilters] = useState<RankingsFilters>({
-    sortBy: RankingsSortBy.MOST_VOLUME
-  })
+  const [currentFilters, setCurrentFilters] = useState<RankingsFilters>(
+    INITIAL_FILTERS
+  )
   const [currentTimeframe, setCurrentTimeframe] = useState(
     AnalyticsTimeframe.WEEK
   )
@@ -62,6 +65,11 @@ const RankingsTable = (props: Props) => {
     })
   }
 
+  const handleTabChange = (entity: RankingEntities) => {
+    setCurrentEntity(entity)
+    setCurrentFilters(INITIAL_FILTERS)
+  }
+
   const renderTableTabs = () => {
     return (
       <div className="rankings-card-tabs">
@@ -71,7 +79,7 @@ const RankingsTable = (props: Props) => {
               <Tabs.Tab
                 key={entity}
                 active={currentEntity === entity}
-                onClick={() => setCurrentEntity(entity)}
+                onClick={() => handleTabChange(entity)}
               >
                 {t(`home_page.analytics.rankings.${entity}.tab_title`)}
               </Tabs.Tab>
@@ -82,6 +90,7 @@ const RankingsTable = (props: Props) => {
           <>
             <Dropdown
               defaultValue={ALL_FILTER}
+              value={currentFilters.category || ALL_FILTER}
               direction="right"
               options={[
                 ALL_FILTER,
@@ -97,6 +106,7 @@ const RankingsTable = (props: Props) => {
             />
             <Dropdown
               defaultValue={ALL_FILTER}
+              value={currentFilters.rarity || ALL_FILTER}
               direction="right"
               options={[ALL_FILTER, ...Object.values(Rarity.schema.enum)].map(
                 rarity => ({
@@ -225,8 +235,32 @@ const RankingsTable = (props: Props) => {
     }
   }
 
+  const renderEmptyState = () => {
+    return (
+      <div className="empty-state-container">
+        <span className="empty-state-title">
+          {t('home_page.analytics.rankings.no_results_title')}
+        </span>
+        <span className="empty-state-subtitle">
+          <T
+            id="home_page.analytics.rankings.no_results_action"
+            values={{
+              link: (
+                <div
+                  className="empty-state-action-button"
+                  onClick={() => setCurrentFilters(INITIAL_FILTERS)}
+                >
+                  {t('home_page.analytics.rankings.clear_filters')}
+                </div>
+              )
+            }}
+          />
+        </span>
+      </div>
+    )
+  }
+
   const renderTableContent = () => {
-    const { data } = props
     if (!data) {
       return null
     }
@@ -303,9 +337,7 @@ const RankingsTable = (props: Props) => {
                           ? t(
                               `wearable.category.${item.data.wearable.category}`
                             )
-                          : t(
-                              `global.emote`
-                            )
+                          : t(`global.emote`)
                         : null}
                     </Table.Cell>
                     <Table.Cell width={2}>
@@ -455,11 +487,13 @@ const RankingsTable = (props: Props) => {
 
         {isLoading ? (
           <Loader active size="large" />
-        ) : (
+        ) : data && data.length > 0 ? (
           <Table basic="very">
             <NotMobile>{getTableHeader()}</NotMobile>
             <Table.Body>{renderTableContent()}</Table.Body>
           </Table>
+        ) : (
+          renderEmptyState()
         )}
       </div>
     </div>

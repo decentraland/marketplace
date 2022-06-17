@@ -147,6 +147,9 @@
         "subtitle": "Incluye solo wearables y emotes",
         "most_volume": "Volumen (MANA)",
         "most_sales": "Cantidad de ventas",
+        "no_results_title": "No hay resultados para los filtros seleccionados",
+        "no_results_action": "{link} o seleccione diferentes",
+        "clear_filters": "Limpie los filtros",
         "items": {
           "all_categories": "Todas las categorias",
           "all_rarities": "Todas las rarezas",
