@@ -42,7 +42,8 @@
     "order": "清单",
     "mint": "薄荷",
     "back": "背部",
-    "emote": "表情"
+    "emote": "表情",
+    "time_ago": "{time} 前"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -146,6 +147,9 @@
         "subtitle": "仅包括可穿戴设备和表情",
         "most_volume": "音量 (MANA)",
         "most_sales": "销售数量",
+        "no_results_title": "没有找到这些过滤器的结果",
+        "no_results_action": "{link} 或选择不同的",
+        "clear_filters": "清除过滤器",
         "items": {
           "all_categories": "所有类别",
           "all_rarities": "所有稀有物品",
@@ -182,6 +186,29 @@
         }
       }
     },
+    "recently_sold": {
+      "title": "最近售出",
+      "last_updated": "最后更新：{日期}",
+      "tabs": {
+        "wearable": "可穿戴设备",
+        "parcel": "土地",
+        "emote": "表情",
+        "ens": "名称"
+      },
+      "wearables": {
+        "item": "物品",
+        "seller": "卖方",
+        "buyer": "买方",
+        "type": "类型",
+        "time": "时间",
+        "price": "价格"
+      },
+      "parcel": {
+        "parcel": "包裹",
+        "time": "时间",
+        "price": "价格"
+      }
+    },
     "title": "Decentraland Marketplace",
     "subtitle": "欢迎来到虚拟世界的一站式商店，获取最好的数字资产。",
     "get_started": "开始浏览",
@@ -196,6 +223,7 @@
     "home_ens": "名称"
   },
   "collection_page": {
+    "no_collection": "没有收藏",
     "unlist_from_market": "取消销售",
     "list_on_market": "待售",
     "edit_in_builder": "在构建器中编辑",
@@ -405,7 +433,8 @@
     "confirm": {
       "title": "请确认",
       "line_one": "您将要列出{amount}待售的{name}。",
-      "line_two": "请重新输入价格以确认："
+      "line_two": "请重新输入价格以确认：",
+      "warning": "警告：此价格远低于市场价值"
     }
   },
   "buy_page": {

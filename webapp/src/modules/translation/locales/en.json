@@ -42,7 +42,8 @@
     "order": "Listing",
     "mint": "Mint",
     "back": "Back",
-    "emote": "Emote"
+    "emote": "Emote",
+    "time_ago": "{time} ago"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -145,9 +146,12 @@
       },
       "rankings": {
         "title": "Rankings",
-        "subtitle": "Includes only wearables and emotes",
+        "subtitle": "Includes only Wearables and Emotes",
         "most_volume": "Volume (MANA)",
         "most_sales": "Items (quantity)",
+        "no_results_title": "No results found for these filters",
+        "no_results_action": "{link} or select different ones",
+        "clear_filters": "Clear filters",
         "items": {
           "all_categories": "All categories",
           "all_rarities": "All rarities",
@@ -177,11 +181,34 @@
           "items_bought": "Items Bought",
           "creators_supported": "Creators Supported",
           "creators_supported_tooltip": "Number of Creators the user bought at least 1 item from.",
-          "unique_items_bought": "Unique items Bought",
+          "unique_items_bought": "Mythic/Unique items Bought",
           "unique_items_bought_tooltip": "Number of Mythic or Unique items the user has bought.",
           "total_spent": "Total Spent",
           "total_spent_tooltip": "Total amount of MANA spent in both primary and secondary markets."
         }
+      }
+    },
+    "recently_sold": {
+      "title": "Recently Sold",
+      "last_updated": "Last updated: {date}",
+      "tabs": {
+        "wearable": "Wearables",
+        "parcel": "Land",
+        "emote": "Emotes",
+        "ens": "Names"
+      },
+      "wearables": {
+        "item": "Item",
+        "seller": "Seller",
+        "buyer": "Buyer",
+        "type": "Type",
+        "time": "Time",
+        "price": "Price"
+      },
+      "parcel": {
+        "parcel": "Parcel",
+        "time": "Time",
+        "price": "Price"
       }
     },
     "title": "Decentraland Marketplace",
@@ -198,6 +225,7 @@
     "home_ens": "Names"
   },
   "collection_page": {
+    "no_collection": "No Collection",
     "unlist_from_market": "Unlist from market",
     "list_on_market": "List on market",
     "edit_in_builder": "Edit in builder",
@@ -408,7 +436,8 @@
     "confirm": {
       "title": "Please confirm",
       "line_one": "You are about to list {name} on sale for {amount}.",
-      "line_two": "Please re-enter the price to confirm:"
+      "line_two": "Please re-enter the price to confirm:",
+      "warning": "Warning: this price is way below market value"
     }
   },
   "buy_page": {

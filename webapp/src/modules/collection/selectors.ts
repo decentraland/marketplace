@@ -1,5 +1,7 @@
 import { Collection } from '@dcl/schemas'
+import { createMatchSelector } from 'connected-react-router'
 import { createSelector } from 'reselect'
+import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
 
 export const getState = (state: RootState) => state.collection
@@ -23,4 +25,18 @@ export const getCollectionsByAddress = createSelector<
     acc[collection.contractAddress] = collection
     return acc
   }, {} as Record<string, Collection>)
+)
+
+const CollectionDetailMatchSelector = createMatchSelector<
+  RootState,
+  { contractAddress: string }
+>(locations.collection(':contractAddress'))
+
+export const getContractAddress = createSelector<
+  RootState,
+  ReturnType<typeof CollectionDetailMatchSelector>,
+  string | null
+>(
+  CollectionDetailMatchSelector,
+  match => match?.params.contractAddress.toLowerCase() || null
 )

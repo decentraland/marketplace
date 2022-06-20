@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { utils } from 'ethers'
 import { Link } from 'react-router-dom'
 import { Loader, Stats, Button } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
@@ -155,7 +156,7 @@ const Bid = (props: Props) => {
                         name: <b>{getAssetName(nft)}</b>,
                         amount: (
                           <Mana network={nft.network} inline>
-                            {formatWeiMANA(bid.price).toLocaleString()}
+                            {formatWeiMANA(bid.price)}
                           </Mana>
                         )
                       }}
@@ -165,7 +166,7 @@ const Bid = (props: Props) => {
                   </>
                 }
                 onConfirm={handleConfirm}
-                valueToConfirm={formatWeiMANA(bid.price)}
+                valueToConfirm={utils.formatEther(bid.price)}
                 network={nft.network}
                 onCancel={() => setShowConfirmationModal(false)}
                 loading={isAcceptingBid}

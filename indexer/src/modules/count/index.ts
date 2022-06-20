@@ -1,6 +1,7 @@
 import { BigInt } from '@graphprotocol/graph-ts'
 import { NFT, Order, Count } from '../../entities/schema'
 import * as categories from '../category/categories'
+import { ONE_MILLION } from '../utils'
 
 export const DEFAULT_ID = 'all'
 
@@ -21,6 +22,8 @@ export function buildCount(): Count {
     count.started = 0
     count.salesTotal = 0
     count.salesManaTotal = BigInt.fromI32(0)
+    count.creatorEarningsManaTotal = BigInt.fromI32(0)
+    count.daoEarningsManaTotal = BigInt.fromI32(0)
   }
 
   return count as Count
@@ -60,9 +63,15 @@ export function buildCountFromOrder(order: Order): Count {
   return count
 }
 
-export function buildCountFromSale(price: BigInt): Count {
+export function buildCountFromSale(
+  price: BigInt,
+  feesCollectorCut: BigInt
+): Count {
   let count = buildCount()
   count.salesTotal += 1
   count.salesManaTotal = count.salesManaTotal.plus(price)
+  count.daoEarningsManaTotal = count.daoEarningsManaTotal.plus(
+    feesCollectorCut.times(price).div(ONE_MILLION)
+  )
   return count
 }

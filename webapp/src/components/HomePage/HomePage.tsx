@@ -11,6 +11,7 @@ import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
+import { RecentlySoldTable } from '../RecentlySoldTable'
 import { Footer } from '../Footer'
 import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
 import { Slideshow } from './Slideshow'
@@ -30,7 +31,6 @@ const HomePage = (props: Props) => {
     () => ({
       [View.HOME_TRENDING_ITEMS]: Section.WEARABLES_TRENDING,
       [View.HOME_NEW_ITEMS]: Section.WEARABLES,
-      [View.HOME_SOLD_ITEMS]: Section.WEARABLES,
       [View.HOME_WEARABLES]: Section.WEARABLES,
       [View.HOME_LAND]: Section.LAND,
       [View.HOME_ENS]: Section.ENS
@@ -57,7 +57,6 @@ const HomePage = (props: Props) => {
     () => ({
       [View.HOME_TRENDING_ITEMS]: AssetType.ITEM,
       [View.HOME_NEW_ITEMS]: AssetType.ITEM,
-      [View.HOME_SOLD_ITEMS]: AssetType.ITEM,
       [View.HOME_WEARABLES]: AssetType.NFT,
       [View.HOME_LAND]: AssetType.NFT,
       [View.HOME_ENS]: AssetType.NFT
@@ -68,7 +67,6 @@ const HomePage = (props: Props) => {
   const sort: Partial<Record<View, SortBy>> = useMemo(
     () => ({
       [View.HOME_NEW_ITEMS]: SortBy.RECENTLY_LISTED,
-      [View.HOME_SOLD_ITEMS]: SortBy.RECENTLY_SOLD,
       [View.HOME_WEARABLES]: SortBy.RECENTLY_LISTED,
       [View.HOME_LAND]: SortBy.RECENTLY_LISTED,
       [View.HOME_ENS]: SortBy.RECENTLY_LISTED
@@ -145,6 +143,7 @@ const HomePage = (props: Props) => {
         {firstViewsSection.map(renderSlideshow)}
         <RankingsTable />
         {secondViewsSection.map(renderSlideshow)}
+        <RecentlySoldTable />
       </Page>
       <Footer />
     </>
