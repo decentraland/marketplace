@@ -23,6 +23,7 @@ import {
   RankingsFilters,
   RankingsSortBy
 } from '../../modules/analytics/types'
+import { useScrollSectionIntoView } from '../../modules/ui/utils'
 import { TimeframeSelector } from '../Rankings/TimeframeSelector'
 import { InfoTooltip } from '../InfoTooltip'
 import { AssetProvider } from '../AssetProvider'
@@ -46,7 +47,6 @@ const RankingsTable = (props: Props) => {
 
   const history = useHistory()
   const location = useLocation()
-  const rankingCardRef = useRef<HTMLDivElement>(null)
   const [currentEntity, setCurrentEntity] = useState(RankingEntities.ITEMS)
   const [currentFilters, setCurrentFilters] = useState<RankingsFilters>(
     INITIAL_FILTERS
@@ -54,6 +54,8 @@ const RankingsTable = (props: Props) => {
   const [currentTimeframe, setCurrentTimeframe] = useState(
     AnalyticsTimeframe.WEEK
   )
+  const rankingCardRef = useRef<HTMLDivElement>(null)
+  useScrollSectionIntoView(rankingCardRef, TABS_PREFIX, setCurrentEntity)
 
   useEffect(() => {
     onFetchRankings(currentEntity, currentTimeframe, currentFilters)
@@ -68,15 +70,6 @@ const RankingsTable = (props: Props) => {
       [filterName]: value !== ALL_FILTER ? value : undefined
     })
   }
-
-  useEffect(() => {
-    if (location.hash && location.hash.includes(TABS_PREFIX)) {
-      rankingCardRef.current?.scrollIntoView({ behavior: 'smooth' })
-      setCurrentEntity(
-        location.hash.replace(TABS_PREFIX, '') as RankingEntities
-      )
-    }
-  }, [])
 
   const handleTabChange = (entity: RankingEntities) => {
     setCurrentEntity(entity)

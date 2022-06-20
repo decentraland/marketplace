@@ -12,6 +12,7 @@ import {
 import { NFTCategory, SaleSortBy } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
+import { useScrollSectionIntoView } from '../../modules/ui/utils'
 import { AssetProvider } from '../AssetProvider'
 import { AssetType } from '../../modules/asset/types'
 import { formatWeiMANA } from '../../lib/mana'
@@ -32,14 +33,11 @@ const RecentlySoldTable = (props: Props) => {
   const recentlySoldCardRef = useRef<HTMLDivElement>(null)
   const [currentCategory, setCurrentyCategory] = useState(NFTCategory.WEARABLE)
 
-  useEffect(() => {
-    if (location.hash && location.hash.includes(TABS_PREFIX)) {
-      recentlySoldCardRef.current?.scrollIntoView({ behavior: 'smooth' })
-      setCurrentyCategory(location.hash.replace(TABS_PREFIX, '') as NFTCategory)
-    }
-    // we only want this behavior after the first render
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  useScrollSectionIntoView(
+    recentlySoldCardRef,
+    TABS_PREFIX,
+    setCurrentyCategory
+  )
 
   useEffect(() => {
     onFetchRecentSales({
