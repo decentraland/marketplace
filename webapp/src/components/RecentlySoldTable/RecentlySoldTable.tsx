@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import {
   HeaderMenu,
   Header,
@@ -12,6 +12,7 @@ import {
 import { NFTCategory, SaleSortBy } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
+import { useScrollSectionIntoView } from '../../modules/ui/utils'
 import { AssetProvider } from '../AssetProvider'
 import { AssetType } from '../../modules/asset/types'
 import { formatWeiMANA } from '../../lib/mana'
@@ -23,10 +24,20 @@ import { Props } from './RecentlySoldTable.types'
 import './RecentlySoldTable.css'
 
 const TABLE_SIZE = 7
+const TABS_PREFIX = '#recently-sold-'
 
 const RecentlySoldTable = (props: Props) => {
   const { isLoading, onFetchRecentSales, data } = props
+  const history = useHistory()
+  const location = useLocation()
+  const recentlySoldCardRef = useRef<HTMLDivElement>(null)
   const [currentCategory, setCurrentyCategory] = useState(NFTCategory.WEARABLE)
+
+  useScrollSectionIntoView(
+    recentlySoldCardRef,
+    TABS_PREFIX,
+    setCurrentyCategory
+  )
 
   useEffect(() => {
     onFetchRecentSales({
@@ -41,9 +52,17 @@ const RecentlySoldTable = (props: Props) => {
 
   const timestamp = useMemo(() => new Date().toLocaleString(), [])
 
+  const handleTabChange = (category: NFTCategory) => {
+    setCurrentyCategory(category)
+    history.replace({
+      pathname: location.pathname,
+      hash: `${TABS_PREFIX}${category}`
+    })
+  }
+
   const renderTableTabs = () => {
     return (
-      <div className="recently-sold-card-tabs">
+      <div className="recently-sold-card-tabs" ref={recentlySoldCardRef}>
         <Tabs isFullscreen>
           <Tabs.Left>
             {Object.values([
@@ -55,7 +74,7 @@ const RecentlySoldTable = (props: Props) => {
               <Tabs.Tab
                 key={category as string}
                 active={currentCategory === category}
-                onClick={() => setCurrentyCategory(category as NFTCategory)}
+                onClick={() => handleTabChange(category as NFTCategory)}
               >
                 {t(`home_page.recently_sold.tabs.${category}`)}
               </Tabs.Tab>

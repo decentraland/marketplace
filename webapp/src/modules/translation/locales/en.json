@@ -146,7 +146,7 @@
       },
       "rankings": {
         "title": "Rankings",
-        "subtitle": "Includes only wearables and emotes",
+        "subtitle": "Includes only Wearables and Emotes",
         "most_volume": "Volume (MANA)",
         "most_sales": "Items (quantity)",
         "no_results_title": "No results found for these filters",
@@ -181,7 +181,7 @@
           "items_bought": "Items Bought",
           "creators_supported": "Creators Supported",
           "creators_supported_tooltip": "Number of Creators the user bought at least 1 item from.",
-          "unique_items_bought": "Unique items Bought",
+          "unique_items_bought": "Mythic/Unique items Bought",
           "unique_items_bought_tooltip": "Number of Mythic or Unique items the user has bought.",
           "total_spent": "Total Spent",
           "total_spent_tooltip": "Total amount of MANA spent in both primary and secondary markets."

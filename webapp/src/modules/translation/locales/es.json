@@ -144,7 +144,7 @@
       },
       "rankings": {
         "title": "Clasificaciones",
-        "subtitle": "Incluye solo wearables y emotes",
+        "subtitle": "Incluye solo Wearables y Emotes",
         "most_volume": "Volumen (MANA)",
         "most_sales": "Cantidad de ventas",
         "no_results_title": "No hay resultados para los filtros seleccionados",
@@ -179,7 +179,7 @@
           "items_bought": "Items comprados",
           "creators_supported": "Creadores apoyados",
           "creators_supported_tooltip": "Número de Creadores que el usuario les ha comprado por lo menos 1 item.",
-          "unique_items_bought": "Items únicos comprados",
+          "unique_items_bought": "Mythic/Unique Items comprados",
           "total_spent": "Total gastado",
           "total_spent_tooltip": "Total de MANA gastado en los mercados primarios y secundarios"
         }

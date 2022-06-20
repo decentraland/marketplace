@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useRef, useState } from 'react'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import {
   HeaderMenu,
   Header,
@@ -23,6 +23,7 @@ import {
   RankingsFilters,
   RankingsSortBy
 } from '../../modules/analytics/types'
+import { useScrollSectionIntoView } from '../../modules/ui/utils'
 import { TimeframeSelector } from '../Rankings/TimeframeSelector'
 import { InfoTooltip } from '../InfoTooltip'
 import { AssetProvider } from '../AssetProvider'
@@ -39,10 +40,13 @@ const ALL_FILTER = 'all'
 const INITIAL_FILTERS = {
   sortBy: RankingsSortBy.MOST_VOLUME
 }
+const TABS_PREFIX = '#rankings-'
 
 const RankingsTable = (props: Props) => {
   const { isLoading, onFetchRankings, data } = props
 
+  const history = useHistory()
+  const location = useLocation()
   const [currentEntity, setCurrentEntity] = useState(RankingEntities.ITEMS)
   const [currentFilters, setCurrentFilters] = useState<RankingsFilters>(
     INITIAL_FILTERS
@@ -50,6 +54,14 @@ const RankingsTable = (props: Props) => {
   const [currentTimeframe, setCurrentTimeframe] = useState(
     AnalyticsTimeframe.WEEK
   )
+  const rankingsSectionRef = useRef<HTMLDivElement>(null)
+
+  useScrollSectionIntoView(rankingsSectionRef, TABS_PREFIX, (hash: string) => {
+    const [entity, timeframe, sortBy] = hash.split('-')
+    setCurrentEntity(entity as RankingEntities)
+    setCurrentTimeframe(timeframe as AnalyticsTimeframe)
+    setCurrentFilters({ sortBy: sortBy as RankingsSortBy })
+  })
 
   useEffect(() => {
     onFetchRankings(currentEntity, currentTimeframe, currentFilters)
@@ -63,11 +75,29 @@ const RankingsTable = (props: Props) => {
       ...currentFilters,
       [filterName]: value !== ALL_FILTER ? value : undefined
     })
+    if (filterName === 'sortBy') {
+      history.replace({
+        pathname: location.pathname,
+        hash: `${TABS_PREFIX}${currentEntity}-${currentTimeframe}-${value}`
+      })
+    }
   }
 
   const handleTabChange = (entity: RankingEntities) => {
     setCurrentEntity(entity)
     setCurrentFilters(INITIAL_FILTERS)
+    history.replace({
+      pathname: location.pathname,
+      hash: `${TABS_PREFIX}${entity}-${currentTimeframe}-${currentFilters.sortBy}`
+    })
+  }
+
+  const handleTimeframeSelectorChange = (timeframe: AnalyticsTimeframe) => {
+    setCurrentTimeframe(timeframe)
+    history.replace({
+      pathname: location.pathname,
+      hash: `${TABS_PREFIX}${currentEntity}-${timeframe}-${currentFilters.sortBy}`
+    })
   }
 
   const renderTableTabs = () => {
@@ -81,7 +111,9 @@ const RankingsTable = (props: Props) => {
                 active={currentEntity === entity}
                 onClick={() => handleTabChange(entity)}
               >
-                {t(`home_page.analytics.rankings.${entity}.tab_title`)}
+                <div id={entity}>
+                  {t(`home_page.analytics.rankings.${entity}.tab_title`)}
+                </div>
               </Tabs.Tab>
             ))}
           </Tabs.Left>
@@ -424,20 +456,20 @@ const RankingsTable = (props: Props) => {
                 <Loader active inline />
               ) : (
                 <>
-                  <Table.Cell width={5}>
+                  <Table.Cell width={4}>
                     <div className="rankings-creator-cell">
                       <Link to={locations.account(collectorAddress)}>
                         <Profile
                           address={collectorAddress}
                           inline={false}
-                          size="huge"
+                          size="large"
                         />
                       </Link>
                     </div>
                   </Table.Cell>
                   <Table.Cell width={2}>{entity.purchases}</Table.Cell>
                   <Table.Cell width={3}>{entity.creatorsSupported}</Table.Cell>
-                  <Table.Cell width={3}>
+                  <Table.Cell width={4}>
                     {entity.uniqueAndMythicItems}
                   </Table.Cell>
                   <Table.Cell>
@@ -457,7 +489,7 @@ const RankingsTable = (props: Props) => {
   }
 
   return (
-    <div className="RankingsTable">
+    <div className="RankingsTable" ref={rankingsSectionRef}>
       <HeaderMenu>
         <HeaderMenu.Left>
           <Header>{t('home_page.analytics.rankings.title')}</Header>
@@ -478,7 +510,7 @@ const RankingsTable = (props: Props) => {
           />
           <TimeframeSelector
             value={currentTimeframe}
-            onChange={timeframe => setCurrentTimeframe(timeframe)}
+            onChange={handleTimeframeSelectorChange}
           />
         </HeaderMenu.Right>
       </HeaderMenu>
