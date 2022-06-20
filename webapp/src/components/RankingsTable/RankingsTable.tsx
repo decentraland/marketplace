@@ -462,7 +462,7 @@ const RankingsTable = (props: Props) => {
                         <Profile
                           address={collectorAddress}
                           inline={false}
-                          size="huge"
+                          size="large"
                         />
                       </Link>
                     </div>

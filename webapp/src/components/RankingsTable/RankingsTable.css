@@ -42,6 +42,10 @@
   display: flex;
 }
 
+.RankingsTable .rankings-item-cell a:hover, .RankingsTable .rankings-creator-cell .Profile.avatar.large .name:hover {
+  text-decoration: underline;
+}
+
 .RankingsTable .rankings-creator-cell .Profile {
   display: flex;
   align-items: center;
