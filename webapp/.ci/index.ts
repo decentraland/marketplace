@@ -7,11 +7,13 @@ async function main() {
   const market = buildStatic({
     domain,
     defaultPath: 'index.html',
+    unprotect: true,
+    destroy: true
   })
 
   return {
     cloudfrontDistribution: market.cloudfrontDistribution,
-    bucketName: market.contentBucket,
+    bucketName: market.contentBucket
   }
 }
 export = main
