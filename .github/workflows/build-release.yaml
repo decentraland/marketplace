@@ -27,7 +27,7 @@ jobs:
           deterministic-snapshot: true
           only-update-versions: true
       - name: Install
-        run: npm ci
+        run: npm ci --legacy-peer-deps
       - name: Build
         run: npm run build
       - name: Publish
