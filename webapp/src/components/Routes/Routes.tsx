@@ -18,9 +18,10 @@ import { HomePage } from '../HomePage'
 import { LegacyNFTPage } from '../LegacyNFTPage'
 import { LandsPage } from '../LandsPage'
 import CollectionPage from '../CollectionPage'
+import { config } from '../../config'
 
 const Routes = () => {
-  const APP_ID = process.env.REACT_APP_INTERCOM_APP_ID
+  const APP_ID = config.get('INTERCOM_APP_ID')
 
   return (
     <>

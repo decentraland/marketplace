@@ -5,8 +5,9 @@ import {
 } from '../services'
 import { Network as AppNetwork } from '../../contract/types'
 import { TransferType } from '../types'
+import { config } from '../../../config'
 
-const network = process.env.REACT_APP_NETWORK! as AppNetwork
+const network = config.get('NETWORK')! as AppNetwork
 
 export enum ContractName {
   DIGITAL_ASSET = 'DigitalAssset',

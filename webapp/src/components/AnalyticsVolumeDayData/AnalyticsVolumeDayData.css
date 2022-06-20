@@ -8,14 +8,15 @@
   background-color: #242129;
   height: 96px;
   border-radius: 10px;
-  padding: 24px;
+  padding: 24px 36px;
   align-items: center;
   position: relative;
+  justify-content: space-between;
 }
 
 .AnalyticsVolumeDayData .stats-container {
   display: flex;
-  min-width: 260px;
+  min-width: 230px;
   align-items: center;
 }
 

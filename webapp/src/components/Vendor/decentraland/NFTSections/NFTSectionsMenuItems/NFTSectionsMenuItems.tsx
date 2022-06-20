@@ -112,14 +112,12 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
                 onMenuItemClick={onSectionClick}
               />
 
-              {process.env.REACT_APP_FF_SKINS ? (
-                <MenuItem
-                  value={Section.WEARABLES_SKIN}
-                  currentValue={section}
-                  onClick={onSectionClick}
-                  nestedLevel={1}
-                />
-              ) : null}
+              <MenuItem
+                value={Section.WEARABLES_SKIN}
+                currentValue={section}
+                onClick={onSectionClick}
+                nestedLevel={1}
+              />
             </>
           ) : null}
         </>

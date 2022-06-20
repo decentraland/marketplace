@@ -1,1 +1,3 @@
-export const ATLAS_SERVER_URL = process.env.REACT_APP_ATLAS_SERVER_URL!
+import { config } from '../../../../config'
+
+export const ATLAS_SERVER_URL = config.get('ATLAS_SERVER_URL')!

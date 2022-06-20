@@ -6,8 +6,9 @@ import { Contract } from '../../services'
 import { contracts } from '../../../contract/utils'
 import { VendorName } from '../../types'
 import { getNFTSortBy } from '../../../routing/search'
+import { config } from '../../../../config'
 
-export const NFT_SERVER_URL = process.env.REACT_APP_NFT_SERVER_URL!
+export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 
 class NFTAPI extends BaseAPI {
   fetch = async (

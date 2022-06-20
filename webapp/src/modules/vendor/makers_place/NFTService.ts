@@ -15,6 +15,7 @@ import { getOriginURL } from '../utils'
 import { VendorName } from '../types'
 import { MakersPlaceAsset } from './types'
 import { makersPlaceAPI } from './api'
+import { config } from '../../../config'
 
 export class NFTService
   implements NFTServiceInterface<VendorName.MAKERS_PLACE> {
@@ -139,7 +140,7 @@ export class NFTService
       },
       category: 'art',
       vendor: VendorName.MAKERS_PLACE,
-      chainId: Number(process.env.REACT_APP_CHAIN_ID),
+      chainId: Number(config.get('CHAIN_ID')!),
       network: Network.ETHEREUM,
       issuedId: null,
       itemId: null,
@@ -171,7 +172,7 @@ export class NFTService
       updatedAt: +asset.sale_created_at!,
       expiresAt: Infinity,
       network: Network.ETHEREUM,
-      chainId: Number(process.env.REACT_APP_CHAIN_ID)
+      chainId: Number(config.get('CHAIN_ID')!)
     }
   }
 

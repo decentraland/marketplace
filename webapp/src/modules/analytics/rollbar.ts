@@ -1,15 +1,16 @@
 /* eslint-disable */
-
-import { environment, isDevelopment } from '../../lib/environment'
+import { Env } from '@dcl/ui-env'
+import { config } from '../../config'
+import { environment } from '../../lib/environment'
 
 let _rollbarConfig = {
-  accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN || '',
+  accessToken: config.get('ROLLBAR_ACCESS_TOKEN')!,
   captureUncaught: true,
   captureUnhandledRejections: true,
   payload: {
     environment
   },
-  enabled: !isDevelopment
+  enabled: !config.is(Env.DEVELOPMENT)
 }
 
 // prettier-ignore
