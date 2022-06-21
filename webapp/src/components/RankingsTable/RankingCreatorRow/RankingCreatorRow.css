@@ -1,0 +1,119 @@
+.RankingCreatorRow .Profile.large .dcl.avatar-face.tiny {
+  margin-right: 16px;
+  width: 45px;
+  height: 45px;
+}
+
+@media (max-width: 768px) {
+  .RankingCreatorRow .Profile.large .name {
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 24px;
+    color: white;
+  }
+
+  .RankingCreatorRow .rankings-creator-data .Profile {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .RankingCreatorRow .rankings-creator-collections-created {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    position: absolute;
+    left: 60px;
+    bottom: 36px;
+    white-space: nowrap;
+  }
+
+  .RankingCreatorRow.rankings-creator-cell {
+    margin: 0 16px;
+    padding-top: 16px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #736e7d;
+    flex-direction: column;
+  }
+
+  .RankingCreatorRow.rankings-creator-cell > div {
+    display: flex;
+    width: 100%;
+  }
+
+  .RankingCreatorRow.rankings-creator-cell:last-of-type {
+    border-bottom: none;
+  }
+
+  .RankingCreatorRow .rankings-creator-data {
+    position: relative;
+    flex-direction: row;
+  }
+
+  .RankingCreatorRow .rankings-creator-right-data {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .RankingCreatorRow .rankings-creator-right-data .ui.header.dcl.mana.inline {
+    margin-bottom: 0;
+  }
+
+  .RankingCreatorRow .arrow-container i.caret {
+    background-color: #acacac;
+    background-image: none;
+    -webkit-mask: url(../../../images/forward.svg) no-repeat 50% 50%;
+    mask: url(../../../images/forward.svg) no-repeat 50% 50%;
+    transform: rotate(90deg);
+    transition: transform 0.3s ease-in-out;
+    -webkit-transition: transform 0.3s ease-in-out;
+    display: inline-block;
+    width: 16px;
+    height: 13px;
+    margin-left: 4px;
+    margin-top: 4px;
+  }
+
+  .RankingCreatorRow .arrow-container i.caret.up {
+    transform: rotate(-90deg);
+  }
+
+  .RankingCreatorRow .arrow-container {
+    color: #acacac;
+    display: flex;
+    margin-top: 8px;
+  }
+
+  .RankingCreatorRow .rankings-creator-more-data-container {
+    border-top: 1px solid #736e7d;
+    justify-content: right;
+    padding-top: 12px;
+    margin-top: 12px;
+    display: flex;
+    margin-left: auto;
+    min-width: 260px;
+  }
+
+  .RankingCreatorRow .rankings-creator-more-data-container > div {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0 12px;
+  }
+
+  .RankingCreatorRow .rankings-creator-more-data-container > div span {
+    color: #736e7d;
+    padding-bottom: 5px;
+  }
+
+  .RankingCreatorRow .rankings-creator-more-data-container > div span {
+    color: #736e7d;
+  }
+
+  .RankingCreatorRow
+    .rankings-creator-more-data-container
+    > div
+    .ui.header.dcl.mana.inline {
+    margin-top: 0;
+  }
+}

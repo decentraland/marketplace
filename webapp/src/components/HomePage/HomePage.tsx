@@ -42,8 +42,7 @@ const HomePage = (props: Props) => {
   const sectionsSubtitles: Partial<Record<View, string>> = useMemo(
     () => ({
       [View.HOME_TRENDING_ITEMS]: t('home_page.home_trending_items_subtitle'),
-      [View.HOME_WEARABLES]: t('home_page.home_recently_listed_items_subtitle'),
-      [View.HOME_SOLD_ITEMS]: t('home_page.home_latest_sales_items_subtitle')
+      [View.HOME_WEARABLES]: t('home_page.home_recently_listed_items_subtitle')
     }),
     []
   )

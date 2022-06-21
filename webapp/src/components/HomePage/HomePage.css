@@ -34,5 +34,11 @@
 }
 
 .HomePage .ui.sub.header {
-  color: #A09BA8
+  color: #a09ba8;
+}
+
+@media (max-width: 768px) {
+  .HomePage .Slideshow .dcl.header-menu .dcl.header-menu-left {
+    max-width: 268px;
+  }
 }
