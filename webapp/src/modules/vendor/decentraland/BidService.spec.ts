@@ -34,13 +34,15 @@ describe('when placing a bid', () => {
         0,
         0
       )
-      const call = mockSendTransaction.mock.calls[0]
+      const callParameters = mockSendTransaction.mock.calls[0]
 
       expect(hash).toBe(expectedHash)
-      expect(call[0]).toBe(
+      expect(callParameters[0]).toBe(
         getContract(ContractName.Bid, ChainId.ETHEREUM_MAINNET)
       )
-      expect(call[1]).toBe('placeBid(address,uint256,uint256,uint256)')
+      expect(callParameters[1]).toBe(
+        'placeBid(address,uint256,uint256,uint256)'
+      )
     })
   })
   describe('when the nft.network is MATIC', () => {
@@ -52,13 +54,15 @@ describe('when placing a bid', () => {
         0,
         0
       )
-      const call = mockSendTransaction.mock.calls[0]
+      const callParameters = mockSendTransaction.mock.calls[0]
 
       expect(hash).toBe(expectedHash)
-      expect(call[0]).toBe(
+      expect(callParameters[0]).toBe(
         getContract(ContractName.BidV2, ChainId.MATIC_MAINNET)
       )
-      expect(call[1]).toBe('placeBid(address,uint256,uint256,uint256)')
+      expect(callParameters[1]).toBe(
+        'placeBid(address,uint256,uint256,uint256)'
+      )
     })
   })
 })
@@ -83,14 +87,16 @@ describe('when accepting a bid', () => {
             chainId: ChainId.ETHEREUM_MAINNET
           } as Bid
         )
-        const call = mockSendTransaction.mock.calls[0]
+        const callParameters = mockSendTransaction.mock.calls[0]
 
         expect(hash).toBe(expectedHash)
-        expect(call[0]).toEqual({
+        expect(callParameters[0]).toEqual({
           ...getContract(ContractName.ERC721, ChainId.ETHEREUM_MAINNET),
           address: contractAddress
         })
-        expect(call[1]).toBe('safeTransferFrom(address,address,uint256,bytes)')
+        expect(callParameters[1]).toBe(
+          'safeTransferFrom(address,address,uint256,bytes)'
+        )
       })
     })
     describe('when the bid.network is MATIC', () => {
@@ -104,17 +110,19 @@ describe('when accepting a bid', () => {
             chainId: ChainId.MATIC_MAINNET
           } as Bid
         )
-        const call = mockSendTransaction.mock.calls[0]
+        const callParameters = mockSendTransaction.mock.calls[0]
 
         expect(hash).toBe(expectedHash)
-        expect(call[0]).toEqual({
+        expect(callParameters[0]).toEqual({
           ...getContract(
             ContractName.ERC721CollectionV2,
             ChainId.MATIC_MAINNET
           ),
           address: contractAddress
         })
-        expect(call[1]).toBe('safeTransferFrom(address,address,uint256,bytes)')
+        expect(callParameters[1]).toBe(
+          'safeTransferFrom(address,address,uint256,bytes)'
+        )
       })
     })
   })
@@ -139,13 +147,13 @@ describe('when canceling a bid', () => {
             chainId: ChainId.ETHEREUM_MAINNET
           } as Bid
         )
-        const call = mockSendTransaction.mock.calls[0]
+        const callParameters = mockSendTransaction.mock.calls[0]
 
         expect(hash).toBe(expectedHash)
-        expect(call[0]).toBe(
+        expect(callParameters[0]).toBe(
           getContract(ContractName.Bid, ChainId.ETHEREUM_MAINNET)
         )
-        expect(call[1]).toBe('cancelBid(address,uint256)')
+        expect(callParameters[1]).toBe('cancelBid(address,uint256)')
       })
     })
     describe('when the bid.network is MATIC', () => {
@@ -158,13 +166,13 @@ describe('when canceling a bid', () => {
             chainId: ChainId.MATIC_MAINNET
           } as Bid
         )
-        const call = mockSendTransaction.mock.calls[0]
+        const callParameters = mockSendTransaction.mock.calls[0]
 
         expect(hash).toBe(expectedHash)
-        expect(call[0]).toBe(
+        expect(callParameters[0]).toBe(
           getContract(ContractName.BidV2, ChainId.MATIC_MAINNET)
         )
-        expect(call[1]).toBe('cancelBid(address,uint256)')
+        expect(callParameters[1]).toBe('cancelBid(address,uint256)')
       })
     })
   })
