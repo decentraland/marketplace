@@ -48,7 +48,7 @@ export class NFTService
       const nft = this.toNFT(asset)
 
       if (this.isOnSale(asset)) {
-        const order = this.toOrder(asset, oneEthInMANA)
+        const order = this.toOrder(asset, oneEthInMANA.toString())
 
         nft.activeOrderId = order.id
 
@@ -95,7 +95,7 @@ export class NFTService
     let order: Order | undefined
 
     if (this.isOnSale(remoteNFT)) {
-      order = this.toOrder(remoteNFT, oneEthInMANA)
+      order = this.toOrder(remoteNFT, oneEthInMANA.toString())
 
       nft.activeOrderId = order.id
     }

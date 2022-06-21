@@ -50,7 +50,7 @@ export class NFTService
       const nft = this.toNFT(fragment)
 
       if (fragment.type === AssetType.EDITION) {
-        const order = this.toOrder(fragment, oneEthInMANA)
+        const order = this.toOrder(fragment, oneEthInMANA.toString())
 
         nft.activeOrderId = order.id
 
@@ -95,7 +95,7 @@ export class NFTService
     let order: Order | undefined
 
     if (fragment.type === AssetType.EDITION) {
-      order = this.toOrder(fragment, oneEthInMANA)
+      order = this.toOrder(fragment, oneEthInMANA.toString())
 
       nft.activeOrderId = order.id
     }

@@ -57,7 +57,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
       )
 
       if (remoteOrder) {
-        const order = this.toOrder(remoteOrder, oneEthInMANA)
+        const order = this.toOrder(remoteOrder, oneEthInMANA.toString())
 
         nft.activeOrderId = order.id
 
@@ -105,7 +105,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
     let order: Order | undefined
 
     if (remoteOrder) {
-      order = this.toOrder(remoteOrder, oneEthInMANA)
+      order = this.toOrder(remoteOrder, oneEthInMANA.toString())
 
       nft.activeOrderId = order.id
     }
