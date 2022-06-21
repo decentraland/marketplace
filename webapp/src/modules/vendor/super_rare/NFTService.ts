@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers'
 import { ethers } from 'ethers'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -19,12 +18,12 @@ import { config } from '../../../config'
 export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
-  private oneEthInWei: BigNumber
+  private oneEthInWei: ethers.BigNumber
 
   constructor() {
     this.tokenConverter = new TokenConverter()
     this.marketplacePrice = new MarketplacePrice()
-    this.oneEthInWei = BigNumber.from('1000000000000000000') // 10 ** 18
+    this.oneEthInWei = ethers.BigNumber.from('1000000000000000000') // 10 ** 18
   }
 
   async fetch(params: NFTsFetchParams) {
@@ -179,7 +178,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
     const { asset, taker } = order
 
     const totalWei = this.marketplacePrice.addFee(order.amountWithFee)
-    const weiPrice = BigNumber.from(totalWei).mul(oneEthInMANA)
+    const weiPrice = ethers.BigNumber.from(totalWei).mul(oneEthInMANA)
     const price = weiPrice.div(this.oneEthInWei)
 
     return {

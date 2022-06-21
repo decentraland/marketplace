@@ -1,4 +1,4 @@
-import { utils } from 'ethers'
+import { ethers } from 'ethers'
 import { Order } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { MarketplaceAdapter__factory } from '../../../contracts'
@@ -80,7 +80,7 @@ export class OrderService
   }
 
   private getCallData(to: string, nft: NFT<VendorName.KNOWN_ORIGIN>) {
-    const abiCoder = utils.defaultAbiCoder
+    const abiCoder = ethers.utils.defaultAbiCoder
     // purchaseTo
     return abiCoder.encode(['address', 'uint256'], [to, nft.tokenId])
   }
