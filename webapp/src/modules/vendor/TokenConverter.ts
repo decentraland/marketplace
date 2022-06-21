@@ -1,6 +1,6 @@
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { config } from '../../config'
 import { Converter__factory } from '../../contracts'
-import { getSigner } from '../wallet/utils'
 
 type Ticker = {
   converted_last: {
