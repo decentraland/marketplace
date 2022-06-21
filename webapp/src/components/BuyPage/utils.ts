@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import { BigNumber } from 'ethers'
-import { config } from '../../config'
-=======
 import { ethers } from 'ethers'
->>>>>>> 37e4dfc (feat: import single ether instance)
+import { config } from '../../config'
 
 /**
  * Checks against the min value of costless sales
