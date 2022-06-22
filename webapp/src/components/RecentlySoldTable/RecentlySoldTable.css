@@ -245,4 +245,9 @@
     margin-bottom: 0;
     text-align: right;
   }
+  
+  .RecentlySoldTable .recently-sold-item-cell {
+    min-height: 161px;
+    position: relative;
+  }
 }

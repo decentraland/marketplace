@@ -18,98 +18,110 @@ import { ItemRank } from '../../../modules/analytics/types'
 
 const RankingItemRow = ({ entity }: Props) => {
   const [expanded, setExpanded] = useState(false)
-  const renderMobile = (entity: ItemRank, item: Item) => {
+  const renderMobile = (
+    entity: ItemRank,
+    item: Item | null,
+    isLoading: boolean
+  ) => {
     return (
       <div className="RankingItemRow rankings-item-cell">
-        <div>
-          <div className="rankings-item-data">
-            <Link to={locations.item(item.contractAddress, item.itemId)}>
-              <img src={item.thumbnail} alt={`${item.name}-thumbnail`} />
-            </Link>
-            <div className="rankings-item-name-container">
-              <Link to={locations.item(item.contractAddress, item.itemId)}>
-                {item.name}
-              </Link>
-              <span>
-                <T
-                  id="home_page.analytics.rankings.items.by_creator"
-                  values={{
-                    creator: (
-                      <span className="rankings-item-data-creator">
-                        <Link to={locations.account(item.creator)}>
-                          <Profile
-                            address={item.creator}
-                            textOnly
-                            inline={false}
-                          />
-                        </Link>
-                      </span>
-                    )
-                  }}
-                />
-              </span>
-              {item ? (
-                <div className="rankings-item-badge-container">
-                  <RarityBadge
-                    size="small"
-                    rarity={item.rarity}
-                    assetType={AssetType.NFT}
-                    category={NFTCategory.WEARABLE}
-                    withTooltip={false}
-                  />
+        {isLoading || !item ? (
+          <Loader active size="large" />
+        ) : (
+          <>
+            <div>
+              <div className="rankings-item-data">
+                <Link to={locations.item(item.contractAddress, item.itemId)}>
+                  <img src={item.thumbnail} alt={`${item.name}-thumbnail`} />
+                </Link>
+                <div className="rankings-item-name-container">
+                  <Link to={locations.item(item.contractAddress, item.itemId)}>
+                    {item.name}
+                  </Link>
+                  <span>
+                    <T
+                      id="home_page.analytics.rankings.items.by_creator"
+                      values={{
+                        creator: (
+                          <span className="rankings-item-data-creator">
+                            <Link to={locations.account(item.creator)}>
+                              <Profile
+                                address={item.creator}
+                                textOnly
+                                inline={false}
+                              />
+                            </Link>
+                          </span>
+                        )
+                      }}
+                    />
+                  </span>
+                  {item ? (
+                    <div className="rankings-item-badge-container">
+                      <RarityBadge
+                        size="small"
+                        rarity={item.rarity}
+                        assetType={AssetType.NFT}
+                        category={NFTCategory.WEARABLE}
+                        withTooltip={false}
+                      />
+                    </div>
+                  ) : null}
                 </div>
-              ) : null}
-            </div>
-          </div>
-          <div className="rankings-item-right-data">
-            {item ? (
-              <>
-                <Mana network={item?.network} inline>
-                  {formatWeiMANA(entity.volume)}
-                </Mana>
-                <span className="rankings-fiat-price">
-                  (<ManaToFiat mana={entity.volume} />)
-                </span>
-                <div
-                  className="arrow-container"
-                  onClick={() => setExpanded(!expanded)}
-                >
-                  <span> {t(`global.${expanded ? 'less' : 'more'}`)} </span>
-                  <i className={`caret back ${expanded ? 'up' : ''}`} />
-                </div>
-              </>
-            ) : null}
-          </div>
-        </div>
-        {expanded ? (
-          <div>
-            <div className="rankings-item-more-data-container">
-              {item ? (
-                <>
-                  <div>
-                    <span>{t('global.category')}</span>
-                    {item.data.wearable?.category
-                      ? t(`wearable.category.${item.data.wearable.category}`)
-                      : t(`global.emote`)}
-                  </div>
-                  <div>
-                    <span>
-                      {t('home_page.analytics.rankings.items.items_sold')}
+              </div>
+              <div className="rankings-item-right-data">
+                {item ? (
+                  <>
+                    <Mana network={item?.network} inline>
+                      {formatWeiMANA(entity.volume)}
+                    </Mana>
+                    <span className="rankings-fiat-price">
+                      (<ManaToFiat mana={entity.volume} />)
                     </span>
-                    {entity.sales}
-                  </div>
-                </>
-              ) : null}
+                    <div
+                      className="arrow-container"
+                      onClick={() => setExpanded(!expanded)}
+                    >
+                      <span> {t(`global.${expanded ? 'less' : 'more'}`)} </span>
+                      <i className={`caret back ${expanded ? 'up' : ''}`} />
+                    </div>
+                  </>
+                ) : null}
+              </div>
             </div>
-          </div>
-        ) : null}
+            {expanded ? (
+              <div>
+                <div className="rankings-item-more-data-container">
+                  {item ? (
+                    <>
+                      <div>
+                        <span>{t('global.category')}</span>
+                        {item.data.wearable?.category
+                          ? t(
+                              `wearable.category.${item.data.wearable.category}`
+                            )
+                          : t(`global.emote`)}
+                      </div>
+                      <div>
+                        <span>
+                          {t('home_page.analytics.rankings.items.items_sold')}
+                        </span>
+                        {entity.sales}
+                      </div>
+                    </>
+                  ) : null}
+                </div>
+              </div>
+            ) : null}
+          </>
+        )}
       </div>
     )
   }
 
   const renderNotMobile = (
     entity: ItemRank,
-    item: Item,
+    item: Item | null,
     isLoading: boolean
   ) => (
     <Table.Row>
@@ -194,14 +206,12 @@ const RankingItemRow = ({ entity }: Props) => {
         if (!isLoading && !item) {
           return null
         }
-        return item ? (
+        return (
           <>
-            <Mobile>{renderMobile(entity, item)}</Mobile>
+            <Mobile>{renderMobile(entity, item, isLoading)}</Mobile>
             <NotMobile>{renderNotMobile(entity, item, isLoading)}</NotMobile>
           </>
-        ) : isLoading ? (
-          <Loader active inline />
-        ) : null
+        )
       }}
     </AssetProvider>
   )

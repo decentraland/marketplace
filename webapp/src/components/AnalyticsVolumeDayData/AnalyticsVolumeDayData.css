@@ -123,6 +123,14 @@
     align-items: flex-start;
     margin-bottom: 32px;
   }
+  
+  .AnalyticsVolumeDayData .stats-card {
+    min-height: 262px;
+  }
+  
+  .AnalyticsVolumeDayData .dcl.stats {
+    width: 80%;
+  }
 
   .AnalyticsVolumeDayData .dcl.stats,
   .AnalyticsVolumeDayData .stats-container:last-of-type {

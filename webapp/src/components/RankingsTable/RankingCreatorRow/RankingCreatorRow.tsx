@@ -1,20 +1,18 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Loader, Mana, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { Network } from '@dcl/schemas'
+import { Loader, Mana, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
-
 import { formatWeiMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { ManaToFiat } from '../../ManaToFiat'
-import { Props } from './RankingCreatorRow.types'
-import './RankingCreatorRow.css'
 import { AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/decentraland'
+import { Props } from './RankingCreatorRow.types'
+import './RankingCreatorRow.css'
 
 const RankingCreatorRow = ({ entity }: Props) => {
-  console.log('entity: ', entity)
   const [expanded, setExpanded] = useState(false)
   const renderMobile = () => {
     const creatorAddress = entity.id

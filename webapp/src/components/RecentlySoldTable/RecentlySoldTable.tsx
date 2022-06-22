@@ -212,81 +212,96 @@ const RecentlySoldTable = (props: Props) => {
     )
   }
 
-  const soldItemRow = (sale: Sale, item: Item, _order: Order | null) => {
+  const soldItemRow = (sale: Sale, item: Item | null, isLoading: boolean) => {
     return (
       <>
         <Mobile>
           <div className="recently-sold-item-cell">
-            <div>
-              <div className="sale-item-data">
-                <Link to={item.url}>
-                  <img src={item.thumbnail} alt={`${item.name}-thumbnail`} />
-                </Link>
-                <div className="sale-item-name-container">
-                  <Link to={locations.item(item.contractAddress, item.itemId)}>
-                    {item.name}
-                  </Link>
-                  <span className="recently-sold-sale-info">
-                    {t(`global.${sale.type}`)}
-                    <span className="separator">|</span>
-                    {t('global.time_ago', {
-                      time: formatDistanceToNow(sale.timestamp)
-                    })}
-                  </span>
+            {isLoading || !item ? (
+              <Loader active size="large" />
+            ) : (
+              <>
+                <div>
+                  <div className="sale-item-data">
+                    <Link to={item.url}>
+                      <img
+                        src={item.thumbnail}
+                        alt={`${item.name}-thumbnail`}
+                      />
+                    </Link>
+                    <div className="sale-item-name-container">
+                      <Link
+                        to={locations.item(item.contractAddress, item.itemId)}
+                      >
+                        {item.name}
+                      </Link>
+                      <span className="recently-sold-sale-info">
+                        {t(`global.${sale.type}`)}
+                        <span className="separator">|</span>
+                        {t('global.time_ago', {
+                          time: formatDistanceToNow(sale.timestamp)
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="sale-item-right-data">
+                    {item ? (
+                      <>
+                        <Mana network={item?.network} inline>
+                          {formatWeiMANA(sale.price)}
+                        </Mana>
+                        <span className="rankings-fiat-price">
+                          {sale.price ? (
+                            <>
+                              (<ManaToFiat mana={sale.price} />)
+                            </>
+                          ) : null}
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-              <div className="sale-item-right-data">
-                {item ? (
-                  <>
-                    <Mana network={item?.network} inline>
-                      {formatWeiMANA(sale.price)}
-                    </Mana>
-                    <span className="rankings-fiat-price">
-                      {sale.price ? (
-                        <>
-                          (<ManaToFiat mana={sale.price} />)
-                        </>
-                      ) : null}
-                    </span>
-                  </>
-                ) : null}
-              </div>
-            </div>
 
-            <div>
-              <div className="sale-item-more-data-container">
-                {item ? (
-                  <>
-                    <div>
-                      <span>
-                        {t('home_page.recently_sold.wearables.seller')}
-                      </span>
-                      <Link
-                        to={locations.account(sale.seller)}
-                        className="account-link"
-                      >
-                        <Profile
-                          address={sale.seller}
-                          textOnly
-                          inline={false}
-                        />
-                      </Link>
-                    </div>
-                    <div>
-                      <span>
-                        {t('home_page.recently_sold.wearables.buyer')}
-                      </span>
-                      <Link
-                        to={locations.account(sale.seller)}
-                        className="account-link"
-                      >
-                        <Profile address={sale.buyer} textOnly inline={false} />
-                      </Link>
-                    </div>
-                  </>
-                ) : null}
-              </div>
-            </div>
+                <div>
+                  <div className="sale-item-more-data-container">
+                    {item ? (
+                      <>
+                        <div>
+                          <span>
+                            {t('home_page.recently_sold.wearables.seller')}
+                          </span>
+                          <Link
+                            to={locations.account(sale.seller)}
+                            className="account-link"
+                          >
+                            <Profile
+                              address={sale.seller}
+                              textOnly
+                              inline={false}
+                            />
+                          </Link>
+                        </div>
+                        <div>
+                          <span>
+                            {t('home_page.recently_sold.wearables.buyer')}
+                          </span>
+                          <Link
+                            to={locations.account(sale.seller)}
+                            className="account-link"
+                          >
+                            <Profile
+                              address={sale.buyer}
+                              textOnly
+                              inline={false}
+                            />
+                          </Link>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </Mobile>
         <NotMobile>
@@ -363,81 +378,91 @@ const RecentlySoldTable = (props: Props) => {
 
   const soldParcelOrENSRow = (
     sale: Sale,
-    asset: NFT<VendorName.DECENTRALAND>,
-    _order: Order | null
+    asset: NFT<VendorName.DECENTRALAND> | null,
+    isLoading: boolean
   ) => {
     return (
       <>
         <Mobile>
           <div className="recently-sold-item-cell">
-            <div>
-              <div className="sale-item-data">
-                <Link to={asset.url}>
-                  <AssetImage asset={asset} showMonospace isSmall />
-                </Link>
-                <div className="sale-item-name-container">
-                  <Link to={asset.url}>{asset.name}</Link>
-                  <span className="recently-sold-sale-info">
-                    {t(`global.${sale.type}`)}
-                    <span className="separator">|</span>
-                    {t('global.time_ago', {
-                      time: formatDistanceToNow(sale.timestamp)
-                    })}
-                  </span>
+            {isLoading || !asset ? (
+              <Loader active size="large" />
+            ) : (
+              <>
+                <div>
+                  <div className="sale-item-data">
+                    <Link to={asset.url}>
+                      <AssetImage asset={asset} showMonospace isSmall />
+                    </Link>
+                    <div className="sale-item-name-container">
+                      <Link to={asset.url}>{asset.name}</Link>
+                      <span className="recently-sold-sale-info">
+                        {t(`global.${sale.type}`)}
+                        <span className="separator">|</span>
+                        {t('global.time_ago', {
+                          time: formatDistanceToNow(sale.timestamp)
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="sale-item-right-data">
+                    {asset ? (
+                      <>
+                        <Mana network={asset?.network} inline>
+                          {formatWeiMANA(sale.price)}
+                        </Mana>
+                        <span className="rankings-fiat-price">
+                          {sale.price ? (
+                            <>
+                              (<ManaToFiat mana={sale.price} />)
+                            </>
+                          ) : null}
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
                 </div>
-              </div>
-              <div className="sale-item-right-data">
-                {asset ? (
-                  <>
-                    <Mana network={asset?.network} inline>
-                      {formatWeiMANA(sale.price)}
-                    </Mana>
-                    <span className="rankings-fiat-price">
-                      {sale.price ? (
-                        <>
-                          (<ManaToFiat mana={sale.price} />)
-                        </>
-                      ) : null}
-                    </span>
-                  </>
-                ) : null}
-              </div>
-            </div>
 
-            <div>
-              <div className="sale-item-more-data-container">
-                {asset ? (
-                  <>
-                    <div>
-                      <span>
-                        {t('home_page.recently_sold.wearables.seller')}
-                      </span>
-                      <Link
-                        to={locations.account(sale.seller)}
-                        className="account-link"
-                      >
-                        <Profile
-                          address={sale.seller}
-                          textOnly
-                          inline={false}
-                        />
-                      </Link>
-                    </div>
-                    <div>
-                      <span>
-                        {t('home_page.recently_sold.wearables.buyer')}
-                      </span>
-                      <Link
-                        to={locations.account(sale.seller)}
-                        className="account-link"
-                      >
-                        <Profile address={sale.buyer} textOnly inline={false} />
-                      </Link>
-                    </div>
-                  </>
-                ) : null}
-              </div>
-            </div>
+                <div>
+                  <div className="sale-item-more-data-container">
+                    {asset ? (
+                      <>
+                        <div>
+                          <span>
+                            {t('home_page.recently_sold.wearables.seller')}
+                          </span>
+                          <Link
+                            to={locations.account(sale.seller)}
+                            className="account-link"
+                          >
+                            <Profile
+                              address={sale.seller}
+                              textOnly
+                              inline={false}
+                            />
+                          </Link>
+                        </div>
+                        <div>
+                          <span>
+                            {t('home_page.recently_sold.wearables.buyer')}
+                          </span>
+                          <Link
+                            to={locations.account(sale.seller)}
+                            className="account-link"
+                          >
+                            <Profile
+                              address={sale.buyer}
+                              textOnly
+                              inline={false}
+                            />
+                          </Link>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </Mobile>
         <NotMobile>
@@ -507,12 +532,7 @@ const RecentlySoldTable = (props: Props) => {
             contractAddress={sale.contractAddress}
             tokenId={sale.itemId}
           >
-            {(item, order, isLoading) => {
-              if (!isLoading && !item) {
-                return null
-              }
-              return item ? soldItemRow(sale, item, order) : null
-            }}
+            {(item, order, isLoading) => soldItemRow(sale, item, isLoading)}
           </AssetProvider>
         ))
         break
@@ -525,12 +545,9 @@ const RecentlySoldTable = (props: Props) => {
             contractAddress={sale.contractAddress}
             tokenId={sale.tokenId}
           >
-            {(asset, order, isLoading) => {
-              if (!isLoading && !asset) {
-                return null
-              }
-              return asset ? soldParcelOrENSRow(sale, asset, order) : null
-            }}
+            {(asset, _order, isLoading) =>
+              soldParcelOrENSRow(sale, asset, isLoading)
+            }
           </AssetProvider>
         ))
         break

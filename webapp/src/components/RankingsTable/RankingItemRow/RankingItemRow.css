@@ -5,6 +5,8 @@
     padding-bottom: 24px;
     border-bottom: 1px solid #736e7d;
     flex-direction: column;
+    min-height: 120px;
+    position: relative;
   }
 
   .RankingItemRow.rankings-item-cell > div {
