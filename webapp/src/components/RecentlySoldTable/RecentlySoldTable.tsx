@@ -12,7 +12,7 @@ import {
   DropdownProps,
   Mobile
 } from 'decentraland-ui'
-import { Item, NFTCategory, Order, Sale, SaleSortBy } from '@dcl/schemas'
+import { Item, NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { useScrollSectionIntoView } from '../../modules/ui/utils'
