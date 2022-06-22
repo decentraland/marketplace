@@ -4,20 +4,28 @@ import { Loader, Mana, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { Item, NFTCategory } from '@dcl/schemas'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
-
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import { AssetType } from '../../../modules/asset/types'
 import { parseItemId } from '../../../modules/item/utils'
+import { ItemRank } from '../../../modules/analytics/types'
 import { locations } from '../../../modules/routing/locations'
 import { AssetProvider } from '../../AssetProvider'
 import { ManaToFiat } from '../../ManaToFiat'
 import RarityBadge from '../../RarityBadge'
 import { Props } from './RankingItemRow.types'
 import './RankingItemRow.css'
-import { ItemRank } from '../../../modules/analytics/types'
 
 const RankingItemRow = ({ entity }: Props) => {
   const [expanded, setExpanded] = useState(false)
+
+  const handleOnLinkClick = (id: string) => {
+    getAnalytics().track('Asset click', {
+      id,
+      section: 'Rankings'
+    })
+  }
+
   const renderMobile = (
     entity: ItemRank,
     item: Item | null,
@@ -31,11 +39,17 @@ const RankingItemRow = ({ entity }: Props) => {
           <>
             <div>
               <div className="rankings-item-data">
-                <Link to={locations.item(item.contractAddress, item.itemId)}>
+                <Link
+                  to={locations.item(item.contractAddress, item.itemId)}
+                  onClick={() => handleOnLinkClick(item.id)}
+                >
                   <img src={item.thumbnail} alt={`${item.name}-thumbnail`} />
                 </Link>
                 <div className="rankings-item-name-container">
-                  <Link to={locations.item(item.contractAddress, item.itemId)}>
+                  <Link
+                    to={locations.item(item.contractAddress, item.itemId)}
+                    onClick={() => handleOnLinkClick(item.id)}
+                  >
                     {item.name}
                   </Link>
                   <span>
@@ -128,12 +142,18 @@ const RankingItemRow = ({ entity }: Props) => {
       <Table.Cell width={7}>
         {item ? (
           <div className="rankings-item-cell">
-            <Link to={locations.item(item.contractAddress, item.itemId)}>
+            <Link
+              to={locations.item(item.contractAddress, item.itemId)}
+              onClick={() => handleOnLinkClick(item.id)}
+            >
               <img src={item.thumbnail} alt={`${item.name}-thumbnail`} />
             </Link>
 
             <div className="rankings-item-data">
-              <Link to={locations.item(item.contractAddress, item.itemId)}>
+              <Link
+                to={locations.item(item.contractAddress, item.itemId)}
+                onClick={() => handleOnLinkClick(item.id)}
+              >
                 {item.name}
               </Link>
 

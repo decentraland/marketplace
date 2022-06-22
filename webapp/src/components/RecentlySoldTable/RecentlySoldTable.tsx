@@ -13,6 +13,7 @@ import {
   Mobile
 } from 'decentraland-ui'
 import { Item, NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { useScrollSectionIntoView } from '../../modules/ui/utils'
@@ -62,6 +63,13 @@ const RecentlySoldTable = (props: Props) => {
     history.replace({
       pathname: location.pathname,
       hash: `${TABS_PREFIX}${category}`
+    })
+  }
+
+  const handleOnLinkClick = (id: string) => {
+    getAnalytics().track('Asset click', {
+      id,
+      section: 'Recently Sold'
     })
   }
 
@@ -223,7 +231,10 @@ const RecentlySoldTable = (props: Props) => {
               <>
                 <div>
                   <div className="sale-item-data">
-                    <Link to={item.url}>
+                    <Link
+                      to={item.url}
+                      onClick={() => handleOnLinkClick(item.id)}
+                    >
                       <img
                         src={item.thumbnail}
                         alt={`${item.name}-thumbnail`}
@@ -231,7 +242,8 @@ const RecentlySoldTable = (props: Props) => {
                     </Link>
                     <div className="sale-item-name-container">
                       <Link
-                        to={locations.item(item.contractAddress, item.itemId)}
+                        to={item.url}
+                        onClick={() => handleOnLinkClick(item.id)}
                       >
                         {item.name}
                       </Link>
@@ -312,12 +324,18 @@ const RecentlySoldTable = (props: Props) => {
                   <Link
                     className="recently-sold-item-cell-thumbnail"
                     to={item.url}
+                    onClick={() => handleOnLinkClick(item.id)}
                   >
                     <img src={item.thumbnail} alt={`${item.name}-thumbnail`} />
                   </Link>
 
                   <div className="sale-item-data">
-                    <Link to={item.url}>{item.name}</Link>
+                    <Link
+                      to={item.url}
+                      onClick={() => handleOnLinkClick(item.id)}
+                    >
+                      {item.name}
+                    </Link>
 
                     <span>
                       <T
@@ -391,11 +409,19 @@ const RecentlySoldTable = (props: Props) => {
               <>
                 <div>
                   <div className="sale-item-data">
-                    <Link to={asset.url}>
+                    <Link
+                      to={asset.url}
+                      onClick={() => handleOnLinkClick(asset.id)}
+                    >
                       <AssetImage asset={asset} showMonospace isSmall />
                     </Link>
                     <div className="sale-item-name-container">
-                      <Link to={asset.url}>{asset.name}</Link>
+                      <Link
+                        to={asset.url}
+                        onClick={() => handleOnLinkClick(asset.id)}
+                      >
+                        {asset.name}
+                      </Link>
                       <span className="recently-sold-sale-info">
                         {t(`global.${sale.type}`)}
                         <span className="separator">|</span>
@@ -473,11 +499,17 @@ const RecentlySoldTable = (props: Props) => {
                   <Link
                     className="recently-sold-item-cell-thumbnail"
                     to={asset.url}
+                    onClick={() => handleOnLinkClick(asset.id)}
                   >
                     <AssetImage asset={asset} showMonospace isSmall />
                   </Link>
                   <div className="rankings-item-data">
-                    <Link to={asset.url}>{asset.name}</Link>
+                    <Link
+                      to={asset.url}
+                      onClick={() => handleOnLinkClick(asset.id)}
+                    >
+                      {asset.name}
+                    </Link>
                   </div>
                 </div>
               ) : isLoading ? (
