@@ -113,7 +113,7 @@ const RankingItemRow = ({ entity }: Props) => {
     isLoading: boolean
   ) => (
     <Table.Row>
-      <Table.Cell width={5}>
+      <Table.Cell width={7}>
         {item ? (
           <div className="rankings-item-cell">
             <Link to={locations.item(item.contractAddress, item.itemId)}>
