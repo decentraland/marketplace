@@ -158,7 +158,7 @@ const RecentlySoldTable = (props: Props) => {
             <Table.Row>
               <Table.HeaderCell>
                 {t(
-                  `global.${
+                  `home_page.recently_sold.tabs.${
                     currentCategory === NFTCategory.PARCEL ? 'parcel' : 'ens'
                   }`
                 )}
