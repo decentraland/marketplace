@@ -172,7 +172,7 @@
           "unique_collectors": "独特的收藏家",
           "unique_collectors_tooltip": "从创建者那里拥有至少 1 个项目的用户数量。",
           "total_volume_sales": "总销量",
-          "total_volume_sales_tooltip": "包括一级和二级销售"
+          "total_volume_sales_tooltip": "仅包括初级销售"
         },
         "total_volume": "总容积",
         "total_volume_tooltip": "包括一级销售和二级销售。",

@@ -174,7 +174,7 @@
           "unique_collectors": "Unique collectors",
           "unique_collectors_tooltip": "Number of users who own at least 1 item from the Creator.",
           "total_volume_sales": "Total Volume of Sales",
-          "total_volume_sales_tooltip": "Includes both primary and secondary sales"
+          "total_volume_sales_tooltip": "Includes only primary sales"
         },
         "total_volume": "Total Volume",
         "total_volume_tooltip": "Includes both primary and secondary sales.",

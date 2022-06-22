@@ -172,7 +172,7 @@
           "unique_collectors": "Coleccionistas únicos",
           "unique_collectors_tooltip": "Número de usuarios que poseen por lo menos 1 item del Creador.",
           "total_volume_sales": "Volumen total de ventas",
-          "total_volume_sales_tooltip": "Incluye ventas primarias y secundarias"
+          "total_volume_sales_tooltip": "Incluye solo ventas primarias"
         },
         "total_volume": "Volumen total",
         "total_volume_tooltip": "Incluye ventas primarias y secundarias.",
