@@ -16,10 +16,10 @@ jobs:
         working-directory: ./webapp
     steps:
       - uses: actions/checkout@master
-      - name: Use Node.js 14.x
+      - name: Use Node.js 16.x
         uses: actions/setup-node@v1
         with:
-          node-version: 14.x
+          node-version: 16.x
       - name: Set package.json version
         uses: menduz/oddish-action@master
         with:
@@ -27,7 +27,7 @@ jobs:
           deterministic-snapshot: true
           only-update-versions: true
       - name: Install
-        run: npm ci
+        run: npm ci --legacy-peer-deps
       - name: Build
         run: npm run build
       - name: Publish

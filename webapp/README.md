@@ -36,3 +36,5 @@ If you want to regenerate the contract typings in `webapp/src/contract` do the f
 ```
 npx web3x-codegen
 ```
+
+.
