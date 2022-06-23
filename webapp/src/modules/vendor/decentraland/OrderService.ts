@@ -1,4 +1,4 @@
-import { utils } from 'ethers'
+import { ethers } from 'ethers'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
 import {
   ContractName,
@@ -30,13 +30,13 @@ export class OrderService
         : ContractName.MarketplaceV2,
       nft.chainId
     )
-    return sendTransaction(contract, marketplace =>
-      marketplace.createOrder(
-        nft.contractAddress,
-        nft.tokenId,
-        utils.parseEther(price.toString()),
-        expiresAt
-      )
+    return sendTransaction(
+      contract,
+      'createOrder',
+      nft.contractAddress,
+      nft.tokenId,
+      ethers.utils.parseEther(price.toString()),
+      expiresAt
     )
   }
 
@@ -49,17 +49,21 @@ export class OrderService
     const contractName = getContractName(order.marketplaceAddress)
     const contract = getContract(contractName, order.chainId)
     if (fingerprint) {
-      return sendTransaction(contract, marketplace =>
-        marketplace.safeExecuteOrder(
-          nft.contractAddress,
-          nft.tokenId,
-          order.price,
-          fingerprint
-        )
+      return sendTransaction(
+        contract,
+        'safeExecuteOrder',
+        nft.contractAddress,
+        nft.tokenId,
+        order.price,
+        fingerprint
       )
     } else {
-      return sendTransaction(contract, marketplace =>
-        marketplace.executeOrder(nft.contractAddress, nft.tokenId, order.price)
+      return sendTransaction(
+        contract,
+        'executeOrder',
+        nft.contractAddress,
+        nft.tokenId,
+        order.price
       )
     }
   }
@@ -67,8 +71,11 @@ export class OrderService
   async cancel(_wallet: Wallet | null, order: Order) {
     const contractName = getContractName(order.marketplaceAddress)
     const contract = getContract(contractName, order.chainId)
-    return sendTransaction(contract, marketplace =>
-      marketplace.cancelOrder(order.contractAddress, order.tokenId)
+    return sendTransaction(
+      contract,
+      'cancelOrder',
+      order.contractAddress,
+      order.tokenId
     )
   }
 

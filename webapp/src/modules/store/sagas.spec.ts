@@ -1,6 +1,6 @@
+import { Entity } from '@dcl/schemas'
+import { AuthIdentity } from '@dcl/crypto'
 import { CatalystClient } from 'dcl-catalyst-client'
-import { Entity } from 'dcl-catalyst-commons'
-import { AuthIdentity } from 'dcl-crypto'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'

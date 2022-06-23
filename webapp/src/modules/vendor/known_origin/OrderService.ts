@@ -1,15 +1,14 @@
-import { Address } from 'web3x/address'
-import { ABICoder } from 'web3x/contract/abi-coder'
+import { ethers } from 'ethers'
 import { Order } from '@dcl/schemas'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
-import { ContractFactory } from '../../contract/ContractFactory'
+import { MarketplaceAdapter__factory } from '../../../contracts'
+import { getContract } from '../../contract/utils'
 import { NFT } from '../../nft/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { getContractNames, VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
-import { getContract } from '../../contract/utils'
 
 export class OrderService
   implements OrderServiceInterface<VendorName.KNOWN_ORIGIN> {
@@ -41,13 +40,8 @@ export class OrderService
     const contractNames = getContractNames()
 
     // Addresses
-    const assetMarketAddress: Address = Address.fromString(
-      order.marketplaceAddress
-    )
-    const manaTokenAddress = Address.fromString(
-      getContract({ name: contractNames.MANA }).address
-    )
-    const from = Address.fromString(wallet.address)
+    const assetMarketAddress = order.marketplaceAddress
+    const manaTokenAddress = getContract({ name: contractNames.MANA }).address
 
     // Data
     const calldata = this.getCallData(wallet.address, nft)
@@ -59,20 +53,22 @@ export class OrderService
     const maxPrice = this.marketplacePrice.addMaxSlippage(manaPrice)
 
     // Contract
-    const marketplaceAdapter = await ContractFactory.build(
-      MarketplaceAdapter,
-      getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address
+    const marketplaceAdapter = MarketplaceAdapter__factory.connect(
+      getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address,
+      await getSigner()
     )
-    return marketplaceAdapter.methods
-      .buy(
-        assetMarketAddress,
-        calldata,
-        (order as Order & { ethPrice: string }).ethPrice!,
-        manaTokenAddress,
-        maxPrice
-      )
-      .send({ from })
-      .getTxHash()
+
+    const transaction = await marketplaceAdapter[
+      'buy(address,bytes,uint256,address,uint256)'
+    ](
+      assetMarketAddress,
+      calldata,
+      (order as Order & { ethPrice: string }).ethPrice!,
+      manaTokenAddress,
+      maxPrice
+    )
+
+    return transaction.hash
   }
 
   cancel(): any {
@@ -84,17 +80,8 @@ export class OrderService
   }
 
   private getCallData(to: string, nft: NFT<VendorName.KNOWN_ORIGIN>) {
-    const abiCoder = new ABICoder()
-    return abiCoder.encodeFunctionCall(
-      {
-        name: 'purchaseTo',
-        type: 'function',
-        inputs: [
-          { type: 'address', name: '_to' },
-          { type: 'uint256', name: '_editionNumber' }
-        ]
-      },
-      [to, nft.tokenId]
-    )
+    const abiCoder = ethers.utils.defaultAbiCoder
+    // purchaseTo
+    return abiCoder.encode(['address', 'uint256'], [to, nft.tokenId])
   }
 }

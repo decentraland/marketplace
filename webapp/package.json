@@ -2,21 +2,22 @@
   "name": "@dcl/marketplace-site",
   "version": "0.0.0-development",
   "dependencies": {
+    "@dcl/crypto": "^3.0.0",
     "@dcl/schemas": "^4.5.0",
     "@dcl/ui-env": "^1.2.0",
+    "@ethersproject/providers": "^5.6.2",
     "apollo-boost": "^0.4.7",
-    "bn.js": "^5.2.0",
     "classnames": "^2.3.1",
     "connected-react-router": "^6.9.1",
     "date-fns": "^2.23.0",
-    "dcl-catalyst-client": "^11.3.0",
-    "dcl-catalyst-commons": "^8.2.0",
-    "dcl-crypto": "^2.2.0",
-    "decentraland-connect": "^3.3.0",
-    "decentraland-dapps": "^12.53.0",
-    "decentraland-transactions": "^1.29.1",
-    "decentraland-ui": "^3.33.0",
+    "dcl-catalyst-client": "^12.0.1",
+    "dcl-catalyst-commons": "^9.0.1",
+    "decentraland-connect": "^3.3.2",
+    "decentraland-dapps": "^13.3.2",
+    "decentraland-transactions": "^1.38.0",
+    "decentraland-ui": "^3.39.0",
     "dotenv": "^10.0.0",
+    "ethers": "^5.6.8",
     "graphql": "^14.7.0",
     "history": "^4.10.1",
     "react": "^17.0.2",
@@ -30,13 +31,13 @@
     "redux-logger": "^3.0.6",
     "redux-saga": "^1.1.3",
     "reselect": "^4.0.0",
-    "typesafe-actions": "^5.1.0",
-    "web3x": "^4.0.6"
+    "typesafe-actions": "^5.1.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/react-hooks": "^7.0.0",
+    "@typechain/ethers-v5": "^10.0.0",
     "@types/history": "^4.7.3",
     "@types/jest": "^24.9.1",
     "@types/node": "^12.0.0",
@@ -55,6 +56,7 @@
     "tslint": "^5.20.1",
     "tslint-plugin-prettier": "^2.0.1",
     "tslint-react": "^4.1.0",
+    "typechain": "^8.0.0",
     "typescript": "^4.3.5"
   },
   "scripts": {
@@ -64,7 +66,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "tslint -p tsconfig.json",
-    "lint:fix": "tslint -p tsconfig.json --fix"
+    "lint:fix": "tslint -p tsconfig.json --fix",
+    "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -74,11 +77,16 @@
     "singleQuote": true,
     "semi": false
   },
+  "engines": {
+    "node": ">= 16.0.0"
+  },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "chrome >= 67",
+      "edge >= 79",
+      "firefox >= 68",
+      "opera >= 54",
+      "safari >= 14"
     ],
     "development": [
       "last 1 chrome version",

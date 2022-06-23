@@ -1,10 +1,11 @@
-import { Eth } from 'web3x/eth'
-import { Address } from 'web3x/address'
 import { NFTCategory } from '@dcl/schemas'
-import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
-import { EstateRegistry } from '../../../contracts/EstateRegistry'
-import { NFT } from '../types'
+import {
+  getSigner,
+  getConnectedProvider
+} from 'decentraland-dapps/dist/lib/eth'
+import { EstateRegistry__factory } from '../../../contracts'
 import { getContract } from '../../contract/utils'
+import { NFT } from '../types'
 
 export const getSelection = (estate: NFT['data']['estate']) => {
   return estate!.parcels.map(pair => ({
@@ -24,12 +25,11 @@ export const getCenter = (selection: { x: number; y: number }[]) => {
 export async function getFingerprint(estateId: string) {
   const provider = await getConnectedProvider()
   if (provider) {
-    const eth = new Eth(provider)
     const estate = getContract({ category: NFTCategory.ESTATE })
-    const estateRegistry = new EstateRegistry(
-      eth,
-      Address.fromString(estate.address)
+    const estateRegistry = EstateRegistry__factory.connect(
+      estate.address,
+      await getSigner()
     )
-    return estateRegistry.methods.getFingerprint(estateId).call()
+    return estateRegistry.getFingerprint(estateId)
   }
 }

@@ -58,8 +58,12 @@ export class NFTService
 
     const contract = getERC721ContractData(nft)
 
-    return sendTransaction(contract, erc721 =>
-      erc721.transferFrom(wallet.address, to, nft.tokenId)
+    return sendTransaction(
+      contract,
+      'transferFrom',
+      wallet.address,
+      to,
+      nft.tokenId
     )
   }
 

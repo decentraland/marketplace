@@ -34,7 +34,5 @@ $ npm run build
 If you want to regenerate the contract typings in `webapp/src/contract` do the following:
 
 ```
-npx web3x-codegen
+npm run generate-contracts
 ```
-
-.

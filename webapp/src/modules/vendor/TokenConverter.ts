@@ -1,7 +1,6 @@
-import { Address } from 'web3x/address'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { config } from '../../config'
-import { Converter } from '../../contracts/Converter'
-import { ContractFactory } from '../contract/ContractFactory'
+import { Converter__factory } from '../../contracts'
 
 type Ticker = {
   converted_last: {
@@ -77,14 +76,18 @@ export class TokenConverter {
     return this.contractEthToToken(ethAmount, manaAddress)
   }
 
-  async contractEthToToken(ethAmount: string, tokenAddress: string) {
-    const converter = await ContractFactory.build(
-      Converter,
-      this.converterAddress
+  async contractEthToToken(
+    ethAmount: string,
+    tokenAddress: string
+  ): Promise<string> {
+    const converter = Converter__factory.connect(
+      this.converterAddress,
+      await getSigner()
     )
-
-    return converter.methods
-      .calcNeededTokensForEther(Address.fromString(tokenAddress), ethAmount)
-      .call()
+    const tokens = await converter.calcNeededTokensForEther(
+      tokenAddress,
+      ethAmount
+    )
+    return tokens.toString()
   }
 }
