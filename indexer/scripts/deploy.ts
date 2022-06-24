@@ -2,13 +2,14 @@ import { spawn, SpawnOptions } from 'child_process'
 
 enum Network {
   MAINNET = 'mainnet',
-  ROPSTEN = 'ropsten'
+  ROPSTEN = 'ropsten',
+  GOERLI = 'goerli'
 }
 
 const graphByNetwork: Record<Network, string> = {
   [Network.MAINNET]: process.env.GRAPH_NAME || 'decentraland/marketplace',
-  [Network.ROPSTEN]:
-    process.env.GRAPH_NAME || 'decentraland/marketplace-ropsten'
+  [Network.ROPSTEN]: process.env.GRAPH_NAME || 'decentraland/marketplace-ropsten',
+  [Network.GOERLI]:  process.env.GRAPH_NAME || 'decentraland/marketplace-goerli'
 }
 
 // TODO: Handle ctrl+C
