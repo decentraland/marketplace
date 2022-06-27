@@ -82,7 +82,7 @@ const RankingsTable = (props: Props) => {
 
   const handleTabChange = (entity: RankingEntities) => {
     setCurrentEntity(entity)
-    setCurrentFilters(INITIAL_FILTERS)
+    setCurrentFilters({ ...INITIAL_FILTERS, sortBy: currentFilters.sortBy })
     history.replace({
       pathname: location.pathname,
       hash: `${TABS_PREFIX}${entity}-${currentTimeframe}-${currentFilters.sortBy}`
