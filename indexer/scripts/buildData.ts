@@ -149,7 +149,7 @@ class Parser {
   replaceAddresses(text = this.text) {
     for (const placeholder of this.getPlaceholders('address')) {
       const contractName = this.getPlaceholderValue(placeholder)
-      const address = this.ethereum.getAddress(contractName)
+      const address = this.ethereum.getAddress(contractName).toLowerCase()
       text = text.replace(placeholder, address)
     }
     return text
