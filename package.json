@@ -7,7 +7,5 @@
     "type": "git",
     "url": "git+https://github.com/decentraland/marketplace.git"
   },
-  "dependencies": {
-    "decentraland-dapps": "^13.0.0"
-  }
+  "dependencies": {}
 }
