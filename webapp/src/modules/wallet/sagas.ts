@@ -140,7 +140,7 @@ function* handleWallet(
   })
 
   for (const contract of contracts.filter(c => c.category !== null)) {
-    // if the contract is a partner we might need to use a different contract name
+    // If the contract is a partner we might need to use a different contract name. See PR #680
     const marketplace = getContract({
       name: contractNames.MARKETPLACE,
       network: contract.network

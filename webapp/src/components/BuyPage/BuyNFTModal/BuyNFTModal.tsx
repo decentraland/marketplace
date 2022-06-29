@@ -49,7 +49,7 @@ const BuyNFTModal = (props: Props) => {
       network: nft.network
     })
 
-    // If the vendor is a partner we might need to use a different contract for authorizedAddress
+    // If the vendor is a partner we might need to use a different contract for authorizedAddress. See PR #680
     return {
       address: wallet.address,
       authorizedAddress: order!.marketplaceAddress,
