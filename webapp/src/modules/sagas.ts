@@ -5,6 +5,7 @@ import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
 import { CatalystClient } from 'dcl-catalyst-client'
 
+import { analyticsSagas as marketplaceAnalyticsSagas } from './analytics/sagas'
 import { bidSaga } from './bid/sagas'
 import { nftSaga } from './nft/sagas'
 import { orderSaga } from './order/sagas'
@@ -51,6 +52,7 @@ export function* rootSaga() {
     accountSaga(),
     collectionSaga(),
     storeSaga(catalystClient),
-    identitySaga()
+    identitySaga(),
+    marketplaceAnalyticsSagas()
   ])
 }

@@ -17,3 +17,28 @@
   margin-bottom: 24px;
   color: var(--secondary-text);
 }
+
+.HomePage .dcl.header-menu .ui.header {
+  font-size: 28px;
+  line-height: 34px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.HomePage .dcl.header-menu .ui.sub.header {
+  font-size: 17px;
+  line-height: 26px;
+  margin-top: 6px;
+  text-transform: none;
+  font-weight: normal;
+}
+
+.HomePage .ui.sub.header {
+  color: #a09ba8;
+}
+
+@media (max-width: 768px) {
+  .HomePage .Slideshow .dcl.header-menu .dcl.header-menu-left {
+    max-width: 268px;
+  }
+}

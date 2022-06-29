@@ -21,7 +21,13 @@ import {
   FetchItemSuccessAction,
   FETCH_ITEM_FAILURE,
   FETCH_ITEM_REQUEST,
-  FETCH_ITEM_SUCCESS
+  FETCH_ITEM_SUCCESS,
+  FETCH_TRENDING_ITEMS_SUCCESS,
+  FetchTrendingItemsRequestAction,
+  FetchTrendingItemsSuccessAction,
+  FetchTrendingItemsFailureAction,
+  FETCH_TRENDING_ITEMS_REQUEST,
+  FETCH_TRENDING_ITEMS_FAILURE
 } from './actions'
 
 export type ItemState = {
@@ -37,6 +43,9 @@ export const INITIAL_STATE: ItemState = {
 }
 
 type ItemReducerAction =
+  | FetchTrendingItemsRequestAction
+  | FetchTrendingItemsSuccessAction
+  | FetchTrendingItemsFailureAction
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
   | FetchItemsFailureAction
@@ -55,12 +64,14 @@ export function itemReducer(
     case BUY_ITEM_REQUEST:
     case BUY_ITEM_SUCCESS:
     case FETCH_ITEMS_REQUEST:
+    case FETCH_TRENDING_ITEMS_REQUEST:
     case FETCH_ITEM_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
     }
+    case FETCH_TRENDING_ITEMS_SUCCESS:
     case FETCH_ITEMS_SUCCESS: {
       const { items } = action.payload
       return {
@@ -91,6 +102,7 @@ export function itemReducer(
 
     case BUY_ITEM_FAILURE:
     case FETCH_ITEMS_FAILURE:
+    case FETCH_TRENDING_ITEMS_FAILURE:
     case FETCH_ITEM_FAILURE: {
       const { error } = action.payload
       return {

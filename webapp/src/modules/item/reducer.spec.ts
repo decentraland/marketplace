@@ -10,7 +10,10 @@ import {
   fetchItemsFailure,
   fetchItemsRequest,
   fetchItemsSuccess,
-  fetchItemSuccess
+  fetchItemSuccess,
+  fetchTrendingItemsFailure,
+  fetchTrendingItemsRequest,
+  fetchTrendingItemsSuccess
 } from './actions'
 import { INITIAL_STATE, itemReducer } from './reducer'
 
@@ -37,7 +40,10 @@ const txHash = 'aTxHash'
 
 const anErrorMessage = 'An error'
 
+const trendingItemsBatchSize = 20
+
 const requestActions = [
+  fetchTrendingItemsRequest(trendingItemsBatchSize),
   fetchItemsRequest(itemBrowseOptions),
   fetchItemRequest(item.contractAddress, item.itemId),
   buyItemRequest(item),
@@ -72,6 +78,10 @@ const failureActions = [
   {
     request: fetchItemRequest(item.contractAddress, item.itemId),
     failure: fetchItemFailure(item.contractAddress, item.itemId, anErrorMessage)
+  },
+  {
+    request: fetchTrendingItemsRequest(trendingItemsBatchSize),
+    failure: fetchTrendingItemsFailure(anErrorMessage)
   }
 ]
 
@@ -128,6 +138,25 @@ describe('when reducing the successful action of fetching an item', () => {
   }
 
   it('should return a state with the the loaded items plus the fetched item and the loading state cleared', () => {
+    expect(itemReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: { ...initialState.data, [item.id]: item }
+    })
+  })
+})
+
+describe('when reducing the successful action of fetching trending items', () => {
+  const requestAction = fetchTrendingItemsRequest(trendingItemsBatchSize)
+  const successAction = fetchTrendingItemsSuccess([item])
+
+  const initialState = {
+    ...INITIAL_STATE,
+    data: { anotherId: anotherItem },
+    loading: loadingReducer([], requestAction)
+  }
+
+  it('should return a state with the the loaded items plus the fetched trending items and the loading state cleared', () => {
     expect(itemReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],

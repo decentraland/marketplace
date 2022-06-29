@@ -1,0 +1,11 @@
+.InfoTooltip {
+  cursor: pointer;
+  display: inline-flex;
+  vertical-align: middle;
+  margin: 3px;
+  width: 14px;
+  height: 14px;
+  background-image: url('../../images/info.svg');
+  margin-bottom: 6px;
+  margin-left: 6px;
+}

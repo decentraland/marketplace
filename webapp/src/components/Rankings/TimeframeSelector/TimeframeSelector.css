@@ -1,0 +1,32 @@
+.TimeframeSelector {
+  border: 1px solid rgba(115, 110, 125, 0.4);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.TimeframeSelector .ui.basic.button {
+  padding: 7px 16px;
+  border-right: 1px solid rgba(115, 110, 125, 0.4);
+  border-radius: 0;
+}
+
+.TimeframeSelector .ui.basic.button.active {
+  /* to override the butotns basic !importants */
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+.TimeframeSelector .ui.button + .ui.button {
+  margin-left: 0;
+}
+
+@media (max-width: 768px) {
+  .TimeframeSelector {
+    margin-top: 16px;
+    width: 100%;
+  }
+
+  .TimeframeSelector .ui.basic.button {
+    width: 33.33%;
+  }
+}

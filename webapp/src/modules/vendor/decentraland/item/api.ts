@@ -3,10 +3,18 @@ import { Item } from '@dcl/schemas'
 import { NFT_SERVER_URL } from '../nft'
 import { ItemFilters, ItemResponse } from './types'
 
+const DEFAULT_TRENDING_PAGE_SIZE = 20
+
 class ItemAPI extends BaseAPI {
   fetch = async (filters: ItemFilters = {}): Promise<ItemResponse> => {
     const queryParams = this.buildItemsQueryString(filters)
     return this.request('get', `/items?${queryParams}`)
+  }
+
+  fetchTrendings = async (
+    size = DEFAULT_TRENDING_PAGE_SIZE
+  ): Promise<ItemResponse> => {
+    return this.request('get', `/trendings?size=${size}`)
   }
 
   fetchOne = async (contractAddress: string, itemId: string): Promise<Item> => {
