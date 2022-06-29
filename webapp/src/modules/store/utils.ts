@@ -1,12 +1,13 @@
+import { Entity } from '@dcl/schemas'
+import { Authenticator, AuthIdentity } from '@dcl/crypto'
 import {
   BuildEntityWithoutFilesOptions,
   CatalystClient,
   DeploymentPreparationData
 } from 'dcl-catalyst-client'
-import { Entity, EntityContentItemReference } from 'dcl-catalyst-commons'
+import { EntityContentItemReference } from 'dcl-catalyst-commons'
 import { LinkType, Store, StoreEntityMetadata } from './types'
 import { peerUrl } from '../../lib/environment'
-import { Authenticator, AuthIdentity } from 'dcl-crypto'
 
 export const getPeerCoverUrl = (hash: string) =>
   `${peerUrl}/content/contents/${hash}`

@@ -1,10 +1,8 @@
-import BN from 'bn.js'
-import { Address } from 'web3x/address'
-import { toWei } from 'web3x/utils'
+import { ethers } from 'ethers'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { ERC721 } from '../../../contracts/ERC721'
-import { ContractFactory } from '../../contract/ContractFactory'
+import { ERC721__factory } from '../../../contracts'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -20,12 +18,12 @@ import { config } from '../../../config'
 export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
-  private oneEthInWei: BN
+  private oneEthInWei: ethers.BigNumber
 
   constructor() {
     this.tokenConverter = new TokenConverter()
     this.marketplacePrice = new MarketplacePrice()
-    this.oneEthInWei = new BN('1000000000000000000') // 10 ** 18
+    this.oneEthInWei = ethers.BigNumber.from('1000000000000000000') // 10 ** 18
   }
 
   async fetch(params: NFTsFetchParams) {
@@ -59,7 +57,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
       )
 
       if (remoteOrder) {
-        const order = this.toOrder(remoteOrder, oneEthInMANA)
+        const order = this.toOrder(remoteOrder, oneEthInMANA.toString())
 
         nft.activeOrderId = order.id
 
@@ -107,7 +105,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
     let order: Order | undefined
 
     if (remoteOrder) {
-      order = this.toOrder(remoteOrder, oneEthInMANA)
+      order = this.toOrder(remoteOrder, oneEthInMANA.toString())
 
       nft.activeOrderId = order.id
     }
@@ -123,10 +121,13 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
     if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(wallet.address)
-    const to = Address.fromString(toAddress)
+    const from = wallet.address
+    const to = toAddress
 
-    const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
+    const erc721 = ERC721__factory.connect(
+      nft.contractAddress,
+      await getSigner()
+    )
     const transferType = new ContractService().getTransferType(
       nft.contractAddress
     )
@@ -134,15 +135,15 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
 
     switch (transferType) {
       case TransferType.TRANSFER:
-        transaction = erc721.methods.transfer(to, nft.tokenId)
+        transaction = await erc721.transfer(to, nft.tokenId)
         break
       case TransferType.SAFE_TRANSFER_FROM:
       default:
-        transaction = erc721.methods.transferFrom(from, to, nft.tokenId)
+        transaction = await erc721.transferFrom(from, to, nft.tokenId)
         break
     }
 
-    return transaction.send({ from }).getTxHash()
+    return transaction.hash
   }
 
   toNFT(asset: SuperRareAsset): NFT<VendorName.SUPER_RARE> {
@@ -177,7 +178,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
     const { asset, taker } = order
 
     const totalWei = this.marketplacePrice.addFee(order.amountWithFee)
-    const weiPrice = new BN(totalWei).mul(new BN(oneEthInMANA))
+    const weiPrice = ethers.BigNumber.from(totalWei).mul(oneEthInMANA)
     const price = weiPrice.div(this.oneEthInWei)
 
     return {
@@ -187,7 +188,7 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
       marketplaceAddress: order.marketContractAddress,
       owner: asset.owner.address,
       buyer: taker ? taker.address : null,
-      price: price.toString(10),
+      price: price.toString(),
       ethPrice: order.amountWithFee.toString(),
       status: ListingStatus.OPEN,
       createdAt: +order.timestamp,
@@ -208,6 +209,6 @@ export class NFTService implements NFTServiceInterface<VendorName.SUPER_RARE> {
 
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
-    return toWei(mana.toString(), 'ether')
+    return ethers.utils.parseEther(mana.toString())
   }
 }

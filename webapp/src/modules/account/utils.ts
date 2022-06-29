@@ -1,14 +1,7 @@
-import { toBN } from 'web3x/utils'
+import { ethers } from 'ethers'
 import { AccountMetrics } from './types'
 
-const addStrings = (a: string, b: string) => {
-  const bnA = toBN(a)
-  const bnB = toBN(b)
-
-  return bnA.add(bnB).toString()
-}
-
-export const sumAccountMetrics = (a: AccountMetrics, b: AccountMetrics) => {
+export function sumAccountMetrics(a: AccountMetrics, b: AccountMetrics) {
   return {
     ...a,
     purchases: a.purchases + b.purchases,
@@ -17,4 +10,10 @@ export const sumAccountMetrics = (a: AccountMetrics, b: AccountMetrics) => {
     royalties: addStrings(a.royalties, b.royalties),
     spent: addStrings(a.spent, b.spent)
   }
+}
+
+function addStrings(a: string, b: string) {
+  return ethers.BigNumber.from(a)
+    .add(b)
+    .toString()
 }

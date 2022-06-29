@@ -1,4 +1,4 @@
-import { toBN } from 'web3x/utils'
+import { ethers } from 'ethers'
 import { config } from '../../config'
 
 /**
@@ -7,7 +7,7 @@ import { config } from '../../config'
 export function isPriceTooLow(price: string) {
   const minSaleValue = getMinSaleValueInWei()
   if (!isNaN(parseInt(price, 10)) && minSaleValue) {
-    return toBN(price).lt(toBN(minSaleValue))
+    return ethers.BigNumber.from(price).lt(minSaleValue)
   }
   return false
 }

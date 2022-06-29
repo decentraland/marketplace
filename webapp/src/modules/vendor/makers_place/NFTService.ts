@@ -1,10 +1,9 @@
 import BN from 'bn.js'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
-import { Address } from 'web3x/address'
-import { toWei } from 'web3x/utils'
+import { ethers } from 'ethers'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { ERC721 } from '../../../contracts/ERC721'
-import { ContractFactory } from '../../contract/ContractFactory'
+import { ERC721__factory } from '../../../contracts'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -49,7 +48,7 @@ export class NFTService
       const nft = this.toNFT(asset)
 
       if (this.isOnSale(asset)) {
-        const order = this.toOrder(asset, oneEthInMANA)
+        const order = this.toOrder(asset, oneEthInMANA.toString())
 
         nft.activeOrderId = order.id
 
@@ -96,7 +95,7 @@ export class NFTService
     let order: Order | undefined
 
     if (this.isOnSale(remoteNFT)) {
-      order = this.toOrder(remoteNFT, oneEthInMANA)
+      order = this.toOrder(remoteNFT, oneEthInMANA.toString())
 
       nft.activeOrderId = order.id
     }
@@ -112,15 +111,16 @@ export class NFTService
     if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(wallet.address)
-    const to = Address.fromString(toAddress)
+    const from = wallet.address
+    const to = toAddress
 
-    const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
+    const erc721 = ERC721__factory.connect(
+      nft.contractAddress,
+      await getSigner()
+    )
 
-    return erc721.methods
-      .transferFrom(from, to, nft.tokenId)
-      .send({ from })
-      .getTxHash()
+    const transaction = await erc721.transferFrom(from, to, nft.tokenId)
+    return transaction.hash
   }
 
   toNFT(asset: MakersPlaceAsset): NFT<VendorName.MAKERS_PLACE> {
@@ -186,7 +186,7 @@ export class NFTService
 
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
-    return toWei(mana.toString(), 'ether')
+    return ethers.utils.parseEther(mana.toString())
   }
 
   private isValid(asset: MakersPlaceAsset) {
