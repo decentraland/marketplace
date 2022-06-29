@@ -7,9 +7,13 @@ import {
   Table,
   Loader,
   Mana,
-  Tabs
+  Tabs,
+  Dropdown,
+  DropdownProps,
+  Mobile
 } from 'decentraland-ui'
-import { NFTCategory, SaleSortBy } from '@dcl/schemas'
+import { Item, NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { useScrollSectionIntoView } from '../../modules/ui/utils'
@@ -18,6 +22,8 @@ import { AssetType } from '../../modules/asset/types'
 import { formatWeiMANA } from '../../lib/mana'
 import { locations } from '../../modules/routing/locations'
 import { ManaToFiat } from '../ManaToFiat'
+import { VendorName } from '../../modules/vendor/types'
+import { NFT } from '../../modules/nft/types'
 import { AssetImage } from '../AssetImage'
 import { formatDistanceToNow } from '../../lib/date'
 import { Props } from './RecentlySoldTable.types'
@@ -60,6 +66,13 @@ const RecentlySoldTable = (props: Props) => {
     })
   }
 
+  const handleOnLinkClick = (id: string) => {
+    getAnalytics().track('Asset click', {
+      id,
+      section: 'Recently Sold'
+    })
+  }
+
   const renderTableTabs = () => {
     return (
       <div className="recently-sold-card-tabs" ref={recentlySoldCardRef}>
@@ -87,6 +100,30 @@ const RecentlySoldTable = (props: Props) => {
           })}
         </span>
       </div>
+    )
+  }
+
+  const renderCategoryDropdown = () => {
+    return (
+      <Dropdown
+        className="recently-sold-dropdown"
+        defaultValue={NFTCategory.WEARABLE}
+        value={currentCategory}
+        direction="right"
+        options={[
+          NFTCategory.WEARABLE,
+          NFTCategory.PARCEL,
+          NFTCategory.EMOTE,
+          NFTCategory.ENS
+        ].map(category => ({
+          value: category as string,
+          text: t(`home_page.recently_sold.tabs.${category}`)
+        }))}
+        onChange={(
+          _event: React.SyntheticEvent<HTMLElement, Event>,
+          { value }: DropdownProps
+        ) => handleTabChange(value as NFTCategory)}
+      />
     )
   }
 
@@ -129,7 +166,7 @@ const RecentlySoldTable = (props: Props) => {
             <Table.Row>
               <Table.HeaderCell>
                 {t(
-                  `global.${
+                  `home_page.recently_sold.tabs.${
                     currentCategory === NFTCategory.PARCEL ? 'parcel' : 'ens'
                   }`
                 )}
@@ -157,187 +194,407 @@ const RecentlySoldTable = (props: Props) => {
     }
   }
 
+  const renderMobileTableHeader = () => {
+    let header = <span>{t('global.item')}</span>
+    if (currentCategory === NFTCategory.EMOTE) {
+      header = <span>{t(`global.emote`)}</span>
+    } else if (
+      currentCategory === NFTCategory.PARCEL ||
+      currentCategory === NFTCategory.ENS
+    ) {
+      header = (
+        <span>
+          {t(
+            `global.${
+              currentCategory === NFTCategory.PARCEL ? 'parcel' : 'ens'
+            }`
+          )}
+        </span>
+      )
+    }
+    return (
+      <div className="table-header">
+        <span>{header}</span>
+        <span>{t('home_page.analytics.rankings.total_volume')}</span>
+      </div>
+    )
+  }
+
+  const soldItemRow = (sale: Sale, item: Item | null, isLoading: boolean) => {
+    return (
+      <>
+        <Mobile>
+          <div className="recently-sold-item-cell">
+            {isLoading || !item ? (
+              <Loader active size="large" />
+            ) : (
+              <>
+                <div>
+                  <div className="sale-item-data">
+                    <Link
+                      to={item.url}
+                      onClick={() => handleOnLinkClick(item.id)}
+                    >
+                      <img
+                        src={item.thumbnail}
+                        alt={`${item.name}-thumbnail`}
+                      />
+                    </Link>
+                    <div className="sale-item-name-container">
+                      <Link
+                        to={item.url}
+                        onClick={() => handleOnLinkClick(item.id)}
+                      >
+                        {item.name}
+                      </Link>
+                      <span className="recently-sold-sale-info">
+                        {t(`global.${sale.type}`)}
+                        <span className="separator">|</span>
+                        {t('global.time_ago', {
+                          time: formatDistanceToNow(sale.timestamp)
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="sale-item-right-data">
+                    {item ? (
+                      <>
+                        <Mana network={item?.network} inline>
+                          {formatWeiMANA(sale.price)}
+                        </Mana>
+                        <span className="rankings-fiat-price">
+                          {sale.price ? (
+                            <>
+                              (<ManaToFiat mana={sale.price} />)
+                            </>
+                          ) : null}
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="sale-item-more-data-container">
+                    {item ? (
+                      <>
+                        <div>
+                          <span>
+                            {t('home_page.recently_sold.wearables.seller')}
+                          </span>
+                          <Link
+                            to={locations.account(sale.seller)}
+                            className="account-link"
+                          >
+                            <Profile
+                              address={sale.seller}
+                              textOnly
+                              inline={false}
+                            />
+                          </Link>
+                        </div>
+                        <div>
+                          <span>
+                            {t('home_page.recently_sold.wearables.buyer')}
+                          </span>
+                          <Link
+                            to={locations.account(sale.seller)}
+                            className="account-link"
+                          >
+                            <Profile
+                              address={sale.buyer}
+                              textOnly
+                              inline={false}
+                            />
+                          </Link>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </Mobile>
+        <NotMobile>
+          <Table.Row key={sale.id}>
+            <Table.Cell width={4}>
+              {item ? (
+                <div className="recently-sold-item-cell">
+                  <Link
+                    className="recently-sold-item-cell-thumbnail"
+                    to={item.url}
+                    onClick={() => handleOnLinkClick(item.id)}
+                  >
+                    <img src={item.thumbnail} alt={`${item.name}-thumbnail`} />
+                  </Link>
+
+                  <div className="sale-item-data">
+                    <Link
+                      to={item.url}
+                      onClick={() => handleOnLinkClick(item.id)}
+                    >
+                      {item.name}
+                    </Link>
+
+                    <span>
+                      <T
+                        id="home_page.analytics.rankings.items.by_creator"
+                        values={{
+                          creator: (
+                            <span className="rankings-item-data-creator">
+                              <Link to={locations.account(item.creator)}>
+                                <Profile
+                                  address={item.creator}
+                                  textOnly
+                                  inline={false}
+                                />
+                              </Link>
+                            </span>
+                          )
+                        }}
+                      />
+                    </span>
+                  </div>
+                </div>
+              ) : isLoading ? (
+                <Loader active inline />
+              ) : null}
+            </Table.Cell>
+            <Table.Cell width={2}>
+              <Link
+                to={locations.account(sale.seller)}
+                className="account-link"
+              >
+                <Profile address={sale.seller} textOnly inline={false} />
+              </Link>
+            </Table.Cell>
+            <Table.Cell width={2}>
+              <Link to={locations.account(sale.buyer)} className="account-link">
+                <Profile address={sale.buyer} textOnly inline={false} />
+              </Link>
+            </Table.Cell>
+            <Table.Cell width={1}>{t(`global.${sale.type}`)}</Table.Cell>
+            <Table.Cell width={2}>
+              {t('global.time_ago', {
+                time: formatDistanceToNow(sale.timestamp)
+              })}
+            </Table.Cell>
+            <Table.Cell width={2}>
+              <Mana network={item?.network} inline>
+                {formatWeiMANA(sale.price)}
+              </Mana>
+              <span className="rankings-fiat-price">
+                (<ManaToFiat mana={sale.price} />)
+              </span>
+            </Table.Cell>
+          </Table.Row>
+        </NotMobile>
+      </>
+    )
+  }
+
+  const soldParcelOrENSRow = (
+    sale: Sale,
+    asset: NFT<VendorName.DECENTRALAND> | null,
+    isLoading: boolean
+  ) => {
+    return (
+      <>
+        <Mobile>
+          <div className="recently-sold-item-cell">
+            {isLoading || !asset ? (
+              <Loader active size="large" />
+            ) : (
+              <>
+                <div>
+                  <div className="sale-item-data">
+                    <Link
+                      to={asset.url}
+                      onClick={() => handleOnLinkClick(asset.id)}
+                    >
+                      <AssetImage asset={asset} showMonospace isSmall />
+                    </Link>
+                    <div className="sale-item-name-container">
+                      <Link
+                        to={asset.url}
+                        onClick={() => handleOnLinkClick(asset.id)}
+                      >
+                        {asset.name}
+                      </Link>
+                      <span className="recently-sold-sale-info">
+                        {t(`global.${sale.type}`)}
+                        <span className="separator">|</span>
+                        {t('global.time_ago', {
+                          time: formatDistanceToNow(sale.timestamp)
+                        })}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="sale-item-right-data">
+                    {asset ? (
+                      <>
+                        <Mana network={asset?.network} inline>
+                          {formatWeiMANA(sale.price)}
+                        </Mana>
+                        <span className="rankings-fiat-price">
+                          {sale.price ? (
+                            <>
+                              (<ManaToFiat mana={sale.price} />)
+                            </>
+                          ) : null}
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="sale-item-more-data-container">
+                    {asset ? (
+                      <>
+                        <div>
+                          <span>
+                            {t('home_page.recently_sold.wearables.seller')}
+                          </span>
+                          <Link
+                            to={locations.account(sale.seller)}
+                            className="account-link"
+                          >
+                            <Profile
+                              address={sale.seller}
+                              textOnly
+                              inline={false}
+                            />
+                          </Link>
+                        </div>
+                        <div>
+                          <span>
+                            {t('home_page.recently_sold.wearables.buyer')}
+                          </span>
+                          <Link
+                            to={locations.account(sale.seller)}
+                            className="account-link"
+                          >
+                            <Profile
+                              address={sale.buyer}
+                              textOnly
+                              inline={false}
+                            />
+                          </Link>
+                        </div>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </Mobile>
+        <NotMobile>
+          <Table.Row key={sale.id}>
+            <Table.Cell width={4}>
+              {asset ? (
+                <div className="recently-sold-item-cell">
+                  <Link
+                    className="recently-sold-item-cell-thumbnail"
+                    to={asset.url}
+                    onClick={() => handleOnLinkClick(asset.id)}
+                  >
+                    <AssetImage asset={asset} showMonospace isSmall />
+                  </Link>
+                  <div className="rankings-item-data">
+                    <Link
+                      to={asset.url}
+                      onClick={() => handleOnLinkClick(asset.id)}
+                    >
+                      {asset.name}
+                    </Link>
+                  </div>
+                </div>
+              ) : isLoading ? (
+                <Loader active inline />
+              ) : null}
+            </Table.Cell>
+            <Table.Cell width={2}>
+              <Link
+                to={locations.account(sale.seller)}
+                className="account-link"
+              >
+                <Profile address={sale.seller} textOnly inline={false} />
+              </Link>
+            </Table.Cell>
+            <Table.Cell width={2}>
+              <Link to={locations.account(sale.buyer)} className="account-link">
+                <Profile address={sale.buyer} textOnly inline={false} />
+              </Link>
+            </Table.Cell>
+            <Table.Cell width={1}>{t(`global.${sale.type}`)}</Table.Cell>
+            <Table.Cell width={2}>
+              {t('global.time_ago', {
+                time: formatDistanceToNow(sale.timestamp)
+              })}
+            </Table.Cell>
+            <Table.Cell width={2}>
+              <Mana network={asset?.network} inline>
+                {formatWeiMANA(sale.price)}
+              </Mana>
+              <span className="rankings-fiat-price">
+                (<ManaToFiat mana={sale.price} />)
+              </span>
+            </Table.Cell>
+          </Table.Row>
+        </NotMobile>
+      </>
+    )
+  }
+
   const renderTableContent = useCallback(() => {
     if (!data) {
       return null
     }
+    let content
     switch (currentCategory) {
       case NFTCategory.WEARABLE:
       case NFTCategory.EMOTE:
-        return data.map(sale => {
-          return (
-            <AssetProvider
-              key={sale.id}
-              type={AssetType.ITEM}
-              contractAddress={sale.contractAddress}
-              tokenId={sale.itemId}
-            >
-              {(item, _order, isLoading) => {
-                if (!isLoading && !item) {
-                  return null
-                }
-                return (
-                  <Table.Row key={sale.id}>
-                    <Table.Cell width={4}>
-                      {item ? (
-                        <div className="recently-sold-item-cell">
-                          <Link
-                            className="recently-sold-item-cell-thumbnail"
-                            to={item.url}
-                          >
-                            <img
-                              src={item.thumbnail}
-                              alt={`${item.name}-thumbnail`}
-                            />
-                          </Link>
-
-                          <div className="rankings-item-data">
-                            <Link to={item.url}>{item.name}</Link>
-
-                            <span>
-                              <T
-                                id="home_page.analytics.rankings.items.by_creator"
-                                values={{
-                                  creator: (
-                                    <span className="rankings-item-data-creator">
-                                      <Link
-                                        to={locations.account(item.creator)}
-                                      >
-                                        <Profile
-                                          address={item.creator}
-                                          textOnly
-                                          inline={false}
-                                        />
-                                      </Link>
-                                    </span>
-                                  )
-                                }}
-                              />
-                            </span>
-                          </div>
-                        </div>
-                      ) : isLoading ? (
-                        <Loader active inline />
-                      ) : null}
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      <Link
-                        to={locations.account(sale.seller)}
-                        className="account-link"
-                      >
-                        <Profile
-                          address={sale.seller}
-                          textOnly
-                          inline={false}
-                        />
-                      </Link>
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      <Link
-                        to={locations.account(sale.buyer)}
-                        className="account-link"
-                      >
-                        <Profile address={sale.buyer} textOnly inline={false} />
-                      </Link>
-                    </Table.Cell>
-                    <Table.Cell width={1}>
-                      {t(`global.${sale.type}`)}
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      {t('global.time_ago', {
-                        time: formatDistanceToNow(sale.timestamp)
-                      })}
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      <Mana network={item?.network} inline>
-                        {formatWeiMANA(sale.price)}
-                      </Mana>
-                      <span className="rankings-fiat-price">
-                        (<ManaToFiat mana={sale.price} />)
-                      </span>
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              }}
-            </AssetProvider>
-          )
-        })
+        content = data.map(sale => (
+          <AssetProvider
+            key={sale.id}
+            type={AssetType.ITEM}
+            contractAddress={sale.contractAddress}
+            tokenId={sale.itemId}
+          >
+            {(item, _order, isLoading) => soldItemRow(sale, item, isLoading)}
+          </AssetProvider>
+        ))
+        break
       case NFTCategory.ENS:
       case NFTCategory.PARCEL:
-        return data.map(sale => {
-          return (
-            <AssetProvider
-              key={sale.id}
-              type={AssetType.NFT}
-              contractAddress={sale.contractAddress}
-              tokenId={sale.tokenId}
-            >
-              {(asset, _order, isLoading) => {
-                if (!isLoading && !asset) {
-                  return null
-                }
-                return (
-                  <Table.Row key={sale.id}>
-                    <Table.Cell width={4}>
-                      {asset ? (
-                        <div className="recently-sold-item-cell">
-                          <Link
-                            className="recently-sold-item-cell-thumbnail"
-                            to={asset.url}
-                          >
-                            <AssetImage asset={asset} showMonospace isSmall />
-                          </Link>
-                          <div className="rankings-item-data">
-                            <Link to={asset.url}>{asset.name}</Link>
-                          </div>
-                        </div>
-                      ) : isLoading ? (
-                        <Loader active inline />
-                      ) : null}
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      <Link
-                        to={locations.account(sale.seller)}
-                        className="account-link"
-                      >
-                        <Profile
-                          address={sale.seller}
-                          textOnly
-                          inline={false}
-                        />
-                      </Link>
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      <Link
-                        to={locations.account(sale.buyer)}
-                        className="account-link"
-                      >
-                        <Profile address={sale.buyer} textOnly inline={false} />
-                      </Link>
-                    </Table.Cell>
-                    <Table.Cell width={1}>
-                      {t(`global.${sale.type}`)}
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      {t('global.time_ago', {
-                        time: formatDistanceToNow(sale.timestamp)
-                      })}
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      <Mana network={asset?.network} inline>
-                        {formatWeiMANA(sale.price)}
-                      </Mana>
-                      <span className="rankings-fiat-price">
-                        (<ManaToFiat mana={sale.price} />)
-                      </span>
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              }}
-            </AssetProvider>
-          )
-        })
+        content = data.map(sale => (
+          <AssetProvider
+            key={sale.id}
+            type={AssetType.NFT}
+            contractAddress={sale.contractAddress}
+            tokenId={sale.tokenId}
+          >
+            {(asset, _order, isLoading) =>
+              soldParcelOrENSRow(sale, asset, isLoading)
+            }
+          </AssetProvider>
+        ))
+        break
     }
+    return (
+      <>
+        <Mobile>{content}</Mobile>
+        <NotMobile>
+          <Table basic="very">
+            {getTableHeader()}
+            <Table.Body>{content}</Table.Body>
+          </Table>
+        </NotMobile>
+      </>
+    )
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
 
@@ -349,15 +606,16 @@ const RecentlySoldTable = (props: Props) => {
         </HeaderMenu.Left>
       </HeaderMenu>
       <div className="recently-sold-card">
-        {renderTableTabs()}
+        <Mobile>{renderCategoryDropdown()}</Mobile>
+        <NotMobile>{renderTableTabs()}</NotMobile>
 
         {isLoading ? (
           <Loader active size="large" />
         ) : (
-          <Table basic="very">
-            <NotMobile>{getTableHeader()}</NotMobile>
-            <Table.Body>{renderTableContent()}</Table.Body>
-          </Table>
+          <>
+            <Mobile>{renderMobileTableHeader()}</Mobile>
+            {renderTableContent()}
+          </>
         )}
       </div>
     </div>

@@ -104,3 +104,36 @@
   display: flex;
   align-items: flex-end;
 }
+
+@media (max-width: 768px) {
+  .AnalyticsVolumeDayData .dcl.header-menu {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .AnalyticsVolumeDayData .stats-card {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 24px;
+  }
+
+  .AnalyticsVolumeDayData .stats-container {
+    width: 100%;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+  
+  .AnalyticsVolumeDayData .stats-card {
+    min-height: 262px;
+  }
+  
+  .AnalyticsVolumeDayData .dcl.stats {
+    width: 80%;
+  }
+
+  .AnalyticsVolumeDayData .dcl.stats,
+  .AnalyticsVolumeDayData .stats-container:last-of-type {
+    margin-bottom: 0;
+  }
+}

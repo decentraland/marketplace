@@ -19,3 +19,14 @@
 .TimeframeSelector .ui.button + .ui.button {
   margin-left: 0;
 }
+
+@media (max-width: 768px) {
+  .TimeframeSelector {
+    margin-top: 16px;
+    width: 100%;
+  }
+
+  .TimeframeSelector .ui.basic.button {
+    width: 33.33%;
+  }
+}

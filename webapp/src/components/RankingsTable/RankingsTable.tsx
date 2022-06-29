@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import {
   HeaderMenu,
   Header,
   NotMobile,
   Table,
   Loader,
-  Mana,
   Tabs,
   Dropdown,
-  DropdownProps
+  DropdownProps,
+  Mobile
 } from 'decentraland-ui'
-import { Network, NFTCategory, Rarity, WearableCategory } from '@dcl/schemas'
+import { Rarity, WearableCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
 import {
   AnalyticsTimeframe,
   CollectorRank,
@@ -26,15 +25,12 @@ import {
 import { useScrollSectionIntoView } from '../../modules/ui/utils'
 import { TimeframeSelector } from '../Rankings/TimeframeSelector'
 import { InfoTooltip } from '../InfoTooltip'
-import { AssetProvider } from '../AssetProvider'
-import { AssetType } from '../../modules/asset/types'
-import { formatWeiMANA } from '../../lib/mana'
-import { parseItemId } from '../../modules/item/utils'
-import { locations } from '../../modules/routing/locations'
-import RarityBadge from '../RarityBadge'
-import { ManaToFiat } from '../ManaToFiat'
 import { Props } from './RankingsTable.types'
 import './RankingsTable.css'
+import { RankingItemRow } from './RankingItemRow'
+import { parseURLHash } from './utils'
+import { RankingCreatorRow } from './RankingCreatorRow'
+import { RankingCollectorRow } from './RankingCollectorRow'
 
 const ALL_FILTER = 'all'
 const INITIAL_FILTERS = {
@@ -47,21 +43,22 @@ const RankingsTable = (props: Props) => {
 
   const history = useHistory()
   const location = useLocation()
-  const [currentEntity, setCurrentEntity] = useState(RankingEntities.ITEMS)
-  const [currentFilters, setCurrentFilters] = useState<RankingsFilters>(
-    INITIAL_FILTERS
+  const parsedURL = location.hash.includes(TABS_PREFIX)
+    ? parseURLHash(location.hash)
+    : null
+
+  const [currentEntity, setCurrentEntity] = useState(
+    parsedURL ? parsedURL.entity : RankingEntities.ITEMS
   )
   const [currentTimeframe, setCurrentTimeframe] = useState(
-    AnalyticsTimeframe.WEEK
+    parsedURL ? parsedURL.timeframe : AnalyticsTimeframe.WEEK
+  )
+  const [currentFilters, setCurrentFilters] = useState<RankingsFilters>(
+    parsedURL ? { sortBy: parsedURL.sortBy } : INITIAL_FILTERS
   )
   const rankingsSectionRef = useRef<HTMLDivElement>(null)
 
-  useScrollSectionIntoView(rankingsSectionRef, TABS_PREFIX, (hash: string) => {
-    const [entity, timeframe, sortBy] = hash.split('-')
-    setCurrentEntity(entity as RankingEntities)
-    setCurrentTimeframe(timeframe as AnalyticsTimeframe)
-    setCurrentFilters({ sortBy: sortBy as RankingsSortBy })
-  })
+  useScrollSectionIntoView(rankingsSectionRef, TABS_PREFIX)
 
   useEffect(() => {
     onFetchRankings(currentEntity, currentTimeframe, currentFilters)
@@ -85,7 +82,7 @@ const RankingsTable = (props: Props) => {
 
   const handleTabChange = (entity: RankingEntities) => {
     setCurrentEntity(entity)
-    setCurrentFilters(INITIAL_FILTERS)
+    setCurrentFilters({ ...INITIAL_FILTERS, sortBy: currentFilters.sortBy })
     history.replace({
       pathname: location.pathname,
       hash: `${TABS_PREFIX}${entity}-${currentTimeframe}-${currentFilters.sortBy}`
@@ -157,35 +154,61 @@ const RankingsTable = (props: Props) => {
     )
   }
 
+  const renderEntityDropdown = () => {
+    return (
+      <Dropdown
+        className="rankings-entity-dropdown"
+        defaultValue={RankingEntities.ITEMS}
+        value={currentEntity}
+        direction="right"
+        options={[...Object.values(RankingEntities)].map(entity => ({
+          value: entity as string,
+          text: t(`home_page.analytics.rankings.${entity}.tab_title`)
+        }))}
+        onChange={(
+          _event: React.SyntheticEvent<HTMLElement, Event>,
+          { value }: DropdownProps
+        ) => handleTabChange(value as RankingEntities)}
+      />
+    )
+  }
+
   const getTableHeader = () => {
     switch (currentEntity) {
       case RankingEntities.ITEMS:
         return (
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.items.item')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.items.category')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.items.rarity')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.items.price')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.items.items_sold')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.total_volume')}
-                <InfoTooltip
-                  content={t(
-                    'home_page.analytics.rankings.total_volume_tooltip'
-                  )}
-                />
-              </Table.HeaderCell>
+              <Mobile>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.items.item')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.total_volume')}
+                </Table.HeaderCell>
+              </Mobile>
+              <NotMobile>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.items.item')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.items.category')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.items.rarity')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.items.items_sold')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.total_volume')}
+                  <InfoTooltip
+                    content={t(
+                      'home_page.analytics.rankings.total_volume_tooltip'
+                    )}
+                  />
+                </Table.HeaderCell>
+              </NotMobile>
             </Table.Row>
           </Table.Header>
         )
@@ -193,31 +216,43 @@ const RankingsTable = (props: Props) => {
         return (
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.creators.creator')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.creators.collections')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.creators.items_sold')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.creators.unique_collectors')}
-                <InfoTooltip
-                  content={t(
-                    'home_page.analytics.rankings.creators.unique_collectors_tooltip'
+              <Mobile>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.items.creator')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.total_volume_sales')}
+                </Table.HeaderCell>
+              </Mobile>
+              <NotMobile>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.creators.creator')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.creators.collections')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.creators.items_sold')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.creators.unique_collectors')}
+                  <InfoTooltip
+                    content={t(
+                      'home_page.analytics.rankings.creators.unique_collectors_tooltip'
+                    )}
+                  />
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t(
+                    'home_page.analytics.rankings.creators.total_volume_sales'
                   )}
-                />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.creators.total_volume_sales')}
-                <InfoTooltip
-                  content={t(
-                    'home_page.analytics.rankings.creators.total_volume_sales_tooltip'
-                  )}
-                />
-              </Table.HeaderCell>
+                  <InfoTooltip
+                    content={t(
+                      'home_page.analytics.rankings.creators.total_volume_sales_tooltip'
+                    )}
+                  />
+                </Table.HeaderCell>
+              </NotMobile>
             </Table.Row>
           </Table.Header>
         )
@@ -225,46 +260,73 @@ const RankingsTable = (props: Props) => {
         return (
           <Table.Header>
             <Table.Row>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.collectors.collector')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.collectors.items_bought')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t(
-                  'home_page.analytics.rankings.collectors.creators_supported'
-                )}
-                <InfoTooltip
-                  content={t(
-                    'home_page.analytics.rankings.collectors.creators_supported_tooltip'
+              <Mobile>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.collectors.collector')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.collectors.total_spent')}
+                </Table.HeaderCell>
+              </Mobile>
+              <NotMobile>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.collectors.collector')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.collectors.items_bought')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t(
+                    'home_page.analytics.rankings.collectors.creators_supported'
                   )}
-                />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t(
-                  'home_page.analytics.rankings.collectors.unique_items_bought'
-                )}
-                <InfoTooltip
-                  content={t(
-                    'home_page.analytics.rankings.collectors.unique_items_bought_tooltip'
+                  <InfoTooltip
+                    content={t(
+                      'home_page.analytics.rankings.collectors.creators_supported_tooltip'
+                    )}
+                  />
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t(
+                    'home_page.analytics.rankings.collectors.unique_items_bought'
                   )}
-                />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {t('home_page.analytics.rankings.collectors.total_spent')}
-                <InfoTooltip
-                  content={t(
-                    'home_page.analytics.rankings.collectors.total_spent_tooltip'
-                  )}
-                />
-              </Table.HeaderCell>
+                  <InfoTooltip
+                    content={t(
+                      'home_page.analytics.rankings.collectors.unique_items_bought_tooltip'
+                    )}
+                  />
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {t('home_page.analytics.rankings.collectors.total_spent')}
+                  <InfoTooltip
+                    content={t(
+                      'home_page.analytics.rankings.collectors.total_spent_tooltip'
+                    )}
+                  />
+                </Table.HeaderCell>
+              </NotMobile>
             </Table.Row>
           </Table.Header>
         )
       default:
         break
     }
+  }
+
+  const renderMobileTableHeader = () => {
+    let header = <span>{t('home_page.analytics.rankings.items.item')}</span>
+    if (currentEntity === RankingEntities.CREATORS) {
+      header = <span>{t('home_page.analytics.rankings.creators.creator')}</span>
+    } else if (currentEntity === RankingEntities.COLLECTORS) {
+      header = (
+        <span>{t('home_page.analytics.rankings.collectors.collector')}</span>
+      )
+    }
+    return (
+      <div className="table-header">
+        <span>{header}</span>
+        <span>{t('home_page.analytics.rankings.total_volume')}</span>
+      </div>
+    )
   }
 
   const renderEmptyState = () => {
@@ -296,196 +358,53 @@ const RankingsTable = (props: Props) => {
     if (!data) {
       return null
     }
+    let content
     switch (currentEntity) {
       case RankingEntities.ITEMS:
-        return (data as ItemRank[]).map(entity => {
-          return (
-            <AssetProvider
-              key={entity.id}
-              type={AssetType.ITEM}
-              contractAddress={parseItemId(entity.id).contractAddress}
-              tokenId={parseItemId(entity.id).tokenId}
-            >
-              {(item, order, isLoading) => {
-                if (!isLoading && !item) {
-                  return null
-                }
-                return (
-                  <Table.Row>
-                    <Table.Cell width={5}>
-                      {item ? (
-                        <div className="rankings-item-cell">
-                          <Link
-                            to={locations.item(
-                              item.contractAddress,
-                              item.itemId
-                            )}
-                          >
-                            <img
-                              src={item.thumbnail}
-                              alt={`${item.name}-thumbnail`}
-                            />
-                          </Link>
-
-                          <div className="rankings-item-data">
-                            <Link
-                              to={locations.item(
-                                item.contractAddress,
-                                item.itemId
-                              )}
-                            >
-                              {item.name}
-                            </Link>
-
-                            <span>
-                              <T
-                                id="home_page.analytics.rankings.items.by_creator"
-                                values={{
-                                  creator: (
-                                    <span className="rankings-item-data-creator">
-                                      <Link
-                                        to={locations.account(item.creator)}
-                                      >
-                                        <Profile
-                                          address={item.creator}
-                                          textOnly
-                                          inline={false}
-                                        />
-                                      </Link>
-                                    </span>
-                                  )
-                                }}
-                              />
-                            </span>
-                          </div>
-                        </div>
-                      ) : isLoading ? (
-                        <Loader active inline />
-                      ) : null}
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      {item
-                        ? item.data.wearable?.category
-                          ? t(
-                              `wearable.category.${item.data.wearable.category}`
-                            )
-                          : t(`global.emote`)
-                        : null}
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      {item ? (
-                        <RarityBadge
-                          size="small"
-                          rarity={item.rarity}
-                          assetType={AssetType.NFT}
-                          category={NFTCategory.WEARABLE}
-                          withTooltip={false}
-                        />
-                      ) : null}
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      {item ? (
-                        <Mana network={item?.network} inline>
-                          {formatWeiMANA(item?.price || order!.price)}
-                        </Mana>
-                      ) : null}
-                    </Table.Cell>
-                    <Table.Cell width={2}>
-                      {item ? entity.sales : null}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {item ? (
-                        <>
-                          <Mana network={item?.network} inline>
-                            {formatWeiMANA(entity.volume)}
-                          </Mana>
-                          <span className="rankings-fiat-price">
-                            (<ManaToFiat mana={entity.volume} />)
-                          </span>
-                        </>
-                      ) : null}
-                    </Table.Cell>
-                  </Table.Row>
-                )
-              }}
-            </AssetProvider>
-          )
-        })
+        content = (data as ItemRank[]).map(entity => (
+          <RankingItemRow
+            key={entity.id}
+            entity={entity}
+            isLoading={isLoading}
+          />
+        ))
+        break
       case RankingEntities.CREATORS:
-        return (data as CreatorRank[])?.map(entity => {
-          const creatorAddress = entity.id
-          return (
-            <Table.Row key={entity.id}>
-              {!entity ? (
-                <Loader active inline />
-              ) : (
-                <>
-                  <Table.Cell width={5}>
-                    <div className="rankings-creator-cell">
-                      <Link to={locations.account(creatorAddress)}>
-                        <Profile
-                          address={creatorAddress}
-                          inline={false}
-                          size="large"
-                        />
-                      </Link>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell width={3}>{entity.collections}</Table.Cell>
-                  <Table.Cell width={2}>{entity.sales}</Table.Cell>
-                  <Table.Cell width={3}>{entity.uniqueCollectors}</Table.Cell>
-                  <Table.Cell>
-                    <Mana network={Network.MATIC} inline>
-                      {entity.earned && formatWeiMANA(entity.earned)}
-                    </Mana>
-                    <span className="rankings-fiat-price">
-                      {entity.earned && <ManaToFiat mana={entity.earned} />}
-                    </span>
-                  </Table.Cell>
-                </>
-              )}
-            </Table.Row>
-          )
-        })
+        content = (data as CreatorRank[])?.map(entity => (
+          <RankingCreatorRow
+            key={entity.id}
+            entity={entity}
+            isLoading={isLoading}
+          />
+        ))
+        break
       case RankingEntities.COLLECTORS:
-        return (data as CollectorRank[])?.map(entity => {
-          const collectorAddress = entity.id
-          return (
-            <Table.Row key={entity.id}>
-              {!entity ? (
-                <Loader active inline />
-              ) : (
-                <>
-                  <Table.Cell width={4}>
-                    <div className="rankings-creator-cell">
-                      <Link to={locations.account(collectorAddress)}>
-                        <Profile
-                          address={collectorAddress}
-                          inline={false}
-                          size="large"
-                        />
-                      </Link>
-                    </div>
-                  </Table.Cell>
-                  <Table.Cell width={2}>{entity.purchases}</Table.Cell>
-                  <Table.Cell width={3}>{entity.creatorsSupported}</Table.Cell>
-                  <Table.Cell width={4}>
-                    {entity.uniqueAndMythicItems}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Mana network={Network.MATIC} inline>
-                      {entity.spent && formatWeiMANA(entity.spent)}
-                    </Mana>
-                    <span className="rankings-fiat-price">
-                      {entity.spent && <ManaToFiat mana={entity.spent} />}
-                    </span>
-                  </Table.Cell>
-                </>
-              )}
-            </Table.Row>
-          )
-        })
+        content = (data as CollectorRank[])?.map(entity => (
+          <RankingCollectorRow
+            key={entity.id}
+            entity={entity}
+            isLoading={isLoading}
+          />
+        ))
+        break
     }
+
+    return (
+      <>
+        <Mobile>
+          <>
+            {renderMobileTableHeader()}
+            {content}
+          </>
+        </Mobile>
+        <NotMobile>
+          <Table basic="very">
+            {getTableHeader()}
+            <Table.Body>{content}</Table.Body>
+          </Table>
+        </NotMobile>
+      </>
+    )
   }
 
   return (
@@ -515,15 +434,13 @@ const RankingsTable = (props: Props) => {
         </HeaderMenu.Right>
       </HeaderMenu>
       <div className="rankings-card">
-        {renderTableTabs()}
+        <NotMobile>{renderTableTabs()}</NotMobile>
+        <Mobile>{renderEntityDropdown()}</Mobile>
 
         {isLoading ? (
           <Loader active size="large" />
         ) : data && data.length > 0 ? (
-          <Table basic="very">
-            <NotMobile>{getTableHeader()}</NotMobile>
-            <Table.Body>{renderTableContent()}</Table.Body>
-          </Table>
+          renderTableContent()
         ) : (
           renderEmptyState()
         )}
