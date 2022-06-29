@@ -13,7 +13,14 @@ const ManaToFiat = (props: Props) => {
       .then(usd => setFiatValue(usd))
   }, [mana])
 
-  return fiatValue ? <>${fiatValue.toFixed(digits)}</> : null
+  return fiatValue ? (
+    <>
+      $
+      {Number(fiatValue.toFixed(digits)).toLocaleString(undefined, {
+        maximumFractionDigits: 2
+      })}
+    </>
+  ) : null
 }
 
 export default React.memo(ManaToFiat)
