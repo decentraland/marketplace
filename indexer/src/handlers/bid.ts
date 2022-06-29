@@ -3,6 +3,7 @@ import {
   BidCreated,
   BidAccepted,
   BidCancelled,
+  ERC721Bid,
 } from '../entities/ERC721Bid/ERC721Bid'
 import { Bid, NFT } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
@@ -77,12 +78,14 @@ export function handleBidAccepted(event: BidAccepted): void {
   nft.updatedAt = event.block.timestamp
   nft.save()
 
+  let bidContract = ERC721Bid.bind(event.address)
   trackSale(
     BID_SALE_TYPE,
     event.params._bidder,
     event.params._seller,
     nft.id,
     bid.price,
+    bidContract.ownerCutPerMillion(),
     event.block.timestamp,
     event.transaction.hash
   )

@@ -1,5 +1,6 @@
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { config } from '../../config'
 import { Converter__factory } from '../../contracts'
-import { getSigner } from '../wallet/utils'
 
 type Ticker = {
   converted_last: {
@@ -21,9 +22,9 @@ export class TokenConverter {
   converterExchange: string
 
   constructor() {
-    const apiURL = process.env.REACT_APP_COINGECKO_API_URL!
-    const converterAddress = process.env.REACT_APP_CONVERTER_ADDRESS!
-    const converterExchange = process.env.REACT_APP_CONVERTER_EXCHANGE!
+    const apiURL = config.get('COINGECKO_API_URL')!
+    const converterAddress = config.get('CONVERTER_ADDRESS')!
+    const converterExchange = config.get('CONVERTER_EXCHANGE')!
 
     if (!apiURL) {
       throw new Error(`Invalid converter API URL "${apiURL}"`)
@@ -71,7 +72,7 @@ export class TokenConverter {
   }
 
   async contractEthToMANA(ethAmount: string) {
-    const manaAddress = process.env.REACT_APP_MANA_ADDRESS!
+    const manaAddress = config.get('MANA_ADDRESS')!
     return this.contractEthToToken(ethAmount, manaAddress)
   }
 

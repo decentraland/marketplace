@@ -1,5 +1,4 @@
-import { Item } from '@dcl/schemas'
-import { AssetType } from '../../modules/asset/types'
+import { config } from '../../config'
 import { getMinSaleValueInWei, isPriceTooLow } from './utils'
 
 describe('getMinSaleValueInWei', () => {
@@ -13,7 +12,7 @@ describe('getMinSaleValueInWei', () => {
     const minSaleValue = '1000000000000000000'
 
     beforeEach(() => {
-      process.env.REACT_APP_MIN_SALE_VALUE_IN_WEI = minSaleValue
+      jest.spyOn(config, 'get').mockReturnValueOnce(minSaleValue)
     })
     it('should return the env variable representing the minimum value in wei', () => {
       expect(getMinSaleValueInWei()).toBe(minSaleValue)
@@ -30,7 +29,7 @@ describe('isPriceTooLow', () => {
 
   describe("when there's no min sale value", () => {
     beforeEach(() => {
-      process.env.REACT_APP_MIN_SALE_VALUE_IN_WEI = ''
+      jest.spyOn(config, 'get').mockReturnValueOnce('')
     })
 
     it('should return false', () => {
@@ -42,7 +41,7 @@ describe('isPriceTooLow', () => {
     const minSaleValue = '1000000000000000000'
 
     beforeEach(() => {
-      process.env.REACT_APP_MIN_SALE_VALUE_IN_WEI = minSaleValue
+      jest.spyOn(config, 'get').mockReturnValueOnce(minSaleValue)
     })
 
     describe("and there's no price", () => {

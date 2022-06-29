@@ -11,6 +11,8 @@ import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import { Atlas } from '../Atlas'
 import { Props } from './AssetImage.types'
 import './AssetImage.css'
+import { config } from '../../config'
+import { Env } from '@dcl/ui-env'
 
 // 1x1 transparent pixel
 const PIXEL =
@@ -148,7 +150,6 @@ const AssetImage = (props: Props) => {
 
     case NFTCategory.WEARABLE: {
       let wearablePreview = null
-      const isDev = process.env.REACT_APP_NETWORK !== 'mainnet'
 
       if (isDraggable) {
         let itemId: string | undefined
@@ -199,7 +200,7 @@ const AssetImage = (props: Props) => {
               emote={previewEmote}
               onLoad={handleLoad}
               onError={handleError}
-              dev={isDev}
+              dev={config.is(Env.DEVELOPMENT)}
             />
             {isLoadingWearablePreview ? (
               <Center>
@@ -292,7 +293,6 @@ const AssetImage = (props: Props) => {
 
     case NFTCategory.EMOTE: {
       let wearablePreview = null
-      const isDev = process.env.REACT_APP_NETWORK !== 'mainnet'
       let itemId: string | undefined
       let tokenId: string | undefined
       if ('itemId' in asset && asset.itemId) {
@@ -311,7 +311,7 @@ const AssetImage = (props: Props) => {
               profile={avatar ? avatar.ethAddress : 'default'}
               onLoad={handleLoad}
               onError={handleError}
-              dev={isDev}
+              dev={config.is(Env.DEVELOPMENT)}
             />
             {isLoadingWearablePreview ? (
               <Center>

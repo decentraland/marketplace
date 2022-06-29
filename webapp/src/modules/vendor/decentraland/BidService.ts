@@ -54,18 +54,26 @@ export class BidService
           ContractName.Bid,
           nft.chainId
         )
-        const method = fingerprint
-          ? 'placeBid(address,uint256,uint256,uint256,bytes)'
-          : 'placeBid(address,uint256,uint256,uint256)'
+
+        if (fingerprint) {
+          return sendTransaction(
+            contract,
+            'placeBid(address,uint256,uint256,uint256,bytes)',
+            nft.contractAddress,
+            nft.tokenId,
+            priceInWei,
+            expiresIn,
+            fingerprint
+          )
+        }
 
         return sendTransaction(
           contract,
-          method,
+          'placeBid(address,uint256,uint256,uint256)',
           nft.contractAddress,
           nft.tokenId,
           priceInWei,
-          expiresIn,
-          fingerprint
+          expiresIn
         )
       }
       case Network.MATIC: {

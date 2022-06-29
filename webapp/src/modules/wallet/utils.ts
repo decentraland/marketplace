@@ -1,8 +1,9 @@
 import { ethers } from 'ethers'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { config } from '../../config'
 
-export const TRANSACTIONS_API_URL = process.env.REACT_APP_TRANSACTIONS_API_URL
+export const TRANSACTIONS_API_URL = config.get('TRANSACTIONS_API_URL')
 
 export function shortenAddress(address: string) {
   if (address) {
@@ -26,14 +27,4 @@ export async function getEth(): Promise<ethers.providers.Web3Provider> {
   }
 
   return new ethers.providers.Web3Provider(provider)
-}
-
-export async function getSigner(): Promise<ethers.Signer> {
-  const provider = await getConnectedProvider()
-  if (!provider) {
-    throw new Error('Could not connect to provider')
-  }
-
-  const eth = new ethers.providers.Web3Provider(provider)
-  return eth.getSigner()
 }

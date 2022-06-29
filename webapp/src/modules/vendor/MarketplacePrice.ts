@@ -1,4 +1,5 @@
 import { ethers } from 'ethers'
+import { config } from '../../config'
 
 export class MarketplacePrice {
   public oneMillion: ethers.BigNumber
@@ -7,11 +8,10 @@ export class MarketplacePrice {
   public maxPriceIncreasePercentage: number
 
   constructor() {
-    const feePerMillion =
-      process.env.REACT_APP_MARKETPLACE_ADAPTER_FEE_PER_MILLION
+    const feePerMillion = config.get('MARKETPLACE_ADAPTER_FEE_PER_MILLION')
 
     const maxPriceIncreasePercentage = Number(
-      process.env.REACT_APP_MAX_PRICE_INCREASE_PERCENTAGE
+      config.get('MAX_PRICE_INCREASE_PERCENTAGE')
     )
 
     if (!feePerMillion) {
