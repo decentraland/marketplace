@@ -12,9 +12,11 @@ import { Section } from '../../modules/vendor/decentraland/routing/types'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
+import { RecentlySoldTable } from '../RecentlySoldTable'
 import { Footer } from '../Footer'
 import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
 import { Slideshow } from './Slideshow'
+import { RankingsTable } from '../RankingsTable'
 import { Props } from './HomePage.types'
 import './HomePage.css'
 
@@ -30,7 +32,6 @@ const HomePage = (props: Props) => {
     () => ({
       [View.HOME_TRENDING_ITEMS]: Section.WEARABLES_TRENDING,
       [View.HOME_NEW_ITEMS]: Section.WEARABLES,
-      [View.HOME_SOLD_ITEMS]: Section.WEARABLES,
       [View.HOME_WEARABLES]: Section.WEARABLES,
       [View.HOME_LAND]: Section.LAND,
       [View.HOME_ENS]: Section.ENS
@@ -41,8 +42,7 @@ const HomePage = (props: Props) => {
   const sectionsSubtitles: Partial<Record<View, string>> = useMemo(
     () => ({
       [View.HOME_TRENDING_ITEMS]: t('home_page.home_trending_items_subtitle'),
-      [View.HOME_WEARABLES]: t('home_page.home_recently_listed_items_subtitle'),
-      [View.HOME_SOLD_ITEMS]: t('home_page.home_latest_sales_items_subtitle')
+      [View.HOME_WEARABLES]: t('home_page.home_recently_listed_items_subtitle')
     }),
     []
   )
@@ -58,7 +58,6 @@ const HomePage = (props: Props) => {
     () => ({
       [View.HOME_TRENDING_ITEMS]: AssetType.ITEM,
       [View.HOME_NEW_ITEMS]: AssetType.ITEM,
-      [View.HOME_SOLD_ITEMS]: AssetType.ITEM,
       [View.HOME_WEARABLES]: AssetType.NFT,
       [View.HOME_LAND]: AssetType.NFT,
       [View.HOME_ENS]: AssetType.NFT
@@ -69,7 +68,6 @@ const HomePage = (props: Props) => {
   const sort: Partial<Record<View, SortBy>> = useMemo(
     () => ({
       [View.HOME_NEW_ITEMS]: SortBy.RECENTLY_LISTED,
-      [View.HOME_SOLD_ITEMS]: SortBy.RECENTLY_SOLD,
       [View.HOME_WEARABLES]: SortBy.RECENTLY_LISTED,
       [View.HOME_LAND]: SortBy.RECENTLY_LISTED,
       [View.HOME_ENS]: SortBy.RECENTLY_LISTED
@@ -122,7 +120,22 @@ const HomePage = (props: Props) => {
     // eslint-disable-next-line
   }, [onFetchAssetsFromRoute])
 
-  const views = Object.keys(homepage) as HomepageView[]
+  // trending and newest sections
+  const firstViewsSection = Object.keys(homepage).slice(0, 2) as HomepageView[]
+  // rest of the sections
+  const secondViewsSection = Object.keys(homepage).slice(2) as HomepageView[]
+
+  const renderSlideshow = (view: HomepageView) => (
+    <Slideshow
+      key={view}
+      title={t(`home_page.${view}`)}
+      subtitle={sectionsSubtitles[view]}
+      viewAllTitle={sectionsViewAllTitle[view]}
+      assets={homepage[view]}
+      isLoading={homepageLoading[view]}
+      onViewAll={() => handleViewAll(view)}
+    />
+  )
 
   return (
     <>
@@ -130,17 +143,10 @@ const HomePage = (props: Props) => {
       <Navigation activeTab={NavigationTab.OVERVIEW} />
       <Page className="HomePage">
         <AnalyticsVolumeDayData />
-        {views.map(view => (
-          <Slideshow
-            key={view}
-            title={t(`home_page.${view}`)}
-            subtitle={sectionsSubtitles[view]}
-            viewAllTitle={sectionsViewAllTitle[view]}
-            assets={homepage[view]}
-            isLoading={homepageLoading[view]}
-            onViewAll={() => handleViewAll(view)}
-          />
-        ))}
+        {firstViewsSection.map(renderSlideshow)}
+        <RankingsTable />
+        {secondViewsSection.map(renderSlideshow)}
+        <RecentlySoldTable />
       </Page>
       <Footer />
     </>

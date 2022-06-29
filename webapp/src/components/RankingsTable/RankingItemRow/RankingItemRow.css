@@ -1,0 +1,107 @@
+@media (max-width: 768px) {
+  .RankingItemRow.rankings-item-cell {
+    margin: 0 16px;
+    padding-top: 16px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #736e7d;
+    flex-direction: column;
+    min-height: 120px;
+    position: relative;
+  }
+
+  .RankingItemRow.rankings-item-cell > div {
+    display: flex;
+    width: 100%;
+  }
+
+  .RankingItemRow.rankings-item-cell:last-of-type {
+    border-bottom: none;
+  }
+
+  .RankingItemRow .rankings-item-data {
+    flex-direction: row;
+  }
+
+  .RankingItemRow .rankings-item-name-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .RankingItemRow .rankings-item-right-data {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .RankingItemRow .rankings-item-right-data .ui.header.dcl.mana.inline {
+    margin-bottom: 0;
+    text-align: right;
+  }
+
+  .RankingItemRow .rankings-item-badge-container {
+    margin-top: 8px;
+  }
+
+  .RankingItemRow .arrow-container i.caret {
+    background-color: #acacac;
+    background-image: none;
+    -webkit-mask: url(../../../images/forward.svg) no-repeat 50% 50%;
+    mask: url(../../../images/forward.svg) no-repeat 50% 50%;
+    transform: rotate(90deg);
+    transition: transform 0.3s ease-in-out;
+    -webkit-transition: transform 0.3s ease-in-out;
+    display: inline-block;
+    width: 16px;
+    height: 13px;
+    margin-left: 4px;
+    margin-top: 4px;
+  }
+
+  .RankingItemRow .arrow-container i.caret.up {
+    transform: rotate(-90deg);
+  }
+
+  .RankingItemRow .arrow-container {
+    color: #acacac;
+    display: flex;
+    margin-top: 8px;
+    margin-left: auto;
+  }
+
+  .RankingItemRow .rankings-item-more-data-container {
+    border-top: 1px solid #736e7d;
+    justify-content: right;
+    padding-top: 12px;
+    margin-top: 12px;
+    display: flex;
+    margin-left: auto;
+    min-width: 260px;
+  }
+
+  .RankingItemRow .rankings-item-more-data-container > div {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0 12px;
+  }
+
+  .RankingItemRow .rankings-item-more-data-container > div span {
+    color: #736e7d;
+    padding-bottom: 5px;
+  }
+
+  .RankingItemRow .rankings-item-more-data-container > div span.price {
+    padding-bottom: 0;
+  }
+
+  .RankingItemRow .rankings-item-more-data-container > div span {
+    color: #736e7d;
+  }
+
+  .RankingItemRow
+    .rankings-item-more-data-container
+    > div
+    .ui.header.dcl.mana.inline {
+    margin-top: 0;
+  }
+}

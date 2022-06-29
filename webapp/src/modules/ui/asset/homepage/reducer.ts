@@ -13,7 +13,6 @@ import { View } from '../../types'
 export type HomepageUIState = {
   [View.HOME_TRENDING_ITEMS]: string[]
   [View.HOME_NEW_ITEMS]: string[]
-  [View.HOME_SOLD_ITEMS]: string[]
   [View.HOME_WEARABLES]: string[]
   [View.HOME_LAND]: string[]
   [View.HOME_ENS]: string[]
@@ -22,7 +21,6 @@ export type HomepageUIState = {
 export const INITIAL_STATE: HomepageUIState = {
   [View.HOME_TRENDING_ITEMS]: [],
   [View.HOME_NEW_ITEMS]: [],
-  [View.HOME_SOLD_ITEMS]: [],
   [View.HOME_WEARABLES]: [],
   [View.HOME_LAND]: [],
   [View.HOME_ENS]: []
@@ -47,12 +45,6 @@ export function homepageReducer(
           return {
             ...state,
             [View.HOME_NEW_ITEMS]: itemIds
-          }
-        }
-        case View.HOME_SOLD_ITEMS: {
-          return {
-            ...state,
-            [View.HOME_SOLD_ITEMS]: itemIds
           }
         }
         default:

@@ -41,6 +41,7 @@ export function trackSale(
   sale.txHash = txHash
   sale.searchTokenId = nft.tokenId
   sale.searchContractAddress = nft.contractAddress
+  sale.searchCategory = nft.category
   sale.save()
 
   // update buyer account

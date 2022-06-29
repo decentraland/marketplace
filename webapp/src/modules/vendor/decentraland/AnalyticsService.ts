@@ -11,7 +11,7 @@ export class AnalyticsService implements AnalyticsServiceInterface {
   }
 
   async fetchVolumeData(timeframe: AnalyticsTimeframe) {
-    const { data } = await analyticsAPI.fetchRankingsByTimeframe(timeframe)
+    const { data } = await analyticsAPI.fetchVolumeByTimeframe(timeframe)
 
     return {
       sales: data.sales,

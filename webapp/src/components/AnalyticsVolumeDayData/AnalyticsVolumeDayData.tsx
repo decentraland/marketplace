@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import CountUp from 'react-countup'
 import {
-  Button,
   HeaderMenu,
   Header,
   Stats,
@@ -9,13 +8,16 @@ import {
   Loader,
   Mana,
   Popup,
-  SemanticICONS
+  SemanticICONS,
+  NotMobile,
+  Mobile
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   AnalyticsTimeframe,
   AnalyticsVolumeData
 } from '../../modules/analytics/types'
+import { TimeframeSelector } from '../Rankings/TimeframeSelector'
 import { Props } from './AnalyticsVolumeDayData.types'
 import { formatAnalyticsVolume, formatDailySales } from './utils'
 import './AnalyticsVolumeDayData.css'
@@ -68,41 +70,26 @@ const AnalyticsVolumeDayData = (props: Props) => {
             <Header sub>{t('home_page.analytics.volume.subtitle')}</Header>
           </div>
         </HeaderMenu.Left>
-        <HeaderMenu.Right>
-          <Button
-            className={
-              currentTimeframe === AnalyticsTimeframe.WEEK ? 'active' : ''
-            }
-            basic
-            onClick={() => setCurrentTimeframe(AnalyticsTimeframe.WEEK)}
-          >
-            {t('home_page.analytics.volume.seven_days')}
-          </Button>
-          <Button
-            className={
-              currentTimeframe === AnalyticsTimeframe.MONTH ? 'active' : ''
-            }
-            basic
-            onClick={() => setCurrentTimeframe(AnalyticsTimeframe.MONTH)}
-          >
-            {t('home_page.analytics.volume.thirty_days')}
-          </Button>
-          <Button
-            className={
-              currentTimeframe === AnalyticsTimeframe.ALL ? 'active' : ''
-            }
-            basic
-            onClick={() => setCurrentTimeframe(AnalyticsTimeframe.ALL)}
-          >
-            {t('home_page.analytics.volume.all')}
-          </Button>
-        </HeaderMenu.Right>
+        <NotMobile>
+          <HeaderMenu.Right>
+            <TimeframeSelector
+              value={currentTimeframe}
+              onChange={timeframe => setCurrentTimeframe(timeframe)}
+            />
+          </HeaderMenu.Right>
+        </NotMobile>
+        <Mobile>
+          <TimeframeSelector
+            value={currentTimeframe}
+            onChange={timeframe => setCurrentTimeframe(timeframe)}
+          />
+        </Mobile>
       </HeaderMenu>
       <div className="stats-card">
         {!isLoading && data ? (
           <>
             {StatSections.map(statSection => (
-              <div className="stats-container">
+              <div className="stats-container" key={statSection.key}>
                 <Icon
                   className="stat-icon"
                   name={statSection.icon as SemanticICONS}

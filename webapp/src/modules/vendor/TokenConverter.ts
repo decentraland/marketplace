@@ -18,6 +18,13 @@ type CoinTickers = {
 // { coinId: {ethAmount: result } }
 const pricesCache: Record<string, Record<number, number>> = {}
 
+// { coinId: {tickerKey: result } }
+const coinTickersCache: Record<string, Record<string, number>> = {}
+const coinTickersPromiseCache: Record<
+  string,
+  Record<string, Promise<CoinTickers>>
+> = {}
+
 export class TokenConverter {
   apiURL: string
   converterAddress: string
@@ -74,11 +81,35 @@ export class TokenConverter {
   }
 
   async marketMANAToUSD(amount: number) {
-    const response = await window.fetch(
-      `${this.apiURL}/coins/decentraland/tickers?exchange_ids=${this.converterExchange}`
-    )
-    const coinTickers: CoinTickers = await response.json()
-    return coinTickers.tickers[0].converted_last.usd * amount
+    const usdTicker = 'usd'
+    const coinId = 'MANA'
+    if (!coinTickersCache[coinId]) {
+      coinTickersCache[coinId] = {}
+    }
+    if (!coinTickersCache[coinId][usdTicker]) {
+      if (!coinTickersPromiseCache[coinId]) {
+        coinTickersPromiseCache[coinId] = {}
+      }
+      const ongoingPromise = coinTickersPromiseCache[coinId][usdTicker]
+      if (!ongoingPromise) {
+        coinTickersPromiseCache[coinId][usdTicker] = new Promise<CoinTickers>(
+          async (res, rej) => {
+            try {
+              const response = await window.fetch(
+                `${this.apiURL}/coins/decentraland/tickers?exchange_ids=${this.converterExchange}`
+              )
+              res(response.json())
+            } catch (error) {
+              rej(error)
+            }
+          }
+        )
+      }
+      const coinTickers = await coinTickersPromiseCache[coinId][usdTicker]
+      coinTickersCache[coinId][usdTicker] =
+        coinTickers.tickers[0].converted_last[usdTicker]
+    }
+    return coinTickersCache[coinId][usdTicker] * amount
   }
 
   async contractEthToMANA(ethAmount: string) {
