@@ -287,13 +287,3 @@ type AnalyticsDayData @entity {
   creatorsEarnings: BigInt!
   daoEarnings: BigInt!
 }
-
-# Data accumulated and condensed into day stats for all of the Marketplace activity
-type AnalyticsDayData @entity {
-  id: ID! # timestamp rounded to current day by dividing by 86400
-  date: Int!
-  sales: Int!
-  volume: BigInt!
-  creatorsEarnings: BigInt!
-  daoEarnings: BigInt!
-}
