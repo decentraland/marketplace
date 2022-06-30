@@ -1,4 +1,4 @@
-import { AuthIdentity } from 'dcl-crypto'
+import { AuthIdentity } from '@dcl/crypto'
 import {
   loadingReducer,
   LoadingState

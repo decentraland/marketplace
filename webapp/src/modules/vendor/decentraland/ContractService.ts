@@ -7,8 +7,9 @@ import {
 import { Network as AppNetwork } from '../../contract/types'
 import { TransferType } from '../types'
 import { nftAPI } from './nft'
+import { config } from '../../../config'
 
-const network = process.env.REACT_APP_NETWORK! as AppNetwork
+const network = config.get('NETWORK')! as AppNetwork
 
 export enum ContractName {
   MANA = 'MANA',

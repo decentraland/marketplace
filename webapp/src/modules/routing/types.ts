@@ -1,4 +1,4 @@
-import { Network, Rarity } from '@dcl/schemas'
+import { Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
@@ -39,4 +39,5 @@ export type BrowseOptions = {
   address?: string
   network?: Network
   viewAsGuest?: boolean
+  category?: NFTCategory
 }

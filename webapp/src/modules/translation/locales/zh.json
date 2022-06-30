@@ -4,6 +4,8 @@
     "address": "地址",
     "balance": "结余",
     "load_more": "装载更多",
+    "more": "更多的",
+    "less": "较少的",
     "not_found": "未找到",
     "parcel": "地块",
     "parcel_count": "{count, plural, one {地块} other {情节}} {count}",
@@ -42,7 +44,8 @@
     "order": "清单",
     "mint": "薄荷",
     "back": "背部",
-    "emote": "表情"
+    "emote": "表情",
+    "time_ago": "{time} 前"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -61,10 +64,11 @@
     "known_origin": "KnownOrigin"
   },
   "navigation": {
+    "overview": "概述",
     "land": "土地",
     "collectibles": "收藏品",
     "partners": "伙伴",
-    "my_store": "我的商店",
+    "my_assets": "我的资产",
     "my_bids": "我的出价",
     "activity": "活动"
   },
@@ -124,9 +128,99 @@
     "size": "大小"
   },
   "home_page": {
+    "analytics": {
+      "volume": {
+        "title": "交易量市场",
+        "subtitle": "包括土地、可穿戴设备、表情和名称",
+        "total_sales": "总销售额",
+        "total_sales_tooltip": "出售的 NFT 数量，包括一级市场和二级市场。",
+        "total_volume": "总体积",
+        "total_volume_tooltip": "MANA 的销售量，包括一级和二级市场。",
+        "creators_earnings": "创作者收益",
+        "creators_earnings_tooltip": "创作者获得 97.5% 的初级销售额和 2.5% 的二级销售额作为版税。",
+        "dao_revenue": "道收入",
+        "dao_revenue_tooltip": "DAO 获得土地和一级市场销售额的 2.5%，外加可穿戴设备的出版费。",
+        "seven_days": "7天",
+        "thirty_days": "30天",
+        "all": "全部"
+      },
+      "rankings": {
+        "title": "排名",
+        "subtitle": "仅包括可穿戴设备和表情",
+        "most_volume": "音量 (MANA)",
+        "most_sales": "销售数量",
+        "no_results_title": "没有找到这些过滤器的结果",
+        "no_results_action": "{link} 或选择不同的",
+        "clear_filters": "清除过滤器",
+        "items": {
+          "all_categories": "所有类别",
+          "all_rarities": "所有稀有物品",
+          "by_creator": "经过 {creator}",
+          "tab_title": "可穿戴设备",
+          "item": "物品",
+          "category": "类别",
+          "rarity": "稀有度",
+          "price": "价格",
+          "items_sold": "出售的物品"
+        },
+        "creators": {
+          "tab_title": "创作者",
+          "creator": "创作者",
+          "collections": "收藏品",
+          "collections_created": "{collections} 集合",
+          "items_sold": "出售的物品",
+          "unique_collectors": "独特的收藏家",
+          "unique_collectors_tooltip": "从创建者那里拥有至少 1 个项目的用户数量。",
+          "total_volume_sales": "总销量",
+          "total_volume_sales_tooltip": "仅包括初级销售"
+        },
+        "total_volume": "总容积",
+        "total_volume_tooltip": "包括一级销售和二级销售。",
+        "collectors": {
+          "tab_title": "收藏家",
+          "collector": "集电极",
+          "items_bought": "购买的物品",
+          "collected_items": "{amount} 收集的物品",
+          "creators_supported": "支持的创作者",
+          "creators_supported_tooltip": "用户至少购买了 1 件商品的创作者数量。",
+          "unique_items_bought": "购买的独特物品",
+          "unique_items_bought_tooltip": "用户购买的神话或传奇物品的数量。",
+          "total_spent": "总花费",
+          "total_spent_tooltip": "在一级市场和二级市场上花费的 MANA 总量。"
+        }
+      }
+    },
+    "recently_sold": {
+      "title": "最近售出",
+      "last_updated": "最后更新：{日期}",
+      "tabs": {
+        "wearable": "可穿戴设备",
+        "parcel": "土地",
+        "emote": "表情",
+        "ens": "名称"
+      },
+      "wearables": {
+        "item": "物品",
+        "seller": "卖方",
+        "buyer": "买方",
+        "type": "类型",
+        "time": "时间",
+        "price": "价格"
+      },
+      "parcel": {
+        "parcel": "包裹",
+        "time": "时间",
+        "price": "价格"
+      }
+    },
     "title": "Decentraland Marketplace",
     "subtitle": "欢迎来到虚拟世界的一站式商店，获取最好的数字资产。",
     "get_started": "开始浏览",
+    "home_trending_items": "热门商品",
+    "home_trending_items_subtitle": "过去 24 小时内的畅销商品 🔥",
+    "home_trending_items_explore_all": "探索所有",
+    "home_recently_listed_items_subtitle": "被转售的物品",
+    "home_latest_sales_items_subtitle": "正在铸造的物品",
     "home_new_items": "最新商品",
     "home_sold_items": "最新销售",
     "home_wearables": "最新上市",

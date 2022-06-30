@@ -1,3 +1,5 @@
+import { PayloadAction } from 'typesafe-actions'
+import { ethers } from 'ethers'
 import {
   EventName,
   GetPayload
@@ -18,7 +20,6 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { PayloadAction } from 'typesafe-actions'
 import { capitalize } from '../../lib/text'
 import {
   EXECUTE_ORDER_SUCCESS,
@@ -53,7 +54,6 @@ import {
   FETCH_ITEMS_SUCCESS
 } from '../item/actions'
 import { SetIsTryingOnAction, SET_IS_TRYING_ON } from '../ui/preview/actions'
-import { fromWei } from 'web3x/utils'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -200,7 +200,7 @@ track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, 'Buy Item', ({ payload }) => ({
   rarity: payload.item.rarity,
   network: payload.item.network,
   chainId: payload.item.chainId,
-  price: Number(fromWei(payload.item.price, 'ether')),
+  price: Number(ethers.utils.formatEther(payload.item.price)),
   data: payload.item.data
 }))
 

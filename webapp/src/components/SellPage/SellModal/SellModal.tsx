@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { fromWei } from 'web3x/utils'
-import { addDays } from 'date-fns'
-import dateFnsFormat from 'date-fns/format'
+import { ethers } from 'ethers'
+import addDays from 'date-fns/addDays'
+import formatDate from 'date-fns/format'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
@@ -45,11 +45,11 @@ const SellModal = (props: Props) => {
 
   const isUpdate = order !== null
   const [price, setPrice] = useState<string>(
-    isUpdate ? fromWei(order!.price, 'ether') : ''
+    isUpdate ? ethers.utils.formatEther(order!.price) : ''
   )
   const [expiresAt, setExpiresAt] = useState(
     isUpdate && order!.expiresAt
-      ? dateFnsFormat(addDays(new Date(+order!.expiresAt), 1), INPUT_FORMAT)
+      ? formatDate(addDays(new Date(+order!.expiresAt), 1), INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
   const [showConfirm, setShowConfirm] = useState(false)

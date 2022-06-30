@@ -1,16 +1,15 @@
-import { Address } from 'web3x/address'
-import { ABICoder } from 'web3x/contract/abi-coder'
+import { ethers } from 'ethers'
 import { Order } from '@dcl/schemas'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { MarketplaceAdapter } from '../../../contracts/MarketplaceAdapter'
-import { ContractFactory } from '../../contract/ContractFactory'
+import { MarketplaceAdapter__factory } from '../../../contracts'
+import { getContract } from '../../contract/utils'
 import { NFT } from '../../nft/types'
 import { TokenConverter } from '../TokenConverter'
 import { MarketplacePrice } from '../MarketplacePrice'
 import { getContractNames, VendorName } from '../types'
 import { OrderService as OrderServiceInterface } from '../services'
 import { ContractService } from './ContractService'
-import { getContract } from '../../contract/utils'
 
 export class OrderService
   implements OrderServiceInterface<VendorName.MAKERS_PLACE> {
@@ -42,14 +41,10 @@ export class OrderService
     const contractNames = getContractNames()
 
     // Addresses
-    const assetContractAddress = Address.fromString(nft.contractAddress)
-    const assetMarketAddress: Address = Address.fromString(
-      order.marketplaceAddress
-    )
-    const manaTokenAddress = Address.fromString(
-      getContract({ name: contractNames.MANA }).address
-    )
-    const from = Address.fromString(wallet.address)
+    const assetContractAddress = nft.contractAddress
+    const assetMarketAddress = order.marketplaceAddress
+    const manaTokenAddress = getContract({ name: contractNames.MANA }).address
+    const from = wallet.address
 
     // Data
     const calldata = this.getCallData(nft)
@@ -62,24 +57,26 @@ export class OrderService
     const maxPrice = this.marketplacePrice.addMaxSlippage(manaPrice)
 
     // Contract
-    const marketplaceAdapter = await ContractFactory.build(
-      MarketplaceAdapter,
-      getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address
+    const marketplaceAdapter = MarketplaceAdapter__factory.connect(
+      getContract({ name: contractNames.MARKETPLACE_ADAPTER }).address,
+      await getSigner()
     )
-    return marketplaceAdapter.methods
-      .buy(
-        assetContractAddress,
-        nft.tokenId,
-        assetMarketAddress,
-        calldata,
-        (order as Order & { ethPrice: string }).ethPrice!,
-        manaTokenAddress,
-        maxPrice,
-        transferType,
-        from
-      )
-      .send({ from })
-      .getTxHash()
+
+    const transaction = await marketplaceAdapter[
+      'buy(address,uint256,address,bytes,uint256,address,uint256,uint8,address)'
+    ](
+      assetContractAddress,
+      nft.tokenId,
+      assetMarketAddress,
+      calldata,
+      (order as Order & { ethPrice: string }).ethPrice!,
+      manaTokenAddress,
+      maxPrice,
+      transferType,
+      from
+    )
+
+    return transaction.hash
   }
 
   cancel(): any {
@@ -91,16 +88,10 @@ export class OrderService
   }
 
   private getCallData(nft: NFT<VendorName.MAKERS_PLACE>) {
-    const abiCoder = new ABICoder()
-    return abiCoder.encodeFunctionCall(
-      {
-        name: 'purchase',
-        type: 'function',
-        inputs: [
-          { type: 'uint256', name: 'TOKEN_ID' },
-          { type: 'address', name: 'ADDRESS_CONTRACT' }
-        ]
-      },
+    const abiCoder = ethers.utils.defaultAbiCoder
+    // purchase
+    return abiCoder.encode(
+      ['uint256', 'address'],
       [nft.tokenId, nft.contractAddress]
     )
   }

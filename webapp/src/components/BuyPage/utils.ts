@@ -1,4 +1,5 @@
-import { toBN } from 'web3x/utils'
+import { ethers } from 'ethers'
+import { config } from '../../config'
 
 /**
  * Checks against the min value of costless sales
@@ -6,7 +7,7 @@ import { toBN } from 'web3x/utils'
 export function isPriceTooLow(price: string) {
   const minSaleValue = getMinSaleValueInWei()
   if (!isNaN(parseInt(price, 10)) && minSaleValue) {
-    return toBN(price).lt(toBN(minSaleValue))
+    return ethers.BigNumber.from(price).lt(minSaleValue)
   }
   return false
 }
@@ -16,5 +17,5 @@ export function isPriceTooLow(price: string) {
  * The price is expected to be used as an inclusive cap, meaning that prices that equal the value SHOULD be filtered
  */
 export function getMinSaleValueInWei(): string | undefined {
-  return process.env.REACT_APP_MIN_SALE_VALUE_IN_WEI
+  return config.get('MIN_SALE_VALUE_IN_WEI')
 }

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { utils } from 'ethers'
+import { ethers } from 'ethers'
 import { Link } from 'react-router-dom'
 import { Loader, Stats, Button } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
@@ -166,7 +166,7 @@ const Bid = (props: Props) => {
                   </>
                 }
                 onConfirm={handleConfirm}
-                valueToConfirm={utils.formatEther(bid.price)}
+                valueToConfirm={ethers.utils.formatEther(bid.price)}
                 network={nft.network}
                 onCancel={() => setShowConfirmationModal(false)}
                 loading={isAcceptingBid}

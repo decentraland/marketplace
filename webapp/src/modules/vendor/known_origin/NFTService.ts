@@ -1,10 +1,8 @@
-import BN from 'bn.js'
-import { Address } from 'web3x/address'
-import { toWei } from 'web3x/utils'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { ethers } from 'ethers'
 import { ListingStatus, Network, Order } from '@dcl/schemas'
-import { ERC721 } from '../../../contracts/ERC721'
-import { ContractFactory } from '../../contract/ContractFactory'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { ERC721__factory } from '../../../contracts'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
 import { getNFTId } from '../../nft/utils'
@@ -21,6 +19,7 @@ import { editionAPI } from './edition/api'
 import { tokenAPI } from './token/api'
 import { MAX_QUERY_SIZE } from './api'
 import { AssetType } from './types'
+import { config } from '../../../config'
 
 type Fragment = TokenFragment | EditionFragment
 
@@ -28,12 +27,12 @@ export class NFTService
   implements NFTServiceInterface<VendorName.KNOWN_ORIGIN> {
   private tokenConverter: TokenConverter
   private marketplacePrice: MarketplacePrice
-  private oneEthInWei: BN
+  private oneEthInWei: ethers.BigNumber
 
   constructor() {
     this.tokenConverter = new TokenConverter()
     this.marketplacePrice = new MarketplacePrice()
-    this.oneEthInWei = new BN('1000000000000000000') // 10 ** 18
+    this.oneEthInWei = ethers.BigNumber.from('1000000000000000000') // 10 ** 18
   }
 
   async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
@@ -51,7 +50,7 @@ export class NFTService
       const nft = this.toNFT(fragment)
 
       if (fragment.type === AssetType.EDITION) {
-        const order = this.toOrder(fragment, oneEthInMANA)
+        const order = this.toOrder(fragment, oneEthInMANA.toString())
 
         nft.activeOrderId = order.id
 
@@ -96,7 +95,7 @@ export class NFTService
     let order: Order | undefined
 
     if (fragment.type === AssetType.EDITION) {
-      order = this.toOrder(fragment, oneEthInMANA)
+      order = this.toOrder(fragment, oneEthInMANA.toString())
 
       nft.activeOrderId = order.id
     }
@@ -108,19 +107,21 @@ export class NFTService
     wallet: Wallet | null,
     toAddress: string,
     nft: NFT<VendorName.KNOWN_ORIGIN>
-  ) {
+  ): Promise<string> {
     if (!wallet) {
       throw new Error('Invalid address. Wallet must be connected.')
     }
-    const from = Address.fromString(wallet.address)
-    const to = Address.fromString(toAddress)
+    const from = wallet.address
+    const to = toAddress
 
-    const erc721 = await ContractFactory.build(ERC721, nft.contractAddress)
+    const erc721 = ERC721__factory.connect(
+      nft.contractAddress,
+      await getSigner()
+    )
 
-    return erc721.methods
-      .transferFrom(from, to, nft.tokenId)
-      .send({ from })
-      .getTxHash()
+    const transaction = await erc721.transferFrom(from, to, nft.tokenId)
+
+    return transaction.hash
   }
 
   toNFT(fragment: Fragment): NFT<VendorName.KNOWN_ORIGIN> {
@@ -148,7 +149,7 @@ export class NFTService
       },
       category: 'art',
       vendor: VendorName.KNOWN_ORIGIN,
-      chainId: Number(process.env.REACT_APP_CHAIN_ID),
+      chainId: Number(config.get('CHAIN_ID')!),
       network: Network.ETHEREUM,
       issuedId: null,
       itemId: null,
@@ -163,7 +164,7 @@ export class NFTService
     oneEthInMANA: string
   ): Order & { ethPrice: string } {
     const totalWei = this.marketplacePrice.addFee(edition.priceInWei)
-    const weiPrice = new BN(totalWei).mul(new BN(oneEthInMANA))
+    const weiPrice = ethers.BigNumber.from(totalWei).mul(oneEthInMANA)
     const price = weiPrice.div(this.oneEthInWei)
 
     const contractNames = getContractNames()
@@ -182,14 +183,14 @@ export class NFTService
       marketplaceAddress,
       owner: edition.artistAccount,
       buyer: null,
-      price: price.toString(10),
+      price: price.toString(),
       ethPrice: edition.priceInWei.toString(),
       status: ListingStatus.OPEN,
       createdAt: +edition.createdTimestamp,
       updatedAt: +edition.createdTimestamp,
       expiresAt: Infinity,
       network: Network.ETHEREUM,
-      chainId: Number(process.env.REACT_APP_CHAIN_ID)
+      chainId: Number(config.get('CHAIN_ID')!)
     }
   }
 
@@ -207,7 +208,7 @@ export class NFTService
 
   private async getOneEthInMANA() {
     const mana = await this.tokenConverter.marketEthToMANA(1)
-    return toWei(mana.toString(), 'ether')
+    return ethers.utils.parseEther(mana.toString())
   }
 
   private getOwner(fragment: Fragment): string {

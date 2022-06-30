@@ -1,4 +1,5 @@
 import { ChainId, Network } from '@dcl/schemas'
+import { config } from '../../../config'
 import { Network as AppNetwork } from '../../contract/types'
 import { getContract } from '../../contract/utils'
 import {
@@ -7,7 +8,7 @@ import {
 } from '../services'
 import { TransferType } from '../types'
 
-const network = process.env.REACT_APP_NETWORK! as AppNetwork
+const network = config.get('NETWORK')! as AppNetwork
 
 export enum ContractName {
   SUPER_RARE = 'SuperRare',

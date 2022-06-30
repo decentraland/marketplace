@@ -8,6 +8,7 @@ import {
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
 import { Account } from '../account/types'
+import { AnalyticsTimeframe, AnalyticsVolumeData } from '../analytics/types'
 import { NFTsFetchFilters } from './nft/types'
 import { VendorName, TransferType } from './types'
 
@@ -16,6 +17,13 @@ export type Contract = Omit<BaseContract, 'category'> & {
   category: NFTCategory | 'art' | null
   vendor: VendorName | null
 }
+
+export interface AnalyticsService {
+  fetchVolumeData: (
+    timeframe: AnalyticsTimeframe
+  ) => Promise<AnalyticsVolumeData>
+}
+export class AnalyticsService {}
 
 export interface NFTService<V extends VendorName> {
   fetch: (

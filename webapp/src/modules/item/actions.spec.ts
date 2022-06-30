@@ -13,9 +13,11 @@ import {
   fetchItemsFailure,
   fetchItemsRequest,
   fetchItemsSuccess,
+  fetchTrendingItemsRequest,
   FETCH_ITEMS_FAILURE,
   FETCH_ITEMS_REQUEST,
-  FETCH_ITEMS_SUCCESS
+  FETCH_ITEMS_SUCCESS,
+  FETCH_TRENDING_ITEMS_REQUEST
 } from './actions'
 
 const itemBrowseOptions = {
@@ -107,6 +109,20 @@ describe('when creating the action to signal a failure in the buy item request',
       type: BUY_ITEM_FAILURE,
       meta: undefined,
       payload: { error: anErrorMessage }
+    })
+  })
+})
+
+describe('when creating the action to fetch the trending items request', () => {
+  let size: number
+  beforeEach(() => {
+    size = 20
+  })
+  it('should return an object representing the action', () => {
+    expect(fetchTrendingItemsRequest(size)).toEqual({
+      type: FETCH_TRENDING_ITEMS_REQUEST,
+      meta: undefined,
+      payload: { size }
     })
   })
 })

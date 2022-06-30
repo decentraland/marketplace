@@ -6,6 +6,7 @@ export type Props = {
   price: string | null
   order?: Order
   showListedTag?: boolean
+  onClick?: () => void
 }
 
 export type MapStateProps = Pick<Props, 'showListedTag' | 'price'>

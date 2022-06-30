@@ -1,0 +1,121 @@
+@media (max-width: 768px) {
+  .RankingCollectorRow .Profile.large .dcl.avatar-face.tiny {
+    margin-right: 16px;
+    width: 45px;
+    height: 45px;
+  }
+
+  .RankingCollectorRow .Profile.large .name {
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 24px;
+    color: white;
+  }
+
+  .RankingCollectorRow .rankings-collector-data .Profile {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .RankingCollectorRow .rankings-collector-items-collected {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    position: absolute;
+    left: 60px;
+    bottom: 36px;
+    white-space: nowrap;
+  }
+
+  .RankingCollectorRow.rankings-collector-cell {
+    margin: 0 16px;
+    padding-top: 16px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #736e7d;
+    flex-direction: column;
+  }
+
+  .RankingCollectorRow.rankings-collector-cell > div {
+    display: flex;
+    width: 100%;
+  }
+
+  .RankingCollectorRow.rankings-collector-cell:last-of-type {
+    border-bottom: none;
+  }
+
+  .RankingCollectorRow .rankings-collector-data {
+    position: relative;
+    flex-direction: row;
+  }
+
+  .RankingCollectorRow .rankings-collector-right-data {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .RankingCollectorRow
+    .rankings-collector-right-data
+    .ui.header.dcl.mana.inline {
+    margin-bottom: 0;
+  }
+
+  .RankingCollectorRow .arrow-container i.caret {
+    background-color: #acacac;
+    background-image: none;
+    -webkit-mask: url(../../../images/forward.svg) no-repeat 50% 50%;
+    mask: url(../../../images/forward.svg) no-repeat 50% 50%;
+    transform: rotate(90deg);
+    transition: transform 0.3s ease-in-out;
+    -webkit-transition: transform 0.3s ease-in-out;
+    display: inline-block;
+    width: 16px;
+    height: 13px;
+    margin-left: 4px;
+    margin-top: 4px;
+  }
+
+  .RankingCollectorRow .arrow-container i.caret.up {
+    transform: rotate(-90deg);
+  }
+
+  .RankingCollectorRow .arrow-container {
+    color: #acacac;
+    display: flex;
+    margin-top: 8px;
+  }
+
+  .RankingCollectorRow .rankings-collector-more-data-container {
+    border-top: 1px solid #736e7d;
+    justify-content: right;
+    padding-top: 12px;
+    margin-top: 12px;
+    display: flex;
+    margin-left: auto;
+    min-width: 260px;
+  }
+
+  .RankingCollectorRow .rankings-collector-more-data-container > div {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0 12px;
+  }
+
+  .RankingCollectorRow .rankings-collector-more-data-container > div span {
+    color: #736e7d;
+    padding-bottom: 5px;
+  }
+
+  .RankingCollectorRow .rankings-collector-more-data-container > div span {
+    color: #736e7d;
+  }
+
+  .RankingCollectorRow
+    .rankings-collector-more-data-container
+    > div
+    .ui.header.dcl.mana.inline {
+    margin-top: 0;
+  }
+}

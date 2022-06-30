@@ -4,6 +4,8 @@
     "address": "Direccion",
     "balance": "Balance",
     "load_more": "Cargar Más",
+    "more": "Más",
+    "less": "Menos",
     "not_found": "No se ha encontrado",
     "parcel": "Parcela",
     "parcel_count": "{count} {count, plural, one {Parcela} other {Parcelas}}",
@@ -42,7 +44,8 @@
     "order": "Clasificado",
     "mint": "Venta",
     "back": "Volver",
-    "emote": "Emote"
+    "emote": "Emote",
+    "time_ago": "Hace {time}"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -61,10 +64,11 @@
     "known_origin": "KnownOrigin"
   },
   "navigation": {
+    "overview": "Resumen",
     "land": "Land",
     "collectibles": "Coleccionables",
     "partners": "Socios",
-    "my_store": "Mi Tienda",
+    "my_assets": "Mis Objetos",
     "my_bids": "Mis Ofertas",
     "activity": "Actividad"
   },
@@ -124,9 +128,98 @@
     "size": "Tamaño"
   },
   "home_page": {
+    "analytics": {
+      "volume": {
+        "title": "Volumen del Marketplace",
+        "subtitle": "Incluye tierras, wearables, emotes and nombres",
+        "total_sales": "Ventas totales",
+        "total_sales_tooltip": "Número de NFT vendidos, incluidos los mercados primario y secundario.",
+        "total_volume": "Volumen total",
+        "total_volume_tooltip": "Volumen de ventas en MANA, incluyendo mercados primarios y secundarios.",
+        "creators_earnings": "Ganancias de creadores",
+        "creators_earnings_tooltip": "Los creadores obtienen el 97,5 % de las ventas primarias y el 2,5 % de las ventas secundarias como regalías.",
+        "dao_revenue": "Ganancias de la DAO",
+        "dao_revenue_tooltip": "La DAO obtiene el 2,5% de las ventas de Land y del mercado primario, más la tarifa de publicación de los wearables.",
+        "seven_days": "7 días",
+        "thirty_days": "30 días",
+        "all": "Todo"
+      },
+      "rankings": {
+        "title": "Clasificaciones",
+        "subtitle": "Incluye solo Wearables y Emotes",
+        "most_volume": "Volumen (MANA)",
+        "most_sales": "Cantidad de ventas",
+        "no_results_title": "No hay resultados para los filtros seleccionados",
+        "no_results_action": "{link} o seleccione diferentes",
+        "clear_filters": "Limpie los filtros",
+        "items": {
+          "all_categories": "Todas las categorias",
+          "all_rarities": "Todas las rarezas",
+          "by_creator": "por {creator}",
+          "tab_title": "Wearables",
+          "item": "Item",
+          "category": "Categorias",
+          "rarity": "Rareza",
+          "price": "Precio",
+          "items_sold": "Items vendidos"
+        },
+        "creators": {
+          "tab_title": "Creadores",
+          "creator": "Creador",
+          "collections": "Colecciones",
+          "collections_created": "{collections} Collecciones",
+          "items_sold": "Items vendidos",
+          "unique_collectors": "Coleccionistas únicos",
+          "unique_collectors_tooltip": "Número de usuarios que poseen por lo menos 1 item del Creador.",
+          "total_volume_sales": "Volumen total de ventas",
+          "total_volume_sales_tooltip": "Incluye solo ventas primarias"
+        },
+        "total_volume": "Volumen total",
+        "total_volume_tooltip": "Incluye ventas primarias y secundarias.",
+        "collectors": {
+          "tab_title": "Coleccionistas",
+          "collector": "Coleccionista",
+          "items_bought": "Items comprados",
+          "collected_items": "{amount} Items coleccionados",
+          "creators_supported": "Creadores apoyados",
+          "creators_supported_tooltip": "Número de Creadores que el usuario les ha comprado por lo menos 1 item.",
+          "unique_items_bought": "Mythic/Unique Items comprados",
+          "total_spent": "Total gastado",
+          "total_spent_tooltip": "Total de MANA gastado en los mercados primarios y secundarios"
+        }
+      }
+    },
+    "recently_sold": {
+      "title": "Vendido recientemente",
+      "last_updated": "Última actualización: {date}",
+      "tabs": {
+        "wearable": "Vestimenta",
+        "parcel": "Land",
+        "emote": "Emotes",
+        "ens": "Nombres"
+      },
+      "wearables": {
+        "item": "Item",
+        "seller": "Vendedor",
+        "buyer": "Comprador",
+        "type": "Tipo",
+        "time": "Fecha",
+        "price": "Precio"
+      },
+      "parcel": {
+        "parcel": "Parcela",
+        "time": "Fecha",
+        "price": "Precio"
+      }
+    },
     "title": "Mercado de Decentraland",
     "subtitle": "Bienvenido al mercado virtual de Decentraland, donde encontrarás los mejores ítems virtuales.",
     "get_started": "Comienza a navegar",
+    "home_trending_items": "Items de tendencia",
+    "home_trending_items_subtitle": "Items más vendidos en las últimas 24hs 🔥",
+    "home_trending_items_explore_all": "Explorar todos",
+    "home_recently_listed_items_subtitle": "Items que se revenden",
+    "home_latest_sales_items_subtitle": "Items siendo acuñados",
     "home_items": "Últimos items",
     "home_sold_items": "Últimas ventas",
     "home_wearables": "Listado recientemente",

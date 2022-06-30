@@ -4,6 +4,8 @@
     "address": "Address",
     "balance": "Balance",
     "load_more": "Load more",
+    "more": "More",
+    "less": "Less",
     "not_found": "Not found",
     "parcel": "Parcel",
     "parcel_count": "{count} {count, plural, one {Parcel} other {Parcels}}",
@@ -42,7 +44,8 @@
     "order": "Listing",
     "mint": "Mint",
     "back": "Back",
-    "emote": "Emote"
+    "emote": "Emote",
+    "time_ago": "{time} ago"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -61,10 +64,11 @@
     "known_origin": "KnownOrigin"
   },
   "navigation": {
+    "overview": "Overview",
     "land": "Land",
     "collectibles": "Collectibles",
     "partners": "Partners",
-    "my_store": "My Store",
+    "my_assets": "My Assets",
     "my_bids": "My Bids",
     "activity": "Activity"
   },
@@ -126,9 +130,99 @@
     "size": "Size"
   },
   "home_page": {
+    "analytics": {
+      "volume": {
+        "title": "Marketplace Volume",
+        "subtitle": "Includes Land, Wearables, Emotes and Names",
+        "total_sales": "Total sales",
+        "total_sales_tooltip": "Number of NFTs sold, including primary and secondary markets.",
+        "total_volume": "Total volume",
+        "total_volume_tooltip": "Volume of sales in MANA, including primary and secondary markets.",
+        "creators_earnings": "creators earnings",
+        "creators_earnings_tooltip": "Creators earn 97.5% of primary sales and 2.5% of secondary sales as royalties.",
+        "dao_revenue": "dao revenue",
+        "dao_revenue_tooltip": "The DAO gets 2.5% of Land and primary market sales, plus the wearables’ publication fee.",
+        "seven_days": "7 DAYS",
+        "thirty_days": "30 DAYS",
+        "all": "all"
+      },
+      "rankings": {
+        "title": "Rankings",
+        "subtitle": "Includes only Wearables and Emotes",
+        "most_volume": "Volume (MANA)",
+        "most_sales": "Items (quantity)",
+        "no_results_title": "No results found for these filters",
+        "no_results_action": "{link} or select different ones",
+        "clear_filters": "Clear filters",
+        "items": {
+          "all_categories": "All categories",
+          "all_rarities": "All rarities",
+          "by_creator": "by {creator}",
+          "tab_title": "Wearables",
+          "item": "Item",
+          "category": "Category",
+          "rarity": "Rarity",
+          "price": "Price",
+          "items_sold": "Items sold"
+        },
+        "creators": {
+          "tab_title": "Creators",
+          "creator": "Creator",
+          "collections": "Collections",
+          "collections_created": "{collections} Collections",
+          "items_sold": "Items sold",
+          "unique_collectors": "Unique collectors",
+          "unique_collectors_tooltip": "Number of users who own at least 1 item from the Creator.",
+          "total_volume_sales": "Total Volume of Sales",
+          "total_volume_sales_tooltip": "Includes only primary sales"
+        },
+        "total_volume": "Total Volume",
+        "total_volume_tooltip": "Includes both primary and secondary sales.",
+        "collectors": {
+          "tab_title": "Collectors",
+          "collector": "Collector",
+          "items_bought": "Items Bought",
+          "collected_items": "{amount} Collected items",
+          "creators_supported": "Creators Supported",
+          "creators_supported_tooltip": "Number of Creators the user bought at least 1 item from.",
+          "unique_items_bought": "Mythic/Unique items Bought",
+          "unique_items_bought_tooltip": "Number of Mythic or Unique items the user has bought.",
+          "total_spent": "Total Spent",
+          "total_spent_tooltip": "Total amount of MANA spent in both primary and secondary markets."
+        }
+      }
+    },
+    "recently_sold": {
+      "title": "Recently Sold",
+      "last_updated": "Last updated: {date}",
+      "tabs": {
+        "wearable": "Wearables",
+        "parcel": "Land",
+        "emote": "Emotes",
+        "ens": "Names"
+      },
+      "wearables": {
+        "item": "Item",
+        "seller": "Seller",
+        "buyer": "Buyer",
+        "type": "Type",
+        "time": "Time",
+        "price": "Price"
+      },
+      "parcel": {
+        "parcel": "Parcel",
+        "time": "Time",
+        "price": "Price"
+      }
+    },
     "title": "Decentraland Marketplace",
     "subtitle": "Welcome to the virtual world's one-stop-shop for the very best digital assets.",
     "get_started": "Start Browsing",
+    "home_trending_items": "Trending items",
+    "home_trending_items_subtitle": "Bestselling Items over the last 24hs 🔥",
+    "home_trending_items_explore_all": "Explore all",
+    "home_recently_listed_items_subtitle": "Items being resold",
+    "home_latest_sales_items_subtitle": "Items being minted",
     "home_new_items": "Newest items",
     "home_sold_items": "Latest sales",
     "home_wearables": "Latest listings",
@@ -309,6 +403,7 @@
       "eyewear": "Eyewear",
       "facial_hair": "Facial Hair",
       "feet": "Feet",
+      "head": "Head",
       "hair": "Hair",
       "hat": "Hat",
       "helmet": "Helmet",

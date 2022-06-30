@@ -6,6 +6,7 @@ export enum Section {
   ESTATES = 'estates',
   WEARABLES = 'wearables',
 
+  WEARABLES_TRENDING = 'wearables_trending',
   WEARABLES_HEAD = 'wearables_head',
   WEARABLES_EYEBROWS = 'wearables_eyebrows',
   WEARABLES_EYES = 'wearables_eyes',
@@ -33,6 +34,7 @@ export enum Section {
 
   COLLECTIONS = 'collections',
   ON_SALE = 'on_sale',
+  RECENTLY_SOLD = 'recently_sold',
   SALES = 'sales',
   BIDS = 'bids',
   STORE_SETTINGS = 'store_settings'

@@ -1,7 +1,0 @@
-encryptionsalt: v1:Ub7Ti35/fOE=:v1:ue70oeMNF/BRh6U/:ZQKwg/S7/BQ3BuP8bwATYtkm+KObIQ==
-config:
-  aws:region: us-east-1
-  market-static:cloudflare_zone_id:
-    secure: v1:rJVlfoRG3TIQUlwc:HZaAAoafzch1ppfuUA1aLsOWMLWLkZyWQjWR/rveIA9cPrjQ5355EJtFzCVC8F7A
-  market-static:sitemaps_target:
-    secure: v1:W/l0/VqQ2z1ahF52:zLwhgfl7nUN8b6QsSHLY1xceOcpJc66MLBmg5JDgvuKw6z2kbyhlhb1EOXm0Wq/YZnm8OO4xWeeD0OKC1qFX+WR5RJrGSgwbVixD4LU0Bq24eWB7HA==

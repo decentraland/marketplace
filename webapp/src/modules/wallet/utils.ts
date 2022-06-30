@@ -1,9 +1,9 @@
-import { Eth } from 'web3x/eth'
+import { ethers } from 'ethers'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
-import { LegacyProviderAdapter } from 'web3x/providers'
+import { config } from '../../config'
 
-export const TRANSACTIONS_API_URL = process.env.REACT_APP_TRANSACTIONS_API_URL
+export const TRANSACTIONS_API_URL = config.get('TRANSACTIONS_API_URL')
 
 export function shortenAddress(address: string) {
   if (address) {
@@ -19,12 +19,12 @@ export function addressEquals(address1?: string, address2?: string) {
   )
 }
 
-export async function getEth(): Promise<Eth> {
+export async function getEth(): Promise<ethers.providers.Web3Provider> {
   const provider: Provider | null = await getConnectedProvider()
 
   if (!provider) {
     throw new Error('Could not get a valid connected Wallet')
   }
 
-  return new Eth(new LegacyProviderAdapter(provider as any))
+  return new ethers.providers.Web3Provider(provider)
 }
