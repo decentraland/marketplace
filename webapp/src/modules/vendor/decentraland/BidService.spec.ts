@@ -43,9 +43,6 @@ describe('when placing a bid', () => {
       expect(callParameters[1]).toBe(
         'placeBid(address,uint256,uint256,uint256)'
       )
-      expect(callParameters[1]).toBe(
-        'placeBid(address,uint256,uint256,uint256)'
-      )
     })
   })
   describe('when the nft.network is MATIC', () => {
@@ -62,9 +59,6 @@ describe('when placing a bid', () => {
       expect(hash).toBe(expectedHash)
       expect(callParameters[0]).toBe(
         getContract(ContractName.BidV2, ChainId.MATIC_MAINNET)
-      )
-      expect(callParameters[1]).toBe(
-        'placeBid(address,uint256,uint256,uint256)'
       )
       expect(callParameters[1]).toBe(
         'placeBid(address,uint256,uint256,uint256)'
