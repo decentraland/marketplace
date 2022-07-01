@@ -195,10 +195,16 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       yield put(fetchTrendingItemsRequest())
       break
     case Section.RECENTLY_SOLD:
-      yield spawn(handleFetchSales, { category: options.category })
+      yield spawn(handleFetchSales, {
+        ...(options.category && { categories: [options.category] })
+      })
       break
     case Section.SALES:
-      yield spawn(handleFetchSales, { address, page, pageSize: SALES_PER_PAGE })
+      yield spawn(handleFetchSales, {
+        address,
+        page,
+        pageSize: SALES_PER_PAGE
+      })
       break
     case Section.COLLECTIONS:
       yield handleFetchCollections(page, address, sortBy, search)
@@ -313,12 +319,12 @@ function* handleFetchOnSale(address: string, view: View) {
 
 function* handleFetchSales({
   address,
-  category,
+  categories,
   page = 1,
   pageSize = 5
 }: {
   address?: string
-  category?: NFTCategory
+  categories?: NFTCategory[]
   page?: number
   pageSize?: number
 }) {
@@ -327,7 +333,7 @@ function* handleFetchSales({
       first: pageSize,
       skip: (page - 1) * SALES_PER_PAGE,
       sortBy: SaleSortBy.RECENTLY_SOLD,
-      categories: [category || NFTCategory.WEARABLE],
+      ...(categories && { categories }),
       ...(address && { seller: address })
     })
   )
