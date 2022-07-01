@@ -2,6 +2,7 @@ import React from 'react'
 import { Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTCategory, Rarity } from '@dcl/schemas'
+import { Link } from 'react-router-dom'
 import { Network } from '../Network'
 import { Description } from '../Description'
 import { Props } from './WearableDetail.types'
@@ -21,6 +22,9 @@ import BaseDetail from '../BaseDetail'
 import { AssetImage } from '../../AssetImage'
 import styles from './WearableDetail.module.css'
 import { Section } from '../../../modules/vendor/decentraland'
+import { locations } from '../../../modules/routing/locations'
+import { VendorName } from '../../../modules/vendor'
+import { SortBy } from '../../../modules/routing/types'
 
 const WearableDetail = ({ nft }: Props) => {
   const wearable = nft.data.wearable!
@@ -58,6 +62,22 @@ const WearableDetail = ({ nft }: Props) => {
       box={
         <>
           <Price asset={nft} />
+          <Link
+            to={locations.browse({
+              assetType: AssetType.NFT,
+              section: Section.WEARABLES,
+              vendor: VendorName.DECENTRALAND,
+              page: 1,
+              sortBy: SortBy.CHEAPEST,
+              onlyOnSale: true,
+              viewAsGuest: false,
+              onlySmart: false,
+              contracts: [nft.contractAddress],
+              search: nft.name
+            })}
+          >
+            LISTINGS
+          </Link>
           <div className="BaseDetail row">
             {nft.issuedId ? (
               <Stats title={t('global.issue_number')}>
