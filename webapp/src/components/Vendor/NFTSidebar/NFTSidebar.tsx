@@ -17,10 +17,6 @@ const NFTSidebar = (props: Props) => {
   )
 
   switch (vendor) {
-    case VendorName.SUPER_RARE:
-    case VendorName.MAKERS_PLACE:
-    case VendorName.KNOWN_ORIGIN:
-      return null
     case VendorName.DECENTRALAND:
     default:
       return (

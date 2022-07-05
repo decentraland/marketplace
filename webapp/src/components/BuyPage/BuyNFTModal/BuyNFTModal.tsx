@@ -8,10 +8,9 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
-import { Network, NFTCategory } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
 import { locations } from '../../../modules/routing/locations'
-import { isPartner } from '../../../modules/vendor/utils'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
@@ -50,14 +49,10 @@ const BuyNFTModal = (props: Props) => {
       network: nft.network
     })
 
+    // If the vendor is a partner we might need to use a different contract for authorizedAddress. See PR #680
     return {
       address: wallet.address,
-      authorizedAddress: isPartner(nft.vendor)
-        ? getContract({
-            name: contractNames.MARKETPLACE_ADAPTER,
-            network: Network.ETHEREUM
-          }).address
-        : order!.marketplaceAddress,
+      authorizedAddress: order!.marketplaceAddress,
       contractAddress: mana.address,
       contractName: ContractName.MANAToken,
       chainId: nft.chainId,
