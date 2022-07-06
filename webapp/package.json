@@ -3,7 +3,7 @@
   "version": "0.0.0-development",
   "dependencies": {
     "@dcl/crypto": "^3.0.0",
-    "@dcl/schemas": "^5.0.2",
+    "@dcl/schemas": "^5.4.0",
     "@dcl/ui-env": "^1.2.0",
     "@ethersproject/providers": "^5.6.2",
     "classnames": "^2.3.1",
@@ -14,7 +14,7 @@
     "decentraland-connect": "^3.3.2",
     "decentraland-dapps": "^13.3.2",
     "decentraland-transactions": "^1.38.0",
-    "decentraland-ui": "^3.39.0",
+    "decentraland-ui": "^3.40.0",
     "dotenv": "^10.0.0",
     "ethers": "^5.6.8",
     "graphql": "^14.7.0",
