@@ -627,5 +627,8 @@
       "title": "Success",
       "body": "Store data updated correctly"
     }
+  },
+  "maintainance": {
+    "notice": "We're currently under maintainance, we'll be back soon!"
   }
 }

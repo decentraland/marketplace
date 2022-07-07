@@ -1,3 +1,3 @@
-import Routes from './Routes'
+import Routes from './Routes.container'
 
 export { Routes }

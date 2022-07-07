@@ -621,6 +621,9 @@
     "store_update_success": {
       "title": "Éxito",
       "body": "Configuración de tienda actualizada correctamente"
+    },
+    "maintainance": {
+      "notice": "Estamos en mantenimiento, volveremos pronto!"
     }
   }
 }
