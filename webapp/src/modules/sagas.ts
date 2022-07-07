@@ -1,8 +1,10 @@
 import { all } from 'redux-saga/effects'
+import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
 import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
+import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
 import { CatalystClient } from 'dcl-catalyst-client'
 
 import { analyticsSagas as marketplaceAnalyticsSagas } from './analytics/sagas'
@@ -53,6 +55,12 @@ export function* rootSaga() {
     collectionSaga(),
     storeSaga(catalystClient),
     identitySaga(),
-    marketplaceAnalyticsSagas()
+    marketplaceAnalyticsSagas(),
+    featuresSaga({
+      polling: {
+        apps: [ApplicationName.MARKETPLACE],
+        delay: 60000 /** 60 seconds */
+      }
+    })
   ])
 }
