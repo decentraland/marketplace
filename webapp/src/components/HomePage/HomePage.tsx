@@ -57,9 +57,9 @@ const HomePage = (props: Props) => {
 
   const sections: Partial<Record<View, Section>> = useMemo(
     () => ({
-      [View.HOME_SOLD_ITEMS]: Section.WEARABLES_TRENDING,
       [View.HOME_TRENDING_ITEMS]: Section.WEARABLES_TRENDING,
       [View.HOME_NEW_ITEMS]: Section.WEARABLES,
+      [View.HOME_SOLD_ITEMS]: Section.WEARABLES,
       [View.HOME_WEARABLES]: Section.WEARABLES,
       [View.HOME_LAND]: Section.LAND,
       [View.HOME_ENS]: Section.ENS
