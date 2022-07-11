@@ -1,6 +1,6 @@
 import React from 'react'
 import { ethers } from 'ethers'
-import { Item, Order } from '@dcl/schemas'
+import { Item, Network } from '@dcl/schemas'
 import { Page } from 'decentraland-ui'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Navbar } from '../Navbar'
@@ -9,7 +9,7 @@ import { Wallet as WalletProvider } from '../Wallet'
 import { AssetProviderPage } from '../AssetProviderPage'
 import { NFT } from '../../modules/nft/types'
 import { isOwnedBy } from '../../modules/asset/utils'
-import { Asset, AssetType } from '../../modules/asset/types'
+import { AssetType } from '../../modules/asset/types'
 import { BuyNFTModal } from './BuyNFTModal'
 import { MintItemModal } from './MintItemModal'
 import { isPriceTooLow } from './utils'
@@ -21,11 +21,9 @@ const BuyPage = (props: Props) => {
 
   const isInsufficientMANA = (
     wallet: Wallet,
-    asset: Asset,
-    order: Order | null
-  ) =>
-    !!order &&
-    wallet.networks[asset.network].mana < +ethers.utils.formatEther(order.price)
+    network: Network,
+    price: string
+  ) => wallet.networks[network].mana < +ethers.utils.formatEther(price)
 
   return (
     <>
@@ -35,6 +33,7 @@ const BuyPage = (props: Props) => {
           {wallet => (
             <AssetProviderPage type={type}>
               {(asset, order) => {
+                const network = (order || asset)?.network
                 const price =
                   type === AssetType.ITEM
                     ? (asset as Item).price
@@ -45,7 +44,7 @@ const BuyPage = (props: Props) => {
                 const modalProps = {
                   wallet: wallet,
                   isOwner: isOwnedBy(asset, wallet),
-                  hasInsufficientMANA: isInsufficientMANA(wallet, asset, order),
+                  hasInsufficientMANA: isInsufficientMANA(wallet, network, price),
                   hasLowPrice:
                     wallet.chainId !== asset.chainId && isPriceTooLow(price)
                 }
