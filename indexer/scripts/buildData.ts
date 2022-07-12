@@ -5,7 +5,8 @@ import * as path from 'path'
 
 enum Network {
   MAINNET = 'mainnet',
-  ROPSTEN = 'ropsten'
+  ROPSTEN = 'ropsten',
+  GOERLI = 'goerli'
 }
 enum ContractName {
   MANAToken = 'MANAToken',
@@ -33,6 +34,14 @@ const startBlockByNetwork: Record<Network, Record<ContractName, number>> = {
     EstateProxy: 3890399,
     MarketplaceProxy: 4202120,
     DCLRegistrar: 7170497
+  },
+  [Network.GOERLI]: {
+    MANAToken: 4045806,
+    ERC721Bid: 7098754,
+    LANDProxy: 7059003,
+    EstateProxy: 7059236,
+    MarketplaceProxy: 7097561,
+    DCLRegistrar: 7098224
   }
 }
 
@@ -140,7 +149,7 @@ class Parser {
   replaceAddresses(text = this.text) {
     for (const placeholder of this.getPlaceholders('address')) {
       const contractName = this.getPlaceholderValue(placeholder)
-      const address = this.ethereum.getAddress(contractName)
+      const address = this.ethereum.getAddress(contractName).toLowerCase()
       text = text.replace(placeholder, address)
     }
     return text
