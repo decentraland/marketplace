@@ -1,5 +1,7 @@
 import { Switch, Route, Redirect } from 'react-router-dom'
+import { Center, Page } from 'decentraland-ui'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
@@ -19,9 +21,26 @@ import { LegacyNFTPage } from '../LegacyNFTPage'
 import { LandsPage } from '../LandsPage'
 import CollectionPage from '../CollectionPage'
 import { config } from '../../config'
+import { Props } from './Routes.types'
+import { Navbar } from '../Navbar'
+import { Footer } from '../Footer'
 
-const Routes = () => {
+const Routes = ({ inMaintenance }: Props) => {
   const APP_ID = config.get('INTERCOM_APP_ID')
+
+  console.log(inMaintenance)
+
+  if (inMaintenance) {
+    return (
+      <>
+        <Navbar />
+        <Page>
+          <Center>🚧 {t('maintainance.notice')} 🚧</Center>
+        </Page>
+        <Footer />
+      </>
+    )
+  }
 
   return (
     <>

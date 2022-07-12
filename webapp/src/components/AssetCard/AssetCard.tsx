@@ -17,13 +17,13 @@ import ListedBadge from '../ListedBadge'
 import './AssetCard.css'
 
 const AssetCard = (props: Props) => {
-  const { asset, price, showListedTag } = props
+  const { asset, price, showListedTag, onClick } = props
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
 
   return (
-    <Card className="AssetCard" link as={Link} to={getAssetUrl(asset)}>
+    <Card className="AssetCard" link as={Link} to={getAssetUrl(asset)} onClick={onClick}>
       <AssetImage asset={asset} showMonospace />
       {showListedTag && <ListedBadge className="listed-badge" />}
       <Card.Content>

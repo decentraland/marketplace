@@ -8,6 +8,7 @@ import { transactionReducer as transaction } from 'decentraland-dapps/dist/modul
 import { profileReducer as profile } from 'decentraland-dapps/dist/modules/profile/reducer'
 import { authorizationReducer as authorization } from 'decentraland-dapps/dist/modules/authorization/reducer'
 import { toastReducer as toast } from 'decentraland-dapps/dist/modules/toast/reducer'
+import { featuresReducer as features } from 'decentraland-dapps/dist/modules/features/reducer'
 
 import { accountReducer as account } from './account/reducer'
 import { bidReducer as bid } from './bid/reducer'
@@ -22,6 +23,7 @@ import { collectionReducer as collection } from './collection/reducer'
 import { storeReducer as store } from './store/reducer'
 import { saleReducer as sale } from './sale/reducer'
 import { identityReducer as identity } from './identity/reducer'
+import { analyticsReducer as analytics } from './analytics/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({
@@ -45,7 +47,9 @@ export const createRootReducer = (history: History) =>
     collection,
     store,
     sale,
-    identity
+    identity,
+    analytics,
+    features
   })
 
 export type RootState = ReturnType<ReturnType<typeof createRootReducer>>

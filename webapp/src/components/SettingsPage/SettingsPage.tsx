@@ -49,10 +49,6 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
-  const marketplaceAdapter = getContract({
-    name: contractNames.MARKETPLACE_ADAPTER
-  })
-
   const bids = getContract({
     name: contractNames.BIDS
   })
@@ -147,16 +143,6 @@ const SettingsPage = (props: Props) => {
                             authorization={{
                               address: wallet.address,
                               authorizedAddress: marketplaceEthereum.address,
-                              contractAddress: manaEthereum.address,
-                              contractName: ContractName.MANAToken,
-                              chainId: manaEthereum.chainId,
-                              type: AuthorizationType.ALLOWANCE
-                            }}
-                          />
-                          <Authorization
-                            authorization={{
-                              address: wallet.address,
-                              authorizedAddress: marketplaceAdapter.address,
                               contractAddress: manaEthereum.address,
                               contractName: ContractName.MANAToken,
                               chainId: manaEthereum.chainId,

@@ -1,0 +1,139 @@
+.AnalyticsVolumeDayData {
+  padding-top: 20px;
+  margin-bottom: 60px;
+}
+
+.AnalyticsVolumeDayData .stats-card {
+  display: flex;
+  background-color: #242129;
+  height: 96px;
+  border-radius: 10px;
+  padding: 24px 36px;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+}
+
+.AnalyticsVolumeDayData .stats-container {
+  display: flex;
+  min-width: 230px;
+  align-items: center;
+}
+
+.AnalyticsVolumeDayData .stats-container:first-of-type {
+  display: flex;
+  min-width: 220px;
+}
+
+.AnalyticsVolumeDayData .stats {
+  display: flex;
+  font-size: 21px;
+  font-weight: bold;
+}
+
+.AnalyticsVolumeDayData .dcl.mana .symbol {
+  line-height: 25px;
+}
+
+.AnalyticsVolumeDayData .stats-card i.stat-icon {
+  font-size: 19px;
+  width: 48px;
+  height: 48px;
+  background-color: #37333d;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+.AnalyticsVolumeDayData i.icon.tag:before {
+  margin-left: 3px;
+}
+
+.AnalyticsVolumeDayData .dcl.header-menu-right {
+  border: 1px solid rgba(115, 110, 125, 0.4);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.AnalyticsVolumeDayData .dcl.header-menu-right .ui.basic.button {
+  padding: 7px 16px;
+  border-right: 1px solid rgba(115, 110, 125, 0.4);
+  border-radius: 0;
+}
+
+.AnalyticsVolumeDayData .dcl.header-menu-right .ui.basic.button.active {
+  /* to override the butotns basic !importants */
+  background-color: var(--primary) !important;
+  color: white !important;
+}
+
+.AnalyticsVolumeDayData .ui.button + .ui.button {
+  margin-left: 0;
+}
+
+.AnalyticsVolumeDayData .stats-usd {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 24px;
+  color: #736e7d;
+  margin-left: 8px;
+}
+
+.AnalyticsVolumeDayData .ui.header.dcl.mana {
+  display: flex;
+  margin-bottom: 0;
+}
+
+.AnalyticsVolumeDayData .dcl.stats .ui.header.sub {
+  margin-bottom: 4px;
+}
+
+.AnalyticsVolumeDayData .info-logo {
+  cursor: pointer;
+  margin: 3px;
+  width: 14px;
+  height: 14px;
+  background-image: url('../../images/info.svg');
+  margin-bottom: 6px;
+  margin-left: 6px;
+}
+
+.AnalyticsVolumeDayData .stat-title-container {
+  display: flex;
+  align-items: flex-end;
+}
+
+@media (max-width: 768px) {
+  .AnalyticsVolumeDayData .dcl.header-menu {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .AnalyticsVolumeDayData .stats-card {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 24px;
+  }
+
+  .AnalyticsVolumeDayData .stats-container {
+    width: 100%;
+    align-items: flex-start;
+    margin-bottom: 32px;
+  }
+  
+  .AnalyticsVolumeDayData .stats-card {
+    min-height: 262px;
+  }
+  
+  .AnalyticsVolumeDayData .dcl.stats {
+    width: 80%;
+  }
+
+  .AnalyticsVolumeDayData .dcl.stats,
+  .AnalyticsVolumeDayData .stats-container:last-of-type {
+    margin-bottom: 0;
+  }
+}

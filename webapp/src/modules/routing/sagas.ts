@@ -21,7 +21,8 @@ import { AssetType } from '../asset/types'
 import {
   BUY_ITEM_SUCCESS,
   fetchItemRequest,
-  fetchItemsRequest
+  fetchItemsRequest,
+  fetchTrendingItemsRequest
 } from '../item/actions'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
@@ -190,8 +191,20 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     case Section.ON_SALE:
       yield handleFetchOnSale(address, options.view!)
       break
+    case Section.WEARABLES_TRENDING:
+      yield put(fetchTrendingItemsRequest())
+      break
+    case Section.RECENTLY_SOLD:
+      yield spawn(handleFetchSales, {
+        ...(options.category && { categories: [options.category] })
+      })
+      break
     case Section.SALES:
-      yield spawn(handleFetchSales, address, page)
+      yield spawn(handleFetchSales, {
+        address,
+        page,
+        pageSize: SALES_PER_PAGE
+      })
       break
     case Section.COLLECTIONS:
       yield handleFetchCollections(page, address, sortBy, search)
@@ -304,13 +317,24 @@ function* handleFetchOnSale(address: string, view: View) {
   )
 }
 
-function* handleFetchSales(address: string, page: number) {
+function* handleFetchSales({
+  address,
+  categories,
+  page = 1,
+  pageSize = 5
+}: {
+  address?: string
+  categories?: NFTCategory[]
+  page?: number
+  pageSize?: number
+}) {
   yield put(
     fetchSalesRequest({
-      first: SALES_PER_PAGE,
+      first: pageSize,
       skip: (page - 1) * SALES_PER_PAGE,
-      seller: address,
-      sortBy: SaleSortBy.RECENTLY_SOLD
+      sortBy: SaleSortBy.RECENTLY_SOLD,
+      ...(categories && { categories }),
+      ...(address && { seller: address })
     })
   )
 

@@ -275,6 +275,7 @@ type Sale @entity {
   # search
   searchTokenId: BigInt!
   searchContractAddress: Bytes!
+  searchCategory: String!
 }
 
 # Data accumulated and condensed into day stats for all of the Marketplace activity

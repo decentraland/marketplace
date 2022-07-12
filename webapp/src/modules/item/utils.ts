@@ -16,3 +16,8 @@ export function getItem(
 export function getItemId(contractAddress: string, tokenId: string) {
   return contractAddress + '-' + tokenId
 }
+
+export function parseItemId(itemId: string) {
+  const [contractAddress, tokenId] = itemId.split('-')
+  return { contractAddress, tokenId }
+}

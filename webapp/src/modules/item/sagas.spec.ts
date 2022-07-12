@@ -12,7 +12,10 @@ import {
   fetchItemsFailure,
   fetchItemSuccess,
   fetchItemRequest,
-  fetchItemFailure
+  fetchItemFailure,
+  fetchTrendingItemsSuccess,
+  fetchTrendingItemsFailure,
+  fetchTrendingItemsRequest
 } from './actions'
 import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
@@ -159,6 +162,47 @@ describe('when handling the fetch items request action', () => {
           .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
           .run({ silenceTimeout: true })
       })
+    })
+  })
+})
+
+describe('when handling the fetch trending items request action', () => {
+  describe('when the request is successful', () => {
+    let dateNowSpy: jest.SpyInstance
+    const nowTimestamp = 1487076708000
+    const fetchResult = { data: [item], total: 1 }
+
+    beforeEach(() => {
+      dateNowSpy = jest
+        .spyOn(Date, 'now')
+        .mockImplementation(() => nowTimestamp)
+    })
+
+    afterEach(() => {
+      dateNowSpy.mockRestore()
+    })
+
+    it('should dispatch a successful action with the fetched trending items', () => {
+      return expectSaga(itemSaga)
+        .provide([[call([itemAPI, 'fetchTrendings'], undefined), fetchResult]])
+        .put(fetchTrendingItemsSuccess(fetchResult.data))
+        .dispatch(fetchTrendingItemsRequest())
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when the request fails', () => {
+    it('should dispatching a failing action with the error and the options', () => {
+      return expectSaga(itemSaga)
+        .provide([
+          [
+            call([itemAPI, 'fetchTrendings'], undefined),
+            Promise.reject(anError)
+          ]
+        ])
+        .put(fetchTrendingItemsFailure(anError.message))
+        .dispatch(fetchTrendingItemsRequest())
+        .run({ silenceTimeout: true })
     })
   })
 })

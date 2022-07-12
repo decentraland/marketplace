@@ -1,0 +1,180 @@
+.RankingsTable {
+  margin-bottom: 60px;
+}
+
+.RankingsTable .rankings-card {
+  background: #242129;
+  padding-top: 0;
+  border-radius: 10px;
+  position: relative;
+  min-height: 575px;
+  display: flex;
+  flex-direction: column;
+}
+
+.RankingsTable .rankings-card-tabs {
+  display: flex;
+  background-color: #2f2b35;
+  padding: 0 24px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.RankingsTable .ui.very.basic.table {
+  padding: 0 24px;
+}
+
+.RankingsTable .dcl.tabs.fullscreen {
+  width: 70%;
+}
+
+.RankingsTable .ui.dropdown {
+  margin-left: auto;
+  align-self: center;
+}
+
+.RankingsTable .rankings-item-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.RankingsTable .rankings-item-cell {
+  display: flex;
+}
+
+.RankingsTable .rankings-item-cell a:hover,
+.RankingsTable .rankings-collector-cell .Profile.large .name:hover,
+.RankingsTable .rankings-creator-cell .Profile.large .name:hover {
+  text-decoration: underline;
+}
+
+.RankingsTable .rankings-collector-cell .Profile,
+.RankingsTable .rankings-creator-cell .Profile {
+  display: flex;
+  align-items: center;
+}
+
+.RankingsTable .rankings-creator-cell .Profile .name,
+.RankingsTable .rankings-collector-cell .Profile .name {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.RankingsTable .rankings-collector-cell .Profile .dcl.avatar-face,
+.RankingsTable .rankings-creator-cell .Profile .dcl.avatar-face,
+.RankingsTable .rankings-collector-cell .Profile .dcl.blockie,
+.RankingsTable .rankings-creator-cell .Profile .dcl.blockie {
+  margin-right: 16px;
+  width: 45px;
+  height: 45px;
+}
+
+.RankingsTable .ui.dropdown.sort-by-dropdown {
+  border: 1px solid rgba(115, 110, 125, 0.4);
+  border-radius: 5px;
+  padding: 6px 16px;
+  margin-right: 12px;
+}
+
+.RankingsTable .rankings-item-cell img {
+  width: 48px;
+  height: 48px;
+  margin-right: 20px;
+  background-color: rgba(115, 110, 125, 0.24);
+  border-radius: 5px;
+}
+
+.RankingsTable .ui.table .rankings-item-data-creator a {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.RankingsTable .dcl.header-menu .dcl.header-menu-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.RankingsTable .dcl .header-menu-left .subtitle {
+  color: #736e7d;
+  margin-top: 6px;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.RankingsTable .rankings-fiat-price {
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 24px;
+  color: #736e7d;
+  padding-left: 4px;
+}
+
+.RankingsTable .empty-state-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #736e7d;
+  flex: 1;
+  align-items: center;
+}
+
+.RankingsTable .empty-state-container .empty-state-title {
+  font-weight: bold;
+  font-size: 21px;
+}
+
+.RankingsTable .empty-state-container .empty-state-subtitle {
+  display: flex;
+  font-size: 18px;
+  margin-top: 12px;
+}
+
+.RankingsTable .empty-state-container .empty-state-action-button {
+  color: var(--primary);
+  cursor: pointer;
+  margin-right: 3px;
+}
+
+@media (max-width: 768px) {
+  .RankingsTable .dcl.header-menu,
+  .RankingsTable .dcl.header-menu .dcl.header-menu-right {
+    display: flex;
+    flex-direction: column;
+  }
+  .RankingsTable .dcl.header-menu {
+    align-items: flex-start;
+  }
+  .RankingsTable .dcl.header-menu-right {
+    width: 100%;
+  }
+  .RankingsTable .ui.dropdown.sort-by-dropdown {
+    margin-top: 12px;
+    text-align: center;
+    width: 100%;
+  }
+  .RankingsTable .ui.dropdown.rankings-entity-dropdown {
+    padding: 12px;
+    border: 1px solid rgba(115, 110, 125, 0.4);
+    border-radius: 5px;
+    margin: 12px;
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .RankingsTable .table-header {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px;
+    margin-bottom: 0;
+    padding-bottom: 16px;
+    color: #736e7d;
+    border-bottom: 1px solid #736e7d;
+  }
+  .RankingsTable .right.visible.menu.transition {
+    width: 100%;
+  }
+}

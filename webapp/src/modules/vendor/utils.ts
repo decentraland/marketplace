@@ -49,16 +49,6 @@ export function getFilters(
         network
       } as NFTsFetchFilters<VendorName.DECENTRALAND>
     }
-    case VendorName.KNOWN_ORIGIN: {
-      const currentSection = Sections[VendorName.KNOWN_ORIGIN]
-
-      return {
-        isEdition: section === currentSection.EDITIONS,
-        isToken: section === currentSection.TOKENS
-      } as NFTsFetchFilters<VendorName.KNOWN_ORIGIN>
-    }
-    case VendorName.SUPER_RARE:
-    case VendorName.MAKERS_PLACE:
     default:
       return {}
   }
@@ -68,12 +58,6 @@ export function getOriginURL(vendor: VendorName) {
   switch (vendor) {
     case VendorName.DECENTRALAND:
       return 'https://market.decentraland.org'
-    case VendorName.SUPER_RARE:
-      return 'https://www.superrare.co'
-    case VendorName.MAKERS_PLACE:
-      return 'https://makersplace.com'
-    case VendorName.KNOWN_ORIGIN:
-      return 'https://knownorigin.io'
     default:
       throw new Error(`Base URL for ${vendor} not implemented`)
   }

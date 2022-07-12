@@ -1,0 +1,253 @@
+.RecentlySoldTable {
+  margin-bottom: 60px;
+}
+
+.RecentlySoldTable .recently-sold-card {
+  background: #242129;
+  padding-top: 0;
+  border-radius: 10px;
+  position: relative;
+  min-height: 687px;
+}
+
+.RecentlySoldTable .recently-sold-card .ui.table td {
+  padding: 16px 0;
+}
+
+.RecentlySoldTable .recently-sold-card table.table td {
+  height: 80px;
+}
+
+.RecentlySoldTable .recently-sold-card-tabs {
+  display: flex;
+  background-color: #2f2b35;
+  padding: 0 24px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  align-items: center;
+}
+
+.RecentlySoldTable .ui.very.basic.table {
+  padding: 0 24px;
+}
+
+.RecentlySoldTable .dcl.tabs.fullscreen {
+  width: 70%;
+}
+
+.RecentlySoldTable .ui.dropdown {
+  margin-left: auto;
+  align-self: center;
+}
+
+.RecentlySoldTable .sale-item-data {
+  display: flex;
+  flex-direction: column;
+}
+
+.RecentlySoldTable .recently-sold-item-cell {
+  display: flex;
+  align-items: center;
+}
+
+.RecentlySoldTable .recently-sold-item-cell a:hover {
+  text-decoration: underline;
+}
+
+.RecentlySoldTable .recently-sold-item-cell-thumbnail {
+  height: 48px;
+}
+
+.RecentlySoldTable .rankings-creator-cell .Profile {
+  display: flex;
+  align-items: center;
+}
+
+.RecentlySoldTable .rankings-creator-cell .Profile .name {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.RecentlySoldTable .rankings-creator-cell .Profile .dcl.avatar-face,
+.RecentlySoldTable .rankings-creator-cell .Profile .dcl.blockie {
+  margin-right: 16px;
+  width: 45px;
+  height: 45px;
+}
+
+.RecentlySoldTable .ui.dropdown.sort-by-dropdown {
+  border: 1px solid rgba(115, 110, 125, 0.4);
+  border-radius: 5px;
+  padding: 6px 16px;
+  margin-right: 12px;
+}
+
+.RecentlySoldTable .recently-sold-item-cell .AssetImage,
+.RecentlySoldTable .recently-sold-item-cell img {
+  width: 48px;
+  height: 48px;
+  margin-right: 20px;
+  background-color: rgba(115, 110, 125, 0.24);
+  border-radius: 5px;
+}
+
+.RecentlySoldTable .recently-sold-item-cell .AssetImage {
+  overflow: hidden;
+}
+
+.RecentlySoldTable .ui.table .rankings-item-data-creator a {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.RecentlySoldTable .dcl.header-menu .dcl.header-menu-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.RecentlySoldTable .dcl .header-menu-left .subtitle {
+  color: #736e7d;
+  margin-top: 6px;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.RecentlySoldTable .rankings-fiat-price {
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 24px;
+  color: #736e7d;
+  padding-left: 4px;
+}
+
+.RecentlySoldTable .recently-sold-timestamp {
+  color: #736e7d;
+  margin-left: auto;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.RecentlySoldTable .ui.table a.account-link {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .RecentlySoldTable .ui.dropdown.recently-sold-dropdown {
+    padding: 12px;
+    border: 1px solid rgba(115, 110, 125, 0.4);
+    border-radius: 5px;
+    margin: 12px;
+    display: flex;
+    align-self: stretch;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .RecentlySoldTable .recently-sold-card {
+    padding-top: 12px;
+  }
+  .RecentlySoldTable .right.visible.menu.transition {
+    width: 100%;
+  }
+  .RecentlySoldTable .table-header {
+    display: flex;
+    justify-content: space-between;
+    margin: 16px;
+    margin-bottom: 0;
+    padding-bottom: 16px;
+    color: #736e7d;
+    border-bottom: 1px solid #736e7d;
+  }
+
+  .RecentlySoldTable .recently-sold-item-cell {
+    margin: 0 16px;
+    padding-top: 16px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #736e7d;
+    flex-direction: column;
+  }
+
+  .RecentlySoldTable .recently-sold-item-cell {
+    align-items: flex-start;
+  }
+
+  .RecentlySoldTable .recently-sold-item-cell > div {
+    display: flex;
+    width: 100%;
+  }
+
+  .RecentlySoldTable .recently-sold-item-cell:last-of-type {
+    border-bottom: none;
+  }
+
+  .RecentlySoldTable .separator {
+    padding: 0 6px;
+  }
+
+  .RecentlySoldTable .recently-sold-sale-info {
+    color: #858585;
+  }
+
+  .RecentlySoldTable .recently-sold-more-data-container {
+    color: #858585;
+  }
+
+  .RecentlySoldTable .sale-item-data {
+    flex-direction: row;
+  }
+
+  .RecentlySoldTable .sale-item-name-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .RecentlySoldTable .sale-item-right-data {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .RecentlySoldTable .sale-item-more-data-container {
+    border-top: 1px solid #736e7d;
+    justify-content: right;
+    padding-top: 12px;
+    margin-top: 12px;
+    display: flex;
+    margin-left: auto;
+    min-width: 260px;
+  }
+
+  .RecentlySoldTable .sale-item-more-data-container > div {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0 12px;
+  }
+
+  .RecentlySoldTable .sale-item-more-data-container > div span {
+    color: #736e7d;
+    padding-bottom: 5px;
+  }
+
+  .RecentlySoldTable .sale-item-more-data-container > div span.price {
+    padding-bottom: 0;
+  }
+
+  .RecentlySoldTable .sale-item-more-data-container > div span {
+    color: #736e7d;
+  }
+
+  .RecentlySoldTable .sale-item-right-data .ui.header.dcl.mana.inline {
+    margin-bottom: 0;
+    text-align: right;
+  }
+  
+  .RecentlySoldTable .recently-sold-item-cell {
+    min-height: 161px;
+    position: relative;
+  }
+}
