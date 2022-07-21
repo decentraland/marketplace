@@ -138,14 +138,12 @@ const HomePage = (props: Props) => {
     view => view !== View.HOME_SOLD_ITEMS
   )
   // trending and newest sections
-  const firstViewsSection = homepageWithoutLatestSales.slice(
+  const firstViewsSection = homepageWithoutLatestSales.splice(
     0,
     2
   ) as HomepageView[]
   // rest of the sections
-  const secondViewsSection = homepageWithoutLatestSales.slice(
-    2
-  ) as HomepageView[]
+  const secondViewsSection = homepageWithoutLatestSales as HomepageView[]
 
   return (
     <>
