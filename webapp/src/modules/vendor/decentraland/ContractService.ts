@@ -20,30 +20,30 @@ export enum ContractName {
 }
 
 const contracts = ({
-  [AppNetwork.ROPSTEN]: [
+  [AppNetwork.GOERLI]: [
     {
       name: ContractName.MANA,
-      address: getContract(CN.MANAToken, ChainId.ETHEREUM_ROPSTEN).address,
+      address: getContract(CN.MANAToken, ChainId.ETHEREUM_GOERLI).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_ROPSTEN
+      chainId: ChainId.ETHEREUM_GOERLI
     },
     {
       name: ContractName.MARKETPLACE,
-      address: getContract(CN.Marketplace, ChainId.ETHEREUM_ROPSTEN).address,
+      address: getContract(CN.Marketplace, ChainId.ETHEREUM_GOERLI).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_ROPSTEN
+      chainId: ChainId.ETHEREUM_GOERLI
     },
     {
       name: ContractName.BIDS,
-      address: getContract(CN.Bid, ChainId.ETHEREUM_ROPSTEN).address,
+      address: getContract(CN.Bid, ChainId.ETHEREUM_GOERLI).address,
       vendor: 'decentraland',
       category: null,
       network: Network.ETHEREUM,
-      chainId: ChainId.ETHEREUM_ROPSTEN
+      chainId: ChainId.ETHEREUM_GOERLI
     },
     {
       name: ContractName.MANA,
