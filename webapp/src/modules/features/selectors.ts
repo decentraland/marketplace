@@ -1,21 +1,7 @@
 import { RootState } from '../reducer'
-import {
-  getState,
-  getIsFeatureEnabled
-} from 'decentraland-dapps/dist/modules/features/selectors'
+import { getIsFeatureEnabled } from 'decentraland-dapps/dist/modules/features/selectors'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { FeatureName } from './types'
-
-export const getRankingsFeatureVariant = (state: RootState) => {
-  try {
-    const features = getState(state)
-    return features.data[ApplicationName.MARKETPLACE].variants[
-      `${ApplicationName.MARKETPLACE}-${FeatureName.RANKINGS}`
-    ]
-  } catch (e) {
-    return false
-  }
-}
 
 export const getIsMaintenanceEnabled = (state: RootState) => {
   // As this is called by the routes component which is rendered when the user enters the application,
