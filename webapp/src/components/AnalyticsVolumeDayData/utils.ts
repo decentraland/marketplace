@@ -14,9 +14,9 @@ export function formatDailySales(sales: number, timeframe: AnalyticsTimeframe) {
   if (!sales) return '0'
   switch (timeframe) {
     case AnalyticsTimeframe.WEEK:
-      return `${Number((sales / 7).toFixed(2))}/day`
+      return `${Math.round(sales / 7)}/day`
     case AnalyticsTimeframe.MONTH:
-      return `${Number(sales / 30).toFixed(2)}/day`
+      return `${Math.round(sales / 30)}/day`
     default:
       return ''
   }
