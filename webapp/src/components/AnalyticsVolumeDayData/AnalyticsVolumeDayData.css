@@ -16,13 +16,13 @@
 
 .AnalyticsVolumeDayData .stats-container {
   display: flex;
-  min-width: 230px;
+  min-width: 33%;
   align-items: center;
 }
 
 .AnalyticsVolumeDayData .stats-container:first-of-type {
   display: flex;
-  min-width: 220px;
+  /* min-width: 220px; */
 }
 
 .AnalyticsVolumeDayData .stats {
