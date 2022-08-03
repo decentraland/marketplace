@@ -53,7 +53,6 @@ const SellModal = (props: Props) => {
       : getDefaultExpirationDate()
   )
   const [showConfirm, setShowConfirm] = useState(false)
-
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
   if (!wallet) {
@@ -116,7 +115,6 @@ const SellModal = (props: Props) => {
           }}
         />
       </p>
-
       <Form onSubmit={() => setShowConfirm(true)}>
         <div className="form-fields">
           <ManaField

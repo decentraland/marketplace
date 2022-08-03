@@ -447,7 +447,12 @@
     "buy": "Comprar",
     "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
-    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}.",
+    "confirm": {
+      "title": "Por favor confirma",
+      "line_one": "Estás por poner en comprar {name} por {amount}.",
+      "line_two": "Por favor vuelve a escribir el precio para confirmar:"
+    }
   },
   "price_too_low": {
     "minimum_price": "La cantidad mínima admitida para transacciones sin costo es {price}",
@@ -462,7 +467,12 @@
     "action": "Comprar",
     "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
-    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}.",
+    "confirm": {
+      "title": "Por favor confirma",
+      "line_one": "Estás por poner en comprar {name} por {amount}.",
+      "line_two": "Por favor vuelve a escribir el precio para confirmar:"
+    }
   },
   "bid_page": {
     "title": "Haz una oferta",

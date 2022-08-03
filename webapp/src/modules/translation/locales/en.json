@@ -452,7 +452,12 @@
     "buy": "Buy",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
-    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
+    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}.",
+    "confirm": {
+      "title": "Please confirm",
+      "line_one": "You are about to buy {name} for {amount}.",
+      "line_two": "Please re-enter the price to confirm:"
+    }
   },
   "price_too_low": {
     "minimum_price": "The minimun amount supported for costless transactions is {price}",
@@ -467,7 +472,12 @@
     "action": "Buy",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
-    "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}."
+    "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}.",
+    "confirm": {
+      "title": "Please confirm",
+      "line_one": "You are about to buy {name} for {amount}.",
+      "line_two": "Please re-enter the price to confirm:"
+    }
   },
   "bid_page": {
     "title": "Place a bid",

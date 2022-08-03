@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react'
+import { ethers } from 'ethers'
 import { Header, Button } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -10,12 +11,15 @@ import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { NFTCategory } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
+import { formatWeiMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
 import { getContract } from '../../../modules/contract/utils'
 import { AssetAction } from '../../AssetAction'
 import { AuthorizationModal } from '../../AuthorizationModal'
+import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
+import { Mana } from '../../Mana'
 import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
 import { Price } from '../Price'
@@ -33,8 +37,8 @@ const BuyNFTModal = (props: Props) => {
     hasLowPrice,
     onExecuteOrder
   } = props
-
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
+  const [showConfirm, setShowConfirm] = useState(false)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
   const handleExecuteOrder = useCallback(() => {
@@ -65,6 +69,7 @@ const BuyNFTModal = (props: Props) => {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
+      setShowConfirm(false)
     }
   }, [
     authorizations,
@@ -135,7 +140,7 @@ const BuyNFTModal = (props: Props) => {
           <ChainButton
             primary
             disabled={isDisabled || isLoading}
-            onClick={handleSubmit}
+            onClick={() => setShowConfirm(true)}
             loading={isLoading}
             chainId={nft.chainId}
           >
@@ -143,6 +148,35 @@ const BuyNFTModal = (props: Props) => {
           </ChainButton>
         ) : null}
       </div>
+      {order ? (
+        <ConfirmInputValueModal
+          open={showConfirm}
+          headerTitle={t('buy_page.confirm.title')}
+          content={
+            <>
+              <T
+                id="buy_page.confirm.line_one"
+                values={{
+                  name,
+                  amount: (
+                    <Mana network={nft.network} inline>
+                      {formatWeiMANA(order!.price)}
+                    </Mana>
+                  )
+                }}
+              />
+              <br />
+              <T id="buy_page.confirm.line_two" />
+            </>
+          }
+          onConfirm={handleSubmit}
+          valueToConfirm={ethers.utils.formatEther(order.price)}
+          network={nft.network}
+          onCancel={() => setShowConfirm(false)}
+          loading={isLoading}
+          disabled={isLoading}
+        />
+      ) : null}
       <AuthorizationModal
         open={showAuthorizationModal}
         authorization={authorization}

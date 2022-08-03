@@ -449,7 +449,12 @@
     "buy": "购买",
     "no_fingerprint": "无法加载指纹。",
     "is_owner": "您是{name}的所有者。",
-    "not_enough_mana": "您没有足够的MANA来购买{name}。"
+    "not_enough_mana": "您没有足够的MANA来购买{name}。",
+    "confirm": {
+      "title": "请确认",
+      "line_one": "您即将以 {amount} 的价格购买 {name}。",
+      "line_two": "请重新输入价格确认："
+    }
   },
   "price_too_low": {
     "minimum_price": "无成本交易支持的最低金额为 {price}",
@@ -464,7 +469,12 @@
     "action": "购买",
     "no_fingerprint": "无法加载指纹。",
     "is_owner": "您是{name}的所有者。",
-    "not_enough_mana": "您没有足够的MANA来购买{name}。"
+    "not_enough_mana": "您没有足够的MANA来购买{name}。",
+    "confirm": {
+      "title": "请确认",
+      "line_one": "您即将以 {amount} 的价格购买 {name}。",
+      "line_two": "请重新输入价格确认："
+    }
   },
   "bid_page": {
     "title": "出价",

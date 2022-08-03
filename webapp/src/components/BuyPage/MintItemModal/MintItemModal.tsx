@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react'
+import { ethers } from 'ethers'
 import { Link } from 'react-router-dom'
 import { Header, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -10,12 +11,15 @@ import { ContractName } from 'decentraland-transactions'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { locations } from '../../../modules/routing/locations'
+import { formatWeiMANA } from '../../../lib/mana'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { getContract } from '../../../modules/contract/utils'
 import { getContractNames } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
+import { Mana } from '../../Mana'
 import { AssetAction } from '../../AssetAction'
+import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { PriceTooLow } from '../PriceTooLow'
@@ -33,6 +37,7 @@ const MintItemModal = (props: Props) => {
     onBuyItem
   } = props
 
+  const [showConfirm, setShowConfirm] = useState(false)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
   const handleExecuteOrder = useCallback(() => onBuyItem(item), [
@@ -67,6 +72,7 @@ const MintItemModal = (props: Props) => {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
+      setShowConfirm(false)
     }
   }, [
     authorizations,
@@ -148,7 +154,7 @@ const MintItemModal = (props: Props) => {
           <ChainButton
             primary
             disabled={isDisabled || isLoading}
-            onClick={handleSubmit}
+            onClick={() => setShowConfirm(true)}
             loading={isLoading}
             chainId={item.chainId}
           >
@@ -156,6 +162,33 @@ const MintItemModal = (props: Props) => {
           </ChainButton>
         ) : null}
       </div>
+      <ConfirmInputValueModal
+        open={showConfirm}
+        headerTitle={t('mint_page.confirm.title')}
+        content={
+          <>
+            <T
+              id="mint_page.confirm.line_one"
+              values={{
+                name,
+                amount: (
+                  <Mana network={item.network} inline>
+                    {formatWeiMANA(item.price)}
+                  </Mana>
+                )
+              }}
+            />
+            <br />
+            <T id="mint_page.confirm.line_two" />
+          </>
+        }
+        onConfirm={handleSubmit}
+        valueToConfirm={ethers.utils.formatEther(item.price)}
+        network={item.network}
+        onCancel={() => setShowConfirm(false)}
+        loading={isLoading}
+        disabled={isLoading}
+      />
       <AuthorizationModal
         isLoading={isLoading}
         open={showAuthorizationModal}
