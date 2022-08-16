@@ -28,8 +28,6 @@ import { Footer } from '../Footer'
 const Routes = ({ inMaintenance }: Props) => {
   const APP_ID = config.get('INTERCOM_APP_ID')
 
-  console.log(inMaintenance)
-
   if (inMaintenance) {
     return (
       <>
