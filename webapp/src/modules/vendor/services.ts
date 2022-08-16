@@ -3,7 +3,8 @@ import {
   Contract as BaseContract,
   ListingStatus,
   NFTCategory,
-  Order
+  Order,
+  RentalListing
 } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
@@ -29,7 +30,7 @@ export interface NFTService<V extends VendorName> {
   fetch: (
     params: NFTsFetchParams,
     filters?: NFTsFetchFilters<V>
-  ) => Promise<readonly [NFT<V>[], Account[], Order[], number]>
+  ) => Promise<readonly [NFT<V>[], Account[], Order[], RentalListing[], number]>
   count: (
     params: NFTsCountParams,
     filters?: NFTsFetchFilters<V>

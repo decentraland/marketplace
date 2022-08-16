@@ -1,5 +1,5 @@
 import { action } from 'typesafe-actions'
-import { Order } from '@dcl/schemas'
+import { Order, RentalListing } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ErrorCode } from 'decentraland-transactions'
 
@@ -33,6 +33,7 @@ export const fetchNFTsSuccess = (
   nfts: NFT[],
   accounts: Account[],
   orders: Order[],
+  rentals: RentalListing[],
   count: number,
   timestamp: number
 ) =>
@@ -41,6 +42,7 @@ export const fetchNFTsSuccess = (
     nfts,
     accounts,
     orders,
+    rentals,
     count,
     timestamp
   })

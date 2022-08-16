@@ -1,4 +1,4 @@
-import { Order } from '@dcl/schemas'
+import { Order, RentalListing } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
@@ -34,7 +34,11 @@ export class NFTService
       .filter(nftResult => nftResult.order)
       .map(nftResult => nftResult.order as Order)
 
-    return [nfts, accounts, orders, total] as const
+    const rentals: RentalListing[] = results
+      .filter(nftResult => nftResult.rental)
+      .map(nftResult => nftResult.rental as RentalListing)
+
+    return [nfts, accounts, orders, rentals, total] as const
   }
 
   async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {

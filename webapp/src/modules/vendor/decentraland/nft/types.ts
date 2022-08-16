@@ -3,6 +3,7 @@ import {
   NFT as BaseNFT,
   Order,
   Rarity,
+  RentalListing,
   WearableCategory
 } from '@dcl/schemas'
 import { WearableGender } from '../../../nft/wearable/types'
@@ -25,6 +26,7 @@ export type NFTsFetchFilters = {
 export type NFTResult = {
   nft: Omit<NFT<VendorName.DECENTRALAND>, 'vendor'>
   order: Order | null
+  rental: RentalListing | null
 }
 
 export type NFTResponse = {
