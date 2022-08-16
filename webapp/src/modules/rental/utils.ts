@@ -8,6 +8,7 @@ import {
   getContract
 } from 'decentraland-transactions'
 import { Asset } from '../asset/types'
+import { NFT } from '../nft/types'
 import { PeriodOption } from './types'
 import { getRentalsContractInstance } from './contract'
 
@@ -113,7 +114,5 @@ export async function getNonces(
 }
 
 export function getOpenRentalId(asset: Asset | null): string | null {
-  return asset && 'activeOrderId' in asset && !!asset.openRentalId
-    ? asset.openRentalId
-    : null
+  return (asset as NFT).openRentalId ?? null
 }

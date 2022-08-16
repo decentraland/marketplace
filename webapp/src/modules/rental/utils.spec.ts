@@ -1,12 +1,15 @@
+import { NFT } from '@dcl/schemas'
 import { BigNumber, ethers } from 'ethers'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { ChainId } from '@dcl/schemas'
+import { Asset } from '../asset/types'
 import {
   getAssetNonce,
   getContractNonce,
   getNonces,
   getSignature,
-  getSignerNonce
+  getSignerNonce,
+  getOpenRentalId
 } from './utils'
 import { getRentalsContractInstance } from './contract'
 
@@ -243,5 +246,34 @@ describe('when getting all the nonces', () => {
       '27562871720596015540533343201973225127790',
       '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'
     )
+  })
+})
+
+describe('when getting the open rental id from an asset', () => {
+  let asset: Asset
+
+  describe('and the open rental id is set', () => {
+    beforeEach(() => {
+      asset = {
+        id: 'someAssetId',
+        openRentalId: 'aRentalId'
+      } as Asset
+    })
+
+    it('should return the open rental id', () => {
+      expect(getOpenRentalId(asset)).toBe((asset as NFT).openRentalId)
+    })
+  })
+
+  describe('and the open rental id is not set', () => {
+    beforeEach(() => {
+      asset = {
+        id: 'someAssetId'
+      } as Asset
+    })
+
+    it('should return null', () => {
+      expect(getOpenRentalId(asset)).toBe(null)
+    })
   })
 })

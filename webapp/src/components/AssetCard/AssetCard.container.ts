@@ -25,7 +25,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const openRentalId = getOpenRentalId(asset)
 
   if (!rental && openRentalId && isLand(asset)) {
-    // rentalPricePerDay = '1000000000000000000'
     // The price per day is the same in this version of rentals
     rentalPricePerDay = getRentalById(state, openRentalId)!.periods[0]
       .pricePerDay
