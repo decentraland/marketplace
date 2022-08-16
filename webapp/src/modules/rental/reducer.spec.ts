@@ -1,5 +1,5 @@
 import { RentalListing, RentalStatus } from '@dcl/schemas'
-import { fetchNFTsSuccess } from '../nft/actions'
+import { fetchNFTsSuccess, fetchNFTSuccess } from '../nft/actions'
 import { NFT, NFTsFetchOptions } from '../nft/types'
 import {
   createRentalFailure,
@@ -160,6 +160,48 @@ describe('when reducing the success action of fetching NFTs', () => {
         aNewRentalId: rentalListingsFromNFTServer[0],
         [oldRentalId]: rentalListingsFromNFTServer[1]
       }
+    })
+  })
+})
+
+describe('when reducing the success action of fetching a NFT', () => {
+  let rentalListing: RentalListing | null
+
+  describe('and the NFT has a rental', () => {
+    beforeEach(() => {
+      rentalListing = {
+        id: 'aNewRentalListing'
+      } as RentalListing
+    })
+
+    it('should store the rental', () => {
+      expect(
+        rentalReducer(
+          rentalState,
+          fetchNFTSuccess({} as NFT, null, rentalListing)
+        )
+      ).toEqual({
+        ...rentalState,
+        data: {
+          ...rentalState.data,
+          [rentalListing!.id]: rentalListing
+        }
+      })
+    })
+  })
+
+  describe("and the NFT doesn't have a rental", () => {
+    beforeEach(() => {
+      rentalListing = null
+    })
+
+    it('should return the state unchanged', () => {
+      expect(
+        rentalReducer(
+          rentalState,
+          fetchNFTSuccess({} as NFT, null, rentalListing)
+        )
+      ).toBe(rentalState)
     })
   })
 })

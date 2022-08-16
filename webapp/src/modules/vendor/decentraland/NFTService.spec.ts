@@ -1,4 +1,4 @@
-import { Network, ChainId } from '@dcl/schemas'
+import { Network, ChainId, Order, RentalListing } from '@dcl/schemas'
 import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT, NFTsCountParams, NFTsFetchParams } from '../../nft/types'
@@ -6,7 +6,6 @@ import { VendorName } from '../types'
 import { NFTService } from './NFTService'
 import * as api from './nft/api'
 import { NFTResult, NFTsFetchFilters } from './nft'
-import { Order } from '../../order/types'
 import {
   ContractData,
   ContractName,
@@ -26,10 +25,8 @@ describe("Decentraland's NFTService", () => {
   let nft: NFT
   let order: Order
   let wallet: Wallet | null
-  let erc721Contract: {
-    transferFrom: jest.Mock
-  }
   let filters: NFTsFetchFilters
+  let rental: RentalListing
 
   beforeEach(() => {
     nftService = new NFTService()
@@ -40,12 +37,10 @@ describe("Decentraland's NFTService", () => {
       tokenId: 'aTokenId',
       owner: anAddress
     } as NFT
-    erc721Contract = {
-      transferFrom: jest.fn().mockReturnValue('transferFrom')
-    }
     wallet = { address: anAddress } as Wallet
     order = { id: 'anID' } as Order
     filters = { isWearableAccessory: true }
+    rental = { id: 'aRentalId' } as RentalListing
   })
 
   afterEach(() => {
@@ -81,8 +76,8 @@ describe("Decentraland's NFTService", () => {
       beforeEach(() => {
         anotherNFT = { ...nft, owner: 'anotherAddress', id: 'anotherNFTID' }
         nftResults = [
-          { nft, order },
-          { nft: anotherNFT, order: null }
+          { nft, order, rental },
+          { nft: anotherNFT, order: null, rental: null }
         ]
         ;(api.nftAPI.fetch as jest.Mock).mockResolvedValueOnce({
           data: nftResults,
@@ -98,7 +93,7 @@ describe("Decentraland's NFTService", () => {
         )
       })
 
-      it('should return the NFTs, the accounts, the orders and the total', () => {
+      it('should return the NFTs, the accounts, the orders, the rentals and the total', () => {
         return expect(nftService.fetch(fetchParams, filters)).resolves.toEqual([
           [
             { ...nft, vendor: VendorName.DECENTRALAND },
@@ -113,6 +108,7 @@ describe("Decentraland's NFTService", () => {
             }
           ],
           [order],
+          [rental],
           total
         ])
       })
@@ -186,7 +182,8 @@ describe("Decentraland's NFTService", () => {
       beforeEach(() => {
         ;(api.nftAPI.fetchOne as jest.Mock).mockResolvedValueOnce({
           order,
-          nft
+          nft,
+          rental
         })
       })
 
@@ -201,7 +198,11 @@ describe("Decentraland's NFTService", () => {
       it('should return the NFT with its vendor and the order', () => {
         return expect(
           nftService.fetchOne(nft.contractAddress, nft.id)
-        ).resolves.toEqual([{ ...nft, vendor: VendorName.DECENTRALAND }, order])
+        ).resolves.toEqual([
+          { ...nft, vendor: VendorName.DECENTRALAND },
+          order,
+          rental
+        ])
       })
     })
   })
