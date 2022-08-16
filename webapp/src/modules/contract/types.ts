@@ -1,4 +1,4 @@
 export enum Network {
-  ROPSTEN = 'ropsten',
+  GOERLI = 'goerli',
   MAINNET = 'mainnet'
 }

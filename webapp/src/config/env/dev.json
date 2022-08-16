@@ -1,9 +1,9 @@
 {
-  "NETWORK": "ropsten",
-  "CHAIN_ID": "3",
+  "NETWORK": "goerli",
+  "CHAIN_ID": "5",
   "NFT_SERVER_URL": "https://nft-api.decentraland.io/v1",
   "ATLAS_SERVER_URL": "https://api.decentraland.io",
-  "PEER_URL": "https://peer.decentraland.zone",
+  "PEER_URL": "https://peer-ap1.decentraland.zone",
   "TRANSACTIONS_API_URL": "https://transactions-api.decentraland.io/v1",
   "BUILDER_URL": "https://builder.decentraland.io",
   "COINGECKO_API_URL": "https://api.coingecko.com/api/v3",
