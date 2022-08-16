@@ -64,8 +64,11 @@ export const FETCH_NFT_FAILURE = '[Failure] Fetch NFT'
 
 export const fetchNFTRequest = (contractAddress: string, tokenId: string) =>
   action(FETCH_NFT_REQUEST, { contractAddress, tokenId })
-export const fetchNFTSuccess = (nft: NFT, order?: Order) =>
-  action(FETCH_NFT_SUCCESS, { nft, order })
+export const fetchNFTSuccess = (
+  nft: NFT,
+  order: Order | null,
+  rental: RentalListing | null
+) => action(FETCH_NFT_SUCCESS, { nft, order, rental })
 export const fetchNFTFailure = (
   contractAddress: string,
   tokenId: string,

@@ -38,7 +38,7 @@ export interface NFTService<V extends VendorName> {
   fetchOne: (
     contractAddress: string,
     tokenId: string
-  ) => Promise<readonly [NFT<V>, Order | undefined]>
+  ) => Promise<readonly [NFT<V>, Order | null, RentalListing | null]>
   transfer: (
     wallet: Wallet | null,
     toAddress: string,
