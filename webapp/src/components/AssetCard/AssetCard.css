@@ -81,12 +81,6 @@ a.ui.card.link:hover .meta {
   font-size: 17px;
 }
 
-.AssetCard .rental-price {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 @media (min-width: 768px) and (max-width: 992px) {
   .AssetCard .header {
     display: flex;
