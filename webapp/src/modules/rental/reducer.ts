@@ -11,6 +11,7 @@ import {
   CREATE_RENTAL_REQUEST,
   CREATE_RENTAL_SUCCESS
 } from './actions'
+import { FetchNFTsSuccessAction, FETCH_NFTS_SUCCESS } from '../nft/actions'
 
 export type RentalState = {
   data: Record<string, RentalListing>
@@ -28,6 +29,7 @@ type RentalReducerAction =
   | CreateRentalRequestAction
   | CreateRentalSuccessAction
   | CreateRentalFailureAction
+  | FetchNFTsSuccessAction
 
 export function rentalReducer(
   state = INITIAL_STATE,
@@ -58,6 +60,17 @@ export function rentalReducer(
         ...state,
         loading: loadingReducer(state.loading, action),
         error
+      }
+    }
+    case FETCH_NFTS_SUCCESS: {
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          ...Object.fromEntries(
+            action.payload.rentals.map(rental => [rental.id, rental])
+          )
+        }
       }
     }
     default:

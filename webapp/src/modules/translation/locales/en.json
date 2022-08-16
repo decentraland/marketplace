@@ -1,5 +1,6 @@
 {
   "global": {
+    "day": "day",
     "assets": "Assets",
     "address": "Address",
     "balance": "Balance",

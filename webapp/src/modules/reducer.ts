@@ -34,6 +34,7 @@ export const createRootReducer = (history: History) =>
     item,
     nft,
     order,
+    rental,
     profile,
     proximity,
     routing,

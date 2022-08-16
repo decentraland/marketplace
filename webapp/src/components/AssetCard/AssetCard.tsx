@@ -17,13 +17,19 @@ import ListedBadge from '../ListedBadge'
 import './AssetCard.css'
 
 const AssetCard = (props: Props) => {
-  const { asset, price, showListedTag, onClick } = props
+  const { asset, price, rentalPricePerDay, showListedTag, onClick } = props
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
 
   return (
-    <Card className="AssetCard" link as={Link} to={getAssetUrl(asset)} onClick={onClick}>
+    <Card
+      className="AssetCard"
+      link
+      as={Link}
+      to={getAssetUrl(asset)}
+      onClick={onClick}
+    >
       <AssetImage asset={asset} showMonospace />
       {showListedTag && <ListedBadge className="listed-badge" />}
       <Card.Content>
@@ -35,7 +41,20 @@ const AssetCard = (props: Props) => {
             </Mana>
           ) : null}
         </Card.Header>
-        <Card.Meta>{t(`networks.${asset.network.toLowerCase()}`)}</Card.Meta>
+        <div className="sub-header">
+          <Card.Meta className="card-meta">
+            {t(`networks.${asset.network.toLowerCase()}`)}
+          </Card.Meta>
+          {rentalPricePerDay ? (
+            <div>
+              <Mana className="rental-price" network={asset.network} inline>
+                {formatWeiMANA(rentalPricePerDay)}
+              </Mana>
+              <span className="card-rental-day">/{t('global.day')}</span>
+            </div>
+          ) : null}
+        </div>
+
         {parcel ? <ParcelTags nft={asset as NFT} /> : null}
         {estate ? <EstateTags nft={asset as NFT} /> : null}
         {wearable ? <WearableTags asset={asset} /> : null}

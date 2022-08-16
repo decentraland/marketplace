@@ -7,6 +7,7 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { Asset } from '../asset/types'
 import { PeriodOption } from './types'
 import { getRentalsContractInstance } from './contract'
 
@@ -109,4 +110,10 @@ export async function getNonces(
     getSignerNonce(chainId, signerAddress),
     getAssetNonce(chainId, contractAddress, tokenId, signerAddress)
   ])
+}
+
+export function getOpenRentalId(asset: Asset | null): string | null {
+  return asset && 'activeOrderId' in asset && !!asset.openRentalId
+    ? asset.openRentalId
+    : null
 }

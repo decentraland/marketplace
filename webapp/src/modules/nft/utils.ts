@@ -1,4 +1,4 @@
-import { BodyShape } from '@dcl/schemas'
+import { BodyShape, Item, NFTCategory } from '@dcl/schemas'
 import { NFT } from './types'
 
 export function getNFTId(contractAddress: string, tokenId: string) {
@@ -30,4 +30,10 @@ export function isGender(bodyShapes: BodyShape[], gender: BodyShape) {
 
 export function isUnisex(bodyShapes: BodyShape[]) {
   return bodyShapes.length === 2
+}
+
+export function isLand(nft: NFT | Item) {
+  return (
+    nft.category === NFTCategory.PARCEL || nft.category === NFTCategory.ESTATE
+  )
 }
