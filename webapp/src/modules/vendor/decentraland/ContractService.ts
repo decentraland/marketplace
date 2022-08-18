@@ -16,7 +16,8 @@ export enum ContractName {
   MARKETPLACE = 'Marketplace',
   LEGACY_MARKETPLACE = 'LegacyMarketplace',
   BIDS = 'Bids',
-  COLLECTION_STORE = 'CollectionStore'
+  COLLECTION_STORE = 'CollectionStore',
+  RENTALS = 'Rentals'
 }
 
 const contracts = ({
@@ -86,6 +87,14 @@ const contracts = ({
       category: null,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      name: ContractName.RENTALS,
+      address: getContract(CN.Rentals, ChainId.ETHEREUM_GOERLI).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_GOERLI
     }
   ],
   [AppNetwork.MAINNET]: [
@@ -153,6 +162,15 @@ const contracts = ({
       network: Network.MATIC,
       chainId: ChainId.MATIC_MAINNET
     }
+    // TODO: Add this once the Rentals contract is deployed to mainnet and added to decentraland-trannsactions
+    // {
+    //   name: ContractName.RENTALS,
+    //   address: getContract(CN.Rentals, ChainId.ETHEREUM_GOERLI).address,
+    //   vendor: 'decentraland',
+    //   category: null,
+    //   network: Network.ETHEREUM,
+    //   chainId: ChainId.ETHEREUM_GOERLI
+    // }
   ]
 } as Record<AppNetwork, Contract[]>)[network]
 

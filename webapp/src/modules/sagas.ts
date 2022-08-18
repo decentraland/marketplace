@@ -24,6 +24,7 @@ import { saleSaga } from './sale/sagas'
 import { accountSaga } from './account/sagas'
 import { storeSaga } from './store/sagas'
 import { identitySaga } from './identity/sagas'
+import { rentalSaga } from './rental/sagas'
 import { peerUrl } from '../lib/environment'
 
 const analyticsSaga = createAnalyticsSaga()
@@ -58,9 +59,10 @@ export function* rootSaga() {
     marketplaceAnalyticsSagas(),
     featuresSaga({
       polling: {
-        apps: [ApplicationName.MARKETPLACE],
+        apps: [ApplicationName.MARKETPLACE, ApplicationName.BUILDER],
         delay: 60000 /** 60 seconds */
       }
-    })
+    }),
+    rentalSaga()
   ])
 }

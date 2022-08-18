@@ -1,0 +1,67 @@
+.CreateRentalModal {
+  width: 520px;
+}
+
+.CreateRentalModal .ui.sub.header {
+  text-transform: none;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+.CreateRentalModal .period-options {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-template-rows: 50% 50%;
+}
+
+.CreateRentalModal .period-options .ui.radio {
+  margin-bottom: 8px;
+}
+
+.CreateRentalModal .period-options .ui.checkbox input.hidden + label {
+  padding-left: 32px;
+  padding-top: 4px;
+}
+
+.CreateRentalModal .period-options-label .info {
+  width: 16px;
+  height: 16px;
+  background-image: url(../../images/info.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  margin-left: 4px;
+  cursor: pointer;
+}
+
+.CreateRentalModal .period-options .ui.radio.checkbox label:before {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+}
+
+.CreateRentalModal
+  .period-options
+  .ui.radio.checkbox.checked
+  input.hidden
+  + label:after {
+  top: -1px;
+  width: 23px;
+  height: 26px;
+}
+
+.ui.popup.periods-tooltip {
+  z-index: 4000;
+}
+
+.CreateRentalModal .notice {
+  padding: 24px;
+  background-color: var(--secondary-on-modal);
+  border-radius: 6px;
+}
+
+.CreateRentalModal .error {
+  color: var(--danger);
+  text-align: center;
+}
