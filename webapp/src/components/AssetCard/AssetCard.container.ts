@@ -8,7 +8,10 @@ import AssetCard from './AssetCard'
 import { getView } from '../../modules/ui/browse/selectors'
 import { getAssetPrice } from '../../modules/asset/utils'
 import { View } from '../../modules/ui/types'
-import { getOpenRentalId } from '../../modules/rental/utils'
+import {
+  getMaxPriceOfPeriods,
+  getOpenRentalId
+} from '../../modules/rental/utils'
 import { getRentalById } from '../../modules/rental/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
@@ -26,8 +29,9 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 
   if (!rental && openRentalId && isLand(asset)) {
     // The price per day is the same in this version of rentals
-    rentalPricePerDay = getRentalById(state, openRentalId)!.periods[0]
-      .pricePerDay
+    rentalPricePerDay = getMaxPriceOfPeriods(
+      getRentalById(state, openRentalId)!
+    )
   }
 
   return {
