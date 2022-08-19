@@ -141,6 +141,10 @@ export function* handleBrowse(action: BrowseAction) {
     getNewBrowseOptions,
     action.payload.options
   )
+
+  console.log('Options', action.payload.options)
+  console.log('New options', options)
+
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
   yield fetchAssetsFromRoute(options)
@@ -169,7 +173,14 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const page = options.page!
   const section = options.section!
   const sortBy = options.sortBy!
-  const { search, onlyOnSale, onlySmart, isMap, contracts } = options
+  const {
+    search,
+    onlyOnSale,
+    onlyOnRent,
+    onlySmart,
+    isMap,
+    contracts
+  } = options
 
   const address =
     options.address || ((yield select(getCurrentLocationAddress)) as string)
@@ -261,6 +272,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               orderBy,
               orderDirection,
               onlyOnSale,
+              onlyOnRent,
               address,
               category,
               search
@@ -284,6 +296,7 @@ export function* getNewBrowseOptions(
     previous = {
       page: 1,
       onlyOnSale: previous.onlyOnSale,
+      onlyOnRent: previous.onlyOnRent,
       sortBy: previous.sortBy,
       isMap: previous.isMap,
       isFullscreen: previous.isFullscreen,

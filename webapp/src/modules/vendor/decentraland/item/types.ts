@@ -16,6 +16,7 @@ export type ItemFilters = {
   category?: NFTCategory
   isSoldOut?: boolean
   isOnSale?: boolean
+  isOnRent?: boolean
   search?: string
   isWearableHead?: boolean
   isWearableAccessory?: boolean

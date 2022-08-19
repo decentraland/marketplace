@@ -23,6 +23,7 @@ export type Props = {
   contracts: string[]
   network?: Network
   hasFiltersEnabled: boolean
+  isRentalsEnabled: boolean
   onBrowse: typeof browse
   onClearFilters: typeof clearFilters
 }
@@ -42,6 +43,7 @@ export type MapStateProps = Pick<
   | 'contracts'
   | 'network'
   | 'hasFiltersEnabled'
+  | 'isRentalsEnabled'
 >
 export type MapDispatchProps = Pick<Props, 'onClearFilters'>
 export type MapDispatch = Dispatch<ClearFiltersAction>

@@ -3,11 +3,12 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header } from 'decentraland-ui'
 
 import { NFTSections } from '../NFTSections'
+import { NFTLandFilters } from '../NFTLandFilters'
 import { Props } from './NFTSidebar.types'
 import './NFTSidebar.css'
 
 const NFTSidebar = (props: Props) => {
-  const { section, sections, onMenuItemClick } = props
+  const { section, sections, onMenuItemClick, isRentalsEnabled } = props
 
   return (
     <div className="NFTSidebar">
@@ -17,6 +18,7 @@ const NFTSidebar = (props: Props) => {
         sections={sections}
         onSectionClick={onMenuItemClick}
       />
+      {isRentalsEnabled && <NFTLandFilters />}
     </div>
   )
 }

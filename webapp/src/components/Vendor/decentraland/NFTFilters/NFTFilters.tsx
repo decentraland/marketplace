@@ -41,7 +41,8 @@ const NFTFilters = (props: Props) => {
     onBrowse,
     assetType,
     hasFiltersEnabled,
-    onClearFilters
+    onClearFilters,
+    isRentalsEnabled
   } = props
 
   const category = section ? getCategoryFromSection(section) : undefined
@@ -193,12 +194,16 @@ const NFTFilters = (props: Props) => {
               minWidth={Responsive.onlyTablet.minWidth}
               className="topbar-filter"
             >
-              <Radio
-                toggle
-                checked={onlyOnSale}
-                onChange={handleOnlyOnSaleChange}
-                label={t('nft_filters.on_sale')}
-              />
+              {
+                !(isRentalsEnabled ? (
+                  <Radio
+                    toggle
+                    checked={onlyOnSale}
+                    onChange={handleOnlyOnSaleChange}
+                    label={t('nft_filters.on_sale')}
+                  />
+                ) : null)
+              }
             </Responsive>
           </>
         ) : (
@@ -235,12 +240,22 @@ const NFTFilters = (props: Props) => {
               minWidth={Responsive.onlyTablet.minWidth}
               className="topbar-filter"
             >
-              <Radio
-                toggle
-                checked={onlyOnSale}
-                onChange={handleOnlyOnSaleChange}
-                label={t('nft_filters.on_sale')}
-              />
+              {!(isRentalsEnabled && section === Section.LAND) ? (
+                <Radio
+                  toggle
+                  checked={onlyOnSale}
+                  onChange={handleOnlyOnSaleChange}
+                  label={t('nft_filters.on_sale')}
+                />
+              ) : null}
+              {isRentalsEnabled && section === Section.LAND ? (
+                <Dropdown
+                  direction="left"
+                  value={sortBy}
+                  options={orderBydropdownOptions}
+                  onChange={handleOrderByDropdownChange}
+                />
+              ) : null}
             </Responsive>
           </>
         )}

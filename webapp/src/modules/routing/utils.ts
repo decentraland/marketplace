@@ -10,7 +10,6 @@ export function buildBrowseURL(
   browseOptions: BrowseOptions
 ): string {
   let params: URLSearchParams | undefined
-
   if (browseOptions.section === Section.ON_SALE) {
     params = getSearchParams({ section: Section.ON_SALE })
   } else {

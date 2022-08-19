@@ -16,6 +16,7 @@ class NFTAPI extends BaseAPI {
     filters?: NFTsFetchFilters
   ): Promise<NFTResponse> => {
     const queryParams = this.buildNFTQueryString(params, filters)
+    console.log('Requesting NFTs with the following params', queryParams)
     return this.request('get', `/nfts?${queryParams}`)
   }
 
@@ -80,7 +81,9 @@ class NFTAPI extends BaseAPI {
     if (params.onlyOnSale) {
       queryParams.append('isOnSale', 'true')
     }
-
+    if (params.onlyOnRent) {
+      queryParams.append('isOnRent', 'true')
+    }
     if (params.search) {
       queryParams.set('search', params.search)
     }

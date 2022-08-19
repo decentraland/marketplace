@@ -7,7 +7,7 @@ import { NFTSidebar as DecentralandNFTSidebar } from '../decentraland/NFTSidebar
 import { Props } from './NFTSidebar.types'
 
 const NFTSidebar = (props: Props) => {
-  const { vendor, section, sections, onBrowse } = props
+  const { vendor, section, sections, onBrowse, isRentalsEnabled } = props
 
   const handleOnBrowse = useCallback(
     (section: string) => {
@@ -21,6 +21,7 @@ const NFTSidebar = (props: Props) => {
     default:
       return (
         <DecentralandNFTSidebar
+          isRentalsEnabled={isRentalsEnabled}
           section={section as DecentralandSection}
           sections={
             (sections as DecentralandSection[]) ?? [Sections.decentraland.ALL]

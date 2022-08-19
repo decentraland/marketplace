@@ -35,6 +35,7 @@ export type NFTsFetchParams = {
   category?: NFTCategory
   address?: string
   onlyOnSale?: boolean
+  onlyOnRent?: boolean
   search?: string
 }
 

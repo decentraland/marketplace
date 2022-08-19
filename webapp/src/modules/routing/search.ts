@@ -53,6 +53,9 @@ export function getSearchParams(options?: BrowseOptions) {
     if (options.onlyOnSale !== undefined) {
       params.set('onlyOnSale', options.onlyOnSale.toString())
     }
+    if (options.onlyOnRent !== undefined) {
+      params.set('onlyOnRent', options.onlyOnRent.toString())
+    }
     if (options.rarities && options.rarities.length > 0) {
       params.set(
         'rarities',

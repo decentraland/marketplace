@@ -13,7 +13,9 @@ import NFTSidebar from './NFTSidebar'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   vendor: getVendor(state),
-  section: ownProps.section || getSection(state)
+  section: ownProps.section || getSection(state),
+  // TODO set isRentalsEnabled
+  isRentalsEnabled: true
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

@@ -41,7 +41,9 @@ const mapState = (state: RootState): MapStateProps => ({
   wearableGenders: getWearableGenders(state),
   contracts: getContracts(state),
   network: getNetwork(state),
-  hasFiltersEnabled: hasFiltersEnabled(state)
+  hasFiltersEnabled: hasFiltersEnabled(state),
+  // TODO: Get if rentals is enabled
+  isRentalsEnabled: true
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
