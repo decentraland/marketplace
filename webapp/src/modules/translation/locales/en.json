@@ -528,7 +528,8 @@
     "for_buying": "For buying",
     "for_bidding": "For bidding",
     "authorization_Marketplace_MANAToken": "MANA",
-    "for_selling": "For selling or renting",
+    "for_selling": "For selling",
+    "for_renting": "For renting",
     "pending_tx": "Transaction pending, click the spinner to go to your activity for a detailed status"
   },
   "authorization": {

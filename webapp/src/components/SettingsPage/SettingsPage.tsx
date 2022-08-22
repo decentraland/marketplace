@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import { Network } from '@dcl/schemas'
+import { Network, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
@@ -65,7 +65,19 @@ const SettingsPage = (props: Props) => {
 
   const authorizationsForSelling = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
-    return contract.category != null
+    return (
+      contract.category != null &&
+      contract.category !== NFTCategory.PARCEL &&
+      contract.category !== NFTCategory.ESTATE
+    )
+  })
+
+  const authorizationsForRenting = authorizations.filter(authorization => {
+    const contract = getContract({ address: authorization.contractAddress })
+    return (
+      contract.category === NFTCategory.PARCEL ||
+      contract.category === NFTCategory.ESTATE
+    )
   })
 
   return (
@@ -184,6 +196,26 @@ const SettingsPage = (props: Props) => {
                             </label>
 
                             {authorizationsForSelling.map(authorization => {
+                              return (
+                                <Authorization
+                                  key={
+                                    authorization.authorizedAddress +
+                                    authorization.contractAddress
+                                  }
+                                  authorization={authorization}
+                                />
+                              )
+                            })}
+                          </div>
+                        ) : null}
+
+                        {authorizationsForRenting.length > 0 ? (
+                          <div className="authorization-checks">
+                            <label className="secondary-text">
+                              {t('settings_page.for_renting')}
+                            </label>
+
+                            {authorizationsForRenting.map(authorization => {
                               return (
                                 <Authorization
                                   key={

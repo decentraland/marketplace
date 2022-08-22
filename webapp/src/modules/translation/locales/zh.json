@@ -525,7 +525,8 @@
     "for_buying": "购买",
     "for_bidding": "出价",
     "authorization_Marketplace_MANAToken": "MANA",
-    "for_selling": "出售或出租",
+    "for_selling": "出售",
+    "for_renting": "出租",
     "pending_tx": "待处理的交易，请单击微调器以转到活动详细状态"
   },
   "authorization": {
