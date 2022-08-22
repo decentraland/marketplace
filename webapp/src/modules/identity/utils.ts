@@ -56,7 +56,6 @@ export function* getIdentity(): Generator<any, AuthIdentity, any> {
   )
 
   if (identity) {
-    console.log('return identity', identity)
     return identity
   }
 

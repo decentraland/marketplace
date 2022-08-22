@@ -70,8 +70,6 @@ export async function getSignature(
 
   const signature = await signer._signTypedData(domain, types, values)
 
-  console.log(domain, types, values, signature)
-
   const signingAddress = ethers.utils.verifyTypedData(
     domain,
     types,
