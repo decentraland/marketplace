@@ -90,10 +90,10 @@ const CreateRentalModal = (props: Props) => {
 
   // validation
   const isInvalidPrice = parseMANANumber(pricePerDayInput) <= 0
-  const isInvalidDate = new Date(expiresAt).getTime() < Date.now()
+  const isInvalidExpirationDate = new Date(expiresAt).getTime() < Date.now()
 
   const isInvalid =
-    isInvalidPrice || isInvalidDate || periodOptions.length === 0
+    isInvalidPrice || isInvalidExpirationDate || periodOptions.length === 0
 
   return (
     <Modal open={open} size="tiny" className="CreateRentalModal">
@@ -123,9 +123,9 @@ const CreateRentalModal = (props: Props) => {
               onChange={(_event, props) =>
                 setExpiresAt(props.value || getDefaultExpirationDate())
               }
-              error={isInvalidDate}
+              error={isInvalidExpirationDate}
               message={
-                isInvalidDate
+                isInvalidExpirationDate
                   ? t('create_rental_modal.invalid_date')
                   : undefined
               }
