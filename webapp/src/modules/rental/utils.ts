@@ -1,16 +1,14 @@
+import { BigNumber, ethers } from 'ethers'
 import { ChainId, PeriodCreation } from '@dcl/schemas'
 import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer'
-import {
-  getConnectedProvider,
-  getSigner
-} from 'decentraland-dapps/dist/lib/eth'
-import { BigNumber, ethers } from 'ethers'
+import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import {
   ContractData,
   ContractName,
   getContract
 } from 'decentraland-transactions'
 import { PeriodOption } from './types'
+import { getRentalsContractInstance } from './contract'
 
 export const daysByPeriod: Record<PeriodOption, number> = {
   [PeriodOption.ONE_WEEK]: 7,
@@ -70,30 +68,7 @@ export async function getSignature(
 
   const signature = await signer._signTypedData(domain, types, values)
 
-  const signingAddress = ethers.utils.verifyTypedData(
-    domain,
-    types,
-    values,
-    signature
-  )
-
-  console.log('signingAddress', signingAddress, address === signingAddress)
-
   return signature
-}
-
-async function getRentalsContractInstance(chainId: ChainId) {
-  const provider = await getConnectedProvider()
-  if (!provider) {
-    throw new Error('Could not get connected provider')
-  }
-  const { address, abi } = getContract(ContractName.Rentals, chainId)
-  const instance = new ethers.Contract(
-    address,
-    abi,
-    new ethers.providers.Web3Provider(provider)
-  )
-  return instance
 }
 
 export async function getAssetNonce(

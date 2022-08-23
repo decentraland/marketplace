@@ -9,6 +9,7 @@ import {
 import { call, select } from '@redux-saga/core/effects'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { expectSaga } from 'redux-saga-test-plan'
+import { throwError } from 'redux-saga-test-plan/providers'
 import { getCurrentIdentity } from '../identity/selectors'
 import { NFT } from '../nft/types'
 import { VendorName } from '../vendor'
@@ -176,6 +177,92 @@ describe('when handling the CREATE_RENTAL_REQUEST action', () => {
           createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration)
         )
         .run({ silenceTimeout: true })
+    })
+    describe('and can not get the nonces', () => {
+      it('should throw an error', () => {
+        const signerAddress = '0xdeadbeef'
+        const expiration = 1234567
+        return expectSaga(rentalSaga)
+          .provide([
+            [select(getAddress), signerAddress],
+            [
+              call(
+                getNonces,
+                nft.chainId,
+                nft.contractAddress,
+                nft.tokenId,
+                signerAddress
+              ),
+              throwError(new Error('Could not get provider'))
+            ]
+          ])
+          .put(
+            createRentalFailure(
+              nft,
+              100,
+              [PeriodOption.ONE_WEEK],
+              1234567,
+              'Could not get provider'
+            )
+          )
+          .dispatch(
+            createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration)
+          )
+          .run({ silenceTimeout: true })
+      })
+    })
+    describe('and can not get the signature', () => {
+      it('should throw an error', () => {
+        const signerAddress = '0xdeadbeef'
+        const nonces = ['0', '0', '0']
+        const periods: PeriodCreation[] = [
+          {
+            pricePerDay: '100000000000000000000',
+            maxDays: 7,
+            minDays: 7
+          }
+        ]
+        const expiration = 1234567
+        return expectSaga(rentalSaga)
+          .provide([
+            [select(getAddress), signerAddress],
+            [
+              call(
+                getNonces,
+                nft.chainId,
+                nft.contractAddress,
+                nft.tokenId,
+                signerAddress
+              ),
+              nonces
+            ],
+            [
+              call(
+                getSignature,
+                nft.chainId,
+                nft.contractAddress,
+                nft.tokenId,
+                nonces,
+                periods,
+                expiration
+              ),
+              throwError(new Error('Could not get provider'))
+            ]
+          ])
+          .put(
+            createRentalFailure(
+              nft,
+              100,
+              [PeriodOption.ONE_WEEK],
+              1234567,
+              'Could not get provider'
+            )
+          )
+          .dispatch(
+            createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration)
+          )
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })
