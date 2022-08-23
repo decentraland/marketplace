@@ -6,8 +6,14 @@ import {
   Field,
   Radio,
   Header,
-  Popup
+  Popup,
+  InputOnChangeData
 } from 'decentraland-ui'
+import {
+  Authorization,
+  AuthorizationType
+} from 'decentraland-dapps/dist/modules/authorization/types'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { TransactionLink } from 'decentraland-dapps/dist/containers'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -18,11 +24,6 @@ import { parseMANANumber } from '../../lib/mana'
 import { getDefaultExpirationDate } from '../../modules/order/utils'
 import { Props } from './CreateRentalModal.types'
 import './CreateRentalModal.css'
-import {
-  Authorization,
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
-import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 
 const CreateRentalModal = (props: Props) => {
   const {
@@ -95,6 +96,20 @@ const CreateRentalModal = (props: Props) => {
   const isInvalid =
     isInvalidPrice || isInvalidExpirationDate || periodOptions.length === 0
 
+  const handlePriceChange = useCallback(
+    (_event: React.ChangeEvent<HTMLInputElement>, props: InputOnChangeData) => {
+      setPricePerDayInput(toFixedMANAValue(props.value))
+    },
+    []
+  )
+
+  const handleExpirationDateChange = useCallback(
+    (_event: React.ChangeEvent<HTMLInputElement>, props: InputOnChangeData) => {
+      setExpiresAt(props.value || getDefaultExpirationDate())
+    },
+    []
+  )
+
   return (
     <Modal open={open} size="tiny" className="CreateRentalModal">
       <ModalNavigation
@@ -112,17 +127,13 @@ const CreateRentalModal = (props: Props) => {
               value={pricePerDayInput}
               focus={true}
               error={pricePerDayInput !== '' && isInvalidPrice}
-              onChange={(_event, props) => {
-                setPricePerDayInput(toFixedMANAValue(props.value))
-              }}
+              onChange={handlePriceChange}
             />
             <Field
               label={t('create_rental_modal.expiration_date')}
               type="date"
               value={expiresAt}
-              onChange={(_event, props) =>
-                setExpiresAt(props.value || getDefaultExpirationDate())
-              }
+              onChange={handleExpirationDateChange}
               error={isInvalidExpirationDate}
               message={
                 isInvalidExpirationDate
