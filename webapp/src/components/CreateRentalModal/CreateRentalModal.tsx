@@ -23,7 +23,7 @@ import { ManaField } from '../ManaField'
 import { parseMANANumber } from '../../lib/mana'
 import { getDefaultExpirationDate } from '../../modules/order/utils'
 import { Props } from './CreateRentalModal.types'
-import './CreateRentalModal.css'
+import styles from './CreateRentalModal.module.css'
 
 const CreateRentalModal = (props: Props) => {
   const {
@@ -111,7 +111,7 @@ const CreateRentalModal = (props: Props) => {
   )
 
   return (
-    <Modal open={open} size="tiny" className="CreateRentalModal">
+    <Modal open={open} size="tiny" className={styles.CreateRentalModal}>
       <ModalNavigation
         title={t('create_rental_modal.title')}
         onClose={onCancel}
@@ -146,19 +146,19 @@ const CreateRentalModal = (props: Props) => {
                   : undefined
               }
             />
-            <div className="period-options-section">
-              <Header sub className="period-options-label">
+            <div>
+              <Header sub>
                 {t('create_rental_modal.periods')}
                 <Popup
-                  className="periods-tooltip"
+                  className={styles.periodsTooltip}
                   content={t('create_rental_modal.periods_tooltip')}
-                  trigger={<i className="info" />}
+                  trigger={<i className={styles.info} />}
                   position="top center"
                   on="hover"
                 ></Popup>
               </Header>
 
-              <div className="period-options">
+              <div className={styles.periodOptions}>
                 {Object.values(PeriodOption).map(option => (
                   <Radio
                     label={t(`create_rental_modal.period_options.${option}`)}
@@ -170,7 +170,7 @@ const CreateRentalModal = (props: Props) => {
             </div>
           </>
         ) : (
-          <div className="notice">
+          <div className={styles.notice}>
             <p>
               <T
                 id="create_rental_modal.notice_line_one"
@@ -207,7 +207,7 @@ const CreateRentalModal = (props: Props) => {
       </Modal.Actions>
 
       {isAuthorized && error && (
-        <Modal.Content className="error">{error}</Modal.Content>
+        <Modal.Content className={styles.error}>{error}</Modal.Content>
       )}
     </Modal>
   )
