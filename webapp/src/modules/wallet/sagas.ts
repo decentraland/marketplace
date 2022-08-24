@@ -83,6 +83,11 @@ function* handleWallet(
     network: Network.MATIC
   })
 
+  const rentals = getContract({
+    name: contractNames.RENTALS,
+    network: Network.ETHEREUM
+  })
+
   const authorizations: Authorization[] = []
 
   authorizations.push({
@@ -158,6 +163,21 @@ function* handleWallet(
       chainId: contract.chainId,
       type: AuthorizationType.APPROVAL
     })
+
+    // add authorizations for the rentals contract for the land and estate registries
+    if (
+      contract.category === NFTCategory.PARCEL ||
+      contract.category === NFTCategory.ESTATE
+    ) {
+      authorizations.push({
+        address,
+        authorizedAddress: rentals.address,
+        contractAddress: contract.address,
+        contractName: ContractName.ERC721,
+        chainId: contract.chainId,
+        type: AuthorizationType.APPROVAL
+      })
+    }
   }
 
   yield put(fetchAuthorizationsRequest(authorizations))

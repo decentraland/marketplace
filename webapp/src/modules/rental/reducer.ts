@@ -1,5 +1,16 @@
 import { RentalListing } from '@dcl/schemas'
-import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
+import {
+  loadingReducer,
+  LoadingState
+} from 'decentraland-dapps/dist/modules/loading/reducer'
+import {
+  CreateRentalFailureAction,
+  CreateRentalRequestAction,
+  CreateRentalSuccessAction,
+  CREATE_RENTAL_FAILURE,
+  CREATE_RENTAL_REQUEST,
+  CREATE_RENTAL_SUCCESS
+} from './actions'
 import {
   FetchNFTsSuccessAction,
   FetchNFTSuccessAction,
@@ -19,13 +30,44 @@ const INITIAL_STATE: RentalState = {
   error: null
 }
 
-type RentalReducerAction = FetchNFTsSuccessAction | FetchNFTSuccessAction
+type RentalReducerAction =
+  | CreateRentalRequestAction
+  | CreateRentalSuccessAction
+  | CreateRentalFailureAction
+  | FetchNFTsSuccessAction
+  | FetchNFTSuccessAction
 
 export function rentalReducer(
   state = INITIAL_STATE,
   action: RentalReducerAction
 ): RentalState {
   switch (action.type) {
+    case CREATE_RENTAL_REQUEST: {
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action)
+      }
+    }
+    case CREATE_RENTAL_SUCCESS: {
+      const { rental } = action.payload
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [rental.id]: rental
+        },
+        loading: loadingReducer(state.loading, action),
+        error: null
+      }
+    }
+    case CREATE_RENTAL_FAILURE: {
+      const { error } = action.payload
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error
+      }
+    }
     case FETCH_NFTS_SUCCESS: {
       return {
         ...state,
