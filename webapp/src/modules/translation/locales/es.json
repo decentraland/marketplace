@@ -524,6 +524,7 @@
     "for_bidding": "Para ofertar",
     "authorization_Marketplace_MANAToken": "MANA",
     "for_selling": "Para vender",
+    "for_renting": "Para alquilar",
     "pending_tx": "Transaccion pendiente, haz click aquí para ir a tu pantalla de actividad y ver más información"
   },
   "authorization": {
@@ -625,5 +626,26 @@
     "maintainance": {
       "notice": "Estamos en mantenimiento, volveremos pronto!"
     }
+  },
+  "create_rental_modal": {
+    "title": "Poner en alquiler",
+    "price": "Precio por día",
+    "expiration_date": "Fecha de expiración del clasificado",
+    "periods": "Período del alquiler",
+    "periods_tooltip": "Selecciona la cantidad de días por las que estas dispuesto a alquilar tu tierra",
+    "notice_line_one": "Antes de publicar tu tierra en alquiler debes aprobar al contrato de {link} para que pueda operar con tus tierras, exactamente igual que cuando intentas venderla.",
+    "notice_line_two": "Cuando el periodo de alquiler se termina, tienes la opción de extenderlo o de reclamar tu tierra de vuelta, si decides reclamarla, deberás enviar una nueva transacción para esto.",
+    "notice_link": "Alquiler",
+    "period_options": {
+      "one_week": "7 días",
+      "one_month": "30 días",
+      "two_months": "60 días",
+      "quarter_year": "90 días",
+      "half_year": "180 días",
+      "one_year": "365 días"
+    },
+    "put_for_rent": "Poner en alquiler",
+    "invalid_date": "Fecha inválida",
+    "invalid_price": "Precio inválido"
   }
 }

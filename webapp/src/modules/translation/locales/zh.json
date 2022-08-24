@@ -526,6 +526,7 @@
     "for_bidding": "出价",
     "authorization_Marketplace_MANAToken": "MANA",
     "for_selling": "出售",
+    "for_renting": "出租",
     "pending_tx": "待处理的交易，请单击微调器以转到活动详细状态"
   },
   "authorization": {
@@ -627,5 +628,26 @@
   },
   "maintainance": {
     "notice": "我们目前正在维护中，我们会很快回来！"
+  },
+  "create_rental_modal": {
+    "title": "出租",
+    "price": "每天的价格",
+    "expiration_date": "上市截止日期",
+    "periods": "租期",
+    "periods_tooltip": "选择您愿意租用土地的日期",
+    "notice_line_one": "在列出您的土地出租之前，您需要批准 {link} 合同，以便它可以运营您的土地，就像出售您的土地时一样。",
+    "notice_line_two": "租期结束后，您可以选择延长租期或认领土地，如果您选择认领，则需要执行新的交易。",
+    "notice_link": "租金",
+    "期间选项": {
+      "one_week": "7 天",
+      "one_month": "30 天",
+      "two_months": "60 天",
+      " Quarter_year": "90 天",
+      "half_year": "180 天",
+      "one_year": "365 天"
+    },
+    "put_for_rent": "出租",
+    "invalid_date": "无效日期",
+    "invalid_price": "无效价格"
   }
 }
