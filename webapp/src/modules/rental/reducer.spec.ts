@@ -73,7 +73,7 @@ describe('when reducing a CREATE_RENTAL_SUCCESS action', () => {
   })
 })
 
-describe('when reducing a CREATE_RENTAL_SUCCESS action', () => {
+describe('when reducing a CREATE_RENTAL_FAILURE action', () => {
   it('should remove the loading action', () => {
     const state: RentalState = {
       loading: [
