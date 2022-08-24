@@ -21,12 +21,15 @@ beforeEach(() => {
 })
 
 describe('when reducing a CREATE_RENTAL_REQUEST action', () => {
-  it('should add a the action to the loading state', () => {
-    const state: RentalState = {
+  let state: RentalState
+  beforeEach(() => {
+    state = {
       loading: [],
       data: {},
       error: null
     }
+  })
+  it('should add a the action to the loading state', () => {
     const action = createRentalRequest(
       nft,
       100,
@@ -40,32 +43,25 @@ describe('when reducing a CREATE_RENTAL_REQUEST action', () => {
 })
 
 describe('when reducing a CREATE_RENTAL_SUCCESS action', () => {
-  it('should remove the loading action', () => {
-    const state: RentalState = {
+  let state: RentalState
+  beforeEach(() => {
+    state = {
       loading: [
         createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], 1976562675847)
       ],
       data: {},
-      error: null
+      error: 'Some error'
     }
+  })
+  it('should remove the loading action', () => {
     const newState = rentalReducer(state, createRentalSuccess(nft, rental))
     expect(newState.loading).toHaveLength(0)
   })
   it('should clear the error', () => {
-    const state: RentalState = {
-      loading: [],
-      data: {},
-      error: 'some error'
-    }
     const newState = rentalReducer(state, createRentalSuccess(nft, rental))
     expect(newState.error).toBe(null)
   })
   it('should add the rental to the data record', () => {
-    const state: RentalState = {
-      loading: [],
-      data: {},
-      error: null
-    }
     const newState = rentalReducer(state, createRentalSuccess(nft, rental))
     expect(newState.data).toEqual({
       [rental.id]: rental
@@ -74,14 +70,17 @@ describe('when reducing a CREATE_RENTAL_SUCCESS action', () => {
 })
 
 describe('when reducing a CREATE_RENTAL_FAILURE action', () => {
-  it('should remove the loading action', () => {
-    const state: RentalState = {
+  let state: RentalState
+  beforeEach(() => {
+    state = {
       loading: [
         createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], 1976562675847)
       ],
       data: {},
       error: null
     }
+  })
+  it('should remove the loading action', () => {
     const newState = rentalReducer(
       state,
       createRentalFailure(
@@ -95,11 +94,6 @@ describe('when reducing a CREATE_RENTAL_FAILURE action', () => {
     expect(newState.loading).toHaveLength(0)
   })
   it('should store the error', () => {
-    const state: RentalState = {
-      loading: [],
-      data: {},
-      error: null
-    }
     const newState = rentalReducer(
       state,
       createRentalFailure(
