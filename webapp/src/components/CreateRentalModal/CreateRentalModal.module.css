@@ -1,29 +1,29 @@
-.CreateRentalModal:global(.ui.modal.tiny) {
+.modal:global(.ui.modal.tiny) {
   width: 520px;
 }
 
-.CreateRentalModal:global(.ui.modal) > :global(.content) {
+.modal:global(.ui.modal) > :global(.content) {
   margin-left: 64px;
   margin-right: 64px;
   margin-top: 32px;
 }
 
-.CreateRentalModal:global(.ui.modal) > :global(.actions) {
+.modal:global(.ui.modal) > :global(.actions) {
   margin-left: 64px;
   margin-right: 64px;
   margin-bottom: 64px;
   margin-top: 40px;
 }
 
-.CreateRentalModal :global(.dcl.modal-navigation-title) {
+.modal :global(.dcl.modal-navigation-title) {
   margin-top: 16px;
 }
 
-.CreateRentalModal :global(.dcl.field) {
+.modal :global(.dcl.field) {
   min-width: 100%;
 }
 
-.CreateRentalModal :global(.ui.sub.header) {
+.modal :global(.ui.sub.header) {
   text-transform: none;
   display: flex;
   align-items: center;

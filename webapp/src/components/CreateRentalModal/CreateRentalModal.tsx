@@ -111,7 +111,7 @@ const CreateRentalModal = (props: Props) => {
   )
 
   return (
-    <Modal open={open} size="tiny" className={styles.CreateRentalModal}>
+    <Modal open={open} size="tiny" className={styles.modal}>
       <ModalNavigation
         title={t('create_rental_modal.title')}
         onClose={onCancel}
