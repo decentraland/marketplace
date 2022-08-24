@@ -2,17 +2,14 @@
   width: 520px;
 }
 
-.modal:global(.ui.modal) > :global(.content) {
+.modal:global(.ui.modal > .content) {
   margin-left: 64px;
   margin-right: 64px;
   margin-top: 32px;
 }
 
-.modal:global(.ui.modal) > :global(.actions) {
-  margin-left: 64px;
-  margin-right: 64px;
-  margin-bottom: 64px;
-  margin-top: 40px;
+.modal:global(.ui.modal > .actions) {
+  margin: 40px 64px 64px 64px;
 }
 
 .modal :global(.dcl.modal-navigation-title) {
