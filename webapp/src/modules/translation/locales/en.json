@@ -649,6 +649,8 @@
       "half_year": "180 days",
       "one_year": "365 days"
     },
-    "put_for_rent": "Put for rent"
+    "put_for_rent": "Put for rent",
+    "invalid_date": "Invalid date",
+    "invalid_price": "Invalid price"
   }
 }

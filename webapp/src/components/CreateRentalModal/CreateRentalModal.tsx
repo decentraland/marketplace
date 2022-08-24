@@ -128,6 +128,11 @@ const CreateRentalModal = (props: Props) => {
               focus={true}
               error={pricePerDayInput !== '' && isInvalidPrice}
               onChange={handlePriceChange}
+              message={
+                pricePerDayInput !== '' && isInvalidPrice
+                  ? t('create_rental_modal.invalid_price')
+                  : undefined
+              }
             />
             <Field
               label={t('create_rental_modal.expiration_date')}

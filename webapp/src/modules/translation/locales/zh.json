@@ -646,6 +646,8 @@
       "half_year": "180 天",
       "one_year": "365 天"
     },
-    "put_for_rent": "出租"
+    "put_for_rent": "出租",
+    "invalid_date": "无效日期",
+    "invalid_price": "无效价格"
   }
 }
