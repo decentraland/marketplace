@@ -1,3 +1,4 @@
+import { ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
 import { Provider } from 'decentraland-connect'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
@@ -31,7 +32,7 @@ describe('when getting a rental contract instance', () => {
     it('should return an instance', () => {
       expect(
         getRentalsContractInstance(ChainId.ETHEREUM_GOERLI)
-      ).resolves.toBeTruthy()
+      ).resolves.toBeInstanceOf(ethers.Contract)
     })
   })
 })
