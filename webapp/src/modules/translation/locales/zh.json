@@ -1,5 +1,6 @@
 {
   "global": {
+    "day": "天",
     "assets": "资产",
     "address": "地址",
     "balance": "结余",

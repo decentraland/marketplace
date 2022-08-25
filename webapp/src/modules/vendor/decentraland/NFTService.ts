@@ -1,4 +1,4 @@
-import { Order } from '@dcl/schemas'
+import { Order, RentalListing } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
@@ -11,7 +11,18 @@ import { getERC721ContractData } from './utils'
 
 export class NFTService
   implements NFTServiceInterface<VendorName.DECENTRALAND> {
-  async fetch(params: NFTsFetchParams, filters?: NFTsFetchFilters) {
+  async fetch(
+    params: NFTsFetchParams,
+    filters?: NFTsFetchFilters
+  ): Promise<
+    readonly [
+      NFT<VendorName.DECENTRALAND>[],
+      Account[],
+      Order[],
+      RentalListing[],
+      number
+    ]
+  > {
     const { data: results, total } = await nftAPI.fetch(params, filters)
 
     const accounts: Account[] = results.reduce((accumulator, nftResult) => {
@@ -34,7 +45,11 @@ export class NFTService
       .filter(nftResult => nftResult.order)
       .map(nftResult => nftResult.order as Order)
 
-    return [nfts, accounts, orders, total] as const
+    const rentals: RentalListing[] = results
+      .filter(nftResult => nftResult.rental)
+      .map(nftResult => nftResult.rental as RentalListing)
+
+    return [nfts, accounts, orders, rentals, total]
   }
 
   async count(countParams: NFTsCountParams, filters?: NFTsFetchFilters) {
@@ -45,10 +60,15 @@ export class NFTService
     return result.total
   }
 
-  async fetchOne(contractAddress: string, tokenId: string) {
+  async fetchOne(
+    contractAddress: string,
+    tokenId: string
+  ): Promise<
+    readonly [NFT<VendorName.DECENTRALAND>, Order | null, RentalListing | null]
+  > {
     const response = await nftAPI.fetchOne(contractAddress, tokenId)
     const nft: NFT = { ...response.nft, vendor: VendorName.DECENTRALAND }
-    return [nft, response.order || undefined] as const
+    return [nft, response.order, response.rental]
   }
 
   async transfer(wallet: Wallet | null, to: string, nft: NFT) {

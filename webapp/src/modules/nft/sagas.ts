@@ -45,6 +45,7 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       nfts,
       accounts,
       orders,
+      rentals,
       count
     ]: AwaitFn<typeof vendor.nftService.fetch> = yield call(
       [vendor.nftService, 'fetch'],
@@ -58,12 +59,13 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
         nfts as NFT[],
         accounts,
         orders,
+        rentals,
         count,
         timestamp
       )
     )
   } catch (error) {
-    yield put(fetchNFTsFailure(options, error.message, timestamp))
+    yield put(fetchNFTsFailure(options, (error as Error).message, timestamp))
   }
 }
 
@@ -85,15 +87,21 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
       contract.vendor
     )
 
-    const [nft, order]: AwaitFn<typeof vendor.nftService.fetchOne> = yield call(
+    const [
+      nft,
+      order,
+      rental
+    ]: AwaitFn<typeof vendor.nftService.fetchOne> = yield call(
       [vendor.nftService, 'fetchOne'],
       contractAddress,
       tokenId
     )
 
-    yield put(fetchNFTSuccess(nft as NFT, order))
+    yield put(fetchNFTSuccess(nft as NFT, order, rental))
   } catch (error) {
-    yield put(fetchNFTFailure(contractAddress, tokenId, error.message))
+    yield put(
+      fetchNFTFailure(contractAddress, tokenId, (error as Error).message)
+    )
   }
 }
 

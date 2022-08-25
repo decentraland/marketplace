@@ -2,7 +2,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { throwError } from 'redux-saga-test-plan/providers'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { NFTCategory, Order } from '@dcl/schemas'
+import { NFTCategory, Order, RentalListing } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { VendorFactory, VendorName } from '../vendor'
 import { getWallet } from '../wallet/selectors'
@@ -24,7 +24,7 @@ import { View } from '../ui/types'
 import { Account } from '../account/types'
 import { getContract } from '../contract/utils'
 
-describe('when handling the fetch NFTs requets action', () => {
+describe('when handling the fetch NFTs request action', () => {
   let dateSpy: jest.SpyInstance<number, []>
   const timestamp = 123456789
 
@@ -94,26 +94,31 @@ describe('when handling the fetch NFTs requets action', () => {
       const nfts = [{ id: 'anID' }] as NFT[]
       const accounts = [{ address: 'someAddress' }] as Account[]
       const orders = [{ id: 'anotherID' }] as Order[]
+      const rentals = [{ id: 'aRentalId' }] as RentalListing[]
       const count = 1
 
       return expectSaga(nftSaga)
         .provide([
           [call(VendorFactory.build, options.vendor), vendor],
           [
-            call(vendor.nftService.fetch, options.params, options.filters),
-            [nfts, accounts, orders, count]
-          ],
-          [
             call(
               [vendor.nftService, 'fetch'],
               { ...DEFAULT_BASE_NFT_PARAMS, ...options.params },
               options.filters
             ),
-            [nfts, accounts, orders, count]
+            [nfts, accounts, orders, rentals, count]
           ]
         ])
         .put(
-          fetchNFTsSuccess(options, nfts, accounts, orders, count, timestamp)
+          fetchNFTsSuccess(
+            options,
+            nfts,
+            accounts,
+            orders,
+            rentals,
+            count,
+            timestamp
+          )
         )
         .dispatch(fetchNFTsRequest(options))
         .run({ silenceTimeout: true })
@@ -220,6 +225,7 @@ describe('when handling the fetch NFT request action', () => {
       const vendor = VendorFactory.build(VendorName.DECENTRALAND)
       const nft = { category: NFTCategory.WEARABLE } as NFT
       const order = { id: 'anId' } as Order
+      const rental = { id: 'aRentalId' } as RentalListing
 
       return expectSaga(nftSaga)
         .provide([
@@ -227,10 +233,10 @@ describe('when handling the fetch NFT request action', () => {
           [call(VendorFactory.build, contract.vendor), vendor],
           [
             call([vendor.nftService, 'fetchOne'], contractAddress, tokenId),
-            Promise.resolve([nft, order])
+            Promise.resolve([nft, order, rental])
           ]
         ])
-        .put(fetchNFTSuccess(nft, order))
+        .put(fetchNFTSuccess(nft, order, rental))
         .dispatch(fetchNFTRequest(contractAddress, tokenId))
         .run({ silenceTimeout: true })
     })

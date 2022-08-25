@@ -34,6 +34,7 @@ export const createRootReducer = (history: History) =>
     item,
     nft,
     order,
+    rental,
     profile,
     proximity,
     routing,
@@ -50,8 +51,7 @@ export const createRootReducer = (history: History) =>
     sale,
     identity,
     analytics,
-    features,
-    rental
+    features
   })
 
 export type RootState = ReturnType<ReturnType<typeof createRootReducer>>

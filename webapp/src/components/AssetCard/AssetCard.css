@@ -65,6 +65,22 @@ a.ui.card.link:hover .meta {
   right: 16px;
 }
 
+.AssetCard .sub-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: var(--text)
+}
+
+.AssetCard .card-meta {
+  margin-right: 10px;
+}
+
+.AssetCard .card-rental-day {
+  color: var(--text);
+  font-size: 17px;
+}
+
 @media (min-width: 768px) and (max-width: 992px) {
   .AssetCard .header {
     display: flex;

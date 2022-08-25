@@ -1,5 +1,5 @@
 import { BigNumber, ethers } from 'ethers'
-import { ChainId, PeriodCreation } from '@dcl/schemas'
+import { ChainId, PeriodCreation, RentalListing } from '@dcl/schemas'
 import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import {
@@ -7,6 +7,8 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { Asset } from '../asset/types'
+import { NFT } from '../nft/types'
 import { PeriodOption } from './types'
 import { getRentalsContractInstance } from './contract'
 
@@ -109,4 +111,18 @@ export async function getNonces(
     getSignerNonce(chainId, signerAddress),
     getAssetNonce(chainId, contractAddress, tokenId, signerAddress)
   ])
+}
+
+export function getOpenRentalId(asset: Asset | null): string | null {
+  return (asset as NFT).openRentalId ?? null
+}
+
+export function getMaxPriceOfPeriods(rental: RentalListing): string {
+  return rental.periods.reduce(
+    (maxPeriodPrice, period) =>
+      BigNumber.from(maxPeriodPrice).gte(period.pricePerDay)
+        ? maxPeriodPrice
+        : period.pricePerDay,
+    '0'
+  )
 }

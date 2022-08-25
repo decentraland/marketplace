@@ -1,5 +1,6 @@
-import { RentalListing } from '@dcl/schemas'
-import { NFT } from '../nft/types'
+import { RentalListing, RentalStatus } from '@dcl/schemas'
+import { fetchNFTsSuccess, fetchNFTSuccess } from '../nft/actions'
+import { NFT, NFTsFetchOptions } from '../nft/types'
 import {
   createRentalFailure,
   createRentalRequest,
@@ -10,6 +11,7 @@ import { PeriodOption } from './types'
 
 let nft: NFT
 let rental: RentalListing
+let rentalState: RentalState
 
 beforeEach(() => {
   nft = {
@@ -18,6 +20,11 @@ beforeEach(() => {
   rental = {
     id: 'someRental'
   } as RentalListing
+  rentalState = {
+    data: {},
+    loading: [],
+    error: null
+  }
 })
 
 describe('when reducing a CREATE_RENTAL_REQUEST action', () => {
@@ -105,5 +112,96 @@ describe('when reducing a CREATE_RENTAL_FAILURE action', () => {
       )
     )
     expect(newState.error).toBe('Some error')
+  })
+})
+
+describe('when reducing the success action of fetching NFTs', () => {
+  let oldRentalId: string
+  let rentalListingsFromNFTServer: RentalListing[]
+
+  beforeEach(() => {
+    oldRentalId = 'aRentalId'
+    rentalState = {
+      ...rentalState,
+      data: {
+        ...rentalState.data,
+        [oldRentalId]: {
+          id: oldRentalId,
+          status: RentalStatus.OPEN
+        } as RentalListing
+      }
+    }
+    rentalListingsFromNFTServer = [
+      {
+        id: 'aNewRentalId'
+      } as RentalListing,
+      { id: oldRentalId, status: RentalStatus.EXECUTED } as RentalListing
+    ]
+  })
+
+  it('should add the new rental listings to the stored rentals and overwrite rentals that that the same id', () => {
+    expect(
+      rentalReducer(
+        rentalState,
+        fetchNFTsSuccess(
+          {} as NFTsFetchOptions,
+          [],
+          [],
+          [],
+          rentalListingsFromNFTServer,
+          2,
+          Date.now()
+        )
+      )
+    ).toEqual({
+      ...rentalState,
+      data: {
+        ...rentalState.data,
+        aNewRentalId: rentalListingsFromNFTServer[0],
+        [oldRentalId]: rentalListingsFromNFTServer[1]
+      }
+    })
+  })
+})
+
+describe('when reducing the success action of fetching a NFT', () => {
+  let rentalListing: RentalListing | null
+
+  describe('and the NFT has a rental', () => {
+    beforeEach(() => {
+      rentalListing = {
+        id: 'aNewRentalListing'
+      } as RentalListing
+    })
+
+    it('should store the rental', () => {
+      expect(
+        rentalReducer(
+          rentalState,
+          fetchNFTSuccess({} as NFT, null, rentalListing)
+        )
+      ).toEqual({
+        ...rentalState,
+        data: {
+          ...rentalState.data,
+          [rentalListing!.id]: rentalListing
+        }
+      })
+    })
+  })
+
+  describe("and the NFT doesn't have a rental", () => {
+    beforeEach(() => {
+      rentalListing = null
+    })
+
+    it('should return the state unchanged', () => {
+      expect(
+        rentalReducer(
+          rentalState,
+          fetchNFTSuccess({} as NFT, null, rentalListing)
+        )
+      ).toBe(rentalState)
+    })
   })
 })
