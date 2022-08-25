@@ -1,4 +1,5 @@
 export enum FeatureName {
   MAINTENANCE = 'maintenance',
-  RANKINGS = 'rankings_variant'
+  RANKINGS = 'rankings_variant',
+  RENTALS = 'rentals'
 }
