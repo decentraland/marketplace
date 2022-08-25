@@ -6,16 +6,18 @@ import {
   clearFilters,
   ClearFiltersAction
 } from '../../../../modules/routing/actions'
+import { Section } from '../../../../modules/vendor/routing/types'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { AssetType } from '../../../../modules/asset/types'
 
 export type Props = {
   assetType: AssetType
   count?: number
-  section: string
+  section: Section
   sortBy?: SortBy
   search: string
   onlyOnSale?: boolean
+  onlyOnRent?: boolean
   onlySmart?: boolean
   isMap?: boolean
   rarities: Rarity[]
@@ -36,6 +38,7 @@ export type MapStateProps = Pick<
   | 'sortBy'
   | 'search'
   | 'onlyOnSale'
+  | 'onlyOnRent'
   | 'onlySmart'
   | 'isMap'
   | 'rarities'

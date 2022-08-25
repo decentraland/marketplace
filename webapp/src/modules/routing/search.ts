@@ -246,6 +246,26 @@ export function getAssetOrderBy(sortBy: SortBy) {
       orderDirection = SortDirection.ASC
       break
     }
+    case SortBy.MAX_RENTAL_PRICE: {
+      orderBy = NFTSortBy.MAX_RENTAL_PRICE
+      orderDirection = SortDirection.ASC
+      break
+    }
+    case SortBy.MIN_RENTAL_PRICE: {
+      orderBy = NFTSortBy.MIN_RENTAL_PRICE
+      orderDirection = SortDirection.DESC
+      break
+    }
+    case SortBy.RENTAL_DATE: {
+      orderBy = NFTSortBy.RENTAL_DATE
+      orderDirection = SortDirection.DESC
+      break
+    }
+    case SortBy.RENTAL_LISTING_DATE: {
+      orderBy = NFTSortBy.RENTAL_LISTING_DATE
+      orderDirection = SortDirection.DESC
+      break
+    }
   }
 
   return [orderBy, orderDirection] as const

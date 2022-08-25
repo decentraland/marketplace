@@ -73,7 +73,12 @@ import {
 import { BrowseOptions, Sections, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
 import { fetchCollectionsRequest } from '../collection/actions'
-import { COLLECTIONS_PER_PAGE, SALES_PER_PAGE } from './utils'
+import {
+  COLLECTIONS_PER_PAGE,
+  rentalFilters,
+  SALES_PER_PAGE,
+  sellFilters
+} from './utils'
 import {
   FetchSalesFailureAction,
   fetchSalesRequest,
@@ -141,9 +146,6 @@ export function* handleBrowse(action: BrowseAction) {
     getNewBrowseOptions,
     action.payload.options
   )
-
-  console.log('Options', action.payload.options)
-  console.log('New options', options)
 
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
@@ -408,10 +410,24 @@ function* deriveCurrentOptions(
   previous: BrowseOptions,
   current: BrowseOptions
 ) {
-  let newOptions = {
+  let newOptions: BrowseOptions = {
     ...current,
+    onlyOnRent: current.hasOwnProperty('onlyOnRent')
+      ? current.onlyOnRent
+      : previous.onlyOnRent,
     assetType: current.assetType || previous.assetType,
     section: current.section || previous.section
+  }
+
+  if (
+    (newOptions.onlyOnRent &&
+      previous.sortBy &&
+      !rentalFilters.includes(previous.sortBy!)) ||
+    (!newOptions.onlyOnRent &&
+      previous.sortBy &&
+      !sellFilters.includes(previous.sortBy!))
+  ) {
+    newOptions.sortBy = undefined
   }
 
   const nextCategory = getCategoryFromSection(newOptions.section!)
@@ -450,7 +466,6 @@ function* deriveCurrentOptions(
       newOptions = { ...newOptions, assetType: AssetType.NFT }
     }
   }
-
   return newOptions
 }
 

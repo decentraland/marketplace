@@ -16,8 +16,6 @@ import NFTLandFilters from './NFTLandFilters'
 const mapState = (state: RootState): MapStateProps => {
   const onlyOnSale = getOnlyOnSale(state)
   const onlyOnRent = getOnlyOnRent(state)
-  console.log('Only on sale', onlyOnSale)
-  console.log('Only on rent', onlyOnRent)
 
   let selectedFilter: LandFilter
 
@@ -28,7 +26,6 @@ const mapState = (state: RootState): MapStateProps => {
   } else {
     selectedFilter = LandFilter.ALL
   }
-  console.log('Final value', selectedFilter)
 
   return {
     selectedFilter

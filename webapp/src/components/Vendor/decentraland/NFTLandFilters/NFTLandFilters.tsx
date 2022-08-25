@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Option, RadioBox } from '../../../AssetBrowse/RadioBox'
 import { LandFilter, Props } from './NFTLandFilters.types'
 import styles from './NFTLandFilters.module.css'
@@ -8,15 +9,15 @@ const NFTLandFilters = (props: Props) => {
 
   const options = [
     {
-      name: 'Only for sale',
+      name: t('nft_land_filters.only_for_sale'),
       value: LandFilter.SALE
     },
     {
-      name: 'Only for rent',
+      name: t('nft_land_filters.only_for_rent'),
       value: LandFilter.RENT
     },
     {
-      name: 'All land',
+      name: t('nft_land_filters.all_land'),
       value: LandFilter.ALL
     }
   ]
@@ -40,7 +41,7 @@ const NFTLandFilters = (props: Props) => {
 
   return (
     <RadioBox
-      header="STATUS"
+      header={t('filters.status')}
       className={styles.NFTLandFilters}
       value={selectedFilter}
       items={options}

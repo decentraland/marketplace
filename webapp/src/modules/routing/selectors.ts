@@ -99,23 +99,16 @@ export const getOnlyOnSale = createSelector<
   boolean | undefined
 >(getRouterSearch, getView, getSection, (search, view, section) => {
   const onlyOnSale = getURLParam(search, 'onlyOnSale')
-  // let result: boolean
   switch (onlyOnSale) {
     case 'true':
       return true
-    // break
     case 'false':
       return false
-    // break
     default:
       return isLandSection(section)
         ? undefined
         : getDefaultOptionsByView(view).onlyOnSale!
-    // result = defaultOptions.onlyOnSale!
-    // console.log('Getting the default value')
-    // break
   }
-  // return result
 })
 
 export const getOnlyOnRent = createSelector<
@@ -344,6 +337,8 @@ export const getCurrentBrowseOptions = createSelector(
   getAssetsUrlParams,
   getLandsUrlParams,
   getWearablesUrlParams,
+  getOnlyOnRent,
+  getOnlyOnSale,
   (
     assetType,
     address,
@@ -353,7 +348,9 @@ export const getCurrentBrowseOptions = createSelector(
     paginationUrlParams,
     AssetsUrlParams,
     landsUrlParams,
-    wearablesUrlParams
+    wearablesUrlParams,
+    onlyOnRent,
+    onlyOnSale
   ) =>
     ({
       assetType,
@@ -364,6 +361,8 @@ export const getCurrentBrowseOptions = createSelector(
       ...AssetsUrlParams,
       ...paginationUrlParams,
       ...landsUrlParams,
-      ...wearablesUrlParams
+      ...wearablesUrlParams,
+      onlyOnRent,
+      onlyOnSale
     } as BrowseOptions)
 )

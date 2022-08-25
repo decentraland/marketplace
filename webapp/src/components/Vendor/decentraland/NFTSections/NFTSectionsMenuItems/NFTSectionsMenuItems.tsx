@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { isLandSection } from '../../../../../modules/ui/utils'
 import { Section } from '../../../../../modules/vendor/decentraland/routing/types'
 import { DropdownMenu } from '../../../../Menu/DropdownMenu'
 import { MenuItem } from '../../../../Menu/MenuItem'
@@ -28,7 +29,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
             currentValue={section}
             onClick={onSectionClick}
           />
-          {[Section.LAND, Section.PARCELS, Section.ESTATES].includes(section!)
+          {isLandSection(section)
             ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
                 <MenuItem
                   key={menuSection}
