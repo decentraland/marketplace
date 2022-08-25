@@ -18,7 +18,7 @@ import { locations } from '../../modules/routing/locations'
 import { Sections } from '../../modules/routing/types'
 import './AssetPage.css'
 
-const AssetPage = ({ type, onBack }: Props) => {
+const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
   return (
     <>
       <Navbar isFullscreen />
@@ -98,7 +98,12 @@ const AssetPage = ({ type, onBack }: Props) => {
                       {
                         ens: nft => <ENSDetail nft={nft} />,
                         estate: nft => <EstateDetail nft={nft} />,
-                        parcel: nft => <ParcelDetail nft={nft} />,
+                        parcel: nft => (
+                          <ParcelDetail
+                            nft={nft}
+                            isRentalsEnabled={isRentalsEnabled}
+                          />
+                        ),
                         wearable: nft => <WearableDetail nft={nft} />,
                         emote: nft => <EmoteDetail nft={nft} />
                       },
