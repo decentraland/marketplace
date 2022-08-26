@@ -1,14 +1,9 @@
 import { Dispatch } from 'redux'
 import { browse, BrowseAction } from '../../../../modules/routing/actions'
-
-export enum LandFilter {
-  SALE = 'sale',
-  RENT = 'rent',
-  ALL = 'all'
-}
+import { LANDFilters } from '../types'
 
 export type Props = {
-  selectedFilter?: LandFilter
+  selectedFilter?: LANDFilters
   onLandFilterChange: typeof browse
 }
 

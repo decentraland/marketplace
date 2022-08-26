@@ -1,18 +1,18 @@
 import { browse as browseAction } from '../../../modules/routing/actions'
-import { LANDStatus } from './types'
+import { LANDFilters } from './types'
 
 export function browseRentedLAND(
   browse: typeof browseAction,
-  filter: LANDStatus
+  filter: LANDFilters
 ): void {
   switch (filter) {
-    case LANDStatus.ALL_LAND:
+    case LANDFilters.ALL_LAND:
       browse({ onlyOnSale: undefined, onlyOnRent: undefined })
       break
-    case LANDStatus.ONLY_FOR_RENT:
+    case LANDFilters.ONLY_FOR_RENT:
       browse({ onlyOnSale: undefined, onlyOnRent: true })
       break
-    case LANDStatus.ONLY_FOR_SALE:
+    case LANDFilters.ONLY_FOR_SALE:
       browse({ onlyOnSale: true, onlyOnRent: undefined })
       break
   }

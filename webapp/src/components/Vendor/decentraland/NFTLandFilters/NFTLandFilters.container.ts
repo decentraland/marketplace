@@ -5,8 +5,8 @@ import {
   getOnlyOnSale,
   getOnlyOnRent
 } from '../../../../modules/routing/selectors'
+import { LANDFilters } from '../types'
 import {
-  LandFilter,
   MapDispatch,
   MapDispatchProps,
   MapStateProps
@@ -17,14 +17,14 @@ const mapState = (state: RootState): MapStateProps => {
   const onlyOnSale = getOnlyOnSale(state)
   const onlyOnRent = getOnlyOnRent(state)
 
-  let selectedFilter: LandFilter
+  let selectedFilter: LANDFilters
 
   if (onlyOnRent) {
-    selectedFilter = LandFilter.RENT
+    selectedFilter = LANDFilters.ONLY_FOR_RENT
   } else if (onlyOnSale) {
-    selectedFilter = LandFilter.SALE
+    selectedFilter = LANDFilters.ONLY_FOR_SALE
   } else {
-    selectedFilter = LandFilter.ALL
+    selectedFilter = LANDFilters.ALL_LAND
   }
 
   return {

@@ -25,7 +25,7 @@ import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { Props } from './NFTFilters.types'
 import { AssetType } from '../../../../modules/asset/types'
 import { isLandSection } from '../../../../modules/ui/utils'
-import { LANDStatus } from '../types'
+import { LANDFilters } from '../types'
 import { browseRentedLAND } from '../utils'
 
 const NFTFilters = (props: Props) => {
@@ -72,13 +72,13 @@ const NFTFilters = (props: Props) => {
   }
 
   const landStatusDropdown = [
-    { value: LANDStatus.ALL_LAND, text: t('nft_land_filters.all_land') },
+    { value: LANDFilters.ALL_LAND, text: t('nft_land_filters.all_land') },
     {
-      value: LANDStatus.ONLY_FOR_RENT,
+      value: LANDFilters.ONLY_FOR_RENT,
       text: t('nft_land_filters.only_for_rent')
     },
     {
-      value: LANDStatus.ONLY_FOR_SALE,
+      value: LANDFilters.ONLY_FOR_SALE,
       text: t('nft_land_filters.only_for_sale')
     }
   ]
@@ -109,13 +109,13 @@ const NFTFilters = (props: Props) => {
     ? props.sortBy
     : orderByDropdownOptions[0].value
 
-  let currentLANDStatus: LANDStatus
+  let currentLANDStatus: LANDFilters
   if (onlyOnRent && !onlyOnSale) {
-    currentLANDStatus = LANDStatus.ONLY_FOR_RENT
+    currentLANDStatus = LANDFilters.ONLY_FOR_RENT
   } else if (onlyOnSale && !onlyOnRent) {
-    currentLANDStatus = LANDStatus.ONLY_FOR_SALE
+    currentLANDStatus = LANDFilters.ONLY_FOR_SALE
   } else {
-    currentLANDStatus = LANDStatus.ALL_LAND
+    currentLANDStatus = LANDFilters.ALL_LAND
   }
 
   const appliedFilters = []
@@ -157,7 +157,7 @@ const NFTFilters = (props: Props) => {
 
   const handleStatusByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
-      browseRentedLAND(onBrowse, props.value as LANDStatus)
+      browseRentedLAND(onBrowse, props.value as LANDFilters)
     },
     [onBrowse]
   )

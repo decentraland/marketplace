@@ -1,4 +1,4 @@
-import { LANDStatus } from './types'
+import { LANDFilters } from './types'
 import { browseRentedLAND } from './utils'
 
 describe('when browsing LAND', () => {
@@ -10,7 +10,7 @@ describe('when browsing LAND', () => {
 
   describe('and it should show only the LAND for rent', () => {
     it('should browse the LAND for rent and not the LAND for sale', () => {
-      browseRentedLAND(browse, LANDStatus.ONLY_FOR_RENT)
+      browseRentedLAND(browse, LANDFilters.ONLY_FOR_RENT)
 
       expect(browse).toHaveBeenCalledWith({
         onlyOnSale: undefined,
@@ -21,7 +21,7 @@ describe('when browsing LAND', () => {
 
   describe('and it should show only the LAND available to buy', () => {
     it('should browse the LAND for rent and not the LAND for sale', () => {
-      browseRentedLAND(browse, LANDStatus.ONLY_FOR_SALE)
+      browseRentedLAND(browse, LANDFilters.ONLY_FOR_SALE)
 
       expect(browse).toHaveBeenCalledWith({
         onlyOnSale: true,
@@ -32,7 +32,7 @@ describe('when browsing LAND', () => {
 
   describe('and it should show all LANDs', () => {
     it('should browse the LAND for rent and not the LAND for sale', () => {
-      browseRentedLAND(browse, LANDStatus.ALL_LAND)
+      browseRentedLAND(browse, LANDFilters.ALL_LAND)
 
       expect(browse).toHaveBeenCalledWith({
         onlyOnSale: undefined,
