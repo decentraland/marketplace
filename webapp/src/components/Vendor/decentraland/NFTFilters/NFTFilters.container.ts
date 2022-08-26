@@ -8,6 +8,7 @@ import {
   hasFiltersEnabled
 } from '../../../../modules/routing/selectors'
 import { getCount } from '../../../../modules/ui/browse/selectors'
+import { getIsRentalsEnabled } from '../../../../modules/features/selectors'
 import {
   getSection,
   getSortBy,
@@ -44,8 +45,7 @@ const mapState = (state: RootState): MapStateProps => ({
   contracts: getContracts(state),
   network: getNetwork(state),
   hasFiltersEnabled: hasFiltersEnabled(state),
-  // TODO: Get if rentals is enabled
-  isRentalsEnabled: true
+  isRentalsEnabled: getIsRentalsEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

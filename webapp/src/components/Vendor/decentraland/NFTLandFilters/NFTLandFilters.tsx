@@ -1,6 +1,7 @@
 import { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Option, RadioBox } from '../../../AssetBrowse/RadioBox'
+import { browseRentedLAND } from '../utils'
 import { LandFilter, Props } from './NFTLandFilters.types'
 import styles from './NFTLandFilters.module.css'
 
@@ -23,19 +24,7 @@ const NFTLandFilters = (props: Props) => {
   ]
 
   const handleLandFilterChange = useCallback(
-    (option: Option) => {
-      switch (option.value) {
-        case LandFilter.SALE:
-          onLandFilterChange({ onlyOnSale: true, onlyOnRent: undefined })
-          break
-        case LandFilter.RENT:
-          onLandFilterChange({ onlyOnSale: undefined, onlyOnRent: true })
-          break
-        case LandFilter.ALL:
-          onLandFilterChange({ onlyOnSale: undefined, onlyOnRent: undefined })
-          break
-      }
-    },
+    (option: Option) => browseRentedLAND(onLandFilterChange, option.value),
     [onLandFilterChange]
   )
 
