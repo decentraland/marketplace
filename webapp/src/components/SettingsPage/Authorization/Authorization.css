@@ -58,8 +58,9 @@
   }
 }
 
+
 .Authorization .ui.radio.checkbox .box:before,
-.ui.radio.checkbox label:before {
+.Authorization .ui.radio.checkbox label:before {
   width: 26px !important;
   height: 26px !important;
 }
