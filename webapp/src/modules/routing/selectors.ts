@@ -22,6 +22,7 @@ import { locations } from './locations'
 import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
+import { isLandSection } from '../ui/utils'
 
 export const getState = (state: RootState) => state.routing
 
@@ -94,23 +95,36 @@ export const getOnlyOnSale = createSelector<
   RootState,
   string,
   View | undefined,
+  Section | undefined,
   boolean | undefined
->(getRouterSearch, getView, (search, view) => {
+>(getRouterSearch, getView, getSection, (search, view, section) => {
   const onlyOnSale = getURLParam(search, 'onlyOnSale')
-  let result: boolean
   switch (onlyOnSale) {
     case 'true':
-      result = true
-      break
+      return true
     case 'false':
-      result = false
-      break
+      return false
     default:
-      const defaultOptions = getDefaultOptionsByView(view)
-      result = defaultOptions.onlyOnSale!
-      break
+      return isLandSection(section)
+        ? undefined
+        : getDefaultOptionsByView(view).onlyOnSale!
   }
-  return result
+})
+
+export const getOnlyOnRent = createSelector<
+  RootState,
+  string,
+  boolean | undefined
+>(getRouterSearch, search => {
+  const onlyOnRent = getURLParam(search, 'onlyOnRent')
+  switch (onlyOnRent) {
+    case 'true':
+      return true
+    case 'false':
+      return false
+    default:
+      return undefined
+  }
 })
 
 export const getIsSoldOut = createSelector<
@@ -323,6 +337,8 @@ export const getCurrentBrowseOptions = createSelector(
   getAssetsUrlParams,
   getLandsUrlParams,
   getWearablesUrlParams,
+  getOnlyOnRent,
+  getOnlyOnSale,
   (
     assetType,
     address,
@@ -332,7 +348,9 @@ export const getCurrentBrowseOptions = createSelector(
     paginationUrlParams,
     AssetsUrlParams,
     landsUrlParams,
-    wearablesUrlParams
+    wearablesUrlParams,
+    onlyOnRent,
+    onlyOnSale
   ) =>
     ({
       assetType,
@@ -343,6 +361,8 @@ export const getCurrentBrowseOptions = createSelector(
       ...AssetsUrlParams,
       ...paginationUrlParams,
       ...landsUrlParams,
-      ...wearablesUrlParams
+      ...wearablesUrlParams,
+      onlyOnRent,
+      onlyOnSale
     } as BrowseOptions)
 )

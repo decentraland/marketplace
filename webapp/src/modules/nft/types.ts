@@ -9,7 +9,11 @@ export enum NFTSortBy {
   NAME = 'name',
   CREATED_AT = 'createdAt',
   ORDER_CREATED_AT = 'searchOrderCreatedAt',
-  PRICE = 'searchOrderPrice'
+  PRICE = 'searchOrderPrice',
+  RENTAL_LISTING_DATE = 'rental_listing_date',
+  RENTAL_DATE = 'rented_date',
+  MAX_RENTAL_PRICE = 'max_rental_price',
+  MIN_RENTAL_PRICE = 'min_rental_price'
 }
 
 export type Data<V extends VendorName> = V extends VendorName.DECENTRALAND
@@ -35,6 +39,7 @@ export type NFTsFetchParams = {
   category?: NFTCategory
   address?: string
   onlyOnSale?: boolean
+  onlyOnRent?: boolean
   search?: string
 }
 

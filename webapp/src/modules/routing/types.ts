@@ -13,7 +13,11 @@ export enum SortBy {
   CHEAPEST = 'cheapest',
   RECENTLY_REVIEWED = 'recently_reviewed',
   RECENTLY_SOLD = 'recently_sold',
-  SIZE = 'size'
+  SIZE = 'size',
+  RENTAL_LISTING_DATE = 'rental_listing_date',
+  RENTAL_DATE = 'rented_date',
+  MAX_RENTAL_PRICE = 'max_rental_price',
+  MIN_RENTAL_PRICE = 'min_rental_price'
 }
 
 export enum SortDirection {
@@ -29,6 +33,7 @@ export type BrowseOptions = {
   section?: string
   sortBy?: SortBy
   onlyOnSale?: boolean
+  onlyOnRent?: boolean
   onlySmart?: boolean
   isMap?: boolean
   isFullscreen?: boolean

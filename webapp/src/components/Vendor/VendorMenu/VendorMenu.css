@@ -40,6 +40,11 @@
   padding-bottom: 12px;
 }
 
+.NFTSections {
+  background-color: #242129;
+  border-radius: 10px;
+}
+
 .NFTSections .MenuItem {
   border-radius: 8px;
 }
