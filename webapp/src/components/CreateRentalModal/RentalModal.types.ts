@@ -13,8 +13,9 @@ import {
 export type Props = {
   open: boolean
   nft: NFT
-  isCreating: boolean
-  isGranting: boolean
+  isCreatingRentalLising: boolean
+  isAuthorizing: boolean
+  isConfirmingAuthorization: boolean
   address: string | undefined
   authorizations: Authorization[]
   onCancel: () => void
@@ -25,7 +26,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'isCreating' | 'address' | 'authorizations' | 'isGranting' | 'error'
+  'isCreatingRentalLising' | 'address' | 'authorizations' | 'isAuthorizing' | 'isConfirmingAuthorization' | 'error'
 >
 export type MapDispatchProps = Pick<Props, 'onCreate' | 'onGrant'>
 export type MapDispatch = Dispatch<

@@ -26,20 +26,19 @@ import {
   MapDispatchProps,
   MapDispatch,
   OwnProps
-} from './CreateRentalModal.types'
-import CreateRentalModal from './CreateRentalModal'
+} from './RentalModal.types'
+import RentalModal from './RentalModal'
 
 const mapState = (state: RootState, { nft }: OwnProps): MapStateProps => ({
   address: getAddress(state),
   authorizations: getAuthorizations(state),
-  isCreating: isLoadingType(getRentalLoading(state), CREATE_RENTAL_REQUEST),
-  isGranting:
-    isLoadingType(getAuthorizationLoading(state), GRANT_TOKEN_REQUEST) ||
-    hasTransactionPending(
+  isCreatingRentalLising: isLoadingType(getRentalLoading(state), CREATE_RENTAL_REQUEST),
+  isAuthorizing: hasTransactionPending(
       getPendingAuthorizationTransactions(state),
       getContract(ContractName.Rentals, nft.chainId).address,
       nft.contractAddress
     ),
+  isConfirmingAuthorization: isLoadingType(getAuthorizationLoading(state), GRANT_TOKEN_REQUEST),
   error: getError(state)
 })
 
@@ -49,4 +48,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onGrant: authorization => dispatch(grantTokenRequest(authorization))
 })
 
-export default connect(mapState, mapDispatch)(CreateRentalModal)
+export default connect(mapState, mapDispatch)(RentalModal)

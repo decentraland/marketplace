@@ -1,0 +1,32 @@
+.modal:global(.ui.modal.tiny) {
+  width: 520px;
+}
+
+.modal:global(.ui.modal > .content) {
+  margin-left: 64px;
+  margin-right: 64px;
+  margin-top: 32px;
+}
+
+.modal:global(.ui.modal > .actions) {
+  margin: 40px 64px 64px 64px;
+}
+
+.modal :global(.dcl.modal-navigation-title) {
+  margin-top: 16px;
+}
+
+.modal :global(.dcl.field) {
+  min-width: 100%;
+}
+
+.notice {
+  padding: 24px;
+  background-color: var(--secondary-on-modal);
+  border-radius: 6px;
+}
+
+.error {
+  color: var(--danger);
+  text-align: center;
+}
