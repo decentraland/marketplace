@@ -46,9 +46,9 @@ const RentalModal = (props: Props) => {
   // validation
   const isInvalidPrice = parseMANANumber(pricePerDayInput) <= 0
   const isInvalidExpirationDate = new Date(expiresAt).getTime() < Date.now()
-
   const isInvalid =
     isInvalidPrice || isInvalidExpirationDate || periodOptions.length === 0
+  const showInvalidPriceError = pricePerDayInput !== '' && isInvalidPrice
 
   const handlePriceChange = useCallback(
     (_event: React.ChangeEvent<HTMLInputElement>, props: InputOnChangeData) => {
@@ -71,33 +71,23 @@ const RentalModal = (props: Props) => {
         onClose={onCancel}
       />
       <Modal.Content>
-        <ManaField
-          label={t('create_rental_modal.price')}
-          type="text"
-          placeholder={1000}
-          network={nft.network}
-          value={pricePerDayInput}
-          focus={true}
-          error={pricePerDayInput !== '' && isInvalidPrice}
-          onChange={handlePriceChange}
-          message={
-            pricePerDayInput !== '' && isInvalidPrice
-              ? t('create_rental_modal.invalid_price')
-              : undefined
-          }
-        />
-        <Field
-          label={t('create_rental_modal.expiration_date')}
-          type="date"
-          value={expiresAt}
-          onChange={handleExpirationDateChange}
-          error={isInvalidExpirationDate}
-          message={
-            isInvalidExpirationDate
-              ? t('create_rental_modal.invalid_date')
-              : undefined
-          }
-        />
+        <div className={styles.pricePerDay}>
+          <ManaField
+            label={t('create_rental_modal.price')}
+            type="text"
+            placeholder={1000}
+            network={nft.network}
+            value={pricePerDayInput}
+            focus={true}
+            error={showInvalidPriceError}
+            onChange={handlePriceChange}
+            message={
+              showInvalidPriceError
+                ? t('create_rental_modal.invalid_price')
+                : t('create_rental_modal.dao_fee')
+            }
+          />
+        </div>
         <div>
           <Header sub>
             {t('create_rental_modal.periods')}
@@ -119,6 +109,20 @@ const RentalModal = (props: Props) => {
               />
             ))}
           </div>
+        </div>
+        <div className={styles.expirationDate}>
+          <Field
+            label={t('create_rental_modal.expiration_date')}
+            type="date"
+            value={expiresAt}
+            onChange={handleExpirationDateChange}
+            error={isInvalidExpirationDate}
+            message={
+              isInvalidExpirationDate
+                ? t('create_rental_modal.invalid_date')
+                : undefined
+            }
+          />
         </div>
       </Modal.Content>
       <Modal.Actions>

@@ -659,6 +659,7 @@
     "put_for_rent": "Poner en alquiler",
     "invalid_date": "Fecha inválida",
     "invalid_price": "Precio inválido",
-    "confirm": "Confirma la transacción en tu billetera"
+    "confirm": "Confirma la transacción en tu billetera",
+    "dao_fee": "2.5% del precio irá para la DAO"
   }
 }

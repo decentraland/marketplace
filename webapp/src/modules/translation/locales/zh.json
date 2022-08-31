@@ -661,6 +661,7 @@
     "put_for_rent": "出租",
     "invalid_date": "无效日期",
     "invalid_price": "无效价格",
-    "confirm": "在您的钱包上确认交易以继续"
+    "confirm": "在您的钱包上确认交易以继续",
+    "dao_fee": "2.5% 的价格将转到 DAO"
   }
 }

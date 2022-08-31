@@ -664,6 +664,7 @@
     "put_for_rent": "List for rent",
     "invalid_date": "Invalid date",
     "invalid_price": "Invalid price",
-    "confirm": "Confirm transaction on your wallet to continue"
+    "confirm": "Confirm transaction on your wallet to continue",
+    "dao_fee": "2.5% of the price will go to the DAO"
   }
 }
