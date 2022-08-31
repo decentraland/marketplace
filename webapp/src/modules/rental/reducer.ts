@@ -45,7 +45,8 @@ export function rentalReducer(
     case CREATE_RENTAL_REQUEST: {
       return {
         ...state,
-        loading: loadingReducer(state.loading, action)
+        loading: loadingReducer(state.loading, action),
+        error: null
       }
     }
     case CREATE_RENTAL_SUCCESS: {

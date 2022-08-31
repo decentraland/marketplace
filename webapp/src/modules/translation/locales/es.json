@@ -641,8 +641,12 @@
     "expiration_date": "Fecha de expiración del clasificado",
     "periods": "Período del alquiler",
     "periods_tooltip": "Selecciona la cantidad de días por las que estas dispuesto a alquilar tu tierra",
-    "notice_line_one": "Antes de publicar tu tierra en alquiler debes aprobar al contrato de {link} para que pueda operar con tus tierras, exactamente igual que cuando intentas venderla.",
-    "notice_line_two": "Cuando el periodo de alquiler se termina, tienes la opción de extenderlo o de reclamar tu tierra de vuelta, si decides reclamarla, deberás enviar una nueva transacción para esto.",
+    "notice_line_one": "Antes de listar tu {assetType} en alquiler necesitas autorizar al contrato de {link} a operar tu {assetType}, de la misma forma que cuando deseas vender tu {assetType}.",
+    "notice_line_two": "Cuando el período de alquiler termine tiene dos opciones :",
+    "notice_line_two_option_one_title": "Reclamar tu tierra para poder usarla",
+    "notice_line_two_option_one_text": "Necesitaras enviar una nueva transacción y pagar su costo",
+    "notice_line_two_option_two_title": "Listar tu tierra en alquiler de nuevo",
+    "notice_line_two_option_two_text": "Esto es gratis",
     "notice_link": "Alquiler",
     "period_options": {
       "one_week": "7 días",
@@ -654,6 +658,7 @@
     },
     "put_for_rent": "Poner en alquiler",
     "invalid_date": "Fecha inválida",
-    "invalid_price": "Precio inválido"
+    "invalid_price": "Precio inválido",
+    "confirm": "Confirma la transacción en tu billetera"
   }
 }

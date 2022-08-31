@@ -5,11 +5,11 @@
 .modal:global(.ui.modal > .content) {
   margin-left: 64px;
   margin-right: 64px;
-  margin-top: 32px;
+  margin-top: 20px;
 }
 
 .modal:global(.ui.modal > .actions) {
-  margin: 40px 64px 64px 64px;
+  margin: 40px 64px 35px 64px;
 }
 
 .modal :global(.dcl.modal-navigation-title) {
@@ -70,4 +70,6 @@
 .error {
   color: var(--danger);
   text-align: center;
+  margin-top: 20px;
+  font-size: 15px;
 }

@@ -1,5 +1,5 @@
-import React, { useCallback, useMemo } from 'react'
-import { Modal, Button, ModalNavigation } from 'decentraland-ui'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Modal, Button, ModalNavigation, Loader } from 'decentraland-ui'
 import {
   Authorization,
   AuthorizationType
@@ -11,6 +11,7 @@ import { Props } from './AuthorizationStep.types'
 import styles from './AuthorizationStep.module.css'
 
 const AuthorizationStep = (props: Props) => {
+  // Props
   const {
     open,
     onCancel,
@@ -22,8 +23,11 @@ const AuthorizationStep = (props: Props) => {
     error
   } = props
 
-  const rentalContractData = getContract(ContractName.Rentals, nft.chainId)
+  // State
+  const [showError, setShowError] = useState(false)
 
+  // Authorization
+  const rentalContractData = getContract(ContractName.Rentals, nft.chainId)
   const authorization: Authorization = useMemo(
     () => ({
       address: address!,
@@ -36,9 +40,26 @@ const AuthorizationStep = (props: Props) => {
     [address, rentalContractData, nft]
   )
 
+  // Handlers
   const handleSubmit = useCallback(() => {
     onAuthorize(authorization)
   }, [onAuthorize, authorization])
+
+  const handleCancel = useCallback(() => {
+    setShowError(false)
+    onCancel()
+  }, [setShowError, onCancel])
+
+  // Effects
+  useEffect(() => {
+    if (error && !isConfirmingAuthorization && !isAuthorizing) {
+      // show error only when it changes, and it's truthy, and it's not confirming
+      setShowError(true)
+    } else if (isConfirmingAuthorization) {
+      // clear error when it is confirming or is closed
+      setShowError(false)
+    }
+  }, [error, isConfirmingAuthorization, isAuthorizing])
 
   return (
     <Modal open={open} size="tiny" className={styles.modal}>
@@ -47,42 +68,68 @@ const AuthorizationStep = (props: Props) => {
         onClose={onCancel}
       />
       <Modal.Content>
-        {
-          <div className={styles.notice}>
-            <p>
-              <T
-                id="create_rental_modal.notice_line_one"
-                values={{
-                  link: (
-                    <TransactionLink
-                      address={rentalContractData.address}
-                      txHash=""
-                      chainId={rentalContractData.chainId}
-                    >
-                      {t('create_rental_modal.notice_link')}
-                    </TransactionLink>
-                  )
-                }}
-              ></T>
-            </p>
-            <p>
-              <T id="create_rental_modal.notice_line_two" />
-            </p>
-          </div>
-        }
+        <div className={styles.notice}>
+          <T
+            id="create_rental_modal.notice_line_one"
+            values={{
+              assetType: t(`global.${nft.category}`),
+              link: (
+                <TransactionLink
+                  address={rentalContractData.address}
+                  txHash=""
+                  chainId={rentalContractData.chainId}
+                >
+                  {t('create_rental_modal.notice_link')}
+                </TransactionLink>
+              )
+            }}
+          ></T>
+        </div>
+        <div className={styles.noticeBox}>
+          <p>
+            <T id="create_rental_modal.notice_line_two" />
+          </p>
+          <ul>
+            <li>
+              <b>{t('create_rental_modal.notice_line_two_option_one_title')}</b>
+              :&nbsp;{t('create_rental_modal.notice_line_two_option_one_text')}
+            </li>
+            <li>
+              <b>{t('create_rental_modal.notice_line_two_option_two_title')}</b>
+              :&nbsp;
+              {t('create_rental_modal.notice_line_two_option_two_text')}
+            </li>
+          </ul>
+        </div>
       </Modal.Content>
       <Modal.Actions>
+        {isConfirmingAuthorization ? (
+          <div className={styles.confirmTransaction}>
+            <Loader
+              active
+              size="small"
+              className={styles.confirmTransactionLoader}
+            />
+            <p>{t('create_rental_modal.confirm')}</p>
+          </div>
+        ) : (
+          <Button
+            primary
+            loading={isConfirmingAuthorization || isAuthorizing}
+            onClick={handleSubmit}
+            disabled={isConfirmingAuthorization || isAuthorizing}
+          >
+            {t('global.proceed')}
+          </Button>
+        )}
         <Button
-          primary
-          loading={isConfirmingAuthorization || isAuthorizing}
-          onClick={handleSubmit}
+          onClick={handleCancel}
           disabled={isConfirmingAuthorization || isAuthorizing}
         >
-          {t('global.proceed')}
+          {t('global.cancel')}
         </Button>
+        {showError && <p className={styles.error}>{error}</p>}
       </Modal.Actions>
-
-      {error && <Modal.Content className={styles.error}>{error}</Modal.Content>}
     </Modal>
   )
 }
