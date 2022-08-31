@@ -72,6 +72,7 @@
   top: -1px;
   width: 23px;
   height: 26px;
+  left: -1px;
 }
 
 .periodsTooltip:global(.ui.popup) {
