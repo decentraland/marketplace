@@ -15,11 +15,12 @@ import { PeriodOption } from '../../../modules/rental/types'
 import { ManaField } from '../../ManaField'
 import { parseMANANumber } from '../../../lib/mana'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
+import { daysByPeriod } from '../../../modules/rental/utils'
 import { Props } from './CreateListingStep.types'
 import styles from './CreateListingStep.module.css'
 
-const RentalModal = (props: Props) => {
-  const { open, onCancel, isCreatingRentalLising, nft, onCreate, error } = props
+const CreateListingStep = (props: Props) => {
+  const { open, onCancel, nft, onCreate } = props
 
   const [pricePerDayInput, setPricePerDayInput] = useState('')
   const [periodOptions, setPeriodOptions] = useState<PeriodOption[]>([])
@@ -37,7 +38,11 @@ const RentalModal = (props: Props) => {
   const createOptionHanlder = (periodOption: PeriodOption) => () => {
     const shouldAdd = !periodOptions.includes(periodOption)
     if (shouldAdd) {
-      setPeriodOptions([...periodOptions, periodOption])
+      setPeriodOptions(
+        [...periodOptions, periodOption].sort((a, b) =>
+          daysByPeriod[a] > daysByPeriod[b] ? 1 : -1
+        )
+      )
     } else {
       setPeriodOptions(periodOptions.filter(option => option !== periodOption))
     }
@@ -67,13 +72,13 @@ const RentalModal = (props: Props) => {
   return (
     <Modal open={open} size="tiny" className={styles.modal}>
       <ModalNavigation
-        title={t('create_rental_modal.title')}
+        title={t('rental_modal.create_listing_step.title')}
         onClose={onCancel}
       />
       <Modal.Content>
         <div className={styles.pricePerDay}>
           <ManaField
-            label={t('create_rental_modal.price')}
+            label={t('rental_modal.create_listing_step.price_per_day')}
             type="text"
             placeholder={1000}
             network={nft.network}
@@ -83,17 +88,17 @@ const RentalModal = (props: Props) => {
             onChange={handlePriceChange}
             message={
               showInvalidPriceError
-                ? t('create_rental_modal.invalid_price')
-                : t('create_rental_modal.dao_fee')
+                ? t('rental_modal.create_listing_step.invalid_price')
+                : t('rental_modal.create_listing_step.dao_fee')
             }
           />
         </div>
         <div>
           <Header sub>
-            {t('create_rental_modal.periods')}
+            {t('rental_modal.create_listing_step.periods')}
             <Popup
               className={styles.periodsTooltip}
-              content={t('create_rental_modal.periods_tooltip')}
+              content={t('rental_modal.create_listing_step.periods_tooltip')}
               trigger={<i className={styles.info} />}
               position="top center"
               on="hover"
@@ -103,7 +108,10 @@ const RentalModal = (props: Props) => {
           <div className={styles.periodOptions}>
             {Object.values(PeriodOption).map(option => (
               <Radio
-                label={t(`create_rental_modal.period_options.${option}`)}
+                key={option}
+                label={t(
+                  `rental_modal.create_listing_step.period_options.${option}`
+                )}
                 checked={periodOptions.includes(option)}
                 onClick={createOptionHanlder(option)}
               />
@@ -112,33 +120,28 @@ const RentalModal = (props: Props) => {
         </div>
         <div className={styles.expirationDate}>
           <Field
-            label={t('create_rental_modal.expiration_date')}
+            label={t(
+              'rental_modal.create_listing_step.listing_expiration_date'
+            )}
             type="date"
             value={expiresAt}
             onChange={handleExpirationDateChange}
             error={isInvalidExpirationDate}
             message={
               isInvalidExpirationDate
-                ? t('create_rental_modal.invalid_date')
+                ? t('rental_modal.create_listing_step.invalid_date')
                 : undefined
             }
           />
         </div>
       </Modal.Content>
       <Modal.Actions>
-        <Button
-          primary
-          loading={isCreatingRentalLising}
-          onClick={handleSubmit}
-          disabled={isInvalid || isCreatingRentalLising}
-        >
-          {t('create_rental_modal.put_for_rent')}
+        <Button primary onClick={handleSubmit} disabled={isInvalid}>
+          {t('rental_modal.create_listing_step.put_for_rent')}
         </Button>
       </Modal.Actions>
-
-      {error && <Modal.Content className={styles.error}>{error}</Modal.Content>}
     </Modal>
   )
 }
 
-export default React.memo(RentalModal)
+export default React.memo(CreateListingStep)

@@ -1,2 +1,2 @@
-import CreateListingStep from './CreateListingStep.container'
+import CreateListingStep from './CreateListingStep'
 export { CreateListingStep }

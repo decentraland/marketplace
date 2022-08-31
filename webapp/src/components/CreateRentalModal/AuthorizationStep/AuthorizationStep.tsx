@@ -64,13 +64,13 @@ const AuthorizationStep = (props: Props) => {
   return (
     <Modal open={open} size="tiny" className={styles.modal}>
       <ModalNavigation
-        title={t('create_rental_modal.title')}
+        title={t('rental_modal.authorization_step.title')}
         onClose={onCancel}
       />
       <Modal.Content>
         <div className={styles.notice}>
           <T
-            id="create_rental_modal.notice_line_one"
+            id="rental_modal.authorization_step.notice_line_one"
             values={{
               assetType: t(`global.${nft.category}`),
               link: (
@@ -79,7 +79,7 @@ const AuthorizationStep = (props: Props) => {
                   txHash=""
                   chainId={rentalContractData.chainId}
                 >
-                  {t('create_rental_modal.notice_link')}
+                  {t('rental_modal.authorization_step.notice_link')}
                 </TransactionLink>
               )
             }}
@@ -87,17 +87,30 @@ const AuthorizationStep = (props: Props) => {
         </div>
         <div className={styles.noticeBox}>
           <p>
-            <T id="create_rental_modal.notice_line_two" />
+            <T id="rental_modal.authorization_step.notice_line_two" />
           </p>
           <ul>
             <li>
-              <b>{t('create_rental_modal.notice_line_two_option_one_title')}</b>
-              :&nbsp;{t('create_rental_modal.notice_line_two_option_one_text')}
+              <b>
+                {t(
+                  'rental_modal.authorization_step.notice_line_two_option_one_title'
+                )}
+              </b>
+              :&nbsp;
+              {t(
+                'rental_modal.authorization_step.notice_line_two_option_one_text'
+              )}
             </li>
             <li>
-              <b>{t('create_rental_modal.notice_line_two_option_two_title')}</b>
+              <b>
+                {t(
+                  'rental_modal.authorization_step.notice_line_two_option_two_title'
+                )}
+              </b>
               :&nbsp;
-              {t('create_rental_modal.notice_line_two_option_two_text')}
+              {t(
+                'rental_modal.authorization_step.notice_line_two_option_two_text'
+              )}
             </li>
           </ul>
         </div>
@@ -110,7 +123,7 @@ const AuthorizationStep = (props: Props) => {
               size="small"
               className={styles.confirmTransactionLoader}
             />
-            <p>{t('create_rental_modal.confirm')}</p>
+            <p>{t('rental_modal.authorization_step.confirm')}</p>
           </div>
         ) : (
           <Button

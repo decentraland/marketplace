@@ -74,17 +74,10 @@
   height: 26px;
 }
 
-.periodsTooltip {
+.periodsTooltip:global(.ui.popup) {
   z-index: 4000;
 }
 
 .expirationDate {
   height: 64px;
-}
-
-.error {
-  color: var(--danger);
-  text-align: center;
-  margin-top: 20px;
-  font-size: 15px;
 }

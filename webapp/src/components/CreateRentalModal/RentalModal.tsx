@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { Button } from 'decentraland-ui'
 import {
   Authorization,
   AuthorizationType
@@ -13,13 +12,16 @@ import {
 } from '../../modules/rental/actions'
 import { AuthorizationStep } from './AuthorizationStep'
 import { CreateListingStep } from './CreateListingStep'
+import { ConfirmationStep } from './ConfirmationStep'
 
 const RentalModal = (props: Props) => {
   // Props
-  const { open, address, nft, authorizations, onCancel, onCreate } = props
+  const { open, address, nft, authorizations, onCancel } = props
 
   // State
-  const [listing, setListing] = useState<CreateRentalRequestAction['payload']>()
+  const [listing, setListing] = useState<
+    CreateRentalRequestAction['payload'] | null
+  >(null)
 
   // Handlers
   const handleSetListing = useCallback<
@@ -31,12 +33,11 @@ const RentalModal = (props: Props) => {
     [setListing]
   )
 
-  const handleConfirm = useCallback(() => {
+  const handleCancel = useCallback(() => {
     if (listing) {
-      const { nft, pricePerDay, periods, expiresAt } = listing
-      onCreate(nft, pricePerDay, periods, expiresAt)
+      setListing(null)
     }
-  }, [listing, onCreate])
+  }, [listing, setListing])
 
   // Authorization step
   const rentalContractData = getContract(ContractName.Rentals, nft.chainId)
@@ -70,7 +71,7 @@ const RentalModal = (props: Props) => {
   }
 
   // Confirmation step
-  return <Button onClick={handleConfirm}>DO IT</Button>
+  return <ConfirmationStep open={open} {...listing} onCancel={handleCancel} />
 }
 
 export default React.memo(RentalModal)
