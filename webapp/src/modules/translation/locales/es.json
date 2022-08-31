@@ -646,7 +646,8 @@
       "notice_line_two_option_one_text": "Necesitaras enviar una nueva transacción y pagar su costo",
       "notice_line_two_option_two_title": "Listar tu tierra en alquiler de nuevo",
       "notice_line_two_option_two_text": "Esto es gratis",
-      "notice_link": "Alquiler"
+      "notice_link": "Alquiler",
+      "confirm": "Confirma la transacción en tu billetera"
     },
     "create_listing_step": {
       "title": "Poner en alquiler",
@@ -665,7 +666,6 @@
       "put_for_rent": "Poner en alquiler",
       "invalid_date": "Fecha inválida",
       "invalid_price": "Precio inválido",
-      "confirm": "Confirma la transacción en tu billetera",
       "dao_fee": "2.5% del precio irá para la DAO"
     },
     "confirmation_step": {

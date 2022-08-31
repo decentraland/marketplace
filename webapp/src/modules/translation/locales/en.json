@@ -651,7 +651,8 @@
       "notice_line_two_option_one_text": "You will need to send a new transaction and cover its cost",
       "notice_line_two_option_two_title": "Listing your land for rent again",
       "notice_line_two_option_two_text": "This is free of charge",
-      "notice_link": "Rentals"
+      "notice_link": "Rentals",
+      "confirm": "Confirm transaction on your wallet to continue"
     },
     "create_listing_step": {
       "title": "List for Rent",
@@ -670,7 +671,6 @@
       "put_for_rent": "List for rent",
       "invalid_date": "Invalid date",
       "invalid_price": "Invalid price",
-      "confirm": "Confirm transaction on your wallet to continue",
       "dao_fee": "2.5% of the price will go to the DAO"
     },
     "confirmation_step": {
