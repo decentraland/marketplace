@@ -48,7 +48,8 @@
     "emote": "Emote",
     "time_ago": "Hace {time}",
     "confirm": "Confirmar",
-    "days": "días"
+    "days": "días",
+    "error": "Error"
   },
   "address": {
     "invalid_address": "Dirección inválida",

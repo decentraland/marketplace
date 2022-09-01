@@ -80,10 +80,3 @@
   left: 12px;
   flex: 0 0 auto;
 }
-
-.error {
-  color: var(--danger);
-  text-align: center;
-  margin-top: 20px;
-  font-size: 15px;
-}

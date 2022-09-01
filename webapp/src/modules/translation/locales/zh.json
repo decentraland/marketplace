@@ -48,7 +48,8 @@
     "emote": "表情",
     "time_ago": "{time} 前",
     "confirm": "确认",
-    "days": "天"
+    "days": "天",
+    "error": "错误"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",

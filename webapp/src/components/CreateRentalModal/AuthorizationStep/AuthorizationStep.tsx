@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Modal, Button, ModalNavigation, Loader } from 'decentraland-ui'
+import {
+  Modal,
+  Button,
+  ModalNavigation,
+  Loader,
+  Message
+} from 'decentraland-ui'
 import {
   Authorization,
   AuthorizationType
@@ -83,7 +89,7 @@ const AuthorizationStep = (props: Props) => {
                 </TransactionLink>
               )
             }}
-          ></T>
+          />
         </div>
         <div className={styles.noticeBox}>
           <p>
@@ -141,7 +147,15 @@ const AuthorizationStep = (props: Props) => {
         >
           {t('global.cancel')}
         </Button>
-        {showError && <p className={styles.error}>{error}</p>}
+        {showError && (
+          <Message
+            error
+            size="tiny"
+            visible
+            content={error}
+            header={t('global.error')}
+          />
+        )}
       </Modal.Actions>
     </Modal>
   )

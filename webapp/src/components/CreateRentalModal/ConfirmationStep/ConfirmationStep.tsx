@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Modal, Button, ModalNavigation } from 'decentraland-ui'
+import { Modal, Button, ModalNavigation, Message } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { daysByPeriod } from '../../../modules/rental/utils'
 import { Mana } from '../../Mana'
@@ -79,7 +79,17 @@ const ConfirmationStep = (props: Props) => {
           {t('global.back')}
         </Button>
       </Modal.Actions>
-      {error && <Modal.Content className={styles.error}>{error}</Modal.Content>}
+      {error && (
+        <Modal.Content>
+          <Message
+            error
+            size="tiny"
+            visible
+            content={error}
+            header={t('global.error')}
+          />
+        </Modal.Content>
+      )}
     </Modal>
   )
 }

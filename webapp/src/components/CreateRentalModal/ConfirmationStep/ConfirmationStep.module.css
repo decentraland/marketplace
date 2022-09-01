@@ -53,10 +53,3 @@
   font-size: 15px;
   line-height: 28px;
 }
-
-.error {
-  color: var(--danger);
-  text-align: center;
-  margin-top: 20px;
-  font-size: 15px;
-}

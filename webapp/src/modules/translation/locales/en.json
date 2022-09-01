@@ -48,7 +48,8 @@
     "emote": "Emote",
     "time_ago": "{time} ago",
     "confirm": "Confirm",
-    "days": "days"
+    "days": "days",
+    "error": "Error"
   },
   "address": {
     "invalid_address": "That's not a valid address",
