@@ -3,12 +3,7 @@ import { AssetType } from '../asset/types'
 import { WearableGender } from '../nft/wearable/types'
 import { VendorName } from '../vendor'
 import { locations } from './locations'
-import {
-  getAssetType,
-  getOnlyOnRent,
-  getSection,
-  hasFiltersEnabled
-} from './selectors'
+import { getAssetType, getSection, hasFiltersEnabled } from './selectors'
 import { Sections } from './types'
 
 describe('when getting if the are filters set', () => {
@@ -152,39 +147,5 @@ describe("when there's assetType URL param and the assetType is NFT", () => {
         VendorName.DECENTRALAND
       )
     ).toBe(AssetType.NFT)
-  })
-})
-
-describe('when getting if it should look for NFTs that are for rent', () => {
-  let url: string
-
-  describe('and the onlyOnRent query param is set to true', () => {
-    beforeEach(() => {
-      url = 'onlyOnRent=true'
-    })
-
-    it('should return true', () => {
-      expect(getOnlyOnRent.resultFunc(url)).toBe(true)
-    })
-  })
-
-  describe('and the onlyOnRent query param is set to false', () => {
-    beforeEach(() => {
-      url = 'onlyOnRent=false'
-    })
-
-    it('should return false', () => {
-      expect(getOnlyOnRent.resultFunc(url)).toBe(false)
-    })
-  })
-
-  describe('and the onlyOnRent query param is not defined', () => {
-    beforeEach(() => {
-      url = ''
-    })
-
-    it('should return undefined', () => {
-      expect(getOnlyOnRent.resultFunc(url)).toBe(undefined)
-    })
   })
 })

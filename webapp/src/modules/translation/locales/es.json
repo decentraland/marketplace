@@ -116,13 +116,11 @@
   },
   "filters": {
     "type": "Tipo",
-    "status": "Estado",
     "item": "Creaciones originales",
     "nft": "Artículos de reventa",
     "name": "Nombre",
     "newest": "Más nuevos",
     "recently_listed": "Listados recientemente",
-    "recently_listed_for_rent": "Listados recientemente para rentar",
     "recently_sold": "Vendidos recientemente",
     "cheapest": "Más baratos",
     "no_results": "No se encontraron resultados.",
@@ -293,11 +291,6 @@
     "network": "Red",
     "all_networks": "Todas las redes",
     "smart_wearables": "Vestimentas Interactivas"
-  },
-  "nft_land_filters": {
-    "all_land": "Todas las tierras",
-    "only_for_rent": "Disponible para rentar",
-    "only_for_sale": "Disponible para comprar"
   },
   "nft_card": {
     "expires_at": "Expira {date}"

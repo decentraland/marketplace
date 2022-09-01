@@ -118,13 +118,11 @@
   },
   "filters": {
     "type": "Type",
-    "status": "Status",
     "item": "Items available for minting",
     "nft": "Items being resold",
     "name": "Name",
     "newest": "Newest",
     "recently_listed": "Recently listed",
-    "recently_listed_for_rent": "Recently listed for rent",
     "recently_sold": "Recently sold",
     "cheapest": "Cheapest",
     "no_results": "No results were found.",
@@ -296,11 +294,6 @@
     "network": "Network",
     "all_networks": "All Networks",
     "smart_wearables": "Smart Wearables"
-  },
-  "nft_land_filters": {
-    "all_land": "All land",
-    "only_for_rent": "Available to rent",
-    "only_for_sale": "Available to buy"
   },
   "nft_card": {
     "expires_at": "Expires {date}"

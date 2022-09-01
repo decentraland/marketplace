@@ -6,18 +6,16 @@ import {
   clearFilters,
   ClearFiltersAction
 } from '../../../../modules/routing/actions'
-import { Section } from '../../../../modules/vendor/routing/types'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { AssetType } from '../../../../modules/asset/types'
 
 export type Props = {
   assetType: AssetType
   count?: number
-  section: Section
+  section: string
   sortBy?: SortBy
   search: string
   onlyOnSale?: boolean
-  onlyOnRent?: boolean
   onlySmart?: boolean
   isMap?: boolean
   rarities: Rarity[]
@@ -25,7 +23,6 @@ export type Props = {
   contracts: string[]
   network?: Network
   hasFiltersEnabled: boolean
-  isRentalsEnabled: boolean
   onBrowse: typeof browse
   onClearFilters: typeof clearFilters
 }
@@ -38,7 +35,6 @@ export type MapStateProps = Pick<
   | 'sortBy'
   | 'search'
   | 'onlyOnSale'
-  | 'onlyOnRent'
   | 'onlySmart'
   | 'isMap'
   | 'rarities'
@@ -46,7 +42,6 @@ export type MapStateProps = Pick<
   | 'contracts'
   | 'network'
   | 'hasFiltersEnabled'
-  | 'isRentalsEnabled'
 >
 export type MapDispatchProps = Pick<Props, 'onClearFilters'>
 export type MapDispatch = Dispatch<ClearFiltersAction>
