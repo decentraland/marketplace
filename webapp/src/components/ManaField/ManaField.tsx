@@ -1,9 +1,9 @@
 import React from 'react'
+import { ethers } from 'ethers'
 import { Field, Mana } from 'decentraland-ui'
 import { Props } from './ManaField.types'
 import './ManaField.css'
 import { ManaToFiat } from '../ManaToFiat'
-import { ethers } from 'ethers'
 
 export default class ManaField extends React.PureComponent<Props> {
   render() {
