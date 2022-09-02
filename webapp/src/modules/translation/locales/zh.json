@@ -46,7 +46,10 @@
     "mint": "薄荷",
     "back": "背部",
     "emote": "表情",
-    "time_ago": "{time} 前"
+    "time_ago": "{time} 前",
+    "confirm": "确认",
+    "days": "天",
+    "error": "错误"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -630,25 +633,43 @@
   "maintainance": {
     "notice": "我们目前正在维护中，我们会很快回来！"
   },
-  "create_rental_modal": {
-    "title": "出租",
-    "price": "每天的价格",
-    "expiration_date": "上市截止日期",
-    "periods": "租期",
-    "periods_tooltip": "选择您愿意租用土地的日期",
-    "notice_line_one": "在列出您的土地出租之前，您需要批准 {link} 合同，以便它可以运营您的土地，就像出售您的土地时一样。",
-    "notice_line_two": "租期结束后，您可以选择延长租期或认领土地，如果您选择认领，则需要执行新的交易。",
-    "notice_link": "租金",
-    "期间选项": {
-      "one_week": "7 天",
-      "one_month": "30 天",
-      "two_months": "60 天",
-      " Quarter_year": "90 天",
-      "half_year": "180 天",
-      "one_year": "365 天"
+  "rental_modal": {
+    "authorization_step": {
+      "title": "出租",
+      "notice_line_one": "在出租您的 {assetType} 之前，您需要批准 {link} 合同，以便它可以操作您的 {assetType}，就像出售您的 {assetType} 时一样。",
+      "notice_line_two": "租期结束后，您将有两种选择：",
+      "notice_line_two_option_one_title": "认领它，以便您可以使用它",
+      "notice_line_two_option_one_text": "您将需要发送新交易并支付其费用",
+      "notice_line_two_option_two_title": "再次挂牌出租您的土地",
+      "notice_line_two_option_two_text": "这是免费的",
+      "notice_link": "租金",
+      "confirm": "在您的钱包上确认交易以继续"
     },
-    "put_for_rent": "出租",
-    "invalid_date": "无效日期",
-    "invalid_price": "无效价格"
+    "create_listing_step": {
+      "title": "出租",
+      "price_per_day": "每天的价格",
+      "listing_expiration_date": "上市截止日期",
+      "periods": "租期",
+      "periods_tooltip": "选择您愿意租用土地的日期",
+      "期间选项": {
+        "one_week": "7 天",
+        "one_month": "30 天",
+        "two_months": "60 天",
+        " Quarter_year": "90 天",
+        "half_year": "180 天",
+        "one_year": "365 天"
+      },
+      "put_for_rent": "出租",
+      "invalid_date": "无效日期",
+      "invalid_price": "无效价格",
+      "dao_fee": "2.5% 的价格将转到 DAO"
+    },
+    "confirmation_step": {
+      "title": "确认上市",
+      "notice_line_one": "查看并确认您选择的价格和租期。",
+      "notice_line_two": "列表是免费的，但编辑或取消列表将需要发送交易，您需要支付其费用。",
+      "price_per_day": "每天的价格",
+      "listing_expiration_date": "上市截止日期"
+    }
   }
 }

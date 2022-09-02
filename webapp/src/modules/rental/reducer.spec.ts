@@ -4,6 +4,7 @@ import { NFT, NFTsFetchOptions } from '../nft/types'
 import {
   createRentalFailure,
   createRentalRequest,
+  CreateRentalRequestAction,
   createRentalSuccess
 } from './actions'
 import { rentalReducer, RentalState } from './reducer'
@@ -29,23 +30,28 @@ beforeEach(() => {
 
 describe('when reducing a CREATE_RENTAL_REQUEST action', () => {
   let state: RentalState
+  let action: CreateRentalRequestAction
   beforeEach(() => {
     state = {
       loading: [],
       data: {},
-      error: null
+      error: 'some error'
     }
-  })
-  it('should add a the action to the loading state', () => {
-    const action = createRentalRequest(
+    action = createRentalRequest(
       nft,
       100,
       [PeriodOption.ONE_WEEK],
       1976562675847
     )
+  })
+  it('should add a the action to the loading state', () => {
     const newState = rentalReducer(state, action)
     expect(newState.loading).toHaveLength(1)
     expect(newState.loading[0]).toEqual(action)
+  })
+  it('should clear the error', () => {
+    const newState = rentalReducer(state, action)
+    expect(newState.error).toBe(null)
   })
 })
 

@@ -46,7 +46,10 @@
     "mint": "Mint",
     "back": "Back",
     "emote": "Emote",
-    "time_ago": "{time} ago"
+    "time_ago": "{time} ago",
+    "confirm": "Confirm",
+    "days": "days",
+    "error": "Error"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -633,25 +636,43 @@
   "maintainance": {
     "notice": "We're currently under maintainance, we'll be back soon!"
   },
-  "create_rental_modal": {
-    "title": "Put for rent",
-    "price": "Price per day",
-    "expiration_date": "Listing expiration date",
-    "periods": "Rent period",
-    "periods_tooltip": "Select the days you are willing to rent your Land",
-    "notice_line_one": "Before listing your Land for rent you will need to approve the {link} contract so it can operate your Land, exactly like when selling your Land.",
-    "notice_line_two": "When the renting period ends you have the option to extend the renting period or claim your land, if you choose to claim it, you will need to execute a new transaction.",
-    "notice_link": "Rentals",
-    "period_options": {
-      "one_week": "7 days",
-      "one_month": "30 days",
-      "two_months": "60 days",
-      "quarter_year": "90 days",
-      "half_year": "180 days",
-      "one_year": "365 days"
+  "rental_modal": {
+    "authorization_step": {
+      "title": "List for Rent",
+      "notice_line_one": "Before listing your {assetType} for rent you will need to approve the {link} contract so it can operate your {assetType}, exactly like when selling your {assetType}.",
+      "notice_line_two": "When the renting period is over you will have two options:",
+      "notice_line_two_option_one_title": "Claim your land back so you can use it",
+      "notice_line_two_option_one_text": "You will need to send a new transaction and cover its cost",
+      "notice_line_two_option_two_title": "Listing your land for rent again",
+      "notice_line_two_option_two_text": "This is free of charge",
+      "notice_link": "Rentals",
+      "confirm": "Confirm transaction on your wallet to continue"
     },
-    "put_for_rent": "Put for rent",
-    "invalid_date": "Invalid date",
-    "invalid_price": "Invalid price"
+    "create_listing_step": {
+      "title": "List for Rent",
+      "price_per_day": "Price per day",
+      "listing_expiration_date": "Listing expiration date",
+      "periods": "Rent period",
+      "periods_tooltip": "Select the days you are willing to rent your Land",
+      "period_options": {
+        "one_week": "7 days",
+        "one_month": "30 days",
+        "two_months": "60 days",
+        "quarter_year": "90 days",
+        "half_year": "180 days",
+        "one_year": "365 days"
+      },
+      "put_for_rent": "List for rent",
+      "invalid_date": "Invalid date",
+      "invalid_price": "Invalid price",
+      "dao_fee": "2.5% of the price will go to the DAO"
+    },
+    "confirmation_step": {
+      "title": "Confirm Listing",
+      "notice_line_one": "Review and confirm the price and rent periods you selected.",
+      "notice_line_two": "Listing is free of charge, but editing or canceling a listing will require sending a transaction, and you will need to cover its cost.",
+      "price_per_day": "Price per day",
+      "listing_expiration_date": "Listing expiration date"
+    }
   }
 }

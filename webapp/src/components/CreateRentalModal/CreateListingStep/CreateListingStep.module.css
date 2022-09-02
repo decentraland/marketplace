@@ -5,11 +5,11 @@
 .modal:global(.ui.modal > .content) {
   margin-left: 64px;
   margin-right: 64px;
-  margin-top: 32px;
+  margin-top: 20px;
 }
 
 .modal:global(.ui.modal > .actions) {
-  margin: 40px 64px 64px 64px;
+  margin: 40px 64px 35px 64px;
 }
 
 .modal :global(.dcl.modal-navigation-title) {
@@ -20,17 +20,29 @@
   min-width: 100%;
 }
 
+.modal :global(.dcl.field .message) {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
 .modal :global(.ui.sub.header) {
   text-transform: none;
   display: flex;
   align-items: center;
   font-size: 15px;
 }
+
+.pricePerDay {
+  margin-bottom: 24px;
+}
+
 .periodOptions {
   margin-top: 14px;
   display: grid;
   grid-template-columns: 33% 33% 33%;
   grid-template-rows: 40px 20px;
+  margin-bottom: 32px;
 }
 
 .periodOptions :global(.ui.checkbox input.hidden + label),
@@ -42,7 +54,7 @@
 .info {
   width: 16px;
   height: 16px;
-  background-image: url(../../images/info.svg);
+  background-image: url(../../../images/info.svg);
   background-repeat: no-repeat;
   background-position: center;
   display: inline-block;
@@ -60,19 +72,13 @@
   top: -1px;
   width: 23px;
   height: 26px;
+  left: -1px;
 }
 
-.periodsTooltip {
+.periodsTooltip:global(.ui.popup) {
   z-index: 4000;
 }
 
-.notice {
-  padding: 24px;
-  background-color: var(--secondary-on-modal);
-  border-radius: 6px;
-}
-
-.error {
-  color: var(--danger);
-  text-align: center;
+.expirationDate {
+  height: 64px;
 }

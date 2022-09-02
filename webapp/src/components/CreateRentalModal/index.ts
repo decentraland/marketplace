@@ -1,2 +1,2 @@
-import CreateRentalModal from './CreateRentalModal.container'
-export { CreateRentalModal }
+import RentalModal from './RentalModal.container'
+export { RentalModal as CreateRentalModal }
