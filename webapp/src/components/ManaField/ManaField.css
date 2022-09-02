@@ -13,3 +13,11 @@
 .ManaField .dcl.mana {
   transform: translateY(-0.15em);
 }
+
+.ManaField .mana-to-fiat {
+  color: var(--secondary-text);
+  position: absolute;
+  right: 0px;
+  font-size: 15px;
+  bottom: 16px;
+}

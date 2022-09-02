@@ -1,0 +1,55 @@
+.modal:global(.ui.modal.tiny) {
+  width: 520px;
+}
+
+.modal:global(.ui.modal > .content) {
+  margin-left: 64px;
+  margin-right: 64px;
+  margin-top: 20px;
+}
+
+.modal:global(.ui.modal > .actions) {
+  margin: 24px 64px 35px 64px;
+  flex-direction: column;
+}
+
+.modal:global(.ui.modal > .actions > .ui.button) {
+  margin-left: 0px;
+}
+
+.modal:global(.ui.modal > .actions > .ui.button + .ui.button) {
+  margin-left: 0px;
+  margin-top: 8px;
+}
+
+.notice > p {
+  font-size: 15px;
+  color: var(--text);
+}
+
+.noticeBlock {
+  color: var(--text);
+  background-color: var(--secondary-on-modal);
+  padding: 16px;
+  border-radius: 6px;
+}
+
+.noticeRow {
+  margin-bottom: 12px;
+}
+
+.noticeRow:last-child {
+  margin-bottom: 0px;
+}
+
+.noticeLabel {
+  font-weight: 400;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.noticeText {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 28px;
+}

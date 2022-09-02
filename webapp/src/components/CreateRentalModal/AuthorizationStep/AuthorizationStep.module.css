@@ -1,0 +1,82 @@
+.modal:global(.ui.modal.tiny) {
+  width: 520px;
+}
+
+.modal:global(.ui.modal > .content) {
+  margin-left: 64px;
+  margin-right: 64px;
+  margin-top: 20px;
+}
+
+.modal:global(.ui.modal > .actions) {
+  margin: 24px 64px 35px 64px;
+  flex-direction: column;
+}
+
+.modal:global(.ui.modal > .actions > .ui.button) {
+  margin-left: 0px;
+}
+
+.modal:global(.ui.modal > .actions > .ui.button + .ui.button) {
+  margin-left: 0px;
+  margin-top: 8px;
+}
+
+.modal :global(.dcl.modal-navigation-title) {
+  margin-top: 16px;
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.modal :global(.dcl.modal-navigation-button.modal-navigation-close) {
+  width: 14px;
+  height: 14px;
+}
+
+.modal :global(.dcl.field) {
+  min-width: 100%;
+}
+
+.noticeBox {
+  padding: 16px;
+  background-color: var(--secondary-on-modal);
+  border-radius: 6px;
+  margin-top: 16px;
+}
+
+.notice,
+.noticeBox,
+.noticeBox p {
+  font-size: 15px;
+  line-height: 24px;
+  margin-bottom: 8px;
+}
+
+.noticeBox ul {
+  padding-left: 20px;
+  margin: 0px;
+}
+
+.confirmTransaction {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  margin-top: 8px;
+  margin-bottom: 20px;
+}
+
+.confirmTransaction p {
+  font-size: 13px;
+  flex: 0 0 auto;
+  text-align: left;
+  padding-left: 12px;
+}
+
+.confirmTransactionLoader:global(.ui.loader) {
+  position: relative;
+  top: 12px;
+  left: 12px;
+  flex: 0 0 auto;
+}

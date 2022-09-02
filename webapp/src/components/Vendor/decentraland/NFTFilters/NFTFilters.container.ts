@@ -3,10 +3,12 @@ import { connect } from 'react-redux'
 import { RootState } from '../../../../modules/reducer'
 import { clearFilters } from '../../../../modules/routing/actions'
 import {
+  getOnlyOnRent,
   getOnlySmart,
   hasFiltersEnabled
 } from '../../../../modules/routing/selectors'
 import { getCount } from '../../../../modules/ui/browse/selectors'
+import { getIsRentalsEnabled } from '../../../../modules/features/selectors'
 import {
   getSection,
   getSortBy,
@@ -35,13 +37,15 @@ const mapState = (state: RootState): MapStateProps => ({
   sortBy: getSortBy(state),
   search: getSearch(state),
   onlyOnSale: getOnlyOnSale(state),
+  onlyOnRent: getOnlyOnRent(state),
   onlySmart: getOnlySmart(state),
   isMap: getIsMap(state),
   rarities: getRarities(state),
   wearableGenders: getWearableGenders(state),
   contracts: getContracts(state),
   network: getNetwork(state),
-  hasFiltersEnabled: hasFiltersEnabled(state)
+  hasFiltersEnabled: hasFiltersEnabled(state),
+  isRentalsEnabled: getIsRentalsEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
