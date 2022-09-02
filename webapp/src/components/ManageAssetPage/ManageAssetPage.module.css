@@ -1,0 +1,78 @@
+.center {
+  position: relative;
+  top: 100px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 350px);
+}
+
+.builderButton:global(.ui.button) {
+  margin-top: 12px;
+  width: 100%;
+}
+
+.leftMenu {
+  width: 256px;
+  flex: 1 0 auto;
+}
+
+.details {
+  margin-top: 12px;
+}
+
+.assetDescription {
+  display: flex;
+  flex-direction: column;
+  background: #242129;
+  border-radius: 12px;
+  padding:24px
+}
+
+.assetDescriptionHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.assetDescriptionTitle {
+  font-weight: 600;
+  font-size: 34px;
+}
+
+.assetDescriptionContent {
+  font-weight: 400;
+  font-size: 17px;
+}
+
+.content {
+  margin-left: 24px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.transfer:global(.ui.button) {
+  border: 1px solid var(--gray);
+  padding: 7px 15px;
+  min-width: unset;
+  color: var(--primary);
+}
+
+.transfer:global(.ui.button):hover {
+  color: var(--primary)
+}
+
+
+.highlights {
+  margin-top: 12px;
+}

@@ -7,6 +7,7 @@ const AssetProvider = (props: Props) => {
     type,
     asset,
     order,
+    rental,
     isLoading,
     children,
     onFetchNFT,
@@ -30,7 +31,7 @@ const AssetProvider = (props: Props) => {
     }
   }, [contractAddress, tokenId, type, onFetchNFT, onFetchItem])
 
-  return <>{children(asset, order, isLoading)}</>
+  return <>{children(asset, order, rental, isLoading)}</>
 }
 
 export default React.memo(AssetProvider)

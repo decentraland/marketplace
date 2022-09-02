@@ -1,0 +1,17 @@
+.button:global(.ui.button) {
+  color: var(--primary);
+  border: 1px solid rgba(115, 110, 125, 0.4);
+  border-radius: 5px;
+  padding: 10px;
+  width: 36px;
+  min-width: unset;
+  height: 36px;
+}
+
+.button:global(.ui.button):hover {
+  color: var(--primary)
+}
+
+.icon {
+  margin: 0px !important;
+}

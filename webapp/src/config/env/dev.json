@@ -6,7 +6,7 @@
   "PEER_URL": "https://peer-ap1.decentraland.zone",
   "SIGNATURES_SERVER_URL": "https://signatures-server.decentraland.io/v1",
   "TRANSACTIONS_API_URL": "https://transactions-api.decentraland.io/v1",
-  "BUILDER_URL": "https://builder.decentraland.io",
+  "BUILDER_URL": "https://builder.decentraland.zone",
   "COINGECKO_API_URL": "https://api.coingecko.com/api/v3",
   "MARKETPLACE_ADAPTER_FEE_PER_MILLION": "25000",
   "MAX_PRICE_INCREASE_PERCENTAGE": "15",

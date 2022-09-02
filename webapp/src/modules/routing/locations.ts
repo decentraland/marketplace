@@ -37,6 +37,10 @@ export const locations = {
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'
   ) => `/contracts/${contractAddress}/tokens/${tokenId}`,
+  manage: (
+    contractAddress: string = ':contractAddress',
+    tokenId: string = ':tokenId'
+  ) => `/contracts/${contractAddress}/tokens/${tokenId}/manage`,
   item: (
     contractAddress: string = ':contractAddress',
     itemId: string = ':itemId'

@@ -222,7 +222,7 @@ const RankingItemRow = ({ entity }: Props) => {
       contractAddress={parseItemId(entity.id).contractAddress}
       tokenId={parseItemId(entity.id).tokenId}
     >
-      {(item, _order, isLoading) => {
+      {(item, _order, _rental, isLoading) => {
         if (!isLoading && !item) {
           return null
         }
