@@ -119,11 +119,13 @@
   },
   "filters": {
     "type": "物品类型",
+    "status": "土地状况",
     "item": "原创作品",
     "nft": "被转售的物品",
     "name": "名称",
     "newest": "最新",
     "recently_listed": "最新上市",
+    "recently_listed_for_rent": "最近挂牌出租",
     "recently_sold": "最近售出",
     "cheapest": "最低价",
     "no_results": "未找到结果。",
@@ -295,6 +297,11 @@
     "network": "网络",
     "all_networks": "所有网络",
     "smart_wearables": "智能穿戴"
+  },
+  "nft_land_filters": {
+    "all_land": "All land",
+    "only_for_rent": "Available to rent",
+    "only_for_sale": "Available to buy"
   },
   "nft_card": {
     "expires_at": "{date}到期"
