@@ -146,9 +146,8 @@ export function* handleBrowse(action: BrowseAction) {
     getNewBrowseOptions,
     action.payload.options
   )
-
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-  yield fetchAssetsFromRoute(options)
+  yield call(fetchAssetsFromRoute, options)
   yield put(push(buildBrowseURL(pathname, options)))
 }
 
@@ -414,6 +413,9 @@ function* deriveCurrentOptions(
     onlyOnRent: current.hasOwnProperty('onlyOnRent')
       ? current.onlyOnRent
       : previous.onlyOnRent,
+    onlyOnSale: current.hasOwnProperty('onlyOnSale')
+      ? current.onlyOnSale
+      : previous.onlyOnSale,
     assetType: current.assetType || previous.assetType,
     section: current.section || previous.section
   }
