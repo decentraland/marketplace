@@ -38,6 +38,19 @@
   visibility: visible;
 }
 
+.tab {
+  display: flex;
+  align-items: center;
+}
+
+.tab div {
+  margin-right: 12px;
+  filter: brightness(100);
+  height: 17px;
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 768px) {
   .columnRight {
     margin-top: 12px;
