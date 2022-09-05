@@ -56,3 +56,14 @@
   display: flex;
   align-items: center;
 }
+
+.listForSale:global(.ui.button) {
+  border: 1px solid var(--gray);
+  padding: 7px 15px;
+  min-width: unset;
+  color: var(--primary);
+}
+
+.listForSale:global(.ui.button):hover {
+  color: var(--primary)
+}

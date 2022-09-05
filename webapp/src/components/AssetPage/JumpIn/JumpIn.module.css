@@ -15,5 +15,8 @@
   height: 16px;
   background-repeat: no-repeat;
   display: inline-block;
+}
+
+.fullSize {
   margin-left: 6px;
 }

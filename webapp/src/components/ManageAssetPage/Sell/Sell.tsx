@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+import { Button } from 'decentraland-ui'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import intlFormat from 'date-fns/intlFormat'
@@ -11,6 +12,7 @@ import { Props } from './Sell.types'
 const Sell = (props: Props) => {
   const { className, order } = props
   const handleOnEdit = useCallback(() => undefined, [])
+  const handleListForSale = useCallback(() => undefined, [])
 
   return (
     <section className={classNames(styles.box, className)}>
@@ -24,7 +26,9 @@ const Sell = (props: Props) => {
           {order ? (
             <IconButton iconName="pencil" onClick={handleOnEdit} />
           ) : (
-            <span>{t('manage_asset_page.sell.list_for_sale')}</span>
+            <Button className={styles.listForSale} onClick={handleListForSale}>
+              {t('manage_asset_page.sell.list_for_sale')}
+            </Button>
           )}
         </div>
       </div>

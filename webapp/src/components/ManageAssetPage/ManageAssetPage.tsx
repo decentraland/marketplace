@@ -19,11 +19,11 @@ import { Navigation } from '../Navigation'
 import { Highlights } from './Highlights'
 import styles from './ManageAssetPage.module.css'
 import { Column } from '../Layout/Column'
-import { AssetImage } from '../AssetImage'
 import { Props } from './ManageAssetPage.types'
 import { Details } from './Details'
 import { Sell } from './Sell'
 import { Rent } from './Rent'
+import { Map } from './Map'
 
 const Loading = () => (
   <div className={styles.center}>
@@ -78,7 +78,7 @@ export const ManageAssetPage = (props: Props) => {
                         <Column className={styles.leftMenu}>
                           {asset && !isLoading ? (
                             <>
-                              <AssetImage asset={asset} />
+                              <Map asset={asset} />
                               <Button
                                 className={styles.builderButton}
                                 primary
@@ -119,7 +119,7 @@ export const ManageAssetPage = (props: Props) => {
                                 </p>
                               </section>
                               <Sell order={order} />
-                              <Rent rental={rental} />
+                              <Rent nft={asset} rental={rental} />
                             </>
                           ) : null}
                         </Column>

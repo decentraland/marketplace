@@ -1,15 +1,17 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
+import { RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button } from 'decentraland-ui'
 import classNames from 'classnames'
 import intlFormat from 'date-fns/intlFormat'
 import formatDistance from 'date-fns/formatDistance'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getMaxPriceOfPeriods } from '../../../modules/rental/utils'
+import { CreateRentalModal } from '../../CreateRentalModal'
 import { Mana } from '../../Mana'
 import { IconButton } from '../IconButton'
 import styles from './Rent.module.css'
 import { Props } from './Rent.types'
-import { RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 
 const sortPeriods = (a: RentalListingPeriod, b: RentalListingPeriod) => {
   if (a.minDays > b.minDays) {
@@ -22,11 +24,24 @@ const sortPeriods = (a: RentalListingPeriod, b: RentalListingPeriod) => {
 }
 
 export const Rent = (props: Props) => {
-  const { className, rental } = props
+  const { className, rental, nft } = props
+
   const handleOnEdit = useCallback(() => undefined, [])
+  const handleListForRent = useCallback(() => {
+    setIsCreateRentalModalOpen(true)
+  }, [])
+  const handleCreateRentalListingCancel = useCallback(() => {
+    setIsCreateRentalModalOpen(false)
+  }, [])
+  const [isCreateRentalModalOpen, setIsCreateRentalModalOpen] = useState(false)
 
   return (
     <section className={classNames(styles.box, className)}>
+      <CreateRentalModal
+        nft={nft}
+        open={isCreateRentalModalOpen}
+        onCancel={handleCreateRentalListingCancel}
+      />
       <div className={styles.header}>
         <h1 className={styles.title}>
           {rental
@@ -37,7 +52,9 @@ export const Rent = (props: Props) => {
           {rental ? (
             <IconButton iconName="pencil" onClick={handleOnEdit} />
           ) : (
-            <span>{t('manage_asset_page.rent.list_for_rent')}</span>
+            <Button className={styles.listForRent} onClick={handleListForRent}>
+              {t('manage_asset_page.rent.list_for_rent')}
+            </Button>
           )}
         </div>
       </div>

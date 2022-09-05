@@ -62,3 +62,14 @@
   color: #736E7D;
   font-size: 18px;
 }
+
+.listForRent:global(.ui.button) {
+  border: 1px solid var(--gray);
+  padding: 7px 15px;
+  min-width: unset;
+  color: var(--primary);
+}
+
+.listForRent:global(.ui.button):hover {
+  color: var(--primary)
+}

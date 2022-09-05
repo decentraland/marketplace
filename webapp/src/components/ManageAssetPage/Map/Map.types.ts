@@ -1,8 +1,6 @@
-import { RentalListing } from '@dcl/schemas'
 import { NFT } from '../../../modules/nft/types'
 
 export type Props = {
+  asset: NFT
   className?: string
-  nft: NFT
-  rental?: RentalListing | null
 }

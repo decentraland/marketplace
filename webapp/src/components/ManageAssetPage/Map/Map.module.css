@@ -1,0 +1,11 @@
+.badges {
+  position: absolute;
+  left: 10px;
+  bottom: 200px;
+  display: flex;
+  flex-direction: row;
+}
+
+.coordinates {
+  margin-right: 8px;
+}
