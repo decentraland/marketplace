@@ -148,7 +148,6 @@ export function* handleBrowse(action: BrowseAction) {
   )
 
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-
   yield fetchAssetsFromRoute(options)
   yield put(push(buildBrowseURL(pathname, options)))
 }
@@ -419,14 +418,26 @@ function* deriveCurrentOptions(
     section: current.section || previous.section
   }
 
-  if (
-    (newOptions.onlyOnRent &&
-      previous.sortBy &&
-      !rentalFilters.includes(previous.sortBy!)) ||
-    (!newOptions.onlyOnRent &&
-      previous.sortBy &&
-      !sellFilters.includes(previous.sortBy!))
-  ) {
+  // Checks if the sorting categories are correctly set for the onlyOnRental and the onlyOnSell filters
+  const previousSortExistsAndIsNotARentalSort =
+    previous.sortBy && !rentalFilters.includes(previous.sortBy)
+  const previousSortExistsAndIsNotASellSort =
+    previous.sortBy && !sellFilters.includes(previous.sortBy)
+  const newSortExistsAndIsNotARentalSort =
+    current.sortBy && !rentalFilters.includes(current.sortBy)
+  const newSortExistsAndIsNotASellSort =
+    current.sortBy && !sellFilters.includes(current.sortBy)
+
+  const hasWrongRentalFilter =
+    newOptions.onlyOnRent &&
+    (newSortExistsAndIsNotARentalSort ||
+      (!current.sortBy && previousSortExistsAndIsNotARentalSort))
+  const hasWrongSellFilter =
+    newOptions.onlyOnSale &&
+    (newSortExistsAndIsNotASellSort ||
+      (!current.sortBy && previousSortExistsAndIsNotASellSort))
+
+  if (hasWrongRentalFilter || hasWrongSellFilter) {
     newOptions.sortBy = undefined
   }
 
