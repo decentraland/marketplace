@@ -17,6 +17,8 @@ import {
   Mobile,
   NotMobile,
   Tabs
+  EmoteIcon,
+  WearableIcon
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
@@ -140,14 +142,14 @@ const CollectionPage = (props: Props) => {
                               handleTabChange(NFTCategory.WEARABLE)
                             }
                           >
-                            <Icon name="tag" />
+                            <WearableIcon />
                             {t('home_page.recently_sold.tabs.wearable')}
                           </Tabs.Tab>
                           <Tabs.Tab
                             active={tab === NFTCategory.EMOTE}
                             onClick={() => handleTabChange(NFTCategory.EMOTE)}
                           >
-                            <Icon name="tag" />
+                            <EmoteIcon />
                             {t('home_page.recently_sold.tabs.emote')}
                           </Tabs.Tab>
                         </Tabs>
