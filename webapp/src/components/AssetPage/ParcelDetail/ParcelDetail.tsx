@@ -78,15 +78,17 @@ const ParcelDetail = ({ nft, isRentalsEnabled }: Props) => {
           <BidList nft={nft} />
           <TransactionHistory asset={nft} />
           {isRentalsEnabled ? (
-            <Button onClick={() => setShowCreateRentalModal(true)}>
-              Create Rental
-            </Button>
+            <>
+              <Button onClick={() => setShowCreateRentalModal(true)}>
+                Create Rental
+              </Button>
+              <CreateRentalModal
+                nft={nft}
+                open={showCreateRentalModal}
+                onCancel={() => setShowCreateRentalModal(false)}
+              />
+            </>
           ) : null}
-          <CreateRentalModal
-            nft={nft}
-            open={showCreateRentalModal}
-            onCancel={() => setShowCreateRentalModal(false)}
-          />
         </>
       }
     />
