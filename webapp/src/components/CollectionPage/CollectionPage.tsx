@@ -136,26 +136,28 @@ const CollectionPage = (props: Props) => {
                     <Narrow>
                       {showShowTabs ? (
                         <Tabs isFullscreen>
-                          <Tabs.Tab
-                            active={tab === NFTCategory.WEARABLE}
-                            onClick={() =>
-                              handleTabChange(NFTCategory.WEARABLE)
-                            }
-                          >
-                            <div className={styles.tab}>
-                              <WearableIcon />
-                              {t('home_page.recently_sold.tabs.wearable')}
-                            </div>
-                          </Tabs.Tab>
-                          <Tabs.Tab
-                            active={tab === NFTCategory.EMOTE}
-                            onClick={() => handleTabChange(NFTCategory.EMOTE)}
-                          >
-                            <div className={styles.tab}>
-                              <EmoteIcon />
-                              {t('home_page.recently_sold.tabs.emote')}
-                            </div>
-                          </Tabs.Tab>
+                          <div className={styles.tabs}>
+                            <Tabs.Tab
+                              active={tab === NFTCategory.WEARABLE}
+                              onClick={() =>
+                                handleTabChange(NFTCategory.WEARABLE)
+                              }
+                            >
+                              <div className={styles.tab}>
+                                <WearableIcon />
+                                {t('home_page.recently_sold.tabs.wearable')}
+                              </div>
+                            </Tabs.Tab>
+                            <Tabs.Tab
+                              active={tab === NFTCategory.EMOTE}
+                              onClick={() => handleTabChange(NFTCategory.EMOTE)}
+                            >
+                              <div className={styles.tab}>
+                                <EmoteIcon />
+                                {t('home_page.recently_sold.tabs.emote')}
+                              </div>
+                            </Tabs.Tab>
+                          </div>
                         </Tabs>
                       ) : null}
                       <Table basic="very">
