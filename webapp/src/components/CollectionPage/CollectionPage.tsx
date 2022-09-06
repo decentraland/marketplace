@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
+import { Item } from '@dcl/schemas'
 import {
   Back,
   Column,
@@ -15,7 +16,10 @@ import {
   Table,
   Dropdown,
   Mobile,
-  NotMobile
+  NotMobile,
+  Tabs,
+  EmoteIcon,
+  WearableIcon
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Navbar } from '../Navbar'
@@ -24,7 +28,7 @@ import { Navigation } from '../Navigation'
 import { Props } from './CollectionPage.types'
 import { Mana } from '../Mana'
 import { formatWeiMANA } from '../../lib/mana'
-import { Rarity } from '@dcl/schemas'
+import { NFTCategory, Rarity } from '@dcl/schemas'
 import CollectionProvider from '../CollectionProvider'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import AssetCell from '../OnSaleList/AssetCell'
@@ -32,6 +36,26 @@ import styles from './CollectionPage.module.css'
 
 const CollectionPage = (props: Props) => {
   const { contractAddress, currentAddress, onBack } = props
+  const [tab, setTab] = useState<NFTCategory>(NFTCategory.WEARABLE)
+
+  const handleTabChange = useCallback(
+    (tab: NFTCategory) => {
+      setTab(tab)
+    },
+    [setTab]
+  )
+
+  const getItemCategoryText = (item: Item) => {
+    switch (item.category) {
+      case NFTCategory.EMOTE:
+      case NFTCategory.WEARABLE:
+        return t(
+          `${item.category}.category.${item.data[item.category]?.category}`
+        )
+      default:
+        return t(`global.${item.category}`)
+    }
+  }
 
   return (
     <div>
@@ -49,10 +73,24 @@ const CollectionPage = (props: Props) => {
               const builderCollectionUrl = getBuilderCollectionDetailUrl(
                 contractAddress
               )
+              const hasWearables = items?.some(
+                item => item.category === NFTCategory.WEARABLE
+              )
+              const hasEmotes = items?.some(
+                item => item.category === NFTCategory.EMOTE
+              )
+              const hasOnlyEmotes = hasEmotes && !hasWearables
+              const filteredItems = items?.filter(item =>
+                hasOnlyEmotes
+                  ? item.category === NFTCategory.EMOTE
+                  : item.category === tab
+              )
+
+              const showShowTabs = hasEmotes && hasWearables
 
               return isLoading ? (
                 <Loader size="massive" active />
-              ) : !collection || !items ? (
+              ) : !collection || !filteredItems ? (
                 <div>{t('collection_page.no_collection')}</div>
               ) : (
                 <>
@@ -109,6 +147,32 @@ const CollectionPage = (props: Props) => {
                   </Section>
                   <Section>
                     <Narrow>
+                      {showShowTabs ? (
+                        <Tabs isFullscreen>
+                          <div className={styles.tabs}>
+                            <Tabs.Tab
+                              active={tab === NFTCategory.WEARABLE}
+                              onClick={() =>
+                                handleTabChange(NFTCategory.WEARABLE)
+                              }
+                            >
+                              <div className={styles.tab}>
+                                <WearableIcon />
+                                {t('home_page.recently_sold.tabs.wearable')}
+                              </div>
+                            </Tabs.Tab>
+                            <Tabs.Tab
+                              active={tab === NFTCategory.EMOTE}
+                              onClick={() => handleTabChange(NFTCategory.EMOTE)}
+                            >
+                              <div className={styles.tab}>
+                                <EmoteIcon />
+                                {t('home_page.recently_sold.tabs.emote')}
+                              </div>
+                            </Tabs.Tab>
+                          </div>
+                        </Tabs>
+                      ) : null}
                       <Table basic="very">
                         <Table.Header>
                           <NotMobile>
@@ -134,7 +198,7 @@ const CollectionPage = (props: Props) => {
                         </Table.Header>
                         <Table.Body>
                           <Mobile>
-                            {items.map(item => (
+                            {filteredItems.map(item => (
                               <div key={item.id} className="mobile-row">
                                 <AssetCell asset={item} />
                                 <Mana network={item.network} inline>
@@ -144,13 +208,13 @@ const CollectionPage = (props: Props) => {
                             ))}
                           </Mobile>
                           <NotMobile>
-                            {items.map(item => (
+                            {filteredItems.map(item => (
                               <Table.Row key={item.id} className={styles.row}>
                                 <Table.Cell>
                                   <AssetCell asset={item} />
                                 </Table.Cell>
                                 <Table.Cell>
-                                  {t(`global.${item.category}`)}
+                                  {getItemCategoryText(item)}
                                 </Table.Cell>
                                 <Table.Cell>
                                   {t(`rarity.${item.rarity}`)}

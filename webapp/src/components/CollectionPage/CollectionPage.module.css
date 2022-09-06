@@ -38,6 +38,22 @@
   visibility: visible;
 }
 
+.tabs {
+  display: flex;
+  align-items: center;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+}
+
+.tab div {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 768px) {
   .columnRight {
     margin-top: 12px;
