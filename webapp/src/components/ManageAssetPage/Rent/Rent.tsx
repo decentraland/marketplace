@@ -60,7 +60,7 @@ export const Rent = (props: Props) => {
       </div>
       {rental ? (
         <div className={styles.content}>
-          <div className={styles.column}>
+          <div className={classNames(styles.column, styles.notShrink)}>
             <div className={styles.columnHeader}>
               {t('manage_asset_page.rent.price')}
             </div>
@@ -73,7 +73,7 @@ export const Rent = (props: Props) => {
           </div>
           {rental.status === RentalStatus.OPEN ? (
             <>
-              <div className={styles.column}>
+              <div className={classNames(styles.column, styles.notShrink)}>
                 <div className={styles.columnHeader}>
                   {t('manage_asset_page.rent.expiration_date')}
                 </div>

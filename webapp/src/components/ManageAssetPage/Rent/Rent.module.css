@@ -73,3 +73,7 @@
 .listForRent:global(.ui.button):hover {
   color: var(--primary)
 }
+
+.notShrink {
+  flex: 1 0 auto;
+}
