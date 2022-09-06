@@ -14,13 +14,21 @@ export type Props = {
   page: number
   count?: number
   isLoading: boolean
-  onBrowse: typeof browse,
+  isManager?: boolean
+  onBrowse: typeof browse
   urlNext: string
 }
 
 export type MapStateProps = Pick<
   Props,
-  'vendor' | 'nfts' | 'items' | 'page' | 'count' | 'isLoading' | 'assetType' | 'urlNext'
+  | 'vendor'
+  | 'nfts'
+  | 'items'
+  | 'page'
+  | 'count'
+  | 'isLoading'
+  | 'assetType'
+  | 'urlNext'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
 export type MapDispatch = Dispatch<BrowseAction>

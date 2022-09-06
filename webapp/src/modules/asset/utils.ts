@@ -41,11 +41,14 @@ export function getAssetImage(asset: Asset) {
   return ''
 }
 
-export function getAssetUrl(asset: Asset) {
-  if ('tokenId' in asset) {
+export function getAssetUrl(asset: Asset, isManager?: boolean) {
+  if ('tokenId' in asset && !isManager) {
     return locations.nft(asset.contractAddress, asset.tokenId)
   }
-  if ('itemId' in asset) {
+  if ('tokenId' in asset && isManager) {
+    return locations.manage(asset.contractAddress, asset.tokenId)
+  }
+  if ('itemId' in asset && asset.itemId !== null) {
     return locations.item(asset.contractAddress, asset.itemId)
   }
   return ''

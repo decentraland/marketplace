@@ -23,6 +23,7 @@ export type Props = {
   sections?: Section[]
   isFullscreen: boolean
   isLoading: boolean
+  isRentalsEnabled: boolean
   onSetView: typeof setView
   onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
   onBrowse: typeof browse
@@ -39,6 +40,7 @@ export type MapStateProps = Pick<
   | 'section'
   | 'assetType'
   | 'onlySmart'
+  | 'isRentalsEnabled'
 >
 export type MapDispatchProps = Pick<
   Props,
