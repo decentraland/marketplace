@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-ui'
+import { Profile } from 'decentraland-dapps/dist/containers'
 import { Box } from '../../AssetBrowse/Box'
 import { Props } from './Details.types'
 import styles from './Details.module.css'
