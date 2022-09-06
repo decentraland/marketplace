@@ -426,6 +426,20 @@
     "smart": "智能穿戴",
     "smart_badge": "聪明的"
   },
+  "emote": {
+    "category": {
+      "simple": "简单的",
+      "loop": "环形",
+      "dance": "舞蹈",
+      "stunt": "特技",
+      "greetings": "问候",
+      "fun": "乐趣",
+      "poses": "姿势",
+      "reactions": "反应",
+      "horror": "恐怖",
+      "miscellaneous": "各种各样的"
+    }
+  },
   "wearable_preview": {
     "toggle_wearable": "可穿戴",
     "toggle_avatar": "试试看",

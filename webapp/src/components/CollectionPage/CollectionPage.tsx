@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { Item } from '@dcl/schemas'
 import {
   Back,
   Column,
@@ -43,6 +44,18 @@ const CollectionPage = (props: Props) => {
     },
     [setTab]
   )
+
+  const getItemCategoryText = (item: Item) => {
+    switch (item.category) {
+      case NFTCategory.EMOTE:
+      case NFTCategory.WEARABLE:
+        return t(
+          `${item.category}.category.${item.data[item.category]?.category}`
+        )
+      default:
+        return t(`global.${item.category}`)
+    }
+  }
 
   return (
     <div>
@@ -201,7 +214,7 @@ const CollectionPage = (props: Props) => {
                                   <AssetCell asset={item} />
                                 </Table.Cell>
                                 <Table.Cell>
-                                  {t(`global.${item.category}`)}
+                                  {getItemCategoryText(item)}
                                 </Table.Cell>
                                 <Table.Cell>
                                   {t(`rarity.${item.rarity}`)}

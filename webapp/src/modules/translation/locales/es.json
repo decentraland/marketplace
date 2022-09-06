@@ -425,6 +425,20 @@
     "smart": "Vestimenta Interactiva",
     "smart_badge": "Interactivo"
   },
+  "emote": {
+    "category": {
+      "simple": "Simple",
+      "loop": "Loop",
+      "dance": "Baile",
+      "stunt": "Truco",
+      "greetings": "Saludos",
+      "fun": "Divertido",
+      "poses": "Poses",
+      "reactions": "Reacciones",
+      "horror": "Horror",
+      "miscellaneous": "Misceláneos"
+    }
+  },
   "wearable_preview": {
     "toggle_wearable": "Vestimenta",
     "toggle_avatar": "Pruébatelo",

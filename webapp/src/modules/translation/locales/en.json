@@ -429,6 +429,20 @@
     "smart": "Smart Wearable",
     "smart_badge": "Smart"
   },
+  "emote": {
+    "category": {
+      "simple": "Simple",
+      "loop": "Loop",
+      "dance": "Dance",
+      "stunt": "Stunt",
+      "greetings": "Greetings",
+      "fun": "Fun",
+      "poses": "Poses",
+      "reactions": "Reactions",
+      "horror": "Horror",
+      "miscellaneous": "Miscellaneous"
+    }
+  },
   "wearable_preview": {
     "toggle_wearable": "Wearable",
     "toggle_avatar": "Try On",
