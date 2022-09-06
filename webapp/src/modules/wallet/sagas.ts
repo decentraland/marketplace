@@ -19,6 +19,7 @@ import { getContractNames } from '../vendor'
 import { contracts, getContract } from '../contract/utils'
 import { TRANSACTIONS_API_URL } from './utils'
 import { config } from '../../config'
+import { Contract } from '../vendor/services'
 
 const baseWalletSaga = createWalletSaga({
   CHAIN_ID: Number(config.get('CHAIN_ID')!),
@@ -83,10 +84,14 @@ function* handleWallet(
     network: Network.MATIC
   })
 
-  const rentals = getContract({
-    name: contractNames.RENTALS,
-    network: Network.ETHEREUM
-  })
+  let rentals: Contract | undefined
+
+  try {
+    rentals = getContract({
+      name: contractNames.RENTALS,
+      network: Network.ETHEREUM
+    })
+  } catch (e) {}
 
   const authorizations: Authorization[] = []
 
@@ -166,8 +171,9 @@ function* handleWallet(
 
     // add authorizations for the rentals contract for the land and estate registries
     if (
-      contract.category === NFTCategory.PARCEL ||
-      contract.category === NFTCategory.ESTATE
+      (contract.category === NFTCategory.PARCEL ||
+        contract.category === NFTCategory.ESTATE) &&
+      rentals !== undefined
     ) {
       authorizations.push({
         address,

@@ -16,6 +16,7 @@ export const sellFilters = [
   SortBy.NEWEST,
   SortBy.RECENTLY_REVIEWED,
   SortBy.RECENTLY_SOLD,
+  SortBy.RECENTLY_LISTED,
   SortBy.SIZE
 ]
 export const COLLECTIONS_PER_PAGE = 6
