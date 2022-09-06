@@ -1,7 +1,7 @@
 .badges {
   position: absolute;
   left: 10px;
-  bottom: 200px;
+  top: 215px;
   display: flex;
   flex-direction: row;
 }
