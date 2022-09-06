@@ -16,9 +16,9 @@ import { NFT } from '../../modules/nft/types'
 import { ErrorBoundary } from '../AssetPage/ErrorBoundary'
 import { AssetProvider } from '../AssetProvider'
 import { Navigation } from '../Navigation'
+import { Column } from '../Layout/Column'
 import { Highlights } from './Highlights'
 import styles from './ManageAssetPage.module.css'
-import { Column } from '../Layout/Column'
 import { Props } from './ManageAssetPage.types'
 import { Details } from './Details'
 import { Sell } from './Sell'
@@ -37,6 +37,7 @@ const NotFound = () => (
   </div>
 )
 
+// This page should be ideally provided by a protected router
 const Unauthorized = () => (
   <div className={styles.center}>
     <p className="secondary-text">{t('global.unauthorized')}&hellip;</p>

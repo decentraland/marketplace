@@ -113,6 +113,7 @@ export const Rent = (props: Props) => {
                   {t('manage_asset_page.rent.end_date')}
                 </div>
                 <div className={styles.columnContent}>
+                  {/* The end date does not exist in the current rental format and can not be computed at the moment */}
                   {formatDistance(rental.startedAt!, new Date(), {
                     addSuffix: true
                   })}
