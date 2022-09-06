@@ -4,7 +4,6 @@ import {
   Footer,
   Loader,
   Narrow,
-  Navbar,
   Page,
   Section
 } from 'decentraland-ui'
@@ -13,8 +12,10 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../modules/asset/types'
 import { builderUrl } from '../../lib/environment'
 import { NFT } from '../../modules/nft/types'
+import { Navbar } from '../Navbar'
 import { ErrorBoundary } from '../AssetPage/ErrorBoundary'
 import { AssetProvider } from '../AssetProvider'
+import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navigation } from '../Navigation'
 import { Column } from '../Layout/Column'
 import { Highlights } from './Highlights'
@@ -60,7 +61,7 @@ export const ManageAssetPage = (props: Props) => {
   return (
     <>
       <Navbar isFullscreen />
-      <Navigation />
+      <Navigation activeTab={NavigationTab.MY_STORE} />
       <Page>
         <ErrorBoundary>
           <Section>

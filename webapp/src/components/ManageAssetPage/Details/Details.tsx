@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-ui'
@@ -18,7 +19,7 @@ const Info = ({
   </div>
 )
 
-export const Details = (props: Props) => {
+const Details = (props: Props) => {
   const { nft, className } = props
 
   return (
@@ -37,3 +38,5 @@ export const Details = (props: Props) => {
     </Box>
   )
 }
+
+export default memo(Details)
