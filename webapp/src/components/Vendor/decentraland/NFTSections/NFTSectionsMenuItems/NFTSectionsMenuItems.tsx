@@ -124,11 +124,43 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
         </>
       )}
       {shouldRenderSection(Section.EMOTES, sections) && (
-        <MenuItem
-          value={Section.EMOTES}
-          currentValue={section}
-          onClick={onSectionClick}
-        />
+        <>
+          <MenuItem
+            value={Section.EMOTES}
+            currentValue={section}
+            onClick={onSectionClick}
+          />
+          {[
+            Section.EMOTES,
+            Section.EMOTES_DANCE,
+            Section.EMOTES_POSES,
+            Section.EMOTES_FUN,
+            Section.EMOTES_GREETINGS,
+            Section.EMOTES_HORROR,
+            Section.EMOTES_MISCELLANEOUS,
+            Section.EMOTES_STUNT,
+            Section.EMOTES_REACTIONS
+          ].includes(section!)
+            ? [
+                Section.EMOTES_DANCE,
+                Section.EMOTES_POSES,
+                Section.EMOTES_FUN,
+                Section.EMOTES_GREETINGS,
+                Section.EMOTES_HORROR,
+                Section.EMOTES_MISCELLANEOUS,
+                Section.EMOTES_STUNT,
+                Section.EMOTES_REACTIONS
+              ].map(menuSection => (
+                <MenuItem
+                  key={menuSection}
+                  value={menuSection}
+                  currentValue={section}
+                  onClick={onSectionClick}
+                  nestedLevel={1}
+                />
+              ))
+            : null}
+        </>
       )}
       {shouldRenderSection(Section.ENS, sections) && (
         <MenuItem

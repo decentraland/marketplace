@@ -1,5 +1,6 @@
 import {
   CollectionSortBy,
+  EmoteCategory,
   ItemSortBy,
   Network,
   NFTCategory,
@@ -104,6 +105,14 @@ export function getCategoryFromSection(section: string) {
     case Section.ENS:
       return NFTCategory.ENS
     case Section.EMOTES:
+    case Section.EMOTES_DANCE:
+    case Section.EMOTES_FUN:
+    case Section.EMOTES_GREETINGS:
+    case Section.EMOTES_HORROR:
+    case Section.EMOTES_MISCELLANEOUS:
+    case Section.EMOTES_POSES:
+    case Section.EMOTES_REACTIONS:
+    case Section.EMOTES_STUNT:
       return NFTCategory.EMOTE
     case Section.WEARABLES:
     case Section.WEARABLES_HEAD:
@@ -186,6 +195,27 @@ export function getSearchWearableCategory(section: string) {
       return WearableCategory.TOP_HEAD
     case Section.WEARABLES_SKIN:
       return WearableCategory.SKIN
+  }
+}
+
+export function getSearchEmoteCategory(section: string) {
+  switch (section) {
+    case Section.EMOTES_DANCE:
+      return EmoteCategory.DANCE
+    case Section.EMOTES_FUN:
+      return EmoteCategory.FUN
+    case Section.EMOTES_GREETINGS:
+      return EmoteCategory.GREETINGS
+    case Section.EMOTES_HORROR:
+      return EmoteCategory.HORROR
+    case Section.EMOTES_MISCELLANEOUS:
+      return EmoteCategory.MISCELLANEOUS
+    case Section.EMOTES_POSES:
+      return EmoteCategory.POSES
+    case Section.EMOTES_REACTIONS:
+      return EmoteCategory.REACTIONS
+    case Section.EMOTES_STUNT:
+      return EmoteCategory.STUNT
   }
 }
 

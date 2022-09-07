@@ -30,6 +30,15 @@ export enum Section {
   WEARABLES_SKIN = 'wearables_skin',
 
   EMOTES = 'emotes',
+  EMOTES_DANCE = 'emotes_dance',
+  EMOTES_STUNT = 'emotes_stunt',
+  EMOTES_GREETINGS = 'emotes_greetings',
+  EMOTES_FUN = 'emotes_fun',
+  EMOTES_POSES = 'emotes_poses',
+  EMOTES_REACTIONS = 'emotes_reactions',
+  EMOTES_HORROR = 'emotes_horror',
+  EMOTES_MISCELLANEOUS = 'emotes_miscellaneous',
+
   ENS = 'ens',
 
   COLLECTIONS = 'collections',
