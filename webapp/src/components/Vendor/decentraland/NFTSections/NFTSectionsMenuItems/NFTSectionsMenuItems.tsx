@@ -4,13 +4,18 @@ import { isLandSection } from '../../../../../modules/ui/utils'
 import { Section } from '../../../../../modules/vendor/decentraland/routing/types'
 import { DropdownMenu } from '../../../../Menu/DropdownMenu'
 import { MenuItem } from '../../../../Menu/MenuItem'
-import { Props } from '../NFTSections.types'
+import { Props } from './NFTSectionsMenuItems.types'
 
 const shouldRenderSection = (section: Section, sections: Section[]) => {
   return sections.includes(section) || sections.includes(Section.ALL)
 }
 
-const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
+const NFTSectionsMenuItems = ({
+  section,
+  sections,
+  onSectionClick,
+  areEmoteCategoriesEnabled
+}: Props) => {
   return (
     <>
       {sections.includes(Section.ALL) && (
@@ -140,7 +145,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
             Section.EMOTES_MISCELLANEOUS,
             Section.EMOTES_STUNT,
             Section.EMOTES_REACTIONS
-          ].includes(section!)
+          ].includes(section!) && areEmoteCategoriesEnabled
             ? [
                 Section.EMOTES_DANCE,
                 Section.EMOTES_POSES,
