@@ -68,7 +68,8 @@ const AssetBrowse = (props: Props) => {
     assetType,
     onlyOnSale,
     onlySmart,
-    viewInState
+    viewInState,
+    isRentalsEnabled
   } = props
 
   // Prevent fetching more than once while browsing
@@ -205,7 +206,9 @@ const AssetBrowse = (props: Props) => {
               />
             </div>
           ) : (
-            <AssetList />
+            <AssetList
+              isManager={view === View.CURRENT_ACCOUNT && isRentalsEnabled}
+            />
           )}
         </>
       )

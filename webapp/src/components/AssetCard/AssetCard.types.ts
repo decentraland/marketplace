@@ -5,6 +5,7 @@ export type Props = {
   asset: Asset
   price: string | null
   order?: Order
+  isManager?: boolean
   rental?: RentalListing
   rentalPricePerDay?: string | null
   showListedTag?: boolean
@@ -16,4 +17,4 @@ export type MapStateProps = Pick<
   'showListedTag' | 'price' | 'rentalPricePerDay'
 >
 export type MapDispatchProps = {}
-export type OwnProps = Pick<Props, 'asset' | 'order' | 'rental'>
+export type OwnProps = Pick<Props, 'asset' | 'order' | 'rental' | 'isManager'>
