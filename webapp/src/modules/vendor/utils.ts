@@ -1,6 +1,7 @@
 import { NFTCategory } from '@dcl/schemas'
 import {
   getCategoryFromSection,
+  getSearchEmoteCategory,
   getSearchWearableCategory
 } from '../routing/search'
 import { BrowseOptions } from '../routing/types'
@@ -29,6 +30,11 @@ export function getFilters(
           ? getSearchWearableCategory(section!)
           : undefined
 
+      const emoteCategory =
+        category === NFTCategory.EMOTE
+          ? getSearchEmoteCategory(section!)
+          : undefined
+
       const {
         rarities,
         wearableGenders,
@@ -43,6 +49,7 @@ export function getFilters(
         isWearableAccessory,
         isWearableSmart: onlySmart,
         wearableCategory,
+        emoteCategory,
         rarities,
         wearableGenders,
         contracts,
