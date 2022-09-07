@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { Item } from '@dcl/schemas'
+import { Item, NFTCategory, Rarity } from '@dcl/schemas'
 import {
   Back,
   Column,
@@ -22,16 +22,15 @@ import {
   WearableIcon
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
+import { formatWeiMANA } from '../../lib/mana'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
-import { Navigation } from '../Navigation'
-import { Props } from './CollectionPage.types'
-import { Mana } from '../Mana'
-import { formatWeiMANA } from '../../lib/mana'
-import { NFTCategory, Rarity } from '@dcl/schemas'
 import CollectionProvider from '../CollectionProvider'
-import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
+import { Navigation } from '../Navigation'
 import AssetCell from '../OnSaleList/AssetCell'
+import { Mana } from '../Mana'
+import { Props } from './CollectionPage.types'
 import styles from './CollectionPage.module.css'
 
 const CollectionPage = (props: Props) => {

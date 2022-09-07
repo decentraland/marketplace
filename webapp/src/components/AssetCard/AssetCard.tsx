@@ -5,19 +5,27 @@ import { Card } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
+import { isLand } from '../../modules/nft/utils'
 import { Mana } from '../Mana'
+import { AssetImage } from '../AssetImage'
+import ListedBadge from '../ListedBadge'
 import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
-import { AssetImage } from '../AssetImage'
 import { Props } from './AssetCard.types'
-import ListedBadge from '../ListedBadge'
 import './AssetCard.css'
 
 const AssetCard = (props: Props) => {
-  const { asset, price, rentalPricePerDay, showListedTag, onClick } = props
+  const {
+    asset,
+    isManager,
+    price,
+    rentalPricePerDay,
+    showListedTag,
+    onClick
+  } = props
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
@@ -27,7 +35,7 @@ const AssetCard = (props: Props) => {
       className="AssetCard"
       link
       as={Link}
-      to={getAssetUrl(asset)}
+      to={getAssetUrl(asset, isManager && isLand(asset))}
       onClick={onClick}
     >
       <AssetImage asset={asset} showMonospace />
