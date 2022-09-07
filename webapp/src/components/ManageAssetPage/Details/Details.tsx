@@ -1,8 +1,8 @@
-import { useMemo } from 'react'
+import { useMemo, memo } from 'react'
 import { NFTCategory } from '@dcl/schemas'
 import classNames from 'classnames'
+import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-ui'
 import { Box } from '../../AssetBrowse/Box'
 import { Props } from './Details.types'
 import styles from './Details.module.css'
@@ -58,3 +58,5 @@ export const Details = (props: Props) => {
     </Box>
   )
 }
+
+export default memo(Details)

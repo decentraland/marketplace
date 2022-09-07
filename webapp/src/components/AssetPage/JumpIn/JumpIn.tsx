@@ -18,7 +18,11 @@ const JumpIn = (props: Props) => {
         rel="noopener noreferrer"
       >
         {!compact ? t('asset_page.jump_in') : null}
-        <i className={classNames(styles.jumpInIcon, { fullSize: !compact })} />
+        <i
+          className={classNames(styles.jumpInIcon, {
+            [styles.fullSize]: !compact
+          })}
+        />
       </a>
     </Badge>
   )
