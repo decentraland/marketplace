@@ -13,8 +13,8 @@ import { locations } from '../../../modules/routing/locations'
 import { VendorName } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import {
-  getPeriodWithMaxPrice
-  // getRentalEndDAte
+  getMaxPriceOfPeriods,
+  getRentalEndDate
 } from '../../../modules/rental/utils'
 import { CreateRentalModal } from '../../CreateRentalModal'
 import { Mana } from '../../Mana'
@@ -62,15 +62,14 @@ export const Rent = (props: Props) => {
     setIsCreateRentalModalOpen(false)
   }, [])
   const [isCreateRentalModalOpen, setIsCreateRentalModalOpen] = useState(false)
-  const periodWithMaxPrice: RentalListingPeriod | null = useMemo(
-    () => (rental ? getPeriodWithMaxPrice(rental) : null),
+  const maxPriceOfPeriods: string | null = useMemo(
+    () => (rental ? getMaxPriceOfPeriods(rental) : null),
     [rental]
   )
-  // const rentalEndDate: Date | null = useMemo(
-  //   () => (rental ? getRentalEndDAte(rental) : null),
-  //   [rental]
-  // )
-  const rentalEndDate: Date | null = new Date()
+  const rentalEndDate: Date | null = useMemo(
+    () => (rental ? getRentalEndDate(rental) : null),
+    [rental]
+  )
   const rentalPeriods: string | null = useMemo(
     () =>
       rental
@@ -170,7 +169,7 @@ export const Rent = (props: Props) => {
                 </div>
                 <div className={styles.columnContent}>
                   <Mana withTooltip size={'medium'} network={rental.network}>
-                    {formatWeiMANA(periodWithMaxPrice!.pricePerDay)}
+                    {formatWeiMANA(maxPriceOfPeriods!)}
                   </Mana>
                   <span>/{t('global.day')}</span>
                 </div>
