@@ -16,7 +16,6 @@ const NFTSectionsMenuItems = ({
   onSectionClick,
   areEmoteCategoriesEnabled
 }: Props) => {
-  console.log('areEmoteCategoriesEnabled: ', areEmoteCategoriesEnabled);
   return (
     <>
       {sections.includes(Section.ALL) && (
