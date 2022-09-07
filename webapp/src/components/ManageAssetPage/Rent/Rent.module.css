@@ -29,13 +29,32 @@
 
 .content {
   display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+}
+
+.summary {
+  display: flex;
   flex-direction: row;
   margin-top: 30px;
+}
+
+.activeRent {
+  display: flex;
+  flex-direction: column;
+  background-color:  rgba(115, 110, 125, 0.24);
+  border-radius: 6px;
+  font-weight: 400;
+  font-size: 15px;
+  padding: 12px;
 }
 
 .column {
   display: flex;
   flex-direction: column;
+}
+
+.column:not(:last-child) {
   margin-right: 68px;
 }
 
@@ -63,17 +82,32 @@
   font-size: 18px;
 }
 
-.listForRent:global(.ui.button) {
+.actionButton:global(.ui.button) {
   border: 1px solid var(--gray);
   padding: 7px 15px;
   min-width: unset;
   color: var(--primary);
 }
 
-.listForRent:global(.ui.button):hover {
+.actionButton:global(.ui.button):hover {
   color: var(--primary)
 }
 
 .notShrink {
   flex: 1 0 auto;
+}
+
+.shrinkAndExpand {
+  flex: 1 1 auto;
+}
+
+.profile {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.activeRentActions {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
 }

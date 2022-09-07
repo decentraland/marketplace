@@ -1,5 +1,10 @@
 import { BigNumber, ethers } from 'ethers'
-import { ChainId, PeriodCreation, RentalListing } from '@dcl/schemas'
+import {
+  ChainId,
+  PeriodCreation,
+  RentalListing,
+  RentalListingPeriod
+} from '@dcl/schemas'
 import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import {
@@ -11,6 +16,8 @@ import { Asset } from '../asset/types'
 import { NFT } from '../nft/types'
 import { PeriodOption } from './types'
 import { getRentalsContractInstance } from './contract'
+
+const A_DAY = 1000 * 60 * 60 * 24
 
 export const daysByPeriod: Record<PeriodOption, number> = {
   [PeriodOption.ONE_WEEK]: 7,
@@ -117,12 +124,31 @@ export function getOpenRentalId(asset: Asset | null): string | null {
   return (asset as NFT | null)?.openRentalId ?? null
 }
 
-export function getMaxPriceOfPeriods(rental: RentalListing): string {
+export function getPeriodWithMaxPrice(
+  rental: RentalListing
+): RentalListingPeriod {
   return rental.periods.reduce(
-    (maxPeriodPrice, period) =>
-      BigNumber.from(maxPeriodPrice).gte(period.pricePerDay)
-        ? maxPeriodPrice
-        : period.pricePerDay,
-    '0'
+    (periodWithMaxPrice, period) =>
+      BigNumber.from(periodWithMaxPrice.pricePerDay).gte(period.pricePerDay)
+        ? periodWithMaxPrice
+        : period,
+    rental.periods[0]
   )
+}
+
+export function getMaxPriceOfPeriods(rental: RentalListing): string {
+  return getPeriodWithMaxPrice(rental).pricePerDay
+}
+
+/**
+ * Returns the end date of a rental by assuming that chosen rental is the one with the maximum price.
+ * @param rental - A rental listing.
+ * @param period - A period of the rental listing.
+ * @returns the end date of the rental or null if the rental has not started.
+ */
+export function getRentalEndDAte(rental: RentalListing): Date | null {
+  const rentalPeriod = getPeriodWithMaxPrice(rental)
+  return rental.startedAt
+    ? new Date(rental.startedAt - rentalPeriod.maxDays * A_DAY)
+    : null
 }

@@ -5,4 +5,7 @@ export type Props = {
   className?: string
   nft: NFT
   rental?: RentalListing | null
+  isClaimingLandBack: boolean
 }
+
+export type MapStateProps = Pick<Props, 'isClaimingLandBack'>
