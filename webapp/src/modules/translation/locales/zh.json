@@ -8,6 +8,7 @@
     "more": "更多的",
     "less": "较少的",
     "not_found": "未找到",
+    "unauthorized": "未经授权",
     "parcel": "地块",
     "parcel_count": "{count, plural, one {地块} other {情节}} {count}",
     "parcel_with_coords": "地块 {x},{y}",
@@ -299,9 +300,9 @@
     "smart_wearables": "智能穿戴"
   },
   "nft_land_filters": {
-    "all_land": "All land",
-    "only_for_rent": "Available to rent",
-    "only_for_sale": "Available to buy"
+    "all_land": "所有土地",
+    "only_for_rent": "可出租",
+    "only_for_sale": "可购买"
   },
   "nft_card": {
     "expires_at": "{date}到期"
@@ -691,6 +692,38 @@
       "notice_line_two": "列表是免费的，但编辑或取消列表将需要发送交易，您需要支付其费用。",
       "price_per_day": "每天的价格",
       "listing_expiration_date": "上市截止日期"
+    }
+  },
+  "manage_asset_page": {
+    "open_in_builder": "在 Builder 中打开",
+    "transfer": "转移",
+    "sell": {
+      "sell_title": "卖",
+      "selling_title": "卖",
+      "list_for_sale": "发布出售",
+      "price": "价格",
+      "expiration_date": "截止日期"
+    },
+    "rent": {
+      "rent_title": "租",
+      "renting_title": "租",
+      "price": "价格",
+      "expiration_date": "上市截止日期",
+      "rent_periods": "租期",
+      "list_for_rent": "发布出租",
+      "start_date": "租金开始日期",
+      "end_date": "租期结束日期"
+    },
+    "highlights": {
+      "title": "亮点",
+      "road": "路",
+      "plaza": "广场",
+      "district": "区"
+    },
+    "details": {
+      "title": "商品详情",
+      "network": "网络",
+      "owner": "所有者"
     }
   }
 }

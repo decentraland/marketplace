@@ -1,0 +1,21 @@
+.content {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.detail {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.detailTitle {
+  font-weight: 400;
+  font-size: 17px;
+  color: var(--primary-text)
+}
+
+.detailContent {
+  color: #979797
+}

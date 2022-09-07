@@ -24,6 +24,7 @@ import { config } from '../../config'
 import { Props } from './Routes.types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
+import { ManageAssetPage } from '../ManageAssetPage'
 
 const Routes = ({ inMaintenance }: Props) => {
   const APP_ID = config.get('INTERCOM_APP_ID')
@@ -57,6 +58,7 @@ const Routes = ({ inMaintenance }: Props) => {
         <Route exact path={locations.cancel()} component={CancelSalePage} />
         <Route exact path={locations.transfer()} component={TransferPage} />
         <Route exact path={locations.collection()} component={CollectionPage} />
+        <Route exact path={locations.manage()} component={ManageAssetPage} />
         <Route
           exact
           path={locations.buy(AssetType.NFT)}

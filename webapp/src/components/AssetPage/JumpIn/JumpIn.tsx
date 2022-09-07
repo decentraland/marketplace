@@ -8,7 +8,7 @@ import { Props } from './JumpIn.types'
 import styles from './JumpIn.module.css'
 
 const JumpIn = (props: Props) => {
-  const { x, y, className } = props
+  const { x, y, className, compact } = props
 
   return (
     <Badge className={classNames([styles.JumpIn, className])} color="#ff2d55">
@@ -17,8 +17,12 @@ const JumpIn = (props: Props) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        {t('asset_page.jump_in')}
-        <i className={styles.jumpInIcon} />
+        {!compact ? t('asset_page.jump_in') : null}
+        <i
+          className={classNames(styles.jumpInIcon, {
+            [styles.fullSize]: !compact
+          })}
+        />
       </a>
     </Badge>
   )

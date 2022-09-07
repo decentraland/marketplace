@@ -1,0 +1,31 @@
+.plaza {
+  background-image: url(../../../images/plaza.svg);
+}
+
+.road {
+  background-image: url(../../../images/road.svg);
+}
+
+.district {
+  background-image: url(../../../images/district.svg);
+}
+
+.icon {
+  background-size: 24px 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.highlight {
+  display: flex;
+  flex-direction: row;
+  margin-left: 24px;
+  margin-bottom: 18px;
+}
+
+.title {
+  margin-left: 12px;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 26px;
+}

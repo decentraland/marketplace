@@ -564,7 +564,9 @@ const RecentlySoldTable = (props: Props) => {
             contractAddress={sale.contractAddress}
             tokenId={sale.itemId}
           >
-            {(item, _order, isLoading) => soldItemRow(sale, item, isLoading)}
+            {(item, _order, _rental, isLoading) =>
+              soldItemRow(sale, item, isLoading)
+            }
           </AssetProvider>
         ))
         break
@@ -577,7 +579,7 @@ const RecentlySoldTable = (props: Props) => {
             contractAddress={sale.contractAddress}
             tokenId={sale.tokenId}
           >
-            {(asset, _order, isLoading) =>
+            {(asset, _order, _rental, isLoading) =>
               soldParcelOrENSRow(sale, asset, isLoading)
             }
           </AssetProvider>

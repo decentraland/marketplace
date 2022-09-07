@@ -8,6 +8,7 @@
     "more": "More",
     "less": "Less",
     "not_found": "Not found",
+    "unauthorized": "Not authorized",
     "parcel": "Parcel",
     "parcel_count": "{count} {count, plural, one {Parcel} other {Parcels}}",
     "parcel_with_coords": "Parcel {x},{y}",
@@ -694,6 +695,38 @@
       "notice_line_two": "Listing is free of charge, but editing or canceling a listing will require sending a transaction, and you will need to cover its cost.",
       "price_per_day": "Price per day",
       "listing_expiration_date": "Listing expiration date"
+    }
+  },
+  "manage_asset_page": {
+    "open_in_builder": "Open in builder",
+    "transfer": "Transfer",
+    "sell": {
+      "sell_title": "Sell",
+      "selling_title": "Selling",
+      "list_for_sale": "List for sale",
+      "price": "Price",
+      "expiration_date": "Expiration date"
+    },
+    "rent": {
+      "rent_title": "Rent",
+      "renting_title": "Renting",
+      "price": "Price",
+      "expiration_date": "Listing expiration date",
+      "rent_periods": "Rent periods",
+      "list_for_rent": "List for rent",
+      "start_date": "Rent start date",
+      "end_date": "Rent end date"
+    },
+    "highlights": {
+      "title": "Highlights",
+      "road": "Road",
+      "plaza": "Plaza",
+      "district": "District"
+    },
+    "details": {
+      "title": "Item details",
+      "network": "Network",
+      "owner": "Owner"
     }
   }
 }

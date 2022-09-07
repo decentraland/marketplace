@@ -30,6 +30,8 @@ import {
   OwnProps
 } from './AssetProvider.types'
 import AssetProvider from './AssetProvider'
+import { getRentalById } from '../../modules/rental/selectors'
+import { getOpenRentalId } from '../../modules/rental/utils'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   let contractAddress = ownProps.contractAddress
@@ -59,11 +61,14 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       throw new Error(`Invalid Asset type ${ownProps.type}`)
   }
   const order = getActiveOrder(asset, orders)
+  const openRentalId = getOpenRentalId(asset)
+  const rental = openRentalId ? getRentalById(state, openRentalId) : null
 
   return {
     tokenId,
     contractAddress,
     asset,
+    rental,
     order,
     isLoading: !asset && isLoading
   }

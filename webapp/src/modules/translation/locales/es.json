@@ -8,6 +8,7 @@
     "more": "Más",
     "less": "Menos",
     "not_found": "No se ha encontrado",
+    "unauthorized": "No autorizado",
     "parcel": "Parcela",
     "parcel_count": "{count} {count, plural, one {Parcela} other {Parcelas}}",
     "parcel_with_coords": "Parcela {x},{y}",
@@ -689,6 +690,38 @@
       "notice_line_two": "Poner en alquiler es gratis, pero editar o cancelar el clasificado una vez hecho requerirá que envies una transacción, y deberas cubrir el costo de la misma.",
       "price_per_day": "Precio por día",
       "listing_expiration_date": "Fecha de expiración del clasificado"
+    }
+  },
+  "manage_asset_page": {
+    "open_in_builder": "Abrir en el builder",
+    "transfer": "Transferir",
+    "sell": {
+      "sell_title": "Venta",
+      "selling_title": "Vendiendo",
+      "list_for_sale": "Publicar para la venta",
+      "price": "Precio",
+      "expiration_date": "Fecha de expiración"
+    },
+    "rent": {
+      "rent_title": "Renta",
+      "renting_title": "Rentando",
+      "price": "Precio",
+      "expiration_date": "Fecha de expiración de la publicación",
+      "rent_periods": "Períodos de renta",
+      "list_for_rent": "Publicar para la renta",
+      "start_date": "Fecha de comienzo",
+      "end_date": "Fecha de finalización"
+    },
+    "highlights": {
+      "title": "Destacados",
+      "road": "Calle",
+      "plaza": "Plaza",
+      "district": "Distrito"
+    },
+    "details": {
+      "title": "Detalles del item",
+      "network": "Red",
+      "owner": "Dueño"
     }
   }
 }

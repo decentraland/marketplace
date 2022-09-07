@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
 import React from 'react'
-import { Order } from '@dcl/schemas'
+import { Order, RentalListing } from '@dcl/schemas'
 import {
   fetchNFTRequest,
   FetchNFTRequestAction
@@ -17,19 +17,21 @@ export type Props<T extends AssetType = AssetType> = {
   tokenId: string | null
   asset: Asset<T> | null
   order: Order | null
+  rental: RentalListing | null
   isLoading: boolean
   onFetchNFT: typeof fetchNFTRequest
   onFetchItem: typeof fetchItemRequest
   children: (
     asset: Asset<T> | null,
     order: Order | null,
+    rental: RentalListing | null,
     isLoading: boolean
   ) => React.ReactNode | null
 }
 
 export type MapStateProps = Pick<
   Props,
-  'contractAddress' | 'tokenId' | 'asset' | 'order' | 'isLoading'
+  'contractAddress' | 'tokenId' | 'asset' | 'order' | 'rental' | 'isLoading'
 >
 export type MapDispatchProps = Pick<Props, 'onFetchNFT' | 'onFetchItem'>
 export type MapDispatch = Dispatch<

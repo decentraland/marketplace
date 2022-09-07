@@ -114,7 +114,7 @@ export async function getNonces(
 }
 
 export function getOpenRentalId(asset: Asset | null): string | null {
-  return (asset as NFT).openRentalId ?? null
+  return (asset as NFT | null)?.openRentalId ?? null
 }
 
 export function getMaxPriceOfPeriods(rental: RentalListing): string {
