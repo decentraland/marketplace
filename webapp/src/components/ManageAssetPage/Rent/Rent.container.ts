@@ -5,7 +5,7 @@ import { Rent } from './Rent'
 
 const mapState = (_state: RootState): MapStateProps => ({
   // TODO: Get the transaction status of the claim back land procedure
-  isClaimingLandBack: true
+  isClaimingLandBack: false
 })
 
 export default connect(mapState)(Rent)
