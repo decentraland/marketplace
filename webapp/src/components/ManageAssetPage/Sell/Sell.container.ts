@@ -11,6 +11,7 @@ const mapState = (_state: RootState): MapStateProps => ({})
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
   onListForSale: () =>
     dispatch(
+      // Open the correct modal once it is created
       openModal('TestModal', {
         title: 'Title',
         subtitle: 'Subtitle'
