@@ -10,9 +10,8 @@ import styles from './Sell.module.css'
 import { Props } from './Sell.types'
 
 const Sell = (props: Props) => {
-  const { className, order } = props
+  const { className, order, onListForSale } = props
   const handleOnEdit = useCallback(() => undefined, [])
-  const handleListForSale = useCallback(() => undefined, [])
 
   return (
     <section className={classNames(styles.box, className)}>
@@ -26,7 +25,7 @@ const Sell = (props: Props) => {
           {order ? (
             <IconButton iconName="pencil" onClick={handleOnEdit} />
           ) : (
-            <Button className={styles.listForSale} onClick={handleListForSale}>
+            <Button className={styles.listForSale} onClick={onListForSale}>
               {t('manage_asset_page.sell.list_for_sale')}
             </Button>
           )}

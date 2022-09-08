@@ -25,6 +25,7 @@ import { accountSaga } from './account/sagas'
 import { storeSaga } from './store/sagas'
 import { identitySaga } from './identity/sagas'
 import { rentalSaga } from './rental/sagas'
+import { modalSaga } from './modal/sagas'
 import { peerUrl } from '../lib/environment'
 
 const analyticsSaga = createAnalyticsSaga()
@@ -63,6 +64,7 @@ export function* rootSaga() {
         delay: 60000 /** 60 seconds */
       }
     }),
-    rentalSaga()
+    rentalSaga(),
+    modalSaga()
   ])
 }

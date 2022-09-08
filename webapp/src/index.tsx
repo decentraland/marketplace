@@ -5,6 +5,7 @@ import { ScrollToTop } from './components/ScrollToTop'
 import WalletProvider from 'decentraland-dapps/dist/providers/WalletProvider'
 import ToastProvider from 'decentraland-dapps/dist/providers/ToastProvider'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
+import ModalProvider from 'decentraland-dapps/dist/providers/ModalProvider'
 
 import './setup'
 import './modules/analytics/track'
@@ -13,6 +14,7 @@ import './modules/analytics/rollbar'
 import * as locales from './modules/translation/locales'
 import { initStore, history } from './modules/store'
 import { Routes } from './components/Routes'
+import * as modals from './components/Modals'
 
 import { buildContracts } from './modules/contract/utils'
 
@@ -27,10 +29,12 @@ async function main() {
       <TranslationProvider locales={Object.keys(locales)}>
         <ToastProvider>
           <WalletProvider>
-            <ConnectedRouter history={history}>
-              <ScrollToTop />
-              <Routes />
-            </ConnectedRouter>
+            <ModalProvider components={modals}>
+              <ConnectedRouter history={history}>
+                <ScrollToTop />
+                <Routes />
+              </ConnectedRouter>
+            </ModalProvider>
           </WalletProvider>
         </ToastProvider>
       </TranslationProvider>

@@ -1,1 +1,1 @@
-export { default as Sell } from './Sell'
+export { default as Sell } from './Sell.container'
