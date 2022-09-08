@@ -9,10 +9,16 @@ const TestModal = ({ name, metadata, address, onConfirm, onClose }: Props) => {
 
   return (
     <Modal name={name} onClose={onClose}>
-      <ModalNavigation title={title} onClose={onClose} />
+      <ModalNavigation title={'Test Modal :)'} onClose={onClose} />
       <Modal.Content>
-        <p>{address}</p>
-        <p>{subtitle}</p>
+        <p>
+          This modal is just for checking that the modals module was implemented
+          correctly, it should be deleted on the future or just kept to copy
+          paste new modals.
+        </p>
+        <p>Address of the connected user: {address}</p>
+        <p>Metadata title: {title}</p>
+        <p>Metadata subtitle: {subtitle}</p>
       </Modal.Content>
       <Modal.Actions>
         <Button secondary onClick={onClose}>
