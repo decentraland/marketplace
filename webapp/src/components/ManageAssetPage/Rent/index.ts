@@ -1,1 +1,1 @@
-export { Rent } from './Rent'
+export { default as Rent } from './Rent.container'

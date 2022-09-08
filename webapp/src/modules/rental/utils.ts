@@ -126,3 +126,14 @@ export function getMaxPriceOfPeriods(rental: RentalListing): string {
     '0'
   )
 }
+
+/**
+ * Returns the end date of a rental.
+ * @param rental - A rental listing.
+ * @param period - A period of the rental listing.
+ * @returns the end date of the rental or null if the rental has not started.
+ */
+export function getRentalEndDate(rental: RentalListing): Date | null {
+  // TODO: to be completed once the server returns the rental date
+  return rental.startedAt ? new Date(rental.startedAt) : null
+}

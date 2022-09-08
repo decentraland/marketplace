@@ -723,7 +723,13 @@
       "rent_periods": "Rent periods",
       "list_for_rent": "List for rent",
       "start_date": "Rent start date",
-      "end_date": "Rent end date"
+      "end_date": "Rent end date",
+      "rented_until": "Rented until {date} by {tenant}",
+      "rent_end": "Rented period over! You can claim your Land from {tenant}",
+      "claim_land": "Claim land",
+      "list_for_rent_again": "List for rent again",
+      "claiming_land": "Claiming back your Land. This process can take up to 24hs.",
+      "view_transaction": "View transaction"
     },
     "highlights": {
       "title": "Highlights",

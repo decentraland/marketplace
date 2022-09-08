@@ -718,7 +718,13 @@
       "rent_periods": "Períodos de renta",
       "list_for_rent": "Publicar para la renta",
       "start_date": "Fecha de comienzo",
-      "end_date": "Fecha de finalización"
+      "end_date": "Fecha de finalización",
+      "rented_until": "En renta hasta el {date} por {tenant}",
+      "rent_end": "El período de renta terminó! Puedes reclamar tu tierra a {tenant}",
+      "claim_land": "Reclamar tierra",
+      "list_for_rent_again": "Volver a publicar para la renta",
+      "claiming_land": "Reclamando su tierra. El proceso puede tardar hasta 25hs.",
+      "view_transaction": "Ver transacción"
     },
     "highlights": {
       "title": "Destacados",

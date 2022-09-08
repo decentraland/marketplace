@@ -720,7 +720,13 @@
       "rent_periods": "租期",
       "list_for_rent": "发布出租",
       "start_date": "租金开始日期",
-      "end_date": "租期结束日期"
+      "end_date": "租期结束日期",
+      "rented_until": "由 {tenant} 租用至 {date}",
+      "rent_end": "租期结束！ 你可以从 {tenant} 那里获得你的土地",
+      "claim_land": "索取土地",
+      "list_for_rent_again": "再次发布出租",
+      "claiming_land": "收回你的土地。 此过程最多可能需要 24 小时。",
+      "view_transaction": "查看区块链交易"
     },
     "highlights": {
       "title": "亮点",
