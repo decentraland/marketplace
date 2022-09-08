@@ -121,7 +121,7 @@ export const ManageAssetPage = (props: Props) => {
                                 </p>
                               </section>
                               <Sell order={order} />
-                              <Rent nft={asset} rental={rental!} />
+                              <Rent nft={asset} rental={rental} />
                             </>
                           ) : null}
                         </Column>
