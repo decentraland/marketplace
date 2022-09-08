@@ -1,10 +1,10 @@
 import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { MapStateProps, MapDispatchProps } from './TestModal.types'
 import TestModal from './TestModal'
 import { RootState } from '../../../modules/reducer'
 import { closeModal } from '../../../modules/modal/actions'
-import { Dispatch } from 'redux'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
