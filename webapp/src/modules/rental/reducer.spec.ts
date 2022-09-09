@@ -2,6 +2,10 @@ import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { fetchNFTsSuccess, fetchNFTSuccess } from '../nft/actions'
 import { NFT, NFTsFetchOptions } from '../nft/types'
 import {
+  claimLandFailure,
+  claimLandRequest,
+  claimLandSignedTransaction,
+  claimLandSuccess,
   createRentalFailure,
   createRentalRequest,
   CreateRentalRequestAction,
@@ -24,7 +28,8 @@ beforeEach(() => {
   rentalState = {
     data: {},
     loading: [],
-    error: null
+    error: null,
+    isSigningTransaction: false
   }
 })
 
@@ -35,7 +40,8 @@ describe('when reducing a CREATE_RENTAL_REQUEST action', () => {
     state = {
       loading: [],
       data: {},
-      error: 'some error'
+      error: 'some error',
+      isSigningTransaction: false
     }
     action = createRentalRequest(
       nft,
@@ -63,7 +69,8 @@ describe('when reducing a CREATE_RENTAL_SUCCESS action', () => {
         createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], 1976562675847)
       ],
       data: {},
-      error: 'Some error'
+      error: 'Some error',
+      isSigningTransaction: false
     }
   })
   it('should remove the loading action', () => {
@@ -90,7 +97,8 @@ describe('when reducing a CREATE_RENTAL_FAILURE action', () => {
         createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], 1976562675847)
       ],
       data: {},
-      error: null
+      error: null,
+      isSigningTransaction: false
     }
   })
   it('should remove the loading action', () => {
@@ -208,6 +216,87 @@ describe('when reducing the success action of fetching a NFT', () => {
           fetchNFTSuccess({} as NFT, null, rentalListing)
         )
       ).toBe(rentalState)
+    })
+  })
+})
+
+describe('when reducing the action that signals that the claim land transaction was signed', () => {
+  beforeEach(() => {
+    rentalState = {
+      ...rentalState,
+      isSigningTransaction: true
+    }
+  })
+
+  it('should set the flag that defines that the transaction is being signed to false', () => {
+    expect(
+      rentalReducer(
+        rentalState,
+        claimLandSignedTransaction(nft, 'aTxHash', 'aRentalContractAddress')
+      )
+    ).toEqual({
+      ...rentalState,
+      isSigningTransaction: false
+    })
+  })
+})
+
+describe('when reducing the action of the start of claiming a LAND', () => {
+  beforeEach(() => {
+    rentalState = {
+      ...rentalState,
+      isSigningTransaction: false,
+      loading: [],
+      error: 'anError'
+    }
+  })
+
+  it('should set the action into loading, the singing transaction flag as true and clear the error', () => {
+    expect(rentalReducer(rentalState, claimLandRequest(nft, rental))).toEqual({
+      ...rentalState,
+      isSigningTransaction: true,
+      loading: [claimLandRequest(nft, rental)],
+      error: null
+    })
+  })
+})
+
+describe('when reducing the action the success of claiming a LAND', () => {
+  beforeEach(() => {
+    rentalState = {
+      ...rentalState,
+      isSigningTransaction: true,
+      loading: [claimLandRequest(nft, rental)],
+      error: 'anError'
+    }
+  })
+
+  it('should remove the loading, set the singing transaction flag as false and clear the error', () => {
+    expect(rentalReducer(rentalState, claimLandSuccess(nft, rental))).toEqual({
+      ...rentalState,
+      isSigningTransaction: false,
+      loading: [],
+      error: null
+    })
+  })
+})
+
+describe('when reducing the failure action of claiming a LAND', () => {
+  beforeEach(() => {
+    rentalState = {
+      ...rentalState,
+      loading: [claimLandRequest(nft, rental)],
+      isSigningTransaction: true,
+      error: null
+    }
+  })
+
+  it("should remove the loading, set the signing transaction flag to false, set the error with the action's error", () => {
+    expect(rentalReducer(rentalState, claimLandFailure('anError'))).toEqual({
+      ...rentalState,
+      loading: [],
+      isSigningTransaction: false,
+      error: 'anError'
     })
   })
 })

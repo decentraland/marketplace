@@ -7,7 +7,7 @@ import {
   Page,
   Section
 } from 'decentraland-ui'
-import { NFTCategory } from '@dcl/schemas'
+import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../modules/asset/types'
 import { builderUrl } from '../../lib/environment'
@@ -121,7 +121,15 @@ export const ManageAssetPage = (props: Props) => {
                                 </p>
                               </section>
                               <Sell order={order} />
-                              <Rent nft={asset} rental={rental} />
+                              <Rent
+                                nft={asset}
+                                rental={{
+                                  ...rental!,
+                                  status: RentalStatus.EXECUTED,
+                                  startedAt: Date.now(),
+                                  tenant: asset.owner
+                                }}
+                              />
                             </>
                           ) : null}
                         </Column>

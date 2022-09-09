@@ -609,7 +609,8 @@
       "transfer": "You transferred {name} to {address}.",
       "place_bid": "You placed a bid of {price} on {name}.",
       "accept_bid": "You accepted a bid of {price} on {name}.",
-      "cancel_bid": "You cancelled a bid of {price} on {name}."
+      "cancel_bid": "You cancelled a bid of {price} on {name}.",
+      "claim_land": "You claimed your {name} from the {contract}."
     }
   },
   "mana": {
@@ -742,5 +743,12 @@
       "network": "Network",
       "owner": "Owner"
     }
+  },
+  "claim_land_modal": {
+    "title": "Claim LAND",
+    "action": "Claim LAND",
+    "question": "Are you sure you want to claim your Land?",
+    "disclaimer": "This will require a transaction and you will need to cover its fees.",
+    "confirm_transaction": "Confirm the transaction on your wallet to continue"
   }
 }
