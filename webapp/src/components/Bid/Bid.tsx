@@ -53,7 +53,7 @@ const Bid = (props: Props) => {
                 contractAddress={bid.contractAddress}
                 tokenId={bid.tokenId}
               >
-                {(nft, isLoading) => (
+                {(nft, _order, _rental, isLoading) => (
                   <>
                     {!nft && isLoading ? <Loader active /> : null}
                     {nft ? (
