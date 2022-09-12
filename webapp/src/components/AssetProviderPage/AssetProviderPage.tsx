@@ -22,14 +22,14 @@ const AssetProviderPage = (props: Props) => {
   const { type, isConnecting, children } = props
   return (
     <AssetProvider type={type}>
-      {(asset, order, isAssetLoading) => {
+      {(asset, order, rental, isAssetLoading) => {
         const isLoading = isConnecting || isAssetLoading
 
         return (
           <>
             {isLoading ? <Loading /> : null}
             {!isLoading && !asset ? <NotFound /> : null}
-            {!isLoading && asset ? children(asset, order) : null}
+            {!isLoading && asset ? children(asset, order, rental) : null}
           </>
         )
       }}
