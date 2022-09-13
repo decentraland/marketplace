@@ -2,7 +2,7 @@ import { RentalListing } from '@dcl/schemas'
 import { expectSaga } from 'redux-saga-test-plan'
 import { NFT } from '../nft/types'
 import { claimLandSuccess } from '../rental/actions'
-import { closeModal } from './actions'
+import { closeAllModals } from './actions'
 import { modalSaga } from './sagas'
 
 describe('when handling the success action of the claim LAND', () => {
@@ -14,9 +14,9 @@ describe('when handling the success action of the claim LAND', () => {
     rental = { id: 'aRentalId' } as RentalListing
   })
 
-  it('should put the action to close the claim modal', () => {
+  it('should put the action to close all modals', () => {
     return expectSaga(modalSaga)
-      .put(closeModal('ClaimLandModal'))
+      .put(closeAllModals())
       .dispatch(claimLandSuccess(nft, rental))
       .silentRun()
   })
