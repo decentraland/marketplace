@@ -1,0 +1,40 @@
+
+/* Dropdown */
+
+.periodDropdown:global(.ui.dropdown) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 8px;
+  border: 1px solid rgba(115, 110, 125, 0.4);
+  border-radius: 6px;
+}
+
+.trigger {
+  font-size: 20px;  
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+/* Dropdown item */
+
+.item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 290px;
+}
+
+.period {
+  display: flex;
+  flex-direction: column;
+  font-size: 15px;
+}
+
+.until {
+  color: #979797
+}

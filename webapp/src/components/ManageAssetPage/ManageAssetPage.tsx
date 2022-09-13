@@ -93,7 +93,7 @@ export const ManageAssetPage = (props: Props) => {
                                 nft={asset as NFT}
                               />
                               <Details
-                                nft={asset as NFT}
+                                asset={asset as NFT}
                                 className={styles.details}
                               />
                             </>

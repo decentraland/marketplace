@@ -33,6 +33,8 @@
     "type": "Type",
     "sale_type": "Sale type",
     "sell_price": "Sell price",
+    "rent": "Rent",
+    "sale": "Sale",
     "no_results": "No results",
     "learn_more": "Learn More",
     "category": "Category",

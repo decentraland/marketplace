@@ -1,6 +1,7 @@
+import { RentalListing } from '@dcl/schemas'
 import { Asset } from '../../../modules/asset/types'
 
 export type Props = {
   asset: Asset
-  className?: string
+  rental: RentalListing | null
 }
