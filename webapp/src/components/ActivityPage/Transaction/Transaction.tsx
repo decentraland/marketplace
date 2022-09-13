@@ -23,6 +23,7 @@ import {
   CANCEL_BID_SUCCESS
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
+import { CLAIM_LAND_TRANSACTION_SUBMITTED } from '../../../modules/rental/actions'
 import { getContract } from '../../../modules/contract/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { AssetProvider } from '../../AssetProvider'
@@ -325,6 +326,49 @@ const Transaction = (props: Props) => {
                       <Mana inline network={nft?.network}>
                         {price.toLocaleString()}
                       </Mana>
+                    )
+                  }}
+                />
+              }
+              tx={tx}
+            />
+          )}
+        </AssetProvider>
+      )
+    }
+    case CLAIM_LAND_TRANSACTION_SUBMITTED: {
+      const {
+        tokenId,
+        contractAddress,
+        rentalContractAddress,
+        chainId
+      } = tx.payload
+      return (
+        <AssetProvider
+          type={AssetType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
+          {nft => (
+            <TransactionDetail
+              asset={nft}
+              text={
+                <T
+                  id="transaction.detail.claim_land"
+                  values={{
+                    name: (
+                      <Link to={locations.manage(contractAddress, tokenId)}>
+                        {nft ? getAssetName(nft) : ''}
+                      </Link>
+                    ),
+                    contract: (
+                      <TransactionLink
+                        chainId={chainId}
+                        address={rentalContractAddress}
+                        txHash=""
+                      >
+                        {t('transaction.rental.contract')}
+                      </TransactionLink>
                     )
                   }}
                 />

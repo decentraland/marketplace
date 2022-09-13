@@ -596,6 +596,9 @@
       "approved": "aprobadó",
       "unapproved": "desaprobó"
     },
+    "rental": {
+      "contract": "Contrato de renta"
+    },
     "detail": {
       "approve_token": "{action} al contrato de {contract} para que opere tokens de {token} por tí.",
       "create_order": "Pusiste {name} en venta por {price}.",
@@ -604,7 +607,8 @@
       "transfer": "Transferiste {name} a {address}.",
       "place_bid": "Hiciste una oferta de {price} por {name}.",
       "accept_bid": "Aceptaste una oferta de {price} por {name}.",
-      "cancel_bid": "Cancelaste una oferta de {price} por {name}."
+      "cancel_bid": "Cancelaste una oferta de {price} por {name}.",
+      "claim_land": "Reclamaste tu {name} del {contract}."
     }
   },
   "mana": {
@@ -737,5 +741,12 @@
       "network": "Red",
       "owner": "Dueño"
     }
+  },
+  "claim_land_modal": {
+    "title": "Reclamar tierra",
+    "action": "Reclamar tierra",
+    "question": "¿Está seguro de que quiere reclamar su tierra?",
+    "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
+    "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   }
 }

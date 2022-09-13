@@ -601,6 +601,9 @@
       "approved": "approved",
       "unapproved": "unapproved"
     },
+    "rental": {
+      "contract": "Rental contract"
+    },
     "detail": {
       "approve_token": "You {action} the {contract} contract to operate {token} on your behalf.",
       "create_order": "You listed {name} on sale for {price}.",
@@ -609,7 +612,8 @@
       "transfer": "You transferred {name} to {address}.",
       "place_bid": "You placed a bid of {price} on {name}.",
       "accept_bid": "You accepted a bid of {price} on {name}.",
-      "cancel_bid": "You cancelled a bid of {price} on {name}."
+      "cancel_bid": "You cancelled a bid of {price} on {name}.",
+      "claim_land": "You claimed your {name} from the {contract}."
     }
   },
   "mana": {
@@ -742,5 +746,12 @@
       "network": "Network",
       "owner": "Owner"
     }
+  },
+  "claim_land_modal": {
+    "title": "Claim LAND",
+    "action": "Claim LAND",
+    "question": "Are you sure you want to claim your LAND?",
+    "disclaimer": "This will require a transaction and you will need to cover its fees.",
+    "confirm_transaction": "Confirm the transaction on your wallet to continue"
   }
 }

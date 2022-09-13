@@ -598,6 +598,9 @@
       "approved": "已批准",
       "unapproved": "未批准"
     },
+    "rental": {
+      "contract": "出租合同"
+    },
     "detail": {
       "approve_token": "您{action} {contract}合同代表您操作{token}。",
       "create_order": "您列出了以{price}出售的{name}。",
@@ -606,7 +609,8 @@
       "transfer": "您已将{name}转移到{address}。",
       "place_bid": "您对{name}出价了{price}。",
       "accept_bid": "您接受了{name}的{price}出价。",
-      "cancel_bid": "您取消了对{name}的{price}出价。"
+      "cancel_bid": "您取消了对{name}的{price}出价。",
+      "claim_land": "您从 {contract} 中认领了您的 {name}。"
     }
   },
   "mana": {
@@ -739,5 +743,12 @@
       "network": "网络",
       "owner": "所有者"
     }
+  },
+  "claim_land_modal": {
+    "title": "开垦土地",
+    "action": "开垦土地",
+    "question": "你确定要收回你的土地吗?",
+    "disclaimer": "这将需要一笔交易，您需要支付其费用。",
+    "confirm_transaction": "确认您钱包上的交易以继续"
   }
 }

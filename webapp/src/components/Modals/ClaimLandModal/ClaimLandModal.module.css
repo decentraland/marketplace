@@ -1,0 +1,33 @@
+.actions {
+  flex-direction: column;
+  align-items: center;
+}
+
+.content > p {
+  text-align: center;
+}
+
+.actions :global(.ui.button) {
+  width: 100%;
+}
+
+.cancel {
+  margin-top: 15px !important;
+  margin-left: 0 !important;
+}
+
+.signMessage {
+  font-size: 14px;
+  margin-left: 15px;
+}
+
+.loader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 44px;
+}
+
+.loader:global(.ui.inline.loader) {
+  margin-right: 10px;
+}
