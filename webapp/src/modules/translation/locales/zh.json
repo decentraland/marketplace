@@ -598,6 +598,9 @@
       "approved": "已批准",
       "unapproved": "未批准"
     },
+    "rental": {
+      "contract": "出租合同"
+    },
     "detail": {
       "approve_token": "您{action} {contract}合同代表您操作{token}。",
       "create_order": "您列出了以{price}出售的{name}。",

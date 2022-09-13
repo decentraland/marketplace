@@ -4,7 +4,7 @@ import { NFT, NFTsFetchOptions } from '../nft/types'
 import {
   claimLandFailure,
   claimLandRequest,
-  claimLandSignedTransaction,
+  claimLandTransactionSubmitted,
   claimLandSuccess,
   createRentalFailure,
   createRentalRequest,
@@ -29,7 +29,7 @@ beforeEach(() => {
     data: {},
     loading: [],
     error: null,
-    isSigningTransaction: false
+    isSubmittingTransaction: false
   }
 })
 
@@ -41,7 +41,7 @@ describe('when reducing a CREATE_RENTAL_REQUEST action', () => {
       loading: [],
       data: {},
       error: 'some error',
-      isSigningTransaction: false
+      isSubmittingTransaction: false
     }
     action = createRentalRequest(
       nft,
@@ -70,7 +70,7 @@ describe('when reducing a CREATE_RENTAL_SUCCESS action', () => {
       ],
       data: {},
       error: 'Some error',
-      isSigningTransaction: false
+      isSubmittingTransaction: false
     }
   })
   it('should remove the loading action', () => {
@@ -98,7 +98,7 @@ describe('when reducing a CREATE_RENTAL_FAILURE action', () => {
       ],
       data: {},
       error: null,
-      isSigningTransaction: false
+      isSubmittingTransaction: false
     }
   })
   it('should remove the loading action', () => {
@@ -220,23 +220,23 @@ describe('when reducing the success action of fetching a NFT', () => {
   })
 })
 
-describe('when reducing the action that signals that the claim land transaction was signed', () => {
+describe('when reducing the action that signals that the claim land transaction was submitted', () => {
   beforeEach(() => {
     rentalState = {
       ...rentalState,
-      isSigningTransaction: true
+      isSubmittingTransaction: true
     }
   })
 
-  it('should set the flag that defines that the transaction is being signed to false', () => {
+  it('should set the flag that defines that the transaction is being submitted to false', () => {
     expect(
       rentalReducer(
         rentalState,
-        claimLandSignedTransaction(nft, 'aTxHash', 'aRentalContractAddress')
+        claimLandTransactionSubmitted(nft, 'aTxHash', 'aRentalContractAddress')
       )
     ).toEqual({
       ...rentalState,
-      isSigningTransaction: false
+      isSubmittingTransaction: false
     })
   })
 })
@@ -245,16 +245,16 @@ describe('when reducing the action of the start of claiming a LAND', () => {
   beforeEach(() => {
     rentalState = {
       ...rentalState,
-      isSigningTransaction: false,
+      isSubmittingTransaction: false,
       loading: [],
       error: 'anError'
     }
   })
 
-  it('should set the action into loading, the singing transaction flag as true and clear the error', () => {
+  it('should set the action into loading, the submitting transaction flag as true and clear the error', () => {
     expect(rentalReducer(rentalState, claimLandRequest(nft, rental))).toEqual({
       ...rentalState,
-      isSigningTransaction: true,
+      isSubmittingTransaction: true,
       loading: [claimLandRequest(nft, rental)],
       error: null
     })
@@ -265,16 +265,16 @@ describe('when reducing the action the success of claiming a LAND', () => {
   beforeEach(() => {
     rentalState = {
       ...rentalState,
-      isSigningTransaction: true,
+      isSubmittingTransaction: true,
       loading: [claimLandRequest(nft, rental)],
       error: 'anError'
     }
   })
 
-  it('should remove the loading, set the singing transaction flag as false and clear the error', () => {
+  it('should remove the loading, set the submitting transaction flag as false and clear the error', () => {
     expect(rentalReducer(rentalState, claimLandSuccess(nft, rental))).toEqual({
       ...rentalState,
-      isSigningTransaction: false,
+      isSubmittingTransaction: false,
       loading: [],
       error: null
     })
@@ -286,16 +286,16 @@ describe('when reducing the failure action of claiming a LAND', () => {
     rentalState = {
       ...rentalState,
       loading: [claimLandRequest(nft, rental)],
-      isSigningTransaction: true,
+      isSubmittingTransaction: true,
       error: null
     }
   })
 
-  it("should remove the loading, set the signing transaction flag to false, set the error with the action's error", () => {
+  it("should remove the loading, set the submitting transaction flag to false, set the error with the action's error", () => {
     expect(rentalReducer(rentalState, claimLandFailure('anError'))).toEqual({
       ...rentalState,
       loading: [],
-      isSigningTransaction: false,
+      isSubmittingTransaction: false,
       error: 'anError'
     })
   })

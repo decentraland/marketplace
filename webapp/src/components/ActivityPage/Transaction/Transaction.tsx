@@ -23,7 +23,7 @@ import {
   CANCEL_BID_SUCCESS
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
-import { CLAIM_LAND_SIGNED_TRANSACTION } from '../../../modules/rental/actions'
+import { CLAIM_LAND_TRANSACTION_SUBMITTED } from '../../../modules/rental/actions'
 import { getContract } from '../../../modules/contract/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { AssetProvider } from '../../AssetProvider'
@@ -336,7 +336,7 @@ const Transaction = (props: Props) => {
         </AssetProvider>
       )
     }
-    case CLAIM_LAND_SIGNED_TRANSACTION: {
+    case CLAIM_LAND_TRANSACTION_SUBMITTED: {
       const {
         tokenId,
         contractAddress,
@@ -354,7 +354,7 @@ const Transaction = (props: Props) => {
               asset={nft}
               text={
                 <T
-                  id="transaction.detail.cancel_bid"
+                  id="transaction.detail.claim_land"
                   values={{
                     name: (
                       <Link to={locations.manage(contractAddress, tokenId)}>
@@ -367,7 +367,7 @@ const Transaction = (props: Props) => {
                         address={rentalContractAddress}
                         txHash=""
                       >
-                        Rental contract address
+                        {t('transaction.rental.contract')}
                       </TransactionLink>
                     )
                   }}

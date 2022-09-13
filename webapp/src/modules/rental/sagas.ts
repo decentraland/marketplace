@@ -22,7 +22,7 @@ import { closeModal, CloseModalAction, CLOSE_MODAL } from '../modal/actions'
 import {
   claimLandFailure,
   ClaimLandRequestAction,
-  claimLandSignedTransaction,
+  claimLandTransactionSubmitted,
   claimLandSuccess,
   CLAIM_LAND_REQUEST,
   CLAIM_LAND_SUCCESS,
@@ -37,7 +37,7 @@ import { daysByPeriod, getNonces, getSignature } from './utils'
 export function* rentalSaga() {
   yield takeEvery(CREATE_RENTAL_REQUEST, handleCreateRentalRequest)
   yield takeEvery(CLAIM_LAND_REQUEST, handleClaimLandRequest)
-  yield takeEvery(CLAIM_LAND_SUCCESS, handleClaimLandCompletion)
+  yield takeEvery(CLAIM_LAND_SUCCESS, handleClaimLandSuccess)
   yield takeEvery(CLOSE_MODAL, handleClaimLandModalClose)
 }
 
@@ -144,7 +144,9 @@ function* handleClaimLandRequest(action: ClaimLandRequestAction) {
       nft.contractAddress,
       nft.tokenId
     )
-    yield put(claimLandSignedTransaction(nft, txHash, rentalsContract.address))
+    yield put(
+      claimLandTransactionSubmitted(nft, txHash, rentalsContract.address)
+    )
     yield call(waitForTx, txHash)
     yield put(claimLandSuccess(nft, rental))
   } catch (error) {
@@ -152,7 +154,7 @@ function* handleClaimLandRequest(action: ClaimLandRequestAction) {
   }
 }
 
-function* handleClaimLandCompletion() {
+function* handleClaimLandSuccess() {
   yield put(closeModal('ClaimLandModal'))
 }
 

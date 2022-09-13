@@ -601,6 +601,9 @@
       "approved": "approved",
       "unapproved": "unapproved"
     },
+    "rental": {
+      "contract": "Rental contract"
+    },
     "detail": {
       "approve_token": "You {action} the {contract} contract to operate {token} on your behalf.",
       "create_order": "You listed {name} on sale for {price}.",

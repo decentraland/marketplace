@@ -14,4 +14,4 @@ export const getRentalById = (
 export const isClaimingLand = (state: RootState) =>
   isLoadingType(getLoading(state), CLAIM_LAND_REQUEST)
 export const isSigningTransaction = (state: RootState) =>
-  getState(state).isSigningTransaction
+  getState(state).isSubmittingTransaction

@@ -596,6 +596,9 @@
       "approved": "aprobadó",
       "unapproved": "desaprobó"
     },
+    "rental": {
+      "contract": "Contrato de renta"
+    },
     "detail": {
       "approve_token": "{action} al contrato de {contract} para que opere tokens de {token} por tí.",
       "create_order": "Pusiste {name} en venta por {price}.",

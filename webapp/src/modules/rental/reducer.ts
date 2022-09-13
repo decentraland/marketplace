@@ -16,7 +16,7 @@ import {
   ClaimLandSuccessAction,
   CLAIM_LAND_FAILURE,
   CLAIM_LAND_REQUEST,
-  CLAIM_LAND_SIGNED_TRANSACTION,
+  CLAIM_LAND_TRANSACTION_SUBMITTED,
   CLAIM_LAND_SUCCESS,
   ClearRentalErrors,
   CLEAR_RENTAL_ERRORS,
@@ -31,14 +31,14 @@ import {
 export type RentalState = {
   data: Record<string, RentalListing>
   loading: LoadingState
-  isSigningTransaction: boolean
+  isSubmittingTransaction: boolean
   error: string | null
 }
 
 const INITIAL_STATE: RentalState = {
   data: {},
   loading: [],
-  isSigningTransaction: false,
+  isSubmittingTransaction: false,
   error: null
 }
 
@@ -59,16 +59,16 @@ export function rentalReducer(
   action: RentalReducerAction
 ): RentalState {
   switch (action.type) {
-    case CLAIM_LAND_SIGNED_TRANSACTION: {
+    case CLAIM_LAND_TRANSACTION_SUBMITTED: {
       return {
         ...state,
-        isSigningTransaction: false
+        isSubmittingTransaction: false
       }
     }
     case CLAIM_LAND_REQUEST: {
       return {
         ...state,
-        isSigningTransaction: true,
+        isSubmittingTransaction: true,
         loading: loadingReducer(state.loading, action),
         error: null
       }
@@ -97,7 +97,7 @@ export function rentalReducer(
       const newState = {
         ...state,
         loading: loadingReducer(state.loading, action),
-        isSigningTransaction: false,
+        isSubmittingTransaction: false,
         error: null
       }
       delete newState.data[rental.id]
@@ -109,7 +109,7 @@ export function rentalReducer(
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
-        isSigningTransaction: false,
+        isSubmittingTransaction: false,
         error
       }
     }

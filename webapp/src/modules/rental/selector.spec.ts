@@ -19,7 +19,7 @@ beforeEach(() => {
       data: {} as Record<string, RentalListing>,
       loading: [] as LoadingState,
       error: null,
-      isSigningTransaction: false
+      isSubmittingTransaction: false
     }
   } as RootState
 })
@@ -93,7 +93,7 @@ describe('when getting if a LAND is being claimed', () => {
 describe('when getting if the claiming LAND transaction is being signed', () => {
   describe('and the transaction is being signed', () => {
     beforeEach(() => {
-      rootState.rental.isSigningTransaction = true
+      rootState.rental.isSubmittingTransaction = true
     })
 
     it('should return true', () => {
@@ -103,7 +103,7 @@ describe('when getting if the claiming LAND transaction is being signed', () => 
 
   describe('and the transaction is not being signed', () => {
     beforeEach(() => {
-      rootState.rental.isSigningTransaction = false
+      rootState.rental.isSubmittingTransaction = false
     })
 
     it('should return false', () => {

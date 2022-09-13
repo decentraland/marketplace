@@ -27,7 +27,7 @@ import { getAddress } from '../wallet/selectors'
 import {
   claimLandFailure,
   claimLandRequest,
-  claimLandSignedTransaction,
+  claimLandTransactionSubmitted,
   claimLandSuccess,
   clearRentalErrors,
   createRentalFailure,
@@ -370,7 +370,7 @@ describe('when handling the request action to claim a LAND', () => {
     const txHash = '0x01'
 
     describe('and the transaction finishes', () => {
-      it('should put the action to notify that the transaction was signed and the claim LAND success action', () => {
+      it('should put the action to notify that the transaction was submitted and the claim LAND success action', () => {
         return expectSaga(rentalSaga)
           .provide([
             [call(getConnectedProvider), {}],
@@ -395,7 +395,9 @@ describe('when handling the request action to claim a LAND', () => {
             ],
             [call(waitForTx, txHash), Promise.resolve()]
           ])
-          .put(claimLandSignedTransaction(nft, txHash, rentalContract.address))
+          .put(
+            claimLandTransactionSubmitted(nft, txHash, rentalContract.address)
+          )
           .put(claimLandSuccess(nft, rental))
           .dispatch(claimLandRequest(nft, rental))
           .silentRun()
@@ -403,7 +405,7 @@ describe('when handling the request action to claim a LAND', () => {
     })
 
     describe('and the transaction gets reverted', () => {
-      it('should put the action to notify that the transaction was signed and the claim LAND failure action with an error', () => {
+      it('should put the action to notify that the transaction was submitted and the claim LAND failure action with an error', () => {
         return expectSaga(rentalSaga)
           .provide([
             [call(getConnectedProvider), {}],
@@ -428,7 +430,9 @@ describe('when handling the request action to claim a LAND', () => {
             ],
             [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
           ])
-          .put(claimLandSignedTransaction(nft, txHash, rentalContract.address))
+          .put(
+            claimLandTransactionSubmitted(nft, txHash, rentalContract.address)
+          )
           .put(claimLandFailure('anError'))
           .dispatch(claimLandRequest(nft, rental))
           .silentRun()
