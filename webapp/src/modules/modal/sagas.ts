@@ -3,10 +3,11 @@ import { delay, put, select, takeEvery } from 'redux-saga/effects'
 import { ModalState } from 'decentraland-dapps/dist/modules/modal/reducer'
 import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
 import { closeAllModals } from './actions'
+import { CLAIM_LAND_SUCCESS } from '../rental/actions'
 
 export function* modalSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
-  yield takeEvery([/** Actions that should trigger all modals to be closed */], handleCloseAllModals)
+  yield takeEvery([CLAIM_LAND_SUCCESS], handleCloseAllModals)
 }
 
 function* handleLocationChange() {

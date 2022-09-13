@@ -7,14 +7,25 @@ import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   ContractData,
   ContractName,
-  getContract
+  getContract,
+  Provider
 } from 'decentraland-transactions'
+import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { ethers } from 'ethers'
 import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
+import { CloseModalAction, CLOSE_MODAL } from '../modal/actions'
 import {
+  claimLandFailure,
+  ClaimLandRequestAction,
+  claimLandTransactionSubmitted,
+  claimLandSuccess,
+  CLAIM_LAND_REQUEST,
+  clearRentalErrors,
   createRentalFailure,
   CreateRentalRequestAction,
   createRentalSuccess,
@@ -24,6 +35,8 @@ import { daysByPeriod, getNonces, getSignature } from './utils'
 
 export function* rentalSaga() {
   yield takeEvery(CREATE_RENTAL_REQUEST, handleCreateRentalRequest)
+  yield takeEvery(CLAIM_LAND_REQUEST, handleClaimLandRequest)
+  yield takeEvery(CLOSE_MODAL, handleClaimLandModalClose)
 }
 
 function* handleCreateRentalRequest(action: CreateRentalRequestAction) {
@@ -92,8 +105,55 @@ function* handleCreateRentalRequest(action: CreateRentalRequestAction) {
         pricePerDay,
         action.payload.periods,
         expiresAt,
-        error.message
+        (error as Error).message
       )
     )
+  }
+}
+
+function* handleClaimLandRequest(action: ClaimLandRequestAction) {
+  const { nft, rental } = action.payload
+
+  try {
+    const provider: Provider | null = yield call(getConnectedProvider)
+    if (!provider) {
+      throw new Error('A provider is required to claim LAND')
+    }
+
+    const address: string | undefined = yield select(getAddress)
+    if (!address) {
+      throw new Error('An address is required to claim LAND')
+    }
+
+    const rentalsContract: ContractData = yield call(
+      getContract,
+      ContractName.Rentals,
+      nft.chainId
+    )
+
+    const txHash: string = yield call(
+      sendTransaction as (
+        contract: ContractData,
+        contractMethodName: string,
+        ...contractArguments: any[]
+      ) => Promise<string>,
+      rentalsContract,
+      'claim(address,uint256)',
+      nft.contractAddress,
+      nft.tokenId
+    )
+    yield put(
+      claimLandTransactionSubmitted(nft, txHash, rentalsContract.address)
+    )
+    yield call(waitForTx, txHash)
+    yield put(claimLandSuccess(nft, rental))
+  } catch (error) {
+    yield put(claimLandFailure((error as Error).message))
+  }
+}
+
+function* handleClaimLandModalClose(action: CloseModalAction) {
+  if (action.payload.name === 'ClaimLandModal') {
+    yield put(clearRentalErrors())
   }
 }

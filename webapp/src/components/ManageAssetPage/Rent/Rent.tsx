@@ -49,11 +49,10 @@ const LinkedProfile = ({ address }: { address: string }) => {
 }
 
 export const Rent = (props: Props) => {
-  const { className, isClaimingLandBack, rental, nft } = props
+  const { className, isClaimingLandBack, onClaimLand, rental, nft } = props
 
   const handleOnEdit = useCallback(() => undefined, [])
   const handleListForRentAgain = useCallback(() => undefined, [])
-  const handleClaimBackLand = useCallback(() => undefined, [])
   const handleViewTransaction = useCallback(() => undefined, [])
   const handleListForRent = useCallback(() => {
     setIsCreateRentalModalOpen(true)
@@ -120,9 +119,9 @@ export const Rent = (props: Props) => {
                     </Button>
                   </div>
                 </>
-              ) : rental.startedAt && rentalEndDate!.getTime() >= Date.now() ? (
+              ) : rentalEndDate && rentalEndDate.getTime() <= Date.now() ? (
                 <>
-                  <div>
+                  <div className={styles.rentMessage}>
                     <T
                       id="manage_asset_page.rent.rent_end"
                       values={{
@@ -133,7 +132,7 @@ export const Rent = (props: Props) => {
                   <div className={styles.activeRentActions}>
                     <Button
                       className={styles.actionButton}
-                      onClick={handleClaimBackLand}
+                      onClick={onClaimLand}
                     >
                       {t('manage_asset_page.rent.claim_land')}
                     </Button>
@@ -145,19 +144,21 @@ export const Rent = (props: Props) => {
                     </Button>
                   </div>
                 </>
-              ) : rental.startedAt && rentalEndDate!.getTime() < Date.now() ? (
-                <T
-                  id="manage_asset_page.rent.rented_until"
-                  values={{
-                    date: intlFormat(rentalEndDate!, {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    }),
-                    tenant: <LinkedProfile address={rental.tenant!} />
-                  }}
-                />
+              ) : rentalEndDate && rentalEndDate.getTime() > Date.now() ? (
+                <div className={styles.rentMessage}>
+                  <T
+                    id="manage_asset_page.rent.rented_until"
+                    values={{
+                      date: intlFormat(rentalEndDate!, {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      }),
+                      tenant: <LinkedProfile address={rental.tenant!} />
+                    }}
+                  />
+                </div>
               ) : null}
             </div>
           ) : null}
