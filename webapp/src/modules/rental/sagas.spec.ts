@@ -441,15 +441,6 @@ describe('when handling the request action to claim a LAND', () => {
   })
 })
 
-describe('when handling the success action of the claim LAND', () => {
-  it('should put the action to close the claim modal', () => {
-    return expectSaga(rentalSaga)
-      .put(closeModal('ClaimLandModal'))
-      .dispatch(claimLandSuccess(nft, rental))
-      .silentRun()
-  })
-})
-
 describe('when handling the action to close the claim LAND modal', () => {
   it('should put the action to clear the rental errors', () => {
     return expectSaga(rentalSaga)

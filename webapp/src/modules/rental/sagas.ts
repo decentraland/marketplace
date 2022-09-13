@@ -18,14 +18,13 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
-import { closeModal, CloseModalAction, CLOSE_MODAL } from '../modal/actions'
+import { CloseModalAction, CLOSE_MODAL } from '../modal/actions'
 import {
   claimLandFailure,
   ClaimLandRequestAction,
   claimLandTransactionSubmitted,
   claimLandSuccess,
   CLAIM_LAND_REQUEST,
-  CLAIM_LAND_SUCCESS,
   clearRentalErrors,
   createRentalFailure,
   CreateRentalRequestAction,
@@ -37,7 +36,6 @@ import { daysByPeriod, getNonces, getSignature } from './utils'
 export function* rentalSaga() {
   yield takeEvery(CREATE_RENTAL_REQUEST, handleCreateRentalRequest)
   yield takeEvery(CLAIM_LAND_REQUEST, handleClaimLandRequest)
-  yield takeEvery(CLAIM_LAND_SUCCESS, handleClaimLandSuccess)
   yield takeEvery(CLOSE_MODAL, handleClaimLandModalClose)
 }
 
@@ -152,10 +150,6 @@ function* handleClaimLandRequest(action: ClaimLandRequestAction) {
   } catch (error) {
     yield put(claimLandFailure((error as Error).message))
   }
-}
-
-function* handleClaimLandSuccess() {
-  yield put(closeModal('ClaimLandModal'))
 }
 
 function* handleClaimLandModalClose(action: CloseModalAction) {
