@@ -45,7 +45,15 @@ const hasPrimarySales = (section?: Section) => {
     case DecentralandSection.WEARABLES_TIARA:
     case DecentralandSection.WEARABLES_TOP_HEAD:
     case DecentralandSection.WEARABLES_SKIN:
-    case DecentralandSection.EMOTES: {
+    case DecentralandSection.EMOTES:
+    case DecentralandSection.EMOTES_DANCE:
+    case DecentralandSection.EMOTES_STUNT:
+    case DecentralandSection.EMOTES_GREETINGS:
+    case DecentralandSection.EMOTES_FUN:
+    case DecentralandSection.EMOTES_POSES:
+    case DecentralandSection.EMOTES_REACTIONS:
+    case DecentralandSection.EMOTES_HORROR:
+    case DecentralandSection.EMOTES_MISCELLANEOUS: {
       return true
     }
     default:
