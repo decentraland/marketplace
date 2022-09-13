@@ -52,7 +52,8 @@ import {
   getSearchWearableCategory,
   getItemSortBy,
   getAssetOrderBy,
-  getCollectionSortBy
+  getCollectionSortBy,
+  getSearchEmoteCategory
 } from './search'
 import {
   getRarities,
@@ -236,6 +237,11 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           ? getSearchWearableCategory(section)
           : undefined
 
+        const emoteCategory =
+          category === NFTCategory.EMOTE
+            ? getSearchEmoteCategory(section)
+            : undefined
+
         const { rarities, wearableGenders } = options
 
         yield put(
@@ -249,6 +255,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               isOnSale: onlyOnSale,
               creator: address,
               wearableCategory,
+              emoteCategory,
               isWearableHead,
               isWearableAccessory,
               isWearableSmart: onlySmart,
