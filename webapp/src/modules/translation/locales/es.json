@@ -351,6 +351,9 @@
       "change_beneficiary": "Cambiar de beneficiario",
       "mint_item": "Acuñar item"
     },
+    "sales_rent_action_box": {
+      "until": "Desde {from_date} a {to_date}"
+    },
     "description": "Descripción",
     "owner": "Dueño",
     "creator": "Creador",
