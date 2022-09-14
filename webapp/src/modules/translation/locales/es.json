@@ -352,7 +352,8 @@
       "mint_item": "Acuñar item"
     },
     "sales_rent_action_box": {
-      "until": "Desde {from_date} a {to_date}"
+      "until": "Desde {from_date} a {to_date}",
+      "not_for_sale": "No disponible para comprar"
     },
     "description": "Descripción",
     "owner": "Dueño",

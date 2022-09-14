@@ -63,6 +63,8 @@
 	outline: inherit;
 	cursor: pointer;
 	border: none;
+  font-weight: 500;
+  font-size: 17px;
 }
 
 .selectedViewOption {
@@ -72,4 +74,31 @@
 
 .viewSelector {
   margin-bottom: 24px;
+}
+
+.notForSale {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.saleButtons {
+  display: flex;
+  flex-direction: row;
+}
+
+.buy + .bid {
+  margin-left: 8px !important;
+}
+
+.bid {
+  background: rgba(115, 110, 125, 0.24) !important;
+}
+
+.periodsDropdown + .manage {
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+.manage {
+  background: rgba(115, 110, 125, 0.24) !important;
 }

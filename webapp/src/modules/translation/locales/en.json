@@ -357,7 +357,8 @@
       "mint_item": "Mint item"
     },
     "sales_rent_action_box": {
-      "until": "From {from_date} to {to_date}"
+      "until": "From {from_date} to {to_date}",
+      "not_for_sale": "Not available for Sale"
     },
     "description": "Description",
     "owner": "Owner",

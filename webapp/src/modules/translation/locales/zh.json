@@ -353,7 +353,8 @@
       "mint_item": "薄荷项目"
     },
     "sales_rent_action_box": {
-      "until": "从 {from_date} 到 {to_date}"
+      "until": "从 {from_date} 到 {to_date}",
+      "not_for_sale": "不可出售"
     },
     "description": "描述",
     "owner": "持有者",

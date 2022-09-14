@@ -1,1 +1,1 @@
-export { default as SaleRentActionBox } from './SaleRentActionBox'
+export { default as SaleRentActionBox } from './SaleRentActionBox.container'

@@ -1,5 +1,6 @@
-import { ethers } from 'ethers'
 import React, { memo, useMemo, useCallback } from 'react'
+import { ethers } from 'ethers'
+import classNames from 'classnames'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
 import { Dropdown, DropdownItemProps, DropdownProps } from 'decentraland-ui'
@@ -27,7 +28,7 @@ const Trigger = ({ period }: { period: RentalListingPeriod }) => {
   )
 }
 
-const PeriodsDropdown = ({ value, periods, onChange }: Props) => {
+const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
   const handleOnChange = useCallback(
     (_event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
       onChange(data.value as number)
@@ -71,7 +72,7 @@ const PeriodsDropdown = ({ value, periods, onChange }: Props) => {
 
   return (
     <Dropdown
-      className={styles.periodDropdown}
+      className={classNames(styles.periodDropdown, className)}
       trigger={<Trigger period={periods[value]} />}
       value={value}
       options={options}

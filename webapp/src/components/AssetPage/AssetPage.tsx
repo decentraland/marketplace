@@ -88,7 +88,7 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
               </AssetProvider>
               <Narrow>
                 <AssetProviderPage type={type}>
-                  {(asset, _order, rental) =>
+                  {(asset, order, rental) =>
                     mapAsset<React.ReactNode>(
                       asset,
                       {
@@ -101,6 +101,7 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
                         parcel: nft => (
                           <ParcelDetail
                             nft={nft}
+                            order={order}
                             rental={rental}
                             isRentalsEnabled={isRentalsEnabled}
                           />

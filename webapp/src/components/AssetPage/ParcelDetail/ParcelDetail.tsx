@@ -2,26 +2,26 @@ import React from 'react'
 import { NFTCategory } from '@dcl/schemas'
 import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
+import { locations } from '../../../modules/routing/locations'
+import { isLand } from '../../../modules/nft/utils'
+import { Coordinate } from '../../Coordinate'
+import { AssetImage } from '../../AssetImage'
 import { Network } from '../Network'
 import { Description } from '../Description'
-import { Props } from './ParcelDetail.types'
 import { Owner } from '../Owner'
 import Price from '../Price'
 import Expiration from '../Expiration'
 import { Actions } from '../Actions'
 import { BidList } from '../BidList'
-import { TransactionHistory } from '../TransactionHistory'
-import { Coordinate } from '../../Coordinate'
 import { JumpIn } from '../JumpIn'
+import { TransactionHistory } from '../TransactionHistory'
 import { ProximityHighlights } from '../ProximityHighlights'
-import { locations } from '../../../modules/routing/locations'
 import BaseDetail from '../BaseDetail'
-import { AssetImage } from '../../AssetImage'
-import styles from './ParcelDetail.module.css'
-import { isLand } from '../../../modules/nft/utils'
 import { SaleRentActionBox } from '../SaleRentActionBox'
+import { Props } from './ParcelDetail.types'
+import styles from './ParcelDetail.module.css'
 
-const ParcelDetail = ({ nft, rental, isRentalsEnabled }: Props) => {
+const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
   const parcel = nft.data.parcel!
   const { x, y } = parcel
   const isPartOfEstate = nft.category === NFTCategory.PARCEL && parcel.estate
@@ -50,7 +50,12 @@ const ParcelDetail = ({ nft, rental, isRentalsEnabled }: Props) => {
       actions={
         <>
           {isRentalsEnabled ? (
-            <SaleRentActionBox asset={nft} rental={rental} />
+            <SaleRentActionBox
+              isRentalsEnabled={isRentalsEnabled}
+              order={order}
+              nft={nft}
+              rental={rental}
+            />
           ) : null}
         </>
       }
