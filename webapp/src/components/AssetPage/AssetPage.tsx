@@ -97,7 +97,14 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
                       },
                       {
                         ens: nft => <ENSDetail nft={nft} />,
-                        estate: nft => <EstateDetail nft={nft} />,
+                        estate: nft => (
+                          <EstateDetail
+                            nft={nft}
+                            order={order}
+                            rental={rental}
+                            isRentalsEnabled={isRentalsEnabled}
+                          />
+                        ),
                         parcel: nft => (
                           <ParcelDetail
                             nft={nft}
