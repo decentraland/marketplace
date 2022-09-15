@@ -5,15 +5,16 @@
   flex-direction: column;
 }
 
-.title {
+.price .title {
   font-weight: 500;
   font-size: 13px;
   text-transform: uppercase;
   color: #736E7D;
 }
 
-.priceValue {
+.price .content {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   margin-bottom: 24px;
 }
@@ -101,4 +102,8 @@
 
 .manage {
   background: rgba(115, 110, 125, 0.24) !important;
+}
+
+.fullWidth {
+  width: 100%
 }

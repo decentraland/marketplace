@@ -14,7 +14,6 @@ import {
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const wallet = getWallet(state)
-
   return {
     userHasAlreadyBidsOnNft: wallet
       ? getNFTBids(state).some(bid => bid.bidder === wallet.address)

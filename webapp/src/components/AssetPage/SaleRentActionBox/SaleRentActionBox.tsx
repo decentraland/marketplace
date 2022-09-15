@@ -1,12 +1,13 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button } from 'decentraland-ui'
+import { Button, Popup } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getMaxPriceOfPeriods } from '../../../modules/rental/utils'
 import { VendorFactory } from '../../../modules/vendor'
 import { locations } from '../../../modules/routing/locations'
+import { isPartOfEstate } from '../../../modules/nft/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { PeriodsDropdown } from './PeriodsDropdown'
@@ -26,7 +27,6 @@ const SaleRentActionBox = ({
   userHasAlreadyBidsOnNft,
   isRentalsEnabled
 }: Props) => {
-  console.log('Order', order)
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
     number
   >(0)
@@ -43,6 +43,7 @@ const SaleRentActionBox = ({
     () => (view === View.RENT ? setView(View.SALE) : setView(View.RENT)),
     [view]
   )
+  const isNFTPartOfAState = useMemo(() => isPartOfEstate(nft), [nft])
 
   // Validations for the sale screen
   const { bidService } = useMemo(() => VendorFactory.build(nft.vendor), [nft])
@@ -99,9 +100,26 @@ const SaleRentActionBox = ({
             className={styles.periodsDropdown}
           />
           {!isOwner ? (
-            <Button primary onClick={handleOnRent} className={styles.rent}>
-              {t('global.rent')}
-            </Button>
+            <Popup
+              content={t(
+                'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
+              )}
+              position="top center"
+              on="hover"
+              disabled={!isNFTPartOfAState}
+              trigger={
+                <div className={styles.fullWidth}>
+                  <Button
+                    primary
+                    disabled={isNFTPartOfAState}
+                    onClick={handleOnRent}
+                    className={styles.rent}
+                  >
+                    {t('global.rent')}
+                  </Button>
+                </div>
+              }
+            />
           ) : null}
         </>
       ) : (
@@ -109,7 +127,7 @@ const SaleRentActionBox = ({
           {order ? (
             <div className={styles.price}>
               <div className={styles.title}>{t('global.price')}</div>
-              <div className={styles.priceValue}>
+              <div className={styles.content}>
                 <Mana
                   className={styles.priceInMana}
                   withTooltip
@@ -136,13 +154,26 @@ const SaleRentActionBox = ({
                 </Button>
               ) : null}
               {canBid ? (
-                <Button
-                  className={classNames({ [styles.bid]: order })}
-                  primary={!order}
-                  fluid
-                >
-                  {t('asset_page.actions.bid')}
-                </Button>
+                <Popup
+                  content={t(
+                    'asset_page.sales_rent_action_box.parcel_belongs_to_estate_bid'
+                  )}
+                  position="top center"
+                  on="hover"
+                  disabled={!isNFTPartOfAState}
+                  trigger={
+                    <div className={styles.fullWidth}>
+                      <Button
+                        className={classNames({ [styles.bid]: order })}
+                        disabled={isNFTPartOfAState}
+                        primary={!order}
+                        fluid
+                      >
+                        {t('asset_page.actions.bid')}
+                      </Button>
+                    </div>
+                  }
+                />
               ) : null}
             </div>
           ) : null}
