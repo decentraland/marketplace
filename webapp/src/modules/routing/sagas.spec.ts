@@ -17,8 +17,7 @@ import { Section } from '../vendor/decentraland'
 import {
   browse,
   clearFilters,
-  fetchAssetsFromRoute as FetchAssetsFromRouteAction,
-  setIsLoadMore
+  fetchAssetsFromRoute as FetchAssetsFromRouteAction
 } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
 import { getCurrentBrowseOptions } from './selectors'
@@ -123,7 +122,6 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
 
     return expectSaga(routingSaga)
       .provide([[call(getNewBrowseOptions, browseOptions), browseOptions]])
-      .put(setIsLoadMore(false))
       .put(
         fetchItemsRequest({
           view: browseOptions.view,
