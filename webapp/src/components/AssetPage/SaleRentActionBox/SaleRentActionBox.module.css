@@ -87,7 +87,7 @@
   flex-direction: row;
 }
 
-.buy + .bid {
+.buy + .fullWidth > .bid {
   margin-left: 8px !important;
 }
 
