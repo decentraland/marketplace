@@ -18,7 +18,6 @@ const BaseDetail = ({
   below,
   className,
   actions,
-  // Maybe a flag here showing the asset details?
   showDetails
 }: Props) => {
   return (
