@@ -120,10 +120,11 @@ export function* routingSaga() {
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
-  const newOptions: BrowseOptions = yield getNewBrowseOptions(
+  const newOptions: BrowseOptions = yield call(
+    getNewBrowseOptions,
     action.payload.options
   )
-  yield fetchAssetsFromRoute(newOptions)
+  yield call(fetchAssetsFromRoute, newOptions)
 }
 
 function* handleClearFilters() {
