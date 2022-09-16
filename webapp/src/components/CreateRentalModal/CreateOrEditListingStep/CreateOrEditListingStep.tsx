@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import {
   Modal,
   Button,
@@ -12,20 +12,51 @@ import {
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import { PeriodOption } from '../../../modules/rental/types'
+import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
+import {
+  convertDateToDateInputValue,
+  getDefaultExpirationDate
+} from '../../../modules/order/utils'
+import {
+  daysByPeriod,
+  getMaxPriceOfPeriods,
+  periodsByDays
+} from '../../../modules/rental/utils'
 import { ManaField } from '../../ManaField'
-import { parseMANANumber } from '../../../lib/mana'
-import { getDefaultExpirationDate } from '../../../modules/order/utils'
-import { daysByPeriod } from '../../../modules/rental/utils'
-import { Props } from './CreateListingStep.types'
-import styles from './CreateListingStep.module.css'
+import { Props } from './CreateOrEditListingStep.types'
+import styles from './CreateOrEditListingStep.module.css'
 
 const CreateListingStep = (props: Props) => {
-  const { open, onCancel, nft, onCreate } = props
+  const { open, onCancel, nft, onCreate, rental } = props
 
-  const [pricePerDayInput, setPricePerDayInput] = useState('')
-  const [periodOptions, setPeriodOptions] = useState<PeriodOption[]>([])
-  const [expiresAt, setExpiresAt] = useState(getDefaultExpirationDate())
+  // Editing properties
+  const oldPrice = useMemo(
+    () => (rental ? formatWeiMANA(getMaxPriceOfPeriods(rental)) : null),
+    [rental]
+  )
+  const oldPeriods = useMemo(
+    () =>
+      rental
+        ? rental.periods.map(period => periodsByDays[period.maxDays])
+        : null,
+    [rental]
+  )
+  const oldExpirationDate = useMemo(
+    () =>
+      rental ? convertDateToDateInputValue(new Date(rental.expiration)) : null,
+    [rental]
+  )
 
+  // Form values
+  const [pricePerDayInput, setPricePerDayInput] = useState(oldPrice ?? '')
+  const [periodOptions, setPeriodOptions] = useState<PeriodOption[]>(
+    oldPeriods ?? []
+  )
+  const [expiresAt, setExpiresAt] = useState(
+    oldExpirationDate ?? getDefaultExpirationDate()
+  )
+
+  // Handlers
   const handleSubmit = useCallback(() => {
     onCreate(
       nft,
@@ -35,7 +66,7 @@ const CreateListingStep = (props: Props) => {
     )
   }, [onCreate, nft, pricePerDayInput, periodOptions, expiresAt])
 
-  const createOptionHanlder = (periodOption: PeriodOption) => () => {
+  const createOptionHandler = (periodOption: PeriodOption) => () => {
     const shouldAdd = !periodOptions.includes(periodOption)
     if (shouldAdd) {
       setPeriodOptions(
@@ -48,12 +79,18 @@ const CreateListingStep = (props: Props) => {
     }
   }
 
-  // validation
-  const isInvalidPrice = parseMANANumber(pricePerDayInput) <= 0
+  // Validations
+  const isInvalidPrice = parseMANANumber(pricePerDayInput) < 0
   const isInvalidExpirationDate = new Date(expiresAt).getTime() < Date.now()
   const isInvalid =
     isInvalidPrice || isInvalidExpirationDate || periodOptions.length === 0
   const showInvalidPriceError = pricePerDayInput !== '' && isInvalidPrice
+  const isUpdated =
+    oldExpirationDate !== expiresAt ||
+    pricePerDayInput !== oldPrice ||
+    (oldPeriods &&
+      (oldPeriods.length !== periodOptions.length ||
+        !oldPeriods.every(period => periodOptions.includes(period))))
 
   const handlePriceChange = useCallback(
     (_event: React.ChangeEvent<HTMLInputElement>, props: InputOnChangeData) => {
@@ -72,7 +109,11 @@ const CreateListingStep = (props: Props) => {
   return (
     <Modal open={open} size="tiny" className={styles.modal}>
       <ModalNavigation
-        title={t('rental_modal.create_listing_step.title')}
+        title={
+          rental
+            ? t('rental_modal.create_listing_step.titles.edit')
+            : t('rental_modal.create_listing_step.titles.create')
+        }
         onClose={onCancel}
       />
       <Modal.Content>
@@ -113,7 +154,7 @@ const CreateListingStep = (props: Props) => {
                   `rental_modal.create_listing_step.period_options.${option}`
                 )}
                 checked={periodOptions.includes(option)}
-                onClick={createOptionHanlder(option)}
+                onClick={createOptionHandler(option)}
               />
             ))}
           </div>
@@ -135,10 +176,25 @@ const CreateListingStep = (props: Props) => {
           />
         </div>
       </Modal.Content>
-      <Modal.Actions>
-        <Button primary onClick={handleSubmit} disabled={isInvalid}>
-          {t('rental_modal.create_listing_step.put_for_rent')}
-        </Button>
+      <Modal.Actions className={styles.actions}>
+        {!rental ? (
+          <Button primary onClick={handleSubmit} disabled={isInvalid}>
+            {t('rental_modal.create_listing_step.put_for_rent')}
+          </Button>
+        ) : (
+          <>
+            <Button
+              primary
+              onClick={handleSubmit}
+              disabled={isInvalid || !isUpdated}
+            >
+              {t('rental_modal.create_listing_step.update_listing')}
+            </Button>
+            <Button secondary onClick={handleSubmit} disabled={isInvalid}>
+              {t('rental_modal.create_listing_step.remove_listing')}
+            </Button>
+          </>
+        )}
       </Modal.Actions>
     </Modal>
   )

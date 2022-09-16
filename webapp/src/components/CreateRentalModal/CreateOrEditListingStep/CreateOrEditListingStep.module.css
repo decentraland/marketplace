@@ -82,3 +82,17 @@
 .expirationDate {
   height: 64px;
 }
+
+.actions {
+  flex-direction: column;
+  align-items: center;
+}
+
+.actions :global(.ui.button) {
+  width: 100%;
+}
+
+.actions :global(.ui.primary.button) + :global(.ui.secondary.button) {
+  margin-left: 0px;
+  margin-top: 15px;
+}

@@ -678,7 +678,12 @@
       "confirm": "Confirma la transacción en tu billetera"
     },
     "create_listing_step": {
-      "title": "Poner en alquiler",
+      "titles": {
+        "edit": "Editar listado de alquiler",
+        "create": "Poner en alquiler"
+      },
+      "update_listing": "Actualizar listado de alquiler",
+      "remove_listing": "Remover listado de alquiler",
       "price_per_day": "Precio por día",
       "listing_expiration_date": "Fecha de expiración del clasificado",
       "periods": "Período del alquiler",

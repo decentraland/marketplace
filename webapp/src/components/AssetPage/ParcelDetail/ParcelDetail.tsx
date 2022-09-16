@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { Button } from 'decentraland-ui'
+import React from 'react'
 import { NFTCategory } from '@dcl/schemas'
 import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
@@ -15,18 +14,15 @@ import { TransactionHistory } from '../TransactionHistory'
 import { Coordinate } from '../../Coordinate'
 import { JumpIn } from '../JumpIn'
 import { ProximityHighlights } from '../ProximityHighlights'
-import { CreateRentalModal } from '../../CreateRentalModal'
 import { locations } from '../../../modules/routing/locations'
 import BaseDetail from '../BaseDetail'
 import { AssetImage } from '../../AssetImage'
 import styles from './ParcelDetail.module.css'
 
-const ParcelDetail = ({ nft, isRentalsEnabled }: Props) => {
+const ParcelDetail = ({ nft }: Props) => {
   const parcel = nft.data.parcel!
   const { x, y } = parcel
   const isPartOfEstate = nft.category === NFTCategory.PARCEL && parcel.estate
-
-  const [showCreateRentalModal, setShowCreateRentalModal] = useState(false)
 
   return (
     <BaseDetail
@@ -77,18 +73,6 @@ const ParcelDetail = ({ nft, isRentalsEnabled }: Props) => {
         <>
           <BidList nft={nft} />
           <TransactionHistory asset={nft} />
-          {isRentalsEnabled ? (
-            <>
-              <Button onClick={() => setShowCreateRentalModal(true)}>
-                Create Rental
-              </Button>
-              <CreateRentalModal
-                nft={nft}
-                open={showCreateRentalModal}
-                onCancel={() => setShowCreateRentalModal(false)}
-              />
-            </>
-          ) : null}
         </>
       }
     />
