@@ -14,7 +14,7 @@ export type PreviewState = {
   isPlayingEmote?: boolean
 }
 
-const INITIAL_STATE: PreviewState = {
+export const INITIAL_STATE: PreviewState = {
   isTryingOn: false
 }
 
