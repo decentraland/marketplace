@@ -1,9 +1,15 @@
-import { Network, Rarity } from '@dcl/schemas'
+import {
+  ItemFilters,
+  ItemSortBy,
+  Network,
+  NFTCategory,
+  Rarity
+} from '@dcl/schemas'
 import { getLocation, push } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { AssetType } from '../asset/types'
-import { fetchTrendingItemsRequest } from '../item/actions'
+import { fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
 import { WearableGender } from '../nft/wearable/types'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
@@ -13,7 +19,7 @@ import {
   clearFilters,
   fetchAssetsFromRoute as FetchAssetsFromRouteAction
 } from './actions'
-import { fetchAssetsFromRoute, routingSaga } from './sagas'
+import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
 import { getCurrentBrowseOptions } from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
@@ -81,6 +87,48 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
     return expectSaga(routingSaga)
       .provide([[select(getCurrentBrowseOptions), browseOptions]])
       .put(fetchTrendingItemsRequest())
+      .dispatch(FetchAssetsFromRouteAction(browseOptions))
+      .run({ silenceTimeout: true })
+  })
+
+  it('should fetch emotes items when providing the EMOTES section', () => {
+    const address = '0x...'
+    const browseOptions: BrowseOptions = {
+      address,
+      assetType: AssetType.ITEM,
+      vendor: VendorName.DECENTRALAND,
+      section: Section.EMOTES,
+      view: View.ACCOUNT,
+      page: 1
+    }
+
+    const filters: ItemFilters = {
+      first: 24,
+      skip: 0,
+      sortBy: ItemSortBy.RECENTLY_REVIEWED,
+      creator: address,
+      category: NFTCategory.EMOTE,
+      isWearableHead: false,
+      isWearableAccessory: false,
+      isOnSale: undefined,
+      wearableCategory: undefined,
+      emoteCategory: undefined,
+      isWearableSmart: undefined,
+      search: undefined,
+      rarities: undefined,
+      contractAddress: undefined,
+      wearableGenders: undefined
+    }
+
+    return expectSaga(routingSaga)
+      .provide([[call(getNewBrowseOptions, browseOptions), browseOptions]])
+      .put(
+        fetchItemsRequest({
+          view: browseOptions.view,
+          page: browseOptions.page,
+          filters
+        })
+      )
       .dispatch(FetchAssetsFromRouteAction(browseOptions))
       .run({ silenceTimeout: true })
   })

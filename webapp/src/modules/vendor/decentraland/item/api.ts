@@ -88,6 +88,11 @@ class ItemAPI extends BaseAPI {
     if (filters.wearableCategory) {
       queryParams.append('wearableCategory', filters.wearableCategory)
     }
+
+    if (filters.emoteCategory) {
+      queryParams.append('emoteCategory', filters.emoteCategory)
+    }
+
     if (filters.wearableGenders) {
       for (const wearableGender of filters.wearableGenders) {
         queryParams.append('wearableGender', wearableGender)

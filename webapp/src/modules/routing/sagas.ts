@@ -52,7 +52,8 @@ import {
   getSearchWearableCategory,
   getItemSortBy,
   getAssetOrderBy,
-  getCollectionSortBy
+  getCollectionSortBy,
+  getSearchEmoteCategory
 } from './search'
 import {
   getRarities,
@@ -119,10 +120,11 @@ export function* routingSaga() {
 }
 
 function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
-  const newOptions: BrowseOptions = yield getNewBrowseOptions(
+  const newOptions: BrowseOptions = yield call(
+    getNewBrowseOptions,
     action.payload.options
   )
-  yield fetchAssetsFromRoute(newOptions)
+  yield call(fetchAssetsFromRoute, newOptions)
 }
 
 function* handleClearFilters() {
@@ -236,6 +238,11 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           ? getSearchWearableCategory(section)
           : undefined
 
+        const emoteCategory =
+          category === NFTCategory.EMOTE
+            ? getSearchEmoteCategory(section)
+            : undefined
+
         const { rarities, wearableGenders } = options
 
         yield put(
@@ -249,6 +256,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               isOnSale: onlyOnSale,
               creator: address,
               wearableCategory,
+              emoteCategory,
               isWearableHead,
               isWearableAccessory,
               isWearableSmart: onlySmart,
