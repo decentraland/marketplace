@@ -372,6 +372,7 @@ const AssetImage = (props: Props) => {
       const playButton = (
         <div className="play-emote-control">
           <Button
+            size="small"
             onClick={() =>
               handleControlActionChange(
                 isPlayingEmote
