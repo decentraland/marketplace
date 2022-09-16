@@ -1,3 +1,4 @@
+import { RentalListing } from '@dcl/schemas'
 import { Dispatch } from 'redux'
 import { NFT } from '../../../modules/nft/types'
 import { createRentalRequest } from '../../../modules/rental/actions'
@@ -5,6 +6,7 @@ import { createRentalRequest } from '../../../modules/rental/actions'
 export type Props = {
   open: boolean
   nft: NFT
+  rental: RentalListing | null
   onCancel: () => void
   onCreate: (...params: Parameters<typeof createRentalRequest>) => void
 }

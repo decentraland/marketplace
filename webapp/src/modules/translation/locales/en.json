@@ -683,7 +683,12 @@
       "confirm": "Confirm transaction on your wallet to continue"
     },
     "create_listing_step": {
-      "title": "List for Rent",
+      "titles": {
+        "edit": "Edit listing",
+        "create": "List for Rent"
+      },
+      "update_listing": "Update listing",
+      "remove_listing": "Remove listing",
       "price_per_day": "Price per day",
       "listing_expiration_date": "Listing expiration date",
       "periods": "Rent period",

@@ -680,7 +680,12 @@
       "confirm": "在您的钱包上确认交易以继续"
     },
     "create_listing_step": {
-      "title": "出租",
+      "titles": {
+        "edit": "编辑出租列表",
+        "create": "列出土地出租"
+      },
+      "update_listing": "更新出租清单",
+      "remove_listing": "删除出租列表",
       "price_per_day": "每天的价格",
       "listing_expiration_date": "上市截止日期",
       "periods": "租期",

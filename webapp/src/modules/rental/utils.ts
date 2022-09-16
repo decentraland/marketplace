@@ -21,6 +21,13 @@ export const daysByPeriod: Record<PeriodOption, number> = {
   [PeriodOption.ONE_YEAR]: 365
 }
 
+export const periodsByDays = (Object.keys(
+  daysByPeriod
+) as PeriodOption[]).reduce((acc, period) => {
+  acc[daysByPeriod[period]] = period
+  return acc
+}, {} as Record<number, PeriodOption>)
+
 export async function getSignature(
   chainId: ChainId,
   contractAddress: string,
