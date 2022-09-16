@@ -8,7 +8,7 @@ beforeEach(() => {
   state = { ...INITIAL_STATE }
 })
 
-describe('when reducing the successful action of setting the wearable preview', () => {
+describe('when reducing action of setting the wearable preview', () => {
   it('should return a state with the created wearable preview', () => {
     const controller = { scene: {}, emote: {} } as IPreviewController
     expect(
@@ -18,7 +18,9 @@ describe('when reducing the successful action of setting the wearable preview', 
       wearablePreviewController: controller
     })
   })
+})
 
+describe('when reducing action of setting the wearable preview to null', () => {
   it('should return a state with the unloaded wearable preview', () => {
     expect(previewReducer(state, setWearablePreviewController(null))).toEqual({
       ...INITIAL_STATE,
@@ -27,14 +29,16 @@ describe('when reducing the successful action of setting the wearable preview', 
   })
 })
 
-describe('when reducing the successful action of setting the playing emote state', () => {
+describe('when reducing action of setting the playing emote state to true', () => {
   it('should return a state with the playing emote state true', () => {
     expect(previewReducer(state, setEmotePlaying(true))).toEqual({
       ...INITIAL_STATE,
       isPlayingEmote: true
     })
   })
+})
 
+describe('when reducing action of setting the playing emote state to false', () => {
   it('should return a state with the playing emote state false', () => {
     expect(previewReducer(state, setEmotePlaying(false))).toEqual({
       ...INITIAL_STATE,
