@@ -3,7 +3,10 @@ import { Avatar } from '@dcl/schemas'
 import { connect } from 'react-redux'
 import { RootState } from '../../modules/reducer'
 import { getWallet } from '../../modules/wallet/selectors'
-import { getIsTryingOn } from '../../modules/ui/preview/selectors'
+import {
+  getIsTryingOn,
+  getIsPlayingEmote
+} from '../../modules/ui/preview/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -22,7 +25,8 @@ const mapState = (state: RootState): MapStateProps => {
   }
   return {
     avatar,
-    isTryingOn: getIsTryingOn(state)
+    isTryingOn: getIsTryingOn(state),
+    isPlayingEmote: getIsPlayingEmote(state)
   }
 }
 

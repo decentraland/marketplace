@@ -18,9 +18,20 @@ export type Props = {
   showMonospace?: boolean
   avatar?: Avatar
   isTryingOn: boolean
+  isPlayingEmote?: boolean
   onSetIsTryingOn: typeof setIsTryingOn
 }
 
-export type MapStateProps = Pick<Props, 'avatar' | 'isTryingOn'>
+export enum ControlOptionAction {
+  ZOOM_IN,
+  ZOOM_OUT,
+  PLAY_EMOTE,
+  STOP_EMOTE
+}
+
+export type MapStateProps = Pick<
+  Props,
+  'avatar' | 'isTryingOn' | 'isPlayingEmote'
+>
 export type MapDispatchProps = Pick<Props, 'onSetIsTryingOn'>
 export type MapDispatch = Dispatch<SetIsTryingOnAction>

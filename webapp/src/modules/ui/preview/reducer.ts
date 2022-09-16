@@ -2,6 +2,7 @@ import { SetIsTryingOnAction, SET_IS_TRYING_ON } from './actions'
 
 export type PreviewState = {
   isTryingOn: boolean
+  isPlayingEmote?: boolean
 }
 
 const INITIAL_STATE: PreviewState = {

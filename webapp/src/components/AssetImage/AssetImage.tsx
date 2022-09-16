@@ -1,15 +1,28 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyImage } from 'react-lazy-images'
 import classNames from 'classnames'
-import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
+import {
+  BodyShape,
+  IPreviewController,
+  NFTCategory,
+  PreviewEmote,
+  Rarity
+} from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { Button, Center, Loader, Popup, WearablePreview } from 'decentraland-ui'
+import {
+  Button,
+  Center,
+  Icon,
+  Loader,
+  Popup,
+  WearablePreview
+} from 'decentraland-ui'
 
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import { Atlas } from '../Atlas'
-import { Props } from './AssetImage.types'
+import { ControlOptionAction, Props } from './AssetImage.types'
 import './AssetImage.css'
 import { config } from '../../config'
 import { Env } from '@dcl/ui-env'
@@ -57,6 +70,7 @@ const AssetImage = (props: Props) => {
     showMonospace,
     avatar,
     isTryingOn,
+    isPlayingEmote,
     onSetIsTryingOn
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
@@ -65,10 +79,19 @@ const AssetImage = (props: Props) => {
     isDraggable
   )
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
+  const [
+    wearableController,
+    setWearableController
+  ] = useState<IPreviewController | null>(null)
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
-  }, [])
+    if (asset.category === NFTCategory.EMOTE && !wearableController) {
+      setWearableController(
+        WearablePreview.createController('try-on-wearable-preview')
+      )
+    }
+  }, [asset.category, wearableController])
   const handleError = useCallback(error => {
     console.warn(error)
     setWearablePreviewError(true)
@@ -86,6 +109,35 @@ const AssetImage = (props: Props) => {
       setIsLoadingWearablePreview(true)
     }
   }, [isTryingOn, onSetIsTryingOn])
+  const handleControlActionChange = useCallback(
+    async (action: ControlOptionAction) => {
+      const ZOOM_DELTA = 0.1
+
+      if (wearableController) {
+        switch (action) {
+          case ControlOptionAction.ZOOM_IN: {
+            await wearableController.scene.changeZoom(ZOOM_DELTA)
+            break
+          }
+          case ControlOptionAction.ZOOM_OUT: {
+            await wearableController.scene.changeZoom(-ZOOM_DELTA)
+            break
+          }
+          case ControlOptionAction.PLAY_EMOTE: {
+            await wearableController.emote.play()
+            break
+          }
+          case ControlOptionAction.STOP_EMOTE: {
+            await wearableController.emote.stop()
+            break
+          }
+          default:
+            break
+        }
+      }
+    },
+    [wearableController]
+  )
 
   const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
     estate
@@ -300,15 +352,58 @@ const AssetImage = (props: Props) => {
       } else if ('tokenId' in asset && asset.tokenId) {
         tokenId = asset.tokenId
       }
+      const zoomControls = (
+        <div className="zoom-controls">
+          <Button
+            className="zoom-control zoom-in-control"
+            onClick={() =>
+              handleControlActionChange(ControlOptionAction.ZOOM_IN)
+            }
+          >
+            <Icon name="plus" />
+          </Button>
+          <Button
+            className="zoom-control zoom-out-control"
+            onClick={() =>
+              handleControlActionChange(ControlOptionAction.ZOOM_OUT)
+            }
+          >
+            <Icon name="minus" />
+          </Button>
+        </div>
+      )
+      const playButton = (
+        <div className="play-emote-control">
+          <Button
+            onClick={() =>
+              handleControlActionChange(
+                isPlayingEmote
+                  ? ControlOptionAction.STOP_EMOTE
+                  : ControlOptionAction.PLAY_EMOTE
+              )
+            }
+          >
+            {isPlayingEmote ? <Icon name="stop" /> : <Icon name="play" />}
+            <span>
+              {isPlayingEmote
+                ? t('wearable_preview.stop_emote')
+                : t('wearable_preview.play_emote')}
+            </span>
+          </Button>
+        </div>
+      )
 
       if (isDraggable) {
         wearablePreview = (
           <>
             <WearablePreview
+              id="try-on-wearable-preview"
               contractAddress={asset.contractAddress}
               itemId={itemId}
               tokenId={tokenId}
               profile={avatar ? avatar.ethAddress : 'default'}
+              wheelZoom={1.5}
+              wheelStart={100}
               onLoad={handleLoad}
               onError={handleError}
               dev={config.is(Env.DEVELOPMENT)}
@@ -321,7 +416,12 @@ const AssetImage = (props: Props) => {
                   size="large"
                 />
               </Center>
-            ) : null}
+            ) : (
+              <>
+                {zoomControls}
+                {playButton}
+              </>
+            )}
           </>
         )
       }
