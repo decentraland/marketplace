@@ -456,7 +456,9 @@
       "male": "男",
       "female": "女",
       "message": "这个可穿戴设备没有 {bodyShape} 表示"
-    }
+    },
+    "play_emote": "玩表情",
+    "stop_emote": "停止表情"
   },
   "sell_page": {
     "title": "待售列表",

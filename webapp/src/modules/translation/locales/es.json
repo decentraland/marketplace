@@ -455,7 +455,9 @@
       "male": "hombre",
       "female": "mujer",
       "message": "Esta vestimenta no tiene representación de {bodyShape}"
-    }
+    },
+    "play_emote": "Reproducir Emote",
+    "stop_emote": "Parar Emote"
   },
   "sell_page": {
     "title": "Poner en venta",

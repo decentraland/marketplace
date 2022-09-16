@@ -459,7 +459,9 @@
       "male": "male",
       "female": "female",
       "message": "This wearable doesn't have a {bodyShape} representation"
-    }
+    },
+    "play_emote": "Play Emote",
+    "stop_emote": "Stop Emote"
   },
   "sell_page": {
     "title": "List for sale",
