@@ -1,13 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyImage } from 'react-lazy-images'
 import classNames from 'classnames'
-import {
-  BodyShape,
-  IPreviewController,
-  NFTCategory,
-  PreviewEmote,
-  Rarity
-} from '@dcl/schemas'
+import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
@@ -69,9 +63,11 @@ const AssetImage = (props: Props) => {
     isSmall,
     showMonospace,
     avatar,
+    wearableController,
     isTryingOn,
     isPlayingEmote,
-    onSetIsTryingOn
+    onSetIsTryingOn,
+    onSetWearablePreviewController
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
@@ -79,19 +75,15 @@ const AssetImage = (props: Props) => {
     isDraggable
   )
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
-  const [
-    wearableController,
-    setWearableController
-  ] = useState<IPreviewController | null>(null)
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
     if (asset.category === NFTCategory.EMOTE && !wearableController) {
-      setWearableController(
-        WearablePreview.createController('try-on-wearable-preview')
+      onSetWearablePreviewController(
+        WearablePreview.createController('wearable-preview')
       )
     }
-  }, [asset.category, wearableController])
+  }, [asset.category, wearableController, onSetWearablePreviewController])
   const handleError = useCallback(error => {
     console.warn(error)
     setWearablePreviewError(true)
@@ -163,6 +155,11 @@ const AssetImage = (props: Props) => {
         mode: isTryingOn ? 'avatar' : 'wearable'
       })
       setIsTracked(true)
+    }
+    return () => {
+      if (asset.category === NFTCategory.EMOTE && wearableController) {
+        onSetWearablePreviewController(null)
+      }
     }
   }, []) // eslint-disable-line
 
@@ -397,7 +394,7 @@ const AssetImage = (props: Props) => {
         wearablePreview = (
           <>
             <WearablePreview
-              id="try-on-wearable-preview"
+              id="wearable-preview"
               contractAddress={asset.contractAddress}
               itemId={itemId}
               tokenId={tokenId}

@@ -5,7 +5,8 @@ import { RootState } from '../../modules/reducer'
 import { getWallet } from '../../modules/wallet/selectors'
 import {
   getIsTryingOn,
-  getIsPlayingEmote
+  getIsPlayingEmote,
+  getWearablePreviewController
 } from '../../modules/ui/preview/selectors'
 import {
   MapStateProps,
@@ -13,7 +14,10 @@ import {
   MapDispatch
 } from './AssetImage.types'
 import AssetImage from './AssetImage'
-import { setIsTryingOn } from '../../modules/ui/preview/actions'
+import {
+  setIsTryingOn,
+  setWearablePreviewController
+} from '../../modules/ui/preview/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   const profiles = getProfiles(state)
@@ -25,13 +29,16 @@ const mapState = (state: RootState): MapStateProps => {
   }
   return {
     avatar,
+    wearableController: getWearablePreviewController(state),
     isTryingOn: getIsTryingOn(state),
     isPlayingEmote: getIsPlayingEmote(state)
   }
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onSetIsTryingOn: value => dispatch(setIsTryingOn(value))
+  onSetIsTryingOn: value => dispatch(setIsTryingOn(value)),
+  onSetWearablePreviewController: controller =>
+    dispatch(setWearablePreviewController(controller))
 })
 
 export default connect(mapState, mapDispatch)(AssetImage)
