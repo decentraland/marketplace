@@ -103,7 +103,7 @@ const AssetImage = (props: Props) => {
   }, [isTryingOn, onSetIsTryingOn])
   const handleControlActionChange = useCallback(
     async (action: ControlOptionAction) => {
-      const ZOOM_DELTA = 0.1
+      const ZOOM_DELTA = 0.03
 
       if (wearableController) {
         switch (action) {
@@ -352,6 +352,7 @@ const AssetImage = (props: Props) => {
       const zoomControls = (
         <div className="zoom-controls">
           <Button
+            animated={false}
             className="zoom-control zoom-in-control"
             onClick={() =>
               handleControlActionChange(ControlOptionAction.ZOOM_IN)
@@ -360,6 +361,7 @@ const AssetImage = (props: Props) => {
             <Icon name="plus" />
           </Button>
           <Button
+            animated={false}
             className="zoom-control zoom-out-control"
             onClick={() =>
               handleControlActionChange(ControlOptionAction.ZOOM_OUT)
