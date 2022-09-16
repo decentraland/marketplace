@@ -80,7 +80,7 @@ const CreateListingStep = (props: Props) => {
   }
 
   // Validations
-  const isInvalidPrice = parseMANANumber(pricePerDayInput) <= 0
+  const isInvalidPrice = parseMANANumber(pricePerDayInput) < 0
   const isInvalidExpirationDate = new Date(expiresAt).getTime() < Date.now()
   const isInvalid =
     isInvalidPrice || isInvalidExpirationDate || periodOptions.length === 0

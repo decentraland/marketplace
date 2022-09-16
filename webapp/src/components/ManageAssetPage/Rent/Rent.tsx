@@ -51,9 +51,7 @@ const LinkedProfile = ({ address }: { address: string }) => {
 export const Rent = (props: Props) => {
   const { className, isClaimingLandBack, onClaimLand, rental, nft } = props
 
-  const handleOnEdit = useCallback(() => {
-    setIsCreateRentalModalOpen(true)
-  }, [])
+  const handleOnEdit = useCallback(() => setIsCreateRentalModalOpen(true), [])
   const handleListForRentAgain = useCallback(() => undefined, [])
   const handleViewTransaction = useCallback(() => undefined, [])
   const handleListForRent = useCallback(() => {
