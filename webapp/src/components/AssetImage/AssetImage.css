@@ -157,6 +157,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 1px;
+}
+
+.AssetImage .zoom-controls > .ui.button.zoom-control:hover {
+  transform: none;
+  background-color: var(--secondary) !important;
 }
 
 .AssetImage .zoom-controls > .ui.button.zoom-control i.icon {
