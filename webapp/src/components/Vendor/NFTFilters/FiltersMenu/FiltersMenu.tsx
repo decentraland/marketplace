@@ -83,9 +83,15 @@ const FiltersMenu = (props: Props) => {
     ]
   }, [])
 
-  const handleOnlySmartClick = useCallback(
-    () => onOnlySmartChange(!isOnlySmart),
-    [onOnlySmartChange, isOnlySmart]
+  const handleOnlySmartClick = useCallback(() => {
+    return onOnlySmartChange ? onOnlySmartChange(!isOnlySmart) : null
+  }, [onOnlySmartChange, isOnlySmart])
+
+  const handleOnGenderChange = useCallback(
+    options => {
+      return onGendersChange ? onGendersChange(options) : null
+    },
+    [onGendersChange]
   )
 
   return (
@@ -105,31 +111,35 @@ const FiltersMenu = (props: Props) => {
           options={networkOptions}
           onChange={network => onNetworkChange(network as Network)}
         />
-        <Mobile>
-          <Header sub>{t('nft_filters.smart_wearables')}</Header>
-          <Radio
-            className="smart-toggle-mobile"
-            toggle
-            checked={isOnlySmart}
-            onChange={handleOnlySmartClick}
-          />
-        </Mobile>
-        <NotMobile>
-          <Popup
-            content={t('nft_filters.smart_wearables')}
-            position="top center"
-            trigger={
-              <div
-                className={classNames(`smart-toggle`, {
-                  'is-enabled': isOnlySmart
-                })}
-                onClick={handleOnlySmartClick}
-              >
-                <SmartIcon />
-              </div>
-            }
-          ></Popup>
-        </NotMobile>
+        {isOnlySmart !== undefined && (
+          <>
+            <Mobile>
+              <Header sub>{t('nft_filters.smart_wearables')}</Header>
+              <Radio
+                className="smart-toggle-mobile"
+                toggle
+                checked={isOnlySmart}
+                onChange={handleOnlySmartClick}
+              />
+            </Mobile>
+            <NotMobile>
+              <Popup
+                content={t('nft_filters.smart_wearables')}
+                position="top center"
+                trigger={
+                  <div
+                    className={classNames(`smart-toggle`, {
+                      'is-enabled': isOnlySmart
+                    })}
+                    onClick={handleOnlySmartClick}
+                  >
+                    <SmartIcon />
+                  </div>
+                }
+              ></Popup>
+            </NotMobile>
+          </>
+        )}
       </Row>
       <Row>
         <Column>
@@ -140,14 +150,16 @@ const FiltersMenu = (props: Props) => {
             onChange={onRaritiesChange}
           />
         </Column>
-        <Column>
-          <ArrayFilter
-            name={t('nft_filters.gender')}
-            values={selectedGenders}
-            options={genderOptions}
-            onChange={onGendersChange}
-          />
-        </Column>
+        {selectedGenders !== undefined && (
+          <Column>
+            <ArrayFilter
+              name={t('nft_filters.gender')}
+              values={selectedGenders}
+              options={genderOptions}
+              onChange={handleOnGenderChange}
+            />
+          </Column>
+        )}
       </Row>
     </>
   )

@@ -208,10 +208,13 @@ const NFTFilters = (props: Props) => {
     [network, onBrowse]
   )
 
-  useEffect(() => setShowFiltersMenu(category === NFTCategory.WEARABLE), [
-    category,
-    setShowFiltersMenu
-  ])
+  useEffect(
+    () =>
+      setShowFiltersMenu(
+        category === NFTCategory.WEARABLE || category === NFTCategory.EMOTE
+      ),
+    [category, setShowFiltersMenu]
+  )
 
   const searchPlaceholder = isMap
     ? t('nft_filters.search_land')
@@ -337,19 +340,32 @@ const NFTFilters = (props: Props) => {
           minWidth={Responsive.onlyTablet.minWidth}
           className="filters"
         >
-          <FiltersMenu
-            assetType={assetType}
-            selectedNetwork={network}
-            selectedCollection={contracts[0]}
-            selectedRarities={rarities}
-            selectedGenders={wearableGenders}
-            isOnlySmart={!!onlySmart}
-            onCollectionsChange={handleCollectionsChange}
-            onGendersChange={handleGendersChange}
-            onRaritiesChange={handleRaritiesChange}
-            onNetworkChange={handleNetworkChange}
-            onOnlySmartChange={handleToggleOnlySmart}
-          />
+          {category === NFTCategory.WEARABLE && (
+            <FiltersMenu
+              assetType={assetType}
+              selectedNetwork={network}
+              selectedCollection={contracts[0]}
+              selectedRarities={rarities}
+              selectedGenders={wearableGenders}
+              isOnlySmart={!!onlySmart}
+              onCollectionsChange={handleCollectionsChange}
+              onGendersChange={handleGendersChange}
+              onRaritiesChange={handleRaritiesChange}
+              onNetworkChange={handleNetworkChange}
+              onOnlySmartChange={handleToggleOnlySmart}
+            />
+          )}
+          {category === NFTCategory.EMOTE && (
+            <FiltersMenu
+              assetType={assetType}
+              selectedNetwork={network}
+              selectedCollection={contracts[0]}
+              selectedRarities={rarities}
+              onCollectionsChange={handleCollectionsChange}
+              onRaritiesChange={handleRaritiesChange}
+              onNetworkChange={handleNetworkChange}
+            />
+          )}
         </Responsive>
       ) : null}
 
@@ -372,7 +388,7 @@ const NFTFilters = (props: Props) => {
               </div>
             </div>
           )}
-          {category === NFTCategory.WEARABLE ? (
+          {showFiltersMenu ? (
             <>
               <div className="filter-row">
                 <Header sub>{t('filters.type')}</Header>
@@ -383,19 +399,32 @@ const NFTFilters = (props: Props) => {
                   onChange={handleTypeByDropdownChange}
                 />
               </div>
-              <FiltersMenu
-                assetType={assetType}
-                selectedNetwork={network}
-                selectedCollection={contracts[0]}
-                selectedRarities={rarities}
-                selectedGenders={wearableGenders}
-                isOnlySmart={!!onlySmart}
-                onCollectionsChange={handleCollectionsChange}
-                onGendersChange={handleGendersChange}
-                onRaritiesChange={handleRaritiesChange}
-                onNetworkChange={handleNetworkChange}
-                onOnlySmartChange={handleToggleOnlySmart}
-              />
+              {category === NFTCategory.WEARABLE && (
+                <FiltersMenu
+                  assetType={assetType}
+                  selectedNetwork={network}
+                  selectedCollection={contracts[0]}
+                  selectedRarities={rarities}
+                  selectedGenders={wearableGenders}
+                  isOnlySmart={!!onlySmart}
+                  onCollectionsChange={handleCollectionsChange}
+                  onGendersChange={handleGendersChange}
+                  onRaritiesChange={handleRaritiesChange}
+                  onNetworkChange={handleNetworkChange}
+                  onOnlySmartChange={handleToggleOnlySmart}
+                />
+              )}
+              {category === NFTCategory.EMOTE && (
+                <FiltersMenu
+                  assetType={assetType}
+                  selectedNetwork={network}
+                  selectedCollection={contracts[0]}
+                  selectedRarities={rarities}
+                  onCollectionsChange={handleCollectionsChange}
+                  onRaritiesChange={handleRaritiesChange}
+                  onNetworkChange={handleNetworkChange}
+                />
+              )}
             </>
           ) : null}
           <div className="filter-row">
