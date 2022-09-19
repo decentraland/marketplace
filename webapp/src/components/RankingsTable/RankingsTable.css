@@ -77,12 +77,13 @@
   margin-right: 12px;
 }
 
-.RankingsTable .rankings-item-cell img {
+.RankingsTable .rankings-item-cell .AssetImage {
   width: 48px;
   height: 48px;
   margin-right: 20px;
   background-color: rgba(115, 110, 125, 0.24);
   border-radius: 5px;
+  overflow: hidden;
 }
 
 .RankingsTable .ui.table .rankings-item-data-creator a {

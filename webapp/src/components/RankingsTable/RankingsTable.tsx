@@ -11,7 +11,7 @@ import {
   DropdownProps,
   Mobile
 } from 'decentraland-ui'
-import { Rarity, WearableCategory } from '@dcl/schemas'
+import { EmoteCategory, Rarity, WearableCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   AnalyticsTimeframe,
@@ -48,7 +48,7 @@ const RankingsTable = (props: Props) => {
     : null
 
   const [currentEntity, setCurrentEntity] = useState(
-    parsedURL ? parsedURL.entity : RankingEntities.ITEMS
+    parsedURL ? parsedURL.entity : RankingEntities.WEARABLES
   )
   const [currentTimeframe, setCurrentTimeframe] = useState(
     parsedURL ? parsedURL.timeframe : AnalyticsTimeframe.WEEK
@@ -115,7 +115,8 @@ const RankingsTable = (props: Props) => {
             ))}
           </Tabs.Left>
         </Tabs>
-        {currentEntity === RankingEntities.ITEMS && (
+        {(currentEntity === RankingEntities.WEARABLES ||
+          currentEntity === RankingEntities.EMOTES) && (
           <>
             <Dropdown
               defaultValue={ALL_FILTER}
@@ -123,13 +124,23 @@ const RankingsTable = (props: Props) => {
               direction="right"
               options={[
                 ALL_FILTER,
-                ...Object.values(WearableCategory.schema.enum)
+                ...Object.values(
+                  currentEntity === RankingEntities.EMOTES
+                    ? EmoteCategory.schema.enum
+                    : WearableCategory.schema.enum
+                )
               ].map(category => ({
                 value: category as string,
                 text:
                   category === ALL_FILTER
-                    ? t('home_page.analytics.rankings.items.all_categories')
-                    : t(`wearable.category.${category}`)
+                    ? t('home_page.analytics.rankings.all_categories')
+                    : t(
+                        `${
+                          currentEntity === RankingEntities.EMOTES
+                            ? 'emote'
+                            : 'wearable'
+                        }.category.${category}`
+                      )
               }))}
               onChange={registerHandleFilterChange('category')}
             />
@@ -142,7 +153,7 @@ const RankingsTable = (props: Props) => {
                   value: rarity as string,
                   text:
                     rarity === ALL_FILTER
-                      ? t('home_page.analytics.rankings.items.all_rarities')
+                      ? t('home_page.analytics.rankings.all_rarities')
                       : t(`rarity.${rarity}`)
                 })
               )}
@@ -158,7 +169,7 @@ const RankingsTable = (props: Props) => {
     return (
       <Dropdown
         className="rankings-entity-dropdown"
-        defaultValue={RankingEntities.ITEMS}
+        defaultValue={RankingEntities.WEARABLES}
         value={currentEntity}
         direction="right"
         options={[...Object.values(RankingEntities)].map(entity => ({
@@ -175,13 +186,16 @@ const RankingsTable = (props: Props) => {
 
   const getTableHeader = () => {
     switch (currentEntity) {
-      case RankingEntities.ITEMS:
+      case RankingEntities.EMOTES:
+      case RankingEntities.WEARABLES:
+        const label =
+          currentEntity === RankingEntities.EMOTES ? 'emotes' : 'wearables'
         return (
           <Table.Header>
             <Table.Row>
               <Mobile>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.items.item')}
+                  {t(`home_page.analytics.rankings.${label}.item`)}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   {t('home_page.analytics.rankings.total_volume')}
@@ -189,16 +203,16 @@ const RankingsTable = (props: Props) => {
               </Mobile>
               <NotMobile>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.items.item')}
+                  {t(`home_page.analytics.rankings.${label}.item`)}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.items.category')}
+                  {t('home_page.analytics.rankings.category')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.items.rarity')}
+                  {t('home_page.analytics.rankings.rarity')}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.items.items_sold')}
+                  {t(`home_page.analytics.rankings.${label}.items_sold`)}
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   {t('home_page.analytics.rankings.total_volume')}
@@ -313,7 +327,9 @@ const RankingsTable = (props: Props) => {
   }
 
   const renderMobileTableHeader = () => {
-    let header = <span>{t('home_page.analytics.rankings.items.item')}</span>
+    const label =
+      currentEntity === RankingEntities.EMOTES ? 'emotes' : 'wearables'
+    let header = <span>{t(`home_page.analytics.rankings.${label}.item`)}</span>
     if (currentEntity === RankingEntities.CREATORS) {
       header = <span>{t('home_page.analytics.rankings.creators.creator')}</span>
     } else if (currentEntity === RankingEntities.COLLECTORS) {
@@ -360,7 +376,8 @@ const RankingsTable = (props: Props) => {
     }
     let content
     switch (currentEntity) {
-      case RankingEntities.ITEMS:
+      case RankingEntities.EMOTES:
+      case RankingEntities.WEARABLES:
         content = (data as ItemRank[]).map(entity => (
           <RankingItemRow
             key={entity.id}

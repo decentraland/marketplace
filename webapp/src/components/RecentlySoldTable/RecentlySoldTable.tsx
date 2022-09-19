@@ -339,7 +339,7 @@ const RecentlySoldTable = (props: Props) => {
 
                     <span>
                       <T
-                        id="home_page.analytics.rankings.items.by_creator"
+                        id="home_page.analytics.rankings.by_creator"
                         values={{
                           creator: (
                             <span className="rankings-item-data-creator">

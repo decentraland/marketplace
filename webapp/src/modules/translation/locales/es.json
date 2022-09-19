@@ -167,16 +167,21 @@
         "no_results_title": "No hay resultados para los filtros seleccionados",
         "no_results_action": "{link} o seleccione diferentes",
         "clear_filters": "Limpie los filtros",
-        "items": {
-          "all_categories": "Todas las categorias",
-          "all_rarities": "Todas las rarezas",
-          "by_creator": "por {creator}",
+        "all_categories": "Todas las categorias",
+        "all_rarities": "Todas las rarezas",
+        "by_creator": "por {creator}",
+        "category": "Categorias",
+        "rarity": "Rareza",
+        "price": "Precio",
+        "wearables": {
           "tab_title": "Wearables",
           "item": "Item",
-          "category": "Categorias",
-          "rarity": "Rareza",
-          "price": "Precio",
           "items_sold": "Items vendidos"
+        },
+        "emotes": {
+          "tab_title": "Emotes",
+          "item": "Emote",
+          "items_sold": "Emotes vendidos"
         },
         "creators": {
           "tab_title": "Creadores",
