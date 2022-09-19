@@ -12,7 +12,7 @@ import {
 import {
   ClaimLandFailureAction,
   ClaimLandRequestAction,
-  ClaimLandSignedTransaction,
+  ClaimLandTransactionSubmitted,
   ClaimLandSuccessAction,
   CLAIM_LAND_FAILURE,
   CLAIM_LAND_REQUEST,
@@ -25,7 +25,15 @@ import {
   CreateRentalSuccessAction,
   CREATE_RENTAL_FAILURE,
   CREATE_RENTAL_REQUEST,
-  CREATE_RENTAL_SUCCESS
+  CREATE_RENTAL_SUCCESS,
+  RemoveRentalFailureAction,
+  RemoveRentalSuccessAction,
+  RemoveRentalRequestAction,
+  RemoveRentalTransactionSubmitted,
+  REMOVE_RENTAL_REQUEST,
+  REMOVE_RENTAL_SUCCESS,
+  REMOVE_RENTAL_FAILURE,
+  REMOVE_RENTAL_TRANSACTION_SUBMITTED
 } from './actions'
 
 export type RentalState = {
@@ -49,8 +57,12 @@ type RentalReducerAction =
   | ClaimLandRequestAction
   | ClaimLandSuccessAction
   | ClaimLandFailureAction
-  | ClaimLandSignedTransaction
+  | ClaimLandTransactionSubmitted
   | ClearRentalErrors
+  | RemoveRentalRequestAction
+  | RemoveRentalSuccessAction
+  | RemoveRentalFailureAction
+  | RemoveRentalTransactionSubmitted
   | FetchNFTsSuccessAction
   | FetchNFTSuccessAction
 
@@ -59,12 +71,14 @@ export function rentalReducer(
   action: RentalReducerAction
 ): RentalState {
   switch (action.type) {
+    case REMOVE_RENTAL_TRANSACTION_SUBMITTED:
     case CLAIM_LAND_TRANSACTION_SUBMITTED: {
       return {
         ...state,
         isSubmittingTransaction: false
       }
     }
+    case REMOVE_RENTAL_REQUEST:
     case CLAIM_LAND_REQUEST: {
       return {
         ...state,
@@ -92,6 +106,19 @@ export function rentalReducer(
         error: null
       }
     }
+    case REMOVE_RENTAL_SUCCESS: {
+      const { nft } = action.payload
+      const newState = {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        isSubmittingTransaction: false,
+        error: null
+      }
+      if (nft.openRentalId) {
+        delete newState.data[nft.openRentalId]
+      }
+      return newState
+    }
     case CLAIM_LAND_SUCCESS: {
       const { rental } = action.payload
       const newState = {
@@ -103,6 +130,7 @@ export function rentalReducer(
       delete newState.data[rental.id]
       return newState
     }
+    case REMOVE_RENTAL_FAILURE:
     case CLAIM_LAND_FAILURE:
     case CREATE_RENTAL_FAILURE: {
       const { error } = action.payload

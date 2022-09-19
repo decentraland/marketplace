@@ -32,7 +32,10 @@ import {
   clearRentalErrors,
   createRentalFailure,
   createRentalRequest,
-  createRentalSuccess
+  createRentalSuccess,
+  removeRentalFailure,
+  removeRentalRequest,
+  removeRentalTransactionSubmitted
 } from './actions'
 import { rentalSaga } from './sagas'
 import { PeriodOption } from './types'
@@ -441,11 +444,199 @@ describe('when handling the request action to claim a LAND', () => {
   })
 })
 
+describe('when handling the request action to remove a rental', () => {
+  let rentalContract: ContractData
+  beforeEach(() => {
+    rentalContract = {
+      abi: [],
+      address: '0x0',
+      name: 'Rental Contract',
+      version: 'v1',
+      chainId: nft.chainId
+    }
+    nft = {
+      ...nft,
+      openRentalId: rental.id
+    }
+  })
+
+  describe('and the NFT does not have an open rental', () => {
+    beforeEach(() => {
+      nft = {
+        ...nft,
+        openRentalId: null
+      }
+    })
+
+    it('should put a remove rental failure action with the error', () => {
+      return expectSaga(rentalSaga)
+        .provide([[call(getConnectedProvider), null]])
+        .put(
+          removeRentalFailure('The provided NFT does not have an open rental')
+        )
+        .dispatch(removeRentalRequest(nft))
+        .silentRun()
+    })
+  })
+
+  describe("and the provider can't be retrieved", () => {
+    it('should put a remove rental failure action with the error', () => {
+      return expectSaga(rentalSaga)
+        .provide([[call(getConnectedProvider), null]])
+        .put(removeRentalFailure('A provider is required to remove a rental'))
+        .dispatch(removeRentalRequest(nft))
+        .silentRun()
+    })
+  })
+
+  describe("and the connected wallet address can't be retrieved", () => {
+    it('should put a remove rental failure action with the error', () => {
+      return expectSaga(rentalSaga)
+        .provide([
+          [call(getConnectedProvider), {}],
+          [select(getAddress), undefined]
+        ])
+        .put(removeRentalFailure('An address is required to remove a rental'))
+        .dispatch(removeRentalRequest(nft))
+        .silentRun()
+    })
+  })
+
+  describe('and getting the rental contract throws', () => {
+    it('should put a remove rental failure action with the error', () => {
+      return expectSaga(rentalSaga)
+        .provide([
+          [call(getConnectedProvider), {}],
+          [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+          [
+            call(getContract, ContractName.Rentals, nft.chainId),
+            throwError(new Error('anError'))
+          ]
+        ])
+        .put(removeRentalFailure('anError'))
+        .dispatch(removeRentalRequest(nft))
+        .silentRun()
+    })
+  })
+
+  describe('and sending the transaction fails', () => {
+    it('should put a remove rental failure action with the error', () => {
+      return expectSaga(rentalSaga)
+        .provide([
+          [call(getConnectedProvider), {}],
+          [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+          [
+            call(getContract, ContractName.Rentals, nft.chainId),
+            rentalContract
+          ],
+          [
+            call(
+              sendTransaction as (
+                contract: ContractData,
+                contractMethodName: string,
+                ...contractArguments: any[]
+              ) => Promise<string>,
+              rentalContract,
+              'bumpAssetIndex(address,uint256)',
+              nft.contractAddress,
+              nft.tokenId
+            ),
+            Promise.reject(new Error('anError'))
+          ]
+        ])
+        .put(removeRentalFailure('anError'))
+        .dispatch(removeRentalRequest(nft))
+        .silentRun()
+    })
+  })
+
+  describe('and sending the transaction is successful', () => {
+    const txHash = '0x01'
+
+    describe('and the transaction finishes', () => {
+      it('should put the action to notify that the transaction was submitted and the remove rental success action', () => {
+        return expectSaga(rentalSaga)
+          .provide([
+            [call(getConnectedProvider), {}],
+            [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+            [
+              call(getContract, ContractName.Rentals, nft.chainId),
+              rentalContract
+            ],
+            [
+              call(
+                sendTransaction as (
+                  contract: ContractData,
+                  contractMethodName: string,
+                  ...contractArguments: any[]
+                ) => Promise<string>,
+                rentalContract,
+                'claim(address,uint256)',
+                nft.contractAddress,
+                nft.tokenId
+              ),
+              Promise.resolve(txHash)
+            ],
+            [call(waitForTx, txHash), Promise.resolve()]
+          ])
+          .put(
+            claimLandTransactionSubmitted(nft, txHash, rentalContract.address)
+          )
+          .put(claimLandSuccess(nft, rental))
+          .dispatch(claimLandRequest(nft, rental))
+          .silentRun()
+      })
+    })
+
+    describe('and the transaction gets reverted', () => {
+      it('should put the action to notify that the transaction was submitted and the remove rental failure action with an error', () => {
+        return expectSaga(rentalSaga)
+          .provide([
+            [call(getConnectedProvider), {}],
+            [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+            [
+              call(getContract, ContractName.Rentals, nft.chainId),
+              rentalContract
+            ],
+            [
+              call(
+                sendTransaction as (
+                  contract: ContractData,
+                  contractMethodName: string,
+                  ...contractArguments: any[]
+                ) => Promise<string>,
+                rentalContract,
+                'bumpAssetIndex(address,uint256)',
+                nft.contractAddress,
+                nft.tokenId
+              ),
+              Promise.resolve(txHash)
+            ],
+            [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
+          ])
+          .put(removeRentalTransactionSubmitted(nft, txHash))
+          .put(removeRentalFailure('anError'))
+          .dispatch(removeRentalRequest(nft))
+          .silentRun()
+      })
+    })
+  })
+})
+
 describe('when handling the action to close the claim LAND modal', () => {
   it('should put the action to clear the rental errors', () => {
     return expectSaga(rentalSaga)
       .put(clearRentalErrors())
       .dispatch(closeModal('ClaimLandModal'))
+      .silentRun()
+  })
+})
+
+describe('when handling the action to close the remove rental modal', () => {
+  it('should put the action to clear the rental errors', () => {
+    return expectSaga(rentalSaga)
+      .put(clearRentalErrors())
+      .dispatch(closeModal('RemoveRentalModal'))
       .silentRun()
   })
 })
