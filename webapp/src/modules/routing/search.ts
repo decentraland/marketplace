@@ -152,9 +152,13 @@ export function getSectionFromCategory(category: NFTCategory) {
   }
 }
 
-export function getSearchWearableSection(category: WearableCategory) {
+export function getSearchSection(category: WearableCategory | EmoteCategory) {
   for (const section of Object.values(Section)) {
-    const sectionCategory = getSearchWearableCategory(section)
+    const sectionCategory = Object.values(EmoteCategory).includes(
+      category as EmoteCategory
+    )
+      ? getSearchEmoteCategory(section)
+      : getSearchWearableCategory(section)
     if (category === sectionCategory) {
       return section
     }

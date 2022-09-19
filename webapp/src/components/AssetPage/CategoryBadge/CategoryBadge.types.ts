@@ -1,9 +1,9 @@
-import { NFT } from '@dcl/schemas'
+import { EmoteCategory, WearableCategory } from '@dcl/schemas'
 import { AssetType } from '../../../modules/asset/types'
 
 export type Props = {
-  wearable: Required<NFT['data']>['wearable']
+  category: WearableCategory | EmoteCategory
   assetType: AssetType
 }
 
-export type OwnProps = Pick<Props, 'wearable' | 'assetType'>
+export type OwnProps = Pick<Props, 'category' | 'assetType'>
