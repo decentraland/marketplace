@@ -152,7 +152,22 @@ export function getSectionFromCategory(category: NFTCategory) {
   }
 }
 
-export function getSearchWearableSection(category: WearableCategory) {
+export function getSearchSection(category: WearableCategory | EmoteCategory) {
+  for (const section of Object.values(Section)) {
+    const sectionCategory = Object.values(EmoteCategory).includes(
+      category as EmoteCategory
+    )
+      ? getSearchEmoteCategory(section)
+      : getSearchWearableCategory(section)
+    if (category === sectionCategory) {
+      return section
+    }
+  }
+}
+
+export function getSearchWearableSection(
+  category: WearableCategory | EmoteCategory
+) {
   for (const section of Object.values(Section)) {
     const sectionCategory = getSearchWearableCategory(section)
     if (category === sectionCategory) {

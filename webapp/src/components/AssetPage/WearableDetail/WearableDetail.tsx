@@ -37,7 +37,7 @@ const WearableDetail = ({ nft }: Props) => {
             assetType={AssetType.NFT}
             category={NFTCategory.WEARABLE}
           />
-          <CategoryBadge wearable={wearable} assetType={AssetType.NFT} />
+          <CategoryBadge category={wearable.category} assetType={AssetType.NFT} />
           <GenderBadge
             bodyShapes={wearable.bodyShapes}
             assetType={AssetType.NFT}
