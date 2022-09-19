@@ -167,16 +167,21 @@
         "no_results_title": "没有找到这些过滤器的结果",
         "no_results_action": "{link} 或选择不同的",
         "clear_filters": "清除过滤器",
-        "items": {
-          "all_categories": "所有类别",
-          "all_rarities": "所有稀有物品",
-          "by_creator": "经过 {creator}",
+        "all_categories": "所有类别",
+        "all_rarities": "所有稀有物品",
+        "by_creator": "经过 {creator}",
+        "category": "类别",
+        "rarity": "稀有度",
+        "price": "价格",
+        "wearables": {
           "tab_title": "可穿戴设备",
           "item": "物品",
-          "category": "类别",
-          "rarity": "稀有度",
-          "price": "价格",
           "items_sold": "出售的物品"
+        },
+        "emotes": {
+          "tab_title": "表情",
+          "item": "表情",
+          "items_sold": "表情出售"
         },
         "creators": {
           "tab_title": "创作者",

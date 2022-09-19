@@ -30,7 +30,8 @@ export enum RankingsTimeframes {
 }
 
 export enum RankingEntities {
-  ITEMS = 'items',
+  WEARABLES = 'wearables',
+  EMOTES = 'emotes',
   CREATORS = 'creators',
   COLLECTORS = 'collectors'
 }

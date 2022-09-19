@@ -13,6 +13,7 @@ import { locations } from '../../../modules/routing/locations'
 import { AssetProvider } from '../../AssetProvider'
 import { ManaToFiat } from '../../ManaToFiat'
 import RarityBadge from '../../RarityBadge'
+import { AssetImage } from '../../AssetImage'
 import { Props } from './RankingItemRow.types'
 import './RankingItemRow.css'
 
@@ -43,7 +44,7 @@ const RankingItemRow = ({ entity }: Props) => {
                   to={locations.item(item.contractAddress, item.itemId)}
                   onClick={() => handleOnLinkClick(item.id)}
                 >
-                  <img src={item.thumbnail} alt={`${item.name}-thumbnail`} />
+                  <AssetImage asset={item} isSmall />
                 </Link>
                 <div className="rankings-item-name-container">
                   <Link
@@ -54,7 +55,7 @@ const RankingItemRow = ({ entity }: Props) => {
                   </Link>
                   <span>
                     <T
-                      id="home_page.analytics.rankings.items.by_creator"
+                      id="home_page.analytics.rankings.by_creator"
                       values={{
                         creator: (
                           <span className="rankings-item-data-creator">
@@ -146,7 +147,7 @@ const RankingItemRow = ({ entity }: Props) => {
               to={locations.item(item.contractAddress, item.itemId)}
               onClick={() => handleOnLinkClick(item.id)}
             >
-              <img src={item.thumbnail} alt={`${item.name}-thumbnail`} />
+              <AssetImage asset={item} isSmall />
             </Link>
 
             <div className="rankings-item-data">
@@ -159,7 +160,7 @@ const RankingItemRow = ({ entity }: Props) => {
 
               <span>
                 <T
-                  id="home_page.analytics.rankings.items.by_creator"
+                  id="home_page.analytics.rankings.by_creator"
                   values={{
                     creator: (
                       <span className="rankings-item-data-creator">
@@ -185,7 +186,7 @@ const RankingItemRow = ({ entity }: Props) => {
         {item
           ? item.data.wearable?.category
             ? t(`wearable.category.${item.data.wearable.category}`)
-            : t(`global.emote`)
+            : t(`emote.category.${item.data.emote!.category}`)
           : null}
       </Table.Cell>
       <Table.Cell width={2}>
