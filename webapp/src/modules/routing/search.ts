@@ -165,17 +165,6 @@ export function getSearchSection(category: WearableCategory | EmoteCategory) {
   }
 }
 
-export function getSearchWearableSection(
-  category: WearableCategory | EmoteCategory
-) {
-  for (const section of Object.values(Section)) {
-    const sectionCategory = getSearchWearableCategory(section)
-    if (category === sectionCategory) {
-      return section
-    }
-  }
-}
-
 export function getSearchWearableCategory(section: string) {
   switch (section) {
     case Section.WEARABLES_EYEBROWS:
