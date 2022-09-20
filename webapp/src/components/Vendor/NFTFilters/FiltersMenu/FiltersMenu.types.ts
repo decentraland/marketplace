@@ -5,12 +5,12 @@ export type Props = {
   assetType: AssetType
   selectedCollection?: string
   selectedRarities: string[]
-  selectedGenders: string[]
+  selectedGenders?: string[]
   selectedNetwork?: Network
-  isOnlySmart: boolean
+  isOnlySmart?: boolean
   onCollectionsChange: (contract?: string) => void
-  onGendersChange: (options: string[]) => void
+  onGendersChange?: (options: string[]) => void
   onRaritiesChange: (options: string[]) => void
   onNetworkChange: (network: Network) => void
-  onOnlySmartChange: (onlySmart: boolean) => void
+  onOnlySmartChange?: (onlySmart: boolean) => void
 }
