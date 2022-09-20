@@ -8,8 +8,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { RentalListingPeriod } from '@dcl/schemas'
 import { formatWeiMANA } from '../../../../lib/mana'
 import { Mana } from '../../../Mana'
-import styles from './PeriodsDropdown.module.css'
 import { Props } from './PeriodsDropdown.types'
+import styles from './PeriodsDropdown.module.css'
 
 const Trigger = ({ period }: { period: RentalListingPeriod }) => {
   const pricePerRent = ethers.BigNumber.from(period.pricePerDay)

@@ -1,4 +1,5 @@
 import { useMemo, memo } from 'react'
+import { Link } from 'react-router-dom'
 import { NFTCategory } from '@dcl/schemas'
 import classNames from 'classnames'
 import { Profile } from 'decentraland-dapps/dist/containers'
@@ -8,7 +9,6 @@ import { locations } from '../../../modules/routing/locations'
 import { Box } from '../../AssetBrowse/Box'
 import { Props } from './Details.types'
 import styles from './Details.module.css'
-import { Link } from 'react-router-dom'
 
 const Info = ({
   title,
