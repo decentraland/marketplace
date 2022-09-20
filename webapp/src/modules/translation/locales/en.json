@@ -33,6 +33,8 @@
     "type": "Type",
     "sale_type": "Sale type",
     "sell_price": "Sell price",
+    "rent": "Rent",
+    "sale": "Sale",
     "no_results": "No results",
     "learn_more": "Learn More",
     "category": "Category",
@@ -358,6 +360,12 @@
       "edit_price": "Edit price",
       "change_beneficiary": "Change beneficiary",
       "mint_item": "Mint item"
+    },
+    "sales_rent_action_box": {
+      "until": "From {from_date} to {to_date}",
+      "not_for_sale": "Not available for Sale",
+      "parcel_belongs_to_estate_bid": "It's not possible to bid on a parcel that belongs to an Estate, please consider going into the Estate page.",
+      "parcel_belongs_to_estate_rent": "It's not possible to rent a parcel that belongs to an Estate, please consider going into the Estate page."
     },
     "description": "Description",
     "owner": "Owner",

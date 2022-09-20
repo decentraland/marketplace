@@ -356,6 +356,12 @@
       "change_beneficiary": "Cambiar de beneficiario",
       "mint_item": "Acuñar item"
     },
+    "sales_rent_action_box": {
+      "until": "Desde {from_date} a {to_date}",
+      "not_for_sale": "No disponible para comprar",
+      "parcel_belongs_to_estate_bid": "No es posible hacer una oferta en la tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
+      "parcel_belongs_to_estate_rent": "No es posible rentar tierra que pertenece a un Estate, por favor, diríjase a la página del Estate."
+    },
     "description": "Descripción",
     "owner": "Dueño",
     "creator": "Creador",

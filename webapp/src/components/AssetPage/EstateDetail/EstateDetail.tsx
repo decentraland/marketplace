@@ -2,9 +2,10 @@ import React from 'react'
 import classNames from 'classnames'
 import { Badge } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isLand } from '../../../modules/nft/utils'
+import { AssetImage } from '../../AssetImage'
 import { Network } from '../Network'
 import { Description } from '../Description'
-import { Props } from './EstateDetail.types'
 import { Owner } from '../Owner'
 import Price from '../Price'
 import Expiration from '../Expiration'
@@ -13,12 +14,13 @@ import { BidList } from '../BidList'
 import { TransactionHistory } from '../TransactionHistory'
 import { JumpIn } from '../JumpIn'
 import { ProximityHighlights } from '../ProximityHighlights'
-import { ParcelCoordinates } from './ParcelCoordinates'
 import BaseDetail from '../BaseDetail'
-import { AssetImage } from '../../AssetImage'
+import { Props } from './EstateDetail.types'
+import { SaleRentActionBox } from '../SaleRentActionBox'
+import { ParcelCoordinates } from './ParcelCoordinates'
 import './EstateDetail.css'
 
-const EstateDetail = ({ nft }: Props) => {
+const EstateDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
   const estate = nft.data.estate!
   let x = 0
   let y = 0
@@ -32,6 +34,7 @@ const EstateDetail = ({ nft }: Props) => {
     <BaseDetail
       className="EstateDetail"
       asset={nft}
+      showDetails={isRentalsEnabled && isLand(nft)}
       assetImage={
         <>
           <AssetImage
@@ -48,6 +51,18 @@ const EstateDetail = ({ nft }: Props) => {
               </div>
             </div>
           )}
+        </>
+      }
+      actions={
+        <>
+          {isRentalsEnabled ? (
+            <SaleRentActionBox
+              isRentalsEnabled={isRentalsEnabled}
+              order={order}
+              nft={nft}
+              rental={rental}
+            />
+          ) : null}
         </>
       }
       isOnSale={!!nft.activeOrderId}

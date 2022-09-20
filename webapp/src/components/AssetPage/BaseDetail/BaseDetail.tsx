@@ -4,6 +4,8 @@ import { Container } from 'decentraland-ui'
 import { PageHeader } from '../../PageHeader'
 import Title from '../Title'
 import { Box } from '../../AssetBrowse/Box'
+// TODO: make it importable from the root directory as AssetDetails or AssetDetailsBox
+import { Details } from '../../ManageAssetPage/Details'
 import { Props } from './BaseDetail.types'
 import './BaseDetail.css'
 
@@ -14,7 +16,9 @@ const BaseDetail = ({
   left,
   box,
   below,
-  className
+  className,
+  actions,
+  showDetails
 }: Props) => {
   return (
     <div className={classNames('BaseDetail', className)}>
@@ -29,9 +33,16 @@ const BaseDetail = ({
             {left}
           </div>
           <div className="right">
-            <Box className="box" childrenClassName="box-children">
-              {box}
-            </Box>
+            {showDetails && actions ? (
+              <div className="action-box">{actions}</div>
+            ) : null}
+            {showDetails ? (
+              <Details asset={asset} />
+            ) : (
+              <Box className="box" childrenClassName="box-children">
+                {box}
+              </Box>
+            )}
           </div>
         </div>
         {below}

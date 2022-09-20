@@ -19,3 +19,10 @@
 .detailContent {
   color: #979797
 }
+
+.type {
+  max-width: 200px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

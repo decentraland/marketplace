@@ -10,4 +10,6 @@ export type Props = {
   box: ReactNode
   below?: ReactNode
   className?: string
+  actions?: ReactNode
+  showDetails?: boolean
 }

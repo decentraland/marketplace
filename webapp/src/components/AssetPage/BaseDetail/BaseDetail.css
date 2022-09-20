@@ -111,3 +111,11 @@
 .BaseDetail .ui.button + .ui.button {
   margin-left: unset;
 }
+
+.BaseDetail .action-box {
+  background: #242129;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 12px;
+  width: 320px;
+}

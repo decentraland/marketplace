@@ -1,0 +1,109 @@
+/* Rent */
+
+.price {
+  display: flex;
+  flex-direction: column;
+}
+
+.price .title {
+  font-weight: 500;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #736E7D;
+}
+
+.price .content {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin-bottom: 24px;
+}
+
+.perDay {
+  font-size: 20px;
+}
+
+.priceInFiat {
+  margin-left: 5px;
+  font-size: 15px;
+  color: #736E7D;
+  line-height: 1.5;
+}
+
+.priceInMana:global(.ui.header) {
+  margin-bottom: unset;
+}
+
+.rent:global(.ui.button) {
+  width: 100%;
+  margin-top: 24px;
+}
+
+/* View selector */
+
+.viewSelector {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border: 2px solid rgba(115, 110, 125, 0.24);
+  border-radius: 6px;
+  justify-content: space-between;
+}
+
+.viewOption {
+  flex: 1 1 auto;
+  width: 100%;
+  background: rgba(115, 110, 125, 0.24);
+  text-align: center;
+  padding-top: 9px;
+  padding-bottom: 9px;
+	padding-left: 0;
+  padding-right: 0;
+	color: inherit;
+	font: inherit;
+	outline: inherit;
+	cursor: pointer;
+	border: none;
+  font-weight: 500;
+  font-size: 17px;
+}
+
+.selectedViewOption {
+  background: #242129;
+  cursor: auto;
+}
+
+.viewSelector {
+  margin-bottom: 24px;
+}
+
+.notForSale {
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.saleButtons {
+  display: flex;
+  flex-direction: row;
+}
+
+.buy + .fullWidth > .bid {
+  margin-left: 8px !important;
+}
+
+.bid {
+  background: rgba(115, 110, 125, 0.24) !important;
+}
+
+.periodsDropdown + .manage {
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+.manage {
+  background: rgba(115, 110, 125, 0.24) !important;
+}
+
+.fullWidth {
+  width: 100%
+}

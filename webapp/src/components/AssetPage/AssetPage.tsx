@@ -1,7 +1,12 @@
 import React from 'react'
 import { Page, Section, Column, Back, Narrow } from 'decentraland-ui'
 import { Asset, AssetType } from '../../modules/asset/types'
+import { locations } from '../../modules/routing/locations'
+import { Sections } from '../../modules/routing/types'
 import { AssetProviderPage } from '../AssetProviderPage'
+import { Navbar } from '../Navbar'
+import { Navigation } from '../Navigation'
+import { Footer } from '../Footer'
 import { ItemDetail } from './ItemDetail'
 import { ErrorBoundary } from './ErrorBoundary'
 import { Props } from './AssetPage.types'
@@ -9,13 +14,8 @@ import { ParcelDetail } from './ParcelDetail'
 import { EstateDetail } from './EstateDetail'
 import { WearableDetail } from './WearableDetail'
 import { ENSDetail } from './ENSDetail'
-import { Navbar } from '../Navbar'
-import { Navigation } from '../Navigation'
-import { Footer } from '../Footer'
 import { EmoteDetail } from './EmoteDetail'
 import { AssetProvider } from '../AssetProvider'
-import { locations } from '../../modules/routing/locations'
-import { Sections } from '../../modules/routing/types'
 import './AssetPage.css'
 
 const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
@@ -88,7 +88,7 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
               </AssetProvider>
               <Narrow>
                 <AssetProviderPage type={type}>
-                  {asset =>
+                  {(asset, order, rental) =>
                     mapAsset<React.ReactNode>(
                       asset,
                       {
@@ -97,10 +97,19 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
                       },
                       {
                         ens: nft => <ENSDetail nft={nft} />,
-                        estate: nft => <EstateDetail nft={nft} />,
+                        estate: nft => (
+                          <EstateDetail
+                            nft={nft}
+                            order={order}
+                            rental={rental}
+                            isRentalsEnabled={isRentalsEnabled}
+                          />
+                        ),
                         parcel: nft => (
                           <ParcelDetail
                             nft={nft}
+                            order={order}
+                            rental={rental}
                             isRentalsEnabled={isRentalsEnabled}
                           />
                         ),
