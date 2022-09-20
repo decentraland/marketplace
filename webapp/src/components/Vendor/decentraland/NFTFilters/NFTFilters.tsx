@@ -231,6 +231,8 @@ const NFTFilters = (props: Props) => {
               })
       })
 
+  const isWearableCategory = category === NFTCategory.WEARABLE
+
   return (
     <div className="NFTFilters">
       <div className="topbar">
@@ -340,32 +342,23 @@ const NFTFilters = (props: Props) => {
           minWidth={Responsive.onlyTablet.minWidth}
           className="filters"
         >
-          {category === NFTCategory.WEARABLE && (
-            <FiltersMenu
-              assetType={assetType}
-              selectedNetwork={network}
-              selectedCollection={contracts[0]}
-              selectedRarities={rarities}
-              selectedGenders={wearableGenders}
-              isOnlySmart={!!onlySmart}
-              onCollectionsChange={handleCollectionsChange}
-              onGendersChange={handleGendersChange}
-              onRaritiesChange={handleRaritiesChange}
-              onNetworkChange={handleNetworkChange}
-              onOnlySmartChange={handleToggleOnlySmart}
-            />
-          )}
-          {category === NFTCategory.EMOTE && (
-            <FiltersMenu
-              assetType={assetType}
-              selectedNetwork={network}
-              selectedCollection={contracts[0]}
-              selectedRarities={rarities}
-              onCollectionsChange={handleCollectionsChange}
-              onRaritiesChange={handleRaritiesChange}
-              onNetworkChange={handleNetworkChange}
-            />
-          )}
+          <FiltersMenu
+            assetType={assetType}
+            selectedNetwork={network}
+            selectedCollection={contracts[0]}
+            selectedRarities={rarities}
+            selectedGenders={isWearableCategory ? wearableGenders : undefined}
+            isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
+            onCollectionsChange={handleCollectionsChange}
+            onGendersChange={
+              isWearableCategory ? handleGendersChange : undefined
+            }
+            onRaritiesChange={handleRaritiesChange}
+            onNetworkChange={handleNetworkChange}
+            onOnlySmartChange={
+              isWearableCategory ? handleToggleOnlySmart : undefined
+            }
+          />
         </Responsive>
       ) : null}
 
@@ -399,32 +392,25 @@ const NFTFilters = (props: Props) => {
                   onChange={handleTypeByDropdownChange}
                 />
               </div>
-              {category === NFTCategory.WEARABLE && (
-                <FiltersMenu
-                  assetType={assetType}
-                  selectedNetwork={network}
-                  selectedCollection={contracts[0]}
-                  selectedRarities={rarities}
-                  selectedGenders={wearableGenders}
-                  isOnlySmart={!!onlySmart}
-                  onCollectionsChange={handleCollectionsChange}
-                  onGendersChange={handleGendersChange}
-                  onRaritiesChange={handleRaritiesChange}
-                  onNetworkChange={handleNetworkChange}
-                  onOnlySmartChange={handleToggleOnlySmart}
-                />
-              )}
-              {category === NFTCategory.EMOTE && (
-                <FiltersMenu
-                  assetType={assetType}
-                  selectedNetwork={network}
-                  selectedCollection={contracts[0]}
-                  selectedRarities={rarities}
-                  onCollectionsChange={handleCollectionsChange}
-                  onRaritiesChange={handleRaritiesChange}
-                  onNetworkChange={handleNetworkChange}
-                />
-              )}
+              <FiltersMenu
+                assetType={assetType}
+                selectedNetwork={network}
+                selectedCollection={contracts[0]}
+                selectedRarities={rarities}
+                selectedGenders={
+                  isWearableCategory ? wearableGenders : undefined
+                }
+                isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
+                onCollectionsChange={handleCollectionsChange}
+                onGendersChange={
+                  isWearableCategory ? handleGendersChange : undefined
+                }
+                onRaritiesChange={handleRaritiesChange}
+                onNetworkChange={handleNetworkChange}
+                onOnlySmartChange={
+                  isWearableCategory ? handleToggleOnlySmart : undefined
+                }
+              />
             </>
           ) : null}
           <div className="filter-row">
