@@ -235,10 +235,7 @@ const RecentlySoldTable = (props: Props) => {
                       to={item.url}
                       onClick={() => handleOnLinkClick(item.id)}
                     >
-                      <img
-                        src={item.thumbnail}
-                        alt={`${item.name}-thumbnail`}
-                      />
+                      <AssetImage asset={item} isSmall />
                     </Link>
                     <div className="sale-item-name-container">
                       <Link
@@ -326,7 +323,7 @@ const RecentlySoldTable = (props: Props) => {
                     to={item.url}
                     onClick={() => handleOnLinkClick(item.id)}
                   >
-                    <img src={item.thumbnail} alt={`${item.name}-thumbnail`} />
+                    <AssetImage asset={item} isSmall />
                   </Link>
 
                   <div className="sale-item-data">
