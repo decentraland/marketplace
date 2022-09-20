@@ -11,12 +11,20 @@ import {
   CreateRentalRequestAction
 } from '../../modules/rental/actions'
 import { AuthorizationStep } from './AuthorizationStep'
-import { CreateListingStep } from './CreateListingStep'
+import { CreateOrEditListingStep } from './CreateOrEditListingStep'
 import { ConfirmationStep } from './ConfirmationStep'
 
 const RentalModal = (props: Props) => {
   // Props
-  const { open, address, nft, authorizations, onCancel } = props
+  const {
+    open,
+    address,
+    nft,
+    rental,
+    authorizations,
+    onCancel,
+    onRemove
+  } = props
 
   // State
   const [listing, setListing] = useState<
@@ -61,10 +69,12 @@ const RentalModal = (props: Props) => {
   // Create listing step
   if (!listing) {
     return (
-      <CreateListingStep
+      <CreateOrEditListingStep
         open={open}
         nft={nft}
+        rental={rental}
         onCreate={handleSetListing}
+        onRemove={onRemove}
         onCancel={onCancel}
       />
     )

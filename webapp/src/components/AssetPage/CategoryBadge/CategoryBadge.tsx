@@ -1,13 +1,17 @@
 import React, { useMemo, useEffect } from 'react'
+import { EmoteCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getSearchWearableSection } from '../../../modules/routing/search'
+import { getSearchSection } from '../../../modules/routing/search'
 import { locations } from '../../../modules/routing/locations'
 import IconBadge from '../IconBadge'
 import { BrowseOptions } from '../../../modules/routing/types'
 import { Props } from './CategoryBadge.types'
 
-const CategoryBadge = ({ wearable, assetType }: Props) => {
-  const section = getSearchWearableSection(wearable.category)
+const CategoryBadge = ({ category, assetType }: Props) => {
+  const isEmote = Object.values(EmoteCategory).includes(
+    category as EmoteCategory
+  )
+  const section = getSearchSection(category)
 
   const href = useMemo(() => {
     const browseProps: BrowseOptions = { assetType: assetType }
@@ -21,14 +25,16 @@ const CategoryBadge = ({ wearable, assetType }: Props) => {
   // TODO: we have to handle these types of errors and report them somewhere
   useEffect(() => {
     if (!section) {
-      throw new Error(`Invalid wearable category ${wearable.category}`)
+      throw new Error(
+        `Invalid ${isEmote ? 'emote' : 'wearable'} category ${category}`
+      )
     }
-  }, [section, wearable.category])
+  }, [section, category, isEmote])
 
   return (
     <IconBadge
-      icon={wearable.category}
-      text={t(`wearable.category.${wearable.category}`)}
+      icon={isEmote ? undefined : category}
+      text={t(`${isEmote ? 'emote' : 'wearable'}.category.${category}`)}
       href={href}
     />
   )

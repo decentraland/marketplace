@@ -208,10 +208,13 @@ const NFTFilters = (props: Props) => {
     [network, onBrowse]
   )
 
-  useEffect(() => setShowFiltersMenu(category === NFTCategory.WEARABLE), [
-    category,
-    setShowFiltersMenu
-  ])
+  useEffect(
+    () =>
+      setShowFiltersMenu(
+        category === NFTCategory.WEARABLE || category === NFTCategory.EMOTE
+      ),
+    [category, setShowFiltersMenu]
+  )
 
   const searchPlaceholder = isMap
     ? t('nft_filters.search_land')
@@ -227,6 +230,8 @@ const NFTFilters = (props: Props) => {
                 count: count.toLocaleString()
               })
       })
+
+  const isWearableCategory = category === NFTCategory.WEARABLE
 
   return (
     <div className="NFTFilters">
@@ -342,13 +347,17 @@ const NFTFilters = (props: Props) => {
             selectedNetwork={network}
             selectedCollection={contracts[0]}
             selectedRarities={rarities}
-            selectedGenders={wearableGenders}
-            isOnlySmart={!!onlySmart}
+            selectedGenders={isWearableCategory ? wearableGenders : undefined}
+            isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
             onCollectionsChange={handleCollectionsChange}
-            onGendersChange={handleGendersChange}
+            onGendersChange={
+              isWearableCategory ? handleGendersChange : undefined
+            }
             onRaritiesChange={handleRaritiesChange}
             onNetworkChange={handleNetworkChange}
-            onOnlySmartChange={handleToggleOnlySmart}
+            onOnlySmartChange={
+              isWearableCategory ? handleToggleOnlySmart : undefined
+            }
           />
         </Responsive>
       ) : null}
@@ -372,7 +381,7 @@ const NFTFilters = (props: Props) => {
               </div>
             </div>
           )}
-          {category === NFTCategory.WEARABLE ? (
+          {showFiltersMenu ? (
             <>
               <div className="filter-row">
                 <Header sub>{t('filters.type')}</Header>
@@ -388,13 +397,19 @@ const NFTFilters = (props: Props) => {
                 selectedNetwork={network}
                 selectedCollection={contracts[0]}
                 selectedRarities={rarities}
-                selectedGenders={wearableGenders}
-                isOnlySmart={!!onlySmart}
+                selectedGenders={
+                  isWearableCategory ? wearableGenders : undefined
+                }
+                isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
                 onCollectionsChange={handleCollectionsChange}
-                onGendersChange={handleGendersChange}
+                onGendersChange={
+                  isWearableCategory ? handleGendersChange : undefined
+                }
                 onRaritiesChange={handleRaritiesChange}
                 onNetworkChange={handleNetworkChange}
-                onOnlySmartChange={handleToggleOnlySmart}
+                onOnlySmartChange={
+                  isWearableCategory ? handleToggleOnlySmart : undefined
+                }
               />
             </>
           ) : null}

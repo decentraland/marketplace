@@ -9,7 +9,10 @@ import {
   createRentalFailure,
   createRentalRequest,
   CreateRentalRequestAction,
-  createRentalSuccess
+  createRentalSuccess,
+  removeRentalRequest,
+  removeRentalFailure,
+  removeRentalSuccess
 } from './actions'
 import { rentalReducer, RentalState } from './reducer'
 import { PeriodOption } from './types'
@@ -19,12 +22,13 @@ let rental: RentalListing
 let rentalState: RentalState
 
 beforeEach(() => {
-  nft = {
-    id: 'someNft'
-  } as NFT
   rental = {
     id: 'someRental'
   } as RentalListing
+  nft = {
+    id: 'someNft',
+    openRentalId: rental.id
+  } as NFT
   rentalState = {
     data: {},
     loading: [],
@@ -265,15 +269,19 @@ describe('when reducing the action the success of claiming a LAND', () => {
   beforeEach(() => {
     rentalState = {
       ...rentalState,
+      data: {
+        [rental.id]: rental
+      },
       isSubmittingTransaction: true,
       loading: [claimLandRequest(nft, rental)],
       error: 'anError'
     }
   })
 
-  it('should remove the loading, set the submitting transaction flag as false and clear the error', () => {
+  it('should remove the loading and the rental, set the submitting transaction flag as false and clear the error', () => {
     expect(rentalReducer(rentalState, claimLandSuccess(nft, rental))).toEqual({
       ...rentalState,
+      data: {},
       isSubmittingTransaction: false,
       loading: [],
       error: null
@@ -293,6 +301,70 @@ describe('when reducing the failure action of claiming a LAND', () => {
 
   it("should remove the loading, set the submitting transaction flag to false, set the error with the action's error", () => {
     expect(rentalReducer(rentalState, claimLandFailure('anError'))).toEqual({
+      ...rentalState,
+      loading: [],
+      isSubmittingTransaction: false,
+      error: 'anError'
+    })
+  })
+})
+
+describe('when reducing the action of the start of a rental removal', () => {
+  beforeEach(() => {
+    rentalState = {
+      ...rentalState,
+      isSubmittingTransaction: false,
+      loading: [],
+      error: 'anError'
+    }
+  })
+
+  it('should set the action into loading, the submitting transaction flag as true and clear the error', () => {
+    expect(rentalReducer(rentalState, removeRentalRequest(nft))).toEqual({
+      ...rentalState,
+      isSubmittingTransaction: true,
+      loading: [removeRentalRequest(nft)],
+      error: null
+    })
+  })
+})
+
+describe('when reducing the action the success of removing a rental', () => {
+  beforeEach(() => {
+    rentalState = {
+      ...rentalState,
+      data: {
+        [rental.id]: rental
+      },
+      isSubmittingTransaction: true,
+      loading: [removeRentalRequest(nft)],
+      error: 'anError'
+    }
+  })
+
+  it('should remove the loading and the rental, set the submitting transaction flag as false and clear the error', () => {
+    expect(rentalReducer(rentalState, removeRentalSuccess(nft))).toEqual({
+      ...rentalState,
+      data: {},
+      isSubmittingTransaction: false,
+      loading: [],
+      error: null
+    })
+  })
+})
+
+describe('when reducing the failure action of removing a rental', () => {
+  beforeEach(() => {
+    rentalState = {
+      ...rentalState,
+      loading: [removeRentalRequest(nft)],
+      isSubmittingTransaction: true,
+      error: null
+    }
+  })
+
+  it("should remove the loading, set the submitting transaction flag to false, set the error with the action's error", () => {
+    expect(rentalReducer(rentalState, removeRentalFailure('anError'))).toEqual({
       ...rentalState,
       loading: [],
       isSubmittingTransaction: false,

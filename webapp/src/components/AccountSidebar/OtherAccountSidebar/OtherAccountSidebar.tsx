@@ -49,7 +49,7 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
       <NFTSectionsMenuItems
         sections={
           assetType === AssetType.ITEM
-            ? [WEARABLES]
+            ? [WEARABLES, EMOTES]
             : [ALL, WEARABLES, LAND, EMOTES, ENS]
         }
         section={section as Section}

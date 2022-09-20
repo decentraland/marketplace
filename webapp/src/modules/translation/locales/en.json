@@ -171,16 +171,21 @@
         "no_results_title": "No results found for these filters",
         "no_results_action": "{link} or select different ones",
         "clear_filters": "Clear filters",
-        "items": {
-          "all_categories": "All categories",
-          "all_rarities": "All rarities",
-          "by_creator": "by {creator}",
+        "all_categories": "All categories",
+        "all_rarities": "All rarities",
+        "by_creator": "by {creator}",
+        "category": "Category",
+        "rarity": "Rarity",
+        "price": "Price",
+        "wearables": {
           "tab_title": "Wearables",
-          "item": "Item",
-          "category": "Category",
-          "rarity": "Rarity",
-          "price": "Price",
-          "items_sold": "Items sold"
+          "item": "Wearable",
+          "items_sold": "Wearables sold"
+        },
+        "emotes": {
+          "tab_title": "Emotes",
+          "item": "Emote",
+          "items_sold": "Emotes sold"
         },
         "creators": {
           "tab_title": "Creators",
@@ -467,7 +472,9 @@
       "male": "male",
       "female": "female",
       "message": "This wearable doesn't have a {bodyShape} representation"
-    }
+    },
+    "play_emote": "Play Emote",
+    "stop_emote": "Stop Emote"
   },
   "sell_page": {
     "title": "List for sale",
@@ -621,7 +628,8 @@
       "place_bid": "You placed a bid of {price} on {name}.",
       "accept_bid": "You accepted a bid of {price} on {name}.",
       "cancel_bid": "You cancelled a bid of {price} on {name}.",
-      "claim_land": "You claimed your {name} from the {contract}."
+      "claim_land": "You claimed your {name} from the {contract}.",
+      "remove_rental": "You removed your rental listing of {name}."
     }
   },
   "mana": {
@@ -691,7 +699,12 @@
       "confirm": "Confirm transaction on your wallet to continue"
     },
     "create_listing_step": {
-      "title": "List for Rent",
+      "titles": {
+        "edit": "Edit listing",
+        "create": "List for Rent"
+      },
+      "update_listing": "Update listing",
+      "remove_listing": "Remove listing",
       "price_per_day": "Price per day",
       "listing_expiration_date": "Listing expiration date",
       "periods": "Rent period",
@@ -759,6 +772,13 @@
     "title": "Claim LAND",
     "action": "Claim LAND",
     "question": "Are you sure you want to claim your LAND?",
+    "disclaimer": "This will require a transaction and you will need to cover its fees.",
+    "confirm_transaction": "Confirm the transaction on your wallet to continue"
+  },
+  "remove_rental_modal": {
+    "title": "Remove listing",
+    "action": "Remove listing",
+    "question": "Are you sure you want to remove your listing?",
     "disclaimer": "This will require a transaction and you will need to cover its fees.",
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   }

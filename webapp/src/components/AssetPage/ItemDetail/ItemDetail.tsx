@@ -31,14 +31,17 @@ const ItemDetail = ({ item, wallet }: Props) => {
 
   let description = ''
   let bodyShapes: BodyShape[] = []
+  let category
   switch (item.category) {
     case NFTCategory.WEARABLE:
       description = item.data.wearable!.description
       bodyShapes = item.data.wearable!.bodyShapes
+      category = item.data.wearable!.category
       break
     case NFTCategory.EMOTE:
       description = item.data.emote!.description
       bodyShapes = item.data.emote!.bodyShapes
+      category = item.data.emote!.category
       break
   }
 
@@ -54,9 +57,13 @@ const ItemDetail = ({ item, wallet }: Props) => {
             assetType={AssetType.ITEM}
             category={NFTCategory.WEARABLE}
           />
-          {item.category === NFTCategory.WEARABLE && (
+          {category && (
             <CategoryBadge
-              wearable={item.data.wearable!}
+              category={
+                item.data.emote
+                  ? item.data.emote.category
+                  : item.data.wearable!.category
+              }
               assetType={AssetType.ITEM}
             />
           )}

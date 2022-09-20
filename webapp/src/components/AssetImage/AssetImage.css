@@ -138,3 +138,46 @@
 .AssetImage .preview-toggle-wrapper .preview-toggle.is-disabled:hover {
   background-color: var(--secondary);
 }
+
+.AssetImage .zoom-controls {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.AssetImage .zoom-controls > .ui.button.zoom-control {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  min-width: unset;
+  background-color: rgba(0, 0, 0, 0.64) !important;
+  border-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1px;
+}
+
+.AssetImage .zoom-controls > .ui.button.zoom-control:hover {
+  transform: none;
+  background-color: var(--secondary) !important;
+}
+
+.AssetImage .zoom-controls > .ui.button.zoom-control i.icon {
+  margin: 0 !important;
+}
+
+.AssetImage .zoom-controls > .ui.button.zoom-in-control {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  min-width: unset;
+}
+
+.AssetImage .play-emote-control {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+}

@@ -23,7 +23,10 @@ import {
   CANCEL_BID_SUCCESS
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
-import { CLAIM_LAND_TRANSACTION_SUBMITTED } from '../../../modules/rental/actions'
+import {
+  CLAIM_LAND_TRANSACTION_SUBMITTED,
+  REMOVE_RENTAL_TRANSACTION_SUBMITTED
+} from '../../../modules/rental/actions'
 import { getContract } from '../../../modules/contract/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { AssetProvider } from '../../AssetProvider'
@@ -369,6 +372,35 @@ const Transaction = (props: Props) => {
                       >
                         {t('transaction.rental.contract')}
                       </TransactionLink>
+                    )
+                  }}
+                />
+              }
+              tx={tx}
+            />
+          )}
+        </AssetProvider>
+      )
+    }
+    case REMOVE_RENTAL_TRANSACTION_SUBMITTED: {
+      const { tokenId, contractAddress } = tx.payload
+      return (
+        <AssetProvider
+          type={AssetType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
+          {nft => (
+            <TransactionDetail
+              asset={nft}
+              text={
+                <T
+                  id="transaction.detail.remove_rental"
+                  values={{
+                    name: (
+                      <Link to={locations.manage(contractAddress, tokenId)}>
+                        {nft ? getAssetName(nft) : ''}
+                      </Link>
                     )
                   }}
                 />

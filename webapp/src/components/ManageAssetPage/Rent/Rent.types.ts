@@ -4,7 +4,7 @@ import { NFT } from '../../../modules/nft/types'
 export type Props = {
   className?: string
   nft: NFT
-  rental?: RentalListing | null
+  rental: RentalListing | null
   isClaimingLandBack: boolean
   onClaimLand: () => void
 }

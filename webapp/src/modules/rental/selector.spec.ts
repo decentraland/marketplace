@@ -2,13 +2,14 @@ import { NFTCategory, RentalListing } from '@dcl/schemas'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { RootState } from '../reducer'
 import { NFT } from '../nft/types'
-import { claimLandRequest } from './actions'
+import { claimLandRequest, removeRentalRequest } from './actions'
 import {
   getState,
   getData,
   getRentalById,
-  isSigningTransaction,
-  isClaimingLand
+  isSubmittingTransaction,
+  isClaimingLand,
+  isRemovingRental
 } from './selectors'
 
 let rootState: RootState
@@ -90,24 +91,46 @@ describe('when getting if a LAND is being claimed', () => {
   })
 })
 
-describe('when getting if the claiming LAND transaction is being signed', () => {
-  describe('and the transaction is being signed', () => {
+describe('when getting if a rental is being removed', () => {
+  describe('and the rental is being removed', () => {
+    beforeEach(() => {
+      rootState.rental.loading = [removeRentalRequest({} as NFT)]
+    })
+
+    it('should return true', () => {
+      expect(isRemovingRental(rootState)).toBe(true)
+    })
+  })
+
+  describe('and the rental is not being removed', () => {
+    beforeEach(() => {
+      rootState.rental.loading = []
+    })
+
+    it('should return false', () => {
+      expect(isRemovingRental(rootState)).toBe(false)
+    })
+  })
+})
+
+describe('when getting if the transaction is being submitted', () => {
+  describe('and the transaction is being submitted', () => {
     beforeEach(() => {
       rootState.rental.isSubmittingTransaction = true
     })
 
     it('should return true', () => {
-      expect(isSigningTransaction(rootState)).toBe(true)
+      expect(isSubmittingTransaction(rootState)).toBe(true)
     })
   })
 
-  describe('and the transaction is not being signed', () => {
+  describe('and the transaction is not being submitted', () => {
     beforeEach(() => {
       rootState.rental.isSubmittingTransaction = false
     })
 
     it('should return false', () => {
-      expect(isSigningTransaction(rootState)).toBe(false)
+      expect(isSubmittingTransaction(rootState)).toBe(false)
     })
   })
 })

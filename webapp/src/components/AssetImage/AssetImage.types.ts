@@ -1,10 +1,12 @@
 import { Dispatch } from 'redux'
-import { Avatar } from '@dcl/schemas'
+import { Avatar, IPreviewController } from '@dcl/schemas'
 import { Item } from '@dcl/schemas'
 import { NFT } from '../../modules/nft/types'
 import {
   setIsTryingOn,
-  SetIsTryingOnAction
+  SetIsTryingOnAction,
+  setWearablePreviewController,
+  SetWearablePreviewControllerAction
 } from '../../modules/ui/preview/actions'
 
 export type Props = {
@@ -17,10 +19,28 @@ export type Props = {
   isSmall?: boolean
   showMonospace?: boolean
   avatar?: Avatar
+  wearableController?: IPreviewController | null
   isTryingOn: boolean
+  isPlayingEmote?: boolean
   onSetIsTryingOn: typeof setIsTryingOn
+  onSetWearablePreviewController: typeof setWearablePreviewController
 }
 
-export type MapStateProps = Pick<Props, 'avatar' | 'isTryingOn'>
-export type MapDispatchProps = Pick<Props, 'onSetIsTryingOn'>
-export type MapDispatch = Dispatch<SetIsTryingOnAction>
+export enum ControlOptionAction {
+  ZOOM_IN,
+  ZOOM_OUT,
+  PLAY_EMOTE,
+  STOP_EMOTE
+}
+
+export type MapStateProps = Pick<
+  Props,
+  'avatar' | 'wearableController' | 'isTryingOn' | 'isPlayingEmote'
+>
+export type MapDispatchProps = Pick<
+  Props,
+  'onSetIsTryingOn' | 'onSetWearablePreviewController'
+>
+export type MapDispatch = Dispatch<
+  SetIsTryingOnAction | SetWearablePreviewControllerAction
+>

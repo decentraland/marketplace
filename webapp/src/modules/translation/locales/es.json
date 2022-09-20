@@ -167,16 +167,21 @@
         "no_results_title": "No hay resultados para los filtros seleccionados",
         "no_results_action": "{link} o seleccione diferentes",
         "clear_filters": "Limpie los filtros",
-        "items": {
-          "all_categories": "Todas las categorias",
-          "all_rarities": "Todas las rarezas",
-          "by_creator": "por {creator}",
+        "all_categories": "Todas las categorias",
+        "all_rarities": "Todas las rarezas",
+        "by_creator": "por {creator}",
+        "category": "Categorias",
+        "rarity": "Rareza",
+        "price": "Precio",
+        "wearables": {
           "tab_title": "Wearables",
           "item": "Item",
-          "category": "Categorias",
-          "rarity": "Rareza",
-          "price": "Precio",
           "items_sold": "Items vendidos"
+        },
+        "emotes": {
+          "tab_title": "Emotes",
+          "item": "Emote",
+          "items_sold": "Emotes vendidos"
         },
         "creators": {
           "tab_title": "Creadores",
@@ -461,7 +466,9 @@
       "male": "hombre",
       "female": "mujer",
       "message": "Esta vestimenta no tiene representación de {bodyShape}"
-    }
+    },
+    "play_emote": "Reproducir Emote",
+    "stop_emote": "Parar Emote"
   },
   "sell_page": {
     "title": "Poner en venta",
@@ -614,7 +621,8 @@
       "place_bid": "Hiciste una oferta de {price} por {name}.",
       "accept_bid": "Aceptaste una oferta de {price} por {name}.",
       "cancel_bid": "Cancelaste una oferta de {price} por {name}.",
-      "claim_land": "Reclamaste tu {name} del {contract}."
+      "claim_land": "Reclamaste tu {name} del {contract}.",
+      "remove_rental": "Removiste tu {name} del listado de rentas."
     }
   },
   "mana": {
@@ -684,7 +692,12 @@
       "confirm": "Confirma la transacción en tu billetera"
     },
     "create_listing_step": {
-      "title": "Poner en alquiler",
+      "titles": {
+        "edit": "Editar listado de alquiler",
+        "create": "Poner en alquiler"
+      },
+      "update_listing": "Actualizar listado de alquiler",
+      "remove_listing": "Remover listado de alquiler",
       "price_per_day": "Precio por día",
       "listing_expiration_date": "Fecha de expiración del clasificado",
       "periods": "Período del alquiler",
@@ -752,6 +765,13 @@
     "title": "Reclamar tierra",
     "action": "Reclamar tierra",
     "question": "¿Está seguro de que quiere reclamar su tierra?",
+    "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
+    "confirm_transaction": "Confirme la transacción en su billetera para continuar"
+  },
+  "remove_rental_modal": {
+    "title": "Quitar listado de alquiler",
+    "action": "Quitar listado de alquiler",
+    "question": "¿Está seguro de que quiere quitar el listado de alquiler?",
     "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   }

@@ -18,7 +18,7 @@ const IconBadge = ({
         {children ? (
           <span className="custom-icon">{children}</span>
         ) : (
-          <span className={classNames('icon', icon)} />
+          <span className={classNames(icon && 'icon', icon)} />
         )}
         <span className="text">{text}</span>
       </>
