@@ -617,7 +617,8 @@
       "place_bid": "您对{name}出价了{price}。",
       "accept_bid": "您接受了{name}的{price}出价。",
       "cancel_bid": "您取消了对{name}的{price}出价。",
-      "claim_land": "您从 {contract} 中认领了您的 {name}。"
+      "claim_land": "您从 {contract} 中认领了您的 {name}。",
+      "remove_rental": "您删除了 {name} 的出租列表."
     }
   },
   "mana": {
@@ -760,6 +761,13 @@
     "title": "开垦土地",
     "action": "开垦土地",
     "question": "你确定要收回你的土地吗?",
+    "disclaimer": "这将需要一笔交易，您需要支付其费用。",
+    "confirm_transaction": "确认您钱包上的交易以继续"
+  },
+  "remove_rental_modal": {
+    "title": "删除出租列表",
+    "action": "删除出租列表",
+    "question": "您确定要删除您的出租列表吗？",
     "disclaimer": "这将需要一笔交易，您需要支付其费用。",
     "confirm_transaction": "确认您钱包上的交易以继续"
   }

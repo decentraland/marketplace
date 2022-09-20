@@ -615,7 +615,8 @@
       "place_bid": "Hiciste una oferta de {price} por {name}.",
       "accept_bid": "Aceptaste una oferta de {price} por {name}.",
       "cancel_bid": "Cancelaste una oferta de {price} por {name}.",
-      "claim_land": "Reclamaste tu {name} del {contract}."
+      "claim_land": "Reclamaste tu {name} del {contract}.",
+      "remove_rental": "Removiste tu {name} del listado de rentas."
     }
   },
   "mana": {
@@ -758,6 +759,13 @@
     "title": "Reclamar tierra",
     "action": "Reclamar tierra",
     "question": "¿Está seguro de que quiere reclamar su tierra?",
+    "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
+    "confirm_transaction": "Confirme la transacción en su billetera para continuar"
+  },
+  "remove_rental_modal": {
+    "title": "Quitar listado de alquiler",
+    "action": "Quitar listado de alquiler",
+    "question": "¿Está seguro de que quiere quitar el listado de alquiler?",
     "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   }

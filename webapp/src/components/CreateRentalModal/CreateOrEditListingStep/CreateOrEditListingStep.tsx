@@ -27,7 +27,7 @@ import { Props } from './CreateOrEditListingStep.types'
 import styles from './CreateOrEditListingStep.module.css'
 
 const CreateListingStep = (props: Props) => {
-  const { open, onCancel, nft, onCreate, rental } = props
+  const { open, onCancel, nft, onCreate, onRemove, rental } = props
 
   // Editing properties
   const oldPrice = useMemo(
@@ -65,6 +65,7 @@ const CreateListingStep = (props: Props) => {
       Number(new Date(expiresAt))
     )
   }, [onCreate, nft, pricePerDayInput, periodOptions, expiresAt])
+  const handleRemove = useCallback(() => onRemove(nft), [nft, onRemove])
 
   const createOptionHandler = (periodOption: PeriodOption) => () => {
     const shouldAdd = !periodOptions.includes(periodOption)
@@ -190,7 +191,7 @@ const CreateListingStep = (props: Props) => {
             >
               {t('rental_modal.create_listing_step.update_listing')}
             </Button>
-            <Button secondary onClick={handleSubmit} disabled={isInvalid}>
+            <Button secondary onClick={handleRemove}>
               {t('rental_modal.create_listing_step.remove_listing')}
             </Button>
           </>

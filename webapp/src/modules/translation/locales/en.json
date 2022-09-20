@@ -620,7 +620,8 @@
       "place_bid": "You placed a bid of {price} on {name}.",
       "accept_bid": "You accepted a bid of {price} on {name}.",
       "cancel_bid": "You cancelled a bid of {price} on {name}.",
-      "claim_land": "You claimed your {name} from the {contract}."
+      "claim_land": "You claimed your {name} from the {contract}.",
+      "remove_rental": "You removed your rental listing of {name}."
     }
   },
   "mana": {
@@ -763,6 +764,13 @@
     "title": "Claim LAND",
     "action": "Claim LAND",
     "question": "Are you sure you want to claim your LAND?",
+    "disclaimer": "This will require a transaction and you will need to cover its fees.",
+    "confirm_transaction": "Confirm the transaction on your wallet to continue"
+  },
+  "remove_rental_modal": {
+    "title": "Remove listing",
+    "action": "Remove listing",
+    "question": "Are you sure you want to remove your listing?",
     "disclaimer": "This will require a transaction and you will need to cover its fees.",
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   }

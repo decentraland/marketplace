@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { RootState } from '../../../modules/reducer'
-import { claimLandRequest } from '../../../modules/rental/actions'
+import { removeRentalRequest } from '../../../modules/rental/actions'
 import {
-  isClaimingLand,
+  isRemovingRental,
   isSubmittingTransaction,
   getError
 } from '../../../modules/rental/selectors'
@@ -11,12 +11,12 @@ import {
   MapDispatchProps,
   MapStateProps,
   OwnProps
-} from './ClaimLandModal.types'
-import ClaimLandModal from './ClaimLandModal'
+} from './RemoveRentalModal.types'
+import ClaimLandModal from './RemoveRentalModal'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
-    isTransactionBeingConfirmed: isClaimingLand(state),
+    isTransactionBeingConfirmed: isRemovingRental(state),
     isSubmittingTransaction: isSubmittingTransaction(state),
     error: getError(state)
   }
@@ -28,9 +28,7 @@ const mapDispatch = (
 ): MapDispatchProps => {
   return {
     onSubmitTransaction: () =>
-      dispatch(
-        claimLandRequest(ownProps.metadata.nft, ownProps.metadata.rental)
-      )
+      dispatch(removeRentalRequest(ownProps.metadata.nft))
   }
 }
 

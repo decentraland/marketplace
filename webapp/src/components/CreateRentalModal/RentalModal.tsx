@@ -16,7 +16,15 @@ import { ConfirmationStep } from './ConfirmationStep'
 
 const RentalModal = (props: Props) => {
   // Props
-  const { open, address, nft, rental, authorizations, onCancel } = props
+  const {
+    open,
+    address,
+    nft,
+    rental,
+    authorizations,
+    onCancel,
+    onRemove
+  } = props
 
   // State
   const [listing, setListing] = useState<
@@ -66,6 +74,7 @@ const RentalModal = (props: Props) => {
         nft={nft}
         rental={rental}
         onCreate={handleSetListing}
+        onRemove={onRemove}
         onCancel={onCancel}
       />
     )

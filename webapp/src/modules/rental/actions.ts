@@ -65,7 +65,7 @@ export const claimLandTransactionSubmitted = (
 export type ClaimLandRequestAction = ReturnType<typeof claimLandRequest>
 export type ClaimLandSuccessAction = ReturnType<typeof claimLandSuccess>
 export type ClaimLandFailureAction = ReturnType<typeof claimLandFailure>
-export type ClaimLandSignedTransaction = ReturnType<
+export type ClaimLandTransactionSubmitted = ReturnType<
   typeof claimLandTransactionSubmitted
 >
 
@@ -74,3 +74,33 @@ export const CLEAR_RENTAL_ERRORS = 'Clear rental errors'
 export const clearRentalErrors = () => action(CLEAR_RENTAL_ERRORS)
 
 export type ClearRentalErrors = ReturnType<typeof clearRentalErrors>
+
+export const REMOVE_RENTAL_REQUEST = '[Request] Remove Rental'
+export const REMOVE_RENTAL_SUCCESS = '[Success] Remove Rental'
+export const REMOVE_RENTAL_FAILURE = '[Failure] Remove Rental'
+export const REMOVE_RENTAL_TRANSACTION_SUBMITTED =
+  '[Submitted transaction] Remove Rental'
+
+export const removeRentalRequest = (nft: NFT) =>
+  action(REMOVE_RENTAL_REQUEST, { nft })
+export const removeRentalSuccess = (nft: NFT) =>
+  action(REMOVE_RENTAL_SUCCESS, {
+    nft
+  })
+export const removeRentalFailure = (error: string) =>
+  action(REMOVE_RENTAL_FAILURE, { error })
+export const removeRentalTransactionSubmitted = (nft: NFT, txHash: string) =>
+  action(
+    REMOVE_RENTAL_TRANSACTION_SUBMITTED,
+    buildTransactionPayload(nft.chainId, txHash, {
+      tokenId: nft.tokenId,
+      contractAddress: nft.contractAddress
+    })
+  )
+
+export type RemoveRentalRequestAction = ReturnType<typeof removeRentalRequest>
+export type RemoveRentalSuccessAction = ReturnType<typeof removeRentalSuccess>
+export type RemoveRentalFailureAction = ReturnType<typeof removeRentalFailure>
+export type RemoveRentalTransactionSubmitted = ReturnType<
+  typeof removeRentalTransactionSubmitted
+>

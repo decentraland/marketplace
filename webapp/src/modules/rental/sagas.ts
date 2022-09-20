@@ -29,14 +29,20 @@ import {
   createRentalFailure,
   CreateRentalRequestAction,
   createRentalSuccess,
-  CREATE_RENTAL_REQUEST
+  CREATE_RENTAL_REQUEST,
+  RemoveRentalRequestAction,
+  removeRentalFailure,
+  removeRentalSuccess,
+  removeRentalTransactionSubmitted,
+  REMOVE_RENTAL_REQUEST
 } from './actions'
 import { daysByPeriod, getNonces, getSignature } from './utils'
 
 export function* rentalSaga() {
   yield takeEvery(CREATE_RENTAL_REQUEST, handleCreateRentalRequest)
   yield takeEvery(CLAIM_LAND_REQUEST, handleClaimLandRequest)
-  yield takeEvery(CLOSE_MODAL, handleClaimLandModalClose)
+  yield takeEvery(CLOSE_MODAL, handleModalClose)
+  yield takeEvery(REMOVE_RENTAL_REQUEST, handleRemoveRentalRequest)
 }
 
 function* handleCreateRentalRequest(action: CreateRentalRequestAction) {
@@ -152,8 +158,55 @@ function* handleClaimLandRequest(action: ClaimLandRequestAction) {
   }
 }
 
-function* handleClaimLandModalClose(action: CloseModalAction) {
-  if (action.payload.name === 'ClaimLandModal') {
+function* handleModalClose(action: CloseModalAction) {
+  if (
+    action.payload.name === 'ClaimLandModal' ||
+    action.payload.name === 'RemoveRentalModal'
+  ) {
     yield put(clearRentalErrors())
+  }
+}
+
+function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
+  const { nft } = action.payload
+
+  try {
+    if (!nft.openRentalId) {
+      throw new Error('The provided NFT does not have an open rental')
+    }
+
+    const provider: Provider | null = yield call(getConnectedProvider)
+    if (!provider) {
+      throw new Error('A provider is required to remove a rental')
+    }
+
+    const address: string | undefined = yield select(getAddress)
+    if (!address) {
+      throw new Error('An address is required to remove a rental')
+    }
+
+    const rentalsContract: ContractData = yield call(
+      getContract,
+      ContractName.Rentals,
+      nft.chainId
+    )
+
+    const txHash: string = yield call(
+      sendTransaction as (
+        contract: ContractData,
+        contractMethodName: string,
+        ...contractArguments: any[]
+      ) => Promise<string>,
+      rentalsContract,
+      'bumpAssetIndex(address,uint256)',
+      nft.contractAddress,
+      nft.tokenId
+    )
+    yield put(removeRentalTransactionSubmitted(nft, txHash))
+    yield call(waitForTx, txHash)
+    yield call([rentalsAPI, 'refreshRentalListing'], nft.openRentalId)
+    yield put(removeRentalSuccess(nft))
+  } catch (error) {
+    yield put(removeRentalFailure((error as Error).message))
   }
 }
