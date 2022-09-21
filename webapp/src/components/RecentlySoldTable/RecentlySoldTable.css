@@ -83,8 +83,7 @@
   margin-right: 12px;
 }
 
-.RecentlySoldTable .recently-sold-item-cell .AssetImage,
-.RecentlySoldTable .recently-sold-item-cell img {
+.RecentlySoldTable .recently-sold-item-cell .AssetImage {
   width: 48px;
   height: 48px;
   margin-right: 20px;
@@ -245,7 +244,7 @@
     margin-bottom: 0;
     text-align: right;
   }
-  
+
   .RecentlySoldTable .recently-sold-item-cell {
     min-height: 161px;
     position: relative;

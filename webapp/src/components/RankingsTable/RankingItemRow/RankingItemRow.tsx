@@ -115,11 +115,15 @@ const RankingItemRow = ({ entity }: Props) => {
                           ? t(
                               `wearable.category.${item.data.wearable.category}`
                             )
-                          : t(`global.emote`)}
+                          : t(`emote.category.${item.data.emote!.category}`)}
                       </div>
                       <div>
                         <span>
-                          {t('home_page.analytics.rankings.items.items_sold')}
+                          {t(
+                            `home_page.analytics.rankings.${
+                              item.data.wearable ? 'wearables' : 'emotes'
+                            }.items_sold`
+                          )}
                         </span>
                         {entity.sales}
                       </div>
