@@ -57,15 +57,12 @@ export function handleAddLand(event: AddLand): void {
 
   let estate = Estate.load(id)
 
-  let parcels = estate.parcels
-  parcels.push(parcelId)
-
-  estate.size = parcels.length
+  estate.size += 1
 
   estate.save()
 
   let estateNFT = NFT.load(id)
-  estateNFT.searchEstateSize = parcels.length
+  estateNFT.searchEstateSize = estate.size
   estateNFT.save()
 
   let parcel = Parcel.load(parcelId)
@@ -99,16 +96,12 @@ export function handleRemoveLand(event: RemoveLand): void {
 
   let estate = Estate.load(id)
 
-  let parcels = estate.parcels
-  let index = parcels.indexOf(parcelId)
-  parcels.splice(index, 1)
-
-  estate.size = parcels.length
+  estate.size -= 1
 
   estate.save()
 
   let estateNFT = NFT.load(id)
-  estateNFT.searchEstateSize = parcels.length
+  estateNFT.searchEstateSize = estate.size
   estateNFT.save()
 
   let parcel = Parcel.load(parcelId)
