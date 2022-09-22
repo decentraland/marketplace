@@ -5,7 +5,6 @@ export function buildEstateFromNFT(nft: NFT): Estate {
 
   estate.tokenId = nft.tokenId
   estate.owner = nft.owner
-  estate.parcels = []
   estate.size = 0
 
   return estate
