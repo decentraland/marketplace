@@ -28,15 +28,3 @@ export const getIsRentalsEnabled = (state: RootState) => {
     return false
   }
 }
-
-export const getAreEmoteCategoriesEnabled = (state: RootState) => {
-  try {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.EMOTE_CATEGORIES
-    )
-  } catch (e) {
-    return false
-  }
-}

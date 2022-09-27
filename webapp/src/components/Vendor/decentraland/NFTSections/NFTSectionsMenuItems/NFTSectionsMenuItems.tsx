@@ -10,12 +10,7 @@ const shouldRenderSection = (section: Section, sections: Section[]) => {
   return sections.includes(section) || sections.includes(Section.ALL)
 }
 
-const NFTSectionsMenuItems = ({
-  section,
-  sections,
-  onSectionClick,
-  areEmoteCategoriesEnabled
-}: Props) => {
+const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
   return (
     <>
       {sections.includes(Section.ALL) && (
@@ -145,7 +140,7 @@ const NFTSectionsMenuItems = ({
             Section.EMOTES_MISCELLANEOUS,
             Section.EMOTES_STUNT,
             Section.EMOTES_REACTIONS
-          ].includes(section!) && areEmoteCategoriesEnabled
+          ].includes(section!)
             ? [
                 Section.EMOTES_DANCE,
                 Section.EMOTES_POSES,
