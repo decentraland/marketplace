@@ -1,3 +1,3 @@
-import NFTSectionsMenuItems from './NFTSectionsMenuItems.container'
+import NFTSectionsMenuItems from './NFTSectionsMenuItems'
 
 export default NFTSectionsMenuItems
