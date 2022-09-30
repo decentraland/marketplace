@@ -1,7 +1,8 @@
 import {
   PeriodCreation,
   RentalListing,
-  RentalListingCreation
+  RentalListingCreation,
+  RentalStatus
 } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
@@ -14,7 +15,9 @@ import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { ethers } from 'ethers'
-import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { call, delay, put, select, takeEvery } from 'redux-saga/effects'
+import { NFT } from '../nft/types'
+import { VendorName } from '../vendor'
 import { getIdentity } from '../identity/utils'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
@@ -167,6 +170,19 @@ function* handleModalClose(action: CloseModalAction) {
   }
 }
 
+function* waitUntilRentalIsCancelled(nft: NFT<VendorName>) {
+  let isCancelled = false
+  while (!isCancelled) {
+    yield delay(1000)
+    const listing: RentalListing = yield call(
+      [rentalsAPI, 'refreshRentalListing'],
+      nft.openRentalId!
+    )
+
+    isCancelled = listing.status === RentalStatus.CANCELLED
+  }
+}
+
 function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
   const { nft } = action.payload
 
@@ -204,7 +220,7 @@ function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
     )
     yield put(removeRentalTransactionSubmitted(nft, txHash))
     yield call(waitForTx, txHash)
-    yield call([rentalsAPI, 'refreshRentalListing'], nft.openRentalId)
+    yield call(waitUntilRentalIsCancelled, nft)
     yield put(removeRentalSuccess(nft))
   } catch (error) {
     yield put(removeRentalFailure((error as Error).message))

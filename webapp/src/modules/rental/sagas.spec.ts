@@ -18,6 +18,7 @@ import {
 } from 'decentraland-transactions'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
+import { delay } from 'redux-saga/effects'
 import { getCurrentIdentity } from '../identity/selectors'
 import { closeModal } from '../modal/actions'
 import { NFT } from '../nft/types'
@@ -35,7 +36,8 @@ import {
   createRentalSuccess,
   removeRentalFailure,
   removeRentalRequest,
-  removeRentalTransactionSubmitted
+  removeRentalTransactionSubmitted,
+  removeRentalSuccess
 } from './actions'
 import { rentalSaga } from './sagas'
 import { PeriodOption } from './types'
@@ -571,19 +573,22 @@ describe('when handling the request action to remove a rental', () => {
                   ...contractArguments: any[]
                 ) => Promise<string>,
                 rentalContract,
-                'claim(address,uint256)',
+                'bumpAssetIndex(address,uint256)',
                 nft.contractAddress,
                 nft.tokenId
               ),
               Promise.resolve(txHash)
             ],
-            [call(waitForTx, txHash), Promise.resolve()]
+            [call(waitForTx, txHash), Promise.resolve()],
+            [delay(1000), void 0],
+            [
+              call([rentalsAPI, 'refreshRentalListing'], nft.openRentalId!),
+              { ...rental, status: RentalStatus.CANCELLED }
+            ]
           ])
-          .put(
-            claimLandTransactionSubmitted(nft, txHash, rentalContract.address)
-          )
-          .put(claimLandSuccess(nft, rental))
-          .dispatch(claimLandRequest(nft, rental))
+          .dispatch(removeRentalRequest(nft))
+          .put(removeRentalTransactionSubmitted(nft, txHash))
+          .put(removeRentalSuccess(nft))
           .silentRun()
       })
     })
