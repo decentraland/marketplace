@@ -3,7 +3,7 @@ import {
   getSearch as getRouterSearch,
   getLocation
 } from 'connected-react-router'
-import { Network, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, Network, Rarity } from '@dcl/schemas'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
 import { WearableGender } from '../nft/wearable/types'
@@ -228,6 +228,15 @@ export const getAssetType = createSelector<
   return assetTypeParam as AssetType
 })
 
+export const getEmotePlayMode = createSelector<
+  RootState,
+  string,
+  EmotePlayMode | undefined
+>(
+  getRouterSearch,
+  search => (getURLParam(search, 'emotePlayMode') as EmotePlayMode) || undefined
+)
+
 export const getViewAsGuest = createSelector<RootState, string, boolean>(
   getRouterSearch,
   search => getURLParam(search, 'viewAsGuest') === 'true'
@@ -333,6 +342,7 @@ export const getCurrentBrowseOptions = createSelector(
   getVendor,
   getSection,
   getNetwork,
+  getEmotePlayMode,
   getPaginationUrlParams,
   getAssetsUrlParams,
   getLandsUrlParams,
@@ -345,6 +355,7 @@ export const getCurrentBrowseOptions = createSelector(
     vendor,
     section,
     network,
+    emotePlayMode,
     paginationUrlParams,
     AssetsUrlParams,
     landsUrlParams,
@@ -358,6 +369,7 @@ export const getCurrentBrowseOptions = createSelector(
       vendor,
       section,
       network,
+      emotePlayMode,
       ...AssetsUrlParams,
       ...paginationUrlParams,
       ...landsUrlParams,

@@ -40,7 +40,8 @@ export function getFilters(
         wearableGenders,
         contracts,
         network,
-        onlySmart
+        onlySmart,
+        emotePlayMode
       } = options
 
       return {
@@ -53,7 +54,8 @@ export function getFilters(
         rarities,
         wearableGenders,
         contracts,
-        network
+        network,
+        emotePlayMode
       } as NFTsFetchFilters<VendorName.DECENTRALAND>
     }
     default:

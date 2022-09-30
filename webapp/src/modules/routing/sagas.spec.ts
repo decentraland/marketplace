@@ -91,7 +91,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       .run({ silenceTimeout: true })
   })
 
-  it('should fetch emotes items when providing the EMOTES section', () => {
+  it.only('should fetch emotes items when providing the EMOTES section', () => {
     const address = '0x...'
     const browseOptions: BrowseOptions = {
       address,
@@ -117,7 +117,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       search: undefined,
       rarities: undefined,
       contractAddress: undefined,
-      wearableGenders: undefined
+      wearableGenders: undefined,
+      emotePlayMode: undefined
     }
 
     return expectSaga(routingSaga)

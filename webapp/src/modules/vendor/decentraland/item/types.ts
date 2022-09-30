@@ -1,5 +1,6 @@
 import {
   EmoteCategory,
+  EmotePlayMode,
   Item,
   ItemSortBy,
   Network,
@@ -24,6 +25,7 @@ export type ItemFilters = {
   isWearableSmart?: boolean
   wearableCategory?: WearableCategory
   emoteCategory?: EmoteCategory
+  emotePlayMode?: EmotePlayMode
   rarities?: Rarity[]
   wearableGenders?: WearableGender[]
   contractAddress?: string
