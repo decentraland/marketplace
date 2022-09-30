@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { Network, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, Network, Rarity } from '@dcl/schemas'
 import { SortBy } from '../../../../modules/routing/types'
 import {
   browse,
@@ -24,6 +24,7 @@ export type Props = {
   wearableGenders: WearableGender[]
   contracts: string[]
   network?: Network
+  emotePlayMode?: EmotePlayMode
   hasFiltersEnabled: boolean
   isRentalsEnabled: boolean
   onBrowse: typeof browse
@@ -45,6 +46,7 @@ export type MapStateProps = Pick<
   | 'wearableGenders'
   | 'contracts'
   | 'network'
+  | 'emotePlayMode'
   | 'hasFiltersEnabled'
   | 'isRentalsEnabled'
 >
