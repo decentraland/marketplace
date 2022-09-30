@@ -417,13 +417,21 @@ const NFTFilters = (props: Props) => {
                 selectedGenders={
                   isWearableCategory ? wearableGenders : undefined
                 }
+                selectedEmotePlayMode={
+                  isEmoteCategory ? emotePlayMode : undefined
+                }
                 isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
                 onCollectionsChange={handleCollectionsChange}
                 onGendersChange={
                   isWearableCategory ? handleGendersChange : undefined
                 }
                 onRaritiesChange={handleRaritiesChange}
-                onNetworkChange={handleNetworkChange}
+                onNetworkChange={
+                  isWearableCategory ? handleNetworkChange : undefined
+                }
+                onEmotePlayModeChange={
+                  isEmoteCategory ? handleEmotePlayModeChange : undefined
+                }
                 onOnlySmartChange={
                   isWearableCategory ? handleToggleOnlySmart : undefined
                 }
