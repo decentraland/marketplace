@@ -466,7 +466,9 @@
     },
     "play_mode": {
       "simple": "Simple",
-      "loop": "Loop"
+      "loop": "Loop",
+      "play_once": "Play once",
+      "play_loop": "Play loop"
     }
   },
   "wearable_preview": {
