@@ -28,7 +28,7 @@ const EmoteDetail = ({ nft }: Props) => {
   const emoteBadgeHref = useMemo(
     () =>
       locations.browse({
-        assetType: AssetType.ITEM,
+        assetType: AssetType.NFT,
         section: Section.EMOTES,
         emotePlayMode: loop ? EmotePlayMode.LOOP : EmotePlayMode.SIMPLE
       }),
