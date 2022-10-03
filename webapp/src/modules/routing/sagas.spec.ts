@@ -91,7 +91,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       .run({ silenceTimeout: true })
   })
 
-  it.only('should fetch emotes items when providing the EMOTES section', () => {
+  it('should fetch emotes items when providing the EMOTES section', () => {
     const address = '0x...'
     const browseOptions: BrowseOptions = {
       address,
