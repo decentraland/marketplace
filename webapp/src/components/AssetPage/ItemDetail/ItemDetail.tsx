@@ -44,7 +44,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
       description = item.data.emote!.description
       bodyShapes = item.data.emote!.bodyShapes
       category = item.data.emote!.category
-      loop = (item.data.emote! as any).loop //TODO: Update common-schemas and remove this `any`
+      loop = item.data.emote!.loop
       break
   }
   const emoteBadgeHref = useMemo(
