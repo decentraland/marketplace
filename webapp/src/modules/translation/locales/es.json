@@ -459,10 +459,8 @@
       "miscellaneous": "Misceláneos"
     },
     "play_mode": {
-      "simple": "Simple",
-      "loop": "Loop",
-      "play_once": "Reproduce una vez",
-      "play_loop": "Reproduce en bucle"
+      "simple": "Reproduce una vez",
+      "loop": "Reproduce en bucle"
     }
   },
   "wearable_preview": {

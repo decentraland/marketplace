@@ -460,10 +460,8 @@
       "miscellaneous": "各种各样的"
     },
     "play_mode": {
-      "simple": "简单的",
-      "loop": "环形",
-      "play_once": "播放一次",
-      "play_loop": "循环播放"
+      "simple": "播放一次",
+      "loop": "循环播放"
     }
   },
   "wearable_preview": {

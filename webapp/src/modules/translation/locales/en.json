@@ -465,10 +465,8 @@
       "miscellaneous": "Miscellaneous"
     },
     "play_mode": {
-      "simple": "Simple",
-      "loop": "Loop",
-      "play_once": "Play once",
-      "play_loop": "Play loop"
+      "simple": "Play once",
+      "loop": "Play loop"
     }
   },
   "wearable_preview": {
