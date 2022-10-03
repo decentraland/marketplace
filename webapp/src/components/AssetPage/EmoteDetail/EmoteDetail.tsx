@@ -1,14 +1,13 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { NFTCategory, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, NFTCategory, Rarity } from '@dcl/schemas'
 import { Network } from '../Network'
 import { Description } from '../Description'
 import { Props } from './EmoteDetail.types'
 import RarityBadge from '../../RarityBadge'
 import { AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/decentraland'
-import GenderBadge from '../../GenderBadge'
 import { Owner } from '../Owner'
 import Collection from '../Collection'
 import Price from '../Price'
@@ -16,12 +15,25 @@ import Expiration from '../Expiration'
 import { Actions } from '../Actions'
 import { BidList } from '../BidList'
 import { TransactionHistory } from '../TransactionHistory'
+import { locations } from '../../../modules/routing/locations'
+import IconBadge from '../IconBadge'
 import BaseDetail from '../BaseDetail'
 import { AssetImage } from '../../AssetImage'
 import styles from './EmoteDetail.module.css'
 
 const EmoteDetail = ({ nft }: Props) => {
   const emote = nft.data.emote!
+  const loop = nft.data.emote!.loop
+
+  const emoteBadgeHref = useMemo(
+    () =>
+      locations.browse({
+        assetType: AssetType.NFT,
+        section: Section.EMOTES,
+        emotePlayMode: loop ? EmotePlayMode.LOOP : EmotePlayMode.SIMPLE
+      }),
+    [loop]
+  )
 
   return (
     <BaseDetail
@@ -35,10 +47,10 @@ const EmoteDetail = ({ nft }: Props) => {
             assetType={AssetType.NFT}
             category={NFTCategory.EMOTE}
           />
-          <GenderBadge
-            bodyShapes={emote.bodyShapes}
-            assetType={AssetType.NFT}
-            section={Section.EMOTES}
+          <IconBadge
+            icon={loop ? 'play-loop' : 'play-once'}
+            text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
+            href={emoteBadgeHref}
           />
         </>
       }

@@ -79,7 +79,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
               assetType={AssetType.ITEM}
             />
           )}
-          {loop !== undefined && (
+          {item.category === NFTCategory.EMOTE && (
             <IconBadge
               icon={loop ? 'play-loop' : 'play-once'}
               text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
