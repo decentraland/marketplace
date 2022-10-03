@@ -81,8 +81,8 @@ const ItemDetail = ({ item, wallet }: Props) => {
           )}
           {loop !== undefined && (
             <IconBadge
-              icon={!loop ? 'play-loop' : 'play-once'}
-              text={t(`emote.play_mode.${loop ? 'play_loop' : 'play_once'}`)}
+              icon={loop ? 'play-loop' : 'play-once'}
+              text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
               href={emoteBadgeHref}
             />
           )}
