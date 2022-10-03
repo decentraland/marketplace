@@ -18,6 +18,9 @@
   background-position: center;
   background-repeat: no-repeat;
   width: 19px;
+  /* filter obtained using https://isotropic.co/tool/hex-color-to-css-filter/ */
+  filter: invert(99%) sepia(4%) saturate(57%) hue-rotate(228deg)
+    brightness(117%) contrast(100%);
 }
 
 .EmoteTags .PlayModeSmallBadge .PlayOnce {
