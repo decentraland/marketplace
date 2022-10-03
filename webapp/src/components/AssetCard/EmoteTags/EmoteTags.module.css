@@ -1,3 +1,29 @@
 .EmoteTags {
   display: flex;
 }
+
+.EmoteTags .PlayModeSmallBadge {
+  display: inline-flex;
+  align-items: center;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #37333d;
+  margin-left: 10px;
+}
+
+.EmoteTags .PlayModeSmallBadge .PlayIcon {
+  height: 15px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 19px;
+}
+
+.EmoteTags .PlayModeSmallBadge .PlayOnce {
+  background-image: url(../../../images/emotes/play-once.svg);
+}
+
+.EmoteTags .PlayModeSmallBadge .PlayLoop {
+  background-image: url(../../../images/emotes/play-loop.svg);
+}
