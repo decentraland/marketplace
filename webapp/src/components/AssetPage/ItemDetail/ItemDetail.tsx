@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { BodyShape, NFTCategory, Rarity } from '@dcl/schemas'
+import { BodyShape, EmotePlayMode, NFTCategory, Rarity } from '@dcl/schemas'
 import { locations } from '../../../modules/routing/locations'
 import { Network } from '../Network'
 import { Description } from '../Description'
@@ -20,6 +20,7 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { getBuilderCollectionDetailUrl } from '../../../modules/collection/utils'
 import { TransactionHistory } from '../TransactionHistory'
 import { AssetImage } from '../../AssetImage'
+import IconBadge from '../IconBadge'
 import styles from './ItemDetail.module.css'
 
 const ItemDetail = ({ item, wallet }: Props) => {
@@ -32,6 +33,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
   let description = ''
   let bodyShapes: BodyShape[] = []
   let category
+  let loop = false
   switch (item.category) {
     case NFTCategory.WEARABLE:
       description = item.data.wearable!.description
@@ -42,8 +44,18 @@ const ItemDetail = ({ item, wallet }: Props) => {
       description = item.data.emote!.description
       bodyShapes = item.data.emote!.bodyShapes
       category = item.data.emote!.category
+      loop = item.data.emote!.loop
       break
   }
+  const emoteBadgeHref = useMemo(
+    () =>
+      locations.browse({
+        assetType: AssetType.ITEM,
+        section: Section.EMOTES,
+        emotePlayMode: loop ? EmotePlayMode.LOOP : EmotePlayMode.SIMPLE
+      }),
+    [loop]
+  )
 
   return (
     <BaseDetail
@@ -67,7 +79,14 @@ const ItemDetail = ({ item, wallet }: Props) => {
               assetType={AssetType.ITEM}
             />
           )}
-          {bodyShapes.length > 0 && (
+          {loop !== undefined && (
+            <IconBadge
+              icon={!loop ? 'play-loop' : 'play-once'}
+              text={t(`emote.play_mode.${loop ? 'play_loop' : 'play_once'}`)}
+              href={emoteBadgeHref}
+            />
+          )}
+          {bodyShapes.length > 0 && !item.data.emote && (
             <GenderBadge
               bodyShapes={bodyShapes}
               assetType={AssetType.ITEM}

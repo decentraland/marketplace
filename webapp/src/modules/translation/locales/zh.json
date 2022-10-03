@@ -310,7 +310,9 @@
     "all_collections": "所有珍藏",
     "network": "网络",
     "all_networks": "所有网络",
-    "smart_wearables": "智能穿戴"
+    "smart_wearables": "智能穿戴",
+    "play_mode": "游戏模式",
+    "all_play_modes": "所有播放模式"
   },
   "nft_land_filters": {
     "all_land": "所有土地",
@@ -448,8 +450,6 @@
   },
   "emote": {
     "category": {
-      "simple": "简单的",
-      "loop": "环形",
       "dance": "舞蹈",
       "stunt": "特技",
       "greetings": "问候",
@@ -458,6 +458,12 @@
       "reactions": "反应",
       "horror": "恐怖",
       "miscellaneous": "各种各样的"
+    },
+    "play_mode": {
+      "simple": "简单的",
+      "loop": "环形",
+      "play_once": "播放一次",
+      "play_loop": "循环播放"
     }
   },
   "wearable_preview": {

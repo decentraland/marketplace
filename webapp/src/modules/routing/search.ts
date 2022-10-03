@@ -1,6 +1,7 @@
 import {
   CollectionSortBy,
   EmoteCategory,
+  EmotePlayMode,
   ItemSortBy,
   Network,
   NFTCategory,
@@ -83,6 +84,13 @@ export function getSearchParams(options?: BrowseOptions) {
 
     if (options.network && Object.values(Network).includes(options.network)) {
       params.set('network', options.network)
+    }
+
+    if (
+      options.emotePlayMode &&
+      Object.values(EmotePlayMode).includes(options.emotePlayMode)
+    ) {
+      params.set('emotePlayMode', options.emotePlayMode)
     }
 
     if (options.viewAsGuest !== undefined) {

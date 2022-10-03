@@ -309,7 +309,9 @@
     "all_collections": "Todas las colecciones",
     "network": "Red",
     "all_networks": "Todas las redes",
-    "smart_wearables": "Vestimentas Interactivas"
+    "smart_wearables": "Vestimentas Interactivas",
+    "play_mode": "Play Mode",
+    "all_play_modes": "All Play Modes"
   },
   "nft_land_filters": {
     "all_land": "Todas las tierras",
@@ -447,8 +449,6 @@
   },
   "emote": {
     "category": {
-      "simple": "Simple",
-      "loop": "Loop",
       "dance": "Baile",
       "stunt": "Truco",
       "greetings": "Saludos",
@@ -457,6 +457,12 @@
       "reactions": "Reacciones",
       "horror": "Horror",
       "miscellaneous": "Misceláneos"
+    },
+    "play_mode": {
+      "simple": "Simple",
+      "loop": "Loop",
+      "play_once": "Reproduce una vez",
+      "play_loop": "Reproduce en bucle"
     }
   },
   "wearable_preview": {

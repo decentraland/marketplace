@@ -117,7 +117,8 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       search: undefined,
       rarities: undefined,
       contractAddress: undefined,
-      wearableGenders: undefined
+      wearableGenders: undefined,
+      emotePlayMode: undefined
     }
 
     return expectSaga(routingSaga)

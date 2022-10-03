@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
-import { Network, NFTCategory, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Row,
@@ -26,11 +26,13 @@ const FiltersMenu = (props: Props) => {
     selectedRarities,
     selectedGenders,
     selectedNetwork,
+    selectedEmotePlayMode,
     isOnlySmart,
     onCollectionsChange,
     onRaritiesChange,
     onGendersChange,
     onNetworkChange,
+    onEmotePlayModeChange,
     onOnlySmartChange
   } = props
 
@@ -83,6 +85,22 @@ const FiltersMenu = (props: Props) => {
     ]
   }, [])
 
+  const emotePlayModeOptions = useMemo(() => {
+    const options = Object.values(EmotePlayMode).filter(
+      value => typeof value === 'string'
+    ) as EmotePlayMode[]
+    return [
+      {
+        value: ALL_FILTER_OPTION,
+        text: t('nft_filters.all_play_modes')
+      },
+      ...options.map(playMode => ({
+        value: playMode,
+        text: t(`emote.play_mode.${playMode}`)
+      }))
+    ]
+  }, [])
+
   const handleOnlySmartClick = useCallback(() => {
     return onOnlySmartChange ? onOnlySmartChange(!isOnlySmart) : null
   }, [onOnlySmartChange, isOnlySmart])
@@ -104,13 +122,26 @@ const FiltersMenu = (props: Props) => {
           options={collectionOptions}
           onChange={onCollectionsChange}
         />
-        <SelectFilter
-          name={t('nft_filters.network')}
-          value={selectedNetwork || ALL_FILTER_OPTION}
-          clearable={!!selectedNetwork}
-          options={networkOptions}
-          onChange={network => onNetworkChange(network as Network)}
-        />
+        {onNetworkChange !== undefined && (
+          <SelectFilter
+            name={t('nft_filters.network')}
+            value={selectedNetwork || ALL_FILTER_OPTION}
+            clearable={!!selectedNetwork}
+            options={networkOptions}
+            onChange={network => onNetworkChange(network as Network)}
+          />
+        )}
+        {onEmotePlayModeChange !== undefined && (
+          <SelectFilter
+            name={t('nft_filters.play_mode')}
+            value={selectedEmotePlayMode || ALL_FILTER_OPTION}
+            clearable={!!selectedEmotePlayMode}
+            options={emotePlayModeOptions}
+            onChange={playMode =>
+              onEmotePlayModeChange(playMode as EmotePlayMode)
+            }
+          />
+        )}
         {isOnlySmart !== undefined && (
           <>
             <Mobile>

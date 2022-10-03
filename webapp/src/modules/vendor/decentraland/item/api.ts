@@ -108,6 +108,10 @@ class ItemAPI extends BaseAPI {
       queryParams.append('network', filters.network)
     }
 
+    if (filters.emotePlayMode) {
+      queryParams.append('emotePlayMode', filters.emotePlayMode)
+    }
+
     return queryParams.toString()
   }
 }

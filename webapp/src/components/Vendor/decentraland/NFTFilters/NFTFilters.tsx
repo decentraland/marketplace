@@ -11,7 +11,7 @@ import {
   Icon,
   NotMobile
 } from 'decentraland-ui'
-import { Network, NFTCategory, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { SortBy } from '../../../../modules/routing/types'
@@ -41,6 +41,7 @@ const NFTFilters = (props: Props) => {
     wearableGenders,
     contracts,
     network,
+    emotePlayMode,
     onBrowse,
     assetType,
     hasFiltersEnabled,
@@ -208,6 +209,15 @@ const NFTFilters = (props: Props) => {
     [network, onBrowse]
   )
 
+  const handleEmotePlayModeChange = useCallback(
+    (newEmotePlayMode: EmotePlayMode) => {
+      if (emotePlayMode !== newEmotePlayMode) {
+        onBrowse({ emotePlayMode: newEmotePlayMode })
+      }
+    },
+    [emotePlayMode, onBrowse]
+  )
+
   useEffect(
     () =>
       setShowFiltersMenu(
@@ -232,6 +242,7 @@ const NFTFilters = (props: Props) => {
       })
 
   const isWearableCategory = category === NFTCategory.WEARABLE
+  const isEmoteCategory = category === NFTCategory.EMOTE
 
   return (
     <div className="NFTFilters">
@@ -348,13 +359,19 @@ const NFTFilters = (props: Props) => {
             selectedCollection={contracts[0]}
             selectedRarities={rarities}
             selectedGenders={isWearableCategory ? wearableGenders : undefined}
+            selectedEmotePlayMode={isEmoteCategory ? emotePlayMode : undefined}
             isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
             onCollectionsChange={handleCollectionsChange}
             onGendersChange={
               isWearableCategory ? handleGendersChange : undefined
             }
             onRaritiesChange={handleRaritiesChange}
-            onNetworkChange={handleNetworkChange}
+            onNetworkChange={
+              isWearableCategory ? handleNetworkChange : undefined
+            }
+            onEmotePlayModeChange={
+              isEmoteCategory ? handleEmotePlayModeChange : undefined
+            }
             onOnlySmartChange={
               isWearableCategory ? handleToggleOnlySmart : undefined
             }
@@ -400,13 +417,21 @@ const NFTFilters = (props: Props) => {
                 selectedGenders={
                   isWearableCategory ? wearableGenders : undefined
                 }
+                selectedEmotePlayMode={
+                  isEmoteCategory ? emotePlayMode : undefined
+                }
                 isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
                 onCollectionsChange={handleCollectionsChange}
                 onGendersChange={
                   isWearableCategory ? handleGendersChange : undefined
                 }
                 onRaritiesChange={handleRaritiesChange}
-                onNetworkChange={handleNetworkChange}
+                onNetworkChange={
+                  isWearableCategory ? handleNetworkChange : undefined
+                }
+                onEmotePlayModeChange={
+                  isEmoteCategory ? handleEmotePlayModeChange : undefined
+                }
                 onOnlySmartChange={
                   isWearableCategory ? handleToggleOnlySmart : undefined
                 }

@@ -314,7 +314,9 @@
     "all_collections": "All Collections",
     "network": "Network",
     "all_networks": "All Networks",
-    "smart_wearables": "Smart Wearables"
+    "smart_wearables": "Smart Wearables",
+    "play_mode": "Play Mode",
+    "all_play_modes": "All Play Modes"
   },
   "nft_land_filters": {
     "all_land": "All land",
@@ -453,8 +455,6 @@
   },
   "emote": {
     "category": {
-      "simple": "Simple",
-      "loop": "Loop",
       "dance": "Dance",
       "stunt": "Stunt",
       "greetings": "Greetings",
@@ -463,6 +463,12 @@
       "reactions": "Reactions",
       "horror": "Horror",
       "miscellaneous": "Miscellaneous"
+    },
+    "play_mode": {
+      "simple": "Simple",
+      "loop": "Loop",
+      "play_once": "Play once",
+      "play_loop": "Play loop"
     }
   },
   "wearable_preview": {
