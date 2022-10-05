@@ -8,7 +8,7 @@ import { Props } from './MVMFBadge.types'
 const MVMFTag = 'MVMF 2022'
 
 const MVMFBadge = ({ contractAddress, isMVMFEnabled }: Props) => {
-  const [showBadge, setShowBadge] = useState(true) // TODO: change to false
+  const [showBadge, setShowBadge] = useState(false)
   const [contractAddresses, setContractAddresses] = useState<string[]>()
 
   const href = useMemo(() => {
