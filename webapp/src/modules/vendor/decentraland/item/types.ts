@@ -29,6 +29,7 @@ export type ItemFilters = {
   rarities?: Rarity[]
   wearableGenders?: WearableGender[]
   contractAddress?: string
+  contractAddresses?: string[]
   itemId?: string
   network?: Network
 }

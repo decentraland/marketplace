@@ -110,7 +110,14 @@
   background-image: url(../../../images/emotes/play-once.svg);
   width: 19px;
 }
+
 .IconBadge .play-loop {
   background-image: url(../../../images/emotes/play-loop.svg);
   width: 19px;
+}
+
+.IconBadge .sparkles {
+  filter: brightness(0) invert(1);
+  background-image: url(../../../images/sparkles.svg);
+  background-size: cover;
 }

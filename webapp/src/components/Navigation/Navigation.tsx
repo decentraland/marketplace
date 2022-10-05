@@ -9,7 +9,7 @@ import * as decentraland from '../../modules/vendor/decentraland'
 import { Props, NavigationTab } from './Navigation.types'
 
 const Navigation = (props: Props) => {
-  const { activeTab, isFullscreen } = props
+  const { activeTab, isFullscreen, isMVMFEnabled } = props
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
@@ -18,6 +18,21 @@ const Navigation = (props: Props) => {
             {t('navigation.overview')}
           </Tabs.Tab>
         </Link>
+        {isMVMFEnabled ? (
+          <Link
+            to={locations.mvmf({
+              section: decentraland.Section.WEARABLES,
+              vendor: VendorName.DECENTRALAND,
+              page: 1,
+              sortBy: SortBy.RECENTLY_LISTED,
+              onlyOnSale: true
+            })}
+          >
+            <Tabs.Tab active={activeTab === NavigationTab.MVMF}>
+              {t('navigation.nvmf')}
+            </Tabs.Tab>
+          </Link>
+        ) : null}
         <Link
           to={locations.browse({
             section: decentraland.Section.WEARABLES,

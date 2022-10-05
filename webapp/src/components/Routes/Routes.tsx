@@ -23,10 +23,11 @@ import { CollectionPage } from '../CollectionPage'
 import { config } from '../../config'
 import { Props } from './Routes.types'
 import { Navbar } from '../Navbar'
+import { MVMFPage } from '../MVMFPage'
 import { Footer } from '../Footer'
 import { ManageAssetPage } from '../ManageAssetPage'
 
-const Routes = ({ inMaintenance }: Props) => {
+const Routes = ({ inMaintenance, isMVMFEnabled }: Props) => {
   const APP_ID = config.get('INTERCOM_APP_ID')
 
   if (inMaintenance) {
@@ -46,6 +47,9 @@ const Routes = ({ inMaintenance }: Props) => {
       <Switch>
         <Route exact path={locations.lands()} component={LandsPage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
+        {isMVMFEnabled ? (
+          <Route exact path={locations.mvmf()} component={MVMFPage} />
+        ) : null}
         <Route
           exact
           path={locations.currentAccount()}

@@ -1,5 +1,6 @@
 export enum NavigationTab {
   OVERVIEW = 'overview',
+  MVMF = 'mvmf',
   LANDS = 'lands',
   BROWSE = 'browse',
   COLLECTIBLES = 'collectibles',
@@ -8,9 +9,10 @@ export enum NavigationTab {
 }
 
 export type Props = {
+  isMVMFEnabled: boolean
   activeTab?: NavigationTab
   isFullscreen?: boolean
 }
 
-export type MapStateProps = {}
+export type MapStateProps = Pick<Props, 'isMVMFEnabled'>
 export type MapDispatchProps = {}
