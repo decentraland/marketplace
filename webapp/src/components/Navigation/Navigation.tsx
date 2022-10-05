@@ -29,7 +29,7 @@ const Navigation = (props: Props) => {
             })}
           >
             <Tabs.Tab active={activeTab === NavigationTab.MVMF}>
-              {t('navigation.nvmf')}
+              {t('navigation.mvmf')}
             </Tabs.Tab>
           </Link>
         ) : null}
