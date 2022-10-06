@@ -48,7 +48,7 @@ const WearableDetail = ({ nft }: Props) => {
             section={Section.WEARABLES}
           />
           {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}
-          <MVMFBadge contractAddress={nft.contractAddress} />
+          <MVMFBadge contract={nft.contractAddress} />
         </>
       }
       left={

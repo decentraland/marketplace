@@ -17,14 +17,14 @@ const MVMFTag = 'MVMF22'
 const MVMFPage = (props: Props) => {
   const { isFullscreen, section } = props
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
-  const [contractAddresses, setContractAddresses] = useState<string[]>()
+  const [contracts, setContracts] = useState<string[]>()
 
   useEffect(() => {
     ;(async () => {
-      const { addresses } = await builderAPI.fetchAddressesByTag([MVMFTag])
-      setContractAddresses(addresses)
+      const addresses = await builderAPI.fetchAddressesByTag([MVMFTag])
+      setContracts(addresses)
     })()
-  })
+  }, [])
 
   const activeTab = NavigationTab.MVMF
 
@@ -38,7 +38,7 @@ const MVMFPage = (props: Props) => {
         view={View.MARKET}
         section={section}
         sections={[Section.WEARABLES, Section.EMOTES, Section.ENS]}
-        contracts={contractAddresses}
+        contracts={contracts}
       />
       <Footer isFullscreen={isFullscreen} />
     </>

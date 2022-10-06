@@ -103,7 +103,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
               <SmartBadge assetType={AssetType.ITEM} />
             )}
 
-          <MVMFBadge contractAddress={item.contractAddress} />
+          <MVMFBadge contract={item.contractAddress} />
         </>
       }
       left={

@@ -1,6 +1,6 @@
 export type Props = {
   isMVMFEnabled: boolean
-  contractAddress: string
+  contract: string
 }
 
 export type MapStateProps = Pick<Props, 'isMVMFEnabled'>

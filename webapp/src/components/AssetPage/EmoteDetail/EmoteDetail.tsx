@@ -53,7 +53,7 @@ const EmoteDetail = ({ nft }: Props) => {
             text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
             href={emoteBadgeHref}
           />
-          <MVMFBadge contractAddress={nft.contractAddress} />
+          <MVMFBadge contract={nft.contractAddress} />
         </>
       }
       left={

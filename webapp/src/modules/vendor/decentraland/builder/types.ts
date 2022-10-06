@@ -1,3 +1,1 @@
-export type AddressesByTagResponse = {
-  addresses: string[]
-}
+export type AddressesByTagResponse = string[]
