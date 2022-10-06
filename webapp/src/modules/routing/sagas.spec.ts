@@ -1,15 +1,10 @@
-import {
-  ItemFilters,
-  ItemSortBy,
-  Network,
-  NFTCategory,
-  Rarity
-} from '@dcl/schemas'
+import { ItemSortBy, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { getLocation, push } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { AssetType } from '../asset/types'
 import { fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
+import { ItemBrowseOptions } from '../item/types'
 import { WearableGender } from '../nft/wearable/types'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
@@ -102,34 +97,32 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       page: 1
     }
 
-    const filters: ItemFilters = {
-      first: 24,
-      skip: 0,
-      sortBy: ItemSortBy.RECENTLY_REVIEWED,
-      creator: address,
-      category: NFTCategory.EMOTE,
-      isWearableHead: false,
-      isWearableAccessory: false,
-      isOnSale: undefined,
-      wearableCategory: undefined,
-      emoteCategory: undefined,
-      isWearableSmart: undefined,
-      search: undefined,
-      rarities: undefined,
-      contractAddress: undefined,
-      wearableGenders: undefined,
-      emotePlayMode: undefined
+    const filters: ItemBrowseOptions = {
+      view: browseOptions.view,
+      page: browseOptions.page,
+      filters: {
+        first: 24,
+        skip: 0,
+        sortBy: ItemSortBy.RECENTLY_REVIEWED,
+        creator: address,
+        category: NFTCategory.EMOTE,
+        isWearableHead: false,
+        isWearableAccessory: false,
+        isOnSale: undefined,
+        wearableCategory: undefined,
+        emoteCategory: undefined,
+        isWearableSmart: undefined,
+        search: undefined,
+        rarities: undefined,
+        contracts: undefined,
+        wearableGenders: undefined,
+        emotePlayMode: undefined
+      }
     }
 
     return expectSaga(routingSaga)
       .provide([[call(getNewBrowseOptions, browseOptions), browseOptions]])
-      .put(
-        fetchItemsRequest({
-          view: browseOptions.view,
-          page: browseOptions.page,
-          filters
-        })
-      )
+      .put(fetchItemsRequest(filters))
       .dispatch(FetchAssetsFromRouteAction(browseOptions))
       .run({ silenceTimeout: true })
   })

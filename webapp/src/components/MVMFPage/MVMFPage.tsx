@@ -12,7 +12,7 @@ import { AssetBrowse } from '../AssetBrowse'
 import { Props } from './MVMFPage.types'
 import { builderAPI } from '../../modules/vendor/decentraland/builder/api'
 
-const MVMFTag = 'MVMF 2022'
+const MVMFTag = 'MVMF22'
 
 const MVMFPage = (props: Props) => {
   const { isFullscreen, section } = props
@@ -38,7 +38,7 @@ const MVMFPage = (props: Props) => {
         view={View.MARKET}
         section={section}
         sections={[Section.WEARABLES, Section.EMOTES, Section.ENS]}
-        contractAddresses={contractAddresses}
+        contracts={contractAddresses}
       />
       <Footer isFullscreen={isFullscreen} />
     </>

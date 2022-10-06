@@ -181,8 +181,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     onlyOnRent,
     onlySmart,
     isMap,
-    contracts,
-    contractAddresses
+    contracts
   } = options
 
   const address =
@@ -264,10 +263,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               search,
               category,
               rarities: rarities,
-              contractAddress: contracts && contracts[0],
+              contracts,
               wearableGenders,
               emotePlayMode,
-              contractAddresses
             }
           })
         )

@@ -42,7 +42,6 @@ export type BrowseOptions = {
   search?: string
   contracts?: string[]
   address?: string
-  contractAddresses?: string[]
   network?: Network
   viewAsGuest?: boolean
   category?: NFTCategory
