@@ -7,16 +7,21 @@ import {
   getSection,
   getVendor
 } from '../../modules/routing/selectors'
-import { MapStateProps } from './MVMFPage.types'
+import { fetchEventRequest } from '../../modules/event/actions'
+import { getData } from '../../modules/event/selectors'
+import { MapStateProps, MapDispatch } from './MVMFPage.types'
 import BrowsePage from './MVMFPage'
 
 const mapState = (state: RootState): MapStateProps => ({
   vendor: getVendor(state),
   assetType: getAssetType(state),
   section: getSection(state),
-  isFullscreen: getIsFullscreen(state)
+  isFullscreen: getIsFullscreen(state),
+  contracts: getData(state)
 })
 
-const mapDispatch = () => ({})
+const mapDispatch = (dispatch: MapDispatch) => ({
+  fetchEventContracts: (tag: string) => dispatch(fetchEventRequest(tag))
+})
 
 export default connect(mapState, mapDispatch)(BrowsePage)

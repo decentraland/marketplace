@@ -18,9 +18,9 @@ export const locations = {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
   },
-  mvmf: (options?: BrowseOptions) => {
+  MVMF22: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
-    return params ? `/mvmf?${params.toString()}` : '/mvmf'
+    return params ? `/MVMF22?${params.toString()}` : '/MVMF22'
   },
   currentAccount: (options?: BrowseOptions) => {
     const params = getSearchParams(options)

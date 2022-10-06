@@ -26,6 +26,7 @@ import { saleReducer as sale } from './sale/reducer'
 import { identityReducer as identity } from './identity/reducer'
 import { analyticsReducer as analytics } from './analytics/reducer'
 import { rentalReducer as rental } from './rental/reducer'
+import { eventReducer as event } from './event/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({
@@ -53,6 +54,7 @@ export const createRootReducer = (history: History) =>
     identity,
     analytics,
     features,
+    event,
     modal
   })
 

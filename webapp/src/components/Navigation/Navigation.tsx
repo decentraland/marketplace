@@ -20,7 +20,7 @@ const Navigation = (props: Props) => {
         </Link>
         {isMVMFEnabled ? (
           <Link
-            to={locations.mvmf({
+            to={locations.MVMF22({
               section: decentraland.Section.WEARABLES,
               vendor: VendorName.DECENTRALAND,
               page: 1,
