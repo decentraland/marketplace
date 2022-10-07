@@ -151,11 +151,14 @@ export function* handleBrowse(action: BrowseAction) {
   )
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
   const eventsContracts: Record<string, string[]> = yield select(getData)
+  const isAnEventRoute = Object.keys(eventsContracts).includes(
+    pathname.slice(1)
+  )
   yield call(fetchAssetsFromRoute, {
     ...options,
-    contracts: Object.keys(eventsContracts).includes(pathname.slice(1))
-      ? eventsContracts[pathname.slice(1)]
-      : undefined
+    ...(isAnEventRoute && {
+      contracts: isAnEventRoute ? eventsContracts[pathname.slice(1)] : undefined
+    })
   })
   yield put(push(buildBrowseURL(pathname, options)))
 }
