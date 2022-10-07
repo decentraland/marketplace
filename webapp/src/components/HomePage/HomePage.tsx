@@ -15,6 +15,7 @@ import { Navbar } from '../Navbar'
 import { RecentlySoldTable } from '../RecentlySoldTable'
 import { Footer } from '../Footer'
 import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
+import { MVMFBanner } from '../MVMFPage/MVMFBanner'
 import { Slideshow } from './Slideshow'
 import { RankingsTable } from '../RankingsTable'
 import { Props } from './HomePage.types'
@@ -149,6 +150,7 @@ const HomePage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.OVERVIEW} />
+      <MVMFBanner type="big" />
       <Page className="HomePage">
         <AnalyticsVolumeDayData />
         {firstViewsSection.map(renderSlideshow)}

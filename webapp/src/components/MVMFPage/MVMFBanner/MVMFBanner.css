@@ -1,0 +1,63 @@
+.MVMFBanner.banner-container {
+  width: 100%;
+  margin-bottom: 32px;
+  color: black;
+}
+
+.MVMFBanner.banner-container .banner {
+  display: flex;
+  flex-direction: column;
+  padding-top: 32px;
+  padding-left: 32px;
+}
+
+.MVMFBanner.banner-container.small .banner {
+  display: flex;
+  flex-direction: row;
+  padding-top: 24px;
+  padding-left: 32px;
+}
+
+.MVMFBanner.banner-container.small .banner .small-text-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: auto;
+}
+
+.MVMFBanner.banner-container.big .button {
+  margin-top: 24px;
+  width: 310px;
+}
+
+.MVMFBanner.banner-container.small .button {
+  height: 44px;
+  margin-right: 32px;
+}
+
+.MVMFBanner.banner-container.small .banner {
+  background-image: url('../../../images/mvmf22-banner-small.png');
+  height: 100px;
+}
+
+.MVMFBanner.banner-container.medium .banner {
+  background-image: url('../../../images/mvmf22-banner-small.png');
+  height: 150px;
+}
+
+.MVMFBanner.banner-container.big .banner {
+  background-image: url('../../../images/mvmf22-banner-large.png');
+  height: 276px;
+}
+
+.MVMFBanner.banner-container.big .title,
+.MVMFBanner.banner-container.medium .title {
+  font-size: 23px;
+  font-weight: bold;
+  margin-bottom: 32px;
+}
+
+.MVMFBanner.banner-container.small .title {
+  margin-bottom: 12px;
+  font-size: 21px;
+  font-weight: bold;
+}

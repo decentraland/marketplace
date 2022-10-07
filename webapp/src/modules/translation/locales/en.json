@@ -787,5 +787,23 @@
     "question": "Are you sure you want to remove your listing?",
     "disclaimer": "This will require a transaction and you will need to cover its fees.",
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
+  },
+  "mvmf22": {
+    "banners": {
+      "big": {
+        "title": "Metaverse Festival is here!",
+        "subtitle": "Find your perfect outfits for the event, and get funniest poses for the pictures.",
+        "cta": "Browse festival collectibles"
+      },
+      "medium": {
+        "title": "Metaverse Festival Collectibles",
+        "subtitle": "Category is... Cyberpunk Meets Nature Realness"
+      },
+      "small": {
+        "title": "Metaverse Festival is here!",
+        "subtitle": "Find your perfect outfits for the event, and get funniest poses for the pictures.",
+        "cta": "Browse festival collectibles"
+      }
+    }
   }
 }
