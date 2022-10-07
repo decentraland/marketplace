@@ -1,7 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import * as decentraland from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
 import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
+import { VendorName } from '../../../modules/vendor'
+import { SortBy } from '../../../modules/routing/types'
+import { AssetType } from '../../../modules/asset/types'
 import IconBadge from '../IconBadge'
 import { Props } from './MVMFBadge.types'
 
@@ -12,7 +16,13 @@ const MVMFBadge = ({ contract, isMVMFEnabled }: Props) => {
   const [contracts, setContracts] = useState<string[]>()
 
   const href = useMemo(() => {
-    return locations.browse({
+    return locations.MVMF22({
+      section: decentraland.Section.WEARABLES,
+      vendor: VendorName.DECENTRALAND,
+      page: 1,
+      sortBy: SortBy.RECENTLY_LISTED,
+      onlyOnSale: true,
+      assetType: AssetType.ITEM,
       contracts
     })
   }, [contracts])
