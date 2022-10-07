@@ -7,6 +7,7 @@ import { VendorName } from '../../modules/vendor'
 import { SortBy } from '../../modules/routing/types'
 import * as decentraland from '../../modules/vendor/decentraland'
 import { Props, NavigationTab } from './Navigation.types'
+import './Navigation.css'
 
 const Navigation = (props: Props) => {
   const { activeTab, isFullscreen, isMVMFEnabled } = props
@@ -29,7 +30,10 @@ const Navigation = (props: Props) => {
             })}
           >
             <Tabs.Tab active={activeTab === NavigationTab.MVMF}>
-              {t('navigation.mvmf')}
+              <>
+                <span className="sparkles-icon" />
+                <span>{t('navigation.mvmf')}</span>
+              </>
             </Tabs.Tab>
           </Link>
         ) : null}
