@@ -27,7 +27,7 @@ import { Props } from './CreateOrEditListingStep.types'
 import styles from './CreateOrEditListingStep.module.css'
 
 const CreateListingStep = (props: Props) => {
-  const { open, onCancel, nft, onCreate, onRemove, rental } = props
+  const { onCancel, nft, onCreate, onRemove, rental } = props
 
   // Editing properties
   const oldPrice = useMemo(
@@ -108,7 +108,7 @@ const CreateListingStep = (props: Props) => {
   )
 
   return (
-    <Modal open={open} size="tiny" className={styles.modal}>
+    <>
       <ModalNavigation
         title={
           rental
@@ -197,7 +197,7 @@ const CreateListingStep = (props: Props) => {
           </>
         )}
       </Modal.Actions>
-    </Modal>
+    </>
   )
 }
 

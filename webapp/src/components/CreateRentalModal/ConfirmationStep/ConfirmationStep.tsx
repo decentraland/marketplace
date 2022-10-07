@@ -8,7 +8,6 @@ import styles from './ConfirmationStep.module.css'
 
 const ConfirmationStep = (props: Props) => {
   const {
-    open,
     onCancel,
     isSigning,
     nft,
@@ -25,7 +24,7 @@ const ConfirmationStep = (props: Props) => {
   )
 
   return (
-    <Modal open={open} size="tiny" className={styles.modal}>
+    <>
       <ModalNavigation
         title={t('rental_modal.confirmation_step.title')}
         onClose={onCancel}
@@ -90,7 +89,7 @@ const ConfirmationStep = (props: Props) => {
           />
         </Modal.Content>
       )}
-    </Modal>
+    </>
   )
 }
 
