@@ -9,7 +9,7 @@ import { SortBy } from '../../../modules/routing/types'
 import { Props } from './MVMFBanner.types'
 import './MVMFBanner.css'
 
-const MVMFBanner = ({ type, onNavigate }: Props) => {
+const MVMFBanner = ({ type, onNavigate, isMVMFEnabled }: Props) => {
   const content = useMemo(() => {
     switch (type) {
       case 'big':
@@ -77,13 +77,13 @@ const MVMFBanner = ({ type, onNavigate }: Props) => {
     }
   }, [onNavigate, type])
 
-  return (
+  return isMVMFEnabled ? (
     <div className={classNames('MVMFBanner banner-container', type)}>
       <Container>
         <div className="banner">{content}</div>
       </Container>
     </div>
-  )
+  ) : null
 }
 
 export default React.memo(MVMFBanner)
