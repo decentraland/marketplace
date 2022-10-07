@@ -1,0 +1,11 @@
+.MVMFBanner .banner-container {
+  width: 100%;
+}
+
+.MVMFBanner .banner-container.small {
+  /* background-image: url(''); */
+}
+
+.MVMFBanner .banner-container.big {
+  /* background-image: url(''); */
+}
