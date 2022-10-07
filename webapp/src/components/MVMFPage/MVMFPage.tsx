@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 
+import { Loader } from 'decentraland-ui'
 import { isVendor } from '../../modules/vendor/utils'
 import { VendorName } from '../../modules/vendor/types'
 import { View } from '../../modules/ui/types'
@@ -9,7 +10,9 @@ import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { AssetBrowse } from '../AssetBrowse'
+import { MVMFBanner } from './MVMFBanner'
 import { Props } from './MVMFPage.types'
+import './MVMFPage.css'
 
 const MVMFTag = 'MVMF22'
 
@@ -27,7 +30,8 @@ const MVMFPage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
-      {contracts ? (
+      <MVMFBanner type="small" />
+      {Object.values(contracts).length > 0 ? (
         <AssetBrowse
           vendor={vendor}
           isFullscreen={Boolean(isFullscreen)}
@@ -36,7 +40,11 @@ const MVMFPage = (props: Props) => {
           sections={[Section.WEARABLES, Section.EMOTES]}
           contracts={contracts[MVMFTag]}
         />
-      ) : null}
+      ) : (
+        <div className="MVMFPage loader-container">
+          <Loader size="big" active inline />
+        </div>
+      )}
       <Footer isFullscreen={isFullscreen} />
     </>
   )
