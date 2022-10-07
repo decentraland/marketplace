@@ -12,7 +12,7 @@ export type Props = {
   assetType: AssetType
   section: Section
   isFullscreen?: boolean
-  fetchEventContracts: typeof fetchEventRequest
+  onFetchEventContracts: typeof fetchEventRequest
   contracts: Record<string, string[]>
 }
 
@@ -20,5 +20,5 @@ export type MapStateProps = Pick<
   Props,
   'vendor' | 'isFullscreen' | 'assetType' | 'section' | 'contracts'
 >
-export type MapDispatchProps = Pick<Props, 'fetchEventContracts'>
+export type MapDispatchProps = Pick<Props, 'onFetchEventContracts'>
 export type MapDispatch = Dispatch<FetchEventRequestAction>

@@ -17,12 +17,12 @@ import './MVMFPage.css'
 const MVMFTag = 'MVMF22'
 
 const MVMFPage = (props: Props) => {
-  const { isFullscreen, section, contracts, fetchEventContracts } = props
+  const { isFullscreen, section, contracts, onFetchEventContracts } = props
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
   useEffect(() => {
-    fetchEventContracts(MVMFTag)
-  }, [fetchEventContracts])
+    onFetchEventContracts(MVMFTag)
+  }, [onFetchEventContracts])
 
   const activeTab = NavigationTab.MVMF
 

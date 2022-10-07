@@ -2,10 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Tabs, Mobile } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import * as decentraland from '../../modules/vendor/decentraland'
 import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor'
 import { SortBy } from '../../modules/routing/types'
-import * as decentraland from '../../modules/vendor/decentraland'
+import { AssetType } from '../../modules/asset/types'
 import { Props, NavigationTab } from './Navigation.types'
 import './Navigation.css'
 
@@ -26,7 +27,8 @@ const Navigation = (props: Props) => {
               vendor: VendorName.DECENTRALAND,
               page: 1,
               sortBy: SortBy.RECENTLY_LISTED,
-              onlyOnSale: true
+              onlyOnSale: true,
+              assetType: AssetType.ITEM
             })}
           >
             <Tabs.Tab active={activeTab === NavigationTab.MVMF}>

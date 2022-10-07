@@ -8,6 +8,7 @@ import { VendorName } from '../../../modules/vendor'
 import { SortBy } from '../../../modules/routing/types'
 import { Props } from './MVMFBanner.types'
 import './MVMFBanner.css'
+import { AssetType } from '../../../modules/asset/types'
 
 const MVMFBanner = ({ type, onNavigate, isMVMFEnabled }: Props) => {
   const content = useMemo(() => {
@@ -25,7 +26,8 @@ const MVMFBanner = ({ type, onNavigate, isMVMFEnabled }: Props) => {
                     vendor: VendorName.DECENTRALAND,
                     page: 1,
                     sortBy: SortBy.RECENTLY_LISTED,
-                    onlyOnSale: true
+                    onlyOnSale: true,
+                    assetType: AssetType.ITEM
                   })
                 )
               }
@@ -62,7 +64,8 @@ const MVMFBanner = ({ type, onNavigate, isMVMFEnabled }: Props) => {
                     vendor: VendorName.DECENTRALAND,
                     page: 1,
                     sortBy: SortBy.RECENTLY_LISTED,
-                    onlyOnSale: true
+                    onlyOnSale: true,
+                    assetType: AssetType.ITEM
                   })
                 )
               }
