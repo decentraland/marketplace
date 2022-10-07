@@ -10,7 +10,6 @@ import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
 import { AssetBrowse } from '../AssetBrowse'
-import { MVMFBanner } from './MVMFBanner'
 import { Props } from './MVMFPage.types'
 import './MVMFPage.css'
 
@@ -30,7 +29,6 @@ const MVMFPage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
-      <MVMFBanner type="small" />
       {Object.values(contracts).length > 0 ? (
         <AssetBrowse
           vendor={vendor}
