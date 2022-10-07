@@ -50,7 +50,8 @@
     "time_ago": "Hace {time}",
     "confirm": "Confirmar",
     "days": "días",
-    "error": "Error"
+    "error": "Error",
+    "mvmf_2022": "Metaverse Festival 2022"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -70,6 +71,7 @@
   },
   "navigation": {
     "overview": "Resumen",
+    "mvmf": "Metaverse Festival",
     "land": "Land",
     "collectibles": "Coleccionables",
     "partners": "Socios",

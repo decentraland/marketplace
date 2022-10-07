@@ -52,7 +52,8 @@
     "time_ago": "{time} ago",
     "confirm": "Confirm",
     "days": "days",
-    "error": "Error"
+    "error": "Error",
+    "mvmf_2022": "Metaverse Festival 2022"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -72,6 +73,7 @@
   },
   "navigation": {
     "overview": "Overview",
+    "mvmf": "Metaverse Festival",
     "land": "Land",
     "collectibles": "Collectibles",
     "partners": "Partners",

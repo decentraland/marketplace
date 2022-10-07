@@ -97,6 +97,7 @@ import {
   CANCEL_BID_SUCCESS,
   PLACE_BID_SUCCESS
 } from '../bid/actions'
+import { getData } from '../event/selectors'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
@@ -149,7 +150,16 @@ export function* handleBrowse(action: BrowseAction) {
     action.payload.options
   )
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-  yield call(fetchAssetsFromRoute, options)
+  const eventsContracts: Record<string, string[]> = yield select(getData)
+  const isAnEventRoute = Object.keys(eventsContracts).includes(
+    pathname.slice(1)
+  )
+  yield call(fetchAssetsFromRoute, {
+    ...options,
+    ...(isAnEventRoute && {
+      contracts: isAnEventRoute ? eventsContracts[pathname.slice(1)] : undefined
+    })
+  })
   yield put(push(buildBrowseURL(pathname, options)))
 }
 
@@ -263,7 +273,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               search,
               category,
               rarities: rarities,
-              contractAddress: contracts && contracts[0],
+              contracts,
               wearableGenders,
               emotePlayMode
             }

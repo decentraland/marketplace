@@ -20,6 +20,7 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { getBuilderCollectionDetailUrl } from '../../../modules/collection/utils'
 import { TransactionHistory } from '../TransactionHistory'
 import { AssetImage } from '../../AssetImage'
+import MVMFBadge from '../MVMFBadge'
 import IconBadge from '../IconBadge'
 import styles from './ItemDetail.module.css'
 
@@ -101,6 +102,8 @@ const ItemDetail = ({ item, wallet }: Props) => {
             item.data.wearable!.isSmart && (
               <SmartBadge assetType={AssetType.ITEM} />
             )}
+
+          <MVMFBadge contract={item.contractAddress} />
         </>
       }
       left={

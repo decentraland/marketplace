@@ -48,7 +48,7 @@ export function* handleFetchCollectionsRequest(
             fetchItemsRequest({
               filters: {
                 first: collection.size,
-                contractAddress: collection.contractAddress
+                contracts: [collection.contractAddress]
               }
             })
           )
@@ -96,7 +96,7 @@ export function* handleFetchSingleCollectionRequest(
           fetchItemsRequest({
             filters: {
               first: collection.size,
-              contractAddress: collection.contractAddress
+              contracts: [collection.contractAddress]
             }
           })
         )

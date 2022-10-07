@@ -28,7 +28,7 @@ export type ItemFilters = {
   emotePlayMode?: EmotePlayMode
   rarities?: Rarity[]
   wearableGenders?: WearableGender[]
-  contractAddress?: string
+  contracts?: string[]
   itemId?: string
   network?: Network
 }

@@ -18,6 +18,7 @@ import Expiration from '../Expiration'
 import BaseDetail from '../BaseDetail'
 import { Actions } from '../Actions'
 import { BidList } from '../BidList'
+import MVMFBadge from '../MVMFBadge'
 import { TransactionHistory } from '../TransactionHistory'
 import { AssetImage } from '../../AssetImage'
 import { Section } from '../../../modules/vendor/decentraland'
@@ -37,13 +38,17 @@ const WearableDetail = ({ nft }: Props) => {
             assetType={AssetType.NFT}
             category={NFTCategory.WEARABLE}
           />
-          <CategoryBadge category={wearable.category} assetType={AssetType.NFT} />
+          <CategoryBadge
+            category={wearable.category}
+            assetType={AssetType.NFT}
+          />
           <GenderBadge
             bodyShapes={wearable.bodyShapes}
             assetType={AssetType.NFT}
             section={Section.WEARABLES}
           />
           {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}
+          <MVMFBadge contract={nft.contractAddress} />
         </>
       }
       left={

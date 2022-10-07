@@ -2,14 +2,15 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Tabs, Mobile } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import * as decentraland from '../../modules/vendor/decentraland'
 import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor'
 import { SortBy } from '../../modules/routing/types'
-import * as decentraland from '../../modules/vendor/decentraland'
+import { AssetType } from '../../modules/asset/types'
 import { Props, NavigationTab } from './Navigation.types'
 
 const Navigation = (props: Props) => {
-  const { activeTab, isFullscreen } = props
+  const { activeTab, isFullscreen, isMVMFEnabled } = props
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
@@ -18,6 +19,22 @@ const Navigation = (props: Props) => {
             {t('navigation.overview')}
           </Tabs.Tab>
         </Link>
+        {isMVMFEnabled ? (
+          <Link
+            to={locations.MVMF22({
+              section: decentraland.Section.WEARABLES,
+              vendor: VendorName.DECENTRALAND,
+              page: 1,
+              sortBy: SortBy.RECENTLY_LISTED,
+              onlyOnSale: true,
+              assetType: AssetType.ITEM
+            })}
+          >
+            <Tabs.Tab active={activeTab === NavigationTab.MVMF}>
+              {t('navigation.mvmf')}
+            </Tabs.Tab>
+          </Link>
+        ) : null}
         <Link
           to={locations.browse({
             section: decentraland.Section.WEARABLES,

@@ -18,6 +18,7 @@ export type Props = {
   assetType: AssetType
   viewInState?: View // This is used to know when the view prop has been set in the app state
   address?: string
+  contracts?: string[]
   isMap?: boolean
   section?: Section
   sections?: Section[]
@@ -58,4 +59,5 @@ export type OwnProps = Pick<
   | 'view'
   | 'sections'
   | 'section'
+  | 'contracts'
 >

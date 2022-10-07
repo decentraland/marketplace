@@ -23,6 +23,7 @@ import { CollectionPage } from '../CollectionPage'
 import { config } from '../../config'
 import { Props } from './Routes.types'
 import { Navbar } from '../Navbar'
+import { MVMFPage } from '../MVMFPage'
 import { Footer } from '../Footer'
 import { ManageAssetPage } from '../ManageAssetPage'
 
@@ -46,6 +47,7 @@ const Routes = ({ inMaintenance }: Props) => {
       <Switch>
         <Route exact path={locations.lands()} component={LandsPage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
+        <Route path={locations.MVMF22()} component={MVMFPage} />
         <Route
           exact
           path={locations.currentAccount()}

@@ -50,7 +50,8 @@
     "time_ago": "{time} 前",
     "confirm": "确认",
     "days": "天",
-    "error": "错误"
+    "error": "错误",
+    "mvmf_2022": "元界节 2022"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -70,6 +71,7 @@
   },
   "navigation": {
     "overview": "概述",
+    "mvmf": "元界节",
     "land": "土地",
     "collectibles": "收藏品",
     "partners": "伙伴",

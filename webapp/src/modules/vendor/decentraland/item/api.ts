@@ -98,8 +98,10 @@ class ItemAPI extends BaseAPI {
         queryParams.append('wearableGender', wearableGender)
       }
     }
-    if (filters.contractAddress) {
-      queryParams.append('contractAddress', filters.contractAddress)
+    if (filters.contracts) {
+      filters.contracts.forEach(contract =>
+        queryParams.append('contractAddress', contract)
+      )
     }
     if (filters.itemId) {
       queryParams.append('itemId', filters.itemId)

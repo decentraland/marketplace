@@ -45,7 +45,7 @@ describe('when creating the action to signal the start of the items request', ()
   })
 })
 
-describe('when creating the action to signal a failure in the items request', () => {
+describe('when creating the action to signal a success in the items request', () => {
   const items = [{} as Item]
   const total = 1
   const timestamp = 1627595757
@@ -61,7 +61,7 @@ describe('when creating the action to signal a failure in the items request', ()
   })
 })
 
-describe('when creating the action to signal a successful items request', () => {
+describe('when creating the action to signal a failure items request', () => {
   it('should return an object representing the action', () => {
     expect(fetchItemsFailure(anErrorMessage, itemBrowseOptions)).toEqual({
       type: FETCH_ITEMS_FAILURE,

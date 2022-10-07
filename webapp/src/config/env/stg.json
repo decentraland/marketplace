@@ -2,6 +2,7 @@
   "NETWORK": "mainnet",
   "CHAIN_ID": "1",
   "NFT_SERVER_URL": "https://nft-api.decentraland.today/v1",
+  "BUILDER_SERVER_URL": "https://builder-api.decentraland.today/v1",
   "ATLAS_SERVER_URL": "https://api.decentraland.today",
   "PEER_URL": "https://peer.decentraland.org",
   "SIGNATURES_SERVER_URL": "https://signatures-server.decentraland.today/v1",
