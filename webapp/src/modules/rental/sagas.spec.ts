@@ -183,7 +183,7 @@ describe('when handling the CREATE_RENTAL_REQUEST action', () => {
                 network: nft.network,
                 expiration,
                 rentalContractAddress:
-                  '0xbb2a03bf5f525734cb0536be4be61ba788d7ee01',
+                  '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
                 nonces,
                 periods,
                 signature
