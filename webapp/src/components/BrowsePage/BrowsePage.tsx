@@ -8,6 +8,7 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
+import { MVMFBanner } from '../MVMFPage/MVMFBanner'
 import { AssetBrowse } from '../AssetBrowse'
 import { Props } from './BrowsePage.types'
 
@@ -21,6 +22,7 @@ const BrowsePage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
+      <MVMFBanner type="small" />
       <AssetBrowse
         vendor={vendor}
         isFullscreen={Boolean(isFullscreen)}

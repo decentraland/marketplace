@@ -30,7 +30,7 @@ const MVMFPage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
-      <MVMFBanner type="small" />
+      <MVMFBanner type="medium" />
       {Object.values(contracts).length > 0 ? (
         <AssetBrowse
           vendor={vendor}

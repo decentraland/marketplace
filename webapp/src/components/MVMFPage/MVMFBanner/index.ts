@@ -1,2 +1,2 @@
-import MVMFBanner from './MVMFBanner'
+import MVMFBanner from './MVMFBanner.container'
 export { MVMFBanner }
