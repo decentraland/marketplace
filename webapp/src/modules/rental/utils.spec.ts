@@ -127,7 +127,7 @@ describe('when getting a signature', () => {
               name: 'Rentals',
               salt:
                 '0x0000000000000000000000000000000000000000000000000000000000000005',
-              verifyingContract: '0xbb2a03bf5f525734cb0536be4be61ba788d7ee01',
+              verifyingContract: '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
               version: '1'
             },
             {
