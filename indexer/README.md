@@ -2,7 +2,9 @@
 
 - Mainnet: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace (QmWF9uXD9KokRU1hA5Gnmc3VKU5mPU3cAYmD15cfa8YDTT)
 - Ropsten: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-ropsten (QmfHCGhLTZV8v2duxDkKtPZKMEdJM7X8YGRj2UvqmrAUBB)
-- Goerli: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli (QmVJ5XudhdALBoyYg8w4bPC62E2N6LKgDteVA2NFnETsL2)
+- Goerli: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli
+  - Prev: `QmVJ5XudhdALBoyYg8w4bPC62E2N6LKgDteVA2NFnETsL2`
+  - Curr: `QmRNcz6TmfrFSYZcChetAiivCktGnEpAMrdRYFg74Sm9CU`
 
 It uses [thegraph](https://thegraph.com)
 
