@@ -21,7 +21,7 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch) => ({
-  fetchEventContracts: (tag: string) => dispatch(fetchEventRequest(tag))
+  onFetchEventContracts: (tag: string) => dispatch(fetchEventRequest(tag))
 })
 
 export default connect(mapState, mapDispatch)(BrowsePage)

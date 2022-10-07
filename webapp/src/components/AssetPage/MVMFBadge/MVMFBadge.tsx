@@ -19,10 +19,14 @@ const MVMFBadge = ({ contract, isMVMFEnabled }: Props) => {
 
   useEffect(() => {
     ;(async () => {
-      const addresses = await builderAPI.fetchAddressesByTag([MVMFTag])
-      setContracts(addresses)
-      if (isMVMFEnabled && addresses.includes(contract)) {
-        setShowBadge(true)
+      try {
+        const addresses = await builderAPI.fetchAddressesByTag([MVMFTag])
+        setContracts(addresses)
+        if (isMVMFEnabled && addresses.includes(contract)) {
+          setShowBadge(true)
+        }
+      } catch (error) {
+        console.error(error)
       }
     })()
   }, [contract, isMVMFEnabled])
