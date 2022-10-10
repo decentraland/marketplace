@@ -791,18 +791,38 @@
   "mvmf22": {
     "banners": {
       "big": {
-        "title": "Metaverse Festival is here!",
+        "event": "Event",
+        "title": "Metaverse Music Festival 2022 is here!",
         "subtitle": "Find your perfect outfits for the event, and get funniest poses for the pictures.",
         "cta": "Browse festival collectibles"
       },
       "medium": {
-        "title": "Metaverse Festival Collectibles",
-        "subtitle": "Category is... Cyberpunk Meets Nature Realness"
+        "title": "Metaverse Music Festival 2022 Collectibles",
+        "subtitle": "Category is... {subtitle_bold_1}",
+        "subtitle_bold_1": "Cyberpunk Meets Nature!"
       },
       "small": {
-        "title": "Metaverse Festival is here!",
+        "title": "Metaverse Festival 2022 is here!",
         "subtitle": "Find your perfect outfits for the event, and get funniest poses for the pictures.",
         "cta": "Browse festival collectibles"
+      }
+    }
+  },
+  "mvmf22_announcement": {
+    "banners": {
+      "big": {
+        "title": "Get your Items featured during the Metaverse Music Festival!",
+        "subtitle": "The theme of this year's Music Festival is... {subtitle_bold_1} {enter} Just tag your Items with {subtitle_bold_2} when submitting for publishing, before {subtitle_bold_3} {enter} and your festival-themed Wearables & Emotes will be featured in a special tab of the Marketplace during the Festival!",
+        "subtitle_bold_1": "Cyberpunk Meets Nature!",
+        "subtitle_bold_2": "#MVMF22",
+        "subtitle_bold_3": "October 20th",
+        "cta": "Learn More"
+      },
+      "small": {
+        "title": "Get your Items featured during the Metaverse Music Festival!",
+        "subtitle": "Submit your wearables and emotes using the {subtitle_bold_1} tag before {subtitle_bold_1} and they will be featured on the Marketplace during the whole event.",
+        "subtitle_bold_1": "#MVMF22",
+        "subtitle_bold_2": "October 20th"
       }
     }
   }

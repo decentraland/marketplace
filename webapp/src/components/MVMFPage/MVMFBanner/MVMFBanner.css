@@ -7,8 +7,9 @@
 .MVMFBanner.banner-container .banner {
   display: flex;
   flex-direction: column;
-  padding-top: 32px;
-  padding-left: 32px;
+  padding-top: 44.5px;
+  padding-left: 72px;
+  padding-right: 72px;
 }
 
 .MVMFBanner.banner-container.small .banner {
@@ -21,22 +22,33 @@
 .MVMFBanner.banner-container.small .banner .small-text-container {
   display: flex;
   flex-direction: column;
-  margin-right: auto;
+  margin-right: 45px;
 }
 
 .MVMFBanner.banner-container.big .button {
-  margin-top: 24px;
+  margin-top: 20px;
   width: 310px;
+}
+
+.MVMFBanner.banner-container.small .button.announcement,
+.MVMFBanner.banner-container.big .button.announcement {
+  padding: 12px 16px;
+  margin-top: 20px;
+  width: 126px;
+}
+
+.MVMFBanner.banner-container.small .button.announcement {
+  margin-top: 6px;
 }
 
 .MVMFBanner.banner-container.small .button {
   height: 44px;
-  margin-right: 32px;
 }
 
 .MVMFBanner.banner-container.small .banner {
   background-image: url('../../../images/mvmf22-banner-small.png');
   height: 100px;
+  padding-right: 32px;
 }
 
 .MVMFBanner.banner-container.medium .banner {
@@ -51,13 +63,44 @@
 
 .MVMFBanner.banner-container.big .title,
 .MVMFBanner.banner-container.medium .title {
-  font-size: 23px;
+  font-size: 30px;
+  line-height: 36.31px;
   font-weight: bold;
-  margin-bottom: 32px;
+  margin-bottom: 6px;
+}
+
+.MVMFBanner.banner-container.big .subtitle,
+.MVMFBanner.banner-container.medium .subtitle {
+  font-size: 13px;
+  line-height: 18px;
 }
 
 .MVMFBanner.banner-container.small .title {
-  margin-bottom: 12px;
-  font-size: 21px;
+  margin-bottom: 3px;
+  font-size: 14px;
+  line-height: 17px;
+  text-transform: uppercase;
   font-weight: bold;
+}
+
+.MVMFBanner.banner-container .event-badge-container {
+  display: flex;
+  align-items: center;
+  background-color: #43404a;
+  width: fit-content;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 6px 11px;
+  border-radius: 4px;
+  margin-bottom: 6px;
+}
+
+.MVMFBanner.banner-container .event-badge-container .icon {
+  width: 12px;
+  height: 12px;
+  background-image: url(../../../images/sparkles.svg);
+  background-size: cover;
+  filter: brightness(0) invert(1);
+  margin-right: 6px;
 }

@@ -780,5 +780,42 @@
     "question": "¿Está seguro de que quiere quitar el listado de alquiler?",
     "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
+  },
+  "mvmf22": {
+    "banners": {
+      "big": {
+        "event": "Evento",
+        "title": "¡Metaverse Music Festival 2022 ya está aquí!",
+        "subtitle": "Encuentra tus atuendos perfectos para el evento y obtén las poses más divertidas para las fotos.",
+        "cta": "Browse festival collectibles"
+      },
+      "medium": {
+        "title": "Coleccionables del Metaverse Music Festival 2022",
+        "subtitle": "Categoria es... Cyberpunk conoce a Nature"
+      },
+      "small": {
+        "title": "¡Metaverse Music Festival 2022 ya está aquí!",
+        "subtitle": "Encuentra tus atuendos perfectos para el evento y obtén las poses más divertidas para las fotos.",
+        "cta": "Browse festival collectibles"
+      }
+    }
+  },
+  "mvmf22_announcement": {
+    "banners": {
+      "big": {
+        "title": "Obtenga sus artículos destacados durante el ¡Metaverse Music Festival 2022!",
+        "subtitle": "La categoría del festival de música de este año es... {subtitle_bold_1} {enter} Envíe sus dispositivos portátiles y gestos usando la etiqueta {subtitle_bold_2} antes de {subtitle_bold_3} {entrar} y aparecerán en el Mercado durante todo el evento.",
+        "subtitle_bold_1": "Cyberpunk conoce a la naturaleza!",
+        "subtitle_bold_2": "#MVMF",
+        "subtitle_bold_3": "20 de octubre",
+        "cta": "Aprende más"
+      },
+      "small": {
+        "title": "Obtenga sus artículos destacados durante el Metaverse Music Festival!",
+        "subtitle": "Envíe sus Wearables y Emotes con el tag {subtitle_bold_1} antes de {subtitle_bold_1} y aparecerán en Marketplace durante todo el evento.",
+        "subtitle_bold_1": "#MVMF",
+        "subtitle_bold_2": "20 de octubre"
+      }
+    }
   }
 }

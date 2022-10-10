@@ -40,3 +40,15 @@ export const getIsMVMFEnabled = (state: RootState) => {
     return false
   }
 }
+
+export const getIsMVMFAnnouncementEnabled = (state: RootState) => {
+  try {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.BUILDER,
+      FeatureName.MVMF_ANNOUNCEMENT
+    )
+  } catch (e) {
+    return false
+  }
+}
