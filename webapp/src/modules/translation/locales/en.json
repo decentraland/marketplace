@@ -791,6 +791,7 @@
   "mvmf22": {
     "banners": {
       "big": {
+        "event": "Event",
         "title": "Metaverse Festival is here!",
         "subtitle": "Find your perfect outfits for the event, and get funniest poses for the pictures.",
         "cta": "Browse festival collectibles"
@@ -803,6 +804,24 @@
         "title": "Metaverse Festival is here!",
         "subtitle": "Find your perfect outfits for the event, and get funniest poses for the pictures.",
         "cta": "Browse festival collectibles"
+      }
+    }
+  },
+  "mvmf22_announcement": {
+    "banners": {
+      "big": {
+        "title": "Get ready for the Metaverse Festival!",
+        "subtitle": "This year’s category is... {subtitle_bold_1} {enter} Submit your wearables and emotes using the {subtitle_bold_2} tag before {subtitle_bold_3} {enter} and they will be featured on the Marketplace during the whole event.",
+        "subtitle_bold_1": "Cyberpunk Meets Nature Realness!",
+        "subtitle_bold_2": "#MVMF",
+        "subtitle_bold_3": "October 20th",
+        "cta": "Learn More"
+      },
+      "small": {
+        "title": "Get ready for the Metaverse Festival!",
+        "subtitle": "Submit your wearables and emotes using the {subtitle_bold_1} tag before {subtitle_bold_1} and they will be featured on the Marketplace during the whole event.",
+        "subtitle_bold_1": "#MVMF",
+        "subtitle_bold_2": "October 20th"
       }
     }
   }

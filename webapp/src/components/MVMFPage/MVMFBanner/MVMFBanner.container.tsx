@@ -1,6 +1,9 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { getIsMVMFEnabled } from '../../../modules/features/selectors'
+import {
+  getIsMVMFEnabled,
+  getIsMVMFAnnouncementEnabled
+} from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'
 import {
   MapDispatchProps,
@@ -10,7 +13,8 @@ import {
 import MVMFBanner from './MVMFBanner'
 
 const mapState = (state: RootState): MapStateProps => ({
-  isMVMFEnabled: getIsMVMFEnabled(state)
+  isMVMFEnabled: getIsMVMFEnabled(state),
+  isMVMFAnnouncementEnabled: getIsMVMFAnnouncementEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
