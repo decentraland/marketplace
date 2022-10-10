@@ -9,6 +9,7 @@
   flex-direction: column;
   padding-top: 44.5px;
   padding-left: 72px;
+  padding-right: 72px;
 }
 
 .MVMFBanner.banner-container.small .banner {
@@ -21,7 +22,7 @@
 .MVMFBanner.banner-container.small .banner .small-text-container {
   display: flex;
   flex-direction: column;
-  margin-right: auto;
+  margin-right: 45px;
 }
 
 .MVMFBanner.banner-container.big .button {
@@ -42,12 +43,12 @@
 
 .MVMFBanner.banner-container.small .button {
   height: 44px;
-  margin-right: 32px;
 }
 
 .MVMFBanner.banner-container.small .banner {
   background-image: url('../../../images/mvmf22-banner-small.png');
   height: 100px;
+  padding-right: 32px;
 }
 
 .MVMFBanner.banner-container.medium .banner {

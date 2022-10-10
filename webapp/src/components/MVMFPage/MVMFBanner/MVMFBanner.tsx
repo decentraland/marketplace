@@ -93,7 +93,14 @@ const MVMFBanner = ({
           <>
             <span className="title">{t('mvmf22.banners.medium.title')} </span>
             <span className="subtitle">
-              {t('mvmf22.banners.medium.subtitle')}
+              <T
+                id="mvmf22.banners.medium.subtitle"
+                values={{
+                  subtitle_bold_1: (
+                    <b>{t('mvmf22.banners.medium.subtitle_bold_1')}</b>
+                  )
+                }}
+              />
             </span>
           </>
         )
