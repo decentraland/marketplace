@@ -1,0 +1,98 @@
+.modal:global(.ui.modal.tiny) {
+    width: 520px;
+  }
+  
+  .modal:global(.ui.modal > .content) {
+    margin-left: 64px;
+    margin-right: 64px;
+    margin-top: 20px;
+  }
+  
+  .modal:global(.ui.modal > .actions) {
+    margin: 40px 64px 35px 64px;
+  }
+  
+  .modal :global(.dcl.modal-navigation-title) {
+    margin-top: 16px;
+  }
+  
+  .modal :global(.dcl.field) {
+    min-width: 100%;
+  }
+  
+  .modal :global(.dcl.field .message) {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    font-size: 13px;
+  }
+  
+  .modal :global(.ui.sub.header) {
+    text-transform: none;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+  }
+  
+  .pricePerDay {
+    margin-bottom: 24px;
+  }
+  
+  .periodOptions {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+    grid-template-rows: 40px 20px;
+    margin-bottom: 32px;
+  }
+  
+  .periodOptions :global(.ui.checkbox input.hidden + label),
+  .periodOptions :global(.ui.checkbox input.hidden:focus + label) {
+    padding-left: 32px;
+    padding-top: 2px;
+  }
+  
+  .info {
+    width: 16px;
+    height: 16px;
+    background-image: url(../../../images/info.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    display: inline-block;
+    margin-left: 4px;
+    cursor: pointer;
+  }
+  
+  .periodOptions :global(.ui.radio.checkbox label:before) {
+    width: 20px;
+    height: 20px;
+    border-radius: 3px;
+  }
+  
+  .periodOptions :global(.ui.radio.checkbox.checked input.hidden + label:after) {
+    top: -1px;
+    width: 23px;
+    height: 26px;
+    left: -1px;
+  }
+  
+  .periodsTooltip:global(.ui.popup) {
+    z-index: 4000;
+  }
+  
+  .expirationDate {
+    height: 64px;
+  }
+  
+  .actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .actions :global(.ui.button) {
+    width: 100%;
+  }
+  
+  .actions :global(.ui.primary.button) + :global(.ui.secondary.button) {
+    margin-left: 0px;
+    margin-top: 15px;
+  }

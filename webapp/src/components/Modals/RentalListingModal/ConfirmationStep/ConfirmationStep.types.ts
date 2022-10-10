@@ -1,13 +1,12 @@
 import { Dispatch } from 'redux'
-import { NFT } from '../../../modules/nft/types'
+import { NFT } from '../../../../modules/nft/types'
 import {
   createRentalRequest,
   CreateRentalRequestAction
-} from '../../../modules/rental/actions'
-import { PeriodOption } from '../../../modules/rental/types'
+} from '../../../../modules/rental/actions'
+import { PeriodOption } from '../../../../modules/rental/types'
 
 export type Props = {
-  open: boolean
   nft: NFT
   pricePerDay: number
   periods: PeriodOption[]
@@ -21,4 +20,4 @@ export type Props = {
 export type MapStateProps = Pick<Props, 'isSigning' | 'error'>
 export type MapDispatchProps = Pick<Props, 'onCreate'>
 export type MapDispatch = Dispatch<CreateRentalRequestAction>
-export type OwnProps = Pick<Props, 'open' | 'nft' | 'onCancel'>
+export type OwnProps = Pick<Props, 'nft' | 'onCancel'>

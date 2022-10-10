@@ -1,14 +1,14 @@
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { RootState } from '../../../modules/reducer'
+import { RootState } from '../../../../modules/reducer'
 import {
   createRentalRequest,
   CREATE_RENTAL_REQUEST
-} from '../../../modules/rental/actions'
+} from '../../../../modules/rental/actions'
 import {
   getLoading as getRentalLoading,
   getError
-} from '../../../modules/rental/selectors'
+} from '../../../../modules/rental/selectors'
 import {
   MapStateProps,
   MapDispatchProps,

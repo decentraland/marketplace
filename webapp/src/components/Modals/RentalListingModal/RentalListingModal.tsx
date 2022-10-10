@@ -4,26 +4,26 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { Modal } from 'decentraland-dapps/dist/containers'
 import { ContractName, getContract } from 'decentraland-transactions'
-import { Props } from './RentalModal.types'
+import { Props } from './RentalListingModal.types'
 import {
   createRentalRequest,
   CreateRentalRequestAction
-} from '../../modules/rental/actions'
+} from '../../../modules/rental/actions'
 import { AuthorizationStep } from './AuthorizationStep'
 import { CreateOrEditListingStep } from './CreateOrEditListingStep'
 import { ConfirmationStep } from './ConfirmationStep'
+import styles from './RentalListingModal.module.css'
 
-const RentalModal = (props: Props) => {
+const RentalListingModal = (props: Props) => {
   // Props
   const {
-    open,
     address,
-    nft,
-    rental,
+    metadata: { nft, rental },
     authorizations,
-    onCancel,
-    onRemove
+    onRemove,
+    onClose
   } = props
 
   // State
@@ -62,26 +62,23 @@ const RentalModal = (props: Props) => {
   )
   const isAuthorized = hasAuthorization(authorizations, authorization)
 
-  if (!isAuthorized) {
-    return <AuthorizationStep open={open} nft={nft} onCancel={onCancel} />
-  }
-
-  // Create listing step
-  if (!listing) {
-    return (
-      <CreateOrEditListingStep
-        open={open}
-        nft={nft}
-        rental={rental}
-        onCreate={handleSetListing}
-        onRemove={onRemove}
-        onCancel={onCancel}
-      />
-    )
-  }
-
-  // Confirmation step
-  return <ConfirmationStep open={open} {...listing} onCancel={handleCancel} />
+  return (
+    <Modal size="tiny" className={styles.modal} onClose={onClose}>
+      {!isAuthorized ? (
+        <AuthorizationStep nft={nft} onCancel={onClose} />
+      ) : !listing ? (
+        <CreateOrEditListingStep
+          nft={nft}
+          rental={rental}
+          onCreate={handleSetListing}
+          onRemove={onRemove}
+          onCancel={onClose}
+        />
+      ) : (
+        <ConfirmationStep {...listing} onCancel={handleCancel} />
+      )}
+    </Modal>
+  )
 }
 
-export default React.memo(RentalModal)
+export default React.memo(RentalListingModal)

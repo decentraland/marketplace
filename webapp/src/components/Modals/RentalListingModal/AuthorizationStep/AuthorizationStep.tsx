@@ -19,7 +19,6 @@ import styles from './AuthorizationStep.module.css'
 const AuthorizationStep = (props: Props) => {
   // Props
   const {
-    open,
     onCancel,
     address,
     isAuthorizing,
@@ -68,7 +67,7 @@ const AuthorizationStep = (props: Props) => {
   }, [error, isConfirmingAuthorization, isAuthorizing])
 
   return (
-    <Modal open={open} size="tiny" className={styles.modal}>
+    <>
       <ModalNavigation
         title={t('rental_modal.authorization_step.title')}
         onClose={onCancel}
@@ -157,7 +156,7 @@ const AuthorizationStep = (props: Props) => {
           />
         )}
       </Modal.Actions>
-    </Modal>
+    </>
   )
 }
 

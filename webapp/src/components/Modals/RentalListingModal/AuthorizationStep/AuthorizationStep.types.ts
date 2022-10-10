@@ -3,10 +3,9 @@ import {
   GrantTokenRequestAction
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Dispatch } from 'redux'
-import { NFT } from '../../../modules/nft/types'
+import { NFT } from '../../../../modules/nft/types'
 
 export type Props = {
-  open: boolean
   nft: NFT
   isAuthorizing: boolean
   isConfirmingAuthorization: boolean
@@ -22,4 +21,4 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<Props, 'onAuthorize'>
 export type MapDispatch = Dispatch<GrantTokenRequestAction>
-export type OwnProps = Pick<Props, 'open' | 'nft' | 'onCancel'>
+export type OwnProps = Pick<Props, 'nft' | 'onCancel'>

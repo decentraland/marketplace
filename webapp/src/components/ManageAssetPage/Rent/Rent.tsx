@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 import { Link } from 'react-router-dom'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -16,7 +16,6 @@ import {
   getMaxPriceOfPeriods,
   getRentalEndDate
 } from '../../../modules/rental/utils'
-import { CreateRentalModal } from '../../CreateRentalModal'
 import { Mana } from '../../Mana'
 import { IconButton } from '../IconButton'
 import styles from './Rent.module.css'
@@ -49,18 +48,21 @@ const LinkedProfile = ({ address }: { address: string }) => {
 }
 
 export const Rent = (props: Props) => {
-  const { className, isClaimingLandBack, onClaimLand, rental, nft } = props
+  const {
+    className,
+    isClaimingLandBack,
+    onClaimLand,
+    onCreateOrEditRent,
+    rental,
+    nft
+  } = props
 
-  const handleOnEdit = useCallback(() => setIsCreateRentalModalOpen(true), [])
+  const handleOnCreateOrEdit = useCallback(
+    () => onCreateOrEditRent(nft, rental),
+    [nft, onCreateOrEditRent, rental]
+  )
   const handleListForRentAgain = useCallback(() => undefined, [])
   const handleViewTransaction = useCallback(() => undefined, [])
-  const handleListForRent = useCallback(() => {
-    setIsCreateRentalModalOpen(true)
-  }, [])
-  const handleCreateRentalListingCancel = useCallback(() => {
-    setIsCreateRentalModalOpen(false)
-  }, [])
-  const [isCreateRentalModalOpen, setIsCreateRentalModalOpen] = useState(false)
   const maxPriceOfPeriods: string | null = useMemo(
     () => (rental ? getMaxPriceOfPeriods(rental) : null),
     [rental]
@@ -82,12 +84,6 @@ export const Rent = (props: Props) => {
 
   return (
     <section className={classNames(styles.box, className)}>
-      <CreateRentalModal
-        nft={nft}
-        rental={rental}
-        open={isCreateRentalModalOpen}
-        onCancel={handleCreateRentalListingCancel}
-      />
       <div className={styles.header}>
         <h1 className={styles.title}>
           {rental
@@ -96,9 +92,12 @@ export const Rent = (props: Props) => {
         </h1>
         <div className={styles.action}>
           {rental ? (
-            <IconButton iconName="pencil" onClick={handleOnEdit} />
+            <IconButton iconName="pencil" onClick={handleOnCreateOrEdit} />
           ) : (
-            <Button className={styles.actionButton} onClick={handleListForRent}>
+            <Button
+              className={styles.actionButton}
+              onClick={handleOnCreateOrEdit}
+            >
               {t('manage_asset_page.rent.list_for_rent')}
             </Button>
           )}
