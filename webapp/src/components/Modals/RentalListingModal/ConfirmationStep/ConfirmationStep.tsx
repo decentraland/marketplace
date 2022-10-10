@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
 import { Modal, Button, ModalNavigation, Message } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { daysByPeriod } from '../../../modules/rental/utils'
-import { Mana } from '../../Mana'
+import { daysByPeriod } from '../../../../modules/rental/utils'
+import { Mana } from '../../../Mana'
 import { Props } from './ConfirmationStep.types'
 import styles from './ConfirmationStep.module.css'
 

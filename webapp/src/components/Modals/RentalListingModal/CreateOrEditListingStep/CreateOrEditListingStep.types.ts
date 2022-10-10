@@ -1,7 +1,7 @@
 import { RentalListing } from '@dcl/schemas'
 import { Dispatch } from 'redux'
-import { NFT } from '../../../modules/nft/types'
-import { createRentalRequest } from '../../../modules/rental/actions'
+import { NFT } from '../../../../modules/nft/types'
+import { createRentalRequest } from '../../../../modules/rental/actions'
 
 export type Props = {
   nft: NFT

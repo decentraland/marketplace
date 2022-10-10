@@ -11,18 +11,18 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-import { PeriodOption } from '../../../modules/rental/types'
-import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
+import { PeriodOption } from '../../../../modules/rental/types'
+import { formatWeiMANA, parseMANANumber } from '../../../../lib/mana'
 import {
   convertDateToDateInputValue,
   getDefaultExpirationDate
-} from '../../../modules/order/utils'
+} from '../../../../modules/order/utils'
 import {
   daysByPeriod,
   getMaxPriceOfPeriods,
   periodsByDays
-} from '../../../modules/rental/utils'
-import { ManaField } from '../../ManaField'
+} from '../../../../modules/rental/utils'
+import { ManaField } from '../../../ManaField'
 import { Props } from './CreateOrEditListingStep.types'
 import styles from './CreateOrEditListingStep.module.css'
 

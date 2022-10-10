@@ -7,10 +7,10 @@ import {
   grantTokenRequest,
   GRANT_TOKEN_REQUEST
 } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { RootState } from '../../../modules/reducer'
-import { getAddress } from '../../../modules/wallet/selectors'
-import { getPendingAuthorizationTransactions } from '../../../modules/transaction/selectors'
-import { hasTransactionPending } from '../../../modules/transaction/utils'
+import { RootState } from '../../../../modules/reducer'
+import { getAddress } from '../../../../modules/wallet/selectors'
+import { getPendingAuthorizationTransactions } from '../../../../modules/transaction/selectors'
+import { hasTransactionPending } from '../../../../modules/transaction/utils'
 import {
   MapStateProps,
   MapDispatchProps,

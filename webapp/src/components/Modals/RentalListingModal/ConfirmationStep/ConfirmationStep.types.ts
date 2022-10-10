@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux'
-import { NFT } from '../../../modules/nft/types'
+import { NFT } from '../../../../modules/nft/types'
 import {
   createRentalRequest,
   CreateRentalRequestAction
-} from '../../../modules/rental/actions'
-import { PeriodOption } from '../../../modules/rental/types'
+} from '../../../../modules/rental/actions'
+import { PeriodOption } from '../../../../modules/rental/types'
 
 export type Props = {
   nft: NFT

@@ -6,17 +6,17 @@ import {
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { ContractName, getContract } from 'decentraland-transactions'
-import { Props } from './RentalModal.types'
+import { Props } from './RentalListingModal.types'
 import {
   createRentalRequest,
   CreateRentalRequestAction
-} from '../../modules/rental/actions'
+} from '../../../modules/rental/actions'
 import { AuthorizationStep } from './AuthorizationStep'
 import { CreateOrEditListingStep } from './CreateOrEditListingStep'
 import { ConfirmationStep } from './ConfirmationStep'
-import styles from './RentalModal.module.css'
+import styles from './RentalListingModal.module.css'
 
-const RentalModal = (props: Props) => {
+const RentalListingModal = (props: Props) => {
   // Props
   const {
     address,
@@ -81,4 +81,4 @@ const RentalModal = (props: Props) => {
   )
 }
 
-export default React.memo(RentalModal)
+export default React.memo(RentalListingModal)

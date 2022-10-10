@@ -3,7 +3,7 @@ import {
   GrantTokenRequestAction
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Dispatch } from 'redux'
-import { NFT } from '../../../modules/nft/types'
+import { NFT } from '../../../../modules/nft/types'
 
 export type Props = {
   nft: NFT
