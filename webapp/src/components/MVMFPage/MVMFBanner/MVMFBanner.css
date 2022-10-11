@@ -104,3 +104,19 @@
   filter: brightness(0) invert(1);
   margin-right: 6px;
 }
+
+@media (max-width: 768px) {
+  .MVMFBanner.banner-container.small .banner {
+    height: fit-content;
+    flex-direction: column;
+    padding-bottom: 24px;
+  }
+  .MVMFBanner.banner-container.medium .banner,
+  .MVMFBanner.banner-container.big .banner {
+    height: fit-content;
+    padding: 24px;
+  }
+  .MVMFBanner.banner-container.small .button {
+    margin-top: 12px;
+  }
+}
