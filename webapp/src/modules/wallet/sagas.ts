@@ -160,17 +160,23 @@ function* handleWallet(
       contract.category === NFTCategory.WEARABLE ||
       contract.category === NFTCategory.EMOTE
     ) {
-      authorizations.push({
-        address,
-        authorizedAddress: marketplace.address,
-        contractAddress: contract.address,
-        contractName:
-          contract.network === Network.MATIC
-            ? ContractName.ERC721CollectionV2
-            : ContractName.ERC721,
-        chainId: contract.chainId,
-        type: AuthorizationType.APPROVAL
-      })
+      if (
+        !authorizations.some(
+          authorization => authorization.contractAddress === contract.address
+        )
+      ) {
+        authorizations.push({
+          address,
+          authorizedAddress: marketplace.address,
+          contractAddress: contract.address,
+          contractName:
+            contract.network === Network.MATIC
+              ? ContractName.ERC721CollectionV2
+              : ContractName.ERC721,
+          chainId: contract.chainId,
+          type: AuthorizationType.APPROVAL
+        })
+      }
     }
 
     // add authorizations for the rentals contract for the land and estate registries
