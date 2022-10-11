@@ -116,4 +116,7 @@
     height: fit-content;
     padding: 24px;
   }
+  .MVMFBanner.banner-container.small .button {
+    margin-top: 12px;
+  }
 }
