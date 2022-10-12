@@ -8,9 +8,21 @@ export function formatWeiMANA(
   wei: string,
   maximumFractionDigits: number = MAXIMUM_FRACTION_DIGITS
 ): string {
-  return Number(ethers.utils.formatEther(wei)).toLocaleString(undefined, {
+  const value = Number(ethers.utils.formatEther(wei))
+
+  if (value === 0) {
+    return '0'
+  }
+
+  const fixedValue = value.toLocaleString(undefined, {
     maximumFractionDigits
   })
+
+  if (fixedValue === '0') {
+    return getMinimumValueForFractionDigits(maximumFractionDigits).toString()
+  }
+
+  return fixedValue
 }
 
 /**
@@ -27,5 +39,20 @@ export function parseMANANumber(
     return 0
   }
 
-  return parseFloat(mana.toFixed(maximumFractionDigits))
+  const fixedValue = parseFloat(mana.toFixed(maximumFractionDigits))
+
+  if (fixedValue === 0) {
+    return getMinimumValueForFractionDigits(maximumFractionDigits)
+  }
+
+  return fixedValue
+}
+
+/**
+ * returns the minimum value that can be given the maximum fraction digits
+ */
+export function getMinimumValueForFractionDigits(
+  maximumFractionDigits: number
+) {
+  return Math.pow(10, -maximumFractionDigits)
 }
