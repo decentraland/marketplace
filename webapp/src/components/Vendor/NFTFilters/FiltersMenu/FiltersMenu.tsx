@@ -14,11 +14,27 @@ import {
 } from 'decentraland-ui'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { contracts } from '../../../../modules/contract/utils'
+import { Contract } from '../../../../modules/vendor/services'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
 
 export const ALL_FILTER_OPTION = 'ALL'
+
+const getContracts = (availableContracts: string[] | undefined): Contract[] => {
+  if (availableContracts && availableContracts.length > 0) {
+    let filteredContracts = []
+    for (const contract of contracts) {
+      if (availableContracts.some(address => contract.address === address)) {
+        filteredContracts.push(contract)
+      }
+    }
+
+    return filteredContracts
+  }
+
+  return contracts
+}
 
 const FiltersMenu = (props: Props) => {
   const {
@@ -28,6 +44,7 @@ const FiltersMenu = (props: Props) => {
     selectedNetwork,
     selectedEmotePlayMode,
     isOnlySmart,
+    availableContracts,
     onCollectionsChange,
     onRaritiesChange,
     onGendersChange,
@@ -42,14 +59,14 @@ const FiltersMenu = (props: Props) => {
         value: ALL_FILTER_OPTION,
         text: t('nft_filters.all_collections')
       },
-      ...contracts
+      ...getContracts(availableContracts)
         .filter(contract => contract.category === NFTCategory.WEARABLE)
         .map(contract => ({
           value: contract.address,
           text: contract.name
         }))
     ]
-  }, [])
+  }, [availableContracts])
 
   const rarityOptions = useMemo(() => {
     const options = Object.values(Rarity)

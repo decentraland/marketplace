@@ -25,6 +25,7 @@ export type Props = {
   contracts: string[]
   network?: Network
   emotePlayMode?: EmotePlayMode
+  availableContracts?: string[]
   hasFiltersEnabled: boolean
   isRentalsEnabled: boolean
   onBrowse: typeof browse
@@ -52,4 +53,4 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<Props, 'onClearFilters'>
 export type MapDispatch = Dispatch<ClearFiltersAction>
-export type OwnProps = Pick<Props, 'onBrowse' | 'isMap'>
+export type OwnProps = Pick<Props, 'onBrowse' | 'isMap' | 'availableContracts'>
