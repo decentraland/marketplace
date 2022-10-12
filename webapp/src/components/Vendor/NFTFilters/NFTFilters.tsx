@@ -7,12 +7,18 @@ import './NFTFilters.css'
 
 // TODO: Code on each NFTFilters can be extracted
 const NFTFilters = (props: Props) => {
-  const { vendor, isMap, onBrowse } = props
+  const { vendor, contracts, isMap, onBrowse } = props
 
   switch (vendor) {
     case VendorName.DECENTRALAND:
     default:
-      return <DecentralandNFTFilters isMap={isMap} onBrowse={onBrowse} />
+      return (
+        <DecentralandNFTFilters
+          isMap={isMap}
+          availableContracts={contracts}
+          onBrowse={onBrowse}
+        />
+      )
   }
 }
 

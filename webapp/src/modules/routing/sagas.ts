@@ -157,7 +157,10 @@ export function* handleBrowse(action: BrowseAction) {
   yield call(fetchAssetsFromRoute, {
     ...options,
     ...(isAnEventRoute && {
-      contracts: isAnEventRoute ? eventsContracts[pathname.slice(1)] : undefined
+      contracts:
+        options.contracts && options.contracts.length > 0
+          ? options.contracts
+          : eventsContracts[pathname.slice(1)]
     })
   })
   yield put(push(buildBrowseURL(pathname, options)))

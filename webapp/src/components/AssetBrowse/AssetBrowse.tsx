@@ -206,7 +206,7 @@ const AssetBrowse = (props: Props) => {
               </Container>
             </div>
           ) : (
-            <NFTFilters isMap={Boolean(isMap)} />
+            <NFTFilters isMap={Boolean(isMap)} contracts={contracts} />
           )}
           {isMap ? (
             <div className="Atlas">
