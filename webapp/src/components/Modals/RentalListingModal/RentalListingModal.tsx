@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
+import classNames from 'classnames'
 import {
   Authorization,
   AuthorizationType
@@ -8,11 +9,12 @@ import { Modal } from 'decentraland-dapps/dist/containers'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { Props } from './RentalListingModal.types'
 import {
-  createRentalRequest,
-  CreateRentalRequestAction
+  upsertRentalRequest,
+  UpsertRentalRequestAction
 } from '../../../modules/rental/actions'
 import { AuthorizationStep } from './AuthorizationStep'
 import { CreateOrEditListingStep } from './CreateOrEditListingStep'
+import { EditConfirmationStep } from './EditConfirmationStep'
 import { ConfirmationStep } from './ConfirmationStep'
 import styles from './RentalListingModal.module.css'
 
@@ -28,15 +30,15 @@ const RentalListingModal = (props: Props) => {
 
   // State
   const [listing, setListing] = useState<
-    CreateRentalRequestAction['payload'] | null
+    UpsertRentalRequestAction['payload'] | null
   >(null)
 
   // Handlers
   const handleSetListing = useCallback<
-    (...params: Parameters<typeof createRentalRequest>) => void
+    (...params: Parameters<typeof upsertRentalRequest>) => void
   >(
-    (nft, pricePerDay, periods, expiresAt) => {
-      setListing({ nft, pricePerDay, periods, expiresAt })
+    (nft, pricePerDay, periods, expiresAt, operationType) => {
+      setListing({ nft, pricePerDay, periods, expiresAt, operationType })
     },
     [setListing]
   )
@@ -62,8 +64,20 @@ const RentalListingModal = (props: Props) => {
   )
   const isAuthorized = hasAuthorization(authorizations, authorization)
 
+  const isConfirmingEditingStep = useMemo(() => !!listing && !!rental, [
+    listing,
+    rental
+  ])
+
   return (
-    <Modal size="tiny" className={styles.modal} onClose={onClose}>
+    <Modal
+      size="tiny"
+      className={classNames(
+        styles.modal,
+        isConfirmingEditingStep && styles.editingModal
+      )}
+      onClose={onClose}
+    >
       {!isAuthorized ? (
         <AuthorizationStep nft={nft} onCancel={onClose} />
       ) : !listing ? (
@@ -74,8 +88,14 @@ const RentalListingModal = (props: Props) => {
           onRemove={onRemove}
           onCancel={onClose}
         />
+      ) : rental ? (
+        <EditConfirmationStep
+          rental={rental}
+          onCancel={handleCancel}
+          {...listing}
+        />
       ) : (
-        <ConfirmationStep {...listing} onCancel={handleCancel} />
+        <ConfirmationStep onCancel={handleCancel} {...listing} />
       )}
     </Modal>
   )

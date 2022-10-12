@@ -1,0 +1,92 @@
+.modal:global(.ui.modal.tiny) {
+  width: 583px;
+}
+
+.modal:global(.ui.modal > .content) {
+  margin-left: 64px;
+  margin-right: 64px;
+  margin-top: 20px;
+}
+
+.modal:global(.ui.modal > .actions) {
+  margin: 24px 64px 35px 64px;
+  flex-direction: column;
+}
+
+.modal:global(.ui.modal > .actions > .ui.button) {
+  margin-left: 0px;
+}
+
+.modal:global(.ui.modal > .actions > .ui.button + .ui.button) {
+  margin-left: 0px;
+  margin-top: 8px;
+}
+
+.notice > p {
+  font-size: 15px;
+  color: var(--text);
+}
+
+.noticeBlock {
+  color: var(--text);
+  font-size: 15px;
+  margin-top: 24px;
+}
+
+.noticeBlock:last-of-type {
+  margin-bottom: 32px;
+}
+
+.actionContainer {
+  display: flex;
+  min-height: 40px;
+}
+
+.actionContainerText {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.actionContainerText > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.step {
+  width: 24px;
+  height: 24px;
+  border-radius: 30px;
+  border: 1px solid #d9d9d9;
+  text-align: center;
+  margin-right: 11px;
+}
+
+.stepSubtitle {
+  font-size: 13px;
+  color: #7b7a7e;
+}
+
+.noticeRow {
+  margin-bottom: 12px;
+}
+
+.noticeRow:last-child {
+  margin-bottom: 0px;
+}
+
+.noticeLabel {
+  font-weight: 400;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+
+.noticeText {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 28px;
+}
+
+.checkIcon {
+  color: var(--summer-red);
+}

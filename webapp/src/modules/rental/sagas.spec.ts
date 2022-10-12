@@ -9,13 +9,16 @@ import {
 import { call, select } from '@redux-saga/core/effects'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import {
   ContractData,
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { ToastType } from 'decentraland-ui/dist/components/Toast/Toast'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { delay } from 'redux-saga/effects'
@@ -31,16 +34,16 @@ import {
   claimLandTransactionSubmitted,
   claimLandSuccess,
   clearRentalErrors,
-  createRentalFailure,
-  createRentalRequest,
-  createRentalSuccess,
+  upsertRentalFailure,
+  upsertRentalRequest,
+  upsertRentalSuccess,
   removeRentalFailure,
   removeRentalRequest,
   removeRentalTransactionSubmitted,
   removeRentalSuccess
 } from './actions'
 import { rentalSaga } from './sagas'
-import { PeriodOption } from './types'
+import { PeriodOption, UpsertRentalOptType } from './types'
 import { getNonces, getSignature } from './utils'
 
 let nft: NFT
@@ -99,7 +102,7 @@ beforeEach(() => {
   }
 })
 
-describe('when handling the CREATE_RENTAL_REQUEST action', () => {
+describe('when handling the UPSERT_RENTAL_REQUEST action', () => {
   let identity: AuthIdentity
 
   beforeEach(() => {
@@ -119,7 +122,7 @@ describe('when handling the CREATE_RENTAL_REQUEST action', () => {
       return expectSaga(rentalSaga)
         .provide([[select(getAddress), undefined]])
         .put(
-          createRentalFailure(
+          upsertRentalFailure(
             nft,
             100,
             [PeriodOption.ONE_WEEK],
@@ -128,76 +131,172 @@ describe('when handling the CREATE_RENTAL_REQUEST action', () => {
           )
         )
         .dispatch(
-          createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], 1234567)
+          upsertRentalRequest(
+            nft,
+            100,
+            [PeriodOption.ONE_WEEK],
+            1234567,
+            UpsertRentalOptType.INSERT
+          )
         )
         .run({ silenceTimeout: true })
     })
   })
 
   describe('and the wallet is connected', () => {
-    it('should create a rental', () => {
-      const signerAddress = '0xdeadbeef'
-      const nonces = ['0', '0', '0']
-      const periods: PeriodCreation[] = [
-        {
-          pricePerDay: '100000000000000000000',
-          maxDays: 7,
-          minDays: 7
-        }
-      ]
-      const expiration = 1234567
-      const signature = 'the-signature'
-      return expectSaga(rentalSaga)
-        .provide([
-          [select(getAddress), signerAddress],
-          [
-            call(
-              getNonces,
-              nft.chainId,
-              nft.contractAddress,
-              nft.tokenId,
-              signerAddress
-            ),
-            nonces
-          ],
-          [
-            call(
-              getSignature,
-              nft.chainId,
-              nft.contractAddress,
-              nft.tokenId,
-              nonces,
-              periods,
-              expiration
-            ),
-            signature
-          ],
-          [select(getCurrentIdentity), identity],
-          [
-            call(
-              [rentalsAPI, 'createRentalListing'],
-              {
-                chainId: nft.chainId,
-                contractAddress: nft.contractAddress,
-                tokenId: nft.tokenId,
-                network: nft.network,
-                expiration,
-                rentalContractAddress:
-                  '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
+    describe('and it is a create operation type', () => {
+      it('should create a rental', () => {
+        const signerAddress = '0xdeadbeef'
+        const nonces = ['0', '0', '0']
+        const periods: PeriodCreation[] = [
+          {
+            pricePerDay: '100000000000000000000',
+            maxDays: 7,
+            minDays: 7
+          }
+        ]
+        const expiration = 1234567
+        const signature = 'the-signature'
+        return expectSaga(rentalSaga)
+          .provide([
+            [select(getAddress), signerAddress],
+            [
+              call(
+                getNonces,
+                nft.chainId,
+                nft.contractAddress,
+                nft.tokenId,
+                signerAddress
+              ),
+              nonces
+            ],
+            [
+              call(
+                getSignature,
+                nft.chainId,
+                nft.contractAddress,
+                nft.tokenId,
                 nonces,
                 periods,
-                signature
-              },
-              identity
-            ),
-            rental
-          ]
-        ])
-        .put(createRentalSuccess(nft, rental))
-        .dispatch(
-          createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration)
-        )
-        .run({ silenceTimeout: true })
+                expiration
+              ),
+              signature
+            ],
+            [select(getCurrentIdentity), identity],
+            [
+              call(
+                [rentalsAPI, 'createRentalListing'],
+                {
+                  chainId: nft.chainId,
+                  contractAddress: nft.contractAddress,
+                  tokenId: nft.tokenId,
+                  network: nft.network,
+                  expiration,
+                  rentalContractAddress:
+                    '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
+                  nonces,
+                  periods,
+                  signature
+                },
+                identity
+              ),
+              rental
+            ]
+          ])
+          .put(upsertRentalSuccess(nft, rental, UpsertRentalOptType.INSERT))
+          .dispatch(
+            upsertRentalRequest(
+              nft,
+              100,
+              [PeriodOption.ONE_WEEK],
+              expiration,
+              UpsertRentalOptType.INSERT
+            )
+          )
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and it is an edit operation type', () => {
+      it('should create the listing and show the info toast', () => {
+        const signerAddress = '0xdeadbeef'
+        const nonces = ['0', '0', '0']
+        const periods: PeriodCreation[] = [
+          {
+            pricePerDay: '100000000000000000000',
+            maxDays: 7,
+            minDays: 7
+          }
+        ]
+        const expiration = 1234567
+        const signature = 'the-signature'
+        return expectSaga(rentalSaga)
+          .provide([
+            [select(getAddress), signerAddress],
+            [
+              call(
+                getNonces,
+                nft.chainId,
+                nft.contractAddress,
+                nft.tokenId,
+                signerAddress
+              ),
+              nonces
+            ],
+            [
+              call(
+                getSignature,
+                nft.chainId,
+                nft.contractAddress,
+                nft.tokenId,
+                nonces,
+                periods,
+                expiration
+              ),
+              signature
+            ],
+            [select(getCurrentIdentity), identity],
+            [
+              call(
+                [rentalsAPI, 'createRentalListing'],
+                {
+                  chainId: nft.chainId,
+                  contractAddress: nft.contractAddress,
+                  tokenId: nft.tokenId,
+                  network: nft.network,
+                  expiration,
+                  rentalContractAddress:
+                    '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
+                  nonces,
+                  periods,
+                  signature
+                },
+                identity
+              ),
+              rental
+            ]
+          ])
+          .put(upsertRentalSuccess(nft, rental, UpsertRentalOptType.EDIT))
+          .put(
+            showToast({
+              type: ToastType.INFO,
+              title: t('toast.rent_listing_updated.title'),
+              body: t('toast.rent_listing_updated.body'),
+              timeout: 6000,
+              closable: true
+            })
+          )
+          .dispatch(
+            upsertRentalRequest(
+              nft,
+              100,
+              [PeriodOption.ONE_WEEK],
+              expiration,
+              UpsertRentalOptType.EDIT
+            )
+          )
+          .run({ silenceTimeout: true })
+      })
     })
     describe('and can not get the nonces', () => {
       it('should throw an error', () => {
@@ -218,7 +317,7 @@ describe('when handling the CREATE_RENTAL_REQUEST action', () => {
             ]
           ])
           .put(
-            createRentalFailure(
+            upsertRentalFailure(
               nft,
               100,
               [PeriodOption.ONE_WEEK],
@@ -227,7 +326,13 @@ describe('when handling the CREATE_RENTAL_REQUEST action', () => {
             )
           )
           .dispatch(
-            createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration)
+            upsertRentalRequest(
+              nft,
+              100,
+              [PeriodOption.ONE_WEEK],
+              expiration,
+              UpsertRentalOptType.INSERT
+            )
           )
           .run({ silenceTimeout: true })
       })
@@ -271,7 +376,7 @@ describe('when handling the CREATE_RENTAL_REQUEST action', () => {
             ]
           ])
           .put(
-            createRentalFailure(
+            upsertRentalFailure(
               nft,
               100,
               [PeriodOption.ONE_WEEK],
@@ -280,7 +385,13 @@ describe('when handling the CREATE_RENTAL_REQUEST action', () => {
             )
           )
           .dispatch(
-            createRentalRequest(nft, 100, [PeriodOption.ONE_WEEK], expiration)
+            upsertRentalRequest(
+              nft,
+              100,
+              [PeriodOption.ONE_WEEK],
+              expiration,
+              UpsertRentalOptType.INSERT
+            )
           )
           .run({ silenceTimeout: true })
       })
@@ -645,3 +756,12 @@ describe('when handling the action to close the remove rental modal', () => {
       .silentRun()
   })
 })
+
+// describe('when handling the successful action of editing a listing', () => {
+//   it('should put the action to show the toast with the success edit message', () => {
+//     return expectSaga(rentalSaga)
+//       .put(clearRentalErrors())
+//       .dispatch(upsertRentalSuccess(nft, listing, UpsertRentalOptType.EDIT))
+//       .silentRun()
+//   })
+// })

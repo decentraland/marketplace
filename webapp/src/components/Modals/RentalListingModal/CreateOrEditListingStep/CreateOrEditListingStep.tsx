@@ -11,7 +11,10 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-import { PeriodOption } from '../../../../modules/rental/types'
+import {
+  PeriodOption,
+  UpsertRentalOptType
+} from '../../../../modules/rental/types'
 import { formatWeiMANA, parseMANANumber } from '../../../../lib/mana'
 import {
   convertDateToDateInputValue,
@@ -62,7 +65,8 @@ const CreateListingStep = (props: Props) => {
       nft,
       parseMANANumber(pricePerDayInput),
       periodOptions,
-      Number(new Date(expiresAt))
+      Number(new Date(expiresAt)),
+      UpsertRentalOptType.EDIT
     )
   }, [onCreate, nft, pricePerDayInput, periodOptions, expiresAt])
   const handleRemove = useCallback(() => onRemove(nft), [nft, onRemove])

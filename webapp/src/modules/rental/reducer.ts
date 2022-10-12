@@ -20,12 +20,12 @@ import {
   CLAIM_LAND_SUCCESS,
   ClearRentalErrors,
   CLEAR_RENTAL_ERRORS,
-  CreateRentalFailureAction,
-  CreateRentalRequestAction,
-  CreateRentalSuccessAction,
-  CREATE_RENTAL_FAILURE,
-  CREATE_RENTAL_REQUEST,
-  CREATE_RENTAL_SUCCESS,
+  UpsertRentalFailureAction,
+  UpsertRentalRequestAction,
+  UpsertRentalSuccessAction,
+  UPSERT_RENTAL_FAILURE,
+  UPSERT_RENTAL_REQUEST,
+  UPSERT_RENTAL_SUCCESS,
   RemoveRentalFailureAction,
   RemoveRentalSuccessAction,
   RemoveRentalRequestAction,
@@ -51,9 +51,9 @@ const INITIAL_STATE: RentalState = {
 }
 
 type RentalReducerAction =
-  | CreateRentalRequestAction
-  | CreateRentalSuccessAction
-  | CreateRentalFailureAction
+  | UpsertRentalRequestAction
+  | UpsertRentalSuccessAction
+  | UpsertRentalFailureAction
   | ClaimLandRequestAction
   | ClaimLandSuccessAction
   | ClaimLandFailureAction
@@ -87,14 +87,14 @@ export function rentalReducer(
         error: null
       }
     }
-    case CREATE_RENTAL_REQUEST: {
+    case UPSERT_RENTAL_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null
       }
     }
-    case CREATE_RENTAL_SUCCESS: {
+    case UPSERT_RENTAL_SUCCESS: {
       const { rental } = action.payload
       return {
         ...state,
@@ -132,7 +132,7 @@ export function rentalReducer(
     }
     case REMOVE_RENTAL_FAILURE:
     case CLAIM_LAND_FAILURE:
-    case CREATE_RENTAL_FAILURE: {
+    case UPSERT_RENTAL_FAILURE: {
       const { error } = action.payload
       return {
         ...state,

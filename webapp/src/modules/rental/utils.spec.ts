@@ -26,9 +26,9 @@ const getRentalsContractInstanceMock = getRentalsContractInstance as jest.Mocked
   typeof getRentalsContractInstance
 >
 const rentalsMock = ({
-  contractNonce: jest.fn(),
-  assetNonce: jest.fn(),
-  signerNonce: jest.fn()
+  getContractIndex: jest.fn(),
+  getAssetIndex: jest.fn(),
+  getSignerIndex: jest.fn()
 } as unknown) as ethers.Contract
 
 describe('when getting a signature', () => {
@@ -159,24 +159,24 @@ describe('when getting a signature', () => {
   })
 })
 
-describe('when getting the contract nonce', () => {
+describe('when getting the contract index', () => {
   beforeEach(() => {
     getRentalsContractInstanceMock.mockResolvedValueOnce(rentalsMock)
-    rentalsMock.contractNonce.mockResolvedValueOnce(BigNumber.from(0))
+    rentalsMock.getContractIndex.mockResolvedValueOnce(BigNumber.from(0))
   })
   it('should return the contract nonce and use the right chain id to the instance helper', async () => {
     await expect(getContractNonce(ChainId.ETHEREUM_GOERLI)).resolves.toBe('0')
     expect(getRentalsContractInstanceMock).toHaveBeenCalledWith(
       ChainId.ETHEREUM_GOERLI
     )
-    expect(rentalsMock.contractNonce).toHaveBeenCalled()
+    expect(rentalsMock.getContractIndex).toHaveBeenCalled()
   })
 })
 
 describe('when getting the asset nonce', () => {
   beforeEach(() => {
     getRentalsContractInstanceMock.mockResolvedValueOnce(rentalsMock)
-    rentalsMock.assetNonce.mockResolvedValueOnce(BigNumber.from(0))
+    rentalsMock.getAssetIndex.mockResolvedValueOnce(BigNumber.from(0))
   })
   it('should return the asset nonce and use the correct chain id, contract address, token id and signer address', async () => {
     await expect(
@@ -190,7 +190,7 @@ describe('when getting the asset nonce', () => {
     expect(getRentalsContractInstanceMock).toHaveBeenCalledWith(
       ChainId.ETHEREUM_GOERLI
     )
-    expect(rentalsMock.assetNonce).toHaveBeenCalledWith(
+    expect(rentalsMock.getAssetIndex).toHaveBeenCalledWith(
       '0x25b6B4bac4aDB582a0ABd475439dA6730777Fbf7',
       '27562871720596015540533343201973225127790',
       '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'
@@ -201,7 +201,7 @@ describe('when getting the asset nonce', () => {
 describe('when getting the signer nonce', () => {
   beforeEach(() => {
     getRentalsContractInstanceMock.mockResolvedValueOnce(rentalsMock)
-    rentalsMock.signerNonce.mockResolvedValueOnce(BigNumber.from(0))
+    rentalsMock.getSignerIndex.mockResolvedValueOnce(BigNumber.from(0))
   })
   it('should return the signer nonce and use the correct chain id and signer address', async () => {
     await expect(
@@ -213,7 +213,7 @@ describe('when getting the signer nonce', () => {
     expect(getRentalsContractInstanceMock).toHaveBeenCalledWith(
       ChainId.ETHEREUM_GOERLI
     )
-    expect(rentalsMock.signerNonce).toHaveBeenCalledWith(
+    expect(rentalsMock.getSignerIndex).toHaveBeenCalledWith(
       '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'
     )
   })
@@ -222,14 +222,14 @@ describe('when getting the signer nonce', () => {
 describe('when getting all the nonces', () => {
   beforeEach(() => {
     getRentalsContractInstanceMock.mockResolvedValue(rentalsMock)
-    rentalsMock.contractNonce.mockResolvedValueOnce(BigNumber.from(0))
-    rentalsMock.signerNonce.mockResolvedValueOnce(BigNumber.from(1))
-    rentalsMock.assetNonce.mockResolvedValueOnce(BigNumber.from(2))
+    rentalsMock.getContractIndex.mockResolvedValueOnce(BigNumber.from(0))
+    rentalsMock.getSignerIndex.mockResolvedValueOnce(BigNumber.from(1))
+    rentalsMock.getAssetIndex.mockResolvedValueOnce(BigNumber.from(2))
   })
   afterEach(() => {
     getRentalsContractInstanceMock.mockReset()
   })
-  it('should return the contract nonce, signer nonce and asset nonce using the correct chain id, contract address, token id and signer address', async () => {
+  it('should return the contract index, signer index and asset index using the correct chain id, contract address, token id and signer address', async () => {
     await expect(
       getNonces(
         ChainId.ETHEREUM_GOERLI,
@@ -238,11 +238,11 @@ describe('when getting all the nonces', () => {
         '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'
       )
     ).resolves.toEqual(['0', '1', '2'])
-    expect(rentalsMock.contractNonce).toHaveBeenCalled()
-    expect(rentalsMock.signerNonce).toHaveBeenCalledWith(
+    expect(rentalsMock.getContractIndex).toHaveBeenCalled()
+    expect(rentalsMock.getSignerIndex).toHaveBeenCalledWith(
       '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'
     )
-    expect(rentalsMock.assetNonce).toHaveBeenCalledWith(
+    expect(rentalsMock.getAssetIndex).toHaveBeenCalledWith(
       '0x25b6B4bac4aDB582a0ABd475439dA6730777Fbf7',
       '27562871720596015540533343201973225127790',
       '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'

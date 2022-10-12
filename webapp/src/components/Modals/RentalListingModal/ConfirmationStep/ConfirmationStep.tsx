@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react'
 import { Modal, Button, ModalNavigation, Message } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { UpsertRentalOptType } from '../../../../modules/rental/types'
 import { daysByPeriod } from '../../../../modules/rental/utils'
 import { Mana } from '../../../Mana'
 import { Props } from './ConfirmationStep.types'
@@ -19,7 +20,14 @@ const ConfirmationStep = (props: Props) => {
   } = props
 
   const handleSubmit = useCallback(
-    () => onCreate(nft, pricePerDay, periods, expiresAt),
+    () =>
+      onCreate(
+        nft,
+        pricePerDay,
+        periods,
+        expiresAt,
+        UpsertRentalOptType.INSERT
+      ),
     [nft, pricePerDay, periods, expiresAt, onCreate]
   )
 

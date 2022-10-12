@@ -5,12 +5,15 @@ import {
   RentalStatus
 } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
+import { ToastType } from 'decentraland-ui'
 import {
   ContractData,
   ContractName,
   getContract,
   Provider
 } from 'decentraland-transactions'
+import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
@@ -29,32 +32,36 @@ import {
   claimLandSuccess,
   CLAIM_LAND_REQUEST,
   clearRentalErrors,
-  createRentalFailure,
-  CreateRentalRequestAction,
-  createRentalSuccess,
-  CREATE_RENTAL_REQUEST,
+  upsertRentalFailure,
+  UpsertRentalRequestAction,
+  upsertRentalSuccess,
+  UPSERT_RENTAL_REQUEST,
   RemoveRentalRequestAction,
   removeRentalFailure,
   removeRentalSuccess,
   removeRentalTransactionSubmitted,
-  REMOVE_RENTAL_REQUEST
+  REMOVE_RENTAL_REQUEST,
+  UPSERT_RENTAL_SUCCESS,
+  UpsertRentalSuccessAction
 } from './actions'
 import { daysByPeriod, getNonces, getSignature } from './utils'
+import { UpsertRentalOptType } from './types'
 
 export function* rentalSaga() {
-  yield takeEvery(CREATE_RENTAL_REQUEST, handleCreateRentalRequest)
+  yield takeEvery(UPSERT_RENTAL_REQUEST, handleCreateOrEditRentalRequest)
+  yield takeEvery(UPSERT_RENTAL_SUCCESS, handleUpsertRentalSuccess)
   yield takeEvery(CLAIM_LAND_REQUEST, handleClaimLandRequest)
   yield takeEvery(CLOSE_MODAL, handleModalClose)
   yield takeEvery(REMOVE_RENTAL_REQUEST, handleRemoveRentalRequest)
 }
 
-function* handleCreateRentalRequest(action: CreateRentalRequestAction) {
-  const { nft, pricePerDay, expiresAt } = action.payload
+function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
+  const { nft, pricePerDay, expiresAt, operationType } = action.payload
 
   const periods: PeriodCreation[] = action.payload.periods.map(period => ({
     maxDays: daysByPeriod[period],
     minDays: daysByPeriod[period],
-    pricePerDay: ethers.utils.parseUnits('100', 18).toString()
+    pricePerDay: ethers.utils.parseUnits(pricePerDay.toString()).toString()
   }))
 
   try {
@@ -106,10 +113,10 @@ function* handleCreateRentalRequest(action: CreateRentalRequestAction) {
       identity
     )
 
-    yield put(createRentalSuccess(nft, rental))
+    yield put(upsertRentalSuccess(nft, rental, operationType))
   } catch (error) {
     yield put(
-      createRentalFailure(
+      upsertRentalFailure(
         nft,
         pricePerDay,
         action.payload.periods,
@@ -224,5 +231,20 @@ function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
     yield put(removeRentalSuccess(nft))
   } catch (error) {
     yield put(removeRentalFailure((error as Error).message))
+  }
+}
+
+function* handleUpsertRentalSuccess(action: UpsertRentalSuccessAction) {
+  const { operationType } = action.payload
+  if (operationType === UpsertRentalOptType.EDIT) {
+    yield put(
+      showToast({
+        type: ToastType.INFO,
+        title: t('toast.rent_listing_updated.title'),
+        body: t('toast.rent_listing_updated.body'),
+        timeout: 6000,
+        closable: true
+      })
+    )
   }
 }
