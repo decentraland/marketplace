@@ -92,7 +92,7 @@ const MVMFBanner = ({
                 as={'a'}
                 target="_blank"
                 rel="noopener noreferrer"
-                href={'link'}
+                href="https://decentraland.org/blog/announcements/emotes-contest-prepare-your-best-moves-for-the-metaverse-music-festival"
               >
                 {t('mvmf22_announcement.banners.big.cta')}
               </Button>
