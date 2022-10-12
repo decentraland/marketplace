@@ -803,18 +803,18 @@
   "mvmf22_announcement": {
     "banners": {
       "big": {
-        "title": "Obtenga sus artículos destacados durante el ¡Metaverse Music Festival 2022!",
-        "subtitle": "La categoría del festival de música de este año es... {subtitle_bold_1} {enter} Envíe sus dispositivos portátiles y gestos usando la etiqueta {subtitle_bold_2} antes de {subtitle_bold_3} {entrar} y aparecerán en el Mercado durante todo el evento.",
+        "title": "Obtenga sus artículos destacados durante el {enter} ¡Metaverse Music Festival 2022!",
+        "subtitle": "La categoría del festival de música de este año es... {subtitle_bold_1} {enter} Envíe sus dispositivos portátiles y gestos usando la etiqueta {subtitle_bold_2} antes de {subtitle_bold_3} {enter} y aparecerán en el Mercado durante todo el evento.",
         "subtitle_bold_1": "Cyberpunk conoce a la naturaleza!",
-        "subtitle_bold_2": "#MVMF",
-        "subtitle_bold_3": "20 de octubre",
+        "subtitle_bold_2": "#MVMF22",
+        "subtitle_bold_3": "25 de octubre",
         "cta": "Aprende más"
       },
       "small": {
         "title": "Obtenga sus artículos destacados durante el Metaverse Music Festival!",
         "subtitle": "Envíe sus Wearables y Emotes con el tag {subtitle_bold_1} antes de {subtitle_bold_2} y aparecerán en Marketplace durante todo el evento.",
-        "subtitle_bold_1": "#MVMF",
-        "subtitle_bold_2": "20 de octubre"
+        "subtitle_bold_1": "#MVMF22",
+        "subtitle_bold_2": "25 de octubre"
       }
     }
   }

@@ -10,7 +10,8 @@
   padding-top: 44.5px;
   padding-left: 72px;
   padding-right: 72px;
-  color: white
+  color: white;
+  border-radius: 10px;
 }
 
 .MVMFBanner.banner-container.small .banner {
@@ -23,7 +24,7 @@
 .MVMFBanner.banner-container.small .banner .small-text-container {
   display: flex;
   flex-direction: column;
-  margin-right: 45px;
+  margin-right: auto;
 }
 
 .MVMFBanner.banner-container.big .button {
@@ -59,7 +60,9 @@
 
 .MVMFBanner.banner-container.big .banner {
   background-image: url('../../../images/mvmf-1064x276.gif');
-  height: 276px;
+  height: 316px;
+  background-repeat: no-repeat;
+  background-color: black;
 }
 
 .MVMFBanner.banner-container.big .title,

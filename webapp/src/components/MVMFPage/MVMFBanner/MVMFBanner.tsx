@@ -21,14 +21,26 @@ const MVMFBanner = ({
       case 'big':
         return (
           <>
-            <div className="event-badge-container">
+            <a
+              href="https://events.decentraland.org/event/?id=7148716b-ff25-4d5f-8267-55fed7ab15bc"
+              target="blank"
+              className="event-badge-container"
+              rel="noopener noreferrer"
+            >
               <span className="icon"></span>
               {t('mvmf22.banners.big.event')}
-            </div>
+            </a>
             <span className="title">
-              {isMVMFEnabled
-                ? t('mvmf22.banners.big.title')
-                : t('mvmf22_announcement.banners.big.title')}
+              {isMVMFEnabled ? (
+                t('mvmf22.banners.big.title')
+              ) : (
+                <T
+                  id="mvmf22_announcement.banners.big.title"
+                  values={{
+                    enter: <br></br>
+                  }}
+                />
+              )}
             </span>
             <span className="subtitle">
               {isMVMFEnabled ? (
@@ -112,7 +124,7 @@ const MVMFBanner = ({
               <span className="title">
                 {isMVMFEnabled
                   ? t('mvmf22.banners.small.title')
-                  : t('mvmf22_announcement.banners.small.title')}{' '}
+                  : t('mvmf22_announcement.banners.small.title')}
               </span>
               <span className="subtitle">
                 {isMVMFEnabled ? (
@@ -134,7 +146,8 @@ const MVMFBanner = ({
                             'mvmf22_announcement.banners.small.subtitle_bold_2'
                           )}
                         </b>
-                      )
+                      ),
+                      enter: <br></br>
                     }}
                   />
                 )}
@@ -163,7 +176,7 @@ const MVMFBanner = ({
                 as={'a'}
                 target="_blank"
                 rel="noopener noreferrer"
-                href={'link'}
+                href="https://decentraland.org/blog/announcements/emotes-contest-prepare-your-best-moves-for-the-metaverse-music-festival"
               >
                 {t('mvmf22_announcement.banners.big.cta')}
               </Button>
