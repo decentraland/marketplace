@@ -17,6 +17,7 @@ const Slideshow = (props: Props) => {
     subtitle,
     viewAllTitle,
     assets,
+    sections,
     isSubHeader,
     isLoading,
     onViewAll
@@ -100,6 +101,7 @@ const Slideshow = (props: Props) => {
           </Button>
         </HeaderMenu.Right>
       </HeaderMenu>
+      {sections ?? null}
       <div className="assets">
         {isLoading ? (
           assets.length === 0 ? (
