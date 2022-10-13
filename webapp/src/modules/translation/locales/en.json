@@ -815,14 +815,14 @@
         "subtitle": "The theme of this year's Music Festival is... {subtitle_bold_1} {enter} Just tag your Items with {subtitle_bold_2} when submitting for publishing, before {subtitle_bold_3} {enter} and your festival-themed Wearables & Emotes will be featured in a special tab during the Festival!",
         "subtitle_bold_1": "Cyberpunk Meets Nature!",
         "subtitle_bold_2": "#MVMF22",
-        "subtitle_bold_3": "October 25th",
+        "subtitle_bold_3": "October 25",
         "cta": "Learn More"
       },
       "small": {
         "title": "Get ready for the Metaverse Music Festival!",
         "subtitle": "Add the {subtitle_bold_1} tag your festival-themed Wearables & Emotes before {subtitle_bold_2} {enter} and they'll be featured in a special Festival tab on the Marketplace during the event!",
         "subtitle_bold_1": "#MVMF22",
-        "subtitle_bold_2": "October 25th"
+        "subtitle_bold_2": "October 25"
       }
     }
   }

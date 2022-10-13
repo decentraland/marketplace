@@ -71,6 +71,7 @@ const MVMFBanner = ({
             </span>
             {isMVMFEnabled ? (
               <Button
+                primary
                 onClick={() =>
                   onNavigate(
                     locations.MVMF22({
@@ -88,6 +89,7 @@ const MVMFBanner = ({
               </Button>
             ) : (
               <Button
+                primary
                 className="announcement"
                 as={'a'}
                 target="_blank"
