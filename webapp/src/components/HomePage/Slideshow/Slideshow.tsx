@@ -92,16 +92,18 @@ const Slideshow = (props: Props) => {
           <div>
             <Header sub={isSubHeader}>{title}</Header>
             <Header sub>{subtitle}</Header>
+            {sections}
           </div>
         </HeaderMenu.Left>
-        <HeaderMenu.Right>
-          <Button basic onClick={onViewAll}>
-            {viewAllTitle ? viewAllTitle : t('slideshow.view_all')}
-            <i className="caret" />
-          </Button>
-        </HeaderMenu.Right>
+        {!sections ? (
+          <HeaderMenu.Right>
+            <Button basic onClick={onViewAll}>
+              {viewAllTitle ? viewAllTitle : t('slideshow.view_all')}
+              <i className="caret" />
+            </Button>
+          </HeaderMenu.Right>
+        ) : null}
       </HeaderMenu>
-      {sections ?? null}
       <div className="assets">
         {isLoading ? (
           assets.length === 0 ? (

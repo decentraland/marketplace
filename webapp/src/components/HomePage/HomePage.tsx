@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Page, Tabs } from 'decentraland-ui'
+import { Button, EmoteIcon, Page, Tabs, WearableIcon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../modules/routing/locations'
@@ -156,22 +156,38 @@ const HomePage = (props: Props) => {
   }, [onFetchAssetsFromRoute])
 
   const itemsSections = (view: HomepageView) => (
-    <Tabs isFullscreen>
-      <Tabs.Left>
+    <div className="items-section">
+      <Tabs>
         <Tabs.Tab
           active={currentItemSection[view] === Section.WEARABLES}
           onClick={() => handleOnChangeItemSection(view, Section.WEARABLES)}
         >
-          <div id={Section.WEARABLES}>{t(`menu.${Section.WEARABLES}`)}</div>
+          <div id={Section.WEARABLES}>
+            <WearableIcon />
+            {t(`menu.${Section.WEARABLES}`)}
+          </div>
         </Tabs.Tab>
         <Tabs.Tab
           active={currentItemSection[view] === Section.EMOTES}
           onClick={() => handleOnChangeItemSection(view, Section.EMOTES)}
         >
-          <div id={Section.EMOTES}>{t(`menu.${Section.EMOTES}`)}</div>
+          <div id={Section.EMOTES}>
+            <EmoteIcon />
+            {t(`menu.${Section.EMOTES}`)}
+          </div>
         </Tabs.Tab>
-      </Tabs.Left>
-    </Tabs>
+        <div className="view-all-button">
+          <Tabs.Tab>
+            <Button basic onClick={() => handleViewAll(view)}>
+              {sectionsViewAllTitle[view]
+                ? sectionsViewAllTitle[view]
+                : t('slideshow.view_all')}
+              <i className="caret" />
+            </Button>
+          </Tabs.Tab>
+        </div>
+      </Tabs>
+    </div>
   )
 
   const renderSlideshow = (view: HomepageView) => {
