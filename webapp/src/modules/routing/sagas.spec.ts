@@ -1,4 +1,10 @@
-import { ItemSortBy, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import {
+  EmotePlayMode,
+  ItemSortBy,
+  Network,
+  NFTCategory,
+  Rarity
+} from '@dcl/schemas'
 import { getLocation, push } from 'connected-react-router'
 import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
@@ -45,7 +51,8 @@ describe('when handling the clear filters request action', () => {
       rarities: [Rarity.EPIC],
       wearableGenders: [WearableGender.FEMALE],
       contracts: ['aContract'],
-      network: Network.ETHEREUM
+      network: Network.ETHEREUM,
+      emotePlayMode: EmotePlayMode.SIMPLE
     }
 
     const browseOptionsWithoutFilters: BrowseOptions = { ...browseOptions }
@@ -54,6 +61,7 @@ describe('when handling the clear filters request action', () => {
     delete browseOptionsWithoutFilters.network
     delete browseOptionsWithoutFilters.contracts
     delete browseOptionsWithoutFilters.page
+    delete browseOptionsWithoutFilters.emotePlayMode
 
     const pathname = 'aPath'
 

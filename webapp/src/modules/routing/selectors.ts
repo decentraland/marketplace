@@ -252,22 +252,26 @@ export const hasFiltersEnabled = createSelector<
   WearableGender[],
   Rarity[],
   string[],
+  string | undefined,
   boolean
 >(
   getNetwork,
   getWearableGenders,
   getRarities,
   getContracts,
-  (network, genders, rarities, contracts) => {
+  getEmotePlayMode,
+  (network, genders, rarities, contracts, playMode) => {
     const hasNetworkFilter = network !== undefined
     const hasGenderFilter = genders.length > 0
     const hasRarityFilter = rarities.length > 0
     const hasContractsFilter = contracts.length > 0
+    const hasEmotePlayModeFilter = playMode !== undefined
     return (
       hasNetworkFilter ||
       hasGenderFilter ||
       hasRarityFilter ||
-      hasContractsFilter
+      hasContractsFilter ||
+      hasEmotePlayModeFilter
     )
   }
 )
