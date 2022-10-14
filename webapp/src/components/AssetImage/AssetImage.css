@@ -167,13 +167,16 @@
 
 .AssetImage .zoom-controls > .ui.button.zoom-control i.icon {
   margin: 0 !important;
+  width: 16px;
+  height: 16px;
 }
 
 .AssetImage .zoom-controls > .ui.button.zoom-in-control {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  min-width: unset;
+  border-radius: 6px 6px 0px 0px;
+}
+
+.AssetImage .zoom-controls > .ui.button.zoom-out-control {
+  border-radius: 0px 0px 6px 6px;
 }
 
 .AssetImage .play-emote-control {
