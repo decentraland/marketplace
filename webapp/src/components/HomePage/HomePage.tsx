@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Button, EmoteIcon, Page, Tabs, WearableIcon } from 'decentraland-ui'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import { Page } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../modules/routing/locations'
@@ -30,13 +30,6 @@ const HomePage = (props: Props) => {
   } = props
 
   const vendor = VendorName.DECENTRALAND
-
-  const [currentItemSection, setCurrentItemSection] = useState<
-    Partial<Record<View, Section>>
-  >({
-    [View.HOME_NEW_ITEMS]: Section.WEARABLES,
-    [View.HOME_WEARABLES]: Section.WEARABLES
-  })
 
   const sections: Partial<Record<View, Section>> = useMemo(
     () => ({
@@ -87,18 +80,9 @@ const HomePage = (props: Props) => {
     []
   )
 
-  const getSection = useCallback(
-    (view: View) => {
-      return view === View.HOME_NEW_ITEMS || view === View.HOME_WEARABLES
-        ? currentItemSection[view]
-        : sections[view]
-    },
-    [sections, currentItemSection]
-  )
-
   const handleViewAll = useCallback(
     (view: View) => {
-      const section = getSection(view)
+      const section = sections[view]
       const assetType = assetTypes[view]
       const sortBy = sort[view]
 
@@ -117,15 +101,12 @@ const HomePage = (props: Props) => {
         onNavigate(locations.browse({ section, assetType, sortBy }))
       }
     },
-    [assetTypes, sort, getSection, onNavigate]
+    [assetTypes, sort, sections, onNavigate]
   )
 
   const handleOnChangeItemSection = useCallback(
     (view: HomepageView, section: Section) => {
-      setCurrentItemSection(currentItemSection => ({
-        ...currentItemSection,
-        [view]: section
-      }))
+      sections[view] = section
       onFetchAssetsFromRoute({
         vendor,
         section,
@@ -136,7 +117,7 @@ const HomePage = (props: Props) => {
         onlyOnSale: true
       })
     },
-    [assetTypes, sort, vendor, onFetchAssetsFromRoute, setCurrentItemSection]
+    [assetTypes, sort, vendor, sections, onFetchAssetsFromRoute]
   )
 
   useEffect(() => {
@@ -144,7 +125,7 @@ const HomePage = (props: Props) => {
     for (view in homepage) {
       onFetchAssetsFromRoute({
         vendor,
-        section: getSection(view),
+        section: sections[view],
         view,
         assetType: assetTypes[view],
         sortBy: sort[view],
@@ -155,41 +136,6 @@ const HomePage = (props: Props) => {
     // eslint-disable-next-line
   }, [onFetchAssetsFromRoute])
 
-  const itemsSections = (view: HomepageView) => (
-    <div className="items-section">
-      <Tabs>
-        <Tabs.Tab
-          active={currentItemSection[view] === Section.WEARABLES}
-          onClick={() => handleOnChangeItemSection(view, Section.WEARABLES)}
-        >
-          <div id={Section.WEARABLES}>
-            <WearableIcon />
-            {t(`menu.${Section.WEARABLES}`)}
-          </div>
-        </Tabs.Tab>
-        <Tabs.Tab
-          active={currentItemSection[view] === Section.EMOTES}
-          onClick={() => handleOnChangeItemSection(view, Section.EMOTES)}
-        >
-          <div id={Section.EMOTES}>
-            <EmoteIcon />
-            {t(`menu.${Section.EMOTES}`)}
-          </div>
-        </Tabs.Tab>
-        <div className="view-all-button">
-          <Tabs.Tab>
-            <Button basic onClick={() => handleViewAll(view)}>
-              {sectionsViewAllTitle[view]
-                ? sectionsViewAllTitle[view]
-                : t('slideshow.view_all')}
-              <i className="caret" />
-            </Button>
-          </Tabs.Tab>
-        </div>
-      </Tabs>
-    </div>
-  )
-
   const renderSlideshow = (view: HomepageView) => {
     const hasItemsSection =
       view === View.HOME_NEW_ITEMS || view === View.HOME_WEARABLES
@@ -197,13 +143,17 @@ const HomePage = (props: Props) => {
     return (
       <Slideshow
         key={view}
+        view={view}
         title={t(`home_page.${view}`)}
         subtitle={sectionsSubtitles[view]}
         viewAllTitle={sectionsViewAllTitle[view]}
         assets={homepageLoading[view] ? [] : homepage[view]}
-        sections={hasItemsSection ? itemsSections(view) : null}
+        hasItemsSection={hasItemsSection}
         isLoading={homepageLoading[view]}
         onViewAll={() => handleViewAll(view)}
+        onChangeItemSection={
+          hasItemsSection ? handleOnChangeItemSection : undefined
+        }
       />
     )
   }

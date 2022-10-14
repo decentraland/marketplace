@@ -37,26 +37,6 @@
   color: #a09ba8;
 }
 
-.HomePage .items-section .tabs {
-  display: flex;
-  align-items: center;
-  margin-bottom: 0;
-}
-
-.HomePage .items-section .tab div {
-  margin-right: 12px;
-  display: flex;
-  align-items: center;
-}
-
-.HomePage .items-section .view-all-button {
-  float: right;
-}
-
-.HomePage .items-section .view-all-button .tab {
-  margin-right: 0;
-}
-
 @media (max-width: 768px) {
   .HomePage .Slideshow .dcl.header-menu .dcl.header-menu-left {
     max-width: 268px;

@@ -5,6 +5,7 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Asset } from '../../../modules/asset/types'
 import { AssetCard } from '../../AssetCard'
 import { Props } from './Slideshow.types'
+import ItemsSection from './ItemsSection'
 import './Slideshow.css'
 
 const PAGE_SIZE = 4
@@ -13,14 +14,16 @@ const INITIAL_PAGE = 1
 const Slideshow = (props: Props) => {
   const slideRef = useRef<HTMLDivElement>(null)
   const {
+    view,
     title,
     subtitle,
     viewAllTitle,
     assets,
-    sections,
     isSubHeader,
     isLoading,
-    onViewAll
+    hasItemsSection,
+    onViewAll,
+    onChangeItemSection
   } = props
   const [showArrows, setShowArrows] = useState(false)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
@@ -83,6 +86,13 @@ const Slideshow = (props: Props) => {
     []
   )
 
+  const viewAllButton = () => (
+    <Button basic onClick={onViewAll}>
+      {viewAllTitle ? viewAllTitle : t('slideshow.view_all')}
+      <i className="caret" />
+    </Button>
+  )
+
   const showArrowsHandlers = { onMouseEnter, onMouseLeave }
 
   return (
@@ -92,16 +102,17 @@ const Slideshow = (props: Props) => {
           <div>
             <Header sub={isSubHeader}>{title}</Header>
             <Header sub>{subtitle}</Header>
-            {sections}
+            {hasItemsSection ? (
+              <ItemsSection
+                view={view}
+                viewAllButton={viewAllButton()}
+                onChangeItemSection={onChangeItemSection!}
+              />
+            ) : null}
           </div>
         </HeaderMenu.Left>
-        {!sections ? (
-          <HeaderMenu.Right>
-            <Button basic onClick={onViewAll}>
-              {viewAllTitle ? viewAllTitle : t('slideshow.view_all')}
-              <i className="caret" />
-            </Button>
-          </HeaderMenu.Right>
+        {!hasItemsSection ? (
+          <HeaderMenu.Right>{viewAllButton()}</HeaderMenu.Right>
         ) : null}
       </HeaderMenu>
       <div className="assets">
