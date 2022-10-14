@@ -741,11 +741,11 @@
     },
     "confirmation_edit_step": {
       "title": "Edit Listing",
-      "notice_line_one": "In order to update the listing you will need to sign 2 transactions.",
+      "notice_line_one": "In order to update the listing, you will need to:",
       "action_one_title": "Remove previous information",
       "action_one_subtitle": "This is for security reasons.",
       "confirm": "Confirm Transaction",
-      "action_two_title": "Publish new information",
+      "action_two_title": "Sign Message",
       "done": "Done"
     }
   },

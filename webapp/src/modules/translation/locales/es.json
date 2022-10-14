@@ -681,9 +681,13 @@
       "title": "Éxito",
       "body": "Configuración de tienda actualizada correctamente"
     },
-    "maintainance": {
-      "notice": "Estamos en mantenimiento, volveremos pronto!"
+    "rent_listing_updated": {
+      "title": "Listado de alquiler actualizado",
+      "body": "El listado ha sido actualizado con éxito."
     }
+  },
+  "maintainance": {
+    "notice": "Estamos en mantenimiento, volveremos pronto!"
   },
   "rental_modal": {
     "authorization_step": {
@@ -727,6 +731,15 @@
       "notice_line_two": "Poner en alquiler es gratis, pero editar o cancelar el clasificado una vez hecho requerirá que envies una transacción, y deberas cubrir el costo de la misma.",
       "price_per_day": "Precio por día",
       "listing_expiration_date": "Fecha de expiración del clasificado"
+    },
+    "confirmation_edit_step": {
+      "title": "Editar Anuncio",
+      "notice_line_one": "Para poder editar el anuncio, debes:",
+      "action_one_title": "Remover la información anterior",
+      "action_one_subtitle": "Esto es por razones de seguridad.",
+      "confirm": "Confirmar Transacción",
+      "action_two_title": "Firmar mensaje",
+      "done": "Listo"
     }
   },
   "manage_asset_page": {
