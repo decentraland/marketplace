@@ -29,6 +29,8 @@ const HomePage = (props: Props) => {
     onFetchAssetsFromRoute
   } = props
 
+  const vendor = VendorName.DECENTRALAND
+
   const sections: Partial<Record<View, Section>> = useMemo(
     () => ({
       [View.HOME_TRENDING_ITEMS]: Section.WEARABLES_TRENDING,
@@ -99,23 +101,34 @@ const HomePage = (props: Props) => {
         onNavigate(locations.browse({ section, assetType, sortBy }))
       }
     },
-    [sections, assetTypes, sort, onNavigate]
+    [assetTypes, sort, sections, onNavigate]
   )
 
-  const vendor = VendorName.DECENTRALAND
-
-  useEffect(() => {
-    let view: HomepageView
-    for (view in homepage) {
-      const assetType = assetTypes[view]
-      const section = sections[view]
-      const sortBy = sort[view]
+  const handleOnChangeItemSection = useCallback(
+    (view: HomepageView, section: Section) => {
+      sections[view] = section
       onFetchAssetsFromRoute({
         vendor,
         section,
         view,
-        assetType,
-        sortBy,
+        assetType: assetTypes[view],
+        sortBy: sort[view],
+        page: 1,
+        onlyOnSale: true
+      })
+    },
+    [assetTypes, sort, vendor, sections, onFetchAssetsFromRoute]
+  )
+
+  useEffect(() => {
+    let view: HomepageView
+    for (view in homepage) {
+      onFetchAssetsFromRoute({
+        vendor,
+        section: sections[view],
+        view,
+        assetType: assetTypes[view],
+        sortBy: sort[view],
         page: 1,
         onlyOnSale: true
       })
@@ -123,17 +136,27 @@ const HomePage = (props: Props) => {
     // eslint-disable-next-line
   }, [onFetchAssetsFromRoute])
 
-  const renderSlideshow = (view: HomepageView) => (
-    <Slideshow
-      key={view}
-      title={t(`home_page.${view}`)}
-      subtitle={sectionsSubtitles[view]}
-      viewAllTitle={sectionsViewAllTitle[view]}
-      assets={homepage[view]}
-      isLoading={homepageLoading[view]}
-      onViewAll={() => handleViewAll(view)}
-    />
-  )
+  const renderSlideshow = (view: HomepageView) => {
+    const hasItemsSection =
+      view === View.HOME_NEW_ITEMS || view === View.HOME_WEARABLES
+
+    return (
+      <Slideshow
+        key={view}
+        view={view}
+        title={t(`home_page.${view}`)}
+        subtitle={sectionsSubtitles[view]}
+        viewAllTitle={sectionsViewAllTitle[view]}
+        assets={homepageLoading[view] ? [] : homepage[view]}
+        hasItemsSection={hasItemsSection}
+        isLoading={homepageLoading[view]}
+        onViewAll={() => handleViewAll(view)}
+        onChangeItemSection={
+          hasItemsSection ? handleOnChangeItemSection : undefined
+        }
+      />
+    )
+  }
 
   const homepageWithoutLatestSales = Object.keys(homepage).filter(
     view => view !== View.HOME_SOLD_ITEMS
