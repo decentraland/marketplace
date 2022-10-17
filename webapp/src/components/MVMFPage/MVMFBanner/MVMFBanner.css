@@ -14,6 +14,10 @@
   border-radius: 10px;
 }
 
+.MVMFBanner.banner-container .banner.started {
+  padding-left: 52px;
+}
+
 .MVMFBanner.banner-container.small .banner {
   display: flex;
   flex-direction: row;
@@ -47,6 +51,20 @@
   height: 44px;
 }
 
+.MVMFBanner.banner-container.small .banner.started {
+  background-image: url('../../../images/mvmf-started-1064x100.gif');
+  height: 145px;
+  padding-right: 32px;
+  background-repeat: no-repeat;
+  background-color: #10141d;
+  flex-direction: column;
+}
+
+.MVMFBanner.banner-container.small .started button {
+  width: 300px;
+  margin-top: 16px;
+}
+
 .MVMFBanner.banner-container.small .banner {
   background-image: url('../../../images/mvmf-1064x100.gif');
   height: 100px;
@@ -54,8 +72,14 @@
 }
 
 .MVMFBanner.banner-container.medium .banner {
-  background-image: url('../../../images/mvmf22-banner-small.png');
+  background-image: url('../../../images/mvmf-started-1064x153.gif');
   height: 150px;
+}
+
+.MVMFBanner.banner-container.big .banner.started {
+  background-image: url('../../../images/mvmf-started-1064x276.gif');
+  height: 276px;
+  background-repeat: no-repeat;
 }
 
 .MVMFBanner.banner-container.big .banner {
