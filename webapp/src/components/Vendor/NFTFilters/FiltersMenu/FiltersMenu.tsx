@@ -53,6 +53,10 @@ const FiltersMenu = (props: Props) => {
     onOnlySmartChange
   } = props
 
+  // Emote category sends this param undefined
+  const category =
+    isOnlySmart !== undefined ? NFTCategory.WEARABLE : NFTCategory.EMOTE
+
   const collectionOptions = useMemo(() => {
     return [
       {
@@ -60,13 +64,13 @@ const FiltersMenu = (props: Props) => {
         text: t('nft_filters.all_collections')
       },
       ...getContracts(availableContracts)
-        .filter(contract => contract.category === NFTCategory.WEARABLE)
+        .filter(contract => contract.category === category)
         .map(contract => ({
           value: contract.address,
           text: contract.name
         }))
     ]
-  }, [availableContracts])
+  }, [availableContracts, category])
 
   const rarityOptions = useMemo(() => {
     const options = Object.values(Rarity)

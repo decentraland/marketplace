@@ -137,6 +137,7 @@ function* handleClearFilters() {
     'wearableGenders',
     'network',
     'contracts',
+    'emotePlayMode',
     'page'
   ])
 
