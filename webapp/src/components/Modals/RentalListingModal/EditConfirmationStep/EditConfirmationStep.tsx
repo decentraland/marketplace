@@ -113,13 +113,13 @@ const EditConfirmationStep = (props: Props) => {
                 </div>
               </div>
               <Button
-                primary
+                primary={isStepOneCompleted}
                 size="small"
                 loading={isSigning}
                 disabled={!isStepOneCompleted}
                 onClick={handlePublishNewInfo}
               >
-                {t('rental_modal.confirmation_edit_step.confirm')}
+                {t('rental_modal.confirmation_edit_step.sign_message')}
               </Button>
             </div>
           </div>
