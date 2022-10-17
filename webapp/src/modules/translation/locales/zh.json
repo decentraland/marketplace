@@ -729,6 +729,15 @@
       "notice_line_two": "列表是免费的，但编辑或取消列表将需要发送交易，您需要支付其费用。",
       "price_per_day": "每天的价格",
       "listing_expiration_date": "上市截止日期"
+    },
+    "confirmation_edit_step": {
+      "title": "编辑列表",
+      "notice_line_one": "为了更新列表，您需要：",
+      "action_one_title": "删除以前的信息",
+      "action_one_subtitle": "这是出于安全原因。",
+      "confirm": "确认交易",
+      "action_two_title": "签名留言",
+      "done": "完毕"
     }
   },
   "manage_asset_page": {

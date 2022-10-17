@@ -2,6 +2,10 @@ import {
   LoadingState,
   loadingReducer
 } from 'decentraland-dapps/dist/modules/loading/reducer'
+import {
+  UpsertRentalSuccessAction,
+  UPSERT_RENTAL_SUCCESS
+} from '../rental/actions'
 
 import { NFT } from './types'
 import {
@@ -47,6 +51,7 @@ type NFTReducerAction =
   | TransferNFTRequestAction
   | TransferNFTSuccessAction
   | TransferNFTFailureAction
+  | UpsertRentalSuccessAction
 
 export function nftReducer(
   state: NFTState = INITIAL_STATE,
@@ -98,6 +103,21 @@ export function nftReducer(
     case TRANSFER_NFT_SUCCESS: {
       return {
         ...state,
+        loading: loadingReducer(state.loading, action),
+        error: null
+      }
+    }
+    case UPSERT_RENTAL_SUCCESS: {
+      const { rental, nft } = action.payload
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          [nft.id]: {
+            ...state.data[nft.id],
+            openRentalId: rental.id
+          }
+        },
         loading: loadingReducer(state.loading, action),
         error: null
       }

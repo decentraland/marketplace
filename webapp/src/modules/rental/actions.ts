@@ -2,35 +2,48 @@ import { RentalListing } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { action } from 'typesafe-actions'
 import { NFT } from '../nft/types'
-import { PeriodOption } from './types'
+import { PeriodOption, UpsertRentalOptType } from './types'
 
-export const CREATE_RENTAL_REQUEST = '[Request] Create Rental'
-export const CREATE_RENTAL_SUCCESS = '[Success] Create Rental'
-export const CREATE_RENTAL_FAILURE = '[Failure] Create Rental'
+export const UPSERT_RENTAL_REQUEST = '[Request] Upsert Rental'
+export const UPSERT_RENTAL_SUCCESS = '[Success] Upsert Rental'
+export const UPSERT_RENTAL_FAILURE = '[Failure] Upsert Rental'
 
-export const createRentalRequest = (
+export const upsertRentalRequest = (
   nft: NFT,
   pricePerDay: number,
   periods: PeriodOption[],
-  expiresAt: number
-) => action(CREATE_RENTAL_REQUEST, { nft, pricePerDay, periods, expiresAt })
-export const createRentalSuccess = (nft: NFT, rental: RentalListing) =>
-  action(CREATE_RENTAL_SUCCESS, {
+  expiresAt: number,
+  operationType: UpsertRentalOptType
+) =>
+  action(UPSERT_RENTAL_REQUEST, {
     nft,
-    rental
+    pricePerDay,
+    periods,
+    expiresAt,
+    operationType
   })
-export const createRentalFailure = (
+export const upsertRentalSuccess = (
+  nft: NFT,
+  rental: RentalListing,
+  operationType: UpsertRentalOptType
+) =>
+  action(UPSERT_RENTAL_SUCCESS, {
+    nft,
+    rental,
+    operationType
+  })
+export const upsertRentalFailure = (
   nft: NFT,
   pricePerDay: number,
   periods: PeriodOption[],
   expiresAt: number,
   error: string
 ) =>
-  action(CREATE_RENTAL_FAILURE, { nft, pricePerDay, periods, expiresAt, error })
+  action(UPSERT_RENTAL_FAILURE, { nft, pricePerDay, periods, expiresAt, error })
 
-export type CreateRentalRequestAction = ReturnType<typeof createRentalRequest>
-export type CreateRentalSuccessAction = ReturnType<typeof createRentalSuccess>
-export type CreateRentalFailureAction = ReturnType<typeof createRentalFailure>
+export type UpsertRentalRequestAction = ReturnType<typeof upsertRentalRequest>
+export type UpsertRentalSuccessAction = ReturnType<typeof upsertRentalSuccess>
+export type UpsertRentalFailureAction = ReturnType<typeof upsertRentalFailure>
 
 export const CLAIM_LAND_REQUEST = '[Request] Claim LAND'
 export const CLAIM_LAND_SUCCESS = '[Success] Claim LAND'

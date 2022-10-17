@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux'
 import { NFT } from '../../../../modules/nft/types'
 import {
-  createRentalRequest,
-  CreateRentalRequestAction
+  upsertRentalRequest,
+  UpsertRentalRequestAction
 } from '../../../../modules/rental/actions'
 import { PeriodOption } from '../../../../modules/rental/types'
 
@@ -13,11 +13,11 @@ export type Props = {
   expiresAt: number
   isSigning: boolean
   onCancel: () => void
-  onCreate: typeof createRentalRequest
+  onCreate: typeof upsertRentalRequest
   error: string | null
 }
 
 export type MapStateProps = Pick<Props, 'isSigning' | 'error'>
 export type MapDispatchProps = Pick<Props, 'onCreate'>
-export type MapDispatch = Dispatch<CreateRentalRequestAction>
+export type MapDispatch = Dispatch<UpsertRentalRequestAction>
 export type OwnProps = Pick<Props, 'nft' | 'onCancel'>
