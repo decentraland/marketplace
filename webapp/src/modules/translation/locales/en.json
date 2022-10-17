@@ -688,9 +688,24 @@
       "title": "Success",
       "body": "Store data updated correctly"
     },
-    "rent_listing_updated": {
-      "title": "Rent Listing Updated",
-      "body": "The listing has been successfully updated."
+    "remove_listing_success": {
+      "title": "Listing removed",
+      "body": "Your LAND is not available for rent anymore."
+    },
+    "claim_land_success": {
+      "title": "LAND claimed back",
+      "body": "You successfully claimed back your LAND."
+    },
+    "create_rental_success": {
+      "title": "Rental listing created",
+      "body": "Your LAND has been successfully listed for rent."
+    },
+    "update_rental_success": {
+      "title": "Rental listing update",
+      "body": "Your listing has been updated."
+    },
+    "upsert_rental_success": {
+      "show_listing": "Show listing"
     }
   },
   "maintainance": {

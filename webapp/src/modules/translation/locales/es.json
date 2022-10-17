@@ -681,9 +681,24 @@
       "title": "Éxito",
       "body": "Configuración de tienda actualizada correctamente"
     },
-    "rent_listing_updated": {
+    "remove_listing_success": {
+      "title": "Listado de alquiler removido",
+      "body": "Tu tierra no está más disponbile para la renta."
+    },
+    "claim_land_success": {
+      "title": "Haz reclamado tu tierra",
+      "body": "Tu tierra ha sido reclamada correctamente."
+    },
+    "create_rental_success": {
+      "title": "Listado de alquiler creado",
+      "body": "Tu tierra ha sido listada para la renta con éxito."
+    },
+    "update_rental_success": {
       "title": "Listado de alquiler actualizado",
       "body": "El listado ha sido actualizado con éxito."
+    },
+    "upsert_rental_success": {
+      "show_listing": "Mostrar listado"
     }
   },
   "maintainance": {
