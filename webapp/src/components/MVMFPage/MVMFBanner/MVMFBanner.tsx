@@ -157,6 +157,7 @@ const MVMFBanner = ({
             </div>
             {isMVMFEnabled ? (
               <Button
+                primary
                 onClick={() =>
                   onNavigate(
                     locations.MVMF22({
