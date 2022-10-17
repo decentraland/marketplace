@@ -1,9 +1,54 @@
-.sparkles-icon {
+.mvmf-icon {
   display: inline-block;
-  width: 15px;
-  height: 15px;
-  filter: brightness(0) invert(1);
+  width: 16px;
+  height: 16px;
   margin-right: 8px;
-  background-image: url(../../images/sparkles.svg);
+  background-image: url(../../images/rabbit.svg);
   background-size: cover;
+}
+
+.mvmf-tab {
+  background: linear-gradient(45deg, #92efeb, #bfffdc, #f7ffdc, #ecc8ff);
+  background-size: 30% 30%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  -webkit-animation: AnimationName 5s ease-out infinite;
+  -moz-animation: AnimationName 5s ease-out infinite;
+  animation: AnimationName 5s ease-out infinite;
+}
+
+@-webkit-keyframes AnimationName {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-moz-keyframes AnimationName {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes AnimationName {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }

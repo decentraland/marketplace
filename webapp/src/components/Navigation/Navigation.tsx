@@ -32,10 +32,10 @@ const Navigation = (props: Props) => {
             })}
           >
             <Tabs.Tab active={activeTab === NavigationTab.MVMF}>
-              <>
-                <span className="sparkles-icon" />
+              <div className="mvmf-tab">
+                <span className="mvmf-icon" />
                 <span>{t('navigation.mvmf')}</span>
-              </>
+              </div>
             </Tabs.Tab>
           </Link>
         ) : null}

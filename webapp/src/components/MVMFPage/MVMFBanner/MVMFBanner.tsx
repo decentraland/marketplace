@@ -194,7 +194,9 @@ const MVMFBanner = ({
   return isMVMFEnabled || isMVMFAnnouncementEnabled ? (
     <div className={classNames('MVMFBanner banner-container', type)}>
       <Container>
-        <div className="banner">{content}</div>
+        <div className={classNames('banner', isMVMFEnabled && 'started')}>
+          {content}
+        </div>
       </Container>
     </div>
   ) : null
