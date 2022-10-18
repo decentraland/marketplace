@@ -9,16 +9,13 @@ import {
 import { call, select } from '@redux-saga/core/effects'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
-import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import {
   ContractData,
   ContractName,
   getContract
 } from 'decentraland-transactions'
-import { ToastType } from 'decentraland-ui/dist/components/Toast/Toast'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { delay } from 'redux-saga/effects'
@@ -277,15 +274,6 @@ describe('when handling the UPSERT_RENTAL_REQUEST action', () => {
             ]
           ])
           .put(upsertRentalSuccess(nft, rental, UpsertRentalOptType.EDIT))
-          .put(
-            showToast({
-              type: ToastType.INFO,
-              title: t('toast.rent_listing_updated.title'),
-              body: t('toast.rent_listing_updated.body'),
-              timeout: 6000,
-              closable: true
-            })
-          )
           .dispatch(
             upsertRentalRequest(
               nft,

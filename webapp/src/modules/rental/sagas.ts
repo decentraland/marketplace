@@ -5,15 +5,12 @@ import {
   RentalStatus
 } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
-import { ToastType } from 'decentraland-ui'
 import {
   ContractData,
   ContractName,
   getContract,
   Provider
 } from 'decentraland-transactions'
-import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
@@ -40,16 +37,12 @@ import {
   removeRentalFailure,
   removeRentalSuccess,
   removeRentalTransactionSubmitted,
-  REMOVE_RENTAL_REQUEST,
-  UPSERT_RENTAL_SUCCESS,
-  UpsertRentalSuccessAction
+  REMOVE_RENTAL_REQUEST
 } from './actions'
 import { daysByPeriod, getNonces, getSignature } from './utils'
-import { UpsertRentalOptType } from './types'
 
 export function* rentalSaga() {
   yield takeEvery(UPSERT_RENTAL_REQUEST, handleCreateOrEditRentalRequest)
-  yield takeEvery(UPSERT_RENTAL_SUCCESS, handleUpsertRentalSuccess)
   yield takeEvery(CLAIM_LAND_REQUEST, handleClaimLandRequest)
   yield takeEvery(CLOSE_MODAL, handleModalClose)
   yield takeEvery(REMOVE_RENTAL_REQUEST, handleRemoveRentalRequest)
@@ -231,20 +224,5 @@ function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
     yield put(removeRentalSuccess(nft))
   } catch (error) {
     yield put(removeRentalFailure((error as Error).message))
-  }
-}
-
-function* handleUpsertRentalSuccess(action: UpsertRentalSuccessAction) {
-  const { operationType } = action.payload
-  if (operationType === UpsertRentalOptType.EDIT) {
-    yield put(
-      showToast({
-        type: ToastType.INFO,
-        title: t('toast.rent_listing_updated.title'),
-        body: t('toast.rent_listing_updated.body'),
-        timeout: 6000,
-        closable: true
-      })
-    )
   }
 }

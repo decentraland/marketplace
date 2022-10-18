@@ -682,6 +682,25 @@
     "store_update_success": {
       "title": "成功",
       "body": "存储数据正确更新"
+    },
+    "remove_listing_success": {
+      "title": "已移除出租列表",
+      "body": "您的 LAND 不再可供出租。"
+    },
+    "claim_land_success": {
+      "title": "您的 LAND 已被收回",
+      "body": "您已成功收回您的 LAND。"
+    },
+    "create_rental_success": {
+      "title": "已创建出租列表",
+      "body": "您的 LAND 已成功挂牌出租。"
+    },
+    "update_rental_success": {
+      "title": "出租清单更新",
+      "body": "您的列表已更新。"
+    },
+    "upsert_rental_success": {
+      "show_listing": "显示出租清单"
     }
   },
   "maintainance": {
