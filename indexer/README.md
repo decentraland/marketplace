@@ -1,8 +1,14 @@
 # Blockchain indexer
 
-- Mainnet: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace (QmWF9uXD9KokRU1hA5Gnmc3VKU5mPU3cAYmD15cfa8YDTT)
-- Temp: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-temp (QmVtYkY1f3aU4JVSXqFRWjod5tNiQP5voLstp1JCBpoQ3r)
-- Ropsten: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-ropsten (QmfHCGhLTZV8v2duxDkKtPZKMEdJM7X8YGRj2UvqmrAUBB)
+- Mainnet: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace
+  - Prev: `QmWF9uXD9KokRU1hA5Gnmc3VKU5mPU3cAYmD15cfa8YDTT`
+  - Curr: `QmYXc2SCC85dvd3pL6yYfxCkLuaCvJaiES3pA4inGiGwej`
+- Temp: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-temp
+  - Prev: `QmVtYkY1f3aU4JVSXqFRWjod5tNiQP5voLstp1JCBpoQ3r`
+  - Curr: `QmccAwofKfT9t4XKieDqwZre1UUZxuHw5ynB35BHwHAJDT`
+- Ropsten: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-ropsten
+  - Prev: `QmfHCGhLTZV8v2duxDkKtPZKMEdJM7X8YGRj2UvqmrAUBB`
+  - Curr: `QmZTADndoP4XRoWGVoQuaz8WTATx3UDXMn5SdE3GfkErkW`
 - Goerli: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli
   - Prev: `QmVJ5XudhdALBoyYg8w4bPC62E2N6LKgDteVA2NFnETsL2`
   - Curr: `QmRNcz6TmfrFSYZcChetAiivCktGnEpAMrdRYFg74Sm9CU`
