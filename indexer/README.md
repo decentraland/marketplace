@@ -10,8 +10,8 @@
   - Prev: `QmRNcz6TmfrFSYZcChetAiivCktGnEpAMrdRYFg74Sm9CU`
   - Curr: `Qmds1Ut7L2Kvr5Y4ZnCvpMaomcQvhq7BpjhVPgxP5TEfhT`
 - Temp: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-temp
-  - Prev: `QmVtYkY1f3aU4JVSXqFRWjod5tNiQP5voLstp1JCBpoQ3r`
-  - Curr: `QmccAwofKfT9t4XKieDqwZre1UUZxuHw5ynB35BHwHAJDT`
+  - Prev: `QmccAwofKfT9t4XKieDqwZre1UUZxuHw5ynB35BHwHAJDT`
+  - Curr: `QmYXc2SCC85dvd3pL6yYfxCkLuaCvJaiES3pA4inGiGwej`
 
 It uses [thegraph](https://thegraph.com)
 
