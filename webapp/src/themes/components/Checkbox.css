@@ -1,0 +1,22 @@
+.ui.checkbox:not(.toggle, .radio) label:before,
+.ui.checkbox:not(.toggle, .radio) label:active::before,
+.ui.checkbox:not(.toggle, .radio) input:focus ~ label:before,
+.ui.checkbox:not(.toggle, .radio) label:hover::before {
+  background-color: var(--background);
+  border-color: var(--secondary-text);
+}
+
+.ui.checkbox:not(.toggle, .radio) input:checked ~ label:before,
+.ui.checkbox:not(.toggle, .radio) input:checked ~ label:active:before,
+.ui.checkbox:not(.toggle, .radio) input:checked:focus ~ label:before {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.ui.checkbox:not(.toggle, .radio).checked input.hidden + label:after {
+  content: '';
+  top: 4px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+}

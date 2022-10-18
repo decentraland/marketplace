@@ -22,7 +22,7 @@ const Trigger = ({ period }: { period: RentalListingPeriod }) => {
         {period.maxDays} {t('global.days')}
       </div>
       <div className={styles.pricePerPeriod}>
-        <Mana>{formatWeiMANA(pricePerRent)}</Mana>
+        <Mana className={styles.mana}>{formatWeiMANA(pricePerRent)}</Mana>
       </div>
     </div>
   )
