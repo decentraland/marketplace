@@ -10,8 +10,8 @@
   - Prev: `QmfHCGhLTZV8v2duxDkKtPZKMEdJM7X8YGRj2UvqmrAUBB`
   - Curr: `QmZTADndoP4XRoWGVoQuaz8WTATx3UDXMn5SdE3GfkErkW`
 - Goerli: https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli
-  - Prev: `QmVJ5XudhdALBoyYg8w4bPC62E2N6LKgDteVA2NFnETsL2`
-  - Curr: `QmRNcz6TmfrFSYZcChetAiivCktGnEpAMrdRYFg74Sm9CU`
+  - Prev: `QmRNcz6TmfrFSYZcChetAiivCktGnEpAMrdRYFg74Sm9CU`
+  - Curr: `Qmds1Ut7L2Kvr5Y4ZnCvpMaomcQvhq7BpjhVPgxP5TEfhT`
 
 It uses [thegraph](https://thegraph.com)
 
