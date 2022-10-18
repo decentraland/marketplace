@@ -53,11 +53,11 @@
 
 .MVMFBanner.banner-container.small .banner.started {
   background-image: url('../../../images/mvmf-started-1064x100.gif');
-  height: 145px;
+  height: 100px;
   padding-right: 32px;
   background-repeat: no-repeat;
   background-color: #10141d;
-  flex-direction: column;
+  padding-left: 74px;
 }
 
 .MVMFBanner.banner-container.small .started button {
