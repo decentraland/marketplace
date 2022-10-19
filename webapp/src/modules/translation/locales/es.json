@@ -712,7 +712,7 @@
       "operator_notice": "Yo seré el operador de la LAND",
       "wrong_operator": "Por favor inserte una dirección válida",
       "subtitle": "Estas a punto de rentar {land_name} por {duration} dias (desde {start_date} hasta {end_date}) por un precio total de {price}",
-      "subtitle_2": "Por favor re-ingrese el precio y la dirección de quien será el operador:",
+      "subtitle_2": "Por favor re-ingrese el precio y la dirección de quien será el operador de la Land:",
       "confirm_transaction": "Confirme la transacción en su billetera para continuar"
     },
     "authorization_step": {

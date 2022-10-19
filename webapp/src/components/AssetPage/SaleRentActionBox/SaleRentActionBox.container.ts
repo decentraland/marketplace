@@ -1,17 +1,17 @@
-import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { connect } from 'react-redux'
+import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { RootState } from '../../../modules/reducer'
 import { getWallet } from '../../../modules/wallet/selectors'
 import { getNFTBids } from '../../../modules/ui/nft/bid/selectors'
 import { isOwnedBy } from '../../../modules/asset/utils'
-import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
-import SaleRentActionBox from './SaleRentActionBox'
 import {
   OwnProps,
   MapStateProps,
   MapDispatchProps,
   MapDispatch
 } from './SaleRentActionBox.types'
+import SaleRentActionBox from './SaleRentActionBox'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const wallet = getWallet(state)

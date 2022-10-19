@@ -8,7 +8,7 @@ import { getContract } from '../modules/contract/utils'
 import { getContractNames } from '../modules/vendor'
 import { Contract } from '../modules/vendor/services'
 
-export const withMANAAuthorization = (
+export const getMANAAuthorization = (
   address: string,
   authorizedAddress: string,
   network: Network,
@@ -19,7 +19,7 @@ export const withMANAAuthorization = (
     name: contractNames.MANA,
     network
   })
-  const authorization = withContractAuthorization(
+  const authorization = getContractAuthorization(
     address,
     authorizedAddress,
     { ...mana, name: ContractName.MANAToken },
@@ -28,7 +28,7 @@ export const withMANAAuthorization = (
   return authorization
 }
 
-export const withContractAuthorization = (
+export const getContractAuthorization = (
   address: string,
   authorizedAddress: string,
   contract: Contract,

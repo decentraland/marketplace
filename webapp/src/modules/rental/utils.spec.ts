@@ -125,7 +125,8 @@ describe('when getting a signature', () => {
           expect(signerMock._signTypedData).toHaveBeenCalledWith(
             {
               name: 'Rentals',
-              chainId: 5,
+              chainId:
+                '0x0000000000000000000000000000000000000000000000000000000000000005',
               verifyingContract: '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
               version: '1'
             },
@@ -145,11 +146,9 @@ describe('when getting a signature', () => {
             {
               signer: '0xb6e9c0a25aa6b10fa4fe0aa8d1097d2a6136bf98',
               contractAddress: '0x25b6b4bac4adb582a0abd475439da6730777fbf7',
-              tokenId: ethers.BigNumber.from(
-                '27562871720596015540533343201973225127790'
-              ),
+              tokenId: '27562871720596015540533343201973225127790',
               expiration: '1976562675',
-              indexes: [0, 0, 0],
+              indexes: ['0', '0', '0'],
               pricePerDay: ['1000000000000000000'],
               maxDays: ['7'],
               minDays: ['7'],

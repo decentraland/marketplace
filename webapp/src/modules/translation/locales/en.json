@@ -716,10 +716,10 @@
     "confirm_rent_step": {
       "title": "Confirm Rent",
       "operator_address": "Operator Address",
-      "operator_notice": "I will be the operator of this Land.",
+      "operator_notice": "I will be the operator of this LAND",
       "wrong_operator": "Please insert a valid address",
       "subtitle": "You are about to rent {land_name} for {duration} days (from {start_date} to {end_date}) for a total price of {price}",
-      "subtitle_2": "Please re-enter the price and the address who will have the operator permission to confirm:",
+      "subtitle_2": "Please re-enter the price and the address who will have the operator permission to operate the Land:",
       "confirm_transaction": "Confirm the transaction on your wallet to continue"
     },
     "authorization_step": {

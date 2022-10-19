@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getMaxPriceOfPeriods } from '../../../modules/rental/utils'
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
-import { withMANAAuthorization } from '../../../hooks/withAuthorization'
+import { getMANAAuthorization } from '../../../lib/authorization'
 import { getContract } from '../../../modules/contract/utils'
 import { locations } from '../../../modules/routing/locations'
 import { isPartOfEstate } from '../../../modules/nft/utils'
@@ -60,7 +60,7 @@ const SaleRentActionBox = ({
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
-  const authorization = withMANAAuthorization(
+  const authorization = getMANAAuthorization(
     wallet!.address,
     rentals.address,
     nft.network
@@ -68,6 +68,7 @@ const SaleRentActionBox = ({
 
   const handleOnRent = useCallback(() => {
     if (hasAuthorization(authorizations, authorization)) {
+      setShowAuthorizationModal(false)
       onRent(selectedRentalPeriodIndex)
     } else {
       setShowAuthorizationModal(true)
@@ -219,7 +220,7 @@ const SaleRentActionBox = ({
       <AuthorizationModal
         open={showAuthorizationModal}
         authorization={authorization}
-        onProceed={handleCloseAuthorizationModal}
+        onProceed={handleOnRent}
         onCancel={handleCloseAuthorizationModal}
       />
     </>

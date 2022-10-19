@@ -714,7 +714,7 @@
       "operator_notice": "我将成为这片土地的经营者",
       "wrong_operator": "请输入有效地址",
       "subtitle": "您即将租用 {land_name} {duration} 天（从 {start_date} 到 {end_date}），总价为 {price}",
-      "subtitle_2": "请重新输入价格和有运营商权限确认的地址：",
+      "subtitle_2": "请重新输入价格和获得经营者许可经营土地的地址：",
       "confirm_transaction": "确认您钱包上的交易以继续"
     },
     "authorization_step": {

@@ -41,7 +41,8 @@ import {
   ACCEPT_RENTAL_LISTING_REQUEST,
   AcceptRentalListingRequestAction,
   acceptRentalListingSuccess,
-  acceptRentalListingFailure
+  acceptRentalListingFailure,
+  acceptRentalListingTransactionSubmitted
 } from './actions'
 import { daysByPeriod, getNonces, getSignature } from './utils'
 
@@ -293,6 +294,7 @@ function* handleAcceptRentalListingRequest(
       'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
       ...txParams
     )
+    yield put(acceptRentalListingTransactionSubmitted(nft, txHash))
     yield call(waitForTx, txHash)
     yield put(acceptRentalListingSuccess(nft))
   } catch (error) {

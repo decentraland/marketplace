@@ -48,7 +48,7 @@ export async function getSignature(
     name: rentalsContract.name,
     verifyingContract: rentalsContract.address,
     version: rentalsContract.version,
-    chainId
+    chainId: ethers.utils.hexZeroPad(ethers.utils.hexlify(chainId), 32)
   }
 
   const types: Record<string, TypedDataField[]> = {
@@ -68,9 +68,9 @@ export async function getSignature(
   const values = {
     signer: address.toLowerCase(),
     contractAddress: contractAddress.toLowerCase(),
-    tokenId: ethers.BigNumber.from(tokenId),
+    tokenId,
     expiration: ((expiration / 1000) | 0).toString(),
-    indexes: nonces.map(nonce => Number(nonce)),
+    indexes: nonces,
     pricePerDay: periods.map(period => period.pricePerDay),
     maxDays: periods.map(period => period.maxDays.toString()),
     minDays: periods.map(period => period.minDays.toString()),

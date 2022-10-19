@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { RootState } from '../../../modules/reducer'
 import { acceptRentalListingRequest } from '../../../modules/rental/actions'
+import { getWallet } from '../../../modules/wallet/selectors'
 import {
   isRemovingRental,
   isSubmittingTransaction,
@@ -13,7 +14,6 @@ import {
   OwnProps
 } from './ConfirmRentModal.types'
 import ConfirmRentModal from './ConfirmRentModal'
-import { getWallet } from '../../../modules/wallet/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

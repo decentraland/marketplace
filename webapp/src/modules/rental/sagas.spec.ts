@@ -41,7 +41,8 @@ import {
   removeRentalSuccess,
   acceptRentalListingFailure,
   acceptRentalListingRequest,
-  acceptRentalListingSuccess
+  acceptRentalListingSuccess,
+  acceptRentalListingTransactionSubmitted
 } from './actions'
 import { rentalSaga } from './sagas'
 import { PeriodOption, UpsertRentalOptType } from './types'
@@ -769,6 +770,7 @@ describe('when handling the request action to accept a rental', () => {
               addressOperator
             )
           )
+          .put(acceptRentalListingTransactionSubmitted(nft, txHash))
           .put(acceptRentalListingSuccess(nft))
           .silentRun()
       })
