@@ -4,9 +4,9 @@ import { RootState } from '../../../modules/reducer'
 import { acceptRentalListingRequest } from '../../../modules/rental/actions'
 import { getWallet } from '../../../modules/wallet/selectors'
 import {
-  isRemovingRental,
   isSubmittingTransaction,
-  getError
+  getError,
+  isAcceptingRental
 } from '../../../modules/rental/selectors'
 import {
   MapDispatchProps,
@@ -18,7 +18,7 @@ import ConfirmRentModal from './ConfirmRentModal'
 const mapState = (state: RootState): MapStateProps => {
   return {
     wallet: getWallet(state),
-    isTransactionBeingConfirmed: isRemovingRental(state),
+    isTransactionBeingConfirmed: isAcceptingRental(state),
     isSubmittingTransaction: isSubmittingTransaction(state),
     error: getError(state)
   }
