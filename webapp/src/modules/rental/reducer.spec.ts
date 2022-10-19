@@ -12,7 +12,10 @@ import {
   upsertRentalSuccess,
   removeRentalRequest,
   removeRentalFailure,
-  removeRentalSuccess
+  removeRentalSuccess,
+  acceptRentalListingRequest,
+  acceptRentalListingSuccess,
+  acceptRentalListingFailure
 } from './actions'
 import { rentalReducer, RentalState } from './reducer'
 import { PeriodOption, UpsertRentalOptType } from './types'
@@ -392,5 +395,113 @@ describe('when reducing the failure action of removing a rental', () => {
       isSubmittingTransaction: false,
       error: 'anError'
     })
+  })
+})
+
+describe('when reducing the action of the start of an accept rental listing', () => {
+  let periodIndexChosen: number
+  let addressOperator: string
+  beforeEach(() => {
+    periodIndexChosen = 0
+    addressOperator = '0xoperator'
+    rentalState = {
+      ...rentalState,
+      isSubmittingTransaction: false,
+      loading: [],
+      error: 'anError'
+    }
+  })
+
+  it('should set the action into loading, the submitting transaction flag as true and clear the error', () => {
+    expect(
+      rentalReducer(
+        rentalState,
+        acceptRentalListingRequest(
+          nft,
+          rental,
+          periodIndexChosen,
+          addressOperator
+        )
+      )
+    ).toEqual({
+      ...rentalState,
+      isSubmittingTransaction: true,
+      loading: [
+        acceptRentalListingRequest(
+          nft,
+          rental,
+          periodIndexChosen,
+          addressOperator
+        )
+      ],
+      error: null
+    })
+  })
+})
+
+describe('when reducing the action the success of accepting a rental', () => {
+  let periodIndexChosen: number
+  let addressOperator: string
+  beforeEach(() => {
+    periodIndexChosen = 0
+    addressOperator = '0xoperator'
+    rentalState = {
+      ...rentalState,
+      data: {},
+      isSubmittingTransaction: true,
+      loading: [
+        acceptRentalListingRequest(
+          nft,
+          rental,
+          periodIndexChosen,
+          addressOperator
+        )
+      ],
+      error: 'anError'
+    }
+  })
+
+  it('should set the submitting transaction flag as false and clear the error', () => {
+    expect(rentalReducer(rentalState, acceptRentalListingSuccess(nft))).toEqual(
+      {
+        ...rentalState,
+        isSubmittingTransaction: false,
+        loading: [],
+        error: null
+      }
+    )
+  })
+})
+
+describe('when reducing the failure action of accepting a rental', () => {
+  let periodIndexChosen: number
+  let addressOperator: string
+  beforeEach(() => {
+    periodIndexChosen = 0
+    addressOperator = '0xoperator'
+    rentalState = {
+      ...rentalState,
+      loading: [
+        acceptRentalListingRequest(
+          nft,
+          rental,
+          periodIndexChosen,
+          addressOperator
+        )
+      ],
+      isSubmittingTransaction: true,
+      error: null
+    }
+  })
+
+  it("should remove the loading, set the submitting transaction flag to false, set the error with the action's error", () => {
+    expect(rentalReducer(rentalState, acceptRentalListingFailure('anError'))).toEqual(
+      {
+        ...rentalState,
+        loading: [],
+        isSubmittingTransaction: false,
+        error: 'anError'
+      }
+    )
   })
 })

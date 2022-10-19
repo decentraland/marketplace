@@ -37,7 +37,12 @@ import {
   removeRentalFailure,
   removeRentalSuccess,
   removeRentalTransactionSubmitted,
-  REMOVE_RENTAL_REQUEST
+  REMOVE_RENTAL_REQUEST,
+  ACCEPT_RENTAL_LISTING_REQUEST,
+  AcceptRentalListingRequestAction,
+  acceptRentalListingSuccess,
+  acceptRentalListingFailure,
+  acceptRentalListingTransactionSubmitted
 } from './actions'
 import { daysByPeriod, getNonces, getSignature } from './utils'
 
@@ -46,6 +51,10 @@ export function* rentalSaga() {
   yield takeEvery(CLAIM_LAND_REQUEST, handleClaimLandRequest)
   yield takeEvery(CLOSE_MODAL, handleModalClose)
   yield takeEvery(REMOVE_RENTAL_REQUEST, handleRemoveRentalRequest)
+  yield takeEvery(
+    ACCEPT_RENTAL_LISTING_REQUEST,
+    handleAcceptRentalListingRequest
+  )
 }
 
 function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
@@ -224,5 +233,71 @@ function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
     yield put(removeRentalSuccess(nft))
   } catch (error) {
     yield put(removeRentalFailure((error as Error).message))
+  }
+}
+
+function* handleAcceptRentalListingRequest(
+  action: AcceptRentalListingRequestAction
+) {
+  const { nft, rental, periodIndexChosen, addressOperator } = action.payload
+
+  try {
+    if (!nft.openRentalId) {
+      throw new Error('The provided NFT does not have an open rental')
+    }
+
+    const provider: Provider | null = yield call(getConnectedProvider)
+    if (!provider) {
+      throw new Error('A provider is required to remove a rental')
+    }
+
+    const address: string | undefined = yield select(getAddress)
+    if (!address) {
+      throw new Error('An address is required to remove a rental')
+    }
+
+    const rentalsContract: ContractData = yield call(
+      getContract,
+      ContractName.Rentals,
+      nft.chainId
+    )
+
+    const { pricePerDay, maxDays, minDays } = rental.periods[periodIndexChosen]
+    const listing = {
+      signer: rental.lessor,
+      contractAddress: rental.contractAddress,
+      tokenId: rental.tokenId,
+      expiration: (rental.expiration / 1000).toString(),
+      indexes: rental.nonces,
+      pricePerDay: [pricePerDay],
+      maxDays: [maxDays],
+      minDays: [minDays],
+      target: ethers.constants.AddressZero,
+      signature: rental.signature
+    }
+
+    const txParams = [
+      Object.values(listing),
+      addressOperator,
+      periodIndexChosen,
+      maxDays,
+      ethers.utils.randomBytes(32).map(() => 0)
+    ]
+
+    const txHash: string = yield call(
+      sendTransaction as (
+        contract: ContractData,
+        contractMethodName: string,
+        ...contractArguments: any[]
+      ) => Promise<string>,
+      rentalsContract,
+      'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
+      ...txParams
+    )
+    yield put(acceptRentalListingTransactionSubmitted(nft, txHash))
+    yield call(waitForTx, txHash)
+    yield put(acceptRentalListingSuccess(nft))
+  } catch (error) {
+    yield put(acceptRentalListingFailure((error as Error).message))
   }
 }

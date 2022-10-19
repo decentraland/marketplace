@@ -1,0 +1,58 @@
+.modal:global(.ui.modal.tiny) {
+  width: 520px;
+}
+
+.modal:global(.ui.modal > .content) {
+  margin-left: 64px;
+  margin-right: 64px;
+  margin-top: 20px;
+}
+
+.modal:global(.ui.modal > .actions) {
+  margin: 40px 64px 35px 64px;
+}
+
+.modal :global(.dcl.modal-navigation-title) {
+  margin-top: 16px;
+}
+
+.modal :global(.dcl.field) {
+  min-width: 100%;
+}
+
+.modal :global(.dcl.field .message) {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.modal :global(.ui.sub.header) {
+  text-transform: none;
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+.priceContainer {
+  margin-top: 16px;
+}
+
+.operatorFieldNotice {
+  margin-left: 10px;
+}
+
+.operatorCheckboxContainer {
+  display: flex;
+  align-items: center;
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  margin-left: 32px;
+}
+
+.signMessage {
+  margin-left: 12px;
+}

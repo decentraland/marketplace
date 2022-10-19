@@ -51,7 +51,8 @@
     "confirm": "确认",
     "days": "天",
     "error": "错误",
-    "mvmf_2022": "元界节 2022"
+    "mvmf_2022": "元界节 2022",
+    "period": "时期"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -707,6 +708,15 @@
     "notice": "我们目前正在维护中，我们会很快回来！"
   },
   "rental_modal": {
+    "confirm_rent_step": {
+      "title": "期间确认租金",
+      "operator_address": "运营商地址",
+      "operator_notice": "我将成为这片土地的经营者",
+      "wrong_operator": "请输入有效地址",
+      "subtitle": "您即将租用 {land_name} {duration} 天（从 {start_date} 到 {end_date}），总价为 {price}",
+      "subtitle_2": "请重新输入价格和获得经营者许可经营土地的地址：",
+      "confirm_transaction": "确认您钱包上的交易以继续"
+    },
     "authorization_step": {
       "title": "出租",
       "notice_line_one": "在出租您的 {assetType} 之前，您需要批准 {link} 合同，以便它可以操作您的 {assetType}，就像出售您的 {assetType} 时一样。",

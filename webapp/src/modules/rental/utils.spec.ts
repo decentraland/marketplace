@@ -125,7 +125,7 @@ describe('when getting a signature', () => {
           expect(signerMock._signTypedData).toHaveBeenCalledWith(
             {
               name: 'Rentals',
-              salt:
+              chainId:
                 '0x0000000000000000000000000000000000000000000000000000000000000005',
               verifyingContract: '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
               version: '1'
@@ -136,10 +136,11 @@ describe('when getting a signature', () => {
                 { name: 'contractAddress', type: 'address' },
                 { name: 'tokenId', type: 'uint256' },
                 { name: 'expiration', type: 'uint256' },
-                { name: 'nonces', type: 'uint256[]' },
+                { name: 'indexes', type: 'uint256[3]' },
                 { name: 'pricePerDay', type: 'uint256[]' },
                 { name: 'maxDays', type: 'uint256[]' },
-                { name: 'minDays', type: 'uint256[]' }
+                { name: 'minDays', type: 'uint256[]' },
+                { name: 'target', type: 'address' }
               ]
             },
             {
@@ -147,10 +148,11 @@ describe('when getting a signature', () => {
               contractAddress: '0x25b6b4bac4adb582a0abd475439da6730777fbf7',
               tokenId: '27562871720596015540533343201973225127790',
               expiration: '1976562675',
-              nonces: ['0', '0', '0'],
+              indexes: ['0', '0', '0'],
               pricePerDay: ['1000000000000000000'],
               maxDays: ['7'],
-              minDays: ['7']
+              minDays: ['7'],
+              target: '0x0000000000000000000000000000000000000000'
             }
           )
         })

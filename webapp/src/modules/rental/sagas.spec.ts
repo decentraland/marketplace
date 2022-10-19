@@ -16,6 +16,7 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { ethers } from 'ethers'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { delay } from 'redux-saga/effects'
@@ -37,7 +38,11 @@ import {
   removeRentalFailure,
   removeRentalRequest,
   removeRentalTransactionSubmitted,
-  removeRentalSuccess
+  removeRentalSuccess,
+  acceptRentalListingFailure,
+  acceptRentalListingRequest,
+  acceptRentalListingSuccess,
+  acceptRentalListingTransactionSubmitted
 } from './actions'
 import { rentalSaga } from './sagas'
 import { PeriodOption, UpsertRentalOptType } from './types'
@@ -99,7 +104,7 @@ beforeEach(() => {
   }
 })
 
-describe('when handling the UPSERT_RENTAL_REQUEST action', () => {
+describe('when handling the request action to upsert a rental listing', () => {
   let identity: AuthIdentity
 
   beforeEach(() => {
@@ -545,6 +550,293 @@ describe('when handling the request action to claim a LAND', () => {
   })
 })
 
+describe('when handling the request action to accept a rental', () => {
+  let rentalContract: ContractData
+  let periodIndexChosen: number
+  let addressOperator: string
+  beforeEach(() => {
+    periodIndexChosen = 0
+    addressOperator = '0xoperator'
+    rentalContract = {
+      abi: [],
+      address: '0x0',
+      name: 'Rental Contract',
+      version: 'v1',
+      chainId: nft.chainId
+    }
+    nft = {
+      ...nft,
+      openRentalId: rental.id
+    }
+  })
+
+  describe('and the NFT does not have an open rental', () => {
+    beforeEach(() => {
+      nft = {
+        ...nft,
+        openRentalId: null
+      }
+    })
+
+    it('should put a accept rental listing failure action with the error', () => {
+      return expectSaga(rentalSaga)
+        .provide([[call(getConnectedProvider), null]])
+        .put(
+          acceptRentalListingFailure(
+            'The provided NFT does not have an open rental'
+          )
+        )
+        .dispatch(
+          acceptRentalListingRequest(
+            nft,
+            rental,
+            periodIndexChosen,
+            addressOperator
+          )
+        )
+        .silentRun()
+    })
+  })
+
+  describe("and the provider can't be retrieved", () => {
+    it('should put a accept rental failure action with the error', () => {
+      return expectSaga(rentalSaga)
+        .provide([[call(getConnectedProvider), null]])
+        .put(
+          acceptRentalListingFailure(
+            'A provider is required to remove a rental'
+          )
+        )
+        .dispatch(
+          acceptRentalListingRequest(
+            nft,
+            rental,
+            periodIndexChosen,
+            addressOperator
+          )
+        )
+        .silentRun()
+    })
+  })
+
+  describe("and the connected wallet address can't be retrieved", () => {
+    it('should put a accept rental failure action with the error', () => {
+      return expectSaga(rentalSaga)
+        .provide([
+          [call(getConnectedProvider), {}],
+          [select(getAddress), undefined]
+        ])
+        .put(
+          acceptRentalListingFailure(
+            'An address is required to remove a rental'
+          )
+        )
+        .dispatch(
+          acceptRentalListingRequest(
+            nft,
+            rental,
+            periodIndexChosen,
+            addressOperator
+          )
+        )
+        .silentRun()
+    })
+  })
+
+  describe('and getting the rental contract throws', () => {
+    it('should put a accept rental failure action with the error', () => {
+      return expectSaga(rentalSaga)
+        .provide([
+          [call(getConnectedProvider), {}],
+          [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+          [
+            call(getContract, ContractName.Rentals, nft.chainId),
+            throwError(new Error('anError'))
+          ]
+        ])
+        .put(acceptRentalListingFailure('anError'))
+        .dispatch(
+          acceptRentalListingRequest(
+            nft,
+            rental,
+            periodIndexChosen,
+            addressOperator
+          )
+        )
+        .silentRun()
+    })
+  })
+
+  describe('and sending the transaction fails', () => {
+    it('should put a accept rental failure action with the error', () => {
+      return expectSaga(rentalSaga)
+        .provide([
+          [call(getConnectedProvider), {}],
+          [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+          [
+            call(getContract, ContractName.Rentals, nft.chainId),
+            rentalContract
+          ],
+          [
+            call(
+              sendTransaction as (
+                contract: ContractData,
+                contractMethodName: string,
+                ...contractArguments: any[]
+              ) => Promise<string>,
+              rentalContract,
+              'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
+              [
+                rental.lessor,
+                rental.contractAddress,
+                rental.tokenId,
+                (rental.expiration / 1000).toString(),
+                rental.nonces,
+                [rental.periods[periodIndexChosen].pricePerDay],
+                [rental.periods[periodIndexChosen].maxDays],
+                [rental.periods[periodIndexChosen].minDays],
+                ethers.constants.AddressZero,
+                rental.signature
+              ],
+              addressOperator,
+              periodIndexChosen,
+              rental.periods[periodIndexChosen].maxDays,
+              ethers.utils.randomBytes(32).map(() => 0)
+            ),
+            Promise.reject(new Error('anError'))
+          ]
+        ])
+        .put(acceptRentalListingFailure('anError'))
+        .dispatch(
+          acceptRentalListingRequest(
+            nft,
+            rental,
+            periodIndexChosen,
+            addressOperator
+          )
+        )
+        .silentRun()
+    })
+  })
+
+  describe('and sending the transaction is successful', () => {
+    const txHash = '0x01'
+
+    describe('and the transaction finishes', () => {
+      it('should put the action to notify that the transaction was submitted and the accept rental success action', () => {
+        return expectSaga(rentalSaga)
+          .provide([
+            [call(getConnectedProvider), {}],
+            [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+            [
+              call(getContract, ContractName.Rentals, nft.chainId),
+              rentalContract
+            ],
+            [
+              call(
+                sendTransaction as (
+                  contract: ContractData,
+                  contractMethodName: string,
+                  ...contractArguments: any[]
+                ) => Promise<string>,
+                rentalContract,
+                'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
+                [
+                  rental.lessor,
+                  rental.contractAddress,
+                  rental.tokenId,
+                  (rental.expiration / 1000).toString(),
+                  rental.nonces,
+                  [rental.periods[periodIndexChosen].pricePerDay],
+                  [rental.periods[periodIndexChosen].maxDays],
+                  [rental.periods[periodIndexChosen].minDays],
+                  ethers.constants.AddressZero,
+                  rental.signature
+                ],
+                addressOperator,
+                periodIndexChosen,
+                rental.periods[periodIndexChosen].maxDays,
+                ethers.utils.randomBytes(32).map(() => 0)
+              ),
+              Promise.resolve(txHash)
+            ],
+            [call(waitForTx, txHash), Promise.resolve()]
+          ])
+          .dispatch(
+            acceptRentalListingRequest(
+              nft,
+              rental,
+              periodIndexChosen,
+              addressOperator
+            )
+          )
+          .put(acceptRentalListingTransactionSubmitted(nft, txHash))
+          .put(acceptRentalListingSuccess(nft))
+          .silentRun()
+      })
+    })
+
+    describe('and the transaction gets reverted', () => {
+      it('should put the action to notify that the transaction was submitted and the accept rental failure action with an error', () => {
+        return (
+          expectSaga(rentalSaga)
+            .provide([
+              [call(getConnectedProvider), {}],
+              [
+                select(getAddress),
+                '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'
+              ],
+              [
+                call(getContract, ContractName.Rentals, nft.chainId),
+                rentalContract
+              ],
+              [
+                call(
+                  sendTransaction as (
+                    contract: ContractData,
+                    contractMethodName: string,
+                    ...contractArguments: any[]
+                  ) => Promise<string>,
+                  rentalContract,
+                  'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
+                  [
+                    rental.lessor,
+                    rental.contractAddress,
+                    rental.tokenId,
+                    (rental.expiration / 1000).toString(),
+                    rental.nonces,
+                    [rental.periods[periodIndexChosen].pricePerDay],
+                    [rental.periods[periodIndexChosen].maxDays],
+                    [rental.periods[periodIndexChosen].minDays],
+                    ethers.constants.AddressZero,
+                    rental.signature
+                  ],
+                  addressOperator,
+                  periodIndexChosen,
+                  rental.periods[periodIndexChosen].maxDays,
+                  ethers.utils.randomBytes(32).map(() => 0)
+                ),
+                Promise.resolve(txHash)
+              ],
+              [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
+            ])
+            // .put(accept(nft, txHash))
+            .put(acceptRentalListingFailure('anError'))
+            .dispatch(
+              acceptRentalListingRequest(
+                nft,
+                rental,
+                periodIndexChosen,
+                addressOperator
+              )
+            )
+            .silentRun()
+        )
+      })
+    })
+  })
+})
+
 describe('when handling the request action to remove a rental', () => {
   let rentalContract: ContractData
   beforeEach(() => {
@@ -744,12 +1036,3 @@ describe('when handling the action to close the remove rental modal', () => {
       .silentRun()
   })
 })
-
-// describe('when handling the successful action of editing a listing', () => {
-//   it('should put the action to show the toast with the success edit message', () => {
-//     return expectSaga(rentalSaga)
-//       .put(clearRentalErrors())
-//       .dispatch(upsertRentalSuccess(nft, listing, UpsertRentalOptType.EDIT))
-//       .silentRun()
-//   })
-// })

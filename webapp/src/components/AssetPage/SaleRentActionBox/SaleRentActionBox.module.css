@@ -5,11 +5,15 @@
   flex-direction: column;
 }
 
-.price .title {
+.price .title, .periodTitle {
   font-weight: 500;
   font-size: 13px;
   text-transform: uppercase;
   color: #736E7D;
+}
+
+.periodTitle {
+  margin-bottom: 8px;
 }
 
 .price .content {
@@ -106,4 +110,8 @@
 
 .fullWidth {
   width: 100%
+}
+
+.priceValue { 
+  margin-bottom: 20px;
 }

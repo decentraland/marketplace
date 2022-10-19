@@ -48,7 +48,7 @@ export async function getSignature(
     name: rentalsContract.name,
     verifyingContract: rentalsContract.address,
     version: rentalsContract.version,
-    salt: ethers.utils.hexZeroPad(ethers.utils.hexlify(chainId), 32)
+    chainId: ethers.utils.hexZeroPad(ethers.utils.hexlify(chainId), 32)
   }
 
   const types: Record<string, TypedDataField[]> = {
@@ -57,10 +57,11 @@ export async function getSignature(
       { name: 'contractAddress', type: 'address' },
       { name: 'tokenId', type: 'uint256' },
       { name: 'expiration', type: 'uint256' },
-      { name: 'nonces', type: 'uint256[]' },
+      { name: 'indexes', type: 'uint256[3]' },
       { name: 'pricePerDay', type: 'uint256[]' },
       { name: 'maxDays', type: 'uint256[]' },
-      { name: 'minDays', type: 'uint256[]' }
+      { name: 'minDays', type: 'uint256[]' },
+      { name: 'target', type: 'address' }
     ]
   }
 
@@ -69,10 +70,11 @@ export async function getSignature(
     contractAddress: contractAddress.toLowerCase(),
     tokenId,
     expiration: ((expiration / 1000) | 0).toString(),
-    nonces,
-    pricePerDay: periods.map(period => period.pricePerDay.toString()),
+    indexes: nonces,
+    pricePerDay: periods.map(period => period.pricePerDay),
     maxDays: periods.map(period => period.maxDays.toString()),
-    minDays: periods.map(period => period.minDays.toString())
+    minDays: periods.map(period => period.minDays.toString()),
+    target: ethers.constants.AddressZero
   }
 
   const signature = await signer._signTypedData(domain, types, values)

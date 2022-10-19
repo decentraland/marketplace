@@ -1,15 +1,19 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { Button, Popup } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getMaxPriceOfPeriods } from '../../../modules/rental/utils'
-import { VendorFactory } from '../../../modules/vendor'
+import { getContractNames, VendorFactory } from '../../../modules/vendor'
+import { getMANAAuthorization } from '../../../lib/authorization'
+import { getContract } from '../../../modules/contract/utils'
 import { locations } from '../../../modules/routing/locations'
 import { isPartOfEstate } from '../../../modules/nft/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
+import { AuthorizationModal } from '../../AuthorizationModal'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
@@ -21,20 +25,24 @@ enum View {
 
 const SaleRentActionBox = ({
   nft,
+  wallet,
+  authorizations,
   order,
   rental,
   isOwner,
   userHasAlreadyBidsOnNft,
-  isRentalsEnabled
+  isRentalsEnabled,
+  onRent
 }: Props) => {
+  const rentals = getContract({
+    name: getContractNames().RENTALS,
+    network: nft.network
+  })
+
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
     number
   >(0)
   const [view, setView] = useState(View.SALE)
-  const handleOnRent = useCallback(
-    () => rental?.periods[selectedRentalPeriodIndex],
-    [rental, selectedRentalPeriodIndex]
-  )
   const maxPriceOfPeriods: string | null = useMemo(
     () => (rental ? getMaxPriceOfPeriods(rental) : null),
     [rental]
@@ -49,6 +57,25 @@ const SaleRentActionBox = ({
   const { bidService } = useMemo(() => VendorFactory.build(nft.vendor), [nft])
   const isBiddable = bidService !== undefined
   const canBid = isBiddable && !userHasAlreadyBidsOnNft
+
+  const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
+
+  const authorization = getMANAAuthorization(
+    wallet!.address,
+    rentals.address,
+    nft.network
+  )
+
+  const handleOnRent = useCallback(() => {
+    if (hasAuthorization(authorizations, authorization)) {
+      setShowAuthorizationModal(false)
+      onRent(selectedRentalPeriodIndex)
+    } else {
+      setShowAuthorizationModal(true)
+    }
+  }, [authorization, authorizations, onRent, selectedRentalPeriodIndex])
+
+  const handleCloseAuthorizationModal = () => setShowAuthorizationModal(false)
 
   return (
     <>
@@ -93,6 +120,7 @@ const SaleRentActionBox = ({
               </span>
             </div>
           </div>
+          <div className={styles.periodTitle}>{t('global.period')}</div>
           <PeriodsDropdown
             onChange={setSelectedRentalPeriodIndex}
             value={selectedRentalPeriodIndex}
@@ -189,6 +217,12 @@ const SaleRentActionBox = ({
           {t('asset_page.actions.manage')}
         </Button>
       ) : null}
+      <AuthorizationModal
+        open={showAuthorizationModal}
+        authorization={authorization}
+        onProceed={handleOnRent}
+        onCancel={handleCloseAuthorizationModal}
+      />
     </>
   )
 }

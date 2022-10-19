@@ -1,7 +1,11 @@
 import { RentalListing } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../reducer'
-import { CLAIM_LAND_REQUEST, REMOVE_RENTAL_REQUEST } from './actions'
+import {
+  ACCEPT_RENTAL_LISTING_REQUEST,
+  CLAIM_LAND_REQUEST,
+  REMOVE_RENTAL_REQUEST
+} from './actions'
 
 export const getState = (state: RootState) => state.rental
 export const getData = (state: RootState) => getState(state).data
@@ -15,5 +19,7 @@ export const isClaimingLand = (state: RootState) =>
   isLoadingType(getLoading(state), CLAIM_LAND_REQUEST)
 export const isRemovingRental = (state: RootState) =>
   isLoadingType(getLoading(state), REMOVE_RENTAL_REQUEST)
+export const isAcceptingRental = (state: RootState) =>
+  isLoadingType(getLoading(state), ACCEPT_RENTAL_LISTING_REQUEST)
 export const isSubmittingTransaction = (state: RootState) =>
   getState(state).isSubmittingTransaction

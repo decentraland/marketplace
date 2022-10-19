@@ -117,3 +117,52 @@ export type RemoveRentalFailureAction = ReturnType<typeof removeRentalFailure>
 export type RemoveRentalTransactionSubmitted = ReturnType<
   typeof removeRentalTransactionSubmitted
 >
+
+export const ACCEPT_RENTAL_LISTING_REQUEST = '[Request] Accept Rental Listing'
+export const ACCEPT_RENTAL_LISTING_SUCCESS = '[Success] Accept Rental Listing'
+export const ACCEPT_RENTAL_LISTING_FAILURE = '[Failure] Accept Rental Listing'
+export const ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED =
+  '[Submitted transaction] Accept Rental Listing'
+
+export const acceptRentalListingRequest = (
+  nft: NFT,
+  rental: RentalListing,
+  periodIndexChosen: number,
+  addressOperator: string
+) =>
+  action(ACCEPT_RENTAL_LISTING_REQUEST, {
+    nft,
+    rental,
+    periodIndexChosen,
+    addressOperator
+  })
+export const acceptRentalListingSuccess = (nft: NFT) =>
+  action(ACCEPT_RENTAL_LISTING_SUCCESS, {
+    nft
+  })
+export const acceptRentalListingFailure = (error: string) =>
+  action(ACCEPT_RENTAL_LISTING_FAILURE, { error })
+export const acceptRentalListingTransactionSubmitted = (
+  nft: NFT,
+  txHash: string
+) =>
+  action(
+    ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
+    buildTransactionPayload(nft.chainId, txHash, {
+      tokenId: nft.tokenId,
+      contractAddress: nft.contractAddress
+    })
+  )
+
+export type AcceptRentalListingRequestAction = ReturnType<
+  typeof acceptRentalListingRequest
+>
+export type AcceptRentalListingSuccessAction = ReturnType<
+  typeof acceptRentalListingSuccess
+>
+export type AcceptRentalListingFailureAction = ReturnType<
+  typeof acceptRentalListingFailure
+>
+export type AcceptRentalListingTransactionSubmitted = ReturnType<
+  typeof acceptRentalListingTransactionSubmitted
+>

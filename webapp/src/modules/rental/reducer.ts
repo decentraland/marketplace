@@ -33,7 +33,13 @@ import {
   REMOVE_RENTAL_REQUEST,
   REMOVE_RENTAL_SUCCESS,
   REMOVE_RENTAL_FAILURE,
-  REMOVE_RENTAL_TRANSACTION_SUBMITTED
+  REMOVE_RENTAL_TRANSACTION_SUBMITTED,
+  ACCEPT_RENTAL_LISTING_REQUEST,
+  AcceptRentalListingRequestAction,
+  ACCEPT_RENTAL_LISTING_FAILURE,
+  ACCEPT_RENTAL_LISTING_SUCCESS,
+  AcceptRentalListingFailureAction,
+  AcceptRentalListingSuccessAction
 } from './actions'
 
 export type RentalState = {
@@ -65,6 +71,9 @@ type RentalReducerAction =
   | RemoveRentalTransactionSubmitted
   | FetchNFTsSuccessAction
   | FetchNFTSuccessAction
+  | AcceptRentalListingRequestAction
+  | AcceptRentalListingFailureAction
+  | AcceptRentalListingSuccessAction
 
 export function rentalReducer(
   state = INITIAL_STATE,
@@ -78,6 +87,7 @@ export function rentalReducer(
         isSubmittingTransaction: false
       }
     }
+    case ACCEPT_RENTAL_LISTING_REQUEST:
     case REMOVE_RENTAL_REQUEST:
     case CLAIM_LAND_REQUEST: {
       return {
@@ -106,6 +116,15 @@ export function rentalReducer(
         error: null
       }
     }
+    case ACCEPT_RENTAL_LISTING_SUCCESS: {
+      const newState = {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        isSubmittingTransaction: false,
+        error: null
+      }
+      return newState
+    }
     case REMOVE_RENTAL_SUCCESS: {
       const { nft } = action.payload
       const newState = {
@@ -131,6 +150,7 @@ export function rentalReducer(
       return newState
     }
     case REMOVE_RENTAL_FAILURE:
+    case ACCEPT_RENTAL_LISTING_FAILURE:
     case CLAIM_LAND_FAILURE:
     case UPSERT_RENTAL_FAILURE: {
       const { error } = action.payload

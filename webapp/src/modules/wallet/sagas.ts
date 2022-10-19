@@ -149,6 +149,17 @@ function* handleWallet(
     type: AuthorizationType.ALLOWANCE
   })
 
+  if (rentals) {
+    authorizations.push({
+      address,
+      authorizedAddress: rentals.address,
+      contractAddress: manaEthereum.address,
+      contractName: ContractName.MANAToken,
+      chainId: manaEthereum.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }
+
   for (const contract of contracts.filter(c => c.category !== null)) {
     // If the contract is a partner we might need to use a different contract name. See PR #680
     const marketplace = getContract({

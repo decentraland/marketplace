@@ -53,7 +53,8 @@
     "confirm": "Confirm",
     "days": "days",
     "error": "Error",
-    "mvmf_2022": "Metaverse Festival 2022"
+    "mvmf_2022": "Metaverse Festival 2022",
+    "period": "Period"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -712,6 +713,15 @@
     "notice": "We're currently under maintainance, we'll be back soon!"
   },
   "rental_modal": {
+    "confirm_rent_step": {
+      "title": "Confirm Rent",
+      "operator_address": "Operator Address",
+      "operator_notice": "I will be the operator of this LAND",
+      "wrong_operator": "Please insert a valid address",
+      "subtitle": "You are about to rent {land_name} for {duration} days (from {start_date} to {end_date}) for a total price of {price}",
+      "subtitle_2": "Please re-enter the price and the address who will have the operator permission to operate the Land:",
+      "confirm_transaction": "Confirm the transaction on your wallet to continue"
+    },
     "authorization_step": {
       "title": "List for Rent",
       "notice_line_one": "Before listing your {assetType} for rent you will need to approve the {link} contract so it can operate your {assetType}, exactly like when selling your {assetType}.",

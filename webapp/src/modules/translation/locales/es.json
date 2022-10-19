@@ -51,7 +51,8 @@
     "confirm": "Confirmar",
     "days": "días",
     "error": "Error",
-    "mvmf_2022": "Metaverse Festival 2022"
+    "mvmf_2022": "Metaverse Festival 2022",
+    "period": "Periodo"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -705,6 +706,15 @@
     "notice": "Estamos en mantenimiento, volveremos pronto!"
   },
   "rental_modal": {
+    "confirm_rent_step": {
+      "title": "Confirmar renta",
+      "operator_address": "Dirección del operador",
+      "operator_notice": "Yo seré el operador de la LAND",
+      "wrong_operator": "Por favor inserte una dirección válida",
+      "subtitle": "Estas a punto de rentar {land_name} por {duration} dias (desde {start_date} hasta {end_date}) por un precio total de {price}",
+      "subtitle_2": "Por favor re-ingrese el precio y la dirección de quien será el operador de la Land:",
+      "confirm_transaction": "Confirme la transacción en su billetera para continuar"
+    },
     "authorization_step": {
       "title": "Poner en alquiler",
       "notice_line_one": "Antes de listar tu {assetType} en alquiler necesitas autorizar al contrato de {link} a operar tu {assetType}, de la misma forma que cuando deseas vender tu {assetType}.",
