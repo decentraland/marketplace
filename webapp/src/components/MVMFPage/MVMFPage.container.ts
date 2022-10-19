@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-
+import { getIsMVMFAnnouncementEnabled } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import {
   getIsFullscreen,
@@ -17,7 +17,8 @@ const mapState = (state: RootState): MapStateProps => ({
   assetType: getAssetType(state),
   section: getSection(state),
   isFullscreen: getIsFullscreen(state),
-  contracts: getData(state)
+  contracts: getData(state),
+  isMVMFAnnouncementEnabled: getIsMVMFAnnouncementEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch) => ({
