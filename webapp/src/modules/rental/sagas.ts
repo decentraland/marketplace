@@ -268,7 +268,7 @@ function* handleAcceptRentalListingRequest(
       contractAddress: rental.contractAddress,
       tokenId: rental.tokenId,
       expiration: (rental.expiration / 1000).toString(),
-      indexes: rental.nonces.map(nonce => Number(nonce)),
+      indexes: rental.nonces,
       pricePerDay: [pricePerDay],
       maxDays: [maxDays],
       minDays: [minDays],

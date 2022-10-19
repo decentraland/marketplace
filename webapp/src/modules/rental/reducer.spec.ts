@@ -398,7 +398,7 @@ describe('when reducing the failure action of removing a rental', () => {
   })
 })
 
-describe('when reducing the action of the start of a accept rental listing', () => {
+describe('when reducing the action of the start of an accept rental listing', () => {
   let periodIndexChosen: number
   let addressOperator: string
   beforeEach(() => {
@@ -465,7 +465,6 @@ describe('when reducing the action the success of accepting a rental', () => {
     expect(rentalReducer(rentalState, acceptRentalListingSuccess(nft))).toEqual(
       {
         ...rentalState,
-        data: {},
         isSubmittingTransaction: false,
         loading: [],
         error: null
