@@ -147,4 +147,19 @@
   .MVMFBanner.banner-container.small .button {
     margin-top: 12px;
   }
+  .MVMFBanner.banner-container.big .banner.started {
+    height: 310px;
+    background-color: #191021;
+  }
+  .MVMFBanner.banner-container.big .started .button {
+    width: 100%;
+  }
+  .MVMFBanner.banner-container.small .banner.started {
+    height: 210px;
+    padding: 24px;
+    padding-top: 12px;
+  }
+  .MVMFBanner.banner-container.small .banner.started .small-text-container {
+    margin-left: 96px;
+  }
 }
