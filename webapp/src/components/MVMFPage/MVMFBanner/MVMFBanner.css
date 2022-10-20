@@ -57,7 +57,7 @@
   padding-right: 32px;
   background-repeat: no-repeat;
   background-color: #10141d;
-  padding-left: 74px;
+  padding-left: 135px;
 }
 
 .MVMFBanner.banner-container.small .started button {
@@ -74,6 +74,7 @@
 .MVMFBanner.banner-container.medium .banner {
   background-image: url('../../../images/mvmf-started-1064x153.gif');
   height: 150px;
+  padding-left: 52px;
 }
 
 .MVMFBanner.banner-container.big .banner.started {
