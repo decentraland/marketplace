@@ -22,7 +22,7 @@ const MVMFPage = (props: Props) => {
     section,
     contracts,
     onFetchEventContracts,
-    isMVMFAnnouncementEnabled
+    isMVMFTabEnabled
   } = props
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
@@ -32,7 +32,7 @@ const MVMFPage = (props: Props) => {
 
   const activeTab = NavigationTab.MVMF
 
-  return isMVMFAnnouncementEnabled ? (
+  return isMVMFTabEnabled ? (
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />

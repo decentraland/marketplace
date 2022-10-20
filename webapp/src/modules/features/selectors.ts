@@ -31,10 +31,18 @@ export const getIsRentalsEnabled = (state: RootState) => {
 
 export const getIsMVMFEnabled = (state: RootState) => {
   try {
+    return getIsFeatureEnabled(state, ApplicationName.BUILDER, FeatureName.MVMF)
+  } catch (e) {
+    return false
+  }
+}
+
+export const getIsMVMFTabEnabled = (state: RootState) => {
+  try {
     return getIsFeatureEnabled(
       state,
       ApplicationName.BUILDER,
-      FeatureName.MVMF
+      FeatureName.MVMF_TAB
     )
   } catch (e) {
     return false

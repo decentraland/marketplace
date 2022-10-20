@@ -14,7 +14,7 @@ export type Props = {
   isFullscreen?: boolean
   onFetchEventContracts: typeof fetchEventRequest
   contracts: Record<string, string[]>
-  isMVMFAnnouncementEnabled: boolean
+  isMVMFTabEnabled: boolean
 }
 
 export type MapStateProps = Pick<
@@ -24,7 +24,7 @@ export type MapStateProps = Pick<
   | 'assetType'
   | 'section'
   | 'contracts'
-  | 'isMVMFAnnouncementEnabled'
+  | 'isMVMFTabEnabled'
 >
 export type MapDispatchProps = Pick<Props, 'onFetchEventContracts'>
 export type MapDispatch = Dispatch<FetchEventRequestAction>

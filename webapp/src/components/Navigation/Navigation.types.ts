@@ -9,10 +9,10 @@ export enum NavigationTab {
 }
 
 export type Props = {
-  isMVMFAnnouncementEnabled: boolean
+  isMVMFTabEnabled: boolean
   activeTab?: NavigationTab
   isFullscreen?: boolean
 }
 
-export type MapStateProps = Pick<Props, 'isMVMFAnnouncementEnabled'>
+export type MapStateProps = Pick<Props, 'isMVMFTabEnabled'>
 export type MapDispatchProps = {}
