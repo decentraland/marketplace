@@ -5,9 +5,11 @@ import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
 import {
   CLAIM_LAND_SUCCESS,
   UPSERT_RENTAL_SUCCESS,
-  REMOVE_RENTAL_SUCCESS
+  REMOVE_RENTAL_SUCCESS,
+  ACCEPT_RENTAL_LISTING_SUCCESS,
+  AcceptRentalListingSuccessAction
 } from '../rental/actions'
-import { closeAllModals } from './actions'
+import { closeAllModals, openModal } from './actions'
 
 export function* modalSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
@@ -16,6 +18,10 @@ export function* modalSaga() {
     handleCloseAllModals
   )
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleCloseRemoveRentalModal)
+  yield takeEvery(
+    ACCEPT_RENTAL_LISTING_SUCCESS,
+    handleOpenRentConfirmationModal
+  )
 }
 
 function* handleLocationChange() {
@@ -36,4 +42,16 @@ function* handleCloseRemoveRentalModal() {
     // if it's confirming the removal, we close all modals. Otherwise, it's in the upsert and we don't want to close modals.
     yield put(closeAllModals())
   }
+}
+
+function* handleOpenRentConfirmationModal(
+  action: AcceptRentalListingSuccessAction
+) {
+  const { rental, periodIndexChosen } = action.payload
+  yield put(
+    openModal('RentConfirmedModal', {
+      rental,
+      periodIndexChosen
+    })
+  )
 }

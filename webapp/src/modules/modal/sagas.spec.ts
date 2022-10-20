@@ -6,10 +6,11 @@ import { NFT } from '../nft/types'
 import {
   claimLandSuccess,
   upsertRentalSuccess,
-  removeRentalSuccess
+  removeRentalSuccess,
+  acceptRentalListingSuccess
 } from '../rental/actions'
 import { UpsertRentalOptType } from '../rental/types'
-import { closeAllModals } from './actions'
+import { closeAllModals, openModal } from './actions'
 import { modalSaga } from './sagas'
 
 describe('when handling the success action of the claim LAND', () => {
@@ -87,6 +88,23 @@ describe('when handling the success action of a rental edit', () => {
     return expectSaga(modalSaga)
       .put(closeAllModals())
       .dispatch(upsertRentalSuccess(nft, rental, UpsertRentalOptType.EDIT))
+      .silentRun()
+  })
+})
+
+describe('when handling the success action of a accepting a rental listing', () => {
+  let rental: RentalListing
+  let periodIndexChosen: number
+
+  beforeEach(() => {
+    rental = { id: 'aRentalId' } as RentalListing
+    periodIndexChosen = 0
+  })
+
+  it('should put the action to open the RentConfirmedModal modal', () => {
+    return expectSaga(modalSaga)
+      .put(openModal('RentConfirmedModal', { rental, periodIndexChosen }))
+      .dispatch(acceptRentalListingSuccess(rental, periodIndexChosen))
       .silentRun()
   })
 })
