@@ -91,7 +91,7 @@ type Estate @entity {
   id: ID!
   tokenId: BigInt!
   owner: Account!
-  parcels: [Parcel!]
+  parcels: [Parcel!]! @derivedFrom(field: "estate")
   size: Int
   data: Data
   rawData: String

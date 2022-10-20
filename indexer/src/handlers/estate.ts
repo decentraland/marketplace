@@ -25,7 +25,6 @@ export function handleCreateEstate(event: CreateEstate): void {
   estate.tokenId = event.params._estateId
   estate.owner = event.params._owner.toHex()
   estate.rawData = data
-  estate.parcels = []
   estate.size = 0
 
   let estateData = buildData(id, data, DataType.ESTATE)
@@ -58,16 +57,12 @@ export function handleAddLand(event: AddLand): void {
 
   let estate = Estate.load(id)
 
-  let parcels = estate.parcels
-  parcels.push(parcelId)
-
-  estate.parcels = parcels
-  estate.size = parcels.length
+  estate.size += 1
 
   estate.save()
 
   let estateNFT = NFT.load(id)
-  estateNFT.searchEstateSize = parcels.length
+  estateNFT.searchEstateSize = estate.size
   estateNFT.save()
 
   let parcel = Parcel.load(parcelId)
@@ -101,17 +96,12 @@ export function handleRemoveLand(event: RemoveLand): void {
 
   let estate = Estate.load(id)
 
-  let parcels = estate.parcels
-  let index = parcels.indexOf(parcelId)
-  parcels.splice(index, 1)
-
-  estate.parcels = parcels
-  estate.size = parcels.length
+  estate.size -= 1
 
   estate.save()
 
   let estateNFT = NFT.load(id)
-  estateNFT.searchEstateSize = parcels.length
+  estateNFT.searchEstateSize = estate.size
   estateNFT.save()
 
   let parcel = Parcel.load(parcelId)
