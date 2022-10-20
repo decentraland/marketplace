@@ -1,8 +1,8 @@
 export type Props = {
-  isMVMFEnabled: boolean
+  isMVMFTabEnabled: boolean
   contract: string
 }
 
-export type MapStateProps = Pick<Props, 'isMVMFEnabled'>
+export type MapStateProps = Pick<Props, 'isMVMFTabEnabled'>
 export type MapDispatchProps = {}
 export type MapDispatch = {}

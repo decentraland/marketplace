@@ -11,7 +11,7 @@ import { Props } from './MVMFBadge.types'
 
 const MVMFTag = 'MVMF22'
 
-const MVMFBadge = ({ contract, isMVMFEnabled }: Props) => {
+const MVMFBadge = ({ contract, isMVMFTabEnabled }: Props) => {
   const [showBadge, setShowBadge] = useState(false)
   const [contracts, setContracts] = useState<string[]>()
 
@@ -32,14 +32,14 @@ const MVMFBadge = ({ contract, isMVMFEnabled }: Props) => {
       try {
         const addresses = await builderAPI.fetchAddressesByTag([MVMFTag])
         setContracts(addresses)
-        if (isMVMFEnabled && addresses.includes(contract)) {
+        if (isMVMFTabEnabled && addresses.includes(contract)) {
           setShowBadge(true)
         }
       } catch (error) {
         console.error(error)
       }
     })()
-  }, [contract, isMVMFEnabled])
+  }, [contract, isMVMFTabEnabled])
 
   return showBadge ? (
     <IconBadge text={t('global.mvmf_2022')} icon="sparkles" href={href} />
