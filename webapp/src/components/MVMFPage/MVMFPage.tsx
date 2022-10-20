@@ -17,7 +17,13 @@ import './MVMFPage.css'
 const MVMFTag = 'MVMF22'
 
 const MVMFPage = (props: Props) => {
-  const { isFullscreen, section, contracts, onFetchEventContracts } = props
+  const {
+    isFullscreen,
+    section,
+    contracts,
+    onFetchEventContracts,
+    isMVMFTabEnabled
+  } = props
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
   useEffect(() => {
@@ -26,7 +32,7 @@ const MVMFPage = (props: Props) => {
 
   const activeTab = NavigationTab.MVMF
 
-  return (
+  return isMVMFTabEnabled ? (
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={activeTab} isFullscreen={isFullscreen} />
@@ -47,7 +53,7 @@ const MVMFPage = (props: Props) => {
       )}
       <Footer isFullscreen={isFullscreen} />
     </>
-  )
+  ) : null
 }
 
 export default React.memo(MVMFPage)

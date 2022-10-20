@@ -11,7 +11,7 @@ import { Props, NavigationTab } from './Navigation.types'
 import './Navigation.css'
 
 const Navigation = (props: Props) => {
-  const { activeTab, isFullscreen, isMVMFEnabled } = props
+  const { activeTab, isFullscreen, isMVMFTabEnabled } = props
   return (
     <Tabs isFullscreen={isFullscreen}>
       <Tabs.Left>
@@ -20,7 +20,7 @@ const Navigation = (props: Props) => {
             {t('navigation.overview')}
           </Tabs.Tab>
         </Link>
-        {isMVMFEnabled ? (
+        {isMVMFTabEnabled ? (
           <Link
             to={locations.MVMF22({
               section: decentraland.Section.WEARABLES,
