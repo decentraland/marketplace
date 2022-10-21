@@ -136,9 +136,13 @@ export const acceptRentalListingRequest = (
     periodIndexChosen,
     addressOperator
   })
-export const acceptRentalListingSuccess = (nft: NFT) =>
+export const acceptRentalListingSuccess = (
+  rental: RentalListing,
+  periodIndexChosen: number
+) =>
   action(ACCEPT_RENTAL_LISTING_SUCCESS, {
-    nft
+    rental,
+    periodIndexChosen
   })
 export const acceptRentalListingFailure = (error: string) =>
   action(ACCEPT_RENTAL_LISTING_FAILURE, { error })

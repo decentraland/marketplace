@@ -1,0 +1,50 @@
+.build-more {
+  background-image: url('../../../images/rentals/build-more.svg');
+}
+
+.get-creative {
+  background-image: url('../../../images/rentals/get-creative.svg');
+}
+
+.manage-land {
+  background-image: url('../../../images/rentals/manage-land.svg');
+}
+
+.icon {
+  width: 52px;
+  height: 48px;
+  background-color: black;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 5px;
+}
+
+.ctaContainer {
+  display: flex;
+  align-items: center;
+  background-color: rgba(115, 110, 125, 0.24);
+  margin-bottom: 16px;
+  padding: 16px;
+  border-radius: 6px;
+}
+
+.ctaTextContainer {
+  display: flex;
+  flex-direction: column;
+  margin-left: 16px;
+  color: var(--text);
+}
+
+.ctaSubtitle {
+  color: #cfcdd4;
+}
+
+.textContainer {
+  margin-bottom: 32px;
+  padding: 0 64px;
+}
+
+.modal:global(.ui.modal > .content) {
+  margin-top: 4px;
+  margin-bottom: 32px;
+}

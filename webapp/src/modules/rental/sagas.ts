@@ -296,7 +296,7 @@ function* handleAcceptRentalListingRequest(
     )
     yield put(acceptRentalListingTransactionSubmitted(nft, txHash))
     yield call(waitForTx, txHash)
-    yield put(acceptRentalListingSuccess(nft))
+    yield put(acceptRentalListingSuccess(rental, periodIndexChosen))
   } catch (error) {
     yield put(acceptRentalListingFailure((error as Error).message))
   }

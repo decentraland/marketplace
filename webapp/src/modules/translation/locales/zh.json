@@ -717,6 +717,22 @@
       "subtitle_2": "请重新输入价格和获得经营者许可经营土地的地址：",
       "confirm_transaction": "确认您钱包上的交易以继续"
     },
+    "rent_confirmed_step": {
+      "title": "土地租用",
+      "subtitle": "惊人的！您刚刚在 {end_date} 之前租用了这块土地",
+      "action_1": {
+        "title": "使用 场景生成器 发挥创意",
+        "subtitle": "轻松创建更简单的场景。"
+      },
+      "action_2": {
+        "title": "使用我们的 SDK 构建更复杂的场景",
+        "subtitle": "如果您有一些技术背景，这是理想的选择。"
+      },
+      "action_3": {
+        "title": "管理土地",
+        "subtitle": "添加现有场景，或查看权限。"
+      }
+    },
     "authorization_step": {
       "title": "出租",
       "notice_line_one": "在出租您的 {assetType} 之前，您需要批准 {link} 合同，以便它可以操作您的 {assetType}，就像出售您的 {assetType} 时一样。",

@@ -722,6 +722,22 @@
       "subtitle_2": "Please re-enter the price and the address who will have the operator permission to operate the Land:",
       "confirm_transaction": "Confirm the transaction on your wallet to continue"
     },
+    "rent_confirmed_step": {
+      "title": "Land rented",
+      "subtitle": "Awesome! You've just rented this land until {end_date}",
+      "action_1": {
+        "title": "Get creative with the Scene Builder",
+        "subtitle": "Easily create simpler scenes."
+      },
+      "action_2": {
+        "title": "Build more complex scenes with our SDK",
+        "subtitle": "Ideal if you have some technical background."
+      },
+      "action_3": {
+        "title": "Manage Land",
+        "subtitle": "Add an existing scene, or review permissions."
+      }
+    },
     "authorization_step": {
       "title": "List for Rent",
       "notice_line_one": "Before listing your {assetType} for rent you will need to approve the {link} contract so it can operate your {assetType}, exactly like when selling your {assetType}.",

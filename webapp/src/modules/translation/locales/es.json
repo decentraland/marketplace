@@ -715,6 +715,22 @@
       "subtitle_2": "Por favor re-ingrese el precio y la dirección de quien será el operador de la Land:",
       "confirm_transaction": "Confirme la transacción en su billetera para continuar"
     },
+    "rent_confirmed_step": {
+      "title": "Land rentada",
+      "subtitle": "¡Felicitaciones! Has rentado esta Land hasta {end_date}",
+      "action_1": {
+        "title": "Póngase creativo con el Scene Builder",
+        "subtitle": "Escenas simples fáciles de crear."
+      },
+      "action_2": {
+        "title": "Cree escenas más complejas utilizando nuestro SDK",
+        "subtitle": "Ideal si tiene experiencia técnica."
+      },
+      "action_3": {
+        "title": "Administrar Land",
+        "subtitle": "Agregue escenas existentees o revise los permisos."
+      }
+    },
     "authorization_step": {
       "title": "Poner en alquiler",
       "notice_line_one": "Antes de listar tu {assetType} en alquiler necesitas autorizar al contrato de {link} a operar tu {assetType}, de la misma forma que cuando deseas vender tu {assetType}.",
