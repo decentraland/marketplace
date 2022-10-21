@@ -719,7 +719,7 @@
     },
     "rent_confirmed_step": {
       "title": "土地租用",
-      "subtitle": "惊人的！在 {end_date}之前，您在这片土地上获得了运营商特权",
+      "subtitle": "惊人的！您刚刚在 {end_date} 之前租用了这块土地",
       "action_1": {
         "title": "使用 场景生成器 发挥创意",
         "subtitle": "轻松创建更简单的场景。"

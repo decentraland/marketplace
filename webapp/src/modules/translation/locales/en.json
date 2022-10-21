@@ -724,7 +724,7 @@
     },
     "rent_confirmed_step": {
       "title": "Land rented",
-      "subtitle": "Awesome! You gained Operator privileges on this Land until {end_date}",
+      "subtitle": "Awesome! You've just rented this land until {end_date}",
       "action_1": {
         "title": "Get creative with the Scene Builder",
         "subtitle": "Easily create simpler scenes."

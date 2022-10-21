@@ -717,9 +717,9 @@
     },
     "rent_confirmed_step": {
       "title": "Land rentada",
-      "subtitle": "Felicitaciones! Has ganado privilegios de operador sobre esta Land hasta {end_date}",
+      "subtitle": "¡Felicitaciones! Has rentado esta Land hasta {end_date}",
       "action_1": {
-        "title": "Póngase creativo con el  Scene Builder",
+        "title": "Póngase creativo con el Scene Builder",
         "subtitle": "Escenas simples fáciles de crear."
       },
       "action_2": {
