@@ -38,6 +38,7 @@ const ConfirmRentModal = ({
   const pricePerRent = ethers.BigNumber.from(period.pricePerDay)
     .mul(period.maxDays)
     .toString()
+  const pricePerRentInEther = Number(ethers.utils.formatEther(pricePerRent))
   const formattedPricePerRent = formatWeiMANA(pricePerRent)
 
   const handleOperatorToggle = useCallback(() => {
@@ -82,7 +83,7 @@ const ConfirmRentModal = ({
           <ManaField
             network={nft.network}
             label={t('bid_page.price')}
-            placeholder={formattedPricePerRent}
+            placeholder={pricePerRentInEther}
             value={price}
             onChange={(_event, props) => {
               setPrice(props.value)
@@ -148,7 +149,7 @@ const ConfirmRentModal = ({
           <Button
             primary
             disabled={
-              price !== formattedPricePerRent ||
+              Number(price) !== pricePerRentInEther ||
               hasAnInvalidOperator ||
               isLoading
             }
