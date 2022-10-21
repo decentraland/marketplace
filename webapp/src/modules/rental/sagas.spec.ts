@@ -100,7 +100,8 @@ beforeEach(() => {
     expiration: 1234567,
     startedAt: 1234567,
     updatedAt: 1234567,
-    createdAt: 1234567
+    createdAt: 1234567,
+    target: ethers.constants.AddressZero
   }
 })
 
@@ -198,7 +199,8 @@ describe('when handling the request action to upsert a rental listing', () => {
                     '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
                   nonces,
                   periods,
-                  signature
+                  signature,
+                  target: ethers.constants.AddressZero
                 },
                 identity
               ),
@@ -271,7 +273,8 @@ describe('when handling the request action to upsert a rental listing', () => {
                     '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
                   nonces,
                   periods,
-                  signature
+                  signature,
+                  target: ethers.constants.AddressZero
                 },
                 identity
               ),

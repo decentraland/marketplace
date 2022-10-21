@@ -104,7 +104,8 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
       rentalContractAddress: rentalsContract.address,
       nonces,
       periods,
-      signature
+      signature,
+      target: ethers.constants.AddressZero // For now, all rent listing will be "public", for all addresses to use.
     }
 
     const identity: AuthIdentity = yield getIdentity()
