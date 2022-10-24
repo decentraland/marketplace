@@ -63,16 +63,25 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
+  const rentals = getContract({
+    name: getContractNames().RENTALS,
+    network: Network.ETHEREUM
+  })
+
   const authorizationsForSelling = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
-    return contract.category != null
+    return (
+      contract.category != null &&
+      authorization.authorizedAddress !== rentals.address
+    )
   })
 
   const authorizationsForRenting = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
     return (
-      contract.category === NFTCategory.PARCEL ||
-      contract.category === NFTCategory.ESTATE
+      (contract.category === NFTCategory.PARCEL ||
+        contract.category === NFTCategory.ESTATE) &&
+      authorization.authorizedAddress === rentals.address
     )
   })
 
