@@ -168,12 +168,28 @@ function* handleWallet(
     })
 
     if (
-      (contract.category === NFTCategory.WEARABLE ||
-        contract.category === NFTCategory.EMOTE) &&
-      !authorizations.some(
-        authorization => authorization.contractAddress === contract.address
-      )
+      contract.category === NFTCategory.WEARABLE ||
+      contract.category === NFTCategory.EMOTE
     ) {
+      // just add the authorizations for the contracts that are not already in the array
+      if (
+        !authorizations.some(
+          authorization => authorization.contractAddress === contract.address
+        )
+      ) {
+        authorizations.push({
+          address,
+          authorizedAddress: marketplace.address,
+          contractAddress: contract.address,
+          contractName:
+            contract.network === Network.MATIC
+              ? ContractName.ERC721CollectionV2
+              : ContractName.ERC721,
+          chainId: contract.chainId,
+          type: AuthorizationType.APPROVAL
+        })
+      }
+    } else {
       authorizations.push({
         address,
         authorizedAddress: marketplace.address,

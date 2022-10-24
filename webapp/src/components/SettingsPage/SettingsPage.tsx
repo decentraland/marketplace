@@ -65,11 +65,7 @@ const SettingsPage = (props: Props) => {
 
   const authorizationsForSelling = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
-    return (
-      contract.category != null &&
-      contract.category !== NFTCategory.PARCEL &&
-      contract.category !== NFTCategory.ESTATE
-    )
+    return contract.category != null
   })
 
   const authorizationsForRenting = authorizations.filter(authorization => {
