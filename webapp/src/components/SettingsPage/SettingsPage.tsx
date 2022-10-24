@@ -9,6 +9,7 @@ import { Page, Grid, Blockie, Loader, Form } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 
 import { locations } from '../../modules/routing/locations'
+import { Contract } from '../../modules/vendor/services'
 import { shortenAddress } from '../../modules/wallet/utils'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
@@ -63,15 +64,20 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
-  const rentals = getContract({
-    name: getContractNames().RENTALS,
-    network: Network.ETHEREUM
-  })
+  let rentals: Contract | undefined
+
+  try {
+    rentals = getContract({
+      name: getContractNames().RENTALS,
+      network: Network.ETHEREUM
+    })
+  } catch (error) {}
 
   const authorizationsForSelling = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
     return (
       contract.category != null &&
+      rentals &&
       authorization.authorizedAddress !== rentals.address
     )
   })
@@ -81,6 +87,7 @@ const SettingsPage = (props: Props) => {
     return (
       (contract.category === NFTCategory.PARCEL ||
         contract.category === NFTCategory.ESTATE) &&
+      rentals &&
       authorization.authorizedAddress === rentals.address
     )
   })
