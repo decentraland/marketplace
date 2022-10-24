@@ -75,11 +75,10 @@ const SettingsPage = (props: Props) => {
 
   const authorizationsForSelling = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
-    return (
-      contract.category != null &&
-      rentals &&
-      authorization.authorizedAddress !== rentals.address
-    )
+    return rentals
+      ? contract.category !== null &&
+          authorization.authorizedAddress !== rentals.address
+      : contract.category !== null
   })
 
   const authorizationsForRenting = authorizations.filter(authorization => {
