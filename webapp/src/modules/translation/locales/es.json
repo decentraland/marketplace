@@ -839,18 +839,18 @@
     "banners": {
       "big": {
         "event": "Evento",
-        "title": "¡Metaverse Music Festival 2022 ya está aquí!",
-        "subtitle": "Encuentra tus atuendos perfectos para el evento y obtén las poses más divertidas para las fotos.",
-        "cta": "Browse festival collectibles"
+        "title": "¡Metaverse Music Festival 2022 casi está aquí!",
+        "subtitle": "Comience su búsqueda de los Wearables y Emotes perfectos para bailar toda la noche con estilo ahora.",
+        "cta": "Examinar items del festival"
       },
       "medium": {
         "title": "Coleccionables del Metaverse Music Festival 2022",
-        "subtitle": "Categoria es... Cyberpunk conoce a Nature"
+        "subtitle": "Categoria es... Cyberpunk conoce a la naturaleza"
       },
       "small": {
-        "title": "¡Metaverse Music Festival 2022 ya está aquí!",
-        "subtitle": "Encuentra tus atuendos perfectos para el evento y obtén las poses más divertidas para las fotos.",
-        "cta": "Browse festival collectibles"
+        "title": "¡Metaverse Music Festival 2022 casi está aquí!",
+        "subtitle": "Comience su búsqueda de los Wearables y Emotes perfectos para bailar toda la noche con estilo ahora.",
+        "cta": "Examinar items del festival"
       }
     }
   },
