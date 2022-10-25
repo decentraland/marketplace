@@ -775,7 +775,7 @@
     },
     "confirmation_edit_step": {
       "title": "Editar Anuncio",
-      "notice_line_one": "Para poder editar el anuncio, debes:",
+      "notice_line_one": "Para poder editar el anuncio, debes completar las siguientes acciones:",
       "action_one_title": "Remover la información anterior",
       "action_one_subtitle": "Esto es por razones de seguridad.",
       "confirm": "Confirmar Transacción",

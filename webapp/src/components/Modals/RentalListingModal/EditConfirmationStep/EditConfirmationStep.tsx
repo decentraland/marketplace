@@ -119,7 +119,7 @@ const EditConfirmationStep = (props: Props) => {
                 disabled={!isStepOneCompleted}
                 onClick={handlePublishNewInfo}
               >
-                {t('rental_modal.confirmation_edit_step.sign_message')}
+                {t('rental_modal.confirmation_edit_step.action_two_title')}
               </Button>
             </div>
           </div>

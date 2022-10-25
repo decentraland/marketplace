@@ -777,7 +777,7 @@
     },
     "confirmation_edit_step": {
       "title": "编辑列表",
-      "notice_line_one": "为了更新列表，您需要：",
+      "notice_line_one": "要更新列表，请完成以下操作：",
       "action_one_title": "删除以前的信息",
       "action_one_subtitle": "这是出于安全原因。",
       "confirm": "确认交易",
