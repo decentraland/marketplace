@@ -23,6 +23,9 @@ import { getNFT } from '../../modules/nft/utils'
 import { getItem } from '../../modules/item/utils'
 import { getActiveOrder } from '../../modules/order/utils'
 import { Asset, AssetType } from '../../modules/asset/types'
+import { getRentalById } from '../../modules/rental/selectors'
+import { getOpenRentalId } from '../../modules/rental/utils'
+import { FetchOneOptions } from '../../modules/vendor'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -30,8 +33,6 @@ import {
   OwnProps
 } from './AssetProvider.types'
 import AssetProvider from './AssetProvider'
-import { getRentalById } from '../../modules/rental/selectors'
-import { getOpenRentalId } from '../../modules/rental/utils'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   let contractAddress = ownProps.contractAddress
@@ -75,8 +76,11 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onFetchNFT: (contractAddress: string, tokenId: string) =>
-    dispatch(fetchNFTRequest(contractAddress, tokenId)),
+  onFetchNFT: (
+    contractAddress: string,
+    tokenId: string,
+    options?: FetchOneOptions
+  ) => dispatch(fetchNFTRequest(contractAddress, tokenId, options)),
   onFetchItem: (contractAddress: string, tokenId: string) =>
     dispatch(fetchItemRequest(contractAddress, tokenId))
 })

@@ -5,7 +5,7 @@ import { NFT, NFTsFetchParams, NFTsCountParams } from '../../nft/types'
 import { Account } from '../../account/types'
 import { NFTService as NFTServiceInterface } from '../services'
 import { NFTsFetchFilters } from './nft/types'
-import { VendorName } from '../types'
+import { FetchOneOptions, VendorName } from '../types'
 import { nftAPI } from './nft/api'
 import { getERC721ContractData } from './utils'
 
@@ -62,11 +62,12 @@ export class NFTService
 
   async fetchOne(
     contractAddress: string,
-    tokenId: string
+    tokenId: string,
+    options?: FetchOneOptions
   ): Promise<
     readonly [NFT<VendorName.DECENTRALAND>, Order | null, RentalListing | null]
   > {
-    const response = await nftAPI.fetchOne(contractAddress, tokenId)
+    const response = await nftAPI.fetchOne(contractAddress, tokenId, options)
     const nft: NFT = { ...response.nft, vendor: VendorName.DECENTRALAND }
     return [nft, response.order, response.rental]
   }

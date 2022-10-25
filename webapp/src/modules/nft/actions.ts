@@ -1,5 +1,5 @@
 import { action } from 'typesafe-actions'
-import { Order, RentalListing } from '@dcl/schemas'
+import { Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ErrorCode } from 'decentraland-transactions'
 
@@ -7,6 +7,7 @@ import { SortDirection } from '../routing/types'
 import { Account } from '../account/types'
 import { getAssetName } from '../asset/utils'
 import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'
+import { FetchOneOptions } from '../vendor'
 
 // Fetch NFTs
 
@@ -62,8 +63,11 @@ export const FETCH_NFT_REQUEST = '[Request] Fetch NFT'
 export const FETCH_NFT_SUCCESS = '[Success] Fetch NFT'
 export const FETCH_NFT_FAILURE = '[Failure] Fetch NFT'
 
-export const fetchNFTRequest = (contractAddress: string, tokenId: string) =>
-  action(FETCH_NFT_REQUEST, { contractAddress, tokenId })
+export const fetchNFTRequest = (
+  contractAddress: string,
+  tokenId: string,
+  options?: FetchOneOptions
+) => action(FETCH_NFT_REQUEST, { contractAddress, tokenId, options })
 export const fetchNFTSuccess = (
   nft: NFT,
   order: Order | null,
