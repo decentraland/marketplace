@@ -29,7 +29,7 @@
   flex-direction: column;
   background: #242129;
   border-radius: 12px;
-  padding:24px
+  padding: 24px;
 }
 
 .assetDescriptionHeader {
@@ -69,10 +69,18 @@
 }
 
 .transfer:global(.ui.button):hover {
-  color: var(--primary)
+  color: var(--primary);
 }
-
 
 .highlights {
   margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .columnMobile {
+    width: 100%;
+  }
+  .assetDescription {
+    margin-top: 12px;
+  }
 }

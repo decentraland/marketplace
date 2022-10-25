@@ -4,7 +4,9 @@ import {
   Button,
   Footer,
   Loader,
+  Mobile,
   Narrow,
+  NotMobile,
   Page,
   Section
 } from 'decentraland-ui'
@@ -79,62 +81,128 @@ export const ManageAssetPage = (props: Props) => {
                   userAddress === asset?.owner ? (
                     <>
                       <Narrow className={styles.mainRow}>
-                        <Column className={styles.leftMenu}>
-                          {asset && !isLoading ? (
-                            <>
-                              <Map asset={asset} />
-                              <Button
-                                className={styles.builderButton}
-                                primary
-                                onClick={() => handleOpenInBuilder(asset)}
-                              >
-                                {t('manage_asset_page.open_in_builder')}
-                              </Button>
-                              <Highlights
-                                className={styles.highlights}
-                                nft={asset as NFT}
-                              />
-                              <Details
-                                asset={asset as NFT}
-                                className={styles.details}
-                              />
-                            </>
-                          ) : null}
-                        </Column>
-                        <Column className={styles.content}>
-                          {asset && !isLoading ? (
-                            <>
-                              <section className={styles.assetDescription}>
-                                <div className={styles.assetDescriptionHeader}>
-                                  <h1 className={styles.assetDescriptionTitle}>
-                                    {asset?.name}
-                                  </h1>
+                        <NotMobile>
+                          <Column className={styles.leftMenu}>
+                            {asset && !isLoading ? (
+                              <>
+                                <Map asset={asset} />
+                                <Button
+                                  className={styles.builderButton}
+                                  primary
+                                  onClick={() => handleOpenInBuilder(asset)}
+                                >
+                                  {t('manage_asset_page.open_in_builder')}
+                                </Button>
+                                <Highlights
+                                  className={styles.highlights}
+                                  nft={asset as NFT}
+                                />
+                                <Details
+                                  asset={asset as NFT}
+                                  className={styles.details}
+                                />
+                              </>
+                            ) : null}
+                          </Column>
+                          <Column className={styles.content}>
+                            {asset && !isLoading ? (
+                              <>
+                                <section className={styles.assetDescription}>
                                   <div
-                                    className={styles.assetDescriptionOptions}
+                                    className={styles.assetDescriptionHeader}
                                   >
-                                    <Button
-                                      className={styles.transfer}
-                                      as={Link}
-                                      to={locations.transfer(
-                                        asset.contractAddress,
-                                        asset.tokenId
-                                      )}
-                                      fluid
+                                    <h1
+                                      className={styles.assetDescriptionTitle}
                                     >
-                                      {t('manage_asset_page.transfer')}
-                                    </Button>
+                                      {asset?.name}
+                                    </h1>
+                                    <div
+                                      className={styles.assetDescriptionOptions}
+                                    >
+                                      <Button
+                                        className={styles.transfer}
+                                        as={Link}
+                                        to={locations.transfer(
+                                          asset.contractAddress,
+                                          asset.tokenId
+                                        )}
+                                        fluid
+                                      >
+                                        {t('manage_asset_page.transfer')}
+                                      </Button>
+                                    </div>
                                   </div>
-                                </div>
-                                <p className={styles.assetDescriptionContent}>
-                                  {asset?.data.estate?.description ||
-                                    asset?.data.parcel?.description}
-                                </p>
-                              </section>
-                              <Sell nft={asset} order={order} />
-                              <Rent nft={asset} rental={rental} />
-                            </>
-                          ) : null}
-                        </Column>
+                                  <p className={styles.assetDescriptionContent}>
+                                    {asset?.data.estate?.description ||
+                                      asset?.data.parcel?.description}
+                                  </p>
+                                </section>
+                                <Sell nft={asset} order={order} />
+                                <Rent nft={asset} rental={rental} />
+                              </>
+                            ) : null}
+                          </Column>
+                        </NotMobile>
+                        <Mobile>
+                          <Column className={styles.columnMobile}>
+                            {asset && !isLoading ? (
+                              <>
+                                <Map asset={asset} />
+                                <Button
+                                  className={styles.builderButton}
+                                  primary
+                                  onClick={() => handleOpenInBuilder(asset)}
+                                >
+                                  {t('manage_asset_page.open_in_builder')}
+                                </Button>
+                                <Highlights
+                                  className={styles.highlights}
+                                  nft={asset as NFT}
+                                />
+                                <Details
+                                  asset={asset as NFT}
+                                  className={styles.details}
+                                />
+                              </>
+                            ) : null}
+                            {asset && !isLoading ? (
+                              <>
+                                <section className={styles.assetDescription}>
+                                  <div
+                                    className={styles.assetDescriptionHeader}
+                                  >
+                                    <h1
+                                      className={styles.assetDescriptionTitle}
+                                    >
+                                      {asset?.name}
+                                    </h1>
+                                    <div
+                                      className={styles.assetDescriptionOptions}
+                                    >
+                                      <Button
+                                        className={styles.transfer}
+                                        as={Link}
+                                        to={locations.transfer(
+                                          asset.contractAddress,
+                                          asset.tokenId
+                                        )}
+                                        fluid
+                                      >
+                                        {t('manage_asset_page.transfer')}
+                                      </Button>
+                                    </div>
+                                  </div>
+                                  <p className={styles.assetDescriptionContent}>
+                                    {asset?.data.estate?.description ||
+                                      asset?.data.parcel?.description}
+                                  </p>
+                                </section>
+                                <Sell nft={asset} order={order} />
+                                <Rent nft={asset} rental={rental} />
+                              </>
+                            ) : null}
+                          </Column>
+                        </Mobile>
                       </Narrow>
                     </>
                   ) : (

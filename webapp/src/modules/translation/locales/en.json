@@ -370,7 +370,8 @@
       "until": "From {from_date} to {to_date}",
       "not_for_sale": "Not available for Sale",
       "parcel_belongs_to_estate_bid": "It's not possible to bid on a parcel that belongs to an Estate, please consider going into the Estate page.",
-      "parcel_belongs_to_estate_rent": "It's not possible to rent a parcel that belongs to an Estate, please consider going into the Estate page."
+      "parcel_belongs_to_estate_rent": "It's not possible to rent a parcel that belongs to an Estate, please consider going into the Estate page.",
+      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND"
     },
     "description": "Description",
     "owner": "Owner",
@@ -814,7 +815,8 @@
       "claim_land": "Claim land",
       "list_for_rent_again": "List for rent again",
       "claiming_land": "Claiming back your Land. This process can take up to 24hs.",
-      "view_transaction": "View transaction"
+      "view_transaction": "View transaction",
+      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND"
     },
     "highlights": {
       "title": "Highlights",

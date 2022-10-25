@@ -67,3 +67,9 @@
 .listForSale:global(.ui.button):hover {
   color: var(--primary)
 }
+
+@media (max-width: 768px) {
+  .box {
+    margin-top: 12px;
+  }
+}
