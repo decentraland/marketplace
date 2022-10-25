@@ -1,5 +1,5 @@
 import { action } from 'typesafe-actions'
-import { Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import { Order, RentalListing } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ErrorCode } from 'decentraland-transactions'
 
