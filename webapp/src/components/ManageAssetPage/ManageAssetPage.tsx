@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import {
   Back,
   Button,
@@ -12,6 +13,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../modules/asset/types'
 import { builderUrl } from '../../lib/environment'
 import { NFT } from '../../modules/nft/types'
+import { locations } from '../../modules/routing/locations'
 import { Navbar } from '../Navbar'
 import { ErrorBoundary } from '../AssetPage/ErrorBoundary'
 import { AssetProvider } from '../AssetProvider'
@@ -110,7 +112,15 @@ export const ManageAssetPage = (props: Props) => {
                                   <div
                                     className={styles.assetDescriptionOptions}
                                   >
-                                    <Button className={styles.transfer}>
+                                    <Button
+                                      className={styles.transfer}
+                                      as={Link}
+                                      to={locations.transfer(
+                                        asset.contractAddress,
+                                        asset.tokenId
+                                      )}
+                                      fluid
+                                    >
                                       {t('manage_asset_page.transfer')}
                                     </Button>
                                   </div>
@@ -120,7 +130,7 @@ export const ManageAssetPage = (props: Props) => {
                                     asset?.data.parcel?.description}
                                 </p>
                               </section>
-                              <Sell order={order} />
+                              <Sell nft={asset} order={order} />
                               <Rent nft={asset} rental={rental} />
                             </>
                           ) : null}
