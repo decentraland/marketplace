@@ -366,7 +366,8 @@
       "until": "从 {from_date} 到 {to_date}",
       "not_for_sale": "不可出售",
       "parcel_belongs_to_estate_bid": "无法对属于某个庄园的地块进行投标，请考虑进入“庄园”页面。",
-      "parcel_belongs_to_estate_rent": "无法租用属于某个庄园的地块，请考虑进入“庄园”页面。"
+      "parcel_belongs_to_estate_rent": "无法租用属于某个庄园的地块，请考虑进入“庄园”页面。",
+      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。"
     },
     "description": "描述",
     "owner": "持有者",
@@ -809,7 +810,8 @@
       "claim_land": "索取土地",
       "list_for_rent_again": "再次发布出租",
       "claiming_land": "收回你的土地。 此过程最多可能需要 24 小时。",
-      "view_transaction": "查看区块链交易"
+      "view_transaction": "查看区块链交易",
+      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。"
     },
     "highlights": {
       "title": "亮点",

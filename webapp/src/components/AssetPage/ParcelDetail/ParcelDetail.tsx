@@ -8,7 +8,6 @@ import { Coordinate } from '../../Coordinate'
 import { AssetImage } from '../../AssetImage'
 import { Network } from '../Network'
 import { Description } from '../Description'
-import { Owner } from '../Owner'
 import Price from '../Price'
 import Expiration from '../Expiration'
 import { Actions } from '../Actions'
@@ -43,7 +42,6 @@ const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
       left={
         <>
           <Description text={parcel.description} />
-          <Owner asset={nft} />
           <ProximityHighlights nft={nft} />
         </>
       }

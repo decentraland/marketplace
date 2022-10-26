@@ -42,7 +42,7 @@
 .activeRent {
   display: flex;
   flex-direction: column;
-  background-color:  rgba(115, 110, 125, 0.24);
+  background-color: rgba(115, 110, 125, 0.24);
   border-radius: 6px;
   font-weight: 400;
   font-size: 15px;
@@ -67,7 +67,7 @@
   font-weight: 500;
   font-size: 13px;
   text-transform: uppercase;
-  color: #736E7D;
+  color: #736e7d;
   padding-bottom: 4px;
 }
 
@@ -83,7 +83,7 @@
 
 .date {
   margin-top: 5px;
-  color: #736E7D;
+  color: #736e7d;
   font-size: 18px;
 }
 
@@ -95,7 +95,7 @@
 }
 
 .actionButton:global(.ui.button):hover {
-  color: var(--primary)
+  color: var(--primary);
 }
 
 .notShrink {
@@ -115,4 +115,23 @@
   margin-top: 10px;
   display: flex;
   flex-direction: row;
+}
+
+@media (max-width: 768px) {
+  .summary {
+    flex-direction: column;
+    margin-top: 0;
+  }
+  .box {
+    margin-top: 12px;
+  }
+  .content {
+    margin-top: 24px;
+  }
+  .notShrink {
+    margin-bottom: 24px;
+  }
+  .notShrink.priceColumn {
+    margin-bottom: 6px;
+  }
 }

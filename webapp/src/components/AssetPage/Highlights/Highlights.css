@@ -11,10 +11,12 @@
 
 @media (max-width: 768px) {
   .Highlights > .Row {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
   }
 
-  .Highlights .Highlight + .Highlight {
+  .Highlights .Highlight {
     margin-top: 24px;
   }
 }

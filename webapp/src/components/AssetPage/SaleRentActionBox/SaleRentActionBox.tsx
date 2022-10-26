@@ -1,9 +1,10 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import classNames from 'classnames'
+import { Link } from 'react-router-dom'
+import { Button, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
-import { Button, Popup } from 'decentraland-ui'
-import { Link } from 'react-router-dom'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getMaxPriceOfPeriods } from '../../../modules/rental/utils'
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
@@ -34,6 +35,7 @@ const SaleRentActionBox = ({
   isRentalsEnabled,
   onRent
 }: Props) => {
+  const isMobileView = isMobile()
   const rentals = getContract({
     name: getContractNames().RENTALS,
     network: nft.network
@@ -129,17 +131,21 @@ const SaleRentActionBox = ({
           />
           {!isOwner ? (
             <Popup
-              content={t(
-                'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
-              )}
+              content={
+                isMobileView
+                  ? t('asset_page.sales_rent_action_box.mobile_coming_soon')
+                  : t(
+                      'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
+                    )
+              }
               position="top center"
-              on="hover"
-              disabled={!isNFTPartOfAState}
+              on={isMobileView ? 'click' : 'hover'}
+              disabled={!isMobileView && !isNFTPartOfAState}
               trigger={
                 <div className={styles.fullWidth}>
                   <Button
                     primary
-                    disabled={isNFTPartOfAState}
+                    disabled={isMobileView || isNFTPartOfAState}
                     onClick={handleOnRent}
                     className={styles.rent}
                   >

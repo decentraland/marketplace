@@ -1,12 +1,13 @@
 import { useCallback, useMemo } from 'react'
-import { RentalListingPeriod, RentalStatus } from '@dcl/schemas'
-import { Link } from 'react-router-dom'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
-import { Button } from 'decentraland-ui'
 import classNames from 'classnames'
+import { Link } from 'react-router-dom'
 import intlFormat from 'date-fns/intlFormat'
 import formatDistance from 'date-fns/formatDistance'
+import { RentalListingPeriod, RentalStatus } from '@dcl/schemas'
+import { Button, Popup } from 'decentraland-ui'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Profile } from 'decentraland-dapps/dist/containers'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
@@ -56,6 +57,22 @@ export const Rent = (props: Props) => {
     rental,
     nft
   } = props
+  const isMobileView = isMobile()
+
+  const wrapDisabledMobileButton = useCallback(
+    trigger => {
+      return (
+        <Popup
+          content={t('asset_page.sales_rent_action_box.mobile_coming_soon')}
+          position="top left"
+          on="click"
+          disabled={!isMobileView}
+          trigger={trigger}
+        />
+      )
+    },
+    [isMobileView]
+  )
 
   const handleOnCreateOrEdit = useCallback(
     () => onCreateOrEditRent(nft, rental),
@@ -91,15 +108,24 @@ export const Rent = (props: Props) => {
             : t('manage_asset_page.rent.rent_title')}
         </h1>
         <div className={styles.action}>
-          {rental ? (
-            <IconButton iconName="pencil" onClick={handleOnCreateOrEdit} />
-          ) : (
-            <Button
-              className={styles.actionButton}
-              onClick={handleOnCreateOrEdit}
-            >
-              {t('manage_asset_page.rent.list_for_rent')}
-            </Button>
+          {wrapDisabledMobileButton(
+            <div>
+              {rental ? (
+                <IconButton
+                  iconName="pencil"
+                  onClick={handleOnCreateOrEdit}
+                  disabled={isMobileView}
+                />
+              ) : (
+                <Button
+                  className={styles.actionButton}
+                  onClick={handleOnCreateOrEdit}
+                  disabled={isMobileView}
+                >
+                  {t('manage_asset_page.rent.list_for_rent')}
+                </Button>
+              )}
+            </div>
           )}
         </div>
       </div>
@@ -130,18 +156,26 @@ export const Rent = (props: Props) => {
                     />
                   </div>
                   <div className={styles.activeRentActions}>
-                    <Button
-                      className={styles.actionButton}
-                      onClick={onClaimLand}
-                    >
-                      {t('manage_asset_page.rent.claim_land')}
-                    </Button>
-                    <Button
-                      className={styles.actionButton}
-                      onClick={handleListForRentAgain}
-                    >
-                      {t('manage_asset_page.rent.list_for_rent_again')}
-                    </Button>
+                    {wrapDisabledMobileButton(
+                      <div>
+                        <Button
+                          className={styles.actionButton}
+                          onClick={onClaimLand}
+                        >
+                          {t('manage_asset_page.rent.claim_land')}
+                        </Button>
+                      </div>
+                    )}
+                    {wrapDisabledMobileButton(
+                      <div>
+                        <Button
+                          className={styles.actionButton}
+                          onClick={handleListForRentAgain}
+                        >
+                          {t('manage_asset_page.rent.list_for_rent_again')}
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </>
               ) : rentalEndDate && rentalEndDate.getTime() > Date.now() ? (
@@ -164,7 +198,13 @@ export const Rent = (props: Props) => {
           ) : null}
           {!isClaimingLandBack ? (
             <div className={styles.summary}>
-              <div className={classNames(styles.column, styles.notShrink)}>
+              <div
+                className={classNames(
+                  styles.column,
+                  styles.notShrink,
+                  styles.priceColumn
+                )}
+              >
                 <div className={styles.columnHeader}>
                   {t('manage_asset_page.rent.price')}
                 </div>
