@@ -11,6 +11,12 @@
 
 .NFTFilters .topbar .topbar-filter {
   margin-left: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+.NFTFilters .topbar .topbar-filter .topbar-dropdown {
+  margin-left: 20px;
 }
 
 .NFTFilters .topbar > .full-width,
