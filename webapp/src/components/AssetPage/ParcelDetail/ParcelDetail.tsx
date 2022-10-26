@@ -43,7 +43,6 @@ const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
       left={
         <>
           <Description text={parcel.description} />
-          <Owner asset={nft} />
           <ProximityHighlights nft={nft} />
         </>
       }

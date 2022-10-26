@@ -119,3 +119,12 @@
   margin-bottom: 12px;
   width: 320px;
 }
+
+@media (max-width: 768px) {
+  .BaseDetail .info > .left {
+    margin-right: 0;
+  }
+  .BaseDetail .action-box {
+    width: 100%;
+  }
+}
