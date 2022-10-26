@@ -1,17 +1,23 @@
-import React, { useCallback } from 'react'
-import { Button } from 'decentraland-ui'
-import classNames from 'classnames'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import intlFormat from 'date-fns/intlFormat'
-import Mana from '../../Mana/Mana'
+import classNames from 'classnames'
+import { Button } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
+import Mana from '../../Mana/Mana'
 import { IconButton } from '../IconButton'
-import styles from './Sell.module.css'
 import { Props } from './Sell.types'
+import styles from './Sell.module.css'
 
 const Sell = (props: Props) => {
-  const { className, order, onListForSale } = props
-  const handleOnEdit = useCallback(() => undefined, [])
+  const {
+    className,
+    order,
+    nft: { contractAddress, tokenId },
+    onEditOrder
+  } = props
 
   return (
     <section className={classNames(styles.box, className)}>
@@ -23,9 +29,14 @@ const Sell = (props: Props) => {
         </h1>
         <div className={styles.action}>
           {order ? (
-            <IconButton iconName="pencil" onClick={handleOnEdit} />
+            <IconButton iconName="pencil" onClick={onEditOrder} />
           ) : (
-            <Button className={styles.listForSale} onClick={onListForSale}>
+            <Button
+              as={Link}
+              to={locations.sell(contractAddress, tokenId)}
+              primary
+              fluid
+            >
               {t('manage_asset_page.sell.list_for_sale')}
             </Button>
           )}
