@@ -28,7 +28,7 @@ class NFTAPI extends BaseAPI {
     const response: NFTResponse = await this.request('get', '/nfts', {
       contractAddress,
       tokenId,
-      status: options?.status
+      ...options
     })
 
     if (response.data.length === 0) {

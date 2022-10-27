@@ -204,9 +204,12 @@ describe('when handling the fetch NFT request action', () => {
           [call(getContract, { address: contractAddress }), contract],
           [call(VendorFactory.build, contract.vendor), vendor],
           [
-            call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
-              status: undefined
-            }),
+            call(
+              [vendor.nftService, 'fetchOne'],
+              contractAddress,
+              tokenId,
+              undefined
+            ),
             Promise.reject(error)
           ]
         ])

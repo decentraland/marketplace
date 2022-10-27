@@ -95,7 +95,7 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
       [vendor.nftService, 'fetchOne'],
       contractAddress,
       tokenId,
-      { status: options?.status }
+      options
     )
 
     yield put(fetchNFTSuccess(nft as NFT, order, rental))

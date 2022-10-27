@@ -6,8 +6,8 @@ import { ErrorCode } from 'decentraland-transactions'
 import { SortDirection } from '../routing/types'
 import { Account } from '../account/types'
 import { getAssetName } from '../asset/utils'
-import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'
 import { FetchOneOptions } from '../vendor'
+import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'
 
 // Fetch NFTs
 
