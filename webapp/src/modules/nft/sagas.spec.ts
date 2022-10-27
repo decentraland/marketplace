@@ -238,7 +238,7 @@ describe('when handling the fetch NFT request action', () => {
           [call(VendorFactory.build, contract.vendor), vendor],
           [
             call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
-              status: [RentalStatus.EXECUTED]
+              rentalStatus: [RentalStatus.EXECUTED]
             }),
             Promise.resolve([nft, order, rental])
           ]
@@ -246,7 +246,7 @@ describe('when handling the fetch NFT request action', () => {
         .put(fetchNFTSuccess(nft, order, rental))
         .dispatch(
           fetchNFTRequest(contractAddress, tokenId, {
-            status: [RentalStatus.EXECUTED]
+            rentalStatus: [RentalStatus.EXECUTED]
           })
         )
         .run({ silenceTimeout: true })
