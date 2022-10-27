@@ -21,7 +21,7 @@ const AssetProvider = (props: Props) => {
     if (contractAddress && tokenId) {
       switch (type) {
         case AssetType.NFT:
-          onFetchNFT(contractAddress, tokenId, { status: rentalStatus })
+          onFetchNFT(contractAddress, tokenId, { rentalStatus })
           break
         case AssetType.ITEM:
           onFetchItem(contractAddress, tokenId)
