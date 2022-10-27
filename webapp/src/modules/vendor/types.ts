@@ -25,5 +25,5 @@ export enum TransferType {
 }
 
 export type FetchOneOptions = {
-  status?: RentalStatus[]
+  rentalStatus?: RentalStatus[]
 }
