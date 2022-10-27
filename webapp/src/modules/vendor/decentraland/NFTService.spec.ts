@@ -195,13 +195,15 @@ describe("Decentraland's NFTService", () => {
 
       it('should fetch the NFT with the provided address and the token ID', async () => {
         await nftService.fetchOne(nft.contractAddress, nft.id, {
-          status: [RentalStatus.EXECUTED]
+          rentalStatus: [RentalStatus.EXECUTED]
         })
-        expect(
-          api.nftAPI.fetchOne as jest.Mock
-        ).toHaveBeenCalledWith(nft.contractAddress, nft.id, {
-          status: [RentalStatus.EXECUTED]
-        })
+        expect(api.nftAPI.fetchOne as jest.Mock).toHaveBeenCalledWith(
+          nft.contractAddress,
+          nft.id,
+          {
+            rentalStatus: [RentalStatus.EXECUTED]
+          }
+        )
       })
 
       it('should return the NFT with its vendor and the order', () => {
