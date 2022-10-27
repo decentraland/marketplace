@@ -68,8 +68,20 @@
   color: var(--primary)
 }
 
+.sellButton:global(.ui.button) {
+  border: 1px solid var(--gray);
+  padding: 7px 15px;
+  min-width: unset;
+  color: var(--primary);
+}
+
+.sellButton:global(.ui.button):hover {
+  color: var(--primary);
+}
+
 @media (max-width: 768px) {
   .box {
     margin-top: 12px;
   }
 }
+

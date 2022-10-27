@@ -32,9 +32,9 @@ const Sell = (props: Props) => {
             <IconButton iconName="pencil" onClick={onEditOrder} />
           ) : (
             <Button
+              className={styles.sellButton}
               as={Link}
               to={locations.sell(contractAddress, tokenId)}
-              primary
               fluid
             >
               {t('manage_asset_page.sell.list_for_sale')}
