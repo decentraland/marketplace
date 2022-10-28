@@ -15,7 +15,13 @@ import {
   LOCATION_CHANGE,
   replace
 } from 'connected-react-router'
-import { NFTCategory, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
+import {
+  NFTCategory,
+  RentalStatus,
+  Sale,
+  SaleSortBy,
+  SaleType
+} from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
 import {
@@ -362,7 +368,8 @@ function* handleFetchOnRent(address: string, view: View) {
       view,
       vendor: VendorName.DECENTRALAND,
       filters: {
-        isLand: true
+        isLand: true,
+        rentalStatus: [RentalStatus.OPEN, RentalStatus.EXECUTED]
       },
       params: {
         first: MAX_QUERY_SIZE,
