@@ -349,7 +349,7 @@
   },
   "on_rent_list": {
     "listed_for_rent": "Listed for rent",
-    "rented_until": "Rented until {end_date}..."
+    "rented_until": "Rented until {end_date}"
   },
   "collection_list": {
     "search": "Search {count} collections...",
