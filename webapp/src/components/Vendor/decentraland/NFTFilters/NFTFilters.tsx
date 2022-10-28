@@ -292,8 +292,18 @@ const NFTFilters = (props: Props) => {
               minWidth={Responsive.onlyTablet.minWidth}
               className="topbar-filter"
             >
+              {isRentalsEnabled ? (
+                <Dropdown
+                  direction="left"
+                  className="topbar-dropdown"
+                  value={currentLANDStatus}
+                  options={landStatusDropdown}
+                  onChange={handleStatusByDropdownChange}
+                />
+              ) : null}
               <Dropdown
                 direction="left"
+                className="topbar-dropdown"
                 value={sortBy}
                 options={orderByDropdownOptions}
                 onChange={handleOrderByDropdownChange}
