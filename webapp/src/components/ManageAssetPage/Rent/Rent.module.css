@@ -36,7 +36,6 @@
 .summary {
   display: flex;
   flex-direction: row;
-  margin-top: 30px;
 }
 
 .activeRent {

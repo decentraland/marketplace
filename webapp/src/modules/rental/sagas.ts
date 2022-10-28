@@ -1,4 +1,5 @@
 import {
+  NFTCategory,
   PeriodCreation,
   RentalListing,
   RentalListingCreation,
@@ -21,6 +22,7 @@ import { VendorName } from '../vendor'
 import { getIdentity } from '../identity/utils'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
+import { getFingerprint } from '../nft/estate/utils'
 import { CloseModalAction, CLOSE_MODAL } from '../modal/actions'
 import {
   claimLandFailure,
@@ -277,12 +279,17 @@ function* handleAcceptRentalListingRequest(
       signature: rental.signature
     }
 
+    let fingerprint = ethers.utils.randomBytes(32).map(() => 0)
+    if (nft.category === NFTCategory.ESTATE) {
+      fingerprint = yield call(getFingerprint, nft.tokenId)
+    }
+
     const txParams = [
       Object.values(listing),
       addressOperator,
       periodIndexChosen,
       maxDays,
-      ethers.utils.randomBytes(32).map(() => 0)
+      fingerprint
     ]
 
     const txHash: string = yield call(

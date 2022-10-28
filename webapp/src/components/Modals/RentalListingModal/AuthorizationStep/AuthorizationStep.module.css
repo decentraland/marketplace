@@ -13,6 +13,20 @@
   flex-direction: column;
 }
 
+.actions {
+  margin: 24px 64px 35px 64px;
+  flex-direction: column;
+}
+
+.errorMessage {
+  text-align: justify;
+}
+
+.actions:global(.actions > .ui.button:not(.primary)) {
+  margin-top: 12px;
+  margin-left: 0;
+}
+
 .modal:global(.ui.modal > .actions > .ui.button) {
   margin-left: 0px;
 }
