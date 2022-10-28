@@ -120,7 +120,7 @@ const AuthorizationStep = (props: Props) => {
           </ul>
         </div>
       </Modal.Content>
-      <Modal.Actions>
+      <Modal.Actions className={styles.actions}>
         {isConfirmingAuthorization ? (
           <div className={styles.confirmTransaction}>
             <Loader
@@ -148,6 +148,7 @@ const AuthorizationStep = (props: Props) => {
         </Button>
         {showError && (
           <Message
+            className={styles.errorMessage}
             error
             size="tiny"
             visible
