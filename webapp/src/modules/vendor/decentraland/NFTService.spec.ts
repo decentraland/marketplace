@@ -1,4 +1,10 @@
-import { Network, ChainId, Order, RentalListing } from '@dcl/schemas'
+import {
+  Network,
+  ChainId,
+  Order,
+  RentalListing,
+  RentalStatus
+} from '@dcl/schemas'
 import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT, NFTsCountParams, NFTsFetchParams } from '../../nft/types'
@@ -188,10 +194,15 @@ describe("Decentraland's NFTService", () => {
       })
 
       it('should fetch the NFT with the provided address and the token ID', async () => {
-        await nftService.fetchOne(nft.contractAddress, nft.id)
+        await nftService.fetchOne(nft.contractAddress, nft.id, {
+          rentalStatus: [RentalStatus.EXECUTED]
+        })
         expect(api.nftAPI.fetchOne as jest.Mock).toHaveBeenCalledWith(
           nft.contractAddress,
-          nft.id
+          nft.id,
+          {
+            rentalStatus: [RentalStatus.EXECUTED]
+          }
         )
       })
 

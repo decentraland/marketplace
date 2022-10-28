@@ -6,6 +6,7 @@ import {
   Order,
   Rarity,
   RentalListing,
+  RentalStatus,
   WearableCategory
 } from '@dcl/schemas'
 import { WearableGender } from '../../../nft/wearable/types'
@@ -25,6 +26,7 @@ export type NFTsFetchFilters = {
   itemId?: string
   contracts?: string[]
   network?: Network
+  rentalStatus?: RentalStatus | RentalStatus[]
 }
 
 export type NFTResult = {

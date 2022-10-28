@@ -1,10 +1,11 @@
+import { RentalStatus } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFTsFetchParams } from '../../../nft/types'
 import { NFTsFetchFilters, NFTResponse, NFTResult } from './types'
 import { ATLAS_SERVER_URL } from '../land'
 import { Contract } from '../../services'
 import { contracts } from '../../../contract/utils'
-import { VendorName } from '../../types'
+import { FetchOneOptions, VendorName } from '../../types'
 import { getNFTSortBy } from '../../../routing/search'
 import { config } from '../../../../config'
 
@@ -19,10 +20,15 @@ class NFTAPI extends BaseAPI {
     return this.request('get', `/nfts?${queryParams}`)
   }
 
-  async fetchOne(contractAddress: string, tokenId: string): Promise<NFTResult> {
+  async fetchOne(
+    contractAddress: string,
+    tokenId: string,
+    options?: FetchOneOptions
+  ): Promise<NFTResult> {
     const response: NFTResponse = await this.request('get', '/nfts', {
       contractAddress,
-      tokenId
+      tokenId,
+      ...options
     })
 
     if (response.data.length === 0) {
@@ -128,6 +134,13 @@ class NFTAPI extends BaseAPI {
 
       if (filters.emotePlayMode) {
         queryParams.append('emotePlayMode', filters.emotePlayMode)
+      }
+
+      if (filters.rentalStatus) {
+        const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus)
+          ? [filters.rentalStatus]
+          : filters.rentalStatus
+        statuses.forEach(status => queryParams.append('rentalStatus', status))
       }
     }
 

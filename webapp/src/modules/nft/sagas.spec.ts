@@ -2,7 +2,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { throwError } from 'redux-saga-test-plan/providers'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { NFTCategory, Order, RentalListing } from '@dcl/schemas'
+import { NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { VendorFactory, VendorName } from '../vendor'
 import { getWallet } from '../wallet/selectors'
@@ -204,7 +204,12 @@ describe('when handling the fetch NFT request action', () => {
           [call(getContract, { address: contractAddress }), contract],
           [call(VendorFactory.build, contract.vendor), vendor],
           [
-            call([vendor.nftService, 'fetchOne'], contractAddress, tokenId),
+            call(
+              [vendor.nftService, 'fetchOne'],
+              contractAddress,
+              tokenId,
+              undefined
+            ),
             Promise.reject(error)
           ]
         ])
@@ -232,12 +237,18 @@ describe('when handling the fetch NFT request action', () => {
           [call(getContract, { address: contractAddress }), contract],
           [call(VendorFactory.build, contract.vendor), vendor],
           [
-            call([vendor.nftService, 'fetchOne'], contractAddress, tokenId),
+            call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
+              rentalStatus: [RentalStatus.EXECUTED]
+            }),
             Promise.resolve([nft, order, rental])
           ]
         ])
         .put(fetchNFTSuccess(nft, order, rental))
-        .dispatch(fetchNFTRequest(contractAddress, tokenId))
+        .dispatch(
+          fetchNFTRequest(contractAddress, tokenId, {
+            rentalStatus: [RentalStatus.EXECUTED]
+          })
+        )
         .run({ silenceTimeout: true })
     })
   })

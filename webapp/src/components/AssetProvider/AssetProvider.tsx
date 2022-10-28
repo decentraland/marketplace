@@ -13,14 +13,15 @@ const AssetProvider = (props: Props) => {
     onFetchNFT,
     onFetchItem,
     contractAddress,
-    tokenId
+    tokenId,
+    rentalStatus
   } = props
 
   useEffect(() => {
     if (contractAddress && tokenId) {
       switch (type) {
         case AssetType.NFT:
-          onFetchNFT(contractAddress, tokenId)
+          onFetchNFT(contractAddress, tokenId, { rentalStatus })
           break
         case AssetType.ITEM:
           onFetchItem(contractAddress, tokenId)
@@ -29,7 +30,7 @@ const AssetProvider = (props: Props) => {
           throw new Error(`Invalid Asset type ${type}`)
       }
     }
-  }, [contractAddress, tokenId, type, onFetchNFT, onFetchItem])
+  }, [contractAddress, tokenId, type, onFetchNFT, onFetchItem, rentalStatus])
 
   return <>{children(asset, order, rental, isLoading)}</>
 }

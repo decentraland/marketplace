@@ -70,7 +70,7 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
 }
 
 function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
-  const { contractAddress, tokenId } = action.payload
+  const { contractAddress, tokenId, options } = action.payload
 
   try {
     const contract: ReturnType<typeof getContract> = yield call(getContract, {
@@ -94,7 +94,8 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
     ]: AwaitFn<typeof vendor.nftService.fetchOne> = yield call(
       [vendor.nftService, 'fetchOne'],
       contractAddress,
-      tokenId
+      tokenId,
+      options
     )
 
     yield put(fetchNFTSuccess(nft as NFT, order, rental))

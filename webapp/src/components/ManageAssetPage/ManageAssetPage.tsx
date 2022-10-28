@@ -10,7 +10,7 @@ import {
   Page,
   Section
 } from 'decentraland-ui'
-import { NFTCategory } from '@dcl/schemas'
+import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../modules/asset/types'
 import { builderUrl } from '../../lib/environment'
@@ -69,7 +69,10 @@ export const ManageAssetPage = (props: Props) => {
       <Page>
         <ErrorBoundary>
           <Section>
-            <AssetProvider type={AssetType.NFT}>
+            <AssetProvider
+              type={AssetType.NFT}
+              rentalStatus={[RentalStatus.EXECUTED, RentalStatus.OPEN]}
+            >
               {(asset, order, rental, isLoading) => (
                 <>
                   <Back className="back" absolute onClick={onBack} />

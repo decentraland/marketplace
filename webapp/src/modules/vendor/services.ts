@@ -11,7 +11,7 @@ import { NFT, NFTsFetchParams, NFTsCountParams } from '../nft/types'
 import { Account } from '../account/types'
 import { AnalyticsTimeframe, AnalyticsVolumeData } from '../analytics/types'
 import { NFTsFetchFilters } from './nft/types'
-import { VendorName, TransferType } from './types'
+import { VendorName, TransferType, FetchOneOptions } from './types'
 
 export type Contract = Omit<BaseContract, 'category'> & {
   label?: string
@@ -37,7 +37,8 @@ export interface NFTService<V extends VendorName> {
   ) => Promise<number>
   fetchOne: (
     contractAddress: string,
-    tokenId: string
+    tokenId: string,
+    options?: FetchOneOptions
   ) => Promise<readonly [NFT<V>, Order | null, RentalListing | null]>
   transfer: (
     wallet: Wallet | null,
