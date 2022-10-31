@@ -18,7 +18,7 @@
   align-items: center;
 }
 
-:global(.ui.header.dcl.mana) {
+.periodDropdown:global(.ui.header.dcl.mana) {
   font-size: 17px;
 }
 
