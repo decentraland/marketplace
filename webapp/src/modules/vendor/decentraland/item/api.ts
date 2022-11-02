@@ -2,6 +2,7 @@ import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { Item } from '@dcl/schemas'
 import { NFT_SERVER_URL } from '../nft'
 import { ItemFilters, ItemResponse } from './types'
+import { retryParams } from '../utils'
 
 const DEFAULT_TRENDING_PAGE_SIZE = 20
 
@@ -118,4 +119,4 @@ class ItemAPI extends BaseAPI {
   }
 }
 
-export const itemAPI = new ItemAPI(NFT_SERVER_URL)
+export const itemAPI = new ItemAPI(NFT_SERVER_URL, retryParams)

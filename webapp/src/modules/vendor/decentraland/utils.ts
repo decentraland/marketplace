@@ -1,4 +1,5 @@
 import { ChainId, Network } from '@dcl/schemas'
+import { RetryParams } from 'decentraland-dapps/dist/lib/api'
 import {
   ContractData,
   ContractName,
@@ -25,4 +26,9 @@ export function getERC721ContractData(data: {
           address: data.contractAddress
         }
   return contract
+}
+
+export const retryParams : RetryParams = {
+  attempts: 3,
+  delay: 1500
 }

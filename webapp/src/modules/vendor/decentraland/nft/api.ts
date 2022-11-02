@@ -8,6 +8,7 @@ import { contracts } from '../../../contract/utils'
 import { FetchOneOptions, VendorName } from '../../types'
 import { getNFTSortBy } from '../../../routing/search'
 import { config } from '../../../../config'
+import { retryParams } from '../utils'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 
@@ -148,4 +149,4 @@ class NFTAPI extends BaseAPI {
   }
 }
 
-export const nftAPI = new NFTAPI(NFT_SERVER_URL)
+export const nftAPI = new NFTAPI(NFT_SERVER_URL, retryParams)
