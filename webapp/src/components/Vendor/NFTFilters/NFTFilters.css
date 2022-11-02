@@ -80,6 +80,11 @@
   margin-left: 20px;
 }
 
+.NFTFilters .ui.toggle.checkbox {
+  display: flex;
+  align-items: center;
+}
+
 .NFTFilters .ui.toggle.checkbox input.hidden:focus + label,
 .NFTFilters .ui.toggle.checkbox.checked input.hidden + label,
 .NFTFilters .ui.toggle.checkbox input.hidden + label,
