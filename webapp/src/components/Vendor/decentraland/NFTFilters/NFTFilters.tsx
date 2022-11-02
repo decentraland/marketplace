@@ -51,7 +51,6 @@ const NFTFilters = (props: Props) => {
     isRentalsEnabled,
     availableContracts
   } = props
-  console.log('View', view)
   const category = section ? getCategoryFromSection(section) : undefined
 
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
