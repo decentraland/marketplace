@@ -1,8 +1,9 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { Item } from '@dcl/schemas'
 import { NFT_SERVER_URL } from '../nft'
-import { ItemFilters, ItemResponse } from './types'
 import { retryParams } from '../utils'
+import { ItemFilters, ItemResponse } from './types'
+
 
 const DEFAULT_TRENDING_PAGE_SIZE = 20
 
