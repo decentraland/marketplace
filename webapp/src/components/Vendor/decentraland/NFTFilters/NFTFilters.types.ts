@@ -9,11 +9,13 @@ import {
 import { Section } from '../../../../modules/vendor/routing/types'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { AssetType } from '../../../../modules/asset/types'
+import { View } from '../../../../modules/ui/types'
 
 export type Props = {
   assetType: AssetType
   count?: number
   section: Section
+  view?: View
   sortBy?: SortBy
   search: string
   onlyOnSale?: boolean
@@ -34,6 +36,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
+  | 'view'
   | 'assetType'
   | 'count'
   | 'section'

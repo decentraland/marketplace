@@ -7,7 +7,7 @@ import {
   getOnlySmart,
   hasFiltersEnabled
 } from '../../../../modules/routing/selectors'
-import { getCount } from '../../../../modules/ui/browse/selectors'
+import { getCount, getView } from '../../../../modules/ui/browse/selectors'
 import { getIsRentalsEnabled } from '../../../../modules/features/selectors'
 import {
   getSection,
@@ -35,6 +35,7 @@ const mapState = (state: RootState): MapStateProps => ({
   assetType: getAssetType(state),
   count: getCount(state),
   section: getSection(state),
+  view: getView(state),
   sortBy: getSortBy(state),
   search: getSearch(state),
   onlyOnSale: getOnlyOnSale(state),
