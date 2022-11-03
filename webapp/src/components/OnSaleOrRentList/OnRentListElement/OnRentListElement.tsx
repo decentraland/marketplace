@@ -4,6 +4,7 @@ import format from 'date-fns/format'
 import { RentalStatus } from '@dcl/schemas'
 import { Mobile, NotMobile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { locations } from '../../../modules/routing/locations'
 import { Mana } from '../../Mana'
 import { formatWeiMANA } from '../../../lib/mana'
 import { Props } from './OnRentListElement.types'
@@ -19,7 +20,10 @@ const OnRentListElement = ({ nft, rental }: Props) => {
     <>
       <Mobile>
         <div className="mobile-row">
-          <AssetCell asset={nft} />
+          <AssetCell
+            asset={nft}
+            link={locations.manage(nft.contractAddress, nft.tokenId)}
+          />
           <Mana network={nft.network} inline>
             {formatWeiMANA(rental.periods[0].pricePerDay)}
           </Mana>
@@ -28,7 +32,10 @@ const OnRentListElement = ({ nft, rental }: Props) => {
       <NotMobile>
         <Table.Row>
           <Table.Cell>
-            <AssetCell asset={nft} />
+            <AssetCell
+              asset={nft}
+              link={locations.manage(nft.contractAddress, nft.tokenId)}
+            />
           </Table.Cell>
           <Table.Cell>{t(`global.${category}`)}</Table.Cell>
           <Table.Cell>
