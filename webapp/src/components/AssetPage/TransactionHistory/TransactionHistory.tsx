@@ -63,7 +63,7 @@ const TransactionHistory = (props: Props) => {
         .fetch(params)
         .then(response => {
           setSales(response.data)
-          setTotalPages((response.total / ROWS_PER_PAGE) | 0)
+          setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => setIsLoading(false))
         .catch(error => {
