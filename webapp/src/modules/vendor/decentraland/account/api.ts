@@ -1,6 +1,7 @@
 import { Account, AccountFilters } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFT_SERVER_URL } from '../nft'
+import { retryParams } from '../utils'
 import { AccountResponse } from './types'
 
 class AccountAPI extends BaseAPI {
@@ -56,4 +57,4 @@ class AccountAPI extends BaseAPI {
   }
 }
 
-export const accountAPI = new AccountAPI(NFT_SERVER_URL)
+export const accountAPI = new AccountAPI(NFT_SERVER_URL, retryParams)

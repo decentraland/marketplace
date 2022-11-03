@@ -1,6 +1,7 @@
 import { ListingStatus, Order } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFT_SERVER_URL } from '../nft'
+import { retryParams } from '../utils';
 
 class OrderAPI extends BaseAPI {
   async fetchByNFT(
@@ -17,4 +18,4 @@ class OrderAPI extends BaseAPI {
   }
 }
 
-export const orderAPI = new OrderAPI(NFT_SERVER_URL)
+export const orderAPI = new OrderAPI(NFT_SERVER_URL, retryParams)
