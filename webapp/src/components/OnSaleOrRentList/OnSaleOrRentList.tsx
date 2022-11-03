@@ -17,7 +17,6 @@ import styles from './OnSaleOrRentList.module.css'
 
 const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType }: Props) => {
   const showRents = onSaleOrRentType === OnSaleOrRentType.RENT
-  console.log('elements: ', elements)
   const perPage = useRef(12)
   const sortOptions = useRef([
     { value: SortBy.NEWEST, text: t('filters.newest') },
