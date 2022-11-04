@@ -12,6 +12,7 @@ import { getMANAAuthorization } from '../../../lib/authorization'
 import { getContract } from '../../../modules/contract/utils'
 import { locations } from '../../../modules/routing/locations'
 import { isPartOfEstate } from '../../../modules/nft/utils'
+import { AssetType } from '../../../modules/asset/types'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { AuthorizationModal } from '../../AuthorizationModal'
@@ -183,7 +184,17 @@ const SaleRentActionBox = ({
           {!isOwner ? (
             <div className={styles.saleButtons}>
               {order ? (
-                <Button className={styles.buy} primary fluid>
+                <Button
+                  as={Link}
+                  to={locations.buy(
+                    AssetType.NFT,
+                    nft.contractAddress,
+                    nft.tokenId
+                  )}
+                  className={styles.buy}
+                  primary
+                  fluid
+                >
                   {t('asset_page.actions.buy')}
                 </Button>
               ) : null}
@@ -198,6 +209,8 @@ const SaleRentActionBox = ({
                   trigger={
                     <div className={styles.fullWidth}>
                       <Button
+                        as={Link}
+                        to={locations.bid(nft.contractAddress, nft.tokenId)}
                         className={classNames({ [styles.bid]: order })}
                         disabled={isNFTPartOfAState}
                         primary={!order}
