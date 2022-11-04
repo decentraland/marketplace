@@ -135,7 +135,7 @@ const FiltersMenu = (props: Props) => {
 
   return (
     <>
-      <Row>
+      <Row className='filters-container'>
         <SelectFilter
           name={t('nft_filters.collection')}
           value={selectedCollection || ALL_FILTER_OPTION}

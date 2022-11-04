@@ -77,7 +77,6 @@
   margin-top: 0px;
   flex: none;
   width: 50%;
-  margin-left: 20px;
 }
 
 .NFTFilters .ui.toggle.checkbox {
@@ -237,7 +236,6 @@
   border-radius: 6px;
   width: 32px;
   height: 32px;
-  margin-left: 20px;
   margin-top: 27px;
   cursor: pointer;
 }
@@ -264,7 +262,19 @@
   }
 }
 
+@media (max-width: 991px) {
+  .smart-toggle {
+    margin-top: 0px !important;
+  }
+}
+
 /* SelectFields */
 .NFTFilters .dcl.select-field .ui.sub.header {
   font-weight: 600;
+}
+
+.filters-container{
+  display: flex;
+  flex-wrap: wrap !important;
+  gap: 20px;
 }
