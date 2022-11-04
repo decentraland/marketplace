@@ -1,5 +1,10 @@
 import signedFetch from 'decentraland-crypto-fetch'
-import { RentalListing, RentalListingCreation } from '@dcl/schemas'
+import { URLSearchParams } from 'url'
+import {
+  RentalListing,
+  RentalListingCreation,
+  RentalsListingsFilterBy
+} from '@dcl/schemas'
 import { AuthIdentity } from '@dcl/crypto'
 import { config } from '../../../../config'
 
@@ -36,6 +41,38 @@ class RentalsAPI {
     const response = await signedFetch(url, {
       method: 'PATCH'
     })
+
+    if (!response.ok) {
+      throw new Error(
+        'The signature server responded without a 2XX status code.'
+      )
+    }
+
+    try {
+      const json = await response.json()
+      if (json.ok) {
+        return json.data
+      } else {
+        throw new Error(json.message)
+      }
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  }
+
+  getRentalListings = async (
+    params: RentalsListingsFilterBy & { page: number; limit: number }
+  ): Promise<{
+    data: RentalListing[]
+    total: number
+  }> => {
+    const convertedParams = Object.fromEntries(
+      Object.entries(params).map(([key, value]) => [key, value.toString()])
+    )
+    const urlSearchParams = new URLSearchParams(convertedParams)
+    const url =
+      SIGNATURES_SERVER_URL + `/rentals-listings?` + urlSearchParams.toString()
+    const response = await signedFetch(url)
 
     if (!response.ok) {
       throw new Error(

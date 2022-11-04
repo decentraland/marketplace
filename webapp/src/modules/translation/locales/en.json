@@ -410,6 +410,14 @@
     "when": "When",
     "price": "Price"
   },
+  "rentals_history": {
+    "title": "Rental history",
+    "lessor": "Lessor",
+    "tenant": "Tenant",
+    "started_at": "Started at",
+    "days": "",
+    "price_per_day": ""
+  },
   "body_shape": {
     "male": "Male",
     "female": "Female",
