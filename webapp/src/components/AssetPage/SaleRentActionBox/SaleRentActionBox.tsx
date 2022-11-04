@@ -18,6 +18,7 @@ import { AuthorizationModal } from '../../AuthorizationModal'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
+import { AssetType } from '../../../modules/asset/types'
 
 enum View {
   SALE,
@@ -183,7 +184,17 @@ const SaleRentActionBox = ({
           {!isOwner ? (
             <div className={styles.saleButtons}>
               {order ? (
-                <Button className={styles.buy} primary fluid>
+                <Button
+                  as={Link}
+                  to={locations.buy(
+                    AssetType.NFT,
+                    nft.contractAddress,
+                    nft.tokenId
+                  )}
+                  className={styles.buy}
+                  primary
+                  fluid
+                >
                   {t('asset_page.actions.buy')}
                 </Button>
               ) : null}
@@ -198,6 +209,8 @@ const SaleRentActionBox = ({
                   trigger={
                     <div className={styles.fullWidth}>
                       <Button
+                        as={Link}
+                        to={locations.bid(nft.contractAddress, nft.tokenId)}
                         className={classNames({ [styles.bid]: order })}
                         disabled={isNFTPartOfAState}
                         primary={!order}
