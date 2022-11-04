@@ -4,6 +4,7 @@ import {
   AnalyticsVolumeData
 } from '../../../analytics/types'
 import { NFT_SERVER_URL } from '../nft'
+import { retryParams } from '../utils'
 
 class AnalyticsAPI extends BaseAPI {
   fetchVolumeByTimeframe = async (
@@ -12,4 +13,4 @@ class AnalyticsAPI extends BaseAPI {
     this.request('get', `/volume/${timeframe}`)
 }
 
-export const analyticsAPI = new AnalyticsAPI(NFT_SERVER_URL)
+export const analyticsAPI = new AnalyticsAPI(NFT_SERVER_URL, retryParams)

@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect'
-import { Item, Order } from '@dcl/schemas'
+import { Item, Order, RentalListing } from '@dcl/schemas'
 import { getData as getNFTData } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
+import { getData as getRentalData } from '../../rental/selectors'
 import { NFTState } from '../../nft/reducer'
 import { RootState } from '../../reducer'
 import { BrowseUIState } from './reducer'
@@ -10,7 +11,7 @@ import { NFT } from '../../nft/types'
 import { ItemState } from '../../item/reducer'
 import { VendorName } from '../../vendor'
 import { getAddress } from '../../wallet/selectors'
-import { OnSaleElement, OnSaleNFT } from './types'
+import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState) => getState(state).view
@@ -61,6 +62,25 @@ export const getOnSaleNFTs = createSelector<
       }
       return acc
     }, [] as [NFT<VendorName.DECENTRALAND>, Order][])
+    .filter(([nft]) => nft.owner === address)
+)
+
+export const getOnRentNFTs = createSelector<
+  RootState,
+  ReturnType<typeof getAddress>,
+  ReturnType<typeof getNFTData>,
+  ReturnType<typeof getRentalData>,
+  OnRentNFT[]
+>(getAddress, getNFTData, getRentalData, (address, nftsById, rentalsById) =>
+  Object.values(nftsById)
+    .reduce((acc, nft) => {
+      const { openRentalId } = nft
+      const rental = openRentalId ? rentalsById[openRentalId] : undefined
+      if (rental) {
+        acc.push([nft, rental])
+      }
+      return acc
+    }, [] as [NFT<VendorName.DECENTRALAND>, RentalListing][])
     .filter(([nft]) => nft.owner === address)
 )
 

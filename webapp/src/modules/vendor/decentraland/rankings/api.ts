@@ -6,6 +6,7 @@ import {
   RankingEntity,
   RankingsFilters
 } from '../../../analytics/types'
+import { retryParams } from '../utils'
 
 const DEFAULT_REQUEST_SIZE = 5
 
@@ -43,4 +44,4 @@ class RankingsAPI extends BaseAPI {
   }
 }
 
-export const rankingsAPI = new RankingsAPI(NFT_SERVER_URL)
+export const rankingsAPI = new RankingsAPI(NFT_SERVER_URL, retryParams)

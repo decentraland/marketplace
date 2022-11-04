@@ -22,15 +22,17 @@ import { NFTSidebar } from '../../NFTSidebar'
 import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
-import { Props } from './NFTFilters.types'
 import { AssetType } from '../../../../modules/asset/types'
 import { isLandSection } from '../../../../modules/ui/utils'
+import { View } from '../../../../modules/ui/types'
 import { LANDFilters } from '../types'
 import { browseRentedLAND } from '../utils'
+import { Props } from './NFTFilters.types'
 
 const NFTFilters = (props: Props) => {
   const {
     section,
+    view,
     search,
     count,
     onlyOnSale,
@@ -49,7 +51,6 @@ const NFTFilters = (props: Props) => {
     isRentalsEnabled,
     availableContracts
   } = props
-
   const category = section ? getCategoryFromSection(section) : undefined
 
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
@@ -292,7 +293,7 @@ const NFTFilters = (props: Props) => {
               minWidth={Responsive.onlyTablet.minWidth}
               className="topbar-filter"
             >
-              {isRentalsEnabled ? (
+              {isRentalsEnabled && view === View.CURRENT_ACCOUNT ? (
                 <Dropdown
                   direction="left"
                   className="topbar-dropdown"

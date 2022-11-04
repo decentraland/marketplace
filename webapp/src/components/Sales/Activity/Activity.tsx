@@ -12,7 +12,7 @@ import {
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { Link } from 'react-router-dom'
 import { SALES_PER_PAGE } from '../../../modules/routing/utils'
-import AssetCell from '../../OnSaleList/AssetCell'
+import AssetCell from '../../OnSaleOrRentList/AssetCell'
 import { Props } from './Activity.types'
 import { Mana } from '../../Mana'
 import { formatWeiMANA } from '../../../lib/mana'

@@ -14,10 +14,11 @@ import { Column } from '../Layout/Column'
 import { NFTFilters } from '../Vendor/NFTFilters'
 import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './AssetBrowse.types'
+import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
 import { ToggleBox } from './ToggleBox'
 import classNames from 'classnames'
 import { isAccountView, isLandSection } from '../../modules/ui/utils'
-import OnSaleList from '../OnSaleList'
+import OnSaleList from '../OnSaleOrRentList'
 import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
@@ -185,7 +186,10 @@ const AssetBrowse = (props: Props) => {
       right = <CollectionList />
       break
     case DecentralandSection.ON_SALE:
-      right = <OnSaleList />
+      right = <OnSaleList onSaleOrRentType={OnSaleOrRentType.SALE} />
+      break
+    case DecentralandSection.ON_RENT:
+      right = <OnSaleList onSaleOrRentType={OnSaleOrRentType.RENT} />
       break
     case DecentralandSection.SALES:
       right = <Sales />
@@ -232,6 +236,7 @@ const AssetBrowse = (props: Props) => {
     Sections.decentraland.EMOTES,
     Sections.decentraland.ENS,
     Sections.decentraland.ON_SALE,
+    Sections.decentraland.ON_RENT,
     Sections.decentraland.SALES,
     Sections.decentraland.BIDS,
     Sections.decentraland.STORE_SETTINGS

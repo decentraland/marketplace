@@ -1,6 +1,7 @@
 import { Bid, ListingStatus } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFT_SERVER_URL } from '../nft'
+import { retryParams } from '../utils'
 
 class BidAPI extends BaseAPI {
   async fetch(options: Record<string, string>): Promise<Bid[]> {
@@ -35,4 +36,4 @@ class BidAPI extends BaseAPI {
   }
 }
 
-export const bidAPI = new BidAPI(NFT_SERVER_URL)
+export const bidAPI = new BidAPI(NFT_SERVER_URL, retryParams)
