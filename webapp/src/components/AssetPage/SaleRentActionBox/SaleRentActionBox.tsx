@@ -12,13 +12,13 @@ import { getMANAAuthorization } from '../../../lib/authorization'
 import { getContract } from '../../../modules/contract/utils'
 import { locations } from '../../../modules/routing/locations'
 import { isPartOfEstate } from '../../../modules/nft/utils'
+import { AssetType } from '../../../modules/asset/types'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
-import { AssetType } from '../../../modules/asset/types'
 
 enum View {
   SALE,
