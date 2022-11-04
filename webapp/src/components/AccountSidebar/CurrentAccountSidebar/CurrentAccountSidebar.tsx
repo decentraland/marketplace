@@ -18,6 +18,7 @@ const {
   EMOTES,
   ENS,
   ON_SALE,
+  ON_RENT,
   SALES,
   BIDS,
   STORE_SETTINGS
@@ -44,6 +45,12 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
       <MenuItem
         key={ON_SALE}
         value={ON_SALE}
+        currentValue={section}
+        onClick={section => onBrowse(decentraland, section)}
+      />
+      <MenuItem
+        key={ON_RENT}
+        value={ON_RENT}
         currentValue={section}
         onClick={section => onBrowse(decentraland, section)}
       />

@@ -7,7 +7,7 @@ import { AssetImage } from '../../AssetImage'
 import { Props } from './AssetCell.types'
 import styles from './AssetCell.module.css'
 
-const AssetCell = ({ asset }: Props) => {
+const AssetCell = ({ asset, link: linkProp }: Props) => {
   let subtitle: string | undefined
 
   switch (asset.category) {
@@ -21,10 +21,11 @@ const AssetCell = ({ asset }: Props) => {
       subtitle = `${x},${y}`
   }
 
-  const link =
-    'tokenId' in asset
-      ? locations.nft(asset.contractAddress, asset.tokenId)
-      : locations.item(asset.contractAddress, asset.itemId!)
+  const link = linkProp
+    ? linkProp
+    : 'tokenId' in asset
+    ? locations.nft(asset.contractAddress, asset.tokenId)
+    : locations.item(asset.contractAddress, asset.itemId!)
 
   return (
     <Link to={link}>

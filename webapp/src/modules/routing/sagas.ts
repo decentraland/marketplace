@@ -15,7 +15,13 @@ import {
   LOCATION_CHANGE,
   replace
 } from 'connected-react-router'
-import { NFTCategory, Sale, SaleSortBy, SaleType } from '@dcl/schemas'
+import {
+  NFTCategory,
+  RentalStatus,
+  Sale,
+  SaleSortBy,
+  SaleType
+} from '@dcl/schemas'
 import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
 import {
@@ -218,6 +224,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     case Section.ON_SALE:
       yield handleFetchOnSale(address, options.view!)
       break
+    case Section.ON_RENT:
+      yield handleFetchOnRent(address, options.view!)
+      break
     case Section.WEARABLES_TRENDING:
       yield put(fetchTrendingItemsRequest())
       break
@@ -349,6 +358,25 @@ function* handleFetchOnSale(address: string, view: View) {
       view,
       vendor: VendorName.DECENTRALAND,
       params: { first: MAX_QUERY_SIZE, skip: 0, onlyOnSale: true, address }
+    })
+  )
+}
+
+function* handleFetchOnRent(address: string, view: View) {
+  yield put(
+    fetchNFTsRequest({
+      view,
+      vendor: VendorName.DECENTRALAND,
+      filters: {
+        isLand: true,
+        rentalStatus: [RentalStatus.OPEN, RentalStatus.EXECUTED]
+      },
+      params: {
+        first: MAX_QUERY_SIZE,
+        skip: 0,
+        onlyOnRent: true,
+        address
+      }
     })
   )
 }

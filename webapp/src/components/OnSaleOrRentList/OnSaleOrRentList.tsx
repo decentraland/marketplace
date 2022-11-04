@@ -8,13 +8,15 @@ import {
   NotMobile
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Props } from './OnSaleList.types'
-import OnSaleListElement from './OnSaleListElement'
+import { OnSaleOrRentType, Props } from './OnSaleOrRentList.types'
 import { SortBy } from '../../modules/routing/types'
 import { useProcessedElements } from './utils'
-import styles from './OnSaleList.module.css'
+import OnSaleListElement from './OnSaleListElement'
+import OnRentListElement from './OnRentListElement'
+import styles from './OnSaleOrRentList.module.css'
 
-const OnSaleList = ({ elements, isLoading }: Props) => {
+const OnSaleOrRentList = ({ elements, isLoading, onSaleOrRentType }: Props) => {
+  const showRents = onSaleOrRentType === OnSaleOrRentType.RENT
   const perPage = useRef(12)
   const sortOptions = useRef([
     { value: SortBy.NEWEST, text: t('filters.newest') },
@@ -73,22 +75,36 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
                 <Table.Row>
                   <Table.HeaderCell>{t('global.item')}</Table.HeaderCell>
                   <Table.HeaderCell>{t('global.type')}</Table.HeaderCell>
-                  <Table.HeaderCell>{t('global.sale_type')}</Table.HeaderCell>
-                  <Table.HeaderCell>{t('global.sell_price')}</Table.HeaderCell>
+                  <Table.HeaderCell>
+                    {showRents ? t('global.status') : t('global.sale_type')}
+                  </Table.HeaderCell>
+                  <Table.HeaderCell>
+                    {showRents
+                      ? t('global.rent_price')
+                      : t('global.sell_price')}
+                  </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
             </NotMobile>
             <Table.Body>
-              {processedElements.paginated.map(element => (
-                <OnSaleListElement
-                  key={
-                    element.item
-                      ? `i-${element.item.id}`
-                      : `n-${element.nft!.id}`
-                  }
-                  {...element}
-                />
-              ))}
+              {processedElements.paginated.map(element =>
+                showRents && element.nft && element.rental ? (
+                  <OnRentListElement
+                    key={`n-${element.nft.id}`}
+                    nft={element.nft}
+                    rental={element.rental}
+                  />
+                ) : (
+                  <OnSaleListElement
+                    key={
+                      element.item
+                        ? `i-${element.item.id}`
+                        : `n-${element.nft!.id}`
+                    }
+                    {...element}
+                  />
+                )
+              )}
             </Table.Body>
           </Table>
           {processedElements.total === 0 && (
@@ -111,4 +127,4 @@ const OnSaleList = ({ elements, isLoading }: Props) => {
   )
 }
 
-export default React.memo(OnSaleList)
+export default React.memo(OnSaleOrRentList)

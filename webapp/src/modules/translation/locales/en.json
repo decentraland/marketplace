@@ -33,6 +33,7 @@
     "type": "Type",
     "sale_type": "Sale type",
     "sell_price": "Sell price",
+    "rent_price": "Rent price",
     "rent": "Rent",
     "sale": "Sale",
     "no_results": "No results",
@@ -54,7 +55,8 @@
     "days": "days",
     "error": "Error",
     "mvmf_2022": "Metaverse Festival 2022",
-    "period": "Period"
+    "period": "Period",
+    "status": "Status"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -124,6 +126,7 @@
     "makers_place": "MakersPlace",
     "collections": "Collections",
     "on_sale": "On Sale",
+    "on_rent": "On Rent",
     "sales": "Sales",
     "bids": "Bids",
     "store_settings": "Settings"
@@ -343,6 +346,10 @@
   },
   "on_sale_list": {
     "search": "Search {count} items..."
+  },
+  "on_rent_list": {
+    "listed_for_rent": "Listed for rent",
+    "rented_until": "Rented until {end_date}"
   },
   "collection_list": {
     "search": "Search {count} collections...",

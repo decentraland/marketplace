@@ -1,8 +1,10 @@
-import { Item, Order } from '@dcl/schemas'
-import { NFT } from '../../modules/nft/types'
 import { useMemo } from 'react'
+import { Item, Order, RentalListing } from '@dcl/schemas'
+import { NFT } from '../../modules/nft/types'
 import { SortBy } from '../../modules/routing/types'
-import { Props as Element } from './OnSaleListElement/OnSaleListElement.types'
+import { Props as SaleElement } from './OnSaleListElement/OnSaleListElement.types'
+
+type Element = SaleElement & { rental?: RentalListing }
 
 export const useProcessedElements = (
   elems: Element[],
@@ -68,11 +70,14 @@ const getUpdatedAt = (element: Element) =>
   handleElement(
     element,
     item => item.updatedAt,
-    (_nft, order) => order.updatedAt
+    (_nft, orderOrRent) => orderOrRent.updatedAt
   )
 
 const handleElement = <T>(
-  { item, nft, order }: Element,
+  element: Element,
   handleItem: (item: Item) => T,
-  handleNFT: (nft: NFT, order: Order) => T
-) => (item ? handleItem(item) : handleNFT(nft!, order!))
+  handleNFT: (nft: NFT, orderOrRental: Order | RentalListing) => T
+) =>
+  element.item
+    ? handleItem(element.item)
+    : handleNFT(element.nft!, element.order ? element.order : element.rental!)
