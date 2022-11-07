@@ -3,14 +3,14 @@ import { Badge } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetImage } from '../../AssetImage'
 import { Network } from '../Network'
-import { Props } from './ENSDetail.types'
 import { Owner } from '../Owner'
 import Price from '../Price'
 import Expiration from '../Expiration'
 import { Actions } from '../Actions'
 import { BidList } from '../BidList'
 import BaseDetail from '../BaseDetail'
-import { TransactionHistory } from '../AssetHistory'
+import { TransactionHistory } from '../TransactionHistory'
+import { Props } from './ENSDetail.types'
 
 const ENSDetail = ({ nft }: Props) => (
   <BaseDetail

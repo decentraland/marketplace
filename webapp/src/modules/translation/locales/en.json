@@ -425,7 +425,7 @@
     "days": "Days",
     "price_per_day": "Price",
     "selected_days": "{days} days",
-    "mobile_price": "{days} days at {pricePerDay}"
+    "mobile_price": "{days} days at {pricePerDay} / day"
   },
   "body_shape": {
     "male": "Male",

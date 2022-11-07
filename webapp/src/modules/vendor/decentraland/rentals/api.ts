@@ -74,11 +74,6 @@ class RentalsAPI {
         if (Array.isArray(params[parameterName])) {
           ;(params[parameterName] as ValueOf<typeof params>[]).forEach(
             parameterValue => {
-              console.log(
-                'Appending each array value',
-                parameterName,
-                parameterValue
-              )
               urlSearchParams.append(
                 parameterName,
                 (parameterValue ?? '').toString()
@@ -93,7 +88,6 @@ class RentalsAPI {
         }
       }
     )
-    console.log(urlSearchParams, urlSearchParams.toString())
     const url =
       SIGNATURES_SERVER_URL + `/rentals-listings?` + urlSearchParams.toString()
     const response = await signedFetch(url)

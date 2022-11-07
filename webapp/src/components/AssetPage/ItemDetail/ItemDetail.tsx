@@ -20,7 +20,7 @@ import Price from '../Price'
 import BaseDetail from '../BaseDetail'
 import MVMFBadge from '../MVMFBadge'
 import IconBadge from '../IconBadge'
-import { TransactionHistory } from '../AssetHistory'
+import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 

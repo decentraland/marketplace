@@ -18,7 +18,7 @@ import { Description } from '../Description'
 import IconBadge from '../IconBadge'
 import MVMFBadge from '../MVMFBadge'
 import BaseDetail from '../BaseDetail'
-import { TransactionHistory } from '../AssetHistory'
+import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './EmoteDetail.types'
 import styles from './EmoteDetail.module.css'
 

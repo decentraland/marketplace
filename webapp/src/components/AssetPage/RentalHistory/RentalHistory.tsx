@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
-import { RentalListing } from '@dcl/schemas'
+import { RentalListing, RentalStatus } from '@dcl/schemas'
 import {
   Header,
   Table,
@@ -20,7 +20,7 @@ import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { Mana } from '../../Mana'
 import { Props } from './RentalHistory.types'
-import styles from './RentalsHistory.module.css'
+import styles from './RentalHistory.module.css'
 
 const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000
@@ -53,22 +53,26 @@ const RentalHistory = (props: Props) => {
   // We're doing this outside of redux to avoid having to store all orders when we only care about the last open one
   useEffect(() => {
     if (asset) {
-      setIsLoading(true)
-      let params = {
-        contractAddresses: [asset.contractAddress],
-        tokenId: asset.tokenId,
-        limit: ROWS_PER_PAGE,
-        page: (page - 1) * ROWS_PER_PAGE
-      }
       rentalsAPI
-        .getRentalListings(params)
+        .getRentalListings({
+          contractAddresses: [asset.contractAddress],
+          tokenId: asset.tokenId,
+          status: [
+            RentalStatus.EXECUTED,
+            RentalStatus.CLAIMED,
+            RentalStatus.CANCELLED
+          ],
+          limit: ROWS_PER_PAGE,
+          page: (page - 1) * ROWS_PER_PAGE
+        })
         .then(response => {
           setRentals(
+            // TODO: Fix type
             response.results as Array<
               RentalListing & { selected_days: number; selected_period: number }
             >
           )
-          setTotalPages((response.total / ROWS_PER_PAGE) | 0)
+          setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => setIsLoading(false))
         .catch(error => {
@@ -110,27 +114,27 @@ const RentalHistory = (props: Props) => {
                   <Table.Row key={rental.id}>
                     <Table.Cell>
                       <Link to={locations.account(rental.lessor!)}>
-                        <Profile address={rental.lessor!} />
+                        <Profile address={rental.lessor ?? '0x0'} />
                       </Link>
                     </Table.Cell>
                     <Table.Cell>
                       <Link to={locations.account(rental.tenant!)}>
-                        <Profile address={rental.tenant!} />
+                        <Profile address={rental.tenant ?? '0x1'} />
                       </Link>
                     </Table.Cell>
                     <Table.Cell title={formatDateTitle(rental.startedAt!)}>
-                      {formatEventDate(rental.startedAt!)}
+                      {formatEventDate(rental.startedAt ?? 0)}
                     </Table.Cell>
                     <Table.Cell>
-                      {t(
-                        'rental_history.selected_days',
-                        rental.selected_days ?? 0
-                      )}
+                      {t('rental_history.selected_days', {
+                        days: rental.selected_days ?? 0
+                      })}
                     </Table.Cell>
                     <Table.Cell>
                       <Mana network={network} inline>
                         {formatWeiMANA(
-                          rental.periods[rental.selected_period].pricePerDay
+                          rental.periods[rental.selected_period ?? 0]
+                            .pricePerDay
                         )}
                       </Mana>
                     </Table.Cell>
