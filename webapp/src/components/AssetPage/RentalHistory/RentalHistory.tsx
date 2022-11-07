@@ -58,11 +58,7 @@ const RentalHistory = (props: Props) => {
         .getRentalListings({
           contractAddresses: [asset.contractAddress],
           tokenId: asset.tokenId,
-          status: [
-            RentalStatus.EXECUTED,
-            RentalStatus.CLAIMED,
-            RentalStatus.CANCELLED
-          ],
+          status: [RentalStatus.EXECUTED, RentalStatus.CLAIMED],
           limit: ROWS_PER_PAGE,
           page: (page - 1) * ROWS_PER_PAGE
         })
