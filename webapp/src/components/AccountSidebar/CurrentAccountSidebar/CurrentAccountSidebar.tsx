@@ -24,7 +24,11 @@ const {
   STORE_SETTINGS
 } = Sections.decentraland
 
-const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
+const CurrentAccountSidebar = ({
+  section,
+  onBrowse,
+  isRentalsEnabled
+}: Props) => (
   <>
     <Menu>
       <Header sub>{t('account_sidebar.assets')}</Header>
@@ -48,12 +52,14 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
         currentValue={section}
         onClick={section => onBrowse(decentraland, section)}
       />
-      <MenuItem
-        key={ON_RENT}
-        value={ON_RENT}
-        currentValue={section}
-        onClick={section => onBrowse(decentraland, section)}
-      />
+      {isRentalsEnabled ? (
+        <MenuItem
+          key={ON_RENT}
+          value={ON_RENT}
+          currentValue={section}
+          onClick={section => onBrowse(decentraland, section)}
+        />
+      ) : null}
       <MenuItem
         key={SALES}
         value={SALES}
