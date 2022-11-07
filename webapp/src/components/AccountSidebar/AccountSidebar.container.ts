@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { RootState } from '../../modules/reducer'
 import { browse } from '../../modules/routing/actions'
 import { getSection } from '../../modules/routing/selectors'
+import { getIsRentalsEnabled } from '../../modules/features/selectors'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -11,7 +12,8 @@ import {
 import AccountSidebar from './AccountSidebar'
 
 const mapState = (state: RootState): MapStateProps => ({
-  section: getSection(state)
+  section: getSection(state),
+  isRentalsEnabled: getIsRentalsEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
