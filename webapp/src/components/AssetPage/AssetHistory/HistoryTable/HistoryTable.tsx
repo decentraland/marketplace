@@ -10,8 +10,9 @@ import {
   Row
 } from 'decentraland-ui'
 
-import { IdentifiableObject, Props } from './HistoryTable.types'
+import { Props } from './HistoryTable.types'
 import styles from './HistoryTable.module.css'
+import { RentalListing, Sale } from '@dcl/schemas'
 
 const ROWS_PER_PAGE = 12
 
@@ -25,7 +26,9 @@ const HistoryTable = (props: Props) => {
     getHistoryItemMobileColumns
   } = props
 
-  const [historyItems, setHistoryItems] = useState([] as IdentifiableObject[])
+  const [historyItems, setHistoryItems] = useState(
+    [] as (Sale | RentalListing)[]
+  )
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
@@ -61,8 +64,8 @@ const HistoryTable = (props: Props) => {
             <Table basic="very">
               <Table.Header>
                 <Table.Row>
-                  {historyItemsHeaders.map(historyItemsHeader => (
-                    <Table.HeaderCell {...historyItemsHeader.props}>
+                  {historyItemsHeaders.map((historyItemsHeader, index) => (
+                    <Table.HeaderCell key={index} {...historyItemsHeader.props}>
                       {historyItemsHeader.content}
                     </Table.HeaderCell>
                   ))}
@@ -73,11 +76,13 @@ const HistoryTable = (props: Props) => {
               >
                 {historyItems.map(historyItem => (
                   <Table.Row key={historyItem.id}>
-                    {getHistoryItemDesktopColumns(historyItem).map(column => (
-                      <Table.Cell {...column.props}>
-                        {column.content}
-                      </Table.Cell>
-                    ))}
+                    {getHistoryItemDesktopColumns(historyItem).map(
+                      (column, index) => (
+                        <Table.Cell key={index} {...column.props}>
+                          {column.content}
+                        </Table.Cell>
+                      )
+                    )}
                   </Table.Row>
                 ))}
                 {isLoading ? <Loader active /> : null}
@@ -85,7 +90,6 @@ const HistoryTable = (props: Props) => {
             </Table>
           </NotMobile>
           <Mobile>
-            <Header sub>{title}</Header>
             <div className={styles.mobileHistoryTable}>
               {mobileRows.map(historyItem => (
                 <div

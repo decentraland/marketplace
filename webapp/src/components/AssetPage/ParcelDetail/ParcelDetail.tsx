@@ -13,8 +13,7 @@ import Expiration from '../Expiration'
 import { Actions } from '../Actions'
 import { BidList } from '../BidList'
 import { JumpIn } from '../JumpIn'
-// import { TransactionHistory } from '../TransactionHistory'
-import { TransactionHistory } from '../AssetHistory/TransactionHistory'
+import { TransactionHistory, RentalHistory } from '../AssetHistory'
 import { ProximityHighlights } from '../ProximityHighlights'
 import BaseDetail from '../BaseDetail'
 import { SaleRentActionBox } from '../SaleRentActionBox'
@@ -87,6 +86,7 @@ const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
         <>
           <BidList nft={nft} />
           <TransactionHistory asset={nft} />
+          <RentalHistory asset={nft} />
         </>
       }
     />

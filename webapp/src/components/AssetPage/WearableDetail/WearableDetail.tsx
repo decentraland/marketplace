@@ -19,7 +19,7 @@ import BaseDetail from '../BaseDetail'
 import { Actions } from '../Actions'
 import { BidList } from '../BidList'
 import MVMFBadge from '../MVMFBadge'
-import { TransactionHistory } from '../TransactionHistory'
+import { TransactionHistory } from '../AssetHistory'
 import { AssetImage } from '../../AssetImage'
 import { Section } from '../../../modules/vendor/decentraland'
 

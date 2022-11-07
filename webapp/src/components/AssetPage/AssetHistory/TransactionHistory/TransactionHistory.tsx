@@ -12,12 +12,12 @@ import { HistoryTable } from '../HistoryTable'
 import { formatDateTitle, formatEventDate } from '../utils'
 import { Props } from './TransactionHistory.types'
 
-const RentalsHistory = (props: Props) => {
+const TransactionHistory = (props: Props) => {
   const { asset } = props
   const network = asset ? asset.network : undefined
 
   const loadHistoryItems = useCallback(
-    (limit: number, page: number) =>
+    (page: number, limit: number) =>
       saleAPI.fetch({
         contractAddress: asset.contractAddress,
         first: limit,
@@ -78,7 +78,7 @@ const RentalsHistory = (props: Props) => {
     <HistoryTable
       title={t('transaction_history.title')}
       asset={asset}
-      loadHistoryItems={loadHistoryItems as any}
+      loadHistoryItems={loadHistoryItems}
       historyItemsHeaders={[
         { content: t('transaction_history.from') },
         { content: t('transaction_history.to') },
@@ -86,10 +86,10 @@ const RentalsHistory = (props: Props) => {
         { content: t('transaction_history.when') },
         { content: t('transaction_history.price') }
       ]}
-      getHistoryItemDesktopColumns={getHistoryItemDesktopColumns as any}
-      getHistoryItemMobileColumns={getHistoryItemMobileColumns as any}
+      getHistoryItemDesktopColumns={getHistoryItemDesktopColumns}
+      getHistoryItemMobileColumns={getHistoryItemMobileColumns}
     />
   )
 }
 
-export default React.memo(RentalsHistory)
+export default React.memo(TransactionHistory)

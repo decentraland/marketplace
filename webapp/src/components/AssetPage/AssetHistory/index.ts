@@ -1,2 +1,2 @@
-export * from './RentalsHistory'
+export * from './RentalHistory'
 export * from './TransactionHistory'

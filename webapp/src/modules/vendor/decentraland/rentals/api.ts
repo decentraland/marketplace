@@ -9,6 +9,8 @@ import { AuthIdentity } from '@dcl/crypto'
 import { config } from '../../../../config'
 
 export const SIGNATURES_SERVER_URL = config.get('SIGNATURES_SERVER_URL')!
+const UrlSearchParams = URLSearchParams ?? window.URLSearchParams
+type ValueOf<T> = T[keyof T]
 
 class RentalsAPI {
   createRentalListing = async (
@@ -63,13 +65,35 @@ class RentalsAPI {
   getRentalListings = async (
     params: RentalsListingsFilterBy & { page: number; limit: number }
   ): Promise<{
-    data: RentalListing[]
+    results: RentalListing[]
     total: number
   }> => {
-    const convertedParams = Object.fromEntries(
-      Object.entries(params).map(([key, value]) => [key, value.toString()])
+    const urlSearchParams = new UrlSearchParams()
+    ;(Object.keys(params) as Array<keyof typeof params>).forEach(
+      parameterName => {
+        if (Array.isArray(params[parameterName])) {
+          ;(params[parameterName] as ValueOf<typeof params>[]).forEach(
+            parameterValue => {
+              console.log(
+                'Appending each array value',
+                parameterName,
+                parameterValue
+              )
+              urlSearchParams.append(
+                parameterName,
+                (parameterValue ?? '').toString()
+              )
+            }
+          )
+        } else {
+          urlSearchParams.append(
+            parameterName,
+            (params[parameterName] ?? '').toString()
+          )
+        }
+      }
     )
-    const urlSearchParams = new URLSearchParams(convertedParams)
+    console.log(urlSearchParams, urlSearchParams.toString())
     const url =
       SIGNATURES_SERVER_URL + `/rentals-listings?` + urlSearchParams.toString()
     const response = await signedFetch(url)

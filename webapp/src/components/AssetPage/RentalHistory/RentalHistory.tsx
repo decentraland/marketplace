@@ -19,7 +19,7 @@ import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { Mana } from '../../Mana'
-import { Props } from './RentalsHistory.types'
+import { Props } from './RentalHistory.types'
 import styles from './RentalsHistory.module.css'
 
 const INPUT_FORMAT = 'PPP'
@@ -37,10 +37,15 @@ const formatDateTitle = (updatedAt: number) => {
   return new Date(updatedAt).toLocaleString()
 }
 
-const RentalsHistory = (props: Props) => {
+const RentalHistory = (props: Props) => {
   const { asset } = props
 
-  const [rentals, setRentals] = useState([] as RentalListing[])
+  // TODO: Fix type
+  const [rentals, setRentals] = useState(
+    [] as Array<
+      RentalListing & { selected_days: number; selected_period: number }
+    >
+  )
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
@@ -58,7 +63,11 @@ const RentalsHistory = (props: Props) => {
       rentalsAPI
         .getRentalListings(params)
         .then(response => {
-          setRentals(response.data)
+          setRentals(
+            response.results as Array<
+              RentalListing & { selected_days: number; selected_period: number }
+            >
+          )
           setTotalPages((response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => setIsLoading(false))
@@ -96,83 +105,67 @@ const RentalsHistory = (props: Props) => {
                   </Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
-
               <Table.Body className={isLoading ? 'is-loading' : ''}>
-                {rentals
-                  // TODO: Remove map
-                  .map(rental => ({
-                    ...rental,
-                    selected_days: 30,
-                    selected_period: 0
-                  }))
-                  .map(rental => (
-                    <Table.Row key={rental.id}>
-                      <Table.Cell>
-                        <Link to={locations.account(rental.lessor!)}>
-                          <Profile address={rental.lessor!} />
-                        </Link>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Link to={locations.account(rental.tenant!)}>
-                          <Profile address={rental.tenant!} />
-                        </Link>
-                      </Table.Cell>
-                      <Table.Cell title={formatDateTitle(rental.startedAt!)}>
-                        {formatEventDate(rental.startedAt!)}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {t(
-                          'rental_history.selected_days',
-                          rental.selected_days
+                {rentals.map(rental => (
+                  <Table.Row key={rental.id}>
+                    <Table.Cell>
+                      <Link to={locations.account(rental.lessor!)}>
+                        <Profile address={rental.lessor!} />
+                      </Link>
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Link to={locations.account(rental.tenant!)}>
+                        <Profile address={rental.tenant!} />
+                      </Link>
+                    </Table.Cell>
+                    <Table.Cell title={formatDateTitle(rental.startedAt!)}>
+                      {formatEventDate(rental.startedAt!)}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {t(
+                        'rental_history.selected_days',
+                        rental.selected_days ?? 0
+                      )}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <Mana network={network} inline>
+                        {formatWeiMANA(
+                          rental.periods[rental.selected_period].pricePerDay
                         )}
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Mana network={network} inline>
-                          {formatWeiMANA(
-                            rental.periods[rental.selected_period].pricePerDay
-                          )}
-                        </Mana>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))}
+                      </Mana>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
                 {isLoading ? <Loader active /> : null}
               </Table.Body>
             </Table>
           </NotMobile>
           <Mobile>
             <div className={styles.mobileRentalsHistory}>
-              {rentals
-                // TODO: Remove map
-                .map(rental => ({
-                  ...rental,
-                  selected_days: 30,
-                  selected_period: 0
-                }))
-                .map(rental => (
-                  <div
-                    className={styles.mobileRentalsHistoryRow}
-                    key={rental.id}
-                  >
-                    <div>
-                      <T
-                        id="rental_history.mobile_price"
-                        values={{
-                          pricePerDay: (
-                            <Mana network={network} inline>
-                              {formatWeiMANA(
-                                rental.periods[rental.selected_period]
-                                  .pricePerDay
-                              )}
-                            </Mana>
-                          )
-                        }}
-                      ></T>
-                    </div>
-                    <div className={styles.mobileRentalsHistoryRowStartedAt}>
-                      {formatEventDate(rental.startedAt!)}
-                    </div>
+              {rentals.map(rental => (
+                <div className={styles.mobileRentalsHistoryRow} key={rental.id}>
+                  <div>
+                    <T
+                      id="rental_history.mobile_price"
+                      values={{
+                        days:
+                          rental.periods[rental.selected_period ?? 0].maxDays,
+                        pricePerDay: (
+                          <Mana network={network} inline>
+                            {formatWeiMANA(
+                              rental.periods[rental.selected_period ?? 0]
+                                .pricePerDay
+                            )}
+                          </Mana>
+                        )
+                      }}
+                    ></T>
                   </div>
-                ))}
+                  <div className={styles.mobileRentalsHistoryRowStartedAt}>
+                    {formatEventDate(rental.startedAt!)}
+                  </div>
+                </div>
+              ))}
             </div>
           </Mobile>
           {totalPages > 1 ? (
@@ -192,4 +185,4 @@ const RentalsHistory = (props: Props) => {
   )
 }
 
-export default React.memo(RentalsHistory)
+export default React.memo(RentalHistory)

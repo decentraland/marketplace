@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import React, { useCallback } from 'react'
-import { RentalListing } from '@dcl/schemas'
+import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 
@@ -10,20 +10,27 @@ import { formatWeiMANA } from '../../../../lib/mana'
 import { Mana } from '../../../Mana'
 import { HistoryTable } from '../HistoryTable'
 import { formatDateTitle, formatEventDate } from '../utils'
-import { Props } from './RentalsHistory.types'
+import { Props } from './RentalHistory.types'
 
 const RentalsHistory = (props: Props) => {
   const { asset } = props
   const network = asset ? asset.network : undefined
 
   const loadHistoryItems = useCallback(
-    (limit: number, page: number) =>
-      rentalsAPI.getRentalListings({
+    async (page: number, limit: number) => {
+      const request = await rentalsAPI.getRentalListings({
         contractAddresses: [asset.contractAddress],
         tokenId: asset.tokenId,
+        status: [RentalStatus.EXECUTED, RentalStatus.CLAIMED],
         limit,
         page
-      }),
+      })
+
+      return {
+        total: request.total,
+        data: request.results
+      }
+    },
     [asset.contractAddress, asset.tokenId]
   )
 
@@ -51,7 +58,9 @@ const RentalsHistory = (props: Props) => {
         props: { title: formatDateTitle(rental.startedAt!) }
       },
       {
-        content: t('rental_history.selected_days', rental.selected_days ?? 0)
+        content: t('rental_history.selected_days', {
+          days: rental.selected_days ?? 0
+        })
       },
       {
         content: (
@@ -75,6 +84,7 @@ const RentalsHistory = (props: Props) => {
         <T
           id="rental_history.mobile_price"
           values={{
+            days: rental.periods[rental.selected_period ?? 0].maxDays,
             pricePerDay: (
               <Mana network={network} inline>
                 {formatWeiMANA(
@@ -95,7 +105,7 @@ const RentalsHistory = (props: Props) => {
     <HistoryTable
       title={t('rental_history.title')}
       asset={asset}
-      loadHistoryItems={loadHistoryItems as any}
+      loadHistoryItems={loadHistoryItems}
       historyItemsHeaders={[
         { content: t('rental_history.lessor') },
         { content: t('rental_history.tenant') },

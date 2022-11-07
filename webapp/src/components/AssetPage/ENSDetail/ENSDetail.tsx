@@ -1,6 +1,7 @@
 import React from 'react'
 import { Badge } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { AssetImage } from '../../AssetImage'
 import { Network } from '../Network'
 import { Props } from './ENSDetail.types'
 import { Owner } from '../Owner'
@@ -8,9 +9,8 @@ import Price from '../Price'
 import Expiration from '../Expiration'
 import { Actions } from '../Actions'
 import { BidList } from '../BidList'
-import { TransactionHistory } from '../TransactionHistory'
 import BaseDetail from '../BaseDetail'
-import { AssetImage } from '../../AssetImage'
+import { TransactionHistory } from '../AssetHistory'
 
 const ENSDetail = ({ nft }: Props) => (
   <BaseDetail
