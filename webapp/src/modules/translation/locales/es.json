@@ -412,6 +412,15 @@
     "when": "Fecha",
     "price": "Precio"
   },
+  "rental_history": {
+    "title": "Últimas rentas",
+    "lessor": "Locador",
+    "tenant": "Locatario",
+    "started_at": "Comenzó en",
+    "price_per_day": "Precio",
+    "selected_days": "{days} días",
+    "mobile_price": "{days} días por {pricePerDay} / día"
+  },
   "body_shape": {
     "male": "Hombre",
     "female": "Mujer",

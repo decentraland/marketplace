@@ -418,11 +418,10 @@
     "price": "Price"
   },
   "rental_history": {
-    "title": "Rental history",
+    "title": "Latest rentals",
     "lessor": "Lessor",
     "tenant": "Tenant",
     "started_at": "Started at",
-    "days": "Days",
     "price_per_day": "Price",
     "selected_days": "{days} days",
     "mobile_price": "{days} days at {pricePerDay} / day"

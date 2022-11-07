@@ -413,6 +413,15 @@
     "when": "时间",
     "price": "价格"
   },
+  "rental_history": {
+    "title": "最新租金",
+    "lessor": "出租人",
+    "tenant": "租户",
+    "started_at": "开始时间",
+    "price_per_day": "价格",
+    "selected_days": "{days}天",
+    "mobile_price": "{days} 天 {pricePerDay} / 天"
+  },
   "body_shape": {
     "male": "男性",
     "female": "女性",

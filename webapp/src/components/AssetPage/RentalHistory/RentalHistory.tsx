@@ -14,6 +14,7 @@ import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import dateFnsFormat from 'date-fns/format'
 
+import { capitalize } from '../../../lib/text'
 import { locations } from '../../../modules/routing/locations'
 import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
 import { formatDistanceToNow } from '../../../lib/date'
@@ -102,7 +103,7 @@ const RentalHistory = (props: Props) => {
                     {t('rental_history.started_at')}
                   </Table.HeaderCell>
                   <Table.HeaderCell>
-                    {t('rental_history.days')}
+                    {capitalize(t('global.days'))}
                   </Table.HeaderCell>
                   <Table.HeaderCell>
                     {t('rental_history.price_per_day')}
