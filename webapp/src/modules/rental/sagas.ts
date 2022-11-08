@@ -182,16 +182,19 @@ function* handleModalClose(action: CloseModalAction) {
   }
 }
 
-function* waitUntilRentalIsCancelled(nft: NFT<VendorName>) {
-  let isCancelled = false
-  while (!isCancelled) {
+function* waitUntilRentalChangesStatus(
+  nft: NFT<VendorName>,
+  status: RentalStatus
+) {
+  let hasChanged = false
+  while (!hasChanged) {
     yield delay(1000)
     const listing: RentalListing = yield call(
       [rentalsAPI, 'refreshRentalListing'],
       nft.openRentalId!
     )
 
-    isCancelled = listing.status === RentalStatus.CANCELLED
+    hasChanged = listing.status === status
   }
 }
 
@@ -232,7 +235,7 @@ function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
     )
     yield put(removeRentalTransactionSubmitted(nft, txHash))
     yield call(waitForTx, txHash)
-    yield call(waitUntilRentalIsCancelled, nft)
+    yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
     yield put(removeRentalSuccess(nft))
   } catch (error) {
     yield put(removeRentalFailure((error as Error).message))
@@ -265,16 +268,26 @@ function* handleAcceptRentalListingRequest(
       nft.chainId
     )
 
-    const { pricePerDay, maxDays, minDays } = rental.periods[periodIndexChosen]
+    // the contract expects these as arrays of values
+    const [pricePerDay, maxDays, minDays] = rental.periods.reduce(
+      (acc, curr) => {
+        acc[0].push(curr.pricePerDay)
+        acc[1].push(curr.maxDays)
+        acc[2].push(curr.minDays)
+        return acc
+      },
+      [[], [], []] as [string[], number[], number[]]
+    )
+
     const listing = {
       signer: rental.lessor,
       contractAddress: rental.contractAddress,
       tokenId: rental.tokenId,
       expiration: (rental.expiration / 1000).toString(),
       indexes: rental.nonces,
-      pricePerDay: [pricePerDay],
-      maxDays: [maxDays],
-      minDays: [minDays],
+      pricePerDay,
+      maxDays,
+      minDays,
       target: ethers.constants.AddressZero,
       signature: rental.signature
     }
@@ -288,7 +301,7 @@ function* handleAcceptRentalListingRequest(
       Object.values(listing),
       addressOperator,
       periodIndexChosen,
-      maxDays,
+      rental.periods[periodIndexChosen].maxDays,
       fingerprint
     ]
 
@@ -304,6 +317,7 @@ function* handleAcceptRentalListingRequest(
     )
     yield put(acceptRentalListingTransactionSubmitted(nft, txHash))
     yield call(waitForTx, txHash)
+    yield call(waitUntilRentalChangesStatus, nft, RentalStatus.EXECUTED)
     yield put(acceptRentalListingSuccess(rental, periodIndexChosen))
   } catch (error) {
     yield put(acceptRentalListingFailure((error as Error).message))

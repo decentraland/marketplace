@@ -763,7 +763,12 @@ describe('when handling the request action to accept a rental', () => {
               ),
               Promise.resolve(txHash)
             ],
-            [call(waitForTx, txHash), Promise.resolve()]
+            [call(waitForTx, txHash), Promise.resolve()],
+            [delay(1000), void 0],
+            [
+              call([rentalsAPI, 'refreshRentalListing'], nft.openRentalId!),
+              { ...rental, status: RentalStatus.EXECUTED }
+            ]
           ])
           .dispatch(
             acceptRentalListingRequest(
