@@ -378,7 +378,8 @@
       "not_for_sale": "Not available for Sale",
       "parcel_belongs_to_estate_bid": "It's not possible to bid on a parcel that belongs to an Estate, please consider going into the Estate page.",
       "parcel_belongs_to_estate_rent": "It's not possible to rent a parcel that belongs to an Estate, please consider going into the Estate page.",
-      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND"
+      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND",
+      "rented_until": "Rented until {end_date}"
     },
     "description": "Description",
     "owner": "Owner",
