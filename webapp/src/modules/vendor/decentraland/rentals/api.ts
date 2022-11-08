@@ -1,5 +1,5 @@
-import signedFetch from 'decentraland-crypto-fetch'
 import { URLSearchParams } from 'url'
+import signedFetch from 'decentraland-crypto-fetch'
 import {
   RentalListing,
   RentalListingCreation,
@@ -9,7 +9,6 @@ import { AuthIdentity } from '@dcl/crypto'
 import { config } from '../../../../config'
 
 export const SIGNATURES_SERVER_URL = config.get('SIGNATURES_SERVER_URL')!
-const UrlSearchParams = URLSearchParams ?? window.URLSearchParams
 type ValueOf<T> = T[keyof T]
 
 class RentalsAPI {
@@ -68,6 +67,7 @@ class RentalsAPI {
     results: RentalListing[]
     total: number
   }> => {
+    const UrlSearchParams = URLSearchParams ?? window.URLSearchParams
     const urlSearchParams = new UrlSearchParams()
     ;(Object.keys(params) as Array<keyof typeof params>).forEach(
       parameterName => {

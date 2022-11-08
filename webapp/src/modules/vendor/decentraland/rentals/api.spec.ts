@@ -1,7 +1,7 @@
-import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { URL } from 'url'
+import { RentalListing, RentalStatus } from '@dcl/schemas'
 import signedFetch from 'decentraland-crypto-fetch'
-import { rentalsAPI, SIGNATURES_SERVER_URL } from './api'
+import { rentalsAPI } from './api'
 
 jest.mock('decentraland-crypto-fetch')
 
