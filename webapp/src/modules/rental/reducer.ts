@@ -117,8 +117,13 @@ export function rentalReducer(
       }
     }
     case ACCEPT_RENTAL_LISTING_SUCCESS: {
+      const { rental } = action.payload
       const newState = {
         ...state,
+        data: {
+          ...state.data,
+          [rental.id]: rental
+        },
         loading: loadingReducer(state.loading, action),
         isSubmittingTransaction: false,
         error: null
