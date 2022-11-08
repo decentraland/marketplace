@@ -182,7 +182,7 @@ function* handleModalClose(action: CloseModalAction) {
   }
 }
 
-function* waitUntilRentalChangeStatus(
+function* waitUntilRentalChangesStatus(
   nft: NFT<VendorName>,
   status: RentalStatus
 ) {
@@ -235,7 +235,7 @@ function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
     )
     yield put(removeRentalTransactionSubmitted(nft, txHash))
     yield call(waitForTx, txHash)
-    yield call(waitUntilRentalChangeStatus, nft, RentalStatus.CANCELLED)
+    yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
     yield put(removeRentalSuccess(nft))
   } catch (error) {
     yield put(removeRentalFailure((error as Error).message))
@@ -317,7 +317,7 @@ function* handleAcceptRentalListingRequest(
     )
     yield put(acceptRentalListingTransactionSubmitted(nft, txHash))
     yield call(waitForTx, txHash)
-    yield call(waitUntilRentalChangeStatus, nft, RentalStatus.EXECUTED)
+    yield call(waitUntilRentalChangesStatus, nft, RentalStatus.EXECUTED)
     yield put(acceptRentalListingSuccess(rental, periodIndexChosen))
   } catch (error) {
     yield put(acceptRentalListingFailure((error as Error).message))
