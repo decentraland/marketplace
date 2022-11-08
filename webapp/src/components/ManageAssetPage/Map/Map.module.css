@@ -9,3 +9,9 @@
 .coordinates {
   margin-right: 8px;
 }
+
+@media  (max-width: 768px) {
+  .badges {
+    top: 340px;
+  }
+}

@@ -79,6 +79,22 @@
   color: var(--primary);
 }
 
+.rentedMessage {
+  background-color: #161419;
+  border-radius: 6px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 15px;
+  width: 100%;
+  margin-top: 34px;
+}
+
+.isBeingRented {
+  opacity: 0.5;
+}
+
 @media (max-width: 768px) {
   .box {
     margin-top: 12px;
