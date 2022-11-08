@@ -87,7 +87,7 @@ const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
         <>
           <BidList nft={nft} />
           <TransactionHistory asset={nft} />
-          <RentalHistory asset={nft} />
+          {isRentalsEnabled ? <RentalHistory asset={nft} /> : null}
         </>
       }
     />
