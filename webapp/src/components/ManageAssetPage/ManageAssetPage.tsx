@@ -55,7 +55,7 @@ export const ManageAssetPage = (props: Props) => {
 
   const isBeingRented = useCallback(
     (rental: RentalListing | null) =>
-      rental !== null && rental.status !== RentalStatus.OPEN,
+      rental !== null && rental.status === RentalStatus.EXECUTED,
     []
   )
 
