@@ -1,8 +1,11 @@
 import { memo, useCallback, useMemo, useState } from 'react'
+import add from 'date-fns/add'
+import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
+import { RentalStatus } from '@dcl/schemas'
 import { Button, Popup } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -80,169 +83,200 @@ const SaleRentActionBox = ({
 
   const handleCloseAuthorizationModal = () => setShowAuthorizationModal(false)
 
+  // TODO: @Rentals refactor this into a single function to be used everywhere
+  const isBeingRented =
+    rental !== null && rental.status === RentalStatus.EXECUTED
+  const rentalEndTime = isBeingRented
+    ? add(rental!.startedAt!, { days: rental!.rentedDays! }).getTime()
+    : 0
+  const rentalHasEnded = rentalEndTime - Date.now() < 0
+
   return (
-    <>
-      {rental && maxPriceOfPeriods && isRentalsEnabled ? (
-        <div className={styles.viewSelector}>
-          <button
-            onClick={toggleView}
-            disabled={view === View.SALE}
-            className={classNames(styles.viewOption, {
-              [styles.selectedViewOption]: view === View.SALE
-            })}
-          >
-            {t('global.sale')}
-          </button>
-          <button
-            onClick={toggleView}
-            disabled={view === View.RENT}
-            className={classNames(styles.viewOption, {
-              [styles.selectedViewOption]: view === View.RENT
-            })}
-          >
-            {t('global.rent')}
-          </button>
-        </div>
-      ) : null}
-      {view === View.RENT && rental && maxPriceOfPeriods && isRentalsEnabled ? (
-        <>
-          <div className={styles.price}>
-            <div className={styles.title}>{t('global.price')}</div>
-            <div className={styles.priceValue}>
-              <Mana
-                className={styles.priceInMana}
-                withTooltip
-                size="medium"
-                network={rental.network}
-              >
-                {formatWeiMANA(maxPriceOfPeriods)}
-              </Mana>
-              <span className={styles.perDay}>/{t('global.day')}</span>
-              <span className={styles.priceInFiat}>
-                (<ManaToFiat mana={maxPriceOfPeriods} />/{t('global.day')})
-              </span>
-            </div>
+    <div className={styles.main}>
+      <div className={styles.actions}>
+        {rental && maxPriceOfPeriods && isRentalsEnabled ? (
+          <div className={styles.viewSelector}>
+            <button
+              onClick={toggleView}
+              disabled={view === View.SALE}
+              className={classNames(styles.viewOption, {
+                [styles.selectedViewOption]: view === View.SALE
+              })}
+            >
+              {t('global.sale')}
+            </button>
+            <button
+              onClick={toggleView}
+              disabled={view === View.RENT}
+              className={classNames(styles.viewOption, {
+                [styles.selectedViewOption]: view === View.RENT
+              })}
+            >
+              {t('global.rent')}
+            </button>
           </div>
-          <div className={styles.periodTitle}>{t('global.period')}</div>
-          <PeriodsDropdown
-            onChange={setSelectedRentalPeriodIndex}
-            value={selectedRentalPeriodIndex}
-            periods={rental.periods}
-            className={styles.periodsDropdown}
-          />
-          {!isOwner ? (
-            <Popup
-              content={
-                isMobileView
-                  ? t('asset_page.sales_rent_action_box.mobile_coming_soon')
-                  : t(
-                      'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
-                    )
-              }
-              position="top center"
-              on={isMobileView ? 'click' : 'hover'}
-              disabled={!isMobileView && !isNFTPartOfAState}
-              trigger={
-                <div className={styles.fullWidth}>
-                  <Button
-                    primary
-                    disabled={isMobileView || isNFTPartOfAState}
-                    onClick={handleOnRent}
-                    className={styles.rent}
-                  >
-                    {t('global.rent')}
-                  </Button>
-                </div>
-              }
-            />
-          ) : null}
-        </>
-      ) : (
-        <>
-          {order ? (
+        ) : null}
+        {view === View.RENT &&
+        rental &&
+        maxPriceOfPeriods &&
+        isRentalsEnabled ? (
+          <>
             <div className={styles.price}>
               <div className={styles.title}>{t('global.price')}</div>
-              <div className={styles.content}>
+              <div className={styles.priceValue}>
                 <Mana
                   className={styles.priceInMana}
                   withTooltip
                   size="medium"
-                  network={order.network}
+                  network={rental.network}
                 >
-                  {formatWeiMANA(order.price)}
+                  {formatWeiMANA(maxPriceOfPeriods)}
                 </Mana>
+                <span className={styles.perDay}>/{t('global.day')}</span>
                 <span className={styles.priceInFiat}>
-                  (<ManaToFiat mana={order.price} />)
+                  (<ManaToFiat mana={maxPriceOfPeriods} />/{t('global.day')})
                 </span>
               </div>
             </div>
-          ) : (
-            <div className={styles.notForSale}>
-              {t('asset_page.sales_rent_action_box.not_for_sale')}
-            </div>
-          )}
-          {!isOwner ? (
-            <div className={styles.saleButtons}>
-              {order ? (
-                <Button
-                  as={Link}
-                  to={locations.buy(
-                    AssetType.NFT,
-                    nft.contractAddress,
-                    nft.tokenId
-                  )}
-                  className={styles.buy}
-                  primary
-                  fluid
-                >
-                  {t('asset_page.actions.buy')}
-                </Button>
-              ) : null}
-              {canBid ? (
-                <Popup
-                  content={t(
-                    'asset_page.sales_rent_action_box.parcel_belongs_to_estate_bid'
-                  )}
-                  position="top center"
-                  on="hover"
-                  disabled={!isNFTPartOfAState}
-                  trigger={
-                    <div className={styles.fullWidth}>
-                      <Button
-                        as={Link}
-                        to={locations.bid(nft.contractAddress, nft.tokenId)}
-                        className={classNames({ [styles.bid]: order })}
-                        disabled={isNFTPartOfAState}
-                        primary={!order}
-                        fluid
-                      >
-                        {t('asset_page.actions.bid')}
-                      </Button>
-                    </div>
-                  }
-                />
-              ) : null}
-            </div>
-          ) : null}
-        </>
-      )}
-      {isOwner ? (
-        <Button
-          as={Link}
-          to={locations.manage(nft.contractAddress, nft.tokenId)}
-          fluid
-          className={styles.manage}
-        >
-          {t('asset_page.actions.manage')}
-        </Button>
+            <div className={styles.periodTitle}>{t('global.period')}</div>
+            <PeriodsDropdown
+              onChange={setSelectedRentalPeriodIndex}
+              value={selectedRentalPeriodIndex}
+              periods={rental.periods}
+              className={styles.periodsDropdown}
+            />
+            {!isOwner ? (
+              <Popup
+                content={
+                  isMobileView
+                    ? t('asset_page.sales_rent_action_box.mobile_coming_soon')
+                    : t(
+                        'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
+                      )
+                }
+                position="top center"
+                on={isMobileView ? 'click' : 'hover'}
+                disabled={!isMobileView && !isNFTPartOfAState}
+                trigger={
+                  <div className={styles.fullWidth}>
+                    <Button
+                      primary
+                      disabled={isMobileView || isNFTPartOfAState}
+                      onClick={handleOnRent}
+                      className={styles.rent}
+                    >
+                      {t('global.rent')}
+                    </Button>
+                  </div>
+                }
+              />
+            ) : null}
+          </>
+        ) : (
+          <>
+            {order ? (
+              <div className={styles.price}>
+                <div className={styles.title}>{t('global.price')}</div>
+                <div className={styles.content}>
+                  <Mana
+                    className={styles.priceInMana}
+                    withTooltip
+                    size="medium"
+                    network={order.network}
+                  >
+                    {formatWeiMANA(order.price)}
+                  </Mana>
+                  <span className={styles.priceInFiat}>
+                    (<ManaToFiat mana={order.price} />)
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className={styles.notForSale}>
+                {t('asset_page.sales_rent_action_box.not_for_sale')}
+              </div>
+            )}
+            {!isOwner ? (
+              <div className={styles.saleButtons}>
+                {order ? (
+                  <Button
+                    as={Link}
+                    to={locations.buy(
+                      AssetType.NFT,
+                      nft.contractAddress,
+                      nft.tokenId
+                    )}
+                    className={styles.buy}
+                    primary
+                    fluid
+                  >
+                    {t('asset_page.actions.buy')}
+                  </Button>
+                ) : null}
+                {canBid ? (
+                  <Popup
+                    content={t(
+                      'asset_page.sales_rent_action_box.parcel_belongs_to_estate_bid'
+                    )}
+                    position="top center"
+                    on="hover"
+                    disabled={!isNFTPartOfAState}
+                    trigger={
+                      <div className={styles.fullWidth}>
+                        <Button
+                          as={Link}
+                          to={locations.bid(nft.contractAddress, nft.tokenId)}
+                          className={classNames({ [styles.bid]: order })}
+                          disabled={isNFTPartOfAState}
+                          primary={!order}
+                          fluid
+                        >
+                          {t('asset_page.actions.bid')}
+                        </Button>
+                      </div>
+                    }
+                  />
+                ) : null}
+              </div>
+            ) : null}
+          </>
+        )}
+        {isOwner ? (
+          <Button
+            as={Link}
+            to={locations.manage(nft.contractAddress, nft.tokenId)}
+            fluid
+            className={styles.manage}
+          >
+            {t('asset_page.actions.manage')}
+          </Button>
+        ) : null}
+        <AuthorizationModal
+          open={showAuthorizationModal}
+          authorization={authorization}
+          onProceed={handleOnRent}
+          onCancel={handleCloseAuthorizationModal}
+        />
+      </div>
+      {isBeingRented && !rentalHasEnded ? (
+        <div className={styles.message}>
+          <T
+            id={'asset_page.sales_rent_action_box.rented_until'}
+            values={{
+              end_date: (
+                <span className={styles.rentedUntil}>
+                  {intlFormat(rentalEndTime, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </span>
+              )
+            }}
+          />
+        </div>
       ) : null}
-      <AuthorizationModal
-        open={showAuthorizationModal}
-        authorization={authorization}
-        onProceed={handleOnRent}
-        onCancel={handleCloseAuthorizationModal}
-      />
-    </>
+    </div>
   )
 }
 
