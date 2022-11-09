@@ -407,7 +407,8 @@
     "invalid_fingerprint_on_bid_received": "This asset has been modified since this bid was made and it's not valid anymore",
     "invalid_seller": "You don't own this asset anymore",
     "not_enough_mana_on_bid_placed": "You don't have enough MANA to pay for this bid",
-    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it"
+    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it",
+    "cant_accept_bid_on_rented_land": "This asset has an active rent or has not been claimed back. Please, wait until the rent finished and claim it back before accepting the bid."
   },
   "transaction_history": {
     "title": "Latest Sales",

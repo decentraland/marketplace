@@ -402,7 +402,8 @@
     "invalid_fingerprint_on_bid_received": "Este artículo ha sido modificado desde que se hizo esta oferta y ya no es válida",
     "invalid_seller": "Ya no eres el dueño de este artículo",
     "not_enough_mana_on_bid_placed": "No tienes suficiente MANA para pagar por esta oferta",
-    "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices"
+    "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices",
+    "cant_accept_bid_on_rented_land": "Este artículo tiene una renta activa o no ha sido reclamado después del fin de una renta. Por favor espera a que la renta haya terminado y reclama el asset antes de aceptar la oferta."
   },
   "transaction_history": {
     "title": "Últimas ventas",
