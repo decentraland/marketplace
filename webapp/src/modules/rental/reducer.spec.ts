@@ -442,12 +442,15 @@ describe('when reducing the action of the start of an accept rental listing', ()
 describe('when reducing the action the success of accepting a rental', () => {
   let periodIndexChosen: number
   let addressOperator: string
+  let updatedRental: RentalListing
   beforeEach(() => {
     periodIndexChosen = 0
     addressOperator = '0xoperator'
     rentalState = {
       ...rentalState,
-      data: {},
+      data: {
+        [rental.id]: rental
+      },
       isSubmittingTransaction: true,
       loading: [
         acceptRentalListingRequest(
@@ -459,17 +462,24 @@ describe('when reducing the action the success of accepting a rental', () => {
       ],
       error: 'anError'
     }
+    updatedRental = { ...rental, status: RentalStatus.EXECUTED }
   })
 
-  it('should set the submitting transaction flag as false and clear the error', () => {
-    expect(rentalReducer(rentalState, acceptRentalListingSuccess(nft))).toEqual(
-      {
-        ...rentalState,
-        isSubmittingTransaction: false,
-        loading: [],
-        error: null
-      }
-    )
+  it('should set the submitting transaction flag as false, clear the error and put the updated listing in the data', () => {
+    expect(
+      rentalReducer(
+        rentalState,
+        acceptRentalListingSuccess(updatedRental, periodIndexChosen)
+      )
+    ).toEqual({
+      ...rentalState,
+      data: {
+        [rental.id]: updatedRental
+      },
+      isSubmittingTransaction: false,
+      loading: [],
+      error: null
+    })
   })
 })
 
@@ -495,13 +505,13 @@ describe('when reducing the failure action of accepting a rental', () => {
   })
 
   it("should remove the loading, set the submitting transaction flag to false, set the error with the action's error", () => {
-    expect(rentalReducer(rentalState, acceptRentalListingFailure('anError'))).toEqual(
-      {
-        ...rentalState,
-        loading: [],
-        isSubmittingTransaction: false,
-        error: 'anError'
-      }
-    )
+    expect(
+      rentalReducer(rentalState, acceptRentalListingFailure('anError'))
+    ).toEqual({
+      ...rentalState,
+      loading: [],
+      isSubmittingTransaction: false,
+      error: 'anError'
+    })
   })
 })

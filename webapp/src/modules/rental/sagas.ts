@@ -187,15 +187,17 @@ function* waitUntilRentalChangesStatus(
   status: RentalStatus
 ) {
   let hasChanged = false
+  let listing: RentalListing
   while (!hasChanged) {
     yield delay(1000)
-    const listing: RentalListing = yield call(
+    listing = yield call(
       [rentalsAPI, 'refreshRentalListing'],
       nft.openRentalId!
     )
 
     hasChanged = listing.status === status
   }
+  return listing!
 }
 
 function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {
@@ -317,8 +319,14 @@ function* handleAcceptRentalListingRequest(
     )
     yield put(acceptRentalListingTransactionSubmitted(nft, txHash))
     yield call(waitForTx, txHash)
-    yield call(waitUntilRentalChangesStatus, nft, RentalStatus.EXECUTED)
-    yield put(acceptRentalListingSuccess(rental, periodIndexChosen))
+    const rentalListingUpdated: RentalListing = yield call(
+      waitUntilRentalChangesStatus,
+      nft,
+      RentalStatus.EXECUTED
+    )
+    yield put(
+      acceptRentalListingSuccess(rentalListingUpdated, periodIndexChosen)
+    )
   } catch (error) {
     yield put(acceptRentalListingFailure((error as Error).message))
   }
