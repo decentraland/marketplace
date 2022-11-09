@@ -806,12 +806,14 @@
   "manage_asset_page": {
     "open_in_builder": "在 Builder 中打开",
     "transfer": "转移",
+    "cant_transfer_rented_land": "当 LAND 正在租用或尚未收回时，转移会暂停。",
     "sell": {
       "sell_title": "卖",
       "selling_title": "卖",
       "list_for_sale": "发布出售",
       "price": "价格",
-      "expiration_date": "截止日期"
+      "expiration_date": "截止日期",
+      "cant_sell_rented_land": "在 LAND 被租用或尚未收回时，销售暂停。"
     },
     "rent": {
       "rent_title": "租",

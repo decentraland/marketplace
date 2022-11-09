@@ -804,12 +804,14 @@
   "manage_asset_page": {
     "open_in_builder": "Abrir en el builder",
     "transfer": "Transferir",
+    "cant_transfer_rented_land": "La transferencia de tierra está en pausa mientras la tierra está siendo rentada o no se haya reclamado.",
     "sell": {
       "sell_title": "Venta",
       "selling_title": "Vendiendo",
       "list_for_sale": "Publicar para la venta",
       "price": "Precio",
-      "expiration_date": "Fecha de expiración"
+      "expiration_date": "Fecha de expiración",
+      "cant_sell_rented_land": "La venta de tierra está en pausa mientras la tierra está siendo rentada o no se haya reclamado."
     },
     "rent": {
       "rent_title": "Renta",

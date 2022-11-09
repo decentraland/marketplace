@@ -811,12 +811,14 @@
   "manage_asset_page": {
     "open_in_builder": "Open in builder",
     "transfer": "Transfer",
+    "cant_transfer_rented_land": "Transferring is pauses while the LAND is being rented or hasn't been claimed back.",
     "sell": {
       "sell_title": "Sell",
       "selling_title": "Selling",
       "list_for_sale": "List for sale",
       "price": "Price",
-      "expiration_date": "Expiration date"
+      "expiration_date": "Expiration date",
+      "cant_sell_rented_land": "Selling is paused while the LAND is being rented or hasn't been claimed back."
     },
     "rent": {
       "rent_title": "Rent",
