@@ -465,7 +465,7 @@ describe('when reducing the action the success of accepting a rental', () => {
     updatedRental = { ...rental, status: RentalStatus.EXECUTED }
   })
 
-  it('should set the submitting transaction flag as false and clear the error and put the updated listing in the data', () => {
+  it('should set the submitting transaction flag as false, clear the error and put the updated listing in the data', () => {
     expect(
       rentalReducer(
         rentalState,
