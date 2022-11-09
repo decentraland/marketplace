@@ -83,14 +83,13 @@ const SaleRentActionBox = ({
 
   const handleCloseAuthorizationModal = () => setShowAuthorizationModal(false)
 
-  const rentalEndTime =
-    rental && rental.startedAt && rental.rentedDays
-      ? add(rental.startedAt, { days: rental.rentedDays }).getTime()
-      : 0
-  const rentalHasEnded = rentalEndTime - Date.now() < 0
   // TODO: @Rentals refactor this into a single function to be used everywhere
   const isBeingRented =
     rental !== null && rental.status === RentalStatus.EXECUTED
+  const rentalEndTime = isBeingRented
+    ? add(rental!.startedAt!, { days: rental!.rentedDays! }).getTime()
+    : 0
+  const rentalHasEnded = rentalEndTime - Date.now() < 0
 
   return (
     <div className={styles.main}>
