@@ -5,7 +5,11 @@ import { getLoading as getItemsLoading } from '../../modules/item/selectors'
 import { getLoading as getNFTsLoading } from '../../modules/nft/selectors'
 import { RootState } from '../../modules/reducer'
 import OnSaleList from './OnSaleOrRentList'
-import { MapStateProps, OnSaleOrRentType, OwnProps } from './OnSaleOrRentList.types'
+import {
+  MapStateProps,
+  OnSaleOrRentType,
+  OwnProps
+} from './OnSaleOrRentList.types'
 
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'

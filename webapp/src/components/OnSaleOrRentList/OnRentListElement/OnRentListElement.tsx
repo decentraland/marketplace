@@ -13,9 +13,10 @@ import './OnRentListElement.css'
 
 const OnRentListElement = ({ nft, rental }: Props) => {
   const category = nft!.category
-  const startDate = rental.startedAt ? new Date(rental.startedAt) : null
-  const period = rental.periods[0]
-  const endDate = startDate ? add(startDate, { days: period.maxDays }) : null
+  const { startedAt, rentedDays } = rental
+  const startDate = startedAt ? new Date(startedAt) : null
+  const endDate =
+    startDate && rentedDays ? add(startDate, { days: rentedDays }) : null
   return (
     <>
       <Mobile>
