@@ -4,12 +4,13 @@ import format from 'date-fns/format'
 import { RentalStatus } from '@dcl/schemas'
 import { Icon, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+
 import { locations } from '../../../modules/routing/locations'
-import { Mana } from '../../Mana'
 import { formatWeiMANA } from '../../../lib/mana'
-import { Props } from './OnRentListElement.types'
+import { Mana } from '../../Mana'
 import AssetCell from '../AssetCell'
 import './OnRentListElement.css'
+import { Props } from './OnRentListElement.types'
 
 const OnRentListElement = ({
   nft,
