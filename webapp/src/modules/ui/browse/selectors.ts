@@ -12,6 +12,8 @@ import { ItemState } from '../../item/reducer'
 import { VendorName } from '../../vendor'
 import { getAddress } from '../../wallet/selectors'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
+import { CLAIM_LAND_TRANSACTION_SUBMITTED } from '../../rental/actions'
+import { getTransactionsByType } from '../../transaction/selectors'
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState) => getState(state).view
@@ -90,3 +92,21 @@ export const getOnSaleElements = createSelector<
   ReturnType<typeof getOnSaleNFTs>,
   OnSaleElement[]
 >(getOnSaleItems, getOnSaleNFTs, (items, nfts) => [...items, ...nfts])
+
+
+export const getClaimingBackState = (state: RootState, nft: NFT): boolean => {
+  const userAddress = getAddress(state);
+
+  const transactionsClainLand = getTransactionsByType(state, userAddress!, CLAIM_LAND_TRANSACTION_SUBMITTED)
+
+  const transactions = transactionsClainLand.filter((element) => element.chainId === nft.chainId &&
+    element.payload.tokenId === nft.tokenId &&
+    element.payload.contractAddress === nft.contractAddress).sort((a, b) => {
+      if (a.timestamp > b.timestamp) return -1
+      else if (a.timestamp < b.timestamp) return 1
+      return 0
+    })
+
+  console.log('flo llega aca', userAddress, transactionsClainLand)
+  return transactions[0] ? !!transactions[0].status : false
+}

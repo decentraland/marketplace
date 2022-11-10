@@ -823,7 +823,9 @@
       "list_for_rent_again": "List for rent again",
       "claiming_land": "Claiming back your Land. This process can take up to 24hs.",
       "view_transaction": "View transaction",
-      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND"
+      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND",
+      "claiming_back": "Claiming Back Land",
+      "claiming_back_process": "Claiming back your Land. This process can take up to 24hs."
     },
     "highlights": {
       "title": "Highlights",

@@ -11,7 +11,7 @@ import { Props } from './OnRentListElement.types'
 import AssetCell from '../AssetCell'
 import './OnRentListElement.css'
 
-const OnRentListElement = ({ nft, rental }: Props) => {
+const OnRentListElement = ({ nft, rental, claimingBackState }: Props) => {
   const category = nft!.category
   const startDate = rental.startedAt ? new Date(rental.startedAt) : null
   const period = rental.periods[0]
@@ -45,7 +45,7 @@ const OnRentListElement = ({ nft, rental }: Props) => {
               ? t('on_rent_list.rented_until', {
                   end_date: format(endDate, 'MMM dd')
                 })
-              : null}
+              : claimingBackState ? t('manage_asset_page.rent.claiming_back')  : null}
           </Table.Cell>
           <Table.Cell>
             <Mana network={nft.network} inline>

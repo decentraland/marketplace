@@ -816,7 +816,9 @@
       "list_for_rent_again": "Volver a publicar para la renta",
       "claiming_land": "Reclamando su tierra. El proceso puede tardar hasta 25hs.",
       "view_transaction": "Ver transacción",
-      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land."
+      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land.",
+      "claiming_back": "Reclamando su tierra",
+      "claiming_back_process": "Reclamando su tierra. Este proceso puede durar hasta 24hs."
     },
     "highlights": {
       "title": "Destacados",

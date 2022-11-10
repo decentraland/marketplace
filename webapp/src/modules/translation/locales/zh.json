@@ -818,7 +818,9 @@
       "list_for_rent_again": "再次发布出租",
       "claiming_land": "收回你的土地。 此过程最多可能需要 24 小时。",
       "view_transaction": "查看区块链交易",
-      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。"
+      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。",
+      "claiming_back": "收回土地",
+      "claiming_back_process": "收回你的土地。 此過程最多可能需要 24 小時。"
     },
     "highlights": {
       "title": "亮点",
