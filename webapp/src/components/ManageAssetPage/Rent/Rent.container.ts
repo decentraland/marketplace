@@ -9,9 +9,11 @@ import { RentalModalMetadata } from '../../Modals/RentalListingModal/RentalListi
 import { VendorName } from '../../../modules/vendor'
 import { NFT } from '../../../modules/nft/types'
 import { Rent } from './Rent'
+import { isClaimingBackLandTransactionPending } from '../../../modules/ui/browse/selectors'
 
-const mapState = (state: RootState): MapStateProps => ({
-  isClaimingLandBack: isClaimingLand(state)
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
+  isClaimingLandBack: isClaimingLand(state),
+  isClaimingBackLandTransactionPending: isClaimingBackLandTransactionPending(state, ownProps.nft)
 })
 
 const mapDispatch = (

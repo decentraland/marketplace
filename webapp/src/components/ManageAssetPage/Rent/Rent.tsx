@@ -55,7 +55,8 @@ export const Rent = (props: Props) => {
     onClaimLand,
     onCreateOrEditRent,
     rental,
-    nft
+    nft,
+    isClaimingBackLandTransactionPending
   } = props
   const isMobileView = isMobile()
 
@@ -131,7 +132,27 @@ export const Rent = (props: Props) => {
       </div>
       {rental ? (
         <div className={styles.content}>
-          {rental.status === RentalStatus.EXECUTED ? (
+          {isClaimingBackLandTransactionPending ? (
+            <div className={styles.activeRent}>
+              <div className={styles.rentMessage}>
+                <T
+                  id="manage_asset_page.rent.claiming_land"
+                  values={{
+                    tenant: <LinkedProfile address={rental.tenant!} />
+                  }}
+                />
+              </div>
+              <div className={styles.activeRentActions}>
+                {wrapDisabledMobileButton(
+                  <div>
+                    <Button basic onClick={handleViewTransaction}>
+                      {t('manage_asset_page.rent.view_transaction')}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : rental.status === RentalStatus.EXECUTED ? (
             <div className={styles.activeRent}>
               {rental.startedAt && isClaimingLandBack ? (
                 <>
@@ -196,7 +217,7 @@ export const Rent = (props: Props) => {
               ) : null}
             </div>
           ) : null}
-          {!isClaimingLandBack ? (
+          {!isClaimingLandBack && !isClaimingBackLandTransactionPending ? (
             <div className={styles.summary}>
               <div
                 className={classNames(
