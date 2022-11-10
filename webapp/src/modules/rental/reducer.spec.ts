@@ -15,7 +15,8 @@ import {
   removeRentalSuccess,
   acceptRentalListingRequest,
   acceptRentalListingSuccess,
-  acceptRentalListingFailure
+  acceptRentalListingFailure,
+  acceptRentalListingTransactionSubmitted
 } from './actions'
 import { rentalReducer, RentalState } from './reducer'
 import { PeriodOption, UpsertRentalOptType } from './types'
@@ -479,6 +480,27 @@ describe('when reducing the action the success of accepting a rental', () => {
       isSubmittingTransaction: false,
       loading: [],
       error: null
+    })
+  })
+})
+
+describe('when reducing the action that signals that the accept listing transaction was submitted', () => {
+  beforeEach(() => {
+    rentalState = {
+      ...rentalState,
+      isSubmittingTransaction: true
+    }
+  })
+
+  it('should set the flag that defines that the transaction is being submitted to false', () => {
+    expect(
+      rentalReducer(
+        rentalState,
+        acceptRentalListingTransactionSubmitted(nft, 'aTxHash')
+      )
+    ).toEqual({
+      ...rentalState,
+      isSubmittingTransaction: false
     })
   })
 })
