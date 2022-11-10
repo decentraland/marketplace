@@ -2,11 +2,10 @@ import { connect } from 'react-redux'
 import OnRentListElement from './OnRentListElement'
 import { RootState } from '../../../modules/reducer'
 import { MapStateProps, OwnProps } from './OnRentListElement.types'
-import { getClaimingBackState } from '../../../modules/ui/browse/selectors'
+import { isClaimingBackLandTransactionPending } from '../../../modules/ui/browse/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const claimingBackState = getClaimingBackState(state, ownProps.nft)
-  return { claimingBackState: claimingBackState }
+  return { isClaimingBackLandTransactionPending: isClaimingBackLandTransactionPending(state, ownProps.nft) }
 }
 
 export default connect(mapState)(OnRentListElement)
