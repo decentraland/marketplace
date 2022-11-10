@@ -39,7 +39,9 @@ import {
   ACCEPT_RENTAL_LISTING_FAILURE,
   ACCEPT_RENTAL_LISTING_SUCCESS,
   AcceptRentalListingFailureAction,
-  AcceptRentalListingSuccessAction
+  AcceptRentalListingSuccessAction,
+  ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
+  AcceptRentalListingTransactionSubmitted
 } from './actions'
 
 export type RentalState = {
@@ -74,6 +76,7 @@ type RentalReducerAction =
   | AcceptRentalListingRequestAction
   | AcceptRentalListingFailureAction
   | AcceptRentalListingSuccessAction
+  | AcceptRentalListingTransactionSubmitted
 
 export function rentalReducer(
   state = INITIAL_STATE,
@@ -81,6 +84,7 @@ export function rentalReducer(
 ): RentalState {
   switch (action.type) {
     case REMOVE_RENTAL_TRANSACTION_SUBMITTED:
+    case ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED:
     case CLAIM_LAND_TRANSACTION_SUBMITTED: {
       return {
         ...state,
