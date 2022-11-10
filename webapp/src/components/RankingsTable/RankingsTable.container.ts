@@ -11,7 +11,7 @@ import {
   fetchRankingsRequest,
   FETCH_RANKINGS_REQUEST
 } from '../../modules/analytics/actions'
-import AnalyticsVolumeDayData from './RankingsTable'
+import RankingsTable from './RankingsTable'
 
 const mapState = (state: RootState): MapStateProps => {
   const data = getRankingsData(state)
@@ -26,4 +26,4 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
     dispatch(fetchRankingsRequest(entity, timeframe, filters))
 })
 
-export default connect(mapState, mapDispatch)(AnalyticsVolumeDayData)
+export default connect(mapState, mapDispatch)(RankingsTable)
