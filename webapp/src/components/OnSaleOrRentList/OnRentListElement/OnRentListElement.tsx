@@ -43,10 +43,6 @@ const OnRentListElement = ({
             />
           </Table.Cell>
           <Table.Cell>{t(`global.${category}`)}</Table.Cell>
-          <Table.Cell> <span>
-                <Icon className='warning-icon' name="warning sign" /> 
-                {t('manage_asset_page.rent.claiming_back')}
-              </span></Table.Cell>
           <Table.Cell>
             {rental.status === RentalStatus.OPEN ? (
               t('on_rent_list.listed_for_rent')
