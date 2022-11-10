@@ -81,7 +81,7 @@ export const getOnRentNFTs = createSelector<
       }
       return acc
     }, [] as [NFT<VendorName.DECENTRALAND>, RentalListing][])
-    .filter(([nft]) => nft.owner === address)
+    .filter(([, rental]) => rental.lessor === address)
 )
 
 export const getOnSaleElements = createSelector<

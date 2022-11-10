@@ -32,8 +32,8 @@ beforeEach(() => {
   nft = { id: '456', owner: address } as NFT
   order = { id: 'orderId ' } as Order
   nftOnSale = { id: '567', activeOrderId: order.id, owner: address } as NFT
-  rental = { id: 'rentalId', status: RentalStatus.OPEN } as RentalListing
-  nftOnRent = { id: '678', openRentalId: rental.id, owner: address } as NFT
+  rental = { id: 'rentalId', status: RentalStatus.OPEN, lessor: address } as RentalListing
+  nftOnRent = { id: '678', openRentalId: rental.id } as NFT
   rootState = {
     ui: {
       browse: {
