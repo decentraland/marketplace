@@ -375,7 +375,8 @@
       "not_for_sale": "不可出售",
       "parcel_belongs_to_estate_bid": "无法对属于某个庄园的地块进行投标，请考虑进入“庄园”页面。",
       "parcel_belongs_to_estate_rent": "无法租用属于某个庄园的地块，请考虑进入“庄园”页面。",
-      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。"
+      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。",
+      "rented_until": "租到 {end_date}"
     },
     "description": "描述",
     "owner": "持有者",
@@ -404,7 +405,8 @@
     "invalid_fingerprint_on_bid_received": "此资产自此出价以来已被修改，因此不再有效",
     "invalid_seller": "您不再拥有此资产",
     "not_enough_mana_on_bid_placed": "您没有足够的MANA来支付此出价",
-    "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改，除非您对其进行更新，否则它将不再有效"
+    "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改，除非您对其进行更新，否则它将不再有效",
+    "cant_accept_bid_on_rented_land": "该资产目前已出租或尚未收回。 请等到租金完成并在接受投标之前将其取回。"
   },
   "transaction_history": {
     "title": "最新销售",
@@ -413,6 +415,15 @@
     "type": "类型",
     "when": "时间",
     "price": "价格"
+  },
+  "rental_history": {
+    "title": "最新租金",
+    "lessor": "出租人",
+    "tenant": "租户",
+    "started_at": "开始时间",
+    "price_per_day": "价格",
+    "selected_days": "{days}天",
+    "mobile_price": "{days} 天 {pricePerDay} / 天"
   },
   "body_shape": {
     "male": "男性",
@@ -797,12 +808,14 @@
   "manage_asset_page": {
     "open_in_builder": "在 Builder 中打开",
     "transfer": "转移",
+    "cant_transfer_rented_land": "当 LAND 正在租用或尚未收回时，转移会暂停。",
     "sell": {
       "sell_title": "卖",
       "selling_title": "卖",
       "list_for_sale": "发布出售",
       "price": "价格",
-      "expiration_date": "截止日期"
+      "expiration_date": "截止日期",
+      "cant_sell_rented_land": "在 LAND 被租用或尚未收回时，销售暂停。"
     },
     "rent": {
       "rent_title": "租",
@@ -852,7 +865,7 @@
     "banners": {
       "big": {
         "event": "事件",
-        "title": "元界节 2022 来了！",
+        "title": "元界音乐节 2022 来了！",
         "subtitle": "立即开始寻找完美的可穿戴设备和表情，以时尚的方式在夜晚跳舞。",
         "cta": "浏览节日物品"
       },
@@ -861,7 +874,7 @@
         "subtitle": "类别是……赛博朋克遇见自然真实"
       },
       "small": {
-        "title": "元界节 2022 来了！",
+        "title": "元界音乐节 2022 来了！",
         "subtitle": "立即开始寻找完美的可穿戴设备和表情，以时尚的方式在夜晚跳舞。",
         "cta": "浏览节日物品"
       }

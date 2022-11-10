@@ -726,6 +726,10 @@ describe('when handling the request action to accept a rental', () => {
     const txHash = '0x01'
 
     describe('and the transaction finishes', () => {
+      let updatedRentalListing: RentalListing
+      beforeEach(() => {
+        updatedRentalListing = { ...rental, status: RentalStatus.EXECUTED }
+      })
       it('should put the action to notify that the transaction was submitted and the accept rental success action', () => {
         return expectSaga(rentalSaga)
           .provide([
@@ -763,7 +767,12 @@ describe('when handling the request action to accept a rental', () => {
               ),
               Promise.resolve(txHash)
             ],
-            [call(waitForTx, txHash), Promise.resolve()]
+            [call(waitForTx, txHash), Promise.resolve()],
+            [delay(1000), void 0],
+            [
+              call([rentalsAPI, 'refreshRentalListing'], nft.openRentalId!),
+              updatedRentalListing
+            ]
           ])
           .dispatch(
             acceptRentalListingRequest(
@@ -774,7 +783,9 @@ describe('when handling the request action to accept a rental', () => {
             )
           )
           .put(acceptRentalListingTransactionSubmitted(nft, txHash))
-          .put(acceptRentalListingSuccess(rental, periodIndexChosen))
+          .put(
+            acceptRentalListingSuccess(updatedRentalListing, periodIndexChosen)
+          )
           .silentRun()
       })
     })

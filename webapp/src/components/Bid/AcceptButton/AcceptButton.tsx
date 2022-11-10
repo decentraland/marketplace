@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { RentalStatus } from '@dcl/schemas'
 import { Button, Popup } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
@@ -10,10 +11,13 @@ import {
 import { Props } from './AcceptButton.types'
 
 const AcceptButton = (props: Props) => {
-  const { nft, bid, onClick } = props
+  const { nft, bid, onClick, rental } = props
 
   const [fingerprint, isLoadingFingerprint] = useFingerprint(nft)
   const [hasInsufficientMANA, setHasInsufficientMANA] = useState(false)
+  // TODO: @Rentals Duplicate of the method in ManageAssetPage.tsx. Abstract it when merged
+  const isBeingRented =
+    rental !== null && rental.status === RentalStatus.EXECUTED
 
   useEffect(() => {
     isInsufficientMANA(bid)
@@ -27,6 +31,7 @@ const AcceptButton = (props: Props) => {
   const isValidSeller = !!nft && nft.owner === bid.seller
 
   const isDisabled =
+    isBeingRented ||
     !nft ||
     isLoadingFingerprint ||
     hasInsufficientMANA ||
@@ -59,6 +64,14 @@ const AcceptButton = (props: Props) => {
     button = (
       <Popup
         content={t('bid.invalid_seller')}
+        position="top center"
+        trigger={<div className="popup-button">{button}</div>}
+      />
+    )
+  } else if (isBeingRented) {
+    button = (
+      <Popup
+        content={t('bid.cant_accept_bid_on_rented_land')}
         position="top center"
         trigger={<div className="popup-button">{button}</div>}
       />

@@ -101,9 +101,10 @@ const Bid = (props: Props) => {
                       contractAddress={bid.contractAddress}
                       tokenId={bid.tokenId}
                     >
-                      {nft => (
+                      {(nft, _order, rental) => (
                         <AcceptButton
                           nft={nft}
+                          rental={rental}
                           bid={bid}
                           onClick={handleAccept}
                         />

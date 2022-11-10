@@ -236,11 +236,11 @@ const AssetBrowse = (props: Props) => {
     Sections.decentraland.EMOTES,
     Sections.decentraland.ENS,
     Sections.decentraland.ON_SALE,
-    Sections.decentraland.ON_RENT,
+    isRentalsEnabled ? Sections.decentraland.ON_RENT : undefined,
     Sections.decentraland.SALES,
     Sections.decentraland.BIDS,
     Sections.decentraland.STORE_SETTINGS
-  ]
+  ].filter(Boolean)
 
   return (
     <>

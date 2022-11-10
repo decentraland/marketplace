@@ -374,7 +374,8 @@
       "not_for_sale": "No disponible para comprar",
       "parcel_belongs_to_estate_bid": "No es posible hacer una oferta en la tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
       "parcel_belongs_to_estate_rent": "No es posible rentar tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
-      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land."
+      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land.",
+      "rented_until": "Rentado hasta {end_date}"
     },
     "description": "Descripción",
     "owner": "Dueño",
@@ -403,7 +404,8 @@
     "invalid_fingerprint_on_bid_received": "Este artículo ha sido modificado desde que se hizo esta oferta y ya no es válida",
     "invalid_seller": "Ya no eres el dueño de este artículo",
     "not_enough_mana_on_bid_placed": "No tienes suficiente MANA para pagar por esta oferta",
-    "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices"
+    "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices",
+    "cant_accept_bid_on_rented_land": "Este artículo tiene una renta activa o no ha sido reclamado después del fin de una renta. Por favor espera a que la renta haya terminado y reclama el asset antes de aceptar la oferta."
   },
   "transaction_history": {
     "title": "Últimas ventas",
@@ -412,6 +414,15 @@
     "type": "Tipo",
     "when": "Fecha",
     "price": "Precio"
+  },
+  "rental_history": {
+    "title": "Últimas rentas",
+    "lessor": "Locador",
+    "tenant": "Locatario",
+    "started_at": "Comenzó en",
+    "price_per_day": "Precio",
+    "selected_days": "{days} días",
+    "mobile_price": "{days} días por {pricePerDay} / día"
   },
   "body_shape": {
     "male": "Hombre",
@@ -795,12 +806,14 @@
   "manage_asset_page": {
     "open_in_builder": "Abrir en el builder",
     "transfer": "Transferir",
+    "cant_transfer_rented_land": "La transferencia de tierra está en pausa mientras la tierra está siendo rentada o no se haya reclamado.",
     "sell": {
       "sell_title": "Venta",
       "selling_title": "Vendiendo",
       "list_for_sale": "Publicar para la venta",
       "price": "Precio",
-      "expiration_date": "Fecha de expiración"
+      "expiration_date": "Fecha de expiración",
+      "cant_sell_rented_land": "La venta de tierra está en pausa mientras la tierra está siendo rentada o no se haya reclamado."
     },
     "rent": {
       "rent_title": "Renta",
@@ -850,7 +863,7 @@
     "banners": {
       "big": {
         "event": "Evento",
-        "title": "¡Metaverse Music Festival 2022 casi está aquí!",
+        "title": "¡Metaverse Music Festival 2022 está aquí!",
         "subtitle": "Comience su búsqueda de los Wearables y Emotes perfectos para bailar toda la noche con estilo ahora.",
         "cta": "Examinar items del festival"
       },
@@ -859,7 +872,7 @@
         "subtitle": "Categoria es... Cyberpunk conoce a la naturaleza"
       },
       "small": {
-        "title": "¡Metaverse Music Festival 2022 casi está aquí!",
+        "title": "¡Metaverse Music Festival 2022 está aquí!",
         "subtitle": "Comience su búsqueda de los Wearables y Emotes perfectos para bailar toda la noche con estilo ahora.",
         "cta": "Examinar items del festival"
       }

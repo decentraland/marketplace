@@ -1,0 +1,24 @@
+.main {
+  position: relative;
+}
+
+.mobileRentalsHistory {
+  margin-top: 16px;
+  margin-bottom: 96px;
+  font-size: 15px;
+}
+
+.mobileRentalsHistoryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.mobileRentalsHistoryRowStartedAt {
+  color: var(--secondary-text);
+}
+
+.TransactionHistory tbody.is-loading tr {
+  opacity: 0.5;
+}
