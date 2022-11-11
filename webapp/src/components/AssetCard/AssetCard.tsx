@@ -48,9 +48,7 @@ const AssetCard = (props: Props) => {
           }}
         >
           <Icon className="warning-icon" name="warning sign" />
-          <div className="HidableText">
-            {t('manage_asset_page.rent.claiming_back')}{' '}
-          </div>
+            {t('manage_asset_page.rent.claiming_back')}
         </div>
       )}
       {showListedTag && <ListedBadge className="listed-badge" />}
