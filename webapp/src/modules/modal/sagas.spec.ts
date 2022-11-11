@@ -10,7 +10,7 @@ import {
   acceptRentalListingSuccess
 } from '../rental/actions'
 import { UpsertRentalOptType } from '../rental/types'
-import { closeAllModals, openModal } from './actions'
+import { closeAllModals, closeModal, openModal } from './actions'
 import { modalSaga } from './sagas'
 
 describe('when handling the success action of the claim LAND', () => {
@@ -101,9 +101,10 @@ describe('when handling the success action of a accepting a rental listing', () 
     periodIndexChosen = 0
   })
 
-  it('should put the action to open the RentConfirmedModal modal', () => {
+  it('should put the action to open the RentConfirmedModal modal and close the ConfirmRentModal', () => {
     return expectSaga(modalSaga)
       .put(openModal('RentConfirmedModal', { rental, periodIndexChosen }))
+      .put(closeModal('ConfirmRentModal'))
       .dispatch(acceptRentalListingSuccess(rental, periodIndexChosen))
       .silentRun()
   })

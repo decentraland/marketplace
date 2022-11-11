@@ -11,12 +11,13 @@ import Price from '../Price'
 import Expiration from '../Expiration'
 import { Actions } from '../Actions'
 import { BidList } from '../BidList'
-import { TransactionHistory } from '../TransactionHistory'
 import { JumpIn } from '../JumpIn'
 import { ProximityHighlights } from '../ProximityHighlights'
 import BaseDetail from '../BaseDetail'
-import { Props } from './EstateDetail.types'
+import { TransactionHistory } from '../TransactionHistory'
+import { RentalHistory } from '../RentalHistory'
 import { SaleRentActionBox } from '../SaleRentActionBox'
+import { Props } from './EstateDetail.types'
 import { ParcelCoordinates } from './ParcelCoordinates'
 import './EstateDetail.css'
 
@@ -92,6 +93,7 @@ const EstateDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
           <BidList nft={nft} />
           {estate.size > 0 && <ParcelCoordinates estateId={nft.tokenId} />}
           <TransactionHistory asset={nft} />
+          {isRentalsEnabled ? <RentalHistory asset={nft} /> : null}
         </>
       }
     />

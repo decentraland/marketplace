@@ -379,7 +379,8 @@
       "not_for_sale": "Not available for Sale",
       "parcel_belongs_to_estate_bid": "It's not possible to bid on a parcel that belongs to an Estate, please consider going into the Estate page.",
       "parcel_belongs_to_estate_rent": "It's not possible to rent a parcel that belongs to an Estate, please consider going into the Estate page.",
-      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND"
+      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND",
+      "rented_until": "Rented until {end_date}"
     },
     "description": "Description",
     "owner": "Owner",
@@ -408,7 +409,8 @@
     "invalid_fingerprint_on_bid_received": "This asset has been modified since this bid was made and it's not valid anymore",
     "invalid_seller": "You don't own this asset anymore",
     "not_enough_mana_on_bid_placed": "You don't have enough MANA to pay for this bid",
-    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it"
+    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it",
+    "cant_accept_bid_on_rented_land": "This asset has an active rent or has not been claimed back. Please, wait until the rent finished and claim it back before accepting the bid."
   },
   "transaction_history": {
     "title": "Latest Sales",
@@ -417,6 +419,15 @@
     "type": "Type",
     "when": "When",
     "price": "Price"
+  },
+  "rental_history": {
+    "title": "Latest rentals",
+    "lessor": "Lessor",
+    "tenant": "Tenant",
+    "started_at": "Started at",
+    "price_per_day": "Price",
+    "selected_days": "{days} days",
+    "mobile_price": "{days} days at {pricePerDay} / day"
   },
   "body_shape": {
     "male": "Male",
@@ -802,12 +813,14 @@
   "manage_asset_page": {
     "open_in_builder": "Open in builder",
     "transfer": "Transfer",
+    "cant_transfer_rented_land": "Transferring is pauses while the LAND is being rented or hasn't been claimed back.",
     "sell": {
       "sell_title": "Sell",
       "selling_title": "Selling",
       "list_for_sale": "List for sale",
       "price": "Price",
-      "expiration_date": "Expiration date"
+      "expiration_date": "Expiration date",
+      "cant_sell_rented_land": "Selling is paused while the LAND is being rented or hasn't been claimed back."
     },
     "rent": {
       "rent_title": "Rent",
@@ -857,7 +870,7 @@
     "banners": {
       "big": {
         "event": "Event",
-        "title": "Metaverse Music Festival 2022 is almost here!",
+        "title": "Metaverse Music Festival 2022 is here!",
         "subtitle": "Start your search for the perfect Wearables & Emotes to dance the night away in style now.",
         "cta": "Browse Festival Items"
       },
@@ -867,7 +880,7 @@
         "subtitle_bold_1": "Cyberpunk Meets Nature!"
       },
       "small": {
-        "title": "Metaverse Music Festival 2022 is almost here!",
+        "title": "Metaverse Music Festival 2022 is here!",
         "subtitle": "Start your search for the perfect Wearables & Emotes to dance the night away in style now.",
         "cta": "Browse Festival Items"
       }

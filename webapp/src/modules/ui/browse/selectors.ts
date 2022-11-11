@@ -86,7 +86,7 @@ export const getOnRentNFTs = createSelector<
       }
       return acc
     }, [] as [NFT<VendorName.DECENTRALAND>, RentalListing][])
-    .filter(([nft]) => nft.owner === address)
+    .filter(([, rental]) => rental.lessor === address)
 )
 
 export const getOnSaleElements = createSelector<
@@ -95,6 +95,7 @@ export const getOnSaleElements = createSelector<
   ReturnType<typeof getOnSaleNFTs>,
   OnSaleElement[]
 >(getOnSaleItems, getOnSaleNFTs, (items, nfts) => [...items, ...nfts])
+
 
 
 export const getLastTransactionForClaimingBackLand = (
@@ -136,5 +137,6 @@ export const isClaimingBackLandTransactionPending = (
   return transaction
     ? transaction.status === TransactionStatus.QUEUED ||
         transaction.status === TransactionStatus.PENDING
+
     : false
 }

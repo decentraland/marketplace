@@ -18,10 +18,10 @@ const OnRentListElement = ({
   isClaimingBackLandTransactionPending
 }: Props) => {
   const category = nft!.category
-  const startDate = rental.startedAt ? new Date(rental.startedAt) : null
-  const period = rental.periods[0]
-  const endDate = startDate ? add(startDate, { days: period.maxDays }) : null
-
+  const { startedAt, rentedDays } = rental
+  const startDate = startedAt ? new Date(startedAt) : null
+  const endDate =
+    startDate && rentedDays ? add(startDate, { days: rentedDays }) : null
   return (
     <>
       <Mobile>
@@ -45,17 +45,17 @@ const OnRentListElement = ({
           </Table.Cell>
           <Table.Cell>{t(`global.${category}`)}</Table.Cell>
           <Table.Cell>
-            {rental.status === RentalStatus.OPEN ? (
+            {isClaimingBackLandTransactionPending ? (
+              <span>
+                <Icon className="warning-icon" name="warning sign" />
+                {t('manage_asset_page.rent.claiming_back')}
+              </span>
+            ) : rental.status === RentalStatus.OPEN ? (
               t('on_rent_list.listed_for_rent')
             ) : endDate ? (
               t('on_rent_list.rented_until', {
                 end_date: format(endDate, 'MMM dd')
               })
-            ) : isClaimingBackLandTransactionPending ? (
-              <span>
-                <Icon className='warning-icon' name="warning sign" /> 
-                {t('manage_asset_page.rent.claiming_back')}
-              </span>
             ) : null}
           </Table.Cell>
           <Table.Cell>

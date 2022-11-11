@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Back,
@@ -10,7 +11,7 @@ import {
   Page,
   Section
 } from 'decentraland-ui'
-import { NFTCategory, RentalStatus } from '@dcl/schemas'
+import { NFTCategory, RentalListing, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../modules/asset/types'
 import { builderUrl } from '../../lib/environment'
@@ -52,6 +53,12 @@ const Unauthorized = () => (
 export const ManageAssetPage = (props: Props) => {
   const { onBack, userAddress, isConnecting } = props
 
+  const isBeingRented = useCallback(
+    (rental: RentalListing | null) =>
+      rental !== null && rental.status === RentalStatus.EXECUTED,
+    []
+  )
+
   const handleOpenInBuilder = (asset: NFT) => {
     window.location.replace(
       `${builderUrl}/land/${
@@ -68,7 +75,7 @@ export const ManageAssetPage = (props: Props) => {
       <Navigation activeTab={NavigationTab.MY_STORE} />
       <Page>
         <ErrorBoundary>
-          <Section>
+          <Section className={styles.main}>
             <AssetProvider
               type={AssetType.NFT}
               rentalStatus={[RentalStatus.EXECUTED, RentalStatus.OPEN]}
@@ -125,6 +132,7 @@ export const ManageAssetPage = (props: Props) => {
                                       <Button
                                         className={styles.transfer}
                                         as={Link}
+                                        disabled={isBeingRented(rental)}
                                         to={locations.transfer(
                                           asset.contractAddress,
                                           asset.tokenId
@@ -139,8 +147,19 @@ export const ManageAssetPage = (props: Props) => {
                                     {asset?.data.estate?.description ||
                                       asset?.data.parcel?.description}
                                   </p>
+                                  {isBeingRented(rental) ? (
+                                    <div className={styles.rentedMessage}>
+                                      {t(
+                                        'manage_asset_page.cant_transfer_rented_land'
+                                      )}
+                                    </div>
+                                  ) : null}
                                 </section>
-                                <Sell nft={asset} order={order} />
+                                <Sell
+                                  nft={asset}
+                                  isBeingRented={isBeingRented(rental)}
+                                  order={order}
+                                />
                                 <Rent nft={asset} rental={rental} />
                               </>
                             ) : null}
@@ -185,6 +204,7 @@ export const ManageAssetPage = (props: Props) => {
                                       <Button
                                         className={styles.transfer}
                                         as={Link}
+                                        disabled={isBeingRented(rental)}
                                         to={locations.transfer(
                                           asset.contractAddress,
                                           asset.tokenId
@@ -199,8 +219,19 @@ export const ManageAssetPage = (props: Props) => {
                                     {asset?.data.estate?.description ||
                                       asset?.data.parcel?.description}
                                   </p>
+                                  {isBeingRented(rental) ? (
+                                    <div className={styles.rentedMessage}>
+                                      {t(
+                                        'manage_asset_page.cant_transfer_rented_land'
+                                      )}
+                                    </div>
+                                  ) : null}
                                 </section>
-                                <Sell nft={asset} order={order} />
+                                <Sell
+                                  nft={asset}
+                                  isBeingRented={isBeingRented(rental)}
+                                  order={order}
+                                />
                                 <Rent nft={asset} rental={rental} />
                               </>
                             ) : null}
