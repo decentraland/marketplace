@@ -349,7 +349,8 @@
   },
   "on_rent_list": {
     "listed_for_rent": "Listed for rent",
-    "rented_until": "Rented until {end_date}"
+    "rented_until": "Rented until {end_date}",
+    "claiming_back": "Claiming Back Land"
   },
   "collection_list": {
     "search": "Search {count} collections...",
@@ -836,7 +837,8 @@
       "list_for_rent_again": "List for rent again",
       "claiming_land": "Claiming back your Land. This process can take up to 24hs.",
       "view_transaction": "View transaction",
-      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND"
+      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND",
+      "claiming_back": "Claiming Back Land"
     },
     "highlights": {
       "title": "Highlights",

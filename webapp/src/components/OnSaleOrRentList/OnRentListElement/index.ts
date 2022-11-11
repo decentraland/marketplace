@@ -1,3 +1,3 @@
-import OnRentListElement from './OnRentListElement'
+import OnRentListElement from './OnRentListElement.container'
 
 export default OnRentListElement

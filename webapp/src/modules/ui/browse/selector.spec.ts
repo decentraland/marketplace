@@ -1,6 +1,11 @@
-import { Item, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import { ChainId, Item, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import {
+  Transaction,
+  TransactionStatus
+} from 'decentraland-dapps/dist/modules/transaction/types'
 import { NFT } from '../../nft/types'
 import { RootState } from '../../reducer'
+import { CLAIM_LAND_TRANSACTION_SUBMITTED } from '../../rental/actions'
 import { View } from '../types'
 import { BrowseUIState } from './reducer'
 import {
@@ -12,7 +17,8 @@ import {
   getOnSaleItems,
   getOnSaleNFTs,
   getState,
-  getView
+  getView,
+  isClaimingBackLandTransactionPending
 } from './selectors'
 
 let rootState: RootState
@@ -126,5 +132,140 @@ describe('when getting the Elements on sale of the ui browse state', () => {
       itemOnSale,
       [nftOnSale, order]
     ])
+  })
+})
+
+describe('when getting if the claiming back transaction is pending', () => {
+  const myAddress = '0xaddress'
+  const chainId = ChainId.ETHEREUM_GOERLI
+  const tokenId = '1'
+  const contractAddress = '0xnewAddress'
+
+  let nft: NFT
+  let state: RootState
+
+  beforeEach(() => {
+    nft = { id: '567', tokenId, contractAddress, chainId } as NFT
+
+    state = ({
+      wallet: {
+        data: {
+          address: null
+        }
+      },
+      transaction: {
+        data: [] as Transaction[]
+      }
+    } as unknown) as RootState
+  })
+
+  describe('and there is no address', () => {
+    beforeEach(() => {
+      state.wallet.data!.address = ''
+    })
+
+    it('should return false', () => {
+      expect(isClaimingBackLandTransactionPending(state, nft)).toBeFalsy()
+    })
+  })
+
+  describe('and there are no transactions', () => {
+    beforeEach(() => {
+      state.wallet.data!.address = myAddress
+      state.transaction.data = []
+    })
+
+    it('should return false ', () => {
+      expect(isClaimingBackLandTransactionPending(state, nft)).toBeFalsy()
+    })
+  })
+
+  ;[
+    {
+      status: TransactionStatus.CONFIRMED,
+      expectedResult: false
+    },
+    {
+      status: TransactionStatus.DROPPED,
+      expectedResult: false
+    },
+    {
+      status: TransactionStatus.PENDING,
+      expectedResult: true
+    },
+    {
+      status: TransactionStatus.QUEUED,
+      expectedResult: true
+    },
+    {
+      status: TransactionStatus.REPLACED,
+      expectedResult: false
+    },
+    {
+      status: TransactionStatus.REVERTED,
+      expectedResult: false
+    }
+  ].forEach(element => {
+    describe(`and there is one transaction with status: ${element.status}`, () => {
+      beforeEach(() => {
+        state.wallet.data!.address = myAddress
+        state.transaction.data = [
+          {
+            hash: 'hash',
+            timestamp: 123456,
+            from: myAddress,
+            actionType: CLAIM_LAND_TRANSACTION_SUBMITTED,
+            status: element.status,
+            chainId,
+            payload: {
+              tokenId,
+              contractAddress
+            }
+          }
+        ] as Transaction[]
+      })
+
+      it(`should return ${element.expectedResult}`, () => {
+        expect(isClaimingBackLandTransactionPending(state, nft)).toBe(
+          element.expectedResult
+        )
+      })
+    })
+  })
+
+  describe('and there are two transactions: one pending and one confirmed', () => {
+    beforeEach(() => {
+      state.wallet.data!.address = myAddress
+      state.transaction.data = [
+        {
+          hash: 'hash',
+          timestamp: 123456,
+          from: myAddress,
+          actionType: CLAIM_LAND_TRANSACTION_SUBMITTED,
+          status: TransactionStatus.CONFIRMED,
+          chainId,
+          payload: {
+            tokenId,
+            contractAddress
+          }
+        },
+        {
+          hash: 'hashPending',
+          timestamp: 1234567,
+          from: myAddress,
+          actionType: CLAIM_LAND_TRANSACTION_SUBMITTED,
+          status: TransactionStatus.PENDING,
+          chainId,
+          payload: {
+            tokenId,
+            contractAddress
+          }
+        }
+      ] as Transaction[]
+    })
+
+    it('should return true', () => {
+      expect(isClaimingBackLandTransactionPending(state, nft)).toBeTruthy()
+    })
   })
 })

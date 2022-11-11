@@ -1,9 +1,11 @@
 import { createSelector } from 'reselect'
 import { Item, Order, RentalListing } from '@dcl/schemas'
+import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { getData as getNFTData } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
 import { getData as getRentalData } from '../../rental/selectors'
+import { CLAIM_LAND_TRANSACTION_SUBMITTED } from '../../rental/actions'
 import { NFTState } from '../../nft/reducer'
 import { RootState } from '../../reducer'
 import { BrowseUIState } from './reducer'
@@ -11,7 +13,10 @@ import { NFT } from '../../nft/types'
 import { ItemState } from '../../item/reducer'
 import { VendorName } from '../../vendor'
 import { getAddress } from '../../wallet/selectors'
+import { getTransactionsByType } from '../../transaction/selectors'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
+
+
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState) => getState(state).view
@@ -90,3 +95,37 @@ export const getOnSaleElements = createSelector<
   ReturnType<typeof getOnSaleNFTs>,
   OnSaleElement[]
 >(getOnSaleItems, getOnSaleNFTs, (items, nfts) => [...items, ...nfts])
+
+
+export const isClaimingBackLandTransactionPending = (
+  state: RootState,
+  nft: NFT
+): boolean => {
+  const userAddress = getAddress(state)
+
+  if (!userAddress) return false
+
+  const transactionsClaimedLand = getTransactionsByType(
+    state,
+    userAddress,
+    CLAIM_LAND_TRANSACTION_SUBMITTED
+  )
+
+  const transactions = transactionsClaimedLand
+    .filter(
+      element =>
+        element.chainId === nft.chainId &&
+        element.payload.tokenId === nft.tokenId &&
+        element.payload.contractAddress === nft.contractAddress
+    )
+    .sort((a, b) => {
+      if (a.timestamp > b.timestamp) return -1
+      else if (a.timestamp < b.timestamp) return 1
+      return 0
+    })
+
+  return transactions[0]
+    ? transactions[0].status === TransactionStatus.QUEUED ||
+        transactions[0].status === TransactionStatus.PENDING
+    : false
+}

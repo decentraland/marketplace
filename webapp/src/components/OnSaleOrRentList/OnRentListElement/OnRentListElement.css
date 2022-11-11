@@ -12,3 +12,7 @@
 .mobile-row a {
   color: var(--text);
 }
+
+.warning-icon{
+ color: var(--primary);
+}
