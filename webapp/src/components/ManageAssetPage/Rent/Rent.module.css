@@ -86,6 +86,10 @@
   font-size: 18px;
 }
 
+.actionButtonBasicPadding{
+  padding: 7px 15px 7px 0px !important;
+}
+
 .actionButton:global(.ui.button) {
   border: 1px solid var(--gray);
   padding: 7px 15px;
