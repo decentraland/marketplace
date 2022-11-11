@@ -4,6 +4,8 @@ import { RootState } from '../../modules/reducer'
 import { getData } from '../../modules/order/selectors'
 import { isLand } from '../../modules/nft/utils'
 import { getActiveOrder } from '../../modules/order/utils'
+import { isClaimingBackLandTransactionPending} from '../../modules/ui/browse/selectors'
+import { NFT } from '../../modules/nft/types'
 import { MapStateProps, OwnProps, MapDispatchProps } from './AssetCard.types'
 import AssetCard from './AssetCard'
 import { getView } from '../../modules/ui/browse/selectors'
@@ -36,12 +38,15 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     )
   }
 
+  const assetNFT = asset as NFT
+  
   return {
     rentalPricePerDay,
     price,
     showListedTag:
       Boolean(view === View.CURRENT_ACCOUNT && price) &&
-      getLocation(state).pathname !== locations.root()
+      getLocation(state).pathname !== locations.root(),
+    isClaimingBackLandTransactionPending: isClaimingBackLandTransactionPending(state, assetNFT)
   }
 }
 

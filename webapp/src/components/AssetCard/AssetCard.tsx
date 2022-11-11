@@ -1,7 +1,7 @@
 import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
-import { Card } from 'decentraland-ui'
+import { Card, Icon } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
@@ -24,7 +24,8 @@ const AssetCard = (props: Props) => {
     price,
     rentalPricePerDay,
     showListedTag,
-    onClick
+    onClick,
+    isClaimingBackLandTransactionPending
   } = props
 
   const title = getAssetName(asset)
@@ -37,8 +38,21 @@ const AssetCard = (props: Props) => {
       as={Link}
       to={getAssetUrl(asset, isManager && isLand(asset))}
       onClick={onClick}
-    >
+    > 
       <AssetImage asset={asset} showMonospace />
+      {isClaimingBackLandTransactionPending && (
+        <div
+          className="LandBubble"
+          style={{
+            borderRadius: '50px !important'
+          }}
+        >
+          <Icon className="warning-icon" name="warning sign" />
+          <div className="HidableText">
+            {t('manage_asset_page.rent.claiming_back')}{' '}
+          </div>
+        </div>
+      )}
       {showListedTag && <ListedBadge className="listed-badge" />}
       <Card.Content>
         <Card.Header>
