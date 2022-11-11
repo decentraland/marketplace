@@ -150,7 +150,8 @@ export const Rent = (props: Props) => {
                   <div className={styles.activeRentActions}>
                     <Button
                       as={'a'}
-                      className={styles.actionButton}
+                      basic 
+                      className={styles.actionButtonBasicPadding}
                       href={claimingBackLandTransactionLink}
                     >
                       {t('manage_asset_page.rent.view_transaction')}
