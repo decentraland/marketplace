@@ -132,29 +132,9 @@ export const Rent = (props: Props) => {
       </div>
       {rental ? (
         <div className={styles.content}>
-          {isClaimingBackLandTransactionPending ? (
+          {rental.status === RentalStatus.EXECUTED ? (
             <div className={styles.activeRent}>
-              <div className={styles.rentMessage}>
-                <T
-                  id="manage_asset_page.rent.claiming_land"
-                  values={{
-                    tenant: <LinkedProfile address={rental.tenant!} />
-                  }}
-                />
-              </div>
-              <div className={styles.activeRentActions}>
-                {wrapDisabledMobileButton(
-                  <div>
-                    <Button basic onClick={handleViewTransaction}>
-                      {t('manage_asset_page.rent.view_transaction')}
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : rental.status === RentalStatus.EXECUTED ? (
-            <div className={styles.activeRent}>
-              {rental.startedAt && isClaimingLandBack ? (
+              {rental.startedAt && (isClaimingLandBack || isClaimingBackLandTransactionPending) ? (
                 <>
                   <div>{t('manage_asset_page.rent.claiming_land')}</div>
                   <div className={styles.activeRentActions}>
