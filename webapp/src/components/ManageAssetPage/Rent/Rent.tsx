@@ -153,6 +153,7 @@ export const Rent = (props: Props) => {
                       basic 
                       className={styles.actionButtonBasicPadding}
                       href={claimingBackLandTransactionLink}
+                      target="_blank"
                     >
                       {t('manage_asset_page.rent.view_transaction')}
                     </Button>
