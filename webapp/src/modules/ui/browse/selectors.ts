@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect'
 import { Item, Order, RentalListing } from '@dcl/schemas'
-import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
+import { Transaction, TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { getData as getNFTData } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
@@ -97,13 +97,14 @@ export const getOnSaleElements = createSelector<
 >(getOnSaleItems, getOnSaleNFTs, (items, nfts) => [...items, ...nfts])
 
 
-export const isClaimingBackLandTransactionPending = (
+
+export const getLastTransactionForClaimingBackLand = (
   state: RootState,
   nft: NFT
-): boolean => {
+): Transaction | null => {
   const userAddress = getAddress(state)
 
-  if (!userAddress) return false
+  if (!userAddress) return null
 
   const transactionsClaimedLand = getTransactionsByType(
     state,
@@ -124,8 +125,18 @@ export const isClaimingBackLandTransactionPending = (
       return 0
     })
 
-  return transactions[0]
-    ? transactions[0].status === TransactionStatus.QUEUED ||
-        transactions[0].status === TransactionStatus.PENDING
+  return transactions[0] ?? null;
+}
+
+export const isClaimingBackLandTransactionPending = (
+  state: RootState,
+  nft: NFT
+): boolean => {
+  const transaction = getLastTransactionForClaimingBackLand(state, nft);
+
+  return transaction
+    ? transaction.status === TransactionStatus.QUEUED ||
+        transaction.status === TransactionStatus.PENDING
+
     : false
 }

@@ -6,6 +6,7 @@ import formatDistance from 'date-fns/formatDistance'
 import { RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 import { Button, Popup } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getTransactionHref } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -52,11 +53,12 @@ const LinkedProfile = ({ address }: { address: string }) => {
 export const Rent = (props: Props) => {
   const {
     className,
-    isClaimingLandBack,
     onClaimLand,
     onCreateOrEditRent,
     rental,
-    nft
+    nft,
+    isClaimingBackLandTransactionPending,
+    claimingBackLandTransaction
   } = props
   const isMobileView = isMobile()
 
@@ -80,7 +82,16 @@ export const Rent = (props: Props) => {
     [nft, onCreateOrEditRent, rental]
   )
   const handleListForRentAgain = useCallback(() => undefined, [])
-  const handleViewTransaction = useCallback(() => undefined, [])
+  const claimingBackLandTransactionLink = claimingBackLandTransaction
+    ? getTransactionHref(
+        {
+          txHash:
+            claimingBackLandTransaction.replacedBy ||
+            claimingBackLandTransaction.hash
+        },
+        claimingBackLandTransaction.chainId
+      )
+    : ''
   const chosenPeriodPrice: string | null = useMemo(
     () =>
       rental && rental.startedAt
@@ -138,13 +149,16 @@ export const Rent = (props: Props) => {
         <div className={styles.content}>
           {rental.status === RentalStatus.EXECUTED ? (
             <div className={styles.activeRent}>
-              {rental.startedAt && isClaimingLandBack ? (
+              {rental.startedAt && isClaimingBackLandTransactionPending ? (
                 <>
                   <div>{t('manage_asset_page.rent.claiming_land')}</div>
                   <div className={styles.activeRentActions}>
                     <Button
-                      className={styles.actionButton}
-                      onClick={handleViewTransaction}
+                      as={'a'}
+                      basic
+                      className={styles.actionButtonBasicPadding}
+                      href={claimingBackLandTransactionLink}
+                      target="_blank"
                     >
                       {t('manage_asset_page.rent.view_transaction')}
                     </Button>
@@ -201,7 +215,7 @@ export const Rent = (props: Props) => {
               ) : null}
             </div>
           ) : null}
-          {!isClaimingLandBack ? (
+          {!isClaimingBackLandTransactionPending ? (
             <div className={styles.summary}>
               <div
                 className={classNames(
