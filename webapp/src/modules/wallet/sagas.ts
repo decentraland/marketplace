@@ -19,7 +19,6 @@ import { getContractNames } from '../vendor'
 import { contracts, getContract } from '../contract/utils'
 import { TRANSACTIONS_API_URL } from './utils'
 import { config } from '../../config'
-import { Contract } from '../vendor/services'
 
 const baseWalletSaga = createWalletSaga({
   CHAIN_ID: Number(config.get('CHAIN_ID')!),
@@ -84,14 +83,10 @@ function* handleWallet(
     network: Network.MATIC
   })
 
-  let rentals: Contract | undefined
-
-  try {
-    rentals = getContract({
-      name: contractNames.RENTALS,
-      network: Network.ETHEREUM
-    })
-  } catch (e) {}
+  const rentals = getContract({
+    name: contractNames.RENTALS,
+    network: Network.ETHEREUM
+  })
 
   const authorizations: Authorization[] = []
 
@@ -149,16 +144,14 @@ function* handleWallet(
     type: AuthorizationType.ALLOWANCE
   })
 
-  if (rentals) {
-    authorizations.push({
-      address,
-      authorizedAddress: rentals.address,
-      contractAddress: manaEthereum.address,
-      contractName: ContractName.MANAToken,
-      chainId: manaEthereum.chainId,
-      type: AuthorizationType.ALLOWANCE
-    })
-  }
+  authorizations.push({
+    address,
+    authorizedAddress: rentals.address,
+    contractAddress: manaEthereum.address,
+    contractName: ContractName.MANAToken,
+    chainId: manaEthereum.chainId,
+    type: AuthorizationType.ALLOWANCE
+  })
 
   for (const contract of contracts.filter(c => c.category !== null)) {
     // If the contract is a partner we might need to use a different contract name. See PR #680
@@ -205,9 +198,8 @@ function* handleWallet(
 
     // add authorizations for the rentals contract for the land and estate registries
     if (
-      (contract.category === NFTCategory.PARCEL ||
-        contract.category === NFTCategory.ESTATE) &&
-      rentals !== undefined
+      contract.category === NFTCategory.PARCEL ||
+      contract.category === NFTCategory.ESTATE
     ) {
       authorizations.push({
         address,

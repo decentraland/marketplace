@@ -161,16 +161,15 @@ const contracts = ({
       category: null,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MAINNET
+    },
+    {
+      name: ContractName.RENTALS,
+      address: getContract(CN.Rentals, ChainId.ETHEREUM_MAINNET).address,
+      vendor: 'decentraland',
+      category: null,
+      network: Network.ETHEREUM,
+      chainId: ChainId.ETHEREUM_MAINNET
     }
-    // TODO: Add this once the Rentals contract is deployed to mainnet and added to decentraland-trannsactions
-    // {
-    //   name: ContractName.RENTALS,
-    //   address: getContract(CN.Rentals, ChainId.ETHEREUM_GOERLI).address,
-    //   vendor: 'decentraland',
-    //   category: null,
-    //   network: Network.ETHEREUM,
-    //   chainId: ChainId.ETHEREUM_GOERLI
-    // }
   ]
 } as Record<AppNetwork, Contract[]>)[network]
 
