@@ -7,8 +7,8 @@ import {
   isInsufficientMANA,
   checkFingerprint
 } from '../../../modules/bid/utils'
-import { Props } from './AcceptButton.types'
 import { isBeingRented } from '../../../modules/rental/utils'
+import { Props } from './AcceptButton.types'
 
 const AcceptButton = (props: Props) => {
   const { nft, bid, onClick, rental } = props
