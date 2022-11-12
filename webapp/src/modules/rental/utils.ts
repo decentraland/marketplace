@@ -1,5 +1,12 @@
 import { BigNumber, ethers } from 'ethers'
-import { ChainId, PeriodCreation, RentalListing } from '@dcl/schemas'
+import add from 'date-fns/add'
+import {
+  ChainId,
+  PeriodCreation,
+  RentalListing,
+  RentalListingPeriod,
+  RentalStatus
+} from '@dcl/schemas'
 import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import {
@@ -137,12 +144,50 @@ export function getMaxPriceOfPeriods(rental: RentalListing): string {
 }
 
 /**
+ * Returns the chosen rental period of an active rental.
+ * @throws Will throw if the rental hasn't started yet.
+ * @param rental - A rental listing.
+ */
+export function getRentalChosenPeriod(
+  rental: RentalListing
+): RentalListingPeriod {
+  const rentalPeriod = rental.periods.find(
+    period => period.maxDays === rental.rentedDays
+  )
+  if (!rentalPeriod) {
+    throw Error('Rental period was not found')
+  }
+
+  return rentalPeriod
+}
+
+/**
  * Returns the end date of a rental.
  * @param rental - A rental listing.
  * @param period - A period of the rental listing.
  * @returns the end date of the rental or null if the rental has not started.
  */
 export function getRentalEndDate(rental: RentalListing): Date | null {
-  // TODO: to be completed once the server returns the rental date
-  return rental.startedAt ? new Date(rental.startedAt) : null
+  return rental.startedAt && rental.rentedDays
+    ? add(rental.startedAt, { days: rental.rentedDays })
+    : null
+}
+
+/**
+ * Checks wether a the listing of an NFT is executed, meaning that is currently on rent.
+ * @param rental - A rental listing.
+ * @returns true if the rental exists and is being rented, false otherwise
+ */
+export function isBeingRented(rental: RentalListing | null) {
+  return rental !== null && rental.status === RentalStatus.EXECUTED
+}
+
+/**
+ * Checks wether a rental has already ended it's renting time.
+ * @param rental - A rental listing.
+ * @returns true if the rental end date is set and the rental has already passed its renting time, false otherwise.
+ */
+export function hasRentalEnded(rental: RentalListing): boolean {
+  const endDate = getRentalEndDate(rental)
+  return endDate ? endDate.getTime() <= Date.now() : false
 }

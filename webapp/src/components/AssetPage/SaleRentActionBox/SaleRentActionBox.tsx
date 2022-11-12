@@ -1,15 +1,18 @@
 import { memo, useCallback, useMemo, useState } from 'react'
-import add from 'date-fns/add'
 import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
-import { RentalStatus } from '@dcl/schemas'
 import { Button, Popup } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { formatWeiMANA } from '../../../lib/mana'
-import { getMaxPriceOfPeriods } from '../../../modules/rental/utils'
+import {
+  getMaxPriceOfPeriods,
+  getRentalEndDate,
+  hasRentalEnded,
+  isBeingRented
+} from '../../../modules/rental/utils'
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
 import { getMANAAuthorization } from '../../../lib/authorization'
 import { getContract } from '../../../modules/contract/utils'
@@ -63,7 +66,7 @@ const SaleRentActionBox = ({
   const { bidService } = useMemo(() => VendorFactory.build(nft.vendor), [nft])
   const isBiddable = bidService !== undefined
   const canBid = isBiddable && !userHasAlreadyBidsOnNft
-
+  const isCurrentlyRented = isBeingRented(rental)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
   const authorization = getMANAAuthorization(
@@ -83,13 +86,10 @@ const SaleRentActionBox = ({
 
   const handleCloseAuthorizationModal = () => setShowAuthorizationModal(false)
 
-  // TODO: @Rentals refactor this into a single function to be used everywhere
-  const isBeingRented =
-    rental !== null && rental.status === RentalStatus.EXECUTED
-  const rentalEndTime = isBeingRented
-    ? add(rental!.startedAt!, { days: rental!.rentedDays! }).getTime()
+  const rentalEndTime = isCurrentlyRented
+    ? getRentalEndDate(rental!)!.getTime()
     : 0
-  const rentalHasEnded = rentalEndTime - Date.now() < 0
+  const rentalHasEnded = isCurrentlyRented && hasRentalEnded(rental!)
 
   return (
     <div className={styles.main}>
@@ -258,7 +258,7 @@ const SaleRentActionBox = ({
           onCancel={handleCloseAuthorizationModal}
         />
       </div>
-      {isBeingRented && !rentalHasEnded ? (
+      {isCurrentlyRented && !rentalHasEnded ? (
         <div className={styles.message}>
           <T
             id={'asset_page.sales_rent_action_box.rented_until'}

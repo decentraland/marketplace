@@ -1,4 +1,9 @@
-import { NFT, RentalListing, RentalListingPeriod } from '@dcl/schemas'
+import {
+  NFT,
+  RentalListing,
+  RentalListingPeriod,
+  RentalStatus
+} from '@dcl/schemas'
 import { BigNumber, ethers } from 'ethers'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
 import { ChainId } from '@dcl/schemas'
@@ -10,7 +15,11 @@ import {
   getSignature,
   getSignerNonce,
   getOpenRentalId,
-  getMaxPriceOfPeriods
+  getMaxPriceOfPeriods,
+  isBeingRented,
+  hasRentalEnded,
+  getRentalEndDate,
+  getRentalChosenPeriod
 } from './utils'
 import { getRentalsContractInstance } from './contract'
 
@@ -30,6 +39,7 @@ const rentalsMock = ({
   getAssetIndex: jest.fn(),
   getSignerIndex: jest.fn()
 } as unknown) as ethers.Contract
+const aDay = 24 * 60 * 60 * 1000
 
 describe('when getting a signature', () => {
   describe('and can not get the signer', () => {
@@ -319,6 +329,156 @@ describe('when getting the max price per day of the periods of a rental', () => 
 
     it('should return the most expensive period', () => {
       expect(getMaxPriceOfPeriods(rentalListing)).toBe('20000')
+    })
+  })
+})
+
+describe('when checking if a rental is being rented', () => {
+  describe('and the rental is null', () => {
+    it('should return false', () => {
+      expect(isBeingRented(null)).toBe(false)
+    })
+  })
+
+  describe('and the rental is not null', () => {
+    let rental: RentalListing
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.EXECUTED
+      } as RentalListing
+    })
+
+    Object.values(RentalStatus).forEach(rentalStatus => {
+      describe(`and its status is "${rentalStatus}"`, () => {
+        beforeEach(() => {
+          rental.status = rentalStatus
+        })
+
+        it(`should return ${rentalStatus === RentalStatus.EXECUTED}`, () => {
+          expect(isBeingRented(rental)).toBe(
+            rentalStatus === RentalStatus.EXECUTED
+          )
+        })
+      })
+    })
+  })
+})
+
+describe('when checking if a rental has ended', () => {
+  let rental: RentalListing
+  beforeEach(() => {
+    rental = {
+      status: RentalStatus.EXECUTED
+    } as RentalListing
+  })
+
+  describe('and the rental did not start yet', () => {
+    beforeEach(() => {
+      rental.status = RentalStatus.OPEN
+      rental.startedAt = null
+      rental.rentedDays = null
+    })
+
+    it('should return false', () => {
+      expect(hasRentalEnded(rental)).toBe(false)
+    })
+  })
+
+  describe('and the rental has started and ended', () => {
+    beforeEach(() => {
+      rental.startedAt = Date.now() - aDay * 5
+      rental.rentedDays = 2
+    })
+
+    it('should return false', () => {
+      expect(hasRentalEnded(rental)).toBe(true)
+    })
+  })
+
+  describe('and the rental has started but not ended yet', () => {
+    beforeEach(() => {
+      rental.startedAt = Date.now() + aDay * 5
+      rental.rentedDays = 2
+    })
+
+    it('should return true', () => {
+      expect(hasRentalEnded(rental)).toBe(false)
+    })
+  })
+})
+
+describe("when getting a rental's end date", () => {
+  let rental: RentalListing
+  beforeEach(() => {
+    rental = {
+      status: RentalStatus.EXECUTED
+    } as RentalListing
+  })
+
+  describe('and the rental has not started yet', () => {
+    beforeEach(() => {
+      rental.status = RentalStatus.OPEN
+      rental.startedAt = null
+      rental.rentedDays = null
+    })
+
+    it('should return null', () => {
+      expect(getRentalEndDate(rental)).toBeNull()
+    })
+  })
+
+  describe('and the rental has started', () => {
+    beforeEach(() => {
+      rental.status = RentalStatus.OPEN
+      rental.startedAt = Date.now() + aDay * 5
+      rental.rentedDays = 2
+    })
+
+    it('should return the started date plus the rented days', () => {
+      expect(getRentalEndDate(rental)).toEqual(
+        new Date(rental.startedAt! + 2 * aDay)
+      )
+    })
+  })
+})
+
+describe('when getting the rental chosen period', () => {
+  let rental: RentalListing
+  beforeEach(() => {
+    rental = {
+      status: RentalStatus.EXECUTED
+    } as RentalListing
+  })
+
+  describe("and the rental hasn't started yet", () => {
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.OPEN,
+        periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }],
+        startedAt: null,
+        rentedDays: null
+      } as RentalListing
+    })
+
+    it('should throw signaling that the rental period was not found', () => {
+      expect(() => getRentalChosenPeriod(rental)).toThrowError(
+        'Rental period was not found'
+      )
+    })
+  })
+
+  describe('and the rental has started', () => {
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.EXECUTED,
+        startedAt: Date.now(),
+        rentedDays: 2,
+        periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }]
+      } as RentalListing
+    })
+
+    it('should return the rental period that matches the rented days', () => {
+      expect(getRentalChosenPeriod(rental)).toEqual(rental.periods[0])
     })
   })
 })

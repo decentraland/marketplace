@@ -14,8 +14,9 @@ import { locations } from '../../../modules/routing/locations'
 import { VendorName } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import {
-  getMaxPriceOfPeriods,
-  getRentalEndDate
+  getRentalChosenPeriod,
+  getRentalEndDate,
+  hasRentalEnded
 } from '../../../modules/rental/utils'
 import { Mana } from '../../Mana'
 import { IconButton } from '../IconButton'
@@ -80,14 +81,18 @@ export const Rent = (props: Props) => {
   )
   const handleListForRentAgain = useCallback(() => undefined, [])
   const handleViewTransaction = useCallback(() => undefined, [])
-  const maxPriceOfPeriods: string | null = useMemo(
-    () => (rental ? getMaxPriceOfPeriods(rental) : null),
+  const chosenPeriodPrice: string | null = useMemo(
+    () =>
+      rental && rental.startedAt
+        ? getRentalChosenPeriod(rental).pricePerDay
+        : null,
     [rental]
   )
   const rentalEndDate: Date | null = useMemo(
-    () => (rental ? getRentalEndDate(rental) : null),
+    () => (rental && rental.startedAt ? getRentalEndDate(rental) : null),
     [rental]
   )
+  const rentalEnded = useMemo(() => rental && hasRentalEnded(rental), [rental])
   const rentalPeriods: string | null = useMemo(
     () =>
       rental
@@ -145,7 +150,7 @@ export const Rent = (props: Props) => {
                     </Button>
                   </div>
                 </>
-              ) : rentalEndDate && rentalEndDate.getTime() <= Date.now() ? (
+              ) : rentalEnded ? (
                 <>
                   <div className={styles.rentMessage}>
                     <T
@@ -178,7 +183,7 @@ export const Rent = (props: Props) => {
                     )}
                   </div>
                 </>
-              ) : rentalEndDate && rentalEndDate.getTime() > Date.now() ? (
+              ) : !rentalEnded ? (
                 <div className={styles.rentMessage}>
                   <T
                     id="manage_asset_page.rent.rented_until"
@@ -210,7 +215,7 @@ export const Rent = (props: Props) => {
                 </div>
                 <div className={styles.columnContent}>
                   <Mana withTooltip size={'medium'} network={rental.network}>
-                    {formatWeiMANA(maxPriceOfPeriods!)}
+                    {formatWeiMANA(chosenPeriodPrice!)}
                   </Mana>
                   <span>/{t('global.day')}</span>
                 </div>
