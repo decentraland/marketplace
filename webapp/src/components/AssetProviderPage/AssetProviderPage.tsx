@@ -1,6 +1,8 @@
 import React from 'react'
+import { RentalStatus } from '@dcl/schemas'
 import { Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { AssetType } from '../../modules/asset/types'
 import { AssetProvider } from '../AssetProvider'
 import { Props } from './AssetProviderPage.types'
 import styles from './AssetProviderPage.module.css'
@@ -21,7 +23,14 @@ export const NotFound = () => (
 const AssetProviderPage = (props: Props) => {
   const { type, isConnecting, children } = props
   return (
-    <AssetProvider type={type}>
+    <AssetProvider
+      type={type}
+      rentalStatus={
+        type === AssetType.NFT
+          ? [RentalStatus.OPEN, RentalStatus.EXECUTED, RentalStatus.CANCELLED]
+          : undefined
+      }
+    >
       {(asset, order, rental, isAssetLoading) => {
         const isLoading = isConnecting || isAssetLoading
 

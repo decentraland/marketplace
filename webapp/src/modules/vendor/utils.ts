@@ -1,4 +1,4 @@
-import { NFTCategory } from '@dcl/schemas'
+import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import {
   getCategoryFromSection,
   getSearchEmoteCategory,
@@ -13,7 +13,7 @@ export function getFilters(
   vendor: VendorName,
   options: BrowseOptions
 ): NFTsFetchFilters {
-  const { section } = options
+  const { section, address } = options
 
   switch (vendor) {
     case VendorName.DECENTRALAND: {
@@ -55,7 +55,11 @@ export function getFilters(
         wearableGenders,
         contracts,
         network,
-        emotePlayMode
+        emotePlayMode,
+        rentalStatus:
+          isLand && address
+            ? [RentalStatus.OPEN, RentalStatus.EXECUTED]
+            : undefined
       } as NFTsFetchFilters<VendorName.DECENTRALAND>
     }
     default:
