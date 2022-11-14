@@ -40,15 +40,14 @@ const AssetCard = (props: Props) => {
       onClick={onClick}
     > 
       <AssetImage asset={asset} showMonospace />
-      {isClaimingBackLandTransactionPending && (
+      {isClaimingBackLandTransactionPending ? (
         <div
           className="LandBubble"
         >
           <Icon className="warning-icon" name="warning sign" />
             {t('manage_asset_page.rent.claiming_back')}
         </div>
-      )}
-      {showListedTag && <ListedBadge className="listed-badge" />}
+      ) : showListedTag ? <ListedBadge className="listed-badge" /> : null}
       <Card.Content>
         <Card.Header>
           <div className="title">{title}</div>
