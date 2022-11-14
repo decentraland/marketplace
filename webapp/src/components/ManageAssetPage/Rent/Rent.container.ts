@@ -3,12 +3,12 @@ import { Dispatch } from 'redux'
 import { RentalListing } from '@dcl/schemas'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../../modules/reducer'
+import { isClaimingBackLandTransactionPending, getLastTransactionForClaimingBackLand} from '../../../modules/ui/browse/selectors'
 import { MapStateProps, MapDispatchProps, OwnProps } from './Rent.types'
 import { RentalModalMetadata } from '../../Modals/RentalListingModal/RentalListingModal.types'
 import { VendorName } from '../../../modules/vendor'
 import { NFT } from '../../../modules/nft/types'
 import { Rent } from './Rent'
-import { isClaimingBackLandTransactionPending, getLastTransactionForClaimingBackLand} from '../../../modules/ui/browse/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   isClaimingBackLandTransactionPending: isClaimingBackLandTransactionPending(state, ownProps.nft),

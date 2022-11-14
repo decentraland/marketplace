@@ -69,7 +69,7 @@ a.ui.card.link:hover .meta {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  color: var(--text)
+  color: var(--text);
 }
 
 .AssetCard .card-meta {
@@ -79,6 +79,32 @@ a.ui.card.link:hover .meta {
 .AssetCard .card-rental-day {
   color: var(--text);
   font-size: 17px;
+}
+
+.AssetCard .LandBubble {
+  align-self: flex-end;
+  background-color: #ecebed;
+  border: 1px solid #a09ba8;
+  border-radius: 50px !important;
+  display: flex;
+  font-weight: 700;
+  padding: 6px 11px;
+  position: fixed;
+  right: 11px;
+  text-transform: uppercase;
+  top: 11px;
+  z-index: 2;
+}
+
+@media (max-width: 1199px) {
+  .AssetCard .LandBubble {
+    align-self: center;
+    font-size: x-small;
+    justify-content: center;
+    left: 11px;
+    line-height: 12px;
+    text-align: center;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 992px) {
@@ -97,11 +123,23 @@ a.ui.card.link:hover .meta {
     overflow: hidden;
     display: block;
   }
+
+  .AssetCard .LandBubble {
+    align-items: center;
+  }
 }
 
 @media (max-width: 768px) {
   .AssetCard.ui.card > .content,
   .ui.cards > .AssetCard.card > .content {
     display: block;
+  }
+
+  .AssetCard .LandBubble {
+    align-items: flex-start;
+    align-self: flex-end;
+    font-size: small;
+    left: unset;
+    text-align: left;
   }
 }
