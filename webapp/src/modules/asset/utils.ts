@@ -68,3 +68,7 @@ export function isOwnedBy(asset: Asset, wallet: Wallet | null) {
   const assetAddress = 'owner' in asset ? asset.owner : asset.creator
   return addressEquals(wallet?.address, assetAddress)
 }
+
+export function isNFT(asset: Asset){
+  return 'tokenId' in asset
+}

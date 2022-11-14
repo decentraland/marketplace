@@ -9,7 +9,7 @@ import { NFT } from '../../modules/nft/types'
 import { MapStateProps, OwnProps, MapDispatchProps } from './AssetCard.types'
 import AssetCard from './AssetCard'
 import { getView } from '../../modules/ui/browse/selectors'
-import { getAssetPrice } from '../../modules/asset/utils'
+import { getAssetPrice, isNFT } from '../../modules/asset/utils'
 import { locations } from '../../modules/routing/locations'
 import { View } from '../../modules/ui/types'
 import {
@@ -37,8 +37,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       getRentalById(state, openRentalId)!
     )
   }
-
-  const assetNFT = asset as NFT
   
   return {
     rentalPricePerDay,
@@ -46,7 +44,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     showListedTag:
       Boolean(view === View.CURRENT_ACCOUNT && price) &&
       getLocation(state).pathname !== locations.root(),
-    isClaimingBackLandTransactionPending: isClaimingBackLandTransactionPending(state, assetNFT)
+    isClaimingBackLandTransactionPending: isNFT(asset) ?  isClaimingBackLandTransactionPending(state, asset as NFT) : false
   }
 }
 

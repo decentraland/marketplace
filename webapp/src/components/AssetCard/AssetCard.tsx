@@ -43,9 +43,6 @@ const AssetCard = (props: Props) => {
       {isClaimingBackLandTransactionPending && (
         <div
           className="LandBubble"
-          style={{
-            borderRadius: '50px !important'
-          }}
         >
           <Icon className="warning-icon" name="warning sign" />
             {t('manage_asset_page.rent.claiming_back')}
