@@ -15,7 +15,10 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'showListedTag' | 'price' | 'rentalPricePerDay' | 'isClaimingBackLandTransactionPending'
+  | 'showListedTag'
+  | 'price'
+  | 'rentalPricePerDay'
+  | 'isClaimingBackLandTransactionPending'
 >
 export type MapDispatchProps = {}
 export type OwnProps = Pick<Props, 'asset' | 'order' | 'rental' | 'isManager'>

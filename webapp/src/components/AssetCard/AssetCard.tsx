@@ -38,16 +38,16 @@ const AssetCard = (props: Props) => {
       as={Link}
       to={getAssetUrl(asset, isManager && isLand(asset))}
       onClick={onClick}
-    > 
+    >
       <AssetImage asset={asset} showMonospace />
       {isClaimingBackLandTransactionPending ? (
-        <div
-          className="LandBubble"
-        >
+        <div className="LandBubble">
           <Icon className="warning-icon" name="warning sign" />
-            {t('manage_asset_page.rent.claiming_back')}
+          {t('manage_asset_page.rent.claiming_back')}
         </div>
-      ) : showListedTag ? <ListedBadge className="listed-badge" /> : null}
+      ) : showListedTag ? (
+        <ListedBadge className="listed-badge" />
+      ) : null}
       <Card.Content>
         <Card.Header>
           <div className="title">{title}</div>
