@@ -1,6 +1,7 @@
-import { NFT, NFTCategory, Order } from '@dcl/schemas'
+import { NFTCategory, Order } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
 import { addressEquals } from '../wallet/utils'
 import { Asset } from './types'
@@ -69,6 +70,6 @@ export function isOwnedBy(asset: Asset, wallet: Wallet | null) {
   return addressEquals(wallet?.address, assetAddress)
 }
 
-export function isNFT(asset: Asset){
+export function isNFT(asset: Asset): asset is NFT {
   return 'tokenId' in asset
 }
