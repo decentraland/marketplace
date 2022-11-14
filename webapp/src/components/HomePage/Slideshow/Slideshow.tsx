@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
-import { HeaderMenu, Header, Button, Loader } from 'decentraland-ui'
+import { HeaderMenu, Header, Button, Loader, Empty } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Asset } from '../../../modules/asset/types'
@@ -18,6 +18,7 @@ const Slideshow = (props: Props) => {
     title,
     subtitle,
     viewAllTitle,
+    emptyMessage,
     assets,
     isSubHeader,
     isLoading,
@@ -61,6 +62,12 @@ const Slideshow = (props: Props) => {
         />
       )),
     [assetsToRender, handleOnAssetCardClick]
+  )
+
+  const renderEmptyState = () => (
+    <Empty height={186} expand className="empty-state-container">
+      <span>{emptyMessage ? emptyMessage : t('slideshow.empty_message')}</span>
+    </Empty>
   )
 
   const handleOnNextPage = () => {
@@ -124,7 +131,9 @@ const Slideshow = (props: Props) => {
           )
         ) : assets.length > 0 ? (
           renderNfts()
-        ) : null}
+        ) : (
+          renderEmptyState()
+        )}
       </div>
       <>
         <div

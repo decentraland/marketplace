@@ -4,7 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor/types'
-import { SortBy } from '../../modules/routing/types'
+import { BrowseOptions, SortBy } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
 import { AssetType } from '../../modules/asset/types'
 import { HomepageView } from '../../modules/ui/asset/homepage/types'
@@ -81,60 +81,94 @@ const HomePage = (props: Props) => {
   )
 
   const handleViewAll = useCallback(
-    (view: View) => {
+    (view: View, fromEmptyState: boolean = false) => {
       const section = sections[view]
       const assetType = assetTypes[view]
       const sortBy = sort[view]
 
+      let trackMessage: string = ''
+      let browseOptions: BrowseOptions = {}
+
       if (Section.LAND === section) {
         onNavigate(locations.lands())
       } else if (Section.WEARABLES_TRENDING === section) {
-        getAnalytics().track('Explore all trending wearables')
-        onNavigate(
-          locations.browse({
-            section: Section.WEARABLES,
-            assetType: AssetType.ITEM
-          })
-        )
+        trackMessage = 'Explore all trending wearables'
+        browseOptions = {
+          section: Section.WEARABLES,
+          assetType: AssetType.ITEM
+        }
       } else {
-        getAnalytics().track(`View all ${section} section`)
-        onNavigate(locations.browse({ section, assetType, sortBy }))
+        trackMessage = `View all ${section} section`
+        browseOptions = { section, assetType, sortBy }
+      }
+
+      if (trackMessage && browseOptions) {
+        getAnalytics().track(
+          fromEmptyState ? `${trackMessage} '(from empty state)'` : trackMessage
+        )
+        onNavigate(locations.browse(browseOptions))
       }
     },
     [assetTypes, sort, sections, onNavigate]
   )
 
-  const handleOnChangeItemSection = useCallback(
-    (view: HomepageView, section: Section) => {
-      sections[view] = section
+  const fetchAssetsForView = useCallback(
+    (view: View, section?: Section) =>
       onFetchAssetsFromRoute({
         vendor,
-        section,
+        section: section || sections[view],
         view,
         assetType: assetTypes[view],
         sortBy: sort[view],
         page: 1,
         onlyOnSale: true
-      })
+      }),
+    [onFetchAssetsFromRoute, vendor, sections, assetTypes, sort]
+  )
+
+  const sectionsEmptyMessages: Partial<Record<View, string>> = useMemo(
+    () => ({
+      [View.HOME_TRENDING_ITEMS]: t(
+        'home_page.home_trending_items_empty_message',
+        {
+          br: <br />,
+          try_again_link: (
+            <div
+              className="empty-state-action-button"
+              onClick={() => fetchAssetsForView(View.HOME_TRENDING_ITEMS)}
+            >
+              {t('home_page.home_trending_items_try_again')}
+            </div>
+          ),
+          explore_all_link: (
+            <div
+              className="empty-state-action-button"
+              onClick={() => handleViewAll(View.HOME_TRENDING_ITEMS)}
+            >
+              {t('home_page.home_trending_items_explore_all_wearables')}
+            </div>
+          )
+        }
+      )
+    }),
+    [fetchAssetsForView, handleViewAll]
+  )
+
+  const handleOnChangeItemSection = useCallback(
+    (view: HomepageView, section: Section) => {
+      sections[view] = section
+      fetchAssetsForView(view, section)
     },
-    [assetTypes, sort, vendor, sections, onFetchAssetsFromRoute]
+    [sections, fetchAssetsForView]
   )
 
   useEffect(() => {
     let view: HomepageView
     for (view in homepage) {
-      onFetchAssetsFromRoute({
-        vendor,
-        section: sections[view],
-        view,
-        assetType: assetTypes[view],
-        sortBy: sort[view],
-        page: 1,
-        onlyOnSale: true
-      })
+      fetchAssetsForView(view)
     }
     // eslint-disable-next-line
-  }, [onFetchAssetsFromRoute])
+  }, [fetchAssetsForView])
 
   const renderSlideshow = (view: HomepageView) => {
     const hasItemsSection =
@@ -147,6 +181,7 @@ const HomePage = (props: Props) => {
         title={t(`home_page.${view}`)}
         subtitle={sectionsSubtitles[view]}
         viewAllTitle={sectionsViewAllTitle[view]}
+        emptyMessage={sectionsEmptyMessages[view]}
         assets={homepageLoading[view] ? [] : homepage[view]}
         hasItemsSection={hasItemsSection}
         isLoading={homepageLoading[view]}

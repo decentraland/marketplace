@@ -147,6 +147,18 @@
   margin-right: 0;
 }
 
+.Slideshow .assets .empty-state-container {
+  text-align: center;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.Slideshow .assets .empty-state-container .empty-state-action-button {
+  color: var(--primary);
+  cursor: pointer;
+  display: inline-flex;
+}
+
 @media (max-width: 768px) {
   .Slideshow .ItemsSection {
     display: flex;

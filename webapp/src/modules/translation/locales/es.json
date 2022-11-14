@@ -244,6 +244,9 @@
     "home_trending_items": "Items de tendencia",
     "home_trending_items_subtitle": "Items más vendidos en las últimas 24hs 🔥",
     "home_trending_items_explore_all": "Explorar todos",
+    "home_trending_items_empty_message": "Tenemos problemas para obtener los últimos items.{br}{try_again_link} o {explore_all_link}",
+    "home_trending_items_try_again": "Intentar de nuevo",
+    "home_trending_items_explore_all_wearables": "Explorar todos los items",
     "home_recently_listed_items_subtitle": "Items que se revenden",
     "home_latest_sales_items_subtitle": "Items siendo acuñados",
     "home_items": "Últimos items",
@@ -660,7 +663,8 @@
     "sign_in": "iniciar sesión"
   },
   "slideshow": {
-    "view_all": "Ver Todo"
+    "view_all": "Ver Todo",
+    "empty_message": "Hubo un error al cargar los elementos."
   },
   "highlights": {
     "title": "Destacados"

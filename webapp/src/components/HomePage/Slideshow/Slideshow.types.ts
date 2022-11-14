@@ -6,6 +6,7 @@ export type Props = {
   title: string
   subtitle?: string
   viewAllTitle?: string
+  emptyMessage?: string
   assets: Asset[]
   view: HomepageView
   isSubHeader?: boolean

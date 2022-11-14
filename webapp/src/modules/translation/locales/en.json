@@ -249,6 +249,9 @@
     "home_trending_items": "Trending items",
     "home_trending_items_subtitle": "Bestselling Items over the last 24hs 🔥",
     "home_trending_items_explore_all": "Explore all",
+    "home_trending_items_empty_message": "We are having troubles fetching the latest trending wearables.{br}{try_again_link} or {explore_all_link}",
+    "home_trending_items_try_again": "Try again",
+    "home_trending_items_explore_all_wearables": "Explore all wearables",
     "home_recently_listed_items_subtitle": "Items being resold",
     "home_latest_sales_items_subtitle": "Items being minted",
     "home_new_items": "Newest items",
@@ -667,7 +670,8 @@
     "sign_in": "Sign In"
   },
   "slideshow": {
-    "view_all": "View All"
+    "view_all": "View All",
+    "empty_message": "There was an error loading these items."
   },
   "highlights": {
     "title": "Highlights"
