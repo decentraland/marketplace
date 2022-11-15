@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Back,
@@ -63,6 +64,11 @@ export const ManageAssetPage = (props: Props) => {
     )
   }
 
+  const rentalStatus = useMemo(
+    () => [RentalStatus.EXECUTED, RentalStatus.OPEN, RentalStatus.CANCELLED],
+    []
+  )
+
   return (
     <>
       <Navbar isFullscreen />
@@ -70,14 +76,7 @@ export const ManageAssetPage = (props: Props) => {
       <Page>
         <ErrorBoundary>
           <Section className={styles.main}>
-            <AssetProvider
-              type={AssetType.NFT}
-              rentalStatus={[
-                RentalStatus.EXECUTED,
-                RentalStatus.OPEN,
-                RentalStatus.CANCELLED
-              ]}
-            >
+            <AssetProvider type={AssetType.NFT} rentalStatus={rentalStatus}>
               {(asset, order, rental, isLoading) => (
                 <>
                   <Back className="back" absolute onClick={onBack} />

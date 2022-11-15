@@ -12,6 +12,7 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
+import { config } from '../../../../config'
 import {
   PeriodOption,
   PeriodOptionsDev,
@@ -30,7 +31,6 @@ import {
 import { ManaField } from '../../../ManaField'
 import { Props } from './CreateOrEditListingStep.types'
 import styles from './CreateOrEditListingStep.module.css'
-import { config } from '../../../../config'
 
 const isDev = config.is(Env.DEVELOPMENT) || config.is(Env.STAGING)
 
