@@ -1,4 +1,5 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
+import { RentalStatus } from '@dcl/schemas'
 import { Atlas, AtlasTile } from 'decentraland-ui'
 import { ATLAS_SERVER_URL } from '../../modules/vendor/decentraland'
 import {
@@ -42,7 +43,12 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
         address: action.payload.wallet.address.toLowerCase()
       },
       filters: {
-        isLand: true
+        isLand: true,
+        rentalStatus: [
+          RentalStatus.OPEN,
+          RentalStatus.CANCELLED,
+          RentalStatus.EXECUTED
+        ]
       }
     })
   )

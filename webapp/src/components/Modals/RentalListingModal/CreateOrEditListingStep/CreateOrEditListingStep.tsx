@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
+import { Env } from '@dcl/ui-env'
 import {
   Modal,
   Button,
@@ -11,8 +12,10 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
+import { config } from '../../../../config'
 import {
   PeriodOption,
+  PeriodOptionsDev,
   UpsertRentalOptType
 } from '../../../../modules/rental/types'
 import { formatWeiMANA, parseMANANumber } from '../../../../lib/mana'
@@ -28,6 +31,8 @@ import {
 import { ManaField } from '../../../ManaField'
 import { Props } from './CreateOrEditListingStep.types'
 import styles from './CreateOrEditListingStep.module.css'
+
+const isDev = config.is(Env.DEVELOPMENT) || config.is(Env.STAGING)
 
 const CreateListingStep = (props: Props) => {
   const { onCancel, nft, onCreate, onRemove, rental } = props
@@ -152,16 +157,18 @@ const CreateListingStep = (props: Props) => {
           </Header>
 
           <div className={styles.periodOptions}>
-            {Object.values(PeriodOption).map(option => (
-              <Radio
-                key={option}
-                label={t(
-                  `rental_modal.create_listing_step.period_options.${option}`
-                )}
-                checked={periodOptions.includes(option)}
-                onClick={createOptionHandler(option)}
-              />
-            ))}
+            {Object.values(isDev ? PeriodOptionsDev : PeriodOption).map(
+              option => (
+                <Radio
+                  key={option}
+                  label={t(
+                    `rental_modal.create_listing_step.period_options.${option}`
+                  )}
+                  checked={periodOptions.includes(option)}
+                  onClick={createOptionHandler(option)}
+                />
+              )
+            )}
           </div>
         </div>
         <div className={styles.expirationDate}>

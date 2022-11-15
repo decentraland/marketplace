@@ -778,6 +778,7 @@
       "periods": "Período del alquiler",
       "periods_tooltip": "Selecciona la cantidad de días por las que estas dispuesto a alquilar tu tierra",
       "period_options": {
+        "one_day": "1 día",
         "one_week": "7 días",
         "one_month": "30 días",
         "two_months": "60 días",

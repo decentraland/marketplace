@@ -785,6 +785,7 @@
       "periods": "Rent period",
       "periods_tooltip": "Select the days you are willing to rent your Land",
       "period_options": {
+        "one_day": "1 day",
         "one_week": "7 days",
         "one_month": "30 days",
         "two_months": "60 days",
