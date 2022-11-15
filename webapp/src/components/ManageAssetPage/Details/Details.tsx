@@ -24,7 +24,7 @@ const Info = ({
 )
 
 export const Details = (props: Props) => {
-  const { asset, className } = props
+  const { asset, rental, className } = props
 
   const categoryName = useMemo(() => {
     switch (asset.category) {
@@ -36,6 +36,8 @@ export const Details = (props: Props) => {
         return t('global.nft')
     }
   }, [asset])
+
+  const owner = rental && rental.lessor ? rental.lessor : (asset as NFT).owner!
 
   return (
     <Box
@@ -60,7 +62,7 @@ export const Details = (props: Props) => {
                           t('global.estate')
                         }
                         to={locations.nft(
-                          (asset as NFT).owner!,
+                          owner,
                           asset.data.parcel?.estate!.tokenId
                         )}
                       >
@@ -81,9 +83,9 @@ export const Details = (props: Props) => {
         <Info title={t('manage_asset_page.details.network')}>
           <span>{asset.network}</span>
         </Info>
-        {(asset as NFT).owner ? (
+        {owner ? (
           <Info title={t('manage_asset_page.details.owner')}>
-            <Profile hasPopup={true} address={(asset as NFT).owner} />
+            <Profile hasPopup={true} address={owner} />
           </Info>
         ) : null}
       </div>

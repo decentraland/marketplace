@@ -78,7 +78,11 @@ export const ManageAssetPage = (props: Props) => {
           <Section className={styles.main}>
             <AssetProvider
               type={AssetType.NFT}
-              rentalStatus={[RentalStatus.EXECUTED, RentalStatus.OPEN]}
+              rentalStatus={[
+                RentalStatus.EXECUTED,
+                RentalStatus.OPEN,
+                RentalStatus.CANCELLED
+              ]}
             >
               {(asset, order, rental, isLoading) => (
                 <>
@@ -88,7 +92,8 @@ export const ManageAssetPage = (props: Props) => {
                   {userAddress &&
                   !isConnecting &&
                   !isLoading &&
-                  userAddress === asset?.owner ? (
+                  ((!!rental && rental.lessor === userAddress) ||
+                    userAddress === asset?.owner) ? (
                     <>
                       <Narrow className={styles.mainRow}>
                         <NotMobile>
@@ -109,6 +114,7 @@ export const ManageAssetPage = (props: Props) => {
                                 />
                                 <Details
                                   asset={asset as NFT}
+                                  rental={rental}
                                   className={styles.details}
                                 />
                               </>
