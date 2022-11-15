@@ -7,6 +7,12 @@ export enum PeriodOption {
   ONE_YEAR = 'one_year'
 }
 
+// Just for development envs so we can test a small rental period
+export const PeriodOptionsDev = {
+  ONE_DAY: 'one_day',
+  ...PeriodOption
+}
+
 export enum UpsertRentalOptType {
   INSERT,
   EDIT

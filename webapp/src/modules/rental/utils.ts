@@ -16,10 +16,11 @@ import {
 } from 'decentraland-transactions'
 import { Asset } from '../asset/types'
 import { NFT } from '../nft/types'
-import { PeriodOption } from './types'
+import { PeriodOption, PeriodOptionsDev } from './types'
 import { getRentalsContractInstance } from './contract'
 
 export const daysByPeriod: Record<PeriodOption, number> = {
+  [PeriodOptionsDev.ONE_DAY]: 1,
   [PeriodOption.ONE_WEEK]: 7,
   [PeriodOption.ONE_MONTH]: 30,
   [PeriodOption.TWO_MONTHS]: 60,
