@@ -92,7 +92,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
       nftsOnRent
         .map(([nft]) => nft)
         .reduce(
-          (lands, nft) => setLand(lands, nft, Color.CANDY_PURPLE),
+          (lands, nft) => setLand(lands, nft, Color.SUNISH),
           new Map<string, ReturnType<Layer>>()
         ),
     [nftsOnRent, setLand]
