@@ -15,18 +15,17 @@ import SaleRentActionBox from './SaleRentActionBox'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const wallet = getWallet(state)
-  const ownedBy = isOwnedBy(
-    ownProps.nft,
-    wallet,
-    ownProps.rental ? ownProps.rental : undefined
-  )
   return {
     wallet,
     authorizations: getAuthorizations(state),
     userHasAlreadyBidsOnNft: wallet
       ? getNFTBids(state).some(bid => bid.bidder === wallet.address)
       : false,
-    isOwner: ownedBy
+    isOwner: isOwnedBy(
+      ownProps.nft,
+      wallet,
+      ownProps.rental ? ownProps.rental : undefined
+    )
   }
 }
 
