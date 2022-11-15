@@ -78,186 +78,178 @@ export const ManageAssetPage = (props: Props) => {
           <Section className={styles.main}>
             <AssetProvider
               type={AssetType.NFT}
-              rentalStatus={[RentalStatus.EXECUTED, RentalStatus.OPEN, RentalStatus.CANCELLED]}
+              rentalStatus={[
+                RentalStatus.EXECUTED,
+                RentalStatus.OPEN,
+                RentalStatus.CANCELLED
+              ]}
             >
-              {(asset, order, rental, isLoading) => {
-                console.log('asset: ', asset)
-                console.log('rental: ', rental)
-                return (
-                  <>
-                    <Back className="back" absolute onClick={onBack} />
-                    {isLoading || isConnecting ? <Loading /> : null}
-                    {!isLoading && !asset ? <NotFound /> : null}
-                    {userAddress &&
-                    !isConnecting &&
-                    !isLoading &&
-                    ((!!rental && rental.lessor === userAddress) ||
-                      userAddress === asset?.owner) ? (
-                      <>
-                        <Narrow className={styles.mainRow}>
-                          <NotMobile>
-                            <Column className={styles.leftMenu}>
-                              {asset && !isLoading ? (
-                                <>
-                                  <Map asset={asset} />
-                                  <Button
-                                    className={styles.builderButton}
-                                    primary
-                                    onClick={() => handleOpenInBuilder(asset)}
+              {(asset, order, rental, isLoading) => (
+                <>
+                  <Back className="back" absolute onClick={onBack} />
+                  {isLoading || isConnecting ? <Loading /> : null}
+                  {!isLoading && !asset ? <NotFound /> : null}
+                  {userAddress &&
+                  !isConnecting &&
+                  !isLoading &&
+                  ((!!rental && rental.lessor === userAddress) ||
+                    userAddress === asset?.owner) ? (
+                    <>
+                      <Narrow className={styles.mainRow}>
+                        <NotMobile>
+                          <Column className={styles.leftMenu}>
+                            {asset && !isLoading ? (
+                              <>
+                                <Map asset={asset} />
+                                <Button
+                                  className={styles.builderButton}
+                                  primary
+                                  onClick={() => handleOpenInBuilder(asset)}
+                                >
+                                  {t('manage_asset_page.open_in_builder')}
+                                </Button>
+                                <Highlights
+                                  className={styles.highlights}
+                                  nft={asset as NFT}
+                                />
+                                <Details
+                                  asset={asset as NFT}
+                                  rental={rental}
+                                  className={styles.details}
+                                />
+                              </>
+                            ) : null}
+                          </Column>
+                          <Column className={styles.content}>
+                            {asset && !isLoading ? (
+                              <>
+                                <section className={styles.assetDescription}>
+                                  <div
+                                    className={styles.assetDescriptionHeader}
                                   >
-                                    {t('manage_asset_page.open_in_builder')}
-                                  </Button>
-                                  <Highlights
-                                    className={styles.highlights}
-                                    nft={asset as NFT}
-                                  />
-                                  <Details
-                                    asset={asset as NFT}
-                                    rental={rental}
-                                    className={styles.details}
-                                  />
-                                </>
-                              ) : null}
-                            </Column>
-                            <Column className={styles.content}>
-                              {asset && !isLoading ? (
-                                <>
-                                  <section className={styles.assetDescription}>
+                                    <h1
+                                      className={styles.assetDescriptionTitle}
+                                    >
+                                      {asset?.name}
+                                    </h1>
                                     <div
-                                      className={styles.assetDescriptionHeader}
+                                      className={styles.assetDescriptionOptions}
                                     >
-                                      <h1
-                                        className={styles.assetDescriptionTitle}
-                                      >
-                                        {asset?.name}
-                                      </h1>
-                                      <div
-                                        className={
-                                          styles.assetDescriptionOptions
-                                        }
-                                      >
-                                        <Button
-                                          className={styles.transfer}
-                                          as={Link}
-                                          disabled={isBeingRented(rental)}
-                                          to={locations.transfer(
-                                            asset.contractAddress,
-                                            asset.tokenId
-                                          )}
-                                          fluid
-                                        >
-                                          {t('manage_asset_page.transfer')}
-                                        </Button>
-                                      </div>
-                                    </div>
-                                    <p
-                                      className={styles.assetDescriptionContent}
-                                    >
-                                      {asset?.data.estate?.description ||
-                                        asset?.data.parcel?.description}
-                                    </p>
-                                    {isBeingRented(rental) ? (
-                                      <div className={styles.rentedMessage}>
-                                        {t(
-                                          'manage_asset_page.cant_transfer_rented_land'
+                                      <Button
+                                        className={styles.transfer}
+                                        as={Link}
+                                        disabled={isBeingRented(rental)}
+                                        to={locations.transfer(
+                                          asset.contractAddress,
+                                          asset.tokenId
                                         )}
-                                      </div>
-                                    ) : null}
-                                  </section>
-                                  <Sell
-                                    nft={asset}
-                                    isBeingRented={isBeingRented(rental)}
-                                    order={order}
-                                  />
-                                  <Rent nft={asset} rental={rental} />
-                                </>
-                              ) : null}
-                            </Column>
-                          </NotMobile>
-                          <Mobile>
-                            <Column className={styles.columnMobile}>
-                              {asset && !isLoading ? (
-                                <>
-                                  <Map asset={asset} />
-                                  <Button
-                                    className={styles.builderButton}
-                                    primary
-                                    onClick={() => handleOpenInBuilder(asset)}
+                                        fluid
+                                      >
+                                        {t('manage_asset_page.transfer')}
+                                      </Button>
+                                    </div>
+                                  </div>
+                                  <p className={styles.assetDescriptionContent}>
+                                    {asset?.data.estate?.description ||
+                                      asset?.data.parcel?.description}
+                                  </p>
+                                  {isBeingRented(rental) ? (
+                                    <div className={styles.rentedMessage}>
+                                      {t(
+                                        'manage_asset_page.cant_transfer_rented_land'
+                                      )}
+                                    </div>
+                                  ) : null}
+                                </section>
+                                <Sell
+                                  nft={asset}
+                                  isBeingRented={isBeingRented(rental)}
+                                  order={order}
+                                />
+                                <Rent nft={asset} rental={rental} />
+                              </>
+                            ) : null}
+                          </Column>
+                        </NotMobile>
+                        <Mobile>
+                          <Column className={styles.columnMobile}>
+                            {asset && !isLoading ? (
+                              <>
+                                <Map asset={asset} />
+                                <Button
+                                  className={styles.builderButton}
+                                  primary
+                                  onClick={() => handleOpenInBuilder(asset)}
+                                >
+                                  {t('manage_asset_page.open_in_builder')}
+                                </Button>
+                                <Highlights
+                                  className={styles.highlights}
+                                  nft={asset as NFT}
+                                />
+                                <Details
+                                  asset={asset as NFT}
+                                  className={styles.details}
+                                />
+                              </>
+                            ) : null}
+                            {asset && !isLoading ? (
+                              <>
+                                <section className={styles.assetDescription}>
+                                  <div
+                                    className={styles.assetDescriptionHeader}
                                   >
-                                    {t('manage_asset_page.open_in_builder')}
-                                  </Button>
-                                  <Highlights
-                                    className={styles.highlights}
-                                    nft={asset as NFT}
-                                  />
-                                  <Details
-                                    asset={asset as NFT}
-                                    className={styles.details}
-                                  />
-                                </>
-                              ) : null}
-                              {asset && !isLoading ? (
-                                <>
-                                  <section className={styles.assetDescription}>
+                                    <h1
+                                      className={styles.assetDescriptionTitle}
+                                    >
+                                      {asset?.name}
+                                    </h1>
                                     <div
-                                      className={styles.assetDescriptionHeader}
+                                      className={styles.assetDescriptionOptions}
                                     >
-                                      <h1
-                                        className={styles.assetDescriptionTitle}
-                                      >
-                                        {asset?.name}
-                                      </h1>
-                                      <div
-                                        className={
-                                          styles.assetDescriptionOptions
-                                        }
-                                      >
-                                        <Button
-                                          className={styles.transfer}
-                                          as={Link}
-                                          disabled={isBeingRented(rental)}
-                                          to={locations.transfer(
-                                            asset.contractAddress,
-                                            asset.tokenId
-                                          )}
-                                          fluid
-                                        >
-                                          {t('manage_asset_page.transfer')}
-                                        </Button>
-                                      </div>
-                                    </div>
-                                    <p
-                                      className={styles.assetDescriptionContent}
-                                    >
-                                      {asset?.data.estate?.description ||
-                                        asset?.data.parcel?.description}
-                                    </p>
-                                    {isBeingRented(rental) ? (
-                                      <div className={styles.rentedMessage}>
-                                        {t(
-                                          'manage_asset_page.cant_transfer_rented_land'
+                                      <Button
+                                        className={styles.transfer}
+                                        as={Link}
+                                        disabled={isBeingRented(rental)}
+                                        to={locations.transfer(
+                                          asset.contractAddress,
+                                          asset.tokenId
                                         )}
-                                      </div>
-                                    ) : null}
-                                  </section>
-                                  <Sell
-                                    nft={asset}
-                                    isBeingRented={isBeingRented(rental)}
-                                    order={order}
-                                  />
-                                  <Rent nft={asset} rental={rental} />
-                                </>
-                              ) : null}
-                            </Column>
-                          </Mobile>
-                        </Narrow>
-                      </>
-                    ) : (
-                      <Unauthorized />
-                    )}
-                  </>
-                )
-              }}
+                                        fluid
+                                      >
+                                        {t('manage_asset_page.transfer')}
+                                      </Button>
+                                    </div>
+                                  </div>
+                                  <p className={styles.assetDescriptionContent}>
+                                    {asset?.data.estate?.description ||
+                                      asset?.data.parcel?.description}
+                                  </p>
+                                  {isBeingRented(rental) ? (
+                                    <div className={styles.rentedMessage}>
+                                      {t(
+                                        'manage_asset_page.cant_transfer_rented_land'
+                                      )}
+                                    </div>
+                                  ) : null}
+                                </section>
+                                <Sell
+                                  nft={asset}
+                                  isBeingRented={isBeingRented(rental)}
+                                  order={order}
+                                />
+                                <Rent nft={asset} rental={rental} />
+                              </>
+                            ) : null}
+                          </Column>
+                        </Mobile>
+                      </Narrow>
+                    </>
+                  ) : (
+                    <Unauthorized />
+                  )}
+                </>
+              )}
             </AssetProvider>
           </Section>
         </ErrorBoundary>
