@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { AtlasTile, AtlasProps } from 'decentraland-ui'
+import { OnRentNFT } from '../../modules/ui/browse/types'
 import { NFT } from '../../modules/nft/types'
 
 export type Tile = AtlasTile & {
@@ -12,6 +13,7 @@ export type Tile = AtlasTile & {
 
 export type Props = Partial<AtlasProps> & {
   nfts: NFT[]
+  nftsOnRent: OnRentNFT[]
   tiles: Record<string, AtlasTile>
   tilesByEstateId: Record<string, Tile[]>
   selection?: { x: number | string; y: number | string }[]
@@ -22,6 +24,9 @@ export type Props = Partial<AtlasProps> & {
   onNavigate: (path: string) => void
 }
 
-export type MapStateProps = Pick<Props, 'tiles' | 'nfts' | 'tilesByEstateId'>
+export type MapStateProps = Pick<
+  Props,
+  'tiles' | 'nfts' | 'nftsOnRent' | 'tilesByEstateId'
+>
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>
