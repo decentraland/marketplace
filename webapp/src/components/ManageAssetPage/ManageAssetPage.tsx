@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Back,
@@ -11,12 +10,13 @@ import {
   Page,
   Section
 } from 'decentraland-ui'
-import { NFTCategory, RentalListing, RentalStatus } from '@dcl/schemas'
+import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../modules/asset/types'
 import { builderUrl } from '../../lib/environment'
 import { NFT } from '../../modules/nft/types'
 import { locations } from '../../modules/routing/locations'
+import { isBeingRented } from '../../modules/rental/utils'
 import { Navbar } from '../Navbar'
 import { ErrorBoundary } from '../AssetPage/ErrorBoundary'
 import { AssetProvider } from '../AssetProvider'
@@ -52,12 +52,6 @@ const Unauthorized = () => (
 
 export const ManageAssetPage = (props: Props) => {
   const { onBack, userAddress, isConnecting } = props
-
-  const isBeingRented = useCallback(
-    (rental: RentalListing | null) =>
-      rental !== null && rental.status === RentalStatus.EXECUTED,
-    []
-  )
 
   const handleOpenInBuilder = (asset: NFT) => {
     window.location.replace(
