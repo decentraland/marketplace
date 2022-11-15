@@ -24,6 +24,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
     isEstate,
     withNavigation,
     nfts,
+    nftsOnRent,
     withPopup,
     showOnSale,
     tilesByEstateId
@@ -46,36 +47,55 @@ const Atlas: React.FC<Props> = (props: Props) => {
     [props.selection]
   )
 
-  const userTiles = useMemo(
-    () =>
-      nfts.reduce((lands, nft) => {
-        if (nft.vendor === VendorName.DECENTRALAND) {
-          switch (nft.category) {
-            case NFTCategory.PARCEL: {
-              const parcel = (nft as NFT<VendorName.DECENTRALAND>).data.parcel!
-              lands.set(getCoords(parcel.x, parcel.y), {
-                color: Color.SUMMER_RED
-              })
-              break
-            }
-            case NFTCategory.ESTATE: {
-              const estateId = nft.tokenId
-              if (estateId in tilesByEstateId) {
-                for (const tile of tilesByEstateId[estateId]) {
-                  lands.set(getCoords(tile.x, tile.y), {
-                    color: Color.SUMMER_RED,
-                    top: !!tile.top,
-                    left: !!tile.left,
-                    topLeft: !!tile.topLeft
-                  })
-                }
+  const setLand = useCallback(
+    (lands, nft, color = Color.SUMMER_RED) => {
+      if (nft.vendor === VendorName.DECENTRALAND) {
+        switch (nft.category) {
+          case NFTCategory.PARCEL: {
+            const parcel = (nft as NFT<VendorName.DECENTRALAND>).data.parcel!
+            lands.set(getCoords(parcel.x, parcel.y), {
+              color
+            })
+            break
+          }
+          case NFTCategory.ESTATE: {
+            const estateId = nft.tokenId
+            if (estateId in tilesByEstateId) {
+              for (const tile of tilesByEstateId[estateId]) {
+                lands.set(getCoords(tile.x, tile.y), {
+                  color,
+                  top: !!tile.top,
+                  left: !!tile.left,
+                  topLeft: !!tile.topLeft
+                })
               }
             }
           }
         }
-        return lands
-      }, new Map<string, ReturnType<Layer>>()),
-    [nfts, tilesByEstateId]
+      }
+      return lands
+    },
+    [tilesByEstateId]
+  )
+
+  const userTiles = useMemo(
+    () =>
+      nfts.reduce(
+        (lands, nft) => setLand(lands, nft),
+        new Map<string, ReturnType<Layer>>()
+      ),
+    [nfts, setLand]
+  )
+
+  const userRentedTiles = useMemo(
+    () =>
+      nftsOnRent
+        .map(([nft]) => nft)
+        .reduce(
+          (lands, nft) => setLand(lands, nft, Color.SUNISH),
+          new Map<string, ReturnType<Layer>>()
+        ),
+    [nftsOnRent, setLand]
   )
 
   const isSelected = useCallback(
@@ -133,9 +153,14 @@ const Atlas: React.FC<Props> = (props: Props) => {
     [isSelected]
   )
 
+  const allUserTiles = useMemo(
+    () => new Map([...userTiles].concat([...userRentedTiles])),
+    [userRentedTiles, userTiles]
+  )
+
   const userLayer: Layer = useCallback(
-    (x, y) => userTiles.get(getCoords(x, y)) || null,
-    [userTiles]
+    (x, y) => allUserTiles.get(getCoords(x, y)) || null,
+    [allUserTiles]
   )
 
   const handleClick = useCallback(
@@ -178,6 +203,19 @@ const Atlas: React.FC<Props> = (props: Props) => {
       }
       const id = getCoords(x, y)
       const tile = tiles[id]
+      const tileRent = tile
+        ? nftsOnRent.find(([nft]) =>
+            nft.data.parcel
+              ? Number(nft.data.parcel.x) === tile.x &&
+                Number(nft.data.parcel.y) === tile.y
+              : null
+          )
+        : null
+
+      if (tile && tileRent && tileRent[1].lessor) {
+        tile.owner = tileRent[1].lessor
+      }
+
       if (tile && !showPopup) {
         setShowPopup(true)
         setHoveredTile(tile)
@@ -191,7 +229,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
         setShowPopup(false)
       }
     },
-    [hoveredTile, showPopup, tiles, withPopup, selection]
+    [withPopup, selection, tiles, showPopup, hoveredTile, nftsOnRent]
   )
 
   const handleHidePopup = useCallback(() => {
