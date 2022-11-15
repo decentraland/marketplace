@@ -90,7 +90,6 @@ const SaleRentActionBox = ({
     ? getRentalEndDate(rental!)!.getTime()
     : 0
   const rentalHasEnded = isCurrentlyRented && hasRentalEnded(rental!)
-
   return (
     <div className={styles.main}>
       <div className={styles.actions}>
@@ -161,7 +160,9 @@ const SaleRentActionBox = ({
                   <div className={styles.fullWidth}>
                     <Button
                       primary
-                      disabled={isMobileView || isNFTPartOfAState}
+                      disabled={
+                        isMobileView || isNFTPartOfAState || rental !== null
+                      }
                       onClick={handleOnRent}
                       className={styles.rent}
                     >

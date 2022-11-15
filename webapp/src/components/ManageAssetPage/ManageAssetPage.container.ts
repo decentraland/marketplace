@@ -2,12 +2,12 @@ import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
 import { goBack } from '../../modules/routing/actions'
 import { RootState } from '../../modules/reducer'
+import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import { MapDispatchProps, MapStateProps } from './ManageAssetPage.types'
 import { ManageAssetPage } from './ManageAssetPage'
-import { getAddress, isConnecting } from '../../modules/wallet/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
-  userAddress: getAddress(state),
+  wallet: getWallet(state),
   isConnecting: isConnecting(state)
 })
 

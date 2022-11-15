@@ -15,13 +15,18 @@ import SaleRentActionBox from './SaleRentActionBox'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const wallet = getWallet(state)
+  const ownedBy = isOwnedBy(
+    ownProps.nft,
+    wallet,
+    ownProps.rental ? ownProps.rental : undefined
+  )
   return {
     wallet,
     authorizations: getAuthorizations(state),
     userHasAlreadyBidsOnNft: wallet
       ? getNFTBids(state).some(bid => bid.bidder === wallet.address)
       : false,
-    isOwner: isOwnedBy(ownProps.nft, wallet)
+    isOwner: ownedBy
   }
 }
 
@@ -29,12 +34,6 @@ const mapDispatch = (
   dispatch: MapDispatch,
   ownProps: OwnProps
 ): MapDispatchProps => ({
-  // TODO: Open the corresponding modals
-  onBid: () => dispatch(openModal('BidModal', { nft: ownProps.nft })),
-  onSell: () =>
-    dispatch(
-      openModal('SellModal', { nft: ownProps.nft, order: ownProps.order })
-    ),
   onRent: (selectedPeriodIndex: number) =>
     dispatch(
       openModal('ConfirmRentModal', {

@@ -31,6 +31,7 @@ import { Details } from './Details'
 import { Sell } from './Sell'
 import { Rent } from './Rent'
 import { Map } from './Map'
+import { isOwnedBy } from '../../modules/asset/utils'
 
 const Loading = () => (
   <div className={styles.center}>
@@ -52,7 +53,7 @@ const Unauthorized = () => (
 )
 
 export const ManageAssetPage = (props: Props) => {
-  const { onBack, userAddress, isConnecting } = props
+  const { onBack, wallet, isConnecting } = props
 
   const handleOpenInBuilder = (asset: NFT) => {
     window.location.replace(
@@ -82,11 +83,11 @@ export const ManageAssetPage = (props: Props) => {
                   <Back className="back" absolute onClick={onBack} />
                   {isLoading || isConnecting ? <Loading /> : null}
                   {!isLoading && !asset ? <NotFound /> : null}
-                  {userAddress &&
-                  !isConnecting &&
+                  {!isConnecting &&
                   !isLoading &&
-                  ((!!rental && rental.lessor === userAddress) ||
-                    userAddress === asset?.owner) ? (
+                  asset &&
+                  wallet &&
+                  isOwnedBy(asset, wallet, rental ?? undefined) ? (
                     <>
                       <Narrow className={styles.mainRow}>
                         <NotMobile>
