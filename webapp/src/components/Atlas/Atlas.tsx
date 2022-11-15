@@ -92,7 +92,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
       nftsOnRent
         .map(([nft]) => nft)
         .reduce(
-          (lands, nft) => setLand(lands, nft, Color.MILLENIAL_ORANGE),
+          (lands, nft) => setLand(lands, nft, Color.CANDY_PURPLE),
           new Map<string, ReturnType<Layer>>()
         ),
     [nftsOnRent, setLand]
@@ -153,12 +153,14 @@ const Atlas: React.FC<Props> = (props: Props) => {
     [isSelected]
   )
 
-  const userLayer: Layer = useCallback(
-    (x, y) =>
-      new Map([...userTiles].concat([...userRentedTiles])).get(
-        getCoords(x, y)
-      ) || null,
+  const allUserTiles = useMemo(
+    () => new Map([...userTiles].concat([...userRentedTiles])),
     [userRentedTiles, userTiles]
+  )
+
+  const userLayer: Layer = useCallback(
+    (x, y) => allUserTiles.get(getCoords(x, y)) || null,
+    [allUserTiles]
   )
 
   const handleClick = useCallback(
@@ -206,8 +208,6 @@ const Atlas: React.FC<Props> = (props: Props) => {
             nft.data.parcel
               ? Number(nft.data.parcel.x) === tile.x &&
                 Number(nft.data.parcel.y) === tile.y
-              : nft.data.estate
-              ? tile.estate_id === nft.data.estate.description
               : null
           )
         : null
