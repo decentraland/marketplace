@@ -791,6 +791,7 @@
       "put_for_rent": "出租",
       "invalid_date": "无效日期",
       "invalid_price": "无效价格",
+      "less_than_min_price": "每天的价格不能低于 1 MANA",
       "dao_fee": "2.5% 的价格将转到 DAO"
     },
     "confirmation_step": {
@@ -813,7 +814,7 @@
   "manage_asset_page": {
     "open_in_builder": "在 Builder 中打开",
     "transfer": "转移",
-    "cant_transfer_rented_land": "当 LAND 正在租用或尚未收回时，转移会暂停。",
+    "cant_transfer_rented_land": "当 LAND 正在出租或尚未收回时，转移将暂停。",
     "sell": {
       "sell_title": "卖",
       "selling_title": "卖",

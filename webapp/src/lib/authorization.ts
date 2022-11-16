@@ -9,11 +9,14 @@ import { getContractNames } from '../modules/vendor'
 import { Contract } from '../modules/vendor/services'
 
 export const getMANAAuthorization = (
-  address: string,
+  address: string | undefined,
   authorizedAddress: string,
   network: Network,
   authorizationType = AuthorizationType.ALLOWANCE
 ) => {
+  if (!address) {
+    return null
+  }
   const contractNames = getContractNames()
   const mana = getContract({
     name: contractNames.MANA,

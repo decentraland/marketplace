@@ -73,13 +73,13 @@ const SaleRentActionBox = ({
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
   const authorization = getMANAAuthorization(
-    wallet!.address,
+    wallet?.address,
     rentals.address,
     nft.network
   )
 
   const handleOnRent = useCallback(() => {
-    if (hasAuthorization(authorizations, authorization)) {
+    if (authorization && hasAuthorization(authorizations, authorization)) {
       setShowAuthorizationModal(false)
       onRent(selectedRentalPeriodIndex)
     } else {
@@ -253,12 +253,14 @@ const SaleRentActionBox = ({
             {t('asset_page.actions.manage')}
           </Button>
         ) : null}
-        <AuthorizationModal
-          open={showAuthorizationModal}
-          authorization={authorization}
-          onProceed={handleOnRent}
-          onCancel={handleCloseAuthorizationModal}
-        />
+        {authorization ? (
+          <AuthorizationModal
+            open={showAuthorizationModal}
+            authorization={authorization}
+            onProceed={handleOnRent}
+            onCancel={handleCloseAuthorizationModal}
+          />
+        ) : null}
       </div>
       {isCurrentlyRented && !rentalHasEnded ? (
         <div className={styles.message}>
