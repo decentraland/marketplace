@@ -789,6 +789,7 @@
       "put_for_rent": "Poner en alquiler",
       "invalid_date": "Fecha inválida",
       "invalid_price": "Precio inválido",
+      "less_than_min_price": "El precio por día no puede ser menor a 1 MANA",
       "dao_fee": "2.5% del precio irá para la DAO"
     },
     "confirmation_step": {
