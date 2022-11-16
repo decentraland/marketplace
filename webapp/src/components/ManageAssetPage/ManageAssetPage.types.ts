@@ -1,7 +1,6 @@
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 
 export type Props = {
-  userAddress?: string
   wallet: Wallet | null
   isConnecting: boolean
   onBack: (location?: string) => void
