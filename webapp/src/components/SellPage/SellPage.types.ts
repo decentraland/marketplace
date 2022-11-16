@@ -10,15 +10,20 @@ export type Props = {
   authorizations: Authorization[]
   isLoading: boolean
   isCreatingOrder: boolean
+  isRentalsEnabled: boolean
   onCreateOrder: typeof createOrderRequest
   onNavigate: (path: string) => void
+  onGoBack: () => void
 }
 
 export type MapStateProps = Pick<
   Props,
-  'authorizations' | 'isLoading' | 'isCreatingOrder'
+  'authorizations' | 'isLoading' | 'isCreatingOrder' | 'isRentalsEnabled'
 >
-export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onCreateOrder'>
+export type MapDispatchProps = Pick<
+  Props,
+  'onNavigate' | 'onCreateOrder' | 'onGoBack'
+>
 export type MapDispatch = Dispatch<
   CallHistoryMethodAction | CreateOrderRequestAction
 >

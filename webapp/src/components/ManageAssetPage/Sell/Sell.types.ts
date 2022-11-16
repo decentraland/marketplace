@@ -7,10 +7,11 @@ export type Props = {
   order?: Order | null
   isBeingRented: boolean
   onEditOrder: () => void
+  onCancelOrder: () => void
 }
 
 export type MapStateProps = {}
-export type MapDispatchProps = Pick<Props, 'onEditOrder'>
+export type MapDispatchProps = Pick<Props, 'onEditOrder' | 'onCancelOrder'>
 
 export type OwnProps = Pick<
   Props,
