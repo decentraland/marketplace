@@ -19,7 +19,8 @@ import {
   isBeingRented,
   hasRentalEnded,
   getRentalEndDate,
-  getRentalChosenPeriod
+  getRentalChosenPeriod,
+  isRentalListingOpen
 } from './utils'
 import { getRentalsContractInstance } from './contract'
 
@@ -479,6 +480,37 @@ describe('when getting the rental chosen period', () => {
 
     it('should return the rental period that matches the rented days', () => {
       expect(getRentalChosenPeriod(rental)).toEqual(rental.periods[0])
+    })
+  })
+})
+
+describe('when checking if a rental listing is open', () => {
+  describe('and the rental is null', () => {
+    it('should return false', () => {
+      expect(isRentalListingOpen(null)).toBe(false)
+    })
+  })
+
+  describe('and the rental listing is not null', () => {
+    let rental: RentalListing
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.OPEN
+      } as RentalListing
+    })
+
+    Object.values(RentalStatus).forEach(rentalStatus => {
+      describe(`and its status is "${rentalStatus}"`, () => {
+        beforeEach(() => {
+          rental.status = rentalStatus
+        })
+
+        it(`should return ${rentalStatus === RentalStatus.OPEN}`, () => {
+          expect(isRentalListingOpen(rental)).toBe(
+            rentalStatus === RentalStatus.OPEN
+          )
+        })
+      })
     })
   })
 })
