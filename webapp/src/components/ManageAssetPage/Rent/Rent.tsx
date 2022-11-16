@@ -15,6 +15,7 @@ import { locations } from '../../../modules/routing/locations'
 import { VendorName } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import {
+  canBeClaimed,
   getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded
@@ -58,7 +59,8 @@ export const Rent = (props: Props) => {
     rental,
     nft,
     isClaimingBackLandTransactionPending,
-    claimingBackLandTransaction
+    claimingBackLandTransaction,
+    wallet
   } = props
   const isMobileView = isMobile()
 
@@ -157,7 +159,7 @@ export const Rent = (props: Props) => {
                     </Button>
                   </div>
                 </>
-              ) : rentalEnded ? (
+              ) : wallet && canBeClaimed(wallet.address, rental, nft) ? (
                 <>
                   <div className={styles.rentMessage}>
                     <T
