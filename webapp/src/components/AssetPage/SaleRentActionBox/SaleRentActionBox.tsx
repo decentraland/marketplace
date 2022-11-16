@@ -19,6 +19,7 @@ import { getContract } from '../../../modules/contract/utils'
 import { locations } from '../../../modules/routing/locations'
 import { isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
+import { isOwnedBy } from '../../../modules/asset/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { AuthorizationModal } from '../../AuthorizationModal'
@@ -37,7 +38,6 @@ const SaleRentActionBox = ({
   authorizations,
   order,
   rental,
-  isOwner,
   userHasAlreadyBidsOnNft,
   isRentalsEnabled,
   onRent
@@ -47,6 +47,7 @@ const SaleRentActionBox = ({
     name: getContractNames().RENTALS,
     network: nft.network
   })
+  const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
     number
