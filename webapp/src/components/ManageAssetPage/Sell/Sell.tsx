@@ -14,7 +14,7 @@ import styles from './Sell.module.css'
 const Sell = (props: Props) => {
   const {
     className,
-    isBeingRented,
+    hasNotBeenClaimed,
     order,
     nft: { contractAddress, tokenId },
     onEditOrder
@@ -32,13 +32,13 @@ const Sell = (props: Props) => {
           {order ? (
             <IconButton
               iconName="pencil"
-              disabled={isBeingRented}
+              disabled={hasNotBeenClaimed}
               onClick={onEditOrder}
             />
           ) : (
             <Button
               className={styles.sellButton}
-              disabled={isBeingRented}
+              disabled={hasNotBeenClaimed}
               as={Link}
               to={locations.sell(contractAddress, tokenId)}
               fluid
@@ -51,7 +51,7 @@ const Sell = (props: Props) => {
       {order ? (
         <div
           className={classNames(styles.content, {
-            [styles.isBeingRented]: isBeingRented
+            [styles.isBeingRented]: hasNotBeenClaimed
           })}
         >
           <div className={styles.column}>
@@ -74,7 +74,7 @@ const Sell = (props: Props) => {
           </div>
         </div>
       ) : null}
-      {isBeingRented ? (
+      {hasNotBeenClaimed ? (
         <div className={styles.rentedMessage}>
           {t('manage_asset_page.sell.cant_sell_rented_land')}
         </div>

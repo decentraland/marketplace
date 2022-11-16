@@ -789,6 +789,7 @@
       "put_for_rent": "Poner en alquiler",
       "invalid_date": "Fecha inválida",
       "invalid_price": "Precio inválido",
+      "less_than_min_price": "El precio por día no puede ser menor a 1 MANA",
       "dao_fee": "2.5% del precio irá para la DAO"
     },
     "confirmation_step": {
@@ -836,7 +837,8 @@
       "claiming_land": "Reclamando su tierra. El proceso puede tardar hasta 24hs.",
       "view_transaction": "Ver transacción",
       "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land.",
-      "claiming_back": "Reclamando su tierra"
+      "claiming_back": "Reclamando su tierra",
+      "unclaimed_message": "La tierra todavía está sin reclamar. Reclámala para poder venderla o transferirla."
     },
     "highlights": {
       "title": "Destacados",

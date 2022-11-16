@@ -791,6 +791,7 @@
       "put_for_rent": "出租",
       "invalid_date": "无效日期",
       "invalid_price": "无效价格",
+      "less_than_min_price": "每天的价格不能低于 1 MANA",
       "dao_fee": "2.5% 的价格将转到 DAO"
     },
     "confirmation_step": {
@@ -813,7 +814,7 @@
   "manage_asset_page": {
     "open_in_builder": "在 Builder 中打开",
     "transfer": "转移",
-    "cant_transfer_rented_land": "当 LAND 正在租用或尚未收回时，转移会暂停。",
+    "cant_transfer_rented_land": "当 LAND 正在出租或尚未收回时，转移将暂停。",
     "sell": {
       "sell_title": "卖",
       "selling_title": "卖",
@@ -838,7 +839,8 @@
       "claiming_land": "收回你的土地。 此过程最多可能需要 24 小时。",
       "view_transaction": "查看区块链交易",
       "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。",
-      "claiming_back": "收回土地"
+      "claiming_back": "收回土地",
+      "unclaimed_message": "该土地仍无人认领。 索回它以出售或转让它。"
     },
     "highlights": {
       "title": "亮点",

@@ -33,6 +33,7 @@ import { Props } from './CreateOrEditListingStep.types'
 import styles from './CreateOrEditListingStep.module.css'
 
 const isDev = config.is(Env.DEVELOPMENT) || config.is(Env.STAGING)
+const RENTAL_MIN_PRICE = 1
 
 const CreateListingStep = (props: Props) => {
   const { onCancel, nft, onCreate, onRemove, rental } = props
@@ -90,11 +91,17 @@ const CreateListingStep = (props: Props) => {
   }
 
   // Validations
-  const isInvalidPrice = parseMANANumber(pricePerDayInput) < 0
+  const parsedPriceInput = parseMANANumber(pricePerDayInput)
+  const isInvalidPrice = parsedPriceInput < 0 || Number(pricePerDayInput) < 0
+  const isLessThanMinPrice = parsedPriceInput < RENTAL_MIN_PRICE
   const isInvalidExpirationDate = new Date(expiresAt).getTime() < Date.now()
   const isInvalid =
-    isInvalidPrice || isInvalidExpirationDate || periodOptions.length === 0
-  const showInvalidPriceError = pricePerDayInput !== '' && isInvalidPrice
+    isInvalidPrice ||
+    isInvalidExpirationDate ||
+    periodOptions.length === 0 ||
+    isLessThanMinPrice
+  const showInvalidPriceError =
+    pricePerDayInput !== '' && (isInvalidPrice || isLessThanMinPrice)
   const isUpdated =
     oldExpirationDate !== expiresAt ||
     pricePerDayInput !== oldPrice ||
@@ -138,7 +145,9 @@ const CreateListingStep = (props: Props) => {
             error={showInvalidPriceError}
             onChange={handlePriceChange}
             message={
-              showInvalidPriceError
+              isLessThanMinPrice
+                ? t('rental_modal.create_listing_step.less_than_min_price')
+                : isInvalidPrice
                 ? t('rental_modal.create_listing_step.invalid_price')
                 : t('rental_modal.create_listing_step.dao_fee')
             }
