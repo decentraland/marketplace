@@ -796,6 +796,7 @@
       "put_for_rent": "List for rent",
       "invalid_date": "Invalid date",
       "invalid_price": "Invalid price",
+      "less_than_min_price": "The price per day cannot be less than 1 MANA",
       "dao_fee": "2.5% of the price will go to the DAO"
     },
     "confirmation_step": {
@@ -818,7 +819,7 @@
   "manage_asset_page": {
     "open_in_builder": "Open in builder",
     "transfer": "Transfer",
-    "cant_transfer_rented_land": "Transferring is pauses while the LAND is being rented or hasn't been claimed back.",
+    "cant_transfer_rented_land": "Transferring is paused while the LAND is being rented or hasn't been claimed back.",
     "sell": {
       "sell_title": "Sell",
       "selling_title": "Selling",

@@ -17,7 +17,8 @@ import { Section } from '../../../modules/vendor/decentraland'
 import {
   getMaxPriceOfPeriods,
   getRentalEndDate,
-  hasRentalEnded
+  hasRentalEnded,
+  isRentalListingOpen
 } from '../../../modules/rental/utils'
 import { Mana } from '../../Mana'
 import { IconButton } from '../IconButton'
@@ -81,7 +82,6 @@ export const Rent = (props: Props) => {
     () => onCreateOrEditRent(nft, rental),
     [nft, onCreateOrEditRent, rental]
   )
-  const handleListForRentAgain = useCallback(() => undefined, [])
   const claimingBackLandTransactionLink = claimingBackLandTransaction
     ? getTransactionHref(
         {
@@ -108,6 +108,29 @@ export const Rent = (props: Props) => {
     [rental]
   )
 
+  const rentButton = useMemo(() => {
+    if (!rental) {
+      return (
+        <Button
+          className={styles.actionButton}
+          onClick={handleOnCreateOrEdit}
+          disabled={isMobileView}
+        >
+          {t('manage_asset_page.rent.list_for_rent')}
+        </Button>
+      )
+    }
+    if (rental && isRentalListingOpen(rental)) {
+      return (
+        <IconButton
+          iconName="pencil"
+          onClick={handleOnCreateOrEdit}
+          disabled={isMobileView}
+        />
+      )
+    }
+  }, [handleOnCreateOrEdit, isMobileView, rental])
+
   return (
     <section className={classNames(styles.box, className)}>
       <div className={styles.header}>
@@ -117,25 +140,7 @@ export const Rent = (props: Props) => {
             : t('manage_asset_page.rent.rent_title')}
         </h1>
         <div className={styles.action}>
-          {wrapDisabledMobileButton(
-            <div>
-              {rental ? (
-                <IconButton
-                  iconName="pencil"
-                  onClick={handleOnCreateOrEdit}
-                  disabled={isMobileView}
-                />
-              ) : (
-                <Button
-                  className={styles.actionButton}
-                  onClick={handleOnCreateOrEdit}
-                  disabled={isMobileView}
-                >
-                  {t('manage_asset_page.rent.list_for_rent')}
-                </Button>
-              )}
-            </div>
-          )}
+          {wrapDisabledMobileButton(<div>{rentButton}</div>)}
         </div>
       </div>
       {rental ? (
@@ -175,16 +180,6 @@ export const Rent = (props: Props) => {
                           onClick={onClaimLand}
                         >
                           {t('manage_asset_page.rent.claim_land')}
-                        </Button>
-                      </div>
-                    )}
-                    {wrapDisabledMobileButton(
-                      <div>
-                        <Button
-                          className={styles.actionButton}
-                          onClick={handleListForRentAgain}
-                        >
-                          {t('manage_asset_page.rent.list_for_rent_again')}
                         </Button>
                       </div>
                     )}

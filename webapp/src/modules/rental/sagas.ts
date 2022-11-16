@@ -189,7 +189,7 @@ function* waitUntilRentalChangesStatus(
   let hasChanged = false
   let listing: RentalListing
   while (!hasChanged) {
-    yield delay(1000)
+    yield delay(3500)
     listing = yield call(
       [rentalsAPI, 'refreshRentalListing'],
       nft.openRentalId!
