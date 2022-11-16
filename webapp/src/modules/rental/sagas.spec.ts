@@ -768,7 +768,7 @@ describe('when handling the request action to accept a rental', () => {
               Promise.resolve(txHash)
             ],
             [call(waitForTx, txHash), Promise.resolve()],
-            [delay(1000), void 0],
+            [delay(3500), void 0],
             [
               call([rentalsAPI, 'refreshRentalListing'], nft.openRentalId!),
               updatedRentalListing
@@ -985,7 +985,7 @@ describe('when handling the request action to remove a rental', () => {
               Promise.resolve(txHash)
             ],
             [call(waitForTx, txHash), Promise.resolve()],
-            [delay(1000), void 0],
+            [delay(3500), void 0],
             [
               call([rentalsAPI, 'refreshRentalListing'], nft.openRentalId!),
               { ...rental, status: RentalStatus.CANCELLED }
