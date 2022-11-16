@@ -20,6 +20,11 @@
   text-transform: uppercase;
 }
 
+.price {
+  font-size: 16px !important;
+  line-height: 24px !important;
+}
+
 .header {
   display: flex;
   flex-direction: row;
@@ -46,6 +51,7 @@
   font-weight: 400;
   font-size: 15px;
   padding: 12px;
+  margin-bottom: 24px;
 }
 
 .rentMessage {
@@ -73,7 +79,7 @@
 .columnContent {
   font-style: normal;
   font-weight: 600;
-  font-size: 21px;
+  font-size: 16px;
   color: var(--primary-text);
   width: 100%;
   display: flex;
@@ -83,7 +89,7 @@
 .date {
   margin-top: 5px;
   color: #736e7d;
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .actionButtonBasicPadding{
@@ -125,6 +131,9 @@
     flex-direction: column;
     margin-top: 0;
   }
+  .column {
+    margin-top: 20px;
+  }  
   .box {
     margin-top: 12px;
   }

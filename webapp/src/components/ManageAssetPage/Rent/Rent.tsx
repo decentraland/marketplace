@@ -15,7 +15,7 @@ import { locations } from '../../../modules/routing/locations'
 import { VendorName } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import {
-  getRentalChosenPeriod,
+  getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded
 } from '../../../modules/rental/utils'
@@ -92,13 +92,6 @@ export const Rent = (props: Props) => {
         claimingBackLandTransaction.chainId
       )
     : ''
-  const chosenPeriodPrice: string | null = useMemo(
-    () =>
-      rental && rental.startedAt
-        ? getRentalChosenPeriod(rental).pricePerDay
-        : null,
-    [rental]
-  )
   const rentalEndDate: Date | null = useMemo(
     () => (rental && rental.startedAt ? getRentalEndDate(rental) : null),
     [rental]
@@ -228,8 +221,13 @@ export const Rent = (props: Props) => {
                   {t('manage_asset_page.rent.price')}
                 </div>
                 <div className={styles.columnContent}>
-                  <Mana withTooltip size={'medium'} network={rental.network}>
-                    {formatWeiMANA(chosenPeriodPrice!)}
+                  <Mana
+                    withTooltip
+                    size={'medium'}
+                    className={styles.price}
+                    network={rental.network}
+                  >
+                    {formatWeiMANA(getMaxPriceOfPeriods(rental))}
                   </Mana>
                   <span>/{t('global.day')}</span>
                 </div>
@@ -283,7 +281,7 @@ export const Rent = (props: Props) => {
                       {t('manage_asset_page.rent.end_date')}
                     </div>
                     <div className={styles.columnContent}>
-                      {formatDistance(new Date(), rentalEndDate!, {
+                      {formatDistance(rentalEndDate!, new Date(), {
                         addSuffix: true
                       })}
                     </div>

@@ -4,7 +4,6 @@ import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/au
 import { RootState } from '../../../modules/reducer'
 import { getWallet } from '../../../modules/wallet/selectors'
 import { getNFTBids } from '../../../modules/ui/nft/bid/selectors'
-import { isOwnedBy } from '../../../modules/asset/utils'
 import {
   OwnProps,
   MapStateProps,
@@ -13,15 +12,14 @@ import {
 } from './SaleRentActionBox.types'
 import SaleRentActionBox from './SaleRentActionBox'
 
-const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
+const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
   return {
     wallet,
     authorizations: getAuthorizations(state),
     userHasAlreadyBidsOnNft: wallet
       ? getNFTBids(state).some(bid => bid.bidder === wallet.address)
-      : false,
-    isOwner: isOwnedBy(ownProps.nft, wallet)
+      : false
   }
 }
 
@@ -29,12 +27,6 @@ const mapDispatch = (
   dispatch: MapDispatch,
   ownProps: OwnProps
 ): MapDispatchProps => ({
-  // TODO: Open the corresponding modals
-  onBid: () => dispatch(openModal('BidModal', { nft: ownProps.nft })),
-  onSell: () =>
-    dispatch(
-      openModal('SellModal', { nft: ownProps.nft, order: ownProps.order })
-    ),
   onRent: (selectedPeriodIndex: number) =>
     dispatch(
       openModal('ConfirmRentModal', {

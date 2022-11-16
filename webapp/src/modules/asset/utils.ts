@@ -1,4 +1,4 @@
-import { NFTCategory, Order } from '@dcl/schemas'
+import { NFTCategory, Order, RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { NFT } from '../nft/types'
@@ -65,9 +65,16 @@ export function getAssetPrice(asset: Asset, order?: Order) {
     : null
 }
 
-export function isOwnedBy(asset: Asset, wallet: Wallet | null) {
+export function isOwnedBy(
+  asset: Asset,
+  wallet: Wallet | null,
+  rental?: RentalListing
+) {
   const assetAddress = 'owner' in asset ? asset.owner : asset.creator
-  return addressEquals(wallet?.address, assetAddress)
+  return (
+    addressEquals(wallet?.address, assetAddress) ||
+    addressEquals(wallet?.address, rental?.lessor ?? undefined)
+  )
 }
 
 export function isNFT(asset: Asset): asset is NFT {
