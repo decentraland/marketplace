@@ -18,6 +18,7 @@ import { builderUrl } from '../../lib/environment'
 import { NFT } from '../../modules/nft/types'
 import { locations } from '../../modules/routing/locations'
 import { isBeingRented } from '../../modules/rental/utils'
+import { isOwnedBy } from '../../modules/asset/utils'
 import { Navbar } from '../Navbar'
 import { ErrorBoundary } from '../AssetPage/ErrorBoundary'
 import { AssetProvider } from '../AssetProvider'
@@ -31,7 +32,6 @@ import { Details } from './Details'
 import { Sell } from './Sell'
 import { Rent } from './Rent'
 import { Map } from './Map'
-import { isOwnedBy } from '../../modules/asset/utils'
 
 const Loading = () => (
   <div className={styles.center}>
