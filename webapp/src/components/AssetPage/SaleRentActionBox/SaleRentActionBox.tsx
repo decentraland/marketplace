@@ -11,7 +11,8 @@ import {
   getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded,
-  isBeingRented
+  isBeingRented,
+  isRentalListingOpen
 } from '../../../modules/rental/utils'
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
 import { getMANAAuthorization } from '../../../lib/authorization'
@@ -68,6 +69,7 @@ const SaleRentActionBox = ({
   const isBiddable = bidService !== undefined
   const canBid = isBiddable && !userHasAlreadyBidsOnNft
   const isCurrentlyRented = isBeingRented(rental)
+  const isRentalOpen = isRentalListingOpen(rental)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
   const authorization = getMANAAuthorization(
@@ -94,7 +96,7 @@ const SaleRentActionBox = ({
   return (
     <div className={styles.main}>
       <div className={styles.actions}>
-        {rental && maxPriceOfPeriods && isRentalsEnabled ? (
+        {isRentalOpen && maxPriceOfPeriods && isRentalsEnabled ? (
           <div className={styles.viewSelector}>
             <button
               onClick={toggleView}
@@ -117,7 +119,7 @@ const SaleRentActionBox = ({
           </div>
         ) : null}
         {view === View.RENT &&
-        rental &&
+        isRentalOpen &&
         maxPriceOfPeriods &&
         isRentalsEnabled ? (
           <>
@@ -128,7 +130,7 @@ const SaleRentActionBox = ({
                   className={styles.priceInMana}
                   withTooltip
                   size="medium"
-                  network={rental.network}
+                  network={rental!.network}
                 >
                   {formatWeiMANA(maxPriceOfPeriods)}
                 </Mana>
@@ -142,7 +144,7 @@ const SaleRentActionBox = ({
             <PeriodsDropdown
               onChange={setSelectedRentalPeriodIndex}
               value={selectedRentalPeriodIndex}
-              periods={rental.periods}
+              periods={rental!.periods}
               className={styles.periodsDropdown}
             />
             {!isOwner ? (
@@ -161,9 +163,7 @@ const SaleRentActionBox = ({
                   <div className={styles.fullWidth}>
                     <Button
                       primary
-                      disabled={
-                        isMobileView || isNFTPartOfAState || rental !== null
-                      }
+                      disabled={isMobileView || isNFTPartOfAState}
                       onClick={handleOnRent}
                       className={styles.rent}
                     >

@@ -184,6 +184,15 @@ export function isBeingRented(rental: RentalListing | null) {
 }
 
 /**
+ * Checks wether a the listing of an NFT is open.
+ * @param rental - A rental listing.
+ * @returns true if the rental listing exists and is open, false otherwise
+ */
+export function isRentalListingOpen(rental: RentalListing | null) {
+  return rental !== null && rental.status === RentalStatus.OPEN
+}
+
+/**
  * Checks wether a rental has already ended it's renting time.
  * @param rental - A rental listing.
  * @returns true if the rental end date is set and the rental has already passed its renting time, false otherwise.
