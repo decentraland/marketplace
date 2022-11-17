@@ -16,14 +16,17 @@ import {
   getSignerNonce,
   getOpenRentalId,
   getMaxPriceOfPeriods,
-  isBeingRented,
+  isRentalListingExecuted,
   hasRentalEnded,
   getRentalEndDate,
   getRentalChosenPeriod,
   isRentalListingOpen,
-  canBeClaimed
+  canBeClaimed,
+  isRentalListingCancelled,
+  canCreateANewRental
 } from './utils'
 import { getRentalsContractInstance } from './contract'
+import { start } from 'repl'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
 jest.mock('./contract')
@@ -338,7 +341,7 @@ describe('when getting the max price per day of the periods of a rental', () => 
 describe('when checking if a rental is being rented', () => {
   describe('and the rental is null', () => {
     it('should return false', () => {
-      expect(isBeingRented(null)).toBe(false)
+      expect(isRentalListingExecuted(null)).toBe(false)
     })
   })
 
@@ -357,7 +360,7 @@ describe('when checking if a rental is being rented', () => {
         })
 
         it(`should return ${rentalStatus === RentalStatus.EXECUTED}`, () => {
-          expect(isBeingRented(rental)).toBe(
+          expect(isRentalListingExecuted(rental)).toBe(
             rentalStatus === RentalStatus.EXECUTED
           )
         })
@@ -509,6 +512,37 @@ describe('when checking if a rental listing is open', () => {
         it(`should return ${rentalStatus === RentalStatus.OPEN}`, () => {
           expect(isRentalListingOpen(rental)).toBe(
             rentalStatus === RentalStatus.OPEN
+          )
+        })
+      })
+    })
+  })
+})
+
+describe('when checking if a rental listing is cancelled', () => {
+  describe('and the rental is null', () => {
+    it('should return false', () => {
+      expect(isRentalListingCancelled(null)).toBe(false)
+    })
+  })
+
+  describe('and the rental listing is not null', () => {
+    let rental: RentalListing
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.CANCELLED
+      } as RentalListing
+    })
+
+    Object.values(RentalStatus).forEach(rentalStatus => {
+      describe(`and its status is "${rentalStatus}"`, () => {
+        beforeEach(() => {
+          rental.status = rentalStatus
+        })
+
+        it(`should return ${rentalStatus === RentalStatus.OPEN}`, () => {
+          expect(isRentalListingCancelled(rental)).toBe(
+            rentalStatus === RentalStatus.CANCELLED
           )
         })
       })
@@ -696,6 +730,57 @@ describe('when getting if a rental is locked', () => {
       it('should return false since the owner holds the asset', () => {
         expect(canBeClaimed(userAddress, rental, asset)).toBeFalsy()
       })
+    })
+  })
+})
+
+describe('when checking if a new rental can be created', () => {
+  describe('and the rental is null', () => {
+    it('should return true', () => {
+      expect(canCreateANewRental(null)).toBe(true)
+    })
+  })
+
+  describe('and the rental is cancelled', () => {
+    let rental: RentalListing
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.CANCELLED
+      } as RentalListing
+    })
+
+    it('should return true', () => {
+      expect(canCreateANewRental(rental)).toBe(true)
+    })
+  })
+
+  describe('and the rental is executed but not finished', () => {
+    let rental: RentalListing
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.EXECUTED,
+        startedAt: Date.now(),
+        rentedDays: 10
+      } as RentalListing
+    })
+
+    it('should return false', () => {
+      expect(canCreateANewRental(rental)).toBe(false)
+    })
+  })
+
+  describe('and the rental is executed and has finished', () => {
+    let rental: RentalListing
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.EXECUTED,
+        startedAt: Date.now() - 3 * aDay,
+        rentedDays: 1
+      } as RentalListing
+    })
+
+    it('should return true', () => {
+      expect(canCreateANewRental(rental)).toBe(true)
     })
   })
 })

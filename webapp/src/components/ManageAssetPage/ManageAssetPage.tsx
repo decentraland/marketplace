@@ -17,7 +17,10 @@ import { AssetType } from '../../modules/asset/types'
 import { builderUrl } from '../../lib/environment'
 import { NFT } from '../../modules/nft/types'
 import { locations } from '../../modules/routing/locations'
-import { isBeingRented, isLandLocked } from '../../modules/rental/utils'
+import {
+  isRentalListingExecuted,
+  isLandLocked
+} from '../../modules/rental/utils'
 import { isOwnedBy } from '../../modules/asset/utils'
 import { Navbar } from '../Navbar'
 import { ErrorBoundary } from '../AssetPage/ErrorBoundary'
@@ -154,7 +157,7 @@ export const ManageAssetPage = (props: Props) => {
                                     {asset?.data.estate?.description ||
                                       asset?.data.parcel?.description}
                                   </p>
-                                  {isBeingRented(rental) ? (
+                                  {isRentalListingExecuted(rental) ? (
                                     <div className={styles.rentedMessage}>
                                       {t(
                                         'manage_asset_page.cant_transfer_rented_land'
@@ -236,7 +239,7 @@ export const ManageAssetPage = (props: Props) => {
                                     {asset?.data.estate?.description ||
                                       asset?.data.parcel?.description}
                                   </p>
-                                  {isBeingRented(rental) ? (
+                                  {isRentalListingExecuted(rental) ? (
                                     <div className={styles.rentedMessage}>
                                       {t(
                                         'manage_asset_page.cant_transfer_rented_land'

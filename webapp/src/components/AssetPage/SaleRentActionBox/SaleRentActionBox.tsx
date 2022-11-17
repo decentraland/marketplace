@@ -11,7 +11,7 @@ import {
   getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded,
-  isBeingRented,
+  isRentalListingExecuted,
   isRentalListingOpen
 } from '../../../modules/rental/utils'
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
@@ -68,7 +68,7 @@ const SaleRentActionBox = ({
   const { bidService } = useMemo(() => VendorFactory.build(nft.vendor), [nft])
   const isBiddable = bidService !== undefined
   const canBid = isBiddable && !userHasAlreadyBidsOnNft
-  const isCurrentlyRented = isBeingRented(rental)
+  const isCurrentlyRented = isRentalListingExecuted(rental)
   const isRentalOpen = isRentalListingOpen(rental)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 

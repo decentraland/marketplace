@@ -179,7 +179,7 @@ export function getRentalEndDate(rental: RentalListing): Date | null {
  * @param rental - A rental listing.
  * @returns true if the rental exists and is being rented, false otherwise
  */
-export function isBeingRented(rental: RentalListing | null) {
+export function isRentalListingExecuted(rental: RentalListing | null) {
   return rental !== null && rental.status === RentalStatus.EXECUTED
 }
 
@@ -190,6 +190,24 @@ export function isBeingRented(rental: RentalListing | null) {
  */
 export function isRentalListingOpen(rental: RentalListing | null) {
   return rental !== null && rental.status === RentalStatus.OPEN
+}
+
+export function isRentalListingCancelled(rental: RentalListing | null) {
+  return rental !== null && rental.status === RentalStatus.CANCELLED
+}
+
+/**
+ * Checks wether a new rental listing can be created on an asset.
+ * @param rental - A rental listing or null if it doesn't have one.
+ * @returns true if the rental listing exists and is open, false otherwise
+ */
+export function canCreateANewRental(rental: RentalListing | null) {
+  return (
+    rental === null ||
+    (rental !== null &&
+      (isRentalListingCancelled(rental) ||
+        (isRentalListingExecuted(rental) && hasRentalEnded(rental))))
+  )
 }
 
 /**
@@ -217,8 +235,7 @@ export function canBeClaimed(
     const endDate = getRentalEndDate(rental)
     return endDate ? endDate.getTime() <= Date.now() : false
   } else if (
-    (rental.status === RentalStatus.OPEN ||
-      rental.status === RentalStatus.CANCELLED) &&
+    (isRentalListingOpen(rental) || isRentalListingCancelled(rental)) &&
     userAddress === rental.lessor &&
     rental.lessor !== (asset as NFT).owner
   ) {
