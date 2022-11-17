@@ -19,6 +19,7 @@ import { locations } from '../../../modules/routing/locations'
 import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { getRentalChosenPeriod } from '../../../modules/rental/utils'
 import { Mana } from '../../Mana'
 import { Props } from './RentalHistory.types'
 import styles from './RentalHistory.module.css'
@@ -41,12 +42,7 @@ const formatDateTitle = (updatedAt: number) => {
 const RentalHistory = (props: Props) => {
   const { asset } = props
 
-  // TODO: Fix type
-  const [rentals, setRentals] = useState(
-    [] as Array<
-      RentalListing & { selected_days: number; selected_period: number }
-    >
-  )
+  const [rentals, setRentals] = useState([] as Array<RentalListing>)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
@@ -63,12 +59,7 @@ const RentalHistory = (props: Props) => {
           page: (page - 1) * ROWS_PER_PAGE
         })
         .then(response => {
-          setRentals(
-            // TODO: Fix type
-            response.results as Array<
-              RentalListing & { selected_days: number; selected_period: number }
-            >
-          )
+          setRentals(response.results)
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
         .finally(() => setIsLoading(false))
@@ -124,14 +115,13 @@ const RentalHistory = (props: Props) => {
                     </Table.Cell>
                     <Table.Cell>
                       {t('rental_history.selected_days', {
-                        days: rental.selected_days ?? 0
+                        days: rental.rentedDays ?? 0
                       })}
                     </Table.Cell>
                     <Table.Cell>
                       <Mana network={network} inline>
                         {formatWeiMANA(
-                          rental.periods[rental.selected_period ?? 0]
-                            .pricePerDay
+                          getRentalChosenPeriod(rental).pricePerDay
                         )}
                       </Mana>
                     </Table.Cell>
@@ -149,13 +139,11 @@ const RentalHistory = (props: Props) => {
                     <T
                       id="rental_history.mobile_price"
                       values={{
-                        days:
-                          rental.periods[rental.selected_period ?? 0].maxDays,
+                        days: rental.rentedDays,
                         pricePerDay: (
                           <Mana network={network} inline>
                             {formatWeiMANA(
-                              rental.periods[rental.selected_period ?? 0]
-                                .pricePerDay
+                              getRentalChosenPeriod(rental).pricePerDay
                             )}
                           </Mana>
                         )
