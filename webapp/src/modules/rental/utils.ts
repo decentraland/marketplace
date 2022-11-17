@@ -179,7 +179,7 @@ export function getRentalEndDate(rental: RentalListing): Date | null {
  * @param rental - A rental listing.
  * @returns true if the rental exists and is being rented, false otherwise
  */
-export function isBeingRented(rental: RentalListing | null) {
+export function isRentalListingExecuted(rental: RentalListing | null) {
   return rental !== null && rental.status === RentalStatus.EXECUTED
 }
 
@@ -206,7 +206,7 @@ export function canCreateANewRental(rental: RentalListing | null) {
     rental === null ||
     (rental !== null &&
       (isRentalListingCancelled(rental) ||
-        (isBeingRented(rental) && hasRentalEnded(rental))))
+        (isRentalListingExecuted(rental) && hasRentalEnded(rental))))
   )
 }
 

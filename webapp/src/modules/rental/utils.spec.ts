@@ -16,7 +16,7 @@ import {
   getSignerNonce,
   getOpenRentalId,
   getMaxPriceOfPeriods,
-  isBeingRented,
+  isRentalListingExecuted,
   hasRentalEnded,
   getRentalEndDate,
   getRentalChosenPeriod,
@@ -341,7 +341,7 @@ describe('when getting the max price per day of the periods of a rental', () => 
 describe('when checking if a rental is being rented', () => {
   describe('and the rental is null', () => {
     it('should return false', () => {
-      expect(isBeingRented(null)).toBe(false)
+      expect(isRentalListingExecuted(null)).toBe(false)
     })
   })
 
@@ -360,7 +360,7 @@ describe('when checking if a rental is being rented', () => {
         })
 
         it(`should return ${rentalStatus === RentalStatus.EXECUTED}`, () => {
-          expect(isBeingRented(rental)).toBe(
+          expect(isRentalListingExecuted(rental)).toBe(
             rentalStatus === RentalStatus.EXECUTED
           )
         })

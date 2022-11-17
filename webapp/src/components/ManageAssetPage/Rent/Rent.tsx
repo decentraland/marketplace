@@ -20,7 +20,7 @@ import {
   getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded,
-  isBeingRented,
+  isRentalListingExecuted,
   isRentalListingCancelled,
   isRentalListingOpen
 } from '../../../modules/rental/utils'
@@ -116,7 +116,7 @@ export const Rent = (props: Props) => {
     wallet && rental && canBeClaimed(wallet.address, rental, nft)
 
   const rentButton = useMemo(() => {
-    if (!rental || canCreateANewRental(rental)) {
+    if (canCreateANewRental(rental)) {
       return (
         <Button
           className={styles.actionButton}
@@ -152,7 +152,7 @@ export const Rent = (props: Props) => {
       </div>
       {rental ? (
         <div className={styles.content}>
-          {isBeingRented(rental) && !rentalEnded ? (
+          {isRentalListingExecuted(rental) && !rentalEnded ? (
             <div className={styles.activeRent}>
               <div className={styles.rentMessage}>
                 <T
@@ -262,7 +262,7 @@ export const Rent = (props: Props) => {
                     <div className={styles.columnContent}>{rentalPeriods}</div>
                   </div>
                 </>
-              ) : isBeingRented(rental) ? (
+              ) : isRentalListingExecuted(rental) ? (
                 <>
                   <div
                     className={classNames(

@@ -7,7 +7,7 @@ import {
   isInsufficientMANA,
   checkFingerprint
 } from '../../../modules/bid/utils'
-import { isBeingRented } from '../../../modules/rental/utils'
+import { isRentalListingExecuted } from '../../../modules/rental/utils'
 import { Props } from './AcceptButton.types'
 
 const AcceptButton = (props: Props) => {
@@ -15,7 +15,7 @@ const AcceptButton = (props: Props) => {
 
   const [fingerprint, isLoadingFingerprint] = useFingerprint(nft)
   const [hasInsufficientMANA, setHasInsufficientMANA] = useState(false)
-  const isCurrentlyRented = isBeingRented(rental)
+  const isCurrentlyRented = isRentalListingExecuted(rental)
 
   useEffect(() => {
     isInsufficientMANA(bid)
