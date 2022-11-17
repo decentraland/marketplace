@@ -11,6 +11,8 @@ export type Props = {
   authorizations: Authorization[]
   isLoading: boolean
   isCreatingOrder: boolean
+  isRentalsEnabled: boolean
   onNavigate: (path: string) => void
+  onGoBack: () => void
   onCreateOrder: typeof createOrderRequest
 }

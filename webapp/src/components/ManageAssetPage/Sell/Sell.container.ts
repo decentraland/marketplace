@@ -16,6 +16,10 @@ const mapDispatch = (
   onEditOrder: () =>
     dispatch(
       push(locations.sell(ownProps.nft.contractAddress, ownProps.nft.tokenId))
+    ),
+  onCancelOrder: () =>
+    dispatch(
+      push(locations.cancel(ownProps.nft.contractAddress, ownProps.nft.tokenId))
     )
 })
 
