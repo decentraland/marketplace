@@ -139,7 +139,7 @@ const RentalHistory = (props: Props) => {
                     <T
                       id="rental_history.mobile_price"
                       values={{
-                        days: getRentalChosenPeriod(rental).maxDays,
+                        days: rental.rentedDays,
                         pricePerDay: (
                           <Mana network={network} inline>
                             {formatWeiMANA(
