@@ -27,6 +27,7 @@ import { identityReducer as identity } from './identity/reducer'
 import { analyticsReducer as analytics } from './analytics/reducer'
 import { rentalReducer as rental } from './rental/reducer'
 import { eventReducer as event } from './event/reducer'
+import { contractReducer as contract } from './contract/reducer'
 
 export const createRootReducer = (history: History) =>
   combineReducers({
@@ -55,7 +56,8 @@ export const createRootReducer = (history: History) =>
     analytics,
     features,
     event,
-    modal
+    modal,
+    contract
   })
 
 export type RootState = ReturnType<ReturnType<typeof createRootReducer>>

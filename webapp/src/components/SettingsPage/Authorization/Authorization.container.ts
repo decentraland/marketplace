@@ -15,6 +15,8 @@ import { areEqual } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { hasTransactionPending } from '../../../modules/transaction/utils'
 import { RootState } from '../../../modules/reducer'
 import { getPendingAuthorizationTransactions } from '../../../modules/transaction/selectors'
+import { getContract } from '../../../modules/contract/selectors'
+import { Contract } from '../../../modules/vendor/services'
 import {
   OwnProps,
   MapStateProps,
@@ -54,7 +56,8 @@ const mapState = (
         pendingTransactions,
         authorizedAddress,
         contractAddress
-      )
+      ),
+    getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }
 

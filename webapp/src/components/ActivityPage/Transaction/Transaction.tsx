@@ -27,7 +27,6 @@ import {
   CLAIM_LAND_TRANSACTION_SUBMITTED,
   REMOVE_RENTAL_TRANSACTION_SUBMITTED
 } from '../../../modules/rental/actions'
-import { getContract } from '../../../modules/contract/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'
@@ -35,7 +34,7 @@ import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
 
 const Transaction = (props: Props) => {
-  const { tx } = props
+  const { tx, getContract } = props
   switch (tx.actionType) {
     case GRANT_TOKEN_SUCCESS:
     case REVOKE_TOKEN_SUCCESS: {
@@ -50,6 +49,11 @@ const Transaction = (props: Props) => {
         tx.actionType === GRANT_TOKEN_SUCCESS
           ? t('transaction.action.approved')
           : t('transaction.action.unapproved')
+
+      if (!authorized || !contract) {
+        return null
+      }
+
       return (
         <TransactionDetail
           text={

@@ -9,10 +9,9 @@ import { VendorName } from '../../modules/vendor/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Props } from './LegacyNFTPage.types'
-import { getContract } from '../../modules/contract/utils'
 
 const LegacyNFTPage = (props: Props) => {
-  const { match, history } = props
+  const { match, history, getContract } = props
   const { params } = match
   const { contractService } = VendorFactory.build(VendorName.DECENTRALAND)
 
@@ -22,17 +21,19 @@ const LegacyNFTPage = (props: Props) => {
     const land = getContract({ category: NFTCategory.PARCEL })
     const estates = getContract({ category: NFTCategory.ESTATE })
 
-    if (estateId) {
-      history.replace(locations.nft(estates.address, estateId))
-    } else if (x && y) {
-      nftAPI
-        .fetchTokenId(Number(x), Number(y))
-        .then(tokenId => {
-          history.replace(locations.nft(land.address, tokenId))
-        })
-        .catch(() => history.replace(locations.root()))
+    if (estates && land) {
+      if (estateId) {
+        history.replace(locations.nft(estates.address, estateId))
+      } else if (x && y) {
+        nftAPI
+          .fetchTokenId(Number(x), Number(y))
+          .then(tokenId => {
+            history.replace(locations.nft(land.address, tokenId))
+          })
+          .catch(() => history.replace(locations.root()))
+      }
     }
-  }, [contractService, params, history])
+  }, [contractService, params, history, getContract])
 
   return (
     <>

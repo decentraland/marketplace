@@ -10,6 +10,7 @@ import { Section } from '../../../../modules/vendor/routing/types'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { AssetType } from '../../../../modules/asset/types'
 import { View } from '../../../../modules/ui/types'
+import { Contract } from '../../../../modules/vendor/services'
 
 export type Props = {
   assetType: AssetType
@@ -27,6 +28,7 @@ export type Props = {
   contracts: string[]
   network?: Network
   emotePlayMode?: EmotePlayMode
+  allContracts: Contract[]
   availableContracts?: string[]
   hasFiltersEnabled: boolean
   isRentalsEnabled: boolean
@@ -53,6 +55,7 @@ export type MapStateProps = Pick<
   | 'emotePlayMode'
   | 'hasFiltersEnabled'
   | 'isRentalsEnabled'
+  | 'allContracts'
 >
 export type MapDispatchProps = Pick<Props, 'onClearFilters'>
 export type MapDispatch = Dispatch<ClearFiltersAction>

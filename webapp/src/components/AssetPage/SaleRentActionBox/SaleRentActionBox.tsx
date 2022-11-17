@@ -3,6 +3,7 @@ import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import { Button, Popup } from 'decentraland-ui'
+import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
@@ -15,8 +16,7 @@ import {
   isRentalListingOpen
 } from '../../../modules/rental/utils'
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
-import { getMANAAuthorization } from '../../../lib/authorization'
-import { getContract } from '../../../modules/contract/utils'
+import { getContractAuthorization } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
 import { isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
@@ -41,6 +41,7 @@ const SaleRentActionBox = ({
   rental,
   userHasAlreadyBidsOnNft,
   isRentalsEnabled,
+  getContract,
   onRent
 }: Props) => {
   const isMobileView = isMobile()
@@ -71,15 +72,20 @@ const SaleRentActionBox = ({
   const isCurrentlyRented = isRentalListingExecuted(rental)
   const isRentalOpen = isRentalListingOpen(rental)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
+  const contractNames = getContractNames()
+  const mana = getContract({
+    name: contractNames.MANA,
+    network: nft.network
+  })
 
-  const authorization = getMANAAuthorization(
-    wallet?.address,
-    rentals.address,
-    nft.network
+  const authorization = getContractAuthorization(
+    wallet!.address,
+    rentals?.address,
+    mana ? { ...mana, name: ContractName.MANAToken } : undefined
   )
 
   const handleOnRent = useCallback(() => {
-    if (authorization && hasAuthorization(authorizations, authorization)) {
+    if (!!authorization && hasAuthorization(authorizations, authorization)) {
       setShowAuthorizationModal(false)
       onRent(selectedRentalPeriodIndex)
     } else {

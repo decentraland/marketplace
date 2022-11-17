@@ -4,7 +4,6 @@ import { NFTsFetchParams } from '../../../nft/types'
 import { NFTsFetchFilters, NFTResponse, NFTResult } from './types'
 import { ATLAS_SERVER_URL } from '../land'
 import { Contract } from '../../services'
-import { contracts } from '../../../contract/utils'
 import { FetchOneOptions, VendorName } from '../../types'
 import { getNFTSortBy } from '../../../routing/search'
 import { config } from '../../../../config'
@@ -124,7 +123,9 @@ class NFTAPI extends BaseAPI {
       }
       if (filters.contracts) {
         for (const address of filters.contracts) {
-          if (contracts.some(contract => contract.address === address)) {
+          if (
+            params.contracts?.some(contract => contract.address === address)
+          ) {
             queryParams.append('contractAddress', address)
           }
         }

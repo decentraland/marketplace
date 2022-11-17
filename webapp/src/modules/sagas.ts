@@ -28,6 +28,7 @@ import { rentalSaga } from './rental/sagas'
 import { modalSaga } from './modal/sagas'
 import { peerUrl } from '../lib/environment'
 import { eventSaga } from './event/sagas'
+import { contractSaga } from './contract/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({ peerUrl })
@@ -67,6 +68,7 @@ export function* rootSaga() {
     }),
     rentalSaga(),
     modalSaga(),
-    eventSaga()
+    eventSaga(),
+    contractSaga()
   ])
 }

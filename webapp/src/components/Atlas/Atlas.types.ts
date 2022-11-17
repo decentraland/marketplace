@@ -3,6 +3,8 @@ import { CallHistoryMethodAction } from 'connected-react-router'
 import { AtlasTile, AtlasProps } from 'decentraland-ui'
 import { OnRentNFT } from '../../modules/ui/browse/types'
 import { NFT } from '../../modules/nft/types'
+import { Contract } from '../../modules/vendor/services'
+import { getContract } from '../../modules/contract/selectors'
 
 export type Tile = AtlasTile & {
   estate_id?: string
@@ -21,12 +23,13 @@ export type Props = Partial<AtlasProps> & {
   withPopup?: boolean
   withNavigation?: boolean
   showOnSale?: boolean
+  getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onNavigate: (path: string) => void
 }
 
 export type MapStateProps = Pick<
   Props,
-  'tiles' | 'nfts' | 'nftsOnRent' | 'tilesByEstateId'
+  'tiles' | 'nfts' | 'nftsOnRent' | 'tilesByEstateId' | 'getContract'
 >
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

@@ -1,10 +1,9 @@
-import { NFTCategory } from '@dcl/schemas'
 import {
   getSigner,
   getConnectedProvider
 } from 'decentraland-dapps/dist/lib/eth'
 import { EstateRegistry__factory } from '../../../contracts'
-import { getContract } from '../../contract/utils'
+import { Contract } from '../../vendor/services'
 import { NFT } from '../types'
 
 export const getSelection = (estate: NFT['data']['estate']) => {
@@ -22,12 +21,14 @@ export const getCenter = (selection: { x: number; y: number }[]) => {
   return [x, y]
 }
 
-export async function getFingerprint(estateId: string) {
+export async function getFingerprint(
+  estateId: string,
+  estateContract: Contract
+) {
   const provider = await getConnectedProvider()
   if (provider) {
-    const estate = getContract({ category: NFTCategory.ESTATE })
     const estateRegistry = EstateRegistry__factory.connect(
-      estate.address,
+      estateContract.address,
       await getSigner()
     )
     return estateRegistry.getFingerprint(estateId)

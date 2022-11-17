@@ -11,6 +11,8 @@ import {
   EXECUTE_ORDER_REQUEST
 } from '../../../modules/order/actions'
 import { getLoading as getLoadingOrders } from '../../../modules/order/selectors'
+import { getContract } from '../../../modules/contract/selectors'
+import { Contract } from '../../../modules/vendor/services'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -24,7 +26,8 @@ const mapState = (state: RootState): MapStateProps => ({
     isLoadingType(
       getLoadingAuthorizations(state),
       FETCH_AUTHORIZATIONS_REQUEST
-    ) || isLoadingType(getLoadingOrders(state), EXECUTE_ORDER_REQUEST)
+    ) || isLoadingType(getLoadingOrders(state), EXECUTE_ORDER_REQUEST),
+  getContract: (query: Partial<Contract>) => getContract(state, query)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

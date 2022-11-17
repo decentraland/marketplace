@@ -12,6 +12,7 @@ import { CLEAR_TRANSACTIONS } from 'decentraland-dapps/dist/modules/transaction/
 import { createRootReducer, RootState } from './reducer'
 import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
+import { fetchContractsRequest } from './contract/actions'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { GENERATE_IDENTITY_SUCCESS } from './identity/actions'
 import { SET_IS_TRYING_ON } from './ui/preview/actions'
@@ -83,6 +84,8 @@ export function initStore() {
 
   // fetch tiles
   store.dispatch(fetchTilesRequest())
+
+  store.dispatch(fetchContractsRequest())
 
   return store
 }

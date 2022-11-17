@@ -1,6 +1,8 @@
+import { Contract } from '../../../modules/vendor/services'
 import { VendorName } from '../../../modules/vendor/types'
 
 export type Props = {
+  contracts: Contract[]
   count?: number
   currentVendor: VendorName
   address?: string
@@ -9,6 +11,6 @@ export type Props = {
   onClick: (value: string) => void
 }
 
-export type MapStateProps = Pick<Props, 'count' | 'currentVendor'>
+export type MapStateProps = Pick<Props, 'contracts' | 'count' | 'currentVendor'>
 export type MapDispatchProps = {}
 export type MapDispatch = {}

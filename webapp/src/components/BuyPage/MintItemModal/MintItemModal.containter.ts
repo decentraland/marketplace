@@ -8,6 +8,8 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { RootState } from '../../../modules/reducer'
 import { buyItemRequest, BUY_ITEM_REQUEST } from '../../../modules/item/actions'
 import { getLoading as getItemsLoading } from '../../../modules/item/selectors'
+import { getContract } from '../../../modules/contract/selectors'
+import { Contract } from '../../../modules/vendor/services'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -21,7 +23,8 @@ const mapState = (state: RootState): MapStateProps => ({
     isLoadingType(
       getLoadingAuthorizations(state),
       FETCH_AUTHORIZATIONS_REQUEST
-    ) || isLoadingType(getItemsLoading(state), BUY_ITEM_REQUEST)
+    ) || isLoadingType(getItemsLoading(state), BUY_ITEM_REQUEST),
+  getContract: (query: Partial<Contract>) => getContract(state, query)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

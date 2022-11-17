@@ -11,7 +11,6 @@ import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { locations } from '../../../modules/routing/locations'
 import { AuthorizationModal } from '../../AuthorizationModal'
-import { getContract } from '../../../modules/contract/utils'
 import { getContractNames } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
@@ -30,6 +29,7 @@ const MintItemModal = (props: Props) => {
     isOwner,
     hasInsufficientMANA,
     hasLowPrice,
+    getContract,
     onBuyItem
   } = props
 
@@ -40,7 +40,7 @@ const MintItemModal = (props: Props) => {
     item
   ])
 
-  const authorization: Authorization = useMemo(() => {
+  const authorization: Authorization | null = useMemo(() => {
     const contractNames = getContractNames()
     const mana = getContract({
       name: contractNames.MANA,
@@ -52,18 +52,20 @@ const MintItemModal = (props: Props) => {
       network: item.network
     })
 
-    return {
-      address: wallet.address,
-      authorizedAddress: collectionStore.address,
-      contractAddress: mana.address,
-      contractName: ContractName.MANAToken,
-      chainId: item.chainId,
-      type: AuthorizationType.ALLOWANCE
-    }
-  }, [wallet, item])
+    return mana && collectionStore
+      ? {
+          address: wallet.address,
+          authorizedAddress: collectionStore.address,
+          contractAddress: mana.address,
+          contractName: ContractName.MANAToken,
+          chainId: item.chainId,
+          type: AuthorizationType.ALLOWANCE
+        }
+      : null
+  }, [getContract, item.network, item.chainId, wallet.address])
 
   const handleSubmit = useCallback(() => {
-    if (hasAuthorization(authorizations, authorization)) {
+    if (authorization && hasAuthorization(authorizations, authorization)) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
@@ -156,13 +158,15 @@ const MintItemModal = (props: Props) => {
           </ChainButton>
         ) : null}
       </div>
-      <AuthorizationModal
-        isLoading={isLoading}
-        open={showAuthorizationModal}
-        authorization={authorization}
-        onProceed={handleExecuteOrder}
-        onCancel={handleClose}
-      />
+      {authorization ? (
+        <AuthorizationModal
+          isLoading={isLoading}
+          open={showAuthorizationModal}
+          authorization={authorization}
+          onProceed={handleExecuteOrder}
+          onCancel={handleClose}
+        />
+      ) : null}
     </AssetAction>
   )
 }

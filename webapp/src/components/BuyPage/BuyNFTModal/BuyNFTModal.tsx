@@ -13,7 +13,6 @@ import { ContractName } from 'decentraland-transactions'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
-import { getContract } from '../../../modules/contract/utils'
 import { AssetAction } from '../../AssetAction'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { PriceTooLow } from '../PriceTooLow'
@@ -31,6 +30,7 @@ const BuyNFTModal = (props: Props) => {
     isOwner,
     hasInsufficientMANA,
     hasLowPrice,
+    getContract,
     onExecuteOrder
   } = props
 
@@ -41,7 +41,7 @@ const BuyNFTModal = (props: Props) => {
     onExecuteOrder(order!, nft, fingerprint)
   }, [order, nft, fingerprint, onExecuteOrder])
 
-  const authorization: Authorization = useMemo(() => {
+  const authorization: Authorization | null = useMemo(() => {
     const contractNames = getContractNames()
 
     const mana = getContract({
@@ -50,18 +50,20 @@ const BuyNFTModal = (props: Props) => {
     })
 
     // If the vendor is a partner we might need to use a different contract for authorizedAddress. See PR #680
-    return {
-      address: wallet.address,
-      authorizedAddress: order!.marketplaceAddress,
-      contractAddress: mana.address,
-      contractName: ContractName.MANAToken,
-      chainId: nft.chainId,
-      type: AuthorizationType.ALLOWANCE
-    }
-  }, [wallet, nft, order])
+    return mana
+      ? {
+          address: wallet.address,
+          authorizedAddress: order!.marketplaceAddress,
+          contractAddress: mana.address,
+          contractName: ContractName.MANAToken,
+          chainId: nft.chainId,
+          type: AuthorizationType.ALLOWANCE
+        }
+      : null
+  }, [getContract, nft.network, nft.chainId, wallet.address, order])
 
   const handleSubmit = useCallback(() => {
-    if (hasAuthorization(authorizations, authorization)) {
+    if (authorization && hasAuthorization(authorizations, authorization)) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
@@ -143,12 +145,14 @@ const BuyNFTModal = (props: Props) => {
           </ChainButton>
         ) : null}
       </div>
-      <AuthorizationModal
-        open={showAuthorizationModal}
-        authorization={authorization}
-        onProceed={handleExecuteOrder}
-        onCancel={handleClose}
-      />
+      {authorization ? (
+        <AuthorizationModal
+          open={showAuthorizationModal}
+          authorization={authorization}
+          onProceed={handleExecuteOrder}
+          onCancel={handleClose}
+        />
+      ) : null}
     </AssetAction>
   )
 }

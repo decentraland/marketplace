@@ -5,13 +5,19 @@ import { ChainCheck, TransactionLink } from 'decentraland-dapps/dist/containers'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
-import { getContract } from '../../../modules/contract/utils'
 import { isAuthorized } from './utils'
 import { Props } from './Authorization.types'
 import './Authorization.css'
 
 const Authorization = (props: Props) => {
-  const { authorization, authorizations, isLoading, onGrant, onRevoke } = props
+  const {
+    authorization,
+    authorizations,
+    isLoading,
+    onGrant,
+    onRevoke,
+    getContract
+  } = props
 
   const handleOnChange = useCallback(
     (isChecked: boolean) =>
@@ -23,6 +29,10 @@ const Authorization = (props: Props) => {
 
   const contract = getContract({ address: authorizedAddress })
   const token = getContract({ address: contractAddress })
+
+  if (!contract || !token) {
+    return null
+  }
 
   const { network } = getChainConfiguration(token.chainId)
 

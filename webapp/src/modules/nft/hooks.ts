@@ -1,18 +1,24 @@
 import { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 import { NFTCategory } from '@dcl/schemas'
+import { getContract } from '../contract/selectors'
+import { RootState } from '../reducer'
 import { getFingerprint } from './estate/utils'
 import { NFT } from './types'
 
 export const useFingerprint = (nft: NFT | null) => {
   const [fingerprint, setFingerprint] = useState<string>()
   const [isLoading, setIsLoading] = useState(false)
+  const estate = useSelector((state: RootState) =>
+    getContract(state, { category: NFTCategory.ESTATE })
+  )
 
   useEffect(() => {
-    if (nft) {
+    if (nft && estate) {
       switch (nft.category) {
         case NFTCategory.ESTATE: {
           setIsLoading(true)
-          getFingerprint(nft.tokenId)
+          getFingerprint(nft.tokenId, estate)
             .then(result => setFingerprint(result))
             .finally(() => setIsLoading(false))
             .catch(error =>
@@ -27,7 +33,7 @@ export const useFingerprint = (nft: NFT | null) => {
           break
       }
     }
-  }, [nft, setFingerprint, setIsLoading])
+  }, [estate, nft, setFingerprint, setIsLoading])
 
   return [fingerprint, isLoading] as const
 }

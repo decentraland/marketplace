@@ -16,7 +16,6 @@ import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { AuthorizationModal } from '../../AuthorizationModal'
-import { getContract } from '../../../modules/contract/utils'
 import { getContractNames } from '../../../modules/vendor'
 import { ManaField } from '../../ManaField'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
@@ -31,7 +30,8 @@ const BidModal = (props: Props) => {
     authorizations,
     onNavigate,
     onPlaceBid,
-    isPlacingBid
+    isPlacingBid,
+    getContract
   } = props
 
   const [price, setPrice] = useState('')
@@ -68,6 +68,10 @@ const BidModal = (props: Props) => {
     name: contractNames.BIDS,
     network: nft.network
   })
+
+  if (!mana || !bids) {
+    return null
+  }
 
   const authorization: Authorization = {
     address: wallet.address,

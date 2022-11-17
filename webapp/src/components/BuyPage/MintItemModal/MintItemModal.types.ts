@@ -6,6 +6,8 @@ import {
   buyItemRequest,
   BuyItemRequestAction
 } from '../../../modules/item/actions'
+import { Contract } from '../../../modules/vendor/services'
+import { getContract } from '../../../modules/contract/selectors'
 
 export type Props = {
   item: Item
@@ -15,9 +17,13 @@ export type Props = {
   isOwner: boolean
   hasInsufficientMANA: boolean
   hasLowPrice: boolean
+  getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onBuyItem: typeof buyItemRequest
 }
 
-export type MapStateProps = Pick<Props, 'authorizations' | 'isLoading'>
+export type MapStateProps = Pick<
+  Props,
+  'authorizations' | 'isLoading' | 'getContract'
+>
 export type MapDispatchProps = Pick<Props, 'onBuyItem'>
 export type MapDispatch = Dispatch<BuyItemRequestAction>

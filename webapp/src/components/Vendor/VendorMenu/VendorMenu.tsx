@@ -10,7 +10,15 @@ import { Props } from './VendorMenu.types'
 import './VendorMenu.css'
 
 const VendorMenu = (props: Props) => {
-  const { count, currentVendor, address, vendor, section, onClick } = props
+  const {
+    contracts,
+    count,
+    currentVendor,
+    address,
+    vendor,
+    section,
+    onClick
+  } = props
 
   const [isCurrentVendor, setIsCurrentVendor] = useState(
     currentVendor === vendor
@@ -39,10 +47,13 @@ const VendorMenu = (props: Props) => {
       setCurrentCount(count)
     } else {
       const { nftService } = VendorFactory.build(vendor)
-      const newCount = await nftService.count({ address })
+      const newCount = await nftService.count({
+        address,
+        contracts
+      })
       setCurrentCount(newCount)
     }
-  }, [isCurrentVendor, vendor, count, address, setCurrentCount])
+  }, [isCurrentVendor, count, vendor, address, contracts])
 
   const subtitle =
     currentCount === undefined
