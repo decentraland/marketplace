@@ -159,9 +159,9 @@ function* handleClaimLandRequest(action: ClaimLandRequestAction) {
         ...contractArguments: any[]
       ) => Promise<string>,
       rentalsContract,
-      'claim(address,uint256)',
-      nft.contractAddress,
-      nft.tokenId
+      'claim(address[],uint256[])',
+      [nft.contractAddress],
+      [nft.tokenId]
     )
     yield put(
       claimLandTransactionSubmitted(nft, txHash, rentalsContract.address)
