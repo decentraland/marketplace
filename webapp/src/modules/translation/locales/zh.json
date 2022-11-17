@@ -813,6 +813,7 @@
   },
   "manage_asset_page": {
     "open_in_builder": "在 Builder 中打开",
+    "land_is_locked": "此操作将被锁定，直到租金完成并且土地已被收回。",
     "transfer": "转移",
     "cant_transfer_rented_land": "当 LAND 正在出租或尚未收回时，转移将暂停。",
     "sell": {

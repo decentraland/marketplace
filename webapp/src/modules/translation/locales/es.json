@@ -811,6 +811,7 @@
   },
   "manage_asset_page": {
     "open_in_builder": "Abrir en el builder",
+    "land_is_locked": "Esta acción no será posible de realizar hasta que la renta haya finalizado y la tierra haya sido reclamada.",
     "transfer": "Transferir",
     "cant_transfer_rented_land": "La transferencia de tierra está en pausa mientras la tierra está siendo rentada o no se haya reclamado.",
     "sell": {
