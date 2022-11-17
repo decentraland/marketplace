@@ -17,7 +17,7 @@ import { AssetType } from '../../modules/asset/types'
 import { builderUrl } from '../../lib/environment'
 import { NFT } from '../../modules/nft/types'
 import { locations } from '../../modules/routing/locations'
-import { canBeClaimed, isBeingRented } from '../../modules/rental/utils'
+import { isBeingRented, isLandLocked } from '../../modules/rental/utils'
 import { isOwnedBy } from '../../modules/asset/utils'
 import { Navbar } from '../Navbar'
 import { ErrorBoundary } from '../AssetPage/ErrorBoundary'
@@ -134,7 +134,7 @@ export const ManageAssetPage = (props: Props) => {
                                         as={Link}
                                         disabled={
                                           rental !== null &&
-                                          canBeClaimed(
+                                          isLandLocked(
                                             wallet.address,
                                             rental,
                                             asset
@@ -164,9 +164,9 @@ export const ManageAssetPage = (props: Props) => {
                                 </section>
                                 <Sell
                                   nft={asset}
-                                  hasNotBeenClaimed={
+                                  isLandLocked={
                                     rental !== null &&
-                                    canBeClaimed(wallet.address, rental, asset)
+                                    isLandLocked(wallet.address, rental, asset)
                                   }
                                   order={order}
                                 />
@@ -216,7 +216,7 @@ export const ManageAssetPage = (props: Props) => {
                                         as={Link}
                                         disabled={
                                           rental !== null &&
-                                          canBeClaimed(
+                                          isLandLocked(
                                             wallet.address,
                                             rental,
                                             asset
@@ -246,9 +246,9 @@ export const ManageAssetPage = (props: Props) => {
                                 </section>
                                 <Sell
                                   nft={asset}
-                                  hasNotBeenClaimed={
+                                  isLandLocked={
                                     rental !== null &&
-                                    canBeClaimed(wallet.address, rental, asset)
+                                    isLandLocked(wallet.address, rental, asset)
                                   }
                                   order={order}
                                 />

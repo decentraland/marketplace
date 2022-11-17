@@ -226,3 +226,19 @@ export function canBeClaimed(
   }
   return false
 }
+
+/**
+ * Checks wether a LAND/Estate is locked from doing transfers, accepting bids or operating with orders.
+ * @param rental - A rental listing.
+ * @returns true if the rental if the Rental has status `EXECUTED` or if the Rental can be claimed.
+ */
+export function isLandLocked(
+  userAddress: string,
+  rental: RentalListing,
+  asset: Asset
+) {
+  return (
+    rental.status === RentalStatus.EXECUTED ||
+    canBeClaimed(userAddress, rental, asset)
+  )
+}
