@@ -16,10 +16,12 @@ import { VendorName } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import {
   canBeClaimed,
+  canCreateANewRental,
   getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded,
   isBeingRented,
+  isRentalListingCancelled,
   isRentalListingOpen
 } from '../../../modules/rental/utils'
 import { Mana } from '../../Mana'
@@ -112,9 +114,10 @@ export const Rent = (props: Props) => {
   )
   const canBeClaimedBack =
     wallet && rental && canBeClaimed(wallet.address, rental, nft)
+  console.log('Can be claimed', canBeClaimedBack)
 
   const rentButton = useMemo(() => {
-    if (!rental) {
+    if (!rental || canCreateANewRental(rental)) {
       return (
         <Button
           className={styles.actionButton}
@@ -140,7 +143,7 @@ export const Rent = (props: Props) => {
     <section className={classNames(styles.box, className)}>
       <div className={styles.header}>
         <h1 className={styles.title}>
-          {rental
+          {rental && !isRentalListingCancelled(rental)
             ? t('manage_asset_page.rent.renting_title')
             : t('manage_asset_page.rent.rent_title')}
         </h1>
@@ -218,7 +221,8 @@ export const Rent = (props: Props) => {
             </div>
           ) : null}
           {!isClaimingBackLandTransactionPending &&
-          (isRentalListingOpen(rental) || !canBeClaimedBack) ? (
+          (isRentalListingOpen(rental) ||
+            (!canBeClaimedBack && !isRentalListingCancelled(rental))) ? (
             <div className={styles.summary}>
               <div
                 className={classNames(
