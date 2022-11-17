@@ -17,7 +17,8 @@ const Sell = (props: Props) => {
     isBeingRented,
     order,
     nft: { contractAddress, tokenId },
-    onEditOrder
+    onEditOrder,
+    onCancelOrder
   } = props
 
   return (
@@ -30,11 +31,18 @@ const Sell = (props: Props) => {
         </h1>
         <div className={styles.action}>
           {order ? (
-            <IconButton
-              iconName="pencil"
-              disabled={isBeingRented}
-              onClick={onEditOrder}
-            />
+            <>
+              <IconButton
+                iconName="pencil"
+                disabled={isBeingRented}
+                onClick={onEditOrder}
+              />
+              <IconButton
+                iconName="trash alternate"
+                disabled={isBeingRented}
+                onClick={onCancelOrder}
+              />
+            </>
           ) : (
             <Button
               className={styles.sellButton}

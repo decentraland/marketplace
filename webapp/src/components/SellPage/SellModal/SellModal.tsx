@@ -40,7 +40,9 @@ const SellModal = (props: Props) => {
     authorizations,
     isLoading,
     isCreatingOrder,
+    isRentalsEnabled,
     onNavigate,
+    onGoBack,
     onCreateOrder
   } = props
 
@@ -148,7 +150,9 @@ const SellModal = (props: Props) => {
           <Button
             as="div"
             onClick={() =>
-              onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
+              isRentalsEnabled
+                ? onGoBack()
+                : onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
             }
           >
             {t('global.cancel')}

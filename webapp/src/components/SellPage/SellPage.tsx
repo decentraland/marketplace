@@ -14,6 +14,8 @@ const SellPage = (props: Props) => {
     authorizations,
     isLoading,
     isCreatingOrder,
+    isRentalsEnabled,
+    onGoBack,
     onNavigate,
     onCreateOrder
   } = props
@@ -32,6 +34,8 @@ const SellPage = (props: Props) => {
                   authorizations={authorizations}
                   isLoading={isLoading}
                   isCreatingOrder={isCreatingOrder}
+                  isRentalsEnabled={isRentalsEnabled}
+                  onGoBack={onGoBack}
                   onNavigate={onNavigate}
                   onCreateOrder={onCreateOrder}
                 />

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { push } from 'connected-react-router'
+import { goBack, push } from 'connected-react-router'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../../modules/reducer'
 import { getLoading } from '../../modules/order/selectors'
@@ -7,6 +7,7 @@ import {
   cancelOrderRequest,
   CANCEL_ORDER_REQUEST
 } from '../../modules/order/actions'
+import { getIsRentalsEnabled } from '../../modules/features/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -15,11 +16,13 @@ import {
 import CancelSalePage from './CancelSalePage'
 
 const mapState = (state: RootState): MapStateProps => ({
-  isLoading: isLoadingType(getLoading(state), CANCEL_ORDER_REQUEST)
+  isLoading: isLoadingType(getLoading(state), CANCEL_ORDER_REQUEST),
+  isRentalsEnabled: getIsRentalsEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
+  onGoBack: () => dispatch(goBack()),
   onCancelOrder: (order, nft) => dispatch(cancelOrderRequest(order, nft))
 })
 
