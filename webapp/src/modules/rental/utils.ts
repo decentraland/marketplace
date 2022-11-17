@@ -201,3 +201,44 @@ export function hasRentalEnded(rental: RentalListing): boolean {
   const endDate = getRentalEndDate(rental)
   return endDate ? endDate.getTime() <= Date.now() : false
 }
+
+/**
+ * Checks wether a LAND/Estate can be claimed
+ * @param rental - A rental listing.
+ * @returns true if the rental if the Rental has status `EXECUTED` and the rental ended or if the Rental has status `OPEN` OR `CANCELLED`
+ * but the rental contract is still owning the NFT from a past rental
+ */
+export function canBeClaimed(
+  userAddress: string,
+  rental: RentalListing,
+  asset: Asset
+): boolean {
+  if (rental.status === RentalStatus.EXECUTED) {
+    const endDate = getRentalEndDate(rental)
+    return endDate ? endDate.getTime() <= Date.now() : false
+  } else if (
+    (rental.status === RentalStatus.OPEN ||
+      rental.status === RentalStatus.CANCELLED) &&
+    userAddress === rental.lessor &&
+    rental.lessor !== (asset as NFT).owner
+  ) {
+    return true
+  }
+  return false
+}
+
+/**
+ * Checks wether a LAND/Estate is locked from doing transfers, accepting bids or operating with orders.
+ * @param rental - A rental listing.
+ * @returns true if the rental if the Rental has status `EXECUTED` or if the Rental can be claimed.
+ */
+export function isLandLocked(
+  userAddress: string,
+  rental: RentalListing,
+  asset: Asset
+) {
+  return (
+    rental.status === RentalStatus.EXECUTED ||
+    canBeClaimed(userAddress, rental, asset)
+  )
+}

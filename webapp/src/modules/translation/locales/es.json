@@ -837,7 +837,8 @@
       "claiming_land": "Reclamando su tierra. El proceso puede tardar hasta 24hs.",
       "view_transaction": "Ver transacción",
       "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land.",
-      "claiming_back": "Reclamando su tierra"
+      "claiming_back": "Reclamando su tierra",
+      "unclaimed_message": "La tierra todavía está sin reclamar. Reclámala para poder venderla o transferirla."
     },
     "highlights": {
       "title": "Destacados",

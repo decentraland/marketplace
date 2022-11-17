@@ -20,7 +20,8 @@ import {
   hasRentalEnded,
   getRentalEndDate,
   getRentalChosenPeriod,
-  isRentalListingOpen
+  isRentalListingOpen,
+  canBeClaimed
 } from './utils'
 import { getRentalsContractInstance } from './contract'
 
@@ -510,6 +511,190 @@ describe('when checking if a rental listing is open', () => {
             rentalStatus === RentalStatus.OPEN
           )
         })
+      })
+    })
+  })
+})
+
+describe('when getting if a rental can be claimed', () => {
+  let rental: RentalListing
+  let asset: Asset
+  let userAddress: string
+  let lessor: string
+
+  describe('and the rental is in status EXECUTED', () => {
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.EXECUTED,
+        periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }],
+        startedAt: Date.now() - aDay * 5,
+        rentedDays: 1,
+        lessor
+      } as RentalListing
+    })
+
+    it('should return true if the end date is in the past', () => {
+      expect(canBeClaimed(userAddress, rental, asset)).toBeTruthy()
+    })
+  })
+
+  describe('and the rental is in status OPEN', () => {
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.OPEN,
+        lessor: userAddress,
+        periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }]
+      } as RentalListing
+    })
+
+    describe('and the asset owner is not the userAddress', () => {
+      beforeEach(() => {
+        asset = {
+          owner: '0xrentalContract'
+        } as Asset
+      })
+      it('should return true since the owner does not hold the asset', () => {
+        expect(canBeClaimed(userAddress, rental, asset)).toBeTruthy()
+      })
+    })
+
+    describe('and the asset owner is the userAddress', () => {
+      beforeEach(() => {
+        asset = {
+          owner: userAddress
+        } as Asset
+        rental = {
+          status: RentalStatus.OPEN,
+          lessor: userAddress,
+          periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }]
+        } as RentalListing
+      })
+      it('should return false since the owner holds the asset', () => {
+        expect(canBeClaimed(userAddress, rental, asset)).toBeFalsy()
+      })
+    })
+  })
+
+  describe('and the rental is in status CANCELLED', () => {
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.CANCELLED,
+        lessor: userAddress,
+        periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }]
+      } as RentalListing
+    })
+
+    describe('and the asset owner is not the userAddress', () => {
+      beforeEach(() => {
+        asset = {
+          owner: '0xrentalContract'
+        } as Asset
+      })
+      it('should return true since the owner does not hold the asset', () => {
+        expect(canBeClaimed(userAddress, rental, asset)).toBeTruthy()
+      })
+    })
+
+    describe('and the asset owner is the userAddress', () => {
+      beforeEach(() => {
+        asset = {
+          owner: userAddress
+        } as Asset
+      })
+      it('should return false since the owner holds the asset', () => {
+        expect(canBeClaimed(userAddress, rental, asset)).toBeFalsy()
+      })
+    })
+  })
+})
+
+describe('when getting if a rental is locked', () => {
+  let rental: RentalListing
+  let asset: Asset
+  let userAddress: string
+  let lessor: string
+
+  describe('and the rental is in status EXECUTED', () => {
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.EXECUTED,
+        periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }],
+        startedAt: Date.now() - aDay * 5,
+        rentedDays: 1,
+        lessor
+      } as RentalListing
+    })
+
+    it('should return true', () => {
+      expect(canBeClaimed(userAddress, rental, asset)).toBe(true)
+    })
+  })
+
+  describe('and the rental is in status OPEN', () => {
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.OPEN,
+        lessor: userAddress,
+        periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }]
+      } as RentalListing
+    })
+
+    describe('and the asset owner is not the userAddress', () => {
+      beforeEach(() => {
+        asset = {
+          owner: '0xrentalContract'
+        } as Asset
+      })
+      it('should return true since the owner does not hold the asset', () => {
+        expect(canBeClaimed(userAddress, rental, asset)).toBeTruthy()
+      })
+    })
+
+    describe('and the asset owner is the userAddress', () => {
+      beforeEach(() => {
+        asset = {
+          owner: userAddress
+        } as Asset
+        rental = {
+          status: RentalStatus.OPEN,
+          lessor: userAddress,
+          periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }]
+        } as RentalListing
+      })
+      it('should return false since the owner holds the asset', () => {
+        expect(canBeClaimed(userAddress, rental, asset)).toBeFalsy()
+      })
+    })
+  })
+
+  describe('and the rental is in status CANCELLED', () => {
+    beforeEach(() => {
+      rental = {
+        status: RentalStatus.CANCELLED,
+        lessor: userAddress,
+        periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }]
+      } as RentalListing
+    })
+
+    describe('and the asset owner is not the userAddress', () => {
+      beforeEach(() => {
+        asset = {
+          owner: '0xrentalContract'
+        } as Asset
+      })
+      it('should return true since the owner does not hold the asset', () => {
+        expect(canBeClaimed(userAddress, rental, asset)).toBeTruthy()
+      })
+    })
+
+    describe('and the asset owner is the userAddress', () => {
+      beforeEach(() => {
+        asset = {
+          owner: userAddress
+        } as Asset
+      })
+      it('should return false since the owner holds the asset', () => {
+        expect(canBeClaimed(userAddress, rental, asset)).toBeFalsy()
       })
     })
   })

@@ -7,6 +7,7 @@ import {
   isClaimingBackLandTransactionPending,
   getLastTransactionForClaimingBackLand
 } from '../../../modules/ui/browse/selectors'
+import { getWallet } from '../../../modules/wallet/selectors'
 import { MapStateProps, MapDispatchProps, OwnProps } from './Rent.types'
 import { RentalModalMetadata } from '../../Modals/RentalListingModal/RentalListingModal.types'
 import { VendorName } from '../../../modules/vendor'
@@ -14,6 +15,7 @@ import { NFT } from '../../../modules/nft/types'
 import { Rent } from './Rent'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
+  wallet: getWallet(state),
   isClaimingBackLandTransactionPending: isClaimingBackLandTransactionPending(
     state,
     ownProps.nft

@@ -17,7 +17,7 @@ import { AssetType } from '../../modules/asset/types'
 import { builderUrl } from '../../lib/environment'
 import { NFT } from '../../modules/nft/types'
 import { locations } from '../../modules/routing/locations'
-import { isBeingRented } from '../../modules/rental/utils'
+import { isBeingRented, isLandLocked } from '../../modules/rental/utils'
 import { isOwnedBy } from '../../modules/asset/utils'
 import { Navbar } from '../Navbar'
 import { ErrorBoundary } from '../AssetPage/ErrorBoundary'
@@ -132,7 +132,14 @@ export const ManageAssetPage = (props: Props) => {
                                       <Button
                                         className={styles.transfer}
                                         as={Link}
-                                        disabled={isBeingRented(rental)}
+                                        disabled={
+                                          rental !== null &&
+                                          isLandLocked(
+                                            wallet.address,
+                                            rental,
+                                            asset
+                                          )
+                                        }
                                         to={locations.transfer(
                                           asset.contractAddress,
                                           asset.tokenId
@@ -157,7 +164,10 @@ export const ManageAssetPage = (props: Props) => {
                                 </section>
                                 <Sell
                                   nft={asset}
-                                  isBeingRented={isBeingRented(rental)}
+                                  isLandLocked={
+                                    rental !== null &&
+                                    isLandLocked(wallet.address, rental, asset)
+                                  }
                                   order={order}
                                 />
                                 <Rent nft={asset} rental={rental} />
@@ -204,7 +214,14 @@ export const ManageAssetPage = (props: Props) => {
                                       <Button
                                         className={styles.transfer}
                                         as={Link}
-                                        disabled={isBeingRented(rental)}
+                                        disabled={
+                                          rental !== null &&
+                                          isLandLocked(
+                                            wallet.address,
+                                            rental,
+                                            asset
+                                          )
+                                        }
                                         to={locations.transfer(
                                           asset.contractAddress,
                                           asset.tokenId
@@ -229,7 +246,10 @@ export const ManageAssetPage = (props: Props) => {
                                 </section>
                                 <Sell
                                   nft={asset}
-                                  isBeingRented={isBeingRented(rental)}
+                                  isLandLocked={
+                                    rental !== null &&
+                                    isLandLocked(wallet.address, rental, asset)
+                                  }
                                   order={order}
                                 />
                                 <Rent nft={asset} rental={rental} />

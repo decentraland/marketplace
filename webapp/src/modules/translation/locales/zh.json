@@ -839,7 +839,8 @@
       "claiming_land": "收回你的土地。 此过程最多可能需要 24 小时。",
       "view_transaction": "查看区块链交易",
       "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。",
-      "claiming_back": "收回土地"
+      "claiming_back": "收回土地",
+      "unclaimed_message": "该土地仍无人认领。 索回它以出售或转让它。"
     },
     "highlights": {
       "title": "亮点",

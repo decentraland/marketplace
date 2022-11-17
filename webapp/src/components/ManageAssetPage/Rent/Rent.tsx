@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import intlFormat from 'date-fns/intlFormat'
 import formatDistance from 'date-fns/formatDistance'
-import { RentalListingPeriod, RentalStatus } from '@dcl/schemas'
+import { RentalListingPeriod } from '@dcl/schemas'
 import { Button, Popup } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getTransactionHref } from 'decentraland-dapps/dist/modules/transaction/utils'
@@ -15,9 +15,11 @@ import { locations } from '../../../modules/routing/locations'
 import { VendorName } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import {
+  canBeClaimed,
   getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded,
+  isBeingRented,
   isRentalListingOpen
 } from '../../../modules/rental/utils'
 import { Mana } from '../../Mana'
@@ -59,7 +61,8 @@ export const Rent = (props: Props) => {
     rental,
     nft,
     isClaimingBackLandTransactionPending,
-    claimingBackLandTransaction
+    claimingBackLandTransaction,
+    wallet
   } = props
   const isMobileView = isMobile()
 
@@ -107,6 +110,8 @@ export const Rent = (props: Props) => {
         : null,
     [rental]
   )
+  const canBeClaimedBack =
+    wallet && rental && canBeClaimed(wallet.address, rental, nft)
 
   const rentButton = useMemo(() => {
     if (!rental) {
@@ -145,11 +150,31 @@ export const Rent = (props: Props) => {
       </div>
       {rental ? (
         <div className={styles.content}>
-          {rental.status === RentalStatus.EXECUTED ? (
+          {isBeingRented(rental) && !rentalEnded ? (
             <div className={styles.activeRent}>
-              {rental.startedAt && isClaimingBackLandTransactionPending ? (
+              <div className={styles.rentMessage}>
+                <T
+                  id="manage_asset_page.rent.rented_until"
+                  values={{
+                    date: intlFormat(rentalEndDate!, {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    }),
+                    tenant: <LinkedProfile address={rental.tenant!} />
+                  }}
+                />
+              </div>
+            </div>
+          ) : null}
+          {canBeClaimedBack ? (
+            <div className={styles.activeRent}>
+              {isClaimingBackLandTransactionPending ? (
                 <>
-                  <div>{t('manage_asset_page.rent.claiming_land')}</div>
+                  <div className={styles.rentMessage}>
+                    {t('manage_asset_page.rent.claiming_land')}
+                  </div>
                   <div className={styles.activeRentActions}>
                     <Button
                       as={'a'}
@@ -162,15 +187,19 @@ export const Rent = (props: Props) => {
                     </Button>
                   </div>
                 </>
-              ) : rentalEnded ? (
+              ) : (
                 <>
                   <div className={styles.rentMessage}>
-                    <T
-                      id="manage_asset_page.rent.rent_end"
-                      values={{
-                        tenant: <LinkedProfile address={rental.tenant!} />
-                      }}
-                    />
+                    {rentalEnded ? (
+                      <T
+                        id="manage_asset_page.rent.rent_end"
+                        values={{
+                          tenant: <LinkedProfile address={rental.tenant!} />
+                        }}
+                      />
+                    ) : (
+                      t('manage_asset_page.rent.unclaimed_message')
+                    )}
                   </div>
                   <div className={styles.activeRentActions}>
                     {wrapDisabledMobileButton(
@@ -185,25 +214,11 @@ export const Rent = (props: Props) => {
                     )}
                   </div>
                 </>
-              ) : !rentalEnded ? (
-                <div className={styles.rentMessage}>
-                  <T
-                    id="manage_asset_page.rent.rented_until"
-                    values={{
-                      date: intlFormat(rentalEndDate!, {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                      }),
-                      tenant: <LinkedProfile address={rental.tenant!} />
-                    }}
-                  />
-                </div>
-              ) : null}
+              )}
             </div>
           ) : null}
-          {!isClaimingBackLandTransactionPending ? (
+          {!isClaimingBackLandTransactionPending &&
+          (isRentalListingOpen(rental) || !canBeClaimedBack) ? (
             <div className={styles.summary}>
               <div
                 className={classNames(
@@ -227,7 +242,7 @@ export const Rent = (props: Props) => {
                   <span>/{t('global.day')}</span>
                 </div>
               </div>
-              {rental.status === RentalStatus.OPEN ? (
+              {isRentalListingOpen(rental) ? (
                 <>
                   <div className={classNames(styles.column, styles.notShrink)}>
                     <div className={styles.columnHeader}>
@@ -244,7 +259,7 @@ export const Rent = (props: Props) => {
                     <div className={styles.columnContent}>{rentalPeriods}</div>
                   </div>
                 </>
-              ) : rental.status === RentalStatus.EXECUTED ? (
+              ) : isBeingRented(rental) ? (
                 <>
                   <div
                     className={classNames(

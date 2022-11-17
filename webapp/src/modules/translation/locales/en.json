@@ -844,7 +844,8 @@
       "claiming_land": "Claiming back your Land. This process can take up to 24hs.",
       "view_transaction": "View transaction",
       "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND",
-      "claiming_back": "Claiming Back Land"
+      "claiming_back": "Claiming Back Land",
+      "unclaimed_message": "The Land is still unclaimed. Claim it back to sell or transfer it."
     },
     "highlights": {
       "title": "Highlights",

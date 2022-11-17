@@ -5,7 +5,7 @@ export type Props = {
   className?: string
   nft: NFT
   order?: Order | null
-  isBeingRented: boolean
+  isLandLocked: boolean
   onEditOrder: () => void
   onCancelOrder: () => void
 }
@@ -15,5 +15,5 @@ export type MapDispatchProps = Pick<Props, 'onEditOrder' | 'onCancelOrder'>
 
 export type OwnProps = Pick<
   Props,
-  'nft' | 'order' | 'className' | 'isBeingRented'
+  'nft' | 'order' | 'className' | 'isLandLocked'
 >
