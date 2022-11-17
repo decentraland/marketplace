@@ -114,7 +114,6 @@ export const Rent = (props: Props) => {
   )
   const canBeClaimedBack =
     wallet && rental && canBeClaimed(wallet.address, rental, nft)
-  console.log('Can be claimed', canBeClaimedBack)
 
   const rentButton = useMemo(() => {
     if (!rental || canCreateANewRental(rental)) {
