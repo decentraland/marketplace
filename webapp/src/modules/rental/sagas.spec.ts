@@ -465,9 +465,9 @@ describe('when handling the request action to claim a LAND', () => {
                 ...contractArguments: any[]
               ) => Promise<string>,
               rentalContract,
-              'claim(address,uint256)',
-              nft.contractAddress,
-              nft.tokenId
+              'claim(address[],uint256[])',
+              [nft.contractAddress],
+              [nft.tokenId]
             ),
             Promise.reject(new Error('anError'))
           ]
@@ -499,9 +499,9 @@ describe('when handling the request action to claim a LAND', () => {
                   ...contractArguments: any[]
                 ) => Promise<string>,
                 rentalContract,
-                'claim(address,uint256)',
-                nft.contractAddress,
-                nft.tokenId
+                'claim(address[],uint256[])',
+                [nft.contractAddress],
+                [nft.tokenId]
               ),
               Promise.resolve(txHash)
             ],
@@ -534,9 +534,9 @@ describe('when handling the request action to claim a LAND', () => {
                   ...contractArguments: any[]
                 ) => Promise<string>,
                 rentalContract,
-                'claim(address,uint256)',
-                nft.contractAddress,
-                nft.tokenId
+                'claim(address[],uint256[])',
+                [nft.contractAddress],
+                [nft.tokenId]
               ),
               Promise.resolve(txHash)
             ],
