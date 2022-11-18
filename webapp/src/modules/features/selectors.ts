@@ -19,10 +19,12 @@ export const getIsMaintenanceEnabled = (state: RootState) => {
 
 export const getIsRentalsEnabled = (state: RootState) => {
   try {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.BUILDER,
-      FeatureName.RENTALS
+    return (
+      getIsFeatureEnabled(
+        state,
+        ApplicationName.BUILDER,
+        FeatureName.RENTALS
+      ) && false
     )
   } catch (e) {
     return false
