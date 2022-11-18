@@ -82,7 +82,7 @@ describe('when getting the asset owner', () => {
         } as Wallet
       })
       it('should return true', () => {
-        expect(isOwnedBy(asset, wallet)).toBeTruthy()
+        expect(isOwnedBy(asset, wallet)).toBe(true)
       })
     })
     describe('and the logged user is not the asset owner', () => {
@@ -92,7 +92,7 @@ describe('when getting the asset owner', () => {
         } as Wallet
       })
       it('should return false', () => {
-        expect(isOwnedBy(asset, wallet)).toBeFalsy()
+        expect(isOwnedBy(asset, wallet)).toBe(false)
       })
     })
   })
@@ -120,7 +120,7 @@ describe('when getting the asset owner', () => {
           } as Wallet
         })
         it('should return true', () => {
-          expect(isOwnedBy(asset, wallet, rental)).toBeTruthy()
+          expect(isOwnedBy(asset, wallet, rental)).toBe(true)
         })
       })
 
@@ -128,24 +128,30 @@ describe('when getting the asset owner', () => {
         beforeEach(() => {
           asset = {
             openRentalId: null,
-            owner: 'anOwner'
+            owner: 'anOwner',
+            chainId: 1
           } as Asset
           wallet = {
             address: 'notTheAssetOwner'
           } as Wallet
         })
         it('should return false', () => {
-          expect(isOwnedBy(asset, wallet, rental)).toBeFalsy()
+          expect(isOwnedBy(asset, wallet, rental)).toBe(false)
         })
       })
     })
 
     describe('and the rental is in status EXECUTED', () => {
-      describe('and the logged user is the rental lessor', () => {
+      describe('and the logged user is the rental lessor the asset is in the rentals contract', () => {
+        const rentalsContract: ContractData = getContract(
+          ContractName.Rentals,
+          1
+        )
         beforeEach(() => {
           asset = {
             openRentalId: null,
-            owner: 'anOwner'
+            owner: rentalsContract.address,
+            chainId: 1
           } as Asset
           wallet = {
             address: 'anAddress'
@@ -156,7 +162,7 @@ describe('when getting the asset owner', () => {
           } as RentalListing
         })
         it('should return true', () => {
-          expect(isOwnedBy(asset, wallet, rental)).toBeTruthy()
+          expect(isOwnedBy(asset, wallet, rental)).toBe(true)
         })
       })
 
@@ -164,14 +170,15 @@ describe('when getting the asset owner', () => {
         beforeEach(() => {
           asset = {
             openRentalId: null,
-            owner: 'anOwner'
+            owner: 'anOwner',
+            chainId: 1
           } as Asset
           wallet = {
             address: 'notTheRentalLessor'
           } as Wallet
         })
         it('should return false', () => {
-          expect(isOwnedBy(asset, wallet, rental)).toBeFalsy()
+          expect(isOwnedBy(asset, wallet, rental)).toBe(false)
         })
       })
     })
@@ -192,7 +199,7 @@ describe('when getting the asset owner', () => {
           } as RentalListing
         })
         it('should return true', () => {
-          expect(isOwnedBy(asset, wallet, rental)).toBeTruthy()
+          expect(isOwnedBy(asset, wallet, rental)).toBe(true)
         })
       })
 
@@ -211,7 +218,7 @@ describe('when getting the asset owner', () => {
           } as RentalListing
         })
         it('should return true', () => {
-          expect(isOwnedBy(asset, wallet, rental)).toBeTruthy()
+          expect(isOwnedBy(asset, wallet, rental)).toBe(true)
         })
       })
 
@@ -231,7 +238,7 @@ describe('when getting the asset owner', () => {
           } as RentalListing
         })
         it('should return false', () => {
-          expect(isOwnedBy(asset, wallet, rental)).toBeFalsy()
+          expect(isOwnedBy(asset, wallet, rental)).toBe(false)
         })
       })
 
@@ -255,7 +262,7 @@ describe('when getting the asset owner', () => {
           } as RentalListing
         })
         it('should return true', () => {
-          expect(isOwnedBy(asset, wallet, rental)).toBeTruthy()
+          expect(isOwnedBy(asset, wallet, rental)).toBe(true)
         })
       })
     })

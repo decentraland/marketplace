@@ -7,10 +7,6 @@ import {
   getContract
 } from 'decentraland-transactions'
 import { NFT } from '../nft/types'
-import {
-  isRentalListingCancelled,
-  isRentalListingExecuted
-} from '../rental/utils'
 import { locations } from '../routing/locations'
 import { addressEquals } from '../wallet/utils'
 import { Asset } from './types'
@@ -88,22 +84,14 @@ export function isOwnedBy(
 
   // If the asset was transfered with an open listing, it will be change to CANCELLED
   // but rental lessor will still be the past owner.
-  if (isRentalListingCancelled(rental)) {
-    if (isLoggedUserTheOwner) {
-      return true
-    }
-    const rentalsContract: ContractData = getContract(
-      ContractName.Rentals,
-      (asset as NFT).chainId
-    )
-    const rentalContractHasTheAsset =
-      rentalsContract.address === (asset as NFT).owner
-
+  const rentalsContract: ContractData = getContract(
+    ContractName.Rentals,
+    (asset as NFT).chainId
+  )
+  const rentalContractHasTheAsset =
+    rentalsContract.address === (asset as NFT).owner
+  if (rental && rentalContractHasTheAsset) {
     // if the asset is not in the rental contracts, it has been transfered and should not have owner permissions
-    return rentalContractHasTheAsset
-  }
-
-  if (isRentalListingExecuted(rental)) {
     return addressEquals(wallet?.address, rental?.lessor ?? undefined)
   }
 

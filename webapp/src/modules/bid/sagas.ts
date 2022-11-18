@@ -91,7 +91,7 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
         getRentalById,
         nft.openRentalId
       )
-      if (isRentalListingOpen(rental) || isRentalListingCancelled(rental)) {
+      if (isRentalListingOpen(rental)) {
         yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
       }
     }
