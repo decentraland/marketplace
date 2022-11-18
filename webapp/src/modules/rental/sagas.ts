@@ -46,7 +46,7 @@ import {
   acceptRentalListingFailure,
   acceptRentalListingTransactionSubmitted
 } from './actions'
-import { daysByPeriod, getNonces, getSignature } from './utils'
+import { daysByPeriod, getNonces, getSignature, waitUntilRentalChangesStatus } from './utils'
 
 export function* rentalSaga() {
   yield takeEvery(UPSERT_RENTAL_REQUEST, handleCreateOrEditRentalRequest)
@@ -180,24 +180,6 @@ function* handleModalClose(action: CloseModalAction) {
   ) {
     yield put(clearRentalErrors())
   }
-}
-
-function* waitUntilRentalChangesStatus(
-  nft: NFT<VendorName>,
-  status: RentalStatus
-) {
-  let hasChanged = false
-  let listing: RentalListing
-  while (!hasChanged) {
-    yield delay(3500)
-    listing = yield call(
-      [rentalsAPI, 'refreshRentalListing'],
-      nft.openRentalId!
-    )
-
-    hasChanged = listing.status === status
-  }
-  return listing!
 }
 
 function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {

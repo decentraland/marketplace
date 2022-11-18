@@ -1,4 +1,5 @@
 import { BigNumber, ethers } from 'ethers'
+import { call, delay } from 'redux-saga/effects'
 import add from 'date-fns/add'
 import {
   ChainId,
@@ -14,6 +15,8 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { VendorName } from '../vendor'
+import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { Asset } from '../asset/types'
 import { NFT } from '../nft/types'
 import { PeriodOption, PeriodOptionsDev } from './types'
@@ -236,10 +239,15 @@ export function canBeClaimed(
     return endDate ? endDate.getTime() <= Date.now() : false
   } else if (
     (isRentalListingOpen(rental) || isRentalListingCancelled(rental)) &&
-    userAddress === rental.lessor &&
-    rental.lessor !== (asset as NFT).owner
+    userAddress === rental.lessor
   ) {
-    return true
+    const rentalsContract: ContractData = getContract(
+      ContractName.Rentals,
+      (asset as NFT).chainId
+    )
+    // can only be claimed from the contract address
+    // this avoids the case where the asset was transfer with an open rental
+    return rentalsContract.address === (asset as NFT).owner
   }
   return false
 }
@@ -258,4 +266,22 @@ export function isLandLocked(
     rental.status === RentalStatus.EXECUTED ||
     canBeClaimed(userAddress, rental, asset)
   )
+}
+
+export function* waitUntilRentalChangesStatus(
+  nft: NFT<VendorName>,
+  status: RentalStatus
+) {
+  let hasChanged = false
+  let listing: RentalListing
+  while (!hasChanged) {
+    yield delay(3500)
+    listing = yield call(
+      [rentalsAPI, 'refreshRentalListing'],
+      nft.openRentalId!
+    )
+
+    hasChanged = listing.status === status
+  }
+  return listing!
 }
