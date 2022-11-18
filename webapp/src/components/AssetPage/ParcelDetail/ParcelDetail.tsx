@@ -18,6 +18,7 @@ import { RentalHistory } from '../RentalHistory'
 import { ProximityHighlights } from '../ProximityHighlights'
 import BaseDetail from '../BaseDetail'
 import { SaleRentActionBox } from '../SaleRentActionBox'
+import { Owner } from '../Owner'
 import { Props } from './ParcelDetail.types'
 import styles from './ParcelDetail.module.css'
 
@@ -43,6 +44,7 @@ const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
       left={
         <>
           <Description text={parcel.description} />
+          {!isRentalsEnabled ? <Owner asset={nft} /> : null}
           <ProximityHighlights nft={nft} />
         </>
       }
