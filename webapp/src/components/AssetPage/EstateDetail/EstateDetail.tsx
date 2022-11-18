@@ -76,7 +76,7 @@ const EstateDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
       left={
         <>
           <Description text={estate.description} />
-          <Owner asset={nft} />
+          {!isRentalsEnabled ? <Owner asset={nft} /> : null}
           <ProximityHighlights nft={nft} />
         </>
       }
