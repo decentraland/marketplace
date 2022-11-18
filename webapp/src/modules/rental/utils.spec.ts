@@ -27,6 +27,11 @@ import {
 } from './utils'
 import { getRentalsContractInstance } from './contract'
 import { start } from 'repl'
+import {
+  ContractData,
+  ContractName,
+  getContract
+} from 'decentraland-transactions'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
 jest.mock('./contract')
@@ -555,9 +560,18 @@ describe('when getting if a rental can be claimed', () => {
   let asset: Asset
   let userAddress: string
   let lessor: string
+  let nftChainId: number
+  let rentalsContract: ContractData
 
   describe('and the rental is in status EXECUTED', () => {
     beforeEach(() => {
+      nftChainId = 1
+      rentalsContract = getContract(ContractName.Rentals, nftChainId)
+      userAddress = '0xanAddress'
+      asset = {
+        owner: rentalsContract.address,
+        chainId: nftChainId
+      } as Asset
       rental = {
         status: RentalStatus.EXECUTED,
         periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }],
@@ -581,10 +595,13 @@ describe('when getting if a rental can be claimed', () => {
       } as RentalListing
     })
 
-    describe('and the asset owner is not the userAddress', () => {
+    describe('and the asset owner is not the userAddress because it i still in the rentals contract', () => {
       beforeEach(() => {
+        nftChainId = 1
+        rentalsContract = getContract(ContractName.Rentals, nftChainId)
         asset = {
-          owner: '0xrentalContract'
+          owner: rentalsContract.address,
+          chainId: nftChainId
         } as Asset
       })
       it('should return true since the owner does not hold the asset', () => {
@@ -611,6 +628,7 @@ describe('when getting if a rental can be claimed', () => {
 
   describe('and the rental is in status CANCELLED', () => {
     beforeEach(() => {
+      userAddress = '0xanAddress'
       rental = {
         status: RentalStatus.CANCELLED,
         lessor: userAddress,
@@ -618,10 +636,13 @@ describe('when getting if a rental can be claimed', () => {
       } as RentalListing
     })
 
-    describe('and the asset owner is not the userAddress', () => {
+    describe('and the asset owner is not the userAddress because it is still in the rentals contract', () => {
       beforeEach(() => {
+        nftChainId = 1
+        rentalsContract = getContract(ContractName.Rentals, nftChainId)
         asset = {
-          owner: '0xrentalContract'
+          owner: rentalsContract.address,
+          chainId: nftChainId
         } as Asset
       })
       it('should return true since the owner does not hold the asset', () => {
@@ -647,9 +668,18 @@ describe('when getting if a rental is locked', () => {
   let asset: Asset
   let userAddress: string
   let lessor: string
+  let nftChainId: number
+  let rentalsContract: ContractData
 
   describe('and the rental is in status EXECUTED', () => {
     beforeEach(() => {
+      nftChainId = 1
+      rentalsContract = getContract(ContractName.Rentals, nftChainId)
+      userAddress = '0xanAddress'
+      asset = {
+        owner: rentalsContract.address,
+        chainId: nftChainId
+      } as Asset
       rental = {
         status: RentalStatus.EXECUTED,
         periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }],
@@ -666,6 +696,7 @@ describe('when getting if a rental is locked', () => {
 
   describe('and the rental is in status OPEN', () => {
     beforeEach(() => {
+      userAddress = '0xanAddress'
       rental = {
         status: RentalStatus.OPEN,
         lessor: userAddress,
@@ -675,8 +706,11 @@ describe('when getting if a rental is locked', () => {
 
     describe('and the asset owner is not the userAddress', () => {
       beforeEach(() => {
+        nftChainId = 1
+        rentalsContract = getContract(ContractName.Rentals, nftChainId)
         asset = {
-          owner: '0xrentalContract'
+          owner: rentalsContract.address,
+          chainId: nftChainId
         } as Asset
       })
       it('should return true since the owner does not hold the asset', () => {
@@ -703,6 +737,7 @@ describe('when getting if a rental is locked', () => {
 
   describe('and the rental is in status CANCELLED', () => {
     beforeEach(() => {
+      userAddress = '0xanAddress'
       rental = {
         status: RentalStatus.CANCELLED,
         lessor: userAddress,
@@ -712,8 +747,11 @@ describe('when getting if a rental is locked', () => {
 
     describe('and the asset owner is not the userAddress', () => {
       beforeEach(() => {
+        nftChainId = 1
+        rentalsContract = getContract(ContractName.Rentals, nftChainId)
         asset = {
-          owner: '0xrentalContract'
+          owner: rentalsContract.address,
+          chainId: nftChainId
         } as Asset
       })
       it('should return true since the owner does not hold the asset', () => {

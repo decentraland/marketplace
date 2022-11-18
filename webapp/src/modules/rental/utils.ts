@@ -17,6 +17,7 @@ import {
 } from 'decentraland-transactions'
 import { VendorName } from '../vendor'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
+import { addressEquals } from '../wallet/utils'
 import { Asset } from '../asset/types'
 import { NFT } from '../nft/types'
 import { PeriodOption, PeriodOptionsDev } from './types'
@@ -234,6 +235,9 @@ export function canBeClaimed(
   rental: RentalListing,
   asset: Asset
 ): boolean {
+  if (addressEquals(userAddress, (asset as NFT).owner)) {
+    return false // the user is the owner, there's nothing to be claimed
+  }
   if (rental.status === RentalStatus.EXECUTED) {
     const endDate = getRentalEndDate(rental)
     return endDate ? endDate.getTime() <= Date.now() : false
@@ -247,7 +251,7 @@ export function canBeClaimed(
     )
     // can only be claimed from the contract address
     // this avoids the case where the asset was transfer with an open rental
-    return rentalsContract.address === (asset as NFT).owner
+    return addressEquals(rentalsContract.address, (asset as NFT).owner)
   }
   return false
 }
