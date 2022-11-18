@@ -90,7 +90,11 @@ const EditConfirmationStep = (props: Props) => {
                     isSubmittingRemoveTransaction ||
                     isRemoveTransactionBeingConfirmed
                   }
-                  disabled={isStepOneCompleted}
+                  disabled={
+                    isStepOneCompleted ||
+                    isSubmittingRemoveTransaction ||
+                    isRemoveTransactionBeingConfirmed
+                  }
                 >
                   {t('rental_modal.confirmation_edit_step.confirm')}
                 </Button>
@@ -116,7 +120,7 @@ const EditConfirmationStep = (props: Props) => {
                 primary={isStepOneCompleted}
                 size="small"
                 loading={isSigning}
-                disabled={!isStepOneCompleted}
+                disabled={!isStepOneCompleted || isSigning}
                 onClick={handlePublishNewInfo}
               >
                 {t('rental_modal.confirmation_edit_step.action_two_title')}
