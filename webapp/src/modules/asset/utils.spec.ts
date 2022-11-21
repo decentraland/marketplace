@@ -98,12 +98,15 @@ describe('when getting the asset owner', () => {
   })
 
   describe('and the asset has a rental', () => {
+    beforeEach(() => {
+      asset = {
+        openRentalId: null,
+        owner: 'anOwner',
+        chainId: 1
+      } as Asset
+    })
     describe('and the rental is in status OPEN', () => {
       beforeEach(() => {
-        asset = {
-          openRentalId: null,
-          owner: 'anOwner'
-        } as Asset
         rental = {
           status: RentalStatus.OPEN
         } as RentalListing
@@ -111,10 +114,6 @@ describe('when getting the asset owner', () => {
 
       describe('and the logged user is the asset owner', () => {
         beforeEach(() => {
-          asset = {
-            openRentalId: null,
-            owner: 'anOwner'
-          } as Asset
           wallet = {
             address: (asset as NFT).owner
           } as Wallet
@@ -126,11 +125,6 @@ describe('when getting the asset owner', () => {
 
       describe('and the logged user is not the asset owner', () => {
         beforeEach(() => {
-          asset = {
-            openRentalId: null,
-            owner: 'anOwner',
-            chainId: 1
-          } as Asset
           wallet = {
             address: 'notTheAssetOwner'
           } as Wallet
