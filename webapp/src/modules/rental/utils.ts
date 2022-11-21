@@ -1,5 +1,4 @@
 import { BigNumber, ethers } from 'ethers'
-import { call, delay } from 'redux-saga/effects'
 import add from 'date-fns/add'
 import {
   ChainId,
@@ -272,19 +271,21 @@ export function isLandLocked(
   )
 }
 
-export function* waitUntilRentalChangesStatus(
+async function delay(miliseconds: number) {
+  return await new Promise<void>(resolve =>
+    setTimeout(() => resolve(), miliseconds)
+  )
+}
+
+export async function waitUntilRentalChangesStatus(
   nft: NFT<VendorName>,
   status: RentalStatus
 ) {
   let hasChanged = false
   let listing: RentalListing
   while (!hasChanged) {
-    yield delay(3500)
-    listing = yield call(
-      [rentalsAPI, 'refreshRentalListing'],
-      nft.openRentalId!
-    )
-
+    await delay(3500)
+    listing = await rentalsAPI.refreshRentalListing(nft.openRentalId!)
     hasChanged = listing.status === status
   }
   return listing!

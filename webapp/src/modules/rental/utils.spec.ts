@@ -1,13 +1,15 @@
-import {
-  NFT,
-  RentalListing,
-  RentalListingPeriod,
-  RentalStatus
-} from '@dcl/schemas'
+import { RentalListing, RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 import { BigNumber, ethers } from 'ethers'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
+import {
+  ContractData,
+  ContractName,
+  getContract
+} from 'decentraland-transactions'
 import { ChainId } from '@dcl/schemas'
 import { Asset } from '../asset/types'
+import { rentalsAPI } from '../vendor/decentraland/rentals/api'
+import { NFT } from '../nft/types'
 import {
   getAssetNonce,
   getContractNonce,
@@ -23,17 +25,21 @@ import {
   isRentalListingOpen,
   canBeClaimed,
   isRentalListingCancelled,
-  canCreateANewRental
+  canCreateANewRental,
+  waitUntilRentalChangesStatus
 } from './utils'
 import { getRentalsContractInstance } from './contract'
-import {
-  ContractData,
-  ContractName,
-  getContract
-} from 'decentraland-transactions'
 
+jest.useFakeTimers()
 jest.mock('decentraland-dapps/dist/lib/eth')
 jest.mock('./contract')
+jest.mock('../vendor/decentraland/rentals/api')
+
+const runTimerAutomaticallyOnce = () => {
+  ;((setTimeout as unknown) as jest.Mock).mockImplementationOnce(callback =>
+    callback()
+  )
+}
 
 const getSignerMock = getSigner as jest.MockedFunction<typeof getSigner>
 const signerMock = {
@@ -818,6 +824,38 @@ describe('when checking if a new rental can be created', () => {
 
     it('should return true', () => {
       expect(canCreateANewRental(rental)).toBe(true)
+    })
+  })
+})
+
+describe('when waiting until the rental changes the status', () => {
+  let nft: NFT
+  let desiredStatus: RentalStatus
+  let listing: RentalListing
+  beforeEach(() => {
+    listing = {
+      status: RentalStatus.OPEN
+    } as RentalListing
+    nft = {
+      openRentalId: 'rentalId'
+    } as NFT
+    desiredStatus = RentalStatus.CANCELLED
+    ;(rentalsAPI.refreshRentalListing as jest.Mock).mockResolvedValueOnce(
+      listing
+    )
+    runTimerAutomaticallyOnce()
+    ;(rentalsAPI.refreshRentalListing as jest.Mock).mockResolvedValueOnce({
+      ...listing,
+      status: desiredStatus
+    })
+    runTimerAutomaticallyOnce()
+  })
+  it('should call the rentalsAPI refreshRentalListing endpoint until it returns the rental in the status desired', async () => {
+    expect(
+      await waitUntilRentalChangesStatus(nft, desiredStatus)
+    ).toStrictEqual({
+      ...listing,
+      status: desiredStatus
     })
   })
 })
