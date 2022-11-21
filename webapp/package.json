@@ -81,7 +81,7 @@
     "semi": false
   },
   "engines": {
-    "node": ">= 16.13.0"
+    "node": ">= 16.0.0"
   },
   "browserslist": {
     "production": [
