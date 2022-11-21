@@ -26,7 +26,6 @@ import {
   canCreateANewRental
 } from './utils'
 import { getRentalsContractInstance } from './contract'
-import { start } from 'repl'
 import {
   ContractData,
   ContractName,
@@ -595,7 +594,7 @@ describe('when getting if a rental can be claimed', () => {
       } as RentalListing
     })
 
-    describe('and the asset owner is not the userAddress because it i still in the rentals contract', () => {
+    describe('and the asset owner is not the userAddress because it is still in the rentals contract', () => {
       beforeEach(() => {
         nftChainId = 1
         rentalsContract = getContract(ContractName.Rentals, nftChainId)

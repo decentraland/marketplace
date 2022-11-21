@@ -30,7 +30,6 @@ import { getRentalById } from '../rental/selectors'
 import { NFT } from '../nft/types'
 import { getCurrentNFT } from '../nft/selectors'
 import {
-  isRentalListingCancelled,
   isRentalListingOpen,
   waitUntilRentalChangesStatus
 } from '../rental/utils'

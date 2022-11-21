@@ -142,6 +142,11 @@ describe('when getting the asset owner', () => {
     })
 
     describe('and the rental is in status EXECUTED', () => {
+      beforeEach(() => {
+        rental = {
+          status: RentalStatus.EXECUTED
+        } as RentalListing
+      })
       describe('and the logged user is the rental lessor the asset is in the rentals contract', () => {
         const rentalsContract: ContractData = getContract(
           ContractName.Rentals,
@@ -156,10 +161,7 @@ describe('when getting the asset owner', () => {
           wallet = {
             address: 'anAddress'
           } as Wallet
-          rental = {
-            status: RentalStatus.EXECUTED,
-            lessor: wallet.address
-          } as RentalListing
+          rental.lessor = wallet.address
         })
         it('should return true', () => {
           expect(isOwnedBy(asset, wallet, rental)).toBe(true)
@@ -184,6 +186,9 @@ describe('when getting the asset owner', () => {
     })
 
     describe('and the rental is in status CANCELLED', () => {
+      rental = {
+        status: RentalStatus.CANCELLED
+      } as RentalListing
       describe('and the logged user is the asset owner and rental lessor', () => {
         beforeEach(() => {
           asset = {
@@ -193,10 +198,7 @@ describe('when getting the asset owner', () => {
           wallet = {
             address: (asset as NFT).owner
           } as Wallet
-          rental = {
-            status: RentalStatus.CANCELLED,
-            lessor: wallet.address
-          } as RentalListing
+          rental.lessor = wallet.address
         })
         it('should return true', () => {
           expect(isOwnedBy(asset, wallet, rental)).toBe(true)
@@ -212,10 +214,7 @@ describe('when getting the asset owner', () => {
           wallet = {
             address: (asset as NFT).owner
           } as Wallet
-          rental = {
-            status: RentalStatus.CANCELLED,
-            lessor: 'exOwner'
-          } as RentalListing
+          rental.lessor = 'exOwner'
         })
         it('should return true', () => {
           expect(isOwnedBy(asset, wallet, rental)).toBe(true)
@@ -232,10 +231,7 @@ describe('when getting the asset owner', () => {
           wallet = {
             address: 'exOwner'
           } as Wallet
-          rental = {
-            status: RentalStatus.CANCELLED,
-            lessor: 'exOwner'
-          } as RentalListing
+          rental.lessor = 'exOwner'
         })
         it('should return false', () => {
           expect(isOwnedBy(asset, wallet, rental)).toBe(false)
@@ -256,10 +252,7 @@ describe('when getting the asset owner', () => {
           wallet = {
             address: (asset as NFT).owner
           } as Wallet
-          rental = {
-            status: RentalStatus.CANCELLED,
-            lessor: wallet.address
-          } as RentalListing
+          rental.lessor = wallet.address
         })
         it('should return true', () => {
           expect(isOwnedBy(asset, wallet, rental)).toBe(true)
