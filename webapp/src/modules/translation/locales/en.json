@@ -818,6 +818,7 @@
   },
   "manage_asset_page": {
     "open_in_builder": "Open in builder",
+    "land_is_locked": "This action is locked until the rent has finished and the Land has been claimed back.",
     "transfer": "Transfer",
     "cant_transfer_rented_land": "Transferring is paused while the LAND is being rented or hasn't been claimed back.",
     "sell": {

@@ -4,11 +4,10 @@ import { Link } from 'react-router-dom'
 import intlFormat from 'date-fns/intlFormat'
 import formatDistance from 'date-fns/formatDistance'
 import { RentalListingPeriod } from '@dcl/schemas'
-import { Button, Popup } from 'decentraland-ui'
+import { Button, Popup, useMobileMediaQuery } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getTransactionHref } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
-import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
@@ -66,7 +65,7 @@ export const Rent = (props: Props) => {
     claimingBackLandTransaction,
     wallet
   } = props
-  const isMobileView = isMobile()
+  const isMobileView = useMobileMediaQuery()
 
   const wrapDisabledMobileButton = useCallback(
     trigger => {

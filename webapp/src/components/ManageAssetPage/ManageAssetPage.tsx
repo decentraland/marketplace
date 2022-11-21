@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Back,
@@ -9,7 +9,9 @@ import {
   Narrow,
   NotMobile,
   Page,
-  Section
+  Popup,
+  Section,
+  useMobileMediaQuery
 } from 'decentraland-ui'
 import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -58,7 +60,7 @@ const Unauthorized = () => (
 export const ManageAssetPage = (props: Props) => {
   const { onBack, wallet, isConnecting } = props
 
-  const handleOpenInBuilder = (asset: NFT) => {
+  const handleOpenInBuilder = useCallback((asset: NFT) => {
     window.location.replace(
       `${builderUrl}/land/${
         asset.category === NFTCategory.ESTATE
@@ -66,12 +68,13 @@ export const ManageAssetPage = (props: Props) => {
           : `${asset.data.parcel?.x},${asset.data.parcel?.y}`
       }`
     )
-  }
+  }, [])
 
   const rentalStatus = useMemo(
     () => [RentalStatus.EXECUTED, RentalStatus.OPEN, RentalStatus.CANCELLED],
     []
   )
+  const isMobileView = useMobileMediaQuery()
 
   return (
     <>
@@ -98,13 +101,48 @@ export const ManageAssetPage = (props: Props) => {
                             {asset && !isLoading ? (
                               <>
                                 <Map asset={asset} />
-                                <Button
-                                  className={styles.builderButton}
-                                  primary
-                                  onClick={() => handleOpenInBuilder(asset)}
-                                >
-                                  {t('manage_asset_page.open_in_builder')}
-                                </Button>
+                                <Popup
+                                  content={
+                                    'This action is locked until the rent has finished and (or) the Land has been claimed back'
+                                  }
+                                  position="top left"
+                                  on={isMobileView ? 'click' : 'hover'}
+                                  disabled={
+                                    !(
+                                      rental !== null &&
+                                      isLandLocked(
+                                        wallet.address,
+                                        rental,
+                                        asset
+                                      )
+                                    )
+                                  }
+                                  trigger={
+                                    <span>
+                                      {
+                                        <Button
+                                          className={styles.builderButton}
+                                          primary
+                                          disabled={
+                                            rental !== null &&
+                                            isLandLocked(
+                                              wallet.address,
+                                              rental,
+                                              asset
+                                            )
+                                          }
+                                          onClick={() =>
+                                            handleOpenInBuilder(asset)
+                                          }
+                                        >
+                                          {t(
+                                            'manage_asset_page.open_in_builder'
+                                          )}
+                                        </Button>
+                                      }
+                                    </span>
+                                  }
+                                />
                                 <Highlights
                                   className={styles.highlights}
                                   nft={asset as NFT}
