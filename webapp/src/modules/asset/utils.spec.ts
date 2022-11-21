@@ -186,9 +186,11 @@ describe('when getting the asset owner', () => {
     })
 
     describe('and the rental is in status CANCELLED', () => {
-      rental = {
-        status: RentalStatus.CANCELLED
-      } as RentalListing
+      beforeEach(() => {
+        rental = {
+          status: RentalStatus.CANCELLED
+        } as RentalListing
+      })
       describe('and the logged user is the asset owner and rental lessor', () => {
         beforeEach(() => {
           asset = {
