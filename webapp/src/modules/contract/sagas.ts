@@ -1,4 +1,6 @@
 import { call, takeEvery, put } from '@redux-saga/core/effects'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../lib/error'
 import { VendorFactory, VendorName } from '../vendor'
 import { Contract } from '../vendor/services'
 import {
@@ -26,6 +28,10 @@ export function* handleFetchContractsRequest() {
     }
     yield put(fetchContractsSuccess(contracts))
   } catch (error) {
-    yield put(fetchContractsFailure(error.message))
+    yield put(
+      fetchContractsFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }

@@ -1,5 +1,7 @@
 import { Bid, RentalListing, RentalStatus } from '@dcl/schemas'
 import { takeEvery, put, select, call } from 'redux-saga/effects'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../lib/error'
 import {
   PLACE_BID_REQUEST,
   PlaceBidRequestAction,
@@ -66,7 +68,15 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
       )
     )
   } catch (error) {
-    yield put(placeBidFailure(nft, price, expiresAt, error, fingerprint))
+    yield put(
+      placeBidFailure(
+        nft,
+        price,
+        expiresAt,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error'),
+        fingerprint
+      )
+    )
   }
 }
 
@@ -99,7 +109,12 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
 
     yield put(acceptBidSuccess(bid, txHash))
   } catch (error) {
-    yield put(acceptBidFailure(bid, error.message))
+    yield put(
+      acceptBidFailure(
+        bid,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }
 
@@ -121,7 +136,12 @@ function* handleCancelBidRequest(action: CancelBidRequestAction) {
 
     yield put(cancelBidSuccess(bid, txHash))
   } catch (error) {
-    yield put(cancelBidFailure(bid, error.message))
+    yield put(
+      cancelBidFailure(
+        bid,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }
 
@@ -151,7 +171,12 @@ function* handleFetchBidsByAddressRequest(
 
     yield put(fetchBidsByAddressSuccess(address, sellerBids, bidderBids))
   } catch (error) {
-    yield put(fetchBidsByAddressFailure(address, error.message))
+    yield put(
+      fetchBidsByAddressFailure(
+        address,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }
 
@@ -164,6 +189,11 @@ function* handleFetchBidsByNFTRequest(action: FetchBidsByNFTRequestAction) {
 
     yield put(fetchBidsByNFTSuccess(nft, bids))
   } catch (error) {
-    yield put(fetchBidsByNFTFailure(nft, error.message))
+    yield put(
+      fetchBidsByNFTFailure(
+        nft,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }

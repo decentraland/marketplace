@@ -1,7 +1,9 @@
 import { ethers } from 'ethers'
 import { Bid } from '@dcl/schemas'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ContractName, getContract } from 'decentraland-transactions'
+import { isErrorWithMessage } from '../../lib/error'
 
 export async function isInsufficientMANA(bid: Bid) {
   try {
@@ -18,7 +20,9 @@ export async function isInsufficientMANA(bid: Bid) {
 
     return balance < price
   } catch (error) {
-    console.warn(error.message)
+    console.warn(
+      isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+    )
   }
   return false
 }

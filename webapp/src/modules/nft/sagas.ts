@@ -1,4 +1,7 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
+import { ErrorCode } from 'decentraland-transactions'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getContract, getContracts } from '../contract/selectors'
@@ -135,6 +138,16 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
 
     yield put(transferNFTSuccess(nft, address, txHash))
   } catch (error) {
-    yield put(transferNFTFailure(nft, address, error.message, error.code))
+    const errorMessage = isErrorWithMessage(error)
+      ? error.message
+      : t('global.unknown_error')
+    const errorCode =
+      error !== undefined &&
+      error !== null &&
+      typeof error === 'object' &&
+      'code' in error
+        ? (error as { code: ErrorCode }).code
+        : undefined
+    yield put(transferNFTFailure(nft, address, errorMessage, errorCode))
   }
 }

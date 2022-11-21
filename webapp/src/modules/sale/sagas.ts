@@ -1,4 +1,6 @@
 import { call, takeEvery, put } from '@redux-saga/core/effects'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../lib/error'
 import { saleAPI } from '../vendor/decentraland'
 import { SaleResponse } from '../vendor/decentraland/sale/types'
 import {
@@ -23,6 +25,10 @@ export function* handleFetchSalesRequest(action: FetchSalesRequestAction) {
 
     yield put(fetchSalesSuccess(sales, total))
   } catch (error) {
-    yield put(fetchSalesFailure(error.message))
+    yield put(
+      fetchSalesFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }

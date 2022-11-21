@@ -1,4 +1,6 @@
 import { call, takeEvery, put, select } from '@redux-saga/core/effects'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../lib/error'
 import { fetchItemsRequest } from '../item/actions'
 import { getItemsByContractAddress } from '../item/selectors'
 import { collectionAPI } from '../vendor/decentraland'
@@ -56,7 +58,11 @@ export function* handleFetchCollectionsRequest(
       }
     }
   } catch (error) {
-    yield put(fetchCollectionsFailure(error.message))
+    yield put(
+      fetchCollectionsFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }
 
@@ -103,6 +109,10 @@ export function* handleFetchSingleCollectionRequest(
       }
     }
   } catch (error) {
-    yield put(fetchSingleCollectionFailure(error.message))
+    yield put(
+      fetchSingleCollectionFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }
