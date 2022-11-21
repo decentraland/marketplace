@@ -102,9 +102,9 @@ export const ManageAssetPage = (props: Props) => {
                               <>
                                 <Map asset={asset} />
                                 <Popup
-                                  content={
-                                    'This action is locked until the rent has finished and (or) the Land has been claimed back'
-                                  }
+                                  content={t(
+                                    'manage_asset_page.land_is_locked'
+                                  )}
                                   position="top left"
                                   on={isMobileView ? 'click' : 'hover'}
                                   disabled={
@@ -119,27 +119,23 @@ export const ManageAssetPage = (props: Props) => {
                                   }
                                   trigger={
                                     <span>
-                                      {
-                                        <Button
-                                          className={styles.builderButton}
-                                          primary
-                                          disabled={
-                                            rental !== null &&
-                                            isLandLocked(
-                                              wallet.address,
-                                              rental,
-                                              asset
-                                            )
-                                          }
-                                          onClick={() =>
-                                            handleOpenInBuilder(asset)
-                                          }
-                                        >
-                                          {t(
-                                            'manage_asset_page.open_in_builder'
-                                          )}
-                                        </Button>
-                                      }
+                                      <Button
+                                        className={styles.builderButton}
+                                        primary
+                                        disabled={
+                                          rental !== null &&
+                                          isLandLocked(
+                                            wallet.address,
+                                            rental,
+                                            asset
+                                          )
+                                        }
+                                        onClick={() =>
+                                          handleOpenInBuilder(asset)
+                                        }
+                                      >
+                                        {t('manage_asset_page.open_in_builder')}
+                                      </Button>
                                     </span>
                                   }
                                 />
