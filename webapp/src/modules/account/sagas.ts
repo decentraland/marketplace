@@ -1,5 +1,7 @@
 import { Network } from '@dcl/schemas'
 import { call, takeEvery, put, all } from '@redux-saga/core/effects'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../lib/error'
 import { accountAPI } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
 import {
@@ -40,6 +42,11 @@ export function* handleFetchAccountMetricsRequest(
       })
     )
   } catch (error) {
-    yield put(fetchAccountMetricsFailure(filters, error.message))
+    yield put(
+      fetchAccountMetricsFailure(
+        filters,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }

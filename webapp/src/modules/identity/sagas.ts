@@ -1,6 +1,8 @@
 import { takeLatest, put, call } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../lib/error'
 import { getEth } from '../wallet/utils'
 
 import {
@@ -39,6 +41,11 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
 
     yield put(generateIdentitySuccess(address, identity))
   } catch (error) {
-    yield put(generateIdentityFailure(address, error))
+    yield put(
+      generateIdentityFailure(
+        address,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }

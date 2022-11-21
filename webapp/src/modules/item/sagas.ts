@@ -1,8 +1,10 @@
 import { Item } from '@dcl/schemas'
 import { put, takeEvery } from '@redux-saga/core/effects'
+import { call, select } from 'redux-saga/effects'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
-import { call, select } from 'redux-saga/effects'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../lib/error'
 import { itemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -41,7 +43,12 @@ function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
 
     yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
   } catch (error) {
-    yield put(fetchItemsFailure(error.message, action.payload))
+    yield put(
+      fetchItemsFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error'),
+        action.payload
+      )
+    )
   }
 }
 
@@ -56,7 +63,11 @@ function* handleFetchTrendingItemsRequest(
     )
     yield put(fetchTrendingItemsSuccess(data))
   } catch (error) {
-    yield put(fetchTrendingItemsFailure(error.message))
+    yield put(
+      fetchTrendingItemsFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }
 
@@ -70,7 +81,13 @@ function* handleFetchItemRequest(action: FetchItemRequestAction) {
     )
     yield put(fetchItemSuccess(item))
   } catch (error) {
-    yield put(fetchItemFailure(contractAddress, tokenId, error.message))
+    yield put(
+      fetchItemFailure(
+        contractAddress,
+        tokenId,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }
 
@@ -97,6 +114,10 @@ function* handleBuyItem(action: BuyItemRequestAction) {
 
     yield put(buyItemSuccess(item.chainId, txHash, item))
   } catch (error) {
-    yield put(buyItemFailure(error.message))
+    yield put(
+      buyItemFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }

@@ -1,4 +1,6 @@
 import { call, takeEvery, put } from '@redux-saga/core/effects'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../lib/error'
 import { builderAPI } from '../vendor/decentraland/builder/api'
 import {
   fetchEventFailure,
@@ -22,6 +24,10 @@ export function* handleFetchEventRequest(action: FetchEventRequestAction) {
 
     yield put(fetchEventSuccess(tag, addresses))
   } catch (error) {
-    yield put(fetchEventFailure(error.message))
+    yield put(
+      fetchEventFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }
