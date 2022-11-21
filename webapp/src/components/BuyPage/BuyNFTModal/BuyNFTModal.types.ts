@@ -7,6 +7,8 @@ import {
   executeOrderRequest,
   ExecuteOrderRequestAction
 } from '../../../modules/order/actions'
+import { Contract } from '../../../modules/vendor/services'
+import { getContract } from '../../../modules/contract/selectors'
 
 export type Props = {
   nft: NFT
@@ -17,9 +19,13 @@ export type Props = {
   isOwner: boolean
   hasInsufficientMANA: boolean
   hasLowPrice: boolean
+  getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onExecuteOrder: typeof executeOrderRequest
 }
 
-export type MapStateProps = Pick<Props, 'authorizations' | 'isLoading'>
+export type MapStateProps = Pick<
+  Props,
+  'authorizations' | 'isLoading' | 'getContract'
+>
 export type MapDispatchProps = Pick<Props, 'onExecuteOrder'>
 export type MapDispatch = Dispatch<ExecuteOrderRequestAction>

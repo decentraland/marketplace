@@ -4,6 +4,7 @@ import { NFTsFetchFilters } from '../vendor/nft/types'
 import { VendorName } from '../vendor/types'
 import { SortDirection } from '../routing/types'
 import { NFTData as DecentralandData } from '../vendor/decentraland/nft/types'
+import { Contract } from '../vendor/services'
 
 export enum NFTSortBy {
   NAME = 'name',
@@ -41,6 +42,7 @@ export type NFTsFetchParams = {
   onlyOnSale?: boolean
   onlyOnRent?: boolean
   search?: string
+  contracts?: Contract[]
 }
 
 export type NFTsCountParams = Omit<NFTsFetchParams, 'first' | 'skip'>

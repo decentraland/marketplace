@@ -4,4 +4,5 @@ export type Props = {
   clearable?: boolean
   options: { value: string; text: string }[]
   onChange: (newValue: string) => void
+  disabled?: boolean
 }

@@ -1,2 +1,2 @@
-import LegacyNFTPage from './LegacyNFTPage'
+import LegacyNFTPage from './LegacyNFTPage.container'
 export { LegacyNFTPage }

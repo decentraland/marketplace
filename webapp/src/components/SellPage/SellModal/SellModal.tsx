@@ -27,7 +27,6 @@ import { AssetAction } from '../../AssetAction'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { getContractNames } from '../../../modules/vendor'
-import { getContract } from '../../../modules/contract/utils'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Props } from './SellModal.types'
 import { showPriceBelowMarketValueWarning } from './utils'
@@ -41,6 +40,7 @@ const SellModal = (props: Props) => {
     isLoading,
     isCreatingOrder,
     isRentalsEnabled,
+    getContract,
     onNavigate,
     onGoBack,
     onCreateOrder
@@ -69,6 +69,10 @@ const SellModal = (props: Props) => {
     name: contractNames.MARKETPLACE,
     network: nft.network
   })
+
+  if (!marketplace) {
+    return null
+  }
 
   const authorization: Authorization = {
     address: wallet.address,

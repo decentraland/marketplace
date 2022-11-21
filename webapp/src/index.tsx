@@ -16,14 +16,10 @@ import { initStore, history } from './modules/store'
 import { Routes } from './components/Routes'
 import * as modals from './components/Modals'
 
-import { buildContracts } from './modules/contract/utils'
-
 import './themes'
 import './index.css'
 
 async function main() {
-  await buildContracts()
-
   const component = (
     <Provider store={initStore()}>
       <TranslationProvider locales={Object.keys(locales)}>

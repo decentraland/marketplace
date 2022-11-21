@@ -15,7 +15,6 @@ import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { Authorization } from './Authorization'
 import { getContractNames } from '../../modules/vendor'
-import { getContract } from '../../modules/contract/utils'
 import { useTimer } from '../../lib/timer'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
@@ -27,6 +26,7 @@ const SettingsPage = (props: Props) => {
     isLoadingAuthorization,
     isConnecting,
     hasError,
+    getContract,
     onNavigate
   } = props
 
@@ -64,7 +64,17 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
-  let rentals: Contract | undefined
+  if (
+    !marketplaceEthereum ||
+    !marketplaceMatic ||
+    !bids ||
+    !manaEthereum ||
+    !manaMatic
+  ) {
+    return null
+  }
+
+  let rentals: Contract | null
 
   try {
     rentals = getContract({
@@ -76,18 +86,20 @@ const SettingsPage = (props: Props) => {
   const authorizationsForSelling = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
     return rentals
-      ? contract.category !== null &&
+      ? !!contract &&
+          contract.category !== null &&
           authorization.authorizedAddress !== rentals.address
-      : contract.category !== null
+      : !!contract && contract.category !== null
   })
 
   const authorizationsForRenting = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
     return (
+      !!contract &&
       (contract.category === NFTCategory.PARCEL ||
         contract.category === NFTCategory.ESTATE) &&
-      rentals &&
-      authorization.authorizedAddress === rentals.address
+        rentals &&
+        authorization.authorizedAddress === rentals.address
     )
   })
 

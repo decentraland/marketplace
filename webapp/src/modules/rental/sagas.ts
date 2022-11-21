@@ -20,6 +20,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
+import { getContract as getContractByQuery } from '../contract/selectors'
 import { getFingerprint } from '../nft/estate/utils'
 import { CloseModalAction, CLOSE_MODAL } from '../modal/actions'
 import {
@@ -281,7 +282,15 @@ function* handleAcceptRentalListingRequest(
 
     let fingerprint = ethers.utils.randomBytes(32).map(() => 0)
     if (nft.category === NFTCategory.ESTATE) {
-      fingerprint = yield call(getFingerprint, nft.tokenId)
+      const estateContract: ReturnType<typeof getContractByQuery> = yield select(
+        getContractByQuery,
+        {
+          category: NFTCategory.ESTATE
+        }
+      )
+      if (estateContract) {
+        fingerprint = yield call(getFingerprint, nft.tokenId, estateContract)
+      }
     }
 
     const txParams = [

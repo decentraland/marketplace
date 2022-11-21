@@ -15,6 +15,8 @@ import {
 } from '../../modules/transaction/utils'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
+import { getContract } from '../../modules/contract/selectors'
+import { Contract } from '../../modules/vendor/services'
 import {
   MapStateProps,
   MapDispatch,
@@ -42,7 +44,8 @@ const mapState = (state: RootState): MapStateProps => {
       FETCH_AUTHORIZATIONS_REQUEST
     ),
     isConnecting: isConnecting(state),
-    hasError
+    hasError,
+    getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }
 

@@ -1,2 +1,2 @@
-import Transaction from './Transaction'
+import Transaction from './Transaction.container'
 export { Transaction }

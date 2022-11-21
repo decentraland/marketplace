@@ -1,4 +1,10 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
+import { getWallet } from '../wallet/selectors'
+import { Vendor, VendorFactory } from '../vendor/VendorFactory'
+import { getContract, getContracts } from '../contract/selectors'
+import { VendorName } from '../vendor/types'
+import { AwaitFn } from '../types'
+import { getOrWaitForContracts } from '../contract/utils'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -14,12 +20,7 @@ import {
   transferNFTSuccess,
   transferNFTFailure
 } from './actions'
-import { getWallet } from '../wallet/selectors'
-import { Vendor, VendorFactory } from '../vendor/VendorFactory'
-import { AwaitFn } from '../types'
-import { getContract } from '../contract/utils'
 import { NFT } from './types'
-import { VendorName } from '../vendor/types'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -30,9 +31,12 @@ export function* nftSaga() {
 function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   const { options, timestamp } = action.payload
   const { vendor: VendorName, filters } = options
+  const contracts: ReturnType<typeof getContracts> = yield select(getContracts)
+
   const params = {
     ...DEFAULT_BASE_NFT_PARAMS,
-    ...action.payload.options.params
+    ...action.payload.options.params,
+    contracts
   }
 
   try {
@@ -73,12 +77,15 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   const { contractAddress, tokenId, options } = action.payload
 
   try {
-    const contract: ReturnType<typeof getContract> = yield call(getContract, {
+    yield call(getOrWaitForContracts)
+
+    const contract: ReturnType<typeof getContract> = yield select(getContract, {
       address: contractAddress
     })
-    if (!contract.vendor) {
+
+    if (!contract || !contract.vendor) {
       throw new Error(
-        `Couldn't find a valid vendor for contract ${contract.address}`
+        `Couldn't find a valid vendor for contract ${contract?.address}`
       )
     }
 

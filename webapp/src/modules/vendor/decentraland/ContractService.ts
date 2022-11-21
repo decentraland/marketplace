@@ -174,25 +174,8 @@ const contracts = ({
 } as Record<AppNetwork, Contract[]>)[network]
 
 export class ContractService implements ContractServiceInterface {
-  contracts = contracts
-
-  hasFetched = false
-
-  async build() {
-    if (this.hasFetched) {
-      return
-    }
-
-    const contracts = await nftAPI.fetchContracts()
-    for (const contract of contracts) {
-      this.contracts.push(contract)
-    }
-
-    this.hasFetched = true
-  }
-
-  getContracts() {
-    return this.contracts
+  async getContracts() {
+    return [...contracts, ...(await nftAPI.fetchContracts())]
   }
 
   getTransferType(_address: string) {

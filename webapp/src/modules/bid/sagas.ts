@@ -24,7 +24,7 @@ import {
 } from './actions'
 import { getWallet } from '../wallet/selectors'
 import { VendorFactory } from '../vendor/VendorFactory'
-import { getContract } from '../contract/utils'
+import { getContract } from '../contract/selectors'
 import { VendorName } from '../vendor/types'
 import { getRentalById } from '../rental/selectors'
 import { NFT } from '../nft/types'
@@ -73,10 +73,12 @@ function* handlePlaceBidRequest(action: PlaceBidRequestAction) {
 function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
   const { bid } = action.payload
   try {
-    const contract = getContract({ address: bid.contractAddress })
-    if (!contract.vendor) {
+    const contract: ReturnType<typeof getContract> = yield select(getContract, {
+      address: bid.contractAddress
+    })
+    if (!contract || !contract.vendor) {
       throw new Error(
-        `Couldn't find a valid vendor for contract ${contract.address}`
+        `Couldn't find a valid vendor for contract ${contract?.address}`
       )
     }
     const { bidService } = VendorFactory.build(contract.vendor)
@@ -104,10 +106,12 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
 function* handleCancelBidRequest(action: CancelBidRequestAction) {
   const { bid } = action.payload
   try {
-    const contract = getContract({ address: bid.contractAddress })
-    if (!contract.vendor) {
+    const contract: ReturnType<typeof getContract> = yield select(getContract, {
+      address: bid.contractAddress
+    })
+    if (!contract || !contract.vendor) {
       throw new Error(
-        `Couldn't find a valid vendor for contract ${contract.address}`
+        `Couldn't find a valid vendor for contract ${contract?.address}`
       )
     }
     const { bidService } = VendorFactory.build(contract.vendor)

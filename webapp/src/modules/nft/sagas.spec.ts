@@ -22,7 +22,7 @@ import { nftSaga } from './sagas'
 import { NFT, NFTsFetchOptions, NFTsFetchParams } from './types'
 import { View } from '../ui/types'
 import { Account } from '../account/types'
-import { getContract } from '../contract/utils'
+import { getContract, getContracts, getLoading } from '../contract/selectors'
 
 describe('when handling the fetch NFTs request action', () => {
   let dateSpy: jest.SpyInstance<number, []>
@@ -49,6 +49,7 @@ describe('when handling the fetch NFTs request action', () => {
 
       return expectSaga(nftSaga)
         .provide([
+          [select(getContracts), []],
           [
             call(VendorFactory.build, options.vendor),
             throwError(new Error(error))
@@ -73,6 +74,7 @@ describe('when handling the fetch NFTs request action', () => {
 
       return expectSaga(nftSaga)
         .provide([
+          [select(getContracts), []],
           [call(VendorFactory.build, options.vendor), vendor],
           [matchers.call.fn(vendor.nftService.fetch), Promise.reject(error)]
         ])
@@ -99,11 +101,12 @@ describe('when handling the fetch NFTs request action', () => {
 
       return expectSaga(nftSaga)
         .provide([
+          [select(getContracts), []],
           [call(VendorFactory.build, options.vendor), vendor],
           [
             call(
               [vendor.nftService, 'fetch'],
-              { ...DEFAULT_BASE_NFT_PARAMS, ...options.params },
+              { ...DEFAULT_BASE_NFT_PARAMS, ...options.params, contracts: [] },
               options.filters
             ),
             [nfts, accounts, orders, rentals, count]
@@ -135,8 +138,10 @@ describe('when handling the fetch NFT request action', () => {
 
       return expectSaga(nftSaga)
         .provide([
+          [select(getLoading), []],
+          [select(getContracts), []],
           [
-            call(getContract, { address: contractAddress }),
+            select(getContract, { address: contractAddress }),
             throwError(new Error(error))
           ]
         ])
@@ -157,7 +162,11 @@ describe('when handling the fetch NFT request action', () => {
       const error = `Couldn't find a valid vendor for contract ${contractAddress}`
 
       return expectSaga(nftSaga)
-        .provide([[call(getContract, { address: contractAddress }), contract]])
+        .provide([
+          [select(getLoading), []],
+          [select(getContracts), []],
+          [select(getContract, { address: contractAddress }), contract]
+        ])
         .put(fetchNFTFailure(contractAddress, tokenId, error))
         .dispatch(fetchNFTRequest(contractAddress, tokenId))
         .run({ silenceTimeout: true })
@@ -176,7 +185,9 @@ describe('when handling the fetch NFT request action', () => {
 
       return expectSaga(nftSaga)
         .provide([
-          [call(getContract, { address: contractAddress }), contract],
+          [select(getLoading), []],
+          [select(getContracts), []],
+          [select(getContract, { address: contractAddress }), contract],
           [
             call(VendorFactory.build, contract.vendor),
             throwError(new Error(error))
@@ -201,7 +212,9 @@ describe('when handling the fetch NFT request action', () => {
 
       return expectSaga(nftSaga)
         .provide([
-          [call(getContract, { address: contractAddress }), contract],
+          [select(getLoading), []],
+          [select(getContracts), []],
+          [select(getContract, { address: contractAddress }), contract],
           [call(VendorFactory.build, contract.vendor), vendor],
           [
             call(
@@ -234,7 +247,9 @@ describe('when handling the fetch NFT request action', () => {
 
       return expectSaga(nftSaga)
         .provide([
-          [call(getContract, { address: contractAddress }), contract],
+          [select(getLoading), []],
+          [select(getContracts), []],
+          [select(getContract, { address: contractAddress }), contract],
           [call(VendorFactory.build, contract.vendor), vendor],
           [
             call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {

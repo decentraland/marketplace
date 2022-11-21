@@ -10,7 +10,6 @@ import { locations } from '../../modules/routing/locations'
 import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import { Props, Tile } from './Atlas.types'
 import { VendorName } from '../../modules/vendor'
-import { getContract } from '../../modules/contract/utils'
 import { NFT } from '../../modules/nft/types'
 import Popup from './Popup'
 import './Atlas.css'
@@ -27,7 +26,8 @@ const Atlas: React.FC<Props> = (props: Props) => {
     nftsOnRent,
     withPopup,
     showOnSale,
-    tilesByEstateId
+    tilesByEstateId,
+    getContract
   } = props
 
   const [showPopup, setShowPopup] = useState(false)
@@ -172,18 +172,19 @@ const Atlas: React.FC<Props> = (props: Props) => {
       if (!tile) {
         return
       }
+
       if (tile.estate_id) {
         const estates = getContract({
           category: NFTCategory.ESTATE
         })
-        onNavigate(locations.nft(estates.address, tile.estate_id))
+        estates && onNavigate(locations.nft(estates.address, tile.estate_id))
       } else {
         try {
           const land = getContract({
             category: NFTCategory.PARCEL
           })
           const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
-          onNavigate(locations.nft(land.address, tokenId))
+          land && onNavigate(locations.nft(land.address, tokenId))
         } catch (error) {
           console.warn(
             `Couldn't fetch parcel ${tile.x},${tile.y}: ${error.message}`
@@ -191,7 +192,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
         }
       }
     },
-    [withNavigation, onNavigate, tiles]
+    [withNavigation, tiles, getContract, onNavigate]
   )
 
   const handleHover = useCallback(

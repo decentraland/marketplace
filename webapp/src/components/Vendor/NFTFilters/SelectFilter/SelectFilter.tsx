@@ -5,7 +5,7 @@ import { Props } from './SelectFilter.types'
 import './SelectFilter.css'
 
 const SelectFilter = (props: Props) => {
-  const { name, options, value, clearable, onChange } = props
+  const { name, options, value, clearable, onChange, disabled = false } = props
   return (
     <div className="SelectFilter Filter">
       <Header sub className="name">
@@ -21,6 +21,7 @@ const SelectFilter = (props: Props) => {
         fluid
         noResultsMessage={t('filters.no_results')}
         onChange={(_event, props) => onChange(props.value as string)}
+        disabled={disabled}
       />
     </div>
   )

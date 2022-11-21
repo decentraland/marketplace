@@ -9,7 +9,13 @@ import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
 
 const BidPage = (props: Props) => {
-  const { authorizations, onNavigate, onPlaceBid, isPlacingBid } = props
+  const {
+    authorizations,
+    onNavigate,
+    onPlaceBid,
+    isPlacingBid,
+    getContract
+  } = props
   return (
     <>
       <Navbar isFullscreen />
@@ -25,6 +31,7 @@ const BidPage = (props: Props) => {
                   onNavigate={onNavigate}
                   onPlaceBid={onPlaceBid}
                   isPlacingBid={isPlacingBid}
+                  getContract={getContract}
                 />
               )}
             </AssetProviderPage>

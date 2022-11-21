@@ -1,4 +1,4 @@
-import { takeEvery, all, put } from 'redux-saga/effects'
+import { takeEvery, all, put, select, call } from 'redux-saga/effects'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
 import { createWalletSaga } from 'decentraland-dapps/dist/modules/wallet/sagas'
@@ -15,10 +15,12 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
-import { getContractNames } from '../vendor'
-import { contracts, getContract } from '../contract/utils'
-import { TRANSACTIONS_API_URL } from './utils'
 import { config } from '../../config'
+import { getContract, getContracts } from '../contract/selectors'
+import { getOrWaitForContracts } from '../contract/utils'
+import { Contract } from '../vendor/services'
+import { getContractNames } from '../vendor'
+import { TRANSACTIONS_API_URL } from './utils'
 
 const baseWalletSaga = createWalletSaga({
   CHAIN_ID: Number(config.get('CHAIN_ID')!),
@@ -41,49 +43,52 @@ function* handleWallet(
 ) {
   const { address } = action.payload.wallet
 
+  const contracts: ReturnType<typeof getContracts> = yield call(
+    getOrWaitForContracts
+  )
   const contractNames = getContractNames()
 
-  const marketplaceEthereum = getContract({
+  const marketplaceEthereum: Contract = yield select(getContract, {
     name: contractNames.MARKETPLACE,
     network: Network.ETHEREUM
   })
 
-  const marketplaceMatic = getContract({
+  const marketplaceMatic: Contract = yield select(getContract, {
     name: contractNames.MARKETPLACE,
     network: Network.MATIC
   })
 
-  const legacyMarketplaceMatic = getContract({
+  const legacyMarketplaceMatic: Contract = yield select(getContract, {
     name: contractNames.LEGACY_MARKETPLACE,
     network: Network.MATIC
   })
 
-  const bidsEthereum = getContract({
+  const bidsEthereum: Contract = yield select(getContract, {
     name: contractNames.BIDS,
     network: Network.ETHEREUM
   })
 
-  const bidsMatic = getContract({
+  const bidsMatic: Contract = yield select(getContract, {
     name: contractNames.BIDS,
     network: Network.MATIC
   })
 
-  const manaEthereum = getContract({
+  const manaEthereum: Contract = yield select(getContract, {
     name: contractNames.MANA,
     network: Network.ETHEREUM
   })
 
-  const manaMatic = getContract({
+  const manaMatic: Contract = yield select(getContract, {
     name: contractNames.MANA,
     network: Network.MATIC
   })
 
-  const collectionStore = getContract({
+  const collectionStore: Contract = yield select(getContract, {
     name: contractNames.COLLECTION_STORE,
     network: Network.MATIC
   })
 
-  const rentals = getContract({
+  const rentals: Contract = yield select(getContract, {
     name: contractNames.RENTALS,
     network: Network.ETHEREUM
   })
@@ -155,7 +160,7 @@ function* handleWallet(
 
   for (const contract of contracts.filter(c => c.category !== null)) {
     // If the contract is a partner we might need to use a different contract name. See PR #680
-    const marketplace = getContract({
+    const marketplace: Contract = yield select(getContract, {
       name: contractNames.MARKETPLACE,
       network: contract.network
     })

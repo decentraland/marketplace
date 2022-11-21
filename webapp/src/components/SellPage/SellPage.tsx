@@ -16,6 +16,7 @@ const SellPage = (props: Props) => {
     isCreatingOrder,
     isRentalsEnabled,
     onGoBack,
+    getContract,
     onNavigate,
     onCreateOrder
   } = props
@@ -38,6 +39,7 @@ const SellPage = (props: Props) => {
                   onGoBack={onGoBack}
                   onNavigate={onNavigate}
                   onCreateOrder={onCreateOrder}
+                  getContract={getContract}
                 />
               )}
             </AssetProviderPage>

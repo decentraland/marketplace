@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import { Modal, Button } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
-import { getContract } from '../../modules/contract/utils'
 import { isAuthorized } from '../SettingsPage/Authorization/utils'
 import { Authorization } from '../SettingsPage/Authorization'
 import { Props } from './AuthorizationModal.types'
@@ -15,6 +14,7 @@ const AuthorizationModal = (props: Props) => {
     authorizations,
     isLoading,
     isAuthorizing,
+    getContract,
     onCancel,
     onProceed
   } = props
@@ -25,6 +25,10 @@ const AuthorizationModal = (props: Props) => {
   const token = getContract({
     address: authorization.contractAddress
   })
+
+  if (!contract || !token) {
+    return null
+  }
 
   return (
     <Modal open={open} size="small" className="AuthorizationModal">

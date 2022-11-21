@@ -5,12 +5,15 @@ import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/au
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { placeBidRequest, PLACE_BID_REQUEST } from '../../modules/bid/actions'
 import { getLoading } from '../../modules/bid/selectors'
+import { getContract } from '../../modules/contract/selectors'
+import { Contract } from '../../modules/vendor/services'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './BidPage.types'
 import BidPage from './BidPage'
 
 const mapState = (state: RootState): MapStateProps => ({
   authorizations: getAuthorizations(state),
-  isPlacingBid: isLoadingType(getLoading(state), PLACE_BID_REQUEST)
+  isPlacingBid: isLoadingType(getLoading(state), PLACE_BID_REQUEST),
+  getContract: (query: Partial<Contract>) => getContract(state, query)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
