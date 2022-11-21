@@ -1,4 +1,4 @@
-import { Bid } from '@dcl/schemas'
+import { Bid, RentalListing, RentalStatus } from '@dcl/schemas'
 import { takeEvery, put, select, call } from 'redux-saga/effects'
 import {
   PLACE_BID_REQUEST,
@@ -26,6 +26,13 @@ import { getWallet } from '../wallet/selectors'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { getContract } from '../contract/utils'
 import { VendorName } from '../vendor/types'
+import { getRentalById } from '../rental/selectors'
+import { NFT } from '../nft/types'
+import { getCurrentNFT } from '../nft/selectors'
+import {
+  isRentalListingOpen,
+  waitUntilRentalChangesStatus
+} from '../rental/utils'
 
 export function* bidSaga() {
   yield takeEvery(PLACE_BID_REQUEST, handlePlaceBidRequest)
@@ -76,6 +83,17 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const txHash: string = yield call(() => bidService!.accept(wallet, bid))
+
+    const nft: NFT | null = yield select(getCurrentNFT)
+    if (nft?.openRentalId) {
+      const rental: RentalListing | null = yield select(
+        getRentalById,
+        nft.openRentalId
+      )
+      if (isRentalListingOpen(rental)) {
+        yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
+      }
+    }
 
     yield put(acceptBidSuccess(bid, txHash))
   } catch (error) {

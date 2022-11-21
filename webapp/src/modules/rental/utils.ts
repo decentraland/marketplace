@@ -14,6 +14,9 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { VendorName } from '../vendor'
+import { rentalsAPI } from '../vendor/decentraland/rentals/api'
+import { addressEquals } from '../wallet/utils'
 import { Asset } from '../asset/types'
 import { NFT } from '../nft/types'
 import { PeriodOption, PeriodOptionsDev } from './types'
@@ -231,15 +234,23 @@ export function canBeClaimed(
   rental: RentalListing,
   asset: Asset
 ): boolean {
+  if (addressEquals(userAddress, (asset as NFT).owner)) {
+    return false // the user is the owner, there's nothing to be claimed
+  }
   if (rental.status === RentalStatus.EXECUTED) {
     const endDate = getRentalEndDate(rental)
     return endDate ? endDate.getTime() <= Date.now() : false
   } else if (
     (isRentalListingOpen(rental) || isRentalListingCancelled(rental)) &&
-    userAddress === rental.lessor &&
-    rental.lessor !== (asset as NFT).owner
+    userAddress === rental.lessor
   ) {
-    return true
+    const rentalsContract: ContractData = getContract(
+      ContractName.Rentals,
+      (asset as NFT).chainId
+    )
+    // can only be claimed from the contract address
+    // this avoids the case where the asset was transfer with an open rental
+    return addressEquals(rentalsContract.address, (asset as NFT).owner)
   }
   return false
 }
@@ -258,4 +269,24 @@ export function isLandLocked(
     rental.status === RentalStatus.EXECUTED ||
     canBeClaimed(userAddress, rental, asset)
   )
+}
+
+async function delay(miliseconds: number) {
+  return await new Promise<void>(resolve =>
+    setTimeout(() => resolve(), miliseconds)
+  )
+}
+
+export async function waitUntilRentalChangesStatus(
+  nft: NFT<VendorName>,
+  status: RentalStatus
+) {
+  let hasChanged = false
+  let listing: RentalListing
+  while (!hasChanged) {
+    await delay(3500)
+    listing = await rentalsAPI.refreshRentalListing(nft.openRentalId!)
+    hasChanged = listing.status === status
+  }
+  return listing!
 }

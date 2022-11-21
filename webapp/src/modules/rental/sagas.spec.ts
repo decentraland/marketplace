@@ -46,7 +46,7 @@ import {
 } from './actions'
 import { rentalSaga } from './sagas'
 import { PeriodOption, UpsertRentalOptType } from './types'
-import { getNonces, getSignature } from './utils'
+import { getNonces, getSignature, waitUntilRentalChangesStatus } from './utils'
 
 let nft: NFT
 let rental: RentalListing
@@ -768,10 +768,9 @@ describe('when handling the request action to accept a rental', () => {
               Promise.resolve(txHash)
             ],
             [call(waitForTx, txHash), Promise.resolve()],
-            [delay(3500), void 0],
             [
-              call([rentalsAPI, 'refreshRentalListing'], nft.openRentalId!),
-              updatedRentalListing
+              call(waitUntilRentalChangesStatus, nft, RentalStatus.EXECUTED),
+              Promise.resolve(updatedRentalListing)
             ]
           ])
           .dispatch(
@@ -985,10 +984,9 @@ describe('when handling the request action to remove a rental', () => {
               Promise.resolve(txHash)
             ],
             [call(waitForTx, txHash), Promise.resolve()],
-            [delay(3500), void 0],
             [
-              call([rentalsAPI, 'refreshRentalListing'], nft.openRentalId!),
-              { ...rental, status: RentalStatus.CANCELLED }
+              call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED),
+              Promise.resolve({ ...rental, status: RentalStatus.CANCELLED })
             ]
           ])
           .dispatch(removeRentalRequest(nft))

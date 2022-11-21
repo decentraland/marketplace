@@ -16,9 +16,7 @@ import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { ethers } from 'ethers'
-import { call, delay, put, select, takeEvery } from 'redux-saga/effects'
-import { NFT } from '../nft/types'
-import { VendorName } from '../vendor'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
@@ -46,7 +44,12 @@ import {
   acceptRentalListingFailure,
   acceptRentalListingTransactionSubmitted
 } from './actions'
-import { daysByPeriod, getNonces, getSignature } from './utils'
+import {
+  daysByPeriod,
+  getNonces,
+  getSignature,
+  waitUntilRentalChangesStatus
+} from './utils'
 
 export function* rentalSaga() {
   yield takeEvery(UPSERT_RENTAL_REQUEST, handleCreateOrEditRentalRequest)
@@ -180,24 +183,6 @@ function* handleModalClose(action: CloseModalAction) {
   ) {
     yield put(clearRentalErrors())
   }
-}
-
-function* waitUntilRentalChangesStatus(
-  nft: NFT<VendorName>,
-  status: RentalStatus
-) {
-  let hasChanged = false
-  let listing: RentalListing
-  while (!hasChanged) {
-    yield delay(3500)
-    listing = yield call(
-      [rentalsAPI, 'refreshRentalListing'],
-      nft.openRentalId!
-    )
-
-    hasChanged = listing.status === status
-  }
-  return listing!
 }
 
 function* handleRemoveRentalRequest(action: RemoveRentalRequestAction) {

@@ -7,11 +7,12 @@ import {
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { ContractName, getContract } from 'decentraland-transactions'
-import { Props } from './RentalListingModal.types'
+import { isRentalListingOpen } from '../../../modules/rental/utils'
 import {
   upsertRentalRequest,
   UpsertRentalRequestAction
 } from '../../../modules/rental/actions'
+import { Props } from './RentalListingModal.types'
 import { AuthorizationStep } from './AuthorizationStep'
 import { CreateOrEditListingStep } from './CreateOrEditListingStep'
 import { EditConfirmationStep } from './EditConfirmationStep'
@@ -88,7 +89,7 @@ const RentalListingModal = (props: Props) => {
           onRemove={onRemove}
           onCancel={onClose}
         />
-      ) : rental ? (
+      ) : rental && isRentalListingOpen(rental) ? (
         <EditConfirmationStep
           rental={rental}
           onCancel={handleCancel}

@@ -1,13 +1,15 @@
-import {
-  NFT,
-  RentalListing,
-  RentalListingPeriod,
-  RentalStatus
-} from '@dcl/schemas'
+import { RentalListing, RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 import { BigNumber, ethers } from 'ethers'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
+import {
+  ContractData,
+  ContractName,
+  getContract
+} from 'decentraland-transactions'
 import { ChainId } from '@dcl/schemas'
 import { Asset } from '../asset/types'
+import { rentalsAPI } from '../vendor/decentraland/rentals/api'
+import { NFT } from '../nft/types'
 import {
   getAssetNonce,
   getContractNonce,
@@ -23,13 +25,21 @@ import {
   isRentalListingOpen,
   canBeClaimed,
   isRentalListingCancelled,
-  canCreateANewRental
+  canCreateANewRental,
+  waitUntilRentalChangesStatus
 } from './utils'
 import { getRentalsContractInstance } from './contract'
-import { start } from 'repl'
 
+jest.useFakeTimers()
 jest.mock('decentraland-dapps/dist/lib/eth')
 jest.mock('./contract')
+jest.mock('../vendor/decentraland/rentals/api')
+
+const runTimerAutomaticallyOnce = () => {
+  ;((setTimeout as unknown) as jest.Mock).mockImplementationOnce(callback =>
+    callback()
+  )
+}
 
 const getSignerMock = getSigner as jest.MockedFunction<typeof getSigner>
 const signerMock = {
@@ -555,9 +565,18 @@ describe('when getting if a rental can be claimed', () => {
   let asset: Asset
   let userAddress: string
   let lessor: string
+  let nftChainId: number
+  let rentalsContract: ContractData
 
   describe('and the rental is in status EXECUTED', () => {
     beforeEach(() => {
+      nftChainId = 1
+      rentalsContract = getContract(ContractName.Rentals, nftChainId)
+      userAddress = '0xanAddress'
+      asset = {
+        owner: rentalsContract.address,
+        chainId: nftChainId
+      } as Asset
       rental = {
         status: RentalStatus.EXECUTED,
         periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }],
@@ -581,10 +600,13 @@ describe('when getting if a rental can be claimed', () => {
       } as RentalListing
     })
 
-    describe('and the asset owner is not the userAddress', () => {
+    describe('and the asset owner is not the userAddress because it is still in the rentals contract', () => {
       beforeEach(() => {
+        nftChainId = 1
+        rentalsContract = getContract(ContractName.Rentals, nftChainId)
         asset = {
-          owner: '0xrentalContract'
+          owner: rentalsContract.address,
+          chainId: nftChainId
         } as Asset
       })
       it('should return true since the owner does not hold the asset', () => {
@@ -611,6 +633,7 @@ describe('when getting if a rental can be claimed', () => {
 
   describe('and the rental is in status CANCELLED', () => {
     beforeEach(() => {
+      userAddress = '0xanAddress'
       rental = {
         status: RentalStatus.CANCELLED,
         lessor: userAddress,
@@ -618,10 +641,13 @@ describe('when getting if a rental can be claimed', () => {
       } as RentalListing
     })
 
-    describe('and the asset owner is not the userAddress', () => {
+    describe('and the asset owner is not the userAddress because it is still in the rentals contract', () => {
       beforeEach(() => {
+        nftChainId = 1
+        rentalsContract = getContract(ContractName.Rentals, nftChainId)
         asset = {
-          owner: '0xrentalContract'
+          owner: rentalsContract.address,
+          chainId: nftChainId
         } as Asset
       })
       it('should return true since the owner does not hold the asset', () => {
@@ -647,9 +673,18 @@ describe('when getting if a rental is locked', () => {
   let asset: Asset
   let userAddress: string
   let lessor: string
+  let nftChainId: number
+  let rentalsContract: ContractData
 
   describe('and the rental is in status EXECUTED', () => {
     beforeEach(() => {
+      nftChainId = 1
+      rentalsContract = getContract(ContractName.Rentals, nftChainId)
+      userAddress = '0xanAddress'
+      asset = {
+        owner: rentalsContract.address,
+        chainId: nftChainId
+      } as Asset
       rental = {
         status: RentalStatus.EXECUTED,
         periods: [{ minDays: 2, maxDays: 2, pricePerDay: '100000' }],
@@ -666,6 +701,7 @@ describe('when getting if a rental is locked', () => {
 
   describe('and the rental is in status OPEN', () => {
     beforeEach(() => {
+      userAddress = '0xanAddress'
       rental = {
         status: RentalStatus.OPEN,
         lessor: userAddress,
@@ -675,8 +711,11 @@ describe('when getting if a rental is locked', () => {
 
     describe('and the asset owner is not the userAddress', () => {
       beforeEach(() => {
+        nftChainId = 1
+        rentalsContract = getContract(ContractName.Rentals, nftChainId)
         asset = {
-          owner: '0xrentalContract'
+          owner: rentalsContract.address,
+          chainId: nftChainId
         } as Asset
       })
       it('should return true since the owner does not hold the asset', () => {
@@ -703,6 +742,7 @@ describe('when getting if a rental is locked', () => {
 
   describe('and the rental is in status CANCELLED', () => {
     beforeEach(() => {
+      userAddress = '0xanAddress'
       rental = {
         status: RentalStatus.CANCELLED,
         lessor: userAddress,
@@ -712,8 +752,11 @@ describe('when getting if a rental is locked', () => {
 
     describe('and the asset owner is not the userAddress', () => {
       beforeEach(() => {
+        nftChainId = 1
+        rentalsContract = getContract(ContractName.Rentals, nftChainId)
         asset = {
-          owner: '0xrentalContract'
+          owner: rentalsContract.address,
+          chainId: nftChainId
         } as Asset
       })
       it('should return true since the owner does not hold the asset', () => {
@@ -781,6 +824,38 @@ describe('when checking if a new rental can be created', () => {
 
     it('should return true', () => {
       expect(canCreateANewRental(rental)).toBe(true)
+    })
+  })
+})
+
+describe('when waiting until the rental changes the status', () => {
+  let nft: NFT
+  let desiredStatus: RentalStatus
+  let listing: RentalListing
+  beforeEach(() => {
+    listing = {
+      status: RentalStatus.OPEN
+    } as RentalListing
+    nft = {
+      openRentalId: 'rentalId'
+    } as NFT
+    desiredStatus = RentalStatus.CANCELLED
+    ;(rentalsAPI.refreshRentalListing as jest.Mock).mockResolvedValueOnce(
+      listing
+    )
+    runTimerAutomaticallyOnce()
+    ;(rentalsAPI.refreshRentalListing as jest.Mock).mockResolvedValueOnce({
+      ...listing,
+      status: desiredStatus
+    })
+    runTimerAutomaticallyOnce()
+  })
+  it('should call the rentalsAPI refreshRentalListing endpoint until it returns the rental in the status desired', async () => {
+    expect(
+      await waitUntilRentalChangesStatus(nft, desiredStatus)
+    ).toStrictEqual({
+      ...listing,
+      status: desiredStatus
     })
   })
 })
