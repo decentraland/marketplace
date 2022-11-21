@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { LazyImage } from 'react-lazy-images'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
 import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -468,18 +468,17 @@ const AssetImage = (props: Props) => {
 
     default: {
       return (
-        <LazyImage
+        <LazyLoadImage
           src={getAssetImage(asset)}
           alt={getAssetName(asset)}
-          debounceDurationMs={1000}
-          placeholder={({ ref }) => (
-            <div ref={ref}>
+          delayMethod="debounce"
+          className="image"
+          delayTime={1000}
+          placeholder={
+            <div>
               <Loader size="small" active />
             </div>
-          )}
-          actual={({ imageProps }) => (
-            <img className="image" alt={getAssetName(asset)} {...imageProps} />
-          )}
+          }
         />
       )
     }
