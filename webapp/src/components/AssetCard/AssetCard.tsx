@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
+import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
 import { Mana } from '../Mana'
@@ -16,6 +17,23 @@ import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
+
+const RentalPrice = ({
+  asset,
+  rentalPricePerDay
+}: {
+  asset: Asset
+  rentalPricePerDay: string
+}) => {
+  return (
+    <>
+      <Mana className="rental-price" network={asset.network} inline>
+        {formatWeiMANA(rentalPricePerDay)}
+      </Mana>
+      <span className="card-rental-day">/{t('global.day')}</span>
+    </>
+  )
+}
 
 const AssetCard = (props: Props) => {
   const {
@@ -55,18 +73,20 @@ const AssetCard = (props: Props) => {
             <Mana network={asset.network} inline>
               {formatWeiMANA(price)}
             </Mana>
+          ) : rentalPricePerDay ? (
+            <RentalPrice asset={asset} rentalPricePerDay={rentalPricePerDay} />
           ) : null}
         </Card.Header>
         <div className="sub-header">
           <Card.Meta className="card-meta">
             {t(`networks.${asset.network.toLowerCase()}`)}
           </Card.Meta>
-          {rentalPricePerDay ? (
+          {rentalPricePerDay && price ? (
             <div>
-              <Mana className="rental-price" network={asset.network} inline>
-                {formatWeiMANA(rentalPricePerDay)}
-              </Mana>
-              <span className="card-rental-day">/{t('global.day')}</span>
+              <RentalPrice
+                asset={asset}
+                rentalPricePerDay={rentalPricePerDay}
+              />
             </div>
           ) : null}
         </div>
