@@ -1,2 +1,2 @@
 import SettingsPage from './SettingsPage.container'
-export { SettingsPage }
+export default SettingsPage

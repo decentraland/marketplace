@@ -1,2 +1,2 @@
 import TransferPage from './TransferPage.container'
-export { TransferPage }
+export default TransferPage

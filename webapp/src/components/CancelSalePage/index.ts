@@ -1,2 +1,2 @@
 import CancelSalePage from './CancelSalePage.container'
-export { CancelSalePage }
+export default CancelSalePage

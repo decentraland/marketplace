@@ -1,2 +1,2 @@
 import ActivityPage from './ActivityPage.container'
-export { ActivityPage }
+export default ActivityPage

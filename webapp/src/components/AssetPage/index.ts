@@ -1,3 +1,2 @@
 import AssetPage from './AssetPage.container'
-
-export { AssetPage }
+export default AssetPage

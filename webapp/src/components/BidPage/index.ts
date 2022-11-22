@@ -1,2 +1,2 @@
 import BidPage from './BidPage.container'
-export { BidPage }
+export default BidPage

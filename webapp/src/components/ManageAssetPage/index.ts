@@ -1,1 +1,1 @@
-export { default as ManageAssetPage } from './ManageAssetPage.container'
+export { default } from './ManageAssetPage.container'

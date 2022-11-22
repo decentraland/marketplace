@@ -1,2 +1,2 @@
 import BuyPage from './BuyPage'
-export { BuyPage }
+export default BuyPage

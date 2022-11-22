@@ -1,2 +1,2 @@
 import AccountPage from './AccountPage.container'
-export { AccountPage }
+export default AccountPage
