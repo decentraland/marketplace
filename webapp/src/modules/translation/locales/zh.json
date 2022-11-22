@@ -54,7 +54,8 @@
     "error": "错误",
     "mvmf_2022": "元界节 2022",
     "period": "时期",
-    "status": "地位"
+    "status": "地位",
+    "unknown_error": "不明错误"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",

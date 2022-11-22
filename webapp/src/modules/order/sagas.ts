@@ -1,5 +1,8 @@
 import { put, call, takeEvery, select } from 'redux-saga/effects'
 import { RentalListing, RentalStatus } from '@dcl/schemas'
+import { ErrorCode } from 'decentraland-transactions'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
 import { VendorFactory } from '../vendor/VendorFactory'
 import { getRentalById } from '../rental/selectors'
@@ -36,8 +39,19 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
     )
     yield put(createOrderSuccess(nft, price, expiresAt, txHash))
   } catch (error) {
+    const errorMessage = isErrorWithMessage(error)
+      ? error.message
+      : t('global.unknown_error')
+    const errorCode =
+      error !== undefined &&
+      error !== null &&
+      typeof error === 'object' &&
+      'code' in error
+        ? (error as { code: ErrorCode }).code
+        : undefined
+
     yield put(
-      createOrderFailure(nft, price, expiresAt, error.message, error.code)
+      createOrderFailure(nft, price, expiresAt, errorMessage, errorCode)
     )
   }
 }
@@ -74,7 +88,18 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
 
     yield put(executeOrderSuccess(order, nft, txHash))
   } catch (error) {
-    yield put(executeOrderFailure(order, nft, error.message, error.code))
+    const errorMessage = isErrorWithMessage(error)
+      ? error.message
+      : t('global.unknown_error')
+    const errorCode =
+      error !== undefined &&
+      error !== null &&
+      typeof error === 'object' &&
+      'code' in error
+        ? (error as { code: ErrorCode }).code
+        : undefined
+
+    yield put(executeOrderFailure(order, nft, errorMessage, errorCode))
   }
 }
 
@@ -93,6 +118,17 @@ function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
     const txHash: string = yield call(() => orderService.cancel(wallet, order))
     yield put(cancelOrderSuccess(order, nft, txHash))
   } catch (error) {
-    yield put(cancelOrderFailure(order, nft, error.message, error.code))
+    const errorMessage = isErrorWithMessage(error)
+      ? error.message
+      : t('global.unknown_error')
+    const errorCode =
+      error !== undefined &&
+      error !== null &&
+      typeof error === 'object' &&
+      'code' in error
+        ? (error as { code: ErrorCode }).code
+        : undefined
+
+    yield put(cancelOrderFailure(order, nft, errorMessage, errorCode))
   }
 }

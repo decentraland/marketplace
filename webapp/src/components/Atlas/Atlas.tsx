@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { NFTCategory } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Atlas as AtlasComponent,
   AtlasTile,
@@ -7,6 +8,7 @@ import {
   Layer
 } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
+import { isErrorWithMessage } from '../../lib/error'
 import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import { Props, Tile } from './Atlas.types'
 import { VendorName } from '../../modules/vendor'
@@ -186,8 +188,11 @@ const Atlas: React.FC<Props> = (props: Props) => {
           const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
           land && onNavigate(locations.nft(land.address, tokenId))
         } catch (error) {
+          const errorMessage = isErrorWithMessage(error)
+            ? error.message
+            : t('global.unknown_error')
           console.warn(
-            `Couldn't fetch parcel ${tile.x},${tile.y}: ${error.message}`
+            `Couldn't fetch parcel ${tile.x},${tile.y}: ${errorMessage}`
           )
         }
       }

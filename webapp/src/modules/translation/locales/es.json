@@ -54,7 +54,8 @@
     "error": "Error",
     "mvmf_2022": "Metaverse Festival 2022",
     "period": "Periodo",
-    "status": "Estado"
+    "status": "Estado",
+    "unknown_error": "Error desconocido"
   },
   "address": {
     "invalid_address": "Dirección inválida",

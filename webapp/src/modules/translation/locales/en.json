@@ -56,7 +56,8 @@
     "error": "Error",
     "mvmf_2022": "Metaverse Festival 2022",
     "period": "Period",
-    "status": "Status"
+    "status": "Status",
+    "unknown_error": "Unknown error"
   },
   "address": {
     "invalid_address": "That's not a valid address",
