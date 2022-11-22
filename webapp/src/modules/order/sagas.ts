@@ -1,4 +1,9 @@
 import { put, call, takeEvery, select } from 'redux-saga/effects'
+import { RentalListing, RentalStatus } from '@dcl/schemas'
+import { getWallet } from '../wallet/selectors'
+import { VendorFactory } from '../vendor/VendorFactory'
+import { getRentalById } from '../rental/selectors'
+import { waitUntilRentalChangesStatus } from '../rental/utils'
 import {
   CREATE_ORDER_REQUEST,
   CreateOrderRequestAction,
@@ -13,8 +18,6 @@ import {
   cancelOrderSuccess,
   cancelOrderFailure
 } from './actions'
-import { getWallet } from '../wallet/selectors'
-import { VendorFactory } from '../vendor/VendorFactory'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
@@ -51,9 +54,23 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
     const { orderService } = VendorFactory.build(nft.vendor)
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call(() =>
-      orderService.execute(wallet, nft, order, fingerprint)
+    const txHash: string = yield call(
+      [orderService, 'execute'],
+      wallet,
+      nft,
+      order,
+      fingerprint
     )
+
+    if (nft.activeOrderId) {
+      const rental: RentalListing = yield select(
+        getRentalById,
+        nft.activeOrderId
+      )
+      if (rental.status === RentalStatus.OPEN) {
+        yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
+      }
+    }
 
     yield put(executeOrderSuccess(order, nft, txHash))
   } catch (error) {
