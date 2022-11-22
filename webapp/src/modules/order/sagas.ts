@@ -82,11 +82,10 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
       order,
       fingerprint
     )
-
-    if (nft.activeOrderId) {
+    if (nft.openRentalId) {
       const rental: RentalListing = yield select(
         getRentalById,
-        nft.activeOrderId
+        nft.openRentalId
       )
       if (isRentalListingOpen(rental)) {
         yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)

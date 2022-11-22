@@ -36,7 +36,7 @@ beforeEach(() => {
     name: 'aName',
     contractAddress: 'aContractAddress',
     tokenId: 'aTokenId',
-    activeOrderId: null,
+    openRentalId: null,
     vendor: VendorName.DECENTRALAND,
     chainId: ChainId.MATIC_MAINNET
   } as NFT
