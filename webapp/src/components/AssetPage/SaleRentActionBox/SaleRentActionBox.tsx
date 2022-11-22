@@ -54,7 +54,7 @@ const SaleRentActionBox = ({
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
     number
   >(0)
-  const [view, setView] = useState(View.SALE)
+  const [view, setView] = useState(order ? View.SALE : View.RENT)
   const maxPriceOfPeriods: string | null = useMemo(
     () => (rental ? getMaxPriceOfPeriods(rental) : null),
     [rental]
