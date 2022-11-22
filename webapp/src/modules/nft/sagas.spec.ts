@@ -4,6 +4,7 @@ import { throwError } from 'redux-saga-test-plan/providers'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { VendorFactory, VendorName } from '../vendor'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -23,6 +24,8 @@ import { NFT, NFTsFetchOptions, NFTsFetchParams } from './types'
 import { View } from '../ui/types'
 import { Account } from '../account/types'
 import { getContract, getContracts, getLoading } from '../contract/selectors'
+import { waitUntilRentalChangesStatus } from '../rental/utils'
+import { getRentalById } from '../rental/selectors'
 
 describe('when handling the fetch NFTs request action', () => {
   let dateSpy: jest.SpyInstance<number, []>
@@ -336,10 +339,15 @@ describe('when handling the transfer NFT request action', () => {
   })
 
   describe('when the transfer is successful', () => {
-    it('should dispatch an action signaling the success of the action handling', () => {
+    it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
       const nft = {
-        vendor: VendorName.DECENTRALAND
+        vendor: VendorName.DECENTRALAND,
+        openRentalId: 'aRentalId'
       } as NFT
+      const rental = {
+        id: nft.openRentalId,
+        status: RentalStatus.OPEN
+      } as RentalListing
       const address = 'anAddress'
       const wallet = { address } as Wallet
       const vendor = VendorFactory.build(nft.vendor)
@@ -349,9 +357,15 @@ describe('when handling the transfer NFT request action', () => {
         .provide([
           [call(VendorFactory.build, nft.vendor), vendor],
           [select(getWallet), wallet],
+          [select(getRentalById, nft.openRentalId!), rental],
           [
             call([vendor.nftService, 'transfer'], wallet, address, nft),
             Promise.resolve(txHash)
+          ],
+          [call(waitForTx, txHash), Promise.resolve()],
+          [
+            call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED),
+            Promise.resolve()
           ]
         ])
         .put(transferNFTSuccess(nft, address, txHash))
