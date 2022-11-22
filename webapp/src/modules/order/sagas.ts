@@ -4,9 +4,12 @@ import { ErrorCode } from 'decentraland-transactions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
-import { VendorFactory } from '../vendor/VendorFactory'
+import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getRentalById } from '../rental/selectors'
-import { waitUntilRentalChangesStatus } from '../rental/utils'
+import {
+  isRentalListingOpen,
+  waitUntilRentalChangesStatus
+} from '../rental/utils'
 import {
   CREATE_ORDER_REQUEST,
   CreateOrderRequestAction,
@@ -21,6 +24,7 @@ import {
   cancelOrderSuccess,
   cancelOrderFailure
 } from './actions'
+import { VendorName } from '../vendor'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
@@ -60,12 +64,15 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   const { order, nft, fingerprint } = action.payload
   try {
     if (
-      nft.contractAddress !== order.contractAddress &&
+      nft.contractAddress !== order.contractAddress ||
       nft.tokenId !== order.tokenId
     ) {
       throw new Error('The order does not match the NFT')
     }
-    const { orderService } = VendorFactory.build(nft.vendor)
+    const { orderService }: Vendor<VendorName> = yield call(
+      [VendorFactory, 'build'],
+      nft.vendor
+    )
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     const txHash: string = yield call(
@@ -81,7 +88,7 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
         getRentalById,
         nft.activeOrderId
       )
-      if (rental.status === RentalStatus.OPEN) {
+      if (isRentalListingOpen(rental)) {
         yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
       }
     }
