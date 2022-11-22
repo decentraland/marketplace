@@ -354,7 +354,8 @@
   "on_rent_list": {
     "listed_for_rent": "Listed for rent",
     "rented_until": "Rented until {end_date}",
-    "claiming_back": "Claiming Back Land"
+    "claiming_back": "Claiming Back Land",
+    "rented_period_over": "Rented Period Over"
   },
   "collection_list": {
     "search": "Search {count} collections...",

@@ -13,6 +13,7 @@
   color: var(--text);
 }
 
-.warning-icon{
- color: var(--primary);
+i.icon.warning-icon {
+  color: var(--primary);
+  margin-right: 5px;
 }
