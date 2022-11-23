@@ -10,6 +10,7 @@ import {
   isRentalListingOpen,
   waitUntilRentalChangesStatus
 } from '../rental/utils'
+import { VendorName } from '../vendor'
 import {
   CREATE_ORDER_REQUEST,
   CreateOrderRequestAction,
@@ -24,7 +25,6 @@ import {
   cancelOrderSuccess,
   cancelOrderFailure
 } from './actions'
-import { VendorName } from '../vendor'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
