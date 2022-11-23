@@ -1,7 +1,14 @@
 import { RootState } from '../reducer'
-import { getIsFeatureEnabled } from 'decentraland-dapps/dist/modules/features/selectors'
+import {
+  getIsFeatureEnabled,
+  getLoading
+} from 'decentraland-dapps/dist/modules/features/selectors'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { FeatureName } from './types'
+
+export const isLoadingFeatureFlags = (state: RootState) => {
+  return getLoading(state)
+}
 
 export const getIsMaintenanceEnabled = (state: RootState) => {
   // As this is called by the routes component which is rendered when the user enters the application,
