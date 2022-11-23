@@ -7,13 +7,6 @@ export enum VendorName {
 
 export const Disabled = {}
 
-const ContractName = {
-  ...decentraland.ContractName
-}
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare -- Intentionally naming the variable the same as the type
-export type ContractName = typeof ContractName
-
 export const getContractNames = () => ({
   ...decentraland.ContractName
 })
