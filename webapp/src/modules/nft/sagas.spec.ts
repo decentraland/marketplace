@@ -4,7 +4,8 @@ import { throwError } from 'redux-saga-test-plan/providers'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
-import { VendorFactory, VendorName } from '../vendor'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { Vendor, VendorFactory, VendorName } from '../vendor'
 import { getWallet } from '../wallet/selectors'
 import {
   DEFAULT_BASE_NFT_PARAMS,
@@ -23,6 +24,8 @@ import { NFT, NFTsFetchOptions, NFTsFetchParams } from './types'
 import { View } from '../ui/types'
 import { Account } from '../account/types'
 import { getContract, getContracts, getLoading } from '../contract/selectors'
+import { waitUntilRentalChangesStatus } from '../rental/utils'
+import { getRentalById } from '../rental/selectors'
 
 describe('when handling the fetch NFTs request action', () => {
   let dateSpy: jest.SpyInstance<number, []>
@@ -336,27 +339,67 @@ describe('when handling the transfer NFT request action', () => {
   })
 
   describe('when the transfer is successful', () => {
-    it('should dispatch an action signaling the success of the action handling', () => {
-      const nft = {
+    let nft: NFT
+    let address: string
+    let wallet: Wallet
+    let vendor: Vendor<VendorName.DECENTRALAND>
+    let txHash: string
+    beforeEach(() => {
+      nft = {
         vendor: VendorName.DECENTRALAND
       } as NFT
-      const address = 'anAddress'
-      const wallet = { address } as Wallet
-      const vendor = VendorFactory.build(nft.vendor)
-      const txHash = 'someHash'
+      address = 'anAddress'
+      wallet = { address } as Wallet
+      vendor = VendorFactory.build(nft.vendor)
+      txHash = 'someHash'
+    })
+    describe('and it has an rental with status OPEN', () => {
+      let rental: RentalListing
+      beforeEach(() => {
+        nft.openRentalId = 'aRentalId'
+        rental = {
+          id: nft.openRentalId,
+          status: RentalStatus.OPEN
+        } as RentalListing
+      })
+      it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
+        return expectSaga(nftSaga)
+          .provide([
+            [call(VendorFactory.build, nft.vendor), vendor],
+            [select(getWallet), wallet],
+            [select(getRentalById, nft.openRentalId!), rental],
+            [
+              call([vendor.nftService, 'transfer'], wallet, address, nft),
+              Promise.resolve(txHash)
+            ],
+            [call(waitForTx, txHash), Promise.resolve()],
+            [
+              call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED),
+              Promise.resolve()
+            ]
+          ])
+          .put(transferNFTSuccess(nft, address, txHash))
+          .dispatch(transferNFTRequest(nft, address))
+          .run({ silenceTimeout: true })
+      })
+    })
 
-      return expectSaga(nftSaga)
-        .provide([
-          [call(VendorFactory.build, nft.vendor), vendor],
-          [select(getWallet), wallet],
-          [
-            call([vendor.nftService, 'transfer'], wallet, address, nft),
-            Promise.resolve(txHash)
-          ]
-        ])
-        .put(transferNFTSuccess(nft, address, txHash))
-        .dispatch(transferNFTRequest(nft, address))
-        .run({ silenceTimeout: true })
+    describe('and it does not have a rental', () => {
+      it('should dispatch an action signaling the success of the action handling', () => {
+        return expectSaga(nftSaga)
+          .provide([
+            [call(VendorFactory.build, nft.vendor), vendor],
+            [select(getWallet), wallet],
+            [
+              call([vendor.nftService, 'transfer'], wallet, address, nft),
+              Promise.resolve(txHash)
+            ],
+            [call(waitForTx, txHash), Promise.resolve()]
+          ])
+          .put(transferNFTSuccess(nft, address, txHash))
+          .dispatch(transferNFTRequest(nft, address))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })

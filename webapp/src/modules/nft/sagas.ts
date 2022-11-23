@@ -1,5 +1,7 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
+import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
@@ -8,6 +10,11 @@ import { getContract, getContracts } from '../contract/selectors'
 import { VendorName } from '../vendor/types'
 import { AwaitFn } from '../types'
 import { getOrWaitForContracts } from '../contract/utils'
+import { getRentalById } from '../rental/selectors'
+import {
+  isRentalListingOpen,
+  waitUntilRentalChangesStatus
+} from '../rental/utils'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -135,6 +142,17 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
       address,
       nft
     )
+
+    yield call(waitForTx, txHash)
+    if (nft?.openRentalId) {
+      const rental: RentalListing | null = yield select(
+        getRentalById,
+        nft.openRentalId
+      )
+      if (isRentalListingOpen(rental)) {
+        yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
+      }
+    }
 
     yield put(transferNFTSuccess(nft, address, txHash))
   } catch (error) {
