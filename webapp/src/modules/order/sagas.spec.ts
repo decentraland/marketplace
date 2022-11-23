@@ -154,7 +154,7 @@ describe('when handling the execute order request action', () => {
           .provide([
             [select(getWallet), wallet],
             [call([VendorFactory, 'build'], nft.vendor), vendor],
-            [select(getRentalById, nft.activeOrderId!), rentalListing],
+            [select(getRentalById, nft.openRentalId!), rentalListing],
             [
               call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED),
               Promise.resolve()
