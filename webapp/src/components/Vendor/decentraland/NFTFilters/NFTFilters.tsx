@@ -69,7 +69,6 @@ const NFTFilters = (props: Props) => {
     ]
   } else {
     orderByDropdownOptions = [
-      { value: SortBy.RECENTLY_SOLD, text: t('filters.recently_sold') },
       { value: SortBy.NEWEST, text: t('filters.newest') },
       { value: SortBy.NAME, text: t('filters.name') }
     ]
@@ -100,6 +99,10 @@ const NFTFilters = (props: Props) => {
     orderByDropdownOptions.unshift({
       value: SortBy.RECENTLY_LISTED,
       text: t('filters.recently_listed')
+    })
+    orderByDropdownOptions.unshift({
+      value: SortBy.RECENTLY_SOLD,
+      text: t('filters.recently_sold')
     })
     orderByDropdownOptions.unshift({
       value: SortBy.CHEAPEST,
@@ -147,9 +150,14 @@ const NFTFilters = (props: Props) => {
 
   const handleIsMapChange = useCallback(
     (isMap: boolean) => {
-      onBrowse({ isMap, isFullscreen: isMap, search: '' })
+      onBrowse({
+        isMap,
+        isFullscreen: isMap,
+        search: '',
+        onlyOnSale: (!onlyOnSale && !onlyOnRent) || onlyOnSale
+      })
     },
-    [onBrowse]
+    [onBrowse, onlyOnSale, onlyOnRent]
   )
 
   const handleOrderByDropdownChange = useCallback(
