@@ -84,7 +84,7 @@ const RentalListingModal = (props: Props) => {
       ) : !listing ? (
         <CreateOrEditListingStep
           nft={nft}
-          rental={rental}
+          rental={isRentalListingOpen(rental) ? rental : null}
           onCreate={handleSetListing}
           onRemove={onRemove}
           onCancel={onClose}
