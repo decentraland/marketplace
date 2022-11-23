@@ -15,7 +15,6 @@ import { EstateDetail } from './EstateDetail'
 import { WearableDetail } from './WearableDetail'
 import { ENSDetail } from './ENSDetail'
 import { EmoteDetail } from './EmoteDetail'
-import { AssetProvider } from '../AssetProvider'
 import './AssetPage.css'
 
 const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
@@ -27,100 +26,98 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
         <ErrorBoundary>
           <Section>
             <Column>
-              <AssetProvider type={type}>
-                {asset => (
-                  <Back
-                    className="back"
-                    absolute
-                    onClick={() =>
-                      onBack(
-                        mapAsset(
-                          asset,
-                          {
-                            wearable: () =>
-                              locations.browse({
-                                assetType: type,
-                                section: Sections.decentraland.WEARABLES
-                              }),
-                            emote: () =>
-                              locations.browse({
-                                assetType: type,
-                                section: Sections.decentraland.EMOTES
-                              })
-                          },
-                          {
-                            ens: () =>
-                              locations.browse({
-                                assetType: type,
-                                section: Sections.decentraland.ENS
-                              }),
-                            estate: () =>
-                              locations.lands({
-                                assetType: type,
-                                section: Sections.decentraland.ESTATES,
-                                isMap: false,
-                                isFullscreen: false
-                              }),
-                            parcel: () =>
-                              locations.lands({
-                                assetType: type,
-                                section: Sections.decentraland.PARCELS,
-                                isMap: false,
-                                isFullscreen: false
-                              }),
-                            wearable: () =>
-                              locations.browse({
-                                assetType: type,
-                                section: Sections.decentraland.WEARABLES
-                              }),
-                            emote: () =>
-                              locations.browse({
-                                assetType: type,
-                                section: Sections.decentraland.EMOTES
-                              })
-                          },
-                          () => undefined
+              <AssetProviderPage type={type}>
+                {(asset, order, rental) => (
+                  <>
+                    <Back
+                      className="back"
+                      absolute
+                      onClick={() =>
+                        onBack(
+                          mapAsset(
+                            asset,
+                            {
+                              wearable: () =>
+                                locations.browse({
+                                  assetType: type,
+                                  section: Sections.decentraland.WEARABLES
+                                }),
+                              emote: () =>
+                                locations.browse({
+                                  assetType: type,
+                                  section: Sections.decentraland.EMOTES
+                                })
+                            },
+                            {
+                              ens: () =>
+                                locations.browse({
+                                  assetType: type,
+                                  section: Sections.decentraland.ENS
+                                }),
+                              estate: () =>
+                                locations.lands({
+                                  assetType: type,
+                                  section: Sections.decentraland.ESTATES,
+                                  isMap: false,
+                                  isFullscreen: false
+                                }),
+                              parcel: () =>
+                                locations.lands({
+                                  assetType: type,
+                                  section: Sections.decentraland.PARCELS,
+                                  isMap: false,
+                                  isFullscreen: false
+                                }),
+                              wearable: () =>
+                                locations.browse({
+                                  assetType: type,
+                                  section: Sections.decentraland.WEARABLES
+                                }),
+                              emote: () =>
+                                locations.browse({
+                                  assetType: type,
+                                  section: Sections.decentraland.EMOTES
+                                })
+                            },
+                            () => undefined
+                          )
                         )
-                      )
-                    }
-                  />
+                      }
+                    />
+                    <Narrow>
+                      {mapAsset<React.ReactNode>(
+                        asset,
+                        {
+                          wearable: item => <ItemDetail item={item} />,
+                          emote: item => <ItemDetail item={item} />
+                        },
+                        {
+                          ens: nft => <ENSDetail nft={nft} />,
+                          estate: nft => (
+                            <EstateDetail
+                              nft={nft}
+                              order={order}
+                              rental={rental}
+                              isRentalsEnabled={isRentalsEnabled}
+                            />
+                          ),
+                          parcel: nft => (
+                            <ParcelDetail
+                              nft={nft}
+                              order={order}
+                              rental={rental}
+                              isRentalsEnabled={isRentalsEnabled}
+                            />
+                          ),
+                          wearable: nft => <WearableDetail nft={nft} />,
+                          emote: nft => <EmoteDetail nft={nft} />
+                        },
+                        () => null
+                      )}
+                    </Narrow>
+                  </>
                 )}
-              </AssetProvider>
-              <Narrow>
-                <AssetProviderPage type={type}>
-                  {(asset, order, rental) =>
-                    mapAsset<React.ReactNode>(
-                      asset,
-                      {
-                        wearable: item => <ItemDetail item={item} />,
-                        emote: item => <ItemDetail item={item} />
-                      },
-                      {
-                        ens: nft => <ENSDetail nft={nft} />,
-                        estate: nft => (
-                          <EstateDetail
-                            nft={nft}
-                            order={order}
-                            rental={rental}
-                            isRentalsEnabled={isRentalsEnabled}
-                          />
-                        ),
-                        parcel: nft => (
-                          <ParcelDetail
-                            nft={nft}
-                            order={order}
-                            rental={rental}
-                            isRentalsEnabled={isRentalsEnabled}
-                          />
-                        ),
-                        wearable: nft => <WearableDetail nft={nft} />,
-                        emote: nft => <EmoteDetail nft={nft} />
-                      },
-                      () => null
-                    )
-                  }
-                </AssetProviderPage>
-              </Narrow>
+              </AssetProviderPage>
             </Column>
           </Section>
         </ErrorBoundary>
