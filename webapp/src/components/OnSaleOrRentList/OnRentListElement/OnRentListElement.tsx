@@ -4,13 +4,16 @@ import format from 'date-fns/format'
 import { RentalStatus } from '@dcl/schemas'
 import { Icon, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import {
+  hasRentalEnded,
+  isRentalListingExecuted
+} from '../../../modules/rental/utils'
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
 import { Mana } from '../../Mana'
 import AssetCell from '../AssetCell'
-import './OnRentListElement.css'
 import { Props } from './OnRentListElement.types'
+import './OnRentListElement.css'
 
 const OnRentListElement = ({
   nft,
@@ -52,6 +55,11 @@ const OnRentListElement = ({
               </span>
             ) : rental.status === RentalStatus.OPEN ? (
               t('on_rent_list.listed_for_rent')
+            ) : isRentalListingExecuted(rental) && hasRentalEnded(rental) ? (
+              <span>
+                <Icon className="warning-icon" name="warning sign" />
+                {t('on_rent_list.rented_period_over')}
+              </span>
             ) : endDate ? (
               t('on_rent_list.rented_until', {
                 end_date: format(endDate, 'MMM dd')

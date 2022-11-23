@@ -349,7 +349,8 @@
   "on_rent_list": {
     "listed_for_rent": "Listado para alquiler",
     "rented_until": "Rentado hasta {end_date}",
-    "claiming_back": "Reclamando su tierra"
+    "claiming_back": "Reclamando su tierra",
+    "rented_period_over": "Periodo de renta terminado"
   },
   "collection_list": {
     "search": "Buscar {count} collecciones...",

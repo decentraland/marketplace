@@ -350,7 +350,8 @@
   "on_rent_list": {
     "listed_for_rent": "挂牌出租",
     "rented_until": "租到 {end_date}",
-    "claiming_back": "收回土地"
+    "claiming_back": "收回土地",
+    "rented_period_over": "租期满"
   },
   "collection_list": {
     "search": "搜索 {count} 个收藏品...",
