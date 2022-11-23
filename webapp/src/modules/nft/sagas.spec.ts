@@ -5,7 +5,7 @@ import * as matchers from 'redux-saga-test-plan/matchers'
 import { NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { VendorFactory, VendorName } from '../vendor'
+import { Vendor, VendorFactory, VendorName } from '../vendor'
 import { getWallet } from '../wallet/selectors'
 import {
   DEFAULT_BASE_NFT_PARAMS,
@@ -339,38 +339,67 @@ describe('when handling the transfer NFT request action', () => {
   })
 
   describe('when the transfer is successful', () => {
-    it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
-      const nft = {
-        vendor: VendorName.DECENTRALAND,
-        openRentalId: 'aRentalId'
+    let nft: NFT
+    let address: string
+    let wallet: Wallet
+    let vendor: Vendor<VendorName.DECENTRALAND>
+    let txHash: string
+    beforeEach(() => {
+      nft = {
+        vendor: VendorName.DECENTRALAND
       } as NFT
-      const rental = {
-        id: nft.openRentalId,
-        status: RentalStatus.OPEN
-      } as RentalListing
-      const address = 'anAddress'
-      const wallet = { address } as Wallet
-      const vendor = VendorFactory.build(nft.vendor)
-      const txHash = 'someHash'
+      address = 'anAddress'
+      wallet = { address } as Wallet
+      vendor = VendorFactory.build(nft.vendor)
+      txHash = 'someHash'
+    })
+    describe('and it has an rental with status OPEN', () => {
+      let rental: RentalListing
+      beforeEach(() => {
+        nft.openRentalId = 'aRentalId'
+        rental = {
+          id: nft.openRentalId,
+          status: RentalStatus.OPEN
+        } as RentalListing
+      })
+      it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
+        return expectSaga(nftSaga)
+          .provide([
+            [call(VendorFactory.build, nft.vendor), vendor],
+            [select(getWallet), wallet],
+            [select(getRentalById, nft.openRentalId!), rental],
+            [
+              call([vendor.nftService, 'transfer'], wallet, address, nft),
+              Promise.resolve(txHash)
+            ],
+            [call(waitForTx, txHash), Promise.resolve()],
+            [
+              call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED),
+              Promise.resolve()
+            ]
+          ])
+          .put(transferNFTSuccess(nft, address, txHash))
+          .dispatch(transferNFTRequest(nft, address))
+          .run({ silenceTimeout: true })
+      })
+    })
 
-      return expectSaga(nftSaga)
-        .provide([
-          [call(VendorFactory.build, nft.vendor), vendor],
-          [select(getWallet), wallet],
-          [select(getRentalById, nft.openRentalId!), rental],
-          [
-            call([vendor.nftService, 'transfer'], wallet, address, nft),
-            Promise.resolve(txHash)
-          ],
-          [call(waitForTx, txHash), Promise.resolve()],
-          [
-            call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED),
-            Promise.resolve()
-          ]
-        ])
-        .put(transferNFTSuccess(nft, address, txHash))
-        .dispatch(transferNFTRequest(nft, address))
-        .run({ silenceTimeout: true })
+    describe('and it does not have a rental', () => {
+      it('should dispatch an action signaling the success of the action handling', () => {
+        return expectSaga(nftSaga)
+          .provide([
+            [call(VendorFactory.build, nft.vendor), vendor],
+            [select(getWallet), wallet],
+            [
+              call([vendor.nftService, 'transfer'], wallet, address, nft),
+              Promise.resolve(txHash)
+            ],
+            [call(waitForTx, txHash), Promise.resolve()]
+          ])
+          .put(transferNFTSuccess(nft, address, txHash))
+          .dispatch(transferNFTRequest(nft, address))
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })

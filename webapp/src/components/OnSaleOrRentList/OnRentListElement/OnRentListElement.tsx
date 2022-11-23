@@ -9,8 +9,8 @@ import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
 import { Mana } from '../../Mana'
 import AssetCell from '../AssetCell'
-import './OnRentListElement.css'
 import { Props } from './OnRentListElement.types'
+import './OnRentListElement.css'
 
 const OnRentListElement = ({
   nft,
