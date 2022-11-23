@@ -45,6 +45,7 @@ const SaleRentActionBox = ({
   onRent
 }: Props) => {
   const isMobileView = isMobile()
+  const isRentalOpen = isRentalListingOpen(rental)
   const rentals = getContract({
     name: getContractNames().RENTALS,
     network: nft.network
@@ -54,7 +55,9 @@ const SaleRentActionBox = ({
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
     number
   >(0)
-  const [view, setView] = useState(View.SALE)
+  const [view, setView] = useState(
+    !!order || !isRentalOpen ? View.SALE : View.RENT
+  )
   const maxPriceOfPeriods: string | null = useMemo(
     () => (rental ? getMaxPriceOfPeriods(rental) : null),
     [rental]
@@ -70,7 +73,6 @@ const SaleRentActionBox = ({
   const isBiddable = bidService !== undefined
   const canBid = isBiddable && !userHasAlreadyBidsOnNft
   const isCurrentlyRented = isRentalListingExecuted(rental)
-  const isRentalOpen = isRentalListingOpen(rental)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
   const contractNames = getContractNames()
   const mana = getContract({
