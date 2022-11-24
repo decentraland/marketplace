@@ -381,7 +381,7 @@
     },
     "sales_rent_action_box": {
       "until": "From {from_date} to {to_date}",
-      "not_for_sale": "Not available for Sale",
+      "not_for_sale": "Currently not listed for sale",
       "parcel_belongs_to_estate_bid": "It's not possible to bid on a parcel that belongs to an Estate, please consider going into the Estate page.",
       "parcel_belongs_to_estate_rent": "It's not possible to rent a parcel that belongs to an Estate, please consider going into the Estate page.",
       "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND",
