@@ -14,6 +14,10 @@ import {
   FETCH_NFT_SUCCESS
 } from '../nft/actions'
 import {
+  AcceptRentalListingSuccessAction,
+  ACCEPT_RENTAL_LISTING_SUCCESS
+} from '../rental/actions'
+import {
   CancelOrderFailureAction,
   CancelOrderRequestAction,
   CancelOrderSuccessAction,
@@ -60,6 +64,7 @@ type OrderReducerAction =
   | CancelOrderRequestAction
   | CancelOrderFailureAction
   | CancelOrderSuccessAction
+  | AcceptRentalListingSuccessAction
 
 export function orderReducer(
   state: OrderState = INITIAL_STATE,
@@ -120,6 +125,22 @@ export function orderReducer(
         }
       }
       return state
+    }
+    case ACCEPT_RENTAL_LISTING_SUCCESS: {
+      const { rental } = action.payload
+      const newState = {
+        ...state,
+        data: Object.fromEntries(
+          Object.entries(state.data).filter(
+            ([_key, value]) =>
+              !(
+                value.contractAddress === rental.contractAddress &&
+                value.tokenId === rental.tokenId
+              )
+          )
+        )
+      }
+      return newState
     }
     default:
       return state
