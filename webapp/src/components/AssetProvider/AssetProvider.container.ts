@@ -1,5 +1,7 @@
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
+import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import { fetchNFTRequest, FETCH_NFT_REQUEST } from '../../modules/nft/actions'
 import {
@@ -71,7 +73,11 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     asset,
     rental,
     order,
-    isLoading: !asset && isLoading
+    isLoading: !asset && isLoading,
+    isLoadingFeatureFlags: isLoadingType(
+      getIsLoadingFeatureFlags(state),
+      FETCH_APPLICATION_FEATURES_REQUEST
+    )
   }
 }
 
