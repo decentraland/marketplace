@@ -1,4 +1,5 @@
 import {
+  NFT,
   NFTCategory,
   PeriodCreation,
   RentalListing,
@@ -16,13 +17,16 @@ import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { ethers } from 'ethers'
-import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { call, delay, put, select, take, takeEvery } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
 import { getContract as getContractByQuery } from '../contract/selectors'
 import { getFingerprint } from '../nft/estate/utils'
 import { CloseModalAction, CLOSE_MODAL } from '../modal/actions'
+import { addressEquals } from '../wallet/utils'
+import { fetchNFTRequest, FETCH_NFT_SUCCESS } from '../nft/actions'
+import { getCurrentNFT } from '../nft/selectors'
 import {
   claimLandFailure,
   ClaimLandRequestAction,
@@ -171,6 +175,15 @@ function* handleClaimLandRequest(action: ClaimLandRequestAction) {
       claimLandTransactionSubmitted(nft, txHash, rentalsContract.address)
     )
     yield call(waitForTx, txHash)
+    yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CLAIMED)
+    let hasAssetBack = addressEquals(nft.owner, rental.lessor!)
+    while (!hasAssetBack) {
+      yield put(fetchNFTRequest(nft.contractAddress, nft.tokenId))
+      yield take(FETCH_NFT_SUCCESS)
+      const nftUpdated: NFT = yield select(getCurrentNFT)
+      hasAssetBack = addressEquals(nftUpdated.owner, rental.lessor!)
+      yield delay(5000)
+    }
     yield put(claimLandSuccess(nft, rental))
   } catch (error) {
     yield put(claimLandFailure((error as Error).message))
