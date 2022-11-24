@@ -43,7 +43,16 @@ const AssetProvider = (props: Props) => {
     isLoadingFeatureFlags
   ])
 
-  return <>{children(asset, order, rental, isLoading)}</>
+  return (
+    <>
+      {children(
+        asset,
+        order,
+        rental,
+        isLoading || (isLoadingFeatureFlags && type === AssetType.NFT)
+      )}
+    </>
+  )
 }
 
 export default React.memo(AssetProvider)
