@@ -1,6 +1,9 @@
 import { createSelector } from 'reselect'
-import { Item, Order, RentalListing } from '@dcl/schemas'
-import { Transaction, TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
+import { Item, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import {
+  Transaction,
+  TransactionStatus
+} from 'decentraland-dapps/dist/modules/transaction/types'
 import { getData as getNFTData } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
@@ -15,8 +18,6 @@ import { VendorName } from '../../vendor'
 import { getAddress } from '../../wallet/selectors'
 import { getTransactionsByType } from '../../transaction/selectors'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
-
-
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState) => getState(state).view
@@ -81,7 +82,10 @@ export const getOnRentNFTs = createSelector<
     .reduce((acc, nft) => {
       const { openRentalId } = nft
       const rental = openRentalId ? rentalsById[openRentalId] : undefined
-      if (rental) {
+      if (
+        rental &&
+        [RentalStatus.EXECUTED, RentalStatus.OPEN].includes(rental.status)
+      ) {
         acc.push([nft, rental])
       }
       return acc
@@ -95,8 +99,6 @@ export const getOnSaleElements = createSelector<
   ReturnType<typeof getOnSaleNFTs>,
   OnSaleElement[]
 >(getOnSaleItems, getOnSaleNFTs, (items, nfts) => [...items, ...nfts])
-
-
 
 export const getLastTransactionForClaimingBackLand = (
   state: RootState,
@@ -125,18 +127,17 @@ export const getLastTransactionForClaimingBackLand = (
       return 0
     })
 
-  return transactions[0] ?? null;
+  return transactions[0] ?? null
 }
 
 export const isClaimingBackLandTransactionPending = (
   state: RootState,
   nft: NFT
 ): boolean => {
-  const transaction = getLastTransactionForClaimingBackLand(state, nft);
+  const transaction = getLastTransactionForClaimingBackLand(state, nft)
 
   return transaction
     ? transaction.status === TransactionStatus.QUEUED ||
         transaction.status === TransactionStatus.PENDING
-
     : false
 }

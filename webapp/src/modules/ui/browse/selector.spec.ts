@@ -26,10 +26,14 @@ let item: Item
 let itemOnSale: Item
 let nft: NFT
 let nftOnSale: NFT
-let nftOnRent: NFT
+let nftWithOpenRent: NFT
+let nftWithCancelledRent: NFT
+let nftWithExecutedRent: NFT
 let address: string
 let order: Order
 let rental: RentalListing
+let rentalCancelled: RentalListing
+let rentalExecuted: RentalListing
 
 beforeEach(() => {
   address = '0xaddress'
@@ -38,14 +42,36 @@ beforeEach(() => {
   nft = { id: '456', owner: address } as NFT
   order = { id: 'orderId ' } as Order
   nftOnSale = { id: '567', activeOrderId: order.id, owner: address } as NFT
-  rental = { id: 'rentalId', status: RentalStatus.OPEN, lessor: address } as RentalListing
-  nftOnRent = { id: '678', openRentalId: rental.id } as NFT
+  rental = {
+    id: 'rentalId',
+    status: RentalStatus.OPEN,
+    lessor: address
+  } as RentalListing
+  rentalCancelled = {
+    id: 'aCancelledRentalId',
+    status: RentalStatus.CANCELLED,
+    lessor: address
+  } as RentalListing
+  rentalExecuted = {
+    id: 'anExecutedRentalId',
+    status: RentalStatus.EXECUTED,
+    lessor: address
+  } as RentalListing
+  nftWithOpenRent = { id: '678', openRentalId: rental.id } as NFT
+  nftWithCancelledRent = { id: '789', openRentalId: rentalCancelled.id } as NFT
+  nftWithExecutedRent = { id: '891', openRentalId: rentalExecuted.id } as NFT
   rootState = {
     ui: {
       browse: {
         itemIds: [item.id, itemOnSale.id],
         lastTimestamp: 123,
-        nftIds: [nft.id, nftOnSale.id, nftOnRent.id],
+        nftIds: [
+          nft.id,
+          nftOnSale.id,
+          nftWithOpenRent.id,
+          nftWithCancelledRent.id,
+          nftWithExecutedRent.id
+        ],
         count: 1,
         view: View.MARKET
       } as BrowseUIState
@@ -54,7 +80,9 @@ beforeEach(() => {
       data: {
         [nft.id]: nft,
         [nftOnSale.id]: nftOnSale,
-        [nftOnRent.id]: nftOnRent
+        [nftWithOpenRent.id]: nftWithOpenRent,
+        [nftWithCancelledRent.id]: nftWithCancelledRent,
+        [nftWithExecutedRent.id]: nftWithExecutedRent
       }
     },
     item: {
@@ -67,7 +95,9 @@ beforeEach(() => {
     },
     rental: {
       data: {
-        [rental.id]: rental
+        [rental.id]: rental,
+        [rentalCancelled.id]: rentalCancelled,
+        [rentalExecuted.id]: rentalExecuted
       }
     },
     wallet: {
@@ -98,7 +128,13 @@ describe('when getting the count of the ui browse state', () => {
 
 describe('when getting the NFTs of the ui browse state', () => {
   it('should retrieve the NFTs of the ui browse state', () => {
-    expect(getNFTs(rootState)).toStrictEqual([nft, nftOnSale, nftOnRent])
+    expect(getNFTs(rootState)).toStrictEqual([
+      nft,
+      nftOnSale,
+      nftWithOpenRent,
+      nftWithCancelledRent,
+      nftWithExecutedRent
+    ])
   })
 })
 
@@ -122,12 +158,15 @@ describe('when getting the NFTs On Sale of the ui browse state', () => {
 
 describe('when getting the NFTs on rent of the ui browse state', () => {
   it('should retrieve the NFTs on rent of the ui browse state', () => {
-    expect(getOnRentNFTs(rootState)).toStrictEqual([[nftOnRent, rental]])
+    expect(getOnRentNFTs(rootState)).toStrictEqual([
+      [nftWithOpenRent, rental],
+      [nftWithExecutedRent, rentalExecuted]
+    ])
   })
 })
 
 describe('when getting the Elements on sale of the ui browse state', () => {
-  it('should retrieve the NFTs on rent of the ui browse state', () => {
+  it('should retrieve the NFTs on sale of the ui browse state', () => {
     expect(getOnSaleElements(rootState)).toStrictEqual([
       itemOnSale,
       [nftOnSale, order]
@@ -179,7 +218,6 @@ describe('when getting if the claiming back transaction is pending', () => {
       expect(isClaimingBackLandTransactionPending(state, nft)).toBeFalsy()
     })
   })
-
   ;[
     {
       status: TransactionStatus.CONFIRMED,
