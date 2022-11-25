@@ -19,9 +19,11 @@ import {
 import { ethers } from 'ethers'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
-import { delay } from 'redux-saga/effects'
+import { delay, take } from 'redux-saga/effects'
 import { getCurrentIdentity } from '../identity/selectors'
 import { closeModal } from '../modal/actions'
+import { FETCH_NFT_SUCCESS } from '../nft/actions'
+import { getCurrentNFT } from '../nft/selectors'
 import { NFT } from '../nft/types'
 import { VendorName } from '../vendor'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
@@ -101,7 +103,8 @@ beforeEach(() => {
     startedAt: 1234567,
     updatedAt: 1234567,
     createdAt: 1234567,
-    target: ethers.constants.AddressZero
+    target: ethers.constants.AddressZero,
+    rentedDays: null
   }
 })
 
@@ -405,6 +408,7 @@ describe('when handling the request action to claim a LAND', () => {
       version: 'v1',
       chainId: nft.chainId
     }
+    nft.owner = rentalContract.address
   })
 
   describe("and the provider can't be retrieved", () => {
@@ -505,11 +509,15 @@ describe('when handling the request action to claim a LAND', () => {
               ),
               Promise.resolve(txHash)
             ],
-            [call(waitForTx, txHash), Promise.resolve()]
+            [call(waitForTx, txHash), Promise.resolve()],
+            [
+              call(waitUntilRentalChangesStatus, nft, RentalStatus.CLAIMED),
+              Promise.resolve()
+            ],
+            [select(getCurrentNFT), { ...nft, owner: rental.lessor }],
+            [take(FETCH_NFT_SUCCESS), {}],
+            [delay(5000), void 0]
           ])
-          .put(
-            claimLandTransactionSubmitted(nft, txHash, rentalContract.address)
-          )
           .put(claimLandSuccess(nft, rental))
           .dispatch(claimLandRequest(nft, rental))
           .silentRun()
