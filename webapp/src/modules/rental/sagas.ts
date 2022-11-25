@@ -29,7 +29,7 @@ import { fetchNFTRequest, FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getCurrentNFT } from '../nft/selectors'
 import {
   claimAssetFailure,
-  ClaimLandRequestAction,
+  ClaimAssetRequestAction,
   claimAssetTransactionSubmitted,
   claimAssetSuccess,
   CLAIM_ASSET_REQUEST,
@@ -140,7 +140,7 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
   }
 }
 
-function* handleClaimLandRequest(action: ClaimLandRequestAction) {
+function* handleClaimLandRequest(action: ClaimAssetRequestAction) {
   const { nft, rental } = action.payload
 
   try {

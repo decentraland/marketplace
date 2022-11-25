@@ -75,10 +75,10 @@ export const claimAssetTransactionSubmitted = (
     })
   )
 
-export type ClaimLandRequestAction = ReturnType<typeof claimAssetRequest>
-export type ClaimLandSuccessAction = ReturnType<typeof claimAssetSuccess>
-export type ClaimLandFailureAction = ReturnType<typeof claimAssetFailure>
-export type ClaimLandTransactionSubmitted = ReturnType<
+export type ClaimAssetRequestAction = ReturnType<typeof claimAssetRequest>
+export type ClaimAssetSuccessAction = ReturnType<typeof claimAssetSuccess>
+export type ClaimAssetFailureAction = ReturnType<typeof claimAssetFailure>
+export type ClaimAssetTransactionSubmitted = ReturnType<
   typeof claimAssetTransactionSubmitted
 >
 

@@ -5,7 +5,7 @@ import {
 } from 'decentraland-dapps/dist/modules/transaction/types'
 import { NFT } from '../../nft/types'
 import { RootState } from '../../reducer'
-import { CLAIM_LAND_TRANSACTION_SUBMITTED } from '../../rental/actions'
+import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
 import { View } from '../types'
 import { BrowseUIState } from './reducer'
 import {
@@ -252,7 +252,7 @@ describe('when getting if the claiming back transaction is pending', () => {
             hash: 'hash',
             timestamp: 123456,
             from: myAddress,
-            actionType: CLAIM_LAND_TRANSACTION_SUBMITTED,
+            actionType: CLAIM_ASSET_TRANSACTION_SUBMITTED,
             status: element.status,
             chainId,
             payload: {
@@ -279,7 +279,7 @@ describe('when getting if the claiming back transaction is pending', () => {
           hash: 'hash',
           timestamp: 123456,
           from: myAddress,
-          actionType: CLAIM_LAND_TRANSACTION_SUBMITTED,
+          actionType: CLAIM_ASSET_TRANSACTION_SUBMITTED,
           status: TransactionStatus.CONFIRMED,
           chainId,
           payload: {
@@ -291,7 +291,7 @@ describe('when getting if the claiming back transaction is pending', () => {
           hash: 'hashPending',
           timestamp: 1234567,
           from: myAddress,
-          actionType: CLAIM_LAND_TRANSACTION_SUBMITTED,
+          actionType: CLAIM_ASSET_TRANSACTION_SUBMITTED,
           status: TransactionStatus.PENDING,
           chainId,
           payload: {

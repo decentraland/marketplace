@@ -57,7 +57,7 @@ import { SetIsTryingOnAction, SET_IS_TRYING_ON } from '../ui/preview/actions'
 import {
   AcceptRentalListingSuccessAction,
   ACCEPT_RENTAL_LISTING_SUCCESS,
-  ClaimLandSuccessAction,
+  ClaimAssetSuccessAction,
   CLAIM_ASSET_SUCCESS,
   UpsertRentalSuccessAction,
   UPSERT_RENTAL_SUCCESS
@@ -234,7 +234,7 @@ track<UpsertRentalSuccessAction>(
   })
 )
 
-track<ClaimLandSuccessAction>(
+track<ClaimAssetSuccessAction>(
   CLAIM_ASSET_SUCCESS,
   'Claim Land Rental',
   ({ payload: { nft, rental } }) => ({

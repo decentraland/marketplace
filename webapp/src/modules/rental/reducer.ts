@@ -10,10 +10,10 @@ import {
   FETCH_NFT_SUCCESS
 } from '../nft/actions'
 import {
-  ClaimLandFailureAction,
-  ClaimLandRequestAction,
-  ClaimLandTransactionSubmitted,
-  ClaimLandSuccessAction,
+  ClaimAssetFailureAction,
+  ClaimAssetRequestAction,
+  ClaimAssetTransactionSubmitted,
+  ClaimAssetSuccessAction,
   CLAIM_ASSET_FAILURE,
   CLAIM_ASSET_REQUEST,
   CLAIM_ASSET_TRANSACTION_SUBMITTED,
@@ -62,10 +62,10 @@ type RentalReducerAction =
   | UpsertRentalRequestAction
   | UpsertRentalSuccessAction
   | UpsertRentalFailureAction
-  | ClaimLandRequestAction
-  | ClaimLandSuccessAction
-  | ClaimLandFailureAction
-  | ClaimLandTransactionSubmitted
+  | ClaimAssetRequestAction
+  | ClaimAssetSuccessAction
+  | ClaimAssetFailureAction
+  | ClaimAssetTransactionSubmitted
   | ClearRentalErrors
   | RemoveRentalRequestAction
   | RemoveRentalSuccessAction
