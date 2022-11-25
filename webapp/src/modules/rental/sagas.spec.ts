@@ -514,10 +514,6 @@ describe('when handling the request action to claim a LAND', () => {
               call(waitUntilRentalChangesStatus, nft, RentalStatus.CLAIMED),
               Promise.resolve()
             ],
-            [
-              call(waitUntilRentalChangesStatus, nft, RentalStatus.CLAIMED),
-              Promise.resolve()
-            ],
             [select(getCurrentNFT), { ...nft, owner: rental.lessor }],
             [take(FETCH_NFT_SUCCESS), {}],
             [delay(5000), void 0]
