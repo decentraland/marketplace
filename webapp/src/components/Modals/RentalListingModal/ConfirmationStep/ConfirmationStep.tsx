@@ -53,7 +53,9 @@ const ConfirmationStep = (props: Props) => {
               </div>
             </div>
             <div className={styles.noticeRow}>
-              <div className={styles.noticeLabel}>Periods</div>
+              <div className={styles.noticeLabel}>
+                {t('rental_modal.confirmation_step.periods')}
+              </div>
               <div className={styles.noticeText}>
                 {periods.map(period => daysByPeriod[period]).join(' / ')}&nbsp;
                 {t('global.days')}
