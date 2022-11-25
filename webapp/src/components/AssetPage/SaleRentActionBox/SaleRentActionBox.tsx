@@ -71,7 +71,7 @@ const SaleRentActionBox = ({
   // Validations for the sale screen
   const { bidService } = useMemo(() => VendorFactory.build(nft.vendor), [nft])
   const isBiddable = bidService !== undefined
-  const canBid = isBiddable && !userHasAlreadyBidsOnNft
+  const canBid = !isOwner && isBiddable && !userHasAlreadyBidsOnNft
   const isCurrentlyRented = isRentalListingExecuted(rental)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
   const contractNames = getContractNames()
