@@ -8,7 +8,7 @@ import { getData as getNFTData } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
 import { getData as getRentalData } from '../../rental/selectors'
-import { CLAIM_LAND_TRANSACTION_SUBMITTED } from '../../rental/actions'
+import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
 import { NFTState } from '../../nft/reducer'
 import { RootState } from '../../reducer'
 import { BrowseUIState } from './reducer'
@@ -111,7 +111,7 @@ export const getLastTransactionForClaimingBackLand = (
   const transactionsClaimedLand = getTransactionsByType(
     state,
     userAddress,
-    CLAIM_LAND_TRANSACTION_SUBMITTED
+    CLAIM_ASSET_TRANSACTION_SUBMITTED
   )
 
   const transactions = transactionsClaimedLand

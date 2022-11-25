@@ -4,7 +4,7 @@ import { ModalState } from 'decentraland-dapps/dist/modules/modal/reducer'
 import { getOpenModals } from 'decentraland-dapps/dist/modules/modal/selectors'
 import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import {
-  CLAIM_LAND_SUCCESS,
+  CLAIM_ASSET_SUCCESS,
   UPSERT_RENTAL_SUCCESS,
   REMOVE_RENTAL_SUCCESS,
   ACCEPT_RENTAL_LISTING_SUCCESS,
@@ -15,7 +15,7 @@ import { closeAllModals, openModal } from './actions'
 export function* modalSaga() {
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
   yield takeEvery(
-    [CLAIM_LAND_SUCCESS, UPSERT_RENTAL_SUCCESS],
+    [CLAIM_ASSET_SUCCESS, UPSERT_RENTAL_SUCCESS],
     handleCloseAllModals
   )
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleCloseRemoveRentalModal)

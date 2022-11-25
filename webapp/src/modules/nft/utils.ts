@@ -38,6 +38,10 @@ export function isLand(nft: NFT | Item) {
   )
 }
 
+export function isParcel(nft: NFT | Item) {
+  return nft.category === NFTCategory.PARCEL
+}
+
 export function isPartOfEstate(nft: NFT): boolean {
   return Boolean(
     nft.category === NFTCategory.PARCEL && nft.data?.parcel?.estate

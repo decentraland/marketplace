@@ -24,6 +24,7 @@ import {
   isLandLocked
 } from '../../modules/rental/utils'
 import { isOwnedBy } from '../../modules/asset/utils'
+import { isParcel } from '../../modules/nft/utils'
 import { Navbar } from '../Navbar'
 import { ErrorBoundary } from '../AssetPage/ErrorBoundary'
 import { AssetProvider } from '../AssetProvider'
@@ -103,7 +104,12 @@ export const ManageAssetPage = (props: Props) => {
                                 <Map asset={asset} />
                                 <Popup
                                   content={t(
-                                    'manage_asset_page.land_is_locked'
+                                    'manage_asset_page.land_is_locked',
+                                    {
+                                      asset: isParcel(asset)
+                                        ? t('global.the_parcel')
+                                        : t('global.the_estate')
+                                    }
                                   )}
                                   position="top left"
                                   on={isMobileView ? 'click' : 'hover'}
@@ -194,7 +200,12 @@ export const ManageAssetPage = (props: Props) => {
                                   {isRentalListingExecuted(rental) ? (
                                     <div className={styles.rentedMessage}>
                                       {t(
-                                        'manage_asset_page.cant_transfer_rented_land'
+                                        'manage_asset_page.cant_transfer_rented_land',
+                                        {
+                                          asset: isParcel(asset)
+                                            ? t('global.the_parcel')
+                                            : t('global.the_estate')
+                                        }
                                       )}
                                     </div>
                                   ) : null}
@@ -276,7 +287,12 @@ export const ManageAssetPage = (props: Props) => {
                                   {isRentalListingExecuted(rental) ? (
                                     <div className={styles.rentedMessage}>
                                       {t(
-                                        'manage_asset_page.cant_transfer_rented_land'
+                                        'manage_asset_page.cant_transfer_rented_land',
+                                        {
+                                          asset: isParcel(asset)
+                                            ? t('global.the_parcel')
+                                            : t('global.the_estate')
+                                        }
                                       )}
                                     </div>
                                   ) : null}

@@ -23,6 +23,7 @@ import {
   isRentalListingCancelled,
   isRentalListingOpen
 } from '../../../modules/rental/utils'
+import { isLand, isParcel } from '../../../modules/nft/utils'
 import { Mana } from '../../Mana'
 import { IconButton } from '../IconButton'
 import styles from './Rent.module.css'
@@ -66,12 +67,15 @@ export const Rent = (props: Props) => {
     wallet
   } = props
   const isMobileView = useMobileMediaQuery()
+  const assetText = isParcel(nft) ? t('menu.land') : t('menu.estate')
 
   const wrapDisabledMobileButton = useCallback(
     trigger => {
       return (
         <Popup
-          content={t('asset_page.sales_rent_action_box.mobile_coming_soon')}
+          content={t('asset_page.sales_rent_action_box.mobile_coming_soon', {
+            asset: isParcel(nft) ? t('menu.land') : t('menu.estate')
+          })}
           position="top left"
           on="click"
           disabled={!isMobileView}
@@ -79,7 +83,7 @@ export const Rent = (props: Props) => {
         />
       )
     },
-    [isMobileView]
+    [isMobileView, nft]
   )
 
   const handleOnCreateOrEdit = useCallback(
@@ -174,7 +178,9 @@ export const Rent = (props: Props) => {
               {isClaimingBackLandTransactionPending ? (
                 <>
                   <div className={styles.rentMessage}>
-                    {t('manage_asset_page.rent.claiming_land')}
+                    {t('manage_asset_page.rent.claiming_land', {
+                      asset: assetText
+                    })}
                   </div>
                   <div className={styles.activeRentActions}>
                     <Button
@@ -195,11 +201,16 @@ export const Rent = (props: Props) => {
                       <T
                         id="manage_asset_page.rent.rent_end"
                         values={{
-                          tenant: <LinkedProfile address={rental.tenant!} />
+                          tenant: <LinkedProfile address={rental.tenant!} />,
+                          asset: assetText
                         }}
                       />
                     ) : (
-                      t('manage_asset_page.rent.unclaimed_message')
+                      t('manage_asset_page.rent.unclaimed_message', {
+                        asset: isLand(nft)
+                          ? t('global.the_parcel')
+                          : t('global.the_estate')
+                      })
                     )}
                   </div>
                   <div className={styles.activeRentActions}>
@@ -209,7 +220,9 @@ export const Rent = (props: Props) => {
                           className={styles.actionButton}
                           onClick={onClaimLand}
                         >
-                          {t('manage_asset_page.rent.claim_land')}
+                          {t('manage_asset_page.rent.claim_asset', {
+                            asset: assetText
+                          })}
                         </Button>
                       </div>
                     )}

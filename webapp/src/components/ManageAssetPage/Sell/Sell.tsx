@@ -4,6 +4,7 @@ import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
 import { Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isParcel } from '../../../modules/nft/utils'
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
 import Mana from '../../Mana/Mana'
@@ -16,7 +17,7 @@ const Sell = (props: Props) => {
     className,
     isLandLocked,
     order,
-    nft: { contractAddress, tokenId },
+    nft,
     onEditOrder,
     onCancelOrder
   } = props
@@ -48,7 +49,7 @@ const Sell = (props: Props) => {
               className={styles.sellButton}
               disabled={isLandLocked}
               as={Link}
-              to={locations.sell(contractAddress, tokenId)}
+              to={locations.sell(nft.contractAddress, nft.tokenId)}
               fluid
             >
               {t('manage_asset_page.sell.list_for_sale')}
@@ -84,7 +85,9 @@ const Sell = (props: Props) => {
       ) : null}
       {isLandLocked ? (
         <div className={styles.rentedMessage}>
-          {t('manage_asset_page.sell.cant_sell_rented_land')}
+          {t('manage_asset_page.sell.cant_sell_rented_land', {
+            asset: isParcel(nft) ? t('global.the_parcel') : t('global.the_estate')
+          })}
         </div>
       ) : null}
     </section>

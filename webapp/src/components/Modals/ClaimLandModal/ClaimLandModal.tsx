@@ -1,20 +1,26 @@
 import React from 'react'
+import { isParcel } from '../../../modules/nft/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './ClaimLandModal.types'
 import styles from './ClaimLandModal.module.css'
 import { SubmitTransactionModal } from '../SubmitTransactionModal'
 
 const ClaimLandModal = ({ ...props }: Props) => {
+  const assetText = isParcel(props.metadata.nft)
+    ? t('menu.land')
+    : t('menu.estate')
   return (
     <SubmitTransactionModal
-      title={t('claim_land_modal.title')}
+      title={t('claim_land_modal.title', {
+        asset: assetText
+      })}
       confirm_transaction_message={t('claim_land_modal.confirm_transaction')}
-      action_message={t('claim_land_modal.action')}
+      action_message={t('claim_land_modal.action', { asset: assetText })}
       className={styles.content}
       {...props}
     >
       <>
-        <p>{t('claim_land_modal.question')}</p>
+        <p>{t('claim_land_modal.question', { asset: assetText })}</p>
         <p>{t('claim_land_modal.disclaimer')}</p>
       </>
     </SubmitTransactionModal>
