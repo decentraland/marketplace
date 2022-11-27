@@ -1,10 +1,10 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { Center, Loader, Page } from 'decentraland-ui'
-import Intercom from 'decentraland-dapps/dist/components/Intercom'
+import { Center } from 'decentraland-ui/dist/components/Center/Center'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
-import HomePage from '../HomePage'
 import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
 import { config } from '../../config'
@@ -12,6 +12,9 @@ import { Props } from './Routes.types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 
+const LazyIntercom = React.lazy(() =>
+  import('decentraland-dapps/dist/components/Intercom')
+)
 const LazyBrowsePage = React.lazy(() => import('../BrowsePage'))
 const LazyAccountPage = React.lazy(() => import('../AccountPage'))
 const LazySignInPage = React.lazy(() => import('../SignInPage'))
@@ -23,7 +26,7 @@ const LazyCancelSalePage = React.lazy(() => import('../CancelSalePage'))
 const LazyTransferPage = React.lazy(() => import('../TransferPage'))
 const LazyActivityPage = React.lazy(() => import('../ActivityPage'))
 const LazyBidPage = React.lazy(() => import('../BidPage'))
-// const HomePage = React.lazy(() => import('../HomePage'))
+const LazyHomePage = React.lazy(() => import('../HomePage'))
 const LazyLegacyNFTPage = React.lazy(() => import('../LegacyNFTPage'))
 const LazyLandsPage = React.lazy(() => import('../LandsPage'))
 const LazyCollectionPage = React.lazy(() => import('../CollectionPage'))
@@ -94,7 +97,7 @@ const Routes = ({ inMaintenance }: Props) => {
         />
         <Route exact path={locations.settings()} component={LazySettingsPage} />
         <Route exact path={locations.activity()} component={LazyActivityPage} />
-        <Route exact path={locations.root()} component={HomePage} />
+        <Route exact path={locations.root()} component={LazyHomePage} />
         <Route exact path={locations.parcel()} component={LazyLegacyNFTPage} />
         <Route exact path={locations.estate()} component={LazyLegacyNFTPage} />
         <Redirect
@@ -105,7 +108,7 @@ const Routes = ({ inMaintenance }: Props) => {
         <Redirect to={locations.root()} />
       </Switch>
       {APP_ID ? (
-        <Intercom appId={APP_ID} settings={{ alignment: 'right' }} />
+        <LazyIntercom appId={APP_ID} settings={{ alignment: 'right' }} />
       ) : null}
     </React.Suspense>
   )

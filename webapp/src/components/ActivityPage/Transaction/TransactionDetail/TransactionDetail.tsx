@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Loader, Icon } from 'decentraland-ui'
+import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
 import { Network } from '@dcl/schemas'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'

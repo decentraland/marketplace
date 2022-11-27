@@ -1,6 +1,9 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import { AtlasTile, AtlasProps } from 'decentraland-ui'
+import {
+  AtlasTile,
+  AtlasProps
+} from 'decentraland-ui/dist/components/Atlas/Atlas'
 import { OnRentNFT } from '../../modules/ui/browse/types'
 import { NFT } from '../../modules/nft/types'
 import { Contract } from '../../modules/vendor/services'

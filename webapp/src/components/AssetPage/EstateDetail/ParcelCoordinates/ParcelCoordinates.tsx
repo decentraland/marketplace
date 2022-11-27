@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header } from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 

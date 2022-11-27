@@ -1,4 +1,4 @@
-import { Header } from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
 
 import { Props } from './ArrayFilter.types'
 import './ArrayFilter.css'

@@ -1,4 +1,5 @@
-import { Header, Dropdown } from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Dropdown } from 'decentraland-ui/dist/components/Dropdown/Dropdown'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { Props } from './SelectFilter.types'

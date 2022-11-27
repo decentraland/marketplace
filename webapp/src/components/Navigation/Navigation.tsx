@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Tabs, Mobile } from 'decentraland-ui'
+import { Tabs } from 'decentraland-ui/dist/components/Tabs/Tabs'
+import { Mobile } from 'decentraland-ui/dist/components/Media/Media'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import * as decentraland from '../../modules/vendor/decentraland'
 import { locations } from '../../modules/routing/locations'

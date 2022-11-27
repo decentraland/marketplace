@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
-import { UserMenuProps } from 'decentraland-ui'
+import { UserMenuProps } from 'decentraland-ui/dist/components/UserMenu/UserMenu'
 
 export type Props = Partial<UserMenuProps>
 

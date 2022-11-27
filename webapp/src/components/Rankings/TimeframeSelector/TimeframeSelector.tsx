@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'decentraland-ui'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AnalyticsTimeframe } from '../../../modules/analytics/types'
 

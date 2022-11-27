@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Image } from 'decentraland-ui'
+import Image from 'semantic-ui-react/dist/commonjs/elements/Image'
 
 import { Props } from './MenuItem.types'
 import './MenuItem.css'

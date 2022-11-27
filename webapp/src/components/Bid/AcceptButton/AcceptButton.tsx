@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Popup } from 'decentraland-ui'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Popup } from 'decentraland-ui/dist/components/Popup/Popup'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { useFingerprint } from '../../../modules/nft/hooks'

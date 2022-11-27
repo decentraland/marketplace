@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { Loader } from 'decentraland-ui'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
 import { isVendor } from '../../modules/vendor/utils'
 import { VendorName } from '../../modules/vendor/types'
 import { View } from '../../modules/ui/types'

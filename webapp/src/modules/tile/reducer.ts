@@ -1,4 +1,4 @@
-import { AtlasTile } from 'decentraland-ui'
+import { AtlasTile } from 'decentraland-ui/dist/components/Atlas/Atlas'
 import {
   LoadingState,
   loadingReducer

@@ -1,6 +1,6 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
 import { RentalStatus } from '@dcl/schemas'
-import { Atlas, AtlasTile } from 'decentraland-ui'
+import { Atlas, AtlasTile } from 'decentraland-ui/dist/components/Atlas/Atlas'
 import { ATLAS_SERVER_URL } from '../../modules/vendor/decentraland'
 import {
   FETCH_TILES_REQUEST,

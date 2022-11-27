@@ -1,6 +1,5 @@
 import React from 'react'
-// Todo extract Icon
-import { Icon } from 'decentraland-ui'
+import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon'
 import { isValid } from 'date-fns'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './Expiration.types'

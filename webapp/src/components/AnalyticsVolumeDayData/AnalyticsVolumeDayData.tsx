@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import CountUp from 'react-countup'
 // TODO: Split these components
-import { Icon, SemanticICONS, NotMobile, Mobile } from 'decentraland-ui'
+import { Icon, SemanticICONS } from 'decentraland-ui'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { NotMobile, Mobile } from 'decentraland-ui/dist/components/Media/Media'
 import { HeaderMenu } from 'decentraland-ui/dist/components/HeaderMenu/HeaderMenu'
 import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
 import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'

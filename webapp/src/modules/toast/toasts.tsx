@@ -1,4 +1,5 @@
-import { Button, ToastType } from 'decentraland-ui'
+import { ToastType } from 'decentraland-ui/dist/components/Toast/Toast'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { UpsertRentalOptType } from '../rental/types'
