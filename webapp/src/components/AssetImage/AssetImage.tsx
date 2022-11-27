@@ -1,25 +1,23 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { Env } from '@dcl/ui-env'
 import classNames from 'classnames'
 import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import {
-  Button,
-  Center,
-  Icon,
-  Loader,
-  Popup,
-  WearablePreview
-} from 'decentraland-ui'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Center } from 'decentraland-ui/dist/components/Center/Center'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Popup } from 'decentraland-ui/dist/components/Popup/Popup'
+import { WearablePreview } from 'decentraland-ui/dist/components/WearablePreview/WearablePreview'
+import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon'
 
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
+import { config } from '../../config'
 import { Atlas } from '../Atlas'
 import { ControlOptionAction, Props } from './AssetImage.types'
 import './AssetImage.css'
-import { config } from '../../config'
-import { Env } from '@dcl/ui-env'
 
 // 1x1 transparent pixel
 const PIXEL =

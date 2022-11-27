@@ -1,6 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Page, Header, Button, Modal } from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { locations } from '../../modules/routing/locations'

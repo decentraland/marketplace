@@ -3,9 +3,14 @@ import { ethers } from 'ethers'
 import classNames from 'classnames'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
-import { Dropdown, DropdownItemProps, DropdownProps } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { RentalListingPeriod } from '@dcl/schemas'
+import {
+  Dropdown,
+  DropdownProps
+} from 'decentraland-ui/dist/components/Dropdown/Dropdown'
+// TODO: Extract
+import { DropdownItemProps } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatWeiMANA } from '../../../../lib/mana'
 import { Mana } from '../../../Mana'
 import { Props } from './PeriodsDropdown.types'

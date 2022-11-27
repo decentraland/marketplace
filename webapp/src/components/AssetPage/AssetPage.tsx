@@ -1,5 +1,10 @@
-import React from 'react'
-import { Page, Section, Column, Back, Narrow } from 'decentraland-ui'
+import React, { Suspense } from 'react'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
+import { Section } from 'decentraland-ui/dist/components/Section/Section'
+import { Column } from 'decentraland-ui/dist/components/Column/Column'
+import { Back } from 'decentraland-ui/dist/components/Back/Back'
+import { Narrow } from 'decentraland-ui/dist/components/Narrow/Narrow'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
 import { Sections } from '../../modules/routing/types'
@@ -7,16 +12,17 @@ import { AssetProviderPage } from '../AssetProviderPage'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { Footer } from '../Footer'
-import { ItemDetail } from './ItemDetail'
 import { ErrorBoundary } from './ErrorBoundary'
 import { Props } from './AssetPage.types'
-import { ParcelDetail } from './ParcelDetail'
-import { EstateDetail } from './EstateDetail'
-import { WearableDetail } from './WearableDetail'
-import { ENSDetail } from './ENSDetail'
-import { EmoteDetail } from './EmoteDetail'
 import { AssetProvider } from '../AssetProvider'
 import './AssetPage.css'
+
+const LazyItemDetail = React.lazy(() => import('./ItemDetail'))
+const LazyEmoteDetail = React.lazy(() => import('./EmoteDetail'))
+const LazyParcelDetail = React.lazy(() => import('./ParcelDetail'))
+const LazyEstateDetail = React.lazy(() => import('./EstateDetail'))
+const LazyWearableDetail = React.lazy(() => import('./WearableDetail'))
+const LazyENSDetail = React.lazy(() => import('./ENSDetail'))
 
 const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
   return (
@@ -92,29 +98,53 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
                     mapAsset<React.ReactNode>(
                       asset,
                       {
-                        wearable: item => <ItemDetail item={item} />,
-                        emote: item => <ItemDetail item={item} />
+                        wearable: item => (
+                          <Suspense fallback={<Loader size="huge" />}>
+                            <LazyItemDetail item={item} />
+                          </Suspense>
+                        ),
+                        emote: item => (
+                          <Suspense fallback={<Loader size="huge" />}>
+                            <LazyItemDetail item={item} />
+                          </Suspense>
+                        )
                       },
                       {
-                        ens: nft => <ENSDetail nft={nft} />,
+                        ens: nft => (
+                          <Suspense fallback={<Loader size="huge" />}>
+                            <LazyENSDetail nft={nft} />
+                          </Suspense>
+                        ),
                         estate: nft => (
-                          <EstateDetail
-                            nft={nft}
-                            order={order}
-                            rental={rental}
-                            isRentalsEnabled={isRentalsEnabled}
-                          />
+                          <Suspense fallback={<Loader size="huge" />}>
+                            <LazyEstateDetail
+                              nft={nft}
+                              order={order}
+                              rental={rental}
+                              isRentalsEnabled={isRentalsEnabled}
+                            />
+                          </Suspense>
                         ),
                         parcel: nft => (
-                          <ParcelDetail
-                            nft={nft}
-                            order={order}
-                            rental={rental}
-                            isRentalsEnabled={isRentalsEnabled}
-                          />
+                          <Suspense fallback={<Loader size="huge" />}>
+                            <LazyParcelDetail
+                              nft={nft}
+                              order={order}
+                              rental={rental}
+                              isRentalsEnabled={isRentalsEnabled}
+                            />
+                          </Suspense>
                         ),
-                        wearable: nft => <WearableDetail nft={nft} />,
-                        emote: nft => <EmoteDetail nft={nft} />
+                        wearable: nft => (
+                          <Suspense fallback={<Loader size="huge" />}>
+                            <LazyWearableDetail nft={nft} />
+                          </Suspense>
+                        ),
+                        emote: nft => (
+                          <Suspense fallback={<Loader size="huge" />}>
+                            <LazyEmoteDetail nft={nft} />
+                          </Suspense>
+                        )
                       },
                       () => null
                     )

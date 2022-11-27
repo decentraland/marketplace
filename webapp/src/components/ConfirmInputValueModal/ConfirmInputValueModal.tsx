@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { Modal, Button, Form } from 'decentraland-ui'
+import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import Form from 'semantic-ui-react/dist/commonjs/collections/Form'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './ConfirmInputValueModal.types'
 import { ManaField } from '../ManaField'

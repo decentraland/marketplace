@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Modal, Button } from 'decentraland-ui'
+import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { isAuthorized } from '../SettingsPage/Authorization/utils'

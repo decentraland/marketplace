@@ -1,5 +1,5 @@
 import React from 'react'
-import { Badge } from 'decentraland-ui'
+import { Badge } from 'decentraland-ui/dist/components/Badge/Badge'
 import { Props } from './Coordinate.types'
 import styles from './Coordinate.module.css'
 

@@ -1,7 +1,9 @@
 import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Card } from 'decentraland-ui/dist/components/Card/Card'
 import { Link } from 'react-router-dom'
-import { Card, Icon } from 'decentraland-ui'
+// TODO extract Icon
+import { Icon } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'

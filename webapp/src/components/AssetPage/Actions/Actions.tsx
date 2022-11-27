@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Modal, Button } from 'decentraland-ui'
+import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { AssetType } from '../../../modules/asset/types'
 import { VendorFactory } from '../../../modules/vendor'
+import { builderUrl } from '../../../lib/environment'
 import { Props } from './Actions.types'
 import styles from './Actions.module.css'
-import { builderUrl } from '../../../lib/environment'
 
 const Actions = (props: Props) => {
   const { wallet, nft, order, bids } = props

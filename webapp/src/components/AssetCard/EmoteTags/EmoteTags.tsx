@@ -1,5 +1,5 @@
 import { NFTCategory } from '@dcl/schemas'
-import { Popup } from 'decentraland-ui'
+import { Popup } from 'decentraland-ui/dist/components/Popup/Popup'
 import classNames from 'classnames'
 import { T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../../modules/asset/types'

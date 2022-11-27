@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stats } from 'decentraland-ui'
+import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { Props } from './Network.types'

@@ -1,6 +1,6 @@
 import React from 'react'
+import { Center } from 'decentraland-ui/dist/components/Center/Center'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Center } from 'decentraland-ui'
 import { Props, State } from './ErrorBoundary.types'
 
 export default class ErrorBoundary extends React.Component<Props, State> {

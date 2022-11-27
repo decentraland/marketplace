@@ -1,7 +1,9 @@
 import React from 'react'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
-import { Page, Header, Button } from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
 
 import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'

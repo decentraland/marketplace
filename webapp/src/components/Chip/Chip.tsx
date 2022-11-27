@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Icon } from 'decentraland-ui'
+import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon'
 
 import { Props } from './Chip.types'
 

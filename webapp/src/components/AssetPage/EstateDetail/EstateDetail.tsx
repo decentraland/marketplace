@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Badge } from 'decentraland-ui'
+import { Badge } from 'decentraland-ui/dist/components/Badge/Badge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isLand } from '../../../modules/nft/utils'
 import { AssetImage } from '../../AssetImage'

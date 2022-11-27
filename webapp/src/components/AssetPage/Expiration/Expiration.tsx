@@ -1,4 +1,5 @@
 import React from 'react'
+// Todo extract Icon
 import { Icon } from 'decentraland-ui'
 import { isValid } from 'date-fns'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'

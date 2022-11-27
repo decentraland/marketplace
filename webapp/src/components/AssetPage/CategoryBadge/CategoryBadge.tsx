@@ -3,8 +3,8 @@ import { EmoteCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getSearchSection } from '../../../modules/routing/search'
 import { locations } from '../../../modules/routing/locations'
-import IconBadge from '../IconBadge'
 import { BrowseOptions } from '../../../modules/routing/types'
+import IconBadge from '../IconBadge'
 import { Props } from './CategoryBadge.types'
 
 const CategoryBadge = ({ category, assetType }: Props) => {

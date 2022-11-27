@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react'
-import { Header, Button } from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { Link } from 'react-router-dom'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {

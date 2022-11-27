@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react'
-import { Card, Button, Loader } from 'decentraland-ui'
 import { Item } from '@dcl/schemas'
+import { Card } from 'decentraland-ui/dist/components/Card/Card'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 

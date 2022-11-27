@@ -1,5 +1,5 @@
 import React from 'react'
-import { Badge } from 'decentraland-ui'
+import { Badge } from 'decentraland-ui/dist/components/Badge/Badge'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetImage } from '../../AssetImage'
 import { Network } from '../Network'

@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { Header } from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { Row } from '../../Layout/Row'

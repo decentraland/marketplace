@@ -1,7 +1,7 @@
 import React from 'react'
 import { ethers } from 'ethers'
 import { Item, Network } from '@dcl/schemas'
-import { Page } from 'decentraland-ui'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
@@ -44,7 +44,11 @@ const BuyPage = (props: Props) => {
                 const modalProps = {
                   wallet: wallet,
                   isOwner: isOwnedBy(asset, wallet),
-                  hasInsufficientMANA: isInsufficientMANA(wallet, network, price),
+                  hasInsufficientMANA: isInsufficientMANA(
+                    wallet,
+                    network,
+                    price
+                  ),
                   hasLowPrice:
                     wallet.chainId !== asset.chainId && isPriceTooLow(price)
                 }

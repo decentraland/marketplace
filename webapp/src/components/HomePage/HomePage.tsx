@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Page } from 'decentraland-ui'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../modules/routing/locations'

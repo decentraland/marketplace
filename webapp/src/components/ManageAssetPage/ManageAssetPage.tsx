@@ -1,18 +1,18 @@
 import { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
+import { Back } from 'decentraland-ui/dist/components/Back/Back'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Footer } from 'decentraland-ui/dist/components/Footer/Footer'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
 import {
-  Back,
-  Button,
-  Footer,
-  Loader,
   Mobile,
-  Narrow,
   NotMobile,
-  Page,
-  Popup,
-  Section,
   useMobileMediaQuery
-} from 'decentraland-ui'
+} from 'decentraland-ui/dist/components/Media'
+import { Narrow } from 'decentraland-ui/dist/components/Narrow/Narrow'
+import { Popup } from 'decentraland-ui/dist/components/Popup/Popup'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
+import { Section } from 'decentraland-ui/dist/components/Section/Section'
 import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../modules/asset/types'

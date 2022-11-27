@@ -1,4 +1,5 @@
-import { Button, Card } from 'decentraland-ui'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Card } from 'decentraland-ui/dist/components/Card/Card'
 import React from 'react'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getMinSaleValueInWei } from '../utils'

@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Radio } from 'decentraland-ui'
+import { Radio } from 'decentraland-ui/dist/components/Radio/Radio'
 import { Box } from '../Box'
 import { Props } from './RadioBox.types'
 import styles from './RadioBox.module.css'

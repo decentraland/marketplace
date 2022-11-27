@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import CountUp from 'react-countup'
-import {
-  HeaderMenu,
-  Header,
-  Stats,
-  Icon,
-  Loader,
-  Mana,
-  Popup,
-  SemanticICONS,
-  NotMobile,
-  Mobile
-} from 'decentraland-ui'
+// TODO: Split these components
+import { Icon, SemanticICONS, NotMobile, Mobile } from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { HeaderMenu } from 'decentraland-ui/dist/components/HeaderMenu/HeaderMenu'
+import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Mana } from 'decentraland-ui/dist/components/Mana/Mana'
+import { Popup } from 'decentraland-ui/dist/components/Popup/Popup'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   AnalyticsTimeframe,

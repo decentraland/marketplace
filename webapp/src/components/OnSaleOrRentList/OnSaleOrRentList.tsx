@@ -1,12 +1,10 @@
 import React, { useMemo, useRef, useState } from 'react'
-import {
-  Table,
-  Loader,
-  TextFilter,
-  Dropdown,
-  Pagination,
-  NotMobile
-} from 'decentraland-ui'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { TextFilter } from 'decentraland-ui/dist/components/TextFilter/TextFilter'
+import { Dropdown } from 'decentraland-ui/dist/components/Dropdown/Dropdown'
+import { Pagination } from 'decentraland-ui/dist/components/Pagination/Pagination'
+import { NotMobile } from 'decentraland-ui/dist/components/Media'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { OnSaleOrRentType, Props } from './OnSaleOrRentList.types'
 import { SortBy } from '../../modules/routing/types'

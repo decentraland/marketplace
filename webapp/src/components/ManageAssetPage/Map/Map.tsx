@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { NFTCategory } from '@dcl/schemas'
-import { Badge } from 'decentraland-ui'
+import { Badge } from 'decentraland-ui/dist/components/Badge/Badge'
 import { AssetImage } from '../../AssetImage'
 import { JumpIn } from '../../AssetPage/JumpIn'
 import { Coordinate } from '../../Coordinate'

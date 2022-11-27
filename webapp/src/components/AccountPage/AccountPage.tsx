@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
-import { Page, Loader, Center } from 'decentraland-ui'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Center } from 'decentraland-ui/dist/components/Center/Center'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AddressProvider } from 'decentraland-dapps/dist/containers/AddressProvider'
 import { View } from '../../modules/ui/types'

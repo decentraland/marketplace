@@ -1,5 +1,5 @@
 import React from 'react'
-import { Header } from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Sections } from '../../../modules/routing/types'
 import { Section } from '../../../modules/vendor/decentraland'

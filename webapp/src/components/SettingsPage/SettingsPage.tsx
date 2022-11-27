@@ -5,7 +5,11 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
-import { Page, Grid, Blockie, Loader, Form } from 'decentraland-ui'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
+import { Blockie } from 'decentraland-ui/dist/components/Blockie/Blockie'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import Form from 'semantic-ui-react/dist/commonjs/collections/Form'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid'
 import { ContractName } from 'decentraland-transactions'
 
 import { locations } from '../../modules/routing/locations'
@@ -98,8 +102,8 @@ const SettingsPage = (props: Props) => {
       !!contract &&
       (contract.category === NFTCategory.PARCEL ||
         contract.category === NFTCategory.ESTATE) &&
-        rentals &&
-        authorization.authorizedAddress === rentals.address
+      rentals &&
+      authorization.authorizedAddress === rentals.address
     )
   })
 

@@ -1,5 +1,6 @@
 import React from 'react'
-import { Mobile, NotMobile, Table } from 'decentraland-ui'
+import { Mobile, NotMobile } from 'decentraland-ui/dist/components/Media'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana } from '../../Mana'
 import { formatWeiMANA } from '../../../lib/mana'

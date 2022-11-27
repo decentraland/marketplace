@@ -1,5 +1,5 @@
 import { NFTCategory } from '@dcl/schemas'
-import { SmartIcon } from 'decentraland-ui'
+import { SmartIcon } from 'decentraland-ui/dist/components/SmartIcon/SmartIcon'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'

@@ -1,5 +1,15 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
-import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
+import React, {
+  ReactNode,
+  Suspense,
+  useCallback,
+  useEffect,
+  useState
+} from 'react'
+import { Mobile, NotMobile } from 'decentraland-ui/dist/components/Media'
+import { Container } from 'decentraland-ui/dist/components/Container/Container'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
+import { Tabs } from 'decentraland-ui/dist/components/Tabs/Tabs'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
@@ -7,12 +17,10 @@ import { AssetType } from '../../modules/asset/types'
 import { VendorName } from '../../modules/vendor'
 import { Section, Sections } from '../../modules/vendor/routing/types'
 import { Atlas } from '../Atlas'
-import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
 import { NFTFilters } from '../Vendor/NFTFilters'
-import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './AssetBrowse.types'
 import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
 import { ToggleBox } from './ToggleBox'
@@ -24,6 +32,9 @@ import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
 import './AssetBrowse.css'
+
+const LazyNFTSidebar = React.lazy(() => import('../Vendor/NFTSidebar'))
+const LazyAccountSidebar = React.lazy(() => import('../AccountSidebar'))
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
@@ -169,11 +180,17 @@ const AssetBrowse = (props: Props) => {
       )}
       <NotMobile>
         {view === View.ACCOUNT ? (
-          <AccountSidebar address={address!} />
+          <Suspense fallback={<Loader size="big" />}>
+            <LazyAccountSidebar address={address!} />
+          </Suspense>
         ) : view === View.CURRENT_ACCOUNT ? (
-          <AccountSidebar address={address!} isCurrentAccount />
+          <Suspense fallback={<Loader size="big" />}>
+            <LazyAccountSidebar address={address!} isCurrentAccount />
+          </Suspense>
         ) : (
-          <NFTSidebar section={section} sections={sections} />
+          <Suspense fallback={<Loader size="big" />}>
+            <LazyNFTSidebar section={section} sections={sections} />
+          </Suspense>
         )}
       </NotMobile>
     </>

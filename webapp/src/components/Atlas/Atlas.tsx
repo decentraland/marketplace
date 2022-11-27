@@ -3,16 +3,16 @@ import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Atlas as AtlasComponent,
-  AtlasTile,
-  Color,
-  Layer
-} from 'decentraland-ui'
+  Layer,
+  AtlasTile
+} from 'decentraland-ui/dist/components/Atlas/Atlas'
+import { Color } from 'decentraland-ui/dist/colors'
 import { locations } from '../../modules/routing/locations'
+import { VendorName } from '../../modules/vendor'
 import { isErrorWithMessage } from '../../lib/error'
 import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
-import { Props, Tile } from './Atlas.types'
-import { VendorName } from '../../modules/vendor'
 import { NFT } from '../../modules/nft/types'
+import { Props, Tile } from './Atlas.types'
 import Popup from './Popup'
 import './Atlas.css'
 

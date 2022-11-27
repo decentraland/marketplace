@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Header } from 'decentraland-ui'
-import { Props } from './BidList.types'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Bid } from '../../Bid'
+import { Props } from './BidList.types'
 import './BidList.css'
 
 const BidList = (props: Props) => {

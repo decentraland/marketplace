@@ -1,5 +1,6 @@
 import React from 'react'
-import { Header, Stats } from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTCategory, Rarity } from '@dcl/schemas'
 import styles from './WearableDetail.module.css'

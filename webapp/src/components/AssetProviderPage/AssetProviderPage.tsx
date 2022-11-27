@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { RentalStatus } from '@dcl/schemas'
-import { Loader } from 'decentraland-ui'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../modules/asset/types'
 import { AssetProvider } from '../AssetProvider'

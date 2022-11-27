@@ -1,15 +1,13 @@
 import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import { RentalListing, RentalStatus } from '@dcl/schemas'
-import {
-  Header,
-  Table,
-  Mobile,
-  NotMobile,
-  Pagination,
-  Loader,
-  Row
-} from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Pagination } from 'decentraland-ui/dist/components/Pagination/Pagination'
+import { Mobile, NotMobile } from 'decentraland-ui/dist/components/Media/Media'
+// TODO: Extract Row
+import { Row } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import dateFnsFormat from 'date-fns/format'

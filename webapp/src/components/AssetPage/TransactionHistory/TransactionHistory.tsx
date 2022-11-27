@@ -1,18 +1,15 @@
 import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
+import dateFnsFormat from 'date-fns/format'
 import { Sale } from '@dcl/schemas'
-import {
-  Header,
-  Table,
-  Mobile,
-  NotMobile,
-  Pagination,
-  Loader,
-  Row
-} from 'decentraland-ui'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
+import { Mobile, NotMobile } from 'decentraland-ui/dist/components/Media'
+import { Pagination } from 'decentraland-ui/dist/components/Pagination/Pagination'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Row } from 'decentraland-ui/dist/components/Row/Row'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Profile } from 'decentraland-dapps/dist/containers'
-import dateFnsFormat from 'date-fns/format'
 
 import { Mana } from '../../Mana'
 import { locations } from '../../../modules/routing/locations'
