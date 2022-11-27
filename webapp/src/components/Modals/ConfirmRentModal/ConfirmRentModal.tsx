@@ -3,14 +3,12 @@ import { ethers } from 'ethers'
 import { isAddress } from 'ethers/lib/utils'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
-import {
-  ModalNavigation,
-  Message,
-  Loader,
-  Button,
-  Field,
-  Checkbox
-} from 'decentraland-ui'
+import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
+import { Message } from 'decentraland-ui/dist/components/Message/Message'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Field } from 'decentraland-ui/dist/components/Field/Field'
+import Checkbox from 'semantic-ui-react/dist/commonjs/modules/Checkbox'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { formatWeiMANA } from '../../../lib/mana'

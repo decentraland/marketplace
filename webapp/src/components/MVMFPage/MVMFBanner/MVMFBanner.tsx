@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import classNames from 'classnames'
-import { Button, Container } from 'decentraland-ui'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Container } from 'decentraland-ui/dist/components/Container/Container'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import * as decentraland from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'

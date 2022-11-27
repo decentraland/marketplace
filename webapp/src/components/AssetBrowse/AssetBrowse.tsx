@@ -16,25 +16,25 @@ import { Section as DecentralandSection } from '../../modules/vendor/decentralan
 import { AssetType } from '../../modules/asset/types'
 import { VendorName } from '../../modules/vendor'
 import { Section, Sections } from '../../modules/vendor/routing/types'
-import { Atlas } from '../Atlas'
-import { AssetList } from '../AssetList'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
-import { NFTFilters } from '../Vendor/NFTFilters'
 import { Props } from './AssetBrowse.types'
 import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
 import { ToggleBox } from './ToggleBox'
 import classNames from 'classnames'
 import { isAccountView, isLandSection } from '../../modules/ui/utils'
-import OnSaleList from '../OnSaleOrRentList'
-import CollectionList from '../CollectionList'
-import StoreSettings from '../StoreSettings'
-import Sales from '../Sales'
-import { Bids } from '../Bids'
 import './AssetBrowse.css'
 
+const LazyNFTFilters = React.lazy(() => import('../Vendor/NFTFilters'))
+const LazyAssetList = React.lazy(() => import('../AssetList'))
+const LazyAtlas = React.lazy(() => import('../Atlas'))
 const LazyNFTSidebar = React.lazy(() => import('../Vendor/NFTSidebar'))
 const LazyAccountSidebar = React.lazy(() => import('../AccountSidebar'))
+const LazyCollectionList = React.lazy(() => import('../CollectionList'))
+const LazyOnSaleList = React.lazy(() => import('../OnSaleOrRentList'))
+const LazyStoreSettings = React.lazy(() => import('../StoreSettings'))
+const LazySales = React.lazy(() => import('../Sales'))
+const LazyBids = React.lazy(() => import('../Bids'))
 
 const hasPrimarySales = (section?: Section) => {
   switch (section) {
@@ -200,22 +200,46 @@ const AssetBrowse = (props: Props) => {
 
   switch (section) {
     case DecentralandSection.COLLECTIONS:
-      right = <CollectionList />
+      right = (
+        <Suspense fallback={<Loader size="big" />}>
+          <LazyCollectionList />
+        </Suspense>
+      )
       break
     case DecentralandSection.ON_SALE:
-      right = <OnSaleList onSaleOrRentType={OnSaleOrRentType.SALE} />
+      right = (
+        <Suspense fallback={<Loader size="big" />}>
+          <LazyOnSaleList onSaleOrRentType={OnSaleOrRentType.SALE} />
+        </Suspense>
+      )
       break
     case DecentralandSection.ON_RENT:
-      right = <OnSaleList onSaleOrRentType={OnSaleOrRentType.RENT} />
+      right = (
+        <Suspense fallback={<Loader size="big" />}>
+          <LazyOnSaleList onSaleOrRentType={OnSaleOrRentType.RENT} />
+        </Suspense>
+      )
       break
     case DecentralandSection.SALES:
-      right = <Sales />
+      right = (
+        <Suspense fallback={<Loader size="big" />}>
+          <LazySales />
+        </Suspense>
+      )
       break
     case DecentralandSection.BIDS:
-      right = <Bids />
+      right = (
+        <Suspense fallback={<Loader size="big" />}>
+          <LazyBids />
+        </Suspense>
+      )
       break
     case DecentralandSection.STORE_SETTINGS:
-      right = <StoreSettings />
+      right = (
+        <Suspense fallback={<Loader size="big" />}>
+          <LazyStoreSettings />
+        </Suspense>
+      )
       break
     default:
       right = (
@@ -223,24 +247,32 @@ const AssetBrowse = (props: Props) => {
           {isMap && isFullscreen ? (
             <div className="blur-background">
               <Container>
-                <NFTFilters isMap={isMap} />
+                <Suspense fallback={<Loader size="big" />}>
+                  <LazyNFTFilters isMap={isMap} />
+                </Suspense>
               </Container>
             </div>
           ) : (
-            <NFTFilters isMap={Boolean(isMap)} contracts={contracts} />
+            <Suspense fallback={<Loader size="big" />}>
+              <LazyNFTFilters isMap={Boolean(isMap)} contracts={contracts} />
+            </Suspense>
           )}
           {isMap ? (
             <div className="Atlas">
-              <Atlas withNavigation withPopup showOnSale={onlyOnSale} />
+              <Suspense fallback={<Loader size="big" />}>
+                <LazyAtlas withNavigation withPopup showOnSale={onlyOnSale} />
+              </Suspense>
               <div
                 className="fullscreen-button"
                 onClick={handleSetFullscreen}
               />
             </div>
           ) : (
-            <AssetList
-              isManager={view === View.CURRENT_ACCOUNT && isRentalsEnabled}
-            />
+            <Suspense fallback={<Loader size="big" />}>
+              <LazyAssetList
+                isManager={view === View.CURRENT_ACCOUNT && isRentalsEnabled}
+              />
+            </Suspense>
           )}
         </>
       )

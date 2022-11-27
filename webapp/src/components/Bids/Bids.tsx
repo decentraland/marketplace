@@ -1,5 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { Loader, HeaderMenu, Header, Button } from 'decentraland-ui'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { HeaderMenu } from 'decentraland-ui/dist/components/HeaderMenu/HeaderMenu'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { locations } from '../../modules/routing/locations'

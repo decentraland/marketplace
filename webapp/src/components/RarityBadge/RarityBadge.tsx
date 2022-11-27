@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { Popup } from 'decentraland-ui'
+import { Popup } from 'decentraland-ui/dist/components/Popup/Popup'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Rarity } from '@dcl/schemas'
 import { Props } from './RarityBadge.types'

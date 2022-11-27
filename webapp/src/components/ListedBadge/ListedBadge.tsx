@@ -1,7 +1,7 @@
 import classNames from 'classnames'
+import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon'
 import { Badge } from 'decentraland-ui/dist/components/Badge/Badge'
-// TODO: Extract other imports
-import { Color, Icon } from 'decentraland-ui'
+import { Color } from 'decentraland-ui/dist/colors'
 import styles from './ListedBadge.module.css'
 
 type Props = {

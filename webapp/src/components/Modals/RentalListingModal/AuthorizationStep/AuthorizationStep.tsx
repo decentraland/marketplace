@@ -1,11 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import {
-  Modal,
-  Button,
-  ModalNavigation,
-  Loader,
-  Message
-} from 'decentraland-ui'
+import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Message } from 'decentraland-ui/dist/components/Message/Message'
+import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
 import {
   Authorization,
   AuthorizationType

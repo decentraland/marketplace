@@ -1,16 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react'
+// TODO: Extract from DCL ui
+import { CheckboxProps } from 'decentraland-ui'
+import { Radio } from 'decentraland-ui/dist/components/Radio/Radio'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import {
-  Radio,
-  CheckboxProps,
-  Button,
-  Header,
   Dropdown,
-  DropdownProps,
-  Responsive,
-  Modal,
-  Icon,
-  NotMobile
-} from 'decentraland-ui'
+  DropdownProps
+} from 'decentraland-ui/dist/components/Dropdown/Dropdown'
+import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
+import { NotMobile } from 'decentraland-ui/dist/components/Media/Media'
+import { Responsive } from 'decentraland-ui/dist/components/Responsive'
+import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon'
+
 import { EmotePlayMode, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 

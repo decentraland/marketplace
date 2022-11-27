@@ -2,16 +2,14 @@ import React, { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { EmotePlayMode, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Row,
-  Column,
-  SmartIcon,
-  Popup,
-  Mobile,
-  NotMobile,
-  Header,
-  Radio
-} from 'decentraland-ui'
+import { Row } from 'decentraland-ui/dist/components/Row/Row'
+import { Column } from 'decentraland-ui/dist/components/Column/Column'
+import { Popup } from 'decentraland-ui/dist/components/Popup/Popup'
+import { Mobile, NotMobile } from 'decentraland-ui/dist/components/Media/Media'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Radio } from 'decentraland-ui/dist/components/Radio/Radio'
+import { SmartIcon } from 'decentraland-ui/dist/components/SmartIcon/SmartIcon'
+
 import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { Contract } from '../../../../modules/vendor/services'
 import { ArrayFilter } from '../ArrayFilter'
