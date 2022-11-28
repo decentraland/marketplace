@@ -152,6 +152,7 @@ const BidModal = (props: Props) => {
         <div className="buttons">
           <Button
             as="div"
+            disabled={isLoading || isPlacingBid}
             onClick={() =>
               onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
             }

@@ -15,7 +15,7 @@ import {
 import TransferPage from './TransferPage'
 
 const mapState = (state: RootState): MapStateProps => ({
-  isTransfering: isLoadingType(getLoading(state), TRANSFER_NFT_REQUEST)
+  isTransferring: isLoadingType(getLoading(state), TRANSFER_NFT_REQUEST)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
