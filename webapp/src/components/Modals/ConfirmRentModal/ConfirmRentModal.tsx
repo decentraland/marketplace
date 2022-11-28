@@ -62,7 +62,7 @@ const ConfirmRentModal = ({
       size="small"
       className={styles.modal}
       name={t('rental_modal.confirm_rent_step.title')}
-      onClose={onClose}
+      onClose={!isLoading ? onClose : undefined}
     >
       <ModalNavigation title={t('rental_modal.confirm_rent_step.title')} />
       <Modal.Content>

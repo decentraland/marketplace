@@ -30,6 +30,7 @@ const AuthorizationStep = (props: Props) => {
 
   // State
   const [showError, setShowError] = useState(false)
+  const isLoading = isConfirmingAuthorization || isAuthorizing
 
   // Authorization
   const rentalContractData = getContract(ContractName.Rentals, nft.chainId)
@@ -70,7 +71,7 @@ const AuthorizationStep = (props: Props) => {
     <>
       <ModalNavigation
         title={t('rental_modal.authorization_step.title')}
-        onClose={onCancel}
+        onClose={!isLoading ? onCancel : undefined}
       />
       <Modal.Content>
         <div className={styles.notice}>
@@ -133,17 +134,14 @@ const AuthorizationStep = (props: Props) => {
         ) : (
           <Button
             primary
-            loading={isConfirmingAuthorization || isAuthorizing}
+            loading={isLoading}
             onClick={handleSubmit}
-            disabled={isConfirmingAuthorization || isAuthorizing}
+            disabled={isLoading}
           >
             {t('global.proceed')}
           </Button>
         )}
-        <Button
-          onClick={handleCancel}
-          disabled={isConfirmingAuthorization || isAuthorizing}
-        >
+        <Button onClick={handleCancel} disabled={isLoading}>
           {t('global.cancel')}
         </Button>
         {showError && (

@@ -22,6 +22,10 @@ const EditConfirmationStep = (props: Props) => {
 
   const [hasTriggeredStepOne, setHasTriggeredStepOne] = useState(false)
   const [isStepOneCompleted, setIsStepOneCompleted] = useState(false)
+  const isLoading =
+    isSubmittingRemoveTransaction ||
+    isRemoveTransactionBeingConfirmed ||
+    isSigning
 
   useEffect(() => {
     if (isRemoveTransactionBeingConfirmed) {
@@ -59,7 +63,7 @@ const EditConfirmationStep = (props: Props) => {
     <>
       <ModalNavigation
         title={t('rental_modal.confirmation_edit_step.title')}
-        onClose={onCancel}
+        onClose={!isLoading ? onCancel : undefined}
       />
       <Modal.Content>
         <div className={styles.notice}>
