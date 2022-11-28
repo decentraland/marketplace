@@ -8,10 +8,11 @@ import {
   checkFingerprint
 } from '../../../modules/bid/utils'
 import { isRentalListingExecuted } from '../../../modules/rental/utils'
+import { LandLockedPopup } from '../../LandLockedPopup'
 import { Props } from './AcceptButton.types'
 
 const AcceptButton = (props: Props) => {
-  const { nft, bid, onClick, rental } = props
+  const { nft, bid, onClick, rental, userAddress } = props
 
   const [fingerprint, isLoadingFingerprint] = useFingerprint(nft)
   const [hasInsufficientMANA, setHasInsufficientMANA] = useState(false)
@@ -68,11 +69,9 @@ const AcceptButton = (props: Props) => {
     )
   } else if (isCurrentlyRented) {
     button = (
-      <Popup
-        content={t('bid.cant_accept_bid_on_rented_land')}
-        position="top center"
-        trigger={<div className="popup-button">{button}</div>}
-      />
+      <LandLockedPopup asset={nft} rental={rental} address={userAddress}>
+        {button}
+      </LandLockedPopup>
     )
   }
 
