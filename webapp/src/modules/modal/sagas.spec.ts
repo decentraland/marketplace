@@ -93,10 +93,12 @@ describe('when handling the success action of a rental edit', () => {
 })
 
 describe('when handling the success action of a accepting a rental listing', () => {
+  let nft: NFT
   let rental: RentalListing
   let periodIndexChosen: number
 
   beforeEach(() => {
+    nft = { id: 'aNftId' } as NFT
     rental = { id: 'aRentalId' } as RentalListing
     periodIndexChosen = 0
   })
@@ -105,7 +107,7 @@ describe('when handling the success action of a accepting a rental listing', () 
     return expectSaga(modalSaga)
       .put(openModal('RentConfirmedModal', { rental, periodIndexChosen }))
       .put(closeModal('ConfirmRentModal'))
-      .dispatch(acceptRentalListingSuccess(rental, periodIndexChosen))
+      .dispatch(acceptRentalListingSuccess(nft, rental, periodIndexChosen))
       .silentRun()
   })
 })
