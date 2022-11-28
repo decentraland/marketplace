@@ -834,6 +834,7 @@
       "expiration_date": "Fecha de expiración de la publicación",
       "rent_periods": "Períodos de renta",
       "list_for_rent": "Publicar para la renta",
+      "view_listing": "Ver listado",
       "start_date": "Fecha de comienzo",
       "end_date": "Fecha de finalización",
       "rented_until": "En renta hasta el {date} por {tenant}",

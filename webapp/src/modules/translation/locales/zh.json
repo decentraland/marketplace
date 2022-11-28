@@ -836,6 +836,7 @@
       "expiration_date": "上市截止日期",
       "rent_periods": "租期",
       "list_for_rent": "发布出租",
+      "view_listing": "查看租赁列表",
       "start_date": "租金开始日期",
       "end_date": "租期结束日期",
       "rented_until": "由 {tenant} 租用至 {date}",

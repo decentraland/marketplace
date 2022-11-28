@@ -841,6 +841,7 @@
       "expiration_date": "Listing expiration date",
       "rent_periods": "Rent periods",
       "list_for_rent": "List for rent",
+      "view_listing": "View listing",
       "start_date": "Rent start date",
       "end_date": "Rent end date",
       "rented_until": "Rented until {date} by {tenant}",
