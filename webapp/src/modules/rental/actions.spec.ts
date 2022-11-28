@@ -62,7 +62,7 @@ describe('when creating the action to signal a success of the accept rental list
     expect(acceptRentalListingSuccess(nft, rental, periodIndexChosen)).toEqual({
       type: ACCEPT_RENTAL_LISTING_SUCCESS,
       meta: undefined,
-      payload: { rental, periodIndexChosen }
+      payload: { nft, rental, periodIndexChosen }
     })
   })
 })
