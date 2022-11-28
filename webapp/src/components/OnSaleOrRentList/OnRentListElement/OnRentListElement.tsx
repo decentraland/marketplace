@@ -2,6 +2,7 @@ import React from 'react'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
 import { RentalStatus } from '@dcl/schemas'
+import { isParcel } from '../../../modules/nft/utils'
 import { Icon, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -51,7 +52,9 @@ const OnRentListElement = ({
             {isClaimingBackLandTransactionPending ? (
               <span>
                 <Icon className="warning-icon" name="warning sign" />
-                {t('manage_asset_page.rent.claiming_back')}
+                {t('manage_asset_page.rent.claiming_back', {
+                  asset: isParcel(nft) ? t('menu.land') : t('menu.estate')
+                })}
               </span>
             ) : rental.status === RentalStatus.OPEN ? (
               t('on_rent_list.listed_for_rent')

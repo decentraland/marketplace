@@ -55,7 +55,9 @@
     "mvmf_2022": "元界节 2022",
     "period": "时期",
     "status": "地位",
-    "unknown_error": "不明错误"
+    "unknown_error": "不明错误",
+    "the_parcel": "地块",
+    "the_estate": "产业"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -815,16 +817,16 @@
   },
   "manage_asset_page": {
     "open_in_builder": "在 Builder 中打开",
-    "land_is_locked": "此操作将被锁定，直到租金完成并且土地已被收回。",
+    "land_is_locked": "此操作将被锁定，直到租金结束并且 {asset} 已被收回。",
     "transfer": "转移",
-    "cant_transfer_rented_land": "当 LAND 正在出租或尚未收回时，转移将暂停。",
+    "cant_transfer_rented_land": "{asset} 正在出租或尚未收回时暂停传输。",
     "sell": {
       "sell_title": "卖",
       "selling_title": "卖",
       "list_for_sale": "发布出售",
       "price": "价格",
       "expiration_date": "截止日期",
-      "cant_sell_rented_land": "在 LAND 被租用或尚未收回时，销售暂停。"
+      "cant_sell_rented_land": "{asset} 正在出租或尚未收回时暂停销售。"
     },
     "rent": {
       "rent_title": "租",
@@ -836,14 +838,14 @@
       "start_date": "租金开始日期",
       "end_date": "租期结束日期",
       "rented_until": "由 {tenant} 租用至 {date}",
-      "rent_end": "租期结束！ 你可以从 {tenant} 那里获得你的土地",
+      "rent_end": "租期结束！ 您可以向{tenant}索取您的{asset}",
       "claim_land": "索取土地",
       "list_for_rent_again": "再次发布出租",
-      "claiming_land": "收回你的土地。 此过程最多可能需要 24 小时。",
+      "claiming_land": "收回您的{asset}。 此过程最长可能需要 24 小时。",
       "view_transaction": "查看区块链交易",
-      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。",
-      "claiming_back": "收回土地",
-      "unclaimed_message": "该土地仍无人认领。 索回它以出售或转让它。"
+      "mobile_coming_soon": "手机租赁即将推出。 请转到桌面版租用此{asset}",
+      "claiming_back": "收回{asset}",
+      "unclaimed_message": "{asset} 仍无人认领。 索回以出售或转让。"
     },
     "highlights": {
       "title": "亮点",
@@ -858,9 +860,9 @@
     }
   },
   "claim_land_modal": {
-    "title": "开垦土地",
-    "action": "开垦土地",
-    "question": "你确定要收回你的土地吗?",
+    "title": "认领{asset}",
+    "action": "认领{asset}",
+    "question": "您确定要认领您的{asset}吗？",
     "disclaimer": "这将需要一笔交易，您需要支付其费用。",
     "confirm_transaction": "确认您钱包上的交易以继续"
   },

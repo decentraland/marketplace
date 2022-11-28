@@ -10,14 +10,14 @@ import {
   FETCH_NFT_SUCCESS
 } from '../nft/actions'
 import {
-  ClaimLandFailureAction,
-  ClaimLandRequestAction,
-  ClaimLandTransactionSubmitted,
-  ClaimLandSuccessAction,
-  CLAIM_LAND_FAILURE,
-  CLAIM_LAND_REQUEST,
-  CLAIM_LAND_TRANSACTION_SUBMITTED,
-  CLAIM_LAND_SUCCESS,
+  ClaimAssetFailureAction,
+  ClaimAssetRequestAction,
+  ClaimAssetTransactionSubmitted,
+  ClaimAssetSuccessAction,
+  CLAIM_ASSET_FAILURE,
+  CLAIM_ASSET_REQUEST,
+  CLAIM_ASSET_TRANSACTION_SUBMITTED,
+  CLAIM_ASSET_SUCCESS,
   ClearRentalErrors,
   CLEAR_RENTAL_ERRORS,
   UpsertRentalFailureAction,
@@ -62,10 +62,10 @@ type RentalReducerAction =
   | UpsertRentalRequestAction
   | UpsertRentalSuccessAction
   | UpsertRentalFailureAction
-  | ClaimLandRequestAction
-  | ClaimLandSuccessAction
-  | ClaimLandFailureAction
-  | ClaimLandTransactionSubmitted
+  | ClaimAssetRequestAction
+  | ClaimAssetSuccessAction
+  | ClaimAssetFailureAction
+  | ClaimAssetTransactionSubmitted
   | ClearRentalErrors
   | RemoveRentalRequestAction
   | RemoveRentalSuccessAction
@@ -85,7 +85,7 @@ export function rentalReducer(
   switch (action.type) {
     case REMOVE_RENTAL_TRANSACTION_SUBMITTED:
     case ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED:
-    case CLAIM_LAND_TRANSACTION_SUBMITTED: {
+    case CLAIM_ASSET_TRANSACTION_SUBMITTED: {
       return {
         ...state,
         isSubmittingTransaction: false
@@ -93,7 +93,7 @@ export function rentalReducer(
     }
     case ACCEPT_RENTAL_LISTING_REQUEST:
     case REMOVE_RENTAL_REQUEST:
-    case CLAIM_LAND_REQUEST: {
+    case CLAIM_ASSET_REQUEST: {
       return {
         ...state,
         isSubmittingTransaction: true,
@@ -147,7 +147,7 @@ export function rentalReducer(
       }
       return newState
     }
-    case CLAIM_LAND_SUCCESS: {
+    case CLAIM_ASSET_SUCCESS: {
       const { rental } = action.payload
       const newState = {
         ...state,
@@ -160,7 +160,7 @@ export function rentalReducer(
     }
     case REMOVE_RENTAL_FAILURE:
     case ACCEPT_RENTAL_LISTING_FAILURE:
-    case CLAIM_LAND_FAILURE:
+    case CLAIM_ASSET_FAILURE:
     case UPSERT_RENTAL_FAILURE: {
       const { error } = action.payload
       return {

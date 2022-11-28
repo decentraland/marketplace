@@ -3,7 +3,7 @@ import { toastSaga as baseToastSaga } from 'decentraland-dapps/dist/modules/toas
 import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { UPDATE_STORE_SUCCESS } from '../store/actions'
 import {
-  CLAIM_LAND_SUCCESS,
+  CLAIM_ASSET_SUCCESS,
   REMOVE_RENTAL_SUCCESS,
   UpsertRentalSuccessAction,
   UPSERT_RENTAL_SUCCESS
@@ -26,7 +26,7 @@ function* customToastSaga() {
 function* successToastSagas() {
   yield takeEvery(UPDATE_STORE_SUCCESS, handleStoreUpdateSuccess)
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleRemoveRentalSuccess)
-  yield takeEvery(CLAIM_LAND_SUCCESS, handleClaimLandBackSuccess)
+  yield takeEvery(CLAIM_ASSET_SUCCESS, handleClaimLandBackSuccess)
   yield takeEvery(UPSERT_RENTAL_SUCCESS, handleUpsertRentalSuccess)
 }
 

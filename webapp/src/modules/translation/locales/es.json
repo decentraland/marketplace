@@ -55,7 +55,9 @@
     "mvmf_2022": "Metaverse Festival 2022",
     "period": "Periodo",
     "status": "Estado",
-    "unknown_error": "Error desconocido"
+    "unknown_error": "Error desconocido",
+    "the_parcel": "La Parcela",
+    "the_estate": "El Estate"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -813,16 +815,16 @@
   },
   "manage_asset_page": {
     "open_in_builder": "Abrir en el builder",
-    "land_is_locked": "Esta acción no será posible de realizar hasta que la renta haya finalizado y la tierra haya sido reclamada.",
+    "land_is_locked": "Esta acción no será posible de realizar hasta que la renta haya finalizado y {asset} haya sido reclamada.",
     "transfer": "Transferir",
-    "cant_transfer_rented_land": "La transferencia de tierra está en pausa mientras la tierra está siendo rentada o no se haya reclamado.",
+    "cant_transfer_rented_land": "La transferencia de {asset} está en pausa mientras {asset} está siendo rentada o no se haya reclamado.",
     "sell": {
       "sell_title": "Venta",
       "selling_title": "Vendiendo",
       "list_for_sale": "Publicar para la venta",
       "price": "Precio",
       "expiration_date": "Fecha de expiración",
-      "cant_sell_rented_land": "La venta de tierra está en pausa mientras la tierra está siendo rentada o no se haya reclamado."
+      "cant_sell_rented_land": "La venta de {asset} está en pausa mientras esté en renta o no se haya reclamado."
     },
     "rent": {
       "rent_title": "Renta",
@@ -834,14 +836,14 @@
       "start_date": "Fecha de comienzo",
       "end_date": "Fecha de finalización",
       "rented_until": "En renta hasta el {date} por {tenant}",
-      "rent_end": "El período de renta terminó! Puedes reclamar tu tierra a {tenant}",
-      "claim_land": "Reclamar tierra",
+      "rent_end": "El período de renta terminó! Puedes reclamar tu {asset} a {tenant}",
+      "claim_asset": "Reclamar {asset}",
       "list_for_rent_again": "Volver a publicar para la renta",
-      "claiming_land": "Reclamando su tierra. El proceso puede tardar hasta 24hs.",
+      "claiming_land": "Reclamando su {asset}. El proceso puede tardar hasta 24hs.",
       "view_transaction": "Ver transacción",
-      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land.",
+      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta {asset}.",
       "claiming_back": "Reclamando su tierra",
-      "unclaimed_message": "La tierra todavía está sin reclamar. Reclámala para poder venderla o transferirla."
+      "unclaimed_message": "{asset} todavía está sin reclamar. Reclámala para poder venderla o transferirla."
     },
     "highlights": {
       "title": "Destacados",
@@ -856,9 +858,9 @@
     }
   },
   "claim_land_modal": {
-    "title": "Reclamar tierra",
-    "action": "Reclamar tierra",
-    "question": "¿Está seguro de que quiere reclamar su tierra?",
+    "title": "Reclamar {asset}",
+    "action": "Reclamar {asset}",
+    "question": "¿Está seguro de que quiere reclamar su {asset}?",
     "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   },

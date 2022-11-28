@@ -29,10 +29,10 @@ import { VendorName } from '../vendor'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
 import {
-  claimLandFailure,
-  claimLandRequest,
-  claimLandTransactionSubmitted,
-  claimLandSuccess,
+  claimAssetFailure,
+  claimAssetRequest,
+  claimAssetTransactionSubmitted,
+  claimAssetSuccess,
   clearRentalErrors,
   upsertRentalFailure,
   upsertRentalRequest,
@@ -415,8 +415,8 @@ describe('when handling the request action to claim a LAND', () => {
     it('should put a claim LAND failure action with the error', () => {
       return expectSaga(rentalSaga)
         .provide([[call(getConnectedProvider), null]])
-        .put(claimLandFailure('A provider is required to claim LAND'))
-        .dispatch(claimLandRequest(nft, rental))
+        .put(claimAssetFailure('A provider is required to claim LAND'))
+        .dispatch(claimAssetRequest(nft, rental))
         .silentRun()
     })
   })
@@ -428,8 +428,8 @@ describe('when handling the request action to claim a LAND', () => {
           [call(getConnectedProvider), {}],
           [select(getAddress), undefined]
         ])
-        .put(claimLandFailure('An address is required to claim LAND'))
-        .dispatch(claimLandRequest(nft, rental))
+        .put(claimAssetFailure('An address is required to claim LAND'))
+        .dispatch(claimAssetRequest(nft, rental))
         .silentRun()
     })
   })
@@ -445,8 +445,8 @@ describe('when handling the request action to claim a LAND', () => {
             throwError(new Error('anError'))
           ]
         ])
-        .put(claimLandFailure('anError'))
-        .dispatch(claimLandRequest(nft, rental))
+        .put(claimAssetFailure('anError'))
+        .dispatch(claimAssetRequest(nft, rental))
         .silentRun()
     })
   })
@@ -476,8 +476,8 @@ describe('when handling the request action to claim a LAND', () => {
             Promise.reject(new Error('anError'))
           ]
         ])
-        .put(claimLandFailure('anError'))
-        .dispatch(claimLandRequest(nft, rental))
+        .put(claimAssetFailure('anError'))
+        .dispatch(claimAssetRequest(nft, rental))
         .silentRun()
     })
   })
@@ -518,8 +518,8 @@ describe('when handling the request action to claim a LAND', () => {
             [take(FETCH_NFT_SUCCESS), {}],
             [delay(5000), void 0]
           ])
-          .put(claimLandSuccess(nft, rental))
-          .dispatch(claimLandRequest(nft, rental))
+          .put(claimAssetSuccess(nft, rental))
+          .dispatch(claimAssetRequest(nft, rental))
           .silentRun()
       })
     })
@@ -551,10 +551,10 @@ describe('when handling the request action to claim a LAND', () => {
             [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
           ])
           .put(
-            claimLandTransactionSubmitted(nft, txHash, rentalContract.address)
+            claimAssetTransactionSubmitted(nft, txHash, rentalContract.address)
           )
-          .put(claimLandFailure('anError'))
-          .dispatch(claimLandRequest(nft, rental))
+          .put(claimAssetFailure('anError'))
+          .dispatch(claimAssetRequest(nft, rental))
           .silentRun()
       })
     })

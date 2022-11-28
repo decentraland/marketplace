@@ -24,10 +24,11 @@ import {
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
 import {
-  CLAIM_LAND_TRANSACTION_SUBMITTED,
+  CLAIM_ASSET_TRANSACTION_SUBMITTED,
   REMOVE_RENTAL_TRANSACTION_SUBMITTED
 } from '../../../modules/rental/actions'
 import { AssetType } from '../../../modules/asset/types'
+import { isParcel } from '../../../modules/nft/utils'
 import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'
 import { TransactionDetail } from './TransactionDetail'
@@ -343,7 +344,7 @@ const Transaction = (props: Props) => {
         </AssetProvider>
       )
     }
-    case CLAIM_LAND_TRANSACTION_SUBMITTED: {
+    case CLAIM_ASSET_TRANSACTION_SUBMITTED: {
       const {
         tokenId,
         contractAddress,
@@ -361,8 +362,13 @@ const Transaction = (props: Props) => {
               asset={nft}
               text={
                 <T
-                  id="transaction.detail.claim_land"
+                  id="transaction.detail.claim_asset"
                   values={{
+                    asset: nft
+                      ? isParcel(nft)
+                        ? t('global.the_parcel')
+                        : t('global.the_estate')
+                      : '',
                     name: (
                       <Link to={locations.manage(contractAddress, tokenId)}>
                         {nft ? getAssetName(nft) : ''}

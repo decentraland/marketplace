@@ -6,7 +6,7 @@ import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
 import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
-import { isLand } from '../../modules/nft/utils'
+import { isLand, isParcel } from '../../modules/nft/utils'
 import { Mana } from '../Mana'
 import { AssetImage } from '../AssetImage'
 import ListedBadge from '../ListedBadge'
@@ -61,7 +61,9 @@ const AssetCard = (props: Props) => {
       {isClaimingBackLandTransactionPending ? (
         <div className="LandBubble">
           <Icon className="warning-icon" name="warning sign" />
-          {t('manage_asset_page.rent.claiming_back')}
+          {t('manage_asset_page.rent.claiming_back', {
+            asset: isParcel(asset) ? t('global.the_parcel') : t('global.the_estate')
+          })}
         </div>
       ) : showListedTag ? (
         <ListedBadge className="listed-badge" />

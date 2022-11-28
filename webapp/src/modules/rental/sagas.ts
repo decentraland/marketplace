@@ -28,11 +28,11 @@ import { addressEquals } from '../wallet/utils'
 import { fetchNFTRequest, FETCH_NFT_SUCCESS } from '../nft/actions'
 import { getCurrentNFT } from '../nft/selectors'
 import {
-  claimLandFailure,
-  ClaimLandRequestAction,
-  claimLandTransactionSubmitted,
-  claimLandSuccess,
-  CLAIM_LAND_REQUEST,
+  claimAssetFailure,
+  ClaimAssetRequestAction,
+  claimAssetTransactionSubmitted,
+  claimAssetSuccess,
+  CLAIM_ASSET_REQUEST,
   clearRentalErrors,
   upsertRentalFailure,
   UpsertRentalRequestAction,
@@ -58,7 +58,7 @@ import {
 
 export function* rentalSaga() {
   yield takeEvery(UPSERT_RENTAL_REQUEST, handleCreateOrEditRentalRequest)
-  yield takeEvery(CLAIM_LAND_REQUEST, handleClaimLandRequest)
+  yield takeEvery(CLAIM_ASSET_REQUEST, handleClaimLandRequest)
   yield takeEvery(CLOSE_MODAL, handleModalClose)
   yield takeEvery(REMOVE_RENTAL_REQUEST, handleRemoveRentalRequest)
   yield takeEvery(
@@ -140,7 +140,7 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
   }
 }
 
-function* handleClaimLandRequest(action: ClaimLandRequestAction) {
+function* handleClaimLandRequest(action: ClaimAssetRequestAction) {
   const { nft, rental } = action.payload
 
   try {
@@ -172,7 +172,7 @@ function* handleClaimLandRequest(action: ClaimLandRequestAction) {
       [nft.tokenId]
     )
     yield put(
-      claimLandTransactionSubmitted(nft, txHash, rentalsContract.address)
+      claimAssetTransactionSubmitted(nft, txHash, rentalsContract.address)
     )
     yield call(waitForTx, txHash)
     yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CLAIMED)
@@ -184,9 +184,9 @@ function* handleClaimLandRequest(action: ClaimLandRequestAction) {
       hasAssetBack = addressEquals(nftUpdated.owner, rental.lessor!)
       yield delay(5000)
     }
-    yield put(claimLandSuccess(nft, rental))
+    yield put(claimAssetSuccess(nft, rental))
   } catch (error) {
-    yield put(claimLandFailure((error as Error).message))
+    yield put(claimAssetFailure((error as Error).message))
   }
 }
 
