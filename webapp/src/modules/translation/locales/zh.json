@@ -352,7 +352,7 @@
   "on_rent_list": {
     "listed_for_rent": "挂牌出租",
     "rented_until": "租到 {end_date}",
-    "claiming_back": "收回土地",
+    "claiming_back": "收回{asset}",
     "rented_period_over": "租期满"
   },
   "collection_list": {
@@ -382,7 +382,7 @@
       "not_for_sale": "目前未上市销售",
       "parcel_belongs_to_estate_bid": "无法对属于某个庄园的地块进行投标，请考虑进入“庄园”页面。",
       "parcel_belongs_to_estate_rent": "无法租用属于某个庄园的地块，请考虑进入“庄园”页面。",
-      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。",
+      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此{asset}。",
       "rented_until": "租到 {end_date}"
     },
     "description": "描述",

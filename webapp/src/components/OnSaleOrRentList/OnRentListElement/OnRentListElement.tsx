@@ -52,8 +52,8 @@ const OnRentListElement = ({
             {isClaimingBackLandTransactionPending ? (
               <span>
                 <Icon className="warning-icon" name="warning sign" />
-                {t('manage_asset_page.rent.claiming_back', {
-                  asset: isParcel(nft) ? t('menu.land') : t('menu.estate')
+                {t('on_rent_list.claiming_back', {
+                  asset: isParcel(nft) ? t('global.land') : t('global.estate')
                 })}
               </span>
             ) : rental.status === RentalStatus.OPEN ? (
