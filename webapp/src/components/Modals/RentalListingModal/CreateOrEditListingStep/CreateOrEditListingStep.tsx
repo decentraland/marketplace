@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
+import { ethers } from 'ethers'
 import { Env } from '@dcl/ui-env'
 import {
   Modal,
@@ -18,7 +19,7 @@ import {
   PeriodOptionsDev,
   UpsertRentalOptType
 } from '../../../../modules/rental/types'
-import { formatWeiMANA, parseMANANumber } from '../../../../lib/mana'
+import { parseMANANumber } from '../../../../lib/mana'
 import {
   convertDateToDateInputValue,
   getDefaultExpirationDate
@@ -40,7 +41,8 @@ const CreateListingStep = (props: Props) => {
 
   // Editing properties
   const oldPrice = useMemo(
-    () => (rental ? formatWeiMANA(getMaxPriceOfPeriods(rental)) : null),
+    () =>
+      rental ? ethers.utils.formatEther(getMaxPriceOfPeriods(rental)) : null,
     [rental]
   )
   const oldPeriods = useMemo(
@@ -64,6 +66,28 @@ const CreateListingStep = (props: Props) => {
   const [expiresAt, setExpiresAt] = useState(
     oldExpirationDate ?? getDefaultExpirationDate()
   )
+
+  const fixedPriceInput = useMemo(() => toFixedMANAValue(pricePerDayInput), [
+    pricePerDayInput
+  ])
+
+  // Checks if the new and the old price are the same by converting them
+  // and checking their integer and floating point parts.
+  const isOldNumberTheSameAsTheNewOne = useMemo(() => {
+    // Converts the input to a number to parse partial inputs E.g: 3.
+    const priceAsNumber = Number(fixedPriceInput)
+    if (Number.isNaN(priceAsNumber)) {
+      return false
+    }
+
+    // Converts the number to Wei and then converts it back to ethers to have
+    // the same value as the old price one.
+    const priceInWei = ethers.utils.parseEther(priceAsNumber.toString())
+    return (
+      ethers.utils.formatEther(priceInWei).toString() ===
+      toFixedMANAValue(oldPrice ?? '')
+    )
+  }, [oldPrice, fixedPriceInput])
 
   // Handlers
   const handleSubmit = useCallback(() => {
@@ -91,7 +115,9 @@ const CreateListingStep = (props: Props) => {
   }
 
   // Validations
-  const parsedPriceInput = parseMANANumber(pricePerDayInput)
+  const parsedPriceInput = useMemo(() => parseMANANumber(pricePerDayInput), [
+    pricePerDayInput
+  ])
   const isInvalidPrice = parsedPriceInput < 0 || Number(pricePerDayInput) < 0
   const isLessThanMinPrice = parsedPriceInput < RENTAL_MIN_PRICE
   const isInvalidExpirationDate = new Date(expiresAt).getTime() < Date.now()
@@ -104,7 +130,7 @@ const CreateListingStep = (props: Props) => {
     pricePerDayInput !== '' && (isInvalidPrice || isLessThanMinPrice)
   const isUpdated =
     oldExpirationDate !== expiresAt ||
-    pricePerDayInput !== oldPrice ||
+    !isOldNumberTheSameAsTheNewOne ||
     (oldPeriods &&
       (oldPeriods.length !== periodOptions.length ||
         !oldPeriods.every(period => periodOptions.includes(period))))
@@ -136,12 +162,13 @@ const CreateListingStep = (props: Props) => {
       <Modal.Content>
         <div className={styles.pricePerDay}>
           <ManaField
-            label={t('rental_modal.create_listing_step.price_per_day')}
             type="text"
+            label={t('rental_modal.create_listing_step.price_per_day')}
+            maxLength="20"
             placeholder={1000}
             network={nft.network}
-            value={pricePerDayInput}
-            focus={true}
+            autoFocus
+            value={fixedPriceInput}
             error={showInvalidPriceError}
             onChange={handlePriceChange}
             message={

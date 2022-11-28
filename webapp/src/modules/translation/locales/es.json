@@ -798,6 +798,7 @@
     },
     "confirmation_step": {
       "title": "Confirm Listing",
+      "periods": "Períodos",
       "notice_line_one": "Revisa y confirma el precio y los períodos de alquiler que has seleccionado.",
       "notice_line_two": "Poner en alquiler es gratis, pero editar o cancelar el clasificado una vez hecho requerirá que envies una transacción, y deberas cubrir el costo de la misma.",
       "price_per_day": "Precio por día",

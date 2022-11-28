@@ -805,6 +805,7 @@
     },
     "confirmation_step": {
       "title": "Confirm Listing",
+      "periods": "Periods",
       "notice_line_one": "Review and confirm the price and rent periods you selected.",
       "notice_line_two": "Listing is free of charge, but editing or canceling a listing will require sending a transaction, and you will need to cover its cost.",
       "price_per_day": "Price per day",

@@ -800,6 +800,7 @@
     },
     "confirmation_step": {
       "title": "确认上市",
+      "periods": "时期",
       "notice_line_one": "查看并确认您选择的价格和租期。",
       "notice_line_two": "列表是免费的，但编辑或取消列表将需要发送交易，您需要支付其费用。",
       "price_per_day": "每天的价格",

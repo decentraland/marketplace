@@ -38,6 +38,10 @@
   margin-top: 30px;
 }
 
+.content:empty {
+  margin-top: 0px;
+}
+
 .summary {
   display: flex;
   flex-direction: row;
