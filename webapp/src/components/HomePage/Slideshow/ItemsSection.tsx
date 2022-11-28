@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { WearableIcon } from 'decentraland-ui/dist/components/WearableIcon/WearableIcon'
+import { Tabs } from 'decentraland-ui/dist/components/Tabs/Tabs'
+import { Mobile, NotMobile } from 'decentraland-ui/dist/components/Media/Media'
+import { EmoteIcon } from 'decentraland-ui/dist/components/EmoteIcon/EmoteIcon'
 import {
   Dropdown,
-  DropdownProps,
-  EmoteIcon,
-  Mobile,
-  NotMobile,
-  Tabs,
-  WearableIcon
-} from 'decentraland-ui'
+  DropdownProps
+} from 'decentraland-ui/dist/components/Dropdown/Dropdown'
+
 import { HomepageView } from '../../../modules/ui/asset/homepage/types'
 import { Section } from '../../../modules/vendor/decentraland/routing/types'
 

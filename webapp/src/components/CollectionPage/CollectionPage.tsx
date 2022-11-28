@@ -1,26 +1,24 @@
 import React, { useCallback, useState } from 'react'
 import { Item, NFTCategory, Rarity } from '@dcl/schemas'
-import {
-  Back,
-  Column,
-  Narrow,
-  Page,
-  Row,
-  Section,
-  Header,
-  Badge,
-  Icon,
-  Color,
-  Button,
-  Loader,
-  Table,
-  Dropdown,
-  Mobile,
-  NotMobile,
-  Tabs,
-  EmoteIcon,
-  WearableIcon
-} from 'decentraland-ui'
+
+import { WearableIcon } from 'decentraland-ui/dist/components/WearableIcon/WearableIcon'
+import { Tabs } from 'decentraland-ui/dist/components/Tabs/Tabs'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Badge } from 'decentraland-ui/dist/components/Badge/Badge'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Section } from 'decentraland-ui/dist/components/Section/Section'
+import { Row } from 'decentraland-ui/dist/components/Row/Row'
+import { Column } from 'decentraland-ui/dist/components/Column/Column'
+import { Back } from 'decentraland-ui/dist/components/Back/Back'
+import { Page } from 'decentraland-ui/dist/components/Page/Page'
+import { Narrow } from 'decentraland-ui/dist/components/Narrow/Narrow'
+import { Color } from 'decentraland-ui/dist/colors'
+import { Mobile, NotMobile } from 'decentraland-ui/dist/components/Media/Media'
+import { EmoteIcon } from 'decentraland-ui/dist/components/EmoteIcon/EmoteIcon'
+import { Dropdown } from 'decentraland-ui/dist/components/Dropdown/Dropdown'
+import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import { formatWeiMANA } from '../../lib/mana'
