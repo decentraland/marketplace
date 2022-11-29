@@ -18,7 +18,7 @@ import {
   CLAIM_ASSET_REQUEST,
   CLAIM_ASSET_TRANSACTION_SUBMITTED,
   CLAIM_ASSET_SUCCESS,
-  ClearRentalErrors,
+  ClearRentalErrorsAction,
   CLEAR_RENTAL_ERRORS,
   UpsertRentalFailureAction,
   UpsertRentalRequestAction,
@@ -66,7 +66,7 @@ type RentalReducerAction =
   | ClaimAssetSuccessAction
   | ClaimAssetFailureAction
   | ClaimAssetTransactionSubmitted
-  | ClearRentalErrors
+  | ClearRentalErrorsAction
   | RemoveRentalRequestAction
   | RemoveRentalSuccessAction
   | RemoveRentalFailureAction
