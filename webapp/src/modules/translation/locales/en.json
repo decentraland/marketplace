@@ -788,6 +788,7 @@
       "listing_expiration_date": "Listing expiration date",
       "periods": "Rent period",
       "periods_tooltip": "Select the days you are willing to rent your Land",
+      "expiration_date_tooltip": "If no one rents your Land, the listing will be removed on this date.",
       "period_options": {
         "one_day": "1 day",
         "one_week": "7 days",

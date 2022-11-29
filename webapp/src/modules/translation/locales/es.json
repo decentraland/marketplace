@@ -781,6 +781,7 @@
       "listing_expiration_date": "Fecha de expiración del clasificado",
       "periods": "Período del alquiler",
       "periods_tooltip": "Selecciona la cantidad de días por las que estas dispuesto a alquilar tu tierra",
+      "expiration_date_tooltip": "Si nadie alquila tu Land, el listado se removerá en esta fecha",
       "period_options": {
         "one_day": "1 día",
         "one_week": "7 días",

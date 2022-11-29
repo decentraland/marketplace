@@ -222,6 +222,15 @@ const CreateListingStep = (props: Props) => {
                 : undefined
             }
           />
+          <Popup
+            className={styles.periodsTooltip}
+            content={t(
+              'rental_modal.create_listing_step.expiration_date_tooltip'
+            )}
+            trigger={<i className={styles.info} />}
+            position="top center"
+            on="hover"
+          ></Popup>
         </div>
       </Modal.Content>
       <Modal.Actions className={styles.actions}>

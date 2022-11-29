@@ -783,6 +783,7 @@
       "listing_expiration_date": "上市截止日期",
       "periods": "租期",
       "periods_tooltip": "选择您愿意租用土地的日期",
+      "expiration_date_tooltip": "如果没有人租用您的土地，该清单将在该日期被删除。",
       "period_options": {
         "one_day": "1 天",
         "one_week": "7 天",

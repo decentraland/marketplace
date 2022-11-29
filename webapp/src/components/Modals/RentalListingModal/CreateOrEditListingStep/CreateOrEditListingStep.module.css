@@ -81,6 +81,13 @@
 
 .expirationDate {
   height: 64px;
+  position: relative;
+}
+
+.expirationDate .info {
+  position: absolute;
+  left: 155px;
+  top: 2px;
 }
 
 .actions {
