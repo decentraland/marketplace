@@ -470,7 +470,7 @@ describe('when reducing the action the success of accepting a rental', () => {
     expect(
       rentalReducer(
         rentalState,
-        acceptRentalListingSuccess(updatedRental, periodIndexChosen)
+        acceptRentalListingSuccess(nft, updatedRental, periodIndexChosen)
       )
     ).toEqual({
       ...rentalState,

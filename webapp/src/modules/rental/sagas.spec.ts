@@ -791,7 +791,7 @@ describe('when handling the request action to accept a rental', () => {
           )
           .put(acceptRentalListingTransactionSubmitted(nft, txHash))
           .put(
-            acceptRentalListingSuccess(updatedRentalListing, periodIndexChosen)
+            acceptRentalListingSuccess(nft, updatedRentalListing, periodIndexChosen)
           )
           .silentRun()
       })
