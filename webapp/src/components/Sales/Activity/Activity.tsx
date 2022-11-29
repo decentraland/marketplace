@@ -9,14 +9,12 @@ import {
   Pagination,
   Table
 } from 'decentraland-ui'
-import { Profile } from 'decentraland-dapps/dist/containers'
-import { Link } from 'react-router-dom'
 import { SALES_PER_PAGE } from '../../../modules/routing/utils'
-import AssetCell from '../../OnSaleOrRentList/AssetCell'
-import { Props } from './Activity.types'
-import { Mana } from '../../Mana'
 import { formatWeiMANA } from '../../../lib/mana'
-import { locations } from '../../../modules/routing/locations'
+import AssetCell from '../../OnSaleOrRentList/AssetCell'
+import { LinkedProfile } from '../../LinkedProfile'
+import { Mana } from '../../Mana'
+import { Props } from './Activity.types'
 import './Activity.css'
 
 const Activity = ({
@@ -83,9 +81,7 @@ const Activity = ({
                           })}
                         </Table.Cell>
                         <Table.Cell>
-                          <Link to={locations.account(sale.buyer)}>
-                            <Profile address={sale.buyer} inline />
-                          </Link>
+                          <LinkedProfile address={sale.buyer} inline />
                         </Table.Cell>
                         <Table.Cell>{t(`global.${sale.type}`)}</Table.Cell>
                         <Table.Cell>

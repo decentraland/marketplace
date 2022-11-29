@@ -7,12 +7,8 @@ import { RentalListingPeriod } from '@dcl/schemas'
 import { Button, Popup, useMobileMediaQuery } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getTransactionHref } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
 import { formatWeiMANA } from '../../../lib/mana'
-import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
-import { VendorName } from '../../../modules/vendor'
-import { Section } from '../../../modules/vendor/decentraland'
 import {
   canBeClaimed,
   canCreateANewRental,
@@ -24,6 +20,7 @@ import {
   isRentalListingOpen
 } from '../../../modules/rental/utils'
 import { isLand, isParcel } from '../../../modules/nft/utils'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Mana } from '../../Mana'
 import { IconButton } from '../IconButton'
 import styles from './Rent.module.css'
@@ -37,22 +34,6 @@ const sortPeriods = (a: RentalListingPeriod, b: RentalListingPeriod) => {
   } else {
     return -1
   }
-}
-
-const LinkedProfile = ({ address }: { address: string }) => {
-  return (
-    <Link
-      to={locations.account(address, {
-        assetType: AssetType.NFT,
-        vendor: VendorName.DECENTRALAND,
-        section: Section.ALL
-      })}
-    >
-      <span className={styles.profile}>
-        <Profile hasPopup={true} address={address} />
-      </span>
-    </Link>
-  )
 }
 
 export const Rent = (props: Props) => {
