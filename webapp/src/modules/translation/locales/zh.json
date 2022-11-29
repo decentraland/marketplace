@@ -412,8 +412,7 @@
     "invalid_fingerprint_on_bid_received": "此资产自此出价以来已被修改，因此不再有效",
     "invalid_seller": "您不再拥有此资产",
     "not_enough_mana_on_bid_placed": "您没有足够的MANA来支付此出价",
-    "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改，除非您对其进行更新，否则它将不再有效",
-    "cant_accept_bid_on_rented_land": "该资产目前已出租或尚未收回。 请等到租金完成并在接受投标之前将其取回。"
+    "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改，除非您对其进行更新，否则它将不再有效"
   },
   "transaction_history": {
     "title": "最新销售",
@@ -821,14 +820,12 @@
     "open_in_builder": "在 Builder 中打开",
     "land_is_locked": "此操作将被锁定，直到租金结束并且 {asset} 已被收回。",
     "transfer": "转移",
-    "cant_transfer_rented_land": "{asset} 正在出租或尚未收回时暂停传输。",
     "sell": {
       "sell_title": "卖",
       "selling_title": "卖",
       "list_for_sale": "发布出售",
       "price": "价格",
-      "expiration_date": "截止日期",
-      "cant_sell_rented_land": "{asset} 正在出租或尚未收回时暂停销售。"
+      "expiration_date": "截止日期"
     },
     "rent": {
       "rent_title": "租",

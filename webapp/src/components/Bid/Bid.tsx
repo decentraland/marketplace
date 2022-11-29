@@ -103,6 +103,7 @@ const Bid = (props: Props) => {
                     >
                       {(nft, _order, rental) => (
                         <AcceptButton
+                          userAddress={wallet.address}
                           nft={nft}
                           rental={rental}
                           bid={bid}

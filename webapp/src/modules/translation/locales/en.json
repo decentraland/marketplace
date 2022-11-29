@@ -416,8 +416,7 @@
     "invalid_fingerprint_on_bid_received": "This asset has been modified since this bid was made and it's not valid anymore",
     "invalid_seller": "You don't own this asset anymore",
     "not_enough_mana_on_bid_placed": "You don't have enough MANA to pay for this bid",
-    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it",
-    "cant_accept_bid_on_rented_land": "This asset has an active rent or has not been claimed back. Please, wait until the rent finished and claim it back before accepting the bid."
+    "invalid_fingerprint_on_bid_placed": "This asset has been modified since this bid was made and it's not valid anymore unless you update it"
   },
   "transaction_history": {
     "title": "Latest Sales",
@@ -826,14 +825,12 @@
     "open_in_builder": "Open in builder",
     "land_is_locked": "This action is locked until the rent has finished and {asset} has been claimed back.",
     "transfer": "Transfer",
-    "cant_transfer_rented_land": "Transferring is paused while {asset} is being rented or hasn't been claimed back.",
     "sell": {
       "sell_title": "Sell",
       "selling_title": "Selling",
       "list_for_sale": "List for sale",
       "price": "Price",
-      "expiration_date": "Expiration date",
-      "cant_sell_rented_land": "Selling is paused while {asset} is being rented or hasn't been claimed back."
+      "expiration_date": "Expiration date"
     },
     "rent": {
       "rent_title": "Rent",
