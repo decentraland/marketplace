@@ -25,6 +25,7 @@ import { AssetProvider } from '../AssetProvider'
 import { NavigationTab } from '../Navigation/Navigation.types'
 import { Navigation } from '../Navigation'
 import { Column } from '../Layout/Column'
+import { LandLockedPopup } from '../LandLockedPopup'
 import { Highlights } from './Highlights'
 import styles from './ManageAssetPage.module.css'
 import { Props } from './ManageAssetPage.types'
@@ -32,7 +33,6 @@ import { Details } from './Details'
 import { Sell } from './Sell'
 import { Rent } from './Rent'
 import { Map } from './Map'
-import { LandLockedPopup } from '../LandLockedPopup'
 
 const Loading = () => (
   <div className={styles.center}>
