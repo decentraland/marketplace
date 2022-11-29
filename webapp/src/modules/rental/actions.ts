@@ -86,7 +86,7 @@ export const CLEAR_RENTAL_ERRORS = 'Clear rental errors'
 
 export const clearRentalErrors = () => action(CLEAR_RENTAL_ERRORS)
 
-export type ClearRentalErrors = ReturnType<typeof clearRentalErrors>
+export type ClearRentalErrorsAction = ReturnType<typeof clearRentalErrors>
 
 export const REMOVE_RENTAL_REQUEST = '[Request] Remove Rental'
 export const REMOVE_RENTAL_SUCCESS = '[Success] Remove Rental'
