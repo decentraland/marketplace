@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AssetType } from '../../modules/asset/types'
 import { Props } from './AssetProvider.types'
 
@@ -18,11 +18,18 @@ const AssetProvider = (props: Props) => {
     isLoadingFeatureFlags
   } = props
 
+  const [hasLoadedInitialFlags, setHasLoadedInitialFlags] = useState(false)
+  useEffect(() => {
+    if (!isLoadingFeatureFlags) {
+      setHasLoadedInitialFlags(true)
+    }
+  }, [isLoadingFeatureFlags])
+
   useEffect(() => {
     if (contractAddress && tokenId) {
       switch (type) {
         case AssetType.NFT:
-          if (!isLoadingFeatureFlags) {
+          if (!hasLoadedInitialFlags) {
             onFetchNFT(contractAddress, tokenId, { rentalStatus })
           }
           break
@@ -40,7 +47,8 @@ const AssetProvider = (props: Props) => {
     onFetchNFT,
     onFetchItem,
     rentalStatus,
-    isLoadingFeatureFlags
+    isLoadingFeatureFlags,
+    hasLoadedInitialFlags
   ])
 
   return (
@@ -49,7 +57,7 @@ const AssetProvider = (props: Props) => {
         asset,
         order,
         rental,
-        isLoading || (isLoadingFeatureFlags && type === AssetType.NFT)
+        isLoading || (!hasLoadedInitialFlags && type === AssetType.NFT)
       )}
     </>
   )
