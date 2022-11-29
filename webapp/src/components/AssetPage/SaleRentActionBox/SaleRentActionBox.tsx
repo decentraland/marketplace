@@ -18,7 +18,7 @@ import {
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
 import { getContractAuthorization } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
-import { isPartOfEstate } from '../../../modules/nft/utils'
+import { isParcel, isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { Mana } from '../../Mana'
@@ -164,7 +164,11 @@ const SaleRentActionBox = ({
               <Popup
                 content={
                   isMobileView
-                    ? t('asset_page.sales_rent_action_box.mobile_coming_soon')
+                    ? t('asset_page.sales_rent_action_box.mobile_coming_soon', {
+                        asset: isParcel(nft)
+                          ? t('global.land')
+                          : t('global.estate')
+                      })
                     : t(
                         'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
                       )

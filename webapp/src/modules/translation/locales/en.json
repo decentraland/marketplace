@@ -356,7 +356,7 @@
   "on_rent_list": {
     "listed_for_rent": "Listed for rent",
     "rented_until": "Rented until {end_date}",
-    "claiming_back": "Claiming Back Land",
+    "claiming_back": "Claiming Back {asset}",
     "rented_period_over": "Rented Period Over"
   },
   "collection_list": {
@@ -386,7 +386,7 @@
       "not_for_sale": "Currently not listed for sale",
       "parcel_belongs_to_estate_bid": "It's not possible to bid on a parcel that belongs to an Estate, please consider going into the Estate page.",
       "parcel_belongs_to_estate_rent": "It's not possible to rent a parcel that belongs to an Estate, please consider going into the Estate page.",
-      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this LAND",
+      "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this {asset}",
       "rented_until": "Rented until {end_date}"
     },
     "description": "Description",

@@ -67,14 +67,14 @@ export const Rent = (props: Props) => {
     wallet
   } = props
   const isMobileView = useMobileMediaQuery()
-  const assetText = isParcel(nft) ? t('menu.land') : t('menu.estate')
+  const assetText = isParcel(nft) ? t('global.land') : t('global.estate')
 
   const wrapDisabledMobileButton = useCallback(
     trigger => {
       return (
         <Popup
           content={t('asset_page.sales_rent_action_box.mobile_coming_soon', {
-            asset: isParcel(nft) ? t('menu.land') : t('menu.estate')
+            asset: assetText
           })}
           position="top left"
           on="click"
@@ -83,7 +83,7 @@ export const Rent = (props: Props) => {
         />
       )
     },
-    [isMobileView, nft]
+    [isMobileView, assetText]
   )
 
   const handleOnCreateOrEdit = useCallback(

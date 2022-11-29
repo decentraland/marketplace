@@ -351,7 +351,7 @@
   "on_rent_list": {
     "listed_for_rent": "Listado para alquiler",
     "rented_until": "Rentado hasta {end_date}",
-    "claiming_back": "Reclamando su tierra",
+    "claiming_back": "Reclamando su {asset}",
     "rented_period_over": "Periodo de renta terminado"
   },
   "collection_list": {
@@ -381,7 +381,7 @@
       "not_for_sale": "Actualmente no disponible para la compra",
       "parcel_belongs_to_estate_bid": "No es posible hacer una oferta en la tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
       "parcel_belongs_to_estate_rent": "No es posible rentar tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
-      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land.",
+      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",
       "rented_until": "Rentado hasta {end_date}"
     },
     "description": "Descripción",
@@ -819,7 +819,7 @@
     "open_in_builder": "Abrir en el builder",
     "land_is_locked": "Esta acción no será posible de realizar hasta que la renta haya finalizado y {asset} haya sido reclamada.",
     "transfer": "Transferir",
-    "cant_transfer_rented_land": "La transferencia de {asset} está en pausa mientras {asset} está siendo rentada o no se haya reclamado.",
+    "cant_transfer_rented_land": "La transferencia está en pausa mientras {asset} está siendo rentada o no se haya reclamado.",
     "sell": {
       "sell_title": "Venta",
       "selling_title": "Vendiendo",
@@ -844,8 +844,8 @@
       "list_for_rent_again": "Volver a publicar para la renta",
       "claiming_land": "Reclamando su {asset}. El proceso puede tardar hasta 24hs.",
       "view_transaction": "Ver transacción",
-      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta {asset}.",
-      "claiming_back": "Reclamando su tierra",
+      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",
+      "claiming_back": "Reclamando su {asset}",
       "unclaimed_message": "{asset} todavía está sin reclamar. Reclámala para poder venderla o transferirla."
     },
     "highlights": {
