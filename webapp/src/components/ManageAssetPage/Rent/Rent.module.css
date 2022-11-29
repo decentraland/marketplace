@@ -32,6 +32,15 @@
   justify-content: space-between;
 }
 
+.header .right {
+  display: flex;
+  flex-direction: row;
+}
+
+.header .right .actionButton {
+  margin-right: 12px;
+}
+
 .content {
   display: flex;
   flex-direction: column;

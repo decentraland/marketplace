@@ -54,6 +54,7 @@ import {
   FETCH_ITEMS_SUCCESS
 } from '../item/actions'
 import { SetIsTryingOnAction, SET_IS_TRYING_ON } from '../ui/preview/actions'
+import { isParcel } from '../nft/utils'
 import {
   AcceptRentalListingSuccessAction,
   ACCEPT_RENTAL_LISTING_SUCCESS,
@@ -63,6 +64,7 @@ import {
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
 import { UpsertRentalOptType } from '../rental/types'
+import { NFTCategory } from '@dcl/schemas'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -226,6 +228,7 @@ track<UpsertRentalSuccessAction>(
   'Upsert Land Rental',
   ({ payload: { nft, operationType, rental } }) => ({
     nftId: nft.id,
+    assetType: isParcel(nft) ? NFTCategory.PARCEL : NFTCategory.ESTATE,
     rentalId: rental.id,
     pricePerDay: rental.periods[0].pricePerDay, // we're accepting just one price per day for all periods
     operation: operationType === UpsertRentalOptType.EDIT ? 'edit' : 'create',
@@ -246,8 +249,9 @@ track<ClaimAssetSuccessAction>(
 track<AcceptRentalListingSuccessAction>(
   ACCEPT_RENTAL_LISTING_SUCCESS,
   'Rent Land',
-  ({ payload: { periodIndexChosen, rental } }) => ({
+  ({ payload: { periodIndexChosen, rental, nft } }) => ({
     nftId: rental.nftId,
+    assetType: isParcel(nft) ? NFTCategory.PARCEL : NFTCategory.ESTATE,
     rentalId: rental.id,
     pricePerDay: rental.periods[periodIndexChosen].pricePerDay,
     duration: rental.periods[periodIndexChosen].maxDays

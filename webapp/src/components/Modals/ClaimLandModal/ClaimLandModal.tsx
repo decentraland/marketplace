@@ -7,8 +7,8 @@ import { SubmitTransactionModal } from '../SubmitTransactionModal'
 
 const ClaimLandModal = ({ ...props }: Props) => {
   const assetText = isParcel(props.metadata.nft)
-    ? t('menu.land')
-    : t('menu.estate')
+    ? t('global.land')
+    : t('global.estate')
   return (
     <SubmitTransactionModal
       title={t('claim_land_modal.title', {

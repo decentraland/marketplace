@@ -18,7 +18,7 @@ import {
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
 import { getContractAuthorization } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
-import { isPartOfEstate } from '../../../modules/nft/utils'
+import { isParcel, isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { isOwnedBy } from '../../../modules/asset/utils'
 import { Mana } from '../../Mana'
@@ -46,10 +46,6 @@ const SaleRentActionBox = ({
 }: Props) => {
   const isMobileView = isMobile()
   const isRentalOpen = isRentalListingOpen(rental)
-  const rentals = getContract({
-    name: getContractNames().RENTALS,
-    network: nft.network
-  })
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
@@ -74,17 +70,26 @@ const SaleRentActionBox = ({
   const canBid = !isOwner && isBiddable && !userHasAlreadyBidsOnNft
   const isCurrentlyRented = isRentalListingExecuted(rental)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
-  const contractNames = getContractNames()
-  const mana = getContract({
-    name: contractNames.MANA,
-    network: nft.network
-  })
+  const authorization = useMemo(() => {
+    if (!wallet) {
+      return null
+    }
 
-  const authorization = getContractAuthorization(
-    wallet!.address,
-    rentals?.address,
-    mana ? { ...mana, name: ContractName.MANAToken } : undefined
-  )
+    const contractNames = getContractNames()
+    const mana = getContract({
+      name: contractNames.MANA,
+      network: nft.network
+    })
+    const rentals = getContract({
+      name: getContractNames().RENTALS,
+      network: nft.network
+    })
+    return getContractAuthorization(
+      wallet.address,
+      rentals?.address,
+      mana ? { ...mana, name: ContractName.MANAToken } : undefined
+    )
+  }, [wallet, getContract, nft.network])
 
   const handleOnRent = useCallback(() => {
     if (!!authorization && hasAuthorization(authorizations, authorization)) {
@@ -159,7 +164,11 @@ const SaleRentActionBox = ({
               <Popup
                 content={
                   isMobileView
-                    ? t('asset_page.sales_rent_action_box.mobile_coming_soon')
+                    ? t('asset_page.sales_rent_action_box.mobile_coming_soon', {
+                        asset: isParcel(nft)
+                          ? t('global.land')
+                          : t('global.estate')
+                      })
                     : t(
                         'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
                       )

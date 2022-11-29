@@ -67,14 +67,14 @@ export const Rent = (props: Props) => {
     wallet
   } = props
   const isMobileView = useMobileMediaQuery()
-  const assetText = isParcel(nft) ? t('menu.land') : t('menu.estate')
+  const assetText = isParcel(nft) ? t('global.land') : t('global.estate')
 
   const wrapDisabledMobileButton = useCallback(
     trigger => {
       return (
         <Popup
           content={t('asset_page.sales_rent_action_box.mobile_coming_soon', {
-            asset: isParcel(nft) ? t('menu.land') : t('menu.estate')
+            asset: assetText
           })}
           position="top left"
           on="click"
@@ -83,7 +83,7 @@ export const Rent = (props: Props) => {
         />
       )
     },
-    [isMobileView, nft]
+    [isMobileView, assetText]
   )
 
   const handleOnCreateOrEdit = useCallback(
@@ -149,8 +149,19 @@ export const Rent = (props: Props) => {
             ? t('manage_asset_page.rent.renting_title')
             : t('manage_asset_page.rent.rent_title')}
         </h1>
-        <div className={styles.action}>
-          {wrapDisabledMobileButton(<div>{rentButton}</div>)}
+        <div className={styles.right}>
+          {rental && isRentalListingOpen(rental) ? (
+            <Button
+              className={styles.actionButton}
+              as={Link}
+              to={locations.nft(nft.contractAddress, nft.tokenId)}
+            >
+              {t('manage_asset_page.rent.view_listing')}
+            </Button>
+          ) : null}
+          <div className={styles.action}>
+            {wrapDisabledMobileButton(<div>{rentButton}</div>)}
+          </div>
         </div>
       </div>
       {rental ? (

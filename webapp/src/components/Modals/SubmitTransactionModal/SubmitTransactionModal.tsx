@@ -21,11 +21,7 @@ const SubmitTransactionModal = ({
   const isLoading = isTransactionBeingConfirmed || isSubmittingTransaction
 
   return (
-    <Modal
-      size="tiny"
-      name={name}
-      onClose={isLoading ? () => undefined : onClose}
-    >
+    <Modal size="tiny" name={name} onClose={!isLoading ? onClose : undefined}>
       <ModalNavigation title={title} />
       <Modal.Content className={className}>
         {children}

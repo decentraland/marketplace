@@ -48,19 +48,21 @@ describe('when creating the action to signal the start of the accept rental list
 })
 
 describe('when creating the action to signal a success of the accept rental listing event', () => {
+  let nft: NFT
   let rental: RentalListing
   let periodIndexChosen: number
 
   beforeEach(() => {
+    nft = { id: 'aNftId' } as NFT
     rental = { id: 'aRentalId' } as RentalListing
     periodIndexChosen = 0
   })
 
   it('should return an object representing the action', () => {
-    expect(acceptRentalListingSuccess(rental, periodIndexChosen)).toEqual({
+    expect(acceptRentalListingSuccess(nft, rental, periodIndexChosen)).toEqual({
       type: ACCEPT_RENTAL_LISTING_SUCCESS,
       meta: undefined,
-      payload: { rental, periodIndexChosen }
+      payload: { nft, rental, periodIndexChosen }
     })
   })
 })

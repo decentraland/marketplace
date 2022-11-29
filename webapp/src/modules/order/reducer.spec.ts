@@ -1,9 +1,11 @@
 import { Order, RentalListing } from '@dcl/schemas'
 import { acceptRentalListingSuccess } from '../rental/actions'
+import { NFT } from '../nft/types'
 import { orderReducer, OrderState } from './reducer'
 
 let state: OrderState
 let rentalListing: RentalListing
+let nft: NFT
 
 beforeEach(() => {
   state = {
@@ -15,6 +17,9 @@ beforeEach(() => {
     contractAddress: 'aContractAddress',
     tokenId: 'aTokenId'
   } as RentalListing
+  nft = {
+    id: 'anId'
+  } as NFT
 })
 
 describe('when reducing the successful action of accepting a rental', () => {
@@ -45,7 +50,7 @@ describe('when reducing the successful action of accepting a rental', () => {
 
   it('should remove the order of the NFT that had the rental listing', () => {
     expect(
-      orderReducer(state, acceptRentalListingSuccess(rentalListing, 0))
+      orderReducer(state, acceptRentalListingSuccess(nft, rentalListing, 0))
     ).toEqual({
       ...state,
       data: {

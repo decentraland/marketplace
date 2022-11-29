@@ -137,10 +137,12 @@ export const acceptRentalListingRequest = (
     addressOperator
   })
 export const acceptRentalListingSuccess = (
+  nft: NFT,
   rental: RentalListing,
   periodIndexChosen: number
 ) =>
   action(ACCEPT_RENTAL_LISTING_SUCCESS, {
+    nft,
     rental,
     periodIndexChosen
   })

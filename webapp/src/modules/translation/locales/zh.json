@@ -352,7 +352,7 @@
   "on_rent_list": {
     "listed_for_rent": "挂牌出租",
     "rented_until": "租到 {end_date}",
-    "claiming_back": "收回土地",
+    "claiming_back": "收回{asset}",
     "rented_period_over": "租期满"
   },
   "collection_list": {
@@ -382,7 +382,7 @@
       "not_for_sale": "目前未上市销售",
       "parcel_belongs_to_estate_bid": "无法对属于某个庄园的地块进行投标，请考虑进入“庄园”页面。",
       "parcel_belongs_to_estate_rent": "无法租用属于某个庄园的地块，请考虑进入“庄园”页面。",
-      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。",
+      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此{asset}。",
       "rented_until": "租到 {end_date}"
     },
     "description": "描述",
@@ -782,6 +782,7 @@
       "listing_expiration_date": "上市截止日期",
       "periods": "租期",
       "periods_tooltip": "选择您愿意租用土地的日期",
+      "expiration_date_tooltip": "如果没有人租用您的土地，该清单将在该日期被删除。",
       "period_options": {
         "one_day": "1 天",
         "one_week": "7 天",
@@ -833,6 +834,7 @@
       "expiration_date": "上市截止日期",
       "rent_periods": "租期",
       "list_for_rent": "发布出租",
+      "view_listing": "查看租赁列表",
       "start_date": "租金开始日期",
       "end_date": "租期结束日期",
       "rented_until": "由 {tenant} 租用至 {date}",

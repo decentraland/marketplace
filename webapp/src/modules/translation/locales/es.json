@@ -351,7 +351,7 @@
   "on_rent_list": {
     "listed_for_rent": "Listado para alquiler",
     "rented_until": "Rentado hasta {end_date}",
-    "claiming_back": "Reclamando su tierra",
+    "claiming_back": "Reclamando su {asset}",
     "rented_period_over": "Periodo de renta terminado"
   },
   "collection_list": {
@@ -381,7 +381,7 @@
       "not_for_sale": "Actualmente no disponible para la compra",
       "parcel_belongs_to_estate_bid": "No es posible hacer una oferta en la tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
       "parcel_belongs_to_estate_rent": "No es posible rentar tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
-      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land.",
+      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",
       "rented_until": "Rentado hasta {end_date}"
     },
     "description": "Descripción",
@@ -780,6 +780,7 @@
       "listing_expiration_date": "Fecha de expiración del clasificado",
       "periods": "Período del alquiler",
       "periods_tooltip": "Selecciona la cantidad de días por las que estas dispuesto a alquilar tu tierra",
+      "expiration_date_tooltip": "Si nadie alquila tu Land, el listado se removerá en esta fecha",
       "period_options": {
         "one_day": "1 día",
         "one_week": "7 días",
@@ -831,6 +832,7 @@
       "expiration_date": "Fecha de expiración de la publicación",
       "rent_periods": "Períodos de renta",
       "list_for_rent": "Publicar para la renta",
+      "view_listing": "Ver listado",
       "start_date": "Fecha de comienzo",
       "end_date": "Fecha de finalización",
       "rented_until": "En renta hasta el {date} por {tenant}",
@@ -839,8 +841,8 @@
       "list_for_rent_again": "Volver a publicar para la renta",
       "claiming_land": "Reclamando su {asset}. El proceso puede tardar hasta 24hs.",
       "view_transaction": "Ver transacción",
-      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta {asset}.",
-      "claiming_back": "Reclamando su tierra",
+      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",
+      "claiming_back": "Reclamando su {asset}",
       "unclaimed_message": "{asset} todavía está sin reclamar. Reclámala para poder venderla o transferirla."
     },
     "highlights": {

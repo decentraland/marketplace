@@ -35,7 +35,7 @@ const ConfirmationStep = (props: Props) => {
     <>
       <ModalNavigation
         title={t('rental_modal.confirmation_step.title')}
-        onClose={onCancel}
+        onClose={!isSigning ? onCancel : undefined}
       />
       <Modal.Content>
         <div className={styles.notice}>

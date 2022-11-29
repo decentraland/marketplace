@@ -332,7 +332,7 @@ function* handleAcceptRentalListingRequest(
       RentalStatus.EXECUTED
     )
     yield put(
-      acceptRentalListingSuccess(rentalListingUpdated, periodIndexChosen)
+      acceptRentalListingSuccess(nft, rentalListingUpdated, periodIndexChosen)
     )
   } catch (error) {
     yield put(acceptRentalListingFailure((error as Error).message))
