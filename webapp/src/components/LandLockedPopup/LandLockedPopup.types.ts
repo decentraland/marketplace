@@ -6,4 +6,5 @@ export type Props = {
   asset: Asset
   rental: RentalListing | null
   children: React.ReactNode
+  userAddress: string
 }

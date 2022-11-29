@@ -2,9 +2,10 @@ import { Popup, useMobileMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isParcel } from '../../modules/nft/utils'
 import { isLandLocked } from '../../modules/rental/utils'
+import { Props } from './LandLockedPopup.types'
 
-export const LandLockedPopup = (props: any) => {
-  const { asset, rental, address, children } = props
+export const LandLockedPopup = (props: Props) => {
+  const { asset, rental, userAddress, children } = props
   const isMobileView = useMobileMediaQuery()
 
   return (
@@ -14,7 +15,7 @@ export const LandLockedPopup = (props: any) => {
       })}
       position="top left"
       on={isMobileView ? 'click' : 'hover'}
-      disabled={!(rental !== null && isLandLocked(address, rental, asset))}
+      disabled={!(rental !== null && isLandLocked(userAddress, rental, asset))}
       trigger={<span>{children}</span>}
     />
   )

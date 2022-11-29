@@ -99,7 +99,7 @@ export const ManageAssetPage = (props: Props) => {
                                 <LandLockedPopup
                                   asset={asset}
                                   rental={rental}
-                                  address={wallet.address}
+                                  userAddress={wallet.address}
                                 >
                                   <Button
                                     className={styles.builderButton}
@@ -147,7 +147,7 @@ export const ManageAssetPage = (props: Props) => {
                                       <LandLockedPopup
                                         asset={asset}
                                         rental={rental}
-                                        address={wallet.address}
+                                        userAddress={wallet.address}
                                       >
                                         <Button
                                           className={styles.transfer}
@@ -195,7 +195,7 @@ export const ManageAssetPage = (props: Props) => {
                                 <LandLockedPopup
                                   asset={asset}
                                   rental={rental}
-                                  address={wallet.address}
+                                  userAddress={wallet.address}
                                 >
                                   <Button
                                     className={styles.builderButton}
@@ -240,7 +240,7 @@ export const ManageAssetPage = (props: Props) => {
                                       <LandLockedPopup
                                         asset={asset}
                                         rental={rental}
-                                        address={wallet.address}
+                                        userAddress={wallet.address}
                                       >
                                         <Button
                                           className={styles.transfer}

@@ -69,7 +69,7 @@ const AcceptButton = (props: Props) => {
     )
   } else if (isCurrentlyRented) {
     button = (
-      <LandLockedPopup asset={nft} rental={rental} address={userAddress}>
+      <LandLockedPopup asset={nft} rental={rental} userAddress={userAddress}>
         {button}
       </LandLockedPopup>
     )
