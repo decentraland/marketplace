@@ -38,10 +38,6 @@ export const Details = (props: Props) => {
   }, [asset])
 
   const owner = rental && rental.lessor ? rental.lessor : (asset as NFT).owner!
-  console.log('Owner', owner)
-  console.log('NFT owner', (asset as NFT).owner)
-  console.log('NFT', asset)
-  console.log('Rental', rental)
 
   return (
     <Box
