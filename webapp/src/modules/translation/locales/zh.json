@@ -383,7 +383,8 @@
       "parcel_belongs_to_estate_bid": "无法对属于某个庄园的地块进行投标，请考虑进入“庄园”页面。",
       "parcel_belongs_to_estate_rent": "无法租用属于某个庄园的地块，请考虑进入“庄园”页面。",
       "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此{asset}。",
-      "rented_until": "租到 {end_date}"
+      "rented_until": "租到 {end_date}",
+      "not_enough_mana": "你没有足够的 MANA"
     },
     "description": "描述",
     "owner": "持有者",

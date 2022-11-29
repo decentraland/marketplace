@@ -15,6 +15,7 @@ export type Props = {
   order: Order | null
   userHasAlreadyBidsOnNft: boolean
   isRentalsEnabled: boolean
+  currentMana: number | undefined
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onRent: (selectedPeriodIndex: number) => void
 }
@@ -22,7 +23,11 @@ export type Props = {
 export type OwnProps = Pick<Props, 'nft' | 'rental' | 'order'>
 export type MapStateProps = Pick<
   Props,
-  'wallet' | 'authorizations' | 'userHasAlreadyBidsOnNft' | 'getContract'
+  | 'wallet'
+  | 'authorizations'
+  | 'userHasAlreadyBidsOnNft'
+  | 'getContract'
+  | 'currentMana'
 >
 export type MapDispatchProps = Pick<Props, 'onRent'>
 export type MapDispatch = Dispatch<OpenModalAction>
