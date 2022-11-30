@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 import { Loader, Mana, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
 import { formatWeiMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { ManaToFiat } from '../../ManaToFiat'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './RankingCollectorRow.types'
 import './RankingCollectorRow.css'
 
@@ -19,7 +19,11 @@ const RankingCollectorRow = ({ entity }: Props) => {
         <div>
           <div className="rankings-collector-data">
             <Link to={locations.account(collectorAddress)}>
-              <Profile address={collectorAddress} inline={false} size="large" />
+              <LinkedProfile
+                address={collectorAddress}
+                inline={false}
+                size="large"
+              />
             </Link>
             <span className="rankings-collector-items-collected">
               {t('home_page.analytics.rankings.collectors.collected_items', {
@@ -85,13 +89,11 @@ const RankingCollectorRow = ({ entity }: Props) => {
           <>
             <Table.Cell width={4}>
               <div className="rankings-collector-cell">
-                <Link to={locations.account(collectorAddress)}>
-                  <Profile
-                    address={collectorAddress}
-                    inline={false}
-                    size="large"
-                  />
-                </Link>
+                <LinkedProfile
+                  address={collectorAddress}
+                  inline={false}
+                  size="large"
+                />
               </div>
             </Table.Cell>
             <Table.Cell width={2}>{entity.purchases}</Table.Cell>

@@ -219,6 +219,7 @@ export const ManageAssetPage = (props: Props) => {
                                 />
                                 <Details
                                   asset={asset as NFT}
+                                  rental={rental}
                                   className={styles.details}
                                 />
                               </>

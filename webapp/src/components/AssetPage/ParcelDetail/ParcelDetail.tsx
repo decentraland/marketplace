@@ -30,6 +30,7 @@ const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
   return (
     <BaseDetail
       asset={nft}
+      rental={rental ?? undefined}
       assetImage={
         <AssetImage asset={nft} isDraggable withNavigation hasPopup />
       }

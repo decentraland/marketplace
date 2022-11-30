@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import { Sale } from '@dcl/schemas'
 import {
@@ -11,14 +10,13 @@ import {
   Row
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
 import dateFnsFormat from 'date-fns/format'
 
 import { Mana } from '../../Mana'
-import { locations } from '../../../modules/routing/locations'
 import { saleAPI } from '../../../modules/vendor/decentraland'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './TransactionHistory.types'
 import './TransactionHistory.css'
 
@@ -105,14 +103,10 @@ const TransactionHistory = (props: Props) => {
                 {sales.map(sale => (
                   <Table.Row key={sale.id}>
                     <Table.Cell>
-                      <Link to={locations.account(sale.seller)}>
-                        <Profile address={sale.seller} />
-                      </Link>
+                      <LinkedProfile address={sale.seller} />
                     </Table.Cell>
                     <Table.Cell>
-                      <Link to={locations.account(sale.buyer)}>
-                        <Profile address={sale.buyer} />
-                      </Link>
+                      <LinkedProfile address={sale.buyer} />
                     </Table.Cell>
                     <Table.Cell>{t(`global.${sale.type}`)}</Table.Cell>
                     <Table.Cell title={formatDateTitle(sale.timestamp)}>

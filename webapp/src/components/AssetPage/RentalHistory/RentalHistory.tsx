@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import { RentalListing, RentalStatus } from '@dcl/schemas'
 import {
@@ -11,16 +10,15 @@ import {
   Row
 } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
 import dateFnsFormat from 'date-fns/format'
 
 import { capitalize } from '../../../lib/text'
-import { locations } from '../../../modules/routing/locations'
 import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getRentalChosenPeriod } from '../../../modules/rental/utils'
 import { Mana } from '../../Mana'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './RentalHistory.types'
 import styles from './RentalHistory.module.css'
 
@@ -101,14 +99,10 @@ const RentalHistory = (props: Props) => {
                 {rentals.map(rental => (
                   <Table.Row key={rental.id}>
                     <Table.Cell>
-                      <Link to={locations.account(rental.lessor!)}>
-                        <Profile address={rental.lessor ?? '0x0'} />
-                      </Link>
+                      <LinkedProfile address={rental.lessor!} />
                     </Table.Cell>
                     <Table.Cell>
-                      <Link to={locations.account(rental.tenant!)}>
-                        <Profile address={rental.tenant ?? '0x1'} />
-                      </Link>
+                      <LinkedProfile address={rental.tenant!} />
                     </Table.Cell>
                     <Table.Cell title={formatDateTitle(rental.startedAt!)}>
                       {formatEventDate(rental.startedAt ?? 0)}

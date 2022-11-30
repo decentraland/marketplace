@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Network } from '@dcl/schemas'
 import { Loader, Mana, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
+import { LinkedProfile } from '../../LinkedProfile'
 import { formatWeiMANA } from '../../../lib/mana'
-import { locations } from '../../../modules/routing/locations'
 import { ManaToFiat } from '../../ManaToFiat'
 import { AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/decentraland'
@@ -20,14 +18,15 @@ const RankingCreatorRow = ({ entity }: Props) => {
       <div className="RankingCreatorRow rankings-creator-cell">
         <div>
           <div className="rankings-creator-data">
-            <Link
-              to={locations.account(creatorAddress, {
+            <LinkedProfile
+              address={creatorAddress}
+              inline={false}
+              size="large"
+              browseOptions={{
                 assetType: AssetType.ITEM,
                 section: Section.WEARABLES
-              })}
-            >
-              <Profile address={creatorAddress} inline={false} size="large" />
-            </Link>
+              }}
+            />
             <span className="rankings-creator-collections-created">
               {t('home_page.analytics.rankings.creators.collections_created', {
                 collections: entity.collections
@@ -88,18 +87,15 @@ const RankingCreatorRow = ({ entity }: Props) => {
           <>
             <Table.Cell width={5}>
               <div className="rankings-creator-cell">
-                <Link
-                  to={locations.account(creatorAddress, {
+                <LinkedProfile
+                  address={creatorAddress}
+                  inline={false}
+                  size="large"
+                  browseOptions={{
                     assetType: AssetType.ITEM,
                     section: Section.WEARABLES
-                  })}
-                >
-                  <Profile
-                    address={creatorAddress}
-                    inline={false}
-                    size="large"
-                  />
-                </Link>
+                  }}
+                />
               </div>
             </Table.Cell>
             <Table.Cell width={3}>{entity.collections}</Table.Cell>

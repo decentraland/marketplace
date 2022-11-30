@@ -35,6 +35,7 @@ const EstateDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
     <BaseDetail
       className="EstateDetail"
       asset={nft}
+      rental={rental ?? undefined}
       showDetails={isRentalsEnabled && isLand(nft)}
       assetImage={
         <>
