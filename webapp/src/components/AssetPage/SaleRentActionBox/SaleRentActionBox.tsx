@@ -112,19 +112,22 @@ const SaleRentActionBox = ({
     () =>
       !!rental &&
       !!currentMana &&
-      currentMana >=
-        +ethers.utils.formatEther(
+      ethers.BigNumber.from(currentMana).gte(
+        ethers.utils.formatEther(
           ethers.BigNumber.from(
             rental.periods[selectedRentalPeriodIndex].pricePerDay
           ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
-        ),
+        )
+      ),
     [rental, currentMana, selectedRentalPeriodIndex]
   )
   const hasEnoughManaToBuy = useMemo(
     () =>
       !!order &&
       !!currentMana &&
-      currentMana >= +ethers.utils.formatEther(order.price),
+      ethers.BigNumber.from(currentMana).gte(
+        ethers.utils.formatEther(order.price)
+      ),
     [order, currentMana]
   )
 
