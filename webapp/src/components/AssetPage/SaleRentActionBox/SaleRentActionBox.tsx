@@ -112,13 +112,12 @@ const SaleRentActionBox = ({
     () =>
       !!rental &&
       !!currentMana &&
-      currentMana >=
-        Number(
-          ethers.utils.formatEther(
-            ethers.BigNumber.from(
-              rental.periods[selectedRentalPeriodIndex].pricePerDay
-            ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
-          )
+      ethers.utils
+        .parseEther(currentMana.toString())
+        .gte(
+          ethers.BigNumber.from(
+            rental.periods[selectedRentalPeriodIndex].pricePerDay
+          ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
         ),
     [rental, currentMana, selectedRentalPeriodIndex]
   )
@@ -126,7 +125,7 @@ const SaleRentActionBox = ({
     () =>
       !!order &&
       !!currentMana &&
-      currentMana >= Number(ethers.utils.formatEther(order.price)),
+      ethers.utils.parseEther(currentMana.toString()).gte(order.price),
     [order, currentMana]
   )
 
