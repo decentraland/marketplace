@@ -1,7 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Modal, Button } from 'decentraland-ui'
+import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
+
 import { locations } from '../../modules/routing/locations'
 import { isAuthorized } from '../SettingsPage/Authorization/utils'
 import { Authorization } from '../SettingsPage/Authorization'
@@ -33,11 +35,20 @@ const AuthorizationModal = (props: Props) => {
 
   return (
     <Modal open={open} size="small" className="AuthorizationModal">
-      <Modal.Header>
-        {t('authorization_modal.title', {
-          token: token.name
-        })}
-      </Modal.Header>
+      {!isMobile ? (
+        <Modal.Header>
+          {t('authorization_modal.title', {
+            token: token.name
+          })}
+        </Modal.Header>
+      ) : (
+        <ModalNavigation
+          title={t('authorization_modal.title', {
+            token: token.name
+          })}
+          onClose={onCancel}
+        />
+      )}
       <Modal.Description>
         <T
           id="authorization_modal.description"
