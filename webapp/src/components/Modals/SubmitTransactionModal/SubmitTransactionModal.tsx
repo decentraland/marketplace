@@ -22,7 +22,10 @@ const SubmitTransactionModal = ({
 
   return (
     <Modal size="tiny" name={name} onClose={!isLoading ? onClose : undefined}>
-      <ModalNavigation title={title} />
+      <ModalNavigation
+        title={title}
+        onClose={!isLoading ? onClose : undefined}
+      />
       <Modal.Content className={className}>
         {children}
 
