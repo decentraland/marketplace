@@ -57,8 +57,7 @@
     "status": "地位",
     "unknown_error": "不明错误",
     "the_parcel": "地块",
-    "the_estate": "产业",
-    "land": "土地"
+    "the_estate": "产业"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",

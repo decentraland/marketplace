@@ -57,8 +57,7 @@
     "status": "Estado",
     "unknown_error": "Error desconocido",
     "the_parcel": "La Parcela",
-    "the_estate": "El Estate",
-    "land": "Tierra"
+    "the_estate": "El Estate"
   },
   "address": {
     "invalid_address": "Dirección inválida",

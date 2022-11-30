@@ -59,8 +59,7 @@
     "status": "Status",
     "unknown_error": "Unknown error",
     "the_parcel": "the Parcel",
-    "the_estate": "the Estate",
-    "land": "Land"
+    "the_estate": "the Estate"
   },
   "address": {
     "invalid_address": "That's not a valid address",
