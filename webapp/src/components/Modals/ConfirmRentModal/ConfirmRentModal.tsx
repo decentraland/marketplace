@@ -64,7 +64,10 @@ const ConfirmRentModal = ({
       name={t('rental_modal.confirm_rent_step.title')}
       onClose={!isLoading ? onClose : undefined}
     >
-      <ModalNavigation title={t('rental_modal.confirm_rent_step.title')} />
+      <ModalNavigation
+        title={t('rental_modal.confirm_rent_step.title')}
+        onClose={!isLoading ? onClose : undefined}
+      />
       <Modal.Content>
         <span>
           <T
@@ -147,6 +150,7 @@ const ConfirmRentModal = ({
           </div>
         ) : (
           <Button
+            className={styles.cancel}
             primary
             disabled={
               Number(price) !== pricePerRentInEther ||
