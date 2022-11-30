@@ -28,3 +28,17 @@
 .loader:global(.ui.inline.loader) {
   margin-right: 10px;
 }
+
+@media (max-width: 700px) {
+  .actions {
+    align-items: center;
+    bottom: 28px;
+    margin: 0px !important;
+    position: fixed;
+    width: 100%;
+  }
+
+  .cancel {
+    width: 80%;
+  }
+}
