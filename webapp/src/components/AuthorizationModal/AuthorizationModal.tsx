@@ -1,11 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Modal, Button } from 'decentraland-ui'
+import {
+  Modal,
+  Button,
+  ModalNavigation,
+  useMobileMediaQuery
+} from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+
 import { locations } from '../../modules/routing/locations'
 import { isAuthorized } from '../SettingsPage/Authorization/utils'
 import { Authorization } from '../SettingsPage/Authorization'
 import { Props } from './AuthorizationModal.types'
+import './AuthorizationModal.css'
 
 const AuthorizationModal = (props: Props) => {
   const {
@@ -18,6 +25,8 @@ const AuthorizationModal = (props: Props) => {
     onCancel,
     onProceed
   } = props
+
+  const isMobile = useMobileMediaQuery()
 
   const contract = getContract({
     address: authorization.authorizedAddress
@@ -32,11 +41,20 @@ const AuthorizationModal = (props: Props) => {
 
   return (
     <Modal open={open} size="small" className="AuthorizationModal">
-      <Modal.Header>
-        {t('authorization_modal.title', {
-          token: token.name
-        })}
-      </Modal.Header>
+      {!isMobile ? (
+        <Modal.Header>
+          {t('authorization_modal.title', {
+            token: token.name
+          })}
+        </Modal.Header>
+      ) : (
+        <ModalNavigation
+          title={t('authorization_modal.title', {
+            token: token.name
+          })}
+          onClose={onCancel}
+        />
+      )}
       <Modal.Description>
         <T
           id="authorization_modal.description"
@@ -61,9 +79,12 @@ const AuthorizationModal = (props: Props) => {
           authorization={authorization}
         />
       </Modal.Content>
-      <Modal.Actions>
-        <Button onClick={onCancel}>{t('global.cancel')}</Button>
+      <Modal.Actions className="AuthorizationModalActions">
+        <Button onClick={onCancel} className="AuthorizationModalButtons">
+          {t('global.cancel')}
+        </Button>
         <Button
+          className="AuthorizationModalButtons"
           primary
           loading={isLoading}
           disabled={
