@@ -140,3 +140,8 @@
 .rentedUntil {
   font-weight: 800;
 }
+
+.notEnoughMana {
+  margin-top: 20px;
+  color: var(--sunish);
+}
