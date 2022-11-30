@@ -112,22 +112,21 @@ const SaleRentActionBox = ({
     () =>
       !!rental &&
       !!currentMana &&
-      ethers.BigNumber.from(currentMana).gte(
-        ethers.utils.formatEther(
-          ethers.BigNumber.from(
-            rental.periods[selectedRentalPeriodIndex].pricePerDay
-          ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
-        )
-      ),
+      currentMana >=
+        Number(
+          ethers.utils.formatEther(
+            ethers.BigNumber.from(
+              rental.periods[selectedRentalPeriodIndex].pricePerDay
+            ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
+          )
+        ),
     [rental, currentMana, selectedRentalPeriodIndex]
   )
   const hasEnoughManaToBuy = useMemo(
     () =>
       !!order &&
       !!currentMana &&
-      ethers.BigNumber.from(currentMana).gte(
-        ethers.utils.formatEther(order.price)
-      ),
+      currentMana >= Number(ethers.utils.formatEther(order.price)),
     [order, currentMana]
   )
 
@@ -204,7 +203,7 @@ const SaleRentActionBox = ({
                   }
                   position="top center"
                   on={isMobileView ? 'click' : 'hover'}
-                  disabled={!isMobileView && !isNFTPartOfAState}
+                  disabled={!isNFTPartOfAState}
                   trigger={
                     <div className={styles.fullWidth}>
                       <Button
