@@ -6,6 +6,7 @@ import { locations } from '../../modules/routing/locations'
 import { isAuthorized } from '../SettingsPage/Authorization/utils'
 import { Authorization } from '../SettingsPage/Authorization'
 import { Props } from './AuthorizationModal.types'
+import './AuthorizationModal.css'
 
 const AuthorizationModal = (props: Props) => {
   const {
@@ -61,9 +62,12 @@ const AuthorizationModal = (props: Props) => {
           authorization={authorization}
         />
       </Modal.Content>
-      <Modal.Actions>
-        <Button onClick={onCancel}>{t('global.cancel')}</Button>
+      <Modal.Actions className="AuthorizationModalActions">
+        <Button onClick={onCancel} className="AuthorizationModalButtons">
+          {t('global.cancel')}
+        </Button>
         <Button
+          className="AuthorizationModalButtons"
           primary
           loading={isLoading}
           disabled={
