@@ -89,13 +89,11 @@ const RankingCollectorRow = ({ entity }: Props) => {
           <>
             <Table.Cell width={4}>
               <div className="rankings-collector-cell">
-                <Link to={locations.account(collectorAddress)}>
-                  <LinkedProfile
-                    address={collectorAddress}
-                    inline={false}
-                    size="large"
-                  />
-                </Link>
+                <LinkedProfile
+                  address={collectorAddress}
+                  inline={false}
+                  size="large"
+                />
               </div>
             </Table.Cell>
             <Table.Cell width={2}>{entity.purchases}</Table.Cell>

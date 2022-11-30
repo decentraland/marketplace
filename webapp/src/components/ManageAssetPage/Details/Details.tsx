@@ -6,9 +6,9 @@ import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFT } from '../../../modules/nft/types'
 import { locations } from '../../../modules/routing/locations'
 import { Box } from '../../AssetBrowse/Box'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './Details.types'
 import styles from './Details.module.css'
-import { LinkedProfile } from '../../LinkedProfile'
 
 const Info = ({
   title,

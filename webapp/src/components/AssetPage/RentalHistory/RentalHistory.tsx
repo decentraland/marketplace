@@ -18,9 +18,9 @@ import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { getRentalChosenPeriod } from '../../../modules/rental/utils'
 import { Mana } from '../../Mana'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './RentalHistory.types'
 import styles from './RentalHistory.module.css'
-import { LinkedProfile } from '../../LinkedProfile'
 
 const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000
@@ -99,10 +99,10 @@ const RentalHistory = (props: Props) => {
                 {rentals.map(rental => (
                   <Table.Row key={rental.id}>
                     <Table.Cell>
-                      <LinkedProfile address={rental.lessor ?? '0x0'} />
+                      <LinkedProfile address={rental.lessor!} />
                     </Table.Cell>
                     <Table.Cell>
-                      <LinkedProfile address={rental.tenant ?? '0x1'} />
+                      <LinkedProfile address={rental.tenant!} />
                     </Table.Cell>
                     <Table.Cell title={formatDateTitle(rental.startedAt!)}>
                       {formatEventDate(rental.startedAt ?? 0)}
