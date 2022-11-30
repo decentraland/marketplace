@@ -56,3 +56,17 @@
 .signMessage {
   margin-left: 12px;
 }
+
+@media (max-width: 700px) {
+  .modal:global(.ui.modal > .actions) {
+    align-items: center;
+    bottom: 28px;
+    margin: 0px !important;
+    position: fixed;
+    min-width: 99vw;
+  }
+
+  .cancel {
+    width: 85% !important;
+  }
+}
