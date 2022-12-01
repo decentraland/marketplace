@@ -61,16 +61,20 @@
   .modal:global(.ui.modal > .actions) {
     align-items: center;
     bottom: 28px;
-    margin: 0px !important;
+    margin: 0px;
     position: fixed;
     min-width: 99vw;
   }
 
   .cancel {
-    width: 85% !important;
+    width: 85%;
   }
 
   .loader {
     display: flex;
+  }
+
+  .modal :global(.dcl.modal-navigation-title) {
+    margin-top: none;
   }
 }
