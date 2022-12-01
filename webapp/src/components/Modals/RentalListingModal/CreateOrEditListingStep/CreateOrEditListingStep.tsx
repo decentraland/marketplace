@@ -235,19 +235,29 @@ const CreateListingStep = (props: Props) => {
       </Modal.Content>
       <Modal.Actions className={styles.actions}>
         {!rental ? (
-          <Button primary onClick={handleSubmit} disabled={isInvalid}>
+          <Button
+            primary
+            onClick={handleSubmit}
+            disabled={isInvalid}
+            className={styles.actionButton}
+          >
             {t('rental_modal.create_listing_step.put_for_rent')}
           </Button>
         ) : (
           <>
             <Button
+              className={styles.actionButton}
               primary
               onClick={handleSubmit}
               disabled={isInvalid || !isUpdated}
             >
               {t('rental_modal.create_listing_step.update_listing')}
             </Button>
-            <Button secondary onClick={handleRemove}>
+            <Button
+              className={styles.actionButton}
+              secondary
+              onClick={handleRemove}
+            >
               {t('rental_modal.create_listing_step.remove_listing')}
             </Button>
           </>
