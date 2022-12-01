@@ -48,7 +48,7 @@ export const Rent = (props: Props) => {
     wallet
   } = props
   const isMobileView = useMobileMediaQuery()
-  const assetText = isParcel(nft) ? t('global.land') : t('global.estate')
+  const assetText = isParcel(nft) ? t('global.parcel') : t('global.estate')
 
   const wrapDisabledMobileButton = useCallback(
     trigger => {
