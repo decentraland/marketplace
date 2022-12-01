@@ -58,7 +58,7 @@
 }
 
 @media (max-width: 700px) {
-  .modal:global(.ui.modal > .actions) {
+  .modal:global(.ui.modal) > .actions {
     align-items: center;
     bottom: 28px;
     margin: 0px;
@@ -75,6 +75,6 @@
   }
 
   .modal :global(.dcl.modal-navigation-title) {
-    margin-top: none;
+    margin-top: unset;
   }
 }
