@@ -30,7 +30,7 @@ import {
   CancelOrderSuccessAction
 } from '../order/actions'
 import {
-  TRANSFER_NFT_SUCCESS,
+  TRANSFER_NFT_TRANSACTION_SUBMITTED,
   TransferNFTSuccessAction,
   FETCH_NFTS_SUCCESS,
   FetchNFTsSuccessAction
@@ -112,7 +112,7 @@ track<CancelOrderSuccessAction>(
 )
 
 track<TransferNFTSuccessAction>(
-  TRANSFER_NFT_SUCCESS,
+  TRANSFER_NFT_TRANSACTION_SUBMITTED,
   ({ payload }) => withCategory('Transfer NFT', payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
