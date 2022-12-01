@@ -69,4 +69,8 @@
   .cancel {
     width: 85% !important;
   }
+
+  .loader {
+    display: flex;
+  }
 }
