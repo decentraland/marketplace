@@ -165,7 +165,7 @@
   .summary {
     flex-wrap: wrap;
   }
-  .summary .column {
+  .column {
     margin-top: 12px;
   }
 }
