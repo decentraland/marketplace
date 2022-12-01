@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import intlFormat from 'date-fns/intlFormat'
 import formatDistance from 'date-fns/formatDistance'
 import { RentalListingPeriod } from '@dcl/schemas'
-import { Button } from 'decentraland-ui'
+import { Button, Popup, useMobileMediaQuery } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getTransactionHref } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -47,7 +47,25 @@ export const Rent = (props: Props) => {
     claimingBackLandTransaction,
     wallet
   } = props
+  const isMobileView = useMobileMediaQuery()
   const assetText = isParcel(nft) ? t('global.land') : t('global.estate')
+
+  const wrapDisabledMobileButton = useCallback(
+    trigger => {
+      return (
+        <Popup
+          content={t('asset_page.sales_rent_action_box.mobile_coming_soon', {
+            asset: assetText
+          })}
+          position="top left"
+          on="click"
+          disabled={!isMobileView}
+          trigger={trigger}
+        />
+      )
+    },
+    [isMobileView, assetText]
+  )
 
   const handleOnCreateOrEdit = useCallback(
     () => onCreateOrEditRent(nft, rental),
@@ -113,7 +131,7 @@ export const Rent = (props: Props) => {
             </Button>
           ) : null}
           <div className={styles.action}>
-            <div>{rentButton}</div>
+            {wrapDisabledMobileButton(<div>{rentButton}</div>)}
           </div>
         </div>
       </div>
@@ -178,16 +196,18 @@ export const Rent = (props: Props) => {
                     )}
                   </div>
                   <div className={styles.activeRentActions}>
-                    <div>
-                      <Button
-                        className={styles.actionButton}
-                        onClick={onClaimLand}
-                      >
-                        {t('manage_asset_page.rent.claim_asset', {
-                          asset: assetText
-                        })}
-                      </Button>
-                    </div>
+                    {wrapDisabledMobileButton(
+                      <div>
+                        <Button
+                          className={styles.actionButton}
+                          onClick={onClaimLand}
+                        >
+                          {t('manage_asset_page.rent.claim_asset', {
+                            asset: assetText
+                          })}
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </>
               )}
