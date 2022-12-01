@@ -105,7 +105,7 @@
   font-size: 15px;
 }
 
-.actionButtonBasicPadding{
+.actionButtonBasicPadding {
   padding: 7px 15px 7px 0px !important;
 }
 
@@ -146,7 +146,7 @@
   }
   .column {
     margin-top: 20px;
-  }  
+  }
   .box {
     margin-top: 12px;
   }
@@ -158,5 +158,14 @@
   }
   .notShrink.priceColumn {
     margin-bottom: 6px;
+  }
+}
+
+@media (max-width: 992px) {
+  .summary {
+    flex-wrap: wrap;
+  }
+  .column {
+    margin-top: 12px;
   }
 }
