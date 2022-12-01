@@ -5,7 +5,6 @@ import { ErrorCode } from 'decentraland-transactions'
 
 import { SortDirection } from '../routing/types'
 import { Account } from '../account/types'
-import { getAssetName } from '../asset/utils'
 import { FetchOneOptions } from '../vendor'
 import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'
 
@@ -93,16 +92,10 @@ export const TRANSFER_NFT_TRANSACTION_SUBMITTED =
 
 export const transferNFTRequest = (nft: NFT, address: string) =>
   action(TRANSFER_NFT_REQUEST, { nft, address })
-export const transferNFTSuccess = (nft: NFT, address: string, txHash: string) =>
+export const transferNFTSuccess = (nft: NFT, address: string) =>
   action(TRANSFER_NFT_SUCCESS, {
     nft,
-    address,
-    ...buildTransactionPayload(nft.chainId, txHash, {
-      tokenId: nft.tokenId,
-      contractAddress: nft.contractAddress,
-      name: getAssetName(nft),
-      address
-    })
+    address
   })
 export const transferNFTFailure = (
   nft: NFT,

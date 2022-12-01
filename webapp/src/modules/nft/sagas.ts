@@ -155,7 +155,7 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
       }
     }
 
-    yield put(transferNFTSuccess(nft, address, txHash))
+    yield put(transferNFTSuccess(nft, address))
   } catch (error) {
     const errorMessage = isErrorWithMessage(error)
       ? error.message
