@@ -33,9 +33,14 @@
   .actions {
     align-items: center;
     bottom: 28px;
-    margin: 0px !important;
+    /* margin: 0px; */
     position: fixed;
     width: 100%;
+  }
+
+  :global(.ui.modal) > .actions,
+  :global(.ui.modal) > :global(.ui.form) > .actions {
+    margin: 0px;
   }
 
   .cancel {
