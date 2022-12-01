@@ -347,7 +347,8 @@ describe('when handling the transfer NFT request action', () => {
     let txHash: string
     beforeEach(() => {
       nft = {
-        vendor: VendorName.DECENTRALAND
+        vendor: VendorName.DECENTRALAND,
+        openRentalId: 'aRentalId'
       } as NFT
       address = 'anAddress'
       wallet = { address } as Wallet
@@ -388,6 +389,9 @@ describe('when handling the transfer NFT request action', () => {
       })
 
       describe('and it does not have a rental', () => {
+        beforeEach(() => {
+          nft.openRentalId = null
+        })
         it('should dispatch an action signaling the success of the action handling', () => {
           return expectSaga(nftSaga)
             .provide([
