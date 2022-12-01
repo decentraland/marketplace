@@ -192,7 +192,7 @@ const SaleRentActionBox = ({
                           'asset_page.sales_rent_action_box.mobile_coming_soon',
                           {
                             asset: isParcel(nft)
-                              ? t('global.land')
+                              ? t('global.parcel')
                               : t('global.estate')
                           }
                         )

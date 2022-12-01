@@ -53,7 +53,7 @@ const OnRentListElement = ({
               <span>
                 <Icon className="warning-icon" name="warning sign" />
                 {t('on_rent_list.claiming_back', {
-                  asset: isParcel(nft) ? t('global.land') : t('global.estate')
+                  asset: isParcel(nft) ? t('global.parcel') : t('global.estate')
                 })}
               </span>
             ) : rental.status === RentalStatus.OPEN ? (
