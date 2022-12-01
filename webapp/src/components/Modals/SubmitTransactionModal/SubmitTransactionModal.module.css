@@ -28,3 +28,23 @@
 .loader:global(.ui.inline.loader) {
   margin-right: 10px;
 }
+
+@media (max-width: 700px) {
+  .actions {
+    align-items: center;
+    bottom: 30px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    margin: 0px !important;
+  }
+
+  .loader {
+    display: flex;
+  }
+
+  .signMessage {
+    margin: 5px;
+  }
+}

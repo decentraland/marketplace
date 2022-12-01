@@ -116,4 +116,14 @@
   .modal:global(.ui.modal > .content) {
     margin: 20px;
   }
+
+  .modal:global(.ui.modal > .actions) {
+    align-items: center;
+    bottom: 28px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    margin: 0px;
+  }
 }

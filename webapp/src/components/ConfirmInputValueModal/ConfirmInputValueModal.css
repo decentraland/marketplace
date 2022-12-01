@@ -7,4 +7,9 @@
     width: 100%;
     min-width: auto;
   }
+
+  .modalContetnt {
+    margin: 0px !important;
+    padding: 0px !important;
+  }
 }

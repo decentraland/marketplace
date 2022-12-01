@@ -26,7 +26,7 @@ const ConfirmInputValueModal = ({
     <Modal size="small" open={open} className="ConfirmInputValueModal">
       <Modal.Header>{headerTitle}</Modal.Header>
       <Form onSubmit={onConfirm}>
-        <Modal.Content>
+        <Modal.Content className="modalContetnt">
           {content}
           <ManaField
             label={t('global.price')}

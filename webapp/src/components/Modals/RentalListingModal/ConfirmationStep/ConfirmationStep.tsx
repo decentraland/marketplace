@@ -81,9 +81,9 @@ const ConfirmationStep = (props: Props) => {
           </div>
         </div>
       </Modal.Content>
-      <Modal.Actions className="actions">
+      <Modal.Actions className="actionsContainer">
         <Button
-          className="actionButton"
+          className={styles.actionButton}
           primary
           loading={isSigning}
           onClick={handleSubmit}
@@ -91,7 +91,11 @@ const ConfirmationStep = (props: Props) => {
         >
           {t('global.confirm')}
         </Button>
-        <Button className="actionButton" onClick={onBack} disabled={isSigning}>
+        <Button
+          className={styles.actionButton}
+          onClick={onBack}
+          disabled={isSigning}
+        >
           {t('global.back')}
         </Button>
       </Modal.Actions>
