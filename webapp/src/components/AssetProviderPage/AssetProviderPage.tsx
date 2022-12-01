@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import classNames from 'classnames'
 import { RentalStatus } from '@dcl/schemas'
 import { Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -7,8 +8,8 @@ import { AssetProvider } from '../AssetProvider'
 import { Props } from './AssetProviderPage.types'
 import styles from './AssetProviderPage.module.css'
 
-const Loading = () => (
-  <div className={styles.center}>
+const Loading = ({ fullWidth }: { fullWidth: boolean }) => (
+  <div className={classNames(styles.center, fullWidth && styles.fullWidth)}>
     <Loader active size="huge" />
   </div>
 )
@@ -21,7 +22,13 @@ export const NotFound = () => (
 )
 
 const AssetProviderPage = (props: Props) => {
-  const { type, isConnecting, isRentalsEnabled, children } = props
+  const {
+    type,
+    isConnecting,
+    isRentalsEnabled,
+    children,
+    fullWidth = false
+  } = props
   const rentalStatuses: RentalStatus[] | undefined = useMemo(
     () =>
       type === AssetType.NFT && isRentalsEnabled
@@ -37,7 +44,7 @@ const AssetProviderPage = (props: Props) => {
 
         return (
           <>
-            {isLoading ? <Loading /> : null}
+            {isLoading ? <Loading fullWidth={fullWidth} /> : null}
             {!isLoading && !asset ? <NotFound /> : null}
             {!isLoading && asset ? children(asset, order, rental) : null}
           </>
