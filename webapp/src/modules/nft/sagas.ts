@@ -143,11 +143,8 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
       address,
       nft
     )
-    console.log('txHash: ', txHash)
-    console.log('before waitFor')
     yield put(transferNFTransactionSubmitted(nft, txHash))
     yield call(waitForTx, txHash)
-    console.log('after waitFor')
     if (nft?.openRentalId) {
       const rental: RentalListing | null = yield select(
         getRentalById,
