@@ -5,6 +5,7 @@ export type Props<T extends AssetType = AssetType> = {
   type: T
   isConnecting: boolean
   isRentalsEnabled: boolean
+  fullWidth?: boolean
   children: (
     asset: Asset<T>,
     order: Order | null,
@@ -15,5 +16,5 @@ export type Props<T extends AssetType = AssetType> = {
 export type MapStateProps = Pick<Props, 'isConnecting' | 'isRentalsEnabled'>
 export type OwnProps<T extends AssetType = AssetType> = Pick<
   Props<T>,
-  'type' | 'children'
+  'type' | 'children' | 'fullWidth'
 >
