@@ -16,6 +16,7 @@ import {
   fetchNFTsSuccess,
   fetchNFTSuccess,
   transferNFTFailure,
+  transferNFTransactionSubmitted,
   transferNFTRequest,
   transferNFTSuccess
 } from './actions'
@@ -338,7 +339,7 @@ describe('when handling the transfer NFT request action', () => {
     })
   })
 
-  describe('when the transfer is successful', () => {
+  describe('and sending the transaction is successful', () => {
     let nft: NFT
     let address: string
     let wallet: Wallet
@@ -346,46 +347,71 @@ describe('when handling the transfer NFT request action', () => {
     let txHash: string
     beforeEach(() => {
       nft = {
-        vendor: VendorName.DECENTRALAND
+        vendor: VendorName.DECENTRALAND,
+        openRentalId: 'aRentalId'
       } as NFT
       address = 'anAddress'
       wallet = { address } as Wallet
       vendor = VendorFactory.build(nft.vendor)
       txHash = 'someHash'
     })
-    describe('and it has an rental with status OPEN', () => {
-      let rental: RentalListing
-      beforeEach(() => {
-        nft.openRentalId = 'aRentalId'
-        rental = {
-          id: nft.openRentalId,
-          status: RentalStatus.OPEN
-        } as RentalListing
+    describe('and the transaction finishes', () => {
+      describe('and it has an rental with status OPEN', () => {
+        let rental: RentalListing
+        beforeEach(() => {
+          nft.openRentalId = 'aRentalId'
+          rental = {
+            id: nft.openRentalId,
+            status: RentalStatus.OPEN
+          } as RentalListing
+        })
+        it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
+          return expectSaga(nftSaga)
+            .provide([
+              [call(VendorFactory.build, nft.vendor), vendor],
+              [select(getWallet), wallet],
+              [select(getRentalById, nft.openRentalId!), rental],
+              [
+                call([vendor.nftService, 'transfer'], wallet, address, nft),
+                Promise.resolve(txHash)
+              ],
+              [call(waitForTx, txHash), Promise.resolve()],
+              [
+                call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED),
+                Promise.resolve()
+              ]
+            ])
+            .put(transferNFTSuccess(nft, address))
+            .put(transferNFTransactionSubmitted(nft, address, txHash))
+            .dispatch(transferNFTRequest(nft, address))
+            .run({ silenceTimeout: true })
+        })
       })
-      it('should dispatch an action signaling the success of the action handling and cancel an existing rental listing', () => {
-        return expectSaga(nftSaga)
-          .provide([
-            [call(VendorFactory.build, nft.vendor), vendor],
-            [select(getWallet), wallet],
-            [select(getRentalById, nft.openRentalId!), rental],
-            [
-              call([vendor.nftService, 'transfer'], wallet, address, nft),
-              Promise.resolve(txHash)
-            ],
-            [call(waitForTx, txHash), Promise.resolve()],
-            [
-              call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED),
-              Promise.resolve()
-            ]
-          ])
-          .put(transferNFTSuccess(nft, address, txHash))
-          .dispatch(transferNFTRequest(nft, address))
-          .run({ silenceTimeout: true })
+
+      describe('and it does not have a rental', () => {
+        beforeEach(() => {
+          nft.openRentalId = null
+        })
+        it('should dispatch an action signaling the success of the action handling', () => {
+          return expectSaga(nftSaga)
+            .provide([
+              [call(VendorFactory.build, nft.vendor), vendor],
+              [select(getWallet), wallet],
+              [
+                call([vendor.nftService, 'transfer'], wallet, address, nft),
+                Promise.resolve(txHash)
+              ],
+              [call(waitForTx, txHash), Promise.resolve()]
+            ])
+            .put(transferNFTransactionSubmitted(nft, address, txHash))
+            .put(transferNFTSuccess(nft, address))
+            .dispatch(transferNFTRequest(nft, address))
+            .run({ silenceTimeout: true })
+        })
       })
     })
-
-    describe('and it does not have a rental', () => {
-      it('should dispatch an action signaling the success of the action handling', () => {
+    describe('and the transaction gets reverted', () => {
+      it('should put the action to notify that the transaction was submitted and the claim LAND failure action with an error', () => {
         return expectSaga(nftSaga)
           .provide([
             [call(VendorFactory.build, nft.vendor), vendor],
@@ -394,9 +420,10 @@ describe('when handling the transfer NFT request action', () => {
               call([vendor.nftService, 'transfer'], wallet, address, nft),
               Promise.resolve(txHash)
             ],
-            [call(waitForTx, txHash), Promise.resolve()]
+            [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
           ])
-          .put(transferNFTSuccess(nft, address, txHash))
+          .put(transferNFTFailure(nft, address, 'anError'))
+          .put(transferNFTransactionSubmitted(nft, address, txHash))
           .dispatch(transferNFTRequest(nft, address))
           .run({ silenceTimeout: true })
       })
