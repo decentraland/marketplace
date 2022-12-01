@@ -88,6 +88,8 @@ export type FetchNFTFailureAction = ReturnType<typeof fetchNFTFailure>
 export const TRANSFER_NFT_REQUEST = '[Request] Transfer NFT'
 export const TRANSFER_NFT_SUCCESS = '[Success] Transfer NFT'
 export const TRANSFER_NFT_FAILURE = '[Failure] Transfer NFT'
+export const TRANSFER_NFT_TRANSACTION_SUBMITTED =
+  '[Submitted transaction] Transfer NFT'
 
 export const transferNFTRequest = (nft: NFT, address: string) =>
   action(TRANSFER_NFT_REQUEST, { nft, address })
@@ -108,6 +110,15 @@ export const transferNFTFailure = (
   error: string,
   errorCode?: ErrorCode
 ) => action(TRANSFER_NFT_FAILURE, { nft, address, error, errorCode })
+export const transferNFTransactionSubmitted = (nft: NFT, txHash: string) =>
+  action(
+    TRANSFER_NFT_TRANSACTION_SUBMITTED,
+    buildTransactionPayload(nft.chainId, txHash, {
+      tokenId: nft.tokenId,
+      contractAddress: nft.contractAddress,
+      chainId: nft.chainId
+    })
+  )
 
 export type TransferNFTRequestAction = ReturnType<typeof transferNFTRequest>
 export type TransferNFTSuccessAction = ReturnType<typeof transferNFTSuccess>
