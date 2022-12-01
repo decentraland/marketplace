@@ -382,7 +382,7 @@ describe('when handling the transfer NFT request action', () => {
               ]
             ])
             .put(transferNFTSuccess(nft, address))
-            .put(transferNFTransactionSubmitted(nft, txHash))
+            .put(transferNFTransactionSubmitted(nft, address, txHash))
             .dispatch(transferNFTRequest(nft, address))
             .run({ silenceTimeout: true })
         })
@@ -403,7 +403,7 @@ describe('when handling the transfer NFT request action', () => {
               ],
               [call(waitForTx, txHash), Promise.resolve()]
             ])
-            .put(transferNFTransactionSubmitted(nft, txHash))
+            .put(transferNFTransactionSubmitted(nft, address, txHash))
             .put(transferNFTSuccess(nft, address))
             .dispatch(transferNFTRequest(nft, address))
             .run({ silenceTimeout: true })
@@ -423,7 +423,7 @@ describe('when handling the transfer NFT request action', () => {
             [call(waitForTx, txHash), Promise.reject(new Error('anError'))]
           ])
           .put(transferNFTFailure(nft, address, 'anError'))
-          .put(transferNFTransactionSubmitted(nft, txHash))
+          .put(transferNFTransactionSubmitted(nft, address, txHash))
           .dispatch(transferNFTRequest(nft, address))
           .run({ silenceTimeout: true })
       })
