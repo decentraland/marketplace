@@ -1,6 +1,7 @@
 import { Bid, RentalListing, RentalStatus } from '@dcl/schemas'
 import { takeEvery, put, select, call } from 'redux-saga/effects'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import {
   PLACE_BID_REQUEST,
@@ -36,7 +37,6 @@ import {
   isRentalListingOpen,
   waitUntilRentalChangesStatus
 } from '../rental/utils'
-import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 
 export function* bidSaga() {
   yield takeEvery(PLACE_BID_REQUEST, handlePlaceBidRequest)
