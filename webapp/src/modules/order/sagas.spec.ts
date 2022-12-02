@@ -5,6 +5,7 @@ import {
   RentalListing,
   RentalStatus
 } from '@dcl/schemas'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import {
   ProviderType,
   Wallet
@@ -22,7 +23,8 @@ import { getWallet } from '../wallet/selectors'
 import {
   executeOrderFailure,
   executeOrderRequest,
-  executeOrderSuccess
+  executeOrderSuccess,
+  executeOrderTransactionSubmitted
 } from './actions'
 import { orderSaga } from './sagas'
 
@@ -149,7 +151,7 @@ describe('when handling the execute order request action', () => {
         } as RentalListing
       })
 
-      it('should wait for the rental to change its status to cancelled and put the success action', () => {
+      it('should wait for the transaction to be completed and the rental to change its status to cancelled and put the success action', () => {
         return expectSaga(orderSaga)
           .provide([
             [select(getWallet), wallet],
@@ -168,9 +170,11 @@ describe('when handling the execute order request action', () => {
                 fingerprint
               ),
               Promise.resolve(txHash)
-            ]
+            ],
+            [call(waitForTx, txHash), Promise.resolve()]
           ])
-          .put(executeOrderSuccess(order, nft, txHash))
+          .put(executeOrderTransactionSubmitted(order, nft, txHash))
+          .put(executeOrderSuccess())
           .dispatch(executeOrderRequest(order, nft, fingerprint))
           .run({ silenceTimeout: true })
       })
@@ -197,7 +201,7 @@ describe('when handling the execute order request action', () => {
               Promise.resolve(txHash)
             ]
           ])
-          .put(executeOrderSuccess(order, nft, txHash))
+          .put(executeOrderTransactionSubmitted(order, nft, txHash))
           .dispatch(executeOrderRequest(order, nft, fingerprint))
           .run({ silenceTimeout: true })
       })

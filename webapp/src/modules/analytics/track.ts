@@ -22,12 +22,12 @@ import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/t
 import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { capitalize } from '../../lib/text'
 import {
-  EXECUTE_ORDER_SUCCESS,
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
-  ExecuteOrderSuccessAction,
+  EXECUTE_ORDER_TRANSACTION_SUBMITTED,
   CreateOrderSuccessAction,
-  CancelOrderSuccessAction
+  CancelOrderSuccessAction,
+  ExecuteOrderTransactionSubmittedAction
 } from '../order/actions'
 import {
   TRANSFER_NFT_TRANSACTION_SUBMITTED,
@@ -79,8 +79,8 @@ function withCategory(eventName: string, item: { category: string }) {
   return `${eventName} ${category}`
 }
 
-track<ExecuteOrderSuccessAction>(
-  EXECUTE_ORDER_SUCCESS,
+track<ExecuteOrderTransactionSubmittedAction>(
+  EXECUTE_ORDER_TRANSACTION_SUBMITTED,
   ({ payload }) => withCategory('Buy', payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
