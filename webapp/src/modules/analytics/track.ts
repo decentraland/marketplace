@@ -37,7 +37,7 @@ import {
 } from '../nft/actions'
 import {
   PLACE_BID_SUCCESS,
-  ACCEPT_BID_SUCCESS,
+  ACCEPT_BID_TRANSACTION_SUBMITTED,
   CANCEL_BID_SUCCESS,
   ARCHIVE_BID,
   UNARCHIVE_BID,
@@ -153,7 +153,7 @@ track<PlaceBidSuccessAction>(
 )
 
 track<AcceptBidSuccessAction>(
-  ACCEPT_BID_SUCCESS,
+  ACCEPT_BID_TRANSACTION_SUBMITTED,
   'Accept bid',
   ({ payload }) => ({
     tokenId: payload.bid.tokenId,

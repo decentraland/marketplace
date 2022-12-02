@@ -22,10 +22,11 @@ import {
   FETCH_BIDS_BY_NFT_REQUEST,
   FetchBidsByNFTRequestAction,
   fetchBidsByNFTSuccess,
-  fetchBidsByNFTFailure
+  fetchBidsByNFTFailure,
+  acceptBidtransactionSubmitted
 } from './actions'
 import { getWallet } from '../wallet/selectors'
-import { VendorFactory } from '../vendor/VendorFactory'
+import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getContract } from '../contract/selectors'
 import { VendorName } from '../vendor/types'
 import { getRentalById } from '../rental/selectors'
@@ -35,6 +36,7 @@ import {
   isRentalListingOpen,
   waitUntilRentalChangesStatus
 } from '../rental/utils'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 
 export function* bidSaga() {
   yield takeEvery(PLACE_BID_REQUEST, handlePlaceBidRequest)
@@ -88,16 +90,26 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
     })
     if (!contract || !contract.vendor) {
       throw new Error(
-        `Couldn't find a valid vendor for contract ${contract?.address}`
+        contract
+          ? `Couldn't find a valid vendor for contract ${contract?.address}`
+          : `Couldn't find a valid vendor for contract ${bid.contractAddress}`
       )
     }
-    const { bidService } = VendorFactory.build(contract.vendor)
+    const vendor: Vendor<VendorName> = yield call(
+      VendorFactory.build,
+      contract.vendor
+    )
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call(() => bidService!.accept(wallet, bid))
-
+    const txHash: string = yield call(
+      [vendor.bidService!, 'accept'],
+      wallet,
+      bid
+    )
+    yield put(acceptBidtransactionSubmitted(bid, txHash))
     const nft: NFT | null = yield select(getCurrentNFT)
     if (nft?.openRentalId) {
+      yield call(waitForTx, txHash)
       const rental: RentalListing | null = yield select(
         getRentalById,
         nft.openRentalId
