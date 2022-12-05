@@ -5,7 +5,7 @@
   "BUILDER_SERVER_URL": "https://builder-api.decentraland.org/v1",
   "ATLAS_SERVER_URL": "https://api.decentraland.org",
   "PEER_URL": "https://peer.decentraland.org",
-  "SIGNATURES_SERVER_URL": "https://signatures-server.decentraland.org/v1",
+  "SIGNATURES_SERVER_URL": "https://signatures-api.decentraland.org/v1",
   "TRANSACTIONS_API_URL": "https://transactions-api.decentraland.org/v1",
   "BUILDER_URL": "https://builder.decentraland.org",
   "COINGECKO_API_URL": "https://api.coingecko.com/api/v3",
