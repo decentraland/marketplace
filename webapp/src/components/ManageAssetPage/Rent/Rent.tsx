@@ -159,7 +159,12 @@ export const Rent = (props: Props) => {
                       month: 'long',
                       day: 'numeric'
                     }),
-                    tenant: <LinkedProfile address={rental.tenant!} />
+                    tenant: (
+                      <LinkedProfile
+                        className={styles.rentedBy}
+                        address={rental.tenant!}
+                      />
+                    )
                   }}
                 />
               </div>
@@ -193,7 +198,12 @@ export const Rent = (props: Props) => {
                       <T
                         id="manage_asset_page.rent.rent_end"
                         values={{
-                          tenant: <LinkedProfile address={rental.tenant!} />,
+                          tenant: (
+                            <LinkedProfile
+                              className={styles.rentedBy}
+                              address={rental.tenant!}
+                            />
+                          ),
                           asset: assetText
                         }}
                       />

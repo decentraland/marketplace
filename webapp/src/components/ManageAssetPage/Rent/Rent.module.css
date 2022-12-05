@@ -128,9 +128,8 @@
   flex: 1 1 auto;
 }
 
-.profile {
-  padding-left: 5px;
-  padding-right: 5px;
+.rentedBy {
+  margin-left: 7px;
 }
 
 .activeRentActions {
