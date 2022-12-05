@@ -54,7 +54,7 @@
   line-height: 28px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 767px) {
   .actionsContainer {
     align-items: center;
     bottom: 28px;

@@ -102,7 +102,7 @@
   margin-top: 15px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 767px) {
   .modal:global(.ui.modal.tiny) {
     width: 100%;
     height: 100%;
