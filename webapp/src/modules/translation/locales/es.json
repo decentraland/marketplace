@@ -277,7 +277,7 @@
     "size_error": "El tamaño máximo permitido es de {max}, el archivo seleccionado tiene {current}",
     "facebook": "Handle de Facebook",
     "twitter": "Handle de Twitter",
-    "discord": "ID del canal de Discord",
+    "discord": "ID de invitación de Discord",
     "save": "Guardar",
     "revert": "Revertir",
     "add_cover_picture": "Haga click aquí para ponerle una imagen a la tienda",

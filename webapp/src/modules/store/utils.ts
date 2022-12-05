@@ -158,23 +158,23 @@ export const deployStoreEntity = async (
 
 // Validations
 
-export const linkStartWiths: Record<LinkType, string> = {
+export const linkStartsWith: Record<LinkType, string> = {
   [LinkType.WEBSITE]: 'https://',
   [LinkType.FACEBOOK]: 'https://www.facebook.com/',
   [LinkType.TWITTER]: 'https://www.twitter.com/',
-  [LinkType.DISCORD]: 'https://discord.com/channels/'
+  [LinkType.DISCORD]: 'https://discord.gg/'
 }
 
 export const getIsValidLink = (type: LinkType, link: string) => {
   switch (type) {
     case LinkType.WEBSITE:
-      return link.startsWith(linkStartWiths.website)
+      return link.startsWith(linkStartsWith.website)
     case LinkType.FACEBOOK:
-      return link.startsWith(linkStartWiths.facebook)
+      return link.startsWith(linkStartsWith.facebook)
     case LinkType.TWITTER:
-      return link.startsWith(linkStartWiths.twitter)
+      return link.startsWith(linkStartsWith.twitter)
     case LinkType.DISCORD:
-      return link.startsWith(linkStartWiths.discord)
+      return link.startsWith(linkStartsWith.discord)
     default:
       throw new Error(`Invalid LinkType '${type}'`)
   }

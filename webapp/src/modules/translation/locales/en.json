@@ -282,7 +282,7 @@
     "size_error": "Maximum file size allowed is of {max}, the file you selected has {current}",
     "facebook": "Facebook Handle",
     "twitter": "Twitter Handle",
-    "discord": "Discord Channel ID",
+    "discord": "Discord Invite ID",
     "save": "Save",
     "revert": "Revert",
     "add_cover_picture": "Click here to add a cover picture",
