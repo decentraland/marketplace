@@ -57,7 +57,7 @@
   margin-left: 12px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 767px) {
   .modal:global(.ui.modal) > .actions {
     align-items: center;
     bottom: 28px;
