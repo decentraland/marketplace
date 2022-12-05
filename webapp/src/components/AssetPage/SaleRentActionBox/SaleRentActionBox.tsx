@@ -220,7 +220,7 @@ const SaleRentActionBox = ({
                     </div>
                   }
                 />
-                {!hasEnoughManaToRent ? (
+                {rental && wallet && !hasEnoughManaToRent ? (
                   <div className={styles.notEnoughMana}>
                     {t('asset_page.sales_rent_action_box.not_enough_mana')}
                   </div>
@@ -296,7 +296,7 @@ const SaleRentActionBox = ({
                     />
                   ) : null}
                 </div>
-                {order && !hasEnoughManaToBuy ? (
+                {order && wallet && !hasEnoughManaToBuy ? (
                   <div className={styles.notEnoughMana}>
                     {t('asset_page.sales_rent_action_box.not_enough_mana')}
                   </div>
