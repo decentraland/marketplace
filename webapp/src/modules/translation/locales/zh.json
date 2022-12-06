@@ -657,8 +657,9 @@
       "place_bid": "您对{name}出价了{price}。",
       "accept_bid": "您接受了{name}的{price}出价。",
       "cancel_bid": "您取消了对{name}的{price}出价。",
-      "claim_land": "您从 {contract} 中认领了您的 {name}。",
-      "remove_rental": "您删除了 {name} 的出租列表."
+      "claim_asset": "您从 {contract} 中认领了您的 {name}。",
+      "remove_rental": "您删除了 {name} 的出租列表.",
+      "accept_rental": "您接受了 {name} 的租赁，价格为 {pricePerDay} 一天，持续 {days} 天."
     }
   },
   "mana": {
