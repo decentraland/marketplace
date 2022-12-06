@@ -143,20 +143,24 @@ export const acceptRentalListingSuccess = (
 ) =>
   action(ACCEPT_RENTAL_LISTING_SUCCESS, {
     nft,
-    rental,
-    periodIndexChosen
+    periodIndexChosen,
+    rental
   })
 export const acceptRentalListingFailure = (error: string) =>
   action(ACCEPT_RENTAL_LISTING_FAILURE, { error })
 export const acceptRentalListingTransactionSubmitted = (
   nft: NFT,
-  txHash: string
+  rental: RentalListing,
+  txHash: string,
+  periodIndexChosen: number
 ) =>
   action(
     ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
     buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
-      contractAddress: nft.contractAddress
+      contractAddress: nft.contractAddress,
+      pricePerDay: rental.periods[periodIndexChosen].pricePerDay,
+      duration: rental.periods[periodIndexChosen].maxDays
     })
   )
 

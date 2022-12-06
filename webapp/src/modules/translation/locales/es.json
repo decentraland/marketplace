@@ -655,8 +655,9 @@
       "place_bid": "Hiciste una oferta de {price} por {name}.",
       "accept_bid": "Aceptaste una oferta de {price} por {name}.",
       "cancel_bid": "Cancelaste una oferta de {price} por {name}.",
-      "claim_land": "Reclamaste tu {name} del {contract}.",
-      "remove_rental": "Removiste tu {name} del listado de rentas."
+      "claim_asset": "Reclamaste tu {name} del {contract}.",
+      "remove_rental": "Removiste tu {name} del listado de rentas.",
+      "accept_rental": "Aceptaste una renta en {name} pagando {pricePerDay} por día por {duration} {duration, plural, one {día} other {días}}."
     }
   },
   "mana": {

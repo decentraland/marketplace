@@ -324,7 +324,14 @@ function* handleAcceptRentalListingRequest(
       'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
       ...txParams
     )
-    yield put(acceptRentalListingTransactionSubmitted(nft, txHash))
+    yield put(
+      acceptRentalListingTransactionSubmitted(
+        nft,
+        rental,
+        txHash,
+        periodIndexChosen
+      )
+    )
     yield call(waitForTx, txHash)
     const rentalListingUpdated: RentalListing = yield call(
       waitUntilRentalChangesStatus,
