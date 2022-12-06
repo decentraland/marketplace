@@ -34,7 +34,7 @@
     align-items: center;
     bottom: 28px;
     position: fixed;
-    width: 100%;
+    width: 90%;
   }
 
   :global(.ui.modal) > .actions,
