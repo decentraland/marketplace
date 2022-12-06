@@ -112,22 +112,20 @@ const SaleRentActionBox = ({
     () =>
       !!rental &&
       !!currentMana &&
-      ethers.BigNumber.from(currentMana).gte(
-        ethers.utils.formatEther(
+      ethers.utils
+        .parseEther(currentMana.toString())
+        .gte(
           ethers.BigNumber.from(
             rental.periods[selectedRentalPeriodIndex].pricePerDay
           ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
-        )
-      ),
+        ),
     [rental, currentMana, selectedRentalPeriodIndex]
   )
   const hasEnoughManaToBuy = useMemo(
     () =>
       !!order &&
       !!currentMana &&
-      ethers.BigNumber.from(currentMana).gte(
-        ethers.utils.formatEther(order.price)
-      ),
+      ethers.utils.parseEther(currentMana.toString()).gte(order.price),
     [order, currentMana]
   )
 
@@ -194,7 +192,7 @@ const SaleRentActionBox = ({
                           'asset_page.sales_rent_action_box.mobile_coming_soon',
                           {
                             asset: isParcel(nft)
-                              ? t('global.land')
+                              ? t('global.parcel')
                               : t('global.estate')
                           }
                         )
@@ -204,7 +202,7 @@ const SaleRentActionBox = ({
                   }
                   position="top center"
                   on={isMobileView ? 'click' : 'hover'}
-                  disabled={!isMobileView && !isNFTPartOfAState}
+                  disabled={!isNFTPartOfAState}
                   trigger={
                     <div className={styles.fullWidth}>
                       <Button
@@ -222,7 +220,7 @@ const SaleRentActionBox = ({
                     </div>
                   }
                 />
-                {!hasEnoughManaToRent ? (
+                {rental && wallet && !hasEnoughManaToRent ? (
                   <div className={styles.notEnoughMana}>
                     {t('asset_page.sales_rent_action_box.not_enough_mana')}
                   </div>
@@ -298,7 +296,7 @@ const SaleRentActionBox = ({
                     />
                   ) : null}
                 </div>
-                {order && !hasEnoughManaToBuy ? (
+                {order && wallet && !hasEnoughManaToBuy ? (
                   <div className={styles.notEnoughMana}>
                     {t('asset_page.sales_rent_action_box.not_enough_mana')}
                   </div>

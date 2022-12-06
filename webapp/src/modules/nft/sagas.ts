@@ -28,7 +28,8 @@ import {
   TRANSFER_NFT_REQUEST,
   TransferNFTRequestAction,
   transferNFTSuccess,
-  transferNFTFailure
+  transferNFTFailure,
+  transferNFTransactionSubmitted
 } from './actions'
 import { NFT } from './types'
 
@@ -142,9 +143,9 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
       address,
       nft
     )
-
-    yield call(waitForTx, txHash)
+    yield put(transferNFTransactionSubmitted(nft, address, txHash))
     if (nft?.openRentalId) {
+      yield call(waitForTx, txHash)
       const rental: RentalListing | null = yield select(
         getRentalById,
         nft.openRentalId
@@ -154,7 +155,7 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
       }
     }
 
-    yield put(transferNFTSuccess(nft, address, txHash))
+    yield put(transferNFTSuccess(nft, address))
   } catch (error) {
     const errorMessage = isErrorWithMessage(error)
       ? error.message

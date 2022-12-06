@@ -56,3 +56,29 @@
 .signMessage {
   margin-left: 12px;
 }
+
+@media (max-width: 767px) {
+  .modal:global(.ui.modal) > .actions {
+    align-items: center;
+    bottom: 28px;
+    margin: 0px;
+    position: fixed;
+    min-width: 99vw;
+  }
+
+  .modal:global(.ui.modal > .content) {
+    margin: 20px 0px 0px 0px;
+  }
+
+  .cancel {
+    width: 85%;
+  }
+
+  .loader {
+    display: flex;
+  }
+
+  .modal :global(.dcl.modal-navigation-title) {
+    margin-top: unset;
+  }
+}

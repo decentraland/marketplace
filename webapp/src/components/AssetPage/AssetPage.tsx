@@ -26,7 +26,7 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
         <ErrorBoundary>
           <Section>
             <Column>
-              <AssetProviderPage type={type}>
+              <AssetProviderPage type={type} fullWidth>
                 {(asset, order, rental) => (
                   <>
                     <Back

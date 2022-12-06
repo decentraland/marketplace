@@ -278,7 +278,7 @@
     "size_error": "允许的最大文件大小为 {max}，您选择的文件具有 {current}",
     "facebook": "处理 Facebook",
     "twitter": "处理 Twitter",
-    "discord": "通道编号 Discord",
+    "discord": "Discord 邀请 ID",
     "save": "救",
     "revert": "恢复",
     "add_cover_picture": "单击此处将图像放入您的商店",
