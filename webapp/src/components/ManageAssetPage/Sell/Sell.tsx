@@ -71,7 +71,7 @@ const Sell = (props: Props) => {
       {order ? (
         <div
           className={classNames(styles.content, {
-            [styles.isLandLocked]: isLandLocked
+            [styles.isLandLocked]: areActionsLocked
           })}
         >
           <div className={styles.column}>

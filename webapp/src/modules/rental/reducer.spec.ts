@@ -27,7 +27,8 @@ let rentalState: RentalState
 
 beforeEach(() => {
   rental = {
-    id: 'someRental'
+    id: 'someRental',
+    periods: [{ maxDays: 10, minDays: 8, pricePerDay: '10000000' }]
   } as RentalListing
   nft = {
     id: 'someNft',
@@ -485,18 +486,25 @@ describe('when reducing the action the success of accepting a rental', () => {
 })
 
 describe('when reducing the action that signals that the accept listing transaction was submitted', () => {
+  let periodIndexChosen: number
   beforeEach(() => {
     rentalState = {
       ...rentalState,
       isSubmittingTransaction: true
     }
+    periodIndexChosen = 0
   })
 
   it('should set the flag that defines that the transaction is being submitted to false', () => {
     expect(
       rentalReducer(
         rentalState,
-        acceptRentalListingTransactionSubmitted(nft, 'aTxHash')
+        acceptRentalListingTransactionSubmitted(
+          nft,
+          rental,
+          'aTxHash',
+          periodIndexChosen
+        )
       )
     ).toEqual({
       ...rentalState,

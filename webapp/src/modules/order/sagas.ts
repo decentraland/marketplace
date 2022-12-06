@@ -2,6 +2,7 @@ import { put, call, takeEvery, select } from 'redux-saga/effects'
 import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
@@ -23,7 +24,8 @@ import {
   CANCEL_ORDER_REQUEST,
   CancelOrderRequestAction,
   cancelOrderSuccess,
-  cancelOrderFailure
+  cancelOrderFailure,
+  executeOrderTransactionSubmitted
 } from './actions'
 
 export function* orderSaga() {
@@ -82,7 +84,10 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
       order,
       fingerprint
     )
+
+    yield put(executeOrderTransactionSubmitted(order, nft, txHash))
     if (nft.openRentalId) {
+      yield call(waitForTx, txHash)
       const rental: RentalListing = yield select(
         getRentalById,
         nft.openRentalId
@@ -92,7 +97,7 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
       }
     }
 
-    yield put(executeOrderSuccess(order, nft, txHash))
+    yield put(executeOrderSuccess())
   } catch (error) {
     const errorMessage = isErrorWithMessage(error)
       ? error.message

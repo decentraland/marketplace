@@ -789,9 +789,20 @@ describe('when handling the request action to accept a rental', () => {
               addressOperator
             )
           )
-          .put(acceptRentalListingTransactionSubmitted(nft, txHash))
           .put(
-            acceptRentalListingSuccess(nft, updatedRentalListing, periodIndexChosen)
+            acceptRentalListingTransactionSubmitted(
+              nft,
+              rental,
+              txHash,
+              periodIndexChosen
+            )
+          )
+          .put(
+            acceptRentalListingSuccess(
+              nft,
+              updatedRentalListing,
+              periodIndexChosen
+            )
           )
           .silentRun()
       })

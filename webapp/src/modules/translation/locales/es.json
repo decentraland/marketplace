@@ -277,7 +277,7 @@
     "size_error": "El tamaño máximo permitido es de {max}, el archivo seleccionado tiene {current}",
     "facebook": "Handle de Facebook",
     "twitter": "Handle de Twitter",
-    "discord": "ID del canal de Discord",
+    "discord": "ID de invitación de Discord",
     "save": "Guardar",
     "revert": "Revertir",
     "add_cover_picture": "Haga click aquí para ponerle una imagen a la tienda",
@@ -655,8 +655,9 @@
       "place_bid": "Hiciste una oferta de {price} por {name}.",
       "accept_bid": "Aceptaste una oferta de {price} por {name}.",
       "cancel_bid": "Cancelaste una oferta de {price} por {name}.",
-      "claim_land": "Reclamaste tu {name} del {contract}.",
-      "remove_rental": "Removiste tu {name} del listado de rentas."
+      "claim_asset": "Reclamaste tu {name} del {contract}.",
+      "remove_rental": "Removiste tu {name} del listado de rentas.",
+      "accept_rental": "Aceptaste una renta en {name} pagando {pricePerDay} por día por {duration} {duration, plural, one {día} other {días}}."
     }
   },
   "mana": {

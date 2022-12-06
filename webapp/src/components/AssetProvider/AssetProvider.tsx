@@ -29,7 +29,7 @@ const AssetProvider = (props: Props) => {
     if (contractAddress && tokenId) {
       switch (type) {
         case AssetType.NFT:
-          if (!hasLoadedInitialFlags) {
+          if (hasLoadedInitialFlags) {
             onFetchNFT(contractAddress, tokenId, { rentalStatus })
           }
           break

@@ -48,7 +48,7 @@ export const Rent = (props: Props) => {
     wallet
   } = props
   const isMobileView = useMobileMediaQuery()
-  const assetText = isParcel(nft) ? t('global.land') : t('global.estate')
+  const assetText = isParcel(nft) ? t('global.parcel') : t('global.estate')
 
   const wrapDisabledMobileButton = useCallback(
     trigger => {
@@ -149,7 +149,12 @@ export const Rent = (props: Props) => {
                       month: 'long',
                       day: 'numeric'
                     }),
-                    tenant: <LinkedProfile address={rental.tenant!} />
+                    tenant: (
+                      <LinkedProfile
+                        className={styles.rentedBy}
+                        address={rental.tenant!}
+                      />
+                    )
                   }}
                 />
               </div>
@@ -183,7 +188,12 @@ export const Rent = (props: Props) => {
                       <T
                         id="manage_asset_page.rent.rent_end"
                         values={{
-                          tenant: <LinkedProfile address={rental.tenant!} />,
+                          tenant: (
+                            <LinkedProfile
+                              className={styles.rentedBy}
+                              address={rental.tenant!}
+                            />
+                          ),
                           asset: assetText
                         }}
                       />

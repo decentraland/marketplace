@@ -13,6 +13,7 @@ import {
 import { ContractName, getContract } from 'decentraland-transactions'
 import { TransactionLink } from 'decentraland-dapps/dist/containers'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { config } from '../../../../config'
 import { Props } from './AuthorizationStep.types'
 import styles from './AuthorizationStep.module.css'
 
@@ -56,6 +57,12 @@ const AuthorizationStep = (props: Props) => {
     onCancel()
   }, [setShowError, onCancel])
 
+  const handleOnInfo = useCallback(() => {
+    window.location.href = `${config.get(
+      'DOCS_URL'
+    )}/player/market/rentals/#list-land-for-rent`
+  }, [])
+
   // Effects
   useEffect(() => {
     if (error && !isConfirmingAuthorization && !isAuthorizing) {
@@ -72,6 +79,7 @@ const AuthorizationStep = (props: Props) => {
       <ModalNavigation
         title={t('rental_modal.authorization_step.title')}
         onClose={!isLoading ? onCancel : undefined}
+        onInfo={handleOnInfo}
       />
       <Modal.Content>
         <div className={styles.notice}>

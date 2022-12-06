@@ -278,7 +278,7 @@
     "size_error": "允许的最大文件大小为 {max}，您选择的文件具有 {current}",
     "facebook": "处理 Facebook",
     "twitter": "处理 Twitter",
-    "discord": "通道编号 Discord",
+    "discord": "Discord 邀请 ID",
     "save": "救",
     "revert": "恢复",
     "add_cover_picture": "单击此处将图像放入您的商店",
@@ -657,8 +657,9 @@
       "place_bid": "您对{name}出价了{price}。",
       "accept_bid": "您接受了{name}的{price}出价。",
       "cancel_bid": "您取消了对{name}的{price}出价。",
-      "claim_land": "您从 {contract} 中认领了您的 {name}。",
-      "remove_rental": "您删除了 {name} 的出租列表."
+      "claim_asset": "您从 {contract} 中认领了您的 {name}。",
+      "remove_rental": "您删除了 {name} 的出租列表.",
+      "accept_rental": "您接受了 {name} 的租赁，价格为 {pricePerDay} 一天，持续 {days} 天."
     }
   },
   "mana": {
