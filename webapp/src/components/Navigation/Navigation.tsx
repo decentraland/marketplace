@@ -87,10 +87,12 @@ const Navigation = (props: Props) => {
             <Icon className="download-icon"></Icon>
             {t('navigation.buy_mana_with_fiat')}
           </Button>
-          <BuyManaWithFiatModal
-            open={showBuyManaModal}
-            onClose={handleCloseBuyManaWithFiatModal}
-          />
+          {showBuyManaModal && (
+            <BuyManaWithFiatModal
+              open={showBuyManaModal}
+              onClose={handleCloseBuyManaWithFiatModal}
+            />
+          )}
         </Tabs.Right>
       </Tabs>
     </div>
