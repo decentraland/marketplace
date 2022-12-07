@@ -29,6 +29,8 @@ import { LANDFilters } from '../types'
 import { browseRentedLAND } from '../utils'
 import { Props } from './NFTFilters.types'
 
+const IS_MAP_STORAGE_KEY = 'is-map'
+
 const NFTFilters = (props: Props) => {
   const {
     section,
@@ -150,7 +152,7 @@ const NFTFilters = (props: Props) => {
 
   const handleIsMapChange = useCallback(
     (isMap: boolean) => {
-      localStorage.setItem('is-map', isMap.toString())
+      localStorage.setItem(IS_MAP_STORAGE_KEY, isMap.toString())
 
       onBrowse({
         isMap,
@@ -238,6 +240,14 @@ const NFTFilters = (props: Props) => {
       ),
     [category, setShowFiltersMenu]
   )
+
+  useEffect(() => {
+    const isMap = localStorage.getItem(IS_MAP_STORAGE_KEY) || ''
+
+    if (isMap === 'false') {
+      handleIsMapChange(false)
+    }
+  }, [handleIsMapChange])
 
   const searchPlaceholder = isMap
     ? t('nft_filters.search_land')
