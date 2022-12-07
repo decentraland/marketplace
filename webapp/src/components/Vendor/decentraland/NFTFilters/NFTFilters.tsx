@@ -23,13 +23,14 @@ import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { AssetType } from '../../../../modules/asset/types'
-import { isLandSection } from '../../../../modules/ui/utils'
+import {
+  isLandSection,
+  persistIsMapProperty
+} from '../../../../modules/ui/utils'
 import { View } from '../../../../modules/ui/types'
 import { LANDFilters } from '../types'
 import { browseRentedLAND } from '../utils'
 import { Props } from './NFTFilters.types'
-
-const IS_MAP_STORAGE_KEY = 'is-map'
 
 const NFTFilters = (props: Props) => {
   const {
@@ -152,7 +153,7 @@ const NFTFilters = (props: Props) => {
 
   const handleIsMapChange = useCallback(
     (isMap: boolean) => {
-      localStorage.setItem(IS_MAP_STORAGE_KEY, isMap.toString())
+      persistIsMapProperty(isMap)
 
       onBrowse({
         isMap,
@@ -240,14 +241,6 @@ const NFTFilters = (props: Props) => {
       ),
     [category, setShowFiltersMenu]
   )
-
-  useEffect(() => {
-    const isMap = localStorage.getItem(IS_MAP_STORAGE_KEY) || ''
-
-    if (isMap === 'false') {
-      handleIsMapChange(false)
-    }
-  }, [handleIsMapChange])
 
   const searchPlaceholder = isMap
     ? t('nft_filters.search_land')
