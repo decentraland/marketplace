@@ -150,6 +150,8 @@ const NFTFilters = (props: Props) => {
 
   const handleIsMapChange = useCallback(
     (isMap: boolean) => {
+      localStorage.setItem('is-map', isMap.toString())
+
       onBrowse({
         isMap,
         isFullscreen: isMap,
