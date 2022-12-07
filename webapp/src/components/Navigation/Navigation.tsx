@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Tabs, Mobile, Button, Icon } from 'decentraland-ui'
+import { Tabs, Mobile, Button } from 'decentraland-ui'
 import BuyManaWithFiatModal from 'decentraland-dapps/dist/containers/BuyManaWithFiatModal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import * as decentraland from '../../modules/vendor/decentraland'
@@ -80,11 +80,10 @@ const Navigation = (props: Props) => {
         </Tabs.Left>
         <Tabs.Right>
           <Button
-            inverted
+            primary
             onClick={() => setShowBuyManaModal(true)}
             size="small"
           >
-            <Icon className="download-icon"></Icon>
             {t('navigation.buy_mana_with_fiat')}
           </Button>
           {showBuyManaModal && (
