@@ -39,7 +39,7 @@ const SubmitTransactionModal = ({
           />
         ) : null}
       </Modal.Content>
-      <Modal.Actions className={styles.actions}>
+      <Modal.Actions>
         {isLoading ? (
           <div className={styles.loader}>
             <Loader inline size="small" />{' '}
@@ -54,12 +54,7 @@ const SubmitTransactionModal = ({
             {action_message}
           </Button>
         )}
-        <Button
-          className={styles.cancel}
-          secondary
-          disabled={isLoading}
-          onClick={onClose}
-        >
+        <Button secondary disabled={isLoading} onClick={onClose}>
           {t('global.cancel')}
         </Button>
       </Modal.Actions>

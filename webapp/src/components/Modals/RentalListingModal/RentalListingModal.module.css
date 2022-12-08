@@ -1,5 +1,6 @@
 .modal:global(.ui.modal.tiny) {
   width: 520px;
+  padding: 0px 30px 35px 30px;
 }
 
 .editingModal.modal:global(.ui.modal.tiny) {
@@ -99,4 +100,30 @@
 .actions :global(.ui.primary.button) + :global(.ui.secondary.button) {
   margin-left: 0px;
   margin-top: 15px;
+}
+
+@media (max-width: 767px) {
+  .modal:global(.ui.modal.tiny) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .editingModal.modal:global(.ui.modal.tiny) {
+    width: 100%;
+    height: 100%;
+  }
+
+  .modal:global(.ui.modal > .content) {
+    margin: 20px;
+  }
+
+  .modal:global(.ui.modal > .actions) {
+    align-items: center;
+    bottom: 28px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    margin: 0px;
+  }
 }

@@ -17,12 +17,17 @@ import { Props } from './AssetBrowse.types'
 import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
 import { ToggleBox } from './ToggleBox'
 import classNames from 'classnames'
-import { isAccountView, isLandSection } from '../../modules/ui/utils'
+import {
+  getPersistedIsMapProperty,
+  isAccountView,
+  isLandSection
+} from '../../modules/ui/utils'
 import OnSaleList from '../OnSaleOrRentList'
 import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
+import { BrowseOptions } from '../../modules/routing/types'
 import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
@@ -79,7 +84,8 @@ const AssetBrowse = (props: Props) => {
     onlyOnSale,
     onlySmart,
     viewInState,
-    isRentalsEnabled
+    isRentalsEnabled,
+    onlyOnRent
   } = props
 
   // Prevent fetching more than once while browsing
@@ -98,8 +104,21 @@ const AssetBrowse = (props: Props) => {
   }, [view, viewInState])
 
   useEffect(() => {
+    if (
+      section === DecentralandSection.LAND &&
+      getPersistedIsMapProperty() === false &&
+      isMap
+    ) {
+      // To prevent the map view from being displayed when the user clicks on the Land navigation tab.
+      // We set the has fetched variable to false so it has to browse back to the list view.
+      setHasFetched(false)
+    }
+  }, [section, isMap])
+
+  useEffect(() => {
     if (viewInState === view && !hasFetched) {
-      onFetchAssetsFromRoute({
+      // Options used to fetch the assets.
+      const browseOpts: BrowseOptions = {
         vendor,
         view,
         section,
@@ -107,7 +126,27 @@ const AssetBrowse = (props: Props) => {
         contracts,
         onlyOnSale,
         onlySmart
-      })
+      }
+
+      // Function used to fetch the assets.
+      let fetchAssetsFn: (opts: BrowseOptions) => void = onFetchAssetsFromRoute
+
+      if (
+        section === DecentralandSection.LAND &&
+        getPersistedIsMapProperty() === false
+      ) {
+        // When the section is LAND and the user has actively selected the list view of the map on the past,
+        // we set the required options to display the list view of the map.
+        browseOpts.isMap = false
+        browseOpts.isFullscreen = false
+        browseOpts.onlyOnSale = (!onlyOnSale && !onlyOnRent) || onlyOnSale
+
+        // We also set the fetch function as onBrowse because we need the url to be updated.
+        fetchAssetsFn = onBrowse
+      }
+
+      fetchAssetsFn(browseOpts)
+
       setHasFetched(true)
     }
   }, [
@@ -120,7 +159,9 @@ const AssetBrowse = (props: Props) => {
     onlySmart,
     viewInState,
     onFetchAssetsFromRoute,
-    hasFetched
+    hasFetched,
+    onlyOnRent,
+    onBrowse
   ])
 
   // Handlers

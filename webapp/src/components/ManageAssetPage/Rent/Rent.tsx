@@ -102,25 +102,15 @@ export const Rent = (props: Props) => {
   const rentButton = useMemo(() => {
     if (canCreateANewRental(rental)) {
       return (
-        <Button
-          className={styles.actionButton}
-          onClick={handleOnCreateOrEdit}
-          disabled={isMobileView}
-        >
+        <Button className={styles.actionButton} onClick={handleOnCreateOrEdit}>
           {t('manage_asset_page.rent.list_for_rent')}
         </Button>
       )
     }
     if (rental && isRentalListingOpen(rental)) {
-      return (
-        <IconButton
-          iconName="pencil"
-          onClick={handleOnCreateOrEdit}
-          disabled={isMobileView}
-        />
-      )
+      return <IconButton iconName="pencil" onClick={handleOnCreateOrEdit} />
     }
-  }, [handleOnCreateOrEdit, isMobileView, rental])
+  }, [handleOnCreateOrEdit, rental])
 
   return (
     <section className={classNames(styles.box, className)}>

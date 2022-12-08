@@ -103,3 +103,28 @@
   margin-left: 0px;
   margin-top: 15px;
 }
+
+@media (max-width: 767px) {
+  .actions {
+    align-items: center;
+    bottom: 28px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    margin: 0px !important;
+  }
+
+  .actionButton {
+    width: 85% !important;
+  }
+
+  .pricePerDay {
+    margin-top: 10px;
+  }
+
+  .periodOptions {
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 34px 34px 34px;
+  }
+}

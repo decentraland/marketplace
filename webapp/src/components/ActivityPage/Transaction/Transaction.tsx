@@ -24,6 +24,7 @@ import {
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
 import {
+  ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
   CLAIM_ASSET_TRANSACTION_SUBMITTED,
   REMOVE_RENTAL_TRANSACTION_SUBMITTED
 } from '../../../modules/rental/actions'
@@ -33,6 +34,7 @@ import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
+import { ethers } from 'ethers'
 
 const Transaction = (props: Props) => {
   const { tx, getContract } = props
@@ -412,6 +414,44 @@ const Transaction = (props: Props) => {
                         {nft ? getAssetName(nft) : ''}
                       </Link>
                     )
+                  }}
+                />
+              }
+              tx={tx}
+            />
+          )}
+        </AssetProvider>
+      )
+    }
+    case ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED: {
+      const { tokenId, contractAddress, pricePerDay, duration } = tx.payload
+      return (
+        <AssetProvider
+          type={AssetType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
+          {nft => (
+            <TransactionDetail
+              asset={nft}
+              text={
+                <T
+                  id="transaction.detail.accept_rental"
+                  values={{
+                    name: (
+                      <Link to={locations.manage(contractAddress, tokenId)}>
+                        {nft ? getAssetName(nft) : ''}
+                      </Link>
+                    ),
+                    pricePerDay: (
+                      <Mana network={nft?.network} inline>
+                        {/* As this there might be already registered transactions and the price information is new, consider it optional */}
+                        {pricePerDay
+                          ? ethers.utils.formatEther(pricePerDay)
+                          : '0'}
+                      </Mana>
+                    ),
+                    duration: <span>{duration}</span>
                   }}
                 />
               }

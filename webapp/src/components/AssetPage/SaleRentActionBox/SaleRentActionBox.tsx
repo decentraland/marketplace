@@ -131,29 +131,29 @@ const SaleRentActionBox = ({
 
   return (
     <div className={styles.main}>
+      {isRentalOpen && maxPriceOfPeriods && isRentalsEnabled ? (
+        <div className={styles.viewSelector}>
+          <button
+            onClick={toggleView}
+            disabled={view === View.SALE}
+            className={classNames(styles.viewOption, {
+              [styles.selectedViewOption]: view === View.SALE
+            })}
+          >
+            {t('global.sale')}
+          </button>
+          <button
+            onClick={toggleView}
+            disabled={view === View.RENT}
+            className={classNames(styles.viewOption, {
+              [styles.selectedViewOption]: view === View.RENT
+            })}
+          >
+            {t('global.rent')}
+          </button>
+        </div>
+      ) : null}
       <div className={styles.actions}>
-        {isRentalOpen && maxPriceOfPeriods && isRentalsEnabled ? (
-          <div className={styles.viewSelector}>
-            <button
-              onClick={toggleView}
-              disabled={view === View.SALE}
-              className={classNames(styles.viewOption, {
-                [styles.selectedViewOption]: view === View.SALE
-              })}
-            >
-              {t('global.sale')}
-            </button>
-            <button
-              onClick={toggleView}
-              disabled={view === View.RENT}
-              className={classNames(styles.viewOption, {
-                [styles.selectedViewOption]: view === View.RENT
-              })}
-            >
-              {t('global.rent')}
-            </button>
-          </div>
-        ) : null}
         {view === View.RENT &&
         isRentalOpen &&
         maxPriceOfPeriods &&

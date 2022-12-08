@@ -2,9 +2,18 @@
   margin-top: 24px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .ConfirmInputValueModal .dcl.field {
     width: 100%;
     min-width: auto;
+  }
+
+  :global(.ui.modal .actions) {
+    align-items: center;
+    bottom: 30px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 90%;
   }
 }

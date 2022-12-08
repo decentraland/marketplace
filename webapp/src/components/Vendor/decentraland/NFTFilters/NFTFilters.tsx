@@ -23,7 +23,10 @@ import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { AssetType } from '../../../../modules/asset/types'
-import { isLandSection } from '../../../../modules/ui/utils'
+import {
+  isLandSection,
+  persistIsMapProperty
+} from '../../../../modules/ui/utils'
 import { View } from '../../../../modules/ui/types'
 import { LANDFilters } from '../types'
 import { browseRentedLAND } from '../utils'
@@ -150,6 +153,8 @@ const NFTFilters = (props: Props) => {
 
   const handleIsMapChange = useCallback(
     (isMap: boolean) => {
+      persistIsMapProperty(isMap)
+
       onBrowse({
         isMap,
         isFullscreen: isMap,

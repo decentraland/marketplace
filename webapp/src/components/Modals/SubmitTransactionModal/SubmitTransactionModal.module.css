@@ -30,19 +30,25 @@
 }
 
 @media (max-width: 767px) {
-  .actions {
+  :global(.ui.modal > .actions) {
     align-items: center;
-    bottom: 28px;
+    bottom: 30px;
+    display: flex;
+    justify-content: center;
     position: fixed;
-    width: 90%;
-  }
-
-  :global(.ui.modal) > .actions,
-  :global(.ui.modal) > :global(.ui.form) > .actions {
+    width: 100%;
     margin: 0px;
   }
 
-  .cancel {
-    width: 80%;
+  .loader {
+    display: flex;
+  }
+
+  .signMessage {
+    margin: 5px;
+  }
+
+  :global(.ui.modal .actions .ui.button + .ui.button) {
+    width: 85%;
   }
 }

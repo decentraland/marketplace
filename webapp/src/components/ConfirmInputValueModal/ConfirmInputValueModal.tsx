@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, Button, Form } from 'decentraland-ui'
+import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './ConfirmInputValueModal.types'
 import { ManaField } from '../ManaField'
@@ -24,35 +24,39 @@ const ConfirmInputValueModal = ({
 
   return (
     <Modal size="small" open={open} className="ConfirmInputValueModal">
-      <Modal.Header>{headerTitle}</Modal.Header>
-      <Form onSubmit={onConfirm}>
-        <Modal.Content>
-          {content}
-          <ManaField
-            label={t('global.price')}
-            network={network}
-            placeholder={parsedValueToConfirm}
-            value={confirmedInput}
-            onChange={(_event, props) => {
-              setConfirmedInput(props.value)
-            }}
-          />
-        </Modal.Content>
-        <Modal.Actions>
-          <Button
-            type="button"
-            onClick={() => {
-              setConfirmedInput('')
-              onCancel()
-            }}
-          >
-            {t('global.cancel')}
-          </Button>
-          <Button type="submit" primary disabled={isDisabled} loading={loading}>
-            {t('global.proceed')}
-          </Button>
-        </Modal.Actions>
-      </Form>
+      <ModalNavigation title={headerTitle} onClose={onCancel}></ModalNavigation>
+      <Modal.Content>
+        {content}
+        <ManaField
+          label={t('global.price')}
+          network={network}
+          placeholder={parsedValueToConfirm}
+          value={confirmedInput}
+          onChange={(_event, props) => {
+            setConfirmedInput(props.value)
+          }}
+        />
+      </Modal.Content>
+      <Modal.Actions>
+        <Button
+          type="button"
+          onClick={() => {
+            setConfirmedInput('')
+            onCancel()
+          }}
+        >
+          {t('global.cancel')}
+        </Button>
+        <Button
+          type="submit"
+          primary
+          disabled={isDisabled}
+          loading={loading}
+          onClick={onConfirm}
+        >
+          {t('global.proceed')}
+        </Button>
+      </Modal.Actions>
     </Modal>
   )
 }
