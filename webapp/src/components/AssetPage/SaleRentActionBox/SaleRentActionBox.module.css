@@ -1,7 +1,7 @@
 .main {
   border-radius: 12px;
   margin-bottom: 12px;
-  background: #242129;
+  background: rgba(42, 38, 47);
 }
 
 .actions {
@@ -59,15 +59,16 @@
   display: flex;
   flex-direction: row;
   width: 100%;
-  border: 2px solid rgba(115, 110, 125, 0.24);
-  border-radius: 6px;
+  overflow: hidden;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
   justify-content: space-between;
 }
 
 .viewOption {
   flex: 1 1 auto;
   width: 100%;
-  background: rgba(115, 110, 125, 0.24);
+  background: rgba(31, 27, 35);
   text-align: center;
   padding-top: 9px;
   padding-bottom: 9px;
@@ -80,15 +81,13 @@
 	border: none;
   font-weight: 500;
   font-size: 17px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 .selectedViewOption {
-  background: #242129;
+  background: rgba(42, 38, 47);
   cursor: auto;
-}
-
-.viewSelector {
-  margin-bottom: 24px;
 }
 
 .notForSale {
