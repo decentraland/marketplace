@@ -77,7 +77,6 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
       value={value}
       options={options}
       onChange={handleOnChange}
-      defaultValue={0}
     />
   )
 }
