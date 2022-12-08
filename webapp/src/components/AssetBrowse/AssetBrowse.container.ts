@@ -12,7 +12,8 @@ import {
   getOnlyOnSale,
   getAssetType,
   getSection,
-  getOnlySmart
+  getOnlySmart,
+  getOnlyOnRent
 } from '../../modules/routing/selectors'
 import { getView } from '../../modules/ui/browse/selectors'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
@@ -36,7 +37,8 @@ const mapState = (state: RootState): MapStateProps => ({
   assetType: getAssetType(state),
   viewInState: getView(state),
   onlySmart: getOnlySmart(state),
-  isRentalsEnabled: getIsRentalsEnabled(state)
+  isRentalsEnabled: getIsRentalsEnabled(state),
+  onlyOnRent: getOnlyOnRent(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
