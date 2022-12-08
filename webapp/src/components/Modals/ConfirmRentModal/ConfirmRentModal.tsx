@@ -85,6 +85,7 @@ const ConfirmRentModal = ({
         <div className={styles.priceContainer}>
           <ManaField
             network={nft.network}
+            disabled={isLoading}
             label={t('bid_page.price')}
             placeholder={pricePerRentInEther}
             value={price}
@@ -98,7 +99,7 @@ const ConfirmRentModal = ({
           <Field
             label={t('rental_modal.confirm_rent_step.operator_address')}
             value={operatorAddress}
-            disabled={isUserTheOperatorAddress}
+            disabled={isUserTheOperatorAddress || isLoading}
             onChange={(_event, props) => {
               setOperatorAddress(props.value)
             }}
@@ -112,6 +113,7 @@ const ConfirmRentModal = ({
           <div className={styles.operatorCheckboxContainer}>
             <Checkbox
               checked={isUserTheOperatorAddress}
+              disabled={isLoading}
               onChange={handleOperatorToggle}
             />
             <span className={styles.operatorFieldNotice}>

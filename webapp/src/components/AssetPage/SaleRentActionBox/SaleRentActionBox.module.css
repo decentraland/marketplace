@@ -108,13 +108,9 @@
   background: rgba(115, 110, 125, 0.24) !important;
 }
 
-.periodsDropdown + .manage {
-  margin-top: 24px !important;
-  margin-bottom: 24px !important;
-}
-
-.manage {
-  background: rgba(115, 110, 125, 0.24) !important;
+.manage:global(.ui.button) {
+  margin-top: 24px;
+  background: rgba(115, 110, 125, 0.24);
 }
 
 .fullWidth {

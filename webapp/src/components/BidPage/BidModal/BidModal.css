@@ -3,16 +3,27 @@
 }
 
 .BidPage .subtitle {
-  margin-bottom: 32px;
+ margin-bottom: 10px; 
 }
 
 .BidPage .form-fields {
+  margin-top: 32px;
   max-width: 420px;
   margin-bottom: 20px;
 }
 
 .BidPage .fields .dcl.field {
   margin-bottom: 8px;
+}
+
+.BidPage .rentalMessage {
+  background-color: #2E2A33;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.BidPage .bid-action {
+  max-width: 400px;
 }
 
 @media (max-width: 768px) {

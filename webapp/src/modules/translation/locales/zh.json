@@ -555,6 +555,7 @@
     "invalid_date": "这个日期已过期",
     "not_enougn_mana": "您没有足够的MANA",
     "submit": "出价",
+    "rental_executed": "{asset_type, select, parcel {包裹} estate {庄园} other {那片土地}}租期至 <strong>{rental_end_date, date, medium}</strong>. 业主只有在收回财产后才能接受出价.",
     "confirm": {
       "title": "请确认",
       "create_bid_line_one": "您即将为 {name} 出价 {amount}。",
