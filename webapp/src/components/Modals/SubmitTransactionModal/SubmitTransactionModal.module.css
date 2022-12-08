@@ -30,14 +30,14 @@
 }
 
 @media (max-width: 767px) {
-  .actions {
+  :global(.ui.modal > .actions) {
     align-items: center;
     bottom: 30px;
     display: flex;
     justify-content: center;
     position: fixed;
     width: 100%;
-    margin: 0px !important;
+    margin: 0px;
   }
 
   .loader {
@@ -46,5 +46,9 @@
 
   .signMessage {
     margin: 5px;
+  }
+
+  :global(.ui.modal .actions .ui.button + .ui.button) {
+    width: 85%;
   }
 }

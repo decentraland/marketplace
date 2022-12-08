@@ -125,6 +125,6 @@
 
   .periodOptions {
     grid-template-columns: 50% 50%;
-    grid-template-rows: 34px 34px;
+    grid-template-rows: 34px 34px 34px;
   }
 }

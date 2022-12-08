@@ -55,16 +55,7 @@
 }
 
 @media (max-width: 767px) {
-  .actionsContainer {
-    align-items: center;
-    bottom: 28px;
-    display: flex;
-    justify-content: center;
-    position: fixed;
-    width: 100%;
-  }
-
-  .actionButton {
-    width: 85% !important;
+  :global(.ui.modal > .actions > .ui.button) {
+    width: 85%;
   }
 }
