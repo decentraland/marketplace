@@ -104,6 +104,18 @@ const AssetBrowse = (props: Props) => {
   }, [view, viewInState])
 
   useEffect(() => {
+    if (
+      section === DecentralandSection.LAND &&
+      getPersistedIsMapProperty() === false &&
+      isMap
+    ) {
+      // To prevent the map view from being displayed when the user clicks on the Land navigation tab.
+      // We set the has fetched variable to false so it has to browse back to the list view.
+      setHasFetched(false)
+    }
+  }, [section, isMap])
+
+  useEffect(() => {
     if (viewInState === view && !hasFetched) {
       // Options used to fetch the assets.
       const browseOpts: BrowseOptions = {
