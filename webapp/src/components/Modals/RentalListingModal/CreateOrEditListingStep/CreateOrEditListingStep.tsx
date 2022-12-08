@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { ethers } from 'ethers'
-import { Env } from '@dcl/ui-env'
 import {
   Modal,
   Button,
@@ -13,10 +12,8 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-import { config } from '../../../../config'
 import {
   PeriodOption,
-  PeriodOptionsDev,
   UpsertRentalOptType
 } from '../../../../modules/rental/types'
 import { parseMANANumber } from '../../../../lib/mana'
@@ -33,7 +30,6 @@ import { ManaField } from '../../../ManaField'
 import { Props } from './CreateOrEditListingStep.types'
 import styles from './CreateOrEditListingStep.module.css'
 
-const isDev = config.is(Env.DEVELOPMENT) || config.is(Env.STAGING)
 const RENTAL_MIN_PRICE = 1
 
 const CreateListingStep = (props: Props) => {
@@ -193,18 +189,16 @@ const CreateListingStep = (props: Props) => {
           </Header>
 
           <div className={styles.periodOptions}>
-            {Object.values(isDev ? PeriodOptionsDev : PeriodOption).map(
-              option => (
-                <Radio
-                  key={option}
-                  label={t(
-                    `rental_modal.create_listing_step.period_options.${option}`
-                  )}
-                  checked={periodOptions.includes(option)}
-                  onClick={createOptionHandler(option)}
-                />
-              )
-            )}
+            {Object.values(PeriodOption).map(option => (
+              <Radio
+                key={option}
+                label={t(
+                  `rental_modal.create_listing_step.period_options.${option}`
+                )}
+                checked={periodOptions.includes(option)}
+                onClick={createOptionHandler(option)}
+              />
+            ))}
           </div>
         </div>
         <div className={styles.expirationDate}>
@@ -235,19 +229,29 @@ const CreateListingStep = (props: Props) => {
       </Modal.Content>
       <Modal.Actions className={styles.actions}>
         {!rental ? (
-          <Button primary onClick={handleSubmit} disabled={isInvalid}>
+          <Button
+            primary
+            onClick={handleSubmit}
+            disabled={isInvalid}
+            className={styles.actionButton}
+          >
             {t('rental_modal.create_listing_step.put_for_rent')}
           </Button>
         ) : (
           <>
             <Button
+              className={styles.actionButton}
               primary
               onClick={handleSubmit}
               disabled={isInvalid || !isUpdated}
             >
               {t('rental_modal.create_listing_step.update_listing')}
             </Button>
-            <Button secondary onClick={handleRemove}>
+            <Button
+              className={styles.actionButton}
+              secondary
+              onClick={handleRemove}
+            >
               {t('rental_modal.create_listing_step.remove_listing')}
             </Button>
           </>

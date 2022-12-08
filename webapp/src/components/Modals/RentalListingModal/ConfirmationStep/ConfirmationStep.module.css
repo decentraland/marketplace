@@ -53,3 +53,9 @@
   font-size: 15px;
   line-height: 28px;
 }
+
+@media (max-width: 767px) {
+  :global(.ui.modal > .actions > .ui.button) {
+    width: 85%;
+  }
+}
