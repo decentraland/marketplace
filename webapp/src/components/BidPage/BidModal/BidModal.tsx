@@ -124,7 +124,7 @@ const BidModal = (props: Props) => {
         <Header size="large">{t('bid_page.title')}</Header>
         <p className="subtitle">
           <T
-            id={'bid_page.subtitle'}
+            id="bid_page.subtitle"
             values={{
               name: <b className="primary-text">{getAssetName(nft)}</b>
             }}
