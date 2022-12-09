@@ -120,7 +120,7 @@ const BidModal = (props: Props) => {
 
   return (
     <AssetAction asset={nft}>
-      <div className={'bid-action'}>
+      <div className="bid-action">
         <Header size="large">{t('bid_page.title')}</Header>
         <p className="subtitle">
           <T
