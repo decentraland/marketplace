@@ -19,7 +19,7 @@ import { BUY_ITEM_SUCCESS } from '../../../modules/item/actions'
 import { TRANSFER_NFT_TRANSACTION_SUBMITTED } from '../../../modules/nft/actions'
 import {
   PLACE_BID_SUCCESS,
-  ACCEPT_BID_SUCCESS,
+  ACCEPT_BID_TRANSACTION_SUBMITTED,
   CANCEL_BID_SUCCESS
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
@@ -278,7 +278,7 @@ const Transaction = (props: Props) => {
         </AssetProvider>
       )
     }
-    case ACCEPT_BID_SUCCESS: {
+    case ACCEPT_BID_TRANSACTION_SUBMITTED: {
       const { tokenId, contractAddress, price } = tx.payload
       return (
         <AssetProvider
