@@ -4,10 +4,7 @@ import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modu
 import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import { fetchNFTRequest, FETCH_NFT_REQUEST } from '../../modules/nft/actions'
-import {
-  fetchItemRequest,
-  FETCH_ITEM_REQUEST
-} from '../../modules/item/actions'
+import { fetchItemRequest } from '../../modules/item/actions'
 import {
   getContractAddress as getNFTContractAddress,
   getTokenId as getNFTTokenId,
@@ -17,7 +14,7 @@ import {
 import {
   getContractAddress as getItemContractAddress,
   getTokenId as getItemTokenId,
-  getLoading as getItemLoading,
+  isFetchingItem,
   getData as getItems
 } from '../../modules/item/selectors'
 import { getData as getOrders } from '../../modules/order/selectors'
@@ -57,7 +54,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       contractAddress = contractAddress || getItemContractAddress(state)
       tokenId = tokenId || getItemTokenId(state)
       asset = getItem(contractAddress, tokenId, items)
-      isLoading = isLoadingType(getItemLoading(state), FETCH_ITEM_REQUEST)
+      isLoading = isFetchingItem(state, contractAddress!, tokenId!)
       break
     }
     default:

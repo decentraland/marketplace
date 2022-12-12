@@ -26,7 +26,7 @@ const AssetProvider = (props: Props) => {
   }, [isLoadingFeatureFlags])
 
   useEffect(() => {
-    if (contractAddress && tokenId) {
+    if (contractAddress && tokenId && asset === null && !isLoading) {
       switch (type) {
         case AssetType.NFT:
           if (hasLoadedInitialFlags) {
@@ -41,14 +41,15 @@ const AssetProvider = (props: Props) => {
       }
     }
   }, [
+    asset,
     contractAddress,
     tokenId,
     type,
     onFetchNFT,
     onFetchItem,
     rentalStatus,
-    isLoadingFeatureFlags,
-    hasLoadedInitialFlags
+    hasLoadedInitialFlags,
+    isLoading
   ])
 
   return (
