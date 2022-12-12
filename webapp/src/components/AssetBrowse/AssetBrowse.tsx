@@ -135,15 +135,11 @@ const AssetBrowse = (props: Props) => {
 
       if (
         section === DecentralandSection.LAND &&
-        isMapPropertyPersisted !== null
+        isMapPropertyPersisted === false
       ) {
         // Update the browser options to match the ones persisted.
         browseOpts.isMap = isMap
-        browseOpts.isFullscreen = isMap
-        browseOpts.onlyOnSale =
-          (!onlyOnSale && onlyOnRent === false) ||
-          (onlyOnSale === undefined && onlyOnRent === undefined) ||
-          onlyOnSale
+        browseOpts.isFullscreen = isFullscreen
 
         // We also set the fetch function as onBrowse because we need the url to be updated.
         fetchAssetsFn = onBrowse
@@ -154,6 +150,7 @@ const AssetBrowse = (props: Props) => {
     }
   }, [
     isMap,
+    isFullscreen,
     view,
     vendor,
     section,

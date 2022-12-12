@@ -19,7 +19,7 @@ import {
 import { getView } from '../../modules/ui/browse/selectors'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { getIsRentalsEnabled } from '../../modules/features/selectors'
-import { getPersistedIsMapProperty } from '../../modules/ui/utils'
+import { isMapSet } from '../../modules/routing/utils'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -28,15 +28,9 @@ import {
   Props
 } from './AssetBrowse.types'
 import AssetBrowse from './AssetBrowse'
-import { Sections } from '../../modules/routing/types'
 
 const mapState = (state: RootState): MapStateProps => {
-  const isMap =
-    getIsMap(state) ??
-    (getSection(state) === Sections.decentraland.LAND &&
-      getPersistedIsMapProperty() !== null)
-      ? getPersistedIsMapProperty()!
-      : false
+  const isMap = isMapSet(getIsMap(state), getSection(state))
 
   return {
     isMap,
