@@ -36,7 +36,6 @@ const AccountPage = ({
     <div className="AccountPage">
       <Navbar isFullscreen />
       <Navigation
-        isFullscreen={!isCurrentAccount || isFullscreen}
         activeTab={isCurrentAccount ? NavigationTab.MY_STORE : undefined}
       />
       <AddressProvider input={addressInUrl || wallet?.address || ''}>
@@ -59,7 +58,6 @@ const AccountPage = ({
                   vendor={vendor}
                   address={address}
                   view={isCurrentAccount ? View.CURRENT_ACCOUNT : View.ACCOUNT}
-                  isFullscreen={Boolean(isFullscreen)}
                 />
               </>
             ) : null}

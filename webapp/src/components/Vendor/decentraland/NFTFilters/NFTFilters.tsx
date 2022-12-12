@@ -159,7 +159,10 @@ const NFTFilters = (props: Props) => {
         isMap,
         isFullscreen: isMap,
         search: '',
-        onlyOnSale: (!onlyOnSale && !onlyOnRent) || onlyOnSale
+        onlyOnSale:
+          (!onlyOnSale && onlyOnRent === false) ||
+          (onlyOnSale === undefined && onlyOnRent === undefined) ||
+          onlyOnSale
       })
     },
     [onBrowse, onlyOnSale, onlyOnRent]

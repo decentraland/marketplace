@@ -103,17 +103,19 @@ const AssetBrowse = (props: Props) => {
     }
   }, [view, viewInState])
 
+  const isMapPropertyPersisted = getPersistedIsMapProperty()
+
   useEffect(() => {
     if (
       section === DecentralandSection.LAND &&
-      getPersistedIsMapProperty() === false &&
+      isMapPropertyPersisted === false &&
       isMap
     ) {
       // To prevent the map view from being displayed when the user clicks on the Land navigation tab.
       // We set the has fetched variable to false so it has to browse back to the list view.
       setHasFetched(false)
     }
-  }, [section, isMap])
+  }, [section, isMap, isMapPropertyPersisted])
 
   useEffect(() => {
     if (viewInState === view && !hasFetched) {
@@ -133,23 +135,26 @@ const AssetBrowse = (props: Props) => {
 
       if (
         section === DecentralandSection.LAND &&
-        getPersistedIsMapProperty() === false
+        isMapPropertyPersisted !== null
       ) {
         // When the section is LAND and the user has actively selected the list view of the map on the past,
         // we set the required options to display the list view of the map.
-        browseOpts.isMap = false
-        browseOpts.isFullscreen = false
-        browseOpts.onlyOnSale = (!onlyOnSale && !onlyOnRent) || onlyOnSale
+        browseOpts.isMap = isMapPropertyPersisted
+        browseOpts.isFullscreen = isMapPropertyPersisted
+        browseOpts.onlyOnSale =
+          (!onlyOnSale && onlyOnRent === false) ||
+          (onlyOnSale === undefined && onlyOnRent === undefined) ||
+          onlyOnSale
 
         // We also set the fetch function as onBrowse because we need the url to be updated.
         fetchAssetsFn = onBrowse
       }
-
       fetchAssetsFn(browseOpts)
 
       setHasFetched(true)
     }
   }, [
+    isMapPropertyPersisted,
     view,
     vendor,
     section,

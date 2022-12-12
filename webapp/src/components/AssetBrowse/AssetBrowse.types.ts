@@ -20,9 +20,9 @@ export type Props = {
   address?: string
   contracts?: string[]
   isMap?: boolean
+  isFullscreen?: boolean
   section?: Section
   sections?: Section[]
-  isFullscreen: boolean
   isLoading: boolean
   isRentalsEnabled: boolean
   onSetView: typeof setView
@@ -36,6 +36,7 @@ export type Props = {
 export type MapStateProps = Pick<
   Props,
   | 'isMap'
+  | 'isFullscreen'
   | 'isLoading'
   | 'onlyOnSale'
   | 'viewInState'

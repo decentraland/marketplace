@@ -1,2 +1,2 @@
-import LandsPage from './LandsPage.container'
+import LandsPage from './LandsPage'
 export { LandsPage }
