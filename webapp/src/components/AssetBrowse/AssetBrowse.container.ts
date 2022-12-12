@@ -28,7 +28,7 @@ import {
 import AssetBrowse from './AssetBrowse'
 
 const mapState = (state: RootState): MapStateProps => ({
-  isMap: getIsMap(state),
+  isMap: getIsMap(state) ?? false,
   onlyOnSale: getOnlyOnSale(state),
   section: getSection(state),
   isLoading:

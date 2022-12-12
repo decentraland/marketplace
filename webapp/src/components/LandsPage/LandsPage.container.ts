@@ -8,7 +8,7 @@ import LandsPage from './LandsPage'
 
 const mapState = (state: RootState): MapStateProps => ({
   isFullscreen: getIsFullscreen(state) ?? true,
-  isMap: getIsMap(state) ?? true
+  isMap: getIsMap(state) ?? false
 })
 
 export default connect(mapState, undefined)(LandsPage)
