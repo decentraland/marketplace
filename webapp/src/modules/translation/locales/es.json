@@ -553,6 +553,7 @@
     "invalid_date": "Esta fecha ya pasó",
     "not_enougn_mana": "No tienes suficiente MANA",
     "submit": "Ofertar",
+    "rental_executed": "{asset_type, select, parcel {La parcela} estate {El estate} other {la tierra}} está rentada hasta <strong>{rental_end_date, date, medium}</strong>. El dueño va a poder aceptar tu oferta sólo después de haber reclamado su {asset_type, select, parcel {parcela} estate {estate} other {tierra}}.",
     "confirm": {
       "title": "Por favor confirma",
       "create_bid_line_one": "Estás por hacer una oferta en {name} por {amount}.",

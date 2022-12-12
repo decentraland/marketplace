@@ -560,6 +560,7 @@
     "invalid_date": "This date has already passed",
     "not_enougn_mana": "You don't have enough MANA",
     "submit": "Bid",
+    "rental_executed": "{asset_type, select, parcel {The parcel} estate {The estate} other {The LAND}} is rented until <strong>{rental_end_date, date, medium}</strong>. The owner will be able to accept bids only after they have claimed back their {asset_type, select, parcel {parcel} estate {estate} other {LAND}}.",
     "confirm": {
       "title": "Please confirm",
       "create_bid_line_one": "You are about to bid on {name} for {amount}.",
