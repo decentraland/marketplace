@@ -48,7 +48,6 @@ const AssetProvider = (props: Props) => {
     onFetchNFT,
     onFetchItem,
     rentalStatus,
-    isLoadingFeatureFlags,
     hasLoadedInitialFlags,
     isLoading
   ])
