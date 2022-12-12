@@ -3,11 +3,34 @@ import { createMatchSelector } from 'connected-react-router'
 import { Item } from '@dcl/schemas'
 import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
+import { FETCH_ITEMS_REQUEST, FETCH_ITEM_REQUEST } from './actions'
 
 export const getState = (state: RootState) => state.item
 export const getData = (state: RootState) => getState(state).data
 export const getError = (state: RootState) => getState(state).error
 export const getLoading = (state: RootState) => getState(state).loading
+
+export const isFetchingItem = (
+  state: RootState,
+  contractAddress: string,
+  tokenId: string
+) =>
+  getLoading(state).find(
+    action =>
+      action.type === FETCH_ITEM_REQUEST &&
+      action.payload.contractAddress === contractAddress &&
+      action.payload.tokenId === tokenId
+  ) !== undefined
+
+export const isFetchingItemsOfCollection = (
+  state: RootState,
+  contractAddress: string
+) =>
+  getLoading(state).find(
+    action =>
+      action.type === FETCH_ITEMS_REQUEST &&
+      action.payload.filters?.contracts?.includes(contractAddress)
+  ) !== undefined
 
 export const getItems = createSelector<
   RootState,

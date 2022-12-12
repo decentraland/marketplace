@@ -3,12 +3,28 @@ import { createMatchSelector } from 'connected-react-router'
 import { createSelector } from 'reselect'
 import { locations } from '../routing/locations'
 import { RootState } from '../reducer'
+import {
+  FETCH_COLLECTIONS_REQUEST,
+  FETCH_SINGLE_COLLECTION_REQUEST
+} from './actions'
 
 export const getState = (state: RootState) => state.collection
 export const getCollectionsByUrn = (state: RootState) => getState(state).data
 export const getCount = (state: RootState) => getState(state).count
 export const getError = (state: RootState) => getState(state).error
 export const getLoading = (state: RootState) => getState(state).loading
+
+export const isFetchingCollection = (
+  state: RootState,
+  contractAddress: string
+) =>
+  getLoading(state).find(
+    action =>
+      (action.type === FETCH_SINGLE_COLLECTION_REQUEST &&
+        action.payload.contractAddress === contractAddress) ||
+      (action.type === FETCH_COLLECTIONS_REQUEST &&
+        action.payload.filters?.contractAddress === contractAddress)
+  ) !== undefined
 
 export const getCollections = createSelector<
   RootState,

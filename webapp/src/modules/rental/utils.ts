@@ -14,6 +14,7 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { config } from '../../config'
 import { VendorName } from '../vendor'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { addressEquals } from '../wallet/utils'
@@ -284,7 +285,7 @@ export async function waitUntilRentalChangesStatus(
   let hasChanged = false
   let listing: RentalListing
   while (!hasChanged) {
-    await delay(3500)
+    await delay(Number(config.get('REFRESH_SIGNATURES_DELAY', '5000')))
     listing = await rentalsAPI.refreshRentalListing(nft.openRentalId!)
     hasChanged = listing.status === status
   }

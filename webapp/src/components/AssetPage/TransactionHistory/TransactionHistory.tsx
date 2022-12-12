@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Sale } from '@dcl/schemas'
+import { Item, Sale } from '@dcl/schemas'
 import {
   Header,
   Table,
@@ -16,6 +16,8 @@ import { Mana } from '../../Mana'
 import { saleAPI } from '../../../modules/vendor/decentraland'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { isNFT } from '../../../modules/asset/utils'
+import { NFT } from '../../../modules/nft/types'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './TransactionHistory.types'
 import './TransactionHistory.css'
@@ -42,20 +44,25 @@ const TransactionHistory = (props: Props) => {
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  const isAssetNull = asset === null
+  const isAssetNFT = asset && isNFT(asset)
+  const assetContractAddress = asset?.contractAddress
+  const assetTokenId = asset ? (asset as NFT).tokenId : '0'
+  const assetItemId = asset ? (asset as Item).itemId : '0'
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the last open one
   useEffect(() => {
-    if (asset) {
+    if (!isAssetNull) {
       setIsLoading(true)
       let params: Record<string, string | number> = {
-        contractAddress: asset.contractAddress,
+        contractAddress: assetContractAddress!,
         first: ROWS_PER_PAGE,
         skip: (page - 1) * ROWS_PER_PAGE
       }
-      if ('tokenId' in asset) {
-        params.tokenId = asset.tokenId
+      if (isAssetNFT) {
+        params.tokenId = assetTokenId
       } else {
-        params.itemId = asset.itemId
+        params.itemId = assetItemId
       }
       saleAPI
         .fetch(params)
@@ -68,7 +75,16 @@ const TransactionHistory = (props: Props) => {
           console.error(error)
         })
     }
-  }, [asset, setIsLoading, setSales, page])
+  }, [
+    assetContractAddress,
+    assetTokenId,
+    assetItemId,
+    setIsLoading,
+    setSales,
+    page,
+    isAssetNull,
+    isAssetNFT
+  ])
 
   const network = asset ? asset.network : undefined
 
