@@ -195,7 +195,7 @@ describe('when getting if the isMap parameter is set', () => {
 
   describe('and no isMap parameter is set', () => {
     beforeEach(() => {
-      url = 'isMap=false'
+      url = ''
     })
 
     it('should return undefined', () => {

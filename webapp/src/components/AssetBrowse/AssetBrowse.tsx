@@ -137,10 +137,9 @@ const AssetBrowse = (props: Props) => {
         section === DecentralandSection.LAND &&
         isMapPropertyPersisted !== null
       ) {
-        // When the section is LAND and the user has actively selected the list view of the map on the past,
-        // we set the required options to display the list view of the map.
-        browseOpts.isMap = isMapPropertyPersisted
-        browseOpts.isFullscreen = isMapPropertyPersisted
+        // Update the browser options to match the ones persisted.
+        browseOpts.isMap = isMap
+        browseOpts.isFullscreen = isMap
         browseOpts.onlyOnSale =
           (!onlyOnSale && onlyOnRent === false) ||
           (onlyOnSale === undefined && onlyOnRent === undefined) ||
@@ -154,7 +153,7 @@ const AssetBrowse = (props: Props) => {
       setHasFetched(true)
     }
   }, [
-    isMapPropertyPersisted,
+    isMap,
     view,
     vendor,
     section,
@@ -166,7 +165,8 @@ const AssetBrowse = (props: Props) => {
     onFetchAssetsFromRoute,
     hasFetched,
     onlyOnRent,
-    onBrowse
+    onBrowse,
+    isMapPropertyPersisted
   ])
 
   // Handlers
