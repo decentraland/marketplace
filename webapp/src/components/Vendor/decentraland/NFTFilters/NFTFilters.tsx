@@ -68,7 +68,8 @@ const NFTFilters = (props: Props) => {
         text: t('filters.recently_listed_for_rent')
       },
       { value: SortBy.NAME, text: t('filters.name') },
-      { value: SortBy.NEWEST, text: t('filters.newest') }
+      { value: SortBy.NEWEST, text: t('filters.newest') },
+      { value: SortBy.MAX_RENTAL_PRICE, text: t('filters.cheapest') }
     ]
   } else {
     orderByDropdownOptions = [
