@@ -119,7 +119,7 @@ function* handleAcceptBidRequest(action: AcceptBidRequestAction) {
       }
     }
 
-    yield put(acceptBidSuccess(bid, txHash))
+    yield put(acceptBidSuccess(bid))
   } catch (error) {
     yield put(
       acceptBidFailure(

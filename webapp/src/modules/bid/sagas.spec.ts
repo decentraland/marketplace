@@ -21,6 +21,13 @@ import {
 import { bidSaga } from './sagas'
 
 describe('when handling the accepting a bid action', () => {
+  let wallet: Wallet
+  let address: string
+  beforeEach(() => {
+    address = 'anAddress'
+    wallet = { address } as Wallet
+  })
+
   describe('and getting the contract fails', () => {
     it('should dispatch an action signaling the failure of the action handling', () => {
       const bid = {
@@ -53,8 +60,6 @@ describe('when handling the accepting a bid action', () => {
       const bid = {
         contractAddress: contract.address
       } as Bid
-      const address = 'anAddress'
-      const wallet = { address } as Wallet
 
       return expectSaga(bidSaga)
         .provide([
@@ -76,8 +81,6 @@ describe('when handling the accepting a bid action', () => {
       const bid = {
         contractAddress: '0x123'
       } as Bid
-      const address = 'anAddress'
-      const wallet = { address } as Wallet
       const error = { message: 'anError' }
       const contract = {
         vendor: VendorName.DECENTRALAND
@@ -154,7 +157,7 @@ describe('when handling the accepting a bid action', () => {
                 Promise.resolve()
               ]
             ])
-            .put(acceptBidSuccess(bid, txHash))
+            .put(acceptBidSuccess(bid))
             .put(acceptBidtransactionSubmitted(bid, txHash))
             .dispatch(acceptBidRequest(bid))
             .run({ silenceTimeout: true })
@@ -178,7 +181,7 @@ describe('when handling the accepting a bid action', () => {
               ],
               [call(waitForTx, txHash), Promise.resolve()]
             ])
-            .put(acceptBidSuccess(bid, txHash))
+            .put(acceptBidSuccess(bid))
             .put(acceptBidtransactionSubmitted(bid, txHash))
             .dispatch(acceptBidRequest(bid))
             .run({ silenceTimeout: true })

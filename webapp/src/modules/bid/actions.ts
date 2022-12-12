@@ -74,8 +74,15 @@ export const ACCEPT_BID_TRANSACTION_SUBMITTED =
 
 export const acceptBidRequest = (bid: Bid) =>
   action(ACCEPT_BID_REQUEST, { bid })
-export const acceptBidSuccess = (bid: Bid, txHash: string) =>
+export const acceptBidSuccess = (bid: Bid) =>
   action(ACCEPT_BID_SUCCESS, {
+    bid
+  })
+export const acceptBidFailure = (bid: Bid, error: string) =>
+  action(ACCEPT_BID_FAILURE, { bid, error })
+
+export const acceptBidtransactionSubmitted = (bid: Bid, txHash: string) =>
+  action(ACCEPT_BID_TRANSACTION_SUBMITTED, {
     bid,
     ...buildTransactionPayload(bid.chainId, txHash, {
       tokenId: bid.tokenId,
@@ -83,23 +90,11 @@ export const acceptBidSuccess = (bid: Bid, txHash: string) =>
       price: formatWeiMANA(bid.price)
     })
   })
-export const acceptBidFailure = (bid: Bid, error: string) =>
-  action(ACCEPT_BID_FAILURE, { bid, error })
-
-export const acceptBidtransactionSubmitted = (bid: Bid, txHash: string) =>
-  action(
-    ACCEPT_BID_TRANSACTION_SUBMITTED,
-    buildTransactionPayload(bid.chainId, txHash, {
-      tokenId: bid.tokenId,
-      contractAddress: bid.contractAddress,
-      price: formatWeiMANA(bid.price)
-    })
-  )
 
 export type AcceptBidRequestAction = ReturnType<typeof acceptBidRequest>
 export type AcceptBidSuccessAction = ReturnType<typeof acceptBidSuccess>
 export type AcceptBidFailureAction = ReturnType<typeof acceptBidFailure>
-export type AcceptBidTransactionSubmittedFailureAction = ReturnType<
+export type AcceptBidTransactionSubmittedAction = ReturnType<
   typeof acceptBidtransactionSubmitted
 >
 
