@@ -160,7 +160,11 @@ const NFTFilters = (props: Props) => {
         isMap,
         isFullscreen: isMap,
         search: '',
-        onlyOnSale: (!onlyOnSale && !onlyOnRent) || onlyOnSale
+        // Forces the onlyOnSale property in the defined cases so the users can see LAND on sale.
+        onlyOnSale:
+          (!onlyOnSale && onlyOnRent === false) ||
+          (onlyOnSale === undefined && onlyOnRent === undefined) ||
+          onlyOnSale
       })
     },
     [onBrowse, onlyOnSale, onlyOnRent]

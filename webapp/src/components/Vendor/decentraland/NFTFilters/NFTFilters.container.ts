@@ -23,6 +23,7 @@ import {
   getAssetType,
   getEmotePlayMode
 } from '../../../../modules/routing/selectors'
+import { isMapSet } from '../../../../modules/routing/utils'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -42,7 +43,7 @@ const mapState = (state: RootState): MapStateProps => ({
   onlyOnSale: getOnlyOnSale(state),
   onlyOnRent: getOnlyOnRent(state),
   onlySmart: getOnlySmart(state),
-  isMap: getIsMap(state),
+  isMap: isMapSet(getIsMap(state), getSection(state)),
   rarities: getRarities(state),
   wearableGenders: getWearableGenders(state),
   contracts: getContracts(state),
