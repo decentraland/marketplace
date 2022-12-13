@@ -295,7 +295,7 @@ export function getAssetOrderBy(sortBy: SortBy) {
     }
     case SortBy.MIN_RENTAL_PRICE: {
       orderBy = NFTSortBy.MIN_RENTAL_PRICE
-      orderDirection = SortDirection.DESC
+      orderDirection = SortDirection.ASC
       break
     }
     case SortBy.RENTAL_DATE: {
@@ -332,6 +332,9 @@ export function getNFTSortBy(orderBy: NFTSortBy) {
     case NFTSortBy.PRICE: {
       sortBy = SortBy.CHEAPEST
       break
+    }
+    case NFTSortBy.MAX_RENTAL_PRICE: {
+      sortBy = SortBy.MAX_RENTAL_PRICE
     }
   }
 
