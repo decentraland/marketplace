@@ -367,6 +367,7 @@
     "actions": {
       "cancel_sale": "Remove listing",
       "manage": "Manage",
+      "manage_in_builder": "Manage in builder",
       "update": "Update price",
       "buy": "Buy",
       "mint": "Mint",

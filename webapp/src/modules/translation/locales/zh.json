@@ -363,6 +363,7 @@
     "actions": {
       "cancel_sale": "删除列表",
       "manage": "管理",
+      "manage_in_builder": "在 Builder 中管理",
       "update": "更新价格",
       "buy": "购买",
       "mint": "购买",

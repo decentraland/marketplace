@@ -362,6 +362,7 @@
     "actions": {
       "cancel_sale": "Borrar publicación",
       "manage": "Gestionar",
+      "manage_in_builder": "Gestionar en el builder",
       "update": "Actualizar precio",
       "buy": "Comprar",
       "mint": "Comprar",

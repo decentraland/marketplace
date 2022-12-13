@@ -113,6 +113,19 @@
   background: rgba(115, 110, 125, 0.24);
 }
 
+.manage_in_builder:global(.ui.button) {
+  margin-bottom: 24px;
+}
+
+.bid_manage_in_builder:global(.ui.button.secondary) {
+  background-color: var(--superGray);
+}
+
+.bid_manage_in_builder:global(.ui.button.secondary):hover {
+  background-color: var(--superGrayHovered);
+}
+
+
 .fullWidth {
   width: 100%
 }

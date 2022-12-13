@@ -1,4 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react'
+import { NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
 import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
@@ -21,7 +22,9 @@ import { getContractAuthorization } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
 import { isParcel, isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
+import { builderUrl } from '../../../lib/environment'
 import { isOwnedBy } from '../../../modules/asset/utils'
+import { addressEquals } from '../../../modules/wallet/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { AuthorizationModal } from '../../AuthorizationModal'
@@ -49,6 +52,12 @@ const SaleRentActionBox = ({
   const isMobileView = isMobile()
   const isRentalOpen = isRentalListingOpen(rental)
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
+  const isTenant =
+    rental &&
+    wallet &&
+    addressEquals(rental.tenant ?? undefined, wallet.address)
+  console.log('Rental tenant', rental?.tenant)
+  console.log('Address', wallet?.address)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
     number
@@ -254,6 +263,21 @@ const SaleRentActionBox = ({
             )}
             {!isOwner ? (
               <>
+                {isTenant && !rentalHasEnded ? (
+                  <Button
+                    as={'a'}
+                    href={`${builderUrl}/land/${
+                      nft.category === NFTCategory.ESTATE
+                        ? `${nft.tokenId}`
+                        : `${nft.data.parcel?.x},${nft.data.parcel?.y}`
+                    }`}
+                    fluid
+                    primary
+                    className={styles.manage_in_builder}
+                  >
+                    {t('asset_page.actions.manage_in_builder')}
+                  </Button>
+                ) : null}
                 <div className={styles.saleButtons}>
                   {order ? (
                     <Button
@@ -284,9 +308,14 @@ const SaleRentActionBox = ({
                           <Button
                             as={Link}
                             to={locations.bid(nft.contractAddress, nft.tokenId)}
-                            className={classNames({ [styles.bid]: order })}
+                            className={classNames({
+                              [styles.bid]: order,
+                              [styles.bid_manage_in_builder]:
+                                isTenant && !rentalHasEnded
+                            })}
                             disabled={isNFTPartOfAState}
-                            primary={!order}
+                            primary={!order && !(isTenant && !rentalHasEnded)}
+                            secondary={true}
                             fluid
                           >
                             {t('asset_page.actions.bid')}
