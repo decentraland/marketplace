@@ -6,19 +6,20 @@ export type Props = {
   price: string | null
   order?: Order
   isManager?: boolean
-  rental?: RentalListing
-  rentalPricePerDay?: string | null
   showListedTag?: boolean
   onClick?: () => void
   isClaimingBackLandTransactionPending: boolean
+  showRentalBubble: boolean
+  rental: RentalListing | null
 }
 
 export type MapStateProps = Pick<
   Props,
   | 'showListedTag'
   | 'price'
-  | 'rentalPricePerDay'
+  | 'showRentalBubble'
+  | 'rental'
   | 'isClaimingBackLandTransactionPending'
 >
 export type MapDispatchProps = {}
-export type OwnProps = Pick<Props, 'asset' | 'order' | 'rental' | 'isManager'>
+export type OwnProps = Pick<Props, 'asset' | 'order' | 'isManager'>
