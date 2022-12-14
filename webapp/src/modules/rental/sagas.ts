@@ -320,8 +320,6 @@ function* handleAcceptRentalListingRequest(
       fingerprint
     ]
 
-    console.log('Transaction params', txParams)
-
     const txHash: string = yield call(
       sendTransaction as (
         contract: ContractData,
