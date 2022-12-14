@@ -9,6 +9,7 @@ import { Box } from '../../AssetBrowse/Box'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './Details.types'
 import styles from './Details.module.css'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 const Info = ({
   title,
@@ -24,7 +25,7 @@ const Info = ({
 )
 
 export const Details = (props: Props) => {
-  const { asset, rental, className } = props
+  const { asset, order, rental, className } = props
 
   const categoryName = useMemo(() => {
     switch (asset.category) {
@@ -83,6 +84,24 @@ export const Details = (props: Props) => {
         <Info title={t('manage_asset_page.details.network')}>
           <span>{asset.network}</span>
         </Info>
+        {order ? (
+          <Info title={t('manage_asset_page.details.order_expiration')}>
+            <span>
+              {formatDistanceToNow(order.expiresAt, {
+                addSuffix: true
+              })}
+            </span>
+          </Info>
+        ) : null}
+        {rental ? (
+          <Info title={t('manage_asset_page.details.rental_expiration')}>
+            <span>
+              {formatDistanceToNow(rental.expiration, {
+                addSuffix: true
+              })}
+            </span>
+          </Info>
+        ) : null}
         {owner ? (
           <Info title={t('manage_asset_page.details.owner')}>
             <LinkedProfile hasPopup={true} address={owner} />
