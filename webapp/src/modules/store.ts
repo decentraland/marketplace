@@ -85,7 +85,7 @@ export function initStore() {
   // fetch tiles
   store.dispatch(fetchTilesRequest())
 
-  store.dispatch(fetchContractsRequest())
+  store.dispatch(fetchContractsRequest(false))
 
   return store
 }

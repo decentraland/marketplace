@@ -23,7 +23,7 @@ describe.only('when handling the fetch contracts request', () => {
 
       return expectSaga(contractSaga)
         .put(fetchContractsSuccess([]))
-        .dispatch(fetchContractsRequest())
+        .dispatch(fetchContractsRequest(false))
         .silentRun()
     })
   })
@@ -35,7 +35,7 @@ describe.only('when handling the fetch contracts request', () => {
         .mockRejectedValueOnce(new Error('some error'))
       return expectSaga(contractSaga)
         .put(fetchContractsFailure('some error'))
-        .dispatch(fetchContractsRequest())
+        .dispatch(fetchContractsRequest(false))
         .silentRun()
     })
   })

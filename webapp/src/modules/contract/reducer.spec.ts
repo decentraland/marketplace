@@ -11,7 +11,7 @@ import { INITIAL_STATE } from './reducer'
 
 describe('when fetch contract request action is received', () => {
   it('should add a loading state action to the loading state array', () => {
-    const newState = contractReducer(INITIAL_STATE, fetchContractsRequest())
+    const newState = contractReducer(INITIAL_STATE, fetchContractsRequest(false))
     expect(newState.loading.length).toBe(1)
     expect(newState.loading[0].type).toBe(FETCH_CONTRACTS_REQUEST)
   })

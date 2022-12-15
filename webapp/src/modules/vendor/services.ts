@@ -84,7 +84,7 @@ export interface BidService<V extends VendorName> {
 export class BidService<V> {}
 
 export interface ContractService {
-  getContracts(): Promise<Contract[]>
+  getContracts(includeMaticCollections: boolean): Promise<Contract[]>
   getTransferType: (address: string) => TransferType
 }
 export class ContractService {}

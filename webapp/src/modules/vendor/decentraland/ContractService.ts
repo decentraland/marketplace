@@ -8,6 +8,7 @@ import { Network as AppNetwork } from '../../contract/types'
 import { TransferType } from '../types'
 import { nftAPI } from './nft'
 import { config } from '../../../config'
+import { getMarketplaceContracts } from './contracts'
 
 const network = config.get('NETWORK')! as AppNetwork
 
@@ -95,7 +96,8 @@ const contracts = ({
       category: null,
       network: Network.ETHEREUM,
       chainId: ChainId.ETHEREUM_GOERLI
-    }
+    },
+    ...getMarketplaceContracts(AppNetwork.GOERLI)
   ],
   [AppNetwork.MAINNET]: [
     {
@@ -169,13 +171,16 @@ const contracts = ({
       category: null,
       network: Network.ETHEREUM,
       chainId: ChainId.ETHEREUM_MAINNET
-    }
+    },
+    ...getMarketplaceContracts(AppNetwork.MAINNET)
   ]
 } as Record<AppNetwork, Contract[]>)[network]
 
 export class ContractService implements ContractServiceInterface {
-  async getContracts() {
-    return [...contracts, ...(await nftAPI.fetchContracts())]
+  async getContracts(includeMaticCollections: boolean) {
+    return includeMaticCollections
+      ? [...contracts, ...(await nftAPI.fetchContracts())]
+      : contracts
   }
 
   getTransferType(_address: string) {

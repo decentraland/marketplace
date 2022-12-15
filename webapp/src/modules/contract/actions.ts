@@ -7,7 +7,8 @@ export const FETCH_CONTRACTS_REQUEST = '[Request] Fetch contracts'
 export const FETCH_CONTRACTS_SUCCESS = '[Success] Fetch contracts'
 export const FETCH_CONTRACTS_FAILURE = '[Failure] Fetch contracts'
 
-export const fetchContractsRequest = () => action(FETCH_CONTRACTS_REQUEST)
+export const fetchContractsRequest = (includeMaticCollections: boolean) =>
+  action(FETCH_CONTRACTS_REQUEST, { includeMaticCollections })
 export const fetchContractsSuccess = (contracts: Contract[]) =>
   action(FETCH_CONTRACTS_SUCCESS, {
     contracts
