@@ -86,14 +86,12 @@ const Navigation = (props: Props) => {
           >
             {t('navigation.buy_mana_with_fiat')}
           </Button>
-          {showBuyManaModal && (
-            <BuyManaWithFiatModal
-              open={showBuyManaModal}
-              onClose={handleCloseBuyManaWithFiatModal}
-            />
-          )}
         </Tabs.Right>
       </Tabs>
+      <BuyManaWithFiatModal
+        open={showBuyManaModal}
+        onClose={handleCloseBuyManaWithFiatModal}
+      />
     </div>
   )
 }
