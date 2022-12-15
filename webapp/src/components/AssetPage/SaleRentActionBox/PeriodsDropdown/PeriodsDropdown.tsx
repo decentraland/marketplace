@@ -3,7 +3,8 @@ import { ethers } from 'ethers'
 import classNames from 'classnames'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
-import { Dropdown, DropdownItemProps, DropdownProps } from 'decentraland-ui'
+import { DropdownItemProps, DropdownProps } from 'decentraland-ui'
+import { Dropdown } from 'decentraland-ui/dist/components/Dropdown/Dropdown.js'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { RentalListingPeriod } from '@dcl/schemas'
 import { formatWeiMANA } from '../../../../lib/mana'
@@ -77,6 +78,7 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
       value={value}
       options={options}
       onChange={handleOnChange}
+      title={t('manage_asset_page.rent.rent_period')}
     />
   )
 }

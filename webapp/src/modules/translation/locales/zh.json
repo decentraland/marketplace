@@ -835,6 +835,7 @@
       "renting_title": "租",
       "price": "价格",
       "expiration_date": "上市截止日期",
+      "rent_period": "租期",
       "rent_periods": "租期",
       "list_for_rent": "发布出租",
       "view_listing": "查看租赁列表",

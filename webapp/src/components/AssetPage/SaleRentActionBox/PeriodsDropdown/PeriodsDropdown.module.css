@@ -41,3 +41,9 @@
 .until {
   color: #979797;
 }
+
+@media (max-width: 767px) {
+  .item {
+    width: 100%;
+  }
+}

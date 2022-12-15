@@ -840,6 +840,7 @@
       "renting_title": "Renting",
       "price": "Price",
       "expiration_date": "Listing expiration date",
+      "rent_period": "Rent period",
       "rent_periods": "Rent periods",
       "list_for_rent": "List for rent",
       "view_listing": "View listing",
