@@ -368,6 +368,7 @@
     "actions": {
       "cancel_sale": "Remove listing",
       "manage": "Manage",
+      "manage_in_builder": "Manage in builder",
       "update": "Update price",
       "buy": "Buy",
       "mint": "Mint",
@@ -385,6 +386,10 @@
     "sales_rent_action_box": {
       "until": "From {from_date} to {to_date}",
       "not_for_sale": "Currently not listed for sale",
+      "in_rent_tenant": "You have rented this {asset_type, select, parcel {parcel} estate {estate} other {LAND}} until <strong>{rental_end_date, date, medium}</strong>.",
+      "in_rent_owner": "{tenant} has rented this {asset_type, select, parcel {parcel} estate {estate} other {LAND}} until <strong>{rental_end_date, date, medium}</strong>.",
+      "rent_ended": "The rental period ended in <strong>{rental_end_date, date, medium}</strong>.",
+      "claim_back_message": "You can claim this {asset_type, select, parcel {parcel} estate {estate} other {LAND}} back or list it again for rent from the management page.",
       "parcel_belongs_to_estate_bid": "It's not possible to bid on a parcel that belongs to an Estate, please consider going into the Estate page.",
       "parcel_belongs_to_estate_rent": "It's not possible to rent a parcel that belongs to an Estate, please consider going into the Estate page.",
       "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this {asset}",

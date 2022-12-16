@@ -363,6 +363,7 @@
     "actions": {
       "cancel_sale": "Borrar publicación",
       "manage": "Gestionar",
+      "manage_in_builder": "Gestionar en el builder",
       "update": "Actualizar precio",
       "buy": "Comprar",
       "mint": "Comprar",
@@ -380,6 +381,10 @@
     "sales_rent_action_box": {
       "until": "Desde {from_date} a {to_date}",
       "not_for_sale": "Actualmente no disponible para la compra",
+      "in_rent_tenant": "Has rentado {asset_type, select, parcel {esta parcela} estate {este estate} other {esta LAND}} hasta <strong>{rental_end_date, date, medium}</strong>.",
+      "in_rent_owner": "{tenant} ha rentado {asset_type, select, parcel {esta parcela} estate {este estate} other {esta LAND}} hasta <strong>{rental_end_date, date, medium}</strong>.",
+      "rent_ended": "El período de renta terminó el <strong>{rental_end_date, date, medium}</strong>.",
+      "claim_back_message": "Puedes reclamar tu {asset_type, select, parcel {parcela} estate {estate} other {LAND}} o listarla nuevamente para ser rentada en la página de management.",
       "parcel_belongs_to_estate_bid": "No es posible hacer una oferta en la tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
       "parcel_belongs_to_estate_rent": "No es posible rentar tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
       "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",

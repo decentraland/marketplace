@@ -364,6 +364,7 @@
     "actions": {
       "cancel_sale": "删除列表",
       "manage": "管理",
+      "manage_in_builder": "在 Builder 中管理",
       "update": "更新价格",
       "buy": "购买",
       "mint": "购买",
@@ -381,6 +382,10 @@
     "sales_rent_action_box": {
       "until": "从 {from_date} 到 {to_date}",
       "not_for_sale": "目前未上市销售",
+      "in_rent_tenant": "您已租用此地块至 <strong>{rental_end_date, date, medium}</strong>。",
+      "in_rent_owner": "{tenant} 已将此房产租到 <strong>{rental_end_date, date, medium}</strong>。",
+      "rent_ended": "<strong>{rental_end_date, date, medium}</strong>租期结束。",
+      "claim_back_message": "您可以从管理页面索回此房产或重新列出以供出租。",
       "parcel_belongs_to_estate_bid": "无法对属于某个庄园的地块进行投标，请考虑进入“庄园”页面。",
       "parcel_belongs_to_estate_rent": "无法租用属于某个庄园的地块，请考虑进入“庄园”页面。",
       "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此{asset}。",
