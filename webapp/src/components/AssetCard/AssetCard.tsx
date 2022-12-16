@@ -87,7 +87,7 @@ const AssetCard = (props: Props) => {
     isManager,
     price,
     showListedTag,
-    showRentalBubble,
+    showRentalChip: showRentalBubble,
     onClick,
     isClaimingBackLandTransactionPending,
     rental

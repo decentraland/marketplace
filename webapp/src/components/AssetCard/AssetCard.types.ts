@@ -9,7 +9,7 @@ export type Props = {
   showListedTag?: boolean
   onClick?: () => void
   isClaimingBackLandTransactionPending: boolean
-  showRentalBubble: boolean
+  showRentalChip: boolean
   rental: RentalListing | null
 }
 
@@ -17,7 +17,7 @@ export type MapStateProps = Pick<
   Props,
   | 'showListedTag'
   | 'price'
-  | 'showRentalBubble'
+  | 'showRentalChip'
   | 'rental'
   | 'isClaimingBackLandTransactionPending'
 >

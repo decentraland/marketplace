@@ -38,7 +38,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       ? isClaimingBackLandTransactionPending(state, asset)
       : false,
     rental: rentalOfNFT,
-    showRentalBubble:
+    showRentalChip:
       rentalOfNFT !== null &&
       view === View.CURRENT_ACCOUNT &&
       getLocation(state).pathname !== locations.root()
