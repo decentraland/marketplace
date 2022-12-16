@@ -860,7 +860,9 @@
     "details": {
       "title": "商品详情",
       "network": "网络",
-      "owner": "所有者"
+      "owner": "所有者",
+      "order_expiration": "订单有效期至",
+      "rental_expiration": "出租清单有效期至"
     }
   },
   "claim_land_modal": {

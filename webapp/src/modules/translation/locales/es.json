@@ -858,7 +858,9 @@
     "details": {
       "title": "Detalles del item",
       "network": "Red",
-      "owner": "Dueño"
+      "owner": "Dueño",
+      "order_expiration": "Expiración de la orden",
+      "rental_expiration": "Expiración de la renta"
     }
   },
   "claim_land_modal": {

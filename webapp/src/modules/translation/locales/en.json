@@ -865,7 +865,9 @@
     "details": {
       "title": "Item details",
       "network": "Network",
-      "owner": "Owner"
+      "owner": "Owner",
+      "order_expiration": "Order expiration",
+      "rental_expiration": "Rental expiration"
     }
   },
   "claim_land_modal": {
