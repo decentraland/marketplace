@@ -18,8 +18,10 @@ const SellPage = (props: Props) => {
     onGoBack,
     getContract,
     onNavigate,
-    onCreateOrder
+    onCreateOrder,
+    onFetchAuthorizations
   } = props
+
   return (
     <>
       <Navbar isFullscreen />
@@ -40,6 +42,7 @@ const SellPage = (props: Props) => {
                   onNavigate={onNavigate}
                   onCreateOrder={onCreateOrder}
                   getContract={getContract}
+                  onFetchAuthorizations={onFetchAuthorizations}
                 />
               )}
             </AssetProviderPage>

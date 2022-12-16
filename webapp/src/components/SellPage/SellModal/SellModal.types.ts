@@ -5,6 +5,7 @@ import { NFT } from '../../../modules/nft/types'
 import { createOrderRequest } from '../../../modules/order/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
+import { fetchAuthorizationsRequest } from 'decentraland-dapps/dist/modules/authorization/actions'
 
 export type Props = {
   nft: NFT
@@ -18,4 +19,5 @@ export type Props = {
   onNavigate: (path: string) => void
   onGoBack: () => void
   onCreateOrder: typeof createOrderRequest
+  onFetchAuthorizations: typeof fetchAuthorizationsRequest
 }

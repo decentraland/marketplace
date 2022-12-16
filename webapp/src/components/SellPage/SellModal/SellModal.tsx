@@ -1,14 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ethers } from 'ethers'
 import addDays from 'date-fns/addDays'
 import formatDate from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-import {
-  Authorization,
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
@@ -43,7 +40,8 @@ const SellModal = (props: Props) => {
     getContract,
     onNavigate,
     onGoBack,
-    onCreateOrder
+    onCreateOrder,
+    onFetchAuthorizations
   } = props
 
   const isUpdate = order !== null
@@ -59,31 +57,64 @@ const SellModal = (props: Props) => {
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
-  if (!wallet) {
+  const [hasFetchedAuthorizations, setHasFetchedAuthorizations] = useState(
+    false
+  )
+
+  const marketplace = useMemo(() => {
+    const contractNames = getContractNames()
+
+    return getContract({
+      name: contractNames.MARKETPLACE,
+      network: nft.network
+    })
+  }, [getContract, nft.network])
+
+  const authorization = useMemo(() => {
+    if (!wallet || !marketplace) {
+      return null
+    }
+
+    return {
+      address: wallet.address,
+      authorizedAddress: marketplace.address,
+      contractAddress: nft.contractAddress,
+      contractName:
+        nft.category === NFTCategory.WEARABLE && nft.network === Network.MATIC
+          ? ContractName.ERC721CollectionV2
+          : ContractName.ERC721,
+      chainId: nft.chainId,
+      type: AuthorizationType.APPROVAL
+    }
+  }, [
+    marketplace,
+    nft.category,
+    nft.chainId,
+    nft.contractAddress,
+    nft.network,
+    wallet
+  ])
+
+  useEffect(() => {
+    if (
+      authorization &&
+      !hasAuthorization(authorizations, authorization) &&
+      !hasFetchedAuthorizations &&
+      !isLoading
+    ) {
+      setHasFetchedAuthorizations(true)
+      onFetchAuthorizations([authorization])
+    }
+  }, [
+    authorization,
+    authorizations,
+    hasFetchedAuthorizations,
+    isLoading,
+    onFetchAuthorizations
+  ])
+
+  if (!wallet || !marketplace || !authorization) {
     return null
-  }
-
-  const contractNames = getContractNames()
-
-  const marketplace = getContract({
-    name: contractNames.MARKETPLACE,
-    network: nft.network
-  })
-
-  if (!marketplace) {
-    return null
-  }
-
-  const authorization: Authorization = {
-    address: wallet.address,
-    authorizedAddress: marketplace.address,
-    contractAddress: nft.contractAddress,
-    contractName:
-      nft.category === NFTCategory.WEARABLE && nft.network === Network.MATIC
-        ? ContractName.ERC721CollectionV2
-        : ContractName.ERC721,
-    chainId: nft.chainId,
-    type: AuthorizationType.APPROVAL
   }
 
   const handleCreateOrder = () =>
