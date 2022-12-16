@@ -10,6 +10,8 @@ export const getState = (state: RootState) => state.contract
 export const getContracts = (state: RootState) => getState(state).data
 export const getError = (state: RootState) => getState(state).error
 export const getLoading = (state: RootState) => getState(state).loading
+export const getHasIncludedMaticCollections = (state: RootState) =>
+  getState(state).hasIncludedMaticCollections
 
 export const getContract = createSelectorCreator(defaultMemoize, isEqual)<
   RootState,

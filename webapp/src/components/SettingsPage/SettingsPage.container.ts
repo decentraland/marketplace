@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 import { push } from 'connected-react-router'
 import {
   getData as getAuthorizations,
@@ -15,14 +16,18 @@ import {
 } from '../../modules/transaction/utils'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
-import { getContract } from '../../modules/contract/selectors'
-import { Contract } from '../../modules/vendor/services'
 import {
-  MapStateProps,
-  MapDispatch,
-  MapDispatchProps
-} from './SettingsPage.types'
+  getContract,
+  getHasIncludedMaticCollections,
+  getLoading as getContractLoading
+} from '../../modules/contract/selectors'
+import { Contract } from '../../modules/vendor/services'
+import { MapStateProps, MapDispatchProps } from './SettingsPage.types'
 import SettingsPage from './SettingsPage'
+import {
+  fetchContractsRequest,
+  FETCH_CONTRACTS_REQUEST
+} from '../../modules/contract/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
@@ -39,18 +44,19 @@ const mapState = (state: RootState): MapStateProps => {
   return {
     wallet,
     authorizations: getAuthorizations(state),
-    isLoadingAuthorization: isLoadingType(
-      getLoading(state),
-      FETCH_AUTHORIZATIONS_REQUEST
-    ),
+    isLoading:
+      isLoadingType(getLoading(state), FETCH_AUTHORIZATIONS_REQUEST) ||
+      isLoadingType(getContractLoading(state), FETCH_CONTRACTS_REQUEST),
     isConnecting: isConnecting(state),
     hasError,
+    hasIncludedMaticCollections: getHasIncludedMaticCollections(state),
     getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }
 
-const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path))
+const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
+  onNavigate: path => dispatch(push(path)),
+  onFetchContracts: () => dispatch(fetchContractsRequest(true, true))
 })
 
 export default connect(mapState, mapDispatch)(SettingsPage)

@@ -21,6 +21,11 @@ import { getOrWaitForContracts } from '../contract/utils'
 import { Contract } from '../vendor/services'
 import { getContractNames } from '../vendor'
 import { TRANSACTIONS_API_URL } from './utils'
+import {
+  FetchContractsSuccessAction,
+  FETCH_CONTRACTS_SUCCESS
+} from '../contract/actions'
+import { getAddress } from './selectors'
 
 const baseWalletSaga = createWalletSaga({
   CHAIN_ID: Number(config.get('CHAIN_ID')!),
@@ -36,13 +41,27 @@ function* fullWalletSaga() {
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleWallet)
   yield takeEvery(CHANGE_ACCOUNT, handleWallet)
   yield takeEvery(CHANGE_NETWORK, handleWallet)
+  yield takeEvery(FETCH_CONTRACTS_SUCCESS, handleFetchContractsSuccess)
 }
 
 function* handleWallet(
   action: ConnectWalletSuccessAction | ChangeAccountAction | ChangeNetworkAction
 ) {
   const { address } = action.payload.wallet
+  
+  yield call(fetchAuthorizations, address)
+}
 
+function* handleFetchContractsSuccess(action: FetchContractsSuccessAction) {
+  const { shouldFetchAuthorizations } = action.payload
+  const address: string | undefined = yield select(getAddress)
+
+  if (address && shouldFetchAuthorizations) {
+    yield call(fetchAuthorizations, address)
+  }
+}
+
+function* fetchAuthorizations(address: string) {
   const contracts: ReturnType<typeof getContracts> = yield call(
     getOrWaitForContracts
   )

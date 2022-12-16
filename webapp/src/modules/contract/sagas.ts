@@ -1,4 +1,4 @@
-import { call, takeEvery, put } from '@redux-saga/core/effects'
+import { call, takeEvery, put, select } from '@redux-saga/core/effects'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { VendorFactory, VendorName } from '../vendor'
@@ -9,6 +9,7 @@ import {
   fetchContractsSuccess,
   FETCH_CONTRACTS_REQUEST
 } from './actions'
+import { getHasIncludedMaticCollections } from './selectors'
 
 export function* contractSaga() {
   yield takeEvery(FETCH_CONTRACTS_REQUEST, handleFetchContractsRequest)
@@ -17,7 +18,17 @@ export function* contractSaga() {
 export function* handleFetchContractsRequest(
   action: FetchContractsRequestAction
 ) {
-  const { includeMaticCollections } = action.payload
+  const { includeMaticCollections, shouldFetchAuthorizations } = action.payload
+  const hasIncludedMaticCollections: boolean = yield select(
+    getHasIncludedMaticCollections
+  )
+
+  if (hasIncludedMaticCollections) {
+    yield put(
+      fetchContractsFailure('Already fetched matic collection contracts')
+    )
+    return
+  }
 
   try {
     const vendors = Object.values(VendorName).map(VendorFactory.build)
@@ -31,7 +42,13 @@ export function* handleFetchContractsRequest(
       )
       contracts = [...contracts, ...moreContracts]
     }
-    yield put(fetchContractsSuccess(contracts))
+    yield put(
+      fetchContractsSuccess(
+        includeMaticCollections,
+        shouldFetchAuthorizations,
+        contracts
+      )
+    )
   } catch (error) {
     yield put(
       fetchContractsFailure(

@@ -1,4 +1,5 @@
 import { expectSaga } from 'redux-saga-test-plan'
+import { select } from 'redux-saga/effects'
 import { services as decentraland } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
 import {
@@ -7,8 +8,9 @@ import {
   fetchContractsSuccess
 } from './actions'
 import { contractSaga } from './sagas'
+import { getHasIncludedMaticCollections } from './selectors'
 
-describe.only('when handling the fetch contracts request', () => {
+describe('when handling the fetch contracts request', () => {
   let mockGetContracts: jest.SpyInstance<Promise<Contract[]>>
 
   afterEach(() => {
@@ -22,8 +24,9 @@ describe.only('when handling the fetch contracts request', () => {
         .mockResolvedValueOnce([])
 
       return expectSaga(contractSaga)
-        .put(fetchContractsSuccess([]))
-        .dispatch(fetchContractsRequest(false))
+        .provide([[select(getHasIncludedMaticCollections), false]])
+        .put(fetchContractsSuccess(false, false, []))
+        .dispatch(fetchContractsRequest(false, false))
         .silentRun()
     })
   })
@@ -34,8 +37,9 @@ describe.only('when handling the fetch contracts request', () => {
         .spyOn(decentraland.ContractService.prototype, 'getContracts')
         .mockRejectedValueOnce(new Error('some error'))
       return expectSaga(contractSaga)
+        .provide([[select(getHasIncludedMaticCollections), false]])
         .put(fetchContractsFailure('some error'))
-        .dispatch(fetchContractsRequest(false))
+        .dispatch(fetchContractsRequest(false, false))
         .silentRun()
     })
   })

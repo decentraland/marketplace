@@ -16,12 +16,14 @@ export type ContractState = {
   data: Contract[]
   loading: LoadingState
   error: string | null
+  hasIncludedMaticCollections: boolean
 }
 
 export const INITIAL_STATE: ContractState = {
   data: [],
   loading: [],
-  error: null
+  error: null,
+  hasIncludedMaticCollections: false
 }
 
 type ContractReducerAction =
@@ -41,13 +43,15 @@ export function contractReducer(
       }
 
     case FETCH_CONTRACTS_SUCCESS:
-      const { contracts } = action.payload
+      const { includeMaticCollections, contracts } = action.payload
 
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
-        data: contracts
+        data: contracts,
+        hasIncludedMaticCollections:
+          state.hasIncludedMaticCollections || includeMaticCollections
       }
 
     case FETCH_CONTRACTS_FAILURE:

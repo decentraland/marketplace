@@ -11,7 +11,10 @@ import { INITIAL_STATE } from './reducer'
 
 describe('when fetch contract request action is received', () => {
   it('should add a loading state action to the loading state array', () => {
-    const newState = contractReducer(INITIAL_STATE, fetchContractsRequest(false))
+    const newState = contractReducer(
+      INITIAL_STATE,
+      fetchContractsRequest(false, false)
+    )
     expect(newState.loading.length).toBe(1)
     expect(newState.loading[0].type).toBe(FETCH_CONTRACTS_REQUEST)
   })
@@ -32,9 +35,10 @@ describe('when fetch contract success action is received', () => {
       {
         loading: [{ type: FETCH_CONTRACTS_REQUEST }],
         error: 'some error',
-        data: []
+        data: [],
+        hasIncludedMaticCollections: false
       },
-      fetchContractsSuccess([contractSample] as Contract[])
+      fetchContractsSuccess(false, false, [contractSample] as Contract[])
     )
     expect(newState.loading.length).toBe(0)
     expect(newState.data).toStrictEqual([contractSample])
@@ -48,7 +52,8 @@ describe('when fetch contract failure action is received', () => {
       {
         loading: [{ type: FETCH_CONTRACTS_REQUEST }],
         error: 'some error',
-        data: []
+        data: [],
+        hasIncludedMaticCollections: false
       },
       fetchContractsFailure('some other error')
     )
