@@ -1,0 +1,4 @@
+.promotionalModal:global(.ui.page.modals) {
+  top: 15px;
+  right: 15px;
+}
