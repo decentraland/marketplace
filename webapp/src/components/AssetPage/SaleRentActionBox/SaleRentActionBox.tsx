@@ -58,8 +58,6 @@ const SaleRentActionBox = ({
     rental &&
     wallet &&
     addressEquals(rental.tenant ?? undefined, wallet.address)
-  console.log('Rental tenant', rental?.tenant)
-  console.log('Address', wallet?.address)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
     number
