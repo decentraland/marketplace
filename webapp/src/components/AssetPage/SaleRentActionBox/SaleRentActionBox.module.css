@@ -90,9 +90,13 @@
   cursor: auto;
 }
 
-.notForSale {
+.upperMessage {
   margin-bottom: 20px;
-  font-size: 20px;
+  font-size: 16px;
+}
+
+.upperMessageDescription {
+  font-size: 13px;
 }
 
 .saleButtons {
@@ -110,7 +114,23 @@
 
 .manage:global(.ui.button) {
   margin-top: 24px;
-  background: rgba(115, 110, 125, 0.24);
+  background-color: var(--superGray);
+}
+
+.manage:global(.ui.button):hover {
+  background-color: var(--superGrayHovered);
+}
+
+.manage_in_builder:global(.ui.button) {
+  margin-bottom: 15px;
+}
+
+.bid_manage_in_builder:global(.ui.button.secondary) {
+  background-color: var(--superGray);
+}
+
+.bid_manage_in_builder:global(.ui.button.secondary):hover {
+  background-color: var(--superGrayHovered);
 }
 
 .fullWidth {

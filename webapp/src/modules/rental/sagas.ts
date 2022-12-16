@@ -280,6 +280,10 @@ function* handleAcceptRentalListingRequest(
       [[], [], []] as [string[], number[], number[]]
     )
 
+    const lastSignatureByte = Number.parseInt(rental.signature.slice(-2), 16)
+    const isSignatureVValid =
+      lastSignatureByte === 27 || lastSignatureByte === 28
+
     const listing = {
       signer: rental.lessor,
       contractAddress: rental.contractAddress,
@@ -290,7 +294,9 @@ function* handleAcceptRentalListingRequest(
       maxDays,
       minDays,
       target: ethers.constants.AddressZero,
-      signature: rental.signature
+      signature: isSignatureVValid
+        ? rental.signature
+        : rental.signature.slice(0, -2) + (lastSignatureByte + 27).toString(16)
     }
 
     let fingerprint = ethers.utils.randomBytes(32).map(() => 0)

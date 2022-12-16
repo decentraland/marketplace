@@ -90,7 +90,8 @@ beforeEach(() => {
     rentalContractAddress: '0xdeadbeef',
     nonces: ['0', '0', '0'],
     periods: [{ pricePerDay: '100000000000000000000', maxDays: 7, minDays: 7 }],
-    signature: 'the-signature',
+    signature:
+      '0x402a10749ebca5d35af41b5780a2667e7edbc2ec64bad157714f533c69cb694c4e4595b88dce064a92772850e903c23d0f67625aeccf9308841ad34929daf5411c',
     chainId: ChainId.ETHEREUM_GOERLI,
     network: Network.ETHEREUM,
     status: RentalStatus.OPEN,
@@ -724,6 +725,85 @@ describe('when handling the request action to accept a rental', () => {
             rental,
             periodIndexChosen,
             addressOperator
+          )
+        )
+        .silentRun()
+    })
+  })
+
+  describe('and the signature has a v value different from 27 or 28', () => {
+    const txHash = '0x01'
+    let updatedRentalListing: RentalListing
+    beforeEach(() => {
+      updatedRentalListing = { ...rental, status: RentalStatus.EXECUTED }
+      rental.signature =
+        '0x402a10749ebca5d35af41b5780a2667e7edbc2ec64bad157714f533c69cb694c4e4595b88dce064a92772850e903c23d0f67625aeccf9308841ad34929daf501'
+    })
+
+    it('should perform the transaction using the modified signature with plus 27 on their last byte', () => {
+      return expectSaga(rentalSaga)
+        .provide([
+          [call(getConnectedProvider), {}],
+          [select(getAddress), '0xEf924C0611035DF4DecfAb7300320c92f68B0F45'],
+          [
+            call(getContract, ContractName.Rentals, nft.chainId),
+            rentalContract
+          ],
+          [
+            call(
+              sendTransaction as (
+                contract: ContractData,
+                contractMethodName: string,
+                ...contractArguments: any[]
+              ) => Promise<string>,
+              rentalContract,
+              'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
+              [
+                rental.lessor,
+                rental.contractAddress,
+                rental.tokenId,
+                (rental.expiration / 1000).toString(),
+                rental.nonces,
+                [rental.periods[periodIndexChosen].pricePerDay],
+                [rental.periods[periodIndexChosen].maxDays],
+                [rental.periods[periodIndexChosen].minDays],
+                ethers.constants.AddressZero,
+                '0x402a10749ebca5d35af41b5780a2667e7edbc2ec64bad157714f533c69cb694c4e4595b88dce064a92772850e903c23d0f67625aeccf9308841ad34929daf51c'
+              ],
+              addressOperator,
+              periodIndexChosen,
+              rental.periods[periodIndexChosen].maxDays,
+              ethers.utils.randomBytes(32).map(() => 0)
+            ),
+            Promise.resolve(txHash)
+          ],
+          [call(waitForTx, txHash), Promise.resolve()],
+          [
+            call(waitUntilRentalChangesStatus, nft, RentalStatus.EXECUTED),
+            Promise.resolve(updatedRentalListing)
+          ]
+        ])
+        .dispatch(
+          acceptRentalListingRequest(
+            nft,
+            rental,
+            periodIndexChosen,
+            addressOperator
+          )
+        )
+        .put(
+          acceptRentalListingTransactionSubmitted(
+            nft,
+            rental,
+            txHash,
+            periodIndexChosen
+          )
+        )
+        .put(
+          acceptRentalListingSuccess(
+            nft,
+            updatedRentalListing,
+            periodIndexChosen
           )
         )
         .silentRun()
