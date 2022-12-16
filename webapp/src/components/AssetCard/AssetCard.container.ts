@@ -29,6 +29,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     ? getRentalById(state, openRentalId)
     : null
 
+  console.log('Log', getLocation(state).pathname, locations.root())
+
   return {
     price,
     showListedTag:
@@ -38,7 +40,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       ? isClaimingBackLandTransactionPending(state, asset)
       : false,
     rental: rentalOfNFT,
-    showRentalBubble: view === View.CURRENT_ACCOUNT
+    showRentalBubble:
+      rentalOfNFT !== null &&
+      view === View.CURRENT_ACCOUNT &&
+      getLocation(state).pathname !== locations.root()
   }
 }
 

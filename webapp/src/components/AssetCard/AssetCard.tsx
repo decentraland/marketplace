@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { RentalListing, RentalStatus } from '@dcl/schemas'
+import { RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
@@ -96,10 +96,7 @@ const AssetCard = (props: Props) => {
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
   const rentalPricePerDay: string | null = useMemo(
-    () =>
-      rental && rental.status === RentalStatus.OPEN
-        ? getMaxPriceOfPeriods(rental)
-        : null,
+    () => (isRentalListingOpen(rental) ? getMaxPriceOfPeriods(rental!) : null),
     [rental]
   )
 
