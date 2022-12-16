@@ -5,8 +5,13 @@ import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/s
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
 import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
+import { createManaFiatGatewaysSaga } from 'decentraland-dapps/dist/modules/manaFiatGateway/sagas'
+import { locationSaga } from 'decentraland-dapps/dist/modules/location/sagas'
 import { CatalystClient } from 'dcl-catalyst-client'
+import { NetworkGatewayType } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
 
+import { config } from '../config'
+import { peerUrl } from '../lib/environment'
 import { analyticsSagas as marketplaceAnalyticsSagas } from './analytics/sagas'
 import { bidSaga } from './bid/sagas'
 import { nftSaga } from './nft/sagas'
@@ -26,7 +31,6 @@ import { storeSaga } from './store/sagas'
 import { identitySaga } from './identity/sagas'
 import { rentalSaga } from './rental/sagas'
 import { modalSaga } from './modal/sagas'
-import { peerUrl } from '../lib/environment'
 import { eventSaga } from './event/sagas'
 import { contractSaga } from './contract/sagas'
 
@@ -34,6 +38,18 @@ const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({ peerUrl })
 const catalystClient = new CatalystClient({
   catalystUrl: peerUrl
+})
+const manaFiatGatewaysSaga = createManaFiatGatewaysSaga({
+  [NetworkGatewayType.MOON_PAY]: {
+    apiBaseUrl: config.get('MOON_PAY_API_URL'),
+    apiKey: config.get('MOON_PAY_API_KEY'),
+    pollingDelay: +config.get('MOON_PAY_POLLING_DELAY'),
+    widgetBaseUrl: config.get('MOON_PAY_WIDGET_URL')
+  },
+  [NetworkGatewayType.TRANSAK]: {
+    key: config.get('TRANSAK_KEY'),
+    env: config.get('TRANSAK_ENV')
+  }
 })
 
 export function* rootSaga() {
@@ -69,6 +85,8 @@ export function* rootSaga() {
     rentalSaga(),
     modalSaga(),
     eventSaga(),
-    contractSaga()
+    contractSaga(),
+    manaFiatGatewaysSaga(),
+    locationSaga()
   ])
 }

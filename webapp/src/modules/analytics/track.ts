@@ -65,6 +65,11 @@ import {
 } from '../rental/actions'
 import { UpsertRentalOptType } from '../rental/types'
 import { NFTCategory } from '@dcl/schemas'
+import {
+  SetPurchaseAction,
+  SET_PURCHASE
+} from 'decentraland-dapps/dist/modules/mana/actions'
+import { PurchaseStatus } from 'decentraland-dapps/dist/modules/mana/types'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -256,4 +261,17 @@ track<AcceptRentalListingSuccessAction>(
     pricePerDay: rental.periods[periodIndexChosen].pricePerDay,
     duration: rental.periods[periodIndexChosen].maxDays
   })
+)
+
+track<SetPurchaseAction>(
+  SET_PURCHASE,
+  action =>
+    action.payload.purchase.status === PurchaseStatus.CANCELLED
+      ? 'Purchase Cancelled'
+      : action.payload.purchase.status === PurchaseStatus.COMPLETE
+      ? 'Purchase Complete'
+      : action.payload.purchase.status === PurchaseStatus.FAILED
+      ? 'Purchase Failed'
+      : 'Purchase Started',
+  action => action.payload.purchase
 )

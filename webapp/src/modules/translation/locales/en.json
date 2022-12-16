@@ -85,7 +85,8 @@
     "partners": "Partners",
     "my_assets": "My Assets",
     "my_bids": "My Bids",
-    "activity": "Activity"
+    "activity": "Activity",
+    "buy_mana_with_fiat": "Buy MANA"
   },
   "menu": {
     "all": "All Assets",
