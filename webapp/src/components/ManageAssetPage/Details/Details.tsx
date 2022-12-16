@@ -1,4 +1,5 @@
 import { useMemo, memo } from 'react'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Link } from 'react-router-dom'
 import { NFTCategory } from '@dcl/schemas'
 import classNames from 'classnames'
@@ -9,7 +10,6 @@ import { Box } from '../../AssetBrowse/Box'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './Details.types'
 import styles from './Details.module.css'
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 const Info = ({
   title,
