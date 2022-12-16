@@ -29,8 +29,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     ? getRentalById(state, openRentalId)
     : null
 
-  console.log('Log', getLocation(state).pathname, locations.root())
-
   return {
     price,
     showListedTag:
