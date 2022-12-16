@@ -1,4 +1,5 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import React, { memo, useCallback, useMemo, useState } from 'react'
+import { NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
 import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
@@ -10,6 +11,7 @@ import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import {
+  canBeClaimed,
   getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded,
@@ -21,13 +23,16 @@ import { getContractAuthorization } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
 import { isParcel, isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
+import { builderUrl } from '../../../lib/environment'
 import { isOwnedBy } from '../../../modules/asset/utils'
+import { addressEquals } from '../../../modules/wallet/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
+import { LinkedProfile } from '../../LinkedProfile'
 
 enum View {
   SALE,
@@ -49,6 +54,10 @@ const SaleRentActionBox = ({
   const isMobileView = isMobile()
   const isRentalOpen = isRentalListingOpen(rental)
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
+  const isTenant =
+    rental &&
+    wallet &&
+    addressEquals(rental.tenant ?? undefined, wallet.address)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
     number
@@ -103,7 +112,9 @@ const SaleRentActionBox = ({
   }, [authorization, authorizations, onRent, selectedRentalPeriodIndex])
 
   const handleCloseAuthorizationModal = () => setShowAuthorizationModal(false)
-
+  const rentalEndDate: Date | null = isCurrentlyRented
+    ? getRentalEndDate(rental!)
+    : null
   const rentalEndTime = isCurrentlyRented
     ? getRentalEndDate(rental!)!.getTime()
     : 0
@@ -247,13 +258,69 @@ const SaleRentActionBox = ({
                   </span>
                 </div>
               </div>
+            ) : isOwner && rental?.tenant && !rentalHasEnded ? (
+              <div className={styles.upperMessage}>
+                {t('asset_page.sales_rent_action_box.in_rent_owner', {
+                  tenant: <LinkedProfile address={rental.tenant!} inline />,
+                  asset_type: nft.category,
+                  rental_end_date: rentalEndDate,
+                  strong: (children: React.ReactElement) => (
+                    <strong>{children}</strong>
+                  )
+                })}
+              </div>
+            ) : isTenant && !rentalHasEnded ? (
+              <div className={styles.upperMessage}>
+                {t('asset_page.sales_rent_action_box.in_rent_tenant', {
+                  asset_type: nft.category,
+                  rental_end_date: rentalEndDate,
+                  strong: (children: React.ReactElement) => (
+                    <strong>{children}</strong>
+                  )
+                })}
+              </div>
+            ) : (isTenant || isOwner) && rentalHasEnded ? (
+              <div className={styles.upperMessage}>
+                {t('asset_page.sales_rent_action_box.rent_ended', {
+                  asset_type: nft.category,
+                  rental_end_date: rentalEndDate,
+                  strong: (children: React.ReactElement) => (
+                    <strong>{children}</strong>
+                  )
+                })}
+              </div>
             ) : (
-              <div className={styles.notForSale}>
+              <div className={styles.upperMessage}>
                 {t('asset_page.sales_rent_action_box.not_for_sale')}
               </div>
             )}
+            {isOwner &&
+            rental &&
+            wallet &&
+            canBeClaimed(wallet?.address, rental, nft) ? (
+              <div className={styles.upperMessageDescription}>
+                {t('asset_page.sales_rent_action_box.claim_back_message', {
+                  asset_type: nft.category
+                })}
+              </div>
+            ) : null}
             {!isOwner ? (
               <>
+                {isTenant && !rentalHasEnded ? (
+                  <Button
+                    as={'a'}
+                    href={`${builderUrl}/land/${
+                      nft.category === NFTCategory.ESTATE
+                        ? `${nft.tokenId}`
+                        : `${nft.data.parcel?.x},${nft.data.parcel?.y}`
+                    }`}
+                    fluid
+                    primary
+                    className={styles.manage_in_builder}
+                  >
+                    {t('asset_page.actions.manage_in_builder')}
+                  </Button>
+                ) : null}
                 <div className={styles.saleButtons}>
                   {order ? (
                     <Button
@@ -284,9 +351,14 @@ const SaleRentActionBox = ({
                           <Button
                             as={Link}
                             to={locations.bid(nft.contractAddress, nft.tokenId)}
-                            className={classNames({ [styles.bid]: order })}
+                            className={classNames({
+                              [styles.bid]: order,
+                              [styles.bid_manage_in_builder]:
+                                isTenant && !rentalHasEnded
+                            })}
                             disabled={isNFTPartOfAState}
-                            primary={!order}
+                            primary={!order && !(isTenant && !rentalHasEnded)}
+                            secondary={true}
                             fluid
                           >
                             {t('asset_page.actions.bid')}
@@ -324,7 +396,7 @@ const SaleRentActionBox = ({
           />
         ) : null}
       </div>
-      {isCurrentlyRented && !rentalHasEnded ? (
+      {isCurrentlyRented && !rentalHasEnded && !isTenant && !isOwner ? (
         <div className={styles.message}>
           <T
             id={'asset_page.sales_rent_action_box.rented_until'}

@@ -1,4 +1,4 @@
-.mvmf-icon {
+.Navigation .mvmf-icon {
   display: inline-block;
   width: 16px;
   height: 16px;
@@ -7,7 +7,7 @@
   background-size: cover;
 }
 
-.mvmf-tab {
+.Navigation .mvmf-tab {
   background: linear-gradient(45deg, #92efeb, #bfffdc, #f7ffdc, #ecc8ff);
   background-size: 30% 30%;
   background-clip: text;
@@ -17,6 +17,25 @@
   -webkit-animation: AnimationName 5s ease-out infinite;
   -moz-animation: AnimationName 5s ease-out infinite;
   animation: AnimationName 5s ease-out infinite;
+}
+
+.Navigation .download-icon {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  margin-right: 6px;
+  background-image: url(../../images/download.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.Navigation .dcl.tabs .ui.container {
+  display: flex;
+}
+
+.Navigation .dcl.tabs .dcl.tabs-right {
+  display: flex;
+  align-items: center;
 }
 
 @-webkit-keyframes AnimationName {

@@ -2,6 +2,8 @@
   --page-header-height: 420px;
   /* Colors */
   --gray: rgba(115, 110, 125, 0.4);
+  --superGray: #37333D;
+  --superGrayHovered: #3D3A45;
 }
 
 body {
