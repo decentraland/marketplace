@@ -3,7 +3,11 @@ import { ethers } from 'ethers'
 import classNames from 'classnames'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
-import { DropdownItemProps, DropdownProps } from 'decentraland-ui'
+import {
+  DropdownItemProps,
+  DropdownProps,
+  useMobileMediaQuery
+} from 'decentraland-ui'
 import { Dropdown } from 'decentraland-ui/dist/components/Dropdown/Dropdown.js'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { RentalListingPeriod } from '@dcl/schemas'
@@ -30,6 +34,8 @@ const Trigger = ({ period }: { period: RentalListingPeriod }) => {
 }
 
 const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
+  const isMobile = useMobileMediaQuery()
+
   const handleOnChange = useCallback(
     (_event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
       onChange(data.value as number)
@@ -79,6 +85,7 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
       options={options}
       onChange={handleOnChange}
       title={t('manage_asset_page.rent.rent_period')}
+      closeOnChange={isMobile ? false : true}
     />
   )
 }
