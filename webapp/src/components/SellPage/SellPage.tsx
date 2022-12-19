@@ -18,8 +18,7 @@ const SellPage = (props: Props) => {
     onGoBack,
     getContract,
     onNavigate,
-    onCreateOrder,
-    onFetchAuthorizations
+    onCreateOrder
   } = props
 
   return (
@@ -42,7 +41,6 @@ const SellPage = (props: Props) => {
                   onNavigate={onNavigate}
                   onCreateOrder={onCreateOrder}
                   getContract={getContract}
-                  onFetchAuthorizations={onFetchAuthorizations}
                 />
               )}
             </AssetProviderPage>

@@ -1,9 +1,6 @@
 import { connect } from 'react-redux'
 import { goBack, push } from 'connected-react-router'
-import {
-  fetchAuthorizationsRequest,
-  FETCH_AUTHORIZATIONS_REQUEST
-} from 'decentraland-dapps/dist/modules/authorization/actions'
+import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
 import {
   getData as getAuthorizations,
   getLoading as getLoadingAuthorizations
@@ -36,9 +33,7 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
   onGoBack: () => dispatch(goBack()),
   onCreateOrder: (nft, price, expiresAt) =>
-    dispatch(createOrderRequest(nft, price, expiresAt)),
-  onFetchAuthorizations: authorizations =>
-    dispatch(fetchAuthorizationsRequest(authorizations))
+    dispatch(createOrderRequest(nft, price, expiresAt))
 })
 
 export default connect(mapState, mapDispatch)(SellPage)

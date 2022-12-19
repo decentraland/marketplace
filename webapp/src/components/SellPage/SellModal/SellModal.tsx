@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { ethers } from 'ethers'
 import addDays from 'date-fns/addDays'
 import formatDate from 'date-fns/format'
@@ -40,8 +40,7 @@ const SellModal = (props: Props) => {
     getContract,
     onNavigate,
     onGoBack,
-    onCreateOrder,
-    onFetchAuthorizations
+    onCreateOrder
   } = props
 
   const isUpdate = order !== null
@@ -56,10 +55,6 @@ const SellModal = (props: Props) => {
   const [showConfirm, setShowConfirm] = useState(false)
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
-
-  const [hasFetchedAuthorizations, setHasFetchedAuthorizations] = useState(
-    false
-  )
 
   const marketplace = useMemo(() => {
     const contractNames = getContractNames()
@@ -93,24 +88,6 @@ const SellModal = (props: Props) => {
     nft.contractAddress,
     nft.network,
     wallet
-  ])
-
-  useEffect(() => {
-    if (
-      authorization &&
-      !hasAuthorization(authorizations, authorization) &&
-      !hasFetchedAuthorizations &&
-      !isLoading
-    ) {
-      setHasFetchedAuthorizations(true)
-      onFetchAuthorizations([authorization])
-    }
-  }, [
-    authorization,
-    authorizations,
-    hasFetchedAuthorizations,
-    isLoading,
-    onFetchAuthorizations
   ])
 
   if (!wallet || !marketplace || !authorization) {

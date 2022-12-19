@@ -7,10 +7,7 @@ import {
 } from '../../modules/order/actions'
 import { Contract } from '../../modules/vendor/services'
 import { getContract } from '../../modules/contract/selectors'
-import {
-  fetchAuthorizationsRequest,
-  FetchAuthorizationsRequestAction
-} from 'decentraland-dapps/dist/modules/authorization/actions'
+import { FetchAuthorizationsRequestAction } from 'decentraland-dapps/dist/modules/authorization/actions'
 
 export type Props = {
   authorizations: Authorization[]
@@ -21,7 +18,6 @@ export type Props = {
   onCreateOrder: typeof createOrderRequest
   onNavigate: (path: string) => void
   onGoBack: () => void
-  onFetchAuthorizations: typeof fetchAuthorizationsRequest
 }
 
 export type MapStateProps = Pick<
@@ -34,7 +30,7 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<
   Props,
-  'onNavigate' | 'onCreateOrder' | 'onGoBack' | 'onFetchAuthorizations'
+  'onNavigate' | 'onCreateOrder' | 'onGoBack'
 >
 export type MapDispatch = Dispatch<
   | CallHistoryMethodAction
