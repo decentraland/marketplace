@@ -920,5 +920,13 @@
         "subtitle_bold_2": "10月25日"
       }
     }
+  },
+  "asset_card": {
+    "rental_bubble": {
+      "listed_for_rent": "挂牌出租",
+      "rented_until": "租到 {endDate, date, medium}",
+      "claiming_back": "土地正在收回",
+      "rental_ended": "租赁已结束"
+    }
   }
 }

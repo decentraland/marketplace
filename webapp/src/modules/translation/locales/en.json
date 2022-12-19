@@ -926,5 +926,13 @@
         "subtitle_bold_2": "October 25"
       }
     }
+  },
+  "asset_card": {
+    "rental_bubble": {
+      "listed_for_rent": "Listed for rent",
+      "rented_until": "Rented until {endDate, date, medium}",
+      "claiming_back": "Claiming back {asset_type, select, parcel {parcel} estate {estate} other {LAND}}",
+      "rental_ended": "Rental period over"
+    }
   }
 }

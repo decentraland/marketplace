@@ -61,7 +61,7 @@ a.ui.card.link:hover .meta {
 
 .AssetCard .listed-badge {
   position: absolute;
-  top: 16px;
+  top: 197px;
   right: 16px;
 }
 
@@ -85,10 +85,12 @@ a.ui.card.link:hover .meta {
   align-self: flex-end;
   background-color: #ecebed;
   border: 1px solid #a09ba8;
+  color: #43404A;
+  font-size: 11px;
   border-radius: 50px !important;
   display: flex;
   font-weight: 700;
-  padding: 6px 11px;
+  padding: 4px 11px;
   position: fixed;
   right: 11px;
   text-transform: uppercase;
