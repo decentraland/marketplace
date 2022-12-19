@@ -10,7 +10,7 @@ import IconBadge from '../../AssetPage/IconBadge'
 import { Props } from './CampaignBadge.types'
 import { CAMPAIGN_TAG } from '../config'
 
-const MVMFBadge = ({ contract, isCampaignBrowserEnabled: isMVMFTabEnabled }: Props) => {
+const CampaignBadge = ({ contract, isCampaignBrowserEnabled: isMVMFTabEnabled }: Props) => {
   const [showBadge, setShowBadge] = useState(false)
   const [contracts, setContracts] = useState<string[]>()
 
@@ -45,4 +45,4 @@ const MVMFBadge = ({ contract, isCampaignBrowserEnabled: isMVMFTabEnabled }: Pro
   ) : null
 }
 
-export default React.memo(MVMFBadge)
+export default React.memo(CampaignBadge)

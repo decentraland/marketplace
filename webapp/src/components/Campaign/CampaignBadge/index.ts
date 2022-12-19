@@ -1,3 +1,3 @@
-import MVMFBadge from './CampaignBadge.container'
+import CampaignBadge from './CampaignBadge.container'
 
-export default MVMFBadge
+export default CampaignBadge
