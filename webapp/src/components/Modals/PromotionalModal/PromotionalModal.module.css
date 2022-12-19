@@ -1,4 +1,6 @@
-.promotionalModal:global(.ui.page.modals) {
-  top: 15px;
-  right: 15px;
+@media (min-width: 992) {
+  :global(.ui.modal.transition.visible.active).promotionalModal {
+    top: 15px !important;
+    right: 15px !important;
+  }
 }

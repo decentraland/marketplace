@@ -6,6 +6,7 @@
   "ATLAS_SERVER_URL": "https://api.decentraland.zone",
   "PEER_URL": "https://peer-ap1.decentraland.zone",
   "SIGNATURES_SERVER_URL": "https://signatures-api.decentraland.zone/v1",
+  "DECENTRALAND_BLOG": "https://decentraland.org/blog",
   "REFRESH_SIGNATURES_DELAY": "10000",
   "TRANSACTIONS_API_URL": "https://transactions-api.decentraland.zone/v1",
   "TRANSAK_KEY": "273ac855-3472-40eb-8ee8-840e317f98e6",
