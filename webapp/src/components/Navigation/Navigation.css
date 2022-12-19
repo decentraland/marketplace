@@ -1,19 +1,21 @@
-.Navigation .mvmf-icon {
+.campaign-icon {
   display: inline-block;
   width: 16px;
   height: 16px;
   margin-right: 8px;
-  background-image: url(../../images/rabbit.svg);
   background-size: cover;
+  /* Remove the display:none rule and update icon image in case we want to use a special icon for the campaign */
+  display: none;
+  background-image: url(../../images/rabbit.svg);
 }
 
-.Navigation .mvmf-tab {
+.campaign-tab-animation {
+  /* Tweak this class and turn it on in the Navigation component to have the tab animated */
   background: linear-gradient(45deg, #92efeb, #bfffdc, #f7ffdc, #ecc8ff);
   background-size: 30% 30%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
   -webkit-animation: AnimationName 5s ease-out infinite;
   -moz-animation: AnimationName 5s ease-out infinite;
   animation: AnimationName 5s ease-out infinite;

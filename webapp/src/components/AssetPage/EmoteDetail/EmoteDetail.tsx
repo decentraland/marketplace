@@ -16,7 +16,7 @@ import { Actions } from '../Actions'
 import { BidList } from '../BidList'
 import { Description } from '../Description'
 import IconBadge from '../IconBadge'
-import MVMFBadge from '../MVMFBadge'
+import CampaignBadge from '../../Campaign/CampaignBadge'
 import BaseDetail from '../BaseDetail'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './EmoteDetail.types'
@@ -53,7 +53,7 @@ const EmoteDetail = ({ nft }: Props) => {
             text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
             href={emoteBadgeHref}
           />
-          <MVMFBadge contract={nft.contractAddress} />
+          <CampaignBadge contract={nft.contractAddress} />
         </>
       }
       left={

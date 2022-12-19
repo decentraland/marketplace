@@ -52,7 +52,6 @@
     "confirm": "Confirmar",
     "days": "días",
     "error": "Error",
-    "mvmf_2022": "Metaverse Festival 2022",
     "period": "Periodo",
     "status": "Estado",
     "unknown_error": "Error desconocido",
@@ -882,40 +881,27 @@
     "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   },
-  "mvmf22": {
-    "banners": {
-      "big": {
-        "event": "Evento",
-        "title": "¡Metaverse Music Festival 2022 está aquí!",
-        "subtitle": "Comience su búsqueda de los Wearables y Emotes perfectos para bailar toda la noche con estilo ahora.",
-        "cta": "Examinar items del festival"
-      },
-      "medium": {
-        "title": "Coleccionables del Metaverse Music Festival 2022",
-        "subtitle": "Categoria es... Cyberpunk conoce a la naturaleza"
-      },
-      "small": {
-        "title": "¡Metaverse Music Festival 2022 está aquí!",
-        "subtitle": "Comience su búsqueda de los Wearables y Emotes perfectos para bailar toda la noche con estilo ahora.",
-        "cta": "Examinar items del festival"
-      }
-    }
+  "campaign": {
+    "tab": "Holiday Season",
+    "badge": "Holiday Season"
   },
-  "mvmf22_announcement": {
-    "banners": {
-      "big": {
-        "title": "Obtenga sus artículos destacados durante el {enter} ¡Metaverse Music Festival 2022!",
-        "subtitle": "La categoría del festival de música de este año es... {subtitle_bold_1} {enter} Envíe sus dispositivos portátiles y gestos usando la etiqueta {subtitle_bold_2} antes de {subtitle_bold_3} {enter} y aparecerán en el Mercado durante todo el evento.",
-        "subtitle_bold_1": "Cyberpunk conoce a la naturaleza!",
-        "subtitle_bold_2": "#MVMF22",
-        "subtitle_bold_3": "25 de octubre",
-        "cta": "Aprende más"
+  "holiday_season_campaign": {
+    "banner": {
+      "homepage": {
+        "title": "The Holiday Season is here!",
+        "subtitle": "Sorpréndete estas vacaciones en Decentraland - encuentra el sweater perfecto o consigue un Emote para patinar sobre hielo",
+        "cta": "Buscar items",
+        "cta_mobile": "Buscar items"
       },
-      "small": {
-        "title": "Obtenga sus artículos destacados durante el Metaverse Music Festival!",
-        "subtitle": "Envíe sus Wearables y Emotes con el tag {subtitle_bold_1} antes de {subtitle_bold_2} y aparecerán en Marketplace durante todo el evento.",
-        "subtitle_bold_1": "#MVMF22",
-        "subtitle_bold_2": "25 de octubre"
+      "collectibles": {
+        "title": "¡Llegaron las vacaciones!",
+        "subtitle": "Sorpréndete estas vacaciones en Decentraland - encuentra el sweater perfecto o consigue un Emote para patinar sobre hielo",
+        "cta": "Buscar items",
+        "cta_mobile": "Buscar items"
+      },
+      "campaign_browser": {
+        "title": "¡Felices Vacaciones!",
+        "subtitle": "Decentraland se convirtió en una maravilla de invierno - encuentra los items perfectos para estas vacaciones aqui."
       }
     }
   },

@@ -54,7 +54,6 @@
     "confirm": "Confirm",
     "days": "days",
     "error": "Error",
-    "mvmf_2022": "Metaverse Festival 2022",
     "period": "Period",
     "status": "Status",
     "unknown_error": "Unknown error",
@@ -889,41 +888,27 @@
     "disclaimer": "This will require a transaction and you will need to cover its fees.",
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   },
-  "mvmf22": {
-    "banners": {
-      "big": {
-        "event": "Event",
-        "title": "Metaverse Music Festival 2022 is here!",
-        "subtitle": "Start your search for the perfect Wearables & Emotes to dance the night away in style now.",
-        "cta": "Browse Festival Items"
-      },
-      "medium": {
-        "title": "Metaverse Music Festival 2022 Collectibles",
-        "subtitle": "Category is... {subtitle_bold_1}",
-        "subtitle_bold_1": "Cyberpunk Meets Nature!"
-      },
-      "small": {
-        "title": "Metaverse Music Festival 2022 is here!",
-        "subtitle": "Start your search for the perfect Wearables & Emotes to dance the night away in style now.",
-        "cta": "Browse Festival Items"
-      }
-    }
+  "campaign": {
+    "tab": "Holiday Season",
+    "badge": "Holiday Season"
   },
-  "mvmf22_announcement": {
-    "banners": {
-      "big": {
-        "title": "Get your Items featured during the {enter} Metaverse Music Festival!",
-        "subtitle": "The theme of this year's Music Festival is... {subtitle_bold_1} {enter} Just tag your Items with {subtitle_bold_2} when submitting for publishing, before {subtitle_bold_3} {enter} and your festival-themed Wearables & Emotes will be featured in a special tab during the Festival!",
-        "subtitle_bold_1": "Cyberpunk Meets Nature!",
-        "subtitle_bold_2": "#MVMF22",
-        "subtitle_bold_3": "October 25",
-        "cta": "Learn More"
+  "holiday_season_campaign": {
+    "banner": {
+      "homepage": {
+        "title": "The Holiday Season is here!",
+        "subtitle": "Put the ‘wonder’ in Decentraland’s winter wonderland—find the perfect ‘ugly sweater’ or pick up an ice skating Emote to get in the holiday mood!",
+        "cta": "Browse Holiday Items",
+        "cta_mobile": "Browse"
       },
-      "small": {
-        "title": "Get ready for the Metaverse Music Festival!",
-        "subtitle": "Add the {subtitle_bold_1} tag your festival-themed Wearables & Emotes before {subtitle_bold_2} {enter} and they'll be featured in a special Festival tab on the Marketplace during the event!",
-        "subtitle_bold_1": "#MVMF22",
-        "subtitle_bold_2": "October 25"
+      "collectibles": {
+        "title": "The Holiday Season is here!",
+        "subtitle": "Put the ‘wonder’ in Decentraland’s winter wonderland—find the perfect ‘ugly sweater’ or pick up an ice skating Emote to get in the holiday mood!",
+        "cta": "Browse Holiday Items",
+        "cta_mobile": "Browse"
+      },
+      "campaign_browser": {
+        "title": "Happy Holidays!",
+        "subtitle": "Decentraland has become a winter wonderland—find the perfect holiday Items for the season right here."
       }
     }
   },

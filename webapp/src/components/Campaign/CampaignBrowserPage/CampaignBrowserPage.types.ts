@@ -1,11 +1,11 @@
 import { Dispatch } from 'redux'
-import { AssetType } from '../../modules/asset/types'
+import { AssetType } from '../../../modules/asset/types'
 import {
   fetchEventRequest,
   FetchEventRequestAction
-} from '../../modules/event/actions'
-import { Section } from '../../modules/vendor/routing/types'
-import { VendorName } from '../../modules/vendor/types'
+} from '../../../modules/event/actions'
+import { Section } from '../../../modules/vendor/routing/types'
+import { VendorName } from '../../../modules/vendor/types'
 
 export type Props = {
   vendor: VendorName
@@ -14,7 +14,7 @@ export type Props = {
   isFullscreen?: boolean
   onFetchEventContracts: typeof fetchEventRequest
   contracts: Record<string, string[]>
-  isMVMFTabEnabled: boolean
+  isCampaignBrowserEnabled: boolean
 }
 
 export type MapStateProps = Pick<
@@ -24,7 +24,7 @@ export type MapStateProps = Pick<
   | 'assetType'
   | 'section'
   | 'contracts'
-  | 'isMVMFTabEnabled'
+  | 'isCampaignBrowserEnabled'
 >
 export type MapDispatchProps = Pick<Props, 'onFetchEventContracts'>
 export type MapDispatch = Dispatch<FetchEventRequestAction>
