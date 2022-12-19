@@ -1,6 +1,5 @@
 .modal:global(.ui.modal.tiny) {
   width: 520px;
-  padding: 0px 30px 35px 30px;
 }
 
 .editingModal.modal:global(.ui.modal.tiny) {
@@ -106,6 +105,7 @@
   .modal:global(.ui.modal.tiny) {
     width: 100%;
     height: 100%;
+    padding: 0px 30px 35px 30px;
   }
 
   .editingModal.modal:global(.ui.modal.tiny) {
