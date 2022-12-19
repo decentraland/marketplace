@@ -1,5 +1,5 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
-import { RentalListing, RentalStatus } from '@dcl/schemas'
+import { Network, NFTCategory, RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -24,7 +24,7 @@ import {
   FETCH_NFT_REQUEST,
   FetchNFTRequestAction,
   fetchNFTSuccess,
-  fetchNFTFailure,
+  // fetchNFTFailure,
   TRANSFER_NFT_REQUEST,
   TransferNFTRequestAction,
   transferNFTSuccess,
@@ -32,6 +32,8 @@ import {
   transferNFTransactionSubmitted
 } from './actions'
 import { NFT } from './types'
+import { addContracts } from '../contract/actions'
+import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -90,9 +92,22 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   try {
     yield call(getOrWaitForContracts)
 
-    const contract: ReturnType<typeof getContract> = yield select(getContract, {
+    let contract: ReturnType<typeof getContract> = yield select(getContract, {
       address: contractAddress
     })
+
+    if (!contract) {
+      contract = {
+        address: contractAddress,
+        category: NFTCategory.WEARABLE,
+        name: contractAddress,
+        chainId: getChainIdByNetwork(Network.MATIC),
+        vendor: VendorName.DECENTRALAND,
+        network: Network.MATIC
+      }
+
+      yield put(addContracts([contract], true))
+    }
 
     if (!contract || !contract.vendor) {
       throw new Error(
@@ -118,9 +133,7 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
 
     yield put(fetchNFTSuccess(nft as NFT, order, rental))
   } catch (error) {
-    yield put(
-      fetchNFTFailure(contractAddress, tokenId, (error as Error).message)
-    )
+    throw error
   }
 }
 

@@ -15,6 +15,7 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
+import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { config } from '../../config'
 import { getContract, getContracts } from '../contract/selectors'
 import { getOrWaitForContracts } from '../contract/utils'
@@ -22,6 +23,8 @@ import { Contract } from '../vendor/services'
 import { getContractNames } from '../vendor'
 import { TRANSACTIONS_API_URL } from './utils'
 import {
+  AddContractsAction,
+  ADD_CONTRACTS,
   FetchContractsSuccessAction,
   FETCH_CONTRACTS_SUCCESS
 } from '../contract/actions'
@@ -42,17 +45,27 @@ function* fullWalletSaga() {
   yield takeEvery(CHANGE_ACCOUNT, handleWallet)
   yield takeEvery(CHANGE_NETWORK, handleWallet)
   yield takeEvery(FETCH_CONTRACTS_SUCCESS, handleFetchContractsSuccess)
+  yield takeEvery(ADD_CONTRACTS, handleAddContracts)
 }
 
 function* handleWallet(
   action: ConnectWalletSuccessAction | ChangeAccountAction | ChangeNetworkAction
 ) {
   const { address } = action.payload.wallet
-  
+
   yield call(fetchAuthorizations, address)
 }
 
 function* handleFetchContractsSuccess(action: FetchContractsSuccessAction) {
+  const { shouldFetchAuthorizations } = action.payload
+  const address: string | undefined = yield select(getAddress)
+
+  if (address && shouldFetchAuthorizations) {
+    yield call(fetchAuthorizations, address)
+  }
+}
+
+function* handleAddContracts(action: AddContractsAction) {
   const { shouldFetchAuthorizations } = action.payload
   const address: string | undefined = yield select(getAddress)
 
@@ -112,7 +125,7 @@ function* fetchAuthorizations(address: string) {
     network: Network.ETHEREUM
   })
 
-  const authorizations: Authorization[] = []
+  let authorizations: Authorization[] = []
 
   authorizations.push({
     address,
@@ -235,6 +248,17 @@ function* fetchAuthorizations(address: string) {
       })
     }
   }
+
+  const currentAuthorizations: Authorization[] = yield select(getAuthorizations)
+
+  const currentAuthorizationsAddresses = new Set<string>(
+    currentAuthorizations.map(authorization => authorization.contractAddress)
+  )
+
+  authorizations = authorizations.filter(
+    authorization =>
+      !currentAuthorizationsAddresses.has(authorization.contractAddress)
+  )
 
   yield put(fetchAuthorizationsRequest(authorizations))
 }

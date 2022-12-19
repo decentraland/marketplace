@@ -37,3 +37,14 @@ export type FetchContractsSuccessAction = ReturnType<
 export type FetchContractsFailureAction = ReturnType<
   typeof fetchContractsFailure
 >
+
+// ADD CONTRACTS
+
+export const ADD_CONTRACTS = 'Add contracts'
+
+export const addContracts = (
+  contracts: Contract[],
+  shouldFetchAuthorizations: boolean
+) => action(ADD_CONTRACTS, { contracts, shouldFetchAuthorizations })
+
+export type AddContractsAction = ReturnType<typeof addContracts>

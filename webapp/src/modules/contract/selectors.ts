@@ -25,7 +25,9 @@ export const getContract = createSelectorCreator(defaultMemoize, isEqual)<
   getLoading,
   getContracts,
   (query: Partial<Contract>, loading: LoadingState, contracts: Contract[]) => {
-    if (isLoadingType(loading, FETCH_CONTRACTS_REQUEST)) return null
+    if (isLoadingType(loading, FETCH_CONTRACTS_REQUEST)) {
+      return null
+    }
 
     const found = contracts.find(contract =>
       Object.keys(query).every(
@@ -35,10 +37,6 @@ export const getContract = createSelectorCreator(defaultMemoize, isEqual)<
       )
     )
 
-    if (!found) {
-      throw new Error(`Contract not found, query=${JSON.stringify(query)}`)
-    }
-
-    return found
+    return found || null
   }
 )

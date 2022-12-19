@@ -4,6 +4,8 @@ import {
 } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { Contract } from '../vendor/services'
 import {
+  AddContractsAction,
+  ADD_CONTRACTS,
   FetchContractsFailureAction,
   FetchContractsRequestAction,
   FetchContractsSuccessAction,
@@ -30,6 +32,7 @@ type ContractReducerAction =
   | FetchContractsRequestAction
   | FetchContractsSuccessAction
   | FetchContractsFailureAction
+  | AddContractsAction
 
 export function contractReducer(
   state = INITIAL_STATE,
@@ -62,6 +65,15 @@ export function contractReducer(
         loading: loadingReducer(state.loading, action),
         error
       }
+
+    case ADD_CONTRACTS: {
+      const { contracts } = action.payload
+
+      return {
+        ...state,
+        data: [...state.data, ...contracts]
+      }
+    }
     default:
       return state
   }
