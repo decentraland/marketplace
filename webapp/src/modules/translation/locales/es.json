@@ -889,19 +889,19 @@
     "banner": {
       "homepage": {
         "title": "The Holiday Season is here!",
-        "subtitle": "Put the ‘wonder’ in Decentraland’s winter wonderland—find the perfect ‘ugly sweater’ or pick up an ice skating Emote to get in the holiday mood!",
-        "cta": "Browse Holiday Items",
-        "cta_mobile": "Browse"
+        "subtitle": "Sorpréndete estas vacaciones en Decentraland - encuentra el sweater perfecto o consigue un Emote para patinar sobre hielo",
+        "cta": "Buscar items",
+        "cta_mobile": "Buscar items"
       },
       "collectibles": {
-        "title": "The Holiday Season is here!",
-        "subtitle": "Put the ‘wonder’ in Decentraland’s winter wonderland—find the perfect ‘ugly sweater’ or pick up an ice skating Emote to get in the holiday mood!",
-        "cta": "Browse Holiday Items",
-        "cta_mobile": "Browse"
+        "title": "¡Llegaron las vacaciones!",
+        "subtitle": "Sorpréndete estas vacaciones en Decentraland - encuentra el sweater perfecto o consigue un Emote para patinar sobre hielo",
+        "cta": "Buscar items",
+        "cta_mobile": "Buscar items"
       },
       "campaign_browser": {
-        "title": "The Holiday Season is here!",
-        "subtitle": "Decentraland has become a winter wonderland—find the perfect holiday Items for the season right here."
+        "title": "¡Felices Vacaciones!",
+        "subtitle": "Decentraland se convirtió en una maravilla de invierno - encuentra los items perfectos para estas vacaciones aqui."
       }
     }
   },

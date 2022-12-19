@@ -890,20 +890,20 @@
   "holiday_season_campaign": {
     "banner": {
       "homepage": {
-        "title": "The Holiday Season is here!",
-        "subtitle": "Put the ‘wonder’ in Decentraland’s winter wonderland—find the perfect ‘ugly sweater’ or pick up an ice skating Emote to get in the holiday mood!",
-        "cta": "Browse Holiday Items",
-        "cta_mobile": "Browse"
+        "title": "#HolidaySeason 就在这里！",
+        "subtitle": "这个假期在 Decentraland 给自己一个惊喜——找到完美的毛衣或获得滑冰表情！",
+        "cta": "浏览节日用品",
+        "cta_mobile": "浏览节日用品"
       },
       "collectibles": {
-        "title": "The Holiday Season is here!",
-        "subtitle": "Put the ‘wonder’ in Decentraland’s winter wonderland—find the perfect ‘ugly sweater’ or pick up an ice skating Emote to get in the holiday mood!",
-        "cta": "Browse Holiday Items",
-        "cta_mobile": "Browse"
+        "title": "#HolidaySeason 就在这里！",
+        "subtitle": "这个假期在 Decentraland 给自己一个惊喜——找到完美的毛衣或获得滑冰表情！",
+        "cta": "浏览节日用品",
+        "cta_mobile": "浏览节日用品"
       },
       "campaign_browser": {
-        "title": "The Holiday Season is here!",
-        "subtitle": "Decentraland has become a winter wonderland—find the perfect holiday Items for the season right here."
+        "title": "节日快乐！",
+        "subtitle": "Decentraland 变成了冬季仙境 - 在这里找到适合这个假期的完美物品。"
       }
     }
   },
