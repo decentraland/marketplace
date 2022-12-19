@@ -109,7 +109,7 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
       yield put(addContracts([contract], true))
     }
 
-    if (!contract || !contract.vendor) {
+    if (!contract.vendor) {
       throw new Error(
         `Couldn't find a valid vendor for contract ${contract?.address}`
       )
