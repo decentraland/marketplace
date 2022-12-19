@@ -304,7 +304,6 @@ function getLastECDSASignatureByte(signature: string) {
 /**
  * Checks wether a ECDSA signature has a valid V.
  * @param signature - A ECDSA signature.
- * @throws "Invalid signature length" if the given signature has less than 65 bytes.
  * @returns true if the v value is decimal 27 or 28 else otherwise.
  */
 function hasECDSASignatureAValidV(signature: string): boolean {
@@ -319,7 +318,6 @@ function hasECDSASignatureAValidV(signature: string): boolean {
 /**
  * Generates an ECDSA signature with a valid V from another signature by changing its V value to 27 or 28 if it was 0 or 1.
  * @param signature - A ECDSA signature.
- * @throws "Invalid signature length" if the given signature has less than 65 bytes.
  * @returns a ECDSA signature based on the given one with its V value as 27 or 28.
  */
 export function generateECDSASignatureWithValidV(signature: string): string {
