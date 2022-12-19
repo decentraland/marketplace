@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Tabs, Mobile, Button } from 'decentraland-ui'
+import { Tabs, Mobile, Button, useMobileMediaQuery } from 'decentraland-ui'
 import BuyManaWithFiatModal from 'decentraland-dapps/dist/containers/BuyManaWithFiatModal'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import * as decentraland from '../../modules/vendor/decentraland'
@@ -13,6 +13,7 @@ import './Navigation.css'
 
 const Navigation = (props: Props) => {
   const { activeTab, isFullscreen, isMVMFTabEnabled } = props
+  const isMobile = useMobileMediaQuery()
   const [showBuyManaModal, setShowBuyManaModal] = useState(false)
 
   const handleCloseBuyManaWithFiatModal = () => {
@@ -78,15 +79,17 @@ const Navigation = (props: Props) => {
             </Link>
           </Mobile>
         </Tabs.Left>
-        <Tabs.Right>
-          <Button
-            primary
-            onClick={() => setShowBuyManaModal(true)}
-            size="small"
-          >
-            {t('navigation.buy_mana_with_fiat')}
-          </Button>
-        </Tabs.Right>
+        {!isMobile ? (
+          <Tabs.Right>
+            <Button
+              primary
+              onClick={() => setShowBuyManaModal(true)}
+              size="small"
+            >
+              {t('navigation.buy_mana_with_fiat')}
+            </Button>
+          </Tabs.Right>
+        ) : null}
       </Tabs>
       <BuyManaWithFiatModal
         open={showBuyManaModal}
