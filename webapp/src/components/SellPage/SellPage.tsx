@@ -20,7 +20,6 @@ const SellPage = (props: Props) => {
     onNavigate,
     onCreateOrder
   } = props
-
   return (
     <>
       <Navbar isFullscreen />
