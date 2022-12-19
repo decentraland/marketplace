@@ -13,11 +13,13 @@
 
 .CampaignHomepageBanner .ui.header {
   color: black;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  font-size: 28px;
 }
 
 .CampaignHomepageBanner p {
   color: black;
+  font-size: 17px;
 }
 
 .CampaignHomepageBanner .copy {
@@ -41,5 +43,12 @@
   .CampaignHomepageBanner .copy {
     margin-right: 0px;
     margin-bottom: 20px;
+  }
+
+  .CampaignHomepageBanner .ui.header {
+    font-size: 20px;
+  }
+  .CampaignHomepageBanner p {
+    font-size: 14px;
   }
 }

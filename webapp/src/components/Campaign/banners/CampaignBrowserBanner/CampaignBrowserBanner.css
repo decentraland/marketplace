@@ -12,11 +12,13 @@
 
 .CampaignBrowserBanner .ui.header {
   color: black;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  font-size: 28px;
 }
 
 .CampaignBrowserBanner p {
   color: black;
+  font-size: 17px;
 }
 
 .CampaignBrowserBanner .copy {
@@ -40,5 +42,11 @@
   .CampaignBrowserBanner .copy {
     margin-right: 0px;
     margin-bottom: 20px;
+  }
+  .CampaignBrowserBanner .ui.header {
+    font-size: 20px;
+  }
+  .CampaignBrowserBanner p {
+    font-size: 14px;
   }
 }

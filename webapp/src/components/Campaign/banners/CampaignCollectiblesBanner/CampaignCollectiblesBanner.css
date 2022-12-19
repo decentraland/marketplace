@@ -12,17 +12,19 @@
 
 .CampaignCollectiblesBanner .ui.header {
   color: black;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  font-size: 28px;
 }
 
 .CampaignCollectiblesBanner p {
   color: black;
+  font-size: 17px;
 }
 
 .CampaignCollectiblesBanner .copy {
   flex: 0 1 auto;
   margin-right: 20px;
-  max-width: 400px;
+  max-width: 425px;
 }
 
 .CampaignCollectiblesBanner .ui.button {
@@ -40,5 +42,11 @@
   .CampaignCollectiblesBanner .copy {
     margin-right: 0px;
     margin-bottom: 20px;
+  }
+  .CampaignCollectiblesBanner .ui.header {
+    font-size: 20px;
+  }
+  .CampaignCollectiblesBanner p {
+    font-size: 14px;
   }
 }
