@@ -1,8 +1,8 @@
 export type Props = {
-  isMVMFTabEnabled: boolean
+  isCampaignBrowserEnabled: boolean
   contract: string
 }
 
-export type MapStateProps = Pick<Props, 'isMVMFTabEnabled'>
+export type MapStateProps = Pick<Props, 'isCampaignBrowserEnabled'>
 export type MapDispatchProps = {}
 export type MapDispatch = {}

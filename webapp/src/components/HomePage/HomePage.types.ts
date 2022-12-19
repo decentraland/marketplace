@@ -12,11 +12,15 @@ import {
 export type Props = {
   homepage: ReturnType<typeof getHomepage>
   homepageLoading: ReturnType<typeof getHomepageLoading>
+  isCampaignHomepageBannerEnabled: boolean
   onNavigate: (path: string) => void
   onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
 }
 
-export type MapStateProps = Pick<Props, 'homepage' | 'homepageLoading'>
+export type MapStateProps = Pick<
+  Props,
+  'homepage' | 'homepageLoading' | 'isCampaignHomepageBannerEnabled'
+>
 export type MapDispatchProps = Pick<
   Props,
   'onNavigate' | 'onFetchAssetsFromRoute'

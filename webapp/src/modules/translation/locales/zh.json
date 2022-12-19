@@ -52,7 +52,6 @@
     "confirm": "确认",
     "days": "天",
     "error": "错误",
-    "mvmf_2022": "元界节 2022",
     "period": "时期",
     "status": "地位",
     "unknown_error": "不明错误",
@@ -884,40 +883,27 @@
     "disclaimer": "这将需要一笔交易，您需要支付其费用。",
     "confirm_transaction": "确认您钱包上的交易以继续"
   },
-  "mvmf22": {
-    "banners": {
-      "big": {
-        "event": "事件",
-        "title": "元界音乐节 2022 来了！",
-        "subtitle": "立即开始寻找完美的可穿戴设备和表情，以时尚的方式在夜晚跳舞。",
-        "cta": "浏览节日物品"
-      },
-      "medium": {
-        "title": "元界节收藏品",
-        "subtitle": "类别是……赛博朋克遇见自然真实"
-      },
-      "small": {
-        "title": "元界音乐节 2022 来了！",
-        "subtitle": "立即开始寻找完美的可穿戴设备和表情，以时尚的方式在夜晚跳舞。",
-        "cta": "浏览节日物品"
-      }
-    }
+  "campaign": {
+    "tab": "Holiday Season",
+    "badge": "Holiday Season"
   },
-  "mvmf22_announcement": {
-    "banners": {
-      "big": {
-        "title": "让您的物品在 2022 年元界音乐节期间成为特色！",
-        "subtitle": "今年的类别是... {subtitle_bold_1} {enter} 在 {subtitle_bold_3} {enter} 之前使用 {subtitle_bold_2} 标签提交您的可穿戴设备和表情，它们将在整个活动期间出现在市场上。",
-        "subtitle_bold_1": "赛博朋克遇见自然真实！",
-        "subtitle_bold_2": "#MVMF22",
-        "subtitle_bold_3": "10月25日",
-        "cta": "学到更多"
+  "holiday_season_campaign": {
+    "banner": {
+      "homepage": {
+        "title": "The Holiday Season is here!",
+        "subtitle": "Put the ‘wonder’ in Decentraland’s winter wonderland—find the perfect ‘ugly sweater’ or pick up an ice skating Emote to get in the holiday mood!",
+        "cta": "Browse Holiday Items",
+        "cta_mobile": "Browse"
       },
-      "small": {
-        "title": "让您的物品在 2022 年元界音乐节期间成为特色！",
-        "subtitle": "在 {subtitle_bold_1} 之前使用 {subtitle_bold_2} 标签提交您的可穿戴设备和表情，它们将在整个活动期间出现在市场上。",
-        "subtitle_bold_1": "#MVMF22",
-        "subtitle_bold_2": "10月25日"
+      "collectibles": {
+        "title": "The Holiday Season is here!",
+        "subtitle": "Put the ‘wonder’ in Decentraland’s winter wonderland—find the perfect ‘ugly sweater’ or pick up an ice skating Emote to get in the holiday mood!",
+        "cta": "Browse Holiday Items",
+        "cta_mobile": "Browse"
+      },
+      "campaign_browser": {
+        "title": "The Holiday Season is here!",
+        "subtitle": "Decentraland has become a winter wonderland—find the perfect holiday Items for the season right here."
       }
     }
   },

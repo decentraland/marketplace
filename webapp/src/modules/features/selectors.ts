@@ -36,32 +36,36 @@ export const getIsRentalsEnabled = (state: RootState) => {
   }
 }
 
-export const getIsMVMFEnabled = (state: RootState) => {
-  try {
-    return getIsFeatureEnabled(state, ApplicationName.BUILDER, FeatureName.MVMF)
-  } catch (e) {
-    return false
-  }
-}
-
-export const getIsMVMFTabEnabled = (state: RootState) => {
+export const getIsCampaignHomepageBannerEnabled = (state: RootState) => {
   try {
     return getIsFeatureEnabled(
       state,
-      ApplicationName.BUILDER,
-      FeatureName.MVMF_TAB
+      ApplicationName.MARKETPLACE,
+      FeatureName.CAMPAIGN_HOMEPAGE_BANNER
     )
   } catch (e) {
     return false
   }
 }
 
-export const getIsMVMFAnnouncementEnabled = (state: RootState) => {
+export const getIsCampaignCollectionsBannerEnabled = (state: RootState) => {
   try {
     return getIsFeatureEnabled(
       state,
-      ApplicationName.BUILDER,
-      FeatureName.MVMF_ANNOUNCEMENT
+      ApplicationName.MARKETPLACE,
+      FeatureName.CAMPAIGN_COLLECTIBLES_BANNER
+    )
+  } catch (e) {
+    return false
+  }
+}
+
+export const getIsCampaignBrowserEnabled = (state: RootState) => {
+  try {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.CAMPAIGN_BROWSER
     )
   } catch (e) {
     return false

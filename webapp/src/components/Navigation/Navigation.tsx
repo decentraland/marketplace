@@ -8,11 +8,13 @@ import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor'
 import { SortBy } from '../../modules/routing/types'
 import { AssetType } from '../../modules/asset/types'
+import { CAMPAING_TAB_ANIMATION_ENABLED } from '../Campaign/config'
+import classNames from 'classnames'
 import { Props, NavigationTab } from './Navigation.types'
 import './Navigation.css'
 
 const Navigation = (props: Props) => {
-  const { activeTab, isFullscreen, isMVMFTabEnabled } = props
+  const { activeTab, isFullscreen, isCampaignBrowserEnabled } = props
   const isMobile = useMobileMediaQuery()
   const [showBuyManaModal, setShowBuyManaModal] = useState(false)
 
@@ -29,9 +31,9 @@ const Navigation = (props: Props) => {
               {t('navigation.overview')}
             </Tabs.Tab>
           </Link>
-          {isMVMFTabEnabled ? (
+          {isCampaignBrowserEnabled ? (
             <Link
-              to={locations.MVMF22({
+              to={locations.campaign({
                 section: decentraland.Section.WEARABLES,
                 vendor: VendorName.DECENTRALAND,
                 page: 1,
@@ -40,10 +42,10 @@ const Navigation = (props: Props) => {
                 assetType: AssetType.ITEM
               })}
             >
-              <Tabs.Tab active={activeTab === NavigationTab.MVMF}>
-                <div className="mvmf-tab">
-                  <span className="mvmf-icon" />
-                  <span>{t('navigation.mvmf')}</span>
+              <Tabs.Tab active={activeTab === NavigationTab.CAMPAIGN_BROWSER}>
+                <div className={classNames("campaign-tab", { "campaign-tab-animation": CAMPAING_TAB_ANIMATION_ENABLED })}>
+                  <span className="campaign-icon" />
+                  <span>{t('campaign.tab')}</span>
                 </div>
               </Tabs.Tab>
             </Link>
