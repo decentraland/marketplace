@@ -21,7 +21,7 @@ import {
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
 import { getContractAuthorization } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
-import { isParcel, isPartOfEstate } from '../../../modules/nft/utils'
+import { isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { builderUrl } from '../../../lib/environment'
 import { isOwnedBy } from '../../../modules/asset/utils'
@@ -197,20 +197,9 @@ const SaleRentActionBox = ({
             {!isOwner ? (
               <>
                 <Popup
-                  content={
-                    isMobileView
-                      ? t(
-                          'asset_page.sales_rent_action_box.mobile_coming_soon',
-                          {
-                            asset: isParcel(nft)
-                              ? t('global.parcel')
-                              : t('global.estate')
-                          }
-                        )
-                      : t(
-                          'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
-                        )
-                  }
+                  content={t(
+                    'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
+                  )}
                   position="top center"
                   on={isMobileView ? 'click' : 'hover'}
                   disabled={!isNFTPartOfAState}
@@ -218,11 +207,7 @@ const SaleRentActionBox = ({
                     <div className={styles.fullWidth}>
                       <Button
                         primary
-                        disabled={
-                          isMobileView ||
-                          isNFTPartOfAState ||
-                          !hasEnoughManaToRent
-                        }
+                        disabled={isNFTPartOfAState || !hasEnoughManaToRent}
                         onClick={handleOnRent}
                         className={styles.rent}
                       >
