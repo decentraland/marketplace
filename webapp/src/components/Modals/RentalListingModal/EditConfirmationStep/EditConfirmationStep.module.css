@@ -90,3 +90,11 @@
 .checkIcon {
   color: var(--summer-red);
 }
+
+@media (max-width: 767px) {
+  .actionContainer {
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 60px;
+  }
+}
