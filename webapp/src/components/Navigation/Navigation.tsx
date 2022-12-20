@@ -21,7 +21,7 @@ const Navigation = (props: Props) => {
   const [showBuyManaModal, setShowBuyManaModal] = useState(false)
 
   const handleOpenBuyManaWithFiatModal = () => {
-    analytics.track('[Marketplace] Buy MANA with FIAT - Open Modal')
+    analytics.track('Open BUY MANA modal')
     setShowBuyManaModal(true)
   }
 
