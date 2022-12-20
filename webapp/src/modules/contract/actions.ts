@@ -7,6 +7,12 @@ export const FETCH_CONTRACTS_REQUEST = '[Request] Fetch contracts'
 export const FETCH_CONTRACTS_SUCCESS = '[Success] Fetch contracts'
 export const FETCH_CONTRACTS_FAILURE = '[Failure] Fetch contracts'
 
+/**
+ * Creates the action for fetching contracts.
+ * @param includeMaticCollections Determines if the saga should fetch contracts from the nft server.
+ * If not, it will just use the contracts defined in src/modules/vendor/decentraland/contracts.ts.
+ * @param shouldFetchAuthorizations Determines if the saga should fetch the authorizations for the newly stored contracts.
+ */
 export const fetchContractsRequest = (
   includeMaticCollections: boolean,
   shouldFetchAuthorizations: boolean
@@ -42,6 +48,11 @@ export type FetchContractsFailureAction = ReturnType<
 
 export const ADD_CONTRACTS = 'Add contracts'
 
+/**
+ * Create the action for adding contracts to the store.
+ * @param contracts Contracts to be appended to the stored contracts.
+ * @param shouldFetchAuthorizations Determines if the saga has to fetch the authorizations for the stored contracts.
+ */
 export const addContracts = (
   contracts: Contract[],
   shouldFetchAuthorizations: boolean
