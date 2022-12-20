@@ -29,7 +29,8 @@ import {
   TransferNFTRequestAction,
   transferNFTSuccess,
   transferNFTFailure,
-  transferNFTransactionSubmitted
+  transferNFTransactionSubmitted,
+  fetchNFTFailure
 } from './actions'
 import { NFT } from './types'
 import { addContracts } from '../contract/actions'
@@ -133,7 +134,9 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
 
     yield put(fetchNFTSuccess(nft as NFT, order, rental))
   } catch (error) {
-    throw error
+    yield put(
+      fetchNFTFailure(contractAddress, tokenId, (error as Error).message)
+    )
   }
 }
 
