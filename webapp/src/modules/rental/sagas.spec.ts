@@ -237,7 +237,8 @@ describe('when handling the request action to upsert a rental listing', () => {
           }
         ]
         const expiration = 1234567
-        const signature = 'the-signature'
+        const signature =
+          '0x402a10749ebca5d35af41b5780a2667e7edbc2ec64bad157714f533c69cb694c4e4595b88dce064a92772850e903c23d0f67625aeccf9308841ad34929daf51c'
         return expectSaga(rentalSaga)
           .provide([
             [select(getAddress), signerAddress],
