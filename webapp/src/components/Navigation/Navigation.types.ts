@@ -1,6 +1,6 @@
 export enum NavigationTab {
   OVERVIEW = 'overview',
-  MVMF = 'mvmf',
+  CAMPAIGN_BROWSER = 'campaign-browser',
   LANDS = 'lands',
   BROWSE = 'browse',
   COLLECTIBLES = 'collectibles',
@@ -9,11 +9,14 @@ export enum NavigationTab {
 }
 
 export type Props = {
-  isMVMFTabEnabled: boolean
+  isCampaignBrowserEnabled: boolean
   isFullScreen?: boolean
   activeTab?: NavigationTab
   isFullscreen?: boolean
 }
 
-export type MapStateProps = Pick<Props, 'isMVMFTabEnabled' | 'isFullScreen'>
+export type MapStateProps = Pick<
+  Props,
+  'isCampaignBrowserEnabled' | 'isFullScreen'
+>
 export type MapDispatchProps = {}

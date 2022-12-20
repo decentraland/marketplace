@@ -1,0 +1,54 @@
+.CampaignHomepageBanner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  background-image: url(./holiday-banner.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 276px;
+  padding: 16px 48px;
+}
+
+.CampaignHomepageBanner .ui.header {
+  color: black;
+  margin-bottom: 8px;
+  font-size: 28px;
+}
+
+.CampaignHomepageBanner p {
+  color: black;
+  font-size: 17px;
+}
+
+.CampaignHomepageBanner .copy {
+  flex: 0 1 auto;
+  margin-bottom: 40px;
+  max-width: 620px;
+}
+
+.CampaignHomepageBanner .ui.button {
+  flex: none;
+}
+
+@media (max-width: 768px) {
+  .CampaignHomepageBanner {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background-image: url(./holiday-banner-mobile.png);
+    height: 276px;
+  }
+  .CampaignHomepageBanner .copy {
+    margin-right: 0px;
+    margin-bottom: 20px;
+  }
+
+  .CampaignHomepageBanner .ui.header {
+    font-size: 20px;
+  }
+  .CampaignHomepageBanner p {
+    font-size: 14px;
+  }
+}

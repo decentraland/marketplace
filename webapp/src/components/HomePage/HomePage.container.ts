@@ -8,10 +8,12 @@ import {
 } from '../../modules/ui/asset/homepage/selectors'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './HomePage.types'
 import HomePage from './HomePage'
+import { getIsCampaignHomepageBannerEnabled } from '../../modules/features/selectors'
 
 const mapState = (state: RootState): MapStateProps => ({
   homepage: getHomepage(state),
-  homepageLoading: getHomepageLoading(state)
+  homepageLoading: getHomepageLoading(state),
+  isCampaignHomepageBannerEnabled: getIsCampaignHomepageBannerEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

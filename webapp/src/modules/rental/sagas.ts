@@ -51,6 +51,7 @@ import {
 } from './actions'
 import {
   daysByPeriod,
+  generateECDSASignatureWithValidV,
   getNonces,
   getSignature,
   waitUntilRentalChangesStatus
@@ -90,7 +91,7 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
       address
     )
 
-    const signature: string = yield call(
+    let signature: string = yield call(
       getSignature,
       nft.chainId,
       nft.contractAddress,
@@ -99,6 +100,8 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
       periods,
       expiresAt
     )
+
+    signature = yield call(generateECDSASignatureWithValidV, signature)
 
     const rentalsContract: ContractData = getContract(
       ContractName.Rentals,
@@ -280,9 +283,10 @@ function* handleAcceptRentalListingRequest(
       [[], [], []] as [string[], number[], number[]]
     )
 
-    const lastSignatureByte = Number.parseInt(rental.signature.slice(-2), 16)
-    const isSignatureVValid =
-      lastSignatureByte === 27 || lastSignatureByte === 28
+    const signature: string = yield call(
+      generateECDSASignatureWithValidV,
+      rental.signature
+    )
 
     const listing = {
       signer: rental.lessor,
@@ -294,9 +298,7 @@ function* handleAcceptRentalListingRequest(
       maxDays,
       minDays,
       target: ethers.constants.AddressZero,
-      signature: isSignatureVValid
-        ? rental.signature
-        : rental.signature.slice(0, -2) + (lastSignatureByte + 27).toString(16)
+      signature
     }
 
     let fingerprint = ethers.utils.randomBytes(32).map(() => 0)

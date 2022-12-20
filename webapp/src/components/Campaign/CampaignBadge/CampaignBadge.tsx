@@ -6,17 +6,16 @@ import { builderAPI } from '../../../modules/vendor/decentraland/builder/api'
 import { VendorName } from '../../../modules/vendor'
 import { SortBy } from '../../../modules/routing/types'
 import { AssetType } from '../../../modules/asset/types'
-import IconBadge from '../IconBadge'
-import { Props } from './MVMFBadge.types'
+import IconBadge from '../../AssetPage/IconBadge'
+import { Props } from './CampaignBadge.types'
+import { CAMPAIGN_TAG } from '../config'
 
-const MVMFTag = 'MVMF22'
-
-const MVMFBadge = ({ contract, isMVMFTabEnabled }: Props) => {
+const CampaignBadge = ({ contract, isCampaignBrowserEnabled: isMVMFTabEnabled }: Props) => {
   const [showBadge, setShowBadge] = useState(false)
   const [contracts, setContracts] = useState<string[]>()
 
   const href = useMemo(() => {
-    return locations.MVMF22({
+    return locations.campaign({
       section: decentraland.Section.WEARABLES,
       vendor: VendorName.DECENTRALAND,
       page: 1,
@@ -28,9 +27,9 @@ const MVMFBadge = ({ contract, isMVMFTabEnabled }: Props) => {
   }, [contracts])
 
   useEffect(() => {
-    ;(async () => {
+    ; (async () => {
       try {
-        const addresses = await builderAPI.fetchAddressesByTag([MVMFTag])
+        const addresses = await builderAPI.fetchAddressesByTag([CAMPAIGN_TAG])
         setContracts(addresses)
         if (isMVMFTabEnabled && addresses.includes(contract)) {
           setShowBadge(true)
@@ -42,8 +41,8 @@ const MVMFBadge = ({ contract, isMVMFTabEnabled }: Props) => {
   }, [contract, isMVMFTabEnabled])
 
   return showBadge ? (
-    <IconBadge text={t('global.mvmf_2022')} icon="sparkles" href={href} />
+    <IconBadge text={t(`campaign.badge`)} icon="sparkles" href={href} />
   ) : null
 }
 
-export default React.memo(MVMFBadge)
+export default React.memo(CampaignBadge)
