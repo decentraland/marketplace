@@ -41,6 +41,8 @@ const SettingsPage = (props: Props) => {
   }, [isConnecting, wallet, onNavigate])
 
   useEffect(() => {
+    // Fetch for all the contracts and their authorizations to fill the settings page.
+    // This is called only once through the session.
     if (!hasIncludedMaticCollections && !isLoading) {
       onFetchContracts()
     }
