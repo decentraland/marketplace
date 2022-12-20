@@ -43,19 +43,24 @@ export function* nftSaga() {
 
 function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   const { options, timestamp } = action.payload
-  const { vendor: VendorName, filters } = options
-  const contracts: ReturnType<typeof getContracts> = yield select(getContracts)
-
-  const params = {
-    ...DEFAULT_BASE_NFT_PARAMS,
-    ...action.payload.options.params,
-    contracts
-  }
+  const { vendor: vendorName, filters } = options
 
   try {
+    yield call(getOrWaitForContracts)
+
+    const contracts: ReturnType<typeof getContracts> = yield select(
+      getContracts
+    )
+
+    const params = {
+      ...DEFAULT_BASE_NFT_PARAMS,
+      ...action.payload.options.params,
+      contracts
+    }
+
     const vendor: Vendor<VendorName> = yield call(
       VendorFactory.build,
-      VendorName
+      vendorName
     )
 
     const [
@@ -69,6 +74,34 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       params,
       filters
     )
+
+    if (nfts.length > 0) {
+      const contractAddresses = new Set(
+        contracts.map(contract => contract.address)
+      )
+
+      const contractsToAdd = new Set(
+        nfts
+          .filter(nft => !contractAddresses.has(nft.contractAddress))
+          .map(nft => nft.contractAddress)
+      )
+
+      if (contractsToAdd.size > 0) {
+        yield put(
+          addContracts(
+            Array.from(contractsToAdd).map(contractAddress => ({
+              address: contractAddress,
+              category: NFTCategory.WEARABLE,
+              name: contractAddress,
+              chainId: getChainIdByNetwork(Network.MATIC),
+              vendor: VendorName.DECENTRALAND,
+              network: Network.MATIC
+            })),
+            true
+          )
+        )
+      }
+    }
 
     yield put(
       fetchNFTsSuccess(
