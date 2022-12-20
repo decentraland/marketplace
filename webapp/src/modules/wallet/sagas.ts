@@ -15,7 +15,6 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
-import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { config } from '../../config'
 import { getContract, getContracts } from '../contract/selectors'
 import { getOrWaitForContracts } from '../contract/utils'
@@ -53,7 +52,7 @@ function* handleWallet(
 ) {
   const { address } = action.payload.wallet
 
-  yield call(fetchAuthorizations, address)
+  yield call(fetchAuthorizationsForAllContracts, address)
 }
 
 function* handleFetchContractsSuccess(action: FetchContractsSuccessAction) {
@@ -61,20 +60,24 @@ function* handleFetchContractsSuccess(action: FetchContractsSuccessAction) {
   const address: string | undefined = yield select(getAddress)
 
   if (address && shouldFetchAuthorizations) {
-    yield call(fetchAuthorizations, address)
+    yield call(fetchAuthorizationsForAllContracts, address)
   }
 }
 
 function* handleAddContracts(action: AddContractsAction) {
-  const { shouldFetchAuthorizations } = action.payload
+  const { shouldFetchAuthorizations, contracts } = action.payload
   const address: string | undefined = yield select(getAddress)
 
   if (address && shouldFetchAuthorizations) {
-    yield call(fetchAuthorizations, address)
+    yield call(
+      fetchAuthorizationsForMaticWearablesAndEmotes,
+      contracts,
+      address
+    )
   }
 }
 
-function* fetchAuthorizations(address: string) {
+function* fetchAuthorizationsForAllContracts(address: string) {
   const contracts: ReturnType<typeof getContracts> = yield call(
     getOrWaitForContracts
   )
@@ -249,16 +252,44 @@ function* fetchAuthorizations(address: string) {
     }
   }
 
-  const currentAuthorizations: Authorization[] = yield select(getAuthorizations)
+  yield put(fetchAuthorizationsRequest(authorizations))
+}
 
-  const currentAuthorizationsAddresses = new Set<string>(
-    currentAuthorizations.map(authorization => authorization.contractAddress)
-  )
+function* fetchAuthorizationsForMaticWearablesAndEmotes(
+  contracts: Contract[],
+  address: string
+) {
+  const authorizations: Authorization[] = []
 
-  authorizations = authorizations.filter(
-    authorization =>
-      !currentAuthorizationsAddresses.has(authorization.contractAddress)
-  )
+  const contractNames = getContractNames()
+
+  const marketplace: Contract = yield select(getContract, {
+    name: contractNames.MARKETPLACE,
+    network: Network.MATIC
+  })
+
+  for (const contract of contracts) {
+    const isMatic = contract.network === Network.MATIC
+    const isWearableOrEmote =
+      contract.category === NFTCategory.WEARABLE ||
+      contract.category === NFTCategory.EMOTE
+
+    if (!isMatic || !isWearableOrEmote) {
+      continue
+    }
+
+    authorizations.push({
+      address,
+      authorizedAddress: marketplace.address,
+      contractAddress: contract.address,
+      contractName:
+        contract.network === Network.MATIC
+          ? ContractName.ERC721CollectionV2
+          : ContractName.ERC721,
+      chainId: contract.chainId,
+      type: AuthorizationType.APPROVAL
+    })
+  }
 
   yield put(fetchAuthorizationsRequest(authorizations))
 }
