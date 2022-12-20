@@ -163,7 +163,8 @@ describe('when handling the request action to upsert a rental listing', () => {
           }
         ]
         const expiration = 1234567
-        const signature = 'the-signature'
+        const signature =
+          '0x402a10749ebca5d35af41b5780a2667e7edbc2ec64bad157714f533c69cb694c4e4595b88dce064a92772850e903c23d0f67625aeccf9308841ad34929daf51c'
         return expectSaga(rentalSaga)
           .provide([
             [select(getAddress), signerAddress],
@@ -224,7 +225,6 @@ describe('when handling the request action to upsert a rental listing', () => {
           .run({ silenceTimeout: true })
       })
     })
-
     describe('and it is an edit operation type', () => {
       it('should create the listing and show the info toast', () => {
         const signerAddress = '0xdeadbeef'
@@ -384,6 +384,82 @@ describe('when handling the request action to upsert a rental listing', () => {
               'Could not get provider'
             )
           )
+          .dispatch(
+            upsertRentalRequest(
+              nft,
+              100,
+              [PeriodOption.ONE_WEEK],
+              expiration,
+              UpsertRentalOptType.INSERT
+            )
+          )
+          .run({ silenceTimeout: true })
+      })
+    })
+    describe('and the signature has an invalid V', () => {
+      it('should generate a new signature based on the old one and use it', () => {
+        const signerAddress = '0xdeadbeef'
+        const nonces = ['0', '0', '0']
+        const periods: PeriodCreation[] = [
+          {
+            pricePerDay: '100000000000000000000',
+            maxDays: 7,
+            minDays: 7
+          }
+        ]
+        const expiration = 1234567
+        const signatureWithWrongV =
+          '0x402a10749ebca5d35af41b5780a2667e7edbc2ec64bad157714f533c69cb694c4e4595b88dce064a92772850e903c23d0f67625aeccf9308841ad34929daf501'
+        const fixedSignature =
+          '0x402a10749ebca5d35af41b5780a2667e7edbc2ec64bad157714f533c69cb694c4e4595b88dce064a92772850e903c23d0f67625aeccf9308841ad34929daf51c'
+        return expectSaga(rentalSaga)
+          .provide([
+            [select(getAddress), signerAddress],
+            [
+              call(
+                getNonces,
+                nft.chainId,
+                nft.contractAddress,
+                nft.tokenId,
+                signerAddress
+              ),
+              nonces
+            ],
+            [
+              call(
+                getSignature,
+                nft.chainId,
+                nft.contractAddress,
+                nft.tokenId,
+                nonces,
+                periods,
+                expiration
+              ),
+              signatureWithWrongV
+            ],
+            [select(getCurrentIdentity), identity],
+            [
+              call(
+                [rentalsAPI, 'createRentalListing'],
+                {
+                  chainId: nft.chainId,
+                  contractAddress: nft.contractAddress,
+                  tokenId: nft.tokenId,
+                  network: nft.network,
+                  expiration,
+                  rentalContractAddress:
+                    '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
+                  nonces,
+                  periods,
+                  signature: fixedSignature,
+                  target: ethers.constants.AddressZero
+                },
+                identity
+              ),
+              rental
+            ]
+          ])
+          .put(upsertRentalSuccess(nft, rental, UpsertRentalOptType.INSERT))
           .dispatch(
             upsertRentalRequest(
               nft,
