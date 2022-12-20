@@ -2,9 +2,17 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { throwError } from 'redux-saga-test-plan/providers'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import {
+  ChainId,
+  Network,
+  NFTCategory,
+  Order,
+  RentalListing,
+  RentalStatus
+} from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 import { Vendor, VendorFactory, VendorName } from '../vendor'
 import { getWallet } from '../wallet/selectors'
 import {
@@ -27,6 +35,16 @@ import { Account } from '../account/types'
 import { getContract, getContracts, getLoading } from '../contract/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { getRentalById } from '../rental/selectors'
+import { addContracts } from '../contract/actions'
+import util from 'util'
+
+jest.mock('decentraland-dapps/dist/lib/eth')
+
+const mockGetChainIdByNetwork = getChainIdByNetwork as jest.MockedFunction<
+  typeof getChainIdByNetwork
+>
+
+util.inspect.defaultOptions.depth = null
 
 describe('when handling the fetch NFTs request action', () => {
   let dateSpy: jest.SpyInstance<number, []>
@@ -135,22 +153,46 @@ describe('when handling the fetch NFTs request action', () => {
 
 describe('when handling the fetch NFT request action', () => {
   describe("when the contract doesn't exist", () => {
-    it('should dispatch an action signaling the failure of the action handling', () => {
+    beforeEach(() => {
+      mockGetChainIdByNetwork.mockReturnValue(ChainId.MATIC_MUMBAI)
+    })
+
+    it('should use a default wearable contract with its address', () => {
       const contractAddress = 'anAddress'
       const tokenId = 'aTokenId'
-      const error = 'Contract not found'
+      const contract = {
+        address: contractAddress,
+        category: NFTCategory.WEARABLE,
+        name: contractAddress,
+        chainId: ChainId.MATIC_MUMBAI,
+        vendor: VendorName.DECENTRALAND,
+        network: Network.MATIC
+      }
+      const nft = { category: NFTCategory.WEARABLE } as NFT
+      const order = { id: 'anId' } as Order
+      const rental = { id: 'aRentalId' } as RentalListing
+      const vendor = VendorFactory.build(VendorName.DECENTRALAND)
 
       return expectSaga(nftSaga)
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
+          [select(getContract, { address: contractAddress }), null],
+          [call(VendorFactory.build, contract.vendor), vendor],
           [
-            select(getContract, { address: contractAddress }),
-            throwError(new Error(error))
+            call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
+              rentalStatus: [RentalStatus.EXECUTED]
+            }),
+            Promise.resolve([nft, order, rental])
           ]
         ])
-        .put(fetchNFTFailure(contractAddress, tokenId, error))
-        .dispatch(fetchNFTRequest(contractAddress, tokenId))
+        .put(addContracts([contract], true))
+        .put(fetchNFTSuccess(nft, order, rental))
+        .dispatch(
+          fetchNFTRequest(contractAddress, tokenId, {
+            rentalStatus: [RentalStatus.EXECUTED]
+          })
+        )
         .run({ silenceTimeout: true })
     })
   })
@@ -178,7 +220,7 @@ describe('when handling the fetch NFT request action', () => {
   })
 
   describe("when the contract doesn't exist for the given vendor", () => {
-    it('should dispatch an action signaling the failure of the action handling', () => {
+    it('should dispatch an action signaling the failure of the action handling asd', () => {
       const contractAddress = 'anAddress'
       const contract = {
         vendor: 'someVendor' as VendorName,
