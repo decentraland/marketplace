@@ -24,7 +24,6 @@ import {
   FETCH_NFT_REQUEST,
   FetchNFTRequestAction,
   fetchNFTSuccess,
-  // fetchNFTFailure,
   TRANSFER_NFT_REQUEST,
   TransferNFTRequestAction,
   transferNFTSuccess,
@@ -97,6 +96,9 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
       address: contractAddress
     })
 
+    // If the contract is not present, we assume that it is because it is a wearable or an emote.
+    // We create a new contract instance as wearable because emote contracts are handled the same.
+    // Then add it to the currently stored contracts so it is persisted.
     if (!contract) {
       contract = {
         address: contractAddress,

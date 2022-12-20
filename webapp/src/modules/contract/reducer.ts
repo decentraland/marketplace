@@ -53,6 +53,8 @@ export function contractReducer(
         loading: loadingReducer(state.loading, action),
         error: null,
         data: contracts,
+        // This is used to prevent the contracts request to the nft server to be done more than once.
+        // Will remain true after the first time the request is done.
         hasIncludedMaticCollections:
           state.hasIncludedMaticCollections || includeMaticCollections
       }

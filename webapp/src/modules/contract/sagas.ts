@@ -23,6 +23,7 @@ export function* handleFetchContractsRequest(
     getHasIncludedMaticCollections
   )
 
+  // Prevent the request to the nft server to be done more than once.
   if (hasIncludedMaticCollections) {
     yield put(
       fetchContractsFailure('Already fetched matic collection contracts')
