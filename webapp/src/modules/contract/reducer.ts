@@ -4,8 +4,8 @@ import {
 } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { Contract } from '../vendor/services'
 import {
-  AddContractsAction,
-  ADD_CONTRACTS,
+  UpdateContractsAction,
+  UPDATE_CONTRACTS,
   FetchContractsFailureAction,
   FetchContractsRequestAction,
   FetchContractsSuccessAction,
@@ -32,7 +32,7 @@ type ContractReducerAction =
   | FetchContractsRequestAction
   | FetchContractsSuccessAction
   | FetchContractsFailureAction
-  | AddContractsAction
+  | UpdateContractsAction
 
 export function contractReducer(
   state = INITIAL_STATE,
@@ -52,7 +52,7 @@ export function contractReducer(
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
-        data: contracts,
+        data: upsertContracts(state.data, contracts),
         // This is used to prevent the contracts request to the nft server to be done more than once.
         // Will remain true after the first time the request is done.
         hasIncludedMaticCollections:
@@ -68,15 +68,33 @@ export function contractReducer(
         error
       }
 
-    case ADD_CONTRACTS: {
+    case UPDATE_CONTRACTS: {
       const { contracts } = action.payload
 
       return {
         ...state,
-        data: [...state.data, ...contracts]
+        data: upsertContracts(state.data, contracts)
       }
     }
     default:
       return state
   }
+}
+
+/**
+ * Update or Add contracts to the store.
+ * @param storeContracts The already stored contracts.
+ * @param newContracts The new contracts to be added or updated.
+ */
+function upsertContracts(storeContracts: Contract[], newContracts: Contract[]) {
+  const contractsByAddress = storeContracts.reduce(
+    (map, contract) => map.set(contract.address, { ...contract }),
+    new Map<string, Contract>()
+  )
+
+  newContracts.forEach(contract =>
+    contractsByAddress.set(contract.address, contract)
+  )
+
+  return Array.from(contractsByAddress.values())
 }

@@ -35,16 +35,13 @@ import { Account } from '../account/types'
 import { getContract, getContracts, getLoading } from '../contract/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { getRentalById } from '../rental/selectors'
-import { addContracts } from '../contract/actions'
-import util from 'util'
+import { updateContracts } from '../contract/actions'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
 
 const mockGetChainIdByNetwork = getChainIdByNetwork as jest.MockedFunction<
   typeof getChainIdByNetwork
 >
-
-util.inspect.defaultOptions.depth = null
 
 describe('when handling the fetch NFTs request action', () => {
   let dateSpy: jest.SpyInstance<number, []>
@@ -186,7 +183,7 @@ describe('when handling the fetch NFT request action', () => {
             Promise.resolve([nft, order, rental])
           ]
         ])
-        .put(addContracts([contract], true))
+        .put(updateContracts([contract], true))
         .put(fetchNFTSuccess(nft, order, rental))
         .dispatch(
           fetchNFTRequest(contractAddress, tokenId, {

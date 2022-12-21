@@ -44,18 +44,18 @@ export type FetchContractsFailureAction = ReturnType<
   typeof fetchContractsFailure
 >
 
-// ADD CONTRACTS
+// UPDATE CONTRACTS
 
-export const ADD_CONTRACTS = 'Add contracts'
+export const UPDATE_CONTRACTS = 'Update contracts'
 
 /**
- * Create the action for adding contracts to the store.
- * @param contracts Contracts to be appended to the stored contracts.
+ * Create the action to update contracts in the store.
+ * @param contracts Contracts to be updated or added to the stored contracts.
  * @param shouldFetchAuthorizations Determines if the saga has to fetch the authorizations for the stored contracts.
  */
-export const addContracts = (
+export const updateContracts = (
   contracts: Contract[],
   shouldFetchAuthorizations: boolean
-) => action(ADD_CONTRACTS, { contracts, shouldFetchAuthorizations })
+) => action(UPDATE_CONTRACTS, { contracts, shouldFetchAuthorizations })
 
-export type AddContractsAction = ReturnType<typeof addContracts>
+export type UpdateContractsAction = ReturnType<typeof updateContracts>

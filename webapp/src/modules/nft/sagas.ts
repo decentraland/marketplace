@@ -1,5 +1,5 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
-import { Network, NFTCategory, RentalListing, RentalStatus } from '@dcl/schemas'
+import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -32,8 +32,8 @@ import {
   fetchNFTFailure
 } from './actions'
 import { NFT } from './types'
-import { addContracts } from '../contract/actions'
-import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
+import { updateContracts } from '../contract/actions'
+import { makeStubMaticCollectionContract } from './utils'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -88,15 +88,8 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
 
       if (contractsToAdd.size > 0) {
         yield put(
-          addContracts(
-            Array.from(contractsToAdd).map(contractAddress => ({
-              address: contractAddress,
-              category: NFTCategory.WEARABLE,
-              name: contractAddress,
-              chainId: getChainIdByNetwork(Network.MATIC),
-              vendor: VendorName.DECENTRALAND,
-              network: Network.MATIC
-            })),
+          updateContracts(
+            Array.from(contractsToAdd).map(makeStubMaticCollectionContract),
             true
           )
         )
@@ -133,16 +126,9 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
     // We create a new contract instance as wearable because emote contracts are handled the same.
     // Then add it to the currently stored contracts so it is persisted.
     if (!contract) {
-      contract = {
-        address: contractAddress,
-        category: NFTCategory.WEARABLE,
-        name: contractAddress,
-        chainId: getChainIdByNetwork(Network.MATIC),
-        vendor: VendorName.DECENTRALAND,
-        network: Network.MATIC
-      }
+      contract = makeStubMaticCollectionContract(contractAddress)
 
-      yield put(addContracts([contract], true))
+      yield put(updateContracts([contract], true))
     }
 
     if (!contract.vendor) {

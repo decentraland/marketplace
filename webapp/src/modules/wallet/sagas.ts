@@ -15,6 +15,7 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
+import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { config } from '../../config'
 import { getContract, getContracts } from '../contract/selectors'
 import { getOrWaitForContracts } from '../contract/utils'
@@ -22,8 +23,8 @@ import { Contract } from '../vendor/services'
 import { getContractNames } from '../vendor'
 import { TRANSACTIONS_API_URL } from './utils'
 import {
-  AddContractsAction,
-  ADD_CONTRACTS,
+  UpdateContractsAction,
+  UPDATE_CONTRACTS,
   FetchContractsSuccessAction,
   FETCH_CONTRACTS_SUCCESS
 } from '../contract/actions'
@@ -44,7 +45,7 @@ function* fullWalletSaga() {
   yield takeEvery(CHANGE_ACCOUNT, handleWallet)
   yield takeEvery(CHANGE_NETWORK, handleWallet)
   yield takeEvery(FETCH_CONTRACTS_SUCCESS, handleFetchContractsSuccess)
-  yield takeEvery(ADD_CONTRACTS, handleAddContracts)
+  yield takeEvery(UPDATE_CONTRACTS, handleUpdateContracts)
 }
 
 function* handleWallet(
@@ -64,7 +65,7 @@ function* handleFetchContractsSuccess(action: FetchContractsSuccessAction) {
   }
 }
 
-function* handleAddContracts(action: AddContractsAction) {
+function* handleUpdateContracts(action: UpdateContractsAction) {
   const { shouldFetchAuthorizations, contracts } = action.payload
   const address: string | undefined = yield select(getAddress)
 
@@ -252,6 +253,8 @@ function* fetchAuthorizationsForAllContracts(address: string) {
     }
   }
 
+  authorizations = yield removeExistingAuthorizations(authorizations)
+
   yield put(fetchAuthorizationsRequest(authorizations))
 }
 
@@ -259,7 +262,7 @@ function* fetchAuthorizationsForMaticWearablesAndEmotes(
   contracts: Contract[],
   address: string
 ) {
-  const authorizations: Authorization[] = []
+  let authorizations: Authorization[] = []
 
   const contractNames = getContractNames()
 
@@ -291,5 +294,19 @@ function* fetchAuthorizationsForMaticWearablesAndEmotes(
     })
   }
 
+  authorizations = yield removeExistingAuthorizations(authorizations)
+
   yield put(fetchAuthorizationsRequest(authorizations))
+}
+
+function* removeExistingAuthorizations(newAuthorizations: Authorization[]) {
+  const currentAuthorizations: Authorization[] = yield select(getAuthorizations)
+
+  const currentAuthorizationsAddresses = new Set(
+    currentAuthorizations.map(authorization => authorization.address)
+  )
+
+  return newAuthorizations.filter(
+    authorization => !currentAuthorizationsAddresses.has(authorization.address)
+  )
 }

@@ -1,4 +1,7 @@
-import { BodyShape, Item, NFTCategory } from '@dcl/schemas'
+import { BodyShape, Item, Network, NFTCategory } from '@dcl/schemas'
+import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
+import { VendorName } from '../vendor'
+import { Contract } from '../vendor/services'
 import { NFT } from './types'
 
 export function getNFTId(contractAddress: string, tokenId: string) {
@@ -46,4 +49,23 @@ export function isPartOfEstate(nft: NFT): boolean {
   return Boolean(
     nft.category === NFTCategory.PARCEL && nft.data?.parcel?.estate
   )
+}
+
+export const STUB_MATIC_COLLECTION_NAME = 'Stub Matic Collection Name'
+
+export function makeStubMaticCollectionContract(
+  contractAddress: string
+): Contract {
+  return {
+    address: contractAddress,
+    category: NFTCategory.WEARABLE,
+    name: STUB_MATIC_COLLECTION_NAME,
+    chainId: getChainIdByNetwork(Network.MATIC),
+    vendor: VendorName.DECENTRALAND,
+    network: Network.MATIC
+  }
+}
+
+export function isStubMaticCollectionContract(contract: Contract) {
+  return contract.name === STUB_MATIC_COLLECTION_NAME
 }
