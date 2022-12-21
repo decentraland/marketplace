@@ -1,6 +1,12 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Modal, Image, Button, ModalNavigation } from 'decentraland-ui'
+import {
+  Modal,
+  Image,
+  Button,
+  ModalNavigation,
+  useMobileMediaQuery
+} from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
@@ -25,10 +31,39 @@ export const RentalsLaunchModal = ({ isRentalsLaunchPopupEnabled }: Props) => {
       isRentalsLaunchPopupEnabled) ||
       true
   )
-  console.log(
-    'Default value of rental promo popup key',
-    localStorage.getItem(RENTAL_PROMO_POPUP_KEY),
-    isOpen
+  const isMobile = useMobileMediaQuery()
+  const browseListingsButton = useMemo(
+    () => (
+      <Button
+        as={Link}
+        to={locations.lands({ onlyOnRent: true })}
+        onClick={onClose}
+        primary
+      >
+        {t('rentals_promotional_modal.browse_listings')}
+      </Button>
+    ),
+    [onClose]
+  )
+  const listYourLandButton = useMemo(
+    () => (
+      <Button
+        as={Link}
+        to={locations.currentAccount({
+          assetType: AssetType.NFT,
+          section: 'land',
+          vendor: VendorName.DECENTRALAND,
+          page: 1,
+          sortBy: SortBy.NAME,
+          onlyOnSale: false,
+          viewAsGuest: false
+        })}
+        onClick={onClose}
+      >
+        {t('rentals_promotional_modal.list_your_land')}
+      </Button>
+    ),
+    [onClose]
   )
 
   return (
@@ -54,33 +89,20 @@ export const RentalsLaunchModal = ({ isRentalsLaunchPopupEnabled }: Props) => {
               </a>
             )
           })}
+          {!isMobile ? (
+            <Modal.Actions>
+              {browseListingsButton}
+              {listYourLandButton}
+            </Modal.Actions>
+          ) : null}
         </Modal.Description>
       </Modal.Content>
-      <Modal.Actions>
-        <Button
-          as={Link}
-          to={locations.lands({ onlyOnRent: true })}
-          onClick={onClose}
-          primary
-        >
-          {t('rentals_promotional_modal.browse_listings')}
-        </Button>
-        <Button
-          as={Link}
-          to={locations.currentAccount({
-            assetType: AssetType.NFT,
-            section: 'land',
-            vendor: VendorName.DECENTRALAND,
-            page: 1,
-            sortBy: SortBy.NAME,
-            onlyOnSale: false,
-            viewAsGuest: false
-          })}
-          onClick={onClose}
-        >
-          {t('rentals_promotional_modal.list_your_land')}
-        </Button>
-      </Modal.Actions>
+      {isMobile ? (
+        <Modal.Actions>
+          {listYourLandButton}
+          {browseListingsButton}
+        </Modal.Actions>
+      ) : null}
     </Modal>
   )
 }
