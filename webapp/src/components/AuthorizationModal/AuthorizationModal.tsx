@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Modal,
@@ -13,6 +13,10 @@ import { isAuthorized } from '../SettingsPage/Authorization/utils'
 import { Authorization } from '../SettingsPage/Authorization'
 import { Props } from './AuthorizationModal.types'
 import './AuthorizationModal.css'
+import { isStubMaticCollectionContract } from '../../modules/nft/utils'
+import { ethers } from 'ethers'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
+import ERC721ABI from '../../contracts/ERC721.json'
 
 const AuthorizationModal = (props: Props) => {
   const {
@@ -23,7 +27,8 @@ const AuthorizationModal = (props: Props) => {
     isAuthorizing,
     getContract,
     onCancel,
-    onProceed
+    onProceed,
+    onUpdateContracts
   } = props
 
   const isMobile = useMobileMediaQuery()
@@ -34,6 +39,37 @@ const AuthorizationModal = (props: Props) => {
   const token = getContract({
     address: authorization.contractAddress
   })
+
+  useEffect(() => {
+    if (!contract || !isStubMaticCollectionContract(contract) || isLoading) {
+      return
+    }
+
+    const updateStubMaticCollectionName = async () => {
+      try {
+        const provider = await getNetworkProvider(contract.chainId)
+
+        const erc721 = new ethers.Contract(
+          contract.address,
+          ERC721ABI,
+          new ethers.providers.Web3Provider(provider)
+        )
+
+        const erc721Name = await erc721.name()
+
+        const updatedContract = {
+          ...contract,
+          name: erc721Name
+        }
+
+        onUpdateContracts([updatedContract], false)
+      } catch (e) {
+        console.warn((e as Error).message)
+      }
+    }
+
+    updateStubMaticCollectionName()
+  }, [contract, isLoading, onUpdateContracts])
 
   if (!contract || !token) {
     return null

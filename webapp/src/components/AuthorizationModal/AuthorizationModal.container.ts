@@ -15,6 +15,7 @@ import {
   MapDispatch
 } from './AuthorizationModal.types'
 import AuthorizationModal from './AuthorizationModal'
+import { updateContracts } from '../../modules/contract/actions'
 
 const mapState = (state: RootState): MapStateProps => ({
   authorizations: getAuthorizations(state),
@@ -24,6 +25,8 @@ const mapState = (state: RootState): MapStateProps => ({
   getContract: (query: Partial<Contract>) => getContract(state, query)
 })
 
-const mapDispatch = (_dispatch: MapDispatch): MapDispatchProps => ({})
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onUpdateContracts: contracts => dispatch(updateContracts(contracts, false))
+})
 
 export default connect(mapState, mapDispatch)(AuthorizationModal)
