@@ -15,7 +15,7 @@ import * as locales from './modules/translation/locales'
 import { initStore, history } from './modules/store'
 import { Routes } from './components/Routes'
 import * as modals from './components/Modals'
-import { PromotionalModal } from './components/Modals/PromotionalModal'
+import { RentalsLaunchModal } from './components/Modals/RentalsLaunchModal'
 
 import './themes'
 import './index.css'
@@ -30,7 +30,7 @@ async function main() {
               <ConnectedRouter history={history}>
                 <ScrollToTop />
                 <Routes />
-                <PromotionalModal />
+                <RentalsLaunchModal />
               </ConnectedRouter>
             </ModalProvider>
           </WalletProvider>

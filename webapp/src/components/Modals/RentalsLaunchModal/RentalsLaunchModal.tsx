@@ -1,17 +1,18 @@
 import React, { useCallback, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal, Image, Button, ModalNavigation } from 'decentraland-ui'
+import { Link } from 'react-router-dom'
 import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
 import { SortBy } from '../../../modules/routing/types'
 import { VendorName } from '../../../modules/vendor'
 import { config } from '../../../config'
-import styles from './PromotionalModal.module.css'
-import { Link } from 'react-router-dom'
+import styles from './RentalsLaunchModal.module.css'
+import { Props } from './RentalsLaunchModal.types'
 
 const RENTAL_PROMO_POPUP_KEY = 'rental-intro-popup-key'
 
-export const PromotionalModal = () => {
+export const RentalsLaunchModal = ({ isRentalsLaunchPopupEnabled }: Props) => {
   const blogPostUrl = `${config.get(
     'DECENTRALAND_BLOG'
   )}/announcements/land-rentals-become-an-easy-process-via-decentraland-s-marketplace/`
@@ -20,7 +21,9 @@ export const PromotionalModal = () => {
     setIsOpen(false)
   }, [])
   const [isOpen, setIsOpen] = useState<boolean>(
-    !localStorage.getItem(RENTAL_PROMO_POPUP_KEY) || true
+    (!localStorage.getItem(RENTAL_PROMO_POPUP_KEY) &&
+      isRentalsLaunchPopupEnabled) ||
+      true
   )
   console.log(
     'Default value of rental promo popup key',
@@ -30,9 +33,10 @@ export const PromotionalModal = () => {
 
   return (
     <Modal
-      className={styles.promotionalModal}
+      className={styles.launchModal}
       open={isOpen}
       size={'small'}
+      dimmer={{ className: styles.dimmerRemover }}
       onClose={onClose}
     >
       <ModalNavigation
