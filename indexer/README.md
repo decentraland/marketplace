@@ -2,11 +2,11 @@
 
 |Network|URL|Current|Previous|
 |-|-|-|-|
-|Mainnet - Hosted Services|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace|QmR9z6HJpRP9tSPLNPWkQ67JbDP4wzM4hBVkWmbgdKBCuo|QmccAwofKfT9t4XKieDqwZre1UUZxuHw5ynB35BHwHAJDT|
-|Mainnet - Satsuma|https://subgraph.satsuma-prod.com/decentraland/marketplace/playground|QmR9z6HJpRP9tSPLNPWkQ67JbDP4wzM4hBVkWmbgdKBCuo|QmccAwofKfT9t4XKieDqwZre1UUZxuHw5ynB35BHwHAJDT|
-|Mainnet - Hosted Services - Temp|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-temp|QmccAwofKfT9t4XKieDqwZre1UUZxuHw5ynB35BHwHAJDT|QmYXc2SCC85dvd3pL6yYfxCkLuaCvJaiES3pA4inGiGwej|
-|Goerli - Hosted Services|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli|QmfBfuQvcwpvf6da8A2LeWXvTrnu99H9fv6RLUCyYAFECJ|Qmds1Ut7L2Kvr5Y4ZnCvpMaomcQvhq7BpjhVPgxP5TEfhT|
-|Ropsten - Hosted Services - Deprecated|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-ropsten|QmZTADndoP4XRoWGVoQuaz8WTATx3UDXMn5SdE3GfkErkW|QmfHCGhLTZV8v2duxDkKtPZKMEdJM7X8YGRj2UvqmrAUBB|
+|Mainnet (Hosted Services)|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace|QmR9z6HJpRP9tSPLNPWkQ67JbDP4wzM4hBVkWmbgdKBCuo|QmccAwofKfT9t4XKieDqwZre1UUZxuHw5ynB35BHwHAJDT|
+|Mainnet (Satsuma)|https://subgraph.satsuma-prod.com/decentraland/marketplace/playground|QmR9z6HJpRP9tSPLNPWkQ67JbDP4wzM4hBVkWmbgdKBCuo|QmccAwofKfT9t4XKieDqwZre1UUZxuHw5ynB35BHwHAJDT|
+|Mainnet Temp (Hosted Services)|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-temp|QmccAwofKfT9t4XKieDqwZre1UUZxuHw5ynB35BHwHAJDT|QmYXc2SCC85dvd3pL6yYfxCkLuaCvJaiES3pA4inGiGwej|
+|Goerli (Hosted Services)|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli|QmfBfuQvcwpvf6da8A2LeWXvTrnu99H9fv6RLUCyYAFECJ|Qmds1Ut7L2Kvr5Y4ZnCvpMaomcQvhq7BpjhVPgxP5TEfhT|
+|Ropsten (Hosted Services)|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-ropsten|QmZTADndoP4XRoWGVoQuaz8WTATx3UDXMn5SdE3GfkErkW|QmfHCGhLTZV8v2duxDkKtPZKMEdJM7X8YGRj2UvqmrAUBB|
 
 Using [The Graph](https://thegraph.com) and [Satsuma](https://www.satsuma.xyz/)
 
