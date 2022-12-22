@@ -19,6 +19,7 @@ import {
   FETCH_CONTRACTS_SUCCESS
 } from './actions'
 import { getContract, getContracts } from './selectors'
+import { getAddressAuthorizedAddressAndContractAddress } from './utils'
 
 export function* contractSaga() {
   yield takeEvery(FETCH_CONTRACTS_REQUEST, handleFetchContractsRequest)
@@ -235,7 +236,7 @@ export function* handleFetchContractsSuccess() {
   const stateAuthorizationsMap = stateAuthorizations.reduce(
     (map, authorization) =>
       map.set(
-        `${authorization.address}-${authorization.authorizedAddress}-${authorization.contractAddress}`,
+        getAddressAuthorizedAddressAndContractAddress(authorization),
         authorization
       ),
     new Map<string, Authorization>()
@@ -244,7 +245,7 @@ export function* handleFetchContractsSuccess() {
   authorizations = authorizations.filter(
     authorization =>
       !stateAuthorizationsMap.has(
-        `${authorization.address}-${authorization.authorizedAddress}-${authorization.contractAddress}`
+        getAddressAuthorizedAddressAndContractAddress(authorization)
       )
   )
 

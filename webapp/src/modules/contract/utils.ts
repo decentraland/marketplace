@@ -1,5 +1,6 @@
 import { Network, NFTCategory } from '@dcl/schemas'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
+import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { race, select, take } from 'redux-saga/effects'
@@ -64,7 +65,14 @@ export function getAddressAndChainIdFromNFT(nft: NFT) {
   return `${nft.contractAddress.toLowerCase()}-${nft.chainId}`
 }
 
-export const STUB_MATIC_COLLECTION_CONTRACT_NAME = 'Stub Matic Collection Contract Name'
+export function getAddressAuthorizedAddressAndContractAddress(
+  authorization: Authorization
+) {
+  return `${authorization.address}-${authorization.authorizedAddress}-${authorization.contractAddress}`
+}
+
+export const STUB_MATIC_COLLECTION_CONTRACT_NAME =
+  'Stub Matic Collection Contract Name'
 
 export function getStubMaticCollectionContract(address: string) {
   return {
