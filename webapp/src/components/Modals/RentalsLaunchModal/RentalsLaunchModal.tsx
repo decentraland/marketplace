@@ -27,41 +27,36 @@ export const RentalsLaunchModal = ({ isRentalsLaunchPopupEnabled }: Props) => {
     setIsOpen(false)
   }, [])
   const [isOpen, setIsOpen] = useState<boolean>(
-    (!localStorage.getItem(RENTAL_PROMO_POPUP_KEY) &&
-      isRentalsLaunchPopupEnabled) ||
-      true
+    !localStorage.getItem(RENTAL_PROMO_POPUP_KEY) && isRentalsLaunchPopupEnabled
   )
   const isMobile = useMobileMediaQuery()
-  const browseListingsButton = useMemo(
+  const modalActions = useMemo(
     () => (
-      <Button
-        as={Link}
-        to={locations.lands({ onlyOnRent: true })}
-        onClick={onClose}
-        primary
-      >
-        {t('rentals_promotional_modal.browse_listings')}
-      </Button>
-    ),
-    [onClose]
-  )
-  const listYourLandButton = useMemo(
-    () => (
-      <Button
-        as={Link}
-        to={locations.currentAccount({
-          assetType: AssetType.NFT,
-          section: 'land',
-          vendor: VendorName.DECENTRALAND,
-          page: 1,
-          sortBy: SortBy.NAME,
-          onlyOnSale: false,
-          viewAsGuest: false
-        })}
-        onClick={onClose}
-      >
-        {t('rentals_promotional_modal.list_your_land')}
-      </Button>
+      <Modal.Actions>
+        <Button
+          as={Link}
+          to={locations.currentAccount({
+            assetType: AssetType.NFT,
+            section: 'land',
+            vendor: VendorName.DECENTRALAND,
+            page: 1,
+            sortBy: SortBy.NAME,
+            onlyOnSale: false,
+            viewAsGuest: false
+          })}
+          onClick={onClose}
+        >
+          {t('rentals_promotional_modal.list_your_land')}
+        </Button>
+        <Button
+          as={Link}
+          to={locations.lands({ onlyOnRent: true })}
+          onClick={onClose}
+          primary
+        >
+          {t('rentals_promotional_modal.browse_listings')}
+        </Button>
+      </Modal.Actions>
     ),
     [onClose]
   )
@@ -89,20 +84,10 @@ export const RentalsLaunchModal = ({ isRentalsLaunchPopupEnabled }: Props) => {
               </a>
             )
           })}
-          {!isMobile ? (
-            <Modal.Actions>
-              {listYourLandButton}
-              {browseListingsButton}
-            </Modal.Actions>
-          ) : null}
+          {!isMobile ? modalActions : null}
         </Modal.Description>
       </Modal.Content>
-      {isMobile ? (
-        <Modal.Actions>
-          {listYourLandButton}
-          {browseListingsButton}
-        </Modal.Actions>
-      ) : null}
+      {isMobile ? modalActions : null}
     </Modal>
   )
 }
