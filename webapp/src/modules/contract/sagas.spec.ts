@@ -8,7 +8,7 @@ import {
 } from './actions'
 import { contractSaga } from './sagas'
 
-describe.only('when handling the fetch contracts request', () => {
+describe('when handling the fetch contracts request', () => {
   let mockGetContracts: jest.SpyInstance<Promise<Contract[]>>
 
   afterEach(() => {
