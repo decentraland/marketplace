@@ -43,23 +43,40 @@ export function contractReducer(
   action: ContractReducerAction
 ): ContractState {
   switch (action.type) {
-    case FETCH_CONTRACTS_REQUEST:
+    case FETCH_CONTRACTS_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
+    }
 
-    case FETCH_CONTRACTS_SUCCESS:
+    case FETCH_CONTRACTS_SUCCESS: {
       const { contracts } = action.payload
+
+      const contractsByAddressAndChain = state.data.reduce(
+        (map, contract) =>
+          map.set(`${contract.address}-${contract.chainId}`, { ...contract }),
+        new Map<string, Contract>()
+      )
+
+      contracts.forEach(contract => {
+        const address = contract.address.toLowerCase()
+
+        contractsByAddressAndChain.set(`${address}-${contract.chainId}`, {
+          ...contract,
+          address
+        })
+      })
 
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
-        data: contracts
+        data: Array.from(contractsByAddressAndChain.values())
       }
+    }
 
-    case FETCH_CONTRACTS_FAILURE:
+    case FETCH_CONTRACTS_FAILURE: {
       const { error } = action.payload
 
       return {
@@ -67,6 +84,8 @@ export function contractReducer(
         loading: loadingReducer(state.loading, action),
         error
       }
+    }
+
     default:
       return state
   }
