@@ -2,6 +2,8 @@ import {
   loadingReducer,
   LoadingState
 } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { config } from '../../config'
+import { contracts } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
 import {
   FetchContractsFailureAction,
@@ -11,6 +13,7 @@ import {
   FETCH_CONTRACTS_REQUEST,
   FETCH_CONTRACTS_SUCCESS
 } from './actions'
+import { Network } from './types'
 
 export type ContractState = {
   data: Contract[]
@@ -18,8 +21,14 @@ export type ContractState = {
   error: string | null
 }
 
+const network = config.get('NETWORK') as Network
+const networkContracts = contracts[network].map(contract => ({
+  ...contract,
+  address: contract.address.toLowerCase()
+}))
+
 export const INITIAL_STATE: ContractState = {
-  data: [],
+  data: networkContracts as Contract[],
   loading: [],
   error: null
 }
