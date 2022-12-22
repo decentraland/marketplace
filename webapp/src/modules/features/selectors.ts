@@ -24,6 +24,20 @@ export const getIsMaintenanceEnabled = (state: RootState) => {
   }
 }
 
+export const getIsMarketplaceLaunchPopupEnabled = (
+  state: RootState
+): boolean => {
+  try {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.RENTALS
+    )
+  } catch (e) {
+    return false
+  }
+}
+
 export const getIsRentalsEnabled = (state: RootState) => {
   try {
     return getIsFeatureEnabled(

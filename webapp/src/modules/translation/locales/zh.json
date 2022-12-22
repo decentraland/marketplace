@@ -914,5 +914,11 @@
       "claiming_back": "土地正在收回",
       "rental_ended": "租赁已结束"
     }
+  },
+  "rentals_promotional_modal": {
+    "title": "Announcing official LAND rentals",
+    "browse_listings": "BROWSE LISTINGS",
+    "list_your_land": "LIST YOUR LAND ON RENT",
+    "description": "<p>If you are a LAND owner you can now earn MANA by renting your parcels or estates to content creators.</p> <p>Are you a content creator? Now you can publish your builds to Genesis City without the need of owning LAND.</p> <p>If you want to learn more, <a>read our blog post</a>.</p>"
   }
 }

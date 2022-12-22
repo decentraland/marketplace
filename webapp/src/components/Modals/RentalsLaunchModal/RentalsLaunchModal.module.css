@@ -1,0 +1,10 @@
+@media not (max-width: 767px) {
+  :global(.ui.modal).launchModal {
+    top: 15px;
+    right: 15px;
+  }
+}
+
+:global(.ui.dimmer).dimmerRemover {
+  background-color: unset;
+}
