@@ -41,16 +41,14 @@ export function upsertContracts(
 ) {
   const contractsByAddressAndChain = storedContracts.reduce(
     (map, contract) =>
-      map.set(`${contract.address}-${contract.chainId}`, { ...contract }),
+      map.set(getAddressAndChainIdFromContract(contract), { ...contract }),
     new Map<string, Contract>()
   )
 
   newContracts.forEach(contract => {
-    const address = contract.address.toLowerCase()
-
-    contractsByAddressAndChain.set(`${address}-${contract.chainId}`, {
+    contractsByAddressAndChain.set(getAddressAndChainIdFromContract(contract), {
       ...contract,
-      address
+      address: contract.address.toLowerCase()
     })
   })
 
