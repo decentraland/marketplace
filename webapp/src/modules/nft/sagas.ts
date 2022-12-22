@@ -1,8 +1,9 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
-import { RentalListing, RentalStatus } from '@dcl/schemas'
+import { Network, NFTCategory, RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
@@ -32,6 +33,7 @@ import {
   transferNFTransactionSubmitted
 } from './actions'
 import { NFT } from './types'
+import { upsertContracts } from '../contract/actions'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -90,11 +92,24 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   try {
     yield call(getOrWaitForContracts)
 
-    const contract: ReturnType<typeof getContract> = yield select(getContract, {
-      address: contractAddress
+    let contract: ReturnType<typeof getContract> = yield select(getContract, {
+      address: contractAddress.toLowerCase()
     })
 
-    if (!contract || !contract.vendor) {
+    if (!contract) {
+      contract = {
+        address: contractAddress.toLowerCase(),
+        category: NFTCategory.WEARABLE,
+        chainId: getChainIdByNetwork(Network.MATIC),
+        network: Network.MATIC,
+        vendor: VendorName.DECENTRALAND,
+        name: contractAddress.toLowerCase()
+      }
+
+      yield put(upsertContracts([contract]))
+    }
+
+    if (!contract.vendor) {
       throw new Error(
         `Couldn't find a valid vendor for contract ${contract?.address}`
       )
