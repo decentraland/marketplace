@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Modal,
-  Image,
+  // Image,
   Button,
   ModalNavigation,
   useMobileMediaQuery
 } from 'decentraland-ui'
+import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
@@ -92,7 +93,9 @@ export const RentalsLaunchModal = ({
         onClose={onClose}
       />
       <Modal.Content image>
-        <Image size="medium" src="/rental_promotional_image.png" wrapped />
+        <div
+          className={classNames(styles.rentalImage, 'ui medium image')}
+        ></div>
         <Modal.Description>
           {t('rentals_promotional_modal.description', {
             p: (children: React.ReactElement) => <p>{children}</p>,

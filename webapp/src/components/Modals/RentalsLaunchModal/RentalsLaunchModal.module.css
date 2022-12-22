@@ -8,3 +8,15 @@
 :global(.ui.dimmer).dimmerRemover {
   background-color: unset;
 }
+
+:global(.ui.medium.image).rentalImage {
+  background-image: url(../../../images/rental_promotional_image.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 767px) {
+  :global(.ui.medium.image).rentalImage {
+    height: 300px;
+  }
+}
