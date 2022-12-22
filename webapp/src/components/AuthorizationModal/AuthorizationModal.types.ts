@@ -6,6 +6,10 @@ import {
   fetchAuthorizationsRequest,
   FetchAuthorizationsRequestAction
 } from 'decentraland-dapps/dist/modules/authorization/actions'
+import {
+  upsertContracts,
+  UpsertContractsAction
+} from '../../modules/contract/actions'
 
 export type Props = {
   open: boolean
@@ -17,14 +21,20 @@ export type Props = {
   onCancel: () => void
   onProceed: () => void
   onFetchAuthorizations: typeof fetchAuthorizationsRequest
+  onUpsertContracts: typeof upsertContracts
 }
 
 export type MapStateProps = Pick<
   Props,
   'authorizations' | 'isAuthorizing' | 'getContract'
 >
-export type MapDispatchProps = Pick<Props, 'onFetchAuthorizations'>
-export type MapDispatch = Dispatch<FetchAuthorizationsRequestAction>
+export type MapDispatchProps = Pick<
+  Props,
+  'onFetchAuthorizations' | 'onUpsertContracts'
+>
+export type MapDispatch = Dispatch<
+  FetchAuthorizationsRequestAction | UpsertContractsAction
+>
 export type OwnProps = Pick<
   Props,
   'open' | 'authorization' | 'onProceed' | 'isLoading'

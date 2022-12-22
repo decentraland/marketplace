@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { ethers } from 'ethers'
 import {
   Modal,
   Button,
@@ -7,11 +8,15 @@ import {
   useMobileMediaQuery
 } from 'decentraland-ui'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 
 import { locations } from '../../modules/routing/locations'
 import { isAuthorized } from '../SettingsPage/Authorization/utils'
 import { Authorization } from '../SettingsPage/Authorization'
 import { Props } from './AuthorizationModal.types'
+import { isStubMaticCollectionContract } from '../../modules/contract/utils'
+import ERC721ABI from '../../contracts/ERC721.json'
+
 import './AuthorizationModal.css'
 
 const AuthorizationModal = (props: Props) => {
@@ -24,7 +29,8 @@ const AuthorizationModal = (props: Props) => {
     getContract,
     onCancel,
     onProceed,
-    onFetchAuthorizations
+    onFetchAuthorizations,
+    onUpsertContracts
   } = props
 
   const isMobile = useMobileMediaQuery()
@@ -38,6 +44,7 @@ const AuthorizationModal = (props: Props) => {
   })
 
   const hasFetchedAuthorizations = useRef(false)
+  const hasFetchedContractName = useRef(false)
 
   useEffect(() => {
     if (
@@ -48,6 +55,36 @@ const AuthorizationModal = (props: Props) => {
       onFetchAuthorizations([authorization])
     }
   }, [authorization, authorizations, onFetchAuthorizations])
+
+  useEffect(() => {
+    if (
+      token &&
+      isStubMaticCollectionContract(token) &&
+      !hasFetchedContractName.current
+    ) {
+      hasFetchedContractName.current = true
+
+      const fetchContractName = async () => {
+        try {
+          const provider = await getNetworkProvider(token.chainId)
+
+          const erc721 = new ethers.Contract(
+            token.address,
+            ERC721ABI,
+            new ethers.providers.Web3Provider(provider)
+          )
+
+          const name = await erc721.name()
+
+          onUpsertContracts([{ ...token, name }])
+        } catch (e) {
+          console.warn('Could not fetch contract name')
+        }
+      }
+
+      fetchContractName()
+    }
+  }, [token, onUpsertContracts])
 
   if (!contract || !token) {
     return null

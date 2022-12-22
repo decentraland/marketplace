@@ -73,7 +73,7 @@ export function getStubMaticCollectionContract(address: string) {
     chainId: getChainIdByNetwork(Network.MATIC),
     network: Network.MATIC,
     vendor: VendorName.DECENTRALAND,
-    name: address.toLowerCase()
+    name: STUB_MATIC_COLLECTION_CONTRACT_NAME
   }
 }
 
