@@ -91,8 +91,8 @@ export const RentalsLaunchModal = ({ isRentalsLaunchPopupEnabled }: Props) => {
           })}
           {!isMobile ? (
             <Modal.Actions>
-              {browseListingsButton}
               {listYourLandButton}
+              {browseListingsButton}
             </Modal.Actions>
           ) : null}
         </Modal.Description>
