@@ -59,8 +59,6 @@ export function* handleFetchContractsSuccess() {
     return
   }
 
-  debugger
-
   const contractNames = getContractNames()
 
   const marketplaceEthereum: Contract = yield select(getContract, {
