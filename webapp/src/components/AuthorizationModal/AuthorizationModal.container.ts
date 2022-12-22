@@ -1,11 +1,13 @@
 import { connect } from 'react-redux'
 import {
+  fetchAuthorizationsRequest,
   GRANT_TOKEN_REQUEST,
   REVOKE_TOKEN_REQUEST
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getLoading } from 'decentraland-dapps/dist/modules/authorization/selectors'
+import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { RootState } from '../../modules/reducer'
 import { getContract } from '../../modules/contract/selectors'
 import { Contract } from '../../modules/vendor/services'
@@ -24,6 +26,9 @@ const mapState = (state: RootState): MapStateProps => ({
   getContract: (query: Partial<Contract>) => getContract(state, query)
 })
 
-const mapDispatch = (_dispatch: MapDispatch): MapDispatchProps => ({})
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onFetchAuthorizations: (authorizations: Authorization[]) =>
+    dispatch(fetchAuthorizationsRequest(authorizations))
+})
 
 export default connect(mapState, mapDispatch)(AuthorizationModal)

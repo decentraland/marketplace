@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
   Modal,
@@ -23,7 +23,8 @@ const AuthorizationModal = (props: Props) => {
     isAuthorizing,
     getContract,
     onCancel,
-    onProceed
+    onProceed,
+    onFetchAuthorizations
   } = props
 
   const isMobile = useMobileMediaQuery()
@@ -31,9 +32,22 @@ const AuthorizationModal = (props: Props) => {
   const contract = getContract({
     address: authorization.authorizedAddress
   })
+
   const token = getContract({
     address: authorization.contractAddress
   })
+
+  const hasFetchedAuthorizations = useRef(false)
+
+  useEffect(() => {
+    if (
+      !isAuthorized(authorization, authorizations) &&
+      !hasFetchedAuthorizations.current
+    ) {
+      hasFetchedAuthorizations.current = true
+      onFetchAuthorizations([authorization])
+    }
+  }, [authorization, authorizations, onFetchAuthorizations])
 
   if (!contract || !token) {
     return null
