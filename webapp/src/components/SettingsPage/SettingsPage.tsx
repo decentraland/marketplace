@@ -23,11 +23,12 @@ const SettingsPage = (props: Props) => {
   const {
     wallet,
     authorizations,
-    isLoadingAuthorization,
+    isLoading,
     isConnecting,
     hasError,
     getContract,
-    onNavigate
+    onNavigate,
+    onFetchContracts
   } = props
 
   const [hasCopiedText, setHasCopiedAddress] = useTimer(1200)
@@ -37,6 +38,10 @@ const SettingsPage = (props: Props) => {
       onNavigate(locations.signIn())
     }
   }, [isConnecting, wallet, onNavigate])
+
+  useEffect(() => {
+    onFetchContracts()
+  }, [onFetchContracts])
 
   const contractNames = getContractNames()
 
@@ -98,8 +103,8 @@ const SettingsPage = (props: Props) => {
       !!contract &&
       (contract.category === NFTCategory.PARCEL ||
         contract.category === NFTCategory.ESTATE) &&
-        rentals &&
-        authorization.authorizedAddress === rentals.address
+      rentals &&
+      authorization.authorizedAddress === rentals.address
     )
   })
 
@@ -156,7 +161,7 @@ const SettingsPage = (props: Props) => {
                 {t('settings_page.authorizations')}
               </Grid.Column>
               <Grid.Column computer={12} mobile={16}>
-                {isLoadingAuthorization ? (
+                {isLoading ? (
                   <Loader size="massive" active />
                 ) : (
                   <div className="authorization-checks-container">
