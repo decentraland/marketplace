@@ -11,7 +11,9 @@ import {
   FetchContractsSuccessAction,
   FETCH_CONTRACTS_FAILURE,
   FETCH_CONTRACTS_REQUEST,
-  FETCH_CONTRACTS_SUCCESS
+  FETCH_CONTRACTS_SUCCESS,
+  UpsertContractsAction,
+  UPSERT_CONTRACTS
 } from './actions'
 import { Network } from './types'
 
@@ -37,6 +39,7 @@ type ContractReducerAction =
   | FetchContractsRequestAction
   | FetchContractsSuccessAction
   | FetchContractsFailureAction
+  | UpsertContractsAction
 
 export function contractReducer(
   state = INITIAL_STATE,
@@ -53,26 +56,11 @@ export function contractReducer(
     case FETCH_CONTRACTS_SUCCESS: {
       const { contracts } = action.payload
 
-      const contractsByAddressAndChain = state.data.reduce(
-        (map, contract) =>
-          map.set(`${contract.address}-${contract.chainId}`, { ...contract }),
-        new Map<string, Contract>()
-      )
-
-      contracts.forEach(contract => {
-        const address = contract.address.toLowerCase()
-
-        contractsByAddressAndChain.set(`${address}-${contract.chainId}`, {
-          ...contract,
-          address
-        })
-      })
-
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
-        data: Array.from(contractsByAddressAndChain.values())
+        data: upsertContracts(state.data, contracts)
       }
     }
 
@@ -86,7 +74,38 @@ export function contractReducer(
       }
     }
 
+    case UPSERT_CONTRACTS: {
+      const { contracts } = action.payload
+
+      return {
+        ...state,
+        data: upsertContracts(state.data, contracts)
+      }
+    }
+
     default:
       return state
   }
+}
+
+function upsertContracts(
+  storedContracts: Contract[],
+  newContracts: Contract[]
+) {
+  const contractsByAddressAndChain = storedContracts.reduce(
+    (map, contract) =>
+      map.set(`${contract.address}-${contract.chainId}`, { ...contract }),
+    new Map<string, Contract>()
+  )
+
+  newContracts.forEach(contract => {
+    const address = contract.address.toLowerCase()
+
+    contractsByAddressAndChain.set(`${address}-${contract.chainId}`, {
+      ...contract,
+      address
+    })
+  })
+
+  return Array.from(contractsByAddressAndChain.values())
 }
