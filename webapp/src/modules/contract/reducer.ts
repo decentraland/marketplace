@@ -16,6 +16,7 @@ import {
   UPSERT_CONTRACTS
 } from './actions'
 import { Network } from './types'
+import { upsertContracts } from './utils'
 
 export type ContractState = {
   data: Contract[]
@@ -86,26 +87,4 @@ export function contractReducer(
     default:
       return state
   }
-}
-
-function upsertContracts(
-  storedContracts: Contract[],
-  newContracts: Contract[]
-) {
-  const contractsByAddressAndChain = storedContracts.reduce(
-    (map, contract) =>
-      map.set(`${contract.address}-${contract.chainId}`, { ...contract }),
-    new Map<string, Contract>()
-  )
-
-  newContracts.forEach(contract => {
-    const address = contract.address.toLowerCase()
-
-    contractsByAddressAndChain.set(`${address}-${contract.chainId}`, {
-      ...contract,
-      address
-    })
-  })
-
-  return Array.from(contractsByAddressAndChain.values())
 }

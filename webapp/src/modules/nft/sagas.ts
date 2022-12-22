@@ -1,16 +1,20 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
-import { Network, NFTCategory, RentalListing, RentalStatus } from '@dcl/schemas'
+import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getContract, getContracts } from '../contract/selectors'
 import { VendorName } from '../vendor/types'
 import { AwaitFn } from '../types'
-import { getOrWaitForContracts } from '../contract/utils'
+import {
+  getAddressAndChainIdFromContract,
+  getAddressAndChainIdFromNFT,
+  getOrWaitForContracts,
+  getStubMaticCollectionContract
+} from '../contract/utils'
 import { getRentalById } from '../rental/selectors'
 import {
   isRentalListingOpen,
@@ -34,6 +38,7 @@ import {
 } from './actions'
 import { NFT } from './types'
 import { upsertContracts } from '../contract/actions'
+import { Contract } from '../vendor/services'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
@@ -43,19 +48,17 @@ export function* nftSaga() {
 
 function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   const { options, timestamp } = action.payload
-  const { vendor: VendorName, filters } = options
-  const contracts: ReturnType<typeof getContracts> = yield select(getContracts)
+  const { vendor: vendorName, filters } = options
 
   const params = {
     ...DEFAULT_BASE_NFT_PARAMS,
-    ...action.payload.options.params,
-    contracts
+    ...action.payload.options.params
   }
 
   try {
     const vendor: Vendor<VendorName> = yield call(
       VendorFactory.build,
-      VendorName
+      vendorName
     )
 
     const [
@@ -69,6 +72,26 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       params,
       filters
     )
+
+    const contracts: Contract[] = yield select(getContracts)
+
+    const contractAddressesAndChainIds = new Set(
+      contracts.map(getAddressAndChainIdFromContract)
+    )
+
+    const newContracts = nfts.reduce((arr, nft) => {
+      const nftContractAddressAndChainId = getAddressAndChainIdFromNFT(nft)
+
+      if (!contractAddressesAndChainIds.has(nftContractAddressAndChainId)) {
+        arr.push(getStubMaticCollectionContract(nft.contractAddress))
+      }
+
+      return arr
+    }, [] as Contract[])
+
+    if (newContracts.length > 0) {
+      yield put(upsertContracts(newContracts))
+    }
 
     yield put(
       fetchNFTsSuccess(
@@ -97,14 +120,7 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
     })
 
     if (!contract) {
-      contract = {
-        address: contractAddress.toLowerCase(),
-        category: NFTCategory.WEARABLE,
-        chainId: getChainIdByNetwork(Network.MATIC),
-        network: Network.MATIC,
-        vendor: VendorName.DECENTRALAND,
-        name: contractAddress.toLowerCase()
-      }
+      contract = getStubMaticCollectionContract(contractAddress)
 
       yield put(upsertContracts([contract]))
     }
