@@ -44,6 +44,11 @@ const SettingsPage = (props: Props) => {
 
   const contractNames = getContractNames()
 
+  const collectionStore = getContract({
+    name: contractNames.COLLECTION_STORE,
+    network: Network.MATIC
+  })
+
   const marketplaceEthereum = getContract({
     name: contractNames.MARKETPLACE,
     network: Network.ETHEREUM
@@ -54,8 +59,14 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
-  const bids = getContract({
-    name: contractNames.BIDS
+  const bidsEthereum = getContract({
+    name: contractNames.BIDS,
+    network: Network.ETHEREUM
+  })
+
+  const bidsMatic = getContract({
+    name: contractNames.BIDS,
+    network: Network.MATIC
   })
 
   const manaEthereum = getContract({
@@ -74,9 +85,11 @@ const SettingsPage = (props: Props) => {
   })
 
   if (
+    !collectionStore ||
     !marketplaceEthereum ||
     !marketplaceMatic ||
-    !bids ||
+    !bidsEthereum ||
+    !bidsMatic ||
     !manaEthereum ||
     !manaMatic ||
     !rentals
@@ -86,7 +99,7 @@ const SettingsPage = (props: Props) => {
 
   const authorizationsForSelling = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
-    
+
     return (
       contract &&
       contract.category !== null &&
@@ -214,13 +227,66 @@ const SettingsPage = (props: Props) => {
                           <Authorization
                             authorization={{
                               address: wallet.address,
-                              authorizedAddress: bids.address,
+                              authorizedAddress: bidsEthereum.address,
                               contractAddress: manaEthereum.address,
                               contractName: ContractName.MANAToken,
                               chainId: manaEthereum.chainId,
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />
+                          <Authorization
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: bidsMatic.address,
+                              contractAddress: manaMatic.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaMatic.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                          />
+                        </div>
+
+                        <div className="authorization-checks">
+                          <label className="secondary-text">
+                            {t('settings_page.for_minting')}
+                          </label>
+                          <Authorization
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: collectionStore.address,
+                              contractAddress: manaMatic.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaMatic.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                          />
+                        </div>
+
+                        <div className="authorization-checks">
+                          <label className="secondary-text">
+                            {t('settings_page.for_renting')}
+                          </label>
+                          <Authorization
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: rentals.address,
+                              contractAddress: manaEthereum.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaEthereum.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                          />
+                          {authorizationsForRenting.map(authorization => {
+                            return (
+                              <Authorization
+                                key={
+                                  authorization.authorizedAddress +
+                                  authorization.contractAddress
+                                }
+                                authorization={authorization}
+                              />
+                            )
+                          })}
                         </div>
 
                         {authorizationsForSelling.length > 0 ? (
@@ -230,26 +296,6 @@ const SettingsPage = (props: Props) => {
                             </label>
 
                             {authorizationsForSelling.map(authorization => {
-                              return (
-                                <Authorization
-                                  key={
-                                    authorization.authorizedAddress +
-                                    authorization.contractAddress
-                                  }
-                                  authorization={authorization}
-                                />
-                              )
-                            })}
-                          </div>
-                        ) : null}
-
-                        {authorizationsForRenting.length > 0 ? (
-                          <div className="authorization-checks">
-                            <label className="secondary-text">
-                              {t('settings_page.for_renting')}
-                            </label>
-
-                            {authorizationsForRenting.map(authorization => {
                               return (
                                 <Authorization
                                   key={
