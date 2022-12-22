@@ -31,7 +31,7 @@ export const getIsMarketplaceLaunchPopupEnabled = (
     return getIsFeatureEnabled(
       state,
       ApplicationName.MARKETPLACE,
-      FeatureName.RENTALS
+      FeatureName.LAUNCH_POPUP
     )
   } catch (e) {
     return false
