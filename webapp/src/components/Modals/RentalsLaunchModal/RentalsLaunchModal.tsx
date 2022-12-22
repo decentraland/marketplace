@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Modal,
@@ -18,17 +18,35 @@ import { Props } from './RentalsLaunchModal.types'
 
 const RENTAL_PROMO_POPUP_KEY = 'rental-intro-popup-key'
 
-export const RentalsLaunchModal = ({ isRentalsLaunchPopupEnabled }: Props) => {
+export const RentalsLaunchModal = ({
+  isRentalsLaunchPopupEnabled,
+  isLoadingFeatureFlags
+}: Props) => {
   const blogPostUrl = `${config.get(
     'DECENTRALAND_BLOG'
   )}/announcements/land-rentals-become-an-easy-process-via-decentraland-s-marketplace/`
+
   const onClose = useCallback(() => {
     localStorage.setItem(RENTAL_PROMO_POPUP_KEY, 'true')
     setIsOpen(false)
   }, [])
-  const [isOpen, setIsOpen] = useState<boolean>(
-    !localStorage.getItem(RENTAL_PROMO_POPUP_KEY) && isRentalsLaunchPopupEnabled
-  )
+
+  const [hasLoadedInitialFlags, setHasLoadedInitialFlags] = useState(false)
+  useEffect(() => {
+    if (!isLoadingFeatureFlags) {
+      setHasLoadedInitialFlags(true)
+    }
+  }, [isLoadingFeatureFlags])
+
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  useEffect(() => {
+    setIsOpen(
+      !localStorage.getItem(RENTAL_PROMO_POPUP_KEY) &&
+        hasLoadedInitialFlags &&
+        isRentalsLaunchPopupEnabled
+    )
+  }, [hasLoadedInitialFlags, isRentalsLaunchPopupEnabled])
+
   const isMobile = useMobileMediaQuery()
   const modalActions = useMemo(
     () => (
