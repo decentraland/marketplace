@@ -9,7 +9,6 @@ import { Page, Grid, Blockie, Loader, Form } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 
 import { locations } from '../../modules/routing/locations'
-import { Contract } from '../../modules/vendor/services'
 import { shortenAddress } from '../../modules/wallet/utils'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
@@ -41,7 +40,7 @@ const SettingsPage = (props: Props) => {
 
   useEffect(() => {
     onFetchContracts()
-  }, [onFetchContracts])
+  }, [onFetchContracts, wallet?.address])
 
   const contractNames = getContractNames()
 
@@ -69,42 +68,49 @@ const SettingsPage = (props: Props) => {
     network: Network.MATIC
   })
 
+  const rentals = getContract({
+    name: contractNames.RENTALS,
+    network: Network.ETHEREUM
+  })
+
   if (
     !marketplaceEthereum ||
     !marketplaceMatic ||
     !bids ||
     !manaEthereum ||
-    !manaMatic
+    !manaMatic ||
+    !rentals
   ) {
     return null
   }
 
-  let rentals: Contract | null
-
-  try {
-    rentals = getContract({
-      name: getContractNames().RENTALS,
-      network: Network.ETHEREUM
-    })
-  } catch (error) {}
-
   const authorizationsForSelling = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
-    return rentals
-      ? !!contract &&
-          contract.category !== null &&
-          authorization.authorizedAddress !== rentals.address
-      : !!contract && contract.category !== null
+    
+    return (
+      contract &&
+      contract.category !== null &&
+      authorization.authorizedAddress !== rentals.address &&
+      authorization.address === wallet!.address
+    )
   })
 
   const authorizationsForRenting = authorizations.filter(authorization => {
     const contract = getContract({ address: authorization.contractAddress })
+
+    if (!contract) {
+      return false
+    }
+
+    const isParcelOrEstate =
+      contract.category === NFTCategory.PARCEL ||
+      contract.category === NFTCategory.ESTATE
+
     return (
-      !!contract &&
-      (contract.category === NFTCategory.PARCEL ||
-        contract.category === NFTCategory.ESTATE) &&
-      rentals &&
-      authorization.authorizedAddress === rentals.address
+      contract &&
+      isParcelOrEstate &&
+      authorization.authorizedAddress === rentals.address &&
+      authorization.address === wallet!.address
     )
   })
 
