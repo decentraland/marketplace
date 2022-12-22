@@ -10,7 +10,6 @@ import { MapStateProps } from './RentalsLaunchModal.types'
 import { RentalsLaunchModal } from './RentalsLaunchModal'
 
 const mapState = (state: RootState): MapStateProps => {
-  console.log('Is feature enabled', getIsMarketplaceLaunchPopupEnabled(state))
   return {
     isLoadingFeatureFlags: isLoadingType(
       isLoadingFeatureFlags(state),
