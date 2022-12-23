@@ -12,10 +12,28 @@
   margin-bottom: 8px;
 }
 
-.item:last-child {
+.item.flex {
+  padding-left: 15px;
+}
+
+.item.flex:last-child {
+  margin-right: 0;
+}
+
+.flex {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+}
+
+.item:last-child:not(.flex) {
   margin-bottom: 0px;
 }
 
+.item:hover {
+  background: var(--secondary);
+}
 .item:hover {
   background: var(--secondary);
 }
@@ -47,4 +65,11 @@
   font-size: 15px;
   line-height: 24px;
   color: #736e7d;
+}
+
+@media (max-width: 768px) {
+  .item.flex {
+    text-align: center;
+    justify-content: center;
+  }
 }
