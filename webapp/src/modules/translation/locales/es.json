@@ -150,7 +150,8 @@
     "type_to_search": "Escriba para buscar collecciones.",
     "clear": "Borrar filtros",
     "recently_reviewed": "Revisado recientemente",
-    "size": "Tamaño"
+    "size": "Tamaño",
+    "price": "Precio"
   },
   "home_page": {
     "analytics": {

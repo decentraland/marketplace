@@ -1,8 +1,8 @@
 import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header, useNotMobileMediaQuery } from 'decentraland-ui'
-
 import { isLandSection } from '../../../../modules/ui/utils'
+import { FiltersSidebar } from '../../../FiltersSidebar'
 import { NFTSections } from '../NFTSections'
 import { NFTLandFilters } from '../NFTLandFilters'
 import { Props } from './NFTSidebar.types'
@@ -20,6 +20,7 @@ const NFTSidebar = (props: Props) => {
         sections={sections}
         onSectionClick={onMenuItemClick}
       />
+      <FiltersSidebar />
       {isRentalsEnabled && isLandSection(section) && isNotMobile ? (
         <NFTLandFilters />
       ) : null}

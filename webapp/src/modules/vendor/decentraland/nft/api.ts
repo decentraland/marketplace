@@ -141,6 +141,13 @@ class NFTAPI extends BaseAPI {
           queryParams.append('contractAddress', contract)
         }
       }
+      if (filters.minPrice) {
+        queryParams.append('minPrice', filters.minPrice)
+      }
+
+      if (filters.maxPrice) {
+        queryParams.append('maxPrice', filters.maxPrice)
+      }
     }
 
     return queryParams.toString()

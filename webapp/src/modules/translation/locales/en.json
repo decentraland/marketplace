@@ -154,7 +154,8 @@
     "type_to_search": "Type to search for collections.",
     "clear": "Clear filters",
     "recently_reviewed": "Recently reviewed",
-    "size": "Size"
+    "size": "Size",
+    "price": "Price"
   },
   "home_page": {
     "analytics": {

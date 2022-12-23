@@ -150,7 +150,8 @@
     "type_to_search": "键入以搜索集合。",
     "clear": "清除过滤器",
     "recently_reviewed": "最近审查",
-    "size": "大小"
+    "size": "大小",
+    "price": "价格"
   },
   "home_page": {
     "analytics": {

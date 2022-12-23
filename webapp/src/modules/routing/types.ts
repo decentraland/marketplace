@@ -46,4 +46,6 @@ export type BrowseOptions = {
   viewAsGuest?: boolean
   category?: NFTCategory
   emotePlayMode?: EmotePlayMode
+  minPrice?: string
+  maxPrice?: string
 }
