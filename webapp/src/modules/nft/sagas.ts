@@ -10,8 +10,8 @@ import { getContract, getContracts } from '../contract/selectors'
 import { VendorName } from '../vendor/types'
 import { AwaitFn } from '../types'
 import {
-  getAddressAndChainIdFromContract,
-  getAddressAndChainIdFromNFT,
+  getContractKey,
+  getContractKeyFromNFT,
   getOrWaitForContracts,
   getStubMaticCollectionContract
 } from '../contract/utils'
@@ -75,12 +75,10 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
 
     const contracts: Contract[] = yield select(getContracts)
 
-    const contractAddressesAndChainIds = new Set(
-      contracts.map(getAddressAndChainIdFromContract)
-    )
+    const contractAddressesAndChainIds = new Set(contracts.map(getContractKey))
 
     const newContracts = nfts.reduce((arr, nft) => {
-      const nftContractAddressAndChainId = getAddressAndChainIdFromNFT(nft)
+      const nftContractAddressAndChainId = getContractKeyFromNFT(nft)
 
       if (!contractAddressesAndChainIds.has(nftContractAddressAndChainId)) {
         arr.push(getStubMaticCollectionContract(nft.contractAddress))

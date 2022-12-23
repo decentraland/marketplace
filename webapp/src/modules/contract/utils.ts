@@ -40,13 +40,12 @@ export function upsertContracts(
   newContracts: Contract[]
 ) {
   const contractsByAddressAndChain = storedContracts.reduce(
-    (map, contract) =>
-      map.set(getAddressAndChainIdFromContract(contract), { ...contract }),
+    (map, contract) => map.set(getContractKey(contract), { ...contract }),
     new Map<string, Contract>()
   )
 
   newContracts.forEach(contract => {
-    contractsByAddressAndChain.set(getAddressAndChainIdFromContract(contract), {
+    contractsByAddressAndChain.set(getContractKey(contract), {
       ...contract,
       address: contract.address.toLowerCase()
     })
@@ -55,18 +54,21 @@ export function upsertContracts(
   return Array.from(contractsByAddressAndChain.values())
 }
 
-export function getAddressAndChainIdFromContract(contract: Contract) {
+export function getContractKey(contract: Contract) {
   return `${contract.address.toLowerCase()}-${contract.chainId}`
 }
 
-export function getAddressAndChainIdFromNFT(nft: NFT) {
+export function getContractKeyFromNFT(nft: NFT) {
   return `${nft.contractAddress.toLowerCase()}-${nft.chainId}`
 }
 
-export function getAddressAuthorizedAddressAndContractAddress(
-  authorization: Authorization
-) {
-  return `${authorization.address}-${authorization.authorizedAddress}-${authorization.contractAddress}`
+export function getAuthorizationKey({
+  address,
+  authorizedAddress,
+  contractAddress,
+  chainId
+}: Authorization) {
+  return `${address}-${authorizedAddress}-${contractAddress}-${chainId}`
 }
 
 export const STUB_MATIC_COLLECTION_CONTRACT_NAME =
