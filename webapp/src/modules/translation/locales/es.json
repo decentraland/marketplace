@@ -912,5 +912,11 @@
       "claiming_back": "Reclamando {asset_type, select, parcel {la parcel} estate {el estate} other {LAND}}",
       "rental_ended": "Período de renta terminado"
     }
+  },
+  "rentals_promotional_modal": {
+    "title": "¡La renta de tierras está disponible!",
+    "browse_listings": "Ver tierras para rentar",
+    "list_your_land": "Lista tu tierra a la renta",
+    "description": "<p>Si eres dueño de tierra ahora puede ganar MANA rentando tus parcelas o estates a creadores de contenido.</p> <p>¿Eres un creador de contenido? Ahora puedes publicar tu escenas en la Genesis City sin la necesidad de poseer tierras.</p> <p>Si quieres leer más sobre ésto, <a>lee nuestro blog post</a>.</p>"
   }
 }

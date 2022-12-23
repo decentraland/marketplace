@@ -1,5 +1,6 @@
 export enum FeatureName {
   MAINTENANCE = 'maintenance',
+  LAUNCH_POPUP = 'launch-popup',
   RANKINGS = 'rankings_variant',
   EMOTE_CATEGORIES = 'emote-categories',
   RENTALS = 'rentals',

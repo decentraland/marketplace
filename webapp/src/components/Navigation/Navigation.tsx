@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import { Tabs, Mobile, Button, useMobileMediaQuery } from 'decentraland-ui'
 import BuyManaWithFiatModal from 'decentraland-dapps/dist/containers/BuyManaWithFiatModal'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import * as decentraland from '../../modules/vendor/decentraland'
 import { locations } from '../../modules/routing/locations'
@@ -15,8 +16,14 @@ import './Navigation.css'
 
 const Navigation = (props: Props) => {
   const { activeTab, isFullscreen, isCampaignBrowserEnabled } = props
+  const analytics = getAnalytics()
   const isMobile = useMobileMediaQuery()
   const [showBuyManaModal, setShowBuyManaModal] = useState(false)
+
+  const handleOpenBuyManaWithFiatModal = () => {
+    analytics.track('Open BUY MANA modal')
+    setShowBuyManaModal(true)
+  }
 
   const handleCloseBuyManaWithFiatModal = () => {
     setShowBuyManaModal(false)
@@ -43,7 +50,11 @@ const Navigation = (props: Props) => {
               })}
             >
               <Tabs.Tab active={activeTab === NavigationTab.CAMPAIGN_BROWSER}>
-                <div className={classNames("campaign-tab", { "campaign-tab-animation": CAMPAING_TAB_ANIMATION_ENABLED })}>
+                <div
+                  className={classNames('campaign-tab', {
+                    'campaign-tab-animation': CAMPAING_TAB_ANIMATION_ENABLED
+                  })}
+                >
                   <span className="campaign-icon" />
                   <span>{t('campaign.tab')}</span>
                 </div>
@@ -85,7 +96,7 @@ const Navigation = (props: Props) => {
           <Tabs.Right>
             <Button
               primary
-              onClick={() => setShowBuyManaModal(true)}
+              onClick={handleOpenBuyManaWithFiatModal}
               size="small"
             >
               {t('navigation.buy_mana_with_fiat')}
