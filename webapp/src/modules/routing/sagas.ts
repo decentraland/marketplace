@@ -147,7 +147,9 @@ function* handleClearFilters() {
     'network',
     'contracts',
     'emotePlayMode',
-    'page'
+    'page',
+    'minPrice',
+    'maxPrice'
   ])
 
   yield call(fetchAssetsFromRoute, clearedBrowseOptions)

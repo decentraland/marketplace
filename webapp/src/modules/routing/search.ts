@@ -100,6 +100,14 @@ export function getSearchParams(options?: BrowseOptions) {
     if (options.onlySmart !== undefined) {
       params.set('onlySmart', options.onlySmart.toString())
     }
+
+    if (options.minPrice) {
+      params.set('minPrice', options.minPrice)
+    }
+
+    if (options.maxPrice) {
+      params.set('maxPrice', options.maxPrice)
+    }
   }
   return params
 }

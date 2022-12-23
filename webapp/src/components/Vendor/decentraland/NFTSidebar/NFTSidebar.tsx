@@ -7,6 +7,7 @@ import { NFTSections } from '../NFTSections'
 import { NFTLandFilters } from '../NFTLandFilters'
 import { Props } from './NFTSidebar.types'
 import './NFTSidebar.css'
+import { FiltersSidebar } from '../../../FiltersSidebar'
 
 const NFTSidebar = (props: Props) => {
   const { section, sections, onMenuItemClick, isRentalsEnabled } = props
@@ -20,6 +21,7 @@ const NFTSidebar = (props: Props) => {
         sections={sections}
         onSectionClick={onMenuItemClick}
       />
+      <FiltersSidebar />
       {isRentalsEnabled && isLandSection(section) && isNotMobile ? (
         <NFTLandFilters />
       ) : null}
