@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { RangeField, Box } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import './PriceFilter.css'
@@ -9,23 +9,26 @@ export type PriceFilterProps = {
   onChange: (value: [string, string]) => void
 }
 
-let timeout: NodeJS.Timeout;
-
 export const PriceFilter = ({ onChange, minPrice, maxPrice }: PriceFilterProps) => {
   const [value, setValue] = useState<[string, string]>([minPrice, maxPrice])
+  const timeout = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => setValue([minPrice, maxPrice]), [minPrice, maxPrice])
 
   useEffect(() => {
-    return () => clearTimeout(timeout)
+    return () => {
+      if (timeout.current) {
+        clearTimeout(timeout.current)
+      }
+    }
   }, [])
 
   const handlePriceChange = useCallback((newValue: [string, string]) => {
     setValue(newValue);
-    if (timeout) {
-      clearTimeout(timeout);
+    if (timeout.current) {
+      clearTimeout(timeout.current);
     }
-    timeout = setTimeout(() => onChange(newValue), 500)
+    timeout.current = setTimeout(() => onChange(newValue), 500)
   }, [setValue, onChange])
 
   return (
