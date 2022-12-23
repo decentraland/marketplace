@@ -149,7 +149,8 @@
     "no_results": "No se encontraron resultados.",
     "clear": "Borrar filtros",
     "recently_reviewed": "Revisado recientemente",
-    "size": "Tamaño"
+    "size": "Tamaño",
+    "price": "Precio"
   },
   "home_page": {
     "analytics": {

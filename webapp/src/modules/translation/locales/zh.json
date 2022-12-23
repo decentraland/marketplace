@@ -149,7 +149,8 @@
     "no_results": "未找到结果。",
     "clear": "清除过滤器",
     "recently_reviewed": "最近审查",
-    "size": "大小"
+    "size": "大小",
+    "price": "价格"
   },
   "home_page": {
     "analytics": {

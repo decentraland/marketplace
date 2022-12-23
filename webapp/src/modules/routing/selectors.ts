@@ -251,6 +251,16 @@ export const getOnlySmart = createSelector<RootState, string, boolean>(
   search => getURLParam(search, 'onlySmart') === 'true'
 )
 
+export const getMinPrice = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'minPrice') as string) || ''
+)
+
+export const getMaxPrice = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'maxPrice') as string) || ''
+)
+
 export const hasFiltersEnabled = createSelector<
   RootState,
   string | undefined,
@@ -258,6 +268,8 @@ export const hasFiltersEnabled = createSelector<
   Rarity[],
   string[],
   string | undefined,
+  string,
+  string,
   boolean
 >(
   getNetwork,
@@ -265,7 +277,9 @@ export const hasFiltersEnabled = createSelector<
   getRarities,
   getContracts,
   getEmotePlayMode,
-  (network, genders, rarities, contracts, playMode) => {
+  getMinPrice,
+  getMaxPrice,
+  (network, genders, rarities, contracts, playMode, minPrice, maxPrice) => {
     const hasNetworkFilter = network !== undefined
     const hasGenderFilter = genders.length > 0
     const hasRarityFilter = rarities.length > 0
@@ -276,7 +290,9 @@ export const hasFiltersEnabled = createSelector<
       hasGenderFilter ||
       hasRarityFilter ||
       hasContractsFilter ||
-      hasEmotePlayModeFilter
+      hasEmotePlayModeFilter ||
+      !!minPrice ||
+      !!maxPrice
     )
   }
 )

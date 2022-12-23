@@ -27,6 +27,8 @@ export type NFTsFetchFilters = {
   contracts?: string[]
   network?: Network
   rentalStatus?: RentalStatus | RentalStatus[]
+  minPrice?: string
+  maxPrice?: string
 }
 
 export type NFTResult = {

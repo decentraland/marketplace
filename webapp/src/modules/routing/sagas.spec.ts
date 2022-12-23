@@ -52,7 +52,9 @@ describe('when handling the clear filters request action', () => {
       wearableGenders: [WearableGender.FEMALE],
       contracts: ['aContract'],
       network: Network.ETHEREUM,
-      emotePlayMode: EmotePlayMode.SIMPLE
+      emotePlayMode: EmotePlayMode.SIMPLE,
+      minPrice: "1",
+      maxPrice: "100"
     }
 
     const browseOptionsWithoutFilters: BrowseOptions = { ...browseOptions }
@@ -62,6 +64,8 @@ describe('when handling the clear filters request action', () => {
     delete browseOptionsWithoutFilters.contracts
     delete browseOptionsWithoutFilters.page
     delete browseOptionsWithoutFilters.emotePlayMode
+    delete browseOptionsWithoutFilters.minPrice
+    delete browseOptionsWithoutFilters.maxPrice
 
     const pathname = 'aPath'
 
