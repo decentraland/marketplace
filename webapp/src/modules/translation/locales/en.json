@@ -153,7 +153,8 @@
     "no_results": "No results were found.",
     "clear": "Clear filters",
     "recently_reviewed": "Recently reviewed",
-    "size": "Size"
+    "size": "Size",
+    "price": "Price"
   },
   "home_page": {
     "analytics": {

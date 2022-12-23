@@ -144,6 +144,14 @@ class NFTAPI extends BaseAPI {
           : filters.rentalStatus
         statuses.forEach(status => queryParams.append('rentalStatus', status))
       }
+
+      if (filters.minPrice) {
+        queryParams.append('minPrice', filters.minPrice)
+      }
+
+      if (filters.maxPrice) {
+        queryParams.append('maxPrice', filters.maxPrice)
+      }
     }
 
     return queryParams.toString()
