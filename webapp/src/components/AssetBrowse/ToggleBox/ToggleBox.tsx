@@ -1,12 +1,13 @@
 import React from 'react'
 import classNames from 'classnames'
-import { isMobile } from 'decentraland-dapps/dist/lib/utils'
+import { useMobileMediaQuery } from 'decentraland-ui'
 import { Box } from '../Box'
 import { Props } from './ToggleBox.types'
 import styles from './ToggleBox.module.css'
 
 const ToggleBox = (props: Props) => {
   const { className, items, direction } = props
+  const isMobile = useMobileMediaQuery()
 
   return (
     <Box
@@ -32,7 +33,7 @@ const ToggleBox = (props: Props) => {
           {item.icon}
           <div>
             <div className={styles.title}>{item.title}</div>
-            {isMobile() && direction === 'row' ? null : (
+            {isMobile && direction === 'row' ? null : (
               <div className={styles.description}>{item.description}</div>
             )}
           </div>

@@ -34,9 +34,6 @@
 .item:hover {
   background: var(--secondary);
 }
-.item:hover {
-  background: var(--secondary);
-}
 
 .active {
   background: var(--secondary);
