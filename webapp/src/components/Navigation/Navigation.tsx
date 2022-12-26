@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
 import { Tabs, Mobile, Button, useMobileMediaQuery } from 'decentraland-ui'
-import BuyManaWithFiatModal from 'decentraland-dapps/dist/containers/BuyManaWithFiatModal'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import * as decentraland from '../../modules/vendor/decentraland'
@@ -15,18 +14,18 @@ import { Props, NavigationTab } from './Navigation.types'
 import './Navigation.css'
 
 const Navigation = (props: Props) => {
-  const { activeTab, isFullscreen, isCampaignBrowserEnabled } = props
+  const {
+    activeTab,
+    isFullscreen,
+    isCampaignBrowserEnabled,
+    onOpenBuyManaWithFiatModal
+  } = props
   const analytics = getAnalytics()
   const isMobile = useMobileMediaQuery()
-  const [showBuyManaModal, setShowBuyManaModal] = useState(false)
 
   const handleOpenBuyManaWithFiatModal = () => {
     analytics.track('Open BUY MANA modal')
-    setShowBuyManaModal(true)
-  }
-
-  const handleCloseBuyManaWithFiatModal = () => {
-    setShowBuyManaModal(false)
+    onOpenBuyManaWithFiatModal()
   }
 
   return (
@@ -104,10 +103,6 @@ const Navigation = (props: Props) => {
           </Tabs.Right>
         ) : null}
       </Tabs>
-      <BuyManaWithFiatModal
-        open={showBuyManaModal}
-        onClose={handleCloseBuyManaWithFiatModal}
-      />
     </div>
   )
 }
