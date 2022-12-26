@@ -42,10 +42,9 @@ export const RentalsLaunchModal = ({
   const [isOpen, setIsOpen] = useState<boolean>(false)
   useEffect(() => {
     setIsOpen(
-      (!localStorage.getItem(RENTAL_PROMO_POPUP_KEY) &&
+      !localStorage.getItem(RENTAL_PROMO_POPUP_KEY) &&
         hasLoadedInitialFlags &&
-        isRentalsLaunchPopupEnabled) ||
-        true
+        isRentalsLaunchPopupEnabled
     )
   }, [hasLoadedInitialFlags, isRentalsLaunchPopupEnabled])
 
