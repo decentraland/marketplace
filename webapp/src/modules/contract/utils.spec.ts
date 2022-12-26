@@ -178,7 +178,7 @@ describe('when calling getContractKeyFromNFT', () => {
 })
 
 describe('when calling getAuthorizationKey', () => {
-  it('should return a string with the contract address and chain id', () => {
+  it('should return a string that contains the address, the authorized address, the contract address and the chain Id', () => {
     expect(
       getAuthorizationKey({
         address: 'address',
