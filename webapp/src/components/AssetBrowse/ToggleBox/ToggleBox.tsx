@@ -21,10 +21,10 @@ const ToggleBox = (props: Props) => {
           key={index}
           className={classNames(
             styles.item,
-            !!direction && direction === 'row' && styles.flex,
             {
               [styles.active]: !!item.active,
-              [styles.disabled]: !!item.disabled
+              [styles.disabled]: !!item.disabled,
+              [styles.flex]: !!direction && direction === 'row'
             }
           )}
           onClick={() => !item.disabled && item.onClick(item, index)}

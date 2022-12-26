@@ -61,7 +61,6 @@ const NFTFilters = (props: Props) => {
   const category = section ? getCategoryFromSection(section) : undefined
 
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
-  console.log('showFiltersMenu: ', showFiltersMenu)
   const [showFiltersModal, setShowFiltersModal] = useState(false)
 
   let orderByDropdownOptions = undefined
