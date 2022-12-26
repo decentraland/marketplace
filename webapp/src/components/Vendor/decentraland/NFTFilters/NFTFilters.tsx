@@ -29,9 +29,11 @@ import {
   persistIsMapProperty
 } from '../../../../modules/ui/utils'
 import { View } from '../../../../modules/ui/types'
+import { ToggleBox } from '../../../AssetBrowse/ToggleBox'
 import { LANDFilters } from '../types'
 import { browseRentedLAND } from '../utils'
 import { Props } from './NFTFilters.types'
+import './NFTFilters.css'
 
 const NFTFilters = (props: Props) => {
   const {
@@ -264,6 +266,9 @@ const NFTFilters = (props: Props) => {
   const isWearableCategory = category === NFTCategory.WEARABLE
   const isEmoteCategory = category === NFTCategory.EMOTE
 
+  const toggleBoxI18nKey =
+    view && isAccountView(view) ? 'account_page' : 'browse_page'
+
   return (
     <div className="NFTFilters">
       <div className="topbar">
@@ -379,35 +384,58 @@ const NFTFilters = (props: Props) => {
       </div>
 
       {showFiltersMenu ? (
-        <Responsive
-          minWidth={Responsive.onlyTablet.minWidth}
-          className="filters"
-        >
-          <FiltersMenu
-            assetType={assetType}
-            selectedNetwork={network}
-            selectedCollection={contracts[0]}
-            selectedRarities={rarities}
-            selectedGenders={isWearableCategory ? wearableGenders : undefined}
-            selectedEmotePlayMode={isEmoteCategory ? emotePlayMode : undefined}
-            isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
-            isOnSale={onlyOnSale}
-            onCollectionsChange={handleCollectionsChange}
-            onGendersChange={
-              isWearableCategory ? handleGendersChange : undefined
-            }
-            onRaritiesChange={handleRaritiesChange}
-            onNetworkChange={
-              isWearableCategory ? handleNetworkChange : undefined
-            }
-            onEmotePlayModeChange={
-              isEmoteCategory ? handleEmotePlayModeChange : undefined
-            }
-            onOnlySmartChange={
-              isWearableCategory ? handleToggleOnlySmart : undefined
-            }
+        <>
+          <ToggleBox
+            direction="row"
+            className="result-type-toggle-flex"
+            items={[
+              {
+                title: t(`${toggleBoxI18nKey}.primary_market_title`),
+                active: assetType === AssetType.ITEM,
+                description: t(`${toggleBoxI18nKey}.primary_market_subtitle`),
+                onClick: () => onBrowse({ assetType: AssetType.ITEM }),
+                icon: <div className="market-icon" />
+              },
+              {
+                title: t(`${toggleBoxI18nKey}.secondary_market_title`),
+                active: assetType === AssetType.NFT,
+                description: t(`${toggleBoxI18nKey}.secondary_market_subtitle`),
+                onClick: () => onBrowse({ assetType: AssetType.NFT }),
+                icon: <div className="listings-icon" />
+              }
+            ]}
           />
-        </Responsive>
+          <Responsive
+            minWidth={Responsive.onlyTablet.minWidth}
+            className="filters"
+          >
+            <FiltersMenu
+              assetType={assetType}
+              selectedNetwork={network}
+              selectedCollection={contracts[0]}
+              selectedRarities={rarities}
+              selectedGenders={isWearableCategory ? wearableGenders : undefined}
+              selectedEmotePlayMode={
+                isEmoteCategory ? emotePlayMode : undefined
+              }
+              isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
+              onCollectionsChange={handleCollectionsChange}
+              onGendersChange={
+                isWearableCategory ? handleGendersChange : undefined
+              }
+              onRaritiesChange={handleRaritiesChange}
+              onNetworkChange={
+                isWearableCategory ? handleNetworkChange : undefined
+              }
+              onEmotePlayModeChange={
+                isEmoteCategory ? handleEmotePlayModeChange : undefined
+              }
+              onOnlySmartChange={
+                isWearableCategory ? handleToggleOnlySmart : undefined
+              }
+            />
+          </Responsive>
+        </>
       ) : null}
 
       <Modal
