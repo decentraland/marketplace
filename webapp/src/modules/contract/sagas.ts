@@ -236,7 +236,7 @@ export function* handleFetchContractsSuccess() {
   // as preventing unnecessary extra calls.
   const storeAuthorizations: Authorization[] = yield select(getAuthorizations)
 
-  const stateAuthorizationsMap = storeAuthorizations.reduce(
+  const storeAuthorizationsMap = storeAuthorizations.reduce(
     (map, authorization) =>
       map.set(getAuthorizationKey(authorization), authorization),
     new Map<string, Authorization>()
@@ -244,7 +244,7 @@ export function* handleFetchContractsSuccess() {
 
   authorizations = authorizations.filter(
     authorization =>
-      !stateAuthorizationsMap.has(getAuthorizationKey(authorization))
+      !storeAuthorizationsMap.has(getAuthorizationKey(authorization))
   )
 
   yield put(fetchAuthorizationsRequest(authorizations))
