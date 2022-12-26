@@ -46,6 +46,7 @@ const AuthorizationModal = (props: Props) => {
   const hasFetchedAuthorizations = useRef(false)
   const hasFetchedContractName = useRef(false)
 
+  // Fetch authorizations only once when this component is rendered.
   useEffect(() => {
     if (
       !isAuthorized(authorization, authorizations) &&
@@ -56,6 +57,8 @@ const AuthorizationModal = (props: Props) => {
     }
   }, [authorization, authorizations, onFetchAuthorizations])
 
+  // Fetch the name of the collection by querying the contract directly.
+  // Required to display the real name of the collection instead of the stub one.
   useEffect(() => {
     if (
       token &&
