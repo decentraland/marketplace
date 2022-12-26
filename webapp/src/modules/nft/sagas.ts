@@ -75,12 +75,16 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
 
     const contracts: Contract[] = yield select(getContracts)
 
-    const contractAddressesAndChainIds = new Set(contracts.map(getContractKey))
+    const contractKeys = new Set(contracts.map(getContractKey))
 
+    // From the obtained nfts, it will check if there are contracts stored for each of them.
+    // Any nft that doesn't have a matching contract will have a stub one created and stored
+    // So it can be used on the rest of the application.
+    // Only wearables and emotes will have a stub contract created.
     const newContracts = nfts.reduce((arr, nft) => {
-      const nftContractAddressAndChainId = getContractKeyFromNFT(nft)
+      const contractKeyFromNFT = getContractKeyFromNFT(nft)
 
-      if (!contractAddressesAndChainIds.has(nftContractAddressAndChainId)) {
+      if (!contractKeys.has(contractKeyFromNFT)) {
         arr.push(getStubMaticCollectionContract(nft.contractAddress))
       }
 
@@ -117,6 +121,9 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
       address: contractAddress.toLowerCase()
     })
 
+    // If the contract is not present in the state, it means that it is a wearable/emote.
+    // In this case, a stub contract is created and added to the state so it can be used
+    // on the rest of the application.
     if (!contract) {
       contract = getStubMaticCollectionContract(contractAddress)
 
