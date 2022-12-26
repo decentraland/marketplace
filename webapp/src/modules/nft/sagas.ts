@@ -20,6 +20,8 @@ import {
   isRentalListingOpen,
   waitUntilRentalChangesStatus
 } from '../rental/utils'
+import { upsertContracts } from '../contract/actions'
+import { Contract } from '../vendor/services'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -37,8 +39,6 @@ import {
   transferNFTransactionSubmitted
 } from './actions'
 import { NFT } from './types'
-import { upsertContracts } from '../contract/actions'
-import { Contract } from '../vendor/services'
 
 export function* nftSaga() {
   yield takeEvery(FETCH_NFTS_REQUEST, handleFetchNFTsRequest)
