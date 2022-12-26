@@ -11,13 +11,13 @@ import { Authorization } from 'decentraland-dapps/dist/modules/authorization/typ
 import { RootState } from '../../modules/reducer'
 import { getContract } from '../../modules/contract/selectors'
 import { Contract } from '../../modules/vendor/services'
+import { upsertContracts } from '../../modules/contract/actions'
 import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch
 } from './AuthorizationModal.types'
 import AuthorizationModal from './AuthorizationModal'
-import { upsertContracts } from '../../modules/contract/actions'
 
 const mapState = (state: RootState): MapStateProps => ({
   authorizations: getAuthorizations(state),
