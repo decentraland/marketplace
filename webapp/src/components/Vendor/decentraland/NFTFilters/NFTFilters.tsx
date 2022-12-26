@@ -11,7 +11,7 @@ import {
   Icon,
   NotMobile
 } from 'decentraland-ui'
-import { EmotePlayMode, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, Network, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { SortBy } from '../../../../modules/routing/types'
@@ -187,13 +187,6 @@ const NFTFilters = (props: Props) => {
   const handleTypeByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
       onBrowse({ assetType: props.value as AssetType })
-    },
-    [onBrowse]
-  )
-
-  const handleRaritiesChange = useCallback(
-    (options: string[]) => {
-      onBrowse({ rarities: options as Rarity[] })
     },
     [onBrowse]
   )
@@ -388,7 +381,6 @@ const NFTFilters = (props: Props) => {
             assetType={assetType}
             selectedNetwork={network}
             selectedCollection={contracts[0]}
-            selectedRarities={rarities}
             selectedGenders={isWearableCategory ? wearableGenders : undefined}
             selectedEmotePlayMode={isEmoteCategory ? emotePlayMode : undefined}
             contracts={allContracts}
@@ -398,7 +390,6 @@ const NFTFilters = (props: Props) => {
             onGendersChange={
               isWearableCategory ? handleGendersChange : undefined
             }
-            onRaritiesChange={handleRaritiesChange}
             onNetworkChange={
               isWearableCategory ? handleNetworkChange : undefined
             }
@@ -447,7 +438,6 @@ const NFTFilters = (props: Props) => {
                 contracts={allContracts}
                 selectedNetwork={network}
                 selectedCollection={contracts[0]}
-                selectedRarities={rarities}
                 selectedGenders={
                   isWearableCategory ? wearableGenders : undefined
                 }
@@ -460,7 +450,6 @@ const NFTFilters = (props: Props) => {
                 onGendersChange={
                   isWearableCategory ? handleGendersChange : undefined
                 }
-                onRaritiesChange={handleRaritiesChange}
                 onNetworkChange={
                   isWearableCategory ? handleNetworkChange : undefined
                 }

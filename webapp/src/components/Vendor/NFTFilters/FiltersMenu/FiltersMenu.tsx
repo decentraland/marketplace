@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
-import { EmotePlayMode, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, Network, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Row,
@@ -41,7 +41,6 @@ const getContracts = (
 const FiltersMenu = (props: Props) => {
   const {
     selectedCollection,
-    selectedRarities,
     selectedGenders,
     selectedNetwork,
     selectedEmotePlayMode,
@@ -49,7 +48,6 @@ const FiltersMenu = (props: Props) => {
     contracts,
     availableContracts,
     onCollectionsChange,
-    onRaritiesChange,
     onGendersChange,
     onNetworkChange,
     onEmotePlayModeChange,
@@ -74,16 +72,6 @@ const FiltersMenu = (props: Props) => {
         }))
     ]
   }, [availableContracts, category, contracts])
-
-  const rarityOptions = useMemo(() => {
-    const options = Object.values(Rarity)
-      .filter(value => typeof value === 'string')
-      .reverse() as string[]
-    return options.map(rarity => ({
-      value: rarity,
-      text: t(`rarity.${rarity}`)
-    }))
-  }, [])
 
   const genderOptions = useMemo(() => {
     const options = Object.values(WearableGender)
@@ -197,14 +185,6 @@ const FiltersMenu = (props: Props) => {
         )}
       </Row>
       <Row>
-        <Column>
-          <ArrayFilter
-            name={t('nft_filters.rarity')}
-            values={selectedRarities}
-            options={rarityOptions}
-            onChange={onRaritiesChange}
-          />
-        </Column>
         {selectedGenders !== undefined && (
           <Column>
             <ArrayFilter

@@ -32,7 +32,7 @@ export const PriceFilter = ({ onChange, minPrice, maxPrice }: PriceFilterProps) 
   }, [setValue, onChange])
 
   return (
-    <Box header={t('filters.price')} collapsible>
+    <Box header={t('filters.price')} className="filters-sidebar-box" collapsible>
       <RangeField onChange={handlePriceChange} value={value} />
     </Box>
   )
