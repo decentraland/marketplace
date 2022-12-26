@@ -42,9 +42,10 @@ export const RentalsLaunchModal = ({
   const [isOpen, setIsOpen] = useState<boolean>(false)
   useEffect(() => {
     setIsOpen(
-      !localStorage.getItem(RENTAL_PROMO_POPUP_KEY) &&
+      (!localStorage.getItem(RENTAL_PROMO_POPUP_KEY) &&
         hasLoadedInitialFlags &&
-        isRentalsLaunchPopupEnabled
+        isRentalsLaunchPopupEnabled) ||
+        true
     )
   }, [hasLoadedInitialFlags, isRentalsLaunchPopupEnabled])
 
@@ -69,7 +70,11 @@ export const RentalsLaunchModal = ({
         </Button>
         <Button
           as={Link}
-          to={locations.lands({ onlyOnRent: true })}
+          to={locations.lands({
+            onlyOnRent: true,
+            isFullscreen: false,
+            isMap: false
+          })}
           onClick={onClose}
           primary
         >
