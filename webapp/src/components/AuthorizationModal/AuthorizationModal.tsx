@@ -11,11 +11,11 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 
 import { locations } from '../../modules/routing/locations'
+import { isStubMaticCollectionContract } from '../../modules/contract/utils'
+import ERC721ABI from '../../contracts/ERC721.json'
 import { isAuthorized } from '../SettingsPage/Authorization/utils'
 import { Authorization } from '../SettingsPage/Authorization'
 import { Props } from './AuthorizationModal.types'
-import { isStubMaticCollectionContract } from '../../modules/contract/utils'
-import ERC721ABI from '../../contracts/ERC721.json'
 
 import './AuthorizationModal.css'
 
