@@ -29,7 +29,7 @@ describe('when handling the fetch contracts request', () => {
   })
 
   describe('when the api call is successful', () => {
-    it('should put a success action with contracts', () => {
+    it('should put a success action with contracts and put a request for authorizations without the one that is already stored', () => {
       const address = '0x123'
 
       mockGetContracts = jest
@@ -186,7 +186,19 @@ describe('when handling the fetch contracts request', () => {
             }),
             rentals
           ],
-          [select(getAuthorizations), []]
+          [
+            select(getAuthorizations),
+            [
+              {
+                address,
+                authorizedAddress: rentals.address,
+                contractAddress: manaEthereum.address,
+                contractName: ContractName.MANAToken,
+                chainId: ChainId.ETHEREUM_GOERLI,
+                type: AuthorizationType.ALLOWANCE
+              }
+            ]
+          ]
         ])
         .put(fetchContractsSuccess([]))
         .put(
@@ -237,14 +249,6 @@ describe('when handling the fetch contracts request', () => {
               contractAddress: manaMatic.address,
               contractName: ContractName.MANAToken,
               chainId: ChainId.MATIC_MUMBAI,
-              type: AuthorizationType.ALLOWANCE
-            },
-            {
-              address,
-              authorizedAddress: rentals.address,
-              contractAddress: manaEthereum.address,
-              contractName: ContractName.MANAToken,
-              chainId: ChainId.ETHEREUM_GOERLI,
               type: AuthorizationType.ALLOWANCE
             }
           ])
