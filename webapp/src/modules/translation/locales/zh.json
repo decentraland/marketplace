@@ -614,6 +614,7 @@
     "authorization_Marketplace_MANAToken": "MANA",
     "for_selling": "出售",
     "for_renting": "出租",
+    "for_minting": "铸造用",
     "pending_tx": "待处理的交易，请单击微调器以转到活动详细状态"
   },
   "authorization": {

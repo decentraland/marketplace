@@ -619,6 +619,7 @@
     "authorization_Marketplace_MANAToken": "MANA",
     "for_selling": "For selling",
     "for_renting": "For renting",
+    "for_minting": "For minting",
     "pending_tx": "Transaction pending, click the spinner to go to your activity for a detailed status"
   },
   "authorization": {

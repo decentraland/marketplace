@@ -2,6 +2,8 @@ import {
   loadingReducer,
   LoadingState
 } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { config } from '../../config'
+import { contracts } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
 import {
   FetchContractsFailureAction,
@@ -9,8 +11,12 @@ import {
   FetchContractsSuccessAction,
   FETCH_CONTRACTS_FAILURE,
   FETCH_CONTRACTS_REQUEST,
-  FETCH_CONTRACTS_SUCCESS
+  FETCH_CONTRACTS_SUCCESS,
+  UpsertContractsAction,
+  UPSERT_CONTRACTS
 } from './actions'
+import { Network } from './types'
+import { upsertContracts } from './utils'
 
 export type ContractState = {
   data: Contract[]
@@ -18,8 +24,14 @@ export type ContractState = {
   error: string | null
 }
 
+const network = config.get('NETWORK') as Network
+const networkContracts = contracts[network].map(contract => ({
+  ...contract,
+  address: contract.address.toLowerCase()
+}))
+
 export const INITIAL_STATE: ContractState = {
-  data: [],
+  data: networkContracts as Contract[],
   loading: [],
   error: null
 }
@@ -28,29 +40,32 @@ type ContractReducerAction =
   | FetchContractsRequestAction
   | FetchContractsSuccessAction
   | FetchContractsFailureAction
+  | UpsertContractsAction
 
 export function contractReducer(
   state = INITIAL_STATE,
   action: ContractReducerAction
 ): ContractState {
   switch (action.type) {
-    case FETCH_CONTRACTS_REQUEST:
+    case FETCH_CONTRACTS_REQUEST: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action)
       }
+    }
 
-    case FETCH_CONTRACTS_SUCCESS:
+    case FETCH_CONTRACTS_SUCCESS: {
       const { contracts } = action.payload
 
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
-        data: contracts
+        data: upsertContracts(state.data, contracts)
       }
+    }
 
-    case FETCH_CONTRACTS_FAILURE:
+    case FETCH_CONTRACTS_FAILURE: {
       const { error } = action.payload
 
       return {
@@ -58,6 +73,17 @@ export function contractReducer(
         loading: loadingReducer(state.loading, action),
         error
       }
+    }
+
+    case UPSERT_CONTRACTS: {
+      const { contracts } = action.payload
+
+      return {
+        ...state,
+        data: upsertContracts(state.data, contracts)
+      }
+    }
+
     default:
       return state
   }

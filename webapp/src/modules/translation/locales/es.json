@@ -612,6 +612,7 @@
     "authorization_Marketplace_MANAToken": "MANA",
     "for_selling": "Para vender",
     "for_renting": "Para alquilar",
+    "for_minting": "Para acuñar",
     "pending_tx": "Transaccion pendiente, haz click aquí para ir a tu pantalla de actividad y ver más información"
   },
   "authorization": {

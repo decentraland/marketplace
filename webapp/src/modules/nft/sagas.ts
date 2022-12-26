@@ -9,12 +9,19 @@ import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getContract, getContracts } from '../contract/selectors'
 import { VendorName } from '../vendor/types'
 import { AwaitFn } from '../types'
-import { getOrWaitForContracts } from '../contract/utils'
+import {
+  getContractKey,
+  getContractKeyFromNFT,
+  getOrWaitForContracts,
+  getStubMaticCollectionContract
+} from '../contract/utils'
 import { getRentalById } from '../rental/selectors'
 import {
   isRentalListingOpen,
   waitUntilRentalChangesStatus
 } from '../rental/utils'
+import { upsertContracts } from '../contract/actions'
+import { Contract } from '../vendor/services'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -41,19 +48,17 @@ export function* nftSaga() {
 
 function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   const { options, timestamp } = action.payload
-  const { vendor: VendorName, filters } = options
-  const contracts: ReturnType<typeof getContracts> = yield select(getContracts)
+  const { vendor: vendorName, filters } = options
 
   const params = {
     ...DEFAULT_BASE_NFT_PARAMS,
-    ...action.payload.options.params,
-    contracts
+    ...action.payload.options.params
   }
 
   try {
     const vendor: Vendor<VendorName> = yield call(
       VendorFactory.build,
-      VendorName
+      vendorName
     )
 
     const [
@@ -67,6 +72,28 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       params,
       filters
     )
+
+    const contracts: Contract[] = yield select(getContracts)
+
+    const contractKeys = new Set(contracts.map(getContractKey))
+
+    // From the obtained nfts, it will check if there are contracts stored for each of them.
+    // Any nft that doesn't have a matching contract will have a stub one created and stored
+    // So it can be used on the rest of the application.
+    // Only wearables and emotes will have a stub contract created.
+    const newContracts = nfts.reduce((arr, nft) => {
+      const contractKeyFromNFT = getContractKeyFromNFT(nft)
+
+      if (!contractKeys.has(contractKeyFromNFT)) {
+        arr.push(getStubMaticCollectionContract(nft.contractAddress))
+      }
+
+      return arr
+    }, [] as Contract[])
+
+    if (newContracts.length > 0) {
+      yield put(upsertContracts(newContracts))
+    }
 
     yield put(
       fetchNFTsSuccess(
@@ -90,11 +117,20 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   try {
     yield call(getOrWaitForContracts)
 
-    const contract: ReturnType<typeof getContract> = yield select(getContract, {
-      address: contractAddress
+    let contract: ReturnType<typeof getContract> = yield select(getContract, {
+      address: contractAddress.toLowerCase()
     })
 
-    if (!contract || !contract.vendor) {
+    // If the contract is not present in the state, it means that it is a wearable/emote.
+    // In this case, a stub contract is created and added to the state so it can be used
+    // on the rest of the application.
+    if (!contract) {
+      contract = getStubMaticCollectionContract(contractAddress)
+
+      yield put(upsertContracts([contract]))
+    }
+
+    if (!contract.vendor) {
       throw new Error(
         `Couldn't find a valid vendor for contract ${contract?.address}`
       )
