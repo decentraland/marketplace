@@ -31,17 +31,12 @@ import { NFT, NFTsFetchOptions, NFTsFetchParams } from './types'
 import { View } from '../ui/types'
 import { Account } from '../account/types'
 import { getContract, getContracts, getLoading } from '../contract/selectors'
-import { waitUntilRentalChangesStatus } from '../rental/utils'
-import { getRentalById } from '../rental/selectors'
-import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 import { upsertContracts } from '../contract/actions'
 import { getStubMaticCollectionContract } from '../contract/utils'
+import { waitUntilRentalChangesStatus } from '../rental/utils'
+import { getRentalById } from '../rental/selectors'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
-
-const mockGetChainIdByNetwork = getChainIdByNetwork as jest.MockedFunction<
-  typeof getChainIdByNetwork
->
 
 describe('when handling the fetch NFTs request action', () => {
   let dateSpy: jest.SpyInstance<number, []>
