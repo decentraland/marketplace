@@ -21,15 +21,15 @@ import {
 } from '../../modules/contract/selectors'
 import { Contract } from '../../modules/vendor/services'
 import {
+  fetchContractsRequest,
+  FETCH_CONTRACTS_REQUEST
+} from '../../modules/contract/actions'
+import {
   MapStateProps,
   MapDispatch,
   MapDispatchProps
 } from './SettingsPage.types'
 import SettingsPage from './SettingsPage'
-import {
-  fetchContractsRequest,
-  FETCH_CONTRACTS_REQUEST
-} from '../../modules/contract/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   const wallet = getWallet(state)
