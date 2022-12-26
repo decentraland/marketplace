@@ -191,7 +191,6 @@ describe('when calling getAuthorizationKey', () => {
 })
 
 describe('when calling getStubMaticCollectionContract', () => {
-  describe('and the provided address is upper case', () => {
     it('should return stub matic collection contract with the address lowercased', () => {
       expect(getStubMaticCollectionContract('ADDRESS')).toEqual({
         address: 'address',
@@ -202,7 +201,6 @@ describe('when calling getStubMaticCollectionContract', () => {
         vendor: VendorName.DECENTRALAND
       })
     })
-  })
 })
 
 describe('when calling isStubMaticCollectionContract', () => {
