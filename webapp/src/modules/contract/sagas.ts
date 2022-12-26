@@ -231,6 +231,9 @@ export function* handleFetchContractsSuccess() {
     }
   }
 
+  // Remove the authorizations that are already in the state. 
+  // This prevents authorizations from being duplicated in the state, as well
+  // as preventing unnecessary extra calls.
   const stateAuthorizations: Authorization[] = yield select(getAuthorizations)
 
   const stateAuthorizationsMap = stateAuthorizations.reduce(
