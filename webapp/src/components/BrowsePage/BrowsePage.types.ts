@@ -8,6 +8,7 @@ export type Props = {
   section: Section
   isCampaignCollectiblesBannerEnabled: boolean
   isFullscreen?: boolean
+  contracts: string[]
 }
 
 export type MapStateProps = Pick<
@@ -17,6 +18,7 @@ export type MapStateProps = Pick<
   | 'assetType'
   | 'section'
   | 'isCampaignCollectiblesBannerEnabled'
+  | 'contracts'
 >
 export type MapDispatchProps = {}
 export type MapDispatch = {}
