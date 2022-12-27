@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { Network } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
 import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
@@ -25,6 +26,8 @@ import { Asset, AssetType } from '../../modules/asset/types'
 import { getRentalById } from '../../modules/rental/selectors'
 import { getOpenRentalId } from '../../modules/rental/utils'
 import { FetchOneOptions } from '../../modules/vendor'
+import { getContract } from '../../modules/contract/selectors'
+import { ContractName } from '../../modules/vendor/decentraland'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -32,6 +35,7 @@ import {
   OwnProps
 } from './AssetProvider.types'
 import AssetProvider from './AssetProvider'
+
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   let contractAddress = ownProps.contractAddress
@@ -64,6 +68,21 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const openRentalId = getOpenRentalId(asset)
   const rental = openRentalId ? getRentalById(state, openRentalId) : null
 
+  const landContract = getContract(state, {
+    name: ContractName.LAND,
+    network: Network.ETHEREUM
+  })
+
+  const estateContract = getContract(state, {
+    name: ContractName.ESTATES,
+    network: Network.ETHEREUM
+  })
+
+  const isLandOrEstate =
+    !!contractAddress &&
+    (contractAddress === landContract?.address ||
+      contractAddress === estateContract?.address)
+
   return {
     tokenId,
     contractAddress,
@@ -74,7 +93,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     isLoadingFeatureFlags: isLoadingType(
       getIsLoadingFeatureFlags(state),
       FETCH_APPLICATION_FEATURES_REQUEST
-    )
+    ),
+    isLandOrEstate
   }
 }
 

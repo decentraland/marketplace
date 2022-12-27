@@ -15,10 +15,12 @@ const AssetProvider = (props: Props) => {
     contractAddress,
     tokenId,
     rentalStatus,
-    isLoadingFeatureFlags
+    isLoadingFeatureFlags,
+    isLandOrEstate
   } = props
 
   const [hasLoadedInitialFlags, setHasLoadedInitialFlags] = useState(false)
+
   useEffect(() => {
     if (!isLoadingFeatureFlags) {
       setHasLoadedInitialFlags(true)
@@ -30,7 +32,9 @@ const AssetProvider = (props: Props) => {
       switch (type) {
         case AssetType.NFT:
           if (hasLoadedInitialFlags) {
-            onFetchNFT(contractAddress, tokenId, { rentalStatus })
+            onFetchNFT(contractAddress, tokenId, {
+              rentalStatus: isLandOrEstate ? rentalStatus : undefined
+            })
           }
           break
         case AssetType.ITEM:
@@ -49,7 +53,8 @@ const AssetProvider = (props: Props) => {
     onFetchItem,
     rentalStatus,
     hasLoadedInitialFlags,
-    isLoading
+    isLoading,
+    isLandOrEstate
   ])
 
   return (
