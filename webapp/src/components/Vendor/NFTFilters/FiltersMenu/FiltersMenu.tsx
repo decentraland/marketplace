@@ -146,6 +146,7 @@ const FiltersMenu = (props: Props) => {
           options={collectionOptions}
           onChange={newVal =>
             // We need to send undefined for the ALL_FILTER_OPTION because we don't want it to be added to the url.
+            // This was causing a bug where the contracts with address "ALL" would be fetched and bring no results.
             onCollectionsChange(
               newVal === ALL_FILTER_OPTION ? undefined : newVal
             )
