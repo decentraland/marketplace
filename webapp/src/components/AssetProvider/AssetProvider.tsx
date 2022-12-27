@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { AssetType } from '../../modules/asset/types'
 import { Props } from './AssetProvider.types'
 
@@ -15,10 +15,14 @@ const AssetProvider = (props: Props) => {
     contractAddress,
     tokenId,
     rentalStatus,
-    isLoadingFeatureFlags
+    isLoadingFeatureFlags,
+    isLandOrEstate
   } = props
 
   const [hasLoadedInitialFlags, setHasLoadedInitialFlags] = useState(false)
+
+  const hasFetchedOnce = useRef(false)
+
   useEffect(() => {
     if (!isLoadingFeatureFlags) {
       setHasLoadedInitialFlags(true)
@@ -26,15 +30,29 @@ const AssetProvider = (props: Props) => {
   }, [isLoadingFeatureFlags])
 
   useEffect(() => {
-    if (contractAddress && tokenId && asset === null && !isLoading) {
+    hasFetchedOnce.current = false
+  }, [contractAddress, tokenId])
+
+  useEffect(() => {
+    if (
+      contractAddress &&
+      tokenId &&
+      asset === null &&
+      !isLoading &&
+      !hasFetchedOnce.current
+    ) {
       switch (type) {
         case AssetType.NFT:
           if (hasLoadedInitialFlags) {
-            onFetchNFT(contractAddress, tokenId, { rentalStatus })
+            onFetchNFT(contractAddress, tokenId, {
+              rentalStatus: isLandOrEstate ? rentalStatus : undefined
+            })
+            hasFetchedOnce.current = true
           }
           break
         case AssetType.ITEM:
           onFetchItem(contractAddress, tokenId)
+          hasFetchedOnce.current = true
           break
         default:
           throw new Error(`Invalid Asset type ${type}`)
@@ -49,7 +67,8 @@ const AssetProvider = (props: Props) => {
     onFetchItem,
     rentalStatus,
     hasLoadedInitialFlags,
-    isLoading
+    isLoading,
+    isLandOrEstate
   ])
 
   return (

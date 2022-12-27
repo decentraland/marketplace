@@ -8,13 +8,15 @@ export enum ContractName {
   LEGACY_MARKETPLACE = 'LegacyMarketplace',
   BIDS = 'Bids',
   COLLECTION_STORE = 'CollectionStore',
-  RENTALS = 'Rentals'
+  RENTALS = 'Rentals',
+  LAND = 'LAND',
+  ESTATES = 'Estates',
 }
 
 const nftServerReplicatedMarketplaceContracts = {
   [AppNetwork.MAINNET]: [
     {
-      name: 'LAND',
+      name: ContractName.LAND,
       address: '0xf87e31492faf9a91b02ee0deaad50d51d56d5d4d',
       vendor: 'decentraland',
       category: NFTCategory.PARCEL,
@@ -22,7 +24,7 @@ const nftServerReplicatedMarketplaceContracts = {
       chainId: ChainId.ETHEREUM_MAINNET
     },
     {
-      name: 'Estates',
+      name: ContractName.ESTATES,
       address: '0x959e104e1a4db6317fa58f8295f586e1a978c297',
       vendor: 'decentraland',
       category: NFTCategory.ESTATE,
@@ -376,7 +378,7 @@ const nftServerReplicatedMarketplaceContracts = {
   ],
   [AppNetwork.GOERLI]: [
     {
-      name: 'LAND',
+      name: ContractName.LAND,
       address: '0x25b6B4bac4aDB582a0ABd475439dA6730777Fbf7',
       vendor: 'decentraland',
       category: NFTCategory.PARCEL,
@@ -384,7 +386,7 @@ const nftServerReplicatedMarketplaceContracts = {
       chainId: ChainId.ETHEREUM_GOERLI
     },
     {
-      name: 'Estates',
+      name: ContractName.ESTATES,
       address: '0xC9A46712E6913c24d15b46fF12221a79c4e251DC',
       vendor: 'decentraland',
       category: NFTCategory.ESTATE,
