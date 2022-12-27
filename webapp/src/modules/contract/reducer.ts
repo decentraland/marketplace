@@ -12,6 +12,8 @@ import {
   FETCH_CONTRACTS_FAILURE,
   FETCH_CONTRACTS_REQUEST,
   FETCH_CONTRACTS_SUCCESS,
+  ResetHasFetchedAction,
+  RESET_HAS_FETCHED,
   UpsertContractsAction,
   UPSERT_CONTRACTS
 } from './actions'
@@ -22,6 +24,7 @@ export type ContractState = {
   data: Contract[]
   loading: LoadingState
   error: string | null
+  hasFetched: boolean
 }
 
 const network = config.get('NETWORK') as Network
@@ -33,7 +36,8 @@ const networkContracts = contracts[network].map(contract => ({
 export const INITIAL_STATE: ContractState = {
   data: networkContracts as Contract[],
   loading: [],
-  error: null
+  error: null,
+  hasFetched: false
 }
 
 type ContractReducerAction =
@@ -41,6 +45,7 @@ type ContractReducerAction =
   | FetchContractsSuccessAction
   | FetchContractsFailureAction
   | UpsertContractsAction
+  | ResetHasFetchedAction
 
 export function contractReducer(
   state = INITIAL_STATE,
@@ -61,7 +66,8 @@ export function contractReducer(
         ...state,
         loading: loadingReducer(state.loading, action),
         error: null,
-        data: upsertContracts(state.data, contracts)
+        data: upsertContracts(state.data, contracts),
+        hasFetched: true
       }
     }
 
@@ -81,6 +87,13 @@ export function contractReducer(
       return {
         ...state,
         data: upsertContracts(state.data, contracts)
+      }
+    }
+
+    case RESET_HAS_FETCHED: {
+      return {
+        ...state,
+        hasFetched: false
       }
     }
 

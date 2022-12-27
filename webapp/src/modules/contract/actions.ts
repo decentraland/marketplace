@@ -33,3 +33,11 @@ export const upsertContracts = (contracts: Contract[]) =>
   action(UPSERT_CONTRACTS, { contracts })
 
 export type UpsertContractsAction = ReturnType<typeof upsertContracts>
+
+// RESET HAS FETCHED
+
+export const RESET_HAS_FETCHED = 'Reset has fetched'
+
+export const resetHasFetched = () => action(RESET_HAS_FETCHED, {})
+
+export type ResetHasFetchedAction = ReturnType<typeof resetHasFetched>

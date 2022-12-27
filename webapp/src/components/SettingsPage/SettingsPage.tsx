@@ -23,8 +23,8 @@ const SettingsPage = (props: Props) => {
     wallet,
     authorizations,
     isLoading,
-    isConnecting,
     hasError,
+    hasFetchedContracts,
     getContract,
     onNavigate,
     onFetchContracts
@@ -33,14 +33,25 @@ const SettingsPage = (props: Props) => {
   const [hasCopiedText, setHasCopiedAddress] = useTimer(1200)
 
   useEffect(() => {
-    if (!isConnecting && !wallet) {
+    if (!wallet) {
       onNavigate(locations.signIn())
     }
-  }, [isConnecting, wallet, onNavigate])
+  }, [wallet, onNavigate])
 
   useEffect(() => {
-    onFetchContracts()
-  }, [onFetchContracts, wallet?.address])
+    // When this condition is met, the previous useEffect will redirect to the sign in page.
+    // However without checking here as well, the contracts will be fetched unnecessarily on the redirect as well
+    // causing an extra call.
+    if (!wallet) {
+      return
+    }
+
+    // Only fetch the contracts if they were not already fetched.
+    // hasFetchedContracts is reset to false whenever the connected account changes.
+    if (!hasFetchedContracts && !isLoading) {
+      onFetchContracts()
+    }
+  }, [onFetchContracts, hasFetchedContracts, isLoading, wallet])
 
   const contractNames = getContractNames()
 
@@ -106,7 +117,8 @@ const SettingsPage = (props: Props) => {
       contract &&
       contract.category !== null &&
       authorization.authorizedAddress !== rentals.address &&
-      authorization.address === wallet!.address
+      wallet &&
+      authorization.address === wallet.address
     )
   })
 
@@ -125,7 +137,8 @@ const SettingsPage = (props: Props) => {
       contract &&
       isParcelOrEstate &&
       authorization.authorizedAddress === rentals.address &&
-      authorization.address === wallet!.address
+      wallet &&
+      authorization.address === wallet.address
     )
   })
 
@@ -134,9 +147,7 @@ const SettingsPage = (props: Props) => {
       <Navbar isFullscreen />
       <Navigation />
       <Page className="SettingsPage">
-        {isConnecting ? (
-          <Loader size="massive" active />
-        ) : wallet ? (
+        {wallet ? (
           <Grid>
             <Grid.Row>
               <Grid.Column

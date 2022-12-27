@@ -1,8 +1,14 @@
 import { ChainId, Network } from '@dcl/schemas'
-import { fetchAuthorizationsRequest } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
+import { ContractName } from 'decentraland-transactions'
+import { fetchAuthorizationsRequest } from 'decentraland-dapps/dist/modules/authorization/actions'
+import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
+import {
+  changeAccount,
+  connectWalletSuccess
+} from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getContractNames, VendorName } from '../vendor'
 import { services as decentraland } from '../vendor/decentraland'
 import { Contract } from '../vendor/services'
@@ -10,22 +16,29 @@ import { getAddress } from '../wallet/selectors'
 import {
   fetchContractsFailure,
   fetchContractsRequest,
-  fetchContractsSuccess
+  fetchContractsSuccess,
+  resetHasFetched
 } from './actions'
 import { contractSaga } from './sagas'
-import { getContract, getContracts } from './selectors'
-
-import util from 'util'
-import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
-import { ContractName } from 'decentraland-transactions'
-
-util.inspect.defaultOptions.depth = null
+import { getContract, getContracts, getHasFetched } from './selectors'
 
 describe('when handling the fetch contracts request', () => {
   let mockGetContracts: jest.SpyInstance<Promise<Contract[]>>
 
   afterEach(() => {
-    mockGetContracts.mockClear()
+    if (mockGetContracts) {
+      mockGetContracts.mockClear()
+    }
+  })
+
+  describe('when contracts have already been fetched', () => {
+    it('should put a failure action with an already fetched message', () => {
+      return expectSaga(contractSaga)
+        .provide([[select(getHasFetched), true]])
+        .put(fetchContractsFailure('Contracts have already been fetched'))
+        .dispatch(fetchContractsRequest())
+        .silentRun()
+    })
   })
 
   describe('when the api call is successful', () => {
@@ -121,6 +134,7 @@ describe('when handling the fetch contracts request', () => {
 
       return expectSaga(contractSaga)
         .provide([
+          [select(getHasFetched), false],
           [select(getContracts), []],
           [select(getAddress), address],
           [
@@ -264,9 +278,28 @@ describe('when handling the fetch contracts request', () => {
         .spyOn(decentraland.ContractService.prototype, 'getContracts')
         .mockRejectedValueOnce(new Error('some error'))
       return expectSaga(contractSaga)
+        .provide([[select(getHasFetched), false]])
         .put(fetchContractsFailure('some error'))
         .dispatch(fetchContractsRequest())
         .silentRun()
     })
+  })
+})
+
+describe('when handling an account change', () => {
+  it('should put a reset has fetched action', () => {
+    return expectSaga(contractSaga)
+      .put(resetHasFetched())
+      .dispatch(changeAccount({} as any))
+      .silentRun()
+  })
+})
+
+describe('when handling an account connect success', () => {
+  it('should put a reset has fetched action', () => {
+    return expectSaga(contractSaga)
+      .put(resetHasFetched())
+      .dispatch(connectWalletSuccess({} as any))
+      .silentRun()
   })
 })

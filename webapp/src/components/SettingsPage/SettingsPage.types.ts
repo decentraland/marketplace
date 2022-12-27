@@ -15,6 +15,7 @@ export type Props = {
   isLoading: boolean
   hasError: boolean
   isConnecting: boolean
+  hasFetchedContracts: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onNavigate: (path: string) => void
   onFetchContracts: typeof fetchContractsRequest
@@ -28,6 +29,7 @@ export type MapStateProps = Pick<
   | 'isConnecting'
   | 'hasError'
   | 'getContract'
+  | 'hasFetchedContracts'
 >
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onFetchContracts'>
 export type MapDispatch = Dispatch<

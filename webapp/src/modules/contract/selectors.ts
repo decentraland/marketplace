@@ -7,6 +7,7 @@ export const getState = (state: RootState) => state.contract
 export const getContracts = (state: RootState) => getState(state).data
 export const getError = (state: RootState) => getState(state).error
 export const getLoading = (state: RootState) => getState(state).loading
+export const getHasFetched = (state: RootState) => getState(state).hasFetched
 
 export const getContract = createSelectorCreator(defaultMemoize, isEqual)<
   RootState,
