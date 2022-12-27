@@ -1,6 +1,5 @@
 import { EmotePlayMode, Network } from '@dcl/schemas'
 import { AssetType } from '../../../../modules/asset/types'
-import { Contract } from '../../../../modules/vendor/services'
 
 export type Props = {
   assetType: AssetType
@@ -9,8 +8,6 @@ export type Props = {
   selectedGenders?: string[]
   selectedNetwork?: Network
   selectedEmotePlayMode?: string
-  contracts: Contract[]
-  availableContracts?: string[]
   isOnlySmart?: boolean
   onCollectionsChange: (contract?: string) => void
   onGendersChange?: (options: string[]) => void
