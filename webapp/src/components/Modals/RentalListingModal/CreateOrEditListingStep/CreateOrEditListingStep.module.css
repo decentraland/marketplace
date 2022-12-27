@@ -81,7 +81,6 @@
 
 .expirationDate {
   height: 64px;
-  position: relative;
 }
 
 .expirationDate .info {
@@ -102,6 +101,14 @@
 .actions :global(.ui.primary.button) + :global(.ui.secondary.button) {
   margin-left: 0px;
   margin-top: 15px;
+}
+
+.expirationDate :global(.field) {
+  width: 100% !important;
+}
+
+.expirationDate :global(.dcl.field .ui.input) {
+  width: 100% !important;
 }
 
 @media (max-width: 767px) {
