@@ -5,6 +5,7 @@ import {
   fetchContractsRequest,
   fetchContractsSuccess,
   FETCH_CONTRACTS_REQUEST,
+  resetHasFetched,
   upsertContracts
 } from './actions'
 import { contractReducer } from './reducer'
@@ -33,13 +34,15 @@ describe('when fetch contract success action is received', () => {
       {
         loading: [{ type: FETCH_CONTRACTS_REQUEST }],
         error: 'some error',
-        data: []
+        data: [],
+        hasFetched: false
       },
       fetchContractsSuccess([contractSample] as Contract[])
     )
     expect(newState.loading.length).toBe(0)
     expect(newState.data).toStrictEqual([contractSample])
     expect(newState.error).toBeNull()
+    expect(newState.hasFetched).toBeTruthy()
   })
 })
 
@@ -49,7 +52,8 @@ describe('when fetch contract failure action is received', () => {
       {
         loading: [{ type: FETCH_CONTRACTS_REQUEST }],
         error: 'some error',
-        data: []
+        data: [],
+        hasFetched: false
       },
       fetchContractsFailure('some other error')
     )
@@ -76,7 +80,8 @@ describe('when upsert contracts action is received', () => {
         {
           loading: [],
           error: null,
-          data: [contract]
+          data: [contract],
+          hasFetched: false
         },
         upsertContracts([newContract])
       )
@@ -97,12 +102,61 @@ describe('when upsert contracts action is received', () => {
         {
           loading: [],
           error: null,
-          data: []
+          data: [],
+          hasFetched: false
         },
         upsertContracts([newContract])
       )
 
       expect(newState.data).toEqual([newContract])
+    })
+  })
+})
+
+describe('when the reset of the the has fetched flag is received', () => {
+  let hasFetched = false
+
+  describe('when has fetched was true', () => {
+    beforeEach(() => {
+      hasFetched = true
+    })
+
+    it('should set has fetched to false', () => {
+      const newState = contractReducer(
+        {
+          loading: [],
+          error: null,
+          data: [],
+          hasFetched: true
+        },
+        resetHasFetched()
+      )
+
+      expect(newState).toStrictEqual({
+        loading: [],
+        error: null,
+        data: [],
+        hasFetched: false
+      })
+    })
+  })
+
+  describe('when has fetched was false', () => {
+    beforeEach(() => {
+      hasFetched = false
+    })
+
+    it('should keep has fetched as false', () => {
+      const state = {
+        loading: [],
+        error: null,
+        data: [],
+        hasFetched: false
+      }
+
+      const newState = contractReducer(state, resetHasFetched())
+
+      expect(newState).toStrictEqual(state)
     })
   })
 })

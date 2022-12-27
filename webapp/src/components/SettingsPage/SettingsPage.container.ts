@@ -17,6 +17,7 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import {
   getContract,
+  getHasFetched,
   getLoading as getContractLoading
 } from '../../modules/contract/selectors'
 import { Contract } from '../../modules/vendor/services'
@@ -51,6 +52,7 @@ const mapState = (state: RootState): MapStateProps => {
       isLoadingType(getContractLoading(state), FETCH_CONTRACTS_REQUEST),
     isConnecting: isConnecting(state),
     hasError,
+    hasFetchedContracts: getHasFetched(state),
     getContract: (query: Partial<Contract>) => getContract(state, query)
   }
 }

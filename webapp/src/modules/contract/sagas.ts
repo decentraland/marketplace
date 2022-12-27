@@ -7,6 +7,10 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import {
+  CHANGE_ACCOUNT,
+  CONNECT_WALLET_SUCCESS
+} from 'decentraland-dapps/dist/modules/wallet/actions'
 import { ContractName } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
 import { getContractNames, VendorFactory, VendorName } from '../vendor'
@@ -16,18 +20,27 @@ import {
   fetchContractsFailure,
   fetchContractsSuccess,
   FETCH_CONTRACTS_REQUEST,
-  FETCH_CONTRACTS_SUCCESS
+  FETCH_CONTRACTS_SUCCESS,
+  resetHasFetched
 } from './actions'
-import { getContract, getContracts } from './selectors'
+import { getContract, getContracts, getHasFetched } from './selectors'
 import { getAuthorizationKey } from './utils'
 
 export function* contractSaga() {
   yield takeEvery(FETCH_CONTRACTS_REQUEST, handleFetchContractsRequest)
   yield takeEvery(FETCH_CONTRACTS_SUCCESS, handleFetchContractsSuccess)
+  yield takeEvery(CHANGE_ACCOUNT, handleChangeAccount)
+  yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
 }
 
 export function* handleFetchContractsRequest() {
   try {
+    const hasFetched: boolean = yield select(getHasFetched)
+
+    if (hasFetched) {
+      throw new Error('Contracts have already been fetched')
+    }
+
     const vendors = Object.values(VendorName).map(VendorFactory.build)
     let contracts: Contract[] = []
 
@@ -231,7 +244,7 @@ export function* handleFetchContractsSuccess() {
     }
   }
 
-  // Remove the authorizations that are already in the state. 
+  // Remove the authorizations that are already in the state.
   // This prevents authorizations from being duplicated in the state, as well
   // as preventing unnecessary extra calls.
   const storeAuthorizations: Authorization[] = yield select(getAuthorizations)
@@ -248,4 +261,12 @@ export function* handleFetchContractsSuccess() {
   )
 
   yield put(fetchAuthorizationsRequest(authorizations))
+}
+
+function* handleChangeAccount() {
+  yield put(resetHasFetched())
+}
+
+function* handleConnectWalletSuccess() {
+  yield put(resetHasFetched())
 }
