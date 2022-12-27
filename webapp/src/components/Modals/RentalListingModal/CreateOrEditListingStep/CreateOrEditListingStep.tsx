@@ -91,7 +91,7 @@ const CreateListingStep = (props: Props) => {
       nft,
       parseMANANumber(pricePerDayInput),
       periodOptions,
-      Number(new Date(`${expiresAt} 00:00:00`)),
+      Number(new Date(expiresAt)),
       UpsertRentalOptType.EDIT
     )
   }, [onCreate, nft, pricePerDayInput, periodOptions, expiresAt])
