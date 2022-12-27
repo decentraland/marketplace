@@ -346,12 +346,13 @@ export function getURLParamArray<T extends string>(
   paramName: string,
   validValues: string[] = []
 ) {
-  const param = getURLParam<T>(search, paramName)
-  return param === null
-    ? []
-    : (param
-        .split(SEARCH_ARRAY_PARAM_SEPARATOR)
-        .filter(item => validValues.includes(item as T)) as T[])
+  let params = new URLSearchParams(search).getAll(paramName) as T[]
+
+  if (validValues.length > 0) {
+    params = params.filter(item => validValues.includes(item))
+  }
+
+  return params
 }
 
 export function getURLParam<T extends string>(
