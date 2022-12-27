@@ -144,7 +144,12 @@ const FiltersMenu = (props: Props) => {
           value={selectedCollection || ALL_FILTER_OPTION}
           clearable={!!selectedCollection}
           options={collectionOptions}
-          onChange={onCollectionsChange}
+          onChange={newVal =>
+            // We need to send undefined for the ALL_FILTER_OPTION because we don't want it to be added to the url.
+            onCollectionsChange(
+              newVal === ALL_FILTER_OPTION ? undefined : newVal
+            )
+          }
         />
         {onNetworkChange !== undefined && (
           <SelectFilter
