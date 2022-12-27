@@ -84,6 +84,8 @@ const SettingsPage = (props: Props) => {
     network: Network.ETHEREUM
   })
 
+  // These contracts are defined in initialization with the redux store, so they should always be defined.
+  // If the settings is shown as blank it's because there is some sort of misconfiguration in the contracts.ts file or the redux store.
   if (
     !collectionStore ||
     !marketplaceEthereum ||
