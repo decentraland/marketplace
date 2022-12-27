@@ -15,8 +15,15 @@ import {
 } from '../../modules/transaction/utils'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
-import { getContract } from '../../modules/contract/selectors'
+import {
+  getContract,
+  getLoading as getContractLoading
+} from '../../modules/contract/selectors'
 import { Contract } from '../../modules/vendor/services'
+import {
+  fetchContractsRequest,
+  FETCH_CONTRACTS_REQUEST
+} from '../../modules/contract/actions'
 import {
   MapStateProps,
   MapDispatch,
@@ -39,10 +46,9 @@ const mapState = (state: RootState): MapStateProps => {
   return {
     wallet,
     authorizations: getAuthorizations(state),
-    isLoadingAuthorization: isLoadingType(
-      getLoading(state),
-      FETCH_AUTHORIZATIONS_REQUEST
-    ),
+    isLoading:
+      isLoadingType(getLoading(state), FETCH_AUTHORIZATIONS_REQUEST) ||
+      isLoadingType(getContractLoading(state), FETCH_CONTRACTS_REQUEST),
     isConnecting: isConnecting(state),
     hasError,
     getContract: (query: Partial<Contract>) => getContract(state, query)
@@ -50,7 +56,8 @@ const mapState = (state: RootState): MapStateProps => {
 }
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path))
+  onNavigate: path => dispatch(push(path)),
+  onFetchContracts: () => dispatch(fetchContractsRequest())
 })
 
 export default connect(mapState, mapDispatch)(SettingsPage)

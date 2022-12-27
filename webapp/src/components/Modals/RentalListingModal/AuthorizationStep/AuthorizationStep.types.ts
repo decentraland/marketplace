@@ -1,4 +1,6 @@
 import {
+  fetchAuthorizationsRequest,
+  FetchAuthorizationsRequestAction,
   grantTokenRequest,
   GrantTokenRequestAction
 } from 'decentraland-dapps/dist/modules/authorization/actions'
@@ -10,15 +12,26 @@ export type Props = {
   isAuthorizing: boolean
   isConfirmingAuthorization: boolean
   address: string
+  error: string | null
+  isFetchingAuthorizations: boolean
   onCancel: () => void
   onAuthorize: typeof grantTokenRequest
-  error: string | null
+  onFetchAuthorizations: typeof fetchAuthorizationsRequest
 }
 
 export type MapStateProps = Pick<
   Props,
-  'address' | 'isAuthorizing' | 'isConfirmingAuthorization' | 'error'
+  | 'address'
+  | 'isAuthorizing'
+  | 'isConfirmingAuthorization'
+  | 'error'
+  | 'isFetchingAuthorizations'
 >
-export type MapDispatchProps = Pick<Props, 'onAuthorize'>
-export type MapDispatch = Dispatch<GrantTokenRequestAction>
+export type MapDispatchProps = Pick<
+  Props,
+  'onAuthorize' | 'onFetchAuthorizations'
+>
+export type MapDispatch = Dispatch<
+  GrantTokenRequestAction | FetchAuthorizationsRequestAction
+>
 export type OwnProps = Pick<Props, 'nft' | 'onCancel'>

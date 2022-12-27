@@ -69,7 +69,11 @@ export const RentalsLaunchModal = ({
         </Button>
         <Button
           as={Link}
-          to={locations.lands({ onlyOnRent: true })}
+          to={locations.lands({
+            onlyOnRent: true,
+            isFullscreen: false,
+            isMap: false
+          })}
           onClick={onClose}
           primary
         >

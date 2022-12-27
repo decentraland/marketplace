@@ -33,10 +33,6 @@ export const getContract = createSelectorCreator(defaultMemoize, isEqual)<
       )
     )
 
-    if (!found) {
-      throw new Error(`Contract not found, query=${JSON.stringify(query)}`)
-    }
-
-    return found
+    return found || null
   }
 )

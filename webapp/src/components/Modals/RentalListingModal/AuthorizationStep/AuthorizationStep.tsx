@@ -25,8 +25,10 @@ const AuthorizationStep = (props: Props) => {
     isAuthorizing,
     isConfirmingAuthorization,
     nft,
+    error,
+    isFetchingAuthorizations,
     onAuthorize,
-    error
+    onFetchAuthorizations
   } = props
 
   // State
@@ -74,6 +76,10 @@ const AuthorizationStep = (props: Props) => {
     }
   }, [error, isConfirmingAuthorization, isAuthorizing])
 
+  useEffect(() => {
+    onFetchAuthorizations([authorization])
+  }, [onFetchAuthorizations, authorization])
+
   return (
     <>
       <ModalNavigation
@@ -81,88 +87,98 @@ const AuthorizationStep = (props: Props) => {
         onClose={!isLoading ? onCancel : undefined}
         onInfo={handleOnInfo}
       />
-      <Modal.Content>
-        <div className={styles.notice}>
-          <T
-            id="rental_modal.authorization_step.notice_line_one"
-            values={{
-              assetType: t(`global.${nft.category}`),
-              link: (
-                <TransactionLink
-                  address={rentalContractData.address}
-                  txHash=""
-                  chainId={rentalContractData.chainId}
-                >
-                  {t('rental_modal.authorization_step.notice_link')}
-                </TransactionLink>
-              )
-            }}
-          />
-        </div>
-        <div className={styles.noticeBox}>
-          <p>
-            <T id="rental_modal.authorization_step.notice_line_two" />
-          </p>
-          <ul>
-            <li>
-              <b>
-                {t(
-                  'rental_modal.authorization_step.notice_line_two_option_one_title'
-                )}
-              </b>
-              :&nbsp;
-              {t(
-                'rental_modal.authorization_step.notice_line_two_option_one_text'
-              )}
-            </li>
-            <li>
-              <b>
-                {t(
-                  'rental_modal.authorization_step.notice_line_two_option_two_title'
-                )}
-              </b>
-              :&nbsp;
-              {t(
-                'rental_modal.authorization_step.notice_line_two_option_two_text'
-              )}
-            </li>
-          </ul>
-        </div>
-      </Modal.Content>
-      <Modal.Actions className={styles.actions}>
-        {isConfirmingAuthorization ? (
-          <div className={styles.confirmTransaction}>
-            <Loader
-              active
-              size="small"
-              className={styles.confirmTransactionLoader}
-            />
-            <p>{t('rental_modal.authorization_step.confirm')}</p>
+      {isFetchingAuthorizations ? (
+        <Modal.Content>
+          <div className={styles.loaderContainer}>
+            <Loader active size="small" inline />
           </div>
-        ) : (
-          <Button
-            primary
-            loading={isLoading}
-            onClick={handleSubmit}
-            disabled={isLoading}
-          >
-            {t('global.proceed')}
-          </Button>
-        )}
-        <Button onClick={handleCancel} disabled={isLoading}>
-          {t('global.cancel')}
-        </Button>
-        {showError && (
-          <Message
-            className={styles.errorMessage}
-            error
-            size="tiny"
-            visible
-            content={error}
-            header={t('global.error')}
-          />
-        )}
-      </Modal.Actions>
+        </Modal.Content>
+      ) : (
+        <>
+          <Modal.Content>
+            <div className={styles.notice}>
+              <T
+                id="rental_modal.authorization_step.notice_line_one"
+                values={{
+                  assetType: t(`global.${nft.category}`),
+                  link: (
+                    <TransactionLink
+                      address={rentalContractData.address}
+                      txHash=""
+                      chainId={rentalContractData.chainId}
+                    >
+                      {t('rental_modal.authorization_step.notice_link')}
+                    </TransactionLink>
+                  )
+                }}
+              />
+            </div>
+            <div className={styles.noticeBox}>
+              <p>
+                <T id="rental_modal.authorization_step.notice_line_two" />
+              </p>
+              <ul>
+                <li>
+                  <b>
+                    {t(
+                      'rental_modal.authorization_step.notice_line_two_option_one_title'
+                    )}
+                  </b>
+                  :&nbsp;
+                  {t(
+                    'rental_modal.authorization_step.notice_line_two_option_one_text'
+                  )}
+                </li>
+                <li>
+                  <b>
+                    {t(
+                      'rental_modal.authorization_step.notice_line_two_option_two_title'
+                    )}
+                  </b>
+                  :&nbsp;
+                  {t(
+                    'rental_modal.authorization_step.notice_line_two_option_two_text'
+                  )}
+                </li>
+              </ul>
+            </div>
+          </Modal.Content>
+          <Modal.Actions className={styles.actions}>
+            {isConfirmingAuthorization ? (
+              <div className={styles.confirmTransaction}>
+                <Loader
+                  active
+                  size="small"
+                  className={styles.confirmTransactionLoader}
+                />
+                <p>{t('rental_modal.authorization_step.confirm')}</p>
+              </div>
+            ) : (
+              <Button
+                primary
+                loading={isLoading}
+                onClick={handleSubmit}
+                disabled={isLoading}
+              >
+                {t('global.proceed')}
+              </Button>
+            )}
+            <Button onClick={handleCancel} disabled={isLoading}>
+              {t('global.cancel')}
+            </Button>
+            {showError && (
+              <Message
+                className={styles.errorMessage}
+                error
+                size="tiny"
+                visible
+                content={error}
+                header={t('global.error')}
+              />
+            )}
+          </Modal.Actions>
+        </>
+      )}
     </>
   )
 }

@@ -1,12 +1,5 @@
-@media not (max-width: 767px) {
-  :global(.ui.modal).launchModal {
-    top: 15px;
-    right: 15px;
-  }
-}
-
 :global(.ui.dimmer).dimmerRemover {
-  background-color: unset;
+  background-color: rgba(0,0,0,0.50)
 }
 
 :global(.ui.medium.image).rentalImage {
