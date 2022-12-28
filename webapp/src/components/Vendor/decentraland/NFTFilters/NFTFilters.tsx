@@ -206,13 +206,6 @@ const NFTFilters = (props: Props) => {
     [onBrowse]
   )
 
-  const handleCollectionsChange = useCallback(
-    (contract?: string) => {
-      onBrowse({ contracts: contract ? [contract] : undefined })
-    },
-    [onBrowse]
-  )
-
   const handleSearch = useCallback(
     (newSearch: string) => {
       if (search !== newSearch) {
@@ -411,13 +404,10 @@ const NFTFilters = (props: Props) => {
             <FiltersMenu
               assetType={assetType}
               selectedNetwork={network}
-              selectedCollection={contracts[0]}
               selectedRarities={rarities}
               selectedGenders={isWearableCategory ? wearableGenders : undefined}
               selectedEmotePlayMode={isEmoteCategory ? emotePlayMode : undefined}
               isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
-              isOnSale={onlyOnSale}
-              onCollectionsChange={handleCollectionsChange}
               onGendersChange={
                 isWearableCategory ? handleGendersChange : undefined
               }
@@ -469,7 +459,6 @@ const NFTFilters = (props: Props) => {
               <FiltersMenu
                 assetType={assetType}
                 selectedNetwork={network}
-                selectedCollection={contracts[0]}
                 selectedRarities={rarities}
                 selectedGenders={
                   isWearableCategory ? wearableGenders : undefined
@@ -478,7 +467,6 @@ const NFTFilters = (props: Props) => {
                   isEmoteCategory ? emotePlayMode : undefined
                 }
                 isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
-                onCollectionsChange={handleCollectionsChange}
                 onGendersChange={
                   isWearableCategory ? handleGendersChange : undefined
                 }
