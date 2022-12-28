@@ -28,6 +28,7 @@ const FiltersMenu = (props: Props) => {
     selectedNetwork,
     selectedEmotePlayMode,
     isOnlySmart,
+    isOnSale,
     onCollectionsChange,
     onRaritiesChange,
     onGendersChange,
@@ -115,7 +116,7 @@ const FiltersMenu = (props: Props) => {
           }
           fetchOptions={async search => {
             try {
-              const { data } = await collectionAPI.fetch({ search })
+              const { data } = await collectionAPI.fetch({ search, isOnSale })
 
               return data.map(collection => ({
                 text: collection.name,
@@ -129,7 +130,8 @@ const FiltersMenu = (props: Props) => {
           fetchOptionFromValue={async value => {
             try {
               const { data } = await collectionAPI.fetch({
-                contractAddress: value
+                contractAddress: value,
+                isOnSale
               })
 
               if (data.length === 0) {

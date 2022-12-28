@@ -9,6 +9,7 @@ export type Props = {
   selectedNetwork?: Network
   selectedEmotePlayMode?: string
   isOnlySmart?: boolean
+  isOnSale?: boolean
   onCollectionsChange: (contract?: string) => void
   onGendersChange?: (options: string[]) => void
   onRaritiesChange: (options: string[]) => void
