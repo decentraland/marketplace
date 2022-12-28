@@ -20,6 +20,7 @@ const SelectFilter = (props: Props) => {
   const [search, setSearch] = useState('')
   const searchTimeout = useRef<NodeJS.Timeout>()
   const previousSearch = useRef(search)
+  const [isLoading, setIsLoading] = useState(false)
 
   // In the case that the value does not match to one of the options,
   // the component will try to fetch the option from the backend and add it.
@@ -33,7 +34,11 @@ const SelectFilter = (props: Props) => {
         return
       }
 
+      setIsLoading(true)
+
       const result = await fetchOptionFromValue(value)
+
+      setIsLoading(false)
 
       if (!result) {
         onChange(providedOptions[0].value)
@@ -68,7 +73,11 @@ const SelectFilter = (props: Props) => {
         return
       }
 
+      setIsLoading(true)
+
       const result = await fetchOptions(search)
+
+      setIsLoading(false)
 
       setProvidedOptions([...options, ...result])
     }, 500)
@@ -94,6 +103,7 @@ const SelectFilter = (props: Props) => {
         selectOnNavigation={false}
         fluid
         noResultsMessage={t('filters.no_results')}
+        loading={isLoading}
         onChange={(_event, data) => {
           onChange(data.value as string)
 
