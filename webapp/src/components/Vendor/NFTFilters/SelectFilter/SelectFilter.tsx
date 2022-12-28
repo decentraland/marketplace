@@ -29,6 +29,7 @@ const SelectFilter = (props: Props) => {
   useEffect(() => {
     async function tryFetchOptionFromValue() {
       if (
+        !value ||
         !fetchOptionFromValue ||
         providedOptions.some(option => option.value === value)
       ) {
