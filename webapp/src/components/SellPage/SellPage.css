@@ -15,10 +15,23 @@
   margin-top: 24px;
 }
 
+.SellPage .ui.form .field {
+  width: 100% !important;
+}
+
+.SellPage .ui.segment .ui.button:not(.primary) {
+  margin: 0px;
+  width: 10px;
+}
+
 @media (max-width: 768px) {
   .SellPage .dcl.field,
   .ConfirmPriceModal .dcl.field {
     width: 100%;
     min-width: auto;
+  }
+
+  .SellPage .AssetAction > .Row .buttons {
+    margin-bottom: 200px;
   }
 }
