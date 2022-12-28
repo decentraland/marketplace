@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { Header, Dropdown } from 'decentraland-ui'
+import { Header, Dropdown, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './SelectFilter.types'
 import './SelectFilter.css'
+import classNames from 'classnames'
 
 const SelectFilter = (props: Props) => {
   const {
@@ -104,6 +105,16 @@ const SelectFilter = (props: Props) => {
         fluid
         noResultsMessage={t('filters.no_results')}
         loading={isLoading}
+        icon={
+          fetchOptions ? (
+            <Icon
+              name="search"
+              className={classNames(isLoading && 'search-loading')}
+            />
+          ) : (
+            <Icon name="dropdown" />
+          )
+        }
         onChange={(_event, data) => {
           onChange(data.value as string)
 
