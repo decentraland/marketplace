@@ -1,3 +1,4 @@
+export { default as BuyManaWithFiatModal } from 'decentraland-dapps/dist/containers/BuyManaWithFiatModal'
 export { BuyManaWithFiatFeedbackModal } from 'decentraland-dapps/dist/containers/BuyManaWithFiatModal/BuyManaWithFiatFeedbackModal'
 export { ClaimLandModal } from './ClaimLandModal'
 export { RemoveRentalModal } from './RemoveRentalModal'

@@ -21,6 +21,8 @@ export * from './ContractService'
 export * from './NFTService'
 export * from './OrderService'
 
+export * from './contracts'
+
 export const services = {
   BidService,
   ContractService,

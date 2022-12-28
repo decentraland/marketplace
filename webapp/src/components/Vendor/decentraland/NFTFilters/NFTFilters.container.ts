@@ -9,7 +9,6 @@ import {
 } from '../../../../modules/routing/selectors'
 import { getCount, getView } from '../../../../modules/ui/browse/selectors'
 import { getIsRentalsEnabled } from '../../../../modules/features/selectors'
-import { getContracts as getAllContracts } from '../../../../modules/contract/selectors'
 import {
   getSection,
   getSortBy,
@@ -43,7 +42,7 @@ const mapState = (state: RootState): MapStateProps => ({
   onlyOnSale: getOnlyOnSale(state),
   onlyOnRent: getOnlyOnRent(state),
   onlySmart: getOnlySmart(state),
-  isMap: isMapSet(getIsMap(state), getSection(state)),
+  isMap: isMapSet(getIsMap(state), getSection(state), getView(state)),
   rarities: getRarities(state),
   wearableGenders: getWearableGenders(state),
   contracts: getContracts(state),
@@ -51,7 +50,6 @@ const mapState = (state: RootState): MapStateProps => ({
   emotePlayMode: getEmotePlayMode(state),
   hasFiltersEnabled: hasFiltersEnabled(state),
   isRentalsEnabled: getIsRentalsEnabled(state),
-  allContracts: getAllContracts(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

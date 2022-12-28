@@ -14,7 +14,7 @@ import { CampaignCollectiblesBanner } from '../Campaign/banners/CampaignCollecti
 import { Props } from './BrowsePage.types'
 
 const BrowsePage = (props: Props) => {
-  const { isFullscreen, section, isCampaignCollectiblesBannerEnabled } = props
+  const { isFullscreen, section, isCampaignCollectiblesBannerEnabled, contracts } = props
   const vendor = isVendor(props.vendor) ? props.vendor : VendorName.DECENTRALAND
 
   const activeTab = NavigationTab.COLLECTIBLES
@@ -30,6 +30,7 @@ const BrowsePage = (props: Props) => {
         view={View.MARKET}
         section={section}
         sections={[Section.WEARABLES, Section.EMOTES, Section.ENS]}
+        contracts={contracts}
       />
       <Footer isFullscreen={isFullscreen} />
     </>

@@ -94,3 +94,8 @@
   left: 12px;
   flex: 0 0 auto;
 }
+
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+}
