@@ -34,9 +34,10 @@
   width: 100% !important;
 }
 
-.BidPage .ui.segment .ui.button:not(.primary) {
-  margin: 0px;
-  width: 10px;
+.clndr-control .ui.compact.icon.button,
+.clndr-control .ui.compact.icon.buttons .button {
+  width: 20px !important;
+  top: 20px;
 }
 
 @media (max-width: 768px) {
@@ -46,5 +47,9 @@
 
   .BidPage .AssetAction > .Row .buttons {
     margin-bottom: 200px;
+  }
+
+  .BidPage .AssetAction > .Row .ui.button + .ui.button {
+    margin-bottom: 0px;
   }
 }
