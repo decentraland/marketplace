@@ -1,5 +1,6 @@
 import { Section } from '../vendor/decentraland/routing'
 import { getPersistedIsMapProperty } from '../ui/utils'
+import { View } from '../ui/types'
 import { isMapSet } from './utils'
 jest.mock('../ui/utils')
 
@@ -10,6 +11,7 @@ const mockedGetPersistedIsMapProperty = (getPersistedIsMapProperty as unknown) a
 describe('when checking if the map is set', () => {
   let isMap: boolean | undefined
   let section: Section
+  let view: View | undefined
 
   describe('and the isMap parameter is undefined', () => {
     beforeEach(() => {
@@ -22,7 +24,7 @@ describe('when checking if the map is set', () => {
       })
 
       it('should return false', () => {
-        expect(isMapSet(isMap, section)).toBe(false)
+        expect(isMapSet(isMap, section, undefined)).toBe(false)
       })
     })
 
@@ -37,7 +39,7 @@ describe('when checking if the map is set', () => {
         })
 
         it('should return true', () => {
-          expect(isMapSet(isMap, section)).toBe(true)
+          expect(isMapSet(isMap, section, View.HOME_LAND)).toBe(true)
         })
       })
 
@@ -47,7 +49,7 @@ describe('when checking if the map is set', () => {
         })
 
         it('should return false', () => {
-          expect(isMapSet(isMap, section)).toBe(false)
+          expect(isMapSet(isMap, section, View.HOME_LAND)).toBe(false)
         })
       })
 
@@ -57,7 +59,29 @@ describe('when checking if the map is set', () => {
         })
 
         it('should return false', () => {
-          expect(isMapSet(isMap, section)).toBe(false)
+          expect(isMapSet(isMap, section, View.HOME_LAND)).toBe(false)
+        })
+      })
+
+      describe('and the view parameter is defined and is the current account view', () => {
+        beforeEach(() => {
+          view = View.CURRENT_ACCOUNT
+          mockedGetPersistedIsMapProperty.mockReturnValueOnce(null)
+        })
+
+        it('should return false', () => {
+          expect(isMapSet(isMap, Section.LAND, view)).toBe(false)
+        })
+      })
+
+      describe('and the view parameter is defined and is the account view', () => {
+        beforeEach(() => {
+          view = View.ACCOUNT
+          mockedGetPersistedIsMapProperty.mockReturnValueOnce(null)
+        })
+
+        it('should return false', () => {
+          expect(isMapSet(isMap, Section.LAND, view)).toBe(false)
         })
       })
     })
@@ -69,7 +93,7 @@ describe('when checking if the map is set', () => {
     })
 
     it('should return false', () => {
-      expect(isMapSet(isMap, Section.LAND)).toBe(false)
+      expect(isMapSet(isMap, Section.LAND, view)).toBe(false)
     })
   })
 
@@ -79,7 +103,7 @@ describe('when checking if the map is set', () => {
     })
 
     it('should return true', () => {
-      expect(isMapSet(isMap, Section.LAND)).toBe(true)
+      expect(isMapSet(isMap, Section.LAND, view)).toBe(true)
     })
   })
 })

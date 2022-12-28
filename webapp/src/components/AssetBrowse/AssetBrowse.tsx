@@ -108,6 +108,7 @@ const AssetBrowse = (props: Props) => {
   useEffect(() => {
     if (
       section === DecentralandSection.LAND &&
+      !isAccountView(view) &&
       isMapPropertyPersisted === false &&
       isMap
     ) {
@@ -115,7 +116,7 @@ const AssetBrowse = (props: Props) => {
       // We set the has fetched variable to false so it has to browse back to the list view.
       setHasFetched(false)
     }
-  }, [section, isMap, isMapPropertyPersisted])
+  }, [section, view, isMap, isMapPropertyPersisted])
 
   useEffect(() => {
     if (viewInState === view && !hasFetched) {
@@ -135,11 +136,16 @@ const AssetBrowse = (props: Props) => {
 
       if (
         section === DecentralandSection.LAND &&
+        !isAccountView(view) &&
         isMapPropertyPersisted === false
       ) {
         // Update the browser options to match the ones persisted.
         browseOpts.isMap = isMap
         browseOpts.isFullscreen = isFullscreen
+        browseOpts.onlyOnSale =
+          (!onlyOnSale && onlyOnRent === false) ||
+          (onlyOnSale === undefined && onlyOnRent === undefined) ||
+          onlyOnSale
 
         // We also set the fetch function as onBrowse because we need the url to be updated.
         fetchAssetsFn = onBrowse

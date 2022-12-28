@@ -1,6 +1,7 @@
 import { BrowseOptions, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
-import { getPersistedIsMapProperty } from '../ui/utils'
+import { getPersistedIsMapProperty, isAccountView } from '../ui/utils'
+import { View } from '../ui/types'
 import { getSearchParams } from './search'
 
 export const rentalFilters = [
@@ -39,13 +40,16 @@ export function buildBrowseURL(
 
 export function isMapSet(
   isMap: boolean | undefined,
-  section: Section
+  section: Section,
+  view: View | undefined
 ): boolean {
   const isMapPropertyPersisted = getPersistedIsMapProperty()
 
   return (
     isMap ??
-    (section === Section.LAND && isMapPropertyPersisted !== null
+    (section === Section.LAND &&
+    (view === undefined || (view && !isAccountView(view))) &&
+    isMapPropertyPersisted !== null
       ? isMapPropertyPersisted!
       : false)
   )
