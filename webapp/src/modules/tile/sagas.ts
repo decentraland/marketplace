@@ -18,8 +18,6 @@ import { fetchNFTsRequest } from '../nft/actions'
 import { VendorName } from '../vendor'
 import { View } from '../ui/types'
 import { getIsRentalsEnabled } from '../features/selectors'
-import { getContracts } from '../contract/selectors'
-import { Contract } from '../vendor/services'
 
 export function* tileSaga() {
   yield takeEvery(FETCH_TILES_REQUEST, handleFetchTilesRequest)
@@ -42,7 +40,6 @@ function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
 }
 
 function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
-  const contracts: Contract[] = yield select(getContracts)
   const isRentalsEnabled: boolean = yield select(getIsRentalsEnabled)
 
   yield put(
@@ -52,8 +49,7 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
       params: {
         first: 1000,
         skip: 0,
-        address: action.payload.wallet.address.toLowerCase(),
-        contracts
+        address: action.payload.wallet.address.toLowerCase()
       },
       filters: {
         isLand: true,
