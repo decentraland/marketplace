@@ -2,16 +2,24 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { RootState } from '../../modules/reducer'
 import { browse } from '../../modules/routing/actions'
-import { getMaxPrice, getMinPrice, getNetwork, getRarities } from '../../modules/routing/selectors'
+import { getEmotePlayMode, getMaxPrice, getMinPrice, getNetwork, getOnlyOnSale, getOnlySmart, getRarities, getSection, getWearableGenders } from '../../modules/routing/selectors'
 import { MapStateProps, MapDispatchProps } from './FiltersSidebar.types'
 import { FiltersSidebar } from './FiltersSidebar'
+import { getCategoryFromSection } from '../../modules/routing/search'
 
 const mapState = (state: RootState): MapStateProps => {
+  const section = getSection(state)
+
   return {
     minPrice: getMinPrice(state),
     maxPrice: getMaxPrice(state),
     rarities: getRarities(state),
-    network: getNetwork(state)
+    network: getNetwork(state),
+    bodyShapes: getWearableGenders(state),
+    category: section ? getCategoryFromSection(section) : undefined,
+    isOnlySmart: getOnlySmart(state),
+    isOnSale: getOnlyOnSale(state),
+    emotePlayMode: getEmotePlayMode(state)
   }
 }
 

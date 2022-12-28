@@ -2,12 +2,11 @@ import { useCallback, useMemo } from 'react'
 import { Box, Radio } from 'decentraland-ui'
 import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-// import { ALL_FILTER_OPTION } from '../../Vendor/NFTFilters/FiltersMenu/FiltersMenu'
 import './NetworkFilter.css'
 
 export type NetworkFilterProps = {
-  network?: Network;
-  onChange: (value: Network) => void;
+  network?: Network
+  onChange: (value: Network) => void
 }
 
 export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
@@ -27,14 +26,27 @@ export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
     ]
   }, [])
 
-  const handleChange = useCallback((_, { value }) => onChange(value), [onChange])
-
+  const handleChange = useCallback((_, { value }) => onChange(value), [
+    onChange
+  ])
 
   return (
-    <Box header={t('nft_filters.network')} className="filters-sidebar-box network-filter" collapsible>
+    <Box
+      header={t('nft_filters.network')}
+      className="filters-sidebar-box network-filter"
+      collapsible
+    >
       <div className="network-options filters-radio-group">
-        {networkOptions.map((option) => (
-          <Radio type="radio" onChange={handleChange} label={option.text} value={option.value} name="network" checked={network === option.value} />
+        {networkOptions.map(option => (
+          <Radio
+            key={option.text}
+            type="radio"
+            onChange={handleChange}
+            label={option.text}
+            value={option.value}
+            name="network"
+            checked={network === option.value}
+          />
         ))}
       </div>
     </Box>

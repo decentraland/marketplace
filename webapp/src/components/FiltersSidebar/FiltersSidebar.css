@@ -11,12 +11,13 @@
   background: #242129;
 }
 
-.filters-sidebar .filters-radio-group .ui.radio.checkbox input.hidden ~ label:before, .ui.radio.checkbox input.hidden:focus ~ label:before {
+.filters-sidebar .filters-radio-group .ui.radio.checkbox input.hidden ~ label:before,
+.filters-sidebar .filters-radio-group .ui.radio.checkbox input.hidden:focus ~ label:before {
   border: 2px solid #736E7D;
   background-color: transparent;
 }
 
-.filters-sidebar .filters-radio-group .ui.radio.checkbox input.hidden ~ label:before, .ui.radio.checkbox input.hidden:focus ~ label:hover:before {
+.filters-sidebar .filters-radio-group .ui.radio.checkbox:hover input.hidden ~ label:before {
   background-color: var(--primary);
 }
 

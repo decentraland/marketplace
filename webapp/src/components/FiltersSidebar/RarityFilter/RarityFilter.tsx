@@ -9,7 +9,10 @@ export type RarityFilterProps = {
   onChange: (value: Rarity[]) => void
 }
 
-export const RarityFilter = ({ onChange, rarities = [] }: RarityFilterProps) => {
+export const RarityFilter = ({
+  onChange,
+  rarities = []
+}: RarityFilterProps) => {
   const rarityOptions = useMemo(() => {
     const options = Object.values(Rarity)
       .filter(value => typeof value === 'string')
@@ -20,13 +23,25 @@ export const RarityFilter = ({ onChange, rarities = [] }: RarityFilterProps) => 
     }))
   }, [])
 
-  const handleRaritiesChange = useCallback((newValue: string[]) => {
-    onChange(newValue as Rarity[])
-  }, [onChange])
+  const handleRaritiesChange = useCallback(
+    (newValue: string[]) => {
+      onChange(newValue as Rarity[])
+    },
+    [onChange]
+  )
 
   return (
-    <Box header={t('nft_filters.rarity')} className="filters-sidebar-box" collapsible>
-      <ArrayFilter name="" options={rarityOptions} onChange={handleRaritiesChange} values={rarities} />
+    <Box
+      header={t('nft_filters.rarity')}
+      className="filters-sidebar-box"
+      collapsible
+    >
+      <ArrayFilter
+        name=""
+        options={rarityOptions}
+        onChange={handleRaritiesChange}
+        values={rarities}
+      />
     </Box>
   )
 }
