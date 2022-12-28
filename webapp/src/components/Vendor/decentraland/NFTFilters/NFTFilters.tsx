@@ -51,9 +51,7 @@ const NFTFilters = (props: Props) => {
     assetType,
     hasFiltersEnabled,
     onClearFilters,
-    isRentalsEnabled,
-    availableContracts,
-    allContracts
+    isRentalsEnabled
   } = props
   const category = section ? getCategoryFromSection(section) : undefined
 
@@ -391,9 +389,8 @@ const NFTFilters = (props: Props) => {
             selectedRarities={rarities}
             selectedGenders={isWearableCategory ? wearableGenders : undefined}
             selectedEmotePlayMode={isEmoteCategory ? emotePlayMode : undefined}
-            contracts={allContracts}
-            availableContracts={availableContracts}
             isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
+            isOnSale={onlyOnSale}
             onCollectionsChange={handleCollectionsChange}
             onGendersChange={
               isWearableCategory ? handleGendersChange : undefined
@@ -444,7 +441,6 @@ const NFTFilters = (props: Props) => {
               </div>
               <FiltersMenu
                 assetType={assetType}
-                contracts={allContracts}
                 selectedNetwork={network}
                 selectedCollection={contracts[0]}
                 selectedRarities={rarities}
@@ -455,7 +451,6 @@ const NFTFilters = (props: Props) => {
                   isEmoteCategory ? emotePlayMode : undefined
                 }
                 isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
-                availableContracts={availableContracts}
                 onCollectionsChange={handleCollectionsChange}
                 onGendersChange={
                   isWearableCategory ? handleGendersChange : undefined

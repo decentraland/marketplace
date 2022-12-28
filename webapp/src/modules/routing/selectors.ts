@@ -14,15 +14,14 @@ import { RootState } from '../reducer'
 import {
   getDefaultOptionsByView,
   getURLParamArray,
-  getURLParam
+  getURLParam,
+  getURLParamArray_nonStandard
 } from './search'
 import { BrowseOptions, SortBy } from './types'
 import { locations } from './locations'
 import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
-import { getContracts as getAllContracts } from '../contract/selectors'
-import { Contract } from '../vendor/services'
 import { isLandSection } from '../ui/utils'
 
 export const getState = (state: RootState) => state.routing
@@ -166,7 +165,7 @@ export const getIsFullscreen = createSelector<
 export const getRarities = createSelector<RootState, string, Rarity[]>(
   getRouterSearch,
   search =>
-    getURLParamArray<Rarity>(
+    getURLParamArray_nonStandard<Rarity>(
       search,
       'rarities',
       Object.values(Rarity).filter(
@@ -180,25 +179,16 @@ export const getWearableGenders = createSelector<
   string,
   WearableGender[]
 >(getRouterSearch, search =>
-  getURLParamArray<WearableGender>(
+  getURLParamArray_nonStandard<WearableGender>(
     search,
     'genders',
     Object.values(WearableGender)
   )
 )
 
-// TODO(/contracts): think the cases and test if we need to wait until load
-export const getContracts = createSelector<
-  RootState,
-  Contract[],
-  string,
-  string[]
->(getAllContracts, getRouterSearch, (contracts, search) =>
-  getURLParamArray<string>(
-    search,
-    'contracts',
-    contracts.map(contract => contract.address)
-  )
+export const getContracts = createSelector<RootState, string, string[]>(
+  getRouterSearch,
+  search => getURLParamArray<string>(search, 'contracts')
 )
 
 export const getSearch = createSelector<RootState, string, string>(
