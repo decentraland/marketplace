@@ -17,10 +17,12 @@ import { ItemState } from '../../item/reducer'
 import { VendorName } from '../../vendor'
 import { getAddress } from '../../wallet/selectors'
 import { getTransactionsByType } from '../../transaction/selectors'
+import { View } from '../types'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
 
 export const getState = (state: RootState) => state.ui.browse
-export const getView = (state: RootState) => getState(state).view
+export const getView = (state: RootState): View | undefined =>
+  getState(state).view
 export const getCount = (state: RootState) => getState(state).count
 
 export const getNFTs = createSelector<

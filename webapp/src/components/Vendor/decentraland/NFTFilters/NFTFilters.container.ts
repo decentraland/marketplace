@@ -42,7 +42,7 @@ const mapState = (state: RootState): MapStateProps => ({
   onlyOnSale: getOnlyOnSale(state),
   onlyOnRent: getOnlyOnRent(state),
   onlySmart: getOnlySmart(state),
-  isMap: isMapSet(getIsMap(state), getSection(state)),
+  isMap: isMapSet(getIsMap(state), getSection(state), getView(state)),
   rarities: getRarities(state),
   wearableGenders: getWearableGenders(state),
   contracts: getContracts(state),

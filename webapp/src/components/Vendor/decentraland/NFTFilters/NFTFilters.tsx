@@ -24,6 +24,7 @@ import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { AssetType } from '../../../../modules/asset/types'
 import {
+  isAccountView,
   isLandSection,
   persistIsMapProperty
 } from '../../../../modules/ui/utils'
@@ -357,7 +358,7 @@ const NFTFilters = (props: Props) => {
           </div>
         </Responsive>
 
-        {isLandSection(section) ? (
+        {isLandSection(section) && !isAccountView(view!) ? (
           <div className="topbar-filter">
             <div className="toggle-map">
               <Chip
