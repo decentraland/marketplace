@@ -50,6 +50,7 @@ export function handleTransfer(event: Transfer): void {
   nft.category = category
   nft.updatedAt = event.block.timestamp
   nft.soldAt = null
+  nft.transferredAt = event.block.timestamp
   nft.sales = 0
   nft.volume = BigInt.fromI32(0)
 

@@ -2,7 +2,13 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { throwError } from 'redux-saga-test-plan/providers'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { NFTCategory, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import {
+  ChainId,
+  NFTCategory,
+  Order,
+  RentalListing,
+  RentalStatus
+} from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { Vendor, VendorFactory, VendorName } from '../vendor'
@@ -25,8 +31,12 @@ import { NFT, NFTsFetchOptions, NFTsFetchParams } from './types'
 import { View } from '../ui/types'
 import { Account } from '../account/types'
 import { getContract, getContracts, getLoading } from '../contract/selectors'
+import { upsertContracts } from '../contract/actions'
+import { getStubMaticCollectionContract } from '../contract/utils'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
 import { getRentalById } from '../rental/selectors'
+
+jest.mock('decentraland-dapps/dist/lib/eth')
 
 describe('when handling the fetch NFTs request action', () => {
   let dateSpy: jest.SpyInstance<number, []>
@@ -97,7 +107,13 @@ describe('when handling the fetch NFTs request action', () => {
         params: {} as NFTsFetchParams
       }
       const vendor = VendorFactory.build(options.vendor)
-      const nfts = [{ id: 'anID' }] as NFT[]
+      const nfts = [
+        {
+          id: 'anID',
+          contractAddress: 'aContractAddress',
+          chainId: ChainId.MATIC_MUMBAI
+        }
+      ] as NFT[]
       const accounts = [{ address: 'someAddress' }] as Account[]
       const orders = [{ id: 'anotherID' }] as Order[]
       const rentals = [{ id: 'aRentalId' }] as RentalListing[]
@@ -105,16 +121,16 @@ describe('when handling the fetch NFTs request action', () => {
 
       return expectSaga(nftSaga)
         .provide([
-          [select(getContracts), []],
           [call(VendorFactory.build, options.vendor), vendor],
           [
             call(
               [vendor.nftService, 'fetch'],
-              { ...DEFAULT_BASE_NFT_PARAMS, ...options.params, contracts: [] },
+              { ...DEFAULT_BASE_NFT_PARAMS, ...options.params },
               options.filters
             ),
             [nfts, accounts, orders, rentals, count]
-          ]
+          ],
+          [select(getContracts), []]
         ])
         .put(
           fetchNFTsSuccess(
@@ -135,21 +151,36 @@ describe('when handling the fetch NFTs request action', () => {
 
 describe('when handling the fetch NFT request action', () => {
   describe("when the contract doesn't exist", () => {
-    it('should dispatch an action signaling the failure of the action handling', () => {
+    it('should create the contract and add it to the store', () => {
       const contractAddress = 'anAddress'
       const tokenId = 'aTokenId'
-      const error = 'Contract not found'
+      const contract = getStubMaticCollectionContract(contractAddress)
+      const vendor = VendorFactory.build(VendorName.DECENTRALAND)
+      const nft = { id: 'id' } as NFT
+      const order = { id: 'id' } as Order
+      const rental = { id: 'id' } as RentalListing
 
       return expectSaga(nftSaga)
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
           [
-            select(getContract, { address: contractAddress }),
-            throwError(new Error(error))
+            select(getContract, { address: contractAddress.toLowerCase() }),
+            null
+          ],
+          [call(VendorFactory.build, contract.vendor), vendor],
+          [
+            call(
+              [vendor.nftService, 'fetchOne'],
+              contractAddress,
+              tokenId,
+              undefined
+            ),
+            Promise.resolve([nft, order, rental])
           ]
         ])
-        .put(fetchNFTFailure(contractAddress, tokenId, error))
+        .put(upsertContracts([contract]))
+        .put(fetchNFTSuccess(nft, order, rental))
         .dispatch(fetchNFTRequest(contractAddress, tokenId))
         .run({ silenceTimeout: true })
     })
@@ -169,7 +200,10 @@ describe('when handling the fetch NFT request action', () => {
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
-          [select(getContract, { address: contractAddress }), contract]
+          [
+            select(getContract, { address: contractAddress.toLowerCase() }),
+            contract
+          ]
         ])
         .put(fetchNFTFailure(contractAddress, tokenId, error))
         .dispatch(fetchNFTRequest(contractAddress, tokenId))
@@ -191,7 +225,10 @@ describe('when handling the fetch NFT request action', () => {
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
-          [select(getContract, { address: contractAddress }), contract],
+          [
+            select(getContract, { address: contractAddress.toLowerCase() }),
+            contract
+          ],
           [
             call(VendorFactory.build, contract.vendor),
             throwError(new Error(error))
@@ -218,7 +255,7 @@ describe('when handling the fetch NFT request action', () => {
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
-          [select(getContract, { address: contractAddress }), contract],
+          [select(getContract, { address: contractAddress.toLowerCase() }), contract],
           [call(VendorFactory.build, contract.vendor), vendor],
           [
             call(
@@ -253,7 +290,7 @@ describe('when handling the fetch NFT request action', () => {
         .provide([
           [select(getLoading), []],
           [select(getContracts), []],
-          [select(getContract, { address: contractAddress }), contract],
+          [select(getContract, { address: contractAddress.toLowerCase() }), contract],
           [call(VendorFactory.build, contract.vendor), vendor],
           [
             call([vendor.nftService, 'fetchOne'], contractAddress, tokenId, {
