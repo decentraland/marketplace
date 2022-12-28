@@ -16,6 +16,7 @@ import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
+import { collectionAPI } from '../../../../modules/vendor/decentraland'
 
 export const ALL_FILTER_OPTION = 'ALL'
 
@@ -35,7 +36,7 @@ const FiltersMenu = (props: Props) => {
     onOnlySmartChange
   } = props
 
-  const collectionOptions = useMemo(() => {
+  const defaultCollectionOptions = useMemo(() => {
     return [
       {
         value: ALL_FILTER_OPTION,
@@ -112,7 +113,7 @@ const FiltersMenu = (props: Props) => {
           name={t('nft_filters.collection')}
           value={selectedCollection || ALL_FILTER_OPTION}
           clearable={!!selectedCollection}
-          options={collectionOptions}
+          options={defaultCollectionOptions}
           onChange={newVal =>
             // We need to send undefined for the ALL_FILTER_OPTION because we don't want it to be added to the url.
             // This was causing a bug where the contracts with address "ALL" would be fetched and bring no results.
@@ -120,6 +121,40 @@ const FiltersMenu = (props: Props) => {
               newVal === ALL_FILTER_OPTION ? undefined : newVal
             )
           }
+          fetchOptions={async search => {
+            try {
+              const { data } = await collectionAPI.fetch({ search })
+
+              return data.map(collection => ({
+                text: collection.name,
+                value: collection.contractAddress
+              }))
+            } catch (e) {
+              console.warn('Could not fetch options')
+              return []
+            }
+          }}
+          fetchOptionFromValue={async value => {
+            try {
+              const { data } = await collectionAPI.fetch({
+                contractAddress: value
+              })
+
+              if (data.length === 0) {
+                return null
+              }
+
+              const collection = data[0]
+
+              return {
+                text: collection.name,
+                value
+              }
+            } catch (e) {
+              console.warn('Could not fetch option from value')
+              return null
+            }
+          }}
         />
         {onNetworkChange !== undefined && (
           <SelectFilter
