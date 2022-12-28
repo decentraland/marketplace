@@ -355,6 +355,24 @@ export function getURLParamArray<T extends string>(
   return params
 }
 
+// TODO: This is currently using a non standard way of parsing query params
+// This might be because of an old functionality but for example, rarities 
+// from the URL are parsed from rarities=common_uncommon instead of 
+// rarities=common&rarities=uncommon I'll leave it as it is for now to prevent
+// further refactoring but should be changed in the future.
+export function getURLParamArray_nonStandard<T extends string>(
+  search: string,
+  paramName: string,
+  validValues: string[] = []
+) {
+  const param = getURLParam<T>(search, paramName)
+  return param === null
+    ? []
+    : (param
+        .split(SEARCH_ARRAY_PARAM_SEPARATOR)
+        .filter(item => validValues.includes(item as T)) as T[])
+}
+
 export function getURLParam<T extends string>(
   search: string,
   paramName: string

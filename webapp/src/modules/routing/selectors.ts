@@ -14,7 +14,8 @@ import { RootState } from '../reducer'
 import {
   getDefaultOptionsByView,
   getURLParamArray,
-  getURLParam
+  getURLParam,
+  getURLParamArray_nonStandard
 } from './search'
 import { BrowseOptions, SortBy } from './types'
 import { locations } from './locations'
@@ -164,7 +165,7 @@ export const getIsFullscreen = createSelector<
 export const getRarities = createSelector<RootState, string, Rarity[]>(
   getRouterSearch,
   search =>
-    getURLParamArray<Rarity>(
+    getURLParamArray_nonStandard<Rarity>(
       search,
       'rarities',
       Object.values(Rarity).filter(
@@ -178,7 +179,7 @@ export const getWearableGenders = createSelector<
   string,
   WearableGender[]
 >(getRouterSearch, search =>
-  getURLParamArray<WearableGender>(
+  getURLParamArray_nonStandard<WearableGender>(
     search,
     'genders',
     Object.values(WearableGender)
