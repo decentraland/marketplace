@@ -231,6 +231,16 @@ const SettingsPage = (props: Props) => {
                               type: AuthorizationType.ALLOWANCE
                             }}
                           />
+                          <Authorization
+                            authorization={{
+                              address: wallet.address,
+                              authorizedAddress: collectionStore.address,
+                              contractAddress: manaMatic.address,
+                              contractName: ContractName.MANAToken,
+                              chainId: manaMatic.chainId,
+                              type: AuthorizationType.ALLOWANCE
+                            }}
+                          />
                         </div>
 
                         <div className="authorization-checks">
@@ -251,22 +261,6 @@ const SettingsPage = (props: Props) => {
                             authorization={{
                               address: wallet.address,
                               authorizedAddress: bidsMatic.address,
-                              contractAddress: manaMatic.address,
-                              contractName: ContractName.MANAToken,
-                              chainId: manaMatic.chainId,
-                              type: AuthorizationType.ALLOWANCE
-                            }}
-                          />
-                        </div>
-
-                        <div className="authorization-checks">
-                          <label className="secondary-text">
-                            {t('settings_page.for_minting')}
-                          </label>
-                          <Authorization
-                            authorization={{
-                              address: wallet.address,
-                              authorizedAddress: collectionStore.address,
                               contractAddress: manaMatic.address,
                               contractName: ContractName.MANAToken,
                               chainId: manaMatic.chainId,
