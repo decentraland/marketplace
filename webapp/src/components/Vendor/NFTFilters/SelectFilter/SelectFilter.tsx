@@ -107,6 +107,9 @@ const SelectFilter = (props: Props) => {
         onChange={(_event, data) => {
           onChange(data.value as string)
 
+          // Settings the search back to empty to be able to
+          // search for the same value again as it would match with
+          // the previous search.
           if (!data.value) {
             setSearch('')
           }
