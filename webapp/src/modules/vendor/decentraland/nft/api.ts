@@ -121,15 +121,6 @@ class NFTAPI extends BaseAPI {
           queryParams.append('wearableGender', wearableGender)
         }
       }
-      if (filters.contracts) {
-        for (const address of filters.contracts) {
-          if (
-            params.contracts?.some(contract => contract.address === address)
-          ) {
-            queryParams.append('contractAddress', address)
-          }
-        }
-      }
       if (filters.network) {
         queryParams.append('network', filters.network)
       }
