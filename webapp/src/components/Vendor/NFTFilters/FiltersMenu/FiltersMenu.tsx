@@ -105,6 +105,7 @@ const FiltersMenu = (props: Props) => {
           value={selectedCollection || ''}
           clearable={!!selectedCollection}
           options={[]}
+          placeholder={t('nft_filters.all_collections')}
           onChange={newVal =>
             // We need to send undefined for the ALL_FILTER_OPTION because we don't want it to be added to the url.
             // This was causing a bug where the contracts with address "ALL" would be fetched and bring no results.
