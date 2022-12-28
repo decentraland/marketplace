@@ -13,10 +13,10 @@ import {
   Radio
 } from 'decentraland-ui'
 import { WearableGender } from '../../../../modules/nft/wearable/types'
+import { collectionAPI } from '../../../../modules/vendor/decentraland'
 import { ArrayFilter } from '../ArrayFilter'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
-import { collectionAPI } from '../../../../modules/vendor/decentraland'
 
 export const ALL_FILTER_OPTION = 'ALL'
 
