@@ -36,15 +36,6 @@ const FiltersMenu = (props: Props) => {
     onOnlySmartChange
   } = props
 
-  const defaultCollectionOptions = useMemo(() => {
-    return [
-      {
-        value: ALL_FILTER_OPTION,
-        text: t('nft_filters.all_collections')
-      }
-    ]
-  }, [])
-
   const rarityOptions = useMemo(() => {
     const options = Object.values(Rarity)
       .filter(value => typeof value === 'string')
@@ -111,9 +102,9 @@ const FiltersMenu = (props: Props) => {
       <Row className="filters-container">
         <SelectFilter
           name={t('nft_filters.collection')}
-          value={selectedCollection || ALL_FILTER_OPTION}
+          value={selectedCollection || ''}
           clearable={!!selectedCollection}
-          options={defaultCollectionOptions}
+          options={[]}
           onChange={newVal =>
             // We need to send undefined for the ALL_FILTER_OPTION because we don't want it to be added to the url.
             // This was causing a bug where the contracts with address "ALL" would be fetched and bring no results.
