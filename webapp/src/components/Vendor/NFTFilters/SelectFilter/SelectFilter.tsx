@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { Header, Dropdown, Icon } from 'decentraland-ui'
+import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './SelectFilter.types'
 import './SelectFilter.css'
-import classNames from 'classnames'
 
 const SelectFilter = (props: Props) => {
   const {
