@@ -19,7 +19,7 @@ import { VendorName } from '../vendor'
 import { View } from '../ui/types'
 import { getIsRentalsEnabled } from '../features/selectors'
 import { getContracts } from '../contract/selectors'
-import { getOrWaitForContracts } from '../contract/utils'
+import { Contract } from '../vendor/services'
 
 export function* tileSaga() {
   yield takeEvery(FETCH_TILES_REQUEST, handleFetchTilesRequest)
@@ -42,9 +42,7 @@ function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
 }
 
 function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
-  const contracts: ReturnType<typeof getContracts> = yield call(
-    getOrWaitForContracts
-  )
+  const contracts: Contract[] = yield select(getContracts)
   const isRentalsEnabled: boolean = yield select(getIsRentalsEnabled)
 
   yield put(

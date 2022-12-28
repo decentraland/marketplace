@@ -12,7 +12,6 @@ import { AwaitFn } from '../types'
 import {
   getContractKey,
   getContractKeyFromNFT,
-  getOrWaitForContracts,
   getStubMaticCollectionContract
 } from '../contract/utils'
 import { getRentalById } from '../rental/selectors'
@@ -115,8 +114,6 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
   const { contractAddress, tokenId, options } = action.payload
 
   try {
-    yield call(getOrWaitForContracts)
-
     let contract: ReturnType<typeof getContract> = yield select(getContract, {
       address: contractAddress.toLowerCase()
     })

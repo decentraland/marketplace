@@ -93,8 +93,6 @@ import {
   FETCH_SALES_SUCCESS
 } from '../sale/actions'
 import { getSales } from '../sale/selectors'
-import { getContracts as getAllContracts } from '../contract/selectors'
-import { getOrWaitForContracts } from '../contract/utils'
 import {
   CANCEL_ORDER_SUCCESS,
   CREATE_ORDER_SUCCESS,
@@ -298,9 +296,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         )
       } else {
         const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
-        const contracts: ReturnType<typeof getAllContracts> = yield call(
-          getOrWaitForContracts
-        )
 
         yield put(
           fetchNFTsRequest({
@@ -315,8 +310,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               onlyOnRent,
               address,
               category,
-              search,
-              contracts
+              search
             },
             filters: getFilters(vendor, options, isRentalsEnabled) // TODO: move to routing
           })
@@ -356,10 +350,6 @@ export function* getNewBrowseOptions(
 }
 
 function* handleFetchOnSale(address: string, view: View) {
-  const contracts: ReturnType<typeof getAllContracts> = yield call(
-    getOrWaitForContracts
-  )
-
   yield put(
     fetchItemsRequest({
       filters: { creator: address, isOnSale: true }
@@ -374,18 +364,13 @@ function* handleFetchOnSale(address: string, view: View) {
         first: MAX_QUERY_SIZE,
         skip: 0,
         onlyOnSale: true,
-        address,
-        contracts
+        address
       }
     })
   )
 }
 
 function* handleFetchOnRent(address: string, view: View) {
-  const contracts: ReturnType<typeof getAllContracts> = yield call(
-    getOrWaitForContracts
-  )
-
   yield put(
     fetchNFTsRequest({
       view,
@@ -398,8 +383,7 @@ function* handleFetchOnRent(address: string, view: View) {
         first: MAX_QUERY_SIZE,
         skip: 0,
         onlyOnRent: true,
-        address,
-        contracts
+        address
       }
     })
   )
