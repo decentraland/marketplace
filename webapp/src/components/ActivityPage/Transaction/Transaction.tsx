@@ -1,13 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { ethers } from 'ethers'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink, Profile } from 'decentraland-dapps/dist/containers'
+import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 import {
   GrantTokenSuccessAction,
   RevokeTokenSuccessAction,
   GRANT_TOKEN_SUCCESS,
   REVOKE_TOKEN_SUCCESS
 } from 'decentraland-dapps/dist/modules/authorization/actions'
+import { ADD_MANA_PURCHASE_AS_TRANSACTION } from 'decentraland-dapps/dist/modules/manaFiatGateway/actions'
+import { Purchase } from 'decentraland-dapps/dist/modules/mana/types'
+import {
+  gatewaysNames,
+  networksNames
+} from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
 
 import { getAssetName } from '../../../modules/asset/utils'
 import {
@@ -30,11 +38,11 @@ import {
 } from '../../../modules/rental/actions'
 import { AssetType } from '../../../modules/asset/types'
 import { isParcel } from '../../../modules/nft/utils'
+import { getContractNames } from '../../../modules/vendor'
 import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
-import { ethers } from 'ethers'
 
 const Transaction = (props: Props) => {
   const { tx, getContract } = props
@@ -459,6 +467,45 @@ const Transaction = (props: Props) => {
             />
           )}
         </AssetProvider>
+      )
+    }
+    case ADD_MANA_PURCHASE_AS_TRANSACTION: {
+      const {
+        purchase: { network, amount, gateway }
+      }: { purchase: Purchase } = tx.payload
+
+      const chainId = getChainIdByNetwork(network)
+      const contract = getContract({
+        name: getContractNames().MANA,
+        network: network
+      })
+
+      const name = `${networksNames[network]} MANA`
+
+      return (
+        <TransactionDetail
+          text={
+            <T
+              id="transaction.detail.buy_mana"
+              values={{
+                amount: amount.toLocaleString(),
+                name: contract ? (
+                  <TransactionLink
+                    chainId={chainId}
+                    address={contract.address}
+                    txHash=""
+                  >
+                    {name}
+                  </TransactionLink>
+                ) : (
+                  name
+                ),
+                gateway: gatewaysNames[gateway]
+              }}
+            />
+          }
+          tx={tx}
+        />
       )
     }
     default:

@@ -664,7 +664,8 @@
       "cancel_bid": "Cancelaste una oferta de {price} por {name}.",
       "claim_asset": "Reclamaste tu {name} del {contract}.",
       "remove_rental": "Removiste tu {name} del listado de rentas.",
-      "accept_rental": "Aceptaste una renta en {name} pagando {pricePerDay} por día por {duration} {duration, plural, one {día} other {días}}."
+      "accept_rental": "Aceptaste una renta en {name} pagando {pricePerDay} por día por {duration} {duration, plural, one {día} other {días}}.",
+      "buy_mana": "Compraste {amount} {name} a través de {gateway}"
     }
   },
   "mana": {
