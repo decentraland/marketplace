@@ -1,14 +1,15 @@
+import { useCallback } from 'react'
 import { EmotePlayMode, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import { WearableGender } from '../../modules/nft/wearable/types'
 import { PriceFilter } from './PriceFilter'
 import { RarityFilter } from './RarityFilter'
 import { NetworkFilter } from './NetworkFilter'
 import { Props } from './FiltersSidebar.types'
 import './FiltersSidebar.css'
 import { BodyShapeFilter } from './BodyShapeFilter'
-import { WearableGender } from '../../modules/nft/wearable/types'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
-import { useCallback } from 'react'
+import { AssetType } from '../../modules/asset/types'
 
 export const FiltersSidebar = ({
   minPrice,
@@ -20,10 +21,12 @@ export const FiltersSidebar = ({
   isOnlySmart,
   isOnSale,
   emotePlayMode,
+  assetType,
   onBrowse
 }: Props): JSX.Element => {
   const isWearableCategory = category === NFTCategory.WEARABLE
   const isEmoteCategory = category === NFTCategory.EMOTE
+  const isPrimarySell = assetType === AssetType.ITEM
 
   const handlePriceChange = useCallback(
     (value: [string, string]) => {
@@ -89,7 +92,7 @@ export const FiltersSidebar = ({
           emotePlayMode={emotePlayMode}
         />
       )}
-      {isWearableCategory && (
+      {isWearableCategory && !isPrimarySell && (
         <NetworkFilter onChange={handleNetworkChange} network={network} />
       )}
       {isWearableCategory && (

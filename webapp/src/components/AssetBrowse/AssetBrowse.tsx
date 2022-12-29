@@ -1,9 +1,14 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import classNames from 'classnames'
 import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { Sections } from '../../modules/vendor/routing/types'
+import {
+  getPersistedIsMapProperty, isAccountView,
+} from '../../modules/ui/utils'
+import { BrowseOptions } from '../../modules/routing/types'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
@@ -11,18 +16,13 @@ import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
 import { NFTFilters } from '../Vendor/NFTFilters'
 import { NFTSidebar } from '../Vendor/NFTSidebar'
-import { Props } from './AssetBrowse.types'
 import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
-import classNames from 'classnames'
-import {
-  getPersistedIsMapProperty, isAccountView,
-} from '../../modules/ui/utils'
 import OnSaleList from '../OnSaleOrRentList'
 import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
-import { BrowseOptions } from '../../modules/routing/types'
+import { Props } from './AssetBrowse.types'
 import './AssetBrowse.css'
 
 const AssetBrowse = (props: Props) => {

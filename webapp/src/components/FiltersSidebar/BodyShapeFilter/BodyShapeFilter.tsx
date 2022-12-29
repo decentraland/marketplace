@@ -33,7 +33,7 @@ export const BodyShapeFilter = ({
   }, [])
 
   const handleChange = useCallback(
-    (_, { value }) => {
+    (_evt, { value }) => {
       let newValue = [value]
 
       if (value === UNISEX_VALUE) {
@@ -60,7 +60,6 @@ export const BodyShapeFilter = ({
     >
       <div className="body-shape-options filters-radio-group">
         {genderOptions.map(option => {
-          console.log(option)
           return (
             <Radio
               type="radio"

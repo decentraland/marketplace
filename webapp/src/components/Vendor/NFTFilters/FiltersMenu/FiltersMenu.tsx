@@ -3,9 +3,9 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Row,
 } from 'decentraland-ui'
+import { collectionAPI } from '../../../../modules/vendor/decentraland'
 import { SelectFilter } from '../SelectFilter'
 import { Props } from './FiltersMenu.types'
-import { collectionAPI } from '../../../../modules/vendor/decentraland'
 
 export const ALL_FILTER_OPTION = 'ALL'
 

@@ -2,10 +2,10 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { RootState } from '../../modules/reducer'
 import { browse } from '../../modules/routing/actions'
-import { getEmotePlayMode, getMaxPrice, getMinPrice, getNetwork, getOnlyOnSale, getOnlySmart, getRarities, getSection, getWearableGenders } from '../../modules/routing/selectors'
+import { getCategoryFromSection } from '../../modules/routing/search'
+import { getAssetType, getEmotePlayMode, getMaxPrice, getMinPrice, getNetwork, getOnlyOnSale, getOnlySmart, getRarities, getSection, getWearableGenders } from '../../modules/routing/selectors'
 import { MapStateProps, MapDispatchProps } from './FiltersSidebar.types'
 import { FiltersSidebar } from './FiltersSidebar'
-import { getCategoryFromSection } from '../../modules/routing/search'
 
 const mapState = (state: RootState): MapStateProps => {
   const section = getSection(state)
@@ -19,7 +19,8 @@ const mapState = (state: RootState): MapStateProps => {
     category: section ? getCategoryFromSection(section) : undefined,
     isOnlySmart: getOnlySmart(state),
     isOnSale: getOnlyOnSale(state),
-    emotePlayMode: getEmotePlayMode(state)
+    emotePlayMode: getEmotePlayMode(state),
+    assetType: getAssetType(state)
   }
 }
 

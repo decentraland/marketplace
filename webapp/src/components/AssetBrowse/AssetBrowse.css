@@ -93,7 +93,9 @@
 }
 
 .AssetBrowse .sidebar {
-  padding-right: 20px;
+  margin-right: 20px;
+  min-width: 320px;
+  max-width: 320px;
 }
 
 .AssetBrowse.fullscreen .NFTFilters {
