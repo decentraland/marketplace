@@ -46,7 +46,6 @@ const SelectFilter = (props: Props) => {
       setIsLoading(false)
 
       if (!result) {
-        console.log("!resulttt")
         onChange(providedOptions[0].value)
       } else {
         setProvidedOptions([...providedOptions, result])

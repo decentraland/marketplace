@@ -1,7 +1,7 @@
 import { PriceFilter } from './PriceFilter'
 import { Props } from './FiltersSidebar.types'
-import './FiltersSidebar.css'
 import { CollectionFilter } from './CollectionFilter/CollectionFilter'
+import './FiltersSidebar.css'
 
 export const FiltersSidebar = ({ onBrowse, minPrice, maxPrice, collection, onlyOnSale }: Props): JSX.Element => {
 

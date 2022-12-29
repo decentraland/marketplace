@@ -15,14 +15,12 @@ type CollectionFilterProps = {
 
 export const CollectionFilter = ({ collection, onlyOnSale, onChange }: CollectionFilterProps): JSX.Element => {
   const handleCollectionChange = useCallback((value: string) => {
-    console.log("handleCollectionChange", value)
     // We need to send undefined for the ALL_FILTER_OPTION because we don't want it to be added to the url.
     // This was causing a bug where the contracts with address "ALL" would be fetched and bring no results.
     onChange(value === ALL_FILTER_OPTION ? undefined : value);
   }, [onChange])
 
   const handleFetchOptions = useCallback(async (search: string) => {
-    console.log("handleFetchOptions")
     try {
       const { data } = await collectionAPI.fetch({ search, isOnSale: onlyOnSale })
 
@@ -37,7 +35,6 @@ export const CollectionFilter = ({ collection, onlyOnSale, onChange }: Collectio
   }, [onlyOnSale])
 
   const handleFetchOptionsFromValue = useCallback(async (value: string) => {
-    console.log("handleFetchOptionsFromValue")
     try {
       const { data } = await collectionAPI.fetch({
         contractAddress: value,
