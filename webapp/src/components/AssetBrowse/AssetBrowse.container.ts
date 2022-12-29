@@ -30,7 +30,7 @@ import {
 import AssetBrowse from './AssetBrowse'
 
 const mapState = (state: RootState): MapStateProps => {
-  const isMap = isMapSet(getIsMap(state), getSection(state))
+  const isMap = isMapSet(getIsMap(state), getSection(state), getView(state))
 
   return {
     isMap,

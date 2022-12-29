@@ -79,7 +79,9 @@ const SellModal = (props: Props) => {
     authorizedAddress: marketplace.address,
     contractAddress: nft.contractAddress,
     contractName:
-      nft.category === NFTCategory.WEARABLE && nft.network === Network.MATIC
+      (nft.category === NFTCategory.WEARABLE ||
+        nft.category === NFTCategory.EMOTE) &&
+      nft.network === Network.MATIC
         ? ContractName.ERC721CollectionV2
         : ContractName.ERC721,
     chainId: nft.chainId,

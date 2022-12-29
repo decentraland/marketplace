@@ -51,9 +51,7 @@ const NFTFilters = (props: Props) => {
     assetType,
     hasFiltersEnabled,
     onClearFilters,
-    isRentalsEnabled,
-    availableContracts,
-    allContracts
+    isRentalsEnabled
   } = props
   const category = section ? getCategoryFromSection(section) : undefined
 
@@ -213,16 +211,16 @@ const NFTFilters = (props: Props) => {
   const searchPlaceholder = isMap
     ? t('nft_filters.search_land')
     : count === undefined
-    ? t('global.loading') + '...'
-    : t('nft_filters.search', {
+      ? t('global.loading') + '...'
+      : t('nft_filters.search', {
         suffix:
           count < MAX_QUERY_SIZE
             ? t('nft_filters.results', {
-                count: count.toLocaleString()
-              })
+              count: count.toLocaleString()
+            })
             : t('nft_filters.more_than_results', {
-                count: count.toLocaleString()
-              })
+              count: count.toLocaleString()
+            })
       })
 
   const isWearableCategory = category === NFTCategory.WEARABLE
@@ -317,14 +315,13 @@ const NFTFilters = (props: Props) => {
           >
             <div className="label">{t('nft_filters.filter')}</div>
             <div
-              className={`open-filters ${
-                showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
-              }`}
+              className={`open-filters ${showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
+                }`}
             />
           </div>
         </Responsive>
 
-        {isLandSection(section) ? (
+        {isLandSection(section) && !isAccountView(view!) ? (
           <div className="topbar-filter">
             <div className="toggle-map">
               <Chip
@@ -373,9 +370,8 @@ const NFTFilters = (props: Props) => {
             <FiltersMenu
               assetType={assetType}
               selectedCollection={contracts[0]}
-              contracts={allContracts}
-              availableContracts={availableContracts}
               isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
+              isOnSale={onlyOnSale}
               onCollectionsChange={handleCollectionsChange}
             />
           </Responsive>
@@ -414,10 +410,8 @@ const NFTFilters = (props: Props) => {
               </div>
               <FiltersMenu
                 assetType={assetType}
-                contracts={allContracts}
                 selectedCollection={contracts[0]}
                 isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
-                availableContracts={availableContracts}
                 onCollectionsChange={handleCollectionsChange}
               />
             </>

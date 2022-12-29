@@ -4,6 +4,8 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { getError } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { getLoading as getAuthorizationLoading } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import {
+  fetchAuthorizationsRequest,
+  FETCH_AUTHORIZATIONS_REQUEST,
   grantTokenRequest,
   GRANT_TOKEN_REQUEST
 } from 'decentraland-dapps/dist/modules/authorization/actions'
@@ -30,11 +32,17 @@ const mapState = (state: RootState, { nft }: OwnProps): MapStateProps => ({
     getAuthorizationLoading(state),
     GRANT_TOKEN_REQUEST
   ),
-  error: getError(state)
+  error: getError(state),
+  isFetchingAuthorizations: isLoadingType(
+    getAuthorizationLoading(state),
+    FETCH_AUTHORIZATIONS_REQUEST
+  )
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onAuthorize: authorization => dispatch(grantTokenRequest(authorization))
+  onAuthorize: authorization => dispatch(grantTokenRequest(authorization)),
+  onFetchAuthorizations: authorizations =>
+    dispatch(fetchAuthorizationsRequest(authorizations))
 })
 
 export default connect(mapState, mapDispatch)(AuthorizationStep)
