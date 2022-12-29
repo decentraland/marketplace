@@ -1,5 +1,5 @@
-import { Header } from 'decentraland-ui'
 import React from 'react'
+import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Menu } from '../../../Menu'
 import { Props } from './NFTSections.types'
