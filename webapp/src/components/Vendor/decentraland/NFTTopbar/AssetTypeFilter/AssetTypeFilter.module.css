@@ -1,0 +1,19 @@
+.marketIcon {
+  background-image: url(../../../../../images/store.svg);
+  height: 28px;
+  width: 32px;
+  margin-right: 24px;
+}
+
+.listingsIcon {
+  background-image: url(../../../../../images/listings.svg);
+  height: 28px;
+  width: 32px;
+  margin-right: 24px;
+}
+
+.toggleFlex {
+  border: none;
+  margin-right: 0;
+  margin-bottom: 12px;
+}

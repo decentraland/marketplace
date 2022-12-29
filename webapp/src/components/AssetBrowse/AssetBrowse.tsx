@@ -11,7 +11,7 @@ import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
-import { NFTFilters } from '../Vendor/NFTFilters'
+import NFTTopbar from '../Vendor/decentraland/NFTTopbar'
 import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './AssetBrowse.types'
 import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
@@ -255,11 +255,11 @@ const AssetBrowse = (props: Props) => {
           {isMap && isFullscreen ? (
             <div className="blur-background">
               <Container>
-                <NFTFilters isMap={isMap} />
+                <NFTTopbar />
               </Container>
             </div>
           ) : (
-            <NFTFilters isMap={Boolean(isMap)} />
+            <NFTTopbar />
           )}
           {isMap ? (
             <div className="Atlas">
