@@ -54,7 +54,7 @@ const BidModal = (props: Props) => {
       onPlaceBid(
         nft,
         parseMANANumber(price),
-        +new Date(`${expiresAt} 00:00:00`),
+        +new Date(expiresAt),
         fingerprint
       ),
     [nft, price, expiresAt, fingerprint, onPlaceBid]
@@ -104,7 +104,7 @@ const BidModal = (props: Props) => {
   const handleClose = () => setShowAuthorizationModal(false)
 
   const isInvalidPrice = parseMANANumber(price) <= 0
-  const isInvalidDate = +new Date(`${expiresAt} 00:00:00`) < Date.now()
+  const isInvalidDate = +new Date(expiresAt) < Date.now()
   const hasInsufficientMANA =
     !!price &&
     !!wallet &&
