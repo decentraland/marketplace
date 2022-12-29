@@ -1,15 +1,15 @@
+import { useCallback, useMemo } from 'react'
 import { Dropdown, DropdownProps, Field, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { useCallback, useMemo } from 'react'
-import { Props } from './NFTTopbar.types'
-import styles from './NFTTopbar.module.css'
-import { AssetTypeFilter } from './AssetTypeFilter'
 import { AssetType } from '../../../../modules/asset/types'
 import { useInput } from '../../../../lib/input'
 import { getCountText, getOrderByOptions } from './utils'
 import { SortBy } from '../../../../modules/routing/types'
 import { isAccountView, isLandSection, persistIsMapProperty } from '../../../../modules/ui/utils'
 import { Chip } from '../../../Chip'
+import { AssetTypeFilter } from './AssetTypeFilter'
+import { Props } from './NFTTopbar.types'
+import styles from './NFTTopbar.module.css'
 
 export const NFTTopbar = ({
   search,
@@ -25,7 +25,9 @@ export const NFTTopbar = ({
 }: Props): JSX.Element => {
   const handleSearch = useCallback(
     (value: string) => {
-      onBrowse({ search: value })
+      if (search !== value) {
+        onBrowse({ search: value, isMap: false, isFullscreen: false })
+      }
     },
     [onBrowse]
   )

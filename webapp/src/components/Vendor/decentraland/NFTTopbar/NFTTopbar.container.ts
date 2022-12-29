@@ -11,14 +11,14 @@ import {
   getSection,
   getSortBy,
 } from '../../../../modules/routing/selectors'
+import { BrowseOptions } from '../../../../modules/routing/types'
+import { isMapSet } from '../../../../modules/routing/utils'
+import { browse } from '../../../../modules/routing/actions'
 import {
   MapStateProps,
   MapDispatchProps,
 } from './NFTTopbar.types'
 import { NFTTopbar } from './NFTTopbar'
-import { BrowseOptions } from '../../../../modules/routing/types'
-import { isMapSet } from '../../../../modules/routing/utils'
-import { browse } from '../../../../modules/routing/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   const view = getView(state)

@@ -1,11 +1,18 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import classNames from 'classnames'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { AssetType } from '../../modules/asset/types'
 import { VendorName } from '../../modules/vendor'
 import { Section, Sections } from '../../modules/vendor/routing/types'
+import {
+  getPersistedIsMapProperty,
+  isAccountView,
+  isLandSection
+} from '../../modules/ui/utils'
+import { BrowseOptions } from '../../modules/routing/types'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
@@ -13,21 +20,14 @@ import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
 import NFTTopbar from '../Vendor/decentraland/NFTTopbar'
 import { NFTSidebar } from '../Vendor/NFTSidebar'
-import { Props } from './AssetBrowse.types'
 import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
-import { ToggleBox } from './ToggleBox'
-import classNames from 'classnames'
-import {
-  getPersistedIsMapProperty,
-  isAccountView,
-  isLandSection
-} from '../../modules/ui/utils'
 import OnSaleList from '../OnSaleOrRentList'
 import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
-import { BrowseOptions } from '../../modules/routing/types'
+import { Props } from './AssetBrowse.types'
+import { ToggleBox } from './ToggleBox'
 import './AssetBrowse.css'
 
 const hasPrimarySales = (section?: Section) => {
