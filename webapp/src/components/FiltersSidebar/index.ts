@@ -1,3 +1,3 @@
-import FiltersSidebar  from './FitlersSidebar.container'
+import FiltersSidebar  from './FiltersSidebar.container'
 
 export { FiltersSidebar };
