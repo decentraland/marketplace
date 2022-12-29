@@ -135,6 +135,12 @@ class NFTAPI extends BaseAPI {
           : filters.rentalStatus
         statuses.forEach(status => queryParams.append('rentalStatus', status))
       }
+
+      if (filters.contracts && filters.contracts.length > 0) {
+        for (const contract of filters.contracts) {
+          queryParams.append('contractAddress', contract)
+        }
+      }
     }
 
     return queryParams.toString()
