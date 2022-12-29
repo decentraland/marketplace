@@ -118,7 +118,7 @@ export const NFTTopbar = ({
       )}
       {!isMap && (
         <div className={styles.infoRow}>
-          <p>{getCountText(count)}</p>
+          <p className={styles.countInfo}>{getCountText(count)}</p>
           <Dropdown
             direction="left"
             value={sortByValue}

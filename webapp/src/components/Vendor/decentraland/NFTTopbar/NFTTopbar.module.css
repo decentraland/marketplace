@@ -52,3 +52,7 @@
 .nftTopbar :global(.Chip.atlas) {
   border-radius: 0 4px 4px 0;
 }
+
+.countInfo {
+  color: #736e7d;
+}

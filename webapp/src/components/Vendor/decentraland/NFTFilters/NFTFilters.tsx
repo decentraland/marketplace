@@ -11,11 +11,10 @@ import {
   Icon,
   NotMobile
 } from 'decentraland-ui'
-import { EmotePlayMode, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { SortBy } from '../../../../modules/routing/types'
-import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { getCategoryFromSection } from '../../../../modules/routing/search'
 import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
 import { NFTSidebar } from '../../NFTSidebar'
@@ -48,8 +47,6 @@ const NFTFilters = (props: Props) => {
     rarities,
     wearableGenders,
     contracts,
-    network,
-    emotePlayMode,
     onBrowse,
     assetType,
     hasFiltersEnabled,
@@ -141,11 +138,6 @@ const NFTFilters = (props: Props) => {
     appliedFilters.push(t('nft_filters.collection'))
   }
 
-  const handleToggleOnlySmart = useCallback(
-    (newOnlySmart: boolean) => onBrowse({ onlySmart: newOnlySmart }),
-    [onBrowse]
-  )
-
   const handleOnlyOnSaleChange = useCallback(
     (_, props: CheckboxProps) => {
       onBrowse({ sortBy: SortBy.NEWEST, onlyOnSale: !!props.checked })
@@ -192,20 +184,6 @@ const NFTFilters = (props: Props) => {
     [onBrowse]
   )
 
-  const handleRaritiesChange = useCallback(
-    (options: string[]) => {
-      onBrowse({ rarities: options as Rarity[] })
-    },
-    [onBrowse]
-  )
-
-  const handleGendersChange = useCallback(
-    (options: string[]) => {
-      onBrowse({ wearableGenders: options as WearableGender[] })
-    },
-    [onBrowse]
-  )
-
   const handleCollectionsChange = useCallback(
     (contract?: string) => {
       onBrowse({ contracts: contract ? [contract] : undefined })
@@ -220,24 +198,6 @@ const NFTFilters = (props: Props) => {
       }
     },
     [search, onBrowse]
-  )
-
-  const handleNetworkChange = useCallback(
-    (newNetwork: Network) => {
-      if (network !== newNetwork) {
-        onBrowse({ network: newNetwork })
-      }
-    },
-    [network, onBrowse]
-  )
-
-  const handleEmotePlayModeChange = useCallback(
-    (newEmotePlayMode: EmotePlayMode) => {
-      if (emotePlayMode !== newEmotePlayMode) {
-        onBrowse({ emotePlayMode: newEmotePlayMode })
-      }
-    },
-    [emotePlayMode, onBrowse]
   )
 
   useEffect(
@@ -264,7 +224,6 @@ const NFTFilters = (props: Props) => {
       })
 
   const isWearableCategory = category === NFTCategory.WEARABLE
-  const isEmoteCategory = category === NFTCategory.EMOTE
 
   const toggleBoxI18nKey =
     view && isAccountView(view) ? 'account_page' : 'browse_page'
@@ -410,27 +369,10 @@ const NFTFilters = (props: Props) => {
           >
             <FiltersMenu
               assetType={assetType}
-              selectedNetwork={network}
               selectedCollection={contracts[0]}
-              selectedRarities={rarities}
-              selectedGenders={isWearableCategory ? wearableGenders : undefined}
-              selectedEmotePlayMode={isEmoteCategory ? emotePlayMode : undefined}
               isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
               isOnSale={onlyOnSale}
               onCollectionsChange={handleCollectionsChange}
-              onGendersChange={
-                isWearableCategory ? handleGendersChange : undefined
-              }
-              onRaritiesChange={handleRaritiesChange}
-              onNetworkChange={
-                isWearableCategory ? handleNetworkChange : undefined
-              }
-              onEmotePlayModeChange={
-                isEmoteCategory ? handleEmotePlayModeChange : undefined
-              }
-              onOnlySmartChange={
-                isWearableCategory ? handleToggleOnlySmart : undefined
-              }
             />
           </Responsive>
         </>
@@ -468,30 +410,9 @@ const NFTFilters = (props: Props) => {
               </div>
               <FiltersMenu
                 assetType={assetType}
-                selectedNetwork={network}
                 selectedCollection={contracts[0]}
-                selectedRarities={rarities}
-                selectedGenders={
-                  isWearableCategory ? wearableGenders : undefined
-                }
-                selectedEmotePlayMode={
-                  isEmoteCategory ? emotePlayMode : undefined
-                }
                 isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
                 onCollectionsChange={handleCollectionsChange}
-                onGendersChange={
-                  isWearableCategory ? handleGendersChange : undefined
-                }
-                onRaritiesChange={handleRaritiesChange}
-                onNetworkChange={
-                  isWearableCategory ? handleNetworkChange : undefined
-                }
-                onEmotePlayModeChange={
-                  isEmoteCategory ? handleEmotePlayModeChange : undefined
-                }
-                onOnlySmartChange={
-                  isWearableCategory ? handleToggleOnlySmart : undefined
-                }
               />
             </>
           ) : null}

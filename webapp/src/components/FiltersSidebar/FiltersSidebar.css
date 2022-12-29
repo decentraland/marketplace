@@ -1,4 +1,29 @@
 .filters-sidebar {
-  margin: 20px;
+  margin-top: 12px;
   margin-left: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 12px;
+  width: 100%;
+}
+
+.filters-sidebar-box {
+  background: #242129;
+}
+
+.filters-sidebar .filters-radio-group .ui.radio.checkbox input.hidden ~ label:before,
+.filters-sidebar .filters-radio-group .ui.radio.checkbox input.hidden:focus ~ label:before {
+  border: 2px solid #736E7D;
+  background-color: transparent;
+}
+
+.filters-sidebar .filters-radio-group .ui.radio.checkbox:hover input.hidden ~ label:before {
+  background-color: var(--primary);
+}
+
+.filters-sidebar .filters-radio-group .ui.radio.checkbox.checked input.hidden + label:after {
+  background-image: none;
+  width: 23px;
+  height: 23px;
+  border: 3px solid var(--secondary);
 }
