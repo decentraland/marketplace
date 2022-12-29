@@ -5,16 +5,14 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { Sections } from '../../modules/vendor/routing/types'
-import {
-  getPersistedIsMapProperty, isAccountView,
-} from '../../modules/ui/utils'
 import { BrowseOptions } from '../../modules/routing/types'
+import { getPersistedIsMapProperty, isAccountView } from '../../modules/ui/utils'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
-import { NFTFilters } from '../Vendor/NFTFilters'
+import NFTTopbar from '../Vendor/decentraland/NFTTopbar'
 import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
 import OnSaleList from '../OnSaleOrRentList'
@@ -176,11 +174,11 @@ const AssetBrowse = (props: Props) => {
           {isMap && isFullscreen ? (
             <div className="blur-background">
               <Container>
-                <NFTFilters isMap={isMap} />
+                <NFTTopbar />
               </Container>
             </div>
           ) : (
-            <NFTFilters isMap={Boolean(isMap)} />
+            <NFTTopbar />
           )}
           {isMap ? (
             <div className="Atlas">
