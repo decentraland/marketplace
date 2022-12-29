@@ -51,7 +51,9 @@ const SellModal = (props: Props) => {
     isUpdate ? ethers.utils.formatEther(order!.price) : ''
   )
   const [expiresAt, setExpiresAt] = useState(
-    isUpdate && order!.expiresAt && isValid(order!.expiresAt)
+    isUpdate &&
+      order!.expiresAt &&
+      isValid(new Date(`${+order!.expiresAt} 00:00:00`))
       ? formatDate(
           addDays(new Date(`${+order!.expiresAt} 00:00:00`), 1),
           INPUT_FORMAT
