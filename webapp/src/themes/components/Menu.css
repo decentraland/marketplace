@@ -9,7 +9,7 @@ ul.box-menu.Menu {
   background-color: var(--card);
   border-radius: 10px;
   padding-bottom: 21px;
-  margin-right: 0;
+  margin: 0;
   width: 100%;
 }
 
