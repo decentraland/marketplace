@@ -26,10 +26,10 @@ export const NFTTopbar = ({
   const handleSearch = useCallback(
     (value: string) => {
       if (search !== value) {
-        onBrowse({ search: value, isMap: false, isFullscreen: false })
+        onBrowse({ search: value })
       }
     },
-    [onBrowse]
+    [onBrowse, search]
   )
 
   const [searchValue, setSearchValue] = useInput(search, handleSearch, 500)
@@ -80,15 +80,17 @@ export const NFTTopbar = ({
   return (
     <div className={styles.nftTopbar}>
       <div>
-        <Field
-          className={styles.searchField}
-          placeholder={t('nft_filters.search')}
-          kind="full"
-          value={searchValue}
-          onChange={setSearchValue}
-          icon={<Icon name="search" />}
-          iconPosition="left"
-        />
+        {!isMap && (
+          <Field
+            className={styles.searchField}
+            placeholder={t('nft_filters.search')}
+            kind="full"
+            value={searchValue}
+            onChange={setSearchValue}
+            icon={<Icon name="search" />}
+            iconPosition="left"
+          />
+        )}
         {isLandSection(section) && !isAccountView(view!) && (
           <div className={styles.mapToggle}>
             <Chip
