@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react'
+import classNames from 'classnames'
 import { Dropdown, DropdownProps, Field, Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../../../modules/asset/types'
@@ -92,7 +93,7 @@ export const NFTTopbar = ({
           />
         )}
         {isLandSection(section) && !isAccountView(view!) && (
-          <div className={styles.mapToggle}>
+          <div className={classNames(styles.mapToggle, { [styles.map]: isMap })}>
             <Chip
               className="grid"
               icon="table"
