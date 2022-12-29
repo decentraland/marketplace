@@ -1,6 +1,5 @@
 import React from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Header, useNotMobileMediaQuery } from 'decentraland-ui'
+import { useNotMobileMediaQuery } from 'decentraland-ui'
 import { isLandSection } from '../../../../modules/ui/utils'
 import { FiltersSidebar } from '../../../FiltersSidebar'
 import { NFTSections } from '../NFTSections'
@@ -14,7 +13,6 @@ const NFTSidebar = (props: Props) => {
 
   return (
     <div className="NFTSidebar">
-      <Header sub>{t('nft_sidebar.categories')}</Header>
       <NFTSections
         section={section}
         sections={sections}
