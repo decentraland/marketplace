@@ -9,6 +9,8 @@ ul.box-menu.Menu {
   background-color: var(--card);
   border-radius: 10px;
   padding-bottom: 21px;
+  margin: 0;
+  width: 100%;
 }
 
 ul.box-menu.Menu > .MenuItem {
@@ -26,11 +28,11 @@ ul.box-menu.Menu > .MenuItem.active {
 ul.box-menu.Menu > .MenuItem.sub-1 {
   margin-left: 0px;
   padding-left: 32px;
-  width: var(--menu-item-width);
+  width: 100%;
 }
 
 ul.box-menu.Menu > .MenuItem.sub-2 {
   margin-left: 0px;
   padding-left: 48px;
-  width: var(--menu-item-width);
+  width: 100%;
 }

@@ -325,7 +325,15 @@
     "all_networks": "Todas las redes",
     "smart_wearables": "Vestimentas Interactivas",
     "play_mode": "Play Mode",
-    "all_play_modes": "All Play Modes"
+    "all_play_modes": "All Play Modes",
+    "body_shapes": {
+      "title": "Género",
+      "all_items": "Todos los géneros",
+      "female": "Solo femenino",
+      "male": "Solo masculino",
+      "unisex": "Solo unisex"
+    },
+    "more_filters": "Más filtros"
   },
   "nft_land_filters": {
     "all_land": "Todas las tierras",
