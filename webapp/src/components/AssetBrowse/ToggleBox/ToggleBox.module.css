@@ -16,6 +16,10 @@
   padding-left: 15px;
 }
 
+.item.flex:first-child {
+  margin-left: 0;
+}
+
 .item.flex:last-child {
   margin-right: 0;
 }
