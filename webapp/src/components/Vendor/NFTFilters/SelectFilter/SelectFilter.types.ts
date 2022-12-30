@@ -5,6 +5,7 @@ export type Props = {
   options: Option[]
   disabled?: boolean
   placeholder?: string
+  className?: string
   fetchOptions?: (search: string) => Promise<Option[]>
   fetchOptionFromValue?: (value: string) => Promise<Option | null>
   onChange: (newValue: string) => void

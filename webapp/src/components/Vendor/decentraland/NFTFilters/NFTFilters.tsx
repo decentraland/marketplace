@@ -20,7 +20,6 @@ import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
 import { NFTSidebar } from '../../NFTSidebar'
 import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
-import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { AssetType } from '../../../../modules/asset/types'
 import {
   isAccountView,
@@ -42,7 +41,6 @@ const NFTFilters = (props: Props) => {
     count,
     onlyOnSale,
     onlyOnRent,
-    onlySmart,
     isMap,
     rarities,
     wearableGenders,
@@ -184,13 +182,6 @@ const NFTFilters = (props: Props) => {
     [onBrowse]
   )
 
-  const handleCollectionsChange = useCallback(
-    (contract?: string) => {
-      onBrowse({ contracts: contract ? [contract] : undefined })
-    },
-    [onBrowse]
-  )
-
   const handleSearch = useCallback(
     (newSearch: string) => {
       if (search !== newSearch) {
@@ -222,8 +213,6 @@ const NFTFilters = (props: Props) => {
               count: count.toLocaleString()
             })
       })
-
-  const isWearableCategory = category === NFTCategory.WEARABLE
 
   const toggleBoxI18nKey =
     view && isAccountView(view) ? 'account_page' : 'browse_page'
@@ -363,18 +352,6 @@ const NFTFilters = (props: Props) => {
               }
             ]}
           />
-          <Responsive
-            minWidth={Responsive.onlyTablet.minWidth}
-            className="filters"
-          >
-            <FiltersMenu
-              assetType={assetType}
-              selectedCollection={contracts[0]}
-              isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
-              isOnSale={onlyOnSale}
-              onCollectionsChange={handleCollectionsChange}
-            />
-          </Responsive>
         </>
       ) : null}
 
@@ -408,12 +385,6 @@ const NFTFilters = (props: Props) => {
                   onChange={handleTypeByDropdownChange}
                 />
               </div>
-              <FiltersMenu
-                assetType={assetType}
-                selectedCollection={contracts[0]}
-                isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
-                onCollectionsChange={handleCollectionsChange}
-              />
             </>
           ) : null}
           <div className="filter-row">
