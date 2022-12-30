@@ -56,7 +56,7 @@ export const CollectionFilter = ({ collection, onlyOnSale, onChange }: Collectio
   }, [onlyOnSale])
 
   return (
-    <Box header={t('nft_filters.collection')} collapsible>
+    <Box header={t('nft_filters.collection')} collapsible className="filters-sidebar-box">
       <SelectFilter
         name=""
         value={collection || ''}

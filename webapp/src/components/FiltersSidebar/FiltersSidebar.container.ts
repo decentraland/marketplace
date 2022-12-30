@@ -23,7 +23,6 @@ const mapState = (state: RootState): MapStateProps => {
     emotePlayMode: getEmotePlayMode(state),
     assetType: getAssetType(state),
     collection: contracts[0]
-
   }
 }
 

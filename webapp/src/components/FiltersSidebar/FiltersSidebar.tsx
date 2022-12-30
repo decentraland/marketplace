@@ -93,7 +93,7 @@ export const FiltersSidebar = ({
         minPrice={minPrice}
         maxPrice={maxPrice}
       />
-      <CollectionFilter onChange={handleCollectionChange} collection={collection} onlyOnSale={onlyOnSale}  />
+      <CollectionFilter onChange={handleCollectionChange} collection={collection} onlyOnSale={isOnSale}  />
       {isEmoteCategory && (
         <EmotePlayModeFilter
           onChange={handleEmotePlayModeChange}

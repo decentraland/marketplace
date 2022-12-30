@@ -41,7 +41,6 @@ const NFTFilters = (props: Props) => {
     count,
     onlyOnSale,
     onlyOnRent,
-    onlySmart,
     isMap,
     rarities,
     wearableGenders,
@@ -183,27 +182,6 @@ const NFTFilters = (props: Props) => {
     [onBrowse]
   )
 
-  const handleRaritiesChange = useCallback(
-    (options: string[]) => {
-      onBrowse({ rarities: options as Rarity[] })
-    },
-    [onBrowse]
-  )
-
-  const handleGendersChange = useCallback(
-    (options: string[]) => {
-      onBrowse({ wearableGenders: options as WearableGender[] })
-    },
-    [onBrowse]
-  )
-
-  const handleCollectionsChange = useCallback(
-    (contract?: string) => {
-      onBrowse({ contracts: contract ? [contract] : undefined })
-    },
-    [onBrowse]
-  )
-
   const handleSearch = useCallback(
     (newSearch: string) => {
       if (search !== newSearch) {
@@ -235,8 +213,6 @@ const NFTFilters = (props: Props) => {
               count: count.toLocaleString()
             })
       })
-
-  const isWearableCategory = category === NFTCategory.WEARABLE
 
   const toggleBoxI18nKey =
     view && isAccountView(view) ? 'account_page' : 'browse_page'
