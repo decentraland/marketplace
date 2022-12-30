@@ -28,7 +28,6 @@ export function buildBrowseURL(
   pathname: string,
   browseOptions: BrowseOptions
 ): string {
-  console.log({ browseOptions });
   let params: URLSearchParams | undefined
   if (browseOptions.section === Section.ON_SALE) {
     params = getSearchParams({ section: Section.ON_SALE })
@@ -36,7 +35,6 @@ export function buildBrowseURL(
     params = getSearchParams(browseOptions)
   }
 
-  console.log({ params })
   return params ? `${pathname}?${params.toString()}` : pathname
 }
 

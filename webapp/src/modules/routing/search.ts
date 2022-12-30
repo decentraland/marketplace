@@ -24,7 +24,6 @@ export function getDefaultOptionsByView(view?: View): BrowseOptions {
 
 export function getSearchParams(options?: BrowseOptions) {
   let params: URLSearchParams | undefined
-  console.log({ options })
   if (options) {
     params = new URLSearchParams()
 
