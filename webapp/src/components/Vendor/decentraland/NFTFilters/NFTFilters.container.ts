@@ -20,7 +20,7 @@ import {
   getContracts,
   getNetwork,
   getAssetType,
-  getEmotePlayMode
+  getEmotePlayModes
 } from '../../../../modules/routing/selectors'
 import { isMapSet } from '../../../../modules/routing/utils'
 import {
@@ -47,7 +47,7 @@ const mapState = (state: RootState): MapStateProps => ({
   wearableGenders: getWearableGenders(state),
   contracts: getContracts(state),
   network: getNetwork(state),
-  emotePlayMode: getEmotePlayMode(state),
+  emotePlayModes: getEmotePlayModes(state),
   hasFiltersEnabled: hasFiltersEnabled(state),
   isRentalsEnabled: getIsRentalsEnabled(state),
 })

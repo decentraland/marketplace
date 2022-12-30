@@ -11,10 +11,10 @@ export type Props = {
   bodyShapes?: WearableGender[]
   isOnlySmart: boolean
   isOnSale?: boolean
-  emotePlayMode?: EmotePlayMode
+  emotePlayModes?: EmotePlayMode[]
   assetType?: AssetType
   onBrowse: (options: BrowseOptions) => void
 }
 
-export type MapStateProps = Pick<Props, 'minPrice' | 'maxPrice' | 'rarities' | 'network' | 'category' | 'bodyShapes' | 'isOnlySmart' | 'isOnSale' | 'emotePlayMode' | 'assetType'>
+export type MapStateProps = Pick<Props, 'minPrice' | 'maxPrice' | 'rarities' | 'network' | 'category' | 'bodyShapes' | 'isOnlySmart' | 'isOnSale' | 'emotePlayModes' | 'assetType'>
 export type MapDispatchProps = Pick<Props, 'onBrowse'>

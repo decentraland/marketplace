@@ -223,13 +223,13 @@ export const getAssetType = createSelector<
   return assetTypeParam as AssetType
 })
 
-export const getEmotePlayMode = createSelector<
+export const getEmotePlayModes = createSelector<
   RootState,
   string,
-  EmotePlayMode | undefined
+  EmotePlayMode[] | undefined
 >(
   getRouterSearch,
-  search => (getURLParam(search, 'emotePlayMode') as EmotePlayMode) || undefined
+  search => getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
 )
 
 export const getViewAsGuest = createSelector<RootState, string, boolean>(
@@ -257,7 +257,7 @@ export const hasFiltersEnabled = createSelector<
   WearableGender[],
   Rarity[],
   string[],
-  string | undefined,
+  EmotePlayMode[] | undefined,
   string,
   string,
   boolean
@@ -266,15 +266,15 @@ export const hasFiltersEnabled = createSelector<
   getWearableGenders,
   getRarities,
   getContracts,
-  getEmotePlayMode,
+  getEmotePlayModes,
   getMinPrice,
   getMaxPrice,
-  (network, genders, rarities, contracts, playMode, minPrice, maxPrice) => {
+  (network, genders, rarities, contracts, playModes, minPrice, maxPrice) => {
     const hasNetworkFilter = network !== undefined
     const hasGenderFilter = genders.length > 0
     const hasRarityFilter = rarities.length > 0
     const hasContractsFilter = contracts.length > 0
-    const hasEmotePlayModeFilter = playMode !== undefined
+    const hasEmotePlayModeFilter = playModes && playModes.length > 0
     return (
       hasNetworkFilter ||
       hasGenderFilter ||
@@ -362,7 +362,7 @@ export const getCurrentBrowseOptions = createSelector([
   getVendor,
   getSection,
   getNetwork,
-  getEmotePlayMode,
+  getEmotePlayModes,
   getPaginationUrlParams,
   getAssetsUrlParams,
   getLandsUrlParams,
@@ -375,7 +375,7 @@ export const getCurrentBrowseOptions = createSelector([
     vendor,
     section,
     network,
-    emotePlayMode,
+    emotePlayModes,
     paginationUrlParams,
     AssetsUrlParams,
     landsUrlParams,
@@ -389,7 +389,7 @@ export const getCurrentBrowseOptions = createSelector([
       vendor,
       section,
       network,
-      emotePlayMode,
+      emotePlayModes,
       ...AssetsUrlParams,
       ...paginationUrlParams,
       ...landsUrlParams,

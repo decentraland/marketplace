@@ -87,10 +87,12 @@ export function getSearchParams(options?: BrowseOptions) {
     }
 
     if (
-      options.emotePlayMode &&
-      Object.values(EmotePlayMode).includes(options.emotePlayMode)
+      options.emotePlayModes?.length &&
+      options.emotePlayModes?.every(option => Object.values(EmotePlayMode).includes(option))
     ) {
-      params.set('emotePlayMode', options.emotePlayMode)
+      for (const emotePlayMode of options.emotePlayModes) {
+        params.append('emotePlayMode', emotePlayMode)
+      }
     }
 
     if (options.viewAsGuest !== undefined) {

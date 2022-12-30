@@ -44,7 +44,7 @@ export function getFilters(
         contracts,
         network,
         onlySmart,
-        emotePlayMode,
+        emotePlayModes,
         minPrice,
         maxPrice
       } = options
@@ -60,7 +60,7 @@ export function getFilters(
         wearableGenders,
         contracts,
         network,
-        emotePlayMode,
+        emotePlayModes,
         rentalStatus:
           isRentalsEnabled && (isLand || isParcelsOrEstates) && address
             ? [RentalStatus.OPEN, RentalStatus.EXECUTED]
