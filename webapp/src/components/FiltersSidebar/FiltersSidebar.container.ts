@@ -3,12 +3,25 @@ import { Dispatch } from 'redux'
 import { RootState } from '../../modules/reducer'
 import { browse } from '../../modules/routing/actions'
 import { getCategoryFromSection } from '../../modules/routing/search'
-import { getAssetType, getEmotePlayMode, getMaxPrice, getMinPrice, getNetwork, getOnlyOnSale, getOnlySmart, getRarities, getSection, getWearableGenders } from '../../modules/routing/selectors'
+import { getAssetType, getContracts, getEmotePlayMode, getMaxPrice, getMinPrice, getNetwork, getOnlyOnRent, getOnlyOnSale, getOnlySmart, getRarities, getSection, getWearableGenders } from '../../modules/routing/selectors'
 import { MapStateProps, MapDispatchProps } from './FiltersSidebar.types'
 import { FiltersSidebar } from './FiltersSidebar'
+import { LANDFilters } from '../Vendor/decentraland/types'
+import { getIsRentalsEnabled } from '../../modules/features/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
   const section = getSection(state)
+  const contracts = getContracts(state)
+  const onlyOnSale = getOnlyOnSale(state)
+  const onlyOnRent = getOnlyOnRent(state)
+  let landStatus = LANDFilters.ALL_LAND;
+
+  if (onlyOnRent) {
+    landStatus = LANDFilters.ONLY_FOR_RENT
+  } else if (onlyOnSale) {
+    landStatus = LANDFilters.ONLY_FOR_SALE
+  }
+
 
   return {
     minPrice: getMinPrice(state),
@@ -18,9 +31,13 @@ const mapState = (state: RootState): MapStateProps => {
     bodyShapes: getWearableGenders(state),
     category: section ? getCategoryFromSection(section) : undefined,
     isOnlySmart: getOnlySmart(state),
-    isOnSale: getOnlyOnSale(state),
+    isOnSale: onlyOnSale,
     emotePlayMode: getEmotePlayMode(state),
-    assetType: getAssetType(state)
+    assetType: getAssetType(state),
+    isRentalsEnabled: getIsRentalsEnabled(state),
+    collection: contracts[0],
+    landStatus,
+    section
   }
 }
 
