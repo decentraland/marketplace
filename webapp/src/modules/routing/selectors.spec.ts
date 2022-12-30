@@ -47,7 +47,7 @@ describe('when getting if the are filters set', () => {
 
   describe('when the playmode filter is set', () => {
     it('should return true', () => {
-      expect(hasFiltersEnabled.resultFunc(undefined, [], [], [], EmotePlayMode.LOOP, '10', '')).toBe(
+      expect(hasFiltersEnabled.resultFunc(undefined, [], [], [], [EmotePlayMode.LOOP], '10', '')).toBe(
         true
       )
     })

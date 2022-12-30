@@ -229,7 +229,7 @@ export const getEmotePlayModes = createSelector<
   EmotePlayMode[] | undefined
 >(
   getRouterSearch,
-  search => getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
+  search => getURLParamArray<EmotePlayMode>(search, 'emotePlayModes') || undefined
 )
 
 export const getViewAsGuest = createSelector<RootState, string, boolean>(

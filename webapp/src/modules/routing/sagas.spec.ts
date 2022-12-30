@@ -52,7 +52,7 @@ describe('when handling the clear filters request action', () => {
       wearableGenders: [WearableGender.FEMALE],
       contracts: ['aContract'],
       network: Network.ETHEREUM,
-      emotePlayMode: EmotePlayMode.SIMPLE,
+      emotePlayModes: [EmotePlayMode.SIMPLE],
       minPrice: "1",
       maxPrice: "100"
     }
@@ -63,7 +63,7 @@ describe('when handling the clear filters request action', () => {
     delete browseOptionsWithoutFilters.network
     delete browseOptionsWithoutFilters.contracts
     delete browseOptionsWithoutFilters.page
-    delete browseOptionsWithoutFilters.emotePlayMode
+    delete browseOptionsWithoutFilters.emotePlayModes
     delete browseOptionsWithoutFilters.minPrice
     delete browseOptionsWithoutFilters.maxPrice
 
@@ -130,7 +130,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         rarities: undefined,
         contracts: undefined,
         wearableGenders: undefined,
-        emotePlayMode: undefined
+        emotePlayModes: undefined
       }
     }
 

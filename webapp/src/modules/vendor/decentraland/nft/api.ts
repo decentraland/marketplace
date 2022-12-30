@@ -134,8 +134,10 @@ class NFTAPI extends BaseAPI {
         queryParams.append('network', filters.network)
       }
 
-      if (filters.emotePlayMode) {
-        queryParams.append('emotePlayMode', filters.emotePlayMode)
+      if (filters.emotePlayModes) {
+        for (const emotePlayMode of filters.emotePlayModes) {
+          queryParams.append('emotePlayModes', emotePlayMode)
+        }
       }
 
       if (filters.rentalStatus) {
