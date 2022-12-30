@@ -326,7 +326,15 @@
     "all_networks": "所有网络",
     "smart_wearables": "智能穿戴",
     "play_mode": "游戏模式",
-    "all_play_modes": "所有播放模式"
+    "all_play_modes": "所有播放模式",
+    "body_shapes": {
+      "title": "身材",
+      "all_items": "所有体型",
+      "female": "只有女性",
+      "male": "只有男性",
+      "unisex": "仅男女皆宜"
+    },
+    "more_filters": "更多过滤器"
   },
   "nft_land_filters": {
     "all_land": "所有土地",

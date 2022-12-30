@@ -161,6 +161,7 @@ export function* handleBrowse(action: BrowseAction) {
     getNewBrowseOptions,
     action.payload.options
   )
+  console.log("HOLAAAA")
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
   const eventsContracts: Record<string, string[]> = yield select(getData)
   const isAnEventRoute = Object.keys(eventsContracts).includes(
@@ -175,6 +176,8 @@ export function* handleBrowse(action: BrowseAction) {
           : eventsContracts[pathname.slice(1)]
     })
   })
+
+  console.log({pathname, options})
   yield put(push(buildBrowseURL(pathname, options)))
 }
 

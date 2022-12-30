@@ -330,7 +330,15 @@
     "all_networks": "All Networks",
     "smart_wearables": "Smart Wearables",
     "play_mode": "Play Mode",
-    "all_play_modes": "All Play Modes"
+    "all_play_modes": "All Play Modes",
+    "body_shapes": {
+      "title": "Body shape",
+      "all_items": "All Body Shapes",
+      "female": "Only female",
+      "male": "Only male",
+      "unisex": "Only unisex"
+    },
+    "more_filters": "More filters"
   },
   "nft_land_filters": {
     "all_land": "All land",

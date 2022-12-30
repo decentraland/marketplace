@@ -343,15 +343,20 @@ export const getWearablesUrlParams = createSelector(
   getWearableGenders,
   getView,
   getViewAsGuest,
-  (rarities, wearableGenders, view, viewAsGuest) => ({
+  getMinPrice,
+  getMaxPrice,
+  (rarities, wearableGenders, view, viewAsGuest, minPrice, maxPrice) => ({
     rarities,
     wearableGenders,
     view,
-    viewAsGuest
+    viewAsGuest,
+    minPrice,
+    maxPrice
   })
 )
 
-export const getCurrentBrowseOptions = createSelector(
+
+export const getCurrentBrowseOptions = createSelector([
   getAssetType,
   getCurrentLocationAddress,
   getVendor,
@@ -364,7 +369,7 @@ export const getCurrentBrowseOptions = createSelector(
   getWearablesUrlParams,
   getOnlyOnRent,
   getOnlyOnSale,
-  (
+],(
     assetType,
     address,
     vendor,
