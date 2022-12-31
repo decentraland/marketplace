@@ -20,6 +20,8 @@ export type Props<T extends AssetType = AssetType> = {
   rental: RentalListing | null
   isLoading: boolean
   rentalStatus?: RentalStatus[]
+  isLoadingFeatureFlags: boolean
+  isLandOrEstate: boolean
   onFetchNFT: typeof fetchNFTRequest
   onFetchItem: typeof fetchItemRequest
   children: (
@@ -32,7 +34,14 @@ export type Props<T extends AssetType = AssetType> = {
 
 export type MapStateProps = Pick<
   Props,
-  'contractAddress' | 'tokenId' | 'asset' | 'order' | 'rental' | 'isLoading'
+  | 'contractAddress'
+  | 'tokenId'
+  | 'asset'
+  | 'order'
+  | 'rental'
+  | 'isLoading'
+  | 'isLoadingFeatureFlags'
+  | 'isLandOrEstate'
 >
 export type MapDispatchProps = Pick<Props, 'onFetchNFT' | 'onFetchItem'>
 export type MapDispatch = Dispatch<

@@ -11,16 +11,14 @@ import { AssetBrowse } from '../AssetBrowse'
 import { Props } from './LandsPage.types'
 
 const LandsPage = (props: Props) => {
-  const { isFullscreen, isMap } = props
+  const { isFullscreen } = props
   return (
     <>
       <Navbar isFullscreen />
-      <Navigation activeTab={NavigationTab.LANDS} isFullscreen={isFullscreen} />
+      <Navigation activeTab={NavigationTab.LANDS} />
       <AssetBrowse
         vendor={VendorName.DECENTRALAND}
         view={View.MARKET}
-        isFullscreen={isFullscreen}
-        isMap={isMap}
         sections={[Section.LAND]}
       />
       <Footer isFullscreen={isFullscreen} />

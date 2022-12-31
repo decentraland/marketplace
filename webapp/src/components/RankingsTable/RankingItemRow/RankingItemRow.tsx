@@ -6,7 +6,6 @@ import { Mobile, NotMobile } from 'decentraland-ui/dist/components/Media/Media'
 import { Table } from 'decentraland-ui/dist/components/Table/Table'
 import { Item, NFTCategory } from '@dcl/schemas'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import { AssetType } from '../../../modules/asset/types'
@@ -17,6 +16,7 @@ import { AssetProvider } from '../../AssetProvider'
 import { ManaToFiat } from '../../ManaToFiat'
 import RarityBadge from '../../RarityBadge'
 import { AssetImage } from '../../AssetImage'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './RankingItemRow.types'
 import './RankingItemRow.css'
 
@@ -62,13 +62,11 @@ const RankingItemRow = ({ entity }: Props) => {
                       values={{
                         creator: (
                           <span className="rankings-item-data-creator">
-                            <Link to={locations.account(item.creator)}>
-                              <Profile
-                                address={item.creator}
-                                textOnly
-                                inline={false}
-                              />
-                            </Link>
+                            <LinkedProfile
+                              address={item.creator}
+                              textOnly
+                              inline={false}
+                            />
                           </span>
                         )
                       }}
@@ -171,13 +169,11 @@ const RankingItemRow = ({ entity }: Props) => {
                   values={{
                     creator: (
                       <span className="rankings-item-data-creator">
-                        <Link to={locations.account(item.creator)}>
-                          <Profile
-                            address={item.creator}
-                            textOnly
-                            inline={false}
-                          />
-                        </Link>
+                        <LinkedProfile
+                          address={item.creator}
+                          textOnly
+                          inline={false}
+                        />
                       </span>
                     )
                   }}

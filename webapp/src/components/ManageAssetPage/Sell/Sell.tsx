@@ -6,6 +6,8 @@ import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
+import { LandLockedPopup } from '../../LandLockedPopup'
+import { isLandLocked } from '../../../modules/rental/utils'
 import Mana from '../../Mana/Mana'
 import { IconButton } from '../IconButton'
 import { Props } from './Sell.types'
@@ -14,12 +16,16 @@ import styles from './Sell.module.css'
 const Sell = (props: Props) => {
   const {
     className,
-    isLandLocked,
+    rental,
     order,
-    nft: { contractAddress, tokenId },
+    nft,
     onEditOrder,
-    onCancelOrder
+    onCancelOrder,
+    userAddress
   } = props
+
+  const areActionsLocked =
+    rental !== null && isLandLocked(userAddress, rental, nft)
 
   return (
     <section className={classNames(styles.box, className)}>
@@ -34,32 +40,38 @@ const Sell = (props: Props) => {
             <>
               <IconButton
                 iconName="pencil"
-                disabled={isLandLocked}
+                disabled={areActionsLocked}
                 onClick={onEditOrder}
               />
               <IconButton
                 iconName="trash alternate"
-                disabled={isLandLocked}
+                disabled={areActionsLocked}
                 onClick={onCancelOrder}
               />
             </>
           ) : (
-            <Button
-              className={styles.sellButton}
-              disabled={isLandLocked}
-              as={Link}
-              to={locations.sell(contractAddress, tokenId)}
-              fluid
+            <LandLockedPopup
+              asset={nft}
+              rental={rental}
+              userAddress={userAddress}
             >
-              {t('manage_asset_page.sell.list_for_sale')}
-            </Button>
+              <Button
+                className={styles.sellButton}
+                disabled={areActionsLocked}
+                as={Link}
+                to={locations.sell(nft.contractAddress, nft.tokenId)}
+                fluid
+              >
+                {t('manage_asset_page.sell.list_for_sale')}
+              </Button>
+            </LandLockedPopup>
           )}
         </div>
       </div>
       {order ? (
         <div
           className={classNames(styles.content, {
-            [styles.isLandLocked]: isLandLocked
+            [styles.isLandLocked]: areActionsLocked
           })}
         >
           <div className={styles.column}>
@@ -80,11 +92,6 @@ const Sell = (props: Props) => {
               {intlFormat(order.expiresAt)}
             </div>
           </div>
-        </div>
-      ) : null}
-      {isLandLocked ? (
-        <div className={styles.rentedMessage}>
-          {t('manage_asset_page.sell.cant_sell_rented_land')}
         </div>
       ) : null}
     </section>

@@ -16,6 +16,7 @@ const ConfirmationStep = (props: Props) => {
     periods,
     expiresAt,
     onCreate,
+    onClearRentalErros,
     error
   } = props
 
@@ -31,11 +32,16 @@ const ConfirmationStep = (props: Props) => {
     [nft, pricePerDay, periods, expiresAt, onCreate]
   )
 
+  const onBack = useCallback(() => {
+    onClearRentalErros()
+    onCancel()
+  }, [onCancel, onClearRentalErros])
+
   return (
     <>
       <ModalNavigation
         title={t('rental_modal.confirmation_step.title')}
-        onClose={onCancel}
+        onClose={!isSigning ? onBack : undefined}
       />
       <Modal.Content>
         <div className={styles.notice}>
@@ -53,7 +59,9 @@ const ConfirmationStep = (props: Props) => {
               </div>
             </div>
             <div className={styles.noticeRow}>
-              <div className={styles.noticeLabel}>Periods</div>
+              <div className={styles.noticeLabel}>
+                {t('rental_modal.confirmation_step.periods')}
+              </div>
               <div className={styles.noticeText}>
                 {periods.map(period => daysByPeriod[period]).join(' / ')}&nbsp;
                 {t('global.days')}
@@ -82,7 +90,7 @@ const ConfirmationStep = (props: Props) => {
         >
           {t('global.confirm')}
         </Button>
-        <Button onClick={onCancel} disabled={isSigning}>
+        <Button onClick={onBack} disabled={isSigning}>
           {t('global.back')}
         </Button>
       </Modal.Actions>

@@ -21,12 +21,11 @@ const SubmitTransactionModal = ({
   const isLoading = isTransactionBeingConfirmed || isSubmittingTransaction
 
   return (
-    <Modal
-      size="tiny"
-      name={name}
-      onClose={isLoading ? () => undefined : onClose}
-    >
-      <ModalNavigation title={title} />
+    <Modal size="tiny" name={name} onClose={!isLoading ? onClose : undefined}>
+      <ModalNavigation
+        title={title}
+        onClose={!isLoading ? onClose : undefined}
+      />
       <Modal.Content className={className}>
         {children}
 
@@ -40,7 +39,7 @@ const SubmitTransactionModal = ({
           />
         ) : null}
       </Modal.Content>
-      <Modal.Actions className={styles.actions}>
+      <Modal.Actions>
         {isLoading ? (
           <div className={styles.loader}>
             <Loader inline size="small" />{' '}
@@ -55,12 +54,7 @@ const SubmitTransactionModal = ({
             {action_message}
           </Button>
         )}
-        <Button
-          className={styles.cancel}
-          secondary
-          disabled={isLoading}
-          onClick={onClose}
-        >
+        <Button secondary disabled={isLoading} onClick={onClose}>
           {t('global.cancel')}
         </Button>
       </Modal.Actions>

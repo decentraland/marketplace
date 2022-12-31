@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
-import Form from 'semantic-ui-react/dist/commonjs/collections/Form'
+import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './ConfirmInputValueModal.types'
 import { ManaField } from '../ManaField'
@@ -26,35 +26,39 @@ const ConfirmInputValueModal = ({
 
   return (
     <Modal size="small" open={open} className="ConfirmInputValueModal">
-      <Modal.Header>{headerTitle}</Modal.Header>
-      <Form onSubmit={onConfirm}>
-        <Modal.Content>
-          {content}
-          <ManaField
-            label={t('global.price')}
-            network={network}
-            placeholder={parsedValueToConfirm}
-            value={confirmedInput}
-            onChange={(_event, props) => {
-              setConfirmedInput(props.value)
-            }}
-          />
-        </Modal.Content>
-        <Modal.Actions>
-          <Button
-            type="button"
-            onClick={() => {
-              setConfirmedInput('')
-              onCancel()
-            }}
-          >
-            {t('global.cancel')}
-          </Button>
-          <Button type="submit" primary disabled={isDisabled} loading={loading}>
-            {t('global.proceed')}
-          </Button>
-        </Modal.Actions>
-      </Form>
+      <ModalNavigation title={headerTitle} onClose={onCancel}></ModalNavigation>
+      <Modal.Content>
+        {content}
+        <ManaField
+          label={t('global.price')}
+          network={network}
+          placeholder={parsedValueToConfirm}
+          value={confirmedInput}
+          onChange={(_event, props) => {
+            setConfirmedInput(props.value)
+          }}
+        />
+      </Modal.Content>
+      <Modal.Actions>
+        <Button
+          type="button"
+          onClick={() => {
+            setConfirmedInput('')
+            onCancel()
+          }}
+        >
+          {t('global.cancel')}
+        </Button>
+        <Button
+          type="submit"
+          primary
+          disabled={isDisabled}
+          loading={loading}
+          onClick={onConfirm}
+        >
+          {t('global.proceed')}
+        </Button>
+      </Modal.Actions>
     </Modal>
   )
 }

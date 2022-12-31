@@ -41,7 +41,7 @@
   margin-top: 14px;
   display: grid;
   grid-template-columns: 33% 33% 33%;
-  grid-template-rows: 40px 20px;
+  grid-template-rows: 34px 34px;
   margin-bottom: 32px;
 }
 
@@ -83,6 +83,12 @@
   height: 64px;
 }
 
+.expirationDate .info {
+  position: absolute;
+  left: 155px;
+  top: 2px;
+}
+
 .actions {
   flex-direction: column;
   align-items: center;
@@ -95,4 +101,37 @@
 .actions :global(.ui.primary.button) + :global(.ui.secondary.button) {
   margin-left: 0px;
   margin-top: 15px;
+}
+
+.expirationDate :global(.field) {
+  width: 100% !important;
+}
+
+.expirationDate :global(.dcl.field .ui.input) {
+  width: 100% !important;
+}
+
+@media (max-width: 767px) {
+  .actions {
+    align-items: center;
+    bottom: 28px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    margin: 0px !important;
+  }
+
+  .actionButton {
+    width: 85% !important;
+  }
+
+  .pricePerDay {
+    margin-top: 10px;
+  }
+
+  .periodOptions {
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 34px 34px 34px;
+  }
 }

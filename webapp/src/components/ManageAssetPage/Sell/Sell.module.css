@@ -50,11 +50,15 @@
 .columnContent {
   font-style: normal;
   font-weight: 600;
-  font-size: 21px;
+  font-size: 16px;
   color: var(--primary-text);
   width: 100%;
   display: flex;
   align-items: center;
+}
+
+.columnContent :global(.ui.medium.header.dcl.mana) {
+  font-size: 16px;
 }
 
 .listForSale:global(.ui.button) {
@@ -98,6 +102,9 @@
 @media (max-width: 768px) {
   .box {
     margin-top: 12px;
+  }
+  .columnContent {
+    font-size: 21px;
   }
 }
 

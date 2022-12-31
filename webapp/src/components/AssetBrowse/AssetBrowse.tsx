@@ -5,6 +5,7 @@ import React, {
   useEffect,
   useState
 } from 'react'
+import classNames from 'classnames'
 import { Mobile, NotMobile } from 'decentraland-ui/dist/components/Media'
 import { Container } from 'decentraland-ui/dist/components/Container/Container'
 import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
@@ -16,13 +17,17 @@ import { Section as DecentralandSection } from '../../modules/vendor/decentralan
 import { AssetType } from '../../modules/asset/types'
 import { VendorName } from '../../modules/vendor'
 import { Section, Sections } from '../../modules/vendor/routing/types'
+import {
+  getPersistedIsMapProperty,
+  isAccountView,
+  isLandSection
+} from '../../modules/ui/utils'
+import { BrowseOptions } from '../../modules/routing/types'
 import { Row } from '../Layout/Row'
 import { Column } from '../Layout/Column'
-import { Props } from './AssetBrowse.types'
 import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
+import { Props } from './AssetBrowse.types'
 import { ToggleBox } from './ToggleBox'
-import classNames from 'classnames'
-import { isAccountView, isLandSection } from '../../modules/ui/utils'
 import './AssetBrowse.css'
 
 const LazyNFTFilters = React.lazy(() => import('../Vendor/NFTFilters'))
@@ -90,7 +95,8 @@ const AssetBrowse = (props: Props) => {
     onlyOnSale,
     onlySmart,
     viewInState,
-    isRentalsEnabled
+    isRentalsEnabled,
+    onlyOnRent
   } = props
 
   // Prevent fetching more than once while browsing
@@ -108,9 +114,25 @@ const AssetBrowse = (props: Props) => {
     }
   }, [view, viewInState])
 
+  const isMapPropertyPersisted = getPersistedIsMapProperty()
+
+  useEffect(() => {
+    if (
+      section === DecentralandSection.LAND &&
+      !isAccountView(view) &&
+      isMapPropertyPersisted === false &&
+      isMap
+    ) {
+      // To prevent the map view from being displayed when the user clicks on the Land navigation tab.
+      // We set the has fetched variable to false so it has to browse back to the list view.
+      setHasFetched(false)
+    }
+  }, [section, view, isMap, isMapPropertyPersisted])
+
   useEffect(() => {
     if (viewInState === view && !hasFetched) {
-      onFetchAssetsFromRoute({
+      // Options used to fetch the assets.
+      const browseOpts: BrowseOptions = {
         vendor,
         view,
         section,
@@ -118,10 +140,34 @@ const AssetBrowse = (props: Props) => {
         contracts,
         onlyOnSale,
         onlySmart
-      })
+      }
+
+      // Function used to fetch the assets.
+      let fetchAssetsFn: (opts: BrowseOptions) => void = onFetchAssetsFromRoute
+
+      if (
+        section === DecentralandSection.LAND &&
+        !isAccountView(view) &&
+        isMapPropertyPersisted === false
+      ) {
+        // Update the browser options to match the ones persisted.
+        browseOpts.isMap = isMap
+        browseOpts.isFullscreen = isFullscreen
+        browseOpts.onlyOnSale =
+          (!onlyOnSale && onlyOnRent === false) ||
+          (onlyOnSale === undefined && onlyOnRent === undefined) ||
+          onlyOnSale
+
+        // We also set the fetch function as onBrowse because we need the url to be updated.
+        fetchAssetsFn = onBrowse
+      }
+      fetchAssetsFn(browseOpts)
+
       setHasFetched(true)
     }
   }, [
+    isMap,
+    isFullscreen,
     view,
     vendor,
     section,
@@ -131,7 +177,10 @@ const AssetBrowse = (props: Props) => {
     onlySmart,
     viewInState,
     onFetchAssetsFromRoute,
-    hasFetched
+    hasFetched,
+    onlyOnRent,
+    onBrowse,
+    isMapPropertyPersisted
   ])
 
   // Handlers
@@ -254,7 +303,7 @@ const AssetBrowse = (props: Props) => {
             </div>
           ) : (
             <Suspense fallback={<Loader size="big" />}>
-              <LazyNFTFilters isMap={Boolean(isMap)} contracts={contracts} />
+              <LazyNFTFilters isMap={Boolean(isMap)} />
             </Suspense>
           )}
           {isMap ? (

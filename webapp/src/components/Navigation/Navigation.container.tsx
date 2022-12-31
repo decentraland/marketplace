@@ -1,11 +1,22 @@
 import { connect } from 'react-redux'
-import { getIsMVMFTabEnabled } from '../../modules/features/selectors'
+import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/manaFiatGateway/actions'
+import { getIsCampaignBrowserEnabled } from '../../modules/features/selectors'
+import { getIsFullscreen } from '../../modules/routing/selectors'
 import { RootState } from '../../modules/reducer'
-import { MapStateProps } from './Navigation.types'
+import {
+  MapDispatch,
+  MapDispatchProps,
+  MapStateProps
+} from './Navigation.types'
 import Navigation from './Navigation'
 
 const mapState = (state: RootState): MapStateProps => ({
-  isMVMFTabEnabled: getIsMVMFTabEnabled(state)
+  isCampaignBrowserEnabled: getIsCampaignBrowserEnabled(state),
+  isFullScreen: getIsFullscreen(state)
 })
 
-export default connect(mapState)(Navigation)
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onOpenBuyManaWithFiatModal: () => dispatch(openBuyManaWithFiatModalRequest())
+})
+
+export default connect(mapState, mapDispatch)(Navigation)

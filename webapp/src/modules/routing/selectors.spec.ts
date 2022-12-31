@@ -5,6 +5,7 @@ import { VendorName } from '../vendor'
 import { locations } from './locations'
 import {
   getAssetType,
+  getIsMap,
   getOnlyOnRent,
   getSection,
   hasFiltersEnabled
@@ -185,6 +186,40 @@ describe('when getting if it should look for NFTs that are for rent', () => {
 
     it('should return undefined', () => {
       expect(getOnlyOnRent.resultFunc(url)).toBe(undefined)
+    })
+  })
+})
+
+describe('when getting if the isMap parameter is set', () => {
+  let url: string
+
+  describe('and no isMap parameter is set', () => {
+    beforeEach(() => {
+      url = ''
+    })
+
+    it('should return undefined', () => {
+      expect(getIsMap.resultFunc(url)).toBe(undefined)
+    })
+  })
+
+  describe('and isMap is set as true', () => {
+    beforeEach(() => {
+      url = 'isMap=true'
+    })
+
+    it('should return true', () => {
+      expect(getIsMap.resultFunc(url)).toBe(true)
+    })
+  })
+
+  describe('and isMap is set as false', () => {
+    beforeEach(() => {
+      url = 'isMap=false'
+    })
+
+    it('should return false', () => {
+      expect(getIsMap.resultFunc(url)).toBe(false)
     })
   })
 })

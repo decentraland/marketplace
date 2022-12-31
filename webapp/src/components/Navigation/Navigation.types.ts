@@ -1,6 +1,12 @@
+import { Dispatch } from 'redux'
+import {
+  openBuyManaWithFiatModalRequest,
+  OpenBuyManaWithFiatModalRequestAction
+} from 'decentraland-dapps/dist/modules/manaFiatGateway/actions'
+
 export enum NavigationTab {
   OVERVIEW = 'overview',
-  MVMF = 'mvmf',
+  CAMPAIGN_BROWSER = 'campaign-browser',
   LANDS = 'lands',
   BROWSE = 'browse',
   COLLECTIBLES = 'collectibles',
@@ -9,10 +15,19 @@ export enum NavigationTab {
 }
 
 export type Props = {
-  isMVMFTabEnabled: boolean
+  isCampaignBrowserEnabled: boolean
+  isFullScreen?: boolean
   activeTab?: NavigationTab
   isFullscreen?: boolean
+  onOpenBuyManaWithFiatModal: () => ReturnType<
+    typeof openBuyManaWithFiatModalRequest
+  >
 }
 
-export type MapStateProps = Pick<Props, 'isMVMFTabEnabled'>
-export type MapDispatchProps = {}
+export type MapDispatch = Dispatch<OpenBuyManaWithFiatModalRequestAction>
+
+export type MapStateProps = Pick<
+  Props,
+  'isCampaignBrowserEnabled' | 'isFullScreen'
+>
+export type MapDispatchProps = Pick<Props, 'onOpenBuyManaWithFiatModal'>

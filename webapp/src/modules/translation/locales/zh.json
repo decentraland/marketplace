@@ -52,10 +52,11 @@
     "confirm": "确认",
     "days": "天",
     "error": "错误",
-    "mvmf_2022": "元界节 2022",
     "period": "时期",
     "status": "地位",
-    "unknown_error": "不明错误"
+    "unknown_error": "不明错误",
+    "the_parcel": "地块",
+    "the_estate": "产业"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -81,7 +82,8 @@
     "partners": "伙伴",
     "my_assets": "我的资产",
     "my_bids": "我的出价",
-    "activity": "活动"
+    "activity": "活动",
+    "buy_mana_with_fiat": "买法力"
   },
   "menu": {
     "all": "所有资产",
@@ -145,6 +147,7 @@
     "recently_sold": "最近售出",
     "cheapest": "最低价",
     "no_results": "未找到结果。",
+    "type_to_search": "键入以搜索集合。",
     "clear": "清除过滤器",
     "recently_reviewed": "最近审查",
     "size": "大小"
@@ -276,7 +279,7 @@
     "size_error": "允许的最大文件大小为 {max}，您选择的文件具有 {current}",
     "facebook": "处理 Facebook",
     "twitter": "处理 Twitter",
-    "discord": "通道编号 Discord",
+    "discord": "Discord 邀请 ID",
     "save": "救",
     "revert": "恢复",
     "add_cover_picture": "单击此处将图像放入您的商店",
@@ -350,7 +353,8 @@
   "on_rent_list": {
     "listed_for_rent": "挂牌出租",
     "rented_until": "租到 {end_date}",
-    "claiming_back": "收回土地"
+    "claiming_back": "收回{asset}",
+    "rented_period_over": "租期满"
   },
   "collection_list": {
     "search": "搜索 {count} 个收藏品...",
@@ -360,6 +364,7 @@
     "actions": {
       "cancel_sale": "删除列表",
       "manage": "管理",
+      "manage_in_builder": "在 Builder 中管理",
       "update": "更新价格",
       "buy": "购买",
       "mint": "购买",
@@ -376,11 +381,16 @@
     },
     "sales_rent_action_box": {
       "until": "从 {from_date} 到 {to_date}",
-      "not_for_sale": "不可出售",
+      "not_for_sale": "目前未上市销售",
+      "in_rent_tenant": "您已租用此地块至 <strong>{rental_end_date, date, medium}</strong>。",
+      "in_rent_owner": "{tenant} 已将此房产租到 <strong>{rental_end_date, date, medium}</strong>。",
+      "rent_ended": "<strong>{rental_end_date, date, medium}</strong>租期结束。",
+      "claim_back_message": "您可以从管理页面索回此房产或重新列出以供出租。",
       "parcel_belongs_to_estate_bid": "无法对属于某个庄园的地块进行投标，请考虑进入“庄园”页面。",
       "parcel_belongs_to_estate_rent": "无法租用属于某个庄园的地块，请考虑进入“庄园”页面。",
-      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。",
-      "rented_until": "租到 {end_date}"
+      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此{asset}。",
+      "rented_until": "租到 {end_date}",
+      "not_enough_mana": "你没有足够的 MANA"
     },
     "description": "描述",
     "owner": "持有者",
@@ -409,8 +419,7 @@
     "invalid_fingerprint_on_bid_received": "此资产自此出价以来已被修改，因此不再有效",
     "invalid_seller": "您不再拥有此资产",
     "not_enough_mana_on_bid_placed": "您没有足够的MANA来支付此出价",
-    "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改，除非您对其进行更新，否则它将不再有效",
-    "cant_accept_bid_on_rented_land": "该资产目前已出租或尚未收回。 请等到租金完成并在接受投标之前将其取回。"
+    "invalid_fingerprint_on_bid_placed": "此资产自出价后就已被修改，除非您对其进行更新，否则它将不再有效"
   },
   "transaction_history": {
     "title": "最新销售",
@@ -552,6 +561,7 @@
     "invalid_date": "这个日期已过期",
     "not_enougn_mana": "您没有足够的MANA",
     "submit": "出价",
+    "rental_executed": "{asset_type, select, parcel {包裹} estate {庄园} other {那片土地}}租期至 <strong>{rental_end_date, date, medium}</strong>. 业主只有在收回财产后才能接受出价.",
     "confirm": {
       "title": "请确认",
       "create_bid_line_one": "您即将为 {name} 出价 {amount}。",
@@ -654,8 +664,9 @@
       "place_bid": "您对{name}出价了{price}。",
       "accept_bid": "您接受了{name}的{price}出价。",
       "cancel_bid": "您取消了对{name}的{price}出价。",
-      "claim_land": "您从 {contract} 中认领了您的 {name}。",
-      "remove_rental": "您删除了 {name} 的出租列表."
+      "claim_asset": "您从 {contract} 中认领了您的 {name}。",
+      "remove_rental": "您删除了 {name} 的出租列表.",
+      "accept_rental": "您接受了 {name} 的租赁，价格为 {pricePerDay} 一天，持续 {days} 天."
     }
   },
   "mana": {
@@ -780,6 +791,7 @@
       "listing_expiration_date": "上市截止日期",
       "periods": "租期",
       "periods_tooltip": "选择您愿意租用土地的日期",
+      "expiration_date_tooltip": "如果没有人租用您的土地，该清单将在该日期被删除。",
       "period_options": {
         "one_day": "1 天",
         "one_week": "7 天",
@@ -797,6 +809,7 @@
     },
     "confirmation_step": {
       "title": "确认上市",
+      "periods": "时期",
       "notice_line_one": "查看并确认您选择的价格和租期。",
       "notice_line_two": "列表是免费的，但编辑或取消列表将需要发送交易，您需要支付其费用。",
       "price_per_day": "每天的价格",
@@ -814,16 +827,14 @@
   },
   "manage_asset_page": {
     "open_in_builder": "在 Builder 中打开",
-    "land_is_locked": "此操作将被锁定，直到租金完成并且土地已被收回。",
+    "land_is_locked": "此操作将被锁定，直到租金结束并且 {asset} 已被收回。",
     "transfer": "转移",
-    "cant_transfer_rented_land": "当 LAND 正在出租或尚未收回时，转移将暂停。",
     "sell": {
       "sell_title": "卖",
       "selling_title": "卖",
       "list_for_sale": "发布出售",
       "price": "价格",
-      "expiration_date": "截止日期",
-      "cant_sell_rented_land": "在 LAND 被租用或尚未收回时，销售暂停。"
+      "expiration_date": "截止日期"
     },
     "rent": {
       "rent_title": "租",
@@ -832,17 +843,18 @@
       "expiration_date": "上市截止日期",
       "rent_periods": "租期",
       "list_for_rent": "发布出租",
+      "view_listing": "查看租赁列表",
       "start_date": "租金开始日期",
       "end_date": "租期结束日期",
       "rented_until": "由 {tenant} 租用至 {date}",
-      "rent_end": "租期结束！ 你可以从 {tenant} 那里获得你的土地",
+      "rent_end": "租期结束！ 您可以向{tenant}索取您的{asset}",
       "claim_land": "索取土地",
       "list_for_rent_again": "再次发布出租",
-      "claiming_land": "收回你的土地。 此过程最多可能需要 24 小时。",
+      "claiming_land": "收回您的{asset}。 此过程最长可能需要 24 小时。",
       "view_transaction": "查看区块链交易",
-      "mobile_coming_soon": "很快就可以在手机上租用了。请转至桌面版租用此 LAND。",
-      "claiming_back": "收回土地",
-      "unclaimed_message": "该土地仍无人认领。 索回它以出售或转让它。"
+      "mobile_coming_soon": "手机租赁即将推出。 请转到桌面版租用此{asset}",
+      "claiming_back": "收回{asset}",
+      "unclaimed_message": "{asset} 仍无人认领。 索回以出售或转让。"
     },
     "highlights": {
       "title": "亮点",
@@ -853,13 +865,15 @@
     "details": {
       "title": "商品详情",
       "network": "网络",
-      "owner": "所有者"
+      "owner": "所有者",
+      "order_expiration": "订单有效期至",
+      "rental_expiration": "出租清单有效期至"
     }
   },
   "claim_land_modal": {
-    "title": "开垦土地",
-    "action": "开垦土地",
-    "question": "你确定要收回你的土地吗?",
+    "title": "认领{asset}",
+    "action": "认领{asset}",
+    "question": "您确定要认领您的{asset}吗？",
     "disclaimer": "这将需要一笔交易，您需要支付其费用。",
     "confirm_transaction": "确认您钱包上的交易以继续"
   },
@@ -870,41 +884,42 @@
     "disclaimer": "这将需要一笔交易，您需要支付其费用。",
     "confirm_transaction": "确认您钱包上的交易以继续"
   },
-  "mvmf22": {
-    "banners": {
-      "big": {
-        "event": "事件",
-        "title": "元界音乐节 2022 来了！",
-        "subtitle": "立即开始寻找完美的可穿戴设备和表情，以时尚的方式在夜晚跳舞。",
-        "cta": "浏览节日物品"
+  "campaign": {
+    "tab": "Holiday Season",
+    "badge": "Holiday Season"
+  },
+  "holiday_season_campaign": {
+    "banner": {
+      "homepage": {
+        "title": "#HolidaySeason 就在这里！",
+        "subtitle": "这个假期在 Decentraland 给自己一个惊喜——找到完美的毛衣或获得滑冰表情！",
+        "cta": "浏览节日用品",
+        "cta_mobile": "浏览节日用品"
       },
-      "medium": {
-        "title": "元界节收藏品",
-        "subtitle": "类别是……赛博朋克遇见自然真实"
+      "collectibles": {
+        "title": "#HolidaySeason 就在这里！",
+        "subtitle": "这个假期在 Decentraland 给自己一个惊喜——找到完美的毛衣或获得滑冰表情！",
+        "cta": "浏览节日用品",
+        "cta_mobile": "浏览节日用品"
       },
-      "small": {
-        "title": "元界音乐节 2022 来了！",
-        "subtitle": "立即开始寻找完美的可穿戴设备和表情，以时尚的方式在夜晚跳舞。",
-        "cta": "浏览节日物品"
+      "campaign_browser": {
+        "title": "节日快乐！",
+        "subtitle": "Decentraland 变成了冬季仙境 - 在这里找到适合这个假期的完美物品。"
       }
     }
   },
-  "mvmf22_announcement": {
-    "banners": {
-      "big": {
-        "title": "让您的物品在 2022 年元界音乐节期间成为特色！",
-        "subtitle": "今年的类别是... {subtitle_bold_1} {enter} 在 {subtitle_bold_3} {enter} 之前使用 {subtitle_bold_2} 标签提交您的可穿戴设备和表情，它们将在整个活动期间出现在市场上。",
-        "subtitle_bold_1": "赛博朋克遇见自然真实！",
-        "subtitle_bold_2": "#MVMF22",
-        "subtitle_bold_3": "10月25日",
-        "cta": "学到更多"
-      },
-      "small": {
-        "title": "让您的物品在 2022 年元界音乐节期间成为特色！",
-        "subtitle": "在 {subtitle_bold_1} 之前使用 {subtitle_bold_2} 标签提交您的可穿戴设备和表情，它们将在整个活动期间出现在市场上。",
-        "subtitle_bold_1": "#MVMF22",
-        "subtitle_bold_2": "10月25日"
-      }
+  "asset_card": {
+    "rental_bubble": {
+      "listed_for_rent": "挂牌出租",
+      "rented_until": "租到 {endDate, date, medium}",
+      "claiming_back": "土地正在收回",
+      "rental_ended": "租赁已结束"
     }
+  },
+  "rentals_promotional_modal": {
+    "title": "Announcing official LAND rentals",
+    "browse_listings": "BROWSE LISTINGS",
+    "list_your_land": "LIST YOUR LAND ON RENT",
+    "description": "<p>If you are a LAND owner you can now earn MANA by renting your parcels or estates to content creators.</p> <p>Are you a content creator? Now you can publish your builds to Genesis City without the need of owning LAND.</p> <p>If you want to learn more, <a>read our blog post</a>.</p>"
   }
 }

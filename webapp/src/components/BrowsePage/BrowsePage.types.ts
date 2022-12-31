@@ -6,12 +6,19 @@ export type Props = {
   vendor: VendorName
   assetType: AssetType
   section: Section
+  isCampaignCollectiblesBannerEnabled: boolean
   isFullscreen?: boolean
+  contracts: string[]
 }
 
 export type MapStateProps = Pick<
   Props,
-  'vendor' | 'isFullscreen' | 'assetType' | 'section'
+  | 'vendor'
+  | 'isFullscreen'
+  | 'assetType'
+  | 'section'
+  | 'isCampaignCollectiblesBannerEnabled'
+  | 'contracts'
 >
 export type MapDispatchProps = {}
 export type MapDispatch = {}

@@ -1,12 +1,21 @@
-import React from 'react'
+import React, { useMemo } from 'react'
+import { RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Card } from 'decentraland-ui/dist/components/Card/Card'
 import { Link } from 'react-router-dom'
 import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
+import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
+import {
+  getMaxPriceOfPeriods,
+  getRentalEndDate,
+  hasRentalEnded,
+  isRentalListingExecuted,
+  isRentalListingOpen
+} from '../../modules/rental/utils'
 import { Mana } from '../Mana'
 import { AssetImage } from '../AssetImage'
 import ListedBadge from '../ListedBadge'
@@ -18,19 +27,79 @@ import { ENSTags } from './ENSTags'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
 
+const RentalPrice = ({
+  asset,
+  rentalPricePerDay
+}: {
+  asset: Asset
+  rentalPricePerDay: string
+}) => {
+  return (
+    <>
+      <Mana className="rental-price" network={asset.network} inline>
+        {formatWeiMANA(rentalPricePerDay)}
+      </Mana>
+      <span className="card-rental-day">/{t('global.day')}</span>
+    </>
+  )
+}
+
+const RentalChip = ({
+  asset,
+  rental,
+  isClaimingBackLandTransactionPending
+}: {
+  asset: Asset
+  isClaimingBackLandTransactionPending: boolean
+  rental: RentalListing | null
+}) => {
+  const rentalEndDate: Date | null = useMemo(
+    () => (rental ? getRentalEndDate(rental) : null),
+    [rental]
+  )
+  const rentalHasEnded = rental ? hasRentalEnded(rental) : false
+
+  return (
+    <div className="LandBubble">
+      {isClaimingBackLandTransactionPending ? (
+        <>
+          <Icon className="warning-icon" name="warning sign" />{' '}
+          {t('asset_card.rental_bubble.claiming_back', {
+            asset: asset.category
+          })}
+        </>
+      ) : isRentalListingOpen(rental) ? (
+        t('asset_card.rental_bubble.listed_for_rent')
+      ) : isRentalListingExecuted(rental) && !rentalHasEnded ? (
+        t('asset_card.rental_bubble.rented_until', { endDate: rentalEndDate })
+      ) : isRentalListingExecuted(rental) && rentalHasEnded ? (
+        <>
+          <Icon className="warning-icon" name="warning sign" />
+          {t('asset_card.rental_bubble.rental_ended')}
+        </>
+      ) : null}
+    </div>
+  )
+}
+
 const AssetCard = (props: Props) => {
   const {
     asset,
     isManager,
     price,
-    rentalPricePerDay,
     showListedTag,
+    showRentalChip: showRentalBubble,
     onClick,
-    isClaimingBackLandTransactionPending
+    isClaimingBackLandTransactionPending,
+    rental
   } = props
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
+  const rentalPricePerDay: string | null = useMemo(
+    () => (isRentalListingOpen(rental) ? getMaxPriceOfPeriods(rental!) : null),
+    [rental]
+  )
 
   return (
     <Card
@@ -41,14 +110,16 @@ const AssetCard = (props: Props) => {
       onClick={onClick}
     >
       <AssetImage asset={asset} showMonospace />
-      {isClaimingBackLandTransactionPending ? (
-        <div className="LandBubble">
-          <Icon className="warning-icon" name="warning sign" />
-          {t('manage_asset_page.rent.claiming_back')}
-        </div>
-      ) : showListedTag ? (
-        <ListedBadge className="listed-badge" />
+      {showRentalBubble ? (
+        <RentalChip
+          asset={asset}
+          isClaimingBackLandTransactionPending={
+            isClaimingBackLandTransactionPending
+          }
+          rental={rental}
+        />
       ) : null}
+      {showListedTag ? <ListedBadge className="listed-badge" /> : null}
       <Card.Content>
         <Card.Header>
           <div className="title">{title}</div>
@@ -56,18 +127,20 @@ const AssetCard = (props: Props) => {
             <Mana network={asset.network} inline>
               {formatWeiMANA(price)}
             </Mana>
+          ) : rentalPricePerDay ? (
+            <RentalPrice asset={asset} rentalPricePerDay={rentalPricePerDay} />
           ) : null}
         </Card.Header>
         <div className="sub-header">
           <Card.Meta className="card-meta">
             {t(`networks.${asset.network.toLowerCase()}`)}
           </Card.Meta>
-          {rentalPricePerDay ? (
+          {rentalPricePerDay && price ? (
             <div>
-              <Mana className="rental-price" network={asset.network} inline>
-                {formatWeiMANA(rentalPricePerDay)}
-              </Mana>
-              <span className="card-rental-day">/{t('global.day')}</span>
+              <RentalPrice
+                asset={asset}
+                rentalPricePerDay={rentalPricePerDay}
+              />
             </div>
           ) : null}
         </div>

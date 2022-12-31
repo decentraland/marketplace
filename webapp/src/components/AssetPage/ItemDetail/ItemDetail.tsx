@@ -20,7 +20,7 @@ import { Owner } from '../Owner'
 import Collection from '../Collection'
 import Price from '../Price'
 import BaseDetail from '../BaseDetail'
-import MVMFBadge from '../MVMFBadge'
+import CampaignBadge from '../../Campaign/CampaignBadge'
 import IconBadge from '../IconBadge'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './ItemDetail.types'
@@ -105,7 +105,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
               <SmartBadge assetType={AssetType.ITEM} />
             )}
 
-          <MVMFBadge contract={item.contractAddress} />
+          <CampaignBadge contract={item.contractAddress} />
         </>
       }
       left={

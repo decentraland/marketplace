@@ -14,16 +14,17 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { config } from '../../config'
 import { VendorName } from '../vendor'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { addressEquals } from '../wallet/utils'
 import { Asset } from '../asset/types'
 import { NFT } from '../nft/types'
-import { PeriodOption, PeriodOptionsDev } from './types'
+import { PeriodOption } from './types'
 import { getRentalsContractInstance } from './contract'
 
 export const daysByPeriod: Record<PeriodOption, number> = {
-  [PeriodOptionsDev.ONE_DAY]: 1,
+  [PeriodOption.ONE_DAY]: 1,
   [PeriodOption.ONE_WEEK]: 7,
   [PeriodOption.ONE_MONTH]: 30,
   [PeriodOption.TWO_MONTHS]: 60,
@@ -271,9 +272,9 @@ export function isLandLocked(
   )
 }
 
-async function delay(miliseconds: number) {
+async function delay(milliseconds: number) {
   return await new Promise<void>(resolve =>
-    setTimeout(() => resolve(), miliseconds)
+    setTimeout(() => resolve(), milliseconds)
   )
 }
 
@@ -284,9 +285,41 @@ export async function waitUntilRentalChangesStatus(
   let hasChanged = false
   let listing: RentalListing
   while (!hasChanged) {
-    await delay(3500)
+    await delay(Number(config.get('REFRESH_SIGNATURES_DELAY', '5000')))
     listing = await rentalsAPI.refreshRentalListing(nft.openRentalId!)
     hasChanged = listing.status === status
   }
   return listing!
+}
+
+/**
+ * Gets the last byte as a number from the a signature.
+ * @param signature - A ECDSA signature.
+ * @returns the last byte of the given signature.
+ */
+function getLastECDSASignatureByte(signature: string) {
+  return Number.parseInt(signature.slice(-2), 16)
+}
+
+/**
+ * Checks wether a ECDSA signature has a valid V.
+ * @param signature - A ECDSA signature.
+ * @returns true if the v value is decimal 27 or 28 else otherwise.
+ */
+function hasECDSASignatureAValidV(signature: string): boolean {
+  const lastSignatureByte = getLastECDSASignatureByte(signature)
+  return lastSignatureByte === 27 || lastSignatureByte === 28
+}
+
+/**
+ * Generates an ECDSA signature with a valid V from another signature by changing its V value to 27 or 28 if it was 0 or 1.
+ * @param signature - A ECDSA signature.
+ * @returns a ECDSA signature based on the given one with its V value as 27 or 28.
+ */
+export function generateECDSASignatureWithValidV(signature: string): string {
+  const isSignatureVValid = hasECDSASignatureAValidV(signature)
+  return isSignatureVValid
+    ? signature
+    : signature.slice(0, -2) +
+        (getLastECDSASignatureByte(signature) + 27).toString(16)
 }

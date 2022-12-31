@@ -1,3 +1,9 @@
 .content > p {
   text-align: center;
 }
+
+@media (max-width: 767px) {
+  .content > p {
+    text-align: left;
+  }
+}

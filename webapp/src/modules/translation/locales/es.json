@@ -52,10 +52,11 @@
     "confirm": "Confirmar",
     "days": "días",
     "error": "Error",
-    "mvmf_2022": "Metaverse Festival 2022",
     "period": "Periodo",
     "status": "Estado",
-    "unknown_error": "Error desconocido"
+    "unknown_error": "Error desconocido",
+    "the_parcel": "La Parcela",
+    "the_estate": "El Estate"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -81,7 +82,8 @@
     "partners": "Socios",
     "my_assets": "Mis Objetos",
     "my_bids": "Mis Ofertas",
-    "activity": "Actividad"
+    "activity": "Actividad",
+    "buy_mana_with_fiat": "Comprar MANA"
   },
   "menu": {
     "all": "Todos",
@@ -145,6 +147,7 @@
     "recently_sold": "Vendidos recientemente",
     "cheapest": "Más baratos",
     "no_results": "No se encontraron resultados.",
+    "type_to_search": "Escriba para buscar collecciones.",
     "clear": "Borrar filtros",
     "recently_reviewed": "Revisado recientemente",
     "size": "Tamaño"
@@ -275,7 +278,7 @@
     "size_error": "El tamaño máximo permitido es de {max}, el archivo seleccionado tiene {current}",
     "facebook": "Handle de Facebook",
     "twitter": "Handle de Twitter",
-    "discord": "ID del canal de Discord",
+    "discord": "ID de invitación de Discord",
     "save": "Guardar",
     "revert": "Revertir",
     "add_cover_picture": "Haga click aquí para ponerle una imagen a la tienda",
@@ -349,7 +352,8 @@
   "on_rent_list": {
     "listed_for_rent": "Listado para alquiler",
     "rented_until": "Rentado hasta {end_date}",
-    "claiming_back": "Reclamando su tierra"
+    "claiming_back": "Reclamando su {asset}",
+    "rented_period_over": "Periodo de renta terminado"
   },
   "collection_list": {
     "search": "Buscar {count} collecciones...",
@@ -359,6 +363,7 @@
     "actions": {
       "cancel_sale": "Borrar publicación",
       "manage": "Gestionar",
+      "manage_in_builder": "Gestionar en el builder",
       "update": "Actualizar precio",
       "buy": "Comprar",
       "mint": "Comprar",
@@ -375,11 +380,16 @@
     },
     "sales_rent_action_box": {
       "until": "Desde {from_date} a {to_date}",
-      "not_for_sale": "No disponible para comprar",
+      "not_for_sale": "Actualmente no disponible para la compra",
+      "in_rent_tenant": "Has rentado {asset_type, select, parcel {esta parcela} estate {este estate} other {esta LAND}} hasta <strong>{rental_end_date, date, medium}</strong>.",
+      "in_rent_owner": "{tenant} ha rentado {asset_type, select, parcel {esta parcela} estate {este estate} other {esta LAND}} hasta <strong>{rental_end_date, date, medium}</strong>.",
+      "rent_ended": "El período de renta terminó el <strong>{rental_end_date, date, medium}</strong>.",
+      "claim_back_message": "Puedes reclamar tu {asset_type, select, parcel {parcela} estate {estate} other {LAND}} o listarla nuevamente para ser rentada en la página de management.",
       "parcel_belongs_to_estate_bid": "No es posible hacer una oferta en la tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
       "parcel_belongs_to_estate_rent": "No es posible rentar tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
-      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land.",
-      "rented_until": "Rentado hasta {end_date}"
+      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",
+      "rented_until": "Rentado hasta {end_date}",
+      "not_enough_mana": "No tienes suficiente MANA"
     },
     "description": "Descripción",
     "owner": "Dueño",
@@ -408,8 +418,7 @@
     "invalid_fingerprint_on_bid_received": "Este artículo ha sido modificado desde que se hizo esta oferta y ya no es válida",
     "invalid_seller": "Ya no eres el dueño de este artículo",
     "not_enough_mana_on_bid_placed": "No tienes suficiente MANA para pagar por esta oferta",
-    "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices",
-    "cant_accept_bid_on_rented_land": "Este artículo tiene una renta activa o no ha sido reclamado después del fin de una renta. Por favor espera a que la renta haya terminado y reclama el asset antes de aceptar la oferta."
+    "invalid_fingerprint_on_bid_placed": "Este artículo ha sido modificado desde que realizaste esta oferta y ya no es valida, a menos que la actualices"
   },
   "transaction_history": {
     "title": "Últimas ventas",
@@ -550,6 +559,7 @@
     "invalid_date": "Esta fecha ya pasó",
     "not_enougn_mana": "No tienes suficiente MANA",
     "submit": "Ofertar",
+    "rental_executed": "{asset_type, select, parcel {La parcela} estate {El estate} other {la tierra}} está rentada hasta <strong>{rental_end_date, date, medium}</strong>. El dueño va a poder aceptar tu oferta sólo después de haber reclamado su {asset_type, select, parcel {parcela} estate {estate} other {tierra}}.",
     "confirm": {
       "title": "Por favor confirma",
       "create_bid_line_one": "Estás por hacer una oferta en {name} por {amount}.",
@@ -652,8 +662,9 @@
       "place_bid": "Hiciste una oferta de {price} por {name}.",
       "accept_bid": "Aceptaste una oferta de {price} por {name}.",
       "cancel_bid": "Cancelaste una oferta de {price} por {name}.",
-      "claim_land": "Reclamaste tu {name} del {contract}.",
-      "remove_rental": "Removiste tu {name} del listado de rentas."
+      "claim_asset": "Reclamaste tu {name} del {contract}.",
+      "remove_rental": "Removiste tu {name} del listado de rentas.",
+      "accept_rental": "Aceptaste una renta en {name} pagando {pricePerDay} por día por {duration} {duration, plural, one {día} other {días}}."
     }
   },
   "mana": {
@@ -778,6 +789,7 @@
       "listing_expiration_date": "Fecha de expiración del clasificado",
       "periods": "Período del alquiler",
       "periods_tooltip": "Selecciona la cantidad de días por las que estas dispuesto a alquilar tu tierra",
+      "expiration_date_tooltip": "Si nadie alquila tu Land, el listado se removerá en esta fecha",
       "period_options": {
         "one_day": "1 día",
         "one_week": "7 días",
@@ -795,6 +807,7 @@
     },
     "confirmation_step": {
       "title": "Confirm Listing",
+      "periods": "Períodos",
       "notice_line_one": "Revisa y confirma el precio y los períodos de alquiler que has seleccionado.",
       "notice_line_two": "Poner en alquiler es gratis, pero editar o cancelar el clasificado una vez hecho requerirá que envies una transacción, y deberas cubrir el costo de la misma.",
       "price_per_day": "Precio por día",
@@ -812,16 +825,14 @@
   },
   "manage_asset_page": {
     "open_in_builder": "Abrir en el builder",
-    "land_is_locked": "Esta acción no será posible de realizar hasta que la renta haya finalizado y la tierra haya sido reclamada.",
+    "land_is_locked": "Esta acción no será posible de realizar hasta que la renta haya finalizado y {asset} haya sido reclamada.",
     "transfer": "Transferir",
-    "cant_transfer_rented_land": "La transferencia de tierra está en pausa mientras la tierra está siendo rentada o no se haya reclamado.",
     "sell": {
       "sell_title": "Venta",
       "selling_title": "Vendiendo",
       "list_for_sale": "Publicar para la venta",
       "price": "Precio",
-      "expiration_date": "Fecha de expiración",
-      "cant_sell_rented_land": "La venta de tierra está en pausa mientras la tierra está siendo rentada o no se haya reclamado."
+      "expiration_date": "Fecha de expiración"
     },
     "rent": {
       "rent_title": "Renta",
@@ -830,17 +841,18 @@
       "expiration_date": "Fecha de expiración de la publicación",
       "rent_periods": "Períodos de renta",
       "list_for_rent": "Publicar para la renta",
+      "view_listing": "Ver listado",
       "start_date": "Fecha de comienzo",
       "end_date": "Fecha de finalización",
       "rented_until": "En renta hasta el {date} por {tenant}",
-      "rent_end": "El período de renta terminó! Puedes reclamar tu tierra a {tenant}",
-      "claim_land": "Reclamar tierra",
+      "rent_end": "El período de renta terminó! Puedes reclamar tu {asset} a {tenant}",
+      "claim_asset": "Reclamar {asset}",
       "list_for_rent_again": "Volver a publicar para la renta",
-      "claiming_land": "Reclamando su tierra. El proceso puede tardar hasta 24hs.",
+      "claiming_land": "Reclamando su {asset}. El proceso puede tardar hasta 24hs.",
       "view_transaction": "Ver transacción",
-      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta Land.",
-      "claiming_back": "Reclamando su tierra",
-      "unclaimed_message": "La tierra todavía está sin reclamar. Reclámala para poder venderla o transferirla."
+      "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",
+      "claiming_back": "Reclamando su {asset}",
+      "unclaimed_message": "{asset} todavía está sin reclamar. Reclámala para poder venderla o transferirla."
     },
     "highlights": {
       "title": "Destacados",
@@ -851,13 +863,15 @@
     "details": {
       "title": "Detalles del item",
       "network": "Red",
-      "owner": "Dueño"
+      "owner": "Dueño",
+      "order_expiration": "Expiración de la orden",
+      "rental_expiration": "Expiración de la renta"
     }
   },
   "claim_land_modal": {
-    "title": "Reclamar tierra",
-    "action": "Reclamar tierra",
-    "question": "¿Está seguro de que quiere reclamar su tierra?",
+    "title": "Reclamar {asset}",
+    "action": "Reclamar {asset}",
+    "question": "¿Está seguro de que quiere reclamar su {asset}?",
     "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   },
@@ -868,41 +882,42 @@
     "disclaimer": "Esto requerirá una transacción que implicará gastos que deberá costear.",
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   },
-  "mvmf22": {
-    "banners": {
-      "big": {
-        "event": "Evento",
-        "title": "¡Metaverse Music Festival 2022 está aquí!",
-        "subtitle": "Comience su búsqueda de los Wearables y Emotes perfectos para bailar toda la noche con estilo ahora.",
-        "cta": "Examinar items del festival"
+  "campaign": {
+    "tab": "Holiday Season",
+    "badge": "Holiday Season"
+  },
+  "holiday_season_campaign": {
+    "banner": {
+      "homepage": {
+        "title": "The Holiday Season is here!",
+        "subtitle": "Sorpréndete estas vacaciones en Decentraland - encuentra el sweater perfecto o consigue un Emote para patinar sobre hielo",
+        "cta": "Buscar items",
+        "cta_mobile": "Buscar items"
       },
-      "medium": {
-        "title": "Coleccionables del Metaverse Music Festival 2022",
-        "subtitle": "Categoria es... Cyberpunk conoce a la naturaleza"
+      "collectibles": {
+        "title": "¡Llegaron las vacaciones!",
+        "subtitle": "Sorpréndete estas vacaciones en Decentraland - encuentra el sweater perfecto o consigue un Emote para patinar sobre hielo",
+        "cta": "Buscar items",
+        "cta_mobile": "Buscar items"
       },
-      "small": {
-        "title": "¡Metaverse Music Festival 2022 está aquí!",
-        "subtitle": "Comience su búsqueda de los Wearables y Emotes perfectos para bailar toda la noche con estilo ahora.",
-        "cta": "Examinar items del festival"
+      "campaign_browser": {
+        "title": "¡Felices Vacaciones!",
+        "subtitle": "Decentraland se convirtió en una maravilla de invierno - encuentra los items perfectos para estas vacaciones aqui."
       }
     }
   },
-  "mvmf22_announcement": {
-    "banners": {
-      "big": {
-        "title": "Obtenga sus artículos destacados durante el {enter} ¡Metaverse Music Festival 2022!",
-        "subtitle": "La categoría del festival de música de este año es... {subtitle_bold_1} {enter} Envíe sus dispositivos portátiles y gestos usando la etiqueta {subtitle_bold_2} antes de {subtitle_bold_3} {enter} y aparecerán en el Mercado durante todo el evento.",
-        "subtitle_bold_1": "Cyberpunk conoce a la naturaleza!",
-        "subtitle_bold_2": "#MVMF22",
-        "subtitle_bold_3": "25 de octubre",
-        "cta": "Aprende más"
-      },
-      "small": {
-        "title": "Obtenga sus artículos destacados durante el Metaverse Music Festival!",
-        "subtitle": "Envíe sus Wearables y Emotes con el tag {subtitle_bold_1} antes de {subtitle_bold_2} y aparecerán en Marketplace durante todo el evento.",
-        "subtitle_bold_1": "#MVMF22",
-        "subtitle_bold_2": "25 de octubre"
-      }
+  "asset_card": {
+    "rental_bubble": {
+      "listed_for_rent": "Listada para la renta",
+      "rented_until": "Rentada hasta {endDate, date, medium}",
+      "claiming_back": "Reclamando {asset_type, select, parcel {la parcel} estate {el estate} other {LAND}}",
+      "rental_ended": "Período de renta terminado"
     }
+  },
+  "rentals_promotional_modal": {
+    "title": "¡La renta de tierras está disponible!",
+    "browse_listings": "Ver tierras para rentar",
+    "list_your_land": "Lista tu tierra a la renta",
+    "description": "<p>Si eres dueño de tierra ahora puede ganar MANA rentando tus parcelas o estates a creadores de contenido.</p> <p>¿Eres un creador de contenido? Ahora puedes publicar tu escenas en la Genesis City sin la necesidad de poseer tierras.</p> <p>Si quieres leer más sobre ésto, <a>lee nuestro blog post</a>.</p>"
   }
 }

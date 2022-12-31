@@ -1,4 +1,6 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import React, { memo, useCallback, useMemo, useState } from 'react'
+import { NFTCategory } from '@dcl/schemas'
+import { ethers } from 'ethers'
 import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
@@ -10,6 +12,7 @@ import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import {
+  canBeClaimed,
   getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded,
@@ -21,13 +24,16 @@ import { getContractAuthorization } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
 import { isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
+import { builderUrl } from '../../../lib/environment'
 import { isOwnedBy } from '../../../modules/asset/utils'
+import { addressEquals } from '../../../modules/wallet/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
+import { LinkedProfile } from '../../LinkedProfile'
 
 enum View {
   SALE,
@@ -42,20 +48,24 @@ const SaleRentActionBox = ({
   rental,
   userHasAlreadyBidsOnNft,
   isRentalsEnabled,
+  currentMana,
   getContract,
   onRent
 }: Props) => {
   const isMobileView = isMobile()
-  const rentals = getContract({
-    name: getContractNames().RENTALS,
-    network: nft.network
-  })
+  const isRentalOpen = isRentalListingOpen(rental)
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
+  const isTenant =
+    rental &&
+    wallet &&
+    addressEquals(rental.tenant ?? undefined, wallet.address)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
     number
   >(0)
-  const [view, setView] = useState(View.SALE)
+  const [view, setView] = useState(
+    !!order || !isRentalOpen ? View.SALE : View.RENT
+  )
   const maxPriceOfPeriods: string | null = useMemo(
     () => (rental ? getMaxPriceOfPeriods(rental) : null),
     [rental]
@@ -69,21 +79,29 @@ const SaleRentActionBox = ({
   // Validations for the sale screen
   const { bidService } = useMemo(() => VendorFactory.build(nft.vendor), [nft])
   const isBiddable = bidService !== undefined
-  const canBid = isBiddable && !userHasAlreadyBidsOnNft
+  const canBid = !isOwner && isBiddable && !userHasAlreadyBidsOnNft
   const isCurrentlyRented = isRentalListingExecuted(rental)
-  const isRentalOpen = isRentalListingOpen(rental)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
-  const contractNames = getContractNames()
-  const mana = getContract({
-    name: contractNames.MANA,
-    network: nft.network
-  })
+  const authorization = useMemo(() => {
+    if (!wallet) {
+      return null
+    }
 
-  const authorization = getContractAuthorization(
-    wallet!.address,
-    rentals?.address,
-    mana ? { ...mana, name: ContractName.MANAToken } : undefined
-  )
+    const contractNames = getContractNames()
+    const mana = getContract({
+      name: contractNames.MANA,
+      network: nft.network
+    })
+    const rentals = getContract({
+      name: getContractNames().RENTALS,
+      network: nft.network
+    })
+    return getContractAuthorization(
+      wallet.address,
+      rentals?.address,
+      mana ? { ...mana, name: ContractName.MANAToken } : undefined
+    )
+  }, [wallet, getContract, nft.network])
 
   const handleOnRent = useCallback(() => {
     if (!!authorization && hasAuthorization(authorizations, authorization)) {
@@ -95,36 +113,59 @@ const SaleRentActionBox = ({
   }, [authorization, authorizations, onRent, selectedRentalPeriodIndex])
 
   const handleCloseAuthorizationModal = () => setShowAuthorizationModal(false)
-
+  const rentalEndDate: Date | null = isCurrentlyRented
+    ? getRentalEndDate(rental!)
+    : null
   const rentalEndTime = isCurrentlyRented
     ? getRentalEndDate(rental!)!.getTime()
     : 0
   const rentalHasEnded = isCurrentlyRented && hasRentalEnded(rental!)
+  const hasEnoughManaToRent = useMemo(
+    () =>
+      !!rental &&
+      !!currentMana &&
+      ethers.utils
+        .parseEther(currentMana.toString())
+        .gte(
+          ethers.BigNumber.from(
+            rental.periods[selectedRentalPeriodIndex].pricePerDay
+          ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
+        ),
+    [rental, currentMana, selectedRentalPeriodIndex]
+  )
+  const hasEnoughManaToBuy = useMemo(
+    () =>
+      !!order &&
+      !!currentMana &&
+      ethers.utils.parseEther(currentMana.toString()).gte(order.price),
+    [order, currentMana]
+  )
+
   return (
     <div className={styles.main}>
+      {isRentalOpen && maxPriceOfPeriods && isRentalsEnabled ? (
+        <div className={styles.viewSelector}>
+          <button
+            onClick={toggleView}
+            disabled={view === View.SALE}
+            className={classNames(styles.viewOption, {
+              [styles.selectedViewOption]: view === View.SALE
+            })}
+          >
+            {t('global.sale')}
+          </button>
+          <button
+            onClick={toggleView}
+            disabled={view === View.RENT}
+            className={classNames(styles.viewOption, {
+              [styles.selectedViewOption]: view === View.RENT
+            })}
+          >
+            {t('global.rent')}
+          </button>
+        </div>
+      ) : null}
       <div className={styles.actions}>
-        {isRentalOpen && maxPriceOfPeriods && isRentalsEnabled ? (
-          <div className={styles.viewSelector}>
-            <button
-              onClick={toggleView}
-              disabled={view === View.SALE}
-              className={classNames(styles.viewOption, {
-                [styles.selectedViewOption]: view === View.SALE
-              })}
-            >
-              {t('global.sale')}
-            </button>
-            <button
-              onClick={toggleView}
-              disabled={view === View.RENT}
-              className={classNames(styles.viewOption, {
-                [styles.selectedViewOption]: view === View.RENT
-              })}
-            >
-              {t('global.rent')}
-            </button>
-          </div>
-        ) : null}
         {view === View.RENT &&
         isRentalOpen &&
         maxPriceOfPeriods &&
@@ -155,30 +196,33 @@ const SaleRentActionBox = ({
               className={styles.periodsDropdown}
             />
             {!isOwner ? (
-              <Popup
-                content={
-                  isMobileView
-                    ? t('asset_page.sales_rent_action_box.mobile_coming_soon')
-                    : t(
-                        'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
-                      )
-                }
-                position="top center"
-                on={isMobileView ? 'click' : 'hover'}
-                disabled={!isMobileView && !isNFTPartOfAState}
-                trigger={
-                  <div className={styles.fullWidth}>
-                    <Button
-                      primary
-                      disabled={isMobileView || isNFTPartOfAState}
-                      onClick={handleOnRent}
-                      className={styles.rent}
-                    >
-                      {t('global.rent')}
-                    </Button>
+              <>
+                <Popup
+                  content={t(
+                    'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
+                  )}
+                  position="top center"
+                  on={isMobileView ? 'click' : 'hover'}
+                  disabled={!isNFTPartOfAState}
+                  trigger={
+                    <div className={styles.fullWidth}>
+                      <Button
+                        primary
+                        disabled={isNFTPartOfAState || !hasEnoughManaToRent}
+                        onClick={handleOnRent}
+                        className={styles.rent}
+                      >
+                        {t('global.rent')}
+                      </Button>
+                    </div>
+                  }
+                />
+                {rental && wallet && !hasEnoughManaToRent ? (
+                  <div className={styles.notEnoughMana}>
+                    {t('asset_page.sales_rent_action_box.not_enough_mana')}
                   </div>
-                }
-              />
+                ) : null}
+              </>
             ) : null}
           </>
         ) : (
@@ -200,53 +244,122 @@ const SaleRentActionBox = ({
                   </span>
                 </div>
               </div>
+            ) : isOwner && rental?.tenant && !rentalHasEnded ? (
+              <div className={styles.upperMessage}>
+                {t('asset_page.sales_rent_action_box.in_rent_owner', {
+                  tenant: <LinkedProfile address={rental.tenant!} inline />,
+                  asset_type: nft.category,
+                  rental_end_date: rentalEndDate,
+                  strong: (children: React.ReactElement) => (
+                    <strong>{children}</strong>
+                  )
+                })}
+              </div>
+            ) : isTenant && !rentalHasEnded ? (
+              <div className={styles.upperMessage}>
+                {t('asset_page.sales_rent_action_box.in_rent_tenant', {
+                  asset_type: nft.category,
+                  rental_end_date: rentalEndDate,
+                  strong: (children: React.ReactElement) => (
+                    <strong>{children}</strong>
+                  )
+                })}
+              </div>
+            ) : (isTenant || isOwner) && rentalHasEnded ? (
+              <div className={styles.upperMessage}>
+                {t('asset_page.sales_rent_action_box.rent_ended', {
+                  asset_type: nft.category,
+                  rental_end_date: rentalEndDate,
+                  strong: (children: React.ReactElement) => (
+                    <strong>{children}</strong>
+                  )
+                })}
+              </div>
             ) : (
-              <div className={styles.notForSale}>
+              <div className={styles.upperMessage}>
                 {t('asset_page.sales_rent_action_box.not_for_sale')}
               </div>
             )}
+            {isOwner &&
+            rental &&
+            wallet &&
+            canBeClaimed(wallet?.address, rental, nft) ? (
+              <div className={styles.upperMessageDescription}>
+                {t('asset_page.sales_rent_action_box.claim_back_message', {
+                  asset_type: nft.category
+                })}
+              </div>
+            ) : null}
             {!isOwner ? (
-              <div className={styles.saleButtons}>
-                {order ? (
+              <>
+                {isTenant && !rentalHasEnded ? (
                   <Button
-                    as={Link}
-                    to={locations.buy(
-                      AssetType.NFT,
-                      nft.contractAddress,
-                      nft.tokenId
-                    )}
-                    className={styles.buy}
-                    primary
+                    as={'a'}
+                    href={`${builderUrl}/land/${
+                      nft.category === NFTCategory.ESTATE
+                        ? `${nft.tokenId}`
+                        : `${nft.data.parcel?.x},${nft.data.parcel?.y}`
+                    }`}
                     fluid
+                    primary
+                    className={styles.manage_in_builder}
                   >
-                    {t('asset_page.actions.buy')}
+                    {t('asset_page.actions.manage_in_builder')}
                   </Button>
                 ) : null}
-                {canBid ? (
-                  <Popup
-                    content={t(
-                      'asset_page.sales_rent_action_box.parcel_belongs_to_estate_bid'
-                    )}
-                    position="top center"
-                    on="hover"
-                    disabled={!isNFTPartOfAState}
-                    trigger={
-                      <div className={styles.fullWidth}>
-                        <Button
-                          as={Link}
-                          to={locations.bid(nft.contractAddress, nft.tokenId)}
-                          className={classNames({ [styles.bid]: order })}
-                          disabled={isNFTPartOfAState}
-                          primary={!order}
-                          fluid
-                        >
-                          {t('asset_page.actions.bid')}
-                        </Button>
-                      </div>
-                    }
-                  />
+                <div className={styles.saleButtons}>
+                  {order ? (
+                    <Button
+                      as={Link}
+                      to={locations.buy(
+                        AssetType.NFT,
+                        nft.contractAddress,
+                        nft.tokenId
+                      )}
+                      disabled={!hasEnoughManaToBuy}
+                      className={styles.buy}
+                      primary
+                      fluid
+                    >
+                      {t('asset_page.actions.buy')}
+                    </Button>
+                  ) : null}
+                  {canBid ? (
+                    <Popup
+                      content={t(
+                        'asset_page.sales_rent_action_box.parcel_belongs_to_estate_bid'
+                      )}
+                      position="top center"
+                      on="hover"
+                      disabled={!isNFTPartOfAState}
+                      trigger={
+                        <div className={styles.fullWidth}>
+                          <Button
+                            as={Link}
+                            to={locations.bid(nft.contractAddress, nft.tokenId)}
+                            className={classNames({
+                              [styles.bid]: order,
+                              [styles.bid_manage_in_builder]:
+                                isTenant && !rentalHasEnded
+                            })}
+                            disabled={isNFTPartOfAState}
+                            primary={!order && !(isTenant && !rentalHasEnded)}
+                            secondary={true}
+                            fluid
+                          >
+                            {t('asset_page.actions.bid')}
+                          </Button>
+                        </div>
+                      }
+                    />
+                  ) : null}
+                </div>
+                {order && wallet && !hasEnoughManaToBuy ? (
+                  <div className={styles.notEnoughMana}>
+                    {t('asset_page.sales_rent_action_box.not_enough_mana')}
+                  </div>
                 ) : null}
-              </div>
+              </>
             ) : null}
           </>
         )}
@@ -269,7 +382,7 @@ const SaleRentActionBox = ({
           />
         ) : null}
       </div>
-      {isCurrentlyRented && !rentalHasEnded ? (
+      {isCurrentlyRented && !rentalHasEnded && !isTenant && !isOwner ? (
         <div className={styles.message}>
           <T
             id={'asset_page.sales_rent_action_box.rented_until'}

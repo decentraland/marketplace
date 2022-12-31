@@ -45,7 +45,10 @@ export const fetchSingleCollectionRequest = (
   contractAddress: string,
   shouldFetchItems?: boolean
 ) =>
-  action(FETCH_SINGLE_COLLECTION_REQUEST, { contractAddress, shouldFetchItems })
+  action(FETCH_SINGLE_COLLECTION_REQUEST, {
+    contractAddress,
+    shouldFetchItems
+  })
 export const fetchSingleCollectionSuccess = (collection: Collection) =>
   action(FETCH_SINGLE_COLLECTION_SUCCESS, {
     collection

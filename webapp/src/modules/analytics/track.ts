@@ -22,30 +22,30 @@ import { TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/t
 import { add } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { capitalize } from '../../lib/text'
 import {
-  EXECUTE_ORDER_SUCCESS,
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
-  ExecuteOrderSuccessAction,
+  EXECUTE_ORDER_TRANSACTION_SUBMITTED,
   CreateOrderSuccessAction,
-  CancelOrderSuccessAction
+  CancelOrderSuccessAction,
+  ExecuteOrderTransactionSubmittedAction
 } from '../order/actions'
 import {
-  TRANSFER_NFT_SUCCESS,
+  TRANSFER_NFT_TRANSACTION_SUBMITTED,
   TransferNFTSuccessAction,
   FETCH_NFTS_SUCCESS,
   FetchNFTsSuccessAction
 } from '../nft/actions'
 import {
   PLACE_BID_SUCCESS,
-  ACCEPT_BID_SUCCESS,
+  ACCEPT_BID_TRANSACTION_SUBMITTED,
   CANCEL_BID_SUCCESS,
   ARCHIVE_BID,
   UNARCHIVE_BID,
   PlaceBidSuccessAction,
-  AcceptBidSuccessAction,
   CancelBidSuccessAction,
   ArchiveBidAction,
-  UnarchiveBidAction
+  UnarchiveBidAction,
+  AcceptBidTransactionSubmittedAction
 } from '../bid/actions'
 import {
   BuyItemSuccessAction,
@@ -54,15 +54,22 @@ import {
   FETCH_ITEMS_SUCCESS
 } from '../item/actions'
 import { SetIsTryingOnAction, SET_IS_TRYING_ON } from '../ui/preview/actions'
+import { isParcel } from '../nft/utils'
 import {
   AcceptRentalListingSuccessAction,
   ACCEPT_RENTAL_LISTING_SUCCESS,
-  ClaimLandSuccessAction,
-  CLAIM_LAND_SUCCESS,
+  ClaimAssetSuccessAction,
+  CLAIM_ASSET_SUCCESS,
   UpsertRentalSuccessAction,
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
 import { UpsertRentalOptType } from '../rental/types'
+import { NFTCategory } from '@dcl/schemas'
+import {
+  SetPurchaseAction,
+  SET_PURCHASE
+} from 'decentraland-dapps/dist/modules/mana/actions'
+import { PurchaseStatus } from 'decentraland-dapps/dist/modules/mana/types'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -77,8 +84,8 @@ function withCategory(eventName: string, item: { category: string }) {
   return `${eventName} ${category}`
 }
 
-track<ExecuteOrderSuccessAction>(
-  EXECUTE_ORDER_SUCCESS,
+track<ExecuteOrderTransactionSubmittedAction>(
+  EXECUTE_ORDER_TRANSACTION_SUBMITTED,
   ({ payload }) => withCategory('Buy', payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
@@ -110,7 +117,7 @@ track<CancelOrderSuccessAction>(
 )
 
 track<TransferNFTSuccessAction>(
-  TRANSFER_NFT_SUCCESS,
+  TRANSFER_NFT_TRANSACTION_SUBMITTED,
   ({ payload }) => withCategory('Transfer NFT', payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
@@ -150,8 +157,8 @@ track<PlaceBidSuccessAction>(
   })
 )
 
-track<AcceptBidSuccessAction>(
-  ACCEPT_BID_SUCCESS,
+track<AcceptBidTransactionSubmittedAction>(
+  ACCEPT_BID_TRANSACTION_SUBMITTED,
   'Accept bid',
   ({ payload }) => ({
     tokenId: payload.bid.tokenId,
@@ -226,6 +233,7 @@ track<UpsertRentalSuccessAction>(
   'Upsert Land Rental',
   ({ payload: { nft, operationType, rental } }) => ({
     nftId: nft.id,
+    assetType: isParcel(nft) ? NFTCategory.PARCEL : NFTCategory.ESTATE,
     rentalId: rental.id,
     pricePerDay: rental.periods[0].pricePerDay, // we're accepting just one price per day for all periods
     operation: operationType === UpsertRentalOptType.EDIT ? 'edit' : 'create',
@@ -234,8 +242,8 @@ track<UpsertRentalSuccessAction>(
   })
 )
 
-track<ClaimLandSuccessAction>(
-  CLAIM_LAND_SUCCESS,
+track<ClaimAssetSuccessAction>(
+  CLAIM_ASSET_SUCCESS,
   'Claim Land Rental',
   ({ payload: { nft, rental } }) => ({
     nftId: nft.id,
@@ -246,10 +254,24 @@ track<ClaimLandSuccessAction>(
 track<AcceptRentalListingSuccessAction>(
   ACCEPT_RENTAL_LISTING_SUCCESS,
   'Rent Land',
-  ({ payload: { periodIndexChosen, rental } }) => ({
+  ({ payload: { periodIndexChosen, rental, nft } }) => ({
     nftId: rental.nftId,
+    assetType: isParcel(nft) ? NFTCategory.PARCEL : NFTCategory.ESTATE,
     rentalId: rental.id,
     pricePerDay: rental.periods[periodIndexChosen].pricePerDay,
     duration: rental.periods[periodIndexChosen].maxDays
   })
+)
+
+track<SetPurchaseAction>(
+  SET_PURCHASE,
+  action =>
+    action.payload.purchase.status === PurchaseStatus.CANCELLED
+      ? 'Purchase Cancelled'
+      : action.payload.purchase.status === PurchaseStatus.COMPLETE
+      ? 'Purchase Complete'
+      : action.payload.purchase.status === PurchaseStatus.FAILED
+      ? 'Purchase Failed'
+      : 'Purchase Started',
+  action => action.payload.purchase
 )

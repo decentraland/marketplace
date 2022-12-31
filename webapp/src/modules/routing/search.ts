@@ -295,7 +295,7 @@ export function getAssetOrderBy(sortBy: SortBy) {
     }
     case SortBy.MIN_RENTAL_PRICE: {
       orderBy = NFTSortBy.MIN_RENTAL_PRICE
-      orderDirection = SortDirection.DESC
+      orderDirection = SortDirection.ASC
       break
     }
     case SortBy.RENTAL_DATE: {
@@ -333,12 +333,34 @@ export function getNFTSortBy(orderBy: NFTSortBy) {
       sortBy = SortBy.CHEAPEST
       break
     }
+    case NFTSortBy.MAX_RENTAL_PRICE: {
+      sortBy = SortBy.MAX_RENTAL_PRICE
+    }
   }
 
   return sortBy
 }
 
 export function getURLParamArray<T extends string>(
+  search: string,
+  paramName: string,
+  validValues: string[] = []
+) {
+  let params = new URLSearchParams(search).getAll(paramName) as T[]
+
+  if (validValues.length > 0) {
+    params = params.filter(item => validValues.includes(item))
+  }
+
+  return params
+}
+
+// TODO: This is currently using a non standard way of parsing query params
+// This might be because of an old functionality but for example, rarities 
+// from the URL are parsed from rarities=common_uncommon instead of 
+// rarities=common&rarities=uncommon I'll leave it as it is for now to prevent
+// further refactoring but should be changed in the future.
+export function getURLParamArray_nonStandard<T extends string>(
   search: string,
   paramName: string,
   validValues: string[] = []

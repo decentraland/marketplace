@@ -1,11 +1,14 @@
 import { createSelector } from 'reselect'
-import { Item, Order, RentalListing } from '@dcl/schemas'
-import { Transaction, TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
+import { Item, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import {
+  Transaction,
+  TransactionStatus
+} from 'decentraland-dapps/dist/modules/transaction/types'
 import { getData as getNFTData } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
 import { getData as getRentalData } from '../../rental/selectors'
-import { CLAIM_LAND_TRANSACTION_SUBMITTED } from '../../rental/actions'
+import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
 import { NFTState } from '../../nft/reducer'
 import { RootState } from '../../reducer'
 import { BrowseUIState } from './reducer'
@@ -14,12 +17,12 @@ import { ItemState } from '../../item/reducer'
 import { VendorName } from '../../vendor'
 import { getAddress } from '../../wallet/selectors'
 import { getTransactionsByType } from '../../transaction/selectors'
+import { View } from '../types'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
 
-
-
 export const getState = (state: RootState) => state.ui.browse
-export const getView = (state: RootState) => getState(state).view
+export const getView = (state: RootState): View | undefined =>
+  getState(state).view
 export const getCount = (state: RootState) => getState(state).count
 
 export const getNFTs = createSelector<
@@ -81,7 +84,10 @@ export const getOnRentNFTs = createSelector<
     .reduce((acc, nft) => {
       const { openRentalId } = nft
       const rental = openRentalId ? rentalsById[openRentalId] : undefined
-      if (rental) {
+      if (
+        rental &&
+        [RentalStatus.EXECUTED, RentalStatus.OPEN].includes(rental.status)
+      ) {
         acc.push([nft, rental])
       }
       return acc
@@ -96,8 +102,6 @@ export const getOnSaleElements = createSelector<
   OnSaleElement[]
 >(getOnSaleItems, getOnSaleNFTs, (items, nfts) => [...items, ...nfts])
 
-
-
 export const getLastTransactionForClaimingBackLand = (
   state: RootState,
   nft: NFT
@@ -109,7 +113,7 @@ export const getLastTransactionForClaimingBackLand = (
   const transactionsClaimedLand = getTransactionsByType(
     state,
     userAddress,
-    CLAIM_LAND_TRANSACTION_SUBMITTED
+    CLAIM_ASSET_TRANSACTION_SUBMITTED
   )
 
   const transactions = transactionsClaimedLand
@@ -125,18 +129,17 @@ export const getLastTransactionForClaimingBackLand = (
       return 0
     })
 
-  return transactions[0] ?? null;
+  return transactions[0] ?? null
 }
 
 export const isClaimingBackLandTransactionPending = (
   state: RootState,
   nft: NFT
 ): boolean => {
-  const transaction = getLastTransactionForClaimingBackLand(state, nft);
+  const transaction = getLastTransactionForClaimingBackLand(state, nft)
 
   return transaction
     ? transaction.status === TransactionStatus.QUEUED ||
         transaction.status === TransactionStatus.PENDING
-
     : false
 }

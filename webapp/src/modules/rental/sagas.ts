@@ -1,4 +1,5 @@
 import {
+  NFT,
   NFTCategory,
   PeriodCreation,
   RentalListing,
@@ -16,19 +17,22 @@ import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { ethers } from 'ethers'
-import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { call, delay, put, select, take, takeEvery } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
 import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { getAddress } from '../wallet/selectors'
 import { getContract as getContractByQuery } from '../contract/selectors'
 import { getFingerprint } from '../nft/estate/utils'
 import { CloseModalAction, CLOSE_MODAL } from '../modal/actions'
+import { addressEquals } from '../wallet/utils'
+import { fetchNFTRequest, FETCH_NFT_SUCCESS } from '../nft/actions'
+import { getCurrentNFT } from '../nft/selectors'
 import {
-  claimLandFailure,
-  ClaimLandRequestAction,
-  claimLandTransactionSubmitted,
-  claimLandSuccess,
-  CLAIM_LAND_REQUEST,
+  claimAssetFailure,
+  ClaimAssetRequestAction,
+  claimAssetTransactionSubmitted,
+  claimAssetSuccess,
+  CLAIM_ASSET_REQUEST,
   clearRentalErrors,
   upsertRentalFailure,
   UpsertRentalRequestAction,
@@ -47,6 +51,7 @@ import {
 } from './actions'
 import {
   daysByPeriod,
+  generateECDSASignatureWithValidV,
   getNonces,
   getSignature,
   waitUntilRentalChangesStatus
@@ -54,7 +59,7 @@ import {
 
 export function* rentalSaga() {
   yield takeEvery(UPSERT_RENTAL_REQUEST, handleCreateOrEditRentalRequest)
-  yield takeEvery(CLAIM_LAND_REQUEST, handleClaimLandRequest)
+  yield takeEvery(CLAIM_ASSET_REQUEST, handleClaimLandRequest)
   yield takeEvery(CLOSE_MODAL, handleModalClose)
   yield takeEvery(REMOVE_RENTAL_REQUEST, handleRemoveRentalRequest)
   yield takeEvery(
@@ -86,7 +91,7 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
       address
     )
 
-    const signature: string = yield call(
+    let signature: string = yield call(
       getSignature,
       nft.chainId,
       nft.contractAddress,
@@ -95,6 +100,8 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
       periods,
       expiresAt
     )
+
+    signature = yield call(generateECDSASignatureWithValidV, signature)
 
     const rentalsContract: ContractData = getContract(
       ContractName.Rentals,
@@ -136,7 +143,7 @@ function* handleCreateOrEditRentalRequest(action: UpsertRentalRequestAction) {
   }
 }
 
-function* handleClaimLandRequest(action: ClaimLandRequestAction) {
+function* handleClaimLandRequest(action: ClaimAssetRequestAction) {
   const { nft, rental } = action.payload
 
   try {
@@ -168,12 +175,21 @@ function* handleClaimLandRequest(action: ClaimLandRequestAction) {
       [nft.tokenId]
     )
     yield put(
-      claimLandTransactionSubmitted(nft, txHash, rentalsContract.address)
+      claimAssetTransactionSubmitted(nft, txHash, rentalsContract.address)
     )
     yield call(waitForTx, txHash)
-    yield put(claimLandSuccess(nft, rental))
+    yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CLAIMED)
+    let hasAssetBack = addressEquals(nft.owner, rental.lessor!)
+    while (!hasAssetBack) {
+      yield put(fetchNFTRequest(nft.contractAddress, nft.tokenId))
+      yield take(FETCH_NFT_SUCCESS)
+      const nftUpdated: NFT = yield select(getCurrentNFT)
+      hasAssetBack = addressEquals(nftUpdated.owner, rental.lessor!)
+      yield delay(5000)
+    }
+    yield put(claimAssetSuccess(nft, rental))
   } catch (error) {
-    yield put(claimLandFailure((error as Error).message))
+    yield put(claimAssetFailure((error as Error).message))
   }
 }
 
@@ -267,6 +283,11 @@ function* handleAcceptRentalListingRequest(
       [[], [], []] as [string[], number[], number[]]
     )
 
+    const signature: string = yield call(
+      generateECDSASignatureWithValidV,
+      rental.signature
+    )
+
     const listing = {
       signer: rental.lessor,
       contractAddress: rental.contractAddress,
@@ -277,7 +298,7 @@ function* handleAcceptRentalListingRequest(
       maxDays,
       minDays,
       target: ethers.constants.AddressZero,
-      signature: rental.signature
+      signature
     }
 
     let fingerprint = ethers.utils.randomBytes(32).map(() => 0)
@@ -311,7 +332,14 @@ function* handleAcceptRentalListingRequest(
       'acceptListing((address,address,uint256,uint256,uint256[3],uint256[],uint256[],uint256[],address,bytes),address,uint256,uint256,bytes32)',
       ...txParams
     )
-    yield put(acceptRentalListingTransactionSubmitted(nft, txHash))
+    yield put(
+      acceptRentalListingTransactionSubmitted(
+        nft,
+        rental,
+        txHash,
+        periodIndexChosen
+      )
+    )
     yield call(waitForTx, txHash)
     const rentalListingUpdated: RentalListing = yield call(
       waitUntilRentalChangesStatus,
@@ -319,7 +347,7 @@ function* handleAcceptRentalListingRequest(
       RentalStatus.EXECUTED
     )
     yield put(
-      acceptRentalListingSuccess(rentalListingUpdated, periodIndexChosen)
+      acceptRentalListingSuccess(nft, rentalListingUpdated, periodIndexChosen)
     )
   } catch (error) {
     yield put(acceptRentalListingFailure((error as Error).message))

@@ -53,14 +53,20 @@ export type CreateOrderFailureAction = ReturnType<typeof createOrderFailure>
 export const EXECUTE_ORDER_REQUEST = '[Request] Execute Order'
 export const EXECUTE_ORDER_SUCCESS = '[Success] Execute Order'
 export const EXECUTE_ORDER_FAILURE = '[Failure] Execute Order'
+export const EXECUTE_ORDER_TRANSACTION_SUBMITTED =
+  '[Submitted transaction] Execute Order'
 
 export const executeOrderRequest = (
   order: Order,
   nft: NFT,
   fingerprint?: string
 ) => action(EXECUTE_ORDER_REQUEST, { order, nft, fingerprint })
-export const executeOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
-  action(EXECUTE_ORDER_SUCCESS, {
+export const executeOrderTransactionSubmitted = (
+  order: Order,
+  nft: NFT,
+  txHash: string
+) =>
+  action(EXECUTE_ORDER_TRANSACTION_SUBMITTED, {
     order,
     nft,
     ...buildTransactionPayload(nft.chainId, txHash, {
@@ -71,6 +77,7 @@ export const executeOrderSuccess = (order: Order, nft: NFT, txHash: string) =>
       price: formatWeiMANA(order.price)
     })
   })
+export const executeOrderSuccess = () => action(EXECUTE_ORDER_SUCCESS)
 export const executeOrderFailure = (
   order: Order,
   nft: NFT,
@@ -80,6 +87,9 @@ export const executeOrderFailure = (
 
 export type ExecuteOrderRequestAction = ReturnType<typeof executeOrderRequest>
 export type ExecuteOrderSuccessAction = ReturnType<typeof executeOrderSuccess>
+export type ExecuteOrderTransactionSubmittedAction = ReturnType<
+  typeof executeOrderTransactionSubmitted
+>
 export type ExecuteOrderFailureAction = ReturnType<typeof executeOrderFailure>
 
 // Cancel Order (aka Cancel Sale)

@@ -48,19 +48,21 @@ describe('when creating the action to signal the start of the accept rental list
 })
 
 describe('when creating the action to signal a success of the accept rental listing event', () => {
+  let nft: NFT
   let rental: RentalListing
   let periodIndexChosen: number
 
   beforeEach(() => {
+    nft = { id: 'aNftId' } as NFT
     rental = { id: 'aRentalId' } as RentalListing
     periodIndexChosen = 0
   })
 
   it('should return an object representing the action', () => {
-    expect(acceptRentalListingSuccess(rental, periodIndexChosen)).toEqual({
+    expect(acceptRentalListingSuccess(nft, rental, periodIndexChosen)).toEqual({
       type: ACCEPT_RENTAL_LISTING_SUCCESS,
       meta: undefined,
-      payload: { rental, periodIndexChosen }
+      payload: { nft, rental, periodIndexChosen }
     })
   })
 })
@@ -77,20 +79,36 @@ describe('when creating the action to signal of the accept rental listing event'
 
 describe('when creating the action to signal the submission of the accept rental listing transaction', () => {
   let nft: NFT
+  let rental: RentalListing
   let txHash: string
+  let periodIndexChosen: number
 
   beforeEach(() => {
     nft = { id: 'aNftId' } as NFT
     txHash = '0x123'
+    rental = {
+      id: 'aRentalId',
+      periods: [{ maxDays: 10, minDays: 8, pricePerDay: '1000000000000' }]
+    } as RentalListing
+    periodIndexChosen = 0
   })
 
   it('should return an object representing the action', () => {
-    expect(acceptRentalListingTransactionSubmitted(nft, txHash)).toEqual({
+    expect(
+      acceptRentalListingTransactionSubmitted(
+        nft,
+        rental,
+        txHash,
+        periodIndexChosen
+      )
+    ).toEqual({
       type: ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
       meta: undefined,
       payload: buildTransactionPayload(nft.chainId, txHash, {
         tokenId: nft.tokenId,
-        contractAddress: nft.contractAddress
+        contractAddress: nft.contractAddress,
+        pricePerDay: rental.periods[0].pricePerDay,
+        duration: rental.periods[0].maxDays
       })
     })
   })

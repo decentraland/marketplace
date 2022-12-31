@@ -60,9 +60,12 @@ const ConfirmRentModal = ({
       size="small"
       className={styles.modal}
       name={t('rental_modal.confirm_rent_step.title')}
-      onClose={onClose}
+      onClose={!isLoading ? onClose : undefined}
     >
-      <ModalNavigation title={t('rental_modal.confirm_rent_step.title')} />
+      <ModalNavigation
+        title={t('rental_modal.confirm_rent_step.title')}
+        onClose={!isLoading ? onClose : undefined}
+      />
       <Modal.Content>
         <span>
           <T
@@ -80,6 +83,7 @@ const ConfirmRentModal = ({
         <div className={styles.priceContainer}>
           <ManaField
             network={nft.network}
+            disabled={isLoading}
             label={t('bid_page.price')}
             placeholder={pricePerRentInEther}
             value={price}
@@ -93,7 +97,7 @@ const ConfirmRentModal = ({
           <Field
             label={t('rental_modal.confirm_rent_step.operator_address')}
             value={operatorAddress}
-            disabled={isUserTheOperatorAddress}
+            disabled={isUserTheOperatorAddress || isLoading}
             onChange={(_event, props) => {
               setOperatorAddress(props.value)
             }}
@@ -107,6 +111,7 @@ const ConfirmRentModal = ({
           <div className={styles.operatorCheckboxContainer}>
             <Checkbox
               checked={isUserTheOperatorAddress}
+              disabled={isLoading}
               onChange={handleOperatorToggle}
             />
             <span className={styles.operatorFieldNotice}>
@@ -145,6 +150,7 @@ const ConfirmRentModal = ({
           </div>
         ) : (
           <Button
+            className={styles.cancel}
             primary
             disabled={
               Number(price) !== pricePerRentInEther ||

@@ -13,25 +13,28 @@ import { getAssetName } from '../../../modules/asset/utils'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
-  EXECUTE_ORDER_SUCCESS
+  EXECUTE_ORDER_TRANSACTION_SUBMITTED
 } from '../../../modules/order/actions'
 import { BUY_ITEM_SUCCESS } from '../../../modules/item/actions'
-import { TRANSFER_NFT_SUCCESS } from '../../../modules/nft/actions'
+import { TRANSFER_NFT_TRANSACTION_SUBMITTED } from '../../../modules/nft/actions'
 import {
   PLACE_BID_SUCCESS,
-  ACCEPT_BID_SUCCESS,
+  ACCEPT_BID_TRANSACTION_SUBMITTED,
   CANCEL_BID_SUCCESS
 } from '../../../modules/bid/actions'
 import { locations } from '../../../modules/routing/locations'
 import {
-  CLAIM_LAND_TRANSACTION_SUBMITTED,
+  ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
+  CLAIM_ASSET_TRANSACTION_SUBMITTED,
   REMOVE_RENTAL_TRANSACTION_SUBMITTED
 } from '../../../modules/rental/actions'
 import { AssetType } from '../../../modules/asset/types'
+import { isParcel } from '../../../modules/nft/utils'
 import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'
 import { TransactionDetail } from './TransactionDetail'
 import { Props } from './Transaction.types'
+import { ethers } from 'ethers'
 
 const Transaction = (props: Props) => {
   const { tx, getContract } = props
@@ -155,7 +158,7 @@ const Transaction = (props: Props) => {
       )
     }
     case BUY_ITEM_SUCCESS:
-    case EXECUTE_ORDER_SUCCESS: {
+    case EXECUTE_ORDER_TRANSACTION_SUBMITTED: {
       const {
         tokenId,
         itemId,
@@ -206,7 +209,7 @@ const Transaction = (props: Props) => {
         </AssetProvider>
       )
     }
-    case TRANSFER_NFT_SUCCESS: {
+    case TRANSFER_NFT_TRANSACTION_SUBMITTED: {
       const { tokenId, contractAddress, name, address } = tx.payload
       return (
         <AssetProvider
@@ -275,7 +278,7 @@ const Transaction = (props: Props) => {
         </AssetProvider>
       )
     }
-    case ACCEPT_BID_SUCCESS: {
+    case ACCEPT_BID_TRANSACTION_SUBMITTED: {
       const { tokenId, contractAddress, price } = tx.payload
       return (
         <AssetProvider
@@ -343,7 +346,7 @@ const Transaction = (props: Props) => {
         </AssetProvider>
       )
     }
-    case CLAIM_LAND_TRANSACTION_SUBMITTED: {
+    case CLAIM_ASSET_TRANSACTION_SUBMITTED: {
       const {
         tokenId,
         contractAddress,
@@ -361,8 +364,13 @@ const Transaction = (props: Props) => {
               asset={nft}
               text={
                 <T
-                  id="transaction.detail.claim_land"
+                  id="transaction.detail.claim_asset"
                   values={{
+                    asset: nft
+                      ? isParcel(nft)
+                        ? t('global.the_parcel')
+                        : t('global.the_estate')
+                      : '',
                     name: (
                       <Link to={locations.manage(contractAddress, tokenId)}>
                         {nft ? getAssetName(nft) : ''}
@@ -406,6 +414,44 @@ const Transaction = (props: Props) => {
                         {nft ? getAssetName(nft) : ''}
                       </Link>
                     )
+                  }}
+                />
+              }
+              tx={tx}
+            />
+          )}
+        </AssetProvider>
+      )
+    }
+    case ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED: {
+      const { tokenId, contractAddress, pricePerDay, duration } = tx.payload
+      return (
+        <AssetProvider
+          type={AssetType.NFT}
+          contractAddress={contractAddress}
+          tokenId={tokenId}
+        >
+          {nft => (
+            <TransactionDetail
+              asset={nft}
+              text={
+                <T
+                  id="transaction.detail.accept_rental"
+                  values={{
+                    name: (
+                      <Link to={locations.manage(contractAddress, tokenId)}>
+                        {nft ? getAssetName(nft) : ''}
+                      </Link>
+                    ),
+                    pricePerDay: (
+                      <Mana network={nft?.network} inline>
+                        {/* As this there might be already registered transactions and the price information is new, consider it optional */}
+                        {pricePerDay
+                          ? ethers.utils.formatEther(pricePerDay)
+                          : '0'}
+                      </Mana>
+                    ),
+                    duration: <span>{duration}</span>
                   }}
                 />
               }

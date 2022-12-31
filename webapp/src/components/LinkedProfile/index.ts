@@ -1,0 +1,1 @@
+export { LinkedProfile } from './LinkedProfile'

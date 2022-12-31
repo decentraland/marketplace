@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { Env } from '@dcl/ui-env'
+import { ethers } from 'ethers'
 import {
   Modal,
   Button,
@@ -12,13 +12,11 @@ import {
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-import { config } from '../../../../config'
 import {
   PeriodOption,
-  PeriodOptionsDev,
   UpsertRentalOptType
 } from '../../../../modules/rental/types'
-import { formatWeiMANA, parseMANANumber } from '../../../../lib/mana'
+import { parseMANANumber } from '../../../../lib/mana'
 import {
   convertDateToDateInputValue,
   getDefaultExpirationDate
@@ -32,7 +30,6 @@ import { ManaField } from '../../../ManaField'
 import { Props } from './CreateOrEditListingStep.types'
 import styles from './CreateOrEditListingStep.module.css'
 
-const isDev = config.is(Env.DEVELOPMENT) || config.is(Env.STAGING)
 const RENTAL_MIN_PRICE = 1
 
 const CreateListingStep = (props: Props) => {
@@ -40,7 +37,8 @@ const CreateListingStep = (props: Props) => {
 
   // Editing properties
   const oldPrice = useMemo(
-    () => (rental ? formatWeiMANA(getMaxPriceOfPeriods(rental)) : null),
+    () =>
+      rental ? ethers.utils.formatEther(getMaxPriceOfPeriods(rental)) : null,
     [rental]
   )
   const oldPeriods = useMemo(
@@ -65,13 +63,35 @@ const CreateListingStep = (props: Props) => {
     oldExpirationDate ?? getDefaultExpirationDate()
   )
 
+  const fixedPriceInput = useMemo(() => toFixedMANAValue(pricePerDayInput), [
+    pricePerDayInput
+  ])
+
+  // Checks if the new and the old price are the same by converting them
+  // and checking their integer and floating point parts.
+  const isOldNumberTheSameAsTheNewOne = useMemo(() => {
+    // Converts the input to a number to parse partial inputs E.g: 3.
+    const priceAsNumber = Number(fixedPriceInput)
+    if (Number.isNaN(priceAsNumber)) {
+      return false
+    }
+
+    // Converts the number to Wei and then converts it back to ethers to have
+    // the same value as the old price one.
+    const priceInWei = ethers.utils.parseEther(priceAsNumber.toString())
+    return (
+      ethers.utils.formatEther(priceInWei).toString() ===
+      toFixedMANAValue(oldPrice ?? '')
+    )
+  }, [oldPrice, fixedPriceInput])
+
   // Handlers
   const handleSubmit = useCallback(() => {
     onCreate(
       nft,
       parseMANANumber(pricePerDayInput),
       periodOptions,
-      Number(new Date(expiresAt)),
+      Number(new Date(`${expiresAt} 00:00:00`)),
       UpsertRentalOptType.EDIT
     )
   }, [onCreate, nft, pricePerDayInput, periodOptions, expiresAt])
@@ -91,7 +111,9 @@ const CreateListingStep = (props: Props) => {
   }
 
   // Validations
-  const parsedPriceInput = parseMANANumber(pricePerDayInput)
+  const parsedPriceInput = useMemo(() => parseMANANumber(pricePerDayInput), [
+    pricePerDayInput
+  ])
   const isInvalidPrice = parsedPriceInput < 0 || Number(pricePerDayInput) < 0
   const isLessThanMinPrice = parsedPriceInput < RENTAL_MIN_PRICE
   const isInvalidExpirationDate = new Date(expiresAt).getTime() < Date.now()
@@ -104,7 +126,7 @@ const CreateListingStep = (props: Props) => {
     pricePerDayInput !== '' && (isInvalidPrice || isLessThanMinPrice)
   const isUpdated =
     oldExpirationDate !== expiresAt ||
-    pricePerDayInput !== oldPrice ||
+    !isOldNumberTheSameAsTheNewOne ||
     (oldPeriods &&
       (oldPeriods.length !== periodOptions.length ||
         !oldPeriods.every(period => periodOptions.includes(period))))
@@ -136,12 +158,13 @@ const CreateListingStep = (props: Props) => {
       <Modal.Content>
         <div className={styles.pricePerDay}>
           <ManaField
-            label={t('rental_modal.create_listing_step.price_per_day')}
             type="text"
+            label={t('rental_modal.create_listing_step.price_per_day')}
+            maxLength="20"
             placeholder={1000}
             network={nft.network}
-            value={pricePerDayInput}
-            focus={true}
+            autoFocus
+            value={fixedPriceInput}
             error={showInvalidPriceError}
             onChange={handlePriceChange}
             message={
@@ -166,18 +189,16 @@ const CreateListingStep = (props: Props) => {
           </Header>
 
           <div className={styles.periodOptions}>
-            {Object.values(isDev ? PeriodOptionsDev : PeriodOption).map(
-              option => (
-                <Radio
-                  key={option}
-                  label={t(
-                    `rental_modal.create_listing_step.period_options.${option}`
-                  )}
-                  checked={periodOptions.includes(option)}
-                  onClick={createOptionHandler(option)}
-                />
-              )
-            )}
+            {Object.values(PeriodOption).map(option => (
+              <Radio
+                key={option}
+                label={t(
+                  `rental_modal.create_listing_step.period_options.${option}`
+                )}
+                checked={periodOptions.includes(option)}
+                onClick={createOptionHandler(option)}
+              />
+            ))}
           </div>
         </div>
         <div className={styles.expirationDate}>
@@ -195,23 +216,42 @@ const CreateListingStep = (props: Props) => {
                 : undefined
             }
           />
+          <Popup
+            className={styles.periodsTooltip}
+            content={t(
+              'rental_modal.create_listing_step.expiration_date_tooltip'
+            )}
+            trigger={<i className={styles.info} />}
+            position="top center"
+            on="hover"
+          ></Popup>
         </div>
       </Modal.Content>
       <Modal.Actions className={styles.actions}>
         {!rental ? (
-          <Button primary onClick={handleSubmit} disabled={isInvalid}>
+          <Button
+            primary
+            onClick={handleSubmit}
+            disabled={isInvalid}
+            className={styles.actionButton}
+          >
             {t('rental_modal.create_listing_step.put_for_rent')}
           </Button>
         ) : (
           <>
             <Button
+              className={styles.actionButton}
               primary
               onClick={handleSubmit}
               disabled={isInvalid || !isUpdated}
             >
               {t('rental_modal.create_listing_step.update_listing')}
             </Button>
-            <Button secondary onClick={handleRemove}>
+            <Button
+              className={styles.actionButton}
+              secondary
+              onClick={handleRemove}
+            >
               {t('rental_modal.create_listing_step.remove_listing')}
             </Button>
           </>

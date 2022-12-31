@@ -1,9 +1,10 @@
 export enum FeatureName {
   MAINTENANCE = 'maintenance',
+  LAUNCH_POPUP = 'launch-popup',
   RANKINGS = 'rankings_variant',
   EMOTE_CATEGORIES = 'emote-categories',
   RENTALS = 'rentals',
-  MVMF = 'mvmf-2022',
-  MVMF_ANNOUNCEMENT = 'mvmf-2022-announcement',
-  MVMF_TAB = 'mvmf-2022-tab'
+  CAMPAIGN_HOMEPAGE_BANNER = 'campaign-homepage-banner',
+  CAMPAIGN_COLLECTIBLES_BANNER = 'campaign-collectibles-banner',
+  CAMPAIGN_BROWSER = 'campaign-browser'
 }

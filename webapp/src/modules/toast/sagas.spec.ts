@@ -5,7 +5,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import { NFT } from '../nft/types'
 import {
-  claimLandSuccess,
+  claimAssetSuccess,
   removeRentalSuccess,
   upsertRentalSuccess
 } from '../rental/actions'
@@ -50,7 +50,7 @@ describe('when handling the success of a LAND claimed back', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
       .put(showToast(getLandClaimedBackSuccessToast()))
-      .dispatch(claimLandSuccess(nft, rental))
+      .dispatch(claimAssetSuccess(nft, rental))
       .silentRun()
   })
 })

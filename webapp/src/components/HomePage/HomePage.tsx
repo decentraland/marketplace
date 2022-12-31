@@ -15,9 +15,10 @@ import { Navbar } from '../Navbar'
 import { RecentlySoldTable } from '../RecentlySoldTable'
 import { Footer } from '../Footer'
 import { AnalyticsVolumeDayData } from '../AnalyticsVolumeDayData'
-import { MVMFBanner } from '../MVMFPage/MVMFBanner'
+import { CampaignBanner } from '../Campaign/CampaignBanner'
 import { Slideshow } from './Slideshow'
 import { RankingsTable } from '../RankingsTable'
+import { CampaignHomepageBanner } from '../Campaign/banners/CampaignHomepageBanner'
 import { Props } from './HomePage.types'
 import './HomePage.css'
 
@@ -26,7 +27,8 @@ const HomePage = (props: Props) => {
     homepage,
     homepageLoading,
     onNavigate,
-    onFetchAssetsFromRoute
+    onFetchAssetsFromRoute,
+    isCampaignHomepageBannerEnabled
   } = props
 
   const vendor = VendorName.DECENTRALAND
@@ -208,7 +210,7 @@ const HomePage = (props: Props) => {
     <>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.OVERVIEW} />
-      <MVMFBanner type="big" />
+      {isCampaignHomepageBannerEnabled ? <CampaignBanner><CampaignHomepageBanner /></CampaignBanner> : null}
       <Page className="HomePage">
         <AnalyticsVolumeDayData />
         {firstViewsSection.map(renderSlideshow)}

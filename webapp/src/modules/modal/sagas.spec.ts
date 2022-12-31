@@ -4,7 +4,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import { NFT } from '../nft/types'
 import {
-  claimLandSuccess,
+  claimAssetSuccess,
   upsertRentalSuccess,
   removeRentalSuccess,
   acceptRentalListingSuccess
@@ -25,7 +25,7 @@ describe('when handling the success action of the claim LAND', () => {
   it('should put the action to close all modals', () => {
     return expectSaga(modalSaga)
       .put(closeAllModals())
-      .dispatch(claimLandSuccess(nft, rental))
+      .dispatch(claimAssetSuccess(nft, rental))
       .silentRun()
   })
 })
@@ -93,10 +93,12 @@ describe('when handling the success action of a rental edit', () => {
 })
 
 describe('when handling the success action of a accepting a rental listing', () => {
+  let nft: NFT
   let rental: RentalListing
   let periodIndexChosen: number
 
   beforeEach(() => {
+    nft = { id: 'aNftId' } as NFT
     rental = { id: 'aRentalId' } as RentalListing
     periodIndexChosen = 0
   })
@@ -105,7 +107,7 @@ describe('when handling the success action of a accepting a rental listing', () 
     return expectSaga(modalSaga)
       .put(openModal('RentConfirmedModal', { rental, periodIndexChosen }))
       .put(closeModal('ConfirmRentModal'))
-      .dispatch(acceptRentalListingSuccess(rental, periodIndexChosen))
+      .dispatch(acceptRentalListingSuccess(nft, rental, periodIndexChosen))
       .silentRun()
   })
 })

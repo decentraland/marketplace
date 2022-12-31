@@ -21,6 +21,8 @@ export function getFilters(
       const currentSection = Sections[VendorName.DECENTRALAND]
 
       const isLand = section === currentSection.LAND
+      const isParcelsOrEstates =
+        section === currentSection.PARCELS || section === currentSection.ESTATES
       const isWearableHead = section === currentSection.WEARABLES_HEAD
       const isWearableAccessory =
         section === currentSection.WEARABLES_ACCESSORIES
@@ -58,7 +60,7 @@ export function getFilters(
         network,
         emotePlayMode,
         rentalStatus:
-          isRentalsEnabled && isLand && address
+          isRentalsEnabled && (isLand || isParcelsOrEstates) && address
             ? [RentalStatus.OPEN, RentalStatus.EXECUTED]
             : undefined
       } as NFTsFetchFilters<VendorName.DECENTRALAND>

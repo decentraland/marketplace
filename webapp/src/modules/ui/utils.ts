@@ -30,3 +30,20 @@ export const useScrollSectionIntoView = <T>(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 }
+
+export const PERSISTED_IS_MAP_STORAGE_KEY = 'is-map'
+
+export const persistIsMapProperty = (val: boolean) => {
+  localStorage.setItem(PERSISTED_IS_MAP_STORAGE_KEY, val.toString())
+}
+
+export const getPersistedIsMapProperty = (): boolean | null => {
+  const persistedIsMapProperty =
+    localStorage.getItem(PERSISTED_IS_MAP_STORAGE_KEY) || ''
+
+  if (['true', 'false'].includes(persistedIsMapProperty)) {
+    return persistedIsMapProperty === 'true'
+  }
+
+  return null
+}

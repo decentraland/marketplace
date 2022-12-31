@@ -88,8 +88,6 @@ export function* handleFetchSingleCollectionRequest(
 
     const [collection] = collections
 
-    yield put(fetchSingleCollectionSuccess(collection))
-
     if (shouldFetchItems) {
       const itemsByContractAddress: ReturnType<typeof getItemsByContractAddress> = yield select(
         getItemsByContractAddress
@@ -108,6 +106,7 @@ export function* handleFetchSingleCollectionRequest(
         )
       }
     }
+    yield put(fetchSingleCollectionSuccess(collection))
   } catch (error) {
     yield put(
       fetchSingleCollectionFailure(

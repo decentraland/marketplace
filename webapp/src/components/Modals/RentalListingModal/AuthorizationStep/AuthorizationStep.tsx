@@ -11,6 +11,7 @@ import {
 import { ContractName, getContract } from 'decentraland-transactions'
 import { TransactionLink } from 'decentraland-dapps/dist/containers'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { config } from '../../../../config'
 import { Props } from './AuthorizationStep.types'
 import styles from './AuthorizationStep.module.css'
 
@@ -22,12 +23,15 @@ const AuthorizationStep = (props: Props) => {
     isAuthorizing,
     isConfirmingAuthorization,
     nft,
+    error,
+    isFetchingAuthorizations,
     onAuthorize,
-    error
+    onFetchAuthorizations
   } = props
 
   // State
   const [showError, setShowError] = useState(false)
+  const isLoading = isConfirmingAuthorization || isAuthorizing
 
   // Authorization
   const rentalContractData = getContract(ContractName.Rentals, nft.chainId)
@@ -53,6 +57,12 @@ const AuthorizationStep = (props: Props) => {
     onCancel()
   }, [setShowError, onCancel])
 
+  const handleOnInfo = useCallback(() => {
+    window.location.href = `${config.get(
+      'DOCS_URL'
+    )}/player/market/rentals/#list-land-for-rent`
+  }, [])
+
   // Effects
   useEffect(() => {
     if (error && !isConfirmingAuthorization && !isAuthorizing) {
@@ -64,97 +74,109 @@ const AuthorizationStep = (props: Props) => {
     }
   }, [error, isConfirmingAuthorization, isAuthorizing])
 
+  useEffect(() => {
+    onFetchAuthorizations([authorization])
+  }, [onFetchAuthorizations, authorization])
+
   return (
     <>
       <ModalNavigation
         title={t('rental_modal.authorization_step.title')}
-        onClose={onCancel}
+        onClose={!isLoading ? onCancel : undefined}
+        onInfo={handleOnInfo}
       />
-      <Modal.Content>
-        <div className={styles.notice}>
-          <T
-            id="rental_modal.authorization_step.notice_line_one"
-            values={{
-              assetType: t(`global.${nft.category}`),
-              link: (
-                <TransactionLink
-                  address={rentalContractData.address}
-                  txHash=""
-                  chainId={rentalContractData.chainId}
-                >
-                  {t('rental_modal.authorization_step.notice_link')}
-                </TransactionLink>
-              )
-            }}
-          />
-        </div>
-        <div className={styles.noticeBox}>
-          <p>
-            <T id="rental_modal.authorization_step.notice_line_two" />
-          </p>
-          <ul>
-            <li>
-              <b>
-                {t(
-                  'rental_modal.authorization_step.notice_line_two_option_one_title'
-                )}
-              </b>
-              :&nbsp;
-              {t(
-                'rental_modal.authorization_step.notice_line_two_option_one_text'
-              )}
-            </li>
-            <li>
-              <b>
-                {t(
-                  'rental_modal.authorization_step.notice_line_two_option_two_title'
-                )}
-              </b>
-              :&nbsp;
-              {t(
-                'rental_modal.authorization_step.notice_line_two_option_two_text'
-              )}
-            </li>
-          </ul>
-        </div>
-      </Modal.Content>
-      <Modal.Actions className={styles.actions}>
-        {isConfirmingAuthorization ? (
-          <div className={styles.confirmTransaction}>
-            <Loader
-              active
-              size="small"
-              className={styles.confirmTransactionLoader}
-            />
-            <p>{t('rental_modal.authorization_step.confirm')}</p>
+      {isFetchingAuthorizations ? (
+        <Modal.Content>
+          <div className={styles.loaderContainer}>
+            <Loader active size="small" inline />
           </div>
-        ) : (
-          <Button
-            primary
-            loading={isConfirmingAuthorization || isAuthorizing}
-            onClick={handleSubmit}
-            disabled={isConfirmingAuthorization || isAuthorizing}
-          >
-            {t('global.proceed')}
-          </Button>
-        )}
-        <Button
-          onClick={handleCancel}
-          disabled={isConfirmingAuthorization || isAuthorizing}
-        >
-          {t('global.cancel')}
-        </Button>
-        {showError && (
-          <Message
-            className={styles.errorMessage}
-            error
-            size="tiny"
-            visible
-            content={error}
-            header={t('global.error')}
-          />
-        )}
-      </Modal.Actions>
+        </Modal.Content>
+      ) : (
+        <>
+          <Modal.Content>
+            <div className={styles.notice}>
+              <T
+                id="rental_modal.authorization_step.notice_line_one"
+                values={{
+                  assetType: t(`global.${nft.category}`),
+                  link: (
+                    <TransactionLink
+                      address={rentalContractData.address}
+                      txHash=""
+                      chainId={rentalContractData.chainId}
+                    >
+                      {t('rental_modal.authorization_step.notice_link')}
+                    </TransactionLink>
+                  )
+                }}
+              />
+            </div>
+            <div className={styles.noticeBox}>
+              <p>
+                <T id="rental_modal.authorization_step.notice_line_two" />
+              </p>
+              <ul>
+                <li>
+                  <b>
+                    {t(
+                      'rental_modal.authorization_step.notice_line_two_option_one_title'
+                    )}
+                  </b>
+                  :&nbsp;
+                  {t(
+                    'rental_modal.authorization_step.notice_line_two_option_one_text'
+                  )}
+                </li>
+                <li>
+                  <b>
+                    {t(
+                      'rental_modal.authorization_step.notice_line_two_option_two_title'
+                    )}
+                  </b>
+                  :&nbsp;
+                  {t(
+                    'rental_modal.authorization_step.notice_line_two_option_two_text'
+                  )}
+                </li>
+              </ul>
+            </div>
+          </Modal.Content>
+          <Modal.Actions className={styles.actions}>
+            {isConfirmingAuthorization ? (
+              <div className={styles.confirmTransaction}>
+                <Loader
+                  active
+                  size="small"
+                  className={styles.confirmTransactionLoader}
+                />
+                <p>{t('rental_modal.authorization_step.confirm')}</p>
+              </div>
+            ) : (
+              <Button
+                primary
+                loading={isLoading}
+                onClick={handleSubmit}
+                disabled={isLoading}
+              >
+                {t('global.proceed')}
+              </Button>
+            )}
+            <Button onClick={handleCancel} disabled={isLoading}>
+              {t('global.cancel')}
+            </Button>
+            {showError && (
+              <Message
+                className={styles.errorMessage}
+                error
+                size="tiny"
+                visible
+                content={error}
+                header={t('global.error')}
+              />
+            )}
+          </Modal.Actions>
+        </>
+      )}
     </>
   )
 }

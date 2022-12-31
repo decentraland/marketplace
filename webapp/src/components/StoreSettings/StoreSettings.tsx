@@ -16,7 +16,7 @@ import { LinkType, Store } from '../../modules/store/types'
 import {
   getIsValidLink,
   getPrefixedCoverName,
-  linkStartWiths
+  linkStartsWith
 } from '../../modules/store/utils'
 import './StoreSettings.css'
 
@@ -51,7 +51,7 @@ const StoreSettings = ({
 
     if (website && !getIsValidLink(LinkType.WEBSITE, website)) {
       newErrors[LinkType.WEBSITE] = t('store_settings.link_start_with_error', {
-        value: linkStartWiths[LinkType.WEBSITE]
+        value: linkStartsWith[LinkType.WEBSITE]
       })
     }
 
@@ -79,7 +79,7 @@ const StoreSettings = ({
   )
 
   const getInputValue = useCallback(
-    (type: LinkType) => store[type].replace(linkStartWiths[type], ''),
+    (type: LinkType) => store[type].replace(linkStartsWith[type], ''),
     [store]
   )
 
@@ -87,7 +87,7 @@ const StoreSettings = ({
     (type: LinkType, value: string) =>
       onChange({
         ...store,
-        [type]: (!value ? '' : linkStartWiths[type] + value).replaceAll(' ', '')
+        [type]: (!value ? '' : linkStartsWith[type] + value).replaceAll(' ', '')
       }),
     [store, onChange]
   )

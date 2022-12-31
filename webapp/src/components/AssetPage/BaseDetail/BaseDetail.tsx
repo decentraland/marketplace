@@ -11,6 +11,7 @@ import './BaseDetail.css'
 
 const BaseDetail = ({
   asset,
+  rental,
   assetImage,
   badges,
   left,
@@ -37,7 +38,7 @@ const BaseDetail = ({
               <div className="action-box">{actions}</div>
             ) : null}
             {showDetails ? (
-              <Details asset={asset} />
+              <Details rental={rental} asset={asset} />
             ) : (
               <Box className="box" childrenClassName="box-children">
                 {box}

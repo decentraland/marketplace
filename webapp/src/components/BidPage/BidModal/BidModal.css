@@ -3,10 +3,11 @@
 }
 
 .BidPage .subtitle {
-  margin-bottom: 32px;
+  margin-bottom: 10px;
 }
 
 .BidPage .form-fields {
+  margin-top: 32px;
   max-width: 420px;
   margin-bottom: 20px;
 }
@@ -15,8 +16,40 @@
   margin-bottom: 8px;
 }
 
+.BidPage .rentalMessage {
+  background-color: #2e2a33;
+  padding: 15px;
+  border-radius: 6px;
+}
+
+.BidPage .bid-action {
+  max-width: 400px;
+}
+
+.BidPage .actions {
+  display: grid !important;
+}
+
+.BidPage .ui.form .field {
+  width: 100% !important;
+}
+
+.clndr-control .ui.compact.icon.button,
+.clndr-control .ui.compact.icon.buttons .button {
+  width: 20px !important;
+  top: 20px;
+}
+
 @media (max-width: 768px) {
   .BidPage .dcl.field {
     min-width: auto;
+  }
+
+  .BidPage .AssetAction > .Row .buttons {
+    margin-bottom: 200px;
+  }
+
+  .BidPage .AssetAction > .Row .ui.button + .ui.button {
+    margin-bottom: 0px;
   }
 }

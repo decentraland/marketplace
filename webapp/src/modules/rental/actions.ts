@@ -45,28 +45,28 @@ export type UpsertRentalRequestAction = ReturnType<typeof upsertRentalRequest>
 export type UpsertRentalSuccessAction = ReturnType<typeof upsertRentalSuccess>
 export type UpsertRentalFailureAction = ReturnType<typeof upsertRentalFailure>
 
-export const CLAIM_LAND_REQUEST = '[Request] Claim LAND'
-export const CLAIM_LAND_SUCCESS = '[Success] Claim LAND'
-export const CLAIM_LAND_FAILURE = '[Failure] Claim LAND'
-export const CLAIM_LAND_TRANSACTION_SUBMITTED =
-  '[Submitted transaction] Claim LAND'
+export const CLAIM_ASSET_REQUEST = '[Request] Claim Asset'
+export const CLAIM_ASSET_SUCCESS = '[Success] Claim Asset'
+export const CLAIM_ASSET_FAILURE = '[Failure] Claim Asset'
+export const CLAIM_ASSET_TRANSACTION_SUBMITTED =
+  '[Submitted transaction] Claim Asset'
 
-export const claimLandRequest = (nft: NFT, rental: RentalListing) =>
-  action(CLAIM_LAND_REQUEST, { nft, rental })
-export const claimLandSuccess = (nft: NFT, rental: RentalListing) =>
-  action(CLAIM_LAND_SUCCESS, {
+export const claimAssetRequest = (nft: NFT, rental: RentalListing) =>
+  action(CLAIM_ASSET_REQUEST, { nft, rental })
+export const claimAssetSuccess = (nft: NFT, rental: RentalListing) =>
+  action(CLAIM_ASSET_SUCCESS, {
     nft,
     rental
   })
-export const claimLandFailure = (error: string) =>
-  action(CLAIM_LAND_FAILURE, { error })
-export const claimLandTransactionSubmitted = (
+export const claimAssetFailure = (error: string) =>
+  action(CLAIM_ASSET_FAILURE, { error })
+export const claimAssetTransactionSubmitted = (
   nft: NFT,
   txHash: string,
   rentalContractAddress: string
 ) =>
   action(
-    CLAIM_LAND_TRANSACTION_SUBMITTED,
+    CLAIM_ASSET_TRANSACTION_SUBMITTED,
     buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
@@ -75,18 +75,18 @@ export const claimLandTransactionSubmitted = (
     })
   )
 
-export type ClaimLandRequestAction = ReturnType<typeof claimLandRequest>
-export type ClaimLandSuccessAction = ReturnType<typeof claimLandSuccess>
-export type ClaimLandFailureAction = ReturnType<typeof claimLandFailure>
-export type ClaimLandTransactionSubmitted = ReturnType<
-  typeof claimLandTransactionSubmitted
+export type ClaimAssetRequestAction = ReturnType<typeof claimAssetRequest>
+export type ClaimAssetSuccessAction = ReturnType<typeof claimAssetSuccess>
+export type ClaimAssetFailureAction = ReturnType<typeof claimAssetFailure>
+export type ClaimAssetTransactionSubmitted = ReturnType<
+  typeof claimAssetTransactionSubmitted
 >
 
 export const CLEAR_RENTAL_ERRORS = 'Clear rental errors'
 
 export const clearRentalErrors = () => action(CLEAR_RENTAL_ERRORS)
 
-export type ClearRentalErrors = ReturnType<typeof clearRentalErrors>
+export type ClearRentalErrorsAction = ReturnType<typeof clearRentalErrors>
 
 export const REMOVE_RENTAL_REQUEST = '[Request] Remove Rental'
 export const REMOVE_RENTAL_SUCCESS = '[Success] Remove Rental'
@@ -137,24 +137,30 @@ export const acceptRentalListingRequest = (
     addressOperator
   })
 export const acceptRentalListingSuccess = (
+  nft: NFT,
   rental: RentalListing,
   periodIndexChosen: number
 ) =>
   action(ACCEPT_RENTAL_LISTING_SUCCESS, {
-    rental,
-    periodIndexChosen
+    nft,
+    periodIndexChosen,
+    rental
   })
 export const acceptRentalListingFailure = (error: string) =>
   action(ACCEPT_RENTAL_LISTING_FAILURE, { error })
 export const acceptRentalListingTransactionSubmitted = (
   nft: NFT,
-  txHash: string
+  rental: RentalListing,
+  txHash: string,
+  periodIndexChosen: number
 ) =>
   action(
     ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
     buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
-      contractAddress: nft.contractAddress
+      contractAddress: nft.contractAddress,
+      pricePerDay: rental.periods[periodIndexChosen].pricePerDay,
+      duration: rental.periods[periodIndexChosen].maxDays
     })
   )
 

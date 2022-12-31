@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom'
 import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
 import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
-import { Profile } from 'decentraland-dapps/dist/containers'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { addressEquals } from '../../modules/wallet/utils'
 import { AssetType } from '../../modules/asset/types'
 import { AssetProvider } from '../AssetProvider'
+import { LinkedProfile } from '../LinkedProfile'
 import { AssetImage } from '../AssetImage'
 import { Mana } from '../Mana'
 import { AcceptButton } from './AcceptButton'
@@ -73,9 +73,7 @@ const Bid = (props: Props) => {
           <div className="wrapper">
             <div className="info">
               <Stats className="from" title={t('bid.from')}>
-                <Link to={locations.account(bid.bidder)}>
-                  <Profile address={bid.bidder} />
-                </Link>
+                <LinkedProfile address={bid.bidder} />
               </Stats>
               <Stats className="price" title={t('bid.price')}>
                 <Mana network={bid.network}>{formatWeiMANA(bid.price)}</Mana>
@@ -105,6 +103,7 @@ const Bid = (props: Props) => {
                     >
                       {(nft, _order, rental) => (
                         <AcceptButton
+                          userAddress={wallet.address}
                           nft={nft}
                           rental={rental}
                           bid={bid}

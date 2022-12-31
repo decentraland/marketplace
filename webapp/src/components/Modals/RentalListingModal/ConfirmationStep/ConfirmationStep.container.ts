@@ -2,6 +2,7 @@ import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../../../../modules/reducer'
 import {
+  clearRentalErrors,
   upsertRentalRequest,
   UPSERT_RENTAL_REQUEST
 } from '../../../../modules/rental/actions'
@@ -32,7 +33,8 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
         expiresAt,
         UpsertRentalOptType.INSERT
       )
-    )
+    ),
+  onClearRentalErros: () => dispatch(clearRentalErrors())
 })
 
 export default connect(mapState, mapDispatch)(ConfirmationStep)

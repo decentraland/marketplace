@@ -1,9 +1,17 @@
 import { put, call, takeEvery, select } from 'redux-saga/effects'
+import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
-import { VendorFactory } from '../vendor/VendorFactory'
+import { Vendor, VendorFactory } from '../vendor/VendorFactory'
+import { getRentalById } from '../rental/selectors'
+import {
+  isRentalListingOpen,
+  waitUntilRentalChangesStatus
+} from '../rental/utils'
+import { VendorName } from '../vendor'
 import {
   CREATE_ORDER_REQUEST,
   CreateOrderRequestAction,
@@ -16,7 +24,8 @@ import {
   CANCEL_ORDER_REQUEST,
   CancelOrderRequestAction,
   cancelOrderSuccess,
-  cancelOrderFailure
+  cancelOrderFailure,
+  executeOrderTransactionSubmitted
 } from './actions'
 
 export function* orderSaga() {
@@ -57,19 +66,38 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   const { order, nft, fingerprint } = action.payload
   try {
     if (
-      nft.contractAddress !== order.contractAddress &&
+      nft.contractAddress !== order.contractAddress ||
       nft.tokenId !== order.tokenId
     ) {
       throw new Error('The order does not match the NFT')
     }
-    const { orderService } = VendorFactory.build(nft.vendor)
-
-    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-    const txHash: string = yield call(() =>
-      orderService.execute(wallet, nft, order, fingerprint)
+    const { orderService }: Vendor<VendorName> = yield call(
+      [VendorFactory, 'build'],
+      nft.vendor
     )
 
-    yield put(executeOrderSuccess(order, nft, txHash))
+    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
+    const txHash: string = yield call(
+      [orderService, 'execute'],
+      wallet,
+      nft,
+      order,
+      fingerprint
+    )
+
+    yield put(executeOrderTransactionSubmitted(order, nft, txHash))
+    if (nft.openRentalId) {
+      yield call(waitForTx, txHash)
+      const rental: RentalListing = yield select(
+        getRentalById,
+        nft.openRentalId
+      )
+      if (isRentalListingOpen(rental)) {
+        yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
+      }
+    }
+
+    yield put(executeOrderSuccess())
   } catch (error) {
     const errorMessage = isErrorWithMessage(error)
       ? error.message

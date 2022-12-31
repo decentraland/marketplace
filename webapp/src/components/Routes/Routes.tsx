@@ -30,7 +30,9 @@ const LazyHomePage = React.lazy(() => import('../HomePage'))
 const LazyLegacyNFTPage = React.lazy(() => import('../LegacyNFTPage'))
 const LazyLandsPage = React.lazy(() => import('../LandsPage'))
 const LazyCollectionPage = React.lazy(() => import('../CollectionPage'))
-const LazyMVMFPage = React.lazy(() => import('../MVMFPage'))
+const LazyCampaignPage = React.lazy(() =>
+  import('../Campaign/CampaignBrowserPage')
+)
 const LazyManageAssetPage = React.lazy(() => import('../ManageAssetPage'))
 
 const Routes = ({ inMaintenance }: Props) => {
@@ -53,7 +55,7 @@ const Routes = ({ inMaintenance }: Props) => {
       <Switch>
         <Route exact path={locations.lands()} component={LazyLandsPage} />
         <Route exact path={locations.browse()} component={LazyBrowsePage} />
-        <Route path={locations.MVMF22()} component={LazyMVMFPage} />
+        <Route path={locations.campaign()} component={LazyCampaignPage} />
         <Route
           exact
           path={locations.currentAccount()}

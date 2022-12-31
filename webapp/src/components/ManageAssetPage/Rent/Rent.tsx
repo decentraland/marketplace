@@ -5,16 +5,10 @@ import intlFormat from 'date-fns/intlFormat'
 import formatDistance from 'date-fns/formatDistance'
 import { RentalListingPeriod } from '@dcl/schemas'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
-import { Popup } from 'decentraland-ui/dist/components/Popup/Popup'
-import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getTransactionHref } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
 import { formatWeiMANA } from '../../../lib/mana'
-import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
-import { VendorName } from '../../../modules/vendor'
-import { Section } from '../../../modules/vendor/decentraland'
 import {
   canBeClaimed,
   canCreateANewRental,
@@ -25,6 +19,8 @@ import {
   isRentalListingCancelled,
   isRentalListingOpen
 } from '../../../modules/rental/utils'
+import { isLand, isParcel } from '../../../modules/nft/utils'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Mana } from '../../Mana'
 import { IconButton } from '../IconButton'
 import styles from './Rent.module.css'
@@ -40,22 +36,6 @@ const sortPeriods = (a: RentalListingPeriod, b: RentalListingPeriod) => {
   }
 }
 
-const LinkedProfile = ({ address }: { address: string }) => {
-  return (
-    <Link
-      to={locations.account(address, {
-        assetType: AssetType.NFT,
-        vendor: VendorName.DECENTRALAND,
-        section: Section.ALL
-      })}
-    >
-      <span className={styles.profile}>
-        <Profile hasPopup={true} address={address} />
-      </span>
-    </Link>
-  )
-}
-
 export const Rent = (props: Props) => {
   const {
     className,
@@ -67,22 +47,7 @@ export const Rent = (props: Props) => {
     claimingBackLandTransaction,
     wallet
   } = props
-  const isMobileView = useMobileMediaQuery()
-
-  const wrapDisabledMobileButton = useCallback(
-    trigger => {
-      return (
-        <Popup
-          content={t('asset_page.sales_rent_action_box.mobile_coming_soon')}
-          position="top left"
-          on="click"
-          disabled={!isMobileView}
-          trigger={trigger}
-        />
-      )
-    },
-    [isMobileView]
-  )
+  const assetText = isParcel(nft) ? t('global.parcel') : t('global.estate')
 
   const handleOnCreateOrEdit = useCallback(
     () => onCreateOrEditRent(nft, rental),
@@ -119,25 +84,15 @@ export const Rent = (props: Props) => {
   const rentButton = useMemo(() => {
     if (canCreateANewRental(rental)) {
       return (
-        <Button
-          className={styles.actionButton}
-          onClick={handleOnCreateOrEdit}
-          disabled={isMobileView}
-        >
+        <Button className={styles.actionButton} onClick={handleOnCreateOrEdit}>
           {t('manage_asset_page.rent.list_for_rent')}
         </Button>
       )
     }
     if (rental && isRentalListingOpen(rental)) {
-      return (
-        <IconButton
-          iconName="pencil"
-          onClick={handleOnCreateOrEdit}
-          disabled={isMobileView}
-        />
-      )
+      return <IconButton iconName="pencil" onClick={handleOnCreateOrEdit} />
     }
-  }, [handleOnCreateOrEdit, isMobileView, rental])
+  }, [handleOnCreateOrEdit, rental])
 
   return (
     <section className={classNames(styles.box, className)}>
@@ -147,8 +102,19 @@ export const Rent = (props: Props) => {
             ? t('manage_asset_page.rent.renting_title')
             : t('manage_asset_page.rent.rent_title')}
         </h1>
-        <div className={styles.action}>
-          {wrapDisabledMobileButton(<div>{rentButton}</div>)}
+        <div className={styles.right}>
+          {rental && isRentalListingOpen(rental) ? (
+            <Button
+              className={styles.actionButton}
+              as={Link}
+              to={locations.nft(nft.contractAddress, nft.tokenId)}
+            >
+              {t('manage_asset_page.rent.view_listing')}
+            </Button>
+          ) : null}
+          <div className={styles.action}>
+            <div>{rentButton}</div>
+          </div>
         </div>
       </div>
       {rental ? (
@@ -165,7 +131,12 @@ export const Rent = (props: Props) => {
                       month: 'long',
                       day: 'numeric'
                     }),
-                    tenant: <LinkedProfile address={rental.tenant!} />
+                    tenant: (
+                      <LinkedProfile
+                        className={styles.rentedBy}
+                        address={rental.tenant!}
+                      />
+                    )
                   }}
                 />
               </div>
@@ -176,7 +147,9 @@ export const Rent = (props: Props) => {
               {isClaimingBackLandTransactionPending ? (
                 <>
                   <div className={styles.rentMessage}>
-                    {t('manage_asset_page.rent.claiming_land')}
+                    {t('manage_asset_page.rent.claiming_land', {
+                      asset: assetText
+                    })}
                   </div>
                   <div className={styles.activeRentActions}>
                     <Button
@@ -197,24 +170,34 @@ export const Rent = (props: Props) => {
                       <T
                         id="manage_asset_page.rent.rent_end"
                         values={{
-                          tenant: <LinkedProfile address={rental.tenant!} />
+                          tenant: (
+                            <LinkedProfile
+                              className={styles.rentedBy}
+                              address={rental.tenant!}
+                            />
+                          ),
+                          asset: assetText
                         }}
                       />
                     ) : (
-                      t('manage_asset_page.rent.unclaimed_message')
+                      t('manage_asset_page.rent.unclaimed_message', {
+                        asset: isLand(nft)
+                          ? t('global.the_parcel')
+                          : t('global.the_estate')
+                      })
                     )}
                   </div>
                   <div className={styles.activeRentActions}>
-                    {wrapDisabledMobileButton(
-                      <div>
-                        <Button
-                          className={styles.actionButton}
-                          onClick={onClaimLand}
-                        >
-                          {t('manage_asset_page.rent.claim_land')}
-                        </Button>
-                      </div>
-                    )}
+                    <div>
+                      <Button
+                        className={styles.actionButton}
+                        onClick={onClaimLand}
+                      >
+                        {t('manage_asset_page.rent.claim_asset', {
+                          asset: assetText
+                        })}
+                      </Button>
+                    </div>
                   </div>
                 </>
               )}

@@ -22,6 +22,22 @@
   .SelectFilter .ui.selection.dropdown > .dropdown.icon {
     padding: 0.63em;
   }
+
+  .SelectFilter .ui.selection.dropdown > .search.icon {
+    padding: 0.63em;
+    color: var(--text);
+    top: 35%;
+    left: 93%;
+    font-size: 1rem;
+  }
+
+  .SelectFilter .ui.selection.dropdown > .search.icon.search-loading::before {
+    top: 40%;
+  }
+
+  .SelectFilter .ui.selection.dropdown > .search.icon.search-loading::after {
+    top: 40%;
+  }
 }
 
 .SelectFilter .ui.dropdown .text {
@@ -36,6 +52,20 @@
   .SelectFilter .ui.selection.dropdown > .dropdown.icon {
     color: var(--text);
     padding: 0.71em;
+  }
+
+  .SelectFilter .ui.selection.dropdown > .search.icon {
+    color: var(--text);
+    top: 30%;
+    padding: 0.71em;
+  }
+
+  .SelectFilter .ui.selection.dropdown > .search.icon.search-loading::before {
+    top: 45%;
+  }
+
+  .SelectFilter .ui.selection.dropdown > .search.icon.search-loading::after {
+    top: 45%;
   }
 
   .SelectFilter .ui.fluid.search.selection.dropdown {

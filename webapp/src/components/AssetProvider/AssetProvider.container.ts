@@ -1,11 +1,11 @@
 import { connect } from 'react-redux'
+import { Network } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
+import { isLoadingFeatureFlags as getIsLoadingFeatureFlags } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import { fetchNFTRequest, FETCH_NFT_REQUEST } from '../../modules/nft/actions'
-import {
-  fetchItemRequest,
-  FETCH_ITEM_REQUEST
-} from '../../modules/item/actions'
+import { fetchItemRequest } from '../../modules/item/actions'
 import {
   getContractAddress as getNFTContractAddress,
   getTokenId as getNFTTokenId,
@@ -15,7 +15,7 @@ import {
 import {
   getContractAddress as getItemContractAddress,
   getTokenId as getItemTokenId,
-  getLoading as getItemLoading,
+  isFetchingItem,
   getData as getItems
 } from '../../modules/item/selectors'
 import { getData as getOrders } from '../../modules/order/selectors'
@@ -26,6 +26,8 @@ import { Asset, AssetType } from '../../modules/asset/types'
 import { getRentalById } from '../../modules/rental/selectors'
 import { getOpenRentalId } from '../../modules/rental/utils'
 import { FetchOneOptions } from '../../modules/vendor'
+import { getContract } from '../../modules/contract/selectors'
+import { ContractName } from '../../modules/vendor/decentraland'
 import {
   MapDispatch,
   MapDispatchProps,
@@ -33,6 +35,7 @@ import {
   OwnProps
 } from './AssetProvider.types'
 import AssetProvider from './AssetProvider'
+
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   let contractAddress = ownProps.contractAddress
@@ -55,7 +58,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       contractAddress = contractAddress || getItemContractAddress(state)
       tokenId = tokenId || getItemTokenId(state)
       asset = getItem(contractAddress, tokenId, items)
-      isLoading = isLoadingType(getItemLoading(state), FETCH_ITEM_REQUEST)
+      isLoading = isFetchingItem(state, contractAddress!, tokenId!)
       break
     }
     default:
@@ -65,13 +68,33 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const openRentalId = getOpenRentalId(asset)
   const rental = openRentalId ? getRentalById(state, openRentalId) : null
 
+  const landContract = getContract(state, {
+    name: ContractName.LAND,
+    network: Network.ETHEREUM
+  })
+
+  const estateContract = getContract(state, {
+    name: ContractName.ESTATES,
+    network: Network.ETHEREUM
+  })
+
+  const isLandOrEstate =
+    !!contractAddress &&
+    (contractAddress === landContract?.address ||
+      contractAddress === estateContract?.address)
+
   return {
     tokenId,
     contractAddress,
     asset,
     rental,
     order,
-    isLoading: !asset && isLoading
+    isLoading: !asset && isLoading,
+    isLoadingFeatureFlags: isLoadingType(
+      getIsLoadingFeatureFlags(state),
+      FETCH_APPLICATION_FEATURES_REQUEST
+    ),
+    isLandOrEstate
   }
 }
 

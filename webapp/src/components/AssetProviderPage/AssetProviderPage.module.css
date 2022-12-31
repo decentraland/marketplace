@@ -9,3 +9,7 @@
   align-items: center;
   height: calc(100vh - 350px);
 }
+
+.fullWidth {
+  width: 100%;
+}

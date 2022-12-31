@@ -1,7 +1,14 @@
 import { RootState } from '../reducer'
-import { getIsFeatureEnabled } from 'decentraland-dapps/dist/modules/features/selectors'
+import {
+  getIsFeatureEnabled,
+  getLoading
+} from 'decentraland-dapps/dist/modules/features/selectors'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { FeatureName } from './types'
+
+export const isLoadingFeatureFlags = (state: RootState) => {
+  return getLoading(state)
+}
 
 export const getIsMaintenanceEnabled = (state: RootState) => {
   // As this is called by the routes component which is rendered when the user enters the application,
@@ -11,6 +18,20 @@ export const getIsMaintenanceEnabled = (state: RootState) => {
       state,
       ApplicationName.MARKETPLACE,
       FeatureName.MAINTENANCE
+    )
+  } catch (e) {
+    return false
+  }
+}
+
+export const getIsMarketplaceLaunchPopupEnabled = (
+  state: RootState
+): boolean => {
+  try {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.LAUNCH_POPUP
     )
   } catch (e) {
     return false
@@ -29,32 +50,36 @@ export const getIsRentalsEnabled = (state: RootState) => {
   }
 }
 
-export const getIsMVMFEnabled = (state: RootState) => {
-  try {
-    return getIsFeatureEnabled(state, ApplicationName.BUILDER, FeatureName.MVMF)
-  } catch (e) {
-    return false
-  }
-}
-
-export const getIsMVMFTabEnabled = (state: RootState) => {
+export const getIsCampaignHomepageBannerEnabled = (state: RootState) => {
   try {
     return getIsFeatureEnabled(
       state,
-      ApplicationName.BUILDER,
-      FeatureName.MVMF_TAB
+      ApplicationName.MARKETPLACE,
+      FeatureName.CAMPAIGN_HOMEPAGE_BANNER
     )
   } catch (e) {
     return false
   }
 }
 
-export const getIsMVMFAnnouncementEnabled = (state: RootState) => {
+export const getIsCampaignCollectionsBannerEnabled = (state: RootState) => {
   try {
     return getIsFeatureEnabled(
       state,
-      ApplicationName.BUILDER,
-      FeatureName.MVMF_ANNOUNCEMENT
+      ApplicationName.MARKETPLACE,
+      FeatureName.CAMPAIGN_COLLECTIBLES_BANNER
+    )
+  } catch (e) {
+    return false
+  }
+}
+
+export const getIsCampaignBrowserEnabled = (state: RootState) => {
+  try {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.CAMPAIGN_BROWSER
     )
   } catch (e) {
     return false

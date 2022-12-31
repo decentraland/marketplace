@@ -25,7 +25,11 @@ import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
 import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { AssetType } from '../../../../modules/asset/types'
-import { isLandSection } from '../../../../modules/ui/utils'
+import {
+  isAccountView,
+  isLandSection,
+  persistIsMapProperty
+} from '../../../../modules/ui/utils'
 import { View } from '../../../../modules/ui/types'
 import { LANDFilters } from '../types'
 import { browseRentedLAND } from '../utils'
@@ -50,9 +54,7 @@ const NFTFilters = (props: Props) => {
     assetType,
     hasFiltersEnabled,
     onClearFilters,
-    isRentalsEnabled,
-    availableContracts,
-    allContracts
+    isRentalsEnabled
   } = props
   const category = section ? getCategoryFromSection(section) : undefined
 
@@ -67,11 +69,11 @@ const NFTFilters = (props: Props) => {
         text: t('filters.recently_listed_for_rent')
       },
       { value: SortBy.NAME, text: t('filters.name') },
-      { value: SortBy.NEWEST, text: t('filters.newest') }
+      { value: SortBy.NEWEST, text: t('filters.newest') },
+      { value: SortBy.MAX_RENTAL_PRICE, text: t('filters.cheapest') }
     ]
   } else {
     orderByDropdownOptions = [
-      { value: SortBy.RECENTLY_SOLD, text: t('filters.recently_sold') },
       { value: SortBy.NEWEST, text: t('filters.newest') },
       { value: SortBy.NAME, text: t('filters.name') }
     ]
@@ -102,6 +104,10 @@ const NFTFilters = (props: Props) => {
     orderByDropdownOptions.unshift({
       value: SortBy.RECENTLY_LISTED,
       text: t('filters.recently_listed')
+    })
+    orderByDropdownOptions.unshift({
+      value: SortBy.RECENTLY_SOLD,
+      text: t('filters.recently_sold')
     })
     orderByDropdownOptions.unshift({
       value: SortBy.CHEAPEST,
@@ -149,9 +155,20 @@ const NFTFilters = (props: Props) => {
 
   const handleIsMapChange = useCallback(
     (isMap: boolean) => {
-      onBrowse({ isMap, isFullscreen: isMap, search: '' })
+      persistIsMapProperty(isMap)
+
+      onBrowse({
+        isMap,
+        isFullscreen: isMap,
+        search: '',
+        // Forces the onlyOnSale property in the defined cases so the users can see LAND on sale.
+        onlyOnSale:
+          (!onlyOnSale && onlyOnRent === false) ||
+          (onlyOnSale === undefined && onlyOnRent === undefined) ||
+          onlyOnSale
+      })
     },
-    [onBrowse]
+    [onBrowse, onlyOnSale, onlyOnRent]
   )
 
   const handleOrderByDropdownChange = useCallback(
@@ -343,7 +360,7 @@ const NFTFilters = (props: Props) => {
           </div>
         </Responsive>
 
-        {isLandSection(section) ? (
+        {isLandSection(section) && !isAccountView(view!) ? (
           <div className="topbar-filter">
             <div className="toggle-map">
               <Chip
@@ -375,9 +392,8 @@ const NFTFilters = (props: Props) => {
             selectedRarities={rarities}
             selectedGenders={isWearableCategory ? wearableGenders : undefined}
             selectedEmotePlayMode={isEmoteCategory ? emotePlayMode : undefined}
-            contracts={allContracts}
-            availableContracts={availableContracts}
             isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
+            isOnSale={onlyOnSale}
             onCollectionsChange={handleCollectionsChange}
             onGendersChange={
               isWearableCategory ? handleGendersChange : undefined
@@ -428,7 +444,6 @@ const NFTFilters = (props: Props) => {
               </div>
               <FiltersMenu
                 assetType={assetType}
-                contracts={allContracts}
                 selectedNetwork={network}
                 selectedCollection={contracts[0]}
                 selectedRarities={rarities}
@@ -439,7 +454,6 @@ const NFTFilters = (props: Props) => {
                   isEmoteCategory ? emotePlayMode : undefined
                 }
                 isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
-                availableContracts={availableContracts}
                 onCollectionsChange={handleCollectionsChange}
                 onGendersChange={
                   isWearableCategory ? handleGendersChange : undefined

@@ -15,15 +15,14 @@ import {
 import { Item, NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Profile } from 'decentraland-dapps/dist/containers'
 import { useScrollSectionIntoView } from '../../modules/ui/utils'
 import { AssetProvider } from '../AssetProvider'
 import { AssetType } from '../../modules/asset/types'
 import { formatWeiMANA } from '../../lib/mana'
-import { locations } from '../../modules/routing/locations'
 import { ManaToFiat } from '../ManaToFiat'
 import { VendorName } from '../../modules/vendor/types'
 import { NFT } from '../../modules/nft/types'
+import { LinkedProfile } from '../LinkedProfile'
 import { AssetImage } from '../AssetImage'
 import { formatDistanceToNow } from '../../lib/date'
 import { Props } from './RecentlySoldTable.types'
@@ -279,31 +278,23 @@ const RecentlySoldTable = (props: Props) => {
                           <span>
                             {t('home_page.recently_sold.wearables.seller')}
                           </span>
-                          <Link
-                            to={locations.account(sale.seller)}
+                          <LinkedProfile
                             className="account-link"
-                          >
-                            <Profile
-                              address={sale.seller}
-                              textOnly
-                              inline={false}
-                            />
-                          </Link>
+                            address={sale.seller}
+                            textOnly
+                            inline={false}
+                          />
                         </div>
                         <div>
                           <span>
                             {t('home_page.recently_sold.wearables.buyer')}
                           </span>
-                          <Link
-                            to={locations.account(sale.seller)}
+                          <LinkedProfile
                             className="account-link"
-                          >
-                            <Profile
-                              address={sale.buyer}
-                              textOnly
-                              inline={false}
-                            />
-                          </Link>
+                            address={sale.buyer}
+                            textOnly
+                            inline={false}
+                          />
                         </div>
                       </>
                     ) : null}
@@ -340,13 +331,11 @@ const RecentlySoldTable = (props: Props) => {
                         values={{
                           creator: (
                             <span className="rankings-item-data-creator">
-                              <Link to={locations.account(item.creator)}>
-                                <Profile
-                                  address={item.creator}
-                                  textOnly
-                                  inline={false}
-                                />
-                              </Link>
+                              <LinkedProfile
+                                address={item.creator}
+                                textOnly
+                                inline={false}
+                              />
                             </span>
                           )
                         }}
@@ -359,17 +348,20 @@ const RecentlySoldTable = (props: Props) => {
               ) : null}
             </Table.Cell>
             <Table.Cell width={2}>
-              <Link
-                to={locations.account(sale.seller)}
+              <LinkedProfile
                 className="account-link"
-              >
-                <Profile address={sale.seller} textOnly inline={false} />
-              </Link>
+                address={sale.seller}
+                textOnly
+                inline={false}
+              />
             </Table.Cell>
             <Table.Cell width={2}>
-              <Link to={locations.account(sale.buyer)} className="account-link">
-                <Profile address={sale.buyer} textOnly inline={false} />
-              </Link>
+              <LinkedProfile
+                className="account-link"
+                address={sale.buyer}
+                textOnly
+                inline={false}
+              />
             </Table.Cell>
             <Table.Cell width={1}>{t(`global.${sale.type}`)}</Table.Cell>
             <Table.Cell width={2}>
@@ -454,31 +446,23 @@ const RecentlySoldTable = (props: Props) => {
                           <span>
                             {t('home_page.recently_sold.wearables.seller')}
                           </span>
-                          <Link
-                            to={locations.account(sale.seller)}
+                          <LinkedProfile
                             className="account-link"
-                          >
-                            <Profile
-                              address={sale.seller}
-                              textOnly
-                              inline={false}
-                            />
-                          </Link>
+                            address={sale.seller}
+                            textOnly
+                            inline={false}
+                          />
                         </div>
                         <div>
                           <span>
                             {t('home_page.recently_sold.wearables.buyer')}
                           </span>
-                          <Link
-                            to={locations.account(sale.seller)}
+                          <LinkedProfile
                             className="account-link"
-                          >
-                            <Profile
-                              address={sale.buyer}
-                              textOnly
-                              inline={false}
-                            />
-                          </Link>
+                            address={sale.buyer}
+                            textOnly
+                            inline={false}
+                          />
                         </div>
                       </>
                     ) : null}
@@ -514,17 +498,20 @@ const RecentlySoldTable = (props: Props) => {
               ) : null}
             </Table.Cell>
             <Table.Cell width={2}>
-              <Link
-                to={locations.account(sale.seller)}
+              <LinkedProfile
                 className="account-link"
-              >
-                <Profile address={sale.seller} textOnly inline={false} />
-              </Link>
+                address={sale.seller}
+                textOnly
+                inline={false}
+              />
             </Table.Cell>
             <Table.Cell width={2}>
-              <Link to={locations.account(sale.buyer)} className="account-link">
-                <Profile address={sale.buyer} textOnly inline={false} />
-              </Link>
+              <LinkedProfile
+                className="account-link"
+                address={sale.buyer}
+                textOnly
+                inline={false}
+              />
             </Table.Cell>
             <Table.Cell width={1}>{t(`global.${sale.type}`)}</Table.Cell>
             <Table.Cell width={2}>

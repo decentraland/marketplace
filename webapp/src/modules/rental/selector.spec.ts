@@ -2,13 +2,13 @@ import { NFTCategory, RentalListing } from '@dcl/schemas'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { RootState } from '../reducer'
 import { NFT } from '../nft/types'
-import { claimLandRequest, removeRentalRequest } from './actions'
+import { claimAssetRequest, removeRentalRequest } from './actions'
 import {
   getState,
   getData,
   getRentalById,
   isSubmittingTransaction,
-  isClaimingLand,
+  isClaimingAsset,
   isRemovingRental
 } from './selectors'
 
@@ -71,12 +71,12 @@ describe('when getting if a LAND is being claimed', () => {
   describe('and the LAND is being claimed', () => {
     beforeEach(() => {
       rootState.rental.loading = [
-        claimLandRequest({} as NFT, {} as RentalListing)
+        claimAssetRequest({} as NFT, {} as RentalListing)
       ]
     })
 
     it('should return true', () => {
-      expect(isClaimingLand(rootState)).toBe(true)
+      expect(isClaimingAsset(rootState)).toBe(true)
     })
   })
 
@@ -86,7 +86,7 @@ describe('when getting if a LAND is being claimed', () => {
     })
 
     it('should return false', () => {
-      expect(isClaimingLand(rootState)).toBe(false)
+      expect(isClaimingAsset(rootState)).toBe(false)
     })
   })
 })

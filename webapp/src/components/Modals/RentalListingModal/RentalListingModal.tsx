@@ -77,14 +77,14 @@ const RentalListingModal = (props: Props) => {
         styles.modal,
         isConfirmingEditingStep && styles.editingModal
       )}
-      onClose={onClose}
+      onClose={() => undefined}
     >
       {!isAuthorized ? (
         <AuthorizationStep nft={nft} onCancel={onClose} />
       ) : !listing ? (
         <CreateOrEditListingStep
           nft={nft}
-          rental={rental}
+          rental={isRentalListingOpen(rental) ? rental : null}
           onCreate={handleSetListing}
           onRemove={onRemove}
           onCancel={onClose}

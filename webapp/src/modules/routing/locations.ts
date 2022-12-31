@@ -1,3 +1,4 @@
+import { CAMPAIGN_TAG } from '../../components/Campaign/config'
 import { AssetType } from '../asset/types'
 import { Section } from '../vendor/decentraland'
 import { getSearchParams } from './search'
@@ -18,9 +19,10 @@ export const locations = {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
   },
-  MVMF22: (options?: BrowseOptions) => {
+  campaign: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
-    return params ? `/MVMF22?${params.toString()}` : '/MVMF22'
+    const path = `/${CAMPAIGN_TAG}`
+    return params ? `${path}?${params.toString()}` : path
   },
   currentAccount: (options?: BrowseOptions) => {
     const params = getSearchParams(options)

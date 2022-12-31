@@ -28,3 +28,27 @@
 .loader:global(.ui.inline.loader) {
   margin-right: 10px;
 }
+
+@media (max-width: 767px) {
+  :global(.ui.modal > .actions) {
+    align-items: center;
+    bottom: 30px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    margin: 0px;
+  }
+
+  .loader {
+    display: flex;
+  }
+
+  .signMessage {
+    margin: 5px;
+  }
+
+  :global(.ui.modal .actions .ui.button + .ui.button) {
+    width: 85%;
+  }
+}

@@ -5,14 +5,18 @@ import { RentalStatus } from '@dcl/schemas'
 import { Mobile, NotMobile } from 'decentraland-ui/dist/components/Media'
 import { Table } from 'decentraland-ui/dist/components/Table/Table'
 import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon'
+import { isParcel } from '../../../modules/nft/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import {
+  hasRentalEnded,
+  isRentalListingExecuted
+} from '../../../modules/rental/utils'
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
 import { Mana } from '../../Mana'
 import AssetCell from '../AssetCell'
-import './OnRentListElement.css'
 import { Props } from './OnRentListElement.types'
+import './OnRentListElement.css'
 
 const OnRentListElement = ({
   nft,
@@ -50,10 +54,17 @@ const OnRentListElement = ({
             {isClaimingBackLandTransactionPending ? (
               <span>
                 <Icon className="warning-icon" name="warning sign" />
-                {t('manage_asset_page.rent.claiming_back')}
+                {t('on_rent_list.claiming_back', {
+                  asset: isParcel(nft) ? t('global.parcel') : t('global.estate')
+                })}
               </span>
             ) : rental.status === RentalStatus.OPEN ? (
               t('on_rent_list.listed_for_rent')
+            ) : isRentalListingExecuted(rental) && hasRentalEnded(rental) ? (
+              <span>
+                <Icon className="warning-icon" name="warning sign" />
+                {t('on_rent_list.rented_period_over')}
+              </span>
             ) : endDate ? (
               t('on_rent_list.rented_until', {
                 end_date: format(endDate, 'MMM dd')

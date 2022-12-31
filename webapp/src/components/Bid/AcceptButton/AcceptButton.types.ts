@@ -5,5 +5,6 @@ export type Props = {
   nft: NFT | null
   rental: RentalListing | null
   bid: Bid
+  userAddress: string
   onClick: () => void
 }

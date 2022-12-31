@@ -2,10 +2,10 @@ import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { fetchNFTsSuccess, fetchNFTSuccess } from '../nft/actions'
 import { NFT, NFTsFetchOptions } from '../nft/types'
 import {
-  claimLandFailure,
-  claimLandRequest,
-  claimLandTransactionSubmitted,
-  claimLandSuccess,
+  claimAssetFailure,
+  claimAssetRequest,
+  claimAssetTransactionSubmitted,
+  claimAssetSuccess,
   upsertRentalFailure,
   upsertRentalRequest,
   UpsertRentalRequestAction,
@@ -27,7 +27,8 @@ let rentalState: RentalState
 
 beforeEach(() => {
   rental = {
-    id: 'someRental'
+    id: 'someRental',
+    periods: [{ maxDays: 10, minDays: 8, pricePerDay: '10000000' }]
   } as RentalListing
   nft = {
     id: 'someNft',
@@ -262,7 +263,7 @@ describe('when reducing the action that signals that the claim land transaction 
     expect(
       rentalReducer(
         rentalState,
-        claimLandTransactionSubmitted(nft, 'aTxHash', 'aRentalContractAddress')
+        claimAssetTransactionSubmitted(nft, 'aTxHash', 'aRentalContractAddress')
       )
     ).toEqual({
       ...rentalState,
@@ -282,10 +283,10 @@ describe('when reducing the action of the start of claiming a LAND', () => {
   })
 
   it('should set the action into loading, the submitting transaction flag as true and clear the error', () => {
-    expect(rentalReducer(rentalState, claimLandRequest(nft, rental))).toEqual({
+    expect(rentalReducer(rentalState, claimAssetRequest(nft, rental))).toEqual({
       ...rentalState,
       isSubmittingTransaction: true,
-      loading: [claimLandRequest(nft, rental)],
+      loading: [claimAssetRequest(nft, rental)],
       error: null
     })
   })
@@ -299,13 +300,13 @@ describe('when reducing the action the success of claiming a LAND', () => {
         [rental.id]: rental
       },
       isSubmittingTransaction: true,
-      loading: [claimLandRequest(nft, rental)],
+      loading: [claimAssetRequest(nft, rental)],
       error: 'anError'
     }
   })
 
   it('should remove the loading and the rental, set the submitting transaction flag as false and clear the error', () => {
-    expect(rentalReducer(rentalState, claimLandSuccess(nft, rental))).toEqual({
+    expect(rentalReducer(rentalState, claimAssetSuccess(nft, rental))).toEqual({
       ...rentalState,
       data: {},
       isSubmittingTransaction: false,
@@ -319,14 +320,14 @@ describe('when reducing the failure action of claiming a LAND', () => {
   beforeEach(() => {
     rentalState = {
       ...rentalState,
-      loading: [claimLandRequest(nft, rental)],
+      loading: [claimAssetRequest(nft, rental)],
       isSubmittingTransaction: true,
       error: null
     }
   })
 
   it("should remove the loading, set the submitting transaction flag to false, set the error with the action's error", () => {
-    expect(rentalReducer(rentalState, claimLandFailure('anError'))).toEqual({
+    expect(rentalReducer(rentalState, claimAssetFailure('anError'))).toEqual({
       ...rentalState,
       loading: [],
       isSubmittingTransaction: false,
@@ -470,7 +471,7 @@ describe('when reducing the action the success of accepting a rental', () => {
     expect(
       rentalReducer(
         rentalState,
-        acceptRentalListingSuccess(updatedRental, periodIndexChosen)
+        acceptRentalListingSuccess(nft, updatedRental, periodIndexChosen)
       )
     ).toEqual({
       ...rentalState,
@@ -485,18 +486,25 @@ describe('when reducing the action the success of accepting a rental', () => {
 })
 
 describe('when reducing the action that signals that the accept listing transaction was submitted', () => {
+  let periodIndexChosen: number
   beforeEach(() => {
     rentalState = {
       ...rentalState,
       isSubmittingTransaction: true
     }
+    periodIndexChosen = 0
   })
 
   it('should set the flag that defines that the transaction is being submitted to false', () => {
     expect(
       rentalReducer(
         rentalState,
-        acceptRentalListingTransactionSubmitted(nft, 'aTxHash')
+        acceptRentalListingTransactionSubmitted(
+          nft,
+          rental,
+          'aTxHash',
+          periodIndexChosen
+        )
       )
     ).toEqual({
       ...rentalState,

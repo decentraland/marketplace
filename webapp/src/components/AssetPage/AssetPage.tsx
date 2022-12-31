@@ -14,7 +14,6 @@ import { Navigation } from '../Navigation'
 import { Footer } from '../Footer'
 import { ErrorBoundary } from './ErrorBoundary'
 import { Props } from './AssetPage.types'
-import { AssetProvider } from '../AssetProvider'
 import './AssetPage.css'
 
 const LazyItemDetail = React.lazy(() => import('./ItemDetail'))
@@ -33,124 +32,122 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
         <ErrorBoundary>
           <Section>
             <Column>
-              <AssetProvider type={type}>
-                {asset => (
-                  <Back
-                    className="back"
-                    absolute
-                    onClick={() =>
-                      onBack(
-                        mapAsset(
-                          asset,
-                          {
-                            wearable: () =>
-                              locations.browse({
-                                assetType: type,
-                                section: Sections.decentraland.WEARABLES
-                              }),
-                            emote: () =>
-                              locations.browse({
-                                assetType: type,
-                                section: Sections.decentraland.EMOTES
-                              })
-                          },
-                          {
-                            ens: () =>
-                              locations.browse({
-                                assetType: type,
-                                section: Sections.decentraland.ENS
-                              }),
-                            estate: () =>
-                              locations.lands({
-                                assetType: type,
-                                section: Sections.decentraland.ESTATES,
-                                isMap: false,
-                                isFullscreen: false
-                              }),
-                            parcel: () =>
-                              locations.lands({
-                                assetType: type,
-                                section: Sections.decentraland.PARCELS,
-                                isMap: false,
-                                isFullscreen: false
-                              }),
-                            wearable: () =>
-                              locations.browse({
-                                assetType: type,
-                                section: Sections.decentraland.WEARABLES
-                              }),
-                            emote: () =>
-                              locations.browse({
-                                assetType: type,
-                                section: Sections.decentraland.EMOTES
-                              })
-                          },
-                          () => undefined
+              <AssetProviderPage type={type} fullWidth>
+                {(asset, order, rental) => (
+                  <>
+                    <Back
+                      className="back"
+                      absolute
+                      onClick={() =>
+                        onBack(
+                          mapAsset(
+                            asset,
+                            {
+                              wearable: () =>
+                                locations.browse({
+                                  assetType: type,
+                                  section: Sections.decentraland.WEARABLES
+                                }),
+                              emote: () =>
+                                locations.browse({
+                                  assetType: type,
+                                  section: Sections.decentraland.EMOTES
+                                })
+                            },
+                            {
+                              ens: () =>
+                                locations.browse({
+                                  assetType: type,
+                                  section: Sections.decentraland.ENS
+                                }),
+                              estate: () =>
+                                locations.lands({
+                                  assetType: type,
+                                  section: Sections.decentraland.ESTATES,
+                                  isMap: false,
+                                  isFullscreen: false
+                                }),
+                              parcel: () =>
+                                locations.lands({
+                                  assetType: type,
+                                  section: Sections.decentraland.PARCELS,
+                                  isMap: false,
+                                  isFullscreen: false
+                                }),
+                              wearable: () =>
+                                locations.browse({
+                                  assetType: type,
+                                  section: Sections.decentraland.WEARABLES
+                                }),
+                              emote: () =>
+                                locations.browse({
+                                  assetType: type,
+                                  section: Sections.decentraland.EMOTES
+                                })
+                            },
+                            () => undefined
+                          )
                         )
-                      )
-                    }
-                  />
+                      }
+                    />
+                    <Narrow>
+                      {mapAsset<React.ReactNode>(
+                        asset,
+                        {
+                          wearable: item => (
+                            <Suspense fallback={<Loader size="huge" />}>
+                              <LazyItemDetail item={item} />
+                            </Suspense>
+                          ),
+                          emote: item => (
+                            <Suspense fallback={<Loader size="huge" />}>
+                              <LazyItemDetail item={item} />
+                            </Suspense>
+                          )
+                        },
+                        {
+                          ens: nft => (
+                            <Suspense fallback={<Loader size="huge" />}>
+                              <LazyENSDetail nft={nft} />
+                            </Suspense>
+                          ),
+                          estate: nft => (
+                            <Suspense fallback={<Loader size="huge" />}>
+                              <LazyEstateDetail
+                                nft={nft}
+                                order={order}
+                                rental={rental}
+                                isRentalsEnabled={isRentalsEnabled}
+                              />
+                            </Suspense>
+                          ),
+                          parcel: nft => (
+                            <Suspense fallback={<Loader size="huge" />}>
+                              <LazyParcelDetail
+                                nft={nft}
+                                order={order}
+                                rental={rental}
+                                isRentalsEnabled={isRentalsEnabled}
+                              />
+                            </Suspense>
+                          ),
+                          wearable: nft => (
+                            <Suspense fallback={<Loader size="huge" />}>
+                              <LazyWearableDetail nft={nft} />
+                            </Suspense>
+                          ),
+                          emote: nft => (
+                            <Suspense fallback={<Loader size="huge" />}>
+                              <LazyEmoteDetail nft={nft} />
+                            </Suspense>
+                          )
+                        },
+                        () => null
+                      )}
+                    </Narrow>
+                  </>
                 )}
-              </AssetProvider>
-              <Narrow>
-                <AssetProviderPage type={type}>
-                  {(asset, order, rental) =>
-                    mapAsset<React.ReactNode>(
-                      asset,
-                      {
-                        wearable: item => (
-                          <Suspense fallback={<Loader size="huge" />}>
-                            <LazyItemDetail item={item} />
-                          </Suspense>
-                        ),
-                        emote: item => (
-                          <Suspense fallback={<Loader size="huge" />}>
-                            <LazyItemDetail item={item} />
-                          </Suspense>
-                        )
-                      },
-                      {
-                        ens: nft => (
-                          <Suspense fallback={<Loader size="huge" />}>
-                            <LazyENSDetail nft={nft} />
-                          </Suspense>
-                        ),
-                        estate: nft => (
-                          <Suspense fallback={<Loader size="huge" />}>
-                            <LazyEstateDetail
-                              nft={nft}
-                              order={order}
-                              rental={rental}
-                              isRentalsEnabled={isRentalsEnabled}
-                            />
-                          </Suspense>
-                        ),
-                        parcel: nft => (
-                          <Suspense fallback={<Loader size="huge" />}>
-                            <LazyParcelDetail
-                              nft={nft}
-                              order={order}
-                              rental={rental}
-                              isRentalsEnabled={isRentalsEnabled}
-                            />
-                          </Suspense>
-                        ),
-                        wearable: nft => (
-                          <Suspense fallback={<Loader size="huge" />}>
-                            <LazyWearableDetail nft={nft} />
-                          </Suspense>
-                        ),
-                        emote: nft => (
-                          <Suspense fallback={<Loader size="huge" />}>
-                            <LazyEmoteDetail nft={nft} />
-                          </Suspense>
-                        )
-                      },
-                      () => null
-                    )
-                  }
-                </AssetProviderPage>
-              </Narrow>
+              </AssetProviderPage>
             </Column>
           </Section>
         </ErrorBoundary>
