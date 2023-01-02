@@ -134,13 +134,6 @@
   margin-right: 24px;
 }
 
-.AssetBrowse.ui.button.back-to-top {
-  position: -webkit-sticky; /* Safari */
-  position: sticky;
-  bottom: 100px;
-  left: 100%;
-}
-
 @media (max-width: 768px) {
   .AssetBrowse .Row .right.Column {
     max-width: 100%;

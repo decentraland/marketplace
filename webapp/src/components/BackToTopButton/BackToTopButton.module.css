@@ -1,0 +1,6 @@
+.back-to-top {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  bottom: 100px;
+  left: 100%;
+}

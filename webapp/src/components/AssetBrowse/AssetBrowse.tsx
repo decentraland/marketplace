@@ -6,15 +6,7 @@ import React, {
   useState
 } from 'react'
 import classNames from 'classnames'
-import {
-  Button,
-  Container,
-  Icon,
-  Mobile,
-  NotMobile,
-  Page,
-  Tabs
-} from 'decentraland-ui'
+import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
@@ -37,10 +29,9 @@ import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
+import { BackToTopButton } from '../BackToTopButton'
 import { Props } from './AssetBrowse.types'
 import './AssetBrowse.css'
-
-const MIN_HEIGHT_SCROLL_BACK = 500
 
 const AssetBrowse = (props: Props) => {
   const {
@@ -233,20 +224,6 @@ const AssetBrowse = (props: Props) => {
     [isRentalsEnabled]
   )
 
-  const [showBackToTopButton, setShowBackToTopButton] = useState(false)
-
-  useEffect(() => {
-    const scrollListener = () => {
-      setShowBackToTopButton(window.scrollY > MIN_HEIGHT_SCROLL_BACK)
-    }
-    window.addEventListener('scroll', scrollListener)
-    return () => window.removeEventListener('scroll', scrollListener)
-  }, [])
-
-  const handleBackToTop = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [])
-
   return (
     <>
       {view === View.CURRENT_ACCOUNT ? (
@@ -281,15 +258,7 @@ const AssetBrowse = (props: Props) => {
           </Column>
         </Row>
       </Page>
-      {showBackToTopButton && (
-        <Button
-          className={classNames('AssetBrowse', 'back-to-top')}
-          onClick={handleBackToTop}
-        >
-          <Icon name="arrow up" />
-          {t('browse_page.back_to_top')}
-        </Button>
-      )}
+      <BackToTopButton />
     </>
   )
 }
