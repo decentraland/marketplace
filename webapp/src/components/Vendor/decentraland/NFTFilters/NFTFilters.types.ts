@@ -26,7 +26,7 @@ export type Props = {
   wearableGenders: WearableGender[]
   contracts: string[]
   network?: Network
-  emotePlayModes?: EmotePlayMode[]
+  emotePlayMode?: EmotePlayMode[]
   hasFiltersEnabled: boolean
   isRentalsEnabled: boolean
   onBrowse: typeof browse
@@ -49,7 +49,7 @@ export type MapStateProps = Pick<
   | 'wearableGenders'
   | 'contracts'
   | 'network'
-  | 'emotePlayModes'
+  | 'emotePlayMode'
   | 'hasFiltersEnabled'
   | 'isRentalsEnabled'
 >

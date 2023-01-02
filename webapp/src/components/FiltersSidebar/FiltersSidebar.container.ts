@@ -3,7 +3,7 @@ import { Dispatch } from 'redux'
 import { RootState } from '../../modules/reducer'
 import { browse } from '../../modules/routing/actions'
 import { getCategoryFromSection } from '../../modules/routing/search'
-import { getAssetType, getEmotePlayModes, getMaxPrice, getMinPrice, getNetwork, getOnlyOnSale, getOnlySmart, getRarities, getSection, getWearableGenders } from '../../modules/routing/selectors'
+import { getAssetType, getEmotePlayMode, getMaxPrice, getMinPrice, getNetwork, getOnlyOnSale, getOnlySmart, getRarities, getSection, getWearableGenders } from '../../modules/routing/selectors'
 import { MapStateProps, MapDispatchProps } from './FiltersSidebar.types'
 import { FiltersSidebar } from './FiltersSidebar'
 
@@ -19,7 +19,7 @@ const mapState = (state: RootState): MapStateProps => {
     category: section ? getCategoryFromSection(section) : undefined,
     isOnlySmart: getOnlySmart(state),
     isOnSale: getOnlyOnSale(state),
-    emotePlayModes: getEmotePlayModes(state),
+    emotePlayMode: getEmotePlayMode(state),
     assetType: getAssetType(state)
   }
 }

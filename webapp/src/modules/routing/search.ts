@@ -87,10 +87,10 @@ export function getSearchParams(options?: BrowseOptions) {
     }
 
     if (
-      options.emotePlayModes?.length &&
-      options.emotePlayModes?.every(option => Object.values(EmotePlayMode).includes(option))
+      options.emotePlayMode?.length &&
+      options.emotePlayMode?.every(option => Object.values(EmotePlayMode).includes(option))
     ) {
-      for (const emotePlayMode of options.emotePlayModes) {
+      for (const emotePlayMode of options.emotePlayMode) {
         params.append('emotePlayMode', emotePlayMode)
       }
     }

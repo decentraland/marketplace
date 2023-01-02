@@ -21,7 +21,7 @@ export type NFTsFetchFilters = {
   rarities?: Rarity[]
   wearableCategory?: WearableCategory
   emoteCategory?: EmoteCategory
-  emotePlayModes?: EmotePlayMode[]
+  emotePlayMode?: EmotePlayMode[]
   wearableGenders?: WearableGender[]
   itemId?: string
   contracts?: string[]

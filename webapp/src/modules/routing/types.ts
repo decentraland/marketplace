@@ -45,7 +45,7 @@ export type BrowseOptions = {
   network?: Network
   viewAsGuest?: boolean
   category?: NFTCategory
-  emotePlayModes?: EmotePlayMode[]
+  emotePlayMode?: EmotePlayMode[]
   minPrice?: string
   maxPrice?: string
 }

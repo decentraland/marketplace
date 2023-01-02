@@ -112,9 +112,9 @@ class ItemAPI extends BaseAPI {
       queryParams.append('network', filters.network)
     }
 
-    if (filters.emotePlayModes) {
-      for (const emotePlayMode of filters.emotePlayModes) {
-        queryParams.append('emotePlayModes', emotePlayMode)
+    if (filters.emotePlayMode) {
+      for (const emotePlayMode of filters.emotePlayMode) {
+        queryParams.append('emotePlayMode', emotePlayMode)
       }
     }
 

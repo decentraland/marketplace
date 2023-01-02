@@ -273,7 +273,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
             ? getSearchEmoteCategory(section)
             : undefined
 
-        const { rarities, wearableGenders, emotePlayModes } = options
+        const { rarities, wearableGenders, emotePlayMode } = options
 
         yield put(
           fetchItemsRequest({
@@ -295,7 +295,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               rarities: rarities,
               contracts,
               wearableGenders,
-              emotePlayModes
+              emotePlayMode
             }
           })
         )

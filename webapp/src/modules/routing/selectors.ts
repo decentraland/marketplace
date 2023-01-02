@@ -223,13 +223,13 @@ export const getAssetType = createSelector<
   return assetTypeParam as AssetType
 })
 
-export const getEmotePlayModes = createSelector<
+export const getEmotePlayMode = createSelector<
   RootState,
   string,
   EmotePlayMode[] | undefined
 >(
   getRouterSearch,
-  search => getURLParamArray<EmotePlayMode>(search, 'emotePlayModes') || undefined
+  search => getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
 )
 
 export const getViewAsGuest = createSelector<RootState, string, boolean>(
@@ -266,7 +266,7 @@ export const hasFiltersEnabled = createSelector<
   getWearableGenders,
   getRarities,
   getContracts,
-  getEmotePlayModes,
+  getEmotePlayMode,
   getMinPrice,
   getMaxPrice,
   (network, genders, rarities, contracts, playModes, minPrice, maxPrice) => {
@@ -362,7 +362,7 @@ export const getCurrentBrowseOptions = createSelector([
   getVendor,
   getSection,
   getNetwork,
-  getEmotePlayModes,
+  getEmotePlayMode,
   getPaginationUrlParams,
   getAssetsUrlParams,
   getLandsUrlParams,
@@ -375,7 +375,7 @@ export const getCurrentBrowseOptions = createSelector([
     vendor,
     section,
     network,
-    emotePlayModes,
+    emotePlayMode,
     paginationUrlParams,
     AssetsUrlParams,
     landsUrlParams,
@@ -389,7 +389,7 @@ export const getCurrentBrowseOptions = createSelector([
       vendor,
       section,
       network,
-      emotePlayModes,
+      emotePlayMode,
       ...AssetsUrlParams,
       ...paginationUrlParams,
       ...landsUrlParams,

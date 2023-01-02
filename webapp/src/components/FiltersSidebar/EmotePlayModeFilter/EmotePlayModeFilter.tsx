@@ -5,12 +5,12 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
 
 export type NetworkFilterProps = {
-  emotePlayModes?: EmotePlayMode[]
+  emotePlayMode?: EmotePlayMode[]
   onChange: (value: EmotePlayMode[]) => void
 }
 
 export const EmotePlayModeFilter = ({
-  emotePlayModes,
+  emotePlayMode,
   onChange
 }: NetworkFilterProps) => {
   const emotePlayModeOptions = useMemo(() => {
@@ -33,7 +33,7 @@ export const EmotePlayModeFilter = ({
       className="filters-sidebar-box emote-play-mode-filter"
       collapsible
     >
-      <ArrayFilter options={emotePlayModeOptions} name='' onChange={handleChange} values={emotePlayModes || []} />
+      <ArrayFilter options={emotePlayModeOptions} name='' onChange={handleChange} values={emotePlayMode || []} />
     </Box>
   )
 }

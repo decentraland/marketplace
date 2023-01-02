@@ -20,7 +20,7 @@ export const FiltersSidebar = ({
   bodyShapes,
   isOnlySmart,
   isOnSale,
-  emotePlayModes,
+  emotePlayMode,
   assetType,
   onBrowse
 }: Props): JSX.Element => {
@@ -73,7 +73,7 @@ export const FiltersSidebar = ({
 
   const handleEmotePlayModeChange = useCallback(
     (value: EmotePlayMode[]) => {
-      onBrowse({ emotePlayModes: value })
+      onBrowse({ emotePlayMode: value })
     },
     [onBrowse]
   )
@@ -89,7 +89,7 @@ export const FiltersSidebar = ({
       {isEmoteCategory && (
         <EmotePlayModeFilter
           onChange={handleEmotePlayModeChange}
-          emotePlayModes={emotePlayModes}
+          emotePlayMode={emotePlayMode}
         />
       )}
       {isWearableCategory && !isPrimarySell && (

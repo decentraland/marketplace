@@ -25,7 +25,7 @@ export type ItemFilters = {
   isWearableSmart?: boolean
   wearableCategory?: WearableCategory
   emoteCategory?: EmoteCategory
-  emotePlayModes?: EmotePlayMode[]
+  emotePlayMode?: EmotePlayMode[]
   rarities?: Rarity[]
   wearableGenders?: WearableGender[]
   contracts?: string[]
