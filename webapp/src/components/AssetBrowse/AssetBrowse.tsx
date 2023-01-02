@@ -40,6 +40,8 @@ import { Bids } from '../Bids'
 import { Props } from './AssetBrowse.types'
 import './AssetBrowse.css'
 
+const MIN_HEIGHT_SCROLL_BACK = 500
+
 const AssetBrowse = (props: Props) => {
   const {
     vendor,
@@ -235,7 +237,6 @@ const AssetBrowse = (props: Props) => {
 
   useEffect(() => {
     const scrollListener = () => {
-      const MIN_HEIGHT_SCROLL_BACK = 500
       setShowBackToTopButton(window.scrollY > MIN_HEIGHT_SCROLL_BACK)
     }
     window.addEventListener('scroll', scrollListener)
