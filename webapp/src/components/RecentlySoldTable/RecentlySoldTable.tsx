@@ -1,17 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { HeaderMenu } from 'decentraland-ui/dist/components/HeaderMenu/HeaderMenu'
+import { NotMobile, Mobile } from 'decentraland-ui/dist/components/Media/Media'
+import { Mana } from 'decentraland-ui/dist/components/Mana/Mana'
+import { Tabs } from 'decentraland-ui/dist/components/Tabs/Tabs'
 import {
-  HeaderMenu,
-  Header,
-  NotMobile,
-  Table,
-  Loader,
-  Mana,
-  Tabs,
   Dropdown,
-  DropdownProps,
-  Mobile
-} from 'decentraland-ui'
+  DropdownProps
+} from 'decentraland-ui/dist/components/Dropdown/Dropdown'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
 import { Item, NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'

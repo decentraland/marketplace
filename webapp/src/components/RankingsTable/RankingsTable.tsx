@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { HeaderMenu } from 'decentraland-ui/dist/components/HeaderMenu/HeaderMenu'
+import { NotMobile, Mobile } from 'decentraland-ui/dist/components/Media/Media'
 import {
-  HeaderMenu,
-  Header,
-  NotMobile,
-  Table,
-  Loader,
-  Tabs,
   Dropdown,
-  DropdownProps,
-  Mobile
-} from 'decentraland-ui'
+  DropdownProps
+} from 'decentraland-ui/dist/components/Dropdown/Dropdown'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
+import { Tabs } from 'decentraland-ui/dist/components/Tabs/Tabs'
+
 import { EmoteCategory, Rarity, WearableCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {

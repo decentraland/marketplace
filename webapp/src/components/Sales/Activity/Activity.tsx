@@ -1,14 +1,11 @@
 import React, { ReactNode } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Header,
-  Loader,
-  Mobile,
-  NotMobile,
-  Pagination,
-  Table
-} from 'decentraland-ui'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { NotMobile, Mobile } from 'decentraland-ui/dist/components/Media/Media'
+import { Pagination } from 'decentraland-ui/dist/components/Pagination/Pagination'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
 import { SALES_PER_PAGE } from '../../../modules/routing/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import AssetCell from '../../OnSaleOrRentList/AssetCell'

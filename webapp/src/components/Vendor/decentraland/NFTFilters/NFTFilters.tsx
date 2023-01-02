@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-// TODO: Extract from DCL ui
-import { CheckboxProps } from 'decentraland-ui'
+import { CheckboxProps } from 'semantic-ui-react/dist/commonjs/modules/Checkbox'
 import { Radio } from 'decentraland-ui/dist/components/Radio/Radio'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
