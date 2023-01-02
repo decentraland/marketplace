@@ -17,7 +17,6 @@ import {
 } from '../../modules/rental/utils'
 import { Mana } from '../Mana'
 import { AssetImage } from '../AssetImage'
-import ListedBadge from '../ListedBadge'
 import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
@@ -108,7 +107,11 @@ const AssetCard = (props: Props) => {
       to={getAssetUrl(asset, isManager && isLand(asset))}
       onClick={onClick}
     >
-      <AssetImage asset={asset} showMonospace />
+      <AssetImage
+        asset={asset}
+        showOrderListedTag={showListedTag}
+        showMonospace
+      />
       {showRentalBubble ? (
         <RentalChip
           asset={asset}
@@ -118,7 +121,6 @@ const AssetCard = (props: Props) => {
           rental={rental}
         />
       ) : null}
-      {showListedTag ? <ListedBadge className="listed-badge" /> : null}
       <Card.Content>
         <Card.Header>
           <div className="title">{title}</div>

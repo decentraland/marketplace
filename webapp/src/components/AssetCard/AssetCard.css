@@ -59,12 +59,6 @@ a.ui.card.link:hover .meta {
   margin-top: 0px;
 }
 
-.AssetCard .listed-badge {
-  position: absolute;
-  top: 197px;
-  right: 16px;
-}
-
 .AssetCard .sub-header {
   display: flex;
   flex-direction: row;
