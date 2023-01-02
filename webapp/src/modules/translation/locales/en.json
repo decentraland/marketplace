@@ -606,7 +606,8 @@
     "primary_market_title": "Store",
     "primary_market_subtitle": "Items available for minting",
     "secondary_market_title": "Listings",
-    "secondary_market_subtitle": "Items being resold"
+    "secondary_market_subtitle": "Items being resold",
+    "back_to_top": "Back to top"
   },
   "account_page": {
     "copied": "Copied ✔",

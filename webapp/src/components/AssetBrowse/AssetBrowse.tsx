@@ -1,12 +1,30 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import classNames from 'classnames'
-import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
+import {
+  Button,
+  Container,
+  Icon,
+  Mobile,
+  NotMobile,
+  Page,
+  Tabs
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { Sections } from '../../modules/vendor/routing/types'
 import { BrowseOptions } from '../../modules/routing/types'
-import { getPersistedIsMapProperty, isAccountView } from '../../modules/ui/utils'
+import {
+  getPersistedIsMapProperty,
+  isAccountView
+} from '../../modules/ui/utils'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
@@ -197,18 +215,39 @@ const AssetBrowse = (props: Props) => {
       )
   }
 
-  const mobileSections = [
-    Sections.decentraland.COLLECTIONS,
-    Sections.decentraland.LAND,
-    Sections.decentraland.WEARABLES,
-    Sections.decentraland.EMOTES,
-    Sections.decentraland.ENS,
-    Sections.decentraland.ON_SALE,
-    isRentalsEnabled ? Sections.decentraland.ON_RENT : undefined,
-    Sections.decentraland.SALES,
-    Sections.decentraland.BIDS,
-    Sections.decentraland.STORE_SETTINGS
-  ].filter(Boolean)
+  const mobileSections = useMemo(
+    () =>
+      [
+        Sections.decentraland.COLLECTIONS,
+        Sections.decentraland.LAND,
+        Sections.decentraland.WEARABLES,
+        Sections.decentraland.EMOTES,
+        Sections.decentraland.ENS,
+        Sections.decentraland.ON_SALE,
+        isRentalsEnabled ? Sections.decentraland.ON_RENT : undefined,
+        Sections.decentraland.SALES,
+        Sections.decentraland.BIDS,
+        Sections.decentraland.STORE_SETTINGS
+      ].filter(Boolean),
+    [isRentalsEnabled]
+  )
+
+  const mainDivRef = useRef<HTMLDivElement>(null)
+
+  const [showBackToTopButton, setShowBackToTopButton] = useState(false)
+
+  useEffect(() => {
+    const scrollListener = () => {
+      const MIN_HEIGHT_SCROLL_BACK = 500
+      setShowBackToTopButton(window.scrollY > MIN_HEIGHT_SCROLL_BACK)
+    }
+    window.addEventListener('scroll', scrollListener)
+    return () => window.removeEventListener('scroll', scrollListener)
+  }, [])
+
+  const handleBackToTop = useCallback(() => {
+    mainDivRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [])
 
   return (
     <>
@@ -229,21 +268,32 @@ const AssetBrowse = (props: Props) => {
           </Tabs>
         </Mobile>
       ) : null}
-      <Page
-        className={classNames('AssetBrowse', isMap && 'is-map')}
-        isFullscreen={isFullscreen}
-      >
-        <Row>
-          {!isFullscreen && (
-            <Column align="left" className="sidebar">
-              {left}
+      <div ref={mainDivRef}>
+        <Page
+          className={classNames('AssetBrowse', isMap && 'is-map')}
+          isFullscreen={isFullscreen}
+        >
+          <Row>
+            {!isFullscreen && (
+              <Column align="left" className="sidebar">
+                {left}
+              </Column>
+            )}
+            <Column align="right" grow={true}>
+              {right}
             </Column>
-          )}
-          <Column align="right" grow={true}>
-            {right}
-          </Column>
-        </Row>
-      </Page>
+          </Row>
+        </Page>
+      </div>
+      {showBackToTopButton && (
+        <Button
+          className={classNames('AssetBrowse', 'back-to-top')}
+          onClick={handleBackToTop}
+        >
+          <Icon name="arrow up" />
+          {t('browse_page.back_to_top')}
+        </Button>
+      )}
     </>
   )
 }
