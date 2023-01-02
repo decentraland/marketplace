@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState
 } from 'react'
 import classNames from 'classnames'
@@ -232,8 +231,6 @@ const AssetBrowse = (props: Props) => {
     [isRentalsEnabled]
   )
 
-  const mainDivRef = useRef<HTMLDivElement>(null)
-
   const [showBackToTopButton, setShowBackToTopButton] = useState(false)
 
   useEffect(() => {
@@ -246,7 +243,7 @@ const AssetBrowse = (props: Props) => {
   }, [])
 
   const handleBackToTop = useCallback(() => {
-    mainDivRef.current?.scrollIntoView({ behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [])
 
   return (
@@ -268,23 +265,21 @@ const AssetBrowse = (props: Props) => {
           </Tabs>
         </Mobile>
       ) : null}
-      <div ref={mainDivRef}>
-        <Page
-          className={classNames('AssetBrowse', isMap && 'is-map')}
-          isFullscreen={isFullscreen}
-        >
-          <Row>
-            {!isFullscreen && (
-              <Column align="left" className="sidebar">
-                {left}
-              </Column>
-            )}
-            <Column align="right" grow={true}>
-              {right}
+      <Page
+        className={classNames('AssetBrowse', isMap && 'is-map')}
+        isFullscreen={isFullscreen}
+      >
+        <Row>
+          {!isFullscreen && (
+            <Column align="left" className="sidebar">
+              {left}
             </Column>
-          </Row>
-        </Page>
-      </div>
+          )}
+          <Column align="right" grow={true}>
+            {right}
+          </Column>
+        </Row>
+      </Page>
       {showBackToTopButton && (
         <Button
           className={classNames('AssetBrowse', 'back-to-top')}
