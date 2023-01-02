@@ -3,6 +3,8 @@ import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
 
+const FIRST = '1000'
+
 class BidAPI extends BaseAPI {
   async fetch(options: Record<string, string>): Promise<Bid[]> {
     const queryParams = new URLSearchParams()
@@ -20,11 +22,15 @@ class BidAPI extends BaseAPI {
     }
   }
   async fetchBySeller(seller: string) {
-    return this.fetch({ seller, status: ListingStatus.OPEN })
+    return this.fetch({
+      seller,
+      status: ListingStatus.OPEN,
+      first: FIRST
+    })
   }
 
   async fetchByBidder(bidder: string) {
-    return this.fetch({ bidder, status: ListingStatus.OPEN })
+    return this.fetch({ bidder, status: ListingStatus.OPEN, first: FIRST })
   }
 
   async fetchByNFT(
@@ -32,7 +38,7 @@ class BidAPI extends BaseAPI {
     tokenId: string,
     status: ListingStatus = ListingStatus.OPEN
   ) {
-    return this.fetch({ contractAddress, tokenId, status })
+    return this.fetch({ contractAddress, tokenId, status, first: FIRST })
   }
 }
 
