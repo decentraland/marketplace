@@ -28,7 +28,7 @@ const BackToTopButton = ({
 
   return showButton ? (
     <Button
-      className={classNames(className, styles['back-to-top'])}
+      className={classNames(className, styles.backToTop)}
       onClick={handleBackToTop}
     >
       <Icon name="arrow up" />
