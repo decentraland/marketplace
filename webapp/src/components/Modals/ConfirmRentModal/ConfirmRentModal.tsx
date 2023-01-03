@@ -19,6 +19,8 @@ import { ManaField } from '../../ManaField'
 import { Props } from './ConfirmRentModal.types'
 import styles from './ConfirmRentModal.module.css'
 
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+
 const ConfirmRentModal = ({
   wallet,
   metadata: { nft, rental, selectedPeriodIndex },
@@ -51,7 +53,9 @@ const ConfirmRentModal = ({
   }, [isUserTheOperatorAddress, wallet, setIsUserTheOperatorAddress])
 
   const hasAnInvalidOperator =
-    !operatorAddress || (operatorAddress && !isAddress(operatorAddress))
+    !operatorAddress ||
+    (!!operatorAddress && !isAddress(operatorAddress)) ||
+    operatorAddress === ZERO_ADDRESS
 
   const handleSubmit = useCallback(() => {
     operatorAddress && onSubmitTransaction(operatorAddress)
@@ -103,9 +107,9 @@ const ConfirmRentModal = ({
             onChange={(_event, props) => {
               setOperatorAddress(props.value)
             }}
-            error={!!operatorAddress && !isAddress(operatorAddress)}
+            error={hasAnInvalidOperator}
             message={
-              operatorAddress && !isAddress(operatorAddress)
+              hasAnInvalidOperator
                 ? t('rental_modal.confirm_rent_step.wrong_operator')
                 : undefined
             }
