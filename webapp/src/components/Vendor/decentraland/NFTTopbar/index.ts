@@ -1,3 +1,3 @@
-import NFTTopbar from "./NFTTopbar.container";
+import NFTTopbar from './NFTTopbar.container'
 
-export default NFTTopbar;
+export default NFTTopbar

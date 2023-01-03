@@ -260,6 +260,7 @@ export const hasFiltersEnabled = createSelector<
   EmotePlayMode[] | undefined,
   string,
   string,
+  boolean | undefined,
   boolean
 >(
   getNetwork,
@@ -269,12 +270,14 @@ export const hasFiltersEnabled = createSelector<
   getEmotePlayMode,
   getMinPrice,
   getMaxPrice,
-  (network, genders, rarities, contracts, playModes, minPrice, maxPrice) => {
+  getOnlyOnSale,
+  (network, genders, rarities, contracts, playModes, minPrice, maxPrice, onlyOnSale) => {
     const hasNetworkFilter = network !== undefined
     const hasGenderFilter = genders.length > 0
     const hasRarityFilter = rarities.length > 0
     const hasContractsFilter = contracts.length > 0
     const hasEmotePlayModeFilter = playModes && playModes.length > 0
+    const hasNotOnSaleFilter = onlyOnSale === false
     return (
       hasNetworkFilter ||
       hasGenderFilter ||
@@ -282,7 +285,8 @@ export const hasFiltersEnabled = createSelector<
       hasContractsFilter ||
       hasEmotePlayModeFilter ||
       !!minPrice ||
-      !!maxPrice
+      !!maxPrice ||
+      hasNotOnSaleFilter
     )
   }
 )
@@ -398,3 +402,4 @@ export const getCurrentBrowseOptions = createSelector([
       onlyOnSale
     } as BrowseOptions)
 )
+

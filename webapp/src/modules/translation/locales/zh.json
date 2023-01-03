@@ -336,7 +336,12 @@
       "male": "只有男性",
       "unisex": "仅男女皆宜"
     },
-    "more_filters": "更多过滤器"
+    "more_filters": "更多过滤器",
+    "only_smart": "只有聪明",
+    "not_on_sale": "不打折",
+    "more_than_price": "超过 <mana></mana> {price}",
+    "less_than_price": "低于 <mana></mana> {price}",
+    "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
   },
   "nft_land_filters": {
     "all_land": "所有土地",

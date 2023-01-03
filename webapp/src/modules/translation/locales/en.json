@@ -152,7 +152,7 @@
     "cheapest": "Cheapest",
     "no_results": "No results were found.",
     "type_to_search": "Type to search for collections.",
-    "clear": "Clear filters",
+    "clear": "Clear all filters",
     "recently_reviewed": "Recently reviewed",
     "size": "Size",
     "price": "Price"
@@ -340,7 +340,12 @@
       "male": "Only male",
       "unisex": "Only unisex"
     },
-    "more_filters": "More filters"
+    "more_filters": "More filters",
+    "only_smart": "Only smart",
+    "not_on_sale": "Not on sale",
+    "more_than_price": "More than <mana></mana> {price}",
+    "less_than_price": "Less than <mana></mana> {price}",
+    "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
   },
   "nft_land_filters": {
     "all_land": "All land",

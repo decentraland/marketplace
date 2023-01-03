@@ -66,6 +66,7 @@ describe('when handling the clear filters request action', () => {
     delete browseOptionsWithoutFilters.emotePlayMode
     delete browseOptionsWithoutFilters.minPrice
     delete browseOptionsWithoutFilters.maxPrice
+    delete browseOptionsWithoutFilters.onlyOnSale
 
     const pathname = 'aPath'
 

@@ -10,14 +10,12 @@ import {
   getSearch,
   getSection,
   getSortBy,
+  hasFiltersEnabled
 } from '../../../../modules/routing/selectors'
 import { BrowseOptions } from '../../../../modules/routing/types'
 import { isMapSet } from '../../../../modules/routing/utils'
-import { browse } from '../../../../modules/routing/actions'
-import {
-  MapStateProps,
-  MapDispatchProps,
-} from './NFTTopbar.types'
+import { browse, clearFilters } from '../../../../modules/routing/actions'
+import { MapStateProps, MapDispatchProps } from './NFTTopbar.types'
 import { NFTTopbar } from './NFTTopbar'
 
 const mapState = (state: RootState): MapStateProps => {
@@ -31,12 +29,14 @@ const mapState = (state: RootState): MapStateProps => {
     onlyOnSale: getOnlyOnSale(state),
     sortBy: getSortBy(state),
     assetType: getAssetType(state),
-    section: getSection(state)
+    section: getSection(state),
+    hasFiltersEnabled: hasFiltersEnabled(state)
   }
 }
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
-  onBrowse: (options: BrowseOptions) => dispatch(browse(options))
+  onBrowse: (options: BrowseOptions) => dispatch(browse(options)),
+  onClearFilters: () => dispatch(clearFilters())
 })
 
 export default connect(mapState, mapDispatch)(NFTTopbar)

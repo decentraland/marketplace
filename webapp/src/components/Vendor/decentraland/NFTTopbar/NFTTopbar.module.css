@@ -53,6 +53,27 @@
   border-radius: 0 4px 4px 0;
 }
 
-.countInfo {
+.countText {
   color: #736e7d;
+  margin-bottom: 0;
+  margin-right: 10px;
+}
+
+.countContainer {
+  display: flex;
+  align-items: center;
+}
+
+.clearFilters {
+  font-size: 12px;
+  line-height: 12px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--primary);
+  background: transparent;
+  border: none;
+}
+
+.clearFilters:hover {
+  opacity: 0.8;
 }
