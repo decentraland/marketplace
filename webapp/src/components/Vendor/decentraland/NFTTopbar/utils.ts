@@ -2,16 +2,31 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { SortBy } from '../../../../modules/routing/types'
 import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
 
-export function getCountText(count: number | undefined) {
-  return count === undefined
-    ? '...'
-    : count < MAX_QUERY_SIZE
-    ? t('nft_filters.results', {
-        count: count.toLocaleString()
-      })
-    : t('nft_filters.more_than_results', {
-        count: count.toLocaleString()
-      })
+export function getCountText(
+  count: number | undefined,
+  search: string | undefined
+) {
+  if (count === undefined) {
+    return '...'
+  } else if (search) {
+    return t(
+      count < MAX_QUERY_SIZE
+        ? 'nft_filters.query_results'
+        : 'nft_filters.query_more_than_results',
+      {
+        count: count.toLocaleString(),
+        search
+      }
+    )
+  }
+  return t(
+    count < MAX_QUERY_SIZE
+      ? 'nft_filters.results'
+      : 'nft_filters.more_than_results',
+    {
+      count: count.toLocaleString()
+    }
+  )
 }
 
 export function getOrderByOptions(
