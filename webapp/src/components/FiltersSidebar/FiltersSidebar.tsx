@@ -83,7 +83,7 @@ export const FiltersSidebar = ({
   )
 
   const handleEmotePlayModeChange = useCallback(
-    (value: EmotePlayMode) => {
+    (value: EmotePlayMode[]) => {
       onBrowse({ emotePlayMode: value })
     },
     [onBrowse]

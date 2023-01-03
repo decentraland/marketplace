@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { RangeField, Box } from 'decentraland-ui'
+import { RangeField, Box, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import './PriceFilter.css'
 
@@ -41,10 +41,15 @@ export const PriceFilter = ({
   return (
     <Box
       header={t('filters.price')}
-      className="filters-sidebar-box"
+      className="filters-sidebar-box price-filter"
       collapsible
     >
-      <RangeField onChange={handlePriceChange} value={value} />
+      <RangeField
+        minProps={{ icon: <Mana />, iconPosition: 'left', placeholder: 0 }}
+        maxProps={{ icon: <Mana />, iconPosition: 'left', placeholder: 1000 }}
+        onChange={handlePriceChange}
+        value={value}
+      />
     </Box>
   )
 }

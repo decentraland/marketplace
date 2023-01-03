@@ -53,7 +53,7 @@ const ItemDetail = ({ item, wallet }: Props) => {
       locations.browse({
         assetType: AssetType.ITEM,
         section: Section.EMOTES,
-        emotePlayMode: loop ? EmotePlayMode.LOOP : EmotePlayMode.SIMPLE
+        emotePlayMode: loop ? [EmotePlayMode.LOOP] : [EmotePlayMode.SIMPLE]
       }),
     [loop]
   )

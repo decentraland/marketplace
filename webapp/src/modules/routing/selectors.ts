@@ -226,10 +226,10 @@ export const getAssetType = createSelector<
 export const getEmotePlayMode = createSelector<
   RootState,
   string,
-  EmotePlayMode | undefined
+  EmotePlayMode[] | undefined
 >(
   getRouterSearch,
-  search => (getURLParam(search, 'emotePlayMode') as EmotePlayMode) || undefined
+  search => getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
 )
 
 export const getViewAsGuest = createSelector<RootState, string, boolean>(
@@ -257,7 +257,7 @@ export const hasFiltersEnabled = createSelector<
   WearableGender[],
   Rarity[],
   string[],
-  string | undefined,
+  EmotePlayMode[] | undefined,
   string,
   string,
   boolean
@@ -269,12 +269,12 @@ export const hasFiltersEnabled = createSelector<
   getEmotePlayMode,
   getMinPrice,
   getMaxPrice,
-  (network, genders, rarities, contracts, playMode, minPrice, maxPrice) => {
+  (network, genders, rarities, contracts, playModes, minPrice, maxPrice) => {
     const hasNetworkFilter = network !== undefined
     const hasGenderFilter = genders.length > 0
     const hasRarityFilter = rarities.length > 0
     const hasContractsFilter = contracts.length > 0
-    const hasEmotePlayModeFilter = playMode !== undefined
+    const hasEmotePlayModeFilter = playModes && playModes.length > 0
     return (
       hasNetworkFilter ||
       hasGenderFilter ||

@@ -52,7 +52,7 @@ describe('when handling the clear filters request action', () => {
       wearableGenders: [WearableGender.FEMALE],
       contracts: ['aContract'],
       network: Network.ETHEREUM,
-      emotePlayMode: EmotePlayMode.SIMPLE,
+      emotePlayMode: [EmotePlayMode.SIMPLE],
       minPrice: "1",
       maxPrice: "100"
     }
