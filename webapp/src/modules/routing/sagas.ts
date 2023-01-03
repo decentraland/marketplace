@@ -149,7 +149,8 @@ function* handleClearFilters() {
     'emotePlayMode',
     'page',
     'minPrice',
-    'maxPrice'
+    'maxPrice',
+    'onlySmart'
   ])
 
   yield call(fetchAssetsFromRoute, clearedBrowseOptions)

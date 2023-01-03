@@ -5,7 +5,7 @@ import { Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Pill } from './Pill/Pill'
 import { Props } from './SelectedFilters.types'
-import { getCollectionNameByAddress } from './utils'
+import { getCollectionByAddress } from './utils'
 import styles from './SelectedFilters.module.css'
 
 export const SelectedFilters = ({
@@ -25,28 +25,31 @@ export const SelectedFilters = ({
     maxPrice,
     onlyOnRent
   } = browseOptions
-  const [collection, setCollection] = useState<string | undefined>()
+  const [collection, setCollection] = useState<Record<string, string> | undefined>()
 
   useEffect(() => {
     const fetchData = async (
       contract: string,
       onlyOnSale: boolean | undefined
     ) => {
-      const collectionName = await getCollectionNameByAddress(
+      const collection = await getCollectionByAddress(
         contract,
         onlyOnSale
       )
-      return collectionName
+      return collection
     }
 
-    if (contracts?.length) {
-      fetchData(contracts[0], onlyOnSale).then(collectionName =>
-        setCollection(collectionName)
+    if (contracts?.length && contracts[0] !== collection?.address) {
+      fetchData(contracts[0], onlyOnSale).then(collection =>
+        setCollection({
+          address: collection.contractAddress,
+          name: collection.name
+        })
       )
-    } else {
+    } else if (!contracts?.length) {
       setCollection(undefined)
     }
-  }, [contracts, onlyOnSale])
+  }, [contracts, onlyOnSale, collection?.address])
 
   const priceLabel = useMemo(() => {
     const manaTranslator = () => (
@@ -115,9 +118,9 @@ export const SelectedFilters = ({
     [onBrowse, wearableGenders]
   )
 
-  const handleDeleteEmotePlayMode = useCallback(() => {
-    onBrowse({ emotePlayMode: undefined })
-  }, [onBrowse])
+  const handleDeleteEmotePlayMode = useCallback((playMode) => {
+    onBrowse({ emotePlayMode: emotePlayMode?.filter((mode) => playMode !== mode) })
+  }, [onBrowse, emotePlayMode])
 
   const handleDeletePrice = useCallback(() => {
     onBrowse({ minPrice: undefined, maxPrice: undefined })
@@ -148,8 +151,8 @@ export const SelectedFilters = ({
       ) : null}
       {collection ? (
         <Pill
-          label={collection}
-          id={collection}
+          label={collection.name}
+          id={collection.address}
           onDelete={handleDeleteRarity}
         />
       ) : null}
@@ -167,13 +170,13 @@ export const SelectedFilters = ({
           onDelete={handleDeleteOnlySale}
         />
       ) : null}
-      {emotePlayMode ? (
+      {emotePlayMode?.map(playMode => (
         <Pill
-          label={t(`emote.play_mode.${emotePlayMode}`)}
+          label={t(`emote.play_mode.${playMode}`)}
           onDelete={handleDeleteEmotePlayMode}
-          id={emotePlayMode}
+          id={playMode}
         />
-      ) : null}
+      ))}
       {minPrice || maxPrice ? (
         <Pill label={priceLabel} onDelete={handleDeletePrice} id="price" />
       ) : null}

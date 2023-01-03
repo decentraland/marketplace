@@ -1,6 +1,6 @@
 import { collectionAPI } from '../../../../../modules/vendor/decentraland'
 
-export async function getCollectionNameByAddress(
+export async function getCollectionByAddress(
   address: string,
   onlyOnSale: boolean | undefined
 ) {
@@ -9,5 +9,5 @@ export async function getCollectionNameByAddress(
     isOnSale: onlyOnSale
   })
 
-  return data[0]?.name
+  return data[0]
 }
