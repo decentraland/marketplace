@@ -10,6 +10,7 @@ import { isAccountView, isLandSection, persistIsMapProperty } from '../../../../
 import { Chip } from '../../../Chip'
 import { AssetTypeFilter } from './AssetTypeFilter'
 import { Props } from './NFTTopbar.types'
+import { SelectedFilters } from './SelectedFilters'
 import styles from './NFTTopbar.module.css'
 
 export const NFTTopbar = ({
@@ -22,7 +23,9 @@ export const NFTTopbar = ({
   onlyOnRent,
   sortBy,
   section,
-  onBrowse
+  hasFiltersEnabled,
+  onBrowse,
+  onClearFilters
 }: Props): JSX.Element => {
   const handleSearch = useCallback(
     (value: string) => {
@@ -118,7 +121,14 @@ export const NFTTopbar = ({
       )}
       {!isMap && (
         <div className={styles.infoRow}>
-          <p className={styles.countInfo}>{getCountText(count)}</p>
+          <div className={styles.countContainer}>
+            <p className={styles.countText}>{getCountText(count)}</p>
+            {hasFiltersEnabled && (
+              <button className={styles.clearFilters} onClick={onClearFilters}>
+                {t('filters.clear')}
+              </button>
+            )}
+          </div>
           <Dropdown
             direction="left"
             value={sortByValue}
@@ -127,6 +137,7 @@ export const NFTTopbar = ({
           />
         </div>
       )}
+      <SelectedFilters />
     </div>
   )
 }
