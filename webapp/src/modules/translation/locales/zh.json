@@ -785,6 +785,7 @@
         "edit": "编辑出租列表",
         "create": "列出土地出租"
       },
+      "editing_cost_warning": "编辑出版物将需要执行一项新交易，您需要为此支付汽油费。",
       "update_listing": "更新出租清单",
       "remove_listing": "删除出租列表",
       "price_per_day": "每天的价格",

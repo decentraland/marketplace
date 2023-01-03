@@ -135,3 +135,11 @@
     grid-template-rows: 34px 34px 34px;
   }
 }
+
+.editingCostWarning {
+  font-size: 15px;
+  padding: 15px;
+  border-radius: 6px;
+  background-color: #37333D;
+  margin-bottom: 16px;
+}

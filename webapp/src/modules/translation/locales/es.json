@@ -783,6 +783,7 @@
         "edit": "Editar listado de alquiler",
         "create": "Poner en alquiler"
       },
+      "editing_cost_warning": "Editar la publicación va a requerir ejecutar una nueva transacción para la cual será necesario pagar los costos de la misma.",
       "update_listing": "Actualizar listado de alquiler",
       "remove_listing": "Remover listado de alquiler",
       "price_per_day": "Precio por día",
