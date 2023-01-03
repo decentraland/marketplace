@@ -156,6 +156,11 @@ const CreateListingStep = (props: Props) => {
         onClose={onCancel}
       />
       <Modal.Content>
+        {rental ? (
+          <div className={styles.editingCostWarning}>
+            {t('rental_modal.create_listing_step.editing_cost_warning')}
+          </div>
+        ) : null}
         <div className={styles.pricePerDay}>
           <ManaField
             type="text"

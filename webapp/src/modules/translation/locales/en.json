@@ -746,7 +746,7 @@
     }
   },
   "maintainance": {
-    "notice": "We're currently under maintainance, we'll be back soon!"
+    "notice": "We're currently under maintenance, we'll be back soon!"
   },
   "rental_modal": {
     "confirm_rent_step": {
@@ -790,6 +790,7 @@
         "edit": "Edit listing",
         "create": "List for Rent"
       },
+      "editing_cost_warning": "Editing the publication will require executing a new transaction for which you will need to pay its gas fees.",
       "update_listing": "Update listing",
       "remove_listing": "Remove listing",
       "price_per_day": "Price per day",
