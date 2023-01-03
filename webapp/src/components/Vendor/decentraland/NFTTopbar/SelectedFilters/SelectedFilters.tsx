@@ -29,18 +29,16 @@ export const SelectedFilters = ({
 
   useEffect(() => {
     const fetchData = async (
-      contract: string,
-      onlyOnSale: boolean | undefined
+      contract: string
     ) => {
       const collection = await getCollectionByAddress(
         contract,
-        onlyOnSale
       )
       return collection
     }
 
     if (contracts?.length && contracts[0] !== collection?.address) {
-      fetchData(contracts[0], onlyOnSale).then(collection =>
+      fetchData(contracts[0]).then(collection =>
         setCollection({
           address: collection.contractAddress,
           name: collection.name
