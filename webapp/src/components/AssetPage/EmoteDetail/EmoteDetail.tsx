@@ -31,7 +31,7 @@ const EmoteDetail = ({ nft }: Props) => {
       locations.browse({
         assetType: AssetType.NFT,
         section: Section.EMOTES,
-        emotePlayMode: loop ? EmotePlayMode.LOOP : EmotePlayMode.SIMPLE
+        emotePlayMode: loop ? [EmotePlayMode.LOOP] : [EmotePlayMode.SIMPLE]
       }),
     [loop]
   )
