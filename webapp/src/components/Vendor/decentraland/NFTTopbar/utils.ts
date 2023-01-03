@@ -6,7 +6,7 @@ export function getCountText(
   count: number | undefined,
   search: string | undefined
 ) {
-  if (!count) {
+  if (count === undefined) {
     return '...'
   } else if (search) {
     return t(
