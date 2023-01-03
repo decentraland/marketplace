@@ -16,6 +16,10 @@
   padding-left: 15px;
 }
 
+.item.flex:not(.active) {
+  background-color: var(--secondary);
+}
+
 .item.flex:first-child {
   margin-left: 0;
 }
@@ -35,12 +39,12 @@
   margin-bottom: 0px;
 }
 
-.item:hover {
-  background: var(--secondary);
+.item:not(.active):hover {
+  background: var(--toast);
 }
 
 .active {
-  background: var(--secondary);
+  background: var(--toast);
 }
 
 .disabled {
