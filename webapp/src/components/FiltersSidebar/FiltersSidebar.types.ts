@@ -13,7 +13,7 @@ export type Props = {
   bodyShapes?: WearableGender[]
   isOnlySmart: boolean
   isOnSale?: boolean
-  emotePlayMode?: EmotePlayMode
+  emotePlayMode?: EmotePlayMode[]
   assetType?: AssetType
   collection: string
   section: Section

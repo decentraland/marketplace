@@ -1,12 +1,12 @@
 import { useCallback, useMemo } from 'react'
-import { Box, Radio } from 'decentraland-ui'
+import { Box } from 'decentraland-ui'
 import { EmotePlayMode } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import './EmotePlayModeFilter.css'
+import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
 
 export type NetworkFilterProps = {
-  emotePlayMode?: EmotePlayMode
-  onChange: (value: EmotePlayMode) => void
+  emotePlayMode?: EmotePlayMode[]
+  onChange: (value: EmotePlayMode[]) => void
 }
 
 export const EmotePlayModeFilter = ({
@@ -17,19 +17,13 @@ export const EmotePlayModeFilter = ({
     const options = Object.values(EmotePlayMode).filter(
       value => typeof value === 'string'
     ) as EmotePlayMode[]
-    return [
-      {
-        value: undefined,
-        text: t('nft_filters.all_play_modes')
-      },
-      ...options.map(playMode => ({
-        value: playMode,
-        text: t(`emote.play_mode.${playMode}`)
-      }))
-    ]
+    return options.map(playMode => ({
+      value: playMode,
+      text: t(`emote.play_mode.${playMode}`)
+    }))
   }, [])
 
-  const handleChange = useCallback((_, { value }) => onChange(value), [
+  const handleChange = useCallback((values: string[]) => onChange(values as EmotePlayMode[]), [
     onChange
   ])
 
@@ -39,19 +33,7 @@ export const EmotePlayModeFilter = ({
       className="filters-sidebar-box emote-play-mode-filter"
       collapsible
     >
-      <div className="emote-play-mode-options filters-radio-group">
-        {emotePlayModeOptions.map(option => (
-          <Radio
-            type="radio"
-            key={option.text}
-            onChange={handleChange}
-            label={option.text}
-            value={option.value}
-            name="network"
-            checked={emotePlayMode === option.value}
-          />
-        ))}
-      </div>
+      <ArrayFilter options={emotePlayModeOptions} name='' onChange={handleChange} values={emotePlayMode || []} />
     </Box>
   )
 }
