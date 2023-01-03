@@ -15,12 +15,22 @@ export type Props = {
   onlyOnRent: boolean | undefined
   section: Section
   hasFiltersEnabled: boolean
-  onBrowse: (options: BrowseOptions) => void,
+  onBrowse: (options: BrowseOptions) => void
   onClearFilters: typeof clearFilters
 }
 
 export type MapStateProps = Pick<
-  Props, 'search' | 'isMap' | 'count' | 'view' | 'assetType' | 'onlyOnRent' | 'onlyOnSale' | 'sortBy' | 'section' | 'hasFiltersEnabled'
+  Props,
+  | 'search'
+  | 'isMap'
+  | 'count'
+  | 'view'
+  | 'assetType'
+  | 'onlyOnRent'
+  | 'onlyOnSale'
+  | 'sortBy'
+  | 'section'
+  | 'hasFiltersEnabled'
 >
 
 export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>

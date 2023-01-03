@@ -10,15 +10,12 @@ import {
   getSearch,
   getSection,
   getSortBy,
-  hasFiltersEnabled,
+  hasFiltersEnabled
 } from '../../../../modules/routing/selectors'
 import { BrowseOptions } from '../../../../modules/routing/types'
 import { isMapSet } from '../../../../modules/routing/utils'
 import { browse, clearFilters } from '../../../../modules/routing/actions'
-import {
-  MapStateProps,
-  MapDispatchProps,
-} from './NFTTopbar.types'
+import { MapStateProps, MapDispatchProps } from './NFTTopbar.types'
 import { NFTTopbar } from './NFTTopbar'
 
 const mapState = (state: RootState): MapStateProps => {
@@ -33,7 +30,7 @@ const mapState = (state: RootState): MapStateProps => {
     sortBy: getSortBy(state),
     assetType: getAssetType(state),
     section: getSection(state),
-    hasFiltersEnabled: hasFiltersEnabled(state),
+    hasFiltersEnabled: hasFiltersEnabled(state)
   }
 }
 

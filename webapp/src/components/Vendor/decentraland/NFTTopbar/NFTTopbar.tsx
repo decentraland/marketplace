@@ -6,7 +6,11 @@ import { AssetType } from '../../../../modules/asset/types'
 import { useInput } from '../../../../lib/input'
 import { getCountText, getOrderByOptions } from './utils'
 import { SortBy } from '../../../../modules/routing/types'
-import { isAccountView, isLandSection, persistIsMapProperty } from '../../../../modules/ui/utils'
+import {
+  isAccountView,
+  isLandSection,
+  persistIsMapProperty
+} from '../../../../modules/ui/utils'
 import { Chip } from '../../../Chip'
 import { AssetTypeFilter } from './AssetTypeFilter'
 import { Props } from './NFTTopbar.types'
@@ -96,7 +100,9 @@ export const NFTTopbar = ({
           />
         )}
         {isLandSection(section) && !isAccountView(view!) && (
-          <div className={classNames(styles.mapToggle, { [styles.map]: isMap })}>
+          <div
+            className={classNames(styles.mapToggle, { [styles.map]: isMap })}
+          >
             <Chip
               className="grid"
               icon="table"
