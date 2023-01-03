@@ -599,7 +599,8 @@
     "primary_market_title": "Tienda",
     "primary_market_subtitle": "Creados por los usuarios",
     "secondary_market_title": "Clasificados",
-    "secondary_market_subtitle": "Artículos de reventa"
+    "secondary_market_subtitle": "Artículos de reventa",
+    "back_to_top": "Volver arriba"
   },
   "account_page": {
     "copied": "Copiado ✔",

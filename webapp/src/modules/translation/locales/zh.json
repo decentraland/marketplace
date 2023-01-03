@@ -601,7 +601,8 @@
     "primary_market_title": "商店",
     "primary_market_subtitle": "用户原创",
     "secondary_market_title": "列表",
-    "secondary_market_subtitle": "被转售的物品"
+    "secondary_market_subtitle": "被转售的物品",
+    "back_to_top": "回到顶部"
   },
   "account_page": {
     "copied": "已复制 ✔",

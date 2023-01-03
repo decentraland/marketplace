@@ -1,4 +1,10 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import classNames from 'classnames'
 import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -6,7 +12,10 @@ import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { Sections } from '../../modules/vendor/routing/types'
 import { BrowseOptions } from '../../modules/routing/types'
-import { getPersistedIsMapProperty, isAccountView } from '../../modules/ui/utils'
+import {
+  getPersistedIsMapProperty,
+  isAccountView
+} from '../../modules/ui/utils'
 import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
@@ -20,6 +29,7 @@ import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
+import { BackToTopButton } from '../BackToTopButton'
 import { Props } from './AssetBrowse.types'
 import './AssetBrowse.css'
 
@@ -197,18 +207,22 @@ const AssetBrowse = (props: Props) => {
       )
   }
 
-  const mobileSections = [
-    Sections.decentraland.COLLECTIONS,
-    Sections.decentraland.LAND,
-    Sections.decentraland.WEARABLES,
-    Sections.decentraland.EMOTES,
-    Sections.decentraland.ENS,
-    Sections.decentraland.ON_SALE,
-    isRentalsEnabled ? Sections.decentraland.ON_RENT : undefined,
-    Sections.decentraland.SALES,
-    Sections.decentraland.BIDS,
-    Sections.decentraland.STORE_SETTINGS
-  ].filter(Boolean)
+  const mobileSections = useMemo(
+    () =>
+      [
+        Sections.decentraland.COLLECTIONS,
+        Sections.decentraland.LAND,
+        Sections.decentraland.WEARABLES,
+        Sections.decentraland.EMOTES,
+        Sections.decentraland.ENS,
+        Sections.decentraland.ON_SALE,
+        isRentalsEnabled ? Sections.decentraland.ON_RENT : undefined,
+        Sections.decentraland.SALES,
+        Sections.decentraland.BIDS,
+        Sections.decentraland.STORE_SETTINGS
+      ].filter(Boolean),
+    [isRentalsEnabled]
+  )
 
   return (
     <>
@@ -244,6 +258,7 @@ const AssetBrowse = (props: Props) => {
           </Column>
         </Row>
       </Page>
+      <BackToTopButton />
     </>
   )
 }
