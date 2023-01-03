@@ -150,7 +150,8 @@ function* handleClearFilters() {
     'page',
     'minPrice',
     'maxPrice',
-    'onlySmart'
+    'onlySmart',
+    'onlyOnSale'
   ])
 
   yield call(fetchAssetsFromRoute, clearedBrowseOptions)

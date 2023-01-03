@@ -128,7 +128,7 @@ export const NFTTopbar = ({
       {!isMap && (
         <div className={styles.infoRow}>
           <div className={styles.countContainer}>
-            <p className={styles.countInfo}>{getCountText(count, search)}</p>
+            <p className={styles.countText}>{getCountText(count, search)}</p>
             {hasFiltersEnabled && (
               <button className={styles.clearFilters} onClick={onClearFilters}>
                 {t('filters.clear')}
