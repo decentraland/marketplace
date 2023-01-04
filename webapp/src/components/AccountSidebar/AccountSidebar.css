@@ -42,7 +42,6 @@
 .AccountSidebar .alternative-menu-item:hover,
 .AccountSidebar .alternative-menu-item.selected {
   background-color: #37333d;
-  /* border-radius: 6px; */
   cursor: pointer;
 }
 
