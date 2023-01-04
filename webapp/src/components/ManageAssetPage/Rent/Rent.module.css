@@ -37,8 +37,8 @@
   flex-direction: row;
 }
 
-.header .right .actionButton {
-  margin-right: 12px;
+.header .right .actionButton + .action {
+  margin-left: 12px;
 }
 
 .content {
