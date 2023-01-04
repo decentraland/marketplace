@@ -116,7 +116,8 @@ const CreateListingStep = (props: Props) => {
   ])
   const isInvalidPrice = parsedPriceInput < 0 || Number(pricePerDayInput) < 0
   const isLessThanMinPrice = parsedPriceInput < RENTAL_MIN_PRICE
-  const isInvalidExpirationDate = new Date(expiresAt).getTime() < Date.now()
+  const isInvalidExpirationDate =
+    new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
   const isInvalid =
     isInvalidPrice ||
     isInvalidExpirationDate ||
@@ -207,6 +208,7 @@ const CreateListingStep = (props: Props) => {
           </div>
         </div>
         <div className={styles.expirationDate}>
+          {console.log('Rendering field date with expiresAt as', expiresAt)}
           <Field
             label={t(
               'rental_modal.create_listing_step.listing_expiration_date'
