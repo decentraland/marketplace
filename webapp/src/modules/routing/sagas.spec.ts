@@ -1,5 +1,6 @@
 import {
   EmotePlayMode,
+  GenderFilterOption,
   ItemSortBy,
   Network,
   NFTCategory,
@@ -12,7 +13,6 @@ import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
-import { WearableGender } from '../nft/wearable/types'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/decentraland'
@@ -49,7 +49,7 @@ describe('when handling the clear filters request action', () => {
       isMap: false,
       isFullscreen: false,
       rarities: [Rarity.EPIC],
-      wearableGenders: [WearableGender.FEMALE],
+      wearableGenders: [GenderFilterOption.FEMALE],
       contracts: ['aContract'],
       network: Network.ETHEREUM,
       emotePlayMode: [EmotePlayMode.SIMPLE],

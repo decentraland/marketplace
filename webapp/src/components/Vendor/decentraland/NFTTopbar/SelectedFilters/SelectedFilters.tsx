@@ -5,7 +5,7 @@ import { Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Pill } from './Pill/Pill'
 import { Props } from './SelectedFilters.types'
-import { getCollectionByAddress } from './utils'
+import { getCollectionByAddress, getGenderFilterLabel } from './utils'
 import styles from './SelectedFilters.module.css'
 
 export const SelectedFilters = ({
@@ -25,15 +25,13 @@ export const SelectedFilters = ({
     maxPrice,
     onlyOnRent
   } = browseOptions
-  const [collection, setCollection] = useState<Record<string, string> | undefined>()
+  const [collection, setCollection] = useState<
+    Record<string, string> | undefined
+  >()
 
   useEffect(() => {
-    const fetchData = async (
-      contract: string
-    ) => {
-      const collection = await getCollectionByAddress(
-        contract,
-      )
+    const fetchData = async (contract: string) => {
+      const collection = await getCollectionByAddress(contract)
       return collection
     }
 
@@ -110,15 +108,20 @@ export const SelectedFilters = ({
   }, [onBrowse])
 
   const handleDeleteGender = useCallback(
-    (gender: string) => {
-      onBrowse({ wearableGenders: wearableGenders?.filter(g => g !== gender) })
+    () => {
+      onBrowse({ wearableGenders: [] })
     },
-    [onBrowse, wearableGenders]
+    [onBrowse]
   )
 
-  const handleDeleteEmotePlayMode = useCallback((playMode) => {
-    onBrowse({ emotePlayMode: emotePlayMode?.filter((mode) => playMode !== mode) })
-  }, [onBrowse, emotePlayMode])
+  const handleDeleteEmotePlayMode = useCallback(
+    playMode => {
+      onBrowse({
+        emotePlayMode: emotePlayMode?.filter(mode => playMode !== mode)
+      })
+    },
+    [onBrowse, emotePlayMode]
+  )
 
   const handleDeletePrice = useCallback(() => {
     onBrowse({ minPrice: undefined, maxPrice: undefined })
@@ -154,13 +157,13 @@ export const SelectedFilters = ({
           onDelete={handleDeleteRarity}
         />
       ) : null}
-      {wearableGenders?.map(gender => (
+      {wearableGenders && wearableGenders.length ? (
         <Pill
-          label={t(`nft_filters.body_shapes.${gender}`)}
-          id={gender}
+          label={t(getGenderFilterLabel(wearableGenders))}
+          id="wearable_genders"
           onDelete={handleDeleteGender}
         />
-      ))}
+      ) : null}
       {!onlyOnSale && !isLandSection ? (
         <Pill
           label={t('nft_filters.not_on_sale')}
