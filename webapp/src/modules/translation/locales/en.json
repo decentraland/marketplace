@@ -671,7 +671,8 @@
       "cancel_bid": "You cancelled a bid of {price} on {name}.",
       "claim_asset": "You claimed your {name} from the {contract}.",
       "remove_rental": "You removed your rental listing of {name}.",
-      "accept_rental": "You accepted a rental on {name} for {pricePerDay} a day, lasting {duration} {duration, plural, one {day} other {days}}."
+      "accept_rental": "You accepted a rental on {name} for {pricePerDay} a day, lasting {duration} {duration, plural, one {day} other {days}}.",
+      "buy_mana": "You bought {amount} {name} via {gateway}"
     }
   },
   "mana": {

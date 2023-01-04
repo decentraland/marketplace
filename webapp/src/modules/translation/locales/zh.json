@@ -666,7 +666,8 @@
       "cancel_bid": "您取消了对{name}的{price}出价。",
       "claim_asset": "您从 {contract} 中认领了您的 {name}。",
       "remove_rental": "您删除了 {name} 的出租列表.",
-      "accept_rental": "您接受了 {name} 的租赁，价格为 {pricePerDay} 一天，持续 {days} 天."
+      "accept_rental": "您接受了 {name} 的租赁，价格为 {pricePerDay} 一天，持续 {days} 天.",
+      "buy_mana": "您通过 {gateway} 购买了 {amount} {name}"
     }
   },
   "mana": {
