@@ -51,7 +51,9 @@ const ConfirmRentModal = ({
   }, [isUserTheOperatorAddress, wallet, setIsUserTheOperatorAddress])
 
   const hasAnInvalidOperator =
-    !operatorAddress || (operatorAddress && !isAddress(operatorAddress))
+    !operatorAddress ||
+    (!!operatorAddress && !isAddress(operatorAddress)) ||
+    operatorAddress === ethers.constants.AddressZero
 
   const handleSubmit = useCallback(() => {
     operatorAddress && onSubmitTransaction(operatorAddress)
@@ -103,9 +105,9 @@ const ConfirmRentModal = ({
             onChange={(_event, props) => {
               setOperatorAddress(props.value)
             }}
-            error={!!operatorAddress && !isAddress(operatorAddress)}
+            error={hasAnInvalidOperator}
             message={
-              operatorAddress && !isAddress(operatorAddress)
+              hasAnInvalidOperator
                 ? t('rental_modal.confirm_rent_step.wrong_operator')
                 : undefined
             }
