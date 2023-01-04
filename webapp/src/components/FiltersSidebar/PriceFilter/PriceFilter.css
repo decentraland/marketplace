@@ -16,13 +16,16 @@
 }
 
 .price-filter .dcl.field.full .ui.input input {
-  padding-right: 10px !important;
-  padding-left: 31px !important;
+  padding-left: 34px !important;
   font-size: 15px;
 }
 
 .price-filter .ui.min-max-field {
   column-gap: 8px;
+}
+
+.price-filter .dcl.field  .ui.sub.header {
+  padding-left: 0;
 }
 
 .price-filter .dcl.field .message {
