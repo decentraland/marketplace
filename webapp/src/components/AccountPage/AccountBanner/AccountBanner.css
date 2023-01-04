@@ -1,6 +1,7 @@
 .AccountBanner {
   overflow: hidden;
   position: relative;
+  margin-top: -24px;
 }
 
 .AccountBanner .ui.container {
