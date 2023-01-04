@@ -19,8 +19,6 @@ import { ManaField } from '../../ManaField'
 import { Props } from './ConfirmRentModal.types'
 import styles from './ConfirmRentModal.module.css'
 
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-
 const ConfirmRentModal = ({
   wallet,
   metadata: { nft, rental, selectedPeriodIndex },
@@ -55,7 +53,7 @@ const ConfirmRentModal = ({
   const hasAnInvalidOperator =
     !operatorAddress ||
     (!!operatorAddress && !isAddress(operatorAddress)) ||
-    operatorAddress === ZERO_ADDRESS
+    operatorAddress === ethers.constants.AddressZero
 
   const handleSubmit = useCallback(() => {
     operatorAddress && onSubmitTransaction(operatorAddress)
