@@ -94,8 +94,7 @@
 
 .AssetBrowse .sidebar {
   margin-right: 20px;
-  min-width: 320px;
-  max-width: 320px;
+  width: 248px;
 }
 
 .AssetBrowse.fullscreen .NFTFilters {
