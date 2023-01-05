@@ -1,14 +1,13 @@
 import { useCallback, useMemo } from 'react'
 import { Box, Radio } from 'decentraland-ui'
+import { GenderFilterOption } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { WearableGender } from '../../../modules/nft/wearable/types'
+import { AVAILABLE_FOR_FEMALE, AVAILABLE_FOR_MALE, getBodyShapeValue } from './utils'
 import './BodyShapeFilter.css'
 
-const UNISEX_VALUE = 'UNISEX'
-
 export type BodyShapeFilterProps = {
-  bodyShapes?: WearableGender[]
-  onChange: (value: WearableGender[]) => void
+  bodyShapes?: GenderFilterOption[]
+  onChange: (value: GenderFilterOption[]) => void
 }
 
 export const BodyShapeFilter = ({
@@ -21,36 +20,32 @@ export const BodyShapeFilter = ({
         value: undefined,
         text: t('nft_filters.body_shapes.all_items')
       },
-      ...Object.values(WearableGender).map(bodyShape => ({
-        value: bodyShape,
-        text: t(`nft_filters.body_shapes.${bodyShape}`)
-      })),
       {
-        value: UNISEX_VALUE,
-        text: t('nft_filters.body_shapes.unisex')
+        value: AVAILABLE_FOR_FEMALE,
+        text:  t("nft_filters.body_shapes.available_for_female")
+      },
+      {
+        value: AVAILABLE_FOR_MALE,
+        text:  t("nft_filters.body_shapes.available_for_male")
       }
     ]
   }, [])
 
   const handleChange = useCallback(
     (_evt, { value }) => {
-      let newValue = [value]
+      let newValue: GenderFilterOption[] = [];
 
-      if (value === UNISEX_VALUE) {
-        newValue = [WearableGender.FEMALE, WearableGender.MALE]
+      if (value === AVAILABLE_FOR_FEMALE) {
+        newValue = [GenderFilterOption.FEMALE, GenderFilterOption.UNISEX]
+      } else if (value === AVAILABLE_FOR_MALE) {
+        newValue = [GenderFilterOption.MALE, GenderFilterOption.UNISEX]
       }
-
       onChange(newValue)
     },
     [onChange]
   )
 
-  const value =
-    !bodyShapes || !bodyShapes.length
-      ? undefined
-      : bodyShapes.length === 2
-      ? UNISEX_VALUE
-      : bodyShapes[0]
+  const value = getBodyShapeValue(bodyShapes)
 
   return (
     <Box

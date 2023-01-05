@@ -7,7 +7,7 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { Menu } from '../../Menu'
 import { Props } from './OtherAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
-import { AssetFilters } from '../../AssetFitlers'
+import { AssetFilters } from '../../AssetFilters'
 import { AssetType } from '../../../modules/asset/types'
 
 const { ALL, LAND, WEARABLES, EMOTES, ENS } = Sections.decentraland

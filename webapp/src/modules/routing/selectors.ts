@@ -3,10 +3,9 @@ import {
   getSearch as getRouterSearch,
   getLocation
 } from 'connected-react-router'
-import { EmotePlayMode, Network, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
-import { WearableGender } from '../nft/wearable/types'
 import { VendorName } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
 import { Section, Sections } from '../vendor/routing/types'
@@ -177,12 +176,12 @@ export const getRarities = createSelector<RootState, string, Rarity[]>(
 export const getWearableGenders = createSelector<
   RootState,
   string,
-  WearableGender[]
+  GenderFilterOption[]
 >(getRouterSearch, search =>
-  getURLParamArray_nonStandard<WearableGender>(
+  getURLParamArray_nonStandard<GenderFilterOption>(
     search,
     'genders',
-    Object.values(WearableGender)
+    Object.values(GenderFilterOption)
   )
 )
 
@@ -254,7 +253,7 @@ export const getMaxPrice = createSelector<RootState, string, string>(
 export const hasFiltersEnabled = createSelector<
   RootState,
   string | undefined,
-  WearableGender[],
+  GenderFilterOption[],
   Rarity[],
   string[],
   EmotePlayMode[] | undefined,

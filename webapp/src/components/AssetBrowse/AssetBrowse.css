@@ -92,6 +92,11 @@
   z-index: 1;
 }
 
+.AssetBrowse .sidebar {
+  margin-right: 20px;
+  width: 248px;
+}
+
 .AssetBrowse.fullscreen .NFTFilters {
   position: relative;
   top: 0px;

@@ -202,16 +202,16 @@ const NFTFilters = (props: Props) => {
   const searchPlaceholder = isMap
     ? t('nft_filters.search_land')
     : count === undefined
-    ? t('global.loading') + '...'
-    : t('nft_filters.search', {
+      ? t('global.loading') + '...'
+      : t('nft_filters.search', {
         suffix:
           count < MAX_QUERY_SIZE
             ? t('nft_filters.results', {
-                count: count.toLocaleString()
-              })
+              count: count.toLocaleString()
+            })
             : t('nft_filters.more_than_results', {
-                count: count.toLocaleString()
-              })
+              count: count.toLocaleString()
+            })
       })
 
   const toggleBoxI18nKey =
@@ -304,9 +304,8 @@ const NFTFilters = (props: Props) => {
           >
             <div className="label">{t('nft_filters.filter')}</div>
             <div
-              className={`open-filters ${
-                showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
-              }`}
+              className={`open-filters ${showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
+                }`}
             />
           </div>
         </Responsive>

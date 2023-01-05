@@ -1,5 +1,5 @@
 import React from 'react'
-import { AssetFilters } from '../../../AssetFitlers'
+import { AssetFilters } from '../../../AssetFilters'
 import { NFTSections } from '../NFTSections'
 import { Props } from './NFTSidebar.types'
 import './NFTSidebar.css'
