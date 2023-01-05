@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { EmotePlayMode, Network, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
 import { ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import { SortBy } from '../../../modules/routing/types'
 import {
@@ -8,7 +8,6 @@ import {
   ClearFiltersAction
 } from '../../../modules/routing/actions'
 import { Section } from '../../../modules/vendor/routing/types'
-import { WearableGender } from '../../../modules/nft/wearable/types'
 import { AssetType } from '../../../modules/asset/types'
 
 export type Props = ModalProps & {
@@ -19,7 +18,7 @@ export type Props = ModalProps & {
   onlyOnRent?: boolean
   onlySmart?: boolean
   rarities: Rarity[]
-  wearableGenders: WearableGender[]
+  wearableGenders: GenderFilterOption[]
   contracts: string[]
   network?: Network
   emotePlayMode?: EmotePlayMode[]
