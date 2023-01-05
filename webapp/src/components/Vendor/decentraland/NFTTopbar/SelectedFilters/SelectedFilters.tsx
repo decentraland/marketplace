@@ -157,7 +157,7 @@ export const SelectedFilters = ({
           onDelete={handleDeleteRarity}
         />
       ) : null}
-      {wearableGenders && wearableGenders.length ? (
+      {wearableGenders?.length ? (
         <Pill
           label={t(getGenderFilterLabel(wearableGenders))}
           id="wearable_genders"

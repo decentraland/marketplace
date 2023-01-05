@@ -1,28 +1,32 @@
 import { GenderFilterOption, WearableGender } from '@dcl/schemas'
 import { collectionAPI } from '../../../../../modules/vendor/decentraland'
+import {
+  AVAILABLE_FOR_FEMALE,
+  AVAILABLE_FOR_MALE,
+  getBodyShapeValue
+} from '../../../../FiltersSidebar/BodyShapeFilter/utils'
 
-export async function getCollectionByAddress(
-  address: string,
-) {
+export async function getCollectionByAddress(address: string) {
   const { data } = await collectionAPI.fetch({
-    contractAddress: address,
+    contractAddress: address
   })
 
   return data[0]
 }
 
-export function getGenderFilterLabel(bodyShapes: (WearableGender | GenderFilterOption)[] | undefined): string {
-  const hasUnisex = bodyShapes?.includes(GenderFilterOption.UNISEX)
-  const hasMale = bodyShapes?.includes(GenderFilterOption.MALE)
-  const hasFemale = bodyShapes?.includes(GenderFilterOption.FEMALE)
+export function getGenderFilterLabel(
+  bodyShapes: (WearableGender | GenderFilterOption)[] | undefined
+): string {
+  const bodyShape = getBodyShapeValue(bodyShapes)
 
-  if (hasUnisex && hasMale) {
-    return 'nft_filters.body_shapes.available_for_male'
+  if (!bodyShape) {
+    return 'nft_filters.body_shapes.all_items'
   }
 
-  if (hasUnisex && hasFemale) {
-    return 'nft_filters.body_shapes.available_for_female'
+  const labels: Record<string, string> = {
+    [AVAILABLE_FOR_FEMALE]: 'nft_filters.body_shapes.available_for_female',
+    [AVAILABLE_FOR_MALE]: 'nft_filters.body_shapes.available_for_male'
   }
 
-  return 'nft_filters.body_shapes.all_items'
+  return labels[bodyShape]
 }
