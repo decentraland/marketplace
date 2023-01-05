@@ -4,3 +4,9 @@
   bottom: 100px;
   left: 100%;
 }
+
+@media (max-width: 768px) {
+  .backToTop {
+    bottom: 10px;
+  }
+}

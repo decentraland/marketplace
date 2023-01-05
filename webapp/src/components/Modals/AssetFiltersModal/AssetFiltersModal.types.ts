@@ -1,27 +1,23 @@
 import { Dispatch } from 'redux'
 import { EmotePlayMode, Network, Rarity } from '@dcl/schemas'
-import { SortBy } from '../../../../modules/routing/types'
+import { ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
+import { SortBy } from '../../../modules/routing/types'
 import {
   browse,
   clearFilters,
   ClearFiltersAction
-} from '../../../../modules/routing/actions'
-import { Section } from '../../../../modules/vendor/routing/types'
-import { WearableGender } from '../../../../modules/nft/wearable/types'
-import { AssetType } from '../../../../modules/asset/types'
-import { View } from '../../../../modules/ui/types'
+} from '../../../modules/routing/actions'
+import { Section } from '../../../modules/vendor/routing/types'
+import { WearableGender } from '../../../modules/nft/wearable/types'
+import { AssetType } from '../../../modules/asset/types'
 
-export type Props = {
+export type Props = ModalProps & {
   assetType: AssetType
-  count?: number
   section: Section
-  view?: View
   sortBy?: SortBy
-  search: string
   onlyOnSale?: boolean
   onlyOnRent?: boolean
   onlySmart?: boolean
-  isMap?: boolean
   rarities: Rarity[]
   wearableGenders: WearableGender[]
   contracts: string[]
@@ -35,16 +31,12 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  | 'view'
   | 'assetType'
-  | 'count'
   | 'section'
   | 'sortBy'
-  | 'search'
   | 'onlyOnSale'
   | 'onlyOnRent'
   | 'onlySmart'
-  | 'isMap'
   | 'rarities'
   | 'wearableGenders'
   | 'contracts'

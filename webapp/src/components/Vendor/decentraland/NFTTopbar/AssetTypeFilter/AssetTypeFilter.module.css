@@ -17,3 +17,16 @@
   margin-right: 0;
   margin-bottom: 12px;
 }
+
+@media (max-width: 768px) {
+  .marketIcon {
+    height: 21px;
+    width: 24px;
+    background-size: contain;
+  }
+  .listingsIcon {
+    height: 24px;
+    width: 24px;
+    background-size: contain;
+  }
+}
