@@ -73,8 +73,14 @@
 }
 
 @media (max-width: 768px) {
+  .flex {
+    overflow: hidden;
+    border-radius: 6px;
+  }
   .item.flex {
     text-align: center;
     justify-content: center;
+    margin: 0;
+    border-radius: 0;
   }
 }

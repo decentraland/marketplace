@@ -1,11 +1,19 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import classNames from 'classnames'
-import { Dropdown, DropdownProps, Field, Icon } from 'decentraland-ui'
+import {
+  Dropdown,
+  DropdownProps,
+  Field,
+  Icon,
+  useMobileMediaQuery
+} from 'decentraland-ui'
+import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AssetType } from '../../../../modules/asset/types'
 import { useInput } from '../../../../lib/input'
 import { getCountText, getOrderByOptions } from './utils'
 import { SortBy } from '../../../../modules/routing/types'
+import { getCategoryFromSection } from '../../../../modules/routing/search'
 import {
   isAccountView,
   isLandSection,
@@ -29,8 +37,13 @@ export const NFTTopbar = ({
   section,
   hasFiltersEnabled,
   onBrowse,
-  onClearFilters
+  onClearFilters,
+  onOpenFiltersModal
 }: Props): JSX.Element => {
+  const isMobile = useMobileMediaQuery()
+  const [showFiltersMenu, setShowFiltersMenu] = useState(false)
+  const category = section ? getCategoryFromSection(section) : undefined
+
   const handleSearch = useCallback(
     (value: string) => {
       if (search !== value) {
@@ -85,6 +98,14 @@ export const NFTTopbar = ({
     ? sortBy
     : orderByDropdownOptions[0].value
 
+  useEffect(
+    () =>
+      setShowFiltersMenu(
+        category === NFTCategory.WEARABLE || category === NFTCategory.EMOTE
+      ),
+    [category, setShowFiltersMenu]
+  )
+
   return (
     <div className={styles.nftTopbar}>
       <div>
@@ -135,12 +156,24 @@ export const NFTTopbar = ({
               </button>
             )}
           </div>
-          <Dropdown
-            direction="left"
-            value={sortByValue}
-            options={orderByDropdownOptions}
-            onChange={handleOrderByDropdownChange}
-          />
+          <div className={styles.rightOptionsContainer}>
+            <Dropdown
+              direction="left"
+              value={sortByValue}
+              options={orderByDropdownOptions}
+              onChange={handleOrderByDropdownChange}
+            />
+            {isMobile ? (
+              <i
+                className={classNames(
+                  styles.openFilters,
+                  styles.openFiltersWrapper,
+                  (showFiltersMenu || hasFiltersEnabled) && styles.active
+                )}
+                onClick={onOpenFiltersModal}
+              />
+            ) : null}
+          </div>
         </div>
       )}
       <SelectedFilters />

@@ -20,14 +20,11 @@ const ToggleBox = (props: Props) => {
       {items.map((item, index) => (
         <div
           key={index}
-          className={classNames(
-            styles.item,
-            {
-              [styles.active]: !!item.active,
-              [styles.disabled]: !!item.disabled,
-              [styles.flex]: !!direction && direction === 'row'
-            }
-          )}
+          className={classNames(styles.item, {
+            [styles.active]: !!item.active,
+            [styles.disabled]: !!item.disabled,
+            [styles.flex]: !!direction && direction === 'row'
+          })}
           onClick={() => !item.disabled && item.onClick(item, index)}
         >
           {item.icon}

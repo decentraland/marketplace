@@ -1,0 +1,145 @@
+.result-type-toggle-flex {
+  border: none;
+  margin-right: 0;
+  margin-bottom: 24px;
+}
+
+.market-icon {
+  background-image: url(../../../images/store.svg);
+  height: 28px;
+  width: 32px;
+  margin-right: 24px;
+}
+
+.listings-icon {
+  background-image: url(../../../images/listings.svg);
+  height: 28px;
+  width: 32px;
+  margin-right: 24px;
+}
+
+@media (max-width: 768px) {
+  .market-icon,
+  .listings-icon {
+    transform: scale(0.75);
+    margin-right: 12px;
+  }
+}
+
+/*------------------
+    AssetFiltersModal
+   */
+
+.AssetFiltersModal .NFTSidebar ul.menu li:hover,
+.AssetFiltersModal .NFTSidebar ul.menu li.active {
+  background-color: var(--secondary-on-modal);
+}
+
+.AssetFiltersModal .filter-row {
+  margin-bottom: 20px;
+}
+
+.AssetFiltersModal .filter-row .ui.sub.header {
+  margin-bottom: 12px;
+}
+
+.AssetFiltersModal .NFTSidebar {
+  width: 100%;
+}
+
+.AssetFiltersModal .NFTSidebar ul.menu {
+  width: calc(100% + 16px);
+}
+
+.AssetFiltersModal .NFTSidebar ul.menu li {
+  width: calc(100% + 16px);
+}
+
+.AssetFiltersModal .NFTSidebar ul.menu li.sub {
+  width: calc(100% + 0px);
+}
+
+.AssetFiltersModal.ui.modal .dcl.close {
+  position: absolute;
+}
+
+.AssetFiltersModal .apply-filters {
+  width: 100%;
+  margin-top: 48px;
+}
+
+.AssetFiltersModal .ui.dropdown {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid var(--divider);
+  border-radius: 6px;
+  color: var(--secondary-text);
+}
+
+.AssetFiltersModal .ui.dropdown .visible.menu {
+  max-height: 500px;
+}
+
+.AssetFiltersModal .ui.dropdown .text {
+  flex: 1 0 auto;
+  color: var(--text);
+}
+
+.AssetFiltersModal .ui.dropdown .dropdown.icon {
+  color: var(--text);
+}
+
+.AssetFiltersModal .clear-filters-modal > span {
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.AssetFilters .smart-toggle {
+  background: #37333d;
+  padding: 8px;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  margin-top: 27px;
+  cursor: pointer;
+}
+
+.AssetFilters .smart-toggle.is-enabled {
+  background: var(--primary);
+}
+
+@media (max-width: 768px) {
+  .AssetFilters .topbar {
+    align-items: normal;
+  }
+
+  .AssetFiltersModal .dcl.row {
+    align-items: flex-start;
+    flex-direction: column;
+    justify-content: stretch;
+  }
+
+  .AssetFiltersModal .smart-toggle-mobile {
+    margin-top: 12px;
+    margin-left: 0px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 991px) {
+  .smart-toggle {
+    margin-top: 0px !important;
+  }
+}
+
+/* SelectFields */
+.AssetFilters .dcl.select-field .ui.sub.header {
+  font-weight: 600;
+}
+
+.filters-container {
+  display: flex;
+  flex-wrap: wrap !important;
+  gap: 20px;
+}
