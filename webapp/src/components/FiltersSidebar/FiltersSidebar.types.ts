@@ -1,4 +1,4 @@
-import { EmotePlayMode, Network, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
 import { BrowseOptions } from '../../modules/routing/types'
 import { Section } from '../../modules/vendor/routing/types'
@@ -10,7 +10,7 @@ export type Props = {
   rarities: Rarity[]
   network?: Network
   category?: NFTCategory
-  bodyShapes?: WearableGender[]
+  bodyShapes?: GenderFilterOption[]
   isOnlySmart: boolean
   isOnSale?: boolean
   emotePlayMode?: EmotePlayMode[]

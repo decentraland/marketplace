@@ -336,9 +336,8 @@
     "body_shapes": {
       "title": "Body shape",
       "all_items": "All Body Shapes",
-      "female": "Only female",
-      "male": "Only male",
-      "unisex": "Only unisex"
+      "available_for_female": "Available for female",
+      "available_for_male": "Available for male"
     },
     "more_filters": "More filters",
     "only_smart": "Only smart",

@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import { useNotMobileMediaQuery } from 'decentraland-ui'
-import { EmotePlayMode, Network, NFTCategory, Rarity } from '@dcl/schemas'
-import { WearableGender } from '../../modules/nft/wearable/types'
+import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
 import { LANDFilters } from '../Vendor/decentraland/types'
@@ -63,7 +62,7 @@ export const FiltersSidebar = ({
   )
 
   const handleBodyShapeChange = useCallback(
-    (value: WearableGender[]) => {
+    (value: GenderFilterOption[]) => {
       onBrowse({ wearableGenders: value })
     },
     [onBrowse]
