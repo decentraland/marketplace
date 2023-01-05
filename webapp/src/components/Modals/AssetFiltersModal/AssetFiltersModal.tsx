@@ -8,7 +8,8 @@ import {
   Dropdown,
   DropdownProps,
   Modal,
-  Icon
+  Icon,
+  Close
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { LANDFilters } from '../../Vendor/decentraland/types'
@@ -158,7 +159,12 @@ const AssetFiltersModal = (props: Props) => {
 
   return (
     <div className="AssetFilters">
-      <Modal open className="AssetFiltersModal" onClose={onClose}>
+      <Modal
+        open
+        className="AssetFiltersModal"
+        onClose={onClose}
+        closeIcon={<Close />}
+      >
         <Modal.Header>{t('nft_filters.filter')}</Modal.Header>
         <Modal.Content>
           {hasFiltersEnabled && (

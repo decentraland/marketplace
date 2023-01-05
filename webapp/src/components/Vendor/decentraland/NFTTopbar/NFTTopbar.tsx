@@ -164,17 +164,14 @@ export const NFTTopbar = ({
               onChange={handleOrderByDropdownChange}
             />
             {isMobile ? (
-              <div
-                className={styles.openFiltersWrapper}
+              <i
+                className={classNames(
+                  styles.openFilters,
+                  styles.openFiltersWrapper,
+                  (showFiltersMenu || hasFiltersEnabled) && styles.active
+                )}
                 onClick={onOpenFiltersModal}
-              >
-                <div
-                  className={classNames(
-                    styles.openFilters,
-                    (showFiltersMenu || hasFiltersEnabled) && styles.active
-                  )}
-                />
-              </div>
+              />
             ) : null}
           </div>
         </div>
