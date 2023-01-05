@@ -4,24 +4,44 @@
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 12px;
-  width: 100%;
+  max-width: 100%;
 }
 
 .filters-sidebar-box {
   background: #242129;
 }
 
-.filters-sidebar .filters-radio-group .ui.radio.checkbox input.hidden ~ label:before,
-.filters-sidebar .filters-radio-group .ui.radio.checkbox input.hidden:focus ~ label:before {
-  border: 2px solid #736E7D;
+.dcl.box.filters-sidebar-box {
+  padding: 21px 24px;
+}
+
+.filters-sidebar
+  .filters-radio-group
+  .ui.radio.checkbox
+  input.hidden
+  ~ label:before,
+.filters-sidebar
+  .filters-radio-group
+  .ui.radio.checkbox
+  input.hidden:focus
+  ~ label:before {
+  border: 2px solid #736e7d;
   background-color: transparent;
 }
 
-.filters-sidebar .filters-radio-group .ui.radio.checkbox:hover input.hidden ~ label:before {
+.filters-sidebar
+  .filters-radio-group
+  .ui.radio.checkbox:hover
+  input.hidden
+  ~ label:before {
   background-color: var(--primary);
 }
 
-.filters-sidebar .filters-radio-group .ui.radio.checkbox.checked input.hidden + label:after {
+.filters-sidebar
+  .filters-radio-group
+  .ui.radio.checkbox.checked
+  input.hidden
+  + label:after {
   background-image: none;
   width: 23px;
   height: 23px;

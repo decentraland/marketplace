@@ -121,15 +121,6 @@ class NFTAPI extends BaseAPI {
           queryParams.append('wearableGender', wearableGender)
         }
       }
-      if (filters.contracts) {
-        for (const address of filters.contracts) {
-          if (
-            params.contracts?.some(contract => contract.address === address)
-          ) {
-            queryParams.append('contractAddress', address)
-          }
-        }
-      }
       if (filters.network) {
         queryParams.append('network', filters.network)
       }
@@ -147,6 +138,11 @@ class NFTAPI extends BaseAPI {
         statuses.forEach(status => queryParams.append('rentalStatus', status))
       }
 
+      if (filters.contracts && filters.contracts.length > 0) {
+        for (const contract of filters.contracts) {
+          queryParams.append('contractAddress', contract)
+        }
+      }
       if (filters.minPrice) {
         queryParams.append('minPrice', filters.minPrice)
       }

@@ -118,7 +118,7 @@ export const NFTTopbar = ({
           </div>
         )}
       </div>
-      {!isLandSection(section) && (
+      {!isLandSection(section) && view && !isAccountView(view) && (
         <AssetTypeFilter
           view={view}
           assetType={assetType}

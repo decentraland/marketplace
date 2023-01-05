@@ -58,7 +58,7 @@ export const BodyShapeFilter = ({
           return (
             <Radio
               type="radio"
-              key={option.value}
+              key={option.value || 'all'}
               onChange={handleChange}
               label={option.text}
               value={option.value}

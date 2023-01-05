@@ -25,9 +25,9 @@ export type NFTsFetchFilters = {
   emotePlayMode?: EmotePlayMode[]
   wearableGenders?: (WearableGender | GenderFilterOption)[]
   itemId?: string
-  contracts?: string[]
   network?: Network
   rentalStatus?: RentalStatus | RentalStatus[]
+  contracts?: string[]
   minPrice?: string
   maxPrice?: string
 }

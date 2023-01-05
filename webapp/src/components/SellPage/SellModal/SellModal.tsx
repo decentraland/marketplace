@@ -50,9 +50,10 @@ const SellModal = (props: Props) => {
   const [price, setPrice] = useState<string>(
     isUpdate ? ethers.utils.formatEther(order!.price) : ''
   )
+
   const [expiresAt, setExpiresAt] = useState(
     isUpdate && order!.expiresAt && isValid(order!.expiresAt)
-      ? formatDate(addDays(new Date(+order!.expiresAt), 1), INPUT_FORMAT)
+      ? formatDate(addDays(order!.expiresAt, 1), INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
   const [showConfirm, setShowConfirm] = useState(false)
@@ -89,7 +90,11 @@ const SellModal = (props: Props) => {
   }
 
   const handleCreateOrder = () =>
-    onCreateOrder(nft, parseMANANumber(price), new Date(expiresAt).getTime())
+    onCreateOrder(
+      nft,
+      parseMANANumber(price),
+      new Date(`${expiresAt} 00:00:00`).getTime()
+    )
 
   const handleSubmit = () => {
     if (hasAuthorization(authorizations, authorization)) {
@@ -104,7 +109,7 @@ const SellModal = (props: Props) => {
 
   const { orderService } = VendorFactory.build(nft.vendor)
 
-  const isInvalidDate = new Date(expiresAt).getTime() < Date.now()
+  const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
   const isInvalidPrice =
     parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
   const isDisabled =

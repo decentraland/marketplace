@@ -25,13 +25,15 @@ export const SelectedFilters = ({
     maxPrice,
     onlyOnRent
   } = browseOptions
-  const [collection, setCollection] = useState<
-    Record<string, string> | undefined
-  >()
+  const [collection, setCollection] = useState<Record<string, string> | undefined>()
 
   useEffect(() => {
-    const fetchData = async (contract: string) => {
-      const collection = await getCollectionByAddress(contract)
+    const fetchData = async (
+      contract: string
+    ) => {
+      const collection = await getCollectionByAddress(
+        contract,
+      )
       return collection
     }
 
