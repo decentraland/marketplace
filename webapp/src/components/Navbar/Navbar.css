@@ -20,3 +20,7 @@
 .dcl.account-wrapper .dcl.mana {
   flex: none;
 }
+
+.dcl.account-wrapper {
+  padding-right: 10px;
+}
