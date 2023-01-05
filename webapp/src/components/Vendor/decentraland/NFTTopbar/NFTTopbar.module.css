@@ -10,7 +10,7 @@
 }
 
 .nftTopbar :global(.dcl.field.full) {
-  min-width: none;
+  min-width: unset;
 }
 
 .nftTopbar.land {
@@ -31,7 +31,7 @@
   display: none;
 }
 
-.mapToggle  {
+.mapToggle {
   margin-left: 10px;
   position: absolute;
   top: 10px;
@@ -76,4 +76,30 @@
 
 .clearFilters:hover {
   opacity: 0.8;
+}
+
+.rightOptionsContainer {
+  display: flex;
+}
+
+.openFiltersWrapper {
+  display: flex;
+  position: relative;
+  cursor: pointer;
+}
+
+.openFilters {
+  width: 20px;
+  height: 20px;
+  background-image: url(../../../../images/filters.svg);
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  margin-left: 24px;
+}
+
+.openFilters.active {
+  background-image: url(../../../../images/filters-active.svg);
+  background-size: 20px;
 }

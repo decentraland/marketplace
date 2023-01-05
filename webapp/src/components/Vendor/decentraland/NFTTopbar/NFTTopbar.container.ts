@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
+import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { RootState } from '../../../../modules/reducer'
 import { getCount, getView } from '../../../../modules/ui/browse/selectors'
 import {
@@ -36,7 +37,8 @@ const mapState = (state: RootState): MapStateProps => {
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
   onBrowse: (options: BrowseOptions) => dispatch(browse(options)),
-  onClearFilters: () => dispatch(clearFilters())
+  onClearFilters: () => dispatch(clearFilters()),
+  onOpenFiltersModal: () => dispatch(openModal('AssetFiltersModal'))
 })
 
 export default connect(mapState, mapDispatch)(NFTTopbar)

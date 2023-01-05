@@ -1,3 +1,4 @@
+import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { AssetType } from '../../../../modules/asset/types'
 import { BrowseOptions } from '../../../../modules/routing/types'
 import { Section } from '../../../../modules/vendor/routing/types'
@@ -17,6 +18,7 @@ export type Props = {
   hasFiltersEnabled: boolean
   onBrowse: (options: BrowseOptions) => void
   onClearFilters: typeof clearFilters
+  onOpenFiltersModal: () => ReturnType<typeof openModal>
 }
 
 export type MapStateProps = Pick<
@@ -33,4 +35,7 @@ export type MapStateProps = Pick<
   | 'hasFiltersEnabled'
 >
 
-export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>
+export type MapDispatchProps = Pick<
+  Props,
+  'onBrowse' | 'onClearFilters' | 'onOpenFiltersModal'
+>
