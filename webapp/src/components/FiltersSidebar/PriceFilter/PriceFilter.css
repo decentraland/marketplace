@@ -12,9 +12,24 @@
 
 .price-filter .dcl.mana .symbol .ethereum {
   filter: grayscale(1);
+  transform: scale(0.8) translateY(0.2em);
 }
 
 .price-filter .dcl.field.full .ui.input input {
-  padding-right: 10px !important;
-  padding-left: 40px !important;
+  padding-right: 0px !important;
+  padding-left: 34px !important;
+  font-size: 15px;
+}
+
+.price-filter .ui.min-max-field {
+  column-gap: 8px;
+}
+
+.price-filter .dcl.field  .ui.sub.header {
+  padding: 4px 0;
+}
+
+.price-filter .dcl.field .message {
+  /* we won't show any message for this inputs */
+  display: none;
 }

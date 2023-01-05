@@ -146,10 +146,11 @@ const AssetBrowse = (props: Props) => {
   const left = (
     <>
       <NotMobile>
-        {view === View.ACCOUNT ? (
-          <AccountSidebar address={address!} />
-        ) : view === View.CURRENT_ACCOUNT ? (
-          <AccountSidebar address={address!} isCurrentAccount />
+        {view === View.ACCOUNT || view === View.CURRENT_ACCOUNT ? (
+          <AccountSidebar
+            address={address!}
+            isCurrentAccount={view === View.CURRENT_ACCOUNT}
+          />
         ) : (
           <NFTSidebar section={section} sections={sections} />
         )}
