@@ -21,9 +21,11 @@ const ArrayFilter = (props: Props) => {
   const { name, values, options, onChange } = props
   return (
     <div className="ArrayFilter Filter">
-      <Header sub className="name">
-        {name}
-      </Header>
+      {name ? (
+        <Header sub className="name">
+          {name}
+        </Header>
+      ) : null}
       <div className="options">
         {options.map(option => (
           <div

@@ -5,6 +5,7 @@ import { WearableGender } from '../../modules/nft/wearable/types'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
 import { LANDFilters } from '../Vendor/decentraland/types'
+import { Menu } from '../Menu'
 import { PriceFilter } from './PriceFilter'
 import { RarityFilter } from './RarityFilter'
 import { NetworkFilter } from './NetworkFilter'
@@ -90,7 +91,7 @@ export const FiltersSidebar = ({
   )
 
   function handleCollectionChange(value: string | undefined) {
-    const newValue = value ? [value] : [];
+    const newValue = value ? [value] : []
     onBrowse({ contracts: newValue })
   }
 
@@ -108,24 +109,30 @@ export const FiltersSidebar = ({
     }
   }
 
-
   if (isInLandSection && isNotMobile && isRentalsEnabled) {
     return (
       <div className="filters-sidebar">
-        <LandStatusFilter landStatus={landStatus} onChange={handleLandStatusChange} />
+        <LandStatusFilter
+          landStatus={landStatus}
+          onChange={handleLandStatusChange}
+        />
       </div>
     )
   }
 
   return (
-    <div className="filters-sidebar">
+    <Menu className="filters-sidebar">
       <RarityFilter onChange={handleRarityChange} rarities={rarities} />
       <PriceFilter
         onChange={handlePriceChange}
         minPrice={minPrice}
         maxPrice={maxPrice}
       />
-      <CollectionFilter onChange={handleCollectionChange} collection={collection} onlyOnSale={isOnSale}  />
+      <CollectionFilter
+        onChange={handleCollectionChange}
+        collection={collection}
+        onlyOnSale={isOnSale}
+      />
       {isEmoteCategory && (
         <EmotePlayModeFilter
           onChange={handleEmotePlayModeChange}
@@ -148,6 +155,6 @@ export const FiltersSidebar = ({
         onSaleChange={handleOnSaleChange}
         onOnlySmartChange={handleOnlySmartChange}
       />
-    </div>
+    </Menu>
   )
 }

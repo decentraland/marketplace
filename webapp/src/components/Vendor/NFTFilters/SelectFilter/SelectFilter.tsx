@@ -97,10 +97,12 @@ const SelectFilter = (props: Props) => {
   }, [search, fetchOptions, options, isTyping])
 
   return (
-    <div className={classNames("SelectFilter Filter", className)}>
-      <Header sub className="name">
-        {name}
-      </Header>
+    <div className={classNames('SelectFilter Filter', className)}>
+      {name ? (
+        <Header sub className="name">
+          {name}
+        </Header>
+      ) : null}
       <Dropdown
         value={value}
         options={providedOptions}

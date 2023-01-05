@@ -11,6 +11,7 @@
 
 .AccountPage ul.Menu {
   margin-top: 0;
+  overflow: hidden;
 }
 
 .AccountPage .blockie-address {
