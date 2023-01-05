@@ -1,4 +1,4 @@
-import { collectionAPI } from '../../../../../modules/vendor/decentraland'
+import { collectionAPI } from '../../../modules/vendor/decentraland'
 
 export async function getCollectionByAddress(
   address: string,

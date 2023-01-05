@@ -1,33 +1,33 @@
-.nftTopbar {
+.assetTopbar {
   margin-bottom: 20px;
   position: relative;
 }
 
-.nftTopbar :global(.dcl.field.full) :global(.ui.input).searchField input {
+.assetTopbar :global(.dcl.field.full) :global(.ui.input).searchField input {
   background: var(--secondary);
   border: none;
   font-size: 17px;
 }
 
-.nftTopbar :global(.dcl.field.full) {
+.assetTopbar :global(.dcl.field.full) {
   min-width: unset;
 }
 
-.nftTopbar.land {
+.assetTopbar.land {
   display: flex;
 }
 
-.nftTopbar .searchField {
+.assetTopbar .searchField {
   margin-bottom: 12px;
 }
 
-.nftTopbar .infoRow {
+.assetTopbar .infoRow {
   display: flex;
   justify-content: space-between;
   font-size: 13px;
 }
 
-.nftTopbar :global(.dcl.field .message) {
+.assetTopbar :global(.dcl.field .message) {
   display: none;
 }
 
@@ -45,11 +45,11 @@
   border-radius: 4px;
 }
 
-.nftTopbar :global(.Chip.grid) {
+.assetTopbar :global(.Chip.grid) {
   border-radius: 4px 0 0 4px;
 }
 
-.nftTopbar :global(.Chip.atlas) {
+.assetTopbar :global(.Chip.atlas) {
   border-radius: 0 4px 4px 0;
 }
 
@@ -91,7 +91,7 @@
 .openFilters {
   width: 20px;
   height: 20px;
-  background-image: url(../../../../images/filters.svg);
+  background-image: url(../../images/filters.svg);
   background-size: 16px;
   background-repeat: no-repeat;
   background-position: center;
@@ -100,6 +100,6 @@
 }
 
 .openFilters.active {
-  background-image: url(../../../../images/filters-active.svg);
+  background-image: url(../../images/filters-active.svg);
   background-size: 20px;
 }

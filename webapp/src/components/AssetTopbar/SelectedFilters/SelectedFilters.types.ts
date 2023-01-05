@@ -1,5 +1,5 @@
-import { browse } from '../../../../../modules/routing/actions'
-import { BrowseOptions } from '../../../../../modules/routing/types'
+import { browse } from '../../../modules/routing/actions'
+import { BrowseOptions } from '../../../modules/routing/types'
 
 export type Props = {
   browseOptions: BrowseOptions

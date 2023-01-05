@@ -1,8 +1,8 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AssetType } from '../../../../../modules/asset/types'
-import { View } from '../../../../../modules/ui/types'
-import { isAccountView } from '../../../../../modules/ui/utils'
-import { ToggleBox } from '../../../../AssetBrowse/ToggleBox'
+import { AssetType } from '../../../modules/asset/types'
+import { View } from '../../../modules/ui/types'
+import { isAccountView } from '../../../modules/ui/utils'
+import { ToggleBox } from '../../AssetBrowse/ToggleBox'
 import styles from './AssetTypeFilter.module.css'
 
 type AssetTypeFilterProps = {

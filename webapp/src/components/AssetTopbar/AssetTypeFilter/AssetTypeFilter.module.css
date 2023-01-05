@@ -1,12 +1,12 @@
 .marketIcon {
-  background-image: url(../../../../../images/store.svg);
+  background-image: url(../../../images/store.svg);
   height: 28px;
   width: 32px;
   margin-right: 24px;
 }
 
 .listingsIcon {
-  background-image: url(../../../../../images/listings.svg);
+  background-image: url(../../../images/listings.svg);
   height: 28px;
   width: 32px;
   margin-right: 24px;
