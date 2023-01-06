@@ -7,7 +7,7 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { Menu } from '../../Menu'
 import { Props } from './OtherAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
-import { FiltersSidebar } from '../../FiltersSidebar'
+import { AssetFilters } from '../../AssetFilters'
 import { AssetType } from '../../../modules/asset/types'
 
 const { ALL, LAND, WEARABLES, EMOTES, ENS } = Sections.decentraland
@@ -66,7 +66,7 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
         onSectionClick={section => onBrowse({ section, assetType })}
       />
     </Menu>
-    <FiltersSidebar />
+    <AssetFilters />
   </>
 )
 

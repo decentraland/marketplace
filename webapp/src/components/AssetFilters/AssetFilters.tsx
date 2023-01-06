@@ -8,15 +8,15 @@ import { Menu } from '../Menu'
 import { PriceFilter } from './PriceFilter'
 import { RarityFilter } from './RarityFilter'
 import { NetworkFilter } from './NetworkFilter'
-import { Props } from './FiltersSidebar.types'
+import { Props } from './AssetFilters.types'
 import { CollectionFilter } from './CollectionFilter'
 import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
-import './FiltersSidebar.css'
+import './AssetFilters.css'
 
-export const FiltersSidebar = ({
+export const AssetFilters = ({
   minPrice,
   maxPrice,
   collection,

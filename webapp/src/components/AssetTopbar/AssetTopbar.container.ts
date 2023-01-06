@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-import { RootState } from '../../../../modules/reducer'
-import { getCount, getView } from '../../../../modules/ui/browse/selectors'
+import { RootState } from '../../modules/reducer'
+import { getCount, getView } from '../../modules/ui/browse/selectors'
 import {
   getAssetType,
   getIsMap,
@@ -12,12 +12,12 @@ import {
   getSection,
   getSortBy,
   hasFiltersEnabled
-} from '../../../../modules/routing/selectors'
-import { BrowseOptions } from '../../../../modules/routing/types'
-import { isMapSet } from '../../../../modules/routing/utils'
-import { browse, clearFilters } from '../../../../modules/routing/actions'
-import { MapStateProps, MapDispatchProps } from './NFTTopbar.types'
-import { NFTTopbar } from './NFTTopbar'
+} from '../../modules/routing/selectors'
+import { BrowseOptions } from '../../modules/routing/types'
+import { isMapSet } from '../../modules/routing/utils'
+import { browse, clearFilters } from '../../modules/routing/actions'
+import { MapStateProps, MapDispatchProps } from './AssetTopbar.types'
+import { AssetTopbar } from './AssetTopbar'
 
 const mapState = (state: RootState): MapStateProps => {
   const view = getView(state)
@@ -41,4 +41,4 @@ const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
   onOpenFiltersModal: () => dispatch(openModal('AssetFiltersModal'))
 })
 
-export default connect(mapState, mapDispatch)(NFTTopbar)
+export default connect(mapState, mapDispatch)(AssetTopbar)

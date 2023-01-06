@@ -1,6 +1,6 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { SortBy } from '../../../../modules/routing/types'
-import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
+import { SortBy } from '../../modules/routing/types'
+import { MAX_QUERY_SIZE } from '../../modules/vendor/api'
 
 export function getCountText(
   count: number | undefined,

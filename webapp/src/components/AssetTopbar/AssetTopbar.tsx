@@ -9,23 +9,23 @@ import {
 } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AssetType } from '../../../../modules/asset/types'
-import { useInput } from '../../../../lib/input'
+import { AssetType } from '../../modules/asset/types'
+import { useInput } from '../../lib/input'
 import { getCountText, getOrderByOptions } from './utils'
-import { SortBy } from '../../../../modules/routing/types'
-import { getCategoryFromSection } from '../../../../modules/routing/search'
+import { SortBy } from '../../modules/routing/types'
+import { getCategoryFromSection } from '../../modules/routing/search'
 import {
   isAccountView,
   isLandSection,
   persistIsMapProperty
-} from '../../../../modules/ui/utils'
-import { Chip } from '../../../Chip'
+} from '../../modules/ui/utils'
+import { Chip } from '../Chip'
 import { AssetTypeFilter } from './AssetTypeFilter'
-import { Props } from './NFTTopbar.types'
+import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
-import styles from './NFTTopbar.module.css'
+import styles from './AssetTopbar.module.css'
 
-export const NFTTopbar = ({
+export const AssetTopbar = ({
   search,
   view,
   assetType,
@@ -107,7 +107,7 @@ export const NFTTopbar = ({
   )
 
   return (
-    <div className={styles.nftTopbar}>
+    <div className={styles.assetTopbar}>
       <div>
         {!isMap && (
           <Field

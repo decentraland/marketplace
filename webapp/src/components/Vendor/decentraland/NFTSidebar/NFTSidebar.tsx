@@ -1,5 +1,5 @@
 import React from 'react'
-import { FiltersSidebar } from '../../../FiltersSidebar'
+import { AssetFilters } from '../../../AssetFilters'
 import { NFTSections } from '../NFTSections'
 import { Props } from './NFTSidebar.types'
 import './NFTSidebar.css'
@@ -14,7 +14,7 @@ const NFTSidebar = (props: Props) => {
         sections={sections}
         onSectionClick={onMenuItemClick}
       />
-      <FiltersSidebar />
+      <AssetFilters />
     </div>
   )
 }

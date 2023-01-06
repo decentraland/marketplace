@@ -4,8 +4,8 @@ import { RootState } from '../../modules/reducer'
 import { browse } from '../../modules/routing/actions'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { getAssetType, getContracts, getEmotePlayMode, getMaxPrice, getMinPrice, getNetwork, getOnlyOnRent, getOnlyOnSale, getOnlySmart, getRarities, getSection, getWearableGenders } from '../../modules/routing/selectors'
-import { MapStateProps, MapDispatchProps } from './FiltersSidebar.types'
-import { FiltersSidebar } from './FiltersSidebar'
+import { MapStateProps, MapDispatchProps } from './AssetFilters.types'
+import { AssetFilters } from './AssetFilters'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { getIsRentalsEnabled } from '../../modules/features/selectors'
 
@@ -47,4 +47,4 @@ const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
   }
 }
 
-export default connect(mapState, mapDispatch)(FiltersSidebar)
+export default connect(mapState, mapDispatch)(AssetFilters)
