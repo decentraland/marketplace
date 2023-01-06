@@ -14,7 +14,7 @@
     min-width: unset;
     padding: 16px 18px;
   }
-  .backToTop:global(.ui.button > .arrow.up.icon) {
+  .backToTop:global(.ui.button:not(.icon) > .icon:not(.button):not(.dropdown)) {
     margin-right: -4px;
   }
 }
