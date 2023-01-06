@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import classNames from 'classnames'
-import { Button, Icon } from 'decentraland-ui'
+import { Button, Icon, useNotMobileMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './BackToTopButton.types'
 import styles from './BackToTopButton.module.css'
@@ -13,6 +13,7 @@ const BackToTopButton = ({
   threshold = MIN_HEIGHT_SCROLL_BACK,
   scrollToOptions = DEFAULT_SCROLL_TO_OPTS
 }: Props) => {
+  const isDesktop = useNotMobileMediaQuery()
   const [showButton, setShowButton] = useState(false)
   useEffect(() => {
     const scrollListener = () => {
@@ -32,7 +33,7 @@ const BackToTopButton = ({
       onClick={handleBackToTop}
     >
       <Icon name="arrow up" />
-      {t('browse_page.back_to_top')}
+      {isDesktop ? t('browse_page.back_to_top') : null}
     </Button>
   ) : null
 }
