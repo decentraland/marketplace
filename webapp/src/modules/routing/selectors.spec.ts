@@ -27,7 +27,6 @@ describe('when getting if the are filters set', () => {
         false,
         'a search'
       )
-      console.log('expected: ', expected)
       expect(expected).toBe(true)
     })
   })
