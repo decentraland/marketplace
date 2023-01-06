@@ -16,7 +16,6 @@
 }
 
 .AssetBrowse .ui.cards + .empty {
-  margin-top: 40px;
   font-size: 16px;
   text-align: center;
   color: var(--secondary-text);
