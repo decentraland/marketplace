@@ -138,6 +138,10 @@
     max-width: 100%;
   }
 
+  .AssetBrowse .sidebar {
+    display: none;
+  }
+
   .AssetBrowse .Layout .right.column > div {
     width: 100%;
   }
