@@ -138,7 +138,9 @@ export function getOpenRentalId(asset: Asset | null): string | null {
   return (asset as NFT | null)?.openRentalId ?? null
 }
 
-export function getMaxPriceOfPeriods(rental: RentalListing): string {
+export function getMaxPriceOfPeriods<
+  T extends { periods: RentalListing['periods'] }
+>(rental: T): string {
   return rental.periods.reduce(
     (maxPeriodPrice, period) =>
       BigNumber.from(maxPeriodPrice).gte(period.pricePerDay)
