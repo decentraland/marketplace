@@ -3,7 +3,12 @@ import {
   getSearch as getRouterSearch,
   getLocation
 } from 'connected-react-router'
-import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
+import {
+  EmotePlayMode,
+  GenderFilterOption,
+  Network,
+  Rarity
+} from '@dcl/schemas'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor/types'
@@ -228,7 +233,8 @@ export const getEmotePlayMode = createSelector<
   EmotePlayMode[] | undefined
 >(
   getRouterSearch,
-  search => getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
+  search =>
+    getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
 )
 
 export const getViewAsGuest = createSelector<RootState, string, boolean>(
@@ -260,6 +266,7 @@ export const hasFiltersEnabled = createSelector<
   string,
   string,
   boolean | undefined,
+  string,
   boolean
 >(
   getNetwork,
@@ -270,7 +277,18 @@ export const hasFiltersEnabled = createSelector<
   getMinPrice,
   getMaxPrice,
   getOnlyOnSale,
-  (network, genders, rarities, contracts, playModes, minPrice, maxPrice, onlyOnSale) => {
+  getSearch,
+  (
+    network,
+    genders,
+    rarities,
+    contracts,
+    playModes,
+    minPrice,
+    maxPrice,
+    onlyOnSale,
+    search
+  ) => {
     const hasNetworkFilter = network !== undefined
     const hasGenderFilter = genders.length > 0
     const hasRarityFilter = rarities.length > 0
@@ -285,7 +303,8 @@ export const hasFiltersEnabled = createSelector<
       hasEmotePlayModeFilter ||
       !!minPrice ||
       !!maxPrice ||
-      hasNotOnSaleFilter
+      hasNotOnSaleFilter ||
+      !!search
     )
   }
 )
@@ -358,21 +377,22 @@ export const getWearablesUrlParams = createSelector(
   })
 )
 
-
-export const getCurrentBrowseOptions = createSelector([
-  getAssetType,
-  getCurrentLocationAddress,
-  getVendor,
-  getSection,
-  getNetwork,
-  getEmotePlayMode,
-  getPaginationUrlParams,
-  getAssetsUrlParams,
-  getLandsUrlParams,
-  getWearablesUrlParams,
-  getOnlyOnRent,
-  getOnlyOnSale,
-],(
+export const getCurrentBrowseOptions = createSelector(
+  [
+    getAssetType,
+    getCurrentLocationAddress,
+    getVendor,
+    getSection,
+    getNetwork,
+    getEmotePlayMode,
+    getPaginationUrlParams,
+    getAssetsUrlParams,
+    getLandsUrlParams,
+    getWearablesUrlParams,
+    getOnlyOnRent,
+    getOnlyOnSale
+  ],
+  (
     assetType,
     address,
     vendor,
@@ -401,4 +421,3 @@ export const getCurrentBrowseOptions = createSelector([
       onlyOnSale
     } as BrowseOptions)
 )
-

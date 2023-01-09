@@ -3,7 +3,12 @@ import { Item } from '@dcl/schemas'
 
 import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
-import { browse, BrowseAction } from '../../modules/routing/actions'
+import {
+  browse,
+  BrowseAction,
+  clearFilters,
+  ClearFiltersAction
+} from '../../modules/routing/actions'
 import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
@@ -16,6 +21,7 @@ export type Props = {
   isLoading: boolean
   isManager?: boolean
   onBrowse: typeof browse
+  onClearFilters: typeof clearFilters
   urlNext: string
 }
 
@@ -30,5 +36,5 @@ export type MapStateProps = Pick<
   | 'assetType'
   | 'urlNext'
 >
-export type MapDispatchProps = Pick<Props, 'onBrowse'>
-export type MapDispatch = Dispatch<BrowseAction>
+export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>
+export type MapDispatch = Dispatch<BrowseAction | ClearFiltersAction>
