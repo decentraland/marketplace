@@ -24,15 +24,13 @@ export const SelectedFilters = ({
     maxPrice,
     onlyOnRent
   } = browseOptions
-  const [collection, setCollection] = useState<Record<string, string> | undefined>()
+  const [collection, setCollection] = useState<
+    Record<string, string> | undefined
+  >()
 
   useEffect(() => {
-    const fetchData = async (
-      contract: string
-    ) => {
-      const collection = await getCollectionByAddress(
-        contract,
-      )
+    const fetchData = async (contract: string) => {
+      const collection = await getCollectionByAddress(contract)
       return collection
     }
 
@@ -48,7 +46,11 @@ export const SelectedFilters = ({
     }
   }, [contracts, onlyOnSale, collection?.address])
 
-  const priceLabel = useMemo(() => getPriceLabel(minPrice, maxPrice, network), [minPrice, maxPrice])
+  const priceLabel = useMemo(() => getPriceLabel(minPrice, maxPrice, network), [
+    minPrice,
+    maxPrice,
+    network
+  ])
 
   const landStatusLabel = useMemo(() => {
     if (!isLandSection) {
@@ -80,12 +82,9 @@ export const SelectedFilters = ({
     onBrowse({ onlyOnSale: true })
   }, [onBrowse])
 
-  const handleDeleteGender = useCallback(
-    () => {
-      onBrowse({ wearableGenders: [] })
-    },
-    [onBrowse]
-  )
+  const handleDeleteGender = useCallback(() => {
+    onBrowse({ wearableGenders: [] })
+  }, [onBrowse])
 
   const handleDeleteEmotePlayMode = useCallback(
     playMode => {

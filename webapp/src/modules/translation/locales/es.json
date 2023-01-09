@@ -307,7 +307,7 @@
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
   "nft_list": {
-    "empty": "Sin resultados"
+    "empty": "No pudimos encontrar ningún resultado en la sección {currentSection}. <br></br><searchStore>Busca en {section}</searchStore> o <clearFilters>limpia los filtros</clearFilters>"
   },
   "nft_filters": {
     "on_sale": "En venta",

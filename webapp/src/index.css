@@ -2,8 +2,8 @@
   --page-header-height: 420px;
   /* Colors */
   --gray: rgba(115, 110, 125, 0.4);
-  --superGray: #37333D;
-  --superGrayHovered: #3D3A45;
+  --superGray: #37333d;
+  --superGrayHovered: #3d3a45;
 }
 
 body {
@@ -22,6 +22,11 @@ code {
 
 .danger-text {
   color: var(--danger);
+}
+
+.ui.toggle.checkbox.checked input.hidden + label:after,
+.ui.toggle.checkbox.checked input.hidden:focus + label:after {
+  background: var(--summer-red);
 }
 
 @media (max-width: 767px) {

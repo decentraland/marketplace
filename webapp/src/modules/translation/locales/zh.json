@@ -308,7 +308,7 @@
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
   "nft_list": {
-    "empty": "无结果"
+    "empty": "我们在 {currentSection} 中找不到任何结果。 <br></br><searchStore>搜索 {section}</searchStore>或<clearFilters>清除过滤器</clearFilters>”"
   },
   "nft_filters": {
     "on_sale": "特价中",

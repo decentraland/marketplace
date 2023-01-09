@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { RangeField, Box, Mana, useMobileMediaQuery } from 'decentraland-ui'
+import { Network } from '@dcl/schemas/dist/dapps/network'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import './PriceFilter.css'
 import { getPriceLabel } from '../../../utils/filters'
@@ -7,13 +8,15 @@ import { getPriceLabel } from '../../../utils/filters'
 export type PriceFilterProps = {
   minPrice: string
   maxPrice: string
+  network?: Network
   onChange: (value: [string, string]) => void
 }
 
 export const PriceFilter = ({
   onChange,
   minPrice,
-  maxPrice
+  maxPrice,
+  network = Network.ETHEREUM
 }: PriceFilterProps) => {
   const [value, setValue] = useState<[string, string]>([minPrice, maxPrice])
   const timeout = useRef<NodeJS.Timeout | null>(null)
@@ -55,8 +58,16 @@ export const PriceFilter = ({
       defaultCollapsed={isMobile}
     >
       <RangeField
-        minProps={{ icon: <Mana />, iconPosition: 'left', placeholder: 0 }}
-        maxProps={{ icon: <Mana />, iconPosition: 'left', placeholder: 1000 }}
+        minProps={{
+          icon: <Mana network={network} />,
+          iconPosition: 'left',
+          placeholder: 0
+        }}
+        maxProps={{
+          icon: <Mana network={network} />,
+          iconPosition: 'left',
+          placeholder: 1000
+        }}
         onChange={handlePriceChange}
         value={value}
       />
