@@ -1,6 +1,12 @@
 import { useCallback } from 'react'
 import { useNotMobileMediaQuery } from 'decentraland-ui'
-import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import {
+  EmotePlayMode,
+  GenderFilterOption,
+  Network,
+  NFTCategory,
+  Rarity
+} from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
 import { LANDFilters } from '../Vendor/decentraland/types'
@@ -14,6 +20,7 @@ import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
+import { AssetFilter, filtersBySection } from './utilts'
 import './AssetFilters.css'
 
 export const AssetFilters = ({
@@ -108,6 +115,13 @@ export const AssetFilters = ({
     }
   }
 
+  const shouldRenderFilter = useCallback(
+    (filter: AssetFilter) => {
+      return filtersBySection[section]?.includes(filter)
+    },
+    [section]
+  )
+
   if (isInLandSection && isNotMobile && isRentalsEnabled) {
     return (
       <div className="filters-sidebar">
@@ -121,27 +135,36 @@ export const AssetFilters = ({
 
   return (
     <Menu className="filters-sidebar">
-      <RarityFilter onChange={handleRarityChange} rarities={rarities} />
+      {shouldRenderFilter(AssetFilter.Rarity) ? (
+        <RarityFilter onChange={handleRarityChange} rarities={rarities} />
+      ) : null}
       <PriceFilter
         onChange={handlePriceChange}
         minPrice={minPrice}
         maxPrice={maxPrice}
+        network={
+          isWearableCategory || isEmoteCategory
+            ? Network.MATIC
+            : Network.ETHEREUM
+        }
       />
-      <CollectionFilter
-        onChange={handleCollectionChange}
-        collection={collection}
-        onlyOnSale={isOnSale}
-      />
-      {isEmoteCategory && (
+      {shouldRenderFilter(AssetFilter.Collection) ? (
+        <CollectionFilter
+          onChange={handleCollectionChange}
+          collection={collection}
+          onlyOnSale={isOnSale}
+        />
+      ) : null}
+      {shouldRenderFilter(AssetFilter.PlayMode) && (
         <EmotePlayModeFilter
           onChange={handleEmotePlayModeChange}
           emotePlayMode={emotePlayMode}
         />
       )}
-      {isWearableCategory && !isPrimarySell && (
+      {shouldRenderFilter(AssetFilter.Network) && !isPrimarySell && (
         <NetworkFilter onChange={handleNetworkChange} network={network} />
       )}
-      {isWearableCategory && (
+      {shouldRenderFilter(AssetFilter.BodyShape) && (
         <BodyShapeFilter
           onChange={handleBodyShapeChange}
           bodyShapes={bodyShapes}

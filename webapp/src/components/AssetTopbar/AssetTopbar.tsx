@@ -139,13 +139,17 @@ export const AssetTopbar = ({
           </div>
         )}
       </div>
-      {!isLandSection(section) && view && !isAccountView(view) && (
-        <AssetTypeFilter
-          view={view}
-          assetType={assetType}
-          onChange={handleAssetTypeChange}
-        />
-      )}
+      {view &&
+        !isLandSection(section) &&
+        !isAccountView(view) &&
+        (category === NFTCategory.WEARABLE ||
+          category === NFTCategory.EMOTE) && (
+          <AssetTypeFilter
+            view={view}
+            assetType={assetType}
+            onChange={handleAssetTypeChange}
+          />
+        )}
       {!isMap && (
         <div className={styles.infoRow}>
           <div className={styles.countContainer}>
