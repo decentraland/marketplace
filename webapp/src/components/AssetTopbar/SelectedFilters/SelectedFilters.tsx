@@ -1,15 +1,22 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getPriceLabel } from '../../../utils/filters'
+import {
+  getGenderFilterLabel,
+  getLandLabel,
+  getNetwork,
+  getPriceLabel
+} from '../../../utils/filters'
 import { Pill } from './Pill/Pill'
 import { Props } from './SelectedFilters.types'
-import { getCollectionByAddress, getGenderFilterLabel } from './utils'
+import { getCollectionByAddress } from './utils'
 import styles from './SelectedFilters.module.css'
 
 export const SelectedFilters = ({
   browseOptions,
   isLandSection,
+  category,
+  landStatus,
   onBrowse
 }: Props) => {
   const {
@@ -22,7 +29,6 @@ export const SelectedFilters = ({
     emotePlayMode,
     minPrice,
     maxPrice,
-    onlyOnRent
   } = browseOptions
   const [collection, setCollection] = useState<
     Record<string, string> | undefined
@@ -46,22 +52,17 @@ export const SelectedFilters = ({
     }
   }, [contracts, onlyOnSale, collection?.address])
 
-  const priceLabel = useMemo(() => getPriceLabel(minPrice, maxPrice, network), [
-    minPrice,
-    maxPrice,
-    network
-  ])
+  const priceLabel = useMemo(
+    () => getPriceLabel(minPrice, maxPrice, getNetwork(network, category)),
+    [minPrice, maxPrice, network, category]
+  )
 
   const landStatusLabel = useMemo(() => {
-    if (!isLandSection) {
-      return undefined
+    if (isLandSection) {
+      return getLandLabel(landStatus)
     }
-    if (onlyOnRent) {
-      return t('nft_land_filters.only_for_rent')
-    } else if (onlyOnSale) {
-      return t('nft_land_filters.only_for_sale')
-    }
-  }, [onlyOnSale, onlyOnRent, isLandSection])
+    return undefined
+  }, [landStatus, isLandSection])
 
   const handleDeleteRarity = useCallback(
     (rarity: string) => {
@@ -106,7 +107,12 @@ export const SelectedFilters = ({
   return (
     <div className={styles.pillContainer}>
       {rarities?.map(rarity => (
-        <Pill label={rarity} id={rarity} onDelete={handleDeleteRarity} />
+        <Pill
+          key={rarity}
+          label={rarity}
+          id={rarity}
+          onDelete={handleDeleteRarity}
+        />
       ))}
       {network ? (
         <Pill
@@ -145,6 +151,7 @@ export const SelectedFilters = ({
       ) : null}
       {emotePlayMode?.map(playMode => (
         <Pill
+          key={playMode}
           label={t(`emote.play_mode.${playMode}`)}
           onDelete={handleDeleteEmotePlayMode}
           id={playMode}

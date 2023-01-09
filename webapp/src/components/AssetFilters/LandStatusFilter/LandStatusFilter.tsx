@@ -3,6 +3,7 @@ import { Box, CheckboxProps, Radio, useMobileMediaQuery } from "decentraland-ui"
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { LANDFilters } from "../../Vendor/decentraland/types"
 import './LandStatusFilter.css'
+import { getLandLabel } from "../../../utils/filters"
 
 type LandStatusFilterProps = {
   landStatus: LANDFilters,
@@ -30,10 +31,11 @@ export const LandStatusFilter = ({ landStatus, onChange }: LandStatusFilterProps
     onChange(props.value as LANDFilters)
   }, [onChange])
 
+
   const mobileBoxHeader = (
     <div className='mobile-box-header'>
       <span className="box-filter-name">{t('filters.status')}</span>
-      <span className='box-filter-value'>All land statuses</span>
+      <span className='box-filter-value'>{getLandLabel(landStatus)}</span>
     </div>
   )
 

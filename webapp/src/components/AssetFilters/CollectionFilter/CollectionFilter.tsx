@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useMobileMediaQuery } from 'decentraland-ui'
 import { SelectFilter } from '../../Vendor/NFTFilters/SelectFilter'
@@ -19,6 +19,12 @@ export const CollectionFilter = ({
   onChange
 }: CollectionFilterProps): JSX.Element => {
   const isMobile = useMobileMediaQuery()
+  const [savedCollectionInfo, setSavedCollectionInfo] = useState<{
+    text: string
+    value: string
+    onlyOnSale?: boolean
+  } | null>(null)
+
   const handleCollectionChange = useCallback(
     (value: string) => {
       // We need to send undefined for the ALL_FILTER_OPTION because we don't want it to be added to the url.
@@ -51,15 +57,32 @@ export const CollectionFilter = ({
   const handleFetchOptionsFromValue = useCallback(
     async (value: string) => {
       try {
+        if (
+          value === savedCollectionInfo?.value &&
+          onlyOnSale === savedCollectionInfo.onlyOnSale
+        ) {
+          return {
+            text: savedCollectionInfo.text,
+            value: savedCollectionInfo.value
+          }
+        }
+
         const { data } = await collectionAPI.fetch({
           contractAddress: value,
           isOnSale: onlyOnSale
         })
 
         if (data.length === 0) {
+          setSavedCollectionInfo(null)
           return null
         }
 
+        setSavedCollectionInfo({
+          text: data[0].name,
+          value,
+          onlyOnSale
+        })
+      
         return {
           text: data[0].name,
           value
@@ -69,19 +92,35 @@ export const CollectionFilter = ({
         return null
       }
     },
-    [onlyOnSale]
+    [onlyOnSale, savedCollectionInfo]
   )
 
+  useEffect(() => {
+    if (collection && collection !== savedCollectionInfo?.value) {
+      handleFetchOptionsFromValue(collection)
+    }
+
+    if (!collection) {
+      setSavedCollectionInfo(null)
+    }
+  }, [collection, savedCollectionInfo, handleFetchOptionsFromValue])
+
   const mobileBoxHeader = (
-    <div className='mobile-box-header'>
-      <span className="box-filter-name">{t('nft_filters.collection')}</span>
-      <span className='box-filter-value'>All land statuses</span>
+    <div className="mobile-box-header">
+      <span className="box-filter-name">
+        {t('nft_filters.collection.title')}
+      </span>
+      <span className="box-filter-value">
+        {savedCollectionInfo?.text
+          ? savedCollectionInfo.text
+          : t('nft_filters.collection.all_items')}
+      </span>
     </div>
   )
 
   return (
     <Box
-      header={isMobile ? mobileBoxHeader : t('nft_filters.collection')}
+      header={isMobile ? mobileBoxHeader : t('nft_filters.collection.title')}
       collapsible
       className="filters-sidebar-box"
       defaultCollapsed={isMobile}
@@ -91,7 +130,7 @@ export const CollectionFilter = ({
         value={collection || ''}
         clearable={!!collection}
         options={[]}
-        placeholder={t('nft_filters.all_collections')}
+        placeholder={t('nft_filters.collection.all_items')}
         onChange={handleCollectionChange}
         fetchOptions={handleFetchOptions}
         fetchOptionFromValue={handleFetchOptionsFromValue}

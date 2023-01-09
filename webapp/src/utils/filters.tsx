@@ -1,9 +1,22 @@
-import { Network } from '@dcl/schemas'
+import {
+  GenderFilterOption,
+  Network,
+  NFTCategory,
+  WearableGender
+} from '@dcl/schemas'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana } from '../components/Mana'
+import { LANDFilters } from '../components/Vendor/decentraland/types'
 
-export function getPriceLabel(minPrice?: string, maxPrice?: string, network?: Network) {
+export const AVAILABLE_FOR_MALE = 'AVAILABLE_FOR_MALE'
+export const AVAILABLE_FOR_FEMALE = 'AVAILABLE_FOR_FEMALE'
+
+export function getPriceLabel(
+  minPrice?: string,
+  maxPrice?: string,
+  network: Network = Network.ETHEREUM
+) {
   const manaTranslator = () => (
     <Mana
       className={classNames('mana-label-icon', {
@@ -36,4 +49,75 @@ export function getPriceLabel(minPrice?: string, maxPrice?: string, network?: Ne
     maxPrice,
     mana: manaTranslator
   })
+}
+
+export function getNetwork(network?: Network, category?: NFTCategory) {
+  if (network) {
+    return network
+  }
+
+  if (
+    category &&
+    [NFTCategory.WEARABLE, NFTCategory.EMOTE].includes(category)
+  ) {
+    return Network.MATIC
+  }
+
+  return Network.ETHEREUM
+}
+
+export function getBodyShapeValue(
+  bodyShapes: (WearableGender | GenderFilterOption)[] | undefined
+): string | undefined {
+  if (bodyShapes?.length === 0) {
+    return undefined
+  }
+
+  const hasUnisex = bodyShapes?.includes(GenderFilterOption.UNISEX)
+  const hasMale = bodyShapes?.includes(GenderFilterOption.MALE)
+  const hasFemale = bodyShapes?.includes(GenderFilterOption.FEMALE)
+
+  if (hasUnisex && hasFemale) {
+    return AVAILABLE_FOR_FEMALE
+  }
+
+  if (hasUnisex && hasMale) {
+    return AVAILABLE_FOR_MALE
+  }
+
+  return undefined
+}
+
+export function getGenderFilterLabel(
+  bodyShapes: (WearableGender | GenderFilterOption)[] | undefined
+): string {
+  const bodyShape = getBodyShapeValue(bodyShapes)
+
+  if (!bodyShape) {
+    return 'nft_filters.body_shapes.all_items'
+  }
+
+  const labels: Record<string, string> = {
+    [AVAILABLE_FOR_FEMALE]: 'nft_filters.body_shapes.available_for_female',
+    [AVAILABLE_FOR_MALE]: 'nft_filters.body_shapes.available_for_male'
+  }
+
+  return labels[bodyShape]
+}
+
+export function getLandLabel(
+  landStatus: LANDFilters
+) {
+  if (landStatus === LANDFilters.ONLY_FOR_RENT) {
+    return t('nft_land_filters.only_for_rent')
+  }
+
+  if (landStatus === LANDFilters.ONLY_FOR_SALE) {
+    return t('nft_land_filters.only_for_sale')
+  }
+
+  if (landStatus === LANDFilters.ALL_LAND) {
+    return t('nft_land_filters.all_land')
+  }
+  return undefined
 }

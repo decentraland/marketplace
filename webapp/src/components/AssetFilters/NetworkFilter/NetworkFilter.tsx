@@ -10,7 +10,7 @@ export type NetworkFilterProps = {
 }
 
 export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
-  const isMobile = useMobileMediaQuery();
+  const isMobile = useMobileMediaQuery()
   const networkOptions = useMemo(() => {
     const options = Object.values(Network).filter(
       value => typeof value === 'string'
@@ -18,7 +18,7 @@ export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
     return [
       {
         value: undefined,
-        text: t('nft_filters.all_networks')
+        text: t('nft_filters.network.all_items')
       },
       ...options.map(network => ({
         value: network,
@@ -32,15 +32,19 @@ export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
   ])
 
   const mobileBoxHeader = (
-    <div className='mobile-box-header'>
-      <span className="box-filter-name">{t('nft_filters.network')}</span>
-      <span className='box-filter-value'>All networks</span>
+    <div className="mobile-box-header">
+      <span className="box-filter-name">{t('nft_filters.network.title')}</span>
+      <span className="box-filter-value">
+        {network
+          ? t(`networks.${network.toLowerCase()}`)
+          : t('nft_filters.network.all_items')}
+      </span>
     </div>
   )
 
   return (
     <Box
-      header={isMobile ? mobileBoxHeader : t('nft_filters.network')}
+      header={isMobile ? mobileBoxHeader : t('nft_filters.network.title')}
       className="filters-sidebar-box network-filter"
       collapsible
       defaultCollapsed={isMobile}

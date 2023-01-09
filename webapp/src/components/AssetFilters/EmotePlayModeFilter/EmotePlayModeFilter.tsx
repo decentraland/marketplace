@@ -13,7 +13,7 @@ export const EmotePlayModeFilter = ({
   emotePlayMode,
   onChange
 }: NetworkFilterProps) => {
-  const isMobile = useMobileMediaQuery();
+  const isMobile = useMobileMediaQuery()
   const emotePlayModeOptions = useMemo(() => {
     const options = Object.values(EmotePlayMode).filter(
       value => typeof value === 'string'
@@ -24,25 +24,41 @@ export const EmotePlayModeFilter = ({
     }))
   }, [])
 
-  const handleChange = useCallback((values: string[]) => onChange(values as EmotePlayMode[]), [
-    onChange
-  ])
+  const handleChange = useCallback(
+    (values: string[]) => onChange(values as EmotePlayMode[]),
+    [onChange]
+  )
+
+  const areAllItemsSelected =
+    emotePlayMode?.length === emotePlayModeOptions.length ||
+    !emotePlayMode?.length
 
   const mobileBoxHeader = (
-    <div className='mobile-box-header'>
-      <span className="box-filter-name">{t('nft_filters.play_mode')}</span>
-      <span className='box-filter-value'>All land statuses</span>
+    <div className="mobile-box-header">
+      <span className="box-filter-name">
+        {t('nft_filters.emote_play_mode.title')}
+      </span>
+      <span className="box-filter-value">
+        {areAllItemsSelected
+          ? t('nft_filters.emote_play_mode.all_items')
+          : emotePlayMode.map(mode => t(`emote.play_mode.${mode}`)).join(', ')}
+      </span>
     </div>
   )
 
   return (
     <Box
-      header={isMobile ? mobileBoxHeader : t('nft_filters.play_mode')}
+      header={isMobile ? mobileBoxHeader : t('nft_filters.emote_play_mode.title')}
       className="filters-sidebar-box emote-play-mode-filter"
       collapsible
       defaultCollapsed={isMobile}
     >
-      <ArrayFilter options={emotePlayModeOptions} name='' onChange={handleChange} values={emotePlayMode || []} />
+      <ArrayFilter
+        options={emotePlayModeOptions}
+        name=""
+        onChange={handleChange}
+        values={emotePlayMode || []}
+      />
     </Box>
   )
 }

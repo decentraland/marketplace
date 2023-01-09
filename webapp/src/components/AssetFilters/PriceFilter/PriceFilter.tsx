@@ -46,7 +46,7 @@ export const PriceFilter = ({
   const mobileBoxHeader = (
     <div className='mobile-box-header'>
       <span className="box-filter-name">{t('filters.price')}</span>
-      <span className='box-filter-value'>{getPriceLabel(minPrice, maxPrice)}</span>
+      <span className='box-filter-value'>{getPriceLabel(minPrice, maxPrice, network)}</span>
     </div>
   )
 

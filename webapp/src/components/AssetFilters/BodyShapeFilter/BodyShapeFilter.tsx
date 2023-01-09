@@ -2,8 +2,13 @@ import { useCallback, useMemo } from 'react'
 import { Box, Radio, useMobileMediaQuery } from 'decentraland-ui'
 import { GenderFilterOption, WearableGender } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AVAILABLE_FOR_FEMALE, AVAILABLE_FOR_MALE, getBodyShapeValue } from './utils'
 import './BodyShapeFilter.css'
+import {
+  AVAILABLE_FOR_FEMALE,
+  AVAILABLE_FOR_MALE,
+  getBodyShapeValue,
+  getGenderFilterLabel
+} from '../../../utils/filters'
 
 export type BodyShapeFilterProps = {
   bodyShapes?: (GenderFilterOption | WearableGender)[]
@@ -14,7 +19,7 @@ export const BodyShapeFilter = ({
   bodyShapes,
   onChange
 }: BodyShapeFilterProps) => {
-  const isMobile = useMobileMediaQuery();
+  const isMobile = useMobileMediaQuery()
   const genderOptions = useMemo(() => {
     return [
       {
@@ -23,18 +28,18 @@ export const BodyShapeFilter = ({
       },
       {
         value: AVAILABLE_FOR_FEMALE,
-        text:  t("nft_filters.body_shapes.available_for_female")
+        text: t('nft_filters.body_shapes.available_for_female')
       },
       {
         value: AVAILABLE_FOR_MALE,
-        text:  t("nft_filters.body_shapes.available_for_male")
+        text: t('nft_filters.body_shapes.available_for_male')
       }
     ]
   }, [])
 
   const handleChange = useCallback(
     (_evt, { value }) => {
-      let newValue: GenderFilterOption[] = [];
+      let newValue: GenderFilterOption[] = []
 
       if (value === AVAILABLE_FOR_FEMALE) {
         newValue = [GenderFilterOption.FEMALE, GenderFilterOption.UNISEX]
@@ -49,9 +54,15 @@ export const BodyShapeFilter = ({
   const value = getBodyShapeValue(bodyShapes)
 
   const mobileBoxHeader = (
-    <div className='mobile-box-header'>
-      <span className="box-filter-name">{t('nft_filters.body_shapes.title')}</span>
-      <span className='box-filter-value'>All land statuses</span>
+    <div className="mobile-box-header">
+      <span className="box-filter-name">
+        {t('nft_filters.body_shapes.title')}
+      </span>
+      <span className="box-filter-value">
+        {value
+          ? t(getGenderFilterLabel(bodyShapes))
+          : t('nft_filters.body_shapes.all_items')}
+      </span>
     </div>
   )
 

@@ -14,6 +14,10 @@
   font-size: 17px;
 }
 
+.price-filter .dcl.mana.mana-label-icon .symbol {
+  opacity: 0.5;
+}
+
 .price-filter .dcl.mana .symbol .ethereum {
   filter: grayscale(1);
   transform: scale(0.8) translateY(0.2em);
