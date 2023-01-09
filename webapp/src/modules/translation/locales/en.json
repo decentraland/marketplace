@@ -928,5 +928,12 @@
     "browse_listings": "Browse listings",
     "list_your_land": "List your land for rent",
     "description": "<p>If you are a LAND owner you can now earn MANA by renting your parcels or estates to content creators.</p> <p>Are you a content creator? Now you can publish your builds to Genesis City without the need of owning LAND.</p> <p>If you want to learn more, <a>read our blog post</a>.</p>"
+  },
+  "atlas": {
+    "price": "Price",
+    "owner": "Owner",
+    "for_sale_and_rent": "Available for sale or rent",
+    "for_sale": "Available for sale",
+    "for_rent": "Available for rent"
   }
 }
