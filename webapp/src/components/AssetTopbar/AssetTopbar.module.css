@@ -5,8 +5,14 @@
 
 .assetTopbar :global(.dcl.field.full) :global(.ui.input).searchField input {
   background: var(--secondary);
-  border: none;
   font-size: 17px;
+}
+
+.assetTopbar
+  :global(.dcl.field.full)
+  :global(.ui.input).searchField
+  input:not(:focus) {
+  border: 2px solid var(--divider);
 }
 
 .assetTopbar :global(.dcl.field.full) {
@@ -57,6 +63,7 @@
   color: #736e7d;
   margin-bottom: 0;
   margin-right: 10px;
+  font-size: 17px;
 }
 
 .countContainer {

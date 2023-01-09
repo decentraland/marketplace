@@ -7,7 +7,7 @@ export function getCountText(
   search: string | undefined
 ) {
   if (count === undefined) {
-    return '...'
+    return ''
   } else if (search) {
     return t(
       count < MAX_QUERY_SIZE

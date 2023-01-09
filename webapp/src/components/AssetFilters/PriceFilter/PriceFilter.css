@@ -15,6 +15,15 @@
   transform: scale(0.8) translateY(0.2em);
 }
 
+.price-filter .dcl.mana .symbol .matic {
+  /* obtained using https://codepen.io/sosuke/pen/Pjoqqp */
+  filter: invert(44%) sepia(18%) saturate(249%) hue-rotate(219deg)
+    brightness(95%) contrast(87%);
+  transform: scale(0.8) translateY(0.2em);
+  width: 16px;
+  height: 16px;
+}
+
 .price-filter .dcl.field.full .ui.input input {
   padding-right: 0px !important;
   padding-left: 34px !important;
@@ -25,11 +34,23 @@
   column-gap: 8px;
 }
 
-.price-filter .dcl.field  .ui.sub.header {
+.price-filter .dcl.field .ui.sub.header {
   padding: 4px 0;
 }
 
 .price-filter .dcl.field .message {
   /* we won't show any message for this inputs */
   display: none;
+}
+
+/* Hide input arrows for Chrome, Safari, Edge, Opera */
+.price-filter .dcl.field.full .ui.input input::-webkit-outer-spin-button,
+.price-filter .dcl.field.full .ui.input input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide input arrows for Firefox */
+.price-filter .dcl.field.full .ui.input input[type='number'] {
+  -moz-appearance: textfield;
 }

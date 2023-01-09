@@ -31,7 +31,7 @@ const MenuItem = <T extends unknown>(props: Props<T>) => {
   }, [value, onClick])
 
   return (
-    <li className={classNames.join(' ')} onClick={handleOnClick}>
+    <li className={classNames.join(' ')} onClick={handleOnClick} tabIndex={0}>
       {image && <Image alt={image} src={image} width="25" circular />}
 
       <div className="content">
