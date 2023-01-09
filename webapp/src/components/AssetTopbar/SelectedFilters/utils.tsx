@@ -1,10 +1,10 @@
-import { collectionAPI } from '../../../modules/vendor/decentraland'
 import { GenderFilterOption, WearableGender } from '@dcl/schemas'
 import {
   AVAILABLE_FOR_FEMALE,
   AVAILABLE_FOR_MALE,
   getBodyShapeValue
 } from '../../AssetFilters/BodyShapeFilter/utils'
+import { collectionAPI } from '../../../modules/vendor/decentraland'
 
 export async function getCollectionByAddress(address: string) {
   const { data } = await collectionAPI.fetch({

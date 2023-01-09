@@ -1,19 +1,18 @@
 import { connect } from 'react-redux'
-import { Dispatch } from 'redux'
 import { RootState } from '../../modules/reducer'
-import { browse } from '../../modules/routing/actions'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import { getAssetType, getContracts, getEmotePlayMode, getMaxPrice, getMinPrice, getNetwork, getOnlyOnRent, getOnlyOnSale, getOnlySmart, getRarities, getSection, getWearableGenders } from '../../modules/routing/selectors'
-import { MapStateProps, MapDispatchProps } from './AssetFilters.types'
+import { MapStateProps, OwnProps } from './AssetFilters.types'
 import { AssetFilters } from './AssetFilters'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { getIsRentalsEnabled } from '../../modules/features/selectors'
 
-const mapState = (state: RootState): MapStateProps => {
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
+  const { values = {} } = ownProps;
   const section = getSection(state)
-  const contracts = getContracts(state)
-  const onlyOnSale = getOnlyOnSale(state)
-  const onlyOnRent = getOnlyOnRent(state)
+  const contracts = values.contracts || getContracts(state)
+  const onlyOnSale = values.onlyOnSale || getOnlyOnSale(state)
+  const onlyOnRent = values.onlyOnRent || getOnlyOnRent(state)
   let landStatus = LANDFilters.ALL_LAND;
 
   if (onlyOnRent) {
@@ -24,15 +23,15 @@ const mapState = (state: RootState): MapStateProps => {
 
 
   return {
-    minPrice: getMinPrice(state),
-    maxPrice: getMaxPrice(state),
-    rarities: getRarities(state),
-    network: getNetwork(state),
-    bodyShapes: getWearableGenders(state),
+    minPrice: values.minPrice || getMinPrice(state),
+    maxPrice: values.maxPrice || getMaxPrice(state),
+    rarities: values.rarities || getRarities(state),
+    network: values.network || getNetwork(state),
+    bodyShapes: values.wearableGenders || getWearableGenders(state),
     category: section ? getCategoryFromSection(section) : undefined,
-    isOnlySmart: getOnlySmart(state),
+    isOnlySmart: values.onlySmart || getOnlySmart(state),
     isOnSale: onlyOnSale,
-    emotePlayMode: getEmotePlayMode(state),
+    emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
     assetType: getAssetType(state),
     isRentalsEnabled: getIsRentalsEnabled(state),
     collection: contracts[0],
@@ -41,10 +40,4 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
-  return {
-    onBrowse: options => dispatch(browse(options))
-  }
-}
-
-export default connect(mapState, mapDispatch)(AssetFilters)
+export default connect(mapState)(AssetFilters)

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useNotMobileMediaQuery } from 'decentraland-ui'
-import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
 import { LANDFilters } from '../Vendor/decentraland/types'
@@ -31,7 +31,7 @@ export const AssetFilters = ({
   section,
   landStatus,
   isRentalsEnabled,
-  onBrowse
+  onFilterChange
 }: Props): JSX.Element => {
   const isWearableCategory = category === NFTCategory.WEARABLE
   const isEmoteCategory = category === NFTCategory.EMOTE
@@ -42,68 +42,68 @@ export const AssetFilters = ({
   const handlePriceChange = useCallback(
     (value: [string, string]) => {
       const [minPrice, maxPrice] = value
-      onBrowse({ minPrice, maxPrice })
+      onFilterChange({ minPrice, maxPrice })
     },
-    [onBrowse]
+    [onFilterChange]
   )
 
   const handleRarityChange = useCallback(
     (value: Rarity[]) => {
-      onBrowse({ rarities: value })
+      onFilterChange({ rarities: value })
     },
-    [onBrowse]
+    [onFilterChange]
   )
 
   const handleNetworkChange = useCallback(
     (value: Network) => {
-      onBrowse({ network: value })
+      onFilterChange({ network: value })
     },
-    [onBrowse]
+    [onFilterChange]
   )
 
   const handleBodyShapeChange = useCallback(
-    (value: GenderFilterOption[]) => {
-      onBrowse({ wearableGenders: value })
+    (value: (WearableGender | GenderFilterOption)[]) => {
+      onFilterChange({ wearableGenders: value })
     },
-    [onBrowse]
+    [onFilterChange]
   )
 
   const handleOnlySmartChange = useCallback(
     (value: boolean) => {
-      onBrowse({ onlySmart: value })
+      onFilterChange({ onlySmart: value })
     },
-    [onBrowse]
+    [onFilterChange]
   )
 
   const handleOnSaleChange = useCallback(
     (value: boolean) => {
-      onBrowse({ onlyOnSale: value })
+      onFilterChange({ onlyOnSale: value })
     },
-    [onBrowse]
+    [onFilterChange]
   )
 
   const handleEmotePlayModeChange = useCallback(
     (value: EmotePlayMode[]) => {
-      onBrowse({ emotePlayMode: value })
+      onFilterChange({ emotePlayMode: value })
     },
-    [onBrowse]
+    [onFilterChange]
   )
 
   function handleCollectionChange(value: string | undefined) {
     const newValue = value ? [value] : []
-    onBrowse({ contracts: newValue })
+    onFilterChange({ contracts: newValue })
   }
 
   function handleLandStatusChange(value: LANDFilters) {
     switch (value) {
       case LANDFilters.ALL_LAND:
-        onBrowse({ onlyOnSale: undefined, onlyOnRent: undefined })
+        onFilterChange({ onlyOnSale: undefined, onlyOnRent: undefined })
         break
       case LANDFilters.ONLY_FOR_RENT:
-        onBrowse({ onlyOnSale: undefined, onlyOnRent: true })
+        onFilterChange({ onlyOnSale: undefined, onlyOnRent: true })
         break
       case LANDFilters.ONLY_FOR_SALE:
-        onBrowse({ onlyOnSale: true, onlyOnRent: undefined })
+        onFilterChange({ onlyOnSale: true, onlyOnRent: undefined })
         break
     }
   }

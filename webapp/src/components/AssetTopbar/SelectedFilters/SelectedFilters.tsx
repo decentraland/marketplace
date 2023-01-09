@@ -1,8 +1,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import classNames from 'classnames'
 import { Rarity } from '@dcl/schemas'
-import { Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getPriceLabel } from '../../../utils/filters'
 import { Pill } from './Pill/Pill'
 import { Props } from './SelectedFilters.types'
 import { getCollectionByAddress, getGenderFilterLabel } from './utils'
@@ -49,35 +48,7 @@ export const SelectedFilters = ({
     }
   }, [contracts, onlyOnSale, collection?.address])
 
-  const priceLabel = useMemo(() => {
-    const manaTranslator = () => (
-      <Mana
-        className={classNames(styles.manaIcon, {
-          [styles.range]: minPrice && maxPrice
-        })}
-      />
-    )
-
-    if (minPrice && !maxPrice) {
-      return t('nft_filters.more_than_price', {
-        price: minPrice,
-        mana: manaTranslator
-      })
-    }
-
-    if (maxPrice && !minPrice) {
-      return t('nft_filters.less_than_price', {
-        price: maxPrice,
-        mana: manaTranslator
-      })
-    }
-
-    return t('nft_filters.price_between', {
-      minPrice,
-      maxPrice,
-      mana: manaTranslator
-    })
-  }, [minPrice, maxPrice])
+  const priceLabel = useMemo(() => getPriceLabel(minPrice, maxPrice, network), [minPrice, maxPrice])
 
   const landStatusLabel = useMemo(() => {
     if (!isLandSection) {

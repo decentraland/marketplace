@@ -66,7 +66,7 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
         onSectionClick={section => onBrowse({ section, assetType })}
       />
     </Menu>
-    <AssetFilters />
+    <AssetFilters onFilterChange={onBrowse}/>
   </>
 )
 

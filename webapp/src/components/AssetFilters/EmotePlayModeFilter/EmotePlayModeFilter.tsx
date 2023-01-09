@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { Box } from 'decentraland-ui'
+import { Box, useMobileMediaQuery } from 'decentraland-ui'
 import { EmotePlayMode } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
@@ -13,6 +13,7 @@ export const EmotePlayModeFilter = ({
   emotePlayMode,
   onChange
 }: NetworkFilterProps) => {
+  const isMobile = useMobileMediaQuery();
   const emotePlayModeOptions = useMemo(() => {
     const options = Object.values(EmotePlayMode).filter(
       value => typeof value === 'string'
@@ -27,11 +28,19 @@ export const EmotePlayModeFilter = ({
     onChange
   ])
 
+  const mobileBoxHeader = (
+    <div className='mobile-box-header'>
+      <span className="box-filter-name">{t('nft_filters.play_mode')}</span>
+      <span className='box-filter-value'>All land statuses</span>
+    </div>
+  )
+
   return (
     <Box
-      header={t('nft_filters.play_mode')}
+      header={isMobile ? mobileBoxHeader : t('nft_filters.play_mode')}
       className="filters-sidebar-box emote-play-mode-filter"
       collapsible
+      defaultCollapsed={isMobile}
     >
       <ArrayFilter options={emotePlayModeOptions} name='' onChange={handleChange} values={emotePlayMode || []} />
     </Box>
