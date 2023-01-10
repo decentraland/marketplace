@@ -1,7 +1,8 @@
 import { RootState } from '../reducer'
 import {
   getIsFeatureEnabled,
-  getLoading
+  getLoading,
+  hasLoadedInitialFlags
 } from 'decentraland-dapps/dist/modules/features/selectors'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { FeatureName } from './types'
@@ -87,13 +88,12 @@ export const getIsCampaignBrowserEnabled = (state: RootState) => {
 }
 
 export const getIsBuyNftsWithFiatEnabled = (state: RootState) => {
-  try {
+  if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(
       state,
       ApplicationName.MARKETPLACE,
       FeatureName.BUY_NFTS_WITH_FIAT
     )
-  } catch (e) {
-    return false
   }
+  return false
 }
