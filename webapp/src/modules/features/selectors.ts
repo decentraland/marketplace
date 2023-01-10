@@ -85,3 +85,15 @@ export const getIsCampaignBrowserEnabled = (state: RootState) => {
     return false
   }
 }
+
+export const getIsBuyNftsWithFiatEnabled = (state: RootState) => {
+  try {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.BUY_NFTS_WITH_FIAT
+    )
+  } catch (e) {
+    return false
+  }
+}
