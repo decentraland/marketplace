@@ -36,6 +36,7 @@ export const AssetTopbar = ({
   sortBy,
   section,
   hasFiltersEnabled,
+  isLoading,
   onBrowse,
   onClearFilters,
   onOpenFiltersModal
@@ -150,7 +151,7 @@ export const AssetTopbar = ({
             onChange={handleAssetTypeChange}
           />
         )}
-      {!isMap && (
+      {!isMap && !isLoading && (
         <div className={styles.infoRow}>
           <div className={styles.countContainer}>
             <p className={styles.countText}>{getCountText(count, search)}</p>

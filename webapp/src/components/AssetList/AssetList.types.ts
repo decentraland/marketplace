@@ -9,11 +9,13 @@ import {
   clearFilters,
   ClearFiltersAction
 } from '../../modules/routing/actions'
+import { Section } from '../../modules/vendor/routing/types'
 import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
   vendor: VendorName
   assetType: AssetType
+  section?: Section
   nfts: NFT[]
   items: Item[]
   page: number
@@ -28,6 +30,7 @@ export type Props = {
 export type MapStateProps = Pick<
   Props,
   | 'vendor'
+  | 'section'
   | 'nfts'
   | 'items'
   | 'page'

@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
-import { Item } from '@dcl/schemas'
+import { Item, NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-
+import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
 import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
@@ -14,6 +14,7 @@ import './AssetList.css'
 const AssetList = (props: Props) => {
   const {
     vendor,
+    section,
     assetType,
     items,
     nfts,
@@ -69,8 +70,16 @@ const AssetList = (props: Props) => {
       {assets.length === 0 && !isLoading ? (
         <div className="empty">
           <div className="watermelon" />
+
           <T
-            id="nft_list.empty"
+            id={
+              section &&
+              [NFTCategory.EMOTE, NFTCategory.WEARABLE].includes(
+                getCategoryFromSection(section)!
+              )
+                ? 'nft_list.empty'
+                : 'nft_list.simple_empty'
+            }
             values={{
               currentSection:
                 assetType === AssetType.ITEM
