@@ -7,6 +7,7 @@ import {
   NFTCategory,
   Rarity
 } from '@dcl/schemas'
+import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
 import { LANDFilters } from '../Vendor/decentraland/types'
@@ -117,9 +118,13 @@ export const AssetFilters = ({
 
   const shouldRenderFilter = useCallback(
     (filter: AssetFilter) => {
-      return filtersBySection[section]?.includes(filter)
+      // /lands page won't have any category, we fallback to the section, that will be Section.LAND
+      const parentSection = category
+        ? getSectionFromCategory(category)
+        : section
+      return filtersBySection[parentSection]?.includes(filter)
     },
-    [section]
+    [category, section]
   )
 
   if (isInLandSection && isNotMobile && isRentalsEnabled) {

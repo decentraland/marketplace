@@ -13,7 +13,10 @@ import { AssetType } from '../../modules/asset/types'
 import { useInput } from '../../lib/input'
 import { getCountText, getOrderByOptions } from './utils'
 import { SortBy } from '../../modules/routing/types'
-import { getCategoryFromSection } from '../../modules/routing/search'
+import {
+  getCategoryFromSection,
+  getSectionFromCategory
+} from '../../modules/routing/search'
 import {
   isAccountView,
   isLandSection,
@@ -47,10 +50,13 @@ export const AssetTopbar = ({
   const handleSearch = useCallback(
     (value: string) => {
       if (search !== value) {
-        onBrowse({ search: value })
+        onBrowse({
+          search: value,
+          section: category ? getSectionFromCategory(category) : section
+        })
       }
     },
-    [onBrowse, search]
+    [category, onBrowse, search, section]
   )
 
   const [searchValue, setSearchValue] = useInput(search, handleSearch, 500)
