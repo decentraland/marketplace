@@ -73,7 +73,7 @@
 
 .clearFilters {
   font-size: 13px;
-  line-height: 11px;
+  line-height: 13px;
   text-transform: uppercase;
   cursor: pointer;
   color: var(--primary);
