@@ -11,6 +11,7 @@ export const enum AssetFilter {
 }
 
 const WearablesFilters = [
+  AssetFilter.Rarity,
   AssetFilter.Price,
   AssetFilter.Network,
   AssetFilter.BodyShape,
