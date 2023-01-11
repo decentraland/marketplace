@@ -149,7 +149,8 @@ function* handleClearFilters() {
     'minPrice',
     'maxPrice',
     'onlySmart',
-    'onlyOnSale'
+    'onlyOnSale',
+    'search'
   ])
 
   yield call(fetchAssetsFromRoute, clearedBrowseOptions)
@@ -208,7 +209,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     onlyOnRent,
     onlySmart,
     isMap,
-    contracts
+    contracts,
+    minPrice,
+    maxPrice
   } = options
 
   const address =
@@ -295,7 +298,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               rarities: rarities,
               contracts,
               wearableGenders,
-              emotePlayMode
+              emotePlayMode,
+              minPrice,
+              maxPrice
             }
           })
         )

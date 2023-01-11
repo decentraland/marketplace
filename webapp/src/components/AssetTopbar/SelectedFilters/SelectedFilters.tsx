@@ -1,16 +1,21 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
-import classNames from 'classnames'
 import { Rarity } from '@dcl/schemas'
-import { Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import {
+  getGenderFilterLabel,
+  getLandLabel,
+  getNetwork,
+  getPriceLabel
+} from '../../../utils/filters'
 import { Pill } from './Pill/Pill'
 import { Props } from './SelectedFilters.types'
-import { getCollectionByAddress, getGenderFilterLabel } from './utils'
+import { getCollectionByAddress } from './utils'
 import styles from './SelectedFilters.module.css'
 
 export const SelectedFilters = ({
   browseOptions,
   isLandSection,
+  category,
   onBrowse
 }: Props) => {
   const {
@@ -25,15 +30,13 @@ export const SelectedFilters = ({
     maxPrice,
     onlyOnRent
   } = browseOptions
-  const [collection, setCollection] = useState<Record<string, string> | undefined>()
+  const [collection, setCollection] = useState<
+    Record<string, string> | undefined
+  >()
 
   useEffect(() => {
-    const fetchData = async (
-      contract: string
-    ) => {
-      const collection = await getCollectionByAddress(
-        contract,
-      )
+    const fetchData = async (contract: string) => {
+      const collection = await getCollectionByAddress(contract)
       return collection
     }
 
@@ -49,46 +52,17 @@ export const SelectedFilters = ({
     }
   }, [contracts, onlyOnSale, collection?.address])
 
-  const priceLabel = useMemo(() => {
-    const manaTranslator = () => (
-      <Mana
-        className={classNames(styles.manaIcon, {
-          [styles.range]: minPrice && maxPrice
-        })}
-      />
-    )
-
-    if (minPrice && !maxPrice) {
-      return t('nft_filters.more_than_price', {
-        price: minPrice,
-        mana: manaTranslator
-      })
-    }
-
-    if (maxPrice && !minPrice) {
-      return t('nft_filters.less_than_price', {
-        price: maxPrice,
-        mana: manaTranslator
-      })
-    }
-
-    return t('nft_filters.price_between', {
-      minPrice,
-      maxPrice,
-      mana: manaTranslator
-    })
-  }, [minPrice, maxPrice])
+  const priceLabel = useMemo(
+    () => getPriceLabel(minPrice, maxPrice, getNetwork(network, category)),
+    [minPrice, maxPrice, network, category]
+  )
 
   const landStatusLabel = useMemo(() => {
-    if (!isLandSection) {
-      return undefined
+    if (isLandSection) {
+      return getLandLabel({ onlyOnRent, onlyOnSale })
     }
-    if (onlyOnRent) {
-      return t('nft_land_filters.only_for_rent')
-    } else if (onlyOnSale) {
-      return t('nft_land_filters.only_for_sale')
-    }
-  }, [onlyOnSale, onlyOnRent, isLandSection])
+    return undefined
+  }, [onlyOnRent, onlyOnSale, isLandSection])
 
   const handleDeleteRarity = useCallback(
     (rarity: string) => {
@@ -109,12 +83,9 @@ export const SelectedFilters = ({
     onBrowse({ onlyOnSale: true })
   }, [onBrowse])
 
-  const handleDeleteGender = useCallback(
-    () => {
-      onBrowse({ wearableGenders: [] })
-    },
-    [onBrowse]
-  )
+  const handleDeleteGender = useCallback(() => {
+    onBrowse({ wearableGenders: [] })
+  }, [onBrowse])
 
   const handleDeleteEmotePlayMode = useCallback(
     playMode => {
@@ -136,7 +107,12 @@ export const SelectedFilters = ({
   return (
     <div className={styles.pillContainer}>
       {rarities?.map(rarity => (
-        <Pill label={rarity} id={rarity} onDelete={handleDeleteRarity} />
+        <Pill
+          key={rarity}
+          label={rarity}
+          id={rarity}
+          onDelete={handleDeleteRarity}
+        />
       ))}
       {network ? (
         <Pill
@@ -175,6 +151,7 @@ export const SelectedFilters = ({
       ) : null}
       {emotePlayMode?.map(playMode => (
         <Pill
+          key={playMode}
           label={t(`emote.play_mode.${playMode}`)}
           onDelete={handleDeleteEmotePlayMode}
           id={playMode}

@@ -9,10 +9,15 @@ import {
 import { MapStateProps, MapDispatchProps } from './SelectedFilters.types'
 import { SelectedFilters } from './SelectedFilters'
 import { isLandSection } from '../../../modules/ui/utils'
+import { getCategoryFromSection } from '../../../modules/routing/search'
 
 const mapState = (state: RootState): MapStateProps => {
+  const section = getSection(state)
+  const browseOptions = getCurrentBrowseOptions(state);
+
   return {
-    browseOptions: getCurrentBrowseOptions(state),
+    category: section ? getCategoryFromSection(section) : undefined,
+    browseOptions,
     isLandSection: isLandSection(getSection(state))
   }
 }

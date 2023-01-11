@@ -1,7 +1,8 @@
-import { useEffect, useState, useCallback, useRef } from 'react'
-import { RangeField, Box, Mana } from 'decentraland-ui'
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import { RangeField, Box, Mana, useMobileMediaQuery } from 'decentraland-ui'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getPriceLabel } from '../../../utils/filters'
 import './PriceFilter.css'
 
 export type PriceFilterProps = {
@@ -19,6 +20,7 @@ export const PriceFilter = ({
 }: PriceFilterProps) => {
   const [value, setValue] = useState<[string, string]>([minPrice, maxPrice])
   const timeout = useRef<NodeJS.Timeout | null>(null)
+  const isMobile = useMobileMediaQuery()
 
   useEffect(() => setValue([minPrice, maxPrice]), [minPrice, maxPrice])
 
@@ -41,11 +43,27 @@ export const PriceFilter = ({
     [setValue, onChange]
   )
 
+  const header = useMemo(
+    () =>
+      isMobile ? (
+        <div className="mobile-box-header">
+          <span className="box-filter-name">{t('filters.price')}</span>
+          <span className="box-filter-value">
+            {getPriceLabel(minPrice, maxPrice, network)}
+          </span>
+        </div>
+      ) : (
+        t('filters.price')
+      ),
+    [minPrice, maxPrice, network, isMobile]
+  )
+
   return (
     <Box
-      header={t('filters.price')}
+      header={header}
       className="filters-sidebar-box price-filter"
       collapsible
+      defaultCollapsed={isMobile}
     >
       <RangeField
         minProps={{

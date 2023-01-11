@@ -1,20 +1,37 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { RootState } from '../../modules/reducer'
-import { browse } from '../../modules/routing/actions'
 import { getCategoryFromSection } from '../../modules/routing/search'
-import { getAssetType, getContracts, getEmotePlayMode, getMaxPrice, getMinPrice, getNetwork, getOnlyOnRent, getOnlyOnSale, getOnlySmart, getRarities, getSection, getWearableGenders } from '../../modules/routing/selectors'
-import { MapStateProps, MapDispatchProps } from './AssetFilters.types'
-import { AssetFilters } from './AssetFilters'
+import {
+  getAssetType,
+  getContracts,
+  getEmotePlayMode,
+  getMaxPrice,
+  getMinPrice,
+  getNetwork,
+  getOnlyOnRent,
+  getOnlyOnSale,
+  getOnlySmart,
+  getRarities,
+  getSection,
+  getWearableGenders
+} from '../../modules/routing/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { getIsRentalsEnabled } from '../../modules/features/selectors'
+import { browse } from '../../modules/routing/actions'
+import { MapDispatchProps, MapStateProps, OwnProps } from './AssetFilters.types'
+import { AssetFilters } from './AssetFilters'
 
-const mapState = (state: RootState): MapStateProps => {
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
+  const { values = {} } = ownProps
   const section = getSection(state)
-  const contracts = getContracts(state)
-  const onlyOnSale = getOnlyOnSale(state)
-  const onlyOnRent = getOnlyOnRent(state)
-  let landStatus = LANDFilters.ALL_LAND;
+  const contracts =
+    'contracts' in values ? values.contracts || [] : getContracts(state)
+  const onlyOnSale =
+    'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
+  const onlyOnRent =
+    'onlyOnRent' in values ? values.onlyOnRent : getOnlyOnRent(state)
+  let landStatus = LANDFilters.ALL_LAND
 
   if (onlyOnRent) {
     landStatus = LANDFilters.ONLY_FOR_RENT
@@ -22,17 +39,20 @@ const mapState = (state: RootState): MapStateProps => {
     landStatus = LANDFilters.ONLY_FOR_SALE
   }
 
-
   return {
-    minPrice: getMinPrice(state),
-    maxPrice: getMaxPrice(state),
-    rarities: getRarities(state),
-    network: getNetwork(state),
-    bodyShapes: getWearableGenders(state),
+    minPrice: 'minPrice' in values ? values.minPrice || '' : getMinPrice(state),
+    maxPrice: 'maxPrice' in values ? values.maxPrice || '' : getMaxPrice(state),
+    rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
+    network: 'network' in values ? values.network : getNetwork(state),
+    bodyShapes:
+      'wearableGenders' in values
+        ? values.wearableGenders
+        : getWearableGenders(state),
     category: section ? getCategoryFromSection(section) : undefined,
-    isOnlySmart: getOnlySmart(state),
+    isOnlySmart:
+      'onlySmart' in values ? !!values.onlySmart : getOnlySmart(state),
     isOnSale: onlyOnSale,
-    emotePlayMode: getEmotePlayMode(state),
+    emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
     assetType: getAssetType(state),
     isRentalsEnabled: getIsRentalsEnabled(state),
     collection: contracts[0],
@@ -41,9 +61,9 @@ const mapState = (state: RootState): MapStateProps => {
   }
 }
 
-const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
+const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps => {
   return {
-    onBrowse: options => dispatch(browse(options))
+    onBrowse: options => ownProps.onFilterChange ? ownProps.onFilterChange(options) : dispatch(browse(options))
   }
 }
 

@@ -67,6 +67,7 @@ describe('when handling the clear filters request action', () => {
     delete browseOptionsWithoutFilters.minPrice
     delete browseOptionsWithoutFilters.maxPrice
     delete browseOptionsWithoutFilters.onlyOnSale
+    delete browseOptionsWithoutFilters.search
 
     const pathname = 'aPath'
 
@@ -131,7 +132,9 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         rarities: undefined,
         contracts: undefined,
         wearableGenders: undefined,
-        emotePlayMode: undefined
+        emotePlayMode: undefined,
+        minPrice: undefined,
+        maxPrice: undefined
       }
     }
 
