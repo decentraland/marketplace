@@ -32,6 +32,8 @@ export type ItemFilters = {
   contracts?: string[]
   itemId?: string
   network?: Network
+  minPrice?: string
+  maxPrice?: string
 }
 
 export type ItemResponse = {
