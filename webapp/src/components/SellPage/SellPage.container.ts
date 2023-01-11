@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { goBack, push } from 'connected-react-router'
+import { goBack } from 'connected-react-router'
 import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
 import {
   getData as getAuthorizations,
