@@ -58,7 +58,7 @@ export const SelectedFilters = ({
   )
 
   const landStatusLabel = useMemo(() => {
-    if (isLandSection) {
+    if (isLandSection && (onlyOnSale || onlyOnRent)) {
       return getLandLabel({ onlyOnRent, onlyOnSale })
     }
     return undefined
