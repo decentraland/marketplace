@@ -1,2 +1,2 @@
-import EmoteDetail from './EmoteDetail'
+import EmoteDetail from './EmoteDetail.container'
 export { EmoteDetail }
