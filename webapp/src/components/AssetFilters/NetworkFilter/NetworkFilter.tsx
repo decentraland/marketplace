@@ -31,20 +31,28 @@ export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
     onChange
   ])
 
-  const mobileBoxHeader = (
-    <div className="mobile-box-header">
-      <span className="box-filter-name">{t('nft_filters.network.title')}</span>
-      <span className="box-filter-value">
-        {network
-          ? t(`networks.${network.toLowerCase()}`)
-          : t('nft_filters.network.all_items')}
-      </span>
-    </div>
+  const header = useMemo(
+    () =>
+      isMobile ? (
+        <div className="mobile-box-header">
+          <span className="box-filter-name">
+            {t('nft_filters.network.title')}
+          </span>
+          <span className="box-filter-value">
+            {network
+              ? t(`networks.${network.toLowerCase()}`)
+              : t('nft_filters.network.all_items')}
+          </span>
+        </div>
+      ) : (
+        t('nft_filters.network.title')
+      ),
+    [network, isMobile]
   )
 
   return (
     <Box
-      header={isMobile ? mobileBoxHeader : t('nft_filters.network.title')}
+      header={header}
       className="filters-sidebar-box network-filter"
       collapsible
       defaultCollapsed={isMobile}

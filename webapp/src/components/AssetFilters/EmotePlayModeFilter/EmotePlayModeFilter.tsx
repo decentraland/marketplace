@@ -33,22 +33,30 @@ export const EmotePlayModeFilter = ({
     emotePlayMode?.length === emotePlayModeOptions.length ||
     !emotePlayMode?.length
 
-  const mobileBoxHeader = (
-    <div className="mobile-box-header">
-      <span className="box-filter-name">
-        {t('nft_filters.emote_play_mode.title')}
-      </span>
-      <span className="box-filter-value">
-        {areAllItemsSelected
-          ? t('nft_filters.emote_play_mode.all_items')
-          : emotePlayMode.map(mode => t(`emote.play_mode.${mode}`)).join(', ')}
-      </span>
-    </div>
+  const header = useMemo(
+    () =>
+      isMobile ? (
+        <div className="mobile-box-header">
+          <span className="box-filter-name">
+            {t('nft_filters.emote_play_mode.title')}
+          </span>
+          <span className="box-filter-value">
+            {areAllItemsSelected
+              ? t('nft_filters.emote_play_mode.all_items')
+              : emotePlayMode
+                  .map(mode => t(`emote.play_mode.${mode}`))
+                  .join(', ')}
+          </span>
+        </div>
+      ) : (
+        t('nft_filters.emote_play_mode.title')
+      ),
+    [areAllItemsSelected, emotePlayMode, isMobile]
   )
 
   return (
     <Box
-      header={isMobile ? mobileBoxHeader : t('nft_filters.emote_play_mode.title')}
+      header={header}
       className="filters-sidebar-box emote-play-mode-filter"
       collapsible
       defaultCollapsed={isMobile}

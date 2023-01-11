@@ -8,6 +8,7 @@ import {
 } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
+import { getNetwork } from '../../utils/filters'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import { PriceFilter } from './PriceFilter'
@@ -21,7 +22,6 @@ import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
 import { AssetFilter, filtersBySection } from './utilts'
 import './AssetFilters.css'
-import { getNetwork } from '../../utils/filters'
 
 export const AssetFilters = ({
   minPrice,
@@ -38,76 +38,76 @@ export const AssetFilters = ({
   section,
   landStatus,
   isRentalsEnabled,
-  onFilterChange
-}: Props): JSX.Element => {
+  onBrowse
+}: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
 
   const handlePriceChange = useCallback(
     (value: [string, string]) => {
       const [minPrice, maxPrice] = value
-      onFilterChange({ minPrice, maxPrice })
+      onBrowse({ minPrice, maxPrice })
     },
-    [onFilterChange]
+    [onBrowse]
   )
 
   const handleRarityChange = useCallback(
     (value: Rarity[]) => {
-      onFilterChange({ rarities: value })
+      onBrowse({ rarities: value })
     },
-    [onFilterChange]
+    [onBrowse]
   )
 
   const handleNetworkChange = useCallback(
     (value: Network) => {
-      onFilterChange({ network: value })
+      onBrowse({ network: value })
     },
-    [onFilterChange]
+    [onBrowse]
   )
 
   const handleBodyShapeChange = useCallback(
     (value: (WearableGender | GenderFilterOption)[]) => {
-      onFilterChange({ wearableGenders: value })
+      onBrowse({ wearableGenders: value })
     },
-    [onFilterChange]
+    [onBrowse]
   )
 
   const handleOnlySmartChange = useCallback(
     (value: boolean) => {
-      onFilterChange({ onlySmart: value })
+      onBrowse({ onlySmart: value })
     },
-    [onFilterChange]
+    [onBrowse]
   )
 
   const handleOnSaleChange = useCallback(
     (value: boolean) => {
-      onFilterChange({ onlyOnSale: value })
+      onBrowse({ onlyOnSale: value })
     },
-    [onFilterChange]
+    [onBrowse]
   )
 
   const handleEmotePlayModeChange = useCallback(
     (value: EmotePlayMode[]) => {
-      onFilterChange({ emotePlayMode: value })
+      onBrowse({ emotePlayMode: value })
     },
-    [onFilterChange]
+    [onBrowse]
   )
 
   function handleCollectionChange(value: string | undefined) {
     const newValue = value ? [value] : []
-    onFilterChange({ contracts: newValue })
+    onBrowse({ contracts: newValue })
   }
 
   function handleLandStatusChange(value: LANDFilters) {
     switch (value) {
       case LANDFilters.ALL_LAND:
-        onFilterChange({ onlyOnSale: undefined, onlyOnRent: undefined })
+        onBrowse({ onlyOnSale: undefined, onlyOnRent: undefined })
         break
       case LANDFilters.ONLY_FOR_RENT:
-        onFilterChange({ onlyOnSale: undefined, onlyOnRent: true })
+        onBrowse({ onlyOnSale: undefined, onlyOnRent: true })
         break
       case LANDFilters.ONLY_FOR_SALE:
-        onFilterChange({ onlyOnSale: true, onlyOnRent: undefined })
+        onBrowse({ onlyOnSale: true, onlyOnRent: undefined })
         break
     }
   }
@@ -122,12 +122,18 @@ export const AssetFilters = ({
   if (isInLandSection) {
     return isRentalsEnabled ? (
       <div className="filters-sidebar">
+        <PriceFilter
+          onChange={handlePriceChange}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          network={getNetwork(network, category)}
+        />
         <LandStatusFilter
           landStatus={landStatus}
           onChange={handleLandStatusChange}
         />
       </div>
-    ) : <></>
+    ) : null
   }
 
   return (

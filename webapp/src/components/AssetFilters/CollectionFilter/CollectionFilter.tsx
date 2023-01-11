@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useMobileMediaQuery } from 'decentraland-ui'
 import { SelectFilter } from '../../Vendor/NFTFilters/SelectFilter'
@@ -82,7 +82,7 @@ export const CollectionFilter = ({
           value,
           onlyOnSale
         })
-      
+
         return {
           text: data[0].name,
           value
@@ -105,22 +105,28 @@ export const CollectionFilter = ({
     }
   }, [collection, savedCollectionInfo, handleFetchOptionsFromValue])
 
-  const mobileBoxHeader = (
-    <div className="mobile-box-header">
-      <span className="box-filter-name">
-        {t('nft_filters.collection.title')}
-      </span>
-      <span className="box-filter-value">
-        {savedCollectionInfo?.text
-          ? savedCollectionInfo.text
-          : t('nft_filters.collection.all_items')}
-      </span>
-    </div>
+  const header = useMemo(
+    () =>
+      isMobile ? (
+        <div className="mobile-box-header">
+          <span className="box-filter-name">
+            {t('nft_filters.collection.title')}
+          </span>
+          <span className="box-filter-value">
+            {savedCollectionInfo?.text
+              ? savedCollectionInfo.text
+              : t('nft_filters.collection.all_items')}
+          </span>
+        </div>
+      ) : (
+        t('nft_filters.collection.title')
+      ),
+    [isMobile, savedCollectionInfo?.text]
   )
 
   return (
     <Box
-      header={isMobile ? mobileBoxHeader : t('nft_filters.collection.title')}
+      header={header}
       collapsible
       className="filters-sidebar-box"
       defaultCollapsed={isMobile}

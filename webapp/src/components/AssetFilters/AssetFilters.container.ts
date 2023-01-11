@@ -1,4 +1,5 @@
 import { connect } from 'react-redux'
+import { Dispatch } from 'redux'
 import { RootState } from '../../modules/reducer'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import {
@@ -15,10 +16,11 @@ import {
   getSection,
   getWearableGenders
 } from '../../modules/routing/selectors'
-import { MapStateProps, OwnProps } from './AssetFilters.types'
-import { AssetFilters } from './AssetFilters'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { getIsRentalsEnabled } from '../../modules/features/selectors'
+import { browse } from '../../modules/routing/actions'
+import { MapDispatchProps, MapStateProps, OwnProps } from './AssetFilters.types'
+import { AssetFilters } from './AssetFilters'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps
@@ -59,4 +61,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   }
 }
 
-export default connect(mapState)(AssetFilters)
+const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps => {
+  return {
+    onBrowse: options => ownProps.onFilterChange ? ownProps.onFilterChange(options) : dispatch(browse(options))
+  }
+}
+
+export default connect(mapState, mapDispatch)(AssetFilters)

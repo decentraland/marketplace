@@ -34,20 +34,30 @@ export const RarityFilter = ({
   const allRaritiesSelected =
     rarities.length === 0 || rarities.length === rarityOptions.length
 
-  const mobileBoxHeader = (
-    <div className="mobile-box-header">
-      <span className="box-filter-name">{t('nft_filters.rarities.title')}</span>
-      <span className="box-filter-value">
-        {allRaritiesSelected
-          ? t('nft_filters.rarities.all_items')
-          : t('nft_filters.rarities.count_items', { count: rarities.length })}
-      </span>
-    </div>
+  const header = useMemo(
+    () =>
+      isMobile ? (
+        <div className="mobile-box-header">
+          <span className="box-filter-name">
+            {t('nft_filters.rarities.title')}
+          </span>
+          <span className="box-filter-value">
+            {allRaritiesSelected
+              ? t('nft_filters.rarities.all_items')
+              : t('nft_filters.rarities.count_items', {
+                  count: rarities.length
+                })}
+          </span>
+        </div>
+      ) : (
+        t('nft_filters.rarities.title')
+      ),
+    [rarities, isMobile, allRaritiesSelected]
   )
 
   return (
     <Box
-      header={isMobile ? mobileBoxHeader : t('nft_filters.rarities.title')}
+      header={header}
       className="filters-sidebar-box"
       collapsible
       defaultCollapsed={isMobile}

@@ -16,7 +16,6 @@ export const SelectedFilters = ({
   browseOptions,
   isLandSection,
   category,
-  landStatus,
   onBrowse
 }: Props) => {
   const {
@@ -29,6 +28,7 @@ export const SelectedFilters = ({
     emotePlayMode,
     minPrice,
     maxPrice,
+    onlyOnRent
   } = browseOptions
   const [collection, setCollection] = useState<
     Record<string, string> | undefined
@@ -59,10 +59,10 @@ export const SelectedFilters = ({
 
   const landStatusLabel = useMemo(() => {
     if (isLandSection) {
-      return getLandLabel(landStatus)
+      return getLandLabel({ onlyOnRent, onlyOnSale })
     }
     return undefined
-  }, [landStatus, isLandSection])
+  }, [onlyOnRent, onlyOnSale, isLandSection])
 
   const handleDeleteRarity = useCallback(
     (rarity: string) => {

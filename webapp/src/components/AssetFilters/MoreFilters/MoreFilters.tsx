@@ -20,7 +20,7 @@ export const MoreFilters = ({
   onSaleChange
 }: MoreFiltersProps) => {
   const isWearableCategory = category === NFTCategory.WEARABLE
-  const isMobile = useMobileMediaQuery();
+  const isMobile = useMobileMediaQuery()
 
   const handleOnlySmartChange = useCallback(
     (_, props: CheckboxProps) => {
@@ -37,24 +37,34 @@ export const MoreFilters = ({
   )
 
   const filterText = useMemo(() => {
-    const values: string[] = [];
-    values.push(isOnSale ? t('nft_filters.for_sale'): t('nft_filters.not_on_sale'));
+    const values: string[] = []
+    values.push(
+      isOnSale ? t('nft_filters.for_sale') : t('nft_filters.not_on_sale')
+    )
     if (isOnlySmart) {
       values.push(t('nft_filters.only_smart'))
     }
     return values.join(', ')
   }, [isOnSale, isOnlySmart])
 
-  const mobileBoxHeader = (
-    <div className='mobile-box-header'>
-      <span className="box-filter-name">{t('nft_filters.more_filters')}</span>
-      <span className='box-filter-value'>{filterText}</span>
-    </div>
+  const header = useMemo(
+    () =>
+      isMobile ? (
+        <div className="mobile-box-header">
+          <span className="box-filter-name">
+            {t('nft_filters.more_filters')}
+          </span>
+          <span className="box-filter-value">{filterText}</span>
+        </div>
+      ) : (
+        t('nft_filters.more_filters')
+      ),
+    [filterText, isMobile]
   )
 
   return (
     <Box
-      header={isMobile ? mobileBoxHeader : t('nft_filters.more_filters')}
+      header={header}
       className="filters-sidebar-box"
       collapsible
       defaultCollapsed={isMobile}

@@ -20,7 +20,8 @@ export type Props = {
   landStatus: LANDFilters
   isRentalsEnabled: boolean
   values?: BrowseOptions
-  onFilterChange: (options: BrowseOptions) => void
+  onBrowse: (options: BrowseOptions) => void
+  onFilterChange?: (options: BrowseOptions) => void
 }
 
 export type MapStateProps = Pick<Props, 'minPrice'
@@ -39,4 +40,5 @@ export type MapStateProps = Pick<Props, 'minPrice'
   | 'isRentalsEnabled'
 >
 
-export type OwnProps = Pick<Props, 'values'>
+export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>
+export type MapDispatchProps = Pick<Props, 'onBrowse'>

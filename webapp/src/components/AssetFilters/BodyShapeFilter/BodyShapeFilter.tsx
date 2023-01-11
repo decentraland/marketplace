@@ -53,22 +53,28 @@ export const BodyShapeFilter = ({
 
   const value = getBodyShapeValue(bodyShapes)
 
-  const mobileBoxHeader = (
-    <div className="mobile-box-header">
-      <span className="box-filter-name">
-        {t('nft_filters.body_shapes.title')}
-      </span>
-      <span className="box-filter-value">
-        {value
-          ? t(getGenderFilterLabel(bodyShapes))
-          : t('nft_filters.body_shapes.all_items')}
-      </span>
-    </div>
+  const header = useMemo(
+    () =>
+      isMobile ? (
+        <div className="mobile-box-header">
+          <span className="box-filter-name">
+            {t('nft_filters.body_shapes.title')}
+          </span>
+          <span className="box-filter-value">
+            {value
+              ? t(getGenderFilterLabel(bodyShapes))
+              : t('nft_filters.body_shapes.all_items')}
+          </span>
+        </div>
+      ) : (
+        t('nft_filters.body_shapes.title')
+      ),
+    [bodyShapes, isMobile, value]
   )
 
   return (
     <Box
-      header={isMobile ? mobileBoxHeader : t('nft_filters.body_shapes.title')}
+      header={header}
       className="filters-sidebar-box body-shape-filter"
       collapsible
       defaultCollapsed={isMobile}

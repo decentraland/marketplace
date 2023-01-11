@@ -105,18 +105,24 @@ export function getGenderFilterLabel(
   return labels[bodyShape]
 }
 
-export function getLandLabel(
-  landStatus: LANDFilters
-) {
-  if (landStatus === LANDFilters.ONLY_FOR_RENT) {
+export function getLandLabel({
+  landStatus,
+  onlyOnRent = false,
+  onlyOnSale = false
+}: {
+  landStatus?: LANDFilters,
+  onlyOnRent?: boolean,
+  onlyOnSale?: boolean
+}) {
+  if (landStatus === LANDFilters.ONLY_FOR_RENT || onlyOnRent) {
     return t('nft_land_filters.only_for_rent')
   }
 
-  if (landStatus === LANDFilters.ONLY_FOR_SALE) {
+  if (landStatus === LANDFilters.ONLY_FOR_SALE || onlyOnSale) {
     return t('nft_land_filters.only_for_sale')
   }
 
-  if (landStatus === LANDFilters.ALL_LAND) {
+  if (landStatus === LANDFilters.ALL_LAND || !landStatus) {
     return t('nft_land_filters.all_land')
   }
   return undefined
