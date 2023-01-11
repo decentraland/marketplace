@@ -5,6 +5,5 @@ export type Props = {
   section: Section
   sections: Section[]
   onMenuItemClick: (section: Section) => void
-  isRentalsEnabled?: boolean
   onBrowse: (options: BrowseOptions) => void
 }

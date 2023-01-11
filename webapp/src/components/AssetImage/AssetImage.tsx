@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
+import { Env } from '@dcl/ui-env'
 import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -16,10 +17,10 @@ import {
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import { Atlas } from '../Atlas'
+import ListedBadge from '../ListedBadge'
+import { config } from '../../config'
 import { ControlOptionAction, Props } from './AssetImage.types'
 import './AssetImage.css'
-import { config } from '../../config'
-import { Env } from '@dcl/ui-env'
 
 // 1x1 transparent pixel
 const PIXEL =
@@ -487,7 +488,7 @@ const AssetImage = (props: Props) => {
 
 // the purpose of this wrapper is to make the div always be square, by using a 1x1 transparent pixel
 const AssetImageWrapper = (props: Props) => {
-  const { asset, className, ...rest } = props
+  const { asset, className, showOrderListedTag, ...rest } = props
 
   let classes = 'AssetImage'
   if (className) {
@@ -498,6 +499,7 @@ const AssetImageWrapper = (props: Props) => {
     <div className={classes}>
       <img src={PIXEL} alt="pixel" className="pixel" />
       <div className="image-wrapper">
+        {showOrderListedTag ? <ListedBadge className="listed-badge" /> : null}
         <AssetImage asset={asset} {...rest} />
       </div>
     </div>

@@ -18,7 +18,6 @@ export type Props = {
   collection: string
   section: Section
   landStatus: LANDFilters
-  isRentalsEnabled: boolean
   values?: BrowseOptions
   onBrowse: (options: BrowseOptions) => void
   onFilterChange?: (options: BrowseOptions) => void
@@ -37,7 +36,6 @@ export type MapStateProps = Pick<Props, 'minPrice'
   | 'collection'
   | 'section'
   | 'landStatus'
-  | 'isRentalsEnabled'
 >
 
 export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>

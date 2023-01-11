@@ -40,6 +40,23 @@
 
 .AtlasPopup .price .dcl.mana {
   font-size: 14px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  padding: 0px
+}
+
+.AtlasPopup .dcl.mana + .dcl.mana {
+  margin-left: 20px;
+}
+
+.AtlasPopup .prices {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.AtlasPopup .rental-day {
+  font-size: 14px;
 }
 
 .AtlasPopup.no-owner .owner {

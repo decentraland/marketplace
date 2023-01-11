@@ -7,7 +7,6 @@ import {
   cancelOrderRequest,
   CANCEL_ORDER_REQUEST
 } from '../../modules/order/actions'
-import { getIsRentalsEnabled } from '../../modules/features/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -16,8 +15,7 @@ import {
 import CancelSalePage from './CancelSalePage'
 
 const mapState = (state: RootState): MapStateProps => ({
-  isLoading: isLoadingType(getLoading(state), CANCEL_ORDER_REQUEST),
-  isRentalsEnabled: getIsRentalsEnabled(state)
+  isLoading: isLoadingType(getLoading(state), CANCEL_ORDER_REQUEST)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

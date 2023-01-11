@@ -1,17 +1,30 @@
 import * as React from 'react'
 import { ethers } from 'ethers'
-import { Row, Section, Header } from 'decentraland-ui'
+import { Row, Section, Header, HeaderSubheader } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getMaxPriceOfPeriods } from '../../../modules/rental/utils'
 import { Coordinate } from '../../Coordinate'
 import { Mana } from '../../Mana'
 import { Props } from './Popup.types'
 import './Popup.css'
+import { formatWeiMANA } from '../../../lib/mana'
 
 export default class Popup extends React.PureComponent<Props> {
+  subPriceHeader() {
+    const { tile } = this.props
+    if (tile.price && tile.rentalListing) {
+      return t('atlas.for_sale_and_rent')
+    } else if (tile.price) {
+      return t('atlas.for_sale')
+    }
+    return t('atlas.for_rent')
+  }
+
   render() {
     const { x, y, visible, tile, position } = this.props
     const isEstate = !!tile.estate_id
+
     return (
       <div
         className={`AtlasPopup ${position} ${
@@ -30,17 +43,28 @@ export default class Popup extends React.PureComponent<Props> {
         </Section>
 
         <Section className="owner">
-          <Header sub>{t('asset_page.owner')}</Header>
+          <Header sub>{t('atlas.owner')}</Header>
           <Profile
             address={tile.owner || ethers.constants.AddressZero}
             debounce={500}
           />
         </Section>
 
-        {tile.price ? (
+        {tile.price || tile.rentalListing ? (
           <Section className="price">
-            <Header sub>{t('asset_page.price')}</Header>
-            <Mana>{tile.price.toLocaleString()}</Mana>
+            <Header sub>{t('atlas.price')}</Header>
+            <HeaderSubheader>{this.subPriceHeader()}</HeaderSubheader>
+            <div className={'prices'}>
+              {tile.price ? <Mana>{tile.price.toLocaleString()}</Mana> : null}
+              {tile.rentalListing ? (
+                <>
+                  <Mana>
+                    {formatWeiMANA(getMaxPriceOfPeriods(tile.rentalListing))}
+                  </Mana>
+                  <span className="rental-day">/{t('global.day')}</span>
+                </>
+              ) : null}
+            </div>
           </Section>
         ) : null}
       </div>

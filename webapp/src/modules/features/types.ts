@@ -6,5 +6,6 @@ export enum FeatureName {
   RENTALS = 'rentals',
   CAMPAIGN_HOMEPAGE_BANNER = 'campaign-homepage-banner',
   CAMPAIGN_COLLECTIBLES_BANNER = 'campaign-collectibles-banner',
-  CAMPAIGN_BROWSER = 'campaign-browser'
+  CAMPAIGN_BROWSER = 'campaign-browser',
+  BUY_NFTS_WITH_FIAT = 'buy-nfts-with-fiat'
 }

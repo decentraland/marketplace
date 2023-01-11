@@ -24,7 +24,6 @@ export type Props = {
   section?: Section
   sections?: Section[]
   isLoading: boolean
-  isRentalsEnabled: boolean
   onSetView: typeof setView
   onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
   onBrowse: typeof browse
@@ -43,7 +42,6 @@ export type MapStateProps = Pick<
   | 'section'
   | 'assetType'
   | 'onlySmart'
-  | 'isRentalsEnabled'
   | 'onlyOnRent'
 >
 export type MapDispatchProps = Pick<

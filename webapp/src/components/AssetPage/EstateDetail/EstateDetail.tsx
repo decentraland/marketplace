@@ -21,7 +21,7 @@ import { Props } from './EstateDetail.types'
 import { ParcelCoordinates } from './ParcelCoordinates'
 import './EstateDetail.css'
 
-const EstateDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
+const EstateDetail = ({ nft, order, rental }: Props) => {
   const estate = nft.data.estate!
   let x = 0
   let y = 0
@@ -36,7 +36,7 @@ const EstateDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
       className="EstateDetail"
       asset={nft}
       rental={rental ?? undefined}
-      showDetails={isRentalsEnabled && isLand(nft)}
+      showDetails={isLand(nft)}
       assetImage={
         <>
           <AssetImage
@@ -55,18 +55,7 @@ const EstateDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
           )}
         </>
       }
-      actions={
-        <>
-          {isRentalsEnabled ? (
-            <SaleRentActionBox
-              isRentalsEnabled={isRentalsEnabled}
-              order={order}
-              nft={nft}
-              rental={rental}
-            />
-          ) : null}
-        </>
-      }
+      actions={<SaleRentActionBox order={order} nft={nft} rental={rental} />}
       isOnSale={!!nft.activeOrderId}
       badges={
         <>
@@ -77,7 +66,7 @@ const EstateDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
       left={
         <>
           <Description text={estate.description} />
-          {!isRentalsEnabled ? <Owner asset={nft} /> : null}
+          <Owner asset={nft} />
           <ProximityHighlights nft={nft} />
         </>
       }
@@ -94,7 +83,7 @@ const EstateDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
           <BidList nft={nft} />
           {estate.size > 0 && <ParcelCoordinates estateId={nft.tokenId} />}
           <TransactionHistory asset={nft} />
-          {isRentalsEnabled ? <RentalHistory asset={nft} /> : null}
+          <RentalHistory asset={nft} />
         </>
       }
     />

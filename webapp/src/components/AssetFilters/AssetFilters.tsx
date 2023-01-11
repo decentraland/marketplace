@@ -38,7 +38,6 @@ export const AssetFilters = ({
   assetType,
   section,
   landStatus,
-  isRentalsEnabled,
   onBrowse
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
@@ -133,12 +132,10 @@ export const AssetFilters = ({
           maxPrice={maxPrice}
           network={getNetwork(network, category)}
         />
-        {isRentalsEnabled ? (
-          <LandStatusFilter
-            landStatus={landStatus}
-            onChange={handleLandStatusChange}
-          />
-        ) : null}
+        <LandStatusFilter
+          landStatus={landStatus}
+          onChange={handleLandStatusChange}
+        />
       </div>
     )
   }

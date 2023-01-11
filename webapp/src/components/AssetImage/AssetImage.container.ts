@@ -9,15 +9,15 @@ import {
   getWearablePreviewController
 } from '../../modules/ui/preview/selectors'
 import {
+  setIsTryingOn,
+  setWearablePreviewController
+} from '../../modules/ui/preview/actions'
+import {
   MapStateProps,
   MapDispatchProps,
   MapDispatch
 } from './AssetImage.types'
 import AssetImage from './AssetImage'
-import {
-  setIsTryingOn,
-  setWearablePreviewController
-} from '../../modules/ui/preview/actions'
 
 const mapState = (state: RootState): MapStateProps => {
   const profiles = getProfiles(state)

@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux'
+import { RentalListing } from '@dcl/schemas'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { AtlasTile, AtlasProps } from 'decentraland-ui'
 import { OnRentNFT } from '../../modules/ui/browse/types'
@@ -6,11 +7,14 @@ import { NFT } from '../../modules/nft/types'
 import { Contract } from '../../modules/vendor/services'
 import { getContract } from '../../modules/contract/selectors'
 
+export type TileRentalListing = Pick<RentalListing, 'expiration' | 'periods'>
+
 export type Tile = AtlasTile & {
   estate_id?: string
   price?: number
   owner?: string
   name?: string
+  rentalListing?: TileRentalListing
 }
 
 export type Props = Partial<AtlasProps> & {
@@ -23,6 +27,7 @@ export type Props = Partial<AtlasProps> & {
   withPopup?: boolean
   withNavigation?: boolean
   showOnSale?: boolean
+  showForRent?: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onNavigate: (path: string) => void
 }

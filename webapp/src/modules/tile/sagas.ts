@@ -1,4 +1,4 @@
-import { takeEvery, call, put, select } from 'redux-saga/effects'
+import { takeEvery, call, put } from 'redux-saga/effects'
 import { RentalStatus } from '@dcl/schemas'
 import { Atlas, AtlasTile } from 'decentraland-ui'
 import { ATLAS_SERVER_URL } from '../../modules/vendor/decentraland'
@@ -17,7 +17,6 @@ import { isErrorWithMessage } from '../../lib/error'
 import { fetchNFTsRequest } from '../nft/actions'
 import { VendorName } from '../vendor'
 import { View } from '../ui/types'
-import { getIsRentalsEnabled } from '../features/selectors'
 
 export function* tileSaga() {
   yield takeEvery(FETCH_TILES_REQUEST, handleFetchTilesRequest)
@@ -40,8 +39,6 @@ function* handleFetchTilesRequest(_action: FetchTilesRequestAction) {
 }
 
 function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
-  const isRentalsEnabled: boolean = yield select(getIsRentalsEnabled)
-
   yield put(
     fetchNFTsRequest({
       vendor: VendorName.DECENTRALAND,
@@ -53,9 +50,11 @@ function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
       },
       filters: {
         isLand: true,
-        rentalStatus: isRentalsEnabled
-          ? [RentalStatus.OPEN, RentalStatus.CANCELLED, RentalStatus.EXECUTED]
-          : undefined
+        rentalStatus: [
+          RentalStatus.OPEN,
+          RentalStatus.CANCELLED,
+          RentalStatus.EXECUTED
+        ]
       }
     })
   )

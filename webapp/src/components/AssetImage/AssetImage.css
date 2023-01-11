@@ -184,3 +184,10 @@
   bottom: 12px;
   right: 12px;
 }
+
+.AssetImage .listed-badge {
+  z-index: 10;
+  position: absolute;
+  bottom: 11px;
+  right: 11px;
+}

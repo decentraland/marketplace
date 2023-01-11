@@ -17,7 +17,6 @@ import {
   getWearableGenders
 } from '../../modules/routing/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
-import { getIsRentalsEnabled } from '../../modules/features/selectors'
 import { browse } from '../../modules/routing/actions'
 import { MapDispatchProps, MapStateProps, OwnProps } from './AssetFilters.types'
 import { AssetFilters } from './AssetFilters'
@@ -54,7 +53,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     isOnSale: onlyOnSale,
     emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
     assetType: getAssetType(state),
-    isRentalsEnabled: getIsRentalsEnabled(state),
     collection: contracts[0],
     landStatus,
     section

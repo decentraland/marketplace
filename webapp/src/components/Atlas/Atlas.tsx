@@ -28,6 +28,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
     nftsOnRent,
     withPopup,
     showOnSale,
+    showForRent,
     tilesByEstateId,
     getContract
   } = props
@@ -124,11 +125,15 @@ const Atlas: React.FC<Props> = (props: Props) => {
     [selection, tiles, isEstate]
   )
 
-  const forSaleLayer: Layer = useCallback(
+  const forSaleOrRentLayer: Layer = useCallback(
     (x, y) => {
       const key = getCoords(x, y)
       const tile = tiles[key] as AtlasTile & { price?: string }
-      if (tile && 'price' in tile) {
+      if (
+        tile &&
+        (('price' in tile && showOnSale) ||
+          ('rentalListing' in tile && showForRent))
+      ) {
         return {
           color: '#00d3ff',
           left: !!tile.left,
@@ -138,7 +143,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
       }
       return null
     },
-    [tiles]
+    [tiles, showOnSale, showForRent]
   )
 
   const selectedStrokeLayer: Layer = useCallback(
@@ -282,8 +287,8 @@ const Atlas: React.FC<Props> = (props: Props) => {
     selectedFillLayer
   ]
 
-  if (showOnSale) {
-    layers.unshift(forSaleLayer)
+  if (showOnSale || showForRent) {
+    layers.unshift(forSaleOrRentLayer)
   }
 
   return (
@@ -309,7 +314,8 @@ const Atlas: React.FC<Props> = (props: Props) => {
 }
 
 Atlas.defaultProps = {
-  showOnSale: true
+  showOnSale: true,
+  showForRent: true
 }
 
 export default Atlas
