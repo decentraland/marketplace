@@ -20,6 +20,7 @@ const AssetList = (props: Props) => {
     nfts,
     page,
     count,
+    search,
     isLoading,
     onBrowse,
     urlNext,
@@ -72,14 +73,17 @@ const AssetList = (props: Props) => {
 
           <T
             id={
-              section &&
-              [NFTCategory.EMOTE, NFTCategory.WEARABLE].includes(
-                getCategoryFromSection(section)!
-              )
+              search
+                ? 'nft_list.empty_search'
+                : section &&
+                  [NFTCategory.EMOTE, NFTCategory.WEARABLE].includes(
+                    getCategoryFromSection(section)!
+                  )
                 ? 'nft_list.empty'
                 : 'nft_list.simple_empty'
             }
             values={{
+              search,
               currentSection:
                 assetType === AssetType.ITEM
                   ? t('browse_page.primary_market_title').toLocaleLowerCase()

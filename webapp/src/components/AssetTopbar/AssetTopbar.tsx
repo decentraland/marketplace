@@ -47,6 +47,7 @@ export const AssetTopbar = ({
   const isMobile = useMobileMediaQuery()
   const [showFiltersMenu, setShowFiltersMenu] = useState(false)
   const category = section ? getCategoryFromSection(section) : undefined
+  const isSearchWithoutResults = !!search && !count
 
   const handleSearch = useCallback(
     (value: string) => {

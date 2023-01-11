@@ -11,7 +11,8 @@ import {
   getPage,
   getAssetType,
   getCurrentBrowseOptions,
-  getSection
+  getSection,
+  getSearch
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
@@ -30,8 +31,9 @@ const mapState = (state: RootState): MapStateProps => {
     section: getSection(state),
     nfts: getNFTs(state),
     items: getItems(state),
-    page: page,
+    page,
     count: getCount(state),
+    search: getSearch(state),
     isLoading:
       assetType === AssetType.ITEM
         ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST)

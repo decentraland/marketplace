@@ -13,6 +13,7 @@ import { getCollectionByAddress } from './utils'
 import styles from './SelectedFilters.module.css'
 
 export const SelectedFilters = ({
+  isLoading,
   browseOptions,
   isLandSection,
   category,
@@ -104,7 +105,7 @@ export const SelectedFilters = ({
     onBrowse({ onlyOnRent: undefined, onlyOnSale: undefined })
   }, [onBrowse])
 
-  return (
+  return isLoading ? null : (
     <div className={styles.pillContainer}>
       {rarities?.map(rarity => (
         <Pill

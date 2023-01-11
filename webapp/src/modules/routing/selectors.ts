@@ -266,7 +266,6 @@ export const hasFiltersEnabled = createSelector<
   string,
   string,
   boolean | undefined,
-  string,
   boolean
 >(
   getNetwork,
@@ -277,7 +276,6 @@ export const hasFiltersEnabled = createSelector<
   getMinPrice,
   getMaxPrice,
   getOnlyOnSale,
-  getSearch,
   (
     network,
     genders,
@@ -286,8 +284,7 @@ export const hasFiltersEnabled = createSelector<
     playModes,
     minPrice,
     maxPrice,
-    onlyOnSale,
-    search
+    onlyOnSale
   ) => {
     const hasNetworkFilter = network !== undefined
     const hasGenderFilter = genders.length > 0
@@ -303,8 +300,7 @@ export const hasFiltersEnabled = createSelector<
       hasEmotePlayModeFilter ||
       !!minPrice ||
       !!maxPrice ||
-      hasNotOnSaleFilter ||
-      !!search
+      hasNotOnSaleFilter
     )
   }
 )
