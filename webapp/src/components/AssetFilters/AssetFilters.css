@@ -66,6 +66,11 @@
 }
 
 @media (max-width: 768px) {
+  .filters-sidebar {
+    row-gap: 0;
+    margin-top: 0;
+  }
+
   .Menu.filters-sidebar {
     margin: 0;
     width: 100%;

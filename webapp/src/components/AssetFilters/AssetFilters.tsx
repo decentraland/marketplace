@@ -120,7 +120,7 @@ export const AssetFilters = ({
   )
 
   if (isInLandSection) {
-    return isRentalsEnabled ? (
+    return (
       <div className="filters-sidebar">
         <PriceFilter
           onChange={handlePriceChange}
@@ -128,12 +128,14 @@ export const AssetFilters = ({
           maxPrice={maxPrice}
           network={getNetwork(network, category)}
         />
-        <LandStatusFilter
-          landStatus={landStatus}
-          onChange={handleLandStatusChange}
-        />
+        {isRentalsEnabled ? (
+          <LandStatusFilter
+            landStatus={landStatus}
+            onChange={handleLandStatusChange}
+          />
+        ) : null}
       </div>
-    ) : null
+    )
   }
 
   return (
