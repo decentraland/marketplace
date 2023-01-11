@@ -7,13 +7,12 @@ import {
 
 export type Props = {
   isLoading: boolean
-  isRentalsEnabled: boolean
   onCancelOrder: typeof cancelOrderRequest
   onNavigate: (path: string) => void
   onGoBack: (path: string) => void
 }
 
-export type MapStateProps = Pick<Props, 'isLoading' | 'isRentalsEnabled'>
+export type MapStateProps = Pick<Props, 'isLoading'>
 export type MapDispatchProps = Pick<
   Props,
   'onNavigate' | 'onCancelOrder' | 'onGoBack'

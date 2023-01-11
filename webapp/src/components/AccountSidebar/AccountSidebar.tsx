@@ -10,8 +10,7 @@ const AccountSidebar = ({
   address,
   section,
   isCurrentAccount,
-  onBrowse,
-  isRentalsEnabled
+  onBrowse
 }: Props) => {
   const handleOnBrowse = useCallback(
     (vendor: VendorName, section: string, assetType?: AssetType) => {
@@ -23,11 +22,7 @@ const AccountSidebar = ({
   return (
     <div className="AccountSidebar">
       {isCurrentAccount ? (
-        <CurrentAccountSidebar
-          section={section}
-          onBrowse={handleOnBrowse}
-          isRentalsEnabled={isRentalsEnabled}
-        />
+        <CurrentAccountSidebar section={section} onBrowse={handleOnBrowse} />
       ) : (
         <OtherAccountSidebar section={section} />
       )}

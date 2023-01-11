@@ -22,9 +22,12 @@ export type Props = {
   wearableController?: IPreviewController | null
   isTryingOn: boolean
   isPlayingEmote?: boolean
+  showOrderListedTag?: boolean
   onSetIsTryingOn: typeof setIsTryingOn
   onSetWearablePreviewController: typeof setWearablePreviewController
 }
+
+export type OwnProps = Pick<Props, 'showOrderListedTag'>
 
 export enum ControlOptionAction {
   ZOOM_IN,

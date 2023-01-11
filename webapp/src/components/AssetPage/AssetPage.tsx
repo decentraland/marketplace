@@ -17,7 +17,7 @@ import { ENSDetail } from './ENSDetail'
 import { EmoteDetail } from './EmoteDetail'
 import './AssetPage.css'
 
-const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
+const AssetPage = ({ type, onBack }: Props) => {
   return (
     <>
       <Navbar isFullscreen />
@@ -98,7 +98,6 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
                               nft={nft}
                               order={order}
                               rental={rental}
-                              isRentalsEnabled={isRentalsEnabled}
                             />
                           ),
                           parcel: nft => (
@@ -106,7 +105,6 @@ const AssetPage = ({ type, isRentalsEnabled, onBack }: Props) => {
                               nft={nft}
                               order={order}
                               rental={rental}
-                              isRentalsEnabled={isRentalsEnabled}
                             />
                           ),
                           wearable: nft => <WearableDetail nft={nft} />,

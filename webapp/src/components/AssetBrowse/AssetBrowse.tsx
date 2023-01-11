@@ -49,7 +49,6 @@ const AssetBrowse = (props: Props) => {
     onlyOnSale,
     onlySmart,
     viewInState,
-    isRentalsEnabled,
     onlyOnRent
   } = props
 
@@ -200,30 +199,24 @@ const AssetBrowse = (props: Props) => {
               />
             </div>
           ) : (
-            <AssetList
-              isManager={view === View.CURRENT_ACCOUNT && isRentalsEnabled}
-            />
+            <AssetList isManager={view === View.CURRENT_ACCOUNT} />
           )}
         </>
       )
   }
 
-  const mobileSections = useMemo(
-    () =>
-      [
-        Sections.decentraland.COLLECTIONS,
-        Sections.decentraland.LAND,
-        Sections.decentraland.WEARABLES,
-        Sections.decentraland.EMOTES,
-        Sections.decentraland.ENS,
-        Sections.decentraland.ON_SALE,
-        isRentalsEnabled ? Sections.decentraland.ON_RENT : undefined,
-        Sections.decentraland.SALES,
-        Sections.decentraland.BIDS,
-        Sections.decentraland.STORE_SETTINGS
-      ].filter(Boolean),
-    [isRentalsEnabled]
-  )
+  const mobileSections = [
+    Sections.decentraland.COLLECTIONS,
+    Sections.decentraland.LAND,
+    Sections.decentraland.WEARABLES,
+    Sections.decentraland.EMOTES,
+    Sections.decentraland.ENS,
+    Sections.decentraland.ON_SALE,
+    Sections.decentraland.ON_RENT,
+    Sections.decentraland.SALES,
+    Sections.decentraland.BIDS,
+    Sections.decentraland.STORE_SETTINGS
+  ].filter(Boolean)
 
   return (
     <>

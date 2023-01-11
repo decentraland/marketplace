@@ -698,7 +698,8 @@
       "cancel_bid": "Cancelaste una oferta de {price} por {name}.",
       "claim_asset": "Reclamaste tu {name} del {contract}.",
       "remove_rental": "Removiste tu {name} del listado de rentas.",
-      "accept_rental": "Aceptaste una renta en {name} pagando {pricePerDay} por día por {duration} {duration, plural, one {día} other {días}}."
+      "accept_rental": "Aceptaste una renta en {name} pagando {pricePerDay} por día por {duration} {duration, plural, one {día} other {días}}.",
+      "buy_mana": "Compraste {amount} {name} a través de {gateway}"
     }
   },
   "mana": {
@@ -817,6 +818,7 @@
         "edit": "Editar listado de alquiler",
         "create": "Poner en alquiler"
       },
+      "editing_cost_warning": "Editar la publicación va a requerir ejecutar una nueva transacción para la cual será necesario pagar los costos de la misma.",
       "update_listing": "Actualizar listado de alquiler",
       "remove_listing": "Remover listado de alquiler",
       "price_per_day": "Precio por día",
@@ -953,5 +955,12 @@
     "browse_listings": "Ver tierras para rentar",
     "list_your_land": "Lista tu tierra a la renta",
     "description": "<p>Si eres dueño de tierra ahora puede ganar MANA rentando tus parcelas o estates a creadores de contenido.</p> <p>¿Eres un creador de contenido? Ahora puedes publicar tu escenas en la Genesis City sin la necesidad de poseer tierras.</p> <p>Si quieres leer más sobre ésto, <a>lee nuestro blog post</a>.</p>"
+  },
+  "atlas": {
+    "price": "Precio",
+    "owner": "Dueño",
+    "for_sale_and_rent": "Disponible para la compra o renta",
+    "for_sale": "Disponible para la compra",
+    "for_rent": "Disponible para la renta"
   }
 }
