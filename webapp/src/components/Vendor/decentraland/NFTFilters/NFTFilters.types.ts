@@ -28,7 +28,6 @@ export type Props = {
   network?: Network
   emotePlayMode?: EmotePlayMode
   hasFiltersEnabled: boolean
-  isRentalsEnabled: boolean
   onBrowse: typeof browse
   onClearFilters: typeof clearFilters
 }
@@ -51,7 +50,6 @@ export type MapStateProps = Pick<
   | 'network'
   | 'emotePlayMode'
   | 'hasFiltersEnabled'
-  | 'isRentalsEnabled'
 >
 export type MapDispatchProps = Pick<Props, 'onClearFilters'>
 export type MapDispatch = Dispatch<ClearFiltersAction>

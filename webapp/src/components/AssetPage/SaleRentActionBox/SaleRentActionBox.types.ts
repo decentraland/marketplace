@@ -14,7 +14,6 @@ export type Props = {
   rental: RentalListing | null
   order: Order | null
   userHasAlreadyBidsOnNft: boolean
-  isRentalsEnabled: boolean
   currentMana: number | undefined
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onRent: (selectedPeriodIndex: number) => void

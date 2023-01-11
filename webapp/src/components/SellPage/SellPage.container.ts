@@ -12,7 +12,6 @@ import {
   CREATE_ORDER_REQUEST
 } from '../../modules/order/actions'
 import { getLoading as getLoadingOrders } from '../../modules/order/selectors'
-import { getIsRentalsEnabled } from '../../modules/features/selectors'
 import { getContract } from '../../modules/contract/selectors'
 import { Contract } from '../../modules/vendor/services'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './SellPage.types'
@@ -25,12 +24,10 @@ const mapState = (state: RootState): MapStateProps => ({
     FETCH_AUTHORIZATIONS_REQUEST
   ),
   isCreatingOrder: isLoadingType(getLoadingOrders(state), CREATE_ORDER_REQUEST),
-  isRentalsEnabled: getIsRentalsEnabled(state),
   getContract: (query: Partial<Contract>) => getContract(state, query)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onNavigate: path => dispatch(push(path)),
   onGoBack: () => dispatch(goBack()),
   onCreateOrder: (nft, price, expiresAt) =>
     dispatch(createOrderRequest(nft, price, expiresAt))

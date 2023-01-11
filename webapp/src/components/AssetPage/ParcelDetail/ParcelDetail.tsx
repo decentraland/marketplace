@@ -22,7 +22,7 @@ import { Owner } from '../Owner'
 import { Props } from './ParcelDetail.types'
 import styles from './ParcelDetail.module.css'
 
-const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
+const ParcelDetail = ({ nft, order, rental }: Props) => {
   const parcel = nft.data.parcel!
   const { x, y } = parcel
   const isPartOfEstate = nft.category === NFTCategory.PARCEL && parcel.estate
@@ -34,7 +34,7 @@ const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
       assetImage={
         <AssetImage asset={nft} isDraggable withNavigation hasPopup />
       }
-      showDetails={isRentalsEnabled && isLand(nft)}
+      showDetails={isLand(nft)}
       isOnSale={!!nft.activeOrderId}
       badges={
         <>
@@ -45,22 +45,11 @@ const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
       left={
         <>
           <Description text={parcel.description} />
-          {!isRentalsEnabled ? <Owner asset={nft} /> : null}
+          <Owner asset={nft} />
           <ProximityHighlights nft={nft} />
         </>
       }
-      actions={
-        <>
-          {isRentalsEnabled ? (
-            <SaleRentActionBox
-              isRentalsEnabled={isRentalsEnabled}
-              order={order}
-              nft={nft}
-              rental={rental}
-            />
-          ) : null}
-        </>
-      }
+      actions={<SaleRentActionBox order={order} nft={nft} rental={rental} />}
       box={
         <>
           {isPartOfEstate && (
@@ -90,7 +79,7 @@ const ParcelDetail = ({ nft, order, rental, isRentalsEnabled }: Props) => {
         <>
           <BidList nft={nft} />
           <TransactionHistory asset={nft} />
-          {isRentalsEnabled ? <RentalHistory asset={nft} /> : null}
+          <RentalHistory asset={nft} />
         </>
       }
     />

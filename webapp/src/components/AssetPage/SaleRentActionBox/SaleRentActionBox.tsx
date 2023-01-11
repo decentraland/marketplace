@@ -46,7 +46,6 @@ const SaleRentActionBox = ({
   order,
   rental,
   userHasAlreadyBidsOnNft,
-  isRentalsEnabled,
   currentMana,
   getContract,
   onRent
@@ -142,7 +141,7 @@ const SaleRentActionBox = ({
 
   return (
     <div className={styles.main}>
-      {isRentalOpen && maxPriceOfPeriods && isRentalsEnabled ? (
+      {isRentalOpen && maxPriceOfPeriods ? (
         <div className={styles.viewSelector}>
           <button
             onClick={toggleView}
@@ -165,10 +164,7 @@ const SaleRentActionBox = ({
         </div>
       ) : null}
       <div className={styles.actions}>
-        {view === View.RENT &&
-        isRentalOpen &&
-        maxPriceOfPeriods &&
-        isRentalsEnabled ? (
+        {view === View.RENT && isRentalOpen && maxPriceOfPeriods ? (
           <>
             <div className={styles.price}>
               <div className={styles.title}>{t('global.price')}</div>

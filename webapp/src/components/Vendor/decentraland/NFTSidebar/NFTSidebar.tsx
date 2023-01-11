@@ -9,7 +9,7 @@ import { Props } from './NFTSidebar.types'
 import './NFTSidebar.css'
 
 const NFTSidebar = (props: Props) => {
-  const { section, sections, onMenuItemClick, isRentalsEnabled } = props
+  const { section, sections, onMenuItemClick } = props
   const isNotMobile = useNotMobileMediaQuery()
 
   return (
@@ -20,9 +20,7 @@ const NFTSidebar = (props: Props) => {
         sections={sections}
         onSectionClick={onMenuItemClick}
       />
-      {isRentalsEnabled && isLandSection(section) && isNotMobile ? (
-        <NFTLandFilters />
-      ) : null}
+      {isLandSection(section) && isNotMobile ? <NFTLandFilters /> : null}
     </div>
   )
 }

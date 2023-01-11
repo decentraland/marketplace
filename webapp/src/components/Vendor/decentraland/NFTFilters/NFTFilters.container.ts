@@ -8,7 +8,6 @@ import {
   hasFiltersEnabled
 } from '../../../../modules/routing/selectors'
 import { getCount, getView } from '../../../../modules/ui/browse/selectors'
-import { getIsRentalsEnabled } from '../../../../modules/features/selectors'
 import {
   getSection,
   getSortBy,
@@ -48,8 +47,7 @@ const mapState = (state: RootState): MapStateProps => ({
   contracts: getContracts(state),
   network: getNetwork(state),
   emotePlayMode: getEmotePlayMode(state),
-  hasFiltersEnabled: hasFiltersEnabled(state),
-  isRentalsEnabled: getIsRentalsEnabled(state),
+  hasFiltersEnabled: hasFiltersEnabled(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

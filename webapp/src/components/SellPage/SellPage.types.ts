@@ -12,25 +12,16 @@ export type Props = {
   authorizations: Authorization[]
   isLoading: boolean
   isCreatingOrder: boolean
-  isRentalsEnabled: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onCreateOrder: typeof createOrderRequest
-  onNavigate: (path: string) => void
   onGoBack: () => void
 }
 
 export type MapStateProps = Pick<
   Props,
-  | 'authorizations'
-  | 'isLoading'
-  | 'isCreatingOrder'
-  | 'isRentalsEnabled'
-  | 'getContract'
+  'authorizations' | 'isLoading' | 'isCreatingOrder' | 'getContract'
 >
-export type MapDispatchProps = Pick<
-  Props,
-  'onNavigate' | 'onCreateOrder' | 'onGoBack'
->
+export type MapDispatchProps = Pick<Props, 'onCreateOrder' | 'onGoBack'>
 export type MapDispatch = Dispatch<
   CallHistoryMethodAction | CreateOrderRequestAction
 >

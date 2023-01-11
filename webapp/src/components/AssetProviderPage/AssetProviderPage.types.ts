@@ -4,7 +4,6 @@ import { Asset, AssetType } from '../../modules/asset/types'
 export type Props<T extends AssetType = AssetType> = {
   type: T
   isConnecting: boolean
-  isRentalsEnabled: boolean
   fullWidth?: boolean
   children: (
     asset: Asset<T>,
@@ -13,7 +12,7 @@ export type Props<T extends AssetType = AssetType> = {
   ) => React.ReactNode | null
 }
 
-export type MapStateProps = Pick<Props, 'isConnecting' | 'isRentalsEnabled'>
+export type MapStateProps = Pick<Props, 'isConnecting'>
 export type OwnProps<T extends AssetType = AssetType> = Pick<
   Props<T>,
   'type' | 'children' | 'fullWidth'

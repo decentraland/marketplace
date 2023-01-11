@@ -51,8 +51,7 @@ const NFTFilters = (props: Props) => {
     onBrowse,
     assetType,
     hasFiltersEnabled,
-    onClearFilters,
-    isRentalsEnabled
+    onClearFilters
   } = props
   const category = section ? getCategoryFromSection(section) : undefined
 
@@ -95,8 +94,7 @@ const NFTFilters = (props: Props) => {
   ]
 
   const shouldShowOnSaleFilter =
-    (isRentalsEnabled && ((section && !isLandSection(section!)) || !section)) ||
-    !isRentalsEnabled
+    (section && !isLandSection(section!)) || !section
 
   if (onlyOnSale) {
     orderByDropdownOptions.unshift({
@@ -311,7 +309,7 @@ const NFTFilters = (props: Props) => {
               minWidth={Responsive.onlyTablet.minWidth}
               className="topbar-filter"
             >
-              {isRentalsEnabled && view === View.CURRENT_ACCOUNT ? (
+              {view === View.CURRENT_ACCOUNT ? (
                 <Dropdown
                   direction="left"
                   className="topbar-dropdown"
@@ -478,7 +476,7 @@ const NFTFilters = (props: Props) => {
               onChange={handleOrderByDropdownChange}
             />
           </div>
-          {isRentalsEnabled && section && isLandSection(section) ? (
+          {section && isLandSection(section) ? (
             <div className="filter-row">
               <Header sub>{t('filters.status')}</Header>
               <Dropdown
