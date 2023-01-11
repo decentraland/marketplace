@@ -10,7 +10,8 @@ import {
   getVendor,
   getPage,
   getAssetType,
-  getCurrentBrowseOptions
+  getCurrentBrowseOptions,
+  getSection
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
@@ -26,6 +27,7 @@ const mapState = (state: RootState): MapStateProps => {
   return {
     vendor: getVendor(state),
     assetType,
+    section: getSection(state),
     nfts: getNFTs(state),
     items: getItems(state),
     page: page,
