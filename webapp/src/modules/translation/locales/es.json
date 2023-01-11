@@ -151,7 +151,9 @@
     "clear": "Borrar filtros",
     "recently_reviewed": "Revisado recientemente",
     "size": "Tamaño",
-    "price": "Precio"
+    "price": "Precio",
+    "reset": "Limpiar",
+    "apply_filters": "Aplicar filtros"
   },
   "home_page": {
     "analytics": {
@@ -320,15 +322,12 @@
     "query_more_than_results": "Mostrando +{count} items para \"{search}\"",
     "search": "Buscar",
     "search_land": "Buscar tierras...",
-    "rarity": "Rareza",
     "gender": "Género",
-    "collection": "Colección",
-    "all_collections": "Todas las colecciones",
-    "network": "Red",
-    "all_networks": "Todas las redes",
     "smart_wearables": "Vestimentas Interactivas",
-    "play_mode": "Play Mode",
-    "all_play_modes": "All Play Modes",
+    "emote_play_mode": {
+      "title": "Play Mode",
+      "all_items": "All Play Modes"
+    },
     "body_shapes": {
       "title": "Género",
       "all_items": "Todos los géneros",
@@ -336,12 +335,29 @@
       "male": "Solo masculino",
       "unisex": "Solo unisex"
     },
+    "rarities": {
+      "title": "Rareza",
+      "all_items": "Todas las rarezas",
+      "count_items": "{count} {count, plural, one {rareza} other {rarezas}}"
+    },
+    "price": {
+      "title": "Precio",
+      "all_items": "Todos los precios",
+      "more_than_price": "Más de <mana></mana> {price}",
+      "less_than_price": "Menos de <mana></mana> {price}",
+      "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "collection": {
+      "title": "Colección",
+      "all_items": "Todas las colecciones"
+    },
+    "network": {
+      "title": "Red",
+      "all_items": "Todas las redes"
+    },
     "more_filters": "Más filtros",
     "only_smart": "Solo vestimentas interactivas",
-    "not_on_sale": "No a la venta",
-    "more_than_price": "Más de <mana></mana> {price}",
-    "less_than_price": "Menos de <mana></mana> {price}",
-    "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    "not_on_sale": "No a la venta"
   },
   "nft_land_filters": {
     "all_land": "Todas las tierras",

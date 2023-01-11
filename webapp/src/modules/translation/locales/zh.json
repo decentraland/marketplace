@@ -151,7 +151,9 @@
     "clear": "清除过滤器",
     "recently_reviewed": "最近审查",
     "size": "大小",
-    "price": "价格"
+    "price": "价格",
+    "reset": "重置",
+    "apply": "应用过滤器"
   },
   "home_page": {
     "analytics": {
@@ -321,15 +323,12 @@
     "query_more_than_results": "显示 +{count} 结果 为了 \"{search}\"",
     "search": "搜寻",
     "search_land": "搜寻...",
-    "rarity": "稀有度",
     "gender": "性别",
-    "collection": "珍藏",
-    "all_collections": "所有珍藏",
-    "network": "网络",
-    "all_networks": "所有网络",
     "smart_wearables": "智能穿戴",
-    "play_mode": "游戏模式",
-    "all_play_modes": "所有播放模式",
+    "emote_play_mode": {
+      "title": "游戏模式",
+      "all_items": "所有播放模式"
+    },
     "body_shapes": {
       "title": "身材",
       "all_items": "所有体型",
@@ -337,12 +336,29 @@
       "male": "只有男性",
       "unisex": "仅男女皆宜"
     },
+    "rarities": {
+      "title": "稀有度",
+      "all_items": "所有稀有",
+      "count_items": "{count} {count, plural, one {稀有度} other {珍品}}"
+    },
+    "price": {
+      "title": "价格",
+      "all_items": "所有价格",
+      "more_than_price": "超过 <mana></mana> {price}",
+      "less_than_price": "低于 <mana></mana> {price}",
+      "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "collection": {
+      "title": "收藏",
+      "all_items": "所有收藏"
+    },
+    "network": {
+      "title": "网络",
+      "all_items": "所有网络"
+    },
     "more_filters": "更多过滤器",
     "only_smart": "只有聪明",
-    "not_on_sale": "不打折",
-    "more_than_price": "超过 <mana></mana> {price}",
-    "less_than_price": "低于 <mana></mana> {price}",
-    "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    "not_on_sale": "不打折"
   },
   "nft_land_filters": {
     "all_land": "所有土地",

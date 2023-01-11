@@ -47,3 +47,37 @@
   height: 23px;
   border: 3px solid var(--secondary);
 }
+
+.filters-sidebar .mobile-box-header {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-box-header .box-filter-name,
+.mobile-box-header .box-filter-value {
+  text-transform: none;
+  font-size: 17px;
+}
+
+.mobile-box-header .box-filter-name {
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .filters-sidebar {
+    row-gap: 0;
+    margin-top: 0;
+  }
+
+  .Menu.filters-sidebar {
+    margin: 0;
+    width: 100%;
+    row-gap: 0;
+  }
+
+  .filters-sidebar .dcl.box.filters-sidebar-box {
+    border-bottom: 1px solid rgba(115, 110, 125, 0.32);
+  }
+}

@@ -1,4 +1,4 @@
-import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
 import { BrowseOptions } from '../../modules/routing/types'
 import { Section } from '../../modules/vendor/routing/types'
@@ -10,7 +10,7 @@ export type Props = {
   rarities: Rarity[]
   network?: Network
   category?: NFTCategory
-  bodyShapes?: GenderFilterOption[]
+  bodyShapes?: (GenderFilterOption | WearableGender)[]
   isOnlySmart: boolean
   isOnSale?: boolean
   emotePlayMode?: EmotePlayMode[]
@@ -19,7 +19,9 @@ export type Props = {
   section: Section
   landStatus: LANDFilters
   isRentalsEnabled: boolean
+  values?: BrowseOptions
   onBrowse: (options: BrowseOptions) => void
+  onFilterChange?: (options: BrowseOptions) => void
 }
 
 export type MapStateProps = Pick<Props, 'minPrice'
@@ -37,4 +39,6 @@ export type MapStateProps = Pick<Props, 'minPrice'
   | 'landStatus'
   | 'isRentalsEnabled'
 >
+
+export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>
 export type MapDispatchProps = Pick<Props, 'onBrowse'>

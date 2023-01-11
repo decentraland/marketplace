@@ -3,11 +3,19 @@
   padding-bottom: 0;
 }
 
-.price-filter .dcl.mana {
+.price-filter .dcl.mana:not(.mana-label-icon) {
   position: absolute;
   top: 10px;
   left: 15px;
   margin-top: 0;
+}
+
+.price-filter .ui.header.dcl.mana.mana-label-icon {
+  font-size: 17px;
+}
+
+.price-filter .dcl.mana.mana-label-icon .symbol {
+  opacity: 0.5;
 }
 
 .price-filter .dcl.mana .symbol .ethereum {

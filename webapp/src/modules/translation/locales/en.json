@@ -155,7 +155,9 @@
     "clear": "Clear all filters",
     "recently_reviewed": "Recently reviewed",
     "size": "Size",
-    "price": "Price"
+    "price": "Price",
+    "reset": "Reset",
+    "apply": "Apply filters"
   },
   "home_page": {
     "analytics": {
@@ -325,27 +327,42 @@
     "query_more_than_results": "Showing +{count} items for \"{search}\"",
     "search": "Search",
     "search_land": "Search land...",
-    "rarity": "Rarity",
     "gender": "Gender",
-    "collection": "Collection",
-    "all_collections": "All Collections",
-    "network": "Network",
-    "all_networks": "All Networks",
     "smart_wearables": "Smart Wearables",
-    "play_mode": "Play Mode",
-    "all_play_modes": "All Play Modes",
+    "emote_play_mode": {
+      "title": "Play Mode",
+      "all_items": "All Play Modes"
+    },
     "body_shapes": {
       "title": "Body shape",
       "all_items": "All Body Shapes",
       "available_for_female": "Available for female",
       "available_for_male": "Available for male"
     },
+    "rarities": {
+      "title": "Rarity",
+      "all_items": "All rarities",
+      "count_items": "{count} {count, plural, one {rarity} other {rarities}}"
+    },
+    "price": {
+      "title": "Price",
+      "all_items": "All prices",
+      "more_than_price": "More than <mana></mana> {price}",
+      "less_than_price": "Less than <mana></mana> {price}",
+      "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "collection": {
+      "title": "Collection",
+      "all_items": "All collections"
+    },
+    "network": {
+      "title": "Network",
+      "all_items": "All networks"
+    },
     "more_filters": "More filters",
     "only_smart": "Only smart",
     "not_on_sale": "Not on sale",
-    "more_than_price": "More than <mana></mana> {price}",
-    "less_than_price": "Less than <mana></mana> {price}",
-    "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    "for_sale": "For sale"
   },
   "nft_land_filters": {
     "all_land": "All land",

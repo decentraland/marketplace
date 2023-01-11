@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
-import { useNotMobileMediaQuery } from 'decentraland-ui'
 import {
   EmotePlayMode,
   GenderFilterOption,
   Network,
-  NFTCategory,
-  Rarity
+  Rarity,
+  WearableGender
 } from '@dcl/schemas'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
+import { getNetwork } from '../../utils/filters'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import { PriceFilter } from './PriceFilter'
@@ -40,12 +40,9 @@ export const AssetFilters = ({
   landStatus,
   isRentalsEnabled,
   onBrowse
-}: Props): JSX.Element => {
-  const isWearableCategory = category === NFTCategory.WEARABLE
-  const isEmoteCategory = category === NFTCategory.EMOTE
+}: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
-  const isNotMobile = useNotMobileMediaQuery()
 
   const handlePriceChange = useCallback(
     (value: [string, string]) => {
@@ -70,7 +67,7 @@ export const AssetFilters = ({
   )
 
   const handleBodyShapeChange = useCallback(
-    (value: GenderFilterOption[]) => {
+    (value: (WearableGender | GenderFilterOption)[]) => {
       onBrowse({ wearableGenders: value })
     },
     [onBrowse]
@@ -127,13 +124,21 @@ export const AssetFilters = ({
     [category, section]
   )
 
-  if (isInLandSection && isNotMobile && isRentalsEnabled) {
+  if (isInLandSection) {
     return (
       <div className="filters-sidebar">
-        <LandStatusFilter
-          landStatus={landStatus}
-          onChange={handleLandStatusChange}
+        <PriceFilter
+          onChange={handlePriceChange}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          network={getNetwork(network, category)}
         />
+        {isRentalsEnabled ? (
+          <LandStatusFilter
+            landStatus={landStatus}
+            onChange={handleLandStatusChange}
+          />
+        ) : null}
       </div>
     )
   }
@@ -147,11 +152,7 @@ export const AssetFilters = ({
         onChange={handlePriceChange}
         minPrice={minPrice}
         maxPrice={maxPrice}
-        network={
-          isWearableCategory || isEmoteCategory
-            ? Network.MATIC
-            : Network.ETHEREUM
-        }
+        network={getNetwork(network, category)}
       />
       {shouldRenderFilter(AssetFilter.Collection) ? (
         <CollectionFilter

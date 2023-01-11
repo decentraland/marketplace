@@ -1,8 +1,8 @@
-import { useCallback } from "react"
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Box } from "decentraland-ui"
-import { SelectFilter } from "../../Vendor/NFTFilters/SelectFilter"
-import { collectionAPI } from "../../../modules/vendor/decentraland"
+import { Box, useMobileMediaQuery } from 'decentraland-ui'
+import { SelectFilter } from '../../Vendor/NFTFilters/SelectFilter'
+import { collectionAPI } from '../../../modules/vendor/decentraland'
 import './CollectionFilter.css'
 
 const ALL_FILTER_OPTION = 'ALL'
@@ -13,56 +13,130 @@ type CollectionFilterProps = {
   onChange: (collection?: string) => void
 }
 
-export const CollectionFilter = ({ collection, onlyOnSale, onChange }: CollectionFilterProps): JSX.Element => {
-  const handleCollectionChange = useCallback((value: string) => {
-    // We need to send undefined for the ALL_FILTER_OPTION because we don't want it to be added to the url.
-    // This was causing a bug where the contracts with address "ALL" would be fetched and bring no results.
-    onChange(value === ALL_FILTER_OPTION ? undefined : value);
-  }, [onChange])
+export const CollectionFilter = ({
+  collection,
+  onlyOnSale,
+  onChange
+}: CollectionFilterProps): JSX.Element => {
+  const isMobile = useMobileMediaQuery()
+  const [savedCollectionInfo, setSavedCollectionInfo] = useState<{
+    text: string
+    value: string
+    onlyOnSale?: boolean
+  } | null>(null)
 
-  const handleFetchOptions = useCallback(async (search: string) => {
-    try {
-      const { data } = await collectionAPI.fetch({ search, isOnSale: onlyOnSale })
+  const handleCollectionChange = useCallback(
+    (value: string) => {
+      // We need to send undefined for the ALL_FILTER_OPTION because we don't want it to be added to the url.
+      // This was causing a bug where the contracts with address "ALL" would be fetched and bring no results.
+      onChange(value === ALL_FILTER_OPTION ? undefined : value)
+    },
+    [onChange]
+  )
 
-      return data.map(collection => ({
-        text: collection.name,
-        value: collection.contractAddress
-      }))
-    } catch (e) {
-      console.warn('Could not fetch options')
-      return []
-    }
-  }, [onlyOnSale])
+  const handleFetchOptions = useCallback(
+    async (search: string) => {
+      try {
+        const { data } = await collectionAPI.fetch({
+          search,
+          isOnSale: onlyOnSale
+        })
 
-  const handleFetchOptionsFromValue = useCallback(async (value: string) => {
-    try {
-      const { data } = await collectionAPI.fetch({
-        contractAddress: value,
-        isOnSale: onlyOnSale
-      })
+        return data.map(collection => ({
+          text: collection.name,
+          value: collection.contractAddress
+        }))
+      } catch (e) {
+        console.warn('Could not fetch options')
+        return []
+      }
+    },
+    [onlyOnSale]
+  )
 
-      if (data.length === 0) {
+  const handleFetchOptionsFromValue = useCallback(
+    async (value: string) => {
+      try {
+        if (
+          value === savedCollectionInfo?.value &&
+          onlyOnSale === savedCollectionInfo.onlyOnSale
+        ) {
+          return {
+            text: savedCollectionInfo.text,
+            value: savedCollectionInfo.value
+          }
+        }
+
+        const { data } = await collectionAPI.fetch({
+          contractAddress: value,
+          isOnSale: onlyOnSale
+        })
+
+        if (data.length === 0) {
+          setSavedCollectionInfo(null)
+          return null
+        }
+
+        setSavedCollectionInfo({
+          text: data[0].name,
+          value,
+          onlyOnSale
+        })
+
+        return {
+          text: data[0].name,
+          value
+        }
+      } catch (e) {
+        console.warn('Could not fetch option from value')
         return null
       }
+    },
+    [onlyOnSale, savedCollectionInfo]
+  )
 
-      return {
-        text: data[0].name,
-        value
-      }
-    } catch (e) {
-      console.warn('Could not fetch option from value')
-      return null
+  useEffect(() => {
+    if (collection && collection !== savedCollectionInfo?.value) {
+      handleFetchOptionsFromValue(collection)
     }
-  }, [onlyOnSale])
+
+    if (!collection) {
+      setSavedCollectionInfo(null)
+    }
+  }, [collection, savedCollectionInfo, handleFetchOptionsFromValue])
+
+  const header = useMemo(
+    () =>
+      isMobile ? (
+        <div className="mobile-box-header">
+          <span className="box-filter-name">
+            {t('nft_filters.collection.title')}
+          </span>
+          <span className="box-filter-value">
+            {savedCollectionInfo?.text
+              ? savedCollectionInfo.text
+              : t('nft_filters.collection.all_items')}
+          </span>
+        </div>
+      ) : (
+        t('nft_filters.collection.title')
+      ),
+    [isMobile, savedCollectionInfo?.text]
+  )
 
   return (
-    <Box header={t('nft_filters.collection')} collapsible className="filters-sidebar-box">
+    <Box
+      header={header}
+      collapsible
+      className="filters-sidebar-box"
+      defaultCollapsed={isMobile}
+    >
       <SelectFilter
         name=""
         value={collection || ''}
         clearable={!!collection}
         options={[]}
-        placeholder={t('nft_filters.all_collections')}
+        placeholder={t('nft_filters.collection.all_items')}
         onChange={handleCollectionChange}
         fetchOptions={handleFetchOptions}
         fetchOptionFromValue={handleFetchOptionsFromValue}
