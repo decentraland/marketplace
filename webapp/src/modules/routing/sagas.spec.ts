@@ -132,7 +132,9 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         rarities: undefined,
         contracts: undefined,
         wearableGenders: undefined,
-        emotePlayMode: undefined
+        emotePlayMode: undefined,
+        minPrice: undefined,
+        maxPrice: undefined
       }
     }
 
