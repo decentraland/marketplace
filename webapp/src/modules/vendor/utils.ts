@@ -11,8 +11,7 @@ import { VendorName, Disabled } from './types'
 
 export function getFilters(
   vendor: VendorName,
-  options: BrowseOptions,
-  isRentalsEnabled: boolean
+  options: BrowseOptions
 ): NFTsFetchFilters {
   const { section, address } = options
 
@@ -60,7 +59,7 @@ export function getFilters(
         network,
         emotePlayMode,
         rentalStatus:
-          isRentalsEnabled && (isLand || isParcelsOrEstates) && address
+          (isLand || isParcelsOrEstates) && address
             ? [RentalStatus.OPEN, RentalStatus.EXECUTED]
             : undefined
       } as NFTsFetchFilters<VendorName.DECENTRALAND>

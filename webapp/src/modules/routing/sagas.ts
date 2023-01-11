@@ -105,7 +105,6 @@ import {
 } from '../bid/actions'
 import { getData } from '../event/selectors'
 import { buildBrowseURL } from './utils'
-import { getIsRentalsEnabled } from '../features/selectors'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -190,7 +189,6 @@ function* handleGoBack(action: GoBackAction) {
 }
 
 export function* fetchAssetsFromRoute(options: BrowseOptions) {
-  const isRentalsEnabled: boolean = yield select(getIsRentalsEnabled)
   const isItems = options.assetType === AssetType.ITEM
   const view = options.view!
   const vendor = options.vendor!
@@ -312,7 +310,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               category,
               search
             },
-            filters: getFilters(vendor, options, isRentalsEnabled) // TODO: move to routing
+            filters: getFilters(vendor, options) // TODO: move to routing
           })
         )
       }

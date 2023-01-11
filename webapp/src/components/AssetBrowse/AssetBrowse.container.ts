@@ -18,7 +18,6 @@ import {
 } from '../../modules/routing/selectors'
 import { getView } from '../../modules/ui/browse/selectors'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
-import { getIsRentalsEnabled } from '../../modules/features/selectors'
 import { isMapSet } from '../../modules/routing/utils'
 import {
   MapDispatch,
@@ -43,7 +42,6 @@ const mapState = (state: RootState): MapStateProps => {
     assetType: getAssetType(state),
     viewInState: getView(state),
     onlySmart: getOnlySmart(state),
-    isRentalsEnabled: getIsRentalsEnabled(state),
     onlyOnRent: getOnlyOnRent(state)
   }
 }

@@ -19,7 +19,6 @@ import {
   INPUT_FORMAT,
   getDefaultExpirationDate
 } from '../../../modules/order/utils'
-import { locations } from '../../../modules/routing/locations'
 import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
 import { AuthorizationModal } from '../../AuthorizationModal'
@@ -39,9 +38,7 @@ const SellModal = (props: Props) => {
     authorizations,
     isLoading,
     isCreatingOrder,
-    isRentalsEnabled,
     getContract,
-    onNavigate,
     onGoBack,
     onCreateOrder
   } = props
@@ -158,14 +155,7 @@ const SellModal = (props: Props) => {
           />
         </div>
         <div className="buttons">
-          <Button
-            as="div"
-            onClick={() =>
-              isRentalsEnabled
-                ? onGoBack()
-                : onNavigate(locations.nft(nft.contractAddress, nft.tokenId))
-            }
-          >
+          <Button as="div" onClick={onGoBack}>
             {t('global.cancel')}
           </Button>
           <ChainButton

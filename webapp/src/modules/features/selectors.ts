@@ -39,18 +39,6 @@ export const getIsMarketplaceLaunchPopupEnabled = (
   }
 }
 
-export const getIsRentalsEnabled = (state: RootState) => {
-  try {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.BUILDER,
-      FeatureName.RENTALS
-    )
-  } catch (e) {
-    return false
-  }
-}
-
 export const getIsCampaignHomepageBannerEnabled = (state: RootState) => {
   try {
     return getIsFeatureEnabled(

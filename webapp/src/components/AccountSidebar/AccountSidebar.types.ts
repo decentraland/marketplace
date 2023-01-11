@@ -6,9 +6,8 @@ export type Props = {
   address: string
   isCurrentAccount?: boolean
   onBrowse: typeof browse
-  isRentalsEnabled: boolean
 }
 
-export type MapStateProps = Pick<Props, 'section' | 'isRentalsEnabled'>
+export type MapStateProps = Pick<Props, 'section'>
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
 export type MapDispatch = Dispatch<BrowseAction>

@@ -6,5 +6,4 @@ export type Props = {
   nft: NFT<VendorName.DECENTRALAND>
   order: Order | null
   rental: RentalListing | null
-  isRentalsEnabled: boolean
 }

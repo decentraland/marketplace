@@ -13,9 +13,7 @@ export type Props = {
   authorizations: Authorization[]
   isLoading: boolean
   isCreatingOrder: boolean
-  isRentalsEnabled: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
-  onNavigate: (path: string) => void
   onGoBack: () => void
   onCreateOrder: typeof createOrderRequest
 }
