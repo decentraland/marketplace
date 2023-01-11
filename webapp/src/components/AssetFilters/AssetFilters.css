@@ -79,5 +79,13 @@
 
   .filters-sidebar .dcl.box.filters-sidebar-box {
     border-bottom: 1px solid rgba(115, 110, 125, 0.32);
+    background: transparent;
+    border-radius: 0;
+    border-right: 0;
+    border-left: 0;
+  }
+
+  .filters-sidebar .dcl.box.filters-sidebar-box:not(:last-child) {
+    border-bottom: 0;
   }
 }
