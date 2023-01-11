@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { Box, CheckboxProps, Radio, useMobileMediaQuery } from 'decentraland-ui'
+import { Box, CheckboxProps, Checkbox, useMobileMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTCategory } from '@dcl/schemas'
 import './MoreFilters.css'
@@ -70,14 +70,14 @@ export const MoreFilters = ({
       defaultCollapsed={isMobile}
     >
       <div className="more-filters-section">
-        <Radio
+        <Checkbox
           label="On sale"
           toggle
           checked={isOnSale}
           onChange={handleOnSaleChange}
         />
         {isWearableCategory && (
-          <Radio
+          <Checkbox
             label="Only smart"
             toggle
             checked={isOnlySmart}
