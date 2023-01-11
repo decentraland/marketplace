@@ -1,6 +1,8 @@
 import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
 import { BrowseOptions } from '../../modules/routing/types'
+import { View } from '../../modules/ui/types'
+import { VendorName } from '../../modules/vendor'
 import { Section } from '../../modules/vendor/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
 
@@ -16,9 +18,11 @@ export type Props = {
   emotePlayMode?: EmotePlayMode[]
   assetType?: AssetType
   collection: string
-  section: Section
+  section?: Section
   landStatus: LANDFilters
   values?: BrowseOptions
+  vendor?: VendorName
+  view?: View
   onBrowse: (options: BrowseOptions) => void
   onFilterChange?: (options: BrowseOptions) => void
 }
@@ -36,6 +40,8 @@ export type MapStateProps = Pick<Props, 'minPrice'
   | 'collection'
   | 'section'
   | 'landStatus'
+  | 'vendor'
+  | 'view'
 >
 
 export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>

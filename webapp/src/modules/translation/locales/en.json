@@ -362,7 +362,8 @@
     "more_filters": "More filters",
     "only_smart": "Only smart",
     "not_on_sale": "Not on sale",
-    "for_sale": "For sale"
+    "for_sale": "For sale",
+    "category": "Category"
   },
   "nft_land_filters": {
     "all_land": "All land",

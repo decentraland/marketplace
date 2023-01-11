@@ -20,10 +20,12 @@ import { LANDFilters } from '../Vendor/decentraland/types'
 import { browse } from '../../modules/routing/actions'
 import { MapDispatchProps, MapStateProps, OwnProps } from './AssetFilters.types'
 import { AssetFilters } from './AssetFilters'
+import { Section } from '../../modules/vendor/routing/types'
+import { getView } from '../../modules/ui/browse/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps
-  const section = getSection(state)
+  const section = 'section' in values ? (values.section as Section)  : getSection(state)
   const contracts =
     'contracts' in values ? values.contracts || [] : getContracts(state)
   const onlyOnSale =
@@ -55,6 +57,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     assetType: getAssetType(state),
     collection: contracts[0],
     landStatus,
+    view: getView(state),
     section
   }
 }

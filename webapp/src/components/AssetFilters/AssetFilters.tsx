@@ -6,6 +6,7 @@ import {
   Rarity,
   WearableGender
 } from '@dcl/schemas'
+import { useMobileMediaQuery } from 'decentraland-ui'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
@@ -21,8 +22,10 @@ import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
+import { CategoryFilter } from './CategoryFilter/CategoryFilter'
 import { AssetFilter, filtersBySection } from './utilts'
 import './AssetFilters.css'
+import { Section } from '../../modules/vendor/routing/types'
 
 export const AssetFilters = ({
   minPrice,
@@ -42,6 +45,9 @@ export const AssetFilters = ({
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
+  const isMobile = useMobileMediaQuery()
+
+  console.log(section)
 
   const handlePriceChange = useCallback(
     (value: [string, string]) => {
@@ -93,6 +99,13 @@ export const AssetFilters = ({
     [onBrowse]
   )
 
+  const handleSectionChange = useCallback(
+    (section: Section) => {
+      onBrowse({ section })
+    },
+    [onBrowse]
+  )
+
   function handleCollectionChange(value: string | undefined) {
     const newValue = value ? [value] : []
     onBrowse({ contracts: newValue })
@@ -118,7 +131,7 @@ export const AssetFilters = ({
       const parentSection = category
         ? getSectionFromCategory(category)
         : section
-      return filtersBySection[parentSection]?.includes(filter)
+      return filtersBySection[parentSection!]?.includes(filter)
     },
     [category, section]
   )
@@ -126,6 +139,7 @@ export const AssetFilters = ({
   if (isInLandSection) {
     return (
       <div className="filters-sidebar">
+        {isMobile && <CategoryFilter onChange={handleSectionChange} section={section} />}
         <PriceFilter
           onChange={handlePriceChange}
           minPrice={minPrice}
@@ -142,6 +156,7 @@ export const AssetFilters = ({
 
   return (
     <Menu className="filters-sidebar">
+      {isMobile && <CategoryFilter section={section} onChange={handleSectionChange} />}
       {shouldRenderFilter(AssetFilter.Rarity) ? (
         <RarityFilter onChange={handleRarityChange} rarities={rarities} />
       ) : null}
