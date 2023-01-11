@@ -921,5 +921,12 @@
     "browse_listings": "Ver tierras para rentar",
     "list_your_land": "Lista tu tierra a la renta",
     "description": "<p>Si eres dueño de tierra ahora puede ganar MANA rentando tus parcelas o estates a creadores de contenido.</p> <p>¿Eres un creador de contenido? Ahora puedes publicar tu escenas en la Genesis City sin la necesidad de poseer tierras.</p> <p>Si quieres leer más sobre ésto, <a>lee nuestro blog post</a>.</p>"
+  },
+  "atlas": {
+    "price": "Precio",
+    "owner": "Dueño",
+    "for_sale_and_rent": "Disponible para la compra o renta",
+    "for_sale": "Disponible para la compra",
+    "for_rent": "Disponible para la renta"
   }
 }
