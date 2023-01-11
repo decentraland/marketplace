@@ -187,7 +187,7 @@ export const AssetTopbar = ({
           </div>
         </div>
       )}
-      <SelectedFilters />
+      {!isMap ? <SelectedFilters /> : null }
     </div>
   )
 }
