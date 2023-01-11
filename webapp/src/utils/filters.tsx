@@ -6,7 +6,6 @@ import {
 } from '@dcl/schemas'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { View } from '../modules/ui/types'
 import { Mana } from '../components/Mana'
 import { LANDFilters } from '../components/Vendor/decentraland/types'
 
