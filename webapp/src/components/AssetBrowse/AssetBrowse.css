@@ -13,6 +13,7 @@
 
 .AssetBrowse .ui.cards {
   min-height: 150px;
+  margin-right: 0;
 }
 
 .AssetBrowse .ui.cards + .empty {
@@ -27,6 +28,8 @@
   position: absolute;
   background: var(--background);
   opacity: 0.6;
+  z-index: 1;
+  margin-top: -20px;
 }
 
 .AssetBrowse .load-more {
