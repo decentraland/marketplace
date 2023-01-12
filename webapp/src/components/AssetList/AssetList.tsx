@@ -48,6 +48,12 @@ const AssetList = (props: Props) => {
 
   return (
     <>
+      {isLoading ? (
+        <>
+          <div className="overlay" />
+          <Loader size="massive" active className="asset-loader" />
+        </>
+      ) : null}
       <Card.Group>
         {assets.length > 0
           ? assets.map((assets, index) => (
@@ -58,13 +64,6 @@ const AssetList = (props: Props) => {
               />
             ))
           : null}
-
-        {isLoading ? (
-          <>
-            <div className="overlay" />
-            <Loader size="massive" active />
-          </>
-        ) : null}
       </Card.Group>
 
       {assets.length === 0 && !isLoading ? (

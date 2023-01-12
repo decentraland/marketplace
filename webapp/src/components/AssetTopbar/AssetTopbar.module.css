@@ -31,6 +31,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 13px;
+  min-height: 26px;
 }
 
 .assetTopbar :global(.dcl.field .message) {
@@ -87,6 +88,7 @@
 
 .rightOptionsContainer {
   display: flex;
+  margin-left: auto;
 }
 
 .openFiltersWrapper {

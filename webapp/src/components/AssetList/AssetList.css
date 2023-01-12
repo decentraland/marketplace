@@ -17,3 +17,7 @@
   margin-bottom: 16px;
   background-size: cover;
 }
+
+.ui.massive.loader.asset-loader {
+  top: 50vh;
+}
