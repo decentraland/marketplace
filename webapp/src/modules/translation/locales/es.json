@@ -152,6 +152,7 @@
     "recently_reviewed": "Revisado recientemente",
     "size": "Tamaño",
     "price": "Precio",
+    "price_min_greater_max": "El precio máximo debería ser mayor al mínimo",
     "reset": "Limpiar",
     "apply_filters": "Aplicar filtros"
   },
