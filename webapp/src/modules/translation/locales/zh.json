@@ -152,6 +152,7 @@
     "recently_reviewed": "最近审查",
     "size": "大小",
     "price": "价格",
+    "price_min_greater_max": "最高价格应高于最低价格",
     "reset": "重置",
     "apply": "应用过滤器"
   },

@@ -79,6 +79,11 @@ export const PriceFilter = ({
         onChange={handlePriceChange}
         value={value}
       />
+      {value[0] && value[1] && value[1] <= value[0] ? (
+        <span className="price-filter-error">
+          {t('filters.price_min_greater_max')}
+        </span>
+      ) : null}
     </Box>
   )
 }

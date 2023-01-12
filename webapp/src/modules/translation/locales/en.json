@@ -156,6 +156,7 @@
     "recently_reviewed": "Recently reviewed",
     "size": "Size",
     "price": "Price",
+    "price_min_greater_max": "The maximum price should be higher than the minimum",
     "reset": "Reset",
     "apply": "Apply filters"
   },
