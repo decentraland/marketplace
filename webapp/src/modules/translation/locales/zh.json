@@ -870,6 +870,8 @@
     "details": {
       "title": "商品详情",
       "network": "网络",
+      "stock": "股票",
+      "sold_out": "无库存",
       "owner": "所有者",
       "order_expiration": "订单有效期至",
       "rental_expiration": "出租清单有效期至"

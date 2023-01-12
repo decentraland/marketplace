@@ -868,6 +868,8 @@
     "details": {
       "title": "Detalles del item",
       "network": "Red",
+      "stock": "Stock",
+      "sold_out": "Sin Stock",
       "owner": "Dueño",
       "order_expiration": "Expiración de la orden",
       "rental_expiration": "Expiración de la renta"

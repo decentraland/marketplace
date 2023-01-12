@@ -1,14 +1,5 @@
-.buy_with_card:global(.ui.button),
-.bid:global(.ui.button) {
-  background-color: var(--superGray);
-}
-
-.buy_with_card:global(.ui.button):hover,
-.bid:global(.ui.button):hover {
-  background-color: var(--superGrayHovered);
-}
-
-.notEnoughMana {
-  margin-top: 20px;
-  color: var(--sunish);
+.ownerButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }

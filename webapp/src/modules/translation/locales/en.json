@@ -875,6 +875,8 @@
     "details": {
       "title": "Item details",
       "network": "Network",
+      "stock": "Stock",
+      "sold_out": "Sold Out",
       "owner": "Owner",
       "order_expiration": "Order expiration",
       "rental_expiration": "Rental expiration"

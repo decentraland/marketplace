@@ -1,28 +1,17 @@
 import { useMemo, memo } from 'react'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Link } from 'react-router-dom'
-import { NFTCategory } from '@dcl/schemas'
+import { NFTCategory, Rarity } from '@dcl/schemas'
 import classNames from 'classnames'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFT } from '../../../modules/nft/types'
 import { locations } from '../../../modules/routing/locations'
+import { isItem, isNFT } from '../../../modules/asset/utils'
 import { Box } from '../../AssetBrowse/Box'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './Details.types'
+import { Info } from './Info'
 import styles from './Details.module.css'
-
-const Info = ({
-  title,
-  children
-}: {
-  title: string
-  children: React.ReactNode
-}) => (
-  <div className={styles.detail}>
-    <div className={styles.detailTitle}>{title}</div>
-    <div className={styles.detailContent}>{children}</div>
-  </div>
-)
 
 export const Details = (props: Props) => {
   const { asset, order, rental, className } = props
@@ -34,11 +23,16 @@ export const Details = (props: Props) => {
       case NFTCategory.ESTATE:
         return t('global.estate')
       default:
-        return t('global.nft')
+        return null
     }
   }, [asset])
 
-  const owner = rental && rental.lessor ? rental.lessor : (asset as NFT).owner!
+  const owner =
+    rental && rental.lessor
+      ? rental.lessor
+      : isNFT(asset)
+      ? asset.owner
+      : asset.creator
 
   return (
     <Box
@@ -46,44 +40,60 @@ export const Details = (props: Props) => {
       className={classNames(className)}
     >
       <div className={styles.content}>
-        <Info title={t('global.type')}>
-          <div className={styles.type}>
-            {categoryName}
-            {asset.category === NFTCategory.PARCEL &&
-            (asset as NFT).data.parcel?.estate ? (
-              <>
-                {' ('}
-                <T
-                  id="asset_page.part_of_estate"
-                  values={{
-                    estate_name: (
-                      <Link
-                        title={
-                          (asset as NFT).data.parcel?.estate?.name ??
-                          t('global.estate')
-                        }
-                        to={locations.nft(
-                          owner,
-                          asset.data.parcel?.estate!.tokenId
-                        )}
-                      >
-                        {(asset as NFT).data.parcel?.estate?.name ??
-                          t('global.estate')}
-                      </Link>
-                    )
-                  }}
-                />
-                {')'}
-              </>
-            ) : null}
-            {asset.category === NFTCategory.ESTATE
-              ? ` (${asset.data.estate!.size})`
-              : ''}
-          </div>
-        </Info>
+        {categoryName ? (
+          <Info title={t('global.type')}>
+            <div className={styles.type}>
+              {categoryName}
+              {asset.category === NFTCategory.PARCEL &&
+              (asset as NFT).data.parcel?.estate ? (
+                <>
+                  {' ('}
+                  <T
+                    id="asset_page.part_of_estate"
+                    values={{
+                      estate_name: (
+                        <Link
+                          title={
+                            (asset as NFT).data.parcel?.estate?.name ??
+                            t('global.estate')
+                          }
+                          to={locations.nft(
+                            owner,
+                            asset.data.parcel?.estate!.tokenId
+                          )}
+                        >
+                          {(asset as NFT).data.parcel?.estate?.name ??
+                            t('global.estate')}
+                        </Link>
+                      )
+                    }}
+                  />
+                  {')'}
+                </>
+              ) : null}
+              {asset.category === NFTCategory.ESTATE
+                ? ` (${asset.data.estate!.size})`
+                : ''}
+            </div>
+          </Info>
+        ) : null}
         <Info title={t('manage_asset_page.details.network')}>
           <span>{asset.network}</span>
         </Info>
+        {isItem(asset) ? (
+          <Info title={t('manage_asset_page.details.stock')}>
+            {asset.available > 0 ? (
+              <>
+                {asset.available.toLocaleString()}
+                <span className={styles.supply}>
+                  /{Rarity.getMaxSupply(asset.rarity).toLocaleString()}
+                </span>
+              </>
+            ) : (
+              t('asset_page.sold_out')
+            )}
+          </Info>
+        ) : null}
         {order ? (
           <Info title={t('manage_asset_page.details.order_expiration')}>
             <span>
