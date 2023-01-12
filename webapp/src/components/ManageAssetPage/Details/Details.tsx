@@ -82,10 +82,16 @@ export const Details = (props: Props) => {
         </Info>
         {isItem(asset) ? (
           <Info title={t('manage_asset_page.details.stock')}>
-            {asset.available.toLocaleString()}
-            <span className={styles.supply}>
-              /{Rarity.getMaxSupply(asset.rarity).toLocaleString()}
-            </span>
+            {asset.available > 0 ? (
+              <>
+                {asset.available.toLocaleString()}
+                <span className={styles.supply}>
+                  /{Rarity.getMaxSupply(asset.rarity).toLocaleString()}
+                </span>
+              </>
+            ) : (
+              t('asset_page.sold_out')
+            )}
           </Info>
         ) : null}
         {order ? (
