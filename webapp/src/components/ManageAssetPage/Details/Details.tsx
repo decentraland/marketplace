@@ -6,12 +6,12 @@ import classNames from 'classnames'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFT } from '../../../modules/nft/types'
 import { locations } from '../../../modules/routing/locations'
+import { isItem, isNFT } from '../../../modules/asset/utils'
 import { Box } from '../../AssetBrowse/Box'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './Details.types'
 import { Info } from './Info'
 import styles from './Details.module.css'
-import { isItem, isNFT } from '../../../modules/asset/utils'
 
 export const Details = (props: Props) => {
   const { asset, order, rental, className } = props
