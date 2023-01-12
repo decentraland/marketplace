@@ -53,11 +53,7 @@ const NFTSaleActions = ({ bids, nft, order, wallet }: Props) => {
           <>
             <Button
               as={Link}
-              to={locations.buyWithMana(
-                AssetType.NFT,
-                contractAddress,
-                tokenId
-              )}
+              to={locations.buy(AssetType.NFT, contractAddress, tokenId)}
               primary
               fluid
             >
@@ -67,11 +63,7 @@ const NFTSaleActions = ({ bids, nft, order, wallet }: Props) => {
             <Button
               as={Link}
               className={styles.buy_with_card}
-              to={locations.buyWithCard(
-                AssetType.NFT,
-                contractAddress,
-                tokenId
-              )}
+              to={locations.buy(AssetType.NFT, contractAddress, tokenId)}
               fluid
             >
               <Icon name="credit card outline" />

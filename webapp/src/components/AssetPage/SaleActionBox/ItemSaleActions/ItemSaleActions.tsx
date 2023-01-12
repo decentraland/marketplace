@@ -35,7 +35,7 @@ const NFTSaleActions = ({ item, wallet }: Props) => {
           <>
             <Button
               as={Link}
-              to={locations.buyWithMana(
+              to={locations.buy(
                 AssetType.NFT,
                 item.contractAddress,
                 item.itemId
@@ -49,7 +49,7 @@ const NFTSaleActions = ({ item, wallet }: Props) => {
             <Button
               as={Link}
               className={styles.buy_with_card}
-              to={locations.buyWithCard(
+              to={locations.buy(
                 AssetType.NFT,
                 item.contractAddress,
                 item.itemId
