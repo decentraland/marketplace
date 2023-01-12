@@ -5,8 +5,8 @@ import { AssetFilters } from '../../AssetFilters'
 import { Props } from './AssetFiltersModal.types'
 import styles from './AssetFiltersModal.module.css'
 import { BrowseOptions } from '../../../modules/routing/types'
-import { CategoryFilter } from './CategoryFilter'
 import { Section } from '../../../modules/vendor/routing/types'
+import { CategoryFilter } from './CategoryFilter'
 
 const AssetFiltersModal = (props: Props) => {
   const [filters, setFilters] = useState<BrowseOptions>({})

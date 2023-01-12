@@ -2,7 +2,7 @@ import {
   GenderFilterOption,
   Network,
   NFTCategory,
-  WearableGender,
+  WearableGender
 } from '@dcl/schemas'
 import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -110,8 +110,8 @@ export function getLandLabel({
   onlyOnRent = false,
   onlyOnSale = false
 }: {
-  landStatus?: LANDFilters,
-  onlyOnRent?: boolean,
+  landStatus?: LANDFilters
+  onlyOnRent?: boolean
   onlyOnSale?: boolean
 }) {
   if (landStatus === LANDFilters.ONLY_FOR_RENT || onlyOnRent) {
