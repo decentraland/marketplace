@@ -5,10 +5,13 @@ import { AssetFilters } from '../../AssetFilters'
 import { Props } from './AssetFiltersModal.types'
 import styles from './AssetFiltersModal.module.css'
 import { BrowseOptions } from '../../../modules/routing/types'
+import { AssetType } from '../../../modules/asset/types'
+import { View } from '../../../modules/ui/types'
+import { AssetTypeFilter } from './AssetTypeFilter'
 
 const AssetFiltersModal = (props: Props) => {
   const [filters, setFilters] = useState<BrowseOptions>({})
-  const { onClearFilters, onClose, onBrowse } = props
+  const { onClearFilters, onClose, onBrowse, view, assetType } = props
 
   const handleFilterChange = useCallback(
     (options: BrowseOptions) => {
@@ -20,6 +23,13 @@ const AssetFiltersModal = (props: Props) => {
   const handleApplyFilters = useCallback(() => {
     onBrowse(filters)
   }, [onBrowse, filters])
+
+  const handleAssetTypeChange = useCallback(
+    (assetType: AssetType) => {
+      setFilters({ ...filters, assetType })
+    },
+    [filters]
+  )
 
   return (
     <Modal open className={styles.assetFiltersModal}>
@@ -35,6 +45,7 @@ const AssetFiltersModal = (props: Props) => {
         />
       </Modal.Header>
       <Modal.Content>
+        {view === View.ACCOUNT ? <AssetTypeFilter onChange={handleAssetTypeChange} assetType={filters.assetType || assetType} /> : null}
         <AssetFilters onFilterChange={handleFilterChange} values={filters} />
       </Modal.Content>
       <Modal.Actions className={styles.modalFooter}>
