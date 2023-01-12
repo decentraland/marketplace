@@ -864,16 +864,19 @@
       "road": "Calle",
       "plaza": "Plaza",
       "district": "Distrito"
-    },
-    "details": {
-      "title": "Detalles del item",
-      "network": "Red",
-      "stock": "Stock",
-      "sold_out": "Sin Stock",
-      "owner": "Dueño",
-      "order_expiration": "Expiración de la orden",
-      "rental_expiration": "Expiración de la renta"
     }
+  },
+  "details_box": {
+    "title": "Detalles del item",
+    "network": "Red",
+    "stock": "Stock",
+    "issue_number": "Número de emisión",
+    "sold_out": "Sin Stock",
+    "owner": "Dueño",
+    "order_expiration": "Expiración de la orden",
+    "expires_at": "Expira en",
+    "expires_at_info": "Cuando el collecionable expire, dejará de estar disponible para comprar",
+    "rental_expiration": "Expiración de la renta"
   },
   "claim_land_modal": {
     "title": "Reclamar {asset}",

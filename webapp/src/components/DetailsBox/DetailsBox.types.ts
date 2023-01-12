@@ -1,5 +1,5 @@
 import { Order, RentalListing } from '@dcl/schemas'
-import { Asset } from '../../../modules/asset/types'
+import { Asset } from '../../modules/asset/types'
 
 export type Props = {
   asset: Asset
@@ -7,3 +7,5 @@ export type Props = {
   order?: Order | null
   className?: string
 }
+
+export type MapStateProps = Pick<Props, 'order'>

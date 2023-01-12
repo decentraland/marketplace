@@ -1,19 +1,19 @@
 import { useMemo, memo } from 'react'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { Link } from 'react-router-dom'
-import { NFTCategory, Rarity } from '@dcl/schemas'
 import classNames from 'classnames'
+import { NFTCategory, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { NFT } from '../../../modules/nft/types'
-import { locations } from '../../../modules/routing/locations'
-import { isItem, isNFT } from '../../../modules/asset/utils'
-import { Box } from '../../AssetBrowse/Box'
-import { LinkedProfile } from '../../LinkedProfile'
-import { Props } from './Details.types'
+import { isNFT } from '../../modules/asset/utils'
+import { NFT } from '../../modules/nft/types'
+import { locations } from '../../modules/routing/locations'
+import { Box } from '../AssetBrowse/Box'
+import { LinkedProfile } from '../LinkedProfile'
+import { Props } from './DetailsBox.types'
 import { Info } from './Info'
-import styles from './Details.module.css'
+import styles from './DetailsBox.module.css'
 
-export const Details = (props: Props) => {
+export const DetailsBox = (props: Props) => {
   const { asset, order, rental, className } = props
 
   const categoryName = useMemo(() => {
@@ -35,10 +35,7 @@ export const Details = (props: Props) => {
       : asset.creator
 
   return (
-    <Box
-      header={t('manage_asset_page.details.title')}
-      className={classNames(className)}
-    >
+    <Box header={t('details_box.title')} className={classNames(className)}>
       <div className={styles.content}>
         {categoryName ? (
           <Info title={t('global.type')}>
@@ -77,11 +74,25 @@ export const Details = (props: Props) => {
             </div>
           </Info>
         ) : null}
-        <Info title={t('manage_asset_page.details.network')}>
+        <Info title={t('details_box.network')}>
           <span>{asset.network}</span>
         </Info>
-        {isItem(asset) ? (
-          <Info title={t('manage_asset_page.details.stock')}>
+        {isNFT(asset) ? (
+          asset.issuedId ? (
+            <Info title={t('details_box.issue_number')}>
+              {Number(asset.issuedId).toLocaleString()}
+              <span className={styles.issued}>
+                /
+                {Rarity.getMaxSupply(
+                  asset.category === NFTCategory.WEARABLE
+                    ? asset.data.wearable!.rarity
+                    : asset.data.emote!.rarity
+                ).toLocaleString()}
+              </span>
+            </Info>
+          ) : null
+        ) : (
+          <Info title={t('details_box.stock')}>
             {asset.available > 0 ? (
               <>
                 {asset.available.toLocaleString()}
@@ -93,18 +104,33 @@ export const Details = (props: Props) => {
               t('asset_page.sold_out')
             )}
           </Info>
-        ) : null}
+        )}
         {order ? (
-          <Info title={t('manage_asset_page.details.order_expiration')}>
-            <span>
-              {formatDistanceToNow(order.expiresAt, {
-                addSuffix: true
-              })}
-            </span>
-          </Info>
+          asset.category === NFTCategory.WEARABLE ||
+          asset.category === NFTCategory.EMOTE ? (
+            <Info
+              title={t('details_box.expires_at')}
+              popupContent={t('details_box.expires_at_info')}
+              icon="info circle"
+            >
+              <span>
+                {formatDistanceToNow(order.expiresAt, {
+                  addSuffix: true
+                })}
+              </span>
+            </Info>
+          ) : (
+            <Info title={t('details_box.order_expiration')}>
+              <span>
+                {formatDistanceToNow(order.expiresAt, {
+                  addSuffix: true
+                })}
+              </span>
+            </Info>
+          )
         ) : null}
         {rental ? (
-          <Info title={t('manage_asset_page.details.rental_expiration')}>
+          <Info title={t('details_box.rental_expiration')}>
             <span>
               {formatDistanceToNow(rental.expiration, {
                 addSuffix: true
@@ -113,7 +139,7 @@ export const Details = (props: Props) => {
           </Info>
         ) : null}
         {owner ? (
-          <Info title={t('manage_asset_page.details.owner')}>
+          <Info title={t('details_box.owner')}>
             <LinkedProfile hasPopup={true} address={owner} />
           </Info>
         ) : null}
@@ -122,4 +148,4 @@ export const Details = (props: Props) => {
   )
 }
 
-export default memo(Details)
+export default memo(DetailsBox)

@@ -1,4 +1,4 @@
-import { Item, NFTCategory, Order, RentalListing } from '@dcl/schemas'
+import { NFTCategory, Order, RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
@@ -100,8 +100,4 @@ export function isOwnedBy(
 
 export function isNFT(asset: Asset): asset is NFT {
   return 'tokenId' in asset
-}
-
-export function isItem(asset: Asset): asset is Item {
-  return 'itemId' in asset
 }

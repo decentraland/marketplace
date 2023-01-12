@@ -866,16 +866,19 @@
       "road": "路",
       "plaza": "广场",
       "district": "区"
-    },
-    "details": {
-      "title": "商品详情",
-      "network": "网络",
-      "stock": "股票",
-      "sold_out": "无库存",
-      "owner": "所有者",
-      "order_expiration": "订单有效期至",
-      "rental_expiration": "出租清单有效期至"
     }
+  },
+  "details": {
+    "title": "商品详情",
+    "network": "网络",
+    "stock": "股票",
+    "issue_number": "发行数量",
+    "sold_out": "无库存",
+    "owner": "所有者",
+    "order_expiration": "订单有效期至",
+    "expires_at": "到期于",
+    "expires_at_info": "当列表过期时，它将停止可供购买",
+    "rental_expiration": "出租清单有效期至"
   },
   "claim_land_modal": {
     "title": "认领{asset}",
