@@ -161,7 +161,7 @@ export const AssetTopbar = ({
         <div className={styles.infoRow}>
           <div className={styles.countContainer}>
             <p className={styles.countText}>{getCountText(count, search)}</p>
-            {hasFiltersEnabled && (
+            {hasFiltersEnabled && !isMobile && (
               <button className={styles.clearFilters} onClick={onClearFilters}>
                 {t('filters.clear')}
               </button>
@@ -187,7 +187,16 @@ export const AssetTopbar = ({
           </div>
         </div>
       )}
-      {!isMap ? <SelectedFilters /> : null }
+      {!isMap ? (
+        <div className={styles.selectedFiltersContainer}>
+          <SelectedFilters />
+          {hasFiltersEnabled && isMobile && (
+            <button className={styles.clearFilters} onClick={onClearFilters}>
+              {t('filters.clear')}
+            </button>
+          )}
+        </div>
+      ) : null}
     </div>
   )
 }
