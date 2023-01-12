@@ -30,8 +30,22 @@ const MenuItem = <T extends unknown>(props: Props<T>) => {
     onClick(value)
   }, [value, onClick])
 
+  const handleOnKeyDown = useCallback(
+    event => {
+      if (event.keyCode === 13) {
+        handleOnClick()
+      }
+    },
+    [handleOnClick]
+  )
+
   return (
-    <li className={classNames.join(' ')} onClick={handleOnClick} tabIndex={0}>
+    <li
+      className={classNames.join(' ')}
+      onClick={handleOnClick}
+      tabIndex={0}
+      onKeyDown={handleOnKeyDown}
+    >
       {image && <Image alt={image} src={image} width="25" circular />}
 
       <div className="content">
