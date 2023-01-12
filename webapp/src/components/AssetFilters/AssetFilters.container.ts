@@ -18,10 +18,10 @@ import {
 } from '../../modules/routing/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { browse } from '../../modules/routing/actions'
-import { MapDispatchProps, MapStateProps, OwnProps } from './AssetFilters.types'
-import { AssetFilters } from './AssetFilters'
 import { Section } from '../../modules/vendor/routing/types'
 import { getView } from '../../modules/ui/browse/selectors'
+import { MapDispatchProps, MapStateProps, OwnProps } from './AssetFilters.types'
+import { AssetFilters } from './AssetFilters'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps

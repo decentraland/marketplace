@@ -26,7 +26,7 @@ ul.Menu li .ui.image {
 
 ul.Menu li.sub {
   width: var(--menu-item-width);
-  color: var(--secondary-text);
+  color: #9791A3;
 }
 
 ul.Menu li.sub.sub-1 {

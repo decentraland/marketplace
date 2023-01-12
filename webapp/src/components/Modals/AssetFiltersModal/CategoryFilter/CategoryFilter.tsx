@@ -1,19 +1,12 @@
-import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useMobileMediaQuery } from 'decentraland-ui'
 import { useMemo } from 'react'
-import { Section, Sections } from '../../../modules/vendor/routing/types'
-import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
+import NFTSectionsMenuItems from '../../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
+import { getAvailableSections } from './utils'
+import { Props } from './CategoryFilter.types'
 import './CategoryFilter.css'
 
-type Props = {
-  category?: NFTCategory
-  section?: Section
-  sections?: Section[]
-  onChange: (section: Section) => void
-}
-
-export const CategoryFilter = ({ section, onChange }: Props): JSX.Element => {
+export const CategoryFilter = ({ section, view, assetType, onChange }: Props): JSX.Element => {
   const isMobile = useMobileMediaQuery()
 
   const header = useMemo(
@@ -28,6 +21,7 @@ export const CategoryFilter = ({ section, onChange }: Props): JSX.Element => {
       ),
     [isMobile, section]
   )
+
   return (
     <Box
       header={header}
@@ -35,15 +29,13 @@ export const CategoryFilter = ({ section, onChange }: Props): JSX.Element => {
       collapsible
       defaultCollapsed={true}
     >
-      <NFTSectionsMenuItems
-        section={section}
-        sections={[
-          Sections.decentraland.WEARABLES,
-          Sections.decentraland.EMOTES,
-          Sections.decentraland.ENS
-        ]}
-        onSectionClick={onChange}
-      />
+      <ul className="Menu box-menu">
+        <NFTSectionsMenuItems
+          section={section}
+          sections={getAvailableSections(view, section, assetType)}
+          onSectionClick={onChange}
+        />
+      </ul>
     </Box>
   )
 }

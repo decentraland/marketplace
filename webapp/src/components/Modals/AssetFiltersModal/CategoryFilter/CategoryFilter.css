@@ -10,7 +10,7 @@
   content: '';
   width: 14px;
   height: 10px;
-  background-image: url('../../../images/check.svg');
+  background-image: url('../../../../images/check.svg');
   background-repeat: no-repeat;
   background-size: contain;
   background-color: transparent;
@@ -35,4 +35,10 @@
 .filters-sidebar-box.category-filter .MenuItem.sub.sub-2 {
   padding-left: 64px;
   margin-left: 0;
+}
+
+.category-filter .Menu.box-menu {
+  background: transparent;
+  width: 100%;
+  padding-bottom: 0;
 }
