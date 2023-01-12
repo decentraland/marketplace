@@ -80,7 +80,7 @@ export const Details = (props: Props) => {
         <Info title={t('manage_asset_page.details.network')}>
           <span>{asset.network}</span>
         </Info>
-        {isItem(asset) && asset.available > 0 ? (
+        {isItem(asset) ? (
           <Info title={t('manage_asset_page.details.stock')}>
             {asset.available.toLocaleString()}
             <span className={styles.supply}>
