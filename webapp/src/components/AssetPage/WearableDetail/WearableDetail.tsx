@@ -2,28 +2,29 @@ import React from 'react'
 import { Header, Stats } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTCategory, Rarity } from '@dcl/schemas'
-import styles from './WearableDetail.module.css'
-import { Network } from '../Network'
-import { Description } from '../Description'
-import { Props } from './WearableDetail.types'
-import RarityBadge from '../../RarityBadge'
 import { AssetType } from '../../../modules/asset/types'
-import GenderBadge from '../../GenderBadge'
-import SmartBadge from '../SmartBadge'
-import CategoryBadge from '../CategoryBadge'
-import { Owner } from '../Owner'
-import Collection from '../Collection'
-import Price from '../Price'
-import Expiration from '../Expiration'
-import BaseDetail from '../BaseDetail'
-import { Actions } from '../Actions'
-import { BidList } from '../BidList'
-import CampaignBadge from '../../Campaign/CampaignBadge'
-import { TransactionHistory } from '../TransactionHistory'
-import { AssetImage } from '../../AssetImage'
 import { Section } from '../../../modules/vendor/decentraland'
+import CampaignBadge from '../../Campaign/CampaignBadge'
+import { AssetImage } from '../../AssetImage'
+import GenderBadge from '../../GenderBadge'
+import RarityBadge from '../../RarityBadge'
+import { Actions } from '../Actions'
+import BaseDetail from '../BaseDetail'
+import { BidList } from '../BidList'
+import CategoryBadge from '../CategoryBadge'
+import Collection from '../Collection'
+import { Description } from '../Description'
+import Expiration from '../Expiration'
+import { Network } from '../Network'
+import { Owner } from '../Owner'
+import Price from '../Price'
+import { SaleActionBox } from '../SaleActionBox'
+import SmartBadge from '../SmartBadge'
+import { TransactionHistory } from '../TransactionHistory'
+import styles from './WearableDetail.module.css'
+import { Props } from './WearableDetail.types'
 
-const WearableDetail = ({ nft }: Props) => {
+const WearableDetail = ({ nft, isBuyNftsWithFiatEnabled }: Props) => {
   const wearable = nft.data.wearable!
 
   return (
@@ -61,25 +62,29 @@ const WearableDetail = ({ nft }: Props) => {
         </>
       }
       box={
-        <>
-          <Price asset={nft} />
-          <div className="BaseDetail row">
-            {nft.issuedId ? (
-              <Stats title={t('global.issue_number')}>
-                <Header>
-                  {Number(nft.issuedId).toLocaleString()}
-                  <span className={styles.issued}>
-                    /{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}
-                  </span>
-                </Header>
-              </Stats>
-            ) : null}
-            <Network asset={nft} />
-          </div>
-          <Actions nft={nft} />
-          <Expiration />
-        </>
+        !isBuyNftsWithFiatEnabled ? (
+          <>
+            <Price asset={nft} />
+            <div className="BaseDetail row">
+              {nft.issuedId ? (
+                <Stats title={t('global.issue_number')}>
+                  <Header>
+                    {Number(nft.issuedId).toLocaleString()}
+                    <span className={styles.issued}>
+                      /{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}
+                    </span>
+                  </Header>
+                </Stats>
+              ) : null}
+              <Network asset={nft} />
+            </div>
+            <Actions nft={nft} />
+            <Expiration />
+          </>
+        ) : null
       }
+      showDetails={isBuyNftsWithFiatEnabled}
+      actions={isBuyNftsWithFiatEnabled ? <SaleActionBox asset={nft} /> : null}
       below={
         <>
           <BidList nft={nft} />

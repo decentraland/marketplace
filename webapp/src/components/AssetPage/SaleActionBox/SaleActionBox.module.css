@@ -1,0 +1,42 @@
+.main {
+  border-radius: 12px;
+  margin-bottom: 12px;
+  background: rgba(42, 38, 47);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.container:empty {
+  display: none;
+}
+
+:global(.dcl.stats .ui.header.sub) {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 18px;
+  text-transform: uppercase;
+  color: #736e7d;
+}
+
+.buy_with_card:global(.ui.button),
+.bid:global(.ui.button) {
+  background-color: var(--superGray);
+}
+
+.buy_with_card:global(.ui.button):hover,
+.bid:global(.ui.button):hover {
+  background-color: var(--superGrayHovered);
+}
+
+.notEnoughMana {
+  margin-top: 20px;
+  color: var(--sunish);
+}

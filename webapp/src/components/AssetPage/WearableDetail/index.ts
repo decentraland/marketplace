@@ -1,2 +1,2 @@
-import WearableDetail from './WearableDetail'
+import WearableDetail from './WearableDetail.container'
 export { WearableDetail }

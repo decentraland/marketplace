@@ -21,10 +21,11 @@ import BaseDetail from '../BaseDetail'
 import CampaignBadge from '../../Campaign/CampaignBadge'
 import IconBadge from '../IconBadge'
 import { TransactionHistory } from '../TransactionHistory'
+import { SaleActionBox } from '../SaleActionBox'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
-const ItemDetail = ({ item, wallet }: Props) => {
+const ItemDetail = ({ isBuyNftsWithFiatEnabled, item, wallet }: Props) => {
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
   const builderCollectionUrl = getBuilderCollectionDetailUrl(
@@ -115,54 +116,59 @@ const ItemDetail = ({ item, wallet }: Props) => {
           </div>
         </>
       }
+      // TODO (buy nfts with card): merge this actions with the SaleActionBox
       box={
-        <>
-          {item.isOnSale && <Price asset={item} />}
-          <div className="BaseDetail row">
-            <Stats title={t('asset_page.stock')}>
-              {item.available > 0 ? (
-                <Header>
-                  {item.available.toLocaleString()}
-                  <span className={styles.supply}>
-                    /{Rarity.getMaxSupply(item.rarity).toLocaleString()}
-                  </span>
-                </Header>
-              ) : (
-                t('asset_page.sold_out')
-              )}
-            </Stats>
-            <Network asset={item} />
-          </div>
-          {isOwner ? (
-            <div className={styles.ownerButtons}>
-              <Button as="a" href={builderCollectionUrl} fluid>
-                {t('asset_page.actions.edit_price')}
-              </Button>
-              <Button as="a" href={builderCollectionUrl} fluid>
-                {t('asset_page.actions.change_beneficiary')}
-              </Button>
-              <Button as="a" href={builderCollectionUrl} fluid>
-                {t('asset_page.actions.mint_item')}
-              </Button>
-            </div>
-          ) : (
-            canBuy && (
-              <Button
-                fluid
-                as={Link}
-                to={locations.buy(
-                  AssetType.ITEM,
-                  item.contractAddress,
-                  item.itemId
+        !isBuyNftsWithFiatEnabled ? (
+          <>
+            {item.isOnSale && <Price asset={item} />}
+            <div className="BaseDetail row">
+              <Stats title={t('asset_page.stock')}>
+                {item.available > 0 ? (
+                  <Header>
+                    {item.available.toLocaleString()}
+                    <span className={styles.supply}>
+                      /{Rarity.getMaxSupply(item.rarity).toLocaleString()}
+                    </span>
+                  </Header>
+                ) : (
+                  t('asset_page.sold_out')
                 )}
-                primary
-              >
-                {t('asset_page.actions.buy')}
-              </Button>
-            )
-          )}
-        </>
+              </Stats>
+              <Network asset={item} />
+            </div>
+            {isOwner ? (
+              <div className={styles.ownerButtons}>
+                <Button as="a" href={builderCollectionUrl} fluid>
+                  {t('asset_page.actions.edit_price')}
+                </Button>
+                <Button as="a" href={builderCollectionUrl} fluid>
+                  {t('asset_page.actions.change_beneficiary')}
+                </Button>
+                <Button as="a" href={builderCollectionUrl} fluid>
+                  {t('asset_page.actions.mint_item')}
+                </Button>
+              </div>
+            ) : (
+              canBuy && (
+                <Button
+                  fluid
+                  as={Link}
+                  to={locations.buy(
+                    AssetType.ITEM,
+                    item.contractAddress,
+                    item.itemId
+                  )}
+                  primary
+                >
+                  {t('asset_page.actions.buy')}
+                </Button>
+              )
+            )}
+          </>
+        ) : null
       }
+      showDetails={isBuyNftsWithFiatEnabled}
+      actions={isBuyNftsWithFiatEnabled ? <SaleActionBox asset={item} /> : null}
       below={<TransactionHistory asset={item} />}
     />
   )
