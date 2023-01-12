@@ -1,0 +1,16 @@
+.info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.infoTitle {
+  font-weight: 400;
+  font-size: 17px;
+  color: var(--primary-text);
+}
+
+.infoContent {
+  color: #979797;
+}
