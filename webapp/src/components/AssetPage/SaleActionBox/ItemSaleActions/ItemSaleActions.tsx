@@ -1,13 +1,11 @@
 import { memo } from 'react'
-import { Link } from 'react-router-dom'
-import { Button, Icon, Mana } from 'decentraland-ui'
+import { Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
-import { AssetType } from '../../../../modules/asset/types'
-import { locations } from '../../../../modules/routing/locations'
 import styles from './ItemSaleActions.module.css'
 import { Props } from './ItemSaleActions.types'
+import { BuyNFTButtons } from '../BuyNFTButtons'
 
 const NFTSaleActions = ({ item, wallet }: Props) => {
   const isOwner = wallet?.address === item.creator
@@ -31,36 +29,7 @@ const NFTSaleActions = ({ item, wallet }: Props) => {
           </Button>
         </div>
       ) : (
-        canBuy && (
-          <>
-            <Button
-              as={Link}
-              to={locations.buy(
-                AssetType.NFT,
-                item.contractAddress,
-                item.itemId
-              )}
-              primary
-              fluid
-            >
-              <Mana inline size="small" network={item.network} />
-              {t('asset_page.actions.buy_with_mana')}
-            </Button>
-            <Button
-              as={Link}
-              className={styles.buy_with_card}
-              to={locations.buy(
-                AssetType.NFT,
-                item.contractAddress,
-                item.itemId
-              )}
-              fluid
-            >
-              <Icon name="credit card outline" />
-              {t('asset_page.actions.buy_with_card')}
-            </Button>
-          </>
-        )
+        canBuy && <BuyNFTButtons asset={item} />
       )}
     </>
   )

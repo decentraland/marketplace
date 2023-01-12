@@ -1,15 +1,15 @@
 import { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Modal, Button, Icon, Mana } from 'decentraland-ui'
+import { Modal, Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { builderUrl } from '../../../../lib/environment'
-import { AssetType } from '../../../../modules/asset/types'
 import { isOwnedBy } from '../../../../modules/asset/utils'
 import { locations } from '../../../../modules/routing/locations'
 import { VendorFactory } from '../../../../modules/vendor'
 import styles from './NFTSaleActions.module.css'
 import { Props } from './NFTSaleActions.types'
+import { BuyNFTButtons } from '../BuyNFTButtons'
 
 const NFTSaleActions = ({ bids, nft, order, wallet }: Props) => {
   const { vendor, contractAddress, tokenId, data } = nft
@@ -51,24 +51,7 @@ const NFTSaleActions = ({ bids, nft, order, wallet }: Props) => {
           </>
         ) : !isOwner ? (
           <>
-            <Button
-              as={Link}
-              to={locations.buy(AssetType.NFT, contractAddress, tokenId)}
-              primary
-              fluid
-            >
-              <Mana inline size="small" network={nft.network} />
-              {t('asset_page.actions.buy_with_mana')}
-            </Button>
-            <Button
-              as={Link}
-              className={styles.buy_with_card}
-              to={locations.buy(AssetType.NFT, contractAddress, tokenId)}
-              fluid
-            >
-              <Icon name="credit card outline" />
-              {t('asset_page.actions.buy_with_card')}
-            </Button>
+            <BuyNFTButtons asset={nft} />
             {canBid ? (
               <Button
                 as={Link}
@@ -123,6 +106,7 @@ const NFTSaleActions = ({ bids, nft, order, wallet }: Props) => {
         </Button>
       )}
 
+      {/* TODO (buy nfts with card): move this to a new component and use openModal */}
       <Modal
         className="LeavingSiteModal"
         size="small"
