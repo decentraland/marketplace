@@ -7,11 +7,7 @@ import { LinkedProfile } from '../LinkedProfile'
 import { Props } from './DetailsBox.types'
 import { Info } from './Info'
 import styles from './DetailsBox.module.css'
-import {
-  AvailabilityDetailsItem,
-  ExpirationDetailsItem,
-  TypeDetailsItem
-} from './DetailsItem'
+import { Availability, Expiration, Type } from './DetailsRow'
 
 export const DetailsBox = (props: Props) => {
   const { asset, order, rental, className } = props
@@ -26,12 +22,12 @@ export const DetailsBox = (props: Props) => {
   return (
     <Box header={t('details_box.title')} className={classNames(className)}>
       <div className={styles.content}>
-        <TypeDetailsItem asset={asset} owner={owner} />
+        <Type asset={asset} owner={owner} />
         <Info title={t('details_box.network')}>
           <span>{asset.network}</span>
         </Info>
-        <AvailabilityDetailsItem asset={asset} />
-        <ExpirationDetailsItem asset={asset} order={order} rental={rental} />
+        <Availability asset={asset} />
+        <Expiration asset={asset} order={order} rental={rental} />
         {owner ? (
           <Info title={t('details_box.owner')}>
             <LinkedProfile hasPopup={true} address={owner} />

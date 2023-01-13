@@ -2,10 +2,10 @@ import { memo } from 'react'
 
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Props } from '../DetailsItem.types'
+import { Props } from '../DetailsRow.types'
 import { ExpirationInfo } from './ExpirationInfo'
 
-export const ExpirationDetailsItem = (props: Props) => {
+export const Expiration = (props: Props) => {
   const { asset, order, rental } = props
 
   return (
@@ -36,4 +36,4 @@ export const ExpirationDetailsItem = (props: Props) => {
   )
 }
 
-export default memo(ExpirationDetailsItem)
+export default memo(Expiration)

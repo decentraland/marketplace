@@ -6,10 +6,10 @@ import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFT } from '../../../../modules/nft/types'
 import { locations } from '../../../../modules/routing/locations'
 import { Info } from '../../Info'
-import { Props } from '../DetailsItem.types'
-import styles from './TypeDetailsItem.module.css'
+import { Props } from '../DetailsRow.types'
+import styles from './Type.module.css'
 
-export const TypeDetailsItem = (props: Props) => {
+export const Type = (props: Props) => {
   const { asset, owner } = props
 
   const categoryName = useMemo(() => {
@@ -62,4 +62,4 @@ export const TypeDetailsItem = (props: Props) => {
   ) : null
 }
 
-export default memo(TypeDetailsItem)
+export default memo(Type)

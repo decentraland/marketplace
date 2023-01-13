@@ -4,9 +4,9 @@ import { NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isNFT } from '../../../../modules/asset/utils'
 import { Info } from '../../Info'
-import { Props } from '../DetailsItem.types'
+import { Props } from '../DetailsRow.types'
 
-export const AvailabilityDetailsItem = (props: Props) => {
+export const Availability = (props: Props) => {
   const { asset } = props
 
   return isNFT(asset) ? (
@@ -37,4 +37,4 @@ export const AvailabilityDetailsItem = (props: Props) => {
   )
 }
 
-export default memo(AvailabilityDetailsItem)
+export default memo(Availability)
