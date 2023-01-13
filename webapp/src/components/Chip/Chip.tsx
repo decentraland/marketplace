@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Icon } from 'decentraland-ui'
+import classNames from 'classnames'
 
 import { Props } from './Chip.types'
 
@@ -11,25 +12,29 @@ const Chip = (props: Props) => {
     throw new Error('You need to provide at least one prop: text or icon')
   }
 
-  const classNames = ['Chip', type]
+  const handleKeyDown = (evt: React.KeyboardEvent<HTMLDivElement>) => {
+    if (evt.key === 'Enter' && onClick) {
+      onClick(evt)
+    }
+  }
 
-  if (className) {
-    classNames.push(className)
-  }
-  if (isActive) {
-    classNames.push('active')
-  }
-  if (isDisabled) {
-    classNames.push('disabled')
-  }
-  if (onClick && !isDisabled) {
-    classNames.push('clickeable')
-  }
+  const containerClass = classNames(
+    'Chip',
+    type,
+    className,
+    {
+      active: isActive,
+      disabled: isDisabled,
+      clickeable: onClick && !isDisabled
+    }
+  )
 
   return (
     <div
-      className={classNames.join(' ')}
+      className={containerClass}
+      tabIndex={0}
       onClick={isActive || isDisabled ? undefined : onClick}
+      onKeyDown={handleKeyDown}
     >
       {text ? (
         <span className="text">{text}</span>
