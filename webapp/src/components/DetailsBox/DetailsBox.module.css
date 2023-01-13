@@ -2,10 +2,3 @@
   padding-left: 24px;
   padding-right: 24px;
 }
-
-.type {
-  max-width: 200px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
