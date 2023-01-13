@@ -12,6 +12,12 @@ const Chip = (props: Props) => {
     throw new Error('You need to provide at least one prop: text or icon')
   }
 
+  const handleKeyDown = (evt: React.KeyboardEvent<HTMLDivElement>) => {
+    if (evt.key === 'Enter' && onClick) {
+      onClick(evt)
+    }
+  }
+
   const containerClass = classNames(
     'Chip',
     type,
@@ -26,10 +32,9 @@ const Chip = (props: Props) => {
   return (
     <div
       className={containerClass}
-      role={onClick ? "checkbox" : undefined}
-      aria-checked={onClick ? isActive : undefined}
       tabIndex={0}
       onClick={isActive || isDisabled ? undefined : onClick}
+      onKeyDown={handleKeyDown}
     >
       {text ? (
         <span className="text">{text}</span>
