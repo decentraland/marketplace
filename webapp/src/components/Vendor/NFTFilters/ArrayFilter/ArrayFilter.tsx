@@ -1,15 +1,8 @@
 import { Header } from 'decentraland-ui'
+import classNames from 'classnames'
 
 import { Props } from './ArrayFilter.types'
 import './ArrayFilter.css'
-
-const getClasses = (value: string, values: string[]) => {
-  const classes = ['option']
-  if (values.includes(value)) {
-    classes.push('selected')
-  }
-  return classes.join(' ')
-}
 
 const getNewValues = (value: string, values: string[]) => {
   return values.some(x => x === value)
@@ -19,6 +12,18 @@ const getNewValues = (value: string, values: string[]) => {
 
 const ArrayFilter = (props: Props) => {
   const { name, values, options, onChange } = props
+
+  const handleKeyDown = (option: string) => (evt: React.KeyboardEvent<HTMLDivElement> ) => {
+    if (evt.key === 'Enter') {
+      onChange(getNewValues(option, values))
+    }
+  }
+
+  const handleOnClick = (option: string) => () => {
+    onChange(getNewValues(option, values))
+  }
+
+
   return (
     <div className="ArrayFilter Filter">
       {name ? (
@@ -27,15 +32,22 @@ const ArrayFilter = (props: Props) => {
         </Header>
       ) : null}
       <div className="options">
-        {options.map(option => (
-          <div
-            key={option.text}
-            className={getClasses(option.value, values)}
-            onClick={() => onChange(getNewValues(option.value, values))}
-          >
-            {option.text}
-          </div>
-        ))}
+        {options.map(option => {
+          const isActive = values.includes(option.value)
+          return (
+            <div
+              tabIndex={0}
+              role="checkbox"
+              aria-checked={isActive}
+              key={option.text}
+              className={classNames('option', { selected: isActive })}
+              onClick={handleOnClick(option.value)}
+              onKeyDown={handleKeyDown(option.value)}
+            >
+              {option.text}
+            </div>
+          )
+        })}
       </div>
     </div>
   )
