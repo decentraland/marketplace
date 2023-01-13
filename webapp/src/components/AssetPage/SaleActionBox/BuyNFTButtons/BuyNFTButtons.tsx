@@ -18,7 +18,7 @@ const BuyNFTButtons = ({ asset }: Props) => {
     <>
       <Button
         as={Link}
-        to={locations.buyWithMana(assetType, contractAddress, assetId)}
+        to={locations.buy(assetType, contractAddress, assetId)}
         primary
         fluid
       >

@@ -550,7 +550,7 @@
     "title": "Buying {name}",
     "subtitle": "You are about to buy {name} for {amount}.",
     "not_for_sale": "{name} is not for sale.",
-    "buy_with_mana": "Buy with MANA",
+    "buy": "Buy with MANA",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."

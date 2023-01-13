@@ -545,7 +545,7 @@
     "title": "购买{name}",
     "subtitle": "您将以{amount}的价格购买{name}。",
     "not_for_sale": "{name}为非卖品",
-    "buy_with_mana": "用 MANA 购买",
+    "buy": "用 MANA 购买",
     "no_fingerprint": "无法加载指纹。",
     "is_owner": "您是{name}的所有者。",
     "not_enough_mana": "您没有足够的MANA来购买{name}。"

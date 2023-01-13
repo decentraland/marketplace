@@ -543,7 +543,7 @@
     "title": "Comprando {name}",
     "subtitle": "Estás por comprar {name} por {amount}.",
     "not_for_sale": "{name} no esta en venta.",
-    "buy_with_mana": "Comprar con MANA",
+    "buy": "Comprar con MANA",
     "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
     "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."

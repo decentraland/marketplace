@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react'
+import compact from 'lodash/compact'
 import { Header, Button } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -30,6 +31,9 @@ const BuyNFTModal = (props: Props) => {
     isOwner,
     hasInsufficientMANA,
     hasLowPrice,
+    defaultSubtitle,
+    translationsInfix,
+    ctaButtonContent,
     getContract,
     onExecuteOrder
   } = props
@@ -86,22 +90,31 @@ const BuyNFTModal = (props: Props) => {
     (!fingerprint && nft.category === NFTCategory.ESTATE)
 
   const name = <Name asset={nft} />
+  const translationPageDescriptorId = compact([
+    'buy',
+    translationsInfix,
+    'page'
+  ]).join('_')
 
   let subtitle = null
   if (!order) {
-    subtitle = <T id={'buy_page.not_for_sale'} values={{ name }} />
+    subtitle = (
+      <T id={`${translationPageDescriptorId}.not_for_sale`} values={{ name }} />
+    )
   } else if (
     !fingerprint &&
     nft.category === NFTCategory.ESTATE &&
     !isFingerprintLoading
   ) {
-    subtitle = <T id={'buy_page.no_fingerprint'} />
+    subtitle = <T id={`${translationPageDescriptorId}.no_fingerprint`} />
   } else if (isOwner) {
-    subtitle = <T id={'buy_page.is_owner'} values={{ name }} />
+    subtitle = (
+      <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
+    )
   } else if (hasInsufficientMANA) {
     subtitle = (
       <T
-        id={'buy_page.not_enough_mana'}
+        id={`${translationPageDescriptorId}.not_enough_mana`}
         values={{
           name,
           amount: <Price network={nft.network} price={order.price} />
@@ -109,9 +122,9 @@ const BuyNFTModal = (props: Props) => {
       />
     )
   } else {
-    subtitle = (
+    subtitle = defaultSubtitle || (
       <T
-        id={'buy_page.subtitle'}
+        id={`${translationPageDescriptorId}.subtitle`}
         values={{
           name,
           amount: <Price network={nft.network} price={order.price} />
@@ -123,7 +136,10 @@ const BuyNFTModal = (props: Props) => {
   return (
     <AssetAction asset={nft}>
       <Header size="large">
-        {t('buy_page.title', { category: t(`global.${nft.category}`) })}
+        {t(`${translationPageDescriptorId}.title`, {
+          name,
+          category: t(`global.${nft.category}`)
+        })}
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
       {hasLowPrice ? (
@@ -141,7 +157,8 @@ const BuyNFTModal = (props: Props) => {
             loading={isLoading}
             chainId={nft.chainId}
           >
-            {t('buy_page.buy')}
+            {ctaButtonContent}
+            {t(`${translationPageDescriptorId}.buy`)}
           </ChainButton>
         ) : null}
       </div>

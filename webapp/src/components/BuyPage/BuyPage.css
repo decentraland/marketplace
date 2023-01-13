@@ -9,3 +9,7 @@
 .BuyPage .error {
   color: var(--danger);
 }
+
+.BuyPage .buttons.with-mana .ui.button {
+  min-width: 180px;
+}

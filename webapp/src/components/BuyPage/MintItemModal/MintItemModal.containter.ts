@@ -6,6 +6,7 @@ import {
 import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { RootState } from '../../../modules/reducer'
+import { getIsBuyNftsWithFiatEnabled } from '../../../modules/features/selectors'
 import { buyItemRequest, BUY_ITEM_REQUEST } from '../../../modules/item/actions'
 import { getLoading as getItemsLoading } from '../../../modules/item/selectors'
 import { getContract } from '../../../modules/contract/selectors'
@@ -24,6 +25,7 @@ const mapState = (state: RootState): MapStateProps => ({
       getLoadingAuthorizations(state),
       FETCH_AUTHORIZATIONS_REQUEST
     ) || isLoadingType(getItemsLoading(state), BUY_ITEM_REQUEST),
+  isBuyNftsWithFiatEnabled: getIsBuyNftsWithFiatEnabled(state),
   getContract: (query: Partial<Contract>) => getContract(state, query)
 })
 
