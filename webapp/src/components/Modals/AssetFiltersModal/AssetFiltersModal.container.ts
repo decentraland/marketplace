@@ -2,9 +2,11 @@ import { connect } from 'react-redux'
 import { RootState } from '../../../modules/reducer'
 import { browse, clearFilters } from '../../../modules/routing/actions'
 import {
+  getAssetType,
   hasFiltersEnabled
 } from '../../../modules/routing/selectors'
 import { BrowseOptions } from '../../../modules/routing/types'
+import { getView } from '../../../modules/ui/browse/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -13,6 +15,8 @@ import {
 import AssetFiltersModal from './AssetFiltersModal'
 
 const mapState = (state: RootState): MapStateProps => ({
+  view: getView(state),
+  assetType: getAssetType(state),
   hasFiltersEnabled: hasFiltersEnabled(state)
 })
 

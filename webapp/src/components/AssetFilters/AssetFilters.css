@@ -88,4 +88,8 @@
   .dcl.box.filters-sidebar-box:not(:last-child) {
     border-bottom: 0;
   }
+
+  .dcl.box.filters-sidebar-box:not(:last-child) {
+    border-bottom: 0;
+  }
 }
