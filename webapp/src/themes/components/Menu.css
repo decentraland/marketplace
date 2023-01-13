@@ -22,6 +22,7 @@ ul.box-menu.Menu > .MenuItem:last-child {
 
 ul.box-menu.Menu > .MenuItem.active {
   background-color: #37333d;
+  border-radius: 0;
 }
 
 ul.box-menu.Menu > .MenuItem.sub-1 {

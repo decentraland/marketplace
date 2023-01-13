@@ -148,9 +148,15 @@ function* handleClearFilters() {
     'minPrice',
     'maxPrice',
     'onlySmart',
-    'onlyOnSale',
     'search'
   ])
+
+  // The onlyOnSale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
+  if (!browseOptions.onlyOnSale) {
+    clearedBrowseOptions.onlyOnSale = true
+  }
+  // reset the pages to the first one
+  clearedBrowseOptions.page = 1
 
   yield call(fetchAssetsFromRoute, clearedBrowseOptions)
   yield put(push(buildBrowseURL(pathname, clearedBrowseOptions)))

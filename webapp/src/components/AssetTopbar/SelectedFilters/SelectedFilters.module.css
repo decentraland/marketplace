@@ -19,3 +19,9 @@
 :global(.ui.header.mana.mana-label-icon .symbol) {
   padding-right: 0;
 }
+
+@media (max-width: 768px) {
+  .pillContainer {
+    margin-top: 0;
+  }
+}

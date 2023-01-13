@@ -62,3 +62,9 @@
 .price-filter .dcl.field.full .ui.input input[type='number'] {
   -moz-appearance: textfield;
 }
+
+.price-filter-error {
+  display: block;
+  margin-top: 12px;
+  color: var(--summer-red);
+}

@@ -12,7 +12,7 @@
   :global(.dcl.field.full)
   :global(.ui.input).searchField
   input:not(:focus) {
-  border: 2px solid var(--divider);
+  border: 2px solid transparent;
 }
 
 .assetTopbar :global(.dcl.field.full) {
@@ -31,6 +31,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 13px;
+  min-height: 26px;
 }
 
 .assetTopbar :global(.dcl.field .message) {
@@ -87,6 +88,7 @@
 
 .rightOptionsContainer {
   display: flex;
+  margin-left: auto;
 }
 
 .openFiltersWrapper {
@@ -109,4 +111,23 @@
 .openFilters.active {
   background-image: url(../../images/filters-active.svg);
   background-size: 20px;
+}
+
+@media (max-width: 768px) {
+  .selectedFiltersContainer {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .clearFilters {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding-top: 6px;
+    padding-left: 0;
+  }
+  .assetTopbar {
+    margin-bottom: 0;
+  }
 }
