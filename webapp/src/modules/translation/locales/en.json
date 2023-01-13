@@ -320,6 +320,7 @@
     "empty_search": "No results for \"{search}\" in the {currentSection}. <br></br><searchStore>Try searching the {section}</searchStore>"
   },
   "nft_filters": {
+    "no_items": "No items",
     "on_sale": "On sale",
     "filter": "Filter",
     "order_by": "Order By",

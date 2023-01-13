@@ -160,19 +160,14 @@ export const AssetTopbar = ({
         )}
       {!isMap && (
         <div className={styles.infoRow}>
-          {!isLoading ? (
-            <div className={styles.countContainer}>
-              <p className={styles.countText}>{getCountText(count, search)}</p>
-              {hasFiltersEnabled && !isMobile && (
-                <button
-                  className={styles.clearFilters}
-                  onClick={onClearFilters}
-                >
-                  {t('filters.clear')}
-                </button>
-              )}
-            </div>
-          ) : null}
+          <div className={styles.countContainer}>
+            <p className={styles.countText}>{getCountText(count, search)}</p>
+            {hasFiltersEnabled && !isMobile && (
+              <button className={styles.clearFilters} onClick={onClearFilters}>
+                {t('filters.clear')}
+              </button>
+            )}
+          </div>
           <div className={styles.rightOptionsContainer}>
             <Dropdown
               direction="left"
@@ -193,10 +188,10 @@ export const AssetTopbar = ({
           </div>
         </div>
       )}
-      {!isMap ? (
+      {!isMap && hasFiltersEnabled ? (
         <div className={styles.selectedFiltersContainer}>
           <SelectedFilters />
-          {hasFiltersEnabled && isMobile && (
+          {isMobile && (
             <button className={styles.clearFilters} onClick={onClearFilters}>
               {t('filters.clear')}
             </button>

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
 import { Item, NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'

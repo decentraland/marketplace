@@ -315,6 +315,7 @@
     "empty_search": "No hay resultados para \"{search}\" en {currentSection}. <br></br><searchStore> Intenta buscando en {section}</searchStore>"
   },
   "nft_filters": {
+    "no_items": "Sin items",
     "on_sale": "En venta",
     "filter": "Filtrar",
     "order_by": "Ordenar por",

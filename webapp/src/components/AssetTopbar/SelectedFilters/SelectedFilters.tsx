@@ -105,7 +105,7 @@ export const SelectedFilters = ({
     onBrowse({ onlyOnRent: undefined, onlyOnSale: undefined })
   }, [onBrowse])
 
-  return isLoading ? null : (
+  return (
     <div className={styles.pillContainer}>
       {rarities?.map(rarity => (
         <Pill
