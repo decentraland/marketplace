@@ -364,7 +364,9 @@
   "nft_land_filters": {
     "all_land": "所有土地",
     "only_for_rent": "可出租",
-    "only_for_sale": "可购买"
+    "only_for_sale": "可购买",
+    "for_sale": "待售",
+    "category": "类别"
   },
   "nft_card": {
     "expires_at": "{date}到期"

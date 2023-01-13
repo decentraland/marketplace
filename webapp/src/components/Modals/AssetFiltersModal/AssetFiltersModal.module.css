@@ -2,6 +2,7 @@
   overflow-x: hidden;
   display: flex !important; /** override decentraland-ui important */
   flex-direction: column;
+  background: var(--background);
 }
 
 :global(.ui.modal).assetFiltersModal > :global(.header).modalHeader {
@@ -11,6 +12,7 @@
   margin: 0;
   padding: 16px !important; /* override decentraland-ui important */
   border-bottom: 1px solid rgba(115, 110, 125, 0.32);
+  background: transparent;
 }
 
 .modalTitle {
@@ -32,9 +34,11 @@
   display: flex;
   flex-direction: column;
   flex: 1;
+  background: transparent;
 }
 
 :global(.ui.modal).assetFiltersModal > .modalFooter {
   padding: 24px;
   position: initial;
+  background: transparent;
 }

@@ -118,7 +118,7 @@ export const AssetFilters = ({
       const parentSection = category
         ? getSectionFromCategory(category)
         : section
-      return filtersBySection[parentSection]?.includes(filter)
+      return filtersBySection[parentSection!]?.includes(filter)
     },
     [category, section]
   )

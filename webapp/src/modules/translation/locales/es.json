@@ -358,7 +358,9 @@
     },
     "more_filters": "Más filtros",
     "only_smart": "Solo vestimentas interactivas",
-    "not_on_sale": "No a la venta"
+    "not_on_sale": "No a la venta",
+    "for_sale": "A la venta",
+    "category": "Categoría"
   },
   "nft_land_filters": {
     "all_land": "Todas las tierras",

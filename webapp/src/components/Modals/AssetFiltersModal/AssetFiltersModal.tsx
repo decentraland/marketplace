@@ -5,6 +5,8 @@ import { AssetFilters } from '../../AssetFilters'
 import { Props } from './AssetFiltersModal.types'
 import styles from './AssetFiltersModal.module.css'
 import { BrowseOptions } from '../../../modules/routing/types'
+import { Section } from '../../../modules/vendor/routing/types'
+import { CategoryFilter } from './CategoryFilter'
 
 const AssetFiltersModal = (props: Props) => {
   const [filters, setFilters] = useState<BrowseOptions>({})
@@ -21,6 +23,13 @@ const AssetFiltersModal = (props: Props) => {
     onBrowse(filters)
   }, [onBrowse, filters])
 
+  const handleSectionChange = useCallback(
+    (section: Section) => {
+      setFilters({ ...filters, section })
+    },
+    [filters]
+  )
+
   return (
     <Modal open className={styles.assetFiltersModal}>
       <Modal.Header className={styles.modalHeader}>
@@ -35,6 +44,7 @@ const AssetFiltersModal = (props: Props) => {
         />
       </Modal.Header>
       <Modal.Content>
+        <CategoryFilter onChange={handleSectionChange} values={filters} />
         <AssetFilters onFilterChange={handleFilterChange} values={filters} />
       </Modal.Content>
       <Modal.Actions className={styles.modalFooter}>

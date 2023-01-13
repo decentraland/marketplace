@@ -110,8 +110,8 @@ export function getLandLabel({
   onlyOnRent = false,
   onlyOnSale = false
 }: {
-  landStatus?: LANDFilters,
-  onlyOnRent?: boolean,
+  landStatus?: LANDFilters
+  onlyOnRent?: boolean
   onlyOnSale?: boolean
 }) {
   if (landStatus === LANDFilters.ONLY_FOR_RENT || onlyOnRent) {
