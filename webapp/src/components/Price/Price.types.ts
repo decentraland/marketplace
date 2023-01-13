@@ -1,4 +1,4 @@
-import { Asset } from '../../../modules/asset/types'
+import { Asset } from '../../modules/asset/types'
 
 export type Props = {
   asset: Asset

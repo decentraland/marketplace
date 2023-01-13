@@ -12,6 +12,7 @@ import { SettingsPage } from '../SettingsPage'
 import { AssetPage } from '../AssetPage'
 import { SellPage } from '../SellPage'
 import { BuyPage } from '../BuyPage'
+import { BuyWithManaPage } from '../BuyWithManaPage'
 import { BidPage } from '../BidPage'
 import { CancelSalePage } from '../CancelSalePage'
 import { TransferPage } from '../TransferPage'
@@ -70,6 +71,16 @@ const Routes = ({ inMaintenance }: Props) => {
           exact
           path={locations.buy(AssetType.ITEM)}
           component={() => <BuyPage type={AssetType.ITEM} />}
+        />
+        <Route
+          exact
+          path={locations.buyWithMana(AssetType.NFT)}
+          component={() => <BuyWithManaPage type={AssetType.NFT} />}
+        />
+        <Route
+          exact
+          path={locations.buyWithMana(AssetType.ITEM)}
+          component={() => <BuyWithManaPage type={AssetType.ITEM} />}
         />
         <Route
           exact
