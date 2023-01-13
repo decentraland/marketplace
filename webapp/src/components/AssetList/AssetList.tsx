@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
 import { Item, NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -47,6 +47,20 @@ const AssetList = (props: Props) => {
 
   const isLoadingNewPage = isLoading && nfts.length >= PAGE_SIZE
 
+  const getEmptyStateTranslationString = useCallback(() => {
+    if (section) {
+      const isEmoteOrWearableSection = [
+        NFTCategory.EMOTE,
+        NFTCategory.WEARABLE
+      ].includes(getCategoryFromSection(section)!)
+
+      if (isEmoteOrWearableSection) {
+        return search ? 'nft_list.empty_search' : 'nft_list.empty'
+      }
+    }
+    return 'nft_list.simple_empty'
+  }, [search, section])
+
   return (
     <>
       {isLoading ? (
@@ -72,16 +86,7 @@ const AssetList = (props: Props) => {
           <div className="watermelon" />
 
           <T
-            id={
-              search
-                ? 'nft_list.empty_search'
-                : section &&
-                  [NFTCategory.EMOTE, NFTCategory.WEARABLE].includes(
-                    getCategoryFromSection(section)!
-                  )
-                ? 'nft_list.empty'
-                : 'nft_list.simple_empty'
-            }
+            id={getEmptyStateTranslationString()}
             values={{
               search,
               currentSection:
