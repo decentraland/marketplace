@@ -5,7 +5,7 @@ import { PageHeader } from '../../PageHeader'
 import Title from '../Title'
 import { Box } from '../../AssetBrowse/Box'
 // TODO: make it importable from the root directory as AssetDetails or AssetDetailsBox
-import { Details } from '../../ManageAssetPage/Details'
+import { DetailsBox } from '../../DetailsBox'
 import { Props } from './BaseDetail.types'
 import './BaseDetail.css'
 
@@ -38,7 +38,7 @@ const BaseDetail = ({
               <div className="action-box">{actions}</div>
             ) : null}
             {showDetails ? (
-              <Details rental={rental} asset={asset} />
+              <DetailsBox rental={rental} asset={asset} />
             ) : (
               <Box className="box" childrenClassName="box-children">
                 {box}

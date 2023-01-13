@@ -9,6 +9,9 @@
   font-weight: 400;
   font-size: 17px;
   color: var(--primary-text);
+  display: flex;
+  align-items: baseline;
+  column-gap: 8px;
 }
 
 .infoContent {

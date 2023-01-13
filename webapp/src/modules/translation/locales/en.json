@@ -871,16 +871,19 @@
       "road": "Road",
       "plaza": "Plaza",
       "district": "District"
-    },
-    "details": {
-      "title": "Item details",
-      "network": "Network",
-      "stock": "Stock",
-      "sold_out": "Sold Out",
-      "owner": "Owner",
-      "order_expiration": "Order expiration",
-      "rental_expiration": "Rental expiration"
     }
+  },
+  "details_box": {
+    "title": "Item details",
+    "network": "Network",
+    "stock": "Stock",
+    "issue_number": "Issue Number",
+    "sold_out": "Sold Out",
+    "owner": "Owner",
+    "order_expiration": "Order expiration",
+    "expires_at": "Expires at",
+    "expires_at_info": "When the listing expires, it will stop being available to buy",
+    "rental_expiration": "Rental expiration"
   },
   "claim_land_modal": {
     "title": "Claim {asset}",

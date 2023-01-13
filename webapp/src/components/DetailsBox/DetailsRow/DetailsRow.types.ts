@@ -5,5 +5,5 @@ export type Props = {
   asset: Asset
   rental?: RentalListing | null
   order?: Order | null
-  className?: string
+  owner?: string
 }

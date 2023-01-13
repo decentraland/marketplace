@@ -116,7 +116,6 @@ const ItemDetail = ({ isBuyNftsWithFiatEnabled, item, wallet }: Props) => {
           </div>
         </>
       }
-      // TODO (buy nfts with card): merge this actions with the SaleActionBox
       box={
         !isBuyNftsWithFiatEnabled ? (
           <>

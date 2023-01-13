@@ -8,7 +8,6 @@ import { ItemSaleActions } from './ItemSaleActions'
 import { NFTSaleActions } from './NFTSaleActions'
 
 const SaleActionBox = ({ asset }: Props) => {
-  // TODO (buy nfts with card): remove irrelevant actions
   return (
     <div className={styles.main}>
       {isNFT(asset) || asset.isOnSale ? (
