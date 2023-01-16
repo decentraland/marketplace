@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import compact from 'lodash/compact'
-import { Header, Button, Mana } from 'decentraland-ui'
+import classNames from 'classnames'
+import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Authorization,
@@ -15,15 +16,15 @@ import { AuthorizationModal } from '../../AuthorizationModal'
 import { getContractNames } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
+import { isWearableOrEmote } from '../../../modules/asset/utils'
 import { AssetAction } from '../../AssetAction'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { PriceTooLow } from '../PriceTooLow'
+import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
 import { Props } from './MintItemModal.types'
-import { isWearableOrEmote } from '../../../modules/asset/utils'
-import classNames from 'classnames'
 
 const MintItemModal = (props: Props) => {
   const {
@@ -35,6 +36,7 @@ const MintItemModal = (props: Props) => {
     hasInsufficientMANA,
     hasLowPrice,
     isBuyNftsWithFiatEnabled,
+    isBuyWithCardPage,
     getContract,
     onBuyItem
   } = props
@@ -93,7 +95,11 @@ const MintItemModal = (props: Props) => {
 
   const translationPageDescriptorId = compact([
     'mint',
-    isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? 'with_mana' : null,
+    isBuyNftsWithFiatEnabled && isWearableOrEmote(item)
+      ? isBuyWithCardPage
+        ? 'with_card'
+        : 'with_mana'
+      : null,
     'page'
   ]).join('_')
 
@@ -183,12 +189,23 @@ const MintItemModal = (props: Props) => {
             chainId={item.chainId}
           >
             {isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
-              <Mana inline size="small" network={item.network} />
+              isBuyWithCardPage ? (
+                <Icon name="credit card outline" />
+              ) : (
+                <Mana inline size="small" network={item.network} />
+              )
             ) : null}
             {t(`${translationPageDescriptorId}.action`)}
           </ChainButton>
         ) : null}
       </div>
+      {isBuyNftsWithFiatEnabled &&
+      isWearableOrEmote(item) &&
+      isBuyWithCardPage ? (
+        <CardPaymentsExplanation
+          translationPageDescriptorId={translationPageDescriptorId}
+        />
+      ) : null}
       {authorization ? (
         <AuthorizationModal
           isLoading={isLoading}

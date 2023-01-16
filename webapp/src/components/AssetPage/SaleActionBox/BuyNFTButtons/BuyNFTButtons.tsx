@@ -29,7 +29,7 @@ const BuyNFTButtons = ({ asset }: Props) => {
       <Button
         as={Link}
         className={styles.buy_with_card}
-        to={locations.buy(assetType, contractAddress, assetId)}
+        to={locations.buyWithCard(assetType, contractAddress, assetId)}
         fluid
       >
         <Icon name="credit card outline" />

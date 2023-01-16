@@ -19,16 +19,19 @@ export type Props = {
   isOwner: boolean
   hasInsufficientMANA: boolean
   hasLowPrice: boolean
-  defaultSubtitle?: React.ReactNode
-  translationsInfix?: string
-  ctaButtonContent?: React.ReactNode
+  isBuyNftsWithFiatEnabled: boolean
+  isBuyWithCardPage: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onExecuteOrder: typeof executeOrderRequest
 }
 
 export type MapStateProps = Pick<
   Props,
-  'authorizations' | 'isLoading' | 'getContract'
+  | 'authorizations'
+  | 'isLoading'
+  | 'getContract'
+  | 'isBuyNftsWithFiatEnabled'
+  | 'isBuyWithCardPage'
 >
 export type MapDispatchProps = Pick<Props, 'onExecuteOrder'>
 export type MapDispatch = Dispatch<ExecuteOrderRequestAction>
