@@ -13,7 +13,6 @@ import { getCollectionByAddress } from './utils'
 import styles from './SelectedFilters.module.css'
 
 export const SelectedFilters = ({
-  isLoading,
   browseOptions,
   isLandSection,
   category,
