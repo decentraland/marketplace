@@ -8,12 +8,19 @@ import { BrowseOptions } from '../../../modules/routing/types'
 import { AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/routing/types'
 import { View } from '../../../modules/ui/types'
+import { getClearedBrowseOptions } from '../../../modules/routing/utils'
 import { AssetTypeFilter } from './AssetTypeFilter'
 import { CategoryFilter } from './CategoryFilter'
 
 const AssetFiltersModal = (props: Props) => {
   const [filters, setFilters] = useState<BrowseOptions>({})
-  const { onClearFilters, onClose, onBrowse, view, assetType } = props
+  const {
+    onClose,
+    onBrowse,
+    view,
+    assetType,
+    browseOptions
+  } = props
 
   const handleFilterChange = useCallback(
     (options: BrowseOptions) => {
@@ -40,10 +47,14 @@ const AssetFiltersModal = (props: Props) => {
     [filters]
   )
 
+  const handleClearFilters = useCallback(() => {
+    setFilters(getClearedBrowseOptions(browseOptions, true))
+  }, [browseOptions])
+
   return (
     <Modal open className={styles.assetFiltersModal}>
       <Modal.Header className={styles.modalHeader}>
-        <Button basic className="clear-filters-modal" onClick={onClearFilters}>
+        <Button basic className="clear-filters-modal" onClick={handleClearFilters}>
           {t('filters.reset')}
         </Button>
         <h3 className={styles.modalTitle}>Filters</h3>
@@ -54,7 +65,12 @@ const AssetFiltersModal = (props: Props) => {
         />
       </Modal.Header>
       <Modal.Content>
-        {view === View.ACCOUNT ? <AssetTypeFilter onChange={handleAssetTypeChange} assetType={filters.assetType || assetType} /> : null}
+        {view === View.ACCOUNT ? (
+          <AssetTypeFilter
+            onChange={handleAssetTypeChange}
+            assetType={filters.assetType || assetType}
+          />
+        ) : null}
         <CategoryFilter onChange={handleSectionChange} values={filters} />
         <AssetFilters onFilterChange={handleFilterChange} values={filters} />
       </Modal.Content>

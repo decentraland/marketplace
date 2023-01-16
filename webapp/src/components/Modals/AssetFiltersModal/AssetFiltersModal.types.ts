@@ -2,7 +2,6 @@ import { Dispatch } from 'redux'
 import { ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import {
   BrowseAction,
-  clearFilters,
   ClearFiltersAction
 } from '../../../modules/routing/actions'
 import { BrowseOptions } from '../../../modules/routing/types'
@@ -13,7 +12,7 @@ export type Props = ModalProps & {
   hasFiltersEnabled: boolean
   view?: View
   assetType: AssetType
-  onClearFilters: typeof clearFilters
+  browseOptions: BrowseOptions
   onBrowse: (options: BrowseOptions) => void
 }
 
@@ -22,7 +21,8 @@ export type MapStateProps = Pick<
   | 'hasFiltersEnabled'
   | 'view'
   | 'assetType'
+  | 'browseOptions'
 >
 
-export type MapDispatchProps = Pick<Props, 'onClearFilters' | 'onBrowse'>
+export type MapDispatchProps = Pick<Props, 'onBrowse'>
 export type MapDispatch = Dispatch<ClearFiltersAction | BrowseAction>

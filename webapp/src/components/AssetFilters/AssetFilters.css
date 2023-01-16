@@ -7,12 +7,10 @@
   max-width: 100%;
 }
 
-.filters-sidebar-box {
-  background: #242129;
-}
-
 .dcl.box.filters-sidebar-box {
   padding: 21px 24px;
+  background: #242129;
+  max-width: var(--menu-item-width);
 }
 
 .filters-sidebar
