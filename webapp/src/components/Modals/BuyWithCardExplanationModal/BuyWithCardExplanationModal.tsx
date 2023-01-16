@@ -5,7 +5,7 @@ import { Props } from './BuyWithCardExplanationModal.types'
 import styles from './BuyWithCardExplanationModal.module.css'
 
 const BuyWithCardExplanationModal = ({ onContinue, onClose }: Props) => (
-  <Modal open>
+  <Modal open className={styles.buyWithCardExplanationModal}>
     <ModalNavigation
       title={t('buy_with_card_explanation_modal.title')}
       onClose={onClose}

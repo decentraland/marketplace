@@ -18,14 +18,14 @@
 }
 
 @media only screen and (min-width: 1200px) {
-  :global(.ui.modal) {
+  .buyWithCardExplanationModal:global(.ui.modal) {
     max-width: 520px;
     margin: 0;
   }
 }
 
 @media (max-width: 767px) {
-  :global(.ui.modal .actions) {
+  .buyWithCardExplanationModal .actions {
     flex-direction: column;
     margin: 0;
   }
