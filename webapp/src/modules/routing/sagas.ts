@@ -104,6 +104,7 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
+import { isLandSection } from '../ui/utils'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
@@ -148,11 +149,15 @@ function* handleClearFilters() {
     'minPrice',
     'maxPrice',
     'onlySmart',
-    'search'
+    'search',
+    'onlyOnRent'
   ])
 
   // The onlyOnSale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
-  if (!browseOptions.onlyOnSale) {
+  if (
+    !browseOptions.onlyOnSale &&
+    !isLandSection(browseOptions.section as Section)
+  ) {
     clearedBrowseOptions.onlyOnSale = true
   }
   // reset the pages to the first one

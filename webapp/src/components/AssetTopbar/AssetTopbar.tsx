@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import {
   Dropdown,
@@ -45,7 +45,6 @@ export const AssetTopbar = ({
   onOpenFiltersModal
 }: Props): JSX.Element => {
   const isMobile = useMobileMediaQuery()
-  const [showFiltersMenu, setShowFiltersMenu] = useState(false)
   const category = section ? getCategoryFromSection(section) : undefined
 
   const handleSearch = useCallback(
@@ -104,14 +103,6 @@ export const AssetTopbar = ({
   )
     ? sortBy
     : orderByDropdownOptions[0].value
-
-  useEffect(
-    () =>
-      setShowFiltersMenu(
-        category === NFTCategory.WEARABLE || category === NFTCategory.EMOTE
-      ),
-    [category, setShowFiltersMenu]
-  )
 
   return (
     <div className={styles.assetTopbar}>
@@ -184,7 +175,7 @@ export const AssetTopbar = ({
                 className={classNames(
                   styles.openFilters,
                   styles.openFiltersWrapper,
-                  (showFiltersMenu || hasFiltersEnabled) && styles.active
+                  hasFiltersEnabled && styles.active
                 )}
                 onClick={onOpenFiltersModal}
               />
