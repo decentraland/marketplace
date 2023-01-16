@@ -78,12 +78,7 @@ const MintItemModal = (props: Props) => {
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [
-    authorizations,
-    authorization,
-    handleExecuteOrder,
-    setShowAuthorizationModal
-  ])
+  }, [authorization, authorizations, handleExecuteOrder])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal

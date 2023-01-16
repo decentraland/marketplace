@@ -9,6 +9,7 @@ import {
 } from '../../../modules/order/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
+import { openModal, OpenModalAction } from '../../../modules/modal/actions'
 
 export type Props = {
   nft: NFT
@@ -23,6 +24,7 @@ export type Props = {
   isBuyWithCardPage: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onExecuteOrder: typeof executeOrderRequest
+  onFirstTimeBuyingWithCard: () => ReturnType<typeof openModal>
 }
 
 export type MapStateProps = Pick<
@@ -33,5 +35,8 @@ export type MapStateProps = Pick<
   | 'isBuyNftsWithFiatEnabled'
   | 'isBuyWithCardPage'
 >
-export type MapDispatchProps = Pick<Props, 'onExecuteOrder'>
-export type MapDispatch = Dispatch<ExecuteOrderRequestAction>
+export type MapDispatchProps = Pick<
+  Props,
+  'onExecuteOrder' | 'onFirstTimeBuyingWithCard'
+>
+export type MapDispatch = Dispatch<ExecuteOrderRequestAction | OpenModalAction>

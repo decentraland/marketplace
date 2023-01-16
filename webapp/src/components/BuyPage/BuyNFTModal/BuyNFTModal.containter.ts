@@ -15,6 +15,7 @@ import { getContract } from '../../../modules/contract/selectors'
 import { Contract } from '../../../modules/vendor/services'
 import { getIsBuyNftsWithFiatEnabled } from '../../../modules/features/selectors'
 import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
+import { openModal } from '../../../modules/modal/actions'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -36,6 +37,8 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onExecuteOrder: (order, nft, fingerprint) =>
-    dispatch(executeOrderRequest(order, nft, fingerprint))
+    dispatch(executeOrderRequest(order, nft, fingerprint)),
+  onFirstTimeBuyingWithCard: () =>
+    dispatch(openModal('BuyWithCardExplanationModal'))
 })
 export default connect(mapState, mapDispatch)(BuyNFTModal)

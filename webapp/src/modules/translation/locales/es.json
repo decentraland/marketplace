@@ -18,6 +18,8 @@
     "art": "Arte",
     "cancel": "Cancelar",
     "proceed": "Aceptar",
+    "continue": "Continuar",
+    "go_back": "Volver",
     "nft": "NFT",
     "loading": "Cargando",
     "settings": "Configuración",
@@ -594,6 +596,11 @@
     "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}.",
     "regions_where_operates": "regiones donde opera Transak",
     "explanation": "{link_to_transak} procesa los pagos con tarjeta y están disponibles para las {regions}. Se admiten tanto tarjetas de crédito como de débito."
+  },
+  "buy_with_card_explanation_modal": {
+    "title": "Comprar con tarjeta",
+    "explanation": "Los pagos con tarjeta son procesados por {link_to_transak}.\nTransak cobra una tarifa por su servicio. Verás el precio final antes de confirmar la compra.",
+    "learn_more": "Más información sobre los pagos con tarjeta"
   },
   "bid_page": {
     "title": "Haz una oferta",

@@ -18,6 +18,8 @@
     "art": "艺术",
     "cancel": "取消",
     "proceed": "继续",
+    "continue": "继续",
+    "go_back": "回去",
     "nft": "NFT",
     "loading": "载入中",
     "settings": "设定",
@@ -597,6 +599,11 @@
     "not_enough_mana": "您没有足够的MANA来购买{name}。",
     "regions_where_operates": "Transak 经营的地区",
     "explanation": "银行卡支付由 {link_to_transak} 处理，并适用于 {regions}。 支持信用卡和借记卡。"
+  },
+  "buy_with_card_explanation_modal": {
+    "title": "刷卡购买",
+    "explanation": "银行卡付款由 {link_to_transak} 处理。\nTransak 对其服务收取费用。 在确认购买之前，您将看到最终价格。",
+    "learn_more": "了解有关卡支付的更多信息"
   },
   "bid_page": {
     "title": "出价",
