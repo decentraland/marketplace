@@ -548,6 +548,17 @@
     "is_owner": "Ya eres el dueño de {name}.",
     "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
   },
+  "buy_with_card_page": {
+    "title": "Comprando {name}",
+    "subtitle": "Estás por comprar {name} por {amount}.",
+    "not_for_sale": "{name} no esta en venta.",
+    "buy": "Comprar con tarjeta",
+    "no_fingerprint": "No se pudo cargar la identificación del Estate.",
+    "is_owner": "Ya eres el dueño de {name}.",
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}.",
+    "regions_where_operates": "regiones donde opera Transak",
+    "explanation": "{link_to_transak} procesa los pagos con tarjeta y están disponibles para las {regions}. Se admiten tanto tarjetas de crédito como de débito."
+  },
   "price_too_low": {
     "minimum_price": "La cantidad mínima admitida para transacciones sin costo es {price}",
     "get_item_in_network": "Para obtener este item, deberá cambiar su red a {network} y luego cubrir el costo de la transacción con {token}.",
@@ -572,6 +583,17 @@
     "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
     "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
+  },
+  "mint_with_card_page": {
+    "title": "Comprando {name}",
+    "subtitle": "Estás por comprar {name} por {amount}.",
+    "not_for_sale": "{name} no esta en venta.",
+    "action": "Comprar con tarjeta",
+    "no_fingerprint": "No se pudo cargar la identificación del Estate.",
+    "is_owner": "Ya eres el dueño de {name}.",
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}.",
+    "regions_where_operates": "regiones donde opera Transak",
+    "explanation": "{link_to_transak} procesa los pagos con tarjeta y están disponibles para las {regions}. Se admiten tanto tarjetas de crédito como de débito."
   },
   "bid_page": {
     "title": "Haz una oferta",

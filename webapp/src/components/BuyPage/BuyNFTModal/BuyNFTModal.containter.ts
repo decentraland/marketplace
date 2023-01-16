@@ -13,6 +13,8 @@ import {
 import { getLoading as getLoadingOrders } from '../../../modules/order/selectors'
 import { getContract } from '../../../modules/contract/selectors'
 import { Contract } from '../../../modules/vendor/services'
+import { getIsBuyNftsWithFiatEnabled } from '../../../modules/features/selectors'
+import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -27,6 +29,8 @@ const mapState = (state: RootState): MapStateProps => ({
       getLoadingAuthorizations(state),
       FETCH_AUTHORIZATIONS_REQUEST
     ) || isLoadingType(getLoadingOrders(state), EXECUTE_ORDER_REQUEST),
+  isBuyNftsWithFiatEnabled: getIsBuyNftsWithFiatEnabled(state),
+  isBuyWithCardPage: getIsBuyWithCardPage(state),
   getContract: (query: Partial<Contract>) => getContract(state, query)
 })
 

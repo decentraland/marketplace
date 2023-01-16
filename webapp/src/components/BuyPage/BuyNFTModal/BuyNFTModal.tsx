@@ -1,7 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import compact from 'lodash/compact'
-import { Header, Button } from 'decentraland-ui'
+import classNames from 'classnames'
 import { Link } from 'react-router-dom'
+import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Authorization,
@@ -11,14 +12,18 @@ import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { NFTCategory } from '@dcl/schemas'
 import { ContractName } from 'decentraland-transactions'
+import { isWearableOrEmote } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
 import { AssetAction } from '../../AssetAction'
 import { AuthorizationModal } from '../../AuthorizationModal'
+import { Network as NetworkSubtitle } from '../../Network'
+import PriceSubtitle from '../../Price'
 import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
 import { Price } from '../Price'
+import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
 import { Props } from './BuyNFTModal.types'
 
 const BuyNFTModal = (props: Props) => {
@@ -31,9 +36,8 @@ const BuyNFTModal = (props: Props) => {
     isOwner,
     hasInsufficientMANA,
     hasLowPrice,
-    defaultSubtitle,
-    translationsInfix,
-    ctaButtonContent,
+    isBuyNftsWithFiatEnabled,
+    isBuyWithCardPage,
     getContract,
     onExecuteOrder
   } = props
@@ -90,9 +94,14 @@ const BuyNFTModal = (props: Props) => {
     (!fingerprint && nft.category === NFTCategory.ESTATE)
 
   const name = <Name asset={nft} />
+
   const translationPageDescriptorId = compact([
     'buy',
-    translationsInfix,
+    isBuyNftsWithFiatEnabled && isWearableOrEmote(nft)
+      ? isBuyWithCardPage
+        ? 'with_card'
+        : 'with_mana'
+      : null,
     'page'
   ]).join('_')
 
@@ -122,15 +131,21 @@ const BuyNFTModal = (props: Props) => {
       />
     )
   } else {
-    subtitle = defaultSubtitle || (
-      <T
-        id={`${translationPageDescriptorId}.subtitle`}
-        values={{
-          name,
-          amount: <Price network={nft.network} price={order.price} />
-        }}
-      />
-    )
+    subtitle =
+      isBuyNftsWithFiatEnabled && isWearableOrEmote(nft) ? (
+        <>
+          <PriceSubtitle asset={nft} />
+          <NetworkSubtitle asset={nft} />
+        </>
+      ) : (
+        <T
+          id={`${translationPageDescriptorId}.subtitle`}
+          values={{
+            name,
+            amount: <Price network={nft.network} price={order.price} />
+          }}
+        />
+      )
   }
 
   return (
@@ -145,7 +160,12 @@ const BuyNFTModal = (props: Props) => {
       {hasLowPrice ? (
         <PriceTooLow chainId={nft.chainId} network={nft.network} />
       ) : null}
-      <div className="buttons">
+      <div
+        className={classNames(
+          'buttons',
+          isBuyNftsWithFiatEnabled && isWearableOrEmote(nft) && 'with-mana'
+        )}
+      >
         <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
           {t('global.cancel')}
         </Button>
@@ -157,11 +177,24 @@ const BuyNFTModal = (props: Props) => {
             loading={isLoading}
             chainId={nft.chainId}
           >
-            {ctaButtonContent}
+            {isBuyNftsWithFiatEnabled && isWearableOrEmote(nft) ? (
+              isBuyWithCardPage ? (
+                <Icon name="credit card outline" />
+              ) : (
+                <Mana inline size="small" network={nft.network} />
+              )
+            ) : null}
             {t(`${translationPageDescriptorId}.buy`)}
           </ChainButton>
         ) : null}
       </div>
+      {isBuyNftsWithFiatEnabled &&
+      isWearableOrEmote(nft) &&
+      isBuyWithCardPage ? (
+        <CardPaymentsExplanation
+          translationPageDescriptorId={translationPageDescriptorId}
+        />
+      ) : null}
       {authorization ? (
         <AuthorizationModal
           open={showAuthorizationModal}

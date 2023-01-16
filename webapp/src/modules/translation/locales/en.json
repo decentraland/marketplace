@@ -555,6 +555,17 @@
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
   },
+  "buy_with_card_page": {
+    "title": "Buying {name}",
+    "subtitle": "You are about to buy {name} for {amount}.",
+    "not_for_sale": "{name} is not for sale.",
+    "buy": "Buy with Card",
+    "no_fingerprint": "Could not load fingerprint.",
+    "is_owner": "You are the owner of {name}.",
+    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}.",
+    "regions_where_operates": "regions where Transak operates",
+    "explanation": "Card payments are processed by {link_to_transak} and are available for the {regions}. Both credit and debit cards are supported."
+  },
   "price_too_low": {
     "minimum_price": "The minimun amount supported for costless transactions is {price}",
     "get_item_in_network": "In order to get this item you'll need to switch your network to {network} and then cover the transaction cost with {token}.",
@@ -579,6 +590,17 @@
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}."
+  },
+  "mint_with_card_page": {
+    "title": "Buying {name}",
+    "subtitle": "You are about to buy {name} for {amount}.",
+    "not_for_sale": "{name} is not for sale.",
+    "action": "Buy with Card",
+    "no_fingerprint": "Could not load fingerprint.",
+    "is_owner": "You are the owner of {name}.",
+    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}.",
+    "regions_where_operates": "regions where Transak operates",
+    "explanation": "Card payments are processed by {link_to_transak} and are available for the {regions}. Both credit and debit cards are supported."
   },
   "bid_page": {
     "title": "Place a bid",

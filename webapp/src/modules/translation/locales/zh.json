@@ -550,6 +550,17 @@
     "is_owner": "您是{name}的所有者。",
     "not_enough_mana": "您没有足够的MANA来购买{name}。"
   },
+  "buy_with_card_page": {
+    "title": "购买{name}",
+    "subtitle": "您将以{amount}的价格购买{name}。",
+    "not_for_sale": "{name}为非卖品",
+    "buy": "用卡购买",
+    "no_fingerprint": "无法加载指纹。",
+    "is_owner": "您是{name}的所有者。",
+    "not_enough_mana": "您没有足够的MANA来购买{name}。",
+    "regions_where_operates": "Transak 经营的地区",
+    "explanation": "银行卡支付由 {link_to_transak} 处理，并适用于 {regions}。 支持信用卡和借记卡。"
+  },
   "price_too_low": {
     "minimum_price": "无成本交易支持的最低金额为 {price}",
     "get_item_in_network": "为了获得这个物品，您需要将您的网络切换到 {network}，然后用 {token} 支付交易成本。",
@@ -574,6 +585,18 @@
     "no_fingerprint": "无法加载指纹。",
     "is_owner": "您是{name}的所有者。",
     "not_enough_mana": "您没有足够的MANA来购买{name}。"
+  },
+  "mint_with_card_page": {
+    "title": "购买{name}",
+    "subtitle": "您将以{amount}的价格购买{name}。",
+    "not_for_sale": "{name} 不可用于铸造，但您可以在 {secondary_market_link} 上搜索它。",
+    "secondary_market": "二级市场",
+    "action": "用卡购买",
+    "no_fingerprint": "无法加载指纹。",
+    "is_owner": "您是{name}的所有者。",
+    "not_enough_mana": "您没有足够的MANA来购买{name}。",
+    "regions_where_operates": "Transak 经营的地区",
+    "explanation": "银行卡支付由 {link_to_transak} 处理，并适用于 {regions}。 支持信用卡和借记卡。"
   },
   "bid_page": {
     "title": "出价",

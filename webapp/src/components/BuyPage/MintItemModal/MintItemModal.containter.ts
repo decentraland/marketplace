@@ -10,6 +10,7 @@ import { getIsBuyNftsWithFiatEnabled } from '../../../modules/features/selectors
 import { buyItemRequest, BUY_ITEM_REQUEST } from '../../../modules/item/actions'
 import { getLoading as getItemsLoading } from '../../../modules/item/selectors'
 import { getContract } from '../../../modules/contract/selectors'
+import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
 import { Contract } from '../../../modules/vendor/services'
 import {
   MapStateProps,
@@ -26,6 +27,7 @@ const mapState = (state: RootState): MapStateProps => ({
       FETCH_AUTHORIZATIONS_REQUEST
     ) || isLoadingType(getItemsLoading(state), BUY_ITEM_REQUEST),
   isBuyNftsWithFiatEnabled: getIsBuyNftsWithFiatEnabled(state),
+  isBuyWithCardPage: getIsBuyWithCardPage(state),
   getContract: (query: Partial<Contract>) => getContract(state, query)
 })
 
