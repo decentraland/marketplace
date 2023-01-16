@@ -1,5 +1,3 @@
-// isBuyNftsWithFiatEnabled: getIsBuyNftsWithFiatEnabled(state)
-
 import { connect } from 'react-redux'
 import { getIsBuyNftsWithFiatEnabled } from '../../../modules/features/selectors'
 import { RootState } from '../../../modules/reducer'

@@ -19,6 +19,9 @@ export type Props = {
   isOwner: boolean
   hasInsufficientMANA: boolean
   hasLowPrice: boolean
+  defaultSubtitle?: React.ReactNode
+  translationsInfix?: string
+  ctaButtonContent?: React.ReactNode
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onExecuteOrder: typeof executeOrderRequest
 }

@@ -11,13 +11,14 @@ import { Props } from './BuyNFTButtons.types'
 
 const BuyNFTButtons = ({ asset }: Props) => {
   const { contractAddress, network } = asset
+  const assetType = isNFT(asset) ? AssetType.NFT : AssetType.ITEM
   const assetId = isNFT(asset) ? asset.tokenId : asset.itemId
 
   return (
     <>
       <Button
         as={Link}
-        to={locations.buy(AssetType.NFT, contractAddress, assetId)}
+        to={locations.buy(assetType, contractAddress, assetId)}
         primary
         fluid
       >
@@ -28,7 +29,7 @@ const BuyNFTButtons = ({ asset }: Props) => {
       <Button
         as={Link}
         className={styles.buy_with_card}
-        to={locations.buy(AssetType.NFT, contractAddress, assetId)}
+        to={locations.buy(assetType, contractAddress, assetId)}
         fluid
       >
         <Icon name="credit card outline" />

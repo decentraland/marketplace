@@ -546,6 +546,15 @@
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
   },
+  "buy_with_mana_page": {
+    "title": "Buying {name}",
+    "subtitle": "You are about to buy {name} for {amount}.",
+    "not_for_sale": "{name} is not for sale.",
+    "buy": "Buy with MANA",
+    "no_fingerprint": "Could not load fingerprint.",
+    "is_owner": "You are the owner of {name}.",
+    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
+  },
   "price_too_low": {
     "minimum_price": "The minimun amount supported for costless transactions is {price}",
     "get_item_in_network": "In order to get this item you'll need to switch your network to {network} and then cover the transaction cost with {token}.",
@@ -557,6 +566,16 @@
     "not_for_sale": "{name} is not available for minting, but you can search for it on the {secondary_market_link}.",
     "secondary_market": "secondary market",
     "action": "Buy",
+    "no_fingerprint": "Could not load fingerprint.",
+    "is_owner": "You are the owner of {name}.",
+    "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}."
+  },
+  "mint_with_mana_page": {
+    "title": "Buying {name}",
+    "subtitle": "You are about to buy {name} for {amount}.",
+    "not_for_sale": "{name} is not available for minting, but you can search for it on the {secondary_market_link}.",
+    "secondary_market": "secondary market",
+    "action": "Buy with MANA",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}."

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import Price from '../Price'
+import Price from '../../Price'
 import styles from './SaleActionBox.module.css'
 import { Props } from './SaleActionBox.types'
 import { isNFT } from '../../../modules/asset/utils'
