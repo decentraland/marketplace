@@ -43,7 +43,7 @@ describe('when handling the clear filters request action', () => {
       assetType: AssetType.ITEM,
       address: '0x...',
       vendor: VendorName.DECENTRALAND,
-      section: 'aSection',
+      section: Section.LAND,
       page: 1,
       view: View.MARKET,
       sortBy: SortBy.NAME,
@@ -89,30 +89,64 @@ describe('when handling the clear filters request action', () => {
     })
   })
   describe('and the onlyOnSale filter is set to "false"', () => {
-    it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
-      return expectSaga(routingSaga)
-        .provide([
-          [
-            select(getCurrentBrowseOptions),
-            { ...browseOptions, onlyOnSale: false }
-          ],
-          [select(getLocation), { pathname }],
-          [select(getEventData), {}],
-          [
-            call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-            Promise.resolve()
-          ]
-        ])
-        .put(
-          push(
-            buildBrowseURL(pathname, {
-              ...browseOptionsWithoutFilters,
-              onlyOnSale: true
-            })
+    describe('and it is the LAND section', () => {
+      it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getCurrentBrowseOptions),
+              { ...browseOptions, section: Section.LAND }
+            ],
+            [select(getLocation), { pathname }],
+            [select(getEventData), {}],
+            [
+              call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
+              Promise.resolve()
+            ]
+          ])
+          .put(
+            push(
+              buildBrowseURL(pathname, {
+                ...browseOptionsWithoutFilters
+              })
+            )
           )
-        )
-        .dispatch(clearFilters())
-        .run({ silenceTimeout: true })
+          .dispatch(clearFilters())
+          .run({ silenceTimeout: true })
+      })
+    })
+
+    describe('and it is not the LAND section', () => {
+      it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getCurrentBrowseOptions),
+              {
+                ...browseOptions,
+                onlyOnSale: false,
+                section: Section.COLLECTIONS
+              }
+            ],
+            [select(getLocation), { pathname }],
+            [select(getEventData), {}],
+            [
+              call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
+              Promise.resolve()
+            ]
+          ])
+          .put(
+            push(
+              buildBrowseURL(pathname, {
+                ...browseOptionsWithoutFilters,
+                section: Section.COLLECTIONS,
+                onlyOnSale: true
+              })
+            )
+          )
+          .dispatch(clearFilters())
+          .run({ silenceTimeout: true })
+      })
     })
   })
 })

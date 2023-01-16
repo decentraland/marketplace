@@ -71,6 +71,10 @@ export const SelectedFilters = ({
     [onBrowse, rarities]
   )
 
+  const handleDeleteCollection = useCallback(() => {
+    onBrowse({ contracts: [] })
+  }, [onBrowse])
+
   const handleDeleteNetwork = useCallback(() => {
     onBrowse({ network: undefined })
   }, [onBrowse])
@@ -132,7 +136,7 @@ export const SelectedFilters = ({
         <Pill
           label={collection.name}
           id={collection.address}
-          onDelete={handleDeleteRarity}
+          onDelete={handleDeleteCollection}
         />
       ) : null}
       {wearableGenders?.length ? (
