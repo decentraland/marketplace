@@ -42,3 +42,7 @@
   width: 100%;
   padding-bottom: 0;
 }
+
+.filters-sidebar-box.category-filter ul.box-menu.Menu > .MenuItem.active {
+  border-radius: 6px;
+}

@@ -22,7 +22,6 @@ import {
   SaleSortBy,
   SaleType
 } from '@dcl/schemas'
-import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
 import {
   BUY_ITEM_SUCCESS,
@@ -82,6 +81,7 @@ import { Section } from '../vendor/decentraland'
 import { fetchCollectionsRequest } from '../collection/actions'
 import {
   COLLECTIONS_PER_PAGE,
+  getClearedBrowseOptions,
   rentalFilters,
   SALES_PER_PAGE,
   sellFilters
@@ -104,7 +104,6 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
-import { isLandSection } from '../ui/utils'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
@@ -138,31 +137,7 @@ function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
 function* handleClearFilters() {
   const browseOptions: BrowseOptions = yield select(getCurrentBrowseOptions)
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-
-  const clearedBrowseOptions: BrowseOptions = omit(browseOptions, [
-    'rarities',
-    'wearableGenders',
-    'network',
-    'contracts',
-    'emotePlayMode',
-    'page',
-    'minPrice',
-    'maxPrice',
-    'onlySmart',
-    'search',
-    'onlyOnRent'
-  ])
-
-  // The onlyOnSale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
-  if (
-    !browseOptions.onlyOnSale &&
-    !isLandSection(browseOptions.section as Section)
-  ) {
-    clearedBrowseOptions.onlyOnSale = true
-  }
-  // reset the pages to the first one
-  clearedBrowseOptions.page = 1
-
+  const clearedBrowseOptions = getClearedBrowseOptions(browseOptions)
   yield call(fetchAssetsFromRoute, clearedBrowseOptions)
   yield put(push(buildBrowseURL(pathname, clearedBrowseOptions)))
 }
