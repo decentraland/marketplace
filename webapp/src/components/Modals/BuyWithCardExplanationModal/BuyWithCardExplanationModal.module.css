@@ -25,7 +25,7 @@
 }
 
 @media (max-width: 767px) {
-  .buyWithCardExplanationModal .actions {
+  .buyWithCardExplanationModal:global(.ui.modal .actions) {
     flex-direction: column;
     margin: 0;
   }
