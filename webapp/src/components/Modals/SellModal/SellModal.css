@@ -1,0 +1,16 @@
+.fields-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 90%;
+  margin: 5%;
+}
+
+.SellModal .dcl.field {
+  width: 100% !important;
+  align-self: center;
+}
+
+.SellModal .field {
+  display: grid;
+}
