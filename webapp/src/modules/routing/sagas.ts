@@ -104,6 +104,7 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
+import { isLandSection } from '../ui/utils'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {

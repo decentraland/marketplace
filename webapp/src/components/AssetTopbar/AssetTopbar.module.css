@@ -30,6 +30,7 @@
 .assetTopbar .infoRow {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 13px;
   min-height: 26px;
 }
@@ -65,11 +66,12 @@
   margin-bottom: 0;
   margin-right: 10px;
   font-size: 17px;
+  height: 100%;
 }
 
 .countContainer {
   display: flex;
-  align-items: center;
+  align-items: baseline;
 }
 
 .clearFilters {
@@ -114,9 +116,12 @@
 }
 
 @media (max-width: 768px) {
+  .mapToggle {
+    top: 13px;
+  }
   .selectedFiltersContainer {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     padding: 16px 0;
     margin-bottom: 6px;
     flex-wrap: wrap;

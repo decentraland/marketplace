@@ -136,6 +136,12 @@
 }
 
 @media (max-width: 768px) {
+  .AssetBrowse .ui.cards,
+  .AssetBrowse .ui.cards > .ui.card {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   .AssetBrowse .Row .right.Column {
     max-width: 100%;
   }

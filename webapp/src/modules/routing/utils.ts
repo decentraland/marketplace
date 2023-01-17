@@ -1,6 +1,6 @@
 import { BrowseOptions, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
-import { getPersistedIsMapProperty, isAccountView } from '../ui/utils'
+import { getPersistedIsMapProperty, isAccountView, isLandSection } from '../ui/utils'
 import { omit, reset } from '../../lib/utils'
 import { View } from '../ui/types'
 import { getSearchParams } from './search'
@@ -67,13 +67,17 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
     'minPrice',
     'maxPrice',
     'onlySmart',
-    'search'
+    'search',
+    'onlyOnRent'
   ]
 
   const clearedBrowseOptions = fillWithUndefined ? reset(browseOptions, keys) : omit(browseOptions, keys)
 
   // The onlyOnSale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
-  if (!browseOptions.onlyOnSale) {
+  if (
+    !browseOptions.onlyOnSale &&
+    !isLandSection(browseOptions.section as Section)
+  ) {
     clearedBrowseOptions.onlyOnSale = true
   }
   // reset the pages to the first one

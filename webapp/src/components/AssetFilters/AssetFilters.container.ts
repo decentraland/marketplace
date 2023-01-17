@@ -34,9 +34,9 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     'onlyOnRent' in values ? values.onlyOnRent : getOnlyOnRent(state)
   let landStatus = LANDFilters.ALL_LAND
 
-  if (onlyOnRent) {
+  if (onlyOnRent && !onlyOnSale) {
     landStatus = LANDFilters.ONLY_FOR_RENT
-  } else if (onlyOnSale) {
+  } else if (onlyOnSale && !onlyOnRent) {
     landStatus = LANDFilters.ONLY_FOR_SALE
   }
 
