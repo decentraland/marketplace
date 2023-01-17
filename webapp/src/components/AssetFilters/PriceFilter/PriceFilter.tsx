@@ -58,6 +58,10 @@ export const PriceFilter = ({
     [minPrice, maxPrice, network, isMobile]
   )
 
+  const showMaxErrorPrice = useMemo(() => {
+    return value[0] && value[1] && Number(value[1]) <= Number(value[0])
+  }, [value])
+
   return (
     <Box
       header={header}
@@ -79,7 +83,7 @@ export const PriceFilter = ({
         onChange={handlePriceChange}
         value={value}
       />
-      {value[0] && value[1] && value[1] <= value[0] ? (
+      {showMaxErrorPrice ? (
         <span className="price-filter-error">
           {t('filters.price_min_greater_max')}
         </span>
