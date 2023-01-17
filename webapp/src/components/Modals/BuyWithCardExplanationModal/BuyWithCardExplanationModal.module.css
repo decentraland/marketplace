@@ -1,0 +1,32 @@
+.explanation {
+  background-color: var(--card-on-modal);
+  padding: 20px 24px;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 24px;
+  white-space: pre-line;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+}
+
+.actions :global(.ui.button + .ui.button) {
+  margin: 0;
+}
+
+@media only screen and (min-width: 1200px) {
+  .buyWithCardExplanationModal:global(.ui.modal) {
+    max-width: 520px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .buyWithCardExplanationModal .actions {
+    flex-direction: column;
+    margin: 0;
+  }
+}

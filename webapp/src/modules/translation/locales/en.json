@@ -18,6 +18,8 @@
     "art": "Art",
     "cancel": "Cancel",
     "proceed": "Proceed",
+    "continue": "Continue",
+    "go_back": "Go back",
     "nft": "NFT",
     "loading": "Loading",
     "settings": "Settings",
@@ -601,6 +603,11 @@
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}.",
     "regions_where_operates": "regions where Transak operates",
     "explanation": "Card payments are processed by {link_to_transak} and are available for the {regions}. Both credit and debit cards are supported."
+  },
+  "buy_with_card_explanation_modal": {
+    "title": "Buy with card",
+    "explanation": "Card payments are processed by {link_to_transak}.\nTransak charges a fee for its service. You will see the final price before confirming the purchase.",
+    "learn_more": "Learn more about card payments"
   },
   "bid_page": {
     "title": "Place a bid",

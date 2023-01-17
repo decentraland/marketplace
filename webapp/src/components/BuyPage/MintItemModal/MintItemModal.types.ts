@@ -8,6 +8,7 @@ import {
 } from '../../../modules/item/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
+import { openModal, OpenModalAction } from '../../../modules/modal/actions'
 
 export type Props = {
   item: Item
@@ -21,6 +22,7 @@ export type Props = {
   isBuyWithCardPage: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onBuyItem: typeof buyItemRequest
+  onFirstTimeBuyingWithCard: () => ReturnType<typeof openModal>
 }
 
 export type MapStateProps = Pick<
@@ -31,5 +33,8 @@ export type MapStateProps = Pick<
   | 'isBuyWithCardPage'
   | 'getContract'
 >
-export type MapDispatchProps = Pick<Props, 'onBuyItem'>
-export type MapDispatch = Dispatch<BuyItemRequestAction>
+export type MapDispatchProps = Pick<
+  Props,
+  'onBuyItem' | 'onFirstTimeBuyingWithCard'
+>
+export type MapDispatch = Dispatch<BuyItemRequestAction | OpenModalAction>

@@ -12,6 +12,7 @@ import { getLoading as getItemsLoading } from '../../../modules/item/selectors'
 import { getContract } from '../../../modules/contract/selectors'
 import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
 import { Contract } from '../../../modules/vendor/services'
+import { openModal } from '../../../modules/modal/actions'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -32,6 +33,8 @@ const mapState = (state: RootState): MapStateProps => ({
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
-  onBuyItem: item => dispatch(buyItemRequest(item))
+  onBuyItem: item => dispatch(buyItemRequest(item)),
+  onFirstTimeBuyingWithCard: () =>
+    dispatch(openModal('BuyWithCardExplanationModal'))
 })
 export default connect(mapState, mapDispatch)(MintItemModal)
