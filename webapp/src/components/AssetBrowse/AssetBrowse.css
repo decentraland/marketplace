@@ -11,7 +11,7 @@
   position: relative;
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(auto-fill, minmax(296px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
 .AssetBrowse .ui.cards {
