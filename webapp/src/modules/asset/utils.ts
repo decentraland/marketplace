@@ -115,14 +115,14 @@ export function isWearableOrEmote(asset: Asset): boolean {
   return categories.includes(asset.category)
 }
 
-export function* buyAssetWithCard() {
+export function* buyAssetWithCard(asset: Asset) {
   const buyNftsWithCardExplanationPopupKey: string | null = yield call(
     [localStorage, 'getItem'],
     BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
   )
 
   if (buyNftsWithCardExplanationPopupKey !== 'true') {
-    yield put(openModal('BuyWithCardExplanationModal'))
+    yield put(openModal('BuyWithCardExplanationModal', { asset }))
 
     // TODO (buy nfts with card): add continue when implementing Transak widget
     const { close }: { close: CloseModalAction } = yield race({

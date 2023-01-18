@@ -46,6 +46,6 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBuyItem: item => dispatch(buyItemRequest(item)),
-  onBuyItemWithCard: () => dispatch(buyItemWithCard())
+  onBuyItemWithCard: item => dispatch(buyItemWithCard(item))
 })
 export default connect(mapState, mapDispatch)(MintItemModal)
