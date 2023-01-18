@@ -1,10 +1,8 @@
-import React, { useCallback } from 'react'
-// import { Link } from 'react-router-dom'
+import React from 'react'
 import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
 import { Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-// import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
 import { LandLockedPopup } from '../../LandLockedPopup'
 import { isLandLocked } from '../../../modules/rental/utils'
@@ -12,9 +10,6 @@ import Mana from '../../Mana/Mana'
 import { IconButton } from '../IconButton'
 import { Props } from './Sell.types'
 import styles from './Sell.module.css'
-// import { SellModal } from '../../Modals/SellModal'
-// import { closeModal } from 'decentraland-dapps/dist/modules/modal/actions'
-// import { PayloadAction } from 'typesafe-actions'
 
 const Sell = (props: Props) => {
   const {
@@ -27,15 +22,9 @@ const Sell = (props: Props) => {
     userAddress,
     onListForSale
   } = props
-  // const [openSale, setOpenSale] = useState(true)
 
   const areActionsLocked =
     rental !== null && isLandLocked(userAddress, rental, nft)
-
-  const handleOnListForSale = useCallback(() => {
-    onListForSale(nft, order)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <section className={classNames(styles.box, className)}>
@@ -68,9 +57,7 @@ const Sell = (props: Props) => {
               <Button
                 className={styles.sellButton}
                 disabled={areActionsLocked}
-                // as={Link}
-                // to={locations.sell(nft.contractAddress, nft.tokenId)}
-                onClick={handleOnListForSale}
+                onClick={onListForSale}
                 fluid
               >
                 {t('manage_asset_page.sell.list_for_sale')}
@@ -105,28 +92,6 @@ const Sell = (props: Props) => {
           </div>
         </div>
       ) : null}
-      {/* {openSale && (
-        <SellModal
-          title={'hola'}
-          confirm_transaction_message={'hola'}
-          action_message={'hola'}
-          name={'hola'}
-          onSubmitTransaction={() => {}}
-          isTransactionBeingConfirmed={false}
-          order={null}
-          isDisabled={false}
-          isSubmittingTransaction={false}
-          nft={nft}
-          // authorizations,
-          wallet={null}
-          getContract={() => null}
-          onClose={() => closeModal('SellModal')}
-          children={undefined}
-          error={null}
-          onCreateOrder={undefined}
-          authorizations={[]} // onCreateOrder,
-        />
-      )} */}
     </section>
   )
 }

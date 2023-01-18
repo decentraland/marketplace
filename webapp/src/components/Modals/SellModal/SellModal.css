@@ -14,3 +14,119 @@
 .SellModal .field {
   display: grid;
 }
+
+.clndr-control .ui.compact.icon.button,
+.clndr-control .ui.compact.icon.buttons .button {
+  width: 20px !important;
+  top: 20px;
+}
+.SellModal .dcl.field .ui.sub.header {
+  margin-top: 24px;
+}
+
+@media (max-width: 767px) {
+  .SellModal .dcl.field {
+    width: 100%;
+    min-width: auto;
+  }
+
+  :global(.ui.modal .actions) {
+    align-items: center;
+    bottom: 30px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 90%;
+  }
+}
+
+@media (max-width: 767px) {
+  .AuthorizationModalActions {
+    align-items: center;
+    bottom: 28px;
+    margin: 0px !important;
+    position: fixed;
+    width: 100%;
+  }
+
+  .AuthorizationModal {
+    flex-grow: 4 !important;
+  }
+
+  .AuthorizationModalButtons {
+    width: 80%;
+  }
+}
+
+.Authorization > .field {
+  margin-bottom: 41px !important;
+}
+
+.Authorization .ui.checkbox input.hidden + label {
+  font-weight: 700;
+  font-size: 17px;
+  padding-left: 35px;
+}
+
+.Authorization .is-pending .ui.checkbox label:before,
+.Authorization .is-pending .ui.checkbox label:after {
+  display: none;
+}
+
+.Authorization .radio-description {
+  font-size: 15px;
+  margin-left: 35px;
+  margin-top: 5px;
+}
+
+.Authorization .is-pending .loader-tooltip {
+  display: inline;
+  position: relative;
+}
+
+.Authorization .loader-tooltip {
+  display: none;
+}
+
+.Authorization .ui.loader {
+  left: 7px;
+  top: 2px;
+  float: left;
+}
+
+.Authorization .ui.mini.loader:after,
+.Authorization .ui.mini.loader:before {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.Authorization .ui.checkbox input.hidden + label,
+.Authorization .ui.checkbox input.hidden:focus + label,
+.Authorization .ui.checkbox input.hidden:active + label {
+  font-weight: 700;
+  font-size: 17px;
+  padding-left: 35px;
+}
+
+@media (max-width: 768px) {
+  .Authorization .ui.radio.checkbox {
+    margin-bottom: 0px;
+  }
+
+  .Authorization .ui.loader {
+    top: 8px;
+  }
+}
+
+.Authorization .ui.radio.checkbox .box:before,
+.Authorization .ui.radio.checkbox label:before {
+  width: 26px !important;
+  height: 26px !important;
+}
+
+.Authorization .ui.radio.checkbox.checked input.hidden + label:after {
+  top: 0px !important;
+  left: -1px !important;
+  width: 29px !important;
+  height: 32px !important;
+}

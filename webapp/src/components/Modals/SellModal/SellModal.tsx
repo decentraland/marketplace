@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
-import { Button, Field, ModalNavigation } from 'decentraland-ui'
-import { ethers } from 'ethers'
+import { Link } from 'react-router-dom'
+import { Button, Field, Mana, Message, ModalNavigation } from 'decentraland-ui'
 import { Network, NFTCategory } from '@dcl/schemas'
+import { ethers } from 'ethers'
 import addDays from 'date-fns/addDays'
 import formatDate from 'date-fns/format'
 import isValid from 'date-fns/isValid'
@@ -10,44 +11,51 @@ import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/
 import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
-  Authorization,
-  AuthorizationType
+  AuthorizationType,
+  Authorization as Authorizations
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ChainButton, Modal } from 'decentraland-dapps/dist/containers'
+import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 
 import { getContractNames, VendorFactory } from '../../../modules/vendor'
-
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
-import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
   getDefaultExpirationDate,
   INPUT_FORMAT
 } from '../../../modules/order/utils'
 import { ManaField } from '../../ManaField'
 import { parseMANANumber } from '../../../lib/mana'
+import { showPriceBelowMarketValueWarning } from '../../SellPage/SellModal/utils'
+import { Authorization } from '../../SettingsPage/Authorization'
+import { locations } from '../../../modules/routing/locations'
+import { isAuthorized } from '../../SettingsPage/Authorization/utils'
+
 import { Props } from './SellModal.types'
 import './SellModal.css'
+
+enum StepperValues {
+  SELL_MODAL = 'SELL_MODAL',
+  CONFIRM_INPUT = 'CONFIRM_INPUT',
+  AUTHORIZE = 'AUTHORIZE'
+}
 
 const SellModal = ({
   wallet,
   metadata: { nft, order },
   onClose,
-  isSubmittingTransaction,
-  isTransactionBeingConfirmed,
-  onSubmitTransaction,
-  error,
   getContract,
   onCreateOrder,
-  authorizations
+  isCreatingOrder,
+  authorizations,
+  isAuthorizing,
+  error
 }: Props) => {
-  console.log(
-    isSubmittingTransaction,
-    isTransactionBeingConfirmed,
-    onSubmitTransaction,
-    error
-  )
+  const { orderService } = VendorFactory.build(nft.vendor)
 
-  const isLoading = false
+  const [confirmedInput, setConfirmedInput] = useState<string>('')
+
+  const [stepper, setStepper] = useState(StepperValues.SELL_MODAL)
+
   const isUpdate = order !== null
   const [price, setPrice] = useState<string>(
     isUpdate ? ethers.utils.formatEther(order!.price) : ''
@@ -58,9 +66,11 @@ const SellModal = ({
       ? formatDate(addDays(order!.expiresAt, 1), INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
-  // const [showConfirm, setShowConfirm] = useState(false)
 
-  // const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
+  const parsedValueToConfirm = parseFloat(price).toString()
+
+  const isDisabledConfirm =
+    parsedValueToConfirm !== confirmedInput || isCreatingOrder
 
   if (!wallet) {
     return null
@@ -77,7 +87,7 @@ const SellModal = ({
     return null
   }
 
-  const authorization: Authorization = {
+  const authorization: Authorizations = {
     address: wallet.address,
     authorizedAddress: marketplace.address,
     contractAddress: nft.contractAddress,
@@ -91,6 +101,22 @@ const SellModal = ({
     type: AuthorizationType.APPROVAL
   }
 
+  const contract = getContract({
+    address: authorization.authorizedAddress
+  })
+
+  const token = getContract({
+    address: authorization.contractAddress
+  })
+
+  const handleOnConfirm = () => {
+    if (hasAuthorization(authorizations, authorization)) {
+      handleCreateOrder()
+    } else {
+      setStepper(StepperValues.AUTHORIZE)
+    }
+  }
+
   const handleCreateOrder = () =>
     onCreateOrder(
       nft,
@@ -98,83 +124,234 @@ const SellModal = ({
       new Date(`${expiresAt} 00:00:00`).getTime()
     )
 
-  const handleSubmit = () => {
-    if (hasAuthorization(authorizations, authorization)) {
-      handleCreateOrder()
-    } else {
-      // setShowAuthorizationModal(true)
-      // setShowConfirm(false)
-    }
-  }
-
-  // const handleClose = () => setShowAuthorizationModal(false)
-
-  const { orderService } = VendorFactory.build(nft.vendor)
-
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
   const isInvalidPrice =
     parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
-  const isDisabled =
+  const isDisabledSell =
     !orderService.canSell() ||
     !isOwnedBy(nft, wallet) ||
     isInvalidPrice ||
     isInvalidDate
 
-  return (
-    <Modal size="small" name={'SellModal'} onClose={onClose}>
-      <ModalNavigation
-        title={t(isUpdate ? 'sell_page.update_title' : 'sell_page.title')}
-        onClose={onClose}
-        subtitle={
-          <T
-            id={isUpdate ? 'sell_page.update_subtitle' : 'sell_page.subtitle'}
-            values={{
-              name: <b className="primary-text">{getAssetName(nft)}</b>
+  const Stepper: {
+    [key: string]: {
+      navigation: React.ReactNode
+      content: React.ReactNode
+      description: React.ReactNode
+      actions: React.ReactNode
+    }
+  } = {
+    SELL_MODAL: {
+      navigation: (
+        <ModalNavigation
+          title={t(isUpdate ? 'sell_page.update_title' : 'sell_page.title')}
+          onClose={onClose}
+          subtitle={
+            <T
+              id={isUpdate ? 'sell_page.update_subtitle' : 'sell_page.subtitle'}
+              values={{
+                name: <b className="primary-text">{getAssetName(nft)}</b>
+              }}
+            />
+          }
+        />
+      ),
+      description: null,
+      content: (
+        <div className="fields-container">
+          <ManaField
+            label={t('sell_page.price')}
+            type="text"
+            placeholder={1000}
+            network={nft.network}
+            value={price}
+            focus={true}
+            error={price !== '' && isInvalidPrice}
+            onChange={(_event, props) => {
+              setPrice(toFixedMANAValue(props.value))
+            }}
+            className="mana-field"
+          />
+          <Field
+            label={t('sell_page.expiration_date')}
+            type="date"
+            value={expiresAt}
+            onChange={(_event, props) =>
+              setExpiresAt(props.value || getDefaultExpirationDate())
+            }
+            error={isInvalidDate}
+            message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
+          />
+        </div>
+      ),
+      actions: (
+        <Modal.Actions>
+          <Button as="div" onClick={onClose}>
+            {t('global.cancel')}
+          </Button>
+          <ChainButton
+            onClick={() => setStepper(StepperValues.CONFIRM_INPUT)}
+            primary
+            disabled={isDisabledSell}
+            chainId={nft.chainId}
+          >
+            {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
+          </ChainButton>
+        </Modal.Actions>
+      )
+    },
+    CONFIRM_INPUT: {
+      navigation: (
+        <ModalNavigation
+          title={t('sell_page.confirm.title')}
+          onClose={isCreatingOrder ? undefined : onClose}
+          onBack={
+            isCreatingOrder
+              ? undefined
+              : () => setStepper(StepperValues.SELL_MODAL)
+          }
+        />
+      ),
+      description: null,
+      content: (
+        <div className="fields-container">
+          <span>
+            <T
+              id="sell_page.confirm.line_one"
+              values={{
+                name: <b>{getAssetName(nft)}</b>,
+                amount: (
+                  <Mana network={nft.network} inline>
+                    {parseMANANumber(price).toLocaleString()}
+                  </Mana>
+                )
+              }}
+            />
+          </span>
+
+          {showPriceBelowMarketValueWarning(nft, parseMANANumber(price)) && (
+            <>
+              <br />
+              <p className="danger-text">
+                <T id="sell_page.confirm.warning" />
+              </p>
+            </>
+          )}
+          <br />
+          <T id="sell_page.confirm.line_two" />
+
+          <ManaField
+            disabled={isCreatingOrder}
+            label={t('global.price')}
+            network={nft.network}
+            placeholder={parsedValueToConfirm}
+            value={confirmedInput}
+            onChange={(_event, props) => {
+              setConfirmedInput(props.value)
             }}
           />
-        }
-      />
+          {error && (
+            <Message
+              error
+              size="tiny"
+              visible
+              content={error}
+              header={t('global.error')}
+            />
+          )}
+        </div>
+      ),
+      actions: (
+        <Modal.Actions>
+          <Button
+            disabled={isCreatingOrder}
+            onClick={() => {
+              setConfirmedInput('')
+              onClose()
+            }}
+          >
+            {t('global.cancel')}
+          </Button>
+          <Button
+            type="submit"
+            primary
+            disabled={isDisabledConfirm}
+            loading={isCreatingOrder}
+            onClick={handleOnConfirm}
+          >
+            {t('global.proceed')}
+          </Button>
+        </Modal.Actions>
+      )
+    },
+    AUTHORIZE: {
+      navigation: (
+        <ModalNavigation
+          title={t('authorization_modal.title', {
+            token: token?.name
+          })}
+          onClose={isAuthorizing || isCreatingOrder ? undefined : onClose}
+        />
+      ),
+      description: (
+        <Modal.Description>
+          <T
+            id="authorization_modal.description"
+            values={{
+              contract: contract?.name,
+              token: token?.name,
+              settings_link: (
+                <Link to={locations.settings()}>{t('global.settings')}</Link>
+              ),
+              br: (
+                <>
+                  <br />
+                  <br />
+                </>
+              )
+            }}
+          />
+        </Modal.Description>
+      ),
+      content: (
+        <Authorization
+          key={authorization.authorizedAddress}
+          authorization={authorization}
+        />
+      ),
+      actions: (
+        <Modal.Actions className="AuthorizationModalActions">
+          <Button
+            onClick={onClose}
+            className="AuthorizationModalButtons"
+            disabled={isAuthorizing || isCreatingOrder}
+          >
+            {t('global.cancel')}
+          </Button>
+          <Button
+            className="AuthorizationModalButtons"
+            primary
+            loading={isCreatingOrder || isAuthorizing}
+            disabled={
+              isCreatingOrder ||
+              isAuthorizing ||
+              !isAuthorized(authorization, authorizations)
+            }
+            onClick={handleCreateOrder}
+          >
+            {t('global.proceed')}
+          </Button>
+        </Modal.Actions>
+      )
+    }
+  }
 
-      {/* <Form onSubmit={() => handleSubmit()}> */}
-      <div className="fields-container">
-        <ManaField
-          label={t('sell_page.price')}
-          type="text"
-          placeholder={1000}
-          network={nft.network}
-          value={price}
-          focus={true}
-          error={price !== '' && isInvalidPrice}
-          onChange={(_event, props) => {
-            setPrice(toFixedMANAValue(props.value))
-          }}
-          className="mana-field"
-        />
-        <Field
-          label={t('sell_page.expiration_date')}
-          type="date"
-          value={expiresAt}
-          onChange={(_event, props) =>
-            setExpiresAt(props.value || getDefaultExpirationDate())
-          }
-          error={isInvalidDate}
-          message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
-        />
-      </div>
-      <Modal.Actions>
-        <Button as="div" onClick={onClose}>
-          {t('global.cancel')}
-        </Button>
-        <ChainButton
-          onClick={() => handleSubmit()}
-          primary
-          disabled={isDisabled || isLoading}
-          loading={isLoading}
-          chainId={nft.chainId}
-        >
-          {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
-        </ChainButton>
-      </Modal.Actions>
+  return (
+    <Modal size="small" name={'SellModal'} onClose={onClose}>
+      {Stepper[stepper].navigation}
+      {Stepper[stepper].description}
+      {Stepper[stepper].content}
+      {Stepper[stepper].actions}
     </Modal>
   )
 }

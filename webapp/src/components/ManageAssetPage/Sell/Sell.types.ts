@@ -1,4 +1,5 @@
 import { Order, RentalListing } from '@dcl/schemas'
+
 import { NFT } from '../../../modules/nft/types'
 
 export type Props = {
@@ -9,10 +10,11 @@ export type Props = {
   userAddress: string
   onEditOrder: () => void
   onCancelOrder: () => void
-  onListForSale: (nft: NFT, order: Order | null) => void
+  onListForSale: () => void
 }
 
 export type MapStateProps = {}
+
 export type MapDispatchProps = Pick<
   Props,
   'onEditOrder' | 'onCancelOrder' | 'onListForSale'
