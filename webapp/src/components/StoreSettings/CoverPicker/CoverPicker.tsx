@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Center, Empty } from 'decentraland-ui'
+import { Button, Empty } from 'decentraland-ui'
 import { Props } from './CoverPicker.types'
 import './CoverPicker.css'
 
@@ -14,7 +14,7 @@ const CoverPicker = ({ src, onChange }: Props) => {
           <img src={src} alt="cover"></img>
         ) : (
           <Empty>
-            <Center>
+            <div className="cover-image-container">
               <div className="watermelon" />
               <button
                 className="add-cover"
@@ -22,7 +22,7 @@ const CoverPicker = ({ src, onChange }: Props) => {
               >
                 {t('store_settings.add_cover_picture')}
               </button>
-            </Center>
+            </div>
           </Empty>
         )}
         {src && (
