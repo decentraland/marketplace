@@ -26,13 +26,13 @@
 .AccountSidebar ul.Menu > .MenuItem.sub-1 {
   margin-left: 0px;
   padding-left: 32px;
-  width: var(--menu-item-width);
+  width: var(--sidebar-width);
 }
 
 .AccountSidebar ul.Menu > .MenuItem.sub-2 {
   margin-left: 0px;
   padding-left: 48px;
-  width: var(--menu-item-width);
+  width: var(--sidebar-width);
 }
 
 .AccountSidebar .alternative-menu-item {

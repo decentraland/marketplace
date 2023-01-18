@@ -4,6 +4,7 @@
   --gray: rgba(115, 110, 125, 0.4);
   --superGray: #37333d;
   --superGrayHovered: #3d3a45;
+  --sidebar-width: 320px;
 }
 
 body {
@@ -27,6 +28,13 @@ code {
 .ui.toggle.checkbox.checked input.hidden + label:after,
 .ui.toggle.checkbox.checked input.hidden:focus + label:after {
   background: var(--summer-red);
+}
+
+/** full-width */
+.ui.container {
+  width: 100vw;
+  padding: 0 24px;
+  box-sizing: border-box;
 }
 
 @media (max-width: 767px) {
