@@ -12,8 +12,10 @@ import {
 } from 'decentraland-dapps/dist/modules/wallet/types'
 import { ErrorCode } from 'decentraland-transactions'
 import { expectSaga } from 'redux-saga-test-plan'
+import * as matchers from 'redux-saga-test-plan/matchers'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { call, select } from 'redux-saga/effects'
+import { closeModal, openModal } from '../modal/actions'
 import { NFT } from '../nft/types'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
@@ -24,7 +26,8 @@ import {
   executeOrderFailure,
   executeOrderRequest,
   executeOrderSuccess,
-  executeOrderTransactionSubmitted
+  executeOrderTransactionSubmitted,
+  executeOrderWithCard
 } from './actions'
 import { orderSaga } from './sagas'
 
@@ -205,6 +208,30 @@ describe('when handling the execute order request action', () => {
           .dispatch(executeOrderRequest(order, nft, fingerprint))
           .run({ silenceTimeout: true })
       })
+    })
+  })
+})
+
+describe('when handling the execute order with card action', () => {
+  beforeEach(() => {
+    jest.spyOn(Object.getPrototypeOf(localStorage), 'setItem')
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
+  describe('when the explanation modal is shown and the user closes it', () => {
+    it('should not set the item in the local storage to show the modal again later', () => {
+      return expectSaga(orderSaga)
+        .provide([[matchers.call.fn(localStorage.getItem), null]])
+        .put(openModal('BuyWithCardExplanationModal'))
+        .dispatch(executeOrderWithCard())
+        .dispatch(closeModal('BuyWithCardExplanationModal'))
+        .run({ silenceTimeout: true })
+        .then(() => {
+          expect(localStorage.setItem).not.toHaveBeenCalled()
+        })
     })
   })
 })

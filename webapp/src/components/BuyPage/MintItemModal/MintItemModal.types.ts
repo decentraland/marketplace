@@ -4,11 +4,12 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
   buyItemRequest,
-  BuyItemRequestAction
+  BuyItemRequestAction,
+  buyItemWithCard,
+  BuyItemWithCardAction
 } from '../../../modules/item/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
-import { openModal, OpenModalAction } from '../../../modules/modal/actions'
 
 export type Props = {
   item: Item
@@ -22,7 +23,7 @@ export type Props = {
   isBuyWithCardPage: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onBuyItem: typeof buyItemRequest
-  onFirstTimeBuyingWithCard: () => ReturnType<typeof openModal>
+  onBuyItemWithCard: typeof buyItemWithCard
 }
 
 export type MapStateProps = Pick<
@@ -33,8 +34,5 @@ export type MapStateProps = Pick<
   | 'isBuyWithCardPage'
   | 'getContract'
 >
-export type MapDispatchProps = Pick<
-  Props,
-  'onBuyItem' | 'onFirstTimeBuyingWithCard'
->
-export type MapDispatch = Dispatch<BuyItemRequestAction | OpenModalAction>
+export type MapDispatchProps = Pick<Props, 'onBuyItem' | 'onBuyItemWithCard'>
+export type MapDispatch = Dispatch<BuyItemRequestAction | BuyItemWithCardAction>

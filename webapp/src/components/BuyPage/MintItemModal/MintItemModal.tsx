@@ -38,12 +38,21 @@ const MintItemModal = (props: Props) => {
     isBuyNftsWithFiatEnabled,
     isBuyWithCardPage,
     getContract,
-    onBuyItem
+    onBuyItem,
+    onBuyItemWithCard
   } = props
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
-  const handleExecuteOrder = useCallback(() => onBuyItem(item), [
+  const handleExecuteOrder = useCallback(() => {
+    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
+      return onBuyItemWithCard()
+
+    onBuyItem(item)
+  }, [
+    isBuyNftsWithFiatEnabled,
+    isBuyWithCardPage,
+    onBuyItemWithCard,
     onBuyItem,
     item
   ])

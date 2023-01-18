@@ -39,15 +39,26 @@ const BuyNFTModal = (props: Props) => {
     isBuyNftsWithFiatEnabled,
     isBuyWithCardPage,
     getContract,
-    onExecuteOrder
+    onExecuteOrder,
+    onExecuteOrderWithCard
   } = props
 
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
   const handleExecuteOrder = useCallback(() => {
+    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
+      return onExecuteOrderWithCard()
     onExecuteOrder(order!, nft, fingerprint)
-  }, [order, nft, fingerprint, onExecuteOrder])
+  }, [
+    isBuyNftsWithFiatEnabled,
+    isBuyWithCardPage,
+    onExecuteOrderWithCard,
+    onExecuteOrder,
+    order,
+    nft,
+    fingerprint
+  ])
 
   const authorization: Authorization | null = useMemo(() => {
     const contractNames = getContractNames()

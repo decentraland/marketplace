@@ -1,71 +1,52 @@
-import React, { useCallback, useEffect } from 'react'
+import React from 'react'
 import { Button, Modal, ModalNavigation } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './BuyWithCardExplanationModal.types'
 import styles from './BuyWithCardExplanationModal.module.css'
 
-const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
-  'buy-nfts-with-card-explanation-popup-key'
-
-const BuyWithCardExplanationModal = ({ onContinue, onClose }: Props) => {
-  const handleOnClose = useCallback(() => {
-    localStorage.setItem(BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY, 'true')
-    onClose()
-  }, [onClose])
-
-  useEffect(() => {
-    if (
-      localStorage.getItem(BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY) === 'true'
-    ) {
-      // TODO(buy nfts with card): Dispatch the opening of Transak widget
-      onClose()
-    }
-  }, [onClose])
-
-  return (
-    <Modal open className={styles.buyWithCardExplanationModal}>
-      <ModalNavigation
-        title={t('buy_with_card_explanation_modal.title')}
-        onClose={handleOnClose}
-      />
-      <Modal.Content className={styles.content}>
-        <div className={styles.explanation}>
-          <p>
-            {t('buy_with_card_explanation_modal.explanation', {
-              link_to_transak: (
-                <a
-                  href="https://transak.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Transak
-                </a>
-              )
-            })}
-          </p>
-          <p className={styles.learnMore}>
-            {/* TODO (buy nfts with card): change href to Transak Documentation when it's online. */}
-            <a
-              className="learn-more"
-              href="https://transak.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {t('buy_with_card_explanation_modal.learn_more')}
-            </a>
-          </p>
-        </div>
-      </Modal.Content>
-      <Modal.Actions className={styles.actions}>
-        <Button primary onClick={onContinue}>
-          {t('global.continue')}
-        </Button>
-        <Button secondary className={styles.cancel} onClick={handleOnClose}>
-          {t('global.go_back')}
-        </Button>
-      </Modal.Actions>
-    </Modal>
-  )
-}
+const BuyWithCardExplanationModal = ({ onContinue, onClose }: Props) => (
+  <Modal open className={styles.buyWithCardExplanationModal}>
+    <ModalNavigation
+      title={t('buy_with_card_explanation_modal.title')}
+      onClose={onClose}
+    />
+    <Modal.Content className={styles.content}>
+      <div className={styles.explanation}>
+        <p>
+          {t('buy_with_card_explanation_modal.explanation', {
+            link_to_transak: (
+              <a
+                href="https://transak.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Transak
+              </a>
+            )
+          })}
+        </p>
+        <p className={styles.learnMore}>
+          {/* TODO (buy nfts with card): change href to Transak Documentation when it's online. */}
+          <a
+            className="learn-more"
+            href="https://transak.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t('buy_with_card_explanation_modal.learn_more')}
+          </a>
+        </p>
+      </div>
+    </Modal.Content>
+    <Modal.Actions className={styles.actions}>
+      <Button primary onClick={onContinue}>
+        {t('global.continue')}
+      </Button>
+      <Button secondary className={styles.cancel} onClick={onClose}>
+        {t('global.go_back')}
+      </Button>
+    </Modal.Actions>
+  </Modal>
+)
 
 export default React.memo(BuyWithCardExplanationModal)

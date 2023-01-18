@@ -1,4 +1,4 @@
-import { put, call, takeEvery, select } from 'redux-saga/effects'
+import { put, call, takeEvery, select, race, take } from 'redux-saga/effects'
 import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -7,6 +7,7 @@ import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getRentalById } from '../rental/selectors'
+import { CloseModalAction, CLOSE_MODAL, openModal } from '../modal/actions'
 import {
   isRentalListingOpen,
   waitUntilRentalChangesStatus
@@ -25,12 +26,18 @@ import {
   CancelOrderRequestAction,
   cancelOrderSuccess,
   cancelOrderFailure,
-  executeOrderTransactionSubmitted
+  executeOrderTransactionSubmitted,
+  ExecuteOrderWithCardAction,
+  EXECUTE_ORDER_WITH_CARD
 } from './actions'
+
+const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
+  'buy-nfts-with-card-explanation-popup-key'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
   yield takeEvery(EXECUTE_ORDER_REQUEST, handleExecuteOrderRequest)
+  yield takeEvery(EXECUTE_ORDER_WITH_CARD, handleExecuteOrderWithCard)
   yield takeEvery(CANCEL_ORDER_REQUEST, handleCancelOrderRequest)
 }
 
@@ -64,6 +71,7 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
 
 function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   const { order, nft, fingerprint } = action.payload
+
   try {
     if (
       nft.contractAddress !== order.contractAddress ||
@@ -111,6 +119,33 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
         : undefined
 
     yield put(executeOrderFailure(order, nft, errorMessage, errorCode))
+  }
+}
+
+function* handleExecuteOrderWithCard(_action: ExecuteOrderWithCardAction) {
+  const buyNftsWithCardExplanationPopupKey: string | null = yield call(
+    [localStorage, 'getItem'],
+    BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
+  )
+
+  if (buyNftsWithCardExplanationPopupKey !== 'true') {
+    yield put(openModal('BuyWithCardExplanationModal'))
+
+    // TODO (buy nfts with card): add continue when implementing Transak widget
+    const { close }: { close: CloseModalAction } = yield race({
+      // TODO (buy nfts with card): should we differentiate the specific close that we need?
+      close: take(CLOSE_MODAL)
+    })
+
+    if (close) {
+      return
+    }
+
+    yield call(
+      [localStorage, 'setItem'],
+      BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY,
+      'true'
+    )
   }
 }
 

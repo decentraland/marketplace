@@ -7,9 +7,11 @@ import {
   buyItemFailure,
   buyItemRequest,
   buyItemSuccess,
+  buyItemWithCard,
   BUY_ITEM_FAILURE,
   BUY_ITEM_REQUEST,
   BUY_ITEM_SUCCESS,
+  BUY_ITEM_WITH_CARD,
   fetchItemsFailure,
   fetchItemsRequest,
   fetchItemsSuccess,
@@ -109,6 +111,16 @@ describe('when creating the action to signal a failure in the buy item request',
       type: BUY_ITEM_FAILURE,
       meta: undefined,
       payload: { error: anErrorMessage }
+    })
+  })
+})
+
+describe('when creating the action to signal the start of the buy item with card', () => {
+  it('should return an object representing the action', () => {
+    expect(buyItemWithCard()).toEqual({
+      type: BUY_ITEM_WITH_CARD,
+      meta: undefined,
+      payload: undefined
     })
   })
 })

@@ -92,6 +92,14 @@ export type ExecuteOrderTransactionSubmittedAction = ReturnType<
 >
 export type ExecuteOrderFailureAction = ReturnType<typeof executeOrderFailure>
 
+// Execute Order With Card (aka Buy with Card)
+
+export const EXECUTE_ORDER_WITH_CARD = 'Execute Order With Card'
+
+export const executeOrderWithCard = () => action(EXECUTE_ORDER_WITH_CARD)
+
+export type ExecuteOrderWithCardAction = ReturnType<typeof executeOrderWithCard>
+
 // Cancel Order (aka Cancel Sale)
 
 export const CANCEL_ORDER_REQUEST = '[Request] Cancel Order'

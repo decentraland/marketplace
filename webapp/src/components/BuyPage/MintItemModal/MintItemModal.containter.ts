@@ -5,14 +5,21 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
+import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
 import { RootState } from '../../../modules/reducer'
-import { getIsBuyNftsWithFiatEnabled } from '../../../modules/features/selectors'
-import { buyItemRequest, BUY_ITEM_REQUEST } from '../../../modules/item/actions'
+import {
+  getIsBuyNftsWithFiatEnabled,
+  isLoadingFeatureFlags as getLoadingFeatureFlags
+} from '../../../modules/features/selectors'
+import {
+  buyItemRequest,
+  buyItemWithCard,
+  BUY_ITEM_REQUEST
+} from '../../../modules/item/actions'
 import { getLoading as getItemsLoading } from '../../../modules/item/selectors'
 import { getContract } from '../../../modules/contract/selectors'
 import { getIsBuyWithCardPage } from '../../../modules/routing/selectors'
 import { Contract } from '../../../modules/vendor/services'
-import { openModal } from '../../../modules/modal/actions'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -26,7 +33,12 @@ const mapState = (state: RootState): MapStateProps => ({
     isLoadingType(
       getLoadingAuthorizations(state),
       FETCH_AUTHORIZATIONS_REQUEST
-    ) || isLoadingType(getItemsLoading(state), BUY_ITEM_REQUEST),
+    ) ||
+    isLoadingType(getItemsLoading(state), BUY_ITEM_REQUEST) ||
+    isLoadingType(
+      getLoadingFeatureFlags(state),
+      FETCH_APPLICATION_FEATURES_REQUEST
+    ),
   isBuyNftsWithFiatEnabled: getIsBuyNftsWithFiatEnabled(state),
   isBuyWithCardPage: getIsBuyWithCardPage(state),
   getContract: (query: Partial<Contract>) => getContract(state, query)
@@ -34,7 +46,6 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBuyItem: item => dispatch(buyItemRequest(item)),
-  onFirstTimeBuyingWithCard: () =>
-    dispatch(openModal('BuyWithCardExplanationModal'))
+  onBuyItemWithCard: () => dispatch(buyItemWithCard())
 })
 export default connect(mapState, mapDispatch)(MintItemModal)

@@ -54,9 +54,9 @@ export type FetchTrendingItemsFailureAction = ReturnType<
 >
 
 // Buy Item
-export const BUY_ITEM_REQUEST = '[Request] Buy item'
-export const BUY_ITEM_SUCCESS = '[Success] Buy item'
-export const BUY_ITEM_FAILURE = '[Failure] Buy item'
+export const BUY_ITEM_REQUEST = '[Request] Buy Item'
+export const BUY_ITEM_SUCCESS = '[Success] Buy Item'
+export const BUY_ITEM_FAILURE = '[Failure] Buy Item'
 
 export const buyItemRequest = (item: Item) => action(BUY_ITEM_REQUEST, { item })
 
@@ -78,6 +78,13 @@ export const buyItemFailure = (error: string) =>
 export type BuyItemRequestAction = ReturnType<typeof buyItemRequest>
 export type BuyItemSuccessAction = ReturnType<typeof buyItemSuccess>
 export type BuyItemFailureAction = ReturnType<typeof buyItemFailure>
+
+// Buy Item With Card
+export const BUY_ITEM_WITH_CARD = 'Buy Item with Card'
+
+export const buyItemWithCard = () => action(BUY_ITEM_WITH_CARD)
+
+export type BuyItemWithCardAction = ReturnType<typeof buyItemWithCard>
 
 // Fetch Item
 
