@@ -12,6 +12,7 @@ import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
 import { addressEquals } from '../wallet/utils'
 import { Asset } from './types'
+import { openTransak } from '../transak/actions'
 
 export const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
   'buy-nfts-with-card-explanation-popup-key'
@@ -121,23 +122,26 @@ export function* buyAssetWithCard(asset: Asset) {
     BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
   )
 
-  if (buyNftsWithCardExplanationPopupKey !== 'true') {
-    yield put(openModal('BuyWithCardExplanationModal', { asset }))
-
-    // TODO (buy nfts with card): add continue when implementing Transak widget
-    const { close }: { close: CloseModalAction } = yield race({
-      // TODO (buy nfts with card): should we differentiate the specific close that we need?
-      close: take(CLOSE_MODAL)
-    })
-
-    if (close) {
-      return
-    }
-
-    yield call(
-      [localStorage, 'setItem'],
-      BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY,
-      'true'
-    )
+  if (buyNftsWithCardExplanationPopupKey === 'true') {
+    yield put(openTransak(asset))
+    return
   }
+
+  yield put(openModal('BuyWithCardExplanationModal', { asset }))
+
+  // TODO (buy nfts with card): add continue when implementing Transak widget
+  const { close }: { close: CloseModalAction } = yield race({
+    // TODO (buy nfts with card): should we differentiate the specific close that we need?
+    close: take(CLOSE_MODAL)
+  })
+
+  if (close) {
+    return
+  }
+
+  yield call(
+    [localStorage, 'setItem'],
+    BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY,
+    'true'
+  )
 }
