@@ -23,6 +23,7 @@ import { View } from '../ui/types'
 import { itemAPI } from '../vendor/decentraland/item/api'
 import { closeModal, openModal } from '../modal/actions'
 import { itemSaga } from './sagas'
+import { BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 
 const item = {
   itemId: 'anItemId',
@@ -96,7 +97,15 @@ describe('when handling the buy items with card action', () => {
   describe('when the explanation modal is shown and the user closes it', () => {
     it('should not set the item in the local storage to show the modal again later', () => {
       return expectSaga(itemSaga)
-        .provide([[matchers.call.fn(localStorage.getItem), null]])
+        .provide([
+          [
+            call(
+              [localStorage, 'getItem'],
+              BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
+            ),
+            null
+          ]
+        ])
         .put(openModal('BuyWithCardExplanationModal'))
         .dispatch(buyItemWithCard())
         .dispatch(closeModal('BuyWithCardExplanationModal'))
