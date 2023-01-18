@@ -11,8 +11,8 @@ import { CloseModalAction, CLOSE_MODAL, openModal } from '../modal/actions'
 import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
 import { addressEquals } from '../wallet/utils'
-import { Asset } from './types'
 import { openTransak } from '../transak/actions'
+import { Asset } from './types'
 
 export const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
   'buy-nfts-with-card-explanation-popup-key'
