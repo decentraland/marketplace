@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { HeaderMenu, Header, Button, Loader, Empty } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -8,7 +8,7 @@ import { Props } from './Slideshow.types'
 import ItemsSection from './ItemsSection'
 import './Slideshow.css'
 
-const PAGE_SIZE = 4
+// const PAGE_SIZE = 10
 const INITIAL_PAGE = 1
 
 const Slideshow = (props: Props) => {
@@ -29,16 +29,14 @@ const Slideshow = (props: Props) => {
   const [showArrows, setShowArrows] = useState(false)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [assetsToRender, setAssetsToRender] = useState(
-    assets.slice(0, PAGE_SIZE)
+    assets
   )
-  const totalPages = useMemo(() => Math.ceil(assets.length / PAGE_SIZE), [
-    assets.length
-  ])
+  const totalPages = 1
 
   useEffect(() => {
-    const currentPosition = (currentPage - INITIAL_PAGE) * PAGE_SIZE
+    // const currentPosition = (currentPage - INITIAL_PAGE)
     setAssetsToRender(
-      assets.slice(currentPosition, currentPosition + PAGE_SIZE)
+      assets
     )
   }, [currentPage, assets, setAssetsToRender])
 
