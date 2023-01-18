@@ -7,6 +7,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { itemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
+import { buyAssetWithCard } from '../asset/utils'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -23,13 +24,16 @@ import {
   FETCH_TRENDING_ITEMS_REQUEST,
   FetchTrendingItemsRequestAction,
   fetchTrendingItemsSuccess,
-  fetchTrendingItemsFailure
+  fetchTrendingItemsFailure,
+  BuyItemWithCardAction,
+  BUY_ITEM_WITH_CARD
 } from './actions'
 
 export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
+  yield takeEvery(BUY_ITEM_WITH_CARD, handleBuyItemWithCard)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
 }
 
@@ -120,4 +124,8 @@ function* handleBuyItem(action: BuyItemRequestAction) {
       )
     )
   }
+}
+
+function* handleBuyItemWithCard(_action: BuyItemWithCardAction) {
+  yield call(buyAssetWithCard)
 }

@@ -5,11 +5,12 @@ import { Authorization } from 'decentraland-dapps/dist/modules/authorization/typ
 import { NFT } from '../../../modules/nft/types'
 import {
   executeOrderRequest,
-  ExecuteOrderRequestAction
+  ExecuteOrderRequestAction,
+  executeOrderWithCard,
+  ExecuteOrderWithCardAction
 } from '../../../modules/order/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
-import { openModal, OpenModalAction } from '../../../modules/modal/actions'
 
 export type Props = {
   nft: NFT
@@ -24,7 +25,7 @@ export type Props = {
   isBuyWithCardPage: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onExecuteOrder: typeof executeOrderRequest
-  onFirstTimeBuyingWithCard: () => ReturnType<typeof openModal>
+  onExecuteOrderWithCard: typeof executeOrderWithCard
 }
 
 export type MapStateProps = Pick<
@@ -37,6 +38,8 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<
   Props,
-  'onExecuteOrder' | 'onFirstTimeBuyingWithCard'
+  'onExecuteOrder' | 'onExecuteOrderWithCard'
 >
-export type MapDispatch = Dispatch<ExecuteOrderRequestAction | OpenModalAction>
+export type MapDispatch = Dispatch<
+  ExecuteOrderRequestAction | ExecuteOrderWithCardAction
+>

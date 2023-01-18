@@ -15,12 +15,15 @@ import {
   fetchItemFailure,
   fetchTrendingItemsSuccess,
   fetchTrendingItemsFailure,
-  fetchTrendingItemsRequest
+  fetchTrendingItemsRequest,
+  buyItemWithCard
 } from './actions'
 import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { itemAPI } from '../vendor/decentraland/item/api'
+import { closeModal, openModal } from '../modal/actions'
 import { itemSaga } from './sagas'
+import { BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 
 const item = {
   itemId: 'anItemId',
@@ -78,6 +81,38 @@ describe('when handling the buy items request action', () => {
         .put(buyItemSuccess(item.chainId, txHash, item))
         .dispatch(buyItemRequest(item))
         .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the buy items with card action', () => {
+  beforeEach(() => {
+    jest.spyOn(Object.getPrototypeOf(localStorage), 'setItem')
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
+  })
+
+  describe('when the explanation modal is shown and the user closes it', () => {
+    it('should not set the item in the local storage to show the modal again later', () => {
+      return expectSaga(itemSaga)
+        .provide([
+          [
+            call(
+              [localStorage, 'getItem'],
+              BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
+            ),
+            null
+          ]
+        ])
+        .put(openModal('BuyWithCardExplanationModal'))
+        .dispatch(buyItemWithCard())
+        .dispatch(closeModal('BuyWithCardExplanationModal'))
+        .run({ silenceTimeout: true })
+        .then(() => {
+          expect(localStorage.setItem).not.toHaveBeenCalled()
+        })
     })
   })
 })

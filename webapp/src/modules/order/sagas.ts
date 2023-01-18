@@ -11,6 +11,7 @@ import {
   isRentalListingOpen,
   waitUntilRentalChangesStatus
 } from '../rental/utils'
+import { buyAssetWithCard } from '../asset/utils'
 import { VendorName } from '../vendor'
 import {
   CREATE_ORDER_REQUEST,
@@ -25,12 +26,15 @@ import {
   CancelOrderRequestAction,
   cancelOrderSuccess,
   cancelOrderFailure,
-  executeOrderTransactionSubmitted
+  executeOrderTransactionSubmitted,
+  ExecuteOrderWithCardAction,
+  EXECUTE_ORDER_WITH_CARD
 } from './actions'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
   yield takeEvery(EXECUTE_ORDER_REQUEST, handleExecuteOrderRequest)
+  yield takeEvery(EXECUTE_ORDER_WITH_CARD, handleExecuteOrderWithCard)
   yield takeEvery(CANCEL_ORDER_REQUEST, handleCancelOrderRequest)
 }
 
@@ -64,6 +68,7 @@ function* handleCreateOrderRequest(action: CreateOrderRequestAction) {
 
 function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   const { order, nft, fingerprint } = action.payload
+
   try {
     if (
       nft.contractAddress !== order.contractAddress ||
@@ -112,6 +117,10 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
 
     yield put(executeOrderFailure(order, nft, errorMessage, errorCode))
   }
+}
+
+function* handleExecuteOrderWithCard(_action: ExecuteOrderWithCardAction) {
+  yield call(buyAssetWithCard)
 }
 
 function* handleCancelOrderRequest(action: CancelOrderRequestAction) {
