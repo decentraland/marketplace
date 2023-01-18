@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Field, Mana, Message, ModalNavigation } from 'decentraland-ui'
@@ -31,7 +30,7 @@ import { locations } from '../../../modules/routing/locations'
 import { isAuthorized } from '../../SettingsPage/Authorization/utils'
 
 import { Props } from './SellModal.types'
-import './SellModal.css'
+import styles from './SellModal.module.css'
 
 enum StepperValues {
   SELL_MODAL = 'SELL_MODAL',
@@ -54,7 +53,7 @@ const SellModal = ({
 
   const [confirmedInput, setConfirmedInput] = useState<string>('')
 
-  const [stepper, setStepper] = useState(StepperValues.SELL_MODAL)
+  const [step, setStep] = useState(StepperValues.SELL_MODAL)
 
   const isUpdate = order !== null
   const [price, setPrice] = useState<string>(
@@ -113,7 +112,7 @@ const SellModal = ({
     if (hasAuthorization(authorizations, authorization)) {
       handleCreateOrder()
     } else {
-      setStepper(StepperValues.AUTHORIZE)
+      setStep(StepperValues.AUTHORIZE)
     }
   }
 
@@ -150,7 +149,7 @@ const SellModal = ({
             <T
               id={isUpdate ? 'sell_page.update_subtitle' : 'sell_page.subtitle'}
               values={{
-                name: <b className="primary-text">{getAssetName(nft)}</b>
+                name: <b className={styles.primaryText}>{getAssetName(nft)}</b>
               }}
             />
           }
@@ -158,7 +157,7 @@ const SellModal = ({
       ),
       description: null,
       content: (
-        <div className="fields-container">
+        <div className={styles.fieldsContainer}>
           <ManaField
             label={t('sell_page.price')}
             type="text"
@@ -170,7 +169,6 @@ const SellModal = ({
             onChange={(_event, props) => {
               setPrice(toFixedMANAValue(props.value))
             }}
-            className="mana-field"
           />
           <Field
             label={t('sell_page.expiration_date')}
@@ -190,7 +188,7 @@ const SellModal = ({
             {t('global.cancel')}
           </Button>
           <ChainButton
-            onClick={() => setStepper(StepperValues.CONFIRM_INPUT)}
+            onClick={() => setStep(StepperValues.CONFIRM_INPUT)}
             primary
             disabled={isDisabledSell}
             chainId={nft.chainId}
@@ -208,13 +206,13 @@ const SellModal = ({
           onBack={
             isCreatingOrder
               ? undefined
-              : () => setStepper(StepperValues.SELL_MODAL)
+              : () => setStep(StepperValues.SELL_MODAL)
           }
         />
       ),
       description: null,
       content: (
-        <div className="fields-container">
+        <div className={styles.fieldsContainer}>
           <span>
             <T
               id="sell_page.confirm.line_one"
@@ -232,7 +230,7 @@ const SellModal = ({
           {showPriceBelowMarketValueWarning(nft, parseMANANumber(price)) && (
             <>
               <br />
-              <p className="danger-text">
+              <p className={styles.dangerText}>
                 <T id="sell_page.confirm.warning" />
               </p>
             </>
@@ -240,6 +238,7 @@ const SellModal = ({
           <br />
           <T id="sell_page.confirm.line_two" />
 
+          <span>&nbsp;</span>
           <ManaField
             disabled={isCreatingOrder}
             label={t('global.price')}
@@ -320,16 +319,16 @@ const SellModal = ({
         />
       ),
       actions: (
-        <Modal.Actions className="AuthorizationModalActions">
+        <Modal.Actions className={styles.AuthorizationModalActions}>
           <Button
             onClick={onClose}
-            className="AuthorizationModalButtons"
+            className={styles.AuthorizationModalButtons}
             disabled={isAuthorizing || isCreatingOrder}
           >
             {t('global.cancel')}
           </Button>
           <Button
-            className="AuthorizationModalButtons"
+            className={styles.AuthorizationModalButtons}
             primary
             loading={isCreatingOrder || isAuthorizing}
             disabled={
@@ -348,10 +347,10 @@ const SellModal = ({
 
   return (
     <Modal size="small" name={'SellModal'} onClose={onClose}>
-      {Stepper[stepper].navigation}
-      {Stepper[stepper].description}
-      {Stepper[stepper].content}
-      {Stepper[stepper].actions}
+      {Stepper[step].navigation}
+      {Stepper[step].description}
+      {Stepper[step].content}
+      {Stepper[step].actions}
     </Modal>
   )
 }
