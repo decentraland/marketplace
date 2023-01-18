@@ -31,7 +31,9 @@ code {
 }
 
 /** full-width */
-.ui.container {
+.AssetBrowse .ui.container,
+.Navigation .ui.container,
+.dcl.navbar.fullscreen .ui.container {
   width: 100vw;
   padding: 0 24px;
   box-sizing: border-box;
