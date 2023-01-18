@@ -6,6 +6,7 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import * as decentraland from '../../modules/vendor/decentraland'
 import { locations } from '../../modules/routing/locations'
+import { getSearchParams } from '../../modules/routing/search'
 import { VendorName } from '../../modules/vendor'
 import { SortBy } from '../../modules/routing/types'
 import { AssetType } from '../../modules/asset/types'
@@ -39,14 +40,18 @@ const Navigation = (props: Props) => {
           </Link>
           {isCampaignBrowserEnabled ? (
             <Link
-              to={locations.campaign({
-                section: decentraland.Section.WEARABLES,
-                vendor: VendorName.DECENTRALAND,
-                page: 1,
-                sortBy: SortBy.RECENTLY_LISTED,
-                onlyOnSale: true,
-                assetType: AssetType.ITEM
-              })}
+              to={{
+                pathname: locations.campaign(),
+                search: getSearchParams({
+                  section: decentraland.Section.WEARABLES,
+                  vendor: VendorName.DECENTRALAND,
+                  page: 1,
+                  sortBy: SortBy.RECENTLY_LISTED,
+                  onlyOnSale: true,
+                  assetType: AssetType.ITEM
+                })?.toString(),
+                state: { reload: true }
+              }}
             >
               <Tabs.Tab active={activeTab === NavigationTab.CAMPAIGN_BROWSER}>
                 <div
@@ -61,19 +66,26 @@ const Navigation = (props: Props) => {
             </Link>
           ) : null}
           <Link
-            to={locations.browse({
-              section: decentraland.Section.WEARABLES,
-              vendor: VendorName.DECENTRALAND,
-              page: 1,
-              sortBy: SortBy.RECENTLY_LISTED,
-              onlyOnSale: true
-            })}
+            to={{
+              pathname: locations.browse(),
+              search: getSearchParams({
+                section: decentraland.Section.WEARABLES,
+                vendor: VendorName.DECENTRALAND,
+                page: 1,
+                sortBy: SortBy.RECENTLY_LISTED,
+                onlyOnSale: true
+              })?.toString(),
+              state: { reload: true }
+            }}
           >
             <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>
               {t('navigation.collectibles')}
             </Tabs.Tab>
           </Link>
-          <Link to={locations.lands()}>
+          <Link to={{
+            pathname: locations.lands(),
+            state: { reload: true }
+          }}>
             <Tabs.Tab active={activeTab === NavigationTab.LANDS}>
               {t('navigation.land')}
             </Tabs.Tab>

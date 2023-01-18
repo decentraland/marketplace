@@ -1,9 +1,4 @@
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useState
-} from 'react'
+import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -31,6 +26,7 @@ import { Bids } from '../Bids'
 import { BackToTopButton } from '../BackToTopButton'
 import { Props } from './AssetBrowse.types'
 import './AssetBrowse.css'
+import { useLocation } from 'react-router-dom'
 
 const AssetBrowse = (props: Props) => {
   const {
@@ -53,11 +49,69 @@ const AssetBrowse = (props: Props) => {
 
   // Prevent fetching more than once while browsing
   const [hasFetched, setHasFetched] = useState(false)
+  const shouldReload = (useLocation().state as any)?.reload
+  const isMapPropertyPersisted = getPersistedIsMapProperty()
+
+  const fetchAssets = useCallback(() => {
+    // Options used to fetch the assets.
+    const browseOpts: BrowseOptions = {
+      vendor,
+      view,
+      section,
+      address,
+      contracts,
+      onlyOnSale,
+      onlySmart
+    }
+
+    // Function used to fetch the assets.
+    let fetchAssetsFn: (opts: BrowseOptions) => void = onFetchAssetsFromRoute
+
+    if (
+      section === DecentralandSection.LAND &&
+      !isAccountView(view) &&
+      isMapPropertyPersisted === false
+    ) {
+      // Update the browser options to match the ones persisted.
+      browseOpts.isMap = isMap
+      browseOpts.isFullscreen = isFullscreen
+      browseOpts.onlyOnSale =
+        (!onlyOnSale && onlyOnRent === false) ||
+        (onlyOnSale === undefined && onlyOnRent === undefined) ||
+        onlyOnSale
+
+      // We also set the fetch function as onBrowse because we need the url to be updated.
+      fetchAssetsFn = onBrowse
+    }
+
+    fetchAssetsFn(browseOpts)
+    setHasFetched(true)
+  }, [
+    isMap,
+    isFullscreen,
+    view,
+    vendor,
+    section,
+    address,
+    contracts,
+    onlyOnSale,
+    onlySmart,
+    onFetchAssetsFromRoute,
+    onlyOnRent,
+    onBrowse,
+    isMapPropertyPersisted
+  ])
 
   // Kick things off
   useEffect(() => {
     onSetView(view)
   }, [onSetView, view])
+
+  useEffect(() => {
+    if (shouldReload) {
+      fetchAssets()
+    }
+  }, [shouldReload, fetchAssets])
 
   // When the view changes, we unset the hasFetched flag
   useEffect(() => {
@@ -65,8 +119,6 @@ const AssetBrowse = (props: Props) => {
       setHasFetched(false)
     }
   }, [view, viewInState])
-
-  const isMapPropertyPersisted = getPersistedIsMapProperty()
 
   useEffect(() => {
     if (
@@ -83,57 +135,9 @@ const AssetBrowse = (props: Props) => {
 
   useEffect(() => {
     if (viewInState === view && !hasFetched) {
-      // Options used to fetch the assets.
-      const browseOpts: BrowseOptions = {
-        vendor,
-        view,
-        section,
-        address,
-        contracts,
-        onlyOnSale,
-        onlySmart
-      }
-
-      // Function used to fetch the assets.
-      let fetchAssetsFn: (opts: BrowseOptions) => void = onFetchAssetsFromRoute
-
-      if (
-        section === DecentralandSection.LAND &&
-        !isAccountView(view) &&
-        isMapPropertyPersisted === false
-      ) {
-        // Update the browser options to match the ones persisted.
-        browseOpts.isMap = isMap
-        browseOpts.isFullscreen = isFullscreen
-        browseOpts.onlyOnSale =
-          (!onlyOnSale && onlyOnRent === false) ||
-          (onlyOnSale === undefined && onlyOnRent === undefined) ||
-          onlyOnSale
-
-        // We also set the fetch function as onBrowse because we need the url to be updated.
-        fetchAssetsFn = onBrowse
-      }
-      fetchAssetsFn(browseOpts)
-
-      setHasFetched(true)
+      fetchAssets()
     }
-  }, [
-    isMap,
-    isFullscreen,
-    view,
-    vendor,
-    section,
-    address,
-    contracts,
-    onlyOnSale,
-    onlySmart,
-    viewInState,
-    onFetchAssetsFromRoute,
-    hasFetched,
-    onlyOnRent,
-    onBrowse,
-    isMapPropertyPersisted
-  ])
+  }, [fetchAssets, hasFetched, viewInState, view])
 
   // Handlers
   const handleSetFullscreen = useCallback(

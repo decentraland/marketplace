@@ -25,3 +25,9 @@ i:global(.icon).deleteBtn {
   cursor: pointer;
   height: auto;
 }
+
+@media (max-width: 768px) {
+  .pill:hover {
+    background: rgba(115, 110, 125, 0.2);
+  }
+}
