@@ -15,7 +15,7 @@ const Sell = (props: Props) => {
   const {
     className,
     rental,
-    order = null,
+    order,
     nft,
     onEditOrder,
     onCancelOrder,
