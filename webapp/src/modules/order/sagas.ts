@@ -1,4 +1,4 @@
-import { put, call, takeEvery, select, race, take } from 'redux-saga/effects'
+import { put, call, takeEvery, select } from 'redux-saga/effects'
 import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -7,11 +7,11 @@ import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getRentalById } from '../rental/selectors'
-import { CloseModalAction, CLOSE_MODAL, openModal } from '../modal/actions'
 import {
   isRentalListingOpen,
   waitUntilRentalChangesStatus
 } from '../rental/utils'
+import { buyAssetWithCard } from '../asset/utils'
 import { VendorName } from '../vendor'
 import {
   CREATE_ORDER_REQUEST,
@@ -30,9 +30,6 @@ import {
   ExecuteOrderWithCardAction,
   EXECUTE_ORDER_WITH_CARD
 } from './actions'
-
-const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
-  'buy-nfts-with-card-explanation-popup-key'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
@@ -123,30 +120,7 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
 }
 
 function* handleExecuteOrderWithCard(_action: ExecuteOrderWithCardAction) {
-  const buyNftsWithCardExplanationPopupKey: string | null = yield call(
-    [localStorage, 'getItem'],
-    BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-  )
-
-  if (buyNftsWithCardExplanationPopupKey !== 'true') {
-    yield put(openModal('BuyWithCardExplanationModal'))
-
-    // TODO (buy nfts with card): add continue when implementing Transak widget
-    const { close }: { close: CloseModalAction } = yield race({
-      // TODO (buy nfts with card): should we differentiate the specific close that we need?
-      close: take(CLOSE_MODAL)
-    })
-
-    if (close) {
-      return
-    }
-
-    yield call(
-      [localStorage, 'setItem'],
-      BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY,
-      'true'
-    )
-  }
+  yield call(buyAssetWithCard)
 }
 
 function* handleCancelOrderRequest(action: CancelOrderRequestAction) {

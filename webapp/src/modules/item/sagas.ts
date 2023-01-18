@@ -1,13 +1,13 @@
 import { Item } from '@dcl/schemas'
 import { put, takeEvery } from '@redux-saga/core/effects'
-import { call, race, select, take } from 'redux-saga/effects'
+import { call, select } from 'redux-saga/effects'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { itemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
-import { CloseModalAction, CLOSE_MODAL, openModal } from '../modal/actions'
+import { buyAssetWithCard } from '../asset/utils'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -28,9 +28,6 @@ import {
   BuyItemWithCardAction,
   BUY_ITEM_WITH_CARD
 } from './actions'
-
-const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
-  'buy-nfts-with-card-explanation-popup-key'
 
 export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
@@ -130,28 +127,5 @@ function* handleBuyItem(action: BuyItemRequestAction) {
 }
 
 function* handleBuyItemWithCard(_action: BuyItemWithCardAction) {
-  const buyNftsWithCardExplanationPopupKey: string | null = yield call(
-    [localStorage, 'getItem'],
-    BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-  )
-
-  if (buyNftsWithCardExplanationPopupKey !== 'true') {
-    yield put(openModal('BuyWithCardExplanationModal'))
-
-    // TODO (buy nfts with card): add continue when implementing Transak widget
-    const { close }: { close: CloseModalAction } = yield race({
-      // TODO (buy nfts with card): should we differentiate the specific close that we need?
-      close: take(CLOSE_MODAL)
-    })
-
-    if (close) {
-      return
-    }
-
-    yield call(
-      [localStorage, 'setItem'],
-      BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY,
-      'true'
-    )
-  }
+  yield call(buyAssetWithCard)
 }

@@ -1,3 +1,4 @@
+import { call, put, race, take } from 'redux-saga/effects'
 import { NFTCategory, Order, RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -6,10 +7,14 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { CloseModalAction, CLOSE_MODAL, openModal } from '../modal/actions'
 import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
 import { addressEquals } from '../wallet/utils'
 import { Asset } from './types'
+
+export const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
+  'buy-nfts-with-card-explanation-popup-key'
 
 export function getAssetName(asset: Asset) {
   if (asset.name) {
@@ -108,4 +113,31 @@ export function isWearableOrEmote(asset: Asset): boolean {
     NFTCategory.EMOTE
   ]
   return categories.includes(asset.category)
+}
+
+export function* buyAssetWithCard() {
+  const buyNftsWithCardExplanationPopupKey: string | null = yield call(
+    [localStorage, 'getItem'],
+    BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
+  )
+
+  if (buyNftsWithCardExplanationPopupKey !== 'true') {
+    yield put(openModal('BuyWithCardExplanationModal'))
+
+    // TODO (buy nfts with card): add continue when implementing Transak widget
+    const { close }: { close: CloseModalAction } = yield race({
+      // TODO (buy nfts with card): should we differentiate the specific close that we need?
+      close: take(CLOSE_MODAL)
+    })
+
+    if (close) {
+      return
+    }
+
+    yield call(
+      [localStorage, 'setItem'],
+      BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY,
+      'true'
+    )
+  }
 }
