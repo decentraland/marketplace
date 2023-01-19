@@ -7,7 +7,8 @@ export const enum AssetFilter {
   PlayMode,
   Network,
   BodyShape,
-  OnSale
+  OnSale,
+  More
 }
 
 const WearablesFilters = [

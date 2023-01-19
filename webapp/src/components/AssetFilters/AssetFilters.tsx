@@ -12,7 +12,7 @@ import { isLandSection } from '../../modules/ui/utils'
 import { getNetwork } from '../../utils/filters'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
-import { PriceFilter } from './PriceFilter'
+import PriceFilter from './PriceFilter'
 import { RarityFilter } from './RarityFilter'
 import { NetworkFilter } from './NetworkFilter'
 import { Props } from './AssetFilters.types'
@@ -38,6 +38,7 @@ export const AssetFilters = ({
   assetType,
   section,
   landStatus,
+  defaultCollapsed,
   onBrowse
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
@@ -143,34 +144,48 @@ export const AssetFilters = ({
   return (
     <Menu className="filters-sidebar">
       {shouldRenderFilter(AssetFilter.Rarity) ? (
-        <RarityFilter onChange={handleRarityChange} rarities={rarities} />
+        <RarityFilter
+          onChange={handleRarityChange}
+          rarities={rarities}
+          defaultCollapsed={defaultCollapsed?.[AssetFilter.Network] || false}
+        />
       ) : null}
-      <PriceFilter
-        onChange={handlePriceChange}
-        minPrice={minPrice}
-        maxPrice={maxPrice}
-        network={getNetwork(network, category)}
-      />
+      {isOnSale ? (
+        <PriceFilter
+          onChange={handlePriceChange}
+          minPrice={minPrice}
+          maxPrice={maxPrice}
+          network={getNetwork(network, category)}
+          defaultCollapsed={defaultCollapsed?.[AssetFilter.Price] || false}
+        />
+      ) : null}
       {shouldRenderFilter(AssetFilter.Collection) ? (
         <CollectionFilter
           onChange={handleCollectionChange}
           collection={collection}
           onlyOnSale={isOnSale}
+          defaultCollapsed={defaultCollapsed?.[AssetFilter.Collection] || false}
         />
       ) : null}
       {shouldRenderFilter(AssetFilter.PlayMode) && (
         <EmotePlayModeFilter
           onChange={handleEmotePlayModeChange}
           emotePlayMode={emotePlayMode}
+          defaultCollapsed={defaultCollapsed?.[AssetFilter.PlayMode] || false}
         />
       )}
       {shouldRenderFilter(AssetFilter.Network) && !isPrimarySell && (
-        <NetworkFilter onChange={handleNetworkChange} network={network} />
+        <NetworkFilter
+          onChange={handleNetworkChange}
+          network={network}
+          defaultCollapsed={defaultCollapsed?.[AssetFilter.Network] || false}
+        />
       )}
       {shouldRenderFilter(AssetFilter.BodyShape) && (
         <BodyShapeFilter
           onChange={handleBodyShapeChange}
           bodyShapes={bodyShapes}
+          defaultCollapsed={defaultCollapsed?.[AssetFilter.BodyShape] || false}
         />
       )}
       <MoreFilters
@@ -179,6 +194,7 @@ export const AssetFilters = ({
         isOnlySmart={isOnlySmart}
         onSaleChange={handleOnSaleChange}
         onOnlySmartChange={handleOnlySmartChange}
+        defaultCollapsed={defaultCollapsed?.[AssetFilter.More] || false}
       />
     </Menu>
   )

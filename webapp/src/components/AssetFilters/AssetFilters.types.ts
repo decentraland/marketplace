@@ -1,10 +1,18 @@
-import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
+import {
+  EmotePlayMode,
+  GenderFilterOption,
+  Network,
+  NFTCategory,
+  Rarity,
+  WearableGender
+} from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
 import { BrowseOptions } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor'
 import { Section } from '../../modules/vendor/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
+import { AssetFilter } from './utilts'
 
 export type Props = {
   minPrice: string
@@ -25,9 +33,12 @@ export type Props = {
   view?: View
   onBrowse: (options: BrowseOptions) => void
   onFilterChange?: (options: BrowseOptions) => void
+  defaultCollapsed?: Record<AssetFilter, boolean>
 }
 
-export type MapStateProps = Pick<Props, 'minPrice'
+export type MapStateProps = Pick<
+  Props,
+  | 'minPrice'
   | 'maxPrice'
   | 'rarities'
   | 'network'

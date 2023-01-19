@@ -5,9 +5,11 @@ import { Sections } from '../../../modules/routing/types'
 import { Section } from '../../../modules/vendor/decentraland'
 import { VendorName } from '../../../modules/vendor/types'
 import { Menu } from '../../Menu'
+import { AssetFilters } from '../../AssetFilters'
 import { MenuItem } from '../../Menu/MenuItem'
 import { Props } from './CurrentAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
+import { AssetFilter } from '../../AssetFilters/utilts'
 
 const decentraland = VendorName.DECENTRALAND
 
@@ -73,6 +75,18 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
         onClick={section => onBrowse(decentraland, section)}
       />
     </Menu>
+    <AssetFilters
+      defaultCollapsed={{
+        [AssetFilter.Rarity]: true,
+        [AssetFilter.Price]: true,
+        [AssetFilter.Collection]: true,
+        [AssetFilter.PlayMode]: true,
+        [AssetFilter.BodyShape]: true,
+        [AssetFilter.Network]: true,
+        [AssetFilter.OnSale]: false,
+        [AssetFilter.More]: false,
+      }}
+    />
   </>
 )
 

@@ -7,11 +7,13 @@ import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
 export type NetworkFilterProps = {
   emotePlayMode?: EmotePlayMode[]
   onChange: (value: EmotePlayMode[]) => void
+  defaultCollapsed?: boolean
 }
 
 export const EmotePlayModeFilter = ({
   emotePlayMode,
-  onChange
+  onChange,
+  defaultCollapsed = false
 }: NetworkFilterProps) => {
   const isMobile = useMobileMediaQuery()
   const emotePlayModeOptions = useMemo(() => {
@@ -59,7 +61,7 @@ export const EmotePlayModeFilter = ({
       header={header}
       className="filters-sidebar-box emote-play-mode-filter"
       collapsible
-      defaultCollapsed={isMobile}
+      defaultCollapsed={defaultCollapsed || isMobile}
     >
       <ArrayFilter
         options={emotePlayModeOptions}

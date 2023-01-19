@@ -116,6 +116,14 @@
 }
 
 @media (max-width: 768px) {
+  .countText {
+    max-width: 160px;
+    margin: 0 auto;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .mapToggle {
     top: 13px;
   }
