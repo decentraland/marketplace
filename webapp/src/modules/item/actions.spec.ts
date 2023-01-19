@@ -117,10 +117,10 @@ describe('when creating the action to signal a failure in the buy item request',
 
 describe('when creating the action to signal the start of the buy item with card', () => {
   it('should return an object representing the action', () => {
-    expect(buyItemWithCard()).toEqual({
+    expect(buyItemWithCard(item)).toEqual({
       type: BUY_ITEM_WITH_CARD,
       meta: undefined,
-      payload: undefined
+      payload: { item }
     })
   })
 })

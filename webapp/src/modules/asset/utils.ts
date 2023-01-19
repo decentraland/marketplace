@@ -116,6 +116,8 @@ export function isWearableOrEmote(asset: Asset): boolean {
   return categories.includes(asset.category)
 }
 
+// TODO (buy nfts with card): add test for the open transak flow
+
 export function* buyAssetWithCard(asset: Asset) {
   const buyNftsWithCardExplanationPopupKey: string | null = yield call(
     [localStorage, 'getItem'],
