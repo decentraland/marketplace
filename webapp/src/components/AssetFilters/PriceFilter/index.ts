@@ -1,3 +1,1 @@
-import PriceFilter from './PriceFilter.container'
-
-export default PriceFilter
+export * from './PriceFilter'
