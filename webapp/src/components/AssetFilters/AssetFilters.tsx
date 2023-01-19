@@ -147,7 +147,7 @@ export const AssetFilters = ({
         <RarityFilter
           onChange={handleRarityChange}
           rarities={rarities}
-          defaultCollapsed={defaultCollapsed?.[AssetFilter.Network] || false}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
         />
       ) : null}
       {isOnSale ? (
@@ -156,7 +156,7 @@ export const AssetFilters = ({
           minPrice={minPrice}
           maxPrice={maxPrice}
           network={getNetwork(network, category)}
-          defaultCollapsed={defaultCollapsed?.[AssetFilter.Price] || false}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Price]}
         />
       ) : null}
       {shouldRenderFilter(AssetFilter.Collection) ? (
@@ -164,28 +164,28 @@ export const AssetFilters = ({
           onChange={handleCollectionChange}
           collection={collection}
           onlyOnSale={isOnSale}
-          defaultCollapsed={defaultCollapsed?.[AssetFilter.Collection] || false}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Collection]}
         />
       ) : null}
       {shouldRenderFilter(AssetFilter.PlayMode) && (
         <EmotePlayModeFilter
           onChange={handleEmotePlayModeChange}
           emotePlayMode={emotePlayMode}
-          defaultCollapsed={defaultCollapsed?.[AssetFilter.PlayMode] || false}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.PlayMode]}
         />
       )}
       {shouldRenderFilter(AssetFilter.Network) && !isPrimarySell && (
         <NetworkFilter
           onChange={handleNetworkChange}
           network={network}
-          defaultCollapsed={defaultCollapsed?.[AssetFilter.Network] || false}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
         />
       )}
       {shouldRenderFilter(AssetFilter.BodyShape) && (
         <BodyShapeFilter
           onChange={handleBodyShapeChange}
           bodyShapes={bodyShapes}
-          defaultCollapsed={defaultCollapsed?.[AssetFilter.BodyShape] || false}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.BodyShape]}
         />
       )}
       <MoreFilters
@@ -194,7 +194,7 @@ export const AssetFilters = ({
         isOnlySmart={isOnlySmart}
         onSaleChange={handleOnSaleChange}
         onOnlySmartChange={handleOnlySmartChange}
-        defaultCollapsed={defaultCollapsed?.[AssetFilter.More] || false}
+        defaultCollapsed={!!defaultCollapsed?.[AssetFilter.More]}
       />
     </Menu>
   )
