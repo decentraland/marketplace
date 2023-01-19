@@ -166,7 +166,7 @@
         "creators_earnings": "Ganancias de creadores",
         "creators_earnings_tooltip": "Los creadores obtienen el 97,5 % de las ventas primarias y el 2,5 % de las ventas secundarias como regalías.",
         "dao_revenue": "Ganancias de la DAO",
-        "dao_revenue_tooltip": "La DAO obtiene el 2,5% de los alquileres de Land, el mercado primario y las ventas de Land, más la tarifa de publicación de los wearables.",
+        "dao_revenue_tooltip": "La DAO obtiene el 2,5% de las ventas y alquileres de LAND, del minteo de Coleccionables, y su tarifa de publicación.",
         "seven_days": "7 días",
         "thirty_days": "30 días",
         "all": "Todo"
