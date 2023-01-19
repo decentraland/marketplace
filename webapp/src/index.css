@@ -37,6 +37,16 @@ code {
   width: 100vw;
   padding: 0 24px;
   box-sizing: border-box;
+  max-width: 100% !important;
+}
+
+.dcl.page {
+  padding: 0 24px;
+}
+
+.ui.container {
+  width: 100%;
+  max-width: 1360px !important;
 }
 
 @media (max-width: 767px) {
