@@ -162,11 +162,11 @@
         "total_sales": "总销售额",
         "total_sales_tooltip": "出售的 NFT 数量，包括一级市场和二级市场。",
         "total_volume": "总体积",
-        "total_volume_tooltip": "MANA 的销售量，包括一级和二级市场。",
+        "total_volume_tooltip": "MANA 的销量和收入，包括一级和二级市场。",
         "creators_earnings": "创作者收益",
         "creators_earnings_tooltip": "创作者获得 97.5% 的初级销售额和 2.5% 的二级销售额作为版税。",
         "dao_revenue": "道收入",
-        "dao_revenue_tooltip": "DAO 获得土地和一级市场销售额的 2.5%，外加可穿戴设备的出版费。",
+        "dao_revenue_tooltip": "DAO 获得土地租金、一级市场和土地销售的 2.5%，外加可穿戴设备的上市费用。",
         "seven_days": "7天",
         "thirty_days": "30天",
         "all": "全部"
