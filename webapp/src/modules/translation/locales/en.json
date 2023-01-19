@@ -166,11 +166,11 @@
         "total_sales": "Total sales",
         "total_sales_tooltip": "Number of NFTs sold, including primary and secondary markets.",
         "total_volume": "Total volume",
-        "total_volume_tooltip": "Volume of sales in MANA, including primary and secondary markets.",
+        "total_volume_tooltip": "Volume of sales and rents in MANA, including primary and secondary sales.",
         "creators_earnings": "creators earnings",
         "creators_earnings_tooltip": "Creators earn 97.5% of primary sales and 2.5% of secondary sales as royalties.",
         "dao_revenue": "dao revenue",
-        "dao_revenue_tooltip": "The DAO gets 2.5% of Land and primary market sales, plus the wearables’ publication fee.",
+        "dao_revenue_tooltip": "The DAO gets 2.5% of Land rentals, primary market and Land sales, plus the wearables' publication fee.",
         "seven_days": "7 DAYS",
         "thirty_days": "30 DAYS",
         "all": "all"
