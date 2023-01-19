@@ -43,7 +43,7 @@ const Slideshow = (props: Props) => {
 
   const totalPages = useMemo(
     () => (isMobileOrTablet ? 1 : Math.ceil(assets.length / pageSize)),
-    [assets.length, pageSize]
+    [assets.length, pageSize, isMobileOrTablet]
   )
 
   useEffect(() => {
@@ -55,7 +55,7 @@ const Slideshow = (props: Props) => {
     if (isMobileOrTablet && currentPage !== 1) {
       setCurrentPage(1)
     }
-  }, [isMobileOrTablet])
+  }, [isMobileOrTablet, currentPage])
 
   const handleOnAssetCardClick = useCallback(
     (asset: Asset) => {
