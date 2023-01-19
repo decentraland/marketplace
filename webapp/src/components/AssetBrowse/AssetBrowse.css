@@ -143,7 +143,7 @@
   margin-right: 24px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 990px) {
   .AssetBrowse .ui.cards,
   .AssetBrowse .ui.cards > .ui.card {
     margin-left: 0;

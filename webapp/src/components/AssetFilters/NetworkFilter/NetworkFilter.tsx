@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { Box, Radio, useMobileMediaQuery } from 'decentraland-ui'
+import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import './NetworkFilter.css'
@@ -10,7 +10,7 @@ export type NetworkFilterProps = {
 }
 
 export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
-  const isMobile = useMobileMediaQuery()
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const networkOptions = useMemo(() => {
     const options = Object.values(Network).filter(
       value => typeof value === 'string'
@@ -33,7 +33,7 @@ export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
 
   const header = useMemo(
     () =>
-      isMobile ? (
+      isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">
             {t('nft_filters.network.title')}
@@ -47,7 +47,7 @@ export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
       ) : (
         t('nft_filters.network.title')
       ),
-    [network, isMobile]
+    [network, isMobileOrTablet]
   )
 
   return (
@@ -55,7 +55,7 @@ export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
       header={header}
       className="filters-sidebar-box network-filter"
       collapsible
-      defaultCollapsed={isMobile}
+      defaultCollapsed={isMobileOrTablet}
     >
       <div className="network-options filters-radio-group">
         {networkOptions.map(option => (

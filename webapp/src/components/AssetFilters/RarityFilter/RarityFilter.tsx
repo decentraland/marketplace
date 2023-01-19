@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react'
-import { Box, useMobileMediaQuery } from 'decentraland-ui'
+import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
@@ -13,7 +13,7 @@ export const RarityFilter = ({
   onChange,
   rarities = []
 }: RarityFilterProps) => {
-  const isMobile = useMobileMediaQuery()
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const rarityOptions = useMemo(() => {
     const options = Object.values(Rarity)
       .filter(value => typeof value === 'string')
@@ -36,7 +36,7 @@ export const RarityFilter = ({
 
   const header = useMemo(
     () =>
-      isMobile ? (
+      isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">
             {t('nft_filters.rarities.title')}
@@ -52,7 +52,7 @@ export const RarityFilter = ({
       ) : (
         t('nft_filters.rarities.title')
       ),
-    [rarities, isMobile, allRaritiesSelected]
+    [rarities, isMobileOrTablet, allRaritiesSelected]
   )
 
   return (
@@ -60,7 +60,7 @@ export const RarityFilter = ({
       header={header}
       className="filters-sidebar-box"
       collapsible
-      defaultCollapsed={isMobile}
+      defaultCollapsed={isMobileOrTablet}
     >
       <ArrayFilter
         name=""

@@ -5,7 +5,7 @@ import {
   DropdownProps,
   Field,
   Icon,
-  useMobileMediaQuery
+  useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -44,7 +44,7 @@ export const AssetTopbar = ({
   onClearFilters,
   onOpenFiltersModal
 }: Props): JSX.Element => {
-  const isMobile = useMobileMediaQuery()
+  const isMobile = useTabletAndBelowMediaQuery()
   const category = section ? getCategoryFromSection(section) : undefined
 
   const handleSearch = useCallback(

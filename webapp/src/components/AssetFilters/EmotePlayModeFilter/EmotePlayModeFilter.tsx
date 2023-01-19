@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { Box, useMobileMediaQuery } from 'decentraland-ui'
+import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { EmotePlayMode } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
@@ -13,7 +13,7 @@ export const EmotePlayModeFilter = ({
   emotePlayMode,
   onChange
 }: NetworkFilterProps) => {
-  const isMobile = useMobileMediaQuery()
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const emotePlayModeOptions = useMemo(() => {
     const options = Object.values(EmotePlayMode).filter(
       value => typeof value === 'string'
@@ -35,7 +35,7 @@ export const EmotePlayModeFilter = ({
 
   const header = useMemo(
     () =>
-      isMobile ? (
+      isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">
             {t('nft_filters.emote_play_mode.title')}
@@ -51,7 +51,7 @@ export const EmotePlayModeFilter = ({
       ) : (
         t('nft_filters.emote_play_mode.title')
       ),
-    [areAllItemsSelected, emotePlayMode, isMobile]
+    [areAllItemsSelected, emotePlayMode, isMobileOrTablet]
   )
 
   return (
@@ -59,7 +59,7 @@ export const EmotePlayModeFilter = ({
       header={header}
       className="filters-sidebar-box emote-play-mode-filter"
       collapsible
-      defaultCollapsed={isMobile}
+      defaultCollapsed={isMobileOrTablet}
     >
       <ArrayFilter
         options={emotePlayModeOptions}

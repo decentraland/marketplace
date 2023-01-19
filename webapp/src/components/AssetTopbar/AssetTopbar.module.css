@@ -115,10 +115,11 @@
   background-size: 20px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 990px) {
   .mapToggle {
     top: 13px;
   }
+
   .selectedFiltersContainer {
     display: flex;
     align-items: baseline;
@@ -126,12 +127,14 @@
     margin-bottom: 6px;
     flex-wrap: wrap;
   }
+
   .clearFilters {
     margin-bottom: 10px;
     margin-left: 10px;
     padding-top: 6px;
     padding-left: 0;
   }
+
   .assetTopbar {
     margin-bottom: 0;
   }
