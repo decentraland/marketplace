@@ -94,6 +94,28 @@ describe('when handling the buy items with card action', () => {
     jest.restoreAllMocks()
   })
 
+  describe('when the explanation modal has already been shown', () => {
+    it('should open Transak widget', () => {
+      return expectSaga(itemSaga)
+        .provide([
+          [
+            call(
+              [localStorage, 'getItem'],
+              BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
+            ),
+            null
+          ]
+        ])
+        .put(openModal('BuyWithCardExplanationModal', { asset: item }))
+        .dispatch(buyItemWithCard(item))
+        .dispatch(closeModal('BuyWithCardExplanationModal'))
+        .run({ silenceTimeout: true })
+        .then(() => {
+          expect(localStorage.setItem).not.toHaveBeenCalled()
+        })
+    })
+  })
+
   describe('when the explanation modal is shown and the user closes it', () => {
     it('should not set the item in the local storage to show the modal again later', () => {
       return expectSaga(itemSaga)
@@ -106,8 +128,8 @@ describe('when handling the buy items with card action', () => {
             null
           ]
         ])
-        .put(openModal('BuyWithCardExplanationModal'))
-        .dispatch(buyItemWithCard())
+        .put(openModal('BuyWithCardExplanationModal', { asset: item }))
+        .dispatch(buyItemWithCard(item))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
         .run({ silenceTimeout: true })
         .then(() => {

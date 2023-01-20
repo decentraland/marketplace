@@ -126,6 +126,7 @@ function* handleBuyItem(action: BuyItemRequestAction) {
   }
 }
 
-function* handleBuyItemWithCard(_action: BuyItemWithCardAction) {
-  yield call(buyAssetWithCard)
+function* handleBuyItemWithCard(action: BuyItemWithCardAction) {
+  const { item } = action.payload
+  yield call(buyAssetWithCard, item)
 }

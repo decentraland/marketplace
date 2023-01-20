@@ -1,9 +1,5 @@
-import { ChainId, Network, Order } from '@dcl/schemas'
+import { ChainId, Order } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
-import {
-  ProviderType,
-  Wallet
-} from 'decentraland-dapps/dist/modules/wallet/types'
 import { ErrorCode } from 'decentraland-transactions'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName } from '../asset/utils'
@@ -37,7 +33,6 @@ import {
 let nft: NFT
 let order: Order
 let fingerprint: string
-let wallet: Wallet
 let txHash: string
 let error: string
 
@@ -56,16 +51,6 @@ beforeEach(() => {
     price: '100000000000'
   } as Order
   fingerprint = 'aFingerprint'
-  wallet = {
-    address: 'anAddress',
-    networks: {
-      [Network.ETHEREUM]: { mana: 1, chainId: ChainId.ETHEREUM_GOERLI },
-      [Network.MATIC]: { mana: 1, chainId: ChainId.MATIC_MAINNET }
-    },
-    network: Network.ETHEREUM,
-    chainId: ChainId.ETHEREUM_GOERLI,
-    providerType: ProviderType.NETWORK
-  }
   txHash = 'aTxHash'
   error = 'anError'
 })
@@ -186,10 +171,10 @@ describe('when creating the action to signal a failure in the execute order requ
 
 describe('when creating the action to signal the start of the execute order with card', () => {
   it('should return an object representing the action', () => {
-    expect(executeOrderWithCard()).toEqual({
+    expect(executeOrderWithCard(nft)).toEqual({
       type: EXECUTE_ORDER_WITH_CARD,
       meta: undefined,
-      payload: undefined
+      payload: { nft }
     })
   })
 })

@@ -119,8 +119,9 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   }
 }
 
-function* handleExecuteOrderWithCard(_action: ExecuteOrderWithCardAction) {
-  yield call(buyAssetWithCard)
+function* handleExecuteOrderWithCard(action: ExecuteOrderWithCardAction) {
+  const { nft } = action.payload
+  yield call(buyAssetWithCard, nft)
 }
 
 function* handleCancelOrderRequest(action: CancelOrderRequestAction) {

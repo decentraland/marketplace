@@ -19,6 +19,7 @@ import { closeModal, openModal } from '../modal/actions'
 import { NFT } from '../nft/types'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
+import { openTransak } from '../transak/actions'
 import { VendorName } from '../vendor'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
 import { getWallet } from '../wallet/selectors'
@@ -221,6 +222,27 @@ describe('when handling the execute order with card action', () => {
     jest.restoreAllMocks()
   })
 
+  describe('when the explanation modal has already been shown', () => {
+    it('should open Transak widget', () => {
+      return expectSaga(orderSaga)
+        .provide([
+          [
+            call(
+              [localStorage, 'getItem'],
+              BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
+            ),
+            'true'
+          ]
+        ])
+        .put(openTransak(nft))
+        .dispatch(executeOrderWithCard(nft))
+        .run({ silenceTimeout: true })
+        .then(() => {
+          expect(localStorage.setItem).not.toHaveBeenCalled()
+        })
+    })
+  })
+
   describe('when the explanation modal is shown and the user closes it', () => {
     it('should not set the item in the local storage to show the modal again later', () => {
       return expectSaga(orderSaga)
@@ -233,8 +255,8 @@ describe('when handling the execute order with card action', () => {
             null
           ]
         ])
-        .put(openModal('BuyWithCardExplanationModal'))
-        .dispatch(executeOrderWithCard())
+        .put(openModal('BuyWithCardExplanationModal', { asset: nft }))
+        .dispatch(executeOrderWithCard(nft))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
         .run({ silenceTimeout: true })
         .then(() => {

@@ -38,7 +38,7 @@ const mapState = (state: RootState): MapStateProps => ({
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onExecuteOrder: (order, nft, fingerprint) =>
     dispatch(executeOrderRequest(order, nft, fingerprint)),
-  onExecuteOrderWithCard: () => dispatch(executeOrderWithCard())
+  onExecuteOrderWithCard: nft => dispatch(executeOrderWithCard(nft))
 })
 
 export default connect(mapState, mapDispatch)(BuyNFTModal)

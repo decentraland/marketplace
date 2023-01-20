@@ -4,7 +4,11 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './BuyWithCardExplanationModal.types'
 import styles from './BuyWithCardExplanationModal.module.css'
 
-const BuyWithCardExplanationModal = ({ onContinue, onClose }: Props) => (
+const BuyWithCardExplanationModal = ({
+  metadata: { asset },
+  onContinue,
+  onClose
+}: Props) => (
   <Modal open className={styles.buyWithCardExplanationModal}>
     <ModalNavigation
       title={t('buy_with_card_explanation_modal.title')}
@@ -39,7 +43,7 @@ const BuyWithCardExplanationModal = ({ onContinue, onClose }: Props) => (
       </div>
     </Modal.Content>
     <Modal.Actions className={styles.actions}>
-      <Button primary onClick={onContinue}>
+      <Button primary onClick={() => onContinue(asset)}>
         {t('global.continue')}
       </Button>
       <Button secondary className={styles.cancel} onClick={onClose}>

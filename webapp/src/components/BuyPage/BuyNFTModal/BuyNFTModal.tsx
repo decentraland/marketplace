@@ -48,7 +48,8 @@ const BuyNFTModal = (props: Props) => {
 
   const handleExecuteOrder = useCallback(() => {
     if (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
-      return onExecuteOrderWithCard()
+      return onExecuteOrderWithCard(nft)
+
     onExecuteOrder(order!, nft, fingerprint)
   }, [
     isBuyNftsWithFiatEnabled,
