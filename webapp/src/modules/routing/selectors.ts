@@ -390,8 +390,9 @@ export const hasFiltersEnabled = createSelector<
   if (isLand) {
     const hasOnSaleFilter = onlyOnSale === true
     const hasOnRentFilter = onlyOnRent === true
-    return ( hasOnSaleFilter && !hasOnRentFilter
-      || hasOnRentFilter && !hasOnSaleFilter
+    return (
+      (hasOnSaleFilter && !hasOnRentFilter)
+      || (hasOnRentFilter && !hasOnSaleFilter)
       || !!minPrice
       || !!maxPrice
     )
