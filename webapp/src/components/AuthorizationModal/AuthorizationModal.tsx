@@ -42,7 +42,6 @@ const AuthorizationModal = (props: Props) => {
     address: authorization.contractAddress
   })
 
-  // const hasFetchedAuthorizations = useRef(false)
   const hasFetchedContractName = useRef(false)
 
   // Fetch authorizations only once when this component is rendered.
