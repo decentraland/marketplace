@@ -95,6 +95,14 @@ export const getOnRentNFTs = createSelector<
     .filter(([, rental]) => rental.lessor === address)
 )
 
+export const getOnRentNFTsByLessor = (state: RootState, address: string) => {
+  return getOnRentNFTs(state).filter(([, rental]) => rental.lessor === address)
+}
+
+export const getOnRentNFTsByTenant = (state: RootState, address: string) => {
+  return getOnRentNFTs(state).filter(([, rental]) => rental.tenant === address)
+}
+
 export const getOnSaleElements = createSelector<
   RootState,
   ReturnType<typeof getOnSaleItems>,

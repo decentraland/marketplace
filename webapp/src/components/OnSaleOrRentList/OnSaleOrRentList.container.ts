@@ -18,15 +18,19 @@ import {
   getOnSaleElements
 } from '../../modules/ui/browse/selectors'
 import { OnSaleNFT } from '../../modules/ui/browse/types'
+import { getWallet } from '../../modules/wallet/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const isLoading =
     isLoadingType(getItemsLoading(state), FETCH_ITEMS_REQUEST) ||
     isLoadingType(getNFTsLoading(state), FETCH_NFTS_REQUEST)
+  const address = getWallet(state)?.address
 
   const showRents = ownProps.onSaleOrRentType === OnSaleOrRentType.RENT
 
-  const selector = showRents ? getOnRentNFTs : getOnSaleElements
+  const selector = showRents
+    ? () => getOnRentNFTs(state, address)
+    : getOnSaleElements
 
   return {
     elements: isLoading

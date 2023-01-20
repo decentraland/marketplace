@@ -9,13 +9,15 @@ import { Contract } from '../../modules/vendor/services'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './Atlas.types'
 import Atlas from './Atlas'
 
-const mapState = (state: RootState): MapStateProps => ({
-  tiles: getTiles(state),
-  nfts: getWalletNFTs(state),
-  nftsOnRent: getOnRentNFTs(state),
-  tilesByEstateId: getTilesByEstateId(state),
-  getContract: (query: Partial<Contract>) => getContract(state, query)
-})
+const mapState = (state: RootState): MapStateProps => {
+  return {
+    tiles: getTiles(state),
+    nfts: getWalletNFTs(state),
+    nftsOnRent: getOnRentNFTs(state),
+    tilesByEstateId: getTilesByEstateId(state),
+    getContract: (query: Partial<Contract>) => getContract(state, query)
+  }
+}
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path))
