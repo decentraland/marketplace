@@ -8,6 +8,7 @@ import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/au
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { getLoading } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
+
 import { RootState } from '../../modules/reducer'
 import { getContract } from '../../modules/contract/selectors'
 import { Contract } from '../../modules/vendor/services'
