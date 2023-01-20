@@ -1,0 +1,91 @@
+.Status .Row {
+  display: flex;
+  flex-direction: column;
+  padding-top: 110px;
+  align-items: center;
+}
+
+.Status .Row .center {
+  flex: 0.5 1 auto;
+  align-items: center;
+  text-align: center;
+  max-width: 392px;
+}
+
+.Status .asset-image-wrapper {
+  width: 240px;
+  display: inline-block;
+}
+
+.Status .asset-image-wrapper .AssetImage .rarity-background {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.Status .asset-image-wrapper .AssetImage::before {
+  content: url(../../../images/buy-nfts-status-page-stars-top.svg);
+  position: absolute;
+  z-index: 1;
+  top: -7%;
+  left: -7%;
+}
+
+.Status .asset-image-wrapper .AssetImage::after {
+  content: url(../../../images/buy-nfts-status-page-stars-bottom.svg);
+  position: absolute;
+  z-index: 1;
+  bottom: -8%;
+  right: -4%;
+}
+
+.Status .ui.header.title {
+  margin: 40px 0 16px;
+}
+
+.Status .status-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 8px;
+  margin-bottom: 16px;
+}
+
+.Status .status-wrapper .status {
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 26px;
+  color: var(--secondary-text);
+}
+
+.Status .description {
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 24px;
+}
+
+.Status .ui.button.cta {
+  margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+  .Status > .Row {
+    flex-direction: column;
+  }
+
+  .Status > .Row .center,
+  .Status > .Row .asset-image-wrapper,
+  .Status > .Row .ui.button {
+    width: 100%;
+  }
+
+  .Status > .Row .buttons {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .Status > .Row .asset-image-wrapper,
+  .Status > .Row .ui.button + .ui.button {
+    margin-left: 0px;
+    margin-bottom: 24px;
+  }
+}
