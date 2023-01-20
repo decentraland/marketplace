@@ -9,15 +9,17 @@ export function getCountText(
   if (count === undefined) {
     return ''
   } else if (search) {
-    return t(
-      count < MAX_QUERY_SIZE
-        ? 'nft_filters.query_results'
-        : 'nft_filters.query_more_than_results',
-      {
-        count: count.toLocaleString(),
-        search
-      }
-    )
+    return count > 0
+      ? t(
+          count < MAX_QUERY_SIZE
+            ? 'nft_filters.query_results'
+            : 'nft_filters.query_more_than_results',
+          {
+            count: count.toLocaleString(),
+            search
+          }
+        )
+      : t('nft_filters.no_items')
   }
   return t(
     count < MAX_QUERY_SIZE

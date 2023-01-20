@@ -25,6 +25,7 @@ export type Props = {
   onBrowse: typeof browse
   onClearFilters: typeof clearFilters
   urlNext: string
+  search: string
 }
 
 export type MapStateProps = Pick<
@@ -38,6 +39,7 @@ export type MapStateProps = Pick<
   | 'isLoading'
   | 'assetType'
   | 'urlNext'
+  | 'search'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>
 export type MapDispatch = Dispatch<BrowseAction | ClearFiltersAction>

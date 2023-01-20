@@ -311,9 +311,11 @@
   },
   "nft_list": {
     "empty": "No pudimos encontrar ningún resultado en la sección {currentSection}. <br></br><searchStore>Busca en {section}</searchStore> o <clearFilters>limpia los filtros</clearFilters>",
-    "simple_empty": "No pudimos encontrar ningún resultado. <br></br><clearFilters>Limpia los filtros</clearFilters>"
+    "simple_empty": "No pudimos encontrar ningún resultado. <br></br><clearFilters>Limpia los filtros</clearFilters>",
+    "empty_search": "No hay resultados para \"{search}\" en {currentSection}. <br></br><searchStore> Intenta buscando en {section}</searchStore>"
   },
   "nft_filters": {
+    "no_items": "Sin items",
     "on_sale": "En venta",
     "filter": "Filtrar",
     "order_by": "Ordenar por",

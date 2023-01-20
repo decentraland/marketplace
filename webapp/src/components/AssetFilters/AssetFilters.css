@@ -11,6 +11,7 @@
   padding: 21px 24px;
   background: #242129;
   max-width: var(--menu-item-width);
+  border: none;
 }
 
 .filters-sidebar

@@ -11,12 +11,14 @@ type CollectionFilterProps = {
   collection: string | undefined
   onlyOnSale: boolean | undefined
   onChange: (collection?: string) => void
+  defaultCollapsed?: boolean
 }
 
 export const CollectionFilter = ({
   collection,
   onlyOnSale,
-  onChange
+  onChange,
+  defaultCollapsed = false
 }: CollectionFilterProps): JSX.Element => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const [savedCollectionInfo, setSavedCollectionInfo] = useState<{
@@ -129,7 +131,7 @@ export const CollectionFilter = ({
       header={header}
       collapsible
       className="filters-sidebar-box"
-      defaultCollapsed={isMobileOrTablet}
+      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <SelectFilter
         name=""

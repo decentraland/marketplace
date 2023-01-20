@@ -1,5 +1,10 @@
 import { useCallback, useMemo } from 'react'
-import { Box, CheckboxProps, Checkbox, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import {
+  Box,
+  CheckboxProps,
+  Checkbox,
+  useTabletAndBelowMediaQuery
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTCategory } from '@dcl/schemas'
 import './MoreFilters.css'
@@ -10,6 +15,7 @@ export type MoreFiltersProps = {
   category?: NFTCategory
   onOnlySmartChange: (value: boolean) => void
   onSaleChange: (value: boolean) => void
+  defaultCollapsed?: boolean
 }
 
 export const MoreFilters = ({
@@ -17,7 +23,8 @@ export const MoreFilters = ({
   isOnSale,
   category,
   onOnlySmartChange,
-  onSaleChange
+  onSaleChange,
+  defaultCollapsed = false
 }: MoreFiltersProps) => {
   const isWearableCategory = category === NFTCategory.WEARABLE
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
@@ -67,13 +74,13 @@ export const MoreFilters = ({
       header={header}
       className="filters-sidebar-box"
       collapsible
-      defaultCollapsed={isMobileOrTablet}
+      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <div className="more-filters-section">
         <Checkbox
           label="On sale"
           toggle
-          checked={isOnSale}
+          checked={isOnSale} 
           onChange={handleOnSaleChange}
         />
         {isWearableCategory && (

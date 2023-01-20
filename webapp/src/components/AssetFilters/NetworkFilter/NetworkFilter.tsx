@@ -7,9 +7,14 @@ import './NetworkFilter.css'
 export type NetworkFilterProps = {
   network?: Network
   onChange: (value: Network) => void
+  defaultCollapsed?: boolean
 }
 
-export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
+export const NetworkFilter = ({
+  network,
+  onChange,
+  defaultCollapsed = false
+}: NetworkFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const networkOptions = useMemo(() => {
     const options = Object.values(Network).filter(
@@ -55,7 +60,7 @@ export const NetworkFilter = ({ network, onChange }: NetworkFilterProps) => {
       header={header}
       className="filters-sidebar-box network-filter"
       collapsible
-      defaultCollapsed={isMobileOrTablet}
+      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <div className="network-options filters-radio-group">
         {networkOptions.map(option => (

@@ -13,11 +13,13 @@ import {
 export type BodyShapeFilterProps = {
   bodyShapes?: (GenderFilterOption | WearableGender)[]
   onChange: (value: (GenderFilterOption | WearableGender)[]) => void
+  defaultCollapsed?: boolean
 }
 
 export const BodyShapeFilter = ({
   bodyShapes,
-  onChange
+  onChange,
+  defaultCollapsed = false
 }: BodyShapeFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const genderOptions = useMemo(() => {
@@ -77,7 +79,7 @@ export const BodyShapeFilter = ({
       header={header}
       className="filters-sidebar-box body-shape-filter"
       collapsible
-      defaultCollapsed={isMobileOrTablet}
+      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <div className="body-shape-options filters-radio-group">
         {genderOptions.map(option => {

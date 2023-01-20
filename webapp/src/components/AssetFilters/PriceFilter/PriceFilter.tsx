@@ -10,13 +10,15 @@ export type PriceFilterProps = {
   maxPrice: string
   network?: Network
   onChange: (value: [string, string]) => void
+  defaultCollapsed?: boolean
 }
 
 export const PriceFilter = ({
   onChange,
   minPrice,
   maxPrice,
-  network = Network.ETHEREUM
+  network = Network.ETHEREUM,
+  defaultCollapsed = false
 }: PriceFilterProps) => {
   const [value, setValue] = useState<[string, string]>([minPrice, maxPrice])
   const timeout = useRef<NodeJS.Timeout | null>(null)
@@ -67,7 +69,7 @@ export const PriceFilter = ({
       header={header}
       className="filters-sidebar-box price-filter"
       collapsible
-      defaultCollapsed={isMobileOrTablet}
+      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <RangeField
         minProps={{
