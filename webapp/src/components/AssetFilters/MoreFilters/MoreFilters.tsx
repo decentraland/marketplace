@@ -3,7 +3,7 @@ import {
   Box,
   CheckboxProps,
   Checkbox,
-  useMobileMediaQuery
+  useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTCategory } from '@dcl/schemas'
@@ -27,7 +27,7 @@ export const MoreFilters = ({
   defaultCollapsed = false
 }: MoreFiltersProps) => {
   const isWearableCategory = category === NFTCategory.WEARABLE
-  const isMobile = useMobileMediaQuery()
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const handleOnlySmartChange = useCallback(
     (_, props: CheckboxProps) => {
@@ -56,7 +56,7 @@ export const MoreFilters = ({
 
   const header = useMemo(
     () =>
-      isMobile ? (
+      isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">
             {t('nft_filters.more_filters')}
@@ -66,7 +66,7 @@ export const MoreFilters = ({
       ) : (
         t('nft_filters.more_filters')
       ),
-    [filterText, isMobile]
+    [filterText, isMobileOrTablet]
   )
 
   return (
@@ -74,7 +74,7 @@ export const MoreFilters = ({
       header={header}
       className="filters-sidebar-box"
       collapsible
-      defaultCollapsed={defaultCollapsed || isMobile}
+      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <div className="more-filters-section">
         <Checkbox

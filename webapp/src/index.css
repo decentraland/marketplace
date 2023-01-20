@@ -4,6 +4,7 @@
   --gray: rgba(115, 110, 125, 0.4);
   --superGray: #37333d;
   --superGrayHovered: #3d3a45;
+  --sidebar-width: 320px;
 }
 
 body {
@@ -29,9 +30,36 @@ code {
   background: var(--summer-red);
 }
 
+/** full-width */
+.AssetBrowse .ui.container,
+.Navigation .ui.container,
+.dcl.navbar.fullscreen .ui.container {
+  width: 100vw;
+  box-sizing: border-box;
+  max-width: 100% !important;
+}
+
+.Navigation,
+.dcl.navbar.fullscreen,
+.dcl.page {
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+.ui.container {
+  width: 100%;
+  max-width: 1360px !important;
+}
+
 @media (max-width: 767px) {
-  .dcl.navbar.overlay .ui.container {
-    width: calc(100% - 32px) !important;
+  .Navigation,
+  .dcl.navbar.fullscreen,
+  .dcl.page {
+    padding: 0;
+  }
+
+  .dcl.navbar.fullscreen .ui.container {
+    width: 100% !important;
   }
 
   .ui.modal .actions {

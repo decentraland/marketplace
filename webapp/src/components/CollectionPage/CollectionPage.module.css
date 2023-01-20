@@ -24,6 +24,10 @@
   overflow: hidden;
 }
 
+.headerContainer {
+  width: 100%;
+}
+
 .title {
   font-weight: 600;
 }

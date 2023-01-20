@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { Box, CheckboxProps, Radio, useMobileMediaQuery } from 'decentraland-ui'
+import { Box, CheckboxProps, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import './LandStatusFilter.css'
@@ -16,7 +16,7 @@ export const LandStatusFilter = ({
   onChange,
   defaultCollapsed = false
 }: LandStatusFilterProps): JSX.Element => {
-  const isMobile = useMobileMediaQuery()
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const landStatusFilterOptions = [
     {
       name: t('nft_land_filters.all_land'),
@@ -41,7 +41,7 @@ export const LandStatusFilter = ({
 
   const header = useMemo(
     () =>
-      isMobile ? (
+      isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">{t('filters.status')}</span>
           <span className="box-filter-value">
@@ -51,7 +51,7 @@ export const LandStatusFilter = ({
       ) : (
         t('filters.status')
       ),
-    [isMobile, landStatus]
+    [isMobileOrTablet, landStatus]
   )
 
   return (
@@ -59,7 +59,7 @@ export const LandStatusFilter = ({
       header={header}
       className="filters-sidebar-box land-status-filter"
       collapsible
-      defaultCollapsed={defaultCollapsed || isMobile}
+      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <div className="filters-radio-group land-status-options">
         {landStatusFilterOptions.map(option => {

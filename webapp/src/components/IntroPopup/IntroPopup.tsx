@@ -22,7 +22,7 @@ export default class IntroPopup extends PureComponent<Props, State> {
       <>
         {open ? <div className="IntroPopupOverlay" /> : null}
         <Popup
-          position="top center"
+          position="top left"
           open={open}
           className="IntroPopup"
           content={

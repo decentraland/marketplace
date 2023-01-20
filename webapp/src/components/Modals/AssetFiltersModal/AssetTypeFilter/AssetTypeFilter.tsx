@@ -1,5 +1,5 @@
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Box, useMobileMediaQuery } from 'decentraland-ui'
+import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { useCallback, useMemo } from 'react'
 import { AssetType } from '../../../../modules/asset/types'
 import { SelectFilter } from '../../../Vendor/NFTFilters/SelectFilter'
@@ -11,7 +11,7 @@ type Props = {
 }
 
 export const AssetTypeFilter = ({ assetType, onChange }: Props): JSX.Element => {
-  const isMobile = useMobileMediaQuery()
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const assetTypeOptions = useMemo(() => {
     return [
       {
@@ -31,7 +31,7 @@ export const AssetTypeFilter = ({ assetType, onChange }: Props): JSX.Element => 
 
   const header = useMemo(
     () =>
-      isMobile ? (
+      isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">{t('filters.type')}</span>
           <span className="box-filter-value">{t(`filters.${assetType}`)}</span>
@@ -39,7 +39,7 @@ export const AssetTypeFilter = ({ assetType, onChange }: Props): JSX.Element => 
       ) : (
         t('filters.type')
       ),
-    [isMobile, assetType]
+    [isMobileOrTablet, assetType]
   )
 
   return (

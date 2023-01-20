@@ -108,7 +108,7 @@ const StoreSettings = ({
   return (
     <div className="StoreSettings">
       <Prompt when={canSubmit} message={getPromptMessage} />
-      <Row className="top">
+      <Row className="top store-settings-header">
         <Column>
           <Header>{t('store_settings.settings')}</Header>
         </Column>

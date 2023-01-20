@@ -64,7 +64,7 @@
   color: white;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 990px) {
   .filters-sidebar {
     row-gap: 0;
     margin-top: 0;

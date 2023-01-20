@@ -3,7 +3,6 @@ import { Item, NFTCategory, Rarity } from '@dcl/schemas'
 import {
   Back,
   Column,
-  Narrow,
   Page,
   Row,
   Section,
@@ -96,7 +95,7 @@ const CollectionPage = (props: Props) => {
                   <Section>
                     <Column>
                       <Back absolute onClick={onBack} />
-                      <Narrow>
+                      <div className={styles.headerContainer}>
                         <Row stacked>
                           <Column>
                             <Row>
@@ -141,11 +140,11 @@ const CollectionPage = (props: Props) => {
                             </Column>
                           )}
                         </Row>
-                      </Narrow>
+                      </div>
                     </Column>
                   </Section>
                   <Section>
-                    <Narrow>
+                    <div>
                       {showShowTabs ? (
                         <Tabs isFullscreen>
                           <div className={styles.tabs}>
@@ -256,7 +255,7 @@ const CollectionPage = (props: Props) => {
                           </NotMobile>
                         </Table.Body>
                       </Table>
-                    </Narrow>
+                    </div>
                   </Section>
                 </>
               )

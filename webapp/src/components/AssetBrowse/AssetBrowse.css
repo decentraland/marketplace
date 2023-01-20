@@ -9,11 +9,19 @@
 
 .AssetBrowse .ui.cards {
   position: relative;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
 
 .AssetBrowse .ui.cards {
   min-height: 150px;
-  margin-right: 0;
+  margin: 0;
+}
+
+.AssetBrowse .ui.cards .ui.card.AssetCard {
+  width: 100%;
+  margin: 0;
 }
 
 .AssetBrowse .ui.cards + .empty {
@@ -96,7 +104,7 @@
 
 .AssetBrowse .sidebar {
   margin-right: 20px;
-  width: 248px;
+  width: var(--sidebar-width);
 }
 
 .AssetBrowse.fullscreen .NFTFilters {
@@ -135,7 +143,7 @@
   margin-right: 24px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 990px) {
   .AssetBrowse .ui.cards,
   .AssetBrowse .ui.cards > .ui.card {
     margin-left: 0;

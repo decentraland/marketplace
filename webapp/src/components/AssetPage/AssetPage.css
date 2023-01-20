@@ -5,3 +5,7 @@
 .AssetPage .back {
   top: 5px;
 }
+
+.AssetPage .asset-container {
+  width: 100%;
+}

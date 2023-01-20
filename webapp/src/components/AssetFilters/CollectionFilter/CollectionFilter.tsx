@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Box, useMobileMediaQuery } from 'decentraland-ui'
+import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { SelectFilter } from '../../Vendor/NFTFilters/SelectFilter'
 import { collectionAPI } from '../../../modules/vendor/decentraland'
 import './CollectionFilter.css'
@@ -20,7 +20,7 @@ export const CollectionFilter = ({
   onChange,
   defaultCollapsed = false
 }: CollectionFilterProps): JSX.Element => {
-  const isMobile = useMobileMediaQuery()
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const [savedCollectionInfo, setSavedCollectionInfo] = useState<{
     text: string
     value: string
@@ -109,7 +109,7 @@ export const CollectionFilter = ({
 
   const header = useMemo(
     () =>
-      isMobile ? (
+      isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">
             {t('nft_filters.collection.title')}
@@ -123,7 +123,7 @@ export const CollectionFilter = ({
       ) : (
         t('nft_filters.collection.title')
       ),
-    [isMobile, savedCollectionInfo?.text]
+    [isMobileOrTablet, savedCollectionInfo?.text]
   )
 
   return (
@@ -131,7 +131,7 @@ export const CollectionFilter = ({
       header={header}
       collapsible
       className="filters-sidebar-box"
-      defaultCollapsed={defaultCollapsed || isMobile}
+      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <SelectFilter
         name=""
