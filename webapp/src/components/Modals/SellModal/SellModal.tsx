@@ -1,6 +1,13 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Field, Mana, Message, ModalNavigation } from 'decentraland-ui'
+import {
+  Button,
+  Field,
+  Loader,
+  Mana,
+  Message,
+  ModalNavigation
+} from 'decentraland-ui'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
 import addDays from 'date-fns/addDays'
@@ -24,11 +31,10 @@ import {
 } from '../../../modules/order/utils'
 import { ManaField } from '../../ManaField'
 import { parseMANANumber } from '../../../lib/mana'
+import { locations } from '../../../modules/routing/locations'
+import { useAuthorization } from '../../../lib/authorization'
 import { showPriceBelowMarketValueWarning } from '../../SellPage/SellModal/utils'
 import { Authorization } from '../../SettingsPage/Authorization'
-import { locations } from '../../../modules/routing/locations'
-import { isAuthorized } from '../../SettingsPage/Authorization/utils'
-
 import { Props } from './SellModal.types'
 import styles from './SellModal.module.css'
 
@@ -47,7 +53,8 @@ const SellModal = ({
   isCreatingOrder,
   authorizations,
   isAuthorizing,
-  error
+  error,
+  onFetchAuthorizations
 }: Props) => {
   const { orderService } = VendorFactory.build(nft.vendor)
 
@@ -71,10 +78,6 @@ const SellModal = ({
   const isDisabledConfirm =
     parsedValueToConfirm !== confirmedInput || isCreatingOrder
 
-  if (!wallet) {
-    return null
-  }
-
   const contractNames = getContractNames()
 
   const marketplace = getContract({
@@ -82,13 +85,9 @@ const SellModal = ({
     network: nft.network
   })
 
-  if (!marketplace) {
-    return null
-  }
-
   const authorization: Authorizations = {
-    address: wallet.address,
-    authorizedAddress: marketplace.address,
+    address: wallet?.address || '',
+    authorizedAddress: marketplace!.address,
     contractAddress: nft.contractAddress,
     contractName:
       (nft.category === NFTCategory.WEARABLE ||
@@ -98,6 +97,15 @@ const SellModal = ({
         : ContractName.ERC721,
     chainId: nft.chainId,
     type: AuthorizationType.APPROVAL
+  }
+
+  const [isLoadingAuthorizations, isAuthorized] = useAuthorization(
+    authorization,
+    onFetchAuthorizations
+  )
+
+  if (!wallet) {
+    return null
   }
 
   const contract = getContract({
@@ -211,7 +219,11 @@ const SellModal = ({
         />
       ),
       description: null,
-      content: (
+      content: isLoadingAuthorizations ? (
+        <div className={styles.loaderContainer}>
+          <Loader active size="large" />
+        </div>
+      ) : (
         <div className={styles.fieldsContainer}>
           <span>
             <T
@@ -331,11 +343,7 @@ const SellModal = ({
             className={styles.AuthorizationModalButtons}
             primary
             loading={isCreatingOrder || isAuthorizing}
-            disabled={
-              isCreatingOrder ||
-              isAuthorizing ||
-              !isAuthorized(authorization, authorizations)
-            }
+            disabled={isCreatingOrder || isAuthorizing || !isAuthorized}
             onClick={handleCreateOrder}
           >
             {t('global.proceed')}
