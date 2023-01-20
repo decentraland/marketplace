@@ -16,7 +16,6 @@ import { useAuthorization } from '../../lib/authorization'
 import ERC721ABI from '../../contracts/ERC721.json'
 import { Authorization } from '../SettingsPage/Authorization'
 import { Props } from './AuthorizationModal.types'
-
 import './AuthorizationModal.css'
 
 const AuthorizationModal = (props: Props) => {
