@@ -68,7 +68,8 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
     'maxPrice',
     'onlySmart',
     'search',
-    'onlyOnRent'
+    'onlyOnRent',
+    'onlyOnSale'
   ]
 
   const clearedBrowseOptions = fillWithUndefined ? reset(browseOptions, keys) : omit(browseOptions, keys)

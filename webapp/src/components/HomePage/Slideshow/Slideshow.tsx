@@ -121,7 +121,7 @@ const Slideshow = (props: Props) => {
     <div className="Slideshow" ref={slideRef} {...showArrowsHandlers}>
       <HeaderMenu>
         <HeaderMenu.Left>
-          <div>
+          <div className="slideshow-header">
             <Header sub={isSubHeader}>{title}</Header>
             <Header sub>{subtitle}</Header>
             {hasItemsSection ? (

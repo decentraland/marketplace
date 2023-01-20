@@ -36,4 +36,18 @@
   :global(.ui.medium.image).rentalImage {
     height: 300px;
   }
+
+  .launchModal:global(.ui.modal) .modalContent {
+    grid-template-columns: 1fr;
+    padding: 25px !important;
+  }
+
+  .launchModal:global(.ui.modal) .modalActions {
+    padding: 25px !important;
+  }
+
+  .launchModal:global(.ui.modal) > .modalActions :global(.ui.button),
+  .launchModal:global(.ui.modal) > .modalActions :global(.ui.button) + :global(.ui.button) {
+    width: 100%;
+  }
 }

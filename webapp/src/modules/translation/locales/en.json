@@ -356,7 +356,8 @@
     },
     "collection": {
       "title": "Collection",
-      "all_items": "All collections"
+      "all_items": "All collections",
+      "search": "Search collections"
     },
     "network": {
       "title": "Network",

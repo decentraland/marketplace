@@ -19,6 +19,10 @@
   display: none;
 }
 
+.Slideshow .slideshow-header {
+  flex: 1;
+}
+
 .Slideshow .assets .AssetCard,
 .Slideshow .assets .ui.card.AssetCard:first-child {
   flex: 0 0 auto;
