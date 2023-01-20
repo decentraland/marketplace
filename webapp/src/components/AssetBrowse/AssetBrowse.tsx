@@ -1,9 +1,4 @@
-import React, {
-  ReactNode,
-  useCallback,
-  useEffect,
-  useState
-} from 'react'
+import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'

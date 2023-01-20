@@ -8,11 +8,13 @@ import { getLandLabel } from '../../../utils/filters'
 type LandStatusFilterProps = {
   landStatus: LANDFilters
   onChange: (value: LANDFilters) => void
+  defaultCollapsed?: boolean
 }
 
 export const LandStatusFilter = ({
   landStatus,
-  onChange
+  onChange,
+  defaultCollapsed = false
 }: LandStatusFilterProps): JSX.Element => {
   const isMobile = useMobileMediaQuery()
   const landStatusFilterOptions = [
@@ -42,7 +44,9 @@ export const LandStatusFilter = ({
       isMobile ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">{t('filters.status')}</span>
-          <span className="box-filter-value">{getLandLabel({ landStatus })}</span>
+          <span className="box-filter-value">
+            {getLandLabel({ landStatus })}
+          </span>
         </div>
       ) : (
         t('filters.status')
@@ -55,7 +59,7 @@ export const LandStatusFilter = ({
       header={header}
       className="filters-sidebar-box land-status-filter"
       collapsible
-      defaultCollapsed={isMobile}
+      defaultCollapsed={defaultCollapsed || isMobile}
     >
       <div className="filters-radio-group land-status-options">
         {landStatusFilterOptions.map(option => {

@@ -7,11 +7,13 @@ import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
 export type RarityFilterProps = {
   rarities: string[]
   onChange: (value: Rarity[]) => void
+  defaultCollapsed?: boolean
 }
 
 export const RarityFilter = ({
   onChange,
-  rarities = []
+  rarities = [],
+  defaultCollapsed = false
 }: RarityFilterProps) => {
   const isMobile = useMobileMediaQuery()
   const rarityOptions = useMemo(() => {
@@ -60,7 +62,7 @@ export const RarityFilter = ({
       header={header}
       className="filters-sidebar-box"
       collapsible
-      defaultCollapsed={isMobile}
+      defaultCollapsed={defaultCollapsed || isMobile}
     >
       <ArrayFilter
         name=""
