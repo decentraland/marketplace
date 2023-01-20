@@ -312,9 +312,11 @@
   },
   "nft_list": {
     "empty": "我们在 {currentSection} 中找不到任何结果。 <br></br><searchStore>搜索 {section}</searchStore>或<clearFilters>清除过滤器</clearFilters>”",
-    "simple_empty": "我们找不到任何结果。 <br></br><clearFilters>清除过滤器</clearFilters>"
+    "simple_empty": "我们找不到任何结果。 <br></br><clearFilters>清除过滤器</clearFilters>",
+    "empty_search": "{currentSection} 中没有“{search}”的结果。 <br></br><searchStore>尝试搜索{section}</searchStore>"
   },
   "nft_filters": {
+    "no_items": "没有相关产品",
     "on_sale": "特价中",
     "filter": "筛选",
     "order_by": "排序",
