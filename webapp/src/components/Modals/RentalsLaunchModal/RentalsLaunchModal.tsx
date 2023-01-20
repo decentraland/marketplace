@@ -4,8 +4,8 @@ import {
   Modal,
   // Image,
   Button,
-  ModalNavigation,
-  useMobileMediaQuery
+  useMobileMediaQuery,
+  Close,
 } from 'decentraland-ui'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
@@ -51,7 +51,7 @@ export const RentalsLaunchModal = ({
   const isMobile = useMobileMediaQuery()
   const modalActions = useMemo(
     () => (
-      <Modal.Actions>
+      <Modal.Actions className={styles.modalActions}>
         <Button
           as={Link}
           to={locations.currentAccount({
@@ -91,16 +91,14 @@ export const RentalsLaunchModal = ({
       size={'small'}
       dimmer={{ className: styles.dimmerRemover }}
       onClose={onClose}
+      closeIcon={<Close />}
     >
-      <ModalNavigation
-        title={t('rentals_promotional_modal.title')}
-        onClose={onClose}
-      />
-      <Modal.Content image>
+      <Modal.Content className={styles.modalContent}>
         <div
           className={classNames(styles.rentalImage, 'ui medium image')}
         ></div>
-        <Modal.Description>
+        <Modal.Description className={styles.modalDescription}>
+          <h2 className={styles.modalTitle}>{t('rentals_promotional_modal.title')}</h2>
           {t('rentals_promotional_modal.description', {
             p: (children: React.ReactElement) => <p>{children}</p>,
             a: (children: React.ReactElement) => (
