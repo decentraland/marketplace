@@ -70,7 +70,7 @@
 }
 
 .price-filter .price-input-container {
-  max-width: 200px;
+  max-width: 100%;
 }
 
 .price-filter .recharts-responsive-container {
