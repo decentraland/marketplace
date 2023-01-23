@@ -54,6 +54,8 @@
     "@typescript-eslint/eslint-plugin": "^4.13.0",
     "@typescript-eslint/parser": "^4.13.0",
     "dcl-tslint-config-standard": "^2.0.0",
+    "eslint-import-resolver-typescript": "^3.5.3",
+    "eslint-plugin-import": "^2.27.5",
     "prettier": "^1.19.1",
     "react-error-overlay": "^6.0.9",
     "redux-saga-test-plan": "^4.0.3",
@@ -74,7 +76,62 @@
     "generate-contracts": "typechain --target ethers-v5 --out-dir src/contracts src/contracts/*.json"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "eslint:recommended",
+      "plugin:import/recommended",
+      "plugin:import/typescript"
+    ],
+    "settings": {
+      "import/resolver": {
+        "typescript": true,
+        "node": true
+      }
+    },
+    "rules": {
+      "import/order": [
+        "error",
+        {
+          "groups": [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+            "object",
+            "type"
+          ],
+          "pathGroups": [
+            {
+              "pattern": "@dcl/**",
+              "group": "internal",
+              "position": "before"
+            },
+            {
+              "pattern": "decentraland-*",
+              "group": "internal",
+              "position": "before"
+            },
+            {
+              "pattern": "decentraland-*/**",
+              "group": "internal",
+              "position": "before"
+            }
+          ],
+          "pathGroupsExcludedImportTypes": [
+            "internal"
+          ],
+          "distinctGroup": false,
+          "newlines-between": "always",
+          "alphabetize": {
+            "order": "asc",
+            "caseInsensitive": true
+          },
+          "warnOnUnassignedImports": true
+        }
+      ]
+    }
   },
   "prettier": {
     "printWidth": 80,
