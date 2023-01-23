@@ -30,7 +30,8 @@ const Atlas: React.FC<Props> = (props: Props) => {
     showOnSale,
     showForRent,
     tilesByEstateId,
-    getContract
+    getContract,
+    children
   } = props
 
   const [showPopup, setShowPopup] = useState(false)
@@ -309,6 +310,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
           position={x > window.innerWidth - 280 ? 'left' : 'right'}
         />
       ) : null}
+      {children}
     </div>
   )
 }
