@@ -63,7 +63,6 @@ export const PriceChart = ({
   useEffect(() => {
     if (prices) {
       try {
-        // const pricesOnRange = removePricesOutOfRange(prices, upperBound)
         const formattedPrices = Object.keys(prices).map(price => Number(price))
         const maxValueFromDataset = Math.max(...formattedPrices)
         const maxValue = upperBound
