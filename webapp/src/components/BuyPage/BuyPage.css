@@ -13,3 +13,24 @@
 .BuyPage .buttons.with-mana .ui.button {
   min-width: 180px;
 }
+
+.BuyPage .card-payments-explanation {
+  margin-top: 24px;
+  max-width: 480px;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 24px;
+}
+
+.BuyPage .card-payments-explanation .explanation {
+  color: var(--secondary-text);
+}
+
+.BuyPage .card-payments-explanation .regions {
+  text-decoration: underline;
+}
+
+.BuyPage .card-payments-explanation a {
+  color: #a6a0b0;
+  text-decoration: underline;
+}

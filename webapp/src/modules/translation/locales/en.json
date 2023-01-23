@@ -18,6 +18,8 @@
     "art": "Art",
     "cancel": "Cancel",
     "proceed": "Proceed",
+    "continue": "Continue",
+    "go_back": "Go back",
     "nft": "NFT",
     "loading": "Loading",
     "settings": "Settings",
@@ -164,11 +166,11 @@
         "total_sales": "Total sales",
         "total_sales_tooltip": "Number of NFTs sold, including primary and secondary markets.",
         "total_volume": "Total volume",
-        "total_volume_tooltip": "Volume of sales in MANA, including primary and secondary markets.",
+        "total_volume_tooltip": "Volume of sales and rents in MANA, including primary and secondary sales.",
         "creators_earnings": "creators earnings",
         "creators_earnings_tooltip": "Creators earn 97.5% of primary sales and 2.5% of secondary sales as royalties.",
         "dao_revenue": "dao revenue",
-        "dao_revenue_tooltip": "The DAO gets 2.5% of Land and primary market sales, plus the wearables’ publication fee.",
+        "dao_revenue_tooltip": "The DAO gets 2.5% of LAND sales and rentals, Collectible mints, and the publication fee.",
         "seven_days": "7 DAYS",
         "thirty_days": "30 DAYS",
         "all": "all"
@@ -555,6 +557,17 @@
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
   },
+  "buy_with_card_page": {
+    "title": "Buying {name}",
+    "subtitle": "You are about to buy {name} for {amount}.",
+    "not_for_sale": "{name} is not for sale.",
+    "buy": "Buy with Card",
+    "no_fingerprint": "Could not load fingerprint.",
+    "is_owner": "You are the owner of {name}.",
+    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}.",
+    "regions_where_operates": "regions where Transak operates",
+    "explanation": "Card payments are processed by {link_to_transak} and are available for the {regions}. Both credit and debit cards are supported."
+  },
   "price_too_low": {
     "minimum_price": "The minimun amount supported for costless transactions is {price}",
     "get_item_in_network": "In order to get this item you'll need to switch your network to {network} and then cover the transaction cost with {token}.",
@@ -579,6 +592,33 @@
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
     "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}."
+  },
+  "mint_with_card_page": {
+    "title": "Buying {name}",
+    "subtitle": "You are about to buy {name} for {amount}.",
+    "not_for_sale": "{name} is not for sale.",
+    "action": "Buy with Card",
+    "no_fingerprint": "Could not load fingerprint.",
+    "is_owner": "You are the owner of {name}.",
+    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}.",
+    "regions_where_operates": "regions where Transak operates",
+    "explanation": "Card payments are processed by {link_to_transak} and are available for the {regions}. Both credit and debit cards are supported."
+  },
+  "buy_with_card_explanation_modal": {
+    "title": "Buy with card",
+    "explanation": "Card payments are processed by {link_to_transak}.\nTransak charges a fee for its service. You will see the final price before confirming the purchase.",
+    "learn_more": "Learn more about card payments"
+  },
+  "processing_page": {
+    "title": "Your item is on its way!",
+    "status": "Processing Transaction",
+    "description": "The transaction can take up to 3 minutes to be processed. You can also track its progress in {activity}.",
+    "cta": "Back to marketplace"
+  },
+  "success_page": {
+    "title": "All done!",
+    "description": "You can find your item in {my_assets}.",
+    "cta": "Explore more collectibles"
   },
   "bid_page": {
     "title": "Place a bid",

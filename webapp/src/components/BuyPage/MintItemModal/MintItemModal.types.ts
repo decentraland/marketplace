@@ -4,7 +4,9 @@ import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import {
   buyItemRequest,
-  BuyItemRequestAction
+  BuyItemRequestAction,
+  buyItemWithCard,
+  BuyItemWithCardAction
 } from '../../../modules/item/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
@@ -18,13 +20,19 @@ export type Props = {
   hasInsufficientMANA: boolean
   hasLowPrice: boolean
   isBuyNftsWithFiatEnabled: boolean
+  isBuyWithCardPage: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onBuyItem: typeof buyItemRequest
+  onBuyItemWithCard: typeof buyItemWithCard
 }
 
 export type MapStateProps = Pick<
   Props,
-  'authorizations' | 'isLoading' | 'isBuyNftsWithFiatEnabled' | 'getContract'
+  | 'authorizations'
+  | 'isLoading'
+  | 'isBuyNftsWithFiatEnabled'
+  | 'isBuyWithCardPage'
+  | 'getContract'
 >
-export type MapDispatchProps = Pick<Props, 'onBuyItem'>
-export type MapDispatch = Dispatch<BuyItemRequestAction>
+export type MapDispatchProps = Pick<Props, 'onBuyItem' | 'onBuyItemWithCard'>
+export type MapDispatch = Dispatch<BuyItemRequestAction | BuyItemWithCardAction>

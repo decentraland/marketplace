@@ -18,6 +18,8 @@
     "art": "Arte",
     "cancel": "Cancelar",
     "proceed": "Aceptar",
+    "continue": "Continuar",
+    "go_back": "Volver",
     "nft": "NFT",
     "loading": "Cargando",
     "settings": "Configuración",
@@ -160,11 +162,11 @@
         "total_sales": "Ventas totales",
         "total_sales_tooltip": "Número de NFT vendidos, incluidos los mercados primario y secundario.",
         "total_volume": "Volumen total",
-        "total_volume_tooltip": "Volumen de ventas en MANA, incluyendo mercados primarios y secundarios.",
+        "total_volume_tooltip": "Volumen de ventas y rentas en MANA, incluyendo mercados primarios y secundarios.",
         "creators_earnings": "Ganancias de creadores",
         "creators_earnings_tooltip": "Los creadores obtienen el 97,5 % de las ventas primarias y el 2,5 % de las ventas secundarias como regalías.",
         "dao_revenue": "Ganancias de la DAO",
-        "dao_revenue_tooltip": "La DAO obtiene el 2,5% de las ventas de Land y del mercado primario, más la tarifa de publicación de los wearables.",
+        "dao_revenue_tooltip": "La DAO obtiene el 2,5% de las ventas y alquileres de LAND, del minteo de Coleccionables, y su tarifa de publicación.",
         "seven_days": "7 días",
         "thirty_days": "30 días",
         "all": "Todo"
@@ -548,6 +550,17 @@
     "is_owner": "Ya eres el dueño de {name}.",
     "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
   },
+  "buy_with_card_page": {
+    "title": "Comprando {name}",
+    "subtitle": "Estás por comprar {name} por {amount}.",
+    "not_for_sale": "{name} no esta en venta.",
+    "buy": "Comprar con tarjeta",
+    "no_fingerprint": "No se pudo cargar la identificación del Estate.",
+    "is_owner": "Ya eres el dueño de {name}.",
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}.",
+    "regions_where_operates": "regiones donde opera Transak",
+    "explanation": "{link_to_transak} procesa los pagos con tarjeta y están disponibles para las {regions}. Se admiten tanto tarjetas de crédito como de débito."
+  },
   "price_too_low": {
     "minimum_price": "La cantidad mínima admitida para transacciones sin costo es {price}",
     "get_item_in_network": "Para obtener este item, deberá cambiar su red a {network} y luego cubrir el costo de la transacción con {token}.",
@@ -572,6 +585,33 @@
     "no_fingerprint": "No se pudo cargar la identificación del Estate.",
     "is_owner": "Ya eres el dueño de {name}.",
     "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
+  },
+  "mint_with_card_page": {
+    "title": "Comprando {name}",
+    "subtitle": "Estás por comprar {name} por {amount}.",
+    "not_for_sale": "{name} no esta en venta.",
+    "action": "Comprar con tarjeta",
+    "no_fingerprint": "No se pudo cargar la identificación del Estate.",
+    "is_owner": "Ya eres el dueño de {name}.",
+    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}.",
+    "regions_where_operates": "regiones donde opera Transak",
+    "explanation": "{link_to_transak} procesa los pagos con tarjeta y están disponibles para las {regions}. Se admiten tanto tarjetas de crédito como de débito."
+  },
+  "buy_with_card_explanation_modal": {
+    "title": "Comprar con tarjeta",
+    "explanation": "Los pagos con tarjeta son procesados por {link_to_transak}.\nTransak cobra una tarifa por su servicio. Verás el precio final antes de confirmar la compra.",
+    "learn_more": "Más información sobre los pagos con tarjeta"
+  },
+  "processing_page": {
+    "title": "¡Tu item está en camino!",
+    "status": "Procesando la Transacción",
+    "description": "La transacción puede tomar hasta 3 minutos en ser procesada. Puedes trackear el progreso en {activity}.",
+    "cta": "Volver al marketplace"
+  },
+  "success_page": {
+    "title": "¡Todo listo!",
+    "description": "Puedes encontrar el item en {my_assets}.",
+    "cta": "Explorar más items"
   },
   "bid_page": {
     "title": "Haz una oferta",
