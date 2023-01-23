@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Header, Button } from 'decentraland-ui'
+import compact from 'lodash/compact'
+import classNames from 'classnames'
+import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Authorization,
@@ -14,10 +16,14 @@ import { AuthorizationModal } from '../../AuthorizationModal'
 import { getContractNames } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
+import { isWearableOrEmote } from '../../../modules/asset/utils'
 import { AssetAction } from '../../AssetAction'
+import { Network as NetworkSubtitle } from '../../Network'
+import PriceSubtitle from '../../Price'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { PriceTooLow } from '../PriceTooLow'
+import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
 import { Props } from './MintItemModal.types'
 
 const MintItemModal = (props: Props) => {
@@ -29,13 +35,24 @@ const MintItemModal = (props: Props) => {
     isOwner,
     hasInsufficientMANA,
     hasLowPrice,
+    isBuyNftsWithFiatEnabled,
+    isBuyWithCardPage,
     getContract,
-    onBuyItem
+    onBuyItem,
+    onBuyItemWithCard
   } = props
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
-  const handleExecuteOrder = useCallback(() => onBuyItem(item), [
+  const handleExecuteOrder = useCallback(() => {
+    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
+      return onBuyItemWithCard(item)
+
+    onBuyItem(item)
+  }, [
+    isBuyNftsWithFiatEnabled,
+    isBuyWithCardPage,
+    onBuyItemWithCard,
     onBuyItem,
     item
   ])
@@ -70,12 +87,7 @@ const MintItemModal = (props: Props) => {
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [
-    authorizations,
-    authorization,
-    handleExecuteOrder,
-    setShowAuthorizationModal
-  ])
+  }, [authorization, authorizations, handleExecuteOrder])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal
@@ -85,11 +97,21 @@ const MintItemModal = (props: Props) => {
 
   const name = <Name asset={item} />
 
+  const translationPageDescriptorId = compact([
+    'mint',
+    isBuyNftsWithFiatEnabled && isWearableOrEmote(item)
+      ? isBuyWithCardPage
+        ? 'with_card'
+        : 'with_mana'
+      : null,
+    'page'
+  ]).join('_')
+
   let subtitle = null
   if (!item.isOnSale) {
     subtitle = (
       <T
-        id={'mint_page.not_for_sale'}
+        id={`${translationPageDescriptorId}.not_for_sale`}
         values={{
           name,
           secondary_market_link: (
@@ -100,18 +122,20 @@ const MintItemModal = (props: Props) => {
                 search: item.name
               })}
             >
-              {t('mint_page.secondary_market')}
+              {t(`${translationPageDescriptorId}.secondary_market`)}
             </Link>
           )
         }}
       />
     )
   } else if (isOwner) {
-    subtitle = <T id={'mint_page.is_owner'} values={{ name }} />
+    subtitle = (
+      <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
+    )
   } else if (hasInsufficientMANA) {
     subtitle = (
       <T
-        id={'mint_page.not_enough_mana'}
+        id={`${translationPageDescriptorId}.not_enough_mana`}
         values={{
           name,
           amount: <Price network={item.network} price={item.price} />
@@ -119,27 +143,41 @@ const MintItemModal = (props: Props) => {
       />
     )
   } else {
-    subtitle = (
-      <T
-        id={'mint_page.subtitle'}
-        values={{
-          name,
-          amount: <Price network={item.network} price={item.price} />
-        }}
-      />
-    )
+    subtitle =
+      isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
+        <>
+          <PriceSubtitle asset={item} />
+          <NetworkSubtitle asset={item} />
+        </>
+      ) : (
+        <T
+          id={`${translationPageDescriptorId}.subtitle`}
+          values={{
+            name,
+            amount: <Price network={item.network} price={item.price} />
+          }}
+        />
+      )
   }
 
   return (
     <AssetAction asset={item}>
       <Header size="large">
-        {t('mint_page.title', { category: t(`global.${item.category}`) })}
+        {t(`${translationPageDescriptorId}.title`, {
+          name,
+          category: t(`global.${item.category}`)
+        })}
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
       {hasLowPrice ? (
         <PriceTooLow chainId={item.chainId} network={item.network} />
       ) : null}
-      <div className="buttons">
+      <div
+        className={classNames(
+          'buttons',
+          isBuyNftsWithFiatEnabled && isWearableOrEmote(item) && 'with-mana'
+        )}
+      >
         <Button
           as={Link}
           to={locations.item(item.contractAddress, item.itemId)}
@@ -154,10 +192,24 @@ const MintItemModal = (props: Props) => {
             loading={isLoading}
             chainId={item.chainId}
           >
-            {t('mint_page.action')}
+            {isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
+              isBuyWithCardPage ? (
+                <Icon name="credit card outline" />
+              ) : (
+                <Mana inline size="small" network={item.network} />
+              )
+            ) : null}
+            {t(`${translationPageDescriptorId}.action`)}
           </ChainButton>
         ) : null}
       </div>
+      {isBuyNftsWithFiatEnabled &&
+      isWearableOrEmote(item) &&
+      isBuyWithCardPage ? (
+        <CardPaymentsExplanation
+          translationPageDescriptorId={translationPageDescriptorId}
+        />
+      ) : null}
       {authorization ? (
         <AuthorizationModal
           isLoading={isLoading}

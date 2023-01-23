@@ -3,7 +3,6 @@ import { ethers } from 'ethers'
 import { Row, Section, Header, HeaderSubheader } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getMaxPriceOfPeriods } from '../../../modules/rental/utils'
 import { Coordinate } from '../../Coordinate'
 import { Mana } from '../../Mana'
 import { Props } from './Popup.types'
@@ -13,7 +12,7 @@ import { formatWeiMANA } from '../../../lib/mana'
 export default class Popup extends React.PureComponent<Props> {
   subPriceHeader() {
     const { tile } = this.props
-    if (tile.price && tile.rentalListing) {
+    if (tile.price && tile.rentalPricePerDay) {
       return t('atlas.for_sale_and_rent')
     } else if (tile.price) {
       return t('atlas.for_sale')
@@ -50,17 +49,15 @@ export default class Popup extends React.PureComponent<Props> {
           />
         </Section>
 
-        {tile.price || tile.rentalListing ? (
+        {tile.price || tile.rentalPricePerDay ? (
           <Section className="price">
             <Header sub>{t('atlas.price')}</Header>
             <HeaderSubheader>{this.subPriceHeader()}</HeaderSubheader>
             <div className={'prices'}>
               {tile.price ? <Mana>{tile.price.toLocaleString()}</Mana> : null}
-              {tile.rentalListing ? (
+              {tile.rentalPricePerDay ? (
                 <>
-                  <Mana>
-                    {formatWeiMANA(getMaxPriceOfPeriods(tile.rentalListing))}
-                  </Mana>
+                  <Mana>{formatWeiMANA(tile.rentalPricePerDay)}</Mana>
                   <span className="rental-day">/{t('global.day')}</span>
                 </>
               ) : null}

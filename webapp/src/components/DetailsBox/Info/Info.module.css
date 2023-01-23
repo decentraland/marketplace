@@ -1,0 +1,19 @@
+.info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.infoTitle {
+  font-weight: 400;
+  font-size: 17px;
+  color: var(--primary-text);
+  display: flex;
+  align-items: baseline;
+  column-gap: 8px;
+}
+
+.infoContent {
+  color: #979797;
+}

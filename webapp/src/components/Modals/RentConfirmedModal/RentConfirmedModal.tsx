@@ -11,7 +11,7 @@ import styles from './RentConfirmedModal.module.css'
 
 const CTAs = [
   {
-    to: builderUrl,
+    to: `${builderUrl}/scenes`,
     icon: 'build-more'
   },
   {
