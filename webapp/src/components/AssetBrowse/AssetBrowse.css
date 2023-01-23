@@ -97,8 +97,6 @@
 }
 .AssetBrowse.fullscreen .blur-background {
   position: relative;
-  background: rgba(22, 20, 26, 0.75);
-  backdrop-filter: blur(20px);
   z-index: 1;
 }
 

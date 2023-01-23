@@ -16,7 +16,6 @@
 
 .AnalyticsVolumeDayData .stats-container {
   display: flex;
-  min-width: 33%;
   align-items: center;
 }
 

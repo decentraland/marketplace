@@ -256,55 +256,6 @@ export const getMaxPrice = createSelector<RootState, string, string>(
   search => (getURLParam(search, 'maxPrice') as string) || ''
 )
 
-export const hasFiltersEnabled = createSelector<
-  RootState,
-  string | undefined,
-  GenderFilterOption[],
-  Rarity[],
-  string[],
-  EmotePlayMode[] | undefined,
-  string,
-  string,
-  boolean | undefined,
-  boolean
->(
-  getNetwork,
-  getWearableGenders,
-  getRarities,
-  getContracts,
-  getEmotePlayMode,
-  getMinPrice,
-  getMaxPrice,
-  getOnlyOnSale,
-  (
-    network,
-    genders,
-    rarities,
-    contracts,
-    playModes,
-    minPrice,
-    maxPrice,
-    onlyOnSale
-  ) => {
-    const hasNetworkFilter = network !== undefined
-    const hasGenderFilter = genders.length > 0
-    const hasRarityFilter = rarities.length > 0
-    const hasContractsFilter = contracts.length > 0
-    const hasEmotePlayModeFilter = playModes && playModes.length > 0
-    const hasNotOnSaleFilter = onlyOnSale === false
-    return (
-      hasNetworkFilter ||
-      hasGenderFilter ||
-      hasRarityFilter ||
-      hasContractsFilter ||
-      hasEmotePlayModeFilter ||
-      !!minPrice ||
-      !!maxPrice ||
-      hasNotOnSaleFilter
-    )
-  }
-)
-
 export const getCurrentLocationAddress = createSelector<
   RootState,
   string,
@@ -417,3 +368,51 @@ export const getCurrentBrowseOptions = createSelector(
       onlyOnSale
     } as BrowseOptions)
 )
+
+export const hasFiltersEnabled = createSelector<
+  RootState,
+  BrowseOptions,
+  boolean
+>(getCurrentBrowseOptions, browseOptions => {
+  const {
+    network,
+    wearableGenders,
+    rarities,
+    contracts,
+    emotePlayMode,
+    onlyOnRent,
+    onlyOnSale,
+    minPrice,
+    maxPrice,
+    section
+  } = browseOptions
+  const isLand = isLandSection(section as Section);
+  if (isLand) {
+    const hasOnSaleFilter = onlyOnSale === true
+    const hasOnRentFilter = onlyOnRent === true
+    return (
+      (hasOnSaleFilter && !hasOnRentFilter)
+      || (hasOnRentFilter && !hasOnSaleFilter)
+      || !!minPrice
+      || !!maxPrice
+    )
+  }
+
+  const hasNetworkFilter = network !== undefined
+  const hasGenderFilter = wearableGenders && wearableGenders.length > 0
+  const hasRarityFilter = rarities && rarities.length > 0
+  const hasContractsFilter = contracts && contracts.length > 0
+  const hasEmotePlayModeFilter = emotePlayMode && emotePlayMode.length > 0
+  const hasNotOnSaleFilter = onlyOnSale === false
+
+  return (
+    hasNetworkFilter ||
+    hasGenderFilter ||
+    hasRarityFilter ||
+    hasContractsFilter ||
+    hasEmotePlayModeFilter ||
+    !!minPrice ||
+    !!maxPrice ||
+    hasNotOnSaleFilter
+  )
+})

@@ -3,6 +3,10 @@
   position: relative;
 }
 
+.searchContainer :global(.dcl.field.full) {
+  flex: 1;
+}
+
 .assetTopbar :global(.dcl.field.full) :global(.ui.input).searchField input {
   background: var(--secondary);
   font-size: 17px;
@@ -23,10 +27,6 @@
   display: flex;
 }
 
-.assetTopbar .searchField {
-  margin-bottom: 12px;
-}
-
 .assetTopbar .infoRow {
   display: flex;
   justify-content: space-between;
@@ -41,9 +41,7 @@
 
 .mapToggle {
   margin-left: 10px;
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  display: flex;
 }
 
 .mapToggle.map {
@@ -51,6 +49,13 @@
   right: 0;
   background: var(--background);
   border-radius: 4px;
+  margin-right: 20px;
+}
+
+.assetTopbar div:not(.map) :global(.Chip) {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
 }
 
 .assetTopbar :global(.Chip.grid) {
@@ -113,6 +118,17 @@
 .openFilters.active {
   background-image: url(../../images/filters-active.svg);
   background-size: 20px;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.searchContainer.searchMap {
+  flex-direction: row-reverse;
 }
 
 @media (max-width: 990px) {

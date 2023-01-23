@@ -68,6 +68,7 @@ describe('when handling the clear filters request action', () => {
     delete browseOptionsWithoutFilters.minPrice
     delete browseOptionsWithoutFilters.maxPrice
     delete browseOptionsWithoutFilters.search
+    delete browseOptionsWithoutFilters.onlyOnSale
     browseOptionsWithoutFilters.page = 1
     pathname = 'aPath'
   })

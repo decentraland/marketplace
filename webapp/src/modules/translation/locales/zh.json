@@ -353,7 +353,8 @@
     },
     "collection": {
       "title": "收藏",
-      "all_items": "所有收藏"
+      "all_items": "所有收藏",
+      "search": "搜索收藏"
     },
     "network": {
       "title": "网络",

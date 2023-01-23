@@ -1,4 +1,9 @@
-import { EmotePlayMode, GenderFilterOption, Rarity } from '@dcl/schemas'
+import {
+  EmotePlayMode,
+  GenderFilterOption,
+  Network,
+  Rarity
+} from '@dcl/schemas'
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor'
 import { locations } from './locations'
@@ -15,36 +20,18 @@ import { Sections } from './types'
 
 describe('when getting if the are filters set', () => {
   describe('when the search filter is set', () => {
-    it('should return true', () => {
-      const expected = hasFiltersEnabled.resultFunc(
-        undefined,
-        [],
-        [],
-        [],
-        undefined,
-        '',
-        '',
-        false,
-        'a search'
-      )
-      expect(expected).toBe(true)
+    it('should return false', () => {
+      const expected = hasFiltersEnabled.resultFunc({
+        search: 'a search'
+      })
+      expect(expected).toBe(false)
     })
   })
 
   describe('when the network filter is set', () => {
     it('should return true', () => {
       expect(
-        hasFiltersEnabled.resultFunc(
-          'aNetwork',
-          [],
-          [],
-          [],
-          undefined,
-          '',
-          '',
-          false,
-          ''
-        )
+        hasFiltersEnabled.resultFunc({ network: 'aNetwork' as Network })
       ).toBe(true)
     })
   })
@@ -52,126 +39,52 @@ describe('when getting if the are filters set', () => {
   describe('when the genders filter is set', () => {
     it('should return true', () => {
       expect(
-        hasFiltersEnabled.resultFunc(
-          undefined,
-          [GenderFilterOption.FEMALE],
-          [],
-          [],
-          undefined,
-          '',
-          '',
-          false,
-          ''
-        )
+        hasFiltersEnabled.resultFunc({
+          wearableGenders: [GenderFilterOption.FEMALE]
+        })
       ).toBe(true)
     })
   })
 
   describe('when the rarities filter is set', () => {
     it('should return true', () => {
-      expect(
-        hasFiltersEnabled.resultFunc(
-          undefined,
-          [],
-          [Rarity.COMMON],
-          [],
-          undefined,
-          '',
-          '',
-          false,
-          ''
-        )
-      ).toBe(true)
+      expect(hasFiltersEnabled.resultFunc({ rarities: [Rarity.COMMON] })).toBe(
+        true
+      )
     })
   })
 
   describe('when the contracts filter is set', () => {
     it('should return true', () => {
-      expect(
-        hasFiltersEnabled.resultFunc(
-          undefined,
-          [],
-          [],
-          ['0x.....'],
-          undefined,
-          '',
-          '',
-          false,
-          ''
-        )
-      ).toBe(true)
+      expect(hasFiltersEnabled.resultFunc({ contracts: ['0x.....'] })).toBe(
+        true
+      )
     })
   })
 
   describe('when the playmode filter is set', () => {
     it('should return true', () => {
       expect(
-        hasFiltersEnabled.resultFunc(
-          undefined,
-          [],
-          [],
-          [],
-          [EmotePlayMode.LOOP],
-          '10',
-          '',
-          false,
-          ''
-        )
+        hasFiltersEnabled.resultFunc({ emotePlayMode: [EmotePlayMode.LOOP] })
       ).toBe(true)
     })
   })
 
   describe('when the minPrice filter is set', () => {
     it('should return true', () => {
-      expect(
-        hasFiltersEnabled.resultFunc(
-          undefined,
-          [],
-          [],
-          [],
-          undefined,
-          '10',
-          '',
-          false,
-          ''
-        )
-      ).toBe(true)
+      expect(hasFiltersEnabled.resultFunc({ minPrice: '10' })).toBe(true)
     })
   })
 
   describe('when the maxPrice filter is set', () => {
     it('should return true', () => {
-      expect(
-        hasFiltersEnabled.resultFunc(
-          undefined,
-          [],
-          [],
-          [],
-          undefined,
-          '',
-          '100',
-          false,
-          ''
-        )
-      ).toBe(true)
+      expect(hasFiltersEnabled.resultFunc({ maxPrice: '100' })).toBe(true)
     })
   })
 
   describe('when no filters are set', () => {
     it('should return false', () => {
-      expect(
-        hasFiltersEnabled.resultFunc(
-          undefined,
-          [],
-          [],
-          [],
-          undefined,
-          '',
-          '',
-          true,
-          ''
-        )
-      ).toBe(false)
+      expect(hasFiltersEnabled.resultFunc({})).toBe(false)
     })
   })
 })

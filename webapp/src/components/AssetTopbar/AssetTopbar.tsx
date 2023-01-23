@@ -105,7 +105,7 @@ export const AssetTopbar = ({
 
   return (
     <div className={styles.assetTopbar}>
-      <div>
+      <div className={classNames(styles.searchContainer, { [styles.searchMap]: isMap })}>
         {!isMap && (
           <Field
             className={styles.searchField}

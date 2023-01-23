@@ -352,7 +352,8 @@
     },
     "collection": {
       "title": "Colección",
-      "all_items": "Todas las colecciones"
+      "all_items": "Todas las colecciones",
+      "search": "Buscar colecciones"
     },
     "network": {
       "title": "Red",
