@@ -1,0 +1,111 @@
+.dcl.sliderfield {
+  display: flex;
+  flex-direction: column;
+  padding: 13px 20px 8px;
+}
+
+.dcl.sliderfield .dcl.sliderfield-header {
+  margin-bottom: 13px;
+  text-transform: uppercase;
+  color: #736e7d;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.dcl.sliderfield {
+  position: relative;
+  width: 100%;
+  padding: 5px 0;
+  border-radius: 6px;
+  touch-action: none;
+}
+
+.dcl.sliderfield-wrapper {
+  width: 100%;
+  position: relative;
+  height: 8px;
+}
+
+.dcl.sliderfield-wrapper .dcl.sliderfield-rail {
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  height: 8px;
+  background-color: #cfcdd4;
+  mix-blend-mode: normal;
+  border-radius: 3px;
+}
+
+.dcl.sliderfield-wrapper .dcl.sliderfield-track {
+  position: absolute;
+  left: 0;
+  height: 8px;
+  border-radius: 14px;
+  background-color: var(--primary);
+}
+
+.dcl.sliderfield-wrapper .dcl.sliderfield-mark {
+  position: absolute;
+  top: -5px;
+  z-index: 2;
+  width: 16px;
+  height: 16px;
+  text-align: left;
+  margin-left: -11px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  background-color: var(--primary);
+  border-radius: 50%;
+  outline: none;
+  border: 0;
+}
+
+.dcl.sliderfield-wrapper > input[type='range'] {
+  position: absolute;
+  pointer-events: none;
+  -webkit-appearance: none;
+  z-index: 3;
+  height: 14px;
+  top: -2px;
+  width: 100%;
+  opacity: 0;
+  left: 0;
+  cursor: pointer;
+}
+.dcl.sliderfield-wrapper
+  > input[type='range']:focus::-webkit-slider-runnable-track {
+  background: transparent;
+  border: transparent;
+}
+
+.dcl.sliderfield-wrapper > input[type='range']:focus {
+  outline: none;
+}
+
+.dcl.sliderfield-wrapper > input[type='range']::-webkit-slider-thumb {
+  pointer-events: all;
+  width: 28px;
+  height: 28px;
+  border-radius: 0px;
+  border: 0 none;
+  -webkit-appearance: none;
+}
+
+.dcl.sliderfield-wrapper > input[type='range']::-moz-range-thumb {
+  pointer-events: all;
+  width: 28px;
+  height: 28px;
+  border-radius: 0px;
+  border: 0 none;
+  -webkit-appearance: none;
+}
+
+.dcl.sliderfield-wrapper > input[type='range']::-ms-fill-lower,
+.dcl.sliderfield-wrapper > input[type='range']::-ms-fill-upper {
+  background: transparent;
+  border: 0 none;
+}
+
+.dcl.sliderfield-wrapper > input[type='range']::-ms-tooltip {
+  display: none;
+}

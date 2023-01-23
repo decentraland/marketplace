@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
 import classNames from 'classnames'
-import { RangeField, SliderField, Loader } from 'decentraland-ui'
+import { RangeField, Loader } from 'decentraland-ui'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { BarChart, Bar, Cell, Tooltip, ResponsiveContainer } from 'recharts'
 import {
@@ -21,6 +21,7 @@ import {
 import { PriceChartProps } from './PriceChart.types'
 import { Mana } from '../Mana'
 import { PriceChartTooltip } from './PriceChartTooltip'
+import { SliderField } from '../SliderField/SliderField'
 import './PriceChart.css'
 
 const DEFAULT_SLIDER_STEP = 0.1

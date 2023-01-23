@@ -1,8 +1,14 @@
-import { useEffect, useState, useCallback, useRef, useMemo } from 'react'
-import { RangeField, Box, Mana, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { useEffect, useState, useMemo } from 'react'
+import { ethers } from 'ethers'
+import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getPriceLabel } from '../../../utils/filters'
+import { nftAPI } from '../../../modules/vendor/decentraland'
+import { Section } from '../../../modules/vendor/routing/types'
+import { getChartUpperBound, sectionToPriceFilterOptions } from './utils'
+import { Props } from './PriceFilter.types'
+import { PriceChart } from '../../PriceChart/PriceChart'
 import './PriceFilter.css'
 
 export type PriceFilterProps = {
@@ -18,32 +24,49 @@ export const PriceFilter = ({
   minPrice,
   maxPrice,
   network = Network.ETHEREUM,
-  defaultCollapsed = false
-}: PriceFilterProps) => {
-  const [value, setValue] = useState<[string, string]>([minPrice, maxPrice])
-  const timeout = useRef<NodeJS.Timeout | null>(null)
+  defaultCollapsed = false,
+  section,
+  assetType
+}: Props) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [prices, setPrices] = useState<Record<string, number>>()
+  const [sectionPricesFetched, setSectionPricesFetched] = useState<string[]>([])
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
-  useEffect(() => setValue([minPrice, maxPrice]), [minPrice, maxPrice])
+  // when changing the asset type, clear the fetched "cache"
+  useEffect(() => {
+    setSectionPricesFetched([])
+  }, [assetType])
 
   useEffect(() => {
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current)
-      }
-    }
-  }, [])
+    const pricesAlreadyFetched = sectionPricesFetched.includes(section)
+    setIsLoading(!pricesAlreadyFetched)
+  }, [assetType, section, sectionPricesFetched])
 
-  const handlePriceChange = useCallback(
-    (newValue: [string, string]) => {
-      setValue(newValue)
-      if (timeout.current) {
-        clearTimeout(timeout.current)
+  useEffect(() => {
+    let cancel = false
+    ;(async () => {
+      try {
+        const prices = await nftAPI.fetchPrices({
+          category: sectionToPriceFilterOptions(section as Section),
+          assetType
+        })
+        if (!cancel) {
+          setIsLoading(false)
+          setSectionPricesFetched([...sectionPricesFetched, section])
+          setPrices(prices)
+        }
+      } catch (e) {
+        console.warn('Could not fetch prices')
+        setIsLoading(false)
       }
-      timeout.current = setTimeout(() => onChange(newValue), 500)
-    },
-    [setValue, onChange]
-  )
+    })()
+    return () => {
+      cancel = false
+    }
+    // disabling the following rule since we don't want to execute the useEffect on the sectionPricesFetched change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [section, assetType])
 
   const header = useMemo(
     () =>
@@ -60,9 +83,19 @@ export const PriceFilter = ({
     [minPrice, maxPrice, network, isMobileOrTablet]
   )
 
-  const showMaxErrorPrice = useMemo(() => {
-    return value[0] && value[1] && Number(value[1]) <= Number(value[0])
-  }, [value])
+  const upperBound = useMemo(() => {
+    return Number(ethers.utils.formatEther(getChartUpperBound(section)))
+  }, [section])
+
+  const formattedPrices = useMemo(() => {
+    return (
+      prices &&
+      Object.entries(prices).reduce((acc, [key, value]) => {
+        acc[ethers.utils.formatEther(key)] = value
+        return acc
+      }, {} as Record<string, number>)
+    )
+  }, [prices])
 
   return (
     <Box
@@ -71,25 +104,16 @@ export const PriceFilter = ({
       collapsible
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
-      <RangeField
-        minProps={{
-          icon: <Mana network={network} />,
-          iconPosition: 'left',
-          placeholder: 0
-        }}
-        maxProps={{
-          icon: <Mana network={network} />,
-          iconPosition: 'left',
-          placeholder: 1000
-        }}
-        onChange={handlePriceChange}
-        value={value}
+      <PriceChart
+        loading={isLoading}
+        prices={formattedPrices}
+        maxPrice={maxPrice}
+        minPrice={minPrice}
+        upperBound={upperBound}
+        network={network}
+        onChange={onChange}
+        errorMessage={t('filters.price_min_greater_max')}
       />
-      {showMaxErrorPrice ? (
-        <span className="price-filter-error">
-          {t('filters.price_min_greater_max')}
-        </span>
-      ) : null}
     </Box>
   )
 }
