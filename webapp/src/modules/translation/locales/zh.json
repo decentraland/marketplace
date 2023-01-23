@@ -831,7 +831,8 @@
       "action_3": {
         "title": "管理土地",
         "subtitle": "添加现有场景，或查看权限。"
-      }
+      },
+      "onlyAvailableOnDesktop": "僅在桌面上可用"
     },
     "authorization_step": {
       "title": "出租",

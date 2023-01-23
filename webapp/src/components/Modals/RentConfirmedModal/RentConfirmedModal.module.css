@@ -28,6 +28,15 @@
   border-radius: 6px;
 }
 
+.ctaContainerMobile {
+  display: flex;
+  align-items: center;
+  background-color: #242129;
+  margin-bottom: 16px;
+  padding: 16px;
+  border-radius: 6px;
+}
+
 .ctaTextContainer {
   display: flex;
   flex-direction: column;

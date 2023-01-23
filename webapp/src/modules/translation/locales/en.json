@@ -835,7 +835,8 @@
       "action_3": {
         "title": "Manage Land",
         "subtitle": "Add an existing scene, or review permissions."
-      }
+      },
+      "onlyAvailableOnDesktop": "Only available on Desktop."
     },
     "authorization_step": {
       "title": "List for Rent",

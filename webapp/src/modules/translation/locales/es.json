@@ -828,7 +828,8 @@
       "action_3": {
         "title": "Administrar Land",
         "subtitle": "Agregue escenas existentees o revise los permisos."
-      }
+      },
+      "onlyAvailableOnDesktop": "Solo disponible en la versión Desktop."
     },
     "authorization_step": {
       "title": "Poner en alquiler",
