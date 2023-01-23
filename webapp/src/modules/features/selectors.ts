@@ -85,3 +85,14 @@ export const getIsBuyNftsWithFiatEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsPriceFilterEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.PRICE_FILTER
+    )
+  }
+  return false
+}

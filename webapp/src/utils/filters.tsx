@@ -17,6 +17,7 @@ export function getPriceLabel(
   maxPrice?: string,
   network: Network = Network.ETHEREUM
 ) {
+  const priceFormatter = Intl.NumberFormat('en', { notation: 'compact' })
   const manaTranslator = () => (
     <Mana
       className={classNames('mana-label-icon', {
@@ -32,21 +33,21 @@ export function getPriceLabel(
 
   if (minPrice && !maxPrice) {
     return t('nft_filters.price.more_than_price', {
-      price: minPrice,
+      price: priceFormatter.format(Number(minPrice)),
       mana: manaTranslator
     })
   }
 
   if (maxPrice && !minPrice) {
     return t('nft_filters.price.less_than_price', {
-      price: maxPrice,
+      price: priceFormatter.format(Number(maxPrice)),
       mana: manaTranslator
     })
   }
 
   return t('nft_filters.price.price_between', {
-    minPrice,
-    maxPrice,
+    minPrice: priceFormatter.format(Number(minPrice)),
+    maxPrice: priceFormatter.format(Number(maxPrice)),
     mana: manaTranslator
   })
 }
