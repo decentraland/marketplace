@@ -138,16 +138,16 @@
 .price-filter .loader-container {
   height: 150px;
   position: absolute;
-  bottom: 74px;
-  width: 200px;
-  left: 24px;
+  width: 100%;
+  left: 0;
+  bottom: 52px;
   border-radius: 6px;
 }
 
 .price-filter .loading-layer {
   height: 150px;
   background-color: black;
-  width: 200px;
+  width: 100%;
   opacity: 0.5;
   border-radius: 6px;
   height: 100%;
