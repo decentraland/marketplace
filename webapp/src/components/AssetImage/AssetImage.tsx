@@ -553,7 +553,6 @@ const AssetImageWrapper = (props: Props) => {
                   />
                 )}
                 <JumpIn compact x={coordinates.x} y={coordinates.y} />
-                {console.log('floooooo')}
               </>
             ) : null}
           </div>
