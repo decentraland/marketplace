@@ -54,7 +54,29 @@ const RentConfirmedModal = ({
           </div>
           <div>
             {CTAs.map((cta, i) =>
-              !isMobileView ? (
+              isMobileView && i !== 1 ? (
+                <div className={styles.ctaContainer}>
+                  <div className={classNames(styles[cta.icon], styles.icon)} />
+                  <div className={styles.ctaTextContainer}>
+                    <span>
+                      {t(
+                        `rental_modal.rent_confirmed_step.action_${i + 1}.title`
+                      )}
+                    </span>
+                    <span className={styles.ctaSubtitle}>
+                      {t(
+                        `rental_modal.rent_confirmed_step.action_${i +
+                          1}.subtitle`
+                      )}
+                    </span>
+                    <span className={styles.ctaSubtitleMobile}>
+                      {t(
+                        `rental_modal.rent_confirmed_step.onlyAvailableOnDesktop`
+                      )}
+                    </span>
+                  </div>
+                </div>
+              ) : (
                 <a
                   key={cta.icon}
                   className={styles.ctaContainer}
@@ -77,28 +99,6 @@ const RentConfirmedModal = ({
                     </span>
                   </div>
                 </a>
-              ) : (
-                <div className={styles.ctaContainerMobile}>
-                  <div className={classNames(styles[cta.icon], styles.icon)} />
-                  <div className={styles.ctaTextContainer}>
-                    <span>
-                      {t(
-                        `rental_modal.rent_confirmed_step.action_${i + 1}.title`
-                      )}
-                    </span>
-                    <span className={styles.ctaSubtitle}>
-                      {t(
-                        `rental_modal.rent_confirmed_step.action_${i +
-                          1}.subtitle`
-                      )}
-                    </span>
-                    <span className={styles.ctaSubtitle}>
-                      {t(
-                        `rental_modal.rent_confirmed_step.onlyAvailableOnDesktop`
-                      )}
-                    </span>
-                  </div>
-                </div>
               )
             )}
           </div>
