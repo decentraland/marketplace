@@ -103,8 +103,6 @@ export const AssetTopbar = ({
     ? sortBy
     : orderByDropdownOptions[0].value
 
-  console.log({ hasFiltersEnabled })
-
   return (
     <div className={styles.assetTopbar}>
       <div className={classNames(styles.searchContainer, { [styles.searchMap]: isMap })}>

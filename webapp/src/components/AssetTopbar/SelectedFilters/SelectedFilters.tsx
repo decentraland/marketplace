@@ -64,8 +64,6 @@ export const SelectedFilters = ({
     return undefined
   }, [onlyOnRent, onlyOnSale, isLandSection])
 
-  console.log({landStatusLabel})
-
   const handleDeleteRarity = useCallback(
     (rarity: string) => {
       onBrowse({ rarities: rarities?.filter((r: Rarity) => r !== rarity) })
@@ -109,8 +107,6 @@ export const SelectedFilters = ({
   const handleDeleteLandStatus = useCallback(() => {
     onBrowse({ onlyOnRent: undefined, onlyOnSale: undefined })
   }, [onBrowse])
-
-  console.log({ browseOptions })
 
   return (
     <div className={styles.pillContainer}>
