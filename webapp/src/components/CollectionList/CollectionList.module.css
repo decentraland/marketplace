@@ -1,9 +1,23 @@
 .filters {
   display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .search {
   flex: 1;
+  background: var(--secondary);
+  border-radius: 6px;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.search :global(.dcl.text-filter) :global(.text-input) input {
+  padding: 12px;
+  font-size: 17px;
+  line-height: 28px;
+  padding-left: 40px;
+  background-position-x: 14px;
 }
 
 .pagination {

@@ -150,7 +150,7 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
         />
       ) : null}
-      {isOnSale ? (
+      {shouldRenderFilter(AssetFilter.Price) && isOnSale ? (
         <PriceFilter
           onChange={handlePriceChange}
           minPrice={minPrice}
@@ -188,14 +188,16 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.BodyShape]}
         />
       )}
-      <MoreFilters
-        category={category}
-        isOnSale={isOnSale}
-        isOnlySmart={isOnlySmart}
-        onSaleChange={handleOnSaleChange}
-        onOnlySmartChange={handleOnlySmartChange}
-        defaultCollapsed={!!defaultCollapsed?.[AssetFilter.More]}
-      />
+      {shouldRenderFilter(AssetFilter.More) && (
+        <MoreFilters
+          category={category}
+          isOnSale={isOnSale}
+          isOnlySmart={isOnlySmart}
+          onSaleChange={handleOnSaleChange}
+          onOnlySmartChange={handleOnlySmartChange}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.More]}
+        />
+      )}
     </Menu>
   )
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import classNames from 'classnames'
 import {
   HeaderMenu,
   Header,
@@ -137,25 +138,27 @@ const Slideshow = (props: Props) => {
           <HeaderMenu.Right>{viewAllButton()}</HeaderMenu.Right>
         ) : null}
       </HeaderMenu>
-      <div className="assets">
-        {isLoading ? (
-          assets.length === 0 ? (
-            <Loader active size="massive" />
-          ) : (
+      <div className="assets-container">
+        <div className={classNames("assets", {
+          ["full-width"]: assetsToRender.length === pageSize
+        })}>
+          {isLoading ? (
+            assets.length === 0 ? (
+              <Loader active size="massive" />
+            ) : (
+              renderNfts()
+            )
+          ) : assets.length > 0 ? (
             renderNfts()
-          )
-        ) : assets.length > 0 ? (
-          renderNfts()
-        ) : (
-          renderEmptyState()
-        )}
-      </div>
-      <>
+          ) : (
+            renderEmptyState()
+          )}
+        </div>
         <div
           className="arrow-container arrow-container-left"
           {...showArrowsHandlers}
         >
-          {showArrows && (
+          {showArrows && totalPages > 1 &&  (
             <Button
               circular
               secondary
@@ -170,7 +173,7 @@ const Slideshow = (props: Props) => {
           className="arrow-container arrow-container-right"
           {...showArrowsHandlers}
         >
-          {showArrows && (
+          {showArrows && totalPages > 1 && (
             <Button
               circular
               secondary
@@ -181,8 +184,7 @@ const Slideshow = (props: Props) => {
             </Button>
           )}
         </div>
-      </>
-
+      </div>
       {totalPages > 1 ? (
         <div className="page-indicators-container">
           {Array.from({ length: totalPages }).map((_, index) => (
