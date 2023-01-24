@@ -39,7 +39,8 @@ export const AssetFilters = ({
   landStatus,
   defaultCollapsed,
   onBrowse,
-  isPriceFilterEnabled
+  isPriceFilterEnabled,
+  values
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
@@ -131,6 +132,7 @@ export const AssetFilters = ({
           onChange={handlePriceChange}
           minPrice={minPrice}
           maxPrice={maxPrice}
+          values={values}
         />
         <LandStatusFilter
           landStatus={landStatus}
@@ -155,6 +157,7 @@ export const AssetFilters = ({
           minPrice={minPrice}
           maxPrice={maxPrice}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Price]}
+          values={values}
         />
       ) : null}
       {shouldRenderFilter(AssetFilter.Collection) ? (

@@ -7,6 +7,7 @@ import {
 } from '@dcl/schemas'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { AssetType } from '../../../modules/asset/types'
+import { BrowseOptions } from '../../../modules/routing/types'
 
 export type Props = {
   section: string
@@ -16,6 +17,7 @@ export type Props = {
   maxPrice: string
   network?: Network
   rarities: Rarity[]
+  values?: BrowseOptions
   bodyShapes?: (GenderFilterOption | WearableGender)[]
   emotePlayMode?: EmotePlayMode[]
   isOnlySmart: boolean
@@ -36,3 +38,5 @@ export type MapStateProps = Pick<
   | 'collection'
   | 'network'
 >
+
+export type OwnProps = Pick<Props, 'values'>

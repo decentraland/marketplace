@@ -11,21 +11,28 @@ import {
   getWearableGenders
 } from '../../../modules/routing/selectors'
 import { getCategoryFromSection } from '../../../modules/routing/search'
-import { MapStateProps } from './PriceFilter.types'
+import { Section } from '../../../modules/vendor/routing/types'
+import { MapStateProps, OwnProps } from './PriceFilter.types'
 import { PriceFilter } from './PriceFilter'
 
-const mapState = (state: RootState): MapStateProps => {
-  const section = getSection(state)
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
+  const { values = {} } = ownProps
+  const section =
+    'section' in values ? (values.section as Section) : getSection(state)
   return {
     section,
     category: section ? getCategoryFromSection(section) : undefined,
     assetType: getAssetType(state),
-    rarities: getRarities(state),
-    network: getNetwork(state),
-    bodyShapes: getWearableGenders(state),
+    rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
+    network: 'network' in values ? values.network : getNetwork(state),
+    bodyShapes:
+      'wearableGenders' in values
+        ? values.wearableGenders
+        : getWearableGenders(state),
     isOnlySmart: getOnlySmart(state),
-    emotePlayMode: getEmotePlayMode(state),
-    collection: getContracts(state)[0]
+    emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
+    collection:
+      'contracts' in values ? values.contracts?.[0] : getContracts(state)[0]
   }
 }
 
