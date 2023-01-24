@@ -94,94 +94,6 @@ class NFTAPI extends BaseAPI {
     }
   }
 
-  private buildNFTQueryString(
-    params: NFTsFetchParams,
-    filters?: NFTsFetchFilters
-  ): string {
-    const queryParams = new URLSearchParams()
-    queryParams.append('first', params.first.toString())
-    queryParams.append('skip', params.skip.toString())
-    if (params.orderBy) {
-      queryParams.append('sortBy', getNFTSortBy(params.orderBy))
-    }
-    if (params.category) {
-      queryParams.append('category', params.category)
-    }
-    if (params.address) {
-      queryParams.append('owner', params.address)
-    }
-    if (params.onlyOnSale) {
-      queryParams.append('isOnSale', 'true')
-    }
-    if (params.onlyOnRent) {
-      queryParams.append('isOnRent', 'true')
-    }
-    if (params.search) {
-      queryParams.set('search', params.search)
-    }
-    if (filters) {
-      if (filters.rarities) {
-        for (const rarity of filters.rarities) {
-          queryParams.append('itemRarity', rarity)
-        }
-      }
-      if (filters.isLand) {
-        queryParams.append('isLand', 'true')
-      }
-      if (filters.isWearableHead) {
-        queryParams.append('isWearableHead', 'true')
-      }
-      if (filters.isWearableAccessory) {
-        queryParams.append('isWearableAccessory', 'true')
-      }
-      if (filters.isWearableSmart) {
-        queryParams.append('isWearableSmart', 'true')
-      }
-      if (filters.wearableCategory) {
-        queryParams.append('wearableCategory', filters.wearableCategory)
-      }
-      if (filters.emoteCategory) {
-        queryParams.append('emoteCategory', filters.emoteCategory)
-      }
-      if (filters.wearableGenders) {
-        for (const wearableGender of filters.wearableGenders) {
-          queryParams.append('wearableGender', wearableGender)
-        }
-      }
-      if (filters.network) {
-        queryParams.append('network', filters.network)
-      }
-
-      if (filters.emotePlayMode) {
-        for (const emotePlayMode of filters.emotePlayMode) {
-          queryParams.append('emotePlayMode', emotePlayMode)
-        }
-      }
-
-      if (filters.rentalStatus) {
-        const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus)
-          ? [filters.rentalStatus]
-          : filters.rentalStatus
-        statuses.forEach(status => queryParams.append('rentalStatus', status))
-      }
-
-      if (filters.contracts && filters.contracts.length > 0) {
-        for (const contract of filters.contracts) {
-          queryParams.append('contractAddress', contract)
-        }
-      }
-      if (filters.minPrice) {
-        queryParams.append('minPrice', filters.minPrice)
-      }
-
-      if (filters.maxPrice) {
-        queryParams.append('maxPrice', filters.maxPrice)
-      }
-    }
-
-    return queryParams.toString()
-  }
-
   private appendNFTFiltersToQueryParams(
     queryParams: URLSearchParams,
     filters: NFTsFetchFilters
@@ -243,6 +155,38 @@ class NFTAPI extends BaseAPI {
     if (filters.maxPrice) {
       queryParams.append('maxPrice', filters.maxPrice)
     }
+  }
+
+  private buildNFTQueryString(
+    params: NFTsFetchParams,
+    filters?: NFTsFetchFilters
+  ): string {
+    const queryParams = new URLSearchParams()
+    queryParams.append('first', params.first.toString())
+    queryParams.append('skip', params.skip.toString())
+    if (params.orderBy) {
+      queryParams.append('sortBy', getNFTSortBy(params.orderBy))
+    }
+    if (params.category) {
+      queryParams.append('category', params.category)
+    }
+    if (params.address) {
+      queryParams.append('owner', params.address)
+    }
+    if (params.onlyOnSale) {
+      queryParams.append('isOnSale', 'true')
+    }
+    if (params.onlyOnRent) {
+      queryParams.append('isOnRent', 'true')
+    }
+    if (params.search) {
+      queryParams.set('search', params.search)
+    }
+    if (filters) {
+      this.appendNFTFiltersToQueryParams(queryParams, filters)
+    }
+
+    return queryParams.toString()
   }
 }
 
