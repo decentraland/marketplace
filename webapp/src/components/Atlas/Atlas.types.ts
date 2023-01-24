@@ -14,7 +14,7 @@ export type Tile = AtlasTile & {
   price?: number
   owner?: string
   name?: string
-  rentalListing?: TileRentalListing
+  rentalPricePerDay?: string
 }
 
 export type Props = Partial<AtlasProps> & {

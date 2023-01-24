@@ -18,6 +18,8 @@
     "art": "艺术",
     "cancel": "取消",
     "proceed": "继续",
+    "continue": "继续",
+    "go_back": "回去",
     "nft": "NFT",
     "loading": "载入中",
     "settings": "设定",
@@ -164,11 +166,11 @@
         "total_sales": "总销售额",
         "total_sales_tooltip": "出售的 NFT 数量，包括一级市场和二级市场。",
         "total_volume": "总体积",
-        "total_volume_tooltip": "MANA 的销售量，包括一级和二级市场。",
+        "total_volume_tooltip": "MANA 的销量和收入，包括一级和二级市场。",
         "creators_earnings": "创作者收益",
         "creators_earnings_tooltip": "创作者获得 97.5% 的初级销售额和 2.5% 的二级销售额作为版税。",
         "dao_revenue": "道收入",
-        "dao_revenue_tooltip": "DAO 获得土地和一级市场销售额的 2.5%，外加可穿戴设备的出版费。",
+        "dao_revenue_tooltip": "DAO 获得 LAND 销售和租赁、收藏品开采和上市费用的 2.5%。",
         "seven_days": "7天",
         "thirty_days": "30天",
         "all": "全部"
@@ -406,6 +408,8 @@
       "manage_in_builder": "在 Builder 中管理",
       "update": "更新价格",
       "buy": "购买",
+      "buy_with_mana": "用 MANA 购买",
+      "buy_with_card": "刷卡购买",
       "mint": "购买",
       "bid": "出价",
       "see_listing": "查看清单",
@@ -435,6 +439,7 @@
     "owner": "持有者",
     "creator": "创造者",
     "price": "价格",
+    "sell_price": "销售价格",
     "collection": "珍藏",
     "available": "可用的",
     "stock": "股票",
@@ -577,6 +582,26 @@
     "is_owner": "您是{name}的所有者。",
     "not_enough_mana": "您没有足够的MANA来购买{name}。"
   },
+  "buy_with_mana_page": {
+    "title": "购买{name}",
+    "subtitle": "您将以{amount}的价格购买{name}。",
+    "not_for_sale": "{name}为非卖品",
+    "buy": "用 MANA 购买",
+    "no_fingerprint": "无法加载指纹。",
+    "is_owner": "您是{name}的所有者。",
+    "not_enough_mana": "您没有足够的MANA来购买{name}。"
+  },
+  "buy_with_card_page": {
+    "title": "购买{name}",
+    "subtitle": "您将以{amount}的价格购买{name}。",
+    "not_for_sale": "{name}为非卖品",
+    "buy": "用卡购买",
+    "no_fingerprint": "无法加载指纹。",
+    "is_owner": "您是{name}的所有者。",
+    "not_enough_mana": "您没有足够的MANA来购买{name}。",
+    "regions_where_operates": "Transak 经营的地区",
+    "explanation": "银行卡支付由 {link_to_transak} 处理，并适用于 {regions}。 支持信用卡和借记卡。"
+  },
   "price_too_low": {
     "minimum_price": "无成本交易支持的最低金额为 {price}",
     "get_item_in_network": "为了获得这个物品，您需要将您的网络切换到 {network}，然后用 {token} 支付交易成本。",
@@ -591,6 +616,44 @@
     "no_fingerprint": "无法加载指纹。",
     "is_owner": "您是{name}的所有者。",
     "not_enough_mana": "您没有足够的MANA来购买{name}。"
+  },
+  "mint_with_mana_page": {
+    "title": "购买{name}",
+    "subtitle": "您将以{amount}的价格购买{name}。",
+    "not_for_sale": "{name} 不可用于铸造，但您可以在 {secondary_market_link} 上搜索它。",
+    "secondary_market": "二级市场",
+    "action": "用 MANA 购买",
+    "no_fingerprint": "无法加载指纹。",
+    "is_owner": "您是{name}的所有者。",
+    "not_enough_mana": "您没有足够的MANA来购买{name}。"
+  },
+  "mint_with_card_page": {
+    "title": "购买{name}",
+    "subtitle": "您将以{amount}的价格购买{name}。",
+    "not_for_sale": "{name} 不可用于铸造，但您可以在 {secondary_market_link} 上搜索它。",
+    "secondary_market": "二级市场",
+    "action": "用卡购买",
+    "no_fingerprint": "无法加载指纹。",
+    "is_owner": "您是{name}的所有者。",
+    "not_enough_mana": "您没有足够的MANA来购买{name}。",
+    "regions_where_operates": "Transak 经营的地区",
+    "explanation": "银行卡支付由 {link_to_transak} 处理，并适用于 {regions}。 支持信用卡和借记卡。"
+  },
+  "buy_with_card_explanation_modal": {
+    "title": "刷卡购买",
+    "explanation": "银行卡付款由 {link_to_transak} 处理。\nTransak 对其服务收取费用。 在确认购买之前，您将看到最终价格。",
+    "learn_more": "了解有关卡支付的更多信息"
+  },
+  "processing_page": {
+    "title": "您的物品正在运送途中！",
+    "status": "处理交易",
+    "description": "处理交易最多可能需要 3 分钟。 您还可以在 {activity} 中跟踪其进度。",
+    "cta": "返回市场"
+  },
+  "success_page": {
+    "title": "全部做完！",
+    "description": "您可以在 {my_assets} 中找到您的物品。",
+    "cta": "探索更多收藏品"
   },
   "bid_page": {
     "title": "出价",
@@ -903,14 +966,19 @@
       "road": "路",
       "plaza": "广场",
       "district": "区"
-    },
-    "details": {
-      "title": "商品详情",
-      "network": "网络",
-      "owner": "所有者",
-      "order_expiration": "订单有效期至",
-      "rental_expiration": "出租清单有效期至"
     }
+  },
+  "details": {
+    "title": "商品详情",
+    "network": "网络",
+    "stock": "股票",
+    "issue_number": "发行数量",
+    "sold_out": "无库存",
+    "owner": "所有者",
+    "order_expiration": "订单有效期至",
+    "expires_at": "到期于",
+    "expires_at_info": "当列表过期时，它将停止可供购买",
+    "rental_expiration": "出租清单有效期至"
   },
   "claim_land_modal": {
     "title": "认领{asset}",

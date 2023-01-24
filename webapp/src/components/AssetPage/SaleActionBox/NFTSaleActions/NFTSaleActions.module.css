@@ -1,0 +1,7 @@
+.bid:global(.ui.button) {
+  background-color: var(--superGray);
+}
+
+.bid:global(.ui.button):hover {
+  background-color: var(--superGrayHovered);
+}

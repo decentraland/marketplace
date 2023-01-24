@@ -44,7 +44,11 @@ const BuyPage = (props: Props) => {
                 const modalProps = {
                   wallet: wallet,
                   isOwner: isOwnedBy(asset, wallet),
-                  hasInsufficientMANA: isInsufficientMANA(wallet, network, price),
+                  hasInsufficientMANA: isInsufficientMANA(
+                    wallet,
+                    network,
+                    price
+                  ),
                   hasLowPrice:
                     wallet.chainId !== asset.chainId && isPriceTooLow(price)
                 }

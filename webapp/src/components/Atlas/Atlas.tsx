@@ -132,7 +132,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
       if (
         tile &&
         (('price' in tile && showOnSale) ||
-          ('rentalListing' in tile && showForRent))
+          ('rentalPricePerDay' in tile && showForRent))
       ) {
         return {
           color: '#00d3ff',

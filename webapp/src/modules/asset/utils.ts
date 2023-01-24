@@ -1,3 +1,4 @@
+import { call, put, race, take } from 'redux-saga/effects'
 import { NFTCategory, Order, RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
@@ -6,10 +7,15 @@ import {
   ContractName,
   getContract
 } from 'decentraland-transactions'
+import { CloseModalAction, CLOSE_MODAL, openModal } from '../modal/actions'
 import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
 import { addressEquals } from '../wallet/utils'
+import { openTransak } from '../transak/actions'
 import { Asset } from './types'
+
+export const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
+  'buy-nfts-with-card-explanation-popup-key'
 
 export function getAssetName(asset: Asset) {
   if (asset.name) {
@@ -100,4 +106,44 @@ export function isOwnedBy(
 
 export function isNFT(asset: Asset): asset is NFT {
   return 'tokenId' in asset
+}
+
+export function isWearableOrEmote(asset: Asset): boolean {
+  const categories: Array<typeof asset.category> = [
+    NFTCategory.WEARABLE,
+    NFTCategory.EMOTE
+  ]
+  return categories.includes(asset.category)
+}
+
+// TODO (buy nfts with card): add test for the open transak flow
+
+export function* buyAssetWithCard(asset: Asset) {
+  const buyNftsWithCardExplanationPopupKey: string | null = yield call(
+    [localStorage, 'getItem'],
+    BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
+  )
+
+  if (buyNftsWithCardExplanationPopupKey === 'true') {
+    yield put(openTransak(asset))
+    return
+  }
+
+  yield put(openModal('BuyWithCardExplanationModal', { asset }))
+
+  // TODO (buy nfts with card): add continue when implementing Transak widget
+  const { close }: { close: CloseModalAction } = yield race({
+    // TODO (buy nfts with card): should we differentiate the specific close that we need?
+    close: take(CLOSE_MODAL)
+  })
+
+  if (close) {
+    return
+  }
+
+  yield call(
+    [localStorage, 'setItem'],
+    BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY,
+    'true'
+  )
 }

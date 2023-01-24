@@ -416,3 +416,10 @@ export const hasFiltersEnabled = createSelector<
     hasNotOnSaleFilter
   )
 })
+export const getIsBuyWithCardPage = createSelector<RootState, string, boolean>(
+  getRouterSearch,
+  search => {
+    const withCard = getURLParam(search, 'withCard')
+    return withCard !== null && withCard === 'true'
+  }
+)

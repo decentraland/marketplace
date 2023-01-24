@@ -12,18 +12,16 @@ import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
 
 import { locations } from '../../modules/routing/locations'
 import { isStubMaticCollectionContract } from '../../modules/contract/utils'
+import { useAuthorization } from '../../lib/authorization'
 import ERC721ABI from '../../contracts/ERC721.json'
-import { isAuthorized } from '../SettingsPage/Authorization/utils'
 import { Authorization } from '../SettingsPage/Authorization'
 import { Props } from './AuthorizationModal.types'
-
 import './AuthorizationModal.css'
 
 const AuthorizationModal = (props: Props) => {
   const {
     open,
     authorization,
-    authorizations,
     isLoading,
     isAuthorizing,
     getContract,
@@ -43,19 +41,13 @@ const AuthorizationModal = (props: Props) => {
     address: authorization.contractAddress
   })
 
-  const hasFetchedAuthorizations = useRef(false)
   const hasFetchedContractName = useRef(false)
 
   // Fetch authorizations only once when this component is rendered.
-  useEffect(() => {
-    if (
-      !isAuthorized(authorization, authorizations) &&
-      !hasFetchedAuthorizations.current
-    ) {
-      hasFetchedAuthorizations.current = true
-      onFetchAuthorizations([authorization])
-    }
-  }, [authorization, authorizations, onFetchAuthorizations])
+  const [, isAuthorized] = useAuthorization(
+    authorization,
+    onFetchAuthorizations
+  )
 
   // Fetch the name of the collection by querying the contract directly.
   // Required to display the real name of the collection instead of the stub one.
@@ -141,11 +133,7 @@ const AuthorizationModal = (props: Props) => {
           className="AuthorizationModalButtons"
           primary
           loading={isLoading}
-          disabled={
-            isLoading ||
-            isAuthorizing ||
-            !isAuthorized(authorization, authorizations)
-          }
+          disabled={isLoading || isAuthorizing || !isAuthorized}
           onClick={onProceed}
         >
           {t('global.proceed')}
