@@ -9,7 +9,18 @@ import { builderUrl } from '../../../lib/environment'
 import { Props } from './RentConfirmedModal.types'
 import styles from './RentConfirmedModal.module.css'
 
-const CTAs = [
+type CTAProps = {
+  to: string
+  icon: string
+}
+
+type WrapperProps = {
+  cta: CTAProps
+  i: number
+  children: React.ReactNode
+}
+
+const CTAs: CTAProps[] = [
   {
     to: builderUrl,
     icon: 'build-more'
@@ -35,6 +46,21 @@ const RentConfirmedModal = ({
 
   const isMobileView = useMobileMediaQuery()
 
+  const Wrapper = ({ children, cta, i }: WrapperProps) =>
+    isMobileView && i !== 1 ? (
+      <div className={styles.mobileAvailabilityContainer}>{children}</div>
+    ) : (
+      <a
+        key={cta.icon}
+        className={styles.ctaContainer}
+        href={cta.to}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {children}
+      </a>
+    )
+
   return (
     <Modal
       size="tiny"
@@ -53,55 +79,32 @@ const RentConfirmedModal = ({
             />
           </div>
           <div>
-            {CTAs.map((cta, i) =>
-              isMobileView && i !== 1 ? (
-                <div className={styles.mobileAvailabilityContainer}>
-                  <div className={classNames(styles[cta.icon], styles.icon)} />
-                  <div className={styles.ctaTextContainer}>
-                    <span>
-                      {t(
-                        `rental_modal.rent_confirmed_step.action_${i + 1}.title`
-                      )}
-                    </span>
-                    <span className={styles.ctaSubtitle}>
-                      {t(
-                        `rental_modal.rent_confirmed_step.action_${i +
-                          1}.subtitle`
-                      )}
-                    </span>
+            {CTAs.map((cta, i) => (
+              <Wrapper cta={cta} i={i}>
+                <div className={classNames(styles[cta.icon], styles.icon)} />
+                <div className={styles.ctaTextContainer}>
+                  <span>
+                    {t(
+                      `rental_modal.rent_confirmed_step.action_${i + 1}.title`
+                    )}
+                  </span>
+                  <span className={styles.ctaSubtitle}>
+                    {t(
+                      `rental_modal.rent_confirmed_step.action_${i +
+                        1}.subtitle`
+                    )}
+                  </span>
+                  {isMobileView && (
                     <span className={styles.ctaSubtitleMobile}>
                       <i className={styles.infoIcon} />
                       {t(
                         `rental_modal.rent_confirmed_step.onlyAvailableOnDesktop`
                       )}
                     </span>
-                  </div>
+                  )}
                 </div>
-              ) : (
-                <a
-                  key={cta.icon}
-                  className={styles.ctaContainer}
-                  href={cta.to}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <div className={classNames(styles[cta.icon], styles.icon)} />
-                  <div className={styles.ctaTextContainer}>
-                    <span>
-                      {t(
-                        `rental_modal.rent_confirmed_step.action_${i + 1}.title`
-                      )}
-                    </span>
-                    <span className={styles.ctaSubtitle}>
-                      {t(
-                        `rental_modal.rent_confirmed_step.action_${i +
-                          1}.subtitle`
-                      )}
-                    </span>
-                  </div>
-                </a>
-              )
-            )}
+              </Wrapper>
+            ))}
           </div>
         </div>
       </Modal.Content>

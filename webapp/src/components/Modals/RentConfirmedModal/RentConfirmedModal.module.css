@@ -94,4 +94,8 @@
   .ctaTextContainer {
     font-size: 15px;
   }
+
+  .ctaContainer {
+    padding: 13px;
+  }
 }
