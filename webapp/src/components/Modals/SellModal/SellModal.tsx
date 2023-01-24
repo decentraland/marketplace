@@ -66,7 +66,6 @@ const SellModal = ({
   const [step, setStep] = useState(StepperValues.SELL_MODAL)
 
   const isUpdate = order !== null
-  const [isCancel, setIsCancel] = useState(false)
 
   const [price, setPrice] = useState<string>(
     isUpdate ? ethers.utils.formatEther(order!.price) : ''
@@ -80,9 +79,8 @@ const SellModal = ({
 
   const parsedValueToConfirm = parseFloat(price).toString()
 
-  const isConfirmDisabled = isCancel
-    ? isCancelling
-    : parsedValueToConfirm !== confirmedInput || isCreatingOrder
+  const isConfirmDisabled =
+    parsedValueToConfirm !== confirmedInput || isCreatingOrder
 
   const contractNames = getContractNames()
 
@@ -123,9 +121,7 @@ const SellModal = ({
   })
 
   const handleOnConfirm = () => {
-    if (isCancel) {
-      onCancelOrder(order!, nft)
-    } else if (hasAuthorization(authorizations, authorization)) {
+    if (hasAuthorization(authorizations, authorization)) {
       handleCreateOrder()
     } else {
       setStep(StepperValues.AUTHORIZE)
@@ -150,8 +146,7 @@ const SellModal = ({
 
   const handleBackOrCancel = () => {
     if (isUpdate) {
-      setIsCancel(true)
-      setStep(StepperValues.CONFIRM_INPUT)
+      setStep(StepperValues.CANCEL)
     } else {
       onClose()
     }
@@ -375,7 +370,15 @@ const SellModal = ({
       )
     },
     CANCEL: {
-      navigation: null,
+      navigation: (
+        <ModalNavigation
+          title={t('sell_page.confirm.title')}
+          onClose={onClose}
+          onBack={
+            isCancelling ? undefined : () => setStep(StepperValues.SELL_MODAL)
+          }
+        />
+      ),
       description: null,
       content: (
         <div className={styles.fieldsContainer}>
@@ -394,7 +397,27 @@ const SellModal = ({
           </span>
         </div>
       ),
-      actions: null
+      actions: (
+        <Modal.Actions>
+          <Button
+            disabled={isCancelling}
+            onClick={() => {
+              onClose()
+            }}
+          >
+            {t('global.cancel')}
+          </Button>
+          <Button
+            type="submit"
+            primary
+            disabled={isCancelling}
+            loading={isCancelling}
+            onClick={() => onCancelOrder(order!, nft)}
+          >
+            {t('global.proceed')}
+          </Button>
+        </Modal.Actions>
+      )
     }
   }
 
