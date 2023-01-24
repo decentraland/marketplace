@@ -857,18 +857,19 @@
     "rent_confirmed_step": {
       "title": "Land rentada",
       "subtitle": "¡Felicitaciones! Has rentado esta Land hasta {end_date}",
-      "action_1": {
+      "build-more": {
         "title": "Póngase creativo con el Scene Builder",
         "subtitle": "Escenas simples fáciles de crear."
       },
-      "action_2": {
+      "get-creative": {
         "title": "Cree escenas más complejas utilizando nuestro SDK",
         "subtitle": "Ideal si tiene experiencia técnica."
       },
-      "action_3": {
+      "manage-land": {
         "title": "Administrar Land",
         "subtitle": "Agregue escenas existentees o revise los permisos."
-      }
+      },
+      "onlyAvailableOnDesktop": "Solo disponible en la versión Desktop."
     },
     "authorization_step": {
       "title": "Poner en alquiler",

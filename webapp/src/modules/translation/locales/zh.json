@@ -860,18 +860,19 @@
     "rent_confirmed_step": {
       "title": "土地租用",
       "subtitle": "惊人的！您刚刚在 {end_date} 之前租用了这块土地",
-      "action_1": {
+      "build-more": {
         "title": "使用 场景生成器 发挥创意",
         "subtitle": "轻松创建更简单的场景。"
       },
-      "action_2": {
+      "get-creative": {
         "title": "使用我们的 SDK 构建更复杂的场景",
         "subtitle": "如果您有一些技术背景，这是理想的选择。"
       },
-      "action_3": {
+      "manage-land": {
         "title": "管理土地",
         "subtitle": "添加现有场景，或查看权限。"
-      }
+      },
+      "onlyAvailableOnDesktop": "僅在桌面上可用"
     },
     "authorization_step": {
       "title": "出租",

@@ -863,18 +863,19 @@
     "rent_confirmed_step": {
       "title": "Land rented",
       "subtitle": "Awesome! You've just rented this land until {end_date}",
-      "action_1": {
+      "build-more": {
         "title": "Get creative with the Scene Builder",
         "subtitle": "Easily create simpler scenes."
       },
-      "action_2": {
+      "get-creative": {
         "title": "Build more complex scenes with our SDK",
         "subtitle": "Ideal if you have some technical background."
       },
-      "action_3": {
+      "manage-land": {
         "title": "Manage Land",
         "subtitle": "Add an existing scene, or review permissions."
-      }
+      },
+      "onlyAvailableOnDesktop": "Only available on Desktop."
     },
     "authorization_step": {
       "title": "List for Rent",
