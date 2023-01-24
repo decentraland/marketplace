@@ -39,7 +39,7 @@ export type Props = Omit<ModalProps, 'metadata'> & {
   onFetchAuthorizations: typeof fetchAuthorizationsRequest
   onUpsertContracts: typeof upsertContracts
   onCancelOrder: typeof cancelOrderRequest
-  isLoadingCancel: boolean
+  isCancelling: boolean
 }
 
 export type OwnProps = Pick<Props, 'metadata'>
@@ -52,7 +52,7 @@ export type MapStateProps = Pick<
   | 'error'
   | 'getContract'
   | 'isAuthorizing'
-  | 'isLoadingCancel'
+  | 'isCancelling'
 >
 
 export type MapDispatchProps = Pick<

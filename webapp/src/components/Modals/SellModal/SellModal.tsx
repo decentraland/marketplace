@@ -41,7 +41,8 @@ import styles from './SellModal.module.css'
 enum StepperValues {
   SELL_MODAL = 'SELL_MODAL',
   CONFIRM_INPUT = 'CONFIRM_INPUT',
-  AUTHORIZE = 'AUTHORIZE'
+  AUTHORIZE = 'AUTHORIZE',
+  CANCEL = 'CANCEL'
 }
 
 const SellModal = ({
@@ -55,7 +56,7 @@ const SellModal = ({
   isAuthorizing,
   error,
   onFetchAuthorizations,
-  isLoadingCancel,
+  isCancelling,
   onCancelOrder
 }: Props) => {
   const { orderService } = VendorFactory.build(nft.vendor)
@@ -79,8 +80,8 @@ const SellModal = ({
 
   const parsedValueToConfirm = parseFloat(price).toString()
 
-  const isDisabledConfirm = isCancel
-    ? isLoadingCancel
+  const isConfirmDisabled = isCancel
+    ? isCancelling
     : parsedValueToConfirm !== confirmedInput || isCreatingOrder
 
   const contractNames = getContractNames()
@@ -230,7 +231,7 @@ const SellModal = ({
           title={t('sell_page.confirm.title')}
           onClose={isCreatingOrder ? undefined : onClose}
           onBack={
-            isCreatingOrder || isLoadingCancel
+            isCreatingOrder || isCancelling
               ? undefined
               : () => setStep(StepperValues.SELL_MODAL)
           }
@@ -240,22 +241,6 @@ const SellModal = ({
       content: isLoadingAuthorizations ? (
         <div className={styles.loaderContainer}>
           <Loader active size="large" />
-        </div>
-      ) : isCancel ? (
-        <div className={styles.fieldsContainer}>
-          <span>
-            <T
-              id="cancel_sale_page.subtitle"
-              values={{
-                name: <b>{assetName}</b>,
-                amount: (
-                  <Mana network={nft.network} inline>
-                    {formatWeiMANA(order!.price)}
-                  </Mana>
-                )
-              }}
-            />
-          </span>
         </div>
       ) : (
         <div className={styles.fieldsContainer}>
@@ -286,7 +271,7 @@ const SellModal = ({
 
           <span>&nbsp;</span>
           <ManaField
-            disabled={isCreatingOrder || isLoadingCancel}
+            disabled={isCreatingOrder || isCancelling}
             label={t('global.price')}
             network={nft.network}
             placeholder={parsedValueToConfirm}
@@ -309,7 +294,7 @@ const SellModal = ({
       actions: (
         <Modal.Actions>
           <Button
-            disabled={isCreatingOrder || isLoadingCancel}
+            disabled={isCreatingOrder || isCancelling}
             onClick={() => {
               setConfirmedInput('')
               onClose()
@@ -320,8 +305,8 @@ const SellModal = ({
           <Button
             type="submit"
             primary
-            disabled={isDisabledConfirm}
-            loading={isCreatingOrder || isLoadingCancel}
+            disabled={isConfirmDisabled}
+            loading={isCreatingOrder || isCancelling}
             onClick={handleOnConfirm}
           >
             {t('global.proceed')}
@@ -336,7 +321,7 @@ const SellModal = ({
             token: token?.name
           })}
           onClose={
-            isAuthorizing || isCreatingOrder || isLoadingCancel
+            isAuthorizing || isCreatingOrder || isCancelling
               ? undefined
               : onClose
           }
@@ -388,6 +373,28 @@ const SellModal = ({
           </Button>
         </Modal.Actions>
       )
+    },
+    CANCEL: {
+      navigation: null,
+      description: null,
+      content: (
+        <div className={styles.fieldsContainer}>
+          <span>
+            <T
+              id="cancel_sale_page.subtitle"
+              values={{
+                name: <b>{assetName}</b>,
+                amount: (
+                  <Mana network={nft.network} inline>
+                    {formatWeiMANA(order!.price)}
+                  </Mana>
+                )
+              }}
+            />
+          </span>
+        </div>
+      ),
+      actions: null
     }
   }
 

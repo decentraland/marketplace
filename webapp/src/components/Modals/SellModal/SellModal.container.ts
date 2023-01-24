@@ -39,7 +39,7 @@ const mapState = (state: RootState): MapStateProps => {
     isAuthorizing:
       isLoadingType(getLoading(state), GRANT_TOKEN_REQUEST) ||
       isLoadingType(getLoading(state), REVOKE_TOKEN_REQUEST),
-    isLoadingCancel: isLoadingType(getLoading(state), CANCEL_ORDER_REQUEST)
+    isCancelling: isLoadingType(getLoading(state), CANCEL_ORDER_REQUEST)
   }
 }
 
