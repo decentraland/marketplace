@@ -29,7 +29,7 @@ import { LandLockedPopup } from '../LandLockedPopup'
 import { Highlights } from './Highlights'
 import styles from './ManageAssetPage.module.css'
 import { Props } from './ManageAssetPage.types'
-import { Details } from './Details'
+import { DetailsBox } from '../DetailsBox'
 import { Sell } from './Sell'
 import { Rent } from './Rent'
 import { Map } from './Map'
@@ -121,7 +121,7 @@ export const ManageAssetPage = (props: Props) => {
                                   className={styles.highlights}
                                   nft={asset as NFT}
                                 />
-                                <Details
+                                <DetailsBox
                                   asset={asset as NFT}
                                   rental={rental}
                                   className={styles.details}
@@ -217,7 +217,7 @@ export const ManageAssetPage = (props: Props) => {
                                   className={styles.highlights}
                                   nft={asset as NFT}
                                 />
-                                <Details
+                                <DetailsBox
                                   asset={asset as NFT}
                                   rental={rental}
                                   className={styles.details}

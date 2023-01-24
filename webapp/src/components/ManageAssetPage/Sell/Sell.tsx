@@ -1,10 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import intlFormat from 'date-fns/intlFormat'
 import classNames from 'classnames'
 import { Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
 import { LandLockedPopup } from '../../LandLockedPopup'
 import { isLandLocked } from '../../../modules/rental/utils'
@@ -21,7 +19,8 @@ const Sell = (props: Props) => {
     nft,
     onEditOrder,
     onCancelOrder,
-    userAddress
+    userAddress,
+    onListForSale
   } = props
 
   const areActionsLocked =
@@ -58,8 +57,7 @@ const Sell = (props: Props) => {
               <Button
                 className={styles.sellButton}
                 disabled={areActionsLocked}
-                as={Link}
-                to={locations.sell(nft.contractAddress, nft.tokenId)}
+                onClick={onListForSale}
                 fluid
               >
                 {t('manage_asset_page.sell.list_for_sale')}

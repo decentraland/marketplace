@@ -5,7 +5,9 @@ import { Authorization } from 'decentraland-dapps/dist/modules/authorization/typ
 import { NFT } from '../../../modules/nft/types'
 import {
   executeOrderRequest,
-  ExecuteOrderRequestAction
+  ExecuteOrderRequestAction,
+  executeOrderWithCard,
+  ExecuteOrderWithCardAction
 } from '../../../modules/order/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
@@ -19,13 +21,25 @@ export type Props = {
   isOwner: boolean
   hasInsufficientMANA: boolean
   hasLowPrice: boolean
+  isBuyNftsWithFiatEnabled: boolean
+  isBuyWithCardPage: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onExecuteOrder: typeof executeOrderRequest
+  onExecuteOrderWithCard: typeof executeOrderWithCard
 }
 
 export type MapStateProps = Pick<
   Props,
-  'authorizations' | 'isLoading' | 'getContract'
+  | 'authorizations'
+  | 'isLoading'
+  | 'getContract'
+  | 'isBuyNftsWithFiatEnabled'
+  | 'isBuyWithCardPage'
 >
-export type MapDispatchProps = Pick<Props, 'onExecuteOrder'>
-export type MapDispatch = Dispatch<ExecuteOrderRequestAction>
+export type MapDispatchProps = Pick<
+  Props,
+  'onExecuteOrder' | 'onExecuteOrderWithCard'
+>
+export type MapDispatch = Dispatch<
+  ExecuteOrderRequestAction | ExecuteOrderWithCardAction
+>

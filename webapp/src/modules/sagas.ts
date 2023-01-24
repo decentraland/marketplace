@@ -33,6 +33,7 @@ import { rentalSaga } from './rental/sagas'
 import { modalSaga } from './modal/sagas'
 import { eventSaga } from './event/sagas'
 import { contractSaga } from './contract/sagas'
+import { transakSaga } from './transak/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({ peerUrl })
@@ -87,6 +88,7 @@ export function* rootSaga() {
     eventSaga(),
     contractSaga(),
     manaFiatGatewaysSaga(),
-    locationSaga()
+    locationSaga(),
+    transakSaga()
   ])
 }

@@ -92,6 +92,15 @@ export type ExecuteOrderTransactionSubmittedAction = ReturnType<
 >
 export type ExecuteOrderFailureAction = ReturnType<typeof executeOrderFailure>
 
+// Execute Order With Card (aka Buy with Card)
+// TODO (buy nfts with card): change to REQUEST, SUCCESS, FAILURE later
+export const EXECUTE_ORDER_WITH_CARD = 'Execute Order With Card'
+
+export const executeOrderWithCard = (nft: NFT) =>
+  action(EXECUTE_ORDER_WITH_CARD, { nft })
+
+export type ExecuteOrderWithCardAction = ReturnType<typeof executeOrderWithCard>
+
 // Cancel Order (aka Cancel Sale)
 
 export const CANCEL_ORDER_REQUEST = '[Request] Cancel Order'
