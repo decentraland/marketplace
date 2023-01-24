@@ -6,6 +6,7 @@ import {
   WearableGender
 } from '@dcl/schemas'
 import { Network } from '@dcl/schemas/dist/dapps/network'
+import { LANDFilters } from '../../Vendor/decentraland/types'
 import { AssetType } from '../../../modules/asset/types'
 import { BrowseOptions } from '../../../modules/routing/types'
 
@@ -21,6 +22,7 @@ export type Props = {
   bodyShapes?: (GenderFilterOption | WearableGender)[]
   emotePlayMode?: EmotePlayMode[]
   isOnlySmart: boolean
+  landStatus: LANDFilters
   onChange: (value: [string, string]) => void
   defaultCollapsed?: boolean
   collection?: string
@@ -34,6 +36,7 @@ export type MapStateProps = Pick<
   | 'rarities'
   | 'bodyShapes'
   | 'isOnlySmart'
+  | 'landStatus'
   | 'emotePlayMode'
   | 'collection'
   | 'network'

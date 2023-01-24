@@ -5,11 +5,14 @@ import {
   getContracts,
   getEmotePlayMode,
   getNetwork,
+  getOnlyOnRent,
+  getOnlyOnSale,
   getOnlySmart,
   getRarities,
   getSection,
   getWearableGenders
 } from '../../../modules/routing/selectors'
+import { LANDFilters } from '../../Vendor/decentraland/types'
 import { getCategoryFromSection } from '../../../modules/routing/search'
 import { Section } from '../../../modules/vendor/routing/types'
 import { MapStateProps, OwnProps } from './PriceFilter.types'
@@ -19,6 +22,16 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps
   const section =
     'section' in values ? (values.section as Section) : getSection(state)
+  const onlyOnSale =
+    'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
+  const onlyOnRent = getOnlyOnRent(state)
+  let landStatus = LANDFilters.ALL_LAND
+
+  if (onlyOnRent && !onlyOnSale) {
+    landStatus = LANDFilters.ONLY_FOR_RENT
+  } else if (onlyOnSale && !onlyOnRent) {
+    landStatus = LANDFilters.ONLY_FOR_SALE
+  }
   return {
     section,
     category: section ? getCategoryFromSection(section) : undefined,
@@ -30,6 +43,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
         ? values.wearableGenders
         : getWearableGenders(state),
     isOnlySmart: getOnlySmart(state),
+    landStatus,
     emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
     collection:
       'contracts' in values ? values.contracts?.[0] : getContracts(state)[0]

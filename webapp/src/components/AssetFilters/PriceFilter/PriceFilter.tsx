@@ -1,12 +1,12 @@
 import { useEffect, useState, useMemo } from 'react'
 import { ethers } from 'ethers'
-import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { Box, PriceChart, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { LANDFilters } from '../../Vendor/decentraland/types'
 import { getNetwork, getPriceLabel } from '../../../utils/filters'
 import { nftAPI } from '../../../modules/vendor/decentraland'
 import { Section } from '../../../modules/vendor/routing/types'
-import { PriceChart } from '../../PriceChart/PriceChart'
 import { getChartUpperBound, getPriceFiltersForSection } from './utils'
 import { Props } from './PriceFilter.types'
 import './PriceFilter.css'
@@ -28,6 +28,7 @@ export const PriceFilter = ({
   defaultCollapsed = false,
   assetType,
   isOnlySmart,
+  landStatus,
   rarities,
   bodyShapes,
   collection,
@@ -100,14 +101,13 @@ export const PriceFilter = ({
   }, [section])
 
   const formattedPrices = useMemo(() => {
-    return (
-      prices &&
-      Object.entries(prices).reduce((acc, [key, value]) => {
+    if (prices && landStatus === LANDFilters.ONLY_FOR_SALE) {
+      return Object.entries(prices).reduce((acc, [key, value]) => {
         acc[ethers.utils.formatEther(key)] = value
         return acc
       }, {} as Record<string, number>)
-    )
-  }, [prices])
+    }
+  }, [landStatus, prices])
 
   return (
     <Box
