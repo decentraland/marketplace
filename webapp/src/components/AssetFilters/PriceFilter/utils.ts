@@ -1,8 +1,13 @@
 import { NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
 import {
+  getCategoryFromSection,
+  getSearchEmoteCategory,
+  getSearchWearableCategory
+} from '../../../modules/routing/search'
+import {
   PriceFilterExtraOption,
-  PriceFilterOptions,
+  PriceFilters,
   Section
 } from '../../../modules/vendor/decentraland'
 
@@ -38,24 +43,33 @@ export const getChartUpperBound = (section: string) => {
   return upperBound
 }
 
-export const sectionToPriceFilterOptions = (
-  section: Section
-): PriceFilterOptions => {
-  switch (section) {
-    case Section.LAND:
-      return PriceFilterExtraOption.LAND
-    case Section.PARCELS:
-      return NFTCategory.PARCEL
-    case Section.ESTATES:
-      return NFTCategory.ESTATE
-    case Section.WEARABLES:
-      return NFTCategory.WEARABLE
-    case Section.EMOTES:
-      return NFTCategory.EMOTE
-    case Section.ENS:
-      return NFTCategory.ENS
+export const getPriceFiltersForSection = (section: Section): PriceFilters => {
+  const category =
+    section === Section.LAND
+      ? PriceFilterExtraOption.LAND
+      : getCategoryFromSection(section!)
 
-    default:
-      throw Error('Invalid section to fetch price')
+  if (!category) {
+    throw Error('Invalid section to fetch price')
+  }
+
+  const isWearableHead = section === Section.WEARABLES_HEAD
+  const isWearableAccessory = section === Section.WEARABLES_ACCESSORIES
+  const wearableCategory =
+    !isWearableAccessory && category === NFTCategory.WEARABLE
+      ? getSearchWearableCategory(section!)
+      : undefined
+
+  const emoteCategory =
+    category === NFTCategory.EMOTE
+      ? getSearchEmoteCategory(section!)
+      : undefined
+
+  return {
+    isWearableHead,
+    isWearableAccessory,
+    wearableCategory,
+    emoteCategory,
+    category
   }
 }

@@ -3,12 +3,12 @@ import { ethers } from 'ethers'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getPriceLabel } from '../../../utils/filters'
+import { getNetwork, getPriceLabel } from '../../../utils/filters'
 import { nftAPI } from '../../../modules/vendor/decentraland'
 import { Section } from '../../../modules/vendor/routing/types'
-import { getChartUpperBound, sectionToPriceFilterOptions } from './utils'
-import { Props } from './PriceFilter.types'
 import { PriceChart } from '../../PriceChart/PriceChart'
+import { getChartUpperBound, getPriceFiltersForSection } from './utils'
+import { Props } from './PriceFilter.types'
 import './PriceFilter.css'
 
 export type PriceFilterProps = {
@@ -20,40 +20,54 @@ export type PriceFilterProps = {
 }
 
 export const PriceFilter = ({
-  onChange,
+  section,
+  category,
   minPrice,
   maxPrice,
-  network = Network.ETHEREUM,
+  network,
   defaultCollapsed = false,
-  section,
-  assetType
+  assetType,
+  isOnlySmart,
+  rarities,
+  bodyShapes,
+  collection,
+  emotePlayMode,
+  onChange
 }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [prices, setPrices] = useState<Record<string, number>>()
-  const [sectionPricesFetched, setSectionPricesFetched] = useState<string[]>([])
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
-  // when changing the asset type, clear the fetched "cache"
-  useEffect(() => {
-    setSectionPricesFetched([])
-  }, [assetType])
-
-  useEffect(() => {
-    const pricesAlreadyFetched = sectionPricesFetched.includes(section)
-    setIsLoading(!pricesAlreadyFetched)
-  }, [assetType, section, sectionPricesFetched])
+  const priceFetchFilters = useMemo(() => {
+    return {
+      assetType,
+      isWearableSmart: isOnlySmart,
+      rarities,
+      wearableGenders: bodyShapes,
+      contracts: collection ? [collection] : undefined,
+      emotePlayMode,
+      network,
+      ...getPriceFiltersForSection(section as Section)
+    }
+  }, [
+    assetType,
+    bodyShapes,
+    collection,
+    emotePlayMode,
+    isOnlySmart,
+    network,
+    rarities,
+    section
+  ])
 
   useEffect(() => {
     let cancel = false
     ;(async () => {
       try {
-        const prices = await nftAPI.fetchPrices({
-          category: sectionToPriceFilterOptions(section as Section),
-          assetType
-        })
+        setIsLoading(true)
+        const prices = await nftAPI.fetchPrices(priceFetchFilters)
         if (!cancel) {
           setIsLoading(false)
-          setSectionPricesFetched([...sectionPricesFetched, section])
           setPrices(prices)
         }
       } catch (e) {
@@ -64,9 +78,7 @@ export const PriceFilter = ({
     return () => {
       cancel = false
     }
-    // disabling the following rule since we don't want to execute the useEffect on the sectionPricesFetched change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [section, assetType])
+  }, [section, priceFetchFilters])
 
   const header = useMemo(
     () =>
@@ -110,7 +122,7 @@ export const PriceFilter = ({
         maxPrice={maxPrice}
         minPrice={minPrice}
         upperBound={upperBound}
-        network={network}
+        network={network || getNetwork(network, category)}
         onChange={onChange}
         errorMessage={t('filters.price_min_greater_max')}
       />

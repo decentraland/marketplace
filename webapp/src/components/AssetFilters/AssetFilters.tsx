@@ -9,7 +9,6 @@ import {
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
-import { getNetwork } from '../../utils/filters'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
@@ -125,14 +124,13 @@ export const AssetFilters = ({
     [category, section]
   )
 
-  if (isInLandSection) {
+  if (isInLandSection && isPriceFilterEnabled) {
     return (
       <div className="filters-sidebar">
         <PriceFilter
           onChange={handlePriceChange}
           minPrice={minPrice}
           maxPrice={maxPrice}
-          network={getNetwork(network, category)}
         />
         <LandStatusFilter
           landStatus={landStatus}
@@ -156,7 +154,6 @@ export const AssetFilters = ({
           onChange={handlePriceChange}
           minPrice={minPrice}
           maxPrice={maxPrice}
-          network={getNetwork(network, category)}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Price]}
         />
       ) : null}
