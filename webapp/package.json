@@ -85,7 +85,8 @@
     "settings": {
       "import/resolver": {
         "typescript": true,
-        "node": true
+        "node": true,
+        "react": true
       }
     },
     "rules": {
@@ -123,7 +124,7 @@
             "internal"
           ],
           "distinctGroup": false,
-          "newlines-between": "always",
+          "newlines-between": "never",
           "alphabetize": {
             "order": "asc",
             "caseInsensitive": true
