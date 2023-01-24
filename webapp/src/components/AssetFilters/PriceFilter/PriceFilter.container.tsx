@@ -17,7 +17,7 @@ import { PriceFilter } from './PriceFilter'
 const mapState = (state: RootState): MapStateProps => {
   const section = getSection(state)
   return {
-    section: getSection(state),
+    section,
     category: section ? getCategoryFromSection(section) : undefined,
     assetType: getAssetType(state),
     rarities: getRarities(state),
