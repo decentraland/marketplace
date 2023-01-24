@@ -4,6 +4,12 @@
   width: 100%;
 }
 
+.Slideshow .assets-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
 .Slideshow .assets {
   display: flex;
   flex-wrap: nowrap;
@@ -77,17 +83,17 @@
   padding: 0;
   height: 48px;
   background: #736e7d;
-  opacity: 0.32;
+  opacity: 0.7;
   top: 50%;
 }
 
 .Slideshow .arrow-container-right {
-  right: -80px;
+  right: -32px;
   justify-content: flex-end;
 }
 
 .Slideshow .arrow-container-left {
-  left: -80px;
+  left: -32px;
   justify-content: flex-start;
 }
 
@@ -99,6 +105,7 @@
   top: 0;
   width: 80px;
   height: 100%;
+  z-index: 5;
 }
 
 .Slideshow .page-indicators-container {
