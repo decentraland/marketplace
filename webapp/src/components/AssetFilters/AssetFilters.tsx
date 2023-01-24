@@ -125,19 +125,21 @@ export const AssetFilters = ({
     [category, section]
   )
 
-  if (isInLandSection && isPriceFilterEnabled) {
+  if (isInLandSection) {
     return (
       <div className="filters-sidebar">
-        <PriceFilter
-          onChange={handlePriceChange}
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          values={values}
-        />
         <LandStatusFilter
           landStatus={landStatus}
           onChange={handleLandStatusChange}
         />
+        {isPriceFilterEnabled ? (
+          <PriceFilter
+            onChange={handlePriceChange}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            values={values}
+          />
+        ) : null}
       </div>
     )
   }
