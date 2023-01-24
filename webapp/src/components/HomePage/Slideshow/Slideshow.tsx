@@ -140,7 +140,7 @@ const Slideshow = (props: Props) => {
       </HeaderMenu>
       <div className="assets-container">
         <div className={classNames("assets", {
-          ["full-width"]: assetsToRender.length === pageSize
+          "full-width": assetsToRender.length === pageSize
         })}>
           {isLoading ? (
             assets.length === 0 ? (
