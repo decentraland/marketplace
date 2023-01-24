@@ -1,32 +1,13 @@
 import React from 'react'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
-import { ModalNavigation, Close } from 'decentraland-ui'
+import { ModalNavigation, Close, useMobileMediaQuery } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { builderUrl } from '../../../lib/environment'
-import { CTAProps, Props } from './RentConfirmedModal.types'
+import { Props } from './RentConfirmedModal.types'
 import styles from './RentConfirmedModal.module.css'
-import CTA from './CTA'
-
-const CTAs: CTAProps[] = [
-  {
-    to: builderUrl,
-    icon: 'build-more',
-    index: 0
-  },
-  {
-    to:
-      'https://docs.decentraland.org/creator/development-guide/coding-scenes/',
-    icon: 'get-creative',
-    index: 1
-  },
-  {
-    to: `${builderUrl}/land`,
-    icon: 'manage-land',
-    index: 2
-  }
-]
+import CTA from './CTA/CTA'
 
 const RentConfirmedModal = ({
   metadata: { rental, periodIndexChosen },
@@ -35,6 +16,8 @@ const RentConfirmedModal = ({
   const period = rental.periods[periodIndexChosen]
   const startDate = new Date()
   const endDate = add(startDate, { days: period.maxDays })
+
+  const isMobileView = useMobileMediaQuery()
 
   return (
     <Modal
@@ -54,9 +37,20 @@ const RentConfirmedModal = ({
             />
           </div>
           <div>
-            <CTA cta={CTAs[0]} />
-            <CTA cta={CTAs[1]} />
-            <CTA cta={CTAs[2]} />
+            <CTA
+              to={`${builderUrl}/scenes`}
+              name="build-more"
+              isDisabledOnMobile={isMobileView}
+            />
+            <CTA
+              to="https://docs.decentraland.org/creator/development-guide/coding-scenes/"
+              name="get-creative"
+            />
+            <CTA
+              to={`${builderUrl}/land`}
+              name="manage-land"
+              isDisabledOnMobile={isMobileView}
+            />
           </div>
         </div>
       </Modal.Content>
