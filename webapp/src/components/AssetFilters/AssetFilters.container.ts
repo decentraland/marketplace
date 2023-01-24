@@ -16,6 +16,7 @@ import {
   getSection,
   getWearableGenders
 } from '../../modules/routing/selectors'
+import { getIsPriceFilterEnabled } from '../../modules/features/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { browse } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
@@ -25,7 +26,8 @@ import { AssetFilters } from './AssetFilters'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps
-  const section = 'section' in values ? (values.section as Section)  : getSection(state)
+  const section =
+    'section' in values ? (values.section as Section) : getSection(state)
   const contracts =
     'contracts' in values ? values.contracts || [] : getContracts(state)
   const onlyOnSale =
@@ -58,13 +60,20 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     collection: contracts[0],
     landStatus,
     view: getView(state),
-    section
+    section,
+    isPriceFilterEnabled: getIsPriceFilterEnabled(state)
   }
 }
 
-const mapDispatch = (dispatch: Dispatch, ownProps: OwnProps): MapDispatchProps => {
+const mapDispatch = (
+  dispatch: Dispatch,
+  ownProps: OwnProps
+): MapDispatchProps => {
   return {
-    onBrowse: options => ownProps.onFilterChange ? ownProps.onFilterChange(options) : dispatch(browse(options))
+    onBrowse: options =>
+      ownProps.onFilterChange
+        ? ownProps.onFilterChange(options)
+        : dispatch(browse(options))
   }
 }
 

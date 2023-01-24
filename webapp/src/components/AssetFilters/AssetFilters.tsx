@@ -9,10 +9,9 @@ import {
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
-import { getNetwork } from '../../utils/filters'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
-import { PriceFilter } from './PriceFilter'
+import PriceFilter from './PriceFilter'
 import { RarityFilter } from './RarityFilter'
 import { NetworkFilter } from './NetworkFilter'
 import { Props } from './AssetFilters.types'
@@ -39,7 +38,9 @@ export const AssetFilters = ({
   section,
   landStatus,
   defaultCollapsed,
-  onBrowse
+  onBrowse,
+  isPriceFilterEnabled,
+  values
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
@@ -127,16 +128,18 @@ export const AssetFilters = ({
   if (isInLandSection) {
     return (
       <div className="filters-sidebar">
-        <PriceFilter
-          onChange={handlePriceChange}
-          minPrice={minPrice}
-          maxPrice={maxPrice}
-          network={getNetwork(network, category)}
-        />
         <LandStatusFilter
           landStatus={landStatus}
           onChange={handleLandStatusChange}
         />
+        {isPriceFilterEnabled ? (
+          <PriceFilter
+            onChange={handlePriceChange}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            values={values}
+          />
+        ) : null}
       </div>
     )
   }
@@ -150,13 +153,13 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
         />
       ) : null}
-      {shouldRenderFilter(AssetFilter.Price) && isOnSale ? (
+      {isPriceFilterEnabled && shouldRenderFilter(AssetFilter.Price) && isOnSale ? (
         <PriceFilter
           onChange={handlePriceChange}
           minPrice={minPrice}
           maxPrice={maxPrice}
-          network={getNetwork(network, category)}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Price]}
+          values={values}
         />
       ) : null}
       {shouldRenderFilter(AssetFilter.Collection) ? (
