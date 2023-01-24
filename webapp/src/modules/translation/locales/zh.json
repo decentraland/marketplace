@@ -644,13 +644,13 @@
     "explanation": "银行卡付款由 {link_to_transak} 处理。\nTransak 对其服务收取费用。 在确认购买之前，您将看到最终价格。",
     "learn_more": "了解有关卡支付的更多信息"
   },
-  "processing_page": {
+  "asset_purchase_with_card_pending_page": {
     "title": "您的物品正在运送途中！",
     "status": "处理交易",
     "description": "处理交易最多可能需要 3 分钟。 您还可以在 {activity} 中跟踪其进度。",
     "cta": "返回市场"
   },
-  "success_page": {
+  "asset_purchase_with_card_success_page": {
     "title": "全部做完！",
     "description": "您可以在 {my_assets} 中找到您的物品。",
     "cta": "探索更多收藏品"

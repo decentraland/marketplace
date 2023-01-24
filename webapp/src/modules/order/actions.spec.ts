@@ -22,12 +22,18 @@ import {
   executeOrderRequest,
   executeOrderSuccess,
   executeOrderTransactionSubmitted,
-  executeOrderWithCard,
+  executeOrderWithCardFailure,
+  executeOrderWithCardRequest,
+  executeOrderWithCardSuccess,
+  executeOrderWithCardTransactionSubmitted,
   EXECUTE_ORDER_FAILURE,
   EXECUTE_ORDER_REQUEST,
   EXECUTE_ORDER_SUCCESS,
   EXECUTE_ORDER_TRANSACTION_SUBMITTED,
-  EXECUTE_ORDER_WITH_CARD
+  EXECUTE_ORDER_WITH_CARD_FAILURE,
+  EXECUTE_ORDER_WITH_CARD_REQUEST,
+  EXECUTE_ORDER_WITH_CARD_SUCCESS,
+  EXECUTE_ORDER_WITH_CARD_TRANSACTION_SUBMITTED
 } from './actions'
 
 let nft: NFT
@@ -169,12 +175,56 @@ describe('when creating the action to signal a failure in the execute order requ
   })
 })
 
-describe('when creating the action to signal the start of the execute order with card', () => {
+describe('when creating the action to signal the start of the execute order with card request', () => {
   it('should return an object representing the action', () => {
-    expect(executeOrderWithCard(nft)).toEqual({
-      type: EXECUTE_ORDER_WITH_CARD,
+    expect(executeOrderWithCardRequest(nft)).toEqual({
+      type: EXECUTE_ORDER_WITH_CARD_REQUEST,
       meta: undefined,
       payload: { nft }
+    })
+  })
+})
+
+describe('when creating the action to signal the submission of the executed order with card transaction', () => {
+  it('should return an object representing the action', () => {
+    expect(
+      executeOrderWithCardTransactionSubmitted(order, nft, txHash)
+    ).toEqual({
+      type: EXECUTE_ORDER_WITH_CARD_TRANSACTION_SUBMITTED,
+      meta: undefined,
+      payload: {
+        order,
+        nft,
+        ...buildTransactionPayload(nft.chainId, txHash, {
+          tokenId: nft.tokenId,
+          contractAddress: nft.contractAddress,
+          network: nft.network,
+          name: getAssetName(nft),
+          price: formatWeiMANA(order.price)
+        })
+      }
+    })
+  })
+})
+
+describe('when creating the action to signal a successful execute order with card request', () => {
+  it('should return an object representing the action', () => {
+    expect(executeOrderWithCardSuccess()).toEqual({
+      type: EXECUTE_ORDER_WITH_CARD_SUCCESS,
+      meta: undefined,
+      payload: undefined
+    })
+  })
+})
+
+describe('when creating the action to signal a failure in the execute order with card request', () => {
+  it('should return an object representing the action', () => {
+    const errorCode = ErrorCode.EXPECTATION_FAILED
+
+    expect(executeOrderWithCardFailure(nft, error, errorCode)).toEqual({
+      type: EXECUTE_ORDER_WITH_CARD_FAILURE,
+      meta: undefined,
+      payload: { nft, error, errorCode }
     })
   })
 })

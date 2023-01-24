@@ -25,15 +25,17 @@ import {
   FetchTrendingItemsRequestAction,
   fetchTrendingItemsSuccess,
   fetchTrendingItemsFailure,
-  BuyItemWithCardAction,
-  BUY_ITEM_WITH_CARD
+  BuyItemWithCardRequestAction,
+  BUY_ITEM_WITH_CARD_REQUEST,
+  buyItemWithCardSuccess,
+  buyItemWithCardFailure
 } from './actions'
 
 export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
-  yield takeEvery(BUY_ITEM_WITH_CARD, handleBuyItemWithCard)
+  yield takeEvery(BUY_ITEM_WITH_CARD_REQUEST, handleBuyItemWithCardRequest)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
 }
 
@@ -126,7 +128,18 @@ function* handleBuyItem(action: BuyItemRequestAction) {
   }
 }
 
-function* handleBuyItemWithCard(action: BuyItemWithCardAction) {
-  const { item } = action.payload
-  yield call(buyAssetWithCard, item)
+function* handleBuyItemWithCardRequest(action: BuyItemWithCardRequestAction) {
+  try {
+    const { item } = action.payload
+    yield call(buyAssetWithCard, item)
+    // TODO (buy nfts with card): do we need the txHash here?
+    const txHash: string = ''
+    yield put(buyItemWithCardSuccess(item.chainId, txHash, item))
+  } catch (error) {
+    yield put(
+      buyItemWithCardFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
+  }
 }

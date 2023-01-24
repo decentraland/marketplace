@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/manaFiatGateway/actions'
+import { openBuyManaWithFiatModalRequest } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { getIsCampaignBrowserEnabled } from '../../modules/features/selectors'
 import { getIsFullscreen } from '../../modules/routing/selectors'
 import { RootState } from '../../modules/reducer'

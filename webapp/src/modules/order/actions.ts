@@ -93,13 +93,54 @@ export type ExecuteOrderTransactionSubmittedAction = ReturnType<
 export type ExecuteOrderFailureAction = ReturnType<typeof executeOrderFailure>
 
 // Execute Order With Card (aka Buy with Card)
-// TODO (buy nfts with card): change to REQUEST, SUCCESS, FAILURE later
-export const EXECUTE_ORDER_WITH_CARD = 'Execute Order With Card'
+export const EXECUTE_ORDER_WITH_CARD_REQUEST =
+  '[Request] Execute Order With Card'
+export const EXECUTE_ORDER_WITH_CARD_TRANSACTION_SUBMITTED =
+  '[Submitted transaction] Execute Order With Card'
+export const EXECUTE_ORDER_WITH_CARD_SUCCESS =
+  '[Success] Execute Order With Card'
+export const EXECUTE_ORDER_WITH_CARD_FAILURE =
+  '[Failure] Execute Order With Card'
 
-export const executeOrderWithCard = (nft: NFT) =>
-  action(EXECUTE_ORDER_WITH_CARD, { nft })
+export const executeOrderWithCardRequest = (nft: NFT) =>
+  action(EXECUTE_ORDER_WITH_CARD_REQUEST, { nft })
 
-export type ExecuteOrderWithCardAction = ReturnType<typeof executeOrderWithCard>
+export const executeOrderWithCardTransactionSubmitted = (
+  order: Order,
+  nft: NFT,
+  txHash: string
+) =>
+  action(EXECUTE_ORDER_WITH_CARD_TRANSACTION_SUBMITTED, {
+    order,
+    nft,
+    ...buildTransactionPayload(nft.chainId, txHash, {
+      tokenId: nft.tokenId,
+      contractAddress: nft.contractAddress,
+      network: nft.network,
+      name: getAssetName(nft),
+      price: formatWeiMANA(order.price)
+    })
+  })
+export const executeOrderWithCardSuccess = () =>
+  action(EXECUTE_ORDER_WITH_CARD_SUCCESS)
+export const executeOrderWithCardFailure = (
+  nft: NFT,
+  error: string,
+  errorCode?: ErrorCode
+) => action(EXECUTE_ORDER_WITH_CARD_FAILURE, { nft, error, errorCode })
+
+export type ExecuteOrderWithCardRequestAction = ReturnType<
+  typeof executeOrderWithCardRequest
+>
+export type ExecuteOrderWithCardTransactionSubmittedAction = ReturnType<
+  typeof executeOrderWithCardTransactionSubmitted
+>
+export type ExecuteOrderWithCardSuccessAction = ReturnType<
+  typeof executeOrderWithCardSuccess
+>
+export type ExecuteOrderWithCardFailureAction = ReturnType<
+  typeof executeOrderWithCardFailure
+>
 
 // Cancel Order (aka Cancel Sale)
 

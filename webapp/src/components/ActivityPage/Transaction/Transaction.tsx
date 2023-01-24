@@ -10,8 +10,8 @@ import {
   GRANT_TOKEN_SUCCESS,
   REVOKE_TOKEN_SUCCESS
 } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { ADD_MANA_PURCHASE_AS_TRANSACTION } from 'decentraland-dapps/dist/modules/manaFiatGateway/actions'
-import { Purchase } from 'decentraland-dapps/dist/modules/mana/types'
+import { ADD_MANA_PURCHASE_AS_TRANSACTION } from 'decentraland-dapps/dist/modules/gateway/actions'
+import { Purchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   gatewaysNames,
   networksNames

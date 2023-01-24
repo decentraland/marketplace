@@ -27,7 +27,13 @@ import {
   FetchTrendingItemsSuccessAction,
   FetchTrendingItemsFailureAction,
   FETCH_TRENDING_ITEMS_REQUEST,
-  FETCH_TRENDING_ITEMS_FAILURE
+  FETCH_TRENDING_ITEMS_FAILURE,
+  BUY_ITEM_WITH_CARD_REQUEST,
+  BUY_ITEM_WITH_CARD_SUCCESS,
+  BuyItemWithCardFailureAction,
+  BuyItemWithCardRequestAction,
+  BuyItemWithCardSuccessAction,
+  BUY_ITEM_WITH_CARD_FAILURE
 } from './actions'
 
 export type ItemState = {
@@ -55,6 +61,9 @@ type ItemReducerAction =
   | BuyItemRequestAction
   | BuyItemSuccessAction
   | BuyItemFailureAction
+  | BuyItemWithCardRequestAction
+  | BuyItemWithCardSuccessAction
+  | BuyItemWithCardFailureAction
 
 export function itemReducer(
   state = INITIAL_STATE,
@@ -63,6 +72,8 @@ export function itemReducer(
   switch (action.type) {
     case BUY_ITEM_REQUEST:
     case BUY_ITEM_SUCCESS:
+    case BUY_ITEM_WITH_CARD_REQUEST:
+    case BUY_ITEM_WITH_CARD_SUCCESS:
     case FETCH_ITEMS_REQUEST:
     case FETCH_TRENDING_ITEMS_REQUEST:
     case FETCH_ITEM_REQUEST: {
@@ -101,6 +112,7 @@ export function itemReducer(
     }
 
     case BUY_ITEM_FAILURE:
+    case BUY_ITEM_WITH_CARD_FAILURE:
     case FETCH_ITEMS_FAILURE:
     case FETCH_TRENDING_ITEMS_FAILURE:
     case FETCH_ITEM_FAILURE: {

@@ -2,7 +2,7 @@ import { Dispatch } from 'redux'
 import {
   openBuyManaWithFiatModalRequest,
   OpenBuyManaWithFiatModalRequestAction
-} from 'decentraland-dapps/dist/modules/manaFiatGateway/actions'
+} from 'decentraland-dapps/dist/modules/gateway/actions'
 
 export enum NavigationTab {
   OVERVIEW = 'overview',

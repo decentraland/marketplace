@@ -1,6 +1,6 @@
 import { put, select, takeEvery } from 'redux-saga/effects'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { Network } from '@dcl/schemas'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { Transak } from '../../lib/transak'
 import { closeAllModals } from '../modal/actions'
 import { OPEN_TRANSAK, OpenTransakAction } from './actions'

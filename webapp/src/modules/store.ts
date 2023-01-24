@@ -9,13 +9,13 @@ import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/tra
 import { createAnalyticsMiddleware } from 'decentraland-dapps/dist/modules/analytics/middleware'
 import { CLEAR_TRANSACTIONS } from 'decentraland-dapps/dist/modules/transaction/actions'
 
+import { config } from '../config'
 import { createRootReducer, RootState } from './reducer'
 import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { GENERATE_IDENTITY_SUCCESS } from './identity/actions'
 import { SET_IS_TRYING_ON } from './ui/preview/actions'
-import { config } from '../config'
 
 export const history = require('history').createBrowserHistory()
 

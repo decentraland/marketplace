@@ -2,6 +2,7 @@ import { call, put, race, take } from 'redux-saga/effects'
 import { NFTCategory, Order, RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import {
   ContractData,
   ContractName,
@@ -116,8 +117,6 @@ export function isWearableOrEmote(asset: Asset): boolean {
   return categories.includes(asset.category)
 }
 
-// TODO (buy nfts with card): add test for the open transak flow
-
 export function* buyAssetWithCard(asset: Asset) {
   const buyNftsWithCardExplanationPopupKey: string | null = yield call(
     [localStorage, 'getItem'],
@@ -131,9 +130,8 @@ export function* buyAssetWithCard(asset: Asset) {
 
   yield put(openModal('BuyWithCardExplanationModal', { asset }))
 
-  // TODO (buy nfts with card): add continue when implementing Transak widget
   const { close }: { close: CloseModalAction } = yield race({
-    // TODO (buy nfts with card): should we differentiate the specific close that we need?
+    continue: take(SET_PURCHASE),
     close: take(CLOSE_MODAL)
   })
 

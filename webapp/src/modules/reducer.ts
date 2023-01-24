@@ -10,9 +10,10 @@ import { authorizationReducer as authorization } from 'decentraland-dapps/dist/m
 import { toastReducer as toast } from 'decentraland-dapps/dist/modules/toast/reducer'
 import { featuresReducer as features } from 'decentraland-dapps/dist/modules/features/reducer'
 import { modalReducer as modal } from 'decentraland-dapps/dist/modules/modal/reducer'
-import { manaFiatGatewayReducer as manaFiatGateway } from 'decentraland-dapps/dist/modules/manaFiatGateway/reducer'
+import { manaFiatGatewayReducer as manaFiatGateway } from 'decentraland-dapps/dist/modules/gateway/reducer'
 
 import { accountReducer as account } from './account/reducer'
+import { assetReducer as asset } from './asset/reducer'
 import { bidReducer as bid } from './bid/reducer'
 import { itemReducer as item } from './item/reducer'
 import { nftReducer as nft } from './nft/reducer'
@@ -33,6 +34,7 @@ import { contractReducer as contract } from './contract/reducer'
 export const createRootReducer = (history: History) =>
   combineReducers({
     account,
+    asset,
     authorization,
     bid,
     item,

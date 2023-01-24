@@ -33,9 +33,15 @@ import {
   ExecuteOrderFailureAction,
   ExecuteOrderRequestAction,
   ExecuteOrderSuccessAction,
+  ExecuteOrderWithCardFailureAction,
+  ExecuteOrderWithCardRequestAction,
+  ExecuteOrderWithCardSuccessAction,
   EXECUTE_ORDER_FAILURE,
   EXECUTE_ORDER_REQUEST,
-  EXECUTE_ORDER_SUCCESS
+  EXECUTE_ORDER_SUCCESS,
+  EXECUTE_ORDER_WITH_CARD_FAILURE,
+  EXECUTE_ORDER_WITH_CARD_REQUEST,
+  EXECUTE_ORDER_WITH_CARD_SUCCESS
 } from './actions'
 
 export type OrderState = {
@@ -44,7 +50,7 @@ export type OrderState = {
   error: string | null
 }
 
-const INITIAL_STATE = {
+export const INITIAL_STATE: OrderState = {
   data: {},
   loading: [],
   error: null
@@ -61,6 +67,9 @@ type OrderReducerAction =
   | ExecuteOrderRequestAction
   | ExecuteOrderFailureAction
   | ExecuteOrderSuccessAction
+  | ExecuteOrderWithCardRequestAction
+  | ExecuteOrderWithCardFailureAction
+  | ExecuteOrderWithCardSuccessAction
   | CancelOrderRequestAction
   | CancelOrderFailureAction
   | CancelOrderSuccessAction
@@ -73,6 +82,7 @@ export function orderReducer(
   switch (action.type) {
     case CREATE_ORDER_REQUEST:
     case EXECUTE_ORDER_REQUEST:
+    case EXECUTE_ORDER_WITH_CARD_REQUEST:
     case CANCEL_ORDER_REQUEST:
     case FETCH_NFTS_REQUEST: {
       return {
@@ -82,6 +92,7 @@ export function orderReducer(
     }
     case CREATE_ORDER_SUCCESS:
     case EXECUTE_ORDER_SUCCESS:
+    case EXECUTE_ORDER_WITH_CARD_SUCCESS:
     case CANCEL_ORDER_SUCCESS: {
       return {
         ...state,
@@ -105,6 +116,7 @@ export function orderReducer(
     }
     case CREATE_ORDER_FAILURE:
     case EXECUTE_ORDER_FAILURE:
+    case EXECUTE_ORDER_WITH_CARD_FAILURE:
     case CANCEL_ORDER_FAILURE:
     case FETCH_NFTS_FAILURE: {
       return {
@@ -118,6 +130,7 @@ export function orderReducer(
       if (order) {
         return {
           ...state,
+          loading: loadingReducer(state.loading, action),
           data: {
             ...state.data,
             [order.id]: order

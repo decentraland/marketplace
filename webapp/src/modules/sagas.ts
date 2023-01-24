@@ -5,7 +5,7 @@ import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/s
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
 import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
-import { createManaFiatGatewaysSaga } from 'decentraland-dapps/dist/modules/manaFiatGateway/sagas'
+import { createManaFiatGatewaysSaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
 import { locationSaga } from 'decentraland-dapps/dist/modules/location/sagas'
 import { CatalystClient } from 'dcl-catalyst-client'
 import { NetworkGatewayType } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
@@ -34,6 +34,7 @@ import { modalSaga } from './modal/sagas'
 import { eventSaga } from './event/sagas'
 import { contractSaga } from './contract/sagas'
 import { transakSaga } from './transak/sagas'
+import { assetSaga } from './asset/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({ peerUrl })
@@ -89,6 +90,7 @@ export function* rootSaga() {
     contractSaga(),
     manaFiatGatewaysSaga(),
     locationSaga(),
-    transakSaga()
+    transakSaga(),
+    assetSaga()
   ])
 }

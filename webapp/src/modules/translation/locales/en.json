@@ -647,13 +647,13 @@
     "explanation": "Card payments are processed by {link_to_transak}.\nTransak charges a fee for its service. You will see the final price before confirming the purchase.",
     "learn_more": "Learn more about card payments"
   },
-  "processing_page": {
+  "asset_purchase_with_card_pending_page": {
     "title": "Your item is on its way!",
     "status": "Processing Transaction",
     "description": "The transaction can take up to 3 minutes to be processed. You can also track its progress in {activity}.",
     "cta": "Back to marketplace"
   },
-  "success_page": {
+  "asset_purchase_with_card_success_page": {
     "title": "All done!",
     "description": "You can find your item in {my_assets}.",
     "cta": "Explore more collectibles"

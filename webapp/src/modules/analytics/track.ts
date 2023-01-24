@@ -68,8 +68,8 @@ import { NFTCategory } from '@dcl/schemas'
 import {
   SetPurchaseAction,
   SET_PURCHASE
-} from 'decentraland-dapps/dist/modules/mana/actions'
-import { PurchaseStatus } from 'decentraland-dapps/dist/modules/mana/types'
+} from 'decentraland-dapps/dist/modules/gateway/actions'
+import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
