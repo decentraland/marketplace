@@ -12,7 +12,8 @@ import {
   getAssetType,
   getCurrentBrowseOptions,
   getSection,
-  getSearch
+  getSearch,
+  hasFiltersEnabled
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
@@ -41,7 +42,8 @@ const mapState = (state: RootState): MapStateProps => {
     urlNext: buildBrowseURL(getLocation(state).pathname, {
       ...getCurrentBrowseOptions(state),
       page: page + 1
-    })
+    }),
+    hasFiltersEnabled: hasFiltersEnabled(state)
   }
 }
 

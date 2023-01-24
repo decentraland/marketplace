@@ -22,6 +22,7 @@ const AssetList = (props: Props) => {
     count,
     search,
     isLoading,
+    hasFiltersEnabled,
     onBrowse,
     urlNext,
     isManager,
@@ -51,6 +52,10 @@ const AssetList = (props: Props) => {
     if (assets.length > 0) {
       return ''
     } else if (section) {
+      if (isManager) {
+        return 'nft_list.simple_empty'
+      }
+
       const isEmoteOrWearableSection = [
         NFTCategory.EMOTE,
         NFTCategory.WEARABLE
@@ -61,7 +66,7 @@ const AssetList = (props: Props) => {
       }
     }
     return 'nft_list.simple_empty'
-  }, [assets.length, search, section])
+  }, [assets.length, search, section, isManager])
 
   return (
     <>
@@ -114,6 +119,8 @@ const AssetList = (props: Props) => {
                   {chunks}
                 </button>
               ),
+              'if-filters': (chunks: string) =>
+                hasFiltersEnabled ? chunks : '',
               clearFilters: (chunks: string) => (
                 <button className="empty-actions" onClick={onClearFilters}>
                   {chunks}

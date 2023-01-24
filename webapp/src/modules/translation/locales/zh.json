@@ -313,8 +313,8 @@
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
   "nft_list": {
-    "empty": "我们在 {currentSection} 中找不到任何结果。 <br></br><searchStore>搜索 {section}</searchStore>或<clearFilters>清除过滤器</clearFilters>”",
-    "simple_empty": "我们找不到任何结果。 <br></br><clearFilters>清除过滤器</clearFilters>",
+    "empty": "我们在 {currentSection} 中找不到任何结果。 <br></br><searchStore>搜索 {section}</searchStore><if-filters>或<clearFilters>清除过滤器</clearFilters></if-filters>",
+    "simple_empty": "我们找不到任何结果。<if-filters><br></br><clearFilters>清除过滤器</clearFilters></if-filters>",
     "empty_search": "{currentSection} 中没有“{search}”的结果。 <br></br><searchStore>尝试搜索{section}</searchStore>"
   },
   "nft_filters": {

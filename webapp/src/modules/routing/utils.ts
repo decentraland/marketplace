@@ -76,7 +76,7 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
 
   // The onlyOnSale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
   if (
-    !browseOptions.onlyOnSale &&
+    !clearedBrowseOptions.onlyOnSale &&
     !isLandSection(browseOptions.section as Section)
   ) {
     clearedBrowseOptions.onlyOnSale = true

@@ -312,8 +312,8 @@
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
   "nft_list": {
-    "empty": "No pudimos encontrar ningún resultado en la sección {currentSection}. <br></br><searchStore>Busca en {section}</searchStore> o <clearFilters>limpia los filtros</clearFilters>",
-    "simple_empty": "No pudimos encontrar ningún resultado. <br></br><clearFilters>Limpia los filtros</clearFilters>",
+    "empty": "No pudimos encontrar ningún resultado en la sección {currentSection}. <br></br><searchStore>Busca en {section}</searchStore><if-filters> o <clearFilters>limpia los filtros</clearFilters></if-filters>",
+    "simple_empty": "No pudimos encontrar ningún resultado. <if-filters><br></br><clearFilters>Limpia los filtros</clearFilters></if-filters>",
     "empty_search": "No hay resultados para \"{search}\" en {currentSection}. <br></br><searchStore> Intenta buscando en {section}</searchStore>"
   },
   "nft_filters": {

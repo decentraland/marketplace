@@ -22,6 +22,7 @@ export type Props = {
   count?: number
   isLoading: boolean
   isManager?: boolean
+  hasFiltersEnabled?: boolean
   onBrowse: typeof browse
   onClearFilters: typeof clearFilters
   urlNext: string
@@ -40,6 +41,7 @@ export type MapStateProps = Pick<
   | 'assetType'
   | 'urlNext'
   | 'search'
+  | 'hasFiltersEnabled'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>
 export type MapDispatch = Dispatch<BrowseAction | ClearFiltersAction>
