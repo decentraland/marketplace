@@ -1,0 +1,23 @@
+.empty-actions {
+  font-weight: bold;
+  background: none;
+  border: none;
+  color: var(--summer-red);
+  padding: 0;
+  padding-top: 6px;
+  cursor: pointer;
+}
+
+.watermelon {
+  background-image: url('../../images/watermelon.svg');
+  width: 56px;
+  height: 56px;
+  display: flex;
+  margin: auto;
+  margin-bottom: 16px;
+  background-size: cover;
+}
+
+.ui.massive.loader.asset-loader {
+  top: 50vh;
+}

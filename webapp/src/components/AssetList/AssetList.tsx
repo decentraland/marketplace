@@ -1,27 +1,32 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
-import { Item } from '@dcl/schemas'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Item, NFTCategory } from '@dcl/schemas'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-
+import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
 import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { AssetCard } from '../AssetCard'
 import { Props } from './AssetList.types'
+import './AssetList.css'
 
 const AssetList = (props: Props) => {
   const {
     vendor,
+    section,
     assetType,
     items,
     nfts,
     page,
     count,
+    search,
     isLoading,
+    hasFiltersEnabled,
     onBrowse,
     urlNext,
-    isManager
+    isManager,
+    onClearFilters
   } = props
 
   const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts
@@ -43,8 +48,34 @@ const AssetList = (props: Props) => {
 
   const isLoadingNewPage = isLoading && nfts.length >= PAGE_SIZE
 
+  const emptyStateTranslationString = useMemo(() => {
+    if (assets.length > 0) {
+      return ''
+    } else if (section) {
+      if (isManager) {
+        return 'nft_list.simple_empty'
+      }
+
+      const isEmoteOrWearableSection = [
+        NFTCategory.EMOTE,
+        NFTCategory.WEARABLE
+      ].includes(getCategoryFromSection(section)!)
+
+      if (isEmoteOrWearableSection) {
+        return search ? 'nft_list.empty_search' : 'nft_list.empty'
+      }
+    }
+    return 'nft_list.simple_empty'
+  }, [assets.length, search, section, isManager])
+
   return (
     <>
+      {isLoading ? (
+        <>
+          <div className="overlay" />
+          <Loader size="massive" active className="asset-loader" />
+        </>
+      ) : null}
       <Card.Group>
         {assets.length > 0
           ? assets.map((assets, index) => (
@@ -55,17 +86,50 @@ const AssetList = (props: Props) => {
               />
             ))
           : null}
-
-        {isLoading ? (
-          <>
-            <div className="overlay" />
-            <Loader size="massive" active />
-          </>
-        ) : null}
       </Card.Group>
 
       {assets.length === 0 && !isLoading ? (
-        <div className="empty">{t('nft_list.empty')}</div>
+        <div className="empty">
+          <div className="watermelon" />
+
+          <T
+            id={emptyStateTranslationString}
+            values={{
+              search,
+              currentSection:
+                assetType === AssetType.ITEM
+                  ? t('browse_page.primary_market_title').toLocaleLowerCase()
+                  : t('browse_page.secondary_market_title').toLocaleLowerCase(),
+              section:
+                assetType === AssetType.ITEM
+                  ? t('browse_page.secondary_market_title').toLocaleLowerCase()
+                  : t('browse_page.primary_market_title').toLocaleLowerCase(),
+              searchStore: (chunks: string) => (
+                <button
+                  className="empty-actions"
+                  onClick={() =>
+                    onBrowse({
+                      assetType:
+                        assetType === AssetType.ITEM
+                          ? AssetType.NFT
+                          : AssetType.ITEM
+                    })
+                  }
+                >
+                  {chunks}
+                </button>
+              ),
+              'if-filters': (chunks: string) =>
+                hasFiltersEnabled ? chunks : '',
+              clearFilters: (chunks: string) => (
+                <button className="empty-actions" onClick={onClearFilters}>
+                  {chunks}
+                </button>
+              ),
+              br: () => <br />
+            }}
+          />
+        </div>
       ) : null}
 
       {assets.length > 0 &&

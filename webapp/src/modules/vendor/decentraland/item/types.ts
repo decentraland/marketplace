@@ -1,14 +1,15 @@
 import {
   EmoteCategory,
   EmotePlayMode,
+  GenderFilterOption,
   Item,
   ItemSortBy,
   Network,
   NFTCategory,
   Rarity,
-  WearableCategory
+  WearableCategory,
+  WearableGender
 } from '@dcl/schemas'
-import { WearableGender } from '../../../nft/wearable/types'
 
 export type ItemFilters = {
   first?: number
@@ -25,12 +26,14 @@ export type ItemFilters = {
   isWearableSmart?: boolean
   wearableCategory?: WearableCategory
   emoteCategory?: EmoteCategory
-  emotePlayMode?: EmotePlayMode
+  emotePlayMode?: EmotePlayMode[]
   rarities?: Rarity[]
-  wearableGenders?: WearableGender[]
+  wearableGenders?: (WearableGender | GenderFilterOption)[]
   contracts?: string[]
   itemId?: string
   network?: Network
+  minPrice?: string
+  maxPrice?: string
 }
 
 export type ItemResponse = {

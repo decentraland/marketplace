@@ -6,17 +6,31 @@
   color: var(--primary);
 }
 
-.dcl.navbar .ui.menu .item .bell.pending:after {
-  content: '';
-  width: 5px;
-  height: 5px;
-  background-color: var(--primary);
-  position: absolute;
-  border-radius: 100%;
-  top: -5px;
-  right: -5px;
-}
+
 
 .dcl.account-wrapper .dcl.mana {
   flex: none;
+}
+
+
+@media (max-width: 991px) {
+    .dcl.navbar .dcl.account-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .dcl.account-wrapper .dcl.mana + .dcl.mana {
+        padding: 0;
+    }
+}
+
+.dcl.navbar .ui.menu .item .bell.pending:after {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background-color: var(--primary);
+    position: absolute;
+    border-radius: 100%;
+    top: -5px;
+    right: -5px;
 }

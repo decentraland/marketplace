@@ -152,7 +152,11 @@
     "type_to_search": "键入以搜索集合。",
     "clear": "清除过滤器",
     "recently_reviewed": "最近审查",
-    "size": "大小"
+    "size": "大小",
+    "price": "价格",
+    "price_min_greater_max": "最高价格应高于最低价格",
+    "reset": "重置",
+    "apply": "应用过滤器"
   },
   "home_page": {
     "analytics": {
@@ -309,30 +313,65 @@
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
   "nft_list": {
-    "empty": "无结果"
+    "empty": "我们在 {currentSection} 中找不到任何结果。 <br></br><searchStore>搜索 {section}</searchStore><if-filters>或<clearFilters>清除过滤器</clearFilters></if-filters>",
+    "simple_empty": "我们找不到任何结果。<if-filters><br></br><clearFilters>清除过滤器</clearFilters></if-filters>",
+    "empty_search": "{currentSection} 中没有“{search}”的结果。 <br></br><searchStore>尝试搜索{section}</searchStore>"
   },
   "nft_filters": {
+    "no_items": "没有相关产品",
     "on_sale": "特价中",
     "filter": "筛选",
     "order_by": "排序",
-    "results": "{count} {count, plural, one {result} other {results}}",
-    "more_than_results": "+{count} results",
-    "search": "搜寻 {suffix}...",
+    "results": "{count} {count, plural, one {结果} other {结果}}",
+    "query_results": "显示 {count} {count, plural, one {结果} other {结果}} 为了 \"{search}\"",
+    "more_than_results": "+{count} 结果",
+    "query_more_than_results": "显示 +{count} 结果 为了 \"{search}\"",
+    "search": "搜寻",
     "search_land": "搜寻...",
-    "rarity": "稀有度",
     "gender": "性别",
-    "collection": "珍藏",
-    "all_collections": "所有珍藏",
-    "network": "网络",
-    "all_networks": "所有网络",
     "smart_wearables": "智能穿戴",
-    "play_mode": "游戏模式",
-    "all_play_modes": "所有播放模式"
+    "emote_play_mode": {
+      "title": "游戏模式",
+      "all_items": "所有播放模式"
+    },
+    "body_shapes": {
+      "title": "身材",
+      "all_items": "所有体型",
+      "female": "只有女性",
+      "male": "只有男性",
+      "unisex": "仅男女皆宜"
+    },
+    "rarities": {
+      "title": "稀有度",
+      "all_items": "所有稀有",
+      "count_items": "{count} {count, plural, one {稀有度} other {珍品}}"
+    },
+    "price": {
+      "title": "价格",
+      "all_items": "所有价格",
+      "more_than_price": "超过 <mana></mana> {price}",
+      "less_than_price": "低于 <mana></mana> {price}",
+      "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "collection": {
+      "title": "收藏",
+      "all_items": "所有收藏",
+      "search": "搜索收藏"
+    },
+    "network": {
+      "title": "网络",
+      "all_items": "所有网络"
+    },
+    "more_filters": "更多过滤器",
+    "only_smart": "只有聪明",
+    "not_on_sale": "不打折"
   },
   "nft_land_filters": {
     "all_land": "所有土地",
     "only_for_rent": "可出租",
-    "only_for_sale": "可购买"
+    "only_for_sale": "可购买",
+    "for_sale": "待售",
+    "category": "类别"
   },
   "nft_card": {
     "expires_at": "{date}到期"
@@ -655,7 +694,8 @@
     "primary_market_title": "商店",
     "primary_market_subtitle": "用户原创",
     "secondary_market_title": "列表",
-    "secondary_market_subtitle": "被转售的物品"
+    "secondary_market_subtitle": "被转售的物品",
+    "back_to_top": "回到顶部"
   },
   "account_page": {
     "copied": "已复制 ✔",

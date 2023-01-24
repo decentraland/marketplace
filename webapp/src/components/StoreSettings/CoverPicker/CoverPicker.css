@@ -27,6 +27,14 @@
   height: 240px;
 }
 
+.CoverPicker .cover-image-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .CoverPicker img {
   border-radius: 10px;
   overflow: hidden;

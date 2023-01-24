@@ -1,0 +1,73 @@
+.fieldsContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 90%;
+  margin: 5%;
+}
+
+.loaderContainer {
+  align-items: center;
+  display: flex;
+  height: 200px;
+  justify-content: center;
+  width: 100%;
+}
+
+:global(.dcl.field) {
+  width: 100% !important;
+  align-self: center;
+}
+
+:global(.dcl.field) {
+  display: grid;
+}
+
+.clndr-control .ui.compact.icon.button,
+.clndr-control .ui.compact.icon.buttons .button {
+  width: 20px !important;
+  top: 20px;
+}
+
+@media (max-width: 767px) {
+  :global(.dcl.field) {
+    width: 100%;
+    min-width: auto;
+  }
+
+  :global(.ui.modal .actions) {
+    align-items: center;
+    bottom: 30px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 90%;
+  }
+}
+
+@media (max-width: 767px) {
+  .AuthorizationModalActions {
+    align-items: center;
+    bottom: 28px;
+    margin: 0px !important;
+    position: fixed;
+    width: 100%;
+  }
+
+  .AuthorizationModal {
+    flex-grow: 4 !important;
+  }
+
+  .AuthorizationModalButtons {
+    width: 80%;
+  }
+
+  :global(.ui.modal .actions) {
+    align-items: center;
+    bottom: 30px;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+  }
+}

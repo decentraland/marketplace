@@ -87,10 +87,12 @@ export function getSearchParams(options?: BrowseOptions) {
     }
 
     if (
-      options.emotePlayMode &&
-      Object.values(EmotePlayMode).includes(options.emotePlayMode)
+      options.emotePlayMode?.length &&
+      options.emotePlayMode?.every(option => Object.values(EmotePlayMode).includes(option))
     ) {
-      params.set('emotePlayMode', options.emotePlayMode)
+      for (const emotePlayMode of options.emotePlayMode) {
+        params.append('emotePlayMode', emotePlayMode)
+      }
     }
 
     if (options.viewAsGuest !== undefined) {
@@ -99,6 +101,14 @@ export function getSearchParams(options?: BrowseOptions) {
 
     if (options.onlySmart !== undefined) {
       params.set('onlySmart', options.onlySmart.toString())
+    }
+
+    if (options.minPrice) {
+      params.set('minPrice', options.minPrice)
+    }
+
+    if (options.maxPrice) {
+      params.set('maxPrice', options.maxPrice)
     }
   }
   return params

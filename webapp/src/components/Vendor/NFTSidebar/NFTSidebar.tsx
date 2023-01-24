@@ -26,6 +26,7 @@ const NFTSidebar = (props: Props) => {
             (sections as DecentralandSection[]) ?? [Sections.decentraland.ALL]
           }
           onMenuItemClick={handleOnBrowse}
+          onBrowse={onBrowse}
         />
       )
   }

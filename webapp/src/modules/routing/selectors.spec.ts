@@ -1,11 +1,17 @@
-import { Rarity } from '@dcl/schemas'
+import {
+  EmotePlayMode,
+  GenderFilterOption,
+  Network,
+  Rarity
+} from '@dcl/schemas'
 import { AssetType } from '../asset/types'
-import { WearableGender } from '../nft/wearable/types'
 import { VendorName } from '../vendor'
 import { locations } from './locations'
 import {
   getAssetType,
   getIsMap,
+  getMaxPrice,
+  getMinPrice,
   getOnlyOnRent,
   getSection,
   hasFiltersEnabled
@@ -13,39 +19,72 @@ import {
 import { Sections } from './types'
 
 describe('when getting if the are filters set', () => {
+  describe('when the search filter is set', () => {
+    it('should return false', () => {
+      const expected = hasFiltersEnabled.resultFunc({
+        search: 'a search'
+      })
+      expect(expected).toBe(false)
+    })
+  })
+
   describe('when the network filter is set', () => {
     it('should return true', () => {
-      expect(hasFiltersEnabled.resultFunc('aNetwork', [], [], [])).toBe(true)
+      expect(
+        hasFiltersEnabled.resultFunc({ network: 'aNetwork' as Network })
+      ).toBe(true)
     })
   })
 
   describe('when the genders filter is set', () => {
     it('should return true', () => {
       expect(
-        hasFiltersEnabled.resultFunc(undefined, [WearableGender.FEMALE], [], [])
+        hasFiltersEnabled.resultFunc({
+          wearableGenders: [GenderFilterOption.FEMALE]
+        })
       ).toBe(true)
     })
   })
 
   describe('when the rarities filter is set', () => {
     it('should return true', () => {
-      expect(
-        hasFiltersEnabled.resultFunc(undefined, [], [Rarity.COMMON], [])
-      ).toBe(true)
-    })
-  })
-
-  describe('when the contracts filter is set', () => {
-    it('should return true', () => {
-      expect(hasFiltersEnabled.resultFunc(undefined, [], [], ['0x.....'])).toBe(
+      expect(hasFiltersEnabled.resultFunc({ rarities: [Rarity.COMMON] })).toBe(
         true
       )
     })
   })
 
-  describe('when the network, the genders, the rarities and the contracts filters is not set', () => {
+  describe('when the contracts filter is set', () => {
+    it('should return true', () => {
+      expect(hasFiltersEnabled.resultFunc({ contracts: ['0x.....'] })).toBe(
+        true
+      )
+    })
+  })
+
+  describe('when the playmode filter is set', () => {
+    it('should return true', () => {
+      expect(
+        hasFiltersEnabled.resultFunc({ emotePlayMode: [EmotePlayMode.LOOP] })
+      ).toBe(true)
+    })
+  })
+
+  describe('when the minPrice filter is set', () => {
+    it('should return true', () => {
+      expect(hasFiltersEnabled.resultFunc({ minPrice: '10' })).toBe(true)
+    })
+  })
+
+  describe('when the maxPrice filter is set', () => {
+    it('should return true', () => {
+      expect(hasFiltersEnabled.resultFunc({ maxPrice: '100' })).toBe(true)
+    })
+  })
+
+  describe('when no filters are set', () => {
     it('should return false', () => {
-      expect(hasFiltersEnabled.resultFunc(undefined, [], [], [])).toBe(false)
+      expect(hasFiltersEnabled.resultFunc({})).toBe(false)
     })
   })
 })
@@ -221,5 +260,29 @@ describe('when getting if the isMap parameter is set', () => {
     it('should return false', () => {
       expect(getIsMap.resultFunc(url)).toBe(false)
     })
+  })
+})
+
+describe('when there is a minPrice defined', () => {
+  let url: string
+
+  beforeEach(() => {
+    url = 'minPrice=20'
+  })
+
+  it('should return the value', () => {
+    expect(getMinPrice.resultFunc(url)).toBe('20')
+  })
+})
+
+describe('when there is a maxPrice defined', () => {
+  let url: string
+
+  beforeEach(() => {
+    url = 'maxPrice=120'
+  })
+
+  it('should return the value', () => {
+    expect(getMaxPrice.resultFunc(url)).toBe('120')
   })
 })

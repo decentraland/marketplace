@@ -1,0 +1,44 @@
+:global(.ui.modal).assetFiltersModal {
+  overflow-x: hidden;
+  display: flex !important; /** override decentraland-ui important */
+  flex-direction: column;
+  background: var(--background);
+}
+
+:global(.ui.modal).assetFiltersModal > :global(.header).modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 16px !important; /* override decentraland-ui important */
+  border-bottom: 1px solid rgba(115, 110, 125, 0.32);
+  background: transparent;
+}
+
+.modalTitle {
+  font-size: 17px;
+  line-height: 17px;
+  margin: 0;
+  font-weight: 400;
+}
+
+:global(.ui.button).closeButton::before {
+  content: url(../../../images/simple_close.svg);
+  width: 16px;
+  height: 16px;
+}
+
+:global(.ui.modal).assetFiltersModal > :global(.content) {
+  margin: 0;
+  padding: 0 !important; /* override important from decentralnad-ui */
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: transparent;
+}
+
+:global(.ui.modal).assetFiltersModal > .modalFooter {
+  padding: 24px;
+  position: initial;
+  background: transparent;
+}

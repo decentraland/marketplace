@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-import { EmotePlayMode, Network, Rarity } from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } from '@dcl/schemas'
 import { SortBy } from '../../../../modules/routing/types'
 import {
   browse,
@@ -7,7 +7,6 @@ import {
   ClearFiltersAction
 } from '../../../../modules/routing/actions'
 import { Section } from '../../../../modules/vendor/routing/types'
-import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { AssetType } from '../../../../modules/asset/types'
 import { View } from '../../../../modules/ui/types'
 
@@ -23,10 +22,10 @@ export type Props = {
   onlySmart?: boolean
   isMap?: boolean
   rarities: Rarity[]
-  wearableGenders: WearableGender[]
+  wearableGenders: (WearableGender | GenderFilterOption)[]
   contracts: string[]
   network?: Network
-  emotePlayMode?: EmotePlayMode
+  emotePlayMode?: EmotePlayMode[]
   hasFiltersEnabled: boolean
   onBrowse: typeof browse
   onClearFilters: typeof clearFilters

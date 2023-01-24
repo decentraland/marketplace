@@ -7,14 +7,14 @@ import { Section } from '../../../modules/vendor/decentraland'
 import { Menu } from '../../Menu'
 import { Props } from './OtherAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
+import { AssetFilters } from '../../AssetFilters'
 import { AssetType } from '../../../modules/asset/types'
 
 const { ALL, LAND, WEARABLES, EMOTES, ENS } = Sections.decentraland
 
 const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
   <>
-    <Menu>
-      <Header sub>{t('account_sidebar.store')}</Header>
+    <Menu className="other-account-menu">
       <div
         className={classNames(
           'alternative-menu-item',
@@ -24,9 +24,14 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
           onBrowse({ section: WEARABLES, assetType: AssetType.ITEM })
         }
       >
-        <div className="main-text">{t('account_sidebar.originals')}</div>
-        <div className="detail-text">
-          {t('account_sidebar.originals_detail')}
+        <div className="alternative-menu-item-container">
+          <span className="sparkles menu-icon" />
+          <div>
+            <div className="main-text">{t('account_sidebar.originals')}</div>
+            <div className="detail-text">
+              {t('account_sidebar.originals_detail')}
+            </div>
+          </div>
         </div>
       </div>
       <div
@@ -36,13 +41,18 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
         )}
         onClick={() => onBrowse({ section: ALL, assetType: AssetType.NFT })}
       >
-        <div className="main-text">{t('account_sidebar.listings')}</div>
-        <div className="detail-text">
-          {t('account_sidebar.listings_detail')}
+        <div className="alternative-menu-item-container">
+          <span className="assets menu-icon" />
+          <div>
+            <div className="main-text">{t('account_sidebar.listings')}</div>
+            <div className="detail-text">
+              {t('account_sidebar.listings_detail')}
+            </div>
+          </div>
         </div>
       </div>
     </Menu>
-    <Menu>
+    <Menu className="categories-assets-menu">
       <Header sub>
         {assetType === AssetType.ITEM ? 'CATEGORIES' : 'ASSETS'}
       </Header>
@@ -56,6 +66,7 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
         onSectionClick={section => onBrowse({ section, assetType })}
       />
     </Menu>
+    <AssetFilters />
   </>
 )
 

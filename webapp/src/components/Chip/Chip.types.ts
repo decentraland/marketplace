@@ -8,5 +8,5 @@ export type Props = {
   type: 'square' | 'rectangle' | 'circle'
   isActive: boolean
   isDisabled: boolean
-  onClick?: (event: React.MouseEvent<HTMLElement>) => any
+  onClick?: (event: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>) => any
 }

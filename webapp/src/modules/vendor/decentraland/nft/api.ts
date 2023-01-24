@@ -1,4 +1,4 @@
-import { RentalStatus } from '@dcl/schemas'
+import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFTsFetchParams } from '../../../nft/types'
 import { NFTsFetchFilters, NFTResponse, NFTResult } from './types'
@@ -6,10 +6,21 @@ import { ATLAS_SERVER_URL } from '../land'
 import { Contract } from '../../services'
 import { FetchOneOptions, VendorName } from '../../types'
 import { getNFTSortBy } from '../../../routing/search'
+import { AssetType } from '../../../asset/types'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
+
+export enum PriceFilterExtraOption {
+  LAND = 'land'
+}
+
+export type PriceFilterOptions = NFTCategory | PriceFilterExtraOption
+export type PriceFilters = Omit<NFTsFetchFilters, 'category'> & {
+  category: NFTCategory | PriceFilterExtraOption
+  assetType?: AssetType
+}
 
 class NFTAPI extends BaseAPI {
   fetch = async (
@@ -49,6 +60,22 @@ class NFTAPI extends BaseAPI {
     }
   }
 
+  async fetchPrices(filters: PriceFilters) {
+    const { category, ...rest } = filters
+    const queryParams = new URLSearchParams()
+    queryParams.append('category', filters.category)
+    this.appendNFTFiltersToQueryParams(queryParams, rest)
+    if (filters.assetType) {
+      queryParams.append('assetType', filters.assetType)
+    }
+    try {
+      const { data } = await this.request('get', `/prices?${queryParams}`)
+      return data
+    } catch (error) {
+      return {}
+    }
+  }
+
   async fetchContracts(): Promise<Contract[]> {
     try {
       const response: {
@@ -64,6 +91,69 @@ class NFTAPI extends BaseAPI {
       return contracts
     } catch (error) {
       return []
+    }
+  }
+
+  private appendNFTFiltersToQueryParams(
+    queryParams: URLSearchParams,
+    filters: NFTsFetchFilters
+  ): void {
+    if (filters.rarities) {
+      for (const rarity of filters.rarities) {
+        queryParams.append('itemRarity', rarity)
+      }
+    }
+    if (filters.isLand) {
+      queryParams.append('isLand', 'true')
+    }
+    if (filters.isWearableHead) {
+      queryParams.append('isWearableHead', 'true')
+    }
+    if (filters.isWearableAccessory) {
+      queryParams.append('isWearableAccessory', 'true')
+    }
+    if (filters.isWearableSmart) {
+      queryParams.append('isWearableSmart', 'true')
+    }
+    if (filters.wearableCategory) {
+      queryParams.append('wearableCategory', filters.wearableCategory)
+    }
+    if (filters.emoteCategory) {
+      queryParams.append('emoteCategory', filters.emoteCategory)
+    }
+    if (filters.wearableGenders) {
+      for (const wearableGender of filters.wearableGenders) {
+        queryParams.append('wearableGender', wearableGender)
+      }
+    }
+    if (filters.network) {
+      queryParams.append('network', filters.network)
+    }
+
+    if (filters.emotePlayMode) {
+      for (const emotePlayMode of filters.emotePlayMode) {
+        queryParams.append('emotePlayMode', emotePlayMode)
+      }
+    }
+
+    if (filters.rentalStatus) {
+      const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus)
+        ? [filters.rentalStatus]
+        : filters.rentalStatus
+      statuses.forEach(status => queryParams.append('rentalStatus', status))
+    }
+
+    if (filters.contracts && filters.contracts.length > 0) {
+      for (const contract of filters.contracts) {
+        queryParams.append('contractAddress', contract)
+      }
+    }
+    if (filters.minPrice) {
+      queryParams.append('minPrice', filters.minPrice)
+    }
+
+    if (filters.maxPrice) {
+      queryParams.append('maxPrice', filters.maxPrice)
     }
   }
 
@@ -93,54 +183,7 @@ class NFTAPI extends BaseAPI {
       queryParams.set('search', params.search)
     }
     if (filters) {
-      if (filters.rarities) {
-        for (const rarity of filters.rarities) {
-          queryParams.append('itemRarity', rarity)
-        }
-      }
-      if (filters.isLand) {
-        queryParams.append('isLand', 'true')
-      }
-      if (filters.isWearableHead) {
-        queryParams.append('isWearableHead', 'true')
-      }
-      if (filters.isWearableAccessory) {
-        queryParams.append('isWearableAccessory', 'true')
-      }
-      if (filters.isWearableSmart) {
-        queryParams.append('isWearableSmart', 'true')
-      }
-      if (filters.wearableCategory) {
-        queryParams.append('wearableCategory', filters.wearableCategory)
-      }
-      if (filters.emoteCategory) {
-        queryParams.append('emoteCategory', filters.emoteCategory)
-      }
-      if (filters.wearableGenders) {
-        for (const wearableGender of filters.wearableGenders) {
-          queryParams.append('wearableGender', wearableGender)
-        }
-      }
-      if (filters.network) {
-        queryParams.append('network', filters.network)
-      }
-
-      if (filters.emotePlayMode) {
-        queryParams.append('emotePlayMode', filters.emotePlayMode)
-      }
-
-      if (filters.rentalStatus) {
-        const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus)
-          ? [filters.rentalStatus]
-          : filters.rentalStatus
-        statuses.forEach(status => queryParams.append('rentalStatus', status))
-      }
-
-      if (filters.contracts && filters.contracts.length > 0) {
-        for (const contract of filters.contracts) {
-          queryParams.append('contractAddress', contract)
-        }
-      }
+      this.appendNFTFiltersToQueryParams(queryParams, filters)
     }
 
     return queryParams.toString()

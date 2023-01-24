@@ -1,3 +1,4 @@
+import React from 'react'
 import { Dispatch } from 'redux'
 import { Avatar, IPreviewController } from '@dcl/schemas'
 import { Item } from '@dcl/schemas'
@@ -25,6 +26,8 @@ export type Props = {
   showOrderListedTag?: boolean
   onSetIsTryingOn: typeof setIsTryingOn
   onSetWearablePreviewController: typeof setWearablePreviewController
+  children?: React.ReactNode
+  hasBadges?: boolean
 }
 
 export type OwnProps = Pick<Props, 'showOrderListedTag'>

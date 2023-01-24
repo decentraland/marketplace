@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { isLandSection } from '../../../../../modules/ui/utils'
 import { Section } from '../../../../../modules/vendor/decentraland/routing/types'
@@ -11,6 +11,13 @@ const shouldRenderSection = (section: Section, sections: Section[]) => {
 }
 
 const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
+
+  const handleOnSectionClick = useCallback((newSection) => {
+    if (section !== newSection) {
+      onSectionClick(newSection)
+    }
+  }, [onSectionClick, section])
+
   return (
     <>
       {sections.includes(Section.ALL) && (
@@ -18,7 +25,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
           key={Section.ALL}
           value={Section.ALL}
           currentValue={section}
-          onClick={onSectionClick}
+          onClick={handleOnSectionClick}
         />
       )}
       {shouldRenderSection(Section.LAND, sections) && (
@@ -27,7 +34,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
             key={Section.LAND}
             value={Section.LAND}
             currentValue={section}
-            onClick={onSectionClick}
+            onClick={handleOnSectionClick}
           />
           {isLandSection(section)
             ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
@@ -35,7 +42,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
                   key={menuSection}
                   value={menuSection}
                   currentValue={section}
-                  onClick={onSectionClick}
+                  onClick={handleOnSectionClick}
                   nestedLevel={1}
                 />
               ))
@@ -47,7 +54,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
           <MenuItem
             value={Section.WEARABLES}
             currentValue={section}
-            onClick={onSectionClick}
+            onClick={handleOnSectionClick}
           />
           {[
             Section.WEARABLES,
@@ -81,7 +88,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
                   Section.WEARABLES_MOUTH
                 ]}
                 currentValue={section}
-                onMenuItemClick={onSectionClick}
+                onMenuItemClick={handleOnSectionClick}
               />
 
               {[
@@ -93,7 +100,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
                   key={menuSection}
                   value={menuSection}
                   currentValue={section}
-                  onClick={onSectionClick}
+                  onClick={handleOnSectionClick}
                   nestedLevel={1}
                 />
               ))}
@@ -110,13 +117,13 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
                   Section.WEARABLES_TOP_HEAD
                 ]}
                 currentValue={section}
-                onMenuItemClick={onSectionClick}
+                onMenuItemClick={handleOnSectionClick}
               />
 
               <MenuItem
                 value={Section.WEARABLES_SKIN}
                 currentValue={section}
-                onClick={onSectionClick}
+                onClick={handleOnSectionClick}
                 nestedLevel={1}
               />
             </>
@@ -128,7 +135,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
           <MenuItem
             value={Section.EMOTES}
             currentValue={section}
-            onClick={onSectionClick}
+            onClick={handleOnSectionClick}
           />
           {[
             Section.EMOTES,
@@ -155,7 +162,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
                   key={menuSection}
                   value={menuSection}
                   currentValue={section}
-                  onClick={onSectionClick}
+                  onClick={handleOnSectionClick}
                   nestedLevel={1}
                 />
               ))
@@ -166,7 +173,7 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
         <MenuItem
           value={Section.ENS}
           currentValue={section}
-          onClick={onSectionClick}
+          onClick={handleOnSectionClick}
         />
       )}
     </>

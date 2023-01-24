@@ -1,0 +1,38 @@
+.box-menu .ui.sub.header {
+  padding-left: 24px;
+  padding-top: 17px;
+  padding-bottom: 22px;
+  margin-bottom: 0px;
+}
+
+ul.box-menu.Menu {
+  background-color: var(--card);
+  border-radius: 10px;
+  padding-bottom: 21px;
+  margin: 0;
+}
+
+ul.box-menu.Menu > .MenuItem {
+  padding-left: 24px;
+}
+
+ul.box-menu.Menu > .MenuItem:last-child {
+  margin-bottom: 0;
+}
+
+ul.box-menu.Menu > .MenuItem.active {
+  background-color: #37333d;
+  border-radius: 0;
+}
+
+ul.box-menu.Menu > .MenuItem.sub-1 {
+  margin-left: 0px;
+  padding-left: 32px;
+  width: 100%;
+}
+
+ul.box-menu.Menu > .MenuItem.sub-2 {
+  margin-left: 0px;
+  padding-left: 48px;
+  width: 100%;
+}

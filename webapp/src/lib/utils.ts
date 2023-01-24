@@ -11,6 +11,16 @@ export function omit(
   return pick(obj, newKeys)
 }
 
+export function reset(
+  obj: Record<string, unknown>,
+  keys: string[]
+): Record<string, unknown> {
+  return keys.reduce((newObj, key) => ({
+    ...newObj,
+    [key]: undefined
+  }), obj)
+}
+
 /**
  * Return a copy of the object, filtered to only have values for the whitelisted array of valid keys
  * @param obj

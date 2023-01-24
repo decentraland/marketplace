@@ -4,8 +4,9 @@ import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainCheck, TransactionLink } from 'decentraland-dapps/dist/containers'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
+import { isAuthorized } from '../../../lib/authorization'
+
 import { locations } from '../../../modules/routing/locations'
-import { isAuthorized } from './utils'
 import { Props } from './Authorization.types'
 import './Authorization.css'
 
