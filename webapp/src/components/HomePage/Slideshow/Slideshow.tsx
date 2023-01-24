@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import classNames from 'classnames'
 import {
   HeaderMenu,
   Header,
@@ -138,7 +139,9 @@ const Slideshow = (props: Props) => {
         ) : null}
       </HeaderMenu>
       <div className="assets-container">
-        <div className="assets">
+        <div className={classNames("assets", {
+          ["full-width"]: assetsToRender.length === pageSize
+        })}>
           {isLoading ? (
             assets.length === 0 ? (
               <Loader active size="massive" />

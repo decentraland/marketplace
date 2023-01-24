@@ -18,6 +18,11 @@
   min-height: 336px;
   -ms-overflow-style: none; /* hide scrollbar IE and Edge */
   scrollbar-width: none; /* hide scrollbar Firefox */
+  width: 100%;
+}
+
+.Slideshow .assets.full-width {
+  justify-content: space-between;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
@@ -36,6 +41,10 @@
   margin-right: 12px;
   height: 300px;
   margin-top: 12px;
+}
+
+.Slideshow .assets .AssetCard:last-child {
+  margin-right: 0;
 }
 
 .Slideshow .dcl.header-menu {
