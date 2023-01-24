@@ -72,7 +72,8 @@ const AssetImage = (props: Props) => {
     isPlayingEmote,
     onSetIsTryingOn,
     onSetWearablePreviewController,
-    children
+    children,
+    hasBadges
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
@@ -183,7 +184,7 @@ const AssetImage = (props: Props) => {
           selection={selection}
           zoom={zoom}
         >
-          {children}
+          {hasBadges && children}
         </Atlas>
       )
     }
@@ -201,7 +202,7 @@ const AssetImage = (props: Props) => {
           zoom={zoom}
           isEstate
         >
-          {children}
+          {hasBadges && children}
         </Atlas>
       )
     }
@@ -345,7 +346,7 @@ const AssetImage = (props: Props) => {
               src={getAssetImage(asset)}
             />
           )}
-          {children}
+          {hasBadges && children}
         </div>
       )
     }
@@ -457,7 +458,7 @@ const AssetImage = (props: Props) => {
               src={getAssetImage(asset)}
             />
           )}
-          {children}
+          {hasBadges && children}
         </div>
       )
     }
@@ -473,7 +474,7 @@ const AssetImage = (props: Props) => {
         <div className={classes.join(' ')}>
           <div className="name">{name}</div>
           {showMonospace ? <div className="monospace">{name}</div> : null}
-          {children}
+          {hasBadges && children}
         </div>
       )
     }
@@ -492,7 +493,7 @@ const AssetImage = (props: Props) => {
             </div>
           }
         >
-          {children}
+          {hasBadges && children}
         </LazyLoadImage>
       )
     }
