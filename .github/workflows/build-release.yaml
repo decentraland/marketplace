@@ -29,6 +29,8 @@ jobs:
       - name: Install
         run: npm ci --legacy-peer-deps
       - name: Build
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
         run: npm run build
       - name: Publish
         uses: menduz/oddish-action@master
