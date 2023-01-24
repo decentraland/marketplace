@@ -162,4 +162,8 @@
   .assetTopbar {
     margin-bottom: 0;
   }
+
+  .assetTopbar .infoRow {
+    margin-bottom: 10px;
+  }
 }
