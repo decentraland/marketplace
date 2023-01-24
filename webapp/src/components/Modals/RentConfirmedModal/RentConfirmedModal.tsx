@@ -55,7 +55,7 @@ const RentConfirmedModal = ({
           <div>
             {CTAs.map((cta, i) =>
               isMobileView && i !== 1 ? (
-                <div className={styles.ctaContainer}>
+                <div className={styles.mobileAvailabilityContainer}>
                   <div className={classNames(styles[cta.icon], styles.icon)} />
                   <div className={styles.ctaTextContainer}>
                     <span>
@@ -70,6 +70,7 @@ const RentConfirmedModal = ({
                       )}
                     </span>
                     <span className={styles.ctaSubtitleMobile}>
+                      <i className={styles.infoIcon} />
                       {t(
                         `rental_modal.rent_confirmed_step.onlyAvailableOnDesktop`
                       )}
