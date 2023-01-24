@@ -1,3 +1,4 @@
+import React from 'react'
 import { Dispatch } from 'redux'
 import { RentalListing } from '@dcl/schemas'
 import { CallHistoryMethodAction } from 'connected-react-router'
@@ -30,6 +31,7 @@ export type Props = Partial<AtlasProps> & {
   showForRent?: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onNavigate: (path: string) => void
+  children?: React.ReactNode
 }
 
 export type MapStateProps = Pick<

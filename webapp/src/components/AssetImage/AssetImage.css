@@ -191,3 +191,16 @@
   bottom: 11px;
   right: 11px;
 }
+
+.AssetImage .badges {
+  position: absolute;
+  left: 10px;
+  bottom: 11px;
+  display: flex;
+  flex-direction: row;
+}
+
+.AssetImage .coordinates {
+  margin-right: 8px;
+  z-index: 999999;
+}

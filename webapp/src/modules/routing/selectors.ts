@@ -416,6 +416,7 @@ export const hasFiltersEnabled = createSelector<
     hasNotOnSaleFilter
   )
 })
+
 export const getIsBuyWithCardPage = createSelector<RootState, string, boolean>(
   getRouterSearch,
   search => {
