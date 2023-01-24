@@ -15,7 +15,8 @@ const SelectFilter = (props: Props) => {
     clearable,
     onChange,
     disabled = false,
-    placeholder
+    placeholder,
+    className
   } = props
 
   const [providedOptions, setProvidedOptions] = useState(options)
@@ -96,10 +97,12 @@ const SelectFilter = (props: Props) => {
   }, [search, fetchOptions, options, isTyping])
 
   return (
-    <div className="SelectFilter Filter">
-      <Header sub className="name">
-        {name}
-      </Header>
+    <div className={classNames('SelectFilter Filter', className)}>
+      {name ? (
+        <Header sub className="name">
+          {name}
+        </Header>
+      ) : null}
       <Dropdown
         value={value}
         options={providedOptions}
@@ -108,6 +111,7 @@ const SelectFilter = (props: Props) => {
         search
         selectOnNavigation={false}
         fluid
+        selectOnBlur={false}
         noResultsMessage={
           search.length > 0 &&
           !isTyping &&

@@ -6,7 +6,7 @@
   margin-bottom: 41px !important;
 }
 
-.Authorization .ui.checkbox input.hidden + label {
+.Authorization .ui.checkbox input[type="radio"].hidden + label {
   font-weight: 700;
   font-size: 17px;
   padding-left: 35px;
@@ -44,9 +44,9 @@
   height: 1.8rem;
 }
 
-.Authorization .ui.checkbox input.hidden + label,
-.Authorization .ui.checkbox input.hidden:focus + label,
-.Authorization .ui.checkbox input.hidden:active + label {
+.Authorization .ui.checkbox input[type="radio"].hidden + label,
+.Authorization .ui.checkbox input[type="radio"].hidden:focus + label,
+.Authorization .ui.checkbox input[type="radio"].hidden:active + label {
   font-weight: 700;
   font-size: 17px;
   padding-left: 35px;
@@ -68,7 +68,7 @@
   height: 26px !important;
 }
 
-.Authorization .ui.radio.checkbox.checked input.hidden + label:after {
+.Authorization .ui.radio.checkbox.checked input[type="radio"].hidden + label:after {
   top: 0px !important;
   left: -1px !important;
   width: 29px !important;

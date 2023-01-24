@@ -1,3 +1,26 @@
+.launchModal {
+  padding: 50px;
+}
+
+.launchModal:global(.ui.modal) .modalContent {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 180px 1fr;
+}
+
+.launchModal:global(.ui.modal) .modalTitle {
+  margin-bottom: 25px;
+}
+
+.launchModal:global(.ui.modal) .modalActions {
+  margin-top: 25px;
+}
+
+.launchModal:global(.ui.modal) .modalDescription {
+  display: flex;
+  flex-direction: column;
+}
+
 :global(.ui.dimmer).dimmerRemover {
   background-color: rgba(0,0,0,0.50)
 }
@@ -6,10 +29,25 @@
   background-image: url(../../../images/rental_promotional_image.png);
   background-size: contain;
   background-repeat: no-repeat;
+  background-position: center;
 }
 
 @media (max-width: 767px) {
   :global(.ui.medium.image).rentalImage {
     height: 300px;
+  }
+
+  .launchModal:global(.ui.modal) .modalContent {
+    grid-template-columns: 1fr;
+    padding: 25px !important;
+  }
+
+  .launchModal:global(.ui.modal) .modalActions {
+    padding: 25px !important;
+  }
+
+  .launchModal:global(.ui.modal) > .modalActions :global(.ui.button),
+  .launchModal:global(.ui.modal) > .modalActions :global(.ui.button) + :global(.ui.button) {
+    width: 100%;
   }
 }

@@ -3,10 +3,14 @@ import {
   getSearch as getRouterSearch,
   getLocation
 } from 'connected-react-router'
-import { EmotePlayMode, Network, Rarity } from '@dcl/schemas'
+import {
+  EmotePlayMode,
+  GenderFilterOption,
+  Network,
+  Rarity
+} from '@dcl/schemas'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
-import { WearableGender } from '../nft/wearable/types'
 import { VendorName } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
 import { Section, Sections } from '../vendor/routing/types'
@@ -177,12 +181,12 @@ export const getRarities = createSelector<RootState, string, Rarity[]>(
 export const getWearableGenders = createSelector<
   RootState,
   string,
-  WearableGender[]
+  GenderFilterOption[]
 >(getRouterSearch, search =>
-  getURLParamArray_nonStandard<WearableGender>(
+  getURLParamArray_nonStandard<GenderFilterOption>(
     search,
     'genders',
-    Object.values(WearableGender)
+    Object.values(GenderFilterOption)
   )
 )
 
@@ -226,10 +230,11 @@ export const getAssetType = createSelector<
 export const getEmotePlayMode = createSelector<
   RootState,
   string,
-  EmotePlayMode | undefined
+  EmotePlayMode[] | undefined
 >(
   getRouterSearch,
-  search => (getURLParam(search, 'emotePlayMode') as EmotePlayMode) || undefined
+  search =>
+    getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
 )
 
 export const getViewAsGuest = createSelector<RootState, string, boolean>(
@@ -241,34 +246,14 @@ export const getOnlySmart = createSelector<RootState, string, boolean>(
   search => getURLParam(search, 'onlySmart') === 'true'
 )
 
-export const hasFiltersEnabled = createSelector<
-  RootState,
-  string | undefined,
-  WearableGender[],
-  Rarity[],
-  string[],
-  string | undefined,
-  boolean
->(
-  getNetwork,
-  getWearableGenders,
-  getRarities,
-  getContracts,
-  getEmotePlayMode,
-  (network, genders, rarities, contracts, playMode) => {
-    const hasNetworkFilter = network !== undefined
-    const hasGenderFilter = genders.length > 0
-    const hasRarityFilter = rarities.length > 0
-    const hasContractsFilter = contracts.length > 0
-    const hasEmotePlayModeFilter = playMode !== undefined
-    return (
-      hasNetworkFilter ||
-      hasGenderFilter ||
-      hasRarityFilter ||
-      hasContractsFilter ||
-      hasEmotePlayModeFilter
-    )
-  }
+export const getMinPrice = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'minPrice') as string) || ''
+)
+
+export const getMaxPrice = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'maxPrice') as string) || ''
 )
 
 export const getCurrentLocationAddress = createSelector<
@@ -327,27 +312,33 @@ export const getWearablesUrlParams = createSelector(
   getWearableGenders,
   getView,
   getViewAsGuest,
-  (rarities, wearableGenders, view, viewAsGuest) => ({
+  getMinPrice,
+  getMaxPrice,
+  (rarities, wearableGenders, view, viewAsGuest, minPrice, maxPrice) => ({
     rarities,
     wearableGenders,
     view,
-    viewAsGuest
+    viewAsGuest,
+    minPrice,
+    maxPrice
   })
 )
 
 export const getCurrentBrowseOptions = createSelector(
-  getAssetType,
-  getCurrentLocationAddress,
-  getVendor,
-  getSection,
-  getNetwork,
-  getEmotePlayMode,
-  getPaginationUrlParams,
-  getAssetsUrlParams,
-  getLandsUrlParams,
-  getWearablesUrlParams,
-  getOnlyOnRent,
-  getOnlyOnSale,
+  [
+    getAssetType,
+    getCurrentLocationAddress,
+    getVendor,
+    getSection,
+    getNetwork,
+    getEmotePlayMode,
+    getPaginationUrlParams,
+    getAssetsUrlParams,
+    getLandsUrlParams,
+    getWearablesUrlParams,
+    getOnlyOnRent,
+    getOnlyOnSale
+  ],
   (
     assetType,
     address,
@@ -377,6 +368,54 @@ export const getCurrentBrowseOptions = createSelector(
       onlyOnSale
     } as BrowseOptions)
 )
+
+export const hasFiltersEnabled = createSelector<
+  RootState,
+  BrowseOptions,
+  boolean
+>(getCurrentBrowseOptions, browseOptions => {
+  const {
+    network,
+    wearableGenders,
+    rarities,
+    contracts,
+    emotePlayMode,
+    onlyOnRent,
+    onlyOnSale,
+    minPrice,
+    maxPrice,
+    section
+  } = browseOptions
+  const isLand = isLandSection(section as Section);
+  if (isLand) {
+    const hasOnSaleFilter = onlyOnSale === true
+    const hasOnRentFilter = onlyOnRent === true
+    return (
+      (hasOnSaleFilter && !hasOnRentFilter)
+      || (hasOnRentFilter && !hasOnSaleFilter)
+      || !!minPrice
+      || !!maxPrice
+    )
+  }
+
+  const hasNetworkFilter = network !== undefined
+  const hasGenderFilter = wearableGenders && wearableGenders.length > 0
+  const hasRarityFilter = rarities && rarities.length > 0
+  const hasContractsFilter = contracts && contracts.length > 0
+  const hasEmotePlayModeFilter = emotePlayMode && emotePlayMode.length > 0
+  const hasNotOnSaleFilter = onlyOnSale === false
+
+  return (
+    hasNetworkFilter ||
+    hasGenderFilter ||
+    hasRarityFilter ||
+    hasContractsFilter ||
+    hasEmotePlayModeFilter ||
+    !!minPrice ||
+    !!maxPrice ||
+    hasNotOnSaleFilter
+  )
+})
 
 export const getIsBuyWithCardPage = createSelector<RootState, string, boolean>(
   getRouterSearch,

@@ -2,6 +2,11 @@
   display: flex;
 }
 
+ul.Menu li.MenuItem,
+ul.Menu li.MenuItem.active {
+  cursor: pointer;
+}
+
 .MenuItem .content {
   display: inline-block;
   flex: 1 1 auto;
@@ -22,4 +27,8 @@
 
 .NFTSidebar .MenuItem {
   border-radius: 6px;
+}
+
+.open .dropdown.icon {
+  transform: rotate(180deg) translateY(-10px);
 }

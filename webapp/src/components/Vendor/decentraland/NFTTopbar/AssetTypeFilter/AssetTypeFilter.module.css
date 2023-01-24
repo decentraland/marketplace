@@ -1,0 +1,32 @@
+.marketIcon {
+  background-image: url(../../../../../images/store.svg);
+  height: 28px;
+  width: 32px;
+  margin-right: 24px;
+}
+
+.listingsIcon {
+  background-image: url(../../../../../images/listings.svg);
+  height: 28px;
+  width: 32px;
+  margin-right: 24px;
+}
+
+.toggleFlex {
+  border: none;
+  margin-right: 0;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 768px) {
+  .marketIcon {
+    height: 21px;
+    width: 24px;
+    background-size: contain;
+  }
+  .listingsIcon {
+    height: 24px;
+    width: 24px;
+    background-size: contain;
+  }
+}

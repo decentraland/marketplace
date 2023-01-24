@@ -95,6 +95,7 @@
   font-weight: 500;
   font-family: var(--font-family);
   padding: 0.47857143em 2.1em 0.47857143em 0.6em;
+  height: 100%;
 }
 
 .SelectFilter .ui.search.selection.dropdown > input.search::selection {
@@ -129,8 +130,15 @@
 
 .SelectFilter .ui.selection.dropdown .menu > .message:not(.ui) {
   color: var(--text);
+  white-space: initial;
+  line-height: 24px;
 }
 
 .SelectFilter .ui.selection.visible.dropdown > .text:not(.default) {
   color: var(--text);
+}
+
+.SelectFilter .ui.search.selection.dropdown > input.search:focus {
+  border: 2px solid var(--text) !important;
+  border-radius: 6px;
 }

@@ -1,0 +1,27 @@
+.pill {
+  padding: 6px 16px;
+  background: rgba(115, 110, 125, 0.2);
+  border-radius: 16px;
+  font-size: 13px;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.pill:last-child {
+  margin-right: 0;
+}
+
+.pill:hover {
+  background: rgba(115, 110, 125, 1);
+}
+
+i:global(.icon).deleteBtn {
+  margin-left: 8px;
+  margin-right: 0;
+  cursor: pointer;
+  height: auto;
+}

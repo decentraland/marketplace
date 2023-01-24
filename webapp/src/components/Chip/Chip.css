@@ -37,6 +37,10 @@
   cursor: pointer;
 }
 
+.Chip.clickeable:focus {
+  outline: 1px solid white;
+}
+
 .Chip.active {
   background: rgba(var(--bluish-steel-raw), 0.32);
   color: var(--primary);

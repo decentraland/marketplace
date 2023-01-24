@@ -11,17 +11,15 @@ import {
   Icon,
   NotMobile
 } from 'decentraland-ui'
-import { EmotePlayMode, Network, NFTCategory, Rarity } from '@dcl/schemas'
+import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { SortBy } from '../../../../modules/routing/types'
-import { WearableGender } from '../../../../modules/nft/wearable/types'
 import { getCategoryFromSection } from '../../../../modules/routing/search'
 import { MAX_QUERY_SIZE } from '../../../../modules/vendor/api'
 import { NFTSidebar } from '../../NFTSidebar'
 import { Chip } from '../../../Chip'
 import { TextFilter } from '../../NFTFilters/TextFilter'
-import { FiltersMenu } from '../../NFTFilters/FiltersMenu'
 import { AssetType } from '../../../../modules/asset/types'
 import {
   isAccountView,
@@ -29,9 +27,11 @@ import {
   persistIsMapProperty
 } from '../../../../modules/ui/utils'
 import { View } from '../../../../modules/ui/types'
+import { ToggleBox } from '../../../AssetBrowse/ToggleBox'
 import { LANDFilters } from '../types'
 import { browseRentedLAND } from '../utils'
 import { Props } from './NFTFilters.types'
+import './NFTFilters.css'
 
 const NFTFilters = (props: Props) => {
   const {
@@ -41,13 +41,10 @@ const NFTFilters = (props: Props) => {
     count,
     onlyOnSale,
     onlyOnRent,
-    onlySmart,
     isMap,
     rarities,
     wearableGenders,
     contracts,
-    network,
-    emotePlayMode,
     onBrowse,
     assetType,
     hasFiltersEnabled,
@@ -137,11 +134,6 @@ const NFTFilters = (props: Props) => {
     appliedFilters.push(t('nft_filters.collection'))
   }
 
-  const handleToggleOnlySmart = useCallback(
-    (newOnlySmart: boolean) => onBrowse({ onlySmart: newOnlySmart }),
-    [onBrowse]
-  )
-
   const handleOnlyOnSaleChange = useCallback(
     (_, props: CheckboxProps) => {
       onBrowse({ sortBy: SortBy.NEWEST, onlyOnSale: !!props.checked })
@@ -188,27 +180,6 @@ const NFTFilters = (props: Props) => {
     [onBrowse]
   )
 
-  const handleRaritiesChange = useCallback(
-    (options: string[]) => {
-      onBrowse({ rarities: options as Rarity[] })
-    },
-    [onBrowse]
-  )
-
-  const handleGendersChange = useCallback(
-    (options: string[]) => {
-      onBrowse({ wearableGenders: options as WearableGender[] })
-    },
-    [onBrowse]
-  )
-
-  const handleCollectionsChange = useCallback(
-    (contract?: string) => {
-      onBrowse({ contracts: contract ? [contract] : undefined })
-    },
-    [onBrowse]
-  )
-
   const handleSearch = useCallback(
     (newSearch: string) => {
       if (search !== newSearch) {
@@ -216,24 +187,6 @@ const NFTFilters = (props: Props) => {
       }
     },
     [search, onBrowse]
-  )
-
-  const handleNetworkChange = useCallback(
-    (newNetwork: Network) => {
-      if (network !== newNetwork) {
-        onBrowse({ network: newNetwork })
-      }
-    },
-    [network, onBrowse]
-  )
-
-  const handleEmotePlayModeChange = useCallback(
-    (newEmotePlayMode: EmotePlayMode) => {
-      if (emotePlayMode !== newEmotePlayMode) {
-        onBrowse({ emotePlayMode: newEmotePlayMode })
-      }
-    },
-    [emotePlayMode, onBrowse]
   )
 
   useEffect(
@@ -247,20 +200,20 @@ const NFTFilters = (props: Props) => {
   const searchPlaceholder = isMap
     ? t('nft_filters.search_land')
     : count === undefined
-    ? t('global.loading') + '...'
-    : t('nft_filters.search', {
+      ? t('global.loading') + '...'
+      : t('nft_filters.search', {
         suffix:
           count < MAX_QUERY_SIZE
             ? t('nft_filters.results', {
-                count: count.toLocaleString()
-              })
+              count: count.toLocaleString()
+            })
             : t('nft_filters.more_than_results', {
-                count: count.toLocaleString()
-              })
+              count: count.toLocaleString()
+            })
       })
 
-  const isWearableCategory = category === NFTCategory.WEARABLE
-  const isEmoteCategory = category === NFTCategory.EMOTE
+  const toggleBoxI18nKey =
+    view && isAccountView(view) ? 'account_page' : 'browse_page'
 
   return (
     <div className="NFTFilters">
@@ -349,9 +302,8 @@ const NFTFilters = (props: Props) => {
           >
             <div className="label">{t('nft_filters.filter')}</div>
             <div
-              className={`open-filters ${
-                showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
-              }`}
+              className={`open-filters ${showFiltersMenu || appliedFilters.length > 0 ? 'active' : ''
+                }`}
             />
           </div>
         </Responsive>
@@ -377,35 +329,28 @@ const NFTFilters = (props: Props) => {
       </div>
 
       {showFiltersMenu ? (
-        <Responsive
-          minWidth={Responsive.onlyTablet.minWidth}
-          className="filters"
-        >
-          <FiltersMenu
-            assetType={assetType}
-            selectedNetwork={network}
-            selectedCollection={contracts[0]}
-            selectedRarities={rarities}
-            selectedGenders={isWearableCategory ? wearableGenders : undefined}
-            selectedEmotePlayMode={isEmoteCategory ? emotePlayMode : undefined}
-            isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
-            isOnSale={onlyOnSale}
-            onCollectionsChange={handleCollectionsChange}
-            onGendersChange={
-              isWearableCategory ? handleGendersChange : undefined
-            }
-            onRaritiesChange={handleRaritiesChange}
-            onNetworkChange={
-              isWearableCategory ? handleNetworkChange : undefined
-            }
-            onEmotePlayModeChange={
-              isEmoteCategory ? handleEmotePlayModeChange : undefined
-            }
-            onOnlySmartChange={
-              isWearableCategory ? handleToggleOnlySmart : undefined
-            }
+        <>
+          <ToggleBox
+            direction="row"
+            className="result-type-toggle-flex"
+            items={[
+              {
+                title: t(`${toggleBoxI18nKey}.primary_market_title`),
+                active: assetType === AssetType.ITEM,
+                description: t(`${toggleBoxI18nKey}.primary_market_subtitle`),
+                onClick: () => onBrowse({ assetType: AssetType.ITEM }),
+                icon: <div className="market-icon" />
+              },
+              {
+                title: t(`${toggleBoxI18nKey}.secondary_market_title`),
+                active: assetType === AssetType.NFT,
+                description: t(`${toggleBoxI18nKey}.secondary_market_subtitle`),
+                onClick: () => onBrowse({ assetType: AssetType.NFT }),
+                icon: <div className="listings-icon" />
+              }
+            ]}
           />
-        </Responsive>
+        </>
       ) : null}
 
       <Modal
@@ -438,33 +383,6 @@ const NFTFilters = (props: Props) => {
                   onChange={handleTypeByDropdownChange}
                 />
               </div>
-              <FiltersMenu
-                assetType={assetType}
-                selectedNetwork={network}
-                selectedCollection={contracts[0]}
-                selectedRarities={rarities}
-                selectedGenders={
-                  isWearableCategory ? wearableGenders : undefined
-                }
-                selectedEmotePlayMode={
-                  isEmoteCategory ? emotePlayMode : undefined
-                }
-                isOnlySmart={isWearableCategory ? !!onlySmart : undefined}
-                onCollectionsChange={handleCollectionsChange}
-                onGendersChange={
-                  isWearableCategory ? handleGendersChange : undefined
-                }
-                onRaritiesChange={handleRaritiesChange}
-                onNetworkChange={
-                  isWearableCategory ? handleNetworkChange : undefined
-                }
-                onEmotePlayModeChange={
-                  isEmoteCategory ? handleEmotePlayModeChange : undefined
-                }
-                onOnlySmartChange={
-                  isWearableCategory ? handleToggleOnlySmart : undefined
-                }
-              />
             </>
           ) : null}
           <div className="filter-row">

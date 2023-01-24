@@ -1,0 +1,7 @@
+.collection-filter {
+  margin-bottom: 20px;
+}
+
+.SelectFilter.collection-filter .ui.fluid.search.selection.dropdown {
+  height: 44px;
+}

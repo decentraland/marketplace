@@ -40,6 +40,38 @@
   align-items: center;
 }
 
+@media (max-width: 767px) {
+  .Navigation .dcl.tabs-left {
+    display: flex;
+    flex-direction: row;
+    overflow: scroll;
+    width: 100%;
+  }
+
+  .Navigation .dcl.tab {
+    margin: 0 16px;
+    padding: 0;
+    padding-bottom: 14px;
+    white-space: nowrap;
+  }
+
+  .Navigation .dcl.tab.active {
+    border-bottom: 3px solid var(--primary);
+    border-left: 0;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .Navigation .dcl.tabs-left::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .Navigation .dcl.tabs-left {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+
 @-webkit-keyframes AnimationName {
   0% {
     background-position: 0% 50%;

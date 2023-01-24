@@ -12,16 +12,39 @@
   margin-bottom: 8px;
 }
 
-.item:last-child {
+.item.flex {
+  padding-left: 15px;
+}
+
+.item.flex:not(.active) {
+  background-color: var(--secondary);
+}
+
+.item.flex:first-child {
+  margin-left: 0;
+}
+
+.item.flex:last-child {
+  margin-right: 0;
+}
+
+.flex {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+}
+
+.item:last-child:not(.flex) {
   margin-bottom: 0px;
 }
 
-.item:hover {
-  background: var(--secondary);
+.item:not(.active):hover {
+  background: var(--toast);
 }
 
 .active {
-  background: var(--secondary);
+  background: var(--toast);
 }
 
 .disabled {
@@ -47,4 +70,17 @@
   font-size: 15px;
   line-height: 24px;
   color: #736e7d;
+}
+
+@media (max-width: 768px) {
+  .flex {
+    overflow: hidden;
+    border-radius: 6px;
+  }
+  .item.flex {
+    text-align: center;
+    justify-content: center;
+    margin: 0;
+    border-radius: 0;
+  }
 }

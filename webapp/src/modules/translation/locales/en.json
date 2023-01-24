@@ -154,9 +154,13 @@
     "cheapest": "Cheapest",
     "no_results": "No results were found.",
     "type_to_search": "Type to search for collections.",
-    "clear": "Clear filters",
+    "clear": "Clear all filters",
     "recently_reviewed": "Recently reviewed",
-    "size": "Size"
+    "size": "Size",
+    "price": "Price",
+    "price_min_greater_max": "The maximum price should be higher than the minimum",
+    "reset": "Reset",
+    "apply": "Apply filters"
   },
   "home_page": {
     "analytics": {
@@ -313,25 +317,59 @@
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
   "nft_list": {
-    "empty": "No results"
+    "empty": "We couldn’t find any results in the {currentSection}. <br></br><searchStore>Search the {section}</searchStore><if-filters> or <clearFilters>clear filters</clearFilters></if-filters>",
+    "simple_empty": "We couldn’t find any results. <if-filters><br></br><clearFilters>Clear filters</clearFilters></if-filters>",
+    "empty_search": "No results for \"{search}\" in the {currentSection}. <br></br><searchStore>Try searching the {section}</searchStore>"
   },
   "nft_filters": {
+    "no_items": "No items",
     "on_sale": "On sale",
     "filter": "Filter",
     "order_by": "Order By",
-    "results": "{count} {count, plural, one {result} other {results}}",
-    "more_than_results": "+{count} results",
-    "search": "Search {suffix}...",
+    "results": "{count} {count, plural, one {item} other {items}}",
+    "query_results": "Showing {count} {count, plural, one {item} other {items}} for \"{search}\"",
+    "more_than_results": "+{count} items",
+    "query_more_than_results": "Showing +{count} items for \"{search}\"",
+    "search": "Search",
     "search_land": "Search land...",
-    "rarity": "Rarity",
     "gender": "Gender",
-    "collection": "Collection",
-    "all_collections": "All Collections",
-    "network": "Network",
-    "all_networks": "All Networks",
     "smart_wearables": "Smart Wearables",
-    "play_mode": "Play Mode",
-    "all_play_modes": "All Play Modes"
+    "emote_play_mode": {
+      "title": "Play Mode",
+      "all_items": "All Play Modes"
+    },
+    "body_shapes": {
+      "title": "Body shape",
+      "all_items": "All Body Shapes",
+      "available_for_female": "Available for female",
+      "available_for_male": "Available for male"
+    },
+    "rarities": {
+      "title": "Rarity",
+      "all_items": "All rarities",
+      "count_items": "{count} {count, plural, one {rarity} other {rarities}}"
+    },
+    "price": {
+      "title": "Price",
+      "all_items": "All prices",
+      "more_than_price": "More than <mana></mana> {price}",
+      "less_than_price": "Less than <mana></mana> {price}",
+      "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "collection": {
+      "title": "Collection",
+      "all_items": "All collections",
+      "search": "Search collections"
+    },
+    "network": {
+      "title": "Network",
+      "all_items": "All networks"
+    },
+    "more_filters": "More filters",
+    "only_smart": "Only smart",
+    "not_on_sale": "Not on sale",
+    "for_sale": "For sale",
+    "category": "Category"
   },
   "nft_land_filters": {
     "all_land": "All land",
@@ -659,7 +697,8 @@
     "primary_market_title": "Store",
     "primary_market_subtitle": "Items available for minting",
     "secondary_market_title": "Listings",
-    "secondary_market_subtitle": "Items being resold"
+    "secondary_market_subtitle": "Items being resold",
+    "back_to_top": "Back to top"
   },
   "account_page": {
     "copied": "Copied ✔",
@@ -993,7 +1032,7 @@
   "rentals_promotional_modal": {
     "title": "Announcing LAND rentals",
     "browse_listings": "Browse listings",
-    "list_your_land": "List your land for rent",
+    "list_your_land": "Rent your land",
     "description": "<p>If you are a LAND owner you can now earn MANA by renting your parcels or estates to content creators.</p> <p>Are you a content creator? Now you can publish your builds to Genesis City without the need of owning LAND.</p> <p>If you want to learn more, <a>read our blog post</a>.</p>"
   },
   "atlas": {

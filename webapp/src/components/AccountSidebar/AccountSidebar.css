@@ -1,14 +1,14 @@
 .AccountSidebar .ui.sub.header {
   padding-left: 24px;
   padding-top: 17px;
-  padding-bottom: 22px;
+  padding-bottom: 13px;
   margin-bottom: 0px;
 }
 
 .AccountSidebar ul.Menu {
   background-color: var(--card);
   border-radius: 10px;
-  padding-bottom: 21px;
+  padding-bottom: 12px;
 }
 
 .AccountSidebar ul.Menu > .MenuItem {
@@ -26,25 +26,22 @@
 .AccountSidebar ul.Menu > .MenuItem.sub-1 {
   margin-left: 0px;
   padding-left: 32px;
-  width: var(--menu-item-width);
+  width: var(--sidebar-width);
 }
 
 .AccountSidebar ul.Menu > .MenuItem.sub-2 {
   margin-left: 0px;
   padding-left: 48px;
-  width: var(--menu-item-width);
+  width: var(--sidebar-width);
 }
 
 .AccountSidebar .alternative-menu-item {
-  margin: 0 12px;
   padding: 8px 12px;
-  margin-bottom: 8px;
 }
 
 .AccountSidebar .alternative-menu-item:hover,
 .AccountSidebar .alternative-menu-item.selected {
   background-color: #37333d;
-  border-radius: 6px;
   cursor: pointer;
 }
 
@@ -58,9 +55,45 @@
   line-height: 24px;
 }
 
+.AccountSidebar .menu-icon {
+  display: block;
+  width: 24px;
+  height: 20px;
+  background-size: cover;
+  margin-left: 4px;
+  margin-right: 16px;
+}
+
+.AccountSidebar .alternative-menu-item .sparkles {
+  height: 24px;
+  filter: brightness(0) invert(1);
+  background-image: url(../../images/sparkles.svg);
+}
+
+.AccountSidebar .alternative-menu-item .assets {
+  background-image: url(../../images/assets.svg);
+}
+
+.AccountSidebar .alternative-menu-item-container {
+  display: flex;
+  align-items: center;
+}
+
 .AccountSidebar .alternative-menu-item .detail-text {
   font-size: 15px;
   font-weight: 400;
   line-height: 24px;
   color: var(--secondary-text);
+}
+
+.AccountSidebar .categories-assets-menu {
+  padding-bottom: 12px;
+}
+
+.AccountSidebar ul.Menu.filters-sidebar {
+  background-color: var(--background);
+}
+
+.AccountSidebar ul.Menu.other-account-menu {
+  padding-bottom: 0;
 }

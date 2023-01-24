@@ -1,0 +1,6 @@
+.emote-play-mode-filter .emote-play-mode-options {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 20px;
+  margin: 20px 0;
+}

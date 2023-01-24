@@ -153,3 +153,11 @@
   background-color: #37333d;
   margin-bottom: 16px;
 }
+
+.editingCostWarning {
+  font-size: 15px;
+  padding: 15px;
+  border-radius: 6px;
+  background-color: #37333D;
+  margin-bottom: 16px;
+}

@@ -1,5 +1,13 @@
 import React, { useEffect, useState, useCallback, useRef, useMemo } from 'react'
-import { HeaderMenu, Header, Button, Loader, Empty } from 'decentraland-ui'
+import classNames from 'classnames'
+import {
+  HeaderMenu,
+  Header,
+  Button,
+  Loader,
+  Empty,
+  useTabletAndBelowMediaQuery
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Asset } from '../../../modules/asset/types'
@@ -8,7 +16,7 @@ import { Props } from './Slideshow.types'
 import ItemsSection from './ItemsSection'
 import './Slideshow.css'
 
-const PAGE_SIZE = 4
+const DEFAULT_PAGE_SIZE = 5
 const INITIAL_PAGE = 1
 
 const Slideshow = (props: Props) => {
@@ -26,21 +34,29 @@ const Slideshow = (props: Props) => {
     onViewAll,
     onChangeItemSection
   } = props
+  const isMobileOrTablet = useTabletAndBelowMediaQuery()
+  const pageSize = isMobileOrTablet ? assets.length : DEFAULT_PAGE_SIZE
   const [showArrows, setShowArrows] = useState(false)
   const [currentPage, setCurrentPage] = useState(INITIAL_PAGE)
   const [assetsToRender, setAssetsToRender] = useState(
-    assets.slice(0, PAGE_SIZE)
+    isMobileOrTablet ? assets : assets.slice(0, pageSize)
   )
-  const totalPages = useMemo(() => Math.ceil(assets.length / PAGE_SIZE), [
-    assets.length
-  ])
+
+  const totalPages = useMemo(
+    () => (isMobileOrTablet ? 1 : Math.ceil(assets.length / pageSize)),
+    [assets.length, pageSize, isMobileOrTablet]
+  )
 
   useEffect(() => {
-    const currentPosition = (currentPage - INITIAL_PAGE) * PAGE_SIZE
-    setAssetsToRender(
-      assets.slice(currentPosition, currentPosition + PAGE_SIZE)
-    )
-  }, [currentPage, assets, setAssetsToRender])
+    const currentPosition = (currentPage - INITIAL_PAGE) * pageSize
+    setAssetsToRender(assets.slice(currentPosition, currentPosition + pageSize))
+  }, [currentPage, assets, setAssetsToRender, pageSize])
+
+  useEffect(() => {
+    if (isMobileOrTablet && currentPage !== 1) {
+      setCurrentPage(1)
+    }
+  }, [isMobileOrTablet, currentPage])
 
   const handleOnAssetCardClick = useCallback(
     (asset: Asset) => {
@@ -106,7 +122,7 @@ const Slideshow = (props: Props) => {
     <div className="Slideshow" ref={slideRef} {...showArrowsHandlers}>
       <HeaderMenu>
         <HeaderMenu.Left>
-          <div>
+          <div className="slideshow-header">
             <Header sub={isSubHeader}>{title}</Header>
             <Header sub>{subtitle}</Header>
             {hasItemsSection ? (
@@ -122,25 +138,27 @@ const Slideshow = (props: Props) => {
           <HeaderMenu.Right>{viewAllButton()}</HeaderMenu.Right>
         ) : null}
       </HeaderMenu>
-      <div className="assets">
-        {isLoading ? (
-          assets.length === 0 ? (
-            <Loader active size="massive" />
-          ) : (
+      <div className="assets-container">
+        <div className={classNames("assets", {
+          "full-width": assetsToRender.length === pageSize
+        })}>
+          {isLoading ? (
+            assets.length === 0 ? (
+              <Loader active size="massive" />
+            ) : (
+              renderNfts()
+            )
+          ) : assets.length > 0 ? (
             renderNfts()
-          )
-        ) : assets.length > 0 ? (
-          renderNfts()
-        ) : (
-          renderEmptyState()
-        )}
-      </div>
-      <>
+          ) : (
+            renderEmptyState()
+          )}
+        </div>
         <div
           className="arrow-container arrow-container-left"
           {...showArrowsHandlers}
         >
-          {showArrows && (
+          {showArrows && totalPages > 1 &&  (
             <Button
               circular
               secondary
@@ -155,7 +173,7 @@ const Slideshow = (props: Props) => {
           className="arrow-container arrow-container-right"
           {...showArrowsHandlers}
         >
-          {showArrows && (
+          {showArrows && totalPages > 1 && (
             <Button
               circular
               secondary
@@ -166,23 +184,24 @@ const Slideshow = (props: Props) => {
             </Button>
           )}
         </div>
-      </>
-
-      <div className="page-indicators-container">
-        {Array.from({ length: totalPages }).map((_, index) => (
-          <div
-            key={index}
-            className="page-indicator-container"
-            onClick={() => setCurrentPage(index + 1)}
-          >
-            <div
-              className={`page-indicator ${
-                currentPage === index + 1 ? 'active' : ''
-              }`}
-            />
-          </div>
-        ))}
       </div>
+      {totalPages > 1 ? (
+        <div className="page-indicators-container">
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <div
+              key={index}
+              className="page-indicator-container"
+              onClick={() => setCurrentPage(index + 1)}
+            >
+              <div
+                className={`page-indicator ${
+                  currentPage === index + 1 ? 'active' : ''
+                }`}
+              />
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   )
 }

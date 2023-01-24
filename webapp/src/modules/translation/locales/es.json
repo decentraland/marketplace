@@ -152,7 +152,11 @@
     "type_to_search": "Escriba para buscar collecciones.",
     "clear": "Borrar filtros",
     "recently_reviewed": "Revisado recientemente",
-    "size": "Tamaño"
+    "size": "Tamaño",
+    "price": "Precio",
+    "price_min_greater_max": "El precio máximo debería ser mayor al mínimo",
+    "reset": "Limpiar",
+    "apply_filters": "Aplicar filtros"
   },
   "home_page": {
     "analytics": {
@@ -308,25 +312,60 @@
     "assets": "{count} {count, plural, one {asset} other {assets}}"
   },
   "nft_list": {
-    "empty": "Sin resultados"
+    "empty": "No pudimos encontrar ningún resultado en la sección {currentSection}. <br></br><searchStore>Busca en {section}</searchStore><if-filters> o <clearFilters>limpia los filtros</clearFilters></if-filters>",
+    "simple_empty": "No pudimos encontrar ningún resultado. <if-filters><br></br><clearFilters>Limpia los filtros</clearFilters></if-filters>",
+    "empty_search": "No hay resultados para \"{search}\" en {currentSection}. <br></br><searchStore> Intenta buscando en {section}</searchStore>"
   },
   "nft_filters": {
+    "no_items": "Sin items",
     "on_sale": "En venta",
     "filter": "Filtrar",
     "order_by": "Ordenar por",
-    "results": "{count} {count, plural, one {resultado} other {resultados}}",
-    "more_than_results": "+{count} resultados",
-    "search": "Buscar {suffix}...",
+    "results": "{count} {count, plural, one {item} other {items}}",
+    "query_results": "Mostrando {count} {count, plural, one {item} other {items}} para \"{search}\"",
+    "more_than_results": "+{count} items",
+    "query_more_than_results": "Mostrando +{count} items para \"{search}\"",
+    "search": "Buscar",
     "search_land": "Buscar tierras...",
-    "rarity": "Rareza",
     "gender": "Género",
-    "collection": "Colección",
-    "all_collections": "Todas las colecciones",
-    "network": "Red",
-    "all_networks": "Todas las redes",
     "smart_wearables": "Vestimentas Interactivas",
-    "play_mode": "Play Mode",
-    "all_play_modes": "All Play Modes"
+    "emote_play_mode": {
+      "title": "Play Mode",
+      "all_items": "All Play Modes"
+    },
+    "body_shapes": {
+      "title": "Género",
+      "all_items": "Todos los géneros",
+      "female": "Solo femenino",
+      "male": "Solo masculino",
+      "unisex": "Solo unisex"
+    },
+    "rarities": {
+      "title": "Rareza",
+      "all_items": "Todas las rarezas",
+      "count_items": "{count} {count, plural, one {rareza} other {rarezas}}"
+    },
+    "price": {
+      "title": "Precio",
+      "all_items": "Todos los precios",
+      "more_than_price": "Más de <mana></mana> {price}",
+      "less_than_price": "Menos de <mana></mana> {price}",
+      "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "collection": {
+      "title": "Colección",
+      "all_items": "Todas las colecciones",
+      "search": "Buscar colecciones"
+    },
+    "network": {
+      "title": "Red",
+      "all_items": "Todas las redes"
+    },
+    "more_filters": "Más filtros",
+    "only_smart": "Solo vestimentas interactivas",
+    "not_on_sale": "No a la venta",
+    "for_sale": "A la venta",
+    "category": "Categoría"
   },
   "nft_land_filters": {
     "all_land": "Todas las tierras",
@@ -652,7 +691,8 @@
     "primary_market_title": "Tienda",
     "primary_market_subtitle": "Creados por los usuarios",
     "secondary_market_title": "Clasificados",
-    "secondary_market_subtitle": "Artículos de reventa"
+    "secondary_market_subtitle": "Artículos de reventa",
+    "back_to_top": "Volver arriba"
   },
   "account_page": {
     "copied": "Copiado ✔",

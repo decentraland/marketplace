@@ -1,8 +1,7 @@
 .Menu {
-  --menu-item-width: 248px;
   --menu-sub-item-width: 232px;
   margin-right: 24px;
-  width: var(--menu-item-width);
+  width: var(--sidebar-width);
 }
 
 ul.Menu {
@@ -25,31 +24,31 @@ ul.Menu li .ui.image {
 }
 
 ul.Menu li.sub {
-  width: var(--menu-item-width);
-  color: var(--secondary-text);
+  width: var(--sidebar-width);
+  color: #9791A3;
 }
 
 ul.Menu li.sub.sub-1 {
   margin-left: 16px;
   padding-left: 16px;
-  width: calc(var(--menu-item-width) - 16px);
+  width: calc(var(--sidebar-width) - 16px);
 }
 
 ul.Menu li.sub.sub-2 {
   margin-left: 32px;
   padding-left: 16px;
-  width: calc(var(--menu-item-width) - 32px);
+  width: calc(var(--sidebar-width) - 32px);
 }
 .VendorMenu ul.Menu li.sub.sub-1 {
   margin-left: 0px;
   padding-left: 32px;
-  width: var(--menu-item-width);
+  width: var(--sidebar-width);
 }
 
 .VendorMenu ul.Menu li.sub.sub-2 {
   margin-left: 0px;
   padding-left: 48px;
-  width: var(--menu-item-width);
+  width: var(--sidebar-width);
 }
 
 ul.Menu li .dropdown.icon {

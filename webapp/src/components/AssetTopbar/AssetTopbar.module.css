@@ -1,0 +1,165 @@
+.assetTopbar {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.searchContainer :global(.dcl.field.full) {
+  flex: 1;
+}
+
+.assetTopbar :global(.dcl.field.full) :global(.ui.input).searchField input {
+  background: var(--secondary);
+  font-size: 17px;
+}
+
+.assetTopbar
+  :global(.dcl.field.full)
+  :global(.ui.input).searchField
+  input:not(:focus) {
+  border: 2px solid transparent;
+}
+
+.assetTopbar :global(.dcl.field.full) {
+  min-width: unset;
+}
+
+.assetTopbar.land {
+  display: flex;
+}
+
+.assetTopbar .infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  min-height: 26px;
+}
+
+.assetTopbar :global(.dcl.field .message) {
+  display: none;
+}
+
+.mapToggle {
+  margin-left: 10px;
+  display: flex;
+}
+
+.mapToggle.map {
+  top: 0;
+  right: 0;
+  background: var(--background);
+  border-radius: 4px;
+  margin-right: 20px;
+}
+
+.assetTopbar div:not(.map) :global(.Chip) {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+}
+
+.assetTopbar :global(.Chip.grid) {
+  border-radius: 4px 0 0 4px;
+}
+
+.assetTopbar :global(.Chip.atlas) {
+  border-radius: 0 4px 4px 0;
+}
+
+.countText {
+  color: #736e7d;
+  margin-bottom: 0;
+  margin-right: 10px;
+  font-size: 17px;
+  height: 100%;
+}
+
+.countContainer {
+  display: flex;
+  align-items: baseline;
+}
+
+.clearFilters {
+  font-size: 13px;
+  line-height: 13px;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: var(--primary);
+  background: transparent;
+  border: none;
+}
+
+.clearFilters:hover {
+  opacity: 0.8;
+}
+
+.rightOptionsContainer {
+  display: flex;
+  margin-left: auto;
+}
+
+.openFiltersWrapper {
+  display: flex;
+  position: relative;
+  cursor: pointer;
+}
+
+.openFilters {
+  width: 20px;
+  height: 20px;
+  background-image: url(../../images/filters.svg);
+  background-size: 16px;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  margin-left: 24px;
+}
+
+.openFilters.active {
+  background-image: url(../../images/filters-active.svg);
+  background-size: 20px;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  width: 100%;
+}
+
+.searchContainer.searchMap {
+  flex-direction: row-reverse;
+}
+
+@media (max-width: 990px) {
+  .countText {
+    max-width: 160px;
+    margin: 0 auto;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mapToggle {
+    top: 13px;
+  }
+
+  .selectedFiltersContainer {
+    display: flex;
+    align-items: baseline;
+    padding: 16px 0;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+
+  .clearFilters {
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding-top: 6px;
+    padding-left: 0;
+  }
+
+  .assetTopbar {
+    margin-bottom: 0;
+  }
+}

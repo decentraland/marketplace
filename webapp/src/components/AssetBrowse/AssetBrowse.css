@@ -9,14 +9,22 @@
 
 .AssetBrowse .ui.cards {
   position: relative;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
 
 .AssetBrowse .ui.cards {
   min-height: 150px;
+  margin: 0;
+}
+
+.AssetBrowse .ui.cards .ui.card.AssetCard {
+  width: 100%;
+  margin: 0;
 }
 
 .AssetBrowse .ui.cards + .empty {
-  margin-top: 40px;
   font-size: 16px;
   text-align: center;
   color: var(--secondary-text);
@@ -28,6 +36,8 @@
   position: absolute;
   background: var(--background);
   opacity: 0.6;
+  z-index: 1;
+  margin-top: -20px;
 }
 
 .AssetBrowse .load-more {
@@ -87,9 +97,12 @@
 }
 .AssetBrowse.fullscreen .blur-background {
   position: relative;
-  background: rgba(22, 20, 26, 0.75);
-  backdrop-filter: blur(20px);
   z-index: 1;
+}
+
+.AssetBrowse .sidebar {
+  margin-right: 20px;
+  width: var(--sidebar-width);
 }
 
 .AssetBrowse.fullscreen .NFTFilters {
@@ -128,9 +141,19 @@
   margin-right: 24px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 990px) {
+  .AssetBrowse .ui.cards,
+  .AssetBrowse .ui.cards > .ui.card {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   .AssetBrowse .Row .right.Column {
     max-width: 100%;
+  }
+
+  .AssetBrowse .sidebar {
+    display: none;
   }
 
   .AssetBrowse .Layout .right.column > div {

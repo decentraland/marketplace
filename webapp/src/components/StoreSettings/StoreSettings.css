@@ -1,3 +1,13 @@
+.StoreSettings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.StoreSettings .store-settings-header {
+  width: 100%;
+}
+
 .StoreSettings > .top {
   margin-bottom: 21px;
 }
@@ -14,7 +24,8 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
-  max-width: 560px;
+  max-width: 960px;
+  width: 100%;
 }
 
 .StoreSettings > .bottom {
