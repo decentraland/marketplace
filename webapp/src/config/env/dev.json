@@ -1,11 +1,11 @@
 {
   "NETWORK": "goerli",
   "CHAIN_ID": "5",
-  "NFT_SERVER_URL": "https://nft-api.decentraland.today/v1",
+  "NFT_SERVER_URL": "https://nft-api.decentraland.zone/v1",
   "BUILDER_SERVER_URL": "https://builder-api.decentraland.zone/v1",
   "ATLAS_SERVER_URL": "https://api.decentraland.zone",
   "PEER_URL": "https://peer-ap1.decentraland.zone",
-  "SIGNATURES_SERVER_URL": "https://signatures-api.decentraland.today/v1",
+  "SIGNATURES_SERVER_URL": "https://signatures-api.decentraland.zone/v1",
   "DECENTRALAND_BLOG": "https://decentraland.org/blog",
   "REFRESH_SIGNATURES_DELAY": "10000",
   "TRANSACTIONS_API_URL": "https://transactions-api.decentraland.zone/v1",
