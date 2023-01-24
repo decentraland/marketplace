@@ -27,6 +27,7 @@ export type Props = {
   onSetIsTryingOn: typeof setIsTryingOn
   onSetWearablePreviewController: typeof setWearablePreviewController
   children?: React.ReactNode
+  hasBadges?: boolean
 }
 
 export type OwnProps = Pick<Props, 'showOrderListedTag'>
