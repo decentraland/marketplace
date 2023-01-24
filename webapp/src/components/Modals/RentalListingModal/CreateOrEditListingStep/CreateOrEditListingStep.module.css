@@ -85,8 +85,8 @@
 
 .expirationDate .info {
   position: absolute;
-  left: 155px;
-  top: 2px;
+  left: 217px;
+  top: 371px;
 }
 
 .actions {
@@ -134,12 +134,22 @@
     grid-template-columns: 50% 50%;
     grid-template-rows: 34px 34px 34px;
   }
+
+  .expirationDate .info {
+    top: 427px;
+  }
+}
+
+@media (max-width: 700px) {
+  .expirationDate .info {
+    left: 187px;
+  }
 }
 
 .editingCostWarning {
   font-size: 15px;
   padding: 15px;
   border-radius: 6px;
-  background-color: #37333D;
+  background-color: #37333d;
   margin-bottom: 16px;
 }

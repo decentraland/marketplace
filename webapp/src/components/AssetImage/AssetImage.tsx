@@ -6,6 +6,7 @@ import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
+  Badge,
   Button,
   Center,
   Icon,
@@ -19,6 +20,8 @@ import { getSelection, getCenter } from '../../modules/nft/estate/utils'
 import { Atlas } from '../Atlas'
 import ListedBadge from '../ListedBadge'
 import { config } from '../../config'
+import { Coordinate } from '../Coordinate'
+import { JumpIn } from '../AssetPage/JumpIn'
 import { ControlOptionAction, Props } from './AssetImage.types'
 import './AssetImage.css'
 
@@ -68,7 +71,8 @@ const AssetImage = (props: Props) => {
     isTryingOn,
     isPlayingEmote,
     onSetIsTryingOn,
-    onSetWearablePreviewController
+    onSetWearablePreviewController,
+    children
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
@@ -178,7 +182,9 @@ const AssetImage = (props: Props) => {
           withNavigation={withNavigation}
           selection={selection}
           zoom={zoom}
-        />
+        >
+          {children}
+        </Atlas>
       )
     }
 
@@ -194,7 +200,9 @@ const AssetImage = (props: Props) => {
           selection={estateSelection}
           zoom={zoom}
           isEstate
-        />
+        >
+          {children}
+        </Atlas>
       )
     }
 
@@ -337,6 +345,7 @@ const AssetImage = (props: Props) => {
               src={getAssetImage(asset)}
             />
           )}
+          {children}
         </div>
       )
     }
@@ -448,6 +457,7 @@ const AssetImage = (props: Props) => {
               src={getAssetImage(asset)}
             />
           )}
+          {children}
         </div>
       )
     }
@@ -463,6 +473,7 @@ const AssetImage = (props: Props) => {
         <div className={classes.join(' ')}>
           <div className="name">{name}</div>
           {showMonospace ? <div className="monospace">{name}</div> : null}
+          {children}
         </div>
       )
     }
@@ -480,7 +491,9 @@ const AssetImage = (props: Props) => {
               <Loader size="small" active />
             </div>
           }
-        />
+        >
+          {children}
+        </LazyLoadImage>
       )
     }
   }
@@ -495,12 +508,55 @@ const AssetImageWrapper = (props: Props) => {
     classes += ' ' + className
   }
 
+  const coordinates: { x: number; y: number } | null = useMemo(() => {
+    switch (asset.category) {
+      case NFTCategory.ESTATE: {
+        if (asset.data.estate!.size) {
+          return {
+            x: asset.data.estate!.parcels[0].x,
+            y: asset.data.estate!.parcels[0].y
+          }
+        }
+        return null
+      }
+      case NFTCategory.PARCEL: {
+        return {
+          x: Number(asset.data.parcel!.x),
+          y: Number(asset.data.parcel!.y)
+        }
+      }
+      default:
+        return null
+    }
+  }, [asset])
+
   return (
     <div className={classes}>
       <img src={PIXEL} alt="pixel" className="pixel" />
       <div className="image-wrapper">
         {showOrderListedTag ? <ListedBadge className="listed-badge" /> : null}
-        <AssetImage asset={asset} {...rest} />
+        <AssetImage asset={asset} {...rest}>
+          <div className="badges">
+            {coordinates ? (
+              <>
+                {asset.category === NFTCategory.ESTATE ? (
+                  <>
+                    <Badge className="coordinates" color="#37333d">
+                      {asset.data.estate!.size.toLocaleString()} LAND
+                    </Badge>
+                  </>
+                ) : (
+                  <Coordinate
+                    className="coordinates"
+                    x={coordinates.x}
+                    y={coordinates.y}
+                  />
+                )}
+                <JumpIn compact x={coordinates.x} y={coordinates.y} />
+              </>
+            ) : null}
+          </div>
+        </AssetImage>
       </div>
     </div>
   )

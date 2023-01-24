@@ -26,13 +26,13 @@ async function main() {
       <TranslationProvider locales={Object.keys(locales)}>
         <ToastProvider>
           <WalletProvider>
-            <ModalProvider components={modals}>
-              <ConnectedRouter history={history}>
+            <ConnectedRouter history={history}>
+              <ModalProvider components={modals}>
                 <ScrollToTop />
                 <Routes />
                 <RentalsLaunchModal />
-              </ConnectedRouter>
-            </ModalProvider>
+              </ModalProvider>
+            </ConnectedRouter>
           </WalletProvider>
         </ToastProvider>
       </TranslationProvider>
