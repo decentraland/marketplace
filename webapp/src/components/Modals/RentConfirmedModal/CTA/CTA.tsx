@@ -27,7 +27,6 @@ const CTA = ({ to, name, isDisabledOnMobile }: Props) => {
     <div className={styles.mobileAvailabilityContainer}>{renderContent()}</div>
   ) : (
     <a
-      key={name}
       className={styles.ctaContainer}
       href={to}
       target="_blank"
