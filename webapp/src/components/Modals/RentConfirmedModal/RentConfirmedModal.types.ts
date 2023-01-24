@@ -12,3 +12,9 @@ export type Props = Omit<ModalProps, 'metadata'> & {
 
 export type OwnProps = Pick<Props, 'metadata'>
 export type MapStateProps = Props
+
+export type CTAProps = {
+  to: string
+  icon: string
+  index: number
+}
