@@ -132,9 +132,7 @@ function* handleBuyItemWithCardRequest(action: BuyItemWithCardRequestAction) {
   try {
     const { item } = action.payload
     yield call(buyAssetWithCard, item)
-    // TODO (buy nfts with card): do we need the txHash here?
-    const txHash: string = ''
-    yield put(buyItemWithCardSuccess(item.chainId, txHash, item))
+    yield put(buyItemWithCardSuccess())
   } catch (error) {
     yield put(
       buyItemWithCardFailure(

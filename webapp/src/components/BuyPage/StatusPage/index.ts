@@ -1,2 +1,2 @@
-import StatusPage from './StatusPage.containter'
+import StatusPage from './StatusPage.container'
 export { StatusPage }

@@ -3,6 +3,14 @@ import * as matchers from 'redux-saga-test-plan/matchers'
 import { ChainId, Item } from '@dcl/schemas'
 import { call, select } from 'redux-saga/effects'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { getWallet } from '../wallet/selectors'
+import { View } from '../ui/types'
+import { itemAPI } from '../vendor/decentraland/item/api'
+import { closeModal, openModal } from '../modal/actions'
+import {
+  buyAssetWithCard,
+  BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
+} from '../asset/utils'
 import {
   buyItemRequest,
   buyItemFailure,
@@ -20,15 +28,7 @@ import {
   buyItemWithCardFailure,
   buyItemWithCardSuccess
 } from './actions'
-import { getWallet } from '../wallet/selectors'
-import { View } from '../ui/types'
-import { itemAPI } from '../vendor/decentraland/item/api'
-import { closeModal, openModal } from '../modal/actions'
 import { itemSaga } from './sagas'
-import {
-  buyAssetWithCard,
-  BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-} from '../asset/utils'
 
 const item = {
   itemId: 'anItemId',
@@ -157,7 +157,7 @@ describe('when handling the buy items with card action', () => {
     it('should dispatch the success action', () => {
       return expectSaga(itemSaga)
         .provide([[call(buyAssetWithCard, item), Promise.resolve()]])
-        .put(buyItemWithCardSuccess(item.chainId, '', item))
+        .put(buyItemWithCardSuccess())
         .dispatch(buyItemWithCardRequest(item))
         .run({ silenceTimeout: true })
     })

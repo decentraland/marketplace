@@ -1,12 +1,16 @@
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import { MapStateProps } from './Routes.types'
-import { getIsMaintenanceEnabled } from '../../modules/features/selectors'
-import Routes from './Routes'
+import {
+  getIsMaintenanceEnabled,
+  getIsBuyNftsWithFiatEnabled
+} from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
+import Routes from './Routes'
+import { MapStateProps } from './Routes.types'
 
 const mapState = (state: RootState): MapStateProps => ({
-  inMaintenance: getIsMaintenanceEnabled(state)
+  inMaintenance: getIsMaintenanceEnabled(state),
+  isBuyNftsWithFiatEnabled: getIsBuyNftsWithFiatEnabled(state)
 })
 
 const mapDispatch = (_: any) => ({})

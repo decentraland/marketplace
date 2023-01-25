@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
-
+import React from 'react'
+import { Link, Redirect } from 'react-router-dom'
 import { Button, Header, Loader, Page } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
-
 import { locations } from '../../../modules/routing/locations'
 import { AssetImage } from '../../AssetImage'
 import { AssetProviderPage } from '../../AssetProviderPage'
@@ -12,20 +10,11 @@ import { Footer } from '../../Footer'
 import { Column } from '../../Layout/Column'
 import { Row } from '../../Layout/Row'
 import { Navbar } from '../../Navbar'
-
-import './StatusPage.css'
 import { Props } from './StatusPage.types'
+import './StatusPage.css'
 
 const StatusPage = ({ type, purchase }: Props) => {
-  const history = useHistory()
-
-  useEffect(() => {
-    if (!purchase) {
-      history.replace(locations.root())
-    }
-  }, [history, purchase])
-
-  if (!purchase) return null
+  if (!purchase) return <Redirect to={{ pathname: locations.root() }} />
 
   const { status } = purchase
 

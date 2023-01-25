@@ -4,6 +4,7 @@ import {
   SET_PURCHASE
 } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { isManaPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { put, select, takeEvery } from 'redux-saga/effects'
 import { locations } from '../routing/locations'
@@ -14,8 +15,9 @@ export function* assetSaga() {
 }
 
 function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
-  const { nft, status } = action.payload.purchase
-  if (nft) {
+  const { purchase } = action.payload
+  if (!isManaPurchase(purchase)) {
+    const { nft, status } = purchase
     const { pathname }: ReturnType<typeof getLocation> = yield select(
       getLocation
     )

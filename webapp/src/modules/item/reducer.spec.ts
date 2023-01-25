@@ -52,7 +52,7 @@ const requestActions = [
   buyItemRequest(item),
   buyItemWithCardRequest(item),
   buyItemSuccess(chainId, txHash, item),
-  buyItemWithCardSuccess(chainId, txHash, item)
+  buyItemWithCardSuccess()
 ]
 
 requestActions.forEach(action => {

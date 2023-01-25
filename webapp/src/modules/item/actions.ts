@@ -86,21 +86,7 @@ export const BUY_ITEM_WITH_CARD_FAILURE = '[Failure] Buy Item with Card'
 
 export const buyItemWithCardRequest = (item: Item) =>
   action(BUY_ITEM_WITH_CARD_REQUEST, { item })
-export const buyItemWithCardSuccess = (
-  chainId: ChainId,
-  txHash: string,
-  item: Item
-) =>
-  action(BUY_ITEM_WITH_CARD_SUCCESS, {
-    item,
-    ...buildTransactionPayload(chainId, txHash, {
-      itemId: item.itemId,
-      contractAddress: item.contractAddress,
-      network: item.network,
-      name: getAssetName(item),
-      price: formatWeiMANA(item.price)
-    })
-  })
+export const buyItemWithCardSuccess = () => action(BUY_ITEM_WITH_CARD_SUCCESS)
 export const buyItemWithCardFailure = (error: string) =>
   action(BUY_ITEM_WITH_CARD_FAILURE, { error })
 

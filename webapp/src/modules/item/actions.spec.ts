@@ -134,19 +134,10 @@ describe('when creating the action to signal a successful buy item with card req
   const txHash = 'aTxHash'
 
   it('should return an object representing the action', () => {
-    expect(buyItemWithCardSuccess(chainId, txHash, item)).toEqual({
+    expect(buyItemWithCardSuccess()).toEqual({
       type: BUY_ITEM_WITH_CARD_SUCCESS,
       meta: undefined,
-      payload: {
-        item,
-        ...buildTransactionPayload(chainId, txHash, {
-          itemId: item.itemId,
-          contractAddress: item.contractAddress,
-          network: item.network,
-          name: getAssetName(item),
-          price: formatWeiMANA(item.price)
-        })
-      }
+      payload: undefined
     })
   })
 })
