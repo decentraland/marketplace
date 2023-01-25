@@ -17,6 +17,14 @@ const mockContractAddress = 'a-contract-address'
 const mockTokenId = 'aTokenId'
 const mockTradeType = TradeType.PRIMARY
 
+const mockPathname = new URL(
+  `${window.origin}${locations.buyWithCard(
+    AssetType.ITEM,
+    mockContractAddress,
+    mockTokenId
+  )}`
+).pathname
+
 const mockNFTPurchase: Purchase = {
   address: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
   id: 'mock-id',
@@ -29,7 +37,8 @@ const mockNFTPurchase: Purchase = {
   nft: {
     contractAddress: mockContractAddress,
     tokenId: mockTokenId,
-    tradeType: mockTradeType
+    tradeType: mockTradeType,
+    cryptoAmount: 100
   }
 }
 
@@ -42,11 +51,7 @@ describe('when handling the set purchase action', () => {
             [
               select(getLocation),
               {
-                pathname: locations.buyWithCard(
-                  AssetType.ITEM,
-                  mockContractAddress,
-                  mockTokenId
-                )
+                pathname: mockPathname
               }
             ]
           ])
@@ -121,11 +126,7 @@ describe('when handling the set purchase action', () => {
             [
               select(getLocation),
               {
-                pathname: locations.buyWithCard(
-                  AssetType.ITEM,
-                  mockContractAddress,
-                  mockTokenId
-                )
+                pathname: mockPathname
               }
             ]
           ])

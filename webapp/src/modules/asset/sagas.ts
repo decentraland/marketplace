@@ -29,7 +29,13 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
       tokenId
     )
     const shouldRedirect = [
-      locations.buyWithCard(assetType, contractAddress, tokenId),
+      new URL(
+        `${window.origin}${locations.buyWithCard(
+          assetType,
+          contractAddress,
+          tokenId
+        )}`
+      ).pathname,
       statusPagePathname
     ].includes(pathname)
 

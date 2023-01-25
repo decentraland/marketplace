@@ -5,7 +5,7 @@ import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/s
 import { createProfileSaga } from 'decentraland-dapps/dist/modules/profile/sagas'
 import { transactionSaga } from 'decentraland-dapps/dist/modules/transaction/sagas'
 import { featuresSaga } from 'decentraland-dapps/dist/modules/features/sagas'
-import { createManaFiatGatewaysSaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
+import { createGatewaySaga } from 'decentraland-dapps/dist/modules/gateway/sagas'
 import { locationSaga } from 'decentraland-dapps/dist/modules/location/sagas'
 import { CatalystClient } from 'dcl-catalyst-client'
 import { NetworkGatewayType } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
@@ -41,7 +41,7 @@ const profileSaga = createProfileSaga({ peerUrl })
 const catalystClient = new CatalystClient({
   catalystUrl: peerUrl
 })
-const manaFiatGatewaysSaga = createManaFiatGatewaysSaga({
+const gatewaySaga = createGatewaySaga({
   [NetworkGatewayType.MOON_PAY]: {
     apiBaseUrl: config.get('MOON_PAY_API_URL'),
     apiKey: config.get('MOON_PAY_API_KEY'),
@@ -57,6 +57,7 @@ const manaFiatGatewaysSaga = createManaFiatGatewaysSaga({
 export function* rootSaga() {
   yield all([
     analyticsSaga(),
+    assetSaga(),
     authorizationSaga(),
     bidSaga(),
     itemSaga(),
@@ -88,9 +89,8 @@ export function* rootSaga() {
     modalSaga(),
     eventSaga(),
     contractSaga(),
-    manaFiatGatewaysSaga(),
+    gatewaySaga(),
     locationSaga(),
-    transakSaga(),
-    assetSaga()
+    transakSaga()
   ])
 }

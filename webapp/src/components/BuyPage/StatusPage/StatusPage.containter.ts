@@ -8,7 +8,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { contractAddress, tokenId } = ownProps.match.params
 
   return {
-    purchase: getNFTPurchase(state, contractAddress, tokenId)
+    purchase:
+      contractAddress && tokenId
+        ? getNFTPurchase(state, contractAddress, tokenId)
+        : null
   }
 }
 
