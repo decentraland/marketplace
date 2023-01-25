@@ -132,6 +132,9 @@
     "bids": "Ofertas",
     "store_settings": "Configuración"
   },
+  "on_rent_menu": {
+    "title": "Assets en renta"
+  },
   "vendor_menu": {
     "no_assets": "Sin assets",
     "assets_count": "{count} {count, plural, one {asset} other {assets}}",

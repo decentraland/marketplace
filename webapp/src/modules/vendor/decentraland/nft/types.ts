@@ -25,6 +25,7 @@ export type NFTsFetchFilters = {
   wearableGenders?: WearableGender[]
   itemId?: string
   network?: Network
+  tenant?: string
   rentalStatus?: RentalStatus | RentalStatus[]
   contracts?: string[]
 }

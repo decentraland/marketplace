@@ -8,10 +8,16 @@ import { Menu } from '../../Menu'
 import { Props } from './OtherAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { AssetType } from '../../../modules/asset/types'
+import { RentalStatus } from '@dcl/schemas'
 
 const { ALL, LAND, WEARABLES, EMOTES, ENS } = Sections.decentraland
 
-const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
+const OtherAccountSidebar = ({
+  section,
+  assetType,
+  wallet,
+  onBrowse
+}: Props) => (
   <>
     <Menu>
       <Header sub>{t('account_sidebar.store')}</Header>
@@ -54,6 +60,22 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
         }
         section={section as Section}
         onSectionClick={section => onBrowse({ section, assetType })}
+      />
+    </Menu>
+    <Menu>
+      <Header sub>{t('on_rent_menu.title')}</Header>
+      <NFTSectionsMenuItems
+        sections={[LAND]}
+        section={section as Section}
+        onSectionClick={section =>
+          onBrowse({
+            section,
+            assetType: AssetType.NFT,
+            onlyOnRent: true,
+            tenant: wallet?.address,
+            rentalStatus: [RentalStatus.EXECUTED]
+          })
+        }
       />
     </Menu>
   </>

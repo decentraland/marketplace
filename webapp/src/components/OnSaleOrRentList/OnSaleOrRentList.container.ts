@@ -14,11 +14,15 @@ import {
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import {
-  getOnRentNFTs,
-  getOnSaleElements
+  getOnRentNFTsByLessor,
+  getOnRentNFTsByTenant,
+  getOnSaleElements,
+  getView
 } from '../../modules/ui/browse/selectors'
-import { OnSaleNFT } from '../../modules/ui/browse/types'
+import { OnRentNFT, OnSaleNFT } from '../../modules/ui/browse/types'
 import { getWallet } from '../../modules/wallet/selectors'
+import { View } from '../../modules/ui/types'
+import { OnSaleElement } from '../../modules/ui/browse/types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const isLoading =
@@ -27,15 +31,20 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const address = getWallet(state)?.address
 
   const showRents = ownProps.onSaleOrRentType === OnSaleOrRentType.RENT
-
-  const selector = showRents
-    ? () => getOnRentNFTs(state, address)
-    : getOnSaleElements
+  const view = getView(state)
+  let elements: Array<OnRentNFT | OnSaleElement>
+  if (showRents && view === View.ACCOUNT && address) {
+    elements = getOnRentNFTsByTenant(state, address)
+  } else if (showRents && view === View.CURRENT_ACCOUNT && address) {
+    elements = getOnRentNFTsByLessor(state, address)
+  } else {
+    elements = getOnSaleElements(state)
+  }
 
   return {
     elements: isLoading
       ? []
-      : selector(state).map(element => {
+      : elements.map(element => {
           if (Array.isArray(element)) {
             const [nft, rentOrOrder] = element as OnSaleNFT
             return {

@@ -75,24 +75,21 @@ export const getOnSaleNFTs = createSelector<
 
 export const getOnRentNFTs = createSelector<
   RootState,
-  ReturnType<typeof getAddress>,
   ReturnType<typeof getNFTData>,
   ReturnType<typeof getRentalData>,
   OnRentNFT[]
->(getAddress, getNFTData, getRentalData, (address, nftsById, rentalsById) =>
-  Object.values(nftsById)
-    .reduce((acc, nft) => {
-      const { openRentalId } = nft
-      const rental = openRentalId ? rentalsById[openRentalId] : undefined
-      if (
-        rental &&
-        [RentalStatus.EXECUTED, RentalStatus.OPEN].includes(rental.status)
-      ) {
-        acc.push([nft, rental])
-      }
-      return acc
-    }, [] as [NFT<VendorName.DECENTRALAND>, RentalListing][])
-    .filter(([, rental]) => rental.lessor === address)
+>(getNFTData, getRentalData, (nftsById, rentalsById) =>
+  Object.values(nftsById).reduce((acc, nft) => {
+    const { openRentalId } = nft
+    const rental = openRentalId ? rentalsById[openRentalId] : undefined
+    if (
+      rental &&
+      [RentalStatus.EXECUTED, RentalStatus.OPEN].includes(rental.status)
+    ) {
+      acc.push([nft, rental])
+    }
+    return acc
+  }, [] as [NFT<VendorName.DECENTRALAND>, RentalListing][])
 )
 
 export const getOnRentNFTsByLessor = (state: RootState, address: string) => {

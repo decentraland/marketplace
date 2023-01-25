@@ -129,6 +129,14 @@ class NFTAPI extends BaseAPI {
         queryParams.append('emotePlayMode', filters.emotePlayMode)
       }
 
+      if (filters.emotePlayMode) {
+        queryParams.append('emotePlayMode', filters.emotePlayMode)
+      }
+
+      if (filters.tenant) {
+        queryParams.append('tenant', filters.tenant)
+      }
+
       if (filters.rentalStatus) {
         const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus)
           ? [filters.rentalStatus]
