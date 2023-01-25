@@ -7,7 +7,10 @@ import {
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { ContractName, getContract } from 'decentraland-transactions'
-import { isRentalListingOpen } from '../../../modules/rental/utils'
+import {
+  canBeClaimed,
+  isRentalListingOpen
+} from '../../../modules/rental/utils'
 import {
   upsertRentalRequest,
   UpsertRentalRequestAction
@@ -20,21 +23,19 @@ import { ConfirmationStep } from './ConfirmationStep'
 import styles from './RentalListingModal.module.css'
 
 const RentalListingModal = (props: Props) => {
-  // Props
   const {
     address,
     metadata: { nft, rental },
     authorizations,
     onRemove,
-    onClose
+    onClose,
+    wallet
   } = props
 
-  // State
   const [listing, setListing] = useState<
     UpsertRentalRequestAction['payload'] | null
   >(null)
 
-  // Handlers
   const handleSetListing = useCallback<
     (...params: Parameters<typeof upsertRentalRequest>) => void
   >(
@@ -70,6 +71,12 @@ const RentalListingModal = (props: Props) => {
     rental
   ])
 
+  const isListForRentAgain =
+    wallet &&
+    rental &&
+    canBeClaimed(wallet.address, rental, nft) &&
+    !isRentalListingOpen(rental)
+
   return (
     <Modal
       size="tiny"
@@ -80,14 +87,21 @@ const RentalListingModal = (props: Props) => {
       onClose={() => undefined}
     >
       {!isAuthorized ? (
-        <AuthorizationStep nft={nft} onCancel={onClose} />
+        <AuthorizationStep
+          nft={nft}
+          onCancel={onClose}
+          isListForRentAgain={isListForRentAgain}
+        />
       ) : !listing ? (
         <CreateOrEditListingStep
           nft={nft}
-          rental={isRentalListingOpen(rental) ? rental : null}
+          rental={
+            isRentalListingOpen(rental) || isListForRentAgain ? rental : null
+          }
           onCreate={handleSetListing}
           onRemove={onRemove}
           onCancel={onClose}
+          isListForRentAgain={isListForRentAgain}
         />
       ) : rental && isRentalListingOpen(rental) ? (
         <EditConfirmationStep

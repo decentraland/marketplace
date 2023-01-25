@@ -885,6 +885,13 @@
       "notice_link": "租金",
       "confirm": "在您的钱包上确认交易以继续"
     },
+    "authorization_step_again": {
+      "title": "再次出租清單",
+      "notice_line_one": "您可以再次免費出租此 {assetType}。",
+      "notice_line_two": "在其他人租用此 {assetType} 之前，之前的租戶將擁有操作員權限。",
+      "notice_line_three": "如果您希望取消這些權限，則需要取回您的 {assetType} 並支付交易費用。",
+      "cancel": "取消"
+    },
     "create_listing_step": {
       "titles": {
         "edit": "编辑出租列表",

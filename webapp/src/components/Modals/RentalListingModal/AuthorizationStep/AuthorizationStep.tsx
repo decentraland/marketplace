@@ -28,7 +28,8 @@ const AuthorizationStep = (props: Props) => {
     error,
     isFetchingAuthorizations,
     onAuthorize,
-    onFetchAuthorizations
+    onFetchAuthorizations,
+    isListForRentAgain
   } = props
 
   // State
@@ -83,7 +84,11 @@ const AuthorizationStep = (props: Props) => {
   return (
     <>
       <ModalNavigation
-        title={t('rental_modal.authorization_step.title')}
+        title={
+          isListForRentAgain
+            ? t('rental_modal.authorization_step_again.title')
+            : t('rental_modal.authorization_step.title')
+        }
         onClose={!isLoading ? onCancel : undefined}
         onInfo={handleOnInfo}
       />
@@ -95,54 +100,85 @@ const AuthorizationStep = (props: Props) => {
         </Modal.Content>
       ) : (
         <>
-          <Modal.Content>
-            <div className={styles.notice}>
-              <T
-                id="rental_modal.authorization_step.notice_line_one"
-                values={{
-                  assetType: t(`global.${nft.category}`),
-                  link: (
-                    <TransactionLink
-                      address={rentalContractData.address}
-                      txHash=""
-                      chainId={rentalContractData.chainId}
-                    >
-                      {t('rental_modal.authorization_step.notice_link')}
-                    </TransactionLink>
-                  )
-                }}
-              />
-            </div>
-            <div className={styles.noticeBox}>
-              <p>
-                <T id="rental_modal.authorization_step.notice_line_two" />
-              </p>
-              <ul>
-                <li>
-                  <b>
+          {isListForRentAgain ? (
+            <Modal.Content>
+              <div className={styles.contentContainerRentAgain}>
+                <span>
+                  <T
+                    id="rental_modal.authorization_step_again.notice_line_one"
+                    values={{
+                      assetType: t(`global.${nft.category}`)
+                    }}
+                  />
+                </span>
+                <span>
+                  <T
+                    id="rental_modal.authorization_step_again.notice_line_two"
+                    values={{
+                      assetType: t(`global.${nft.category}`)
+                    }}
+                  />
+                </span>
+                <div className={styles.rentAgainSmallText}>
+                  <T
+                    id="rental_modal.authorization_step_again.notice_line_three"
+                    values={{
+                      assetType: t(`global.${nft.category}`)
+                    }}
+                  />
+                </div>
+              </div>
+            </Modal.Content>
+          ) : (
+            <Modal.Content>
+              <div className={styles.notice}>
+                <T
+                  id="rental_modal.authorization_step.notice_line_one"
+                  values={{
+                    assetType: t(`global.${nft.category}`),
+                    link: (
+                      <TransactionLink
+                        address={rentalContractData.address}
+                        txHash=""
+                        chainId={rentalContractData.chainId}
+                      >
+                        {t('rental_modal.authorization_step.notice_link')}
+                      </TransactionLink>
+                    )
+                  }}
+                />
+              </div>
+              <div className={styles.noticeBox}>
+                <p>
+                  <T id="rental_modal.authorization_step.notice_line_two" />
+                </p>
+                <ul>
+                  <li>
+                    <b>
+                      {t(
+                        'rental_modal.authorization_step.notice_line_two_option_one_title'
+                      )}
+                    </b>
+                    :&nbsp;
                     {t(
-                      'rental_modal.authorization_step.notice_line_two_option_one_title'
+                      'rental_modal.authorization_step.notice_line_two_option_one_text'
                     )}
-                  </b>
-                  :&nbsp;
-                  {t(
-                    'rental_modal.authorization_step.notice_line_two_option_one_text'
-                  )}
-                </li>
-                <li>
-                  <b>
+                  </li>
+                  <li>
+                    <b>
+                      {t(
+                        'rental_modal.authorization_step.notice_line_two_option_two_title'
+                      )}
+                    </b>
+                    :&nbsp;
                     {t(
-                      'rental_modal.authorization_step.notice_line_two_option_two_title'
+                      'rental_modal.authorization_step.notice_line_two_option_two_text'
                     )}
-                  </b>
-                  :&nbsp;
-                  {t(
-                    'rental_modal.authorization_step.notice_line_two_option_two_text'
-                  )}
-                </li>
-              </ul>
-            </div>
-          </Modal.Content>
+                  </li>
+                </ul>
+              </div>
+            </Modal.Content>
+          )}
           <Modal.Actions className={styles.actions}>
             {isConfirmingAuthorization ? (
               <div className={styles.confirmTransaction}>
@@ -160,7 +196,9 @@ const AuthorizationStep = (props: Props) => {
                 onClick={handleSubmit}
                 disabled={isLoading}
               >
-                {t('global.proceed')}
+                {isListForRentAgain
+                  ? t('rental_modal.authorization_step_again.title')
+                  : t('global.proceed')}
               </Button>
             )}
             <Button onClick={handleCancel} disabled={isLoading}>

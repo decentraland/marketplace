@@ -63,11 +63,14 @@ export const Rent = (props: Props) => {
         claimingBackLandTransaction.chainId
       )
     : ''
+
   const rentalEndDate: Date | null = useMemo(
     () => (rental && rental.startedAt ? getRentalEndDate(rental) : null),
     [rental]
   )
+
   const rentalEnded = useMemo(() => rental && hasRentalEnded(rental), [rental])
+
   const rentalPeriods: string | null = useMemo(
     () =>
       rental
@@ -85,14 +88,16 @@ export const Rent = (props: Props) => {
     if (canCreateANewRental(rental)) {
       return (
         <Button className={styles.actionButton} onClick={handleOnCreateOrEdit}>
-          {t('manage_asset_page.rent.list_for_rent')}
+          {canBeClaimedBack
+            ? t('manage_asset_page.rent.list_for_rent_again')
+            : t('manage_asset_page.rent.list_for_rent')}
         </Button>
       )
     }
     if (rental && isRentalListingOpen(rental)) {
       return <IconButton iconName="pencil" onClick={handleOnCreateOrEdit} />
     }
-  }, [handleOnCreateOrEdit, rental])
+  }, [handleOnCreateOrEdit, rental, canBeClaimedBack])
 
   return (
     <section className={classNames(styles.box, className)}>
@@ -142,7 +147,7 @@ export const Rent = (props: Props) => {
               </div>
             </div>
           ) : null}
-          {canBeClaimedBack ? (
+          {!isRentalListingOpen(rental) && canBeClaimedBack ? (
             <div className={styles.activeRent}>
               {isClaimingBackLandTransactionPending ? (
                 <>
@@ -173,7 +178,7 @@ export const Rent = (props: Props) => {
                           tenant: (
                             <LinkedProfile
                               className={styles.rentedBy}
-                              address={rental.tenant!}
+                              address={rental!.tenant!}
                             />
                           ),
                           asset: assetText

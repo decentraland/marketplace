@@ -99,3 +99,17 @@
   display: flex;
   justify-content: center;
 }
+
+.contentContainerRentAgain {
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  line-height: 24px;
+  text-align: center;
+}
+
+.rentAgainSmallText {
+  font-size: 15px;
+}
