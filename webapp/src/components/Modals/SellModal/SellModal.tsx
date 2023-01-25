@@ -226,7 +226,7 @@ const SellModal = ({
           title={t('sell_page.confirm.title')}
           onClose={isCreatingOrder ? undefined : onClose}
           onBack={
-            isCreatingOrder || isCancelling
+            isCreatingOrder
               ? undefined
               : () => setStep(StepperValues.SELL_MODAL)
           }
@@ -266,7 +266,7 @@ const SellModal = ({
 
           <span>&nbsp;</span>
           <ManaField
-            disabled={isCreatingOrder || isCancelling}
+            disabled={isCreatingOrder}
             label={t('global.price')}
             network={nft.network}
             placeholder={parsedValueToConfirm}
@@ -289,7 +289,7 @@ const SellModal = ({
       actions: (
         <Modal.Actions>
           <Button
-            disabled={isCreatingOrder || isCancelling}
+            disabled={isCreatingOrder}
             onClick={() => {
               setConfirmedInput('')
               onClose()
@@ -301,7 +301,7 @@ const SellModal = ({
             type="submit"
             primary
             disabled={isConfirmDisabled}
-            loading={isCreatingOrder || isCancelling}
+            loading={isCreatingOrder}
             onClick={handleOnConfirm}
           >
             {t('global.proceed')}
@@ -315,11 +315,7 @@ const SellModal = ({
           title={t('authorization_modal.title', {
             token: token?.name
           })}
-          onClose={
-            isAuthorizing || isCreatingOrder || isCancelling
-              ? undefined
-              : onClose
-          }
+          onClose={isAuthorizing || isCreatingOrder ? undefined : onClose}
         />
       ),
       description: (
@@ -399,12 +395,7 @@ const SellModal = ({
       ),
       actions: (
         <Modal.Actions>
-          <Button
-            disabled={isCancelling}
-            onClick={() => {
-              onClose()
-            }}
-          >
+          <Button disabled={isCancelling} onClick={onClose}>
             {t('global.cancel')}
           </Button>
           <Button
