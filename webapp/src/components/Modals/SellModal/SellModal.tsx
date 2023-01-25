@@ -30,7 +30,7 @@ import {
   INPUT_FORMAT
 } from '../../../modules/order/utils'
 import { ManaField } from '../../ManaField'
-import { parseMANANumber } from '../../../lib/mana'
+import { formatWeiMANA, parseMANANumber } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import { useAuthorization } from '../../../lib/authorization'
 import { showPriceBelowMarketValueWarning } from '../../SellPage/SellModal/utils'
@@ -41,7 +41,8 @@ import styles from './SellModal.module.css'
 enum StepperValues {
   SELL_MODAL = 'SELL_MODAL',
   CONFIRM_INPUT = 'CONFIRM_INPUT',
-  AUTHORIZE = 'AUTHORIZE'
+  AUTHORIZE = 'AUTHORIZE',
+  CANCEL = 'CANCEL'
 }
 
 const SellModal = ({
@@ -54,7 +55,9 @@ const SellModal = ({
   authorizations,
   isAuthorizing,
   error,
-  onFetchAuthorizations
+  onFetchAuthorizations,
+  isCancelling,
+  onCancelOrder
 }: Props) => {
   const { orderService } = VendorFactory.build(nft.vendor)
 
@@ -63,6 +66,7 @@ const SellModal = ({
   const [step, setStep] = useState(StepperValues.SELL_MODAL)
 
   const isUpdate = order !== null
+
   const [price, setPrice] = useState<string>(
     isUpdate ? ethers.utils.formatEther(order!.price) : ''
   )
@@ -75,7 +79,7 @@ const SellModal = ({
 
   const parsedValueToConfirm = parseFloat(price).toString()
 
-  const isDisabledConfirm =
+  const isConfirmDisabled =
     parsedValueToConfirm !== confirmedInput || isCreatingOrder
 
   const contractNames = getContractNames()
@@ -140,6 +144,16 @@ const SellModal = ({
     isInvalidPrice ||
     isInvalidDate
 
+  const handleBackOrCancel = () => {
+    if (isUpdate) {
+      setStep(StepperValues.CANCEL)
+    } else {
+      onClose()
+    }
+  }
+
+  const assetName = getAssetName(nft)
+
   const Stepper: {
     [key: string]: {
       navigation: React.ReactNode
@@ -192,8 +206,8 @@ const SellModal = ({
       ),
       actions: (
         <Modal.Actions>
-          <Button as="div" onClick={onClose}>
-            {t('global.cancel')}
+          <Button as="div" onClick={handleBackOrCancel}>
+            {isUpdate ? t('cancel_sale_page.title') : t('global.cancel')}
           </Button>
           <ChainButton
             onClick={() => setStep(StepperValues.CONFIRM_INPUT)}
@@ -286,7 +300,7 @@ const SellModal = ({
           <Button
             type="submit"
             primary
-            disabled={isDisabledConfirm}
+            disabled={isConfirmDisabled}
             loading={isCreatingOrder}
             onClick={handleOnConfirm}
           >
@@ -345,6 +359,51 @@ const SellModal = ({
             loading={isCreatingOrder || isAuthorizing}
             disabled={isCreatingOrder || isAuthorizing || !isAuthorized}
             onClick={handleCreateOrder}
+          >
+            {t('global.proceed')}
+          </Button>
+        </Modal.Actions>
+      )
+    },
+    CANCEL: {
+      navigation: (
+        <ModalNavigation
+          title={t('sell_page.confirm.title')}
+          onClose={onClose}
+          onBack={
+            isCancelling ? undefined : () => setStep(StepperValues.SELL_MODAL)
+          }
+        />
+      ),
+      description: null,
+      content: (
+        <div className={styles.fieldsContainer}>
+          <span>
+            <T
+              id="cancel_sale_page.subtitle"
+              values={{
+                name: <b>{assetName}</b>,
+                amount: (
+                  <Mana network={nft.network} inline>
+                    {formatWeiMANA(order!.price)}
+                  </Mana>
+                )
+              }}
+            />
+          </span>
+        </div>
+      ),
+      actions: (
+        <Modal.Actions>
+          <Button disabled={isCancelling} onClick={onClose}>
+            {t('global.cancel')}
+          </Button>
+          <Button
+            type="submit"
+            primary
+            disabled={isCancelling}
+            loading={isCancelling}
+            onClick={() => onCancelOrder(order!, nft)}
           >
             {t('global.proceed')}
           </Button>
