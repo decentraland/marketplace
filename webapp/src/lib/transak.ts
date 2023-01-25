@@ -14,13 +14,13 @@ export class Transak extends BaseTransak {
       key: config.get('TRANSAK_KEY'),
       env: config.get('TRANSAK_ENV')
     }
-    const providedCustomizationOptions = {
+    const customizationOptions = {
       contractAddress: asset.contractAddress,
       tradeType: isNFT(asset) ? TradeType.SECONDARY : TradeType.PRIMARY,
       tokenId: isNFT(asset) ? asset.tokenId : asset.itemId,
       productsAvailed: ProductsAvailed.BUY,
       isNFT: true
     }
-    super(transakConfig, providedCustomizationOptions)
+    super(transakConfig, customizationOptions)
   }
 }
