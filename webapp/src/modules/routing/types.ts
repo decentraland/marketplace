@@ -3,12 +3,13 @@ import {
   Network,
   NFTCategory,
   Rarity,
-  RentalStatus
+  RentalStatus,
+  WearableGender,
+  GenderFilterOption
 } from '@dcl/schemas'
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
-import { WearableGender } from '../nft/wearable/types'
 
 export { Sections } from '../vendor/routing/types'
 
@@ -44,7 +45,7 @@ export type BrowseOptions = {
   isMap?: boolean
   isFullscreen?: boolean
   rarities?: Rarity[]
-  wearableGenders?: WearableGender[]
+  wearableGenders?: (WearableGender | GenderFilterOption)[]
   search?: string
   contracts?: string[]
   address?: string
@@ -53,5 +54,7 @@ export type BrowseOptions = {
   rentalStatus?: RentalStatus[]
   viewAsGuest?: boolean
   category?: NFTCategory
-  emotePlayMode?: EmotePlayMode
+  emotePlayMode?: EmotePlayMode[]
+  minPrice?: string
+  maxPrice?: string
 }

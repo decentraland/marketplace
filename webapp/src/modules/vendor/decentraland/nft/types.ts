@@ -1,6 +1,7 @@
 import {
   EmoteCategory,
   EmotePlayMode,
+  GenderFilterOption,
   Network,
   NFT as BaseNFT,
   Order,
@@ -21,13 +22,15 @@ export type NFTsFetchFilters = {
   rarities?: Rarity[]
   wearableCategory?: WearableCategory
   emoteCategory?: EmoteCategory
-  emotePlayMode?: EmotePlayMode
-  wearableGenders?: WearableGender[]
+  emotePlayMode?: EmotePlayMode[]
+  wearableGenders?: (WearableGender | GenderFilterOption)[]
   itemId?: string
   network?: Network
   tenant?: string
   rentalStatus?: RentalStatus | RentalStatus[]
   contracts?: string[]
+  minPrice?: string
+  maxPrice?: string
 }
 
 export type NFTResult = {

@@ -1,0 +1,48 @@
+.filters-sidebar-box.category-filter .MenuItem {
+  border-radius: 4px;
+  position: relative;
+}
+
+.filters-sidebar-box.category-filter .MenuItem.active::before {
+  top: 18px;
+  left: 10px;
+  position: absolute;
+  content: '';
+  width: 14px;
+  height: 10px;
+  background-image: url('../../../../images/check.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: transparent;
+  border: none;
+  filter: invert(57%) sepia(80%) saturate(7429%) hue-rotate(335deg) brightness(84%) contrast(103%);
+}
+
+.filters-sidebar-box.category-filter .MenuItem:not(.sub) {
+  padding-left: 32px;
+}
+
+.filters-sidebar-box.category-filter .MenuItem.sub {
+  width: 100%;
+  border-radius: 4px;
+}
+
+.filters-sidebar-box.category-filter .MenuItem.sub.sub-1 {
+  padding-left: 48px;
+  margin-left: 0;
+}
+
+.filters-sidebar-box.category-filter .MenuItem.sub.sub-2 {
+  padding-left: 64px;
+  margin-left: 0;
+}
+
+.category-filter .Menu.box-menu {
+  background: transparent;
+  width: 100%;
+  padding-bottom: 0;
+}
+
+.filters-sidebar-box.category-filter ul.box-menu.Menu > .MenuItem.active {
+  border-radius: 6px;
+}

@@ -1,29 +1,13 @@
 import React from 'react'
-import classNames from 'classnames'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
-import { ModalNavigation, Close } from 'decentraland-ui'
+import { ModalNavigation, Close, useMobileMediaQuery } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { builderUrl } from '../../../lib/environment'
 import { Props } from './RentConfirmedModal.types'
 import styles from './RentConfirmedModal.module.css'
-
-const CTAs = [
-  {
-    to: `${builderUrl}/scenes`,
-    icon: 'build-more'
-  },
-  {
-    to:
-      'https://docs.decentraland.org/creator/development-guide/coding-scenes/',
-    icon: 'get-creative'
-  },
-  {
-    to: `${builderUrl}/land`,
-    icon: 'manage-land'
-  }
-]
+import CTA from './CTA/CTA'
 
 const RentConfirmedModal = ({
   metadata: { rental, periodIndexChosen },
@@ -32,6 +16,9 @@ const RentConfirmedModal = ({
   const period = rental.periods[periodIndexChosen]
   const startDate = new Date()
   const endDate = add(startDate, { days: period.maxDays })
+
+  const isMobileView = useMobileMediaQuery()
+
   return (
     <Modal
       size="tiny"
@@ -50,30 +37,20 @@ const RentConfirmedModal = ({
             />
           </div>
           <div>
-            {CTAs.map((cta, i) => (
-              <a
-                key={cta.icon}
-                className={styles.ctaContainer}
-                href={cta.to}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <div className={classNames(styles[cta.icon], styles.icon)} />
-                <div className={styles.ctaTextContainer}>
-                  <span>
-                    {t(
-                      `rental_modal.rent_confirmed_step.action_${i + 1}.title`
-                    )}
-                  </span>
-                  <span className={styles.ctaSubtitle}>
-                    {t(
-                      `rental_modal.rent_confirmed_step.action_${i +
-                        1}.subtitle`
-                    )}
-                  </span>
-                </div>
-              </a>
-            ))}
+            <CTA
+              to={`${builderUrl}/scenes`}
+              name="build-more"
+              isDisabledOnMobile={isMobileView}
+            />
+            <CTA
+              to="https://docs.decentraland.org/creator/development-guide/coding-scenes/"
+              name="get-creative"
+            />
+            <CTA
+              to={`${builderUrl}/land`}
+              name="manage-land"
+              isDisabledOnMobile={isMobileView}
+            />
           </div>
         </div>
       </Modal.Content>

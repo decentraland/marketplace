@@ -4,7 +4,6 @@ import { NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
 import { ItemFilters, ItemResponse } from './types'
 
-
 const DEFAULT_TRENDING_PAGE_SIZE = 20
 
 class ItemAPI extends BaseAPI {
@@ -113,7 +112,17 @@ class ItemAPI extends BaseAPI {
     }
 
     if (filters.emotePlayMode) {
-      queryParams.append('emotePlayMode', filters.emotePlayMode)
+      for (const emotePlayMode of filters.emotePlayMode) {
+        queryParams.append('emotePlayMode', emotePlayMode)
+      }
+    }
+
+    if (filters.minPrice) {
+      queryParams.append('minPrice', filters.minPrice)
+    }
+
+    if (filters.maxPrice) {
+      queryParams.append('maxPrice', filters.maxPrice)
     }
 
     return queryParams.toString()

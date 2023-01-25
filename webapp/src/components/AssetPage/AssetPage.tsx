@@ -1,5 +1,5 @@
 import React from 'react'
-import { Page, Section, Column, Back, Narrow } from 'decentraland-ui'
+import { Page, Section, Column, Back } from 'decentraland-ui'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
 import { Sections } from '../../modules/routing/types'
@@ -84,7 +84,7 @@ const AssetPage = ({ type, onBack }: Props) => {
                         )
                       }
                     />
-                    <Narrow>
+                    <div className="asset-container">
                       {mapAsset<React.ReactNode>(
                         asset,
                         {
@@ -112,7 +112,7 @@ const AssetPage = ({ type, onBack }: Props) => {
                         },
                         () => null
                       )}
-                    </Narrow>
+                    </div>
                   </>
                 )}
               </AssetProviderPage>

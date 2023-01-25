@@ -14,6 +14,10 @@
   margin-bottom: 8px;
 }
 
+.ArrayFilter .options .option:focus {
+  outline: 1px solid white;
+}
+
 .ArrayFilter .options .option:last-child {
   margin-right: 0px;
 }

@@ -7,7 +7,7 @@ const Map = (props: Props) => {
 
   return (
     <div className={className}>
-      <AssetImage asset={asset} />
+      <AssetImage asset={asset} hasBadges={true} />
     </div>
   )
 }

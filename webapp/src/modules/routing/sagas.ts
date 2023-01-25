@@ -22,7 +22,6 @@ import {
   SaleSortBy,
   SaleType
 } from '@dcl/schemas'
-import { omit } from '../../lib/utils'
 import { AssetType } from '../asset/types'
 import {
   BUY_ITEM_SUCCESS,
@@ -82,6 +81,7 @@ import { Section } from '../vendor/decentraland'
 import { fetchCollectionsRequest } from '../collection/actions'
 import {
   COLLECTIONS_PER_PAGE,
+  getClearedBrowseOptions,
   rentalFilters,
   SALES_PER_PAGE,
   sellFilters
@@ -137,16 +137,7 @@ function* handleFetchAssetsFromRoute(action: FetchAssetsFromRouteAction) {
 function* handleClearFilters() {
   const browseOptions: BrowseOptions = yield select(getCurrentBrowseOptions)
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
-
-  const clearedBrowseOptions: BrowseOptions = omit(browseOptions, [
-    'rarities',
-    'wearableGenders',
-    'network',
-    'contracts',
-    'emotePlayMode',
-    'page'
-  ])
-
+  const clearedBrowseOptions = getClearedBrowseOptions(browseOptions)
   yield call(fetchAssetsFromRoute, clearedBrowseOptions)
   yield put(push(buildBrowseURL(pathname, clearedBrowseOptions)))
 }
@@ -170,6 +161,7 @@ export function* handleBrowse(action: BrowseAction) {
           : eventsContracts[pathname.slice(1)]
     })
   })
+
   yield put(push(buildBrowseURL(pathname, options)))
 }
 
@@ -202,7 +194,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     onlySmart,
     isMap,
     contracts,
-    tenant
+    tenant,
+    minPrice,
+    maxPrice
   } = options
 
   const address =
@@ -300,7 +294,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               rarities: rarities,
               contracts,
               wearableGenders,
-              emotePlayMode
+              emotePlayMode,
+              minPrice,
+              maxPrice
             }
           })
         )

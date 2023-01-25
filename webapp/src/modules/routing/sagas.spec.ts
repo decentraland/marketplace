@@ -1,5 +1,6 @@
 import {
   EmotePlayMode,
+  GenderFilterOption,
   ItemSortBy,
   Network,
   NFTCategory,
@@ -12,7 +13,6 @@ import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
-import { WearableGender } from '../nft/wearable/types'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/decentraland'
@@ -35,12 +35,15 @@ afterEach(() => {
 })
 
 describe('when handling the clear filters request action', () => {
-  it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter", () => {
-    const browseOptions: BrowseOptions = {
+  let browseOptions: BrowseOptions
+  let browseOptionsWithoutFilters: BrowseOptions
+  let pathname: string
+  beforeEach(() => {
+    browseOptions = {
       assetType: AssetType.ITEM,
       address: '0x...',
       vendor: VendorName.DECENTRALAND,
-      section: 'aSection',
+      section: Section.LAND,
       page: 1,
       view: View.MARKET,
       sortBy: SortBy.NAME,
@@ -49,35 +52,103 @@ describe('when handling the clear filters request action', () => {
       isMap: false,
       isFullscreen: false,
       rarities: [Rarity.EPIC],
-      wearableGenders: [WearableGender.FEMALE],
+      wearableGenders: [GenderFilterOption.FEMALE],
       contracts: ['aContract'],
       network: Network.ETHEREUM,
-      emotePlayMode: EmotePlayMode.SIMPLE
+      emotePlayMode: [EmotePlayMode.SIMPLE],
+      minPrice: '1',
+      maxPrice: '100'
     }
-
-    const browseOptionsWithoutFilters: BrowseOptions = { ...browseOptions }
+    browseOptionsWithoutFilters = { ...browseOptions }
     delete browseOptionsWithoutFilters.rarities
     delete browseOptionsWithoutFilters.wearableGenders
     delete browseOptionsWithoutFilters.network
     delete browseOptionsWithoutFilters.contracts
-    delete browseOptionsWithoutFilters.page
     delete browseOptionsWithoutFilters.emotePlayMode
+    delete browseOptionsWithoutFilters.minPrice
+    delete browseOptionsWithoutFilters.maxPrice
+    delete browseOptionsWithoutFilters.search
+    delete browseOptionsWithoutFilters.onlyOnSale
+    browseOptionsWithoutFilters.page = 1
+    pathname = 'aPath'
+  })
+  describe('and the onlyOnSale filter is set to "true"', () => {
+    it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter", () => {
+      return expectSaga(routingSaga)
+        .provide([
+          [select(getCurrentBrowseOptions), browseOptions],
+          [select(getLocation), { pathname }],
+          [select(getEventData), {}],
+          [
+            call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
+            Promise.resolve()
+          ]
+        ])
+        .put(push(buildBrowseURL(pathname, browseOptionsWithoutFilters)))
+        .dispatch(clearFilters())
+        .run({ silenceTimeout: true })
+    })
+  })
+  describe('and the onlyOnSale filter is set to "false"', () => {
+    describe('and it is the LAND section', () => {
+      it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getCurrentBrowseOptions),
+              { ...browseOptions, section: Section.LAND }
+            ],
+            [select(getLocation), { pathname }],
+            [select(getEventData), {}],
+            [
+              call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
+              Promise.resolve()
+            ]
+          ])
+          .put(
+            push(
+              buildBrowseURL(pathname, {
+                ...browseOptionsWithoutFilters
+              })
+            )
+          )
+          .dispatch(clearFilters())
+          .run({ silenceTimeout: true })
+      })
+    })
 
-    const pathname = 'aPath'
-
-    return expectSaga(routingSaga)
-      .provide([
-        [select(getCurrentBrowseOptions), browseOptions],
-        [select(getLocation), { pathname }],
-        [select(getEventData), {}],
-        [
-          call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-          Promise.resolve()
-        ]
-      ])
-      .put(push(buildBrowseURL(pathname, browseOptionsWithoutFilters)))
-      .dispatch(clearFilters())
-      .run({ silenceTimeout: true })
+    describe('and it is not the LAND section', () => {
+      it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
+        return expectSaga(routingSaga)
+          .provide([
+            [
+              select(getCurrentBrowseOptions),
+              {
+                ...browseOptions,
+                onlyOnSale: false,
+                section: Section.COLLECTIONS
+              }
+            ],
+            [select(getLocation), { pathname }],
+            [select(getEventData), {}],
+            [
+              call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
+              Promise.resolve()
+            ]
+          ])
+          .put(
+            push(
+              buildBrowseURL(pathname, {
+                ...browseOptionsWithoutFilters,
+                section: Section.COLLECTIONS,
+                onlyOnSale: true
+              })
+            )
+          )
+          .dispatch(clearFilters())
+          .run({ silenceTimeout: true })
+      })
+    })
   })
 })
 
@@ -126,7 +197,9 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         rarities: undefined,
         contracts: undefined,
         wearableGenders: undefined,
-        emotePlayMode: undefined
+        emotePlayMode: undefined,
+        minPrice: undefined,
+        maxPrice: undefined
       }
     }
 
