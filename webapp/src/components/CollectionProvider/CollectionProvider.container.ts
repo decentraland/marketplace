@@ -9,7 +9,8 @@ import {
 import {
   getLoading,
   getCollectionsByAddress,
-  isFetchingCollection
+  isFetchingCollection,
+  getError as getCollectionError
 } from '../../modules/collection/selectors'
 import { fetchItemsRequest } from '../../modules/item/actions'
 import {
@@ -33,7 +34,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   isLoadingCollectionItems: isFetchingItemsOfCollection(
     state,
     ownProps.contractAddress
-  )
+  ),
+  error: getCollectionError(state)
 })
 
 const mapDispatch = (

@@ -10,6 +10,7 @@ export type Props = {
   isLoadingCollectionItems: boolean
   onFetchCollection: () => void
   onFetchCollectionItems: (collection: Collection) => void
+  error: string | null
   children: (
     data: Pick<Props, 'collection' | 'items'> & { isLoading: boolean }
   ) => ReactNode
@@ -17,7 +18,11 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'collection' | 'items' | 'isLoadingCollection' | 'isLoadingCollectionItems'
+  | 'collection'
+  | 'items'
+  | 'isLoadingCollection'
+  | 'isLoadingCollectionItems'
+  | 'error'
 >
 export type MapDispatchProps = Pick<
   Props,
