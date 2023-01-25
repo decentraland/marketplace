@@ -59,10 +59,8 @@ class ItemAPI extends BaseAPI {
 
     if (filters.isSoldOut) {
       queryParams.append('isSoldOut', 'true')
-    }
-
-    if (filters.isOnSale) {
-      queryParams.append('isOnSale', 'true')
+    } else if (filters.isOnSale === false) {
+      queryParams.append('isOnSale', 'false')
     }
 
     if (filters.search) {

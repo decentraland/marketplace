@@ -175,6 +175,8 @@ class NFTAPI extends BaseAPI {
     }
     if (params.onlyOnSale) {
       queryParams.append('isOnSale', 'true')
+    } else if (params.onlyOnSale === false) {
+      queryParams.append('isOnSale', 'false')
     }
     if (params.onlyOnRent) {
       queryParams.append('isOnRent', 'true')
