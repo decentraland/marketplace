@@ -10,10 +10,11 @@ const CollectionProvider = ({
   contractAddress,
   onFetchCollection,
   onFetchCollectionItems,
-  children
+  children,
+  error
 }: Props) => {
   useEffect(() => {
-    if (!isLoadingCollection && !collection) {
+    if (!isLoadingCollection && !collection && !error) {
       onFetchCollection()
     }
 
@@ -33,7 +34,8 @@ const CollectionProvider = ({
     onFetchCollection,
     isLoadingCollection,
     isLoadingCollectionItems,
-    onFetchCollectionItems
+    onFetchCollectionItems,
+    error
   ])
 
   return (

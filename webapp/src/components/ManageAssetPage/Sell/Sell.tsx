@@ -18,7 +18,6 @@ const Sell = (props: Props) => {
     order,
     nft,
     onEditOrder,
-    onCancelOrder,
     userAddress,
     onListForSale
   } = props
@@ -41,11 +40,6 @@ const Sell = (props: Props) => {
                 iconName="pencil"
                 disabled={areActionsLocked}
                 onClick={onEditOrder}
-              />
-              <IconButton
-                iconName="trash alternate"
-                disabled={areActionsLocked}
-                onClick={onCancelOrder}
               />
             </>
           ) : (

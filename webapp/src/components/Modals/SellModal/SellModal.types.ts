@@ -15,6 +15,8 @@ import {
 import { getContract } from '../../../modules/contract/selectors'
 import { NFT } from '../../../modules/nft/types'
 import {
+  cancelOrderRequest,
+  CancelOrderRequestAction,
   createOrderRequest,
   CreateOrderRequestAction
 } from '../../../modules/order/actions'
@@ -36,6 +38,8 @@ export type Props = Omit<ModalProps, 'metadata'> & {
   isAuthorizing: boolean
   onFetchAuthorizations: typeof fetchAuthorizationsRequest
   onUpsertContracts: typeof upsertContracts
+  onCancelOrder: typeof cancelOrderRequest
+  isCancelling: boolean
 }
 
 export type OwnProps = Pick<Props, 'metadata'>
@@ -48,15 +52,20 @@ export type MapStateProps = Pick<
   | 'error'
   | 'getContract'
   | 'isAuthorizing'
+  | 'isCancelling'
 >
 
 export type MapDispatchProps = Pick<
   Props,
-  'onCreateOrder' | 'onFetchAuthorizations' | 'onUpsertContracts'
+  | 'onCreateOrder'
+  | 'onFetchAuthorizations'
+  | 'onUpsertContracts'
+  | 'onCancelOrder'
 >
 
 export type MapDispatch = Dispatch<
   | CreateOrderRequestAction
   | FetchAuthorizationsRequestAction
   | UpsertContractsAction
+  | CancelOrderRequestAction
 >

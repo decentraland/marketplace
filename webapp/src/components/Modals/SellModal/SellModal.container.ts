@@ -19,7 +19,9 @@ import { upsertContracts } from '../../../modules/contract/actions'
 
 import {
   createOrderRequest,
-  CREATE_ORDER_REQUEST
+  CREATE_ORDER_REQUEST,
+  cancelOrderRequest,
+  CANCEL_ORDER_REQUEST
 } from '../../../modules/order/actions'
 import { MapDispatch, MapDispatchProps, MapStateProps } from './SellModal.types'
 import SellModal from './SellModal'
@@ -36,7 +38,8 @@ const mapState = (state: RootState): MapStateProps => {
     ),
     isAuthorizing:
       isLoadingType(getLoading(state), GRANT_TOKEN_REQUEST) ||
-      isLoadingType(getLoading(state), REVOKE_TOKEN_REQUEST)
+      isLoadingType(getLoading(state), REVOKE_TOKEN_REQUEST),
+    isCancelling: isLoadingType(getLoading(state), CANCEL_ORDER_REQUEST)
   }
 }
 
@@ -46,7 +49,8 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onFetchAuthorizations: (authorizations: Authorization[]) =>
     dispatch(fetchAuthorizationsRequest(authorizations)),
   onUpsertContracts: (contracts: Contract[]) =>
-    dispatch(upsertContracts(contracts))
+    dispatch(upsertContracts(contracts)),
+  onCancelOrder: (order, nft) => dispatch(cancelOrderRequest(order, nft))
 })
 
 export default connect(mapState, mapDispatch)(SellModal)
