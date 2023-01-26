@@ -124,9 +124,8 @@ export const fetchStoreEntity = async (
   client: CatalystClient,
   address: string
 ): Promise<Entity | null> => {
-  const type: any = 'store'
   const urn = getStoreUrn(address)
-  const entities = await client.fetchEntitiesByPointers(type, [urn])
+  const entities = await client.fetchEntitiesByPointers([urn])
   return entities.length === 0 ? null : entities[0]
 }
 

@@ -1,11 +1,10 @@
 import { URLSearchParams } from 'url'
-import signedFetch from 'decentraland-crypto-fetch'
+import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   RentalListing,
   RentalListingCreation,
   RentalsListingsFilterBy
 } from '@dcl/schemas'
-import { AuthIdentity } from '@dcl/crypto'
 import { config } from '../../../../config'
 
 export const SIGNATURES_SERVER_URL = config.get('SIGNATURES_SERVER_URL')!
