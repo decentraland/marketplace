@@ -72,24 +72,24 @@ const Routes = ({ inMaintenance, isBuyNftsWithFiatEnabled }: Props) => {
           path={locations.buy(AssetType.ITEM)}
           component={() => <BuyPage type={AssetType.ITEM} />}
         />
-        {isBuyNftsWithFiatEnabled ? (
-          <>
-            <Route
-              exact
-              path={locations.buyStatusPage(AssetType.NFT)}
-              component={(props: RouteComponentProps) => (
-                <StatusPage {...props} type={AssetType.NFT} />
-              )}
-            />
-            <Route
-              exact
-              path={locations.buyStatusPage(AssetType.ITEM)}
-              component={(props: RouteComponentProps) => (
-                <StatusPage {...props} type={AssetType.ITEM} />
-              )}
-            />
-          </>
-        ) : null}
+        <Route
+          exact
+          path={locations.buyStatusPage(AssetType.NFT)}
+          component={(props: RouteComponentProps) =>
+            isBuyNftsWithFiatEnabled ? (
+              <StatusPage {...props} type={AssetType.NFT} />
+            ) : null
+          }
+        />
+        <Route
+          exact
+          path={locations.buyStatusPage(AssetType.ITEM)}
+          component={(props: RouteComponentProps) =>
+            isBuyNftsWithFiatEnabled ? (
+              <StatusPage {...props} type={AssetType.ITEM} />
+            ) : null
+          }
+        />
         <Route
           exact
           path={locations.nft()}
