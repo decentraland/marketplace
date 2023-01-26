@@ -1,6 +1,12 @@
-import { ChainId, Order } from '@dcl/schemas'
+import { ChainId, Network, Order } from '@dcl/schemas'
+import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import {
+  NFTPurchase,
+  PurchaseStatus
+} from 'decentraland-dapps/dist/modules/gateway/types'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ErrorCode } from 'decentraland-transactions'
+import { NetworkGatewayType } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName } from '../asset/utils'
 import { NFT } from '../nft/types'
@@ -25,15 +31,13 @@ import {
   executeOrderWithCardFailure,
   executeOrderWithCardRequest,
   executeOrderWithCardSuccess,
-  executeOrderWithCardTransactionSubmitted,
   EXECUTE_ORDER_FAILURE,
   EXECUTE_ORDER_REQUEST,
   EXECUTE_ORDER_SUCCESS,
   EXECUTE_ORDER_TRANSACTION_SUBMITTED,
   EXECUTE_ORDER_WITH_CARD_FAILURE,
   EXECUTE_ORDER_WITH_CARD_REQUEST,
-  EXECUTE_ORDER_WITH_CARD_SUCCESS,
-  EXECUTE_ORDER_WITH_CARD_TRANSACTION_SUBMITTED
+  EXECUTE_ORDER_WITH_CARD_SUCCESS
 } from './actions'
 
 let nft: NFT
@@ -41,6 +45,7 @@ let order: Order
 let fingerprint: string
 let txHash: string
 let error: string
+let purchase: NFTPurchase
 
 beforeEach(() => {
   nft = {
@@ -59,6 +64,22 @@ beforeEach(() => {
   fingerprint = 'aFingerprint'
   txHash = 'aTxHash'
   error = 'anError'
+  purchase = {
+    address: 'anAddress',
+    id: 'anId',
+    network: Network.ETHEREUM,
+    timestamp: 1671028355396,
+    status: PurchaseStatus.PENDING,
+    gateway: NetworkGatewayType.TRANSAK,
+    txHash: 'mock-transaction-hash',
+    nft: {
+      contractAddress: 'contractAddress',
+      itemId: 'anId',
+      tokenId: undefined,
+      tradeType: TradeType.PRIMARY,
+      cryptoAmount: 10
+    }
+  }
 })
 
 describe('when creating the action to signal the start of the create order request', () => {
@@ -187,32 +208,20 @@ describe('when creating the action to signal the start of the execute order with
 
 describe('when creating the action to signal the submission of the executed order with card transaction', () => {
   it('should return an object representing the action', () => {
-    expect(
-      executeOrderWithCardTransactionSubmitted(order, nft, txHash)
-    ).toEqual({
-      type: EXECUTE_ORDER_WITH_CARD_TRANSACTION_SUBMITTED,
+    expect(executeOrderWithCardSuccess(purchase, nft, txHash)).toEqual({
+      type: EXECUTE_ORDER_WITH_CARD_SUCCESS,
       meta: undefined,
       payload: {
-        order,
+        purchase,
         nft,
         ...buildTransactionPayload(nft.chainId, txHash, {
           tokenId: nft.tokenId,
           contractAddress: nft.contractAddress,
           network: nft.network,
           name: getAssetName(nft),
-          price: formatWeiMANA(order.price)
+          price: purchase.nft.cryptoAmount.toString()
         })
       }
-    })
-  })
-})
-
-describe('when creating the action to signal a successful execute order with card request', () => {
-  it('should return an object representing the action', () => {
-    expect(executeOrderWithCardSuccess()).toEqual({
-      type: EXECUTE_ORDER_WITH_CARD_SUCCESS,
-      meta: undefined,
-      payload: undefined
     })
   })
 })

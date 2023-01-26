@@ -1,8 +1,8 @@
 import { action } from 'typesafe-actions'
 import { Order } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import { ErrorCode } from 'decentraland-transactions'
-
 import { NFT } from '../nft/types'
 import { getAssetName } from '../asset/utils'
 import { formatWeiMANA } from '../../lib/mana'
@@ -95,8 +95,6 @@ export type ExecuteOrderFailureAction = ReturnType<typeof executeOrderFailure>
 // Execute Order With Card (aka Buy with Card)
 export const EXECUTE_ORDER_WITH_CARD_REQUEST =
   '[Request] Execute Order With Card'
-export const EXECUTE_ORDER_WITH_CARD_TRANSACTION_SUBMITTED =
-  '[Submitted transaction] Execute Order With Card'
 export const EXECUTE_ORDER_WITH_CARD_SUCCESS =
   '[Success] Execute Order With Card'
 export const EXECUTE_ORDER_WITH_CARD_FAILURE =
@@ -105,24 +103,22 @@ export const EXECUTE_ORDER_WITH_CARD_FAILURE =
 export const executeOrderWithCardRequest = (nft: NFT) =>
   action(EXECUTE_ORDER_WITH_CARD_REQUEST, { nft })
 
-export const executeOrderWithCardTransactionSubmitted = (
-  order: Order,
+export const executeOrderWithCardSuccess = (
+  purchase: NFTPurchase,
   nft: NFT,
   txHash: string
 ) =>
-  action(EXECUTE_ORDER_WITH_CARD_TRANSACTION_SUBMITTED, {
-    order,
+  action(EXECUTE_ORDER_WITH_CARD_SUCCESS, {
+    purchase,
     nft,
     ...buildTransactionPayload(nft.chainId, txHash, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       network: nft.network,
       name: getAssetName(nft),
-      price: formatWeiMANA(order.price)
+      price: purchase.nft.cryptoAmount.toString()
     })
   })
-export const executeOrderWithCardSuccess = () =>
-  action(EXECUTE_ORDER_WITH_CARD_SUCCESS)
 export const executeOrderWithCardFailure = (
   nft: NFT,
   error: string,
@@ -131,9 +127,6 @@ export const executeOrderWithCardFailure = (
 
 export type ExecuteOrderWithCardRequestAction = ReturnType<
   typeof executeOrderWithCardRequest
->
-export type ExecuteOrderWithCardTransactionSubmittedAction = ReturnType<
-  typeof executeOrderWithCardTransactionSubmitted
 >
 export type ExecuteOrderWithCardSuccessAction = ReturnType<
   typeof executeOrderWithCardSuccess

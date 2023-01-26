@@ -1,8 +1,16 @@
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { ChainId, Item } from '@dcl/schemas'
 import { call, select } from 'redux-saga/effects'
+import { ChainId, Item, Network } from '@dcl/schemas'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
+import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import {
+  ManaPurchase,
+  NFTPurchase,
+  PurchaseStatus
+} from 'decentraland-dapps/dist/modules/gateway/types'
+import { NetworkGatewayType } from 'decentraland-ui'
 import { getWallet } from '../wallet/selectors'
 import { View } from '../ui/types'
 import { itemAPI } from '../vendor/decentraland/item/api'
@@ -29,6 +37,8 @@ import {
   buyItemWithCardSuccess
 } from './actions'
 import { itemSaga } from './sagas'
+import { getData as getItems } from './selectors'
+import { getItem } from './utils'
 
 const item = {
   itemId: 'anItemId',
@@ -50,6 +60,28 @@ const itemBrowseOptions = {
   view: View.MARKET,
   page: 0,
   filters: {}
+}
+
+const manaPurchase: ManaPurchase = {
+  address: 'anAddress',
+  id: 'anId',
+  network: Network.ETHEREUM,
+  timestamp: 1671028355396,
+  status: PurchaseStatus.PENDING,
+  gateway: NetworkGatewayType.TRANSAK,
+  txHash,
+  amount: 10
+}
+
+const nftPurchase: NFTPurchase = {
+  ...manaPurchase,
+  nft: {
+    contractAddress: 'contractAddress',
+    itemId: 'anId',
+    tokenId: undefined,
+    tradeType: TradeType.PRIMARY,
+    cryptoAmount: 10
+  }
 }
 
 describe('when handling the buy items request action', () => {
@@ -157,9 +189,122 @@ describe('when handling the buy items with card action', () => {
     it('should dispatch the success action', () => {
       return expectSaga(itemSaga)
         .provide([[call(buyAssetWithCard, item), Promise.resolve()]])
-        .put(buyItemWithCardSuccess())
         .dispatch(buyItemWithCardRequest(item))
         .run({ silenceTimeout: true })
+        .then(({ effects }) => {
+          expect(effects.put).toBeUndefined()
+        })
+    })
+  })
+})
+
+describe('when handling the set purchase action', () => {
+  describe('when it is a MANA purchase', () => {
+    it('should not put any new action', () => {
+      return expectSaga(itemSaga)
+        .dispatch(setPurchase(manaPurchase))
+        .run({ silenceTimeout: true })
+        .then(({ effects }) => {
+          expect(effects.put).toBeUndefined()
+        })
+    })
+  })
+
+  describe('when it is an NFT purchase', () => {
+    describe('when it is a secondary market purchase', () => {
+      it('should not put any new action', () => {
+        return expectSaga(itemSaga)
+          .dispatch(
+            setPurchase({
+              ...nftPurchase,
+              nft: {
+                ...nftPurchase.nft,
+                tokenId: nftPurchase.nft.itemId,
+                tradeType: TradeType.SECONDARY,
+                itemId: undefined
+              }
+            })
+          )
+          .run({ silenceTimeout: true })
+          .then(({ effects }) => {
+            expect(effects.put).toBeUndefined()
+          })
+      })
+    })
+
+    describe('when the purchase is incomplete', () => {
+      it('should not put any new action', () => {
+        return expectSaga(itemSaga)
+          .dispatch(setPurchase(nftPurchase))
+          .run({ silenceTimeout: true })
+          .then(({ effects }) => {
+            expect(effects.put).toBeUndefined()
+          })
+      })
+    })
+
+    describe('when it is complete without a txHash', () => {
+      it('should not put any new action', () => {
+        return expectSaga(itemSaga)
+          .dispatch(
+            setPurchase({
+              ...nftPurchase,
+              txHash: null,
+              status: PurchaseStatus.COMPLETE
+            })
+          )
+          .run({ silenceTimeout: true })
+          .then(({ effects }) => {
+            expect(effects.put).toBeUndefined()
+          })
+      })
+    })
+
+    describe('when it is complete and it has a txHash', () => {
+      describe('when the item does not exist', () => {
+        it('should not put any new action', () => {
+          return expectSaga(itemSaga)
+            .provide([[select(getItems), {}]])
+            .dispatch(
+              setPurchase({
+                ...nftPurchase,
+                txHash,
+                status: PurchaseStatus.COMPLETE
+              })
+            )
+            .run({ silenceTimeout: true })
+            .then(({ effects }) => {
+              expect(effects.put).toBeUndefined()
+            })
+        })
+      })
+
+      describe('when the item exists', () => {
+        const items = { anItemId: item }
+        const { contractAddress, itemId } = nftPurchase.nft
+
+        it('should not put any new action', () => {
+          return expectSaga(itemSaga)
+            .provide([
+              [select(getItems), items],
+              [call(getItem, contractAddress, itemId, items), item]
+            ])
+            .put(
+              buyItemWithCardSuccess(item.chainId, txHash, item, {
+                ...nftPurchase,
+                status: PurchaseStatus.COMPLETE
+              })
+            )
+            .dispatch(
+              setPurchase({
+                ...nftPurchase,
+                txHash,
+                status: PurchaseStatus.COMPLETE
+              })
+            )
+            .run({ silenceTimeout: true })
+        })
+      })
     })
   })
 })

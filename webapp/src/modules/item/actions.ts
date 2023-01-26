@@ -1,4 +1,5 @@
 import { ChainId, Item } from '@dcl/schemas'
+import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { action } from 'typesafe-actions'
 import { formatWeiMANA } from '../../lib/mana'
@@ -86,7 +87,23 @@ export const BUY_ITEM_WITH_CARD_FAILURE = '[Failure] Buy Item with Card'
 
 export const buyItemWithCardRequest = (item: Item) =>
   action(BUY_ITEM_WITH_CARD_REQUEST, { item })
-export const buyItemWithCardSuccess = () => action(BUY_ITEM_WITH_CARD_SUCCESS)
+export const buyItemWithCardSuccess = (
+  chainId: ChainId,
+  txHash: string,
+  item: Item,
+  purchase: NFTPurchase
+) =>
+  action(BUY_ITEM_WITH_CARD_SUCCESS, {
+    item,
+    purchase,
+    ...buildTransactionPayload(chainId, txHash, {
+      itemId: item.itemId,
+      contractAddress: item.contractAddress,
+      network: item.network,
+      name: getAssetName(item),
+      price: purchase.nft.cryptoAmount.toString()
+    })
+  })
 export const buyItemWithCardFailure = (error: string) =>
   action(BUY_ITEM_WITH_CARD_FAILURE, { error })
 

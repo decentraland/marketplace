@@ -1,5 +1,11 @@
-import { Order, RentalListing } from '@dcl/schemas'
+import { Network, Order, RentalListing } from '@dcl/schemas'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
+import {
+  NFTPurchase,
+  PurchaseStatus
+} from 'decentraland-dapps/dist/modules/gateway/types'
+import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { NetworkGatewayType } from 'decentraland-ui'
 import { acceptRentalListingSuccess } from '../rental/actions'
 import { NFT, NFTsFetchOptions, NFTsFetchParams } from '../nft/types'
 import {
@@ -57,6 +63,22 @@ const timestamp = 1627595757
 
 let state: OrderState
 let rentalListing: RentalListing
+const purchase: NFTPurchase = {
+  address: 'anAddress',
+  id: 'anId',
+  network: Network.ETHEREUM,
+  timestamp: 1671028355396,
+  status: PurchaseStatus.PENDING,
+  gateway: NetworkGatewayType.TRANSAK,
+  txHash: 'mock-transaction-hash',
+  nft: {
+    contractAddress: 'contractAddress',
+    itemId: 'anId',
+    tokenId: undefined,
+    tradeType: TradeType.PRIMARY,
+    cryptoAmount: 10
+  }
+}
 
 beforeEach(() => {
   state = {
@@ -97,7 +119,7 @@ requestActions.forEach(action => {
 const successActions = [
   createOrderSuccess(nft, Number(order.price), order.expiresAt, txHash),
   executeOrderSuccess(),
-  executeOrderWithCardSuccess(),
+  executeOrderWithCardSuccess(purchase, nft, txHash),
   cancelOrderSuccess(order, nft, txHash)
 ]
 

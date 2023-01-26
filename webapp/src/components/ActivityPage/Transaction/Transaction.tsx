@@ -21,9 +21,13 @@ import { getAssetName } from '../../../modules/asset/utils'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
-  EXECUTE_ORDER_TRANSACTION_SUBMITTED
+  EXECUTE_ORDER_TRANSACTION_SUBMITTED,
+  EXECUTE_ORDER_WITH_CARD_SUCCESS
 } from '../../../modules/order/actions'
-import { BUY_ITEM_SUCCESS } from '../../../modules/item/actions'
+import {
+  BUY_ITEM_SUCCESS,
+  BUY_ITEM_WITH_CARD_SUCCESS
+} from '../../../modules/item/actions'
 import { TRANSFER_NFT_TRANSACTION_SUBMITTED } from '../../../modules/nft/actions'
 import {
   PLACE_BID_SUCCESS,
@@ -166,7 +170,9 @@ const Transaction = (props: Props) => {
       )
     }
     case BUY_ITEM_SUCCESS:
-    case EXECUTE_ORDER_TRANSACTION_SUBMITTED: {
+    case EXECUTE_ORDER_TRANSACTION_SUBMITTED:
+    case BUY_ITEM_WITH_CARD_SUCCESS:
+    case EXECUTE_ORDER_WITH_CARD_SUCCESS: {
       const {
         tokenId,
         itemId,

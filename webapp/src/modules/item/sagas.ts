@@ -4,6 +4,12 @@ import { call, select } from 'redux-saga/effects'
 import { ContractName, getContract } from 'decentraland-transactions'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import {
+  SetPurchaseAction,
+  SET_PURCHASE
+} from 'decentraland-dapps/dist/modules/gateway/actions'
+import { isManaPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
+import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
 import { itemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
@@ -30,12 +36,15 @@ import {
   buyItemWithCardSuccess,
   buyItemWithCardFailure
 } from './actions'
+import { getData as getItems } from './selectors'
+import { getItem } from './utils'
 
 export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(BUY_ITEM_WITH_CARD_REQUEST, handleBuyItemWithCardRequest)
+  yield takeEvery(SET_PURCHASE, handleSetItemPurchaseWithCard)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
 }
 
@@ -132,8 +141,45 @@ function* handleBuyItemWithCardRequest(action: BuyItemWithCardRequestAction) {
   try {
     const { item } = action.payload
     yield call(buyAssetWithCard, item)
-    yield put(buyItemWithCardSuccess())
   } catch (error) {
+    yield put(
+      buyItemWithCardFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
+  }
+}
+
+function* handleSetItemPurchaseWithCard(action: SetPurchaseAction) {
+  try {
+    const { purchase } = action.payload
+
+    if (!isManaPurchase(purchase) && purchase.nft.itemId) {
+      const {
+        status,
+        txHash,
+        nft: { contractAddress, itemId }
+      } = purchase
+
+      if (status === PurchaseStatus.COMPLETE && txHash) {
+        const items: ReturnType<typeof getItems> = yield select(getItems)
+        const item: ReturnType<typeof getItem> = yield call(
+          getItem,
+          contractAddress,
+          itemId,
+          items
+        )
+
+        if (item) {
+          yield put(
+            buyItemWithCardSuccess(item.chainId, txHash, item, purchase)
+          )
+        }
+      }
+    }
+  } catch (error) {
+    // el error Error: invalid BigNumber string (argument="value", value="1.01", code=INVALID_ARGUMENT, version=bignumber/5.6.2)
+
     yield put(
       buyItemWithCardFailure(
         isErrorWithMessage(error) ? error.message : t('global.unknown_error')

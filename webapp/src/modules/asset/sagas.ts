@@ -22,20 +22,21 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
       getLocation
     )
 
-    const { tradeType, contractAddress, tokenId } = nft
+    const { tradeType, contractAddress, tokenId, itemId } = nft
     const assetType: AssetType =
       tradeType === TradeType.PRIMARY ? AssetType.ITEM : AssetType.NFT
+    const assetId = tradeType === TradeType.PRIMARY ? itemId : tokenId
     const statusPagePathname = locations.buyStatusPage(
       assetType,
       contractAddress,
-      tokenId
+      assetId
     )
     const shouldRedirect = [
       new URL(
         `${window.origin}${locations.buyWithCard(
           assetType,
           contractAddress,
-          tokenId
+          assetId
         )}`
       ).pathname,
       statusPagePathname

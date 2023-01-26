@@ -3,6 +3,12 @@ import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import {
+  SetPurchaseAction,
+  SET_PURCHASE
+} from 'decentraland-dapps/dist/modules/gateway/actions'
+import { isManaPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
+import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
 import { Vendor, VendorFactory } from '../vendor/VendorFactory'
@@ -13,6 +19,8 @@ import {
 } from '../rental/utils'
 import { buyAssetWithCard } from '../asset/utils'
 import { VendorName } from '../vendor'
+import { getData as getNFTs } from '../nft/selectors'
+import { getNFT } from '../nft/utils'
 import {
   CREATE_ORDER_REQUEST,
   CreateOrderRequestAction,
@@ -29,8 +37,8 @@ import {
   executeOrderTransactionSubmitted,
   ExecuteOrderWithCardRequestAction,
   EXECUTE_ORDER_WITH_CARD_REQUEST,
-  executeOrderWithCardSuccess,
-  executeOrderWithCardFailure
+  executeOrderWithCardFailure,
+  executeOrderWithCardSuccess
 } from './actions'
 
 export function* orderSaga() {
@@ -40,6 +48,7 @@ export function* orderSaga() {
     EXECUTE_ORDER_WITH_CARD_REQUEST,
     handleExecuteOrderWithCardRequest
   )
+  yield takeEvery(SET_PURCHASE, handleSetNftPurchaseWithCard)
   yield takeEvery(CANCEL_ORDER_REQUEST, handleCancelOrderRequest)
 }
 
@@ -131,7 +140,6 @@ function* handleExecuteOrderWithCardRequest(
 
   try {
     yield call(buyAssetWithCard, nft)
-    yield put(executeOrderWithCardSuccess())
   } catch (error) {
     yield put(
       executeOrderWithCardFailure(
@@ -139,6 +147,30 @@ function* handleExecuteOrderWithCardRequest(
         isErrorWithMessage(error) ? error.message : t('global.unknown_error')
       )
     )
+  }
+}
+
+function* handleSetNftPurchaseWithCard(action: SetPurchaseAction) {
+  const { purchase } = action.payload
+
+  if (!isManaPurchase(purchase) && purchase.nft.tokenId) {
+    const {
+      status,
+      txHash,
+      nft: { contractAddress, tokenId }
+    } = purchase
+
+    const nfts: ReturnType<typeof getNFTs> = yield select(getNFTs)
+    const nft: ReturnType<typeof getNFT> = yield call(
+      getNFT,
+      contractAddress,
+      tokenId,
+      nfts
+    )
+
+    if (nft && status === PurchaseStatus.COMPLETE && txHash) {
+      yield put(executeOrderWithCardSuccess(purchase, nft, txHash))
+    }
   }
 }
 

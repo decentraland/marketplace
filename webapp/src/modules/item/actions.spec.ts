@@ -1,5 +1,11 @@
 import { ChainId, Item, Network } from '@dcl/schemas'
+import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import {
+  NFTPurchase,
+  PurchaseStatus
+} from 'decentraland-dapps/dist/modules/gateway/types'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { NetworkGatewayType } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName } from '../asset/utils'
 import { View } from '../ui/types'
@@ -132,12 +138,38 @@ describe('when creating the action to signal the start of the buy item with card
 describe('when creating the action to signal a successful buy item with card request', () => {
   const chainId = ChainId.MATIC_MAINNET
   const txHash = 'aTxHash'
+  const purchase: NFTPurchase = {
+    address: 'anAddress',
+    id: 'anId',
+    network: Network.ETHEREUM,
+    timestamp: 1671028355396,
+    status: PurchaseStatus.PENDING,
+    gateway: NetworkGatewayType.TRANSAK,
+    txHash: 'mock-transaction-hash',
+    nft: {
+      contractAddress: 'contractAddress',
+      itemId: 'anId',
+      tokenId: undefined,
+      tradeType: TradeType.PRIMARY,
+      cryptoAmount: 10
+    }
+  }
 
   it('should return an object representing the action', () => {
-    expect(buyItemWithCardSuccess()).toEqual({
+    expect(buyItemWithCardSuccess(chainId, txHash, item, purchase)).toEqual({
       type: BUY_ITEM_WITH_CARD_SUCCESS,
       meta: undefined,
-      payload: undefined
+      payload: {
+        item,
+        purchase,
+        ...buildTransactionPayload(chainId, txHash, {
+          itemId: item.itemId,
+          contractAddress: item.contractAddress,
+          network: item.network,
+          name: getAssetName(item),
+          price: purchase.nft.cryptoAmount.toString()
+        })
+      }
     })
   })
 })
