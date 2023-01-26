@@ -1,5 +1,11 @@
-import { ChainId, Item } from '@dcl/schemas'
+import { ChainId, Item, Network } from '@dcl/schemas'
+import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import {
+  NFTPurchase,
+  PurchaseStatus
+} from 'decentraland-dapps/dist/modules/gateway/types'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { NetworkGatewayType } from 'decentraland-ui'
 import { View } from '../ui/types'
 import {
   buyItemFailure,
@@ -38,6 +44,23 @@ const anotherItem = {
   price: '1500000000000000000000'
 } as Item
 
+const purchase: NFTPurchase = {
+  address: 'anAddress',
+  id: 'anId',
+  network: Network.ETHEREUM,
+  timestamp: 1671028355396,
+  status: PurchaseStatus.PENDING,
+  gateway: NetworkGatewayType.TRANSAK,
+  txHash: 'mock-transaction-hash',
+  nft: {
+    contractAddress: 'contractAddress',
+    itemId: 'anId',
+    tokenId: undefined,
+    tradeType: TradeType.PRIMARY,
+    cryptoAmount: 10
+  }
+}
+
 const chainId = ChainId.MATIC_MAINNET
 const txHash = 'aTxHash'
 
@@ -52,7 +75,7 @@ const requestActions = [
   buyItemRequest(item),
   buyItemWithCardRequest(item),
   buyItemSuccess(chainId, txHash, item),
-  buyItemWithCardSuccess()
+  buyItemWithCardSuccess(chainId, txHash, item, purchase)
 ]
 
 requestActions.forEach(action => {
