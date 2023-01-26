@@ -650,7 +650,7 @@
     "description": "处理交易最多可能需要 3 分钟。 您还可以在 {activity} 中跟踪其进度。",
     "cta": "返回市场"
   },
-  "asset_purchase_with_card_success_page": {
+  "asset_purchase_with_card_complete_page": {
     "title": "全部做完！",
     "description": "您可以在 {my_assets} 中找到您的物品。",
     "cta": "探索更多收藏品"

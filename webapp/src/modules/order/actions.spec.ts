@@ -219,7 +219,7 @@ describe('when creating the action to signal the submission of the executed orde
           contractAddress: nft.contractAddress,
           network: nft.network,
           name: getAssetName(nft),
-          price: formatWeiMANA(purchase.nft.cryptoAmount.toString())
+          price: purchase.nft.cryptoAmount.toString()
         })
       }
     })

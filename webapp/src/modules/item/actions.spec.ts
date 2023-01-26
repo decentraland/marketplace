@@ -167,7 +167,7 @@ describe('when creating the action to signal a successful buy item with card req
           contractAddress: item.contractAddress,
           network: item.network,
           name: getAssetName(item),
-          price: formatWeiMANA(purchase.nft.cryptoAmount.toString())
+          price: purchase.nft.cryptoAmount.toString()
         })
       }
     })

@@ -653,7 +653,7 @@
     "description": "The transaction can take up to 3 minutes to be processed. You can also track its progress in {activity}.",
     "cta": "Back to marketplace"
   },
-  "asset_purchase_with_card_success_page": {
+  "asset_purchase_with_card_complete_page": {
     "title": "All done!",
     "description": "You can find your item in {my_assets}.",
     "cta": "Explore more collectibles"

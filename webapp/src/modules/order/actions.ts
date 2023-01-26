@@ -116,7 +116,7 @@ export const executeOrderWithCardSuccess = (
       contractAddress: nft.contractAddress,
       network: nft.network,
       name: getAssetName(nft),
-      price: formatWeiMANA(purchase.nft.cryptoAmount.toString())
+      price: purchase.nft.cryptoAmount.toString()
     })
   })
 export const executeOrderWithCardFailure = (
