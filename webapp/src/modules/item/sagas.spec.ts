@@ -40,9 +40,6 @@ import { itemSaga } from './sagas'
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
 
-import util from 'util'
-util.inspect.defaultOptions.depth = null
-
 const item = {
   itemId: 'anItemId',
   price: '324234',
