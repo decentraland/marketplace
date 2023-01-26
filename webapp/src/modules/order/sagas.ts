@@ -27,14 +27,19 @@ import {
   cancelOrderSuccess,
   cancelOrderFailure,
   executeOrderTransactionSubmitted,
-  ExecuteOrderWithCardAction,
-  EXECUTE_ORDER_WITH_CARD
+  ExecuteOrderWithCardRequestAction,
+  EXECUTE_ORDER_WITH_CARD_REQUEST,
+  executeOrderWithCardSuccess,
+  executeOrderWithCardFailure
 } from './actions'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
   yield takeEvery(EXECUTE_ORDER_REQUEST, handleExecuteOrderRequest)
-  yield takeEvery(EXECUTE_ORDER_WITH_CARD, handleExecuteOrderWithCard)
+  yield takeEvery(
+    EXECUTE_ORDER_WITH_CARD_REQUEST,
+    handleExecuteOrderWithCardRequest
+  )
   yield takeEvery(CANCEL_ORDER_REQUEST, handleCancelOrderRequest)
 }
 
@@ -119,9 +124,22 @@ function* handleExecuteOrderRequest(action: ExecuteOrderRequestAction) {
   }
 }
 
-function* handleExecuteOrderWithCard(action: ExecuteOrderWithCardAction) {
+function* handleExecuteOrderWithCardRequest(
+  action: ExecuteOrderWithCardRequestAction
+) {
   const { nft } = action.payload
-  yield call(buyAssetWithCard, nft)
+
+  try {
+    yield call(buyAssetWithCard, nft)
+    yield put(executeOrderWithCardSuccess())
+  } catch (error) {
+    yield put(
+      executeOrderWithCardFailure(
+        nft,
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
+  }
 }
 
 function* handleCancelOrderRequest(action: CancelOrderRequestAction) {

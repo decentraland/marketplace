@@ -5,8 +5,8 @@ import { Authorization } from 'decentraland-dapps/dist/modules/authorization/typ
 import {
   buyItemRequest,
   BuyItemRequestAction,
-  buyItemWithCard,
-  BuyItemWithCardAction
+  buyItemWithCardRequest,
+  BuyItemWithCardRequestAction
 } from '../../../modules/item/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
@@ -23,7 +23,7 @@ export type Props = {
   isBuyWithCardPage: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onBuyItem: typeof buyItemRequest
-  onBuyItemWithCard: typeof buyItemWithCard
+  onBuyItemWithCard: typeof buyItemWithCardRequest
 }
 
 export type MapStateProps = Pick<
@@ -35,4 +35,6 @@ export type MapStateProps = Pick<
   | 'getContract'
 >
 export type MapDispatchProps = Pick<Props, 'onBuyItem' | 'onBuyItemWithCard'>
-export type MapDispatch = Dispatch<BuyItemRequestAction | BuyItemWithCardAction>
+export type MapDispatch = Dispatch<
+  BuyItemRequestAction | BuyItemWithCardRequestAction
+>

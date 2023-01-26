@@ -5,6 +5,9 @@ import {
   buyItemFailure,
   buyItemRequest,
   buyItemSuccess,
+  buyItemWithCardFailure,
+  buyItemWithCardRequest,
+  buyItemWithCardSuccess,
   fetchItemFailure,
   fetchItemRequest,
   fetchItemsFailure,
@@ -47,7 +50,9 @@ const requestActions = [
   fetchItemsRequest(itemBrowseOptions),
   fetchItemRequest(item.contractAddress, item.itemId),
   buyItemRequest(item),
-  buyItemSuccess(chainId, txHash, item)
+  buyItemWithCardRequest(item),
+  buyItemSuccess(chainId, txHash, item),
+  buyItemWithCardSuccess()
 ]
 
 requestActions.forEach(action => {
@@ -70,6 +75,10 @@ const failureActions = [
   {
     request: buyItemRequest(item),
     failure: buyItemFailure(anErrorMessage)
+  },
+  {
+    request: buyItemWithCardRequest(item),
+    failure: buyItemWithCardFailure(anErrorMessage)
   },
   {
     request: fetchItemsRequest(itemBrowseOptions),

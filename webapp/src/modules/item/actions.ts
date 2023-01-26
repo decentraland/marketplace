@@ -80,13 +80,25 @@ export type BuyItemSuccessAction = ReturnType<typeof buyItemSuccess>
 export type BuyItemFailureAction = ReturnType<typeof buyItemFailure>
 
 // Buy Item With Card
-// TODO (buy nfts with card): change to REQUEST, SUCCESS, FAILURE later
-export const BUY_ITEM_WITH_CARD = 'Buy Item with Card'
+export const BUY_ITEM_WITH_CARD_REQUEST = '[Request] Buy Item with Card'
+export const BUY_ITEM_WITH_CARD_SUCCESS = '[Success] Buy Item with Card'
+export const BUY_ITEM_WITH_CARD_FAILURE = '[Failure] Buy Item with Card'
 
-export const buyItemWithCard = (item: Item) =>
-  action(BUY_ITEM_WITH_CARD, { item })
+export const buyItemWithCardRequest = (item: Item) =>
+  action(BUY_ITEM_WITH_CARD_REQUEST, { item })
+export const buyItemWithCardSuccess = () => action(BUY_ITEM_WITH_CARD_SUCCESS)
+export const buyItemWithCardFailure = (error: string) =>
+  action(BUY_ITEM_WITH_CARD_FAILURE, { error })
 
-export type BuyItemWithCardAction = ReturnType<typeof buyItemWithCard>
+export type BuyItemWithCardRequestAction = ReturnType<
+  typeof buyItemWithCardRequest
+>
+export type BuyItemWithCardSuccessAction = ReturnType<
+  typeof buyItemWithCardSuccess
+>
+export type BuyItemWithCardFailureAction = ReturnType<
+  typeof buyItemWithCardFailure
+>
 
 // Fetch Item
 

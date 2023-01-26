@@ -208,7 +208,6 @@ const CreateListingStep = (props: Props) => {
           </div>
         </div>
         <div className={styles.expirationDate}>
-          {console.log('Rendering field date with expiresAt as', expiresAt)}
           <Field
             label={t(
               'rental_modal.create_listing_step.listing_expiration_date'

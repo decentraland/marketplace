@@ -13,7 +13,7 @@ import {
 } from '../../../modules/features/selectors'
 import {
   buyItemRequest,
-  buyItemWithCard,
+  buyItemWithCardRequest,
   BUY_ITEM_REQUEST
 } from '../../../modules/item/actions'
 import { getLoading as getItemsLoading } from '../../../modules/item/selectors'
@@ -46,6 +46,6 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onBuyItem: item => dispatch(buyItemRequest(item)),
-  onBuyItemWithCard: item => dispatch(buyItemWithCard(item))
+  onBuyItemWithCard: item => dispatch(buyItemWithCardRequest(item))
 })
 export default connect(mapState, mapDispatch)(MintItemModal)

@@ -14,7 +14,10 @@ import { ErrorCode } from 'decentraland-transactions'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { call, select } from 'redux-saga/effects'
-import { BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
+import {
+  buyAssetWithCard,
+  BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
+} from '../asset/utils'
 import { closeModal, openModal } from '../modal/actions'
 import { NFT } from '../nft/types'
 import { getRentalById } from '../rental/selectors'
@@ -28,7 +31,9 @@ import {
   executeOrderRequest,
   executeOrderSuccess,
   executeOrderTransactionSubmitted,
-  executeOrderWithCard
+  executeOrderWithCardFailure,
+  executeOrderWithCardRequest,
+  executeOrderWithCardSuccess
 } from './actions'
 import { orderSaga } from './sagas'
 
@@ -235,7 +240,7 @@ describe('when handling the execute order with card action', () => {
           ]
         ])
         .put(openTransak(nft))
-        .dispatch(executeOrderWithCard(nft))
+        .dispatch(executeOrderWithCardRequest(nft))
         .run({ silenceTimeout: true })
         .then(() => {
           expect(localStorage.setItem).not.toHaveBeenCalled()
@@ -256,12 +261,40 @@ describe('when handling the execute order with card action', () => {
           ]
         ])
         .put(openModal('BuyWithCardExplanationModal', { asset: nft }))
-        .dispatch(executeOrderWithCard(nft))
+        .dispatch(executeOrderWithCardRequest(nft))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
         .run({ silenceTimeout: true })
         .then(() => {
           expect(localStorage.setItem).not.toHaveBeenCalled()
         })
+    })
+  })
+
+  describe('when opening Transak Widget fails', () => {
+    let errorMessage: string
+
+    beforeEach(() => {
+      errorMessage = 'The execution was reverted'
+    })
+
+    it('should dispatch an action signaling the failure of the action handling', () => {
+      return expectSaga(orderSaga)
+        .provide([
+          [call(buyAssetWithCard, nft), Promise.reject(new Error(errorMessage))]
+        ])
+        .put(executeOrderWithCardFailure(nft, errorMessage))
+        .dispatch(executeOrderWithCardRequest(nft))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when Transak widget is opened succesfully', () => {
+    it('should dispatch the success action', () => {
+      return expectSaga(orderSaga)
+        .provide([[call(buyAssetWithCard, nft), Promise.resolve()]])
+        .put(executeOrderWithCardSuccess())
+        .dispatch(executeOrderWithCardRequest(nft))
+        .run({ silenceTimeout: true })
     })
   })
 })

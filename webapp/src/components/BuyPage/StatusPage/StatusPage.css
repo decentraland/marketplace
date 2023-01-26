@@ -50,6 +50,10 @@
   margin-bottom: 16px;
 }
 
+.Status .status-wrapper .ui.loader {
+  z-index: 100;
+}
+
 .Status .status-wrapper .status {
   font-weight: 500;
   font-size: 17px;

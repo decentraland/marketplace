@@ -1,8 +1,9 @@
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route, Redirect, RouteComponentProps } from 'react-router-dom'
 import { Center, Page } from 'decentraland-ui'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
+import { config } from '../../config'
 import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
 import { BrowsePage } from '../BrowsePage'
@@ -20,14 +21,14 @@ import { HomePage } from '../HomePage'
 import { LegacyNFTPage } from '../LegacyNFTPage'
 import { LandsPage } from '../LandsPage'
 import { CollectionPage } from '../CollectionPage'
-import { config } from '../../config'
-import { Props } from './Routes.types'
 import { Navbar } from '../Navbar'
-import { CampaignBrowserPage } from '../Campaign/CampaignBrowserPage'
-import { Footer } from '../Footer'
 import { ManageAssetPage } from '../ManageAssetPage'
+import { Footer } from '../Footer'
+import { CampaignBrowserPage } from '../Campaign/CampaignBrowserPage'
+import { StatusPage } from '../BuyPage/StatusPage'
+import { Props } from './Routes.types'
 
-const Routes = ({ inMaintenance }: Props) => {
+const Routes = ({ inMaintenance, isBuyNftsWithFiatEnabled }: Props) => {
   const APP_ID = config.get('INTERCOM_APP_ID')
 
   if (inMaintenance) {
@@ -70,6 +71,24 @@ const Routes = ({ inMaintenance }: Props) => {
           exact
           path={locations.buy(AssetType.ITEM)}
           component={() => <BuyPage type={AssetType.ITEM} />}
+        />
+        <Route
+          exact
+          path={locations.buyStatusPage(AssetType.NFT)}
+          component={(props: RouteComponentProps) =>
+            isBuyNftsWithFiatEnabled ? (
+              <StatusPage {...props} type={AssetType.NFT} />
+            ) : null
+          }
+        />
+        <Route
+          exact
+          path={locations.buyStatusPage(AssetType.ITEM)}
+          component={(props: RouteComponentProps) =>
+            isBuyNftsWithFiatEnabled ? (
+              <StatusPage {...props} type={AssetType.ITEM} />
+            ) : null
+          }
         />
         <Route
           exact

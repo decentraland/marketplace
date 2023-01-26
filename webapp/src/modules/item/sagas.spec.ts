@@ -3,6 +3,14 @@ import * as matchers from 'redux-saga-test-plan/matchers'
 import { ChainId, Item } from '@dcl/schemas'
 import { call, select } from 'redux-saga/effects'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
+import { getWallet } from '../wallet/selectors'
+import { View } from '../ui/types'
+import { itemAPI } from '../vendor/decentraland/item/api'
+import { closeModal, openModal } from '../modal/actions'
+import {
+  buyAssetWithCard,
+  BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
+} from '../asset/utils'
 import {
   buyItemRequest,
   buyItemFailure,
@@ -16,14 +24,11 @@ import {
   fetchTrendingItemsSuccess,
   fetchTrendingItemsFailure,
   fetchTrendingItemsRequest,
-  buyItemWithCard
+  buyItemWithCardRequest,
+  buyItemWithCardFailure,
+  buyItemWithCardSuccess
 } from './actions'
-import { getWallet } from '../wallet/selectors'
-import { View } from '../ui/types'
-import { itemAPI } from '../vendor/decentraland/item/api'
-import { closeModal, openModal } from '../modal/actions'
 import { itemSaga } from './sagas'
-import { BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 
 const item = {
   itemId: 'anItemId',
@@ -107,7 +112,7 @@ describe('when handling the buy items with card action', () => {
           ]
         ])
         .put(openModal('BuyWithCardExplanationModal', { asset: item }))
-        .dispatch(buyItemWithCard(item))
+        .dispatch(buyItemWithCardRequest(item))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
         .run({ silenceTimeout: true })
         .then(() => {
@@ -129,12 +134,32 @@ describe('when handling the buy items with card action', () => {
           ]
         ])
         .put(openModal('BuyWithCardExplanationModal', { asset: item }))
-        .dispatch(buyItemWithCard(item))
+        .dispatch(buyItemWithCardRequest(item))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
         .run({ silenceTimeout: true })
         .then(() => {
           expect(localStorage.setItem).not.toHaveBeenCalled()
         })
+    })
+  })
+
+  describe('when opening Transak Widget fails', () => {
+    it('should dispatch an action signaling the failure of the action handling', () => {
+      return expectSaga(itemSaga)
+        .provide([[call(buyAssetWithCard, item), Promise.reject(anError)]])
+        .put(buyItemWithCardFailure(anError.message))
+        .dispatch(buyItemWithCardRequest(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('when Transak widget is opened succesfully', () => {
+    it('should dispatch the success action', () => {
+      return expectSaga(itemSaga)
+        .provide([[call(buyAssetWithCard, item), Promise.resolve()]])
+        .put(buyItemWithCardSuccess())
+        .dispatch(buyItemWithCardRequest(item))
+        .run({ silenceTimeout: true })
     })
   })
 })

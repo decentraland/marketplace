@@ -66,6 +66,12 @@ export const locations = {
     `/contracts/${contractAddress}/${getResource(
       type
     )}/${tokenId}/buy?withCard=true`,
+  buyStatusPage: (
+    type: AssetType,
+    contractAddress: string = ':contractAddress',
+    tokenId: string = ':tokenId'
+  ) =>
+    `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy/status`,
   sell: (
     contractAddress: string = ':contractAddress',
     tokenId: string = ':tokenId'

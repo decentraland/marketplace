@@ -641,13 +641,13 @@
     "explanation": "Los pagos con tarjeta son procesados por {link_to_transak}.\nTransak cobra una tarifa por su servicio. Verás el precio final antes de confirmar la compra.",
     "learn_more": "Más información sobre los pagos con tarjeta"
   },
-  "processing_page": {
+  "asset_purchase_with_card_pending_page": {
     "title": "¡Tu item está en camino!",
     "status": "Procesando la Transacción",
     "description": "La transacción puede tomar hasta 3 minutos en ser procesada. Puedes trackear el progreso en {activity}.",
     "cta": "Volver al marketplace"
   },
-  "success_page": {
+  "asset_purchase_with_card_success_page": {
     "title": "¡Todo listo!",
     "description": "Puedes encontrar el item en {my_assets}.",
     "cta": "Explorar más items"

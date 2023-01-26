@@ -10,7 +10,7 @@ import { authorizationReducer as authorization } from 'decentraland-dapps/dist/m
 import { toastReducer as toast } from 'decentraland-dapps/dist/modules/toast/reducer'
 import { featuresReducer as features } from 'decentraland-dapps/dist/modules/features/reducer'
 import { modalReducer as modal } from 'decentraland-dapps/dist/modules/modal/reducer'
-import { manaFiatGatewayReducer as manaFiatGateway } from 'decentraland-dapps/dist/modules/manaFiatGateway/reducer'
+import { gatewayReducer as gateway } from 'decentraland-dapps/dist/modules/gateway/reducer'
 
 import { accountReducer as account } from './account/reducer'
 import { bidReducer as bid } from './bid/reducer'
@@ -59,7 +59,7 @@ export const createRootReducer = (history: History) =>
     event,
     modal,
     contract,
-    manaFiatGateway
+    gateway
   })
 
 export type RootState = ReturnType<ReturnType<typeof createRootReducer>>

@@ -7,11 +7,15 @@ import {
   buyItemFailure,
   buyItemRequest,
   buyItemSuccess,
-  buyItemWithCard,
+  buyItemWithCardFailure,
+  buyItemWithCardRequest,
+  buyItemWithCardSuccess,
   BUY_ITEM_FAILURE,
   BUY_ITEM_REQUEST,
   BUY_ITEM_SUCCESS,
-  BUY_ITEM_WITH_CARD,
+  BUY_ITEM_WITH_CARD_FAILURE,
+  BUY_ITEM_WITH_CARD_REQUEST,
+  BUY_ITEM_WITH_CARD_SUCCESS,
   fetchItemsFailure,
   fetchItemsRequest,
   fetchItemsSuccess,
@@ -117,10 +121,33 @@ describe('when creating the action to signal a failure in the buy item request',
 
 describe('when creating the action to signal the start of the buy item with card', () => {
   it('should return an object representing the action', () => {
-    expect(buyItemWithCard(item)).toEqual({
-      type: BUY_ITEM_WITH_CARD,
+    expect(buyItemWithCardRequest(item)).toEqual({
+      type: BUY_ITEM_WITH_CARD_REQUEST,
       meta: undefined,
       payload: { item }
+    })
+  })
+})
+
+describe('when creating the action to signal a successful buy item with card request', () => {
+  const chainId = ChainId.MATIC_MAINNET
+  const txHash = 'aTxHash'
+
+  it('should return an object representing the action', () => {
+    expect(buyItemWithCardSuccess()).toEqual({
+      type: BUY_ITEM_WITH_CARD_SUCCESS,
+      meta: undefined,
+      payload: undefined
+    })
+  })
+})
+
+describe('when creating the action to signal a failure in the buy item with card request', () => {
+  it('should return an object representing the action', () => {
+    expect(buyItemWithCardFailure(anErrorMessage)).toEqual({
+      type: BUY_ITEM_WITH_CARD_FAILURE,
+      meta: undefined,
+      payload: { error: anErrorMessage }
     })
   })
 })

@@ -6,8 +6,8 @@ import { NFT } from '../../../modules/nft/types'
 import {
   executeOrderRequest,
   ExecuteOrderRequestAction,
-  executeOrderWithCard,
-  ExecuteOrderWithCardAction
+  executeOrderWithCardRequest,
+  ExecuteOrderWithCardRequestAction
 } from '../../../modules/order/actions'
 import { Contract } from '../../../modules/vendor/services'
 import { getContract } from '../../../modules/contract/selectors'
@@ -25,7 +25,7 @@ export type Props = {
   isBuyWithCardPage: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onExecuteOrder: typeof executeOrderRequest
-  onExecuteOrderWithCard: typeof executeOrderWithCard
+  onExecuteOrderWithCard: typeof executeOrderWithCardRequest
 }
 
 export type MapStateProps = Pick<
@@ -41,5 +41,5 @@ export type MapDispatchProps = Pick<
   'onExecuteOrder' | 'onExecuteOrderWithCard'
 >
 export type MapDispatch = Dispatch<
-  ExecuteOrderRequestAction | ExecuteOrderWithCardAction
+  ExecuteOrderRequestAction | ExecuteOrderWithCardRequestAction
 >

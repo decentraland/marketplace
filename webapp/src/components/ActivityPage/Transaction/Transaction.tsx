@@ -10,8 +10,8 @@ import {
   GRANT_TOKEN_SUCCESS,
   REVOKE_TOKEN_SUCCESS
 } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { ADD_MANA_PURCHASE_AS_TRANSACTION } from 'decentraland-dapps/dist/modules/manaFiatGateway/actions'
-import { Purchase } from 'decentraland-dapps/dist/modules/mana/types'
+import { ADD_MANA_PURCHASE_AS_TRANSACTION } from 'decentraland-dapps/dist/modules/gateway/actions'
+import { ManaPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import {
   gatewaysNames,
   networksNames
@@ -472,7 +472,7 @@ const Transaction = (props: Props) => {
     case ADD_MANA_PURCHASE_AS_TRANSACTION: {
       const {
         purchase: { network, amount, gateway }
-      }: { purchase: Purchase } = tx.payload
+      }: { purchase: ManaPurchase } = tx.payload
 
       const chainId = getChainIdByNetwork(network)
       const contract = getContract({

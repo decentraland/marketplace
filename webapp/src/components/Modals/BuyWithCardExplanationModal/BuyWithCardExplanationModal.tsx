@@ -1,8 +1,9 @@
 import React from 'react'
-import { Button, Modal, ModalNavigation } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Props } from './BuyWithCardExplanationModal.types'
+import { Button, Modal, ModalNavigation } from 'decentraland-ui'
+
 import styles from './BuyWithCardExplanationModal.module.css'
+import { Props } from './BuyWithCardExplanationModal.types'
 
 const BuyWithCardExplanationModal = ({
   metadata: { asset },
