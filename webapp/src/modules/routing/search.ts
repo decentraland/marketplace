@@ -250,7 +250,7 @@ export function getItemSortBy(sortBy: SortBy): ItemSortBy {
     case SortBy.NEWEST:
       return ItemSortBy.NEWEST
     case SortBy.RECENTLY_LISTED:
-      return ItemSortBy.RECENTLY_REVIEWED
+      return ItemSortBy.RECENTLY_LISTED
     case SortBy.RECENTLY_SOLD:
       return ItemSortBy.RECENTLY_SOLD
     default:
