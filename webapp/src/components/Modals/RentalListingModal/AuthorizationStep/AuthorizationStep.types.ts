@@ -17,7 +17,6 @@ export type Props = {
   onCancel: () => void
   onAuthorize: typeof grantTokenRequest
   onFetchAuthorizations: typeof fetchAuthorizationsRequest
-  isListForRentAgain: boolean | null
 }
 
 export type MapStateProps = Pick<
@@ -35,4 +34,4 @@ export type MapDispatchProps = Pick<
 export type MapDispatch = Dispatch<
   GrantTokenRequestAction | FetchAuthorizationsRequestAction
 >
-export type OwnProps = Pick<Props, 'nft' | 'onCancel' | 'isListForRentAgain'>
+export type OwnProps = Pick<Props, 'nft' | 'onCancel'>

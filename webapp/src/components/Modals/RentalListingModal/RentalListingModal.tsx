@@ -21,6 +21,7 @@ import { CreateOrEditListingStep } from './CreateOrEditListingStep'
 import { EditConfirmationStep } from './EditConfirmationStep'
 import { ConfirmationStep } from './ConfirmationStep'
 import styles from './RentalListingModal.module.css'
+import InformationStep from './InformationStep/InformationStep'
 
 const RentalListingModal = (props: Props) => {
   const {
@@ -77,6 +78,11 @@ const RentalListingModal = (props: Props) => {
     canBeClaimed(wallet.address, rental, nft) &&
     !isRentalListingOpen(rental)
 
+  const [
+    listForRentAgainAuthorizationStep,
+    setListForRentAgainAuthorizationStep
+  ] = useState(isListForRentAgain)
+
   return (
     <Modal
       size="tiny"
@@ -87,10 +93,12 @@ const RentalListingModal = (props: Props) => {
       onClose={() => undefined}
     >
       {!isAuthorized ? (
-        <AuthorizationStep
+        <AuthorizationStep nft={nft} onCancel={onClose} />
+      ) : listForRentAgainAuthorizationStep ? (
+        <InformationStep
           nft={nft}
           onCancel={onClose}
-          isListForRentAgain={isListForRentAgain}
+          handleSubmit={() => setListForRentAgainAuthorizationStep(false)}
         />
       ) : !listing ? (
         <CreateOrEditListingStep

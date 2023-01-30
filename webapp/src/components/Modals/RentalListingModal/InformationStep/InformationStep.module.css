@@ -18,10 +18,6 @@
   flex-direction: column;
 }
 
-.errorMessage {
-  text-align: justify;
-}
-
 .actions:global(.actions > .ui.button:not(.primary)) {
   margin-top: 12px;
   margin-left: 0;
@@ -51,51 +47,16 @@
   min-width: 100%;
 }
 
-.noticeBox {
-  padding: 16px;
-  background-color: var(--secondary-on-modal);
-  border-radius: 6px;
-  margin-top: 16px;
-}
-
-.notice,
-.noticeBox,
-.noticeBox p {
-  font-size: 15px;
+.contentContainerRentAgain {
+  align-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
   line-height: 24px;
-  margin-bottom: 8px;
+  text-align: center;
 }
 
-.noticeBox ul {
-  padding-left: 20px;
-  margin: 0px;
-}
-
-.confirmTransaction {
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  margin-top: 8px;
-  margin-bottom: 20px;
-}
-
-.confirmTransaction p {
-  font-size: 13px;
-  flex: 0 0 auto;
-  text-align: left;
-  padding-left: 12px;
-}
-
-.confirmTransactionLoader:global(.ui.loader) {
-  position: relative;
-  top: 12px;
-  left: 12px;
-  flex: 0 0 auto;
-}
-
-.loaderContainer {
-  display: flex;
-  justify-content: center;
+.rentAgainSmallText {
+  font-size: 15px;
 }
