@@ -136,6 +136,10 @@ class NFTAPI extends BaseAPI {
       }
     }
 
+    if (filters.tenant) {
+      queryParams.append('tenant', filters.tenant)
+    }
+
     if (filters.rentalStatus) {
       const statuses: RentalStatus[] = !Array.isArray(filters.rentalStatus)
         ? [filters.rentalStatus]

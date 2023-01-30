@@ -3,6 +3,7 @@ import { BrowseOptions } from '../../../modules/routing/types'
 
 export type Props = {
   section: string
+  address: string
   assetType: AssetType
   onBrowse: (options: BrowseOptions) => void
 }
