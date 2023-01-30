@@ -1,7 +1,6 @@
 {
   "extends": [
     "tslint-react",
-    "dcl-tslint-config-standard",
     "tslint-plugin-prettier"
   ],
   "rules": {
