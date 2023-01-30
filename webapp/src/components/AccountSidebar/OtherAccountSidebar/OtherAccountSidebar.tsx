@@ -22,7 +22,6 @@ const OtherAccountSidebar = ({
   onBrowse
 }: Props) => (
   <>
-    {console.log('Viewing address', address)}
     <Menu className="other-account-menu">
       <div
         className={classNames(
