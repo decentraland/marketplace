@@ -220,17 +220,10 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       yield handleFetchOnSale(address, options.view!)
       break
     case Section.ON_RENT:
-      yield handleFetchOnRent(address, options.view!, [
-        RentalStatus.OPEN,
-        RentalStatus.EXECUTED
-      ])
-      break
-    case Section.USER_ON_RENT:
       yield handleFetchOnRent(
-        address,
         options.view!,
-        [RentalStatus.EXECUTED],
-        tenant
+        [RentalStatus.OPEN, RentalStatus.EXECUTED],
+        View.ACCOUNT ? { tenant } : { ownerAddress: address }
       )
       break
     case Section.WEARABLES_TRENDING:
@@ -377,11 +370,12 @@ function* handleFetchOnSale(address: string, view: View) {
 }
 
 function* handleFetchOnRent(
-  address: string,
   view: View,
   rentalStatus: RentalStatus[],
-  tenant?: string
+  options: { ownerAddress?: string; tenant?: string }
 ) {
+  const { ownerAddress: address, tenant } = options
+
   yield put(
     fetchNFTsRequest({
       view,

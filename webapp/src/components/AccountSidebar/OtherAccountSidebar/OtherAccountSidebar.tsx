@@ -1,25 +1,28 @@
 import React from 'react'
 import { Header } from 'decentraland-ui'
+import { RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import classNames from 'classnames'
 import { Sections } from '../../../modules/routing/types'
 import { Section } from '../../../modules/vendor/decentraland'
+import { AssetType } from '../../../modules/asset/types'
+import { View } from '../../../modules/ui/types'
 import { Menu } from '../../Menu'
-import { Props } from './OtherAccountSidebar.types'
+import { MenuItem } from '../../Menu/MenuItem'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { AssetFilters } from '../../AssetFilters'
-import { AssetType } from '../../../modules/asset/types'
-import { RentalStatus } from '@dcl/schemas'
+import { Props } from './OtherAccountSidebar.types'
 
 const { ALL, LAND, WEARABLES, EMOTES, ENS } = Sections.decentraland
 
 const OtherAccountSidebar = ({
   section,
   assetType,
-  wallet,
+  address,
   onBrowse
 }: Props) => (
   <>
+    {console.log('Viewing address', address)}
     <Menu className="other-account-menu">
       <div
         className={classNames(
@@ -74,21 +77,23 @@ const OtherAccountSidebar = ({
     </Menu>
     <Menu>
       <Header sub>{t('on_rent_menu.title')}</Header>
-      <NFTSectionsMenuItems
-        sections={[LAND]}
-        section={section as Section}
-        onSectionClick={section =>
+      <MenuItem
+        key={Section.ON_RENT}
+        value={Section.LAND}
+        currentValue={section === Section.ON_RENT ? Section.LAND : undefined}
+        onClick={() =>
           onBrowse({
-            section,
+            section: Sections.decentraland.ON_RENT,
+            view: View.CURRENT_ACCOUNT,
             assetType: AssetType.NFT,
             onlyOnRent: true,
-            tenant: wallet?.address,
+            tenant: address,
             rentalStatus: [RentalStatus.EXECUTED]
           })
         }
       />
     </Menu>
-    <AssetFilters />
+    {!Sections.decentraland.USER_ON_RENT ? <AssetFilters /> : null}
   </>
 )
 

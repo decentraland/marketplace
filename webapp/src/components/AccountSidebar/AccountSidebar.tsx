@@ -24,7 +24,7 @@ const AccountSidebar = ({
       {isCurrentAccount ? (
         <CurrentAccountSidebar section={section} onBrowse={handleOnBrowse} />
       ) : (
-        <OtherAccountSidebar section={section} />
+        <OtherAccountSidebar section={section} address={address} />
       )}
     </div>
   )

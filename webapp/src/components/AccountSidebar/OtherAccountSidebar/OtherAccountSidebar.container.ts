@@ -5,13 +5,11 @@ import { getAssetType } from '../../../modules/routing/selectors'
 import { BrowseOptions } from '../../../modules/routing/types'
 import { browse } from '../../../modules/routing/actions'
 import { VendorName } from '../../../modules/vendor'
-import { getWallet } from '../../../modules/wallet/selectors'
 import { MapStateProps, MapDispatchProps } from './OtherAccountSidebar.types'
 import OtherAccountSidebar from './OtherAccountSidebar'
 
 const mapState = (state: RootState): MapStateProps => ({
-  assetType: getAssetType(state),
-  wallet: getWallet(state)
+  assetType: getAssetType(state)
 })
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => ({
