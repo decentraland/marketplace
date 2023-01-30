@@ -179,7 +179,9 @@ const BuyNFTModal = (props: Props) => {
         )}
       >
         <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
-          {t('global.cancel')}
+          {isBuyNftsWithFiatEnabled && !isBuyWithCardPage && hasLowPrice
+            ? t('global.go_back')
+            : t('global.cancel')}
         </Button>
         {!hasLowPrice ? (
           <ChainButton

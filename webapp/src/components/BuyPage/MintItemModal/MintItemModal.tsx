@@ -182,11 +182,11 @@ const MintItemModal = (props: Props) => {
           as={Link}
           to={locations.item(item.contractAddress, item.itemId)}
         >
-          {isBuyNftsWithFiatEnabled && isBuyWithCardPage && hasLowPrice
+          {isBuyNftsWithFiatEnabled && !isBuyWithCardPage && hasLowPrice
             ? t('global.go_back')
             : t('global.cancel')}
         </Button>
-        {!hasLowPrice ? (
+        {(!hasLowPrice && !isBuyWithCardPage) || isBuyWithCardPage ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}

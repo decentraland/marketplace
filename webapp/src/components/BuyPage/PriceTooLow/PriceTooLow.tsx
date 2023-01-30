@@ -26,9 +26,7 @@ const PriceTooLow = (props: Props) => {
     <Card
       className={classNames(
         styles.card,
-        isBuyNftsWithFiatEnabled && isBuyWithCardPage
-          ? styles.buyWithCard
-          : undefined
+        isBuyNftsWithFiatEnabled ? styles.buyWithCard : undefined
       )}
     >
       <Card.Content>
@@ -40,8 +38,14 @@ const PriceTooLow = (props: Props) => {
             token: humanToken
           })}
         </div>
-        <div className="buttons">
-          {isBuyNftsWithFiatEnabled && isBuyWithCardPage ? (
+        <div
+          className={
+            isBuyNftsWithFiatEnabled && isBuyWithCardPage
+              ? undefined
+              : 'buttons'
+          }
+        >
+          {isBuyNftsWithFiatEnabled && !isBuyWithCardPage ? (
             <Button
               basic
               size="small"
@@ -51,16 +55,19 @@ const PriceTooLow = (props: Props) => {
               {t('price_too_low.switch_network', { network: humanNetwork })}
             </Button>
           ) : null}
-          <Button
-            basic
-            size="small"
-            href="https://docs.decentraland.org/blockchain-integration/transactions-in-polygon/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t('global.learn_more')}
-          </Button>
-          {!isBuyNftsWithFiatEnabled || !isBuyWithCardPage ? (
+          {(isBuyNftsWithFiatEnabled && !isBuyWithCardPage) ||
+          !isBuyNftsWithFiatEnabled ? (
+            <Button
+              basic
+              size="small"
+              href="https://docs.decentraland.org/blockchain-integration/transactions-in-polygon/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {t('global.learn_more')}
+            </Button>
+          ) : null}
+          {!isBuyNftsWithFiatEnabled ? (
             <Button
               primary
               size="small"
