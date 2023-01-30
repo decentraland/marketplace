@@ -183,7 +183,7 @@ const BuyNFTModal = (props: Props) => {
             ? t('global.go_back')
             : t('global.cancel')}
         </Button>
-        {!hasLowPrice ? (
+        {(!hasLowPrice && !isBuyWithCardPage) || isBuyWithCardPage ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}
