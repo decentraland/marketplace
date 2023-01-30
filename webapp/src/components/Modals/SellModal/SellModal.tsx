@@ -376,7 +376,7 @@ const SellModal = ({
         />
       ),
       description: null,
-      content: (
+      content: order ? (
         <div className={styles.fieldsContainer}>
           <span>
             <T
@@ -385,14 +385,14 @@ const SellModal = ({
                 name: <b>{assetName}</b>,
                 amount: (
                   <Mana network={nft.network} inline>
-                    {formatWeiMANA(order!.price)}
+                    {formatWeiMANA(order.price)}
                   </Mana>
                 )
               }}
             />
           </span>
         </div>
-      ),
+      ) : null,
       actions: (
         <Modal.Actions>
           <Button disabled={isCancelling} onClick={onClose}>
