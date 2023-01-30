@@ -5,9 +5,16 @@ import { getMinSaleValueInWei } from '../utils'
 import { Price } from '../Price'
 import { Props } from './PriceTooLow.types'
 import styles from './PriceTooLow.module.css'
+import classNames from 'classnames'
 
 const PriceTooLow = (props: Props) => {
-  const { chainId, network, onSwitchNetwork } = props
+  const {
+    chainId,
+    network,
+    isBuyNftsWithFiatEnabled,
+    isBuyWithCardPage,
+    onSwitchNetwork
+  } = props
 
   const humanNetwork = t(`networks.${network.toLowerCase()}`)
   const humanToken = t(`tokens.${network.toLowerCase()}`)
@@ -16,7 +23,14 @@ const PriceTooLow = (props: Props) => {
   const price = <Price network={network} price={getMinSaleValueInWei()!} />
 
   return (
-    <Card className={styles.card}>
+    <Card
+      className={classNames(
+        styles.card,
+        isBuyNftsWithFiatEnabled && isBuyWithCardPage
+          ? styles.buyWithCard
+          : undefined
+      )}
+    >
       <Card.Content>
         <div className={styles.paragraph}>
           <T id="price_too_low.minimum_price" values={{ price }} />
@@ -27,6 +41,16 @@ const PriceTooLow = (props: Props) => {
           })}
         </div>
         <div className="buttons">
+          {isBuyNftsWithFiatEnabled && isBuyWithCardPage ? (
+            <Button
+              basic
+              size="small"
+              onClick={() => onSwitchNetwork(chainId)}
+              className={styles.switchNetwork}
+            >
+              {t('price_too_low.switch_network', { network: humanNetwork })}
+            </Button>
+          ) : null}
           <Button
             basic
             size="small"
@@ -36,14 +60,15 @@ const PriceTooLow = (props: Props) => {
           >
             {t('global.learn_more')}
           </Button>
-          <Button
-            primary
-            inverted
-            size="small"
-            onClick={() => onSwitchNetwork(chainId)}
-          >
-            {t('price_too_low.switch_network', { network: humanNetwork })}
-          </Button>
+          {!isBuyNftsWithFiatEnabled || !isBuyWithCardPage ? (
+            <Button
+              primary
+              size="small"
+              onClick={() => onSwitchNetwork(chainId)}
+            >
+              {t('price_too_low.switch_network', { network: humanNetwork })}
+            </Button>
+          ) : null}
         </div>
       </Card.Content>
     </Card>

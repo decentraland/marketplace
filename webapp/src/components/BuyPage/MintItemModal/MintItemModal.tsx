@@ -145,10 +145,10 @@ const MintItemModal = (props: Props) => {
   } else {
     subtitle =
       isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
-        <>
+        <div className="subtitle-wrapper">
           <PriceSubtitle asset={item} />
           <NetworkSubtitle asset={item} />
-        </>
+        </div>
       ) : (
         <T
           id={`${translationPageDescriptorId}.subtitle`}
@@ -182,7 +182,9 @@ const MintItemModal = (props: Props) => {
           as={Link}
           to={locations.item(item.contractAddress, item.itemId)}
         >
-          {t('global.cancel')}
+          {isBuyNftsWithFiatEnabled && isBuyWithCardPage && hasLowPrice
+            ? t('global.go_back')
+            : t('global.cancel')}
         </Button>
         {!hasLowPrice ? (
           <ChainButton
@@ -203,6 +205,7 @@ const MintItemModal = (props: Props) => {
           </ChainButton>
         ) : null}
       </div>
+      {/* TODO (buy nfts with card): should we render the explanation in addition to the gasless tx message? */}
       {isBuyNftsWithFiatEnabled &&
       isWearableOrEmote(item) &&
       isBuyWithCardPage ? (

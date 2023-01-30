@@ -145,10 +145,10 @@ const BuyNFTModal = (props: Props) => {
   } else {
     subtitle =
       isBuyNftsWithFiatEnabled && isWearableOrEmote(nft) ? (
-        <>
+        <div className="subtitle-wrapper">
           <PriceSubtitle asset={nft} />
           <NetworkSubtitle asset={nft} />
-        </>
+        </div>
       ) : (
         <T
           id={`${translationPageDescriptorId}.subtitle`}
