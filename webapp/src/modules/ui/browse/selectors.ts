@@ -73,7 +73,7 @@ export const getOnSaleNFTs = createSelector<
     .filter(([nft]) => nft.owner === address)
 )
 
-export const getOnRentNFTs = createSelector<
+const getOnRentNFTs = createSelector<
   RootState,
   ReturnType<typeof getNFTData>,
   ReturnType<typeof getRentalData>,
