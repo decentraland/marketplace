@@ -147,7 +147,7 @@ export const Rent = (props: Props) => {
               </div>
             </div>
           ) : null}
-          {!isRentalListingOpen(rental) && canBeClaimedBack ? (
+          {canBeClaimedBack ? (
             <div className={styles.activeRent}>
               {isClaimingBackLandTransactionPending ? (
                 <>
