@@ -82,8 +82,8 @@ const OtherAccountSidebar = ({
         currentValue={section === Section.ON_RENT ? Section.LAND : undefined}
         onClick={() =>
           onBrowse({
-            section: Sections.decentraland.ON_RENT,
-            view: View.CURRENT_ACCOUNT,
+            section: Section.ON_RENT,
+            view: View.ACCOUNT,
             assetType: AssetType.NFT,
             onlyOnRent: true,
             tenant: address,
