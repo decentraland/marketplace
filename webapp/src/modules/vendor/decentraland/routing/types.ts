@@ -44,7 +44,6 @@ export enum Section {
   COLLECTIONS = 'collections',
   ON_SALE = 'on_sale',
   ON_RENT = 'on_rent',
-  USER_ON_RENT = 'user_on_rent',
   RECENTLY_SOLD = 'recently_sold',
   SALES = 'sales',
   BIDS = 'bids',

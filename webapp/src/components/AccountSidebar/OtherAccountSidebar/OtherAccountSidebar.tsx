@@ -92,7 +92,7 @@ const OtherAccountSidebar = ({
         }
       />
     </Menu>
-    {!Sections.decentraland.USER_ON_RENT ? <AssetFilters /> : null}
+    {section !== Section.ON_RENT ? <AssetFilters /> : null}
   </>
 )
 
