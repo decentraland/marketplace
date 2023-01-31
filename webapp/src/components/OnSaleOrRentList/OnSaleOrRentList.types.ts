@@ -8,10 +8,15 @@ export enum OnSaleOrRentType {
 
 export type Props = {
   elements: OnSaleListElementProps[] | OnRentListElementProps[]
+  address?: string
+  isCurrentAccount: boolean
   isLoading: boolean
   onSaleOrRentType: OnSaleOrRentType
 }
 
 export type MapStateProps = Pick<Props, 'elements' | 'isLoading'>
 
-export type OwnProps = Pick<Props, 'onSaleOrRentType'>
+export type OwnProps = Pick<
+  Props,
+  'onSaleOrRentType' | 'address' | 'isCurrentAccount'
+>

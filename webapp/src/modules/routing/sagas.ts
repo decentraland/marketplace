@@ -194,6 +194,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     onlySmart,
     isMap,
     contracts,
+    tenant,
     minPrice,
     maxPrice
   } = options
@@ -219,7 +220,11 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       yield handleFetchOnSale(address, options.view!)
       break
     case Section.ON_RENT:
-      yield handleFetchOnRent(address, options.view!)
+      yield handleFetchOnRent(
+        options.view!,
+        [RentalStatus.OPEN, RentalStatus.EXECUTED],
+        View.ACCOUNT ? { tenant } : { ownerAddress: address }
+      )
       break
     case Section.WEARABLES_TRENDING:
       yield put(fetchTrendingItemsRequest())
@@ -364,14 +369,21 @@ function* handleFetchOnSale(address: string, view: View) {
   )
 }
 
-function* handleFetchOnRent(address: string, view: View) {
+function* handleFetchOnRent(
+  view: View,
+  rentalStatus: RentalStatus[],
+  options: { ownerAddress?: string; tenant?: string }
+) {
+  const { ownerAddress: address, tenant } = options
+
   yield put(
     fetchNFTsRequest({
       view,
       vendor: VendorName.DECENTRALAND,
       filters: {
         isLand: true,
-        rentalStatus: [RentalStatus.OPEN, RentalStatus.EXECUTED]
+        rentalStatus,
+        tenant
       },
       params: {
         first: MAX_QUERY_SIZE,

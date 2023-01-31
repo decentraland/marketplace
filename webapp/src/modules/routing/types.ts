@@ -1,4 +1,12 @@
-import { EmotePlayMode, GenderFilterOption, Network, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
+import {
+  EmotePlayMode,
+  Network,
+  NFTCategory,
+  Rarity,
+  RentalStatus,
+  WearableGender,
+  GenderFilterOption
+} from '@dcl/schemas'
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
@@ -42,6 +50,8 @@ export type BrowseOptions = {
   contracts?: string[]
   address?: string
   network?: Network
+  tenant?: string
+  rentalStatus?: RentalStatus[]
   viewAsGuest?: boolean
   category?: NFTCategory
   emotePlayMode?: EmotePlayMode[]

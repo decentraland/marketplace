@@ -132,6 +132,9 @@
     "bids": "出价",
     "store_settings": "配置"
   },
+  "on_rent_menu": {
+    "title": "出租资产"
+  },
   "vendor_menu": {
     "no_assets": "无资产",
     "assets_count": "{count} {count, plural, one {asset} other {assets}}",

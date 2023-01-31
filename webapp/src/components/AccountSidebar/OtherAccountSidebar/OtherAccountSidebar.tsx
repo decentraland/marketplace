@@ -1,18 +1,26 @@
 import React from 'react'
 import { Header } from 'decentraland-ui'
+import { RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import classNames from 'classnames'
 import { Sections } from '../../../modules/routing/types'
 import { Section } from '../../../modules/vendor/decentraland'
+import { AssetType } from '../../../modules/asset/types'
+import { View } from '../../../modules/ui/types'
 import { Menu } from '../../Menu'
-import { Props } from './OtherAccountSidebar.types'
+import { MenuItem } from '../../Menu/MenuItem'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { AssetFilters } from '../../AssetFilters'
-import { AssetType } from '../../../modules/asset/types'
+import { Props } from './OtherAccountSidebar.types'
 
 const { ALL, LAND, WEARABLES, EMOTES, ENS } = Sections.decentraland
 
-const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
+const OtherAccountSidebar = ({
+  section,
+  assetType,
+  address,
+  onBrowse
+}: Props) => (
   <>
     <Menu className="other-account-menu">
       <div
@@ -66,7 +74,25 @@ const OtherAccountSidebar = ({ section, assetType, onBrowse }: Props) => (
         onSectionClick={section => onBrowse({ section, assetType })}
       />
     </Menu>
-    <AssetFilters />
+    <Menu>
+      <Header sub>{t('on_rent_menu.title')}</Header>
+      <MenuItem
+        key={Section.ON_RENT}
+        value={Section.LAND}
+        currentValue={section === Section.ON_RENT ? Section.LAND : undefined}
+        onClick={() =>
+          onBrowse({
+            section: Section.ON_RENT,
+            view: View.ACCOUNT,
+            assetType: AssetType.NFT,
+            onlyOnRent: true,
+            tenant: address,
+            rentalStatus: [RentalStatus.EXECUTED]
+          })
+        }
+      />
+    </Menu>
+    {section !== Section.ON_RENT ? <AssetFilters /> : null}
   </>
 )
 

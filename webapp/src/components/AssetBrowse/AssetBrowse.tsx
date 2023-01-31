@@ -48,6 +48,7 @@ const AssetBrowse = (props: Props) => {
 
   // Prevent fetching more than once while browsing
   const [hasFetched, setHasFetched] = useState(false)
+  const isCurrentAccount = view === View.CURRENT_ACCOUNT
 
   // Kick things off
   useEffect(() => {
@@ -139,10 +140,10 @@ const AssetBrowse = (props: Props) => {
   const left = (
     <>
       <NotMobile>
-        {view === View.ACCOUNT || view === View.CURRENT_ACCOUNT ? (
+        {view === View.ACCOUNT || isCurrentAccount ? (
           <AccountSidebar
             address={address!}
-            isCurrentAccount={view === View.CURRENT_ACCOUNT}
+            isCurrentAccount={isCurrentAccount}
           />
         ) : (
           <NFTSidebar section={section} sections={sections} />
@@ -158,10 +159,22 @@ const AssetBrowse = (props: Props) => {
       right = <CollectionList />
       break
     case DecentralandSection.ON_SALE:
-      right = <OnSaleList onSaleOrRentType={OnSaleOrRentType.SALE} />
+      right = (
+        <OnSaleList
+          address={address}
+          isCurrentAccount={isCurrentAccount}
+          onSaleOrRentType={OnSaleOrRentType.SALE}
+        />
+      )
       break
     case DecentralandSection.ON_RENT:
-      right = <OnSaleList onSaleOrRentType={OnSaleOrRentType.RENT} />
+      right = (
+        <OnSaleList
+          address={address}
+          isCurrentAccount={isCurrentAccount}
+          onSaleOrRentType={OnSaleOrRentType.RENT}
+        />
+      )
       break
     case DecentralandSection.SALES:
       right = <Sales />

@@ -136,6 +136,9 @@
     "bids": "Bids",
     "store_settings": "Settings"
   },
+  "on_rent_menu": {
+    "title": "Assets on rent"
+  },
   "vendor_menu": {
     "no_assets": "No assets",
     "assets_count": "{count} {count, plural, one {asset} other {assets}}",
