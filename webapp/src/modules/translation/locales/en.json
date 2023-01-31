@@ -415,6 +415,7 @@
       "update": "Update price",
       "buy": "Buy",
       "buy_with_mana": "Buy with MANA",
+      "get_mana": "Get MANA",
       "buy_with_card": "Buy with card",
       "mint": "Mint",
       "bid": "Bid",

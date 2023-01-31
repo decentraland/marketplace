@@ -25,6 +25,7 @@ import { Name } from '../Name'
 import { Price } from '../Price'
 import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
 import { Props } from './BuyNFTModal.types'
+import { NotEnoughMana } from '../NotEnoughMana'
 
 const BuyNFTModal = (props: Props) => {
   const {
@@ -133,7 +134,7 @@ const BuyNFTModal = (props: Props) => {
       <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
     )
   } else if (hasInsufficientMANA) {
-    subtitle = (
+    const description = (
       <T
         id={`${translationPageDescriptorId}.not_enough_mana`}
         values={{
@@ -142,6 +143,12 @@ const BuyNFTModal = (props: Props) => {
         }}
       />
     )
+    subtitle =
+      isBuyNftsWithFiatEnabled && isWearableOrEmote(nft) ? (
+        <NotEnoughMana asset={nft} description={description} />
+      ) : (
+        description
+      )
   } else {
     subtitle =
       isBuyNftsWithFiatEnabled && isWearableOrEmote(nft) ? (
@@ -179,11 +186,14 @@ const BuyNFTModal = (props: Props) => {
         )}
       >
         <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
-          {isBuyNftsWithFiatEnabled && !isBuyWithCardPage && hasLowPrice
+          {isBuyNftsWithFiatEnabled &&
+          !isBuyWithCardPage &&
+          (hasLowPrice || hasInsufficientMANA)
             ? t('global.go_back')
             : t('global.cancel')}
         </Button>
-        {(!hasLowPrice && !isBuyWithCardPage) || isBuyWithCardPage ? (
+        {(!hasInsufficientMANA || !isBuyNftsWithFiatEnabled) &&
+        ((!hasLowPrice && !isBuyWithCardPage) || isBuyWithCardPage) ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}
