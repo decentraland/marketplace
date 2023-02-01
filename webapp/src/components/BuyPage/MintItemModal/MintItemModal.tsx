@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import compact from 'lodash/compact'
 import classNames from 'classnames'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
+import { Item } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Authorization,
@@ -24,8 +25,10 @@ import { Name } from '../Name'
 import { Price } from '../Price'
 import { PriceTooLow } from '../PriceTooLow'
 import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
-import { Props } from './MintItemModal.types'
 import { NotEnoughMana } from '../NotEnoughMana'
+import { PriceHasChanged } from '../PriceHasChanged'
+import { Props } from './MintItemModal.types'
+import { AssetProviderPage } from '../../AssetProviderPage'
 
 const MintItemModal = (props: Props) => {
   const {
@@ -177,6 +180,15 @@ const MintItemModal = (props: Props) => {
         })}
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
+      {isBuyNftsWithFiatEnabled ? (
+        <AssetProviderPage type={AssetType.ITEM}>
+          {(asset: Item) => {
+            return asset.price !== item.price ? (
+              <PriceHasChanged asset={item} newPrice={asset.price} />
+            ) : null
+          }}
+        </AssetProviderPage>
+      ) : null}
       {hasLowPrice ? (
         <PriceTooLow chainId={item.chainId} network={item.network} />
       ) : null}

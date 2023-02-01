@@ -659,6 +659,7 @@
     "description": "您可以在 {my_assets} 中找到您的物品。",
     "cta": "探索更多收藏品"
   },
+  "asset_price_has_changed": "{name} 的价格已更新为 {amount}。",
   "bid_page": {
     "title": "出价",
     "subtitle": "为您在{name}上的出价设置价格和有效期。",

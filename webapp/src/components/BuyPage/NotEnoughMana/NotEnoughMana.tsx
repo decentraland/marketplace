@@ -5,7 +5,7 @@ import { Mana } from '../../Mana'
 import { Props } from './NotEnoughMana.types'
 import styles from './NotEnoughMana.module.css'
 
-const PriceTooLow = (props: Props) => {
+const NotEnoughMana = (props: Props) => {
   const { asset, description, onGetMana, onBuyWithCard } = props
 
   return (
@@ -32,4 +32,4 @@ const PriceTooLow = (props: Props) => {
   )
 }
 
-export default React.memo(PriceTooLow)
+export default React.memo(NotEnoughMana)

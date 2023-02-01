@@ -1,0 +1,19 @@
+.card {
+  /* Override semantic UI's width */
+  width: 416px !important;
+}
+
+.card:global(.ui.card > .content) {
+  padding: 20px 24px;
+}
+
+.paragraph {
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .card {
+    /* Override semantic UI's width */
+    width: 100% !important;
+  }
+}

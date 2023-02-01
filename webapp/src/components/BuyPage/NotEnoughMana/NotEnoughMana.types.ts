@@ -1,14 +1,14 @@
+import React from 'react'
 import { Dispatch } from 'redux'
+import {
+  openBuyManaWithFiatModalRequest,
+  OpenBuyManaWithFiatModalRequestAction
+} from 'decentraland-dapps/dist/modules/gateway/actions'
 import { Asset } from '../../../modules/asset/types'
 import {
   openTransak,
   OpenTransakAction
 } from '../../../modules/transak/actions'
-import {
-  openBuyManaWithFiatModalRequest,
-  OpenBuyManaWithFiatModalRequestAction
-} from 'decentraland-dapps/dist/modules/gateway/actions'
-import React from 'react'
 
 export type Props = {
   asset: Asset
