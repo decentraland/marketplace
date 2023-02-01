@@ -119,11 +119,8 @@ export const executeOrderWithCardSuccess = (
       price: purchase.nft.cryptoAmount.toString()
     })
   })
-export const executeOrderWithCardFailure = (
-  nft: NFT,
-  error: string,
-  errorCode?: ErrorCode
-) => action(EXECUTE_ORDER_WITH_CARD_FAILURE, { nft, error, errorCode })
+export const executeOrderWithCardFailure = (error: string) =>
+  action(EXECUTE_ORDER_WITH_CARD_FAILURE, { error })
 
 export type ExecuteOrderWithCardRequestAction = ReturnType<
   typeof executeOrderWithCardRequest

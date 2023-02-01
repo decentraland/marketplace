@@ -844,6 +844,11 @@
     },
     "upsert_rental_success": {
       "show_listing": "Mostrar listado"
+    },
+    "buy_nft_with_card_error": {
+      "title": "Error al enviar la transacción",
+      "body": "Actualice la página e intente enviar la transacción nuevamente.",
+      "refresh": "Actualizar"
     }
   },
   "maintainance": {

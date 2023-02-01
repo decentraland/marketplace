@@ -1,31 +1,36 @@
-import { expectSaga } from 'redux-saga-test-plan'
 import { getLocation, push } from 'connected-react-router'
+import { expectSaga } from 'redux-saga-test-plan'
+import { select } from 'redux-saga/effects'
 import { Network } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import {
-  Purchase,
+  NFTPurchase,
   PurchaseStatus
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { getState as getToastState } from 'decentraland-dapps/dist/modules/toast/selectors'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
+import { buyItemWithCardFailure } from '../item/actions'
 import { locations } from '../routing/locations'
 import { assetSaga } from './sagas'
 import { AssetType } from './types'
-import { select } from 'redux-saga/effects'
+import { executeOrderWithCardFailure } from '../order/actions'
 
 const mockContractAddress = 'a-contract-address'
 const mockTokenId = 'aTokenId'
 const mockTradeType = TradeType.PRIMARY
 
-const mockPathname = new URL(
-  `${window.origin}${locations.buyWithCard(
-    AssetType.ITEM,
-    mockContractAddress,
-    mockTokenId
-  )}`
-).pathname
+const mockPathname = (assetType: AssetType = AssetType.ITEM) =>
+  new URL(
+    `${window.origin}${locations.buyWithCard(
+      assetType,
+      mockContractAddress,
+      mockTokenId
+    )}`
+  ).pathname
 
-const mockNFTPurchase: Purchase = {
+const mockNFTPurchase: NFTPurchase = {
   address: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
   id: 'mock-id',
   network: Network.MATIC,
@@ -33,7 +38,6 @@ const mockNFTPurchase: Purchase = {
   status: PurchaseStatus.PENDING,
   gateway: NetworkGatewayType.TRANSAK,
   txHash: null,
-  amount: 1,
   nft: {
     contractAddress: mockContractAddress,
     itemId: mockTokenId,
@@ -52,7 +56,7 @@ describe('when handling the set purchase action', () => {
             [
               select(getLocation),
               {
-                pathname: mockPathname
+                pathname: mockPathname()
               }
             ]
           ])
@@ -119,45 +123,68 @@ describe('when handling the set purchase action', () => {
     })
   })
 
-  describe('when the purchase failed', () => {
-    describe('when the user was waiting in the same page', () => {
-      it('should not dispatch a push to the history with the location of the buy status page', () => {
-        return expectSaga(assetSaga)
-          .provide([
-            [
-              select(getLocation),
-              {
-                pathname: mockPathname
-              }
-            ]
-          ])
-          .dispatch(
-            setPurchase({ ...mockNFTPurchase, status: PurchaseStatus.FAILED })
+  describe('when the purchase of an item failed', () => {
+    it('should dispatch an action signaling the failure of the item', () => {
+      return expectSaga(assetSaga)
+        .provide([
+          [
+            select(getLocation),
+            {
+              pathname: mockPathname()
+            }
+          ]
+        ])
+        .put(buyItemWithCardFailure(t('global.unknown_error')))
+        .put(
+          push(
+            locations.buyWithCard(
+              AssetType.ITEM,
+              mockContractAddress,
+              mockTokenId
+            )
           )
-          .run({ silenceTimeout: true })
-          .then(({ effects }) => {
-            expect(effects.put).toBeUndefined()
-          })
-      })
+        )
+        .dispatch(
+          setPurchase({ ...mockNFTPurchase, status: PurchaseStatus.FAILED })
+        )
+        .run({ silenceTimeout: true })
     })
+  })
 
-    describe('when the user was exploring collectibles', () => {
-      it('should not dispatch a push to the history with the location of the buy status page', () => {
-        return expectSaga(assetSaga)
-          .provide([
-            [
-              select(getLocation),
-              {
-                pathname: locations.browse()
-              }
-            ]
-          ])
-          .dispatch(setPurchase(mockNFTPurchase))
-          .run({ silenceTimeout: true })
-          .then(({ effects }) => {
-            expect(effects.put).toBeUndefined()
+  describe('when the purchase of an nft failed', () => {
+    it('should dispatch an action signaling the failure of the nft', () => {
+      return expectSaga(assetSaga)
+        .provide([
+          [
+            select(getLocation),
+            {
+              pathname: mockPathname(AssetType.NFT)
+            }
+          ]
+        ])
+        .put(executeOrderWithCardFailure(t('global.unknown_error')))
+        .put(
+          push(
+            locations.buyWithCard(
+              AssetType.NFT,
+              mockContractAddress,
+              mockTokenId
+            )
+          )
+        )
+        .dispatch(
+          setPurchase({
+            ...mockNFTPurchase,
+            status: PurchaseStatus.FAILED,
+            nft: {
+              ...mockNFTPurchase.nft,
+              tokenId: mockTokenId,
+              itemId: undefined,
+              tradeType: TradeType.SECONDARY
+            }
           })
-      })
+        )
+        .run({ silenceTimeout: true })
     })
   })
 })

@@ -316,7 +316,7 @@ describe('when handling the execute order with card action', () => {
         .provide([
           [call(buyAssetWithCard, nft), Promise.reject(new Error(errorMessage))]
         ])
-        .put(executeOrderWithCardFailure(nft, errorMessage))
+        .put(executeOrderWithCardFailure(errorMessage))
         .dispatch(executeOrderWithCardRequest(nft))
         .run({ silenceTimeout: true })
     })

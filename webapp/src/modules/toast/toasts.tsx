@@ -1,4 +1,4 @@
-import { Button, ToastType } from 'decentraland-ui'
+import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { UpsertRentalOptType } from '../rental/types'
@@ -59,5 +59,22 @@ export function getUpsertRentalSuccessToast(
     ),
     timeout: 6000,
     closable: true
+  }
+}
+
+export function getBuyNFTWithCardErrorToast(): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.ERROR,
+    title: t('toast.buy_nft_with_card_error.title'),
+    body: (
+      <div className="buy-nft-with-card-error">
+        <p>{t('toast.buy_nft_with_card_error.body')}</p>
+        <Button as="a" basic href={window.location.href}>
+          {t('toast.buy_nft_with_card_error.refresh')}
+        </Button>
+      </div>
+    ),
+    closable: true,
+    icon: <Icon name="exclamation circle" />
   }
 }

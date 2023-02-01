@@ -847,6 +847,11 @@
     },
     "upsert_rental_success": {
       "show_listing": "显示出租清单"
+    },
+    "buy_nft_with_card_error": {
+      "title": "发送交易时出错",
+      "body": "刷新页面并尝试再次发送交易。",
+      "refresh": "刷新"
     }
   },
   "maintainance": {
