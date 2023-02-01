@@ -8,11 +8,9 @@ import { ItemSaleActions } from './ItemSaleActions'
 import { NFTSaleActions } from './NFTSaleActions'
 
 const SaleActionBox = ({ asset }: Props) => {
-  return (
+  return isNFT(asset) || asset.isOnSale ? (
     <div className={styles.main}>
-      {isNFT(asset) || asset.isOnSale ? (
-        <Price asset={asset} title={t('asset_page.sell_price')} />
-      ) : null}
+      <Price asset={asset} title={t('asset_page.sell_price')} />
       <div className={styles.container}>
         {isNFT(asset) ? (
           <NFTSaleActions nft={asset} />
@@ -21,7 +19,7 @@ const SaleActionBox = ({ asset }: Props) => {
         )}
       </div>
     </div>
-  )
+  ) : null
 }
 
 export default memo(SaleActionBox)

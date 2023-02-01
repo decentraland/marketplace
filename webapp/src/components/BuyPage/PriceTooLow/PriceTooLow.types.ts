@@ -8,8 +8,17 @@ import {
 export type Props = {
   chainId: ChainId
   network: Network
+  isBuyNftsWithFiatEnabled: boolean
+  isBuyWithCardPage: boolean
   onSwitchNetwork: typeof switchNetworkRequest
 }
 
+export type MapStateProps = Pick<
+  Props,
+  'isBuyNftsWithFiatEnabled' | 'isBuyWithCardPage'
+>
+
 export type MapDispatchProps = Pick<Props, 'onSwitchNetwork'>
 export type MapDispatch = Dispatch<SwitchNetworkRequestAction>
+
+export type OwnProps = Pick<Props, 'chainId' | 'network'>

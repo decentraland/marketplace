@@ -145,10 +145,10 @@ const BuyNFTModal = (props: Props) => {
   } else {
     subtitle =
       isBuyNftsWithFiatEnabled && isWearableOrEmote(nft) ? (
-        <>
+        <div className="subtitle-wrapper">
           <PriceSubtitle asset={nft} />
           <NetworkSubtitle asset={nft} />
-        </>
+        </div>
       ) : (
         <T
           id={`${translationPageDescriptorId}.subtitle`}
@@ -179,9 +179,11 @@ const BuyNFTModal = (props: Props) => {
         )}
       >
         <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
-          {t('global.cancel')}
+          {isBuyNftsWithFiatEnabled && !isBuyWithCardPage && hasLowPrice
+            ? t('global.go_back')
+            : t('global.cancel')}
         </Button>
-        {!hasLowPrice ? (
+        {(!hasLowPrice && !isBuyWithCardPage) || isBuyWithCardPage ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}
