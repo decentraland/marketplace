@@ -964,7 +964,7 @@
       "view_transaction": "Ver transacción",
       "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",
       "claiming_back": "Reclamando su {asset}",
-      "unclaimed_message": "{asset} todavía está sin reclamar. Reclámala para poder venderla o transferirla."
+      "unclaimed_message": "Tienes una renta activa pero el {asset} todavía está sin reclamar. Reclámala para poder venderla o transferirla"
     },
     "highlights": {
       "title": "Destacados",

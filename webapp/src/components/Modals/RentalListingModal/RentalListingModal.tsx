@@ -107,7 +107,7 @@ const RentalListingModal = (props: Props) => {
             isRentalListingOpen(rental) || isListForRentAgain ? rental : null
           }
           onCreate={handleSetListing}
-          onRemove={onRemove}
+          onRemove={isListForRentAgain ? onClose : onRemove}
           onCancel={onClose}
           isListForRentAgain={isListForRentAgain}
         />

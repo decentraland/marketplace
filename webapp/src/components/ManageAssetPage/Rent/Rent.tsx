@@ -11,7 +11,6 @@ import { formatWeiMANA } from '../../../lib/mana'
 import { locations } from '../../../modules/routing/locations'
 import {
   canBeClaimed,
-  canCreateANewRental,
   getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded,
@@ -85,29 +84,27 @@ export const Rent = (props: Props) => {
     wallet && rental && canBeClaimed(wallet.address, rental, nft)
 
   const rentButton = useMemo(() => {
-    if (canCreateANewRental(rental)) {
+    if (!rental) {
       return (
         <Button className={styles.actionButton} onClick={handleOnCreateOrEdit}>
-          {canBeClaimedBack
-            ? t('manage_asset_page.rent.list_for_rent_again')
-            : t('manage_asset_page.rent.list_for_rent')}
+          {t('manage_asset_page.rent.list_for_rent')}
         </Button>
       )
     }
     if (rental && isRentalListingOpen(rental)) {
       return <IconButton iconName="pencil" onClick={handleOnCreateOrEdit} />
     }
-  }, [handleOnCreateOrEdit, rental, canBeClaimedBack])
+  }, [handleOnCreateOrEdit, rental])
 
   return (
     <section className={classNames(styles.box, className)}>
       <div className={styles.header}>
-        <h1 className={styles.title}>
-          {rental && !isRentalListingCancelled(rental)
-            ? t('manage_asset_page.rent.renting_title')
-            : t('manage_asset_page.rent.rent_title')}
-        </h1>
-        <div className={styles.right}>
+        <div className={styles.left}>
+          <h1 className={styles.title}>
+            {rental && !isRentalListingCancelled(rental)
+              ? t('manage_asset_page.rent.renting_title')
+              : t('manage_asset_page.rent.rent_title')}
+          </h1>
           {rental && isRentalListingOpen(rental) ? (
             <Button
               className={styles.actionButton}
@@ -117,9 +114,10 @@ export const Rent = (props: Props) => {
               {t('manage_asset_page.rent.view_listing')}
             </Button>
           ) : null}
-          <div className={styles.action}>
-            <div>{rentButton}</div>
-          </div>
+        </div>
+
+        <div className={styles.action}>
+          <div>{rentButton}</div>
         </div>
       </div>
       {rental ? (
@@ -202,6 +200,14 @@ export const Rent = (props: Props) => {
                           asset: assetText
                         })}
                       </Button>
+                      {!isRentalListingOpen(rental) && (
+                        <Button
+                          className={styles.actionButton}
+                          onClick={handleOnCreateOrEdit}
+                        >
+                          {t('manage_asset_page.rent.list_for_rent_again')}
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </>

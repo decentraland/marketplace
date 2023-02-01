@@ -970,7 +970,7 @@
       "view_transaction": "View transaction",
       "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this {asset}",
       "claiming_back": "Claiming Back {asset}",
-      "unclaimed_message": "The {asset} is still unclaimed. Claim it back to sell or transfer it."
+      "unclaimed_message": "You have an active listing, but the {asset} is still unclaimed. Claim it back to sell or transfer it."
     },
     "highlights": {
       "title": "Highlights",

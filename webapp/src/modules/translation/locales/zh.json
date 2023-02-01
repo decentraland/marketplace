@@ -967,7 +967,7 @@
       "view_transaction": "查看区块链交易",
       "mobile_coming_soon": "手机租赁即将推出。 请转到桌面版租用此{asset}",
       "claiming_back": "收回{asset}",
-      "unclaimed_message": "{asset} 仍无人认领。 索回以出售或转让。"
+      "unclaimed_message": "您有一個有效列表，但{asset}仍無人認領。認領它以出售或轉讓它。"
     },
     "highlights": {
       "title": "亮点",

@@ -240,7 +240,13 @@ const CreateListingStep = (props: Props) => {
             content={t(
               'rental_modal.create_listing_step.expiration_date_tooltip'
             )}
-            trigger={<i className={styles.info} />}
+            trigger={
+              <i
+                className={
+                  rental && !isListForRentAgain ? styles.editInfo : styles.info
+                }
+              />
+            }
             position="top center"
             on="hover"
           ></Popup>
