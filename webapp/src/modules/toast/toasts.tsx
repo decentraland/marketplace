@@ -62,7 +62,6 @@ export function getUpsertRentalSuccessToast(
   }
 }
 
-// TODO (buy nfts with card): check refresh (using reload on the button onClick breaks the tests)
 export function getBuyNFTWithCardErrorToast(): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,
