@@ -94,7 +94,8 @@ const MintItemModal = (props: Props) => {
     setShowAuthorizationModal
   ])
 
-  const isDisabled = !item.price || isOwner || hasInsufficientMANA
+  const isDisabled =
+    !item.price || isOwner || (hasInsufficientMANA && !isBuyWithCardPage)
 
   const name = <Name asset={item} />
 
@@ -133,7 +134,7 @@ const MintItemModal = (props: Props) => {
     subtitle = (
       <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
     )
-  } else if (hasInsufficientMANA) {
+  } else if (hasInsufficientMANA && !isBuyWithCardPage) {
     const description = (
       <T
         id={`${translationPageDescriptorId}.not_enough_mana`}
@@ -152,7 +153,6 @@ const MintItemModal = (props: Props) => {
   } else {
     subtitle =
       isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
-        <div className="subtitle-wrapper">
         <div className="subtitle-wrapper">
           <PriceSubtitle asset={item} />
           <NetworkSubtitle asset={item} />
@@ -196,8 +196,10 @@ const MintItemModal = (props: Props) => {
             ? t('global.go_back')
             : t('global.cancel')}
         </Button>
-        {(!hasInsufficientMANA || !isBuyNftsWithFiatEnabled) &&
-        ((!hasLowPrice && !isBuyWithCardPage) || isBuyWithCardPage) ? (
+        {(!hasInsufficientMANA &&
+          !hasLowPrice &&
+          (!isBuyNftsWithFiatEnabled || !isBuyWithCardPage)) ||
+        (isBuyNftsWithFiatEnabled && isBuyWithCardPage) ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}

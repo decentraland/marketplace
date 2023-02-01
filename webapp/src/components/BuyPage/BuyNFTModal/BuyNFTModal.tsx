@@ -103,7 +103,7 @@ const BuyNFTModal = (props: Props) => {
   const isDisabled =
     !order ||
     isOwner ||
-    hasInsufficientMANA ||
+    (hasInsufficientMANA && !isBuyWithCardPage) ||
     (!fingerprint && nft.category === NFTCategory.ESTATE)
 
   const name = <Name asset={nft} />
@@ -133,7 +133,7 @@ const BuyNFTModal = (props: Props) => {
     subtitle = (
       <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
     )
-  } else if (hasInsufficientMANA) {
+  } else if (hasInsufficientMANA && !isBuyWithCardPage) {
     const description = (
       <T
         id={`${translationPageDescriptorId}.not_enough_mana`}
@@ -192,8 +192,10 @@ const BuyNFTModal = (props: Props) => {
             ? t('global.go_back')
             : t('global.cancel')}
         </Button>
-        {(!hasInsufficientMANA || !isBuyNftsWithFiatEnabled) &&
-        ((!hasLowPrice && !isBuyWithCardPage) || isBuyWithCardPage) ? (
+        {(!hasInsufficientMANA &&
+          !hasLowPrice &&
+          (!isBuyNftsWithFiatEnabled || !isBuyWithCardPage)) ||
+        (isBuyNftsWithFiatEnabled && isBuyWithCardPage) ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}
