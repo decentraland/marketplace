@@ -110,6 +110,17 @@
   padding: 7px 15px 7px 0px !important;
 }
 
+.actionButtonRounded:global(.ui.button) {
+  border: 1px solid var(--gray);
+  padding: 7px 15px;
+  min-width: unset;
+  color: var(--primary);
+}
+
+.actionButtonRounded:global(.ui.button):hover {
+  color: var(--primary);
+}
+
 .actionButton:global(.ui.button) {
   background-color: transparent;
   padding: 7px 0px;

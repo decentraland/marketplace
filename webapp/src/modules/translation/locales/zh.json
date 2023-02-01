@@ -888,8 +888,8 @@
     "authorization_step_again": {
       "title": "再次出租清單",
       "notice_line_one": "您可以再次免費出租此 {assetType}。",
-      "notice_line_two": "在其他人租用此 {assetType} 之前，之前的租戶將擁有操作員權限。",
-      "notice_line_three": "如果您希望取消這些權限，則需要取回您的 {assetType} 並支付交易費用。",
+      "notice_line_two": "當前租戶將持有操作員權限，直到再次租用",
+      "notice_line_three": "要重新獲得操作員權限，請取回（涉及汽油費）",
       "cancel": "取消"
     },
     "create_listing_step": {

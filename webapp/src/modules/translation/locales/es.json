@@ -885,8 +885,8 @@
     "authorization_step_again": {
       "title": "Volver a publicar para la renta",
       "notice_line_one": "Puedes volver a publicar tu {assetType} para la renta sin costo.",
-      "notice_line_two": "El inquilino anterior tendrá permisos de operador hasta que alguien más alquile este {assetType}.",
-      "notice_line_three": "Si prefiere quitar esos permisos, deberá reclamar su {assetType} en su lugar y cubrir el costo de la transacción.",
+      "notice_line_two": "El Inquilino actual tendrá permisos de operador hasta que se vuelva a alquilar",
+      "notice_line_three": "Para retomar los permisos del operador, reclámalos (tarifas de gas involucradas)",
       "cancel": "Cancelar"
     },
     "create_listing_step": {

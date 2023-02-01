@@ -86,7 +86,10 @@ export const Rent = (props: Props) => {
   const rentButton = useMemo(() => {
     if (!rental) {
       return (
-        <Button className={styles.actionButton} onClick={handleOnCreateOrEdit}>
+        <Button
+          className={styles.actionButtonRounded}
+          onClick={handleOnCreateOrEdit}
+        >
           {t('manage_asset_page.rent.list_for_rent')}
         </Button>
       )
