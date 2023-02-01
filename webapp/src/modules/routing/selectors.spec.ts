@@ -315,7 +315,7 @@ describe('when getting if the SortBy parameter is set', () => {
       beforeEach(() => {
         view = View.ACCOUNT
       })
-      it('should NEWEST as the default value', () => {
+      it('should return NEWEST as the default value', () => {
         expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.NEWEST)
       })
     })
@@ -324,16 +324,34 @@ describe('when getting if the SortBy parameter is set', () => {
       beforeEach(() => {
         view = View.CURRENT_ACCOUNT
       })
-      it('should NEWEST as the default value', () => {
+      it('should return NEWEST as the default value', () => {
         expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.NEWEST)
       })
     })
 
-    describe('and it is a Land section', () => {
+    describe('and it is a Parcels section', () => {
+      beforeEach(() => {
+        section = Sections.decentraland.PARCELS
+      })
+      it('should return NEWEST as the default value', () => {
+        expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.NEWEST)
+      })
+    })
+
+    describe('and it is a Estates section', () => {
+      beforeEach(() => {
+        section = Sections.decentraland.ESTATES
+      })
+      it('should return NEWEST as the default value', () => {
+        expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.NEWEST)
+      })
+    })
+
+    describe('and it is a LAND section', () => {
       beforeEach(() => {
         section = Sections.decentraland.LAND
       })
-      it('should NEWEST as the default value', () => {
+      it('should return NEWEST as the default value', () => {
         expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.NEWEST)
       })
     })
@@ -344,7 +362,7 @@ describe('when getting if the SortBy parameter is set', () => {
         view = View.MARKET
         url = ''
       })
-      it('should RECENTLY_LISTED as the default value', () => {
+      it('should return RECENTLY_LISTED as the default value', () => {
         expect(getSortBy.resultFunc(url, view, section)).toBe(
           SortBy.RECENTLY_LISTED
         )
