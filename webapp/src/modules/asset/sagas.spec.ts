@@ -152,7 +152,7 @@ describe('when handling the set purchase action', () => {
   })
 
   describe('when the purchase of an nft failed', () => {
-    it.only('should dispatch an action signaling the failure of the nft', () => {
+    it('should dispatch an action signaling the failure of the nft', () => {
       return expectSaga(assetSaga)
         .provide([
           [
