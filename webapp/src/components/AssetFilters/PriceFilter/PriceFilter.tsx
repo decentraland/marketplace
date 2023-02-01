@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { ethers } from 'ethers'
-import { Box, PriceChart, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { Box, BarChart, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { LANDFilters } from '../../Vendor/decentraland/types'
@@ -116,11 +116,11 @@ export const PriceFilter = ({
       collapsible
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
-      <PriceChart
+      <BarChart
         loading={isLoading}
-        prices={formattedPrices}
-        maxPrice={maxPrice}
-        minPrice={minPrice}
+        data={formattedPrices}
+        min={minPrice}
+        max={maxPrice}
         upperBound={upperBound}
         network={network || getNetwork(network, category)}
         onChange={onChange}
