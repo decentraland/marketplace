@@ -1,0 +1,29 @@
+.card {
+  /* Override semantic UI's width */
+  width: 460px !important;
+}
+
+.card:global(.ui.card > .content) {
+  padding: 20px 24px 24px;
+}
+
+.paragraph {
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.getMana {
+  padding-left: 0px !important;
+}
+
+.buttons {
+  margin-top: 6px;
+}
+
+
+@media (max-width: 768px) {
+  .card {
+    /* Override semantic UI's width */
+    width: 100% !important;
+  }
+}

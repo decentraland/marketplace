@@ -25,6 +25,7 @@ import { Name } from '../Name'
 import { Price } from '../Price'
 import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
 import { Props } from './BuyNFTModal.types'
+import { NotEnoughMana } from '../NotEnoughMana'
 
 const BuyNFTModal = (props: Props) => {
   const {
@@ -102,7 +103,7 @@ const BuyNFTModal = (props: Props) => {
   const isDisabled =
     !order ||
     isOwner ||
-    hasInsufficientMANA ||
+    (hasInsufficientMANA && !isBuyWithCardPage) ||
     (!fingerprint && nft.category === NFTCategory.ESTATE)
 
   const name = <Name asset={nft} />
@@ -132,8 +133,8 @@ const BuyNFTModal = (props: Props) => {
     subtitle = (
       <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
     )
-  } else if (hasInsufficientMANA) {
-    subtitle = (
+  } else if (hasInsufficientMANA && !isBuyWithCardPage) {
+    const description = (
       <T
         id={`${translationPageDescriptorId}.not_enough_mana`}
         values={{
@@ -142,6 +143,12 @@ const BuyNFTModal = (props: Props) => {
         }}
       />
     )
+    subtitle =
+      isBuyNftsWithFiatEnabled && isWearableOrEmote(nft) ? (
+        <NotEnoughMana asset={nft} description={description} />
+      ) : (
+        description
+      )
   } else {
     subtitle =
       isBuyNftsWithFiatEnabled && isWearableOrEmote(nft) ? (
@@ -179,11 +186,16 @@ const BuyNFTModal = (props: Props) => {
         )}
       >
         <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
-          {isBuyNftsWithFiatEnabled && !isBuyWithCardPage && hasLowPrice
+          {isBuyNftsWithFiatEnabled &&
+          !isBuyWithCardPage &&
+          (hasLowPrice || hasInsufficientMANA)
             ? t('global.go_back')
             : t('global.cancel')}
         </Button>
-        {(!hasLowPrice && !isBuyWithCardPage) || isBuyWithCardPage ? (
+        {(!hasInsufficientMANA &&
+          !hasLowPrice &&
+          (!isBuyNftsWithFiatEnabled || !isBuyWithCardPage)) ||
+        (isBuyNftsWithFiatEnabled && isBuyWithCardPage) ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}

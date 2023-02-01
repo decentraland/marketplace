@@ -25,6 +25,7 @@ import { Price } from '../Price'
 import { PriceTooLow } from '../PriceTooLow'
 import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
 import { Props } from './MintItemModal.types'
+import { NotEnoughMana } from '../NotEnoughMana'
 
 const MintItemModal = (props: Props) => {
   const {
@@ -93,7 +94,8 @@ const MintItemModal = (props: Props) => {
     setShowAuthorizationModal
   ])
 
-  const isDisabled = !item.price || isOwner || hasInsufficientMANA
+  const isDisabled =
+    !item.price || isOwner || (hasInsufficientMANA && !isBuyWithCardPage)
 
   const name = <Name asset={item} />
 
@@ -132,8 +134,8 @@ const MintItemModal = (props: Props) => {
     subtitle = (
       <T id={`${translationPageDescriptorId}.is_owner`} values={{ name }} />
     )
-  } else if (hasInsufficientMANA) {
-    subtitle = (
+  } else if (hasInsufficientMANA && !isBuyWithCardPage) {
+    const description = (
       <T
         id={`${translationPageDescriptorId}.not_enough_mana`}
         values={{
@@ -142,6 +144,12 @@ const MintItemModal = (props: Props) => {
         }}
       />
     )
+    subtitle =
+      isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
+        <NotEnoughMana asset={item} description={description} />
+      ) : (
+        description
+      )
   } else {
     subtitle =
       isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
@@ -182,11 +190,16 @@ const MintItemModal = (props: Props) => {
           as={Link}
           to={locations.item(item.contractAddress, item.itemId)}
         >
-          {isBuyNftsWithFiatEnabled && !isBuyWithCardPage && hasLowPrice
+          {isBuyNftsWithFiatEnabled &&
+          !isBuyWithCardPage &&
+          (hasLowPrice || hasInsufficientMANA)
             ? t('global.go_back')
             : t('global.cancel')}
         </Button>
-        {(!hasLowPrice && !isBuyWithCardPage) || isBuyWithCardPage ? (
+        {(!hasInsufficientMANA &&
+          !hasLowPrice &&
+          (!isBuyNftsWithFiatEnabled || !isBuyWithCardPage)) ||
+        (isBuyNftsWithFiatEnabled && isBuyWithCardPage) ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}
