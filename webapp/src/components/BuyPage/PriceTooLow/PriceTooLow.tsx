@@ -1,11 +1,11 @@
-import { Button, Card } from 'decentraland-ui'
 import React from 'react'
+import classNames from 'classnames'
+import { Button, Card } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getMinSaleValueInWei } from '../utils'
 import { Price } from '../Price'
 import { Props } from './PriceTooLow.types'
 import styles from './PriceTooLow.module.css'
-import classNames from 'classnames'
 
 const PriceTooLow = (props: Props) => {
   const {

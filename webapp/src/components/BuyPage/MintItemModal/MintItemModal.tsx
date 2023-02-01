@@ -205,7 +205,6 @@ const MintItemModal = (props: Props) => {
           </ChainButton>
         ) : null}
       </div>
-      {/* TODO (buy nfts with card): should we render the explanation in addition to the gasless tx message? */}
       {isBuyNftsWithFiatEnabled &&
       isWearableOrEmote(item) &&
       isBuyWithCardPage ? (
