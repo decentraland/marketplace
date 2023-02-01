@@ -153,6 +153,7 @@ const MintItemModal = (props: Props) => {
     subtitle =
       isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
         <div className="subtitle-wrapper">
+        <div className="subtitle-wrapper">
           <PriceSubtitle asset={item} />
           <NetworkSubtitle asset={item} />
         </div>
