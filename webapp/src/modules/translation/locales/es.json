@@ -656,6 +656,7 @@
     "description": "Puedes encontrar el item en {my_assets}.",
     "cta": "Explorar más items"
   },
+  "asset_price_has_changed": "El precio de {name} se ha actualizado a {amount}.",
   "bid_page": {
     "title": "Haz una oferta",
     "subtitle": "Pon un precio y una fecha de expiración para tu oferta sobre {name}.",

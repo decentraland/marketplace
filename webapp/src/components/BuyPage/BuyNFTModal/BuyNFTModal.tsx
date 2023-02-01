@@ -16,16 +16,19 @@ import { isWearableOrEmote } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
-import { AssetAction } from '../../AssetAction'
+import { AssetType } from '../../../modules/asset/types'
 import { AuthorizationModal } from '../../AuthorizationModal'
+import { AssetAction } from '../../AssetAction'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
+import { AssetProviderPage } from '../../AssetProviderPage'
 import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
-import { Props } from './BuyNFTModal.types'
 import { NotEnoughMana } from '../NotEnoughMana'
+import { PriceHasChanged } from '../PriceHasChanged'
+import { Props } from './BuyNFTModal.types'
 
 const BuyNFTModal = (props: Props) => {
   const {
@@ -176,6 +179,15 @@ const BuyNFTModal = (props: Props) => {
         })}
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
+      {isBuyNftsWithFiatEnabled ? (
+        <AssetProviderPage type={AssetType.NFT}>
+          {(asset, newOrder) => {
+            return newOrder && order && newOrder.price !== order.price ? (
+              <PriceHasChanged asset={asset} newPrice={newOrder.price} />
+            ) : null
+          }}
+        </AssetProviderPage>
+      ) : null}
       {hasLowPrice ? (
         <PriceTooLow chainId={nft.chainId} network={nft.network} />
       ) : null}
