@@ -178,8 +178,6 @@ function* handleSetItemPurchaseWithCard(action: SetPurchaseAction) {
       }
     }
   } catch (error) {
-    // el error Error: invalid BigNumber string (argument="value", value="1.01", code=INVALID_ARGUMENT, version=bignumber/5.6.2)
-
     yield put(
       buyItemWithCardFailure(
         isErrorWithMessage(error) ? error.message : t('global.unknown_error')

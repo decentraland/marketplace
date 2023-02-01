@@ -8,7 +8,10 @@ import {
   UpsertRentalSuccessAction,
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
+import { BUY_ITEM_WITH_CARD_FAILURE } from '../item/actions'
+import { EXECUTE_ORDER_WITH_CARD_FAILURE } from '../order/actions'
 import {
+  getBuyNFTWithCardErrorToast,
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
   getStoreUpdateSuccessToast,
@@ -28,6 +31,8 @@ function* successToastSagas() {
   yield takeEvery(REMOVE_RENTAL_SUCCESS, handleRemoveRentalSuccess)
   yield takeEvery(CLAIM_ASSET_SUCCESS, handleClaimLandBackSuccess)
   yield takeEvery(UPSERT_RENTAL_SUCCESS, handleUpsertRentalSuccess)
+  yield takeEvery(BUY_ITEM_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
+  yield takeEvery(EXECUTE_ORDER_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
 }
 
 function* handleStoreUpdateSuccess() {
@@ -51,4 +56,8 @@ function* handleUpsertRentalSuccess(action: UpsertRentalSuccessAction) {
       )
     )
   )
+}
+
+function* handleBuyNFTWithCardFailure() {
+  yield put(showToast(getBuyNFTWithCardErrorToast(), 'bottom center'))
 }

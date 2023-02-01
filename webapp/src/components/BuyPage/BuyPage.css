@@ -38,3 +38,7 @@
   color: #a6a0b0;
   text-decoration: underline;
 }
+
+.buy-nft-with-card-error .ui.button.basic {
+  padding-left: 0px;
+}

@@ -228,12 +228,10 @@ describe('when creating the action to signal the submission of the executed orde
 
 describe('when creating the action to signal a failure in the execute order with card request', () => {
   it('should return an object representing the action', () => {
-    const errorCode = ErrorCode.EXPECTATION_FAILED
-
-    expect(executeOrderWithCardFailure(nft, error, errorCode)).toEqual({
+    expect(executeOrderWithCardFailure(error)).toEqual({
       type: EXECUTE_ORDER_WITH_CARD_FAILURE,
       meta: undefined,
-      payload: { nft, error, errorCode }
+      payload: { error }
     })
   })
 })

@@ -143,7 +143,6 @@ function* handleExecuteOrderWithCardRequest(
   } catch (error) {
     yield put(
       executeOrderWithCardFailure(
-        nft,
         isErrorWithMessage(error) ? error.message : t('global.unknown_error')
       )
     )
@@ -151,26 +150,34 @@ function* handleExecuteOrderWithCardRequest(
 }
 
 function* handleSetNftPurchaseWithCard(action: SetPurchaseAction) {
-  const { purchase } = action.payload
+  try {
+    const { purchase } = action.payload
 
-  if (!isManaPurchase(purchase) && purchase.nft.tokenId) {
-    const {
-      status,
-      txHash,
-      nft: { contractAddress, tokenId }
-    } = purchase
+    if (!isManaPurchase(purchase) && purchase.nft.tokenId) {
+      const {
+        status,
+        txHash,
+        nft: { contractAddress, tokenId }
+      } = purchase
 
-    const nfts: ReturnType<typeof getNFTs> = yield select(getNFTs)
-    const nft: ReturnType<typeof getNFT> = yield call(
-      getNFT,
-      contractAddress,
-      tokenId,
-      nfts
-    )
+      const nfts: ReturnType<typeof getNFTs> = yield select(getNFTs)
+      const nft: ReturnType<typeof getNFT> = yield call(
+        getNFT,
+        contractAddress,
+        tokenId,
+        nfts
+      )
 
-    if (nft && status === PurchaseStatus.COMPLETE && txHash) {
-      yield put(executeOrderWithCardSuccess(purchase, nft, txHash))
+      if (nft && status === PurchaseStatus.COMPLETE && txHash) {
+        yield put(executeOrderWithCardSuccess(purchase, nft, txHash))
+      }
     }
+  } catch (error) {
+    yield put(
+      executeOrderWithCardFailure(
+        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      )
+    )
   }
 }
 

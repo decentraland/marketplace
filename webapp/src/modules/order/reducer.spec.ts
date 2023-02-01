@@ -184,7 +184,7 @@ const failureActions = [
   },
   {
     request: executeOrderWithCardRequest(nft),
-    failure: executeOrderWithCardFailure(nft, anErrorMessage)
+    failure: executeOrderWithCardFailure(anErrorMessage)
   },
   {
     request: cancelOrderRequest(order, nft),
