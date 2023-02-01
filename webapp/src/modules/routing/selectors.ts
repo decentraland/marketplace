@@ -86,13 +86,15 @@ export const getSortBy = createSelector<
   RootState,
   string,
   View | undefined,
+  Section,
   SortBy | undefined
 >(
   getRouterSearch,
   getView,
-  (search, view) =>
+  getSection,
+  (search, view, section) =>
     getURLParam<SortBy>(search, 'sortBy') ||
-    getDefaultOptionsByView(view).sortBy
+    getDefaultOptionsByView(view, section).sortBy
 )
 
 export const getOnlyOnSale = createSelector<
@@ -386,15 +388,15 @@ export const hasFiltersEnabled = createSelector<
     maxPrice,
     section
   } = browseOptions
-  const isLand = isLandSection(section as Section);
+  const isLand = isLandSection(section as Section)
   if (isLand) {
     const hasOnSaleFilter = onlyOnSale === true
     const hasOnRentFilter = onlyOnRent === true
     return (
-      (hasOnSaleFilter && !hasOnRentFilter)
-      || (hasOnRentFilter && !hasOnSaleFilter)
-      || !!minPrice
-      || !!maxPrice
+      (hasOnSaleFilter && !hasOnRentFilter) ||
+      (hasOnRentFilter && !hasOnSaleFilter) ||
+      !!minPrice ||
+      !!maxPrice
     )
   }
 
