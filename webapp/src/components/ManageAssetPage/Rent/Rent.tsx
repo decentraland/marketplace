@@ -172,14 +172,14 @@ export const Rent = (props: Props) => {
               ) : (
                 <>
                   <div className={styles.rentMessage}>
-                    {rentalEnded ? (
+                    {rentalEnded && rental.tenant ? (
                       <T
                         id="manage_asset_page.rent.rent_end"
                         values={{
                           tenant: (
                             <LinkedProfile
                               className={styles.rentedBy}
-                              address={rental!.tenant!}
+                              address={rental.tenant}
                             />
                           ),
                           asset: assetText

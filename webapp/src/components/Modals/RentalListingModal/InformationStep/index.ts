@@ -1,2 +1,2 @@
-import InformationStep from './InformationStep.container'
+import InformationStep from './InformationStep'
 export { InformationStep }
