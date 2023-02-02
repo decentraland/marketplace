@@ -25,10 +25,9 @@ const CardPaymentsExplanation = (props: Props) => {
           )
         })}
       </p>
-      {/* TODO (buy nfts with card): change href to Transak Documentation when it's online. */}
       <a
         className="learn-more"
-        href="https://transak.com/"
+        href="https://transak.com/nft-checkout"
         target="_blank"
         rel="noopener noreferrer"
       >
