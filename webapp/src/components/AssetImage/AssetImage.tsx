@@ -256,7 +256,7 @@ const AssetImage = (props: Props) => {
               }
               skin={skin}
               hair={hair}
-              emote={previewEmote}
+              emote={isTryingOnEnabled ? previewEmote : undefined}
               onLoad={handleLoad}
               onError={handleError}
               dev={config.is(Env.DEVELOPMENT)}
