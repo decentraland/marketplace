@@ -21,11 +21,14 @@ export function getNFT(
   return nftId in nfts ? nfts[nftId] : null
 }
 
+export const getBodyShapeUrn = (bodyShape: string) =>
+  `urn:decentraland:off-chain:base-avatars:${bodyShape}`
+
 export function isGender(bodyShapes: BodyShape[], gender: BodyShape) {
   if (bodyShapes.length !== 1) {
     return false
   }
-  return bodyShapes[0] === gender
+  return bodyShapes[0] === gender || getBodyShapeUrn(bodyShapes[0]) === gender
 }
 
 export function isUnisex(bodyShapes: BodyShape[]) {
