@@ -12,6 +12,7 @@ import {
 import { ContractName } from 'decentraland-transactions'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../../modules/routing/locations'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { getContractNames } from '../../../modules/vendor'
@@ -48,9 +49,13 @@ const MintItemModal = (props: Props) => {
 
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
+  const analytics = getAnalytics()
+
   const handleExecuteOrder = useCallback(() => {
-    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
+    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage) {
+      analytics.track('Click on Buy NFT With Card')
       return onBuyItemWithCard(item)
+    }
 
     onBuyItem(item)
   }, [
@@ -58,8 +63,14 @@ const MintItemModal = (props: Props) => {
     isBuyWithCardPage,
     onBuyItemWithCard,
     onBuyItem,
-    item
+    item,
+    analytics
   ])
+
+  const handleCancel = useCallback(() => {
+    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
+      analytics.track('Cancel Buy NFT With Card')
+  }, [analytics, isBuyNftsWithFiatEnabled, isBuyWithCardPage])
 
   const authorization: Authorization | null = useMemo(() => {
     const contractNames = getContractNames()
@@ -201,6 +212,7 @@ const MintItemModal = (props: Props) => {
         <Button
           as={Link}
           to={locations.item(item.contractAddress, item.itemId)}
+          onClick={handleCancel}
         >
           {isBuyNftsWithFiatEnabled &&
           !isBuyWithCardPage &&

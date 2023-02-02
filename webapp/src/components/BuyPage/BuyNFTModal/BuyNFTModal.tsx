@@ -2,7 +2,9 @@ import React, { useState, useCallback, useMemo } from 'react'
 import compact from 'lodash/compact'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
+import { NFTCategory } from '@dcl/schemas'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
+import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Authorization,
@@ -10,8 +12,7 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
-import { NFTCategory } from '@dcl/schemas'
-import { ContractName } from 'decentraland-transactions'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { isWearableOrEmote } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
@@ -50,9 +51,13 @@ const BuyNFTModal = (props: Props) => {
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
   const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
 
+  const analytics = getAnalytics()
+
   const handleExecuteOrder = useCallback(() => {
-    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
+    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage) {
+      analytics.track('Click on Buy NFT With Card')
       return onExecuteOrderWithCard(nft)
+    }
 
     onExecuteOrder(order!, nft, fingerprint)
   }, [
@@ -62,8 +67,14 @@ const BuyNFTModal = (props: Props) => {
     onExecuteOrder,
     order,
     nft,
-    fingerprint
+    fingerprint,
+    analytics
   ])
+
+  const handleCancel = useCallback(() => {
+    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
+      analytics.track('Cancel Buy NFT With Card')
+  }, [analytics, isBuyNftsWithFiatEnabled, isBuyWithCardPage])
 
   const authorization: Authorization | null = useMemo(() => {
     const contractNames = getContractNames()
@@ -197,7 +208,11 @@ const BuyNFTModal = (props: Props) => {
           isBuyNftsWithFiatEnabled && isWearableOrEmote(nft) && 'with-mana'
         )}
       >
-        <Button as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
+        <Button
+          as={Link}
+          to={locations.nft(nft.contractAddress, nft.tokenId)}
+          onClick={handleCancel}
+        >
           {isBuyNftsWithFiatEnabled &&
           !isBuyWithCardPage &&
           (hasLowPrice || hasInsufficientMANA)

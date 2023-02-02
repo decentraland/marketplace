@@ -1,7 +1,8 @@
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Icon, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 import { AssetType } from '../../../../modules/asset/types'
 import { isNFT } from '../../../../modules/asset/utils'
@@ -13,6 +14,12 @@ const BuyNFTButtons = ({ asset }: Props) => {
   const { contractAddress, network } = asset
   const assetType = isNFT(asset) ? AssetType.NFT : AssetType.ITEM
   const assetId = isNFT(asset) ? asset.tokenId : asset.itemId
+
+  const analytics = getAnalytics()
+
+  const handleBuyWithCard = useCallback(() => {
+    analytics.track('Click on go to Buy NFT With Card')
+  }, [analytics])
 
   return (
     <>
@@ -30,6 +37,7 @@ const BuyNFTButtons = ({ asset }: Props) => {
         as={Link}
         className={styles.buy_with_card}
         to={locations.buyWithCard(assetType, contractAddress, assetId)}
+        onClick={handleBuyWithCard}
         fluid
       >
         <Icon name="credit card outline" />
