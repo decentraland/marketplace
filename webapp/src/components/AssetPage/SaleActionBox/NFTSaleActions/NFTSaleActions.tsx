@@ -1,7 +1,7 @@
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
-import { Modal, Button } from 'decentraland-ui'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { builderUrl } from '../../../../lib/environment'
 import { isOwnedBy } from '../../../../modules/asset/utils'
@@ -11,10 +11,8 @@ import styles from './NFTSaleActions.module.css'
 import { Props } from './NFTSaleActions.types'
 import { BuyNFTButtons } from '../BuyNFTButtons'
 
-const NFTSaleActions = ({ bids, nft, order, wallet }: Props) => {
-  const { vendor, contractAddress, tokenId, data } = nft
-
-  const [showLeavingSiteModal, setShowLeavingSiteModal] = useState(false)
+const NFTSaleActions = ({ bids, nft, order, wallet, onLeavingSite }: Props) => {
+  const { contractAddress, tokenId, data } = nft
 
   const { bidService, orderService } = VendorFactory.build(nft.vendor)
   const isBiddable = bidService !== undefined
@@ -27,7 +25,6 @@ const NFTSaleActions = ({ bids, nft, order, wallet }: Props) => {
     !wallet || !bids.some(bid => bid.bidder === wallet.address)
   const canBid = !isOwner && isBiddable && notLoggedOrHasAlreadyBidsOnNft
 
-  // TODO (buy nfts with card): remove irrelevant actions
   return (
     <>
       {order ? (
@@ -64,7 +61,7 @@ const NFTSaleActions = ({ bids, nft, order, wallet }: Props) => {
             ) : null}
           </>
         ) : (
-          <Button onClick={() => setShowLeavingSiteModal(true)} primary fluid>
+          <Button onClick={() => onLeavingSite(nft)} primary fluid>
             {t('asset_page.actions.see_listing')}
           </Button>
         )
@@ -78,7 +75,7 @@ const NFTSaleActions = ({ bids, nft, order, wallet }: Props) => {
           {t('asset_page.actions.sell')}
         </Button>
       ) : isOwner && !canSell ? (
-        <Button onClick={() => setShowLeavingSiteModal(true)} primary fluid>
+        <Button onClick={() => onLeavingSite(nft)} primary fluid>
           {t('asset_page.actions.sell')}
         </Button>
       ) : canBid ? (
@@ -105,53 +102,6 @@ const NFTSaleActions = ({ bids, nft, order, wallet }: Props) => {
           {t('asset_page.actions.manage')}
         </Button>
       )}
-
-      {/* TODO (buy nfts with card): move this to a new component and use openModal */}
-      <Modal
-        className="LeavingSiteModal"
-        size="small"
-        open={showLeavingSiteModal}
-        onClose={() => setShowLeavingSiteModal(false)}
-      >
-        <Modal.Header>
-          {t('asset_page.actions.leaving_decentraland')}
-        </Modal.Header>
-        <Modal.Content>
-          <p>
-            <T
-              id="asset_page.actions.leaving_decentraland_description"
-              values={{
-                vendor: t(`vendors.${vendor}`),
-                vendor_link: (
-                  <a href={nft.url} target="_blank" rel="noopener noreferrer">
-                    {nft.url}
-                  </a>
-                )
-              }}
-            />
-            <br />
-            <br />
-            <small>
-              <i>{t('asset_page.actions.leaving_decentraland_disclaimer')}</i>
-            </small>
-          </p>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button onClick={() => setShowLeavingSiteModal(false)}>
-            {t('global.cancel')}
-          </Button>
-          <Button
-            primary
-            as="a"
-            href={nft.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setShowLeavingSiteModal(false)}
-          >
-            {t('global.proceed')}
-          </Button>
-        </Modal.Actions>
-      </Modal>
     </>
   )
 }
