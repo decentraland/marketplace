@@ -808,14 +808,6 @@
     "ethereum": "ETH",
     "matic": "MATIC"
   },
-  "intro_popup": {
-    "title": "介绍Polygon MANA",
-    "blog_link": "博客文章",
-    "account_link": "帐户dApp",
-    "manage_account": "管理帐户",
-    "content": "Polygon MANA将使您更快地进行购买。{br}您可以在我们的{blog_link}中了解有关Polygon MANA的更多信息。{br}您还可以在新的{ account_link}。{br}点击您的头像，选择{manage_account}，然后开始征服Metaverse。",
-    "dismiss": "知道了！"
-  },
   "toast": {
     "meta_transaction_failure": {
       "title": "元交易",
