@@ -7,6 +7,7 @@ import {
   TradeType
 } from 'decentraland-dapps/dist/modules/gateway/transak/types'
 import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { closeAllModals } from '../modal/actions'
 import { config } from '../../config'
 import { isNFT } from '../asset/utils'
@@ -36,7 +37,7 @@ function* handleOpenTransak(action: OpenTransakAction) {
       asset.contractAddress,
       tokenId
     )}`,
-    widgetWidth: undefined // To avoid fixing the width of the widget
+    widgetWidth: isMobile() ? undefined : '450px' // To avoid fixing the width of the widget in mobile
   }
 
   const address: string = yield select(getAddress)
