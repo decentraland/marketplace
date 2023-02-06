@@ -1,8 +1,10 @@
 import React from 'react'
 import { Link, Redirect } from 'react-router-dom'
+import { NFTCategory } from '@dcl/schemas/dist/dapps/nft-category'
 import { Button, Header, Loader, Page } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { Sections } from '../../../modules/routing/types'
 import { locations } from '../../../modules/routing/locations'
 import { AssetImage } from '../../AssetImage'
 import { AssetProviderPage } from '../../AssetProviderPage'
@@ -12,6 +14,8 @@ import { Row } from '../../Layout/Row'
 import { Navbar } from '../../Navbar'
 import { Props } from './StatusPage.types'
 import './StatusPage.css'
+
+const { WEARABLES, EMOTES } = Sections.decentraland
 
 const StatusPage = ({ type, purchase }: Props) => {
   if (!purchase) return <Redirect to={{ pathname: locations.root() }} />
@@ -58,7 +62,13 @@ const StatusPage = ({ type, purchase }: Props) => {
                   <Button
                     className="cta"
                     as={Link}
-                    to={locations.browse()}
+                    to={locations.browse({
+                      assetType: type,
+                      section:
+                        asset.category === NFTCategory.EMOTE
+                          ? EMOTES
+                          : WEARABLES
+                    })}
                     inverted
                     primary
                     fluid
