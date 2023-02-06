@@ -10,6 +10,8 @@ import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
 import { closeAllModals } from '../modal/actions'
 import { config } from '../../config'
 import { isNFT } from '../asset/utils'
+import { locations } from '../routing/locations'
+import { AssetType } from '../asset/types'
 import { OPEN_TRANSAK, OpenTransakAction } from './actions'
 
 export function* transakSaga() {
@@ -22,12 +24,19 @@ function* handleOpenTransak(action: OpenTransakAction) {
     key: config.get('TRANSAK_KEY'),
     env: config.get('TRANSAK_ENV')
   }
+  const tokenId = isNFT(asset) ? asset.tokenId : asset.itemId
   const customizationOptions = {
     contractAddress: asset.contractAddress,
     tradeType: isNFT(asset) ? TradeType.SECONDARY : TradeType.PRIMARY,
-    tokenId: isNFT(asset) ? asset.tokenId : asset.itemId,
+    tokenId,
     productsAvailed: ProductsAvailed.BUY,
-    isNFT: true
+    isNFT: true,
+    redirectURL: `${window.origin}${locations.buyStatusPage(
+      isNFT(asset) ? AssetType.NFT : AssetType.ITEM,
+      asset.contractAddress,
+      tokenId
+    )}`,
+    widgetWidth: undefined // To avoid fixing the width of the widget
   }
 
   const address: string = yield select(getAddress)
