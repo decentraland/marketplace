@@ -1,4 +1,4 @@
-import { BigInt } from '@graphprotocol/graph-ts'
+import { BigInt, log } from '@graphprotocol/graph-ts'
 import { Transfer } from '../entities/templates/ERC721/ERC721'
 import { NFT, Parcel, Estate, Order, ENS, Wearable } from '../entities/schema'
 import {
@@ -13,6 +13,8 @@ import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
 import { buildCountFromNFT } from '../modules/count'
 import {
   buildParcelFromNFT,
+  getAdjacentToRoad,
+  getDistanceToPlaza,
   getParcelImage,
   getParcelText,
   isInBounds,
@@ -93,6 +95,9 @@ export function handleTransfer(event: Transfer): void {
       nft.searchParcelIsInBounds = isInBounds(parcel.x, parcel.y)
       nft.searchParcelX = parcel.x
       nft.searchParcelY = parcel.y
+      let distance = getDistanceToPlaza(parcel);
+      nft.searchDistanceToPlaza = getDistanceToPlaza(parcel)
+      nft.searchAdjacentToRoad = getAdjacentToRoad(parcel)
       nft.searchText = getParcelText(parcel, '')
     } else {
       parcel = new Parcel(nft.id)
@@ -106,6 +111,8 @@ export function handleTransfer(event: Transfer): void {
       nft.estate = id
       nft.image = getEstateImage(estate)
       nft.searchIsLand = true
+      nft.searchDistanceToPlaza = -1
+      nft.searchAdjacentToRoad = false
       nft.searchEstateSize = estate.size
     } else {
       estate = new Estate(nft.id)
