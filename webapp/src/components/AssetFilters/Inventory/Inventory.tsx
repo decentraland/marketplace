@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { BarChart } from 'decentraland-ui'
-import { Props } from './Inventory.types'
 import { Network } from '@dcl/schemas/dist/dapps/network'
+import { Props } from './Inventory.types'
 
 export type InventoryProps = {
   min: string

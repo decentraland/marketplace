@@ -1,3 +1,3 @@
-import PriceFilter from './Inventory.container'
+import Inventory from './Inventory.container'
 
-export default PriceFilter
+export default Inventory

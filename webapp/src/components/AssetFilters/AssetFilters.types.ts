@@ -12,7 +12,7 @@ import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor'
 import { Section } from '../../modules/vendor/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
-import { AssetFilter } from './utilts'
+import { AssetFilter } from './utils'
 
 export type Props = {
   minPrice: string

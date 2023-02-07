@@ -37,8 +37,8 @@ export const EstateSizeFilter = ({
 
   const fetcher = useCallback(async () => {
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
-      // for rents, we don't have the data yet, so let's just resolve the promise with an empty object so the chart is not rendered
-      return Promise.resolve({})
+      // for rents, we don't have the data yet, so let's just resolve with an empty object so the chart is not rendered
+      return {}
     }
     const data = await nftAPI.fetchEstateSizes(
       landStatus === LANDFilters.ONLY_FOR_SALE || undefined

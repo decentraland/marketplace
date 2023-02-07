@@ -366,7 +366,6 @@
       "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
     },
     "estate_size": {
-      "title": "Price",
       "all_sizes": "All sizes",
       "more_than_size": "More than {size} parcels",
       "less_than_size": "Less than {size} parcels",

@@ -9,7 +9,7 @@ import { AssetFilters } from '../../AssetFilters'
 import { MenuItem } from '../../Menu/MenuItem'
 import { Props } from './CurrentAccountSidebar.types'
 import NFTSectionsMenuItems from '../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
-import { AssetFilter } from '../../AssetFilters/utilts'
+import { AssetFilter } from '../../AssetFilters/utils'
 
 const decentraland = VendorName.DECENTRALAND
 

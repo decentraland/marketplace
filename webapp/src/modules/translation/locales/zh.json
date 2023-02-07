@@ -362,6 +362,12 @@
       "less_than_price": "低于 <mana></mana> {price}",
       "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
     },
+    "estate_size": {
+      "all_sizes": "所有尺寸",
+      "more_than_size": "超过 {size} 个包裹",
+      "less_than_size": "小于 {size} 个包裹",
+      "size_between": "{min} 到 {max} 个地块"
+    },
     "collection": {
       "title": "收藏",
       "all_items": "所有收藏",

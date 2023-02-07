@@ -82,7 +82,7 @@ export const PriceFilter = ({
   const fetcher = useCallback(async () => {
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
       // for rents, we don't have the data yet, so let's just resolve the promise with an empty object so the chart is not rendered
-      return Promise.resolve({})
+      return {}
     }
     const data: Record<string, number> = await nftAPI.fetchPrices(
       priceFetchFilters
