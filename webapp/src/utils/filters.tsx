@@ -67,7 +67,7 @@ export function getEstateSizeLabel(min?: string, max?: string) {
 
   if (max && !min) {
     return t('nft_filters.estate_size.less_than_size', {
-      price: priceFormatter.format(Number(max))
+      size: priceFormatter.format(Number(max))
     })
   }
 
