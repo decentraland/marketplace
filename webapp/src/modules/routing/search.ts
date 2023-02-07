@@ -11,14 +11,22 @@ import { View } from '../ui/types'
 import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
 import { NFTSortBy } from '../nft/types'
-import { isAccountView } from '../ui/utils'
+import { isAccountView, isLandSection } from '../ui/utils'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
-export function getDefaultOptionsByView(view?: View): BrowseOptions {
+export function getDefaultOptionsByView(
+  view?: View,
+  section?: Section
+): BrowseOptions {
   return {
     onlyOnSale: !view || !isAccountView(view),
-    sortBy: view && isAccountView(view) ? SortBy.NEWEST : SortBy.RECENTLY_LISTED
+    sortBy:
+      view && isAccountView(view)
+        ? SortBy.NEWEST
+        : section && isLandSection(section)
+        ? SortBy.NEWEST
+        : SortBy.RECENTLY_LISTED
   }
 }
 
@@ -88,7 +96,9 @@ export function getSearchParams(options?: BrowseOptions) {
 
     if (
       options.emotePlayMode?.length &&
-      options.emotePlayMode?.every(option => Object.values(EmotePlayMode).includes(option))
+      options.emotePlayMode?.every(option =>
+        Object.values(EmotePlayMode).includes(option)
+      )
     ) {
       for (const emotePlayMode of options.emotePlayMode) {
         params.append('emotePlayMode', emotePlayMode)
@@ -366,8 +376,8 @@ export function getURLParamArray<T extends string>(
 }
 
 // TODO: This is currently using a non standard way of parsing query params
-// This might be because of an old functionality but for example, rarities 
-// from the URL are parsed from rarities=common_uncommon instead of 
+// This might be because of an old functionality but for example, rarities
+// from the URL are parsed from rarities=common_uncommon instead of
 // rarities=common&rarities=uncommon I'll leave it as it is for now to prevent
 // further refactoring but should be changed in the future.
 export function getURLParamArray_nonStandard<T extends string>(

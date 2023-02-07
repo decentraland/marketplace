@@ -6,6 +6,9 @@ import {
 } from '@dcl/schemas'
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor'
+import { Section } from '../vendor/routing/types'
+import { View } from '../ui/types'
+import { Sections, SortBy } from './types'
 import { locations } from './locations'
 import {
   getAssetType,
@@ -14,9 +17,9 @@ import {
   getMinPrice,
   getOnlyOnRent,
   getSection,
+  getSortBy,
   hasFiltersEnabled
 } from './selectors'
-import { Sections } from './types'
 
 describe('when getting if the are filters set', () => {
   describe('when the search filter is set', () => {
@@ -284,5 +287,86 @@ describe('when there is a maxPrice defined', () => {
 
   it('should return the value', () => {
     expect(getMaxPrice.resultFunc(url)).toBe('120')
+  })
+})
+
+describe('when getting if the SortBy parameter is set', () => {
+  let url: string
+  let view: View
+  let section: Section
+  let sortBy: string
+
+  describe('and there is a sortBy in the url', () => {
+    beforeEach(() => {
+      sortBy = 'a_sort_by'
+      url = `sortBy=${sortBy}`
+    })
+    it('should return the sortBy value', () => {
+      expect(getSortBy.resultFunc(url, view, section)).toBe(sortBy)
+    })
+  })
+
+  describe('and there is no sortBy in the url', () => {
+    beforeEach(() => {
+      sortBy = 'a_sort_by'
+      url = ''
+    })
+    describe('and it is the account view', () => {
+      beforeEach(() => {
+        view = View.ACCOUNT
+      })
+      it('should return NEWEST as the default value', () => {
+        expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.NEWEST)
+      })
+    })
+
+    describe('and it is the current account view', () => {
+      beforeEach(() => {
+        view = View.CURRENT_ACCOUNT
+      })
+      it('should return NEWEST as the default value', () => {
+        expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.NEWEST)
+      })
+    })
+
+    describe('and it is a Parcels section', () => {
+      beforeEach(() => {
+        section = Sections.decentraland.PARCELS
+      })
+      it('should return NEWEST as the default value', () => {
+        expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.NEWEST)
+      })
+    })
+
+    describe('and it is a Estates section', () => {
+      beforeEach(() => {
+        section = Sections.decentraland.ESTATES
+      })
+      it('should return NEWEST as the default value', () => {
+        expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.NEWEST)
+      })
+    })
+
+    describe('and it is a LAND section', () => {
+      beforeEach(() => {
+        section = Sections.decentraland.LAND
+      })
+      it('should return NEWEST as the default value', () => {
+        expect(getSortBy.resultFunc(url, view, section)).toBe(SortBy.NEWEST)
+      })
+    })
+
+    describe('and it is not a Land section or Account view', () => {
+      beforeEach(() => {
+        section = Sections.decentraland.COLLECTIONS
+        view = View.MARKET
+        url = ''
+      })
+      it('should return RECENTLY_LISTED as the default value', () => {
+        expect(getSortBy.resultFunc(url, view, section)).toBe(
+          SortBy.RECENTLY_LISTED
+        )
+      })
+    })
   })
 })
