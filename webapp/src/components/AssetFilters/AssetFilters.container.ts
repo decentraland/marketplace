@@ -6,7 +6,9 @@ import {
   getAssetType,
   getContracts,
   getEmotePlayMode,
+  getMaxEstateSize,
   getMaxPrice,
+  getMinEstateSize,
   getMinPrice,
   getNetwork,
   getOnlyOnRent,
@@ -45,6 +47,14 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
     minPrice: 'minPrice' in values ? values.minPrice || '' : getMinPrice(state),
     maxPrice: 'maxPrice' in values ? values.maxPrice || '' : getMaxPrice(state),
+    minEstateSize:
+      'minEstateSize' in values
+        ? values.minEstateSize || ''
+        : getMinEstateSize(state),
+    maxEstateSize:
+      'maxEstateSize' in values
+        ? values.maxEstateSize || ''
+        : getMaxEstateSize(state),
     rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
     network: 'network' in values ? values.network : getNetwork(state),
     bodyShapes:

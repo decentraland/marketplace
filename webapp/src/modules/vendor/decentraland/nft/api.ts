@@ -23,6 +23,15 @@ export type PriceFilters = Omit<NFTsFetchFilters, 'category'> & {
 }
 
 class NFTAPI extends BaseAPI {
+  fetchEstateSizes = async (
+    isOnSale?: boolean
+  ): Promise<Record<string, number>> => {
+    const { data } = await this.request('get', `/stats/estate/size`, {
+      isOnSale
+    })
+    return data
+  }
+
   fetch = async (
     params: NFTsFetchParams,
     filters?: NFTsFetchFilters
@@ -158,6 +167,13 @@ class NFTAPI extends BaseAPI {
 
     if (filters.maxPrice) {
       queryParams.append('maxPrice', filters.maxPrice)
+    }
+    if (filters.minEstateSize) {
+      queryParams.append('minEstateSize', filters.minEstateSize)
+    }
+
+    if (filters.maxEstateSize) {
+      queryParams.append('maxEstateSize', filters.maxEstateSize)
     }
   }
 

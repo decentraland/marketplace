@@ -258,6 +258,16 @@ export const getMaxPrice = createSelector<RootState, string, string>(
   search => (getURLParam(search, 'maxPrice') as string) || ''
 )
 
+export const getMinEstateSize = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'minEstateSize') as string) || ''
+)
+
+export const getMaxEstateSize = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'maxEstateSize') as string) || ''
+)
+
 export const getCurrentLocationAddress = createSelector<
   RootState,
   string,
@@ -306,7 +316,14 @@ export const getAssetsUrlParams = createSelector(
 export const getLandsUrlParams = createSelector(
   getIsMap,
   getIsFullscreen,
-  (isMap, isFullscreen) => ({ isMap, isFullscreen })
+  getMinEstateSize,
+  getMaxEstateSize,
+  (isMap, isFullscreen, minEstateSize, maxEstateSize) => ({
+    isMap,
+    isFullscreen,
+    minEstateSize,
+    maxEstateSize
+  })
 )
 
 export const getWearablesUrlParams = createSelector(
@@ -386,6 +403,8 @@ export const hasFiltersEnabled = createSelector<
     onlyOnSale,
     minPrice,
     maxPrice,
+    minEstateSize,
+    maxEstateSize,
     section
   } = browseOptions
   const isLand = isLandSection(section as Section)
@@ -415,6 +434,8 @@ export const hasFiltersEnabled = createSelector<
     hasEmotePlayModeFilter ||
     !!minPrice ||
     !!maxPrice ||
+    !!minEstateSize ||
+    !!maxEstateSize ||
     hasNotOnSaleFilter
   )
 })

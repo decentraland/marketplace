@@ -57,4 +57,6 @@ export type BrowseOptions = {
   emotePlayMode?: EmotePlayMode[]
   minPrice?: string
   maxPrice?: string
+  minEstateSize?: string
+  maxEstateSize?: string
 }

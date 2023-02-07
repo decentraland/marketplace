@@ -45,7 +45,9 @@ export function getFilters(
         onlySmart,
         emotePlayMode,
         minPrice,
-        maxPrice
+        maxPrice,
+        minEstateSize,
+        maxEstateSize
       } = options
 
       return {
@@ -65,7 +67,9 @@ export function getFilters(
             ? [RentalStatus.OPEN, RentalStatus.EXECUTED]
             : undefined,
         minPrice,
-        maxPrice
+        maxPrice,
+        minEstateSize,
+        maxEstateSize
       } as NFTsFetchFilters<VendorName.DECENTRALAND>
     }
     default:

@@ -17,6 +17,8 @@ import { AssetFilter } from './utilts'
 export type Props = {
   minPrice: string
   maxPrice: string
+  minEstateSize: string
+  maxEstateSize: string
   rarities: Rarity[]
   network?: Network
   category?: NFTCategory
@@ -41,6 +43,8 @@ export type MapStateProps = Pick<
   Props,
   | 'minPrice'
   | 'maxPrice'
+  | 'minEstateSize'
+  | 'maxEstateSize'
   | 'rarities'
   | 'network'
   | 'category'
