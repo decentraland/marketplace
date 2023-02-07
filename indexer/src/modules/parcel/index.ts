@@ -1,4 +1,4 @@
-import { log, BigInt, Address, log } from '@graphprotocol/graph-ts'
+import { BigInt, Address } from '@graphprotocol/graph-ts'
 import { LANDRegistry } from '../../entities/LANDRegistry/LANDRegistry'
 import { NFT, Parcel } from '../../entities/schema'
 import { toLowerCase } from '../../modules/utils'
@@ -44,10 +44,8 @@ export function getParcelImage(parcel: Parcel): string {
 
 export function getDistanceToPlaza(parcel: Parcel): i32 {
   let coord = getParcelText(parcel, '');
-  log.info("ParcelText {}",[coord])
   if (proximities.has(coord)) {
     let proximity = proximities.get(coord)!;
-    log.info("Distance to plaza {} {} {}", [coord, proximity.p.toString(), proximity.r.toString()])
     return proximity.p
   }
   return -1

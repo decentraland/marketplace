@@ -93,6 +93,7 @@ type Estate @entity {
   owner: Account!
   parcels: [Parcel!] @derivedFrom(field: "estate")
   parcelDistances: [Int!]
+  adjacentToRoadCount: Int
   size: Int
   data: Data
   rawData: String

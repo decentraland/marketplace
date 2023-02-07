@@ -1,4 +1,4 @@
-import { BigInt, log } from '@graphprotocol/graph-ts'
+import { BigInt } from '@graphprotocol/graph-ts'
 import { Transfer } from '../entities/templates/ERC721/ERC721'
 import { NFT, Parcel, Estate, Order, ENS, Wearable } from '../entities/schema'
 import {
@@ -95,7 +95,6 @@ export function handleTransfer(event: Transfer): void {
       nft.searchParcelIsInBounds = isInBounds(parcel.x, parcel.y)
       nft.searchParcelX = parcel.x
       nft.searchParcelY = parcel.y
-      let distance = getDistanceToPlaza(parcel);
       nft.searchDistanceToPlaza = getDistanceToPlaza(parcel)
       nft.searchAdjacentToRoad = getAdjacentToRoad(parcel)
       nft.searchText = getParcelText(parcel, '')

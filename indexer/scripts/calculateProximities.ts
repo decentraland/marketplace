@@ -26,6 +26,8 @@ type Tile = {
   tokenId: string;
 };
 
+const PLAZA_MAX_DISTANCE = 10
+
 async function calculateProximities() {
   const response = await (
     await fetch("https://api.decentraland.org/v2/tiles", {})
@@ -52,9 +54,11 @@ async function calculateProximities() {
     if (![TileType.PLAZA, TileType.ROAD].includes(tile.type)) {
       const minDistanceToPlaza = getMinDistanceBetweenTiles(tile, plazas);
       const minDistanceToRoad = getMinDistanceBetweenTiles(tile, roads);
-      if (minDistanceToPlaza !== null && minDistanceToPlaza < 10 || minDistanceToRoad === 0) {
+      // We are only considering tiles that have a distance to a plaza of maximun 9 tiles. This is to reduce the
+      // size of the proximities file as it will not compile for the amount of parcels that exist in decentraland.
+      if (minDistanceToPlaza !== null && minDistanceToPlaza < PLAZA_MAX_DISTANCE || minDistanceToRoad === 0) {
         proximities[tile.id] = {
-          p: minDistanceToPlaza && minDistanceToPlaza < 10 ? minDistanceToPlaza : -1,
+          p: minDistanceToPlaza && minDistanceToPlaza < PLAZA_MAX_DISTANCE ? minDistanceToPlaza : -1,
           r: minDistanceToRoad === 0
         };
       }
