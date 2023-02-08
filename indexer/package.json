@@ -13,7 +13,7 @@
     "deploy:mainnet": "ts-node ./scripts/buildData.ts --network mainnet && ts-node ./scripts/deploy.ts --network mainnet",
     "deploy:goerli": "ts-node ./scripts/buildData.ts --network goerli && ts-node ./scripts/deploy.ts --network goerli",
     "deploy:temp": "ts-node ./scripts/buildData.ts --network mainnet && ts-node ./scripts/deploy.ts --network temp",
-    "calculateProximities": "ts-node ./scripts/calculateProximities.ts"
+    "calculate-proximities": "ts-node ./scripts/calculateProximities.ts"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.21.1",

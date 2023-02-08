@@ -30,7 +30,7 @@ const PLAZA_MAX_DISTANCE = 10
 
 async function calculateProximities() {
   const response = await (
-    await fetch("https://api.decentraland.org/v2/tiles", {})
+    await fetch("https://api.decentraland.org/v2/tiles")
   ).json();
   const tiles: Record<string, Tile> = response.data;
   const plazas: Tile[] = [];
@@ -68,11 +68,11 @@ async function calculateProximities() {
 
   const resultKeys = Object.keys(result);
 
-  const test = resultKeys.reduce((str, key) => `${str}p.set("${key}",${JSON.stringify(result[key])});`, '')
+  const mapSetters = resultKeys.reduce((str, key) => `${str}p.set("${key}",${JSON.stringify(result[key])});`, '')
 
   const proximitiesFile = `
     class Proximity {r:boolean;p:i32;}
-    export let p: Map<string, Proximity> = new Map();${test};`;
+    export let p: Map<string, Proximity> = new Map();${mapSetters};`;
   fs.writeFileSync("src/data/proximities.ts", proximitiesFile);
 
   console.log(`
