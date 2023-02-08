@@ -43,18 +43,18 @@ export function getParcelImage(parcel: Parcel): string {
 }
 
 export function getDistanceToPlaza(parcel: Parcel): i32 {
-  let coord = getParcelText(parcel, '');
+  let coord = getParcelText(parcel, '')
   if (proximities.has(coord)) {
-    let proximity = proximities.get(coord)!;
+    let proximity = proximities.get(coord)!
     return proximity.p
   }
   return -1
 }
 
 export function getAdjacentToRoad(parcel: Parcel): boolean {
-  let coord = getParcelText(parcel, '');
+  let coord = getParcelText(parcel, '')
   if (proximities.has(coord)) {
-    let proximity = proximities.get(coord)!;
+    let proximity = proximities.get(coord)!
     return proximity.r
   }
   return false
