@@ -9,9 +9,11 @@ import {
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
+import { Sections } from '../../modules/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
+import EstateSizeFilter from './EstateSizeFilter'
 import { RarityFilter } from './RarityFilter'
 import { NetworkFilter } from './NetworkFilter'
 import { Props } from './AssetFilters.types'
@@ -20,12 +22,14 @@ import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
-import { AssetFilter, filtersBySection } from './utilts'
+import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 
 export const AssetFilters = ({
   minPrice,
   maxPrice,
+  minEstateSize,
+  maxEstateSize,
   collection,
   rarities,
   network,
@@ -49,6 +53,15 @@ export const AssetFilters = ({
     (value: [string, string]) => {
       const [minPrice, maxPrice] = value
       onBrowse({ minPrice, maxPrice })
+    },
+    [onBrowse]
+  )
+
+  const handleRangeFilterChange = useCallback(
+    (filterNames: [string, string], value: [string, string]) => {
+      const [filterMinName, filterMaxName] = filterNames
+      const [minPrice, maxPrice] = value
+      onBrowse({ [filterMinName]: minPrice, [filterMaxName]: maxPrice })
     },
     [onBrowse]
   )
@@ -140,6 +153,20 @@ export const AssetFilters = ({
             values={values}
           />
         ) : null}
+        {section !== Sections.decentraland.PARCELS ? (
+          <EstateSizeFilter
+            landStatus={landStatus}
+            values={values}
+            minPrice={minEstateSize}
+            maxPrice={maxEstateSize}
+            onChange={values =>
+              handleRangeFilterChange(
+                ['minEstateSize', 'maxEstateSize'],
+                values
+              )
+            }
+          />
+        ) : null}
       </div>
     )
   }
@@ -153,7 +180,9 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
         />
       ) : null}
-      {isPriceFilterEnabled && shouldRenderFilter(AssetFilter.Price) && isOnSale ? (
+      {isPriceFilterEnabled &&
+      shouldRenderFilter(AssetFilter.Price) &&
+      isOnSale ? (
         <PriceFilter
           onChange={handlePriceChange}
           minPrice={minPrice}

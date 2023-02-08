@@ -1,12 +1,13 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useMemo, useCallback } from 'react'
 import { ethers } from 'ethers'
-import { Box, BarChart, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { LANDFilters } from '../../Vendor/decentraland/types'
 import { getNetwork, getPriceLabel } from '../../../utils/filters'
+import { LANDFilters } from '../../Vendor/decentraland/types'
 import { nftAPI } from '../../../modules/vendor/decentraland'
 import { Section } from '../../../modules/vendor/routing/types'
+import Inventory from '../Inventory'
 import { getChartUpperBound, getPriceFiltersForSection } from './utils'
 import { Props } from './PriceFilter.types'
 import './PriceFilter.css'
@@ -35,8 +36,6 @@ export const PriceFilter = ({
   emotePlayMode,
   onChange
 }: Props) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [prices, setPrices] = useState<Record<string, number>>()
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const priceFetchFilters = useMemo(() => {
@@ -61,26 +60,6 @@ export const PriceFilter = ({
     section
   ])
 
-  useEffect(() => {
-    let cancel = false
-    ;(async () => {
-      try {
-        setIsLoading(true)
-        const prices = await nftAPI.fetchPrices(priceFetchFilters)
-        if (!cancel) {
-          setIsLoading(false)
-          setPrices(prices)
-        }
-      } catch (e) {
-        console.warn('Could not fetch prices')
-        setIsLoading(false)
-      }
-    })()
-    return () => {
-      cancel = false
-    }
-  }, [section, priceFetchFilters])
-
   const header = useMemo(
     () =>
       isMobileOrTablet ? (
@@ -100,14 +79,19 @@ export const PriceFilter = ({
     return Number(ethers.utils.formatEther(getChartUpperBound(section)))
   }, [section])
 
-  const formattedPrices = useMemo(() => {
-    if (prices && landStatus === LANDFilters.ONLY_FOR_SALE) {
-      return Object.entries(prices).reduce((acc, [key, value]) => {
-        acc[ethers.utils.formatEther(key)] = value
-        return acc
-      }, {} as Record<string, number>)
+  const fetcher = useCallback(async () => {
+    if (landStatus === LANDFilters.ONLY_FOR_RENT) {
+      // for rents, we don't have the data yet, so let's just resolve the promise with an empty object so the chart is not rendered
+      return {}
     }
-  }, [landStatus, prices])
+    const data: Record<string, number> = await nftAPI.fetchPrices(
+      priceFetchFilters
+    )
+    return Object.entries(data).reduce((acc, [key, value]) => {
+      acc[ethers.utils.formatEther(key)] = value
+      return acc
+    }, {} as Record<string, number>)
+  }, [priceFetchFilters, landStatus])
 
   return (
     <Box
@@ -116,11 +100,11 @@ export const PriceFilter = ({
       collapsible
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
-      <BarChart
-        loading={isLoading}
-        data={formattedPrices}
-        min={minPrice}
+      <Inventory
+        isMana
+        fetcher={fetcher}
         max={maxPrice}
+        min={minPrice}
         upperBound={upperBound}
         network={network || getNetwork(network, category)}
         onChange={onChange}

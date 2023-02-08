@@ -158,6 +158,12 @@
     "size": "Tamaño",
     "price": "Precio",
     "price_min_greater_max": "El precio máximo debería ser mayor al mínimo",
+    "estate_size": {
+      "label": "Tamaño de Estate",
+      "min_label": "Min (Land)",
+      "max_label": "Máx (Land)",
+      "error": "El tamaño máximo de parcelas debería ser superior al mínimo"
+    },
     "reset": "Limpiar",
     "apply_filters": "Aplicar filtros"
   },
@@ -354,6 +360,12 @@
       "more_than_price": "Más de <mana></mana> {price}",
       "less_than_price": "Menos de <mana></mana> {price}",
       "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "estate_size": {
+      "all_sizes": "Todos los tamaños",
+      "more_than_size": "Más de {size} parcelas",
+      "less_than_size": "Menos de {size} parcelas",
+      "size_between": "{min} a {max} parcelas"
     },
     "collection": {
       "title": "Colección",
@@ -920,7 +932,7 @@
       "dao_fee": "2.5% del precio irá para la DAO"
     },
     "confirmation_step": {
-      "title": "Confirm Listing",
+      "title": "Confirmar clasificado",
       "periods": "Períodos",
       "notice_line_one": "Revisa y confirma el precio y los períodos de alquiler que has seleccionado.",
       "notice_line_two": "Poner en alquiler es gratis, pero editar o cancelar el clasificado una vez hecho requerirá que envies una transacción, y deberas cubrir el costo de la misma.",

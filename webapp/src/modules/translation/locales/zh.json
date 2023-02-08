@@ -158,6 +158,12 @@
     "size": "大小",
     "price": "价格",
     "price_min_greater_max": "最高价格应高于最低价格",
+    "estate_size": {
+      "label": "庄园规模",
+      "min_label": "最小（土地）",
+      "max_label": "马克斯（陆地）",
+      "error": "最大地产规模应高于最小规模"
+    },
     "reset": "重置",
     "apply": "应用过滤器"
   },
@@ -355,6 +361,12 @@
       "more_than_price": "超过 <mana></mana> {price}",
       "less_than_price": "低于 <mana></mana> {price}",
       "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "estate_size": {
+      "all_sizes": "所有尺寸",
+      "more_than_size": "超过 {size} 个包裹",
+      "less_than_size": "小于 {size} 个包裹",
+      "size_between": "{min} 到 {max} 个地块"
     },
     "collection": {
       "title": "收藏",

@@ -31,6 +31,8 @@ export type NFTsFetchFilters = {
   contracts?: string[]
   minPrice?: string
   maxPrice?: string
+  minEstateSize?: string
+  maxEstateSize?: string
 }
 
 export type NFTResult = {

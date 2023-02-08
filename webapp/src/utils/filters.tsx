@@ -52,6 +52,31 @@ export function getPriceLabel(
   })
 }
 
+export function getEstateSizeLabel(min?: string, max?: string) {
+  const priceFormatter = Intl.NumberFormat('en', { notation: 'compact' })
+
+  if (!min && !max) {
+    return t('nft_filters.estate_size.all_sizes')
+  }
+
+  if (min && !max) {
+    return t('nft_filters.estate_size.more_than_size', {
+      size: priceFormatter.format(Number(min))
+    })
+  }
+
+  if (max && !min) {
+    return t('nft_filters.estate_size.less_than_size', {
+      size: priceFormatter.format(Number(max))
+    })
+  }
+
+  return t('nft_filters.estate_size.size_between', {
+    min: priceFormatter.format(Number(min)),
+    max: priceFormatter.format(Number(max))
+  })
+}
+
 export function getNetwork(network?: Network, category?: NFTCategory) {
   if (network) {
     return network

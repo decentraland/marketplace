@@ -162,6 +162,12 @@
     "size": "Size",
     "price": "Price",
     "price_min_greater_max": "The maximum price should be higher than the minimum",
+    "estate_size": {
+      "label": "Estate size",
+      "min_label": "Min (Land)",
+      "max_label": "Max (Land)",
+      "error": "The maximun estate size should be higher than the minimum"
+    },
     "reset": "Reset",
     "apply": "Apply filters"
   },
@@ -358,6 +364,12 @@
       "more_than_price": "More than <mana></mana> {price}",
       "less_than_price": "Less than <mana></mana> {price}",
       "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "estate_size": {
+      "all_sizes": "All sizes",
+      "more_than_size": "More than {size} parcels",
+      "less_than_size": "Less than {size} parcels",
+      "size_between": "{min} to {max} parcels"
     },
     "collection": {
       "title": "Collection",

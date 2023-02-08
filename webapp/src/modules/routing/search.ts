@@ -120,6 +120,14 @@ export function getSearchParams(options?: BrowseOptions) {
     if (options.maxPrice) {
       params.set('maxPrice', options.maxPrice)
     }
+
+    if (options.minEstateSize) {
+      params.set('minEstateSize', options.minEstateSize)
+    }
+
+    if (options.maxEstateSize) {
+      params.set('maxEstateSize', options.maxEstateSize)
+    }
   }
   return params
 }
