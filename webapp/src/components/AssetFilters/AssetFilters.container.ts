@@ -18,7 +18,10 @@ import {
   getSection,
   getWearableGenders
 } from '../../modules/routing/selectors'
-import { getIsPriceFilterEnabled } from '../../modules/features/selectors'
+import {
+  getIsEstateSizeFilterEnabled,
+  getIsPriceFilterEnabled
+} from '../../modules/features/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { browse } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
@@ -71,7 +74,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     landStatus,
     view: getView(state),
     section,
-    isPriceFilterEnabled: getIsPriceFilterEnabled(state)
+    isPriceFilterEnabled: getIsPriceFilterEnabled(state),
+    isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state)
   }
 }
 

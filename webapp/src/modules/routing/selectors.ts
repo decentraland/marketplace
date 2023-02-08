@@ -415,7 +415,9 @@ export const hasFiltersEnabled = createSelector<
       (hasOnSaleFilter && !hasOnRentFilter) ||
       (hasOnRentFilter && !hasOnSaleFilter) ||
       !!minPrice ||
-      !!maxPrice
+      !!maxPrice ||
+      !!minEstateSize ||
+      !!maxEstateSize
     )
   }
 
@@ -434,8 +436,6 @@ export const hasFiltersEnabled = createSelector<
     hasEmotePlayModeFilter ||
     !!minPrice ||
     !!maxPrice ||
-    !!minEstateSize ||
-    !!maxEstateSize ||
     hasNotOnSaleFilter
   )
 })

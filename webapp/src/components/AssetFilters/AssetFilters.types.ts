@@ -37,6 +37,7 @@ export type Props = {
   onFilterChange?: (options: BrowseOptions) => void
   defaultCollapsed?: Record<AssetFilter, boolean>
   isPriceFilterEnabled: boolean
+  isEstateSizeFilterEnabled: boolean
 }
 
 export type MapStateProps = Pick<
@@ -59,6 +60,7 @@ export type MapStateProps = Pick<
   | 'vendor'
   | 'view'
   | 'isPriceFilterEnabled'
+  | 'isEstateSizeFilterEnabled'
 >
 
 export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>

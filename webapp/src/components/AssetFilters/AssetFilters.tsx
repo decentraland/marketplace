@@ -44,6 +44,7 @@ export const AssetFilters = ({
   defaultCollapsed,
   onBrowse,
   isPriceFilterEnabled,
+  isEstateSizeFilterEnabled,
   values
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
@@ -153,7 +154,8 @@ export const AssetFilters = ({
             values={values}
           />
         ) : null}
-        {section !== Sections.decentraland.PARCELS ? (
+        {isEstateSizeFilterEnabled &&
+        section !== Sections.decentraland.PARCELS ? (
           <EstateSizeFilter
             landStatus={landStatus}
             values={values}

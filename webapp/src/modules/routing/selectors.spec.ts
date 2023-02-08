@@ -87,6 +87,30 @@ describe('when getting if the are filters set', () => {
     })
   })
 
+  describe('and it is the land section', () => {
+    describe('when the minEstateSize filter is set', () => {
+      it('should return true', () => {
+        expect(
+          hasFiltersEnabled.resultFunc({
+            section: Sections.decentraland.LAND,
+            minEstateSize: '10'
+          })
+        ).toBe(true)
+      })
+    })
+
+    describe('when the maxEstateSize filter is set', () => {
+      it('should return true', () => {
+        expect(
+          hasFiltersEnabled.resultFunc({
+            section: Sections.decentraland.LAND,
+            maxEstateSize: '100'
+          })
+        ).toBe(true)
+      })
+    })
+  })
+
   describe('when no filters are set', () => {
     it('should return false', () => {
       expect(hasFiltersEnabled.resultFunc({})).toBe(false)
