@@ -1,9 +1,11 @@
 import { connect } from 'react-redux'
 import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
+
 import { RootState } from '../../../modules/reducer'
 import { getAddress } from '../../../modules/wallet/selectors'
 import { NFT } from '../../../modules/nft/types'
+import { getWallet } from '../../../modules/wallet/selectors'
 import {
   MapStateProps,
   MapDispatchProps,
@@ -13,7 +15,8 @@ import RentalModal from './RentalListingModal'
 
 const mapState = (state: RootState): MapStateProps => ({
   address: getAddress(state),
-  authorizations: getAuthorizations(state)
+  authorizations: getAuthorizations(state),
+  wallet: getWallet(state)
 })
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({

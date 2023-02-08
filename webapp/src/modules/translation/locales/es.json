@@ -884,6 +884,13 @@
       "notice_link": "Alquiler",
       "confirm": "Confirma la transacción en tu billetera"
     },
+    "authorization_step_again": {
+      "title": "Volver a publicar para la renta",
+      "notice_line_one": "Puedes volver a publicar tu {assetType} para la renta sin costo.",
+      "notice_line_two": "El Inquilino actual tendrá permisos de operador hasta que se vuelva a alquilar",
+      "notice_line_three": "Para retomar los permisos del operador, reclámalos (tarifas de gas involucradas)",
+      "cancel": "Cancelar"
+    },
     "create_listing_step": {
       "titles": {
         "edit": "Editar listado de alquiler",
@@ -959,7 +966,7 @@
       "view_transaction": "Ver transacción",
       "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",
       "claiming_back": "Reclamando su {asset}",
-      "unclaimed_message": "{asset} todavía está sin reclamar. Reclámala para poder venderla o transferirla."
+      "unclaimed_message": "Tienes una renta activa pero el {asset} todavía está sin reclamar. Reclámala para poder venderla o transferirla"
     },
     "highlights": {
       "title": "Destacados",

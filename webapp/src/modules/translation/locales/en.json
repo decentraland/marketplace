@@ -890,6 +890,13 @@
       "notice_link": "Rentals",
       "confirm": "Confirm transaction on your wallet to continue"
     },
+    "authorization_step_again": {
+      "title": "List for Rent Again",
+      "notice_line_one": "List this {assetType} for rent again at no cost.",
+      "notice_line_two": "The current Tenant will hold Operator Permissions until it is rented again",
+      "notice_line_three": "To retake Operator Permissions, Claim it back (gas fees involved)",
+      "cancel": "Cancel"
+    },
     "create_listing_step": {
       "titles": {
         "edit": "Edit listing",
@@ -965,7 +972,7 @@
       "view_transaction": "View transaction",
       "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this {asset}",
       "claiming_back": "Claiming Back {asset}",
-      "unclaimed_message": "The {asset} is still unclaimed. Claim it back to sell or transfer it."
+      "unclaimed_message": "You have an active listing, but the {asset} is still unclaimed. Claim it back to sell or transfer it."
     },
     "highlights": {
       "title": "Highlights",
