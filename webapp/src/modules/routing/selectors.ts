@@ -86,13 +86,15 @@ export const getSortBy = createSelector<
   RootState,
   string,
   View | undefined,
+  Section,
   SortBy | undefined
 >(
   getRouterSearch,
   getView,
-  (search, view) =>
+  getSection,
+  (search, view, section) =>
     getURLParam<SortBy>(search, 'sortBy') ||
-    getDefaultOptionsByView(view).sortBy
+    getDefaultOptionsByView(view, section).sortBy
 )
 
 export const getOnlyOnSale = createSelector<
@@ -256,6 +258,16 @@ export const getMaxPrice = createSelector<RootState, string, string>(
   search => (getURLParam(search, 'maxPrice') as string) || ''
 )
 
+export const getMinEstateSize = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'minEstateSize') as string) || ''
+)
+
+export const getMaxEstateSize = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'maxEstateSize') as string) || ''
+)
+
 export const getCurrentLocationAddress = createSelector<
   RootState,
   string,
@@ -304,7 +316,14 @@ export const getAssetsUrlParams = createSelector(
 export const getLandsUrlParams = createSelector(
   getIsMap,
   getIsFullscreen,
-  (isMap, isFullscreen) => ({ isMap, isFullscreen })
+  getMinEstateSize,
+  getMaxEstateSize,
+  (isMap, isFullscreen, minEstateSize, maxEstateSize) => ({
+    isMap,
+    isFullscreen,
+    minEstateSize,
+    maxEstateSize
+  })
 )
 
 export const getWearablesUrlParams = createSelector(
@@ -384,17 +403,19 @@ export const hasFiltersEnabled = createSelector<
     onlyOnSale,
     minPrice,
     maxPrice,
+    minEstateSize,
+    maxEstateSize,
     section
   } = browseOptions
-  const isLand = isLandSection(section as Section);
+  const isLand = isLandSection(section as Section)
   if (isLand) {
     const hasOnSaleFilter = onlyOnSale === true
     const hasOnRentFilter = onlyOnRent === true
     return (
-      (hasOnSaleFilter && !hasOnRentFilter)
-      || (hasOnRentFilter && !hasOnSaleFilter)
-      || !!minPrice
-      || !!maxPrice
+      (hasOnSaleFilter && !hasOnRentFilter) ||
+      (hasOnRentFilter && !hasOnSaleFilter) ||
+      !!minPrice ||
+      !!maxPrice
     )
   }
 
@@ -413,6 +434,8 @@ export const hasFiltersEnabled = createSelector<
     hasEmotePlayModeFilter ||
     !!minPrice ||
     !!maxPrice ||
+    !!minEstateSize ||
+    !!maxEstateSize ||
     hasNotOnSaleFilter
   )
 })

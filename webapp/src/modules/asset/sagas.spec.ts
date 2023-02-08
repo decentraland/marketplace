@@ -8,7 +8,6 @@ import {
   PurchaseStatus
 } from 'decentraland-dapps/dist/modules/gateway/types'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import { getState as getToastState } from 'decentraland-dapps/dist/modules/toast/selectors'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { buyItemWithCardFailure } from '../item/actions'
@@ -37,7 +36,7 @@ const mockNFTPurchase: NFTPurchase = {
   timestamp: 1535398843748,
   status: PurchaseStatus.PENDING,
   gateway: NetworkGatewayType.TRANSAK,
-  txHash: null,
+  txHash: 'aTxHash',
   nft: {
     contractAddress: mockContractAddress,
     itemId: mockTokenId,
@@ -49,7 +48,7 @@ const mockNFTPurchase: NFTPurchase = {
 
 describe('when handling the set purchase action', () => {
   describe('when an NFT has been purchased and it is in status pending', () => {
-    describe('when the user still waiting for the purchase in the same page', () => {
+    describe('and the user still waiting for the purchase in the same page', () => {
       it('should dispatch a push to the history with the location of the buy status page', () => {
         return expectSaga(assetSaga)
           .provide([
@@ -74,7 +73,7 @@ describe('when handling the set purchase action', () => {
       })
     })
 
-    describe('when the user was redirected to the processing page and the purchase changed it status', () => {
+    describe('and the user was redirected to the processing page and the purchase changed it status', () => {
       it('should dispatch a push to the history with the location of the buy status page', () => {
         return expectSaga(assetSaga)
           .provide([
@@ -103,7 +102,7 @@ describe('when handling the set purchase action', () => {
       })
     })
 
-    describe('when the user was exploring collectibles', () => {
+    describe('and the user was exploring collectibles', () => {
       it('should not dispatch a push to the history with the location of the buy status page', () => {
         return expectSaga(assetSaga)
           .provide([
@@ -115,6 +114,25 @@ describe('when handling the set purchase action', () => {
             ]
           ])
           .dispatch(setPurchase(mockNFTPurchase))
+          .run({ silenceTimeout: true })
+          .then(({ effects }) => {
+            expect(effects.put).toBeUndefined()
+          })
+      })
+    })
+
+    describe('and the tx hash has not yet been setted', () => {
+      it('should not dispatch a push to the history with the location of the buy status page', () => {
+        return expectSaga(assetSaga)
+          .provide([
+            [
+              select(getLocation),
+              {
+                pathname: locations.browse()
+              }
+            ]
+          ])
+          .dispatch(setPurchase({ ...mockNFTPurchase, txHash: null }))
           .run({ silenceTimeout: true })
           .then(({ effects }) => {
             expect(effects.put).toBeUndefined()

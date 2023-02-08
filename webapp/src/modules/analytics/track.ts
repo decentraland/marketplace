@@ -27,7 +27,9 @@ import {
   EXECUTE_ORDER_TRANSACTION_SUBMITTED,
   CreateOrderSuccessAction,
   CancelOrderSuccessAction,
-  ExecuteOrderTransactionSubmittedAction
+  ExecuteOrderTransactionSubmittedAction,
+  ExecuteOrderWithCardSuccessAction,
+  EXECUTE_ORDER_WITH_CARD_SUCCESS
 } from '../order/actions'
 import {
   TRANSFER_NFT_TRANSACTION_SUBMITTED,
@@ -49,7 +51,9 @@ import {
 } from '../bid/actions'
 import {
   BuyItemSuccessAction,
+  BuyItemWithCardSuccessAction,
   BUY_ITEM_SUCCESS,
+  BUY_ITEM_WITH_CARD_SUCCESS,
   FetchItemsSuccessAction,
   FETCH_ITEMS_SUCCESS
 } from '../item/actions'
@@ -93,6 +97,18 @@ track<ExecuteOrderTransactionSubmittedAction>(
     price: payload.order.price,
     seller: payload.order.owner,
     buyer: payload.order.buyer
+  })
+)
+
+track<ExecuteOrderWithCardSuccessAction>(
+  EXECUTE_ORDER_WITH_CARD_SUCCESS,
+  ({ payload }) => withCategory('Buy With Card', payload.nft),
+  ({ payload }) => ({
+    category: payload.nft.category,
+    nft: payload.nft.id,
+    price: payload.purchase.nft.cryptoAmount,
+    seller: payload.nft.owner,
+    buyer: payload.purchase.address
   })
 )
 
@@ -219,6 +235,21 @@ track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, 'Buy Item', ({ payload }) => ({
   price: Number(ethers.utils.formatEther(payload.item.price)),
   data: payload.item.data
 }))
+
+track<BuyItemWithCardSuccessAction>(
+  BUY_ITEM_WITH_CARD_SUCCESS,
+  'Buy Item With Card',
+  ({ payload }) => ({
+    itemId: payload.item.itemId,
+    contractAddress: payload.item.contractAddress,
+    rarity: payload.item.rarity,
+    network: payload.item.network,
+    chainId: payload.item.chainId,
+    price: payload.purchase.nft.cryptoAmount,
+    data: payload.item.data,
+    purchase: payload.purchase
+  })
+)
 
 track<SetIsTryingOnAction>(
   SET_IS_TRYING_ON,

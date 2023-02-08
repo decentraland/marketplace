@@ -12,11 +12,13 @@ import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor'
 import { Section } from '../../modules/vendor/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
-import { AssetFilter } from './utilts'
+import { AssetFilter } from './utils'
 
 export type Props = {
   minPrice: string
   maxPrice: string
+  minEstateSize: string
+  maxEstateSize: string
   rarities: Rarity[]
   network?: Network
   category?: NFTCategory
@@ -41,6 +43,8 @@ export type MapStateProps = Pick<
   Props,
   | 'minPrice'
   | 'maxPrice'
+  | 'minEstateSize'
+  | 'maxEstateSize'
   | 'rarities'
   | 'network'
   | 'category'

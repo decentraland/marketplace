@@ -1,6 +1,7 @@
 import { connect } from 'react-redux'
 import { getLocation, push } from 'connected-react-router'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { UserMenu } from 'decentraland-dapps/dist/containers'
 import {
   isConnected,
   isConnecting
@@ -9,7 +10,6 @@ import { getTransactions } from '../../modules/transaction/selectors'
 import { locations } from '../../modules/routing/locations'
 import { RootState } from '../../modules/reducer'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './UserMenu.types'
-import UserMenu from './UserMenu'
 
 const mapState = (state: RootState): MapStateProps => {
   return {

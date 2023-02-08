@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react'
 import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
+  getEstateSizeLabel,
   getGenderFilterLabel,
   getLandLabel,
   getNetwork,
@@ -28,7 +29,9 @@ export const SelectedFilters = ({
     emotePlayMode,
     minPrice,
     maxPrice,
-    onlyOnRent
+    onlyOnRent,
+    minEstateSize,
+    maxEstateSize
   } = browseOptions
   const [collection, setCollection] = useState<
     Record<string, string> | undefined
@@ -55,6 +58,11 @@ export const SelectedFilters = ({
   const priceLabel = useMemo(
     () => getPriceLabel(minPrice, maxPrice, getNetwork(network, category)),
     [minPrice, maxPrice, network, category]
+  )
+
+  const estateSizeLabel = useMemo(
+    () => getEstateSizeLabel(minEstateSize, maxEstateSize),
+    [minEstateSize, maxEstateSize]
   )
 
   const landStatusLabel = useMemo(() => {
@@ -102,6 +110,10 @@ export const SelectedFilters = ({
 
   const handleDeletePrice = useCallback(() => {
     onBrowse({ minPrice: undefined, maxPrice: undefined })
+  }, [onBrowse])
+
+  const handleDeleteEstateSize = useCallback(() => {
+    onBrowse({ minEstateSize: undefined, maxEstateSize: undefined })
   }, [onBrowse])
 
   const handleDeleteLandStatus = useCallback(() => {
@@ -163,6 +175,13 @@ export const SelectedFilters = ({
       ))}
       {minPrice || maxPrice ? (
         <Pill label={priceLabel} onDelete={handleDeletePrice} id="price" />
+      ) : null}
+      {minEstateSize || maxEstateSize ? (
+        <Pill
+          label={estateSizeLabel}
+          onDelete={handleDeleteEstateSize}
+          id="estate-size"
+        />
       ) : null}
       {isLandSection && landStatusLabel ? (
         <Pill

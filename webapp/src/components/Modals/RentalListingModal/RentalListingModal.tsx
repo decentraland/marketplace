@@ -7,7 +7,10 @@ import {
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { ContractName, getContract } from 'decentraland-transactions'
-import { isRentalListingOpen } from '../../../modules/rental/utils'
+import {
+  canBeClaimed,
+  isRentalListingOpen
+} from '../../../modules/rental/utils'
 import {
   upsertRentalRequest,
   UpsertRentalRequestAction
@@ -18,23 +21,22 @@ import { CreateOrEditListingStep } from './CreateOrEditListingStep'
 import { EditConfirmationStep } from './EditConfirmationStep'
 import { ConfirmationStep } from './ConfirmationStep'
 import styles from './RentalListingModal.module.css'
+import InformationStep from './InformationStep/InformationStep'
 
 const RentalListingModal = (props: Props) => {
-  // Props
   const {
     address,
     metadata: { nft, rental },
     authorizations,
     onRemove,
-    onClose
+    onClose,
+    wallet
   } = props
 
-  // State
   const [listing, setListing] = useState<
     UpsertRentalRequestAction['payload'] | null
   >(null)
 
-  // Handlers
   const handleSetListing = useCallback<
     (...params: Parameters<typeof upsertRentalRequest>) => void
   >(
@@ -70,6 +72,17 @@ const RentalListingModal = (props: Props) => {
     rental
   ])
 
+  const isListForRentAgain =
+    wallet &&
+    rental &&
+    canBeClaimed(wallet.address, rental, nft) &&
+    !isRentalListingOpen(rental)
+
+  const [
+    listForRentAgainAuthorizationStep,
+    setListForRentAgainAuthorizationStep
+  ] = useState(isListForRentAgain)
+
   return (
     <Modal
       size="tiny"
@@ -81,13 +94,22 @@ const RentalListingModal = (props: Props) => {
     >
       {!isAuthorized ? (
         <AuthorizationStep nft={nft} onCancel={onClose} />
+      ) : listForRentAgainAuthorizationStep ? (
+        <InformationStep
+          nft={nft}
+          onCancel={onClose}
+          handleSubmit={() => setListForRentAgainAuthorizationStep(false)}
+        />
       ) : !listing ? (
         <CreateOrEditListingStep
           nft={nft}
-          rental={isRentalListingOpen(rental) ? rental : null}
+          rental={
+            isRentalListingOpen(rental) || isListForRentAgain ? rental : null
+          }
           onCreate={handleSetListing}
-          onRemove={onRemove}
+          onRemove={isListForRentAgain ? onClose : onRemove}
           onCancel={onClose}
+          isListForRentAgain={isListForRentAgain}
         />
       ) : rental && isRentalListingOpen(rental) ? (
         <EditConfirmationStep

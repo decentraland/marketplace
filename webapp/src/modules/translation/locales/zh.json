@@ -158,6 +158,12 @@
     "size": "大小",
     "price": "价格",
     "price_min_greater_max": "最高价格应高于最低价格",
+    "estate_size": {
+      "label": "庄园规模",
+      "min_label": "最小（土地）",
+      "max_label": "马克斯（陆地）",
+      "error": "最大地产规模应高于最小规模"
+    },
     "reset": "重置",
     "apply": "应用过滤器"
   },
@@ -355,6 +361,12 @@
       "more_than_price": "超过 <mana></mana> {price}",
       "less_than_price": "低于 <mana></mana> {price}",
       "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "estate_size": {
+      "all_sizes": "所有尺寸",
+      "more_than_size": "超过 {size} 个包裹",
+      "less_than_size": "小于 {size} 个包裹",
+      "size_between": "{min} 到 {max} 个地块"
     },
     "collection": {
       "title": "收藏",
@@ -808,14 +820,6 @@
     "ethereum": "ETH",
     "matic": "MATIC"
   },
-  "intro_popup": {
-    "title": "介绍Polygon MANA",
-    "blog_link": "博客文章",
-    "account_link": "帐户dApp",
-    "manage_account": "管理帐户",
-    "content": "Polygon MANA将使您更快地进行购买。{br}您可以在我们的{blog_link}中了解有关Polygon MANA的更多信息。{br}您还可以在新的{ account_link}。{br}点击您的头像，选择{manage_account}，然后开始征服Metaverse。",
-    "dismiss": "知道了！"
-  },
   "toast": {
     "meta_transaction_failure": {
       "title": "元交易",
@@ -895,6 +899,13 @@
       "notice_link": "租金",
       "confirm": "在您的钱包上确认交易以继续"
     },
+    "authorization_step_again": {
+      "title": "再次出租清單",
+      "notice_line_one": "您可以再次免費出租此 {assetType}。",
+      "notice_line_two": "當前租戶將持有操作員權限，直到再次租用",
+      "notice_line_three": "要重新獲得操作員權限，請取回（涉及汽油費）",
+      "cancel": "取消"
+    },
     "create_listing_step": {
       "titles": {
         "edit": "编辑出租列表",
@@ -970,7 +981,7 @@
       "view_transaction": "查看区块链交易",
       "mobile_coming_soon": "手机租赁即将推出。 请转到桌面版租用此{asset}",
       "claiming_back": "收回{asset}",
-      "unclaimed_message": "{asset} 仍无人认领。 索回以出售或转让。"
+      "unclaimed_message": "您有一個有效列表，但{asset}仍無人認領。認領它以出售或轉讓它。"
     },
     "highlights": {
       "title": "亮点",
