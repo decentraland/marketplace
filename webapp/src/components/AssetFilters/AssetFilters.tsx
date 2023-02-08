@@ -9,6 +9,7 @@ import {
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
+import { View } from '../../modules/ui/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
@@ -40,7 +41,8 @@ export const AssetFilters = ({
   defaultCollapsed,
   onBrowse,
   isPriceFilterEnabled,
-  values
+  values,
+  view
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
@@ -153,7 +155,10 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
         />
       ) : null}
-      {isPriceFilterEnabled && shouldRenderFilter(AssetFilter.Price) && isOnSale ? (
+      {isPriceFilterEnabled &&
+      shouldRenderFilter(AssetFilter.Price) &&
+      isOnSale &&
+      view !== View.ACCOUNT ? (
         <PriceFilter
           onChange={handlePriceChange}
           minPrice={minPrice}
