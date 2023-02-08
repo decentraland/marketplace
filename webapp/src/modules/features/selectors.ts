@@ -96,3 +96,14 @@ export const getIsPriceFilterEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsEstateSizeFilterEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.ESTATE_SIZE_FILTER
+    )
+  }
+  return false
+}
