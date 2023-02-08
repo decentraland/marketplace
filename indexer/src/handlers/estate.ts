@@ -1,4 +1,4 @@
-import { BigInt, ValueKind } from '@graphprotocol/graph-ts'
+import { BigInt } from '@graphprotocol/graph-ts'
 import {
   CreateEstate,
   AddLand,
@@ -7,10 +7,18 @@ import {
 } from '../entities/EstateRegistry/EstateRegistry'
 import { NFT, Parcel, Estate } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
-import { decodeTokenId } from '../modules/parcel'
+import {
+  decodeTokenId,
+  getAdjacentToRoad,
+  getDistanceToPlaza,
+} from '../modules/parcel'
 import { buildData, DataType } from '../modules/data'
 import { createOrLoadAccount } from '../modules/account'
 import { toLowerCase } from '../modules/utils'
+import {
+  getParcelDistances,
+  shouldRecalculateMinDistance,
+} from '../modules/estate'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
 
@@ -25,7 +33,9 @@ export function handleCreateEstate(event: CreateEstate): void {
   estate.tokenId = event.params._estateId
   estate.owner = event.params._owner.toHex()
   estate.rawData = data
+  estate.parcelDistances = []
   estate.size = 0
+  estate.adjacentToRoadCount = 0
 
   let estateData = buildData(id, data, DataType.ESTATE)
   if (estateData != null) {
@@ -37,6 +47,8 @@ export function handleCreateEstate(event: CreateEstate): void {
     nft.searchText = toLowerCase(estateData.name)
     nft.createdAt = event.block.timestamp
     nft.updatedAt = event.block.timestamp
+    nft.searchDistanceToPlaza = -1
+    nft.searchAdjacentToRoad = false
     nft.soldAt = null
     nft.sales = 0
     nft.volume = BigInt.fromI32(0)
@@ -79,12 +91,29 @@ export function handleAddLand(event: AddLand): void {
 
   parcel.owner = addresses.EstateRegistry
   parcel.estate = id
-  parcel.save()
 
   let parcelNFT = new NFT(parcelId)
   parcelNFT.searchParcelEstateId = id
   parcelNFT.owner = addresses.EstateRegistry
   parcelNFT.save()
+
+  if (estateNFT != null && estate != null) {
+    estate.parcelDistances = getParcelDistances(parcel, estate.parcelDistances)
+
+    let adjacentToRoad = getAdjacentToRoad(parcel!)
+    if (adjacentToRoad) {
+      estate.adjacentToRoadCount += 1
+    }
+
+    estate.save()
+
+    let distances = estate.parcelDistances!
+    estateNFT.searchDistanceToPlaza = distances.length ? distances[0] : -1
+    estateNFT.searchAdjacentToRoad = estateNFT.searchAdjacentToRoad || adjacentToRoad
+    estateNFT.save()
+  }
+
+  parcel.save()
 }
 
 export function handleRemoveLand(event: RemoveLand): void {
@@ -125,6 +154,27 @@ export function handleRemoveLand(event: RemoveLand): void {
   parcelNFT.searchParcelEstateId = null
   parcelNFT.owner = event.params._destinatary.toHex()
   parcelNFT.save()
+
+  if (estateNFT != null && estate != null) {
+    if (shouldRecalculateMinDistance(parcel, estate, estateNFT)) {
+      // parcelDistances is an ordered array, so we just need to remove the first element
+      let distances = estate.parcelDistances!
+      distances.shift()
+      estate.parcelDistances = distances
+      estate.save()
+
+      estateNFT.searchDistanceToPlaza = distances[0] || -1
+    }
+
+    let adjacentToRoad = getAdjacentToRoad(parcel!)
+    if (adjacentToRoad) {
+      estate.adjacentToRoadCount -= 1
+      estate.save()
+
+      estateNFT.searchAdjacentToRoad = estate.adjacentToRoadCount > 0
+    }
+    estateNFT.save()
+  }
 }
 
 export function handleUpdate(event: Update): void {
