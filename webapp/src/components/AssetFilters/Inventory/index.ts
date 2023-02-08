@@ -1,3 +1,3 @@
-import Inventory from './Inventory.container'
+import { Inventory } from './Inventory'
 
 export default Inventory

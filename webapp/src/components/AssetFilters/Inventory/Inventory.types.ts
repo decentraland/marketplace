@@ -15,7 +15,3 @@ export type Props = {
   onChange: (value: [string, string]) => void
   fetcher: () => Promise<Record<string, number>>
 }
-
-export type MapStateProps = Pick<Props, 'network'>
-
-export type OwnProps = Pick<Props, 'values'>

@@ -1,16 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BarChart } from 'decentraland-ui'
-import { Network } from '@dcl/schemas/dist/dapps/network'
 import { Props } from './Inventory.types'
-
-export type InventoryProps = {
-  min: string
-  max: string
-  network?: Network
-  onChange: (value: [string, string]) => void
-  defaultCollapsed?: boolean
-  fetcher: () => Promise<Record<string, number>>
-}
 
 export const Inventory = ({
   fetcher,
