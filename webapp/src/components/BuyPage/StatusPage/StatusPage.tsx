@@ -60,9 +60,9 @@ const StatusPage = ({ type, purchase }: Props) => {
                             </a>
                           ),
                           my_assets: (
-                            <a href={locations.currentAccount(browserOptions)}>
+                            <Link to={locations.currentAccount(browserOptions)}>
                               {t('navigation.my_assets')}
-                            </a>
+                            </Link>
                           )
                         }
                       )}
