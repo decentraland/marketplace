@@ -9,7 +9,7 @@
   flex: 0.5 1 auto;
   align-items: center;
   text-align: center;
-  max-width: 392px;
+  max-width: 400px;
 }
 
 .Status .asset-image-wrapper {
@@ -72,23 +72,23 @@
 }
 
 @media (max-width: 768px) {
-  .Status > .Row {
+  .Status>.Row {
     flex-direction: column;
   }
 
-  .Status > .Row .center,
-  .Status > .Row .asset-image-wrapper,
-  .Status > .Row .ui.button {
+  .Status>.Row .center,
+  .Status>.Row .asset-image-wrapper,
+  .Status>.Row .ui.button {
     width: 100%;
   }
 
-  .Status > .Row .buttons {
+  .Status>.Row .buttons {
     display: flex;
     flex-direction: column-reverse;
   }
 
-  .Status > .Row .asset-image-wrapper,
-  .Status > .Row .ui.button + .ui.button {
+  .Status>.Row .asset-image-wrapper,
+  .Status>.Row .ui.button+.ui.button {
     margin-left: 0px;
     margin-bottom: 24px;
   }

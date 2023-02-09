@@ -660,7 +660,7 @@
   "asset_purchase_with_card_pending_page": {
     "title": "¡Tu item está en camino!",
     "status": "Procesando la Transacción",
-    "description": "La transacción puede tomar hasta 3 minutos en ser procesada. Puedes trackear el progreso en {activity}.",
+    "description": "La transacción puede tomar hasta 3 minutos en ser procesada.",
     "cta": "Volver al marketplace"
   },
   "asset_purchase_with_card_complete_page": {

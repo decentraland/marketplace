@@ -54,11 +54,6 @@ const StatusPage = ({ type, purchase }: Props) => {
                       {t(
                         `asset_purchase_with_card_${status}_page.description`,
                         {
-                          activity: (
-                            <a href={locations.activity()}>
-                              {t('navigation.activity')}
-                            </a>
-                          ),
                           my_assets: (
                             <Link to={locations.currentAccount(browserOptions)}>
                               {t('navigation.my_assets')}
@@ -67,16 +62,18 @@ const StatusPage = ({ type, purchase }: Props) => {
                         }
                       )}
                     </p>
-                    <Button
-                      className="cta"
-                      as={Link}
-                      to={locations.browse(browserOptions)}
-                      inverted
-                      primary
-                      fluid
-                    >
-                      {t(`asset_purchase_with_card_${status}_page.cta`)}
-                    </Button>
+                    {status === PurchaseStatus.COMPLETE ? (
+                      <Button
+                        className="cta"
+                        as={Link}
+                        to={locations.browse(browserOptions)}
+                        inverted
+                        primary
+                        fluid
+                      >
+                        {t(`asset_purchase_with_card_${status}_page.cta`)}
+                      </Button>
+                    ) : null}
                   </Column>
                 </Row>
               </div>
