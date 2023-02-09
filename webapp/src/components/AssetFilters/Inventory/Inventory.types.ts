@@ -1,4 +1,5 @@
 import { Network } from '@dcl/schemas/dist/dapps/network'
+import { BarChartProps } from 'decentraland-ui/lib/components/BarChart/BarChart.types'
 import { BrowseOptions } from '../../../modules/routing/types'
 
 export type Props = {
@@ -14,4 +15,4 @@ export type Props = {
   defaultCollapsed?: boolean
   onChange: (value: [string, string]) => void
   fetcher: () => Promise<Record<string, number>>
-}
+} & BarChartProps

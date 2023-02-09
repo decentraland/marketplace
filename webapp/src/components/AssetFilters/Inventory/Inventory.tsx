@@ -12,7 +12,8 @@ export const Inventory = ({
   network,
   upperBound,
   errorMessage,
-  onChange
+  onChange,
+  ...rest
 }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [data, setData] = useState<Record<string, number>>()
@@ -50,6 +51,7 @@ export const Inventory = ({
       network={network}
       onChange={onChange}
       errorMessage={errorMessage}
+      {...rest}
     />
   )
 }
