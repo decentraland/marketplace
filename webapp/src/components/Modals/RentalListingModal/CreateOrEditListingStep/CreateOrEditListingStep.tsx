@@ -33,7 +33,14 @@ import styles from './CreateOrEditListingStep.module.css'
 const RENTAL_MIN_PRICE = 1
 
 const CreateListingStep = (props: Props) => {
-  const { onCancel, nft, onCreate, onRemove, rental } = props
+  const {
+    onCancel,
+    nft,
+    onCreate,
+    onRemove,
+    rental,
+    isListForRentAgain
+  } = props
 
   // Editing properties
   const oldPrice = useMemo(
@@ -50,8 +57,10 @@ const CreateListingStep = (props: Props) => {
   )
   const oldExpirationDate = useMemo(
     () =>
-      rental ? convertDateToDateInputValue(new Date(rental.expiration)) : null,
-    [rental]
+      rental && !isListForRentAgain
+        ? convertDateToDateInputValue(new Date(rental.expiration))
+        : null,
+    [rental, isListForRentAgain]
   )
 
   // Form values
@@ -95,6 +104,7 @@ const CreateListingStep = (props: Props) => {
       UpsertRentalOptType.EDIT
     )
   }, [onCreate, nft, pricePerDayInput, periodOptions, expiresAt])
+
   const handleRemove = useCallback(() => onRemove(nft), [nft, onRemove])
 
   const createOptionHandler = (periodOption: PeriodOption) => () => {
@@ -150,14 +160,16 @@ const CreateListingStep = (props: Props) => {
     <>
       <ModalNavigation
         title={
-          rental
+          isListForRentAgain
+            ? t('rental_modal.authorization_step_again.title')
+            : rental
             ? t('rental_modal.create_listing_step.titles.edit')
             : t('rental_modal.create_listing_step.titles.create')
         }
         onClose={onCancel}
       />
       <Modal.Content>
-        {rental ? (
+        {rental && !isListForRentAgain ? (
           <div className={styles.editingCostWarning}>
             {t('rental_modal.create_listing_step.editing_cost_warning')}
           </div>
@@ -227,7 +239,13 @@ const CreateListingStep = (props: Props) => {
             content={t(
               'rental_modal.create_listing_step.expiration_date_tooltip'
             )}
-            trigger={<i className={styles.info} />}
+            trigger={
+              <i
+                className={
+                  rental && !isListForRentAgain ? styles.editInfo : styles.info
+                }
+              />
+            }
             position="top center"
             on="hover"
           ></Popup>
@@ -251,14 +269,18 @@ const CreateListingStep = (props: Props) => {
               onClick={handleSubmit}
               disabled={isInvalid || !isUpdated}
             >
-              {t('rental_modal.create_listing_step.update_listing')}
+              {isListForRentAgain
+                ? t('rental_modal.authorization_step_again.title')
+                : t('rental_modal.create_listing_step.update_listing')}
             </Button>
             <Button
               className={styles.actionButton}
               secondary
               onClick={handleRemove}
             >
-              {t('rental_modal.create_listing_step.remove_listing')}
+              {isListForRentAgain
+                ? t('global.cancel')
+                : t('rental_modal.create_listing_step.remove_listing')}
             </Button>
           </>
         )}

@@ -13,7 +13,9 @@ import { locations } from './locations'
 import {
   getAssetType,
   getIsMap,
+  getMaxEstateSize,
   getMaxPrice,
+  getMinEstateSize,
   getMinPrice,
   getOnlyOnRent,
   getSection,
@@ -82,6 +84,30 @@ describe('when getting if the are filters set', () => {
   describe('when the maxPrice filter is set', () => {
     it('should return true', () => {
       expect(hasFiltersEnabled.resultFunc({ maxPrice: '100' })).toBe(true)
+    })
+  })
+
+  describe('and it is the land section', () => {
+    describe('when the minEstateSize filter is set', () => {
+      it('should return true', () => {
+        expect(
+          hasFiltersEnabled.resultFunc({
+            section: Sections.decentraland.LAND,
+            minEstateSize: '10'
+          })
+        ).toBe(true)
+      })
+    })
+
+    describe('when the maxEstateSize filter is set', () => {
+      it('should return true', () => {
+        expect(
+          hasFiltersEnabled.resultFunc({
+            section: Sections.decentraland.LAND,
+            maxEstateSize: '100'
+          })
+        ).toBe(true)
+      })
     })
   })
 
@@ -287,6 +313,30 @@ describe('when there is a maxPrice defined', () => {
 
   it('should return the value', () => {
     expect(getMaxPrice.resultFunc(url)).toBe('120')
+  })
+})
+
+describe('when there is a minEstateSize defined', () => {
+  let url: string
+
+  beforeEach(() => {
+    url = 'minEstateSize=20'
+  })
+
+  it('should return the value', () => {
+    expect(getMinEstateSize.resultFunc(url)).toBe('20')
+  })
+})
+
+describe('when there is a maxEstateSize defined', () => {
+  let url: string
+
+  beforeEach(() => {
+    url = 'maxEstateSize=120'
+  })
+
+  it('should return the value', () => {
+    expect(getMaxEstateSize.resultFunc(url)).toBe('120')
   })
 })
 

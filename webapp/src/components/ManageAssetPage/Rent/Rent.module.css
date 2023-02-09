@@ -32,12 +32,13 @@
   justify-content: space-between;
 }
 
-.header .right {
+.header .left {
   display: flex;
   flex-direction: row;
+  gap: 16px;
 }
 
-.header .right .actionButton + .action {
+.header .actionButton + .action {
   margin-left: 12px;
 }
 
@@ -109,9 +110,20 @@
   padding: 7px 15px 7px 0px !important;
 }
 
-.actionButton:global(.ui.button) {
+.actionButtonRounded:global(.ui.button) {
   border: 1px solid var(--gray);
   padding: 7px 15px;
+  min-width: unset;
+  color: var(--primary);
+}
+
+.actionButtonRounded:global(.ui.button):hover {
+  color: var(--primary);
+}
+
+.actionButton:global(.ui.button) {
+  background-color: transparent;
+  padding: 7px 0px;
   min-width: unset;
   color: var(--primary);
 }

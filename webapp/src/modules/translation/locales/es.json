@@ -158,6 +158,12 @@
     "size": "Tamaño",
     "price": "Precio",
     "price_min_greater_max": "El precio máximo debería ser mayor al mínimo",
+    "estate_size": {
+      "label": "Tamaño de Estate",
+      "min_label": "Min (Land)",
+      "max_label": "Máx (Land)",
+      "error": "El tamaño máximo de parcelas debería ser superior al mínimo"
+    },
     "reset": "Limpiar",
     "apply_filters": "Aplicar filtros"
   },
@@ -354,6 +360,12 @@
       "more_than_price": "Más de <mana></mana> {price}",
       "less_than_price": "Menos de <mana></mana> {price}",
       "price_between": "<mana></mana> {minPrice} - <mana></mana> {maxPrice}"
+    },
+    "estate_size": {
+      "all_sizes": "Todos los tamaños",
+      "more_than_size": "Más de {size} parcelas",
+      "less_than_size": "Menos de {size} parcelas",
+      "size_between": "{min} a {max} parcelas"
     },
     "collection": {
       "title": "Colección",
@@ -884,6 +896,13 @@
       "notice_link": "Alquiler",
       "confirm": "Confirma la transacción en tu billetera"
     },
+    "authorization_step_again": {
+      "title": "Volver a publicar para la renta",
+      "notice_line_one": "Puedes volver a publicar tu {assetType} para la renta sin costo.",
+      "notice_line_two": "El Inquilino actual tendrá permisos de operador hasta que se vuelva a alquilar",
+      "notice_line_three": "Para retomar los permisos del operador, reclámalos (tarifas de gas involucradas)",
+      "cancel": "Cancelar"
+    },
     "create_listing_step": {
       "titles": {
         "edit": "Editar listado de alquiler",
@@ -913,7 +932,7 @@
       "dao_fee": "2.5% del precio irá para la DAO"
     },
     "confirmation_step": {
-      "title": "Confirm Listing",
+      "title": "Confirmar clasificado",
       "periods": "Períodos",
       "notice_line_one": "Revisa y confirma el precio y los períodos de alquiler que has seleccionado.",
       "notice_line_two": "Poner en alquiler es gratis, pero editar o cancelar el clasificado una vez hecho requerirá que envies una transacción, y deberas cubrir el costo de la misma.",
@@ -959,7 +978,7 @@
       "view_transaction": "Ver transacción",
       "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",
       "claiming_back": "Reclamando su {asset}",
-      "unclaimed_message": "{asset} todavía está sin reclamar. Reclámala para poder venderla o transferirla."
+      "unclaimed_message": "Tienes una renta activa pero el {asset} todavía está sin reclamar. Reclámala para poder venderla o transferirla"
     },
     "highlights": {
       "title": "Destacados",

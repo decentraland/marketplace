@@ -13,6 +13,8 @@ import { buildEstateFromNFT, getEstateImage } from '../modules/estate'
 import { buildCountFromNFT } from '../modules/count'
 import {
   buildParcelFromNFT,
+  getAdjacentToRoad,
+  getDistanceToPlaza,
   getParcelImage,
   getParcelText,
   isInBounds,
@@ -93,6 +95,8 @@ export function handleTransfer(event: Transfer): void {
       nft.searchParcelIsInBounds = isInBounds(parcel.x, parcel.y)
       nft.searchParcelX = parcel.x
       nft.searchParcelY = parcel.y
+      nft.searchDistanceToPlaza = getDistanceToPlaza(parcel)
+      nft.searchAdjacentToRoad = getAdjacentToRoad(parcel)
       nft.searchText = getParcelText(parcel, '')
     } else {
       parcel = new Parcel(nft.id)
@@ -106,6 +110,8 @@ export function handleTransfer(event: Transfer): void {
       nft.estate = id
       nft.image = getEstateImage(estate)
       nft.searchIsLand = true
+      nft.searchDistanceToPlaza = -1
+      nft.searchAdjacentToRoad = false
       nft.searchEstateSize = estate.size
     } else {
       estate = new Estate(nft.id)

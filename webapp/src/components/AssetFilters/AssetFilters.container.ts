@@ -6,7 +6,9 @@ import {
   getAssetType,
   getContracts,
   getEmotePlayMode,
+  getMaxEstateSize,
   getMaxPrice,
+  getMinEstateSize,
   getMinPrice,
   getNetwork,
   getOnlyOnRent,
@@ -16,7 +18,10 @@ import {
   getSection,
   getWearableGenders
 } from '../../modules/routing/selectors'
-import { getIsPriceFilterEnabled } from '../../modules/features/selectors'
+import {
+  getIsEstateSizeFilterEnabled,
+  getIsPriceFilterEnabled
+} from '../../modules/features/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { browse } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
@@ -45,6 +50,14 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
     minPrice: 'minPrice' in values ? values.minPrice || '' : getMinPrice(state),
     maxPrice: 'maxPrice' in values ? values.maxPrice || '' : getMaxPrice(state),
+    minEstateSize:
+      'minEstateSize' in values
+        ? values.minEstateSize || ''
+        : getMinEstateSize(state),
+    maxEstateSize:
+      'maxEstateSize' in values
+        ? values.maxEstateSize || ''
+        : getMaxEstateSize(state),
     rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
     network: 'network' in values ? values.network : getNetwork(state),
     bodyShapes:
@@ -61,7 +74,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     landStatus,
     view: getView(state),
     section,
-    isPriceFilterEnabled: getIsPriceFilterEnabled(state)
+    isPriceFilterEnabled: getIsPriceFilterEnabled(state),
+    isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state)
   }
 }
 

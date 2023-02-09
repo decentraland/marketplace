@@ -1,8 +1,9 @@
-import { log, BigInt, Address } from '@graphprotocol/graph-ts'
+import { BigInt, Address } from '@graphprotocol/graph-ts'
 import { LANDRegistry } from '../../entities/LANDRegistry/LANDRegistry'
 import { NFT, Parcel } from '../../entities/schema'
 import { toLowerCase } from '../../modules/utils'
 import * as addresses from '../../data/addresses'
+import { p as proximities } from '../../data/proximities'
 
 export function buildParcelFromNFT(nft: NFT): Parcel {
   let parcel = new Parcel(nft.id)
@@ -39,6 +40,24 @@ export function getParcelImage(parcel: Parcel): string {
     parcel.y.toString() +
     '/map.png'
   )
+}
+
+export function getDistanceToPlaza(parcel: Parcel): i32 {
+  let coord = getParcelText(parcel, '')
+  if (proximities.has(coord)) {
+    let proximity = proximities.get(coord)!
+    return proximity.p
+  }
+  return -1
+}
+
+export function getAdjacentToRoad(parcel: Parcel): boolean {
+  let coord = getParcelText(parcel, '')
+  if (proximities.has(coord)) {
+    let proximity = proximities.get(coord)!
+    return proximity.r
+  }
+  return false
 }
 
 export function isInBounds(x: BigInt, y: BigInt): boolean {

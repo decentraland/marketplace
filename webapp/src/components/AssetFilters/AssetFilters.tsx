@@ -10,9 +10,11 @@ import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
 import { View } from '../../modules/ui/types'
+import { Sections } from '../../modules/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
+import EstateSizeFilter from './EstateSizeFilter'
 import { RarityFilter } from './RarityFilter'
 import { NetworkFilter } from './NetworkFilter'
 import { Props } from './AssetFilters.types'
@@ -21,12 +23,14 @@ import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
-import { AssetFilter, filtersBySection } from './utilts'
+import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 
 export const AssetFilters = ({
   minPrice,
   maxPrice,
+  minEstateSize,
+  maxEstateSize,
   collection,
   rarities,
   network,
@@ -41,8 +45,9 @@ export const AssetFilters = ({
   defaultCollapsed,
   onBrowse,
   isPriceFilterEnabled,
-  values,
-  view
+  view,
+  isEstateSizeFilterEnabled,
+  values
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
@@ -51,6 +56,15 @@ export const AssetFilters = ({
     (value: [string, string]) => {
       const [minPrice, maxPrice] = value
       onBrowse({ minPrice, maxPrice })
+    },
+    [onBrowse]
+  )
+
+  const handleRangeFilterChange = useCallback(
+    (filterNames: [string, string], value: [string, string]) => {
+      const [filterMinName, filterMaxName] = filterNames
+      const [minPrice, maxPrice] = value
+      onBrowse({ [filterMinName]: minPrice, [filterMaxName]: maxPrice })
     },
     [onBrowse]
   )
@@ -140,6 +154,21 @@ export const AssetFilters = ({
             minPrice={minPrice}
             maxPrice={maxPrice}
             values={values}
+          />
+        ) : null}
+        {isEstateSizeFilterEnabled &&
+        section !== Sections.decentraland.PARCELS ? (
+          <EstateSizeFilter
+            landStatus={landStatus}
+            values={values}
+            minPrice={minEstateSize}
+            maxPrice={maxEstateSize}
+            onChange={values =>
+              handleRangeFilterChange(
+                ['minEstateSize', 'maxEstateSize'],
+                values
+              )
+            }
           />
         ) : null}
       </div>

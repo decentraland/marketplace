@@ -92,6 +92,8 @@ type Estate @entity {
   tokenId: BigInt!
   owner: Account!
   parcels: [Parcel!]! @derivedFrom(field: "estate")
+  parcelDistances: [Int!]
+  adjacentToRoadCount: Int
   size: Int
   data: Data
   rawData: String
@@ -176,6 +178,8 @@ type NFT @entity {
   searchParcelX: BigInt
   searchParcelY: BigInt
   searchParcelEstateId: String
+  searchDistanceToPlaza: Int
+  searchAdjacentToRoad: Boolean
 
   searchEstateSize: Int
 
