@@ -9,6 +9,7 @@ import {
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
+import { View } from '../../modules/ui/types'
 import { Sections } from '../../modules/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
@@ -44,6 +45,7 @@ export const AssetFilters = ({
   defaultCollapsed,
   onBrowse,
   isPriceFilterEnabled,
+  view,
   isEstateSizeFilterEnabled,
   values
 }: Props): JSX.Element | null => {
@@ -184,7 +186,8 @@ export const AssetFilters = ({
       ) : null}
       {isPriceFilterEnabled &&
       shouldRenderFilter(AssetFilter.Price) &&
-      isOnSale ? (
+      isOnSale &&
+      view !== View.ACCOUNT ? (
         <PriceFilter
           onChange={handlePriceChange}
           minPrice={minPrice}
