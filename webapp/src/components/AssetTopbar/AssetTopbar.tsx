@@ -1,31 +1,18 @@
 import { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
-import {
-  Dropdown,
-  DropdownProps,
-  Field,
-  Icon,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AssetType } from '../../modules/asset/types'
+import { Dropdown, DropdownProps, Field, Icon, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { useInput } from '../../lib/input'
-import { getCountText, getOrderByOptions } from './utils'
+import { AssetType } from '../../modules/asset/types'
+import { getCategoryFromSection, getSectionFromCategory } from '../../modules/routing/search'
 import { SortBy } from '../../modules/routing/types'
-import {
-  getCategoryFromSection,
-  getSectionFromCategory
-} from '../../modules/routing/search'
-import {
-  isAccountView,
-  isLandSection,
-  persistIsMapProperty
-} from '../../modules/ui/utils'
+import { isAccountView, isLandSection, persistIsMapProperty } from '../../modules/ui/utils'
 import { Chip } from '../Chip'
 import { AssetTypeFilter } from './AssetTypeFilter'
-import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
+import { getCountText, getOrderByOptions } from './utils'
+import { Props } from './AssetTopbar.types'
 import styles from './AssetTopbar.module.css'
 
 export const AssetTopbar = ({
@@ -83,25 +70,15 @@ export const AssetTopbar = ({
         isFullscreen: isMap,
         search: '',
         // Forces the onlyOnSale property in the defined cases so the users can see LAND on sale.
-        onlyOnSale:
-          (!onlyOnSale && onlyOnRent === false) ||
-          (onlyOnSale === undefined && onlyOnRent === undefined) ||
-          onlyOnSale
+        onlyOnSale: (!onlyOnSale && onlyOnRent === false) || (onlyOnSale === undefined && onlyOnRent === undefined) || onlyOnSale
       })
     },
     [onBrowse, onlyOnSale, onlyOnRent]
   )
 
-  const orderByDropdownOptions = useMemo(
-    () => getOrderByOptions(onlyOnRent, onlyOnSale),
-    [onlyOnRent, onlyOnSale]
-  )
+  const orderByDropdownOptions = useMemo(() => getOrderByOptions(onlyOnRent, onlyOnSale), [onlyOnRent, onlyOnSale])
 
-  const sortByValue = orderByDropdownOptions.find(
-    option => option.value === sortBy
-  )
-    ? sortBy
-    : orderByDropdownOptions[0].value
+  const sortByValue = orderByDropdownOptions.find(option => option.value === sortBy) ? sortBy : orderByDropdownOptions[0].value
 
   return (
     <div className={styles.assetTopbar}>
@@ -118,35 +95,15 @@ export const AssetTopbar = ({
           />
         )}
         {isLandSection(section) && !isAccountView(view!) && (
-          <div
-            className={classNames(styles.mapToggle, { [styles.map]: isMap })}
-          >
-            <Chip
-              className="grid"
-              icon="table"
-              isActive={!isMap}
-              onClick={handleIsMapChange.bind(null, false)}
-            />
-            <Chip
-              className="atlas"
-              icon="map marker alternate"
-              isActive={isMap}
-              onClick={handleIsMapChange.bind(null, true)}
-            />
+          <div className={classNames(styles.mapToggle, { [styles.map]: isMap })}>
+            <Chip className="grid" icon="table" isActive={!isMap} onClick={handleIsMapChange.bind(null, false)} />
+            <Chip className="atlas" icon="map marker alternate" isActive={isMap} onClick={handleIsMapChange.bind(null, true)} />
           </div>
         )}
       </div>
-      {view &&
-        !isLandSection(section) &&
-        !isAccountView(view) &&
-        (category === NFTCategory.WEARABLE ||
-          category === NFTCategory.EMOTE) && (
-          <AssetTypeFilter
-            view={view}
-            assetType={assetType}
-            onChange={handleAssetTypeChange}
-          />
-        )}
+      {view && !isLandSection(section) && !isAccountView(view) && (category === NFTCategory.WEARABLE || category === NFTCategory.EMOTE) && (
+        <AssetTypeFilter view={view} assetType={assetType} onChange={handleAssetTypeChange} />
+      )}
       {!isMap && (
         <div className={styles.infoRow}>
           <div className={styles.countContainer}>
@@ -158,19 +115,10 @@ export const AssetTopbar = ({
             )}
           </div>
           <div className={styles.rightOptionsContainer}>
-            <Dropdown
-              direction="left"
-              value={sortByValue}
-              options={orderByDropdownOptions}
-              onChange={handleOrderByDropdownChange}
-            />
+            <Dropdown direction="left" value={sortByValue} options={orderByDropdownOptions} onChange={handleOrderByDropdownChange} />
             {isMobile ? (
               <i
-                className={classNames(
-                  styles.openFilters,
-                  styles.openFiltersWrapper,
-                  hasFiltersEnabled && styles.active
-                )}
+                className={classNames(styles.openFilters, styles.openFiltersWrapper, hasFiltersEnabled && styles.active)}
                 onClick={onOpenFiltersModal}
               />
             ) : null}

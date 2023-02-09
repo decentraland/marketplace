@@ -1,12 +1,14 @@
 import React from 'react'
-import { Header, Stats } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NFTCategory, Rarity } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header, Stats } from 'decentraland-ui'
 import { AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/decentraland'
-import CampaignBadge from '../../Campaign/CampaignBadge'
 import { AssetImage } from '../../AssetImage'
+import CampaignBadge from '../../Campaign/CampaignBadge'
 import GenderBadge from '../../GenderBadge'
+import { Network } from '../../Network'
+import Price from '../../Price'
 import RarityBadge from '../../RarityBadge'
 import { Actions } from '../Actions'
 import BaseDetail from '../BaseDetail'
@@ -15,14 +17,12 @@ import CategoryBadge from '../CategoryBadge'
 import Collection from '../Collection'
 import { Description } from '../Description'
 import Expiration from '../Expiration'
-import { Network } from '../../Network'
 import { Owner } from '../Owner'
-import Price from '../../Price'
 import { SaleActionBox } from '../SaleActionBox'
 import SmartBadge from '../SmartBadge'
 import { TransactionHistory } from '../TransactionHistory'
-import styles from './WearableDetail.module.css'
 import { Props } from './WearableDetail.types'
+import styles from './WearableDetail.module.css'
 
 const WearableDetail = ({ nft, isBuyNftsWithFiatEnabled }: Props) => {
   const wearable = nft.data.wearable!
@@ -34,20 +34,9 @@ const WearableDetail = ({ nft, isBuyNftsWithFiatEnabled }: Props) => {
       isOnSale={!!nft.activeOrderId}
       badges={
         <>
-          <RarityBadge
-            rarity={wearable.rarity}
-            assetType={AssetType.NFT}
-            category={NFTCategory.WEARABLE}
-          />
-          <CategoryBadge
-            category={wearable.category}
-            assetType={AssetType.NFT}
-          />
-          <GenderBadge
-            bodyShapes={wearable.bodyShapes}
-            assetType={AssetType.NFT}
-            section={Section.WEARABLES}
-          />
+          <RarityBadge rarity={wearable.rarity} assetType={AssetType.NFT} category={NFTCategory.WEARABLE} />
+          <CategoryBadge category={wearable.category} assetType={AssetType.NFT} />
+          <GenderBadge bodyShapes={wearable.bodyShapes} assetType={AssetType.NFT} section={Section.WEARABLES} />
           {wearable.isSmart ? <SmartBadge assetType={AssetType.NFT} /> : null}
           <CampaignBadge contract={nft.contractAddress} />
         </>
@@ -70,9 +59,7 @@ const WearableDetail = ({ nft, isBuyNftsWithFiatEnabled }: Props) => {
                 <Stats title={t('global.issue_number')}>
                   <Header>
                     {Number(nft.issuedId).toLocaleString()}
-                    <span className={styles.issued}>
-                      /{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}
-                    </span>
+                    <span className={styles.issued}>/{Rarity.getMaxSupply(wearable.rarity).toLocaleString()}</span>
                   </Header>
                 </Stats>
               ) : null}

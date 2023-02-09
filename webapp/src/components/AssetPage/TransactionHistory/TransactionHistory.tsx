@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { Item, Sale } from '@dcl/schemas'
-import {
-  Header,
-  Table,
-  Mobile,
-  NotMobile,
-  Pagination,
-  Loader,
-  Row
-} from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
-
-import { Mana } from '../../Mana'
-import { saleAPI } from '../../../modules/vendor/decentraland'
+import { Item, Sale } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header, Table, Mobile, NotMobile, Pagination, Loader, Row } from 'decentraland-ui'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { isNFT } from '../../../modules/asset/utils'
 import { NFT } from '../../../modules/nft/types'
+import { saleAPI } from '../../../modules/vendor/decentraland'
 import { LinkedProfile } from '../../LinkedProfile'
+import { Mana } from '../../Mana'
 import { Props } from './TransactionHistory.types'
 import './TransactionHistory.css'
 
@@ -54,7 +45,7 @@ const TransactionHistory = (props: Props) => {
   useEffect(() => {
     if (!isAssetNull) {
       setIsLoading(true)
-      let params: Record<string, string | number> = {
+      const params: Record<string, string | number> = {
         contractAddress: assetContractAddress!,
         first: ROWS_PER_PAGE,
         skip: (page - 1) * ROWS_PER_PAGE
@@ -75,16 +66,7 @@ const TransactionHistory = (props: Props) => {
           console.error(error)
         })
     }
-  }, [
-    assetContractAddress,
-    assetTokenId,
-    assetItemId,
-    setIsLoading,
-    setSales,
-    page,
-    isAssetNull,
-    isAssetNFT
-  ])
+  }, [assetContractAddress, assetTokenId, assetItemId, setIsLoading, setSales, page, isAssetNull, isAssetNFT])
 
   const network = asset ? asset.network : undefined
 
@@ -97,21 +79,11 @@ const TransactionHistory = (props: Props) => {
             <Table basic="very">
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>
-                    {t('transaction_history.from')}
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    {t('transaction_history.to')}
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    {t('transaction_history.type')}
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    {t('transaction_history.when')}
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    {t('transaction_history.price')}
-                  </Table.HeaderCell>
+                  <Table.HeaderCell>{t('transaction_history.from')}</Table.HeaderCell>
+                  <Table.HeaderCell>{t('transaction_history.to')}</Table.HeaderCell>
+                  <Table.HeaderCell>{t('transaction_history.type')}</Table.HeaderCell>
+                  <Table.HeaderCell>{t('transaction_history.when')}</Table.HeaderCell>
+                  <Table.HeaderCell>{t('transaction_history.price')}</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
 
@@ -125,9 +97,7 @@ const TransactionHistory = (props: Props) => {
                       <LinkedProfile address={sale.buyer} />
                     </Table.Cell>
                     <Table.Cell>{t(`global.${sale.type}`)}</Table.Cell>
-                    <Table.Cell title={formatDateTitle(sale.timestamp)}>
-                      {formatEventDate(sale.timestamp)}
-                    </Table.Cell>
+                    <Table.Cell title={formatDateTitle(sale.timestamp)}>{formatEventDate(sale.timestamp)}</Table.Cell>
                     <Table.Cell>
                       <Mana network={network} inline>
                         {formatWeiMANA(sale.price)}

@@ -1,36 +1,34 @@
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Button, Header, Stats } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { BodyShape, EmotePlayMode, NFTCategory, Rarity } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Header, Stats } from 'decentraland-ui'
+import { AssetType } from '../../../modules/asset/types'
+import { getBuilderCollectionDetailUrl } from '../../../modules/collection/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
-import { getBuilderCollectionDetailUrl } from '../../../modules/collection/utils'
-import RarityBadge from '../../RarityBadge'
-import { AssetType } from '../../../modules/asset/types'
-import GenderBadge from '../../GenderBadge'
 import { AssetImage } from '../../AssetImage'
-import CategoryBadge from '../CategoryBadge'
-import SmartBadge from '../SmartBadge'
-import { Network } from '../../Network'
-import { Description } from '../Description'
-import { Owner } from '../Owner'
-import Collection from '../Collection'
-import Price from '../../Price'
-import BaseDetail from '../BaseDetail'
 import CampaignBadge from '../../Campaign/CampaignBadge'
+import GenderBadge from '../../GenderBadge'
+import { Network } from '../../Network'
+import Price from '../../Price'
+import RarityBadge from '../../RarityBadge'
+import BaseDetail from '../BaseDetail'
+import CategoryBadge from '../CategoryBadge'
+import Collection from '../Collection'
+import { Description } from '../Description'
 import IconBadge from '../IconBadge'
-import { TransactionHistory } from '../TransactionHistory'
+import { Owner } from '../Owner'
 import { SaleActionBox } from '../SaleActionBox'
+import SmartBadge from '../SmartBadge'
+import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './ItemDetail.types'
 import styles from './ItemDetail.module.css'
 
 const ItemDetail = ({ isBuyNftsWithFiatEnabled, item, wallet }: Props) => {
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
-  const builderCollectionUrl = getBuilderCollectionDetailUrl(
-    item.contractAddress
-  )
+  const builderCollectionUrl = getBuilderCollectionDetailUrl(item.contractAddress)
 
   let description = ''
   let bodyShapes: BodyShape[] = []
@@ -66,18 +64,10 @@ const ItemDetail = ({ isBuyNftsWithFiatEnabled, item, wallet }: Props) => {
       isOnSale={item.isOnSale}
       badges={
         <>
-          <RarityBadge
-            rarity={item.rarity}
-            assetType={AssetType.ITEM}
-            category={NFTCategory.WEARABLE}
-          />
+          <RarityBadge rarity={item.rarity} assetType={AssetType.ITEM} category={NFTCategory.WEARABLE} />
           {category && (
             <CategoryBadge
-              category={
-                item.data.emote
-                  ? item.data.emote.category
-                  : item.data.wearable!.category
-              }
+              category={item.data.emote ? item.data.emote.category : item.data.wearable!.category}
               assetType={AssetType.ITEM}
             />
           )}
@@ -92,17 +82,10 @@ const ItemDetail = ({ isBuyNftsWithFiatEnabled, item, wallet }: Props) => {
             <GenderBadge
               bodyShapes={bodyShapes}
               assetType={AssetType.ITEM}
-              section={
-                item.category === NFTCategory.WEARABLE
-                  ? Section.WEARABLES
-                  : Section.EMOTES
-              }
+              section={item.category === NFTCategory.WEARABLE ? Section.WEARABLES : Section.EMOTES}
             />
           )}
-          {item.category === NFTCategory.WEARABLE &&
-            item.data.wearable!.isSmart && (
-              <SmartBadge assetType={AssetType.ITEM} />
-            )}
+          {item.category === NFTCategory.WEARABLE && item.data.wearable!.isSmart && <SmartBadge assetType={AssetType.ITEM} />}
 
           <CampaignBadge contract={item.contractAddress} />
         </>
@@ -125,9 +108,7 @@ const ItemDetail = ({ isBuyNftsWithFiatEnabled, item, wallet }: Props) => {
                 {item.available > 0 ? (
                   <Header>
                     {item.available.toLocaleString()}
-                    <span className={styles.supply}>
-                      /{Rarity.getMaxSupply(item.rarity).toLocaleString()}
-                    </span>
+                    <span className={styles.supply}>/{Rarity.getMaxSupply(item.rarity).toLocaleString()}</span>
                   </Header>
                 ) : (
                   t('asset_page.sold_out')
@@ -149,16 +130,7 @@ const ItemDetail = ({ isBuyNftsWithFiatEnabled, item, wallet }: Props) => {
               </div>
             ) : (
               canBuy && (
-                <Button
-                  fluid
-                  as={Link}
-                  to={locations.buy(
-                    AssetType.ITEM,
-                    item.contractAddress,
-                    item.itemId
-                  )}
-                  primary
-                >
+                <Button fluid as={Link} to={locations.buy(AssetType.ITEM, item.contractAddress, item.itemId)} primary>
                   {t('asset_page.actions.buy')}
                 </Button>
               )

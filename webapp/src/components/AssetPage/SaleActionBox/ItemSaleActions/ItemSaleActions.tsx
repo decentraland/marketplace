@@ -1,18 +1,15 @@
 import { memo } from 'react'
-import { Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import { Button } from 'decentraland-ui'
 import { getBuilderCollectionDetailUrl } from '../../../../modules/collection/utils'
-import styles from './ItemSaleActions.module.css'
-import { Props } from './ItemSaleActions.types'
 import { BuyNFTButtons } from '../BuyNFTButtons'
+import { Props } from './ItemSaleActions.types'
+import styles from './ItemSaleActions.module.css'
 
 const NFTSaleActions = ({ item, wallet }: Props) => {
   const isOwner = wallet?.address === item.creator
   const canBuy = !isOwner && item.isOnSale && item.available > 0
-  const builderCollectionUrl = getBuilderCollectionDetailUrl(
-    item.contractAddress
-  )
+  const builderCollectionUrl = getBuilderCollectionDetailUrl(item.contractAddress)
 
   return (
     <>

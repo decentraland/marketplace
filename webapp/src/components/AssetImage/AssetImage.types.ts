@@ -1,7 +1,6 @@
 import React from 'react'
 import { Dispatch } from 'redux'
-import { Avatar, IPreviewController } from '@dcl/schemas'
-import { Item } from '@dcl/schemas'
+import { Avatar, IPreviewController, Item } from '@dcl/schemas'
 import { NFT } from '../../modules/nft/types'
 import {
   setIsTryingOn,
@@ -39,14 +38,6 @@ export enum ControlOptionAction {
   STOP_EMOTE
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'avatar' | 'wearableController' | 'isTryingOn' | 'isPlayingEmote'
->
-export type MapDispatchProps = Pick<
-  Props,
-  'onSetIsTryingOn' | 'onSetWearablePreviewController'
->
-export type MapDispatch = Dispatch<
-  SetIsTryingOnAction | SetWearablePreviewControllerAction
->
+export type MapStateProps = Pick<Props, 'avatar' | 'wearableController' | 'isTryingOn' | 'isPlayingEmote'>
+export type MapDispatchProps = Pick<Props, 'onSetIsTryingOn' | 'onSetWearablePreviewController'>
+export type MapDispatch = Dispatch<SetIsTryingOnAction | SetWearablePreviewControllerAction>

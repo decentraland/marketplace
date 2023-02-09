@@ -1,9 +1,9 @@
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
 import { AssetType } from '../../modules/asset/types'
-import { BrowseOptions } from '../../modules/routing/types'
-import { Section } from '../../modules/vendor/routing/types'
-import { View } from '../../modules/ui/types'
 import { clearFilters } from '../../modules/routing/actions'
+import { BrowseOptions } from '../../modules/routing/types'
+import { View } from '../../modules/ui/types'
+import { Section } from '../../modules/vendor/routing/types'
 
 export type Props = {
   count: number | undefined
@@ -37,7 +37,4 @@ export type MapStateProps = Pick<
   | 'isLoading'
 >
 
-export type MapDispatchProps = Pick<
-  Props,
-  'onBrowse' | 'onClearFilters' | 'onOpenFiltersModal'
->
+export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters' | 'onOpenFiltersModal'>

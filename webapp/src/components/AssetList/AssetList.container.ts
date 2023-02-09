@@ -1,11 +1,13 @@
-import { getLocation } from 'connected-react-router'
 import { connect } from 'react-redux'
+import { getLocation } from 'connected-react-router'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-
-import { RootState } from '../../modules/reducer'
+import { AssetType } from '../../modules/asset/types'
+import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
+import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
+import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
+import { RootState } from '../../modules/reducer'
 import { browse, clearFilters } from '../../modules/routing/actions'
-import { getNFTs, getCount, getItems } from '../../modules/ui/browse/selectors'
 import {
   getVendor,
   getPage,
@@ -15,13 +17,10 @@ import {
   getSearch,
   hasFiltersEnabled
 } from '../../modules/routing/selectors'
-import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
-import { getLoading as getLoadingItems } from '../../modules/item/selectors'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
-import AssetList from './AssetList'
-import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { buildBrowseURL } from '../../modules/routing/utils'
-import { AssetType } from '../../modules/asset/types'
+import { getNFTs, getCount, getItems } from '../../modules/ui/browse/selectors'
+import AssetList from './AssetList'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const page = getPage(state)

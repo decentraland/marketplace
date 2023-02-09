@@ -1,10 +1,9 @@
 import { connect } from 'react-redux'
-
-import { RootState } from '../../../modules/reducer'
 import { getIsBuyNftsWithFiatEnabled } from '../../../modules/features/selectors'
+import { RootState } from '../../../modules/reducer'
 import { getWallet } from '../../../modules/wallet/selectors'
-import { MapStateProps } from './ItemDetail.types'
 import ItemDetail from './ItemDetail'
+import { MapStateProps } from './ItemDetail.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),
