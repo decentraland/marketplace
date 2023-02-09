@@ -62,6 +62,7 @@ export const EstateSizeFilter = ({
         maxLabel={t('filters.estate_size.max_label')}
         onChange={onChange}
         errorMessage={t('filters.estate_size.error')}
+        rangeDecimals={0}
       />
     </Box>
   )
