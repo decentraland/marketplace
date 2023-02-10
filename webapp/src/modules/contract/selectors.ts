@@ -1,7 +1,7 @@
-import { createSelectorCreator, defaultMemoize } from 'reselect'
 import isEqual from 'lodash/isEqual'
-import { Contract } from '../vendor/services'
+import { createSelectorCreator, defaultMemoize } from 'reselect'
 import { RootState } from '../reducer'
+import { Contract } from '../vendor/services'
 
 export const getState = (state: RootState) => state.contract
 export const getContracts = (state: RootState) => getState(state).data
@@ -21,9 +21,7 @@ export const getContract = createSelectorCreator(defaultMemoize, isEqual)<
   (query: Partial<Contract>, contracts: Contract[]) => {
     const found = contracts.find(contract =>
       Object.keys(query).every(
-        key =>
-          query[key as keyof Contract]?.toString().toLowerCase() ===
-          contract[key as keyof Contract]?.toString().toLowerCase()
+        key => query[key as keyof Contract]?.toString().toLowerCase() === contract[key as keyof Contract]?.toString().toLowerCase()
       )
     )
 

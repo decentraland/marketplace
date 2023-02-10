@@ -8,24 +8,9 @@ const ProximityTags = (props: Props) => {
   const proximity = useProximity(nft, proximities)
   return (
     <>
-      {proximity?.plaza !== undefined ? (
-        <div
-          className="ProximityTag plaza"
-          title={getDistanceText(proximity.plaza)}
-        />
-      ) : null}
-      {proximity?.road !== undefined ? (
-        <div
-          className="ProximityTag road"
-          title={getDistanceText(proximity.road)}
-        />
-      ) : null}
-      {proximity?.district !== undefined ? (
-        <div
-          className="ProximityTag district"
-          title={getDistanceText(proximity.district)}
-        />
-      ) : null}
+      {proximity?.plaza !== undefined ? <div className="ProximityTag plaza" title={getDistanceText(proximity.plaza)} /> : null}
+      {proximity?.road !== undefined ? <div className="ProximityTag road" title={getDistanceText(proximity.road)} /> : null}
+      {proximity?.district !== undefined ? <div className="ProximityTag district" title={getDistanceText(proximity.district)} /> : null}
     </>
   )
 }

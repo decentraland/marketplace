@@ -1,4 +1,4 @@
-import { Order } from "@dcl/schemas"
+import { Order } from '@dcl/schemas'
 
 export type Props = {
   order?: Order

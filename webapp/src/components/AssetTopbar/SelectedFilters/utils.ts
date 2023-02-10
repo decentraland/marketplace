@@ -7,4 +7,3 @@ export async function getCollectionByAddress(address: string) {
 
   return data[0]
 }
-

@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react'
-
 import { isLandSection } from '../../../../../modules/ui/utils'
 import { Section } from '../../../../../modules/vendor/decentraland/routing/types'
 import { DropdownMenu } from '../../../../Menu/DropdownMenu'
@@ -11,51 +10,33 @@ const shouldRenderSection = (section: Section, sections: Section[]) => {
 }
 
 const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
-
-  const handleOnSectionClick = useCallback((newSection) => {
-    if (section !== newSection) {
-      onSectionClick(newSection)
-    }
-  }, [onSectionClick, section])
+  const handleOnSectionClick = useCallback(
+    newSection => {
+      if (section !== newSection) {
+        onSectionClick(newSection)
+      }
+    },
+    [onSectionClick, section]
+  )
 
   return (
     <>
       {sections.includes(Section.ALL) && (
-        <MenuItem
-          key={Section.ALL}
-          value={Section.ALL}
-          currentValue={section}
-          onClick={handleOnSectionClick}
-        />
+        <MenuItem key={Section.ALL} value={Section.ALL} currentValue={section} onClick={handleOnSectionClick} />
       )}
       {shouldRenderSection(Section.LAND, sections) && (
         <>
-          <MenuItem
-            key={Section.LAND}
-            value={Section.LAND}
-            currentValue={section}
-            onClick={handleOnSectionClick}
-          />
+          <MenuItem key={Section.LAND} value={Section.LAND} currentValue={section} onClick={handleOnSectionClick} />
           {isLandSection(section)
             ? [Section.PARCELS, Section.ESTATES].map(menuSection => (
-                <MenuItem
-                  key={menuSection}
-                  value={menuSection}
-                  currentValue={section}
-                  onClick={handleOnSectionClick}
-                  nestedLevel={1}
-                />
+                <MenuItem key={menuSection} value={menuSection} currentValue={section} onClick={handleOnSectionClick} nestedLevel={1} />
               ))
             : null}
         </>
       )}
       {shouldRenderSection(Section.WEARABLES, sections) && (
         <>
-          <MenuItem
-            value={Section.WEARABLES}
-            currentValue={section}
-            onClick={handleOnSectionClick}
-          />
+          <MenuItem value={Section.WEARABLES} currentValue={section} onClick={handleOnSectionClick} />
           {[
             Section.WEARABLES,
             Section.WEARABLES_HEAD,
@@ -91,18 +72,8 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
                 onMenuItemClick={handleOnSectionClick}
               />
 
-              {[
-                Section.WEARABLES_UPPER_BODY,
-                Section.WEARABLES_LOWER_BODY,
-                Section.WEARABLES_FEET
-              ].map(menuSection => (
-                <MenuItem
-                  key={menuSection}
-                  value={menuSection}
-                  currentValue={section}
-                  onClick={handleOnSectionClick}
-                  nestedLevel={1}
-                />
+              {[Section.WEARABLES_UPPER_BODY, Section.WEARABLES_LOWER_BODY, Section.WEARABLES_FEET].map(menuSection => (
+                <MenuItem key={menuSection} value={menuSection} currentValue={section} onClick={handleOnSectionClick} nestedLevel={1} />
               ))}
 
               <DropdownMenu
@@ -120,23 +91,14 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
                 onMenuItemClick={handleOnSectionClick}
               />
 
-              <MenuItem
-                value={Section.WEARABLES_SKIN}
-                currentValue={section}
-                onClick={handleOnSectionClick}
-                nestedLevel={1}
-              />
+              <MenuItem value={Section.WEARABLES_SKIN} currentValue={section} onClick={handleOnSectionClick} nestedLevel={1} />
             </>
           ) : null}
         </>
       )}
       {shouldRenderSection(Section.EMOTES, sections) && (
         <>
-          <MenuItem
-            value={Section.EMOTES}
-            currentValue={section}
-            onClick={handleOnSectionClick}
-          />
+          <MenuItem value={Section.EMOTES} currentValue={section} onClick={handleOnSectionClick} />
           {[
             Section.EMOTES,
             Section.EMOTES_DANCE,
@@ -158,24 +120,12 @@ const NFTSectionsMenuItems = ({ section, sections, onSectionClick }: Props) => {
                 Section.EMOTES_STUNT,
                 Section.EMOTES_REACTIONS
               ].map(menuSection => (
-                <MenuItem
-                  key={menuSection}
-                  value={menuSection}
-                  currentValue={section}
-                  onClick={handleOnSectionClick}
-                  nestedLevel={1}
-                />
+                <MenuItem key={menuSection} value={menuSection} currentValue={section} onClick={handleOnSectionClick} nestedLevel={1} />
               ))
             : null}
         </>
       )}
-      {shouldRenderSection(Section.ENS, sections) && (
-        <MenuItem
-          value={Section.ENS}
-          currentValue={section}
-          onClick={handleOnSectionClick}
-        />
-      )}
+      {shouldRenderSection(Section.ENS, sections) && <MenuItem value={Section.ENS} currentValue={section} onClick={handleOnSectionClick} />}
     </>
   )
 }

@@ -1,8 +1,8 @@
+import { AnalyticsService } from './AnalyticsService'
 import { BidService } from './BidService'
 import { ContractService } from './ContractService'
 import { NFTService } from './NFTService'
 import { OrderService } from './OrderService'
-import { AnalyticsService } from './AnalyticsService'
 
 export const VendorName = 'decentraland' as const
 

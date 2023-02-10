@@ -10,10 +10,6 @@ type Props = {
 export const Pill = ({ id, label, onDelete }: Props): JSX.Element => (
   <div className={styles.pill}>
     {label}
-    <Icon
-      onClick={onDelete.bind(null, id)}
-      name="times"
-      className={styles.deleteBtn}
-    />
+    <Icon onClick={onDelete.bind(null, id)} name="times" className={styles.deleteBtn} />
   </div>
 )

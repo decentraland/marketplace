@@ -5,21 +5,15 @@ import { retryParams } from '../utils'
 import { CollectionResponse } from './types'
 
 class CollectionAPI extends BaseAPI {
-  fetch = async (
-    filters: CollectionFilters = {}
-  ): Promise<CollectionResponse> => {
+  fetch = async (filters: CollectionFilters = {}): Promise<CollectionResponse> => {
     const queryParams = this.buildCollectionsQueryString(filters)
     return this.request('get', `/collections?${queryParams}`)
   }
 
   fetchOne = async (collectionUrn: string): Promise<Collection> => {
-    const { data }: CollectionResponse = await this.request(
-      'get',
-      '/collections',
-      {
-        urn: collectionUrn
-      }
-    )
+    const { data }: CollectionResponse = await this.request('get', '/collections', {
+      urn: collectionUrn
+    })
 
     if (data.length === 0) {
       throw new Error('Not found')

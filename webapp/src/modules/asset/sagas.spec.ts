@@ -1,33 +1,24 @@
 import { getLocation, push } from 'connected-react-router'
-import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
 import { Network } from '@dcl/schemas'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
-import {
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { buyItemWithCardFailure } from '../item/actions'
+import { executeOrderWithCardFailure } from '../order/actions'
 import { locations } from '../routing/locations'
 import { assetSaga } from './sagas'
 import { AssetType } from './types'
-import { executeOrderWithCardFailure } from '../order/actions'
 
 const mockContractAddress = 'a-contract-address'
 const mockTokenId = 'aTokenId'
 const mockTradeType = TradeType.PRIMARY
 
 const mockPathname = (assetType: AssetType = AssetType.ITEM) =>
-  new URL(
-    `${window.origin}${locations.buyWithCard(
-      assetType,
-      mockContractAddress,
-      mockTokenId
-    )}`
-  ).pathname
+  new URL(`${window.origin}${locations.buyWithCard(assetType, mockContractAddress, mockTokenId)}`).pathname
 
 const mockNFTPurchase: NFTPurchase = {
   address: '0x9c76ae45c36a4da3801a5ba387bbfa3c073ecae2',
@@ -59,15 +50,7 @@ describe('when handling the set purchase action', () => {
               }
             ]
           ])
-          .put(
-            push(
-              locations.buyStatusPage(
-                AssetType.ITEM,
-                mockContractAddress,
-                mockTokenId
-              )
-            )
-          )
+          .put(push(locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId)))
           .dispatch(setPurchase(mockNFTPurchase))
           .run({ silenceTimeout: true })
       })
@@ -80,23 +63,11 @@ describe('when handling the set purchase action', () => {
             [
               select(getLocation),
               {
-                pathname: locations.buyStatusPage(
-                  AssetType.ITEM,
-                  mockContractAddress,
-                  mockTokenId
-                )
+                pathname: locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId)
               }
             ]
           ])
-          .put(
-            push(
-              locations.buyStatusPage(
-                AssetType.ITEM,
-                mockContractAddress,
-                mockTokenId
-              )
-            )
-          )
+          .put(push(locations.buyStatusPage(AssetType.ITEM, mockContractAddress, mockTokenId)))
           .dispatch(setPurchase(mockNFTPurchase))
           .run({ silenceTimeout: true })
       })
@@ -153,18 +124,8 @@ describe('when handling the set purchase action', () => {
           ]
         ])
         .put(buyItemWithCardFailure(t('global.unknown_error')))
-        .put(
-          push(
-            locations.buyWithCard(
-              AssetType.ITEM,
-              mockContractAddress,
-              mockTokenId
-            )
-          )
-        )
-        .dispatch(
-          setPurchase({ ...mockNFTPurchase, status: PurchaseStatus.FAILED })
-        )
+        .put(push(locations.buyWithCard(AssetType.ITEM, mockContractAddress, mockTokenId)))
+        .dispatch(setPurchase({ ...mockNFTPurchase, status: PurchaseStatus.FAILED }))
         .run({ silenceTimeout: true })
     })
   })
@@ -181,15 +142,7 @@ describe('when handling the set purchase action', () => {
           ]
         ])
         .put(executeOrderWithCardFailure(t('global.unknown_error')))
-        .put(
-          push(
-            locations.buyWithCard(
-              AssetType.NFT,
-              mockContractAddress,
-              mockTokenId
-            )
-          )
-        )
+        .put(push(locations.buyWithCard(AssetType.NFT, mockContractAddress, mockTokenId)))
         .dispatch(
           setPurchase({
             ...mockNFTPurchase,

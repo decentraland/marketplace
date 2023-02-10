@@ -1,9 +1,6 @@
 import { ChainId, Network, Order } from '@dcl/schemas'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import {
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
+import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ErrorCode } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
@@ -84,9 +81,7 @@ beforeEach(() => {
 
 describe('when creating the action to signal the start of the create order request', () => {
   it('should return an object representing the action', () => {
-    expect(
-      createOrderRequest(nft, Number(order.price), order.expiresAt)
-    ).toEqual({
+    expect(createOrderRequest(nft, Number(order.price), order.expiresAt)).toEqual({
       type: CREATE_ORDER_REQUEST,
       meta: undefined,
       payload: { nft, price: Number(order.price), expiresAt: order.expiresAt }
@@ -124,19 +119,17 @@ describe('when creating the action to signal a failure in the create order reque
     const { expiresAt } = order
     const errorCode = ErrorCode.EXPECTATION_FAILED
 
-    expect(createOrderFailure(nft, price, expiresAt, error, errorCode)).toEqual(
-      {
-        type: CREATE_ORDER_FAILURE,
-        meta: undefined,
-        payload: {
-          nft,
-          price,
-          expiresAt,
-          error,
-          errorCode
-        }
+    expect(createOrderFailure(nft, price, expiresAt, error, errorCode)).toEqual({
+      type: CREATE_ORDER_FAILURE,
+      meta: undefined,
+      payload: {
+        nft,
+        price,
+        expiresAt,
+        error,
+        errorCode
       }
-    )
+    })
   })
 })
 

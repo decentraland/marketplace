@@ -1,6 +1,5 @@
 import React from 'react'
 import classnames from 'classnames'
-
 import { Props } from './Column.types'
 import './Column.css'
 

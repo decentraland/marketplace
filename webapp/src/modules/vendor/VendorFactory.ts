@@ -1,11 +1,5 @@
 import { services as decentraland } from './decentraland'
-import {
-  ContractService,
-  NFTService,
-  OrderService,
-  BidService,
-  AnalyticsService
-} from './services'
+import { ContractService, NFTService, OrderService, BidService, AnalyticsService } from './services'
 import { VendorName } from './types'
 
 export class VendorFactory {

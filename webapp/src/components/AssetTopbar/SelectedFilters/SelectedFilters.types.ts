@@ -9,8 +9,5 @@ export type Props = {
   onBrowse: typeof browse
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'browseOptions' | 'isLandSection' | 'category'
->
+export type MapStateProps = Pick<Props, 'browseOptions' | 'isLandSection' | 'category'>
 export type MapDispatchProps = Pick<Props, 'onBrowse'>

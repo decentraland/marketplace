@@ -1,22 +1,13 @@
 import { Network, Order, RentalListing } from '@dcl/schemas'
-import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
-import {
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NetworkGatewayType } from 'decentraland-ui'
-import { acceptRentalListingSuccess } from '../rental/actions'
+import { fetchNFTRequest, fetchNFTsFailure, fetchNFTsRequest, fetchNFTsSuccess, fetchNFTSuccess } from '../nft/actions'
 import { NFT, NFTsFetchOptions, NFTsFetchParams } from '../nft/types'
-import {
-  fetchNFTRequest,
-  fetchNFTsFailure,
-  fetchNFTsRequest,
-  fetchNFTsSuccess,
-  fetchNFTSuccess
-} from '../nft/actions'
-import { VendorName } from '../vendor'
+import { acceptRentalListingSuccess } from '../rental/actions'
 import { View } from '../ui/types'
+import { VendorName } from '../vendor'
 import {
   cancelOrderFailure,
   cancelOrderRequest,
@@ -143,15 +134,7 @@ successActions.forEach(action => {
 
 describe('when reducing the successful action of fetching nfts', () => {
   const requestAction = fetchNFTsRequest(nftsFetchOptions)
-  const successAction = fetchNFTsSuccess(
-    nftsFetchOptions,
-    [nft],
-    [],
-    [order],
-    [],
-    1,
-    timestamp
-  )
+  const successAction = fetchNFTsSuccess(nftsFetchOptions, [nft], [], [order], [], 1, timestamp)
 
   const initialState = {
     ...INITIAL_STATE,
@@ -171,12 +154,7 @@ describe('when reducing the successful action of fetching nfts', () => {
 const failureActions = [
   {
     request: createOrderRequest(nft, Number(order.price), order.expiresAt),
-    failure: createOrderFailure(
-      nft,
-      Number(order.price),
-      order.expiresAt,
-      anErrorMessage
-    )
+    failure: createOrderFailure(nft, Number(order.price), order.expiresAt, anErrorMessage)
   },
   {
     request: executeOrderRequest(order, nft, fingerprint),
@@ -260,9 +238,7 @@ describe('when reducing the successful action of accepting a rental', () => {
   })
 
   it('should remove the order of the NFT that had the rental listing', () => {
-    expect(
-      orderReducer(state, acceptRentalListingSuccess(nft, rentalListing, 0))
-    ).toEqual({
+    expect(orderReducer(state, acceptRentalListingSuccess(nft, rentalListing, 0))).toEqual({
       ...state,
       data: {
         ftOrder: {

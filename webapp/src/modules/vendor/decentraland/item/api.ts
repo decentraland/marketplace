@@ -1,5 +1,5 @@
-import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { Item } from '@dcl/schemas'
+import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
 import { ItemFilters, ItemResponse } from './types'
@@ -12,9 +12,7 @@ class ItemAPI extends BaseAPI {
     return this.request('get', `/items?${queryParams}`)
   }
 
-  fetchTrendings = async (
-    size = DEFAULT_TRENDING_PAGE_SIZE
-  ): Promise<ItemResponse> => {
+  fetchTrendings = async (size = DEFAULT_TRENDING_PAGE_SIZE): Promise<ItemResponse> => {
     return this.request('get', `/trendings?size=${size}`)
   }
 
@@ -100,9 +98,7 @@ class ItemAPI extends BaseAPI {
       }
     }
     if (filters.contracts) {
-      filters.contracts.forEach(contract =>
-        queryParams.append('contractAddress', contract)
-      )
+      filters.contracts.forEach(contract => queryParams.append('contractAddress', contract))
     }
     if (filters.itemId) {
       queryParams.append('itemId', filters.itemId)

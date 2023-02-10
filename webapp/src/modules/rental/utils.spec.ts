@@ -1,15 +1,11 @@
-import { RentalListing, RentalListingPeriod, RentalStatus } from '@dcl/schemas'
 import { BigNumber, ethers } from 'ethers'
+import { RentalListing, RentalListingPeriod, RentalStatus, ChainId } from '@dcl/schemas'
 import { getSigner } from 'decentraland-dapps/dist/lib/eth'
-import {
-  ContractData,
-  ContractName,
-  getContract
-} from 'decentraland-transactions'
-import { ChainId } from '@dcl/schemas'
+import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { Asset } from '../asset/types'
-import { rentalsAPI } from '../vendor/decentraland/rentals/api'
 import { NFT } from '../nft/types'
+import { rentalsAPI } from '../vendor/decentraland/rentals/api'
+import { getRentalsContractInstance } from './contract'
 import {
   getAssetNonce,
   getContractNonce,
@@ -29,7 +25,6 @@ import {
   waitUntilRentalChangesStatus,
   generateECDSASignatureWithValidV
 } from './utils'
-import { getRentalsContractInstance } from './contract'
 
 jest.useFakeTimers()
 jest.mock('decentraland-dapps/dist/lib/eth')
@@ -37,9 +32,7 @@ jest.mock('./contract')
 jest.mock('../vendor/decentraland/rentals/api')
 
 const runTimerAutomaticallyOnce = () => {
-  ;((setTimeout as unknown) as jest.Mock).mockImplementationOnce(callback =>
-    callback()
-  )
+  ;(setTimeout as unknown as jest.Mock).mockImplementationOnce(callback => callback())
 }
 
 const getSignerMock = getSigner as jest.MockedFunction<typeof getSigner>
@@ -47,14 +40,12 @@ const signerMock = {
   getAddress: jest.fn(),
   _signTypedData: jest.fn()
 }
-const getRentalsContractInstanceMock = getRentalsContractInstance as jest.MockedFunction<
-  typeof getRentalsContractInstance
->
-const rentalsMock = ({
+const getRentalsContractInstanceMock = getRentalsContractInstance as jest.MockedFunction<typeof getRentalsContractInstance>
+const rentalsMock = {
   getContractIndex: jest.fn(),
   getAssetIndex: jest.fn(),
   getSignerIndex: jest.fn()
-} as unknown) as ethers.Contract
+} as unknown as ethers.Contract
 const aDay = 24 * 60 * 60 * 1000
 
 describe('when getting a signature', () => {
@@ -79,9 +70,7 @@ describe('when getting a signature', () => {
   })
   describe('and the signer can be retrieved', () => {
     beforeEach(() => {
-      getSignerMock.mockResolvedValueOnce(
-        (signerMock as unknown) as ethers.providers.JsonRpcSigner
-      )
+      getSignerMock.mockResolvedValueOnce(signerMock as unknown as ethers.providers.JsonRpcSigner)
     })
     describe('and can not get the address', () => {
       let error: Error
@@ -104,9 +93,7 @@ describe('when getting a signature', () => {
     })
     describe('and the address can be retrieved', () => {
       beforeEach(() => {
-        signerMock.getAddress.mockResolvedValueOnce(
-          '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'
-        )
+        signerMock.getAddress.mockResolvedValueOnce('0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98')
       })
 
       describe('and the signature fails to be generated', () => {
@@ -151,8 +138,7 @@ describe('when getting a signature', () => {
           expect(signerMock._signTypedData).toHaveBeenCalledWith(
             {
               name: 'Rentals',
-              chainId:
-                '0x0000000000000000000000000000000000000000000000000000000000000005',
+              chainId: '0x0000000000000000000000000000000000000000000000000000000000000005',
               verifyingContract: '0x92159c78f0f4523b9c60382bb888f30f10a46b3b',
               version: '1'
             },
@@ -194,9 +180,7 @@ describe('when getting the contract index', () => {
   })
   it('should return the contract nonce and use the right chain id to the instance helper', async () => {
     await expect(getContractNonce(ChainId.ETHEREUM_GOERLI)).resolves.toBe('0')
-    expect(getRentalsContractInstanceMock).toHaveBeenCalledWith(
-      ChainId.ETHEREUM_GOERLI
-    )
+    expect(getRentalsContractInstanceMock).toHaveBeenCalledWith(ChainId.ETHEREUM_GOERLI)
     expect(rentalsMock.getContractIndex).toHaveBeenCalled()
   })
 })
@@ -215,9 +199,7 @@ describe('when getting the asset nonce', () => {
         '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'
       )
     ).resolves.toBe('0')
-    expect(getRentalsContractInstanceMock).toHaveBeenCalledWith(
-      ChainId.ETHEREUM_GOERLI
-    )
+    expect(getRentalsContractInstanceMock).toHaveBeenCalledWith(ChainId.ETHEREUM_GOERLI)
     expect(rentalsMock.getAssetIndex).toHaveBeenCalledWith(
       '0x25b6B4bac4aDB582a0ABd475439dA6730777Fbf7',
       '27562871720596015540533343201973225127790',
@@ -232,18 +214,9 @@ describe('when getting the signer nonce', () => {
     rentalsMock.getSignerIndex.mockResolvedValueOnce(BigNumber.from(0))
   })
   it('should return the signer nonce and use the correct chain id and signer address', async () => {
-    await expect(
-      getSignerNonce(
-        ChainId.ETHEREUM_GOERLI,
-        '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'
-      )
-    ).resolves.toBe('0')
-    expect(getRentalsContractInstanceMock).toHaveBeenCalledWith(
-      ChainId.ETHEREUM_GOERLI
-    )
-    expect(rentalsMock.getSignerIndex).toHaveBeenCalledWith(
-      '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'
-    )
+    await expect(getSignerNonce(ChainId.ETHEREUM_GOERLI, '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98')).resolves.toBe('0')
+    expect(getRentalsContractInstanceMock).toHaveBeenCalledWith(ChainId.ETHEREUM_GOERLI)
+    expect(rentalsMock.getSignerIndex).toHaveBeenCalledWith('0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98')
   })
 })
 
@@ -267,9 +240,7 @@ describe('when getting all the nonces', () => {
       )
     ).resolves.toEqual(['0', '1', '2'])
     expect(rentalsMock.getContractIndex).toHaveBeenCalled()
-    expect(rentalsMock.getSignerIndex).toHaveBeenCalledWith(
-      '0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98'
-    )
+    expect(rentalsMock.getSignerIndex).toHaveBeenCalledWith('0xB6E9c0a25aA6b10Fa4fe0AA8d1097D2A6136bf98')
     expect(rentalsMock.getAssetIndex).toHaveBeenCalledWith(
       '0x25b6B4bac4aDB582a0ABd475439dA6730777Fbf7',
       '27562871720596015540533343201973225127790',
@@ -371,9 +342,7 @@ describe('when checking if a rental is being rented', () => {
         })
 
         it(`should return ${rentalStatus === RentalStatus.EXECUTED}`, () => {
-          expect(isRentalListingExecuted(rental)).toBe(
-            rentalStatus === RentalStatus.EXECUTED
-          )
+          expect(isRentalListingExecuted(rental)).toBe(rentalStatus === RentalStatus.EXECUTED)
         })
       })
     })
@@ -451,9 +420,7 @@ describe("when getting a rental's end date", () => {
     })
 
     it('should return the started date plus the rented days', () => {
-      expect(getRentalEndDate(rental)).toEqual(
-        new Date(rental.startedAt! + 2 * aDay)
-      )
+      expect(getRentalEndDate(rental)).toEqual(new Date(rental.startedAt! + 2 * aDay))
     })
   })
 })
@@ -477,9 +444,7 @@ describe('when getting the rental chosen period', () => {
     })
 
     it('should throw signaling that the rental period was not found', () => {
-      expect(() => getRentalChosenPeriod(rental)).toThrowError(
-        'Rental period was not found'
-      )
+      expect(() => getRentalChosenPeriod(rental)).toThrowError('Rental period was not found')
     })
   })
 
@@ -521,9 +486,7 @@ describe('when checking if a rental listing is open', () => {
         })
 
         it(`should return ${rentalStatus === RentalStatus.OPEN}`, () => {
-          expect(isRentalListingOpen(rental)).toBe(
-            rentalStatus === RentalStatus.OPEN
-          )
+          expect(isRentalListingOpen(rental)).toBe(rentalStatus === RentalStatus.OPEN)
         })
       })
     })
@@ -552,9 +515,7 @@ describe('when checking if a rental listing is cancelled', () => {
         })
 
         it(`should return ${rentalStatus === RentalStatus.OPEN}`, () => {
-          expect(isRentalListingCancelled(rental)).toBe(
-            rentalStatus === RentalStatus.CANCELLED
-          )
+          expect(isRentalListingCancelled(rental)).toBe(rentalStatus === RentalStatus.CANCELLED)
         })
       })
     })
@@ -841,9 +802,7 @@ describe('when waiting until the rental changes the status', () => {
       openRentalId: 'rentalId'
     } as NFT
     desiredStatus = RentalStatus.CANCELLED
-    ;(rentalsAPI.refreshRentalListing as jest.Mock).mockResolvedValueOnce(
-      listing
-    )
+    ;(rentalsAPI.refreshRentalListing as jest.Mock).mockResolvedValueOnce(listing)
     runTimerAutomaticallyOnce()
     ;(rentalsAPI.refreshRentalListing as jest.Mock).mockResolvedValueOnce({
       ...listing,
@@ -852,9 +811,7 @@ describe('when waiting until the rental changes the status', () => {
     runTimerAutomaticallyOnce()
   })
   it('should call the rentalsAPI refreshRentalListing endpoint until it returns the rental in the status desired', async () => {
-    expect(
-      await waitUntilRentalChangesStatus(nft, desiredStatus)
-    ).toStrictEqual({
+    expect(await waitUntilRentalChangesStatus(nft, desiredStatus)).toStrictEqual({
       ...listing,
       status: desiredStatus
     })

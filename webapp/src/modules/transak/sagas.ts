@@ -1,18 +1,15 @@
 import { put, select, takeEvery } from 'redux-saga/effects'
 import { Network } from '@dcl/schemas'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
-import {
-  ProductsAvailed,
-  TradeType
-} from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
-import { closeAllModals } from '../modal/actions'
+import { Transak } from 'decentraland-dapps/dist/modules/gateway/transak'
+import { ProductsAvailed, TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { TransakConfig } from 'decentraland-dapps/dist/modules/gateway/types'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { config } from '../../config'
-import { isNFT } from '../asset/utils'
-import { locations } from '../routing/locations'
 import { AssetType } from '../asset/types'
+import { isNFT } from '../asset/utils'
+import { closeAllModals } from '../modal/actions'
+import { locations } from '../routing/locations'
 import { OPEN_TRANSAK, OpenTransakAction } from './actions'
 
 export function* transakSaga() {
@@ -44,8 +41,5 @@ function* handleOpenTransak(action: OpenTransakAction) {
 
   yield put(closeAllModals())
 
-  new Transak(transakConfig, customizationOptions).openWidget(
-    address,
-    Network.MATIC
-  )
+  new Transak(transakConfig, customizationOptions).openWidget(address, Network.MATIC)
 }

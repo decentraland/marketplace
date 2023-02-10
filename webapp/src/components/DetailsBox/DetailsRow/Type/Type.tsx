@@ -1,5 +1,4 @@
 import { useMemo, memo } from 'react'
-
 import { Link } from 'react-router-dom'
 import { NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -27,8 +26,7 @@ export const Type = (props: Props) => {
     <Info title={t('global.type')}>
       <div className={styles.type}>
         {categoryName}
-        {asset.category === NFTCategory.PARCEL &&
-        (asset as NFT).data.parcel?.estate ? (
+        {asset.category === NFTCategory.PARCEL && (asset as NFT).data.parcel?.estate ? (
           <>
             {' ('}
             <T
@@ -36,17 +34,10 @@ export const Type = (props: Props) => {
               values={{
                 estate_name: (
                   <Link
-                    title={
-                      (asset as NFT).data.parcel?.estate?.name ??
-                      t('global.estate')
-                    }
-                    to={locations.nft(
-                      owner,
-                      asset.data.parcel?.estate!.tokenId
-                    )}
+                    title={(asset as NFT).data.parcel?.estate?.name ?? t('global.estate')}
+                    to={locations.nft(owner, asset.data.parcel?.estate!.tokenId)}
                   >
-                    {(asset as NFT).data.parcel?.estate?.name ??
-                      t('global.estate')}
+                    {(asset as NFT).data.parcel?.estate?.name ?? t('global.estate')}
                   </Link>
                 )
               }}
@@ -54,9 +45,7 @@ export const Type = (props: Props) => {
             {')'}
           </>
         ) : null}
-        {asset.category === NFTCategory.ESTATE
-          ? ` (${asset.data.estate!.size})`
-          : ''}
+        {asset.category === NFTCategory.ESTATE ? ` (${asset.data.estate!.size})` : ''}
       </div>
     </Info>
   ) : null

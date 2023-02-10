@@ -1,8 +1,5 @@
 import { RootState } from '../reducer'
-import {
-  fetchCollectionsRequest,
-  fetchSingleCollectionRequest
-} from './actions'
+import { fetchCollectionsRequest, fetchSingleCollectionRequest } from './actions'
 import { isFetchingCollection } from './selectors'
 
 let state: RootState
@@ -57,9 +54,7 @@ describe('when getting if a collection is being fetched', () => {
 
   describe('and the given collection is being fetched in a collections fetch', () => {
     beforeEach(() => {
-      state.collection.loading = [
-        fetchCollectionsRequest({ contractAddress: contractAddress })
-      ]
+      state.collection.loading = [fetchCollectionsRequest({ contractAddress: contractAddress })]
     })
 
     it('should return true', () => {

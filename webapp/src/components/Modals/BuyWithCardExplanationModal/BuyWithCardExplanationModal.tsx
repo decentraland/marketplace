@@ -1,16 +1,11 @@
 import React, { useCallback } from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button, Modal, ModalNavigation } from 'decentraland-ui'
-
-import styles from './BuyWithCardExplanationModal.module.css'
 import { Props } from './BuyWithCardExplanationModal.types'
+import styles from './BuyWithCardExplanationModal.module.css'
 
-const BuyWithCardExplanationModal = ({
-  metadata: { asset },
-  onContinue,
-  onClose
-}: Props) => {
+const BuyWithCardExplanationModal = ({ metadata: { asset }, onContinue, onClose }: Props) => {
   const analytics = getAnalytics()
 
   const handleContinue = useCallback(() => {
@@ -25,32 +20,20 @@ const BuyWithCardExplanationModal = ({
 
   return (
     <Modal open className={styles.buyWithCardExplanationModal}>
-      <ModalNavigation
-        title={t('buy_with_card_explanation_modal.title')}
-        onClose={onClose}
-      />
+      <ModalNavigation title={t('buy_with_card_explanation_modal.title')} onClose={onClose} />
       <Modal.Content className={styles.content}>
         <div className={styles.explanation}>
           <p>
             {t('buy_with_card_explanation_modal.explanation', {
               link_to_transak: (
-                <a
-                  href="https://transak.com/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href="https://transak.com/" target="_blank" rel="noopener noreferrer">
                   Transak
                 </a>
               )
             })}
           </p>
           <p className={styles.learnMore}>
-            <a
-              className="learn-more"
-              href="https://transak.com/nft-checkout"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a className="learn-more" href="https://transak.com/nft-checkout" target="_blank" rel="noopener noreferrer">
               {t('buy_with_card_explanation_modal.learn_more')}
             </a>
           </p>

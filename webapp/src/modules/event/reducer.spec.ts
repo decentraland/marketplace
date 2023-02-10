@@ -1,9 +1,5 @@
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
-import {
-  fetchEventFailure,
-  fetchEventRequest,
-  fetchEventSuccess
-} from './actions'
+import { fetchEventFailure, fetchEventRequest, fetchEventSuccess } from './actions'
 import { eventReducer, INITIAL_STATE } from './reducer'
 
 const anErrorMessage = 'An error'

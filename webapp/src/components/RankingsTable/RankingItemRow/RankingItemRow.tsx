@@ -1,19 +1,19 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Loader, Mana, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { Item, NFTCategory } from '@dcl/schemas'
-import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Loader, Mana, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
+import { ItemRank } from '../../../modules/analytics/types'
 import { AssetType } from '../../../modules/asset/types'
 import { parseItemId } from '../../../modules/item/utils'
-import { ItemRank } from '../../../modules/analytics/types'
 import { locations } from '../../../modules/routing/locations'
+import { AssetImage } from '../../AssetImage'
 import { AssetProvider } from '../../AssetProvider'
+import { LinkedProfile } from '../../LinkedProfile'
 import { ManaToFiat } from '../../ManaToFiat'
 import RarityBadge from '../../RarityBadge'
-import { AssetImage } from '../../AssetImage'
-import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './RankingItemRow.types'
 import './RankingItemRow.css'
 
@@ -27,11 +27,7 @@ const RankingItemRow = ({ entity }: Props) => {
     })
   }
 
-  const renderMobile = (
-    entity: ItemRank,
-    item: Item | null,
-    isLoading: boolean
-  ) => {
+  const renderMobile = (entity: ItemRank, item: Item | null, isLoading: boolean) => {
     return (
       <div className="RankingItemRow rankings-item-cell">
         {isLoading || !item ? (
@@ -40,17 +36,11 @@ const RankingItemRow = ({ entity }: Props) => {
           <>
             <div>
               <div className="rankings-item-data">
-                <Link
-                  to={locations.item(item.contractAddress, item.itemId)}
-                  onClick={() => handleOnLinkClick(item.id)}
-                >
+                <Link to={locations.item(item.contractAddress, item.itemId)} onClick={() => handleOnLinkClick(item.id)}>
                   <AssetImage asset={item} isSmall />
                 </Link>
                 <div className="rankings-item-name-container">
-                  <Link
-                    to={locations.item(item.contractAddress, item.itemId)}
-                    onClick={() => handleOnLinkClick(item.id)}
-                  >
+                  <Link to={locations.item(item.contractAddress, item.itemId)} onClick={() => handleOnLinkClick(item.id)}>
                     {item.name}
                   </Link>
                   <span>
@@ -59,11 +49,7 @@ const RankingItemRow = ({ entity }: Props) => {
                       values={{
                         creator: (
                           <span className="rankings-item-data-creator">
-                            <LinkedProfile
-                              address={item.creator}
-                              textOnly
-                              inline={false}
-                            />
+                            <LinkedProfile address={item.creator} textOnly inline={false} />
                           </span>
                         )
                       }}
@@ -91,10 +77,7 @@ const RankingItemRow = ({ entity }: Props) => {
                     <span className="rankings-fiat-price">
                       (<ManaToFiat mana={entity.volume} />)
                     </span>
-                    <div
-                      className="arrow-container"
-                      onClick={() => setExpanded(!expanded)}
-                    >
+                    <div className="arrow-container" onClick={() => setExpanded(!expanded)}>
                       <span> {t(`global.${expanded ? 'less' : 'more'}`)} </span>
                       <i className={`caret back ${expanded ? 'up' : ''}`} />
                     </div>
@@ -110,19 +93,11 @@ const RankingItemRow = ({ entity }: Props) => {
                       <div>
                         <span>{t('global.category')}</span>
                         {item.data.wearable?.category
-                          ? t(
-                              `wearable.category.${item.data.wearable.category}`
-                            )
+                          ? t(`wearable.category.${item.data.wearable.category}`)
                           : t(`emote.category.${item.data.emote!.category}`)}
                       </div>
                       <div>
-                        <span>
-                          {t(
-                            `home_page.analytics.rankings.${
-                              item.data.wearable ? 'wearables' : 'emotes'
-                            }.items_sold`
-                          )}
-                        </span>
+                        <span>{t(`home_page.analytics.rankings.${item.data.wearable ? 'wearables' : 'emotes'}.items_sold`)}</span>
                         {entity.sales}
                       </div>
                     </>
@@ -136,27 +111,17 @@ const RankingItemRow = ({ entity }: Props) => {
     )
   }
 
-  const renderNotMobile = (
-    entity: ItemRank,
-    item: Item | null,
-    isLoading: boolean
-  ) => (
+  const renderNotMobile = (entity: ItemRank, item: Item | null, isLoading: boolean) => (
     <Table.Row>
       <Table.Cell width={7}>
         {item ? (
           <div className="rankings-item-cell">
-            <Link
-              to={locations.item(item.contractAddress, item.itemId)}
-              onClick={() => handleOnLinkClick(item.id)}
-            >
+            <Link to={locations.item(item.contractAddress, item.itemId)} onClick={() => handleOnLinkClick(item.id)}>
               <AssetImage asset={item} isSmall />
             </Link>
 
             <div className="rankings-item-data">
-              <Link
-                to={locations.item(item.contractAddress, item.itemId)}
-                onClick={() => handleOnLinkClick(item.id)}
-              >
+              <Link to={locations.item(item.contractAddress, item.itemId)} onClick={() => handleOnLinkClick(item.id)}>
                 {item.name}
               </Link>
 
@@ -166,11 +131,7 @@ const RankingItemRow = ({ entity }: Props) => {
                   values={{
                     creator: (
                       <span className="rankings-item-data-creator">
-                        <LinkedProfile
-                          address={item.creator}
-                          textOnly
-                          inline={false}
-                        />
+                        <LinkedProfile address={item.creator} textOnly inline={false} />
                       </span>
                     )
                   }}
@@ -191,13 +152,7 @@ const RankingItemRow = ({ entity }: Props) => {
       </Table.Cell>
       <Table.Cell width={2}>
         {item ? (
-          <RarityBadge
-            size="small"
-            rarity={item.rarity}
-            assetType={AssetType.NFT}
-            category={NFTCategory.WEARABLE}
-            withTooltip={false}
-          />
+          <RarityBadge size="small" rarity={item.rarity} assetType={AssetType.NFT} category={NFTCategory.WEARABLE} withTooltip={false} />
         ) : null}
       </Table.Cell>
       <Table.Cell width={2}>{item ? entity.sales : null}</Table.Cell>

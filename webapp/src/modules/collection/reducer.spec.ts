@@ -1,11 +1,5 @@
-import {
-  fetchCollectionsFailure,
-  fetchCollectionsRequest,
-  fetchCollectionsSuccess,
-  FETCH_COLLECTIONS_REQUEST
-} from './actions'
-import { collectionReducer } from './reducer'
-import { INITIAL_STATE } from './reducer'
+import { fetchCollectionsFailure, fetchCollectionsRequest, fetchCollectionsSuccess, FETCH_COLLECTIONS_REQUEST } from './actions'
+import { collectionReducer, INITIAL_STATE } from './reducer'
 
 describe('when fetch collection request action is received', () => {
   it('should add a loading state action to the loading state array', () => {
@@ -37,7 +31,7 @@ describe('when fetch collection success action is received', () => {
       fetchCollectionsSuccess([{ urn: 'some urn' }] as any[], 1)
     )
     expect(newState.loading.length).toBe(0)
-    expect(newState.data).toStrictEqual({ ['some urn']: { urn: 'some urn' } })
+    expect(newState.data).toStrictEqual({ 'some urn': { urn: 'some urn' } })
     expect(newState.error).toBeNull()
     expect(newState.count).toBe(1)
   })

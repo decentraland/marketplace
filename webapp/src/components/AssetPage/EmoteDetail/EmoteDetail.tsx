@@ -1,12 +1,14 @@
 import React, { useMemo } from 'react'
-import { Header, Stats } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { EmotePlayMode, NFTCategory, Rarity } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header, Stats } from 'decentraland-ui'
 import { AssetType } from '../../../modules/asset/types'
-import { Section } from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
+import { Section } from '../../../modules/vendor/decentraland'
 import { AssetImage } from '../../AssetImage'
 import CampaignBadge from '../../Campaign/CampaignBadge'
+import { Network } from '../../Network'
+import Price from '../../Price'
 import RarityBadge from '../../RarityBadge'
 import { Actions } from '../Actions'
 import BaseDetail from '../BaseDetail'
@@ -15,9 +17,7 @@ import Collection from '../Collection'
 import { Description } from '../Description'
 import Expiration from '../Expiration'
 import IconBadge from '../IconBadge'
-import { Network } from '../../Network'
 import { Owner } from '../Owner'
-import Price from '../../Price'
 import { SaleActionBox } from '../SaleActionBox'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './EmoteDetail.types'
@@ -44,11 +44,7 @@ const EmoteDetail = ({ nft, isBuyNftsWithFiatEnabled }: Props) => {
       isOnSale={!!nft.activeOrderId}
       badges={
         <>
-          <RarityBadge
-            rarity={emote.rarity}
-            assetType={AssetType.NFT}
-            category={NFTCategory.EMOTE}
-          />
+          <RarityBadge rarity={emote.rarity} assetType={AssetType.NFT} category={NFTCategory.EMOTE} />
           <IconBadge
             icon={loop ? 'play-loop' : 'play-once'}
             text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
@@ -75,9 +71,7 @@ const EmoteDetail = ({ nft, isBuyNftsWithFiatEnabled }: Props) => {
                 <Stats title={t('global.issue_number')}>
                   <Header>
                     {Number(nft.issuedId).toLocaleString()}
-                    <span className={styles.issued}>
-                      /{Rarity.getMaxSupply(emote.rarity).toLocaleString()}
-                    </span>
+                    <span className={styles.issued}>/{Rarity.getMaxSupply(emote.rarity).toLocaleString()}</span>
                   </Header>
                 </Stats>
               ) : null}

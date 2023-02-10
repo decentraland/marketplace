@@ -1,5 +1,5 @@
-import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
+import { Dispatch } from 'redux'
 import { Bid } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import {
@@ -27,20 +27,10 @@ export type Props = {
   isAcceptingBid: boolean
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'archivedBidIds' | 'wallet' | 'isAcceptingBid'
->
-export type MapDispatchProps = Pick<
-  Props,
-  'onUpdate' | 'onCancel' | 'onArchive' | 'onUnarchive' | 'onAccept'
->
+export type MapStateProps = Pick<Props, 'archivedBidIds' | 'wallet' | 'isAcceptingBid'>
+export type MapDispatchProps = Pick<Props, 'onUpdate' | 'onCancel' | 'onArchive' | 'onUnarchive' | 'onAccept'>
 export type MapDispatch = Dispatch<
-  | CallHistoryMethodAction
-  | CancelBidRequestAction
-  | ArchiveBidAction
-  | UnarchiveBidAction
-  | AcceptBidRequestAction
+  CallHistoryMethodAction | CancelBidRequestAction | ArchiveBidAction | UnarchiveBidAction | AcceptBidRequestAction
 >
 
 export type OwnProps = Pick<Props, 'bid' | 'isArchivable' | 'hasImage'>

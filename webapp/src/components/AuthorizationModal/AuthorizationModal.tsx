@@ -1,35 +1,20 @@
 import React, { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ethers } from 'ethers'
-import {
-  Modal,
-  Button,
-  ModalNavigation,
-  useMobileMediaQuery
-} from 'decentraland-ui'
-import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getNetworkProvider } from 'decentraland-dapps/dist/lib/eth'
-
-import { locations } from '../../modules/routing/locations'
-import { isStubMaticCollectionContract } from '../../modules/contract/utils'
-import { useAuthorization } from '../../lib/authorization'
+import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Modal, Button, ModalNavigation, useMobileMediaQuery } from 'decentraland-ui'
 import ERC721ABI from '../../contracts/ERC721.json'
+import { useAuthorization } from '../../lib/authorization'
+import { isStubMaticCollectionContract } from '../../modules/contract/utils'
+import { locations } from '../../modules/routing/locations'
 import { Authorization } from '../SettingsPage/Authorization'
 import { Props } from './AuthorizationModal.types'
 import './AuthorizationModal.css'
 
 const AuthorizationModal = (props: Props) => {
-  const {
-    open,
-    authorization,
-    isLoading,
-    isAuthorizing,
-    getContract,
-    onCancel,
-    onProceed,
-    onFetchAuthorizations,
-    onUpsertContracts
-  } = props
+  const { open, authorization, isLoading, isAuthorizing, getContract, onCancel, onProceed, onFetchAuthorizations, onUpsertContracts } =
+    props
 
   const isMobile = useMobileMediaQuery()
 
@@ -44,30 +29,19 @@ const AuthorizationModal = (props: Props) => {
   const hasFetchedContractName = useRef(false)
 
   // Fetch authorizations only once when this component is rendered.
-  const [, isAuthorized] = useAuthorization(
-    authorization,
-    onFetchAuthorizations
-  )
+  const [, isAuthorized] = useAuthorization(authorization, onFetchAuthorizations)
 
   // Fetch the name of the collection by querying the contract directly.
   // Required to display the real name of the collection instead of the stub one.
   useEffect(() => {
-    if (
-      token &&
-      isStubMaticCollectionContract(token) &&
-      !hasFetchedContractName.current
-    ) {
+    if (token && isStubMaticCollectionContract(token) && !hasFetchedContractName.current) {
       hasFetchedContractName.current = true
 
       const fetchContractName = async () => {
         try {
           const provider = await getNetworkProvider(token.chainId)
 
-          const erc721 = new ethers.Contract(
-            token.address,
-            ERC721ABI,
-            new ethers.providers.Web3Provider(provider)
-          )
+          const erc721 = new ethers.Contract(token.address, ERC721ABI, new ethers.providers.Web3Provider(provider))
 
           const name = await erc721.name()
 
@@ -107,9 +81,7 @@ const AuthorizationModal = (props: Props) => {
           values={{
             contract: contract.name,
             token: token.name,
-            settings_link: (
-              <Link to={locations.settings()}>{t('global.settings')}</Link>
-            ),
+            settings_link: <Link to={locations.settings()}>{t('global.settings')}</Link>,
             br: (
               <>
                 <br />
@@ -120,10 +92,7 @@ const AuthorizationModal = (props: Props) => {
         />
       </Modal.Description>
       <Modal.Content>
-        <Authorization
-          key={authorization.authorizedAddress}
-          authorization={authorization}
-        />
+        <Authorization key={authorization.authorizedAddress} authorization={authorization} />
       </Modal.Content>
       <Modal.Actions className="AuthorizationModalActions">
         <Button onClick={onCancel} className="AuthorizationModalButtons">

@@ -4,10 +4,7 @@ import {
   FETCH_ITEMS_SUCCESS,
   FETCH_TRENDING_ITEMS_SUCCESS
 } from '../../../item/actions'
-import {
-  FetchNFTsSuccessAction,
-  FETCH_NFTS_SUCCESS
-} from '../../../nft/actions'
+import { FetchNFTsSuccessAction, FETCH_NFTS_SUCCESS } from '../../../nft/actions'
 import { View } from '../../types'
 
 export type HomepageUIState = {
@@ -28,15 +25,9 @@ export const INITIAL_STATE: HomepageUIState = {
   [View.HOME_ENS]: []
 }
 
-type UIReducerAction =
-  | FetchItemsSuccessAction
-  | FetchTrendingItemsSuccessAction
-  | FetchNFTsSuccessAction
+type UIReducerAction = FetchItemsSuccessAction | FetchTrendingItemsSuccessAction | FetchNFTsSuccessAction
 
-export function homepageReducer(
-  state: HomepageUIState = INITIAL_STATE,
-  action: UIReducerAction
-) {
+export function homepageReducer(state: HomepageUIState = INITIAL_STATE, action: UIReducerAction) {
   switch (action.type) {
     case FETCH_ITEMS_SUCCESS: {
       const { items, options } = action.payload

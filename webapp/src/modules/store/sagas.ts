@@ -1,10 +1,10 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects'
 import { LocationChangeAction, LOCATION_CHANGE } from 'connected-react-router'
-import { Entity } from '@dcl/schemas'
-import { AuthIdentity } from '@dcl/crypto'
-import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { CatalystClient } from 'dcl-catalyst-client'
+import { call, put, select, takeEvery } from 'redux-saga/effects'
+import { AuthIdentity } from '@dcl/crypto'
+import { Entity } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAddress } from 'decentraland-dapps/dist/modules/wallet/selectors'
 import { isErrorWithMessage } from '../../lib/error'
 import { getIdentity } from '../identity/utils'
 import {
@@ -18,21 +18,15 @@ import {
   UPDATE_STORE_REQUEST,
   revertLocalStore
 } from './actions'
-import {
-  deployStoreEntity,
-  fetchStoreEntity,
-  getStoreFromEntity
-} from './utils'
 import { getIsLocalStoreDirty } from './selectors'
+import { deployStoreEntity, fetchStoreEntity, getStoreFromEntity } from './utils'
 
 export function* storeSaga(client: CatalystClient) {
   yield takeEvery(FETCH_STORE_REQUEST, handleFetchStoreRequest)
   yield takeEvery(UPDATE_STORE_REQUEST, handleUpdateStoreRequest)
   yield takeEvery(LOCATION_CHANGE, handleLocationChange)
 
-  function* handleLocationChange({
-    payload: { location }
-  }: LocationChangeAction) {
+  function* handleLocationChange({ payload: { location } }: LocationChangeAction) {
     const isLocalStoreDirty: boolean = yield select(getIsLocalStoreDirty)
     if (!isLocalStoreDirty) {
       return
@@ -45,33 +39,17 @@ export function* storeSaga(client: CatalystClient) {
     }
   }
 
-  function* handleFetchStoreRequest({
-    payload: { address }
-  }: FetchStoreRequestAction) {
+  function* handleFetchStoreRequest({ payload: { address } }: FetchStoreRequestAction) {
     try {
-      const storeEntity: Entity | null = yield call(
-        fetchStoreEntity,
-        client,
-        address
-      )
+      const storeEntity: Entity | null = yield call(fetchStoreEntity, client, address)
 
-      yield put(
-        fetchStoreSuccess(
-          storeEntity ? getStoreFromEntity(storeEntity) : undefined
-        )
-      )
+      yield put(fetchStoreSuccess(storeEntity ? getStoreFromEntity(storeEntity) : undefined))
     } catch (error) {
-      yield put(
-        fetchStoreFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(fetchStoreFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 
-  function* handleUpdateStoreRequest({
-    payload: { store }
-  }: UpdateStoreRequestAction) {
+  function* handleUpdateStoreRequest({ payload: { store } }: UpdateStoreRequestAction) {
     try {
       const identity: AuthIdentity = yield call(getIdentity)
 
@@ -79,11 +57,7 @@ export function* storeSaga(client: CatalystClient) {
 
       yield put(updateStoreSuccess(store))
     } catch (error) {
-      yield put(
-        updateStoreFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-        )
-      )
+      yield put(updateStoreFailure(isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
     }
   }
 }

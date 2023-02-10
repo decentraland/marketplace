@@ -1,26 +1,19 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects'
 import { RentalListing, RentalStatus } from '@dcl/schemas'
-import { ErrorCode } from 'decentraland-transactions'
 import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ErrorCode } from 'decentraland-transactions'
 import { isErrorWithMessage } from '../../lib/error'
-import { getWallet } from '../wallet/selectors'
-import { Vendor, VendorFactory } from '../vendor/VendorFactory'
-import { getContract, getContracts } from '../contract/selectors'
-import { VendorName } from '../vendor/types'
-import { AwaitFn } from '../types'
-import {
-  getContractKey,
-  getContractKeyFromNFT,
-  getStubMaticCollectionContract
-} from '../contract/utils'
-import { getRentalById } from '../rental/selectors'
-import {
-  isRentalListingOpen,
-  waitUntilRentalChangesStatus
-} from '../rental/utils'
 import { upsertContracts } from '../contract/actions'
+import { getContract, getContracts } from '../contract/selectors'
+import { getContractKey, getContractKeyFromNFT, getStubMaticCollectionContract } from '../contract/utils'
+import { getRentalById } from '../rental/selectors'
+import { isRentalListingOpen, waitUntilRentalChangesStatus } from '../rental/utils'
+import { AwaitFn } from '../types'
 import { Contract } from '../vendor/services'
+import { VendorName } from '../vendor/types'
+import { Vendor, VendorFactory } from '../vendor/VendorFactory'
+import { getWallet } from '../wallet/selectors'
 import {
   DEFAULT_BASE_NFT_PARAMS,
   FETCH_NFTS_REQUEST,
@@ -55,18 +48,9 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
   }
 
   try {
-    const vendor: Vendor<VendorName> = yield call(
-      VendorFactory.build,
-      vendorName
-    )
+    const vendor: Vendor<VendorName> = yield call(VendorFactory.build, vendorName)
 
-    const [
-      nfts,
-      accounts,
-      orders,
-      rentals,
-      count
-    ]: AwaitFn<typeof vendor.nftService.fetch> = yield call(
+    const [nfts, accounts, orders, rentals, count]: AwaitFn<typeof vendor.nftService.fetch> = yield call(
       [vendor.nftService, 'fetch'],
       params,
       filters
@@ -94,17 +78,7 @@ function* handleFetchNFTsRequest(action: FetchNFTsRequestAction) {
       yield put(upsertContracts(newContracts))
     }
 
-    yield put(
-      fetchNFTsSuccess(
-        options,
-        nfts as NFT[],
-        accounts,
-        orders,
-        rentals,
-        count,
-        timestamp
-      )
-    )
+    yield put(fetchNFTsSuccess(options, nfts, accounts, orders, rentals, count, timestamp))
   } catch (error) {
     yield put(fetchNFTsFailure(options, (error as Error).message, timestamp))
   }
@@ -128,61 +102,39 @@ function* handleFetchNFTRequest(action: FetchNFTRequestAction) {
     }
 
     if (!contract.vendor) {
-      throw new Error(
-        `Couldn't find a valid vendor for contract ${contract?.address}`
-      )
+      throw new Error(`Couldn't find a valid vendor for contract ${contract?.address}`)
     }
 
-    const vendor: Vendor<VendorName> = yield call(
-      VendorFactory.build,
-      contract.vendor
-    )
+    const vendor: Vendor<VendorName> = yield call(VendorFactory.build, contract.vendor)
 
-    const [
-      nft,
-      order,
-      rental
-    ]: AwaitFn<typeof vendor.nftService.fetchOne> = yield call(
+    const [nft, order, rental]: AwaitFn<typeof vendor.nftService.fetchOne> = yield call(
       [vendor.nftService, 'fetchOne'],
       contractAddress,
       tokenId,
       options
     )
 
-    yield put(fetchNFTSuccess(nft as NFT, order, rental))
+    yield put(fetchNFTSuccess(nft, order, rental))
   } catch (error) {
-    yield put(
-      fetchNFTFailure(contractAddress, tokenId, (error as Error).message)
-    )
+    yield put(fetchNFTFailure(contractAddress, tokenId, (error as Error).message))
   }
 }
 
 function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
   const { nft, address } = action.payload
   try {
-    const vendor: Vendor<VendorName> = yield call(
-      VendorFactory.build,
-      nft.vendor
-    )
+    const vendor: Vendor<VendorName> = yield call(VendorFactory.build, nft.vendor)
 
     const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
     if (!wallet) {
       throw new Error('A wallet is needed to perform a NFT transfer request')
     }
 
-    const txHash: string = yield call(
-      [vendor.nftService, 'transfer'],
-      wallet,
-      address,
-      nft
-    )
+    const txHash: string = yield call([vendor.nftService, 'transfer'], wallet, address, nft)
     yield put(transferNFTransactionSubmitted(nft, address, txHash))
     if (nft?.openRentalId) {
       yield call(waitForTx, txHash)
-      const rental: RentalListing | null = yield select(
-        getRentalById,
-        nft.openRentalId
-      )
+      const rental: RentalListing | null = yield select(getRentalById, nft.openRentalId)
       if (isRentalListingOpen(rental)) {
         yield call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED)
       }
@@ -190,14 +142,9 @@ function* handleTransferNFTRequest(action: TransferNFTRequestAction) {
 
     yield put(transferNFTSuccess(nft, address))
   } catch (error) {
-    const errorMessage = isErrorWithMessage(error)
-      ? error.message
-      : t('global.unknown_error')
+    const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
     const errorCode =
-      error !== undefined &&
-      error !== null &&
-      typeof error === 'object' &&
-      'code' in error
+      error !== undefined && error !== null && typeof error === 'object' && 'code' in error
         ? (error as { code: ErrorCode }).code
         : undefined
     yield put(transferNFTFailure(nft, address, errorMessage, errorCode))

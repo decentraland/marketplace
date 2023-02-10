@@ -1,56 +1,38 @@
 import React, { useState } from 'react'
-import { ethers } from 'ethers'
 import addDays from 'date-fns/addDays'
 import formatDate from 'date-fns/format'
 import isValid from 'date-fns/isValid'
+import { ethers } from 'ethers'
 import { Network, NFTCategory } from '@dcl/schemas'
+import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
-import {
-  Authorization,
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
+import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
-import { ChainButton } from 'decentraland-dapps/dist/containers'
-import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
+import { Header, Form, Field, Button } from 'decentraland-ui'
 import { parseMANANumber } from '../../../lib/mana'
-import {
-  INPUT_FORMAT,
-  getDefaultExpirationDate
-} from '../../../modules/order/utils'
-import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { getAssetName, isOwnedBy } from '../../../modules/asset/utils'
-import { AuthorizationModal } from '../../AuthorizationModal'
+import { INPUT_FORMAT, getDefaultExpirationDate } from '../../../modules/order/utils'
+import { getContractNames } from '../../../modules/vendor'
+import { VendorFactory } from '../../../modules/vendor/VendorFactory'
 import { AssetAction } from '../../AssetAction'
+import { AuthorizationModal } from '../../AuthorizationModal'
+import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
-import { getContractNames } from '../../../modules/vendor'
-import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
-import { Props } from './SellModal.types'
 import { showPriceBelowMarketValueWarning } from './utils'
+import { Props } from './SellModal.types'
 
 const SellModal = (props: Props) => {
-  const {
-    nft,
-    order,
-    wallet,
-    authorizations,
-    isLoading,
-    isCreatingOrder,
-    getContract,
-    onGoBack,
-    onCreateOrder
-  } = props
+  const { nft, order, wallet, authorizations, isLoading, isCreatingOrder, getContract, onGoBack, onCreateOrder } = props
 
   const isUpdate = order !== null
-  const [price, setPrice] = useState<string>(
-    isUpdate ? ethers.utils.formatEther(order!.price) : ''
-  )
+  const [price, setPrice] = useState<string>(isUpdate ? ethers.utils.formatEther(order.price) : '')
 
   const [expiresAt, setExpiresAt] = useState(
-    isUpdate && order!.expiresAt && isValid(order!.expiresAt)
-      ? formatDate(addDays(order!.expiresAt, 1), INPUT_FORMAT)
+    isUpdate && order.expiresAt && isValid(order.expiresAt)
+      ? formatDate(addDays(order.expiresAt, 1), INPUT_FORMAT)
       : getDefaultExpirationDate()
   )
   const [showConfirm, setShowConfirm] = useState(false)
@@ -77,21 +59,14 @@ const SellModal = (props: Props) => {
     authorizedAddress: marketplace.address,
     contractAddress: nft.contractAddress,
     contractName:
-      (nft.category === NFTCategory.WEARABLE ||
-        nft.category === NFTCategory.EMOTE) &&
-      nft.network === Network.MATIC
+      (nft.category === NFTCategory.WEARABLE || nft.category === NFTCategory.EMOTE) && nft.network === Network.MATIC
         ? ContractName.ERC721CollectionV2
         : ContractName.ERC721,
     chainId: nft.chainId,
     type: AuthorizationType.APPROVAL
   }
 
-  const handleCreateOrder = () =>
-    onCreateOrder(
-      nft,
-      parseMANANumber(price),
-      new Date(`${expiresAt} 00:00:00`).getTime()
-    )
+  const handleCreateOrder = () => onCreateOrder(nft, parseMANANumber(price), new Date(`${expiresAt} 00:00:00`).getTime())
 
   const handleSubmit = () => {
     if (hasAuthorization(authorizations, authorization)) {
@@ -107,19 +82,12 @@ const SellModal = (props: Props) => {
   const { orderService } = VendorFactory.build(nft.vendor)
 
   const isInvalidDate = new Date(`${expiresAt} 00:00:00`).getTime() < Date.now()
-  const isInvalidPrice =
-    parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
-  const isDisabled =
-    !orderService.canSell() ||
-    !isOwnedBy(nft, wallet) ||
-    isInvalidPrice ||
-    isInvalidDate
+  const isInvalidPrice = parseMANANumber(price) <= 0 || parseFloat(price) !== parseMANANumber(price)
+  const isDisabled = !orderService.canSell() || !isOwnedBy(nft, wallet) || isInvalidPrice || isInvalidDate
 
   return (
     <AssetAction asset={nft}>
-      <Header size="large">
-        {t(isUpdate ? 'sell_page.update_title' : 'sell_page.title')}
-      </Header>
+      <Header size="large">{t(isUpdate ? 'sell_page.update_title' : 'sell_page.title')}</Header>
       <p className="subtitle">
         <T
           id={isUpdate ? 'sell_page.update_subtitle' : 'sell_page.subtitle'}
@@ -147,9 +115,7 @@ const SellModal = (props: Props) => {
             label={t('sell_page.expiration_date')}
             type="date"
             value={expiresAt}
-            onChange={(_event, props) =>
-              setExpiresAt(props.value || getDefaultExpirationDate())
-            }
+            onChange={(_event, props) => setExpiresAt(props.value || getDefaultExpirationDate())}
             error={isInvalidDate}
             message={isInvalidDate ? t('sell_page.invalid_date') : undefined}
           />
@@ -158,13 +124,7 @@ const SellModal = (props: Props) => {
           <Button as="div" onClick={onGoBack}>
             {t('global.cancel')}
           </Button>
-          <ChainButton
-            type="submit"
-            primary
-            disabled={isDisabled || isLoading}
-            loading={isLoading}
-            chainId={nft.chainId}
-          >
+          <ChainButton type="submit" primary disabled={isDisabled || isLoading} loading={isLoading} chainId={nft.chainId}>
             {t(isUpdate ? 'sell_page.update_submit' : 'sell_page.submit')}
           </ChainButton>
         </div>

@@ -10,7 +10,7 @@ export enum ContractName {
   COLLECTION_STORE = 'CollectionStore',
   RENTALS = 'Rentals',
   LAND = 'LAND',
-  ESTATES = 'Estates',
+  ESTATES = 'Estates'
 }
 
 const nftServerReplicatedMarketplaceContracts = {
@@ -566,12 +566,6 @@ const localContracts = {
 }
 
 export const contracts = {
-  [AppNetwork.GOERLI]: [
-    ...localContracts[AppNetwork.GOERLI],
-    ...nftServerReplicatedMarketplaceContracts[AppNetwork.GOERLI]
-  ],
-  [AppNetwork.MAINNET]: [
-    ...localContracts[AppNetwork.MAINNET],
-    ...nftServerReplicatedMarketplaceContracts[AppNetwork.MAINNET]
-  ]
+  [AppNetwork.GOERLI]: [...localContracts[AppNetwork.GOERLI], ...nftServerReplicatedMarketplaceContracts[AppNetwork.GOERLI]],
+  [AppNetwork.MAINNET]: [...localContracts[AppNetwork.MAINNET], ...nftServerReplicatedMarketplaceContracts[AppNetwork.MAINNET]]
 }

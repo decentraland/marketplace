@@ -13,8 +13,7 @@ export const locations = {
     return params ? `/lands?${params.toString()}` : '/lands'
   },
   collectibles: () => '/collectibles',
-  collection: (contractAddress: string = ':contractAddress') =>
-    `/collections/${contractAddress}`,
+  collection: (contractAddress = ':contractAddress') => `/collections/${contractAddress}`,
   browse: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
     return params ? `/browse?${params.toString()}` : '/browse'
@@ -28,67 +27,31 @@ export const locations = {
     const params = getSearchParams(options)
     return params ? `/account?${params.toString()}` : '/account'
   },
-  defaultCurrentAccount: function() {
+  defaultCurrentAccount: function () {
     return this.currentAccount({
       section: Section.COLLECTIONS
     })
   },
-  account: (address: string = ':address', options?: BrowseOptions) => {
+  account: (address = ':address', options?: BrowseOptions) => {
     const params = getSearchParams(options)
-    return params
-      ? `/accounts/${address}?${params.toString()}`
-      : `/accounts/${address}`
+    return params ? `/accounts/${address}?${params.toString()}` : `/accounts/${address}`
   },
-  nft: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}`,
-  manage: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/manage`,
-  item: (
-    contractAddress: string = ':contractAddress',
-    itemId: string = ':itemId'
-  ) => `/contracts/${contractAddress}/items/${itemId}`,
-  parcel: (x: string = ':x', y: string = ':y') => `/parcels/${x}/${y}/detail`,
-  estate: (estateId: string = ':estateId') => `/estates/${estateId}/detail`,
-  buy: (
-    type: AssetType,
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy`,
-  buyWithCard: (
-    type: AssetType,
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) =>
-    `/contracts/${contractAddress}/${getResource(
-      type
-    )}/${tokenId}/buy?withCard=true`,
-  buyStatusPage: (
-    type: AssetType,
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) =>
+  nft: (contractAddress = ':contractAddress', tokenId = ':tokenId') => `/contracts/${contractAddress}/tokens/${tokenId}`,
+  manage: (contractAddress = ':contractAddress', tokenId = ':tokenId') => `/contracts/${contractAddress}/tokens/${tokenId}/manage`,
+  item: (contractAddress = ':contractAddress', itemId = ':itemId') => `/contracts/${contractAddress}/items/${itemId}`,
+  parcel: (x = ':x', y = ':y') => `/parcels/${x}/${y}/detail`,
+  estate: (estateId = ':estateId') => `/estates/${estateId}/detail`,
+  buy: (type: AssetType, contractAddress = ':contractAddress', tokenId = ':tokenId') =>
+    `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy`,
+  buyWithCard: (type: AssetType, contractAddress = ':contractAddress', tokenId = ':tokenId') =>
+    `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy?withCard=true`,
+  buyStatusPage: (type: AssetType, contractAddress = ':contractAddress', tokenId = ':tokenId') =>
     `/contracts/${contractAddress}/${getResource(type)}/${tokenId}/buy/status`,
-  sell: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/sell`,
-  cancel: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/cancel`,
-  transfer: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/transfer`,
-  bid: (
-    contractAddress: string = ':contractAddress',
-    tokenId: string = ':tokenId'
-  ) => `/contracts/${contractAddress}/tokens/${tokenId}/bid`,
-  activity: () => `/activity`
+  sell: (contractAddress = ':contractAddress', tokenId = ':tokenId') => `/contracts/${contractAddress}/tokens/${tokenId}/sell`,
+  cancel: (contractAddress = ':contractAddress', tokenId = ':tokenId') => `/contracts/${contractAddress}/tokens/${tokenId}/cancel`,
+  transfer: (contractAddress = ':contractAddress', tokenId = ':tokenId') => `/contracts/${contractAddress}/tokens/${tokenId}/transfer`,
+  bid: (contractAddress = ':contractAddress', tokenId = ':tokenId') => `/contracts/${contractAddress}/tokens/${tokenId}/bid`,
+  activity: () => '/activity'
 }
 
 function getResource(type: AssetType) {

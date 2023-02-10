@@ -1,18 +1,11 @@
 import React, { useCallback, useState } from 'react'
-import { ethers } from 'ethers'
-import { isAddress } from 'ethers/lib/utils'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
-import {
-  ModalNavigation,
-  Message,
-  Loader,
-  Button,
-  Field,
-  Checkbox
-} from 'decentraland-ui'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ethers } from 'ethers'
+import { isAddress } from 'ethers/lib/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ModalNavigation, Message, Loader, Button, Field, Checkbox } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
 import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
@@ -35,9 +28,7 @@ const ConfirmRentModal = ({
   const startDate = new Date()
   const period = rental.periods[selectedPeriodIndex]
   const endDate = add(startDate, { days: period.maxDays })
-  const pricePerRent = ethers.BigNumber.from(period.pricePerDay)
-    .mul(period.maxDays)
-    .toString()
+  const pricePerRent = ethers.BigNumber.from(period.pricePerDay).mul(period.maxDays).toString()
   const pricePerRentInEther = Number(ethers.utils.formatEther(pricePerRent))
   const formattedPricePerRent = formatWeiMANA(pricePerRent)
 
@@ -51,9 +42,7 @@ const ConfirmRentModal = ({
   }, [isUserTheOperatorAddress, wallet, setIsUserTheOperatorAddress])
 
   const hasAnInvalidOperator =
-    !operatorAddress ||
-    (!!operatorAddress && !isAddress(operatorAddress)) ||
-    operatorAddress === ethers.constants.AddressZero
+    !operatorAddress || (!!operatorAddress && !isAddress(operatorAddress)) || operatorAddress === ethers.constants.AddressZero
 
   const handleSubmit = useCallback(() => {
     operatorAddress && onSubmitTransaction(operatorAddress)
@@ -66,10 +55,7 @@ const ConfirmRentModal = ({
       name={t('rental_modal.confirm_rent_step.title')}
       onClose={!isLoading ? onClose : undefined}
     >
-      <ModalNavigation
-        title={t('rental_modal.confirm_rent_step.title')}
-        onClose={!isLoading ? onClose : undefined}
-      />
+      <ModalNavigation title={t('rental_modal.confirm_rent_step.title')} onClose={!isLoading ? onClose : undefined} />
       <Modal.Content>
         <span>
           <T
@@ -106,61 +92,32 @@ const ConfirmRentModal = ({
               setOperatorAddress(props.value)
             }}
             error={hasAnInvalidOperator}
-            message={
-              hasAnInvalidOperator
-                ? t('rental_modal.confirm_rent_step.wrong_operator')
-                : undefined
-            }
+            message={hasAnInvalidOperator ? t('rental_modal.confirm_rent_step.wrong_operator') : undefined}
           />
           <div className={styles.operatorCheckboxContainer}>
-            <Checkbox
-              checked={isUserTheOperatorAddress}
-              disabled={isLoading}
-              onChange={handleOperatorToggle}
-            />
-            <span className={styles.operatorFieldNotice}>
-              {t('rental_modal.confirm_rent_step.operator_notice')}
-            </span>
+            <Checkbox checked={isUserTheOperatorAddress} disabled={isLoading} onChange={handleOperatorToggle} />
+            <span className={styles.operatorFieldNotice}>{t('rental_modal.confirm_rent_step.operator_notice')}</span>
           </div>
         </div>
 
-        {error ? (
-          <Message
-            error
-            size="tiny"
-            visible
-            content={error}
-            header={t('global.error')}
-          />
-        ) : null}
+        {error ? <Message error size="tiny" visible content={error} header={t('global.error')} /> : null}
       </Modal.Content>
       <Modal.Actions className={styles.actions}>
-        <Button
-          className={styles.cancel}
-          secondary
-          disabled={isLoading}
-          onClick={onClose}
-        >
+        <Button className={styles.cancel} secondary disabled={isLoading} onClick={onClose}>
           {t('global.cancel')}
         </Button>
         {isLoading ? (
           <div className={styles.loader}>
             <Loader inline size="small" />
             {isSubmittingTransaction ? (
-              <span className={styles.signMessage}>
-                {t('rental_modal.confirm_rent_step.confirm_transaction')}
-              </span>
+              <span className={styles.signMessage}>{t('rental_modal.confirm_rent_step.confirm_transaction')}</span>
             ) : null}
           </div>
         ) : (
           <Button
             className={styles.cancel}
             primary
-            disabled={
-              Number(price) !== pricePerRentInEther ||
-              hasAnInvalidOperator ||
-              isLoading
-            }
+            disabled={Number(price) !== pricePerRentInEther || hasAnInvalidOperator || isLoading}
             onClick={handleSubmit}
           >
             {t('global.confirm')}

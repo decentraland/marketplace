@@ -34,13 +34,7 @@ const AssetProvider = (props: Props) => {
   }, [contractAddress, tokenId])
 
   useEffect(() => {
-    if (
-      contractAddress &&
-      tokenId &&
-      asset === null &&
-      !isLoading &&
-      !hasFetchedOnce.current
-    ) {
+    if (contractAddress && tokenId && asset === null && !isLoading && !hasFetchedOnce.current) {
       switch (type) {
         case AssetType.NFT:
           if (hasLoadedInitialFlags) {
@@ -58,29 +52,9 @@ const AssetProvider = (props: Props) => {
           throw new Error(`Invalid Asset type ${type}`)
       }
     }
-  }, [
-    asset,
-    contractAddress,
-    tokenId,
-    type,
-    onFetchNFT,
-    onFetchItem,
-    rentalStatus,
-    hasLoadedInitialFlags,
-    isLoading,
-    isLandOrEstate
-  ])
+  }, [asset, contractAddress, tokenId, type, onFetchNFT, onFetchItem, rentalStatus, hasLoadedInitialFlags, isLoading, isLandOrEstate])
 
-  return (
-    <>
-      {children(
-        asset,
-        order,
-        rental,
-        isLoading || (!hasLoadedInitialFlags && type === AssetType.NFT)
-      )}
-    </>
-  )
+  return <>{children(asset, order, rental, isLoading || (!hasLoadedInitialFlags && type === AssetType.NFT))}</>
 }
 
 export default React.memo(AssetProvider)

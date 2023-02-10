@@ -1,31 +1,26 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Modal,
   // Image,
   Button,
   useMobileMediaQuery,
-  Close,
+  Close
 } from 'decentraland-ui'
-import classNames from 'classnames'
-import { Link } from 'react-router-dom'
+import { config } from '../../../config'
 import { AssetType } from '../../../modules/asset/types'
 import { locations } from '../../../modules/routing/locations'
 import { SortBy } from '../../../modules/routing/types'
 import { VendorName } from '../../../modules/vendor'
-import { config } from '../../../config'
-import styles from './RentalsLaunchModal.module.css'
 import { Props } from './RentalsLaunchModal.types'
+import styles from './RentalsLaunchModal.module.css'
 
 const RENTAL_PROMO_POPUP_KEY = 'rental-intro-popup-key'
 
-export const RentalsLaunchModal = ({
-  isRentalsLaunchPopupEnabled,
-  isLoadingFeatureFlags
-}: Props) => {
-  const blogPostUrl = `${config.get(
-    'DECENTRALAND_BLOG'
-  )}/announcements/land-rentals-become-an-easy-process-via-decentraland-s-marketplace/`
+export const RentalsLaunchModal = ({ isRentalsLaunchPopupEnabled, isLoadingFeatureFlags }: Props) => {
+  const blogPostUrl = `${config.get('DECENTRALAND_BLOG')}/announcements/land-rentals-become-an-easy-process-via-decentraland-s-marketplace/`
 
   const onClose = useCallback(() => {
     localStorage.setItem(RENTAL_PROMO_POPUP_KEY, 'true')
@@ -41,11 +36,7 @@ export const RentalsLaunchModal = ({
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
   useEffect(() => {
-    setIsOpen(
-      !localStorage.getItem(RENTAL_PROMO_POPUP_KEY) &&
-        hasLoadedInitialFlags &&
-        isRentalsLaunchPopupEnabled
-    )
+    setIsOpen(!localStorage.getItem(RENTAL_PROMO_POPUP_KEY) && hasLoadedInitialFlags && isRentalsLaunchPopupEnabled)
   }, [hasLoadedInitialFlags, isRentalsLaunchPopupEnabled])
 
   const isMobile = useMobileMediaQuery()
@@ -94,9 +85,7 @@ export const RentalsLaunchModal = ({
       closeIcon={<Close />}
     >
       <Modal.Content className={styles.modalContent}>
-        <div
-          className={classNames(styles.rentalImage, 'ui medium image')}
-        ></div>
+        <div className={classNames(styles.rentalImage, 'ui medium image')}></div>
         <Modal.Description className={styles.modalDescription}>
           <h2 className={styles.modalTitle}>{t('rentals_promotional_modal.title')}</h2>
           {t('rentals_promotional_modal.description', {

@@ -1,9 +1,5 @@
 import { Bid } from '@dcl/schemas'
-import {
-  LoadingState,
-  loadingReducer
-} from 'decentraland-dapps/dist/modules/loading/reducer'
-import { toBidObject } from './utils'
+import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchBidsByAddressRequestAction,
   FetchBidsByAddressSuccessAction,
@@ -36,6 +32,7 @@ import {
   CancelBidFailureAction,
   CancelBidSuccessAction
 } from './actions'
+import { toBidObject } from './utils'
 
 export type BidState = {
   data: Record<string, Bid>

@@ -1,5 +1,5 @@
-import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
+import { Dispatch } from 'redux'
 import { NavbarProps } from 'decentraland-ui'
 
 export type Props = Partial<NavbarProps> & {
@@ -9,9 +9,6 @@ export type Props = Partial<NavbarProps> & {
   onNavigate: (path: string) => void
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'pathname' | 'hasPendingTransactions' | 'isConnected'
->
+export type MapStateProps = Pick<Props, 'pathname' | 'hasPendingTransactions' | 'isConnected'>
 export type MapDispatchProps = Pick<Props, 'onNavigate'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

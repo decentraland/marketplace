@@ -1,9 +1,6 @@
 import { ChainId, Item, Network } from '@dcl/schemas'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import {
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
+import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
@@ -63,9 +60,7 @@ describe('when creating the action to signal a success in the items request', ()
   const timestamp = 1627595757
 
   it('should return an object representing the action', () => {
-    expect(
-      fetchItemsSuccess(items, total, itemBrowseOptions, timestamp)
-    ).toEqual({
+    expect(fetchItemsSuccess(items, total, itemBrowseOptions, timestamp)).toEqual({
       type: FETCH_ITEMS_SUCCESS,
       meta: undefined,
       payload: { items, total, options: itemBrowseOptions, timestamp }

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
 import { RootState } from '../../../modules/reducer'
+import { getCategoryFromSection } from '../../../modules/routing/search'
 import {
   getAssetType,
   getContracts,
@@ -12,18 +13,15 @@ import {
   getSection,
   getWearableGenders
 } from '../../../modules/routing/selectors'
-import { LANDFilters } from '../../Vendor/decentraland/types'
-import { getCategoryFromSection } from '../../../modules/routing/search'
 import { Section } from '../../../modules/vendor/routing/types'
-import { MapStateProps, OwnProps } from './PriceFilter.types'
+import { LANDFilters } from '../../Vendor/decentraland/types'
 import { PriceFilter } from './PriceFilter'
+import { MapStateProps, OwnProps } from './PriceFilter.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps
-  const section =
-    'section' in values ? (values.section as Section) : getSection(state)
-  const onlyOnSale =
-    'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
+  const section = 'section' in values ? (values.section as Section) : getSection(state)
+  const onlyOnSale = 'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
   const onlyOnRent = getOnlyOnRent(state)
   let landStatus = LANDFilters.ALL_LAND
 
@@ -38,15 +36,11 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     assetType: getAssetType(state),
     rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
     network: 'network' in values ? values.network : getNetwork(state),
-    bodyShapes:
-      'wearableGenders' in values
-        ? values.wearableGenders
-        : getWearableGenders(state),
+    bodyShapes: 'wearableGenders' in values ? values.wearableGenders : getWearableGenders(state),
     isOnlySmart: getOnlySmart(state),
     landStatus,
     emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
-    collection:
-      'contracts' in values ? values.contracts?.[0] : getContracts(state)[0]
+    collection: 'contracts' in values ? values.contracts?.[0] : getContracts(state)[0]
   }
 }
 

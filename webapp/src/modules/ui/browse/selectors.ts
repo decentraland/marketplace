@@ -1,57 +1,38 @@
 import { createSelector } from 'reselect'
 import { Item, Order, RentalListing, RentalStatus } from '@dcl/schemas'
-import {
-  Transaction,
-  TransactionStatus
-} from 'decentraland-dapps/dist/modules/transaction/types'
-import { getData as getNFTData } from '../../nft/selectors'
-import { getData as getItemData } from '../../item/selectors'
-import { getData as getOrderData } from '../../order/selectors'
-import { getData as getRentalData } from '../../rental/selectors'
-import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
-import { NFTState } from '../../nft/reducer'
-import { RootState } from '../../reducer'
-import { BrowseUIState } from './reducer'
-import { NFT } from '../../nft/types'
+import { Transaction, TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { ItemState } from '../../item/reducer'
+import { getData as getItemData } from '../../item/selectors'
+import { NFTState } from '../../nft/reducer'
+import { getData as getNFTData } from '../../nft/selectors'
+import { NFT } from '../../nft/types'
+import { getData as getOrderData } from '../../order/selectors'
+import { RootState } from '../../reducer'
+import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
+import { getData as getRentalData } from '../../rental/selectors'
+import { getTransactionsByType } from '../../transaction/selectors'
 import { VendorName } from '../../vendor'
 import { getAddress } from '../../wallet/selectors'
-import { getTransactionsByType } from '../../transaction/selectors'
 import { View } from '../types'
+import { BrowseUIState } from './reducer'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
 
 export const getState = (state: RootState) => state.ui.browse
-export const getView = (state: RootState): View | undefined =>
-  getState(state).view
+export const getView = (state: RootState): View | undefined => getState(state).view
 export const getCount = (state: RootState) => getState(state).count
 
-export const getNFTs = createSelector<
-  RootState,
-  BrowseUIState,
-  NFTState['data'],
-  NFT[]
->(getState, getNFTData, (browse, nftsById) =>
+export const getNFTs = createSelector<RootState, BrowseUIState, NFTState['data'], NFT[]>(getState, getNFTData, (browse, nftsById) =>
   browse.nftIds.map(id => nftsById[id])
 )
 
-export const getItems = createSelector<
-  RootState,
-  BrowseUIState,
-  ItemState['data'],
-  Item[]
->(getState, getItemData, (browse, itemsById) =>
+export const getItems = createSelector<RootState, BrowseUIState, ItemState['data'], Item[]>(getState, getItemData, (browse, itemsById) =>
   browse.itemIds.map(id => itemsById[id])
 )
 
-export const getOnSaleItems = createSelector<
-  RootState,
-  ReturnType<typeof getAddress>,
-  ReturnType<typeof getItemData>,
-  Item[]
->(getAddress, getItemData, (address, itemsById) =>
-  Object.values(itemsById).filter(
-    item => item.isOnSale && item.creator === address
-  )
+export const getOnSaleItems = createSelector<RootState, ReturnType<typeof getAddress>, ReturnType<typeof getItemData>, Item[]>(
+  getAddress,
+  getItemData,
+  (address, itemsById) => Object.values(itemsById).filter(item => item.isOnSale && item.creator === address)
 )
 
 export const getOnSaleNFTs = createSelector<
@@ -73,23 +54,18 @@ export const getOnSaleNFTs = createSelector<
     .filter(([nft]) => nft.owner === address)
 )
 
-const getOnRentNFTs = createSelector<
-  RootState,
-  ReturnType<typeof getNFTData>,
-  ReturnType<typeof getRentalData>,
-  OnRentNFT[]
->(getNFTData, getRentalData, (nftsById, rentalsById) =>
-  Object.values(nftsById).reduce((acc, nft) => {
-    const { openRentalId } = nft
-    const rental = openRentalId ? rentalsById[openRentalId] : undefined
-    if (
-      rental &&
-      [RentalStatus.EXECUTED, RentalStatus.OPEN].includes(rental.status)
-    ) {
-      acc.push([nft, rental])
-    }
-    return acc
-  }, [] as [NFT<VendorName.DECENTRALAND>, RentalListing][])
+const getOnRentNFTs = createSelector<RootState, ReturnType<typeof getNFTData>, ReturnType<typeof getRentalData>, OnRentNFT[]>(
+  getNFTData,
+  getRentalData,
+  (nftsById, rentalsById) =>
+    Object.values(nftsById).reduce((acc, nft) => {
+      const { openRentalId } = nft
+      const rental = openRentalId ? rentalsById[openRentalId] : undefined
+      if (rental && [RentalStatus.EXECUTED, RentalStatus.OPEN].includes(rental.status)) {
+        acc.push([nft, rental])
+      }
+      return acc
+    }, [] as [NFT<VendorName.DECENTRALAND>, RentalListing][])
 )
 
 export const getOnRentNFTsByLessor = (state: RootState, address: string) => {
@@ -107,19 +83,12 @@ export const getOnSaleElements = createSelector<
   OnSaleElement[]
 >(getOnSaleItems, getOnSaleNFTs, (items, nfts) => [...items, ...nfts])
 
-export const getLastTransactionForClaimingBackLand = (
-  state: RootState,
-  nft: NFT
-): Transaction | null => {
+export const getLastTransactionForClaimingBackLand = (state: RootState, nft: NFT): Transaction | null => {
   const userAddress = getAddress(state)
 
   if (!userAddress) return null
 
-  const transactionsClaimedLand = getTransactionsByType(
-    state,
-    userAddress,
-    CLAIM_ASSET_TRANSACTION_SUBMITTED
-  )
+  const transactionsClaimedLand = getTransactionsByType(state, userAddress, CLAIM_ASSET_TRANSACTION_SUBMITTED)
 
   const transactions = transactionsClaimedLand
     .filter(
@@ -137,14 +106,8 @@ export const getLastTransactionForClaimingBackLand = (
   return transactions[0] ?? null
 }
 
-export const isClaimingBackLandTransactionPending = (
-  state: RootState,
-  nft: NFT
-): boolean => {
+export const isClaimingBackLandTransactionPending = (state: RootState, nft: NFT): boolean => {
   const transaction = getLastTransactionForClaimingBackLand(state, nft)
 
-  return transaction
-    ? transaction.status === TransactionStatus.QUEUED ||
-        transaction.status === TransactionStatus.PENDING
-    : false
+  return transaction ? transaction.status === TransactionStatus.QUEUED || transaction.status === TransactionStatus.PENDING : false
 }

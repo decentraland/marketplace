@@ -117,9 +117,7 @@ describe('when getting the Wearable BodyShapeUrn', () => {
     })
 
     it('should return "urn:decentraland:off-chain:base-avatars:BaseMale"', () => {
-      const bodyShape: string = nft.data.wearable
-        ? nft.data.wearable.bodyShapes[0]
-        : ''
+      const bodyShape: string = nft.data.wearable ? nft.data.wearable.bodyShapes[0] : ''
       expect(getBodyShapeUrn(bodyShape)).toBe(BodyShape.MALE)
     })
   })
@@ -132,9 +130,7 @@ describe('when getting the Wearable BodyShapeUrn', () => {
     })
 
     it('should return "urn:decentraland:off-chain:base-avatars:BaseFemale"', () => {
-      const bodyShape: string = nft.data.wearable
-        ? nft.data.wearable.bodyShapes[0]
-        : ''
+      const bodyShape: string = nft.data.wearable ? nft.data.wearable.bodyShapes[0] : ''
       expect(getBodyShapeUrn(bodyShape)).toBe(BodyShape.FEMALE)
     })
   })
@@ -159,18 +155,14 @@ describe('when checking that a Wearable is gender or unisex', () => {
 
     describe('and is comparing to "BodyShape.MALE"', () => {
       it('should return true', () => {
-        const bodyShape: BodyShape[] = nft.data.wearable
-          ? [nft.data.wearable.bodyShapes[0]]
-          : []
+        const bodyShape: BodyShape[] = nft.data.wearable ? [nft.data.wearable.bodyShapes[0]] : []
         expect(isGender(bodyShape, BodyShape.MALE)).toBe(true)
       })
     })
 
     describe('and is comparing to "BodyShape.FEMALE"', () => {
       it('should return false', () => {
-        const bodyShape: BodyShape[] = nft.data.wearable
-          ? [nft.data.wearable.bodyShapes[0]]
-          : []
+        const bodyShape: BodyShape[] = nft.data.wearable ? [nft.data.wearable.bodyShapes[0]] : []
         expect(isGender(bodyShape, BodyShape.FEMALE)).toBe(false)
       })
     })
@@ -185,18 +177,14 @@ describe('when checking that a Wearable is gender or unisex', () => {
 
     describe('and is comparing to "BodyShape.FEMALE"', () => {
       it('should return true', () => {
-        const bodyShape: BodyShape[] = nft.data.wearable
-          ? [nft.data.wearable.bodyShapes[0]]
-          : []
+        const bodyShape: BodyShape[] = nft.data.wearable ? [nft.data.wearable.bodyShapes[0]] : []
         expect(isGender(bodyShape, BodyShape.FEMALE)).toBe(true)
       })
     })
 
     describe('and is comparing to "BodyShape.MALE"', () => {
       it('should return false', () => {
-        const bodyShape: BodyShape[] = nft.data.wearable
-          ? [nft.data.wearable.bodyShapes[0]]
-          : []
+        const bodyShape: BodyShape[] = nft.data.wearable ? [nft.data.wearable.bodyShapes[0]] : []
         expect(isGender(bodyShape, BodyShape.MALE)).toBe(false)
       })
     })
@@ -205,27 +193,20 @@ describe('when checking that a Wearable is gender or unisex', () => {
   describe('and the Wearable bodyShape is "Unisex"', () => {
     beforeEach(() => {
       nft.data.wearable = {
-        bodyShapes: [
-          'BaseMale' as BodyShape.MALE,
-          'BaseFemale' as BodyShape.FEMALE
-        ]
+        bodyShapes: ['BaseMale' as BodyShape.MALE, 'BaseFemale' as BodyShape.FEMALE]
       } as NFTData[NFTCategory.WEARABLE]
     })
 
     describe('and is comparing to "BodyShape.FEMALE"', () => {
       it('should return false', () => {
-        const bodyShape: BodyShape[] = nft.data.wearable
-          ? nft.data.wearable.bodyShapes
-          : []
+        const bodyShape: BodyShape[] = nft.data.wearable ? nft.data.wearable.bodyShapes : []
         expect(isGender(bodyShape, BodyShape.FEMALE)).toBe(false)
       })
     })
 
     describe('and is comparing to "BodyShape.MALE"', () => {
       it('should return false', () => {
-        const bodyShape: BodyShape[] = nft.data.wearable
-          ? nft.data.wearable.bodyShapes
-          : []
+        const bodyShape: BodyShape[] = nft.data.wearable ? nft.data.wearable.bodyShapes : []
         expect(isGender(bodyShape, BodyShape.MALE)).toBe(false)
       })
     })

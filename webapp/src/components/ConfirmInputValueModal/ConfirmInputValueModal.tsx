@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Props } from './ConfirmInputValueModal.types'
+import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { ManaField } from '../ManaField'
+import { Props } from './ConfirmInputValueModal.types'
 import './ConfirmInputValueModal.css'
 
 const ConfirmInputValueModal = ({
@@ -47,13 +47,7 @@ const ConfirmInputValueModal = ({
         >
           {t('global.cancel')}
         </Button>
-        <Button
-          type="submit"
-          primary
-          disabled={isDisabled}
-          loading={loading}
-          onClick={onConfirm}
-        >
+        <Button type="submit" primary disabled={isDisabled} loading={loading} onClick={onConfirm}>
           {t('global.proceed')}
         </Button>
       </Modal.Actions>

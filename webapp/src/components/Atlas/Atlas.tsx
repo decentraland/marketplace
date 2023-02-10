@@ -1,19 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Atlas as AtlasComponent,
-  AtlasTile,
-  Color,
-  Layer
-} from 'decentraland-ui'
-import { locations } from '../../modules/routing/locations'
+import { Atlas as AtlasComponent, AtlasTile, Color, Layer } from 'decentraland-ui'
 import { isErrorWithMessage } from '../../lib/error'
-import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
-import { Props, Tile } from './Atlas.types'
-import { VendorName } from '../../modules/vendor'
 import { NFT } from '../../modules/nft/types'
+import { locations } from '../../modules/routing/locations'
+import { VendorName } from '../../modules/vendor'
+import { nftAPI } from '../../modules/vendor/decentraland/nft/api'
 import Popup from './Popup'
+import { Props, Tile } from './Atlas.types'
 import './Atlas.css'
 
 const getCoords = (x: number | string, y: number | string) => `${x},${y}`
@@ -43,11 +38,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   const timeout = useRef<NodeJS.Timer | null>(null)
 
   const selection = useMemo(
-    () =>
-      (props.selection || []).reduce(
-        (set, pair) => set.add(getCoords(pair.x, pair.y)),
-        new Set<string>()
-      ),
+    () => (props.selection || []).reduce((set, pair) => set.add(getCoords(pair.x, pair.y)), new Set<string>()),
     [props.selection]
   )
 
@@ -82,23 +73,10 @@ const Atlas: React.FC<Props> = (props: Props) => {
     [tilesByEstateId]
   )
 
-  const userTiles = useMemo(
-    () =>
-      nfts.reduce(
-        (lands, nft) => setLand(lands, nft),
-        new Map<string, ReturnType<Layer>>()
-      ),
-    [nfts, setLand]
-  )
+  const userTiles = useMemo(() => nfts.reduce((lands, nft) => setLand(lands, nft), new Map<string, ReturnType<Layer>>()), [nfts, setLand])
 
   const userRentedTiles = useMemo(
-    () =>
-      nftsOnRent
-        .map(([nft]) => nft)
-        .reduce(
-          (lands, nft) => setLand(lands, nft, Color.SUNISH),
-          new Map<string, ReturnType<Layer>>()
-        ),
+    () => nftsOnRent.map(([nft]) => nft).reduce((lands, nft) => setLand(lands, nft, Color.SUNISH), new Map<string, ReturnType<Layer>>()),
     [nftsOnRent, setLand]
   )
 
@@ -111,14 +89,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
       const id = selection.values().next().value as string
       const center = tiles[id] as Tile
       const tile = tiles[getCoords(x, y)] as Tile
-      if (
-        center &&
-        tile &&
-        center.estate_id &&
-        tile.estate_id &&
-        center.estate_id === tile.estate_id &&
-        isEstate
-      ) {
+      if (center && tile && center.estate_id && tile.estate_id && center.estate_id === tile.estate_id && isEstate) {
         return true
       }
       return false
@@ -130,11 +101,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
     (x, y) => {
       const key = getCoords(x, y)
       const tile = tiles[key] as AtlasTile & { price?: string }
-      if (
-        tile &&
-        (('price' in tile && showOnSale) ||
-          ('rentalPricePerDay' in tile && showForRent))
-      ) {
+      if (tile && (('price' in tile && showOnSale) || ('rentalPricePerDay' in tile && showForRent))) {
         return {
           color: '#00d3ff',
           left: !!tile.left,
@@ -161,15 +128,9 @@ const Atlas: React.FC<Props> = (props: Props) => {
     [isSelected]
   )
 
-  const allUserTiles = useMemo(
-    () => new Map([...userTiles].concat([...userRentedTiles])),
-    [userRentedTiles, userTiles]
-  )
+  const allUserTiles = useMemo(() => new Map([...userTiles].concat([...userRentedTiles])), [userRentedTiles, userTiles])
 
-  const userLayer: Layer = useCallback(
-    (x, y) => allUserTiles.get(getCoords(x, y)) || null,
-    [allUserTiles]
-  )
+  const userLayer: Layer = useCallback((x, y) => allUserTiles.get(getCoords(x, y)) || null, [allUserTiles])
 
   const handleClick = useCallback(
     async (x: number, y: number) => {
@@ -194,12 +155,8 @@ const Atlas: React.FC<Props> = (props: Props) => {
           const tokenId = await nftAPI.fetchTokenId(tile.x, tile.y)
           land && onNavigate(locations.nft(land.address, tokenId))
         } catch (error) {
-          const errorMessage = isErrorWithMessage(error)
-            ? error.message
-            : t('global.unknown_error')
-          console.warn(
-            `Couldn't fetch parcel ${tile.x},${tile.y}: ${errorMessage}`
-          )
+          const errorMessage = isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+          console.warn(`Couldn't fetch parcel ${tile.x},${tile.y}: ${errorMessage}`)
         }
       }
     },
@@ -217,10 +174,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
       const tile = tiles[id]
       const tileRent = tile
         ? nftsOnRent.find(([nft]) =>
-            nft.data.parcel
-              ? Number(nft.data.parcel.x) === tile.x &&
-                Number(nft.data.parcel.y) === tile.y
-              : null
+            nft.data.parcel ? Number(nft.data.parcel.x) === tile.x && Number(nft.data.parcel.y) === tile.y : null
           )
         : null
 
@@ -281,12 +235,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   }, [withPopup, showPopup, mouseX, mouseY])
 
   // layers
-  const layers = [
-    userLayer,
-    ...(props.layers || []),
-    selectedStrokeLayer,
-    selectedFillLayer
-  ]
+  const layers = [userLayer, ...(props.layers || []), selectedStrokeLayer, selectedFillLayer]
 
   if (showOnSale || showForRent) {
     layers.unshift(forSaleOrRentLayer)
@@ -294,21 +243,9 @@ const Atlas: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="atlas-wrapper" onMouseLeave={handleHidePopup}>
-      <AtlasComponent
-        {...props}
-        tiles={tiles}
-        onClick={handleClick}
-        onHover={handleHover}
-        layers={layers}
-      />
+      <AtlasComponent {...props} tiles={tiles} onClick={handleClick} onHover={handleHover} layers={layers} />
       {hoveredTile ? (
-        <Popup
-          x={x}
-          y={y}
-          visible={showPopup}
-          tile={hoveredTile}
-          position={x > window.innerWidth - 280 ? 'left' : 'right'}
-        />
+        <Popup x={x} y={y} visible={showPopup} tile={hoveredTile} position={x > window.innerWidth - 280 ? 'left' : 'right'} />
       ) : null}
       {children}
     </div>

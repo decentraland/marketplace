@@ -1,7 +1,6 @@
 import React from 'react'
-
-import { Row } from '../../Layout/Row'
 import { Column } from '../../Layout/Column'
+import { Row } from '../../Layout/Row'
 import { Props } from './Highlight.types'
 import './Highlight.css'
 
@@ -17,9 +16,7 @@ const Highlight = (props: Props) => {
         <Column align="left">{icon}</Column>
         <Column align="right">
           <div className="name">{name}</div>
-          {description ? (
-            <div className="description">{description}</div>
-          ) : null}
+          {description ? <div className="description">{description}</div> : null}
         </Column>
       </Row>
     </Column>

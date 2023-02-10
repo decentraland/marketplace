@@ -1,10 +1,6 @@
 import { Item } from '@dcl/schemas'
 
-export function getItem(
-  contractAddress: string | null,
-  tokenId: string | null,
-  items: Record<string, Item>
-): Item | null {
+export function getItem(contractAddress: string | null, tokenId: string | null, items: Record<string, Item>): Item | null {
   if (!contractAddress || !tokenId) {
     return null
   }

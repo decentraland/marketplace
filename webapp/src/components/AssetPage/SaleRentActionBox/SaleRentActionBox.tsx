@@ -1,15 +1,20 @@
 import React, { memo, useCallback, useMemo, useState } from 'react'
-import { NFTCategory } from '@dcl/schemas'
-import { ethers } from 'ethers'
-import intlFormat from 'date-fns/intlFormat'
-import classNames from 'classnames'
 import { Link } from 'react-router-dom'
-import { Button, Popup } from 'decentraland-ui'
-import { ContractName } from 'decentraland-transactions'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import classNames from 'classnames'
+import intlFormat from 'date-fns/intlFormat'
+import { ethers } from 'ethers'
+import { NFTCategory } from '@dcl/schemas'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
+import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ContractName } from 'decentraland-transactions'
+import { Button, Popup } from 'decentraland-ui'
+import { getContractAuthorization } from '../../../lib/authorization'
+import { builderUrl } from '../../../lib/environment'
 import { formatWeiMANA } from '../../../lib/mana'
+import { AssetType } from '../../../modules/asset/types'
+import { isOwnedBy } from '../../../modules/asset/utils'
+import { isPartOfEstate } from '../../../modules/nft/utils'
 import {
   canBeClaimed,
   getMaxPriceOfPeriods,
@@ -18,21 +23,16 @@ import {
   isRentalListingExecuted,
   isRentalListingOpen
 } from '../../../modules/rental/utils'
-import { getContractNames, VendorFactory } from '../../../modules/vendor'
-import { getContractAuthorization } from '../../../lib/authorization'
 import { locations } from '../../../modules/routing/locations'
-import { isPartOfEstate } from '../../../modules/nft/utils'
-import { AssetType } from '../../../modules/asset/types'
-import { builderUrl } from '../../../lib/environment'
-import { isOwnedBy } from '../../../modules/asset/utils'
+import { getContractNames, VendorFactory } from '../../../modules/vendor'
 import { addressEquals } from '../../../modules/wallet/utils'
+import { AuthorizationModal } from '../../AuthorizationModal'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
-import { AuthorizationModal } from '../../AuthorizationModal'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
-import { LinkedProfile } from '../../LinkedProfile'
 
 enum View {
   SALE,
@@ -53,25 +53,12 @@ const SaleRentActionBox = ({
   const isMobileView = isMobile()
   const isRentalOpen = isRentalListingOpen(rental)
   const isOwner = isOwnedBy(nft, wallet, rental ? rental : undefined)
-  const isTenant =
-    rental &&
-    wallet &&
-    addressEquals(rental.tenant ?? undefined, wallet.address)
+  const isTenant = rental && wallet && addressEquals(rental.tenant ?? undefined, wallet.address)
 
-  const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
-    number
-  >(0)
-  const [view, setView] = useState(
-    !!order || !isRentalOpen ? View.SALE : View.RENT
-  )
-  const maxPriceOfPeriods: string | null = useMemo(
-    () => (rental ? getMaxPriceOfPeriods(rental) : null),
-    [rental]
-  )
-  const toggleView = useCallback(
-    () => (view === View.RENT ? setView(View.SALE) : setView(View.RENT)),
-    [view]
-  )
+  const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<number>(0)
+  const [view, setView] = useState(!!order || !isRentalOpen ? View.SALE : View.RENT)
+  const maxPriceOfPeriods: string | null = useMemo(() => (rental ? getMaxPriceOfPeriods(rental) : null), [rental])
+  const toggleView = useCallback(() => (view === View.RENT ? setView(View.SALE) : setView(View.RENT)), [view])
   const isNFTPartOfAState = useMemo(() => isPartOfEstate(nft), [nft])
 
   // Validations for the sale screen
@@ -94,11 +81,7 @@ const SaleRentActionBox = ({
       name: getContractNames().RENTALS,
       network: nft.network
     })
-    return getContractAuthorization(
-      wallet.address,
-      rentals?.address,
-      mana ? { ...mana, name: ContractName.MANAToken } : undefined
-    )
+    return getContractAuthorization(wallet.address, rentals?.address, mana ? { ...mana, name: ContractName.MANAToken } : undefined)
   }, [wallet, getContract, nft.network])
 
   const handleOnRent = useCallback(() => {
@@ -111,12 +94,8 @@ const SaleRentActionBox = ({
   }, [authorization, authorizations, onRent, selectedRentalPeriodIndex])
 
   const handleCloseAuthorizationModal = () => setShowAuthorizationModal(false)
-  const rentalEndDate: Date | null = isCurrentlyRented
-    ? getRentalEndDate(rental!)
-    : null
-  const rentalEndTime = isCurrentlyRented
-    ? getRentalEndDate(rental!)!.getTime()
-    : 0
+  const rentalEndDate: Date | null = isCurrentlyRented ? getRentalEndDate(rental!) : null
+  const rentalEndTime = isCurrentlyRented ? getRentalEndDate(rental!)!.getTime() : 0
   const rentalHasEnded = isCurrentlyRented && hasRentalEnded(rental!)
   const hasEnoughManaToRent = useMemo(
     () =>
@@ -125,17 +104,14 @@ const SaleRentActionBox = ({
       ethers.utils
         .parseEther(currentMana.toString())
         .gte(
-          ethers.BigNumber.from(
-            rental.periods[selectedRentalPeriodIndex].pricePerDay
-          ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
+          ethers.BigNumber.from(rental.periods[selectedRentalPeriodIndex].pricePerDay).mul(
+            rental.periods[selectedRentalPeriodIndex].maxDays
+          )
         ),
     [rental, currentMana, selectedRentalPeriodIndex]
   )
   const hasEnoughManaToBuy = useMemo(
-    () =>
-      !!order &&
-      !!currentMana &&
-      ethers.utils.parseEther(currentMana.toString()).gte(order.price),
+    () => !!order && !!currentMana && ethers.utils.parseEther(currentMana.toString()).gte(order.price),
     [order, currentMana]
   )
 
@@ -169,12 +145,7 @@ const SaleRentActionBox = ({
             <div className={styles.price}>
               <div className={styles.title}>{t('global.price')}</div>
               <div className={styles.priceValue}>
-                <Mana
-                  className={styles.priceInMana}
-                  withTooltip
-                  size="medium"
-                  network={rental!.network}
-                >
+                <Mana className={styles.priceInMana} withTooltip size="medium" network={rental!.network}>
                   {formatWeiMANA(maxPriceOfPeriods)}
                 </Mana>
                 <span className={styles.perDay}>/{t('global.day')}</span>
@@ -193,29 +164,20 @@ const SaleRentActionBox = ({
             {!isOwner ? (
               <>
                 <Popup
-                  content={t(
-                    'asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent'
-                  )}
+                  content={t('asset_page.sales_rent_action_box.parcel_belongs_to_estate_rent')}
                   position="top center"
                   on={isMobileView ? 'click' : 'hover'}
                   disabled={!isNFTPartOfAState}
                   trigger={
                     <div className={styles.fullWidth}>
-                      <Button
-                        primary
-                        disabled={isNFTPartOfAState || !hasEnoughManaToRent}
-                        onClick={handleOnRent}
-                        className={styles.rent}
-                      >
+                      <Button primary disabled={isNFTPartOfAState || !hasEnoughManaToRent} onClick={handleOnRent} className={styles.rent}>
                         {t('global.rent')}
                       </Button>
                     </div>
                   }
                 />
                 {rental && wallet && !hasEnoughManaToRent ? (
-                  <div className={styles.notEnoughMana}>
-                    {t('asset_page.sales_rent_action_box.not_enough_mana')}
-                  </div>
+                  <div className={styles.notEnoughMana}>{t('asset_page.sales_rent_action_box.not_enough_mana')}</div>
                 ) : null}
               </>
             ) : null}
@@ -226,12 +188,7 @@ const SaleRentActionBox = ({
               <div className={styles.price}>
                 <div className={styles.title}>{t('global.price')}</div>
                 <div className={styles.content}>
-                  <Mana
-                    className={styles.priceInMana}
-                    withTooltip
-                    size="medium"
-                    network={order.network}
-                  >
+                  <Mana className={styles.priceInMana} withTooltip size="medium" network={order.network}>
                     {formatWeiMANA(order.price)}
                   </Mana>
                   <span className={styles.priceInFiat}>
@@ -242,12 +199,10 @@ const SaleRentActionBox = ({
             ) : isOwner && rental?.tenant && !rentalHasEnded ? (
               <div className={styles.upperMessage}>
                 {t('asset_page.sales_rent_action_box.in_rent_owner', {
-                  tenant: <LinkedProfile address={rental.tenant!} inline />,
+                  tenant: <LinkedProfile address={rental.tenant} inline />,
                   asset_type: nft.category,
                   rental_end_date: rentalEndDate,
-                  strong: (children: React.ReactElement) => (
-                    <strong>{children}</strong>
-                  )
+                  strong: (children: React.ReactElement) => <strong>{children}</strong>
                 })}
               </div>
             ) : isTenant && !rentalHasEnded ? (
@@ -255,9 +210,7 @@ const SaleRentActionBox = ({
                 {t('asset_page.sales_rent_action_box.in_rent_tenant', {
                   asset_type: nft.category,
                   rental_end_date: rentalEndDate,
-                  strong: (children: React.ReactElement) => (
-                    <strong>{children}</strong>
-                  )
+                  strong: (children: React.ReactElement) => <strong>{children}</strong>
                 })}
               </div>
             ) : (isTenant || isOwner) && rentalHasEnded ? (
@@ -265,20 +218,13 @@ const SaleRentActionBox = ({
                 {t('asset_page.sales_rent_action_box.rent_ended', {
                   asset_type: nft.category,
                   rental_end_date: rentalEndDate,
-                  strong: (children: React.ReactElement) => (
-                    <strong>{children}</strong>
-                  )
+                  strong: (children: React.ReactElement) => <strong>{children}</strong>
                 })}
               </div>
             ) : (
-              <div className={styles.upperMessage}>
-                {t('asset_page.sales_rent_action_box.not_for_sale')}
-              </div>
+              <div className={styles.upperMessage}>{t('asset_page.sales_rent_action_box.not_for_sale')}</div>
             )}
-            {isOwner &&
-            rental &&
-            wallet &&
-            canBeClaimed(wallet?.address, rental, nft) ? (
+            {isOwner && rental && wallet && canBeClaimed(wallet?.address, rental, nft) ? (
               <div className={styles.upperMessageDescription}>
                 {t('asset_page.sales_rent_action_box.claim_back_message', {
                   asset_type: nft.category
@@ -291,9 +237,7 @@ const SaleRentActionBox = ({
                   <Button
                     as={'a'}
                     href={`${builderUrl}/land/${
-                      nft.category === NFTCategory.ESTATE
-                        ? `${nft.tokenId}`
-                        : `${nft.data.parcel?.x},${nft.data.parcel?.y}`
+                      nft.category === NFTCategory.ESTATE ? `${nft.tokenId}` : `${nft.data.parcel?.x},${nft.data.parcel?.y}`
                     }`}
                     fluid
                     primary
@@ -306,11 +250,7 @@ const SaleRentActionBox = ({
                   {order ? (
                     <Button
                       as={Link}
-                      to={locations.buy(
-                        AssetType.NFT,
-                        nft.contractAddress,
-                        nft.tokenId
-                      )}
+                      to={locations.buy(AssetType.NFT, nft.contractAddress, nft.tokenId)}
                       disabled={!hasEnoughManaToBuy}
                       className={styles.buy}
                       primary
@@ -321,9 +261,7 @@ const SaleRentActionBox = ({
                   ) : null}
                   {canBid ? (
                     <Popup
-                      content={t(
-                        'asset_page.sales_rent_action_box.parcel_belongs_to_estate_bid'
-                      )}
+                      content={t('asset_page.sales_rent_action_box.parcel_belongs_to_estate_bid')}
                       position="top center"
                       on="hover"
                       disabled={!isNFTPartOfAState}
@@ -334,8 +272,7 @@ const SaleRentActionBox = ({
                             to={locations.bid(nft.contractAddress, nft.tokenId)}
                             className={classNames({
                               [styles.bid]: order,
-                              [styles.bid_manage_in_builder]:
-                                isTenant && !rentalHasEnded
+                              [styles.bid_manage_in_builder]: isTenant && !rentalHasEnded
                             })}
                             disabled={isNFTPartOfAState}
                             primary={!order && !(isTenant && !rentalHasEnded)}
@@ -350,21 +287,14 @@ const SaleRentActionBox = ({
                   ) : null}
                 </div>
                 {order && wallet && !hasEnoughManaToBuy ? (
-                  <div className={styles.notEnoughMana}>
-                    {t('asset_page.sales_rent_action_box.not_enough_mana')}
-                  </div>
+                  <div className={styles.notEnoughMana}>{t('asset_page.sales_rent_action_box.not_enough_mana')}</div>
                 ) : null}
               </>
             ) : null}
           </>
         )}
         {isOwner ? (
-          <Button
-            as={Link}
-            to={locations.manage(nft.contractAddress, nft.tokenId)}
-            fluid
-            className={styles.manage}
-          >
+          <Button as={Link} to={locations.manage(nft.contractAddress, nft.tokenId)} fluid className={styles.manage}>
             {t('asset_page.actions.manage')}
           </Button>
         ) : null}

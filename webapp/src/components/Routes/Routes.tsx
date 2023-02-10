@@ -1,31 +1,30 @@
 import { Switch, Route, Redirect, RouteComponentProps } from 'react-router-dom'
-import { Center, Page } from 'decentraland-ui'
 import Intercom from 'decentraland-dapps/dist/components/Intercom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import { Center, Page } from 'decentraland-ui'
 import { config } from '../../config'
 import { AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
-import { BrowsePage } from '../BrowsePage'
 import { AccountPage } from '../AccountPage'
-import { SignInPage } from '../SignInPage'
-import { SettingsPage } from '../SettingsPage'
-import { AssetPage } from '../AssetPage'
-import { SellPage } from '../SellPage'
-import { BuyPage } from '../BuyPage'
-import { BidPage } from '../BidPage'
-import { CancelSalePage } from '../CancelSalePage'
-import { TransferPage } from '../TransferPage'
 import { ActivityPage } from '../ActivityPage'
-import { HomePage } from '../HomePage'
-import { LegacyNFTPage } from '../LegacyNFTPage'
-import { LandsPage } from '../LandsPage'
-import { CollectionPage } from '../CollectionPage'
-import { Navbar } from '../Navbar'
-import { ManageAssetPage } from '../ManageAssetPage'
-import { Footer } from '../Footer'
-import { CampaignBrowserPage } from '../Campaign/CampaignBrowserPage'
+import { AssetPage } from '../AssetPage'
+import { BidPage } from '../BidPage'
+import { BrowsePage } from '../BrowsePage'
+import { BuyPage } from '../BuyPage'
 import { StatusPage } from '../BuyPage/StatusPage'
+import { CampaignBrowserPage } from '../Campaign/CampaignBrowserPage'
+import { CancelSalePage } from '../CancelSalePage'
+import { CollectionPage } from '../CollectionPage'
+import { Footer } from '../Footer'
+import { HomePage } from '../HomePage'
+import { LandsPage } from '../LandsPage'
+import { LegacyNFTPage } from '../LegacyNFTPage'
+import { ManageAssetPage } from '../ManageAssetPage'
+import { Navbar } from '../Navbar'
+import { SellPage } from '../SellPage'
+import { SettingsPage } from '../SettingsPage'
+import { SignInPage } from '../SignInPage'
+import { TransferPage } from '../TransferPage'
 import { Props } from './Routes.types'
 
 const Routes = ({ inMaintenance, isBuyNftsWithFiatEnabled }: Props) => {
@@ -49,11 +48,7 @@ const Routes = ({ inMaintenance, isBuyNftsWithFiatEnabled }: Props) => {
         <Route exact path={locations.lands()} component={LandsPage} />
         <Route exact path={locations.browse()} component={BrowsePage} />
         <Route path={locations.campaign()} component={CampaignBrowserPage} />
-        <Route
-          exact
-          path={locations.currentAccount()}
-          component={AccountPage}
-        />
+        <Route exact path={locations.currentAccount()} component={AccountPage} />
         <Route exact path={locations.account()} component={AccountPage} />
         <Route exact path={locations.signIn()} component={SignInPage} />
         <Route exact path={locations.sell()} component={SellPage} />
@@ -62,59 +57,29 @@ const Routes = ({ inMaintenance, isBuyNftsWithFiatEnabled }: Props) => {
         <Route exact path={locations.transfer()} component={TransferPage} />
         <Route exact path={locations.collection()} component={CollectionPage} />
         <Route exact path={locations.manage()} component={ManageAssetPage} />
-        <Route
-          exact
-          path={locations.buy(AssetType.NFT)}
-          component={() => <BuyPage type={AssetType.NFT} />}
-        />
-        <Route
-          exact
-          path={locations.buy(AssetType.ITEM)}
-          component={() => <BuyPage type={AssetType.ITEM} />}
-        />
+        <Route exact path={locations.buy(AssetType.NFT)} component={() => <BuyPage type={AssetType.NFT} />} />
+        <Route exact path={locations.buy(AssetType.ITEM)} component={() => <BuyPage type={AssetType.ITEM} />} />
         <Route
           exact
           path={locations.buyStatusPage(AssetType.NFT)}
-          component={(props: RouteComponentProps) =>
-            isBuyNftsWithFiatEnabled ? (
-              <StatusPage {...props} type={AssetType.NFT} />
-            ) : null
-          }
+          component={(props: RouteComponentProps) => (isBuyNftsWithFiatEnabled ? <StatusPage {...props} type={AssetType.NFT} /> : null)}
         />
         <Route
           exact
           path={locations.buyStatusPage(AssetType.ITEM)}
-          component={(props: RouteComponentProps) =>
-            isBuyNftsWithFiatEnabled ? (
-              <StatusPage {...props} type={AssetType.ITEM} />
-            ) : null
-          }
+          component={(props: RouteComponentProps) => (isBuyNftsWithFiatEnabled ? <StatusPage {...props} type={AssetType.ITEM} /> : null)}
         />
-        <Route
-          exact
-          path={locations.nft()}
-          component={() => <AssetPage type={AssetType.NFT} />}
-        />
-        <Route
-          exact
-          path={locations.item()}
-          component={() => <AssetPage type={AssetType.ITEM} />}
-        />
+        <Route exact path={locations.nft()} component={() => <AssetPage type={AssetType.NFT} />} />
+        <Route exact path={locations.item()} component={() => <AssetPage type={AssetType.ITEM} />} />
         <Route exact path={locations.settings()} component={SettingsPage} />
         <Route exact path={locations.activity()} component={ActivityPage} />
         <Route exact path={locations.root()} component={HomePage} />
         <Route exact path={locations.parcel()} component={LegacyNFTPage} />
         <Route exact path={locations.estate()} component={LegacyNFTPage} />
-        <Redirect
-          from="/browse"
-          to={locations.browse() + window.location.search}
-          push
-        />
+        <Redirect from="/browse" to={locations.browse() + window.location.search} push />
         <Redirect to={locations.root()} />
       </Switch>
-      {APP_ID ? (
-        <Intercom appId={APP_ID} settings={{ alignment: 'right' }} />
-      ) : null}
+      {APP_ID ? <Intercom appId={APP_ID} settings={{ alignment: 'right' }} /> : null}
     </>
   )
 }

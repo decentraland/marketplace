@@ -2,10 +2,9 @@ import { action } from 'typesafe-actions'
 import { Order, RentalListing } from '@dcl/schemas'
 import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ErrorCode } from 'decentraland-transactions'
-
-import { SortDirection } from '../routing/types'
 import { Account } from '../account/types'
 import { getAssetName } from '../asset/utils'
+import { SortDirection } from '../routing/types'
 import { FetchOneOptions } from '../vendor'
 import { NFT, NFTSortBy, NFTsFetchOptions, NFTsFetchParams } from './types'
 
@@ -47,11 +46,8 @@ export const fetchNFTsSuccess = (
     count,
     timestamp
   })
-export const fetchNFTsFailure = (
-  options: NFTsFetchOptions,
-  error: string,
-  timestamp: number
-) => action(FETCH_NFTS_FAILURE, { options, error, timestamp })
+export const fetchNFTsFailure = (options: NFTsFetchOptions, error: string, timestamp: number) =>
+  action(FETCH_NFTS_FAILURE, { options, error, timestamp })
 
 export type FetchNFTsRequestAction = ReturnType<typeof fetchNFTsRequest>
 export type FetchNFTsSuccessAction = ReturnType<typeof fetchNFTsSuccess>
@@ -63,21 +59,12 @@ export const FETCH_NFT_REQUEST = '[Request] Fetch NFT'
 export const FETCH_NFT_SUCCESS = '[Success] Fetch NFT'
 export const FETCH_NFT_FAILURE = '[Failure] Fetch NFT'
 
-export const fetchNFTRequest = (
-  contractAddress: string,
-  tokenId: string,
-  options?: FetchOneOptions
-) => action(FETCH_NFT_REQUEST, { contractAddress, tokenId, options })
-export const fetchNFTSuccess = (
-  nft: NFT,
-  order: Order | null,
-  rental: RentalListing | null
-) => action(FETCH_NFT_SUCCESS, { nft, order, rental })
-export const fetchNFTFailure = (
-  contractAddress: string,
-  tokenId: string,
-  error: string
-) => action(FETCH_NFT_FAILURE, { contractAddress, tokenId, error })
+export const fetchNFTRequest = (contractAddress: string, tokenId: string, options?: FetchOneOptions) =>
+  action(FETCH_NFT_REQUEST, { contractAddress, tokenId, options })
+export const fetchNFTSuccess = (nft: NFT, order: Order | null, rental: RentalListing | null) =>
+  action(FETCH_NFT_SUCCESS, { nft, order, rental })
+export const fetchNFTFailure = (contractAddress: string, tokenId: string, error: string) =>
+  action(FETCH_NFT_FAILURE, { contractAddress, tokenId, error })
 
 export type FetchNFTRequestAction = ReturnType<typeof fetchNFTRequest>
 export type FetchNFTSuccessAction = ReturnType<typeof fetchNFTSuccess>
@@ -88,27 +75,17 @@ export type FetchNFTFailureAction = ReturnType<typeof fetchNFTFailure>
 export const TRANSFER_NFT_REQUEST = '[Request] Transfer NFT'
 export const TRANSFER_NFT_SUCCESS = '[Success] Transfer NFT'
 export const TRANSFER_NFT_FAILURE = '[Failure] Transfer NFT'
-export const TRANSFER_NFT_TRANSACTION_SUBMITTED =
-  '[Submitted transaction] Transfer NFT'
+export const TRANSFER_NFT_TRANSACTION_SUBMITTED = '[Submitted transaction] Transfer NFT'
 
-export const transferNFTRequest = (nft: NFT, address: string) =>
-  action(TRANSFER_NFT_REQUEST, { nft, address })
+export const transferNFTRequest = (nft: NFT, address: string) => action(TRANSFER_NFT_REQUEST, { nft, address })
 export const transferNFTSuccess = (nft: NFT, address: string) =>
   action(TRANSFER_NFT_SUCCESS, {
     nft,
     address
   })
-export const transferNFTFailure = (
-  nft: NFT,
-  address: string,
-  error: string,
-  errorCode?: ErrorCode
-) => action(TRANSFER_NFT_FAILURE, { nft, address, error, errorCode })
-export const transferNFTransactionSubmitted = (
-  nft: NFT,
-  address: string,
-  txHash: string
-) =>
+export const transferNFTFailure = (nft: NFT, address: string, error: string, errorCode?: ErrorCode) =>
+  action(TRANSFER_NFT_FAILURE, { nft, address, error, errorCode })
+export const transferNFTransactionSubmitted = (nft: NFT, address: string, txHash: string) =>
   action(TRANSFER_NFT_TRANSACTION_SUBMITTED, {
     nft,
     ...buildTransactionPayload(nft.chainId, txHash, {

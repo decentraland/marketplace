@@ -1,14 +1,7 @@
-import {
-  EmotePlayMode,
-  GenderFilterOption,
-  ItemSortBy,
-  Network,
-  NFTCategory,
-  Rarity
-} from '@dcl/schemas'
 import { getLocation, push } from 'connected-react-router'
-import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
+import { EmotePlayMode, GenderFilterOption, ItemSortBy, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
 import { fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
@@ -16,11 +9,7 @@ import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import { VendorName } from '../vendor'
 import { Section } from '../vendor/decentraland'
-import {
-  browse,
-  clearFilters,
-  fetchAssetsFromRoute as FetchAssetsFromRouteAction
-} from './actions'
+import { browse, clearFilters, fetchAssetsFromRoute as FetchAssetsFromRouteAction } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
 import { getCurrentBrowseOptions } from './selectors'
 import { BrowseOptions, SortBy } from './types'
@@ -79,10 +68,7 @@ describe('when handling the clear filters request action', () => {
           [select(getCurrentBrowseOptions), browseOptions],
           [select(getLocation), { pathname }],
           [select(getEventData), {}],
-          [
-            call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-            Promise.resolve()
-          ]
+          [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
         ])
         .put(push(buildBrowseURL(pathname, browseOptionsWithoutFilters)))
         .dispatch(clearFilters())
@@ -94,16 +80,10 @@ describe('when handling the clear filters request action', () => {
       it("should fetch assets and change the URL by clearing the filter's browse options and restarting the page counter and delete the onlyOnSale filter", () => {
         return expectSaga(routingSaga)
           .provide([
-            [
-              select(getCurrentBrowseOptions),
-              { ...browseOptions, section: Section.LAND }
-            ],
+            [select(getCurrentBrowseOptions), { ...browseOptions, section: Section.LAND }],
             [select(getLocation), { pathname }],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
           ])
           .put(
             push(
@@ -131,10 +111,7 @@ describe('when handling the clear filters request action', () => {
             ],
             [select(getLocation), { pathname }],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, browseOptionsWithoutFilters),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, browseOptionsWithoutFilters), Promise.resolve()]
           ])
           .put(
             push(
@@ -261,10 +238,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -288,10 +262,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -315,10 +286,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -342,10 +310,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -380,10 +345,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -407,10 +369,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -440,10 +399,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -466,10 +422,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -492,10 +445,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -519,10 +469,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -557,10 +504,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -584,10 +528,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -611,10 +552,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -638,10 +576,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))
@@ -676,10 +611,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -703,10 +635,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -736,10 +665,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -762,10 +688,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -788,10 +711,7 @@ describe('when handling the browse action', () => {
               [select(getCurrentBrowseOptions), browseOptions],
               [select(getLocation), { pathname }],
               [select(getEventData), {}],
-              [
-                call(fetchAssetsFromRoute, expectedBrowseOptions),
-                Promise.resolve()
-              ]
+              [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
             ])
             .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
             .dispatch(browse(newBrowseOptions))
@@ -815,10 +735,7 @@ describe('when handling the browse action', () => {
             [select(getCurrentBrowseOptions), browseOptions],
             [select(getLocation), { pathname }],
             [select(getEventData), {}],
-            [
-              call(fetchAssetsFromRoute, expectedBrowseOptions),
-              Promise.resolve()
-            ]
+            [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
           ])
           .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
           .dispatch(browse(newBrowseOptions))

@@ -1,22 +1,12 @@
-import {
-  Network,
-  ChainId,
-  Order,
-  RentalListing,
-  RentalStatus
-} from '@dcl/schemas'
-import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
+import { Network, ChainId, Order, RentalListing, RentalStatus } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import * as walletUtils from 'decentraland-dapps/dist/modules/wallet/utils'
+import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { NFT, NFTsCountParams, NFTsFetchParams } from '../../nft/types'
 import { VendorName } from '../types'
-import { NFTService } from './NFTService'
-import * as api from './nft/api'
 import { NFTResult, NFTsFetchFilters } from './nft'
-import {
-  ContractData,
-  ContractName,
-  getContract
-} from 'decentraland-transactions'
+import * as api from './nft/api'
+import { NFTService } from './NFTService'
 import { getERC721ContractData } from './utils'
 
 jest.mock('decentraland-dapps/dist/modules/wallet/utils')
@@ -62,15 +52,11 @@ describe("Decentraland's NFTService", () => {
 
     describe('when the fetch fails', () => {
       beforeEach(() => {
-        ;(api.nftAPI.fetch as jest.Mock).mockRejectedValueOnce(
-          aBasicErrorMessage
-        )
+        ;(api.nftAPI.fetch as jest.Mock).mockRejectedValueOnce(aBasicErrorMessage)
       })
 
       it("should reject with the fetch's error", () => {
-        return expect(nftService.fetch(fetchParams, filters)).rejects.toEqual(
-          aBasicErrorMessage
-        )
+        return expect(nftService.fetch(fetchParams, filters)).rejects.toEqual(aBasicErrorMessage)
       })
     })
 
@@ -93,10 +79,7 @@ describe("Decentraland's NFTService", () => {
 
       it('should have fetched the NFTs with the filter and NFT params', async () => {
         await nftService.fetch(fetchParams, filters)
-        expect(api.nftAPI.fetch as jest.Mock).toHaveBeenCalledWith(
-          fetchParams,
-          filters
-        )
+        expect(api.nftAPI.fetch as jest.Mock).toHaveBeenCalledWith(fetchParams, filters)
       })
 
       it('should return the NFTs, the accounts, the orders, the rentals and the total', () => {
@@ -130,15 +113,11 @@ describe("Decentraland's NFTService", () => {
 
     describe('when the fetch fails', () => {
       beforeEach(() => {
-        ;(api.nftAPI.fetch as jest.Mock).mockRejectedValueOnce(
-          aBasicErrorMessage
-        )
+        ;(api.nftAPI.fetch as jest.Mock).mockRejectedValueOnce(aBasicErrorMessage)
       })
 
       it("should reject with the fetch's error", () => {
-        return expect(nftService.count(countParams, filters)).rejects.toEqual(
-          aBasicErrorMessage
-        )
+        return expect(nftService.count(countParams, filters)).rejects.toEqual(aBasicErrorMessage)
       })
     })
 
@@ -162,9 +141,7 @@ describe("Decentraland's NFTService", () => {
       })
 
       it('should resolve with the number of NFTs', () => {
-        return expect(nftService.count(countParams, filters)).resolves.toBe(
-          total
-        )
+        return expect(nftService.count(countParams, filters)).resolves.toBe(total)
       })
     })
   })
@@ -172,15 +149,11 @@ describe("Decentraland's NFTService", () => {
   describe('when fetching one NFT', () => {
     describe('when the fetch fails', () => {
       beforeEach(() => {
-        ;(api.nftAPI.fetchOne as jest.Mock).mockRejectedValueOnce(
-          aBasicErrorMessage
-        )
+        ;(api.nftAPI.fetchOne as jest.Mock).mockRejectedValueOnce(aBasicErrorMessage)
       })
 
       it("should reject with the fetch's error", () => {
-        return expect(
-          nftService.fetchOne(nft.contractAddress, nft.id)
-        ).rejects.toEqual(aBasicErrorMessage)
+        return expect(nftService.fetchOne(nft.contractAddress, nft.id)).rejects.toEqual(aBasicErrorMessage)
       })
     })
 
@@ -197,19 +170,13 @@ describe("Decentraland's NFTService", () => {
         await nftService.fetchOne(nft.contractAddress, nft.id, {
           rentalStatus: [RentalStatus.EXECUTED]
         })
-        expect(api.nftAPI.fetchOne as jest.Mock).toHaveBeenCalledWith(
-          nft.contractAddress,
-          nft.id,
-          {
-            rentalStatus: [RentalStatus.EXECUTED]
-          }
-        )
+        expect(api.nftAPI.fetchOne as jest.Mock).toHaveBeenCalledWith(nft.contractAddress, nft.id, {
+          rentalStatus: [RentalStatus.EXECUTED]
+        })
       })
 
       it('should return the NFT with its vendor and the order', () => {
-        return expect(
-          nftService.fetchOne(nft.contractAddress, nft.id)
-        ).resolves.toEqual([
+        return expect(nftService.fetchOne(nft.contractAddress, nft.id)).resolves.toEqual([
           { ...nft, vendor: VendorName.DECENTRALAND },
           order,
           rental
@@ -224,9 +191,7 @@ describe("Decentraland's NFTService", () => {
         wallet = null
       })
       it('should reject into a "Wallet must be connected" error', () => {
-        return expect(
-          nftService.transfer(null, 'anAddress', nft)
-        ).rejects.toThrowError('Invalid address. Wallet must be connected.')
+        return expect(nftService.transfer(null, 'anAddress', nft)).rejects.toThrowError('Invalid address. Wallet must be connected.')
       })
     })
 
@@ -236,23 +201,17 @@ describe("Decentraland's NFTService", () => {
       })
       describe('when the transaction fails', () => {
         beforeEach(() => {
-          ;(walletUtils.sendTransaction as jest.Mock).mockRejectedValueOnce(
-            aBasicErrorMessage
-          )
+          ;(walletUtils.sendTransaction as jest.Mock).mockRejectedValueOnce(aBasicErrorMessage)
         })
 
         it("should reject with the transaction's error", () => {
-          return expect(
-            nftService.transfer(wallet, anAddress, nft)
-          ).rejects.toBe(aBasicErrorMessage)
+          return expect(nftService.transfer(wallet, anAddress, nft)).rejects.toBe(aBasicErrorMessage)
         })
       })
 
       describe('when the transaction is successful', () => {
         beforeEach(() => {
-          ;(walletUtils.sendTransaction as jest.Mock).mockResolvedValueOnce(
-            aTxHash
-          )
+          ;(walletUtils.sendTransaction as jest.Mock).mockResolvedValueOnce(aTxHash)
         })
 
         it("should have called send transaction with the erc721's crafted contract using the nft's chain id, the contract address and the ABI", async () => {
@@ -283,9 +242,7 @@ describe("Decentraland's NFTService", () => {
         })
 
         it("should resolve with the transaction's hash", () => {
-          return expect(
-            nftService.transfer(wallet, 'anAddress', nft)
-          ).resolves.toBe(aTxHash)
+          return expect(nftService.transfer(wallet, 'anAddress', nft)).resolves.toBe(aTxHash)
         })
       })
     })
@@ -298,23 +255,17 @@ describe("Decentraland's NFTService", () => {
 
       describe('when the transaction fails', () => {
         beforeEach(() => {
-          ;(walletUtils.sendTransaction as jest.Mock).mockRejectedValueOnce(
-            aBasicErrorMessage
-          )
+          ;(walletUtils.sendTransaction as jest.Mock).mockRejectedValueOnce(aBasicErrorMessage)
         })
 
         it("should reject with the transaction's error", () => {
-          return expect(
-            nftService.transfer(wallet, anAddress, nft)
-          ).rejects.toBe(aBasicErrorMessage)
+          return expect(nftService.transfer(wallet, anAddress, nft)).rejects.toBe(aBasicErrorMessage)
         })
       })
 
       describe('when the transaction is successful', () => {
         beforeEach(() => {
-          ;(walletUtils.sendTransaction as jest.Mock).mockResolvedValueOnce(
-            aTxHash
-          )
+          ;(walletUtils.sendTransaction as jest.Mock).mockResolvedValueOnce(aTxHash)
         })
 
         it("should have called send transaction with the erc721's contract using the nft's chain id and contract address", async () => {
@@ -345,9 +296,7 @@ describe("Decentraland's NFTService", () => {
         })
 
         it("should resolve with the transaction's hash", () => {
-          return expect(
-            nftService.transfer(wallet, 'anAddress', nft)
-          ).resolves.toBe(aTxHash)
+          return expect(nftService.transfer(wallet, 'anAddress', nft)).resolves.toBe(aTxHash)
         })
       })
     })

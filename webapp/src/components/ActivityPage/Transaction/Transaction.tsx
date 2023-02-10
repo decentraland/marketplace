@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { ethers } from 'ethers'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { TransactionLink, Profile } from 'decentraland-dapps/dist/containers'
 import { getChainIdByNetwork } from 'decentraland-dapps/dist/lib/eth'
 import {
@@ -12,12 +11,14 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { ADD_MANA_PURCHASE_AS_TRANSACTION } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { ManaPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
-import {
-  gatewaysNames,
-  networksNames
-} from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
-
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { gatewaysNames, networksNames } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
+import { AssetType } from '../../../modules/asset/types'
 import { getAssetName } from '../../../modules/asset/utils'
+import { PLACE_BID_SUCCESS, ACCEPT_BID_TRANSACTION_SUBMITTED, CANCEL_BID_SUCCESS } from '../../../modules/bid/actions'
+import { BUY_ITEM_SUCCESS, BUY_ITEM_WITH_CARD_SUCCESS } from '../../../modules/item/actions'
+import { TRANSFER_NFT_TRANSACTION_SUBMITTED } from '../../../modules/nft/actions'
+import { isParcel } from '../../../modules/nft/utils'
 import {
   CREATE_ORDER_SUCCESS,
   CANCEL_ORDER_SUCCESS,
@@ -25,23 +26,11 @@ import {
   EXECUTE_ORDER_WITH_CARD_SUCCESS
 } from '../../../modules/order/actions'
 import {
-  BUY_ITEM_SUCCESS,
-  BUY_ITEM_WITH_CARD_SUCCESS
-} from '../../../modules/item/actions'
-import { TRANSFER_NFT_TRANSACTION_SUBMITTED } from '../../../modules/nft/actions'
-import {
-  PLACE_BID_SUCCESS,
-  ACCEPT_BID_TRANSACTION_SUBMITTED,
-  CANCEL_BID_SUCCESS
-} from '../../../modules/bid/actions'
-import { locations } from '../../../modules/routing/locations'
-import {
   ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED,
   CLAIM_ASSET_TRANSACTION_SUBMITTED,
   REMOVE_RENTAL_TRANSACTION_SUBMITTED
 } from '../../../modules/rental/actions'
-import { AssetType } from '../../../modules/asset/types'
-import { isParcel } from '../../../modules/nft/utils'
+import { locations } from '../../../modules/routing/locations'
 import { getContractNames } from '../../../modules/vendor'
 import { AssetProvider } from '../../AssetProvider'
 import { Mana } from '../../Mana'
@@ -53,17 +42,12 @@ const Transaction = (props: Props) => {
   switch (tx.actionType) {
     case GRANT_TOKEN_SUCCESS:
     case REVOKE_TOKEN_SUCCESS: {
-      const { authorization } = tx.payload as
-        | GrantTokenSuccessAction['payload']
-        | RevokeTokenSuccessAction['payload']
+      const { authorization } = tx.payload as GrantTokenSuccessAction['payload'] | RevokeTokenSuccessAction['payload']
       const authorized = getContract({
         address: authorization.authorizedAddress
       })
       const contract = getContract({ address: authorization.contractAddress })
-      const action =
-        tx.actionType === GRANT_TOKEN_SUCCESS
-          ? t('transaction.action.approved')
-          : t('transaction.action.unapproved')
+      const action = tx.actionType === GRANT_TOKEN_SUCCESS ? t('transaction.action.approved') : t('transaction.action.unapproved')
 
       if (!authorized || !contract) {
         return null
@@ -77,20 +61,12 @@ const Transaction = (props: Props) => {
               values={{
                 action,
                 contract: (
-                  <TransactionLink
-                    chainId={authorization.chainId}
-                    address={authorized.address}
-                    txHash=""
-                  >
+                  <TransactionLink chainId={authorization.chainId} address={authorized.address} txHash="">
                     {authorized.label || authorized.name}
                   </TransactionLink>
                 ),
                 token: (
-                  <TransactionLink
-                    chainId={authorization.chainId}
-                    address={contract.address}
-                    txHash=""
-                  >
+                  <TransactionLink chainId={authorization.chainId} address={contract.address} txHash="">
                     {contract.label || contract.name}
                   </TransactionLink>
                 )
@@ -104,11 +80,7 @@ const Transaction = (props: Props) => {
     case CREATE_ORDER_SUCCESS: {
       const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
-        <AssetProvider
-          type={AssetType.NFT}
-          contractAddress={contractAddress}
-          tokenId={tokenId}
-        >
+        <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
             <TransactionDetail
               asset={nft}
@@ -116,11 +88,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.create_order"
                   values={{
-                    name: (
-                      <Link to={locations.nft(contractAddress, tokenId)}>
-                        {name}
-                      </Link>
-                    ),
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{name}</Link>,
                     price: (
                       <Mana network={network} inline>
                         {price.toLocaleString()}
@@ -138,11 +106,7 @@ const Transaction = (props: Props) => {
     case CANCEL_ORDER_SUCCESS: {
       const { tokenId, contractAddress, network, name, price } = tx.payload
       return (
-        <AssetProvider
-          type={AssetType.NFT}
-          contractAddress={contractAddress}
-          tokenId={tokenId}
-        >
+        <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
             <TransactionDetail
               asset={nft}
@@ -150,11 +114,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.cancel_order"
                   values={{
-                    name: (
-                      <Link to={locations.nft(contractAddress, tokenId)}>
-                        {name}
-                      </Link>
-                    ),
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{name}</Link>,
                     price: (
                       <Mana network={network} inline>
                         {price.toLocaleString()}
@@ -173,14 +133,7 @@ const Transaction = (props: Props) => {
     case EXECUTE_ORDER_TRANSACTION_SUBMITTED:
     case BUY_ITEM_WITH_CARD_SUCCESS:
     case EXECUTE_ORDER_WITH_CARD_SUCCESS: {
-      const {
-        tokenId,
-        itemId,
-        contractAddress,
-        network,
-        name,
-        price
-      } = tx.payload
+      const { tokenId, itemId, contractAddress, network, name, price } = tx.payload
 
       let assetTokenId: string
       let type: AssetType
@@ -196,11 +149,7 @@ const Transaction = (props: Props) => {
       }
 
       return (
-        <AssetProvider
-          type={type}
-          contractAddress={contractAddress}
-          tokenId={assetTokenId}
-        >
+        <AssetProvider type={type} contractAddress={contractAddress} tokenId={assetTokenId}>
           {asset => (
             <TransactionDetail
               asset={asset}
@@ -226,11 +175,7 @@ const Transaction = (props: Props) => {
     case TRANSFER_NFT_TRANSACTION_SUBMITTED: {
       const { tokenId, contractAddress, name, address } = tx.payload
       return (
-        <AssetProvider
-          type={AssetType.NFT}
-          contractAddress={contractAddress}
-          tokenId={tokenId}
-        >
+        <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
             <TransactionDetail
               asset={nft}
@@ -238,11 +183,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.transfer"
                   values={{
-                    name: (
-                      <Link to={locations.nft(contractAddress, tokenId)}>
-                        {name}
-                      </Link>
-                    ),
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{name}</Link>,
                     address: (
                       <Link to={locations.account(address)}>
                         <Profile address={address} />
@@ -261,11 +202,7 @@ const Transaction = (props: Props) => {
       const { tokenId, contractAddress, price } = tx.payload
 
       return (
-        <AssetProvider
-          type={AssetType.NFT}
-          contractAddress={contractAddress}
-          tokenId={tokenId}
-        >
+        <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
             <TransactionDetail
               asset={nft}
@@ -273,11 +210,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.place_bid"
                   values={{
-                    name: (
-                      <Link to={locations.nft(contractAddress, tokenId)}>
-                        {nft ? getAssetName(nft) : ''}
-                      </Link>
-                    ),
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
                     price: (
                       <Mana network={nft?.network} inline>
                         {price.toLocaleString()}
@@ -295,11 +228,7 @@ const Transaction = (props: Props) => {
     case ACCEPT_BID_TRANSACTION_SUBMITTED: {
       const { tokenId, contractAddress, price } = tx.payload
       return (
-        <AssetProvider
-          type={AssetType.NFT}
-          contractAddress={contractAddress}
-          tokenId={tokenId}
-        >
+        <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
             <TransactionDetail
               asset={nft}
@@ -307,11 +236,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.accept_bid"
                   values={{
-                    name: (
-                      <Link to={locations.nft(contractAddress, tokenId)}>
-                        {nft ? getAssetName(nft) : ''}
-                      </Link>
-                    ),
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
                     price: (
                       <Mana inline network={nft?.network}>
                         {price.toLocaleString()}
@@ -329,11 +254,7 @@ const Transaction = (props: Props) => {
     case CANCEL_BID_SUCCESS: {
       const { tokenId, contractAddress, price } = tx.payload
       return (
-        <AssetProvider
-          type={AssetType.NFT}
-          contractAddress={contractAddress}
-          tokenId={tokenId}
-        >
+        <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
             <TransactionDetail
               asset={nft}
@@ -341,11 +262,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.cancel_bid"
                   values={{
-                    name: (
-                      <Link to={locations.nft(contractAddress, tokenId)}>
-                        {nft ? getAssetName(nft) : ''}
-                      </Link>
-                    ),
+                    name: <Link to={locations.nft(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
                     price: (
                       <Mana inline network={nft?.network}>
                         {price.toLocaleString()}
@@ -361,18 +278,9 @@ const Transaction = (props: Props) => {
       )
     }
     case CLAIM_ASSET_TRANSACTION_SUBMITTED: {
-      const {
-        tokenId,
-        contractAddress,
-        rentalContractAddress,
-        chainId
-      } = tx.payload
+      const { tokenId, contractAddress, rentalContractAddress, chainId } = tx.payload
       return (
-        <AssetProvider
-          type={AssetType.NFT}
-          contractAddress={contractAddress}
-          tokenId={tokenId}
-        >
+        <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
             <TransactionDetail
               asset={nft}
@@ -380,22 +288,10 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.claim_asset"
                   values={{
-                    asset: nft
-                      ? isParcel(nft)
-                        ? t('global.the_parcel')
-                        : t('global.the_estate')
-                      : '',
-                    name: (
-                      <Link to={locations.manage(contractAddress, tokenId)}>
-                        {nft ? getAssetName(nft) : ''}
-                      </Link>
-                    ),
+                    asset: nft ? (isParcel(nft) ? t('global.the_parcel') : t('global.the_estate')) : '',
+                    name: <Link to={locations.manage(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
                     contract: (
-                      <TransactionLink
-                        chainId={chainId}
-                        address={rentalContractAddress}
-                        txHash=""
-                      >
+                      <TransactionLink chainId={chainId} address={rentalContractAddress} txHash="">
                         {t('transaction.rental.contract')}
                       </TransactionLink>
                     )
@@ -411,11 +307,7 @@ const Transaction = (props: Props) => {
     case REMOVE_RENTAL_TRANSACTION_SUBMITTED: {
       const { tokenId, contractAddress } = tx.payload
       return (
-        <AssetProvider
-          type={AssetType.NFT}
-          contractAddress={contractAddress}
-          tokenId={tokenId}
-        >
+        <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
             <TransactionDetail
               asset={nft}
@@ -423,11 +315,7 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.remove_rental"
                   values={{
-                    name: (
-                      <Link to={locations.manage(contractAddress, tokenId)}>
-                        {nft ? getAssetName(nft) : ''}
-                      </Link>
-                    )
+                    name: <Link to={locations.manage(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>
                   }}
                 />
               }
@@ -440,11 +328,7 @@ const Transaction = (props: Props) => {
     case ACCEPT_RENTAL_LISTING_TRANSACTION_SUBMITTED: {
       const { tokenId, contractAddress, pricePerDay, duration } = tx.payload
       return (
-        <AssetProvider
-          type={AssetType.NFT}
-          contractAddress={contractAddress}
-          tokenId={tokenId}
-        >
+        <AssetProvider type={AssetType.NFT} contractAddress={contractAddress} tokenId={tokenId}>
           {nft => (
             <TransactionDetail
               asset={nft}
@@ -452,17 +336,11 @@ const Transaction = (props: Props) => {
                 <T
                   id="transaction.detail.accept_rental"
                   values={{
-                    name: (
-                      <Link to={locations.manage(contractAddress, tokenId)}>
-                        {nft ? getAssetName(nft) : ''}
-                      </Link>
-                    ),
+                    name: <Link to={locations.manage(contractAddress, tokenId)}>{nft ? getAssetName(nft) : ''}</Link>,
                     pricePerDay: (
                       <Mana network={nft?.network} inline>
                         {/* As this there might be already registered transactions and the price information is new, consider it optional */}
-                        {pricePerDay
-                          ? ethers.utils.formatEther(pricePerDay)
-                          : '0'}
+                        {pricePerDay ? ethers.utils.formatEther(pricePerDay) : '0'}
                       </Mana>
                     ),
                     duration: <span>{duration}</span>
@@ -496,11 +374,7 @@ const Transaction = (props: Props) => {
               values={{
                 amount: amount.toLocaleString(),
                 name: contract ? (
-                  <TransactionLink
-                    chainId={chainId}
-                    address={contract.address}
-                    txHash=""
-                  >
+                  <TransactionLink chainId={chainId} address={contract.address} txHash="">
                     {name}
                   </TransactionLink>
                 ) : (

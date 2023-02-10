@@ -1,20 +1,18 @@
 import React, { memo, useMemo, useCallback } from 'react'
-import { ethers } from 'ethers'
 import classNames from 'classnames'
 import add from 'date-fns/add'
 import format from 'date-fns/format'
-import { Dropdown, DropdownItemProps, DropdownProps } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { ethers } from 'ethers'
 import { RentalListingPeriod } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Dropdown, DropdownItemProps, DropdownProps } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../../lib/mana'
 import { Mana } from '../../../Mana'
 import { Props } from './PeriodsDropdown.types'
 import styles from './PeriodsDropdown.module.css'
 
 const Trigger = ({ period }: { period: RentalListingPeriod }) => {
-  const pricePerRent = ethers.BigNumber.from(period.pricePerDay)
-    .mul(period.maxDays)
-    .toString()
+  const pricePerRent = ethers.BigNumber.from(period.pricePerDay).mul(period.maxDays).toString()
 
   return (
     <div className={styles.trigger}>
@@ -39,9 +37,7 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
   const options: DropdownItemProps[] = useMemo(
     () =>
       periods.map((period, index) => {
-        const pricePerRent = ethers.BigNumber.from(period.pricePerDay)
-          .mul(period.maxDays)
-          .toString()
+        const pricePerRent = ethers.BigNumber.from(period.pricePerDay).mul(period.maxDays).toString()
         const startDate = new Date()
         const endDate = add(startDate, { days: period.maxDays })
         return {

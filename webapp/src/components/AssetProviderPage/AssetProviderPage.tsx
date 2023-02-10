@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react'
 import classNames from 'classnames'
 import { RentalStatus } from '@dcl/schemas'
-import { Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Loader } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
 import { AssetProvider } from '../AssetProvider'
 import { Props } from './AssetProviderPage.types'
@@ -24,10 +24,7 @@ export const NotFound = () => (
 const AssetProviderPage = (props: Props) => {
   const { type, isConnecting, children, fullWidth = false } = props
   const rentalStatuses: RentalStatus[] | undefined = useMemo(
-    () =>
-      type === AssetType.NFT
-        ? [RentalStatus.OPEN, RentalStatus.EXECUTED, RentalStatus.CANCELLED]
-        : undefined,
+    () => (type === AssetType.NFT ? [RentalStatus.OPEN, RentalStatus.EXECUTED, RentalStatus.CANCELLED] : undefined),
     [type]
   )
 

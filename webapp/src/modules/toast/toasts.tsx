@@ -1,9 +1,9 @@
-import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Icon, ToastType } from 'decentraland-ui'
+import { NFT } from '../nft/types'
 import { UpsertRentalOptType } from '../rental/types'
 import { locations } from '../routing/locations'
-import { NFT } from '../nft/types'
 
 export function getStoreUpdateSuccessToast(): Omit<Toast, 'id'> {
   return {
@@ -35,23 +35,13 @@ export function getListingRemoveSuccessToast(): Omit<Toast, 'id'> {
   }
 }
 
-export function getUpsertRentalSuccessToast(
-  nft: NFT,
-  type: UpsertRentalOptType
-): Omit<Toast, 'id'> {
+export function getUpsertRentalSuccessToast(nft: NFT, type: UpsertRentalOptType): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
-    title:
-      type === UpsertRentalOptType.INSERT
-        ? t('toast.create_rental_success.title')
-        : t('toast.update_rental_success.title'),
+    title: type === UpsertRentalOptType.INSERT ? t('toast.create_rental_success.title') : t('toast.update_rental_success.title'),
     body: (
       <div>
-        <p>
-          {type === UpsertRentalOptType.INSERT
-            ? t('toast.create_rental_success.body')
-            : t('toast.update_rental_success.body')}
-        </p>
+        <p>{type === UpsertRentalOptType.INSERT ? t('toast.create_rental_success.body') : t('toast.update_rental_success.body')}</p>
         <Button as={'a'} href={locations.nft(nft.contractAddress, nft.tokenId)}>
           {t('toast.upsert_rental_success.show_listing')}
         </Button>

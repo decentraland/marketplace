@@ -1,5 +1,5 @@
-import { Props as OnSaleListElementProps } from './OnSaleListElement/OnSaleListElement.types'
 import { Props as OnRentListElementProps } from './OnRentListElement/OnRentListElement.types'
+import { Props as OnSaleListElementProps } from './OnSaleListElement/OnSaleListElement.types'
 
 export enum OnSaleOrRentType {
   RENT,
@@ -16,7 +16,4 @@ export type Props = {
 
 export type MapStateProps = Pick<Props, 'elements' | 'isLoading'>
 
-export type OwnProps = Pick<
-  Props,
-  'onSaleOrRentType' | 'address' | 'isCurrentAccount'
->
+export type OwnProps = Pick<Props, 'onSaleOrRentType' | 'address' | 'isCurrentAccount'>

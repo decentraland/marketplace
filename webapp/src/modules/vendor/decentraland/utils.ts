@@ -1,16 +1,8 @@
 import { ChainId, Network } from '@dcl/schemas'
 import { RetryParams } from 'decentraland-dapps/dist/lib/api'
-import {
-  ContractData,
-  ContractName,
-  getContract
-} from 'decentraland-transactions'
+import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 
-export function getERC721ContractData(data: {
-  contractAddress: string
-  network: Network
-  chainId: ChainId
-}) {
+export function getERC721ContractData(data: { contractAddress: string; network: Network; chainId: ChainId }) {
   const contract: ContractData =
     /*  We need to use the ERC721CollectionV2 instead of ERC721 for non-ethereum transfers otherwise 
         the meta-tx would fail due to wrong domain and version.
@@ -28,7 +20,7 @@ export function getERC721ContractData(data: {
   return contract
 }
 
-export const retryParams : RetryParams = {
+export const retryParams: RetryParams = {
   attempts: 3,
   delay: 1500
 }

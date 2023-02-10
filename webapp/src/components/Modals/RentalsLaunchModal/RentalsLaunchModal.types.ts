@@ -3,8 +3,5 @@ export type Props = {
   isLoadingFeatureFlags: boolean
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'isRentalsLaunchPopupEnabled' | 'isLoadingFeatureFlags'
->
+export type MapStateProps = Pick<Props, 'isRentalsLaunchPopupEnabled' | 'isLoadingFeatureFlags'>
 export type MapDispatchProps = {}

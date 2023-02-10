@@ -1,5 +1,4 @@
 import { memo } from 'react'
-
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from '../DetailsRow.types'
@@ -11,8 +10,7 @@ export const Expiration = (props: Props) => {
   return (
     <>
       {order ? (
-        asset.category === NFTCategory.WEARABLE ||
-        asset.category === NFTCategory.EMOTE ? (
+        asset.category === NFTCategory.WEARABLE || asset.category === NFTCategory.EMOTE ? (
           <ExpirationInfo
             title={t('details_box.expires_at')}
             popupContent={t('details_box.expires_at_info')}
@@ -20,18 +18,10 @@ export const Expiration = (props: Props) => {
             expirationDate={order.expiresAt}
           />
         ) : (
-          <ExpirationInfo
-            title={t('details_box.order_expiration')}
-            expirationDate={order.expiresAt}
-          />
+          <ExpirationInfo title={t('details_box.order_expiration')} expirationDate={order.expiresAt} />
         )
       ) : null}
-      {rental ? (
-        <ExpirationInfo
-          title={t('details_box.rental_expiration')}
-          expirationDate={rental.expiration}
-        />
-      ) : null}
+      {rental ? <ExpirationInfo title={t('details_box.rental_expiration')} expirationDate={rental.expiration} /> : null}
     </>
   )
 }

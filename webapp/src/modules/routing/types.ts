@@ -1,15 +1,7 @@
-import {
-  EmotePlayMode,
-  Network,
-  NFTCategory,
-  Rarity,
-  RentalStatus,
-  WearableGender,
-  GenderFilterOption
-} from '@dcl/schemas'
+import { EmotePlayMode, Network, NFTCategory, Rarity, RentalStatus, WearableGender, GenderFilterOption } from '@dcl/schemas'
 import { AssetType } from '../asset/types'
-import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
+import { VendorName } from '../vendor/types'
 
 export { Sections } from '../vendor/routing/types'
 

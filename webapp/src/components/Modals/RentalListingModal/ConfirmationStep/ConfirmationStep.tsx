@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
-import { Modal, Button, ModalNavigation, Message } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Modal, Button, ModalNavigation, Message } from 'decentraland-ui'
 import { UpsertRentalOptType } from '../../../../modules/rental/types'
 import { daysByPeriod } from '../../../../modules/rental/utils'
 import { Mana } from '../../../Mana'
@@ -8,27 +8,10 @@ import { Props } from './ConfirmationStep.types'
 import styles from './ConfirmationStep.module.css'
 
 const ConfirmationStep = (props: Props) => {
-  const {
-    onCancel,
-    isSigning,
-    nft,
-    pricePerDay,
-    periods,
-    expiresAt,
-    onCreate,
-    onClearRentalErros,
-    error
-  } = props
+  const { onCancel, isSigning, nft, pricePerDay, periods, expiresAt, onCreate, onClearRentalErros, error } = props
 
   const handleSubmit = useCallback(
-    () =>
-      onCreate(
-        nft,
-        pricePerDay,
-        periods,
-        expiresAt,
-        UpsertRentalOptType.INSERT
-      ),
+    () => onCreate(nft, pricePerDay, periods, expiresAt, UpsertRentalOptType.INSERT),
     [nft, pricePerDay, periods, expiresAt, onCreate]
   )
 
@@ -39,10 +22,7 @@ const ConfirmationStep = (props: Props) => {
 
   return (
     <>
-      <ModalNavigation
-        title={t('rental_modal.confirmation_step.title')}
-        onClose={!isSigning ? onBack : undefined}
-      />
+      <ModalNavigation title={t('rental_modal.confirmation_step.title')} onClose={!isSigning ? onBack : undefined} />
       <Modal.Content>
         <div className={styles.notice}>
           <p>
@@ -51,30 +31,21 @@ const ConfirmationStep = (props: Props) => {
           </p>
           <div className={styles.noticeBlock}>
             <div className={styles.noticeRow}>
-              <div className={styles.noticeLabel}>
-                {t('rental_modal.confirmation_step.price_per_day')}
-              </div>
+              <div className={styles.noticeLabel}>{t('rental_modal.confirmation_step.price_per_day')}</div>
               <div className={styles.noticeText}>
                 <Mana inline>{pricePerDay}</Mana>/{t('global.day')}
               </div>
             </div>
             <div className={styles.noticeRow}>
-              <div className={styles.noticeLabel}>
-                {t('rental_modal.confirmation_step.periods')}
-              </div>
+              <div className={styles.noticeLabel}>{t('rental_modal.confirmation_step.periods')}</div>
               <div className={styles.noticeText}>
                 {periods.map(period => daysByPeriod[period]).join(' / ')}&nbsp;
                 {t('global.days')}
               </div>
             </div>
             <div className={styles.noticeRow}>
-              <div className={styles.noticeLabel}>
-                {t('rental_modal.confirmation_step.listing_expiration_date')}
-              </div>
-              <div
-                className={styles.noticeText}
-                title={new Date(expiresAt).toString()}
-              >
+              <div className={styles.noticeLabel}>{t('rental_modal.confirmation_step.listing_expiration_date')}</div>
+              <div className={styles.noticeText} title={new Date(expiresAt).toString()}>
                 {new Date(expiresAt).toLocaleDateString()}
               </div>
             </div>
@@ -82,12 +53,7 @@ const ConfirmationStep = (props: Props) => {
         </div>
       </Modal.Content>
       <Modal.Actions>
-        <Button
-          primary
-          loading={isSigning}
-          onClick={handleSubmit}
-          disabled={isSigning}
-        >
+        <Button primary loading={isSigning} onClick={handleSubmit} disabled={isSigning}>
           {t('global.confirm')}
         </Button>
         <Button onClick={onBack} disabled={isSigning}>
@@ -96,13 +62,7 @@ const ConfirmationStep = (props: Props) => {
       </Modal.Actions>
       {error && (
         <Modal.Content>
-          <Message
-            error
-            size="tiny"
-            visible
-            content={error}
-            header={t('global.error')}
-          />
+          <Message error size="tiny" visible content={error} header={t('global.error')} />
         </Modal.Content>
       )}
     </>

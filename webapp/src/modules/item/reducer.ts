@@ -1,8 +1,5 @@
 import { Item } from '@dcl/schemas'
-import {
-  loadingReducer,
-  LoadingState
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { loadingReducer, LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   BuyItemFailureAction,
   BuyItemRequestAction,
@@ -65,10 +62,7 @@ type ItemReducerAction =
   | BuyItemWithCardSuccessAction
   | BuyItemWithCardFailureAction
 
-export function itemReducer(
-  state = INITIAL_STATE,
-  action: ItemReducerAction
-): ItemState {
+export function itemReducer(state = INITIAL_STATE, action: ItemReducerAction): ItemState {
   switch (action.type) {
     case BUY_ITEM_REQUEST:
     case BUY_ITEM_SUCCESS:
