@@ -1,14 +1,14 @@
 import { connect } from 'react-redux'
 import { push } from 'connected-react-router'
-import { RootState } from '../../modules/reducer'
 import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { placeBidRequest, PLACE_BID_REQUEST } from '../../modules/bid/actions'
 import { getLoading } from '../../modules/bid/selectors'
 import { getContract } from '../../modules/contract/selectors'
+import { RootState } from '../../modules/reducer'
 import { Contract } from '../../modules/vendor/services'
-import { MapStateProps, MapDispatchProps, MapDispatch } from './BidPage.types'
 import BidPage from './BidPage'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './BidPage.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   authorizations: getAuthorizations(state),
@@ -18,8 +18,7 @@ const mapState = (state: RootState): MapStateProps => ({
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onNavigate: path => dispatch(push(path)),
-  onPlaceBid: (nft, price, expiresAt, fingerprint) =>
-    dispatch(placeBidRequest(nft, price, expiresAt, fingerprint))
+  onPlaceBid: (nft, price, expiresAt, fingerprint) => dispatch(placeBidRequest(nft, price, expiresAt, fingerprint))
 })
 
 export default connect(mapState, mapDispatch)(BidPage)

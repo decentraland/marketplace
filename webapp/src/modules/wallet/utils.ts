@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
-import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
 import { config } from '../../config'
 
 export const TRANSACTIONS_API_URL = config.get('TRANSACTIONS_API_URL')
@@ -12,11 +12,7 @@ export function shortenAddress(address: string) {
 }
 
 export function addressEquals(address1?: string, address2?: string) {
-  return (
-    address1 !== undefined &&
-    address2 !== undefined &&
-    address1.toLowerCase() === address2.toLowerCase()
-  )
+  return address1 !== undefined && address2 !== undefined && address1.toLowerCase() === address2.toLowerCase()
 }
 
 export async function getEth(): Promise<ethers.providers.Web3Provider> {

@@ -1,12 +1,10 @@
-import { Section } from '../vendor/decentraland/routing'
-import { getPersistedIsMapProperty } from '../ui/utils'
 import { View } from '../ui/types'
+import { getPersistedIsMapProperty } from '../ui/utils'
+import { Section } from '../vendor/decentraland/routing'
 import { isMapSet } from './utils'
 jest.mock('../ui/utils')
 
-const mockedGetPersistedIsMapProperty = (getPersistedIsMapProperty as unknown) as jest.MockedFunction<
-  typeof getPersistedIsMapProperty
->
+const mockedGetPersistedIsMapProperty = getPersistedIsMapProperty as unknown as jest.MockedFunction<typeof getPersistedIsMapProperty>
 
 describe('when checking if the map is set', () => {
   let isMap: boolean | undefined

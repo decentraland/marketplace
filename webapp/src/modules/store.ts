@@ -1,20 +1,19 @@
-import { applyMiddleware, compose, createStore } from 'redux'
-import createSagasMiddleware from 'redux-saga'
 import { routerMiddleware } from 'connected-react-router'
+import { applyMiddleware, compose, createStore } from 'redux'
 import { createLogger } from 'redux-logger'
+import createSagasMiddleware from 'redux-saga'
 import { Env } from '@dcl/ui-env'
+import { createAnalyticsMiddleware } from 'decentraland-dapps/dist/modules/analytics/middleware'
 import { createStorageMiddleware } from 'decentraland-dapps/dist/modules/storage/middleware'
 import { storageReducerWrapper } from 'decentraland-dapps/dist/modules/storage/reducer'
-import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/transaction/middleware'
-import { createAnalyticsMiddleware } from 'decentraland-dapps/dist/modules/analytics/middleware'
 import { CLEAR_TRANSACTIONS } from 'decentraland-dapps/dist/modules/transaction/actions'
-
+import { createTransactionMiddleware } from 'decentraland-dapps/dist/modules/transaction/middleware'
 import { config } from '../config'
+import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
+import { GENERATE_IDENTITY_SUCCESS } from './identity/actions'
 import { createRootReducer, RootState } from './reducer'
 import { rootSaga } from './sagas'
 import { fetchTilesRequest } from './tile/actions'
-import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
-import { GENERATE_IDENTITY_SUCCESS } from './identity/actions'
 import { SET_IS_TRYING_ON } from './ui/preview/actions'
 
 export const history = require('history').createBrowserHistory()
@@ -49,18 +48,10 @@ export function initStore() {
       ['ui', 'preview', 'isTryingOn'],
       ['identity', 'data']
     ], // array of paths from state to be persisted (optional)
-    actions: [
-      CLEAR_TRANSACTIONS,
-      ARCHIVE_BID,
-      UNARCHIVE_BID,
-      GENERATE_IDENTITY_SUCCESS,
-      SET_IS_TRYING_ON
-    ], // array of actions types that will trigger a SAVE (optional)
+    actions: [CLEAR_TRANSACTIONS, ARCHIVE_BID, UNARCHIVE_BID, GENERATE_IDENTITY_SUCCESS, SET_IS_TRYING_ON], // array of actions types that will trigger a SAVE (optional)
     migrations: {} // migration object that will migrate your localstorage (optional)
   })
-  const analyticsMiddleware = createAnalyticsMiddleware(
-    config.get('SEGMENT_API_KEY')!
-  )
+  const analyticsMiddleware = createAnalyticsMiddleware(config.get('SEGMENT_API_KEY')!)
 
   const middleware = applyMiddleware(
     sagasMiddleware,

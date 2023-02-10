@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Network } from '@dcl/schemas'
-import { Loader, Mana, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { LinkedProfile } from '../../LinkedProfile'
+import { Loader, Mana, Mobile, NotMobile, Table } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
-import { ManaToFiat } from '../../ManaToFiat'
 import { AssetType } from '../../../modules/asset/types'
 import { Section } from '../../../modules/vendor/decentraland'
+import { LinkedProfile } from '../../LinkedProfile'
+import { ManaToFiat } from '../../ManaToFiat'
 import { Props } from './RankingCreatorRow.types'
 import './RankingCreatorRow.css'
 
@@ -45,10 +45,7 @@ const RankingCreatorRow = ({ entity }: Props) => {
                   </>
                 )}
               </span>
-              <div
-                className="arrow-container"
-                onClick={() => setExpanded(!expanded)}
-              >
+              <div className="arrow-container" onClick={() => setExpanded(!expanded)}>
                 <span> {t(`global.${expanded ? 'less' : 'more'}`)} </span>
                 <i className={`caret back ${expanded ? 'up' : ''}`} />
               </div>
@@ -59,15 +56,11 @@ const RankingCreatorRow = ({ entity }: Props) => {
           <div>
             <div className="rankings-creator-more-data-container">
               <div>
-                <span>
-                  {t('home_page.analytics.rankings.creators.unique_collectors')}
-                </span>
+                <span>{t('home_page.analytics.rankings.creators.unique_collectors')}</span>
                 {entity.uniqueCollectors}
               </div>
               <div>
-                <span>
-                  {t('home_page.analytics.rankings.creators.items_sold')}
-                </span>
+                <span>{t('home_page.analytics.rankings.creators.items_sold')}</span>
                 {entity.sales}
               </div>
             </div>

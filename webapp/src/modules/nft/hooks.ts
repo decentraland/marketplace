@@ -9,9 +9,7 @@ import { NFT } from './types'
 export const useFingerprint = (nft: NFT | null) => {
   const [fingerprint, setFingerprint] = useState<string>()
   const [isLoading, setIsLoading] = useState(false)
-  const estate = useSelector((state: RootState) =>
-    getContract(state, { category: NFTCategory.ESTATE })
-  )
+  const estate = useSelector((state: RootState) => getContract(state, { category: NFTCategory.ESTATE }))
 
   useEffect(() => {
     if (nft && estate) {
@@ -21,12 +19,7 @@ export const useFingerprint = (nft: NFT | null) => {
           getFingerprint(nft.tokenId, estate)
             .then(result => setFingerprint(result))
             .finally(() => setIsLoading(false))
-            .catch(error =>
-              console.error(
-                `Error getting fingerprint for nft ${nft.tokenId}`,
-                error
-              )
-            )
+            .catch(error => console.error(`Error getting fingerprint for nft ${nft.tokenId}`, error))
           break
         }
         default:

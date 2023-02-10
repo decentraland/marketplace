@@ -10,10 +10,7 @@ const INITIAL_STATE: RoutingState = {
 
 type RoutingReducerAction = SetIsLoadMoreAction
 
-export function routingReducer(
-  state: RoutingState = INITIAL_STATE,
-  action: RoutingReducerAction
-) {
+export function routingReducer(state: RoutingState = INITIAL_STATE, action: RoutingReducerAction) {
   switch (action.type) {
     case SET_IS_LOAD_MORE: {
       return {

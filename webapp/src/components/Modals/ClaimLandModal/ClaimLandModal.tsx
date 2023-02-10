@@ -1,14 +1,12 @@
 import React from 'react'
-import { isParcel } from '../../../modules/nft/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { isParcel } from '../../../modules/nft/utils'
+import { SubmitTransactionModal } from '../SubmitTransactionModal'
 import { Props } from './ClaimLandModal.types'
 import styles from './ClaimLandModal.module.css'
-import { SubmitTransactionModal } from '../SubmitTransactionModal'
 
 const ClaimLandModal = ({ ...props }: Props) => {
-  const assetText = isParcel(props.metadata.nft)
-    ? t('global.parcel')
-    : t('global.estate')
+  const assetText = isParcel(props.metadata.nft) ? t('global.parcel') : t('global.estate')
   return (
     <SubmitTransactionModal
       title={t('claim_land_modal.title', {

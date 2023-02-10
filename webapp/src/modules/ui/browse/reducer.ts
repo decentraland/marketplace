@@ -6,12 +6,7 @@ import {
   FETCH_ITEMS_SUCCESS,
   FETCH_TRENDING_ITEMS_SUCCESS
 } from '../../item/actions'
-import {
-  FetchNFTsRequestAction,
-  FetchNFTsSuccessAction,
-  FETCH_NFTS_REQUEST,
-  FETCH_NFTS_SUCCESS
-} from '../../nft/actions'
+import { FetchNFTsRequestAction, FetchNFTsSuccessAction, FETCH_NFTS_REQUEST, FETCH_NFTS_SUCCESS } from '../../nft/actions'
 import { BrowseAction, BROWSE } from '../../routing/actions'
 import { SetViewAction, SET_VIEW } from '../actions'
 import { View } from '../types'
@@ -41,10 +36,7 @@ type UIReducerAction =
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
 
-export function browseReducer(
-  state: BrowseUIState = INITIAL_STATE,
-  action: UIReducerAction
-): BrowseUIState {
+export function browseReducer(state: BrowseUIState = INITIAL_STATE, action: UIReducerAction): BrowseUIState {
   switch (action.type) {
     case SET_VIEW: {
       return {
@@ -98,10 +90,7 @@ export function browseReducer(
         case View.LOAD_MORE: {
           return {
             ...state,
-            nftIds: [
-              ...state.nftIds,
-              ...action.payload.nfts.map(nft => nft.id)
-            ],
+            nftIds: [...state.nftIds, ...action.payload.nfts.map(nft => nft.id)],
             count: action.payload.count,
             lastTimestamp: action.payload.timestamp
           }
@@ -155,10 +144,7 @@ export function browseReducer(
         case View.LOAD_MORE: {
           return {
             ...state,
-            itemIds: [
-              ...state.itemIds,
-              ...action.payload.items.map(item => item.id)
-            ],
+            itemIds: [...state.itemIds, ...action.payload.items.map(item => item.id)],
             count: action.payload.total,
             lastTimestamp: action.payload.timestamp
           }

@@ -1,24 +1,16 @@
 import React, { useRef } from 'react'
-import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
 import { Link } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Props } from './CollectionList.types'
+import { Card, Loader, Dropdown, TextFilter, Pagination } from 'decentraland-ui'
+import { locations } from '../../modules/routing/locations'
 import { SortBy } from '../../modules/routing/types'
 import { COLLECTIONS_PER_PAGE } from '../../modules/routing/utils'
 import CollectionImage from '../CollectionImage'
-import { locations } from '../../modules/routing/locations'
-import styles from './CollectionList.module.css'
 import ListedBadge from '../ListedBadge'
+import { Props } from './CollectionList.types'
+import styles from './CollectionList.module.css'
 
-const CollectionList = ({
-  collections,
-  count,
-  isLoading,
-  search,
-  sortBy,
-  page,
-  onBrowse
-}: Props) => {
+const CollectionList = ({ collections, count, isLoading, search, sortBy, page, onBrowse }: Props) => {
   const sortOptions = useRef([
     { value: SortBy.NAME, text: t('filters.name') },
     { value: SortBy.NEWEST, text: t('filters.newest') },
@@ -71,22 +63,13 @@ const CollectionList = ({
             <div className={styles.empty}>{t('global.no_results')}</div>
           ) : (
             collections.map(collection => (
-              <Card
-                key={collection.contractAddress}
-                className={styles.card}
-                fluid
-              >
-                <Link
-                  className={styles.link}
-                  to={locations.collection(collection.contractAddress)}
-                >
+              <Card key={collection.contractAddress} className={styles.card} fluid>
+                <Link className={styles.link} to={locations.collection(collection.contractAddress)}>
                   <Card.Content className={styles.cardContent}>
                     <div className={styles.detailsContainer}>
                       <div className={styles.detailsLeft}>
                         <div className={styles.image}>
-                          <CollectionImage
-                            contractAddress={collection.contractAddress}
-                          />
+                          <CollectionImage contractAddress={collection.contractAddress} />
                         </div>
                       </div>
                       <div className={styles.detailsRight}>
@@ -98,9 +81,7 @@ const CollectionList = ({
                         </div>
                       </div>
                     </div>
-                    {collection.isOnSale && (
-                      <ListedBadge className={styles.listedBadge} />
-                    )}
+                    {collection.isOnSale && <ListedBadge className={styles.listedBadge} />}
                   </Card.Content>
                 </Link>
               </Card>

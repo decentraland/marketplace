@@ -1,18 +1,17 @@
 import React from 'react'
-import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
+import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Page, Header, Button } from 'decentraland-ui'
-
-import { AssetType } from '../../modules/asset/types'
-import { locations } from '../../modules/routing/locations'
-import { getAssetName } from '../../modules/asset/utils'
 import { formatWeiMANA } from '../../lib/mana'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
-import { Wallet } from '../Wallet'
-import { Mana } from '../Mana'
-import { AssetProviderPage } from '../AssetProviderPage'
+import { AssetType } from '../../modules/asset/types'
+import { getAssetName } from '../../modules/asset/utils'
+import { locations } from '../../modules/routing/locations'
 import { AssetAction } from '../AssetAction'
+import { AssetProviderPage } from '../AssetProviderPage'
+import { Footer } from '../Footer'
+import { Mana } from '../Mana'
+import { Navbar } from '../Navbar'
+import { Wallet } from '../Wallet'
 import { Props } from './CancelSalePage.types'
 import './CancelSalePage.css'
 
@@ -32,20 +31,10 @@ const CancelSalePage = (props: Props) => {
                 const name = getAssetName(nft)
                 if (!order) {
                   isDisabled = true
-                  subtitle = (
-                    <T
-                      id="cancel_sale_page.not_for_sale"
-                      values={{ name: <b>{name}</b> }}
-                    />
-                  )
+                  subtitle = <T id="cancel_sale_page.not_for_sale" values={{ name: <b>{name}</b> }} />
                 } else if (order.owner !== wallet.address) {
                   isDisabled = true
-                  subtitle = (
-                    <T
-                      id="cancel_sale_page.invalid_owner"
-                      values={{ name: <b>{name}</b> }}
-                    />
-                  )
+                  subtitle = <T id="cancel_sale_page.invalid_owner" values={{ name: <b>{name}</b> }} />
                 } else {
                   subtitle = (
                     <T
@@ -66,15 +55,7 @@ const CancelSalePage = (props: Props) => {
                     <Header size="large">{t('cancel_sale_page.title')}</Header>
                     <div className="subtitle">{subtitle}</div>
                     <div className="buttons">
-                      <Button
-                        onClick={() =>
-                          onNavigate(
-                            locations.nft(nft.contractAddress, nft.tokenId)
-                          )
-                        }
-                      >
-                        {t('global.cancel')}
-                      </Button>
+                      <Button onClick={() => onNavigate(locations.nft(nft.contractAddress, nft.tokenId))}>{t('global.cancel')}</Button>
                       <ChainButton
                         primary
                         loading={isLoading}

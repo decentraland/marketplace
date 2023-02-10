@@ -1,8 +1,5 @@
 import { Order } from '@dcl/schemas'
-import {
-  LoadingState,
-  loadingReducer
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchNFTsRequestAction,
   FetchNFTsSuccessAction,
@@ -13,10 +10,7 @@ import {
   FetchNFTSuccessAction,
   FETCH_NFT_SUCCESS
 } from '../nft/actions'
-import {
-  AcceptRentalListingSuccessAction,
-  ACCEPT_RENTAL_LISTING_SUCCESS
-} from '../rental/actions'
+import { AcceptRentalListingSuccessAction, ACCEPT_RENTAL_LISTING_SUCCESS } from '../rental/actions'
 import {
   CancelOrderFailureAction,
   CancelOrderRequestAction,
@@ -75,10 +69,7 @@ type OrderReducerAction =
   | CancelOrderSuccessAction
   | AcceptRentalListingSuccessAction
 
-export function orderReducer(
-  state: OrderState = INITIAL_STATE,
-  action: OrderReducerAction
-): OrderState {
+export function orderReducer(state: OrderState = INITIAL_STATE, action: OrderReducerAction): OrderState {
   switch (action.type) {
     case CREATE_ORDER_REQUEST:
     case EXECUTE_ORDER_REQUEST:
@@ -145,11 +136,7 @@ export function orderReducer(
         ...state,
         data: Object.fromEntries(
           Object.entries(state.data).filter(
-            ([_key, value]) =>
-              !(
-                value.contractAddress === rental.contractAddress &&
-                value.tokenId === rental.tokenId
-              )
+            ([_key, value]) => !(value.contractAddress === rental.contractAddress && value.tokenId === rental.tokenId)
           )
         )
       }

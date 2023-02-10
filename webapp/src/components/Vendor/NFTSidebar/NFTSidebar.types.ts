@@ -1,5 +1,4 @@
 import { Dispatch } from 'redux'
-
 import { browse, BrowseAction } from '../../../modules/routing/actions'
 import { Section } from '../../../modules/vendor/routing/types'
 

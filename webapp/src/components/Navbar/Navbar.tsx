@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react'
 import { Navbar as BaseNavbar } from 'decentraland-dapps/dist/containers'
-
 import { locations } from '../../modules/routing/locations'
 import UserMenu from '../UserMenu'
 import { Props } from './Navbar.types'

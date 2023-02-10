@@ -1,10 +1,6 @@
 import { Item, RentalListing, RentalStatus } from '@dcl/schemas'
-import {
-  ContractData,
-  ContractName,
-  getContract
-} from 'decentraland-transactions'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { ContractData, ContractName, getContract } from 'decentraland-transactions'
 import { NFT } from '../nft/types'
 import { locations } from '../routing/locations'
 import { Asset } from './types'
@@ -29,17 +25,13 @@ describe("when getting the asset's url", () => {
 
     describe('and the user is a manager of the asset', () => {
       it('should return the location path of the management page', () => {
-        expect(getAssetUrl(asset, true)).toEqual(
-          locations.manage(asset.contractAddress, (asset as NFT).tokenId)
-        )
+        expect(getAssetUrl(asset, true)).toEqual(locations.manage(asset.contractAddress, (asset as NFT).tokenId))
       })
     })
 
     describe('and the user is not a manager of the asset', () => {
       it("should return the location path of the token's page", () => {
-        expect(getAssetUrl(asset, false)).toEqual(
-          locations.nft(asset.contractAddress, (asset as NFT).tokenId)
-        )
+        expect(getAssetUrl(asset, false)).toEqual(locations.nft(asset.contractAddress, (asset as NFT).tokenId))
       })
     })
   })
@@ -51,17 +43,13 @@ describe("when getting the asset's url", () => {
 
     describe('and the user is a manager of the asset', () => {
       it("should return the location path of the item's page", () => {
-        expect(getAssetUrl(asset, true)).toEqual(
-          locations.item(asset.contractAddress, (asset as Item).itemId)
-        )
+        expect(getAssetUrl(asset, true)).toEqual(locations.item(asset.contractAddress, (asset as Item).itemId))
       })
     })
 
     describe('and the user is not a manager of the asset', () => {
       it("should return the location path of the item's page", () => {
-        expect(getAssetUrl(asset, false)).toEqual(
-          locations.item(asset.contractAddress, (asset as Item).itemId)
-        )
+        expect(getAssetUrl(asset, false)).toEqual(locations.item(asset.contractAddress, (asset as Item).itemId))
       })
     })
   })
@@ -142,10 +130,7 @@ describe('when getting the asset owner', () => {
         } as RentalListing
       })
       describe('and the logged user is the rental lessor the asset is in the rentals contract', () => {
-        const rentalsContract: ContractData = getContract(
-          ContractName.Rentals,
-          1
-        )
+        const rentalsContract: ContractData = getContract(ContractName.Rentals, 1)
         beforeEach(() => {
           asset = {
             openRentalId: null,
@@ -235,10 +220,7 @@ describe('when getting the asset owner', () => {
       })
 
       describe('and the logged user is not the asset owner since it is still in the rentals contract because it hasnt been claimed yet', () => {
-        const rentalsContract: ContractData = getContract(
-          ContractName.Rentals,
-          1
-        )
+        const rentalsContract: ContractData = getContract(ContractName.Rentals, 1)
         beforeEach(() => {
           asset = {
             openRentalId: null,

@@ -9,13 +9,7 @@ export const Info = ({ title, icon, popupContent, children }: Props) => (
       {title}
       {icon ? (
         popupContent ? (
-          <Popup
-            content={popupContent}
-            position="top center"
-            trigger={
-              <Icon name={icon} size="small" className={styles.infoIcon} />
-            }
-          />
+          <Popup content={popupContent} position="top center" trigger={<Icon name={icon} size="small" className={styles.infoIcon} />} />
         ) : (
           <Icon name={icon} size="small" className={styles.infoIcon} />
         )

@@ -1,9 +1,6 @@
 import { ChainId, Item, Network } from '@dcl/schemas'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import {
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
+import { NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { View } from '../ui/types'
@@ -137,12 +134,7 @@ failureActions.forEach(action => {
 
 describe('when reducing the successful action of fetching items', () => {
   const requestAction = fetchItemsRequest(itemBrowseOptions)
-  const successAction = fetchItemsSuccess(
-    [item],
-    1,
-    itemBrowseOptions,
-    223423423
-  )
+  const successAction = fetchItemsSuccess([item], 1, itemBrowseOptions, 223423423)
 
   const initialState = {
     ...INITIAL_STATE,

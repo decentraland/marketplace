@@ -1,5 +1,4 @@
 import { memo } from 'react'
-
 import { NFTCategory, Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isNFT } from '../../../../modules/asset/utils'
@@ -16,9 +15,7 @@ export const Availability = (props: Props) => {
         <span>
           /
           {Rarity.getMaxSupply(
-            asset.category === NFTCategory.WEARABLE
-              ? asset.data.wearable!.rarity
-              : asset.data.emote!.rarity
+            asset.category === NFTCategory.WEARABLE ? asset.data.wearable!.rarity : asset.data.emote!.rarity
           ).toLocaleString()}
         </span>
       </Info>

@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux'
 import { Order } from '@dcl/schemas'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { getContract } from '../../../modules/contract/selectors'
 import { NFT } from '../../../modules/nft/types'
 import {
   executeOrderRequest,
@@ -10,7 +11,6 @@ import {
   ExecuteOrderWithCardRequestAction
 } from '../../../modules/order/actions'
 import { Contract } from '../../../modules/vendor/services'
-import { getContract } from '../../../modules/contract/selectors'
 
 export type Props = {
   nft: NFT
@@ -28,18 +28,6 @@ export type Props = {
   onExecuteOrderWithCard: typeof executeOrderWithCardRequest
 }
 
-export type MapStateProps = Pick<
-  Props,
-  | 'authorizations'
-  | 'isLoading'
-  | 'getContract'
-  | 'isBuyNftsWithFiatEnabled'
-  | 'isBuyWithCardPage'
->
-export type MapDispatchProps = Pick<
-  Props,
-  'onExecuteOrder' | 'onExecuteOrderWithCard'
->
-export type MapDispatch = Dispatch<
-  ExecuteOrderRequestAction | ExecuteOrderWithCardRequestAction
->
+export type MapStateProps = Pick<Props, 'authorizations' | 'isLoading' | 'getContract' | 'isBuyNftsWithFiatEnabled' | 'isBuyWithCardPage'>
+export type MapDispatchProps = Pick<Props, 'onExecuteOrder' | 'onExecuteOrderWithCard'>
+export type MapDispatch = Dispatch<ExecuteOrderRequestAction | ExecuteOrderWithCardRequestAction>

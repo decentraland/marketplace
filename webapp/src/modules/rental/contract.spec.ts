@@ -1,18 +1,16 @@
 import { ethers } from 'ethers'
 import { ChainId } from '@dcl/schemas'
-import { Provider } from 'decentraland-connect'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
+import { Provider } from 'decentraland-connect'
 import { getRentalsContractInstance } from './contract'
 
 jest.mock('decentraland-dapps/dist/lib/eth')
 
-const getConnectedProviderMock = getConnectedProvider as jest.MockedFunction<
-  typeof getConnectedProvider
->
+const getConnectedProviderMock = getConnectedProvider as jest.MockedFunction<typeof getConnectedProvider>
 
-const providerMock = ({
+const providerMock = {
   send: jest.fn()
-} as unknown) as Provider
+} as unknown as Provider
 
 describe('when getting a rental contract instance', () => {
   describe('and the provider is not connected', () => {
@@ -20,9 +18,7 @@ describe('when getting a rental contract instance', () => {
       getConnectedProviderMock.mockResolvedValueOnce(null)
     })
     it('should throw an error', async () => {
-      return expect(
-        getRentalsContractInstance(ChainId.ETHEREUM_GOERLI)
-      ).rejects.toThrow('Could not get connected provider')
+      return expect(getRentalsContractInstance(ChainId.ETHEREUM_GOERLI)).rejects.toThrow('Could not get connected provider')
     })
   })
   describe('and the provider is connected', () => {
@@ -30,9 +26,7 @@ describe('when getting a rental contract instance', () => {
       getConnectedProviderMock.mockResolvedValueOnce(providerMock)
     })
     it('should return an instance', () => {
-      expect(
-        getRentalsContractInstance(ChainId.ETHEREUM_GOERLI)
-      ).resolves.toBeInstanceOf(ethers.Contract)
+      expect(getRentalsContractInstance(ChainId.ETHEREUM_GOERLI)).resolves.toBeInstanceOf(ethers.Contract)
     })
   })
 })

@@ -37,9 +37,7 @@ describe('when calling upsertContracts', () => {
     describe('and newContracts has a contract', () => {
       describe('and that contract has an upper cased address', () => {
         beforeEach(() => {
-          newContracts = [
-            { address: 'ADDRESS', chainId: ChainId.MATIC_MUMBAI } as Contract
-          ]
+          newContracts = [{ address: 'ADDRESS', chainId: ChainId.MATIC_MUMBAI } as Contract]
         })
 
         it('should return an array with the new contract with its address lower cased', () => {
@@ -48,9 +46,7 @@ describe('when calling upsertContracts', () => {
             address: newContracts[0].address.toLowerCase()
           }
 
-          expect(upsertContracts(storedContracts, newContracts)).toEqual([
-            expectedContract
-          ])
+          expect(upsertContracts(storedContracts, newContracts)).toEqual([expectedContract])
         })
       })
     })
@@ -73,9 +69,7 @@ describe('when calling upsertContracts', () => {
       })
 
       it('should return the storedContracts as is', () => {
-        expect(upsertContracts(storedContracts, newContracts)).toEqual(
-          storedContracts
-        )
+        expect(upsertContracts(storedContracts, newContracts)).toEqual(storedContracts)
       })
     })
 
@@ -91,9 +85,7 @@ describe('when calling upsertContracts', () => {
       })
 
       it('should return the storedContracts as is', () => {
-        expect(upsertContracts(storedContracts, newContracts)).toEqual(
-          storedContracts
-        )
+        expect(upsertContracts(storedContracts, newContracts)).toEqual(storedContracts)
       })
     })
 
@@ -109,10 +101,7 @@ describe('when calling upsertContracts', () => {
       })
 
       it('should return an array with the new contract added to the stored contracts', () => {
-        expect(upsertContracts(storedContracts, newContracts)).toEqual([
-          ...storedContracts,
-          ...newContracts
-        ])
+        expect(upsertContracts(storedContracts, newContracts)).toEqual([...storedContracts, ...newContracts])
       })
     })
 
@@ -128,10 +117,7 @@ describe('when calling upsertContracts', () => {
       })
 
       it('should return an array with the new contract added to the stored contracts', () => {
-        expect(upsertContracts(storedContracts, newContracts)).toEqual([
-          ...storedContracts,
-          ...newContracts
-        ])
+        expect(upsertContracts(storedContracts, newContracts)).toEqual([...storedContracts, ...newContracts])
       })
     })
 
@@ -147,9 +133,7 @@ describe('when calling upsertContracts', () => {
       })
 
       it('should update the stored contract with the new name', () => {
-        expect(upsertContracts(storedContracts, newContracts)).toEqual([
-          { ...storedContracts[0], name: newContracts[0].name }
-        ])
+        expect(upsertContracts(storedContracts, newContracts)).toEqual([{ ...storedContracts[0], name: newContracts[0].name }])
       })
     })
   })
@@ -191,16 +175,16 @@ describe('when calling getAuthorizationKey', () => {
 })
 
 describe('when calling getStubMaticCollectionContract', () => {
-    it('should return stub matic collection contract with the address lowercased', () => {
-      expect(getStubMaticCollectionContract('ADDRESS')).toEqual({
-        address: 'address',
-        category: NFTCategory.WEARABLE,
-        chainId: undefined,
-        name: STUB_MATIC_COLLECTION_CONTRACT_NAME,
-        network: Network.MATIC,
-        vendor: VendorName.DECENTRALAND
-      })
+  it('should return stub matic collection contract with the address lowercased', () => {
+    expect(getStubMaticCollectionContract('ADDRESS')).toEqual({
+      address: 'address',
+      category: NFTCategory.WEARABLE,
+      chainId: undefined,
+      name: STUB_MATIC_COLLECTION_CONTRACT_NAME,
+      network: Network.MATIC,
+      vendor: VendorName.DECENTRALAND
     })
+  })
 })
 
 describe('when calling isStubMaticCollectionContract', () => {

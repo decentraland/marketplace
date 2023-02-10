@@ -1,11 +1,11 @@
 import React from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { NFTCategory } from '@dcl/schemas/dist/dapps/nft-category'
-import { Button, Header, Loader, Page } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
-import { Sections } from '../../../modules/routing/types'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Header, Loader, Page } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
+import { Sections } from '../../../modules/routing/types'
 import { AssetImage } from '../../AssetImage'
 import { AssetProviderPage } from '../../AssetProviderPage'
 import { Footer } from '../../Footer'
@@ -40,23 +40,13 @@ const StatusPage = ({ type, purchase }: Props) => {
                   {status === PurchaseStatus.PENDING ? (
                     <div className="status-wrapper">
                       <Loader size="small" active inline />
-                      <p className="status">
-                        {t(`asset_purchase_with_card_${status}_page.status`)}
-                      </p>
+                      <p className="status">{t(`asset_purchase_with_card_${status}_page.status`)}</p>
                     </div>
                   ) : null}
                   <p className="description">
                     {t(`asset_purchase_with_card_${status}_page.description`, {
-                      activity: (
-                        <a href={locations.activity()}>
-                          {t('navigation.activity')}
-                        </a>
-                      ),
-                      my_assets: (
-                        <a href={locations.defaultCurrentAccount()}>
-                          {t('navigation.my_assets')}
-                        </a>
-                      )
+                      activity: <a href={locations.activity()}>{t('navigation.activity')}</a>,
+                      my_assets: <a href={locations.defaultCurrentAccount()}>{t('navigation.my_assets')}</a>
                     })}
                   </p>
                   <Button
@@ -64,10 +54,7 @@ const StatusPage = ({ type, purchase }: Props) => {
                     as={Link}
                     to={locations.browse({
                       assetType: type,
-                      section:
-                        asset.category === NFTCategory.EMOTE
-                          ? EMOTES
-                          : WEARABLES
+                      section: asset.category === NFTCategory.EMOTE ? EMOTES : WEARABLES
                     })}
                     inverted
                     primary

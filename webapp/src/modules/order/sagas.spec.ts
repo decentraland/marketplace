@@ -1,34 +1,18 @@
-import {
-  ChainId,
-  Network,
-  Order,
-  RentalListing,
-  RentalStatus
-} from '@dcl/schemas'
-import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
-import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import {
-  ManaPurchase,
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
-import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
-import {
-  ProviderType,
-  Wallet
-} from 'decentraland-dapps/dist/modules/wallet/types'
-import { ErrorCode } from 'decentraland-transactions'
-import { NetworkGatewayType } from 'decentraland-ui'
+import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
-import { call, select } from 'redux-saga/effects'
-import {
-  buyAssetWithCard,
-  BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-} from '../asset/utils'
+import { ChainId, Network, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
+import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
+import { ManaPurchase, NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { waitForTx } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { ProviderType, Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { ErrorCode } from 'decentraland-transactions'
+import { NetworkGatewayType } from 'decentraland-ui'
+import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
 import { closeModal, openModal } from '../modal/actions'
-import { NFT } from '../nft/types'
 import { getData as getNFTs } from '../nft/selectors'
+import { NFT } from '../nft/types'
 import { getNFT } from '../nft/utils'
 import { getRentalById } from '../rental/selectors'
 import { waitUntilRentalChangesStatus } from '../rental/utils'
@@ -111,9 +95,7 @@ describe('when handling the execute order request action', () => {
 
     it("should put the execute order failure with an error message saying that the order doesn't match the NFT", () => {
       return expectSaga(orderSaga)
-        .put(
-          executeOrderFailure(order, nft, 'The order does not match the NFT')
-        )
+        .put(executeOrderFailure(order, nft, 'The order does not match the NFT'))
         .dispatch(executeOrderRequest(order, nft, fingerprint))
         .run({ silenceTimeout: true })
     })
@@ -126,9 +108,7 @@ describe('when handling the execute order request action', () => {
 
     it("should put the execute order failure with the an error message saying that the order doesn't match the NFT", () => {
       return expectSaga(orderSaga)
-        .put(
-          executeOrderFailure(order, nft, 'The order does not match the NFT')
-        )
+        .put(executeOrderFailure(order, nft, 'The order does not match the NFT'))
         .dispatch(executeOrderRequest(order, nft, fingerprint))
         .run({ silenceTimeout: true })
     })
@@ -151,25 +131,9 @@ describe('when handling the execute order request action', () => {
         .provide([
           [select(getWallet), wallet],
           [call([VendorFactory, 'build'], nft.vendor), vendor],
-          [
-            call(
-              [vendor.orderService, 'execute'],
-              wallet,
-              nft,
-              order,
-              fingerprint
-            ),
-            throwError(error)
-          ]
+          [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), throwError(error)]
         ])
-        .put(
-          executeOrderFailure(
-            order,
-            nft,
-            errorMessage,
-            ErrorCode.SALE_PRICE_TOO_LOW
-          )
-        )
+        .put(executeOrderFailure(order, nft, errorMessage, ErrorCode.SALE_PRICE_TOO_LOW))
         .dispatch(executeOrderRequest(order, nft, fingerprint))
         .run({ silenceTimeout: true })
     })
@@ -200,20 +164,8 @@ describe('when handling the execute order request action', () => {
             [select(getWallet), wallet],
             [call([VendorFactory, 'build'], nft.vendor), vendor],
             [select(getRentalById, nft.openRentalId!), rentalListing],
-            [
-              call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED),
-              Promise.resolve()
-            ],
-            [
-              call(
-                [vendor.orderService, 'execute'],
-                wallet,
-                nft,
-                order,
-                fingerprint
-              ),
-              Promise.resolve(txHash)
-            ],
+            [call(waitUntilRentalChangesStatus, nft, RentalStatus.CANCELLED), Promise.resolve()],
+            [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), Promise.resolve(txHash)],
             [call(waitForTx, txHash), Promise.resolve()]
           ])
           .put(executeOrderTransactionSubmitted(order, nft, txHash))
@@ -233,16 +185,7 @@ describe('when handling the execute order request action', () => {
           .provide([
             [call([VendorFactory, 'build'], nft.vendor), vendor],
             [select(getWallet), wallet],
-            [
-              call(
-                [vendor.orderService, 'execute'],
-                wallet,
-                nft,
-                order,
-                fingerprint
-              ),
-              Promise.resolve(txHash)
-            ]
+            [call([vendor.orderService, 'execute'], wallet, nft, order, fingerprint), Promise.resolve(txHash)]
           ])
           .put(executeOrderTransactionSubmitted(order, nft, txHash))
           .dispatch(executeOrderRequest(order, nft, fingerprint))
@@ -264,15 +207,7 @@ describe('when handling the execute order with card action', () => {
   describe('when the explanation modal has already been shown', () => {
     it('should open Transak widget', () => {
       return expectSaga(orderSaga)
-        .provide([
-          [
-            call(
-              [localStorage, 'getItem'],
-              BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-            ),
-            'true'
-          ]
-        ])
+        .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), 'true']])
         .put(openTransak(nft))
         .dispatch(executeOrderWithCardRequest(nft))
         .run({ silenceTimeout: true })
@@ -285,15 +220,7 @@ describe('when handling the execute order with card action', () => {
   describe('when the explanation modal is shown and the user closes it', () => {
     it('should not set the item in the local storage to show the modal again later', () => {
       return expectSaga(orderSaga)
-        .provide([
-          [
-            call(
-              [localStorage, 'getItem'],
-              BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-            ),
-            null
-          ]
-        ])
+        .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
         .put(openModal('BuyWithCardExplanationModal', { asset: nft }))
         .dispatch(executeOrderWithCardRequest(nft))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
@@ -313,9 +240,7 @@ describe('when handling the execute order with card action', () => {
 
     it('should dispatch an action signaling the failure of the action handling', () => {
       return expectSaga(orderSaga)
-        .provide([
-          [call(buyAssetWithCard, nft), Promise.reject(new Error(errorMessage))]
-        ])
+        .provide([[call(buyAssetWithCard, nft), Promise.reject(new Error(errorMessage))]])
         .put(executeOrderWithCardFailure(errorMessage))
         .dispatch(executeOrderWithCardRequest(nft))
         .run({ silenceTimeout: true })

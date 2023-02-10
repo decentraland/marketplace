@@ -1,6 +1,6 @@
 import React from 'react'
-import { Button, Icon, Modal } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Button, Icon, Modal } from 'decentraland-ui'
 import { Props } from './ExternalLinkModal.types'
 import './ExternalLinkModal.css'
 
@@ -18,14 +18,7 @@ const ExternalLinkModal = ({ link, onClose }: Props) => {
       </Modal.Content>
       <Modal.Actions>
         <Button onClick={onClose}>{t('global.cancel')}</Button>
-        <Button
-          as={'a'}
-          target="_blank"
-          rel="noopener noreferrer"
-          primary
-          href={link}
-          onClick={onClose}
-        >
+        <Button as={'a'} target="_blank" rel="noopener noreferrer" primary href={link} onClick={onClose}>
           {t('global.proceed')}
         </Button>
       </Modal.Actions>

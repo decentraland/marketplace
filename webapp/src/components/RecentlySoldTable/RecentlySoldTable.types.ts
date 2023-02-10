@@ -1,9 +1,6 @@
 import { Dispatch } from 'redux'
 import { Sale } from '@dcl/schemas'
-import {
-  fetchSalesRequest,
-  FetchSalesRequestAction
-} from '../../modules/sale/actions'
+import { fetchSalesRequest, FetchSalesRequestAction } from '../../modules/sale/actions'
 
 export type Props = {
   data: Sale[] | null

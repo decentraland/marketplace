@@ -1,9 +1,9 @@
-import { BrowseOptions, SortBy } from './types'
-import { Section } from '../vendor/decentraland'
-import { getPersistedIsMapProperty, isAccountView, isLandSection } from '../ui/utils'
 import { omit, reset } from '../../lib/utils'
 import { View } from '../ui/types'
+import { getPersistedIsMapProperty, isAccountView, isLandSection } from '../ui/utils'
+import { Section } from '../vendor/decentraland'
 import { getSearchParams } from './search'
+import { BrowseOptions, SortBy } from './types'
 
 export const rentalFilters = [
   SortBy.NAME,
@@ -25,10 +25,7 @@ export const sellFilters = [
 export const COLLECTIONS_PER_PAGE = 6
 export const SALES_PER_PAGE = 6
 
-export function buildBrowseURL(
-  pathname: string,
-  browseOptions: BrowseOptions
-): string {
+export function buildBrowseURL(pathname: string, browseOptions: BrowseOptions): string {
   let params: URLSearchParams | undefined
   if (browseOptions.section === Section.ON_SALE) {
     params = getSearchParams({ section: Section.ON_SALE })
@@ -39,19 +36,13 @@ export function buildBrowseURL(
   return params ? `${pathname}?${params.toString()}` : pathname
 }
 
-export function isMapSet(
-  isMap: boolean | undefined,
-  section: Section,
-  view: View | undefined
-): boolean {
+export function isMapSet(isMap: boolean | undefined, section: Section, view: View | undefined): boolean {
   const isMapPropertyPersisted = getPersistedIsMapProperty()
 
   return (
     isMap ??
-    (section === Section.LAND &&
-    (view === undefined || (view && !isAccountView(view))) &&
-    isMapPropertyPersisted !== null
-      ? isMapPropertyPersisted!
+    (section === Section.LAND && (view === undefined || (view && !isAccountView(view))) && isMapPropertyPersisted !== null
+      ? isMapPropertyPersisted
       : false)
   )
 }
@@ -75,13 +66,10 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
   const clearedBrowseOptions = fillWithUndefined ? reset(browseOptions, keys) : omit(browseOptions, keys)
 
   // The onlyOnSale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
-  if (
-    !clearedBrowseOptions.onlyOnSale &&
-    !isLandSection(browseOptions.section as Section)
-  ) {
+  if (!clearedBrowseOptions.onlyOnSale && !isLandSection(browseOptions.section as Section)) {
     clearedBrowseOptions.onlyOnSale = true
   }
   // reset the pages to the first one
   clearedBrowseOptions.page = 1
-  return clearedBrowseOptions;
+  return clearedBrowseOptions
 }

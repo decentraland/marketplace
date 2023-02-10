@@ -1,20 +1,14 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Button, Card } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getMinSaleValueInWei } from '../utils'
+import { Button, Card } from 'decentraland-ui'
 import { Price } from '../Price'
+import { getMinSaleValueInWei } from '../utils'
 import { Props } from './PriceTooLow.types'
 import styles from './PriceTooLow.module.css'
 
 const PriceTooLow = (props: Props) => {
-  const {
-    chainId,
-    network,
-    isBuyNftsWithFiatEnabled,
-    isBuyWithCardPage,
-    onSwitchNetwork
-  } = props
+  const { chainId, network, isBuyNftsWithFiatEnabled, isBuyWithCardPage, onSwitchNetwork } = props
 
   const humanNetwork = t(`networks.${network.toLowerCase()}`)
   const humanToken = t(`tokens.${network.toLowerCase()}`)
@@ -23,12 +17,7 @@ const PriceTooLow = (props: Props) => {
   const price = <Price network={network} price={getMinSaleValueInWei()!} />
 
   return (
-    <Card
-      className={classNames(
-        styles.card,
-        isBuyNftsWithFiatEnabled ? styles.buyWithCard : undefined
-      )}
-    >
+    <Card className={classNames(styles.card, isBuyNftsWithFiatEnabled ? styles.buyWithCard : undefined)}>
       <Card.Content>
         <div className={styles.paragraph}>
           <T id="price_too_low.minimum_price" values={{ price }} />
@@ -38,25 +27,13 @@ const PriceTooLow = (props: Props) => {
             token: humanToken
           })}
         </div>
-        <div
-          className={
-            isBuyNftsWithFiatEnabled && isBuyWithCardPage
-              ? undefined
-              : 'buttons'
-          }
-        >
+        <div className={isBuyNftsWithFiatEnabled && isBuyWithCardPage ? undefined : 'buttons'}>
           {isBuyNftsWithFiatEnabled && !isBuyWithCardPage ? (
-            <Button
-              basic
-              size="small"
-              onClick={() => onSwitchNetwork(chainId)}
-              className={styles.switchNetwork}
-            >
+            <Button basic size="small" onClick={() => onSwitchNetwork(chainId)} className={styles.switchNetwork}>
               {t('price_too_low.switch_network', { network: humanNetwork })}
             </Button>
           ) : null}
-          {(isBuyNftsWithFiatEnabled && !isBuyWithCardPage) ||
-          !isBuyNftsWithFiatEnabled ? (
+          {(isBuyNftsWithFiatEnabled && !isBuyWithCardPage) || !isBuyNftsWithFiatEnabled ? (
             <Button
               basic
               size="small"
@@ -68,11 +45,7 @@ const PriceTooLow = (props: Props) => {
             </Button>
           ) : null}
           {!isBuyNftsWithFiatEnabled ? (
-            <Button
-              primary
-              size="small"
-              onClick={() => onSwitchNetwork(chainId)}
-            >
+            <Button primary size="small" onClick={() => onSwitchNetwork(chainId)}>
               {t('price_too_low.switch_network', { network: humanNetwork })}
             </Button>
           ) : null}

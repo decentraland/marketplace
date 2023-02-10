@@ -1,53 +1,36 @@
 import { createSelector } from 'reselect'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
-
-import { NFTState } from '../../../nft/reducer'
-import { ItemState } from '../../../item/reducer'
-import { FETCH_NFTS_REQUEST } from '../../../nft/actions'
-import {
-  FETCH_ITEMS_REQUEST,
-  FETCH_TRENDING_ITEMS_REQUEST
-} from '../../../item/actions'
-import {
-  getData as getNFTData,
-  getLoading as getNFTLoading
-} from '../../../nft/selectors'
-import {
-  getData as getItemData,
-  getLoading as getItemLoading
-} from '../../../item/selectors'
 import { Asset } from '../../../asset/types'
+import { FETCH_ITEMS_REQUEST, FETCH_TRENDING_ITEMS_REQUEST } from '../../../item/actions'
+import { ItemState } from '../../../item/reducer'
+import { getData as getItemData, getLoading as getItemLoading } from '../../../item/selectors'
+import { FETCH_NFTS_REQUEST } from '../../../nft/actions'
+import { NFTState } from '../../../nft/reducer'
+import { getData as getNFTData, getLoading as getNFTLoading } from '../../../nft/selectors'
 import { RootState } from '../../../reducer'
 import { View } from '../../types'
-import { HomepageView } from './types'
 import { HomepageUIState } from './reducer'
+import { HomepageView } from './types'
 
 export const getState = (state: RootState) => state.ui.asset.homepage
 
-export const getHomepage = createSelector<
-  RootState,
-  HomepageUIState,
-  NFTState['data'],
-  ItemState['data'],
-  Record<HomepageView, Asset[]>
->(getState, getNFTData, getItemData, (homepage, nftsById, itemsById) => {
-  const result: Record<string, Asset[]> = {}
+export const getHomepage = createSelector<RootState, HomepageUIState, NFTState['data'], ItemState['data'], Record<HomepageView, Asset[]>>(
+  getState,
+  getNFTData,
+  getItemData,
+  (homepage, nftsById, itemsById) => {
+    const result: Record<string, Asset[]> = {}
 
-  let view: HomepageView
-  for (view in homepage) {
-    result[view] = homepage[view].map(id => nftsById[id] || itemsById[id])
+    let view: HomepageView
+    for (view in homepage) {
+      result[view] = homepage[view].map(id => nftsById[id] || itemsById[id])
+    }
+
+    return result as Record<HomepageView, Asset[]>
   }
+)
 
-  return result as Record<HomepageView, Asset[]>
-})
-
-export const getHomepageLoading = createSelector<
-  RootState,
-  HomepageUIState,
-  LoadingState,
-  LoadingState,
-  Record<HomepageView, boolean>
->(
+export const getHomepageLoading = createSelector<RootState, HomepageUIState, LoadingState, LoadingState, Record<HomepageView, boolean>>(
   getState,
   getNFTLoading,
   getItemLoading,
@@ -61,8 +44,7 @@ export const getHomepageLoading = createSelector<
         return (
           (type === FETCH_NFTS_REQUEST && payload.options.view === view) ||
           (type === FETCH_ITEMS_REQUEST && payload.view === view) ||
-          (type === FETCH_TRENDING_ITEMS_REQUEST &&
-            view === View.HOME_TRENDING_ITEMS)
+          (type === FETCH_TRENDING_ITEMS_REQUEST && view === View.HOME_TRENDING_ITEMS)
         )
       })
     }

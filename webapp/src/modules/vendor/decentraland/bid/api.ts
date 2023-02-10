@@ -12,10 +12,7 @@ class BidAPI extends BaseAPI {
       queryParams.append(key, options[key])
     }
     try {
-      const response: { data: Bid[]; total: number } = await this.request(
-        'get',
-        `/bids?${queryParams.toString()}`
-      )
+      const response: { data: Bid[]; total: number } = await this.request('get', `/bids?${queryParams.toString()}`)
       return response.data
     } catch (error) {
       return []
@@ -33,11 +30,7 @@ class BidAPI extends BaseAPI {
     return this.fetch({ bidder, status: ListingStatus.OPEN, first: FIRST })
   }
 
-  async fetchByNFT(
-    contractAddress: string,
-    tokenId: string,
-    status: ListingStatus = ListingStatus.OPEN
-  ) {
+  async fetchByNFT(contractAddress: string, tokenId: string, status: ListingStatus = ListingStatus.OPEN) {
     return this.fetch({ contractAddress, tokenId, status, first: FIRST })
   }
 }

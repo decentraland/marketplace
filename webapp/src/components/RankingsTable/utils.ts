@@ -1,8 +1,4 @@
-import {
-  RankingEntities,
-  AnalyticsTimeframe,
-  RankingsSortBy
-} from '../../modules/analytics/types'
+import { RankingEntities, AnalyticsTimeframe, RankingsSortBy } from '../../modules/analytics/types'
 
 export const parseURLHash = (hash: string) => {
   const splitted = hash.split('-')

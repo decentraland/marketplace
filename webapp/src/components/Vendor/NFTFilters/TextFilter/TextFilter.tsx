@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { Header } from 'decentraland-ui'
-
 import { useInput } from '../../../../lib/input'
 import { Props } from './TextFilter.types'
 import './TextFilter.css'
@@ -25,12 +24,7 @@ const TextFilter = (props: Props) => {
         </Header>
       ) : null}
       <div className="text-input">
-        <input
-          ref={inputRef}
-          value={text}
-          onChange={setText}
-          placeholder={placeholder}
-        />
+        <input ref={inputRef} value={text} onChange={setText} placeholder={placeholder} />
       </div>
     </div>
   )

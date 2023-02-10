@@ -1,9 +1,6 @@
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
-import {
-  getIsMaintenanceEnabled,
-  getIsBuyNftsWithFiatEnabled
-} from '../../modules/features/selectors'
+import { getIsMaintenanceEnabled, getIsBuyNftsWithFiatEnabled } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import Routes from './Routes'
 import { MapStateProps } from './Routes.types'

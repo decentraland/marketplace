@@ -1,10 +1,10 @@
-import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
-import { goBack } from '../../modules/routing/actions'
+import { Dispatch } from 'redux'
 import { RootState } from '../../modules/reducer'
+import { goBack } from '../../modules/routing/actions'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
-import { MapDispatchProps, MapStateProps } from './ManageAssetPage.types'
 import { ManageAssetPage } from './ManageAssetPage'
+import { MapDispatchProps, MapStateProps } from './ManageAssetPage.types'
 
 const mapState = (state: RootState): MapStateProps => ({
   wallet: getWallet(state),

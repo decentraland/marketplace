@@ -10,21 +10,13 @@ export type Props = {
   nft: NFT
   rental: RentalListing | null
   onClaimLand: () => void
-  onCreateOrEditRent: (
-    nft: NFT<VendorName>,
-    rental: RentalListing | null
-  ) => void
+  onCreateOrEditRent: (nft: NFT<VendorName>, rental: RentalListing | null) => void
   isClaimingBackLandTransactionPending: boolean
   claimingBackLandTransaction: Transaction | null
 }
 
 export type OwnProps = Pick<Props, 'nft' | 'rental'>
 
-export type MapStateProps = Pick<
-  Props,
-  | 'wallet'
-  | 'isClaimingBackLandTransactionPending'
-  | 'claimingBackLandTransaction'
->
+export type MapStateProps = Pick<Props, 'wallet' | 'isClaimingBackLandTransactionPending' | 'claimingBackLandTransaction'>
 
 export type MapDispatchProps = Pick<Props, 'onClaimLand' | 'onCreateOrEditRent'>

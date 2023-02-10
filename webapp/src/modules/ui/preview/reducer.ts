@@ -18,15 +18,9 @@ export const INITIAL_STATE: PreviewState = {
   isTryingOn: false
 }
 
-type PreviewReducerAction =
-  | SetIsTryingOnAction
-  | SetEmotePlayingAction
-  | SetWearablePreviewControllerAction
+type PreviewReducerAction = SetIsTryingOnAction | SetEmotePlayingAction | SetWearablePreviewControllerAction
 
-export function previewReducer(
-  state = INITIAL_STATE,
-  action: PreviewReducerAction
-): PreviewState {
+export function previewReducer(state = INITIAL_STATE, action: PreviewReducerAction): PreviewState {
   switch (action.type) {
     case SET_IS_TRYING_ON: {
       return {

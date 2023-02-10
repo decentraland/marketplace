@@ -1,21 +1,15 @@
 import React from 'react'
 import { Page } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
-import { Wallet } from '../Wallet'
 import { AssetProviderPage } from '../AssetProviderPage'
+import { Footer } from '../Footer'
+import { Navbar } from '../Navbar'
+import { Wallet } from '../Wallet'
 import { BidModal } from './BidModal'
 import { Props } from './BidPage.types'
 
 const BidPage = (props: Props) => {
-  const {
-    authorizations,
-    onNavigate,
-    onPlaceBid,
-    isPlacingBid,
-    getContract
-  } = props
+  const { authorizations, onNavigate, onPlaceBid, isPlacingBid, getContract } = props
   return (
     <>
       <Navbar isFullscreen />
