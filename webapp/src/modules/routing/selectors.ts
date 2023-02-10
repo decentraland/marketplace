@@ -174,6 +174,16 @@ export const getMaxPrice = createSelector<RootState, string, string>(
   search => (getURLParam(search, 'maxPrice') as string) || ''
 )
 
+export const getMinEstateSize = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'minEstateSize') as string) || ''
+)
+
+export const getMaxEstateSize = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'maxEstateSize') as string) || ''
+)
+
 export const getCurrentLocationAddress = createSelector<RootState, string, string | undefined, string | undefined, string | undefined>(
   getPathName,
   getWalletAddress,
@@ -208,7 +218,18 @@ export const getAssetsUrlParams = createSelector(
   })
 )
 
-export const getLandsUrlParams = createSelector(getIsMap, getIsFullscreen, (isMap, isFullscreen) => ({ isMap, isFullscreen }))
+export const getLandsUrlParams = createSelector(
+  getIsMap,
+  getIsFullscreen,
+  getMinEstateSize,
+  getMaxEstateSize,
+  (isMap, isFullscreen, minEstateSize, maxEstateSize) => ({
+    isMap,
+    isFullscreen,
+    minEstateSize,
+    maxEstateSize
+  })
+)
 
 export const getWearablesUrlParams = createSelector(
   getRarities,
@@ -273,13 +294,32 @@ export const getCurrentBrowseOptions = createSelector(
 )
 
 export const hasFiltersEnabled = createSelector<RootState, BrowseOptions, boolean>(getCurrentBrowseOptions, browseOptions => {
-  const { network, wearableGenders, rarities, contracts, emotePlayMode, onlyOnRent, onlyOnSale, minPrice, maxPrice, section } =
-    browseOptions
+  const {
+    network,
+    wearableGenders,
+    rarities,
+    contracts,
+    emotePlayMode,
+    onlyOnRent,
+    onlyOnSale,
+    minPrice,
+    maxPrice,
+    minEstateSize,
+    maxEstateSize,
+    section
+  } = browseOptions
   const isLand = isLandSection(section as Section)
   if (isLand) {
     const hasOnSaleFilter = onlyOnSale === true
     const hasOnRentFilter = onlyOnRent === true
-    return (hasOnSaleFilter && !hasOnRentFilter) || (hasOnRentFilter && !hasOnSaleFilter) || !!minPrice || !!maxPrice
+    return (
+      (hasOnSaleFilter && !hasOnRentFilter) ||
+      (hasOnRentFilter && !hasOnSaleFilter) ||
+      !!minPrice ||
+      !!maxPrice ||
+      !!minEstateSize ||
+      !!maxEstateSize
+    )
   }
 
   const hasNetworkFilter = network !== undefined

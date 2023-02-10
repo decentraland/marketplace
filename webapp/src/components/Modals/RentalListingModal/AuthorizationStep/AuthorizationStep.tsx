@@ -116,6 +116,7 @@ const AuthorizationStep = (props: Props) => {
               </ul>
             </div>
           </Modal.Content>
+
           <Modal.Actions className={styles.actions}>
             {isConfirmingAuthorization ? (
               <div className={styles.confirmTransaction}>

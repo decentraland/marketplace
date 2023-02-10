@@ -3,6 +3,9 @@ import { EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } fr
 import { AssetType } from '../../modules/asset/types'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { isLandSection } from '../../modules/ui/utils'
+import { View } from '../../modules/ui/types'
+import { Sections } from '../../modules/routing/types'
+import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { BodyShapeFilter } from './BodyShapeFilter'
@@ -12,14 +15,23 @@ import { LandStatusFilter } from './LandStatusFilter'
 import { MoreFilters } from './MoreFilters'
 import { NetworkFilter } from './NetworkFilter'
 import PriceFilter from './PriceFilter'
+import EstateSizeFilter from './EstateSizeFilter'
 import { RarityFilter } from './RarityFilter'
-import { AssetFilter, filtersBySection } from './utilts'
+import { NetworkFilter } from './NetworkFilter'
 import { Props } from './AssetFilters.types'
+import { CollectionFilter } from './CollectionFilter'
+import { LandStatusFilter } from './LandStatusFilter'
+import { BodyShapeFilter } from './BodyShapeFilter'
+import { MoreFilters } from './MoreFilters'
+import { EmotePlayModeFilter } from './EmotePlayModeFilter'
+import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 
 export const AssetFilters = ({
   minPrice,
   maxPrice,
+  minEstateSize,
+  maxEstateSize,
   collection,
   rarities,
   network,
@@ -34,6 +46,8 @@ export const AssetFilters = ({
   defaultCollapsed,
   onBrowse,
   isPriceFilterEnabled,
+  view,
+  isEstateSizeFilterEnabled,
   values
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
@@ -43,6 +57,15 @@ export const AssetFilters = ({
     (value: [string, string]) => {
       const [minPrice, maxPrice] = value
       onBrowse({ minPrice, maxPrice })
+    },
+    [onBrowse]
+  )
+
+  const handleRangeFilterChange = useCallback(
+    (filterNames: [string, string], value: [string, string]) => {
+      const [filterMinName, filterMaxName] = filterNames
+      const [minPrice, maxPrice] = value
+      onBrowse({ [filterMinName]: minPrice, [filterMaxName]: maxPrice })
     },
     [onBrowse]
   )
@@ -122,6 +145,15 @@ export const AssetFilters = ({
       <div className="filters-sidebar">
         <LandStatusFilter landStatus={landStatus} onChange={handleLandStatusChange} />
         {isPriceFilterEnabled ? <PriceFilter onChange={handlePriceChange} minPrice={minPrice} maxPrice={maxPrice} values={values} /> : null}
+        {isEstateSizeFilterEnabled && section !== Sections.decentraland.PARCELS ? (
+          <EstateSizeFilter
+            landStatus={landStatus}
+            values={values}
+            minPrice={minEstateSize}
+            maxPrice={maxEstateSize}
+            onChange={values => handleRangeFilterChange(['minEstateSize', 'maxEstateSize'], values)}
+          />
+        ) : null}
       </div>
     )
   }
@@ -131,7 +163,7 @@ export const AssetFilters = ({
       {shouldRenderFilter(AssetFilter.Rarity) ? (
         <RarityFilter onChange={handleRarityChange} rarities={rarities} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]} />
       ) : null}
-      {isPriceFilterEnabled && shouldRenderFilter(AssetFilter.Price) && isOnSale ? (
+      {isPriceFilterEnabled && shouldRenderFilter(AssetFilter.Price) && isOnSale && view !== View.ACCOUNT ? (
         <PriceFilter
           onChange={handlePriceChange}
           minPrice={minPrice}

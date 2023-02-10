@@ -10,7 +10,7 @@ import IconBadge from '../../AssetPage/IconBadge'
 import { CAMPAIGN_TAG } from '../config'
 import { Props } from './CampaignBadge.types'
 
-const CampaignBadge = ({ contract, isCampaignBrowserEnabled: isMVMFTabEnabled }: Props) => {
+const CampaignBadge = ({ contract, isCampaignBrowserEnabled }: Props) => {
   const [showBadge, setShowBadge] = useState(false)
   const [contracts, setContracts] = useState<string[]>()
 
@@ -29,16 +29,16 @@ const CampaignBadge = ({ contract, isCampaignBrowserEnabled: isMVMFTabEnabled }:
   useEffect(() => {
     ;(async () => {
       try {
-        const addresses = await builderAPI.fetchAddressesByTag([CAMPAIGN_TAG])
-        setContracts(addresses)
-        if (isMVMFTabEnabled && addresses.includes(contract)) {
-          setShowBadge(true)
+        if (isCampaignBrowserEnabled) {
+          const addresses = await builderAPI.fetchAddressesByTag([CAMPAIGN_TAG])
+          setContracts(addresses)
+          setShowBadge(addresses.includes(contract))
         }
       } catch (error) {
         console.error(error)
       }
     })()
-  }, [contract, isMVMFTabEnabled])
+  }, [contract, isCampaignBrowserEnabled])
 
   return showBadge ? <IconBadge text={t('campaign.badge')} icon="sparkles" href={href} /> : null
 }

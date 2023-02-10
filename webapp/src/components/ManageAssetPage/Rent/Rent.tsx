@@ -11,7 +11,6 @@ import { formatWeiMANA } from '../../../lib/mana'
 import { isLand, isParcel } from '../../../modules/nft/utils'
 import {
   canBeClaimed,
-  canCreateANewRental,
   getMaxPriceOfPeriods,
   getRentalEndDate,
   hasRentalEnded,
@@ -58,8 +57,11 @@ export const Rent = (props: Props) => {
         claimingBackLandTransaction.chainId
       )
     : ''
+
   const rentalEndDate: Date | null = useMemo(() => (rental && rental.startedAt ? getRentalEndDate(rental) : null), [rental])
+
   const rentalEnded = useMemo(() => rental && hasRentalEnded(rental), [rental])
+
   const rentalPeriods: string | null = useMemo(
     () =>
       rental
@@ -73,9 +75,9 @@ export const Rent = (props: Props) => {
   const canBeClaimedBack = wallet && rental && canBeClaimed(wallet.address, rental, nft)
 
   const rentButton = useMemo(() => {
-    if (canCreateANewRental(rental)) {
+    if (!rental) {
       return (
-        <Button className={styles.actionButton} onClick={handleOnCreateOrEdit}>
+        <Button className={styles.actionButtonRounded} onClick={handleOnCreateOrEdit}>
           {t('manage_asset_page.rent.list_for_rent')}
         </Button>
       )
@@ -88,18 +90,21 @@ export const Rent = (props: Props) => {
   return (
     <section className={classNames(styles.box, className)}>
       <div className={styles.header}>
-        <h1 className={styles.title}>
-          {rental && !isRentalListingCancelled(rental) ? t('manage_asset_page.rent.renting_title') : t('manage_asset_page.rent.rent_title')}
-        </h1>
-        <div className={styles.right}>
+        <div className={styles.left}>
+          <h1 className={styles.title}>
+            {rental && !isRentalListingCancelled(rental)
+              ? t('manage_asset_page.rent.renting_title')
+              : t('manage_asset_page.rent.rent_title')}
+          </h1>
           {rental && isRentalListingOpen(rental) ? (
             <Button className={styles.actionButton} as={Link} to={locations.nft(nft.contractAddress, nft.tokenId)}>
               {t('manage_asset_page.rent.view_listing')}
             </Button>
           ) : null}
-          <div className={styles.action}>
-            <div>{rentButton}</div>
-          </div>
+        </div>
+
+        <div className={styles.action}>
+          <div>{rentButton}</div>
         </div>
       </div>
       {rental ? (
@@ -146,11 +151,11 @@ export const Rent = (props: Props) => {
               ) : (
                 <>
                   <div className={styles.rentMessage}>
-                    {rentalEnded ? (
+                    {rentalEnded && rental.tenant ? (
                       <T
                         id="manage_asset_page.rent.rent_end"
                         values={{
-                          tenant: <LinkedProfile className={styles.rentedBy} address={rental.tenant!} />,
+                          tenant: <LinkedProfile className={styles.rentedBy} address={rental.tenant} />,
                           asset: assetText
                         }}
                       />
@@ -167,6 +172,11 @@ export const Rent = (props: Props) => {
                           asset: assetText
                         })}
                       </Button>
+                      {!isRentalListingOpen(rental) && (
+                        <Button className={styles.actionButton} onClick={handleOnCreateOrEdit}>
+                          {t('manage_asset_page.rent.list_for_rent_again')}
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </>

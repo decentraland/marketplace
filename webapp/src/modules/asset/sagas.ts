@@ -17,7 +17,7 @@ export function* assetSaga() {
 function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
   const { purchase } = action.payload
   if (!isManaPurchase(purchase)) {
-    const { nft, status, txHash } = purchase
+    const { nft, status } = purchase
     const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
     const { tradeType, contractAddress, tokenId, itemId } = nft
@@ -27,7 +27,7 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
     const statusPagePathname = locations.buyStatusPage(assetType, contractAddress, assetId)
     const shouldRedirect = [new URL(`${window.origin}${buyWithCardPathname}`).pathname, statusPagePathname].includes(pathname)
 
-    if (shouldRedirect && [PurchaseStatus.PENDING, PurchaseStatus.COMPLETE].includes(status) && txHash) {
+    if (shouldRedirect && [PurchaseStatus.PENDING, PurchaseStatus.COMPLETE].includes(status)) {
       yield put(push(statusPagePathname))
     }
 

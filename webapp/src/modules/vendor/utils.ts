@@ -22,7 +22,8 @@ export function getFilters(vendor: VendorName, options: BrowseOptions): NFTsFetc
 
       const emoteCategory = category === NFTCategory.EMOTE ? getSearchEmoteCategory(section!) : undefined
 
-      const { rarities, wearableGenders, contracts, network, onlySmart, emotePlayMode, minPrice, maxPrice } = options
+      const { rarities, wearableGenders, contracts, network, onlySmart, emotePlayMode, minPrice, maxPrice, minEstateSize, maxEstateSize } =
+        options
 
       return {
         isLand,
@@ -38,7 +39,9 @@ export function getFilters(vendor: VendorName, options: BrowseOptions): NFTsFetc
         emotePlayMode,
         rentalStatus: (isLand || isParcelsOrEstates) && address ? [RentalStatus.OPEN, RentalStatus.EXECUTED] : undefined,
         minPrice,
-        maxPrice
+        maxPrice,
+        minEstateSize,
+        maxEstateSize
       } as NFTsFetchFilters<VendorName.DECENTRALAND>
     }
     default:

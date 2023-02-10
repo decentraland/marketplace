@@ -1,15 +1,27 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getGenderFilterLabel, getLandLabel, getNetwork, getPriceLabel } from '../../../utils/filters'
+import { getEstateSizeLabel, getGenderFilterLabel, getLandLabel, getNetwork, getPriceLabel } from '../../../utils/filters'
 import { Pill } from './Pill/Pill'
 import { getCollectionByAddress } from './utils'
 import { Props } from './SelectedFilters.types'
 import styles from './SelectedFilters.module.css'
 
 export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrowse }: Props) => {
-  const { rarities, network, onlySmart, contracts, wearableGenders, onlyOnSale, emotePlayMode, minPrice, maxPrice, onlyOnRent } =
-    browseOptions
+  const {
+    rarities,
+    network,
+    onlySmart,
+    contracts,
+    wearableGenders,
+    onlyOnSale,
+    emotePlayMode,
+    minPrice,
+    maxPrice,
+    onlyOnRent,
+    minEstateSize,
+    maxEstateSize
+  } = browseOptions
   const [collection, setCollection] = useState<Record<string, string> | undefined>()
 
   useEffect(() => {
@@ -34,6 +46,8 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
     () => getPriceLabel(minPrice, maxPrice, getNetwork(network, category)),
     [minPrice, maxPrice, network, category]
   )
+
+  const estateSizeLabel = useMemo(() => getEstateSizeLabel(minEstateSize, maxEstateSize), [minEstateSize, maxEstateSize])
 
   const landStatusLabel = useMemo(() => {
     if (isLandSection && (onlyOnSale || onlyOnRent)) {
@@ -82,6 +96,10 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
     onBrowse({ minPrice: undefined, maxPrice: undefined })
   }, [onBrowse])
 
+  const handleDeleteEstateSize = useCallback(() => {
+    onBrowse({ minEstateSize: undefined, maxEstateSize: undefined })
+  }, [onBrowse])
+
   const handleDeleteLandStatus = useCallback(() => {
     onBrowse({ onlyOnRent: undefined, onlyOnSale: undefined })
   }, [onBrowse])
@@ -104,6 +122,7 @@ export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrow
         <Pill key={playMode} label={t(`emote.play_mode.${playMode}`)} onDelete={handleDeleteEmotePlayMode} id={playMode} />
       ))}
       {minPrice || maxPrice ? <Pill label={priceLabel} onDelete={handleDeletePrice} id="price" /> : null}
+      {minEstateSize || maxEstateSize ? <Pill label={estateSizeLabel} onDelete={handleDeleteEstateSize} id="estate-size" /> : null}
       {isLandSection && landStatusLabel ? <Pill label={landStatusLabel} onDelete={handleDeleteLandStatus} id="land_filter" /> : null}
     </div>
   )

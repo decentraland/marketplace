@@ -9,6 +9,7 @@ export type Props = {
   onCancel: () => void
   onCreate: (...params: Parameters<typeof upsertRentalRequest>) => void
   onRemove: (nft: NFT) => unknown
+  isListForRentAgain: boolean | null
 }
 
 export type MapStateProps = {}
