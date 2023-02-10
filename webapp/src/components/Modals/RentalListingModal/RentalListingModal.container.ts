@@ -1,12 +1,9 @@
 import { connect } from 'react-redux'
 import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { openModal } from 'decentraland-dapps/dist/modules/modal/actions'
-
-import { RootState } from '../../../modules/reducer'
-import { getAddress } from '../../../modules/wallet/selectors'
 import { NFT } from '../../../modules/nft/types'
-import { getWallet } from '../../../modules/wallet/selectors'
-import { MapStateProps, MapDispatchProps, MapDispatch } from './RentalListingModal.types'
+import { RootState } from '../../../modules/reducer'
+import { getAddress, getWallet } from '../../../modules/wallet/selectors'
 import RentalModal from './RentalListingModal'
 import { MapStateProps, MapDispatchProps, MapDispatch } from './RentalListingModal.types'
 

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { getIsPriceFilterEnabled } from '../../modules/features/selectors'
+import { getIsEstateSizeFilterEnabled, getIsPriceFilterEnabled } from '../../modules/features/selectors'
 import { RootState } from '../../modules/reducer'
 import { browse } from '../../modules/routing/actions'
 import { getCategoryFromSection } from '../../modules/routing/search'
@@ -20,9 +20,6 @@ import {
   getSection,
   getWearableGenders
 } from '../../modules/routing/selectors'
-import { getIsEstateSizeFilterEnabled, getIsPriceFilterEnabled } from '../../modules/features/selectors'
-import { LANDFilters } from '../Vendor/decentraland/types'
-import { browse } from '../../modules/routing/actions'
 import { getView } from '../../modules/ui/browse/selectors'
 import { Section } from '../../modules/vendor/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'

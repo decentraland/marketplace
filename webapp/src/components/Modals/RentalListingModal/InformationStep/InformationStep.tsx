@@ -1,6 +1,6 @@
 import React from 'react'
-import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Modal, Button, ModalNavigation } from 'decentraland-ui'
 import { Props } from './InformationStep.types'
 import styles from './InformationStep.module.css'
 
@@ -9,10 +9,7 @@ const InformationStep = (props: Props) => {
 
   return (
     <>
-      <ModalNavigation
-        title={t('rental_modal.authorization_step_again.title')}
-        onClose={onCancel}
-      />
+      <ModalNavigation title={t('rental_modal.authorization_step_again.title')} onClose={onCancel} />
       <Modal.Content>
         <div className={styles.contentContainerRentAgain}>
           <span>

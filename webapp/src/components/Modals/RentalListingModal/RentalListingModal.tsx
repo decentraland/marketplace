@@ -4,16 +4,15 @@ import { Modal } from 'decentraland-dapps/dist/containers'
 import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ContractName, getContract } from 'decentraland-transactions'
-import { canBeClaimed, isRentalListingOpen } from '../../../modules/rental/utils'
 import { upsertRentalRequest, UpsertRentalRequestAction } from '../../../modules/rental/actions'
-import { Props } from './RentalListingModal.types'
+import { canBeClaimed, isRentalListingOpen } from '../../../modules/rental/utils'
 import { AuthorizationStep } from './AuthorizationStep'
 import { ConfirmationStep } from './ConfirmationStep'
 import { CreateOrEditListingStep } from './CreateOrEditListingStep'
 import { EditConfirmationStep } from './EditConfirmationStep'
+import InformationStep from './InformationStep/InformationStep'
 import { Props } from './RentalListingModal.types'
 import styles from './RentalListingModal.module.css'
-import InformationStep from './InformationStep/InformationStep'
 
 const RentalListingModal = (props: Props) => {
   const {

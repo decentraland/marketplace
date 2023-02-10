@@ -24,7 +24,7 @@ export type PriceFilters = Omit<NFTsFetchFilters, 'category'> & {
 
 class NFTAPI extends BaseAPI {
   fetchEstateSizes = async (isOnSale?: boolean): Promise<Record<string, number>> => {
-    const { data } = await this.request('get', `/stats/estate/size`, {
+    const { data } = await this.request('get', '/stats/estate/size', {
       isOnSale
     })
     return data
