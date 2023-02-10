@@ -160,8 +160,8 @@
     "price_min_greater_max": "最高价格应高于最低价格",
     "estate_size": {
       "label": "庄园规模",
-      "min_label": "最小（土地）",
-      "max_label": "马克斯（陆地）",
+      "min_label": "最小（包裹）",
+      "max_label": "马克斯（包裹）",
       "error": "最大地产规模应高于最小规模"
     },
     "reset": "重置",
