@@ -50,7 +50,11 @@ const gatewaySaga = createGatewaySaga({
   },
   [NetworkGatewayType.TRANSAK]: {
     key: config.get('TRANSAK_KEY'),
-    env: config.get('TRANSAK_ENV')
+    env: config.get('TRANSAK_ENV'),
+    pusher: {
+      appKey: config.get('TRANSAK_PUSHER_APP_KEY'),
+      appCluster: config.get('TRANSAK_PUSHER_APP_CLUSTER')
+    }
   }
 })
 

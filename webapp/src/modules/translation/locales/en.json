@@ -666,7 +666,7 @@
   "asset_purchase_with_card_pending_page": {
     "title": "Your item is on its way!",
     "status": "Processing Transaction",
-    "description": "The transaction can take up to 3 minutes to be processed. You can also track its progress in {activity}.",
+    "description": "The transaction can take up to 3 minutes to be processed.",
     "cta": "Back to marketplace"
   },
   "asset_purchase_with_card_complete_page": {
