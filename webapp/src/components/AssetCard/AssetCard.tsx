@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import { RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
-import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
 import { Asset } from '../../modules/asset/types'
+import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
 import {
@@ -15,23 +15,17 @@ import {
   isRentalListingExecuted,
   isRentalListingOpen
 } from '../../modules/rental/utils'
-import { Mana } from '../Mana'
 import { AssetImage } from '../AssetImage'
-import { ParcelTags } from './ParcelTags'
-import { EstateTags } from './EstateTags'
-import { WearableTags } from './WearableTags'
+import { Mana } from '../Mana'
 import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
+import { EstateTags } from './EstateTags'
+import { ParcelTags } from './ParcelTags'
+import { WearableTags } from './WearableTags'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
 
-const RentalPrice = ({
-  asset,
-  rentalPricePerDay
-}: {
-  asset: Asset
-  rentalPricePerDay: string
-}) => {
+const RentalPrice = ({ asset, rentalPricePerDay }: { asset: Asset; rentalPricePerDay: string }) => {
   return (
     <>
       <Mana className="rental-price" network={asset.network} inline>
@@ -51,10 +45,7 @@ const RentalChip = ({
   isClaimingBackLandTransactionPending: boolean
   rental: RentalListing | null
 }) => {
-  const rentalEndDate: Date | null = useMemo(
-    () => (rental ? getRentalEndDate(rental) : null),
-    [rental]
-  )
+  const rentalEndDate: Date | null = useMemo(() => (rental ? getRentalEndDate(rental) : null), [rental])
   const rentalHasEnded = rental ? hasRentalEnded(rental) : false
 
   return (
@@ -94,32 +85,13 @@ const AssetCard = (props: Props) => {
 
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
-  const rentalPricePerDay: string | null = useMemo(
-    () => (isRentalListingOpen(rental) ? getMaxPriceOfPeriods(rental!) : null),
-    [rental]
-  )
+  const rentalPricePerDay: string | null = useMemo(() => (isRentalListingOpen(rental) ? getMaxPriceOfPeriods(rental!) : null), [rental])
 
   return (
-    <Card
-      className="AssetCard"
-      link
-      as={Link}
-      to={getAssetUrl(asset, isManager && isLand(asset))}
-      onClick={onClick}
-    >
-      <AssetImage
-        asset={asset}
-        showOrderListedTag={showListedTag}
-        showMonospace
-      />
+    <Card className="AssetCard" link as={Link} to={getAssetUrl(asset, isManager && isLand(asset))} onClick={onClick}>
+      <AssetImage asset={asset} showOrderListedTag={showListedTag} showMonospace />
       {showRentalBubble ? (
-        <RentalChip
-          asset={asset}
-          isClaimingBackLandTransactionPending={
-            isClaimingBackLandTransactionPending
-          }
-          rental={rental}
-        />
+        <RentalChip asset={asset} isClaimingBackLandTransactionPending={isClaimingBackLandTransactionPending} rental={rental} />
       ) : null}
       <Card.Content>
         <Card.Header>
@@ -133,15 +105,10 @@ const AssetCard = (props: Props) => {
           ) : null}
         </Card.Header>
         <div className="sub-header">
-          <Card.Meta className="card-meta">
-            {t(`networks.${asset.network.toLowerCase()}`)}
-          </Card.Meta>
+          <Card.Meta className="card-meta">{t(`networks.${asset.network.toLowerCase()}`)}</Card.Meta>
           {rentalPricePerDay && price ? (
             <div>
-              <RentalPrice
-                asset={asset}
-                rentalPricePerDay={rentalPricePerDay}
-              />
+              <RentalPrice asset={asset} rentalPricePerDay={rentalPricePerDay} />
             </div>
           ) : null}
         </div>

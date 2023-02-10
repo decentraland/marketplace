@@ -1,10 +1,10 @@
+import { Dispatch } from 'redux'
 import {
   fetchAuthorizationsRequest,
   FetchAuthorizationsRequestAction,
   grantTokenRequest,
   GrantTokenRequestAction
 } from 'decentraland-dapps/dist/modules/authorization/actions'
-import { Dispatch } from 'redux'
 import { NFT } from '../../../../modules/nft/types'
 
 export type Props = {
@@ -19,19 +19,7 @@ export type Props = {
   onFetchAuthorizations: typeof fetchAuthorizationsRequest
 }
 
-export type MapStateProps = Pick<
-  Props,
-  | 'address'
-  | 'isAuthorizing'
-  | 'isConfirmingAuthorization'
-  | 'error'
-  | 'isFetchingAuthorizations'
->
-export type MapDispatchProps = Pick<
-  Props,
-  'onAuthorize' | 'onFetchAuthorizations'
->
-export type MapDispatch = Dispatch<
-  GrantTokenRequestAction | FetchAuthorizationsRequestAction
->
+export type MapStateProps = Pick<Props, 'address' | 'isAuthorizing' | 'isConfirmingAuthorization' | 'error' | 'isFetchingAuthorizations'>
+export type MapDispatchProps = Pick<Props, 'onAuthorize' | 'onFetchAuthorizations'>
+export type MapDispatch = Dispatch<GrantTokenRequestAction | FetchAuthorizationsRequestAction>
 export type OwnProps = Pick<Props, 'nft' | 'onCancel'>

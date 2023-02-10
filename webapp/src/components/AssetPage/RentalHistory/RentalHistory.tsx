@@ -1,24 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { RentalListing, RentalStatus } from '@dcl/schemas'
-import {
-  Header,
-  Table,
-  Mobile,
-  NotMobile,
-  Pagination,
-  Loader,
-  Row
-} from 'decentraland-ui'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
-
-import { capitalize } from '../../../lib/text'
-import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
+import { RentalListing, RentalStatus } from '@dcl/schemas'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header, Table, Mobile, NotMobile, Pagination, Loader, Row } from 'decentraland-ui'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
+import { capitalize } from '../../../lib/text'
 import { getRentalChosenPeriod } from '../../../modules/rental/utils'
-import { Mana } from '../../Mana'
+import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
 import { LinkedProfile } from '../../LinkedProfile'
+import { Mana } from '../../Mana'
 import { Props } from './RentalHistory.types'
 import styles from './RentalHistory.module.css'
 
@@ -78,21 +69,11 @@ const RentalHistory = (props: Props) => {
             <Table basic="very">
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>
-                    {t('rental_history.lessor')}
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    {t('rental_history.tenant')}
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    {t('rental_history.started_at')}
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    {capitalize(t('global.days'))}
-                  </Table.HeaderCell>
-                  <Table.HeaderCell>
-                    {t('rental_history.price_per_day')}
-                  </Table.HeaderCell>
+                  <Table.HeaderCell>{t('rental_history.lessor')}</Table.HeaderCell>
+                  <Table.HeaderCell>{t('rental_history.tenant')}</Table.HeaderCell>
+                  <Table.HeaderCell>{t('rental_history.started_at')}</Table.HeaderCell>
+                  <Table.HeaderCell>{capitalize(t('global.days'))}</Table.HeaderCell>
+                  <Table.HeaderCell>{t('rental_history.price_per_day')}</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
               <Table.Body className={isLoading ? 'is-loading' : ''}>
@@ -104,9 +85,7 @@ const RentalHistory = (props: Props) => {
                     <Table.Cell>
                       <LinkedProfile address={rental.tenant!} />
                     </Table.Cell>
-                    <Table.Cell title={formatDateTitle(rental.startedAt!)}>
-                      {formatEventDate(rental.startedAt ?? 0)}
-                    </Table.Cell>
+                    <Table.Cell title={formatDateTitle(rental.startedAt!)}>{formatEventDate(rental.startedAt ?? 0)}</Table.Cell>
                     <Table.Cell>
                       {t('rental_history.selected_days', {
                         days: rental.rentedDays ?? 0
@@ -114,9 +93,7 @@ const RentalHistory = (props: Props) => {
                     </Table.Cell>
                     <Table.Cell>
                       <Mana network={network} inline>
-                        {formatWeiMANA(
-                          getRentalChosenPeriod(rental).pricePerDay
-                        )}
+                        {formatWeiMANA(getRentalChosenPeriod(rental).pricePerDay)}
                       </Mana>
                     </Table.Cell>
                   </Table.Row>
@@ -136,17 +113,13 @@ const RentalHistory = (props: Props) => {
                         days: rental.rentedDays,
                         pricePerDay: (
                           <Mana network={network} inline>
-                            {formatWeiMANA(
-                              getRentalChosenPeriod(rental).pricePerDay
-                            )}
+                            {formatWeiMANA(getRentalChosenPeriod(rental).pricePerDay)}
                           </Mana>
                         )
                       }}
                     ></T>
                   </div>
-                  <div className={styles.mobileRentalsHistoryRowStartedAt}>
-                    {formatEventDate(rental.startedAt!)}
-                  </div>
+                  <div className={styles.mobileRentalsHistoryRowStartedAt}>{formatEventDate(rental.startedAt!)}</div>
                 </div>
               ))}
             </div>

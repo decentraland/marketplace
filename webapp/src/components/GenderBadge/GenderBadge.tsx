@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
-import { BodyShape, WearableGender } from '@dcl/schemas'
 import classNames from 'classnames'
+import { BodyShape, WearableGender } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isGender, isUnisex as getIsUnisex } from '../../modules/nft/utils'
 import { locations } from '../../modules/routing/locations'
@@ -31,13 +31,7 @@ const GenderBadge = ({ bodyShapes, withText, assetType, section }: Props) => {
   return withText ? (
     <IconBadge
       icon={icon}
-      text={
-        isUnisex
-          ? t('body_shape.unisex')
-          : isGenderBodyShape
-          ? t('body_shape.male')
-          : t('body_shape.female')
-      }
+      text={isUnisex ? t('body_shape.unisex') : isGenderBodyShape ? t('body_shape.male') : t('body_shape.female')}
       href={href}
     />
   ) : (

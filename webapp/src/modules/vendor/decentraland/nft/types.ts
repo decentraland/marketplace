@@ -10,8 +10,8 @@ import {
   RentalStatus,
   WearableCategory
 } from '@dcl/schemas'
-import { WearableGender } from '../../../nft/wearable/types'
 import { NFT } from '../../../nft/types'
+import { WearableGender } from '../../../nft/wearable/types'
 import { VendorName } from '../../types'
 
 export type NFTsFetchFilters = {

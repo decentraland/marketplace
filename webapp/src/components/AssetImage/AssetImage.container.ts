@@ -1,23 +1,12 @@
-import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
-import { Avatar } from '@dcl/schemas'
 import { connect } from 'react-redux'
+import { Avatar } from '@dcl/schemas'
+import { getData as getProfiles } from 'decentraland-dapps/dist/modules/profile/selectors'
 import { RootState } from '../../modules/reducer'
+import { setIsTryingOn, setWearablePreviewController } from '../../modules/ui/preview/actions'
+import { getIsTryingOn, getIsPlayingEmote, getWearablePreviewController } from '../../modules/ui/preview/selectors'
 import { getWallet } from '../../modules/wallet/selectors'
-import {
-  getIsTryingOn,
-  getIsPlayingEmote,
-  getWearablePreviewController
-} from '../../modules/ui/preview/selectors'
-import {
-  setIsTryingOn,
-  setWearablePreviewController
-} from '../../modules/ui/preview/actions'
-import {
-  MapStateProps,
-  MapDispatchProps,
-  MapDispatch
-} from './AssetImage.types'
 import AssetImage from './AssetImage'
+import { MapStateProps, MapDispatchProps, MapDispatch } from './AssetImage.types'
 
 const mapState = (state: RootState): MapStateProps => {
   const profiles = getProfiles(state)
@@ -37,8 +26,7 @@ const mapState = (state: RootState): MapStateProps => {
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onSetIsTryingOn: value => dispatch(setIsTryingOn(value)),
-  onSetWearablePreviewController: controller =>
-    dispatch(setWearablePreviewController(controller))
+  onSetWearablePreviewController: controller => dispatch(setWearablePreviewController(controller))
 })
 
 export default connect(mapState, mapDispatch)(AssetImage)

@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
-import { RootState } from '../../modules/reducer'
 import { getContract } from '../../modules/contract/selectors'
+import { RootState } from '../../modules/reducer'
 import { Contract } from '../../modules/vendor/services'
-import { MapStateProps, OwnProps } from './LegacyNFTPage.types'
 import LegacyNFTPage from './LegacyNFTPage'
+import { MapStateProps, OwnProps } from './LegacyNFTPage.types'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => ({
   match: ownProps.match,

@@ -1,12 +1,12 @@
 import { useEffect, useState, useMemo } from 'react'
 import { ethers } from 'ethers'
-import { Box, BarChart, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { LANDFilters } from '../../Vendor/decentraland/types'
-import { getNetwork, getPriceLabel } from '../../../utils/filters'
+import { Box, BarChart, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { nftAPI } from '../../../modules/vendor/decentraland'
 import { Section } from '../../../modules/vendor/routing/types'
+import { getNetwork, getPriceLabel } from '../../../utils/filters'
+import { LANDFilters } from '../../Vendor/decentraland/types'
 import { getChartUpperBound, getPriceFiltersForSection } from './utils'
 import { Props } from './PriceFilter.types'
 import './PriceFilter.css'
@@ -50,16 +50,7 @@ export const PriceFilter = ({
       network,
       ...getPriceFiltersForSection(section as Section)
     }
-  }, [
-    assetType,
-    bodyShapes,
-    collection,
-    emotePlayMode,
-    isOnlySmart,
-    network,
-    rarities,
-    section
-  ])
+  }, [assetType, bodyShapes, collection, emotePlayMode, isOnlySmart, network, rarities, section])
 
   useEffect(() => {
     let cancel = false
@@ -86,9 +77,7 @@ export const PriceFilter = ({
       isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">{t('filters.price')}</span>
-          <span className="box-filter-value">
-            {getPriceLabel(minPrice, maxPrice, network)}
-          </span>
+          <span className="box-filter-value">{getPriceLabel(minPrice, maxPrice, network)}</span>
         </div>
       ) : (
         t('filters.price')
@@ -110,12 +99,7 @@ export const PriceFilter = ({
   }, [landStatus, prices])
 
   return (
-    <Box
-      header={header}
-      className="filters-sidebar-box price-filter"
-      collapsible
-      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
-    >
+    <Box header={header} className="filters-sidebar-box price-filter" collapsible defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
       <BarChart
         loading={isLoading}
         data={formattedPrices}

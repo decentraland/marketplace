@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from 'react'
-import { Card, Button, Loader } from 'decentraland-ui'
 import { Item, NFTCategory } from '@dcl/schemas'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { getCategoryFromSection } from '../../modules/routing/search'
-import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Card, Button, Loader } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
+import { getCategoryFromSection } from '../../modules/routing/search'
+import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
 import { AssetCard } from '../AssetCard'
 import { Props } from './AssetList.types'
 import './AssetList.css'
@@ -43,8 +43,7 @@ const AssetList = (props: Props) => {
 
   const maxQuerySize = getMaxQuerySize(vendor)
 
-  const hasExtraPages =
-    (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
+  const hasExtraPages = (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
 
   const isLoadingNewPage = isLoading && nfts.length >= PAGE_SIZE
 
@@ -56,10 +55,7 @@ const AssetList = (props: Props) => {
         return 'nft_list.simple_empty'
       }
 
-      const isEmoteOrWearableSection = [
-        NFTCategory.EMOTE,
-        NFTCategory.WEARABLE
-      ].includes(getCategoryFromSection(section)!)
+      const isEmoteOrWearableSection = [NFTCategory.EMOTE, NFTCategory.WEARABLE].includes(getCategoryFromSection(section)!)
 
       if (isEmoteOrWearableSection) {
         return search ? 'nft_list.empty_search' : 'nft_list.empty'
@@ -79,11 +75,7 @@ const AssetList = (props: Props) => {
       <Card.Group>
         {assets.length > 0
           ? assets.map((assets, index) => (
-              <AssetCard
-                isManager={isManager}
-                key={assetType + '-' + assets.id + '-' + index}
-                asset={assets}
-              />
+              <AssetCard isManager={isManager} key={assetType + '-' + assets.id + '-' + index} asset={assets} />
             ))
           : null}
       </Card.Group>
@@ -109,18 +101,14 @@ const AssetList = (props: Props) => {
                   className="empty-actions"
                   onClick={() =>
                     onBrowse({
-                      assetType:
-                        assetType === AssetType.ITEM
-                          ? AssetType.NFT
-                          : AssetType.ITEM
+                      assetType: assetType === AssetType.ITEM ? AssetType.NFT : AssetType.ITEM
                     })
                   }
                 >
                   {chunks}
                 </button>
               ),
-              'if-filters': (chunks: string) =>
-                hasFiltersEnabled ? chunks : '',
+              'if-filters': (chunks: string) => (hasFiltersEnabled ? chunks : ''),
               clearFilters: (chunks: string) => (
                 <button className="empty-actions" onClick={onClearFilters}>
                   {chunks}
@@ -132,18 +120,9 @@ const AssetList = (props: Props) => {
         </div>
       ) : null}
 
-      {assets.length > 0 &&
-      hasExtraPages &&
-      (!isLoading || isLoadingNewPage) ? (
+      {assets.length > 0 && hasExtraPages && (!isLoading || isLoadingNewPage) ? (
         <div className="load-more">
-          <Button
-            as="a"
-            href={urlNext}
-            loading={isLoading}
-            inverted
-            primary
-            onClick={handleLoadMore}
-          >
+          <Button as="a" href={urlNext} loading={isLoading} inverted primary onClick={handleLoadMore}>
             {t('global.load_more')}
           </Button>
         </div>

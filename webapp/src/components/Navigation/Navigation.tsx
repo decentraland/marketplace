@@ -1,25 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import classNames from 'classnames'
-import { Tabs, Mobile, Button, useMobileMediaQuery } from 'decentraland-ui'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import * as decentraland from '../../modules/vendor/decentraland'
-import { locations } from '../../modules/routing/locations'
-import { VendorName } from '../../modules/vendor'
-import { SortBy } from '../../modules/routing/types'
+import { Tabs, Mobile, Button, useMobileMediaQuery } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
+import { locations } from '../../modules/routing/locations'
+import { SortBy } from '../../modules/routing/types'
+import { VendorName } from '../../modules/vendor'
+import * as decentraland from '../../modules/vendor/decentraland'
 import { CAMPAING_TAB_ANIMATION_ENABLED } from '../Campaign/config'
 import { Props, NavigationTab } from './Navigation.types'
 import './Navigation.css'
 
 const Navigation = (props: Props) => {
-  const {
-    activeTab,
-    isFullscreen,
-    isCampaignBrowserEnabled,
-    onOpenBuyManaWithFiatModal
-  } = props
+  const { activeTab, isFullscreen, isCampaignBrowserEnabled, onOpenBuyManaWithFiatModal } = props
   const analytics = getAnalytics()
   const isMobile = useMobileMediaQuery()
 
@@ -33,9 +28,7 @@ const Navigation = (props: Props) => {
       <Tabs isFullscreen={isFullscreen}>
         <Tabs.Left>
           <Link to={locations.root()}>
-            <Tabs.Tab active={activeTab === NavigationTab.OVERVIEW}>
-              {t('navigation.overview')}
-            </Tabs.Tab>
+            <Tabs.Tab active={activeTab === NavigationTab.OVERVIEW}>{t('navigation.overview')}</Tabs.Tab>
           </Link>
           {isCampaignBrowserEnabled ? (
             <Link
@@ -69,35 +62,23 @@ const Navigation = (props: Props) => {
               onlyOnSale: true
             })}
           >
-            <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>
-              {t('navigation.collectibles')}
-            </Tabs.Tab>
+            <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>{t('navigation.collectibles')}</Tabs.Tab>
           </Link>
           <Link to={locations.lands()}>
-            <Tabs.Tab active={activeTab === NavigationTab.LANDS}>
-              {t('navigation.land')}
-            </Tabs.Tab>
+            <Tabs.Tab active={activeTab === NavigationTab.LANDS}>{t('navigation.land')}</Tabs.Tab>
           </Link>
           <Link to={locations.defaultCurrentAccount()}>
-            <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>
-              {t('navigation.my_assets')}
-            </Tabs.Tab>
+            <Tabs.Tab active={activeTab === NavigationTab.MY_STORE}>{t('navigation.my_assets')}</Tabs.Tab>
           </Link>
           <Mobile>
             <Link to={locations.activity()}>
-              <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>
-                {t('navigation.activity')}
-              </Tabs.Tab>
+              <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>{t('navigation.activity')}</Tabs.Tab>
             </Link>
           </Mobile>
         </Tabs.Left>
         {!isMobile ? (
           <Tabs.Right>
-            <Button
-              primary
-              onClick={handleOpenBuyManaWithFiatModal}
-              size="small"
-            >
+            <Button primary onClick={handleOpenBuyManaWithFiatModal} size="small">
               {t('navigation.buy_mana_with_fiat')}
             </Button>
           </Tabs.Right>

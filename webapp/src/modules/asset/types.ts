@@ -6,8 +6,4 @@ export enum AssetType {
   NFT = 'nft'
 }
 
-export type Asset<T extends AssetType = AssetType> = T extends AssetType.NFT
-  ? NFT
-  : T extends AssetType.ITEM
-  ? Item
-  : NFT | Item
+export type Asset<T extends AssetType = AssetType> = T extends AssetType.NFT ? NFT : T extends AssetType.ITEM ? Item : NFT | Item

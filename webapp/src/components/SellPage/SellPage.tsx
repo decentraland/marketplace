@@ -1,23 +1,16 @@
 import React from 'react'
 import { Page } from 'decentraland-ui'
 import { AssetType } from '../../modules/asset/types'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
-import { Wallet } from '../Wallet'
 import { AssetProviderPage } from '../AssetProviderPage'
+import { Footer } from '../Footer'
+import { Navbar } from '../Navbar'
+import { Wallet } from '../Wallet'
 import { SellModal } from './SellModal'
 import { Props } from './SellPage.types'
 import './SellPage.css'
 
 const SellPage = (props: Props) => {
-  const {
-    authorizations,
-    isLoading,
-    isCreatingOrder,
-    onGoBack,
-    getContract,
-    onCreateOrder
-  } = props
+  const { authorizations, isLoading, isCreatingOrder, onGoBack, getContract, onCreateOrder } = props
   return (
     <>
       <Navbar isFullscreen />

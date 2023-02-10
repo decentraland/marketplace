@@ -1,16 +1,9 @@
 import { NFTCategory, RentalListing } from '@dcl/schemas'
 import { LoadingState } from 'decentraland-dapps/dist/modules/loading/reducer'
-import { RootState } from '../reducer'
 import { NFT } from '../nft/types'
+import { RootState } from '../reducer'
 import { claimAssetRequest, removeRentalRequest } from './actions'
-import {
-  getState,
-  getData,
-  getRentalById,
-  isSubmittingTransaction,
-  isClaimingAsset,
-  isRemovingRental
-} from './selectors'
+import { getState, getData, getRentalById, isSubmittingTransaction, isClaimingAsset, isRemovingRental } from './selectors'
 
 let rootState: RootState
 
@@ -70,9 +63,7 @@ describe('when getting a rental by id', () => {
 describe('when getting if a LAND is being claimed', () => {
   describe('and the LAND is being claimed', () => {
     beforeEach(() => {
-      rootState.rental.loading = [
-        claimAssetRequest({} as NFT, {} as RentalListing)
-      ]
+      rootState.rental.loading = [claimAssetRequest({} as NFT, {} as RentalListing)]
     })
 
     it('should return true', () => {

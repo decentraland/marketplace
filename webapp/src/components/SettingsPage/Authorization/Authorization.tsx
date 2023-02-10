@@ -1,28 +1,19 @@
 import React, { useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ChainCheck, TransactionLink } from 'decentraland-dapps/dist/containers'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
+import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Form, Radio, Loader, Popup, RadioProps } from 'decentraland-ui'
 import { isAuthorized } from '../../../lib/authorization'
-
 import { locations } from '../../../modules/routing/locations'
 import { Props } from './Authorization.types'
 import './Authorization.css'
 
 const Authorization = (props: Props) => {
-  const {
-    authorization,
-    authorizations,
-    isLoading,
-    onGrant,
-    onRevoke,
-    getContract
-  } = props
+  const { authorization, authorizations, isLoading, onGrant, onRevoke, getContract } = props
 
   const handleOnChange = useCallback(
-    (isChecked: boolean) =>
-      isChecked ? onGrant(authorization) : onRevoke(authorization),
+    (isChecked: boolean) => (isChecked ? onGrant(authorization) : onRevoke(authorization)),
     [authorization, onGrant, onRevoke]
   )
 
@@ -39,10 +30,7 @@ const Authorization = (props: Props) => {
 
   return (
     <div className="Authorization">
-      <Form.Field
-        key={contractAddress}
-        className={isLoading ? 'is-pending' : ''}
-      >
+      <Form.Field key={contractAddress} className={isLoading ? 'is-pending' : ''}>
         <Popup
           content={t('settings_page.pending_tx')}
           position="top left"
@@ -58,9 +46,7 @@ const Authorization = (props: Props) => {
               checked={isAuthorized(authorization, authorizations)}
               label={token.name}
               disabled={!isEnabled}
-              onClick={(_, props: RadioProps) =>
-                handleOnChange(!!props.checked)
-              }
+              onClick={(_, props: RadioProps) => handleOnChange(!!props.checked)}
             />
           )}
         </ChainCheck>
@@ -69,11 +55,7 @@ const Authorization = (props: Props) => {
             id="authorization.authorize"
             values={{
               contract_link: (
-                <TransactionLink
-                  address={authorizedAddress}
-                  txHash=""
-                  chainId={authorization.chainId}
-                >
+                <TransactionLink address={authorizedAddress} txHash="" chainId={authorization.chainId}>
                   {contract.label || contract.name}
                 </TransactionLink>
               ),

@@ -1,15 +1,10 @@
 import { Dispatch } from 'redux'
 import { Item } from '@dcl/schemas'
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
-import {
-  buyItemRequest,
-  BuyItemRequestAction,
-  buyItemWithCardRequest,
-  BuyItemWithCardRequestAction
-} from '../../../modules/item/actions'
-import { Contract } from '../../../modules/vendor/services'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { getContract } from '../../../modules/contract/selectors'
+import { buyItemRequest, BuyItemRequestAction, buyItemWithCardRequest, BuyItemWithCardRequestAction } from '../../../modules/item/actions'
+import { Contract } from '../../../modules/vendor/services'
 
 export type Props = {
   item: Item
@@ -26,15 +21,6 @@ export type Props = {
   onBuyItemWithCard: typeof buyItemWithCardRequest
 }
 
-export type MapStateProps = Pick<
-  Props,
-  | 'authorizations'
-  | 'isLoading'
-  | 'isBuyNftsWithFiatEnabled'
-  | 'isBuyWithCardPage'
-  | 'getContract'
->
+export type MapStateProps = Pick<Props, 'authorizations' | 'isLoading' | 'isBuyNftsWithFiatEnabled' | 'isBuyWithCardPage' | 'getContract'>
 export type MapDispatchProps = Pick<Props, 'onBuyItem' | 'onBuyItemWithCard'>
-export type MapDispatch = Dispatch<
-  BuyItemRequestAction | BuyItemWithCardRequestAction
->
+export type MapDispatch = Dispatch<BuyItemRequestAction | BuyItemWithCardRequestAction>

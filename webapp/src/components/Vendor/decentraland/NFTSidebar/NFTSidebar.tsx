@@ -9,11 +9,7 @@ const NFTSidebar = (props: Props) => {
 
   return (
     <div className="NFTSidebar">
-      <NFTSections
-        section={section}
-        sections={sections}
-        onSectionClick={onMenuItemClick}
-      />
+      <NFTSections section={section} sections={sections} onSectionClick={onMenuItemClick} />
       <AssetFilters />
     </div>
   )

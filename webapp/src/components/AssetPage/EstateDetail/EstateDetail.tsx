@@ -1,24 +1,24 @@
 import React from 'react'
 import classNames from 'classnames'
-import { Badge } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Badge } from 'decentraland-ui'
 import { isLand } from '../../../modules/nft/utils'
 import { AssetImage } from '../../AssetImage'
 import { Network } from '../../Network'
-import { Description } from '../Description'
-import { Owner } from '../Owner'
 import Price from '../../Price'
-import Expiration from '../Expiration'
 import { Actions } from '../Actions'
-import { BidList } from '../BidList'
-import { JumpIn } from '../JumpIn'
-import { ProximityHighlights } from '../ProximityHighlights'
 import BaseDetail from '../BaseDetail'
-import { TransactionHistory } from '../TransactionHistory'
+import { BidList } from '../BidList'
+import { Description } from '../Description'
+import Expiration from '../Expiration'
+import { JumpIn } from '../JumpIn'
+import { Owner } from '../Owner'
+import { ProximityHighlights } from '../ProximityHighlights'
 import { RentalHistory } from '../RentalHistory'
 import { SaleRentActionBox } from '../SaleRentActionBox'
-import { Props } from './EstateDetail.types'
+import { TransactionHistory } from '../TransactionHistory'
 import { ParcelCoordinates } from './ParcelCoordinates'
+import { Props } from './EstateDetail.types'
 import './EstateDetail.css'
 
 const EstateDetail = ({ nft, order, rental }: Props) => {
@@ -39,18 +39,10 @@ const EstateDetail = ({ nft, order, rental }: Props) => {
       showDetails={isLand(nft)}
       assetImage={
         <>
-          <AssetImage
-            className={classNames(estate.size === 0 && 'dissolved')}
-            asset={nft}
-            isDraggable
-            withNavigation
-            hasPopup
-          />
+          <AssetImage className={classNames(estate.size === 0 && 'dissolved')} asset={nft} isDraggable withNavigation hasPopup />
           {estate.size === 0 && (
             <div className="dissolved-wrapper">
-              <div className="dissolved-notice">
-                {t('estate_detail.dissolved')}
-              </div>
+              <div className="dissolved-notice">{t('estate_detail.dissolved')}</div>
             </div>
           )}
         </>

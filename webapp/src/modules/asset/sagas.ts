@@ -1,16 +1,13 @@
 import { getLocation, push } from 'connected-react-router'
 import { put, select, takeEvery } from 'redux-saga/effects'
-import {
-  SetPurchaseAction,
-  SET_PURCHASE
-} from 'decentraland-dapps/dist/modules/gateway/actions'
+import { SetPurchaseAction, SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import { isManaPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { isManaPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { locations } from '../routing/locations'
 import { buyItemWithCardFailure } from '../item/actions'
 import { executeOrderWithCardFailure } from '../order/actions'
+import { locations } from '../routing/locations'
 import { AssetType } from './types'
 
 export function* assetSaga() {
@@ -21,42 +18,21 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
   const { purchase } = action.payload
   if (!isManaPurchase(purchase)) {
     const { nft, status, txHash } = purchase
-    const { pathname }: ReturnType<typeof getLocation> = yield select(
-      getLocation
-    )
+    const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
 
     const { tradeType, contractAddress, tokenId, itemId } = nft
-    const assetType: AssetType =
-      tradeType === TradeType.PRIMARY ? AssetType.ITEM : AssetType.NFT
+    const assetType: AssetType = tradeType === TradeType.PRIMARY ? AssetType.ITEM : AssetType.NFT
     const assetId = tradeType === TradeType.PRIMARY ? itemId : tokenId
-    const buyWithCardPathname = locations.buyWithCard(
-      assetType,
-      contractAddress,
-      assetId
-    )
-    const statusPagePathname = locations.buyStatusPage(
-      assetType,
-      contractAddress,
-      assetId
-    )
-    const shouldRedirect = [
-      new URL(`${window.origin}${buyWithCardPathname}`).pathname,
-      statusPagePathname
-    ].includes(pathname)
+    const buyWithCardPathname = locations.buyWithCard(assetType, contractAddress, assetId)
+    const statusPagePathname = locations.buyStatusPage(assetType, contractAddress, assetId)
+    const shouldRedirect = [new URL(`${window.origin}${buyWithCardPathname}`).pathname, statusPagePathname].includes(pathname)
 
-    if (
-      shouldRedirect &&
-      [PurchaseStatus.PENDING, PurchaseStatus.COMPLETE].includes(status) &&
-      txHash
-    ) {
+    if (shouldRedirect && [PurchaseStatus.PENDING, PurchaseStatus.COMPLETE].includes(status) && txHash) {
       yield put(push(statusPagePathname))
     }
 
     if (status === PurchaseStatus.FAILED) {
-      const failureAction =
-        assetType === AssetType.NFT
-          ? executeOrderWithCardFailure
-          : buyItemWithCardFailure
+      const failureAction = assetType === AssetType.NFT ? executeOrderWithCardFailure : buyItemWithCardFailure
 
       if (shouldRedirect) yield put(push(buyWithCardPathname))
 

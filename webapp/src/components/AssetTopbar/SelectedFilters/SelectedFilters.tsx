@@ -1,38 +1,16 @@
 import { useState, useMemo, useCallback, useEffect } from 'react'
 import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  getGenderFilterLabel,
-  getLandLabel,
-  getNetwork,
-  getPriceLabel
-} from '../../../utils/filters'
+import { getGenderFilterLabel, getLandLabel, getNetwork, getPriceLabel } from '../../../utils/filters'
 import { Pill } from './Pill/Pill'
-import { Props } from './SelectedFilters.types'
 import { getCollectionByAddress } from './utils'
+import { Props } from './SelectedFilters.types'
 import styles from './SelectedFilters.module.css'
 
-export const SelectedFilters = ({
-  browseOptions,
-  isLandSection,
-  category,
-  onBrowse
-}: Props) => {
-  const {
-    rarities,
-    network,
-    onlySmart,
-    contracts,
-    wearableGenders,
-    onlyOnSale,
-    emotePlayMode,
-    minPrice,
-    maxPrice,
-    onlyOnRent
-  } = browseOptions
-  const [collection, setCollection] = useState<
-    Record<string, string> | undefined
-  >()
+export const SelectedFilters = ({ browseOptions, isLandSection, category, onBrowse }: Props) => {
+  const { rarities, network, onlySmart, contracts, wearableGenders, onlyOnSale, emotePlayMode, minPrice, maxPrice, onlyOnRent } =
+    browseOptions
+  const [collection, setCollection] = useState<Record<string, string> | undefined>()
 
   useEffect(() => {
     const fetchData = async (contract: string) => {
@@ -111,66 +89,22 @@ export const SelectedFilters = ({
   return (
     <div className={styles.pillContainer}>
       {rarities?.map(rarity => (
-        <Pill
-          key={rarity}
-          label={rarity}
-          id={rarity}
-          onDelete={handleDeleteRarity}
-        />
+        <Pill key={rarity} label={rarity} id={rarity} onDelete={handleDeleteRarity} />
       ))}
-      {network ? (
-        <Pill
-          label={t(`networks.${network.toLowerCase()}`)}
-          id="network"
-          onDelete={handleDeleteNetwork}
-        />
-      ) : null}
-      {onlySmart ? (
-        <Pill
-          label={t('nft_filters.only_smart')}
-          id="only smart"
-          onDelete={handleDeleteOnlySmart}
-        />
-      ) : null}
-      {collection ? (
-        <Pill
-          label={collection.name}
-          id={collection.address}
-          onDelete={handleDeleteCollection}
-        />
-      ) : null}
+      {network ? <Pill label={t(`networks.${network.toLowerCase()}`)} id="network" onDelete={handleDeleteNetwork} /> : null}
+      {onlySmart ? <Pill label={t('nft_filters.only_smart')} id="only smart" onDelete={handleDeleteOnlySmart} /> : null}
+      {collection ? <Pill label={collection.name} id={collection.address} onDelete={handleDeleteCollection} /> : null}
       {wearableGenders?.length ? (
-        <Pill
-          label={t(getGenderFilterLabel(wearableGenders))}
-          id="wearable_genders"
-          onDelete={handleDeleteGender}
-        />
+        <Pill label={t(getGenderFilterLabel(wearableGenders))} id="wearable_genders" onDelete={handleDeleteGender} />
       ) : null}
       {!onlyOnSale && !isLandSection ? (
-        <Pill
-          label={t('nft_filters.not_on_sale')}
-          id="only_on_sale"
-          onDelete={handleDeleteOnlySale}
-        />
+        <Pill label={t('nft_filters.not_on_sale')} id="only_on_sale" onDelete={handleDeleteOnlySale} />
       ) : null}
       {emotePlayMode?.map(playMode => (
-        <Pill
-          key={playMode}
-          label={t(`emote.play_mode.${playMode}`)}
-          onDelete={handleDeleteEmotePlayMode}
-          id={playMode}
-        />
+        <Pill key={playMode} label={t(`emote.play_mode.${playMode}`)} onDelete={handleDeleteEmotePlayMode} id={playMode} />
       ))}
-      {minPrice || maxPrice ? (
-        <Pill label={priceLabel} onDelete={handleDeletePrice} id="price" />
-      ) : null}
-      {isLandSection && landStatusLabel ? (
-        <Pill
-          label={landStatusLabel}
-          onDelete={handleDeleteLandStatus}
-          id="land_filter"
-        />
-      ) : null}
+      {minPrice || maxPrice ? <Pill label={priceLabel} onDelete={handleDeletePrice} id="price" /> : null}
+      {isLandSection && landStatusLabel ? <Pill label={landStatusLabel} onDelete={handleDeleteLandStatus} id="land_filter" /> : null}
     </div>
   )
 }

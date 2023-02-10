@@ -1,8 +1,5 @@
 import { Network } from '@dcl/schemas'
-import {
-  LoadingState,
-  loadingReducer
-} from 'decentraland-dapps/dist/modules/loading/reducer'
+import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
   FetchNFTsRequestAction,
   FetchNFTsSuccessAction,
@@ -46,10 +43,7 @@ type AccountReducerAction =
   | FetchAccountMetricsSuccessAction
   | FetchAccountMetricsFailureAction
 
-export function accountReducer(
-  state: AccountState = INITIAL_STATE,
-  action: AccountReducerAction
-): AccountState {
+export function accountReducer(state: AccountState = INITIAL_STATE, action: AccountReducerAction): AccountState {
   switch (action.type) {
     case FETCH_ACCOUNT_METRICS_REQUEST:
     case FETCH_NFTS_REQUEST: {

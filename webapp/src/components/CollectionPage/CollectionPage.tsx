@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { Item, NFTCategory, Rarity } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Back,
   Column,
@@ -20,15 +21,14 @@ import {
   EmoteIcon,
   WearableIcon
 } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import { formatWeiMANA } from '../../lib/mana'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
+import { getBuilderCollectionDetailUrl } from '../../modules/collection/utils'
 import CollectionProvider from '../CollectionProvider'
+import { Footer } from '../Footer'
+import { Mana } from '../Mana'
+import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import AssetCell from '../OnSaleOrRentList/AssetCell'
-import { Mana } from '../Mana'
 import { Props } from './CollectionPage.types'
 import styles from './CollectionPage.module.css'
 
@@ -47,9 +47,7 @@ const CollectionPage = (props: Props) => {
     switch (item.category) {
       case NFTCategory.EMOTE:
       case NFTCategory.WEARABLE:
-        return t(
-          `${item.category}.category.${item.data[item.category]?.category}`
-        )
+        return t(`${item.category}.category.${item.data[item.category]?.category}`)
       default:
         return t(`global.${item.category}`)
     }
@@ -63,26 +61,13 @@ const CollectionPage = (props: Props) => {
         {contractAddress ? (
           <CollectionProvider contractAddress={contractAddress} withItems>
             {({ collection, items, isLoading }) => {
-              const isCollectionOwner =
-                !!collection &&
-                !!currentAddress &&
-                collection.creator.toLowerCase() === currentAddress
+              const isCollectionOwner = !!collection && !!currentAddress && collection.creator.toLowerCase() === currentAddress
 
-              const builderCollectionUrl = getBuilderCollectionDetailUrl(
-                contractAddress
-              )
-              const hasWearables = items?.some(
-                item => item.category === NFTCategory.WEARABLE
-              )
-              const hasEmotes = items?.some(
-                item => item.category === NFTCategory.EMOTE
-              )
+              const builderCollectionUrl = getBuilderCollectionDetailUrl(contractAddress)
+              const hasWearables = items?.some(item => item.category === NFTCategory.WEARABLE)
+              const hasEmotes = items?.some(item => item.category === NFTCategory.EMOTE)
               const hasOnlyEmotes = hasEmotes && !hasWearables
-              const filteredItems = items?.filter(item =>
-                hasOnlyEmotes
-                  ? item.category === NFTCategory.EMOTE
-                  : item.category === tab
-              )
+              const filteredItems = items?.filter(item => (hasOnlyEmotes ? item.category === NFTCategory.EMOTE : item.category === tab))
 
               const showShowTabs = hasEmotes && hasWearables
 
@@ -103,38 +88,19 @@ const CollectionPage = (props: Props) => {
                               {collection.isOnSale && (
                                 <Badge color={Color.SUMMER_RED}>
                                   <Icon name="tag" />
-                                  <span className={styles.badge}>
-                                    {t('collection_page.on_sale')}
-                                  </span>
+                                  <span className={styles.badge}>{t('collection_page.on_sale')}</span>
                                 </Badge>
                               )}
                             </Row>
                           </Column>
                           {isCollectionOwner && (
-                            <Column
-                              align="right"
-                              className={styles.columnRight}
-                            >
+                            <Column align="right" className={styles.columnRight}>
                               <Row align="right">
-                                <Button
-                                  primary
-                                  inverted
-                                  compact
-                                  as="a"
-                                  href={builderCollectionUrl}
-                                >
+                                <Button primary inverted compact as="a" href={builderCollectionUrl}>
                                   {t('collection_page.edit_in_builder')}
                                 </Button>
-                                <Button
-                                  primary
-                                  inverted
-                                  compact
-                                  as="a"
-                                  href={builderCollectionUrl}
-                                >
-                                  {collection.isOnSale
-                                    ? t('collection_page.unlist_from_market')
-                                    : t('collection_page.list_on_market')}
+                                <Button primary inverted compact as="a" href={builderCollectionUrl}>
+                                  {collection.isOnSale ? t('collection_page.unlist_from_market') : t('collection_page.list_on_market')}
                                 </Button>
                               </Row>
                             </Column>
@@ -148,21 +114,13 @@ const CollectionPage = (props: Props) => {
                       {showShowTabs ? (
                         <Tabs isFullscreen>
                           <div className={styles.tabs}>
-                            <Tabs.Tab
-                              active={tab === NFTCategory.WEARABLE}
-                              onClick={() =>
-                                handleTabChange(NFTCategory.WEARABLE)
-                              }
-                            >
+                            <Tabs.Tab active={tab === NFTCategory.WEARABLE} onClick={() => handleTabChange(NFTCategory.WEARABLE)}>
                               <div className={styles.tab}>
                                 <WearableIcon />
                                 {t('home_page.recently_sold.tabs.wearable')}
                               </div>
                             </Tabs.Tab>
-                            <Tabs.Tab
-                              active={tab === NFTCategory.EMOTE}
-                              onClick={() => handleTabChange(NFTCategory.EMOTE)}
-                            >
+                            <Tabs.Tab active={tab === NFTCategory.EMOTE} onClick={() => handleTabChange(NFTCategory.EMOTE)}>
                               <div className={styles.tab}>
                                 <EmoteIcon />
                                 {t('home_page.recently_sold.tabs.emote')}
@@ -175,21 +133,11 @@ const CollectionPage = (props: Props) => {
                         <Table.Header>
                           <NotMobile>
                             <Table.Row>
-                              <Table.HeaderCell>
-                                {t('global.item')}
-                              </Table.HeaderCell>
-                              <Table.HeaderCell>
-                                {t('global.category')}
-                              </Table.HeaderCell>
-                              <Table.HeaderCell>
-                                {t('global.rarity')}
-                              </Table.HeaderCell>
-                              <Table.HeaderCell>
-                                {t('global.stock')}
-                              </Table.HeaderCell>
-                              <Table.HeaderCell>
-                                {t('global.price')}
-                              </Table.HeaderCell>
+                              <Table.HeaderCell>{t('global.item')}</Table.HeaderCell>
+                              <Table.HeaderCell>{t('global.category')}</Table.HeaderCell>
+                              <Table.HeaderCell>{t('global.rarity')}</Table.HeaderCell>
+                              <Table.HeaderCell>{t('global.stock')}</Table.HeaderCell>
+                              <Table.HeaderCell>{t('global.price')}</Table.HeaderCell>
                               {isCollectionOwner && <Table.HeaderCell />}
                             </Table.Row>
                           </NotMobile>
@@ -211,17 +159,10 @@ const CollectionPage = (props: Props) => {
                                 <Table.Cell>
                                   <AssetCell asset={item} />
                                 </Table.Cell>
+                                <Table.Cell>{getItemCategoryText(item)}</Table.Cell>
+                                <Table.Cell>{t(`rarity.${item.rarity}`)}</Table.Cell>
                                 <Table.Cell>
-                                  {getItemCategoryText(item)}
-                                </Table.Cell>
-                                <Table.Cell>
-                                  {t(`rarity.${item.rarity}`)}
-                                </Table.Cell>
-                                <Table.Cell>
-                                  {item.available.toLocaleString()}/
-                                  {Rarity.getMaxSupply(
-                                    item.rarity
-                                  ).toLocaleString()}
+                                  {item.available.toLocaleString()}/{Rarity.getMaxSupply(item.rarity).toLocaleString()}
                                 </Table.Cell>
                                 <Table.Cell>
                                   <Mana network={item.network} inline>
@@ -230,22 +171,10 @@ const CollectionPage = (props: Props) => {
                                 </Table.Cell>
                                 {isCollectionOwner && (
                                   <Table.Cell>
-                                    <Dropdown
-                                      className={styles.ellipsis}
-                                      icon="ellipsis horizontal"
-                                      direction="left"
-                                    >
+                                    <Dropdown className={styles.ellipsis} icon="ellipsis horizontal" direction="left">
                                       <Dropdown.Menu>
-                                        <Dropdown.Item
-                                          text={t('collection_page.edit_price')}
-                                          as="a"
-                                          href={builderCollectionUrl}
-                                        />
-                                        <Dropdown.Item
-                                          text={t('collection_page.mint_item')}
-                                          as="a"
-                                          href={builderCollectionUrl}
-                                        />
+                                        <Dropdown.Item text={t('collection_page.edit_price')} as="a" href={builderCollectionUrl} />
+                                        <Dropdown.Item text={t('collection_page.mint_item')} as="a" href={builderCollectionUrl} />
                                       </Dropdown.Menu>
                                     </Dropdown>
                                   </Table.Cell>

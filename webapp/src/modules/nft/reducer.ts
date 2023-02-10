@@ -1,13 +1,5 @@
-import {
-  LoadingState,
-  loadingReducer
-} from 'decentraland-dapps/dist/modules/loading/reducer'
-import {
-  UpsertRentalSuccessAction,
-  UPSERT_RENTAL_SUCCESS
-} from '../rental/actions'
-
-import { NFT } from './types'
+import { LoadingState, loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { UpsertRentalSuccessAction, UPSERT_RENTAL_SUCCESS } from '../rental/actions'
 import {
   FetchNFTRequestAction,
   FetchNFTSuccessAction,
@@ -28,6 +20,7 @@ import {
   TransferNFTSuccessAction,
   TransferNFTFailureAction
 } from './actions'
+import { NFT } from './types'
 
 export type NFTState = {
   data: Record<string, NFT>
@@ -53,10 +46,7 @@ type NFTReducerAction =
   | TransferNFTFailureAction
   | UpsertRentalSuccessAction
 
-export function nftReducer(
-  state: NFTState = INITIAL_STATE,
-  action: NFTReducerAction
-) {
+export function nftReducer(state: NFTState = INITIAL_STATE, action: NFTReducerAction) {
   switch (action.type) {
     case TRANSFER_NFT_REQUEST:
     case FETCH_NFTS_REQUEST:

@@ -13,7 +13,5 @@ export function sumAccountMetrics(a: AccountMetrics, b: AccountMetrics) {
 }
 
 function addStrings(a: string, b: string) {
-  return ethers.BigNumber.from(a)
-    .add(b)
-    .toString()
+  return ethers.BigNumber.from(a).add(b).toString()
 }

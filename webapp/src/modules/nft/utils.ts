@@ -8,11 +8,7 @@ export function getNFTId(contractAddress: string, tokenId: string) {
 // TODO: These methods are repeated on item/utils and can be moved to asset/utils:
 //   - getNFT
 //   - getNFTId
-export function getNFT(
-  contractAddress: string | null,
-  tokenId: string | null,
-  nfts: Record<string, NFT>
-): NFT | null {
+export function getNFT(contractAddress: string | null, tokenId: string | null, nfts: Record<string, NFT>): NFT | null {
   if (!contractAddress || !tokenId) {
     return null
   }
@@ -21,8 +17,7 @@ export function getNFT(
   return nftId in nfts ? nfts[nftId] : null
 }
 
-export const getBodyShapeUrn = (bodyShape: string) =>
-  `urn:decentraland:off-chain:base-avatars:${bodyShape}`
+export const getBodyShapeUrn = (bodyShape: string) => `urn:decentraland:off-chain:base-avatars:${bodyShape}`
 
 export function isGender(bodyShapes: BodyShape[], gender: BodyShape) {
   if (bodyShapes.length !== 1) {
@@ -36,9 +31,7 @@ export function isUnisex(bodyShapes: BodyShape[]) {
 }
 
 export function isLand(nft: NFT | Item) {
-  return (
-    nft.category === NFTCategory.PARCEL || nft.category === NFTCategory.ESTATE
-  )
+  return nft.category === NFTCategory.PARCEL || nft.category === NFTCategory.ESTATE
 }
 
 export function isParcel(nft: NFT | Item) {
@@ -46,7 +39,5 @@ export function isParcel(nft: NFT | Item) {
 }
 
 export function isPartOfEstate(nft: NFT): boolean {
-  return Boolean(
-    nft.category === NFTCategory.PARCEL && nft.data?.parcel?.estate
-  )
+  return Boolean(nft.category === NFTCategory.PARCEL && nft.data?.parcel?.estate)
 }

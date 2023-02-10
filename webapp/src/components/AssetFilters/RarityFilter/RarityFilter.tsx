@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react'
-import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { ArrayFilter } from '../../Vendor/NFTFilters/ArrayFilter'
 
 export type RarityFilterProps = {
@@ -10,11 +10,7 @@ export type RarityFilterProps = {
   defaultCollapsed?: boolean
 }
 
-export const RarityFilter = ({
-  onChange,
-  rarities = [],
-  defaultCollapsed = false
-}: RarityFilterProps) => {
+export const RarityFilter = ({ onChange, rarities = [], defaultCollapsed = false }: RarityFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const rarityOptions = useMemo(() => {
     const options = Object.values(Rarity)
@@ -33,16 +29,13 @@ export const RarityFilter = ({
     [onChange]
   )
 
-  const allRaritiesSelected =
-    rarities.length === 0 || rarities.length === rarityOptions.length
+  const allRaritiesSelected = rarities.length === 0 || rarities.length === rarityOptions.length
 
   const header = useMemo(
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
-          <span className="box-filter-name">
-            {t('nft_filters.rarities.title')}
-          </span>
+          <span className="box-filter-name">{t('nft_filters.rarities.title')}</span>
           <span className="box-filter-value">
             {allRaritiesSelected
               ? t('nft_filters.rarities.all_items')
@@ -58,18 +51,8 @@ export const RarityFilter = ({
   )
 
   return (
-    <Box
-      header={header}
-      className="filters-sidebar-box"
-      collapsible
-      defaultCollapsed={defaultCollapsed || isMobileOrTablet}
-    >
-      <ArrayFilter
-        name=""
-        options={rarityOptions}
-        onChange={handleRaritiesChange}
-        values={rarities}
-      />
+    <Box header={header} className="filters-sidebar-box" collapsible defaultCollapsed={defaultCollapsed || isMobileOrTablet}>
+      <ArrayFilter name="" options={rarityOptions} onChange={handleRaritiesChange} values={rarities} />
     </Box>
   )
 }

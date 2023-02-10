@@ -1,47 +1,36 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import classNames from 'classnames'
-import { Env } from '@dcl/ui-env'
 import { BodyShape, NFTCategory, PreviewEmote, Rarity } from '@dcl/schemas'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Env } from '@dcl/ui-env'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import {
-  Badge,
-  Button,
-  Center,
-  Icon,
-  Loader,
-  Popup,
-  WearablePreview
-} from 'decentraland-ui'
-
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Badge, Button, Center, Icon, Loader, Popup, WearablePreview } from 'decentraland-ui'
+import { config } from '../../config'
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
-import { Atlas } from '../Atlas'
-import ListedBadge from '../ListedBadge'
-import { config } from '../../config'
-import { Coordinate } from '../Coordinate'
 import { JumpIn } from '../AssetPage/JumpIn'
+import { Atlas } from '../Atlas'
+import { Coordinate } from '../Coordinate'
+import ListedBadge from '../ListedBadge'
 import { ControlOptionAction, Props } from './AssetImage.types'
 import './AssetImage.css'
 
 // 1x1 transparent pixel
-const PIXEL =
-  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
+const PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNiYAAAAAkAAxkR2eQAAAAASUVORK5CYII='
 
 const DEFAULT_COLOR = 'bbbbbb'
 
 type Color = { r: number; g: number; b: number }
 type WrappedColor = { color: Color }
 
-const valueToHex = (value: number) =>
-  ('00' + Math.min(255, (value * 255) | 0).toString(16)).slice(-2)
+const valueToHex = (value: number) => ('00' + Math.min(255, (value * 255) | 0).toString(16)).slice(-2)
 
 const colorToHex = (color: Color): string => {
   if (isColor(color)) {
     return valueToHex(color.r) + valueToHex(color.g) + valueToHex(color.b)
   }
-  const maybeWrapped = (color as unknown) as Partial<WrappedColor>
+  const maybeWrapped = color as unknown as Partial<WrappedColor>
   if (isWrapped(maybeWrapped)) {
     return colorToHex(maybeWrapped.color!)
   }
@@ -50,12 +39,9 @@ const colorToHex = (color: Color): string => {
 }
 
 // sometimes the color come from the catalyst wrapped in an extra "color": { } object
-const isWrapped = (maybeWrapped: Partial<WrappedColor>) =>
-  maybeWrapped.color && isColor(maybeWrapped.color)
+const isWrapped = (maybeWrapped: Partial<WrappedColor>) => maybeWrapped.color && isColor(maybeWrapped.color)
 const isColor = (maybeColor: Partial<Color>) =>
-  typeof maybeColor.r === 'number' &&
-  typeof maybeColor.g === 'number' &&
-  typeof maybeColor.b === 'number'
+  typeof maybeColor.r === 'number' && typeof maybeColor.g === 'number' && typeof maybeColor.b === 'number'
 
 const AssetImage = (props: Props) => {
   const {
@@ -77,17 +63,13 @@ const AssetImage = (props: Props) => {
   } = props
   const { parcel, estate, wearable, emote, ens } = asset.data
 
-  const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(
-    isDraggable
-  )
+  const [isLoadingWearablePreview, setIsLoadingWearablePreview] = useState(isDraggable)
   const [wearablePreviewError, setWearablePreviewError] = useState(false)
   const handleLoad = useCallback(() => {
     setIsLoadingWearablePreview(false)
     setWearablePreviewError(false)
     if (asset.category === NFTCategory.EMOTE && !wearableController) {
-      onSetWearablePreviewController(
-        WearablePreview.createController('wearable-preview')
-      )
+      onSetWearablePreviewController(WearablePreview.createController('wearable-preview'))
     }
   }, [asset.category, wearableController, onSetWearablePreviewController])
   const handleError = useCallback(error => {
@@ -137,19 +119,13 @@ const AssetImage = (props: Props) => {
     [wearableController]
   )
 
-  const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [
-    estate
-  ])
+  const estateSelection = useMemo(() => (estate ? getSelection(estate) : []), [estate])
 
   const [isTracked, setIsTracked] = useState(false)
 
   // pick a random emote
   const previewEmote = useMemo(() => {
-    const poses = [
-      PreviewEmote.FASHION,
-      PreviewEmote.FASHION_2,
-      PreviewEmote.FASHION_3
-    ]
+    const poses = [PreviewEmote.FASHION, PreviewEmote.FASHION_2, PreviewEmote.FASHION_3]
     return isTryingOn ? poses[(Math.random() * poses.length) | 0] : undefined
   }, [isTryingOn])
 
@@ -175,15 +151,7 @@ const AssetImage = (props: Props) => {
       const y = +parcel!.y
       const selection = [{ x, y }]
       return (
-        <Atlas
-          x={x}
-          y={y}
-          isDraggable={isDraggable}
-          withPopup={hasPopup}
-          withNavigation={withNavigation}
-          selection={selection}
-          zoom={zoom}
-        >
+        <Atlas x={x} y={y} isDraggable={isDraggable} withPopup={hasPopup} withNavigation={withNavigation} selection={selection} zoom={zoom}>
           {hasBadges && children}
         </Atlas>
       )
@@ -225,12 +193,7 @@ const AssetImage = (props: Props) => {
           hair = colorToHex(avatar.avatar.hair.color)
         }
 
-        const hasRepresentation = avatar
-          ? wearable &&
-            wearable.bodyShapes.some(shape =>
-              avatar.avatar.bodyShape.includes(shape)
-            )
-          : true
+        const hasRepresentation = avatar ? wearable && wearable.bodyShapes.some(shape => avatar.avatar.bodyShape.includes(shape)) : true
 
         const missingBodyShape =
           hasRepresentation || !avatar
@@ -247,13 +210,7 @@ const AssetImage = (props: Props) => {
               contractAddress={asset.contractAddress}
               itemId={itemId}
               tokenId={tokenId}
-              profile={
-                isTryingOnEnabled
-                  ? avatar
-                    ? avatar.ethAddress
-                    : 'default'
-                  : undefined
-              }
+              profile={isTryingOnEnabled ? (avatar ? avatar.ethAddress : 'default') : undefined}
               skin={skin}
               hair={hair}
               emote={isTryingOnEnabled ? previewEmote : undefined}
@@ -263,20 +220,11 @@ const AssetImage = (props: Props) => {
             />
             {isLoadingWearablePreview ? (
               <Center>
-                <Loader
-                  className="wearable-preview-loader"
-                  active
-                  size="large"
-                />
+                <Loader className="wearable-preview-loader" active size="large" />
               </Center>
             ) : null}
             <Popup
-              content={
-                <T
-                  id="wearable_preview.missing_representation_error.message"
-                  values={{ bodyShape: <b>{missingBodyShape}</b> }}
-                />
-              }
+              content={<T id="wearable_preview.missing_representation_error.message" values={{ bodyShape: <b>{missingBodyShape}</b> }} />}
               trigger={
                 <div className="preview-toggle-wrapper">
                   <Popup
@@ -285,13 +233,9 @@ const AssetImage = (props: Props) => {
                     trigger={
                       <Button
                         size="small"
-                        className={classNames(
-                          'preview-toggle',
-                          'preview-toggle-wearable',
-                          {
-                            'is-active': !isTryingOnEnabled
-                          }
-                        )}
+                        className={classNames('preview-toggle', 'preview-toggle-wearable', {
+                          'is-active': !isTryingOnEnabled
+                        })}
                         onClick={handleShowWearable}
                       />
                     }
@@ -303,14 +247,10 @@ const AssetImage = (props: Props) => {
                     trigger={
                       <Button
                         size="small"
-                        className={classNames(
-                          'preview-toggle',
-                          'preview-toggle-avatar',
-                          {
-                            'is-active': isTryingOnEnabled,
-                            'is-disabled': !hasRepresentation
-                          }
-                        )}
+                        className={classNames('preview-toggle', 'preview-toggle-avatar', {
+                          'is-active': isTryingOnEnabled,
+                          'is-disabled': !hasRepresentation
+                        })}
                         onClick={hasRepresentation ? handleTryOut : undefined}
                       />
                     }
@@ -326,9 +266,7 @@ const AssetImage = (props: Props) => {
       }
       const [light, dark] = Rarity.getGradient(wearable!.rarity)
       const backgroundImage = `radial-gradient(${light}, ${dark})`
-      const classes =
-        'rarity-background ' +
-        (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
+      const classes = 'rarity-background ' + (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
       const showWearablePreview = !!wearablePreview && !wearablePreviewError
       return (
         <div
@@ -337,15 +275,7 @@ const AssetImage = (props: Props) => {
             backgroundImage
           }}
         >
-          {showWearablePreview ? (
-            wearablePreview
-          ) : (
-            <img
-              alt={getAssetName(asset)}
-              className="image"
-              src={getAssetImage(asset)}
-            />
-          )}
+          {showWearablePreview ? wearablePreview : <img alt={getAssetName(asset)} className="image" src={getAssetImage(asset)} />}
           {hasBadges && children}
         </div>
       )
@@ -365,18 +295,14 @@ const AssetImage = (props: Props) => {
           <Button
             animated={false}
             className="zoom-control zoom-in-control"
-            onClick={() =>
-              handleControlActionChange(ControlOptionAction.ZOOM_IN)
-            }
+            onClick={() => handleControlActionChange(ControlOptionAction.ZOOM_IN)}
           >
             <Icon name="plus" />
           </Button>
           <Button
             animated={false}
             className="zoom-control zoom-out-control"
-            onClick={() =>
-              handleControlActionChange(ControlOptionAction.ZOOM_OUT)
-            }
+            onClick={() => handleControlActionChange(ControlOptionAction.ZOOM_OUT)}
           >
             <Icon name="minus" />
           </Button>
@@ -386,20 +312,10 @@ const AssetImage = (props: Props) => {
         <div className="play-emote-control">
           <Button
             size="small"
-            onClick={() =>
-              handleControlActionChange(
-                isPlayingEmote
-                  ? ControlOptionAction.STOP_EMOTE
-                  : ControlOptionAction.PLAY_EMOTE
-              )
-            }
+            onClick={() => handleControlActionChange(isPlayingEmote ? ControlOptionAction.STOP_EMOTE : ControlOptionAction.PLAY_EMOTE)}
           >
             {isPlayingEmote ? <Icon name="stop" /> : <Icon name="play" />}
-            <span>
-              {isPlayingEmote
-                ? t('wearable_preview.stop_emote')
-                : t('wearable_preview.play_emote')}
-            </span>
+            <span>{isPlayingEmote ? t('wearable_preview.stop_emote') : t('wearable_preview.play_emote')}</span>
           </Button>
         </div>
       )
@@ -421,11 +337,7 @@ const AssetImage = (props: Props) => {
             />
             {isLoadingWearablePreview ? (
               <Center>
-                <Loader
-                  className="wearable-preview-loader"
-                  active
-                  size="large"
-                />
+                <Loader className="wearable-preview-loader" active size="large" />
               </Center>
             ) : (
               <>
@@ -438,9 +350,7 @@ const AssetImage = (props: Props) => {
       }
       const [light, dark] = Rarity.getGradient(emote!.rarity)
       const backgroundImage = `radial-gradient(${light}, ${dark})`
-      const classes =
-        'rarity-background ' +
-        (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
+      const classes = 'rarity-background ' + (isLoadingWearablePreview ? 'is-loading-wearable-preview' : '')
       const showWearablePreview = !!wearablePreview && !wearablePreviewError
       return (
         <div
@@ -449,15 +359,7 @@ const AssetImage = (props: Props) => {
             backgroundImage
           }}
         >
-          {showWearablePreview ? (
-            wearablePreview
-          ) : (
-            <img
-              alt={getAssetName(asset)}
-              className="image"
-              src={getAssetImage(asset)}
-            />
-          )}
+          {showWearablePreview ? wearablePreview : <img alt={getAssetName(asset)} className="image" src={getAssetImage(asset)} />}
           {hasBadges && children}
         </div>
       )
@@ -465,7 +367,7 @@ const AssetImage = (props: Props) => {
 
     case NFTCategory.ENS: {
       let name = ens!.subdomain
-      let classes = ['ens-subdomain']
+      const classes = ['ens-subdomain']
       if (isSmall) {
         name = name.slice(0, 2)
         classes.push('small')
@@ -547,11 +449,7 @@ const AssetImageWrapper = (props: Props) => {
                     </Badge>
                   </>
                 ) : (
-                  <Coordinate
-                    className="coordinates"
-                    x={coordinates.x}
-                    y={coordinates.y}
-                  />
+                  <Coordinate className="coordinates" x={coordinates.x} y={coordinates.y} />
                 )}
                 <JumpIn compact x={coordinates.x} y={coordinates.y} />
               </>

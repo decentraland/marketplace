@@ -1,6 +1,6 @@
+import { useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { useMemo } from 'react'
 import NFTSectionsMenuItems from '../../../Vendor/decentraland/NFTSections/NFTSectionsMenuItems'
 import { getAvailableSections } from './utils'
 import { Props } from './CategoryFilter.types'
@@ -23,18 +23,9 @@ export const CategoryFilter = ({ section, view, assetType, onChange }: Props): J
   )
 
   return (
-    <Box
-      header={header}
-      className="filters-sidebar-box category-filter"
-      collapsible
-      defaultCollapsed={true}
-    >
+    <Box header={header} className="filters-sidebar-box category-filter" collapsible defaultCollapsed={true}>
       <ul className="Menu box-menu">
-        <NFTSectionsMenuItems
-          section={section}
-          sections={getAvailableSections(view, section, assetType)}
-          onSectionClick={onChange}
-        />
+        <NFTSectionsMenuItems section={section} sections={getAvailableSections(view, section, assetType)} onSectionClick={onChange} />
       </ul>
     </Box>
   )

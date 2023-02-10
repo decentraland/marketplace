@@ -1,11 +1,7 @@
 import { expectSaga } from 'redux-saga-test-plan'
 import { call } from 'redux-saga-test-plan/matchers'
 import { VendorFactory, VendorName } from '../vendor'
-import {
-  fetchAnalyticsVolumeDataRequest,
-  fetchAnalyticsVolumeDataSuccess,
-  fetchAnalyticsVolumeDataFailure
-} from './actions'
+import { fetchAnalyticsVolumeDataRequest, fetchAnalyticsVolumeDataSuccess, fetchAnalyticsVolumeDataFailure } from './actions'
 import { analyticsSagas } from './sagas'
 import { AnalyticsTimeframe, AnalyticsVolumeData } from './types'
 
@@ -34,16 +30,7 @@ describe('when handling a fetch volume data request', () => {
       return expectSaga(analyticsSagas)
         .provide([
           [call(VendorFactory.build, options.vendor), vendor],
-          [
-            call(
-              [
-                vendor.analyticsService,
-                vendor.analyticsService!.fetchVolumeData
-              ],
-              timeframe
-            ),
-            response
-          ]
+          [call([vendor.analyticsService, vendor.analyticsService!.fetchVolumeData], timeframe), response]
         ])
         .put(fetchAnalyticsVolumeDataSuccess(response))
         .dispatch(fetchAnalyticsVolumeDataRequest(timeframe))
@@ -56,16 +43,7 @@ describe('when handling a fetch volume data request', () => {
       return expectSaga(analyticsSagas)
         .provide([
           [call(VendorFactory.build, options.vendor), vendor],
-          [
-            call(
-              [
-                vendor.analyticsService,
-                vendor.analyticsService!.fetchVolumeData
-              ],
-              timeframe
-            ),
-            Promise.reject(new Error('some error'))
-          ]
+          [call([vendor.analyticsService, vendor.analyticsService!.fetchVolumeData], timeframe), Promise.reject(new Error('some error'))]
         ])
         .put(fetchAnalyticsVolumeDataFailure('some error'))
         .dispatch(fetchAnalyticsVolumeDataRequest(timeframe))

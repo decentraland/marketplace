@@ -1,16 +1,12 @@
+import { select } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
 import { RentalListing } from '@dcl/schemas'
 import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
-import { expectSaga } from 'redux-saga-test-plan'
-import { select } from 'redux-saga/effects'
 import { buyItemWithCardFailure } from '../item/actions'
 import { NFT } from '../nft/types'
 import { executeOrderWithCardFailure } from '../order/actions'
-import {
-  claimAssetSuccess,
-  removeRentalSuccess,
-  upsertRentalSuccess
-} from '../rental/actions'
+import { claimAssetSuccess, removeRentalSuccess, upsertRentalSuccess } from '../rental/actions'
 import { UpsertRentalOptType } from '../rental/types'
 import { updateStoreSuccess } from '../store/actions'
 import { getEmptyStore } from '../store/utils'
@@ -72,9 +68,7 @@ describe('when handling the success of a rental listing update', () => {
   it('should show a toast signaling the success of a rental listing update', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
-      .put(
-        showToast(getUpsertRentalSuccessToast(nft, UpsertRentalOptType.EDIT))
-      )
+      .put(showToast(getUpsertRentalSuccessToast(nft, UpsertRentalOptType.EDIT)))
       .dispatch(upsertRentalSuccess(nft, rental, UpsertRentalOptType.EDIT))
       .silentRun()
   })
@@ -84,9 +78,7 @@ describe('when handling the success of a rental listing creation', () => {
   it('should show a toast signaling the success of a rental listing creation', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
-      .put(
-        showToast(getUpsertRentalSuccessToast(nft, UpsertRentalOptType.INSERT))
-      )
+      .put(showToast(getUpsertRentalSuccessToast(nft, UpsertRentalOptType.INSERT)))
       .dispatch(upsertRentalSuccess(nft, rental, UpsertRentalOptType.INSERT))
       .silentRun()
   })

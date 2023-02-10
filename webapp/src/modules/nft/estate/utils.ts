@@ -1,7 +1,4 @@
-import {
-  getSigner,
-  getConnectedProvider
-} from 'decentraland-dapps/dist/lib/eth'
+import { getSigner, getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { EstateRegistry__factory } from '../../../contracts'
 import { Contract } from '../../vendor/services'
 import { NFT } from '../types'
@@ -21,16 +18,10 @@ export const getCenter = (selection: { x: number; y: number }[]) => {
   return [x, y]
 }
 
-export async function getFingerprint(
-  estateId: string,
-  estateContract: Contract
-) {
+export async function getFingerprint(estateId: string, estateContract: Contract) {
   const provider = await getConnectedProvider()
   if (provider) {
-    const estateRegistry = EstateRegistry__factory.connect(
-      estateContract.address,
-      await getSigner()
-    )
+    const estateRegistry = EstateRegistry__factory.connect(estateContract.address, await getSigner())
     return estateRegistry.getFingerprint(estateId)
   }
 }

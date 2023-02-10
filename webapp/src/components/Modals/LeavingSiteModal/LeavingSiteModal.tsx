@@ -33,14 +33,7 @@ const BuyWithCardExplanationModal = ({
     </Modal.Content>
     <Modal.Actions>
       <Button onClick={onClose}>{t('global.cancel')}</Button>
-      <Button
-        primary
-        as="a"
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={onClose}
-      >
+      <Button primary as="a" href={url} target="_blank" rel="noopener noreferrer" onClick={onClose}>
         {t('global.proceed')}
       </Button>
     </Modal.Actions>

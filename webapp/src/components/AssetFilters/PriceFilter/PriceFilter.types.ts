@@ -1,14 +1,8 @@
-import {
-  EmotePlayMode,
-  GenderFilterOption,
-  NFTCategory,
-  Rarity,
-  WearableGender
-} from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, NFTCategory, Rarity, WearableGender } from '@dcl/schemas'
 import { Network } from '@dcl/schemas/dist/dapps/network'
-import { LANDFilters } from '../../Vendor/decentraland/types'
 import { AssetType } from '../../../modules/asset/types'
 import { BrowseOptions } from '../../../modules/routing/types'
+import { LANDFilters } from '../../Vendor/decentraland/types'
 
 export type Props = {
   section: string

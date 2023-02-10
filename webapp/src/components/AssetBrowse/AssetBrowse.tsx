@@ -1,29 +1,26 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
-import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
+import { BrowseOptions } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
+import { getPersistedIsMapProperty, isAccountView } from '../../modules/ui/utils'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
 import { Sections } from '../../modules/vendor/routing/types'
-import { BrowseOptions } from '../../modules/routing/types'
-import {
-  getPersistedIsMapProperty,
-  isAccountView
-} from '../../modules/ui/utils'
-import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
-import { Row } from '../Layout/Row'
-import { Column } from '../Layout/Column'
 import AssetTopbar from '../AssetTopbar'
-import { NFTSidebar } from '../Vendor/NFTSidebar'
-import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
-import OnSaleList from '../OnSaleOrRentList'
-import CollectionList from '../CollectionList'
-import StoreSettings from '../StoreSettings'
-import Sales from '../Sales'
-import { Bids } from '../Bids'
+import { Atlas } from '../Atlas'
 import { BackToTopButton } from '../BackToTopButton'
+import { Bids } from '../Bids'
+import CollectionList from '../CollectionList'
+import { Column } from '../Layout/Column'
+import { Row } from '../Layout/Row'
+import OnSaleList from '../OnSaleOrRentList'
+import { OnSaleOrRentType } from '../OnSaleOrRentList/OnSaleOrRentList.types'
+import Sales from '../Sales'
+import StoreSettings from '../StoreSettings'
+import { NFTSidebar } from '../Vendor/NFTSidebar'
 import { Props } from './AssetBrowse.types'
 import './AssetBrowse.css'
 
@@ -65,12 +62,7 @@ const AssetBrowse = (props: Props) => {
   const isMapPropertyPersisted = getPersistedIsMapProperty()
 
   useEffect(() => {
-    if (
-      section === DecentralandSection.LAND &&
-      !isAccountView(view) &&
-      isMapPropertyPersisted === false &&
-      isMap
-    ) {
+    if (section === DecentralandSection.LAND && !isAccountView(view) && isMapPropertyPersisted === false && isMap) {
       // To prevent the map view from being displayed when the user clicks on the Land navigation tab.
       // We set the has fetched variable to false so it has to browse back to the list view.
       setHasFetched(false)
@@ -93,18 +85,12 @@ const AssetBrowse = (props: Props) => {
       // Function used to fetch the assets.
       let fetchAssetsFn: (opts: BrowseOptions) => void = onFetchAssetsFromRoute
 
-      if (
-        section === DecentralandSection.LAND &&
-        !isAccountView(view) &&
-        isMapPropertyPersisted === false
-      ) {
+      if (section === DecentralandSection.LAND && !isAccountView(view) && isMapPropertyPersisted === false) {
         // Update the browser options to match the ones persisted.
         browseOpts.isMap = isMap
         browseOpts.isFullscreen = isFullscreen
         browseOpts.onlyOnSale =
-          (!onlyOnSale && onlyOnRent === false) ||
-          (onlyOnSale === undefined && onlyOnRent === undefined) ||
-          onlyOnSale
+          (!onlyOnSale && onlyOnRent === false) || (onlyOnSale === undefined && onlyOnRent === undefined) || onlyOnSale
 
         // We also set the fetch function as onBrowse because we need the url to be updated.
         fetchAssetsFn = onBrowse
@@ -132,19 +118,13 @@ const AssetBrowse = (props: Props) => {
   ])
 
   // Handlers
-  const handleSetFullscreen = useCallback(
-    () => onBrowse({ isMap: true, isFullscreen: true }),
-    [onBrowse]
-  )
+  const handleSetFullscreen = useCallback(() => onBrowse({ isMap: true, isFullscreen: true }), [onBrowse])
 
   const left = (
     <>
       <NotMobile>
         {view === View.ACCOUNT || isCurrentAccount ? (
-          <AccountSidebar
-            address={address!}
-            isCurrentAccount={isCurrentAccount}
-          />
+          <AccountSidebar address={address!} isCurrentAccount={isCurrentAccount} />
         ) : (
           <NFTSidebar section={section} sections={sections} />
         )}
@@ -159,22 +139,10 @@ const AssetBrowse = (props: Props) => {
       right = <CollectionList />
       break
     case DecentralandSection.ON_SALE:
-      right = (
-        <OnSaleList
-          address={address}
-          isCurrentAccount={isCurrentAccount}
-          onSaleOrRentType={OnSaleOrRentType.SALE}
-        />
-      )
+      right = <OnSaleList address={address} isCurrentAccount={isCurrentAccount} onSaleOrRentType={OnSaleOrRentType.SALE} />
       break
     case DecentralandSection.ON_RENT:
-      right = (
-        <OnSaleList
-          address={address}
-          isCurrentAccount={isCurrentAccount}
-          onSaleOrRentType={OnSaleOrRentType.RENT}
-        />
-      )
+      right = <OnSaleList address={address} isCurrentAccount={isCurrentAccount} onSaleOrRentType={OnSaleOrRentType.RENT} />
       break
     case DecentralandSection.SALES:
       right = <Sales />
@@ -200,10 +168,7 @@ const AssetBrowse = (props: Props) => {
           {isMap ? (
             <div className="Atlas">
               <Atlas withNavigation withPopup showOnSale={onlyOnSale} />
-              <div
-                className="fullscreen-button"
-                onClick={handleSetFullscreen}
-              />
+              <div className="fullscreen-button" onClick={handleSetFullscreen} />
             </div>
           ) : (
             <AssetList isManager={view === View.CURRENT_ACCOUNT} />
@@ -232,11 +197,7 @@ const AssetBrowse = (props: Props) => {
           <Tabs isFullscreen>
             <Tabs.Left>
               {mobileSections.map((value, key) => (
-                <Tabs.Tab
-                  key={key}
-                  active={section === value}
-                  onClick={() => onBrowse({ section: value })}
-                >
+                <Tabs.Tab key={key} active={section === value} onClick={() => onBrowse({ section: value })}>
                   {t(`menu.${value}`)}
                 </Tabs.Tab>
               ))}
@@ -244,10 +205,7 @@ const AssetBrowse = (props: Props) => {
           </Tabs>
         </Mobile>
       ) : null}
-      <Page
-        className={classNames('AssetBrowse', isMap && 'is-map')}
-        isFullscreen={isFullscreen}
-      >
+      <Page className={classNames('AssetBrowse', isMap && 'is-map')} isFullscreen={isFullscreen}>
         <Row>
           {!isFullscreen && (
             <Column align="left" className="sidebar">

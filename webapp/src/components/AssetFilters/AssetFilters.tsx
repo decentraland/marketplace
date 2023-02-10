@@ -1,26 +1,20 @@
 import { useCallback } from 'react'
-import {
-  EmotePlayMode,
-  GenderFilterOption,
-  Network,
-  Rarity,
-  WearableGender
-} from '@dcl/schemas'
-import { getSectionFromCategory } from '../../modules/routing/search'
+import { EmotePlayMode, GenderFilterOption, Network, Rarity, WearableGender } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
+import { getSectionFromCategory } from '../../modules/routing/search'
 import { isLandSection } from '../../modules/ui/utils'
-import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
+import { LANDFilters } from '../Vendor/decentraland/types'
+import { BodyShapeFilter } from './BodyShapeFilter'
+import { CollectionFilter } from './CollectionFilter'
+import { EmotePlayModeFilter } from './EmotePlayModeFilter'
+import { LandStatusFilter } from './LandStatusFilter'
+import { MoreFilters } from './MoreFilters'
+import { NetworkFilter } from './NetworkFilter'
 import PriceFilter from './PriceFilter'
 import { RarityFilter } from './RarityFilter'
-import { NetworkFilter } from './NetworkFilter'
-import { Props } from './AssetFilters.types'
-import { CollectionFilter } from './CollectionFilter'
-import { LandStatusFilter } from './LandStatusFilter'
-import { BodyShapeFilter } from './BodyShapeFilter'
-import { MoreFilters } from './MoreFilters'
-import { EmotePlayModeFilter } from './EmotePlayModeFilter'
 import { AssetFilter, filtersBySection } from './utilts'
+import { Props } from './AssetFilters.types'
 import './AssetFilters.css'
 
 export const AssetFilters = ({
@@ -117,9 +111,7 @@ export const AssetFilters = ({
   const shouldRenderFilter = useCallback(
     (filter: AssetFilter) => {
       // /lands page won't have any category, we fallback to the section, that will be Section.LAND
-      const parentSection = category
-        ? getSectionFromCategory(category)
-        : section
+      const parentSection = category ? getSectionFromCategory(category) : section
       return filtersBySection[parentSection!]?.includes(filter)
     },
     [category, section]
@@ -128,18 +120,8 @@ export const AssetFilters = ({
   if (isInLandSection) {
     return (
       <div className="filters-sidebar">
-        <LandStatusFilter
-          landStatus={landStatus}
-          onChange={handleLandStatusChange}
-        />
-        {isPriceFilterEnabled ? (
-          <PriceFilter
-            onChange={handlePriceChange}
-            minPrice={minPrice}
-            maxPrice={maxPrice}
-            values={values}
-          />
-        ) : null}
+        <LandStatusFilter landStatus={landStatus} onChange={handleLandStatusChange} />
+        {isPriceFilterEnabled ? <PriceFilter onChange={handlePriceChange} minPrice={minPrice} maxPrice={maxPrice} values={values} /> : null}
       </div>
     )
   }
@@ -147,11 +129,7 @@ export const AssetFilters = ({
   return (
     <Menu className="filters-sidebar">
       {shouldRenderFilter(AssetFilter.Rarity) ? (
-        <RarityFilter
-          onChange={handleRarityChange}
-          rarities={rarities}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
-        />
+        <RarityFilter onChange={handleRarityChange} rarities={rarities} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]} />
       ) : null}
       {isPriceFilterEnabled && shouldRenderFilter(AssetFilter.Price) && isOnSale ? (
         <PriceFilter
@@ -178,11 +156,7 @@ export const AssetFilters = ({
         />
       )}
       {shouldRenderFilter(AssetFilter.Network) && !isPrimarySell && (
-        <NetworkFilter
-          onChange={handleNetworkChange}
-          network={network}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
-        />
+        <NetworkFilter onChange={handleNetworkChange} network={network} defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]} />
       )}
       {shouldRenderFilter(AssetFilter.BodyShape) && (
         <BodyShapeFilter

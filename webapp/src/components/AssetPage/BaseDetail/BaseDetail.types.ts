@@ -1,5 +1,5 @@
-import { RentalListing } from '@dcl/schemas'
 import { ReactNode } from 'react'
+import { RentalListing } from '@dcl/schemas'
 import { Asset } from '../../../modules/asset/types'
 
 export type Props = {

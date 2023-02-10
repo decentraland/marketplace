@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { ethers } from 'ethers'
-import { Row, Section, Header, HeaderSubheader } from 'decentraland-ui'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Row, Section, Header, HeaderSubheader } from 'decentraland-ui'
 import { Coordinate } from '../../Coordinate'
 import { Mana } from '../../Mana'
 import { Props } from './Popup.types'
@@ -26,27 +26,19 @@ export default class Popup extends React.PureComponent<Props> {
 
     return (
       <div
-        className={`AtlasPopup ${position} ${
-          tile.owner ? 'has-owner' : 'no-owner'
-        }`}
+        className={`AtlasPopup ${position} ${tile.owner ? 'has-owner' : 'no-owner'}`}
         style={{ top: y, left: x, opacity: visible ? 1 : 0 }}
       >
         <Section className="land-name">
           <Row className="name-row">
-            <span className="name">
-              {tile.name ||
-                (!isEstate ? t('global.parcel') : t('global.estate'))}
-            </span>
+            <span className="name">{tile.name || (!isEstate ? t('global.parcel') : t('global.estate'))}</span>
             <Coordinate className="coordinates" x={tile.x} y={tile.y} />
           </Row>
         </Section>
 
         <Section className="owner">
           <Header sub>{t('atlas.owner')}</Header>
-          <Profile
-            address={tile.owner || ethers.constants.AddressZero}
-            debounce={500}
-          />
+          <Profile address={tile.owner || ethers.constants.AddressZero} debounce={500} />
         </Section>
 
         {tile.price || tile.rentalPricePerDay ? (

@@ -5,10 +5,7 @@ export type Props = RouteComponentProps & {
   isBuyNftsWithFiatEnabled: boolean
 }
 
-export type MapStateProps = Pick<
-  Props,
-  'inMaintenance' | 'isBuyNftsWithFiatEnabled'
->
+export type MapStateProps = Pick<Props, 'inMaintenance' | 'isBuyNftsWithFiatEnabled'>
 
 export type State = {
   hasError: boolean

@@ -22,7 +22,5 @@ export type Props = {
 
 export type MapStateProps = Pick<Props, 'isSigning' | 'error'>
 export type MapDispatchProps = Pick<Props, 'onCreate' | 'onClearRentalErros'>
-export type MapDispatch = Dispatch<
-  UpsertRentalRequestAction | ClearRentalErrorsAction
->
+export type MapDispatch = Dispatch<UpsertRentalRequestAction | ClearRentalErrorsAction>
 export type OwnProps = Pick<Props, 'nft' | 'onCancel'>

@@ -1,30 +1,17 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { Loader, HeaderMenu, Header, Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import { Loader, HeaderMenu, Header, Button } from 'decentraland-ui'
 import { locations } from '../../modules/routing/locations'
 import { Bid } from '../Bid'
 import { Props } from './Bids.types'
 import './Bids.css'
 
 const Bids = (props: Props) => {
-  const {
-    wallet,
-    isConnecting,
-    isLoading,
-    bidderBids,
-    sellerBids,
-    archivedBidIds,
-    onNavigate,
-    onFetchBids
-  } = props
+  const { wallet, isConnecting, isLoading, bidderBids, sellerBids, archivedBidIds, onNavigate, onFetchBids } = props
 
   const [showArchived, setShowArchivedSeller] = useState(false)
 
-  const handleToggleSeller = useCallback(
-    () => setShowArchivedSeller(!showArchived),
-    [showArchived, setShowArchivedSeller]
-  )
+  const handleToggleSeller = useCallback(() => setShowArchivedSeller(!showArchived), [showArchived, setShowArchivedSeller])
 
   // Redirect to signIn if trying to access current account without a wallet
   useEffect(() => {
@@ -51,13 +38,7 @@ const Bids = (props: Props) => {
         <>
           <HeaderMenu>
             <HeaderMenu.Left>
-              <Header sub>
-                {t(
-                  showArchived
-                    ? 'my_bids_page.bids_archived'
-                    : 'my_bids_page.bids_received'
-                )}
-              </Header>
+              <Header sub>{t(showArchived ? 'my_bids_page.bids_archived' : 'my_bids_page.bids_received')}</Header>
             </HeaderMenu.Left>
             <HeaderMenu.Right>
               {showArchived || archived.length > 0 ? (
@@ -81,18 +62,10 @@ const Bids = (props: Props) => {
             ) : null}
             {filteredSeller.length === 0 && !isLoading ? (
               <div className="center">
-                <div className="empty">
-                  {t(
-                    showArchived
-                      ? 'my_bids_page.empty_archived'
-                      : 'my_bids_page.empty_received'
-                  )}
-                </div>
+                <div className="empty">{t(showArchived ? 'my_bids_page.empty_archived' : 'my_bids_page.empty_received')}</div>
               </div>
             ) : null}
-            {filteredSeller.length > 0
-              ? filteredSeller.map(bid => <Bid key={bid.id} bid={bid} />)
-              : null}
+            {filteredSeller.length > 0 ? filteredSeller.map(bid => <Bid key={bid.id} bid={bid} />) : null}
           </div>
           <HeaderMenu>
             <HeaderMenu.Left>
@@ -110,9 +83,7 @@ const Bids = (props: Props) => {
                 <div className="empty">{t('my_bids_page.empty_placed')}</div>
               </div>
             ) : null}
-            {bidderBids.length > 0
-              ? bidderBids.map(bid => <Bid key={bid.id} bid={bid} />)
-              : null}
+            {bidderBids.length > 0 ? bidderBids.map(bid => <Bid key={bid.id} bid={bid} />) : null}
           </div>
         </>
       )}

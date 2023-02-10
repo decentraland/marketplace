@@ -1,22 +1,13 @@
 import React, { ReactNode, useEffect } from 'react'
-import { Icon, Loader } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { formatWeiMANA } from '../../../lib/mana'
-import { Props } from './Stats.types'
-import { Mana } from '../../Mana'
 import { Network } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Icon, Loader } from 'decentraland-ui'
+import { formatWeiMANA } from '../../../lib/mana'
+import { Mana } from '../../Mana'
+import { Props } from './Stats.types'
 import './Stats.css'
 
-const Stats = ({
-  address,
-  totalSales,
-  totalEarnings,
-  ethereumEarned,
-  maticEarned,
-  royalties,
-  isLoading,
-  onFetchMetrics
-}: Props) => {
+const Stats = ({ address, totalSales, totalEarnings, ethereumEarned, maticEarned, royalties, isLoading, onFetchMetrics }: Props) => {
   useEffect(() => onFetchMetrics(address), [address, onFetchMetrics])
 
   return (
@@ -31,13 +22,7 @@ const Stats = ({
         subtitle={t('sales.total_earnings')}
         value={formatWeiMANA(totalEarnings)}
         isLoading={isLoading}
-        icon={
-          <Icon
-            className="total-earnings-icon"
-            name="shopping bag"
-            size="large"
-          />
-        }
+        icon={<Icon className="total-earnings-icon" name="shopping bag" size="large" />}
       />
       <Stat
         subtitle={t('sales.royalties')}
@@ -49,41 +34,19 @@ const Stats = ({
         subtitle={t('sales.ethereum_earnings')}
         value={formatWeiMANA(ethereumEarned)}
         isLoading={isLoading}
-        icon={
-          <Mana
-            className="ethereum-earnings-icon"
-            network={Network.ETHEREUM}
-            size="large"
-          />
-        }
+        icon={<Mana className="ethereum-earnings-icon" network={Network.ETHEREUM} size="large" />}
       />
       <Stat
         subtitle={t('sales.polygon_earnings')}
         value={formatWeiMANA(maticEarned)}
         isLoading={isLoading}
-        icon={
-          <Mana
-            className="polygon-earnings-icon"
-            network={Network.MATIC}
-            size="medium"
-          />
-        }
+        icon={<Mana className="polygon-earnings-icon" network={Network.MATIC} size="medium" />}
       />
     </div>
   )
 }
 
-const Stat = ({
-  value,
-  subtitle,
-  isLoading,
-  icon
-}: {
-  value: string
-  subtitle: string
-  isLoading: boolean
-  icon: ReactNode
-}) => {
+const Stat = ({ value, subtitle, isLoading, icon }: { value: string; subtitle: string; isLoading: boolean; icon: ReactNode }) => {
   return (
     <div className="Stat">
       {isLoading ? (

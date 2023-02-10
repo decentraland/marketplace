@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Header } from 'decentraland-ui'
-import { Props } from './BidList.types'
 import { Bid } from '../../Bid'
+import { Props } from './BidList.types'
 import './BidList.css'
 
 const BidList = (props: Props) => {
@@ -11,12 +11,7 @@ const BidList = (props: Props) => {
 
   // this is because when you change from one nft detail to another you would still see the previous nft bids
   const filteredBids = useMemo(
-    () =>
-      bids.filter(
-        bid =>
-          bid.contractAddress === nft.contractAddress &&
-          bid.tokenId === nft.tokenId
-      ),
+    () => bids.filter(bid => bid.contractAddress === nft.contractAddress && bid.tokenId === nft.tokenId),
     [nft, bids]
   )
 

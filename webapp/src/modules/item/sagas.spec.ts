@@ -1,24 +1,17 @@
+import { call, select } from 'redux-saga/effects'
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { call, select } from 'redux-saga/effects'
 import { ChainId, Item, Network } from '@dcl/schemas'
-import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import {
-  ManaPurchase,
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
+import { ManaPurchase, NFTPurchase, PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
-import { getWallet } from '../wallet/selectors'
+import { buyAssetWithCard, BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY } from '../asset/utils'
+import { closeModal, openModal } from '../modal/actions'
 import { View } from '../ui/types'
 import { itemAPI } from '../vendor/decentraland/item/api'
-import { closeModal, openModal } from '../modal/actions'
-import {
-  buyAssetWithCard,
-  BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-} from '../asset/utils'
+import { getWallet } from '../wallet/selectors'
 import {
   buyItemRequest,
   buyItemFailure,
@@ -51,8 +44,7 @@ const wallet = {
   address: '0x32be343b94f860124dc4fee278fdcbd38c102d88'
 }
 
-const txHash =
-  '0x9fc518261399c1bd236997706347f8b117a061cef5518073b1c3eefd5efbff84'
+const txHash = '0x9fc518261399c1bd236997706347f8b117a061cef5518073b1c3eefd5efbff84'
 
 const anError = new Error('An error occured')
 
@@ -134,15 +126,7 @@ describe('when handling the buy items with card action', () => {
   describe('when the explanation modal has already been shown', () => {
     it('should open Transak widget', () => {
       return expectSaga(itemSaga)
-        .provide([
-          [
-            call(
-              [localStorage, 'getItem'],
-              BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-            ),
-            null
-          ]
-        ])
+        .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
         .put(openModal('BuyWithCardExplanationModal', { asset: item }))
         .dispatch(buyItemWithCardRequest(item))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
@@ -156,15 +140,7 @@ describe('when handling the buy items with card action', () => {
   describe('when the explanation modal is shown and the user closes it', () => {
     it('should not set the item in the local storage to show the modal again later', () => {
       return expectSaga(itemSaga)
-        .provide([
-          [
-            call(
-              [localStorage, 'getItem'],
-              BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
-            ),
-            null
-          ]
-        ])
+        .provide([[call([localStorage, 'getItem'], BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY), null]])
         .put(openModal('BuyWithCardExplanationModal', { asset: item }))
         .dispatch(buyItemWithCardRequest(item))
         .dispatch(closeModal('BuyWithCardExplanationModal'))
@@ -316,9 +292,7 @@ describe('when handling the fetch items request action', () => {
     const fetchResult = { data: [item], total: 1 }
 
     beforeEach(() => {
-      dateNowSpy = jest
-        .spyOn(Date, 'now')
-        .mockImplementation(() => nowTimestamp)
+      dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => nowTimestamp)
     })
 
     afterEach(() => {
@@ -327,17 +301,8 @@ describe('when handling the fetch items request action', () => {
 
     it('should dispatch a successful action with the fetched items', () => {
       return expectSaga(itemSaga)
-        .provide([
-          [call([itemAPI, 'fetch'], itemBrowseOptions.filters), fetchResult]
-        ])
-        .put(
-          fetchItemsSuccess(
-            fetchResult.data,
-            fetchResult.total,
-            itemBrowseOptions,
-            nowTimestamp
-          )
-        )
+        .provide([[call([itemAPI, 'fetch'], itemBrowseOptions.filters), fetchResult]])
+        .put(fetchItemsSuccess(fetchResult.data, fetchResult.total, itemBrowseOptions, nowTimestamp))
         .dispatch(fetchItemsRequest(itemBrowseOptions))
         .run({ silenceTimeout: true })
     })
@@ -346,12 +311,7 @@ describe('when handling the fetch items request action', () => {
   describe('when the request fails', () => {
     it('should dispatching a failing action with the error and the options', () => {
       return expectSaga(itemSaga)
-        .provide([
-          [
-            call([itemAPI, 'fetch'], itemBrowseOptions.filters),
-            Promise.reject(anError)
-          ]
-        ])
+        .provide([[call([itemAPI, 'fetch'], itemBrowseOptions.filters), Promise.reject(anError)]])
         .put(fetchItemsFailure(anError.message, itemBrowseOptions))
         .dispatch(fetchItemsRequest(itemBrowseOptions))
         .run({ silenceTimeout: true })
@@ -362,12 +322,7 @@ describe('when handling the fetch items request action', () => {
     describe('when the request is successful', () => {
       it('should dispatch a successful action with the fetched items', () => {
         return expectSaga(itemSaga)
-          .provide([
-            [
-              call([itemAPI, 'fetchOne'], item.contractAddress, item.itemId),
-              item
-            ]
-          ])
+          .provide([[call([itemAPI, 'fetchOne'], item.contractAddress, item.itemId), item]])
           .put(fetchItemSuccess(item))
           .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
           .run({ silenceTimeout: true })
@@ -377,15 +332,8 @@ describe('when handling the fetch items request action', () => {
     describe('when the request fails', () => {
       it('should dispatching a failing action with the contract address, the token id and the error message', () => {
         return expectSaga(itemSaga)
-          .provide([
-            [
-              call([itemAPI, 'fetchOne'], item.contractAddress, item.itemId),
-              Promise.reject(anError)
-            ]
-          ])
-          .put(
-            fetchItemFailure(item.contractAddress, item.itemId, anError.message)
-          )
+          .provide([[call([itemAPI, 'fetchOne'], item.contractAddress, item.itemId), Promise.reject(anError)]])
+          .put(fetchItemFailure(item.contractAddress, item.itemId, anError.message))
           .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
           .run({ silenceTimeout: true })
       })
@@ -400,9 +348,7 @@ describe('when handling the fetch trending items request action', () => {
     const fetchResult = { data: [item], total: 1 }
 
     beforeEach(() => {
-      dateNowSpy = jest
-        .spyOn(Date, 'now')
-        .mockImplementation(() => nowTimestamp)
+      dateNowSpy = jest.spyOn(Date, 'now').mockImplementation(() => nowTimestamp)
     })
 
     afterEach(() => {
@@ -421,12 +367,7 @@ describe('when handling the fetch trending items request action', () => {
   describe('when the request fails', () => {
     it('should dispatching a failing action with the error and the options', () => {
       return expectSaga(itemSaga)
-        .provide([
-          [
-            call([itemAPI, 'fetchTrendings'], undefined),
-            Promise.reject(anError)
-          ]
-        ])
+        .provide([[call([itemAPI, 'fetchTrendings'], undefined), Promise.reject(anError)]])
         .put(fetchTrendingItemsFailure(anError.message))
         .dispatch(fetchTrendingItemsRequest())
         .run({ silenceTimeout: true })

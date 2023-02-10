@@ -1,127 +1,84 @@
+import { getSearch as getRouterSearch, getLocation } from 'connected-react-router'
 import { createSelector } from 'reselect'
-import {
-  getSearch as getRouterSearch,
-  getLocation
-} from 'connected-react-router'
-import {
-  EmotePlayMode,
-  GenderFilterOption,
-  Network,
-  Rarity
-} from '@dcl/schemas'
+import { EmotePlayMode, GenderFilterOption, Network, Rarity } from '@dcl/schemas'
+import { getAddress as getAccountAddress } from '../account/selectors'
+import { AssetType } from '../asset/types'
+import { RootState } from '../reducer'
 import { getView } from '../ui/browse/selectors'
 import { View } from '../ui/types'
+import { isLandSection } from '../ui/utils'
+import { Section, Sections } from '../vendor/routing/types'
 import { VendorName } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
-import { Section, Sections } from '../vendor/routing/types'
-import { RootState } from '../reducer'
-import {
-  getDefaultOptionsByView,
-  getURLParamArray,
-  getURLParam,
-  getURLParamArray_nonStandard
-} from './search'
-import { BrowseOptions, SortBy } from './types'
-import { locations } from './locations'
-import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
-import { getAddress as getAccountAddress } from '../account/selectors'
-import { isLandSection } from '../ui/utils'
+import { locations } from './locations'
+import { getDefaultOptionsByView, getURLParamArray, getURLParam, getURLParamArray_nonStandard } from './search'
+import { BrowseOptions, SortBy } from './types'
 
 export const getState = (state: RootState) => state.routing
 
-const getPathName = createSelector<
-  RootState,
-  ReturnType<typeof getLocation>,
-  string
->(getLocation, location => location.pathname)
+const getPathName = createSelector<RootState, ReturnType<typeof getLocation>, string>(getLocation, location => location.pathname)
 
-export const getVendor = createSelector<RootState, string, VendorName>(
-  getRouterSearch,
-  search => {
-    const vendor = getURLParam<VendorName>(search, 'vendor')
-    if (vendor && isVendor(vendor)) {
-      return vendor
-    }
-    return VendorName.DECENTRALAND
+export const getVendor = createSelector<RootState, string, VendorName>(getRouterSearch, search => {
+  const vendor = getURLParam<VendorName>(search, 'vendor')
+  if (vendor && isVendor(vendor)) {
+    return vendor
   }
-)
-
-export const getSection = createSelector<
-  RootState,
-  string,
-  ReturnType<typeof getPathName>,
-  VendorName,
-  Section
->(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
-  const section = getURLParam<string>(search, 'section') ?? ''
-  if (!section && pathname === locations.lands()) {
-    return Sections.decentraland.LAND
-  }
-
-  if (
-    (!section || section === Sections[vendor].ALL) &&
-    pathname === locations.browse() &&
-    vendor === VendorName.DECENTRALAND
-  ) {
-    return Sections.decentraland.WEARABLES
-  }
-
-  if (!section || !(section.toUpperCase() in Sections[vendor])) {
-    return Sections[vendor].ALL
-  }
-
-  return section as Section
+  return VendorName.DECENTRALAND
 })
 
-export const getPage = createSelector<RootState, string, number>(
+export const getSection = createSelector<RootState, string, ReturnType<typeof getPathName>, VendorName, Section>(
   getRouterSearch,
-  search => {
-    const page = getURLParam(search, 'page')
-    return page === null || isNaN(+page) ? 1 : +page
+  getPathName,
+  getVendor,
+  (search, pathname, vendor) => {
+    const section = getURLParam<string>(search, 'section') ?? ''
+    if (!section && pathname === locations.lands()) {
+      return Sections.decentraland.LAND
+    }
+
+    if ((!section || section === Sections[vendor].ALL) && pathname === locations.browse() && vendor === VendorName.DECENTRALAND) {
+      return Sections.decentraland.WEARABLES
+    }
+
+    if (!section || !(section.toUpperCase() in Sections[vendor])) {
+      return Sections[vendor].ALL
+    }
+
+    return section as Section
   }
 )
 
-export const getSortBy = createSelector<
-  RootState,
-  string,
-  View | undefined,
-  Section,
-  SortBy | undefined
->(
+export const getPage = createSelector<RootState, string, number>(getRouterSearch, search => {
+  const page = getURLParam(search, 'page')
+  return page === null || isNaN(+page) ? 1 : +page
+})
+
+export const getSortBy = createSelector<RootState, string, View | undefined, Section, SortBy | undefined>(
   getRouterSearch,
   getView,
   getSection,
-  (search, view, section) =>
-    getURLParam<SortBy>(search, 'sortBy') ||
-    getDefaultOptionsByView(view, section).sortBy
+  (search, view, section) => getURLParam<SortBy>(search, 'sortBy') || getDefaultOptionsByView(view, section).sortBy
 )
 
-export const getOnlyOnSale = createSelector<
-  RootState,
-  string,
-  View | undefined,
-  Section | undefined,
-  boolean | undefined
->(getRouterSearch, getView, getSection, (search, view, section) => {
-  const onlyOnSale = getURLParam(search, 'onlyOnSale')
-  switch (onlyOnSale) {
-    case 'true':
-      return true
-    case 'false':
-      return false
-    default:
-      return isLandSection(section)
-        ? undefined
-        : getDefaultOptionsByView(view).onlyOnSale!
+export const getOnlyOnSale = createSelector<RootState, string, View | undefined, Section | undefined, boolean | undefined>(
+  getRouterSearch,
+  getView,
+  getSection,
+  (search, view, section) => {
+    const onlyOnSale = getURLParam(search, 'onlyOnSale')
+    switch (onlyOnSale) {
+      case 'true':
+        return true
+      case 'false':
+        return false
+      default:
+        return isLandSection(section) ? undefined : getDefaultOptionsByView(view).onlyOnSale!
+    }
   }
-})
+)
 
-export const getOnlyOnRent = createSelector<
-  RootState,
-  string,
-  boolean | undefined
->(getRouterSearch, search => {
+export const getOnlyOnRent = createSelector<RootState, string, boolean | undefined>(getRouterSearch, search => {
   const onlyOnRent = getURLParam(search, 'onlyOnRent')
   switch (onlyOnRent) {
     case 'true':
@@ -133,110 +90,69 @@ export const getOnlyOnRent = createSelector<
   }
 })
 
-export const getIsSoldOut = createSelector<
-  RootState,
-  string,
-  boolean | undefined
->(getRouterSearch, search => {
+export const getIsSoldOut = createSelector<RootState, string, boolean | undefined>(getRouterSearch, search => {
   const isSoldOut = getURLParam(search, 'isSoldOut')
   return isSoldOut === 'true'
 })
 
-export const getIsMap = createSelector<RootState, string, boolean | undefined>(
-  getRouterSearch,
-  search => {
-    const isMap = getURLParam(search, 'isMap')
-    return isMap === null ? undefined : isMap === 'true'
-  }
-)
-
-export const getItemId = createSelector<RootState, string, string | undefined>(
-  getRouterSearch,
-  search => {
-    const itemId = getURLParam(search, 'isSoldOut')
-    return itemId ? itemId : undefined
-  }
-)
-
-export const getIsFullscreen = createSelector<
-  RootState,
-  string,
-  boolean | undefined,
-  boolean | undefined
->(getRouterSearch, getIsMap, (search, isMap) => {
-  const isFullscreen = getURLParam(search, 'isFullscreen')
-  return isFullscreen === null ? undefined : isMap && isFullscreen === 'true'
+export const getIsMap = createSelector<RootState, string, boolean | undefined>(getRouterSearch, search => {
+  const isMap = getURLParam(search, 'isMap')
+  return isMap === null ? undefined : isMap === 'true'
 })
 
-export const getRarities = createSelector<RootState, string, Rarity[]>(
+export const getItemId = createSelector<RootState, string, string | undefined>(getRouterSearch, search => {
+  const itemId = getURLParam(search, 'isSoldOut')
+  return itemId ? itemId : undefined
+})
+
+export const getIsFullscreen = createSelector<RootState, string, boolean | undefined, boolean | undefined>(
   getRouterSearch,
-  search =>
-    getURLParamArray_nonStandard<Rarity>(
-      search,
-      'rarities',
-      Object.values(Rarity).filter(
-        value => typeof value === 'string'
-      ) as string[]
-    )
+  getIsMap,
+  (search, isMap) => {
+    const isFullscreen = getURLParam(search, 'isFullscreen')
+    return isFullscreen === null ? undefined : isMap && isFullscreen === 'true'
+  }
 )
 
-export const getWearableGenders = createSelector<
-  RootState,
-  string,
-  GenderFilterOption[]
->(getRouterSearch, search =>
-  getURLParamArray_nonStandard<GenderFilterOption>(
-    search,
-    'genders',
-    Object.values(GenderFilterOption)
-  )
+export const getRarities = createSelector<RootState, string, Rarity[]>(getRouterSearch, search =>
+  getURLParamArray_nonStandard<Rarity>(search, 'rarities', Object.values(Rarity).filter(value => typeof value === 'string') as string[])
 )
 
-export const getContracts = createSelector<RootState, string, string[]>(
-  getRouterSearch,
-  search => getURLParamArray<string>(search, 'contracts')
+export const getWearableGenders = createSelector<RootState, string, GenderFilterOption[]>(getRouterSearch, search =>
+  getURLParamArray_nonStandard<GenderFilterOption>(search, 'genders', Object.values(GenderFilterOption))
 )
 
-export const getSearch = createSelector<RootState, string, string>(
-  getRouterSearch,
-  search => getURLParam(search, 'search') || ''
+export const getContracts = createSelector<RootState, string, string[]>(getRouterSearch, search =>
+  getURLParamArray<string>(search, 'contracts')
 )
 
-export const getNetwork = createSelector<
-  RootState,
-  string,
-  Network | undefined
->(
+export const getSearch = createSelector<RootState, string, string>(getRouterSearch, search => getURLParam(search, 'search') || '')
+
+export const getNetwork = createSelector<RootState, string, Network | undefined>(
   getRouterSearch,
   search => (getURLParam(search, 'network') as Network) || undefined
 )
 
-export const getAssetType = createSelector<
-  RootState,
-  string,
-  string,
-  VendorName,
-  AssetType
->(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
-  let assetTypeParam = getURLParam(search, 'assetType') ?? ''
-
-  if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
-    if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
-      return AssetType.ITEM
-    }
-    return AssetType.NFT
-  }
-  return assetTypeParam as AssetType
-})
-
-export const getEmotePlayMode = createSelector<
-  RootState,
-  string,
-  EmotePlayMode[] | undefined
->(
+export const getAssetType = createSelector<RootState, string, string, VendorName, AssetType>(
   getRouterSearch,
-  search =>
-    getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
+  getPathName,
+  getVendor,
+  (search, pathname, vendor) => {
+    const assetTypeParam = getURLParam(search, 'assetType') ?? ''
+
+    if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
+      if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
+        return AssetType.ITEM
+      }
+      return AssetType.NFT
+    }
+    return assetTypeParam as AssetType
+  }
+)
+
+export const getEmotePlayMode = createSelector<RootState, string, EmotePlayMode[] | undefined>(
+  getRouterSearch,
+  search => getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
 )
 
 export const getViewAsGuest = createSelector<RootState, string, boolean>(
@@ -258,13 +174,7 @@ export const getMaxPrice = createSelector<RootState, string, string>(
   search => (getURLParam(search, 'maxPrice') as string) || ''
 )
 
-export const getCurrentLocationAddress = createSelector<
-  RootState,
-  string,
-  string | undefined,
-  string | undefined,
-  string | undefined
->(
+export const getCurrentLocationAddress = createSelector<RootState, string, string | undefined, string | undefined, string | undefined>(
   getPathName,
   getWalletAddress,
   getAccountAddress,
@@ -281,12 +191,7 @@ export const getCurrentLocationAddress = createSelector<
   }
 )
 
-export const getPaginationUrlParams = createSelector(
-  getPage,
-  getSortBy,
-  getSearch,
-  (page, sortBy, search) => ({ page, sortBy, search })
-)
+export const getPaginationUrlParams = createSelector(getPage, getSortBy, getSearch, (page, sortBy, search) => ({ page, sortBy, search }))
 
 export const getAssetsUrlParams = createSelector(
   getOnlyOnSale,
@@ -303,11 +208,7 @@ export const getAssetsUrlParams = createSelector(
   })
 )
 
-export const getLandsUrlParams = createSelector(
-  getIsMap,
-  getIsFullscreen,
-  (isMap, isFullscreen) => ({ isMap, isFullscreen })
-)
+export const getLandsUrlParams = createSelector(getIsMap, getIsFullscreen, (isMap, isFullscreen) => ({ isMap, isFullscreen }))
 
 export const getWearablesUrlParams = createSelector(
   getRarities,
@@ -371,33 +272,14 @@ export const getCurrentBrowseOptions = createSelector(
     } as BrowseOptions)
 )
 
-export const hasFiltersEnabled = createSelector<
-  RootState,
-  BrowseOptions,
-  boolean
->(getCurrentBrowseOptions, browseOptions => {
-  const {
-    network,
-    wearableGenders,
-    rarities,
-    contracts,
-    emotePlayMode,
-    onlyOnRent,
-    onlyOnSale,
-    minPrice,
-    maxPrice,
-    section
-  } = browseOptions
+export const hasFiltersEnabled = createSelector<RootState, BrowseOptions, boolean>(getCurrentBrowseOptions, browseOptions => {
+  const { network, wearableGenders, rarities, contracts, emotePlayMode, onlyOnRent, onlyOnSale, minPrice, maxPrice, section } =
+    browseOptions
   const isLand = isLandSection(section as Section)
   if (isLand) {
     const hasOnSaleFilter = onlyOnSale === true
     const hasOnRentFilter = onlyOnRent === true
-    return (
-      (hasOnSaleFilter && !hasOnRentFilter) ||
-      (hasOnRentFilter && !hasOnSaleFilter) ||
-      !!minPrice ||
-      !!maxPrice
-    )
+    return (hasOnSaleFilter && !hasOnRentFilter) || (hasOnRentFilter && !hasOnSaleFilter) || !!minPrice || !!maxPrice
   }
 
   const hasNetworkFilter = network !== undefined
@@ -419,10 +301,7 @@ export const hasFiltersEnabled = createSelector<
   )
 })
 
-export const getIsBuyWithCardPage = createSelector<RootState, string, boolean>(
-  getRouterSearch,
-  search => {
-    const withCard = getURLParam(search, 'withCard')
-    return withCard !== null && withCard === 'true'
-  }
-)
+export const getIsBuyWithCardPage = createSelector<RootState, string, boolean>(getRouterSearch, search => {
+  const withCard = getURLParam(search, 'withCard')
+  return withCard !== null && withCard === 'true'
+})

@@ -1,10 +1,4 @@
-import {
-  fetchStoreFailure,
-  fetchStoreRequest,
-  fetchStoreSuccess,
-  revertLocalStore,
-  updateLocalStore
-} from './actions'
+import { fetchStoreFailure, fetchStoreRequest, fetchStoreSuccess, revertLocalStore, updateLocalStore } from './actions'
 import { StoreState, storeReducer } from './reducer'
 import { Store } from './types'
 

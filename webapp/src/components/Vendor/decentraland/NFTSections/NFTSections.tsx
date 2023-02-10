@@ -1,9 +1,9 @@
 import React from 'react'
-import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Header } from 'decentraland-ui'
 import { Menu } from '../../../Menu'
-import { Props } from './NFTSections.types'
 import NFTSectionsMenuItems from './NFTSectionsMenuItems'
+import { Props } from './NFTSections.types'
 
 const NFTSections = (props: Props) => {
   return (

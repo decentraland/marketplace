@@ -1,5 +1,5 @@
-import { Network } from '@dcl/schemas'
 import { call, takeEvery, put, all } from '@redux-saga/core/effects'
+import { Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isErrorWithMessage } from '../../lib/error'
 import { accountAPI } from '../vendor/decentraland'
@@ -12,15 +12,10 @@ import {
 } from './actions'
 
 export function* accountSaga() {
-  yield takeEvery(
-    FETCH_ACCOUNT_METRICS_REQUEST,
-    handleFetchAccountMetricsRequest
-  )
+  yield takeEvery(FETCH_ACCOUNT_METRICS_REQUEST, handleFetchAccountMetricsRequest)
 }
 
-export function* handleFetchAccountMetricsRequest(
-  action: FetchAccountMetricsRequestAction
-) {
+export function* handleFetchAccountMetricsRequest(action: FetchAccountMetricsRequestAction) {
   const { filters } = action.payload
 
   try {
@@ -42,11 +37,6 @@ export function* handleFetchAccountMetricsRequest(
       })
     )
   } catch (error) {
-    yield put(
-      fetchAccountMetricsFailure(
-        filters,
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
+    yield put(fetchAccountMetricsFailure(filters, isErrorWithMessage(error) ? error.message : t('global.unknown_error')))
   }
 }

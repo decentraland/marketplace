@@ -1,6 +1,5 @@
-import classNames from 'classnames'
 import React, { useCallback, useEffect, useState } from 'react'
-
+import classNames from 'classnames'
 import { MenuItem } from '../../Menu/MenuItem'
 import { Props } from './DropdownMenu.types'
 
@@ -8,13 +7,16 @@ const DropdownMenu = <T extends unknown>(props: Props<T>) => {
   const { values, currentValue, onMenuItemClick } = props
   const [isDropdownOpen, setIsDropdownOpen] = useState(currentValue && values.includes(currentValue))
 
-  const handleMenuItemClick = useCallback((value: T) => {
-    if (value === values[0]) {
-      setIsDropdownOpen(!isDropdownOpen);
-    }
+  const handleMenuItemClick = useCallback(
+    (value: T) => {
+      if (value === values[0]) {
+        setIsDropdownOpen(!isDropdownOpen)
+      }
 
-    onMenuItemClick(value);
-  }, [values, isDropdownOpen, onMenuItemClick])
+      onMenuItemClick(value)
+    },
+    [values, isDropdownOpen, onMenuItemClick]
+  )
 
   useEffect(() => {
     if (!currentValue || !values.includes(currentValue)) {
@@ -33,17 +35,11 @@ const DropdownMenu = <T extends unknown>(props: Props<T>) => {
         className={classNames({ open: isDropdownOpen })}
       />
       <ul className="submenu">
-        {values.includes(currentValue!) && isDropdownOpen
+        {values.includes(currentValue) && isDropdownOpen
           ? values
               .slice(1)
               .map((value, index) => (
-                <MenuItem<T>
-                  key={index}
-                  value={value}
-                  currentValue={currentValue}
-                  onClick={handleMenuItemClick}
-                  nestedLevel={2}
-                />
+                <MenuItem<T> key={index} value={value} currentValue={currentValue} onClick={handleMenuItemClick} nestedLevel={2} />
               ))
           : null}
       </ul>

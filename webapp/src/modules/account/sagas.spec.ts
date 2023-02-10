@@ -1,13 +1,9 @@
-import { Account, AccountFilters, Network } from '@dcl/schemas'
-import { expectSaga } from 'redux-saga-test-plan'
 import { call } from 'redux-saga/effects'
+import { expectSaga } from 'redux-saga-test-plan'
+import { Account, AccountFilters, Network } from '@dcl/schemas'
 import { accountAPI } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
-import {
-  fetchAccountMetricsFailure,
-  fetchAccountMetricsRequest,
-  fetchAccountMetricsSuccess
-} from './actions'
+import { fetchAccountMetricsFailure, fetchAccountMetricsRequest, fetchAccountMetricsSuccess } from './actions'
 import { accountSaga } from './sagas'
 
 let account: Account
@@ -49,10 +45,7 @@ describe('when handling the request to fetch account metrics', () => {
       it('should signal that the request has failed with the request error', () => {
         return expectSaga(accountSaga)
           .provide([
-            [
-              call([accountAPI, accountAPI.fetch], ethereumFilters),
-              Promise.reject(new Error(error))
-            ],
+            [call([accountAPI, accountAPI.fetch], ethereumFilters), Promise.reject(new Error(error))],
             [
               call([accountAPI, accountAPI.fetch], maticFilters),
               {
@@ -78,10 +71,7 @@ describe('when handling the request to fetch account metrics', () => {
                 total: 10
               } as AccountResponse
             ],
-            [
-              call([accountAPI, accountAPI.fetch], maticFilters),
-              Promise.reject(new Error(error))
-            ]
+            [call([accountAPI, accountAPI.fetch], maticFilters), Promise.reject(new Error(error))]
           ])
           .put(fetchAccountMetricsFailure(filters, error))
           .dispatch(fetchAccountMetricsRequest(filters))

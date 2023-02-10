@@ -1,8 +1,5 @@
 import { ChainId, Item, Order, RentalListing, RentalStatus } from '@dcl/schemas'
-import {
-  Transaction,
-  TransactionStatus
-} from 'decentraland-dapps/dist/modules/transaction/types'
+import { Transaction, TransactionStatus } from 'decentraland-dapps/dist/modules/transaction/types'
 import { NFT } from '../../nft/types'
 import { RootState } from '../../reducer'
 import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
@@ -187,18 +184,13 @@ describe('when getting the NFTs on rent by lessor', () => {
 
 describe('when getting the NFTs on rent by tenant', () => {
   it('should get all the NFTs rented by the given tenant', () => {
-    expect(getOnRentNFTsByTenant(rootState, address)).toEqual([
-      [nftWithExecutedRentByTenant, rentalExecutedByTenant]
-    ])
+    expect(getOnRentNFTsByTenant(rootState, address)).toEqual([[nftWithExecutedRentByTenant, rentalExecutedByTenant]])
   })
 })
 
 describe('when getting the Elements on sale of the ui browse state', () => {
   it('should retrieve the NFTs on sale of the ui browse state', () => {
-    expect(getOnSaleElements(rootState)).toStrictEqual([
-      itemOnSale,
-      [nftOnSale, order]
-    ])
+    expect(getOnSaleElements(rootState)).toStrictEqual([itemOnSale, [nftOnSale, order]])
   })
 })
 
@@ -214,7 +206,7 @@ describe('when getting if the claiming back transaction is pending', () => {
   beforeEach(() => {
     nft = { id: '567', tokenId, contractAddress, chainId } as NFT
 
-    state = ({
+    state = {
       wallet: {
         data: {
           address: null
@@ -223,7 +215,7 @@ describe('when getting if the claiming back transaction is pending', () => {
       transaction: {
         data: [] as Transaction[]
       }
-    } as unknown) as RootState
+    } as unknown as RootState
   })
 
   describe('and there is no address', () => {
@@ -242,7 +234,7 @@ describe('when getting if the claiming back transaction is pending', () => {
       state.transaction.data = []
     })
 
-    it('should return false ', () => {
+    it('should return false', () => {
       expect(isClaimingBackLandTransactionPending(state, nft)).toBeFalsy()
     })
   })
@@ -292,9 +284,7 @@ describe('when getting if the claiming back transaction is pending', () => {
       })
 
       it(`should return ${element.expectedResult}`, () => {
-        expect(isClaimingBackLandTransactionPending(state, nft)).toBe(
-          element.expectedResult
-        )
+        expect(isClaimingBackLandTransactionPending(state, nft)).toBe(element.expectedResult)
       })
     })
   })

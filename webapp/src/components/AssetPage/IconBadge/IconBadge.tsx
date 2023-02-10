@@ -4,22 +4,11 @@ import classNames from 'classnames'
 import { Props } from './IconBadge.types'
 import './IconBadge.css'
 
-const IconBadge = ({
-  icon,
-  text,
-  onClick,
-  href,
-  className,
-  children
-}: Props) => {
+const IconBadge = ({ icon, text, onClick, href, className, children }: Props) => {
   const childrenInt = React.useMemo(
     () => (
       <>
-        {children ? (
-          <span className="custom-icon">{children}</span>
-        ) : (
-          <span className={classNames(icon && 'icon', icon)} />
-        )}
+        {children ? <span className="custom-icon">{children}</span> : <span className={classNames(icon && 'icon', icon)} />}
         <span className="text">{text}</span>
       </>
     ),
@@ -27,11 +16,7 @@ const IconBadge = ({
   )
 
   return href ? (
-    <Link
-      className={classNames('IconBadge', className)}
-      onClick={onClick}
-      to={href}
-    >
+    <Link className={classNames('IconBadge', className)} onClick={onClick} to={href}>
       {childrenInt}
     </Link>
   ) : (
