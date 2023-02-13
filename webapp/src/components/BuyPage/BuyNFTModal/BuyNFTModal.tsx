@@ -199,7 +199,7 @@ const BuyNFTModal = (props: Props) => {
           }}
         </AssetProviderPage>
       ) : null}
-      {hasLowPrice ? (
+      {hasLowPrice && !isBuyWithCardPage ? (
         <PriceTooLow chainId={nft.chainId} network={nft.network} />
       ) : null}
       <div
