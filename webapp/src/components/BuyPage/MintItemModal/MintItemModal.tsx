@@ -200,7 +200,7 @@ const MintItemModal = (props: Props) => {
           }}
         </AssetProviderPage>
       ) : null}
-      {hasLowPrice ? (
+      {hasLowPrice && !isBuyWithCardPage ? (
         <PriceTooLow chainId={item.chainId} network={item.network} />
       ) : null}
       <div
