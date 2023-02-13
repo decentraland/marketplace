@@ -268,6 +268,21 @@ export const getMaxEstateSize = createSelector<RootState, string, string>(
   search => (getURLParam(search, 'maxEstateSize') as string) || ''
 )
 
+export const getMinDistanceToPlaza = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'minDistanceToPlaza') as string) || ''
+)
+
+export const getMaxDistanceToPlaza = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => (getURLParam(search, 'maxDistanceToPlaza') as string) || ''
+)
+
+export const getAdjacentToRoad = createSelector<RootState, string, boolean>(
+  getRouterSearch,
+  search => getURLParam(search, 'adjacentToRoad') === 'true'
+)
+
 export const getCurrentLocationAddress = createSelector<
   RootState,
   string,
@@ -318,11 +333,25 @@ export const getLandsUrlParams = createSelector(
   getIsFullscreen,
   getMinEstateSize,
   getMaxEstateSize,
-  (isMap, isFullscreen, minEstateSize, maxEstateSize) => ({
+  getMinDistanceToPlaza,
+  getMaxDistanceToPlaza,
+  getAdjacentToRoad,
+  (
     isMap,
     isFullscreen,
     minEstateSize,
-    maxEstateSize
+    maxEstateSize,
+    minDistanceToPlaza,
+    maxDistanceToPlaza,
+    adjacentToRoad
+  ) => ({
+    isMap,
+    isFullscreen,
+    minEstateSize,
+    maxEstateSize,
+    minDistanceToPlaza,
+    maxDistanceToPlaza,
+    adjacentToRoad
   })
 )
 
@@ -405,7 +434,10 @@ export const hasFiltersEnabled = createSelector<
     maxPrice,
     minEstateSize,
     maxEstateSize,
-    section
+    section,
+    minDistanceToPlaza,
+    maxDistanceToPlaza,
+    adjacentToRoad
   } = browseOptions
   const isLand = isLandSection(section as Section)
   if (isLand) {
@@ -417,7 +449,10 @@ export const hasFiltersEnabled = createSelector<
       !!minPrice ||
       !!maxPrice ||
       !!minEstateSize ||
-      !!maxEstateSize
+      !!maxEstateSize ||
+      !!minDistanceToPlaza ||
+      !!maxDistanceToPlaza ||
+      !!adjacentToRoad
     )
   }
 

@@ -3,11 +3,14 @@ import { Dispatch } from 'redux'
 import { RootState } from '../../modules/reducer'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import {
+  getAdjacentToRoad,
   getAssetType,
   getContracts,
   getEmotePlayMode,
+  getMaxDistanceToPlaza,
   getMaxEstateSize,
   getMaxPrice,
+  getMinDistanceToPlaza,
   getMinEstateSize,
   getMinPrice,
   getNetwork,
@@ -75,7 +78,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     view: getView(state),
     section,
     isPriceFilterEnabled: getIsPriceFilterEnabled(state),
-    isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state)
+    isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),
+    minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
+    maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
+    adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state)
   }
 }
 

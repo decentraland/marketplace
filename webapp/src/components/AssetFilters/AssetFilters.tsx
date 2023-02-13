@@ -24,6 +24,7 @@ import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
+import { LocationFilter } from './LocationFilter/LocationFilter'
 
 export const AssetFilters = ({
   minPrice,
@@ -45,6 +46,9 @@ export const AssetFilters = ({
   onBrowse,
   isPriceFilterEnabled,
   isEstateSizeFilterEnabled,
+  minDistanceToPlaza,
+  maxDistanceToPlaza,
+  adjacentToRoad,
   values
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
@@ -109,6 +113,23 @@ export const AssetFilters = ({
     [onBrowse]
   )
 
+  const handleAdjacentToRoadChange = useCallback(
+    (value?: boolean) => {
+      onBrowse({ adjacentToRoad: value })
+    },
+    [onBrowse]
+  )
+
+  const handleDistanceToPlazaChange = useCallback(
+    (distanceToPlazaRange?: [string, string]) => {
+      if (distanceToPlazaRange) {
+        const [minDistanceToPlaza, maxDistanceToPlaza] = distanceToPlazaRange
+        onBrowse({ minDistanceToPlaza, maxDistanceToPlaza })
+      }
+    },
+    [onBrowse]
+  )
+
   function handleCollectionChange(value: string | undefined) {
     const newValue = value ? [value] : []
     onBrowse({ contracts: newValue })
@@ -169,6 +190,13 @@ export const AssetFilters = ({
             }
           />
         ) : null}
+        <LocationFilter
+          minDistanceToPlaza={minDistanceToPlaza}
+          maxDistanceToPlaza={maxDistanceToPlaza}
+          adjacentToRoad={adjacentToRoad}
+          onAdjacentToRoadChange={handleAdjacentToRoadChange}
+          onDistanceToPlazaChange={handleDistanceToPlazaChange}
+        />
       </div>
     )
   }

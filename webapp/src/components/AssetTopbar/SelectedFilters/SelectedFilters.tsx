@@ -31,7 +31,10 @@ export const SelectedFilters = ({
     maxPrice,
     onlyOnRent,
     minEstateSize,
-    maxEstateSize
+    maxEstateSize,
+    adjacentToRoad,
+    minDistanceToPlaza,
+    maxDistanceToPlaza
   } = browseOptions
   const [collection, setCollection] = useState<
     Record<string, string> | undefined
@@ -120,6 +123,14 @@ export const SelectedFilters = ({
     onBrowse({ onlyOnRent: undefined, onlyOnSale: undefined })
   }, [onBrowse])
 
+  const handleDeleteDistanceToPlaza = useCallback(() => {
+    onBrowse({ minDistanceToPlaza: undefined, maxDistanceToPlaza: undefined })
+  }, [onBrowse])
+
+  const handleDeleteAdjacentToRoad = useCallback(() => {
+    onBrowse({ adjacentToRoad: undefined })
+  }, [onBrowse])
+
   return (
     <div className={styles.pillContainer}>
       {rarities?.map(rarity => (
@@ -190,6 +201,20 @@ export const SelectedFilters = ({
           id="land_filter"
         />
       ) : null}
+      {adjacentToRoad ? (
+        <Pill
+          label={t('nft_filters.adjacent_to_road')}
+          onDelete={handleDeleteAdjacentToRoad}
+          id="adjacent-to-road"
+        />
+      ): null}
+      {minDistanceToPlaza || maxDistanceToPlaza ? (
+        <Pill
+          label={t('nft_filters.distance_to_plaza.selection', { from: minDistanceToPlaza, to: maxDistanceToPlaza })}
+          onDelete={handleDeleteDistanceToPlaza}
+          id="distance-to-plaza"
+        />
+      ): null}
     </div>
   )
 }

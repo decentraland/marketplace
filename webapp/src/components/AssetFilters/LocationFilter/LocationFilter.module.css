@@ -1,0 +1,16 @@
+.checkboxFilter {
+  margin-bottom: 25px;
+}
+
+.slider {
+  margin-top: 20px;
+}
+
+.slider p {
+  color: var(--secondary-text);
+}
+
+.locationContainer {
+  display: flex;
+  flex-direction: column;
+}

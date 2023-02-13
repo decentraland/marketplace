@@ -59,4 +59,7 @@ export type BrowseOptions = {
   maxPrice?: string
   minEstateSize?: string
   maxEstateSize?: string
+  minDistanceToPlaza?: string
+  maxDistanceToPlaza?: string
+  adjacentToRoad?: boolean
 }

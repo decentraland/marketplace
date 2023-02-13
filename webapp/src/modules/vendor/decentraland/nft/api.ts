@@ -36,6 +36,7 @@ class NFTAPI extends BaseAPI {
     params: NFTsFetchParams,
     filters?: NFTsFetchFilters
   ): Promise<NFTResponse> => {
+    console.log({ filtersFetch: filters })
     const queryParams = this.buildNFTQueryString(params, filters)
     return this.request('get', `/nfts?${queryParams}`)
   }
@@ -175,6 +176,18 @@ class NFTAPI extends BaseAPI {
     if (filters.maxEstateSize) {
       queryParams.append('maxEstateSize', filters.maxEstateSize)
     }
+
+    if (filters.minDistanceToPlaza) {
+      queryParams.append('minDistanceToPlaza', filters.minDistanceToPlaza)
+    }
+
+    if (filters.maxDistanceToPlaza) {
+      queryParams.append('maxDistanceToPlaza', filters.maxDistanceToPlaza)
+    }
+
+    if (filters.adjacentToRoad) {
+      queryParams.append('adjacentToRoad', 'true')
+    }
   }
 
   private buildNFTQueryString(
@@ -203,6 +216,7 @@ class NFTAPI extends BaseAPI {
       queryParams.set('search', params.search)
     }
     if (filters) {
+      console.log({ filters })
       this.appendNFTFiltersToQueryParams(queryParams, filters)
     }
 
