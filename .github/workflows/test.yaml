@@ -17,4 +17,10 @@ jobs:
       - name: Install
         run: npm ci --legacy-peer-deps
       - name: Test
-        run: npm run test
+        run: npm run test:coverage
+      - name: report coverage
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          base-path: ./webapp
+          path-to-lcov: ./webapp/coverage/lcov.info
