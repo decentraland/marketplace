@@ -4,7 +4,7 @@ import { NFTCategory } from '@dcl/schemas/dist/dapps/nft-category'
 import { Button, Header, Loader, Page } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
-import { Sections } from '../../../modules/routing/types'
+import { BrowseOptions, Sections } from '../../../modules/routing/types'
 import { locations } from '../../../modules/routing/locations'
 import { AssetImage } from '../../AssetImage'
 import { AssetProviderPage } from '../../AssetProviderPage'
@@ -27,58 +27,58 @@ const StatusPage = ({ type, purchase }: Props) => {
       <Navbar isFullscreen />
       <Page className="StatusPage">
         <AssetProviderPage type={type}>
-          {asset => (
-            <div className="Status">
-              <Row>
-                <Column align="center">
-                  <div className="asset-image-wrapper">
-                    <AssetImage asset={asset} zoom={1} />
-                  </div>
-                  <Header className="title" size="large">
-                    {t(`asset_purchase_with_card_${status}_page.title`)}
-                  </Header>
-                  {status === PurchaseStatus.PENDING ? (
-                    <div className="status-wrapper">
-                      <Loader size="small" active inline />
-                      <p className="status">
-                        {t(`asset_purchase_with_card_${status}_page.status`)}
-                      </p>
+          {asset => {
+            const browserOptions: BrowseOptions = {
+              assetType: type,
+              section: asset.category === NFTCategory.EMOTE ? EMOTES : WEARABLES
+            }
+            return (
+              <div className="Status">
+                <Row>
+                  <Column align="center">
+                    <div className="asset-image-wrapper">
+                      <AssetImage asset={asset} zoom={1} />
                     </div>
-                  ) : null}
-                  <p className="description">
-                    {t(`asset_purchase_with_card_${status}_page.description`, {
-                      activity: (
-                        <a href={locations.activity()}>
-                          {t('navigation.activity')}
-                        </a>
-                      ),
-                      my_assets: (
-                        <a href={locations.defaultCurrentAccount()}>
-                          {t('navigation.my_assets')}
-                        </a>
-                      )
-                    })}
-                  </p>
-                  <Button
-                    className="cta"
-                    as={Link}
-                    to={locations.browse({
-                      assetType: type,
-                      section:
-                        asset.category === NFTCategory.EMOTE
-                          ? EMOTES
-                          : WEARABLES
-                    })}
-                    inverted
-                    primary
-                    fluid
-                  >
-                    {t(`asset_purchase_with_card_${status}_page.cta`)}
-                  </Button>
-                </Column>
-              </Row>
-            </div>
-          )}
+                    <Header className="title" size="large">
+                      {t(`asset_purchase_with_card_${status}_page.title`)}
+                    </Header>
+                    {status === PurchaseStatus.PENDING ? (
+                      <div className="status-wrapper">
+                        <Loader size="small" active inline />
+                        <p className="status">
+                          {t(`asset_purchase_with_card_${status}_page.status`)}
+                        </p>
+                      </div>
+                    ) : null}
+                    <p className="description">
+                      {t(
+                        `asset_purchase_with_card_${status}_page.description`,
+                        {
+                          my_assets: (
+                            <Link to={locations.currentAccount(browserOptions)}>
+                              {t('navigation.my_assets')}
+                            </Link>
+                          )
+                        }
+                      )}
+                    </p>
+                    {status === PurchaseStatus.COMPLETE ? (
+                      <Button
+                        className="cta"
+                        as={Link}
+                        to={locations.browse(browserOptions)}
+                        inverted
+                        primary
+                        fluid
+                      >
+                        {t(`asset_purchase_with_card_${status}_page.cta`)}
+                      </Button>
+                    ) : null}
+                  </Column>
+                </Row>
+              </div>
+            )
+          }}
         </AssetProviderPage>
       </Page>
       <Footer />

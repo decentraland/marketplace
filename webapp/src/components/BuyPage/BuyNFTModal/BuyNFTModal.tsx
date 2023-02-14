@@ -98,7 +98,10 @@ const BuyNFTModal = (props: Props) => {
   }, [getContract, nft.network, nft.chainId, wallet.address, order])
 
   const handleSubmit = useCallback(() => {
-    if (authorization && hasAuthorization(authorizations, authorization)) {
+    if (
+      (authorization && hasAuthorization(authorizations, authorization)) ||
+      (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
+    ) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
@@ -107,6 +110,8 @@ const BuyNFTModal = (props: Props) => {
     authorizations,
     authorization,
     handleExecuteOrder,
+    isBuyNftsWithFiatEnabled,
+    isBuyWithCardPage,
     setShowAuthorizationModal
   ])
 
@@ -199,7 +204,7 @@ const BuyNFTModal = (props: Props) => {
           }}
         </AssetProviderPage>
       ) : null}
-      {hasLowPrice ? (
+      {hasLowPrice && !isBuyWithCardPage ? (
         <PriceTooLow chainId={nft.chainId} network={nft.network} />
       ) : null}
       <div

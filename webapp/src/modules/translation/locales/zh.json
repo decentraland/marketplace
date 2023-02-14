@@ -663,7 +663,7 @@
   "asset_purchase_with_card_pending_page": {
     "title": "您的物品正在运送途中！",
     "status": "处理交易",
-    "description": "处理交易最多可能需要 3 分钟。 您还可以在 {activity} 中跟踪其进度。",
+    "description": "处理交易最多可能需要 3 分钟。",
     "cta": "返回市场"
   },
   "asset_purchase_with_card_complete_page": {

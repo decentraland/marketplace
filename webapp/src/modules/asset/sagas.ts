@@ -20,7 +20,7 @@ export function* assetSaga() {
 function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
   const { purchase } = action.payload
   if (!isManaPurchase(purchase)) {
-    const { nft, status, txHash } = purchase
+    const { nft, status } = purchase
     const { pathname }: ReturnType<typeof getLocation> = yield select(
       getLocation
     )
@@ -46,8 +46,7 @@ function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
 
     if (
       shouldRedirect &&
-      [PurchaseStatus.PENDING, PurchaseStatus.COMPLETE].includes(status) &&
-      txHash
+      [PurchaseStatus.PENDING, PurchaseStatus.COMPLETE].includes(status)
     ) {
       yield put(push(statusPagePathname))
     }

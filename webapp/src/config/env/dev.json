@@ -11,6 +11,8 @@
   "TRANSACTIONS_API_URL": "https://transactions-api.decentraland.zone/v1",
   "TRANSAK_KEY": "273ac855-3472-40eb-8ee8-840e317f98e6",
   "TRANSAK_ENV": "STAGING",
+  "TRANSAK_PUSHER_APP_KEY": "1d9ffac87de599c61283",
+  "TRANSAK_PUSHER_APP_CLUSTER": "ap2",
   "MOON_PAY_API_URL": "https://api.moonpay.com",
   "MOON_PAY_API_KEY": "pk_test_WVS2xVSCnSnR7A7qIueWwCtcKnrGb55p",
   "MOON_PAY_POLLING_DELAY": "6000",

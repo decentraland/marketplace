@@ -97,12 +97,21 @@ const MintItemModal = (props: Props) => {
   }, [getContract, item.network, item.chainId, wallet.address])
 
   const handleSubmit = useCallback(() => {
-    if (authorization && hasAuthorization(authorizations, authorization)) {
+    if (
+      (authorization && hasAuthorization(authorizations, authorization)) ||
+      (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
+    ) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [authorization, authorizations, handleExecuteOrder])
+  }, [
+    authorization,
+    authorizations,
+    handleExecuteOrder,
+    isBuyNftsWithFiatEnabled,
+    isBuyWithCardPage
+  ])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal
@@ -200,7 +209,7 @@ const MintItemModal = (props: Props) => {
           }}
         </AssetProviderPage>
       ) : null}
-      {hasLowPrice ? (
+      {hasLowPrice && !isBuyWithCardPage ? (
         <PriceTooLow chainId={item.chainId} network={item.network} />
       ) : null}
       <div

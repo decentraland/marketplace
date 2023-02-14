@@ -66,6 +66,8 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
     'page',
     'minPrice',
     'maxPrice',
+    'minEstateSize',
+    'maxEstateSize',
     'onlySmart',
     'search',
     'onlyOnRent',
