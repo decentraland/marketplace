@@ -19,9 +19,20 @@
   background: rgba(115, 110, 125, 1);
 }
 
-i:global(.icon).deleteBtn {
+.pill .deleteBtn {
   margin-left: 8px;
   margin-right: 0;
   cursor: pointer;
   height: auto;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: white;
+  padding: 0;
+  margin-right: 0;
 }
+
+.pill .deleteBtn i {
+  margin-right: 0;
+}
+
