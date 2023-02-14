@@ -23,3 +23,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           base-path: /webapp
+          path-to-lcov: /webapp/coverage/lcov.info
