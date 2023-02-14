@@ -69,6 +69,7 @@
     "prebuild": "node scripts/prebuild.js",
     "build": "CI=false react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "npm run test -- --coverage",
     "eject": "react-scripts eject",
     "lint": "tslint -p tsconfig.json",
     "lint:fix": "tslint -p tsconfig.json --fix",
