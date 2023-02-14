@@ -391,7 +391,8 @@
       "title": "Near a plaza",
       "subtitle": "Distance from a plaza (in parcels)",
       "selection": "{from} to {to} parcels from a plaza"
-    }
+    },
+    "all_locations": "All locations"
   },
   "nft_land_filters": {
     "all_land": "All land",

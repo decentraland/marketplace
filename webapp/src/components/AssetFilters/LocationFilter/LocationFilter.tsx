@@ -10,6 +10,9 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import styles from './LocationFilter.module.css'
 import classNames from 'classnames'
 
+const DISTANCE_TO_PLAZA_MIN = 2;
+const DISTANCE_TO_PLAZA_MAX = 10;
+
 export type LocationFilterProps = {
   adjacentToRoad?: boolean
   minDistanceToPlaza?: string
@@ -46,7 +49,7 @@ export const LocationFilter = ({
   const handleToggleDistanceFilter = useCallback(
     (_evt, props: CheckboxProps) => {
       if (!!props.checked) {
-        onDistanceToPlazaChange(['2', '10'])
+        onDistanceToPlazaChange([DISTANCE_TO_PLAZA_MIN.toString(), DISTANCE_TO_PLAZA_MAX.toString()])
       } else {
         onDistanceToPlazaChange(['', ''])
       }
@@ -56,7 +59,7 @@ export const LocationFilter = ({
 
   const locationSelectionText = useMemo(() => {
     if (!adjacentToRoad && !minDistanceToPlaza && !maxDistanceToPlaza) {
-      return 'All locations'
+      return t('nft_filters.all_locations')
     }
 
     let locationTexts = []
@@ -115,8 +118,8 @@ export const LocationFilter = ({
       {distanceFilterIsOn && (
         <SliderField
           data-testid="dkstance-to-plaza-slider"
-          min={2}
-          max={10}
+          min={DISTANCE_TO_PLAZA_MIN}
+          max={DISTANCE_TO_PLAZA_MAX}
           onChange={handleDistanceToPlazaChange}
           step={1}
           valueFrom={
@@ -131,7 +134,7 @@ export const LocationFilter = ({
           }
           range
           header=""
-          label="Distance from a plaza (in parcels)"
+          label={t('nft_filters.distance_to_plaza.subtitle')}
           className={styles.slider}
         />
       )}
