@@ -151,14 +151,14 @@ export const SelectedFilters = ({
       {onlySmart ? (
         <Pill
           label={t('nft_filters.only_smart')}
-          id="only smart"
+          id="onlySmart"
           onDelete={handleDeleteOnlySmart}
         />
       ) : null}
       {collection ? (
         <Pill
           label={collection.name}
-          id={collection.address}
+          id="collection"
           onDelete={handleDeleteCollection}
         />
       ) : null}
@@ -172,7 +172,7 @@ export const SelectedFilters = ({
       {!onlyOnSale && !isLandSection ? (
         <Pill
           label={t('nft_filters.not_on_sale')}
-          id="only_on_sale"
+          id="onlyOnSale"
           onDelete={handleDeleteOnlySale}
         />
       ) : null}
@@ -191,7 +191,7 @@ export const SelectedFilters = ({
         <Pill
           label={estateSizeLabel}
           onDelete={handleDeleteEstateSize}
-          id="estate-size"
+          id="estateSize"
         />
       ) : null}
       {isLandSection && landStatusLabel ? (
@@ -205,14 +205,14 @@ export const SelectedFilters = ({
         <Pill
           label={t('nft_filters.adjacent_to_road')}
           onDelete={handleDeleteAdjacentToRoad}
-          id="adjacent-to-road"
+          id="adjacentToRoad"
         />
       ): null}
       {minDistanceToPlaza || maxDistanceToPlaza ? (
         <Pill
           label={t('nft_filters.distance_to_plaza.selection', { from: minDistanceToPlaza, to: maxDistanceToPlaza })}
           onDelete={handleDeleteDistanceToPlaza}
-          id="distance-to-plaza"
+          id="distanceToPlaza"
         />
       ): null}
     </div>

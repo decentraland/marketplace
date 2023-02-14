@@ -10,7 +10,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import styles from './LocationFilter.module.css'
 import classNames from 'classnames'
 
-type LocationFilterProps = {
+export type LocationFilterProps = {
   adjacentToRoad?: boolean
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
@@ -96,6 +96,8 @@ export const LocationFilter = ({
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <Checkbox
+        data-testid="adjacent-to-road-toggle"
+        id="adjacent-to-road-toggle"
         label={t('nft_filters.adjacent_to_road')}
         toggle
         checked={adjacentToRoad}
@@ -103,13 +105,16 @@ export const LocationFilter = ({
         className={styles.checkboxFilter}
       />
       <Checkbox
-        label="Near a plaza"
+        data-testid="near-to-plaza-toggle"
+        id="near-to-plaza-toggle"
+        label={t('nft_filters.distance_to_plaza.title')}
         toggle
         checked={distanceFilterIsOn}
         onChange={handleToggleDistanceFilter}
       />
       {distanceFilterIsOn && (
         <SliderField
+          data-testid="dkstance-to-plaza-slider"
           min={2}
           max={10}
           onChange={handleDistanceToPlazaChange}
