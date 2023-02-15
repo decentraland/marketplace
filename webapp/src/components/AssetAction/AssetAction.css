@@ -26,6 +26,12 @@
     flex-direction: column;
   }
 
+  .AssetAction .dcl.back {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    margin-left: 2px;
+  }
+
   .AssetAction > .Row .Column.left,
   .AssetAction > .Row .asset-image-wrapper,
   .AssetAction > .Row .ui.button {

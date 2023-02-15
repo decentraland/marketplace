@@ -79,6 +79,11 @@
   align-items: center;
 }
 
+.network-warning .description a {
+  color: var(--primary-text) !important;
+  text-decoration: underline;
+}
+
 @media (max-width: 768px) {
   .network-warning {
     padding-left: 5%;
@@ -91,9 +96,8 @@
   .network-warning .description {
     width: 100%;
   }
-
   .network-warning .description .ui.header.title {
-    line-height: auto;
+    line-height: normal;
   }
 
   .network-warning .action {
