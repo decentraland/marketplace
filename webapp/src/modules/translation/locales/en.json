@@ -600,7 +600,13 @@
     "buy": "Buy",
     "no_fingerprint": "Could not load fingerprint.",
     "is_owner": "You are the owner of {name}.",
-    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}."
+    "not_enough_mana": "You don't have enough MANA to buy {name} for {amount}.",
+    "switch_network_warning": {
+      "title": "Your wallet is connected to a partially supported network (Polygon)",
+      "desktop_content": "You will only be able to use the features of this app that interact with Polygon, and you will need to pay for the gas costs of the transactions. Switch to Ethereum Mainnet to use all the features of this app. <a>Learn more</a>",
+      "mobile_content": "Switch to Ethereum Mainnet if you want to use all the features of this app. <a>Learn more</a>",
+      "action": "Switch Network"
+    }
   },
   "buy_with_mana_page": {
     "title": "Buying {name}",

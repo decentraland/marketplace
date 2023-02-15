@@ -42,3 +42,63 @@
 .buy-nft-with-card-error .ui.button.basic {
   padding-left: 0px;
 }
+
+.network-warning {
+  padding-left: 20%;
+  padding-right: 20%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #44404B;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.network-warning .title {
+  font-weight: bold;
+}
+
+.network-warning .description {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 60%;
+}
+
+.network-warning .description .ui.header.title {
+  margin: 0 0 5px 0;
+}
+
+.network-warning .description .warning-icon {
+  margin-right: 20px;
+}
+
+.network-warning .action {
+  width: 30%;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .network-warning {
+    padding-left: 5%;
+    padding-right: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: unset;
+  }
+
+  .network-warning .description {
+    width: 100%;
+  }
+
+  .network-warning .description .ui.header.title {
+    line-height: auto;
+  }
+
+  .network-warning .action {
+    width: 100%;
+    margin-top: 15px;
+    justify-content: center;
+  }
+}
