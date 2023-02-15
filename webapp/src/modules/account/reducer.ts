@@ -15,15 +15,22 @@ import {
   FetchAccountMetricsFailureAction,
   FetchAccountMetricsRequestAction,
   FetchAccountMetricsSuccessAction,
+  FetchCreatorsAccountFailureAction,
+  FetchCreatorsAccountRequestAction,
+  FetchCreatorsAccountSuccessAction,
   FETCH_ACCOUNT_METRICS_FAILURE,
   FETCH_ACCOUNT_METRICS_REQUEST,
-  FETCH_ACCOUNT_METRICS_SUCCESS
+  FETCH_ACCOUNT_METRICS_SUCCESS,
+  FETCH_CREATORS_ACCOUNT_FAILURE,
+  FETCH_CREATORS_ACCOUNT_REQUEST,
+  FETCH_CREATORS_ACCOUNT_SUCCESS
 } from './actions'
-import { Account, AccountMetrics } from './types'
+import { Account, AccountMetrics, CreatorAccount } from './types'
 
 export type AccountState = {
   data: Record<string, Account>
   metrics: Record<Network, Record<string, AccountMetrics>>
+  creators: CreatorAccount[]
   loading: LoadingState
   error: string | null
 }
@@ -34,6 +41,7 @@ const INITIAL_STATE: AccountState = {
     [Network.ETHEREUM]: {},
     [Network.MATIC]: {}
   },
+  creators: [],
   loading: [],
   error: null
 }
@@ -45,12 +53,16 @@ type AccountReducerAction =
   | FetchAccountMetricsRequestAction
   | FetchAccountMetricsSuccessAction
   | FetchAccountMetricsFailureAction
+  | FetchCreatorsAccountRequestAction
+  | FetchCreatorsAccountSuccessAction
+  | FetchCreatorsAccountFailureAction
 
 export function accountReducer(
   state: AccountState = INITIAL_STATE,
   action: AccountReducerAction
 ): AccountState {
   switch (action.type) {
+    case FETCH_CREATORS_ACCOUNT_REQUEST:
     case FETCH_ACCOUNT_METRICS_REQUEST:
     case FETCH_NFTS_REQUEST: {
       return {
@@ -101,6 +113,21 @@ export function accountReducer(
     }
     case FETCH_ACCOUNT_METRICS_FAILURE:
     case FETCH_NFTS_FAILURE: {
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        error: action.payload.error
+      }
+    }
+    case FETCH_CREATORS_ACCOUNT_SUCCESS: {
+      return {
+        ...state,
+        loading: loadingReducer(state.loading, action),
+        creators: action.payload.creatorAccounts,
+        error: null
+      }
+    }
+    case FETCH_CREATORS_ACCOUNT_FAILURE: {
       return {
         ...state,
         loading: loadingReducer(state.loading, action),

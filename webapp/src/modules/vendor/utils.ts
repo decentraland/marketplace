@@ -41,6 +41,7 @@ export function getFilters(
         rarities,
         wearableGenders,
         contracts,
+        creators,
         network,
         onlySmart,
         emotePlayMode,
@@ -60,6 +61,7 @@ export function getFilters(
         rarities,
         wearableGenders,
         contracts,
+        creators,
         network,
         emotePlayMode,
         rentalStatus:

@@ -29,6 +29,7 @@ export type NFTsFetchFilters = {
   tenant?: string
   rentalStatus?: RentalStatus | RentalStatus[]
   contracts?: string[]
+  creator?: string | string[]
   minPrice?: string
   maxPrice?: string
   minEstateSize?: string

@@ -5,6 +5,7 @@ import { getCategoryFromSection } from '../../modules/routing/search'
 import {
   getAssetType,
   getContracts,
+  getCreators,
   getEmotePlayMode,
   getMaxEstateSize,
   getMaxPrice,
@@ -35,6 +36,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     'section' in values ? (values.section as Section) : getSection(state)
   const contracts =
     'contracts' in values ? values.contracts || [] : getContracts(state)
+  const creators =
+    'creators' in values ? values.creators || [] : getCreators(state)
   const onlyOnSale =
     'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
   const onlyOnRent =
@@ -71,6 +74,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
     assetType: getAssetType(state),
     collection: contracts[0],
+    creators,
     landStatus,
     view: getView(state),
     section,

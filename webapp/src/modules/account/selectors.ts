@@ -8,6 +8,7 @@ import { sumAccountMetrics } from './utils'
 
 export const getState = (state: RootState) => state.account
 export const getData = (state: RootState) => getState(state).data
+export const getCreators = (state: RootState) => getState(state).creators
 export const getMetricsByNetworkByAddress = (state: RootState) =>
   getState(state).metrics
 export const getLoading = (state: RootState) => getState(state).loading

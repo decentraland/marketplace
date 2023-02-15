@@ -28,6 +28,7 @@ export type Props = {
   emotePlayMode?: EmotePlayMode[]
   assetType?: AssetType
   collection: string
+  creators?: string[]
   section?: Section
   landStatus: LANDFilters
   values?: BrowseOptions
@@ -55,6 +56,7 @@ export type MapStateProps = Pick<
   | 'emotePlayMode'
   | 'assetType'
   | 'collection'
+  | 'creators'
   | 'section'
   | 'landStatus'
   | 'vendor'

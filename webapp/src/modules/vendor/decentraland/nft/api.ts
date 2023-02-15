@@ -156,6 +156,13 @@ class NFTAPI extends BaseAPI {
       statuses.forEach(status => queryParams.append('rentalStatus', status))
     }
 
+    if (filters.creator) {
+      const creators = Array.isArray(filters.creator)
+        ? filters.creator
+        : [filters.creator]
+      creators.forEach(creator => queryParams.append('creator', creator))
+    }
+
     if (filters.contracts && filters.contracts.length > 0) {
       for (const contract of filters.contracts) {
         queryParams.append('contractAddress', contract)

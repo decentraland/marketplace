@@ -8,6 +8,8 @@ import {
   getNetwork,
   getPriceLabel
 } from '../../../utils/filters'
+import { CreatorAccount } from '../../../modules/account/types'
+import { getCreatorsByAddress } from '../../AssetFilters/CreatorsFilter/utils'
 import { Pill } from './Pill/Pill'
 import { Props } from './SelectedFilters.types'
 import { getCollectionByAddress } from './utils'
@@ -24,6 +26,7 @@ export const SelectedFilters = ({
     network,
     onlySmart,
     contracts,
+    creators,
     wearableGenders,
     onlyOnSale,
     emotePlayMode,
@@ -35,6 +38,10 @@ export const SelectedFilters = ({
   } = browseOptions
   const [collection, setCollection] = useState<
     Record<string, string> | undefined
+  >()
+
+  const [selectedCreators, setSelectedCreators] = useState<
+    Pick<CreatorAccount, 'address' | 'name'>[]
   >()
 
   useEffect(() => {
@@ -54,6 +61,18 @@ export const SelectedFilters = ({
       setCollection(undefined)
     }
   }, [contracts, onlyOnSale, collection?.address])
+
+  useEffect(() => {
+    const fetchData = async (addresses: string[]) => {
+      return await getCreatorsByAddress(addresses)
+    }
+
+    if (creators?.length) {
+      fetchData(creators).then(creators => setSelectedCreators(creators))
+    } else if (!creators?.length) {
+      setSelectedCreators([])
+    }
+  }, [creators])
 
   const priceLabel = useMemo(
     () => getPriceLabel(minPrice, maxPrice, getNetwork(network, category)),
@@ -77,6 +96,13 @@ export const SelectedFilters = ({
       onBrowse({ rarities: rarities?.filter((r: Rarity) => r !== rarity) })
     },
     [onBrowse, rarities]
+  )
+
+  const handleDeleteCreator = useCallback(
+    (address: string) => {
+      onBrowse({ creators: creators?.filter(creator => creator !== address) })
+    },
+    [creators, onBrowse]
   )
 
   const handleDeleteCollection = useCallback(() => {
@@ -151,6 +177,16 @@ export const SelectedFilters = ({
           onDelete={handleDeleteCollection}
         />
       ) : null}
+      {selectedCreators?.length
+        ? selectedCreators.map(creator => (
+            <Pill
+              key={creator.address}
+              label={creator.name}
+              id={creator.address}
+              onDelete={() => handleDeleteCreator(creator.address)}
+            />
+          ))
+        : null}
       {wearableGenders?.length ? (
         <Pill
           label={t(getGenderFilterLabel(wearableGenders))}
