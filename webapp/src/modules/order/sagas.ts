@@ -1,4 +1,4 @@
-import { put, call, takeEvery, select } from 'redux-saga/effects'
+import { put, call, takeEvery, select, race, take } from 'redux-saga/effects'
 import { RentalListing, RentalStatus } from '@dcl/schemas'
 import { ErrorCode } from 'decentraland-transactions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -20,7 +20,7 @@ import {
 import { buyAssetWithCard } from '../asset/utils'
 import { VendorName } from '../vendor'
 import { getData as getNFTs } from '../nft/selectors'
-import { getNFT } from '../nft/utils'
+import { getNFT as getNFTByContractAddressAndTokenId } from '../nft/utils'
 import {
   CREATE_ORDER_REQUEST,
   CreateOrderRequestAction,
@@ -40,6 +40,13 @@ import {
   executeOrderWithCardFailure,
   executeOrderWithCardSuccess
 } from './actions'
+import {
+  FetchNFTFailureAction,
+  fetchNFTRequest,
+  FetchNFTSuccessAction,
+  FETCH_NFT_FAILURE,
+  FETCH_NFT_SUCCESS
+} from '../nft/actions'
 
 export function* orderSaga() {
   yield takeEvery(CREATE_ORDER_REQUEST, handleCreateOrderRequest)
@@ -149,26 +156,60 @@ function* handleExecuteOrderWithCardRequest(
   }
 }
 
+function* getNFT(contractAddress: string, tokenId: string) {
+  const nfts: ReturnType<typeof getNFTs> = yield select(getNFTs)
+  const nft: ReturnType<typeof getNFTByContractAddressAndTokenId> = yield call(
+    getNFTByContractAddressAndTokenId,
+    contractAddress,
+    tokenId,
+    nfts
+  )
+  return nft
+}
+
 function* handleSetNftPurchaseWithCard(action: SetPurchaseAction) {
   try {
     const { purchase } = action.payload
+    const { status, txHash } = purchase
 
-    if (!isManaPurchase(purchase) && purchase.nft.tokenId) {
+    if (
+      !isManaPurchase(purchase) &&
+      purchase.nft.tokenId &&
+      status === PurchaseStatus.COMPLETE &&
+      txHash
+    ) {
       const {
-        status,
-        txHash,
         nft: { contractAddress, tokenId }
       } = purchase
 
-      const nfts: ReturnType<typeof getNFTs> = yield select(getNFTs)
-      const nft: ReturnType<typeof getNFT> = yield call(
+      let nft: ReturnType<typeof getNFTByContractAddressAndTokenId> = yield call(
         getNFT,
         contractAddress,
-        tokenId,
-        nfts
+        tokenId
       )
 
-      if (nft && status === PurchaseStatus.COMPLETE && txHash) {
+      if (!nft) {
+        yield put(fetchNFTRequest(contractAddress, tokenId))
+
+        const {
+          success,
+          failure
+        }: {
+          success: FetchNFTSuccessAction
+          failure: FetchNFTFailureAction
+        } = yield race({
+          success: take(FETCH_NFT_SUCCESS),
+          failure: take(FETCH_NFT_FAILURE)
+        })
+
+        if (success) {
+          nft = yield call(getNFT, contractAddress, tokenId)
+        } else {
+          yield put(executeOrderWithCardFailure(failure.payload.error))
+        }
+      }
+
+      if (nft) {
         yield put(executeOrderWithCardSuccess(purchase, nft, txHash))
       }
     }
