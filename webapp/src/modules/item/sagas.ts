@@ -8,7 +8,7 @@ import {
   SetPurchaseAction,
   SET_PURCHASE
 } from 'decentraland-dapps/dist/modules/gateway/actions'
-import { isManaPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
+import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
 import { itemAPI } from '../vendor/decentraland/item/api'
@@ -42,7 +42,7 @@ import {
   fetchItemRequest
 } from './actions'
 import { getData as getItems } from './selectors'
-import { getItem as getItemByContractAddressAndItemId } from './utils'
+import { getItem } from './utils'
 
 export function* itemSaga() {
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
@@ -155,24 +155,13 @@ function* handleBuyItemWithCardRequest(action: BuyItemWithCardRequestAction) {
   }
 }
 
-function* getItem(contractAddress: string, itemId: string) {
-  const items: ReturnType<typeof getItems> = yield select(getItems)
-  const item: ReturnType<typeof getItemByContractAddressAndItemId> = yield call(
-    getItemByContractAddressAndItemId,
-    contractAddress,
-    itemId,
-    items
-  )
-  return item
-}
-
 function* handleSetItemPurchaseWithCard(action: SetPurchaseAction) {
   try {
     const { purchase } = action.payload
     const { status, txHash } = purchase
 
     if (
-      !isManaPurchase(purchase) &&
+      isNFTPurchase(purchase) &&
       purchase.nft.itemId &&
       status === PurchaseStatus.COMPLETE &&
       txHash
@@ -181,10 +170,12 @@ function* handleSetItemPurchaseWithCard(action: SetPurchaseAction) {
         nft: { contractAddress, itemId }
       } = purchase
 
-      let item: ReturnType<typeof getItemByContractAddressAndItemId> = yield call(
+      const items: ReturnType<typeof getItems> = yield select(getItems)
+      let item: ReturnType<typeof getItem> = yield call(
         getItem,
         contractAddress,
-        itemId
+        itemId,
+        items
       )
 
       if (!item) {
@@ -201,16 +192,12 @@ function* handleSetItemPurchaseWithCard(action: SetPurchaseAction) {
           failure: take(FETCH_ITEM_FAILURE)
         })
 
-        if (success) {
-          item = yield call(getItem, contractAddress, itemId)
-        } else {
-          yield put(buyItemWithCardFailure(failure.payload.error))
-        }
+        if (failure) throw new Error(failure.payload.error)
+
+        item = success.payload.item
       }
 
-      if (item) {
-        yield put(buyItemWithCardSuccess(item.chainId, txHash, item, purchase))
-      }
+      yield put(buyItemWithCardSuccess(item.chainId, txHash, item, purchase))
     }
   } catch (error) {
     yield put(

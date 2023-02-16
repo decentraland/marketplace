@@ -7,7 +7,7 @@ import {
   SetPurchaseAction,
   SET_PURCHASE
 } from 'decentraland-dapps/dist/modules/gateway/actions'
-import { isManaPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
+import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
 import { getWallet } from '../wallet/selectors'
@@ -20,7 +20,7 @@ import {
 import { buyAssetWithCard } from '../asset/utils'
 import { VendorName } from '../vendor'
 import { getData as getNFTs } from '../nft/selectors'
-import { getNFT as getNFTByContractAddressAndTokenId } from '../nft/utils'
+import { getNFT } from '../nft/utils'
 import {
   CREATE_ORDER_REQUEST,
   CreateOrderRequestAction,
@@ -156,24 +156,13 @@ function* handleExecuteOrderWithCardRequest(
   }
 }
 
-function* getNFT(contractAddress: string, tokenId: string) {
-  const nfts: ReturnType<typeof getNFTs> = yield select(getNFTs)
-  const nft: ReturnType<typeof getNFTByContractAddressAndTokenId> = yield call(
-    getNFTByContractAddressAndTokenId,
-    contractAddress,
-    tokenId,
-    nfts
-  )
-  return nft
-}
-
 function* handleSetNftPurchaseWithCard(action: SetPurchaseAction) {
   try {
     const { purchase } = action.payload
     const { status, txHash } = purchase
 
     if (
-      !isManaPurchase(purchase) &&
+      isNFTPurchase(purchase) &&
       purchase.nft.tokenId &&
       status === PurchaseStatus.COMPLETE &&
       txHash
@@ -182,10 +171,12 @@ function* handleSetNftPurchaseWithCard(action: SetPurchaseAction) {
         nft: { contractAddress, tokenId }
       } = purchase
 
-      let nft: ReturnType<typeof getNFTByContractAddressAndTokenId> = yield call(
+      const nfts: ReturnType<typeof getNFTs> = yield select(getNFTs)
+      let nft: ReturnType<typeof getNFT> = yield call(
         getNFT,
         contractAddress,
-        tokenId
+        tokenId,
+        nfts
       )
 
       if (!nft) {
@@ -202,16 +193,12 @@ function* handleSetNftPurchaseWithCard(action: SetPurchaseAction) {
           failure: take(FETCH_NFT_FAILURE)
         })
 
-        if (success) {
-          nft = yield call(getNFT, contractAddress, tokenId)
-        } else {
-          yield put(executeOrderWithCardFailure(failure.payload.error))
-        }
+        if (failure) throw new Error(failure.payload.error)
+
+        nft = success.payload.nft
       }
 
-      if (nft) {
-        yield put(executeOrderWithCardSuccess(purchase, nft, txHash))
-      }
+      yield put(executeOrderWithCardSuccess(purchase, nft, txHash))
     }
   } catch (error) {
     yield put(
