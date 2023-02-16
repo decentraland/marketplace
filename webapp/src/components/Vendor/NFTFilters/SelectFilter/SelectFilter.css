@@ -138,6 +138,10 @@
   color: var(--text);
 }
 
+.SelectFilter .ui.selection.visible.dropdown > .text.default {
+  padding-left: 4px;
+}
+
 .SelectFilter .ui.search.selection.dropdown > input.search:focus {
   border: 2px solid var(--text) !important;
   border-radius: 6px;

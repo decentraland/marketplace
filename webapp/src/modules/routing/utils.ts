@@ -78,7 +78,8 @@ export function getClearedBrowseOptions(
     'onlySmart',
     'search',
     'onlyOnRent',
-    'onlyOnSale'
+    'onlyOnSale',
+    'creators'
   ]
 
   const clearedBrowseOptions = fillWithUndefined

@@ -136,10 +136,11 @@ export const CreatorsFilter = ({
     <Box
       header={header}
       collapsible
-      className="CreatorsFilter SelectFilter filters-sidebar-box"
+      className="CreatorsFilter filters-sidebar-box"
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
       <Dropdown
+        className="creators-filter-dropdown"
         onFocus={handleFetchTopCreators}
         value={searchTerm}
         options={dropdownOptions}
