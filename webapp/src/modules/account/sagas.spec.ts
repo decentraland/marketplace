@@ -152,11 +152,11 @@ describe('when handling the request to fetch creators accounts', () => {
   let accounts: Account[]
   let addresses: string[]
 
-  describe('when a call to the nftAPI fails', () => {
+  describe('when the request with a search term fails while fetching the NFT API', () => {
     const error = 'request failed with error'
     let filters: NFTsFetchParams
 
-    describe('when the call with search with a term', () => {
+    describe('when having the search term set', () => {
       beforeEach(() => {
         search = 'a term'
         filters = {
@@ -181,11 +181,11 @@ describe('when handling the request to fetch creators accounts', () => {
     })
   })
 
-  describe('when a call to the accountAPI fails', () => {
+  describe('when the request without a search term fails while fetching the Accounts API', () => {
     const error = 'request failed with error'
     let filters: AccountFilters
 
-    describe('when the call with search with a term', () => {
+    describe('when the call has an empty search string', () => {
       beforeEach(() => {
         search = ''
         filters = {
@@ -300,7 +300,7 @@ describe('when handling the request to fetch creators accounts', () => {
           { avatars: [{ ethAddress: addresses[1] }] } as Profile
         ]
       })
-      it('should fetch the ens that match the search term using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI', () => {
+      it('should fetch the ens that match the search term using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators\' profiles', () => {
         return expectSaga(accountSaga, catalystClient)
           .provide([
             [call([nftAPI, nftAPI.fetch], nftAPIFilters), { data: nftResults }],

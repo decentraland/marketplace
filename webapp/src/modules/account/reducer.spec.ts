@@ -112,7 +112,7 @@ describe('when reducing the action that signals the failed fetch of account metr
   })
 })
 
-describe('when reducing the action that signals the fetch of creators accounts', () => {
+describe('when reducing the action that signals the request of the fetch of creators accounts', () => {
   it('should return a state where the loading state has the fetch creators account action', () => {
     const result = accountReducer(state, fetchCreatorsAccountRequest(''))
 
@@ -137,7 +137,7 @@ describe('when reducing the action that signals the successful fetch of creators
     )
   })
 
-  it('should return a state where the received account metrics are stored in the metrics state', () => {
+  it('should return a state where the received account creators are stored in the creators state', () => {
     expect(result.creators).toEqual(creatorsAccounts)
   })
 
@@ -145,7 +145,7 @@ describe('when reducing the action that signals the successful fetch of creators
     expect(result.error).toEqual(null)
   })
 
-  it('should return a state where the request for fetching the creators is not in the loading state anymore', () => {
+  it('should return a state where the request for fetching the creators request is not in the loading state anymore', () => {
     expect(result.loading).toEqual([])
   })
 })
@@ -167,7 +167,7 @@ describe('when reducing the action that signals the failed fetch of creators acc
     expect(result.error).toEqual('some error')
   })
 
-  it('should return a state where the request for fetching the metrics is not in the loading state anymore', () => {
+  it('should return a state where the request for fetching the creators request is not in the loading state anymore', () => {
     expect(result.loading).toEqual([])
   })
 })

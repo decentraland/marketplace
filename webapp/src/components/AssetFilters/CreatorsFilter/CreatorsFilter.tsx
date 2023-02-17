@@ -36,13 +36,9 @@ export const CreatorsFilter = ({
   )
 
   useEffect(() => {
-    const fetchData = async (addresses: string[]) => {
-      return await getCreatorsByAddress(addresses)
-    }
-
     if (creators?.length) {
       setIsFetchingNames(true)
-      fetchData(creators).then(creators => {
+      getCreatorsByAddress(creators).then(creators => {
         setSelectedCreators(creators)
         setIsFetchingNames(false)
       })

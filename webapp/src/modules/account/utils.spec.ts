@@ -1,4 +1,5 @@
-import { sumAccountMetrics } from './utils'
+import { Account, Avatar, Profile } from '@dcl/schemas'
+import { fromProfilesToCreators, sumAccountMetrics } from './utils'
 
 describe('when summing account metrics', () => {
   it('should return an account metric with its values added from the provided account metrics', () => {
@@ -29,5 +30,40 @@ describe('when summing account metrics', () => {
       sales: 300,
       spent: '300'
     })
+  })
+})
+
+describe('when transforming profiles and accounts objects to creators entities', () => {
+  let profiles: Profile[]
+  let accounts: Account[]
+  let avatarName: string
+  let ethAddress: string
+  let collectionsAmount: number
+  beforeEach(() => {
+    avatarName = 'anAvatarName'
+    ethAddress = 'anEthAddress'
+    profiles = [
+      {
+        avatars: [
+          {
+            name: avatarName,
+            ethAddress
+          } as Avatar
+        ]
+      }
+    ]
+    collectionsAmount = 3
+    accounts = [
+      { address: ethAddress, collections: collectionsAmount } as Account
+    ]
+  })
+  it('should return an creator account with the values from the profile and account', () => {
+    expect(fromProfilesToCreators(profiles, accounts)).toEqual([
+      {
+        name: avatarName,
+        address: ethAddress,
+        collections: collectionsAmount
+      }
+    ])
   })
 })

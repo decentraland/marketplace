@@ -44,7 +44,6 @@ export const fetchCreatorsAccountRequest = (search: string) =>
 export const fetchCreatorsAccountSuccess = (
   search: string,
   creatorAccounts: CreatorAccount[]
-  // accountMetrics: Record<Network, AccountMetrics[]>
 ) => action(FETCH_CREATORS_ACCOUNT_SUCCESS, { search, creatorAccounts })
 export const fetchCreatorsAccountFailure = (search: string, error: string) =>
   action(FETCH_CREATORS_ACCOUNT_FAILURE, { search, error })

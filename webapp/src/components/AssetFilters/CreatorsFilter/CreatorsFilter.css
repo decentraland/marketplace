@@ -71,7 +71,9 @@
 @media (min-width: 769px) {
   .CreatorsFilter .ui.selection.dropdown > .dropdown.icon {
     color: var(--text);
-    padding: 0.71em;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
 
   .CreatorsFilter .ui.selection.dropdown > .search.icon {

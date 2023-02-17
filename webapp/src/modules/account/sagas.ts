@@ -79,7 +79,7 @@ export function* accountSaga(catalystClient: CatalystClient) {
 
       const creators = fromProfilesToCreators(
         profiles,
-        accounts ? accounts : creatorsAccounts.data
+        accounts ?? creatorsAccounts.data
       )
 
       yield put(fetchCreatorsAccountSuccess(search, creators))

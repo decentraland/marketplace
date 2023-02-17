@@ -358,8 +358,18 @@ describe('when there is a creator defined', () => {
     url = `creators=${anAddress}`
   })
 
-  it('should return the value', () => {
+  it('should return an array with the creator address', () => {
     expect(getCreators.resultFunc(url)).toEqual([anAddress])
+  })
+})
+
+describe("when there aren't any creators defined", () => {
+  let url: string
+  beforeEach(() => {
+    url = `sortBy=a_sort_by`
+  })
+  it('should return an empty array', () => {
+    expect(getCreators.resultFunc(url)).toEqual([])
   })
 })
 
