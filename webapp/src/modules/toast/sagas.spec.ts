@@ -1,11 +1,11 @@
-import { RentalListing } from '@dcl/schemas'
+import { Order, RentalListing } from '@dcl/schemas'
 import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
 import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
 import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import { buyItemWithCardFailure } from '../item/actions'
 import { NFT } from '../nft/types'
-import { executeOrderWithCardFailure } from '../order/actions'
+import { executeOrderFailure, executeOrderWithCardFailure } from '../order/actions'
 import {
   claimAssetSuccess,
   removeRentalSuccess,
@@ -15,6 +15,7 @@ import { UpsertRentalOptType } from '../rental/types'
 import { updateStoreSuccess } from '../store/actions'
 import { getEmptyStore } from '../store/utils'
 import {
+  getExcecuteOrderFailureToast,
   getBuyNFTWithCardErrorToast,
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
@@ -108,6 +109,24 @@ describe('when handling the failure of a buy NFTs with card', () => {
       .provide([[select(getState), []]])
       .put(showToast(getBuyNFTWithCardErrorToast(), 'bottom center'))
       .dispatch(executeOrderWithCardFailure(errorMessage))
+      .silentRun()
+  })
+})
+
+
+describe('when handling the failure of excecute order ', () => {
+  const error = 'anError'
+  const order =  {
+    contractAddress: 'aContractAddress',
+    tokenId: 'aTokenId',
+    price: '100000000000'
+  } as Order;
+
+  it('should show a toast signaling the failure ', () => {
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getExcecuteOrderFailureToast(), 'bottom center'))
+      .dispatch(executeOrderFailure(order, nft, error))
       .silentRun()
   })
 })
