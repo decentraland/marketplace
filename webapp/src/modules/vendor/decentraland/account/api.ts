@@ -46,7 +46,7 @@ class AccountAPI extends BaseAPI {
     }
 
     if (filters.address) {
-      queryParams.set('address', filters.address)
+      filters.address.forEach(address => queryParams.append('address', address))
     }
 
     if (filters.network) {
