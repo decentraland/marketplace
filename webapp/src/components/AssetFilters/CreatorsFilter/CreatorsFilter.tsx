@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import classNames from 'classnames'
 import {
   Box,
@@ -118,14 +118,19 @@ export const CreatorsFilter = ({
     [fetchedCreators]
   )
 
+  const dropdownRef = useRef(null)
   const onDropdownChange = useCallback(
     (_event, data) => {
       handleCreatorsChange(data.value as string)
-      if (!data.value) {
+      if (searchTerm && !data.value) {
         setSearchTerm('')
+        if (dropdownRef.current) {
+          // typing as any since the type of the Legacy ref component is not exposed by the lib
+          ;(dropdownRef.current as any).clearSearchQuery?.()
+        }
       }
     },
-    [handleCreatorsChange]
+    [handleCreatorsChange, searchTerm]
   )
 
   return (
@@ -137,22 +142,27 @@ export const CreatorsFilter = ({
     >
       <Dropdown
         className="creators-filter-dropdown"
-        onFocus={handleFetchTopCreators}
+        placeholder={t('nft_filters.creators.search')}
+        loading={isLoading}
         value={searchTerm}
         options={dropdownOptions}
+        selectOnNavigation={false}
+        selectOnBlur={false}
         clearable
         selection
         search
-        selectOnNavigation={false}
         fluid
-        selectOnBlur={false}
         noResultsMessage={
           fetchedCreators.length > 0 && !isLoading
             ? t('filters.no_results')
             : t('nft_filters.creators.type_to_search')
         }
-        loading={isLoading}
-        placeholder={t('nft_filters.creators.search')}
+        onFocus={handleFetchTopCreators}
+        onChange={onDropdownChange}
+        onSearchChange={(_event, data) => {
+          setSearchTerm(data.searchQuery)
+        }}
+        ref={dropdownRef}
         icon={
           fetchedCreators.length ? (
             <Icon
@@ -163,10 +173,6 @@ export const CreatorsFilter = ({
             <Icon name="dropdown" />
           )
         }
-        onChange={onDropdownChange}
-        onSearchChange={(_event, data) => {
-          setSearchTerm(data.searchQuery)
-        }}
       />
       <div className="pill-container">
         {selectedCreators.map(creator => (
