@@ -43,7 +43,7 @@ const mapState = (state: RootState): MapStateProps => {
 
 const mapDispatch = (dispatch: Dispatch): MapDispatchProps => {
   return {
-    onFetchMetrics: address => dispatch(fetchAccountMetricsRequest({ address }))
+    onFetchMetrics: address => dispatch(fetchAccountMetricsRequest({ address: [address] }))
   }
 }
 
