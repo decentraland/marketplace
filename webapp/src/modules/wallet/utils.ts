@@ -28,3 +28,15 @@ export async function getEth(): Promise<ethers.providers.Web3Provider> {
 
   return new ethers.providers.Web3Provider(provider)
 }
+
+// TODO: remove after fixing the following issue https://app.zenhub.com/workspaces/dapps-5ffc44ecec9f8500140e173c/issues/gh/decentraland/dapps-issues/45
+function removeScientificNotationForSmallNumbers(number: number): string {
+  // fix the amount of decimals to the exponent of the scientific notation when the number is too low
+  return number.toFixed(parseInt(number.toString().split('-')[1]))
+}
+
+export function formatBalance(balance: number) {
+  return balance.toString().includes('-')
+    ? removeScientificNotationForSmallNumbers(balance)
+    : balance.toString()
+}
