@@ -45,8 +45,7 @@
   background-color: var(--background);
   border-top: 1px solid rgba(115, 110, 125, 0.32);
   width: 100%;
-  padding: 0 21px !important;
-  padding-top: 12px !important;
+  padding: 12px 21px !important;
 }
 
 :global(.ui.modal).assetFiltersModal
@@ -54,4 +53,8 @@
   > :global(.ui.primary.button) {
   width: 100%;
   margin-bottom: 0;
+}
+
+:global(.ui.page.modals) {
+  padding-bottom: 0;
 }
