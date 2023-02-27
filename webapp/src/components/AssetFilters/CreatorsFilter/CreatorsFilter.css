@@ -9,7 +9,7 @@
 }
 
 @media (max-width: 768px) {
-  .CreatorsFilter .ui.selection.dropdown .menu {
+  .CreatorsFilter .ui.selection.dropdown:not(.loading) .menu {
     min-height: 170px;
   }
 
