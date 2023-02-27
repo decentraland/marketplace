@@ -1,5 +1,5 @@
 :global(.ui.modal).assetFiltersModal {
-  overflow-x: hidden;
+  overflow-x: scroll;
   display: flex !important; /** override decentraland-ui important */
   flex-direction: column;
   background: var(--background);
@@ -48,10 +48,13 @@
   bottom: 0;
   background-color: var(--background);
   border-top: 1px solid rgba(115, 110, 125, 0.32);
+  width: 100%;
+  margin-top: 14px;
 }
 
 :global(.ui.modal).assetFiltersModal
   > .modalFooter
   > :global(.ui.primary.button) {
-  padding: 12px 0 !important;
+  width: 100%;
+  margin-top: 14px;
 }
