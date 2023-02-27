@@ -44,7 +44,14 @@
   position: initial;
   background: transparent;
   position: sticky;
+  position: -webkit-sticky;
   bottom: 0;
   background-color: var(--background);
   border-top: 1px solid rgba(115, 110, 125, 0.32);
+}
+
+:global(.ui.modal).assetFiltersModal
+  > .modalFooter
+  > :global(.ui.primary.button) {
+  padding: 12px 0 !important;
 }
