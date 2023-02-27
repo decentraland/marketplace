@@ -12,7 +12,9 @@
   margin: 0;
   padding: 16px !important; /* override decentraland-ui important */
   border-bottom: 1px solid rgba(115, 110, 125, 0.32);
-  background: transparent;
+  background: var(--background);
+  position: sticky;
+  top: 0
 }
 
 .modalTitle {
@@ -56,5 +58,6 @@
 }
 
 :global(.ui.page.modals) {
+  padding-top: 0;
   padding-bottom: 0;
 }
