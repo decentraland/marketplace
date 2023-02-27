@@ -93,6 +93,10 @@
   .CreatorsFilter .ui.fluid.search.selection.dropdown {
     min-height: 33px;
   }
+
+  .CreatorsFilter .ui.selection.dropdown .menu {
+    min-height: 170px;
+  }
 }
 
 .CreatorsFilter .ui.selection.dropdown .menu {
