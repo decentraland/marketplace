@@ -3,6 +3,7 @@
   display: flex !important; /** override decentraland-ui important */
   flex-direction: column;
   background: var(--background);
+  height: 100vh;
 }
 
 :global(.ui.modal).assetFiltersModal > :global(.header).modalHeader {
@@ -35,10 +36,15 @@
   flex-direction: column;
   flex: 1;
   background: transparent;
+  margin-bottom: 73px; /* adding margin for the button that is fixed at the bottom */
 }
 
 :global(.ui.modal).assetFiltersModal > .modalFooter {
   padding: 24px;
   position: initial;
   background: transparent;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--background);
+  border-top: 1px solid rgba(115, 110, 125, 0.32);
 }

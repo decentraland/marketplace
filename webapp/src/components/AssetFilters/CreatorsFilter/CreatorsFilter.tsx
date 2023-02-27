@@ -164,14 +164,10 @@ export const CreatorsFilter = ({
         }}
         ref={dropdownRef}
         icon={
-          fetchedCreators.length ? (
-            <Icon
-              name="search"
-              className={classNames(isLoading && 'search-loading')}
-            />
-          ) : (
-            <Icon name="dropdown" />
-          )
+          <Icon
+            name="search"
+            className={classNames(isLoading && 'search-loading')}
+          />
         }
       />
       <div className="pill-container">
