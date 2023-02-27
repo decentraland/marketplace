@@ -9,6 +9,10 @@
 }
 
 @media (max-width: 768px) {
+  .CreatorsFilter .ui.selection.dropdown .menu {
+    min-height: 170px;
+  }
+
   .creators-filter-dropdown {
     margin-top: 20px;
   }
@@ -92,10 +96,6 @@
 
   .CreatorsFilter .ui.fluid.search.selection.dropdown {
     min-height: 33px;
-  }
-
-  .CreatorsFilter .ui.selection.dropdown .menu {
-    min-height: 170px;
   }
 }
 
