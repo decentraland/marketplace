@@ -14,7 +14,8 @@
   border-bottom: 1px solid rgba(115, 110, 125, 0.32);
   background: var(--background);
   position: sticky;
-  top: 0
+  top: 0;
+  z-index: 2;
 }
 
 .modalTitle {
