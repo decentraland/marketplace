@@ -1,5 +1,4 @@
 :global(.ui.modal).assetFiltersModal {
-  overflow-x: scroll;
   display: flex !important; /** override decentraland-ui important */
   flex-direction: column;
   background: var(--background);
@@ -30,13 +29,13 @@
 }
 
 :global(.ui.modal).assetFiltersModal > :global(.content) {
+  overflow: scroll;
   margin: 0;
   padding: 0 !important; /* override important from decentralnad-ui */
   display: flex;
   flex-direction: column;
   flex: 1;
   background: transparent;
-  margin-bottom: 73px; /* adding margin for the button that is fixed at the bottom */
 }
 
 :global(.ui.modal).assetFiltersModal > .modalFooter {
