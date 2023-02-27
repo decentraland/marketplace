@@ -63,12 +63,10 @@ export const SelectedFilters = ({
   }, [contracts, onlyOnSale, collection?.address])
 
   useEffect(() => {
-    const fetchData = async (addresses: string[]) => {
-      return await getCreatorsByAddress(addresses)
-    }
-
     if (creators?.length) {
-      fetchData(creators).then(creators => setSelectedCreators(creators))
+      getCreatorsByAddress(creators).then(creators =>
+        setSelectedCreators(creators)
+      )
     } else if (!creators?.length) {
       setSelectedCreators([])
     }

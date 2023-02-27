@@ -202,20 +202,20 @@ export const AssetFilters = ({
           values={values}
         />
       ) : null}
-      {shouldRenderFilter(AssetFilter.Collection) ? (
-        <CollectionFilter
-          onChange={handleCollectionChange}
-          collection={collection}
-          onlyOnSale={isOnSale}
-          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Collection]}
-        />
-      ) : null}
       {shouldRenderFilter(AssetFilter.Creators) &&
       (!network || (network && network === Network.MATIC)) ? (
         <CreatorsFilter
           creators={creators}
           onChange={handleCreatorsChange}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Creators]}
+        />
+      ) : null}
+      {shouldRenderFilter(AssetFilter.Collection) ? (
+        <CollectionFilter
+          onChange={handleCollectionChange}
+          collection={collection}
+          onlyOnSale={isOnSale}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Collection]}
         />
       ) : null}
 
