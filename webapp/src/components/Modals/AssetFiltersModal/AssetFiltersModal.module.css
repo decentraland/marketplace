@@ -39,21 +39,19 @@
 }
 
 :global(.ui.modal).assetFiltersModal > .modalFooter {
-  padding: 24px;
-  position: initial;
-  background: transparent;
   position: sticky;
   position: -webkit-sticky;
   bottom: 0;
   background-color: var(--background);
   border-top: 1px solid rgba(115, 110, 125, 0.32);
   width: 100%;
-  margin-top: 14px;
+  padding: 0 21px !important;
+  padding-top: 12px !important;
 }
 
 :global(.ui.modal).assetFiltersModal
   > .modalFooter
   > :global(.ui.primary.button) {
   width: 100%;
-  margin-top: 14px;
+  margin-bottom: 0;
 }

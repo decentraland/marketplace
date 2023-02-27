@@ -142,6 +142,9 @@
 }
 
 @media (max-width: 990px) {
+  .AssetBrowse .overlay {
+    margin-top: 0;
+  }
   .AssetBrowse .ui.cards,
   .AssetBrowse .ui.cards > .ui.card {
     margin-left: 0;
