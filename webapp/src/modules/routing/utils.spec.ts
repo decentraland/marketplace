@@ -1,7 +1,8 @@
 import { Section } from '../vendor/decentraland/routing'
 import { getPersistedIsMapProperty } from '../ui/utils'
 import { View } from '../ui/types'
-import { isMapSet } from './utils'
+import { getClearedBrowseOptions, isMapSet } from './utils'
+import { BrowseOptions } from './types'
 jest.mock('../ui/utils')
 
 const mockedGetPersistedIsMapProperty = (getPersistedIsMapProperty as unknown) as jest.MockedFunction<
@@ -104,6 +105,26 @@ describe('when checking if the map is set', () => {
 
     it('should return true', () => {
       expect(isMapSet(isMap, Section.LAND, view)).toBe(true)
+    })
+  })
+})
+
+describe('when clearing browser options', () => {
+  let baseBrowseOptions: BrowseOptions
+  let options: BrowseOptions
+  describe('and the creators filter is set', () => {
+    beforeEach(() => {
+      baseBrowseOptions = {
+        onlyOnSale: true,
+        page: 1
+      }
+      options = {
+        ...baseBrowseOptions,
+        creators: ['creator1', 'creator2']
+      }
+    })
+    it('should remove the creators key from the options', () => {
+      expect(getClearedBrowseOptions(options)).toStrictEqual(baseBrowseOptions)
     })
   })
 })

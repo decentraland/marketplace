@@ -107,3 +107,14 @@ export const getIsEstateSizeFilterEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsCreatorsFilterEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.CREATOR_FILTER
+    )
+  }
+  return false
+}

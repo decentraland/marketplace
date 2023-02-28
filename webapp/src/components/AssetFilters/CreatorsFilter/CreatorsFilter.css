@@ -1,0 +1,175 @@
+.CreatorsFilter .creators-filter-dropdown.ui.fluid.search.selection.dropdown {
+  height: 44px;
+}
+
+.CreatorsFilter .pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+  .CreatorsFilter .ui.selection.dropdown:not(.loading) .menu {
+    min-height: 170px;
+  }
+
+  .creators-filter-dropdown {
+    margin-top: 20px;
+  }
+
+  .CreatorsFilter.CreatorsFilter {
+    margin-bottom: 0;
+    width: 100%;
+  }
+
+  .CreatorsFilter .ui.sub.header.name {
+    font-weight: normal;
+    margin-bottom: 12px;
+  }
+
+  .CreatorsFilter .ui.fluid.search.selection.dropdown {
+    padding: 0.53em 2.1em 0.53em 0.6em;
+    min-height: 37px;
+  }
+
+  .CreatorsFilter .ui.search.selection.dropdown > input.search {
+    padding: 0.43em 2.1em 0.43em 0.6em;
+    right: 0.74em;
+    font-size: 16px;
+  }
+
+  .CreatorsFilter
+    .ui.search.selection.dropdown
+    > input.search::-webkit-input-placeholder {
+    padding-left: 20px;
+  }
+
+  .CreatorsFilter .ui.selection.dropdown > .dropdown.icon {
+    padding: 0.63em;
+  }
+
+  .CreatorsFilter .ui.selection.dropdown > .search.icon {
+    padding: 0.63em;
+    color: var(--text);
+    top: 35%;
+    left: 93%;
+    font-size: 1rem;
+  }
+
+  .CreatorsFilter .ui.selection.dropdown > .search.icon.search-loading::before {
+    top: 40%;
+  }
+
+  .CreatorsFilter .ui.selection.dropdown > .search.icon.search-loading::after {
+    top: 40%;
+  }
+}
+
+.CreatorsFilter .ui.dropdown .text {
+  color: var(--text);
+  font-weight: 500;
+  margin-top: auto;
+  margin-bottom: auto;
+  font-family: var(--font-family);
+}
+
+@media (min-width: 769px) {
+  .CreatorsFilter .ui.selection.dropdown > .dropdown.icon {
+    color: var(--text);
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .CreatorsFilter .ui.selection.dropdown > .search.icon {
+    color: var(--text);
+    top: 30%;
+    padding: 0.71em;
+  }
+
+  .CreatorsFilter .ui.selection.dropdown > .search.icon.search-loading::before {
+    top: 45%;
+  }
+
+  .CreatorsFilter .ui.selection.dropdown > .search.icon.search-loading::after {
+    top: 45%;
+  }
+
+  .CreatorsFilter .ui.fluid.search.selection.dropdown {
+    min-height: 33px;
+  }
+}
+
+.CreatorsFilter .ui.selection.dropdown .menu {
+  border-radius: 6px;
+  margin-top: 13px;
+  border-color: transparent !important;
+  box-shadow: var(--shadow-2);
+}
+
+.CreatorsFilter .ui.fluid.search.selection.dropdown {
+  display: flex;
+  border-radius: 6px !important;
+  padding: 0.58571429em 2.1em 0.58571429em 0.6em;
+  padding: 0.53em 2.1em 0.53em 0.6em;
+  color: var(--secondary-text);
+  border: 1px solid var(--divider) !important;
+  background-color: transparent;
+}
+
+.CreatorsFilter .ui.search.selection.dropdown > input.search {
+  color: var(--text);
+  font-weight: 500;
+  font-family: var(--font-family);
+  padding: 0.47857143em 2.1em 0.47857143em 0.6em;
+  height: 100%;
+}
+
+.CreatorsFilter .ui.search.selection.dropdown > input.search::selection {
+  color: var(--text);
+}
+
+.CreatorsFilter .ui.dropdown.visible .menu.wrapper {
+  overflow-y: hidden;
+  height: auto;
+  display: flex !important;
+  flex-direction: column;
+}
+
+.CreatorsFilter .ui.dropdown .options-wrapper {
+  flex: 1;
+  width: 100% !important;
+}
+
+.CreatorsFilter .ui.dropdown:hover .menu {
+  border-color: transparent !important;
+  box-shadow: var(--shadow-2) !important;
+}
+
+.CreatorsFilter .ui.selection.dropdown .menu > .item {
+  border-top: none;
+}
+
+.CreatorsFilter .ui.selection.dropdown .menu > .item::selection .text {
+  border-top: none;
+  color: var(--text);
+}
+
+.CreatorsFilter .ui.selection.dropdown .menu > .message:not(.ui) {
+  color: var(--text);
+  white-space: initial;
+  line-height: 24px;
+}
+
+.CreatorsFilter .ui.selection.visible.dropdown > .text:not(.default) {
+  color: var(--text);
+}
+
+.CreatorsFilter .ui.selection.visible.dropdown > .text.default {
+  padding-left: 4px;
+}
+
+.CreatorsFilter .ui.search.selection.dropdown > input.search:focus {
+  border: 2px solid var(--text) !important;
+  border-radius: 6px;
+}

@@ -80,7 +80,7 @@ export function* rootSaga() {
     walletSaga(),
     collectionSaga(),
     saleSaga(),
-    accountSaga(),
+    accountSaga(catalystClient),
     collectionSaga(),
     storeSaga(catalystClient),
     identitySaga(),

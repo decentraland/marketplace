@@ -12,6 +12,7 @@ import { Sections, SortBy } from './types'
 import { locations } from './locations'
 import {
   getAssetType,
+  getCreators,
   getIsMap,
   getMaxEstateSize,
   getMaxPrice,
@@ -30,6 +31,14 @@ describe('when getting if the are filters set', () => {
         search: 'a search'
       })
       expect(expected).toBe(false)
+    })
+  })
+
+  describe('when the creator filter is set', () => {
+    it('should return true', () => {
+      expect(hasFiltersEnabled.resultFunc({ creators: ['anAddress'] })).toBe(
+        true
+      )
     })
   })
 
@@ -337,6 +346,30 @@ describe('when there is a maxEstateSize defined', () => {
 
   it('should return the value', () => {
     expect(getMaxEstateSize.resultFunc(url)).toBe('120')
+  })
+})
+
+describe('when there is a creator defined', () => {
+  let url: string
+  let anAddress: string
+
+  beforeEach(() => {
+    anAddress = '0xAddress'
+    url = `creators=${anAddress}`
+  })
+
+  it('should return an array with the creator address', () => {
+    expect(getCreators.resultFunc(url)).toEqual([anAddress])
+  })
+})
+
+describe("when there aren't any creators defined", () => {
+  let url: string
+  beforeEach(() => {
+    url = `sortBy=a_sort_by`
+  })
+  it('should return an empty array', () => {
+    expect(getCreators.resultFunc(url)).toEqual([])
   })
 })
 
