@@ -49,6 +49,7 @@ export const AssetFilters = ({
   isPriceFilterEnabled,
   view,
   isEstateSizeFilterEnabled,
+  isCreatorFiltersEnabled,
   values
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
@@ -202,7 +203,8 @@ export const AssetFilters = ({
           values={values}
         />
       ) : null}
-      {shouldRenderFilter(AssetFilter.Creators) &&
+      {isCreatorFiltersEnabled &&
+      shouldRenderFilter(AssetFilter.Creators) &&
       (!network || (network && network === Network.MATIC)) ? (
         <CreatorsFilter
           creators={creators}

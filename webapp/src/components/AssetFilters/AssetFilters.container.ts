@@ -20,6 +20,7 @@ import {
   getWearableGenders
 } from '../../modules/routing/selectors'
 import {
+  getIsCreatorsFilterEnabled,
   getIsEstateSizeFilterEnabled,
   getIsPriceFilterEnabled
 } from '../../modules/features/selectors'
@@ -79,7 +80,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     view: getView(state),
     section,
     isPriceFilterEnabled: getIsPriceFilterEnabled(state),
-    isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state)
+    isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),
+    isCreatorFiltersEnabled: getIsCreatorsFilterEnabled(state)
   }
 }
 
