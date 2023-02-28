@@ -34,7 +34,7 @@
 }
 
 .perDay {
-  font-size: 20px;
+  font-size: 15px;
 }
 
 .priceInFiat {
@@ -46,6 +46,7 @@
 
 .priceInMana:global(.ui.header) {
   margin-bottom: unset;
+  font-size: 21px;
 }
 
 .rent:global(.ui.button) {

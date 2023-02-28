@@ -31,7 +31,6 @@ const Trigger = ({ period }: { period: RentalListingPeriod }) => {
 const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
   const handleOnChange = useCallback(
     (_event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
-      console.log('flo a ver ', data.value)
       onChange(data.value as number)
     },
     [onChange]
@@ -71,23 +70,12 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
     [periods]
   )
 
-  console.log(
-    'flo periods[0]',
-    periods[0],
-    'value',
-    value,
-    'periods[value] con value 0',
-    value && periods[value],
-    'si periods[0] y periods[value] siendo value 0 sin iguales',
-    value && periods[value] === periods[0]
-  )
-
   return (
     <Dropdown
       className={classNames(styles.periodDropdown, className)}
-      trigger={value ? <Trigger period={periods[value]} /> : null}
+      trigger={value !== undefined ? <Trigger period={periods[value]} /> : null}
       value={value}
-      placeholder={'Select period'}
+      placeholder={t('asset_page.sales_rent_action_box.select_period')}
       options={options}
       onChange={handleOnChange}
     />
