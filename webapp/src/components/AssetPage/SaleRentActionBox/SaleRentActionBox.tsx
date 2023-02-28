@@ -59,8 +59,8 @@ const SaleRentActionBox = ({
     addressEquals(rental.tenant ?? undefined, wallet.address)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
-    number
-  >(0)
+    number | undefined
+  >(undefined)
   const [view, setView] = useState(
     !!order || !isRentalOpen ? View.SALE : View.RENT
   )
@@ -104,7 +104,7 @@ const SaleRentActionBox = ({
   const handleOnRent = useCallback(() => {
     if (!!authorization && hasAuthorization(authorizations, authorization)) {
       setShowAuthorizationModal(false)
-      onRent(selectedRentalPeriodIndex)
+      onRent(selectedRentalPeriodIndex ? selectedRentalPeriodIndex : 0)
     } else {
       setShowAuthorizationModal(true)
     }
@@ -126,8 +126,8 @@ const SaleRentActionBox = ({
         .parseEther(formatBalance(currentMana))
         .gte(
           ethers.BigNumber.from(
-            rental.periods[selectedRentalPeriodIndex].pricePerDay
-          ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
+            rental.periods[selectedRentalPeriodIndex ? selectedRentalPeriodIndex : 0].pricePerDay
+          ).mul(rental.periods[selectedRentalPeriodIndex ? selectedRentalPeriodIndex : 0].maxDays)
         ),
     [rental, currentMana, selectedRentalPeriodIndex]
   )
@@ -203,7 +203,7 @@ const SaleRentActionBox = ({
                     <div className={styles.fullWidth}>
                       <Button
                         primary
-                        disabled={isNFTPartOfAState || !hasEnoughManaToRent}
+                        disabled={isNFTPartOfAState || !hasEnoughManaToRent || !selectedRentalPeriodIndex}
                         onClick={handleOnRent}
                         className={styles.rent}
                       >
