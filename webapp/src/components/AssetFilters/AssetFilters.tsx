@@ -48,6 +48,7 @@ export const AssetFilters = ({
   isPriceFilterEnabled,
   view,
   isEstateSizeFilterEnabled,
+  isLocationFilterEnabled,
   minDistanceToPlaza,
   maxDistanceToPlaza,
   adjacentToRoad,
@@ -192,13 +193,15 @@ export const AssetFilters = ({
             }
           />
         ) : null}
-        <LocationFilter
-          minDistanceToPlaza={minDistanceToPlaza}
-          maxDistanceToPlaza={maxDistanceToPlaza}
-          adjacentToRoad={adjacentToRoad}
-          onAdjacentToRoadChange={handleAdjacentToRoadChange}
-          onDistanceToPlazaChange={handleDistanceToPlazaChange}
-        />
+        {isLocationFilterEnabled && (
+          <LocationFilter
+            minDistanceToPlaza={minDistanceToPlaza}
+            maxDistanceToPlaza={maxDistanceToPlaza}
+            adjacentToRoad={adjacentToRoad}
+            onAdjacentToRoadChange={handleAdjacentToRoadChange}
+            onDistanceToPlazaChange={handleDistanceToPlazaChange}
+          />
+        )}
       </div>
     )
   }

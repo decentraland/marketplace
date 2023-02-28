@@ -36,6 +36,7 @@ export type Props = {
   defaultCollapsed?: Record<AssetFilter, boolean>
   isPriceFilterEnabled: boolean
   isEstateSizeFilterEnabled: boolean
+  isLocationFilterEnabled: boolean
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
@@ -64,6 +65,7 @@ export type MapStateProps = Pick<
   | 'view'
   | 'isPriceFilterEnabled'
   | 'isEstateSizeFilterEnabled'
+  | 'isLocationFilterEnabled'
   | 'minDistanceToPlaza'
   | 'maxDistanceToPlaza'
   | 'adjacentToRoad'

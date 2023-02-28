@@ -23,6 +23,7 @@ import {
 } from '../../modules/routing/selectors'
 import {
   getIsEstateSizeFilterEnabled,
+  getIsLocationFilterEnabled,
   getIsPriceFilterEnabled
 } from '../../modules/features/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
@@ -79,6 +80,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     section,
     isPriceFilterEnabled: getIsPriceFilterEnabled(state),
     isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),
+    isLocationFilterEnabled: getIsLocationFilterEnabled(state),
     minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
     maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
     adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state)
