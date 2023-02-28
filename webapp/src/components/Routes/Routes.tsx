@@ -28,7 +28,7 @@ import { CampaignBrowserPage } from '../Campaign/CampaignBrowserPage'
 import { StatusPage } from '../BuyPage/StatusPage'
 import { Props } from './Routes.types'
 
-const Routes = ({ inMaintenance, isBuyNftsWithFiatEnabled }: Props) => {
+const Routes = ({ inMaintenance }: Props) => {
   const APP_ID = config.get('INTERCOM_APP_ID')
 
   if (inMaintenance) {
@@ -75,20 +75,16 @@ const Routes = ({ inMaintenance, isBuyNftsWithFiatEnabled }: Props) => {
         <Route
           exact
           path={locations.buyStatusPage(AssetType.NFT)}
-          component={(props: RouteComponentProps) =>
-            isBuyNftsWithFiatEnabled ? (
-              <StatusPage {...props} type={AssetType.NFT} />
-            ) : null
-          }
+          component={(props: RouteComponentProps) => (
+            <StatusPage {...props} type={AssetType.NFT} />
+          )}
         />
         <Route
           exact
           path={locations.buyStatusPage(AssetType.ITEM)}
-          component={(props: RouteComponentProps) =>
-            isBuyNftsWithFiatEnabled ? (
-              <StatusPage {...props} type={AssetType.ITEM} />
-            ) : null
-          }
+          component={(props: RouteComponentProps) => (
+            <StatusPage {...props} type={AssetType.ITEM} />
+          )}
         />
         <Route
           exact

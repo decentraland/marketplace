@@ -7,10 +7,7 @@ import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/au
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 import { FETCH_APPLICATION_FEATURES_REQUEST } from 'decentraland-dapps/dist/modules/features/actions'
 import { RootState } from '../../../modules/reducer'
-import {
-  getIsBuyNftsWithFiatEnabled,
-  isLoadingFeatureFlags as getLoadingFeatureFlags
-} from '../../../modules/features/selectors'
+import { isLoadingFeatureFlags as getLoadingFeatureFlags } from '../../../modules/features/selectors'
 import {
   buyItemRequest,
   buyItemWithCardRequest,
@@ -39,7 +36,6 @@ const mapState = (state: RootState): MapStateProps => ({
       getLoadingFeatureFlags(state),
       FETCH_APPLICATION_FEATURES_REQUEST
     ),
-  isBuyNftsWithFiatEnabled: getIsBuyNftsWithFiatEnabled(state),
   isBuyWithCardPage: getIsBuyWithCardPage(state),
   getContract: (query: Partial<Contract>) => getContract(state, query)
 })
