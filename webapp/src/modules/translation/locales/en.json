@@ -376,6 +376,12 @@
       "all_items": "All collections",
       "search": "Search collections"
     },
+    "creators": {
+      "title": "Creators",
+      "all_creators": "All creators",
+      "search": "Search creators",
+      "type_to_search": "Type to search for creators."
+    },
     "network": {
       "title": "Network",
       "all_items": "All networks"

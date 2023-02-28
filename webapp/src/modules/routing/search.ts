@@ -86,6 +86,12 @@ export function getSearchParams(options?: BrowseOptions) {
       )
     }
 
+    if (options.creators && options.creators.length > 0) {
+      for (const creators of options.creators) {
+        params.append('creators', creators)
+      }
+    }
+
     if (options.search) {
       params.set('search', options.search)
     }

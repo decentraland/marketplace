@@ -1,6 +1,10 @@
 import { BrowseOptions, SortBy } from './types'
 import { Section } from '../vendor/decentraland'
-import { getPersistedIsMapProperty, isAccountView, isLandSection } from '../ui/utils'
+import {
+  getPersistedIsMapProperty,
+  isAccountView,
+  isLandSection
+} from '../ui/utils'
 import { omit, reset } from '../../lib/utils'
 import { View } from '../ui/types'
 import { getSearchParams } from './search'
@@ -56,7 +60,10 @@ export function isMapSet(
   )
 }
 
-export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUndefined = false): BrowseOptions {
+export function getClearedBrowseOptions(
+  browseOptions: BrowseOptions,
+  fillWithUndefined = false
+): BrowseOptions {
   const keys = [
     'rarities',
     'wearableGenders',
@@ -76,10 +83,13 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
     'maxEstateSize',
     'minDistanceToPlaza',
     'maxDistanceToPlaza',
-    'adjacentToRoad'
+    'adjacentToRoad',
+    'creators'
   ]
 
-  const clearedBrowseOptions = fillWithUndefined ? reset(browseOptions, keys) : omit(browseOptions, keys)
+  const clearedBrowseOptions = fillWithUndefined
+    ? reset(browseOptions, keys)
+    : omit(browseOptions, keys)
 
   // The onlyOnSale filter is ON by default. The clear should remove it if it's off so it's back on (default state)
   if (
@@ -90,5 +100,5 @@ export function getClearedBrowseOptions(browseOptions: BrowseOptions, fillWithUn
   }
   // reset the pages to the first one
   clearedBrowseOptions.page = 1
-  return clearedBrowseOptions;
+  return clearedBrowseOptions
 }

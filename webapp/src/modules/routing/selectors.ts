@@ -197,6 +197,11 @@ export const getContracts = createSelector<RootState, string, string[]>(
   search => getURLParamArray<string>(search, 'contracts')
 )
 
+export const getCreators = createSelector<RootState, string, string[]>(
+  getRouterSearch,
+  search => getURLParamArray<string>(search, 'creators')
+)
+
 export const getSearch = createSelector<RootState, string, string>(
   getRouterSearch,
   search => getURLParam(search, 'search') || ''
@@ -319,12 +324,14 @@ export const getAssetsUrlParams = createSelector(
   getIsSoldOut,
   getItemId,
   getContracts,
-  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts) => ({
+  getCreators,
+  (onlyOnSale, onlySmart, isSoldOut, itemId, contracts, creators) => ({
     onlyOnSale,
     onlySmart,
     isSoldOut,
     itemId,
-    contracts
+    contracts,
+    creators
   })
 )
 
@@ -437,7 +444,8 @@ export const hasFiltersEnabled = createSelector<
     section,
     minDistanceToPlaza,
     maxDistanceToPlaza,
-    adjacentToRoad
+    adjacentToRoad,
+    creators
   } = browseOptions
   const isLand = isLandSection(section as Section)
   if (isLand) {
@@ -460,6 +468,7 @@ export const hasFiltersEnabled = createSelector<
   const hasGenderFilter = wearableGenders && wearableGenders.length > 0
   const hasRarityFilter = rarities && rarities.length > 0
   const hasContractsFilter = contracts && contracts.length > 0
+  const hasCreatorFilter = creators && creators.length > 0
   const hasEmotePlayModeFilter = emotePlayMode && emotePlayMode.length > 0
   const hasNotOnSaleFilter = onlyOnSale === false
 
@@ -468,6 +477,7 @@ export const hasFiltersEnabled = createSelector<
     hasGenderFilter ||
     hasRarityFilter ||
     hasContractsFilter ||
+    hasCreatorFilter ||
     hasEmotePlayModeFilter ||
     !!minPrice ||
     !!maxPrice ||

@@ -373,6 +373,12 @@
       "all_items": "所有收藏",
       "search": "搜索收藏"
     },
+    "creators": {
+      "title": "创作者",
+      "all_creators": "所有创作者",
+      "search": "搜索创作者",
+      "type_to_search": "键入以搜索创作者。"
+    },
     "network": {
       "title": "网络",
       "all_items": "所有网络"

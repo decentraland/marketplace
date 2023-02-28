@@ -28,6 +28,7 @@ export type Props = {
   emotePlayMode?: EmotePlayMode[]
   assetType?: AssetType
   collection: string
+  creators?: string[]
   section?: Section
   landStatus: LANDFilters
   values?: BrowseOptions
@@ -42,6 +43,7 @@ export type Props = {
   adjacentToRoad?: boolean
   onBrowse: (options: BrowseOptions) => void
   onFilterChange?: (options: BrowseOptions) => void
+  isCreatorFiltersEnabled: boolean
 }
 
 export type MapStateProps = Pick<
@@ -59,6 +61,7 @@ export type MapStateProps = Pick<
   | 'emotePlayMode'
   | 'assetType'
   | 'collection'
+  | 'creators'
   | 'section'
   | 'landStatus'
   | 'vendor'
@@ -69,6 +72,7 @@ export type MapStateProps = Pick<
   | 'minDistanceToPlaza'
   | 'maxDistanceToPlaza'
   | 'adjacentToRoad'
+  | 'isCreatorFiltersEnabled'
 >
 
 export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>

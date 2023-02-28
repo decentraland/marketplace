@@ -1,7 +1,7 @@
 import { AccountFilters as AccountMetricsFilters } from '@dcl/schemas'
 import { Network } from '@dcl/schemas'
 import { action } from 'typesafe-actions'
-import { AccountMetrics } from './types'
+import { AccountMetrics, CreatorAccount } from './types'
 
 // Fetch account metrics
 
@@ -28,4 +28,32 @@ export type FetchAccountMetricsSuccessAction = ReturnType<
 >
 export type FetchAccountMetricsFailureAction = ReturnType<
   typeof fetchAccountMetricsFailure
+>
+
+// Fetch creators accounts
+
+export const FETCH_CREATORS_ACCOUNT_REQUEST =
+  '[Request] Fetch creators accounts'
+export const FETCH_CREATORS_ACCOUNT_SUCCESS =
+  '[Success] Fetch creators accounts'
+export const FETCH_CREATORS_ACCOUNT_FAILURE =
+  '[Failure] Fetch creators accounts'
+
+export const fetchCreatorsAccountRequest = (search: string) =>
+  action(FETCH_CREATORS_ACCOUNT_REQUEST, { search })
+export const fetchCreatorsAccountSuccess = (
+  search: string,
+  creatorAccounts: CreatorAccount[]
+) => action(FETCH_CREATORS_ACCOUNT_SUCCESS, { search, creatorAccounts })
+export const fetchCreatorsAccountFailure = (search: string, error: string) =>
+  action(FETCH_CREATORS_ACCOUNT_FAILURE, { search, error })
+
+export type FetchCreatorsAccountRequestAction = ReturnType<
+  typeof fetchCreatorsAccountRequest
+>
+export type FetchCreatorsAccountSuccessAction = ReturnType<
+  typeof fetchCreatorsAccountSuccess
+>
+export type FetchCreatorsAccountFailureAction = ReturnType<
+  typeof fetchCreatorsAccountFailure
 >

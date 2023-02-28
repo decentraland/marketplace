@@ -179,7 +179,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
         first: 24,
         skip: 0,
         sortBy: ItemSortBy.RECENTLY_REVIEWED,
-        creator: address,
+        creator: [address],
         category: NFTCategory.EMOTE,
         isWearableHead: false,
         isWearableAccessory: false,

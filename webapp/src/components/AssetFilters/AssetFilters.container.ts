@@ -6,6 +6,7 @@ import {
   getAdjacentToRoad,
   getAssetType,
   getContracts,
+  getCreators,
   getEmotePlayMode,
   getMaxDistanceToPlaza,
   getMaxEstateSize,
@@ -22,6 +23,7 @@ import {
   getWearableGenders
 } from '../../modules/routing/selectors'
 import {
+  getIsCreatorsFilterEnabled,
   getIsEstateSizeFilterEnabled,
   getIsLocationFilterEnabled,
   getIsPriceFilterEnabled
@@ -39,6 +41,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     'section' in values ? (values.section as Section) : getSection(state)
   const contracts =
     'contracts' in values ? values.contracts || [] : getContracts(state)
+  const creators =
+    'creators' in values ? values.creators || [] : getCreators(state)
   const onlyOnSale =
     'onlyOnSale' in values ? values.onlyOnSale : getOnlyOnSale(state)
   const onlyOnRent =
@@ -75,6 +79,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
     assetType: getAssetType(state),
     collection: contracts[0],
+    creators,
     landStatus,
     view: getView(state),
     section,
@@ -83,7 +88,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     isLocationFilterEnabled: getIsLocationFilterEnabled(state),
     minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
     maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
-    adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state)
+    adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),
+    isCreatorFiltersEnabled: getIsCreatorsFilterEnabled(state)
   }
 }
 
