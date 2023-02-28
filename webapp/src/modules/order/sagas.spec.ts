@@ -21,7 +21,7 @@ import { ErrorCode } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
-import { call, select } from 'redux-saga/effects'
+import { call, select, take } from 'redux-saga/effects'
 import {
   buyAssetWithCard,
   BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
@@ -46,6 +46,11 @@ import {
   executeOrderWithCardSuccess
 } from './actions'
 import { orderSaga } from './sagas'
+import {
+  fetchNFTRequest,
+  FETCH_NFTS_FAILURE,
+  FETCH_NFT_FAILURE
+} from '../nft/actions'
 
 let nft: NFT
 let order: Order
@@ -54,8 +59,13 @@ let txHash: string
 let wallet: Wallet
 let manaPurchase: ManaPurchase
 let nftPurchase: NFTPurchase
+let contractAddress: string
+let tokenId: string
 
 beforeEach(() => {
+  contractAddress = 'contractAddress'
+  tokenId = 'anId'
+
   nft = {
     name: 'aName',
     contractAddress: 'aContractAddress',
@@ -89,13 +99,14 @@ beforeEach(() => {
     status: PurchaseStatus.PENDING,
     gateway: NetworkGatewayType.TRANSAK,
     txHash,
+    paymentMethod: 'paymentMethod',
     amount: 10
   }
   nftPurchase = {
     ...manaPurchase,
     nft: {
-      contractAddress: 'contractAddress',
-      tokenId: 'anId',
+      contractAddress,
+      tokenId,
       itemId: undefined,
       tradeType: TradeType.SECONDARY,
       cryptoAmount: 10
@@ -283,7 +294,7 @@ describe('when handling the execute order with card action', () => {
   })
 
   describe('when the explanation modal is shown and the user closes it', () => {
-    it('should not set the item in the local storage to show the modal again later', () => {
+    it('should not set nft in the local storage to show the modal again later', () => {
       return expectSaga(orderSaga)
         .provide([
           [
@@ -388,10 +399,11 @@ describe('when handling the set purchase action', () => {
     })
 
     describe('when it is a complete and it has a txHash', () => {
-      describe('when the item does not exist', () => {
-        it('should not put any new action', () => {
+      describe('when the nft does not yet exist in the store', () => {
+        it('should put the action signaling the fetch nft request', () => {
           return expectSaga(orderSaga)
             .provide([[select(getNFTs), {}]])
+            .put(fetchNFTRequest(contractAddress, tokenId!))
             .dispatch(
               setPurchase({
                 ...nftPurchase,
@@ -406,11 +418,38 @@ describe('when handling the set purchase action', () => {
         })
       })
 
-      describe('when the item exists', () => {
-        it('should not put any new action', () => {
-          const nfts = { anNFTId: nft }
-          const { contractAddress, tokenId } = nftPurchase.nft
+      describe('when the action of fetching the nft has been dispatched', () => {
+        let errorMessage: string
 
+        beforeEach(() => {
+          errorMessage = 'The execution was reverted'
+        })
+
+        describe('when the fetch nft request fails', () => {
+          it('should put an action signaling the failure of the execute order with card request', () => {
+            return expectSaga(orderSaga)
+              .provide([
+                [select(getNFTs), {}],
+                [take(FETCH_NFT_FAILURE), { payload: { error: errorMessage } }]
+              ])
+              .put(fetchNFTRequest(contractAddress, tokenId!))
+              .put(executeOrderWithCardFailure(errorMessage))
+              .dispatch(
+                setPurchase({
+                  ...nftPurchase,
+                  txHash,
+                  status: PurchaseStatus.COMPLETE
+                })
+              )
+              .run({ silenceTimeout: true })
+          })
+        })
+      })
+
+      describe('when the nft already exists in the store', () => {
+        const nfts = { anNFTId: nft }
+
+        it('should put an action signaling the success of the execute order with card request', () => {
           return expectSaga(orderSaga)
             .provide([
               [select(getNFTs), nfts],

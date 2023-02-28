@@ -1,6 +1,6 @@
 import { expectSaga } from 'redux-saga-test-plan'
 import * as matchers from 'redux-saga-test-plan/matchers'
-import { call, select } from 'redux-saga/effects'
+import { call, select, take } from 'redux-saga/effects'
 import { ChainId, Item, Network } from '@dcl/schemas'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { setPurchase } from 'decentraland-dapps/dist/modules/gateway/actions'
@@ -34,10 +34,19 @@ import {
   fetchTrendingItemsRequest,
   buyItemWithCardRequest,
   buyItemWithCardFailure,
-  buyItemWithCardSuccess
+  buyItemWithCardSuccess,
+  FETCH_ITEM_SUCCESS,
+  FETCH_ITEMS_REQUEST,
+  FETCH_ITEMS_SUCCESS,
+  FETCH_ITEM_FAILURE,
+  FETCH_ITEMS_FAILURE
 } from './actions'
 import { itemSaga } from './sagas'
-import { getData as getItems } from './selectors'
+import {
+  getData as getItems,
+  getLoading as getItemLoading,
+  isFetchingItem
+} from './selectors'
 import { getItem } from './utils'
 
 const item = {
@@ -70,6 +79,7 @@ const manaPurchase: ManaPurchase = {
   status: PurchaseStatus.PENDING,
   gateway: NetworkGatewayType.TRANSAK,
   txHash,
+  paymentMethod: 'paymentMethod',
   amount: 10
 }
 
@@ -261,10 +271,13 @@ describe('when handling the set purchase action', () => {
     })
 
     describe('when it is complete and it has a txHash', () => {
-      describe('when the item does not exist', () => {
-        it('should not put any new action', () => {
+      const { contractAddress, itemId } = nftPurchase.nft
+
+      describe('when the item does not yet exist in the store', () => {
+        it('should put the action signaling the fetch item request', () => {
           return expectSaga(itemSaga)
             .provide([[select(getItems), {}]])
+            .put(fetchItemRequest(contractAddress, itemId!))
             .dispatch(
               setPurchase({
                 ...nftPurchase,
@@ -279,11 +292,35 @@ describe('when handling the set purchase action', () => {
         })
       })
 
-      describe('when the item exists', () => {
-        const items = { anItemId: item }
-        const { contractAddress, itemId } = nftPurchase.nft
+      describe('when the action of fetching the item has been dispatched', () => {
+        describe('when the fetch item request fails', () => {
+          it('should put an action signaling the failure of the buy item with card request', () => {
+            return expectSaga(itemSaga)
+              .provide([
+                [select(getItems), {}],
+                [
+                  take(FETCH_ITEM_FAILURE),
+                  { payload: { error: anError.message } }
+                ]
+              ])
+              .put(fetchItemRequest(contractAddress, itemId!))
+              .put(buyItemWithCardFailure(anError.message))
+              .dispatch(
+                setPurchase({
+                  ...nftPurchase,
+                  txHash,
+                  status: PurchaseStatus.COMPLETE
+                })
+              )
+              .run({ silenceTimeout: true })
+          })
+        })
+      })
 
-        it('should not put any new action', () => {
+      describe('when the item already exists in the store', () => {
+        const items = { anItemId: item }
+
+        it('should put an action signaling the success of the buy item with card request', () => {
           return expectSaga(itemSaga)
             .provide([
               [select(getItems), items],
