@@ -7,6 +7,8 @@
   padding: 8px;
   border: 1px solid rgba(115, 110, 125, 0.4);
   border-radius: 6px;
+  justify-content: space-between;
+  height: 40px;
 }
 
 .trigger {
@@ -20,6 +22,16 @@
 
 .periodDropdown:global(.ui.header.dcl.mana) {
   font-size: 17px;
+}
+
+.periodDropdown .triggerPlaceholder{
+  font-size: 17px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  opacity: 0.5;
 }
 
 /* Dropdown item */
