@@ -25,6 +25,7 @@ import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
+import { RentalPeriodFilter } from './RentalPeriodFilter/RentalPeriodFilter'
 
 export const AssetFilters = ({
   minPrice,
@@ -171,6 +172,7 @@ export const AssetFilters = ({
             }
           />
         ) : null}
+        <RentalPeriodFilter periods={[]} onChange={() => console.log("CHANGE")} />
       </div>
     )
   }
