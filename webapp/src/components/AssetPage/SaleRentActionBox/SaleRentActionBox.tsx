@@ -25,7 +25,7 @@ import { isPartOfEstate } from '../../../modules/nft/utils'
 import { AssetType } from '../../../modules/asset/types'
 import { builderUrl } from '../../../lib/environment'
 import { isOwnedBy } from '../../../modules/asset/utils'
-import { addressEquals } from '../../../modules/wallet/utils'
+import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { AuthorizationModal } from '../../AuthorizationModal'
@@ -123,7 +123,7 @@ const SaleRentActionBox = ({
       !!rental &&
       !!currentMana &&
       ethers.utils
-        .parseEther(currentMana.toString())
+        .parseEther(formatBalance(currentMana))
         .gte(
           ethers.BigNumber.from(
             rental.periods[selectedRentalPeriodIndex].pricePerDay
@@ -135,7 +135,7 @@ const SaleRentActionBox = ({
     () =>
       !!order &&
       !!currentMana &&
-      ethers.utils.parseEther(currentMana.toString()).gte(order.price),
+      ethers.utils.parseEther(formatBalance(currentMana)).gte(order.price),
     [order, currentMana]
   )
 

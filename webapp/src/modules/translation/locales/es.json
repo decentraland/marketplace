@@ -160,8 +160,8 @@
     "price_min_greater_max": "El precio máximo debería ser mayor al mínimo",
     "estate_size": {
       "label": "Tamaño de Estate",
-      "min_label": "Min (Land)",
-      "max_label": "Máx (Land)",
+      "min_label": "Min (Parcelas)",
+      "max_label": "Máx (Parcelas)",
       "error": "El tamaño máximo de parcelas debería ser superior al mínimo"
     },
     "reset": "Limpiar",

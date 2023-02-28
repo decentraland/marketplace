@@ -164,8 +164,8 @@
     "price_min_greater_max": "The maximum price should be higher than the minimum",
     "estate_size": {
       "label": "Estate size",
-      "min_label": "Min (Land)",
-      "max_label": "Max (Land)",
+      "min_label": "Min (Parcels)",
+      "max_label": "Max (Parcels)",
       "error": "The maximun estate size should be higher than the minimum"
     },
     "reset": "Reset",

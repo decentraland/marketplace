@@ -78,3 +78,14 @@ export function getBuyNFTWithCardErrorToast(): Omit<Toast, 'id'> {
     icon: <Icon name="exclamation circle" />
   }
 }
+
+export function getExcecuteOrderFailureToast(): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.ERROR,
+    title: t('toast.meta_transaction_failure.title'),
+    body: (
+        <p>{t('toast.meta_transaction_failure.body')}</p>
+    ),
+    icon: <Icon name="exclamation circle" />
+  }
+}
