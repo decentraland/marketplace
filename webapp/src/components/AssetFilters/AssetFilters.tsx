@@ -15,6 +15,7 @@ import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
 import EstateSizeFilter from './EstateSizeFilter'
+import CreatorsFilter from './CreatorsFilter'
 import { RarityFilter } from './RarityFilter'
 import { NetworkFilter } from './NetworkFilter'
 import { Props } from './AssetFilters.types'
@@ -33,6 +34,7 @@ export const AssetFilters = ({
   minEstateSize,
   maxEstateSize,
   collection,
+  creators,
   rarities,
   network,
   category,
@@ -48,6 +50,7 @@ export const AssetFilters = ({
   isPriceFilterEnabled,
   view,
   isEstateSizeFilterEnabled,
+  isCreatorFiltersEnabled,
   values
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
@@ -115,6 +118,10 @@ export const AssetFilters = ({
   function handleCollectionChange(value: string | undefined) {
     const newValue = value ? [value] : []
     onBrowse({ contracts: newValue })
+  }
+
+  function handleCreatorsChange(value: string[] | undefined) {
+    onBrowse({ creators: value })
   }
 
   function handleLandStatusChange(value: LANDFilters) {
@@ -198,6 +205,15 @@ export const AssetFilters = ({
           values={values}
         />
       ) : null}
+      {isCreatorFiltersEnabled &&
+      shouldRenderFilter(AssetFilter.Creators) &&
+      (!network || (network && network === Network.MATIC)) ? (
+        <CreatorsFilter
+          creators={creators}
+          onChange={handleCreatorsChange}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Creators]}
+        />
+      ) : null}
       {shouldRenderFilter(AssetFilter.Collection) ? (
         <CollectionFilter
           onChange={handleCollectionChange}
@@ -206,6 +222,7 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Collection]}
         />
       ) : null}
+
       {shouldRenderFilter(AssetFilter.PlayMode) && (
         <EmotePlayModeFilter
           onChange={handleEmotePlayModeChange}

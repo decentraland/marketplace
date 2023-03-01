@@ -1,6 +1,9 @@
 import { action } from 'typesafe-actions'
 import { Order } from '@dcl/schemas'
-import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
+import {
+  buildTransactionPayload,
+  buildTransactionWithFromPayload
+} from 'decentraland-dapps/dist/modules/transaction/utils'
 import { NFTPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
 import { ErrorCode } from 'decentraland-transactions'
 import { NFT } from '../nft/types'
@@ -111,7 +114,7 @@ export const executeOrderWithCardSuccess = (
   action(EXECUTE_ORDER_WITH_CARD_SUCCESS, {
     purchase,
     nft,
-    ...buildTransactionPayload(nft.chainId, txHash, {
+    ...buildTransactionWithFromPayload(nft.chainId, txHash, purchase.address, {
       tokenId: nft.tokenId,
       contractAddress: nft.contractAddress,
       network: nft.network,

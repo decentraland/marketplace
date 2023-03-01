@@ -372,6 +372,12 @@
       "all_items": "Todas las colecciones",
       "search": "Buscar colecciones"
     },
+    "creators": {
+      "title": "Creadores",
+      "all_creators": "Todos los creadores",
+      "search": "Buscar creadores",
+      "type_to_search": "Escriba para buscar creadores."
+    },
     "network": {
       "title": "Red",
       "all_items": "Todas las redes"

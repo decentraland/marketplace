@@ -80,6 +80,7 @@ const CurrentAccountSidebar = ({ section, onBrowse }: Props) => (
         [AssetFilter.Rarity]: true,
         [AssetFilter.Price]: true,
         [AssetFilter.Collection]: true,
+        [AssetFilter.Creators]: true,
         [AssetFilter.PlayMode]: true,
         [AssetFilter.BodyShape]: true,
         [AssetFilter.Network]: true,

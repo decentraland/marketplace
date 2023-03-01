@@ -28,6 +28,7 @@ export type Props = {
   emotePlayMode?: EmotePlayMode[]
   assetType?: AssetType
   collection: string
+  creators?: string[]
   section?: Section
   landStatus: LANDFilters
   values?: BrowseOptions
@@ -38,6 +39,7 @@ export type Props = {
   defaultCollapsed?: Record<AssetFilter, boolean>
   isPriceFilterEnabled: boolean
   isEstateSizeFilterEnabled: boolean
+  isCreatorFiltersEnabled: boolean
 }
 
 export type MapStateProps = Pick<
@@ -55,12 +57,14 @@ export type MapStateProps = Pick<
   | 'emotePlayMode'
   | 'assetType'
   | 'collection'
+  | 'creators'
   | 'section'
   | 'landStatus'
   | 'vendor'
   | 'view'
   | 'isPriceFilterEnabled'
   | 'isEstateSizeFilterEnabled'
+  | 'isCreatorFiltersEnabled'
 >
 
 export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>

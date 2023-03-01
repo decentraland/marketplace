@@ -54,7 +54,10 @@ class ItemAPI extends BaseAPI {
     }
 
     if (filters.creator) {
-      queryParams.append('creator', filters.creator)
+      let creators = Array.isArray(filters.creator)
+        ? filters.creator
+        : [filters.creator]
+      creators.forEach(creator => queryParams.append('creator', creator))
     }
 
     if (filters.isSoldOut) {

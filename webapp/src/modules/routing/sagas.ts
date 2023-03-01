@@ -161,7 +161,6 @@ export function* handleBrowse(action: BrowseAction) {
           : eventsContracts[pathname.slice(1)]
     })
   })
-
   yield put(push(buildBrowseURL(pathname, options)))
 }
 
@@ -196,7 +195,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     contracts,
     tenant,
     minPrice,
-    maxPrice
+    maxPrice,
+    creators
   } = options
 
   const address =
@@ -217,13 +217,18 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     case Section.STORE_SETTINGS:
       break
     case Section.ON_SALE:
-      yield handleFetchOnSale(address, options.view!)
+      yield handleFetchOnSale(
+        Array.isArray(address) ? address[0] : address,
+        options.view!
+      )
       break
     case Section.ON_RENT:
       yield handleFetchOnRent(
         options.view!,
         [RentalStatus.OPEN, RentalStatus.EXECUTED],
-        View.ACCOUNT ? { tenant } : { ownerAddress: address }
+        View.ACCOUNT
+          ? { tenant }
+          : { ownerAddress: Array.isArray(address) ? address[0] : address }
       )
       break
     case Section.WEARABLES_TRENDING:
@@ -236,13 +241,18 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       break
     case Section.SALES:
       yield spawn(handleFetchSales, {
-        address,
+        address: Array.isArray(address) ? address[0] : address,
         page,
         pageSize: SALES_PER_PAGE
       })
       break
     case Section.COLLECTIONS:
-      yield handleFetchCollections(page, address, sortBy, search)
+      yield handleFetchCollections(
+        page,
+        Array.isArray(address) ? address[0] : address,
+        sortBy,
+        search
+      )
       break
     default:
       const offset = isLoadMore ? page - 1 : 0
@@ -276,7 +286,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
               skip,
               sortBy: getItemSortBy(sortBy),
               isOnSale: onlyOnSale,
-              creator: address,
+              creator: address ? [address] : creators,
               wearableCategory,
               emoteCategory,
               isWearableHead,
@@ -351,7 +361,7 @@ export function* getNewBrowseOptions(
 function* handleFetchOnSale(address: string, view: View) {
   yield put(
     fetchItemsRequest({
-      filters: { creator: address, isOnSale: true }
+      filters: { creator: [address], isOnSale: true }
     })
   )
 

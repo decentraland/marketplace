@@ -12,3 +12,9 @@ export type AccountMetrics = {
   earned: string
   royalties: string
 }
+
+export type CreatorAccount = {
+  name: string
+  address: string
+  collections: number
+}

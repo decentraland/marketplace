@@ -20,8 +20,10 @@ export function* transakSaga() {
 function* handleOpenTransak(action: OpenTransakAction) {
   const { asset } = action.payload
   const transakConfig: TransakConfig = {
+    apiBaseUrl: config.get('TRANSAK_API_URL'),
     key: config.get('TRANSAK_KEY'),
     env: config.get('TRANSAK_ENV'),
+    pollingDelay: +config.get('TRANSAK_POLLING_DELAY'),
     pusher: {
       appKey: config.get('TRANSAK_PUSHER_APP_KEY'),
       appCluster: config.get('TRANSAK_PUSHER_APP_CLUSTER')

@@ -4,6 +4,8 @@ Decentraland's Marketplace
 
 ## Frontend
 
+[![Coverage Status](https://coveralls.io/repos/github/decentraland/marketplace/badge.svg?branch=master)](https://coveralls.io/github/decentraland/marketplace?branch=master)
+
 It can be found under [/webapp](https://github.com/decentraland/marketplace/tree/master/webapp).
 
 ## Backend

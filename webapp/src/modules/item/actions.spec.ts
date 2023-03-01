@@ -4,7 +4,10 @@ import {
   NFTPurchase,
   PurchaseStatus
 } from 'decentraland-dapps/dist/modules/gateway/types'
-import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
+import {
+  buildTransactionPayload,
+  buildTransactionWithFromPayload
+} from 'decentraland-dapps/dist/modules/transaction/utils'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
 import { getAssetName } from '../asset/utils'
@@ -162,7 +165,7 @@ describe('when creating the action to signal a successful buy item with card req
       payload: {
         item,
         purchase,
-        ...buildTransactionPayload(chainId, txHash, {
+        ...buildTransactionWithFromPayload(chainId, txHash, purchase.address, {
           itemId: item.itemId,
           contractAddress: item.contractAddress,
           network: item.network,

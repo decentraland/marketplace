@@ -4,7 +4,10 @@ import {
   NFTPurchase,
   PurchaseStatus
 } from 'decentraland-dapps/dist/modules/gateway/types'
-import { buildTransactionPayload } from 'decentraland-dapps/dist/modules/transaction/utils'
+import {
+  buildTransactionPayload,
+  buildTransactionWithFromPayload
+} from 'decentraland-dapps/dist/modules/transaction/utils'
 import { ErrorCode } from 'decentraland-transactions'
 import { NetworkGatewayType } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
@@ -214,13 +217,18 @@ describe('when creating the action to signal the submission of the executed orde
       payload: {
         purchase,
         nft,
-        ...buildTransactionPayload(nft.chainId, txHash, {
-          tokenId: nft.tokenId,
-          contractAddress: nft.contractAddress,
-          network: nft.network,
-          name: getAssetName(nft),
-          price: purchase.nft.cryptoAmount.toString()
-        })
+        ...buildTransactionWithFromPayload(
+          nft.chainId,
+          txHash,
+          purchase.address,
+          {
+            tokenId: nft.tokenId,
+            contractAddress: nft.contractAddress,
+            network: nft.network,
+            name: getAssetName(nft),
+            price: purchase.nft.cryptoAmount.toString()
+          }
+        )
       }
     })
   })

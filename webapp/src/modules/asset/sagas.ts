@@ -5,7 +5,7 @@ import {
   SET_PURCHASE
 } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import { isManaPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
+import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../routing/locations'
@@ -19,7 +19,7 @@ export function* assetSaga() {
 
 function* handleSetAssetPurchaseWithCard(action: SetPurchaseAction) {
   const { purchase } = action.payload
-  if (!isManaPurchase(purchase)) {
+  if (isNFTPurchase(purchase)) {
     const { nft, status } = purchase
     const { pathname }: ReturnType<typeof getLocation> = yield select(
       getLocation

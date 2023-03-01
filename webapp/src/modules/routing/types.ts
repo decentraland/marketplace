@@ -48,6 +48,7 @@ export type BrowseOptions = {
   wearableGenders?: (WearableGender | GenderFilterOption)[]
   search?: string
   contracts?: string[]
+  creators?: string[]
   address?: string
   network?: Network
   tenant?: string
