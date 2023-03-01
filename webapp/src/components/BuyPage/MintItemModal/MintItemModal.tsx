@@ -40,7 +40,6 @@ const MintItemModal = (props: Props) => {
     isOwner,
     hasInsufficientMANA,
     hasLowPrice,
-    isBuyNftsWithFiatEnabled,
     isBuyWithCardPage,
     getContract,
     onBuyItem,
@@ -52,25 +51,17 @@ const MintItemModal = (props: Props) => {
   const analytics = getAnalytics()
 
   const handleExecuteOrder = useCallback(() => {
-    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage) {
+    if (isBuyWithCardPage) {
       analytics.track('Click on Buy NFT With Card')
       return onBuyItemWithCard(item)
     }
 
     onBuyItem(item)
-  }, [
-    isBuyNftsWithFiatEnabled,
-    isBuyWithCardPage,
-    onBuyItemWithCard,
-    onBuyItem,
-    item,
-    analytics
-  ])
+  }, [isBuyWithCardPage, onBuyItemWithCard, onBuyItem, item, analytics])
 
   const handleCancel = useCallback(() => {
-    if (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
-      analytics.track('Cancel Buy NFT With Card')
-  }, [analytics, isBuyNftsWithFiatEnabled, isBuyWithCardPage])
+    if (isBuyWithCardPage) analytics.track('Cancel Buy NFT With Card')
+  }, [analytics, isBuyWithCardPage])
 
   const authorization: Authorization | null = useMemo(() => {
     const contractNames = getContractNames()
@@ -99,19 +90,13 @@ const MintItemModal = (props: Props) => {
   const handleSubmit = useCallback(() => {
     if (
       (authorization && hasAuthorization(authorizations, authorization)) ||
-      (isBuyNftsWithFiatEnabled && isBuyWithCardPage)
+      isBuyWithCardPage
     ) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [
-    authorization,
-    authorizations,
-    handleExecuteOrder,
-    isBuyNftsWithFiatEnabled,
-    isBuyWithCardPage
-  ])
+  }, [authorization, authorizations, handleExecuteOrder, isBuyWithCardPage])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal
@@ -124,7 +109,7 @@ const MintItemModal = (props: Props) => {
 
   const translationPageDescriptorId = compact([
     'mint',
-    isBuyNftsWithFiatEnabled && isWearableOrEmote(item)
+    isWearableOrEmote(item)
       ? isBuyWithCardPage
         ? 'with_card'
         : 'with_mana'
@@ -167,28 +152,26 @@ const MintItemModal = (props: Props) => {
         }}
       />
     )
-    subtitle =
-      isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
-        <NotEnoughMana asset={item} description={description} />
-      ) : (
-        description
-      )
+    subtitle = isWearableOrEmote(item) ? (
+      <NotEnoughMana asset={item} description={description} />
+    ) : (
+      description
+    )
   } else {
-    subtitle =
-      isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
-        <div className="subtitle-wrapper">
-          <PriceSubtitle asset={item} />
-          <NetworkSubtitle asset={item} />
-        </div>
-      ) : (
-        <T
-          id={`${translationPageDescriptorId}.subtitle`}
-          values={{
-            name,
-            amount: <Price network={item.network} price={item.price} />
-          }}
-        />
-      )
+    subtitle = isWearableOrEmote(item) ? (
+      <div className="subtitle-wrapper">
+        <PriceSubtitle asset={item} />
+        <NetworkSubtitle asset={item} />
+      </div>
+    ) : (
+      <T
+        id={`${translationPageDescriptorId}.subtitle`}
+        values={{
+          name,
+          amount: <Price network={item.network} price={item.price} />
+        }}
+      />
+    )
   }
 
   return (
@@ -200,22 +183,20 @@ const MintItemModal = (props: Props) => {
         })}
       </Header>
       <div className={isDisabled ? 'error' : ''}>{subtitle}</div>
-      {isBuyNftsWithFiatEnabled ? (
-        <AssetProviderPage type={AssetType.ITEM}>
-          {(asset: Item) => {
-            return asset.price !== item.price ? (
-              <PriceHasChanged asset={item} newPrice={asset.price} />
-            ) : null
-          }}
-        </AssetProviderPage>
-      ) : null}
+      <AssetProviderPage type={AssetType.ITEM}>
+        {(asset: Item) => {
+          return asset.price !== item.price ? (
+            <PriceHasChanged asset={item} newPrice={asset.price} />
+          ) : null
+        }}
+      </AssetProviderPage>
       {hasLowPrice && !isBuyWithCardPage ? (
         <PriceTooLow chainId={item.chainId} network={item.network} />
       ) : null}
       <div
         className={classNames(
           'buttons',
-          isBuyNftsWithFiatEnabled && isWearableOrEmote(item) && 'with-mana'
+          isWearableOrEmote(item) && 'with-mana'
         )}
       >
         <Button
@@ -223,16 +204,11 @@ const MintItemModal = (props: Props) => {
           to={locations.item(item.contractAddress, item.itemId)}
           onClick={handleCancel}
         >
-          {isBuyNftsWithFiatEnabled &&
-          !isBuyWithCardPage &&
-          (hasLowPrice || hasInsufficientMANA)
+          {!isBuyWithCardPage && (hasLowPrice || hasInsufficientMANA)
             ? t('global.go_back')
             : t('global.cancel')}
         </Button>
-        {(!hasInsufficientMANA &&
-          !hasLowPrice &&
-          (!isBuyNftsWithFiatEnabled || !isBuyWithCardPage)) ||
-        (isBuyNftsWithFiatEnabled && isBuyWithCardPage) ? (
+        {(!hasInsufficientMANA && !hasLowPrice) || isBuyWithCardPage ? (
           <ChainButton
             primary
             disabled={isDisabled || isLoading}
@@ -240,7 +216,7 @@ const MintItemModal = (props: Props) => {
             loading={isLoading}
             chainId={item.chainId}
           >
-            {isBuyNftsWithFiatEnabled && isWearableOrEmote(item) ? (
+            {isWearableOrEmote(item) ? (
               isBuyWithCardPage ? (
                 <Icon name="credit card outline" />
               ) : (
@@ -251,9 +227,7 @@ const MintItemModal = (props: Props) => {
           </ChainButton>
         ) : null}
       </div>
-      {isBuyNftsWithFiatEnabled &&
-      isWearableOrEmote(item) &&
-      isBuyWithCardPage ? (
+      {isWearableOrEmote(item) && isBuyWithCardPage ? (
         <CardPaymentsExplanation
           translationPageDescriptorId={translationPageDescriptorId}
         />
