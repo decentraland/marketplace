@@ -10,5 +10,6 @@ export enum FeatureName {
   BUY_NFTS_WITH_FIAT = 'buy-nfts-with-fiat',
   PRICE_FILTER = 'price-filter',
   ESTATE_SIZE_FILTER = 'estate-size-filter',
+  LOCATION_FILTER = 'location-filter',
   CREATOR_FILTER = 'creator-filter'
 }

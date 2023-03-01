@@ -134,6 +134,18 @@ export function getSearchParams(options?: BrowseOptions) {
     if (options.maxEstateSize) {
       params.set('maxEstateSize', options.maxEstateSize)
     }
+
+    if (options.minDistanceToPlaza) {
+      params.set('minDistanceToPlaza', options.minDistanceToPlaza)
+    }
+
+    if (options.adjacentToRoad) {
+      params.set('adjacentToRoad', options.adjacentToRoad.toString())
+    }
+
+    if (options.maxDistanceToPlaza) {
+      params.set('maxDistanceToPlaza', options.maxDistanceToPlaza)
+    }
   }
   return params
 }

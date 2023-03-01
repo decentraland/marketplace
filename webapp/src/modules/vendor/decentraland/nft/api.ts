@@ -182,6 +182,18 @@ class NFTAPI extends BaseAPI {
     if (filters.maxEstateSize) {
       queryParams.append('maxEstateSize', filters.maxEstateSize)
     }
+
+    if (filters.minDistanceToPlaza) {
+      queryParams.append('minDistanceToPlaza', filters.minDistanceToPlaza)
+    }
+
+    if (filters.maxDistanceToPlaza) {
+      queryParams.append('maxDistanceToPlaza', filters.maxDistanceToPlaza)
+    }
+
+    if (filters.adjacentToRoad) {
+      queryParams.append('adjacentToRoad', 'true')
+    }
   }
 
   private buildNFTQueryString(

@@ -34,11 +34,15 @@ export type Props = {
   values?: BrowseOptions
   vendor?: VendorName
   view?: View
-  onBrowse: (options: BrowseOptions) => void
-  onFilterChange?: (options: BrowseOptions) => void
   defaultCollapsed?: Record<AssetFilter, boolean>
   isPriceFilterEnabled: boolean
   isEstateSizeFilterEnabled: boolean
+  isLocationFilterEnabled: boolean
+  minDistanceToPlaza?: string
+  maxDistanceToPlaza?: string
+  adjacentToRoad?: boolean
+  onBrowse: (options: BrowseOptions) => void
+  onFilterChange?: (options: BrowseOptions) => void
   isCreatorFiltersEnabled: boolean
 }
 
@@ -64,6 +68,10 @@ export type MapStateProps = Pick<
   | 'view'
   | 'isPriceFilterEnabled'
   | 'isEstateSizeFilterEnabled'
+  | 'isLocationFilterEnabled'
+  | 'minDistanceToPlaza'
+  | 'maxDistanceToPlaza'
+  | 'adjacentToRoad'
   | 'isCreatorFiltersEnabled'
 >
 

@@ -3,12 +3,15 @@ import { Dispatch } from 'redux'
 import { RootState } from '../../modules/reducer'
 import { getCategoryFromSection } from '../../modules/routing/search'
 import {
+  getAdjacentToRoad,
   getAssetType,
   getContracts,
   getCreators,
   getEmotePlayMode,
+  getMaxDistanceToPlaza,
   getMaxEstateSize,
   getMaxPrice,
+  getMinDistanceToPlaza,
   getMinEstateSize,
   getMinPrice,
   getNetwork,
@@ -22,6 +25,7 @@ import {
 import {
   getIsCreatorsFilterEnabled,
   getIsEstateSizeFilterEnabled,
+  getIsLocationFilterEnabled,
   getIsPriceFilterEnabled
 } from '../../modules/features/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
@@ -81,6 +85,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     section,
     isPriceFilterEnabled: getIsPriceFilterEnabled(state),
     isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),
+    isLocationFilterEnabled: getIsLocationFilterEnabled(state),
+    minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
+    maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
+    adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),
     isCreatorFiltersEnabled: getIsCreatorsFilterEnabled(state)
   }
 }

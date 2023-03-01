@@ -34,7 +34,10 @@ export const SelectedFilters = ({
     maxPrice,
     onlyOnRent,
     minEstateSize,
-    maxEstateSize
+    maxEstateSize,
+    adjacentToRoad,
+    minDistanceToPlaza,
+    maxDistanceToPlaza
   } = browseOptions
   const [collection, setCollection] = useState<
     Record<string, string> | undefined
@@ -144,6 +147,14 @@ export const SelectedFilters = ({
     onBrowse({ onlyOnRent: undefined, onlyOnSale: undefined })
   }, [onBrowse])
 
+  const handleDeleteDistanceToPlaza = useCallback(() => {
+    onBrowse({ minDistanceToPlaza: undefined, maxDistanceToPlaza: undefined })
+  }, [onBrowse])
+
+  const handleDeleteAdjacentToRoad = useCallback(() => {
+    onBrowse({ adjacentToRoad: undefined })
+  }, [onBrowse])
+
   return (
     <div className={styles.pillContainer}>
       {rarities?.map(rarity => (
@@ -164,14 +175,14 @@ export const SelectedFilters = ({
       {onlySmart ? (
         <Pill
           label={t('nft_filters.only_smart')}
-          id="only smart"
+          id="onlySmart"
           onDelete={handleDeleteOnlySmart}
         />
       ) : null}
       {collection ? (
         <Pill
           label={collection.name}
-          id={collection.address}
+          id="collection"
           onDelete={handleDeleteCollection}
         />
       ) : null}
@@ -195,7 +206,7 @@ export const SelectedFilters = ({
       {!onlyOnSale && !isLandSection ? (
         <Pill
           label={t('nft_filters.not_on_sale')}
-          id="only_on_sale"
+          id="onlyOnSale"
           onDelete={handleDeleteOnlySale}
         />
       ) : null}
@@ -214,7 +225,7 @@ export const SelectedFilters = ({
         <Pill
           label={estateSizeLabel}
           onDelete={handleDeleteEstateSize}
-          id="estate-size"
+          id="estateSize"
         />
       ) : null}
       {isLandSection && landStatusLabel ? (
@@ -224,6 +235,20 @@ export const SelectedFilters = ({
           id="land_filter"
         />
       ) : null}
+      {adjacentToRoad ? (
+        <Pill
+          label={t('nft_filters.adjacent_to_road')}
+          onDelete={handleDeleteAdjacentToRoad}
+          id="adjacentToRoad"
+        />
+      ): null}
+      {minDistanceToPlaza || maxDistanceToPlaza ? (
+        <Pill
+          label={t('nft_filters.distance_to_plaza.selection', { from: minDistanceToPlaza, to: maxDistanceToPlaza })}
+          onDelete={handleDeleteDistanceToPlaza}
+          id="distanceToPlaza"
+        />
+      ): null}
     </div>
   )
 }

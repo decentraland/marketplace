@@ -24,6 +24,7 @@ import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
+import { LocationFilter } from './LocationFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 
@@ -49,6 +50,10 @@ export const AssetFilters = ({
   isPriceFilterEnabled,
   view,
   isEstateSizeFilterEnabled,
+  isLocationFilterEnabled,
+  minDistanceToPlaza,
+  maxDistanceToPlaza,
+  adjacentToRoad,
   isCreatorFiltersEnabled,
   values
 }: Props): JSX.Element | null => {
@@ -110,6 +115,23 @@ export const AssetFilters = ({
   const handleEmotePlayModeChange = useCallback(
     (value: EmotePlayMode[]) => {
       onBrowse({ emotePlayMode: value })
+    },
+    [onBrowse]
+  )
+
+  const handleAdjacentToRoadChange = useCallback(
+    (value?: boolean) => {
+      onBrowse({ adjacentToRoad: value })
+    },
+    [onBrowse]
+  )
+
+  const handleDistanceToPlazaChange = useCallback(
+    (distanceToPlazaRange?: [string, string]) => {
+      if (distanceToPlazaRange) {
+        const [minDistanceToPlaza, maxDistanceToPlaza] = distanceToPlazaRange
+        onBrowse({ minDistanceToPlaza, maxDistanceToPlaza })
+      }
     },
     [onBrowse]
   )
@@ -178,6 +200,15 @@ export const AssetFilters = ({
             }
           />
         ) : null}
+        {isLocationFilterEnabled && (
+          <LocationFilter
+            minDistanceToPlaza={minDistanceToPlaza}
+            maxDistanceToPlaza={maxDistanceToPlaza}
+            adjacentToRoad={adjacentToRoad}
+            onAdjacentToRoadChange={handleAdjacentToRoadChange}
+            onDistanceToPlazaChange={handleDistanceToPlazaChange}
+          />
+        )}
       </div>
     )
   }

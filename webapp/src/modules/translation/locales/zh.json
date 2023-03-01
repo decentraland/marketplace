@@ -384,8 +384,16 @@
       "all_items": "所有网络"
     },
     "more_filters": "更多过滤器",
+    "location": "地点",
     "only_smart": "只有聪明",
-    "not_on_sale": "包括非卖品"
+    "not_on_sale": "包括非卖品",
+    "adjacent_to_road": "毗邻道路",
+    "distance_to_plaza": {
+      "title": "靠近一个广场",
+      "subtitle": "距广场的距离（地块",
+      "selection": "从一个广场 {from} 到 {to} 个地块"
+    },
+    "all_locations": "所有地点"
   },
   "nft_land_filters": {
     "all_land": "所有土地",

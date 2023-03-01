@@ -7,13 +7,13 @@ type Props = {
   onDelete: (id: string) => void
 }
 
-export const Pill = ({ id, label, onDelete }: Props): JSX.Element => (
-  <div className={styles.pill}>
-    {label}
-    <Icon
-      onClick={onDelete.bind(null, id)}
-      name="times"
-      className={styles.deleteBtn}
-    />
-  </div>
-)
+export const Pill = ({ id, label, onDelete }: Props): JSX.Element => {
+  return (
+    <div className={styles.pill} data-testid={`pill-${id}`}>
+      {label}
+      <button onClick={onDelete.bind(null, id)} data-testid="b" className={styles.deleteBtn}>
+        <Icon name="times" />
+      </button>
+    </div>
+  )
+}

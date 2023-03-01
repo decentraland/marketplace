@@ -15,7 +15,7 @@
     "decentraland-crypto-fetch": "^1.0.3",
     "decentraland-dapps": "^13.35.0",
     "decentraland-transactions": "^1.42.0",
-    "decentraland-ui": "^3.79.2",
+    "decentraland-ui": "^3.80.1",
     "dotenv": "^10.0.0",
     "ethers": "^5.6.8",
     "graphql": "^14.7.0",
@@ -37,9 +37,10 @@
     "typesafe-actions": "^5.1.0"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/react-hooks": "^7.0.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.4",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^14.4.3",
     "@typechain/ethers-v5": "^10.0.0",
     "@types/history": "^4.7.3",
     "@types/jest": "^24.9.1",

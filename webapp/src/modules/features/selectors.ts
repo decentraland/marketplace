@@ -118,3 +118,14 @@ export const getIsCreatorsFilterEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsLocationFilterEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.LOCATION_FILTER
+    )
+  }
+  return false
+}

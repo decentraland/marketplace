@@ -48,7 +48,10 @@ export function getFilters(
         minPrice,
         maxPrice,
         minEstateSize,
-        maxEstateSize
+        maxEstateSize,
+        adjacentToRoad,
+        minDistanceToPlaza,
+        maxDistanceToPlaza
       } = options
 
       return {
@@ -71,7 +74,10 @@ export function getFilters(
         minPrice,
         maxPrice,
         minEstateSize,
-        maxEstateSize
+        maxEstateSize,
+        adjacentToRoad,
+        minDistanceToPlaza,
+        maxDistanceToPlaza
       } as NFTsFetchFilters<VendorName.DECENTRALAND>
     }
     default:
