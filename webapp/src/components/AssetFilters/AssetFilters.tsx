@@ -24,9 +24,9 @@ import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
+import { LocationFilter } from './LocationFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
-import { LocationFilter } from './LocationFilter/LocationFilter'
 
 export const AssetFilters = ({
   minPrice,
