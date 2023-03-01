@@ -9,9 +9,14 @@ import { Props } from './EstateSizeFilter.types'
 import './EstateSizeFilter.css'
 
 export const EstateSizeFilter = ({
+  min,
+  max,
   landStatus,
   minPrice,
   maxPrice,
+  adjacentToRoad,
+  minDistanceToPlaza,
+  maxDistanceToPlaza,
   network,
   defaultCollapsed = false,
   onChange
@@ -35,16 +40,33 @@ export const EstateSizeFilter = ({
     [minPrice, maxPrice, network, isMobileOrTablet]
   )
 
+  const filters = useMemo(
+    () => ({
+      maxPrice,
+      minPrice,
+      isOnSale: landStatus === LANDFilters.ONLY_FOR_SALE || undefined,
+      adjacentToRoad: adjacentToRoad || undefined,
+      minDistanceToPlaza: Number(minDistanceToPlaza) || undefined,
+      maxDistanceToPlaza: Number(maxDistanceToPlaza) || undefined
+    }),
+    [
+      adjacentToRoad,
+      landStatus,
+      minDistanceToPlaza,
+      maxDistanceToPlaza,
+      maxPrice,
+      minPrice
+    ]
+  )
+
   const fetcher = useCallback(async () => {
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
       // for rents, we don't have the data yet, so let's just resolve with an empty object so the chart is not rendered
       return {}
     }
-    const data = await nftAPI.fetchEstateSizes(
-      landStatus === LANDFilters.ONLY_FOR_SALE || undefined
-    )
+    const data = await nftAPI.fetchEstateSizes(filters)
     return data
-  }, [landStatus])
+  }, [filters, landStatus])
 
   return (
     <Box
@@ -56,9 +78,9 @@ export const EstateSizeFilter = ({
       <Inventory
         fetcher={fetcher}
         isMana={false}
-        min={minPrice}
+        min={min}
+        max={max}
         minLabel={t('filters.estate_size.min_label')}
-        max={maxPrice}
         maxLabel={t('filters.estate_size.max_label')}
         onChange={onChange}
         errorMessage={t('filters.estate_size.error')}

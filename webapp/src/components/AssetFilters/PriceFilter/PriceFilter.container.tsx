@@ -10,7 +10,12 @@ import {
   getOnlySmart,
   getRarities,
   getSection,
-  getWearableGenders
+  getWearableGenders,
+  getMinDistanceToPlaza,
+  getMaxDistanceToPlaza,
+  getMinEstateSize,
+  getMaxEstateSize,
+  getAdjacentToRoad
 } from '../../../modules/routing/selectors'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import { getCategoryFromSection } from '../../../modules/routing/search'
@@ -46,7 +51,27 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     landStatus,
     emotePlayMode: values.emotePlayMode || getEmotePlayMode(state),
     collection:
-      'contracts' in values ? values.contracts?.[0] : getContracts(state)[0]
+      'contracts' in values ? values.contracts?.[0] : getContracts(state)[0],
+    minDistanceToPlaza:
+      'minDistanceToPlaza' in values
+        ? values.minDistanceToPlaza
+        : getMinDistanceToPlaza(state),
+    maxDistanceToPlaza:
+      'maxDistanceToPlaza' in values
+        ? values.maxDistanceToPlaza
+        : getMaxDistanceToPlaza(state),
+    adjacentToRoad:
+      'adjacentToRoad' in values
+        ? values.adjacentToRoad
+        : getAdjacentToRoad(state),
+    minEstateSize:
+      'minEstateSize' in values
+        ? values.minEstateSize || ''
+        : getMinEstateSize(state),
+    maxEstateSize:
+      'maxEstateSize' in values
+        ? values.maxEstateSize || ''
+        : getMaxEstateSize(state)
   }
 }
 
