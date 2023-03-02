@@ -12,6 +12,7 @@ import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
 import { NFTSortBy } from '../nft/types'
 import { isAccountView, isLandSection } from '../ui/utils'
+import { PeriodOption } from '../rental/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -145,6 +146,12 @@ export function getSearchParams(options?: BrowseOptions) {
 
     if (options.maxDistanceToPlaza) {
       params.set('maxDistanceToPlaza', options.maxDistanceToPlaza)
+    }
+
+    if (options.periods && options.periods.every(option => Object.values(PeriodOption).includes(option))) {
+      for (const period of options.periods) {
+        params.append('period', period)
+      }
     }
   }
   return params

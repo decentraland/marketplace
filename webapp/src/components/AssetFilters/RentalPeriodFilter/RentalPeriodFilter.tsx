@@ -6,7 +6,7 @@ import styles from './RentalPeriodFilter.module.css'
 import classNames from 'classnames'
 
 export type RentalPeriodFilterProps = {
-  periods: PeriodOption[]
+  periods?: PeriodOption[]
   onChange: (value: PeriodOption[]) => void
   defaultCollapsed?: boolean
 }
@@ -23,24 +23,35 @@ export const RentalPeriodFilter = ({
       if (checked) {
         onChange([...periods, value])
       } else {
-        onChange(periods.filter((period) => period === value ))
+        onChange(periods.filter((period) => period !== value ))
       }
     },
     [periods, onChange]
   )
+
+  const allPeriodsSelected = useMemo(() => (
+    periods.length === 0 || periods.length === Object.values(PeriodOption).length
+  ), [periods.length])
 
   const header = useMemo(
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
           <span className="box-filter-name">
-            {t('nft_filters.rarities.title')}
+            {t('nft_filters.periods.title')}
+          </span>
+          <span className="box-filter-value">
+            {allPeriodsSelected
+              ? t('nft_filters.periods.all_items')
+              : t('nft_filters.periods.count_items', {
+                  count: periods.length
+                })}
           </span>
         </div>
       ) : (
-        t('nft_filters.rarities.title')
+        t('nft_filters.periods.title')
       ),
-    [isMobileOrTablet]
+    [isMobileOrTablet, periods.length, allPeriodsSelected]
   )
 
   return (

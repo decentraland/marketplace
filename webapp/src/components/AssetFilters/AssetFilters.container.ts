@@ -27,7 +27,8 @@ import {
   getIsCreatorsFilterEnabled,
   getIsEstateSizeFilterEnabled,
   getIsLocationFilterEnabled,
-  getIsPriceFilterEnabled
+  getIsPriceFilterEnabled,
+  getIsRentalPeriodFilterEnabled
 } from '../../modules/features/selectors'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { browse } from '../../modules/routing/actions'
@@ -84,14 +85,15 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     landStatus,
     view: getView(state),
     section,
-    periods: getPeriods(state),
-    isPriceFilterEnabled: getIsPriceFilterEnabled(state),
-    isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),
-    isLocationFilterEnabled: getIsLocationFilterEnabled(state),
+    periods: 'periods' in values ? values.periods : getPeriods(state),
     minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
     maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
     adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),
-    isCreatorFiltersEnabled: getIsCreatorsFilterEnabled(state)
+    isCreatorFiltersEnabled: getIsCreatorsFilterEnabled(state),
+    isPriceFilterEnabled: getIsPriceFilterEnabled(state),
+    isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),
+    isLocationFilterEnabled: getIsLocationFilterEnabled(state),
+    isRentalPeriodFilterEnabled: getIsRentalPeriodFilterEnabled(state)
   }
 }
 

@@ -351,6 +351,7 @@ export const getLandsUrlParams = createSelector(
   getMinDistanceToPlaza,
   getMaxDistanceToPlaza,
   getAdjacentToRoad,
+  getPeriods,
   (
     isMap,
     isFullscreen,
@@ -358,7 +359,8 @@ export const getLandsUrlParams = createSelector(
     maxEstateSize,
     minDistanceToPlaza,
     maxDistanceToPlaza,
-    adjacentToRoad
+    adjacentToRoad,
+    periods
   ) => ({
     isMap,
     isFullscreen,
@@ -366,7 +368,8 @@ export const getLandsUrlParams = createSelector(
     maxEstateSize,
     minDistanceToPlaza,
     maxDistanceToPlaza,
-    adjacentToRoad
+    adjacentToRoad,
+    periods
   })
 )
 
@@ -453,7 +456,8 @@ export const hasFiltersEnabled = createSelector<
     minDistanceToPlaza,
     maxDistanceToPlaza,
     adjacentToRoad,
-    creators
+    creators,
+    periods
   } = browseOptions
   const isLand = isLandSection(section as Section)
   if (isLand) {
@@ -468,7 +472,8 @@ export const hasFiltersEnabled = createSelector<
       !!maxEstateSize ||
       !!minDistanceToPlaza ||
       !!maxDistanceToPlaza ||
-      !!adjacentToRoad
+      !!adjacentToRoad ||
+      !!periods?.length
     )
   }
 

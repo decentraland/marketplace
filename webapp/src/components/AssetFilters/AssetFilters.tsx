@@ -49,15 +49,17 @@ export const AssetFilters = ({
   landStatus,
   defaultCollapsed,
   onBrowse,
-  isPriceFilterEnabled,
   view,
-  isEstateSizeFilterEnabled,
-  isLocationFilterEnabled,
   minDistanceToPlaza,
   maxDistanceToPlaza,
   adjacentToRoad,
+  values,
+  periods,
+  isPriceFilterEnabled,
+  isEstateSizeFilterEnabled,
+  isLocationFilterEnabled,
   isCreatorFiltersEnabled,
-  values
+  isRentalPeriodFilterEnabled
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
@@ -122,10 +124,12 @@ export const AssetFilters = ({
   )
 
   const handlePeriodsChange = useCallback(
-    (periods: PeriodOption[]) => {
-      onBrowse({ periods })
-    },[onBrowse])
-  
+    (value: PeriodOption[]) => {
+      onBrowse({ periods: value })
+    },
+    [onBrowse]
+  )
+
   const handleAdjacentToRoadChange = useCallback(
     (value?: boolean) => {
       onBrowse({ adjacentToRoad: value })
@@ -219,10 +223,13 @@ export const AssetFilters = ({
             {...locationFilters}
           />
         ) : null}
-        <RentalPeriodFilter
-          periods={[]}
-          onChange={handlePeriodsChange}
-        />
+        {isRentalPeriodFilterEnabled &&
+          landStatus === LANDFilters.ONLY_FOR_RENT && (
+            <RentalPeriodFilter
+              periods={periods}
+              onChange={handlePeriodsChange}
+            />
+          )}
         {isLocationFilterEnabled && (
           <LocationFilter
             {...locationFilters}
