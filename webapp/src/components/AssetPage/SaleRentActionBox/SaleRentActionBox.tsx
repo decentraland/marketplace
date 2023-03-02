@@ -102,9 +102,9 @@ const SaleRentActionBox = ({
   }, [wallet, getContract, nft.network])
 
   const handleOnRent = useCallback(() => {
-    if (!!authorization && hasAuthorization(authorizations, authorization)) {
+    if (!!authorization && hasAuthorization(authorizations, authorization) && selectedRentalPeriodIndex !== undefined) {
       setShowAuthorizationModal(false)
-      onRent(selectedRentalPeriodIndex ? selectedRentalPeriodIndex : 0)
+      onRent(selectedRentalPeriodIndex)
     } else {
       setShowAuthorizationModal(true)
     }
@@ -122,12 +122,13 @@ const SaleRentActionBox = ({
     () =>
       !!rental &&
       !!currentMana &&
+      selectedRentalPeriodIndex &&
       ethers.utils
         .parseEther(formatBalance(currentMana))
         .gte(
           ethers.BigNumber.from(
-            rental.periods[selectedRentalPeriodIndex ? selectedRentalPeriodIndex : 0].pricePerDay
-          ).mul(rental.periods[selectedRentalPeriodIndex ? selectedRentalPeriodIndex : 0].maxDays)
+            rental.periods[selectedRentalPeriodIndex].pricePerDay
+          ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
         ),
     [rental, currentMana, selectedRentalPeriodIndex]
   )

@@ -12,12 +12,13 @@ import { Props } from './PeriodsDropdown.types'
 import styles from './PeriodsDropdown.module.css'
 
 const Trigger = ({
-  period,
+  value,
   periods
 }: {
-  period: RentalListingPeriod | undefined
+  value: number | undefined
   periods: RentalListingPeriod[]
 }) => {
+  const period = value !== undefined ? periods[value] : undefined
   const pricePerRent = period
     ? ethers.BigNumber.from(period.pricePerDay)
         .mul(period.maxDays)
@@ -25,6 +26,7 @@ const Trigger = ({
     : ethers.BigNumber.from(periods[0].pricePerDay)
         .mul(periods[0].maxDays)
         .toString()
+
 
   return (
     <div className={period ? styles.trigger : styles.triggerPlaceholder}>
@@ -39,7 +41,7 @@ const Trigger = ({
 }
 
 const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
-  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false)
 
   const handleOnChange = useCallback(
     (_event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
@@ -87,13 +89,10 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
       className={classNames(styles.periodDropdown, className)}
       trigger={
         value !== undefined || isOpenDropdown ? (
-          <Trigger
-            period={value ? periods[value] : undefined}
-            periods={periods}
-          />
+          <Trigger value={value} periods={periods} />
         ) : null
       }
-      onClick={() => setIsOpenDropdown((prevState) => !prevState)}
+      onClick={() => setIsOpenDropdown(prevState => !prevState)}
       value={value}
       placeholder={t('asset_page.sales_rent_action_box.select_period')}
       options={options}
