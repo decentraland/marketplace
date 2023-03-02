@@ -383,10 +383,18 @@
       "all_items": "Todas las redes"
     },
     "more_filters": "Más filtros",
+    "location": "Ubicación",
     "only_smart": "Solo vestimentas interactivas",
     "not_on_sale": "Incluye no a la venta",
     "for_sale": "A la venta",
-    "category": "Categoría"
+    "category": "Categoría",
+    "adjacent_to_road": "Adyacente a una calle",
+    "distance_to_plaza": {
+      "title": "Cerca de una plaza",
+      "subtitle": "Distancia a una plaza (en parcelas)",
+      "selection": "Desde {from} hasta {to} parcelas de una plaza"
+    },
+    "all_locations": "Todas las ubicaciones"
   },
   "nft_land_filters": {
     "all_land": "Todas las tierras",

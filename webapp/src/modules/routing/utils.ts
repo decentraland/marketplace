@@ -79,6 +79,11 @@ export function getClearedBrowseOptions(
     'search',
     'onlyOnRent',
     'onlyOnSale',
+    'minEstateSize',
+    'maxEstateSize',
+    'minDistanceToPlaza',
+    'maxDistanceToPlaza',
+    'adjacentToRoad',
     'creators'
   ]
 

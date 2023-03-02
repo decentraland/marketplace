@@ -21,7 +21,6 @@ export type Props = {
   isOwner: boolean
   hasInsufficientMANA: boolean
   hasLowPrice: boolean
-  isBuyNftsWithFiatEnabled: boolean
   isBuyWithCardPage: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onExecuteOrder: typeof executeOrderRequest
@@ -30,11 +29,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  | 'authorizations'
-  | 'isLoading'
-  | 'getContract'
-  | 'isBuyNftsWithFiatEnabled'
-  | 'isBuyWithCardPage'
+  'authorizations' | 'isLoading' | 'getContract' | 'isBuyWithCardPage'
 >
 export type MapDispatchProps = Pick<
   Props,

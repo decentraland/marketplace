@@ -36,11 +36,15 @@ export type Props = {
   vendor?: VendorName
   view?: View
   periods?: PeriodOption[]
-  onBrowse: (options: BrowseOptions) => void
-  onFilterChange?: (options: BrowseOptions) => void
   defaultCollapsed?: Record<AssetFilter, boolean>
   isPriceFilterEnabled: boolean
   isEstateSizeFilterEnabled: boolean
+  isLocationFilterEnabled: boolean
+  minDistanceToPlaza?: string
+  maxDistanceToPlaza?: string
+  adjacentToRoad?: boolean
+  onBrowse: (options: BrowseOptions) => void
+  onFilterChange?: (options: BrowseOptions) => void
   isCreatorFiltersEnabled: boolean
 }
 
@@ -67,6 +71,10 @@ export type MapStateProps = Pick<
   | 'periods'
   | 'isPriceFilterEnabled'
   | 'isEstateSizeFilterEnabled'
+  | 'isLocationFilterEnabled'
+  | 'minDistanceToPlaza'
+  | 'maxDistanceToPlaza'
+  | 'adjacentToRoad'
   | 'isCreatorFiltersEnabled'
 >
 

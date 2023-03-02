@@ -387,10 +387,18 @@
       "all_items": "All networks"
     },
     "more_filters": "More filters",
+    "location": "Location",
     "only_smart": "Only smart",
     "not_on_sale": "Includes not on sale",
     "for_sale": "For sale",
-    "category": "Category"
+    "category": "Category",
+    "adjacent_to_road": "Adjacent to road",
+    "distance_to_plaza": {
+      "title": "Near a plaza",
+      "subtitle": "Distance from a plaza (in parcels)",
+      "selection": "{from} to {to} parcels from a plaza"
+    },
+    "all_locations": "All locations"
   },
   "nft_land_filters": {
     "all_land": "All land",

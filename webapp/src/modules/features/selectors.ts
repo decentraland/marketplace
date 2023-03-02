@@ -75,17 +75,6 @@ export const getIsCampaignBrowserEnabled = (state: RootState) => {
   }
 }
 
-export const getIsBuyNftsWithFiatEnabled = (state: RootState) => {
-  if (hasLoadedInitialFlags(state)) {
-    return getIsFeatureEnabled(
-      state,
-      ApplicationName.MARKETPLACE,
-      FeatureName.BUY_NFTS_WITH_FIAT
-    )
-  }
-  return false
-}
-
 export const getIsPriceFilterEnabled = (state: RootState) => {
   if (hasLoadedInitialFlags(state)) {
     return getIsFeatureEnabled(
@@ -114,6 +103,17 @@ export const getIsCreatorsFilterEnabled = (state: RootState) => {
       state,
       ApplicationName.MARKETPLACE,
       FeatureName.CREATOR_FILTER
+    )
+  }
+  return false
+}
+
+export const getIsLocationFilterEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.LOCATION_FILTER
     )
   }
   return false

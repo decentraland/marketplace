@@ -34,6 +34,9 @@ export type NFTsFetchFilters = {
   maxPrice?: string
   minEstateSize?: string
   maxEstateSize?: string
+  minDistanceToPlaza?: string
+  maxDistanceToPlaza?: string
+  adjacentToRoad?: boolean
 }
 
 export type NFTResult = {

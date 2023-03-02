@@ -8,13 +8,7 @@ import { Props } from './PriceTooLow.types'
 import styles from './PriceTooLow.module.css'
 
 const PriceTooLow = (props: Props) => {
-  const {
-    chainId,
-    network,
-    isBuyNftsWithFiatEnabled,
-    isBuyWithCardPage,
-    onSwitchNetwork
-  } = props
+  const { chainId, network, isBuyWithCardPage, onSwitchNetwork } = props
 
   const humanNetwork = t(`networks.${network.toLowerCase()}`)
   const humanToken = t(`tokens.${network.toLowerCase()}`)
@@ -26,7 +20,7 @@ const PriceTooLow = (props: Props) => {
     <Card
       className={classNames(
         styles.card,
-        isBuyNftsWithFiatEnabled ? styles.buyWithCard : undefined
+        isBuyWithCardPage ? styles.buyWithCard : undefined
       )}
     >
       <Card.Content>
@@ -38,14 +32,8 @@ const PriceTooLow = (props: Props) => {
             token: humanToken
           })}
         </div>
-        <div
-          className={
-            isBuyNftsWithFiatEnabled && isBuyWithCardPage
-              ? undefined
-              : 'buttons'
-          }
-        >
-          {isBuyNftsWithFiatEnabled && !isBuyWithCardPage ? (
+        <div className={isBuyWithCardPage ? undefined : 'buttons'}>
+          {!isBuyWithCardPage ? (
             <Button
               basic
               size="small"
@@ -55,8 +43,7 @@ const PriceTooLow = (props: Props) => {
               {t('price_too_low.switch_network', { network: humanNetwork })}
             </Button>
           ) : null}
-          {(isBuyNftsWithFiatEnabled && !isBuyWithCardPage) ||
-          !isBuyNftsWithFiatEnabled ? (
+          {!isBuyWithCardPage ? (
             <Button
               basic
               size="small"
@@ -65,15 +52,6 @@ const PriceTooLow = (props: Props) => {
               rel="noopener noreferrer"
             >
               {t('global.learn_more')}
-            </Button>
-          ) : null}
-          {!isBuyNftsWithFiatEnabled ? (
-            <Button
-              primary
-              size="small"
-              onClick={() => onSwitchNetwork(chainId)}
-            >
-              {t('price_too_low.switch_network', { network: humanNetwork })}
             </Button>
           ) : null}
         </div>

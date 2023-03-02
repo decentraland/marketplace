@@ -1,3 +1,3 @@
-import ItemDetail from './ItemDetail.container'
+import ItemDetail from './ItemDetail'
 
 export { ItemDetail }

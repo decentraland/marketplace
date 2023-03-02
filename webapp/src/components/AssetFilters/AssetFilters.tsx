@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   EmotePlayMode,
   GenderFilterOption,
@@ -24,6 +24,7 @@ import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
+import { LocationFilter } from './LocationFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 import { RentalPeriodFilter } from './RentalPeriodFilter/RentalPeriodFilter'
@@ -51,6 +52,10 @@ export const AssetFilters = ({
   isPriceFilterEnabled,
   view,
   isEstateSizeFilterEnabled,
+  isLocationFilterEnabled,
+  minDistanceToPlaza,
+  maxDistanceToPlaza,
+  adjacentToRoad,
   isCreatorFiltersEnabled,
   values
 }: Props): JSX.Element | null => {
@@ -119,6 +124,21 @@ export const AssetFilters = ({
   const handlePeriodsChange = useCallback(
     (periods: PeriodOption[]) => {
       onBrowse({ periods })
+    },[onBrowse])
+  
+  const handleAdjacentToRoadChange = useCallback(
+    (value?: boolean) => {
+      onBrowse({ adjacentToRoad: value })
+    },
+    [onBrowse]
+  )
+
+  const handleDistanceToPlazaChange = useCallback(
+    (distanceToPlazaRange?: [string, string]) => {
+      if (distanceToPlazaRange) {
+        const [minDistanceToPlaza, maxDistanceToPlaza] = distanceToPlazaRange
+        onBrowse({ minDistanceToPlaza, maxDistanceToPlaza })
+      }
     },
     [onBrowse]
   )
@@ -145,6 +165,15 @@ export const AssetFilters = ({
         break
     }
   }
+
+  const locationFilters = useMemo(
+    () => ({
+      adjacentToRoad,
+      minDistanceToPlaza,
+      maxDistanceToPlaza
+    }),
+    [adjacentToRoad, maxDistanceToPlaza, minDistanceToPlaza]
+  )
 
   const shouldRenderFilter = useCallback(
     (filter: AssetFilter) => {
@@ -177,20 +206,30 @@ export const AssetFilters = ({
           <EstateSizeFilter
             landStatus={landStatus}
             values={values}
-            minPrice={minEstateSize}
-            maxPrice={maxEstateSize}
+            min={minEstateSize}
+            max={maxEstateSize}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
             onChange={values =>
               handleRangeFilterChange(
                 ['minEstateSize', 'maxEstateSize'],
                 values
               )
             }
+            {...locationFilters}
           />
         ) : null}
         <RentalPeriodFilter
           periods={[]}
           onChange={handlePeriodsChange}
         />
+        {isLocationFilterEnabled && (
+          <LocationFilter
+            {...locationFilters}
+            onAdjacentToRoadChange={handleAdjacentToRoadChange}
+            onDistanceToPlazaChange={handleDistanceToPlazaChange}
+          />
+        )}
       </div>
     )
   }

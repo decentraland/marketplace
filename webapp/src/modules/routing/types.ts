@@ -62,4 +62,7 @@ export type BrowseOptions = {
   minEstateSize?: string
   maxEstateSize?: string
   periods?: PeriodOption[]
+  minDistanceToPlaza?: string
+  maxDistanceToPlaza?: string
+  adjacentToRoad?: boolean
 }
