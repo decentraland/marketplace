@@ -39,7 +39,7 @@ const Trigger = ({
 }
 
 const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
-  const [isOpenDropdown, setIsOpenDropdwon] = useState(false);
+  const [isOpenDropdown, setIsOpenDropdown] = useState(false);
 
   const handleOnChange = useCallback(
     (_event: React.SyntheticEvent<HTMLElement>, data: DropdownProps) => {
@@ -93,7 +93,7 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
           />
         ) : null
       }
-      onClick={() => setIsOpenDropdwon((prevState) => !prevState)}
+      onClick={() => setIsOpenDropdown((prevState) => !prevState)}
       value={value}
       placeholder={t('asset_page.sales_rent_action_box.select_period')}
       options={options}
