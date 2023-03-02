@@ -10,8 +10,8 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import styles from './LocationFilter.module.css'
 import classNames from 'classnames'
 
-const DISTANCE_TO_PLAZA_MIN = 2;
-const DISTANCE_TO_PLAZA_MAX = 10;
+export const DISTANCE_TO_PLAZA_MIN = 1;
+export const DISTANCE_TO_PLAZA_MAX = 10;
 
 export type LocationFilterProps = {
   adjacentToRoad?: boolean
