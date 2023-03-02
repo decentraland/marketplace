@@ -10,6 +10,7 @@ import {
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
+import { PeriodOption } from '../rental/types'
 
 export { Sections } from '../vendor/routing/types'
 
@@ -60,4 +61,5 @@ export type BrowseOptions = {
   maxPrice?: string
   minEstateSize?: string
   maxEstateSize?: string
+  periods?: PeriodOption[]
 }

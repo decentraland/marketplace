@@ -27,6 +27,7 @@ import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
 import { isLandSection } from '../ui/utils'
+import { PeriodOption } from '../rental/types'
 
 export const getState = (state: RootState) => state.routing
 
@@ -271,6 +272,13 @@ export const getMinEstateSize = createSelector<RootState, string, string>(
 export const getMaxEstateSize = createSelector<RootState, string, string>(
   getRouterSearch,
   search => (getURLParam(search, 'maxEstateSize') as string) || ''
+)
+
+export const getPeriods = createSelector<RootState, string, PeriodOption[]>(
+  getRouterSearch,
+  search => (
+    getURLParamArray<PeriodOption>(search, 'period', Object.values(PeriodOption))
+  )
 )
 
 export const getCurrentLocationAddress = createSelector<

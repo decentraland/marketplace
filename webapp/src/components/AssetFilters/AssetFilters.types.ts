@@ -7,6 +7,7 @@ import {
   WearableGender
 } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
+import { PeriodOption } from '../../modules/rental/types'
 import { BrowseOptions } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor'
@@ -34,6 +35,7 @@ export type Props = {
   values?: BrowseOptions
   vendor?: VendorName
   view?: View
+  periods?: PeriodOption[]
   onBrowse: (options: BrowseOptions) => void
   onFilterChange?: (options: BrowseOptions) => void
   defaultCollapsed?: Record<AssetFilter, boolean>
@@ -62,6 +64,7 @@ export type MapStateProps = Pick<
   | 'landStatus'
   | 'vendor'
   | 'view'
+  | 'periods'
   | 'isPriceFilterEnabled'
   | 'isEstateSizeFilterEnabled'
   | 'isCreatorFiltersEnabled'

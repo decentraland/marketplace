@@ -15,6 +15,7 @@ import {
   getOnlyOnRent,
   getOnlyOnSale,
   getOnlySmart,
+  getPeriods,
   getRarities,
   getSection,
   getWearableGenders
@@ -79,6 +80,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     landStatus,
     view: getView(state),
     section,
+    periods: getPeriods(state),
     isPriceFilterEnabled: getIsPriceFilterEnabled(state),
     isEstateSizeFilterEnabled: getIsEstateSizeFilterEnabled(state),
     isCreatorFiltersEnabled: getIsCreatorsFilterEnabled(state)

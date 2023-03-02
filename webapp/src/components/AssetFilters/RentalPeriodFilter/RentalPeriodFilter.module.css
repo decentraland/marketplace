@@ -1,0 +1,5 @@
+.rentalPeriodContainer :global(.box-children) {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}

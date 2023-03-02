@@ -27,6 +27,7 @@ import { EmotePlayModeFilter } from './EmotePlayModeFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 import { RentalPeriodFilter } from './RentalPeriodFilter/RentalPeriodFilter'
+import { PeriodOption } from '../../modules/rental/types'
 
 export const AssetFilters = ({
   minPrice,
@@ -115,6 +116,13 @@ export const AssetFilters = ({
     [onBrowse]
   )
 
+  const handlePeriodsChange = useCallback(
+    (periods: PeriodOption[]) => {
+      onBrowse({ periods })
+    },
+    [onBrowse]
+  )
+
   function handleCollectionChange(value: string | undefined) {
     const newValue = value ? [value] : []
     onBrowse({ contracts: newValue })
@@ -179,7 +187,10 @@ export const AssetFilters = ({
             }
           />
         ) : null}
-        <RentalPeriodFilter periods={[]} onChange={() => console.log("CHANGE")} />
+        <RentalPeriodFilter
+          periods={[]}
+          onChange={handlePeriodsChange}
+        />
       </div>
     )
   }

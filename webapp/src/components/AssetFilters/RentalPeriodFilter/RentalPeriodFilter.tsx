@@ -1,12 +1,13 @@
 import { useMemo, useCallback } from 'react'
 import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { Rarity } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { PeriodOption } from '../../../modules/rental/types'
+import styles from './RentalPeriodFilter.module.css'
+import classNames from 'classnames'
 
 export type RentalPeriodFilterProps = {
   periods: PeriodOption[]
-  onChange: (value: Rarity[]) => void
+  onChange: (value: PeriodOption[]) => void
   defaultCollapsed?: boolean
 }
 
@@ -18,10 +19,14 @@ export const RentalPeriodFilter = ({
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
   const handlePeriodsChange = useCallback(
-    (event, data) => {
-      console.log("holaa", event, data, onChange)
+    (_evt, { checked, value }) => {
+      if (checked) {
+        onChange([...periods, value])
+      } else {
+        onChange(periods.filter((period) => period === value ))
+      }
     },
-    [onChange]
+    [periods, onChange]
   )
 
   const header = useMemo(
@@ -41,7 +46,7 @@ export const RentalPeriodFilter = ({
   return (
     <Box
       header={header}
-      className="filters-sidebar-box"
+      className={classNames("filters-sidebar-box", styles.rentalPeriodContainer)}
       collapsible
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
@@ -51,6 +56,8 @@ export const RentalPeriodFilter = ({
           label={t(`rental_modal.create_listing_step.period_options.${option}`)}
           checked={periods.includes(option)}
           onClick={handlePeriodsChange}
+          value={option}
+          type="checkbox"
         />
       ))}
     </Box>
