@@ -1,4 +1,4 @@
-import { NFTCategory, RentalStatus } from '@dcl/schemas'
+import { NFTCategory, NFTFilters, RentalStatus } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFTsFetchParams } from '../../../nft/types'
 import { NFTsFetchFilters, NFTResponse, NFTResult } from './types'
@@ -22,13 +22,21 @@ export type PriceFilters = Omit<NFTsFetchFilters, 'category'> & {
   assetType?: AssetType
 }
 
+export type EstateSizeFilters = Pick<
+  NFTFilters,
+  | 'isOnSale'
+  | 'adjacentToRoad'
+  | 'minDistanceToPlaza'
+  | 'maxDistanceToPlaza'
+  | 'minPrice'
+  | 'maxPrice'
+>
+
 class NFTAPI extends BaseAPI {
   fetchEstateSizes = async (
-    isOnSale?: boolean
+    filters: EstateSizeFilters
   ): Promise<Record<string, number>> => {
-    const { data } = await this.request('get', `/stats/estate/size`, {
-      isOnSale
-    })
+    const { data } = await this.request('get', `/stats/estate/size`, filters)
     return data
   }
 

@@ -26,6 +26,11 @@ export type Props = {
   onChange: (value: [string, string]) => void
   defaultCollapsed?: boolean
   collection?: string
+  minDistanceToPlaza?: string
+  maxDistanceToPlaza?: string
+  adjacentToRoad?: boolean
+  minEstateSize?: string
+  maxEstateSize?: string
 }
 
 export type MapStateProps = Pick<
@@ -40,6 +45,11 @@ export type MapStateProps = Pick<
   | 'emotePlayMode'
   | 'collection'
   | 'network'
+  | 'adjacentToRoad'
+  | 'minEstateSize'
+  | 'maxEstateSize'
+  | 'minDistanceToPlaza'
+  | 'maxDistanceToPlaza'
 >
 
 export type OwnProps = Pick<Props, 'values'>

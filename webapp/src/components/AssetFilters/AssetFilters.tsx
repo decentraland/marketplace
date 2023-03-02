@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import {
   EmotePlayMode,
   GenderFilterOption,
@@ -159,6 +159,15 @@ export const AssetFilters = ({
     }
   }
 
+  const locationFilters = useMemo(
+    () => ({
+      adjacentToRoad,
+      minDistanceToPlaza,
+      maxDistanceToPlaza
+    }),
+    [adjacentToRoad, maxDistanceToPlaza, minDistanceToPlaza]
+  )
+
   const shouldRenderFilter = useCallback(
     (filter: AssetFilter) => {
       // /lands page won't have any category, we fallback to the section, that will be Section.LAND
@@ -190,21 +199,22 @@ export const AssetFilters = ({
           <EstateSizeFilter
             landStatus={landStatus}
             values={values}
-            minPrice={minEstateSize}
-            maxPrice={maxEstateSize}
+            min={minEstateSize}
+            max={maxEstateSize}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
             onChange={values =>
               handleRangeFilterChange(
                 ['minEstateSize', 'maxEstateSize'],
                 values
               )
             }
+            {...locationFilters}
           />
         ) : null}
         {isLocationFilterEnabled && (
           <LocationFilter
-            minDistanceToPlaza={minDistanceToPlaza}
-            maxDistanceToPlaza={maxDistanceToPlaza}
-            adjacentToRoad={adjacentToRoad}
+            {...locationFilters}
             onAdjacentToRoadChange={handleAdjacentToRoadChange}
             onDistanceToPlazaChange={handleDistanceToPlazaChange}
           />

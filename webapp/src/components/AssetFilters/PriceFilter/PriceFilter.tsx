@@ -25,6 +25,11 @@ export const PriceFilter = ({
   category,
   minPrice,
   maxPrice,
+  adjacentToRoad,
+  minDistanceToPlaza,
+  maxDistanceToPlaza,
+  maxEstateSize,
+  minEstateSize,
   network,
   defaultCollapsed = false,
   assetType,
@@ -47,14 +52,24 @@ export const PriceFilter = ({
       contracts: collection ? [collection] : undefined,
       emotePlayMode,
       network,
-      ...getPriceFiltersForSection(section as Section)
+      ...getPriceFiltersForSection(section as Section),
+      adjacentToRoad: adjacentToRoad || undefined,
+      minDistanceToPlaza: minDistanceToPlaza || undefined,
+      maxDistanceToPlaza: maxDistanceToPlaza || undefined,
+      maxEstateSize,
+      minEstateSize
     }
   }, [
+    adjacentToRoad,
     assetType,
     bodyShapes,
     collection,
     emotePlayMode,
     isOnlySmart,
+    maxDistanceToPlaza,
+    maxEstateSize,
+    minDistanceToPlaza,
+    minEstateSize,
     network,
     rarities,
     section
