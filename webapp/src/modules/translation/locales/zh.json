@@ -375,6 +375,8 @@
     },
     "creators": {
       "title": "创作者",
+      "tooltip": "只有分配了 NAME 的创作者才会出现在此过滤器中。建议的创作者是发布了最多收藏的创作者。",
+      "dropdown_header": "建议",
       "all_creators": "所有创作者",
       "search": "搜索创作者",
       "type_to_search": "键入以搜索创作者。"

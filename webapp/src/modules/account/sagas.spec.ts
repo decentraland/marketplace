@@ -8,7 +8,7 @@ import {
 } from '@dcl/schemas'
 import { CatalystClient } from 'dcl-catalyst-client'
 import { expectSaga } from 'redux-saga-test-plan'
-import { call } from 'redux-saga/effects'
+import { call, select } from 'redux-saga/effects'
 import { NFTsFetchParams } from '../nft/types'
 import { accountAPI, nftAPI, NFTResult } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
@@ -21,6 +21,8 @@ import {
   fetchCreatorsAccountSuccess
 } from './actions'
 import { accountSaga, DEFAULT_FIRST_VALUE, DEFAULT_SKIP_VALUE } from './sagas'
+import { getCreators, getCreatorsSearchQuery } from './selectors'
+import { CreatorAccount } from './types'
 import { fromProfilesToCreators } from './utils'
 
 let account: Account
@@ -169,6 +171,7 @@ describe('when handling the request to fetch creators accounts', () => {
       it('should signal that the request has failed with the request error', () => {
         return expectSaga(accountSaga, catalystClient)
           .provide([
+            [select(getCreatorsSearchQuery), null],
             [
               call([nftAPI, nftAPI.fetch], filters),
               Promise.reject(new Error(error))
@@ -195,6 +198,7 @@ describe('when handling the request to fetch creators accounts', () => {
       it('should signal that the request has failed with the request error', () => {
         return expectSaga(accountSaga, catalystClient)
           .provide([
+            [select(getCreatorsSearchQuery), null],
             [
               call([accountAPI, accountAPI.fetch], filters),
               Promise.reject(new Error(error))
@@ -224,6 +228,7 @@ describe('when handling the request to fetch creators accounts', () => {
       it('should signal that the request has failed with the request error', () => {
         return expectSaga(accountSaga, catalystClient)
           .provide([
+            [select(getCreatorsSearchQuery), null],
             [call([accountAPI, accountAPI.fetch], filters), { data: accounts }],
             [
               call([catalystClient, 'fetchProfiles'], addresses),
@@ -259,6 +264,7 @@ describe('when handling the request to fetch creators accounts', () => {
       it('should fetch the accounts with more collections using the accountAPI and their profiles using the catalyst lambdas', () => {
         return expectSaga(accountSaga, catalystClient)
           .provide([
+            [select(getCreatorsSearchQuery), null],
             [call([accountAPI, accountAPI.fetch], filters), { data: accounts }],
             [call([catalystClient, 'fetchProfiles'], addresses), profiles]
           ])
@@ -274,6 +280,7 @@ describe('when handling the request to fetch creators accounts', () => {
     })
     describe('and there is a search term', () => {
       let nftResults: NFTResult[]
+      let creatorAccounts: CreatorAccount[]
       beforeEach(() => {
         search = 'a search term'
         nftAPIFilters = {
@@ -283,8 +290,8 @@ describe('when handling the request to fetch creators accounts', () => {
           skip: DEFAULT_SKIP_VALUE
         }
         accounts = [
-          { address: 'address1' } as Account,
-          { address: 'address2' } as Account
+          { address: 'address1', collections: 2 } as Account,
+          { address: 'address2', collections: 3 } as Account
         ]
         addresses = accounts.map(account => account.address)
         filters = {
@@ -299,22 +306,45 @@ describe('when handling the request to fetch creators accounts', () => {
           { avatars: [{ ethAddress: addresses[0] }] } as Profile,
           { avatars: [{ ethAddress: addresses[1] }] } as Profile
         ]
+        creatorAccounts = fromProfilesToCreators(profiles, accounts)
       })
-      it('should fetch the ens that match the search term using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators\' profiles', () => {
-        return expectSaga(accountSaga, catalystClient)
-          .provide([
-            [call([nftAPI, nftAPI.fetch], nftAPIFilters), { data: nftResults }],
-            [call([accountAPI, accountAPI.fetch], filters), { data: accounts }],
-            [call([catalystClient, 'fetchProfiles'], addresses), profiles]
-          ])
-          .put(
-            fetchCreatorsAccountSuccess(
-              search,
-              fromProfilesToCreators(profiles, accounts)
+      describe('and the term is the same as the last search', () => {
+        it('should return the accounts fetched on the lastest action', () => {
+          return expectSaga(accountSaga, catalystClient)
+            .provide([
+              [select(getCreatorsSearchQuery), search],
+              [select(getCreators), creatorAccounts],
+              [call([catalystClient, 'fetchProfiles'], addresses), profiles]
+            ])
+            .put(fetchCreatorsAccountSuccess(search, creatorAccounts))
+            .dispatch(fetchCreatorsAccountRequest(search))
+            .silentRun()
+        })
+      })
+      describe('and the term is different than the last search', () => {
+        it("should fetch the ens that match the search term using the nftAPI and then and their profiles using the catalyst lambdas and accounts using the nftAPI and put the success action with the creators' profiles", () => {
+          return expectSaga(accountSaga, catalystClient)
+            .provide([
+              [select(getCreatorsSearchQuery), null],
+              [
+                call([nftAPI, nftAPI.fetch], nftAPIFilters),
+                { data: nftResults }
+              ],
+              [
+                call([accountAPI, accountAPI.fetch], filters),
+                { data: accounts }
+              ],
+              [call([catalystClient, 'fetchProfiles'], addresses), profiles]
+            ])
+            .put(
+              fetchCreatorsAccountSuccess(
+                search,
+                fromProfilesToCreators(profiles, accounts)
+              )
             )
-          )
-          .dispatch(fetchCreatorsAccountRequest(search))
-          .silentRun()
+            .dispatch(fetchCreatorsAccountRequest(search))
+            .silentRun()
+        })
       })
     })
   })

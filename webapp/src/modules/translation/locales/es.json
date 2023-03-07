@@ -374,6 +374,8 @@
     },
     "creators": {
       "title": "Creadores",
+      "tooltip": "Solo los creadores con un nombre asignado aparecerán en este filtro. Los creadores sugeridos son aquellos con más colecciones publicadas.",
+      "dropdown_header": "Sugerencias",
       "all_creators": "Todos los creadores",
       "search": "Buscar creadores",
       "type_to_search": "Escriba para buscar creadores."

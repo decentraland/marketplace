@@ -17,7 +17,7 @@ let state: AccountState
 beforeEach(() => {
   state = {
     data: {},
-    creators: [],
+    creators: { accounts: [], search: null },
     metrics: {
       [Network.ETHEREUM]: {},
       [Network.MATIC]: {}
@@ -138,7 +138,7 @@ describe('when reducing the action that signals the successful fetch of creators
   })
 
   it('should return a state where the received account creators are stored in the creators state', () => {
-    expect(result.creators).toEqual(creatorsAccounts)
+    expect(result.creators).toEqual({ accounts: creatorsAccounts, search })
   })
 
   it('should return a state where the error is set to null', () => {

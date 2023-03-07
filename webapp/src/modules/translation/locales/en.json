@@ -378,6 +378,8 @@
     },
     "creators": {
       "title": "Creators",
+      "tooltip": "Only creators with assigned NAMEs appear in this filter. Suggested creators are the ones with most collections published.",
+      "dropdown_header": "Suggestions",
       "all_creators": "All creators",
       "search": "Search creators",
       "type_to_search": "Type to search for creators."
