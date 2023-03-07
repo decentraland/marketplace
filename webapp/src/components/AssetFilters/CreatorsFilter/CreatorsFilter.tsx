@@ -119,10 +119,10 @@ export const CreatorsFilter = ({
 
   // tracks the click outside the main div and close suggestions if needed
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         dropdownContainerRef.current &&
-        !dropdownContainerRef.current.contains(event.target)
+        !dropdownContainerRef.current.contains(event.target as Node)
       ) {
         setShowSuggestions(false)
       }
