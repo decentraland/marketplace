@@ -28,7 +28,6 @@ import { LocationFilter } from './LocationFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 import { RentalPeriodFilter } from './RentalPeriodFilter/RentalPeriodFilter'
-import { PeriodOption } from '../../modules/rental/types'
 
 export const AssetFilters = ({
   minPrice,
@@ -54,7 +53,7 @@ export const AssetFilters = ({
   maxDistanceToPlaza,
   adjacentToRoad,
   values,
-  periods,
+  rentalDays,
   isPriceFilterEnabled,
   isEstateSizeFilterEnabled,
   isLocationFilterEnabled,
@@ -123,9 +122,9 @@ export const AssetFilters = ({
     [onBrowse]
   )
 
-  const handlePeriodsChange = useCallback(
-    (value: PeriodOption[]) => {
-      onBrowse({ periods: value })
+  const handleRentalDaysChange = useCallback(
+    (value: number[]) => {
+      onBrowse({ rentalDays: value })
     },
     [onBrowse]
   )
@@ -226,8 +225,8 @@ export const AssetFilters = ({
         {isRentalPeriodFilterEnabled &&
           landStatus === LANDFilters.ONLY_FOR_RENT && (
             <RentalPeriodFilter
-              periods={periods}
-              onChange={handlePeriodsChange}
+            rentalDays={rentalDays}
+              onChange={handleRentalDaysChange}
             />
           )}
         {isLocationFilterEnabled && (

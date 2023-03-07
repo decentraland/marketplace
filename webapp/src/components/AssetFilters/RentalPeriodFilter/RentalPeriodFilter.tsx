@@ -4,34 +4,35 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { PeriodOption } from '../../../modules/rental/types'
 import styles from './RentalPeriodFilter.module.css'
 import classNames from 'classnames'
+import { daysByPeriod } from '../../../modules/rental/utils'
 
 export type RentalPeriodFilterProps = {
-  periods?: PeriodOption[]
-  onChange: (value: PeriodOption[]) => void
+  rentalDays?: number[]
+  onChange: (value: number[]) => void
   defaultCollapsed?: boolean
 }
 
 export const RentalPeriodFilter = ({
   onChange,
-  periods = [],
+  rentalDays = [],
   defaultCollapsed = false
 }: RentalPeriodFilterProps) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
 
-  const handlePeriodsChange = useCallback(
+  const handleRentalDaysChange = useCallback(
     (_evt, { checked, value }) => {
       if (checked) {
-        onChange([...periods, value])
+        onChange([...rentalDays, value])
       } else {
-        onChange(periods.filter((period) => period !== value ))
+        onChange(rentalDays.filter((period) => period !== value ))
       }
     },
-    [periods, onChange]
+    [rentalDays, onChange]
   )
 
   const allPeriodsSelected = useMemo(() => (
-    periods.length === 0 || periods.length === Object.values(PeriodOption).length
-  ), [periods.length])
+    rentalDays.length === 0 || rentalDays.length === Object.values(PeriodOption).length
+  ), [rentalDays.length])
 
   const header = useMemo(
     () =>
@@ -44,14 +45,14 @@ export const RentalPeriodFilter = ({
             {allPeriodsSelected
               ? t('nft_filters.periods.all_items')
               : t('nft_filters.periods.count_items', {
-                  count: periods.length
+                  count: rentalDays.length
                 })}
           </span>
         </div>
       ) : (
         t('nft_filters.periods.title')
       ),
-    [isMobileOrTablet, periods.length, allPeriodsSelected]
+    [isMobileOrTablet, rentalDays.length, allPeriodsSelected]
   )
 
   return (
@@ -65,9 +66,9 @@ export const RentalPeriodFilter = ({
         <Radio
           key={option}
           label={t(`rental_modal.create_listing_step.period_options.${option}`)}
-          checked={periods.includes(option)}
-          onClick={handlePeriodsChange}
-          value={option}
+          checked={rentalDays.includes(daysByPeriod[option])}
+          onClick={handleRentalDaysChange}
+          value={daysByPeriod[option]}
           type="checkbox"
         />
       ))}

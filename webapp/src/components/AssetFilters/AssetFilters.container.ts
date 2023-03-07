@@ -85,7 +85,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     landStatus,
     view: getView(state),
     section,
-    periods: 'periods' in values ? values.periods : getPeriods(state),
+    rentalDays: 'rentalDays' in values ? values.rentalDays : getPeriods(state),
     minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
     maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
     adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),

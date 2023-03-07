@@ -27,7 +27,6 @@ import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
 import { isLandSection } from '../ui/utils'
-import { PeriodOption } from '../rental/types'
 
 export const getState = (state: RootState) => state.routing
 
@@ -274,11 +273,9 @@ export const getMaxEstateSize = createSelector<RootState, string, string>(
   search => (getURLParam(search, 'maxEstateSize') as string) || ''
 )
 
-export const getPeriods = createSelector<RootState, string, PeriodOption[]>(
+export const getPeriods = createSelector<RootState, string, number[]>(
   getRouterSearch,
-  search => (
-    getURLParamArray<PeriodOption>(search, 'period', Object.values(PeriodOption))
-  )
+  search => getURLParamArray(search, 'rentalDays').map((value) => Number.parseInt(value)) as number[]
 )
 
 export const getMinDistanceToPlaza = createSelector<RootState, string, string>(
@@ -457,7 +454,7 @@ export const hasFiltersEnabled = createSelector<
     maxDistanceToPlaza,
     adjacentToRoad,
     creators,
-    periods
+    rentalDays
   } = browseOptions
   const isLand = isLandSection(section as Section)
   if (isLand) {
@@ -473,7 +470,7 @@ export const hasFiltersEnabled = createSelector<
       !!minDistanceToPlaza ||
       !!maxDistanceToPlaza ||
       !!adjacentToRoad ||
-      !!periods?.length
+      !!rentalDays?.length
     )
   }
 

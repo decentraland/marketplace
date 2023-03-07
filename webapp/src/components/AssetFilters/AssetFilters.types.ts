@@ -7,7 +7,6 @@ import {
   WearableGender
 } from '@dcl/schemas'
 import { AssetType } from '../../modules/asset/types'
-import { PeriodOption } from '../../modules/rental/types'
 import { BrowseOptions } from '../../modules/routing/types'
 import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor'
@@ -35,7 +34,7 @@ export type Props = {
   values?: BrowseOptions
   vendor?: VendorName
   view?: View
-  periods?: PeriodOption[]
+  rentalDays?: number[]
   defaultCollapsed?: Record<AssetFilter, boolean>
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
@@ -71,7 +70,7 @@ export type MapStateProps = Pick<
   | 'landStatus'
   | 'vendor'
   | 'view'
-  | 'periods'
+  | 'rentalDays'
   | 'minDistanceToPlaza'
   | 'maxDistanceToPlaza'
   | 'adjacentToRoad'
