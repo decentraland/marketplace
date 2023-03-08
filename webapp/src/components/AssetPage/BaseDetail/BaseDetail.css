@@ -79,10 +79,6 @@
   padding: 25px;
 }
 
-.BaseDetail .ui.container > div {
-  margin-bottom: 48px;
-}
-
 /* Override ui stats */
 
 .BaseDetail .dcl.stats + .dcl.stats {
