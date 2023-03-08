@@ -230,7 +230,7 @@ export const AssetFilters = ({
         {isRentalPeriodFilterEnabled &&
           landStatus === LANDFilters.ONLY_FOR_RENT && (
             <RentalPeriodFilter
-            rentalDays={rentalDays}
+              rentalDays={rentalDays}
               onChange={handleRentalDaysChange}
             />
           )}
