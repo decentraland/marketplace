@@ -10,7 +10,7 @@ import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
 import { View } from '../../modules/ui/types'
-import { Sections } from '../../modules/routing/types'
+import { Sections, SortBy } from '../../modules/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
@@ -107,7 +107,12 @@ export const AssetFilters = ({
 
   const handleOnSaleChange = useCallback(
     (value: boolean) => {
-      onBrowse({ onlyOnSale: value })
+      // when toggling off the on sale filter, we need to reset the sortBy to avoid invalid combinations with the on sale sort options
+      onBrowse(
+        value
+          ? { onlyOnSale: value }
+          : { onlyOnSale: value, sortBy: SortBy.NEWEST }
+      )
     },
     [onBrowse]
   )
