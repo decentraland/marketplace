@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Loader, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import ProfilesCache from '../../../lib/profiles'
 import { Pill } from '../../AssetTopbar/SelectedFilters/Pill/Pill'
 import { InfoTooltip } from '../../InfoTooltip'
 import { Props } from './CreatorsFilter.types'
-import { getCreatorsByAddress } from './utils'
+import { profileToCreatorAccount } from './utils'
 import './CreatorsFilter.css'
 
 type Creator = {
@@ -33,8 +34,8 @@ export const CreatorsFilter = ({
   useEffect(() => {
     if (creators?.length) {
       setIsFetchingNames(true)
-      getCreatorsByAddress(creators).then(creators => {
-        setSelectedCreators(creators)
+      ProfilesCache.fetchProfile(creators).then(profiles => {
+        setSelectedCreators(profileToCreatorAccount(profiles))
         setIsFetchingNames(false)
       })
     } else if (!creators?.length) {
