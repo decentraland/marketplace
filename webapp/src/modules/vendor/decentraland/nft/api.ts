@@ -9,7 +9,6 @@ import { getNFTSortBy } from '../../../routing/search'
 import { AssetType } from '../../../asset/types'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
-import { PeriodOption } from '../../../rental/types'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 
@@ -204,11 +203,9 @@ class NFTAPI extends BaseAPI {
       queryParams.append('adjacentToRoad', 'true')
     }
 
-    if (filters.periods) {
-      for (const period of filters.periods) {
-        if (Object.values(PeriodOption).includes(period)) {
-          queryParams.append('period', period)
-        }
+    if (filters.rentalDays) {
+      for (const rentalDay of filters.rentalDays) {
+        queryParams.append('rentalDays', rentalDay.toString())
       }
     }
   }

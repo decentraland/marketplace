@@ -18,7 +18,7 @@ import {
   getOnlyOnRent,
   getOnlyOnSale,
   getOnlySmart,
-  getPeriods,
+  getRentalDays,
   getRarities,
   getSection,
   getWearableGenders
@@ -85,7 +85,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     landStatus,
     view: getView(state),
     section,
-    rentalDays: 'rentalDays' in values ? values.rentalDays : getPeriods(state),
+    rentalDays: 'rentalDays' in values ? values.rentalDays : getRentalDays(state),
     minDistanceToPlaza: 'minDistanceToPlaza' in values ? values.minDistanceToPlaza : getMinDistanceToPlaza(state),
     maxDistanceToPlaza: 'maxDistanceToPlaza' in values ? values.maxDistanceToPlaza : getMaxDistanceToPlaza(state),
     adjacentToRoad: 'adjacentToRoad' in values ? values.adjacentToRoad : getAdjacentToRoad(state),

@@ -361,7 +361,8 @@
     "periods": {
       "title": "Rental Period",
       "all_items": "All periods",
-      "count_items": "{count} {count, plural, one {period} other {periods}}"
+      "count_items": "{count} {count, plural, one {period} other {periods}}",
+      "selection": "Rental period {rentalDays} days"
     },
     "price": {
       "title": "Price",

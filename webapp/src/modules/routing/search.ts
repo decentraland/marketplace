@@ -148,8 +148,8 @@ export function getSearchParams(options?: BrowseOptions) {
     }
 
     if (options.rentalDays) {
-      for (const period of options.rentalDays) {
-        params.append('period', period.toString())
+      for (const rentalDay of options.rentalDays) {
+        params.append('rentalDays', rentalDay.toString())
       }
     }
   }

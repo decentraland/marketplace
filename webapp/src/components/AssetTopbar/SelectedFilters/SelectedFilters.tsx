@@ -37,7 +37,8 @@ export const SelectedFilters = ({
     maxEstateSize,
     adjacentToRoad,
     minDistanceToPlaza,
-    maxDistanceToPlaza
+    maxDistanceToPlaza,
+    rentalDays
   } = browseOptions
   const [collection, setCollection] = useState<
     Record<string, string> | undefined
@@ -155,6 +156,10 @@ export const SelectedFilters = ({
     onBrowse({ adjacentToRoad: undefined })
   }, [onBrowse])
 
+  const handleDeleteRentalDays = useCallback((removeDays) => {
+    onBrowse({ rentalDays: rentalDays?.filter((day) => removeDays.toString() !== day.toString() )})
+  }, [onBrowse, rentalDays])
+
   return (
     <div className={styles.pillContainer}>
       {rarities?.map(rarity => (
@@ -248,6 +253,15 @@ export const SelectedFilters = ({
           onDelete={handleDeleteDistanceToPlaza}
           id="distanceToPlaza"
         />
+      ): null}
+      {rentalDays && rentalDays.length ? (
+        rentalDays.map((days) => (
+          <Pill
+            label={t('nft_filters.periods.selection', { rentalDays: days })}
+            onDelete={handleDeleteRentalDays}
+            id={days.toString()}
+          />
+        ))
       ): null}
     </div>
   )

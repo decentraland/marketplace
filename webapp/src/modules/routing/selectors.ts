@@ -273,7 +273,7 @@ export const getMaxEstateSize = createSelector<RootState, string, string>(
   search => (getURLParam(search, 'maxEstateSize') as string) || ''
 )
 
-export const getPeriods = createSelector<RootState, string, number[]>(
+export const getRentalDays = createSelector<RootState, string, number[]>(
   getRouterSearch,
   search => getURLParamArray(search, 'rentalDays').map((value) => Number.parseInt(value)) as number[]
 )
@@ -348,7 +348,7 @@ export const getLandsUrlParams = createSelector(
   getMinDistanceToPlaza,
   getMaxDistanceToPlaza,
   getAdjacentToRoad,
-  getPeriods,
+  getRentalDays,
   (
     isMap,
     isFullscreen,
@@ -357,7 +357,7 @@ export const getLandsUrlParams = createSelector(
     minDistanceToPlaza,
     maxDistanceToPlaza,
     adjacentToRoad,
-    periods
+    rentalDays
   ) => ({
     isMap,
     isFullscreen,
@@ -366,7 +366,7 @@ export const getLandsUrlParams = createSelector(
     minDistanceToPlaza,
     maxDistanceToPlaza,
     adjacentToRoad,
-    periods
+    rentalDays
   })
 )
 

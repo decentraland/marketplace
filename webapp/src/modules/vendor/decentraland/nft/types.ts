@@ -12,7 +12,6 @@ import {
 } from '@dcl/schemas'
 import { WearableGender } from '../../../nft/wearable/types'
 import { NFT } from '../../../nft/types'
-import { PeriodOption } from '../../../rental/types'
 import { VendorName } from '../../types'
 
 export type NFTsFetchFilters = {
@@ -38,7 +37,7 @@ export type NFTsFetchFilters = {
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
-  periods?: PeriodOption[]
+  rentalDays?: number[]
 }
 
 export type NFTResult = {
