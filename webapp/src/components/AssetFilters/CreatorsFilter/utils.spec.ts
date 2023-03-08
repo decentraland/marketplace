@@ -1,46 +1,25 @@
-import { Profile } from '@dcl/schemas'
-import { CatalystClient } from 'dcl-catalyst-client'
-import { getCreatorsByAddress } from './utils'
+import { Avatar, Profile } from '@dcl/schemas'
+import { profileToCreatorAccount } from './utils'
+import { Creator } from './CreatorsFilter'
 
-describe('when getting creators by address', () => {
-  let mockFetchProfile: jest.SpyInstance<Promise<Profile[]>>
-  let anAddress: string
-  let anotherAddress: string
-  let avatarName: string
-  let anotherAvatarName: string
-
-  afterEach(() => {
-    if (mockFetchProfile) {
-      mockFetchProfile.mockClear()
-    }
-  })
+describe('profileToCreatorAccount', () => {
+  let profiles: Profile[]
+  let names: string[]
+  let addresses: string[]
+  let creatorAccounts: Creator[]
   beforeEach(() => {
-    anAddress = 'anAddress'
-    anotherAddress = 'anotherAddress'
-    avatarName = 'anAvatarName'
-    anotherAvatarName = 'anotherAvatarName'
-    mockFetchProfile = jest
-      .spyOn(CatalystClient.prototype, 'fetchProfiles')
-      .mockResolvedValueOnce([
-        {
-          avatars: [{ name: avatarName, ethAddress: anAddress }]
-        },
-        {
-          avatars: [{ name: anotherAvatarName, ethAddress: anotherAddress }]
-        }
-      ])
+    names = ['aName', 'anotherName']
+    addresses = ['anAddress', 'anotherAddress']
+    profiles = [
+      { avatars: [{ name: names[0], ethAddress: addresses[0] } as Avatar] },
+      { avatars: [{ name: names[1], ethAddress: addresses[1] } as Avatar] }
+    ]
+    creatorAccounts = [
+      { name: names[0], address: addresses[0] },
+      { name: names[1], address: addresses[1] }
+    ]
   })
-
-  it('should fetch the profile and return a Creator object', async () => {
-    expect(await getCreatorsByAddress([anAddress, anotherAddress])).toEqual([
-      {
-        name: avatarName,
-        address: anAddress
-      },
-      {
-        name: anotherAvatarName,
-        address: anotherAddress
-      }
-    ])
+  it('should get the name and address out of the profile', () => {
+    expect(profileToCreatorAccount(profiles)).toStrictEqual(creatorAccounts)
   })
 })

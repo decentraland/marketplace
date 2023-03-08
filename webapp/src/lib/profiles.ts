@@ -13,10 +13,10 @@ class ProfilesCache {
   public async fetchProfile(address: string[]) {
     const addressesString = address.sort().join(',')
     if (addressesString in this.cache) {
-      return await this.cache[addressesString]
+      return this.cache[addressesString]
     }
     this.cache[addressesString] = this.client.fetchProfiles(address)
-    return await this.cache[addressesString]
+    return this.cache[addressesString]
   }
 }
 

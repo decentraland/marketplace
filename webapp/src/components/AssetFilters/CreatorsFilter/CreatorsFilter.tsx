@@ -8,7 +8,7 @@ import { Props } from './CreatorsFilter.types'
 import { profileToCreatorAccount } from './utils'
 import './CreatorsFilter.css'
 
-type Creator = {
+export type Creator = {
   name: string
   address: string
 }
