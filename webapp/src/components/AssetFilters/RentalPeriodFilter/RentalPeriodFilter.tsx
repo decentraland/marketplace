@@ -70,6 +70,7 @@ export const RentalPeriodFilter = ({
           onClick={handleRentalDaysChange}
           value={daysByPeriod[option]}
           type="checkbox"
+          data-testid={option}
         />
       ))}
     </Box>

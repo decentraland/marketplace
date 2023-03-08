@@ -40,6 +40,30 @@ describe('rarities filter', () => {
   })
 })
 
+describe('rental days filter', () => {
+  test('should render rental days', () => {
+    const rentalDaysBrowseOptions = { rentalDays: [1, 30] }
+    const { getByTestId } = renderSelectedFilters({
+      browseOptions: rentalDaysBrowseOptions
+    })
+    expect(getByTestId('pill-1')).toBeInTheDocument()
+    expect(getByTestId('pill-30')).toBeInTheDocument()
+  })
+
+  test('should call onBrowse without deleted rental day', async () => {
+    const rentalDaysBrowseOptions = { rentalDays: [1, 30] }
+    const onBrowseMock = jest.fn()
+
+    const { getByTestId } = renderSelectedFilters({
+      browseOptions: rentalDaysBrowseOptions,
+      onBrowse: onBrowseMock
+    })
+    const commonPill = getByTestId('pill-1')
+    await userEvent.click(within(commonPill).getByRole('button'))
+    expect(onBrowseMock).toHaveBeenCalledWith({ rentalDays: [30] })
+  })
+})
+
 describe.each([
   ['network', { network: Network.MATIC }, { network: undefined }],
   ['onlySmart', { onlySmart: true }, { onlySmart: undefined }],

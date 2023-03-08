@@ -1,4 +1,4 @@
-import { render, waitFor } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
