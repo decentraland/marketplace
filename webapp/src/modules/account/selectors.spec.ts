@@ -1,11 +1,14 @@
 import { Network } from '@dcl/schemas'
+import { RootState } from '../reducer'
 import {
   getAggregatedMetricsByAddress,
+  getCreators,
+  getCreatorsSearchQuery,
   getMetricsByAddress,
   getMetricsByAddressByNetwork,
   getMetricsByNetworkByAddress
 } from './selectors'
-import { AccountMetrics } from './types'
+import { AccountMetrics, CreatorAccount } from './types'
 import { sumAccountMetrics } from './utils'
 
 let metrics1: AccountMetrics
@@ -13,7 +16,21 @@ let metrics2: AccountMetrics
 let metrics3: AccountMetrics
 let metrics4: AccountMetrics
 
+let state: RootState
+let accounts: CreatorAccount[]
+let search: string
+
 beforeEach(() => {
+  accounts = [{ name: 'aCreatorName' } as CreatorAccount]
+  search = 'a search term'
+  state = {
+    account: {
+      creators: {
+        accounts: accounts,
+        search
+      }
+    }
+  } as any
   metrics1 = {
     address: 'address1',
     earned: '200',
@@ -151,5 +168,17 @@ describe('when getting metrics by address', () => {
         aggregated: metrics4
       }
     })
+  })
+})
+
+describe('when getting creators accounts', () => {
+  it('should return the creator accounts', () => {
+    expect(getCreators(state)).toBe(accounts)
+  })
+})
+
+describe('when getting creators accounts search query', () => {
+  it('should return the creator accounts search term used', () => {
+    expect(getCreatorsSearchQuery(state)).toBe(search)
   })
 })

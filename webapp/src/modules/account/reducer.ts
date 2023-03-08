@@ -30,7 +30,10 @@ import { Account, AccountMetrics, CreatorAccount } from './types'
 export type AccountState = {
   data: Record<string, Account>
   metrics: Record<Network, Record<string, AccountMetrics>>
-  creators: CreatorAccount[]
+  creators: {
+    accounts: CreatorAccount[]
+    search: string | null
+  }
   loading: LoadingState
   error: string | null
 }
@@ -41,7 +44,7 @@ const INITIAL_STATE: AccountState = {
     [Network.ETHEREUM]: {},
     [Network.MATIC]: {}
   },
-  creators: [],
+  creators: { accounts: [], search: null },
   loading: [],
   error: null
 }
@@ -123,7 +126,10 @@ export function accountReducer(
       return {
         ...state,
         loading: loadingReducer(state.loading, action),
-        creators: action.payload.creatorAccounts,
+        creators: {
+          accounts: action.payload.creatorAccounts,
+          search: action.payload.search
+        },
         error: null
       }
     }

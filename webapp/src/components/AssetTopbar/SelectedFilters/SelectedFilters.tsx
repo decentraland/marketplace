@@ -9,7 +9,8 @@ import {
   getPriceLabel
 } from '../../../utils/filters'
 import { CreatorAccount } from '../../../modules/account/types'
-import { getCreatorsByAddress } from '../../AssetFilters/CreatorsFilter/utils'
+import ProfilesCache from '../../../lib/profiles'
+import { profileToCreatorAccount } from '../../AssetFilters/CreatorsFilter/utils'
 import { Pill } from './Pill/Pill'
 import { Props } from './SelectedFilters.types'
 import { getCollectionByAddress } from './utils'
@@ -67,9 +68,9 @@ export const SelectedFilters = ({
 
   useEffect(() => {
     if (creators?.length) {
-      getCreatorsByAddress(creators).then(creators =>
-        setSelectedCreators(creators)
-      )
+      ProfilesCache.fetchProfile(creators).then(profiles => {
+        setSelectedCreators(profileToCreatorAccount(profiles))
+      })
     } else if (!creators?.length) {
       setSelectedCreators([])
     }
@@ -241,14 +242,17 @@ export const SelectedFilters = ({
           onDelete={handleDeleteAdjacentToRoad}
           id="adjacentToRoad"
         />
-      ): null}
+      ) : null}
       {minDistanceToPlaza || maxDistanceToPlaza ? (
         <Pill
-          label={t('nft_filters.distance_to_plaza.selection', { from: minDistanceToPlaza, to: maxDistanceToPlaza })}
+          label={t('nft_filters.distance_to_plaza.selection', {
+            from: minDistanceToPlaza,
+            to: maxDistanceToPlaza
+          })}
           onDelete={handleDeleteDistanceToPlaza}
           id="distanceToPlaza"
         />
-      ): null}
+      ) : null}
     </div>
   )
 }

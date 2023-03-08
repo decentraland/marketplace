@@ -14,13 +14,7 @@ import { CategoryFilter } from './CategoryFilter'
 
 const AssetFiltersModal = (props: Props) => {
   const [filters, setFilters] = useState<BrowseOptions>({})
-  const {
-    onClose,
-    onBrowse,
-    view,
-    assetType,
-    browseOptions
-  } = props
+  const { onClose, onBrowse, view, assetType, browseOptions } = props
 
   const handleFilterChange = useCallback(
     (options: BrowseOptions) => {
@@ -54,7 +48,11 @@ const AssetFiltersModal = (props: Props) => {
   return (
     <Modal open className={styles.assetFiltersModal}>
       <Modal.Header className={styles.modalHeader}>
-        <Button basic className="clear-filters-modal" onClick={handleClearFilters}>
+        <Button
+          basic
+          className="clear-filters-modal"
+          onClick={handleClearFilters}
+        >
           {t('filters.reset')}
         </Button>
         <h3 className={styles.modalTitle}>Filters</h3>
