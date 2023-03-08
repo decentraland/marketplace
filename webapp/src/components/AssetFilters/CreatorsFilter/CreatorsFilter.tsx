@@ -1,34 +1,30 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import classNames from 'classnames'
-import {
-  Box,
-  Dropdown,
-  Icon,
-  Loader,
-  useTabletAndBelowMediaQuery
-} from 'decentraland-ui'
+import { Box, Loader, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import ProfilesCache from '../../../lib/profiles'
 import { Pill } from '../../AssetTopbar/SelectedFilters/Pill/Pill'
+import { InfoTooltip } from '../../InfoTooltip'
 import { Props } from './CreatorsFilter.types'
-import { getCreatorsByAddress } from './utils'
+import { profileToCreatorAccount } from './utils'
 import './CreatorsFilter.css'
 
-type Creator = {
+export type Creator = {
   name: string
   address: string
 }
 
 export const CreatorsFilter = ({
+  isLoading,
   creators,
   fetchedCreators,
-  onChange,
-  isLoading,
   defaultCollapsed = false,
+  onChange,
   onFetchCreators
 }: Props): JSX.Element => {
   const [isFetchingNames, setIsFetchingNames] = useState(false)
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
   const [searchTerm, setSearchTerm] = useState('')
+  const [showSuggestions, setShowSuggestions] = useState(false)
   const [selectedCreators, setSelectedCreators] = useState<Creator[]>(
     creators?.length && fetchedCreators
       ? fetchedCreators.filter(creator => creators.includes(creator.address))
@@ -38,8 +34,8 @@ export const CreatorsFilter = ({
   useEffect(() => {
     if (creators?.length) {
       setIsFetchingNames(true)
-      getCreatorsByAddress(creators).then(creators => {
-        setSelectedCreators(creators)
+      ProfilesCache.fetchProfile(creators).then(profiles => {
+        setSelectedCreators(profileToCreatorAccount(profiles))
         setIsFetchingNames(false)
       })
     } else if (!creators?.length) {
@@ -50,10 +46,15 @@ export const CreatorsFilter = ({
   const handleCreatorsChange = useCallback(
     (value: string) => {
       const creator = fetchedCreators.find(creator => creator.address === value)
-      if (creator) {
+      if (
+        creator &&
+        !selectedCreators.find(c => c.address === creator.address)
+      ) {
         const newCreators = [...selectedCreators, creator]
         setSelectedCreators(newCreators)
         onChange(newCreators.map(creator => creator.address))
+        setShowSuggestions(false)
+        setSearchTerm('')
       }
     },
     [fetchedCreators, onChange, selectedCreators]
@@ -62,6 +63,7 @@ export const CreatorsFilter = ({
   const handleFetchTopCreators = useCallback(() => {
     if (!searchTerm && !isLoading) {
       onFetchCreators('')
+      setShowSuggestions(true)
     }
   }, [isLoading, onFetchCreators, searchTerm])
 
@@ -69,7 +71,9 @@ export const CreatorsFilter = ({
     if (!searchTerm) {
       return
     }
+    setShowSuggestions(false)
     const delayedDebounceFn = setTimeout(() => {
+      setShowSuggestions(true)
       onFetchCreators(searchTerm)
     }, 500)
     return () => clearTimeout(delayedDebounceFn)
@@ -93,7 +97,10 @@ export const CreatorsFilter = ({
           </span>
         </div>
       ) : (
-        t('nft_filters.creators.title')
+        <>
+          {t('nft_filters.creators.title')}
+          <InfoTooltip content={t('nft_filters.creators.tooltip')} />
+        </>
       ),
     [isFetchingNames, isMobileOrTablet, selectedCreators]
   )
@@ -109,29 +116,45 @@ export const CreatorsFilter = ({
     [onChange, selectedCreators]
   )
 
-  const dropdownOptions = useMemo(
-    () =>
-      fetchedCreators.map(creator => ({
-        text: creator.name,
-        value: creator.address
-      })),
-    [fetchedCreators]
-  )
+  const dropdownContainerRef = useRef<HTMLDivElement>(null)
 
-  const dropdownRef = useRef(null)
-  const onDropdownChange = useCallback(
-    (_event, data) => {
-      handleCreatorsChange(data.value as string)
-      if (searchTerm && !data.value) {
-        setSearchTerm('')
-        if (dropdownRef.current) {
-          // typing as any since the type of the Legacy ref component is not exposed by the lib
-          ;(dropdownRef.current as any).clearSearchQuery?.()
-        }
+  // tracks the click outside the main div and close suggestions if needed
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownContainerRef.current &&
+        !dropdownContainerRef.current.contains(event.target as Node)
+      ) {
+        setShowSuggestions(false)
+      }
+    }
+    document.addEventListener('click', handleClickOutside, true)
+    return () => {
+      document.removeEventListener('click', handleClickOutside, true)
+    }
+  }, [])
+
+  const clearAndShowSuggestions = useCallback(() => {
+    setSearchTerm('')
+    onFetchCreators('')
+    setShowSuggestions(true)
+  }, [onFetchCreators])
+
+  const handleSearchInputChange = useCallback(
+    e => {
+      const value = e.target.value
+      if (!value) {
+        clearAndShowSuggestions()
+      } else {
+        setSearchTerm(value)
       }
     },
-    [handleCreatorsChange, searchTerm]
+    [clearAndShowSuggestions]
   )
+
+  const handleClearSearchInput = useCallback(() => {
+    clearAndShowSuggestions()
+  }, [clearAndShowSuggestions])
 
   return (
     <Box
@@ -140,36 +163,50 @@ export const CreatorsFilter = ({
       className="CreatorsFilter filters-sidebar-box"
       defaultCollapsed={defaultCollapsed || isMobileOrTablet}
     >
-      <Dropdown
-        className="creators-filter-dropdown"
-        placeholder={t('nft_filters.creators.search')}
-        loading={isLoading}
-        value={searchTerm}
-        options={dropdownOptions}
-        selectOnNavigation={false}
-        selectOnBlur={false}
-        clearable
-        selection
-        search
-        fluid
-        noResultsMessage={
-          fetchedCreators.length > 0 && !isLoading
-            ? t('filters.no_results')
-            : t('nft_filters.creators.type_to_search')
-        }
-        onFocus={handleFetchTopCreators}
-        onChange={onDropdownChange}
-        onSearchChange={(_event, data) => {
-          setSearchTerm(data.searchQuery)
-        }}
-        ref={dropdownRef}
-        icon={
-          <Icon
-            name="search"
-            className={classNames(isLoading && 'search-loading')}
-          />
-        }
-      />
+      <div
+        ref={dropdownContainerRef}
+        className="creators-filter-dropdown-container"
+      >
+        <input
+          className="creators-filter-dropdown"
+          placeholder={t('nft_filters.creators.search')}
+          onFocus={handleFetchTopCreators}
+          onChange={handleSearchInputChange}
+          value={searchTerm}
+        />
+        {isLoading ? (
+          <Loader active size={'small'} />
+        ) : searchTerm ? (
+          <i
+            aria-hidden="true"
+            className="search icon clear"
+            onClick={handleClearSearchInput}
+          ></i>
+        ) : (
+          <i aria-hidden="true" className="search icon"></i>
+        )}
+        {showSuggestions && !isLoading ? (
+          <div className="menu">
+            {!searchTerm ? (
+              <div className="header">
+                {t('nft_filters.creators.dropdown_header')}{' '}
+              </div>
+            ) : null}
+            {searchTerm && !fetchedCreators.length ? (
+              <div className="item no-results">{t('filters.no_results')}</div>
+            ) : null}
+            {fetchedCreators.map(creator => (
+              <div
+                key={creator.address}
+                className="item"
+                onClick={() => handleCreatorsChange(creator.address)}
+              >
+                {creator.name}
+              </div>
+            ))}
+          </div>
+        ) : null}
+      </div>
       <div className="pill-container">
         {selectedCreators.map(creator => (
           <Pill

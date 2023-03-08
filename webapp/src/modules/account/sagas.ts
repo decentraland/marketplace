@@ -8,6 +8,7 @@ import {
 import { call, takeEvery, put, all } from '@redux-saga/core/effects'
 import { CatalystClient } from 'dcl-catalyst-client'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { cancelled, select, takeLatest } from 'redux-saga/effects'
 import { isErrorWithMessage } from '../../lib/error'
 import { accountAPI, nftAPI, NFTResult } from '../vendor/decentraland'
 import { AccountResponse } from '../vendor/decentraland/account/types'
@@ -21,6 +22,8 @@ import {
   FETCH_ACCOUNT_METRICS_REQUEST,
   FETCH_CREATORS_ACCOUNT_REQUEST
 } from './actions'
+import { getCreators, getCreatorsSearchQuery } from './selectors'
+import { CreatorAccount } from './types'
 import { fromProfilesToCreators } from './utils'
 
 export const DEFAULT_FIRST_VALUE = 20
@@ -31,7 +34,7 @@ export function* accountSaga(catalystClient: CatalystClient) {
     FETCH_ACCOUNT_METRICS_REQUEST,
     handleFetchAccountMetricsRequest
   )
-  yield takeEvery(
+  yield takeLatest(
     FETCH_CREATORS_ACCOUNT_REQUEST,
     handleFetchCreatorsAccountsRequest
   )
@@ -40,6 +43,13 @@ export function* accountSaga(catalystClient: CatalystClient) {
     action: FetchCreatorsAccountRequestAction
   ): any {
     const { search } = action.payload
+
+    const previousSearch: string | null = yield select(getCreatorsSearchQuery)
+    if (previousSearch === search) {
+      const fetchedCreators: CreatorAccount[] = yield select(getCreators)
+      yield put(fetchCreatorsAccountSuccess(search, fetchedCreators))
+      return
+    }
 
     try {
       let addresses: Set<string> = new Set()
@@ -90,6 +100,11 @@ export function* accountSaga(catalystClient: CatalystClient) {
           isErrorWithMessage(error) ? error.message : t('global.unknown_error')
         )
       )
+    } finally {
+      // cancel ongoing requests and emit a failure to clean the loading state
+      if (yield cancelled()) {
+        yield put(fetchCreatorsAccountFailure(search, 'cancelled'))
+      }
     }
   }
 }

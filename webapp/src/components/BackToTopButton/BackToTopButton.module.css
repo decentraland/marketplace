@@ -3,6 +3,7 @@
   position: sticky;
   bottom: 100px;
   left: 100%;
+  z-index: 5;
 }
 
 @media (max-width: 767px) {
