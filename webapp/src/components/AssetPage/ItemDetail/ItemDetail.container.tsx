@@ -6,6 +6,7 @@ import { MapDispatchProps } from './ItemDetail.types'
 const mapState = () => ({})
 
 const mapDispatch = (_dispatch: Dispatch): MapDispatchProps => ({
+    
 })
 
 export default connect(mapState, mapDispatch)(ItemDetail)

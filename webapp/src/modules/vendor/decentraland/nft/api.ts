@@ -9,6 +9,7 @@ import { getNFTSortBy } from '../../../routing/search'
 import { AssetType } from '../../../asset/types'
 import { config } from '../../../../config'
 import { retryParams } from '../utils'
+import { OwnersFilters, OwnersResponse } from '../../../../components/AssetPage/OwnersTable/OwnersTable.types'
 
 export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
 
@@ -231,6 +232,26 @@ class NFTAPI extends BaseAPI {
     }
     if (filters) {
       this.appendNFTFiltersToQueryParams(queryParams, filters)
+    }
+
+    return queryParams.toString()
+  }
+
+  async getOwners( params: OwnersFilters): Promise<{data: OwnersResponse[], total: number}> {
+    const queryParams = this.buildGetOwnersParams(params)
+    return this.request('get', `/owners?${queryParams}`)
+  }
+
+
+
+  private buildGetOwnersParams(filters: OwnersFilters): string {
+    const queryParams = new URLSearchParams()
+
+    const entries = Object.entries(filters)
+
+    for (let [key, value] of entries) {
+        queryParams.append(key, value.toString())
+      
     }
 
     return queryParams.toString()

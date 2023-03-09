@@ -22,49 +22,6 @@ import { OwnersTable } from '../OwnersTable'
 import { Dropdown, Tabs } from 'decentraland-ui'
 import styles from './ItemDetail.module.css'
 
-const ownersMock: { issuedId: number; ownerId: string }[] = [
-  {
-    issuedId: 1,
-    ownerId: '0x353eabbab90269cb88d273edebaa8cf18a02abc4'
-  },
-  {
-    issuedId: 2,
-    ownerId: '0x75ceb89323b2c3e4fa872b2495ce1b783df6a847'
-  },
-  {
-    issuedId: 3,
-    ownerId: '0x8d277df8465f423ab1b7311c3693b80fe3e5b440'
-  },
-  {
-    issuedId: 4,
-    ownerId: '0x03d05b7efd62be3f6e66972d96deb96cb2ac6d1d'
-  },
-  {
-    issuedId: 5,
-    ownerId: '0x0d28e6707a2492ad6c9bca977103d575953bf80d'
-  },
-  {
-    issuedId: 6,
-    ownerId: '0x72544fc541922e59b85b36c3d10c3a8370a8b7a2'
-  },
-  {
-    issuedId: 7,
-    ownerId: '0x4eb13941f46ae60a862ce254ab8e9a0d080af0d8'
-  },
-  {
-    issuedId: 8,
-    ownerId: '0xf316ce7e8aa6f0f3cecdebdb862d94a358026adc'
-  },
-  {
-    issuedId: 9,
-    ownerId: '0x09d44876be494c2317ffe4c852d866b6e28d4928'
-  },
-  {
-    issuedId: 10,
-    ownerId: '0xa62608ddabbb98bc4249bf20401a77a0576d9b1a'
-  }
-]
-
 enum BelowTabs {
   LISTINGS = 'listings',
   OWNERS = 'owners'
@@ -192,7 +149,7 @@ const ItemDetail = ({ item }: Props) => {
           {belowTab === BelowTabs.LISTINGS ? (
             <TransactionHistory asset={item} />
           ) : (
-            <OwnersTable owners={ownersMock} />
+            <OwnersTable asset={item} sort_by={undefined} />
           )}
         </div>
       }
