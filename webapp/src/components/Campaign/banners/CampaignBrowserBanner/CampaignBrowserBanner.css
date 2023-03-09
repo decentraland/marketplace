@@ -50,11 +50,8 @@
 
 @media (max-width: 768px) {
   .CampaignBrowserBanner {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    background-image: url(./campaign-browser-banner-mobile.png);
-    height: 200px;
+    background-image: url(../mvfw-banner.png);
+    height: auto;
   }
   .CampaignBrowserBanner .copy {
     margin-right: 0px;

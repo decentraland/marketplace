@@ -44,11 +44,8 @@
 
 @media (max-width: 768px) {
   .CampaignHomepageBanner {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
     background-image: url(../mvfw-banner.png);
-    height: 276px;
+    height: auto;
   }
   .CampaignHomepageBanner .copy {
     margin-right: 0px;
