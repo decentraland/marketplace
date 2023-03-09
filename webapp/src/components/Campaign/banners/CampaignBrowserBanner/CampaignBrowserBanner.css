@@ -14,8 +14,8 @@
 .CampaignBrowserBanner .ui.header {
   color: white;
   margin-bottom: 8px;
-  font-size: 32px;
-  line-height: 35px;
+  font-size: 24px;
+  line-height: 26px;
   font-weight: bold;
   text-transform: uppercase;
 }
@@ -31,7 +31,8 @@
 
 .CampaignBrowserBanner p {
   color: white;
-  font-size: 18px;
+  font-size: 16px;
+  line-height: 18px;
 }
 
 .CampaignBrowserBanner .copy {
