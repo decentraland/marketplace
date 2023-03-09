@@ -54,7 +54,6 @@ const Navigation = (props: Props) => {
                     'campaign-tab-animation': CAMPAING_TAB_ANIMATION_ENABLED
                   })}
                 >
-                  <span className="campaign-icon" />
                   <span>{t('campaign.tab')}</span>
                 </div>
               </Tabs.Tab>

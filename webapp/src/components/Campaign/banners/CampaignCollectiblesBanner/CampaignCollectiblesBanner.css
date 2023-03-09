@@ -44,8 +44,9 @@
 
 @media (max-width: 768px) {
   .CampaignCollectiblesBanner {
-    background-image: url(../mvfw-banner.png);
+    background-image: url(../mvfw-banner-mobile.png);
     height: auto;
+    padding: 25px 48px;
   }
   .CampaignCollectiblesBanner .copy {
     margin-right: 0px;

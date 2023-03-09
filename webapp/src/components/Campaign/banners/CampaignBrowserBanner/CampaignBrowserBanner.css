@@ -50,8 +50,9 @@
 
 @media (max-width: 768px) {
   .CampaignBrowserBanner {
-    background-image: url(../mvfw-banner.png);
+    background-image: url(../mvfw-banner-mobile.png);
     height: auto;
+    padding: 25px 48px;
   }
   .CampaignBrowserBanner .copy {
     margin-right: 0px;

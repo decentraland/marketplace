@@ -10,15 +10,7 @@
 }
 
 .campaign-tab-animation {
-  /* Tweak this class and turn it on in the Navigation component to have the tab animated */
-  background: linear-gradient(45deg, #92efeb, #bfffdc, #f7ffdc, #ecc8ff);
-  background-size: 30% 30%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-animation: AnimationName 5s ease-out infinite;
-  -moz-animation: AnimationName 5s ease-out infinite;
-  animation: AnimationName 5s ease-out infinite;
+  animation: pulsate 0.11s ease-in-out infinite alternate;
 }
 
 .Navigation .download-icon {
@@ -72,36 +64,14 @@
   }
 }
 
-@-webkit-keyframes AnimationName {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+@keyframes pulsate {
   100% {
-    background-position: 0% 50%;
+    text-shadow: 0 0 4px #fff, 0 0 11px #fff, 0 0 19px #fff, 0 0 40px #f09,
+      0 0 80px #f09, 0 0 90px #f09, 0 0 100px #f09, 0 0 150px #f09;
   }
-}
-@-moz-keyframes AnimationName {
+
   0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-@keyframes AnimationName {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
+    text-shadow: 0 0 4px #fff, 0 0 10px #fff, 0 0 18px #fff, 0 0 38px #f09,
+      0 0 73px #f09, 0 0 80px #f09, 0 0 94px #f09, 0 0 140px #f09;
   }
 }
