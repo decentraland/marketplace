@@ -1,43 +1,51 @@
 .CampaignCollectiblesBanner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-image: url(./collectibles-banner.png);
+  justify-content: center;
+  background-image: url(../mvfw-banner.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 153px;
+  height: 260px;
   padding: 16px 48px;
+  flex-direction: column;
 }
 
 .CampaignCollectiblesBanner .ui.header {
-  color: black;
+  color: white;
   margin-bottom: 8px;
-  font-size: 28px;
+  font-size: 24px;
+  line-height: 26px;
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
 .CampaignCollectiblesBanner p {
-  color: black;
-  font-size: 17px;
+  color: white;
+  font-size: 16px;
+  line-height: 18px;
 }
 
 .CampaignCollectiblesBanner .copy {
   flex: 0 1 auto;
-  margin-right: 20px;
-  max-width: 425px;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-.CampaignCollectiblesBanner .ui.button {
+.CampaignCollectiblesBanner .ui.button.browse-button {
   flex: none;
 }
 
 @media (max-width: 768px) {
   .CampaignCollectiblesBanner {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    background-image: url(./collectibles-banner-mobile.png);
-    height: 276px;
+    background-image: url(../mvfw-banner-mobile.png);
+    height: auto;
+    padding: 25px 48px;
   }
   .CampaignCollectiblesBanner .copy {
     margin-right: 0px;

@@ -1,30 +1,47 @@
 .CampaignBrowserBanner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background-image: url(./campaign-browser-banner.png);
-  background-position: left;
+  justify-content: center;
+  background-image: url(../mvfw-banner.png);
+  background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  height: 153px;
+  height: 260px;
   padding: 16px 48px;
+  text-align: center;
 }
 
 .CampaignBrowserBanner .ui.header {
-  color: black;
+  color: white;
   margin-bottom: 8px;
-  font-size: 28px;
+  font-size: 24px;
+  line-height: 26px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.CampaignBrowserBanner .copy::before {
+  content: '';
+  width: 118px;
+  height: 32px;
+  background: url('../mvmf-logo.png');
+  background-size: contain;
+  margin-bottom: 20px;
 }
 
 .CampaignBrowserBanner p {
-  color: black;
-  font-size: 17px;
+  color: white;
+  font-size: 16px;
+  line-height: 18px;
 }
 
 .CampaignBrowserBanner .copy {
   flex: 0 1 auto;
   margin-right: 20px;
-  max-width: 512px;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .CampaignBrowserBanner .ui.button {
@@ -33,11 +50,9 @@
 
 @media (max-width: 768px) {
   .CampaignBrowserBanner {
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    background-image: url(./campaign-browser-banner-mobile.png);
-    height: 200px;
+    background-image: url(../mvfw-banner-mobile.png);
+    height: auto;
+    padding: 25px 48px;
   }
   .CampaignBrowserBanner .copy {
     margin-right: 0px;

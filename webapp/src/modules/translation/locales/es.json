@@ -1036,26 +1036,26 @@
     "confirm_transaction": "Confirme la transacción en su billetera para continuar"
   },
   "campaign": {
-    "tab": "Holiday Season",
-    "badge": "Holiday Season"
+    "tab": "MVFW23",
+    "badge": "MVFW23"
   },
-  "holiday_season_campaign": {
+  "fashion_week_campaign": {
     "banner": {
       "homepage": {
-        "title": "The Holiday Season is here!",
-        "subtitle": "Sorpréndete estas vacaciones en Decentraland - encuentra el sweater perfecto o consigue un Emote para patinar sobre hielo",
-        "cta": "Buscar items",
+        "title": "¿Estás listo para la pasarela?",
+        "subtitle": "Ya sea que estes en un asiento de primera fila en la pasarela o luciendote, obtené todo lo que necesitas para el Metaverse Fashion Week: atuendos, accesorios y movimientos, todo en un solo lugar.",
+        "cta": "Buscar mvfw items",
         "cta_mobile": "Buscar items"
       },
       "collectibles": {
-        "title": "¡Llegaron las vacaciones!",
-        "subtitle": "Sorpréndete estas vacaciones en Decentraland - encuentra el sweater perfecto o consigue un Emote para patinar sobre hielo",
-        "cta": "Buscar items",
+        "title": "¿Estás listo para la pasarela?",
+        "subtitle": "Ya sea que estes en un asiento de primera fila en la pasarela o luciendote, obtené todo lo que necesitas para el Metaverse Fashion Week: atuendos, accesorios y movimientos, todo en un solo lugar.",
+        "cta": "Buscar mvfw items",
         "cta_mobile": "Buscar items"
       },
       "campaign_browser": {
-        "title": "¡Felices Vacaciones!",
-        "subtitle": "Decentraland se convirtió en una maravilla de invierno - encuentra los items perfectos para estas vacaciones aqui."
+        "title": "Esenciales de la semana de la moda del metaverso",
+        "subtitle": "Encuentre aquí los Wearables y Emotes más populares para el evento más glamoroso de Decentraland."
       }
     }
   },

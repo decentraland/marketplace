@@ -8,8 +8,8 @@ const CampaignBrowserBanner: React.FC = () => {
   return (
     <div className="CampaignBrowserBanner">
       <div className='copy'>
-        <Header>{t('holiday_season_campaign.banner.campaign_browser.title')}</Header>
-        <p>{t('holiday_season_campaign.banner.campaign_browser.subtitle')}</p>
+        <Header>{t('fashion_week_campaign.banner.campaign_browser.title')}</Header>
+        <p>{t('fashion_week_campaign.banner.campaign_browser.subtitle')}</p>
       </div>
     </div>
   )

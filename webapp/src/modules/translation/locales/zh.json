@@ -1039,26 +1039,26 @@
     "confirm_transaction": "确认您钱包上的交易以继续"
   },
   "campaign": {
-    "tab": "Holiday Season",
-    "badge": "Holiday Season"
+    "tab": "MVFW23",
+    "badge": "MVFW23"
   },
-  "holiday_season_campaign": {
+  "fashion_week_campaign": {
     "banner": {
       "homepage": {
-        "title": "#HolidaySeason 就在这里！",
-        "subtitle": "这个假期在 Decentraland 给自己一个惊喜——找到完美的毛衣或获得滑冰表情！",
-        "cta": "浏览节日用品",
-        "cta_mobile": "浏览节日用品"
+        "title": "你准备好跑道了吗？",
+        "subtitle": "无论您是坐在 T 台的前排座位上还是在 T 台上炫耀自己的东西，元界时装周所需的一切——服装、配饰和动作——都集中在一个地方。",
+        "cta": "浏览 mvfw 项目",
+        "cta_mobile": "浏览 mvfw 项目"
       },
       "collectibles": {
-        "title": "#HolidaySeason 就在这里！",
-        "subtitle": "这个假期在 Decentraland 给自己一个惊喜——找到完美的毛衣或获得滑冰表情！",
-        "cta": "浏览节日用品",
-        "cta_mobile": "浏览节日用品"
+        "title": "你准备好跑道了吗？",
+        "subtitle": "无论您是坐在 T 台的前排座位上还是在 T 台上炫耀自己的东西，元界时装周所需的一切——服装、配饰和动作——都集中在一个地方。",
+        "cta": "浏览 mvfw 项目",
+        "cta_mobile": "浏览 mvfw 项目"
       },
       "campaign_browser": {
-        "title": "节日快乐！",
-        "subtitle": "Decentraland 变成了冬季仙境 - 在这里找到适合这个假期的完美物品。"
+        "title": "元界时装周要点",
+        "subtitle": "在这里为 Decentraland 最迷人的活动寻找最热门的可穿戴设备和表情。"
       }
     }
   },

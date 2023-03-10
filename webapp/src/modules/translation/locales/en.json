@@ -1042,26 +1042,26 @@
     "confirm_transaction": "Confirm the transaction on your wallet to continue"
   },
   "campaign": {
-    "tab": "Holiday Season",
-    "badge": "Holiday Season"
+    "tab": "MVFW23",
+    "badge": "MVFW23"
   },
-  "holiday_season_campaign": {
+  "fashion_week_campaign": {
     "banner": {
       "homepage": {
-        "title": "The Holiday Season is here!",
-        "subtitle": "Put the ‘wonder’ in Decentraland’s winter wonderland—find the perfect ‘ugly sweater’ or pick up an ice skating Emote to get in the holiday mood!",
-        "cta": "Browse Holiday Items",
+        "title": "Are you ready for the runway?",
+        "subtitle": "Whether you'll be in a front row seat at the catwalk or strutting your stuff on it, get everything you need for Metaverse Fashion Week—outfits, accessories, and moves—all in one place.",
+        "cta": "Browse mvfw Items",
         "cta_mobile": "Browse"
       },
       "collectibles": {
-        "title": "The Holiday Season is here!",
-        "subtitle": "Put the ‘wonder’ in Decentraland’s winter wonderland—find the perfect ‘ugly sweater’ or pick up an ice skating Emote to get in the holiday mood!",
-        "cta": "Browse Holiday Items",
+        "title": "Are you ready for the runway?",
+        "subtitle": "Whether you'll be in a front row seat at the catwalk or strutting your stuff on it, get everything you need for Metaverse Fashion Week—outfits, accessories, and moves—all in one place.",
+        "cta": "Browse mvfw Items",
         "cta_mobile": "Browse"
       },
       "campaign_browser": {
-        "title": "Happy Holidays!",
-        "subtitle": "Decentraland has become a winter wonderland—find the perfect holiday Items for the season right here."
+        "title": "Metaverse Fashion Week Essentials",
+        "subtitle": "Find the hottest Wearables and Emotes for Decentraland's most glamorous event right here."
       }
     }
   },
