@@ -2,7 +2,7 @@ import { Asset } from '../../../modules/asset/types'
 
 export type Props = {
   asset: Asset | null
-  sort_by?: OwnersSortBy
+  orderDirection?: OrderDirection
 }
 
 export type OwnersFilters = {
@@ -10,7 +10,7 @@ export type OwnersFilters = {
   itemId: string
   first: number
   skip: number
-  sort_by?: OwnersSortBy
+  sortBy?: OwnersSortBy
   orderDirection?: string
 }
 
@@ -26,4 +26,9 @@ export type OwnersResponse = {
 
 export enum OwnersSortBy {
   ISSUED_ID = 'issuedId'
+}
+
+export enum OrderDirection {
+  ASC = 'asc',
+  DESC = 'desc'
 }

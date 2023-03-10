@@ -21,6 +21,7 @@ import { Props } from './ItemDetail.types'
 import { OwnersTable } from '../OwnersTable'
 import { Dropdown, Tabs } from 'decentraland-ui'
 import styles from './ItemDetail.module.css'
+import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 
 enum BelowTabs {
   LISTINGS = 'listings',
@@ -32,7 +33,22 @@ const ItemDetail = ({ item }: Props) => {
   let bodyShapes: BodyShape[] = []
   let category
   let loop = false
+
   const [belowTab, setBelowTab] = useState(BelowTabs.LISTINGS)
+  const [orderDirection, setOrderDirection] = useState(OrderDirection.ASC)
+
+  const orderDirectionOptions = [
+    {
+      text: t('owners_table.issue_number'),
+      icon: 'arrow-up',
+      value: OrderDirection.ASC
+    },
+    {
+      text: t('owners_table.issue_number'),
+      icon: 'arrow-down',
+      value: OrderDirection.DESC
+    }
+  ]
 
   switch (item.category) {
     case NFTCategory.WEARABLE:
@@ -126,7 +142,9 @@ const ItemDetail = ({ item }: Props) => {
                 active={belowTab === BelowTabs.LISTINGS}
                 onClick={() => setBelowTab(BelowTabs.LISTINGS)}
               >
-                <div className={styles.tabStyle}>{t('transaction_history.title')}</div>
+                <div className={styles.tabStyle}>
+                  {t('transaction_history.title')}
+                </div>
               </Tabs.Tab>
               <Tabs.Tab
                 active={belowTab === BelowTabs.OWNERS}
@@ -135,21 +153,24 @@ const ItemDetail = ({ item }: Props) => {
                 {t('owners_table.owners')}
               </Tabs.Tab>
             </Tabs>
-            {belowTab === BelowTabs.OWNERS && <Dropdown
-              text= {t('owners_table.issue_number')}
-              direction="right"
-              className={styles.sortByDropdown}
-            >
-              <Dropdown.Menu>
-                <Dropdown.Item text= {t('owners_table.issue_number')} />
-              </Dropdown.Menu>
-            </Dropdown>}
+            {belowTab === BelowTabs.OWNERS && (
+              <Dropdown
+                direction="left"
+                className={styles.sortByDropdown}
+                value={orderDirection}
+                onChange={(_event, data) => {
+                  const value = data.value as OrderDirection
+                  setOrderDirection(value)
+                }}
+                options={orderDirectionOptions}
+              />
+            )}
           </div>
 
           {belowTab === BelowTabs.LISTINGS ? (
             <TransactionHistory asset={item} />
           ) : (
-            <OwnersTable asset={item} sort_by={undefined} />
+            <OwnersTable asset={item} orderDirection={orderDirection} />
           )}
         </div>
       }

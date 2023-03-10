@@ -44,6 +44,13 @@
 }
 
 
+ .ui.dropdown > .icon {
+  color: white !important;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
 @media (max-width: 768px){
 
   :global(.ui.button.basic){

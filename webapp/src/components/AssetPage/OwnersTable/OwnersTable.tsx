@@ -6,6 +6,7 @@ import { nftAPI } from '../../../modules/vendor/decentraland'
 import { LinkedProfile } from '../../LinkedProfile'
 import ListedBadge from '../../ListedBadge'
 import {
+  OrderDirection,
   OwnersFilters,
   OwnersResponse,
   OwnersSortBy,
@@ -16,7 +17,7 @@ import styles from './OwnersTable.module.css'
 const ROWS_PER_PAGE = 6
 
 const OwnersTable = (props: Props) => {
-  const { asset, sort_by = OwnersSortBy.ISSUED_ID } = props
+  const { asset, orderDirection = OrderDirection.ASC } = props
 
   const [owners, setOwners] = useState([] as Array<OwnersResponse>)
   const [total, setTotal] = useState(0)
@@ -33,7 +34,8 @@ const OwnersTable = (props: Props) => {
         itemId: asset.itemId!,
         first: ROWS_PER_PAGE,
         skip: (page - 1) * ROWS_PER_PAGE,
-        sort_by: sort_by
+        sortBy: OwnersSortBy.ISSUED_ID,
+        orderDirection: orderDirection
       }
       nftAPI
         .getOwners(params)
@@ -47,7 +49,7 @@ const OwnersTable = (props: Props) => {
           console.error(error)
         })
     }
-  }, [asset, setIsLoading, setOwners, page, sort_by])
+  }, [asset, setIsLoading, setOwners, page, orderDirection])
 
   return (
     <div className={styles.OwnersTable}>
