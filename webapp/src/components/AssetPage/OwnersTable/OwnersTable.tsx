@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Loader, Icon, Button, Row, Pagination } from 'decentraland-ui'
+import { Table, Loader, Icon, Row, Pagination } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 
 import { nftAPI } from '../../../modules/vendor/decentraland'
@@ -13,6 +13,8 @@ import {
   Props
 } from './OwnersTable.types'
 import styles from './OwnersTable.module.css'
+import { Link } from 'react-router-dom'
+import { locations } from '../../../modules/routing/locations'
 
 const ROWS_PER_PAGE = 6
 
@@ -88,14 +90,14 @@ const OwnersTable = (props: Props) => {
                           /{total}
                         </span>
                         {owner.orderStatus === 'open' &&
-                        +new Date(`${owner.orderExpiresAt} 00:00:00`) <
-                          Date.now() ? (
+                        owner.orderExpiresAt &&
+                        +owner.orderExpiresAt >= Date.now() ? (
                           <ListedBadge className={styles.badge} />
                         ) : null}
                       </div>
-                      <Button basic>
+                      <Link to={locations.nft(asset?.contractAddress, owner?.tokenId)}>
                         <Icon name="arrow right" className={styles.gotToNFT} />
-                      </Button>
+                      </Link>
                     </div>
                   </Table.Cell>
                 </Table.Row>

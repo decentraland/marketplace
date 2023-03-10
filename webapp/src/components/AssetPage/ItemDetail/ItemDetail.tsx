@@ -39,13 +39,11 @@ const ItemDetail = ({ item }: Props) => {
 
   const orderDirectionOptions = [
     {
-      text: t('owners_table.issue_number'),
-      icon: 'arrow-up',
+      text: t('owners_table.issue_number_asc'),
       value: OrderDirection.ASC
     },
     {
-      text: t('owners_table.issue_number'),
-      icon: 'arrow-down',
+      text: t('owners_table.issue_number_desc'),
       value: OrderDirection.DESC
     }
   ]

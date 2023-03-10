@@ -22,6 +22,7 @@ export type OwnersResponse = {
   ownerId: string
   orderStatus: string | null
   orderExpiresAt: string | null
+  tokenId: string
 }
 
 export enum OwnersSortBy {
