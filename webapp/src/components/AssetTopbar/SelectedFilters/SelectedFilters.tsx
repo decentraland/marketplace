@@ -261,6 +261,7 @@ export const SelectedFilters = ({
       {rentalDays && rentalDays.length ? (
         rentalDays.map((days) => (
           <Pill
+            key={days}
             label={t('nft_filters.periods.selection', { rentalDays: days })}
             onDelete={handleDeleteRentalDays}
             id={days.toString()}

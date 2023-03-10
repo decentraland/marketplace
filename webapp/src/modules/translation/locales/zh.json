@@ -355,6 +355,12 @@
       "all_items": "所有稀有",
       "count_items": "{count} {count, plural, one {稀有度} other {珍品}}"
     },
+    "periods": {
+      "title": "租赁期",
+      "all_items": "所有时期",
+      "count_items": "{count} {count, plural, one {时期} other {时期}}",
+      "selection": "{rentalDays} {rentalDays, plural, one {天} other {天}}"
+    },
     "price": {
       "title": "价格",
       "all_items": "所有价格",

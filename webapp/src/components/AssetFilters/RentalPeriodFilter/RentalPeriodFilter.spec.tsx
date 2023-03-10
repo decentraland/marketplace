@@ -14,7 +14,7 @@ function renderRentalPeriodFilter(
   )
 }
 describe('RentalPeriodFilter', () => {
-  test.each(Object.values(PeriodOption))(
+  it.each(Object.values(PeriodOption))(
     'should render all rental days option for %s',
     option => {
       const { getByTestId } = renderRentalPeriodFilter()
@@ -22,12 +22,14 @@ describe('RentalPeriodFilter', () => {
     }
   )
 
-  test('should call onChange when checkbox clicked with correct value', async () => {
-    const onChangeMock = jest.fn()
-    const { getByTestId } = renderRentalPeriodFilter({
-      onChange: onChangeMock
+  describe("when checkbox clicked", () => {
+    it('should call onChange with the correct value', async () => {
+      const onChangeMock = jest.fn()
+      const { getByTestId } = renderRentalPeriodFilter({
+        onChange: onChangeMock
+      })
+      await userEvent.click(getByTestId(PeriodOption.ONE_DAY))
+      expect(onChangeMock).toHaveBeenCalledWith([1])
     })
-    await userEvent.click(getByTestId(PeriodOption.ONE_DAY))
-    expect(onChangeMock).toHaveBeenCalledWith([1])
   })
 })

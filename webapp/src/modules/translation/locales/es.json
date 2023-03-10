@@ -354,6 +354,12 @@
       "all_items": "Todas las rarezas",
       "count_items": "{count} {count, plural, one {rareza} other {rarezas}}"
     },
+    "periods": {
+      "title": "Período de renta",
+      "all_items": "Todos los períodos",
+      "count_items": "{count} {count, plural, one {período} other {períodos}}",
+      "selection": "{rentalDays} {rentalDays, plural, one {día} other {días}}"
+    },
     "price": {
       "title": "Precio",
       "all_items": "Todos los precios",

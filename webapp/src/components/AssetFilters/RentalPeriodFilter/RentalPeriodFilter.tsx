@@ -1,10 +1,10 @@
 import { useMemo, useCallback } from 'react'
+import classNames from 'classnames'
 import { Box, Radio, useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { PeriodOption } from '../../../modules/rental/types'
-import styles from './RentalPeriodFilter.module.css'
-import classNames from 'classnames'
 import { daysByPeriod } from '../../../modules/rental/utils'
+import styles from './RentalPeriodFilter.module.css'
 
 export type RentalPeriodFilterProps = {
   rentalDays?: number[]
