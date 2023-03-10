@@ -21,7 +21,7 @@ const ROWS_PER_PAGE = 6
 const OwnersTable = (props: Props) => {
   const { asset, orderDirection = OrderDirection.ASC } = props
 
-  const [owners, setOwners] = useState([] as Array<OwnersResponse>)
+  const [owners, setOwners] = useState<OwnersResponse[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)

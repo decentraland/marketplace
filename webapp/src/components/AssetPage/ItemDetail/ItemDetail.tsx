@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { BodyShape, EmotePlayMode, NFTCategory } from '@dcl/schemas'
+import { Dropdown, Tabs } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'
@@ -15,13 +16,12 @@ import { Owner } from '../Owner'
 import Collection from '../Collection'
 import BaseDetail from '../BaseDetail'
 import IconBadge from '../IconBadge'
+import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 import { TransactionHistory } from '../TransactionHistory'
+import styles from './ItemDetail.module.css'
 import { SaleActionBox } from '../SaleActionBox'
 import { Props } from './ItemDetail.types'
 import { OwnersTable } from '../OwnersTable'
-import { Dropdown, Tabs } from 'decentraland-ui'
-import styles from './ItemDetail.module.css'
-import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 
 enum BelowTabs {
   LISTINGS = 'listings',
