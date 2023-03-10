@@ -18,10 +18,10 @@ import BaseDetail from '../BaseDetail'
 import IconBadge from '../IconBadge'
 import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 import { TransactionHistory } from '../TransactionHistory'
-import styles from './ItemDetail.module.css'
 import { SaleActionBox } from '../SaleActionBox'
 import { Props } from './ItemDetail.types'
 import { OwnersTable } from '../OwnersTable'
+import styles from './ItemDetail.module.css'
 
 enum BelowTabs {
   LISTINGS = 'listings',

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Table, Loader, Icon, Row, Pagination } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
+import { Link } from 'react-router-dom'
+import { locations } from '../../../modules/routing/locations'
 import { nftAPI } from '../../../modules/vendor/decentraland'
 import { LinkedProfile } from '../../LinkedProfile'
 import ListedBadge from '../../ListedBadge'
@@ -13,8 +14,6 @@ import {
   Props
 } from './OwnersTable.types'
 import styles from './OwnersTable.module.css'
-import { Link } from 'react-router-dom'
-import { locations } from '../../../modules/routing/locations'
 
 const ROWS_PER_PAGE = 6
 
