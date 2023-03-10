@@ -39,7 +39,6 @@
 
 .CampaignHomepageBanner .ui.button.browse-button {
   flex: none;
-  background: #BE3455;
 }
 
 @media (max-width: 768px) {
