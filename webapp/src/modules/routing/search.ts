@@ -146,6 +146,12 @@ export function getSearchParams(options?: BrowseOptions) {
     if (options.maxDistanceToPlaza) {
       params.set('maxDistanceToPlaza', options.maxDistanceToPlaza)
     }
+
+    if (options.rentalDays) {
+      for (const rentalDay of options.rentalDays) {
+        params.append('rentalDays', rentalDay.toString())
+      }
+    }
   }
   return params
 }

@@ -273,6 +273,11 @@ export const getMaxEstateSize = createSelector<RootState, string, string>(
   search => (getURLParam(search, 'maxEstateSize') as string) || ''
 )
 
+export const getRentalDays = createSelector<RootState, string, number[]>(
+  getRouterSearch,
+  search => getURLParamArray(search, 'rentalDays').map((value) => Number.parseInt(value)) as number[]
+)
+
 export const getMinDistanceToPlaza = createSelector<RootState, string, string>(
   getRouterSearch,
   search => (getURLParam(search, 'minDistanceToPlaza') as string) || ''
@@ -343,6 +348,7 @@ export const getLandsUrlParams = createSelector(
   getMinDistanceToPlaza,
   getMaxDistanceToPlaza,
   getAdjacentToRoad,
+  getRentalDays,
   (
     isMap,
     isFullscreen,
@@ -350,7 +356,8 @@ export const getLandsUrlParams = createSelector(
     maxEstateSize,
     minDistanceToPlaza,
     maxDistanceToPlaza,
-    adjacentToRoad
+    adjacentToRoad,
+    rentalDays
   ) => ({
     isMap,
     isFullscreen,
@@ -358,7 +365,8 @@ export const getLandsUrlParams = createSelector(
     maxEstateSize,
     minDistanceToPlaza,
     maxDistanceToPlaza,
-    adjacentToRoad
+    adjacentToRoad,
+    rentalDays
   })
 )
 
@@ -445,7 +453,8 @@ export const hasFiltersEnabled = createSelector<
     minDistanceToPlaza,
     maxDistanceToPlaza,
     adjacentToRoad,
-    creators
+    creators,
+    rentalDays
   } = browseOptions
   const isLand = isLandSection(section as Section)
   if (isLand) {
@@ -460,7 +469,8 @@ export const hasFiltersEnabled = createSelector<
       !!maxEstateSize ||
       !!minDistanceToPlaza ||
       !!maxDistanceToPlaza ||
-      !!adjacentToRoad
+      !!adjacentToRoad ||
+      !!rentalDays?.length
     )
   }
 

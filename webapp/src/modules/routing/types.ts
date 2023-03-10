@@ -60,6 +60,7 @@ export type BrowseOptions = {
   maxPrice?: string
   minEstateSize?: string
   maxEstateSize?: string
+  rentalDays?: number[]
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean

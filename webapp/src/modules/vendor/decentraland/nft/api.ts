@@ -202,6 +202,12 @@ class NFTAPI extends BaseAPI {
     if (filters.adjacentToRoad) {
       queryParams.append('adjacentToRoad', 'true')
     }
+
+    if (filters.rentalDays) {
+      for (const rentalDay of filters.rentalDays) {
+        queryParams.append('rentalDays', rentalDay.toString())
+      }
+    }
   }
 
   private buildNFTQueryString(

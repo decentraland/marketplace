@@ -37,6 +37,7 @@ export type NFTsFetchFilters = {
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
+  rentalDays?: number[]
 }
 
 export type NFTResult = {

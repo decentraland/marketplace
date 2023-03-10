@@ -118,3 +118,14 @@ export const getIsLocationFilterEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsRentalPeriodFilterEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.RENTAL_PERIOD_FILTER
+    )
+  }
+  return false
+}

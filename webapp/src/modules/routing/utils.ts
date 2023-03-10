@@ -84,7 +84,8 @@ export function getClearedBrowseOptions(
     'minDistanceToPlaza',
     'maxDistanceToPlaza',
     'adjacentToRoad',
-    'creators'
+    'creators',
+    'rentalDays'
   ]
 
   const clearedBrowseOptions = fillWithUndefined

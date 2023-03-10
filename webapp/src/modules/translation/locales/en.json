@@ -358,6 +358,12 @@
       "all_items": "All rarities",
       "count_items": "{count} {count, plural, one {rarity} other {rarities}}"
     },
+    "periods": {
+      "title": "Rental Period",
+      "all_items": "All periods",
+      "count_items": "{count} {count, plural, one {period} other {periods}}",
+      "selection": "{rentalDays} {rentalDays, plural, one {day} other {days}}"
+    },
     "price": {
       "title": "Price",
       "all_items": "All prices",

@@ -10,5 +10,6 @@ export enum FeatureName {
   PRICE_FILTER = 'price-filter',
   ESTATE_SIZE_FILTER = 'estate-size-filter',
   LOCATION_FILTER = 'location-filter',
-  CREATOR_FILTER = 'creator-filter'
+  CREATOR_FILTER = 'creator-filter',
+  RENTAL_PERIOD_FILTER = 'rental-period-filter'
 }

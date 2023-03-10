@@ -51,7 +51,8 @@ export function getFilters(
         maxEstateSize,
         adjacentToRoad,
         minDistanceToPlaza,
-        maxDistanceToPlaza
+        maxDistanceToPlaza,
+        rentalDays
       } = options
 
       return {
@@ -77,7 +78,8 @@ export function getFilters(
         maxEstateSize,
         adjacentToRoad,
         minDistanceToPlaza,
-        maxDistanceToPlaza
+        maxDistanceToPlaza,
+        rentalDays
       } as NFTsFetchFilters<VendorName.DECENTRALAND>
     }
     default:

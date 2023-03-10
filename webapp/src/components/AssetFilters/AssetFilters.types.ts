@@ -34,16 +34,20 @@ export type Props = {
   values?: BrowseOptions
   vendor?: VendorName
   view?: View
+  rentalDays?: number[]
   defaultCollapsed?: Record<AssetFilter, boolean>
-  isPriceFilterEnabled: boolean
-  isEstateSizeFilterEnabled: boolean
-  isLocationFilterEnabled: boolean
   minDistanceToPlaza?: string
   maxDistanceToPlaza?: string
   adjacentToRoad?: boolean
   onBrowse: (options: BrowseOptions) => void
   onFilterChange?: (options: BrowseOptions) => void
+  
+  // feature flags
   isCreatorFiltersEnabled: boolean
+  isPriceFilterEnabled: boolean
+  isEstateSizeFilterEnabled: boolean
+  isLocationFilterEnabled: boolean
+  isRentalPeriodFilterEnabled: boolean
 }
 
 export type MapStateProps = Pick<
@@ -66,13 +70,15 @@ export type MapStateProps = Pick<
   | 'landStatus'
   | 'vendor'
   | 'view'
-  | 'isPriceFilterEnabled'
-  | 'isEstateSizeFilterEnabled'
-  | 'isLocationFilterEnabled'
+  | 'rentalDays'
   | 'minDistanceToPlaza'
   | 'maxDistanceToPlaza'
   | 'adjacentToRoad'
   | 'isCreatorFiltersEnabled'
+  | 'isPriceFilterEnabled'
+  | 'isEstateSizeFilterEnabled'
+  | 'isLocationFilterEnabled'
+  | 'isRentalPeriodFilterEnabled'
 >
 
 export type OwnProps = Pick<Props, 'values' | 'onFilterChange'>

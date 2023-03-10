@@ -27,6 +27,7 @@ import { EmotePlayModeFilter } from './EmotePlayModeFilter'
 import { LocationFilter } from './LocationFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
+import { RentalPeriodFilter } from './RentalPeriodFilter/RentalPeriodFilter'
 
 export const AssetFilters = ({
   minPrice,
@@ -47,15 +48,17 @@ export const AssetFilters = ({
   landStatus,
   defaultCollapsed,
   onBrowse,
-  isPriceFilterEnabled,
   view,
-  isEstateSizeFilterEnabled,
-  isLocationFilterEnabled,
   minDistanceToPlaza,
   maxDistanceToPlaza,
   adjacentToRoad,
+  values,
+  rentalDays,
+  isPriceFilterEnabled,
+  isEstateSizeFilterEnabled,
+  isLocationFilterEnabled,
   isCreatorFiltersEnabled,
-  values
+  isRentalPeriodFilterEnabled
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
@@ -120,6 +123,13 @@ export const AssetFilters = ({
   const handleEmotePlayModeChange = useCallback(
     (value: EmotePlayMode[]) => {
       onBrowse({ emotePlayMode: value })
+    },
+    [onBrowse]
+  )
+
+  const handleRentalDaysChange = useCallback(
+    (value: number[]) => {
+      onBrowse({ rentalDays: value })
     },
     [onBrowse]
   )
@@ -217,6 +227,13 @@ export const AssetFilters = ({
             {...locationFilters}
           />
         ) : null}
+        {isRentalPeriodFilterEnabled &&
+          landStatus === LANDFilters.ONLY_FOR_RENT && (
+            <RentalPeriodFilter
+              rentalDays={rentalDays}
+              onChange={handleRentalDaysChange}
+            />
+          )}
         {isLocationFilterEnabled && (
           <LocationFilter
             {...locationFilters}

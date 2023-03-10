@@ -355,6 +355,12 @@
       "all_items": "所有稀有",
       "count_items": "{count} {count, plural, one {稀有度} other {珍品}}"
     },
+    "periods": {
+      "title": "租赁期",
+      "all_items": "所有时期",
+      "count_items": "{count} 时期",
+      "selection": "{rentalDays} 天"
+    },
     "price": {
       "title": "价格",
       "all_items": "所有价格",
@@ -940,7 +946,7 @@
         "one_week": "7 天",
         "one_month": "30 天",
         "two_months": "60 天",
-        " Quarter_year": "90 天",
+        "quarter_year": "90 天",
         "half_year": "180 天",
         "one_year": "365 天"
       },
