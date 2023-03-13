@@ -4,10 +4,10 @@ import { Dropdown, Tabs } from 'decentraland-ui'
 
 import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 import { OwnersTable } from '../OwnersTable'
-import { BelowTabs, Props } from './ListingsTable.types'
-import styles from './ListingsTable.module.css'
+import { BelowTabs, Props } from './ListingsTableContainer.types'
+import styles from './ListingsTableContainer.module.css'
 
-const ListingsTable = ({ item }: Props) => {
+const ListingsTableContainer = ({ item }: Props) => {
   const [belowTab, setBelowTab] = useState(BelowTabs.OWNERS)
   const [orderDirection, setOrderDirection] = useState(OrderDirection.ASC)
 
@@ -62,4 +62,4 @@ const ListingsTable = ({ item }: Props) => {
   )
 }
 
-export default React.memo(ListingsTable)
+export default React.memo(ListingsTableContainer)
