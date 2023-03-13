@@ -503,7 +503,20 @@
     "when": "时间",
     "price": "价格"
   },
-  "owners_table":{
+  "listings_table": {
+    "listings": "Listings",
+    "owner": "Owner",
+    "published_date": "Published date",
+    "expiration_date": "Expiration date",
+    "issue_number": "Issue Number",
+    "price": "Price",
+    "cheapest": "Cheapest",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "issue_number_asc": "Issue Number ↑",
+    "issue_number_desc": "Issue Number ↓"
+  },
+  "owners_table": {
     "owner": "所有者",
     "issue_number": "发行数量",
     "issue_number_asc": "发行数量 ↑",

@@ -502,7 +502,20 @@
     "when": "Fecha",
     "price": "Precio"
   },
-  "owners_table":{
+  "listings_table": {
+    "owner": "Dueño",
+    "issue_number": "Número de emisión",
+    "issue_number_asc": "Número de emisión ↑",
+    "issue_number_desc": "Número de emisión ↓",
+    "listings": "Coleccionables",
+    "published_date": "Fecha de publicación",
+    "expiration_date": "Fecha de expiración",
+    "price": "Precio",
+    "cheapest": "Más baratos",
+    "newest": "Más nuevos",
+    "oldest": "Más viejos"
+  },
+  "owners_table": {
     "owner": "Dueño",
     "issue_number": "Número de emisión",
     "issue_number_asc": "Número de emisión ↑",

@@ -1,0 +1,51 @@
+.ListingsTable {
+  position: relative;
+}
+
+.ListingsTable .linkedProfileRow {
+  margin-left: 20px;
+}
+
+.ListingsTable .headerMargin {
+  padding: 20px !important;
+}
+
+.ListingsTable .issuedIdContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.ListingsTable .issuedId {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.ListingsTable .row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.ListingsTable .badge {
+  color: white;
+  background-color: var(--background) !important;
+}
+
+.ListingsTable .gotToNFT {
+  color: white;
+  padding-right: 25px;
+}
+
+.ListingsTable .loadingStatus {
+  height: 200px;
+}
+
+@media (max-width: 768px) {
+  .ListingsTable .linkedProfileRow {
+    margin-left: unset;
+  }
+}

@@ -506,7 +506,20 @@
     "when": "When",
     "price": "Price"
   },
-  "owners_table":{
+  "listings_table": {
+    "listings": "Listings",
+    "owner": "Owner",
+    "published_date": "Published date",
+    "expiration_date": "Expiration date",
+    "issue_number": "Issue Number",
+    "price": "Price",
+    "cheapest": "Cheapest",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "issue_number_asc": "Issue Number ↑",
+    "issue_number_desc": "Issue Number ↓"
+  },
+  "owners_table": {
     "owner": "Owner",
     "issue_number": "Issue Number",
     "issue_number_asc": "Issue Number ↑",
