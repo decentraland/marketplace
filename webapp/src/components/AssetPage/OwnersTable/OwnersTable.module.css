@@ -40,6 +40,10 @@
   padding-right: 25px;
 }
 
+.OwnersTable .loadingStatus {
+  height: 200px;
+}
+
 @media (max-width: 768px) {
   .OwnersTable .linkedProfileRow {
     margin-left: unset;

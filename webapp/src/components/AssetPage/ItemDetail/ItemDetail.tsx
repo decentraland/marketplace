@@ -1,7 +1,6 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { BodyShape, EmotePlayMode, NFTCategory } from '@dcl/schemas'
-import { Dropdown, Tabs } from 'decentraland-ui'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'
@@ -16,37 +15,17 @@ import { Owner } from '../Owner'
 import Collection from '../Collection'
 import BaseDetail from '../BaseDetail'
 import IconBadge from '../IconBadge'
-import { OrderDirection } from '../OwnersTable/OwnersTable.types'
-import { TransactionHistory } from '../TransactionHistory'
+// import { TransactionHistory } from '../TransactionHistory'
 import { SaleActionBox } from '../SaleActionBox'
 import { Props } from './ItemDetail.types'
-import { OwnersTable } from '../OwnersTable'
-import styles from './ItemDetail.module.css'
+import ListingsTable from '../ListingsTable/ListingsTable'
 
-enum BelowTabs {
-  LISTINGS = 'listings',
-  OWNERS = 'owners'
-}
 
 const ItemDetail = ({ item }: Props) => {
   let description = ''
   let bodyShapes: BodyShape[] = []
   let category
   let loop = false
-
-  const [belowTab, setBelowTab] = useState(BelowTabs.LISTINGS)
-  const [orderDirection, setOrderDirection] = useState(OrderDirection.ASC)
-
-  const orderDirectionOptions = [
-    {
-      text: t('owners_table.issue_number_asc'),
-      value: OrderDirection.ASC
-    },
-    {
-      text: t('owners_table.issue_number_desc'),
-      value: OrderDirection.DESC
-    }
-  ]
 
   switch (item.category) {
     case NFTCategory.WEARABLE:
@@ -133,44 +112,7 @@ const ItemDetail = ({ item }: Props) => {
       showDetails
       actions={<SaleActionBox asset={item} />}
       below={
-        <div className={styles.tableContainer}>
-          <div className={styles.filtertabsContainer}>
-            <Tabs isFullscreen>
-              <Tabs.Tab
-                active={belowTab === BelowTabs.LISTINGS}
-                onClick={() => setBelowTab(BelowTabs.LISTINGS)}
-              >
-                <div className={styles.tabStyle}>
-                  {t('transaction_history.title')}
-                </div>
-              </Tabs.Tab>
-              <Tabs.Tab
-                active={belowTab === BelowTabs.OWNERS}
-                onClick={() => setBelowTab(BelowTabs.OWNERS)}
-              >
-                {t('owners_table.owners')}
-              </Tabs.Tab>
-            </Tabs>
-            {belowTab === BelowTabs.OWNERS && (
-              <Dropdown
-                direction="left"
-                className={styles.sortByDropdown}
-                value={orderDirection}
-                onChange={(_event, data) => {
-                  const value = data.value as OrderDirection
-                  setOrderDirection(value)
-                }}
-                options={orderDirectionOptions}
-              />
-            )}
-          </div>
-
-          {belowTab === BelowTabs.LISTINGS ? (
-            <TransactionHistory asset={item} />
-          ) : (
-            <OwnersTable asset={item} orderDirection={orderDirection} />
-          )}
-        </div>
+       <ListingsTable item={item}/>
       }
     />
   )

@@ -3,40 +3,40 @@ import { Table, Loader, Icon, Row, Pagination } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { locations } from '../../../modules/routing/locations'
-import { nftAPI } from '../../../modules/vendor/decentraland'
+import {
+  nftAPI,
+  OwnersResponse,
+  OwnersFilters,
+  OwnersSortBy
+} from '../../../modules/vendor/decentraland'
 import { LinkedProfile } from '../../LinkedProfile'
 import ListedBadge from '../../ListedBadge'
-import {
-  OrderDirection,
-  OwnersFilters,
-  OwnersResponse,
-  OwnersSortBy,
-  Props
-} from './OwnersTable.types'
+import { OrderDirection, Props } from './OwnersTable.types'
 import styles from './OwnersTable.module.css'
 
 const ROWS_PER_PAGE = 6
+const INITIAL_PAGE = 1
 
 const OwnersTable = (props: Props) => {
   const { asset, orderDirection = OrderDirection.ASC } = props
 
   const [owners, setOwners] = useState<OwnersResponse[]>([])
   const [total, setTotal] = useState(0)
-  const [page, setPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
+  const [page, setPage] = useState(INITIAL_PAGE)
+  const [totalPages, setTotalPages] = useState<number>(1)
   const [isLoading, setIsLoading] = useState(false)
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the first ROWS_PER_PAGE
   useEffect(() => {
-    if (asset) {
+    if (asset && asset.itemId) {
       setIsLoading(true)
       let params: OwnersFilters = {
-        contractAddress: asset.contractAddress!,
-        itemId: asset.itemId!,
+        contractAddress: asset.contractAddress,
+        itemId: asset.itemId,
         first: ROWS_PER_PAGE,
         skip: (page - 1) * ROWS_PER_PAGE,
         sortBy: OwnersSortBy.ISSUED_ID,
-        orderDirection: orderDirection
+        orderDirection
       }
       nftAPI
         .getOwners(params)
@@ -55,7 +55,9 @@ const OwnersTable = (props: Props) => {
   return (
     <div className={styles.OwnersTable}>
       {isLoading ? (
-        <Loader />
+        <div className={styles.loadingStatus}>
+          <Loader active />
+        </div>
       ) : (
         <>
           <Table basic="very">
@@ -94,7 +96,12 @@ const OwnersTable = (props: Props) => {
                           <ListedBadge className={styles.badge} />
                         ) : null}
                       </div>
-                      <Link to={locations.nft(asset?.contractAddress, owner?.tokenId)}>
+                      <Link
+                        to={locations.nft(
+                          asset?.contractAddress,
+                          owner?.tokenId
+                        )}
+                      >
                         <Icon name="arrow right" className={styles.gotToNFT} />
                       </Link>
                     </div>
@@ -103,7 +110,7 @@ const OwnersTable = (props: Props) => {
               ))}
             </Table.Body>
           </Table>
-          {totalPages > 1 ? (
+          {totalPages && totalPages > 1 ? (
             <Row center>
               <Pagination
                 activePage={page}
