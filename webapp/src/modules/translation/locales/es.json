@@ -470,7 +470,8 @@
       "parcel_belongs_to_estate_rent": "No es posible rentar tierra que pertenece a un Estate, por favor, diríjase a la página del Estate.",
       "mobile_coming_soon": "Alquilar en dispositivos mobile estará disponible pronto. Por favor use la versión Desktop para alquilar esta/e {asset}.",
       "rented_until": "Rentado hasta {end_date}",
-      "not_enough_mana": "No tienes suficiente MANA"
+      "not_enough_mana": "No tienes suficiente MANA",
+      "select_period": "Seleccionar Período"
     },
     "description": "Descripción",
     "owner": "Dueño",

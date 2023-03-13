@@ -59,8 +59,8 @@ const SaleRentActionBox = ({
     addressEquals(rental.tenant ?? undefined, wallet.address)
 
   const [selectedRentalPeriodIndex, setSelectedRentalPeriodIndex] = useState<
-    number
-  >(0)
+    number | undefined
+  >(undefined)
   const [view, setView] = useState(
     !!order || !isRentalOpen ? View.SALE : View.RENT
   )
@@ -102,7 +102,7 @@ const SaleRentActionBox = ({
   }, [wallet, getContract, nft.network])
 
   const handleOnRent = useCallback(() => {
-    if (!!authorization && hasAuthorization(authorizations, authorization)) {
+    if (!!authorization && hasAuthorization(authorizations, authorization) && selectedRentalPeriodIndex !== undefined) {
       setShowAuthorizationModal(false)
       onRent(selectedRentalPeriodIndex)
     } else {
@@ -122,6 +122,7 @@ const SaleRentActionBox = ({
     () =>
       !!rental &&
       !!currentMana &&
+      selectedRentalPeriodIndex &&
       ethers.utils
         .parseEther(formatBalance(currentMana))
         .gte(
@@ -203,7 +204,7 @@ const SaleRentActionBox = ({
                     <div className={styles.fullWidth}>
                       <Button
                         primary
-                        disabled={isNFTPartOfAState || !hasEnoughManaToRent}
+                        disabled={isNFTPartOfAState || !hasEnoughManaToRent || !selectedRentalPeriodIndex}
                         onClick={handleOnRent}
                         className={styles.rent}
                       >

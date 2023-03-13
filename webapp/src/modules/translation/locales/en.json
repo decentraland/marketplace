@@ -474,7 +474,8 @@
       "parcel_belongs_to_estate_rent": "It's not possible to rent a parcel that belongs to an Estate, please consider going into the Estate page.",
       "mobile_coming_soon": "Renting on mobile will be available soon. Please go to the desktop version to rent this {asset}",
       "rented_until": "Rented until {end_date}",
-      "not_enough_mana": "You don't have enough MANA"
+      "not_enough_mana": "You don't have enough MANA",
+      "select_period": "Select Period"
     },
     "description": "Description",
     "owner": "Owner",
