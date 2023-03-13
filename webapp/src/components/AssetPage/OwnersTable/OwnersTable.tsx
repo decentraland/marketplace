@@ -23,7 +23,7 @@ const OwnersTable = (props: Props) => {
   const [owners, setOwners] = useState<OwnersResponse[]>([])
   const [total, setTotal] = useState(0)
   const [page, setPage] = useState(INITIAL_PAGE)
-  const [totalPages, setTotalPages] = useState<number>(1)
+  const [totalPages, setTotalPages] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(false)
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the first ROWS_PER_PAGE

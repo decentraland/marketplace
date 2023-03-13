@@ -15,11 +15,10 @@ import { Owner } from '../Owner'
 import Collection from '../Collection'
 import BaseDetail from '../BaseDetail'
 import IconBadge from '../IconBadge'
-// import { TransactionHistory } from '../TransactionHistory'
+import { TransactionHistory } from '../TransactionHistory'
 import { SaleActionBox } from '../SaleActionBox'
 import { Props } from './ItemDetail.types'
 import ListingsTable from '../ListingsTable/ListingsTable'
-
 
 const ItemDetail = ({ item }: Props) => {
   let description = ''
@@ -112,7 +111,10 @@ const ItemDetail = ({ item }: Props) => {
       showDetails
       actions={<SaleActionBox asset={item} />}
       below={
-       <ListingsTable item={item}/>
+        <>
+          <ListingsTable item={item} />
+          <TransactionHistory asset={item} />
+        </>
       }
     />
   )

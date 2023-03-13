@@ -165,7 +165,9 @@ const TransactionHistory = (props: Props) => {
             </Row>
           ) : null}
         </>
-      ) :  <Loader/>}
+      ) : (
+        <Loader active />
+      )}
     </div>
   )
 }

@@ -3,7 +3,6 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Dropdown, Tabs } from 'decentraland-ui'
 
 import { OrderDirection } from '../OwnersTable/OwnersTable.types'
-import { TransactionHistory } from '../TransactionHistory'
 import { OwnersTable } from '../OwnersTable'
 import { BelowTabs, Props } from './ListingsTable.types'
 import styles from './ListingsTable.module.css'
@@ -59,7 +58,6 @@ const ListingsTable = ({ item }: Props) => {
       {belowTab === BelowTabs.OWNERS && (
         <OwnersTable asset={item} orderDirection={orderDirection} />
       )}
-      <TransactionHistory asset={item} />
     </div>
   )
 }
