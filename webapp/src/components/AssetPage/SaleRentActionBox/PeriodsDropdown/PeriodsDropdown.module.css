@@ -20,7 +20,7 @@
   align-items: center;
 }
 
-.periodDropdown:global(.ui.header.dcl.mana) {
+.periodDropdown:global(.ui.header.dcl.mana){
   font-size: 17px;
 }
 
@@ -34,6 +34,10 @@
   opacity: 0.5;
 }
 
+.mana:global(.ui.header){
+  font-size: 17px;
+}
+
 /* Dropdown item */
 
 .item {
@@ -41,7 +45,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  width: 290px;
 }
 
 .period {
@@ -52,4 +55,8 @@
 
 .until {
   color: #979797;
+}
+
+:global(.ui.dropdown .menu){
+  width: 100%;
 }

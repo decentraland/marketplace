@@ -75,7 +75,7 @@ const PeriodsDropdown = ({ value, periods, className, onChange }: Props) => {
                 </div>
               </div>
               <div className={styles.periodPrice}>
-                <Mana>{formatWeiMANA(pricePerRent)}</Mana>
+                <Mana className={styles.mana}>{formatWeiMANA(pricePerRent)}</Mana>
               </div>
             </div>
           )
