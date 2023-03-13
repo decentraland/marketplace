@@ -57,6 +57,6 @@
   color: #979797;
 }
 
-:global(.ui.dropdown .menu){
+.periodDropdown:global(.ui.dropdown .menu){
   width: 100%;
 }
