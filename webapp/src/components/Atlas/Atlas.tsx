@@ -29,6 +29,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
     withPopup,
     showOnSale,
     showForRent,
+    showOwned,
     tilesByEstateId,
     getContract,
     children
@@ -167,8 +168,14 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const userLayer: Layer = useCallback(
-    (x, y) => allUserTiles.get(getCoords(x, y)) || null,
-    [allUserTiles]
+    (x, y) => {
+      const tile = allUserTiles.get(getCoords(x, y))
+      if (showOwned && tile) {
+        return tile
+      }
+      return null;
+    },
+    [allUserTiles, showOwned]
   )
 
   const handleClick = useCallback(
@@ -317,7 +324,8 @@ const Atlas: React.FC<Props> = (props: Props) => {
 
 Atlas.defaultProps = {
   showOnSale: true,
-  showForRent: true
+  showForRent: true,
+  showOwned: true
 }
 
 export default Atlas

@@ -20,3 +20,41 @@
   width: 10px;
   height: 10px;
 }
+
+/* checkbox styles */
+
+.square-checkbox.ui.radio.checkbox:not(.toggle) {
+  min-height: 20px;
+}
+
+.square-checkbox.ui.radio.checkbox:not(.toggle) input[type="checkbox"].hidden {
+  width: 18px;
+  height: 18px;
+}
+
+.square-checkbox.ui.radio.checkbox:not(.toggle) input[type="checkbox"].hidden ~ label {
+  padding-left: 30px;
+}
+
+.square-checkbox.ui.radio.checkbox:not(.toggle) input[type="checkbox"].hidden ~ .box:before,
+.square-checkbox.ui.radio.checkbox:not(.toggle) input[type="checkbox"].hidden ~ label:before {
+  border-radius: 3px;
+  width: 18px;
+  height: 18px;
+}
+
+.square-checkbox.ui.radio.checkbox:not(.toggle) input[type="checkbox"].hidden ~ label:hover:before {
+  border: 2px solid var(--text);
+}
+
+.square-checkbox.ui.radio.checkbox:not(.toggle) input[type="checkbox"].hidden ~ .box:after,
+.square-checkbox.ui.radio.checkbox:not(.toggle) input[type="checkbox"].hidden ~ label:after,
+.square-checkbox.ui.radio.checkbox:not(.toggle) input[type="checkbox"].hidden:focus ~ label:after,
+.square-checkbox.ui.radio.checkbox:not(.toggle) input[type="checkbox"].hidden:hover ~ label:after {
+  width: 20px;
+  height: 20px;
+  left: 0;
+  top: 1px;
+}
+
+/** checkbox styles **/

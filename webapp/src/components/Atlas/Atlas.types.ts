@@ -29,6 +29,7 @@ export type Props = Partial<AtlasProps> & {
   withNavigation?: boolean
   showOnSale?: boolean
   showForRent?: boolean
+  showOwned?: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onNavigate: (path: string) => void
   children?: React.ReactNode

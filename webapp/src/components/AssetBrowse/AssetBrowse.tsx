@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
-import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
+import { Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
@@ -26,6 +26,7 @@ import { Bids } from '../Bids'
 import { BackToTopButton } from '../BackToTopButton'
 import { Props } from './AssetBrowse.types'
 import './AssetBrowse.css'
+import MapTopbar from './MapTopbar'
 
 const AssetBrowse = (props: Props) => {
   const {
@@ -49,6 +50,7 @@ const AssetBrowse = (props: Props) => {
   // Prevent fetching more than once while browsing
   const [hasFetched, setHasFetched] = useState(false)
   const isCurrentAccount = view === View.CURRENT_ACCOUNT
+  const [showOwnedLandOnMap, setShowOwnedLandOnMap] = useState(true)
 
   // Kick things off
   useEffect(() => {
@@ -189,17 +191,22 @@ const AssetBrowse = (props: Props) => {
       right = (
         <>
           {isMap && isFullscreen ? (
-            <div className="blur-background">
-              <Container>
-                <AssetTopbar />
-              </Container>
-            </div>
+            <MapTopbar
+              showOwned={showOwnedLandOnMap}
+              onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
+            />
           ) : (
             <AssetTopbar />
           )}
           {isMap ? (
             <div className="Atlas">
-              <Atlas withNavigation withPopup showOnSale={onlyOnSale} />
+              <Atlas
+                withNavigation
+                withPopup
+                showOnSale={onlyOnSale}
+                showForRent={onlyOnRent}
+                showOwned={showOwnedLandOnMap}
+              />
               <div
                 className="fullscreen-button"
                 onClick={handleSetFullscreen}
