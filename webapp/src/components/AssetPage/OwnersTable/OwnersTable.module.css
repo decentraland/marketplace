@@ -1,0 +1,51 @@
+.OwnersTable {
+  position: relative;
+}
+
+.OwnersTable .linkedProfileRow {
+  margin-left: 20px;
+}
+
+.OwnersTable .headerMargin {
+  padding: 20px !important;
+}
+
+.OwnersTable .issuedIdContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+}
+
+.OwnersTable .issuedId {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.OwnersTable .row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
+.OwnersTable .badge {
+  color: white;
+  background-color: var(--background) !important;
+}
+
+.OwnersTable .gotToNFT {
+  color: white;
+  padding-right: 25px;
+}
+
+.OwnersTable .loadingStatus {
+  height: 200px;
+}
+
+@media (max-width: 768px) {
+  .OwnersTable .linkedProfileRow {
+    margin-left: unset;
+  }
+}
