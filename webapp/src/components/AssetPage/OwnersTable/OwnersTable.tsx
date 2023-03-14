@@ -13,6 +13,7 @@ import { LinkedProfile } from '../../LinkedProfile'
 import ListedBadge from '../../ListedBadge'
 import { OrderDirection, Props } from './OwnersTable.types'
 import styles from './OwnersTable.module.css'
+import { ListingStatus } from '@dcl/schemas'
 
 const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
@@ -80,7 +81,6 @@ const OwnersTable = (props: Props) => {
                       address={owner.ownerId}
                     />
                   </Table.Cell>
-                  {console.log(owner.orderStatus)}
                   <Table.Cell>
                     <div className={styles.issuedIdContainer}>
                       <div className={styles.row}>
@@ -90,20 +90,25 @@ const OwnersTable = (props: Props) => {
                           </span>
                           /{total}
                         </span>
-                        {owner.orderStatus === 'open' &&
+                        {owner.orderStatus === ListingStatus.OPEN &&
                         owner.orderExpiresAt &&
                         +owner.orderExpiresAt >= Date.now() ? (
                           <ListedBadge className={styles.badge} />
                         ) : null}
                       </div>
-                      <Link
-                        to={locations.nft(
-                          asset?.contractAddress,
-                          owner?.tokenId
-                        )}
-                      >
-                        <Icon name="arrow right" className={styles.gotToNFT} />
-                      </Link>
+                      {asset && (
+                        <Link
+                          to={locations.nft(
+                            asset.contractAddress,
+                            owner.tokenId
+                          )}
+                        >
+                          <Icon
+                            name="arrow right"
+                            className={styles.gotToNFT}
+                          />
+                        </Link>
+                      )}
                     </div>
                   </Table.Cell>
                 </Table.Row>
