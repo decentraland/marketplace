@@ -19,7 +19,7 @@
 }
 
 .ListingsTable .issuedId {
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 700;
 }
 
@@ -46,7 +46,7 @@
 
 .ListingsTable :global(.ui.header.dcl.mana) {
   margin: 0px;
-  font-size: 19px;
+  font-size: 15px;
 }
 
 @media (max-width: 768px) {

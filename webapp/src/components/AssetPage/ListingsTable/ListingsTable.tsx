@@ -4,7 +4,7 @@ import { ChainId, ListingStatus, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Order } from '@dcl/schemas/dist/dapps/order'
 import { Link } from 'react-router-dom'
-import { fromUnixTime } from 'date-fns'
+// import { fromUnixTime } from 'date-fns'
 
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -31,8 +31,8 @@ const ListingsTable = (props: Props) => {
       buyer: null,
       price: '1',
       status: ListingStatus.OPEN,
-      expiresAt: 1681481197,
-      createdAt: 1669997473,
+      expiresAt: 1653609600000,
+      createdAt: 1669997473000,
       updatedAt: 1,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MUMBAI
@@ -46,8 +46,8 @@ const ListingsTable = (props: Props) => {
       buyer: null,
       price: '2',
       status: ListingStatus.OPEN,
-      expiresAt: 1678975597,
-      createdAt: 1676556397,
+      expiresAt: 1653609600000,
+      createdAt: 1676556397000,
       updatedAt: 2,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MUMBAI
@@ -61,8 +61,8 @@ const ListingsTable = (props: Props) => {
       buyer: null,
       price: '3',
       status: ListingStatus.OPEN,
-      expiresAt: 1669997473,
-      createdAt: 3,
+      expiresAt: 1653609600000,
+      createdAt: 1676556397000,
       updatedAt: 3,
       network: Network.MATIC,
       chainId: ChainId.MATIC_MUMBAI
@@ -138,7 +138,7 @@ const ListingsTable = (props: Props) => {
                     {getDateAndMonthName(order.createdAt)}
                   </Table.Cell>
                   <Table.Cell>
-                    {formatDistanceToNow(fromUnixTime(+order.expiresAt), {
+                    {formatDistanceToNow(+order.expiresAt, {
                       addSuffix: true
                     })}
                   </Table.Cell>
@@ -147,7 +147,6 @@ const ListingsTable = (props: Props) => {
                       <div className={styles.row}>
                         <span>
                           <span className={styles.issuedId}>
-                            {/* todo: esto tiene que ser el issue number */}
                             {order.tokenId}
                           </span>
                         </span>
