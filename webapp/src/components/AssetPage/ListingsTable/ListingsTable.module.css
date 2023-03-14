@@ -35,13 +35,18 @@
   background-color: var(--background) !important;
 }
 
-.ListingsTable .gotToNFT {
+.ListingsTable .goToNFT {
   color: white;
   padding-right: 25px;
 }
 
 .ListingsTable .loadingStatus {
   height: 200px;
+}
+
+.ListingsTable :global(.ui.header.dcl.mana) {
+  margin: 0px;
+  font-size: 19px;
 }
 
 @media (max-width: 768px) {

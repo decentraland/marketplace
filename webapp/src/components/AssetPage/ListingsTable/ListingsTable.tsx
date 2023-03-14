@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
-import { Table, Loader, Row, Pagination } from 'decentraland-ui'
+import { Table, Loader, Row, Pagination, Icon, Mana } from 'decentraland-ui'
+import { ChainId, ListingStatus, Network } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-// import { Link } from 'react-router-dom'
-// import { locations } from '../../../modules/routing/locations'
-// import {
-//   nftAPI,
-//   OwnersResponse,
-//   OwnersFilters,
-//   OwnersSortBy
-// } from '../../../modules/vendor/decentraland'
-// import { LinkedProfile } from '../../LinkedProfile'
-// import ListedBadge from '../../ListedBadge'
+import { Order } from '@dcl/schemas/dist/dapps/order'
+import { Link } from 'react-router-dom'
+import { fromUnixTime } from 'date-fns'
+
+import { locations } from '../../../modules/routing/locations'
+import { formatWeiMANA } from '../../../lib/mana'
+import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
+import { LinkedProfile } from '../../LinkedProfile'
 import { SortByOptions, Props } from './ListingsTable.types'
 import styles from './ListingsTable.module.css'
 
@@ -20,9 +19,55 @@ const INITIAL_PAGE = 1
 const ListingsTable = (props: Props) => {
   const { asset, sortBy = SortByOptions.CHEAPEST } = props
 
-  console.log(asset, sortBy)
+  false && console.log(asset, sortBy)
 
-  // const [owners, setOwners] = useState<OwnersResponse[]>([])
+  const [orders] = useState<Order[]>([
+    {
+      id: '0x01489387f6c06b3185bdbb34c8398091be33214a97b7cd18266ba634ef3bce5f',
+      marketplaceAddress: '1',
+      contractAddress: '1',
+      tokenId: '13',
+      owner: '0xa87d168717538e86d71ac48baccaeb84162de602',
+      buyer: null,
+      price: '1',
+      status: ListingStatus.OPEN,
+      expiresAt: 1681481197,
+      createdAt: 1669997473,
+      updatedAt: 1,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      id: '2',
+      marketplaceAddress: '2',
+      contractAddress: '2',
+      tokenId: '2',
+      owner: '2',
+      buyer: null,
+      price: '2',
+      status: ListingStatus.OPEN,
+      expiresAt: 1678975597,
+      createdAt: 1676556397,
+      updatedAt: 2,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    },
+    {
+      id: '3',
+      marketplaceAddress: '3',
+      contractAddress: '3',
+      tokenId: '3',
+      owner: '3',
+      buyer: null,
+      price: '3',
+      status: ListingStatus.OPEN,
+      expiresAt: 1669997473,
+      createdAt: 3,
+      updatedAt: 3,
+      network: Network.MATIC,
+      chainId: ChainId.MATIC_MUMBAI
+    }
+  ])
   // const [total, setTotal] = useState(0)
   const [page, setPage] = useState(INITIAL_PAGE)
   const [totalPages] = useState<number>(0)
@@ -81,42 +126,57 @@ const ListingsTable = (props: Props) => {
               </Table.Row>
             </Table.Header>
             <Table.Body className={isLoading ? 'is-loading' : ''}>
-              {/* {owners?.map(owner => (
-                <Table.Row key={owner.issuedId}>
+              {orders?.map(order => (
+                <Table.Row key={order.id}>
                   <Table.Cell>
                     <LinkedProfile
                       className={styles.linkedProfileRow}
-                      address={owner.ownerId}
+                      address={order.owner}
                     />
                   </Table.Cell>
-                  {console.log(owner.orderStatus)}
+                  <Table.Cell>
+                    {getDateAndMonthName(order.createdAt)}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {formatDistanceToNow(fromUnixTime(+order.expiresAt), {
+                      addSuffix: true
+                    })}
+                  </Table.Cell>
                   <Table.Cell>
                     <div className={styles.issuedIdContainer}>
                       <div className={styles.row}>
                         <span>
                           <span className={styles.issuedId}>
-                            {owner.issuedId}
+                            {/* todo: esto tiene que ser el issue number */}
+                            {order.tokenId}
                           </span>
-                          /{total}
                         </span>
-                        {owner.orderStatus === 'open' &&
-                        owner.orderExpiresAt &&
-                        +owner.orderExpiresAt >= Date.now() ? (
-                          <ListedBadge className={styles.badge} />
-                        ) : null}
                       </div>
+                    </div>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}
+                    >
+                      <Mana className="manaField">
+                        {formatWeiMANA(order.price)}
+                      </Mana>
                       <Link
                         to={locations.nft(
                           asset?.contractAddress,
-                          owner?.tokenId
+                          order?.tokenId
                         )}
                       >
-                        <Icon name="arrow right" className={styles.gotToNFT} />
+                        <Icon name="arrow right" className={styles.goToNFT} />
                       </Link>
                     </div>
                   </Table.Cell>
                 </Table.Row>
-              ))} */}
+              ))}
             </Table.Body>
           </Table>
           {totalPages && totalPages > 1 ? (
