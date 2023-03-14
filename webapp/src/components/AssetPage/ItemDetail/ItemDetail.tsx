@@ -17,6 +17,7 @@ import BaseDetail from '../BaseDetail'
 import IconBadge from '../IconBadge'
 import { TransactionHistory } from '../TransactionHistory'
 import { SaleActionBox } from '../SaleActionBox'
+import ListingsTableContainer from '../ListingsTableContainer/ListingsTableContainer'
 import { Props } from './ItemDetail.types'
 
 const ItemDetail = ({ item }: Props) => {
@@ -109,7 +110,12 @@ const ItemDetail = ({ item }: Props) => {
       box={null}
       showDetails
       actions={<SaleActionBox asset={item} />}
-      below={<TransactionHistory asset={item} />}
+      below={
+        <>
+          <ListingsTableContainer item={item} />
+          <TransactionHistory asset={item} />
+        </>
+      }
     />
   )
 }
