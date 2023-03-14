@@ -540,6 +540,13 @@
     "when": "Fecha",
     "price": "Precio"
   },
+  "owners_table":{
+    "owner": "Dueño",
+    "issue_number": "Número de emisión",
+    "issue_number_asc": "Número de emisión ↑",
+    "issue_number_desc": "Número de emisión ↓",
+    "owners": "Dueños"
+  },
   "rental_history": {
     "title": "Últimas rentas",
     "lessor": "Locador",

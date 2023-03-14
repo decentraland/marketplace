@@ -1,9 +1,0 @@
-.supply {
-  color: var(--secondary-text);
-}
-
-.ownerButtons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
