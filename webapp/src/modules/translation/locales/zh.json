@@ -503,6 +503,13 @@
     "when": "时间",
     "price": "价格"
   },
+  "owners_table":{
+    "owner": "所有者",
+    "issue_number": "发行数量",
+    "issue_number_asc": "发行数量 ↑",
+    "issue_number_desc": "发行数量 ↓",
+    "owners": "所有者"
+  },
   "rental_history": {
     "title": "最新租金",
     "lessor": "出租人",

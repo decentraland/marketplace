@@ -506,6 +506,13 @@
     "when": "When",
     "price": "Price"
   },
+  "owners_table":{
+    "owner": "Owner",
+    "issue_number": "Issue Number",
+    "issue_number_asc": "Issue Number ↑",
+    "issue_number_desc": "Issue Number ↓",
+    "owners": "Owners"
+  },
   "rental_history": {
     "title": "Latest rentals",
     "lessor": "Lessor",
