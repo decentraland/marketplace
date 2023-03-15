@@ -99,7 +99,7 @@ export const MapTopbar = ({
       />
       <Radio
         label={t('nft_filters.map.owned')}
-        checked={showOwned}
+        checked={!!showOwned}
         onClick={handleShowOwnedChange}
         type="checkbox"
         className="square-checkbox"

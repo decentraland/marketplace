@@ -204,8 +204,8 @@ const AssetBrowse = (props: Props) => {
                 withNavigation
                 withPopup
                 withMapColorsInfo
-                showOnSale={onlyOnSale}
-                showForRent={onlyOnRent}
+                showOnSale={!!onlyOnSale}
+                showForRent={!!onlyOnRent}
                 showOwned={showOwnedLandOnMap}
               />
               <div
