@@ -80,3 +80,18 @@
 .atlas-references .reference.taken::before {
   background-color: #403c47;
 }
+
+@media (max-width: 990px) {
+  .atlas-references-container {
+    padding: 10px;
+    width: 200px;
+  }
+
+  .atlas-references-container .references-title {
+    margin-bottom: 15px;
+  }
+
+  .atlas-references-container .atlas-references {
+    gap: 15px;
+  }
+}

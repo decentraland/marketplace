@@ -203,6 +203,7 @@ const AssetBrowse = (props: Props) => {
               <Atlas
                 withNavigation
                 withPopup
+                withMapColorsInfo
                 showOnSale={onlyOnSale}
                 showForRent={onlyOnRent}
                 showOwned={showOwnedLandOnMap}

@@ -1,6 +1,13 @@
 import { useCallback } from 'react'
 import classNames from 'classnames'
-import { CheckboxProps, Container, Radio } from 'decentraland-ui'
+import {
+  Button,
+  CheckboxProps,
+  Container,
+  Popup,
+  Radio,
+  useTabletAndBelowMediaQuery
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { persistIsMapProperty } from '../../../modules/ui/utils'
 import { Chip } from '../../Chip'
@@ -13,7 +20,9 @@ export const MapTopbar = ({
   showOwned,
   onBrowse,
   onShowOwnedChange
-}: Props): JSX.Element => {
+}: Props): JSX.Element | null => {
+  const isMobileOrTable = useTabletAndBelowMediaQuery()
+
   const handleIsMapChange = useCallback(
     (isMap: boolean) => {
       persistIsMapProperty(isMap)
@@ -55,45 +64,78 @@ export const MapTopbar = ({
     [onShowOwnedChange]
   )
 
+  const mapToggle = (
+    <div className={styles.mapToggle}>
+      <Chip
+        className="grid"
+        icon="table"
+        isActive={false}
+        onClick={handleIsMapChange.bind(null, false)}
+      />
+      <Chip
+        className="atlas"
+        icon="map marker alternate"
+        isActive
+        onClick={handleIsMapChange.bind(null, true)}
+      />
+    </div>
+  )
+
+  const filters = (
+    <>
+      <Radio
+        label={t('nft_filters.map.on_sale')}
+        checked={!!onlyOnSale}
+        onClick={handleOnSaleChange}
+        type="checkbox"
+        className="square-checkbox"
+      />
+      <Radio
+        label={t('nft_filters.map.on_rent')}
+        checked={!!onlyOnRent}
+        onClick={handleOnRentChange}
+        type="checkbox"
+        className="square-checkbox"
+      />
+      <Radio
+        label={t('nft_filters.map.owned')}
+        checked={showOwned}
+        onClick={handleShowOwnedChange}
+        type="checkbox"
+        className="square-checkbox"
+      />
+    </>
+  )
+
+  if (isMobileOrTable) {
+    return (
+      <div className={styles.filterBar}>
+        <Popup
+          content={<div className={styles.filtersMobile}>{filters}</div>}
+          position="bottom right"
+          trigger={
+            <Button
+              primary
+              className={styles.filtersButton}
+              aria-label="filters"
+            >
+              <span aria-label="filters-icon" className={styles.filtersIcon} />
+            </Button>
+          }
+          on="click"
+          className={styles.filtersPopup}
+        />
+        {mapToggle}
+      </div>
+    )
+  }
+
   return (
     <Container>
       <div className={styles.filterBar}>
         <div className={classNames(styles.searchContainer)}>
-          <Radio
-            label={t('nft_filters.map.on_sale')}
-            checked={!!onlyOnSale}
-            onClick={handleOnSaleChange}
-            type="checkbox"
-            className="square-checkbox"
-          />
-          <Radio
-            label={t('nft_filters.map.on_rent')}
-            checked={!!onlyOnRent}
-            onClick={handleOnRentChange}
-            type="checkbox"
-            className="square-checkbox"
-          />
-          <Radio
-            label={t('nft_filters.map.owned')}
-            checked={showOwned}
-            onClick={handleShowOwnedChange}
-            type="checkbox"
-            className="square-checkbox"
-          />
-          <div className={styles.mapToggle}>
-            <Chip
-              className="grid"
-              icon="table"
-              isActive={false}
-              onClick={handleIsMapChange.bind(null, false)}
-            />
-            <Chip
-              className="atlas"
-              icon="map marker alternate"
-              isActive
-              onClick={handleIsMapChange.bind(null, true)}
-            />
-          </div>
+          {filters}
+          {mapToggle}
         </div>
       </div>
     </Container>

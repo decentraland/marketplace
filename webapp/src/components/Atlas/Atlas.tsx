@@ -32,6 +32,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
     showForRent,
     showOwned,
     tilesByEstateId,
+    withMapColorsInfo,
     getContract,
     children
   } = props
@@ -310,27 +311,41 @@ const Atlas: React.FC<Props> = (props: Props) => {
         layers={layers}
         withZoomControls
       />
-      <UIPopup
-        content={
-          <div className="atlas-references-container">
-            <h3 className="references-title">{t('nft_filters.map.map_colors')}</h3>
-            <div className="atlas-references">
-              <span className="reference plaza">{t('nft_filters.map.plaza')}</span>
-              <span className="reference owned">{t('nft_filters.map.owned_land')}</span>
-              <span className="reference rented">{t('nft_filters.map.rented_land')}</span>
-              <span className="reference sale">{t('nft_filters.map.sale_or_rent')}</span>
-              <span className="reference taken">{t('nft_filters.map.taken')}</span>
+      {withMapColorsInfo && (
+        <UIPopup
+          content={
+            <div className="atlas-references-container">
+              <h3 className="references-title">
+                {t('nft_filters.map.map_colors')}
+              </h3>
+              <div className="atlas-references">
+                <span className="reference plaza">
+                  {t('nft_filters.map.plaza')}
+                </span>
+                <span className="reference owned">
+                  {t('nft_filters.map.owned_land')}
+                </span>
+                <span className="reference rented">
+                  {t('nft_filters.map.rented_land')}
+                </span>
+                <span className="reference sale">
+                  {t('nft_filters.map.sale_or_rent')}
+                </span>
+                <span className="reference taken">
+                  {t('nft_filters.map.taken')}
+                </span>
+              </div>
             </div>
-          </div>
-        }
-        position="top right"
-        trigger={
-          <Button primary className="atlas-info-button" aria-label="info">
-            <span aria-label="info-icon" className="info-icon" />
-          </Button>
-        }
-        on="click"
-      />
+          }
+          position="top right"
+          trigger={
+            <Button primary className="atlas-info-button" aria-label="info">
+              <span aria-label="info-icon" className="info-icon" />
+            </Button>
+          }
+          on="click"
+        />
+      )}
       {hoveredTile ? (
         <Popup
           x={x}
