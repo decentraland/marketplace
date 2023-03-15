@@ -38,13 +38,13 @@ describe("Decentraland's OrderService", () => {
 
     describe('when the fetch fails', () => {
       beforeEach(() => {
-        ;(orderAPI.orderAPI.fetchByNFT as jest.Mock).mockRejectedValueOnce(
+        ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockRejectedValueOnce(
           aBasicErrorMessage
         )
       })
 
       it('should reject into an exception', () => {
-        expect(orderService.fetchByNFT(nft, status)).rejects.toBe(
+        expect(orderService.fetchOrders(nft, status)).rejects.toBe(
           aBasicErrorMessage
         )
       })
@@ -54,13 +54,13 @@ describe("Decentraland's OrderService", () => {
       const orders = [{ id: 'anOrderId' }] as Order[]
 
       beforeEach(() => {
-        ;(orderAPI.orderAPI.fetchByNFT as jest.Mock).mockResolvedValueOnce(
+        ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce(
           orders
         )
       })
 
       it('should reject into an exception', () => {
-        expect(orderService.fetchByNFT(nft, status)).resolves.toEqual(orders)
+        expect(orderService.fetchOrders(nft, status)).resolves.toEqual(orders)
       })
     })
   })

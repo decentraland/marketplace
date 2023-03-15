@@ -1,19 +1,18 @@
 import React, { useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Dropdown, Tabs } from 'decentraland-ui'
-
+import { OrderSortBy } from '@dcl/schemas'
 import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 import { OwnersTable } from '../OwnersTable'
 import ListingsTable from '../ListingsTable/ListingsTable'
-import { SortByOptions } from '../ListingsTable/ListingsTable.types'
 import { BelowTabs, Props, SortByType } from './ListingsTableContainer.types'
 import styles from './ListingsTableContainer.module.css'
 
 const ListingsTableContainer = ({ item }: Props) => {
   const [belowTab, setBelowTab] = useState(BelowTabs.LISTINGS)
-  const [sortBy, setSortBy] = useState<SortByType>(SortByOptions.CHEAPEST)
+  const [sortBy, setSortBy] = useState<SortByType>(OrderSortBy.CHEAPEST)
 
-  const orderSortByOptions = [
+  const ownerSortByOptions = [
     {
       text: t('owners_table.issue_number_asc'),
       value: OrderDirection.ASC
@@ -27,29 +26,29 @@ const ListingsTableContainer = ({ item }: Props) => {
   const listingSortByOptions = [
     {
       text: t('listings_table.cheapest'),
-      value: SortByOptions.CHEAPEST
+      value: OrderSortBy.CHEAPEST
     },
     {
       text: t('listings_table.newest'),
-      value: SortByOptions.NEWEST
+      value: OrderSortBy.RECENTLY_LISTED
     },
     {
       text: t('listings_table.oldest'),
-      value: SortByOptions.OLDEST
+      value: OrderSortBy.OLDEST
     },
     {
       text: t('listings_table.issue_number_asc'),
-      value: SortByOptions.ISSUE_NUMBER_ASC
+      value: OrderSortBy.ISSUED_ID_ASC
     },
     {
       text: t('listings_table.issue_number_desc'),
-      value: OrderDirection.DESC
+      value: OrderSortBy.ISSUED_ID_DESC
     }
   ]
 
   const handleTabChange = (tab: BelowTabs) => {
     const sortByTab =
-      tab === BelowTabs.LISTINGS ? SortByOptions.CHEAPEST : OrderDirection.ASC
+      tab === BelowTabs.LISTINGS ? OrderSortBy.CHEAPEST : OrderDirection.ASC
     setBelowTab(tab)
     setSortBy(sortByTab)
   }
@@ -84,7 +83,7 @@ const ListingsTableContainer = ({ item }: Props) => {
           options={
             belowTab === BelowTabs.LISTINGS
               ? listingSortByOptions
-              : orderSortByOptions
+              : ownerSortByOptions
           }
         />
       </div>
