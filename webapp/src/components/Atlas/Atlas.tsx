@@ -33,6 +33,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
     showOwned,
     tilesByEstateId,
     withMapColorsInfo,
+    withZoomControls,
     getContract,
     children
   } = props
@@ -309,7 +310,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
         onClick={handleClick}
         onHover={handleHover}
         layers={layers}
-        withZoomControls
+        withZoomControls={withZoomControls}
       />
       {withMapColorsInfo && (
         <UIPopup
