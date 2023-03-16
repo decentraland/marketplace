@@ -62,7 +62,7 @@ const ListingsTableContainer = ({ item }: Props) => {
             onClick={() => handleTabChange(BelowTabs.LISTINGS)}
           >
             <div className={styles.tabStyle}>
-              {t('transaction_history.title')}
+              {t('listings_table.listings')}
             </div>
           </Tabs.Tab>
           <Tabs.Tab

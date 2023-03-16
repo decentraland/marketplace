@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import {
-  Table,
-  Loader,
-  Row,
-  Pagination,
-  Icon,
-  Mana,
-  Button
-} from 'decentraland-ui'
+import { Network } from '@dcl/schemas'
+import { Table, Loader, Row, Pagination, Icon, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Order, OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
 import { Link } from 'react-router-dom'
@@ -33,14 +26,21 @@ const ListingsTable = (props: Props) => {
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the first ROWS_PER_PAGE
   useEffect(() => {
-    if (asset && asset.itemId) {
+    if (asset) {
       setIsLoading(true)
+
       let params: OrderFilters = {
         contractAddress: asset.contractAddress,
-        itemId: asset.itemId,
         first: ROWS_PER_PAGE,
         skip: (page - 1) * ROWS_PER_PAGE
       }
+
+      if (asset.network === Network.MATIC && asset.itemId) {
+        params.itemId = asset.itemId
+      } else if (asset.network === Network.ETHEREUM) {
+        params.name = asset.name
+      }
+
       orderAPI
         .fetchOrders(params, sortBy)
         .then(response => {
