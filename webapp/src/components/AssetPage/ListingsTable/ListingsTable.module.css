@@ -40,8 +40,15 @@
   padding-right: 25px;
 }
 
-.ListingsTable .loadingStatus {
+.ListingsTable .emptyTable {
   height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ListingsTable .emptyTableActionButton {
+  text-decoration: underline;
 }
 
 .ListingsTable :global(.ui.header.dcl.mana) {

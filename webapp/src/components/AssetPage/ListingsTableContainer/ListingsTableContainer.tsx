@@ -87,9 +87,8 @@ const ListingsTableContainer = ({ item }: Props) => {
           }
         />
       </div>
-
       {belowTab === BelowTabs.LISTINGS ? (
-        <ListingsTable asset={item} />
+        <ListingsTable asset={item} sortBy={sortBy as OrderSortBy} />
       ) : (
         <OwnersTable asset={item} orderDirection={sortBy as OrderDirection} />
       )}

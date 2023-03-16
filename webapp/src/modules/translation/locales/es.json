@@ -513,14 +513,18 @@
     "price": "Precio",
     "cheapest": "Más baratos",
     "newest": "Más nuevos",
-    "oldest": "Más viejos"
+    "oldest": "Más viejos",
+    "there_are_no_owners": "Aún no hay dueños",
+    "become_the_first_one": "Se el primero!"
   },
   "owners_table": {
     "owner": "Dueño",
     "issue_number": "Número de emisión",
     "issue_number_asc": "Número de emisión ↑",
     "issue_number_desc": "Número de emisión ↓",
-    "owners": "Dueños"
+    "owners": "Dueños",
+    "there_are_no_owners": "Aún no hay dueños",
+    "become_the_first_one": "Se el primero!"
   },
   "rental_history": {
     "title": "Últimas rentas",

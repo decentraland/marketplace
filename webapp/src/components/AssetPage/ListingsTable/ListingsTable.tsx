@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Loader, Row, Pagination, Icon, Mana } from 'decentraland-ui'
-// import { ChainId, Network } from '@dcl/schemas'
+import {
+  Table,
+  Loader,
+  Row,
+  Pagination,
+  Icon,
+  Mana,
+  Button
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Order, OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
 import { Link } from 'react-router-dom'
-// import { fromUnixTime } from 'date-fns'
-
+import { orderAPI } from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './ListingsTable.types'
 import styles from './ListingsTable.module.css'
-import { orderAPI } from '../../../modules/vendor/decentraland'
 
 const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
@@ -48,13 +53,28 @@ const ListingsTable = (props: Props) => {
           console.error(error)
         })
     }
-  }, [asset, setIsLoading, setOrders, page])
+  }, [asset, setIsLoading, setOrders, sortBy, page])
 
   return (
     <div className={styles.ListingsTable}>
       {isLoading ? (
-        <div className={styles.loadingStatus}>
+        <div className={styles.emptyTable}>
           <Loader active />
+        </div>
+      ) : orders.length !== 0 ? (
+        <div className={styles.emptyTable}>
+          <span>
+            {t('listings_table.there_are_no_owners')}
+            <Button
+              basic
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
+              className={styles.emptyTableActionButton}
+            >
+              {t('listings_table.become_the_first_one')}
+            </Button>
+          </span>
         </div>
       ) : (
         <>
@@ -98,8 +118,9 @@ const ListingsTable = (props: Props) => {
                       <div className={styles.row}>
                         <span>
                           <span className={styles.issuedId}>
-                            {order.tokenId} / {total}
+                            {order.tokenId}
                           </span>
+                          / {total}
                         </span>
                       </div>
                     </div>
