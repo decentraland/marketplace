@@ -40,8 +40,15 @@
   padding-right: 25px;
 }
 
-.OwnersTable .loadingStatus {
+.OwnersTable .emptyTable {
   height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.OwnersTable .emptyTableActionButton {
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {

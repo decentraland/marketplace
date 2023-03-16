@@ -47,10 +47,6 @@
   justify-content: center;
 }
 
-.ListingsTable .emptyTableActionButton {
-  text-decoration: underline;
-}
-
 .ListingsTable :global(.ui.header.dcl.mana) {
   margin: 0px;
   font-size: 15px;

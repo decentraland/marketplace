@@ -515,8 +515,7 @@
     "最老": "最老",
     "issue_number_asc": "發行編號↑",
     "issue_number_desc": "發行編號↓",
-    "there_are_no_owners": "還沒有所有者",
-    "become_the_first_one": "成為第一個！"
+    "there_are_no_listings": "沒有可用的列表"
   },
   "owners_table": {
     "owner": "所有者",

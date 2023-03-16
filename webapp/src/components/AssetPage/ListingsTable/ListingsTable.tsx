@@ -61,20 +61,9 @@ const ListingsTable = (props: Props) => {
         <div className={styles.emptyTable}>
           <Loader active />
         </div>
-      ) : orders.length !== 0 ? (
+      ) : orders.length === 0 ? (
         <div className={styles.emptyTable}>
-          <span>
-            {t('listings_table.there_are_no_owners')}
-            <Button
-              basic
-              onClick={() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' })
-              }}
-              className={styles.emptyTableActionButton}
-            >
-              {t('listings_table.become_the_first_one')}
-            </Button>
-          </span>
+          <span>{t('listings_table.there_are_no_listings')}</span>
         </div>
       ) : (
         <>

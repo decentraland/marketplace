@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Loader, Icon, Row, Pagination } from 'decentraland-ui'
+import { ListingStatus } from '@dcl/schemas'
+import { Table, Loader, Icon, Row, Pagination, Button } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { locations } from '../../../modules/routing/locations'
@@ -13,7 +14,6 @@ import { LinkedProfile } from '../../LinkedProfile'
 import ListedBadge from '../../ListedBadge'
 import { OrderDirection, Props } from './OwnersTable.types'
 import styles from './OwnersTable.module.css'
-import { ListingStatus } from '@dcl/schemas'
 
 const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
@@ -58,6 +58,21 @@ const OwnersTable = (props: Props) => {
       {isLoading ? (
         <div className={styles.loadingStatus}>
           <Loader active />
+        </div>
+      ) : owners.length === 0 ? (
+        <div className={styles.emptyTable}>
+          <span>
+            {t('owners_table.there_are_no_owners')}
+            <Button
+              basic
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+              }}
+              className={styles.emptyTableActionButton}
+            >
+              {t('owners_table.become_the_first_one')}
+            </Button>
+          </span>
         </div>
       ) : (
         <>

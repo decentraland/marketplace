@@ -514,8 +514,7 @@
     "cheapest": "Más baratos",
     "newest": "Más nuevos",
     "oldest": "Más viejos",
-    "there_are_no_owners": "Aún no hay dueños",
-    "become_the_first_one": "Se el primero!"
+    "there_are_no_listings": "No hay collecionables disponibles"
   },
   "owners_table": {
     "owner": "Dueño",
