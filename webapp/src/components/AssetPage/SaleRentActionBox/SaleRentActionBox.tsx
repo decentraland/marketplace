@@ -29,10 +29,10 @@ import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
 import { AuthorizationModal } from '../../AuthorizationModal'
+import { LinkedProfile } from '../../LinkedProfile'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
-import { LinkedProfile } from '../../LinkedProfile'
 
 enum View {
   SALE,
@@ -102,7 +102,11 @@ const SaleRentActionBox = ({
   }, [wallet, getContract, nft.network])
 
   const handleOnRent = useCallback(() => {
-    if (!!authorization && hasAuthorization(authorizations, authorization) && selectedRentalPeriodIndex !== undefined) {
+    if (
+      !!authorization &&
+      hasAuthorization(authorizations, authorization) &&
+      selectedRentalPeriodIndex !== undefined
+    ) {
       setShowAuthorizationModal(false)
       onRent(selectedRentalPeriodIndex)
     } else {
@@ -118,11 +122,13 @@ const SaleRentActionBox = ({
     ? getRentalEndDate(rental!)!.getTime()
     : 0
   const rentalHasEnded = isCurrentlyRented && hasRentalEnded(rental!)
+  const isPeriodSelected = selectedRentalPeriodIndex !== undefined
+
   const hasEnoughManaToRent = useMemo(
     () =>
       !!rental &&
       !!currentMana &&
-      selectedRentalPeriodIndex &&
+      isPeriodSelected &&
       ethers.utils
         .parseEther(formatBalance(currentMana))
         .gte(
@@ -130,7 +136,7 @@ const SaleRentActionBox = ({
             rental.periods[selectedRentalPeriodIndex].pricePerDay
           ).mul(rental.periods[selectedRentalPeriodIndex].maxDays)
         ),
-    [rental, currentMana, selectedRentalPeriodIndex]
+    [rental, currentMana, selectedRentalPeriodIndex, isPeriodSelected]
   )
   const hasEnoughManaToBuy = useMemo(
     () =>
@@ -204,7 +210,11 @@ const SaleRentActionBox = ({
                     <div className={styles.fullWidth}>
                       <Button
                         primary
-                        disabled={isNFTPartOfAState || !hasEnoughManaToRent || !selectedRentalPeriodIndex}
+                        disabled={
+                          isNFTPartOfAState ||
+                          !hasEnoughManaToRent ||
+                          !isPeriodSelected
+                        }
                         onClick={handleOnRent}
                         className={styles.rent}
                       >
@@ -213,7 +223,10 @@ const SaleRentActionBox = ({
                     </div>
                   }
                 />
-                {rental && wallet && !hasEnoughManaToRent ? (
+                {rental &&
+                wallet &&
+                isPeriodSelected &&
+                !hasEnoughManaToRent ? (
                   <div className={styles.notEnoughMana}>
                     {t('asset_page.sales_rent_action_box.not_enough_mana')}
                   </div>
