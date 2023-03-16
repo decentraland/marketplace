@@ -1,4 +1,5 @@
 import { URLSearchParams } from 'url'
+import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   RentalListing,
@@ -10,7 +11,7 @@ import { config } from '../../../../config'
 export const SIGNATURES_SERVER_URL = config.get('SIGNATURES_SERVER_URL')!
 type ValueOf<T> = T[keyof T]
 
-class RentalsAPI {
+class RentalsAPI extends BaseAPI {
   createRentalListing = async (
     listing: RentalListingCreation,
     identity: AuthIdentity
@@ -108,6 +109,16 @@ class RentalsAPI {
       throw new Error((error as Error).message)
     }
   }
+
+  getRentalListingsPrices = async (filters: RentalsListingsFilterBy): Promise<Record<string, number>> => {
+    console.log({filters})
+    try {
+      const response = await this.request('get', `/rental-listings/prices`)
+      return response
+    } catch (error) {
+      return {}
+    }
+  }
 }
 
-export const rentalsAPI = new RentalsAPI()
+export const rentalsAPI = new RentalsAPI(SIGNATURES_SERVER_URL)

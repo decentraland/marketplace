@@ -11,6 +11,7 @@ import Inventory from '../Inventory'
 import { getChartUpperBound, getPriceFiltersForSection } from './utils'
 import { Props } from './PriceFilter.types'
 import './PriceFilter.css'
+import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
 
 export type PriceFilterProps = {
   minPrice: string
@@ -95,13 +96,16 @@ export const PriceFilter = ({
   }, [section])
 
   const fetcher = useCallback(async () => {
+    let data: Record<string, number> = {};
+    console.log(landStatus)
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
-      // for rents, we don't have the data yet, so let's just resolve the promise with an empty object so the chart is not rendered
-      return {}
+      console.log("HOEEEL")
+        data = await rentalsAPI.getRentalListingsPrices({})
+        console.log({ data2: data })
+    } else {
+      data = await nftAPI.fetchPrices(priceFetchFilters)
     }
-    const data: Record<string, number> = await nftAPI.fetchPrices(
-      priceFetchFilters
-    )
+  
     return Object.entries(data).reduce((acc, [key, value]) => {
       acc[ethers.utils.formatEther(key)] = value
       return acc
