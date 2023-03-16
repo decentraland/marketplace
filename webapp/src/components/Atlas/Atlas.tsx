@@ -304,14 +304,6 @@ const Atlas: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="atlas-wrapper" onMouseLeave={handleHidePopup}>
-      <AtlasComponent
-        {...props}
-        tiles={tiles}
-        onClick={handleClick}
-        onHover={handleHover}
-        layers={layers}
-        withZoomControls={withZoomControls}
-      />
       {withMapColorsInfo && (
         <UIPopup
           content={
@@ -340,13 +332,26 @@ const Atlas: React.FC<Props> = (props: Props) => {
           }
           position="top right"
           trigger={
-            <Button primary className="atlas-info-button" aria-label="info">
+            <Button
+              primary
+              className="atlas-info-button"
+              aria-label="info"
+              tabIndex={0}
+            >
               <span aria-label="info-icon" className="info-icon" />
             </Button>
           }
           on="click"
         />
       )}
+      <AtlasComponent
+        {...props}
+        tiles={tiles}
+        onClick={handleClick}
+        onHover={handleHover}
+        layers={layers}
+        withZoomControls={withZoomControls}
+      />
       {hoveredTile ? (
         <Popup
           x={x}

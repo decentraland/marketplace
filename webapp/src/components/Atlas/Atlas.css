@@ -20,6 +20,10 @@
   padding: 0;
 }
 
+.atlas-wrapper .ui.button.primary.atlas-info-button:focus {
+  outline: 1px solid white;
+}
+
 .atlas-wrapper .atlas-info-button .info-icon {
   background-image: url('../../images/info.svg');
   width: 16px;
