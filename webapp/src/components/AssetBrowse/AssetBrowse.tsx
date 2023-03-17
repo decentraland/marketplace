@@ -26,6 +26,7 @@ import { Bids } from '../Bids'
 import { BackToTopButton } from '../BackToTopButton'
 import { Props } from './AssetBrowse.types'
 import './AssetBrowse.css'
+import MapTopbar from './MapTopbar'
 
 const AssetBrowse = (props: Props) => {
   const {
@@ -43,12 +44,14 @@ const AssetBrowse = (props: Props) => {
     onlyOnSale,
     onlySmart,
     viewInState,
-    onlyOnRent
+    onlyOnRent,
+    isMapViewFiltersEnabled
   } = props
 
   // Prevent fetching more than once while browsing
   const [hasFetched, setHasFetched] = useState(false)
   const isCurrentAccount = view === View.CURRENT_ACCOUNT
+  const [showOwnedLandOnMap, setShowOwnedLandOnMap] = useState(true)
 
   // Kick things off
   useEffect(() => {
@@ -154,6 +157,19 @@ const AssetBrowse = (props: Props) => {
 
   let right: ReactNode
 
+  const mapTopbar = isMapViewFiltersEnabled ? (
+    <MapTopbar
+              showOwned={showOwnedLandOnMap}
+              onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
+            />
+  ) : (
+    <div className="blur-background">
+      <Container>
+        <AssetTopbar />
+      </Container>
+    </div>
+  )
+
   switch (section) {
     case DecentralandSection.COLLECTIONS:
       right = <CollectionList />
@@ -189,17 +205,21 @@ const AssetBrowse = (props: Props) => {
       right = (
         <>
           {isMap && isFullscreen ? (
-            <div className="blur-background">
-              <Container>
-                <AssetTopbar />
-              </Container>
-            </div>
+            mapTopbar
           ) : (
             <AssetTopbar />
           )}
           {isMap ? (
             <div className="Atlas">
-              <Atlas withNavigation withPopup showOnSale={onlyOnSale} />
+              <Atlas
+                withNavigation
+                withPopup
+                withMapColorsInfo={isMapViewFiltersEnabled}
+                withZoomControls={isMapViewFiltersEnabled}
+                showOnSale={isMapViewFiltersEnabled ? !!onlyOnSale : onlyOnSale}
+                showForRent={isMapViewFiltersEnabled ? !!onlyOnRent : undefined}
+                showOwned={isMapViewFiltersEnabled ? showOwnedLandOnMap : undefined}
+              />
               <div
                 className="fullscreen-button"
                 onClick={handleSetFullscreen}

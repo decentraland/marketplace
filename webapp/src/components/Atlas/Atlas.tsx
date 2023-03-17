@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Button, Popup as UIPopup } from 'decentraland-ui'
 import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -29,7 +30,10 @@ const Atlas: React.FC<Props> = (props: Props) => {
     withPopup,
     showOnSale,
     showForRent,
+    showOwned,
     tilesByEstateId,
+    withMapColorsInfo,
+    withZoomControls,
     getContract,
     children
   } = props
@@ -127,7 +131,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const forSaleOrRentLayer: Layer = useCallback(
-    (x, y) => {
+    (x: number, y: number) => {
       const key = getCoords(x, y)
       const tile = tiles[key] as AtlasTile & { price?: string }
       if (
@@ -148,14 +152,14 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const selectedStrokeLayer: Layer = useCallback(
-    (x, y) => {
+    (x: number, y: number) => {
       return isSelected(x, y) ? { color: '#ff0044', scale: 1.4 } : null
     },
     [isSelected]
   )
 
   const selectedFillLayer: Layer = useCallback(
-    (x, y) => {
+    (x: number, y: number) => {
       return isSelected(x, y) ? { color: '#ff9990', scale: 1.2 } : null
     },
     [isSelected]
@@ -167,8 +171,14 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const userLayer: Layer = useCallback(
-    (x, y) => allUserTiles.get(getCoords(x, y)) || null,
-    [allUserTiles]
+    (x: number, y: number) => {
+      const tile = allUserTiles.get(getCoords(x, y))
+      if (showOwned && tile) {
+        return tile
+      }
+      return null
+    },
+    [allUserTiles, showOwned]
   )
 
   const handleClick = useCallback(
@@ -294,12 +304,53 @@ const Atlas: React.FC<Props> = (props: Props) => {
 
   return (
     <div className="atlas-wrapper" onMouseLeave={handleHidePopup}>
+      {withMapColorsInfo && (
+        <UIPopup
+          content={
+            <div className="atlas-references-container">
+              <h3 className="references-title">
+                {t('nft_filters.map.map_colors')}
+              </h3>
+              <div className="atlas-references">
+                <span className="reference plaza">
+                  {t('nft_filters.map.plaza')}
+                </span>
+                <span className="reference owned">
+                  {t('nft_filters.map.owned_land')}
+                </span>
+                <span className="reference rented">
+                  {t('nft_filters.map.rented_land')}
+                </span>
+                <span className="reference sale">
+                  {t('nft_filters.map.sale_or_rent')}
+                </span>
+                <span className="reference taken">
+                  {t('nft_filters.map.taken')}
+                </span>
+              </div>
+            </div>
+          }
+          position="top right"
+          trigger={
+            <Button
+              primary
+              className="atlas-info-button"
+              aria-label="info"
+              tabIndex={0}
+            >
+              <span aria-label="info-icon" className="info-icon" />
+            </Button>
+          }
+          on="click"
+        />
+      )}
       <AtlasComponent
         {...props}
         tiles={tiles}
         onClick={handleClick}
         onHover={handleHover}
         layers={layers}
+        withZoomControls={withZoomControls}
       />
       {hoveredTile ? (
         <Popup
@@ -317,7 +368,8 @@ const Atlas: React.FC<Props> = (props: Props) => {
 
 Atlas.defaultProps = {
   showOnSale: true,
-  showForRent: true
+  showForRent: true,
+  showOwned: true
 }
 
 export default Atlas

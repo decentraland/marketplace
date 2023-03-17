@@ -140,7 +140,7 @@
   background-color: var(--secondary);
 }
 
-.AssetImage .zoom-controls {
+.AssetImage .asset-zoom-controls {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -148,7 +148,7 @@
   left: 12px;
 }
 
-.AssetImage .zoom-controls > .ui.button.zoom-control {
+.AssetImage .asset-zoom-controls > .ui.button.zoom-control {
   width: 32px;
   height: 32px;
   padding: 0;
@@ -161,22 +161,22 @@
   margin-bottom: 1px;
 }
 
-.AssetImage .zoom-controls > .ui.button.zoom-control:hover {
+.AssetImage .asset-zoom-controls > .ui.button.zoom-control:hover {
   transform: none;
   background-color: var(--secondary) !important;
 }
 
-.AssetImage .zoom-controls > .ui.button.zoom-control i.icon {
+.AssetImage .asset-zoom-controls > .ui.button.zoom-control i.icon {
   margin: 0 !important;
   width: 16px;
   height: 16px;
 }
 
-.AssetImage .zoom-controls > .ui.button.zoom-in-control {
+.AssetImage .asset-zoom-controls > .ui.button.zoom-in-control {
   border-radius: 6px 6px 0px 0px;
 }
 
-.AssetImage .zoom-controls > .ui.button.zoom-out-control {
+.AssetImage .asset-zoom-controls > .ui.button.zoom-out-control {
   border-radius: 0px 0px 6px 6px;
 }
 

@@ -391,6 +391,17 @@
       "title": "网络",
       "all_items": "所有网络"
     },
+    "map": {
+      "on_rent": "可供出租",
+      "on_sale": "可供出售",
+      "owned": "归我所有",
+      "map_colors": "地图颜色",
+      "plaza": "广场",
+      "owned_land": "你的土地",
+      "rented_land": "您租用的土地",
+      "sale_or_rent": "出售或出租",
+      "taken": "采取"
+    },
     "more_filters": "更多过滤器",
     "location": "地点",
     "only_smart": "只有聪明",

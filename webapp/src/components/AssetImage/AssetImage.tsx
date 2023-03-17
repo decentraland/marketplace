@@ -361,7 +361,7 @@ const AssetImage = (props: Props) => {
         tokenId = asset.tokenId
       }
       const zoomControls = (
-        <div className="zoom-controls">
+        <div className="asset-zoom-controls">
           <Button
             animated={false}
             className="zoom-control zoom-in-control"
