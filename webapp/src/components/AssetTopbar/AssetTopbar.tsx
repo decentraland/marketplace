@@ -41,7 +41,7 @@ export const AssetTopbar = ({
   hasFiltersEnabled,
   onBrowse,
   onClearFilters,
-  onOpenFiltersModal,
+  onOpenFiltersModal
 }: Props): JSX.Element => {
   const isMobile = useTabletAndBelowMediaQuery()
   const category = section ? getCategoryFromSection(section) : undefined
@@ -105,32 +105,32 @@ export const AssetTopbar = ({
 
   return (
     <div className={styles.assetTopbar}>
-      <div
-        className={classNames(styles.searchContainer)}
-      >
-        <Field
-          className={styles.searchField}
-          placeholder={t('nft_filters.search')}
-          kind="full"
-          value={searchValue}
-          onChange={setSearchValue}
-          icon={<Icon name="search" />}
-          iconPosition="left"
-        />
+      <div className={classNames(styles.searchContainer, { [styles.searchMap]: isMap })}>
+        {!isMap && (
+          <Field
+            className={styles.searchField}
+            placeholder={t('nft_filters.search')}
+            kind="full"
+            value={searchValue}
+            onChange={setSearchValue}
+            icon={<Icon name="search" />}
+            iconPosition="left"
+          />
+        )}
         {isLandSection(section) && !isAccountView(view!) && (
           <div
-            className={classNames(styles.mapToggle)}
+            className={classNames(styles.mapToggle, { [styles.map]: isMap })}
           >
             <Chip
               className="grid"
               icon="table"
-              isActive
+              isActive={!isMap}
               onClick={handleIsMapChange.bind(null, false)}
             />
             <Chip
               className="atlas"
               icon="map marker alternate"
-              isActive={false}
+              isActive={isMap}
               onClick={handleIsMapChange.bind(null, true)}
             />
           </div>
@@ -177,7 +177,7 @@ export const AssetTopbar = ({
           </div>
         </div>
       )}
-      {hasFiltersEnabled ? (
+      {!isMap && hasFiltersEnabled ? (
         <div className={styles.selectedFiltersContainer}>
           <SelectedFilters />
           {isMobile && (

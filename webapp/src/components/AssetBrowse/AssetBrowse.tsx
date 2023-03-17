@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
-import { Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
+import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
@@ -44,7 +44,8 @@ const AssetBrowse = (props: Props) => {
     onlyOnSale,
     onlySmart,
     viewInState,
-    onlyOnRent
+    onlyOnRent,
+    isMapViewFitlersEnabled
   } = props
 
   // Prevent fetching more than once while browsing
@@ -156,6 +157,19 @@ const AssetBrowse = (props: Props) => {
 
   let right: ReactNode
 
+  const mapTopbar = isMapViewFitlersEnabled ? (
+    <MapTopbar
+              showOwned={showOwnedLandOnMap}
+              onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
+            />
+  ) : (
+    <div className="blur-background">
+      <Container>
+        <AssetTopbar />
+      </Container>
+    </div>
+  )
+
   switch (section) {
     case DecentralandSection.COLLECTIONS:
       right = <CollectionList />
@@ -191,10 +205,7 @@ const AssetBrowse = (props: Props) => {
       right = (
         <>
           {isMap && isFullscreen ? (
-            <MapTopbar
-              showOwned={showOwnedLandOnMap}
-              onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
-            />
+            mapTopbar
           ) : (
             <AssetTopbar />
           )}
@@ -203,11 +214,11 @@ const AssetBrowse = (props: Props) => {
               <Atlas
                 withNavigation
                 withPopup
-                withMapColorsInfo
-                withZoomControls
-                showOnSale={!!onlyOnSale}
-                showForRent={!!onlyOnRent}
-                showOwned={showOwnedLandOnMap}
+                withMapColorsInfo={isMapViewFitlersEnabled}
+                withZoomControls={isMapViewFitlersEnabled}
+                showOnSale={isMapViewFitlersEnabled ? !!onlyOnSale : onlyOnSale}
+                showForRent={isMapViewFitlersEnabled ? !!onlyOnRent : undefined}
+                showOwned={isMapViewFitlersEnabled ? showOwnedLandOnMap : undefined}
               />
               <div
                 className="fullscreen-button"
