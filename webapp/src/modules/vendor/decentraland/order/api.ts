@@ -25,7 +25,7 @@ class OrderAPI extends BaseAPI {
     params.status && queryParams.append('status', params.status.toString())
     params.network && queryParams.append('network', params.network.toString())
     params.itemId && queryParams.append('itemId', params.itemId.toString())
-    params.name && queryParams.append('name', params.name.toString())
+    params.nftName && queryParams.append('nftName', params.nftName.toString())
     sortBy && queryParams.append('sortBy', sortBy.toString())
 
     return queryParams.toString()

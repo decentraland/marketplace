@@ -56,7 +56,7 @@ const OwnersTable = (props: Props) => {
   return (
     <div className={styles.OwnersTable}>
       {isLoading ? (
-        <div className={styles.loadingStatus}>
+        <div className={styles.emptyTable}>
           <Loader active />
         </div>
       ) : owners.length === 0 ? (

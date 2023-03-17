@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Network } from '@dcl/schemas'
+import { ListingStatus, Network } from '@dcl/schemas'
 import { Table, Loader, Row, Pagination, Icon, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Order, OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
@@ -32,13 +32,14 @@ const ListingsTable = (props: Props) => {
       let params: OrderFilters = {
         contractAddress: asset.contractAddress,
         first: ROWS_PER_PAGE,
-        skip: (page - 1) * ROWS_PER_PAGE
+        skip: (page - 1) * ROWS_PER_PAGE,
+        status: ListingStatus.OPEN
       }
 
       if (asset.network === Network.MATIC && asset.itemId) {
         params.itemId = asset.itemId
       } else if (asset.network === Network.ETHEREUM) {
-        params.name = asset.name
+        params.nftName = asset.name
       }
 
       orderAPI
