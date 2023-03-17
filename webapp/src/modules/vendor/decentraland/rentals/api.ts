@@ -5,12 +5,14 @@ import {
   RentalListingCreation,
   RentalsListingsFilterBy
 } from '@dcl/schemas'
+import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { config } from '../../../../config'
+import { objectToURLSearchParams } from './utils'
 
 export const SIGNATURES_SERVER_URL = config.get('SIGNATURES_SERVER_URL')!
 type ValueOf<T> = T[keyof T]
 
-class RentalsAPI {
+class RentalsAPI extends BaseAPI {
   createRentalListing = async (
     listing: RentalListingCreation,
     identity: AuthIdentity
@@ -108,6 +110,16 @@ class RentalsAPI {
       throw new Error((error as Error).message)
     }
   }
+
+  getRentalListingsPrices = async (filters: RentalsListingsFilterBy): Promise<Record<string, number>> => {
+    const queryParams = objectToURLSearchParams(filters)
+    try {
+      const response = await this.request('get', `/rental-listings/prices?${queryParams.toString()}`)
+      return response
+    } catch (error) {
+      throw new Error((error as Error).message)
+    }
+  }
 }
 
-export const rentalsAPI = new RentalsAPI()
+export const rentalsAPI = new RentalsAPI(SIGNATURES_SERVER_URL)

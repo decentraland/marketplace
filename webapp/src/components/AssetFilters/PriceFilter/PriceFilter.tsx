@@ -7,6 +7,7 @@ import { getNetwork, getPriceLabel } from '../../../utils/filters'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import { nftAPI } from '../../../modules/vendor/decentraland'
 import { Section } from '../../../modules/vendor/routing/types'
+import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
 import Inventory from '../Inventory'
 import { getChartUpperBound, getPriceFiltersForSection } from './utils'
 import { Props } from './PriceFilter.types'
@@ -39,6 +40,7 @@ export const PriceFilter = ({
   bodyShapes,
   collection,
   emotePlayMode,
+  rentalDays,
   onChange
 }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
@@ -75,6 +77,22 @@ export const PriceFilter = ({
     section
   ])
 
+  const rentalPriceFetchFilters = useMemo(() => ({
+    rentalDays,
+    minEstateSize: minEstateSize ? Number.parseFloat(minEstateSize) : undefined,
+    maxEstateSize: maxEstateSize ? Number.parseFloat(maxEstateSize) : undefined,
+    minDistanceToPlaza: minDistanceToPlaza ? Number.parseFloat(minDistanceToPlaza) : undefined,
+    maxDistanceToPlaza: maxDistanceToPlaza ? Number.parseFloat(maxDistanceToPlaza) : undefined,
+    adjacentToRoad: adjacentToRoad || undefined,
+  }), [
+    minEstateSize,
+    maxEstateSize,
+    minDistanceToPlaza,
+    maxDistanceToPlaza,
+    adjacentToRoad,
+    rentalDays
+  ])
+
   const header = useMemo(
     () =>
       isMobileOrTablet ? (
@@ -95,18 +113,17 @@ export const PriceFilter = ({
   }, [section])
 
   const fetcher = useCallback(async () => {
+    let data: Record<string, number> = {}
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
-      // for rents, we don't have the data yet, so let's just resolve the promise with an empty object so the chart is not rendered
-      return {}
+      data = await rentalsAPI.getRentalListingsPrices(rentalPriceFetchFilters)
+    } else {
+      data = await nftAPI.fetchPrices(priceFetchFilters)
     }
-    const data: Record<string, number> = await nftAPI.fetchPrices(
-      priceFetchFilters
-    )
     return Object.entries(data).reduce((acc, [key, value]) => {
       acc[ethers.utils.formatEther(key)] = value
       return acc
     }, {} as Record<string, number>)
-  }, [priceFetchFilters, landStatus])
+  }, [priceFetchFilters, landStatus, rentalPriceFetchFilters])
 
   return (
     <Box
