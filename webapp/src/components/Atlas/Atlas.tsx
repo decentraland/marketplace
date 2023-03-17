@@ -131,7 +131,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const forSaleOrRentLayer: Layer = useCallback(
-    (x: any, y: any) => {
+    (x: number, y: number) => {
       const key = getCoords(x, y)
       const tile = tiles[key] as AtlasTile & { price?: string }
       if (
@@ -152,14 +152,14 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const selectedStrokeLayer: Layer = useCallback(
-    (x: any, y: any) => {
+    (x: number, y: number) => {
       return isSelected(x, y) ? { color: '#ff0044', scale: 1.4 } : null
     },
     [isSelected]
   )
 
   const selectedFillLayer: Layer = useCallback(
-    (x: any, y: any) => {
+    (x: number, y: number) => {
       return isSelected(x, y) ? { color: '#ff9990', scale: 1.2 } : null
     },
     [isSelected]
@@ -171,7 +171,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const userLayer: Layer = useCallback(
-    (x: any, y: any) => {
+    (x: number, y: number) => {
       const tile = allUserTiles.get(getCoords(x, y))
       if (showOwned && tile) {
         return tile

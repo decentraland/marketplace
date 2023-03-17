@@ -30,7 +30,7 @@ export type Props = {
   onlyOnSale?: boolean
   onlySmart?: boolean
   onlyOnRent?: boolean
-  isMapViewFitlersEnabled?: boolean
+  isMapViewFiltersEnabled?: boolean
 }
 
 export type MapStateProps = Pick<
@@ -44,7 +44,7 @@ export type MapStateProps = Pick<
   | 'assetType'
   | 'onlySmart'
   | 'onlyOnRent'
-  | 'isMapViewFitlersEnabled'
+  | 'isMapViewFiltersEnabled'
 >
 export type MapDispatchProps = Pick<
   Props,

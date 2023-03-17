@@ -44,7 +44,7 @@ const mapState = (state: RootState): MapStateProps => {
     viewInState: getView(state),
     onlySmart: getOnlySmart(state),
     onlyOnRent: getOnlyOnRent(state),
-    isMapViewFitlersEnabled: getIsMapViewFiltersEnabled(state)
+    isMapViewFiltersEnabled: getIsMapViewFiltersEnabled(state)
   }
 }
 

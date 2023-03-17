@@ -45,7 +45,7 @@ const AssetBrowse = (props: Props) => {
     onlySmart,
     viewInState,
     onlyOnRent,
-    isMapViewFitlersEnabled
+    isMapViewFiltersEnabled
   } = props
 
   // Prevent fetching more than once while browsing
@@ -157,7 +157,7 @@ const AssetBrowse = (props: Props) => {
 
   let right: ReactNode
 
-  const mapTopbar = isMapViewFitlersEnabled ? (
+  const mapTopbar = isMapViewFiltersEnabled ? (
     <MapTopbar
               showOwned={showOwnedLandOnMap}
               onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
@@ -214,11 +214,11 @@ const AssetBrowse = (props: Props) => {
               <Atlas
                 withNavigation
                 withPopup
-                withMapColorsInfo={isMapViewFitlersEnabled}
-                withZoomControls={isMapViewFitlersEnabled}
-                showOnSale={isMapViewFitlersEnabled ? !!onlyOnSale : onlyOnSale}
-                showForRent={isMapViewFitlersEnabled ? !!onlyOnRent : undefined}
-                showOwned={isMapViewFitlersEnabled ? showOwnedLandOnMap : undefined}
+                withMapColorsInfo={isMapViewFiltersEnabled}
+                withZoomControls={isMapViewFiltersEnabled}
+                showOnSale={isMapViewFiltersEnabled ? !!onlyOnSale : onlyOnSale}
+                showForRent={isMapViewFiltersEnabled ? !!onlyOnRent : undefined}
+                showOwned={isMapViewFiltersEnabled ? showOwnedLandOnMap : undefined}
               />
               <div
                 className="fullscreen-button"
