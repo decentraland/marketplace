@@ -73,6 +73,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   text-transform: lowercase;
+  color: #CFCDD4;
 }
 
 .AssetImage .WearablePreview {
