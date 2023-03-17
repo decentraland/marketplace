@@ -40,6 +40,7 @@ export const PriceFilter = ({
   bodyShapes,
   collection,
   emotePlayMode,
+  rentalDays,
   onChange
 }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
@@ -76,6 +77,22 @@ export const PriceFilter = ({
     section
   ])
 
+  const rentalPriceFetchFilters = useMemo(() => ({
+    rentalDays,
+    minEstateSize: minEstateSize ? Number.parseFloat(minEstateSize) : undefined,
+    maxEstateSize: maxEstateSize ? Number.parseFloat(maxEstateSize) : undefined,
+    minDistanceToPlaza: minDistanceToPlaza ? Number.parseFloat(minDistanceToPlaza) : undefined,
+    maxDistanceToPlaza: maxDistanceToPlaza ? Number.parseFloat(maxDistanceToPlaza) : undefined,
+    adjacentToRoad: adjacentToRoad || undefined,
+  }), [
+    minEstateSize,
+    maxEstateSize,
+    minDistanceToPlaza,
+    maxDistanceToPlaza,
+    adjacentToRoad,
+    rentalDays
+  ])
+
   const header = useMemo(
     () =>
       isMobileOrTablet ? (
@@ -96,21 +113,18 @@ export const PriceFilter = ({
   }, [section])
 
   const fetcher = useCallback(async () => {
-    let data: Record<string, number> = {};
-    console.log(landStatus)
+    let data: Record<string, number> = {}
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
-      console.log("HOEEEL")
-        data = await rentalsAPI.getRentalListingsPrices({})
-        console.log({ data2: data })
+      data = await rentalsAPI.getRentalListingsPrices(rentalPriceFetchFilters)
     } else {
       data = await nftAPI.fetchPrices(priceFetchFilters)
     }
-  
+
     return Object.entries(data).reduce((acc, [key, value]) => {
       acc[ethers.utils.formatEther(key)] = value
       return acc
     }, {} as Record<string, number>)
-  }, [priceFetchFilters, landStatus])
+  }, [priceFetchFilters, rentalPriceFetchFilters, landStatus])
 
   return (
     <Box
