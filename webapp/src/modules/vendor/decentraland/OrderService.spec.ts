@@ -1,5 +1,11 @@
 import { ethers } from 'ethers'
-import { ChainId, ListingStatus, Order } from '@dcl/schemas'
+import {
+  ChainId,
+  ListingStatus,
+  Order,
+  OrderFilters,
+  OrderSortBy
+} from '@dcl/schemas'
 import {
   ContractData,
   ContractName,
@@ -34,7 +40,15 @@ describe("Decentraland's OrderService", () => {
   })
 
   describe('when fetching orders by NFT', () => {
-    const status = ListingStatus.OPEN
+    const params: OrderFilters = {
+      contractAddress: '0x2323233423',
+      first: 6,
+      skip: 0,
+      itemId: '1',
+      status: ListingStatus.OPEN
+    }
+
+    const sortBy = OrderSortBy.CHEAPEST
 
     describe('when the fetch fails', () => {
       beforeEach(() => {
@@ -44,7 +58,7 @@ describe("Decentraland's OrderService", () => {
       })
 
       it('should reject into an exception', () => {
-        expect(orderService.fetchOrders(nft, status)).rejects.toBe(
+        expect(orderService.fetchOrders(params, sortBy)).rejects.toBe(
           aBasicErrorMessage
         )
       })
@@ -60,7 +74,9 @@ describe("Decentraland's OrderService", () => {
       })
 
       it('should reject into an exception', () => {
-        expect(orderService.fetchOrders(nft, status)).resolves.toEqual(orders)
+        expect(orderService.fetchOrders(params, sortBy)).resolves.toEqual(
+          orders
+        )
       })
     })
   })
