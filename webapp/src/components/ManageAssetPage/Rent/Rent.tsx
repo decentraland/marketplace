@@ -84,7 +84,7 @@ export const Rent = (props: Props) => {
     wallet && rental && canBeClaimed(wallet.address, rental, nft)
 
   const rentButton = useMemo(() => {
-    if (!rental) {
+    if (!rental || (isRentalListingCancelled(rental) && !canBeClaimedBack)) {
       return (
         <Button
           className={styles.actionButtonRounded}
@@ -93,11 +93,10 @@ export const Rent = (props: Props) => {
           {t('manage_asset_page.rent.list_for_rent')}
         </Button>
       )
-    }
-    if (rental && isRentalListingOpen(rental)) {
+    } else if (rental && isRentalListingOpen(rental)) {
       return <IconButton iconName="pencil" onClick={handleOnCreateOrEdit} />
     }
-  }, [handleOnCreateOrEdit, rental])
+  }, [handleOnCreateOrEdit, rental, canBeClaimedBack])
 
   return (
     <section className={classNames(styles.box, className)}>
