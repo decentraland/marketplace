@@ -98,7 +98,6 @@ const Atlas: React.FC<Props> = (props: Props) => {
   )
 
   const userRentedTiles = useMemo(() => {
-    console.log({ nftsOnRent })
     return nftsOnRent.reduce(
       (lands, [nft, rental]) =>
         setLand(
@@ -177,7 +176,6 @@ const Atlas: React.FC<Props> = (props: Props) => {
   const userLayer: Layer = useCallback(
     (x: number, y: number) => {
       const tile = allUserTiles.get(getCoords(x, y))
-      console.log(tile)
       if (showOwned && tile) {
         return tile
       }
