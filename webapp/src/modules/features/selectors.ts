@@ -140,3 +140,14 @@ export const getIsMapViewFiltersEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsRentalPriceFilterChartEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.RENTAL_PRICE_FILTER_CHART
+    )
+  }
+  return false
+}

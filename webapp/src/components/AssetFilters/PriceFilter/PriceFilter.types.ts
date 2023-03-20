@@ -31,6 +31,8 @@ export type Props = {
   adjacentToRoad?: boolean
   minEstateSize?: string
   maxEstateSize?: string
+  rentalDays?: number[]
+  isRentalPriceFitlerChartEnabled?: boolean
 }
 
 export type MapStateProps = Pick<
@@ -50,6 +52,8 @@ export type MapStateProps = Pick<
   | 'maxEstateSize'
   | 'minDistanceToPlaza'
   | 'maxDistanceToPlaza'
+  | 'rentalDays'
+  | 'isRentalPriceFitlerChartEnabled'
 >
 
 export type OwnProps = Pick<Props, 'values'>

@@ -413,7 +413,8 @@
       "subtitle": "Distancia a una plaza (en parcelas)",
       "selection": "Desde {from} hasta {to} parcelas de una plaza"
     },
-    "all_locations": "Todas las ubicaciones"
+    "all_locations": "Todas las ubicaciones",
+    "price_per_day": "Precio por día"
   },
   "nft_land_filters": {
     "all_land": "Todas las tierras",

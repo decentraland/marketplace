@@ -412,7 +412,8 @@
       "subtitle": "距广场的距离（地块",
       "selection": "从一个广场 {from} 到 {to} 个地块"
     },
-    "all_locations": "所有地点"
+    "all_locations": "所有地点",
+    "price_per_day": "每天的价格"
   },
   "nft_land_filters": {
     "all_land": "所有土地",

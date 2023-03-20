@@ -12,5 +12,6 @@ export enum FeatureName {
   LOCATION_FILTER = 'location-filter',
   CREATOR_FILTER = 'creator-filter',
   RENTAL_PERIOD_FILTER = 'rental-period-filter',
-  MAP_VIEW_FILTERS = 'map-view-filters'
+  MAP_VIEW_FILTERS = 'map-view-filters',
+  RENTAL_PRICE_FILTER_CHART = 'rental-price-fitler-chart'
 }

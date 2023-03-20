@@ -15,11 +15,13 @@ import {
   getMaxDistanceToPlaza,
   getMinEstateSize,
   getMaxEstateSize,
-  getAdjacentToRoad
+  getAdjacentToRoad,
+  getRentalDays
 } from '../../../modules/routing/selectors'
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import { getCategoryFromSection } from '../../../modules/routing/search'
 import { Section } from '../../../modules/vendor/routing/types'
+import { getIsRentalPriceFilterChartEnabled } from '../../../modules/features/selectors'
 import { MapStateProps, OwnProps } from './PriceFilter.types'
 import { PriceFilter } from './PriceFilter'
 
@@ -71,7 +73,10 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     maxEstateSize:
       'maxEstateSize' in values
         ? values.maxEstateSize || ''
-        : getMaxEstateSize(state)
+        : getMaxEstateSize(state),
+    rentalDays:
+      'rentalDays' in values ? values.rentalDays : getRentalDays(state),
+    isRentalPriceFitlerChartEnabled: getIsRentalPriceFilterChartEnabled(state)
   }
 }
 

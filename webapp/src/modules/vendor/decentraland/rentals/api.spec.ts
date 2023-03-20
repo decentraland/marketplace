@@ -1,5 +1,9 @@
 import { URL } from 'url'
-import { RentalListing, RentalStatus } from '@dcl/schemas'
+import {
+  RentalListing,
+  RentalsListingsFilterByCategory,
+  RentalStatus
+} from '@dcl/schemas'
 import signedFetch from 'decentraland-crypto-fetch'
 import { rentalsAPI } from './api'
 
@@ -171,6 +175,49 @@ describe('when getting rental listings', () => {
         RentalStatus.EXECUTED,
         RentalStatus.CLAIMED
       ])
+    })
+  })
+})
+
+describe('when getting rental listings prices', () => {
+  describe('when request finished successfully', () => {
+    let prices = { '100': 1 }
+    beforeEach(() => {
+      jest.spyOn(rentalsAPI, 'request').mockResolvedValueOnce(prices)
+    })
+
+    it('should call signature api with correct params', async () => {
+      await rentalsAPI.getRentalListingsPrices({
+        category: RentalsListingsFilterByCategory.PARCEL
+      })
+      expect(rentalsAPI.request).toHaveBeenCalledWith(
+        'get',
+        '/rental-listings/prices?category=parcel'
+      )
+    })
+
+    it('should return rental listings prices object', async () => {
+      const response = await rentalsAPI.getRentalListingsPrices({
+        category: RentalsListingsFilterByCategory.PARCEL
+      })
+      expect(response).toEqual(prices)
+    })
+  })
+
+  describe('when request finished with errors', () => {
+    const errorMessage = 'somwthing went wrong'
+
+    beforeEach(() => {
+      jest
+        .spyOn(rentalsAPI, 'request')
+        .mockRejectedValueOnce(new Error(errorMessage))
+    })
+    it('should return error message', async () => {
+      expect(
+        rentalsAPI.getRentalListingsPrices({
+          category: RentalsListingsFilterByCategory.PARCEL
+        })
+      ).rejects.toThrowError(errorMessage)
     })
   })
 })
