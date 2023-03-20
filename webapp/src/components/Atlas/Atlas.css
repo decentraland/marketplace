@@ -5,3 +5,97 @@
   right: 0px;
   bottom: 0px;
 }
+
+.atlas-wrapper .ui.button.primary.atlas-info-button {
+  z-index: 1;
+  position: absolute;
+  bottom: 130px;
+  right: 20px;
+  min-width: unset;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.atlas-wrapper .ui.button.primary.atlas-info-button:focus {
+  outline: 1px solid white;
+}
+
+.atlas-wrapper .atlas-info-button .info-icon {
+  background-image: url('../../images/info.svg');
+  width: 16px;
+  height: 16px;
+  background-size: cover;
+  filter: brightness(0) invert(1);
+}
+
+.atlas-references {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.atlas-references-container {
+  padding: 20px;
+  width: 240px;
+}
+
+.atlas-references-container .references-title {
+  font-weight: 500;
+  font-size: 13px;
+  text-transform: uppercase;
+  margin-bottom: 25px;
+}
+
+.atlas-references .reference {
+  display: flex;
+  gap: 10px;
+  font-size: 15px;
+  align-items: center;
+}
+
+.atlas-references .reference::before {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.atlas-references .reference.plaza::before {
+  background-color: #70ac76;
+}
+
+.atlas-references .reference.owned::before {
+  background-color: #ff2d55;
+}
+
+.atlas-references .reference.rented::before {
+  background-color: #ffbd33;
+}
+
+.atlas-references .reference.sale::before {
+  background-color: #5dd1fa;
+}
+
+.atlas-references .reference.taken::before {
+  background-color: #403c47;
+}
+
+@media (max-width: 990px) {
+  .atlas-references-container {
+    padding: 10px;
+    width: 200px;
+  }
+
+  .atlas-references-container .references-title {
+    margin-bottom: 15px;
+  }
+
+  .atlas-references-container .atlas-references {
+    gap: 15px;
+  }
+}

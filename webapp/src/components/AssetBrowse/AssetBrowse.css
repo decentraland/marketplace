@@ -3,6 +3,10 @@
   max-width: calc(100% - 256px);
 }
 
+.AssetBrowse.is-map {
+  top: -24px; /* ignore navigation margin-bottom */
+}
+
 .AssetBrowse.is-map .Row .right.Column {
   max-width: none;
 }

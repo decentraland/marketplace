@@ -129,3 +129,14 @@ export const getIsRentalPeriodFilterEnabled = (state: RootState) => {
   }
   return false
 }
+
+export const getIsMapViewFiltersEnabled = (state: RootState) => {
+  if (hasLoadedInitialFlags(state)) {
+    return getIsFeatureEnabled(
+      state,
+      ApplicationName.MARKETPLACE,
+      FeatureName.MAP_VIEW_FILTERS
+    )
+  }
+  return false
+}

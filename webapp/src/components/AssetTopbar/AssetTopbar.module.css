@@ -50,9 +50,10 @@
   background: var(--background);
   border-radius: 4px;
   margin-right: 20px;
+  height: auto;
 }
 
-.assetTopbar div:not(.map) :global(.Chip) {
+.assetTopbar :global(.Chip) {
   min-height: 52px;
   display: flex;
   align-items: center;
@@ -128,7 +129,28 @@
 }
 
 .searchContainer.searchMap {
-  flex-direction: row-reverse;
+  align-self: flex-end;
+  background-color: #16141A;
+  width: fit-content;
+  display: flex;
+  padding: 10px 20px;
+  gap: 20px;
+  position: absolute;
+  top: 0;
+  right: 24px;
+  border-radius: 10px;
+}
+
+.searchContainer :global(.Chip) {
+  min-height: 52px;
+}
+
+.searchContainer.searchMap .mapToggle {
+  margin: 0;
+}
+
+.searchContainer.searchMap :global(.Chip) {
+  min-height: 32px;
 }
 
 @media (max-width: 990px) {

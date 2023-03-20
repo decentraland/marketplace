@@ -71,6 +71,7 @@ export const RentalPeriodFilter = ({
           value={daysByPeriod[option]}
           type="checkbox"
           data-testid={option}
+          className="square-checkbox"
         />
       ))}
     </Box>

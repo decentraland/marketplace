@@ -394,6 +394,17 @@
       "title": "Network",
       "all_items": "All networks"
     },
+    "map": {
+      "on_rent": "Available for rent",
+      "on_sale": "Available for sale",
+      "owned": "Owned by me",
+      "map_colors": "Map colors",
+      "plaza": "Plaza",
+      "owned_land": "Your LAND",
+      "rented_land": "Your rented LAND",
+      "sale_or_rent": "On sale or on rent",
+      "taken": "Taken"
+    },
     "more_filters": "More filters",
     "location": "Location",
     "only_smart": "Only smart",
