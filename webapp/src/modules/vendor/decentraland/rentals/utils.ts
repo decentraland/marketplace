@@ -1,4 +1,4 @@
-export function objectToURLSearchParams(params: Record<string, any>) {
+export function objectToURLSearchParams(params: Record<string, any> = {}) {
   const queryParams = new URLSearchParams();
   Object.keys(params).forEach((key) => {
     if (Array.isArray(params[key])) {
