@@ -18,6 +18,11 @@
   align-items: center;
   justify-content: center;
   padding: 0;
+  background: #736e7d;
+}
+
+.atlas-wrapper .ui.button.primary.atlas-info-button.atlas-info-open {
+  background: var(--primary);
 }
 
 .atlas-wrapper .ui.button.primary.atlas-info-button:focus {

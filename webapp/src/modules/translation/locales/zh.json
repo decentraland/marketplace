@@ -392,8 +392,8 @@
       "all_items": "所有网络"
     },
     "map": {
-      "on_rent": "可供出租",
-      "on_sale": "可供出售",
+      "on_rent": "可出租",
+      "on_sale": "可购买",
       "owned": "归我所有",
       "map_colors": "地图颜色",
       "plaza": "广场",
