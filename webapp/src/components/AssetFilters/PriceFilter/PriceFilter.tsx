@@ -70,7 +70,7 @@ export const PriceFilter = ({
     section
   ])
 
-  const rentalPriceFetchFilters = useMemo(() => ({
+  const rentalPriceFetchFilters = useCallback(() => ({
     category: category as any as RentalsListingsFilterByCategory,
     rentalDays,
     minEstateSize: minEstateSize ? Number.parseFloat(minEstateSize) : undefined,
@@ -120,7 +120,7 @@ export const PriceFilter = ({
       if (!isRentalPriceFitlerChartEnabled) {
         return {}
       }
-      data = await rentalsAPI.getRentalListingsPrices(rentalPriceFetchFilters)
+      data = await rentalsAPI.getRentalListingsPrices(rentalPriceFetchFilters())
     } else {
       data = await nftAPI.fetchPrices(priceFetchFilters)
     }
