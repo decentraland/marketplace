@@ -391,8 +391,8 @@
       "all_items": "Todas las redes"
     },
     "map": {
-      "on_rent": "Disponible para la renta",
-      "on_sale": "Disponible para la venta",
+      "on_rent": "Disponible para rentar",
+      "on_sale": "Disponible para comprar",
       "owned": "Mis tierras",
       "map_colors": "Colores del mapa",
       "plaza": "Plaza",

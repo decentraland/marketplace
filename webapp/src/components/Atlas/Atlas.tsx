@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button, Popup as UIPopup } from 'decentraland-ui'
-import { NFTCategory } from '@dcl/schemas'
+import { NFTCategory, RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Atlas as AtlasComponent,
@@ -16,6 +16,7 @@ import { VendorName } from '../../modules/vendor'
 import { NFT } from '../../modules/nft/types'
 import Popup from './Popup'
 import './Atlas.css'
+import classNames from 'classnames'
 
 const getCoords = (x: number | string, y: number | string) => `${x},${y}`
 
@@ -39,6 +40,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   } = props
 
   const [showPopup, setShowPopup] = useState(false)
+  const [isInfoPopupOpen, setIsInfoPopupOpen] = useState(false)
   const [hoveredTile, setHoveredTile] = useState<Tile | null>(null)
   const [mouseX, setMouseX] = useState(-1)
   const [mouseY, setMouseY] = useState(-1)
@@ -95,16 +97,18 @@ const Atlas: React.FC<Props> = (props: Props) => {
     [nfts, setLand]
   )
 
-  const userRentedTiles = useMemo(
-    () =>
-      nftsOnRent
-        .map(([nft]) => nft)
-        .reduce(
-          (lands, nft) => setLand(lands, nft, Color.SUNISH),
-          new Map<string, ReturnType<Layer>>()
+  const userRentedTiles = useMemo(() => {
+    console.log({ nftsOnRent })
+    return nftsOnRent.reduce(
+      (lands, [nft, rental]) =>
+        setLand(
+          lands,
+          nft,
+          rental.status === RentalStatus.EXECUTED ? Color.SUNISH : Color.SUMMER_RED
         ),
-    [nftsOnRent, setLand]
-  )
+      new Map<string, ReturnType<Layer>>()
+    )
+  }, [nftsOnRent, setLand])
 
   const isSelected = useCallback(
     (x: number, y: number) => {
@@ -173,6 +177,7 @@ const Atlas: React.FC<Props> = (props: Props) => {
   const userLayer: Layer = useCallback(
     (x: number, y: number) => {
       const tile = allUserTiles.get(getCoords(x, y))
+      console.log(tile)
       if (showOwned && tile) {
         return tile
       }
@@ -290,6 +295,15 @@ const Atlas: React.FC<Props> = (props: Props) => {
     }
   }, [withPopup, showPopup, mouseX, mouseY])
 
+  function handleInfoPopupOpen() {
+    setIsInfoPopupOpen(true)
+  }
+
+  function handleInfoPopupClose(evt: React.MouseEvent) {
+    evt.stopPropagation()
+    setIsInfoPopupOpen(false)
+  }
+
   // layers
   const layers = [
     userLayer,
@@ -331,10 +345,14 @@ const Atlas: React.FC<Props> = (props: Props) => {
             </div>
           }
           position="top right"
+          onClose={handleInfoPopupClose}
+          onOpen={handleInfoPopupOpen}
           trigger={
             <Button
               primary
-              className="atlas-info-button"
+              className={classNames('atlas-info-button', {
+                'atlas-info-open': isInfoPopupOpen
+              })}
               aria-label="info"
               tabIndex={0}
             >
