@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button, Popup as UIPopup } from 'decentraland-ui'
 import { NFTCategory, RentalStatus } from '@dcl/schemas'
+import classNames from 'classnames'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Atlas as AtlasComponent,
@@ -16,7 +17,6 @@ import { VendorName } from '../../modules/vendor'
 import { NFT } from '../../modules/nft/types'
 import Popup from './Popup'
 import './Atlas.css'
-import classNames from 'classnames'
 
 const getCoords = (x: number | string, y: number | string) => `${x},${y}`
 
@@ -97,17 +97,21 @@ const Atlas: React.FC<Props> = (props: Props) => {
     [nfts, setLand]
   )
 
-  const userRentedTiles = useMemo(() => {
-    return nftsOnRent.reduce(
-      (lands, [nft, rental]) =>
-        setLand(
-          lands,
-          nft,
-          rental.status === RentalStatus.EXECUTED ? Color.SUNISH : Color.SUMMER_RED
-        ),
-      new Map<string, ReturnType<Layer>>()
-    )
-  }, [nftsOnRent, setLand])
+  const userRentedTiles = useMemo(
+    () =>
+      nftsOnRent.reduce(
+        (lands, [nft, rental]) =>
+          setLand(
+            lands,
+            nft,
+            rental.status === RentalStatus.EXECUTED
+              ? Color.SUNISH
+              : Color.SUMMER_RED
+          ),
+        new Map<string, ReturnType<Layer>>()
+      ),
+    [nftsOnRent, setLand]
+  )
 
   const isSelected = useCallback(
     (x: number, y: number) => {
