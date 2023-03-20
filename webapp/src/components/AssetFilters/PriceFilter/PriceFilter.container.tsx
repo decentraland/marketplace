@@ -21,9 +21,9 @@ import {
 import { LANDFilters } from '../../Vendor/decentraland/types'
 import { getCategoryFromSection } from '../../../modules/routing/search'
 import { Section } from '../../../modules/vendor/routing/types'
+import { getIsRentalPriceFilterChartEnabled } from '../../../modules/features/selectors'
 import { MapStateProps, OwnProps } from './PriceFilter.types'
 import { PriceFilter } from './PriceFilter'
-import { getIsRentalPriceFilterChartEnabled } from '../../../modules/features/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps

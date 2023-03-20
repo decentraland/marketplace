@@ -1,6 +1,7 @@
 import { useMemo, useCallback } from 'react'
 import { ethers } from 'ethers'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
+import { RentalsListingsFilterByCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getNetwork, getPriceLabel } from '../../../utils/filters'
 import { LANDFilters } from '../../Vendor/decentraland/types'
@@ -11,7 +12,6 @@ import Inventory from '../Inventory'
 import { getChartUpperBound, getPriceFiltersForSection } from './utils'
 import { Props } from './PriceFilter.types'
 import './PriceFilter.css'
-import { RentalsListingsFilterByCategory } from '@dcl/schemas'
 
 export const PriceFilter = ({
   section,
