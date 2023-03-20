@@ -23,6 +23,7 @@ import { getCategoryFromSection } from '../../../modules/routing/search'
 import { Section } from '../../../modules/vendor/routing/types'
 import { MapStateProps, OwnProps } from './PriceFilter.types'
 import { PriceFilter } from './PriceFilter'
+import { getIsRentalPriceFilterChartEnabled } from '../../../modules/features/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { values = {} } = ownProps
@@ -74,7 +75,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
         ? values.maxEstateSize || ''
         : getMaxEstateSize(state),
     rentalDays:
-      'rentalDays' in values ? values.rentalDays : getRentalDays(state)
+      'rentalDays' in values ? values.rentalDays : getRentalDays(state),
+    isRentalPriceFitlerChartEnabled: getIsRentalPriceFilterChartEnabled(state)
   }
 }
 

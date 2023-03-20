@@ -32,6 +32,7 @@ export type Props = {
   minEstateSize?: string
   maxEstateSize?: string
   rentalDays?: number[]
+  isRentalPriceFitlerChartEnabled?: boolean
 }
 
 export type MapStateProps = Pick<
@@ -52,6 +53,7 @@ export type MapStateProps = Pick<
   | 'minDistanceToPlaza'
   | 'maxDistanceToPlaza'
   | 'rentalDays'
+  | 'isRentalPriceFitlerChartEnabled'
 >
 
 export type OwnProps = Pick<Props, 'values'>

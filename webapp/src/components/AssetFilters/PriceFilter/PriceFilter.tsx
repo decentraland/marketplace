@@ -1,7 +1,6 @@
 import { useMemo, useCallback } from 'react'
 import { ethers } from 'ethers'
 import { Box, useTabletAndBelowMediaQuery } from 'decentraland-ui'
-import { Network } from '@dcl/schemas/dist/dapps/network'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getNetwork, getPriceLabel } from '../../../utils/filters'
 import { LANDFilters } from '../../Vendor/decentraland/types'
@@ -13,14 +12,6 @@ import { getChartUpperBound, getPriceFiltersForSection } from './utils'
 import { Props } from './PriceFilter.types'
 import './PriceFilter.css'
 import { RentalsListingsFilterByCategory } from '@dcl/schemas'
-
-export type PriceFilterProps = {
-  minPrice: string
-  maxPrice: string
-  network?: Network
-  onChange: (value: [string, string]) => void
-  defaultCollapsed?: boolean
-}
 
 export const PriceFilter = ({
   section,
@@ -42,6 +33,7 @@ export const PriceFilter = ({
   collection,
   emotePlayMode,
   rentalDays,
+  isRentalPriceFitlerChartEnabled,
   onChange
 }: Props) => {
   const isMobileOrTablet = useTabletAndBelowMediaQuery()
@@ -96,19 +88,26 @@ export const PriceFilter = ({
     rentalDays
   ])
 
+  const title = useMemo(() => {
+    if(landStatus === LANDFilters.ONLY_FOR_RENT) {
+      return t('nft_filters.price_per_day')
+    }
+    return t('filters.price')
+  }, [landStatus])
+
   const header = useMemo(
     () =>
       isMobileOrTablet ? (
         <div className="mobile-box-header">
-          <span className="box-filter-name">{t('filters.price')}</span>
+          <span className="box-filter-name">{title}</span>
           <span className="box-filter-value">
             {getPriceLabel(minPrice, maxPrice, network)}
           </span>
         </div>
       ) : (
-        t('filters.price')
+        title
       ),
-    [minPrice, maxPrice, network, isMobileOrTablet]
+    [minPrice, maxPrice, network, title, isMobileOrTablet]
   )
 
   const upperBound = useMemo(() => {
@@ -118,6 +117,9 @@ export const PriceFilter = ({
   const fetcher = useCallback(async () => {
     let data: Record<string, number> = {}
     if (landStatus === LANDFilters.ONLY_FOR_RENT) {
+      if (!isRentalPriceFitlerChartEnabled) {
+        return {}
+      }
       data = await rentalsAPI.getRentalListingsPrices(rentalPriceFetchFilters)
     } else {
       data = await nftAPI.fetchPrices(priceFetchFilters)
@@ -126,7 +128,7 @@ export const PriceFilter = ({
       acc[ethers.utils.formatEther(key)] = value
       return acc
     }, {} as Record<string, number>)
-  }, [priceFetchFilters, landStatus, rentalPriceFetchFilters])
+  }, [priceFetchFilters, landStatus, isRentalPriceFitlerChartEnabled, rentalPriceFetchFilters])
 
   return (
     <Box

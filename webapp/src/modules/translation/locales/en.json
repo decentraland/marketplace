@@ -417,7 +417,8 @@
       "subtitle": "Distance from a plaza (in parcels)",
       "selection": "{from} to {to} parcels from a plaza"
     },
-    "all_locations": "All locations"
+    "all_locations": "All locations",
+    "price_per_day": "Price per day"
   },
   "nft_land_filters": {
     "all_land": "All land",
