@@ -297,14 +297,17 @@ const Atlas: React.FC<Props> = (props: Props) => {
     }
   }, [withPopup, showPopup, mouseX, mouseY])
 
-  function handleInfoPopupOpen() {
-    setIsInfoPopupOpen(true)
-  }
+  const handleInfoPopupOpen = useCallback(() => setIsInfoPopupOpen(true), [
+    setIsInfoPopupOpen
+  ])
 
-  function handleInfoPopupClose(evt: React.MouseEvent) {
-    evt.stopPropagation()
-    setIsInfoPopupOpen(false)
-  }
+  const handleInfoPopupClose = useCallback(
+    (evt: React.MouseEvent) => {
+      evt.stopPropagation()
+      setIsInfoPopupOpen(false)
+    },
+    [setIsInfoPopupOpen]
+  )
 
   // layers
   const layers = [
