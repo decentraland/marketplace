@@ -12,6 +12,7 @@ import Inventory from '../Inventory'
 import { getChartUpperBound, getPriceFiltersForSection } from './utils'
 import { Props } from './PriceFilter.types'
 import './PriceFilter.css'
+import { RentalsListingsFilterByCategory } from '@dcl/schemas'
 
 export type PriceFilterProps = {
   minPrice: string
@@ -78,6 +79,7 @@ export const PriceFilter = ({
   ])
 
   const rentalPriceFetchFilters = useMemo(() => ({
+    category: category as any as RentalsListingsFilterByCategory,
     rentalDays,
     minEstateSize: minEstateSize ? Number.parseFloat(minEstateSize) : undefined,
     maxEstateSize: maxEstateSize ? Number.parseFloat(maxEstateSize) : undefined,
@@ -85,6 +87,7 @@ export const PriceFilter = ({
     maxDistanceToPlaza: maxDistanceToPlaza ? Number.parseFloat(maxDistanceToPlaza) : undefined,
     adjacentToRoad: adjacentToRoad || undefined,
   }), [
+    category,
     minEstateSize,
     maxEstateSize,
     minDistanceToPlaza,
