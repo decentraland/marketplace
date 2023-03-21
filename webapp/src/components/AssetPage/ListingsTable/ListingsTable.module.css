@@ -7,7 +7,7 @@
 }
 
 .ListingsTable .headerMargin {
-  padding: 20px !important;
+  padding: 20px;
 }
 
 .ListingsTable .issuedIdContainer {
@@ -30,11 +30,6 @@
   align-items: center;
 }
 
-.ListingsTable .badge {
-  color: white;
-  background-color: var(--background) !important;
-}
-
 .ListingsTable .goToNFT {
   color: white;
   padding-right: 25px;
@@ -45,6 +40,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.ListingsTable .manaField {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .ListingsTable :global(.ui.header.dcl.mana) {
