@@ -11,11 +11,17 @@ import { MapStateProps, MapDispatch, MapDispatchProps } from './MapBrowse.types'
 import { MapBrowse } from './MapBrowse'
 import { getWalletNFTs } from '../../../modules/nft/selectors'
 import { NFTCategory } from '@dcl/schemas'
+import { getOnRentNFTsByLessor } from '../../../modules/ui/browse/selectors'
+import { getWallet } from '../../../modules/wallet/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
+  const nfts = getWalletNFTs(state);
+  const wallet = getWallet(state)
+  const nftsOnRent = (wallet ? getOnRentNFTsByLessor(state, wallet?.address) : []).map(([nft]) => nft)
+
   return {
     tiles: getTiles(state),
-    ownedLands: getWalletNFTs(state).filter(
+    ownedLands: [...nfts, ...nftsOnRent].filter(
       nft =>
         nft.category === NFTCategory.ESTATE ||
         nft.category === NFTCategory.PARCEL

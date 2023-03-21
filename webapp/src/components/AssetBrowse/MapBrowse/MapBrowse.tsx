@@ -82,7 +82,7 @@ export function MapBrowse({
     // dependencies array. In this case, we don't won't this useEffect to be
     // called when those values change so we are disabling the rule
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onlyOnRent, tilesForRent])
+  }, [onlyOnRent])
 
   useEffect(() => {
     if (onlyOnSale && tilesForSale.length) {
@@ -93,10 +93,10 @@ export function MapBrowse({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onlyOnSale, tilesForSale])
+  }, [onlyOnSale])
 
   useEffect(() => {
-    if (showOwned && ownedLands.length) {
+    if (showOwned && ownedTiles.length) {
       const newCenter = getNearestTile({ x: x || 0, y: y || 0 }, ownedTiles)
       if (newCenter) {
         setX(newCenter.x)
@@ -104,7 +104,7 @@ export function MapBrowse({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showOwned, ownedLands])
+  }, [showOwned])
 
   return (
     <div className="Atlas">
