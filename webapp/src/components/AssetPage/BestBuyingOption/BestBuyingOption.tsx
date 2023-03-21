@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { ethers } from 'ethers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Bid,
@@ -11,8 +12,6 @@ import {
   Rarity
 } from '@dcl/schemas'
 import { Button, Loader, Mana } from 'decentraland-ui'
-import { ethers } from 'ethers'
-
 import { formatWeiMANA } from '../../../lib/mana'
 import { formatDistanceToNow } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'
@@ -23,15 +22,28 @@ import { LinkedProfile } from '../../LinkedProfile'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { BuyOptions, Props } from './BestBuyingOption.types'
 import styles from './BestBuyingOption.module.css'
+import { BelowTabs } from '../ListingsTableContainer/ListingsTableContainer.types'
+import { useHistory, useLocation } from 'react-router-dom'
 
-const BestBuyingOption = ({ asset }: Props) => {
+const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const [buyOption, setBuyOption] = useState<BuyOptions | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [listing, setListing] = useState<{
     order: Order
     total: number
   } | null>(null)
-  const [bid, setBid] = useState<Bid | null>(null)
+  const [mostExpensiveBid, setMostExpensiveBid] = useState<Bid | null>(null)
+  const history = useHistory()
+
+  const location = useLocation()
+
+  const handleViewOffers = () => {
+    history.replace({
+      pathname: location.pathname,
+      search: `selectedTableTab=${BelowTabs.OWNERS}`
+    })
+    tableRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+  }
 
   useEffect(() => {
     if (asset && !isNFT(asset)) {
@@ -69,7 +81,7 @@ const BestBuyingOption = ({ asset }: Props) => {
                   '1'
                 )
                 .then(response => {
-                  setBid(response[0])
+                  setMostExpensiveBid(response[0])
                 })
                 .finally(() => setIsLoading(false))
                 .catch(error => {
@@ -160,7 +172,7 @@ const BestBuyingOption = ({ asset }: Props) => {
                 </div>
               </div>
             </div>
-            {bid && (
+            {mostExpensiveBid && (
               <div className={styles.containerColumn}>
                 <span className={styles.informationTitle}>
                   {t(
@@ -174,14 +186,14 @@ const BestBuyingOption = ({ asset }: Props) => {
                       size="medium"
                       network={listing.order.network}
                     >
-                      {formatWeiMANA(bid.price)}
+                      {formatWeiMANA(mostExpensiveBid.price)}
                     </Mana>
                   </div>
 
                   <div className={styles.informationText}>
                     <ManaToFiat
                       mana={ethers.utils
-                        .parseEther(formatWeiMANA(bid.price))
+                        .parseEther(formatWeiMANA(mostExpensiveBid.price))
                         .toString()}
                     />
                   </div>
@@ -218,7 +230,7 @@ const BestBuyingOption = ({ asset }: Props) => {
             {t('best_buying_option.buy_listing.view_listing')}
           </Button>
           <span>
-            {t('best_buying_option.buy_listing.expires')}
+            {t('best_buying_option.buy_listing.expires')}&nbsp;
             {formatDistanceToNow(listing.order.expiresAt, {
               addSuffix: true
             })}
@@ -232,13 +244,7 @@ const BestBuyingOption = ({ asset }: Props) => {
           </span>
           <span>
             {t('best_buying_option.empty.you_can')}
-            <Button
-              basic
-              onClick={() => {
-                // todo: hacer el que vaya a tbala de owners y baje un cacho la pantalla, deberia poner el settab afuera del listingstablecontainer o hacer que solo baje a la tabla
-                window.scrollTo({ top: 400, behavior: 'smooth' })
-              }}
-            >
+            <Button basic onClick={handleViewOffers}>
               {t('best_buying_option.empty.check_the_current_owners')}
             </Button>
             {t('best_buying_option.empty.and_make_an_offer')}
