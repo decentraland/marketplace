@@ -506,6 +506,28 @@
     "when": "When",
     "price": "Price"
   },
+  "best_buying_option": {
+    "empty": {
+      "title": "There are no available listings for this item",
+      "you_can": "You can",
+      "check_the_current_owners": "check the current owners",
+      "and_make_an_offer": "and make an offer."
+    },
+    "minting": {
+      "title": "Available for Minting",
+      "price": "Price",
+      "stock": "Stock"
+    },
+    "buy_listing": {
+      "title": "Cheapest Listing",
+      "price": "Price",
+      "highest_offer": "Highest Offer",
+      "issue_number": "Issue Number",
+      "owner": "Owner",
+      "view_listing": "View listing",
+      "expires": "Expires"
+    }
+  },
   "listings_table": {
     "listings": "Listings",
     "owner": "Owner",
