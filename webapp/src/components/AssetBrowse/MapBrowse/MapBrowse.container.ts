@@ -9,23 +9,12 @@ import { browse } from '../../../modules/routing/actions'
 import { getTiles } from '../../../modules/tile/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './MapBrowse.types'
 import { MapBrowse } from './MapBrowse'
-import { getWalletNFTs } from '../../../modules/nft/selectors'
-import { NFTCategory } from '@dcl/schemas'
-import { getOnRentNFTsByLessor } from '../../../modules/ui/browse/selectors'
-import { getWallet } from '../../../modules/wallet/selectors'
+import { getWalletOwnedLands } from '../../../modules/ui/browse/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
-  const nfts = getWalletNFTs(state);
-  const wallet = getWallet(state)
-  const nftsOnRent = (wallet ? getOnRentNFTsByLessor(state, wallet?.address) : []).map(([nft]) => nft)
-
   return {
     tiles: getTiles(state),
-    ownedLands: [...nfts, ...nftsOnRent].filter(
-      nft =>
-        nft.category === NFTCategory.ESTATE ||
-        nft.category === NFTCategory.PARCEL
-    ),
+    ownedLands: getWalletOwnedLands(state),
     onlyOnSale: getOnlyOnSale(state),
     onlyOnRent: getOnlyOnRent(state),
     isMapViewFiltersEnabled: getIsMapViewFiltersEnabled(state)

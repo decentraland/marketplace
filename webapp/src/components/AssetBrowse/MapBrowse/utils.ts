@@ -7,7 +7,7 @@ function getDistanceBetween(position1: Coord, position2: Coord) {
   return Math.abs(position1.x - position2.x) + Math.abs(position1.y - position2.y)
 }
 
-export default function getNearestTile(currentPosition: Coord, coords: Array<Coord> = []) {
+export function getNearestTile(currentPosition: Coord, coords: Array<Coord> = []) {
   if (!coords.length) {
     return undefined;
   }

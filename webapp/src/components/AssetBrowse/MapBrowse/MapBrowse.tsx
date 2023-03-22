@@ -3,7 +3,7 @@ import { useTabletAndBelowMediaQuery } from 'decentraland-ui'
 import { Atlas } from '../../Atlas'
 import { Props } from './MapBrowse.types'
 import { Coordinate } from 'recharts/types/util/types'
-import getNearestTile, { Coord } from './utils'
+import { getNearestTile, Coord } from './utils'
 import { NFTCategory } from '@dcl/schemas'
 
 export function MapBrowse({
@@ -79,7 +79,7 @@ export function MapBrowse({
       }
     }
     // this eslint rule is causing a warning due to x and y not being in the
-    // dependencies array. In this case, we don't won't this useEffect to be
+    // dependencies array. In this case, we don't want this useEffect to be
     // called when those values change so we are disabling the rule
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [onlyOnRent])
