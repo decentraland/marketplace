@@ -1,6 +1,12 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 import classNames from 'classnames'
-import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
+import {
+  Container,
+  Mobile,
+  NotMobile,
+  Page,
+  Tabs,
+} from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
@@ -10,7 +16,6 @@ import {
   getPersistedIsMapProperty,
   isAccountView
 } from '../../modules/ui/utils'
-import { Atlas } from '../Atlas'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
 import { Row } from '../Layout/Row'
@@ -25,8 +30,9 @@ import Sales from '../Sales'
 import { Bids } from '../Bids'
 import { BackToTopButton } from '../BackToTopButton'
 import { Props } from './AssetBrowse.types'
-import './AssetBrowse.css'
 import MapTopbar from './MapTopbar'
+import MapBrowse from './MapBrowse'
+import './AssetBrowse.css'
 
 const AssetBrowse = (props: Props) => {
   const {
@@ -134,12 +140,6 @@ const AssetBrowse = (props: Props) => {
     isMapPropertyPersisted
   ])
 
-  // Handlers
-  const handleSetFullscreen = useCallback(
-    () => onBrowse({ isMap: true, isFullscreen: true }),
-    [onBrowse]
-  )
-
   const left = (
     <>
       <NotMobile>
@@ -159,9 +159,9 @@ const AssetBrowse = (props: Props) => {
 
   const mapTopbar = isMapViewFiltersEnabled ? (
     <MapTopbar
-              showOwned={showOwnedLandOnMap}
-              onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
-            />
+      showOwned={showOwnedLandOnMap}
+      onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
+    />
   ) : (
     <div className="blur-background">
       <Container>
@@ -204,27 +204,9 @@ const AssetBrowse = (props: Props) => {
     default:
       right = (
         <>
-          {isMap && isFullscreen ? (
-            mapTopbar
-          ) : (
-            <AssetTopbar />
-          )}
+          {isMap && isFullscreen ? mapTopbar : <AssetTopbar />}
           {isMap ? (
-            <div className="Atlas">
-              <Atlas
-                withNavigation
-                withPopup
-                withMapColorsInfo={isMapViewFiltersEnabled}
-                withZoomControls={isMapViewFiltersEnabled}
-                showOnSale={isMapViewFiltersEnabled ? !!onlyOnSale : onlyOnSale}
-                showForRent={isMapViewFiltersEnabled ? !!onlyOnRent : undefined}
-                showOwned={isMapViewFiltersEnabled ? showOwnedLandOnMap : undefined}
-              />
-              <div
-                className="fullscreen-button"
-                onClick={handleSetFullscreen}
-              />
-            </div>
+            <MapBrowse showOwned={showOwnedLandOnMap} />
           ) : (
             <AssetList isManager={view === View.CURRENT_ACCOUNT} />
           )}
