@@ -6,6 +6,7 @@ import {
   Rarity,
   WearableGender
 } from '@dcl/schemas'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
@@ -28,7 +29,6 @@ import { LocationFilter } from './LocationFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 import { RentalPeriodFilter } from './RentalPeriodFilter/RentalPeriodFilter'
-import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 export const AssetFilters = ({
   minPrice,
