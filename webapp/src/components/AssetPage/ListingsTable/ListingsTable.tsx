@@ -45,7 +45,7 @@ const ListingsTable = (props: Props) => {
       orderAPI
         .fetchOrders(params, sortBy)
         .then(response => {
-          setTotal(response.total)
+          setTotal(response.total) //arreglar aca  que no es esto
           setOrders(response.data)
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
@@ -110,7 +110,7 @@ const ListingsTable = (props: Props) => {
                           <span className={styles.issuedId}>
                             {order.tokenId}
                           </span>
-                          / {total}
+                          / {total} //TODO YA ARREGLAR
                         </span>
                       </div>
                     </div>
