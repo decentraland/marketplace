@@ -28,6 +28,7 @@ import { LocationFilter } from './LocationFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 import { RentalPeriodFilter } from './RentalPeriodFilter/RentalPeriodFilter'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 
 export const AssetFilters = ({
   minPrice,
@@ -62,22 +63,18 @@ export const AssetFilters = ({
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
-
-  const handlePriceChange = useCallback(
-    (value: [string, string]) => {
-      const [minPrice, maxPrice] = value
-      onBrowse({ minPrice, maxPrice })
-    },
-    [onBrowse]
-  )
+  const analytics = getAnalytics()
 
   const handleRangeFilterChange = useCallback(
-    (filterNames: [string, string], value: [string, string]) => {
+    (filterNames: [string, string], value: [string, string], source) => {
       const [filterMinName, filterMaxName] = filterNames
       const [minPrice, maxPrice] = value
+      analytics.track(
+        `${filterMinName} and ${filterMaxName} changed using ${source}`
+      )
       onBrowse({ [filterMinName]: minPrice, [filterMaxName]: maxPrice })
     },
-    [onBrowse]
+    [onBrowse, analytics]
   )
 
   const handleRarityChange = useCallback(
@@ -203,7 +200,7 @@ export const AssetFilters = ({
         />
         {isPriceFilterEnabled ? (
           <PriceFilter
-            onChange={handlePriceChange}
+            onChange={(value, source) => handleRangeFilterChange(['minPrice', 'maxPrice'], value, source)}
             minPrice={minPrice}
             maxPrice={maxPrice}
             values={values}
@@ -218,10 +215,11 @@ export const AssetFilters = ({
             max={maxEstateSize}
             minPrice={minPrice}
             maxPrice={maxPrice}
-            onChange={values =>
+            onChange={(values, source) =>
               handleRangeFilterChange(
                 ['minEstateSize', 'maxEstateSize'],
-                values
+                values,
+                source
               )
             }
             {...locationFilters}
@@ -259,7 +257,9 @@ export const AssetFilters = ({
       isOnSale &&
       view !== View.ACCOUNT ? (
         <PriceFilter
-          onChange={handlePriceChange}
+          onChange={(value, source) =>
+            handleRangeFilterChange(['minPrice', 'maxPrice'], value, source)
+          }
           minPrice={minPrice}
           maxPrice={maxPrice}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Price]}
