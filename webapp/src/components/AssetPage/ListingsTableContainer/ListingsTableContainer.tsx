@@ -1,17 +1,18 @@
 import React, { useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Dropdown, Tabs } from 'decentraland-ui'
-
+import { OrderSortBy } from '@dcl/schemas'
 import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 import { OwnersTable } from '../OwnersTable'
-import { BelowTabs, Props } from './ListingsTableContainer.types'
+import ListingsTable from '../ListingsTable/ListingsTable'
+import { BelowTabs, Props, SortByType } from './ListingsTableContainer.types'
 import styles from './ListingsTableContainer.module.css'
 
 const ListingsTableContainer = ({ item }: Props) => {
-  const [belowTab, setBelowTab] = useState(BelowTabs.OWNERS)
-  const [orderDirection, setOrderDirection] = useState(OrderDirection.ASC)
+  const [belowTab, setBelowTab] = useState(BelowTabs.LISTINGS)
+  const [sortBy, setSortBy] = useState<SortByType>(OrderSortBy.CHEAPEST)
 
-  const orderDirectionOptions = [
+  const ownerSortByOptions = [
     {
       text: t('owners_table.issue_number_asc'),
       value: OrderDirection.ASC
@@ -22,41 +23,74 @@ const ListingsTableContainer = ({ item }: Props) => {
     }
   ]
 
+  const listingSortByOptions = [
+    {
+      text: t('listings_table.cheapest'),
+      value: OrderSortBy.CHEAPEST
+    },
+    {
+      text: t('listings_table.newest'),
+      value: OrderSortBy.RECENTLY_LISTED
+    },
+    {
+      text: t('listings_table.oldest'),
+      value: OrderSortBy.OLDEST
+    },
+    {
+      text: t('listings_table.issue_number_asc'),
+      value: OrderSortBy.ISSUED_ID_ASC
+    },
+    {
+      text: t('listings_table.issue_number_desc'),
+      value: OrderSortBy.ISSUED_ID_DESC
+    }
+  ]
+
+  const handleTabChange = (tab: BelowTabs) => {
+    const sortByTab =
+      tab === BelowTabs.LISTINGS ? OrderSortBy.CHEAPEST : OrderDirection.ASC
+    setBelowTab(tab)
+    setSortBy(sortByTab)
+  }
+
   return (
     <div className={styles.tableContainer}>
       <div className={styles.filtertabsContainer}>
         <Tabs isFullscreen>
           <Tabs.Tab
             active={belowTab === BelowTabs.LISTINGS}
-            onClick={() => setBelowTab(BelowTabs.LISTINGS)}
+            onClick={() => handleTabChange(BelowTabs.LISTINGS)}
           >
             <div className={styles.tabStyle}>
-              {t('transaction_history.title')}
+              {t('listings_table.listings')}
             </div>
           </Tabs.Tab>
           <Tabs.Tab
             active={belowTab === BelowTabs.OWNERS}
-            onClick={() => setBelowTab(BelowTabs.OWNERS)}
+            onClick={() => handleTabChange(BelowTabs.OWNERS)}
           >
             {t('owners_table.owners')}
           </Tabs.Tab>
         </Tabs>
-        {belowTab === BelowTabs.OWNERS && (
-          <Dropdown
-            direction="left"
-            className={styles.sortByDropdown}
-            value={orderDirection}
-            onChange={(_event, data) => {
-              const value = data.value as OrderDirection
-              setOrderDirection(value)
-            }}
-            options={orderDirectionOptions}
-          />
-        )}
+        <Dropdown
+          direction="left"
+          className={styles.sortByDropdown}
+          value={sortBy}
+          onChange={(_event, data) => {
+            const value = data.value as SortByType
+            setSortBy(value)
+          }}
+          options={
+            belowTab === BelowTabs.LISTINGS
+              ? listingSortByOptions
+              : ownerSortByOptions
+          }
+        />
       </div>
-
-      {belowTab === BelowTabs.OWNERS && (
-        <OwnersTable asset={item} orderDirection={orderDirection} />
+      {belowTab === BelowTabs.LISTINGS ? (
+        <ListingsTable asset={item} sortBy={sortBy as OrderSortBy} />
+      ) : (
+        <OwnersTable asset={item} orderDirection={sortBy as OrderDirection} />
       )}
     </div>
   )
