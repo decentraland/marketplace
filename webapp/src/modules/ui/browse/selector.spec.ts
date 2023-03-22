@@ -1,4 +1,11 @@
-import { ChainId, Item, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import {
+  ChainId,
+  Item,
+  NFTCategory,
+  Order,
+  RentalListing,
+  RentalStatus
+} from '@dcl/schemas'
 import {
   Transaction,
   TransactionStatus
@@ -19,6 +26,7 @@ import {
   getOnSaleNFTs,
   getState,
   getView,
+  getWalletOwnedLands,
   isClaimingBackLandTransactionPending
 } from './selectors'
 
@@ -31,6 +39,8 @@ let nftWithOpenRent: NFT
 let nftWithCancelledRent: NFT
 let nftWithExecutedRentByLessor: NFT
 let nftWithExecutedRentByTenant: NFT
+let nftWithLandCategory: NFT
+let nftWithWearableCategory: NFT
 let address: string
 let order: Order
 let rental: RentalListing
@@ -66,15 +76,35 @@ beforeEach(() => {
     tenant: address,
     lessor: '0x1'
   } as RentalListing
-  nftWithOpenRent = { id: '678', openRentalId: rental.id } as NFT
-  nftWithCancelledRent = { id: '789', openRentalId: rentalCancelled.id } as NFT
+  nftWithOpenRent = {
+    id: '678',
+    openRentalId: rental.id,
+    owner: address
+  } as NFT
+  nftWithCancelledRent = {
+    id: '789',
+    openRentalId: rentalCancelled.id,
+    owner: address
+  } as NFT
   nftWithExecutedRentByLessor = {
     id: '891',
-    openRentalId: rentalExecutedByLessor.id
+    openRentalId: rentalExecutedByLessor.id,
+    owner: address
   } as NFT
   nftWithExecutedRentByTenant = {
     id: '892',
-    openRentalId: rentalExecutedByTenant.id
+    openRentalId: rentalExecutedByTenant.id,
+    owner: address
+  } as NFT
+  nftWithLandCategory = {
+    id: '893',
+    owner: address,
+    category: NFTCategory.PARCEL
+  } as NFT
+  nftWithWearableCategory = {
+    id: '894',
+    owner: address,
+    category: NFTCategory.WEARABLE
   } as NFT
   rootState = {
     ui: {
@@ -100,7 +130,9 @@ beforeEach(() => {
         [nftWithOpenRent.id]: nftWithOpenRent,
         [nftWithCancelledRent.id]: nftWithCancelledRent,
         [nftWithExecutedRentByLessor.id]: nftWithExecutedRentByLessor,
-        [nftWithExecutedRentByTenant.id]: nftWithExecutedRentByTenant
+        [nftWithExecutedRentByTenant.id]: nftWithExecutedRentByTenant,
+        [nftWithLandCategory.id]: nftWithLandCategory,
+        [nftWithWearableCategory.id]: nftWithWearableCategory
       }
     },
     item: {
@@ -189,6 +221,16 @@ describe('when getting the NFTs on rent by tenant', () => {
   it('should get all the NFTs rented by the given tenant', () => {
     expect(getOnRentNFTsByTenant(rootState, address)).toEqual([
       [nftWithExecutedRentByTenant, rentalExecutedByTenant]
+    ])
+  })
+})
+
+describe('when getting all owned land', () => {
+  it('should return all owned lands', () => {
+    expect(getWalletOwnedLands(rootState)).toEqual([
+      nftWithLandCategory,
+      nftWithOpenRent,
+      nftWithExecutedRentByLessor
     ])
   })
 })
