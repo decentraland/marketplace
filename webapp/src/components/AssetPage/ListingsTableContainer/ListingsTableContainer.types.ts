@@ -1,4 +1,5 @@
-import { Item } from '@dcl/schemas'
+import { Item, OrderSortBy } from '@dcl/schemas'
+import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 
 export enum BelowTabs {
   LISTINGS = 'listings',
@@ -8,3 +9,5 @@ export enum BelowTabs {
 export type Props = {
   item: Item
 }
+
+export type SortByType = OrderSortBy | OrderDirection
