@@ -506,12 +506,28 @@
     "when": "When",
     "price": "Price"
   },
-  "owners_table":{
+  "listings_table": {
+    "listings": "Listings",
+    "owner": "Owner",
+    "published_date": "Published date",
+    "expiration_date": "Expiration date",
+    "issue_number": "Issue Number",
+    "price": "Price",
+    "cheapest": "Cheapest",
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "issue_number_asc": "Issue Number ↑",
+    "issue_number_desc": "Issue Number ↓",
+    "there_are_no_listings": "No available listings"
+  },
+  "owners_table": {
     "owner": "Owner",
     "issue_number": "Issue Number",
     "issue_number_asc": "Issue Number ↑",
     "issue_number_desc": "Issue Number ↓",
-    "owners": "Owners"
+    "owners": "Owners",
+    "there_are_no_owners": "There are no owners yet",
+    "become_the_first_one": "Become the first one!"
   },
   "rental_history": {
     "title": "Latest rentals",
