@@ -541,12 +541,28 @@
     "when": "时间",
     "price": "价格"
   },
-  "owners_table":{
+  "listings_table": {
+    "listings": "收藏品",
+    "owner": "所有者",
+    "published_date": "發布日期",
+    "expiration_date": "到期日期",
+    "issue_number": "發行編號",
+    "價格": "價格",
+    "最便宜": "最便宜",
+    "最新": "最新",
+    "最老": "最老",
+    "issue_number_asc": "發行編號↑",
+    "issue_number_desc": "發行編號↓",
+    "there_are_no_listings": "沒有可用的列表"
+  },
+  "owners_table": {
     "owner": "所有者",
     "issue_number": "发行数量",
     "issue_number_asc": "发行数量 ↑",
     "issue_number_desc": "发行数量 ↓",
-    "owners": "所有者"
+    "owners": "所有者",
+    "there_are_no_owners": "還沒有所有者",
+    "become_the_first_one": "成為第一個！"
   },
   "rental_history": {
     "title": "最新租金",
