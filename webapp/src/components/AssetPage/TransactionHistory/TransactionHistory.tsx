@@ -93,7 +93,7 @@ const TransactionHistory = (props: Props) => {
       {isLoading && sales.length === 0 ? null : sales.length > 0 ? (
         <div className={'tableContainer'}>
           <div className={'titleContainer'}>
-            <Tabs.Tab>{t('listings_table.listings')}</Tabs.Tab>
+            <Tabs.Tab> {t('transaction_history.title')}</Tabs.Tab>
           </div>
           <NotMobile>
             <Table basic="very">
