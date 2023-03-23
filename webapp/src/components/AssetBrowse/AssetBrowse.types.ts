@@ -23,7 +23,6 @@ export type Props = {
   isFullscreen?: boolean
   section?: Section
   sections?: Section[]
-  isLoading: boolean
   onSetView: typeof setView
   onFetchAssetsFromRoute: typeof fetchAssetsFromRoute
   onBrowse: typeof browse
@@ -37,7 +36,6 @@ export type MapStateProps = Pick<
   Props,
   | 'isMap'
   | 'isFullscreen'
-  | 'isLoading'
   | 'onlyOnSale'
   | 'viewInState'
   | 'section'

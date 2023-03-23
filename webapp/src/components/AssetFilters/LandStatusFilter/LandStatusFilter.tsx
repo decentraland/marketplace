@@ -65,6 +65,7 @@ export const LandStatusFilter = ({
         {landStatusFilterOptions.map(option => {
           return (
             <Radio
+              id={`landStatus-${option.value}`}
               type="radio"
               key={option.value}
               onChange={handleStatusChange}
