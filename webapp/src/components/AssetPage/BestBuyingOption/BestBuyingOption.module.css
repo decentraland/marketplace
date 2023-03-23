@@ -56,3 +56,7 @@
 .BestBuyingOption :global(.ui.header.medium) {
   font-size: 17px;
 }
+
+.BestBuyingOption :global(.ui.button + .ui.button) {
+  margin-left: unset;
+}

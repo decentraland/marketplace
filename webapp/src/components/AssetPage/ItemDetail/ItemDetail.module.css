@@ -3,7 +3,7 @@
   flex-direction: column;
 }
 
-.ItemDetail .AssetImage {
+.ItemDetail .assetImageContainer :global(.AssetImage) {
   border-radius: 12px;
   overflow: hidden;
 }
@@ -32,7 +32,6 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 30px;
-  /* width: 48%; */
 }
 
 .ItemDetail .basicRow {
@@ -42,8 +41,8 @@
   width: 100%;
 }
 
-.ItemDetail .ui.button + .ui.button {
-  margin-left: unset;
+.ItemDetail :global(.ui.button + .ui.button) {
+  margin-left: 0px;
 }
 
 @media (max-width: 800px) {
@@ -57,7 +56,7 @@
     flex-direction: column;
   }
 
-  .ItemDetail .dcl.stats + .dcl.stats {
+  .ItemDetail :global(.dcl.stats + .dcl.stats) {
     width: 100%;
   }
 }

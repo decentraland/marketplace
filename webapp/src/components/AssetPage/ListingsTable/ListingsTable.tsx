@@ -4,7 +4,7 @@ import { Table, Loader, Row, Pagination, Icon, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Order, OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
 import { Link } from 'react-router-dom'
-import { orderAPI } from '../../../modules/vendor/decentraland'
+import { nftAPI, orderAPI } from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
@@ -42,10 +42,25 @@ const ListingsTable = (props: Props) => {
         params.nftName = asset.name
       }
 
+      asset.itemId &&
+        nftAPI
+          .getOwners({
+            contractAddress: asset.contractAddress,
+            itemId: asset.itemId,
+            first: 1,
+            skip: 0
+          })
+          .then(response => {
+            setTotal(response.total)
+          })
+          .finally(() => setIsLoading(false))
+          .catch(error => {
+            console.error(error)
+          })
+
       orderAPI
         .fetchOrders(params, sortBy)
         .then(response => {
-          setTotal(response.total) //arreglar aca  que no es esto
           setOrders(response.data)
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
         })
@@ -110,7 +125,7 @@ const ListingsTable = (props: Props) => {
                           <span className={styles.issuedId}>
                             {order.tokenId}
                           </span>
-                          / {total} //TODO YA ARREGLAR
+                          / {total}
                         </span>
                       </div>
                     </div>
