@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { BodyShape, EmotePlayMode, NFTCategory } from '@dcl/schemas'
 import { locations } from '../../../modules/routing/locations'
@@ -19,12 +19,15 @@ import { TransactionHistory } from '../TransactionHistory'
 import { SaleActionBox } from '../SaleActionBox'
 import ListingsTableContainer from '../ListingsTableContainer/ListingsTableContainer'
 import { Props } from './ItemDetail.types'
+import { BestBuyingOption } from '../BestBuyingOption'
 
 const ItemDetail = ({ item }: Props) => {
   let description = ''
   let bodyShapes: BodyShape[] = []
   let category
   let loop = false
+
+  const tableRef = useRef<HTMLDivElement>(null)
 
   switch (item.category) {
     case NFTCategory.WEARABLE:
@@ -112,7 +115,8 @@ const ItemDetail = ({ item }: Props) => {
       actions={<SaleActionBox asset={item} />}
       below={
         <>
-          <ListingsTableContainer item={item} />
+          <BestBuyingOption asset={item} tableRef={tableRef} />
+          <ListingsTableContainer item={item} ref={tableRef} />
           <TransactionHistory asset={item} />
         </>
       }

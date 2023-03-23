@@ -4,7 +4,6 @@ import { ListingStatus, Network } from '@dcl/schemas'
 import { Table, Loader, Row, Pagination, Icon, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Order, OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
-
 import { orderAPI } from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
