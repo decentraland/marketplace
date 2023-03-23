@@ -6,7 +6,6 @@ import {
   Rarity,
   WearableGender
 } from '@dcl/schemas'
-import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
@@ -23,12 +22,16 @@ import { Props } from './AssetFilters.types'
 import { CollectionFilter } from './CollectionFilter'
 import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
+import { RentalPeriodFilter } from './RentalPeriodFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
 import { LocationFilter } from './LocationFilter'
-import { AssetFilter, filtersBySection } from './utils'
+import {
+  AssetFilter,
+  filtersBySection,
+  trackBarChartComponentChange
+} from './utils'
 import './AssetFilters.css'
-import { RentalPeriodFilter } from './RentalPeriodFilter/RentalPeriodFilter'
 
 export const AssetFilters = ({
   minPrice,
@@ -63,18 +66,20 @@ export const AssetFilters = ({
 }: Props): JSX.Element | null => {
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
-  const analytics = getAnalytics()
 
   const handleRangeFilterChange = useCallback(
-    (filterNames: [string, string], value: [string, string], source) => {
+    (
+      filterNames: [string, string],
+      value: [string, string],
+      source,
+      prevValues: [string, string]
+    ) => {
       const [filterMinName, filterMaxName] = filterNames
-      const [minPrice, maxPrice] = value
-      analytics.track(
-        `${filterMinName} and ${filterMaxName} changed using ${source}`
-      )
-      onBrowse({ [filterMinName]: minPrice, [filterMaxName]: maxPrice })
+      const [minValue, maxValue] = value
+      onBrowse({ [filterMinName]: minValue, [filterMaxName]: maxValue })
+      trackBarChartComponentChange(filterNames, value, source, prevValues)
     },
-    [onBrowse, analytics]
+    [onBrowse]
   )
 
   const handleRarityChange = useCallback(
@@ -200,7 +205,12 @@ export const AssetFilters = ({
         />
         {isPriceFilterEnabled ? (
           <PriceFilter
-            onChange={(value, source) => handleRangeFilterChange(['minPrice', 'maxPrice'], value, source)}
+            onChange={(value, source) =>
+              handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
+                minPrice,
+                maxPrice
+              ])
+            }
             minPrice={minPrice}
             maxPrice={maxPrice}
             values={values}
@@ -219,7 +229,8 @@ export const AssetFilters = ({
               handleRangeFilterChange(
                 ['minEstateSize', 'maxEstateSize'],
                 values,
-                source
+                source,
+                [minEstateSize, maxEstateSize]
               )
             }
             {...locationFilters}
@@ -258,7 +269,10 @@ export const AssetFilters = ({
       view !== View.ACCOUNT ? (
         <PriceFilter
           onChange={(value, source) =>
-            handleRangeFilterChange(['minPrice', 'maxPrice'], value, source)
+            handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
+              minPrice,
+              maxPrice
+            ])
           }
           minPrice={minPrice}
           maxPrice={maxPrice}

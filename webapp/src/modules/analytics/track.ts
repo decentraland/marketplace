@@ -74,6 +74,7 @@ import {
   SET_PURCHASE
 } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
+import * as events from '../../utils/events'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -90,7 +91,7 @@ function withCategory(eventName: string, item: { category: string }) {
 
 track<ExecuteOrderTransactionSubmittedAction>(
   EXECUTE_ORDER_TRANSACTION_SUBMITTED,
-  ({ payload }) => withCategory('Buy', payload.nft),
+  ({ payload }) => withCategory(events.BUY, payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
     nft: payload.nft.id,
@@ -102,7 +103,7 @@ track<ExecuteOrderTransactionSubmittedAction>(
 
 track<ExecuteOrderWithCardSuccessAction>(
   EXECUTE_ORDER_WITH_CARD_SUCCESS,
-  ({ payload }) => withCategory('Buy With Card', payload.nft),
+  ({ payload }) => withCategory(events.BUY_WITH_CARD, payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
     nft: payload.nft.id,
@@ -114,7 +115,7 @@ track<ExecuteOrderWithCardSuccessAction>(
 
 track<CreateOrderSuccessAction>(
   CREATE_ORDER_SUCCESS,
-  ({ payload }) => withCategory('Publish', payload.nft),
+  ({ payload }) => withCategory(events.PUBLISH, payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
     tokenId: payload.nft.tokenId,
@@ -124,7 +125,7 @@ track<CreateOrderSuccessAction>(
 
 track<CancelOrderSuccessAction>(
   CANCEL_ORDER_SUCCESS,
-  ({ payload }) => withCategory('Cancel Sale', payload.nft),
+  ({ payload }) => withCategory(events.CANCEL_SALE, payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
     tokenId: payload.nft.tokenId,
@@ -134,7 +135,7 @@ track<CancelOrderSuccessAction>(
 
 track<TransferNFTSuccessAction>(
   TRANSFER_NFT_TRANSACTION_SUBMITTED,
-  ({ payload }) => withCategory('Transfer NFT', payload.nft),
+  ({ payload }) => withCategory(events.TRANSFER_NFT, payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
     tokenId: payload.nft.tokenId,
@@ -144,27 +145,27 @@ track<TransferNFTSuccessAction>(
 
 track<FetchTransactionFailureAction>(FETCH_TRANSACTION_FAILURE, ({ payload }) =>
   payload.status === TransactionStatus.REVERTED
-    ? 'Transaction Failed'
-    : 'Transaction Dropped'
+    ? events.TRANSACTION_FAILED
+    : events.TRANSACTION_DROPPED
 )
 
 track<FixRevertedTransactionAction>(
   FIX_REVERTED_TRANSACTION,
-  'Transaction Fixed'
+  events.TRANSACTION_FIXED
 )
 
 track<ReplaceTransactionSuccessAction>(
   REPLACE_TRANSACTION_SUCCESS,
-  'Transaction Replaced'
+  events.TRANSACTION_REPLACED
 )
 
-track<GrantTokenSuccessAction>(GRANT_TOKEN_SUCCESS, () => 'Authorize')
+track<GrantTokenSuccessAction>(GRANT_TOKEN_SUCCESS, () => events.AUTHORIZE)
 
-track<RevokeTokenSuccessAction>(REVOKE_TOKEN_SUCCESS, () => 'Unauthorize')
+track<RevokeTokenSuccessAction>(REVOKE_TOKEN_SUCCESS, () => events.UNAUTHORIZE)
 
 track<PlaceBidSuccessAction>(
   PLACE_BID_SUCCESS,
-  ({ payload }) => withCategory('Bid', payload.nft),
+  ({ payload }) => withCategory(events.BID, payload.nft),
   ({ payload }) => ({
     category: payload.nft.category,
     tokenId: payload.nft.tokenId,
@@ -175,7 +176,7 @@ track<PlaceBidSuccessAction>(
 
 track<AcceptBidTransactionSubmittedAction>(
   ACCEPT_BID_TRANSACTION_SUBMITTED,
-  'Accept bid',
+  events.ACCEPT_BID,
   ({ payload }) => ({
     tokenId: payload.bid.tokenId,
     bidId: payload.bid.id,
@@ -186,7 +187,7 @@ track<AcceptBidTransactionSubmittedAction>(
 
 track<CancelBidSuccessAction>(
   CANCEL_BID_SUCCESS,
-  'Cancel bid',
+  events.CANCEL_BID,
   ({ payload }) => ({
     tokenId: payload.bid.tokenId,
     bidId: payload.bid.id,
@@ -194,13 +195,13 @@ track<CancelBidSuccessAction>(
   })
 )
 
-track<ArchiveBidAction>(ARCHIVE_BID, 'Archive Bid', ({ payload }) => ({
+track<ArchiveBidAction>(ARCHIVE_BID, events.ARCHIVE_BID, ({ payload }) => ({
   tokenId: payload.bid.tokenId,
   bidId: payload.bid.id,
   price: payload.bid.price
 }))
 
-track<UnarchiveBidAction>(UNARCHIVE_BID, 'Unarchive Bid', ({ payload }) => ({
+track<UnarchiveBidAction>(UNARCHIVE_BID, events.UNARCHIVE_BID, ({ payload }) => ({
   tokenId: payload.bid.tokenId,
   bidId: payload.bid.id,
   price: payload.bid.price
@@ -208,7 +209,7 @@ track<UnarchiveBidAction>(UNARCHIVE_BID, 'Unarchive Bid', ({ payload }) => ({
 
 track<FetchNFTsSuccessAction>(
   FETCH_NFTS_SUCCESS,
-  'Fetch NFTs',
+  events.FETCH_NFTS,
   ({ payload }) => ({
     ...payload.options.params,
     view: payload.options.view,
@@ -219,14 +220,14 @@ track<FetchNFTsSuccessAction>(
 
 track<FetchItemsSuccessAction>(
   FETCH_ITEMS_SUCCESS,
-  'Fetch Items',
+  events.FETCH_ITEMS,
   ({ payload }) => ({
     options: payload.options,
     total: payload.total
   })
 )
 
-track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, 'Buy Item', ({ payload }) => ({
+track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, events.BUY_ITEM, ({ payload }) => ({
   itemId: payload.item.itemId,
   contractAddress: payload.item.contractAddress,
   rarity: payload.item.rarity,
@@ -238,7 +239,7 @@ track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, 'Buy Item', ({ payload }) => ({
 
 track<BuyItemWithCardSuccessAction>(
   BUY_ITEM_WITH_CARD_SUCCESS,
-  'Buy Item With Card',
+  events.BUY_ITEM_WITH_CARD,
   ({ payload }) => ({
     itemId: payload.item.itemId,
     contractAddress: payload.item.contractAddress,
@@ -253,7 +254,7 @@ track<BuyItemWithCardSuccessAction>(
 
 track<SetIsTryingOnAction>(
   SET_IS_TRYING_ON,
-  'Toggle Preview Mode',
+  events.TOGGLE_PREVIEW_MODE,
   ({ payload }) => ({
     mode: payload.value ? 'avatar' : 'wearable'
   })
@@ -261,7 +262,7 @@ track<SetIsTryingOnAction>(
 
 track<UpsertRentalSuccessAction>(
   UPSERT_RENTAL_SUCCESS,
-  'Upsert Land Rental',
+  events.UPSERT_LAND_RENTAL,
   ({ payload: { nft, operationType, rental } }) => ({
     nftId: nft.id,
     assetType: isParcel(nft) ? NFTCategory.PARCEL : NFTCategory.ESTATE,
@@ -275,7 +276,7 @@ track<UpsertRentalSuccessAction>(
 
 track<ClaimAssetSuccessAction>(
   CLAIM_ASSET_SUCCESS,
-  'Claim Land Rental',
+  events.CLAIM_LAND_RENTAL,
   ({ payload: { nft, rental } }) => ({
     nftId: nft.id,
     rentalId: rental.id
@@ -284,7 +285,7 @@ track<ClaimAssetSuccessAction>(
 
 track<AcceptRentalListingSuccessAction>(
   ACCEPT_RENTAL_LISTING_SUCCESS,
-  'Rent Land',
+  events.RENT_LAND,
   ({ payload: { periodIndexChosen, rental, nft } }) => ({
     nftId: rental.nftId,
     assetType: isParcel(nft) ? NFTCategory.PARCEL : NFTCategory.ESTATE,
@@ -298,11 +299,11 @@ track<SetPurchaseAction>(
   SET_PURCHASE,
   action =>
     action.payload.purchase.status === PurchaseStatus.CANCELLED
-      ? 'Purchase Cancelled'
+      ? events.PURCHASED_CANCELLED
       : action.payload.purchase.status === PurchaseStatus.COMPLETE
-      ? 'Purchase Complete'
+      ? events.PURCHASED_COMPLETE
       : action.payload.purchase.status === PurchaseStatus.FAILED
-      ? 'Purchase Failed'
-      : 'Purchase Started',
+      ? events.PURCHASED_FAILED
+      : events.PURCHASED_STARTED,
   action => action.payload.purchase
 )

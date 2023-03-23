@@ -17,6 +17,7 @@ import {
 
 import { getAssetImage, getAssetName } from '../../modules/asset/utils'
 import { getSelection, getCenter } from '../../modules/nft/estate/utils'
+import * as events from '../../utils/events'
 import { Atlas } from '../Atlas'
 import ListedBadge from '../ListedBadge'
 import { config } from '../../config'
@@ -157,7 +158,7 @@ const AssetImage = (props: Props) => {
   useEffect(() => {
     const isPreview = asset.category === NFTCategory.WEARABLE && isDraggable
     if (!isTracked && isPreview) {
-      getAnalytics().track('Init Preview', {
+      getAnalytics().track(events.INIT_PREVIEW, {
         mode: isTryingOn ? 'avatar' : 'wearable'
       })
       setIsTracked(true)

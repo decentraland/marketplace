@@ -19,9 +19,11 @@ import { getContractNames } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
 import { isWearableOrEmote } from '../../../modules/asset/utils'
+import * as events from '../../../utils/events'
 import { AssetAction } from '../../AssetAction'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
+import { AssetProviderPage } from '../../AssetProviderPage'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { PriceTooLow } from '../PriceTooLow'
@@ -29,7 +31,6 @@ import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
 import { NotEnoughMana } from '../NotEnoughMana'
 import { PriceHasChanged } from '../PriceHasChanged'
 import { Props } from './MintItemModal.types'
-import { AssetProviderPage } from '../../AssetProviderPage'
 
 const MintItemModal = (props: Props) => {
   const {
@@ -52,7 +53,7 @@ const MintItemModal = (props: Props) => {
 
   const handleExecuteOrder = useCallback(() => {
     if (isBuyWithCardPage) {
-      analytics.track('Click on Buy NFT With Card')
+      analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
       return onBuyItemWithCard(item)
     }
 
@@ -60,7 +61,7 @@ const MintItemModal = (props: Props) => {
   }, [isBuyWithCardPage, onBuyItemWithCard, onBuyItem, item, analytics])
 
   const handleCancel = useCallback(() => {
-    if (isBuyWithCardPage) analytics.track('Cancel Buy NFT With Card')
+    if (isBuyWithCardPage) analytics.track(events.CANCEL_BUY_NFT_WITH_CARD)
   }, [analytics, isBuyWithCardPage])
 
   const authorization: Authorization | null = useMemo(() => {
