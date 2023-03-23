@@ -1,4 +1,4 @@
-import { Bid, ListingStatus } from '@dcl/schemas'
+import { Bid, BidSortBy, ListingStatus } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
@@ -6,11 +6,15 @@ import { retryParams } from '../utils'
 const FIRST = '1000'
 
 class BidAPI extends BaseAPI {
-  async fetch(options: Record<string, string>): Promise<Bid[]> {
+  async fetch(
+    options: Record<string, string>,
+    sortBy?: BidSortBy
+  ): Promise<Bid[]> {
     const queryParams = new URLSearchParams()
     for (const key of Object.keys(options)) {
       queryParams.append(key, options[key])
     }
+    sortBy && queryParams.append('sortBy', sortBy.toString())
     try {
       const response: { data: Bid[]; total: number } = await this.request(
         'get',
@@ -36,9 +40,19 @@ class BidAPI extends BaseAPI {
   async fetchByNFT(
     contractAddress: string,
     tokenId: string,
-    status: ListingStatus = ListingStatus.OPEN
+    status: ListingStatus = ListingStatus.OPEN,
+    sortBy?: BidSortBy,
+    first: string = FIRST
   ) {
-    return this.fetch({ contractAddress, tokenId, status, first: FIRST })
+    return this.fetch(
+      {
+        contractAddress,
+        tokenId,
+        status,
+        first
+      },
+      sortBy
+    )
   }
 }
 
