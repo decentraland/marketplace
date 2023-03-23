@@ -503,6 +503,28 @@
     "when": "时间",
     "price": "价格"
   },
+  "best_buying_option": {
+    "empty": {
+      "title": "此項目沒有可用的列表",
+      "you_can": "你可以",
+      "check_the_current_owners": "檢查當前所有者",
+      "and_make_an_offer": "然後出價。"
+    },
+    "minting": {
+      "title": "可鑄造",
+      "price": "價格",
+      "stock": "庫存"
+    },
+    "buy_listing": {
+      "title": "最便宜的清單",
+      "price": "價格",
+      "highest_offer": "最高報價",
+      "issue_number": "發行編號",
+      "owner": "所有者",
+      "view_listing": "查看房源",
+      "expires": "過期"
+    }
+  },
   "listings_table": {
     "listings": "收藏品",
     "owner": "所有者",
