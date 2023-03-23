@@ -540,6 +540,28 @@
     "when": "Fecha",
     "price": "Precio"
   },
+  "best_buying_option": {
+    "empty": {
+      "title": "No hay listados disponibles para este artículo",
+      "you_can": "Puedes",
+      "check_the_current_owners": "verificar los propietarios actuales",
+      "and_make_an_offer": "y hacer una oferta"
+    },
+    "minting": {
+      "title": "Disponible para acuñar",
+      "price": "Precio",
+      "stock": "Stock"
+    },
+    "buy_listing": {
+      "title": "Listado más barato",
+      "price": "Precio",
+      "highest_offer": "Oferta más alta",
+      "issue_number": "Número de problema",
+      "owner": "Propietario",
+      "view_listing": "Ver listado",
+      "expires": "Expira"
+    }
+  },
   "listings_table": {
     "owner": "Dueño",
     "issue_number": "Número de emisión",
