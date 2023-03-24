@@ -14,5 +14,3 @@ export type MapStateProps = Pick<Props, 'isPickedByUser' | 'count'>
 
 export type MapDispatchProps = {}
 export type MapDispatch = {}
-
-export type OwnProps = Pick<Props, 'className' | 'item' | 'isCollapsed'>

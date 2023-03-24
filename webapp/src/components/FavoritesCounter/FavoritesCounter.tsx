@@ -5,7 +5,7 @@ import { Props } from './FavoritesCounter.types'
 import './FavoritesCounter.css'
 
 const FavoritesCounter = (props: Props) => {
-  const { className, isPickedByUser, count, isCollapsed } = props
+  const { className, isPickedByUser, count, isCollapsed = false } = props
 
   const counter = useMemo(
     () => (

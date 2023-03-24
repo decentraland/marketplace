@@ -3,9 +3,7 @@ import { RootState } from '../../modules/reducer'
 import {
   MapDispatch,
   MapDispatchProps,
-  MapStateProps,
-  OwnProps,
-  Props
+  MapStateProps
 } from './FavoritesCounter.types'
 import FavoritesCounter from './FavoritesCounter'
 
@@ -17,15 +15,4 @@ const mapState = (_state: RootState): MapStateProps => ({
 
 const mapDispatch = (_dispatch: MapDispatch): MapDispatchProps => ({})
 
-const mergeProps = (
-  stateProps: MapStateProps,
-  dispatchProps: MapDispatchProps,
-  ownProps: OwnProps
-): Props => ({
-  ...stateProps,
-  ...dispatchProps,
-  ...ownProps,
-  isCollapsed: ownProps.isCollapsed ?? false
-})
-
-export default connect(mapState, mapDispatch, mergeProps)(FavoritesCounter)
+export default connect(mapState, mapDispatch)(FavoritesCounter)
