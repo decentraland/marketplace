@@ -10,13 +10,15 @@ import styles from './FavoritesCounter.module.css'
     - The div may be converted to a button with the withTooltip prop.
 */
 
+const formatter = Intl.NumberFormat('en', { notation: 'compact' })
+
 const FavoritesCounter = (props: Props) => {
   const { className, isPickedByUser, count, isCollapsed = false } = props
 
   const counter = useMemo(
     () => (
       <span className={styles.counter} aria-label="counter">
-        {count}
+        {formatter.format(count)}
       </span>
     ),
     [count]

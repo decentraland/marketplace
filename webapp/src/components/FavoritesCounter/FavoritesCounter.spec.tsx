@@ -66,9 +66,36 @@ describe('FavoritesCounter', () => {
   describe('when the count of favorites is more than 0', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number of users that picked it as favorite', () => {
       const { getByText } = render(
-        <FavoritesCounter item={item} isPickedByUser count={55} />
+        <FavoritesCounter item={item} isPickedByUser count={999} />
       )
-      expect(getByText('55')).toBeInTheDocument()
+      expect(getByText('999')).toBeInTheDocument()
+    })
+  })
+
+  describe('when the count of favorites is a thousand', () => {
+    it('should render the favorite counter using a compact notation of 1K', () => {
+      const { getByText } = render(
+        <FavoritesCounter item={item} isPickedByUser count={1000} />
+      )
+      expect(getByText('1K')).toBeInTheDocument()
+    })
+  })
+
+  describe('when the count of favorites is 2500', () => {
+    it('should render the favorite counter using a compact notation of 2.5K', () => {
+      const { getByText } = render(
+        <FavoritesCounter item={item} isPickedByUser count={2500} />
+      )
+      expect(getByText('2.5K')).toBeInTheDocument()
+    })
+  })
+
+  describe('when the count of favorites is a million', () => {
+    it('should render the favorite counter using a compact notation of 1M', () => {
+      const { getByText } = render(
+        <FavoritesCounter item={item} isPickedByUser count={1000000} />
+      )
+      expect(getByText('1M')).toBeInTheDocument()
     })
   })
 })
