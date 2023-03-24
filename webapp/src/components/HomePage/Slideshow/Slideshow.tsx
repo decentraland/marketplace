@@ -11,6 +11,7 @@ import {
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Asset } from '../../../modules/asset/types'
+import * as events from '../../../utils/events'
 import { AssetCard } from '../../AssetCard'
 import { Props } from './Slideshow.types'
 import ItemsSection from './ItemsSection'
@@ -60,7 +61,7 @@ const Slideshow = (props: Props) => {
 
   const handleOnAssetCardClick = useCallback(
     (asset: Asset) => {
-      getAnalytics().track('Asset click', {
+      getAnalytics().track(events.ASSET_CLICK, {
         id: asset.id,
         section: title
       })

@@ -9,6 +9,7 @@ import { locations } from '../../modules/routing/locations'
 import { VendorName } from '../../modules/vendor'
 import { SortBy } from '../../modules/routing/types'
 import { AssetType } from '../../modules/asset/types'
+import * as events from '../../utils/events'
 import { CAMPAING_TAB_ANIMATION_ENABLED } from '../Campaign/config'
 import { Props, NavigationTab } from './Navigation.types'
 import './Navigation.css'
@@ -24,7 +25,7 @@ const Navigation = (props: Props) => {
   const isMobile = useMobileMediaQuery()
 
   const handleOpenBuyManaWithFiatModal = () => {
-    analytics.track('Open BUY MANA modal')
+    analytics.track(events.OPEN_BUY_MANA_MODAL)
     onOpenBuyManaWithFiatModal()
   }
 

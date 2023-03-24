@@ -9,6 +9,7 @@ import { AssetType } from '../../../modules/asset/types'
 import { parseItemId } from '../../../modules/item/utils'
 import { ItemRank } from '../../../modules/analytics/types'
 import { locations } from '../../../modules/routing/locations'
+import * as events from '../../../utils/events'
 import { AssetProvider } from '../../AssetProvider'
 import { ManaToFiat } from '../../ManaToFiat'
 import RarityBadge from '../../RarityBadge'
@@ -21,7 +22,7 @@ const RankingItemRow = ({ entity }: Props) => {
   const [expanded, setExpanded] = useState(false)
 
   const handleOnLinkClick = (id: string) => {
-    getAnalytics().track('Asset click', {
+    getAnalytics().track(events.ASSET_CLICK, {
       id,
       section: 'Rankings'
     })

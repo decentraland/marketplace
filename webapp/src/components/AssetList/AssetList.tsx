@@ -7,6 +7,7 @@ import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
 import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
+import * as events from '../../utils/events'
 import { AssetCard } from '../AssetCard'
 import { Props } from './AssetList.types'
 import './AssetList.css'
@@ -36,7 +37,7 @@ const AssetList = (props: Props) => {
       e.preventDefault()
       const newPage = page + 1
       onBrowse({ page: newPage })
-      getAnalytics().track('Load more', { page: newPage })
+      getAnalytics().track(events.LOAD_MORE, { page: newPage })
     },
     [onBrowse, page]
   )

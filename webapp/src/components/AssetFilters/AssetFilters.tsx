@@ -22,12 +22,16 @@ import { Props } from './AssetFilters.types'
 import { CollectionFilter } from './CollectionFilter'
 import { LandStatusFilter } from './LandStatusFilter'
 import { BodyShapeFilter } from './BodyShapeFilter'
+import { RentalPeriodFilter } from './RentalPeriodFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
 import { LocationFilter } from './LocationFilter'
-import { AssetFilter, filtersBySection } from './utils'
+import {
+  AssetFilter,
+  filtersBySection,
+  trackBarChartComponentChange
+} from './utils'
 import './AssetFilters.css'
-import { RentalPeriodFilter } from './RentalPeriodFilter/RentalPeriodFilter'
 
 export const AssetFilters = ({
   minPrice,
@@ -63,19 +67,17 @@ export const AssetFilters = ({
   const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
 
-  const handlePriceChange = useCallback(
-    (value: [string, string]) => {
-      const [minPrice, maxPrice] = value
-      onBrowse({ minPrice, maxPrice })
-    },
-    [onBrowse]
-  )
-
   const handleRangeFilterChange = useCallback(
-    (filterNames: [string, string], value: [string, string]) => {
+    (
+      filterNames: [string, string],
+      value: [string, string],
+      source,
+      prevValues: [string, string]
+    ) => {
       const [filterMinName, filterMaxName] = filterNames
-      const [minPrice, maxPrice] = value
-      onBrowse({ [filterMinName]: minPrice, [filterMaxName]: maxPrice })
+      const [minValue, maxValue] = value
+      onBrowse({ [filterMinName]: minValue, [filterMaxName]: maxValue })
+      trackBarChartComponentChange(filterNames, value, source, prevValues)
     },
     [onBrowse]
   )
@@ -203,7 +205,12 @@ export const AssetFilters = ({
         />
         {isPriceFilterEnabled ? (
           <PriceFilter
-            onChange={handlePriceChange}
+            onChange={(value, source) =>
+              handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
+                minPrice,
+                maxPrice
+              ])
+            }
             minPrice={minPrice}
             maxPrice={maxPrice}
             values={values}
@@ -218,10 +225,12 @@ export const AssetFilters = ({
             max={maxEstateSize}
             minPrice={minPrice}
             maxPrice={maxPrice}
-            onChange={values =>
+            onChange={(values, source) =>
               handleRangeFilterChange(
                 ['minEstateSize', 'maxEstateSize'],
-                values
+                values,
+                source,
+                [minEstateSize, maxEstateSize]
               )
             }
             {...locationFilters}
@@ -259,7 +268,12 @@ export const AssetFilters = ({
       isOnSale &&
       view !== View.ACCOUNT ? (
         <PriceFilter
-          onChange={handlePriceChange}
+          onChange={(value, source) =>
+            handleRangeFilterChange(['minPrice', 'maxPrice'], value, source, [
+              minPrice,
+              maxPrice
+            ])
+          }
           minPrice={minPrice}
           maxPrice={maxPrice}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Price]}

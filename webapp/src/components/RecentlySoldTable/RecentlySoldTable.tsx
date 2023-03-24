@@ -16,6 +16,7 @@ import { Item, NFTCategory, Sale, SaleSortBy } from '@dcl/schemas'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { useScrollSectionIntoView } from '../../modules/ui/utils'
+import * as events from '../../utils/events'
 import { AssetProvider } from '../AssetProvider'
 import { AssetType } from '../../modules/asset/types'
 import { formatWeiMANA } from '../../lib/mana'
@@ -66,7 +67,7 @@ const RecentlySoldTable = (props: Props) => {
   }
 
   const handleOnLinkClick = (id: string) => {
-    getAnalytics().track('Asset click', {
+    getAnalytics().track(events.ASSET_CLICK, {
       id,
       section: 'Recently Sold'
     })
