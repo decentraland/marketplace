@@ -1,8 +1,14 @@
 import React, { useMemo } from 'react'
 import classNames from 'classnames'
-import { Icon, IconProps } from 'decentraland-ui'
+import { Icon } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './FavoritesCounter.types'
 import styles from './FavoritesCounter.module.css'
+
+/* TODO:
+    - An idea for more accesibility: Tooltip for the whole component with the name of the action
+    - The div may be converted to a button with the withTooltip prop.
+*/
 
 const FavoritesCounter = (props: Props) => {
   const { className, isPickedByUser, count, isCollapsed = false } = props
@@ -15,10 +21,6 @@ const FavoritesCounter = (props: Props) => {
     ),
     [count]
   )
-  const iconProps: Partial<IconProps> = {
-    size: isCollapsed ? 'large' : undefined,
-    fitted: isCollapsed
-  }
 
   return (
     <div
@@ -27,21 +29,18 @@ const FavoritesCounter = (props: Props) => {
         className,
         isCollapsed && styles.Collapsed
       )}
+      aria-label={
+        isPickedByUser
+          ? t('favorites_counter.unpick_label')
+          : t('favorites_counter.pick_label')
+      }
+      role="button"
     >
       <div className={styles.bubble}>
         <Icon
-          {...iconProps}
-          name="bookmark"
-          className={isPickedByUser ? styles.show : styles.hidden}
-          aria-label="unpick favorited"
-          role="button"
-        />
-        <Icon
-          {...iconProps}
-          name="bookmark outline"
-          className={isPickedByUser ? styles.hidden : styles.show}
-          aria-label="pick as favorite"
-          role="button"
+          size={isCollapsed ? 'large' : undefined}
+          fitted={isCollapsed}
+          name={isPickedByUser ? 'bookmark' : 'bookmark outline'}
         />
         {!isCollapsed ? counter : null}
       </div>

@@ -1,5 +1,6 @@
 import { ChainId, Item, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { render } from '@testing-library/react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import FavoritesCounter from './FavoritesCounter'
 
 describe('FavoritesCounter', () => {
@@ -33,29 +34,23 @@ describe('FavoritesCounter', () => {
 
   describe('when the item is not favorited by the user', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number 0', () => {
-      const { getByRole } = render(
+      const { getByLabelText } = render(
         <FavoritesCounter count={0} isPickedByUser={false} item={item} />
       )
-      expect(getByRole('button', { name: 'pick as favorite' })).toHaveClass(
-        'show'
-      )
-      expect(getByRole('button', { name: 'unpick favorited' })).toHaveClass(
-        'hidden'
-      )
+      expect(
+        getByLabelText(t('favorites_counter.pick_label'))
+      ).toBeInTheDocument()
     })
   })
 
   describe('when the item is favorited by the user', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number 0', () => {
-      const { getByRole } = render(
+      const { getByLabelText } = render(
         <FavoritesCounter count={0} isPickedByUser item={item} />
       )
-      expect(getByRole('button', { name: 'pick as favorite' })).toHaveClass(
-        'hidden'
-      )
-      expect(getByRole('button', { name: 'unpick favorited' })).toHaveClass(
-        'show'
-      )
+      expect(
+        getByLabelText(t('favorites_counter.unpick_label'))
+      ).toBeInTheDocument()
     })
   })
 

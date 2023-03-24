@@ -6,15 +6,10 @@
   cursor: pointer;
 }
 
-.FavoritesCounter:hover .show,
-.FavoritesCounter .hidden {
-  display: none;
+.FavoritesCounter:hover i {
+  color: var(--primary);
 }
 
-.FavoritesCounter .show,
-.FavoritesCounter:hover .hidden {
-  display: inline;
-}
 
 .FavoritesCounter.Collapsed {
   flex-direction: column;
