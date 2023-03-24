@@ -62,7 +62,7 @@ const ListingsTable = (props: Props) => {
         .fetchOrders(params, sortBy)
         .then(response => {
           setOrders(response.data)
-          setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) | 0)
+          setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) || 0)
         })
         .finally(() => setIsLoading(false))
         .catch(error => {
