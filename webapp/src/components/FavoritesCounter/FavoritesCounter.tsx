@@ -2,14 +2,14 @@ import React, { useMemo } from 'react'
 import classNames from 'classnames'
 import { Icon, IconProps } from 'decentraland-ui'
 import { Props } from './FavoritesCounter.types'
-import './FavoritesCounter.css'
+import styles from './FavoritesCounter.module.css'
 
 const FavoritesCounter = (props: Props) => {
   const { className, isPickedByUser, count, isCollapsed = false } = props
 
   const counter = useMemo(
     () => (
-      <span className="counter" aria-label="counter">
+      <span className={styles.counter} aria-label="counter">
         {count}
       </span>
     ),
@@ -23,23 +23,23 @@ const FavoritesCounter = (props: Props) => {
   return (
     <div
       className={classNames(
-        'FavoritesCounter',
+        styles.FavoritesCounter,
         className,
-        isCollapsed && 'Collapsed'
+        isCollapsed && styles.Collapsed
       )}
     >
-      <div className="bubble">
+      <div className={styles.bubble}>
         <Icon
           {...iconProps}
           name="bookmark"
-          className={isPickedByUser ? 'show' : 'hidden'}
+          className={isPickedByUser ? styles.show : styles.hidden}
           aria-label="unpick favorited"
           role="button"
         />
         <Icon
           {...iconProps}
           name="bookmark outline"
-          className={isPickedByUser ? 'hidden' : 'show'}
+          className={isPickedByUser ? styles.hidden : styles.show}
           aria-label="pick as favorite"
           role="button"
         />
