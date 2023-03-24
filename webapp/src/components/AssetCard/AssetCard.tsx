@@ -114,7 +114,7 @@ const AssetCard = (props: Props) => {
         showOrderListedTag={showListedTag}
         showMonospace
       />
-      {isFavoritesEnabled && !rental && !isNFT(asset) ? (
+      {isFavoritesEnabled && !isNFT(asset) ? (
         <FavoritesCounter className="FavoritesCounterBubble" item={asset} />
       ) : null}
       {showRentalBubble ? (
