@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { ListingStatus, Network } from '@dcl/schemas'
 import { Table, Loader, Row, Pagination, Icon, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Order, OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
-import { Link } from 'react-router-dom'
 import { nftAPI, orderAPI } from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -131,24 +131,20 @@ const ListingsTable = (props: Props) => {
                     </div>
                   </Table.Cell>
                   <Table.Cell>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center'
-                      }}
-                    >
-                      <Mana className="manaField">
+                    <div className={styles.manaField}>
+                      <Mana className="manaField" network={asset?.network}>
                         {formatWeiMANA(order.price)}
                       </Mana>
-                      <Link
-                        to={locations.nft(
-                          asset?.contractAddress,
-                          order?.tokenId
-                        )}
-                      >
-                        <Icon name="arrow right" className={styles.goToNFT} />
-                      </Link>
+                      {asset?.contractAddress && order.tokenId && (
+                        <Link
+                          to={locations.nft(
+                            asset.contractAddress,
+                            order.tokenId
+                          )}
+                        >
+                          <Icon name="arrow right" className={styles.goToNFT} />
+                        </Link>
+                      )}
                     </div>
                   </Table.Cell>
                 </Table.Row>

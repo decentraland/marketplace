@@ -47,6 +47,12 @@
   justify-content: center;
 }
 
+.ListingsTable .manaField {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .ListingsTable :global(.ui.header.dcl.mana) {
   margin: 0px;
   font-size: 15px;
