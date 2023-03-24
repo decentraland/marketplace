@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Item, Sale } from '@dcl/schemas'
 import {
-  Header,
   Table,
   Mobile,
   NotMobile,
   Pagination,
   Loader,
-  Row
+  Row,
+  Tabs
 } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import dateFnsFormat from 'date-fns/format'
@@ -91,13 +91,15 @@ const TransactionHistory = (props: Props) => {
   return (
     <div className="TransactionHistory">
       {isLoading && sales.length === 0 ? null : sales.length > 0 ? (
-        <>
-          <Header sub>{t('transaction_history.title')}</Header>
+        <div className="tableContainer">
+          <div className="titleContainer">
+            <Tabs.Tab> {t('transaction_history.title')}</Tabs.Tab>
+          </div>
           <NotMobile>
             <Table basic="very">
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>
+                  <Table.HeaderCell className="firstTabMargin">
                     {t('transaction_history.from')}
                   </Table.HeaderCell>
                   <Table.HeaderCell>
@@ -118,7 +120,7 @@ const TransactionHistory = (props: Props) => {
               <Table.Body className={isLoading ? 'is-loading' : ''}>
                 {sales.map(sale => (
                   <Table.Row key={sale.id}>
-                    <Table.Cell>
+                    <Table.Cell className="firstTabMargin">
                       <LinkedProfile address={sale.seller} />
                     </Table.Cell>
                     <Table.Cell>
@@ -164,7 +166,7 @@ const TransactionHistory = (props: Props) => {
               />
             </Row>
           ) : null}
-        </>
+        </div>
       ) : null}
     </div>
   )
