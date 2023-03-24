@@ -32,7 +32,7 @@ describe('FavoritesCounter', () => {
   })
 
   describe('when the item is not favorited by the user', () => {
-    test('should render the favorite counter component with an empty bookmark icon and the number 0', () => {
+    it('should render the favorite counter component with an empty bookmark icon and the number 0', () => {
       const { getByRole } = render(
         <FavoritesCounter count={0} isPickedByUser={false} item={item} />
       )
@@ -46,7 +46,7 @@ describe('FavoritesCounter', () => {
   })
 
   describe('when the item is favorited by the user', () => {
-    test('should render the favorite counter component with an empty bookmark icon and the number 0', () => {
+    it('should render the favorite counter component with an empty bookmark icon and the number 0', () => {
       const { getByRole } = render(
         <FavoritesCounter count={0} isPickedByUser item={item} />
       )
@@ -60,7 +60,7 @@ describe('FavoritesCounter', () => {
   })
 
   describe('when the count of favorites is 0', () => {
-    test('should render the favorite counter component with an empty bookmark icon and the number of users that picked it as favorite', () => {
+    it('should render the favorite counter component with an empty bookmark icon and the number of users that picked it as favorite', () => {
       const { getByText } = render(
         <FavoritesCounter item={item} isPickedByUser count={0} />
       )
@@ -69,7 +69,7 @@ describe('FavoritesCounter', () => {
   })
 
   describe('when the count of favorites is more than 0', () => {
-    test('should render the favorite counter component with an empty bookmark icon and the number of users that picked it as favorite', () => {
+    it('should render the favorite counter component with an empty bookmark icon and the number of users that picked it as favorite', () => {
       const { getByText } = render(
         <FavoritesCounter item={item} isPickedByUser count={55} />
       )
