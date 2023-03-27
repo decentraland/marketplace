@@ -4,7 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
-import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
+import { getAssetName, getAssetUrl, isNFT } from '../../modules/asset/utils'
 import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
@@ -17,6 +17,7 @@ import {
 } from '../../modules/rental/utils'
 import { Mana } from '../Mana'
 import { AssetImage } from '../AssetImage'
+import { FavoritesCounter } from '../FavoritesCounter'
 import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
 import { WearableTags } from './WearableTags'
@@ -89,7 +90,8 @@ const AssetCard = (props: Props) => {
     showRentalChip: showRentalBubble,
     onClick,
     isClaimingBackLandTransactionPending,
-    rental
+    rental,
+    isFavoritesEnabled
   } = props
 
   const title = getAssetName(asset)
@@ -112,6 +114,9 @@ const AssetCard = (props: Props) => {
         showOrderListedTag={showListedTag}
         showMonospace
       />
+      {isFavoritesEnabled && !isNFT(asset) ? (
+        <FavoritesCounter className="FavoritesCounterBubble" item={asset} />
+      ) : null}
       {showRentalBubble ? (
         <RentalChip
           asset={asset}

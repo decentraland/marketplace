@@ -139,3 +139,11 @@ a.ui.card.link:hover .meta {
     text-align: left;
   }
 }
+
+.AssetCard .FavoritesCounterBubble {
+  display: flex;
+  align-self: flex-start;
+  position: fixed;
+  top: 8px;
+  left: 8px;
+}
