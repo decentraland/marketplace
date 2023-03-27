@@ -3,9 +3,7 @@
   border-radius: 12px;
   display: flex;
   padding: 24px;
-  /* TODO: when placing this on the correct place, make it's width on percentage to be responsive */
-  width: 668px;
-  margin-top: 50px;
+  width: 100%;
 }
 
 .BestBuyingOption .cardTitle {
@@ -57,4 +55,8 @@
 
 .BestBuyingOption :global(.ui.header.medium) {
   font-size: 17px;
+}
+
+.BestBuyingOption :global(.ui.button + .ui.button) {
+  margin-left: unset;
 }
