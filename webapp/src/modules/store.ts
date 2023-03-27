@@ -86,3 +86,41 @@ export function initStore() {
 
   return store
 }
+
+
+export function initTestStore(preloadedState = {}) {
+  const rootReducer = storageReducerWrapper(createRootReducer(history))
+  const sagasMiddleware = createSagasMiddleware()
+  const transactionMiddleware = createTransactionMiddleware()
+  const { storageMiddleware, loadStorageMiddleware } = createStorageMiddleware({
+    storageKey: 'marketplace-v2', // this is the key used to save the state in localStorage (required)
+    paths: [
+      ['ui', 'archivedBidIds'],
+      ['ui', 'preview', 'isTryingOn'],
+      ['identity', 'data']
+    ], // array of paths from state to be persisted (optional)
+    actions: [
+      CLEAR_TRANSACTIONS,
+      ARCHIVE_BID,
+      UNARCHIVE_BID,
+      GENERATE_IDENTITY_SUCCESS,
+      SET_IS_TRYING_ON
+    ], // array of actions types that will trigger a SAVE (optional)
+    migrations: {} // migration object that will migrate your localstorage (optional)
+  })
+
+  const middleware = applyMiddleware(
+    sagasMiddleware,
+    routerMiddleware(history),
+    transactionMiddleware,
+    storageMiddleware,
+  )
+  const enhancer = compose(middleware)
+  const store = createStore(rootReducer, preloadedState, enhancer)
+
+  sagasMiddleware.run(rootSaga)
+  loadStorageMiddleware(store)
+  store.dispatch(fetchTilesRequest())
+
+  return store
+}

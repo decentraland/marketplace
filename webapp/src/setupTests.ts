@@ -10,6 +10,14 @@ import * as locales from './modules/translation/locales'
 import flatten from 'flat'
 import { setCurrentLocale } from 'decentraland-dapps/dist/modules/translation/utils'
 
+jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
+  const module = jest.requireActual('decentraland-dapps/dist/modules/translation/utils')
+  return {
+    ...module,
+    T: ({ id, values }: typeof module['T']) => module.t(id, values)
+  }
+})
+
 config({ path: path.resolve(process.cwd(), '.env.example') })
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder as any
