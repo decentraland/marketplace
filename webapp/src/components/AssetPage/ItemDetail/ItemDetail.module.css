@@ -1,0 +1,62 @@
+.ItemDetail {
+  display: flex;
+  flex-direction: column;
+}
+
+.ItemDetail .assetImageContainer :global(.AssetImage) {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.ItemDetail .assetImageContainer {
+  width: 48%;
+}
+
+.ItemDetail .badges {
+  margin-top: 15px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.ItemDetail .information {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 48%;
+  gap: 30px;
+}
+
+.ItemDetail .informationContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.ItemDetail .basicRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.ItemDetail :global(.ui.button + .ui.button) {
+  margin-left: 0px;
+}
+
+@media (max-width: 800px) {
+  .ItemDetail .information {
+    width: 100%;
+  }
+  .ItemDetail .assetImageContainer {
+    width: 100%;
+  }
+  .ItemDetail .basicRow {
+    flex-direction: column;
+  }
+
+  .ItemDetail :global(.dcl.stats + .dcl.stats) {
+    width: 100%;
+  }
+}

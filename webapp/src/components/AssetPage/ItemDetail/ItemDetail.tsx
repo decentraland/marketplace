@@ -1,6 +1,7 @@
 import React, { useMemo, useRef } from 'react'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Container } from 'decentraland-ui'
 import { BodyShape, EmotePlayMode, NFTCategory } from '@dcl/schemas'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../../modules/routing/locations'
 import { Section } from '../../../modules/vendor/decentraland'
 import RarityBadge from '../../RarityBadge'
@@ -13,13 +14,13 @@ import SmartBadge from '../SmartBadge'
 import { Description } from '../Description'
 import { Owner } from '../Owner'
 import Collection from '../Collection'
-import BaseDetail from '../BaseDetail'
 import IconBadge from '../IconBadge'
 import { TransactionHistory } from '../TransactionHistory'
-import { SaleActionBox } from '../SaleActionBox'
 import ListingsTableContainer from '../ListingsTableContainer/ListingsTableContainer'
-import { Props } from './ItemDetail.types'
 import { BestBuyingOption } from '../BestBuyingOption'
+import Title from '../Title'
+import { Props } from './ItemDetail.types'
+import styles from './ItemDetail.module.css'
 
 const ItemDetail = ({ item }: Props) => {
   let description = ''
@@ -54,73 +55,71 @@ const ItemDetail = ({ item }: Props) => {
   )
 
   return (
-    <BaseDetail
-      asset={item}
-      assetImage={<AssetImage asset={item} isDraggable />}
-      isOnSale={item.isOnSale}
-      badges={
-        <>
-          <RarityBadge
-            rarity={item.rarity}
-            assetType={AssetType.ITEM}
-            category={NFTCategory.WEARABLE}
-          />
-          {category && (
-            <CategoryBadge
-              category={
-                item.data.emote
-                  ? item.data.emote.category
-                  : item.data.wearable!.category
-              }
-              assetType={AssetType.ITEM}
-            />
-          )}
-          {item.category === NFTCategory.EMOTE && (
-            <IconBadge
-              icon={loop ? 'play-loop' : 'play-once'}
-              text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
-              href={emoteBadgeHref}
-            />
-          )}
-          {bodyShapes.length > 0 && !item.data.emote && (
-            <GenderBadge
-              bodyShapes={bodyShapes}
-              assetType={AssetType.ITEM}
-              section={
-                item.category === NFTCategory.WEARABLE
-                  ? Section.WEARABLES
-                  : Section.EMOTES
-              }
-            />
-          )}
-          {item.category === NFTCategory.WEARABLE &&
-            item.data.wearable!.isSmart && (
-              <SmartBadge assetType={AssetType.ITEM} />
-            )}
+    <div className={styles.ItemDetail}>
+      <div className={styles.informationContainer}>
+        <div className={styles.assetImageContainer}>
+          <AssetImage asset={item} isDraggable />
+        </div>
+        <div className={styles.information}>
+          <div>
+            <Title asset={item} />
+            <div className={styles.badges}>
+              <RarityBadge
+                rarity={item.rarity}
+                assetType={AssetType.ITEM}
+                category={NFTCategory.WEARABLE}
+              />
+              {category && (
+                <CategoryBadge
+                  category={
+                    item.data.emote
+                      ? item.data.emote.category
+                      : item.data.wearable!.category
+                  }
+                  assetType={AssetType.ITEM}
+                />
+              )}
+              {item.category === NFTCategory.EMOTE && (
+                <IconBadge
+                  icon={loop ? 'play-loop' : 'play-once'}
+                  text={t(`emote.play_mode.${loop ? 'loop' : 'simple'}`)}
+                  href={emoteBadgeHref}
+                />
+              )}
+              {bodyShapes.length > 0 && !item.data.emote && (
+                <GenderBadge
+                  bodyShapes={bodyShapes}
+                  assetType={AssetType.ITEM}
+                  section={
+                    item.category === NFTCategory.WEARABLE
+                      ? Section.WEARABLES
+                      : Section.EMOTES
+                  }
+                />
+              )}
+              {item.category === NFTCategory.WEARABLE &&
+                item.data.wearable!.isSmart && (
+                  <SmartBadge assetType={AssetType.ITEM} />
+                )}
 
-          <CampaignBadge contract={item.contractAddress} />
-        </>
-      }
-      left={
-        <>
+              <CampaignBadge contract={item.contractAddress} />
+            </div>
+          </div>
+
           <Description text={description} />
-          <div className="BaseDetail row">
+          <div className={styles.basicRow}>
             <Owner asset={item} />
             <Collection asset={item} />
           </div>
-        </>
-      }
-      box={null}
-      showDetails
-      actions={<SaleActionBox asset={item} />}
-      below={
-        <>
           <BestBuyingOption asset={item} tableRef={tableRef} />
-          <ListingsTableContainer item={item} ref={tableRef} />
-          <TransactionHistory asset={item} />
-        </>
-      }
-    />
+        </div>
+      </div>
+
+      <Container>
+        <ListingsTableContainer item={item} ref={tableRef} />
+        <TransactionHistory asset={item} />
+      </Container>
+    </div>
   )
 }
 

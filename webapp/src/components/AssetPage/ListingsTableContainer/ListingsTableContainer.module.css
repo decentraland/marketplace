@@ -15,6 +15,7 @@
   border-top-left-radius: 10px;
   align-items: center;
   border-bottom: 1px solid var(--secondary);
+  padding-left: 20px;
 }
 
 .tableContainer {
@@ -39,10 +40,6 @@
   right: 20px;
 }
 
-.tabStyle {
-  padding-left: 20px;
-}
-
 .ui.dropdown > .icon {
   color: white !important;
   height: 100%;
@@ -57,6 +54,7 @@
 
   .filtertabsContainer {
     flex-direction: column;
+    padding: unset;
   }
 
   .tabStyle {
