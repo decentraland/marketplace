@@ -1,6 +1,6 @@
-import { render } from '@testing-library/react'
 import { Asset } from '../../../modules/asset/types'
 import { getAssetName } from '../../../modules/asset/utils'
+import { renderWithProviders } from '../../../utils/test'
 import Title from './Title'
 
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter'
@@ -13,16 +13,18 @@ describe('Title', () => {
   })
 
   it('should render the Asset Name', () => {
-    const { getByText } = render(<Title asset={asset} isFavoritesEnabled />)
-    expect(getByText(getAssetName(asset)))
+    const { getByText } = renderWithProviders(
+      <Title asset={asset} isFavoritesEnabled />
+    )
+    expect(getByText(getAssetName(asset))).toBeInTheDocument()
   })
 
   describe('when the favorites feature flag is not enabled', () => {
     it('should not render the favorites counter', () => {
-      const { getByTestId } = render(
+      const { queryByTestId } = renderWithProviders(
         <Title asset={asset} isFavoritesEnabled={false} />
       )
-      expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).not.toBeInTheDocument()
+      expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
     })
   })
 
@@ -33,10 +35,10 @@ describe('Title', () => {
       })
 
       it('should not render the favorites counter', () => {
-        const { getByTestId } = render(
+        const { queryByTestId } = renderWithProviders(
           <Title asset={asset} isFavoritesEnabled />
         )
-        expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).not.toBeInTheDocument()
+        expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
       })
     })
 
@@ -45,8 +47,8 @@ describe('Title', () => {
         asset = { ...asset, itemId: 'itemId' } as Asset
       })
 
-      it('should not render the favorites counter', () => {
-        const { getByTestId } = render(
+      it('should render the favorites counter', () => {
+        const { getByTestId } = renderWithProviders(
           <Title asset={asset} isFavoritesEnabled />
         )
         expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()

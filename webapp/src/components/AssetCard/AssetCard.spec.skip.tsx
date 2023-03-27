@@ -1,32 +1,22 @@
-import { Provider } from 'react-redux'
-import { MemoryRouter } from 'react-router-dom'
-import { render } from '@testing-library/react'
 import configureStore from 'redux-mock-store'
 import { ChainId, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { Asset } from '../../modules/asset/types'
 import AssetCard from './AssetCard'
 import { Props as AssetCardProps } from './AssetCard.types'
 import { Middleware } from 'redux'
-
-const middlewares: Middleware[] = []
-const mockStore = configureStore(middlewares)
-const store = mockStore({})
+import { renderWithProviders } from '../../utils/test'
 
 function renderAssetCard(props: Partial<AssetCardProps> = {}) {
-  return render(
-    <Provider store={store}>
-      <MemoryRouter>
-        <AssetCard
-          asset={{} as Asset}
-          price={null}
-          isClaimingBackLandTransactionPending={false}
-          showRentalChip={false}
-          rental={null}
-          isFavoritesEnabled={false}
-          {...props}
-        />
-      </MemoryRouter>
-    </Provider>
+  return renderWithProviders(
+    <AssetCard
+      asset={{} as Asset}
+      price={null}
+      isClaimingBackLandTransactionPending={false}
+      showRentalChip={false}
+      rental={null}
+      isFavoritesEnabled={false}
+      {...props}
+    />
   )
 }
 

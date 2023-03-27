@@ -37,6 +37,7 @@ const FavoritesCounter = (props: Props) => {
           : t('favorites_counter.pick_label')
       }
       role="button"
+      data-testid="favorites-counter"
     >
       <div className={styles.bubble}>
         <Icon

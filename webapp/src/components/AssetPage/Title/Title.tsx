@@ -14,7 +14,6 @@ const Title = ({ asset, isFavoritesEnabled }: Props) => {
           isCollapsed
           className={styles.favorites}
           item={asset}
-          data-testid="favorites-counter"
         />
       ) : null}
     </div>
