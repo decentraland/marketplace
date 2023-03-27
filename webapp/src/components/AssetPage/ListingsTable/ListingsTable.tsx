@@ -75,15 +75,17 @@ const ListingsTable = (props: Props) => {
     <div className={styles.ListingsTable}>
       {isLoading ? (
         <div className={styles.emptyTable}>
-          <Loader active />
+          <Loader active data-testid="loader" />
         </div>
       ) : orders.length === 0 ? (
         <div className={styles.emptyTable}>
-          <span>{t('listings_table.there_are_no_listings')}</span>
+          <span data-testid="empty-table">
+            {t('listings_table.there_are_no_listings')}
+          </span>
         </div>
       ) : (
         <>
-          <Table basic="very">
+          <Table basic="very" data-testid="listings-table">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell className={styles.headerMargin}>
@@ -104,21 +106,21 @@ const ListingsTable = (props: Props) => {
             <Table.Body className={isLoading ? 'is-loading' : ''}>
               {orders?.map(order => (
                 <Table.Row key={order.id}>
-                  <Table.Cell>
+                  <Table.Cell data-testid={`profile-${order.owner}`}>
                     <LinkedProfile
                       className={styles.linkedProfileRow}
                       address={order.owner}
                     />
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell data-testid={`created-at-${order.createdAt}`}>
                     {getDateAndMonthName(order.createdAt)}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell data-testid={`expires-at-${order.expiresAt}`}>
                     {formatDistanceToNow(+order.expiresAt, {
                       addSuffix: true
                     })}
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell data-testid={`issue-number-${order.tokenId}`}>
                     <div className={styles.issuedIdContainer}>
                       <div className={styles.row}>
                         <span>
@@ -130,7 +132,7 @@ const ListingsTable = (props: Props) => {
                       </div>
                     </div>
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell data-testid={`price-${order.price}`}>
                     <div className={styles.manaField}>
                       <Mana className="manaField" network={asset?.network}>
                         {formatWeiMANA(order.price)}
@@ -159,6 +161,7 @@ const ListingsTable = (props: Props) => {
                 onPageChange={(_event, props) => setPage(+props.activePage!)}
                 firstItem={null}
                 lastItem={null}
+                data-testid="listings-table-pagination"
               />
             </Row>
           ) : null}

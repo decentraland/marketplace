@@ -57,11 +57,11 @@ const OwnersTable = (props: Props) => {
     <div className={styles.OwnersTable}>
       {isLoading ? (
         <div className={styles.emptyTable}>
-          <Loader active />
+          <Loader active data-testid="loader" />
         </div>
       ) : owners.length === 0 ? (
         <div className={styles.emptyTable}>
-          <span>
+          <span data-testid="empty-table">
             {t('owners_table.there_are_no_owners')}
             <Button
               basic
@@ -76,7 +76,7 @@ const OwnersTable = (props: Props) => {
         </div>
       ) : (
         <>
-          <Table basic="very">
+          <Table basic="very" data-testid="owners-table">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell className={styles.headerMargin}>
@@ -87,17 +87,20 @@ const OwnersTable = (props: Props) => {
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
-            <Table.Body className={isLoading ? 'is-loading' : ''}>
+            <Table.Body>
               {owners?.map(owner => (
                 <Table.Row key={owner.issuedId}>
-                  <Table.Cell>
+                  <Table.Cell data-testid={`profile-${owner.ownerId}`}>
                     <LinkedProfile
                       className={styles.linkedProfileRow}
                       address={owner.ownerId}
                     />
                   </Table.Cell>
                   <Table.Cell>
-                    <div className={styles.issuedIdContainer}>
+                    <div
+                      className={styles.issuedIdContainer}
+                      data-testid={`issue-number-${owner.issuedId}`}
+                    >
                       <div className={styles.row}>
                         <span>
                           <span className={styles.issuedId}>
@@ -107,11 +110,11 @@ const OwnersTable = (props: Props) => {
                         </span>
                         {owner.orderStatus === ListingStatus.OPEN &&
                         owner.orderExpiresAt &&
-                        +owner.orderExpiresAt >= Date.now() ? (
+                        Number(owner.orderExpiresAt) >= Date.now() ? (
                           <ListedBadge className={styles.badge} />
                         ) : null}
                       </div>
-                      {asset && (
+                      {asset?.contractAddress && owner.tokenId && (
                         <Link
                           to={locations.nft(
                             asset.contractAddress,
@@ -138,6 +141,7 @@ const OwnersTable = (props: Props) => {
                 onPageChange={(_event, props) => setPage(+props.activePage!)}
                 firstItem={null}
                 lastItem={null}
+                data-testid="owners-table-pagination"
               />
             </Row>
           ) : null}
