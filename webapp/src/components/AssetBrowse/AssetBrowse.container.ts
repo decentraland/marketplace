@@ -14,7 +14,8 @@ import {
   getSection,
   getOnlySmart,
   getOnlyOnRent,
-  getIsFullscreen
+  getIsFullscreen,
+  getVisitedLocations
 } from '../../modules/routing/selectors'
 import { getView } from '../../modules/ui/browse/selectors'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
@@ -44,7 +45,8 @@ const mapState = (state: RootState): MapStateProps => {
     viewInState: getView(state),
     onlySmart: getOnlySmart(state),
     onlyOnRent: getOnlyOnRent(state),
-    isMapViewFiltersEnabled: getIsMapViewFiltersEnabled(state)
+    isMapViewFiltersEnabled: getIsMapViewFiltersEnabled(state),
+    visitedLocations: getVisitedLocations(state)
   }
 }
 

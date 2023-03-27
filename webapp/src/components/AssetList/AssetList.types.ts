@@ -11,6 +11,7 @@ import {
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
 import { AssetType } from '../../modules/asset/types'
+import { RouterLocation } from 'connected-react-router'
 
 export type Props = {
   vendor: VendorName
@@ -27,6 +28,7 @@ export type Props = {
   onClearFilters: typeof clearFilters
   urlNext: string
   search: string
+  visitedLocations: RouterLocation<unknown>[]
 }
 
 export type MapStateProps = Pick<
@@ -42,6 +44,7 @@ export type MapStateProps = Pick<
   | 'urlNext'
   | 'search'
   | 'hasFiltersEnabled'
+  | 'visitedLocations'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>
 export type MapDispatch = Dispatch<BrowseAction | ClearFiltersAction>

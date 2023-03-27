@@ -1,12 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react'
+import { matchPath } from 'react-router-dom'
 import classNames from 'classnames'
-import {
-  Container,
-  Mobile,
-  NotMobile,
-  Page,
-  Tabs,
-} from 'decentraland-ui'
+import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { View } from '../../modules/ui/types'
 import { Section as DecentralandSection } from '../../modules/vendor/decentraland'
@@ -33,6 +28,7 @@ import { Props } from './AssetBrowse.types'
 import MapTopbar from './MapTopbar'
 import MapBrowse from './MapBrowse'
 import './AssetBrowse.css'
+import { locations } from '../../modules/routing/locations'
 
 const AssetBrowse = (props: Props) => {
   const {
@@ -51,6 +47,7 @@ const AssetBrowse = (props: Props) => {
     onlySmart,
     viewInState,
     onlyOnRent,
+    visitedLocations,
     isMapViewFiltersEnabled
   } = props
 
@@ -107,12 +104,18 @@ const AssetBrowse = (props: Props) => {
         !isAccountView(view) &&
         isMapPropertyPersisted === false
       ) {
+        const previousPageIsLandDetail = !!matchPath(
+          visitedLocations[1]?.pathname,
+          { path: locations.nft(), strict: true, exact: true }
+        )
         // Update the browser options to match the ones persisted.
         browseOpts.isMap = isMap
         browseOpts.isFullscreen = isFullscreen
         browseOpts.onlyOnSale =
-          (!onlyOnSale && onlyOnRent === false) ||
-          (onlyOnSale === undefined && onlyOnRent === undefined) ||
+          (!onlyOnSale && onlyOnRent === false && !previousPageIsLandDetail) ||
+          (onlyOnSale === undefined &&
+            onlyOnRent === undefined &&
+            !previousPageIsLandDetail) ||
           onlyOnSale
 
         // We also set the fetch function as onBrowse because we need the url to be updated.
@@ -137,7 +140,8 @@ const AssetBrowse = (props: Props) => {
     hasFetched,
     onlyOnRent,
     onBrowse,
-    isMapPropertyPersisted
+    isMapPropertyPersisted,
+    visitedLocations
   ])
 
   const left = (

@@ -11,6 +11,7 @@ import {
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
 import { AssetType } from '../../modules/asset/types'
+import { RouterLocation } from 'connected-react-router'
 
 export type Props = {
   vendor: VendorName
@@ -30,6 +31,7 @@ export type Props = {
   onlyOnSale?: boolean
   onlySmart?: boolean
   onlyOnRent?: boolean
+  visitedLocations: RouterLocation<unknown>[]
   isMapViewFiltersEnabled?: boolean
 }
 
@@ -45,6 +47,7 @@ export type MapStateProps = Pick<
   | 'onlySmart'
   | 'onlyOnRent'
   | 'isMapViewFiltersEnabled'
+  | 'visitedLocations'
 >
 export type MapDispatchProps = Pick<
   Props,
