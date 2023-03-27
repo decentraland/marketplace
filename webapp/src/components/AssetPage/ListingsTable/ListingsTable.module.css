@@ -30,6 +30,11 @@
   align-items: center;
 }
 
+.ListingsTable .badge {
+  color: white;
+  background-color: var(--background) !important;
+}
+
 .ListingsTable .goToNFT {
   color: white;
   padding-right: 25px;

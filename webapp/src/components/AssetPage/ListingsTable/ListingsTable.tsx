@@ -4,7 +4,7 @@ import { ListingStatus, Network } from '@dcl/schemas'
 import { Table, Loader, Row, Pagination, Icon, Mana } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Order, OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
-import { orderAPI } from '../../../modules/vendor/decentraland'
+import { nftAPI, orderAPI } from '../../../modules/vendor/decentraland'
 import { locations } from '../../../modules/routing/locations'
 import { formatWeiMANA } from '../../../lib/mana'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
@@ -42,10 +42,25 @@ const ListingsTable = (props: Props) => {
         params.nftName = asset.name
       }
 
+      asset.itemId &&
+        nftAPI
+          .getOwners({
+            contractAddress: asset.contractAddress,
+            itemId: asset.itemId,
+            first: 1,
+            skip: 0
+          })
+          .then(response => {
+            setTotal(response.total)
+          })
+          .finally(() => setIsLoading(false))
+          .catch(error => {
+            console.error(error)
+          })
+
       orderAPI
         .fetchOrders(params, sortBy)
         .then(response => {
-          setTotal(response.total)
           setOrders(response.data)
           setTotalPages(Math.ceil(response.total / ROWS_PER_PAGE) || 0)
         })
