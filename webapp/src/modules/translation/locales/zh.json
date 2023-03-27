@@ -1095,5 +1095,9 @@
     "for_sale_and_rent": "可供出售或出租",
     "for_sale": "可供出售",
     "for_rent": "可供出租"
+  },
+  "favorites_counter": {
+    "pick_label": "选择最喜欢的",
+    "unpick_label": "取消收藏"
   }
 }

@@ -1098,5 +1098,9 @@
     "for_sale_and_rent": "Available for sale or rent",
     "for_sale": "Available for sale",
     "for_rent": "Available for rent"
+  },
+  "favorites_counter": {
+    "pick_label": "pick as favorite",
+    "unpick_label": "unpick favorited"
   }
 }

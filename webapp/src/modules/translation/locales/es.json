@@ -1092,5 +1092,9 @@
     "for_sale_and_rent": "Disponible para la compra o renta",
     "for_sale": "Disponible para la compra",
     "for_rent": "Disponible para la renta"
+  },
+  "favorites_counter": {
+    "pick_label": "elegir como favorito",
+    "unpick_label": "quitar de favoritos"
   }
 }
