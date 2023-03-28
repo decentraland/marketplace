@@ -3,6 +3,7 @@ import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAssetName } from '../asset/utils'
+import { UNDO_UNPICKING_ITEM_AS_FAVORITE_TIMEOUT } from '../favorites/utils'
 import { NFT } from '../nft/types'
 import { UpsertRentalOptType } from '../rental/types'
 import { locations } from '../routing/locations'
@@ -128,6 +129,7 @@ export function getUnpickItemAsFavoriteSuccessToast(
     }),
     body: t('toast.unpick_item_as_favorite_success.undo'), // TODO: dispatch the undo action
     closable: true,
+    timeout: UNDO_UNPICKING_ITEM_AS_FAVORITE_TIMEOUT,
     icon: <Icon name="exclamation circle" />
   }
 }

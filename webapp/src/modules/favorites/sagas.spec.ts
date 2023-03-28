@@ -12,6 +12,9 @@ import {
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
+  undoUnpickingItemAsFavoriteFailure,
+  undoUnpickingItemAsFavoriteRequest,
+  undoUnpickingItemAsFavoriteSuccess,
   unpickItemAsFavoriteFailure,
   unpickItemAsFavoriteRequest,
   unpickItemAsFavoriteSuccess
@@ -113,7 +116,7 @@ describe('when handling the request for picking an item as favorite', () => {
   })
 })
 
-describe('when handling the request for unpicking an item as favorite', () => {
+describe('when handling the request for unpicking a favorite item', () => {
   describe('and getting the identity fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga)
@@ -152,6 +155,50 @@ describe('when handling the request for unpicking an item as favorite', () => {
         ])
         .put(unpickItemAsFavoriteSuccess(item))
         .dispatch(unpickItemAsFavoriteRequest(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the request for undo unpicking a favorite item', () => {
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga)
+        .provide([[call(getIdentity), throwError(error)]])
+        .put(undoUnpickingItemAsFavoriteFailure(item, error.message))
+        .dispatch(undoUnpickingItemAsFavoriteRequest(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga)
+        .provide([
+          [call(getIdentity), identity],
+          [
+            call([favoritesAPI, 'pickItemAsFavorite'], item.id, identity),
+            throwError(error)
+          ]
+        ])
+        .put(undoUnpickingItemAsFavoriteFailure(item, error.message))
+        .dispatch(undoUnpickingItemAsFavoriteRequest(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api succeeds', () => {
+    it('should dispatch an action signaling the success of the handled action', () => {
+      return expectSaga(favoritesSaga)
+        .provide([
+          [call(getIdentity), identity],
+          [
+            call([favoritesAPI, 'pickItemAsFavorite'], item.id, identity),
+            undefined
+          ]
+        ])
+        .put(undoUnpickingItemAsFavoriteSuccess(item))
+        .dispatch(undoUnpickingItemAsFavoriteRequest(item))
         .run({ silenceTimeout: true })
     })
   })

@@ -1,0 +1,1 @@
+export const UNDO_UNPICKING_ITEM_AS_FAVORITE_TIMEOUT = 0.5 * 60 * 1000 // 30 seconds

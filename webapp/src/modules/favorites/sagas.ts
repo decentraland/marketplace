@@ -14,6 +14,10 @@ import {
   PickItemAsFavoriteRequestAction,
   pickItemAsFavoriteSuccess,
   PICK_ITEM_AS_FAVORITE_REQUEST,
+  undoUnpickingItemAsFavoriteFailure,
+  UndoUnpickingItemAsFavoriteRequestAction,
+  undoUnpickingItemAsFavoriteSuccess,
+  UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
   unpickItemAsFavoriteFailure,
   UnpickItemAsFavoriteRequestAction,
   unpickItemAsFavoriteSuccess,
@@ -28,6 +32,10 @@ export function* favoritesSaga() {
   yield takeEvery(
     UNPICK_ITEM_AS_FAVORITE_REQUEST,
     handleUnpickItemAsFavoriteRequest
+  )
+  yield takeEvery(
+    UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST,
+    handleUndoUnpickingItemAsFavoriteRequest
   )
 }
 
@@ -70,8 +78,25 @@ function* handleUnpickItemAsFavoriteRequest(
   try {
     const identity: AuthIdentity = yield call(getIdentity)
     yield call([favoritesAPI, 'unpickItemAsFavorite'], item.id, identity)
+
     yield put(unpickItemAsFavoriteSuccess(item))
   } catch (error) {
     yield put(unpickItemAsFavoriteFailure(item, (error as Error).message))
+  }
+}
+
+function* handleUndoUnpickingItemAsFavoriteRequest(
+  action: UndoUnpickingItemAsFavoriteRequestAction
+) {
+  const { item } = action.payload
+  try {
+    const identity: AuthIdentity = yield call(getIdentity)
+    yield call([favoritesAPI, 'pickItemAsFavorite'], item.id, identity)
+
+    yield put(undoUnpickingItemAsFavoriteSuccess(item))
+  } catch (error) {
+    yield put(
+      undoUnpickingItemAsFavoriteFailure(item, (error as Error).message)
+    )
   }
 }
