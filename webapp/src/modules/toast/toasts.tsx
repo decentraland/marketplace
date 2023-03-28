@@ -1,9 +1,11 @@
+import { Item } from '@dcl/schemas'
 import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAssetName } from '../asset/utils'
+import { NFT } from '../nft/types'
 import { UpsertRentalOptType } from '../rental/types'
 import { locations } from '../routing/locations'
-import { NFT } from '../nft/types'
 
 export function getStoreUpdateSuccessToast(): Omit<Toast, 'id'> {
   return {
@@ -83,9 +85,63 @@ export function getExcecuteOrderFailureToast(): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,
     title: t('toast.meta_transaction_failure.title'),
-    body: (
-        <p>{t('toast.meta_transaction_failure.body')}</p>
-    ),
+    body: <p>{t('toast.meta_transaction_failure.body')}</p>,
+    icon: <Icon name="exclamation circle" />
+  }
+}
+
+export function getPickItemAsFavoriteSuccessToast(
+  item: Item
+): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: t('toast.pick_item_as_favorite_success.title', {
+      name: getAssetName(item)
+    }),
+    body: t('toast.pick_item_as_favorite_success.view_my_lists'), // TODO: make it a link to "My Lists"
+    closable: true,
+    icon: <Icon name="bookmark" />
+  }
+}
+
+export function getPickItemAsFavoriteFailureToast(
+  item: Item
+): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.ERROR,
+    title: t('toast.pick_item_as_favorite_failure.title', {
+      name: getAssetName(item)
+    }),
+    body: t('toast.pick_item_as_favorite_failure.try_again'), // TODO: dispatch the action again
+    closable: true,
+    icon: <Icon name="exclamation circle" />
+  }
+}
+
+export function getUnpickItemAsFavoriteSuccessToast(
+  item: Item
+): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.INFO,
+    title: t('toast.unpick_item_as_favorite_success.title', {
+      name: getAssetName(item)
+    }),
+    body: t('toast.unpick_item_as_favorite_success.undo'), // TODO: dispatch the undo action
+    closable: true,
+    icon: <Icon name="exclamation circle" />
+  }
+}
+
+export function getUnpickItemAsFavoriteFailureToast(
+  item: Item
+): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.ERROR,
+    title: t('toast.unpick_item_as_favorite_failure.title', {
+      name: getAssetName(item)
+    }),
+    body: t('toast.unpick_item_as_favorite_failure.try_again'), // TODO: dispatch the action again
+    closable: true,
     icon: <Icon name="exclamation circle" />
   }
 }

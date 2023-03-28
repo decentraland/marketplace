@@ -9,15 +9,32 @@ import {
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
 import { BUY_ITEM_WITH_CARD_FAILURE } from '../item/actions'
-import { EXECUTE_ORDER_WITH_CARD_FAILURE, EXECUTE_ORDER_FAILURE } from '../order/actions'
+import {
+  EXECUTE_ORDER_WITH_CARD_FAILURE,
+  EXECUTE_ORDER_FAILURE
+} from '../order/actions'
 import {
   getBuyNFTWithCardErrorToast,
   getExcecuteOrderFailureToast,
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
+  getPickItemAsFavoriteFailureToast,
+  getPickItemAsFavoriteSuccessToast,
   getStoreUpdateSuccessToast,
+  getUnpickItemAsFavoriteFailureToast,
+  getUnpickItemAsFavoriteSuccessToast,
   getUpsertRentalSuccessToast
 } from './toasts'
+import {
+  PickItemAsFavoriteFailureAction,
+  PickItemAsFavoriteSuccessAction,
+  PICK_ITEM_AS_FAVORITE_FAILURE,
+  PICK_ITEM_AS_FAVORITE_SUCCESS,
+  UnpickItemAsFavoriteFailureAction,
+  UnpickItemAsFavoriteSuccessAction,
+  UNPICK_ITEM_AS_FAVORITE_FAILURE,
+  UNPICK_ITEM_AS_FAVORITE_SUCCESS
+} from '../favorites/actions'
 
 export function* toastSaga() {
   yield all([baseToastSaga(), customToastSaga()])
@@ -34,7 +51,23 @@ function* successToastSagas() {
   yield takeEvery(UPSERT_RENTAL_SUCCESS, handleUpsertRentalSuccess)
   yield takeEvery(BUY_ITEM_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
-  yield takeEvery(EXECUTE_ORDER_FAILURE ,handleExcecuteOrderFailure)
+  yield takeEvery(EXECUTE_ORDER_FAILURE, handleExcecuteOrderFailure)
+  yield takeEvery(
+    PICK_ITEM_AS_FAVORITE_SUCCESS,
+    handlePickItemAsFavoriteSuccess
+  )
+  yield takeEvery(
+    PICK_ITEM_AS_FAVORITE_FAILURE,
+    handlePickItemAsFavoriteFailure
+  )
+  yield takeEvery(
+    UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+    handleUnpickItemAsFavoriteSuccess
+  )
+  yield takeEvery(
+    UNPICK_ITEM_AS_FAVORITE_FAILURE,
+    handleUnpickItemAsFavoriteFailure
+  )
 }
 
 function* handleStoreUpdateSuccess() {
@@ -66,4 +99,36 @@ function* handleBuyNFTWithCardFailure() {
 
 function* handleExcecuteOrderFailure() {
   yield put(showToast(getExcecuteOrderFailureToast(), 'bottom center'))
+}
+
+function* handlePickItemAsFavoriteSuccess(
+  action: PickItemAsFavoriteSuccessAction
+) {
+  const { item } = action.payload
+  yield put(showToast(getPickItemAsFavoriteSuccessToast(item), 'bottom center'))
+}
+
+function* handlePickItemAsFavoriteFailure(
+  action: PickItemAsFavoriteFailureAction
+) {
+  const { item } = action.payload
+  yield put(showToast(getPickItemAsFavoriteFailureToast(item), 'bottom center'))
+}
+
+function* handleUnpickItemAsFavoriteSuccess(
+  action: UnpickItemAsFavoriteSuccessAction
+) {
+  const { item } = action.payload
+  yield put(
+    showToast(getUnpickItemAsFavoriteSuccessToast(item), 'bottom center')
+  )
+}
+
+function* handleUnpickItemAsFavoriteFailure(
+  action: UnpickItemAsFavoriteFailureAction
+) {
+  const { item } = action.payload
+  yield put(
+    showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
+  )
 }

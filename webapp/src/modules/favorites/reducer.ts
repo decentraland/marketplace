@@ -70,7 +70,7 @@ export function favoritesReducer(
           ...state.data,
           [item.id]: {
             pickedByUser: true,
-            count: state.data[item.id].count + 1
+            count: state.data[item.id]?.count + 1
           }
         },
         loading: loadingReducer(state.loading, action)
@@ -85,7 +85,7 @@ export function favoritesReducer(
           ...state.data,
           [item.id]: {
             pickedByUser: false,
-            count: state.data[item.id].count - 1
+            count: state.data[item.id]?.count - 1
           }
         },
         loading: loadingReducer(state.loading, action)
