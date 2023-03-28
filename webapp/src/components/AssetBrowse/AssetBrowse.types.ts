@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-
+import { RouterLocation } from 'connected-react-router'
 import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor/types'
 import { setView, SetViewAction } from '../../modules/ui/actions'
@@ -11,7 +11,6 @@ import {
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
 import { AssetType } from '../../modules/asset/types'
-import { RouterLocation } from 'connected-react-router'
 
 export type Props = {
   vendor: VendorName

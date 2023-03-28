@@ -11,6 +11,7 @@ import {
   getPersistedIsMapProperty,
   isAccountView
 } from '../../modules/ui/utils'
+import { locations } from '../../modules/routing/locations'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
 import { Row } from '../Layout/Row'
@@ -28,7 +29,6 @@ import { Props } from './AssetBrowse.types'
 import MapTopbar from './MapTopbar'
 import MapBrowse from './MapBrowse'
 import './AssetBrowse.css'
-import { locations } from '../../modules/routing/locations'
 
 const AssetBrowse = (props: Props) => {
   const {

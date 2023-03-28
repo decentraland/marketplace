@@ -34,7 +34,7 @@ export function routingReducer(
         visitedLocations: [
           action.payload.location,
           ...state.visitedLocations,
-        ].slice(0, 5) // only save last 5 locations
+        ].slice(0, 2) // only save last 2 locations
       }
     }
     default:
