@@ -211,7 +211,7 @@ describe('Listings Table', () => {
       it('should not render pagination as there is no need', async () => {
         const screen = renderWithProviders(<ListingsTable asset={asset} />)
 
-        const { findByTestId, getByRole } = screen
+        const { findByTestId, queryByRole } = screen
 
         const loader = await findByTestId('loader')
 
@@ -219,7 +219,7 @@ describe('Listings Table', () => {
           expect(loader).not.toBeInTheDocument()
         })
 
-        expect(getByRole('navigation')).not.toBeInTheDocument()
+        expect(queryByRole('navigation')).not.toBeInTheDocument()
       })
     })
   })
