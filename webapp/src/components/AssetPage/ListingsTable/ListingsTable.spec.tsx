@@ -7,12 +7,15 @@ import {
   Order,
   Rarity
 } from '@dcl/schemas'
-import { waitFor } from '@testing-library/react'
+import { waitFor, within } from '@testing-library/react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
+import { formatWeiMANA } from '../../../lib/mana'
 import { OwnersResponse } from '../../../modules/vendor/decentraland'
 import * as nftAPI from '../../../modules/vendor/decentraland/nft/api'
 import * as orderAPI from '../../../modules/vendor/decentraland/order/api'
 import { renderWithProviders } from '../../../utils/tests'
-import ListingsTable from './ListingsTable'
+import ListingsTable, { ROWS_PER_PAGE } from './ListingsTable'
 
 jest.mock('../../../modules/vendor/decentraland/nft/api')
 jest.mock('../../../modules/vendor/decentraland/order/api')
@@ -96,7 +99,7 @@ describe('Listings Table', () => {
     })
 
     it('should render the empty table message', async () => {
-      const { getByTestId, findByTestId } = renderWithProviders(
+      const { getByText, findByTestId } = renderWithProviders(
         <ListingsTable asset={asset} />
       )
 
@@ -106,7 +109,9 @@ describe('Listings Table', () => {
         expect(loader).not.toBeInTheDocument()
       })
 
-      expect(getByTestId('empty-table')).toBeInTheDocument()
+      expect(
+        getByText(t('listings_table.there_are_no_listings'))
+      ).toBeInTheDocument()
     })
   })
 
@@ -139,7 +144,7 @@ describe('Listings Table', () => {
     it('should render the table data correctly', async () => {
       const screen = renderWithProviders(<ListingsTable asset={asset} />)
 
-      const { findByTestId, getByTestId } = screen
+      const { findByTestId, getByText } = screen
 
       const loader = await findByTestId('loader')
 
@@ -147,17 +152,16 @@ describe('Listings Table', () => {
         expect(loader).not.toBeInTheDocument()
       })
 
-      expect(getByTestId(`profile-${orderResponse.owner}`)).not.toBe(null)
-      expect(getByTestId(`issue-number-${orderResponse.tokenId}`)).not.toBe(
-        null
-      )
-      expect(getByTestId(`created-at-${orderResponse.createdAt}`)).not.toBe(
-        null
-      )
-      expect(getByTestId(`expires-at-${orderResponse.expiresAt}`)).not.toBe(
-        null
-      )
-      expect(getByTestId(`price-${orderResponse.price}`)).not.toBe(null)
+      const created = getDateAndMonthName(orderResponse.createdAt)
+      const expires = formatDistanceToNow(+orderResponse.expiresAt, {
+        addSuffix: true
+      })
+      const price = formatWeiMANA(orderResponse.price)
+
+      expect(getByText(orderResponse.tokenId)).not.toBe(null)
+      expect(getByText(created)).not.toBe(null)
+      expect(getByText(expires)).not.toBe(null)
+      expect(getByText(price)).not.toBe(null)
     })
   })
 
@@ -165,27 +169,11 @@ describe('Listings Table', () => {
     describe('Should have pagination', () => {
       beforeEach(() => {
         ;(nftAPI.nftAPI.getOwners as jest.Mock).mockResolvedValueOnce({
-          data: [
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse
-          ],
+          data: Array(ROWS_PER_PAGE + 1).fill(ownersResponse),
           total: 7
         })
         ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
-          data: [
-            orderResponse,
-            orderResponse,
-            orderResponse,
-            orderResponse,
-            orderResponse,
-            orderResponse,
-            orderResponse
-          ],
+          data: Array(ROWS_PER_PAGE + 1).fill(orderResponse),
           total: 7
         })
       })
@@ -193,7 +181,7 @@ describe('Listings Table', () => {
       it('should render the pagination correctly', async () => {
         const screen = renderWithProviders(<ListingsTable asset={asset} />)
 
-        const { findByTestId, getByTestId } = screen
+        const { findByTestId, getByRole } = screen
 
         const loader = await findByTestId('loader')
 
@@ -201,30 +189,21 @@ describe('Listings Table', () => {
           expect(loader).not.toBeInTheDocument()
         })
 
-        expect(getByTestId('listings-table-pagination')).toBeInTheDocument()
+        const navigation = getByRole('navigation')
+
+        expect(within(navigation).getByText('1')).toBeInTheDocument()
+        expect(within(navigation).getByText('2')).toBeInTheDocument()
       })
     })
 
     describe('Should not have pagination', () => {
       beforeEach(() => {
         ;(nftAPI.nftAPI.getOwners as jest.Mock).mockResolvedValueOnce({
-          data: [
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse
-          ],
+          data: Array(ROWS_PER_PAGE - 1).fill(ownersResponse),
           total: 5
         })
         ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
-          data: [
-            orderResponse,
-            orderResponse,
-            orderResponse,
-            orderResponse,
-            orderResponse
-          ],
+          data: Array(ROWS_PER_PAGE - 1).fill(orderResponse),
           total: 5
         })
       })
@@ -232,7 +211,7 @@ describe('Listings Table', () => {
       it('should not render pagination as there is no need', async () => {
         const screen = renderWithProviders(<ListingsTable asset={asset} />)
 
-        const { findByTestId, queryByTestId } = screen
+        const { findByTestId, getByRole } = screen
 
         const loader = await findByTestId('loader')
 
@@ -240,9 +219,7 @@ describe('Listings Table', () => {
           expect(loader).not.toBeInTheDocument()
         })
 
-        expect(
-          queryByTestId('listings-table-pagination')
-        ).not.toBeInTheDocument()
+        expect(getByRole('navigation')).not.toBeInTheDocument()
       })
     })
   })

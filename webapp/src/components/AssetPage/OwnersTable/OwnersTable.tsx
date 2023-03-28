@@ -15,7 +15,7 @@ import ListedBadge from '../../ListedBadge'
 import { OrderDirection, Props } from './OwnersTable.types'
 import styles from './OwnersTable.module.css'
 
-const ROWS_PER_PAGE = 6
+export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
 
 const OwnersTable = (props: Props) => {
@@ -61,7 +61,7 @@ const OwnersTable = (props: Props) => {
         </div>
       ) : owners.length === 0 ? (
         <div className={styles.emptyTable}>
-          <span data-testid="empty-table">
+          <span>
             {t('owners_table.there_are_no_owners')}
             <Button
               basic
@@ -76,7 +76,7 @@ const OwnersTable = (props: Props) => {
         </div>
       ) : (
         <>
-          <Table basic="very" data-testid="owners-table">
+          <Table basic="very">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell className={styles.headerMargin}>
@@ -90,17 +90,14 @@ const OwnersTable = (props: Props) => {
             <Table.Body>
               {owners?.map(owner => (
                 <Table.Row key={owner.issuedId}>
-                  <Table.Cell data-testid={`profile-${owner.ownerId}`}>
+                  <Table.Cell>
                     <LinkedProfile
                       className={styles.linkedProfileRow}
                       address={owner.ownerId}
                     />
                   </Table.Cell>
                   <Table.Cell>
-                    <div
-                      className={styles.issuedIdContainer}
-                      data-testid={`issue-number-${owner.issuedId}`}
-                    >
+                    <div className={styles.issuedIdContainer}>
                       <div className={styles.row}>
                         <span>
                           <span className={styles.issuedId}>
@@ -141,7 +138,6 @@ const OwnersTable = (props: Props) => {
                 onPageChange={(_event, props) => setPage(+props.activePage!)}
                 firstItem={null}
                 lastItem={null}
-                data-testid="owners-table-pagination"
               />
             </Row>
           ) : null}

@@ -1,16 +1,19 @@
 import { ChainId, Item, Network, NFTCategory, Rarity } from '@dcl/schemas'
-import { waitFor } from '@testing-library/react'
+import { queryByRole, waitFor, within } from '@testing-library/react'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { OwnersResponse } from '../../../modules/vendor/decentraland'
 import * as nftAPI from '../../../modules/vendor/decentraland/nft/api'
 import { renderWithProviders } from '../../../utils/tests'
-import OwnersTable from './OwnersTable'
+import OwnersTable, { ROWS_PER_PAGE } from './OwnersTable'
+
+const ownerIdMock = '0x92712b730b9a474f99a47bb8b1750190d5959a2b'
 
 jest.mock('../../../modules/vendor/decentraland/nft/api')
 jest.mock('decentraland-dapps/dist/containers', () => {
   const module = jest.requireActual('decentraland-dapps/dist/containers')
   return {
     ...module,
-    Profile: () => <div></div>
+    Profile: () => <div>{ownerIdMock}</div>
   }
 })
 
@@ -46,7 +49,7 @@ describe('Owners Table', () => {
   }
   let ownersResponse: OwnersResponse = {
     issuedId: 1,
-    ownerId: '0x92712b730b9a474f99a47bb8b1750190d5959a2b',
+    ownerId: ownerIdMock,
     orderStatus: 'open',
     orderExpiresAt: '1671033414000',
     tokenId: '1'
@@ -65,7 +68,7 @@ describe('Owners Table', () => {
     })
 
     it('should render the empty table message', async () => {
-      const { getByTestId, findByTestId } = renderWithProviders(
+      const { getByText, findByTestId } = renderWithProviders(
         <OwnersTable asset={asset} />
       )
 
@@ -75,7 +78,9 @@ describe('Owners Table', () => {
         expect(loader).not.toBeInTheDocument()
       })
 
-      expect(getByTestId('empty-table')).toBeInTheDocument()
+      expect(
+        getByText(t('owners_table.there_are_no_owners'))
+      ).toBeInTheDocument()
     })
   })
 
@@ -90,7 +95,7 @@ describe('Owners Table', () => {
     it('should render the table', async () => {
       const screen = renderWithProviders(<OwnersTable asset={asset} />)
 
-      const { findByTestId, getByTestId } = screen
+      const { findByTestId, container } = screen
 
       const loader = await findByTestId('loader')
 
@@ -98,13 +103,13 @@ describe('Owners Table', () => {
         expect(loader).not.toBeInTheDocument()
       })
 
-      expect(getByTestId('owners-table')).not.toBe(null)
+      expect(container.getElementsByClassName('OwnersTable')).not.toBe(null)
     })
 
     it('should render the table data correctly', async () => {
       const screen = renderWithProviders(<OwnersTable asset={asset} />)
 
-      const { findByTestId, getByTestId } = screen
+      const { findByTestId, getByText } = screen
 
       const loader = await findByTestId('loader')
 
@@ -112,10 +117,8 @@ describe('Owners Table', () => {
         expect(loader).not.toBeInTheDocument()
       })
 
-      expect(getByTestId(`profile-${ownersResponse.ownerId}`)).not.toBe(null)
-      expect(getByTestId(`issue-number-${ownersResponse.issuedId}`)).not.toBe(
-        null
-      )
+      expect(getByText(ownersResponse.ownerId)).not.toBe(null)
+      expect(getByText(ownersResponse.issuedId)).not.toBe(null)
     })
   })
 
@@ -123,15 +126,7 @@ describe('Owners Table', () => {
     describe('Should have pagination', () => {
       beforeEach(() => {
         ;(nftAPI.nftAPI.getOwners as jest.Mock).mockResolvedValueOnce({
-          data: [
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse
-          ],
+          data: Array(ROWS_PER_PAGE + 2).fill(ownersResponse),
           total: 7
         })
       })
@@ -139,7 +134,7 @@ describe('Owners Table', () => {
       it('should render the pagination correctly', async () => {
         const screen = renderWithProviders(<OwnersTable asset={asset} />)
 
-        const { findByTestId, getByTestId } = screen
+        const { findByTestId, getByRole } = screen
 
         const loader = await findByTestId('loader')
 
@@ -147,20 +142,17 @@ describe('Owners Table', () => {
           expect(loader).not.toBeInTheDocument()
         })
 
-        expect(getByTestId('owners-table-pagination')).toBeInTheDocument()
+        const navigation = getByRole('navigation')
+
+        expect(within(navigation).getByText('1')).toBeInTheDocument()
+        expect(within(navigation).getByText('2')).toBeInTheDocument()
       })
     })
 
     describe('Should not have pagination', () => {
       beforeEach(() => {
         ;(nftAPI.nftAPI.getOwners as jest.Mock).mockResolvedValueOnce({
-          data: [
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse,
-            ownersResponse
-          ],
+          data: Array(ROWS_PER_PAGE - 1).fill(ownersResponse),
           total: 5
         })
       })
@@ -168,7 +160,7 @@ describe('Owners Table', () => {
       it('should not render pagination as there is no need', async () => {
         const screen = renderWithProviders(<OwnersTable asset={asset} />)
 
-        const { findByTestId, queryByTestId, debug } = screen
+        const { findByTestId, queryByRole } = screen
 
         const loader = await findByTestId('loader')
 
@@ -176,7 +168,7 @@ describe('Owners Table', () => {
           expect(loader).not.toBeInTheDocument()
         })
 
-        expect(queryByTestId('owners-table-pagination')).not.toBeInTheDocument()
+        expect(queryByRole('navigation')).not.toBeInTheDocument()
       })
     })
   })
