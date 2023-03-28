@@ -134,7 +134,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
               </span>
               <span className={styles.informationText}>
                 <span className={styles.informationBold}>
-                  {asset.available}&nbsp;
+                  {asset.available.toLocaleString()}&nbsp;
                 </span>
                 / {Rarity.getMaxSupply(asset.rarity).toLocaleString()}
               </span>
