@@ -1,13 +1,14 @@
 import React, { useState, useCallback } from 'react'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
+import { ethers } from 'ethers'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
-import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { hasAuthorizationAndEnoughAllowance } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import {
   getRentalEndDate,
@@ -94,7 +95,13 @@ const BidModal = (props: Props) => {
   }
 
   const handleConfirmBid = () => {
-    if (hasAuthorization(authorizations, authorization)) {
+    if (
+      hasAuthorizationAndEnoughAllowance(
+        authorizations,
+        authorization,
+        ethers.utils.parseEther(price).toString()
+      )
+    ) {
       handlePlaceBid()
     } else {
       setShowAuthorizationModal(true)
