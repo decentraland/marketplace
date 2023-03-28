@@ -13,7 +13,8 @@ import {
   getCurrentBrowseOptions,
   getSection,
   getSearch,
-  hasFiltersEnabled
+  hasFiltersEnabled,
+  getVisitedLocations
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
@@ -43,7 +44,8 @@ const mapState = (state: RootState): MapStateProps => {
       ...getCurrentBrowseOptions(state),
       page: page + 1
     }),
-    hasFiltersEnabled: hasFiltersEnabled(state)
+    hasFiltersEnabled: hasFiltersEnabled(state),
+    visitedLocations: getVisitedLocations(state)
   }
 }
 
