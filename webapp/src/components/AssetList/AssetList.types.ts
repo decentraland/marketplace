@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
+import { RouterLocation } from 'connected-react-router'
 import { Item } from '@dcl/schemas'
-
 import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
 import {
@@ -11,7 +11,6 @@ import {
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
 import { AssetType } from '../../modules/asset/types'
-import { RouterLocation } from 'connected-react-router'
 
 export type Props = {
   vendor: VendorName
