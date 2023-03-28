@@ -2,6 +2,20 @@ import { ChainId, Item, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { render } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import FavoritesCounter from './FavoritesCounter'
+import { Props as FavoritesCounterProps } from './FavoritesCounter.types'
+
+function renderLocationFilter(props: Partial<FavoritesCounterProps> = {}) {
+  return render(
+    <FavoritesCounter
+      count={0}
+      isPickedByUser={false}
+      item={{} as Item}
+      onPick={jest.fn()}
+      onUnpick={jest.fn()}
+      {...props}
+    />
+  )
+}
 
 describe('FavoritesCounter', () => {
   let item: Item
@@ -32,22 +46,26 @@ describe('FavoritesCounter', () => {
     }
   })
 
-  describe('when the item is not favorited by the user', () => {
+  describe('when the item is not favorite by the user', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number 0', () => {
-      const { getByLabelText } = render(
-        <FavoritesCounter count={0} isPickedByUser={false} item={item} />
-      )
+      const { getByLabelText } = renderLocationFilter({
+        count: 0,
+        isPickedByUser: false,
+        item: item
+      })
       expect(
         getByLabelText(t('favorites_counter.pick_label'))
       ).toBeInTheDocument()
     })
   })
 
-  describe('when the item is favorited by the user', () => {
+  describe('when the item is favorite by the user', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number 0', () => {
-      const { getByLabelText } = render(
-        <FavoritesCounter count={0} isPickedByUser item={item} />
-      )
+      const { getByLabelText } = renderLocationFilter({
+        count: 0,
+        isPickedByUser: true,
+        item: item
+      })
       expect(
         getByLabelText(t('favorites_counter.unpick_label'))
       ).toBeInTheDocument()
@@ -56,45 +74,55 @@ describe('FavoritesCounter', () => {
 
   describe('when the count of favorites is 0', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number of users that picked it as favorite', () => {
-      const { getByText } = render(
-        <FavoritesCounter item={item} isPickedByUser count={0} />
-      )
+      const { getByText } = renderLocationFilter({
+        item: item,
+        isPickedByUser: true,
+        count: 0
+      })
       expect(getByText('0')).toBeInTheDocument()
     })
   })
 
   describe('when the count of favorites is more than 0', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number of users that picked it as favorite', () => {
-      const { getByText } = render(
-        <FavoritesCounter item={item} isPickedByUser count={999} />
-      )
+      const { getByText } = renderLocationFilter({
+        item: item,
+        isPickedByUser: true,
+        count: 999
+      })
       expect(getByText('999')).toBeInTheDocument()
     })
   })
 
   describe('when the count of favorites is a thousand', () => {
     it('should render the favorite counter using a compact notation of 1K', () => {
-      const { getByText } = render(
-        <FavoritesCounter item={item} isPickedByUser count={1000} />
-      )
+      const { getByText } = renderLocationFilter({
+        item: item,
+        isPickedByUser: true,
+        count: 1000
+      })
       expect(getByText('1K')).toBeInTheDocument()
     })
   })
 
   describe('when the count of favorites is 2500', () => {
     it('should render the favorite counter using a compact notation of 2.5K', () => {
-      const { getByText } = render(
-        <FavoritesCounter item={item} isPickedByUser count={2500} />
-      )
+      const { getByText } = renderLocationFilter({
+        item: item,
+        isPickedByUser: true,
+        count: 2500
+      })
       expect(getByText('2.5K')).toBeInTheDocument()
     })
   })
 
   describe('when the count of favorites is a million', () => {
     it('should render the favorite counter using a compact notation of 1M', () => {
-      const { getByText } = render(
-        <FavoritesCounter item={item} isPickedByUser count={1000000} />
-      )
+      const { getByText } = renderLocationFilter({
+        item: item,
+        isPickedByUser: true,
+        count: 1000000
+      })
       expect(getByText('1M')).toBeInTheDocument()
     })
   })

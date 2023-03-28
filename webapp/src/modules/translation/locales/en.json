@@ -1101,6 +1101,6 @@
   },
   "favorites_counter": {
     "pick_label": "pick as favorite",
-    "unpick_label": "unpick favorited"
+    "unpick_label": "unpick favorite"
   }
 }
