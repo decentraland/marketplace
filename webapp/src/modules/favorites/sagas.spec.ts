@@ -5,7 +5,7 @@ import { Item } from '@dcl/schemas'
 import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getIdentity } from '../identity/utils'
-import { closeModal, openModal } from '../modal/actions'
+import { closeModal, CLOSE_MODAL, openModal } from '../modal/actions'
 import { favoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import {
@@ -63,6 +63,22 @@ describe('when handling the request for picking an item as favorite', () => {
             .put(pickItemAsFavoriteSuccess(item))
             .dispatch(pickItemAsFavoriteRequest(item))
             .run({ silenceTimeout: true })
+        })
+      })
+
+      describe('and the user closes the login modal', () => {
+        it('should finish the saga', () => {
+          return expectSaga(favoritesSaga)
+            .provide([
+              [select(getAddress), undefined],
+              [take(CLOSE_MODAL), {}]
+            ])
+            .put(openModal('LoginModal'))
+            .dispatch(pickItemAsFavoriteRequest(item))
+            .run({ silenceTimeout: true })
+            .then(({ effects }) => {
+              expect(effects.put).toBeUndefined()
+            })
         })
       })
     })

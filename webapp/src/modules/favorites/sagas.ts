@@ -6,7 +6,12 @@ import {
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
-import { closeModal, openModal } from '../modal/actions'
+import {
+  closeModal,
+  CloseModalAction,
+  CLOSE_MODAL,
+  openModal
+} from '../modal/actions'
 import { favoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import {
@@ -51,14 +56,19 @@ function* handlePickItemAsFavoriteRequest(
       yield put(openModal('LoginModal'))
 
       const {
-        success
+        success,
+        close
       }: {
         success: ConnectWalletSuccessAction
         failure: ConnectWalletSuccessAction
+        close: CloseModalAction
       } = yield race({
         success: take(CONNECT_WALLET_SUCCESS),
-        failure: take(CONNECT_WALLET_FAILURE)
+        failure: take(CONNECT_WALLET_FAILURE),
+        close: take(CLOSE_MODAL)
       })
+
+      if (close) return
 
       if (success) yield put(closeModal('LoginModal'))
     }
