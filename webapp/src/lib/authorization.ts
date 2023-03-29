@@ -59,10 +59,7 @@ export const useAuthorization = (
   const hasFetchedAuthorizations = useRef(false)
 
   useEffect(() => {
-    if (
-      !isAuthorized(authorization, authorizations) &&
-      !hasFetchedAuthorizations.current
-    ) {
+    if (!hasFetchedAuthorizations.current) {
       hasFetchedAuthorizations.current = true
       onFetchAuthorizations([authorization])
     }
