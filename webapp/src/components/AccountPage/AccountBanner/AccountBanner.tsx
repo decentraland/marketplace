@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
 import { Back, Container, Loader } from 'decentraland-ui'
 import { Icon } from 'semantic-ui-react'
 import classNames from 'classnames'
 import { Profile } from 'decentraland-dapps/dist/containers'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+
 import { PageHeader } from '../../PageHeader'
 import { Column } from '../../Layout/Column'
 import { Props } from './AccountBanner.types'
@@ -15,6 +15,7 @@ import { LinkType } from '../../../modules/store/types'
 import { shortenAddress } from '../../../modules/wallet/utils'
 import ExternalLinkModal from '../../ExternalLinkModal'
 import './AccountBanner.css'
+import useCopyToClipboard from '../../../hooks/useCopyToClipboard'
 
 const AccountBanner = ({
   address,
@@ -23,7 +24,10 @@ const AccountBanner = ({
   onBack,
   onFetchStore
 }: Props) => {
-  const [hasCopiedAddress, setHasCopiedAddress] = useTimer(1200)
+  const [hasCopiedAddress, setHasCopied] = useTimer(1200)
+
+  const copyToClipboard = useCopyToClipboard(setHasCopied)
+
   const [openExternalLinkModal, setOpenExternalLinkModal] = useState<string>()
 
   useEffect(() => {
@@ -71,17 +75,13 @@ const AccountBanner = ({
                 </div>
                 {!isMobile() && (
                   <div>
-                    <CopyToClipboard
-                      text={address}
-                      onCopy={setHasCopiedAddress}
-                    >
-                      <Icon
-                        aria-label="Copy address"
-                        aria-hidden="false"
-                        className="copy"
-                        name="copy outline"
-                      />
-                    </CopyToClipboard>
+                    <Icon
+                      onClick={() => copyToClipboard(address)}
+                      aria-label="Copy address"
+                      aria-hidden="false"
+                      className="copy"
+                      name="copy outline"
+                    />
                     {hasCopiedAddress && (
                       <span className="profile-copied-text-desktop copied">
                         {t('account_page.copied')}
@@ -92,7 +92,7 @@ const AccountBanner = ({
               </div>
               {isMobile() && (
                 <div className="profile-copy-text-mobile">
-                  <CopyToClipboard text={address} onCopy={setHasCopiedAddress}>
+                  <div onClick={() => copyToClipboard(address)}>
                     {hasCopiedAddress ? (
                       <span className="copied">
                         {t('account_page.copied_capitalized')}
@@ -102,7 +102,7 @@ const AccountBanner = ({
                         {t('account_page.copy_address')}
                       </span>
                     )}
-                  </CopyToClipboard>
+                  </div>
                 </div>
               )}
               {store?.description && (
