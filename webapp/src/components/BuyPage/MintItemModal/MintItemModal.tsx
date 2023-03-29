@@ -88,6 +88,19 @@ const MintItemModal = (props: Props) => {
       : null
   }, [getContract, item.network, item.chainId, wallet.address])
 
+  const shouldUpdateSpendingCap: boolean = useMemo<boolean>(() => {
+    return (
+      !!authorizations &&
+      !!authorization &&
+      !!item?.price &&
+      !hasAuthorizationAndEnoughAllowance(
+        authorizations,
+        authorization,
+        item.price
+      )
+    )
+  }, [authorizations, authorization, item?.price])
+
   const handleSubmit = useCallback(() => {
     if (
       (authorization &&
@@ -249,6 +262,7 @@ const MintItemModal = (props: Props) => {
           isLoading={isLoading}
           open={showAuthorizationModal}
           authorization={authorization}
+          shouldUpdateSpendingCap={shouldUpdateSpendingCap}
           onProceed={handleExecuteOrder}
           onCancel={handleClose}
         />

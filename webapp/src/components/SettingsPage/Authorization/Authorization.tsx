@@ -14,6 +14,7 @@ const Authorization = (props: Props) => {
   const {
     authorization,
     authorizations,
+    shouldUpdateSpendingCap,
     isLoading,
     onGrant,
     onRevoke,
@@ -55,7 +56,10 @@ const Authorization = (props: Props) => {
         <ChainCheck chainId={authorization.chainId}>
           {isEnabled => (
             <Radio
-              checked={isAuthorized(authorization, authorizations)}
+              checked={
+                isAuthorized(authorization, authorizations) &&
+                !shouldUpdateSpendingCap
+              }
               label={token.name}
               disabled={!isEnabled}
               onClick={(_, props: RadioProps) =>

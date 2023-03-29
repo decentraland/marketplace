@@ -90,6 +90,15 @@ const BidModal = (props: Props) => {
     type: AuthorizationType.ALLOWANCE
   }
 
+  const shouldUpdateSpendingCap: boolean =
+    !!authorizations &&
+    !!price &&
+    !hasAuthorizationAndEnoughAllowance(
+      authorizations,
+      authorization,
+      ethers.utils.parseEther(price).toString()
+    )
+
   const handleSubmit = () => {
     setShowConfirmationModal(true)
   }
@@ -204,6 +213,7 @@ const BidModal = (props: Props) => {
           open={showAuthorizationModal}
           authorization={authorization}
           isLoading={isPlacingBid}
+          shouldUpdateSpendingCap={shouldUpdateSpendingCap}
           onProceed={handlePlaceBid}
           onCancel={handleClose}
         />

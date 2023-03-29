@@ -96,6 +96,19 @@ const BuyNFTModal = (props: Props) => {
       : null
   }, [getContract, nft.network, nft.chainId, wallet.address, order])
 
+  const shouldUpdateSpendingCap: boolean = useMemo<boolean>(() => {
+    return (
+      !!authorizations &&
+      !!authorization &&
+      !!order?.price &&
+      !hasAuthorizationAndEnoughAllowance(
+        authorizations,
+        authorization,
+        order.price
+      )
+    )
+  }, [authorizations, authorization, order?.price])
+
   const handleSubmit = useCallback(() => {
     if (
       (authorization &&
@@ -248,6 +261,7 @@ const BuyNFTModal = (props: Props) => {
         <AuthorizationModal
           open={showAuthorizationModal}
           authorization={authorization}
+          shouldUpdateSpendingCap={shouldUpdateSpendingCap}
           onProceed={handleExecuteOrder}
           onCancel={handleClose}
         />
