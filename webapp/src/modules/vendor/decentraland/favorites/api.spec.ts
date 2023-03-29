@@ -68,7 +68,7 @@ describe('when unpicking an item as favorite', () => {
       } as Response)
     })
 
-    it('should return the rental', () => {
+    it('should resolve', () => {
       return expect(
         favoritesAPI.unpickItemAsFavorite(itemId, identity)
       ).resolves.toBeUndefined()
