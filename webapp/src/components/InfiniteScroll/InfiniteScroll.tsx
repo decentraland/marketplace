@@ -11,7 +11,7 @@ export function InfiniteScroll({
   maxScrollPages,
   onLoadMore
 }: Props) {
-  const [initPage] = useState(page)
+  const [scrollPage, setScrollPage] = useState(0)
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(
     maxScrollPages === 0
   )
@@ -21,19 +21,23 @@ export function InfiniteScroll({
     const scrollHeight = document.documentElement.scrollHeight
     const clientHeight = document.documentElement.clientHeight
     if (
+      !isLoading &&
       scrollTop + clientHeight >= scrollHeight &&
       hasMorePages &&
-      (!maxScrollPages || page - initPage < maxScrollPages)
+      (!maxScrollPages || scrollPage < maxScrollPages)
     ) {
+      setScrollPage(scrollPage + 1)
       onLoadMore(page + 1)
     }
-  }, [page, hasMorePages, initPage, maxScrollPages, onLoadMore])
+  }, [page, hasMorePages, isLoading, scrollPage, maxScrollPages, onLoadMore])
 
   useEffect(() => {
-    if (!isLoading && maxScrollPages && page - initPage >= maxScrollPages) {
+    if (!isLoading && maxScrollPages && scrollPage === maxScrollPages) {
       setShowLoadMoreButton(true)
+    } else {
+      setShowLoadMoreButton(false)
     }
-  }, [isLoading, initPage, maxScrollPages, page, setShowLoadMoreButton])
+  }, [isLoading, scrollPage, maxScrollPages, page, setShowLoadMoreButton])
 
   useEffect(() => {
     window.addEventListener('scroll', onScroll)
@@ -42,6 +46,7 @@ export function InfiniteScroll({
 
   const handleLoadMore = useCallback(() => {
     onLoadMore(page + 1)
+    setScrollPage(0)
   }, [onLoadMore, page])
 
   if (!hasMorePages) {
