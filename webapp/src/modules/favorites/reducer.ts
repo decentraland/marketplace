@@ -57,7 +57,8 @@ export function favoritesReducer(
     case UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST: {
       return {
         ...state,
-        loading: loadingReducer(state.loading, action)
+        loading: loadingReducer(state.loading, action),
+        error: null
       }
     }
 
