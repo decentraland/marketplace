@@ -15,7 +15,7 @@ import ListedBadge from '../../ListedBadge'
 import { OrderDirection, Props } from './OwnersTable.types'
 import styles from './OwnersTable.module.css'
 
-const ROWS_PER_PAGE = 6
+export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
 
 const OwnersTable = (props: Props) => {
@@ -57,7 +57,7 @@ const OwnersTable = (props: Props) => {
     <div className={styles.OwnersTable}>
       {isLoading ? (
         <div className={styles.emptyTable}>
-          <Loader active />
+          <Loader active data-testid="loader" />
         </div>
       ) : owners.length === 0 ? (
         <div className={styles.emptyTable}>
@@ -87,7 +87,7 @@ const OwnersTable = (props: Props) => {
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
-            <Table.Body className={isLoading ? 'is-loading' : ''}>
+            <Table.Body>
               {owners?.map(owner => (
                 <Table.Row key={owner.issuedId}>
                   <Table.Cell>
@@ -107,11 +107,11 @@ const OwnersTable = (props: Props) => {
                         </span>
                         {owner.orderStatus === ListingStatus.OPEN &&
                         owner.orderExpiresAt &&
-                        +owner.orderExpiresAt >= Date.now() ? (
+                        Number(owner.orderExpiresAt) >= Date.now() ? (
                           <ListedBadge className={styles.badge} />
                         ) : null}
                       </div>
-                      {asset && (
+                      {asset?.contractAddress && owner.tokenId && (
                         <Link
                           to={locations.nft(
                             asset.contractAddress,
