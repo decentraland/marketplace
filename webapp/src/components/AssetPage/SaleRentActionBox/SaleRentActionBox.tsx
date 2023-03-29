@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { Button, Popup } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { hasAuthorizationAndEnoughAllowance } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import {
@@ -101,18 +101,37 @@ const SaleRentActionBox = ({
     )
   }, [wallet, getContract, nft.network])
 
+  const shouldUpdateSpendingCap: boolean =
+    !!authorization &&
+    selectedRentalPeriodIndex !== undefined &&
+    !!rental &&
+    (() => {
+      const bnPricePerDay = ethers.BigNumber.from(
+        rental.periods[selectedRentalPeriodIndex].pricePerDay
+      )
+
+      const bnMaxDays = ethers.BigNumber.from(
+        rental.periods[selectedRentalPeriodIndex].maxDays
+      )
+
+      return !hasAuthorizationAndEnoughAllowance(
+        authorizations,
+        authorization,
+        bnPricePerDay.mul(bnMaxDays).toString()
+      )
+    })()
+
   const handleOnRent = useCallback(() => {
-    if (
-      !!authorization &&
-      hasAuthorization(authorizations, authorization) &&
-      selectedRentalPeriodIndex !== undefined
-    ) {
+    if (!shouldUpdateSpendingCap) {
       setShowAuthorizationModal(false)
-      onRent(selectedRentalPeriodIndex)
+
+      if (selectedRentalPeriodIndex !== undefined) {
+        onRent(selectedRentalPeriodIndex)
+      }
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [authorization, authorizations, onRent, selectedRentalPeriodIndex])
+  }, [onRent, selectedRentalPeriodIndex, shouldUpdateSpendingCap])
 
   const handleCloseAuthorizationModal = () => setShowAuthorizationModal(false)
   const rentalEndDate: Date | null = isCurrentlyRented
@@ -386,6 +405,7 @@ const SaleRentActionBox = ({
           <AuthorizationModal
             open={showAuthorizationModal}
             authorization={authorization}
+            shouldUpdateSpendingCap={shouldUpdateSpendingCap}
             onProceed={handleOnRent}
             onCancel={handleCloseAuthorizationModal}
           />
