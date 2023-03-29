@@ -7,3 +7,8 @@ export const getError = (state: RootState) => getState(state).error
 
 export const getFavoritesDataByItemId = (state: RootState, itemId: string) =>
   getData(state)[itemId]
+
+export const getIsPickedByUser = (state: RootState, itemId: string) =>
+  getFavoritesDataByItemId(state, itemId).pickedByUser
+export const getCount = (state: RootState, itemId: string) =>
+  getFavoritesDataByItemId(state, itemId).count

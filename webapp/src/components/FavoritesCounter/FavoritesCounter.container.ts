@@ -4,20 +4,28 @@ import {
   pickItemAsFavoriteRequest,
   unpickItemAsFavoriteRequest
 } from '../../modules/favorites/actions'
+import { getIsPickedByUser, getCount } from '../../modules/favorites/selectors'
 import { RootState } from '../../modules/reducer'
+import { getAddress } from '../../modules/wallet/selectors'
 import FavoritesCounter from './FavoritesCounter'
 import {
   MapDispatch,
   MapDispatchProps,
-  MapStateProps
+  MapStateProps,
+  OwnProps
 } from './FavoritesCounter.types'
-import { getAddress } from '../../modules/wallet/selectors'
 
-// TOOD: use the values from the store
-const mapState = (state: RootState): MapStateProps => ({
-  isPickedByUser: getAddress(state) ? Math.floor(Math.random() * 2) > 0 : false,
-  count: Math.floor(Math.random() * 5000)
-})
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
+  const {
+    item: { id: itemId }
+  } = ownProps
+  return {
+    isPickedByUser: getAddress(state)
+      ? getIsPickedByUser(state, itemId)
+      : false,
+    count: getCount(state, itemId)
+  }
+}
 
 const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
   onPick: (item: Item) => dispatch(pickItemAsFavoriteRequest(item)),

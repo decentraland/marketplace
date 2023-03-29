@@ -2,9 +2,11 @@ import { RootState } from '../reducer'
 import {} from './actions'
 import { INITIAL_STATE } from './reducer'
 import {
+  getCount,
   getData,
   getError,
   getFavoritesDataByItemId,
+  getIsPickedByUser,
   getLoading,
   getState
 } from './selectors'
@@ -58,5 +60,19 @@ describe('when getting the favorites data by item id', () => {
     expect(getFavoritesDataByItemId(state, 'item1')).toEqual(
       state.favorites.data.item1
     )
+  })
+})
+
+describe('when getting the if an item is picked by user', () => {
+  it('should return the a boolean with the value', () => {
+    expect(getIsPickedByUser(state, 'item1')).toEqual(
+      state.favorites.data.item1.pickedByUser
+    )
+  })
+})
+
+describe('when getting the count of favorites an item has', () => {
+  it('should return the numeric value representing the count', () => {
+    expect(getCount(state, 'item1')).toEqual(state.favorites.data.item1.count)
   })
 })

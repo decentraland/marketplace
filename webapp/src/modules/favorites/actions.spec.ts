@@ -21,6 +21,7 @@ import {
 } from './actions'
 
 const item = {
+  id: 'anAddress-anItemId',
   name: 'aName',
   contractAddress: 'anAddress',
   itemId: 'anItemId',

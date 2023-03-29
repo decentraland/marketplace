@@ -23,3 +23,5 @@ export type MapDispatchProps = Pick<Props, 'onPick' | 'onUnpick'>
 export type MapDispatch = Dispatch<
   PickItemAsFavoriteRequestAction | UnpickItemAsFavoriteRequestAction
 >
+
+export type OwnProps = Pick<Props, 'item'>

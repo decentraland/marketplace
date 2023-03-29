@@ -14,6 +14,7 @@ import {
 import { INITIAL_STATE, favoritesReducer } from './reducer'
 
 const item = {
+  id: '0xContactAddress-anItemId',
   name: 'aName',
   contractAddress: '0xContactAddress',
   itemId: 'itemId',

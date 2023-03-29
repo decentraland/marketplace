@@ -28,7 +28,7 @@ let error: Error
 
 beforeEach(() => {
   error = new Error('error')
-  item = { itemId: 'itemId' } as Item
+  item = { id: 'anAddress-itemId', itemId: 'itemId' } as Item
   address = '0xb549b2442b2bd0a53795bc5cdcbfe0caf7aca9f8'
   identity = {} as AuthIdentity
 })
