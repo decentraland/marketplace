@@ -59,8 +59,6 @@ const AssetList = (props: Props) => {
   const hasMorePages =
     (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
 
-  // const isLoadingNewPage = isLoading && nfts.length >= PAGE_SIZE
-
   const emptyStateTranslationString = useMemo(() => {
     if (assets.length > 0) {
       return ''

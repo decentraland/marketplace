@@ -1,6 +1,6 @@
+import { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
-import { useCallback, useEffect, useState } from 'react'
 import { Props } from './InfiniteScroll.types'
 
 export function InfiniteScroll({
