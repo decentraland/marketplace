@@ -10,7 +10,7 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ContractName } from 'decentraland-transactions'
-import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { hasAuthorizationAndEnoughAllowance } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -88,16 +88,40 @@ const MintItemModal = (props: Props) => {
       : null
   }, [getContract, item.network, item.chainId, wallet.address])
 
+  const shouldUpdateSpendingCap: boolean = useMemo<boolean>(() => {
+    return (
+      !!authorizations &&
+      !!authorization &&
+      !!item?.price &&
+      !hasAuthorizationAndEnoughAllowance(
+        authorizations,
+        authorization,
+        item.price
+      )
+    )
+  }, [authorizations, authorization, item?.price])
+
   const handleSubmit = useCallback(() => {
     if (
-      (authorization && hasAuthorization(authorizations, authorization)) ||
+      (authorization &&
+        hasAuthorizationAndEnoughAllowance(
+          authorizations,
+          authorization,
+          item.price
+        )) ||
       isBuyWithCardPage
     ) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [authorization, authorizations, handleExecuteOrder, isBuyWithCardPage])
+  }, [
+    authorization,
+    authorizations,
+    handleExecuteOrder,
+    isBuyWithCardPage,
+    item.price
+  ])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal
@@ -238,6 +262,7 @@ const MintItemModal = (props: Props) => {
           isLoading={isLoading}
           open={showAuthorizationModal}
           authorization={authorization}
+          shouldUpdateSpendingCap={shouldUpdateSpendingCap}
           onProceed={handleExecuteOrder}
           onCancel={handleClose}
         />

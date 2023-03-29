@@ -1,11 +1,18 @@
 import { Network, NFTCategory } from '@dcl/schemas'
 import { call, takeEvery, put, select } from '@redux-saga/core/effects'
-import { fetchAuthorizationsRequest } from 'decentraland-dapps/dist/modules/authorization/actions'
+import {
+  fetchAuthorizationsRequest,
+  GRANT_TOKEN_SUCCESS
+} from 'decentraland-dapps/dist/modules/authorization/actions'
 import { getData as getAuthorizations } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
+import {
+  FetchTransactionSuccessAction,
+  FETCH_TRANSACTION_SUCCESS
+} from 'decentraland-dapps/dist/modules/transaction/actions'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   CHANGE_ACCOUNT,
@@ -31,6 +38,7 @@ export function* contractSaga() {
   yield takeEvery(FETCH_CONTRACTS_SUCCESS, handleFetchContractsSuccess)
   yield takeEvery(CHANGE_ACCOUNT, handleChangeAccount)
   yield takeEvery(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
+  yield takeEvery(FETCH_TRANSACTION_SUCCESS, handleFetchTransactionSuccess)
 }
 
 export function* handleFetchContractsRequest() {
@@ -269,4 +277,13 @@ function* handleChangeAccount() {
 
 function* handleConnectWalletSuccess() {
   yield put(resetHasFetched())
+}
+
+function* handleFetchTransactionSuccess(action: FetchTransactionSuccessAction) {
+  const { transaction } = action.payload
+
+  if (transaction.actionType === GRANT_TOKEN_SUCCESS) {
+    const authorization: Authorization = transaction.payload.authorization
+    yield put(fetchAuthorizationsRequest([authorization]))
+  }
 }
