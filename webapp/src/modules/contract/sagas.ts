@@ -1,7 +1,6 @@
 import { Network, NFTCategory } from '@dcl/schemas'
 import { call, takeEvery, put, select } from '@redux-saga/core/effects'
 import {
-  fetchAuthorizationRequest,
   fetchAuthorizationsRequest,
   GRANT_TOKEN_SUCCESS
 } from 'decentraland-dapps/dist/modules/authorization/actions'
@@ -285,6 +284,6 @@ function* handleFetchTransactionSuccess(action: FetchTransactionSuccessAction) {
 
   if (transaction.actionType === GRANT_TOKEN_SUCCESS) {
     const authorization: Authorization = transaction.payload.authorization
-    yield put(fetchAuthorizationRequest(authorization))
+    yield put(fetchAuthorizationsRequest([authorization]))
   }
 }
