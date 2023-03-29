@@ -4,7 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import FavoritesCounter from './FavoritesCounter'
 import { Props as FavoritesCounterProps } from './FavoritesCounter.types'
 
-function renderLocationFilter(props: Partial<FavoritesCounterProps> = {}) {
+function renderFavoritesCounter(props: Partial<FavoritesCounterProps> = {}) {
   return render(
     <FavoritesCounter
       count={0}
@@ -46,9 +46,9 @@ describe('FavoritesCounter', () => {
     }
   })
 
-  describe('when the item is not favorite by the user', () => {
+  describe('when the item is not favorited by the user', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number 0', () => {
-      const { getByLabelText } = renderLocationFilter({
+      const { getByLabelText } = renderFavoritesCounter({
         count: 0,
         isPickedByUser: false,
         item: item
@@ -59,9 +59,9 @@ describe('FavoritesCounter', () => {
     })
   })
 
-  describe('when the item is favorite by the user', () => {
+  describe('when the item is favorited by the user', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number 0', () => {
-      const { getByLabelText } = renderLocationFilter({
+      const { getByLabelText } = renderFavoritesCounter({
         count: 0,
         isPickedByUser: true,
         item: item
@@ -74,7 +74,7 @@ describe('FavoritesCounter', () => {
 
   describe('when the count of favorites is 0', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number of users that picked it as favorite', () => {
-      const { getByText } = renderLocationFilter({
+      const { getByText } = renderFavoritesCounter({
         item: item,
         isPickedByUser: true,
         count: 0
@@ -85,7 +85,7 @@ describe('FavoritesCounter', () => {
 
   describe('when the count of favorites is more than 0', () => {
     it('should render the favorite counter component with an empty bookmark icon and the number of users that picked it as favorite', () => {
-      const { getByText } = renderLocationFilter({
+      const { getByText } = renderFavoritesCounter({
         item: item,
         isPickedByUser: true,
         count: 999
@@ -96,7 +96,7 @@ describe('FavoritesCounter', () => {
 
   describe('when the count of favorites is a thousand', () => {
     it('should render the favorite counter using a compact notation of 1K', () => {
-      const { getByText } = renderLocationFilter({
+      const { getByText } = renderFavoritesCounter({
         item: item,
         isPickedByUser: true,
         count: 1000
@@ -107,7 +107,7 @@ describe('FavoritesCounter', () => {
 
   describe('when the count of favorites is 2500', () => {
     it('should render the favorite counter using a compact notation of 2.5K', () => {
-      const { getByText } = renderLocationFilter({
+      const { getByText } = renderFavoritesCounter({
         item: item,
         isPickedByUser: true,
         count: 2500
@@ -118,7 +118,7 @@ describe('FavoritesCounter', () => {
 
   describe('when the count of favorites is a million', () => {
     it('should render the favorite counter using a compact notation of 1M', () => {
-      const { getByText } = renderLocationFilter({
+      const { getByText } = renderFavoritesCounter({
         item: item,
         isPickedByUser: true,
         count: 1000000
