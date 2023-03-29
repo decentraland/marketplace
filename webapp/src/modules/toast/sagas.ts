@@ -1,6 +1,9 @@
 import { all, takeEvery, put } from 'redux-saga/effects'
 import { toastSaga as baseToastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
-import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
+import {
+  showToast,
+  hideAllToasts
+} from 'decentraland-dapps/dist/modules/toast/actions'
 import { UPDATE_STORE_SUCCESS } from '../store/actions'
 import {
   CLAIM_ASSET_SUCCESS,
@@ -35,6 +38,8 @@ import {
   UNPICK_ITEM_AS_FAVORITE_FAILURE,
   UNPICK_ITEM_AS_FAVORITE_SUCCESS
 } from '../favorites/actions'
+import { toastDispatchableActionsChannel } from './utils'
+import { DispatchableFromToastActions } from './types'
 
 export function* toastSaga() {
   yield all([baseToastSaga(), customToastSaga()])
@@ -68,6 +73,17 @@ function* successToastSagas() {
     UNPICK_ITEM_AS_FAVORITE_FAILURE,
     handleUnpickItemAsFavoriteFailure
   )
+  yield takeEvery(
+    toastDispatchableActionsChannel,
+    handleToastTryAgainActionChannel
+  )
+
+  function* handleToastTryAgainActionChannel(
+    action: DispatchableFromToastActions
+  ) {
+    yield put(action)
+    yield put(hideAllToasts())
+  }
 }
 
 function* handleStoreUpdateSuccess() {

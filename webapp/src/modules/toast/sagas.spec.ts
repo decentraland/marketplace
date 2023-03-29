@@ -1,10 +1,14 @@
 import { Item, Order, RentalListing } from '@dcl/schemas'
-import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
+import {
+  hideAllToasts,
+  showToast
+} from 'decentraland-dapps/dist/modules/toast/actions'
 import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
 import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
 import {
   pickItemAsFavoriteFailure,
+  pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
   unpickItemAsFavoriteFailure,
   unpickItemAsFavoriteSuccess
@@ -36,6 +40,7 @@ import {
   getUnpickItemAsFavoriteSuccessToast
 } from '../toast/toasts'
 import { toastSaga } from './sagas'
+import { toastDispatchableActionsChannel } from './utils'
 
 let nft: NFT
 let rental: RentalListing
@@ -189,6 +194,18 @@ describe('when handling the failure of unpicking a favorite item', () => {
         showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
       )
       .dispatch(unpickItemAsFavoriteFailure(item, error))
+      .silentRun()
+  })
+})
+
+describe('when handling a put into the toastDispatchableActionsChannel', () => {
+  it('should hide all the previous rendered toasts and dispatch the given action', () => {
+    const item = {} as Item
+    toastDispatchableActionsChannel.put(pickItemAsFavoriteRequest(item))
+
+    return expectSaga(toastSaga)
+      .put(pickItemAsFavoriteRequest(item))
+      .put(hideAllToasts())
       .silentRun()
   })
 })

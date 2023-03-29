@@ -1,12 +1,37 @@
+import { useCallback } from 'react'
 import { Item } from '@dcl/schemas'
 import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAssetName } from '../asset/utils'
-import { UNDO_UNPICKING_ITEM_AS_FAVORITE_TIMEOUT } from '../favorites/utils'
 import { NFT } from '../nft/types'
 import { UpsertRentalOptType } from '../rental/types'
 import { locations } from '../routing/locations'
+import {
+  pickItemAsFavoriteRequest,
+  undoUnpickingItemAsFavoriteRequest,
+  unpickItemAsFavoriteRequest
+} from '../favorites/actions'
+import { toastDispatchableActionsChannel } from './utils'
+import { DispatchableFromToastActions } from './types'
+
+const ToastCTA = ({
+  action,
+  description
+}: {
+  action: DispatchableFromToastActions
+  description: string
+}) => {
+  const onClick = useCallback(
+    () => toastDispatchableActionsChannel.put(action),
+    [action]
+  )
+  return (
+    <Button as="a" className="no-padding" basic onClick={onClick}>
+      {description}
+    </Button>
+  )
+}
 
 export function getStoreUpdateSuccessToast(): Omit<Toast, 'id'> {
   return {
@@ -101,6 +126,7 @@ export function getPickItemAsFavoriteSuccessToast(
     }),
     body: t('toast.pick_item_as_favorite_success.view_my_lists'), // TODO: make it a link to "My Lists"
     closable: true,
+    timeout: 6000,
     icon: <Icon name="bookmark" />
   }
 }
@@ -113,8 +139,14 @@ export function getPickItemAsFavoriteFailureToast(
     title: t('toast.pick_item_as_favorite_failure.title', {
       name: getAssetName(item)
     }),
-    body: t('toast.pick_item_as_favorite_failure.try_again'), // TODO: dispatch the action again
+    body: (
+      <ToastCTA
+        action={pickItemAsFavoriteRequest(item)}
+        description={t('toast.pick_item_as_favorite_failure.try_again')}
+      />
+    ),
     closable: true,
+    timeout: 6000,
     icon: <Icon name="exclamation circle" />
   }
 }
@@ -127,9 +159,14 @@ export function getUnpickItemAsFavoriteSuccessToast(
     title: t('toast.unpick_item_as_favorite_success.title', {
       name: getAssetName(item)
     }),
-    body: t('toast.unpick_item_as_favorite_success.undo'), // TODO: dispatch the undo action
+    body: (
+      <ToastCTA
+        action={undoUnpickingItemAsFavoriteRequest(item)}
+        description={t('toast.unpick_item_as_favorite_success.undo')}
+      />
+    ),
     closable: true,
-    timeout: UNDO_UNPICKING_ITEM_AS_FAVORITE_TIMEOUT,
+    timeout: 6000,
     icon: <Icon name="exclamation circle" />
   }
 }
@@ -142,8 +179,14 @@ export function getUnpickItemAsFavoriteFailureToast(
     title: t('toast.unpick_item_as_favorite_failure.title', {
       name: getAssetName(item)
     }),
-    body: t('toast.unpick_item_as_favorite_failure.try_again'), // TODO: dispatch the action again
+    body: (
+      <ToastCTA
+        action={unpickItemAsFavoriteRequest(item)}
+        description={t('toast.unpick_item_as_favorite_failure.try_again')}
+      />
+    ),
     closable: true,
+    timeout: 6000,
     icon: <Icon name="exclamation circle" />
   }
 }
