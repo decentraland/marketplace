@@ -60,7 +60,8 @@
     "status": "Status",
     "unknown_error": "Unknown error",
     "the_parcel": "the Parcel",
-    "the_estate": "the Estate"
+    "the_estate": "the Estate",
+    "discord_server": "Discord Server"
   },
   "address": {
     "invalid_address": "That's not a valid address",

@@ -4,6 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { UpsertRentalOptType } from '../rental/types'
 import { locations } from '../routing/locations'
 import { NFT } from '../nft/types'
+import { config } from '../../config'
 
 export function getStoreUpdateSuccessToast(): Omit<Toast, 'id'> {
   return {
@@ -84,7 +85,14 @@ export function getExcecuteOrderFailureToast(): Omit<Toast, 'id'> {
     type: ToastType.ERROR,
     title: t('toast.meta_transaction_failure.title'),
     body: (
-        <p>{t('toast.meta_transaction_failure.body')}</p>
+      <p>
+        {t('toast.meta_transaction_failure.body', {
+          discord_link: (
+            <a href={config.get('DISCORD_URL')}>{t('global.discord_server')}</a>
+          ),
+          br: <br />
+        })}
+      </p>
     ),
     icon: <Icon name="exclamation circle" />
   }
