@@ -9,6 +9,8 @@ import {
 import FavoritesCounter from './FavoritesCounter'
 import { Props as FavoritesCounterProps } from './FavoritesCounter.types'
 
+const FAVORITES_COUNTER_TEST_ID = 'favorites-counter-bubble'
+
 function renderFavoritesCounter(props: Partial<FavoritesCounterProps> = {}) {
   return render(
     <FavoritesCounter
@@ -142,7 +144,7 @@ describe('FavoritesCounter', () => {
           isPickedByUser: false,
           onPick
         })
-        await userEvent.click(getByTestId('favorites-counter'))
+        await userEvent.click(getByTestId(FAVORITES_COUNTER_TEST_ID))
         expect(onPick).toHaveBeenCalledWith(item)
       })
     })
@@ -156,7 +158,7 @@ describe('FavoritesCounter', () => {
           isPickedByUser: true,
           onUnpick
         })
-        await userEvent.click(getByTestId('favorites-counter'))
+        await userEvent.click(getByTestId(FAVORITES_COUNTER_TEST_ID))
         expect(onUnpick).toHaveBeenCalledWith(item)
       })
     })

@@ -44,7 +44,6 @@ const FavoritesCounter = (props: Props) => {
 
   return (
     <div
-      onClick={onClick}
       className={classNames(
         styles.FavoritesCounter,
         className,
@@ -58,7 +57,11 @@ const FavoritesCounter = (props: Props) => {
       role="button"
       data-testid="favorites-counter"
     >
-      <div className={styles.bubble}>
+      <div
+        className={styles.bubble}
+        onClick={onClick}
+        data-testid="favorites-counter-bubble"
+      >
         <Icon
           size={isCollapsed ? 'large' : undefined}
           fitted={isCollapsed}
