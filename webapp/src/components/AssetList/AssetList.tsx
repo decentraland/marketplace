@@ -90,7 +90,7 @@ const AssetList = (props: Props) => {
         page={page}
         hasMorePages={hasMorePages}
         onLoadMore={handleLoadMore}
-        maxScrollPages={1}
+        maxScrollPages={3}
       >
         {assets.length === 0 && !isLoading ? (
           <div className="empty">
