@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
@@ -17,6 +16,7 @@ import { getContractNames } from '../../modules/vendor'
 import { useTimer } from '../../lib/timer'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
+import useCopyToClipboard from '../../hooks/useCopyToClipboard'
 
 const SettingsPage = (props: Props) => {
   const {
@@ -31,6 +31,8 @@ const SettingsPage = (props: Props) => {
   } = props
 
   const [hasCopiedText, setHasCopiedAddress] = useTimer(1200)
+
+  const copyToClipboard = useCopyToClipboard(setHasCopiedAddress)
 
   useEffect(() => {
     if (!wallet) {
@@ -167,10 +169,7 @@ const SettingsPage = (props: Props) => {
                       ? shortenAddress(wallet.address)
                       : wallet.address}
                   </div>
-                  <CopyToClipboard
-                    text={wallet.address}
-                    onCopy={setHasCopiedAddress}
-                  >
+                  <div onClick={() => copyToClipboard(wallet.address)}>
                     {hasCopiedText ? (
                       <span className="copy-text">
                         {t('settings_page.copied')}
@@ -180,7 +179,7 @@ const SettingsPage = (props: Props) => {
                         {t('settings_page.copy_address')}
                       </span>
                     )}
-                  </CopyToClipboard>
+                  </div>
                 </div>
               </Grid.Column>
             </Grid.Row>
