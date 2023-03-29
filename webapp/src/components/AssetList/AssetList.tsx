@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useEffect } from 'react'
 import { Card, Loader } from 'decentraland-ui'
 import { Item, NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -9,6 +9,7 @@ import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import * as events from '../../utils/events'
 import { AssetCard } from '../AssetCard'
+import { getLastVisitedElementId } from './utils'
 import { Props } from './AssetList.types'
 import './AssetList.css'
 import { InfiniteScroll } from '../InfiniteScroll'
@@ -25,12 +26,25 @@ const AssetList = (props: Props) => {
     search,
     isLoading,
     hasFiltersEnabled,
+    visitedLocations,
     onBrowse,
     isManager,
     onClearFilters
   } = props
 
   const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts
+
+  useEffect(() => {
+    if (visitedLocations.length > 1) {
+      const [currentLocation, previousLocation] = visitedLocations
+      const elementId = getLastVisitedElementId(currentLocation?.pathname, previousLocation?.pathname)
+      if (elementId) {
+        document.getElementById(elementId)?.scrollIntoView()
+      }
+    }
+  // only run effect on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleLoadMore = useCallback(
     newPage => {

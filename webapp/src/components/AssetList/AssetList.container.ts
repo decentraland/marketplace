@@ -11,7 +11,8 @@ import {
   getAssetType,
   getSection,
   getSearch,
-  hasFiltersEnabled
+  hasFiltersEnabled,
+  getVisitedLocations
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
@@ -36,7 +37,8 @@ const mapState = (state: RootState): MapStateProps => {
       assetType === AssetType.ITEM
         ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST)
         : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
-    hasFiltersEnabled: hasFiltersEnabled(state)
+    hasFiltersEnabled: hasFiltersEnabled(state),
+    visitedLocations: getVisitedLocations(state)
   }
 }
 

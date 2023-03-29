@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux'
-
+import { RouterLocation } from 'connected-react-router'
 import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor/types'
 import { setView, SetViewAction } from '../../modules/ui/actions'
@@ -29,6 +29,7 @@ export type Props = {
   onlyOnSale?: boolean
   onlySmart?: boolean
   onlyOnRent?: boolean
+  visitedLocations: RouterLocation<unknown>[]
   isMapViewFiltersEnabled?: boolean
 }
 
@@ -43,6 +44,7 @@ export type MapStateProps = Pick<
   | 'onlySmart'
   | 'onlyOnRent'
   | 'isMapViewFiltersEnabled'
+  | 'visitedLocations'
 >
 export type MapDispatchProps = Pick<
   Props,

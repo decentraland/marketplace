@@ -30,6 +30,8 @@ import { isLandSection } from '../ui/utils'
 
 export const getState = (state: RootState) => state.routing
 
+export const getVisitedLocations = (state: RootState) => getState(state).visitedLocations
+
 const getPathName = createSelector<
   RootState,
   ReturnType<typeof getLocation>,

@@ -108,6 +108,7 @@ const AssetCard = (props: Props) => {
       as={Link}
       to={getAssetUrl(asset, isManager && isLand(asset))}
       onClick={onClick}
+      id={`${asset.contractAddress}-${'tokenId' in asset ? asset.tokenId : asset.itemId}`}
     >
       <AssetImage
         asset={asset}

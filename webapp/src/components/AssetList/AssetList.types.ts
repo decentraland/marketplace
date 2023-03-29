@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux'
+import { RouterLocation } from 'connected-react-router'
 import { Item } from '@dcl/schemas'
-
 import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
 import {
@@ -26,6 +26,7 @@ export type Props = {
   onBrowse: typeof browse
   onClearFilters: typeof clearFilters
   search: string
+  visitedLocations: RouterLocation<unknown>[]
 }
 
 export type MapStateProps = Pick<
@@ -40,6 +41,7 @@ export type MapStateProps = Pick<
   | 'assetType'
   | 'search'
   | 'hasFiltersEnabled'
+  | 'visitedLocations'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>
 export type MapDispatch = Dispatch<BrowseAction | ClearFiltersAction>
