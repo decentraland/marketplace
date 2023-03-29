@@ -104,6 +104,7 @@ const AssetList = (props: Props) => {
         page={page}
         hasMorePages={hasMorePages}
         onLoadMore={handleLoadMore}
+        isLoading={isLoading}
         maxScrollPages={3}
       >
         {assets.length === 0 && !isLoading ? (
