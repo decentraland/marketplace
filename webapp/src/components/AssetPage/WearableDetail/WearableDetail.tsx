@@ -16,6 +16,7 @@ import { SaleActionBox } from '../SaleActionBox'
 import SmartBadge from '../SmartBadge'
 import { TransactionHistory } from '../TransactionHistory'
 import { Props } from './WearableDetail.types'
+// import { AvailableForMint } from '../AvailableForMint'
 
 const WearableDetail = ({ nft }: Props) => {
   const wearable = nft.data.wearable!
@@ -59,6 +60,7 @@ const WearableDetail = ({ nft }: Props) => {
       actions={<SaleActionBox asset={nft} />}
       below={
         <>
+          {/* <AvailableForMint nft={nft} /> */}
           <BidList nft={nft} />
           <TransactionHistory asset={nft} />
         </>
