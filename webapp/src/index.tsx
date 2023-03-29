@@ -8,6 +8,7 @@ import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationPr
 import ModalProvider from 'decentraland-dapps/dist/providers/ModalProvider'
 
 import './setup'
+
 import './modules/analytics/track'
 import './modules/analytics/rollbar'
 
