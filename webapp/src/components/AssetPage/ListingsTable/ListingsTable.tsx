@@ -12,7 +12,7 @@ import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './ListingsTable.types'
 import styles from './ListingsTable.module.css'
 
-const ROWS_PER_PAGE = 6
+export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
 
 const ListingsTable = (props: Props) => {
@@ -75,7 +75,7 @@ const ListingsTable = (props: Props) => {
     <div className={styles.ListingsTable}>
       {isLoading ? (
         <div className={styles.emptyTable}>
-          <Loader active />
+          <Loader active data-testid="loader" />
         </div>
       ) : orders.length === 0 ? (
         <div className={styles.emptyTable}>
@@ -83,7 +83,7 @@ const ListingsTable = (props: Props) => {
         </div>
       ) : (
         <>
-          <Table basic="very">
+          <Table basic="very" data-testid="listings-table">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell className={styles.headerMargin}>
