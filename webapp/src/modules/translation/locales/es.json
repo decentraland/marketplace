@@ -888,6 +888,22 @@
       "title": "Error al enviar la transacción",
       "body": "Actualice la página e intente enviar la transacción nuevamente.",
       "refresh": "Actualizar"
+    },
+    "pick_item_as_favorite_success": {
+      "title": "{name} agregado a Favoritos",
+      "view_my_lists": "Ver Mis Listas"
+    },
+    "pick_item_as_favorite_failure": {
+      "title": "Hubo un error al agregar {nombre} a Favoritos",
+      "try_again": "Intentar de nuevo"
+    },
+    "unpick_item_as_favorite_success": {
+      "title": "{name} fue eliminado de Favoritos",
+      "undo": "Deshacer"
+    },
+    "unpick_item_as_favorite_failure": {
+      "title": "Hubo un error al eliminar {name} de Favoritos",
+      "try_again": "Intentar de nuevo"
     }
   },
   "maintainance": {
