@@ -92,7 +92,7 @@ const AccountBanner = ({
               </div>
               {isMobile() && (
                 <div className="profile-copy-text-mobile">
-                  <div onClick={() => copyToClipboard(address)}>
+                  <div role="button" aria-label="copy" onClick={() => copyToClipboard(address)}>
                     {hasCopiedAddress ? (
                       <span className="copied">
                         {t('account_page.copied_capitalized')}
