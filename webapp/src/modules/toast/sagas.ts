@@ -1,6 +1,9 @@
 import { all, takeEvery, put } from 'redux-saga/effects'
 import { toastSaga as baseToastSaga } from 'decentraland-dapps/dist/modules/toast/sagas'
-import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
+import {
+  showToast,
+  hideAllToasts
+} from 'decentraland-dapps/dist/modules/toast/actions'
 import { UPDATE_STORE_SUCCESS } from '../store/actions'
 import {
   CLAIM_ASSET_SUCCESS,
@@ -9,15 +12,34 @@ import {
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
 import { BUY_ITEM_WITH_CARD_FAILURE } from '../item/actions'
-import { EXECUTE_ORDER_WITH_CARD_FAILURE, EXECUTE_ORDER_FAILURE } from '../order/actions'
+import {
+  EXECUTE_ORDER_WITH_CARD_FAILURE,
+  EXECUTE_ORDER_FAILURE
+} from '../order/actions'
 import {
   getBuyNFTWithCardErrorToast,
   getExcecuteOrderFailureToast,
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
+  getPickItemAsFavoriteFailureToast,
+  getPickItemAsFavoriteSuccessToast,
   getStoreUpdateSuccessToast,
+  getUnpickItemAsFavoriteFailureToast,
+  getUnpickItemAsFavoriteSuccessToast,
   getUpsertRentalSuccessToast
 } from './toasts'
+import {
+  PickItemAsFavoriteFailureAction,
+  PickItemAsFavoriteSuccessAction,
+  PICK_ITEM_AS_FAVORITE_FAILURE,
+  PICK_ITEM_AS_FAVORITE_SUCCESS,
+  UnpickItemAsFavoriteFailureAction,
+  UnpickItemAsFavoriteSuccessAction,
+  UNPICK_ITEM_AS_FAVORITE_FAILURE,
+  UNPICK_ITEM_AS_FAVORITE_SUCCESS
+} from '../favorites/actions'
+import { toastDispatchableActionsChannel } from './utils'
+import { DispatchableFromToastActions } from './types'
 
 export function* toastSaga() {
   yield all([baseToastSaga(), customToastSaga()])
@@ -34,7 +56,34 @@ function* successToastSagas() {
   yield takeEvery(UPSERT_RENTAL_SUCCESS, handleUpsertRentalSuccess)
   yield takeEvery(BUY_ITEM_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
-  yield takeEvery(EXECUTE_ORDER_FAILURE ,handleExcecuteOrderFailure)
+  yield takeEvery(EXECUTE_ORDER_FAILURE, handleExcecuteOrderFailure)
+  yield takeEvery(
+    PICK_ITEM_AS_FAVORITE_SUCCESS,
+    handlePickItemAsFavoriteSuccess
+  )
+  yield takeEvery(
+    PICK_ITEM_AS_FAVORITE_FAILURE,
+    handlePickItemAsFavoriteFailure
+  )
+  yield takeEvery(
+    UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+    handleUnpickItemAsFavoriteSuccess
+  )
+  yield takeEvery(
+    UNPICK_ITEM_AS_FAVORITE_FAILURE,
+    handleUnpickItemAsFavoriteFailure
+  )
+  yield takeEvery(
+    toastDispatchableActionsChannel,
+    handleToastTryAgainActionChannel
+  )
+
+  function* handleToastTryAgainActionChannel(
+    action: DispatchableFromToastActions
+  ) {
+    yield put(action)
+    yield put(hideAllToasts())
+  }
 }
 
 function* handleStoreUpdateSuccess() {
@@ -66,4 +115,36 @@ function* handleBuyNFTWithCardFailure() {
 
 function* handleExcecuteOrderFailure() {
   yield put(showToast(getExcecuteOrderFailureToast(), 'bottom center'))
+}
+
+function* handlePickItemAsFavoriteSuccess(
+  action: PickItemAsFavoriteSuccessAction
+) {
+  const { item } = action.payload
+  yield put(showToast(getPickItemAsFavoriteSuccessToast(item), 'bottom center'))
+}
+
+function* handlePickItemAsFavoriteFailure(
+  action: PickItemAsFavoriteFailureAction
+) {
+  const { item } = action.payload
+  yield put(showToast(getPickItemAsFavoriteFailureToast(item), 'bottom center'))
+}
+
+function* handleUnpickItemAsFavoriteSuccess(
+  action: UnpickItemAsFavoriteSuccessAction
+) {
+  const { item } = action.payload
+  yield put(
+    showToast(getUnpickItemAsFavoriteSuccessToast(item), 'bottom center')
+  )
+}
+
+function* handleUnpickItemAsFavoriteFailure(
+  action: UnpickItemAsFavoriteFailureAction
+) {
+  const { item } = action.payload
+  yield put(
+    showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
+  )
 }

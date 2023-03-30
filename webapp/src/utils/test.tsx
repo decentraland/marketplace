@@ -10,7 +10,10 @@ import * as locales from '../modules/translation/locales'
 
 export function renderWithProviders(
   component: JSX.Element,
-  { preloadedState, store }: { preloadedState?: RootState; store?: Store } = {}
+  {
+    preloadedState,
+    store
+  }: { preloadedState?: Partial<RootState>; store?: Store } = {}
 ) {
   const initializedStore =
     store ||
