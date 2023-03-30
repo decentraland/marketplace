@@ -1,9 +1,6 @@
-const useCopyToClipboard = (setHasCopied: () => void) => {
-  const copy = (text: string) => {
+const copyToClipboard = (onCopy: () => void) => {
     navigator.clipboard.writeText(text)
-    setHasCopied()
-  }
-  return copy
+    onCopy()
 }
 
 export default useCopyToClipboard
