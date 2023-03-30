@@ -15,7 +15,7 @@ import { LinkType } from '../../../modules/store/types'
 import { shortenAddress } from '../../../modules/wallet/utils'
 import ExternalLinkModal from '../../ExternalLinkModal'
 import './AccountBanner.css'
-import useCopyToClipboard from '../../../hooks/useCopyToClipboard'
+import copyText from '../../../lib/copyText'
 
 const AccountBanner = ({
   address,
@@ -25,8 +25,6 @@ const AccountBanner = ({
   onFetchStore
 }: Props) => {
   const [hasCopiedAddress, setHasCopied] = useTimer(1200)
-
-  const copyToClipboard = useCopyToClipboard(setHasCopied)
 
   const [openExternalLinkModal, setOpenExternalLinkModal] = useState<string>()
 
@@ -76,7 +74,7 @@ const AccountBanner = ({
                 {!isMobile() && (
                   <div>
                     <Icon
-                      onClick={() => copyToClipboard(address)}
+                      onClick={() => copyText(address, setHasCopied)}
                       aria-label="Copy address"
                       aria-hidden="false"
                       className="copy"
@@ -92,7 +90,11 @@ const AccountBanner = ({
               </div>
               {isMobile() && (
                 <div className="profile-copy-text-mobile">
-                  <div role="button" aria-label="copy" onClick={() => copyToClipboard(address)}>
+                  <div
+                    role="button"
+                    aria-label="copy"
+                    onClick={() => copyText(address, setHasCopied)}
+                  >
                     {hasCopiedAddress ? (
                       <span className="copied">
                         {t('account_page.copied_capitalized')}

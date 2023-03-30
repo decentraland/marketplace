@@ -16,7 +16,7 @@ import { getContractNames } from '../../modules/vendor'
 import { useTimer } from '../../lib/timer'
 import { Props } from './SettingsPage.types'
 import './SettingsPage.css'
-import useCopyToClipboard from '../../hooks/useCopyToClipboard'
+import copyText from '../../lib/copyText'
 
 const SettingsPage = (props: Props) => {
   const {
@@ -31,8 +31,6 @@ const SettingsPage = (props: Props) => {
   } = props
 
   const [hasCopiedText, setHasCopiedAddress] = useTimer(1200)
-
-  const copyToClipboard = useCopyToClipboard(setHasCopiedAddress)
 
   useEffect(() => {
     if (!wallet) {
@@ -169,7 +167,13 @@ const SettingsPage = (props: Props) => {
                       ? shortenAddress(wallet.address)
                       : wallet.address}
                   </div>
-                  <div onClick={() => copyToClipboard(wallet.address)}>
+                  <div
+                    role="button"
+                    aria-label="copy"
+                    onClick={() =>
+                      copyText(wallet.address, setHasCopiedAddress)
+                    }
+                  >
                     {hasCopiedText ? (
                       <span className="copy-text">
                         {t('settings_page.copied')}
