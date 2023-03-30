@@ -1,5 +1,6 @@
 import { BodyShape, ChainId, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { Asset } from '../../modules/asset/types'
+import { INITIAL_STATE } from '../../modules/favorites/reducer'
 import { renderWithProviders } from '../../utils/test'
 import AssetCard from './AssetCard'
 import { Props as AssetCardProps } from './AssetCard.types'
@@ -16,7 +17,17 @@ function renderAssetCard(props: Partial<AssetCardProps> = {}) {
       rental={null}
       isFavoritesEnabled={false}
       {...props}
-    />
+    />,
+    {
+      preloadedState: {
+        favorites: {
+          ...INITIAL_STATE,
+          data: {
+            '0xContractAddress-itemId': { pickedByUser: false, count: 35 }
+          }
+        }
+      }
+    }
   )
 }
 
@@ -25,7 +36,7 @@ describe('AssetCard', () => {
 
   beforeEach(() => {
     asset = {
-      id: 'assetId',
+      id: '0xContractAddress-itemId',
       name: 'assetName',
       thumbnail: 'assetThumbnail',
       url: 'assetUrl',

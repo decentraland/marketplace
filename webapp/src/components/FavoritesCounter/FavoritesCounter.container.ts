@@ -1,18 +1,32 @@
 import { connect } from 'react-redux'
+import { Item } from '@dcl/schemas'
+import {
+  pickItemAsFavoriteRequest,
+  unpickItemAsFavoriteRequest
+} from '../../modules/favorites/actions'
+import { getIsPickedByUser, getCount } from '../../modules/favorites/selectors'
 import { RootState } from '../../modules/reducer'
+import FavoritesCounter from './FavoritesCounter'
 import {
   MapDispatch,
   MapDispatchProps,
-  MapStateProps
+  MapStateProps,
+  OwnProps
 } from './FavoritesCounter.types'
-import FavoritesCounter from './FavoritesCounter'
 
-// TOOD: use the values from the store
-const mapState = (_state: RootState): MapStateProps => ({
-  isPickedByUser: Math.floor(Math.random() * 2) > 0,
-  count: Math.floor(Math.random() * 5000)
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
+  const {
+    item: { id: itemId }
+  } = ownProps
+  return {
+    isPickedByUser: getIsPickedByUser(state, itemId),
+    count: getCount(state, itemId)
+  }
+}
+
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onPick: (item: Item) => dispatch(pickItemAsFavoriteRequest(item)),
+  onUnpick: (item: Item) => dispatch(unpickItemAsFavoriteRequest(item))
 })
-
-const mapDispatch = (_dispatch: MapDispatch): MapDispatchProps => ({})
 
 export default connect(mapState, mapDispatch)(FavoritesCounter)

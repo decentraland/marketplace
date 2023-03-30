@@ -6,6 +6,8 @@
   "ATLAS_SERVER_URL": "https://api.decentraland.org",
   "PEER_URL": "https://peer.decentraland.org",
   "SIGNATURES_SERVER_URL": "https://signatures-api.decentraland.org/v1",
+  "MARKETPLACE_FAVORITES_SERVER_URL": "https://marketplace-favorites-api.decentraland.org/v1",
+  "DEFAULT_FAVORITES_LIST_ID": "70ab6873-4a03-4eb2-b331-4b8be0e0b8af",
   "DECENTRALAND_BLOG": "https://decentraland.org/blog",
   "REFRESH_SIGNATURES_DELAY": "10000",
   "TRANSACTIONS_API_URL": "https://transactions-api.decentraland.org/v1",
