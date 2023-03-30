@@ -6,7 +6,6 @@ import {
 } from '../../modules/favorites/actions'
 import { getIsPickedByUser, getCount } from '../../modules/favorites/selectors'
 import { RootState } from '../../modules/reducer'
-import { getAddress } from '../../modules/wallet/selectors'
 import FavoritesCounter from './FavoritesCounter'
 import {
   MapDispatch,
@@ -20,9 +19,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     item: { id: itemId }
   } = ownProps
   return {
-    isPickedByUser: getAddress(state)
-      ? getIsPickedByUser(state, itemId)
-      : false,
+    isPickedByUser: getIsPickedByUser(state, itemId),
     count: getCount(state, itemId)
   }
 }
