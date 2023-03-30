@@ -20,7 +20,9 @@ import {
   UNPICK_ITEM_AS_FAVORITE_SUCCESS,
   UndoUnpickingItemAsFavoriteRequestAction,
   UndoUnpickingItemAsFavoriteSuccessAction,
-  UndoUnpickingItemAsFavoriteFailureAction
+  UndoUnpickingItemAsFavoriteFailureAction,
+  CancelPickItemAsFavoriteAction,
+  CANCEL_PICK_ITEM_AS_FAVORITE
 } from './actions'
 import { FavoritesData } from './types'
 
@@ -40,6 +42,7 @@ type FavoritesReducerAction =
   | PickItemAsFavoriteRequestAction
   | PickItemAsFavoriteSuccessAction
   | PickItemAsFavoriteFailureAction
+  | CancelPickItemAsFavoriteAction
   | UnpickItemAsFavoriteRequestAction
   | UnpickItemAsFavoriteSuccessAction
   | UnpickItemAsFavoriteFailureAction
@@ -101,6 +104,14 @@ export function favoritesReducer(
         ...state,
         loading: loadingReducer(state.loading, action),
         error
+      }
+    }
+
+    case CANCEL_PICK_ITEM_AS_FAVORITE: {
+      return {
+        ...state,
+        loading: [],
+        error: null
       }
     }
 

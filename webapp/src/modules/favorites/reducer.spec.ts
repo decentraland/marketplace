@@ -1,6 +1,7 @@
 import { Item, Network } from '@dcl/schemas'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import {
+  cancelPickItemAsFavorite,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -118,6 +119,23 @@ describe.each(pickAndUndoSuccessActions)(
     })
   }
 )
+
+describe('when reducing the action of canceling a pick item as favorite', () => {
+  const requestAction = unpickItemAsFavoriteRequest(item)
+  const cancelAction = cancelPickItemAsFavorite()
+
+  const initialState = {
+    ...INITIAL_STATE,
+    loading: loadingReducer([], requestAction)
+  }
+
+  it('should return a state with an empty loading state', () => {
+    expect(favoritesReducer(initialState, cancelAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: []
+    })
+  })
+})
 
 describe('when reducing the successful action of unpicking the item as favorite', () => {
   const requestAction = unpickItemAsFavoriteRequest(item)

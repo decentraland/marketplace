@@ -28,6 +28,17 @@ export type PickItemAsFavoriteFailureAction = ReturnType<
   typeof pickItemAsFavoriteFailure
 >
 
+// Cancel pick item as Favorite Request
+export const CANCEL_PICK_ITEM_AS_FAVORITE =
+  'Cancel pick item as Favorite Request'
+
+export const cancelPickItemAsFavorite = () =>
+  action(CANCEL_PICK_ITEM_AS_FAVORITE)
+
+export type CancelPickItemAsFavoriteAction = ReturnType<
+  typeof cancelPickItemAsFavorite
+>
+
 // Unpick item as Favorite Request
 export const UNPICK_ITEM_AS_FAVORITE_REQUEST =
   '[Request] Unpick item as Favorite Request'

@@ -15,6 +15,7 @@ import {
 import { favoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import {
+  cancelPickItemAsFavorite,
   pickItemAsFavoriteFailure,
   PickItemAsFavoriteRequestAction,
   pickItemAsFavoriteSuccess,
@@ -68,7 +69,10 @@ function* handlePickItemAsFavoriteRequest(
         close: take(CLOSE_MODAL)
       })
 
-      if (close) return
+      if (close) {
+        yield put(cancelPickItemAsFavorite())
+        return
+      }
 
       if (success) yield put(closeModal('LoginModal'))
     }

@@ -9,6 +9,7 @@ import { closeModal, CLOSE_MODAL, openModal } from '../modal/actions'
 import { favoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import {
+  cancelPickItemAsFavorite,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -74,6 +75,7 @@ describe('when handling the request for picking an item as favorite', () => {
               [take(CLOSE_MODAL), {}]
             ])
             .put(openModal('LoginModal'))
+            .put(cancelPickItemAsFavorite())
             .dispatch(pickItemAsFavoriteRequest(item))
             .run({ silenceTimeout: true })
             .then(({ effects }) => {

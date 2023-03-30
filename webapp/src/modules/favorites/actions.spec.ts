@@ -1,5 +1,7 @@
 import { Item, Network } from '@dcl/schemas'
 import {
+  cancelPickItemAsFavorite,
+  CANCEL_PICK_ITEM_AS_FAVORITE,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -59,6 +61,16 @@ describe('when creating the action to signal a failure in the pick item as favor
       type: PICK_ITEM_AS_FAVORITE_FAILURE,
       meta: undefined,
       payload: { item, error: anErrorMessage }
+    })
+  })
+})
+
+describe('when creating the action to signal the cancel of a pick item as favorite', () => {
+  it('should return an object representing the action', () => {
+    expect(cancelPickItemAsFavorite()).toEqual({
+      type: CANCEL_PICK_ITEM_AS_FAVORITE,
+      meta: undefined,
+      payload: undefined
     })
   })
 })
