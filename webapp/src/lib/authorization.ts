@@ -59,13 +59,23 @@ export const useAuthorization = (
   const hasFetchedAuthorizations = useRef(false)
 
   useEffect(() => {
-    if (
-      !isAuthorized(authorization, authorizations) &&
-      !hasFetchedAuthorizations.current
-    ) {
-      hasFetchedAuthorizations.current = true
-      onFetchAuthorizations([authorization])
+    // Authorization fetch has to be done only once using this hook
+    if (hasFetchedAuthorizations.current) {
+      return
     }
+
+    // Allowance authorizations have an allowance amount that determines how much the target can spend in behalf of the user.
+    // These need to be re-fetched every time because the user might have executed a transaction that consumed from this allowance, changing its value.
+    // For other kind of authorizations, if it is already authorized, we don't need to re-fetch it.
+    if (
+      authorization.type !== AuthorizationType.ALLOWANCE &&
+      isAuthorized(authorization, authorizations)
+    ) {
+      return
+    }
+
+    hasFetchedAuthorizations.current = true
+    onFetchAuthorizations([authorization])
   }, [authorization, authorizations, onFetchAuthorizations])
 
   return [isLoadingAuthorizations, isAuthorized(authorization, authorizations)]

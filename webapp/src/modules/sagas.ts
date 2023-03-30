@@ -35,6 +35,7 @@ import { eventSaga } from './event/sagas'
 import { contractSaga } from './contract/sagas'
 import { transakSaga } from './transak/sagas'
 import { assetSaga } from './asset/sagas'
+import { favoritesSaga } from './favorites/sagas'
 
 const analyticsSaga = createAnalyticsSaga()
 const profileSaga = createProfileSaga({ peerUrl })
@@ -97,6 +98,7 @@ export function* rootSaga() {
     contractSaga(),
     gatewaySaga(),
     locationSaga(),
-    transakSaga()
+    transakSaga(),
+    favoritesSaga()
   ])
 }

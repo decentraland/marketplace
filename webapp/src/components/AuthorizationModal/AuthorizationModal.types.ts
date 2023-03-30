@@ -15,6 +15,7 @@ export type Props = {
   open: boolean
   authorization: Authorization
   authorizations: Authorization[]
+  shouldUpdateSpendingCap?: boolean
   isAuthorizing: boolean
   isLoading?: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -13,7 +13,15 @@ import styles from './FavoritesCounter.module.css'
 const formatter = Intl.NumberFormat('en', { notation: 'compact' })
 
 const FavoritesCounter = (props: Props) => {
-  const { className, isPickedByUser, count, isCollapsed = false } = props
+  const {
+    className,
+    count,
+    isPickedByUser,
+    isCollapsed = false,
+    item,
+    onPick,
+    onUnpick
+  } = props
 
   const counter = useMemo(
     () => (
@@ -22,6 +30,16 @@ const FavoritesCounter = (props: Props) => {
       </span>
     ),
     [count]
+  )
+
+  const onClick = useCallback(
+    (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      e.preventDefault()
+      e.stopPropagation()
+      const handler = isPickedByUser ? onUnpick : onPick
+      return handler(item)
+    },
+    [isPickedByUser, item, onPick, onUnpick]
   )
 
   return (
@@ -39,7 +57,11 @@ const FavoritesCounter = (props: Props) => {
       role="button"
       data-testid="favorites-counter"
     >
-      <div className={styles.bubble}>
+      <div
+        className={styles.bubble}
+        onClick={onClick}
+        data-testid="favorites-counter-bubble"
+      >
         <Icon
           size={isCollapsed ? 'large' : undefined}
           fitted={isCollapsed}
