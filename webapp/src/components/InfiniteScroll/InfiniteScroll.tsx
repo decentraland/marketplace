@@ -32,7 +32,7 @@ export function InfiniteScroll({
   }, [page, hasMorePages, isLoading, scrollPage, maxScrollPages, onLoadMore])
 
   useEffect(() => {
-    if (!isLoading && maxScrollPages && scrollPage === maxScrollPages) {
+    if (!isLoading && maxScrollPages !== undefined && scrollPage === maxScrollPages) {
       setShowLoadMoreButton(true)
     } else {
       setShowLoadMoreButton(false)
