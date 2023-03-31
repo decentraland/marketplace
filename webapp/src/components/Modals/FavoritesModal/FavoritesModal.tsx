@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { ModalNavigation, Message } from 'decentraland-ui'
 import { FixedSizeList } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
-// import AutoSizer from 'react-virtualized-auto-sizer'
+import AutoSizer from 'react-virtualized-auto-sizer'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { isErrorWithMessage } from '../../../lib/error'
@@ -76,7 +76,11 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
     ({ index, style }: { index: number; style: object }) => (
       <div style={style} tabIndex={0}>
         {isItemLoaded(index) ? (
-          <LinkedProfile size="huge" address={favorites[index]} />
+          <LinkedProfile
+            size="huge"
+            sliceAddressBy={42}
+            address={favorites[index]}
+          />
         ) : (
           'Loading....'
         )}
@@ -104,28 +108,28 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
         <>
           <div>Only accounts with more than 1 VP are counted. Learn More</div>
           <div>The item has not been favorited by anyone</div>
-          {/* <AutoSizer>
-            {({ height, width }) => ( */}
-          <InfiniteLoader
-            isItemLoaded={isItemLoaded}
-            itemCount={favorites.length}
-            loadMoreItems={fetchNextPage}
-          >
-            {({ onItemsRendered, ref }) => (
-              <FixedSizeList
+          <AutoSizer>
+            {({ height, width }) => (
+              <InfiniteLoader
+                isItemLoaded={isItemLoaded}
                 itemCount={favorites.length}
-                onItemsRendered={onItemsRendered}
-                itemSize={55}
-                height={200}
-                width={600}
-                ref={ref}
+                loadMoreItems={fetchNextPage}
               >
-                {Row}
-              </FixedSizeList>
+                {({ onItemsRendered, ref }) => (
+                  <FixedSizeList
+                    itemCount={favorites.length}
+                    onItemsRendered={onItemsRendered}
+                    itemSize={55}
+                    height={height ?? 300}
+                    width={width ?? 650}
+                    ref={ref}
+                  >
+                    {Row}
+                  </FixedSizeList>
+                )}
+              </InfiniteLoader>
             )}
-          </InfiniteLoader>
-          {/* )}
-          </AutoSizer> */}
+          </AutoSizer>
           {error ? (
             <Message
               error
