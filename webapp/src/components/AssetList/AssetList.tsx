@@ -8,11 +8,11 @@ import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
 import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import * as events from '../../utils/events'
+import { InfiniteScroll } from '../InfiniteScroll'
 import { AssetCard } from '../AssetCard'
 import { getLastVisitedElementId } from './utils'
 import { Props } from './AssetList.types'
 import './AssetList.css'
-import { InfiniteScroll } from '../InfiniteScroll'
 
 const AssetList = (props: Props) => {
   const {
