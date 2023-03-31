@@ -1,13 +1,21 @@
 .BestBuyingOption {
   border: 2px solid var(--secondary);
-  border-radius: 12px;
+  border-radius: 10px;
   display: flex;
   padding: 24px;
   width: 100%;
+  background-color: var(--secondary);
 }
 
 .BestBuyingOption .cardTitle {
-  font-weight: 800;
+  font-weight: 400;
+  font-size: 14px;
+  align-items: center;
+  display: flex;
+}
+
+.BestBuyingOption .emptyCardTitle {
+  font-weight: 600;
   font-size: 18px;
 }
 
@@ -16,8 +24,31 @@
   display: flex;
   flex-direction: column;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 14px;
   gap: 10px;
+}
+
+.BestBuyingOption .nolistingsImage {
+  height: 40px;
+  align-self: center;
+}
+
+.BestBuyingOption .checkTheOwners {
+  background-color: unset;
+  padding: 0px 5px;
+  text-decoration: underline;
+}
+
+.BestBuyingOption .mintingStockContainer {
+  color: var(--primary-text);
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  font-size: 15px;
+  justify-content: space-between;
+}
+
+.BestBuyingOption .fullWidth {
   width: 100%;
 }
 
@@ -25,6 +56,14 @@
   display: flex;
   flex-direction: row;
   gap: 10px;
+  align-items: flex-end;
+}
+
+.BestBuyingOption .emptyCardContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  padding: 19px;
 }
 
 .BestBuyingOption .informationContainer {
@@ -35,22 +74,72 @@
   width: 100%;
 }
 
+.BestBuyingOption .mintingContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 1;
+  width: 100%;
+}
+
 .BestBuyingOption .informationBold {
   color: white;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 30px;
+  font-weight: 600;
   margin: unset;
+}
+
+.BestBuyingOption .stockText {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 7px;
+}
+
+.BestBuyingOption .informationBold :global(.ui.header.large) {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.BestBuyingOption .informationBold :global(.dcl.mana .matic) {
+  margin-bottom: 5px;
+  width: 22px;
+  height: 22px;
 }
 
 .BestBuyingOption .informationText {
   color: var(--secondary-text);
-  font-size: 15px;
+  font-size: 24px;
   margin-top: 3px;
   line-height: 1.5;
 }
 
+.BestBuyingOption .informationListingText {
+  color: white;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.BestBuyingOption .centerItems {
+  align-items: center;
+}
+
 .BestBuyingOption .informationTitle {
-  font-size: 15px;
+  font-size: 14px;
+  color: var(--secondary-text);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.BestBuyingOption .informationTooltip {
+  width: 14px;
+  height: 14px;
+}
+
+.BestBuyingOption .mintingIcon {
+  height: 19px;
 }
 
 .BestBuyingOption :global(.ui.header.medium) {
@@ -59,4 +148,36 @@
 
 .BestBuyingOption :global(.ui.button + .ui.button) {
   margin-left: unset;
+}
+
+.BestBuyingOption .buyWithCardClassName {
+  background-color: white !important;
+  color: black !important;
+}
+
+.BestBuyingOption .expiresAt {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.BestBuyingOption .listingMana {
+  align-items: center;
+  display: flex;
+  width: 14px;
+  height: 14px;
+}
+
+.BestBuyingOption .listingMana :global(.ui.header.small) {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.BestBuyingOption .columnListing {
+  color: var(--primary-text);
+  display: flex;
+  flex-direction: column;
+  font-weight: 400;
+  font-size: 14px;
 }

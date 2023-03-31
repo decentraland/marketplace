@@ -8,7 +8,9 @@ const Description = (props: Props) => {
   return props.text ? (
     <div className="Description">
       <Header sub>{t('asset_page.description')}</Header>
-      <div className="description-text">{props.text}</div>
+      <div className="description-text" id="text-container">
+        {props.text}
+      </div>
     </div>
   ) : null
 }

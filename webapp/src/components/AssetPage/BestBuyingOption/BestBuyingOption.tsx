@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
 import { ethers } from 'ethers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -11,19 +12,22 @@ import {
   OrderSortBy,
   Rarity
 } from '@dcl/schemas'
-import { Button, Loader, Mana } from 'decentraland-ui'
+import { Button, Loader, Mana, Popup } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
 import { formatDistanceToNow } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'
 import { isNFT } from '../../../modules/asset/utils'
 import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
+import mintingIcon from '../../../images/minting.png'
+import infoIcon from '../../../images/infoIcon.png'
+import clock from '../../../images/clock.png'
+import noListings from '../../../images/noListings.png'
 import { ManaToFiat } from '../../ManaToFiat'
 import { LinkedProfile } from '../../LinkedProfile'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
+import { BelowTabs } from '../ListingsTableContainer/ListingsTableContainer.types'
 import { BuyOptions, Props } from './BestBuyingOption.types'
 import styles from './BestBuyingOption.module.css'
-import { BelowTabs } from '../ListingsTableContainer/ListingsTableContainer.types'
-import { useHistory, useLocation } from 'react-router-dom'
 
 const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const [buyOption, setBuyOption] = useState<BuyOptions | null>(null)
@@ -100,22 +104,57 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   return (
     <div className={styles.BestBuyingOption}>
       {isLoading ? (
-        <div className={styles.containerColumn}>
+        <div className={`${styles.containerColumn} ${styles.fullWitdth}`}>
           <Loader active data-testid="loader" />
         </div>
       ) : buyOption === BuyOptions.MINT && asset && !isNFT(asset) ? (
-        <div className={styles.containerColumn}>
+        <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
           <span className={styles.cardTitle}>
-            {t('best_buying_option.minting.title')}
+            {t('best_buying_option.minting.title')}&nbsp;
+            <img src={mintingIcon} alt="mint" className={styles.mintingIcon} />
+            &nbsp;
+            <Popup
+              content={t('best_buying_option.minting.minting_popup')}
+              position="top center"
+              trigger={
+                <img
+                  src={infoIcon}
+                  alt="info"
+                  className={styles.informationTooltip}
+                />
+              }
+              on="hover"
+            />
           </span>
-          <div className={styles.informationContainer}>
-            <div className={styles.containerColumn}>
+          <div className={styles.mintingContainer}>
+            <div className={styles.mintingStockContainer}>
               <span className={styles.informationTitle}>
-                {t('best_buying_option.minting.price').toUpperCase()}
+                {t('best_buying_option.minting.price').toUpperCase()}&nbsp;
+                <Popup
+                  content={
+                    asset.network === Network.MATIC
+                      ? t('best_buying_option.minting.polygon_mana')
+                      : t('best_buying_option.minting.ethereum_mana')
+                  }
+                  position="top center"
+                  trigger={
+                    <img
+                      src={infoIcon}
+                      alt="info"
+                      className={styles.informationTooltip}
+                    />
+                  }
+                  on="hover"
+                />
               </span>
               <div className={styles.containerRow}>
                 <div className={styles.informationBold}>
-                  <Mana withTooltip size="medium" network={asset.network}>
+                  <Mana
+                    withTooltip
+                    size="large"
+                    network={asset.network}
+                    className={styles.informationBold}
+                  >
                     {formatWeiMANA(asset.price)}
                   </Mana>
                 </div>
@@ -128,42 +167,44 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                 </div>
               </div>
             </div>
-            <div className={styles.containerColumn}>
+            <div className={styles.mintingStockContainer}>
               <span className={styles.informationTitle}>
                 {t('best_buying_option.minting.stock').toUpperCase()}
               </span>
-              <span className={styles.informationText}>
-                <span className={styles.informationBold}>
-                  {asset.available.toLocaleString()}&nbsp;
-                </span>
-                / {Rarity.getMaxSupply(asset.rarity).toLocaleString()}
+              <span className={styles.stockText}>
+                {asset.available.toLocaleString()}/{' '}
+                {Rarity.getMaxSupply(asset.rarity).toLocaleString()}
               </span>
             </div>
           </div>
-          <BuyNFTButtons asset={asset} />
+          <BuyNFTButtons
+            asset={asset}
+            buyWithCardClassName={styles.buyWithCardClassName}
+          />
         </div>
       ) : buyOption === BuyOptions.BUY_LISTING && asset && listing ? (
-        <div className={styles.containerColumn}>
+        <div className={`${styles.containerColumn} ${styles.fullWidth}`}>
           <span className={styles.cardTitle}>
             {t('best_buying_option.buy_listing.title')}
           </span>
           <div className={styles.informationContainer}>
-            <div className={styles.containerColumn}>
+            <div className={styles.columnListing}>
               <span className={styles.informationTitle}>
                 {t('best_buying_option.minting.price').toUpperCase()}
               </span>
-              <div className={styles.containerRow}>
-                <span className={styles.informationBold}>
+              <div className={`${styles.containerRow} ${styles.centerItems}`}>
+                <span className={styles.listingMana}>
                   <Mana
                     withTooltip
-                    size="medium"
+                    size="small"
                     network={listing.order.network}
+                    className={styles.listingMana}
                   >
                     {formatWeiMANA(listing.order.price)}
                   </Mana>
                 </span>
 
-                <div className={styles.informationText}>
+                <div className={styles.informationListingText}>
                   <ManaToFiat
                     mana={ethers.utils
                       .parseEther(formatWeiMANA(listing.order.price))
@@ -173,24 +214,25 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
               </div>
             </div>
             {mostExpensiveBid && (
-              <div className={styles.containerColumn}>
+              <div className={styles.columnListing}>
                 <span className={styles.informationTitle}>
                   {t(
                     'best_buying_option.buy_listing.highest_offer'
                   ).toUpperCase()}
                 </span>
-                <div className={styles.containerRow}>
-                  <div className={styles.informationBold}>
+                <div className={`${styles.containerRow} ${styles.centerItems}`}>
+                  <div className={styles.listingMana}>
                     <Mana
                       withTooltip
-                      size="medium"
+                      size="small"
                       network={listing.order.network}
+                      className={styles.listingMana}
                     >
                       {formatWeiMANA(mostExpensiveBid.price)}
                     </Mana>
                   </div>
 
-                  <div className={styles.informationText}>
+                  <div className={styles.informationListingText}>
                     <ManaToFiat
                       mana={ethers.utils
                         .parseEther(formatWeiMANA(mostExpensiveBid.price))
@@ -200,18 +242,15 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                 </div>
               </div>
             )}
-            <div className={styles.containerColumn}>
+            <div className={styles.columnListing}>
               <span className={styles.informationTitle}>
                 {t('best_buying_option.buy_listing.issue_number').toUpperCase()}
               </span>
-              <span className={styles.informationText}>
-                <span className={styles.informationBold}>
-                  {listing.order.tokenId}
-                </span>
-                /{listing.total}
+              <span className={styles.informationListingText}>
+                #{listing.order.tokenId}
               </span>
             </div>
-            <div className={styles.containerColumn}>
+            <div className={styles.columnListing}>
               <span className={styles.informationTitle}>
                 {t('best_buying_option.buy_listing.owner').toUpperCase()}
               </span>
@@ -221,15 +260,19 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
               />
             </div>
           </div>
-          <div className={styles.containerRow}>
-            <BuyNFTButtons asset={asset} />
-          </div>
+          <BuyNFTButtons
+            asset={asset}
+            buyWithCardClassName={styles.buyWithCardClassName}
+          />
           <Button
             href={locations.nft(asset.contractAddress, listing.order.tokenId)}
+            inverted
           >
             {t('best_buying_option.buy_listing.view_listing')}
           </Button>
-          <span>
+          <span className={styles.expiresAt}>
+            <img src={clock} alt="clock" className={styles.mintingIcon} />
+            &nbsp;
             {t('best_buying_option.buy_listing.expires')}&nbsp;
             {formatDistanceToNow(listing.order.expiresAt, {
               addSuffix: true
@@ -238,17 +281,27 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
           </span>
         </div>
       ) : (
-        <div className={styles.containerColumn}>
-          <span className={styles.cardTitle}>
-            {t('best_buying_option.empty.title')}
-          </span>
-          <span>
-            {t('best_buying_option.empty.you_can')}
-            <Button basic onClick={handleViewOffers}>
-              {t('best_buying_option.empty.check_the_current_owners')}
-            </Button>
-            {t('best_buying_option.empty.and_make_an_offer')}
-          </span>
+        <div className={styles.emptyCardContainer}>
+          <img
+            src={noListings}
+            alt={t('best_buying_option.empty.title')}
+            className={styles.nolistingsImage}
+          />
+          <div className={styles.containerColumn}>
+            <span className={styles.emptyCardTitle}>
+              {t('best_buying_option.empty.title')}
+            </span>
+            <span>
+              {t('best_buying_option.empty.you_can')}
+              <Button
+                onClick={handleViewOffers}
+                className={styles.checkTheOwners}
+              >
+                {t('best_buying_option.empty.check_the_current_owners')}
+              </Button>
+              {t('best_buying_option.empty.and_make_an_offer')}
+            </span>
+          </div>
         </div>
       )}
     </div>
