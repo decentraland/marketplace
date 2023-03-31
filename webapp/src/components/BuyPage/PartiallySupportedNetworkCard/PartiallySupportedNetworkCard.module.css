@@ -1,0 +1,9 @@
+.card:global(.ui.card) {
+  width: 390px;
+}
+
+@media (max-width: 767px) {
+  .card:global(.ui.card) {
+    width: 100%;
+  }
+}
