@@ -1,7 +1,7 @@
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 
 export type Metadata = {
-  assetId: string
+  itemId: string
 }
 
 export type Props = Omit<ModalProps, 'metadata'> & {

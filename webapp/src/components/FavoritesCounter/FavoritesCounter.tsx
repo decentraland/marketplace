@@ -6,7 +6,7 @@ import { Props } from './FavoritesCounter.types'
 import styles from './FavoritesCounter.module.css'
 
 /* TODO:
-    - An idea for more accesibility: Tooltip for the whole component with the name of the action
+    - An idea for more accessibility: Tooltip for the whole component with the name of the action
     - The div may be converted to a button with the withTooltip prop.
 */
 
@@ -19,17 +19,28 @@ const FavoritesCounter = (props: Props) => {
     isPickedByUser,
     isCollapsed = false,
     item,
+    onCounterClick,
     onPick,
     onUnpick
   } = props
 
+  const handleOnCounterClick = useCallback(() => onCounterClick(item), [
+    item,
+    onCounterClick
+  ])
+
   const counter = useMemo(
     () => (
-      <span className={styles.counter} aria-label="counter">
+      <span
+        role="button"
+        onClick={isCollapsed ? handleOnCounterClick : undefined}
+        className={styles.counter}
+        aria-label="counter"
+      >
         {formatter.format(count)}
       </span>
     ),
-    [count]
+    [count, handleOnCounterClick, isCollapsed]
   )
 
   const onClick = useCallback(
