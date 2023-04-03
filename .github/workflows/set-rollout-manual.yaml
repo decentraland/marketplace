@@ -23,7 +23,7 @@ on:
 
 jobs:
   set-manual-rollout:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./webapp
