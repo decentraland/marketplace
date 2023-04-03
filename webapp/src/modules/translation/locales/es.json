@@ -58,7 +58,8 @@
     "status": "Estado",
     "unknown_error": "Error desconocido",
     "the_parcel": "La Parcela",
-    "the_estate": "El Estate"
+    "the_estate": "El Estate",
+    "discord_server": "Servidor de Discord"
   },
   "address": {
     "invalid_address": "Dirección inválida",
