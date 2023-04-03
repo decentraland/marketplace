@@ -15,8 +15,9 @@ import { Authorization } from './Authorization'
 import { getContractNames } from '../../modules/vendor'
 import { useTimer } from '../../lib/timer'
 import { Props } from './SettingsPage.types'
-import './SettingsPage.css'
 import copyText from '../../lib/copyText'
+
+import './SettingsPage.css'
 
 const SettingsPage = (props: Props) => {
   const {
