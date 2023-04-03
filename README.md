@@ -6,7 +6,7 @@ Decentraland's Marketplace
 
 [![Coverage Status](https://coveralls.io/repos/github/decentraland/marketplace/badge.svg?branch=master)](https://coveralls.io/github/decentraland/marketplace?branch=master)
 
-The Marketplace is a React static site. It's code can be found under the [/webapp](https://github.com/decentraland/marketplace/tree/master/webapp) directory.
+The Marketplace is a React static site. Its code can be found under the [/webapp](https://github.com/decentraland/marketplace/tree/master/webapp) directory.
 
 ## Backend
 
