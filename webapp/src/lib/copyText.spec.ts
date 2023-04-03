@@ -5,7 +5,7 @@ describe('when calling the copy text function', () => {
   let onCopyMock: jest.Mock
 
   beforeAll(() => {
-    //since the clipboard api is not available on the react server!
+    //since the clipboard api is not available on the react server!!
     Object.defineProperty(navigator, 'clipboard', {
       value: {
         writeText: jest.fn(),
