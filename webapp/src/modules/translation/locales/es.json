@@ -652,20 +652,13 @@
     "regions_where_operates": "regiones donde opera Transak",
     "explanation": "{link_to_transak} procesa los pagos con tarjeta y están disponibles para las {regions}. Se admiten tanto tarjetas de crédito como de débito."
   },
+  "partially_supported_network_card": {
+    "content": "Estás conectado a la red de Polygon para comprar artículos por debajo de <mana>1</mana>. Deberá tener MATIC en su billetera para cubrir la tarifa de transacción de esta compra."
+  },
   "price_too_low": {
     "minimum_price": "La cantidad mínima admitida para transacciones sin costo es {price}",
     "get_item_in_network": "Para obtener este item, deberá cambiar su red a {network} y luego cubrir el costo de la transacción con {token}.",
     "switch_network": "Cambiar a {red}"
-  },
-  "mint_page": {
-    "title": "Comprar {category}",
-    "subtitle": "Estás por comprar {name} por {amount}.",
-    "not_for_sale": "{name} no esta disponible, pero puedes buscarlo en el {secondary_market_link}.",
-    "secondary_market": "mercado secundario",
-    "action": "Comprar",
-    "no_fingerprint": "No se pudo cargar la identificación del Estate.",
-    "is_owner": "Ya eres el dueño de {name}.",
-    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
   },
   "mint_with_mana_page": {
     "title": "Comprando {name}",
