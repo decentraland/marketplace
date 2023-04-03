@@ -24,7 +24,7 @@ export enum SortBy {
   RENTAL_LISTING_DATE = 'rental_listing_date',
   RENTAL_DATE = 'rented_date',
   MAX_RENTAL_PRICE = 'max_rental_price',
-  MIN_RENTAL_PRICE = 'min_rental_price'
+  MIN_RENTAL_PRICE = 'min_rental_price',
 }
 
 export enum SortDirection {
