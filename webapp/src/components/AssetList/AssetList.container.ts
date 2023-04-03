@@ -1,4 +1,3 @@
-import { getLocation } from 'connected-react-router'
 import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 
@@ -10,7 +9,6 @@ import {
   getVendor,
   getPage,
   getAssetType,
-  getCurrentBrowseOptions,
   getSection,
   getSearch,
   hasFiltersEnabled,
@@ -21,7 +19,6 @@ import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
 import AssetList from './AssetList'
 import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
-import { buildBrowseURL } from '../../modules/routing/utils'
 import { AssetType } from '../../modules/asset/types'
 
 const mapState = (state: RootState): MapStateProps => {
@@ -40,10 +37,6 @@ const mapState = (state: RootState): MapStateProps => {
       assetType === AssetType.ITEM
         ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST)
         : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
-    urlNext: buildBrowseURL(getLocation(state).pathname, {
-      ...getCurrentBrowseOptions(state),
-      page: page + 1
-    }),
     hasFiltersEnabled: hasFiltersEnabled(state),
     visitedLocations: getVisitedLocations(state)
   }
