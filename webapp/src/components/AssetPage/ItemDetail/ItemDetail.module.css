@@ -24,15 +24,14 @@
 .ItemDetail .itemDetailBottomContainer {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 12px;
 }
 
 .ItemDetail .information {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   width: 45%;
-  gap: 30px;
+  gap: 15px;
 }
 
 .ItemDetail .informationContainer {

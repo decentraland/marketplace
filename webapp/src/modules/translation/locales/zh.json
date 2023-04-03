@@ -466,6 +466,8 @@
       "not_enough_mana": "你没有足够的 MANA"
     },
     "description": "描述",
+    "no_description": "沒有說明",
+    "read_more": "閱讀更多",
     "owner": "持有者",
     "creator": "创造者",
     "price": "价格",

@@ -247,7 +247,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                 {t('best_buying_option.buy_listing.issue_number').toUpperCase()}
               </span>
               <span className={styles.informationListingText}>
-                #{listing.order.tokenId}
+                #{listing.order.issuedId}
               </span>
             </div>
             <div className={styles.columnListing}>
@@ -293,12 +293,13 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
             </span>
             <span>
               {t('best_buying_option.empty.you_can')}
-              <Button
+              <span
                 onClick={handleViewOffers}
                 className={styles.checkTheOwners}
               >
                 {t('best_buying_option.empty.check_the_current_owners')}
-              </Button>
+              </span>
+
               {t('best_buying_option.empty.and_make_an_offer')}
             </span>
           </div>

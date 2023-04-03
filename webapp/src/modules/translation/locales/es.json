@@ -465,6 +465,8 @@
       "not_enough_mana": "No tienes suficiente MANA"
     },
     "description": "Descripción",
+    "no_description": "Sin descripción",
+    "read_more": "Leer más",
     "owner": "Dueño",
     "creator": "Creador",
     "price": "Precio",
