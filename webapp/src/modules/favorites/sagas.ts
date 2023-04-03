@@ -152,7 +152,7 @@ function* handleFetchFavoritedItemsRequest(
     }
 
     yield put(fetchItemsRequest(options))
-    yield put(fetchFavoritedItemsSuccess(results, total))
+    yield put(fetchFavoritedItemsSuccess(results, Number(total)))
   } catch (error) {
     yield put(fetchFavoritedItemsFailure((error as Error).message))
   }

@@ -7,7 +7,6 @@ import {
   fetchFavoritedItemsFailure,
   fetchFavoritedItemsRequest,
   fetchFavoritedItemsSuccess,
-  FetchFavoritedItemsSuccessAction,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -233,7 +232,7 @@ describe('when reducing the successful action of unpicking the item as favorite'
 
 describe('when reducing the successful action of fetching the favorited items', () => {
   const requestAction = fetchFavoritedItemsRequest(itemBrowseOptions)
-  let successAction: FetchFavoritedItemsSuccessAction
+  let successAction = fetchFavoritedItemsSuccess(itemIds, 2)
 
   const initialState = {
     ...INITIAL_STATE,
@@ -257,55 +256,14 @@ describe('when reducing the successful action of fetching the favorited items', 
     loading: loadingReducer([], requestAction)
   }
 
-  describe('when the item is not in the state', () => {
-    const itemIdThatIsNotInTheState = '0x...-itemIdThatIsNotInTheState'
-    beforeEach(() => {
-      successAction = fetchFavoritedItemsSuccess(
-        [{ itemId: itemIdThatIsNotInTheState }],
-        1
-      )
-    })
-
-    it('should return a state with the new item with count one, flagged as picked by user, and the loading state cleared', () => {
-      expect(favoritesReducer(initialState, successAction)).toEqual({
-        ...INITIAL_STATE,
-        loading: [],
-        data: {
-          ...initialState.data,
-          items: {
-            ...initialState.data.items,
-            [itemIdThatIsNotInTheState]: {
-              pickedByUser: true,
-              count: 1
-            }
-          },
-          total: 1
-        }
-      })
-    })
-  })
-
-  describe('when the item is in the state', () => {
-    beforeEach(() => {
-      successAction = fetchFavoritedItemsSuccess(itemIds, 2)
-    })
-
-    it('should return a state with the current item count increased by one, flagged as picked by user, and the loading state cleared', () => {
-      expect(favoritesReducer(initialState, successAction)).toEqual({
-        ...INITIAL_STATE,
-        loading: [],
-        data: {
-          ...initialState.data,
-          items: {
-            ...initialState.data.items,
-            [item.id]: {
-              pickedByUser: true,
-              count: 2
-            }
-          },
-          total: 2
-        }
-      })
+  it('should return a state with the total and the loading state cleared', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...INITIAL_STATE,
+      loading: [],
+      data: {
+        ...initialState.data,
+        total: 2
+      }
     })
   })
 })

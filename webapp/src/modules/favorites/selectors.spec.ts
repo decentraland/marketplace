@@ -7,7 +7,6 @@ import {
   getFavoritedItems,
   getFavoritesDataByItemId,
   getIsPickedByUser,
-  getListId,
   getLoading,
   getState
 } from './selectors'
@@ -78,7 +77,7 @@ describe('when getting the if an item is picked by user', () => {
   describe('and the data is already in the store', () => {
     it('should return the a boolean with the value', () => {
       expect(getIsPickedByUser(state, 'item1')).toEqual(
-        state.favorites.data.item1.pickedByUser
+        state.favorites.data.items.item1.pickedByUser
       )
     })
   })
@@ -93,7 +92,9 @@ describe('when getting the if an item is picked by user', () => {
 describe('when getting the count of favorites an item has', () => {
   describe('and the data is already in the store', () => {
     it('should return the numeric value representing the count', () => {
-      expect(getCount(state, 'item1')).toEqual(state.favorites.data.item1.count)
+      expect(getCount(state, 'item1')).toEqual(
+        state.favorites.data.items.item1.count
+      )
     })
   })
 

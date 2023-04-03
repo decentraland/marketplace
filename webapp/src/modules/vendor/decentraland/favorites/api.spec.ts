@@ -126,7 +126,7 @@ describe('when getting the the items picked in a list', () => {
     })
 
     it('should resolve', () => {
-      const expectedUrl = `${MARKETPLACE_FAVORITES_SERVER_URL}/lists/${listId}/picks?first=${filters.first}&skip=${filters.skip}`
+      const expectedUrl = `${MARKETPLACE_FAVORITES_SERVER_URL}/lists/${listId}/picks?limit=${filters.first}&offset=${filters.skip}`
       expect(
         favoritesAPI.getPicksByList(listId, filters, identity)
       ).resolves.toBeUndefined()

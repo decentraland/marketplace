@@ -91,8 +91,7 @@ class FavoritesAPI extends BaseAPI {
 
       const json = await response.json()
       if (json.ok) {
-        const { results, total } = json.data
-        return { results, total: Number(total) }
+        return json.data
       } else {
         throw new Error(json.message)
       }

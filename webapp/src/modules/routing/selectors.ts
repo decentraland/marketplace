@@ -239,8 +239,7 @@ export const getAssetType = createSelector<
     if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
       if (
         vendor === VendorName.DECENTRALAND &&
-        pathname === locations.browse() &&
-        View.LISTS === view
+        (pathname === locations.browse() || View.LISTS === view)
       ) {
         return AssetType.ITEM
       }
