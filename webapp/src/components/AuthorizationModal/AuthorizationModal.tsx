@@ -22,6 +22,7 @@ const AuthorizationModal = (props: Props) => {
   const {
     open,
     authorization,
+    shouldUpdateSpendingCap,
     isLoading,
     isAuthorizing,
     getContract,
@@ -122,6 +123,7 @@ const AuthorizationModal = (props: Props) => {
       <Modal.Content>
         <Authorization
           key={authorization.authorizedAddress}
+          shouldUpdateSpendingCap={shouldUpdateSpendingCap}
           authorization={authorization}
         />
       </Modal.Content>
@@ -133,7 +135,12 @@ const AuthorizationModal = (props: Props) => {
           className="AuthorizationModalButtons"
           primary
           loading={isLoading}
-          disabled={isLoading || isAuthorizing || !isAuthorized}
+          disabled={
+            isLoading ||
+            isAuthorizing ||
+            !isAuthorized ||
+            shouldUpdateSpendingCap
+          }
           onClick={onProceed}
         >
           {t('global.proceed')}
