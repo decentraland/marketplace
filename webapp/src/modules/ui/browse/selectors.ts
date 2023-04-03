@@ -45,9 +45,9 @@ export const getItems = createSelector<
   BrowseUIState,
   ItemState['data'],
   Item[]
->(getState, getItemData, (browse, itemsById) =>
-  browse.itemIds.map(id => itemsById[id])
-)
+>(getState, getItemData, (browse, itemsById) => {
+  return browse.itemIds.map(id => itemsById[id])
+})
 
 export const getOnSaleItems = createSelector<
   RootState,

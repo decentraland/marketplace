@@ -11,6 +11,7 @@ const landSections = new Set<Section>([
 ])
 
 export const isAccountView = (view: View) => accountViews.has(view)
+export const isListsView = (view?: View) => View.LISTS === view
 export const isLandSection = (section?: Section) =>
   !!section && landSections.has(section)
 

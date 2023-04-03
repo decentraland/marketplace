@@ -104,6 +104,7 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
+import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
@@ -147,6 +148,7 @@ export function* handleBrowse(action: BrowseAction) {
     getNewBrowseOptions,
     action.payload.options
   )
+
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
   const eventsContracts: Record<string, string[]> = yield select(getData)
   const isAnEventRoute = Object.keys(eventsContracts).includes(
@@ -212,6 +214,17 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const category = getCategoryFromSection(section)
 
+  const offset = isLoadMore ? page - 1 : 0
+  const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
+  const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
+
+  if (view === View.LISTS) {
+    yield put(
+      fetchFavoritedItemsRequest({ view, page, filters: { first, skip } })
+    )
+    return
+  }
+
   switch (section) {
     case Section.BIDS:
     case Section.STORE_SETTINGS:
@@ -255,10 +268,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       )
       break
     default:
-      const offset = isLoadMore ? page - 1 : 0
-      const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
-      const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
-
       if (isItems) {
         // TODO: clean up
         const isWearableHead =
@@ -349,6 +358,7 @@ export function* getNewBrowseOptions(
   }
 
   const defaults = getDefaultOptionsByView(view)
+
   return {
     ...defaults,
     ...previous,

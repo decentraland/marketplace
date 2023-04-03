@@ -1,5 +1,7 @@
 import { action } from 'typesafe-actions'
 import { Item } from '@dcl/schemas'
+import { FavoritedItemIds } from './types'
+import { ItemBrowseOptions } from '../item/types'
 
 // Pick item as Favorite Request
 export const PICK_ITEM_AS_FAVORITE_REQUEST =
@@ -91,4 +93,31 @@ export type UndoUnpickingItemAsFavoriteSuccessAction = ReturnType<
 >
 export type UndoUnpickingItemAsFavoriteFailureAction = ReturnType<
   typeof undoUnpickingItemAsFavoriteFailure
+>
+
+// Fetch Favorited Items
+
+export const FETCH_FAVORITED_ITEMS_REQUEST = '[Request] Fetch Favorited Items'
+export const FETCH_FAVORITED_ITEMS_SUCCESS = '[Success] Fetch Favorited Items'
+export const FETCH_FAVORITED_ITEMS_FAILURE = '[Failure] Fetch Favorited Items'
+
+export const fetchFavoritedItemsRequest = (options: ItemBrowseOptions) =>
+  action(FETCH_FAVORITED_ITEMS_REQUEST, options)
+
+export const fetchFavoritedItemsSuccess = (
+  itemIds: FavoritedItemIds,
+  total: number
+) => action(FETCH_FAVORITED_ITEMS_SUCCESS, { itemIds, total })
+
+export const fetchFavoritedItemsFailure = (error: string) =>
+  action(FETCH_FAVORITED_ITEMS_FAILURE, { error })
+
+export type FetchFavoritedItemsRequestAction = ReturnType<
+  typeof fetchFavoritedItemsRequest
+>
+export type FetchFavoritedItemsSuccessAction = ReturnType<
+  typeof fetchFavoritedItemsSuccess
+>
+export type FetchFavoritedItemsFailureAction = ReturnType<
+  typeof fetchFavoritedItemsFailure
 >

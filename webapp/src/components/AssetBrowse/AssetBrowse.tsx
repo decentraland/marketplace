@@ -144,20 +144,21 @@ const AssetBrowse = (props: Props) => {
     visitedLocations
   ])
 
-  const left = (
-    <>
-      <NotMobile>
-        {view === View.ACCOUNT || isCurrentAccount ? (
-          <AccountSidebar
-            address={address!}
-            isCurrentAccount={isCurrentAccount}
-          />
-        ) : (
-          <NFTSidebar section={section} sections={sections} />
-        )}
-      </NotMobile>
-    </>
-  )
+  const left =
+    view === View.LISTS ? null : (
+      <>
+        <NotMobile>
+          {view === View.ACCOUNT || isCurrentAccount ? (
+            <AccountSidebar
+              address={address!}
+              isCurrentAccount={isCurrentAccount}
+            />
+          ) : (
+            <NFTSidebar section={section} sections={sections} />
+          )}
+        </NotMobile>
+      </>
+    )
 
   let right: ReactNode
 
@@ -255,12 +256,12 @@ const AssetBrowse = (props: Props) => {
         isFullscreen={isFullscreen}
       >
         <Row>
-          {!isFullscreen && (
+          {!isFullscreen && left && (
             <Column align="left" className="sidebar">
               {left}
             </Column>
           )}
-          <Column align="right" grow={true}>
+          <Column align={!left ? 'center' : 'right'} grow={true}>
             {right}
           </Column>
         </Row>

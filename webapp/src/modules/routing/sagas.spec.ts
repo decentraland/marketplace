@@ -11,6 +11,7 @@ import { expectSaga } from 'redux-saga-test-plan'
 import { call, select } from 'redux-saga/effects'
 import { AssetType } from '../asset/types'
 import { getData as getEventData } from '../event/selectors'
+import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { fetchItemsRequest, fetchTrendingItemsRequest } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
@@ -19,12 +20,16 @@ import { Section } from '../vendor/decentraland'
 import {
   browse,
   clearFilters,
-  fetchAssetsFromRoute as FetchAssetsFromRouteAction
+  fetchAssetsFromRoute as FetchAssetsFromRouteAction,
+  setIsLoadMore
 } from './actions'
 import { fetchAssetsFromRoute, getNewBrowseOptions, routingSaga } from './sagas'
 import { getCurrentBrowseOptions } from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
+
+import util from 'util'
+util.inspect.defaultOptions.depth = null
 
 beforeEach(() => {
   jest.spyOn(Date, 'now').mockReturnValue(100)
@@ -200,6 +205,32 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
     return expectSaga(routingSaga)
       .provide([[call(getNewBrowseOptions, browseOptions), browseOptions]])
       .put(fetchItemsRequest(filters))
+      .dispatch(FetchAssetsFromRouteAction(browseOptions))
+      .run({ silenceTimeout: true })
+  })
+
+  it('should fetch favorited items when providing the LISTS section', () => {
+    const browseOptions: BrowseOptions = {
+      page: 1,
+      address: '0x...',
+      vendor: VendorName.DECENTRALAND,
+      section: Section.LISTS,
+      view: View.LISTS
+    } as BrowseOptions
+
+    const filters: ItemBrowseOptions = {
+      view: browseOptions.view,
+      page: browseOptions.page,
+      filters: {
+        first: 24,
+        skip: 0
+      }
+    }
+
+    return expectSaga(routingSaga)
+      .provide([[select(getCurrentBrowseOptions), browseOptions]])
+      .put(setIsLoadMore(false))
+      .put(fetchFavoritedItemsRequest(filters))
       .dispatch(FetchAssetsFromRouteAction(browseOptions))
       .run({ silenceTimeout: true })
   })

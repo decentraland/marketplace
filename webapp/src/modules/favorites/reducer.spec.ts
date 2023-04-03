@@ -1,7 +1,13 @@
 import { Item, Network } from '@dcl/schemas'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { ItemBrowseOptions } from '../item/types'
+import { View } from '../ui/types'
 import {
   cancelPickItemAsFavorite,
+  fetchFavoritedItemsFailure,
+  fetchFavoritedItemsRequest,
+  fetchFavoritedItemsSuccess,
+  FetchFavoritedItemsSuccessAction,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -13,6 +19,12 @@ import {
   unpickItemAsFavoriteSuccess
 } from './actions'
 import { INITIAL_STATE, favoritesReducer } from './reducer'
+import { FavoritedItemIds } from './types'
+
+const itemBrowseOptions: ItemBrowseOptions = {
+  view: View.LISTS,
+  page: 0
+}
 
 const item = {
   id: '0xContactAddress-anItemId',
@@ -23,12 +35,15 @@ const item = {
   network: Network.ETHEREUM
 } as Item
 
+const itemIds: FavoritedItemIds = [{ itemId: item.id }]
+
 const error = 'anErrorMessage'
 
 const requestActions = [
   pickItemAsFavoriteRequest(item),
   unpickItemAsFavoriteRequest(item),
-  undoUnpickingItemAsFavoriteRequest(item)
+  undoUnpickingItemAsFavoriteRequest(item),
+  fetchFavoritedItemsRequest(itemBrowseOptions)
 ]
 
 describe.each(requestActions)('when reducing the "$type" action', action => {
@@ -57,6 +72,10 @@ const failureActions = [
   {
     request: undoUnpickingItemAsFavoriteRequest(item),
     failure: undoUnpickingItemAsFavoriteFailure(item, error)
+  },
+  {
+    request: fetchFavoritedItemsRequest(itemBrowseOptions),
+    failure: fetchFavoritedItemsFailure(error)
   }
 ]
 
@@ -81,40 +100,78 @@ describe.each(failureActions)(
 
 const pickAndUndoSuccessActions = [
   {
-    request: pickItemAsFavoriteRequest(item),
-    success: pickItemAsFavoriteSuccess(item)
+    request: pickItemAsFavoriteRequest,
+    success: pickItemAsFavoriteSuccess
   },
   {
-    request: undoUnpickingItemAsFavoriteRequest(item),
-    success: undoUnpickingItemAsFavoriteSuccess(item)
+    request: undoUnpickingItemAsFavoriteRequest,
+    success: undoUnpickingItemAsFavoriteSuccess
   }
 ]
 
 describe.each(pickAndUndoSuccessActions)(
-  `when reducing the "$success.type" action`,
+  `when reducing the "$success(item).type" action`,
   ({ request, success }) => {
     const initialState = {
       ...INITIAL_STATE,
       data: {
-        [item.id]: {
-          pickedByUser: false,
-          count: 0
-        }
-      },
-      loading: loadingReducer([], request)
+        items: {
+          [item.id]: {
+            pickedByUser: false,
+            count: 0
+          }
+        },
+        total: 0
+      }
     }
 
-    it('should return a state with the current item count incremented by one, flagged as picked by user, and the loading state cleared', () => {
-      expect(favoritesReducer(initialState, success)).toEqual({
-        ...INITIAL_STATE,
-        loading: [],
-        data: {
-          ...initialState.data,
-          [item.id]: {
-            pickedByUser: true,
-            count: 1
+    describe('when the item is not in the state', () => {
+      const anotherItem = { id: '0xContactAddress-anotherItemId' } as Item
+
+      beforeEach(() => {
+        initialState.loading = loadingReducer([], request(anotherItem))
+      })
+
+      it('should return a state with the current item count incremented by one, flagged as picked by user, and the loading state cleared', () => {
+        expect(favoritesReducer(initialState, success(anotherItem))).toEqual({
+          ...INITIAL_STATE,
+          loading: [],
+          data: {
+            ...initialState.data,
+            items: {
+              ...initialState.data.items,
+              [anotherItem.id]: {
+                pickedByUser: true,
+                count: 1
+              }
+            },
+            total: 1
           }
-        }
+        })
+      })
+    })
+
+    describe('when the item is in the state', () => {
+      beforeEach(() => {
+        initialState.loading = loadingReducer([], request(item))
+      })
+
+      it('should return a state with the current item count incremented by one, flagged as picked by user, and the loading state cleared', () => {
+        expect(favoritesReducer(initialState, success(item))).toEqual({
+          ...INITIAL_STATE,
+          loading: [],
+          data: {
+            ...initialState.data,
+            items: {
+              ...initialState.data.items,
+              [item.id]: {
+                pickedByUser: true,
+                count: 1
+              }
+            },
+            total: 1
+          }
+        })
       })
     })
   }
@@ -144,10 +201,13 @@ describe('when reducing the successful action of unpicking the item as favorite'
   const initialState = {
     ...INITIAL_STATE,
     data: {
-      [item.id]: {
-        pickedByUser: true,
-        count: 1
-      }
+      items: {
+        [item.id]: {
+          pickedByUser: true,
+          count: 1
+        }
+      },
+      total: 1
     },
     loading: loadingReducer([], requestAction)
   }
@@ -158,11 +218,94 @@ describe('when reducing the successful action of unpicking the item as favorite'
       loading: [],
       data: {
         ...initialState.data,
+        items: {
+          ...initialState.data.items,
+          [item.id]: {
+            pickedByUser: false,
+            count: 0
+          }
+        },
+        total: 0
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of fetching the favorited items', () => {
+  const requestAction = fetchFavoritedItemsRequest(itemBrowseOptions)
+  let successAction: FetchFavoritedItemsSuccessAction
+
+  const initialState = {
+    ...INITIAL_STATE,
+    data: {
+      items: {
         [item.id]: {
+          pickedByUser: false,
+          count: 1
+        },
+        '0x...-itemId': {
+          pickedByUser: true,
+          count: 10
+        },
+        '0x...-anotherItemId': {
           pickedByUser: false,
           count: 0
         }
-      }
+      },
+      total: 1
+    },
+    loading: loadingReducer([], requestAction)
+  }
+
+  describe('when the item is not in the state', () => {
+    const itemIdThatIsNotInTheState = '0x...-itemIdThatIsNotInTheState'
+    beforeEach(() => {
+      successAction = fetchFavoritedItemsSuccess(
+        [{ itemId: itemIdThatIsNotInTheState }],
+        1
+      )
+    })
+
+    it('should return a state with the new item with count one, flagged as picked by user, and the loading state cleared', () => {
+      expect(favoritesReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: {
+          ...initialState.data,
+          items: {
+            ...initialState.data.items,
+            [itemIdThatIsNotInTheState]: {
+              pickedByUser: true,
+              count: 1
+            }
+          },
+          total: 1
+        }
+      })
+    })
+  })
+
+  describe('when the item is in the state', () => {
+    beforeEach(() => {
+      successAction = fetchFavoritedItemsSuccess(itemIds, 2)
+    })
+
+    it('should return a state with the current item count increased by one, flagged as picked by user, and the loading state cleared', () => {
+      expect(favoritesReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: {
+          ...initialState.data,
+          items: {
+            ...initialState.data.items,
+            [item.id]: {
+              pickedByUser: true,
+              count: 2
+            }
+          },
+          total: 2
+        }
+      })
     })
   })
 })

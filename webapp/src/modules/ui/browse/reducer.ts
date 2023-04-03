@@ -1,4 +1,8 @@
 import {
+  FETCH_FAVORITED_ITEMS_SUCCESS,
+  FetchFavoritedItemsSuccessAction
+} from '../../favorites/actions'
+import {
   FetchItemsRequestAction,
   FetchItemsSuccessAction,
   FetchTrendingItemsSuccessAction,
@@ -40,6 +44,7 @@ type UIReducerAction =
   | FetchTrendingItemsSuccessAction
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
+  | FetchFavoritedItemsSuccessAction
 
 export function browseReducer(
   state: BrowseUIState = INITIAL_STATE,
@@ -129,10 +134,17 @@ export function browseReducer(
           }
       }
     }
+
     case FETCH_TRENDING_ITEMS_SUCCESS:
       return {
         ...state,
         itemIds: action.payload.items.map(item => item.id)
+      }
+
+    case FETCH_FAVORITED_ITEMS_SUCCESS:
+      return {
+        ...state,
+        count: action.payload.total
       }
 
     case FETCH_ITEMS_SUCCESS: {
@@ -149,6 +161,14 @@ export function browseReducer(
             view,
             itemIds: action.payload.items.map(item => item.id),
             count: action.payload.total,
+            lastTimestamp: action.payload.timestamp
+          }
+        }
+        case View.LISTS: {
+          return {
+            ...state,
+            view,
+            itemIds: action.payload.items.map(item => item.id),
             lastTimestamp: action.payload.timestamp
           }
         }

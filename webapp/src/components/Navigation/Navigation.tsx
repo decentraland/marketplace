@@ -19,6 +19,7 @@ const Navigation = (props: Props) => {
     activeTab,
     isFullscreen,
     isCampaignBrowserEnabled,
+    isFavoritesEnabled,
     onOpenBuyManaWithFiatModal
   } = props
   const analytics = getAnalytics()
@@ -83,6 +84,14 @@ const Navigation = (props: Props) => {
               {t('navigation.my_assets')}
             </Tabs.Tab>
           </Link>
+          {/* TODO: should we show this if the user is not logged in? */}
+          {isFavoritesEnabled && (
+            <Link to={locations.defaultList()}>
+              <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>
+                {t('navigation.my_lists')}
+              </Tabs.Tab>
+            </Link>
+          )}
           <Mobile>
             <Link to={locations.activity()}>
               <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>

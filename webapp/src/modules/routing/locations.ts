@@ -1,6 +1,7 @@
 import { CAMPAIGN_TAG } from '../../components/Campaign/config'
 import { AssetType } from '../asset/types'
 import { Section } from '../vendor/decentraland'
+import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
 import { getSearchParams } from './search'
 import { BrowseOptions } from './types'
 
@@ -33,6 +34,17 @@ export const locations = {
   defaultCurrentAccount: function() {
     return this.currentAccount({
       section: Section.COLLECTIONS
+    })
+  },
+  lists: () => '/lists',
+  list: (listId: string = ':listId', options?: BrowseOptions) => {
+    const params = getSearchParams(options)
+    return params ? `/lists/${listId}?${params.toString()}` : `/lists/${listId}`
+  },
+  defaultList: function() {
+    return this.list(DEFAULT_FAVORITES_LIST_ID, {
+      assetType: AssetType.ITEM,
+      page: 1
     })
   },
   account: (address: string = ':address', options?: BrowseOptions) => {

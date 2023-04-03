@@ -1,12 +1,13 @@
 import { RootState } from '../reducer'
-import {} from './actions'
 import { INITIAL_STATE } from './reducer'
 import {
   getCount,
   getData,
   getError,
+  getFavoritedItems,
   getFavoritesDataByItemId,
   getIsPickedByUser,
+  getListId,
   getLoading,
   getState
 } from './selectors'
@@ -18,12 +19,16 @@ beforeEach(() => {
     favorites: {
       ...INITIAL_STATE,
       data: {
-        item1: {
-          pickedByUser: false,
-          count: 18
-        },
-        item2: {},
-        item3: {}
+        ...INITIAL_STATE.data,
+        items: {
+          ...INITIAL_STATE.data.items,
+          item1: {
+            pickedByUser: false,
+            count: 18
+          },
+          item2: {},
+          item3: {}
+        }
       },
       error: 'anError',
       loading: []
@@ -43,6 +48,12 @@ describe('when getting the data of the state', () => {
   })
 })
 
+describe('when getting the favorited items of the state', () => {
+  it('should return the items', () => {
+    expect(getFavoritedItems(state)).toEqual(state.favorites.data.items)
+  })
+})
+
 describe('when getting the error of the state', () => {
   it('should return the error message', () => {
     expect(getError(state)).toEqual(state.favorites.error)
@@ -58,7 +69,7 @@ describe('when getting the loading state of the state', () => {
 describe('when getting the favorites data by item id', () => {
   it('should return the favorites data state for the given item id', () => {
     expect(getFavoritesDataByItemId(state, 'item1')).toEqual(
-      state.favorites.data.item1
+      state.favorites.data.items.item1
     )
   })
 })

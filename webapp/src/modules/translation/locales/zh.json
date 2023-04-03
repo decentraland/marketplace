@@ -84,9 +84,14 @@
     "collectibles": "收藏品",
     "partners": "伙伴",
     "my_assets": "我的资产",
+    "my_lists": "我的清单",
     "my_bids": "我的出价",
     "activity": "活动",
     "buy_mana_with_fiat": "买法力"
+  },
+  "user_menu": {
+    "my_assets": "我的资产",
+    "my_lists": "我的列表"
   },
   "menu": {
     "all": "所有资产",
@@ -1109,5 +1114,8 @@
   "favorites_counter": {
     "pick_label": "选择最喜欢的",
     "unpick_label": "取消收藏"
+  },
+  "lists_page": {
+    "default_title": "心愿单"
   }
 }

@@ -26,11 +26,12 @@ import { locations } from './locations'
 import { AssetType } from '../asset/types'
 import { getAddress as getWalletAddress } from '../wallet/selectors'
 import { getAddress as getAccountAddress } from '../account/selectors'
-import { isLandSection } from '../ui/utils'
+import { isLandSection, isListsView } from '../ui/utils'
 
 export const getState = (state: RootState) => state.routing
 
-export const getVisitedLocations = (state: RootState) => getState(state).visitedLocations
+export const getVisitedLocations = (state: RootState) =>
+  getState(state).visitedLocations
 
 const getPathName = createSelector<
   RootState,
@@ -155,7 +156,7 @@ export const getIsMap = createSelector<RootState, string, boolean | undefined>(
 export const getItemId = createSelector<RootState, string, string | undefined>(
   getRouterSearch,
   search => {
-    const itemId = getURLParam(search, 'isSoldOut')
+    const itemId = getURLParam(search, 'itemId')
     return itemId ? itemId : undefined
   }
 )
@@ -223,18 +224,31 @@ export const getAssetType = createSelector<
   string,
   string,
   VendorName,
+  View | undefined,
   AssetType
->(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
-  let assetTypeParam = getURLParam(search, 'assetType') ?? ''
+>(
+  getRouterSearch,
+  getPathName,
+  getVendor,
+  getView,
+  (search, pathname, vendor, view) => {
+    let assetTypeParam = getURLParam(search, 'assetType') ?? ''
 
-  if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
-    if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
-      return AssetType.ITEM
+    // TODO (my lists): view can be undefined
+
+    if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
+      if (
+        vendor === VendorName.DECENTRALAND &&
+        pathname === locations.browse() &&
+        View.LISTS === view
+      ) {
+        return AssetType.ITEM
+      }
+      return AssetType.NFT
     }
-    return AssetType.NFT
+    return assetTypeParam as AssetType
   }
-  return assetTypeParam as AssetType
-})
+)
 
 export const getEmotePlayMode = createSelector<
   RootState,
@@ -277,7 +291,10 @@ export const getMaxEstateSize = createSelector<RootState, string, string>(
 
 export const getRentalDays = createSelector<RootState, string, number[]>(
   getRouterSearch,
-  search => getURLParamArray(search, 'rentalDays').map((value) => Number.parseInt(value)) as number[]
+  search =>
+    getURLParamArray(search, 'rentalDays').map(value =>
+      Number.parseInt(value)
+    ) as number[]
 )
 
 export const getMinDistanceToPlaza = createSelector<RootState, string, string>(
@@ -456,9 +473,14 @@ export const hasFiltersEnabled = createSelector<
     maxDistanceToPlaza,
     adjacentToRoad,
     creators,
-    rentalDays
+    rentalDays,
+    view
   } = browseOptions
   const isLand = isLandSection(section as Section)
+
+  // TODO (lists): are we good with this?
+  if (isListsView(view)) return false
+
   if (isLand) {
     const hasOnSaleFilter = onlyOnSale === true
     const hasOnRentFilter = onlyOnRent === true

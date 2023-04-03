@@ -37,13 +37,16 @@ const AssetList = (props: Props) => {
   useEffect(() => {
     if (visitedLocations.length > 1) {
       const [currentLocation, previousLocation] = visitedLocations
-      const elementId = getLastVisitedElementId(currentLocation?.pathname, previousLocation?.pathname)
+      const elementId = getLastVisitedElementId(
+        currentLocation?.pathname,
+        previousLocation?.pathname
+      )
       if (elementId) {
         document.getElementById(elementId)?.scrollIntoView()
       }
     }
-  // only run effect on mount
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // only run effect on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleLoadMore = useCallback(

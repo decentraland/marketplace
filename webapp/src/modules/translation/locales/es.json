@@ -84,9 +84,14 @@
     "collectibles": "Coleccionables",
     "partners": "Socios",
     "my_assets": "Mis Objetos",
+    "my_lists": "Mis Listas",
     "my_bids": "Mis Ofertas",
     "activity": "Actividad",
     "buy_mana_with_fiat": "Comprar MANA"
+  },
+  "user_menu": {
+    "my_assets": "Mis Objetos",
+    "my_lists": "Mis Listas"
   },
   "menu": {
     "all": "Todos",
@@ -1106,5 +1111,8 @@
   "favorites_counter": {
     "pick_label": "elegir como favorito",
     "unpick_label": "quitar de favoritos"
+  },
+  "lists_page": {
+    "default_title": "Lista de deseos"
   }
 }
