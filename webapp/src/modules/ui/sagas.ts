@@ -23,8 +23,14 @@ export function* uiSaga() {
 
 function* handleConnectWalletSuccess(_action: ConnectWalletSuccessAction) {
   const location: ReturnType<typeof getLocation> = yield select(getLocation)
-  if (location.pathname === locations.signIn()) {
-    yield put(push(locations.defaultCurrentAccount()))
+  const { pathname, search } = location
+  if (pathname === locations.signIn()) {
+    const redirectTo = new URLSearchParams(search).get('redirectTo')
+    if (redirectTo) {
+      yield put(push(decodeURIComponent(redirectTo)))
+    } else {
+      yield put(push(locations.defaultCurrentAccount()))
+    }
   }
 }
 

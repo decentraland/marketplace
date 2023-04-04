@@ -6,6 +6,7 @@ import { locations } from '../../modules/routing/locations'
 import { Bid } from '../Bid'
 import { Props } from './Bids.types'
 import './Bids.css'
+import { useLocation } from 'react-router-dom'
 
 const Bids = (props: Props) => {
   const {
@@ -20,6 +21,7 @@ const Bids = (props: Props) => {
   } = props
 
   const [showArchived, setShowArchivedSeller] = useState(false)
+  const { pathname, search } = useLocation()
 
   const handleToggleSeller = useCallback(
     () => setShowArchivedSeller(!showArchived),
@@ -29,9 +31,9 @@ const Bids = (props: Props) => {
   // Redirect to signIn if trying to access current account without a wallet
   useEffect(() => {
     if (!isConnecting && !wallet) {
-      onNavigate(locations.signIn())
+      onNavigate(locations.signIn(`${pathname}${search}`))
     }
-  }, [isConnecting, wallet, onNavigate])
+  }, [isConnecting, wallet, onNavigate, pathname, search])
 
   useEffect(() => {
     if (wallet) {
