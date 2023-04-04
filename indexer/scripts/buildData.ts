@@ -27,7 +27,7 @@ const startBlockByNetwork: Record<Network, Record<ContractName, number>> = {
     EstateProxy: 6236547,
     MarketplaceProxy: 6496012,
     DCLRegistrar: 9412979,
-    DCLControllerV2: 9412979
+    DCLControllerV2: 16977347
   },
   [Network.ROPSTEN]: {
     MANAToken: 1891200,
