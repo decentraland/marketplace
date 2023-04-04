@@ -1,10 +1,16 @@
 import { createSelector } from 'reselect'
-import { Item, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import {
+  Item,
+  NFTCategory,
+  Order,
+  RentalListing,
+  RentalStatus
+} from '@dcl/schemas'
 import {
   Transaction,
   TransactionStatus
 } from 'decentraland-dapps/dist/modules/transaction/types'
-import { getData as getNFTData } from '../../nft/selectors'
+import { getData as getNFTData, getWalletNFTs } from '../../nft/selectors'
 import { getData as getItemData } from '../../item/selectors'
 import { getData as getOrderData } from '../../order/selectors'
 import { getData as getRentalData } from '../../rental/selectors'
@@ -15,7 +21,7 @@ import { BrowseUIState } from './reducer'
 import { NFT } from '../../nft/types'
 import { ItemState } from '../../item/reducer'
 import { VendorName } from '../../vendor'
-import { getAddress } from '../../wallet/selectors'
+import { getAddress, getWallet } from '../../wallet/selectors'
 import { getTransactionsByType } from '../../transaction/selectors'
 import { View } from '../types'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
@@ -99,6 +105,24 @@ export const getOnRentNFTsByLessor = (state: RootState, address: string) => {
 export const getOnRentNFTsByTenant = (state: RootState, address: string) => {
   return getOnRentNFTs(state).filter(([, rental]) => rental.tenant === address)
 }
+
+export const getWalletOwnedLands = createSelector(
+  getWallet,
+  getWalletNFTs,
+  getOnRentNFTs,
+  (wallet, nfts, onRentNFTs) => {
+    return [
+      ...nfts.filter(nft =>
+        [NFTCategory.ESTATE, NFTCategory.PARCEL].includes(
+          nft.category as NFTCategory
+        )
+      ),
+      ...onRentNFTs
+        .filter(([, rental]) => rental.lessor === wallet?.address)
+        .map(([nft]) => nft)
+    ]
+  }
+)
 
 export const getOnSaleElements = createSelector<
   RootState,

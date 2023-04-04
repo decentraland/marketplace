@@ -1,0 +1,66 @@
+.FavoritesCounter {
+  display: flex;
+}
+
+.FavoritesCounter:hover {
+  cursor: pointer;
+}
+
+.FavoritesCounter:hover i {
+  color: var(--primary);
+}
+
+
+.FavoritesCounter.Collapsed {
+  flex-direction: column;
+  text-align: center;
+  row-gap: 8px;
+}
+
+.bubble {
+  background-color: #ecebed;
+  border: 1px solid #a09ba8;
+  color: #43404A;
+  border-radius: 40px;
+  padding: 4px 11px;
+  z-index: 2;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 12px;
+}
+
+.FavoritesCounter.Collapsed .bubble {
+  min-width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.FavoritesCounter.Collapsed .counter {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 1199px) {
+  .bubble {
+    font-size: x-small;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 992px) {
+  .bubble {
+    align-items: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .bubble {
+    align-items: flex-start;
+    align-self: flex-end;
+    left: unset;
+    text-align: left;
+  }
+}

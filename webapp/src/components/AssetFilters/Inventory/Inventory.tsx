@@ -29,12 +29,14 @@ export const Inventory = ({
           setData(data)
         }
       } catch (e) {
-        console.warn('Could not fetch inventory data')
-        setIsLoading(false)
+        if (!cancel) {
+          console.warn('Could not fetch inventory data')
+          setIsLoading(false)
+        }
       }
     })()
     return () => {
-      cancel = false
+      cancel = true
     }
   }, [fetcher])
 

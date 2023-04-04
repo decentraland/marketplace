@@ -10,13 +10,14 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
-import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { hasAuthorizationAndEnoughAllowance } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { isWearableOrEmote } from '../../../modules/asset/utils'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
+import * as events from '../../../utils/events'
 import { AssetType } from '../../../modules/asset/types'
 import { AuthorizationModal } from '../../AuthorizationModal'
 import { AssetAction } from '../../AssetAction'
@@ -27,6 +28,7 @@ import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
+import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
 import { NotEnoughMana } from '../NotEnoughMana'
 import { PriceHasChanged } from '../PriceHasChanged'
 import { Props } from './BuyNFTModal.types'
@@ -41,7 +43,6 @@ const BuyNFTModal = (props: Props) => {
     isOwner,
     hasInsufficientMANA,
     hasLowPrice,
-
     isBuyWithCardPage,
     getContract,
     onExecuteOrder,
@@ -55,7 +56,7 @@ const BuyNFTModal = (props: Props) => {
 
   const handleExecuteOrder = useCallback(() => {
     if (isBuyWithCardPage) {
-      analytics.track('Click on Buy NFT With Card')
+      analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
       return onExecuteOrderWithCard(nft)
     }
 
@@ -71,7 +72,7 @@ const BuyNFTModal = (props: Props) => {
   ])
 
   const handleCancel = useCallback(() => {
-    if (isBuyWithCardPage) analytics.track('Cancel Buy NFT With Card')
+    if (isBuyWithCardPage) analytics.track(events.CANCEL_BUY_NFT_WITH_CARD)
   }, [analytics, isBuyWithCardPage])
 
   const authorization: Authorization | null = useMemo(() => {
@@ -95,9 +96,28 @@ const BuyNFTModal = (props: Props) => {
       : null
   }, [getContract, nft.network, nft.chainId, wallet.address, order])
 
+  const shouldUpdateSpendingCap: boolean = useMemo<boolean>(() => {
+    return (
+      !!authorizations &&
+      !!authorization &&
+      !!order?.price &&
+      !hasAuthorizationAndEnoughAllowance(
+        authorizations,
+        authorization,
+        order.price
+      )
+    )
+  }, [authorizations, authorization, order?.price])
+
   const handleSubmit = useCallback(() => {
     if (
-      (authorization && hasAuthorization(authorizations, authorization)) ||
+      (authorization &&
+        order?.price &&
+        hasAuthorizationAndEnoughAllowance(
+          authorizations,
+          authorization,
+          order.price
+        )) ||
       isBuyWithCardPage
     ) {
       handleExecuteOrder()
@@ -109,7 +129,8 @@ const BuyNFTModal = (props: Props) => {
     authorization,
     handleExecuteOrder,
     isBuyWithCardPage,
-    setShowAuthorizationModal
+    setShowAuthorizationModal,
+    order?.price
   ])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
@@ -200,6 +221,7 @@ const BuyNFTModal = (props: Props) => {
       {hasLowPrice && !isBuyWithCardPage ? (
         <PriceTooLow chainId={nft.chainId} network={nft.network} />
       ) : null}
+      <PartiallySupportedNetworkCard asset={nft} />
       <div
         className={classNames('buttons', isWearableOrEmote(nft) && 'with-mana')}
       >
@@ -240,6 +262,7 @@ const BuyNFTModal = (props: Props) => {
         <AuthorizationModal
           open={showAuthorizationModal}
           authorization={authorization}
+          shouldUpdateSpendingCap={shouldUpdateSpendingCap}
           onProceed={handleExecuteOrder}
           onCancel={handleClose}
         />

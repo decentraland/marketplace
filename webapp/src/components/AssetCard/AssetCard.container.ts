@@ -13,6 +13,7 @@ import { getOpenRentalId } from '../../modules/rental/utils'
 import { getRentalById } from '../../modules/rental/selectors'
 import { MapStateProps, OwnProps, MapDispatchProps } from './AssetCard.types'
 import AssetCard from './AssetCard'
+import { getIsFavoritesEnabled } from '../../modules/features/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const { order, asset } = ownProps
@@ -41,7 +42,8 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     showRentalChip:
       rentalOfNFT !== null &&
       view === View.CURRENT_ACCOUNT &&
-      getLocation(state).pathname !== locations.root()
+      getLocation(state).pathname !== locations.root(),
+    isFavoritesEnabled: getIsFavoritesEnabled(state)
   }
 }
 

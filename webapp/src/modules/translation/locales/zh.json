@@ -58,7 +58,8 @@
     "status": "地位",
     "unknown_error": "不明错误",
     "the_parcel": "地块",
-    "the_estate": "产业"
+    "the_estate": "产业",
+    "discord_server": "Discord 服务器"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -653,20 +654,13 @@
     "regions_where_operates": "Transak 经营的地区",
     "explanation": "银行卡支付由 {link_to_transak} 处理，并适用于 {regions}。 支持信用卡和借记卡。"
   },
+  "partially_supported_network_card": {
+    "content": "您已连接到 Polygon Network 以购买 <mana>1</mana> 以下的物品。 您的钱包中需要有 MATIC 来支付此次购买的交易费用。"
+  },
   "price_too_low": {
     "minimum_price": "无成本交易支持的最低金额为 {price}",
     "get_item_in_network": "为了获得这个物品，您需要将您的网络切换到 {network}，然后用 {token} 支付交易成本。",
     "switch_network": "切换到 {network}"
-  },
-  "mint_page": {
-    "title": "购买{category}",
-    "subtitle": "您将以{amount}的价格购买{name}。",
-    "not_for_sale": "{name} 不可用于铸造，但您可以在 {secondary_market_link} 上搜索它。",
-    "secondary_market": "二级市场",
-    "action": "购买",
-    "no_fingerprint": "无法加载指纹。",
-    "is_owner": "您是{name}的所有者。",
-    "not_enough_mana": "您没有足够的MANA来购买{name}。"
   },
   "mint_with_mana_page": {
     "title": "购买{name}",
@@ -891,6 +885,22 @@
       "title": "发送交易时出错",
       "body": "刷新页面并尝试再次发送交易。",
       "refresh": "刷新"
+    },
+    "pick_item_as_favorite_success": {
+      "title": "{name} 已添加到收藏夹",
+      "view_my_lists": "查看我的列表"
+    },
+    "pick_item_as_favorite_failure": {
+      "title": "将 {name} 添加到收藏夹时出错",
+      "try_again": "再试一次"
+    },
+    "unpick_item_as_favorite_success": {
+      "title": "{name} 已从收藏夹中删除",
+      "undo": "撤消"
+    },
+    "unpick_item_as_favorite_failure": {
+      "title": "从收藏夹中删除 {name} 时出错",
+      "try_again": "再试一次"
     }
   },
   "maintainance": {
@@ -1095,5 +1105,9 @@
     "for_sale_and_rent": "可供出售或出租",
     "for_sale": "可供出售",
     "for_rent": "可供出租"
+  },
+  "favorites_counter": {
+    "pick_label": "选择最喜欢的",
+    "unpick_label": "取消收藏"
   }
 }

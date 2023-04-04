@@ -1,11 +1,24 @@
-import { Order, RentalListing } from '@dcl/schemas'
-import { showToast } from 'decentraland-dapps/dist/modules/toast/actions'
+import { Item, Order, RentalListing } from '@dcl/schemas'
+import {
+  hideAllToasts,
+  showToast
+} from 'decentraland-dapps/dist/modules/toast/actions'
 import { getState } from 'decentraland-dapps/dist/modules/toast/selectors'
 import { expectSaga } from 'redux-saga-test-plan'
 import { select } from 'redux-saga/effects'
+import {
+  pickItemAsFavoriteFailure,
+  pickItemAsFavoriteRequest,
+  pickItemAsFavoriteSuccess,
+  unpickItemAsFavoriteFailure,
+  unpickItemAsFavoriteSuccess
+} from '../favorites/actions'
 import { buyItemWithCardFailure } from '../item/actions'
 import { NFT } from '../nft/types'
-import { executeOrderFailure, executeOrderWithCardFailure } from '../order/actions'
+import {
+  executeOrderFailure,
+  executeOrderWithCardFailure
+} from '../order/actions'
 import {
   claimAssetSuccess,
   removeRentalSuccess,
@@ -20,9 +33,14 @@ import {
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
   getStoreUpdateSuccessToast,
-  getUpsertRentalSuccessToast
+  getUpsertRentalSuccessToast,
+  getPickItemAsFavoriteSuccessToast,
+  getPickItemAsFavoriteFailureToast,
+  getUnpickItemAsFavoriteFailureToast,
+  getUnpickItemAsFavoriteSuccessToast
 } from '../toast/toasts'
 import { toastSaga } from './sagas'
+import { toastDispatchableActionsChannel } from './utils'
 
 let nft: NFT
 let rental: RentalListing
@@ -113,20 +131,81 @@ describe('when handling the failure of a buy NFTs with card', () => {
   })
 })
 
-
-describe('when handling the failure of excecute order ', () => {
+describe('when handling the failure of excecute order', () => {
   const error = 'anError'
-  const order =  {
+  const order = {
     contractAddress: 'aContractAddress',
     tokenId: 'aTokenId',
     price: '100000000000'
-  } as Order;
+  } as Order
 
-  it('should show a toast signaling the failure ', () => {
+  it('should show a toast signaling the failure', () => {
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
       .put(showToast(getExcecuteOrderFailureToast(), 'bottom center'))
       .dispatch(executeOrderFailure(order, nft, error))
+      .silentRun()
+  })
+})
+
+describe('when handling the success of picking an item as favorite', () => {
+  it('should show a toast signaling the success ', () => {
+    const item = {} as Item
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getPickItemAsFavoriteSuccessToast(item), 'bottom center'))
+      .dispatch(pickItemAsFavoriteSuccess(item))
+      .silentRun()
+  })
+})
+
+describe('when handling the failure of picking an item as favorite', () => {
+  it('should show a toast signaling the failure ', () => {
+    const item = {} as Item
+    const error = 'anError'
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(showToast(getPickItemAsFavoriteFailureToast(item), 'bottom center'))
+      .dispatch(pickItemAsFavoriteFailure(item, error))
+      .silentRun()
+  })
+})
+
+describe('when handling the success of unpicking a favorite item', () => {
+  it('should show a toast signaling the success ', () => {
+    const item = {} as Item
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(
+        showToast(getUnpickItemAsFavoriteSuccessToast(item), 'bottom center')
+      )
+      .dispatch(unpickItemAsFavoriteSuccess(item))
+      .silentRun()
+  })
+})
+
+describe('when handling the failure of unpicking a favorite item', () => {
+  it('should show a toast signaling the failure ', () => {
+    const item = {} as Item
+    const error = 'anError'
+    return expectSaga(toastSaga)
+      .provide([[select(getState), []]])
+      .put(
+        showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
+      )
+      .dispatch(unpickItemAsFavoriteFailure(item, error))
+      .silentRun()
+  })
+})
+
+describe('when handling a put into the toastDispatchableActionsChannel', () => {
+  it('should hide all the previous rendered toasts and dispatch the given action', () => {
+    const item = {} as Item
+    toastDispatchableActionsChannel.put(pickItemAsFavoriteRequest(item))
+
+    return expectSaga(toastSaga)
+      .put(pickItemAsFavoriteRequest(item))
+      .put(hideAllToasts())
       .silentRun()
   })
 })

@@ -10,7 +10,7 @@ import {
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ContractName } from 'decentraland-transactions'
-import { hasAuthorization } from 'decentraland-dapps/dist/modules/authorization/utils'
+import { hasAuthorizationAndEnoughAllowance } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { locations } from '../../../modules/routing/locations'
@@ -19,17 +19,19 @@ import { getContractNames } from '../../../modules/vendor'
 import { Section } from '../../../modules/vendor/decentraland'
 import { AssetType } from '../../../modules/asset/types'
 import { isWearableOrEmote } from '../../../modules/asset/utils'
+import * as events from '../../../utils/events'
 import { AssetAction } from '../../AssetAction'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
+import { AssetProviderPage } from '../../AssetProviderPage'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { PriceTooLow } from '../PriceTooLow'
 import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
 import { NotEnoughMana } from '../NotEnoughMana'
 import { PriceHasChanged } from '../PriceHasChanged'
+import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
 import { Props } from './MintItemModal.types'
-import { AssetProviderPage } from '../../AssetProviderPage'
 
 const MintItemModal = (props: Props) => {
   const {
@@ -52,7 +54,7 @@ const MintItemModal = (props: Props) => {
 
   const handleExecuteOrder = useCallback(() => {
     if (isBuyWithCardPage) {
-      analytics.track('Click on Buy NFT With Card')
+      analytics.track(events.CLICK_BUY_NFT_WITH_CARD)
       return onBuyItemWithCard(item)
     }
 
@@ -60,7 +62,7 @@ const MintItemModal = (props: Props) => {
   }, [isBuyWithCardPage, onBuyItemWithCard, onBuyItem, item, analytics])
 
   const handleCancel = useCallback(() => {
-    if (isBuyWithCardPage) analytics.track('Cancel Buy NFT With Card')
+    if (isBuyWithCardPage) analytics.track(events.CANCEL_BUY_NFT_WITH_CARD)
   }, [analytics, isBuyWithCardPage])
 
   const authorization: Authorization | null = useMemo(() => {
@@ -87,16 +89,40 @@ const MintItemModal = (props: Props) => {
       : null
   }, [getContract, item.network, item.chainId, wallet.address])
 
+  const shouldUpdateSpendingCap: boolean = useMemo<boolean>(() => {
+    return (
+      !!authorizations &&
+      !!authorization &&
+      !!item?.price &&
+      !hasAuthorizationAndEnoughAllowance(
+        authorizations,
+        authorization,
+        item.price
+      )
+    )
+  }, [authorizations, authorization, item?.price])
+
   const handleSubmit = useCallback(() => {
     if (
-      (authorization && hasAuthorization(authorizations, authorization)) ||
+      (authorization &&
+        hasAuthorizationAndEnoughAllowance(
+          authorizations,
+          authorization,
+          item.price
+        )) ||
       isBuyWithCardPage
     ) {
       handleExecuteOrder()
     } else {
       setShowAuthorizationModal(true)
     }
-  }, [authorization, authorizations, handleExecuteOrder, isBuyWithCardPage])
+  }, [
+    authorization,
+    authorizations,
+    handleExecuteOrder,
+    isBuyWithCardPage,
+    item.price
+  ])
 
   const handleClose = useCallback(() => setShowAuthorizationModal(false), [
     setShowAuthorizationModal
@@ -193,6 +219,7 @@ const MintItemModal = (props: Props) => {
       {hasLowPrice && !isBuyWithCardPage ? (
         <PriceTooLow chainId={item.chainId} network={item.network} />
       ) : null}
+      <PartiallySupportedNetworkCard asset={item} />
       <div
         className={classNames(
           'buttons',
@@ -237,6 +264,7 @@ const MintItemModal = (props: Props) => {
           isLoading={isLoading}
           open={showAuthorizationModal}
           authorization={authorization}
+          shouldUpdateSpendingCap={shouldUpdateSpendingCap}
           onProceed={handleExecuteOrder}
           onCancel={handleClose}
         />

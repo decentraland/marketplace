@@ -1,4 +1,5 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
+import { matchPath } from 'react-router-dom'
 import classNames from 'classnames'
 import { Container, Mobile, NotMobile, Page, Tabs } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -10,7 +11,7 @@ import {
   getPersistedIsMapProperty,
   isAccountView
 } from '../../modules/ui/utils'
-import { Atlas } from '../Atlas'
+import { locations } from '../../modules/routing/locations'
 import { AccountSidebar } from '../AccountSidebar'
 import { AssetList } from '../AssetList'
 import { Row } from '../Layout/Row'
@@ -25,8 +26,9 @@ import Sales from '../Sales'
 import { Bids } from '../Bids'
 import { BackToTopButton } from '../BackToTopButton'
 import { Props } from './AssetBrowse.types'
-import './AssetBrowse.css'
 import MapTopbar from './MapTopbar'
+import MapBrowse from './MapBrowse'
+import './AssetBrowse.css'
 
 const AssetBrowse = (props: Props) => {
   const {
@@ -45,6 +47,7 @@ const AssetBrowse = (props: Props) => {
     onlySmart,
     viewInState,
     onlyOnRent,
+    visitedLocations,
     isMapViewFiltersEnabled
   } = props
 
@@ -101,12 +104,18 @@ const AssetBrowse = (props: Props) => {
         !isAccountView(view) &&
         isMapPropertyPersisted === false
       ) {
+        const previousPageIsLandDetail = !!matchPath(
+          visitedLocations[1]?.pathname,
+          { path: locations.nft(), strict: true, exact: true }
+        )
         // Update the browser options to match the ones persisted.
         browseOpts.isMap = isMap
         browseOpts.isFullscreen = isFullscreen
         browseOpts.onlyOnSale =
-          (!onlyOnSale && onlyOnRent === false) ||
-          (onlyOnSale === undefined && onlyOnRent === undefined) ||
+          (!onlyOnSale && onlyOnRent === false && !previousPageIsLandDetail) ||
+          (onlyOnSale === undefined &&
+            onlyOnRent === undefined &&
+            !previousPageIsLandDetail) ||
           onlyOnSale
 
         // We also set the fetch function as onBrowse because we need the url to be updated.
@@ -131,14 +140,9 @@ const AssetBrowse = (props: Props) => {
     hasFetched,
     onlyOnRent,
     onBrowse,
-    isMapPropertyPersisted
+    isMapPropertyPersisted,
+    visitedLocations
   ])
-
-  // Handlers
-  const handleSetFullscreen = useCallback(
-    () => onBrowse({ isMap: true, isFullscreen: true }),
-    [onBrowse]
-  )
 
   const left = (
     <>
@@ -159,9 +163,9 @@ const AssetBrowse = (props: Props) => {
 
   const mapTopbar = isMapViewFiltersEnabled ? (
     <MapTopbar
-              showOwned={showOwnedLandOnMap}
-              onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
-            />
+      showOwned={showOwnedLandOnMap}
+      onShowOwnedChange={(show: boolean) => setShowOwnedLandOnMap(show)}
+    />
   ) : (
     <div className="blur-background">
       <Container>
@@ -204,27 +208,9 @@ const AssetBrowse = (props: Props) => {
     default:
       right = (
         <>
-          {isMap && isFullscreen ? (
-            mapTopbar
-          ) : (
-            <AssetTopbar />
-          )}
+          {isMap && isFullscreen ? mapTopbar : <AssetTopbar />}
           {isMap ? (
-            <div className="Atlas">
-              <Atlas
-                withNavigation
-                withPopup
-                withMapColorsInfo={isMapViewFiltersEnabled}
-                withZoomControls={isMapViewFiltersEnabled}
-                showOnSale={isMapViewFiltersEnabled ? !!onlyOnSale : onlyOnSale}
-                showForRent={isMapViewFiltersEnabled ? !!onlyOnRent : undefined}
-                showOwned={isMapViewFiltersEnabled ? showOwnedLandOnMap : undefined}
-              />
-              <div
-                className="fullscreen-button"
-                onClick={handleSetFullscreen}
-              />
-            </div>
+            <MapBrowse showOwned={showOwnedLandOnMap} />
           ) : (
             <AssetList isManager={view === View.CURRENT_ACCOUNT} />
           )}

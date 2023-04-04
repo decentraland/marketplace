@@ -7,6 +7,7 @@ import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { AssetType } from '../../../../modules/asset/types'
 import { isNFT } from '../../../../modules/asset/utils'
 import { locations } from '../../../../modules/routing/locations'
+import * as events from '../../../../utils/events'
 import styles from './BuyNFTButtons.module.css'
 import { Props } from './BuyNFTButtons.types'
 
@@ -18,7 +19,7 @@ const BuyNFTButtons = ({ asset }: Props) => {
   const analytics = getAnalytics()
 
   const handleBuyWithCard = useCallback(() => {
-    analytics.track('Click on go to Buy NFT With Card')
+    analytics.track(events.CLICK_GO_TO_BUY_NFT_WITH_CARD)
   }, [analytics])
 
   return (

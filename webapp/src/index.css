@@ -53,6 +53,10 @@ code {
   max-width: 1360px !important;
 }
 
+.dcl.toast .toast-info .body .ui.basic.button.no-padding {
+  padding: 0;
+}
+
 @media (max-width: 767px) {
   .Navigation,
   .dcl.navbar.fullscreen,

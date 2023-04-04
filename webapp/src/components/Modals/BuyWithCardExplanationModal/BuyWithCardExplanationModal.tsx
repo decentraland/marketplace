@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { Button, Modal, ModalNavigation } from 'decentraland-ui'
-
+import * as events from '../../../utils/events'
 import styles from './BuyWithCardExplanationModal.module.css'
 import { Props } from './BuyWithCardExplanationModal.types'
 
@@ -14,12 +14,12 @@ const BuyWithCardExplanationModal = ({
   const analytics = getAnalytics()
 
   const handleContinue = useCallback(() => {
-    analytics.track('Click on Continue in Buy With Card Explanation Modal')
+    analytics.track(events.CONTINUE_BUY_WITH_CARD_MODAL)
     onContinue(asset)
   }, [analytics, asset, onContinue])
 
   const handleGoBack = useCallback(() => {
-    analytics.track('Click on Go Back in Buy With Card Explanation Modal')
+    analytics.track(events.BACK_BUY_WITH_CARD_MODAL)
     onClose()
   }, [analytics, onClose])
 
