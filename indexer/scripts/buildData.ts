@@ -45,7 +45,7 @@ const startBlockByNetwork: Record<Network, Record<ContractName, number>> = {
     EstateProxy: 7059236,
     MarketplaceProxy: 7097561,
     DCLRegistrar: 7098224,
-    DCLControllerV2: 8659376
+    DCLControllerV2: 8767204
   }
 }
 

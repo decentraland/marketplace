@@ -3,7 +3,8 @@
     "inputs": [
       { "internalType": "contract IERC20Token", "name": "_acceptedToken", "type": "address" },
       { "internalType": "contract IDCLRegistrar", "name": "_registrar", "type": "address" },
-      { "internalType": "address", "name": "_feeCollector", "type": "address" }
+      { "internalType": "address", "name": "_feeCollector", "type": "address" },
+      { "internalType": "address", "name": "_owner", "type": "address" }
     ],
     "payable": false,
     "stateMutability": "nonpayable",
@@ -16,15 +17,6 @@
       { "indexed": true, "internalType": "address", "name": "_newFeeCollector", "type": "address" }
     ],
     "name": "FeeCollectorChanged",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      { "indexed": true, "internalType": "uint256", "name": "_oldMaxGasPrice", "type": "uint256" },
-      { "indexed": true, "internalType": "uint256", "name": "_newMaxGasPrice", "type": "uint256" }
-    ],
-    "name": "MaxGasPriceChanged",
     "type": "event"
   },
   {
@@ -86,15 +78,6 @@
   {
     "constant": true,
     "inputs": [],
-    "name": "maxGasPrice",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
-    "payable": false,
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": true,
-    "inputs": [],
     "name": "owner",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "payable": false,
@@ -144,15 +127,6 @@
     "constant": false,
     "inputs": [{ "internalType": "address", "name": "newOwner", "type": "address" }],
     "name": "transferOwnership",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [{ "internalType": "uint256", "name": "_maxGasPrice", "type": "uint256" }],
-    "name": "updateMaxGasPrice",
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
