@@ -1,0 +1,13 @@
+.favoritesList {
+  margin-top: 20px;
+}
+
+.content {
+  height: 100%;
+}
+
+@media (max-width: 767px) {
+  .favoritesList {
+    height: 100%;
+  }
+}

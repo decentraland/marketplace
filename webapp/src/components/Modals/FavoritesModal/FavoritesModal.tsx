@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { ModalNavigation, Message } from 'decentraland-ui'
+import { ModalNavigation, Message, useMobileMediaQuery } from 'decentraland-ui'
 import { FixedSizeList } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -9,12 +9,17 @@ import { isErrorWithMessage } from '../../../lib/error'
 import { LinkedProfile } from '../../LinkedProfile'
 import { favoritesAPI } from '../../../modules/vendor/decentraland/favorites'
 import { Props } from './FavoritesModal.types'
+import styles from './FavoritesModal.module.css'
+
+const ITEM_HEIGHT = 55
 
 const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string>()
   const [favorites, setFavorites] = useState<string[]>([])
   const [total, setTotalFavorites] = useState<number>(0)
+
+  const isMobile = useMobileMediaQuery()
 
   const fetchWhoFavoritedAnItem = useCallback(
     async (assetId: string, limit: number, offset: number) => {
@@ -56,12 +61,14 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
     async (startIndex: number, stopIndex: number) => {
       const addresses = Array.from(
         { length: stopIndex - startIndex },
-        (_, i) => '0x' + (i + startIndex + 1).toString(16).padStart(40, '0')
+        (_, i) =>
+          '0x' +
+          (i + startIndex + 1).toString(16).padStart(isMobile ? 18 : 40, '0')
       )
       setFavorites(addresses)
       setTotalFavorites(addresses.length)
     },
-    []
+    [isMobile]
   )
 
   const isItemLoaded = useCallback(
@@ -93,6 +100,10 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
     fetchNextPage(0, 100)
   }, [fetchNextPage])
 
+  // Makes the modal dynamic in size.
+  const desktopHeight =
+    favorites.length * ITEM_HEIGHT > 500 ? 500 : favorites.length * ITEM_HEIGHT
+
   return (
     <Modal
       size="small"
@@ -104,32 +115,40 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
         title={'Saved by'}
         onClose={!isLoading ? onClose : undefined}
       />
-      <Modal.Content>
+      <Modal.Content className={styles.content}>
         <>
-          <div>Only accounts with more than 1 VP are counted. Learn More</div>
+          <div>
+            Only accounts with more than 1 VP are counted.{' '}
+            <a href="#">Learn More</a>
+          </div>
           <div>The item has not been favorited by anyone</div>
-          <AutoSizer>
-            {({ height, width }) => (
-              <InfiniteLoader
-                isItemLoaded={isItemLoaded}
-                itemCount={favorites.length}
-                loadMoreItems={fetchNextPage}
-              >
-                {({ onItemsRendered, ref }) => (
-                  <FixedSizeList
-                    itemCount={favorites.length}
-                    onItemsRendered={onItemsRendered}
-                    itemSize={55}
-                    height={height ?? 300}
-                    width={width ?? 650}
-                    ref={ref}
-                  >
-                    {Row}
-                  </FixedSizeList>
-                )}
-              </InfiniteLoader>
-            )}
-          </AutoSizer>
+          <div
+            className={styles.favoritesList}
+            style={{ height: !isMobile ? desktopHeight : undefined }}
+          >
+            <AutoSizer>
+              {({ height, width }) => (
+                <InfiniteLoader
+                  isItemLoaded={isItemLoaded}
+                  itemCount={favorites.length}
+                  loadMoreItems={fetchNextPage}
+                >
+                  {({ onItemsRendered, ref }) => (
+                    <FixedSizeList
+                      itemCount={favorites.length}
+                      onItemsRendered={onItemsRendered}
+                      itemSize={ITEM_HEIGHT}
+                      height={height ?? 300}
+                      width={width ?? 650}
+                      ref={ref}
+                    >
+                      {Row}
+                    </FixedSizeList>
+                  )}
+                </InfiniteLoader>
+              )}
+            </AutoSizer>
+          </div>
           {error ? (
             <Message
               error
