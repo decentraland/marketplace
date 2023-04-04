@@ -5,7 +5,8 @@
 |Mainnet (Hosted Services)|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace|Qmf8fcWxGiKcxffcWRfhbAb36HEvXFNXsoRunuf4sPR1Bp|QmR9z6HJpRP9tSPLNPWkQ67JbDP4wzM4hBVkWmbgdKBCuo|
 |Mainnet (Satsuma)|https://subgraph.satsuma-prod.com/decentraland/marketplace/playground|Qmf8fcWxGiKcxffcWRfhbAb36HEvXFNXsoRunuf4sPR1Bp|QmR9z6HJpRP9tSPLNPWkQ67JbDP4wzM4hBVkWmbgdKBCuo|
 |Mainnet Temp (Hosted Services)|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-temp|QmR9z6HJpRP9tSPLNPWkQ67JbDP4wzM4hBVkWmbgdKBCuo|QmccAwofKfT9t4XKieDqwZre1UUZxuHw5ynB35BHwHAJDT|
-|Goerli (Hosted Services)|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli|QmRDXpMaGDL2Sq9Jfw7VfPz6aTfJNorEcY5LfhyQGgHeRY|QmfBfuQvcwpvf6da8A2LeWXvTrnu99H9fv6RLUCyYAFECJ|
+|Goerli (Hosted Services)|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-goerli|QmS2GCuAkzH2kNDYe2pA9HkRTPLpC5DpbXRqhQW93exZEM|QmRDXpMaGDL2Sq9Jfw7VfPz6aTfJNorEcY5LfhyQGgHeRY|
+|Goerli (Satsuma)|https://subgraph.satsuma-prod.com/decentraland/marketplace-goerli/playground|QmS2GCuAkzH2kNDYe2pA9HkRTPLpC5DpbXRqhQW93exZEM|-|
 |Ropsten (Hosted Services)|https://thegraph.com/hosted-service/subgraph/decentraland/marketplace-ropsten|QmZTADndoP4XRoWGVoQuaz8WTATx3UDXMn5SdE3GfkErkW|QmfHCGhLTZV8v2duxDkKtPZKMEdJM7X8YGRj2UvqmrAUBB|
 
 Using [The Graph](https://thegraph.com) and [Satsuma](https://www.satsuma.xyz/)
