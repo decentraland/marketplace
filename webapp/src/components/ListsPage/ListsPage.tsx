@@ -4,7 +4,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor'
-import { Section } from '../../modules/vendor/decentraland/routing'
+import { Section } from '../../modules/vendor/decentraland'
 import { Navbar } from '../Navbar'
 import { Footer } from '../Footer'
 import { Navigation } from '../Navigation'
@@ -41,6 +41,7 @@ const ListsPage = ({
         </Header>
         <AssetBrowse
           view={View.LISTS}
+          section={Section.LISTS}
           vendor={VendorName.DECENTRALAND}
           isFullscreen
         />

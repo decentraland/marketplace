@@ -25,7 +25,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
     wallet: getWallet(state),
     isConnecting: isConnecting(state),
     isFullscreen: getIsFullscreen(state),
-    viewAsGuest: getViewAsGuest(state)
+    viewAsGuest: !!getViewAsGuest(state)
   }
 }
 

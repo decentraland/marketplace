@@ -15,6 +15,10 @@ import { VendorName } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
 import { Section, Sections } from '../vendor/routing/types'
 import { RootState } from '../reducer'
+import { AssetType } from '../asset/types'
+import { getAddress as getWalletAddress } from '../wallet/selectors'
+import { getAddress as getAccountAddress } from '../account/selectors'
+import { isLandSection, isListsSection } from '../ui/utils'
 import {
   getDefaultOptionsByView,
   getURLParamArray,
@@ -23,10 +27,6 @@ import {
 } from './search'
 import { BrowseOptions, SortBy } from './types'
 import { locations } from './locations'
-import { AssetType } from '../asset/types'
-import { getAddress as getWalletAddress } from '../wallet/selectors'
-import { getAddress as getAccountAddress } from '../account/selectors'
-import { isLandSection, isListsView } from '../ui/utils'
 
 export const getState = (state: RootState) => state.routing
 
@@ -116,7 +116,7 @@ export const getOnlyOnSale = createSelector<
     default:
       return isLandSection(section)
         ? undefined
-        : getDefaultOptionsByView(view).onlyOnSale!
+        : getDefaultOptionsByView(view, section).onlyOnSale!
   }
 })
 
@@ -224,30 +224,21 @@ export const getAssetType = createSelector<
   string,
   string,
   VendorName,
-  View | undefined,
   AssetType
->(
-  getRouterSearch,
-  getPathName,
-  getVendor,
-  getView,
-  (search, pathname, vendor, view) => {
-    let assetTypeParam = getURLParam(search, 'assetType') ?? ''
+>(getRouterSearch, getPathName, getVendor, (search, pathname, vendor) => {
+  let assetTypeParam = getURLParam(search, 'assetType') ?? ''
 
-    // TODO (my lists): view can be undefined
-
-    if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
-      if (
-        vendor === VendorName.DECENTRALAND &&
-        (pathname === locations.browse() || View.LISTS === view)
-      ) {
-        return AssetType.ITEM
-      }
-      return AssetType.NFT
+  if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
+    if (
+      vendor === VendorName.DECENTRALAND &&
+      (pathname === locations.browse() || pathname === locations.list())
+    ) {
+      return AssetType.ITEM
     }
-    return assetTypeParam as AssetType
+    return AssetType.NFT
   }
-)
+  return assetTypeParam as AssetType
+})
 
 export const getEmotePlayMode = createSelector<
   RootState,
@@ -259,13 +250,21 @@ export const getEmotePlayMode = createSelector<
     getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
 )
 
-export const getViewAsGuest = createSelector<RootState, string, boolean>(
+export const getViewAsGuest = createSelector<
+  RootState,
+  string,
+  boolean | undefined
+>(
   getRouterSearch,
-  search => getURLParam(search, 'viewAsGuest') === 'true'
+  search => getURLParam(search, 'viewAsGuest') === 'true' || undefined
 )
-export const getOnlySmart = createSelector<RootState, string, boolean>(
+export const getOnlySmart = createSelector<
+  RootState,
+  string,
+  boolean | undefined
+>(
   getRouterSearch,
-  search => getURLParam(search, 'onlySmart') === 'true'
+  search => getURLParam(search, 'onlySmart') === 'true' || undefined
 )
 
 export const getMinPrice = createSelector<RootState, string, string>(
@@ -472,13 +471,12 @@ export const hasFiltersEnabled = createSelector<
     maxDistanceToPlaza,
     adjacentToRoad,
     creators,
-    rentalDays,
-    view
+    rentalDays
   } = browseOptions
   const isLand = isLandSection(section as Section)
 
   // TODO (lists): are we good with this?
-  if (isListsView(view)) return false
+  if (isListsSection(section as Section)) return false
 
   if (isLand) {
     const hasOnSaleFilter = onlyOnSale === true

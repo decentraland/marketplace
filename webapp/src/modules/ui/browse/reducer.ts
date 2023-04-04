@@ -17,6 +17,7 @@ import {
   FETCH_NFTS_SUCCESS
 } from '../../nft/actions'
 import { BrowseAction, BROWSE } from '../../routing/actions'
+import { Section } from '../../vendor/decentraland'
 import { SetViewAction, SET_VIEW } from '../actions'
 import { View } from '../types'
 
@@ -152,6 +153,8 @@ export function browseReducer(
         return state
       }
       const view = action.payload.options.view
+      const section = action.payload.options.section
+
       switch (view) {
         case View.MARKET:
         case View.CURRENT_ACCOUNT:
@@ -179,7 +182,8 @@ export function browseReducer(
               ...state.itemIds,
               ...action.payload.items.map(item => item.id)
             ],
-            count: action.payload.total,
+            count:
+              section === Section.LISTS ? state.count : action.payload.total,
             lastTimestamp: action.payload.timestamp
           }
         }

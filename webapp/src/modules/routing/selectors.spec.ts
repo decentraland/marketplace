@@ -197,6 +197,14 @@ describe("when there's no assetType URL param and the vendor is DECENTRALAND and
   })
 })
 
+describe("when there's no assetType URL param and the vendor is DECENTRALAND and the location is in lists", () => {
+  it('should return ITEM as the assetType', () => {
+    expect(
+      getAssetType.resultFunc('', locations.list(), VendorName.DECENTRALAND)
+    ).toBe(AssetType.ITEM)
+  })
+})
+
 describe("when there's assetType URL param, the assetType is not NFT or ITEM and the vendor is DECENTRALAND but the location is not in browse", () => {
   it('should return NFT as the assetType', () => {
     expect(

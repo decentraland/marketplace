@@ -221,6 +221,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
     const filters: ItemBrowseOptions = {
       view: browseOptions.view,
       page: browseOptions.page,
+      section: browseOptions.section as Section,
       filters: {
         first: 24,
         skip: 0
@@ -902,6 +903,40 @@ describe('when handling the browse action', () => {
         ])
         .put(push(buildBrowseURL(pathname, browseOptions)))
         .dispatch(browse(browseOptions))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the section is lists', () => {
+    beforeEach(() => {
+      newBrowseOptions = {
+        assetType: AssetType.ITEM,
+        section: Section.LISTS,
+        view: View.LISTS,
+        vendor: VendorName.DECENTRALAND
+      }
+      expectedBrowseOptions = {
+        ...newBrowseOptions,
+        page: 1,
+        onlyOnSale: undefined,
+        onlyOnRent: undefined,
+        sortBy: undefined,
+        isMap: undefined,
+        isFullscreen: undefined,
+        viewAsGuest: undefined
+      }
+    })
+
+    it('should fetch the assets and put the new url using only page, section, vendor, view, and asset type', () => {
+      return expectSaga(routingSaga)
+        .provide([
+          [select(getCurrentBrowseOptions), {}],
+          [select(getLocation), { pathname }],
+          [select(getEventData), {}],
+          [call(fetchAssetsFromRoute, expectedBrowseOptions), Promise.resolve()]
+        ])
+        .put(push(buildBrowseURL(pathname, expectedBrowseOptions)))
+        .dispatch(browse(newBrowseOptions))
         .run({ silenceTimeout: true })
     })
   })

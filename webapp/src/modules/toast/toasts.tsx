@@ -134,7 +134,7 @@ export function getPickItemAsFavoriteSuccessToast(
     title: t('toast.pick_item_as_favorite_success.title', {
       name: getAssetName(item)
     }),
-    // TODO: redirect to the chosen list
+    // TODO (lists): redirect to the chosen list
     body: (
       <Button as="a" basic href={locations.defaultList()}>
         {t('toast.pick_item_as_favorite_success.view_my_lists')}

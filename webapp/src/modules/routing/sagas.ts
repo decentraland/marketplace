@@ -218,13 +218,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
   const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
-  if (view === View.LISTS) {
-    yield put(
-      fetchFavoritedItemsRequest({ view, page, filters: { first, skip } })
-    )
-    return
-  }
-
   switch (section) {
     case Section.BIDS:
     case Section.STORE_SETTINGS:
@@ -265,6 +258,16 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         Array.isArray(address) ? address[0] : address,
         sortBy,
         search
+      )
+      break
+    case Section.LISTS:
+      yield put(
+        fetchFavoritedItemsRequest({
+          view,
+          section,
+          page,
+          filters: { first, skip }
+        })
       )
       break
     default:
@@ -340,6 +343,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 export function* getNewBrowseOptions(
   current: BrowseOptions
 ): Generator<unknown, BrowseOptions, any> {
+  // debugger
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
@@ -357,7 +361,7 @@ export function* getNewBrowseOptions(
     }
   }
 
-  const defaults = getDefaultOptionsByView(view)
+  const defaults = getDefaultOptionsByView(view, current.section as Section)
 
   return {
     ...defaults,
@@ -493,16 +497,23 @@ function* deriveCurrentOptions(
   previous: BrowseOptions,
   current: BrowseOptions
 ) {
+  // debugger
   let newOptions: BrowseOptions = {
     ...current,
+    assetType: current.assetType || previous.assetType,
+    section: current.section || previous.section
+  }
+
+  if (newOptions.section === Section.LISTS) return newOptions
+
+  newOptions = {
+    ...newOptions,
     onlyOnRent: current.hasOwnProperty('onlyOnRent')
       ? current.onlyOnRent
       : previous.onlyOnRent,
     onlyOnSale: current.hasOwnProperty('onlyOnSale')
       ? current.onlyOnSale
-      : previous.onlyOnSale,
-    assetType: current.assetType || previous.assetType,
-    section: current.section || previous.section
+      : previous.onlyOnSale
   }
 
   // Checks if the sorting categories are correctly set for the onlyOnRental and the onlyOnSell filters

@@ -20,7 +20,7 @@ import {
 import {
   isAccountView,
   isLandSection,
-  isListsView,
+  isListsSection,
   persistIsMapProperty
 } from '../../modules/ui/utils'
 import { Chip } from '../Chip'
@@ -111,7 +111,7 @@ export const AssetTopbar = ({
           [styles.searchMap]: isMap
         })}
       >
-        {!isMap && !isListsView(view) && (
+        {!isMap && !isListsSection(section) && (
           <Field
             className={styles.searchField}
             placeholder={t('nft_filters.search')}
@@ -144,7 +144,7 @@ export const AssetTopbar = ({
       {view &&
         !isLandSection(section) &&
         !isAccountView(view) &&
-        !isListsView(view) &&
+        !isListsSection(section) &&
         (category === NFTCategory.WEARABLE ||
           category === NFTCategory.EMOTE) && (
           <AssetTypeFilter
@@ -163,7 +163,7 @@ export const AssetTopbar = ({
               </button>
             )}
           </div>
-          {!isListsView(view) ? (
+          {!isListsSection(section) ? (
             <div className={styles.rightOptionsContainer}>
               <Dropdown
                 direction="left"

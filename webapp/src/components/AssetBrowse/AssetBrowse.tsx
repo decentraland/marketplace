@@ -9,7 +9,8 @@ import { Sections } from '../../modules/vendor/routing/types'
 import { BrowseOptions } from '../../modules/routing/types'
 import {
   getPersistedIsMapProperty,
-  isAccountView
+  isAccountView,
+  isListsSection
 } from '../../modules/ui/utils'
 import { locations } from '../../modules/routing/locations'
 import { AccountSidebar } from '../AccountSidebar'
@@ -144,21 +145,20 @@ const AssetBrowse = (props: Props) => {
     visitedLocations
   ])
 
-  const left =
-    view === View.LISTS ? null : (
-      <>
-        <NotMobile>
-          {view === View.ACCOUNT || isCurrentAccount ? (
-            <AccountSidebar
-              address={address!}
-              isCurrentAccount={isCurrentAccount}
-            />
-          ) : (
-            <NFTSidebar section={section} sections={sections} />
-          )}
-        </NotMobile>
-      </>
-    )
+  const left = isListsSection(section) ? null : (
+    <>
+      <NotMobile>
+        {view === View.ACCOUNT || isCurrentAccount ? (
+          <AccountSidebar
+            address={address!}
+            isCurrentAccount={isCurrentAccount}
+          />
+        ) : (
+          <NFTSidebar section={section} sections={sections} />
+        )}
+      </NotMobile>
+    </>
+  )
 
   let right: ReactNode
 

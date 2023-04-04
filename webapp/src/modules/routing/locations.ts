@@ -1,5 +1,6 @@
 import { CAMPAIGN_TAG } from '../../components/Campaign/config'
 import { AssetType } from '../asset/types'
+import { View } from '../ui/types'
 import { Section } from '../vendor/decentraland'
 import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
 import { getSearchParams } from './search'
@@ -44,7 +45,9 @@ export const locations = {
   defaultList: function() {
     return this.list(DEFAULT_FAVORITES_LIST_ID, {
       assetType: AssetType.ITEM,
-      page: 1
+      page: 1,
+      section: Section.LISTS,
+      view: View.LISTS
     })
   },
   account: (address: string = ':address', options?: BrowseOptions) => {
