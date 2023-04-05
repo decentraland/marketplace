@@ -116,7 +116,7 @@ describe('when getting the items picked in a list', () => {
     })
   })
 
-  describe('when the request does not receive query params', () => {
+  describe('when the request is made with the first and skip query params', () => {
     beforeEach(() => {
       filters = { ...filters, first: 25, skip: 10 }
       signedFetchMock.mockResolvedValueOnce({
