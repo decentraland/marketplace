@@ -123,9 +123,7 @@ const ListingsTable = (props: Props) => {
                       <div className={styles.row}>
                         <span>
                           <span className={styles.issuedId}>
-                            {asset?.network === Network.ETHEREUM
-                              ? order.tokenId
-                              : order.issuedId}
+                            {order.issuedId}
                           </span>
                           / {total}
                         </span>
