@@ -283,7 +283,7 @@ describe('when handling the request for fetching favorited items', () => {
       total = 1
     })
 
-    it('should dispatch an action signaling the success of the handled action', () => {
+    it('should dispatch an action signaling the success of the handled action and the request of the retrieved items', () => {
       return expectSaga(favoritesSaga)
         .provide([
           [call(getIdentity), identity],
