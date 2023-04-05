@@ -34,7 +34,7 @@ import {
 import { FavoritesData } from './types'
 
 export type FavoritesState = {
-  data: { items: Record<string, FavoritesData>; total: number }
+  data: { items: Record<string, FavoritesData | undefined>; total: number }
   loading: LoadingState
   error: string | null
 }
@@ -100,6 +100,7 @@ export function favoritesReducer(
 
     case UNPICK_ITEM_AS_FAVORITE_SUCCESS: {
       const { item } = action.payload
+      const currentCount = state.data.items[item.id]?.count ?? 0
       return {
         ...state,
         data: {
@@ -108,10 +109,10 @@ export function favoritesReducer(
             ...state.data.items,
             [item.id]: {
               pickedByUser: false,
-              count: state.data.items[item.id].count - 1
+              count: Math.max(0, currentCount - 1)
             }
           },
-          total: state.data.total - 1
+          total: Math.max(0, state.data.total - 1)
         },
         loading: loadingReducer(state.loading, action)
       }

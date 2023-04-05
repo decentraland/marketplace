@@ -19,6 +19,7 @@ import {
 } from './actions'
 import { INITIAL_STATE, favoritesReducer } from './reducer'
 import { FavoritedItemIds } from './types'
+import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 
 const itemBrowseOptions: ItemBrowseOptions = {
   view: View.LISTS,
@@ -31,7 +32,11 @@ const item = {
   contractAddress: '0xContactAddress',
   itemId: 'itemId ',
   price: '1500000000000000000000',
-  network: Network.ETHEREUM
+  network: Network.ETHEREUM,
+  picks: {
+    pickedByUser: false,
+    count: 1
+  }
 } as Item
 
 const itemIds: FavoritedItemIds = [{ itemId: item.id }]
@@ -197,34 +202,90 @@ describe('when reducing the successful action of unpicking the item as favorite'
   const requestAction = unpickItemAsFavoriteRequest(item)
   const successAction = unpickItemAsFavoriteSuccess(item)
 
-  const initialState = {
+  let initialState = {
     ...INITIAL_STATE,
     data: {
-      items: {
-        [item.id]: {
-          pickedByUser: true,
-          count: 1
-        }
-      },
-      total: 1
+      items: {},
+      total: 0
     },
     loading: loadingReducer([], requestAction)
   }
 
-  it('should return a state with the current item count decreased by one, flagged as non picked by user, and the loading state cleared', () => {
+  describe('when the picks stats are not defined', () => {
+    it('should return a state with the count in 0, flagged as non picked by user, and the loading state cleared', () => {
+      expect(favoritesReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: {
+          ...initialState.data,
+          items: {
+            [item.id]: {
+              pickedByUser: false,
+              count: 0
+            }
+          },
+          total: 0
+        }
+      })
+    })
+  })
+
+  describe('when the picks stats are defined', () => {
+    beforeEach(() => {
+      initialState = {
+        ...initialState,
+        data: {
+          items: {
+            [item.id]: {
+              pickedByUser: true,
+              count: 1
+            }
+          },
+          total: 1
+        }
+      }
+    })
+
+    it('should return a state with the current item count decreased by one, flagged as non picked by user, and the loading state cleared', () => {
+      expect(favoritesReducer(initialState, successAction)).toEqual({
+        ...INITIAL_STATE,
+        loading: [],
+        data: {
+          ...initialState.data,
+          items: {
+            ...initialState.data.items,
+            [item.id]: {
+              pickedByUser: false,
+              count: 0
+            }
+          },
+          total: 0
+        }
+      })
+    })
+  })
+})
+
+describe('when reducing the successful action of fetching the items', () => {
+  const requestAction = fetchItemsRequest(itemBrowseOptions)
+  let successAction = fetchItemsSuccess([item], 1, itemBrowseOptions, 223423423)
+
+  const initialState = {
+    ...INITIAL_STATE,
+    loading: loadingReducer([], requestAction)
+  }
+
+  it('should return a state with favorited items and their picks stats', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
-      ...INITIAL_STATE,
-      loading: [],
+      ...initialState,
       data: {
         ...initialState.data,
         items: {
-          ...initialState.data.items,
           [item.id]: {
             pickedByUser: false,
-            count: 0
+            count: 1
           }
-        },
-        total: 0
+        }
       }
     })
   })

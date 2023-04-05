@@ -1,5 +1,5 @@
 export type FavoritesData = {
-  pickedByUser: boolean
+  pickedByUser?: boolean
   count: number
 }
 
