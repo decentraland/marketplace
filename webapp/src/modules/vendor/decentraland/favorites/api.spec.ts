@@ -76,7 +76,7 @@ describe('when unpicking an item as favorite', () => {
   })
 })
 
-describe('when getting the the items picked in a list', () => {
+describe('when getting the items picked in a list', () => {
   let listId: string
   let filters: ItemFilters
 
