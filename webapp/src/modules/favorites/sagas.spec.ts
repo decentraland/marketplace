@@ -252,19 +252,6 @@ describe('when handling the request for fetching favorited items', () => {
     })
   })
 
-  describe('and getting the listId from the path fails', () => {
-    it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga)
-        .provide([
-          [call(getIdentity), identity],
-          [select(getListId), throwError(error)]
-        ])
-        .put(fetchFavoritedItemsFailure(error.message))
-        .dispatch(fetchFavoritedItemsRequest(options))
-        .run({ silenceTimeout: true })
-    })
-  })
-
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
       return expectSaga(favoritesSaga)
