@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react'
 import { UserMenu as BaseUserMenu } from 'decentraland-dapps/dist/containers'
-import { Props } from './UserMenu.types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Icon } from 'decentraland-ui'
+import { Props } from './UserMenu.types'
 
 const UserMenu = (props: Props) => {
   const { onClickMyAssets, onClickMyLists, ...baseProps } = props
