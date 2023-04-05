@@ -343,7 +343,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 export function* getNewBrowseOptions(
   current: BrowseOptions
 ): Generator<unknown, BrowseOptions, any> {
-  // debugger
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
@@ -497,7 +496,6 @@ function* deriveCurrentOptions(
   previous: BrowseOptions,
   current: BrowseOptions
 ) {
-  // debugger
   let newOptions: BrowseOptions = {
     ...current,
     assetType: current.assetType || previous.assetType,
