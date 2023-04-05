@@ -1,74 +1,52 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { ModalNavigation, Message, useMobileMediaQuery } from 'decentraland-ui'
+import React, { useCallback, useState, useEffect } from 'react'
+import {
+  ModalNavigation,
+  Message,
+  useMobileMediaQuery,
+  Empty,
+  Loader
+} from 'decentraland-ui'
 import { FixedSizeList } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { isErrorWithMessage } from '../../../lib/error'
-import { LinkedProfile } from '../../LinkedProfile'
 import { favoritesAPI } from '../../../modules/vendor/decentraland/favorites'
+import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './FavoritesModal.types'
 import styles from './FavoritesModal.module.css'
 
 const ITEM_HEIGHT = 55
+const DEFAULT_LIST_HEIGHT = 300
+const DEFAULT_LIST_WIDTH = 650
 
 const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string>()
   const [favorites, setFavorites] = useState<string[]>([])
-  const [total, setTotalFavorites] = useState<number>(0)
+  const [total, setTotal] = useState<number>(0)
 
   const isMobile = useMobileMediaQuery()
 
-  const fetchWhoFavoritedAnItem = useCallback(
-    async (assetId: string, limit: number, offset: number) => {
+  const fetchNextPage = useCallback(
+    async (startIndex: number, stopIndex: number) => {
       setIsLoading(true)
       try {
-        return favoritesAPI.getWhoFavoritedAnItem(assetId, limit, offset)
+        const result = await favoritesAPI.getWhoFavoritedAnItem(
+          itemId,
+          stopIndex - startIndex,
+          startIndex
+        )
+        setFavorites(favorites.concat(result.addresses))
+        setTotal(result.total)
       } catch (error) {
         setError(isErrorWithMessage(error) ? error.message : 'Unknown')
       } finally {
         setIsLoading(false)
       }
-      return {
-        addresses: [],
-        total: 0
-      }
     },
-    [setIsLoading, setError]
-  )
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  fetchWhoFavoritedAnItem
-  // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-  itemId
-
-  // const fetchNextPage = useCallback(
-  //   async (startIndex: number, stopIndex: number) => {
-  //     const result = await fetchWhoFavoritedAnItem(
-  //       itemId,
-  //       stopIndex - startIndex,
-  //       startIndex
-  //     )
-  //     setFavorites(result.addresses)
-  //     setTotalFavorites(result.total)
-  //   },
-  //   [itemId, fetchWhoFavoritedAnItem]
-  // )
-
-  const fetchNextPage = useCallback(
-    async (startIndex: number, stopIndex: number) => {
-      const addresses = Array.from(
-        { length: stopIndex - startIndex },
-        (_, i) =>
-          '0x' +
-          (i + startIndex + 1).toString(16).padStart(isMobile ? 18 : 40, '0')
-      )
-      setFavorites(addresses)
-      setTotalFavorites(addresses.length)
-    },
-    [isMobile]
+    [itemId, favorites]
   )
 
   const isItemLoaded = useCallback(
@@ -85,7 +63,8 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
         {isItemLoaded(index) ? (
           <LinkedProfile
             size="huge"
-            sliceAddressBy={42}
+            key={favorites[index]}
+            sliceAddressBy={isMobile ? 18 : 40}
             address={favorites[index]}
           />
         ) : (
@@ -93,7 +72,7 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
         )}
       </div>
     ),
-    [favorites, isItemLoaded]
+    [favorites, isItemLoaded, isMobile]
   )
 
   useEffect(() => {
@@ -107,48 +86,54 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
   return (
     <Modal
       size="small"
-      // className={styles.modal}
-      // name={'Saved by'}
+      className={styles.modal}
       onClose={!isLoading ? onClose : undefined}
     >
       <ModalNavigation
-        title={'Saved by'}
+        title={t('favorites_modal.title')}
         onClose={!isLoading ? onClose : undefined}
       />
       <Modal.Content className={styles.content}>
         <>
-          <div>
-            Only accounts with more than 1 VP are counted.{' '}
-            <a href="#">Learn More</a>
-          </div>
-          <div>The item has not been favorited by anyone</div>
-          <div
-            className={styles.favoritesList}
-            style={{ height: !isMobile ? desktopHeight : undefined }}
-          >
-            <AutoSizer>
-              {({ height, width }) => (
-                <InfiniteLoader
-                  isItemLoaded={isItemLoaded}
-                  itemCount={favorites.length}
-                  loadMoreItems={fetchNextPage}
-                >
-                  {({ onItemsRendered, ref }) => (
-                    <FixedSizeList
-                      itemCount={favorites.length}
-                      onItemsRendered={onItemsRendered}
-                      itemSize={ITEM_HEIGHT}
-                      height={height ?? 300}
-                      width={width ?? 650}
-                      ref={ref}
-                    >
-                      {Row}
-                    </FixedSizeList>
-                  )}
-                </InfiniteLoader>
-              )}
-            </AutoSizer>
-          </div>
+          <div>{t('favorites_modal.disclaimer')}</div>
+          {isLoading && favorites.length === 0 ? (
+            <div className={styles.loading}>
+              <Loader inline size="medium" active />{' '}
+              <span>{t('global.loading')}...</span>
+            </div>
+          ) : null}
+          {!isLoading && favorites.length === 0 ? (
+            <Empty className={styles.empty}>{t('favorites_modal.empty')}</Empty>
+          ) : null}
+          {favorites.length !== 0 ? (
+            <div
+              className={styles.favoritesList}
+              style={{ height: !isMobile ? desktopHeight : undefined }}
+            >
+              <AutoSizer>
+                {({ height, width }) => (
+                  <InfiniteLoader
+                    isItemLoaded={isItemLoaded}
+                    itemCount={total}
+                    loadMoreItems={fetchNextPage}
+                  >
+                    {({ onItemsRendered, ref }) => (
+                      <FixedSizeList
+                        itemCount={total}
+                        onItemsRendered={onItemsRendered}
+                        itemSize={ITEM_HEIGHT}
+                        height={height ?? DEFAULT_LIST_HEIGHT}
+                        width={width ?? DEFAULT_LIST_WIDTH}
+                        ref={ref}
+                      >
+                        {Row}
+                      </FixedSizeList>
+                    )}
+                  </InfiniteLoader>
+                )}
+              </AutoSizer>
+            </div>
+          ) : null}
           {error ? (
             <Message
               error

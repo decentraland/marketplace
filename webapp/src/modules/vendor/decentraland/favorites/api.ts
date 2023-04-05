@@ -19,10 +19,11 @@ class FavoritesAPI extends BaseAPI {
     const response = await fetch(
       `${MARKETPLACE_FAVORITES_SERVER_URL}/picks/${itemId}?limit=${limit}&offset=${offset}`
     )
+
     const parsedResponse = await response.json()
 
-    if (!parsedResponse.ok) {
-      throw new Error(parsedResponse.message ?? 'Unknown error')
+    if (!response.ok) {
+      throw new Error(parsedResponse?.message ?? 'Unknown error')
     }
 
     return {
