@@ -251,17 +251,19 @@ export const getViewAsGuest = createSelector<
   RootState,
   string,
   boolean | undefined
->(
-  getRouterSearch,
-  search => getURLParam(search, 'viewAsGuest') === 'true' || undefined
+>(getRouterSearch, search =>
+  getURLParam(search, 'viewAsGuest')
+    ? getURLParam(search, 'viewAsGuest') === 'true'
+    : undefined
 )
 export const getOnlySmart = createSelector<
   RootState,
   string,
   boolean | undefined
->(
-  getRouterSearch,
-  search => getURLParam(search, 'onlySmart') === 'true' || undefined
+>(getRouterSearch, search =>
+  getURLParam(search, 'onlySmart')
+    ? getURLParam(search, 'onlySmart') === 'true'
+    : undefined
 )
 
 export const getMinPrice = createSelector<RootState, string, string>(

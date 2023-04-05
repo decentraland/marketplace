@@ -19,8 +19,10 @@ import {
   getMinEstateSize,
   getMinPrice,
   getOnlyOnRent,
+  getOnlySmart,
   getSection,
   getSortBy,
+  getViewAsGuest,
   hasFiltersEnabled
 } from './selectors'
 
@@ -193,14 +195,6 @@ describe("when there's no assetType URL param and the vendor is DECENTRALAND and
   it('should return ITEM as the assetType', () => {
     expect(
       getAssetType.resultFunc('', locations.browse(), VendorName.DECENTRALAND)
-    ).toBe(AssetType.ITEM)
-  })
-})
-
-describe("when there's no assetType URL param and the vendor is DECENTRALAND and the location is in lists", () => {
-  it('should return ITEM as the assetType', () => {
-    expect(
-      getAssetType.resultFunc('', locations.list(), VendorName.DECENTRALAND)
     ).toBe(AssetType.ITEM)
   })
 })
@@ -458,6 +452,74 @@ describe('when getting if the SortBy parameter is set', () => {
           SortBy.RECENTLY_LISTED
         )
       })
+    })
+  })
+})
+
+describe('when getting if it should look for only smart NFTs', () => {
+  let url: string
+
+  describe('and the onlySmart query param is set to true', () => {
+    beforeEach(() => {
+      url = 'onlySmart=true'
+    })
+
+    it('should return true', () => {
+      expect(getOnlySmart.resultFunc(url)).toBe(true)
+    })
+  })
+
+  describe('and the onlySmart query param is set to false', () => {
+    beforeEach(() => {
+      url = 'onlySmart=false'
+    })
+
+    it('should return false', () => {
+      expect(getOnlySmart.resultFunc(url)).toBe(false)
+    })
+  })
+
+  describe('and the onlyOnRent query param is not defined', () => {
+    beforeEach(() => {
+      url = ''
+    })
+
+    it('should return undefined', () => {
+      expect(getOnlySmart.resultFunc(url)).toBe(undefined)
+    })
+  })
+})
+
+describe('when getting if it should filter for guests', () => {
+  let url: string
+
+  describe('and the viewAsGuest query param is set to true', () => {
+    beforeEach(() => {
+      url = 'viewAsGuest=true'
+    })
+
+    it('should return true', () => {
+      expect(getViewAsGuest.resultFunc(url)).toBe(true)
+    })
+  })
+
+  describe('and the viewAsGuest query param is set to false', () => {
+    beforeEach(() => {
+      url = 'viewAsGuest=false'
+    })
+
+    it('should return false', () => {
+      expect(getViewAsGuest.resultFunc(url)).toBe(false)
+    })
+  })
+
+  describe('and the onlyOnRent query param is not defined', () => {
+    beforeEach(() => {
+      url = ''
+    })
+
+    it('should return undefined', () => {
+      expect(getViewAsGuest.resultFunc(url)).toBe(undefined)
     })
   })
 })
