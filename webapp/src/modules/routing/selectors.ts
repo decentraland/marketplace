@@ -229,10 +229,7 @@ export const getAssetType = createSelector<
   let assetTypeParam = getURLParam(search, 'assetType') ?? ''
 
   if (!assetTypeParam || !(assetTypeParam.toUpperCase() in AssetType)) {
-    if (
-      vendor === VendorName.DECENTRALAND &&
-      (pathname === locations.browse() || pathname === locations.list())
-    ) {
+    if (vendor === VendorName.DECENTRALAND && pathname === locations.browse()) {
       return AssetType.ITEM
     }
     return AssetType.NFT
