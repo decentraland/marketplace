@@ -2,6 +2,7 @@ import {
   loadingReducer,
   LoadingState
 } from 'decentraland-dapps/dist/modules/loading/reducer'
+import { FETCH_ITEMS_SUCCESS, FetchItemsSuccessAction } from '../item/actions'
 import {
   PickItemAsFavoriteFailureAction,
   PickItemAsFavoriteRequestAction,
@@ -31,7 +32,6 @@ import {
   FETCH_FAVORITED_ITEMS_SUCCESS
 } from './actions'
 import { FavoritesData } from './types'
-import { FETCH_ITEMS_SUCCESS, FetchItemsSuccessAction } from '../item/actions'
 
 export type FavoritesState = {
   data: { items: Record<string, FavoritesData>; total: number }
