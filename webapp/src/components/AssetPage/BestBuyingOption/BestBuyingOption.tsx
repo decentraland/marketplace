@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { ethers } from 'ethers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
   Bid,
@@ -159,11 +158,9 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                   </Mana>
                 </div>
                 <div className={styles.informationText}>
-                  <ManaToFiat
-                    mana={ethers.utils
-                      .parseEther(formatWeiMANA(asset.price))
-                      .toString()}
-                  />
+                  {'('}
+                  <ManaToFiat mana={asset.price} />
+                  {')'}
                 </div>
               </div>
             </div>
@@ -193,7 +190,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                 {t('best_buying_option.minting.price').toUpperCase()}
               </span>
               <div className={`${styles.containerRow} ${styles.centerItems}`}>
-                <span className={styles.listingMana}>
+                <div className={styles.listingMana}>
                   <Mana
                     withTooltip
                     size="small"
@@ -202,14 +199,11 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                   >
                     {formatWeiMANA(listing.order.price)}
                   </Mana>
-                </span>
-
+                </div>
                 <div className={styles.informationListingText}>
-                  <ManaToFiat
-                    mana={ethers.utils
-                      .parseEther(formatWeiMANA(listing.order.price))
-                      .toString()}
-                  />
+                  {'('}
+                  <ManaToFiat mana={listing.order.price} />
+                  {')'}
                 </div>
               </div>
             </div>
@@ -233,11 +227,9 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
                   </div>
 
                   <div className={styles.informationListingText}>
-                    <ManaToFiat
-                      mana={ethers.utils
-                        .parseEther(formatWeiMANA(mostExpensiveBid.price))
-                        .toString()}
-                    />
+                    {'('}
+                    <ManaToFiat mana={mostExpensiveBid.price} />
+                    {')'}
                   </div>
                 </div>
               </div>

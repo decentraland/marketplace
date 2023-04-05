@@ -111,10 +111,9 @@
 }
 
 .BestBuyingOption .informationText {
-  color: var(--secondary-text);
+  color: white;
   font-size: 24px;
-  margin-top: 3px;
-  line-height: 1.5;
+  line-height: 1.7;
 }
 
 .BestBuyingOption .informationListingText {
@@ -162,13 +161,6 @@
   display: flex;
   align-items: center;
   font-size: 14px;
-}
-
-.BestBuyingOption .listingMana {
-  align-items: center;
-  display: flex;
-  width: 14px;
-  height: 14px;
 }
 
 .BestBuyingOption .listingMana :global(.ui.header.small) {
