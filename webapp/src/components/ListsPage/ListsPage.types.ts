@@ -8,15 +8,11 @@ type Params = { listId?: string }
 export type Props = {
   wallet: Wallet | null
   isConnecting: boolean
-  isFullscreen?: boolean
   listId?: string
   onRedirect: (path: string) => void
 } & RouteComponentProps<Params>
 
-export type MapStateProps = Pick<
-  Props,
-  'wallet' | 'isConnecting' | 'isFullscreen' | 'listId'
->
+export type MapStateProps = Pick<Props, 'wallet' | 'isConnecting' | 'listId'>
 
 export type MapDispatchProps = Pick<Props, 'onRedirect'>
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

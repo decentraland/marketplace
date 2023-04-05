@@ -13,12 +13,7 @@ import { NavigationTab } from '../Navigation/Navigation.types'
 import { Props } from './ListsPage.types'
 import styles from './ListsPage.module.css'
 
-const ListsPage = ({
-  wallet,
-  isConnecting,
-  isFullscreen,
-  onRedirect
-}: Props) => {
+const ListsPage = ({ wallet, isConnecting, onRedirect }: Props) => {
   // Redirect to signIn if trying to access current account without a wallet
   useEffect(() => {
     if (!isConnecting && !wallet) {
@@ -46,7 +41,7 @@ const ListsPage = ({
           isFullscreen
         />
       </Page>
-      <Footer isFullscreen={isFullscreen} />
+      <Footer isFullscreen />
     </div>
   )
 }

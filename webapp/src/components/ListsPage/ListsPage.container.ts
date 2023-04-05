@@ -1,7 +1,6 @@
 import { connect } from 'react-redux'
 import { replace } from 'connected-react-router'
 import { RootState } from '../../modules/reducer'
-import { getIsFullscreen } from '../../modules/routing/selectors'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import {
   MapStateProps,
@@ -17,7 +16,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
     wallet: getWallet(state),
     isConnecting: isConnecting(state),
-    isFullscreen: getIsFullscreen(state),
     listId
   }
 }
