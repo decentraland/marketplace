@@ -28,9 +28,6 @@ import { getCurrentBrowseOptions } from './selectors'
 import { BrowseOptions, SortBy } from './types'
 import { buildBrowseURL } from './utils'
 
-import util from 'util'
-util.inspect.defaultOptions.depth = null
-
 beforeEach(() => {
   jest.spyOn(Date, 'now').mockReturnValue(100)
 })
