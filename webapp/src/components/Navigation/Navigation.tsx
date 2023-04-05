@@ -84,7 +84,6 @@ const Navigation = (props: Props) => {
               {t('navigation.my_assets')}
             </Tabs.Tab>
           </Link>
-          {/* TODO (lists): should we show this if the user is not logged in? */}
           {isFavoritesEnabled && (
             <Link to={locations.defaultList()}>
               <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>
