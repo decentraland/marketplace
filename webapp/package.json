@@ -3,7 +3,7 @@
   "version": "0.0.0-development",
   "dependencies": {
     "@dcl/crypto": "^3.0.0",
-    "@dcl/schemas": "^6.11.1",
+    "@dcl/schemas": "^6.15.0",
     "@dcl/ui-env": "^1.2.0",
     "@ethersproject/providers": "^5.6.2",
     "classnames": "^2.3.1",
