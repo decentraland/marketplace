@@ -4,9 +4,10 @@ import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAssetName } from '../asset/utils'
-import { NFT } from '../nft/types'
 import { UpsertRentalOptType } from '../rental/types'
 import { locations } from '../routing/locations'
+import { NFT } from '../nft/types'
+import { config } from '../../config'
 import {
   pickItemAsFavoriteRequest,
   undoUnpickingItemAsFavoriteRequest,
@@ -111,7 +112,16 @@ export function getExcecuteOrderFailureToast(): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,
     title: t('toast.meta_transaction_failure.title'),
-    body: <p>{t('toast.meta_transaction_failure.body')}</p>,
+    body: (
+      <p>
+        {t('toast.meta_transaction_failure.body', {
+          discord_link: (
+            <a href={config.get('DISCORD_URL')}>{t('global.discord_server')}</a>
+          ),
+          br: <br />
+        })}
+      </p>
+    ),
     icon: <Icon name="exclamation circle" />
   }
 }

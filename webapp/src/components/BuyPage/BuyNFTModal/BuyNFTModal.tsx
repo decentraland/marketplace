@@ -28,6 +28,7 @@ import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
 import { Price } from '../Price'
 import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
+import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
 import { NotEnoughMana } from '../NotEnoughMana'
 import { PriceHasChanged } from '../PriceHasChanged'
 import { Props } from './BuyNFTModal.types'
@@ -42,7 +43,6 @@ const BuyNFTModal = (props: Props) => {
     isOwner,
     hasInsufficientMANA,
     hasLowPrice,
-
     isBuyWithCardPage,
     getContract,
     onExecuteOrder,
@@ -221,6 +221,7 @@ const BuyNFTModal = (props: Props) => {
       {hasLowPrice && !isBuyWithCardPage ? (
         <PriceTooLow chainId={nft.chainId} network={nft.network} />
       ) : null}
+      <PartiallySupportedNetworkCard asset={nft} />
       <div
         className={classNames('buttons', isWearableOrEmote(nft) && 'with-mana')}
       >

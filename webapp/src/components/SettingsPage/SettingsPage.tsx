@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
@@ -16,6 +15,8 @@ import { Authorization } from './Authorization'
 import { getContractNames } from '../../modules/vendor'
 import { useTimer } from '../../lib/timer'
 import { Props } from './SettingsPage.types'
+import copyText from '../../lib/copyText'
+
 import './SettingsPage.css'
 
 const SettingsPage = (props: Props) => {
@@ -167,9 +168,12 @@ const SettingsPage = (props: Props) => {
                       ? shortenAddress(wallet.address)
                       : wallet.address}
                   </div>
-                  <CopyToClipboard
-                    text={wallet.address}
-                    onCopy={setHasCopiedAddress}
+                  <div
+                    role="button"
+                    aria-label="copy"
+                    onClick={() =>
+                      copyText(wallet.address, setHasCopiedAddress)
+                    }
                   >
                     {hasCopiedText ? (
                       <span className="copy-text">
@@ -180,7 +184,7 @@ const SettingsPage = (props: Props) => {
                         {t('settings_page.copy_address')}
                       </span>
                     )}
-                  </CopyToClipboard>
+                  </div>
                 </div>
               </Grid.Column>
             </Grid.Row>

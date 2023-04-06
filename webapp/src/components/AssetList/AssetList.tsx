@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
-import { Card, Button, Loader } from 'decentraland-ui'
+import React, { useCallback, useMemo, useEffect } from 'react'
+import { Card, Loader } from 'decentraland-ui'
 import { Item, NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
-import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
+import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
 import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import * as events from '../../utils/events'
+import { InfiniteScroll } from '../InfiniteScroll'
 import { AssetCard } from '../AssetCard'
 import { getLastVisitedElementId } from './utils'
 import { Props } from './AssetList.types'
@@ -27,7 +28,6 @@ const AssetList = (props: Props) => {
     hasFiltersEnabled,
     visitedLocations,
     onBrowse,
-    urlNext,
     isManager,
     onClearFilters
   } = props
@@ -47,21 +47,17 @@ const AssetList = (props: Props) => {
   }, [])
 
   const handleLoadMore = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.preventDefault()
-      const newPage = page + 1
+    newPage => {
       onBrowse({ page: newPage })
       getAnalytics().track(events.LOAD_MORE, { page: newPage })
     },
-    [onBrowse, page]
+    [onBrowse]
   )
 
   const maxQuerySize = getMaxQuerySize(vendor)
 
-  const hasExtraPages =
+  const hasMorePages =
     (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
-
-  const isLoadingNewPage = isLoading && nfts.length >= PAGE_SIZE
 
   const emptyStateTranslationString = useMemo(() => {
     if (assets.length > 0) {
@@ -102,67 +98,61 @@ const AssetList = (props: Props) => {
             ))
           : null}
       </Card.Group>
+      <InfiniteScroll
+        page={page}
+        hasMorePages={hasMorePages}
+        onLoadMore={handleLoadMore}
+        isLoading={isLoading}
+        maxScrollPages={3}
+      >
+        {assets.length === 0 && !isLoading ? (
+          <div className="empty">
+            <div className="watermelon" />
 
-      {assets.length === 0 && !isLoading ? (
-        <div className="empty">
-          <div className="watermelon" />
-
-          <T
-            id={emptyStateTranslationString}
-            values={{
-              search,
-              currentSection:
-                assetType === AssetType.ITEM
-                  ? t('browse_page.primary_market_title').toLocaleLowerCase()
-                  : t('browse_page.secondary_market_title').toLocaleLowerCase(),
-              section:
-                assetType === AssetType.ITEM
-                  ? t('browse_page.secondary_market_title').toLocaleLowerCase()
-                  : t('browse_page.primary_market_title').toLocaleLowerCase(),
-              searchStore: (chunks: string) => (
-                <button
-                  className="empty-actions"
-                  onClick={() =>
-                    onBrowse({
-                      assetType:
-                        assetType === AssetType.ITEM
-                          ? AssetType.NFT
-                          : AssetType.ITEM
-                    })
-                  }
-                >
-                  {chunks}
-                </button>
-              ),
-              'if-filters': (chunks: string) =>
-                hasFiltersEnabled ? chunks : '',
-              clearFilters: (chunks: string) => (
-                <button className="empty-actions" onClick={onClearFilters}>
-                  {chunks}
-                </button>
-              ),
-              br: () => <br />
-            }}
-          />
-        </div>
-      ) : null}
-
-      {assets.length > 0 &&
-      hasExtraPages &&
-      (!isLoading || isLoadingNewPage) ? (
-        <div className="load-more">
-          <Button
-            as="a"
-            href={urlNext}
-            loading={isLoading}
-            inverted
-            primary
-            onClick={handleLoadMore}
-          >
-            {t('global.load_more')}
-          </Button>
-        </div>
-      ) : null}
+            <T
+              id={emptyStateTranslationString}
+              values={{
+                search,
+                currentSection:
+                  assetType === AssetType.ITEM
+                    ? t('browse_page.primary_market_title').toLocaleLowerCase()
+                    : t(
+                        'browse_page.secondary_market_title'
+                      ).toLocaleLowerCase(),
+                section:
+                  assetType === AssetType.ITEM
+                    ? t(
+                        'browse_page.secondary_market_title'
+                      ).toLocaleLowerCase()
+                    : t('browse_page.primary_market_title').toLocaleLowerCase(),
+                searchStore: (chunks: string) => (
+                  <button
+                    className="empty-actions"
+                    onClick={() =>
+                      onBrowse({
+                        assetType:
+                          assetType === AssetType.ITEM
+                            ? AssetType.NFT
+                            : AssetType.ITEM
+                      })
+                    }
+                  >
+                    {chunks}
+                  </button>
+                ),
+                'if-filters': (chunks: string) =>
+                  hasFiltersEnabled ? chunks : '',
+                clearFilters: (chunks: string) => (
+                  <button className="empty-actions" onClick={onClearFilters}>
+                    {chunks}
+                  </button>
+                ),
+                br: () => <br />
+              }}
+            />
+          </div>
+        ) : null}
+      </InfiniteScroll>
     </>
   )
 }
