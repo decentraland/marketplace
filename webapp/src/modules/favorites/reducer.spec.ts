@@ -3,6 +3,12 @@ import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
 import {
+  CancelPickItemAsFavoriteAction,
+  FetchFavoritedItemsRequestAction,
+  FetchFavoritedItemsSuccessAction,
+  PickItemAsFavoriteRequestAction,
+  UnpickItemAsFavoriteRequestAction,
+  UnpickItemAsFavoriteSuccessAction,
   cancelPickItemAsFavorite,
   fetchFavoritedItemsFailure,
   fetchFavoritedItemsRequest,
@@ -17,9 +23,14 @@ import {
   unpickItemAsFavoriteRequest,
   unpickItemAsFavoriteSuccess
 } from './actions'
-import { INITIAL_STATE, favoritesReducer } from './reducer'
+import { FavoritesState, INITIAL_STATE, favoritesReducer } from './reducer'
 import { FavoritedItemIds } from './types'
-import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
+import {
+  FetchItemsRequestAction,
+  FetchItemsSuccessAction,
+  fetchItemsRequest,
+  fetchItemsSuccess
+} from '../item/actions'
 
 const itemBrowseOptions: ItemBrowseOptions = {
   view: View.LISTS,
@@ -51,12 +62,16 @@ const requestActions = [
 ]
 
 describe.each(requestActions)('when reducing the "$type" action', action => {
-  it('should return a state with the loading set', () => {
-    const initialState = {
+  let initialState: FavoritesState
+
+  beforeEach(() => {
+    initialState = {
       ...INITIAL_STATE,
       loading: []
     }
+  })
 
+  it('should return a state with the loading set', () => {
     expect(favoritesReducer(initialState, action)).toEqual({
       ...INITIAL_STATE,
       loading: loadingReducer(initialState.loading, action)
@@ -86,13 +101,17 @@ const failureActions = [
 describe.each(failureActions)(
   `when reducing the "$failure.type" action`,
   ({ request, failure }) => {
-    it('should return a state with the error set and the loading state cleared', () => {
-      const initialState = {
+    let initialState: FavoritesState
+
+    beforeEach(() => {
+      initialState = {
         ...INITIAL_STATE,
         error: null,
         loading: loadingReducer([], request)
       }
+    })
 
+    it('should return a state with the error set and the loading state cleared', () => {
       expect(favoritesReducer(initialState, failure)).toEqual({
         ...INITIAL_STATE,
         error,
@@ -116,18 +135,22 @@ const pickAndUndoSuccessActions = [
 describe.each(pickAndUndoSuccessActions)(
   `when reducing the "$success(item).type" action`,
   ({ request, success }) => {
-    const initialState = {
-      ...INITIAL_STATE,
-      data: {
-        items: {
-          [item.id]: {
-            pickedByUser: false,
-            count: 0
-          }
-        },
-        total: 0
+    let initialState: FavoritesState
+
+    beforeEach(() => {
+      initialState = {
+        ...INITIAL_STATE,
+        data: {
+          items: {
+            [item.id]: {
+              pickedByUser: false,
+              count: 0
+            }
+          },
+          total: 0
+        }
       }
-    }
+    })
 
     describe('when the item is not in the state', () => {
       const anotherItem = { id: '0xContactAddress-anotherItemId' } as Item
@@ -182,13 +205,20 @@ describe.each(pickAndUndoSuccessActions)(
 )
 
 describe('when reducing the action of canceling a pick item as favorite', () => {
-  const requestAction = unpickItemAsFavoriteRequest(item)
-  const cancelAction = cancelPickItemAsFavorite()
+  let initialState: FavoritesState
 
-  const initialState = {
-    ...INITIAL_STATE,
-    loading: loadingReducer([], requestAction)
-  }
+  let requestAction: PickItemAsFavoriteRequestAction
+  let cancelAction: CancelPickItemAsFavoriteAction
+
+  beforeEach(() => {
+    requestAction = pickItemAsFavoriteRequest(item)
+    cancelAction = cancelPickItemAsFavorite()
+
+    initialState = {
+      ...INITIAL_STATE,
+      loading: loadingReducer([], requestAction)
+    }
+  })
 
   it('should return a state with an empty loading state', () => {
     expect(favoritesReducer(initialState, cancelAction)).toEqual({
@@ -199,17 +229,20 @@ describe('when reducing the action of canceling a pick item as favorite', () => 
 })
 
 describe('when reducing the successful action of unpicking the item as favorite', () => {
-  const requestAction = unpickItemAsFavoriteRequest(item)
-  const successAction = unpickItemAsFavoriteSuccess(item)
+  let initialState: FavoritesState
 
-  let initialState = {
-    ...INITIAL_STATE,
-    data: {
-      items: {},
-      total: 0
-    },
-    loading: loadingReducer([], requestAction)
-  }
+  let requestAction: UnpickItemAsFavoriteRequestAction
+  let successAction: UnpickItemAsFavoriteSuccessAction
+
+  beforeEach(() => {
+    requestAction = unpickItemAsFavoriteRequest(item)
+    successAction = unpickItemAsFavoriteSuccess(item)
+
+    initialState = {
+      ...INITIAL_STATE,
+      loading: loadingReducer([], requestAction)
+    }
+  })
 
   describe('when the picks stats are not defined', () => {
     it('should return a state with the count in 0, flagged as non picked by user, and the loading state cleared', () => {
@@ -267,13 +300,20 @@ describe('when reducing the successful action of unpicking the item as favorite'
 })
 
 describe('when reducing the successful action of fetching the items', () => {
-  const requestAction = fetchItemsRequest(itemBrowseOptions)
-  let successAction = fetchItemsSuccess([item], 1, itemBrowseOptions, 223423423)
+  let initialState: FavoritesState
 
-  const initialState = {
-    ...INITIAL_STATE,
-    loading: loadingReducer([], requestAction)
-  }
+  let requestAction: FetchItemsRequestAction
+  let successAction: FetchItemsSuccessAction
+
+  beforeEach(() => {
+    requestAction = fetchItemsRequest(itemBrowseOptions)
+    successAction = fetchItemsSuccess([item], 1, itemBrowseOptions, 223423423)
+
+    initialState = {
+      ...INITIAL_STATE,
+      loading: loadingReducer([], requestAction)
+    }
+  })
 
   it('should return a state with favorited items and their picks stats', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
@@ -292,30 +332,37 @@ describe('when reducing the successful action of fetching the items', () => {
 })
 
 describe('when reducing the successful action of fetching the favorited items', () => {
-  const requestAction = fetchFavoritedItemsRequest(itemBrowseOptions)
-  let successAction = fetchFavoritedItemsSuccess(itemIds, 2)
+  let initialState: FavoritesState
 
-  const initialState = {
-    ...INITIAL_STATE,
-    data: {
-      items: {
-        [item.id]: {
-          pickedByUser: false,
-          count: 1
+  let requestAction: FetchFavoritedItemsRequestAction
+  let successAction: FetchFavoritedItemsSuccessAction
+
+  beforeEach(() => {
+    requestAction = fetchFavoritedItemsRequest(itemBrowseOptions)
+    successAction = fetchFavoritedItemsSuccess(itemIds, 2)
+
+    initialState = {
+      ...INITIAL_STATE,
+      data: {
+        items: {
+          [item.id]: {
+            pickedByUser: false,
+            count: 1
+          },
+          '0x...-itemId': {
+            pickedByUser: true,
+            count: 10
+          },
+          '0x...-anotherItemId': {
+            pickedByUser: false,
+            count: 0
+          }
         },
-        '0x...-itemId': {
-          pickedByUser: true,
-          count: 10
-        },
-        '0x...-anotherItemId': {
-          pickedByUser: false,
-          count: 0
-        }
+        total: 1
       },
-      total: 1
-    },
-    loading: loadingReducer([], requestAction)
-  }
+      loading: loadingReducer([], requestAction)
+    }
+  })
 
   it('should return a state with the total and the loading state cleared', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
