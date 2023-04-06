@@ -122,6 +122,16 @@ describe('when getting if the are filters set', () => {
     })
   })
 
+  describe('and it is the lists section', () => {
+    it('should return false', () => {
+      expect(
+        hasFiltersEnabled.resultFunc({
+          section: Sections.decentraland.LISTS
+        })
+      ).toBe(false)
+    })
+  })
+
   describe('when no filters are set', () => {
     it('should return false', () => {
       expect(hasFiltersEnabled.resultFunc({})).toBe(false)

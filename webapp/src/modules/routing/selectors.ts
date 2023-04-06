@@ -474,7 +474,6 @@ export const hasFiltersEnabled = createSelector<
   } = browseOptions
   const isLand = isLandSection(section as Section)
 
-  // TODO (lists): are we good with this?
   if (isListsSection(section as Section)) return false
 
   if (isLand) {
