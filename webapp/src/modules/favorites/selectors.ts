@@ -25,7 +25,7 @@ const listMatchSelector = createMatchSelector<
   {
     listId: string
   }
->(locations.list(':listId'))
+>(locations.list())
 
 export const getListId = createSelector<
   RootState,
