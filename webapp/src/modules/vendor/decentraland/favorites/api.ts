@@ -78,8 +78,8 @@ class FavoritesAPI extends BaseAPI {
 
       const url =
         MARKETPLACE_FAVORITES_SERVER_URL +
-        `/lists/${listId}/picks?` +
-        queryParams.toString()
+        `/lists/${listId}/picks` +
+        (queryParams.toString() && `?${queryParams.toString()}`)
 
       const response = await signedFetch(url, { identity })
 

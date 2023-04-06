@@ -114,7 +114,7 @@ describe('when getting the items picked in a list', () => {
     })
 
     it('should resolve the favorited item ids and the total favorited', () => {
-      const expectedUrl = `${MARKETPLACE_FAVORITES_SERVER_URL}/lists/${listId}/picks?`
+      const expectedUrl = `${MARKETPLACE_FAVORITES_SERVER_URL}/lists/${listId}/picks`
       expect(
         favoritesAPI.getPicksByList(listId, filters, identity)
       ).resolves.toBe(data)
