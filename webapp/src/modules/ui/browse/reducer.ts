@@ -29,7 +29,7 @@ export type BrowseUIState = {
   count?: number
 }
 
-const INITIAL_STATE: BrowseUIState = {
+export const INITIAL_STATE: BrowseUIState = {
   view: undefined,
   nftIds: [],
   itemIds: [],
@@ -58,6 +58,7 @@ export function browseReducer(
         view: action.payload.view
       }
     }
+
     case BROWSE: {
       const { view } = action.payload.options
       return {
@@ -65,6 +66,7 @@ export function browseReducer(
         nftIds: view ? [] : [...state.nftIds]
       }
     }
+
     case FETCH_NFTS_REQUEST: {
       const { view } = action.payload.options
       switch (view) {
@@ -84,6 +86,7 @@ export function browseReducer(
           }
       }
     }
+
     case FETCH_NFTS_SUCCESS: {
       if (action.payload.timestamp < state.lastTimestamp) {
         return state
@@ -116,6 +119,7 @@ export function browseReducer(
           return state
       }
     }
+
     case FETCH_ITEMS_REQUEST: {
       const { view } = action.payload
       switch (view) {
