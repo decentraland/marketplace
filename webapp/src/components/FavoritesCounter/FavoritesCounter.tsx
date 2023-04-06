@@ -33,14 +33,15 @@ const FavoritesCounter = (props: Props) => {
     () => (
       <span
         role="button"
-        onClick={isCollapsed ? handleOnCounterClick : undefined}
+        onClick={count > 0 && isCollapsed ? handleOnCounterClick : undefined}
         className={styles.counter}
         aria-label="counter"
+        data-testid="favorites-counter-number"
       >
         {formatter.format(count)}
       </span>
     ),
-    [count, handleOnCounterClick, isCollapsed]
+    [count, isCollapsed, handleOnCounterClick]
   )
 
   const onClick = useCallback(

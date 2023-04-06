@@ -3,6 +3,7 @@ import { ConnectedRouter } from 'connected-react-router'
 import { createMemoryHistory } from 'history'
 import { Provider } from 'react-redux'
 import { Store } from 'redux'
+import mediaQuery from 'css-mediaquery'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
 import { RootState } from '../modules/reducer'
 import { initTestStore } from '../modules/store'
@@ -44,4 +45,19 @@ export async function waitForComponentToFinishLoading(screen: RenderResult) {
       screen.container.getElementsByClassName('loader-container').length
     ).toEqual(0)
   )
+}
+
+export function createMatchMedia(width: number) {
+  return (query: string) => {
+    return {
+      matches: mediaQuery.match(query, { width }),
+      media: '',
+      addListener: () => {},
+      removeListener: () => {},
+      onchange: () => {},
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      dispatchEvent: () => true
+    }
+  }
 }

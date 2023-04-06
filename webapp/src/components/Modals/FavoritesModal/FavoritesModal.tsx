@@ -24,8 +24,10 @@ const DEFAULT_LIST_WIDTH = 650
 const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string>()
-  const [favorites, setFavorites] = useState<string[]>([])
-  const [total, setTotal] = useState<number>(0)
+  const [favorites, setFavorites] = useState<{
+    addresses: string[]
+    total: number
+  }>({ addresses: [], total: 0 })
 
   const isMobile = useMobileMediaQuery()
 
@@ -38,8 +40,10 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
           stopIndex - startIndex,
           startIndex
         )
-        setFavorites(favorites.concat(result.addresses))
-        setTotal(result.total)
+        setFavorites({
+          addresses: favorites.addresses.concat(result.addresses),
+          total: result.total
+        })
       } catch (error) {
         setError(isErrorWithMessage(error) ? error.message : 'Unknown')
       } finally {
@@ -51,10 +55,10 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
 
   const isItemLoaded = useCallback(
     index => {
-      const hasNextPage = favorites.length < total
-      return !hasNextPage || index < favorites.length
+      const hasNextPage = favorites.addresses.length < favorites.total
+      return !hasNextPage || index < favorites.addresses.length
     },
-    [total, favorites]
+    [favorites]
   )
 
   const Row = useCallback(
@@ -63,9 +67,9 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
         {isItemLoaded(index) ? (
           <LinkedProfile
             size="huge"
-            key={favorites[index]}
+            key={favorites.addresses[index]}
             sliceAddressBy={isMobile ? 18 : 40}
-            address={favorites[index]}
+            address={favorites.addresses[index]}
           />
         ) : (
           'Loading....'
@@ -77,11 +81,13 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
 
   useEffect(() => {
     fetchNextPage(0, 100)
-  }, [fetchNextPage])
+  }, [])
 
   // Makes the modal dynamic in size.
   const desktopHeight =
-    favorites.length * ITEM_HEIGHT > 500 ? 500 : favorites.length * ITEM_HEIGHT
+    favorites.addresses.length * ITEM_HEIGHT > 500
+      ? 500
+      : favorites.addresses.length * ITEM_HEIGHT
 
   return (
     <Modal
@@ -92,20 +98,24 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
       <ModalNavigation
         title={t('favorites_modal.title')}
         onClose={!isLoading ? onClose : undefined}
+        data-testid="favorites-modal"
       />
       <Modal.Content className={styles.content}>
         <>
           <div>{t('favorites_modal.disclaimer')}</div>
-          {isLoading && favorites.length === 0 ? (
-            <div className={styles.loading}>
-              <Loader inline size="medium" active />{' '}
+          {isLoading && favorites.addresses.length === 0 ? (
+            <div
+              data-testid="favorites-modal-loader"
+              className={styles.loading}
+            >
+              <Loader inline size="medium" active />
               <span>{t('global.loading')}...</span>
             </div>
           ) : null}
-          {!isLoading && favorites.length === 0 ? (
+          {!isLoading && favorites.addresses.length === 0 ? (
             <Empty className={styles.empty}>{t('favorites_modal.empty')}</Empty>
           ) : null}
-          {favorites.length !== 0 ? (
+          {favorites.addresses.length !== 0 ? (
             <div
               className={styles.favoritesList}
               style={{ height: !isMobile ? desktopHeight : undefined }}
@@ -114,12 +124,12 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
                 {({ height, width }) => (
                   <InfiniteLoader
                     isItemLoaded={isItemLoaded}
-                    itemCount={total}
+                    itemCount={favorites.total}
                     loadMoreItems={fetchNextPage}
                   >
                     {({ onItemsRendered, ref }) => (
                       <FixedSizeList
-                        itemCount={total}
+                        itemCount={favorites.total}
                         onItemsRendered={onItemsRendered}
                         itemSize={ITEM_HEIGHT}
                         height={height ?? DEFAULT_LIST_HEIGHT}

@@ -10,6 +10,7 @@ import FavoritesCounter from './FavoritesCounter'
 import { Props as FavoritesCounterProps } from './FavoritesCounter.types'
 
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter-bubble'
+const FAVORITES_COUNTER_NUMBER_TEST_ID = 'favorites-counter-number'
 
 function renderFavoritesCounter(props: Partial<FavoritesCounterProps> = {}) {
   return render(
@@ -19,6 +20,7 @@ function renderFavoritesCounter(props: Partial<FavoritesCounterProps> = {}) {
       item={{} as Item}
       onPick={jest.fn()}
       onUnpick={jest.fn()}
+      onCounterClick={jest.fn()}
       {...props}
     />
   )
@@ -160,6 +162,38 @@ describe('FavoritesCounter', () => {
         })
         await userEvent.click(getByTestId(FAVORITES_COUNTER_TEST_ID))
         expect(onUnpick).toHaveBeenCalledWith(item)
+      })
+    })
+  })
+
+  describe('when clicking the counter of an item', () => {
+    let onCounterClick: jest.Mock
+
+    beforeEach(() => {
+      onCounterClick = jest.fn()
+    })
+
+    describe('and the counter has no favorites', () => {
+      it('should not call the onCounterClick prop method', async () => {
+        const { getByTestId } = renderFavoritesCounter({
+          onCounterClick,
+          count: 0,
+          isCollapsed: true
+        })
+        await userEvent.click(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID))
+        expect(onCounterClick).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('and the counter has favorites', () => {
+      it('should call the onCounterClick prop method', async () => {
+        const { getByTestId } = renderFavoritesCounter({
+          onCounterClick,
+          count: 1000,
+          isCollapsed: true
+        })
+        await userEvent.click(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID))
+        expect(onCounterClick).toHaveBeenCalled()
       })
     })
   })
