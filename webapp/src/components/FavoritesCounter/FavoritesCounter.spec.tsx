@@ -2,12 +2,18 @@ import { ChainId, Item, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
   pickItemAsFavoriteRequest,
   unpickItemAsFavoriteRequest
 } from '../../modules/favorites/actions'
 import FavoritesCounter from './FavoritesCounter'
 import { Props as FavoritesCounterProps } from './FavoritesCounter.types'
+
+jest.mock('decentraland-dapps/dist/modules/analytics/utils')
+const getAnalyticsMock = (getAnalytics as unknown) as jest.MockedFunction<
+  typeof getAnalytics
+>
 
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter-bubble'
 const FAVORITES_COUNTER_NUMBER_TEST_ID = 'favorites-counter-number'
@@ -30,6 +36,9 @@ describe('FavoritesCounter', () => {
   let item: Item
 
   beforeEach(() => {
+    getAnalyticsMock.mockReturnValue({
+      track: jest.fn()
+    })
     item = {
       id: 'itemId',
       name: '',

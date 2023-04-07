@@ -2,6 +2,8 @@ import React, { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import * as events from '../../utils/events'
 import { Props } from './FavoritesCounter.types'
 import styles from './FavoritesCounter.module.css'
 
@@ -24,10 +26,12 @@ const FavoritesCounter = (props: Props) => {
     onUnpick
   } = props
 
-  const handleOnCounterClick = useCallback(() => onCounterClick(item), [
-    item,
-    onCounterClick
-  ])
+  const handleOnCounterClick = useCallback(() => {
+    getAnalytics().track(events.OPEN_FAVORITES_MODAL, {
+      item
+    })
+    onCounterClick(item)
+  }, [item, onCounterClick])
 
   const counter = useMemo(
     () => (
