@@ -44,7 +44,7 @@ const ActivityPage = (props: Props) => {
               id="wallet.sign_in_required"
               values={{
                 sign_in: (
-                  <Link to={locations.signIn()}>{t('wallet.sign_in')}</Link>
+                  <Link to={locations.signIn(locations.activity())}>{t('wallet.sign_in')}</Link>
                 )
               }}
             />

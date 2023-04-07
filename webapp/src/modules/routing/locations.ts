@@ -6,7 +6,9 @@ import { BrowseOptions } from './types'
 
 export const locations = {
   root: () => '/',
-  signIn: () => '/sign-in',
+  signIn: (redirectTo?: string) => {
+    return `/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`
+  },
   settings: () => '/settings',
   lands: (options?: BrowseOptions) => {
     const params = getSearchParams(options)
