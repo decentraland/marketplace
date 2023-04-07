@@ -65,7 +65,7 @@ export function getFilters(
         rarities,
         wearableGenders,
         contracts,
-        creators,
+        creator: address ? [address] : creators,
         network,
         emotePlayMode,
         rentalStatus:
