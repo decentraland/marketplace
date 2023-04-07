@@ -1,6 +1,6 @@
 import { NFTCategory, NFTFilters, RentalStatus } from '@dcl/schemas'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
-import { NFTsFetchParams, NFTSortBy } from '../../../nft/types'
+import { NFTsFetchParams } from '../../../nft/types'
 import { NFTsFetchFilters, NFTResponse, NFTResult } from './types'
 import { ATLAS_SERVER_URL } from '../land'
 import { Contract } from '../../services'
@@ -219,10 +219,6 @@ class NFTAPI extends BaseAPI {
     queryParams.append('skip', params.skip.toString())
     if (params.orderBy) {
       queryParams.append('sortBy', getNFTSortBy(params.orderBy))
-
-      if (params.orderBy === NFTSortBy.MAX_RENTAL_PRICE) {
-        queryParams.append('isOnRent', 'true')
-      }
     }
     if (params.category) {
       queryParams.append('category', params.category)

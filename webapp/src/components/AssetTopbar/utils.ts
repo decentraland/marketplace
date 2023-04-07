@@ -69,7 +69,7 @@ export function getOrderByOptions(
   return [
     { value: SortBy.NEWEST, text: t('filters.newest') },
     { value: SortBy.NAME, text: t('filters.name') },
-    { value: SortBy.CHEAPEST, text: t('filters.cheapest_sale') },
-    { value: SortBy.MAX_RENTAL_PRICE, text: t('filters.cheapest_rent') },
+    { value: SortBy.CHEAPEST_SALE, text: t('filters.cheapest_sale') },
+    { value: SortBy.CHEAPEST_RENT, text: t('filters.cheapest_rent') },
   ]
 }
