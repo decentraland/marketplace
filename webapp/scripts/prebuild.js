@@ -3,15 +3,23 @@ const dotenv = require('dotenv')
 
 dotenv.config()
 
-let ENV_CONTENT = {}
-
-// read files
-if (fs.existsSync('.env')) {
-  Object.assign(ENV_CONTENT, dotenv.parse(fs.readFileSync('.env')))
+// read .env 
+const ENV_CONTENT = async () => {
+  if (fs.existsSync('.env')) {
+    return dotenv.parse(await fs.promises.readFile('.env'))
+  } else {
+    return {}
+  }
 }
-const packageJson = JSON.parse(fs.readFileSync('./package.json').toString())
-const publicPackageJson = JSON.parse(
-  fs.readFileSync('./public/package.json').toString()
+
+// read package.json
+const { version: packageVersion } = JSON.parse(
+  await fs.promises.readFile('./package.json')
+)
+
+// read public/package.json 
+const { version: publicPackageVersion } = JSON.parse(
+  await fs.promises.readFile('./public/package.json')
 )
 
 // set version
