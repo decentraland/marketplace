@@ -58,7 +58,8 @@ const purchase: NFTPurchase = {
     tokenId: undefined,
     tradeType: TradeType.PRIMARY,
     cryptoAmount: 10
-  }
+  },
+  paymentMethod: 'credit-card'
 }
 
 const chainId = ChainId.MATIC_MAINNET

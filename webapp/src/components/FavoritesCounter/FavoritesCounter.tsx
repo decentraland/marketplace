@@ -5,7 +5,7 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Props } from './FavoritesCounter.types'
 import styles from './FavoritesCounter.module.css'
 
-/* TODO:
+/* TODO (lists):
     - An idea for more accesibility: Tooltip for the whole component with the name of the action
     - The div may be converted to a button with the withTooltip prop.
 */

@@ -15,6 +15,10 @@ import { VendorName } from '../vendor/types'
 import { isVendor } from '../vendor/utils'
 import { Section, Sections } from '../vendor/routing/types'
 import { RootState } from '../reducer'
+import { AssetType } from '../asset/types'
+import { getAddress as getWalletAddress } from '../wallet/selectors'
+import { getAddress as getAccountAddress } from '../account/selectors'
+import { isLandSection, isListsSection } from '../ui/utils'
 import {
   getDefaultOptionsByView,
   getURLParamArray,
@@ -23,14 +27,11 @@ import {
 } from './search'
 import { BrowseOptions, SortBy } from './types'
 import { locations } from './locations'
-import { AssetType } from '../asset/types'
-import { getAddress as getWalletAddress } from '../wallet/selectors'
-import { getAddress as getAccountAddress } from '../account/selectors'
-import { isLandSection } from '../ui/utils'
 
 export const getState = (state: RootState) => state.routing
 
-export const getVisitedLocations = (state: RootState) => getState(state).visitedLocations
+export const getVisitedLocations = (state: RootState) =>
+  getState(state).visitedLocations
 
 const getPathName = createSelector<
   RootState,
@@ -115,7 +116,7 @@ export const getOnlyOnSale = createSelector<
     default:
       return isLandSection(section)
         ? undefined
-        : getDefaultOptionsByView(view).onlyOnSale!
+        : getDefaultOptionsByView(view, section).onlyOnSale!
   }
 })
 
@@ -155,7 +156,7 @@ export const getIsMap = createSelector<RootState, string, boolean | undefined>(
 export const getItemId = createSelector<RootState, string, string | undefined>(
   getRouterSearch,
   search => {
-    const itemId = getURLParam(search, 'isSoldOut')
+    const itemId = getURLParam(search, 'itemId')
     return itemId ? itemId : undefined
   }
 )
@@ -246,13 +247,23 @@ export const getEmotePlayMode = createSelector<
     getURLParamArray<EmotePlayMode>(search, 'emotePlayMode') || undefined
 )
 
-export const getViewAsGuest = createSelector<RootState, string, boolean>(
-  getRouterSearch,
-  search => getURLParam(search, 'viewAsGuest') === 'true'
+export const getViewAsGuest = createSelector<
+  RootState,
+  string,
+  boolean | undefined
+>(getRouterSearch, search =>
+  getURLParam(search, 'viewAsGuest')
+    ? getURLParam(search, 'viewAsGuest') === 'true'
+    : undefined
 )
-export const getOnlySmart = createSelector<RootState, string, boolean>(
-  getRouterSearch,
-  search => getURLParam(search, 'onlySmart') === 'true'
+export const getOnlySmart = createSelector<
+  RootState,
+  string,
+  boolean | undefined
+>(getRouterSearch, search =>
+  getURLParam(search, 'onlySmart')
+    ? getURLParam(search, 'onlySmart') === 'true'
+    : undefined
 )
 
 export const getMinPrice = createSelector<RootState, string, string>(
@@ -277,7 +288,10 @@ export const getMaxEstateSize = createSelector<RootState, string, string>(
 
 export const getRentalDays = createSelector<RootState, string, number[]>(
   getRouterSearch,
-  search => getURLParamArray(search, 'rentalDays').map((value) => Number.parseInt(value)) as number[]
+  search =>
+    getURLParamArray(search, 'rentalDays').map(value =>
+      Number.parseInt(value)
+    ) as number[]
 )
 
 export const getMinDistanceToPlaza = createSelector<RootState, string, string>(
@@ -459,6 +473,9 @@ export const hasFiltersEnabled = createSelector<
     rentalDays
   } = browseOptions
   const isLand = isLandSection(section as Section)
+
+  if (isListsSection(section as Section)) return false
+
   if (isLand) {
     const hasOnSaleFilter = onlyOnSale === true
     const hasOnRentFilter = onlyOnRent === true

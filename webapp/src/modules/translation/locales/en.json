@@ -86,9 +86,14 @@
     "collectibles": "Collectibles",
     "partners": "Partners",
     "my_assets": "My Assets",
+    "my_lists": "My Lists",
     "my_bids": "My Bids",
     "activity": "Activity",
     "buy_mana_with_fiat": "Buy MANA"
+  },
+  "user_menu": {
+    "my_assets": "My Assets",
+    "my_lists": "My Lists"
   },
   "menu": {
     "all": "All Assets",
@@ -1112,5 +1117,8 @@
   "favorites_counter": {
     "pick_label": "pick as favorite",
     "unpick_label": "unpick favorite"
+  },
+  "lists_page": {
+    "default_title": "Wishlist"
   }
 }

@@ -8,7 +8,7 @@ const Title = ({ asset, isFavoritesEnabled }: Props) => {
   return (
     <div className={styles.title}>
       <span className={styles.text}>{getAssetName(asset)}</span>
-      {/* TODO: this may be moved after the new detail page for unified markets */}
+      {/* TODO (lists): this may be moved after the new detail page for unified markets */}
       {isFavoritesEnabled && !isNFT(asset) ? (
         <FavoritesCounter
           isCollapsed

@@ -36,14 +36,6 @@ function* handleOpenTransak(action: OpenTransakAction) {
     tokenId,
     productsAvailed: ProductsAvailed.BUY,
     isNFT: true,
-    // TODO (buy nfts with card): waiting for a fix on Transak Widget
-    /* redirectURL: encodeURIComponent(
-      `${window.origin}${locations.buyStatusPage(
-        isNFT(asset) ? AssetType.NFT : AssetType.ITEM,
-        asset.contractAddress,
-        tokenId
-      )}`
-    ), */
     widgetWidth: isMobile() ? undefined : '450px' // To avoid fixing the width of the widget in mobile
   }
 

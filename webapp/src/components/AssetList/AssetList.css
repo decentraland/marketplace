@@ -20,4 +20,5 @@
 
 .ui.massive.loader.asset-loader {
   top: 50vh;
+  position: fixed;
 }

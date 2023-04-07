@@ -1,6 +1,8 @@
 import signedFetch, { AuthIdentity } from 'decentraland-crypto-fetch'
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { config } from '../../../../config'
+import { FavoritedItemIds } from '../../../favorites/types'
+import { ItemFilters } from '../item/types'
 import { retryParams } from '../utils'
 
 export const DEFAULT_FAVORITES_LIST_ID = config.get(
@@ -52,6 +54,49 @@ class FavoritesAPI extends BaseAPI {
       throw new Error(
         'The marketplace favorites server responded with a non-2XX status code.'
       )
+    }
+  }
+
+  async getPicksByList(
+    listId: string,
+    filters: ItemFilters = {},
+    identity: AuthIdentity
+  ): Promise<{
+    results: FavoritedItemIds
+    total: number
+  }> {
+    try {
+      const queryParams = new URLSearchParams()
+
+      if (filters.first) {
+        queryParams.append('limit', filters.first.toString())
+      }
+
+      if (filters.skip) {
+        queryParams.append('offset', filters.skip.toString())
+      }
+
+      const url =
+        MARKETPLACE_FAVORITES_SERVER_URL +
+        `/lists/${listId}/picks` +
+        (queryParams.toString() && `?${queryParams.toString()}`)
+
+      const response = await signedFetch(url, { identity })
+
+      if (!response.ok) {
+        throw new Error(
+          'The marketplace favorites server responded with a non-2XX status code.'
+        )
+      }
+
+      const json = await response.json()
+      if (json.ok) {
+        return json.data
+      } else {
+        throw new Error(json.message)
+      }
+    } catch (error) {
+      throw new Error((error as Error).message)
     }
   }
 }

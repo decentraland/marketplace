@@ -9,7 +9,8 @@ import { Sections } from '../../modules/vendor/routing/types'
 import { BrowseOptions } from '../../modules/routing/types'
 import {
   getPersistedIsMapProperty,
-  isAccountView
+  isAccountView,
+  isListsSection
 } from '../../modules/ui/utils'
 import { locations } from '../../modules/routing/locations'
 import { AccountSidebar } from '../AccountSidebar'
@@ -144,7 +145,7 @@ const AssetBrowse = (props: Props) => {
     visitedLocations
   ])
 
-  const left = (
+  const left = isListsSection(section) ? null : (
     <>
       <NotMobile>
         {view === View.ACCOUNT || isCurrentAccount ? (
@@ -255,12 +256,12 @@ const AssetBrowse = (props: Props) => {
         isFullscreen={isFullscreen}
       >
         <Row>
-          {!isFullscreen && (
+          {!isFullscreen && left && (
             <Column align="left" className="sidebar">
               {left}
             </Column>
           )}
-          <Column align="right" grow={true}>
+          <Column align={!left ? 'center' : 'right'} grow={true}>
             {right}
           </Column>
         </Row>
