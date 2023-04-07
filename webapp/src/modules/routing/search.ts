@@ -19,6 +19,8 @@ export function getDefaultOptionsByView(
   view?: View,
   section?: Section
 ): BrowseOptions {
+  if (section === Section.LISTS) return {}
+
   return {
     onlyOnSale: !view || !isAccountView(view),
     sortBy:

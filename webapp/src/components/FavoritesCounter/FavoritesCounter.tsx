@@ -7,7 +7,7 @@ import * as events from '../../utils/events'
 import { Props } from './FavoritesCounter.types'
 import styles from './FavoritesCounter.module.css'
 
-/* TODO:
+/* TODO (lists):
     - An idea for more accessibility: Tooltip for the whole component with the name of the action
     - The div may be converted to a button with the withTooltip prop.
 */

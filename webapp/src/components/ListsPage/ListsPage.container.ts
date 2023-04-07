@@ -1,31 +1,22 @@
 import { connect } from 'react-redux'
 import { replace } from 'connected-react-router'
-
 import { RootState } from '../../modules/reducer'
-import {
-  getIsFullscreen,
-  getVendor,
-  getViewAsGuest
-} from '../../modules/routing/selectors'
 import { getWallet, isConnecting } from '../../modules/wallet/selectors'
 import {
   MapStateProps,
   MapDispatch,
   MapDispatchProps,
   OwnProps
-} from './AccountPage.types'
-import AccountPage from './AccountPage'
+} from './ListsPage.types'
+import AccountPage from './ListsPage'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const { address } = ownProps.match.params
+  const { listId } = ownProps.match.params
 
   return {
-    addressInUrl: address?.toLowerCase(),
-    vendor: getVendor(state),
     wallet: getWallet(state),
     isConnecting: isConnecting(state),
-    isFullscreen: getIsFullscreen(state),
-    viewAsGuest: !!getViewAsGuest(state)
+    listId
   }
 }
 

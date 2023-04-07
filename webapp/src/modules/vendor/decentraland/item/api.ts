@@ -38,9 +38,6 @@ class ItemAPI extends BaseAPI {
       queryParams.append('first', filters.first.toString())
     }
 
-    // TODO: remove
-    // queryParams.append('first', '1000')
-
     if (filters.skip) {
       queryParams.append('skip', filters.skip.toString())
     }
@@ -101,6 +98,11 @@ class ItemAPI extends BaseAPI {
       for (const wearableGender of filters.wearableGenders) {
         queryParams.append('wearableGender', wearableGender)
       }
+    }
+    if (filters.ids) {
+      filters.ids.forEach(id =>
+        queryParams.append('id', id)
+      )
     }
     if (filters.contracts) {
       filters.contracts.forEach(contract =>
