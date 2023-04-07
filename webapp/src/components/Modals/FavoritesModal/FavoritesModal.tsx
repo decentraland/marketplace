@@ -1,4 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react'
+import { FixedSizeList } from 'react-window'
+import InfiniteLoader from 'react-window-infinite-loader'
+import AutoSizer from 'react-virtualized-auto-sizer'
 import {
   ModalNavigation,
   Message,
@@ -6,9 +9,6 @@ import {
   Empty,
   Loader
 } from 'decentraland-ui'
-import { FixedSizeList } from 'react-window'
-import InfiniteLoader from 'react-window-infinite-loader'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { isErrorWithMessage } from '../../../lib/error'
@@ -45,7 +45,9 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
           total: result.total
         })
       } catch (error) {
-        setError(isErrorWithMessage(error) ? error.message : 'Unknown')
+        setError(
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+        )
       } finally {
         setIsLoading(false)
       }

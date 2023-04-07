@@ -1,8 +1,8 @@
-import { waitFor, waitForElementToBeRemoved } from '@testing-library/react'
-import FavoritesModal from './FavoritesModal'
-import { Props } from './FavoritesModal.types'
+import { waitForElementToBeRemoved } from '@testing-library/react'
 import { favoritesAPI } from '../../../modules/vendor/decentraland/favorites'
 import { renderWithProviders } from '../../../utils/test'
+import FavoritesModal from './FavoritesModal'
+import { Props } from './FavoritesModal.types'
 
 jest.mock('../../../modules/vendor/decentraland/favorites')
 const getWhoFavoritedAnItemMock = (favoritesAPI.getWhoFavoritedAnItem as unknown) as jest.MockedFunction<
