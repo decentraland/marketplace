@@ -211,7 +211,7 @@ const BidModal = (props: Props) => {
                   values={{
                     name: <b>{getAssetName(nft)}</b>,
                     amount: (
-                      <Mana network={nft.network} inline>
+                      <Mana showTooltip={true} network={nft.network} inline>
                         {parseMANANumber(price).toLocaleString()}
                       </Mana>
                     )

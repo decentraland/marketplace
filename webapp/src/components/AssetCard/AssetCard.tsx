@@ -35,7 +35,12 @@ const RentalPrice = ({
 }) => {
   return (
     <>
-      <Mana className="rental-price" network={asset.network} inline>
+      <Mana
+        showTooltip={true}
+        className="rental-price"
+        network={asset.network}
+        inline
+      >
         {formatWeiMANA(rentalPricePerDay)}
       </Mana>
       <span className="card-rental-day">/{t('global.day')}</span>
@@ -108,7 +113,9 @@ const AssetCard = (props: Props) => {
       as={Link}
       to={getAssetUrl(asset, isManager && isLand(asset))}
       onClick={onClick}
-      id={`${asset.contractAddress}-${'tokenId' in asset ? asset.tokenId : asset.itemId}`}
+      id={`${asset.contractAddress}-${
+        'tokenId' in asset ? asset.tokenId : asset.itemId
+      }`}
     >
       <AssetImage
         asset={asset}
@@ -131,7 +138,7 @@ const AssetCard = (props: Props) => {
         <Card.Header>
           <div className="title">{title}</div>
           {price ? (
-            <Mana network={asset.network} inline>
+            <Mana showTooltip={true} network={asset.network} inline>
               {formatWeiMANA(price)}
             </Mana>
           ) : rentalPricePerDay ? (
