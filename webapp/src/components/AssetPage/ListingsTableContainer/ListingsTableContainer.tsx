@@ -1,17 +1,22 @@
-import React, { forwardRef, useEffect, useState } from 'react'
+import React, { forwardRef, useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Dropdown, Tabs } from 'decentraland-ui'
 import { OrderSortBy } from '@dcl/schemas'
 import { OrderDirection } from '../OwnersTable/OwnersTable.types'
 import { OwnersTable } from '../OwnersTable'
 import ListingsTable from '../ListingsTable/ListingsTable'
-import { BelowTabs, Props, SortByType } from './ListingsTableContainer.types'
-import styles from './ListingsTableContainer.module.css'
+import TableContainer from '../../Table/TableContainer'
+import { Props, SortByType } from './ListingsTableContainer.types'
 
 const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
   (props, ref) => {
     const { item } = props
+
+    const BelowTabs = {
+      LISTINGS: t('listings_table.listings'),
+      OWNERS: t('owners_table.owners')
+    }
+
     const locations = useLocation()
     const [belowTab, setBelowTab] = useState(BelowTabs.LISTINGS)
     const [sortBy, setSortBy] = useState<SortByType>(OrderSortBy.CHEAPEST)
@@ -50,59 +55,47 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
       }
     ]
 
+    const handleTabChange = useCallback(
+      (tab: string) => {
+        const sortByTab =
+          tab === BelowTabs.LISTINGS ? OrderSortBy.CHEAPEST : OrderDirection.ASC
+        setBelowTab(tab)
+        setSortBy(sortByTab)
+      },
+      [BelowTabs.LISTINGS]
+    )
+
     useEffect(() => {
       const params = new URLSearchParams(locations.search)
       if (params.get('selectedTableTab') === BelowTabs.OWNERS)
         handleTabChange(BelowTabs.OWNERS)
-    }, [locations.search])
+    }, [BelowTabs.OWNERS, handleTabChange, locations.search])
 
-    const handleTabChange = (tab: BelowTabs) => {
-      const sortByTab =
-        tab === BelowTabs.LISTINGS ? OrderSortBy.CHEAPEST : OrderDirection.ASC
-      setBelowTab(tab)
-      setSortBy(sortByTab)
-    }
-
+    console.log(item)
     return (
-      <div className={styles.tableContainer} ref={ref}>
-        <div className={styles.filtertabsContainer}>
-          <Tabs isFullscreen>
-            <Tabs.Tab
-              active={belowTab === BelowTabs.LISTINGS}
-              onClick={() => handleTabChange(BelowTabs.LISTINGS)}
-            >
-              <div className={styles.tabStyle}>
-                {t('listings_table.listings')}
-              </div>
-            </Tabs.Tab>
-            <Tabs.Tab
-              active={belowTab === BelowTabs.OWNERS}
-              onClick={() => handleTabChange(BelowTabs.OWNERS)}
-            >
-              {t('owners_table.owners')}
-            </Tabs.Tab>
-          </Tabs>
-          <Dropdown
-            direction="left"
-            className={styles.sortByDropdown}
-            value={sortBy}
-            onChange={(_event, data) => {
-              const value = data.value as SortByType
-              setSortBy(value)
-            }}
-            options={
-              belowTab === BelowTabs.LISTINGS
-                ? listingSortByOptions
-                : ownerSortByOptions
-            }
-          />
-        </div>
-        {belowTab === BelowTabs.LISTINGS ? (
-          <ListingsTable asset={item} sortBy={sortBy as OrderSortBy} />
-        ) : (
-          <OwnersTable asset={item} orderDirection={sortBy as OrderDirection} />
-        )}
-      </div>
+      <TableContainer
+        children={
+          belowTab === BelowTabs.LISTINGS ? (
+            <ListingsTable asset={item} sortBy={sortBy as OrderSortBy} />
+          ) : (
+            <OwnersTable
+              asset={item}
+              orderDirection={sortBy as OrderDirection}
+            />
+          )
+        }
+        ref={ref}
+        tabsList={[BelowTabs.LISTINGS, BelowTabs.OWNERS]}
+        activeTab={belowTab}
+        handleTabChange={(tab: string) => handleTabChange(tab)}
+        sortbyList={
+          belowTab === BelowTabs.LISTINGS
+            ? listingSortByOptions
+            : ownerSortByOptions
+        }
+        handleSortByChange={(value: string) => setSortBy(value as SortByType)}
+        sortBy={sortBy}
+      />
     )
   }
 )

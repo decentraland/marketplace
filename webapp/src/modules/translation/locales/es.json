@@ -536,7 +536,8 @@
     "cheapest": "Más baratos",
     "newest": "Más nuevos",
     "oldest": "Más viejos",
-    "there_are_no_listings": "No hay collecionables disponibles"
+    "there_are_no_listings": "No hay collecionables disponibles",
+    "view_listing": "Ver listado"
   },
   "owners_table": {
     "owner": "Dueño",

@@ -10,7 +10,7 @@
   padding: 20px !important;
 }
 
-.ListingsTable .issuedIdContainer {
+.issuedIdContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -23,16 +23,23 @@
   font-weight: 700;
 }
 
-.ListingsTable .row {
+.row {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  justify-content: space-between;
   align-items: center;
 }
 
-.ListingsTable .badge {
+.badgeContainer :global(.dcl.badge) {
   color: white;
-  background-color: var(--background) !important;
+  background-color: transparent !important;
+}
+
+.badgeContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
 
 .ListingsTable .goToNFT {
@@ -47,15 +54,21 @@
   justify-content: center;
 }
 
-.ListingsTable .manaField {
+.manaField {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  font-size: 14px;
 }
 
-.ListingsTable :global(.ui.header.dcl.mana) {
-  margin: 0px;
-  font-size: 15px;
+.manaField :global(.ui.header:last-child) {
+  font-size: 14px;
+}
+
+.viewListingContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 10px;
 }
 
 @media (max-width: 768px) {

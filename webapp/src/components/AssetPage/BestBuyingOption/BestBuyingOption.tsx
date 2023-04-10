@@ -22,7 +22,6 @@ import { LinkedProfile } from '../../LinkedProfile'
 import { BuyNFTButtons } from '../SaleActionBox/BuyNFTButtons'
 import { BuyOptions, Props } from './BestBuyingOption.types'
 import styles from './BestBuyingOption.module.css'
-import { BelowTabs } from '../ListingsTableContainer/ListingsTableContainer.types'
 import { useHistory, useLocation } from 'react-router-dom'
 
 const BestBuyingOption = ({ asset, tableRef }: Props) => {
@@ -40,14 +39,14 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   const handleViewOffers = () => {
     history.replace({
       pathname: location.pathname,
-      search: `selectedTableTab=${BelowTabs.OWNERS}`
+      search: `selectedTableTab=owners`
     })
     tableRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' })
   }
 
   useEffect(() => {
     if (asset && !isNFT(asset)) {
-      if (asset.available > 1) {
+      if (asset.available > 1 && asset.isOnSale) {
         setBuyOption(BuyOptions.MINT)
       } else {
         setIsLoading(true)

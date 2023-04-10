@@ -1,0 +1,41 @@
+.TableContent {
+  display: flex;
+}
+
+.TableContent .ui.table {
+  font-size: 14px;
+  line-height: 24px;
+  color: white;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+}
+
+.TableContent .header {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.TableContent .ui.table th {
+  padding: 18px;
+  border: 1px solid var(--divider);
+}
+
+.TableContent .ui.table td:first-child,
+.TableContent .ui.table th:first-child {
+  padding: 18px !important;
+  border: 1px solid var(--divider);
+}
+
+.TableContent .ui.table tr td {
+  border: 1px solid var(--divider);
+  padding: 18px;
+}
+
+.TableContent .ui.table tr td {
+  border-top: 1px solid var(--divider);
+}
+
+.TableContent .ui.table td a {
+  color: var(--text);
+}
