@@ -8,8 +8,13 @@ import { getIdentity } from '../identity/utils'
 import { closeModal, CLOSE_MODAL, openModal } from '../modal/actions'
 import { favoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
+import { ItemBrowseOptions } from '../item/types'
+import { View } from '../ui/types'
 import {
   cancelPickItemAsFavorite,
+  fetchFavoritedItemsFailure,
+  fetchFavoritedItemsRequest,
+  fetchFavoritedItemsSuccess,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -21,6 +26,9 @@ import {
   unpickItemAsFavoriteSuccess
 } from './actions'
 import { favoritesSaga } from './sagas'
+import { getListId } from './selectors'
+import { fetchItemsRequest } from '../item/actions'
+import { FavoritedItemIds } from './types'
 
 let item: Item
 let address: string
@@ -217,6 +225,87 @@ describe('when handling the request for undo unpicking a favorite item', () => {
         ])
         .put(undoUnpickingItemAsFavoriteSuccess(item))
         .dispatch(undoUnpickingItemAsFavoriteRequest(item))
+        .run({ silenceTimeout: true })
+    })
+  })
+})
+
+describe('when handling the request for fetching favorited items', () => {
+  let options: ItemBrowseOptions
+  let listId: string
+
+  beforeEach(() => {
+    options = {
+      view: View.LISTS,
+      page: 0
+    }
+    listId = 'listId'
+  })
+
+  describe('and getting the identity fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga)
+        .provide([[call(getIdentity), throwError(error)]])
+        .put(fetchFavoritedItemsFailure(error.message))
+        .dispatch(fetchFavoritedItemsRequest(options))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api fails', () => {
+    it('should dispatch an action signaling the failure of the handled action', () => {
+      return expectSaga(favoritesSaga)
+        .provide([
+          [call(getIdentity), identity],
+          [select(getListId), listId],
+          [
+            call(
+              [favoritesAPI, 'getPicksByList'],
+              listId,
+              options.filters,
+              identity
+            ),
+            throwError(error)
+          ]
+        ])
+        .put(fetchFavoritedItemsFailure(error.message))
+        .dispatch(fetchFavoritedItemsRequest(options))
+        .run({ silenceTimeout: true })
+    })
+  })
+
+  describe('and the call to the favorites api succeeds', () => {
+    let favoritedItemIds: FavoritedItemIds
+    let total: number
+
+    beforeEach(() => {
+      favoritedItemIds = [{ itemId: item.id }]
+      total = 1
+    })
+
+    it('should dispatch an action signaling the success of the handled action and the request of the retrieved items', () => {
+      return expectSaga(favoritesSaga)
+        .provide([
+          [call(getIdentity), identity],
+          [select(getListId), listId],
+          [
+            call(
+              [favoritesAPI, 'getPicksByList'],
+              listId,
+              options.filters,
+              identity
+            ),
+            { results: favoritedItemIds, total }
+          ]
+        ])
+        .put(fetchFavoritedItemsSuccess(favoritedItemIds, total))
+        .put(
+          fetchItemsRequest({
+            ...options,
+            filters: { ...options.filters, ids: [item.id] }
+          })
+        )
+        .dispatch(fetchFavoritedItemsRequest(options))
         .run({ silenceTimeout: true })
     })
   })

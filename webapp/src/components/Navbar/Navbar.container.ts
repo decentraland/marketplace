@@ -10,7 +10,7 @@ import Navbar from './Navbar'
 
 const mapState = (state: RootState): MapStateProps => ({
   isConnected: isConnected(state),
-  pathname: getLocation(state).pathname,
+  location: getLocation(state),
   hasPendingTransactions: getTransactions(state).some(tx =>
     isPending(tx.status)
   )

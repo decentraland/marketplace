@@ -2,7 +2,10 @@ import { Dispatch } from 'redux'
 import { CallHistoryMethodAction } from 'connected-react-router'
 import { UserMenuProps } from 'decentraland-ui'
 
-export type Props = Partial<UserMenuProps>
+export type Props = Partial<UserMenuProps> & {
+  onClickMyAssets: () => void
+  onClickMyLists: () => void
+}
 
 export type MapStateProps = Pick<
   Props,
@@ -10,6 +13,6 @@ export type MapStateProps = Pick<
 >
 export type MapDispatchProps = Pick<
   Props,
-  'onClickActivity' | 'onClickSettings'
+  'onClickActivity' | 'onClickSettings' | 'onClickMyAssets' | 'onClickMyLists'
 >
 export type MapDispatch = Dispatch<CallHistoryMethodAction>

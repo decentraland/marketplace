@@ -1,7 +1,15 @@
 import { Item, Network } from '@dcl/schemas'
+import { ItemBrowseOptions } from '../item/types'
+import { View } from '../ui/types'
 import {
   cancelPickItemAsFavorite,
   CANCEL_PICK_ITEM_AS_FAVORITE,
+  fetchFavoritedItemsFailure,
+  fetchFavoritedItemsRequest,
+  fetchFavoritedItemsSuccess,
+  FETCH_FAVORITED_ITEMS_FAILURE,
+  FETCH_FAVORITED_ITEMS_REQUEST,
+  FETCH_FAVORITED_ITEMS_SUCCESS,
   pickItemAsFavoriteFailure,
   pickItemAsFavoriteRequest,
   pickItemAsFavoriteSuccess,
@@ -21,6 +29,12 @@ import {
   UNPICK_ITEM_AS_FAVORITE_REQUEST,
   UNPICK_ITEM_AS_FAVORITE_SUCCESS
 } from './actions'
+import { FavoritedItemIds } from './types'
+
+const itemBrowseOptions: ItemBrowseOptions = {
+  view: View.LISTS,
+  page: 0
+}
 
 const item = {
   id: 'anAddress-anItemId',
@@ -30,6 +44,9 @@ const item = {
   price: '1500000000000000000000',
   network: Network.ETHEREUM
 } as Item
+
+const itemIds: FavoritedItemIds = [{ itemId: item.id }]
+const total = itemIds.length
 
 const anErrorMessage = 'An error'
 
@@ -135,6 +152,39 @@ describe('when creating the action to signal a failure in the undo unpicking ite
       type: UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE,
       meta: undefined,
       payload: { item, error: anErrorMessage }
+    })
+  })
+})
+
+describe('when creating the action to signal the start of the fetch favorited items request', () => {
+  it('should return an object representing the action', () => {
+    expect(fetchFavoritedItemsRequest(itemBrowseOptions)).toEqual({
+      type: FETCH_FAVORITED_ITEMS_REQUEST,
+      meta: undefined,
+      payload: itemBrowseOptions
+    })
+  })
+})
+
+describe('when creating the action to signal a successful fetch favorited items request', () => {
+  it('should return an object representing the action', () => {
+    expect(fetchFavoritedItemsSuccess(itemIds, total)).toEqual({
+      type: FETCH_FAVORITED_ITEMS_SUCCESS,
+      meta: undefined,
+      payload: {
+        itemIds,
+        total
+      }
+    })
+  })
+})
+
+describe('when creating the action to signal a failure in the fetch favorited items request', () => {
+  it('should return an object representing the action', () => {
+    expect(fetchFavoritedItemsFailure(anErrorMessage)).toEqual({
+      type: FETCH_FAVORITED_ITEMS_FAILURE,
+      meta: undefined,
+      payload: { error: anErrorMessage }
     })
   })
 })

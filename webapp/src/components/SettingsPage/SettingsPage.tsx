@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import CopyToClipboard from 'react-copy-to-clipboard'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Footer } from 'decentraland-dapps/dist/containers'
@@ -16,7 +15,10 @@ import { Authorization } from './Authorization'
 import { getContractNames } from '../../modules/vendor'
 import { useTimer } from '../../lib/timer'
 import { Props } from './SettingsPage.types'
+import copyText from '../../lib/copyText'
+
 import './SettingsPage.css'
+import { useLocation } from 'react-router-dom'
 
 const SettingsPage = (props: Props) => {
   const {
@@ -31,12 +33,13 @@ const SettingsPage = (props: Props) => {
   } = props
 
   const [hasCopiedText, setHasCopiedAddress] = useTimer(1200)
+  const {pathname, search} = useLocation()
 
   useEffect(() => {
     if (!wallet) {
-      onNavigate(locations.signIn())
+      onNavigate(locations.signIn(`${pathname}${search}`))
     }
-  }, [wallet, onNavigate])
+  }, [wallet, onNavigate, pathname, search])
 
   useEffect(() => {
     // When this condition is met, the previous useEffect will redirect to the sign in page.
@@ -167,9 +170,12 @@ const SettingsPage = (props: Props) => {
                       ? shortenAddress(wallet.address)
                       : wallet.address}
                   </div>
-                  <CopyToClipboard
-                    text={wallet.address}
-                    onCopy={setHasCopiedAddress}
+                  <div
+                    role="button"
+                    aria-label="copy"
+                    onClick={() =>
+                      copyText(wallet.address, setHasCopiedAddress)
+                    }
                   >
                     {hasCopiedText ? (
                       <span className="copy-text">
@@ -180,7 +186,7 @@ const SettingsPage = (props: Props) => {
                         {t('settings_page.copy_address')}
                       </span>
                     )}
-                  </CopyToClipboard>
+                  </div>
                 </div>
               </Grid.Column>
             </Grid.Row>

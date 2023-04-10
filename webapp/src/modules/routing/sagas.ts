@@ -104,6 +104,7 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
+import { fetchFavoritedItemsRequest } from '../favorites/actions'
 import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
@@ -147,6 +148,7 @@ export function* handleBrowse(action: BrowseAction) {
     getNewBrowseOptions,
     action.payload.options
   )
+
   const { pathname }: ReturnType<typeof getLocation> = yield select(getLocation)
   const eventsContracts: Record<string, string[]> = yield select(getData)
   const isAnEventRoute = Object.keys(eventsContracts).includes(
@@ -212,6 +214,10 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const category = getCategoryFromSection(section)
 
+  const offset = isLoadMore ? page - 1 : 0
+  const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
+  const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
+
   switch (section) {
     case Section.BIDS:
     case Section.STORE_SETTINGS:
@@ -254,11 +260,17 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         search
       )
       break
+    case Section.LISTS:
+      yield put(
+        fetchFavoritedItemsRequest({
+          view,
+          section,
+          page,
+          filters: { first, skip }
+        })
+      )
+      break
     default:
-      const offset = isLoadMore ? page - 1 : 0
-      const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
-      const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
-
       if (isItems) {
         // TODO: clean up
         const isWearableHead =
@@ -348,7 +360,8 @@ export function* getNewBrowseOptions(
     }
   }
 
-  const defaults = getDefaultOptionsByView(view)
+  const defaults = getDefaultOptionsByView(view, current.section as Section)
+
   return {
     ...defaults,
     ...previous,
@@ -485,14 +498,20 @@ function* deriveCurrentOptions(
 ) {
   let newOptions: BrowseOptions = {
     ...current,
+    assetType: current.assetType || previous.assetType,
+    section: current.section || previous.section
+  }
+
+  if (newOptions.section === Section.LISTS) return newOptions
+
+  newOptions = {
+    ...newOptions,
     onlyOnRent: current.hasOwnProperty('onlyOnRent')
       ? current.onlyOnRent
       : previous.onlyOnRent,
     onlyOnSale: current.hasOwnProperty('onlyOnSale')
       ? current.onlyOnSale
-      : previous.onlyOnSale,
-    assetType: current.assetType || previous.assetType,
-    section: current.section || previous.section
+      : previous.onlyOnSale
   }
 
   // Checks if the sorting categories are correctly set for the onlyOnRental and the onlyOnSell filters

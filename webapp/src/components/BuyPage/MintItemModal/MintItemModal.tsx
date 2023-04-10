@@ -30,6 +30,7 @@ import { PriceTooLow } from '../PriceTooLow'
 import { CardPaymentsExplanation } from '../CardPaymentsExplanation'
 import { NotEnoughMana } from '../NotEnoughMana'
 import { PriceHasChanged } from '../PriceHasChanged'
+import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
 import { Props } from './MintItemModal.types'
 
 const MintItemModal = (props: Props) => {
@@ -218,6 +219,7 @@ const MintItemModal = (props: Props) => {
       {hasLowPrice && !isBuyWithCardPage ? (
         <PriceTooLow chainId={item.chainId} network={item.network} />
       ) : null}
+      <PartiallySupportedNetworkCard asset={item} />
       <div
         className={classNames(
           'buttons',

@@ -134,7 +134,12 @@ export function getPickItemAsFavoriteSuccessToast(
     title: t('toast.pick_item_as_favorite_success.title', {
       name: getAssetName(item)
     }),
-    body: t('toast.pick_item_as_favorite_success.view_my_lists'), // TODO: make it a link to "My Lists"
+    // TODO (lists): redirect to the chosen list
+    body: (
+      <Button as="a" basic href={locations.defaultList()}>
+        {t('toast.pick_item_as_favorite_success.view_my_lists')}
+      </Button>
+    ),
     closable: true,
     timeout: 6000,
     icon: <Icon name="bookmark" />

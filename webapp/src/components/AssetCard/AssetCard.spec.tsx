@@ -23,7 +23,10 @@ function renderAssetCard(props: Partial<AssetCardProps> = {}) {
         favorites: {
           ...INITIAL_STATE,
           data: {
-            '0xContractAddress-itemId': { pickedByUser: false, count: 35 }
+            items: {
+              '0xContractAddress-itemId': { pickedByUser: false, count: 35 }
+            },
+            total: 0
           }
         }
       }

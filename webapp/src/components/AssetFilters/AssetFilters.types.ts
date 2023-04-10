@@ -23,7 +23,7 @@ export type Props = {
   network?: Network
   category?: NFTCategory
   bodyShapes?: (GenderFilterOption | WearableGender)[]
-  isOnlySmart: boolean
+  isOnlySmart?: boolean
   isOnSale?: boolean
   emotePlayMode?: EmotePlayMode[]
   assetType?: AssetType
@@ -41,7 +41,7 @@ export type Props = {
   adjacentToRoad?: boolean
   onBrowse: (options: BrowseOptions) => void
   onFilterChange?: (options: BrowseOptions) => void
-  
+
   // feature flags
   isCreatorFiltersEnabled: boolean
   isPriceFilterEnabled: boolean
