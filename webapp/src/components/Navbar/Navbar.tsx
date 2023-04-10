@@ -7,15 +7,16 @@ import { Props } from './Navbar.types'
 import './Navbar.css'
 
 const Navbar = (props: Props) => {
-  const { pathname, onNavigate, isConnected } = props
+  const { location, onNavigate, isConnected } = props
+  const { pathname, search } = location
 
   if (isConnected) {
     props = { ...props, rightMenu: <UserMenu /> }
   }
 
   const handleOnSignIn = useCallback(() => {
-    onNavigate(locations.signIn())
-  }, [onNavigate])
+    onNavigate(locations.signIn(`${pathname}${search}`))
+  }, [onNavigate, pathname, search])
 
   const handleOnClickAccount = useCallback(() => {
     onNavigate(locations.settings())

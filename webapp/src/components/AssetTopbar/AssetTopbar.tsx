@@ -20,6 +20,7 @@ import {
 import {
   isAccountView,
   isLandSection,
+  isListsSection,
   persistIsMapProperty
 } from '../../modules/ui/utils'
 import { Chip } from '../Chip'
@@ -105,8 +106,12 @@ export const AssetTopbar = ({
 
   return (
     <div className={styles.assetTopbar}>
-      <div className={classNames(styles.searchContainer, { [styles.searchMap]: isMap })}>
-        {!isMap && (
+      <div
+        className={classNames(styles.searchContainer, {
+          [styles.searchMap]: isMap
+        })}
+      >
+        {!isMap && !isListsSection(section) && (
           <Field
             className={styles.searchField}
             placeholder={t('nft_filters.search')}
@@ -139,6 +144,7 @@ export const AssetTopbar = ({
       {view &&
         !isLandSection(section) &&
         !isAccountView(view) &&
+        !isListsSection(section) &&
         (category === NFTCategory.WEARABLE ||
           category === NFTCategory.EMOTE) && (
           <AssetTypeFilter
@@ -157,24 +163,26 @@ export const AssetTopbar = ({
               </button>
             )}
           </div>
-          <div className={styles.rightOptionsContainer}>
-            <Dropdown
-              direction="left"
-              value={sortByValue}
-              options={orderByDropdownOptions}
-              onChange={handleOrderByDropdownChange}
-            />
-            {isMobile ? (
-              <i
-                className={classNames(
-                  styles.openFilters,
-                  styles.openFiltersWrapper,
-                  hasFiltersEnabled && styles.active
-                )}
-                onClick={onOpenFiltersModal}
+          {!isListsSection(section) ? (
+            <div className={styles.rightOptionsContainer}>
+              <Dropdown
+                direction="left"
+                value={sortByValue}
+                options={orderByDropdownOptions}
+                onChange={handleOrderByDropdownChange}
               />
-            ) : null}
-          </div>
+              {isMobile ? (
+                <i
+                  className={classNames(
+                    styles.openFilters,
+                    styles.openFiltersWrapper,
+                    hasFiltersEnabled && styles.active
+                  )}
+                  onClick={onOpenFiltersModal}
+                />
+              ) : null}
+            </div>
+          ) : null}
         </div>
       )}
       {!isMap && hasFiltersEnabled ? (

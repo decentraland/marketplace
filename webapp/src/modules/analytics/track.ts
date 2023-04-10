@@ -75,6 +75,21 @@ import {
 } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import * as events from '../../utils/events'
+import {
+  PICK_ITEM_AS_FAVORITE_FAILURE,
+  PICK_ITEM_AS_FAVORITE_SUCCESS,
+  PickItemAsFavoriteFailureAction,
+  PickItemAsFavoriteSuccessAction,
+  UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE,
+  UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
+  UNPICK_ITEM_AS_FAVORITE_FAILURE,
+  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+  UndoUnpickingItemAsFavoriteFailureAction,
+  UndoUnpickingItemAsFavoriteSuccessAction,
+  UnpickItemAsFavoriteFailureAction,
+  UnpickItemAsFavoriteSuccessAction
+} from '../favorites/actions'
+import { DEFAULT_FAVORITES_LIST_ID } from '../vendor/decentraland/favorites'
 
 function track<T extends PayloadAction<string, any>>(
   actionType: string,
@@ -201,11 +216,15 @@ track<ArchiveBidAction>(ARCHIVE_BID, events.ARCHIVE_BID, ({ payload }) => ({
   price: payload.bid.price
 }))
 
-track<UnarchiveBidAction>(UNARCHIVE_BID, events.UNARCHIVE_BID, ({ payload }) => ({
-  tokenId: payload.bid.tokenId,
-  bidId: payload.bid.id,
-  price: payload.bid.price
-}))
+track<UnarchiveBidAction>(
+  UNARCHIVE_BID,
+  events.UNARCHIVE_BID,
+  ({ payload }) => ({
+    tokenId: payload.bid.tokenId,
+    bidId: payload.bid.id,
+    price: payload.bid.price
+  })
+)
 
 track<FetchNFTsSuccessAction>(
   FETCH_NFTS_SUCCESS,
@@ -227,15 +246,19 @@ track<FetchItemsSuccessAction>(
   })
 )
 
-track<BuyItemSuccessAction>(BUY_ITEM_SUCCESS, events.BUY_ITEM, ({ payload }) => ({
-  itemId: payload.item.itemId,
-  contractAddress: payload.item.contractAddress,
-  rarity: payload.item.rarity,
-  network: payload.item.network,
-  chainId: payload.item.chainId,
-  price: Number(ethers.utils.formatEther(payload.item.price)),
-  data: payload.item.data
-}))
+track<BuyItemSuccessAction>(
+  BUY_ITEM_SUCCESS,
+  events.BUY_ITEM,
+  ({ payload }) => ({
+    itemId: payload.item.itemId,
+    contractAddress: payload.item.contractAddress,
+    rarity: payload.item.rarity,
+    network: payload.item.network,
+    chainId: payload.item.chainId,
+    price: Number(ethers.utils.formatEther(payload.item.price)),
+    data: payload.item.data
+  })
+)
 
 track<BuyItemWithCardSuccessAction>(
   BUY_ITEM_WITH_CARD_SUCCESS,
@@ -306,4 +329,76 @@ track<SetPurchaseAction>(
       ? events.PURCHASED_FAILED
       : events.PURCHASED_STARTED,
   action => action.payload.purchase
+)
+
+track<PickItemAsFavoriteSuccessAction>(
+  PICK_ITEM_AS_FAVORITE_SUCCESS,
+  events.PICK_ITEM,
+  ({ payload }) => ({
+    id: payload.item.id,
+    itemId: payload.item.itemId,
+    contractAddress: payload.item.contractAddress,
+    rarity: payload.item.rarity,
+    network: payload.item.network,
+    chainId: payload.item.chainId,
+    listId: DEFAULT_FAVORITES_LIST_ID
+  })
+)
+
+track<PickItemAsFavoriteFailureAction>(
+  PICK_ITEM_AS_FAVORITE_FAILURE,
+  events.PICK_ITEM,
+  ({ payload }) => ({
+    id: payload.item.id,
+    listId: DEFAULT_FAVORITES_LIST_ID,
+    error: payload.error
+  })
+)
+
+track<UnpickItemAsFavoriteSuccessAction>(
+  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+  events.UNPICK_ITEM,
+  ({ payload }) => ({
+    id: payload.item.id,
+    itemId: payload.item.itemId,
+    contractAddress: payload.item.contractAddress,
+    rarity: payload.item.rarity,
+    network: payload.item.network,
+    chainId: payload.item.chainId,
+    listId: DEFAULT_FAVORITES_LIST_ID
+  })
+)
+
+track<UnpickItemAsFavoriteFailureAction>(
+  UNPICK_ITEM_AS_FAVORITE_FAILURE,
+  events.UNPICK_ITEM,
+  ({ payload }) => ({
+    id: payload.item.id,
+    listId: DEFAULT_FAVORITES_LIST_ID,
+    error: payload.error
+  })
+)
+
+track<UndoUnpickingItemAsFavoriteSuccessAction>(
+  UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
+  events.UNDO_UNPICK_ITEM,
+  ({ payload }) => ({
+    id: payload.item.id,
+    itemId: payload.item.itemId,
+    contractAddress: payload.item.contractAddress,
+    rarity: payload.item.rarity,
+    network: payload.item.network,
+    chainId: payload.item.chainId,
+    listId: DEFAULT_FAVORITES_LIST_ID
+  })
+)
+
+track<UndoUnpickingItemAsFavoriteFailureAction>(
+  UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE,
+  events.UNDO_UNPICK_ITEM,
+  ({ payload }) => ({
+    id: payload.item.id,
+    listId: DEFAULT_FAVORITES_LIST_ID,
+    error: payload.error
+  })
 )
