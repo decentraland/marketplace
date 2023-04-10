@@ -199,11 +199,7 @@ const CollectionPage = (props: Props) => {
                             {filteredItems.map(item => (
                               <div key={item.id} className="mobile-row">
                                 <AssetCell asset={item} />
-                                <Mana
-                                  showTooltip={true}
-                                  network={item.network}
-                                  inline
-                                >
+                                <Mana showTooltip network={item.network} inline>
                                   {formatWeiMANA(item.price)}
                                 </Mana>
                               </div>
@@ -229,7 +225,7 @@ const CollectionPage = (props: Props) => {
                                 </Table.Cell>
                                 <Table.Cell>
                                   <Mana
-                                    showTooltip={true}
+                                    showTooltip
                                     network={item.network}
                                     inline
                                   >

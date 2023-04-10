@@ -177,7 +177,7 @@ const SaleRentActionBox = ({
               <div className={styles.title}>{t('global.price')}</div>
               <div className={styles.priceValue}>
                 <Mana
-                  showTooltip={true}
+                  showTooltip
                   className={styles.priceInMana}
                   withTooltip
                   size="medium"
@@ -242,7 +242,7 @@ const SaleRentActionBox = ({
                 <div className={styles.title}>{t('global.price')}</div>
                 <div className={styles.content}>
                   <Mana
-                    showTooltip={true}
+                    showTooltip
                     className={styles.priceInMana}
                     withTooltip
                     size="medium"

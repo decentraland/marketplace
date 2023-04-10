@@ -86,7 +86,7 @@ const RankingItemRow = ({ entity }: Props) => {
               <div className="rankings-item-right-data">
                 {item ? (
                   <>
-                    <Mana showTooltip={true} network={item?.network} inline>
+                    <Mana showTooltip network={item?.network} inline>
                       {formatWeiMANA(entity.volume)}
                     </Mana>
                     <span className="rankings-fiat-price">
@@ -205,7 +205,7 @@ const RankingItemRow = ({ entity }: Props) => {
       <Table.Cell>
         {item ? (
           <>
-            <Mana showTooltip={true} network={item?.network} inline>
+            <Mana showTooltip network={item?.network} inline>
               {formatWeiMANA(entity.volume)}
             </Mana>
             <span className="rankings-fiat-price">

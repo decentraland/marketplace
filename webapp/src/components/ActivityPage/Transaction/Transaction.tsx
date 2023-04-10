@@ -122,7 +122,7 @@ const Transaction = (props: Props) => {
                       </Link>
                     ),
                     price: (
-                      <Mana showTooltip={true} network={network} inline>
+                      <Mana showTooltip network={network} inline>
                         {price.toLocaleString()}
                       </Mana>
                     )
@@ -156,7 +156,7 @@ const Transaction = (props: Props) => {
                       </Link>
                     ),
                     price: (
-                      <Mana showTooltip={true} network={network} inline>
+                      <Mana showTooltip network={network} inline>
                         {price.toLocaleString()}
                       </Mana>
                     )
@@ -210,7 +210,7 @@ const Transaction = (props: Props) => {
                   values={{
                     name: <Link to={url}>{name}</Link>,
                     price: (
-                      <Mana showTooltip={true} network={network} inline>
+                      <Mana showTooltip network={network} inline>
                         {price.toLocaleString()}
                       </Mana>
                     )
@@ -279,7 +279,7 @@ const Transaction = (props: Props) => {
                       </Link>
                     ),
                     price: (
-                      <Mana showTooltip={true} network={nft?.network} inline>
+                      <Mana showTooltip network={nft?.network} inline>
                         {price.toLocaleString()}
                       </Mana>
                     )
@@ -313,7 +313,7 @@ const Transaction = (props: Props) => {
                       </Link>
                     ),
                     price: (
-                      <Mana showTooltip={true} inline network={nft?.network}>
+                      <Mana showTooltip inline network={nft?.network}>
                         {price.toLocaleString()}
                       </Mana>
                     )
@@ -347,7 +347,7 @@ const Transaction = (props: Props) => {
                       </Link>
                     ),
                     price: (
-                      <Mana showTooltip={true} inline network={nft?.network}>
+                      <Mana showTooltip inline network={nft?.network}>
                         {price.toLocaleString()}
                       </Mana>
                     )
@@ -458,7 +458,7 @@ const Transaction = (props: Props) => {
                       </Link>
                     ),
                     pricePerDay: (
-                      <Mana showTooltip={true} network={nft?.network} inline>
+                      <Mana showTooltip network={nft?.network} inline>
                         {/* As this there might be already registered transactions and the price information is new, consider it optional */}
                         {pricePerDay
                           ? ethers.utils.formatEther(pricePerDay)

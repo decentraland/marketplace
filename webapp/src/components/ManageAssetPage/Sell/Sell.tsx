@@ -72,7 +72,7 @@ const Sell = (props: Props) => {
             </div>
             <div className={styles.columnContent}>
               <Mana
-                showTooltip={true}
+                showTooltip
                 withTooltip
                 size={'medium'}
                 network={order.network}

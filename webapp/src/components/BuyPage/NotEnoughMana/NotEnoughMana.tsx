@@ -20,7 +20,7 @@ const NotEnoughMana = (props: Props) => {
             className={styles.getMana}
           >
             <Mana
-              showTooltip={true}
+              showTooltip
               inline
               size="small"
               network={asset.network}

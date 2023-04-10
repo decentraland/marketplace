@@ -225,12 +225,7 @@ const BuyNFTModal = (props: Props) => {
               isBuyWithCardPage ? (
                 <Icon name="credit card outline" />
               ) : (
-                <Mana
-                  showTooltip={true}
-                  inline
-                  size="small"
-                  network={nft.network}
-                />
+                <Mana showTooltip inline size="small" network={nft.network} />
               )
             ) : null}
             {t(`${translationPageDescriptorId}.buy`)}

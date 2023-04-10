@@ -35,12 +35,7 @@ const RentalPrice = ({
 }) => {
   return (
     <>
-      <Mana
-        showTooltip={true}
-        className="rental-price"
-        network={asset.network}
-        inline
-      >
+      <Mana showTooltip className="rental-price" network={asset.network} inline>
         {formatWeiMANA(rentalPricePerDay)}
       </Mana>
       <span className="card-rental-day">/{t('global.day')}</span>
@@ -138,7 +133,7 @@ const AssetCard = (props: Props) => {
         <Card.Header>
           <div className="title">{title}</div>
           {price ? (
-            <Mana showTooltip={true} network={asset.network} inline>
+            <Mana showTooltip network={asset.network} inline>
               {formatWeiMANA(price)}
             </Mana>
           ) : rentalPricePerDay ? (

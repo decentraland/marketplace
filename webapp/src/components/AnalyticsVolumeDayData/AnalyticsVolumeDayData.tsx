@@ -110,7 +110,7 @@ const AnalyticsVolumeDayData = (props: Props) => {
                   </div>
                   <div className="stats">
                     {statSection.isMana ? (
-                      <Mana showTooltip={true}>
+                      <Mana showTooltip>
                         <CountUp
                           end={statSection.getData(data)}
                           formattingFn={formatAnalyticsVolume}

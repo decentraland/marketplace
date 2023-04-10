@@ -35,7 +35,7 @@ const RankingCreatorRow = ({ entity }: Props) => {
           </div>
           <div className="rankings-creator-right-data">
             <>
-              <Mana showTooltip={true} network={Network.MATIC} inline>
+              <Mana showTooltip network={Network.MATIC} inline>
                 {entity.earned && formatWeiMANA(entity.earned)}
               </Mana>
               <span className="rankings-fiat-price">
@@ -102,7 +102,7 @@ const RankingCreatorRow = ({ entity }: Props) => {
             <Table.Cell width={2}>{entity.sales}</Table.Cell>
             <Table.Cell width={3}>{entity.uniqueCollectors}</Table.Cell>
             <Table.Cell>
-              <Mana showTooltip={true} network={Network.MATIC} inline>
+              <Mana showTooltip network={Network.MATIC} inline>
                 {entity.earned && formatWeiMANA(entity.earned)}
               </Mana>
               <span className="rankings-fiat-price">
