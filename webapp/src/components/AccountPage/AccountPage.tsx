@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react'
-import { Page, Loader, Center } from 'decentraland-ui'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { AddressProvider } from 'decentraland-dapps/dist/containers/AddressProvider'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Center, Loader, Page } from 'decentraland-ui'
+import React from 'react'
+import { useRequireConnect } from '../../customHooks/useRequireConnect'
 import { View } from '../../modules/ui/types'
-import { Navbar } from '../Navbar'
-import { Footer } from '../Footer'
 import { AssetBrowse } from '../AssetBrowse'
+import { Footer } from '../Footer'
+import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
 import { NavigationTab } from '../Navigation/Navigation.types'
-import { locations } from '../../modules/routing/locations'
-import { Props } from './AccountPage.types'
 import AccountBanner from './AccountBanner'
 import './AccountPage.css'
+import { Props } from './AccountPage.types'
 
 const AccountPage = ({
   addressInUrl,
@@ -25,12 +25,7 @@ const AccountPage = ({
   const isCurrentAccount =
     (!addressInUrl || wallet?.address === addressInUrl) && !viewAsGuest
 
-  // Redirect to signIn if trying to access current account without a wallet
-  useEffect(() => {
-    if (!addressInUrl && !isConnecting && !wallet) {
-      onRedirect(locations.signIn())
-    }
-  }, [addressInUrl, isConnecting, wallet, onRedirect])
+  useRequireConnect({ addressInUrl, wallet, isConnecting, onRedirect })
 
   return (
     <div className="AccountPage">
