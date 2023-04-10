@@ -9,3 +9,18 @@
 .AssetPage .asset-container {
   width: 100%;
 }
+
+.AssetPage .backText {
+  margin-left: 45px;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .AssetPage .backText {
+    margin-top: -20px;
+  }
+
+  .AssetPage .ui.container .dcl.back.absolute {
+    position: absolute;
+  }
+}
