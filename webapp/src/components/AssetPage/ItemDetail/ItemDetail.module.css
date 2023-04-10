@@ -1,6 +1,7 @@
 .ItemDetail {
   display: flex;
   flex-direction: column;
+  margin-top: 30px;
 }
 
 .ItemDetail .assetImageContainer :global(.AssetImage) {
@@ -9,22 +10,28 @@
 }
 
 .ItemDetail .assetImageContainer {
-  width: 48%;
+  width: 52.5%;
+  height: 602px;
 }
 
 .ItemDetail .badges {
-  margin-top: 15px;
+  margin-top: 8px;
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
 
+.ItemDetail .itemDetailBottomContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .ItemDetail .information {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: 48%;
-  gap: 30px;
+  width: 45%;
+  gap: 15px;
 }
 
 .ItemDetail .informationContainer {

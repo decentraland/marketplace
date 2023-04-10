@@ -469,6 +469,8 @@
       "not_enough_mana": "You don't have enough MANA"
     },
     "description": "Description",
+    "no_description": "No description",
+    "read_more": "Read more",
     "owner": "Owner",
     "creator": "Creator",
     "price": "Price",
@@ -516,7 +518,10 @@
     "minting": {
       "title": "Available for Minting",
       "price": "Price",
-      "stock": "Stock"
+      "stock": "Stock",
+      "minting_popup": "When you mint an item you become its first owner. It also means buying directly from the creator. ",
+      "polygon_mana": "Polygon MANA",
+      "ethereum_mana": "Ethereum MANA"
     },
     "buy_listing": {
       "title": "Cheapest Listing",

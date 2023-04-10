@@ -123,7 +123,7 @@ const ListingsTable = (props: Props) => {
                       <div className={styles.row}>
                         <span>
                           <span className={styles.issuedId}>
-                            {order.tokenId}
+                            {order.issuedId}
                           </span>
                           / {total}
                         </span>

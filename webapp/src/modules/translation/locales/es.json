@@ -465,6 +465,8 @@
       "not_enough_mana": "No tienes suficiente MANA"
     },
     "description": "Descripción",
+    "no_description": "Sin descripción",
+    "read_more": "Leer más",
     "owner": "Dueño",
     "creator": "Creador",
     "price": "Precio",
@@ -510,9 +512,12 @@
       "and_make_an_offer": "y hacer una oferta"
     },
     "minting": {
-      "title": "Disponible para acuñar",
+      "title": "Disponible para comprar",
       "price": "Precio",
-      "stock": "Stock"
+      "stock": "Stock",
+      "minting_popup": "Cuando compras un artículo, te conviertes en su primer propietario. También significa comprarlo directamente al creador",
+      "polygon_mana": "Polygon MANA",
+      "ethereum_mana": "Ethereum MANA"
     },
     "buy_listing": {
       "title": "Listado más barato",

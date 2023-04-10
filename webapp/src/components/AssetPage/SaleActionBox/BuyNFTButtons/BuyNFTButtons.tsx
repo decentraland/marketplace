@@ -10,7 +10,7 @@ import { locations } from '../../../../modules/routing/locations'
 import styles from './BuyNFTButtons.module.css'
 import { Props } from './BuyNFTButtons.types'
 
-const BuyNFTButtons = ({ asset }: Props) => {
+const BuyNFTButtons = ({ asset, buyWithCardClassName }: Props) => {
   const { contractAddress, network } = asset
   const assetType = isNFT(asset) ? AssetType.NFT : AssetType.ITEM
   const assetId = isNFT(asset) ? asset.tokenId : asset.itemId
@@ -35,7 +35,7 @@ const BuyNFTButtons = ({ asset }: Props) => {
 
       <Button
         as={Link}
-        className={styles.buy_with_card}
+        className={`${styles.buy_with_card} ${buyWithCardClassName}`}
         to={locations.buyWithCard(assetType, contractAddress, assetId)}
         onClick={handleBuyWithCard}
         fluid

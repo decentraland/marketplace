@@ -466,6 +466,8 @@
       "not_enough_mana": "你没有足够的 MANA"
     },
     "description": "描述",
+    "no_description": "沒有說明",
+    "read_more": "閱讀更多",
     "owner": "持有者",
     "creator": "创造者",
     "price": "价格",
@@ -513,7 +515,10 @@
     "minting": {
       "title": "可鑄造",
       "price": "價格",
-      "stock": "庫存"
+      "stock": "庫存",
+      "minting_popup": "當你鑄造一件物品時，你就成為了它的第一個所有者。這也意味著直接從創造者那裡購買。",
+      "polygon_mana": "Polygon MANA",
+      "ethereum_mana": "Ethereum MANA"
     },
     "buy_listing": {
       "title": "最便宜的清單",

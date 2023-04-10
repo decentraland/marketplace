@@ -79,7 +79,8 @@ describe('Listings Table', () => {
     createdAt: 1671033414000,
     updatedAt: 0,
     network: Network.MATIC,
-    chainId: ChainId.ETHEREUM_GOERLI
+    chainId: ChainId.ETHEREUM_GOERLI,
+    issuedId: '1'
   }
 
   afterEach(() => {
@@ -158,7 +159,7 @@ describe('Listings Table', () => {
       })
       const price = formatWeiMANA(orderResponse.price)
 
-      expect(getByText(orderResponse.tokenId)).not.toBe(null)
+      expect(getByText(orderResponse.issuedId)).not.toBe(null)
       expect(getByText(created)).not.toBe(null)
       expect(getByText(expires)).not.toBe(null)
       expect(getByText(price)).not.toBe(null)
