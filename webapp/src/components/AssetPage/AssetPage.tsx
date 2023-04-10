@@ -1,6 +1,6 @@
 import React from 'react'
-import { Page, Section, Column } from 'decentraland-ui'
 import { mapAsset } from '../../modules/asset/utils'
+import { Page, Section, Column } from 'decentraland-ui'
 import { AssetProviderPage } from '../AssetProviderPage'
 import { Navbar } from '../Navbar'
 import { Navigation } from '../Navigation'
