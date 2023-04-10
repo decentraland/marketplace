@@ -1,0 +1,33 @@
+.favoritesList {
+  margin-top: 20px;
+}
+
+@media (max-width: 767px) {
+  .favoritesList {
+    height: 100%;
+  }
+
+  .content {
+    overflow: hidden;
+    height: calc(100vh - 95px - 20px);
+  }
+  
+  .modal {
+    height: 100%;
+  }
+}
+
+.empty {
+  margin-top: 20px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.loading span {
+  margin-left: 20px;
+}

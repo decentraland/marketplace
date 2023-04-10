@@ -2,6 +2,7 @@ import { ChainId, Item, Network, NFTCategory, Rarity } from '@dcl/schemas'
 import { render } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import {
   pickItemAsFavoriteRequest,
   unpickItemAsFavoriteRequest
@@ -9,7 +10,13 @@ import {
 import FavoritesCounter from './FavoritesCounter'
 import { Props as FavoritesCounterProps } from './FavoritesCounter.types'
 
+jest.mock('decentraland-dapps/dist/modules/analytics/utils')
+const getAnalyticsMock = (getAnalytics as unknown) as jest.MockedFunction<
+  typeof getAnalytics
+>
+
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter-bubble'
+const FAVORITES_COUNTER_NUMBER_TEST_ID = 'favorites-counter-number'
 
 function renderFavoritesCounter(props: Partial<FavoritesCounterProps> = {}) {
   return render(
@@ -19,6 +26,7 @@ function renderFavoritesCounter(props: Partial<FavoritesCounterProps> = {}) {
       item={{} as Item}
       onPick={jest.fn()}
       onUnpick={jest.fn()}
+      onCounterClick={jest.fn()}
       {...props}
     />
   )
@@ -28,6 +36,9 @@ describe('FavoritesCounter', () => {
   let item: Item
 
   beforeEach(() => {
+    getAnalyticsMock.mockReturnValue({
+      track: jest.fn()
+    })
     item = {
       id: 'itemId',
       name: '',
@@ -160,6 +171,38 @@ describe('FavoritesCounter', () => {
         })
         await userEvent.click(getByTestId(FAVORITES_COUNTER_TEST_ID))
         expect(onUnpick).toHaveBeenCalledWith(item)
+      })
+    })
+  })
+
+  describe('when clicking the counter of an item', () => {
+    let onCounterClick: jest.Mock
+
+    beforeEach(() => {
+      onCounterClick = jest.fn()
+    })
+
+    describe('and the counter has no favorites', () => {
+      it('should not call the onCounterClick prop method', async () => {
+        const { getByTestId } = renderFavoritesCounter({
+          onCounterClick,
+          count: 0,
+          isCollapsed: true
+        })
+        await userEvent.click(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID))
+        expect(onCounterClick).not.toHaveBeenCalled()
+      })
+    })
+
+    describe('and the counter has favorites', () => {
+      it('should call the onCounterClick prop method', async () => {
+        const { getByTestId } = renderFavoritesCounter({
+          onCounterClick,
+          count: 1000,
+          isCollapsed: true
+        })
+        await userEvent.click(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID))
+        expect(onCounterClick).toHaveBeenCalled()
       })
     })
   })

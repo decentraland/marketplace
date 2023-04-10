@@ -2,11 +2,13 @@ import React, { useCallback, useMemo } from 'react'
 import classNames from 'classnames'
 import { Icon } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
+import * as events from '../../utils/events'
 import { Props } from './FavoritesCounter.types'
 import styles from './FavoritesCounter.module.css'
 
 /* TODO (lists):
-    - An idea for more accesibility: Tooltip for the whole component with the name of the action
+    - An idea for more accessibility: Tooltip for the whole component with the name of the action
     - The div may be converted to a button with the withTooltip prop.
 */
 
@@ -19,17 +21,31 @@ const FavoritesCounter = (props: Props) => {
     isPickedByUser,
     isCollapsed = false,
     item,
+    onCounterClick,
     onPick,
     onUnpick
   } = props
 
+  const handleOnCounterClick = useCallback(() => {
+    getAnalytics().track(events.OPEN_FAVORITES_MODAL, {
+      item
+    })
+    onCounterClick(item)
+  }, [item, onCounterClick])
+
   const counter = useMemo(
     () => (
-      <span className={styles.counter} aria-label="counter">
+      <span
+        role="button"
+        onClick={count > 0 && isCollapsed ? handleOnCounterClick : undefined}
+        className={styles.counter}
+        aria-label="counter"
+        data-testid="favorites-counter-number"
+      >
         {formatter.format(count)}
       </span>
     ),
-    [count]
+    [count, isCollapsed, handleOnCounterClick]
   )
 
   const onClick = useCallback(

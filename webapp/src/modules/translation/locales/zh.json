@@ -1115,6 +1115,11 @@
     "pick_label": "选择最喜欢的",
     "unpick_label": "取消收藏"
   },
+  "favorites_modal": {
+    "title": "由保存",
+    "disclaimer": "仅统计超过 1 个 VP 的帐户。",
+    "empty": "用户尚未保存此项"
+  },
   "lists_page": {
     "default_title": "心愿单"
   }

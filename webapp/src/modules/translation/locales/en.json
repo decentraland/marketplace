@@ -1118,6 +1118,11 @@
     "pick_label": "pick as favorite",
     "unpick_label": "unpick favorite"
   },
+  "favorites_modal": {
+    "title": "Saved by",
+    "disclaimer": "Only accounts with more than 1 VP are counted.",
+    "empty": "Users have not saved this item"
+  },
   "lists_page": {
     "default_title": "Wishlist"
   }

@@ -13,6 +13,27 @@ export const MARKETPLACE_FAVORITES_SERVER_URL = config.get(
 )!
 
 class FavoritesAPI extends BaseAPI {
+  async getWhoFavoritedAnItem(
+    itemId: string,
+    limit: number,
+    offset: number
+  ): Promise<{ addresses: string[]; total: number }> {
+    const response = await fetch(
+      `${MARKETPLACE_FAVORITES_SERVER_URL}/picks/${itemId}?limit=${limit}&offset=${offset}`
+    )
+
+    const parsedResponse = await response.json()
+
+    if (!response.ok) {
+      throw new Error(parsedResponse?.message ?? 'Unknown error')
+    }
+
+    return {
+      addresses: parsedResponse.data.results,
+      total: parsedResponse.data.total
+    }
+  }
+
   async pickItemAsFavorite(
     itemId: string,
     identity: AuthIdentity

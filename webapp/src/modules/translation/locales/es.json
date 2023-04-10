@@ -1112,6 +1112,11 @@
     "pick_label": "elegir como favorito",
     "unpick_label": "quitar de favoritos"
   },
+  "favorites_modal": {
+    "title": "Guardado por",
+    "disclaimer": "Solo se cuentan las cuentas con más de 1 VP.",
+    "empty": "Los usuarios no han guardado este artículo"
+  },
   "lists_page": {
     "default_title": "Lista de deseos"
   }
