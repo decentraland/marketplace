@@ -183,6 +183,17 @@ describe('FavoritesCounter', () => {
     })
 
     describe('and the counter has no favorites', () => {
+      it('should have the non clickable class', async () => {
+        const { getByTestId } = renderFavoritesCounter({
+          onCounterClick,
+          count: 0,
+          isCollapsed: true
+        })
+        expect(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID)).toHaveClass(
+          'nonClickable'
+        )
+      })
+
       it('should not call the onCounterClick prop method', async () => {
         const { getByTestId } = renderFavoritesCounter({
           onCounterClick,
@@ -195,6 +206,17 @@ describe('FavoritesCounter', () => {
     })
 
     describe('and the counter has favorites', () => {
+      it('should not have the non clickable class', async () => {
+        const { getByTestId } = renderFavoritesCounter({
+          onCounterClick,
+          count: 1000,
+          isCollapsed: true
+        })
+        expect(getByTestId(FAVORITES_COUNTER_NUMBER_TEST_ID)).not.toHaveClass(
+          'nonClickable'
+        )
+      })
+
       it('should call the onCounterClick prop method', async () => {
         const { getByTestId } = renderFavoritesCounter({
           onCounterClick,

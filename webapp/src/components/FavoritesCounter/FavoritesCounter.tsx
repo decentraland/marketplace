@@ -38,7 +38,10 @@ const FavoritesCounter = (props: Props) => {
       <span
         role="button"
         onClick={count > 0 && isCollapsed ? handleOnCounterClick : undefined}
-        className={styles.counter}
+        className={classNames(
+          styles.counter,
+          isCollapsed && count === 0 && styles.nonClickable
+        )}
         aria-label="counter"
         data-testid="favorites-counter-number"
       >
@@ -78,11 +81,13 @@ const FavoritesCounter = (props: Props) => {
         onClick={onClick}
         data-testid="favorites-counter-bubble"
       >
-        <Icon
-          size={isCollapsed ? 'large' : undefined}
-          fitted={isCollapsed}
-          name={isPickedByUser ? 'bookmark' : 'bookmark outline'}
-        />
+        <span>
+          <Icon
+            size={isCollapsed ? 'large' : undefined}
+            fitted={isCollapsed}
+            name={isPickedByUser ? 'bookmark' : 'bookmark outline'}
+          />
+        </span>
         {!isCollapsed ? counter : null}
       </div>
       {isCollapsed ? counter : null}
