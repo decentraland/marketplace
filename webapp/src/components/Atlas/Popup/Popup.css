@@ -1,6 +1,6 @@
 .AtlasPopup {
   position: absolute;
-  z-index: 1000 !important;
+  z-index: 100;
   padding: 20px;
   background: black;
   margin-left: -320px;
