@@ -49,3 +49,8 @@ export const MAX_ESTATE_SIZE_CHANGED = 'Max Estate Size Changed'
 
 // Favorites
 export const OPEN_FAVORITES_MODAL = 'Open favorites modal'
+
+// Pick & Unpick items in lists
+export const PICK_ITEM = 'Pick Item'
+export const UNPICK_ITEM = 'Unpick Item'
+export const UNDO_UNPICK_ITEM = 'Undo unpick Item'
