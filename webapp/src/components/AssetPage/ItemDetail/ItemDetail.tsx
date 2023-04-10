@@ -68,6 +68,7 @@ const ItemDetail = ({ item }: Props) => {
                 rarity={item.rarity}
                 assetType={AssetType.ITEM}
                 category={NFTCategory.WEARABLE}
+                size="small"
               />
               {category && (
                 <CategoryBadge
@@ -107,11 +108,13 @@ const ItemDetail = ({ item }: Props) => {
           </div>
 
           <Description text={description} />
-          <div className={styles.basicRow}>
-            <Owner asset={item} />
-            <Collection asset={item} />
+          <div className={styles.itemDetailBottomContainer}>
+            <div className={styles.basicRow}>
+              <Owner asset={item} />
+              <Collection asset={item} />
+            </div>
+            <BestBuyingOption asset={item} tableRef={tableRef} />
           </div>
-          <BestBuyingOption asset={item} tableRef={tableRef} />
         </div>
       </div>
 

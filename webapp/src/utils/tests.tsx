@@ -49,7 +49,7 @@ export function initTestStore(preloadedState = {}) {
   const enhancer = compose(middleware)
   const store = createStore(rootReducer, preloadedState, enhancer)
 
-  sagasMiddleware.run(rootSaga)
+  sagasMiddleware.run(rootSaga, () => undefined)
   loadStorageMiddleware(store)
   store.dispatch(fetchTilesRequest())
 
