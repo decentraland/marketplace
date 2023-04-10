@@ -73,7 +73,8 @@ describe('Best Buying Option', () => {
     createdAt: 1671033414000,
     updatedAt: 0,
     network: Network.MATIC,
-    chainId: ChainId.ETHEREUM_GOERLI
+    chainId: ChainId.ETHEREUM_GOERLI,
+    issuedId: '1'
   }
 
   let bid: Bid = {
