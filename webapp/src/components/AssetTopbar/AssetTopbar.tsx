@@ -108,7 +108,6 @@ export const AssetTopbar = ({
   )
 
   useEffect(() => {
-    console.log(sortBy)
     const option = orderByDropdownOptions.find(
       option => option.value === sortBy
     )
