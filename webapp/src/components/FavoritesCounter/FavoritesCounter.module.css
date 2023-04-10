@@ -23,9 +23,15 @@
 
 
 .FavoritesCounter.Collapsed {
-  flex-direction: column;
-  text-align: center;
-  row-gap: 8px;
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+}
+
+.FavoritesCounter.Collapsed {
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
 }
 
 .FavoritesCounter .bubble {
@@ -53,7 +59,10 @@
 
 .FavoritesCounter.Collapsed .bubble {
   min-width: 38px;
-  height: 38px;
+  min-height: 33px;
+  border-radius: 17px;
+  background-color: #231F20;
+  border: .25px solid var(--text);
   display: flex;
   align-items: center;
   opacity: 1;
@@ -62,8 +71,11 @@
 .FavoritesCounter.Collapsed .counter {
   font-style: normal;
   font-weight: 500;
-  font-size: 13px;
-  line-height: 12px;
+  font-size: 16px;
+  line-height: 18px;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration-line: underline;
   text-transform: uppercase;
 }
 

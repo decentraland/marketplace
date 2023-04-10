@@ -7,11 +7,6 @@ import * as events from '../../utils/events'
 import { Props } from './FavoritesCounter.types'
 import styles from './FavoritesCounter.module.css'
 
-/* TODO (lists):
-    - An idea for more accessibility: Tooltip for the whole component with the name of the action
-    - The div may be converted to a button with the withTooltip prop.
-*/
-
 const formatter = Intl.NumberFormat('en', { notation: 'compact' })
 
 const FavoritesCounter = (props: Props) => {
@@ -76,6 +71,7 @@ const FavoritesCounter = (props: Props) => {
       role="button"
       data-testid="favorites-counter"
     >
+      {isCollapsed ? counter : null}
       <div
         className={styles.bubble}
         onClick={onClick}
@@ -90,7 +86,6 @@ const FavoritesCounter = (props: Props) => {
         </span>
         {!isCollapsed ? counter : null}
       </div>
-      {isCollapsed ? counter : null}
     </div>
   )
 }
