@@ -1,5 +1,6 @@
 .TableContent {
   display: flex;
+  flex-direction: column;
 }
 
 .TableContent .ui.table {
@@ -38,4 +39,26 @@
 
 .TableContent .ui.table td a {
   color: var(--text);
+}
+
+.TableContent .emptyTable {
+  width: 100%;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.TableContent .ui.loader.active {
+  display: flex;
+  position: initial;
+}
+
+.TableContent .pagination {
+  justify-content: flex-end;
+  gap: 20px;
+  display: flex;
+  color: var(--secondary-text);
+  align-items: center;
+  margin-bottom: 11px;
 }

@@ -21,22 +21,26 @@ const TableContainer = forwardRef<HTMLDivElement, Props>((props, ref) => {
           {tabsList.map(tab => (
             <Tabs.Tab
               active={activeTab === tab}
-              onClick={() => handleTabChange(tab)}
+              onClick={() => {
+                handleTabChange && handleTabChange(tab)
+              }}
             >
               <div className={'tabStyle'}>{tab}</div>
             </Tabs.Tab>
           ))}
         </Tabs>
-        <Dropdown
-          direction="left"
-          className={'sortByDropdown'}
-          value={sortBy}
-          onChange={(_event, data) => {
-            const value = data.value as string
-            handleSortByChange(value)
-          }}
-          options={sortbyList}
-        />
+        {sortbyList && (
+          <Dropdown
+            direction="left"
+            className={'sortByDropdown'}
+            value={sortBy}
+            onChange={(_event, data) => {
+              const value = data.value as string
+              handleSortByChange && handleSortByChange(value)
+            }}
+            options={sortbyList}
+          />
+        )}
       </div>
       {children}
     </div>

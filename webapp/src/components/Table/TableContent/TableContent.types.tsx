@@ -6,7 +6,9 @@ export type Props = {
   isLoading: boolean
   setPage?: (page: number) => void
   totalPages?: number
-  empty: React.ReactNode
+  empty: () => void
+  total: number
+  rowsPerPage?: number
 }
 
 export type DataTableType = {

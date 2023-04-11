@@ -67,7 +67,7 @@ const ListingsTableContainer = forwardRef<HTMLDivElement, Props>(
 
     useEffect(() => {
       const params = new URLSearchParams(locations.search)
-      if (params.get('selectedTableTab') === BelowTabs.OWNERS)
+      if (params.get('selectedTableTab') === 'owners')
         handleTabChange(BelowTabs.OWNERS)
     }, [BelowTabs.OWNERS, handleTabChange, locations.search])
 

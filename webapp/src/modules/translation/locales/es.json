@@ -58,7 +58,9 @@
     "status": "Estado",
     "unknown_error": "Error desconocido",
     "the_parcel": "La Parcela",
-    "the_estate": "El Estate"
+    "the_estate": "El Estate",
+    "showing": "Mostrando",
+    "of": "de"
   },
   "address": {
     "invalid_address": "Dirección inválida",

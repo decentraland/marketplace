@@ -47,11 +47,15 @@
   padding-right: 25px;
 }
 
-.ListingsTable .emptyTable {
-  height: 200px;
+.emptyTable {
+  width: 100%;
+  height: 350px;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 10px;
+  font-size: 20px;
 }
 
 .manaField {

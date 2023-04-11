@@ -10,10 +10,7 @@ import { ManaToFiat } from '../../ManaToFiat'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import styles from './ListingsTable.module.css'
 
-export const formatDataToTable = (
-  orders: Order[],
-  total: number
-): DataTableType[] => {
+export const formatDataToTable = (orders: Order[]): DataTableType[] => {
   return orders?.map((order: Order) => {
     const value: DataTableType = {
       [t('listings_table.owner')]: (
@@ -41,7 +38,7 @@ export const formatDataToTable = (
             ) : null}
             <div className={styles.row}>
               <span>
-                <span className={styles.issuedId}>1</span>/ {total}
+                #<span className={styles.issuedId}>{order.issuedId}</span>
               </span>
             </div>
           </div>

@@ -99,7 +99,7 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
   return (
     <div className={styles.BestBuyingOption}>
       {isLoading ? (
-        <div className={styles.containerColumn}>
+        <div className={styles.emptyContainer}>
           <Loader active data-testid="loader" />
         </div>
       ) : buyOption === BuyOptions.MINT && asset && !isNFT(asset) ? (

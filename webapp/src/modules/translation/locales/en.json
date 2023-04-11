@@ -60,7 +60,9 @@
     "status": "Status",
     "unknown_error": "Unknown error",
     "the_parcel": "the Parcel",
-    "the_estate": "the Estate"
+    "the_estate": "the Estate",
+    "showing": "Showing",
+    "of": "of"
   },
   "address": {
     "invalid_address": "That's not a valid address",
