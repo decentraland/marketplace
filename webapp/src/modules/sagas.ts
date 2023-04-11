@@ -1,4 +1,5 @@
 import { all } from 'redux-saga/effects'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ApplicationName } from 'decentraland-dapps/dist/modules/features/types'
 import { authorizationSaga } from 'decentraland-dapps/dist/modules/authorization/sagas'
 import { createAnalyticsSaga } from 'decentraland-dapps/dist/modules/analytics/sagas'
@@ -61,13 +62,13 @@ const gatewaySaga = createGatewaySaga({
   }
 })
 
-export function* rootSaga() {
+export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
   yield all([
     analyticsSaga(),
     assetSaga(),
     authorizationSaga(),
     bidSaga(),
-    itemSaga(),
+    itemSaga(getIdentity),
     nftSaga(),
     orderSaga(),
     profileSaga(),
