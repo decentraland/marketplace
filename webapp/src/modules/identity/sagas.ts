@@ -3,6 +3,7 @@ import { ethers } from 'ethers'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isErrorWithMessage } from '../../lib/error'
 import { getEth } from '../wallet/utils'
 
@@ -14,7 +15,6 @@ import {
   generateIdentitySuccess
 } from './actions'
 import { IDENTITY_EXPIRATION_IN_MINUTES } from './utils'
-import { ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getCurrentIdentity } from './selectors'
 
 export function* identitySaga() {
