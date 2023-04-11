@@ -894,19 +894,23 @@
       "refresh": "刷新"
     },
     "pick_item_as_favorite_success": {
-      "title": "{name} 已添加到收藏夹",
+      "title": "项目已添加到收藏夹",
+      "body": "{name} 已添加到收藏夹",
       "view_my_lists": "查看我的列表"
     },
     "pick_item_as_favorite_failure": {
-      "title": "将 {name} 添加到收藏夹时出错",
+      "title": "将项目添加到收藏夹时出错",
+      "body": "将 {name} 添加到收藏夹时出错",
       "try_again": "再试一次"
     },
     "unpick_item_as_favorite_success": {
-      "title": "{name} 已从收藏夹中删除",
+      "title": "从收藏夹中删除的项目",
+      "body": "{name} 已从收藏夹中删除",
       "undo": "撤消"
     },
     "unpick_item_as_favorite_failure": {
-      "title": "从收藏夹中删除 {name} 时出错",
+      "title": "从收藏夹中删除项目时出错",
+      "body": "从收藏夹中删除 {name} 时出错",
       "try_again": "再试一次"
     }
   },

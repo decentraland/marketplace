@@ -131,14 +131,19 @@ export function getPickItemAsFavoriteSuccessToast(
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
-    title: t('toast.pick_item_as_favorite_success.title', {
-      name: getAssetName(item)
-    }),
+    title: t('toast.pick_item_as_favorite_success.title'),
     // TODO (lists): redirect to the chosen list
     body: (
-      <Button as="a" basic href={locations.defaultList()}>
-        {t('toast.pick_item_as_favorite_success.view_my_lists')}
-      </Button>
+      <>
+        <p>
+          {t('toast.pick_item_as_favorite_success.body', {
+            name: getAssetName(item)
+          })}
+        </p>
+        <Button as="a" basic href={locations.defaultList()}>
+          {t('toast.pick_item_as_favorite_success.view_my_lists')}
+        </Button>
+      </>
     ),
     closable: true,
     timeout: 6000,
@@ -151,14 +156,19 @@ export function getPickItemAsFavoriteFailureToast(
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,
-    title: t('toast.pick_item_as_favorite_failure.title', {
-      name: getAssetName(item)
-    }),
+    title: t('toast.pick_item_as_favorite_failure.title'),
     body: (
-      <ToastCTA
-        action={pickItemAsFavoriteRequest(item)}
-        description={t('toast.pick_item_as_favorite_failure.try_again')}
-      />
+      <>
+        <p>
+          {t('toast.pick_item_as_favorite_failure.body', {
+            name: getAssetName(item)
+          })}
+        </p>
+        <ToastCTA
+          action={pickItemAsFavoriteRequest(item)}
+          description={t('toast.pick_item_as_favorite_failure.try_again')}
+        />
+      </>
     ),
     closable: true,
     timeout: 6000,
@@ -171,14 +181,19 @@ export function getUnpickItemAsFavoriteSuccessToast(
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.INFO,
-    title: t('toast.unpick_item_as_favorite_success.title', {
-      name: getAssetName(item)
-    }),
+    title: t('toast.unpick_item_as_favorite_success.title'),
     body: (
-      <ToastCTA
-        action={undoUnpickingItemAsFavoriteRequest(item)}
-        description={t('toast.unpick_item_as_favorite_success.undo')}
-      />
+      <>
+        <p>
+          {t('toast.unpick_item_as_favorite_success.body', {
+            name: getAssetName(item)
+          })}
+        </p>
+        <ToastCTA
+          action={undoUnpickingItemAsFavoriteRequest(item)}
+          description={t('toast.unpick_item_as_favorite_success.undo')}
+        />
+      </>
     ),
     closable: true,
     timeout: 6000,
@@ -191,14 +206,19 @@ export function getUnpickItemAsFavoriteFailureToast(
 ): Omit<Toast, 'id'> {
   return {
     type: ToastType.ERROR,
-    title: t('toast.unpick_item_as_favorite_failure.title', {
-      name: getAssetName(item)
-    }),
+    title: t('toast.unpick_item_as_favorite_failure.title'),
     body: (
-      <ToastCTA
-        action={unpickItemAsFavoriteRequest(item)}
-        description={t('toast.unpick_item_as_favorite_failure.try_again')}
-      />
+      <>
+        <p>
+          {t('toast.unpick_item_as_favorite_failure.body', {
+            name: getAssetName(item)
+          })}
+        </p>
+        <ToastCTA
+          action={unpickItemAsFavoriteRequest(item)}
+          description={t('toast.unpick_item_as_favorite_failure.try_again')}
+        />
+      </>
     ),
     closable: true,
     timeout: 6000,

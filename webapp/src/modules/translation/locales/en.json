@@ -897,19 +897,23 @@
       "refresh": "Refresh"
     },
     "pick_item_as_favorite_success": {
-      "title": "{name} added to Favorites",
+      "title": "Item added to Favorites",
+      "body": "{name} was successfully added to Favorites",
       "view_my_lists": "View My Lists"
     },
     "pick_item_as_favorite_failure": {
-      "title": "There was an error adding {name} to Favorites",
+      "title": "Error adding item to Favorites",
+      "body": "There was an error adding {name} to Favorites",
       "try_again": "Try again"
     },
     "unpick_item_as_favorite_success": {
-      "title": "{name} was removed from Favorites",
+      "title": "Item removed from Favorites",
+      "body": "{name} was successfully removed from Favorites",
       "undo": "Undo"
     },
     "unpick_item_as_favorite_failure": {
-      "title": "There was an error removing {name} from Favorites",
+      "title": "Error removing item from Favorites",
+      "body": "There was an error removing {name} from Favorites",
       "try_again": "Try again"
     }
   },
