@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useEffect } from 'react'
 import classNames from 'classnames'
 import {
   Dropdown,
@@ -70,9 +70,18 @@ export const AssetTopbar = ({
 
   const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
-      onBrowse({ sortBy: props.value as SortBy })
+      const sortBy: SortBy = props.value as SortBy
+      if (!onlyOnRent && !onlyOnSale) {
+        if (sortBy === SortBy.CHEAPEST_SALE) {
+          onBrowse({ onlyOnSale: true, sortBy: SortBy.CHEAPEST })
+        } else if (sortBy === SortBy.CHEAPEST_RENT) {
+          onBrowse({ onlyOnRent: true, sortBy: SortBy.MAX_RENTAL_PRICE })
+        }
+      } else {
+        onBrowse({ sortBy })
+      }
     },
-    [onBrowse]
+    [onBrowse, onlyOnSale, onlyOnRent]
   )
 
   const handleIsMapChange = useCallback(
@@ -98,11 +107,14 @@ export const AssetTopbar = ({
     [onlyOnRent, onlyOnSale]
   )
 
-  const sortByValue = orderByDropdownOptions.find(
-    option => option.value === sortBy
-  )
-    ? sortBy
-    : orderByDropdownOptions[0].value
+  useEffect(() => {
+    const option = orderByDropdownOptions.find(
+      option => option.value === sortBy
+    )
+    if (!option) {
+      onBrowse({ sortBy: orderByDropdownOptions[0].value })
+    }
+  }, [onBrowse, sortBy, orderByDropdownOptions])
 
   return (
     <div className={styles.assetTopbar}>
@@ -167,7 +179,7 @@ export const AssetTopbar = ({
             <div className={styles.rightOptionsContainer}>
               <Dropdown
                 direction="left"
-                value={sortByValue}
+                value={sortBy}
                 options={orderByDropdownOptions}
                 onChange={handleOrderByDropdownChange}
               />

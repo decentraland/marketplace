@@ -6,61 +6,89 @@
   cursor: pointer;
 }
 
-.FavoritesCounter:hover i {
-  color: var(--primary);
+:global(.ui.cards a.card:hover) .bubble,
+:global(.ui.link.card:hover) .bubble,
+:global(.ui.link.cards .card:hover) .bubble,
+:global(a.ui.card:hover) .bubble {
+  opacity: 1;
+  transition: opacity .2s ease-out;
+  -webkit-transition: opacity .2s ease-out;
+  -moz-transition: opacity .2s ease-out;
+  -o-transition: opacity .2s ease-out;
+}
+
+.FavoritesCounter:hover .bubble {
+  background-color: rgba(35, 31, 32, 1);
 }
 
 
 .FavoritesCounter.Collapsed {
-  flex-direction: column;
-  text-align: center;
-  row-gap: 8px;
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
 }
 
-.bubble {
-  background-color: #ecebed;
-  border: 1px solid #a09ba8;
-  color: #43404A;
-  border-radius: 40px;
-  padding: 4px 11px;
+.FavoritesCounter.Collapsed {
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+}
+
+.FavoritesCounter .bubble {
+  opacity: 0;
+  min-width: 65px;
+  height: 32px;
+  background-color: rgb(35, 31, 32, 0.4);
+  color: var(--text);
+  border-radius: 50px;
+  padding: 4px 8px;
   z-index: 2;
+  font-weight: 500;
   font-size: 12px;
-  font-weight: 700;
-  line-height: 12px;
+  line-height: 18px;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 1px;
+  transition: background-color .5s;
+  -webkit-transition: background-color .5s;
+  -moz-transition: background-color .5s;
+  -o-transition: background-color .5s;
 }
 
 .FavoritesCounter.Collapsed .bubble {
   min-width: 38px;
-  height: 38px;
+  min-height: 33px;
+  border-radius: 17px;
+  background-color: #231F20;
+  border: .25px solid var(--text);
   display: flex;
   align-items: center;
+  opacity: 1;
 }
 
 .FavoritesCounter.Collapsed .counter {
   font-style: normal;
   font-weight: 500;
-  font-size: 13px;
-  line-height: 12px;
+  font-size: 16px;
+  line-height: 18px;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration-line: underline;
   text-transform: uppercase;
 }
 
-@media (max-width: 1199px) {
-  .bubble {
-    font-size: x-small;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 992px) {
-  .bubble {
-    align-items: center;
-  }
+.FavoritesCounter.Collapsed .counter.nonClickable {
+  cursor: default;
 }
 
 @media (max-width: 768px) {
-  .bubble {
-    align-items: flex-start;
-    align-self: flex-end;
-    left: unset;
-    text-align: left;
+  .FavoritesCounter .bubble {
+    opacity: 1;
+  }
+
+  .FavoritesCounter:hover .bubble {
+    background-color: rgb(35, 31, 32, 0.4);
   }
 }

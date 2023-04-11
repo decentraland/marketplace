@@ -145,3 +145,66 @@ describe('when getting the items picked in a list', () => {
     })
   })
 })
+
+describe('when getting who favorited an item', () => {
+  let fetchMock: jest.SpyInstance
+  let body: { ok: boolean; message?: string; data?: any }
+  beforeEach(() => {
+    fetchMock = jest.spyOn(global, 'fetch')
+  })
+
+  describe('and the response status code is not ok', () => {
+    beforeEach(() => {
+      body = { ok: false }
+      fetchMock.mockResolvedValueOnce({
+        ok: false,
+        json: jest.fn().mockResolvedValueOnce(body) as Response['json']
+      })
+    })
+
+    describe('and the parsed response includes a message', () => {
+      beforeEach(() => {
+        body.message = 'An error'
+      })
+
+      it('should reject with the response error message', () => {
+        return expect(
+          favoritesAPI.getWhoFavoritedAnItem(itemId, 0, 10)
+        ).rejects.toThrowError(body.message)
+      })
+    })
+
+    describe("and the parsed response doesn't include a message", () => {
+      it('should reject with an "Unknown error"', () => {
+        return expect(
+          favoritesAPI.getWhoFavoritedAnItem(itemId, 0, 10)
+        ).rejects.toThrowError('Unknown error')
+      })
+    })
+  })
+
+  describe('and the response is successful', () => {
+    beforeEach(() => {
+      body = {
+        ok: true,
+        data: {
+          results: ['0x0'],
+          total: 1
+        }
+      }
+      fetchMock.mockResolvedValueOnce({
+        ok: true,
+        json: jest.fn().mockResolvedValueOnce(body) as Response['json']
+      })
+    })
+
+    it('should resolve with the addresses of the users who favorited the item and the total of them', () => {
+      return expect(
+        favoritesAPI.getWhoFavoritedAnItem(itemId, 0, 10)
+      ).resolves.toEqual({
+        addresses: body.data?.results,
+        total: body.data?.total
+      })
+    })
+  })
+})
