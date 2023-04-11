@@ -34,12 +34,6 @@
   color: var(--secondary-text);
 }
 
-.AssetBrowse .empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
 .AssetBrowse .overlay {
   height: 100%;
   width: 100%;
