@@ -19,7 +19,6 @@ const TableContent = (props: Props) => {
     rowsPerPage = ROWS_PER_PAGE
   } = props
 
-  console.log(empty)
   const headers = data.length > 0 ? Object.keys(data[0]) : null
 
   return (
