@@ -12,6 +12,7 @@ import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
 import { NFTSortBy } from '../nft/types'
 import { isAccountView, isLandSection } from '../ui/utils'
+import { CatalogSortBy } from '../catalog/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 
@@ -291,6 +292,21 @@ export function getItemSortBy(sortBy: SortBy): ItemSortBy {
       return ItemSortBy.RECENTLY_SOLD
     default:
       return ItemSortBy.RECENTLY_REVIEWED
+  }
+}
+
+export function getCatalogSortBy(sortBy: SortBy): CatalogSortBy {
+  switch (sortBy) {
+    case SortBy.CHEAPEST:
+      return CatalogSortBy.CHEAPEST
+    case SortBy.NEWEST:
+      return CatalogSortBy.NEWEST
+    case SortBy.RECENTLY_LISTED:
+      return CatalogSortBy.RECENTLY_LISTED
+    case SortBy.RECENTLY_SOLD:
+      return CatalogSortBy.RECENTLY_SOLD
+    default:
+      return CatalogSortBy.CHEAPEST
   }
 }
 

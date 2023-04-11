@@ -43,7 +43,6 @@ import {
   TRANSFER_NFT_SUCCESS
 } from '../nft/actions'
 import { setView } from '../ui/actions'
-import { getFilters } from '../vendor/utils'
 import {
   MAX_PAGE,
   PAGE_SIZE,
@@ -55,10 +54,9 @@ import {
   getCategoryFromSection,
   getDefaultOptionsByView,
   getSearchWearableCategory,
-  getItemSortBy,
-  getAssetOrderBy,
   getCollectionSortBy,
-  getSearchEmoteCategory
+  getSearchEmoteCategory,
+  getCatalogSortBy
 } from './search'
 import {
   getRarities,
@@ -105,6 +103,7 @@ import {
 } from '../bid/actions'
 import { getData } from '../event/selectors'
 import { buildBrowseURL } from './utils'
+import { fetchCatalogRequest } from '../catalog/actions'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -180,7 +179,7 @@ function* handleGoBack(action: GoBackAction) {
 }
 
 export function* fetchAssetsFromRoute(options: BrowseOptions) {
-  const isItems = options.assetType === AssetType.ITEM
+  // const isItems = options.assetType === AssetType.ITEM
   const view = options.view!
   const vendor = options.vendor!
   const page = options.page!
@@ -189,10 +188,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const {
     search,
     onlyOnSale,
-    onlyOnRent,
     onlySmart,
     isMap,
-    contracts,
     tenant,
     minPrice,
     maxPrice,
@@ -259,72 +256,44 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
       const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
-      if (isItems) {
-        // TODO: clean up
-        const isWearableHead =
-          section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
-        const isWearableAccessory =
-          section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
+      const isWearableHead =
+        section === Sections[VendorName.DECENTRALAND].WEARABLES_HEAD
+      const isWearableAccessory =
+        section === Sections[VendorName.DECENTRALAND].WEARABLES_ACCESSORIES
 
-        const wearableCategory = !isWearableAccessory
-          ? getSearchWearableCategory(section)
+      const wearableCategory = !isWearableAccessory
+        ? getSearchWearableCategory(section)
+        : undefined
+
+      const emoteCategory =
+        category === NFTCategory.EMOTE
+          ? getSearchEmoteCategory(section)
           : undefined
 
-        const emoteCategory =
-          category === NFTCategory.EMOTE
-            ? getSearchEmoteCategory(section)
-            : undefined
+      const { rarities, wearableGenders, emotePlayMode } = options
 
-        const { rarities, wearableGenders, emotePlayMode } = options
-
-        yield put(
-          fetchItemsRequest({
-            view,
-            page,
-            filters: {
-              first,
-              skip,
-              sortBy: getItemSortBy(sortBy),
-              isOnSale: onlyOnSale,
-              creator: address ? [address] : creators,
-              wearableCategory,
-              emoteCategory,
-              isWearableHead,
-              isWearableAccessory,
-              isWearableSmart: onlySmart,
-              search,
-              category,
-              rarities: rarities,
-              contracts,
-              wearableGenders,
-              emotePlayMode,
-              minPrice,
-              maxPrice
-            }
-          })
-        )
-      } else {
-        const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
-
-        yield put(
-          fetchNFTsRequest({
-            vendor,
-            view,
-            params: {
-              first,
-              skip,
-              orderBy,
-              orderDirection,
-              onlyOnSale,
-              onlyOnRent,
-              address,
-              category,
-              search
-            },
-            filters: getFilters(vendor, options) // TODO: move to routing
-          })
-        )
-      }
+      yield put(
+        fetchCatalogRequest({
+          first,
+          skip,
+          sortBy: getCatalogSortBy(sortBy),
+          isOnSale: onlyOnSale,
+          creator: address ? [address] : creators,
+          wearableCategory,
+          emoteCategory,
+          isWearableHead,
+          isWearableAccessory,
+          isWearableSmart: onlySmart,
+          search,
+          category,
+          rarities: rarities,
+          // contracts,
+          wearableGenders,
+          emotePlayMode,
+          minPrice,
+          maxPrice
+        })
+      )
   }
 }
 
