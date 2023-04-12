@@ -65,7 +65,7 @@ export function getFilters(
         rarities,
         wearableGenders,
         contracts,
-        creator: address ? [address] : creators,
+        creator: creators,
         network,
         emotePlayMode,
         rentalStatus:
@@ -80,7 +80,7 @@ export function getFilters(
         minDistanceToPlaza,
         maxDistanceToPlaza,
         rentalDays
-      } as NFTsFetchFilters<VendorName.DECENTRALAND>
+      }
     }
     default:
       return {}
