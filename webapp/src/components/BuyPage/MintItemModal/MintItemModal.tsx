@@ -110,7 +110,8 @@ const MintItemModal = (props: Props) => {
           authorization,
           item.price
         )) ||
-      isBuyWithCardPage
+      isBuyWithCardPage ||
+      +item.price === 0
     ) {
       handleExecuteOrder()
     } else {
