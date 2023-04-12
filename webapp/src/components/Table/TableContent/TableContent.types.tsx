@@ -9,6 +9,7 @@ export type Props = {
   empty: () => void
   total: number
   rowsPerPage?: number
+  mobileTableBody?: React.ReactNode
 }
 
 export type DataTableType = {

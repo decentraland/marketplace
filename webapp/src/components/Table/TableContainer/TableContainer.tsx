@@ -17,18 +17,20 @@ const TableContainer = forwardRef<HTMLDivElement, Props>((props, ref) => {
   return (
     <div className={'tableContainer'} ref={ref}>
       <div className={'filtertabsContainer'}>
-        <Tabs isFullscreen>
-          {tabsList.map(tab => (
-            <Tabs.Tab
-              active={activeTab === tab}
-              onClick={() => {
-                handleTabChange && handleTabChange(tab)
-              }}
-            >
-              <div className={'tabStyle'}>{tab}</div>
-            </Tabs.Tab>
-          ))}
-        </Tabs>
+        {tabsList.length > 0 ? (
+          <Tabs isFullscreen>
+            {tabsList.map(tab => (
+              <Tabs.Tab
+                active={activeTab === tab}
+                onClick={() => {
+                  handleTabChange && handleTabChange(tab)
+                }}
+              >
+                <div className={'tabStyle'}>{tab}</div>
+              </Tabs.Tab>
+            ))}
+          </Tabs>
+        ) : null}
         {sortbyList && (
           <Dropdown
             direction="left"
