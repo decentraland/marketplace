@@ -19,6 +19,7 @@ import {
   buyAssetWithCard,
   BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY
 } from '../asset/utils'
+import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
 import {
   buyItemRequest,
   buyItemFailure,
@@ -368,7 +369,10 @@ describe('when handling the fetch items request action', () => {
 
     it('should dispatch a successful action with the fetched items', () => {
       return expectSaga(itemSaga, getIdentity)
-        .provide([[matchers.call.fn(ItemAPI.prototype.get), fetchResult]])
+        .provide([
+          [matchers.call.fn(ItemAPI.prototype.get), fetchResult],
+          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+        ])
         .put(
           fetchItemsSuccess(
             fetchResult.data,
@@ -386,7 +390,8 @@ describe('when handling the fetch items request action', () => {
     it('should dispatching a failing action with the error and the options', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
-          [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)]
+          [matchers.call.fn(ItemAPI.prototype.get), Promise.reject(anError)],
+          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
         ])
         .put(fetchItemsFailure(anError.message, itemBrowseOptions))
         .dispatch(fetchItemsRequest(itemBrowseOptions))
@@ -398,7 +403,10 @@ describe('when handling the fetch items request action', () => {
     describe('when the request is successful', () => {
       it('should dispatch a successful action with the fetched items', () => {
         return expectSaga(itemSaga, getIdentity)
-          .provide([[matchers.call.fn(ItemAPI.prototype.getOne), item]])
+          .provide([
+            [matchers.call.fn(ItemAPI.prototype.getOne), item],
+            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
+          ])
           .put(fetchItemSuccess(item))
           .dispatch(fetchItemRequest(item.contractAddress, item.itemId))
           .run({ silenceTimeout: true })
@@ -412,7 +420,8 @@ describe('when handling the fetch items request action', () => {
             [
               matchers.call.fn(ItemAPI.prototype.getOne),
               Promise.reject(anError)
-            ]
+            ],
+            [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
           ])
           .put(
             fetchItemFailure(item.contractAddress, item.itemId, anError.message)
@@ -443,7 +452,8 @@ describe('when handling the fetch trending items request action', () => {
     it('should dispatch a successful action with the fetched trending items', () => {
       return expectSaga(itemSaga, getIdentity)
         .provide([
-          [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult]
+          [matchers.call.fn(ItemAPI.prototype.getTrendings), fetchResult],
+          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
         ])
         .put(fetchTrendingItemsSuccess(fetchResult.data))
         .dispatch(fetchTrendingItemsRequest())
@@ -458,7 +468,8 @@ describe('when handling the fetch trending items request action', () => {
           [
             matchers.call.fn(ItemAPI.prototype.getTrendings),
             Promise.reject(anError)
-          ]
+          ],
+          [matchers.call.fn(waitForWalletConnectionIfConnecting), undefined]
         ])
         .put(fetchTrendingItemsFailure(anError.message))
         .dispatch(fetchTrendingItemsRequest())

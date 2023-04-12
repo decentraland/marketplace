@@ -16,6 +16,7 @@ import { config } from '../../config'
 import { ItemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
 import { buyAssetWithCard } from '../asset/utils'
+import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
 import { retryParams } from '../vendor/decentraland/utils'
 import {
   buyItemFailure,
@@ -56,7 +57,6 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     identity: getIdentity
   })
 
-  console.log('Getting identity', getIdentity())
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
@@ -68,6 +68,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     action: FetchTrendingItemsRequestAction
   ) {
     const { size } = action.payload
+
+    // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
+    yield call(waitForWalletConnectionIfConnecting)
+
     try {
       const { data }: { data: Item[] } = yield call(
         [itemAPI, 'getTrendings'],
@@ -85,7 +89,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
     const { filters } = action.payload
-    console.log('Getting identity', getIdentity())
+
+    // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
+    yield call(waitForWalletConnectionIfConnecting)
+
     try {
       const { data, total }: { data: Item[]; total: number } = yield call(
         [itemAPI, 'get'],
@@ -105,7 +112,10 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
 
   function* handleFetchItemRequest(action: FetchItemRequestAction) {
     const { contractAddress, tokenId } = action.payload
-    console.log('Getting identity', getIdentity())
+
+    // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
+    yield call(waitForWalletConnectionIfConnecting)
+
     try {
       const item: Item = yield call(
         [itemAPI, 'getOne'],

@@ -1,7 +1,13 @@
 import { ethers } from 'ethers'
+import { race, select, take } from 'redux-saga/effects'
 import { Provider } from 'decentraland-dapps/dist/modules/wallet/types'
+import {
+  CONNECT_WALLET_FAILURE,
+  CONNECT_WALLET_SUCCESS
+} from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getConnectedProvider } from 'decentraland-dapps/dist/lib/eth'
 import { config } from '../../config'
+import { isConnecting } from './selectors'
 
 export const TRANSACTIONS_API_URL = config.get('TRANSACTIONS_API_URL')
 
@@ -39,4 +45,14 @@ export function formatBalance(balance: number) {
   return balance.toString().includes('-')
     ? removeScientificNotationForSmallNumbers(balance)
     : balance.toString()
+}
+
+export function* waitForWalletConnectionIfConnecting() {
+  const isConnectingToWallet: boolean = yield select(isConnecting)
+  if (isConnectingToWallet) {
+    yield race({
+      success: take(CONNECT_WALLET_SUCCESS),
+      failure: take(CONNECT_WALLET_FAILURE)
+    })
+  }
 }
