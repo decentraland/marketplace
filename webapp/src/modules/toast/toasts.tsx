@@ -16,6 +16,8 @@ import {
 import { toastDispatchableActionsChannel } from './utils'
 import { DispatchableFromToastActions } from './types'
 
+const DEFAULT_TIMEOUT = 6000
+
 const ToastCTA = ({
   action,
   description
@@ -39,7 +41,7 @@ export function getStoreUpdateSuccessToast(): Omit<Toast, 'id'> {
     type: ToastType.INFO,
     title: t('toast.store_update_success.title'),
     body: t('toast.store_update_success.body'),
-    timeout: 6000,
+    timeout: DEFAULT_TIMEOUT,
     closable: true
   }
 }
@@ -49,7 +51,7 @@ export function getLandClaimedBackSuccessToast(): Omit<Toast, 'id'> {
     type: ToastType.INFO,
     title: t('toast.claim_land_success.title'),
     body: t('toast.claim_land_success.body'),
-    timeout: 6000,
+    timeout: DEFAULT_TIMEOUT,
     closable: true
   }
 }
@@ -59,7 +61,7 @@ export function getListingRemoveSuccessToast(): Omit<Toast, 'id'> {
     type: ToastType.INFO,
     title: t('toast.remove_listing_success.title'),
     body: t('toast.remove_listing_success.body'),
-    timeout: 6000,
+    timeout: DEFAULT_TIMEOUT,
     closable: true
   }
 }
@@ -86,7 +88,7 @@ export function getUpsertRentalSuccessToast(
         </Button>
       </div>
     ),
-    timeout: 6000,
+    timeout: DEFAULT_TIMEOUT,
     closable: true
   }
 }
@@ -146,7 +148,7 @@ export function getPickItemAsFavoriteSuccessToast(
       </>
     ),
     closable: true,
-    timeout: 6000,
+    timeout: DEFAULT_TIMEOUT,
     icon: <Icon name="bookmark" />
   }
 }
@@ -171,7 +173,7 @@ export function getPickItemAsFavoriteFailureToast(
       </>
     ),
     closable: true,
-    timeout: 6000,
+    timeout: DEFAULT_TIMEOUT,
     icon: <Icon name="exclamation circle" />
   }
 }
@@ -196,7 +198,7 @@ export function getUnpickItemAsFavoriteSuccessToast(
       </>
     ),
     closable: true,
-    timeout: 6000,
+    timeout: DEFAULT_TIMEOUT,
     icon: <Icon name="exclamation circle" />
   }
 }
@@ -221,7 +223,7 @@ export function getUnpickItemAsFavoriteFailureToast(
       </>
     ),
     closable: true,
-    timeout: 6000,
+    timeout: DEFAULT_TIMEOUT,
     icon: <Icon name="exclamation circle" />
   }
 }
