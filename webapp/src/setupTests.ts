@@ -6,12 +6,18 @@ import '@testing-library/jest-dom'
 import { TextEncoder, TextDecoder } from 'util'
 import path from 'path'
 import { config } from 'dotenv'
-import * as locales from './modules/translation/locales'
 import flatten from 'flat'
-import { setCurrentLocale } from 'decentraland-dapps/dist/modules/translation/utils'
+import {
+  mergeTranslations,
+  setCurrentLocale
+} from 'decentraland-dapps/dist/modules/translation/utils'
+import { en as dappsEn } from 'decentraland-dapps/dist/modules/translation/defaults'
+import * as locales from './modules/translation/locales'
 
 jest.mock('decentraland-dapps/dist/modules/translation/utils', () => {
-  const module = jest.requireActual('decentraland-dapps/dist/modules/translation/utils')
+  const module = jest.requireActual(
+    'decentraland-dapps/dist/modules/translation/utils'
+  )
   return {
     ...module,
     T: ({ id, values }: typeof module['T']) => module.t(id, values)
@@ -22,4 +28,7 @@ config({ path: path.resolve(process.cwd(), '.env.example') })
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder as any
 
-setCurrentLocale('en', flatten(locales.en))
+setCurrentLocale(
+  'en',
+  mergeTranslations(flatten(dappsEn) as any, flatten(locales.en))
+)
