@@ -13,8 +13,12 @@ import {
   unpickItemAsFavoriteFailure,
   unpickItemAsFavoriteSuccess
 } from '../favorites/actions'
-import { buyItemWithCardFailure } from '../item/actions'
-import { NFT } from '../nft/types'
+import {
+  FetchItemsFailureAction,
+  buyItemWithCardFailure,
+  fetchItemsFailure
+} from '../item/actions'
+import { NFT, NFTsFetchOptions } from '../nft/types'
 import {
   executeOrderFailure,
   executeOrderWithCardFailure
@@ -37,10 +41,13 @@ import {
   getPickItemAsFavoriteSuccessToast,
   getPickItemAsFavoriteFailureToast,
   getUnpickItemAsFavoriteFailureToast,
-  getUnpickItemAsFavoriteSuccessToast
+  getUnpickItemAsFavoriteSuccessToast,
+  getFetchAssetsFailureToast
 } from '../toast/toasts'
 import { toastSaga } from './sagas'
 import { toastDispatchableActionsChannel } from './utils'
+import { ItemBrowseOptions } from '../item/types'
+import { FetchNFTsFailureAction, fetchNFTsFailure } from '../nft/actions'
 
 let nft: NFT
 let rental: RentalListing
@@ -209,3 +216,22 @@ describe('when handling a put into the toastDispatchableActionsChannel', () => {
       .silentRun()
   })
 })
+
+const error = 'anError'
+const actions: [string, FetchItemsFailureAction | FetchNFTsFailureAction][] = [
+  ['items', fetchItemsFailure(error, {} as ItemBrowseOptions)],
+  ['NFTs', fetchNFTsFailure({} as NFTsFetchOptions, error, 123456789)]
+]
+
+describe.each(actions)(
+  'when handling the failure of fetching %s',
+  (_, action) => {
+    it('should show a toast signaling the failure ', () => {
+      return expectSaga(toastSaga)
+        .provide([[select(getState), []]])
+        .put(showToast(getFetchAssetsFailureToast(error), 'bottom right'))
+        .dispatch(action)
+        .silentRun()
+    })
+  }
+)
