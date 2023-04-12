@@ -243,6 +243,6 @@ export function getFetchAssetsFailureToast(error: string): Omit<Toast, 'id'> {
     }),
     icon: <Icon name="exclamation circle" />,
     closable: true,
-    timeout: 6000
+    timeout: DEFAULT_TIMEOUT
   }
 }
