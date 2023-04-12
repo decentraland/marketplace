@@ -188,7 +188,7 @@ describe('when getting who favorited an item', () => {
       body = {
         ok: true,
         data: {
-          results: ['0x0'],
+          results: [{ userAddress: '0x0' }],
           total: 1
         }
       }
@@ -202,7 +202,9 @@ describe('when getting who favorited an item', () => {
       return expect(
         favoritesAPI.getWhoFavoritedAnItem(itemId, 0, 10)
       ).resolves.toEqual({
-        addresses: body.data?.results,
+        addresses: body.data?.results.map(
+          (pick: { userAddress: string }) => pick.userAddress
+        ),
         total: body.data?.total
       })
     })

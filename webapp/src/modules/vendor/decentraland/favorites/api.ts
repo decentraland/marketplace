@@ -47,7 +47,9 @@ class FavoritesAPI extends BaseAPI {
 
     if (!response.ok || parsedResponse.ok === false) {
       throw new Error(
-        parsedResponse.ok === false ? parsedResponse?.message : 'Unknown error'
+        parsedResponse.ok === false && parsedResponse.message !== undefined
+          ? parsedResponse.message
+          : 'Unknown error'
       )
     }
 
