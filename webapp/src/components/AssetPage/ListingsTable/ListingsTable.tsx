@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { ListingStatus, Network } from '@dcl/schemas'
 import { OrderFilters, OrderSortBy } from '@dcl/schemas/dist/dapps/order'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { nftAPI, orderAPI } from '../../../modules/vendor/decentraland'
-import { Props } from './ListingsTable.types'
-import styles from './ListingsTable.module.css'
+import noListings from '../../../images/noListings.png'
 import { TableContent } from '../../Table/TableContent'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
-import noListings from '../../../images/noListings.png'
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { Props } from './ListingsTable.types'
+import styles from './ListingsTable.module.css'
 
 export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1

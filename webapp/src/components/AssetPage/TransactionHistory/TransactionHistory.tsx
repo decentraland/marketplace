@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Item } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
 import { saleAPI } from '../../../modules/vendor/decentraland'
 import { isNFT } from '../../../modules/asset/utils'
 import { NFT } from '../../../modules/nft/types'
-import { Props } from './TransactionHistory.types'
-import './TransactionHistory.css'
 import TableContainer from '../../Table/TableContainer'
 import { TableContent } from '../../Table/TableContent'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
 import { formatDataToTable } from './utils'
+import { Props } from './TransactionHistory.types'
+import './TransactionHistory.css'
 
 const ROWS_PER_PAGE = 12
 

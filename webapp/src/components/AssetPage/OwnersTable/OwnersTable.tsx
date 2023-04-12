@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react'
+import { Button } from 'decentraland-ui'
 import {
   nftAPI,
   OwnersFilters,
   OwnersSortBy
 } from '../../../modules/vendor/decentraland'
-import { OrderDirection, Props } from './OwnersTable.types'
-import { TableContent } from '../../Table/TableContent'
-import { formatDataToTable } from './utils'
-import { DataTableType } from '../../Table/TableContent/TableContent.types'
-import styles from './OwnersTable.module.css'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button } from 'decentraland-ui'
+import { TableContent } from '../../Table/TableContent'
+import { DataTableType } from '../../Table/TableContent/TableContent.types'
+import { OrderDirection, Props } from './OwnersTable.types'
+import styles from './OwnersTable.module.css'
 
+import { formatDataToTable } from './utils'
 export const ROWS_PER_PAGE = 6
 const INITIAL_PAGE = 1
 

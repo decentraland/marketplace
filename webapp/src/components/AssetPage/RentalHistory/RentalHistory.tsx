@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { RentalStatus } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-
 import { rentalsAPI } from '../../../modules/vendor/decentraland/rentals/api'
-import { Props } from './RentalHistory.types'
+import { DataTableType } from '../../Table/TableContent/TableContent.types'
+
 import TableContainer from '../../Table/TableContainer'
 import { TableContent } from '../../Table/TableContent'
 import { formatDataToTable } from './utils'
-import { DataTableType } from '../../Table/TableContent/TableContent.types'
+import { Props } from './RentalHistory.types'
 
 const ROWS_PER_PAGE = 12
 

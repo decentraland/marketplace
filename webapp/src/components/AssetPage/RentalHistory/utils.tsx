@@ -1,13 +1,13 @@
+import { capitalize } from 'lodash'
 import dateFnsFormat from 'date-fns/format'
 import { RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Mana } from 'decentraland-ui'
+import { getRentalChosenPeriod } from '../../../modules/rental/utils'
 import { formatDistanceToNow } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
 import { LinkedProfile } from '../../LinkedProfile'
 import { DataTableType } from '../../Table/TableContent/TableContent.types'
-import { capitalize } from 'lodash'
-import { getRentalChosenPeriod } from '../../../modules/rental/utils'
 
 const INPUT_FORMAT = 'PPP'
 const WEEK_IN_MILLISECONDS = 7 * 24 * 60 * 60 * 1000

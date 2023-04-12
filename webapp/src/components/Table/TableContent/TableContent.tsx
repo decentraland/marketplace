@@ -1,11 +1,9 @@
 import React from 'react'
-// import { Pagination, Row } from 'decentraland-ui'
-
-import { Props } from './TableContent.types'
 import { Loader, Pagination, Table } from 'decentraland-ui'
-import './TableContent.css'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { ROWS_PER_PAGE } from '../../AssetPage/OwnersTable/OwnersTable'
+import { Props } from './TableContent.types'
+import './TableContent.css'
 
 const TableContent = (props: Props) => {
   const {
