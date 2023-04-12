@@ -78,7 +78,6 @@ export function initStore() {
     enhancer
   )
   const getIdentity = () => {
-    store.getState()
     return (
       (getCurrentIdentity(store.getState()) as AuthIdentity | null) ?? undefined
     )

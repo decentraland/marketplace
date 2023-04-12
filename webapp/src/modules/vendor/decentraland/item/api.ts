@@ -15,13 +15,13 @@ export class ItemAPI extends BaseClient {
   }
 
   async getOne(contractAddress: string, itemId: string): Promise<Item> {
-    const response: ItemResponse = await this.fetch('/v1/items', {
-      method: 'POST',
-      body: JSON.stringify({
-        contractAddress,
-        itemId
-      })
+    const queryParams = this.buildItemsQueryString({
+      contracts: [contractAddress],
+      itemId
     })
+    const response: ItemResponse = await this.fetch(
+      `/v1/items?${queryParams.toString()}`
+    )
 
     if (response.data.length === 0) {
       throw new Error('Not found')

@@ -56,7 +56,9 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
 }
 
 function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
+  console.log('Handling wallet connect success')
   const identity: AuthIdentity = yield select(getCurrentIdentity)
+  console.log('Identity exists', identity)
   if (!identity) {
     // Generate a new identity
     yield put(generateIdentityRequest(action.payload.wallet.address))

@@ -56,31 +56,13 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     identity: getIdentity
   })
 
+  console.log('Getting identity', getIdentity())
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(BUY_ITEM_WITH_CARD_REQUEST, handleBuyItemWithCardRequest)
   yield takeEvery(SET_PURCHASE, handleSetItemPurchaseWithCard)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
-
-  function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
-    const { filters } = action.payload
-    try {
-      const { data, total }: { data: Item[]; total: number } = yield call(
-        [itemAPI, 'get'],
-        filters
-      )
-
-      yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
-    } catch (error) {
-      yield put(
-        fetchItemsFailure(
-          isErrorWithMessage(error) ? error.message : t('global.unknown_error'),
-          action.payload
-        )
-      )
-    }
-  }
 
   function* handleFetchTrendingItemsRequest(
     action: FetchTrendingItemsRequestAction
@@ -101,8 +83,29 @@ export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
     }
   }
 
+  function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
+    const { filters } = action.payload
+    console.log('Getting identity', getIdentity())
+    try {
+      const { data, total }: { data: Item[]; total: number } = yield call(
+        [itemAPI, 'get'],
+        filters
+      )
+
+      yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
+    } catch (error) {
+      yield put(
+        fetchItemsFailure(
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error'),
+          action.payload
+        )
+      )
+    }
+  }
+
   function* handleFetchItemRequest(action: FetchItemRequestAction) {
     const { contractAddress, tokenId } = action.payload
+    console.log('Getting identity', getIdentity())
     try {
       const item: Item = yield call(
         [itemAPI, 'getOne'],
