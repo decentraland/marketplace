@@ -11,7 +11,11 @@ import {
   UpsertRentalSuccessAction,
   UPSERT_RENTAL_SUCCESS
 } from '../rental/actions'
-import { BUY_ITEM_WITH_CARD_FAILURE } from '../item/actions'
+import {
+  BUY_ITEM_WITH_CARD_FAILURE,
+  FETCH_ITEMS_FAILURE,
+  FetchItemsFailureAction
+} from '../item/actions'
 import {
   EXECUTE_ORDER_WITH_CARD_FAILURE,
   EXECUTE_ORDER_FAILURE
@@ -19,6 +23,7 @@ import {
 import {
   getBuyNFTWithCardErrorToast,
   getExcecuteOrderFailureToast,
+  getFetchAssetsFailureToast,
   getLandClaimedBackSuccessToast,
   getListingRemoveSuccessToast,
   getPickItemAsFavoriteFailureToast,
@@ -40,6 +45,7 @@ import {
 } from '../favorites/actions'
 import { toastDispatchableActionsChannel } from './utils'
 import { DispatchableFromToastActions } from './types'
+import { FETCH_NFTS_FAILURE, FetchNFTsFailureAction } from '../nft/actions'
 
 export function* toastSaga() {
   yield all([baseToastSaga(), customToastSaga()])
@@ -57,6 +63,8 @@ function* successToastSagas() {
   yield takeEvery(BUY_ITEM_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_WITH_CARD_FAILURE, handleBuyNFTWithCardFailure)
   yield takeEvery(EXECUTE_ORDER_FAILURE, handleExcecuteOrderFailure)
+  yield takeEvery(FETCH_ITEMS_FAILURE, handleFetchAssetsFailure)
+  yield takeEvery(FETCH_NFTS_FAILURE, handleFetchAssetsFailure)
   yield takeEvery(
     PICK_ITEM_AS_FAVORITE_SUCCESS,
     handlePickItemAsFavoriteSuccess
@@ -147,4 +155,11 @@ function* handleUnpickItemAsFavoriteFailure(
   yield put(
     showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
   )
+}
+
+function* handleFetchAssetsFailure(
+  action: FetchItemsFailureAction | FetchNFTsFailureAction
+) {
+  const { error } = action.payload
+  yield put(showToast(getFetchAssetsFailureToast(error), 'bottom right'))
 }

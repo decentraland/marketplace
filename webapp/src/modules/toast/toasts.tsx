@@ -3,11 +3,11 @@ import { Item } from '@dcl/schemas'
 import { Button, Icon, ToastType } from 'decentraland-ui'
 import { Toast } from 'decentraland-dapps/dist/modules/toast/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { config } from '../../config'
 import { getAssetName } from '../asset/utils'
 import { UpsertRentalOptType } from '../rental/types'
 import { locations } from '../routing/locations'
 import { NFT } from '../nft/types'
-import { config } from '../../config'
 import {
   pickItemAsFavoriteRequest,
   undoUnpickingItemAsFavoriteRequest,
@@ -223,5 +223,24 @@ export function getUnpickItemAsFavoriteFailureToast(
     closable: true,
     timeout: 6000,
     icon: <Icon name="exclamation circle" />
+  }
+}
+
+export function getFetchAssetsFailureToast(error: string): Omit<Toast, 'id'> {
+  return {
+    type: ToastType.ERROR,
+    title: t('toast.fetch_assets_failure.title', {
+      error: error.toLowerCase()
+    }),
+    body: t('toast.fetch_assets_failure.body', {
+      reload_page: (
+        <a href={window.location.href}>
+          {t('toast.fetch_assets_failure.reload_page')}
+        </a>
+      )
+    }),
+    icon: <Icon name="exclamation circle" />,
+    closable: true,
+    timeout: 6000
   }
 }

@@ -912,6 +912,11 @@
       "title": "从收藏夹中删除项目时出错",
       "body": "从收藏夹中删除 {name} 时出错",
       "try_again": "再试一次"
+    },
+    "fetch_assets_failure": {
+      "title": "网站无法加载",
+      "body": "加载此页面内容时出现问题。请{reload_page} 或稍后重试。",
+      "reload_page": "重新加载页面"
     }
   },
   "maintainance": {

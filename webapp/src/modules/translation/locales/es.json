@@ -909,6 +909,11 @@
       "title": "Error al eliminar el item de Favoritos",
       "body": "Hubo un error al eliminar {name} de Favoritos",
       "try_again": "Intentar de nuevo"
+    },
+    "fetch_assets_failure": {
+      "title": "El sitio no pudo cargar",
+      "body": "Hubo un problema al cargar el contenido de esta página. {reload_page} o inténtalo de nuevo más tarde.",
+      "reload_page": "Recargue la página"
     }
   },
   "maintainance": {
