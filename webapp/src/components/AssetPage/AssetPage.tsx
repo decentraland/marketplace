@@ -1,5 +1,6 @@
 import React from 'react'
 import { Page, Section, Column, Back } from 'decentraland-ui'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Asset, AssetType } from '../../modules/asset/types'
 import { locations } from '../../modules/routing/locations'
 import { Sections } from '../../modules/routing/types'
@@ -29,61 +30,65 @@ const AssetPage = ({ type, onBack }: Props) => {
               <AssetProviderPage type={type} fullWidth>
                 {(asset, order, rental) => (
                   <>
-                    <Back
-                      className="back"
-                      absolute
-                      onClick={() =>
-                        onBack(
-                          mapAsset(
-                            asset,
-                            {
-                              wearable: () =>
-                                locations.browse({
-                                  assetType: type,
-                                  section: Sections.decentraland.WEARABLES
-                                }),
-                              emote: () =>
-                                locations.browse({
-                                  assetType: type,
-                                  section: Sections.decentraland.EMOTES
-                                })
-                            },
-                            {
-                              ens: () =>
-                                locations.browse({
-                                  assetType: type,
-                                  section: Sections.decentraland.ENS
-                                }),
-                              estate: () =>
-                                locations.lands({
-                                  assetType: type,
-                                  section: Sections.decentraland.ESTATES,
-                                  isMap: false,
-                                  isFullscreen: false
-                                }),
-                              parcel: () =>
-                                locations.lands({
-                                  assetType: type,
-                                  section: Sections.decentraland.PARCELS,
-                                  isMap: false,
-                                  isFullscreen: false
-                                }),
-                              wearable: () =>
-                                locations.browse({
-                                  assetType: type,
-                                  section: Sections.decentraland.WEARABLES
-                                }),
-                              emote: () =>
-                                locations.browse({
-                                  assetType: type,
-                                  section: Sections.decentraland.EMOTES
-                                })
-                            },
-                            () => undefined
+                    <>
+                      <Back
+                        className="back"
+                        absolute
+                        onClick={() =>
+                          onBack(
+                            mapAsset(
+                              asset,
+                              {
+                                wearable: () =>
+                                  locations.browse({
+                                    assetType: type,
+                                    section: Sections.decentraland.WEARABLES
+                                  }),
+                                emote: () =>
+                                  locations.browse({
+                                    assetType: type,
+                                    section: Sections.decentraland.EMOTES
+                                  })
+                              },
+                              {
+                                ens: () =>
+                                  locations.browse({
+                                    assetType: type,
+                                    section: Sections.decentraland.ENS
+                                  }),
+                                estate: () =>
+                                  locations.lands({
+                                    assetType: type,
+                                    section: Sections.decentraland.ESTATES,
+                                    isMap: false,
+                                    isFullscreen: false
+                                  }),
+                                parcel: () =>
+                                  locations.lands({
+                                    assetType: type,
+                                    section: Sections.decentraland.PARCELS,
+                                    isMap: false,
+                                    isFullscreen: false
+                                  }),
+                                wearable: () =>
+                                  locations.browse({
+                                    assetType: type,
+                                    section: Sections.decentraland.WEARABLES
+                                  }),
+                                emote: () =>
+                                  locations.browse({
+                                    assetType: type,
+                                    section: Sections.decentraland.EMOTES
+                                  })
+                              },
+                              () => undefined
+                            )
                           )
-                        )
-                      }
-                    />
+                        }
+                      />
+                      <span className="backText">{t('global.back')}</span>
+                    </>
+
                     <div className="asset-container">
                       {mapAsset<React.ReactNode>(
                         asset,
