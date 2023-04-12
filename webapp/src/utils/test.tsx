@@ -4,10 +4,18 @@ import { createMemoryHistory } from 'history'
 import { Provider } from 'react-redux'
 import { Store } from 'redux'
 import mediaQuery from 'css-mediaquery'
+import flatten from 'flat'
 import TranslationProvider from 'decentraland-dapps/dist/providers/TranslationProvider'
+import { mergeTranslations } from 'decentraland-dapps/dist/modules/translation/utils'
+import { en } from 'decentraland-dapps/dist/modules/translation/defaults'
 import { RootState } from '../modules/reducer'
 import { initTestStore } from '../modules/store'
 import * as locales from '../modules/translation/locales'
+
+const allTranslations = mergeTranslations(
+  flatten(en) as any,
+  flatten(locales.en)
+)
 
 export function renderWithProviders(
   component: JSX.Element,
@@ -21,14 +29,19 @@ export function renderWithProviders(
     initTestStore({
       ...(preloadedState || {}),
       storage: { loading: false },
-      translation: { data: locales, locale: 'en' }
+      translation: {
+        data: {
+          en: allTranslations
+        },
+        locale: 'en'
+      }
     })
   const history = createMemoryHistory()
 
   function AppProviders({ children }: { children: JSX.Element }) {
     return (
       <Provider store={initializedStore}>
-        <TranslationProvider locales={Object.keys(locales)}>
+        <TranslationProvider locales={['en']}>
           <ConnectedRouter history={history}>{children}</ConnectedRouter>
         </TranslationProvider>
       </Provider>

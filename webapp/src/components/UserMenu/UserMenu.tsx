@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useMemo } from 'react'
 import { UserMenu as BaseUserMenu } from 'decentraland-dapps/dist/containers'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Icon } from 'decentraland-ui'
@@ -12,15 +12,15 @@ const UserMenu = (props: Props) => {
     ...baseProps
   } = props
 
-  const getMenuItems = useCallback(
+  const menuItems = useMemo(
     () => (
       <>
-        <li onClick={onClickMyAssets} role="button">
+        <li onClick={onClickMyAssets} role="button" data-testid="my-assets">
           <Icon name="briefcase"></Icon>
           {t('user_menu.my_assets')}
         </li>
         {isFavoritesEnabled ? (
-          <li onClick={onClickMyLists} role="button">
+          <li onClick={onClickMyLists} role="button" data-testid="my-lists">
             <Icon name="bookmark"></Icon>
             {t('user_menu.my_lists')}
           </li>
@@ -30,7 +30,7 @@ const UserMenu = (props: Props) => {
     [isFavoritesEnabled, onClickMyAssets, onClickMyLists]
   )
 
-  return <BaseUserMenu {...baseProps} menuItems={getMenuItems()} />
+  return <BaseUserMenu {...baseProps} menuItems={menuItems} />
 }
 
 export default React.memo(UserMenu)
