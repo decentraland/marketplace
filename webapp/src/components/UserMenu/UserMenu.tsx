@@ -15,12 +15,12 @@ const UserMenu = (props: Props) => {
   const getMenuItems = useCallback(
     () => (
       <>
-        <li onClick={onClickMyAssets} role="button">
+        <li onClick={onClickMyAssets} role="button" data-testid="my-assets">
           <Icon name="briefcase"></Icon>
           {t('user_menu.my_assets')}
         </li>
         {isFavoritesEnabled ? (
-          <li onClick={onClickMyLists} role="button">
+          <li onClick={onClickMyLists} role="button" data-testid="my-lists">
             <Icon name="bookmark"></Icon>
             {t('user_menu.my_lists')}
           </li>
