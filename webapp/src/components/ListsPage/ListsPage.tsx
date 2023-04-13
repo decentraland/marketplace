@@ -1,6 +1,6 @@
+import React from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Header, Page } from 'decentraland-ui'
-import React from 'react'
 import { useRequireConnect } from '../../customHooks/useRequireConnect'
 import { View } from '../../modules/ui/types'
 import { VendorName } from '../../modules/vendor'

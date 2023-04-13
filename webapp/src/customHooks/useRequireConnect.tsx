@@ -1,5 +1,5 @@
-import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { useEffect } from 'react'
+import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { locations } from '../modules/routing/locations'
 
 interface UseRequireConnectProps {
