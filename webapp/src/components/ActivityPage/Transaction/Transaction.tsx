@@ -12,10 +12,8 @@ import {
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { ADD_MANA_PURCHASE_AS_TRANSACTION } from 'decentraland-dapps/dist/modules/gateway/actions'
 import { ManaPurchase } from 'decentraland-dapps/dist/modules/gateway/types'
-import {
-  gatewaysNames,
-  networksNames
-} from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
+import { gatewaysNames } from 'decentraland-ui/dist/components/BuyManaWithFiatModal/Network'
+import { getNetworkMANADescription } from 'decentraland-ui/dist/lib/network'
 
 import { getAssetName } from '../../../modules/asset/utils'
 import {
@@ -486,7 +484,7 @@ const Transaction = (props: Props) => {
         network: network
       })
 
-      const name = `${networksNames[network]} MANA`
+      const name = getNetworkMANADescription(network)
 
       return (
         <TransactionDetail

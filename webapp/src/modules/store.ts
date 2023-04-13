@@ -16,6 +16,8 @@ import { fetchTilesRequest } from './tile/actions'
 import { ARCHIVE_BID, UNARCHIVE_BID } from './bid/actions'
 import { GENERATE_IDENTITY_SUCCESS } from './identity/actions'
 import { SET_IS_TRYING_ON } from './ui/preview/actions'
+import { getCurrentIdentity } from './identity/selectors'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 
 export const history = require('history').createBrowserHistory()
 
@@ -71,9 +73,16 @@ export function initStore() {
     analyticsMiddleware
   )
   const enhancer = composeEnhancers(middleware)
-  const store = createStore(rootReducer, enhancer)
-
-  sagasMiddleware.run(rootSaga)
+  const store = createStore(
+    (rootReducer as unknown) as ReturnType<typeof createRootReducer>,
+    enhancer
+  )
+  const getIdentity = () => {
+    return (
+      (getCurrentIdentity(store.getState()) as AuthIdentity | null) ?? undefined
+    )
+  }
+  sagasMiddleware.run(rootSaga, getIdentity)
   loadStorageMiddleware(store)
 
   if (isDev) {
@@ -86,7 +95,6 @@ export function initStore() {
 
   return store
 }
-
 
 export function initTestStore(preloadedState = {}) {
   const rootReducer = storageReducerWrapper(createRootReducer(history))
@@ -113,12 +121,11 @@ export function initTestStore(preloadedState = {}) {
     sagasMiddleware,
     routerMiddleware(history),
     transactionMiddleware,
-    storageMiddleware,
+    storageMiddleware
   )
   const enhancer = compose(middleware)
   const store = createStore(rootReducer, preloadedState, enhancer)
-
-  sagasMiddleware.run(rootSaga)
+  sagasMiddleware.run(rootSaga, () => undefined)
   loadStorageMiddleware(store)
   store.dispatch(fetchTilesRequest())
 

@@ -1,9 +1,11 @@
 import { NameRegistered } from '../entities/DCLRegistrar/DCLRegistrar'
+import { NameBought } from '../entities/DCLControllerV2/DCLControllerV2'
 import { ENS, NFT } from '../entities/schema'
 import { getNFTId } from '../modules/nft'
 import { getTokenIdFromLabelHash } from '../modules/ens'
 import { createOrLoadAccount } from '../modules/account'
 import { toLowerCase } from '../modules/utils'
+import { getOrCreateAnalyticsDayData } from '../modules/analytics'
 import * as categories from '../modules/category/categories'
 import * as addresses from '../data/addresses'
 
@@ -28,4 +30,12 @@ export function handleNameRegistered(event: NameRegistered): void {
   nft.save()
 
   createOrLoadAccount(event.params._caller)
+}
+
+export function handleNameBought(event: NameBought): void {
+  let dayData = getOrCreateAnalyticsDayData(event.block.timestamp)
+
+  dayData.daoEarnings = dayData.daoEarnings.plus(event.params._price)
+
+  dayData.save()
 }

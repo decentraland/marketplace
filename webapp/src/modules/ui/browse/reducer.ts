@@ -1,4 +1,8 @@
 import {
+  FETCH_FAVORITED_ITEMS_SUCCESS,
+  FetchFavoritedItemsSuccessAction
+} from '../../favorites/actions'
+import {
   FetchItemsRequestAction,
   FetchItemsSuccessAction,
   FetchTrendingItemsSuccessAction,
@@ -13,6 +17,7 @@ import {
   FETCH_NFTS_SUCCESS
 } from '../../nft/actions'
 import { BrowseAction, BROWSE } from '../../routing/actions'
+import { Section } from '../../vendor/decentraland'
 import { SetViewAction, SET_VIEW } from '../actions'
 import { View } from '../types'
 
@@ -24,7 +29,7 @@ export type BrowseUIState = {
   count?: number
 }
 
-const INITIAL_STATE: BrowseUIState = {
+export const INITIAL_STATE: BrowseUIState = {
   view: undefined,
   nftIds: [],
   itemIds: [],
@@ -40,6 +45,7 @@ type UIReducerAction =
   | FetchTrendingItemsSuccessAction
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
+  | FetchFavoritedItemsSuccessAction
 
 export function browseReducer(
   state: BrowseUIState = INITIAL_STATE,
@@ -52,6 +58,7 @@ export function browseReducer(
         view: action.payload.view
       }
     }
+
     case BROWSE: {
       const { view } = action.payload.options
       return {
@@ -59,6 +66,7 @@ export function browseReducer(
         nftIds: view ? [] : [...state.nftIds]
       }
     }
+
     case FETCH_NFTS_REQUEST: {
       const { view } = action.payload.options
       switch (view) {
@@ -78,6 +86,7 @@ export function browseReducer(
           }
       }
     }
+
     case FETCH_NFTS_SUCCESS: {
       if (action.payload.timestamp < state.lastTimestamp) {
         return state
@@ -110,6 +119,7 @@ export function browseReducer(
           return state
       }
     }
+
     case FETCH_ITEMS_REQUEST: {
       const { view } = action.payload
       switch (view) {
@@ -129,10 +139,17 @@ export function browseReducer(
           }
       }
     }
+
     case FETCH_TRENDING_ITEMS_SUCCESS:
       return {
         ...state,
         itemIds: action.payload.items.map(item => item.id)
+      }
+
+    case FETCH_FAVORITED_ITEMS_SUCCESS:
+      return {
+        ...state,
+        count: action.payload.total
       }
 
     case FETCH_ITEMS_SUCCESS: {
@@ -140,6 +157,8 @@ export function browseReducer(
         return state
       }
       const view = action.payload.options.view
+      const section = action.payload.options.section
+
       switch (view) {
         case View.MARKET:
         case View.CURRENT_ACCOUNT:
@@ -152,6 +171,14 @@ export function browseReducer(
             lastTimestamp: action.payload.timestamp
           }
         }
+        case View.LISTS: {
+          return {
+            ...state,
+            view,
+            itemIds: action.payload.items.map(item => item.id),
+            lastTimestamp: action.payload.timestamp
+          }
+        }
         case View.LOAD_MORE: {
           return {
             ...state,
@@ -159,7 +186,8 @@ export function browseReducer(
               ...state.itemIds,
               ...action.payload.items.map(item => item.id)
             ],
-            count: action.payload.total,
+            count:
+              section === Section.LISTS ? state.count : action.payload.total,
             lastTimestamp: action.payload.timestamp
           }
         }

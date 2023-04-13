@@ -2,6 +2,7 @@ import { Item } from '@dcl/schemas'
 import { put, takeEvery } from '@redux-saga/core/effects'
 import { call, race, select, take } from 'redux-saga/effects'
 import { ContractName, getContract } from 'decentraland-transactions'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { sendTransaction } from 'decentraland-dapps/dist/modules/wallet/utils'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import {
@@ -11,9 +12,12 @@ import {
 import { isNFTPurchase } from 'decentraland-dapps/dist/modules/gateway/utils'
 import { PurchaseStatus } from 'decentraland-dapps/dist/modules/gateway/types'
 import { isErrorWithMessage } from '../../lib/error'
-import { itemAPI } from '../vendor/decentraland/item/api'
+import { config } from '../../config'
+import { ItemAPI } from '../vendor/decentraland/item/api'
 import { getWallet } from '../wallet/selectors'
 import { buyAssetWithCard } from '../asset/utils'
+import { waitForWalletConnectionIfConnecting } from '../wallet/utils'
+import { retryParams } from '../vendor/decentraland/utils'
 import {
   buyItemFailure,
   BuyItemRequestAction,
@@ -44,166 +48,191 @@ import {
 import { getData as getItems } from './selectors'
 import { getItem } from './utils'
 
-export function* itemSaga() {
+export const NFT_SERVER_URL = config.get('NFT_SERVER_URL')!
+
+export function* itemSaga(getIdentity: () => AuthIdentity | undefined) {
+  const itemAPI = new ItemAPI(NFT_SERVER_URL, {
+    retries: retryParams.attempts,
+    retryDelay: retryParams.delay,
+    identity: getIdentity
+  })
+
   yield takeEvery(FETCH_ITEMS_REQUEST, handleFetchItemsRequest)
   yield takeEvery(FETCH_TRENDING_ITEMS_REQUEST, handleFetchTrendingItemsRequest)
   yield takeEvery(BUY_ITEM_REQUEST, handleBuyItem)
   yield takeEvery(BUY_ITEM_WITH_CARD_REQUEST, handleBuyItemWithCardRequest)
   yield takeEvery(SET_PURCHASE, handleSetItemPurchaseWithCard)
   yield takeEvery(FETCH_ITEM_REQUEST, handleFetchItemRequest)
-}
 
-function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
-  const { filters } = action.payload
-  try {
-    const { data, total }: { data: Item[]; total: number } = yield call(
-      [itemAPI, 'fetch'],
-      filters
-    )
+  function* handleFetchTrendingItemsRequest(
+    action: FetchTrendingItemsRequestAction
+  ) {
+    const { size } = action.payload
 
-    yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
-  } catch (error) {
-    yield put(
-      fetchItemsFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error'),
-        action.payload
+    // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
+    yield call(waitForWalletConnectionIfConnecting)
+
+    try {
+      const { data }: { data: Item[] } = yield call(
+        [itemAPI, 'getTrendings'],
+        size
       )
-    )
-  }
-}
-
-function* handleFetchTrendingItemsRequest(
-  action: FetchTrendingItemsRequestAction
-) {
-  const { size } = action.payload
-  try {
-    const { data }: { data: Item[] } = yield call(
-      [itemAPI, 'fetchTrendings'],
-      size
-    )
-    yield put(fetchTrendingItemsSuccess(data))
-  } catch (error) {
-    yield put(
-      fetchTrendingItemsFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      yield put(fetchTrendingItemsSuccess(data))
+    } catch (error) {
+      yield put(
+        fetchTrendingItemsFailure(
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+        )
       )
-    )
-  }
-}
-
-function* handleFetchItemRequest(action: FetchItemRequestAction) {
-  const { contractAddress, tokenId } = action.payload
-  try {
-    const item: Item = yield call(
-      [itemAPI, 'fetchOne'],
-      contractAddress,
-      tokenId
-    )
-    yield put(fetchItemSuccess(item))
-  } catch (error) {
-    yield put(
-      fetchItemFailure(
-        contractAddress,
-        tokenId,
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
-  }
-}
-
-function* handleBuyItem(action: BuyItemRequestAction) {
-  try {
-    const { item } = action.payload
-
-    const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
-
-    if (!wallet) {
-      throw new Error('A defined wallet is required to buy an item')
     }
-
-    const contract = getContract(ContractName.CollectionStore, item.chainId)
-
-    const txHash: string = yield call(
-      sendTransaction,
-      contract,
-      collectionStore =>
-        collectionStore.buy([
-          [item.contractAddress, [item.itemId], [item.price], [wallet.address]]
-        ])
-    )
-
-    yield put(buyItemSuccess(item.chainId, txHash, item))
-  } catch (error) {
-    yield put(
-      buyItemFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
-      )
-    )
   }
-}
 
-function* handleBuyItemWithCardRequest(action: BuyItemWithCardRequestAction) {
-  try {
-    const { item } = action.payload
-    yield call(buyAssetWithCard, item)
-  } catch (error) {
-    yield put(
-      buyItemWithCardFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+  function* handleFetchItemsRequest(action: FetchItemsRequestAction) {
+    const { filters } = action.payload
+
+    // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
+    yield call(waitForWalletConnectionIfConnecting)
+
+    try {
+      const { data, total }: { data: Item[]; total: number } = yield call(
+        [itemAPI, 'get'],
+        filters
       )
-    )
+
+      yield put(fetchItemsSuccess(data, total, action.payload, Date.now()))
+    } catch (error) {
+      yield put(
+        fetchItemsFailure(
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error'),
+          action.payload
+        )
+      )
+    }
   }
-}
 
-function* handleSetItemPurchaseWithCard(action: SetPurchaseAction) {
-  try {
-    const { purchase } = action.payload
-    const { status, txHash } = purchase
+  function* handleFetchItemRequest(action: FetchItemRequestAction) {
+    const { contractAddress, tokenId } = action.payload
 
-    if (
-      isNFTPurchase(purchase) &&
-      purchase.nft.itemId &&
-      status === PurchaseStatus.COMPLETE &&
-      txHash
-    ) {
-      const {
-        nft: { contractAddress, itemId }
-      } = purchase
+    // If the wallet is getting connected, wait until it finishes to fetch the items so it can fetch them with authentication
+    yield call(waitForWalletConnectionIfConnecting)
 
-      const items: ReturnType<typeof getItems> = yield select(getItems)
-      let item: ReturnType<typeof getItem> = yield call(
-        getItem,
+    try {
+      const item: Item = yield call(
+        [itemAPI, 'getOne'],
         contractAddress,
-        itemId,
-        items
+        tokenId
       )
+      yield put(fetchItemSuccess(item))
+    } catch (error) {
+      yield put(
+        fetchItemFailure(
+          contractAddress,
+          tokenId,
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+        )
+      )
+    }
+  }
 
-      if (!item) {
-        yield put(fetchItemRequest(contractAddress, itemId))
+  function* handleBuyItem(action: BuyItemRequestAction) {
+    try {
+      const { item } = action.payload
 
-        const {
-          success,
-          failure
-        }: {
-          success: FetchItemSuccessAction
-          failure: FetchItemFailureAction
-        } = yield race({
-          success: take(FETCH_ITEM_SUCCESS),
-          failure: take(FETCH_ITEM_FAILURE)
-        })
+      const wallet: ReturnType<typeof getWallet> = yield select(getWallet)
 
-        if (failure) throw new Error(failure.payload.error)
-
-        item = success.payload.item
+      if (!wallet) {
+        throw new Error('A defined wallet is required to buy an item')
       }
 
-      yield put(buyItemWithCardSuccess(item.chainId, txHash, item, purchase))
-    }
-  } catch (error) {
-    yield put(
-      buyItemWithCardFailure(
-        isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+      const contract = getContract(ContractName.CollectionStore, item.chainId)
+
+      const txHash: string = yield call(
+        sendTransaction,
+        contract,
+        collectionStore =>
+          collectionStore.buy([
+            [
+              item.contractAddress,
+              [item.itemId],
+              [item.price],
+              [wallet.address]
+            ]
+          ])
       )
-    )
+
+      yield put(buyItemSuccess(item.chainId, txHash, item))
+    } catch (error) {
+      yield put(
+        buyItemFailure(
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+        )
+      )
+    }
+  }
+
+  function* handleBuyItemWithCardRequest(action: BuyItemWithCardRequestAction) {
+    try {
+      const { item } = action.payload
+      yield call(buyAssetWithCard, item)
+    } catch (error) {
+      yield put(
+        buyItemWithCardFailure(
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+        )
+      )
+    }
+  }
+
+  function* handleSetItemPurchaseWithCard(action: SetPurchaseAction) {
+    try {
+      const { purchase } = action.payload
+      const { status, txHash } = purchase
+
+      if (
+        isNFTPurchase(purchase) &&
+        purchase.nft.itemId &&
+        status === PurchaseStatus.COMPLETE &&
+        txHash
+      ) {
+        const {
+          nft: { contractAddress, itemId }
+        } = purchase
+
+        const items: ReturnType<typeof getItems> = yield select(getItems)
+        let item: ReturnType<typeof getItem> = yield call(
+          getItem,
+          contractAddress,
+          itemId,
+          items
+        )
+
+        if (!item) {
+          yield put(fetchItemRequest(contractAddress, itemId))
+
+          const {
+            success,
+            failure
+          }: {
+            success: FetchItemSuccessAction
+            failure: FetchItemFailureAction
+          } = yield race({
+            success: take(FETCH_ITEM_SUCCESS),
+            failure: take(FETCH_ITEM_FAILURE)
+          })
+
+          if (failure) throw new Error(failure.payload.error)
+
+          item = success.payload.item
+        }
+
+        yield put(buyItemWithCardSuccess(item.chainId, txHash, item, purchase))
+      }
+    } catch (error) {
+      yield put(
+        buyItemWithCardFailure(
+          isErrorWithMessage(error) ? error.message : t('global.unknown_error')
+        )
+      )
+    }
   }
 }

@@ -1,6 +1,7 @@
 export const View = {
   MARKET: 'market',
   ACCOUNT: 'account',
+  LISTS: 'lists',
   CURRENT_ACCOUNT: 'current_account',
   HOME_TRENDING_ITEMS: 'home_trending_items',
   HOME_SOLD_ITEMS: 'home_sold_items',

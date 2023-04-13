@@ -1,7 +1,9 @@
-import { takeLatest, put, call } from 'redux-saga/effects'
+import { takeLatest, put, call, select } from 'redux-saga/effects'
 import { ethers } from 'ethers'
 import { Authenticator, AuthIdentity } from '@dcl/crypto'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
+import { ConnectWalletSuccessAction } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { isErrorWithMessage } from '../../lib/error'
 import { getEth } from '../wallet/utils'
 
@@ -9,12 +11,15 @@ import {
   GENERATE_IDENTITY_REQUEST,
   GenerateIdentityRequestAction,
   generateIdentityFailure,
+  generateIdentityRequest,
   generateIdentitySuccess
 } from './actions'
 import { IDENTITY_EXPIRATION_IN_MINUTES } from './utils'
+import { getCurrentIdentity } from './selectors'
 
 export function* identitySaga() {
   yield takeLatest(GENERATE_IDENTITY_REQUEST, handleGenerateIdentityRequest)
+  yield takeLatest(CONNECT_WALLET_SUCCESS, handleConnectWalletSuccess)
 }
 
 function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
@@ -47,5 +52,13 @@ function* handleGenerateIdentityRequest(action: GenerateIdentityRequestAction) {
         isErrorWithMessage(error) ? error.message : t('global.unknown_error')
       )
     )
+  }
+}
+
+function* handleConnectWalletSuccess(action: ConnectWalletSuccessAction) {
+  const identity: AuthIdentity = yield select(getCurrentIdentity)
+  if (!identity) {
+    // Generate a new identity
+    yield put(generateIdentityRequest(action.payload.wallet.address))
   }
 }

@@ -19,5 +19,8 @@
 }
 
 .ui.massive.loader.asset-loader {
+  position: sticky;
   top: 50vh;
+  left: 0;
+  margin: auto;
 }

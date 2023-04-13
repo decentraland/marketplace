@@ -1,0 +1,54 @@
+.favoritesList {
+  margin-top: 20px;
+}
+
+.separator {
+  border-top: 2px var(--text) solid;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+@media (max-width: 767px) {
+  .favoritesList {
+    height: 100%;
+  }
+
+  .content {
+    overflow: hidden;
+    height: calc(100vh - 95px - 20px);
+  }
+  
+  .modal {
+    height: 100%;
+  }
+}
+
+.empty {
+  margin-top: 20px;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.loading span {
+  margin-left: 20px;
+}
+
+.modal :global(.Profile) {
+  display: flex !important;
+  align-items: center;
+}
+
+.modal :global(.Profile .name) {
+  margin-left: 10px;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 30px;
+  letter-spacing: 0.3149999976158142px;
+  text-align: left;
+}

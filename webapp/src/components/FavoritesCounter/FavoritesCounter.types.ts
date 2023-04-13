@@ -1,5 +1,15 @@
-// import { Dispatch } from 'react'
+import { Dispatch } from 'redux'
 import { Item } from '@dcl/schemas'
+import {
+  openModal,
+  OpenModalAction
+} from 'decentraland-dapps/dist/modules/modal/actions'
+import {
+  pickItemAsFavoriteRequest,
+  PickItemAsFavoriteRequestAction,
+  unpickItemAsFavoriteRequest,
+  UnpickItemAsFavoriteRequestAction
+} from '../../modules/favorites/actions'
 
 export type Props = {
   className?: string
@@ -7,10 +17,21 @@ export type Props = {
   isCollapsed?: boolean
   isPickedByUser: boolean
   count: number
-  // onClick: typeof 'action'
+  onCounterClick: (item: Item) => ReturnType<typeof openModal>
+  onPick: typeof pickItemAsFavoriteRequest
+  onUnpick: typeof unpickItemAsFavoriteRequest
 }
 
 export type MapStateProps = Pick<Props, 'isPickedByUser' | 'count'>
 
-export type MapDispatchProps = {}
-export type MapDispatch = {}
+export type MapDispatchProps = Pick<
+  Props,
+  'onPick' | 'onUnpick' | 'onCounterClick'
+>
+export type MapDispatch = Dispatch<
+  | PickItemAsFavoriteRequestAction
+  | UnpickItemAsFavoriteRequestAction
+  | OpenModalAction
+>
+
+export type OwnProps = Pick<Props, 'item'>
