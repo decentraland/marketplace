@@ -1,0 +1,50 @@
+.gradient {
+  height: 152px;
+  width: 100%;
+  margin-bottom: 11px;
+  background: linear-gradient(
+    116.34deg,
+    #ffbc5b 0%,
+    #ff2d55 50.52%,
+    #c640cd 100%
+  );
+  border-radius: 14.482757568359375px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  height: 146px;
+  width: calc(100% - 6px);
+  background: #242129;
+  border-radius: 14.482757568359375px;
+  display: flex;
+  align-items: center;
+  padding: 0 33px 0 15px;
+}
+
+.img {
+  margin-right: 14px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.btn {
+  max-width: 222px;
+  margin-left: 21px !important;
+}

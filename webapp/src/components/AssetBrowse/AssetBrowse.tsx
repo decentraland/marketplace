@@ -25,6 +25,7 @@ import CollectionList from '../CollectionList'
 import StoreSettings from '../StoreSettings'
 import Sales from '../Sales'
 import { Bids } from '../Bids'
+import { ClaimYourName } from '../ClaimYourName'
 import { BackToTopButton } from '../BackToTopButton'
 import { Props } from './AssetBrowse.types'
 import MapTopbar from './MapTopbar'
@@ -205,6 +206,15 @@ const AssetBrowse = (props: Props) => {
       break
     case DecentralandSection.STORE_SETTINGS:
       right = <StoreSettings />
+      break
+    case DecentralandSection.ENS:
+      right = (
+        <>
+          <ClaimYourName />
+          <AssetTopbar />
+          <AssetList isManager={view === View.CURRENT_ACCOUNT} />
+        </>
+      )
       break
     default:
       right = (
