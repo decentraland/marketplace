@@ -83,6 +83,7 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
 
   useEffect(() => {
     fetchNextPage(0, 100)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Makes the modal dynamic in size.
@@ -118,33 +119,36 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
             <Empty className={styles.empty}>{t('favorites_modal.empty')}</Empty>
           ) : null}
           {favorites.addresses.length !== 0 ? (
-            <div
-              className={styles.favoritesList}
-              style={{ height: !isMobile ? desktopHeight : undefined }}
-            >
-              <AutoSizer>
-                {({ height, width }) => (
-                  <InfiniteLoader
-                    isItemLoaded={isItemLoaded}
-                    itemCount={favorites.total}
-                    loadMoreItems={fetchNextPage}
-                  >
-                    {({ onItemsRendered, ref }) => (
-                      <FixedSizeList
-                        itemCount={favorites.total}
-                        onItemsRendered={onItemsRendered}
-                        itemSize={ITEM_HEIGHT}
-                        height={height ?? DEFAULT_LIST_HEIGHT}
-                        width={width ?? DEFAULT_LIST_WIDTH}
-                        ref={ref}
-                      >
-                        {Row}
-                      </FixedSizeList>
-                    )}
-                  </InfiniteLoader>
-                )}
-              </AutoSizer>
-            </div>
+            <>
+              <div className={styles.separator}></div>
+              <div
+                className={styles.favoritesList}
+                style={{ height: !isMobile ? desktopHeight : undefined }}
+              >
+                <AutoSizer>
+                  {({ height, width }) => (
+                    <InfiniteLoader
+                      isItemLoaded={isItemLoaded}
+                      itemCount={favorites.total}
+                      loadMoreItems={fetchNextPage}
+                    >
+                      {({ onItemsRendered, ref }) => (
+                        <FixedSizeList
+                          itemCount={favorites.total}
+                          onItemsRendered={onItemsRendered}
+                          itemSize={ITEM_HEIGHT}
+                          height={height ?? DEFAULT_LIST_HEIGHT}
+                          width={width ?? DEFAULT_LIST_WIDTH}
+                          ref={ref}
+                        >
+                          {Row}
+                        </FixedSizeList>
+                      )}
+                    </InfiniteLoader>
+                  )}
+                </AutoSizer>
+              </div>
+            </>
           ) : null}
           {error ? (
             <Message

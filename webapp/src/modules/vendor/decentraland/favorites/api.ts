@@ -12,6 +12,25 @@ export const MARKETPLACE_FAVORITES_SERVER_URL = config.get(
   'MARKETPLACE_FAVORITES_SERVER_URL'
 )!
 
+type PaginatedResponse<T> = {
+  results: T[]
+  total: number
+  page: number
+  pages: number
+  limit: number
+}
+
+type HTTPBody<T> =
+  | {
+      ok: false
+      message: string
+      data?: object
+    }
+  | {
+      ok: true
+      data: PaginatedResponse<T>
+    }
+
 class FavoritesAPI extends BaseAPI {
   async getWhoFavoritedAnItem(
     itemId: string,
@@ -22,14 +41,20 @@ class FavoritesAPI extends BaseAPI {
       `${MARKETPLACE_FAVORITES_SERVER_URL}/picks/${itemId}?limit=${limit}&offset=${offset}`
     )
 
-    const parsedResponse = await response.json()
+    const parsedResponse: HTTPBody<{
+      userAddress: string
+    }> = await response.json()
 
-    if (!response.ok) {
-      throw new Error(parsedResponse?.message ?? 'Unknown error')
+    if (!response.ok || parsedResponse.ok === false) {
+      throw new Error(
+        parsedResponse.ok === false && parsedResponse.message !== undefined
+          ? parsedResponse.message
+          : 'Unknown error'
+      )
     }
 
     return {
-      addresses: parsedResponse.data.results,
+      addresses: parsedResponse.data.results.map(pick => pick.userAddress),
       total: parsedResponse.data.total
     }
   }
