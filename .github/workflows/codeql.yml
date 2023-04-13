@@ -30,10 +30,16 @@ jobs:
       uses: github/codeql-action/init@v2
       with:
         languages: ${{ matrix.language }}
+
     - name: Install
       run: npm install
+
+    - name: Audit signatures
+      run: npm audit signatures
+
     - name: Build
       run: npm run build
+
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
       with:
