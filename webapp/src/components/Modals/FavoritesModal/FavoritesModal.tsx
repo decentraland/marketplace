@@ -68,7 +68,6 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
       <div style={style} tabIndex={0}>
         {isItemLoaded(index) ? (
           <LinkedProfile
-            className={styles.user}
             size="huge"
             key={favorites.addresses[index]}
             sliceAddressBy={isMobile ? 18 : 40}
