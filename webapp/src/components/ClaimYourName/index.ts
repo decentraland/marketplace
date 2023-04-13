@@ -1,3 +1,3 @@
-import ClaimYourName from './ClaimYourName.container'
+import ClaimYourName from './ClaimYourName'
 
 export { ClaimYourName }
