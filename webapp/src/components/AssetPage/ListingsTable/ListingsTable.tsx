@@ -67,7 +67,7 @@ const ListingsTable = (props: Props) => {
           console.error(error)
         })
     }
-  }, [asset, setIsLoading, setOrders, sortBy, page, total])
+  }, [asset, setIsLoading, setOrders, sortBy, page])
 
   return (
     <TableContent

@@ -26,19 +26,19 @@ const TableContent = (props: Props) => {
           <Loader active data-testid="loader" />
         </div>
       ) : headers ? (
-        <Table basic="very" data-testid="listings-table">
-          <Table.Row>
-            {headers.map(header => (
-              <Table.HeaderCell key={header}>
-                <span className={'header'}>{header}</span>
-              </Table.HeaderCell>
-            ))}
-          </Table.Row>
+        <Table basic="very" data-testid="table-content">
           <Table.Body className={isLoading ? 'is-loading' : ''}>
-            {data?.map((data: any) => (
-              <Table.Row key={data}>
+            <Table.Row>
+              {headers.map(header => (
+                <Table.HeaderCell key={header}>
+                  <span className={'header'}>{header}</span>
+                </Table.HeaderCell>
+              ))}
+            </Table.Row>
+            {data?.map((data: any, index) => (
+              <Table.Row key={index}>
                 {headers.map((header: string) => (
-                  <Table.Cell>{data[header]}</Table.Cell>
+                  <Table.Cell key={header}>{data[header]}</Table.Cell>
                 ))}
               </Table.Row>
             ))}

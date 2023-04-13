@@ -48,7 +48,7 @@ const OwnersTable = (props: Props) => {
           console.error(error)
         })
     }
-  }, [asset, setIsLoading, setOwners, page, orderDirection, total])
+  }, [asset, setIsLoading, setOwners, page, orderDirection])
 
   return (
     <TableContent
