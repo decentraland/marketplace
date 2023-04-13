@@ -2,6 +2,7 @@ import React from 'react'
 import { Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import claimYourOwnNameImg from '../../images/claim-your-own-name.svg'
+import { builderUrl } from '../../lib/environment'
 import { Mana } from '../Mana'
 import styles from './ClaimYourName.module.css'
 
@@ -25,7 +26,7 @@ const ClaimYourName = () => {
             />
           </p>
         </div>
-        <Button className={styles.btn} primary fluid>
+        <Button className={styles.btn} primary fluid as={'a'} href={`${builderUrl}/names`}>
           {t('claim_your_own_name.btn')}
         </Button>
       </div>
