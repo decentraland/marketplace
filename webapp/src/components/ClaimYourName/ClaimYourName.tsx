@@ -1,6 +1,8 @@
 import React from 'react'
 import { Button } from 'decentraland-ui'
+import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import claimYourOwnNameImg from '../../images/claim-your-own-name.svg'
+import { Mana } from '../Mana'
 import styles from './ClaimYourName.module.css'
 
 const ClaimYourName = () => {
@@ -13,15 +15,18 @@ const ClaimYourName = () => {
           alt="Claim your own name"
         ></img>
         <div>
-          <h4 className={styles.title}>CLAIM YOUR OWN NAME</h4>
+          <h4 className={styles.title}>{t('claim_your_own_name.title')}</h4>
           <p className={styles.text}>
-            In this Marketplace section you can find NAMEs that are being resold
-            by community members. Alternatively, you can claim your own unique
-            NAME from the Builder section for a fixed price of 100.
+            <T
+              id="claim_your_own_name.text"
+              values={{
+                mana: <Mana size="small">100</Mana>
+              }}
+            />
           </p>
         </div>
         <Button className={styles.btn} primary fluid>
-          CLAIM YOUR NAME
+          {t('claim_your_own_name.btn')}
         </Button>
       </div>
     </div>

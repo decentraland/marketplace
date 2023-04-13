@@ -1136,5 +1136,10 @@
   },
   "lists_page": {
     "default_title": "Wishlist"
+  },
+  "claim_your_own_name": {
+    "title": "CLAIM YOUR OWN NAME",
+    "text": "In this Marketplace section you can find NAMEs that are being resold by community members. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",
+    "btn": "Claim your name"
   }
 }

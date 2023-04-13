@@ -1130,5 +1130,10 @@
   },
   "lists_page": {
     "default_title": "Lista de deseos"
+  },
+  "claim_your_own_name": {
+    "title": "RECLAMA TU PROPIO NOMBRE",
+    "text": "En esta sección del Mercado puedes encontrar Nombres que están siendo revendidos por miembros de la comunidad. Alternativamente, puedes reclamar tu propio Nombre único en la sección Builder por un precio fijo de {mana}.",
+    "btn": "Reclama tu nombre"
   }
 }
