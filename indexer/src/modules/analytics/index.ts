@@ -67,7 +67,7 @@ export function trackSale(
   analyticsDayData.save()
 }
 
-function getOrCreateAnalyticsDayData(blockTimestamp: BigInt): AnalyticsDayData {
+export function getOrCreateAnalyticsDayData(blockTimestamp: BigInt): AnalyticsDayData {
   let timestamp = blockTimestamp.toI32()
   let dayID = timestamp / 86400 // unix timestamp for start of day / 86400 giving a unique day index
   let dayStartTimestamp = dayID * 86400

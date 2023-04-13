@@ -147,6 +147,27 @@ dataSources:
       eventHandlers:
         - event: NameRegistered(indexed address,indexed address,indexed bytes32,string,uint256)
           handler: handleNameRegistered
+  
+  - kind: ethereum/contract
+    name: DCLControllerV2
+    network: {{network}}
+    source:
+      address: '{{address:DCLControllerV2}}'
+      abi: DCLControllerV2
+      startBlock: {{startBlock:DCLControllerV2}}
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      file: ./src/handlers/ens.ts
+      entities:
+        - DCLControllerV2
+      abis:
+        - name: DCLControllerV2
+          file: ./abis/DCLControllerV2.json
+      eventHandlers:
+        - event: NameBought(indexed address,indexed address,uint256,string)
+          handler: handleNameBought
 
   # ---------------------------------------------------------
   # BIDS ----------------------------------------------------
