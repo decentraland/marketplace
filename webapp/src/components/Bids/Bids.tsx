@@ -1,11 +1,11 @@
-import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { Button, Header, HeaderMenu, Loader } from 'decentraland-ui'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import { Loader, HeaderMenu, Header, Button } from 'decentraland-ui'
 import { useLocation } from 'react-router-dom'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { useRequireConnect } from '../../customHooks/useRequireConnect'
 import { Bid } from '../Bid'
-import './Bids.css'
 import { Props } from './Bids.types'
+import './Bids.css'
 
 const Bids = (props: Props) => {
   const {
