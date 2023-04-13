@@ -27,7 +27,7 @@ const BuyPage = (props: Props) => {
 
   return (
     <>
-      <Navbar isFullscreen />
+      <Navbar isFullscreen enablePartialSupportAlert={false} />
       <Page className="BuyPage">
         <WalletProvider>
           {wallet => (

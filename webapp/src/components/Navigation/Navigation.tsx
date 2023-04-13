@@ -19,6 +19,7 @@ const Navigation = (props: Props) => {
     activeTab,
     isFullscreen,
     isCampaignBrowserEnabled,
+    isFavoritesEnabled,
     onOpenBuyManaWithFiatModal
   } = props
   const analytics = getAnalytics()
@@ -83,6 +84,13 @@ const Navigation = (props: Props) => {
               {t('navigation.my_assets')}
             </Tabs.Tab>
           </Link>
+          {isFavoritesEnabled && (
+            <Link to={locations.defaultList()}>
+              <Tabs.Tab active={activeTab === NavigationTab.MY_LISTS}>
+                {t('navigation.my_lists')}
+              </Tabs.Tab>
+            </Link>
+          )}
           <Mobile>
             <Link to={locations.activity()}>
               <Tabs.Tab active={activeTab === NavigationTab.ACTIVITY}>

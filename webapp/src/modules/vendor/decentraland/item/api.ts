@@ -1,28 +1,27 @@
-import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { Item } from '@dcl/schemas'
-import { NFT_SERVER_URL } from '../nft'
-import { retryParams } from '../utils'
+import { BaseClient } from 'decentraland-dapps/dist/lib/BaseClient'
 import { ItemFilters, ItemResponse } from './types'
 
-const DEFAULT_TRENDING_PAGE_SIZE = 20
+export const DEFAULT_TRENDING_PAGE_SIZE = 20
 
-class ItemAPI extends BaseAPI {
-  fetch = async (filters: ItemFilters = {}): Promise<ItemResponse> => {
+export class ItemAPI extends BaseClient {
+  async get(filters: ItemFilters = {}): Promise<ItemResponse> {
     const queryParams = this.buildItemsQueryString(filters)
-    return this.request('get', `/items?${queryParams}`)
+    return this.fetch(`/v1/items?${queryParams}`)
   }
 
-  fetchTrendings = async (
-    size = DEFAULT_TRENDING_PAGE_SIZE
-  ): Promise<ItemResponse> => {
-    return this.request('get', `/trendings?size=${size}`)
+  async getTrendings(size = DEFAULT_TRENDING_PAGE_SIZE): Promise<ItemResponse> {
+    return this.fetch(`/v1/trendings?size=${size}`)
   }
 
-  fetchOne = async (contractAddress: string, itemId: string): Promise<Item> => {
-    const response: ItemResponse = await this.request('get', '/items', {
-      contractAddress,
+  async getOne(contractAddress: string, itemId: string): Promise<Item> {
+    const queryParams = this.buildItemsQueryString({
+      contracts: [contractAddress],
       itemId
     })
+    const response: ItemResponse = await this.fetch(
+      `/v1/items?${queryParams.toString()}`
+    )
 
     if (response.data.length === 0) {
       throw new Error('Not found')
@@ -37,9 +36,6 @@ class ItemAPI extends BaseAPI {
     if (filters.first) {
       queryParams.append('first', filters.first.toString())
     }
-
-    // TODO: remove
-    // queryParams.append('first', '1000')
 
     if (filters.skip) {
       queryParams.append('skip', filters.skip.toString())
@@ -102,6 +98,9 @@ class ItemAPI extends BaseAPI {
         queryParams.append('wearableGender', wearableGender)
       }
     }
+    if (filters.ids) {
+      filters.ids.forEach(id => queryParams.append('id', id))
+    }
     if (filters.contracts) {
       filters.contracts.forEach(contract =>
         queryParams.append('contractAddress', contract)
@@ -131,5 +130,3 @@ class ItemAPI extends BaseAPI {
     return queryParams.toString()
   }
 }
-
-export const itemAPI = new ItemAPI(NFT_SERVER_URL, retryParams)

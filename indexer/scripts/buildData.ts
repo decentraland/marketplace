@@ -14,7 +14,8 @@ enum ContractName {
   LANDProxy = 'LANDProxy',
   EstateProxy = 'EstateProxy',
   MarketplaceProxy = 'MarketplaceProxy',
-  DCLRegistrar = 'DCLRegistrar'
+  DCLRegistrar = 'DCLRegistrar',
+  DCLControllerV2 = 'DCLControllerV2'
 }
 type ContractsResponse = Record<Network, Record<ContractName, string>>
 
@@ -25,7 +26,8 @@ const startBlockByNetwork: Record<Network, Record<ContractName, number>> = {
     LANDProxy: 4944642,
     EstateProxy: 6236547,
     MarketplaceProxy: 6496012,
-    DCLRegistrar: 9412979
+    DCLRegistrar: 9412979,
+    DCLControllerV2: 16977347
   },
   [Network.ROPSTEN]: {
     MANAToken: 1891200,
@@ -33,7 +35,8 @@ const startBlockByNetwork: Record<Network, Record<ContractName, number>> = {
     LANDProxy: 2482847,
     EstateProxy: 3890399,
     MarketplaceProxy: 4202120,
-    DCLRegistrar: 7170497
+    DCLRegistrar: 7170497,
+    DCLControllerV2: 7170497
   },
   [Network.GOERLI]: {
     MANAToken: 4045806,
@@ -41,7 +44,8 @@ const startBlockByNetwork: Record<Network, Record<ContractName, number>> = {
     LANDProxy: 7059003,
     EstateProxy: 7059236,
     MarketplaceProxy: 7097561,
-    DCLRegistrar: 7098224
+    DCLRegistrar: 7098224,
+    DCLControllerV2: 8767204
   }
 }
 

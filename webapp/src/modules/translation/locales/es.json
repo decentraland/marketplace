@@ -58,7 +58,8 @@
     "status": "Estado",
     "unknown_error": "Error desconocido",
     "the_parcel": "La Parcela",
-    "the_estate": "El Estate"
+    "the_estate": "El Estate",
+    "discord_server": "Servidor de Discord"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -83,9 +84,14 @@
     "collectibles": "Coleccionables",
     "partners": "Socios",
     "my_assets": "Mis Objetos",
+    "my_lists": "Mis Listas",
     "my_bids": "Mis Ofertas",
     "activity": "Actividad",
     "buy_mana_with_fiat": "Comprar MANA"
+  },
+  "user_menu": {
+    "my_assets": "Mis Objetos",
+    "my_lists": "Mis Listas"
   },
   "menu": {
     "all": "Todos",
@@ -151,6 +157,8 @@
     "recently_listed_for_rent": "Listados recientemente para rentar",
     "recently_sold": "Vendidos recientemente",
     "cheapest": "Más baratos",
+    "cheapest_sale": "Más baratos (Venta)",
+    "cheapest_rent": "Más baratos (Renta)",
     "no_results": "No se encontraron resultados.",
     "type_to_search": "Escriba para buscar collecciones.",
     "clear": "Borrar filtros",
@@ -651,20 +659,13 @@
     "regions_where_operates": "regiones donde opera Transak",
     "explanation": "{link_to_transak} procesa los pagos con tarjeta y están disponibles para las {regions}. Se admiten tanto tarjetas de crédito como de débito."
   },
+  "partially_supported_network_card": {
+    "content": "Estás conectado a la red de Polygon para comprar artículos por debajo de <mana>1</mana>. Deberá tener MATIC en su billetera para cubrir la tarifa de transacción de esta compra."
+  },
   "price_too_low": {
     "minimum_price": "La cantidad mínima admitida para transacciones sin costo es {price}",
     "get_item_in_network": "Para obtener este item, deberá cambiar su red a {network} y luego cubrir el costo de la transacción con {token}.",
     "switch_network": "Cambiar a {red}"
-  },
-  "mint_page": {
-    "title": "Comprar {category}",
-    "subtitle": "Estás por comprar {name} por {amount}.",
-    "not_for_sale": "{name} no esta disponible, pero puedes buscarlo en el {secondary_market_link}.",
-    "secondary_market": "mercado secundario",
-    "action": "Comprar",
-    "no_fingerprint": "No se pudo cargar la identificación del Estate.",
-    "is_owner": "Ya eres el dueño de {name}.",
-    "not_enough_mana": "No tienes suficiente MANA para comprar {name} por {amount}."
   },
   "mint_with_mana_page": {
     "title": "Comprando {name}",
@@ -888,6 +889,31 @@
       "title": "Error al enviar la transacción",
       "body": "Actualice la página e intente enviar la transacción nuevamente.",
       "refresh": "Actualizar"
+    },
+    "pick_item_as_favorite_success": {
+      "title": "Item agregado a Favoritos",
+      "body": "{name} agregado a Favoritos",
+      "view_my_lists": "Ver Mis Listas"
+    },
+    "pick_item_as_favorite_failure": {
+      "title": "Error al agregar el item a Favoritos",
+      "body": "Hubo un error al agregar {nombre} a Favoritos",
+      "try_again": "Intentar de nuevo"
+    },
+    "unpick_item_as_favorite_success": {
+      "title": "Item eliminado de Favoritos",
+      "body": "{name} fue eliminado de Favoritos",
+      "undo": "Deshacer"
+    },
+    "unpick_item_as_favorite_failure": {
+      "title": "Error al eliminar el item de Favoritos",
+      "body": "Hubo un error al eliminar {name} de Favoritos",
+      "try_again": "Intentar de nuevo"
+    },
+    "fetch_assets_failure": {
+      "title": "El sitio no pudo cargar",
+      "body": "Hubo un problema al cargar el contenido de esta página. {reload_page} o inténtalo de nuevo más tarde.",
+      "reload_page": "Recargue la página"
     }
   },
   "maintainance": {
@@ -1096,5 +1122,13 @@
   "favorites_counter": {
     "pick_label": "elegir como favorito",
     "unpick_label": "quitar de favoritos"
+  },
+  "favorites_modal": {
+    "title": "Guardado por",
+    "disclaimer": "Solo se cuentan las cuentas con más de 1 VP.",
+    "empty": "Los usuarios no han guardado este artículo"
+  },
+  "lists_page": {
+    "default_title": "Lista de deseos"
   }
 }

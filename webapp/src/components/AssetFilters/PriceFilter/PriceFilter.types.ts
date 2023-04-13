@@ -22,7 +22,7 @@ export type Props = {
   values?: BrowseOptions
   bodyShapes?: (GenderFilterOption | WearableGender)[]
   emotePlayMode?: EmotePlayMode[]
-  isOnlySmart: boolean
+  isOnlySmart?: boolean
   landStatus: LANDFilters
   onChange: (value: [string, string], source: BarChartSource) => void
   defaultCollapsed?: boolean

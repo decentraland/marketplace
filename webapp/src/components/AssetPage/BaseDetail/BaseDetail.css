@@ -67,7 +67,6 @@
 
 .BaseDetail .PageHeader > .AssetImage {
   border-radius: 12px;
-  overflow: hidden;
 }
 
 .BaseDetail .PageHeader > .AssetImage .ens-subdomain {

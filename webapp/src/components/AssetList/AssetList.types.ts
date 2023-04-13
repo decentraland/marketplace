@@ -25,7 +25,6 @@ export type Props = {
   hasFiltersEnabled?: boolean
   onBrowse: typeof browse
   onClearFilters: typeof clearFilters
-  urlNext: string
   search: string
   visitedLocations: RouterLocation<unknown>[]
 }
@@ -40,7 +39,6 @@ export type MapStateProps = Pick<
   | 'count'
   | 'isLoading'
   | 'assetType'
-  | 'urlNext'
   | 'search'
   | 'hasFiltersEnabled'
   | 'visitedLocations'

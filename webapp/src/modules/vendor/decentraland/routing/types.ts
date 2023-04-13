@@ -47,5 +47,6 @@ export enum Section {
   RECENTLY_SOLD = 'recently_sold',
   SALES = 'sales',
   BIDS = 'bids',
-  STORE_SETTINGS = 'store_settings'
+  STORE_SETTINGS = 'store_settings',
+  LISTS = 'lists'
 }

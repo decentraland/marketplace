@@ -15,6 +15,7 @@ export type Props = {
   authorizations: Authorization[]
   pendingTransactions: Transaction[]
   isLoading: boolean
+  shouldUpdateSpendingCap?: boolean
   getContract: (query: Partial<Contract>) => ReturnType<typeof getContract>
   onGrant: typeof grantTokenRequest
   onRevoke: typeof revokeTokenRequest

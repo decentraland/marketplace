@@ -60,7 +60,8 @@
     "status": "Status",
     "unknown_error": "Unknown error",
     "the_parcel": "the Parcel",
-    "the_estate": "the Estate"
+    "the_estate": "the Estate",
+    "discord_server": "Discord Server"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -85,9 +86,14 @@
     "collectibles": "Collectibles",
     "partners": "Partners",
     "my_assets": "My Assets",
+    "my_lists": "My Lists",
     "my_bids": "My Bids",
     "activity": "Activity",
     "buy_mana_with_fiat": "Buy MANA"
+  },
+  "user_menu": {
+    "my_assets": "My Assets",
+    "my_lists": "My Lists"
   },
   "menu": {
     "all": "All Assets",
@@ -155,6 +161,8 @@
     "recently_listed_for_rent": "Recently listed for rent",
     "recently_sold": "Recently sold",
     "cheapest": "Cheapest",
+    "cheapest_sale": "Cheapest (Sale)",
+    "cheapest_rent": "Cheapest (Rent)",
     "no_results": "No results were found.",
     "type_to_search": "Type to search for collections.",
     "clear": "Clear all filters",
@@ -657,20 +665,13 @@
     "regions_where_operates": "regions where Transak operates",
     "explanation": "Card payments are processed by {link_to_transak} and are available for the {regions}. Both credit and debit cards are supported."
   },
+  "partially_supported_network_card": {
+    "content": "You are connected to the Polygon Network for purchasing items below <mana>1</mana>. You will need to have MATIC in your wallet to cover the transaction fee for this purchase."
+  },
   "price_too_low": {
     "minimum_price": "The minimun amount supported for costless transactions is {price}",
     "get_item_in_network": "In order to get this item you'll need to switch your network to {network} and then cover the transaction cost with {token}.",
     "switch_network": "Switch to {network}"
-  },
-  "mint_page": {
-    "title": "Buy {category}",
-    "subtitle": "You are about to buy {name} for {amount}.",
-    "not_for_sale": "{name} is not available for minting, but you can search for it on the {secondary_market_link}.",
-    "secondary_market": "secondary market",
-    "action": "Buy",
-    "no_fingerprint": "Could not load fingerprint.",
-    "is_owner": "You are the owner of {name}.",
-    "not_enough_mana": "You don't have enough MANA to mint {name} for {amount}."
   },
   "mint_with_mana_page": {
     "title": "Buying {name}",
@@ -894,6 +895,31 @@
       "title": "Error while sending the transaction",
       "body": "Refresh the page and try sending the transaction again.",
       "refresh": "Refresh"
+    },
+    "pick_item_as_favorite_success": {
+      "title": "Item added to Favorites",
+      "body": "{name} was successfully added to Favorites",
+      "view_my_lists": "View My Lists"
+    },
+    "pick_item_as_favorite_failure": {
+      "title": "Error adding item to Favorites",
+      "body": "There was an error adding {name} to Favorites",
+      "try_again": "Try again"
+    },
+    "unpick_item_as_favorite_success": {
+      "title": "Item removed from Favorites",
+      "body": "{name} was successfully removed from Favorites",
+      "undo": "Undo"
+    },
+    "unpick_item_as_favorite_failure": {
+      "title": "Error removing item from Favorites",
+      "body": "There was an error removing {name} from Favorites",
+      "try_again": "Try again"
+    },
+    "fetch_assets_failure": {
+      "title": "The site couldn’t load",
+      "body": "There was an issue while loading the content of this page. Please {reload_page} or try again later.",
+      "reload_page": "reload the page"
     }
   },
   "maintainance": {
@@ -1101,6 +1127,14 @@
   },
   "favorites_counter": {
     "pick_label": "pick as favorite",
-    "unpick_label": "unpick favorited"
+    "unpick_label": "unpick favorite"
+  },
+  "favorites_modal": {
+    "title": "Saved by",
+    "disclaimer": "Only accounts with more than 1 VP are counted.",
+    "empty": "Users have not saved this item"
+  },
+  "lists_page": {
+    "default_title": "Wishlist"
   }
 }
