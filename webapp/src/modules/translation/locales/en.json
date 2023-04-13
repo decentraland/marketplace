@@ -191,7 +191,7 @@
         "creators_earnings": "creators earnings",
         "creators_earnings_tooltip": "Creators earn 97.5% of primary sales and 2.5% of secondary sales as royalties.",
         "dao_revenue": "dao revenue",
-        "dao_revenue_tooltip": "The DAO gets 2.5% of LAND sales and rentals, Collectible mints, and the publication fee.",
+        "dao_revenue_tooltip": "The DAO gets 2.5% of LAND sales, rentals and collectibles mints; and 100% of publication fees and name mints.",
         "seven_days": "7 DAYS",
         "thirty_days": "30 DAYS",
         "all": "all"
