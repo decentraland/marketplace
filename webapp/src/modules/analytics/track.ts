@@ -334,13 +334,8 @@ track<SetPurchaseAction>(
 track<PickItemAsFavoriteSuccessAction>(
   PICK_ITEM_AS_FAVORITE_SUCCESS,
   events.PICK_ITEM,
-  ({ payload }) => ({
-    id: payload.item.id,
-    itemId: payload.item.itemId,
-    contractAddress: payload.item.contractAddress,
-    rarity: payload.item.rarity,
-    network: payload.item.network,
-    chainId: payload.item.chainId,
+  ({ payload: { item } }) => ({
+    item,
     listId: DEFAULT_FAVORITES_LIST_ID
   })
 )
@@ -348,23 +343,18 @@ track<PickItemAsFavoriteSuccessAction>(
 track<PickItemAsFavoriteFailureAction>(
   PICK_ITEM_AS_FAVORITE_FAILURE,
   events.PICK_ITEM,
-  ({ payload }) => ({
-    id: payload.item.id,
+  ({ payload: { item, error } }) => ({
+    item,
     listId: DEFAULT_FAVORITES_LIST_ID,
-    error: payload.error
+    error
   })
 )
 
 track<UnpickItemAsFavoriteSuccessAction>(
   UNPICK_ITEM_AS_FAVORITE_SUCCESS,
   events.UNPICK_ITEM,
-  ({ payload }) => ({
-    id: payload.item.id,
-    itemId: payload.item.itemId,
-    contractAddress: payload.item.contractAddress,
-    rarity: payload.item.rarity,
-    network: payload.item.network,
-    chainId: payload.item.chainId,
+  ({ payload: { item } }) => ({
+    item,
     listId: DEFAULT_FAVORITES_LIST_ID
   })
 )
@@ -372,23 +362,18 @@ track<UnpickItemAsFavoriteSuccessAction>(
 track<UnpickItemAsFavoriteFailureAction>(
   UNPICK_ITEM_AS_FAVORITE_FAILURE,
   events.UNPICK_ITEM,
-  ({ payload }) => ({
-    id: payload.item.id,
+  ({ payload: { item, error } }) => ({
+    item,
     listId: DEFAULT_FAVORITES_LIST_ID,
-    error: payload.error
+    error
   })
 )
 
 track<UndoUnpickingItemAsFavoriteSuccessAction>(
   UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
   events.UNDO_UNPICK_ITEM,
-  ({ payload }) => ({
-    id: payload.item.id,
-    itemId: payload.item.itemId,
-    contractAddress: payload.item.contractAddress,
-    rarity: payload.item.rarity,
-    network: payload.item.network,
-    chainId: payload.item.chainId,
+  ({ payload: { item } }) => ({
+    item,
     listId: DEFAULT_FAVORITES_LIST_ID
   })
 )
@@ -396,9 +381,9 @@ track<UndoUnpickingItemAsFavoriteSuccessAction>(
 track<UndoUnpickingItemAsFavoriteFailureAction>(
   UNDO_UNPICKING_ITEM_AS_FAVORITE_FAILURE,
   events.UNDO_UNPICK_ITEM,
-  ({ payload }) => ({
-    id: payload.item.id,
+  ({ payload: { item, error } }) => ({
+    item,
     listId: DEFAULT_FAVORITES_LIST_ID,
-    error: payload.error
+    error
   })
 )
