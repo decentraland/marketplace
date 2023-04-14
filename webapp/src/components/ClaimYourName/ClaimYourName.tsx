@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -9,12 +9,36 @@ import { Mana } from '../Mana'
 import styles from './ClaimYourName.module.css'
 
 const ClaimYourName = () => {
+  const gradientRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const { current } = gradientRef
+
+    const handler = (e: MouseEvent) => {
+      if (current) {
+        const x = e.clientX / window.innerWidth
+        const degrees = x * 40 - 20
+        current.style.background = `linear-gradient(${degrees}deg,#ffbc5b 0%,#ff2d55 50.52%,#c640cd 100%)`
+      }
+    }
+
+    if (current) {
+      current.addEventListener('mousemove', handler)
+    }
+
+    return () => {
+      if (current) {
+        current.removeEventListener('mousemove', handler)
+      }
+    }
+  }, [gradientRef])
+
   const trackClick = () => {
     getAnalytics().track(events.CLICK_CLAIM_NEW_NAME)
   }
 
   return (
-    <div className={styles.gradient}>
+    <div ref={gradientRef} className={styles.gradient}>
       <div className={styles.container}>
         <img
           className={styles.img}
