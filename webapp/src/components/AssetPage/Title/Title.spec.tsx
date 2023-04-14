@@ -38,7 +38,7 @@ describe('Title', () => {
     expect(getByText(getAssetName(asset))).toBeInTheDocument()
   })
 
-  describe('when the favorites feature flag is not enabled', () => {
+  describe('when the dispositive is mobile', () => {
     it('should not render the favorites counter', () => {
       const { queryByTestId } = renderTitle({
         asset,
@@ -48,29 +48,44 @@ describe('Title', () => {
     })
   })
 
-  describe('when the favorites feature flag is enabled', () => {
-    describe('when the asset is an nft', () => {
-      beforeEach(() => {
-        asset = { ...asset, tokenId: 'tokenId' } as Asset
-      })
-
+  describe('when the dispositive is not mobile', () => {
+    describe('and the favorites feature flag is not enabled', () => {
       it('should not render the favorites counter', () => {
         const { queryByTestId } = renderTitle({
           asset,
-          isFavoritesEnabled: true
+          isFavoritesEnabled: false
         })
         expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
       })
     })
 
-    describe('when the asset is an item', () => {
-      beforeEach(() => {
-        asset = { ...asset, itemId: 'itemId' } as Asset
+    describe('and the favorites feature flag is enabled', () => {
+      describe('and the asset is an nft', () => {
+        beforeEach(() => {
+          asset = { ...asset, tokenId: 'tokenId' } as Asset
+        })
+
+        it('should not render the favorites counter', () => {
+          const { queryByTestId } = renderTitle({
+            asset,
+            isFavoritesEnabled: true
+          })
+          expect(queryByTestId(FAVORITES_COUNTER_TEST_ID)).toBeNull()
+        })
       })
 
-      it('should render the favorites counter', () => {
-        const { getByTestId } = renderTitle({ asset, isFavoritesEnabled: true })
-        expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
+      describe('and the asset is an item', () => {
+        beforeEach(() => {
+          asset = { ...asset, itemId: 'itemId' } as Asset
+        })
+
+        it('should render the favorites counter', () => {
+          const { getByTestId } = renderTitle({
+            asset,
+            isFavoritesEnabled: true
+          })
+          expect(getByTestId(FAVORITES_COUNTER_TEST_ID)).toBeInTheDocument()
+        })
       })
     })
   })

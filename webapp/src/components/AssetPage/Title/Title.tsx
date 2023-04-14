@@ -1,4 +1,5 @@
 import React from 'react'
+import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { getAssetName, isNFT } from '../../../modules/asset/utils'
 import { FavoritesCounter } from '../../FavoritesCounter'
 import { Props } from './Title.types'
@@ -9,7 +10,7 @@ const Title = ({ asset, isFavoritesEnabled }: Props) => {
     <div className={styles.title}>
       <span className={styles.text}>{getAssetName(asset)}</span>
       {/* TODO (lists): this may be moved after the new detail page for unified markets */}
-      {isFavoritesEnabled && !isNFT(asset) ? (
+      {isFavoritesEnabled && !isMobile() && !isNFT(asset) ? (
         <FavoritesCounter
           isCollapsed
           className={styles.favorites}
