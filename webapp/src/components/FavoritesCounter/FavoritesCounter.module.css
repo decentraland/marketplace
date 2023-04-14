@@ -31,7 +31,7 @@
 .FavoritesCounter.Collapsed {
   display: flex;
   align-items: center;
-  column-gap: 4px;
+  column-gap: 11px;
 }
 
 .FavoritesCounter .bubble {
