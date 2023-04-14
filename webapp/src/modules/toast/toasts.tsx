@@ -153,7 +153,7 @@ export function getPickItemAsFavoriteSuccessToast(
       </div>
     ),
     closable: true,
-    timeout: DEFAULT_TIMEOUT,
+    // timeout: DEFAULT_TIMEOUT,
     icon: <Icon name="bookmark" />
   }
 }

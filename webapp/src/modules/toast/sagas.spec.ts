@@ -160,6 +160,7 @@ describe('when handling the success of picking an item as favorite', () => {
     const item = {} as Item
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
+      .put(hideAllToasts())
       .put(showToast(getPickItemAsFavoriteSuccessToast(item), 'bottom center'))
       .dispatch(pickItemAsFavoriteSuccess(item))
       .silentRun()
@@ -172,6 +173,7 @@ describe('when handling the failure of picking an item as favorite', () => {
     const error = 'anError'
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
+      .put(hideAllToasts())
       .put(showToast(getPickItemAsFavoriteFailureToast(item), 'bottom center'))
       .dispatch(pickItemAsFavoriteFailure(item, error))
       .silentRun()
@@ -183,6 +185,7 @@ describe('when handling the success of unpicking a favorite item', () => {
     const item = {} as Item
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
+      .put(hideAllToasts())
       .put(
         showToast(getUnpickItemAsFavoriteSuccessToast(item), 'bottom center')
       )
@@ -197,6 +200,7 @@ describe('when handling the failure of unpicking a favorite item', () => {
     const error = 'anError'
     return expectSaga(toastSaga)
       .provide([[select(getState), []]])
+      .put(hideAllToasts())
       .put(
         showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
       )
