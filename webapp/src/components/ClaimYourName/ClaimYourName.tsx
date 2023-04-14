@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import claimYourOwnNameImg from '../../images/claim-your-own-name.svg'
@@ -7,7 +7,7 @@ import { Mana } from '../Mana'
 import styles from './ClaimYourName.module.css'
 
 const ClaimYourName = () => {
-  const gradientRef = React.useRef<HTMLDivElement>(null)
+  const gradientRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const { current } = gradientRef
