@@ -106,7 +106,7 @@ export function getBuyNFTWithCardErrorToast(): Omit<Toast, 'id'> {
       </div>
     ),
     closable: true,
-    icon: <Icon name="exclamation circle" />
+    icon: <Icon size="big" name="exclamation circle" />
   }
 }
 
@@ -124,7 +124,7 @@ export function getExcecuteOrderFailureToast(): Omit<Toast, 'id'> {
         })}
       </p>
     ),
-    icon: <Icon name="exclamation circle" />
+    icon: <Icon size="big" name="exclamation circle" />
   }
 }
 
@@ -153,8 +153,8 @@ export function getPickItemAsFavoriteSuccessToast(
       </div>
     ),
     closable: true,
-    // timeout: DEFAULT_TIMEOUT,
-    icon: <Icon name="bookmark" />
+    timeout: DEFAULT_TIMEOUT,
+    icon: <Icon size="big" name="bookmark" />
   }
 }
 
@@ -179,7 +179,7 @@ export function getPickItemAsFavoriteFailureToast(
     ),
     closable: true,
     timeout: DEFAULT_TIMEOUT,
-    icon: <Icon name="exclamation circle" />
+    icon: <Icon size="big" name="exclamation circle" />
   }
 }
 
@@ -204,7 +204,7 @@ export function getUnpickItemAsFavoriteSuccessToast(
     ),
     closable: true,
     timeout: DEFAULT_TIMEOUT,
-    icon: <Icon name="exclamation circle" />
+    icon: <Icon size="big" name="trash" />
   }
 }
 
@@ -229,7 +229,7 @@ export function getUnpickItemAsFavoriteFailureToast(
     ),
     closable: true,
     timeout: DEFAULT_TIMEOUT,
-    icon: <Icon name="exclamation circle" />
+    icon: <Icon size="big" name="exclamation circle" />
   }
 }
 
@@ -246,7 +246,7 @@ export function getFetchAssetsFailureToast(error: string): Omit<Toast, 'id'> {
         </a>
       )
     }),
-    icon: <Icon name="exclamation circle" />,
+    icon: <Icon size="big" name="exclamation circle" />,
     closable: true,
     timeout: DEFAULT_TIMEOUT
   }
