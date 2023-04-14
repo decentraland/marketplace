@@ -1,8 +1,10 @@
 import React, { useEffect, useRef } from 'react'
 import { Button } from 'decentraland-ui'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import claimYourOwnNameImg from '../../images/claim-your-own-name.svg'
 import { builderUrl } from '../../lib/environment'
+import * as events from '../../utils/events'
 import { Mana } from '../Mana'
 import styles from './ClaimYourName.module.css'
 
@@ -31,6 +33,10 @@ const ClaimYourName = () => {
     }
   }, [gradientRef])
 
+  const trackClick = () => {
+    getAnalytics().track(events.CLICK_CLAIM_NEW_NAME)
+  }
+
   return (
     <div ref={gradientRef} className={styles.gradient}>
       <div className={styles.container}>
@@ -56,6 +62,10 @@ const ClaimYourName = () => {
           fluid
           as={'a'}
           href={`${builderUrl}/claim-name`}
+          onClick={trackClick}
+          // If the user does right click and opens in new tab, the onClick handler is not triggered.
+          // By using onContextMenu, the event will be tracked this way too.
+          onContextMenu={trackClick}
         >
           {t('claim_your_own_name.btn')}
         </Button>
