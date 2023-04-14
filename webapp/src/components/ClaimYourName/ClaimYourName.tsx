@@ -7,10 +7,10 @@ import { Mana } from '../Mana'
 import styles from './ClaimYourName.module.css'
 
 const ClaimYourName = () => {
-  const g = React.useRef<HTMLDivElement>(null)
+  const gradientRef = React.useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const { current } = g
+    const { current } = gradientRef
 
     const handler = (e: MouseEvent) => {
       if (current) {
@@ -29,10 +29,10 @@ const ClaimYourName = () => {
         current.removeEventListener('mousemove', handler)
       }
     }
-  }, [g])
+  }, [gradientRef])
 
   return (
-    <div ref={g} className={styles.gradient}>
+    <div ref={gradientRef} className={styles.gradient}>
       <div className={styles.container}>
         <img
           className={styles.img}
