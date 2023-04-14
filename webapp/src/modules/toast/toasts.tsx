@@ -142,7 +142,12 @@ export function getPickItemAsFavoriteSuccessToast(
             name: getAssetName(item)
           })}
         </p>
-        <Button as="a" basic href={locations.defaultList()}>
+        <Button
+          as="a"
+          basic
+          className="no-padding"
+          href={locations.defaultList()}
+        >
           {t('toast.pick_item_as_favorite_success.view_my_lists')}
         </Button>
       </>
