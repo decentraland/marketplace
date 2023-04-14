@@ -136,7 +136,7 @@ export function getPickItemAsFavoriteSuccessToast(
     title: t('toast.pick_item_as_favorite_success.title'),
     // TODO (lists): redirect to the chosen list
     body: (
-      <>
+      <div className="list-flow-toast">
         <p>
           {t('toast.pick_item_as_favorite_success.body', {
             name: getAssetName(item)
@@ -150,7 +150,7 @@ export function getPickItemAsFavoriteSuccessToast(
         >
           {t('toast.pick_item_as_favorite_success.view_my_lists')}
         </Button>
-      </>
+      </div>
     ),
     closable: true,
     timeout: DEFAULT_TIMEOUT,
@@ -165,7 +165,7 @@ export function getPickItemAsFavoriteFailureToast(
     type: ToastType.ERROR,
     title: t('toast.pick_item_as_favorite_failure.title'),
     body: (
-      <>
+      <div className="list-flow-toast">
         <p>
           {t('toast.pick_item_as_favorite_failure.body', {
             name: getAssetName(item)
@@ -175,7 +175,7 @@ export function getPickItemAsFavoriteFailureToast(
           action={pickItemAsFavoriteRequest(item)}
           description={t('toast.pick_item_as_favorite_failure.try_again')}
         />
-      </>
+      </div>
     ),
     closable: true,
     timeout: DEFAULT_TIMEOUT,
@@ -190,7 +190,7 @@ export function getUnpickItemAsFavoriteSuccessToast(
     type: ToastType.INFO,
     title: t('toast.unpick_item_as_favorite_success.title'),
     body: (
-      <>
+      <div className="list-flow-toast">
         <p>
           {t('toast.unpick_item_as_favorite_success.body', {
             name: getAssetName(item)
@@ -200,7 +200,7 @@ export function getUnpickItemAsFavoriteSuccessToast(
           action={undoUnpickingItemAsFavoriteRequest(item)}
           description={t('toast.unpick_item_as_favorite_success.undo')}
         />
-      </>
+      </div>
     ),
     closable: true,
     timeout: DEFAULT_TIMEOUT,
@@ -215,7 +215,7 @@ export function getUnpickItemAsFavoriteFailureToast(
     type: ToastType.ERROR,
     title: t('toast.unpick_item_as_favorite_failure.title'),
     body: (
-      <>
+      <div className="list-flow-toast">
         <p>
           {t('toast.unpick_item_as_favorite_failure.body', {
             name: getAssetName(item)
@@ -225,7 +225,7 @@ export function getUnpickItemAsFavoriteFailureToast(
           action={unpickItemAsFavoriteRequest(item)}
           description={t('toast.unpick_item_as_favorite_failure.try_again')}
         />
-      </>
+      </div>
     ),
     closable: true,
     timeout: DEFAULT_TIMEOUT,

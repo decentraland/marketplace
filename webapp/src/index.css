@@ -57,6 +57,10 @@ code {
   padding: 0;
 }
 
+.dcl.toast .toast-info .body .list-flow-toast {
+  width: 350px;
+}
+
 @media (max-width: 767px) {
   .Navigation,
   .dcl.navbar.fullscreen,
