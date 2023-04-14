@@ -56,6 +56,7 @@ const AssetBrowse = (props: Props) => {
   // Prevent fetching more than once while browsing
   const [hasFetched, setHasFetched] = useState(false)
   const isCurrentAccount = view === View.CURRENT_ACCOUNT
+  const isAccountOrCurrentAccount = view === View.ACCOUNT || isCurrentAccount
   const [showOwnedLandOnMap, setShowOwnedLandOnMap] = useState(true)
 
   // Kick things off
@@ -149,7 +150,7 @@ const AssetBrowse = (props: Props) => {
   const left = isListsSection(section) ? null : (
     <>
       <NotMobile>
-        {view === View.ACCOUNT || isCurrentAccount ? (
+        {isAccountOrCurrentAccount ? (
           <AccountSidebar
             address={address!}
             isCurrentAccount={isCurrentAccount}
@@ -210,9 +211,9 @@ const AssetBrowse = (props: Props) => {
     case DecentralandSection.ENS:
       right = (
         <>
-          <ClaimYourName />
+          {!isAccountOrCurrentAccount && <ClaimYourName />}
           <AssetTopbar />
-          <AssetList isManager={view === View.CURRENT_ACCOUNT} />
+          <AssetList isManager={isCurrentAccount} />
         </>
       )
       break
@@ -223,7 +224,7 @@ const AssetBrowse = (props: Props) => {
           {isMap ? (
             <MapBrowse showOwned={showOwnedLandOnMap} />
           ) : (
-            <AssetList isManager={view === View.CURRENT_ACCOUNT} />
+            <AssetList isManager={isCurrentAccount} />
           )}
         </>
       )
@@ -244,7 +245,7 @@ const AssetBrowse = (props: Props) => {
 
   return (
     <>
-      {view === View.CURRENT_ACCOUNT ? (
+      {isCurrentAccount ? (
         <Mobile>
           <Tabs isFullscreen>
             <Tabs.Left>
