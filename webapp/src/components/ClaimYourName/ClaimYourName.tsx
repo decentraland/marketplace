@@ -55,7 +55,7 @@ const ClaimYourName = () => {
           primary
           fluid
           as={'a'}
-          href={`${builderUrl}/names`}
+          href={`${builderUrl}/claim-name`}
         >
           {t('claim_your_own_name.btn')}
         </Button>
