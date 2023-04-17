@@ -1,4 +1,4 @@
-import { isMobile } from 'decentraland-dapps/dist/lib/utils'
+import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { Asset } from '../../../modules/asset/types'
 import { getAssetName } from '../../../modules/asset/utils'
 import { INITIAL_STATE } from '../../../modules/favorites/reducer'
@@ -6,7 +6,7 @@ import { renderWithProviders } from '../../../utils/test'
 import Title from './Title'
 import { Props as TitleProps } from './Title.types'
 
-jest.mock('decentraland-dapps/dist/lib/utils')
+jest.mock('decentraland-ui/dist/components/Media')
 
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter'
 
@@ -31,11 +31,13 @@ function renderTitle(props: Partial<TitleProps> = {}) {
 
 describe('Title', () => {
   let asset: Asset
-  let isMobileMock: jest.MockedFunction<typeof isMobile>
+  let useMobileMediaQueryMock: jest.MockedFunction<typeof useMobileMediaQuery>
 
   beforeEach(() => {
     asset = { id: '0xContractAddress-itemId', name: 'Asset Name' } as Asset
-    isMobileMock = isMobile as jest.MockedFunction<typeof isMobile>
+    useMobileMediaQueryMock = useMobileMediaQuery as jest.MockedFunction<
+      typeof useMobileMediaQuery
+    >
   })
 
   it('should render the Asset Name', () => {
@@ -45,7 +47,7 @@ describe('Title', () => {
 
   describe('when the dispositive is mobile', () => {
     beforeEach(() => {
-      isMobileMock.mockReturnValue(true)
+      useMobileMediaQueryMock.mockReturnValue(true)
     })
 
     it('should not render the favorites counter', () => {
@@ -59,7 +61,7 @@ describe('Title', () => {
 
   describe('when the dispositive is not mobile', () => {
     beforeEach(() => {
-      isMobileMock.mockReturnValue(false)
+      useMobileMediaQueryMock.mockReturnValue(false)
     })
 
     describe('and the favorites feature flag is not enabled', () => {

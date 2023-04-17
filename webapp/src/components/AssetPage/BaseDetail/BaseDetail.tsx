@@ -1,7 +1,7 @@
 import React from 'react'
 import classNames from 'classnames'
-import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { Container } from 'decentraland-ui'
+import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { isNFT } from '../../../modules/asset/utils'
 import { Box } from '../../AssetBrowse/Box'
 // TODO: make it importable from the root directory as AssetDetails or AssetDetailsBox
@@ -25,9 +25,13 @@ const BaseDetail = ({
   showDetails,
   isFavoritesEnabled
 }: Props) => {
+  const isMobile = useMobileMediaQuery()
+
+  console.log('isMobile', isMobile)
+
   return (
     <div className={classNames('BaseDetail', className)}>
-      {isFavoritesEnabled && isMobile() && !isNFT(asset) ? (
+      {isFavoritesEnabled && isMobile && !isNFT(asset) ? (
         <FavoritesCounter isCollapsed className="favorites" item={asset} />
       ) : null}
       <PageHeader>{assetImage}</PageHeader>
