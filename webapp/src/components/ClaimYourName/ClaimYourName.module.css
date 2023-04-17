@@ -2,16 +2,36 @@
   height: 152px;
   width: 100%;
   margin-bottom: 11px;
-  background: linear-gradient(
-    116.34deg,
-    #ffbc5b 0%,
-    #ff2d55 50.52%,
-    #c640cd 100%
-  );
   border-radius: 14.482757568359375px;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.gradient::before {
+  content: '';
+  position: absolute;
+  aspect-ratio: 1/1;
+  width: 105%;
+  background-image: radial-gradient(
+      100% 100% at 6% 9%,
+      #ffbc5bff 2%,
+      #ffffff00 73%
+    ),
+    linear-gradient(60deg, #ff2d55 18%, #c640cd 100%);
+  z-index: -1;
+  animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 767px) {
