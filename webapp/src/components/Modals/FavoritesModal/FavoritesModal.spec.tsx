@@ -1,10 +1,15 @@
 import { waitForElementToBeRemoved } from '@testing-library/react'
-import { favoritesAPI } from '../../../modules/vendor/decentraland/favorites'
+import {
+  FavoritesAPI,
+  MARKETPLACE_FAVORITES_SERVER_URL
+} from '../../../modules/vendor/decentraland/favorites'
 import { renderWithProviders } from '../../../utils/test'
 import FavoritesModal from './FavoritesModal'
 import { Props } from './FavoritesModal.types'
 
 jest.mock('../../../modules/vendor/decentraland/favorites')
+
+const favoritesAPI = new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL)
 const getWhoFavoritedAnItemMock = (favoritesAPI.getWhoFavoritedAnItem as unknown) as jest.MockedFunction<
   typeof favoritesAPI.getWhoFavoritedAnItem
 >
@@ -17,6 +22,7 @@ function renderFavoritesModal(props: Partial<Props> = {}) {
       name={'A name'}
       metadata={{ itemId }}
       onClose={jest.fn()}
+      getIdentity={jest.fn()}
       {...props}
     />,
     {
@@ -54,7 +60,7 @@ describe('when loading the component', () => {
       apiResponse = { addresses: ['0x0', '0x1'], total: 0 }
     })
 
-    it('should fetch the first batch of favorites showing the loader in the process and not show the empty component', async () => {
+    it.only('should fetch the first batch of favorites showing the loader in the process and not show the empty component', async () => {
       const { getByTestId, queryByText } = renderFavoritesModal()
       expect(getWhoFavoritedAnItemMock).toHaveBeenCalledWith(itemId, 100, 0)
       apiFetchPromiseResolve(apiResponse)

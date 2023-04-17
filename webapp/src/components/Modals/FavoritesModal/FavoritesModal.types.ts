@@ -1,3 +1,4 @@
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { ModalProps } from 'decentraland-dapps/dist/providers/ModalProvider/ModalProvider.types'
 
 export type Metadata = {
@@ -6,6 +7,9 @@ export type Metadata = {
 
 export type Props = Omit<ModalProps, 'metadata'> & {
   metadata: Metadata
+  getIdentity: () => AuthIdentity | undefined
 }
+
+export type MapStateProps = Pick<Props, 'getIdentity'>
 
 export type OwnProps = Pick<Props, 'metadata'>

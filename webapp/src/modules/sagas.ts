@@ -100,6 +100,6 @@ export function* rootSaga(getIdentity: () => AuthIdentity | undefined) {
     gatewaySaga(),
     locationSaga(),
     transakSaga(),
-    favoritesSaga()
+    favoritesSaga(getIdentity)
   ])
 }

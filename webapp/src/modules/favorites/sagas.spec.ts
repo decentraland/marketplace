@@ -6,7 +6,10 @@ import { AuthIdentity } from 'decentraland-crypto-fetch'
 import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { getIdentity } from '../identity/utils'
 import { closeModal, CLOSE_MODAL, openModal } from '../modal/actions'
-import { favoritesAPI } from '../vendor/decentraland/favorites/api'
+import {
+  FavoritesAPI,
+  MARKETPLACE_FAVORITES_SERVER_URL
+} from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
@@ -34,18 +37,22 @@ let item: Item
 let address: string
 let identity: AuthIdentity
 let error: Error
+let favoritesAPI: FavoritesAPI
 
 beforeEach(() => {
   error = new Error('error')
   item = { id: 'anAddress-itemId', itemId: 'itemId' } as Item
   address = '0xb549b2442b2bd0a53795bc5cdcbfe0caf7aca9f8'
   identity = {} as AuthIdentity
+  favoritesAPI = new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
+    identity
+  })
 })
 
 describe('when handling the request for picking an item as favorite', () => {
   describe('and getting the address fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([[select(getAddress), throwError(error)]])
         .put(pickItemAsFavoriteFailure(item, error.message))
         .dispatch(pickItemAsFavoriteRequest(item))
@@ -57,15 +64,11 @@ describe('when handling the request for picking an item as favorite', () => {
     describe('and the user is not connected', () => {
       describe('and the user succeeds to connect the wallet', () => {
         it('should close the login modal after the success', () => {
-          return expectSaga(favoritesSaga)
+          return expectSaga(favoritesSaga, () => identity)
             .provide([
               [select(getAddress), undefined],
               [take(CONNECT_WALLET_SUCCESS), {}],
-              [call(getIdentity), identity],
-              [
-                call([favoritesAPI, 'pickItemAsFavorite'], item.id, identity),
-                undefined
-              ]
+              [call([favoritesAPI, 'pickItemAsFavorite'], item.id), undefined]
             ])
             .put(openModal('LoginModal'))
             .put(closeModal('LoginModal'))
@@ -77,7 +80,7 @@ describe('when handling the request for picking an item as favorite', () => {
 
       describe('and the user closes the login modal', () => {
         it('should finish the saga', () => {
-          return expectSaga(favoritesSaga)
+          return expectSaga(favoritesSaga, () => identity)
             .provide([
               [select(getAddress), undefined],
               [take(CLOSE_MODAL), {}]
@@ -96,7 +99,7 @@ describe('when handling the request for picking an item as favorite', () => {
 
   describe('and getting the identity fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([
           [select(getAddress), address],
           [call(getIdentity), throwError(error)]
@@ -109,12 +112,11 @@ describe('when handling the request for picking an item as favorite', () => {
 
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([
           [select(getAddress), address],
-          [call(getIdentity), identity],
           [
-            call([favoritesAPI, 'pickItemAsFavorite'], item.id, identity),
+            call([favoritesAPI, 'pickItemAsFavorite'], item.id),
             throwError(error)
           ]
         ])
@@ -126,14 +128,10 @@ describe('when handling the request for picking an item as favorite', () => {
 
   describe('and the call to the favorites api succeeds', () => {
     it('should dispatch an action signaling the success of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([
           [select(getAddress), address],
-          [call(getIdentity), identity],
-          [
-            call([favoritesAPI, 'pickItemAsFavorite'], item.id, identity),
-            undefined
-          ]
+          [call([favoritesAPI, 'pickItemAsFavorite'], item.id), undefined]
         ])
         .put(pickItemAsFavoriteSuccess(item))
         .dispatch(pickItemAsFavoriteRequest(item))
@@ -145,7 +143,7 @@ describe('when handling the request for picking an item as favorite', () => {
 describe('when handling the request for unpicking a favorite item', () => {
   describe('and getting the identity fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([[call(getIdentity), throwError(error)]])
         .put(unpickItemAsFavoriteFailure(item, error.message))
         .dispatch(unpickItemAsFavoriteRequest(item))
@@ -155,11 +153,10 @@ describe('when handling the request for unpicking a favorite item', () => {
 
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([
-          [call(getIdentity), identity],
           [
-            call([favoritesAPI, 'unpickItemAsFavorite'], item.id, identity),
+            call([favoritesAPI, 'unpickItemAsFavorite'], item.id),
             throwError(error)
           ]
         ])
@@ -171,13 +168,9 @@ describe('when handling the request for unpicking a favorite item', () => {
 
   describe('and the call to the favorites api succeeds', () => {
     it('should dispatch an action signaling the success of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([
-          [call(getIdentity), identity],
-          [
-            call([favoritesAPI, 'unpickItemAsFavorite'], item.id, identity),
-            undefined
-          ]
+          [call([favoritesAPI, 'unpickItemAsFavorite'], item.id), undefined]
         ])
         .put(unpickItemAsFavoriteSuccess(item))
         .dispatch(unpickItemAsFavoriteRequest(item))
@@ -189,7 +182,7 @@ describe('when handling the request for unpicking a favorite item', () => {
 describe('when handling the request for undo unpicking a favorite item', () => {
   describe('and getting the identity fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([[call(getIdentity), throwError(error)]])
         .put(undoUnpickingItemAsFavoriteFailure(item, error.message))
         .dispatch(undoUnpickingItemAsFavoriteRequest(item))
@@ -199,11 +192,10 @@ describe('when handling the request for undo unpicking a favorite item', () => {
 
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([
-          [call(getIdentity), identity],
           [
-            call([favoritesAPI, 'pickItemAsFavorite'], item.id, identity),
+            call([favoritesAPI, 'pickItemAsFavorite'], item.id),
             throwError(error)
           ]
         ])
@@ -215,13 +207,9 @@ describe('when handling the request for undo unpicking a favorite item', () => {
 
   describe('and the call to the favorites api succeeds', () => {
     it('should dispatch an action signaling the success of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([
-          [call(getIdentity), identity],
-          [
-            call([favoritesAPI, 'pickItemAsFavorite'], item.id, identity),
-            undefined
-          ]
+          [call([favoritesAPI, 'pickItemAsFavorite'], item.id), undefined]
         ])
         .put(undoUnpickingItemAsFavoriteSuccess(item))
         .dispatch(undoUnpickingItemAsFavoriteRequest(item))
@@ -244,7 +232,7 @@ describe('when handling the request for fetching favorited items', () => {
 
   describe('and getting the identity fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([[call(getIdentity), throwError(error)]])
         .put(fetchFavoritedItemsFailure(error.message))
         .dispatch(fetchFavoritedItemsRequest(options))
@@ -254,17 +242,11 @@ describe('when handling the request for fetching favorited items', () => {
 
   describe('and the call to the favorites api fails', () => {
     it('should dispatch an action signaling the failure of the handled action', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([
-          [call(getIdentity), identity],
           [select(getListId), listId],
           [
-            call(
-              [favoritesAPI, 'getPicksByList'],
-              listId,
-              options.filters,
-              identity
-            ),
+            call([favoritesAPI, 'getPicksByList'], listId, options.filters),
             throwError(error)
           ]
         ])
@@ -284,17 +266,11 @@ describe('when handling the request for fetching favorited items', () => {
     })
 
     it('should dispatch an action signaling the success of the handled action and the request of the retrieved items', () => {
-      return expectSaga(favoritesSaga)
+      return expectSaga(favoritesSaga, () => identity)
         .provide([
-          [call(getIdentity), identity],
           [select(getListId), listId],
           [
-            call(
-              [favoritesAPI, 'getPicksByList'],
-              listId,
-              options.filters,
-              identity
-            ),
+            call([favoritesAPI, 'getPicksByList'], listId, options.filters),
             { results: favoritedItemIds, total }
           ]
         ])
