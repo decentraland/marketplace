@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
@@ -15,10 +16,13 @@ import styles from './ListsPage.module.css'
 
 const ListsPage = ({ wallet, isConnecting, onRedirect }: Props) => {
   // Redirect to signIn if trying to access current account without a wallet
+  const { pathname, search } = useLocation()
+
   useEffect(() => {
     if (!isConnecting && !wallet) {
-      onRedirect(locations.signIn())
+      onRedirect(locations.signIn(`${pathname}${search}`))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnecting, wallet, onRedirect])
 
   return (
