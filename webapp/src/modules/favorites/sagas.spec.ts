@@ -302,7 +302,7 @@ describe('when handling the request for fetching favorited items', () => {
         .put(
           fetchItemsRequest({
             ...options,
-            filters: { ...options.filters, ids: [item.id] }
+            filters: { ...options.filters, ids: [item.id], first: 1 }
           })
         )
         .dispatch(fetchFavoritedItemsRequest(options))

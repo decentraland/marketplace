@@ -147,6 +147,7 @@ function* handleFetchFavoritedItemsRequest(
     const options: ItemBrowseOptions = {
       ...action.payload,
       filters: {
+        first: results.length,
         ids: results.map(({ itemId }) => itemId)
       }
     }
