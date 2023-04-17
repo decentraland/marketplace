@@ -57,8 +57,10 @@ code {
   padding: 0;
 }
 
-.dcl.toast .toast-info .body .list-flow-toast {
-  width: 350px;
+@media only screen and (min-width: 1200px) {
+  .dcl.toast .toast-info .body .list-flow-toast {
+    width: 350px;
+  }
 }
 
 @media (max-width: 767px) {
