@@ -16,9 +16,10 @@ const Navbar = (props: Props) => {
 
   const handleOnSignIn = useCallback(() => {
     const searchParams = new URLSearchParams(search)
-    const redirectTo = !searchParams.has('redirectTo')
+    const currentRedirectTo = searchParams.get('redirectTo')
+    const redirectTo = !currentRedirectTo
       ? `${pathname}${search}`
-      : undefined
+      : currentRedirectTo
     onNavigate(locations.signIn(redirectTo))
   }, [onNavigate, pathname, search])
 
