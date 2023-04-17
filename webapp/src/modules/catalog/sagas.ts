@@ -16,9 +16,7 @@ export function* catalogSaga() {
 }
 
 function* handleFetchCatalogRequest(action: FetchCatalogRequestAction) {
-  console.log('action: ', action)
   const { filters } = action.payload
-  console.log('filters: ', filters)
   try {
     const { data, total }: { data: CatalogItem[]; total: number } = yield call(
       [catalogAPI, 'fetch'],

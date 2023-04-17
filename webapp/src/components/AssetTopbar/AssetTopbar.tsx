@@ -7,9 +7,9 @@ import {
   Icon,
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
-import { NFTCategory } from '@dcl/schemas'
+// import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { AssetType } from '../../modules/asset/types'
+// import { AssetType } from '../../modules/asset/types'
 import { useInput } from '../../lib/input'
 import { getCountText, getOrderByOptions } from './utils'
 import { SortBy } from '../../modules/routing/types'
@@ -23,7 +23,7 @@ import {
   persistIsMapProperty
 } from '../../modules/ui/utils'
 import { Chip } from '../Chip'
-import { AssetTypeFilter } from './AssetTypeFilter'
+// import { AssetTypeFilter } from './AssetTypeFilter'
 import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
 import styles from './AssetTopbar.module.css'
@@ -31,7 +31,7 @@ import styles from './AssetTopbar.module.css'
 export const AssetTopbar = ({
   search,
   view,
-  assetType,
+  // assetType,
   count,
   isMap,
   onlyOnSale,
@@ -60,12 +60,12 @@ export const AssetTopbar = ({
 
   const [searchValue, setSearchValue] = useInput(search, handleSearch, 500)
 
-  const handleAssetTypeChange = useCallback(
-    (value: AssetType) => {
-      onBrowse({ assetType: value })
-    },
-    [onBrowse]
-  )
+  // const handleAssetTypeChange = useCallback(
+  //   (value: AssetType) => {
+  //     onBrowse({ assetType: value })
+  //   },
+  //   [onBrowse]
+  // )
 
   const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
@@ -105,7 +105,11 @@ export const AssetTopbar = ({
 
   return (
     <div className={styles.assetTopbar}>
-      <div className={classNames(styles.searchContainer, { [styles.searchMap]: isMap })}>
+      <div
+        className={classNames(styles.searchContainer, {
+          [styles.searchMap]: isMap
+        })}
+      >
         {!isMap && (
           <Field
             className={styles.searchField}
@@ -136,7 +140,7 @@ export const AssetTopbar = ({
           </div>
         )}
       </div>
-      {view &&
+      {/* {view &&
         !isLandSection(section) &&
         !isAccountView(view) &&
         (category === NFTCategory.WEARABLE ||
@@ -146,7 +150,7 @@ export const AssetTopbar = ({
             assetType={assetType}
             onChange={handleAssetTypeChange}
           />
-        )}
+        )} */}
       {!isMap && (
         <div className={styles.infoRow}>
           <div className={styles.countContainer}>

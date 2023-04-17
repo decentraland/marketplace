@@ -1,4 +1,9 @@
 import {
+  FetchCatalogRequestAction,
+  FetchCatalogSuccessAction,
+  FETCH_CATALOG_SUCCESS
+} from '../../catalog/actions'
+import {
   FetchItemsRequestAction,
   FetchItemsSuccessAction,
   FetchTrendingItemsSuccessAction,
@@ -20,6 +25,7 @@ export type BrowseUIState = {
   view?: View
   nftIds: string[]
   itemIds: string[]
+  catalogIds: string[]
   lastTimestamp: number
   count?: number
 }
@@ -28,6 +34,7 @@ const INITIAL_STATE: BrowseUIState = {
   view: undefined,
   nftIds: [],
   itemIds: [],
+  catalogIds: [],
   count: undefined,
   lastTimestamp: 0
 }
@@ -40,6 +47,8 @@ type UIReducerAction =
   | FetchTrendingItemsSuccessAction
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
+  | FetchCatalogRequestAction
+  | FetchCatalogSuccessAction
 
 export function browseReducer(
   state: BrowseUIState = INITIAL_STATE,
@@ -167,6 +176,17 @@ export function browseReducer(
           return state
       }
     }
+
+    case FETCH_CATALOG_SUCCESS: {
+      return {
+        ...state,
+        catalogIds: action.payload.catalogItems.map(
+          catalogItem => catalogItem.id
+        ),
+        count: action.payload.total
+      }
+    }
+
     default:
       return state
   }

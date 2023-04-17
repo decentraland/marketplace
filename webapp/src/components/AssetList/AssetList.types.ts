@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux'
-import { Item } from '@dcl/schemas'
+// import { Item } from '@dcl/schemas'
 
-import { NFT } from '../../modules/nft/types'
+// import { NFT } from '../../modules/nft/types'
 import { VendorName } from '../../modules/vendor/types'
 import {
   browse,
@@ -11,13 +11,14 @@ import {
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
 import { AssetType } from '../../modules/asset/types'
+import { CatalogItem } from '../../modules/catalog/types'
 
 export type Props = {
   vendor: VendorName
   assetType: AssetType
   section?: Section
-  nfts: NFT[]
-  items: Item[]
+  // nfts: NFT[]
+  // items: Item[]
   page: number
   count?: number
   isLoading: boolean
@@ -27,14 +28,15 @@ export type Props = {
   onClearFilters: typeof clearFilters
   urlNext: string
   search: string
+  catalogItems: CatalogItem[]
 }
 
 export type MapStateProps = Pick<
   Props,
   | 'vendor'
   | 'section'
-  | 'nfts'
-  | 'items'
+  // | 'nfts'
+  // | 'items'
   | 'page'
   | 'count'
   | 'isLoading'
@@ -42,6 +44,7 @@ export type MapStateProps = Pick<
   | 'urlNext'
   | 'search'
   | 'hasFiltersEnabled'
+  | 'catalogItems'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse' | 'onClearFilters'>
 export type MapDispatch = Dispatch<BrowseAction | ClearFiltersAction>

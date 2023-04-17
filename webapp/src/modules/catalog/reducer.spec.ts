@@ -24,72 +24,48 @@ import {
   fetchTrendingItemsRequest,
   fetchTrendingItemsSuccess
 } from './actions'
-import { INITIAL_STATE, itemReducer } from './reducer'
+import { INITIAL_STATE, catalogItemReducer } from './reducer'
+import { CatalogFilters, CatalogItem } from './types'
 
-const itemBrowseOptions = {
-  view: View.MARKET,
-  page: 0
-}
+const catalogFilters: CatalogFilters = {}
 
 const item = {
   id: 'anId',
-  itemId: 'anItemId',
   contractAddress: 'aContractAddress',
-  price: '5000000000000000000'
-} as Item
+  price: '5000000000000000000',
+  listings: 4,
+  minListingPrice: '1500000000000000000000',
+  maxListingPrice: '5000000000000000000000'
+} as CatalogItem
 
 const anotherItem = {
   id: 'anotherId',
-  itemId: 'anotherItemId',
-  price: '1500000000000000000000'
-} as Item
-
-const purchase: NFTPurchase = {
-  address: 'anAddress',
-  id: 'anId',
-  network: Network.ETHEREUM,
-  timestamp: 1671028355396,
-  status: PurchaseStatus.PENDING,
-  gateway: NetworkGatewayType.TRANSAK,
-  txHash: 'mock-transaction-hash',
-  nft: {
-    contractAddress: 'contractAddress',
-    itemId: 'anId',
-    tokenId: undefined,
-    tradeType: TradeType.PRIMARY,
-    cryptoAmount: 10
-  }
-}
-
-const chainId = ChainId.MATIC_MAINNET
-const txHash = 'aTxHash'
+  contractAddress: 'aContractAddress',
+  price: '5000000000000000000',
+  listings: 4,
+  minListingPrice: '1500000000000000000000',
+  maxListingPrice: '5000000000000000000000'
+} as CatalogItem
 
 const anErrorMessage = 'An error'
 
 const trendingItemsBatchSize = 20
 
-const requestActions = [
-  fetchTrendingItemsRequest(trendingItemsBatchSize),
-  fetchItemsRequest(itemBrowseOptions),
-  fetchItemRequest(item.contractAddress, item.itemId),
-  buyItemRequest(item),
-  buyItemWithCardRequest(item),
-  buyItemSuccess(chainId, txHash, item),
-  buyItemWithCardSuccess(chainId, txHash, item, purchase)
-]
+describe(`when reducing the "${fetchItemsRequest.type}" action`, () => {
+  it('should return a state with the loading set', () => {
+    const initialState = {
+      ...INITIAL_STATE,
+      loading: []
+    }
 
-requestActions.forEach(action => {
-  describe(`when reducing the "${action.type}" action`, () => {
-    it('should return a state with the loading set', () => {
-      const initialState = {
-        ...INITIAL_STATE,
-        loading: []
-      }
-
-      expect(itemReducer(initialState, action)).toEqual({
-        ...INITIAL_STATE,
-        loading: loadingReducer(initialState.loading, action)
-      })
+    expect(
+      catalogItemReducer(initialState, fetchItemsRequest(catalogFilters))
+    ).toEqual({
+      ...INITIAL_STATE,
+      loading: loadingReducer(
+        initialState.loading,
+        fetchItemsRequest(catalogFilters)
+      )
     })
   })
 })

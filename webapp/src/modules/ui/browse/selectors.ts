@@ -19,6 +19,9 @@ import { getAddress } from '../../wallet/selectors'
 import { getTransactionsByType } from '../../transaction/selectors'
 import { View } from '../types'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
+import { CatalogState } from '../../catalog/reducer'
+import { CatalogItem } from '../../catalog/types'
+import { getData as getCatalogData } from '../../catalog/selectors'
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState): View | undefined =>
@@ -41,6 +44,15 @@ export const getItems = createSelector<
   Item[]
 >(getState, getItemData, (browse, itemsById) =>
   browse.itemIds.map(id => itemsById[id])
+)
+
+export const getCatalogItems = createSelector<
+  RootState,
+  BrowseUIState,
+  CatalogState['data'],
+  CatalogItem[]
+>(getState, getCatalogData, (browse, catalogsById) =>
+  browse.catalogIds.map(id => catalogsById[id])
 )
 
 export const getOnSaleItems = createSelector<

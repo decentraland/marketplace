@@ -1,35 +1,33 @@
-import React, { useCallback, useMemo } from 'react'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useCallback } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
-import { Item, NFTCategory } from '@dcl/schemas'
-import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
-import { getCategoryFromSection } from '../../modules/routing/search'
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
-import { AssetType } from '../../modules/asset/types'
-import { NFT } from '../../modules/nft/types'
-import { AssetCard } from '../AssetCard'
+// import { AssetCard } from '../AssetCard'
 import { Props } from './AssetList.types'
 import './AssetList.css'
 
 const AssetList = (props: Props) => {
   const {
     vendor,
-    section,
-    assetType,
-    items,
-    nfts,
+    // section,
+    // assetType,
+    // items,
+    // nfts,
     page,
     count,
-    search,
+    // search,
     isLoading,
-    hasFiltersEnabled,
+    // hasFiltersEnabled,
     onBrowse,
     urlNext,
-    isManager,
-    onClearFilters
+    // isManager,
+    // onClearFilters,
+    catalogItems
   } = props
 
-  const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts
+  // const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts -> catalogItems
 
   const handleLoadMore = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -44,29 +42,32 @@ const AssetList = (props: Props) => {
   const maxQuerySize = getMaxQuerySize(vendor)
 
   const hasExtraPages =
-    (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
+    (catalogItems.length !== count || count === maxQuerySize) &&
+    page <= MAX_PAGE
 
-  const isLoadingNewPage = isLoading && nfts.length >= PAGE_SIZE
+  const isLoadingNewPage = isLoading && catalogItems.length >= PAGE_SIZE
 
-  const emptyStateTranslationString = useMemo(() => {
-    if (assets.length > 0) {
-      return ''
-    } else if (section) {
-      if (isManager) {
-        return 'nft_list.simple_empty'
-      }
+  // const emptyStateTranslationString = useMemo(() => {
+  //   if (catalogItems.length > 0) {
+  //     return ''
+  //   } else if (section) {
+  //     if (isManager) {
+  //       return 'nft_list.simple_empty'
+  //     }
 
-      const isEmoteOrWearableSection = [
-        NFTCategory.EMOTE,
-        NFTCategory.WEARABLE
-      ].includes(getCategoryFromSection(section)!)
+  //     const isEmoteOrWearableSection = [
+  //       NFTCategory.EMOTE,
+  //       NFTCategory.WEARABLE
+  //     ].includes(getCategoryFromSection(section)!)
 
-      if (isEmoteOrWearableSection) {
-        return search ? 'nft_list.empty_search' : 'nft_list.empty'
-      }
-    }
-    return 'nft_list.simple_empty'
-  }, [assets.length, search, section, isManager])
+  //     if (isEmoteOrWearableSection) {
+  //       return search ? 'nft_list.empty_search' : 'nft_list.empty'
+  //     }
+  //   }
+  //   return 'nft_list.simple_empty'
+  // }, [catalogItems.length, search, section, isManager])
+
+  // console.log('flo a veeer', catalogItems.length, catalogItems)
 
   return (
     <>
@@ -77,18 +78,30 @@ const AssetList = (props: Props) => {
         </>
       ) : null}
       <Card.Group>
-        {assets.length > 0
-          ? assets.map((assets, index) => (
-              <AssetCard
-                isManager={isManager}
-                key={assetType + '-' + assets.id + '-' + index}
-                asset={assets}
-              />
+        {catalogItems.length > 0
+          ? catalogItems.map((catalogItem, index) => (
+              // <AssetCard
+              //   isManager={isManager}
+              //   key={assetType + '-' + catalogItems.id + '-' + index}
+              //   asset={catalogItems}
+              // />
+              <div
+                key={index}
+                style={{ backgroundColor: 'yellow', color: 'black' }}
+              >
+                Card chanchullo :)
+                <br></br>
+                {catalogItem.name}
+                <br></br>
+                {catalogItem.price}
+                <br></br>
+                {catalogItem.rarity}
+              </div>
             ))
           : null}
       </Card.Group>
 
-      {assets.length === 0 && !isLoading ? (
+      {/* {assets.length === 0 && !isLoading ? (
         <div className="empty">
           <div className="watermelon" />
 
@@ -130,9 +143,9 @@ const AssetList = (props: Props) => {
             }}
           />
         </div>
-      ) : null}
+      ) : null} */}
 
-      {assets.length > 0 &&
+      {catalogItems.length > 0 &&
       hasExtraPages &&
       (!isLoading || isLoadingNewPage) ? (
         <div className="load-more">

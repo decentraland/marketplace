@@ -3,9 +3,9 @@ import { connect } from 'react-redux'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 
 import { RootState } from '../../modules/reducer'
-import { FETCH_NFTS_REQUEST } from '../../modules/nft/actions'
 import { browse, clearFilters } from '../../modules/routing/actions'
-import { getNFTs, getCount, getItems } from '../../modules/ui/browse/selectors'
+import { getCount } from '../../modules/ui/browse/selectors'
+// import { getCatalogItems } from '../../modules/catalog/selectors'
 import {
   getVendor,
   getPage,
@@ -15,13 +15,12 @@ import {
   getSearch,
   hasFiltersEnabled
 } from '../../modules/routing/selectors'
-import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
-import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
 import AssetList from './AssetList'
-import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
 import { buildBrowseURL } from '../../modules/routing/utils'
-import { AssetType } from '../../modules/asset/types'
+import { getLoading as getLoadingCatalog } from '../../modules/catalog/selectors'
+import { FETCH_CATALOG_REQUEST } from '../../modules/catalog/actions'
+import { getCatalogItems } from '../../modules/ui/browse/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
   const page = getPage(state)
@@ -30,20 +29,21 @@ const mapState = (state: RootState): MapStateProps => {
     vendor: getVendor(state),
     assetType,
     section: getSection(state),
-    nfts: getNFTs(state),
-    items: getItems(state),
+    // nfts: getNFTs(state),
+    // items: getItems(state),
     page,
     count: getCount(state),
     search: getSearch(state),
-    isLoading:
-      assetType === AssetType.ITEM
-        ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST)
-        : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
+    isLoading: isLoadingType(getLoadingCatalog(state), FETCH_CATALOG_REQUEST),
+    // assetType === AssetType.ITEM
+    //   ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST)
+    //   : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
     urlNext: buildBrowseURL(getLocation(state).pathname, {
       ...getCurrentBrowseOptions(state),
       page: page + 1
     }),
-    hasFiltersEnabled: hasFiltersEnabled(state)
+    hasFiltersEnabled: hasFiltersEnabled(state),
+    catalogItems: getCatalogItems(state)
   }
 }
 

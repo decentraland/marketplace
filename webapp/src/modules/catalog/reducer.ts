@@ -15,12 +15,14 @@ import { CatalogItem } from './types'
 
 export type CatalogState = {
   data: Record<string, CatalogItem>
+  // data: CatalogItem[]
   loading: LoadingState
   error: string | null
 }
 
 export const INITIAL_STATE: CatalogState = {
   data: {},
+  // data: [],
   loading: [],
   error: null
 }
@@ -43,6 +45,7 @@ export function catalogItemReducer(
     }
     case FETCH_CATALOG_SUCCESS: {
       const { catalogItems } = action.payload
+      console.log('floo a ver catalogItems', catalogItems)
       return {
         ...state,
         loading: loadingReducer(state.loading, action),

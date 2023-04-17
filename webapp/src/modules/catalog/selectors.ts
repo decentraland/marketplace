@@ -20,7 +20,7 @@ export const isFetchingCatalogItems = (
       action.payload.tokenId === tokenId
   ) !== undefined
 
-export const getCatalogItem = createSelector<
+export const getCatalogItems = createSelector<
   RootState,
   ReturnType<typeof getData>,
   CatalogItem[]
