@@ -1133,5 +1133,10 @@
   },
   "lists_page": {
     "default_title": "心愿单"
+  },
+  "claim_your_own_name": {
+    "title": "声称自己的名字",
+    "text": "在本节中，您可以找到由 Decentraland 用户列出的待售名称。或者，您可以从'构建器'部分以{mana}的固定价格声明自己唯一的名称。",
+    "btn": "认领你的名字"
   }
 }

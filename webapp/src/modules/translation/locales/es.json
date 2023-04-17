@@ -1130,5 +1130,10 @@
   },
   "lists_page": {
     "default_title": "Lista de deseos"
+  },
+  "claim_your_own_name": {
+    "title": "RECLAMA TU PROPIO NOMBRE",
+    "text": "En esta sección puede encontrar NOMBRES que están listados para la venta por los usuarios de Decentraland. Alternativamente, puede reclamar su propio NOMBRE único de la sección Constructor por un precio fijo de {mana}.",
+    "btn": "Reclama tu nombre"
   }
 }
