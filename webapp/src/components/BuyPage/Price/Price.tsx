@@ -6,7 +6,7 @@ import { Props } from './Price.types'
 const Price = (props: Props) => {
   const { network, price } = props
   return (
-    <Mana network={network} inline withTooltip>
+    <Mana showTooltip network={network} inline withTooltip>
       {formatWeiMANA(price)}
     </Mana>
   )

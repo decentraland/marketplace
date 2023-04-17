@@ -74,7 +74,9 @@ const Bid = (props: Props) => {
                 <LinkedProfile address={bid.bidder} />
               </Stats>
               <Stats className="price" title={t('bid.price')}>
-                <Mana network={bid.network}>{formatWeiMANA(bid.price)}</Mana>
+                <Mana showTooltip network={bid.network}>
+                  {formatWeiMANA(bid.price)}
+                </Mana>
               </Stats>
               <Stats title={t('bid.time_left')}>
                 {formatDistanceToNow(+bid.expiresAt)}
@@ -155,7 +157,7 @@ const Bid = (props: Props) => {
                       values={{
                         name: <b>{getAssetName(nft)}</b>,
                         amount: (
-                          <Mana network={nft.network} inline>
+                          <Mana showTooltip network={nft.network} inline>
                             {formatWeiMANA(bid.price)}
                           </Mana>
                         )

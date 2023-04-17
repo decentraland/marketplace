@@ -71,7 +71,12 @@ const Sell = (props: Props) => {
               {t('manage_asset_page.sell.price')}
             </div>
             <div className={styles.columnContent}>
-              <Mana withTooltip size={'medium'} network={order.network}>
+              <Mana
+                showTooltip
+                withTooltip
+                size={'medium'}
+                network={order.network}
+              >
                 {formatWeiMANA(order.price)}
               </Mana>
             </div>

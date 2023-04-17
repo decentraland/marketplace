@@ -11,7 +11,7 @@ const Price = ({ asset, price, title }: Props) => {
 
   return (
     <Stats title={title || t('asset_page.price')}>
-      <Mana network={asset.network} withTooltip>
+      <Mana showTooltip network={asset.network} withTooltip>
         {formatWeiMANA(price)}
       </Mana>
     </Stats>

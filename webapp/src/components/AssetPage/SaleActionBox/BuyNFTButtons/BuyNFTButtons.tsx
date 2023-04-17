@@ -30,7 +30,7 @@ const BuyNFTButtons = ({ asset }: Props) => {
         primary
         fluid
       >
-        <Mana inline size="small" network={network} />
+        <Mana showTooltip inline size="small" network={network} />
         {t('asset_page.actions.buy_with_mana')}
       </Button>
 
