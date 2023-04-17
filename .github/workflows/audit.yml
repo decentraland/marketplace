@@ -3,7 +3,7 @@ name: Audit
 on: [push, pull_request]
 
 jobs:
-  test:
+  audit:
     runs-on: ubuntu-latest
     defaults:
       run:
