@@ -897,23 +897,23 @@
       "refresh": "Refresh"
     },
     "pick_item_as_favorite_success": {
-      "title": "Item added to my list",
-      "body": "{name} was successfully added to my list",
+      "title": "Item added to wishlists",
+      "body": "{name} was successfully added to wishlists",
       "view_my_lists": "View My Lists"
     },
     "pick_item_as_favorite_failure": {
-      "title": "Error adding item to my list",
-      "body": "There was an error adding {name} to my list",
+      "title": "Error adding item to wishlists",
+      "body": "There was an error adding {name} to wishlists",
       "try_again": "Try again"
     },
     "unpick_item_as_favorite_success": {
-      "title": "Item removed from my list",
-      "body": "{name} was successfully removed from my list",
+      "title": "Item removed from wishlists",
+      "body": "{name} was successfully removed from wishlists",
       "undo": "Undo"
     },
     "unpick_item_as_favorite_failure": {
-      "title": "Error removing item from my list",
-      "body": "There was an error removing {name} from my list",
+      "title": "Error removing item from wishlists",
+      "body": "There was an error removing {name} from wishlists",
       "try_again": "Try again"
     },
     "fetch_assets_failure": {
@@ -1126,8 +1126,8 @@
     "for_rent": "Available for rent"
   },
   "favorites_counter": {
-    "pick_label": "add to my list",
-    "unpick_label": "remove from my list"
+    "pick_label": "add to wishlists",
+    "unpick_label": "remove from wishlists"
   },
   "favorites_modal": {
     "title": "Saved by",
