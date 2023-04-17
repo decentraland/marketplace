@@ -15,7 +15,7 @@
     "decentraland-crypto-fetch": "^1.0.3",
     "decentraland-dapps": "^13.47.1",
     "decentraland-transactions": "^1.43.1",
-    "decentraland-ui": "^3.88.0",
+    "decentraland-ui": "^3.95.0",
     "dotenv": "^10.0.0",
     "ethers": "^5.6.8",
     "graphql": "^14.7.0",
