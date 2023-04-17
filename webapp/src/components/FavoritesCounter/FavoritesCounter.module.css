@@ -62,8 +62,8 @@
 }
 
 .FavoritesCounter.Collapsed .bubble {
-  min-width: 32px;
-  min-height: 28px;
+  min-width: 38px;
+  min-height: 33px;
   border-radius: 13px;
   background-color: #231F20;
   border: .25px solid var(--text);
@@ -88,6 +88,11 @@
 }
 
 @media (max-width: 768px) {
+  .FavoritesCounter.Collapsed .bubble {
+    min-width: 32px;
+    min-height: 28px;
+  }
+
   .FavoritesCounter .bubble {
     opacity: 1;
   }
