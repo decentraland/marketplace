@@ -1,28 +1,30 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Card, Button, Loader } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getMaxQuerySize, MAX_PAGE, PAGE_SIZE } from '../../modules/vendor/api'
-// import { AssetCard } from '../AssetCard'
+import { AssetCard } from '../AssetCard'
 import { Props } from './AssetList.types'
 import './AssetList.css'
+import { getCategoryFromSection } from '../../modules/routing/search'
+import { NFTCategory } from '@dcl/schemas'
 
 const AssetList = (props: Props) => {
   const {
     vendor,
-    // section,
-    // assetType,
+    section,
+    assetType,
     // items,
     // nfts,
     page,
     count,
-    // search,
+    search,
     isLoading,
     // hasFiltersEnabled,
     onBrowse,
     urlNext,
-    // isManager,
+    isManager,
     // onClearFilters,
     catalogItems
   } = props
@@ -47,27 +49,32 @@ const AssetList = (props: Props) => {
 
   const isLoadingNewPage = isLoading && catalogItems.length >= PAGE_SIZE
 
-  // const emptyStateTranslationString = useMemo(() => {
-  //   if (catalogItems.length > 0) {
-  //     return ''
-  //   } else if (section) {
-  //     if (isManager) {
-  //       return 'nft_list.simple_empty'
-  //     }
+  const emptyStateTranslationString = useMemo(() => {
+    if (catalogItems.length > 0) {
+      return ''
+    } else if (section) {
+      if (isManager) {
+        return 'nft_list.simple_empty'
+      }
 
-  //     const isEmoteOrWearableSection = [
-  //       NFTCategory.EMOTE,
-  //       NFTCategory.WEARABLE
-  //     ].includes(getCategoryFromSection(section)!)
+      const isEmoteOrWearableSection = [
+        NFTCategory.EMOTE,
+        NFTCategory.WEARABLE
+      ].includes(getCategoryFromSection(section)!)
 
-  //     if (isEmoteOrWearableSection) {
-  //       return search ? 'nft_list.empty_search' : 'nft_list.empty'
-  //     }
-  //   }
-  //   return 'nft_list.simple_empty'
-  // }, [catalogItems.length, search, section, isManager])
+      if (isEmoteOrWearableSection) {
+        return search ? 'nft_list.empty_search' : 'nft_list.empty'
+      }
+    }
+    return 'nft_list.simple_empty'
+  }, [catalogItems.length, search, section, isManager])
 
-  // console.log('flo a veeer', catalogItems.length, catalogItems)
+  console.log(
+    'flo a veeer',
+    catalogItems.length,
+    catalogItems,
+    emptyStateTranslationString
+  )
 
   return (
     <>
@@ -80,23 +87,25 @@ const AssetList = (props: Props) => {
       <Card.Group>
         {catalogItems.length > 0
           ? catalogItems.map((catalogItem, index) => (
-              // <AssetCard
-              //   isManager={isManager}
-              //   key={assetType + '-' + catalogItems.id + '-' + index}
-              //   asset={catalogItems}
-              // />
-              <div
-                key={index}
-                style={{ backgroundColor: 'yellow', color: 'black' }}
-              >
-                Card chanchullo :)
-                <br></br>
-                {catalogItem.name}
-                <br></br>
-                {catalogItem.price}
-                <br></br>
-                {catalogItem.rarity}
-              </div>
+              <>
+                <AssetCard
+                  isManager={isManager}
+                  key={assetType + '-' + catalogItem.id + '-' + index}
+                  asset={catalogItem}
+                />
+                {/* <div
+                  key={index}
+                  style={{ backgroundColor: 'yellow', color: 'black' }}
+                >
+                  Card chanchullo :)
+                  <br></br>
+                  {catalogItem.name}
+                  <br></br>
+                  {catalogItem.price}
+                  <br></br>
+                  {catalogItem.rarity}
+                </div> */}
+              </>
             ))
           : null}
       </Card.Group>

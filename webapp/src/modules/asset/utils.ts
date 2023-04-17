@@ -14,6 +14,7 @@ import { locations } from '../routing/locations'
 import { addressEquals } from '../wallet/utils'
 import { openTransak } from '../transak/actions'
 import { Asset } from './types'
+import { CatalogItem } from '../catalog/types'
 
 export const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
   'buy-nfts-with-card-explanation-popup-key'
@@ -107,6 +108,10 @@ export function isOwnedBy(
 
 export function isNFT(asset: Asset): asset is NFT {
   return 'tokenId' in asset
+}
+
+export function isCatalogItem(asset: Asset): asset is CatalogItem {
+  return 'minPrice' in asset
 }
 
 export function isWearableOrEmote(asset: Asset): boolean {

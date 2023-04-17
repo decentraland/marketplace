@@ -63,8 +63,8 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
         }
         const sortBy = OrderSortBy.CHEAPEST
 
-        if (asset.network === Network.MATIC && asset.itemId) {
-          params.itemId = asset.itemId
+        if (asset.network === Network.MATIC && asset.id) {
+          params.itemId = asset.id
         } else if (asset.network === Network.ETHEREUM) {
           params.nftName = asset.name
         }

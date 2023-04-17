@@ -29,7 +29,7 @@ function* handleOpenTransak(action: OpenTransakAction) {
       appCluster: config.get('TRANSAK_PUSHER_APP_CLUSTER')
     }
   }
-  const tokenId = isNFT(asset) ? asset.tokenId : asset.itemId
+  const tokenId = isNFT(asset) ? asset.tokenId : asset.id
   const customizationOptions = {
     contractAddress: asset.contractAddress,
     tradeType: isNFT(asset) ? TradeType.SECONDARY : TradeType.PRIMARY,

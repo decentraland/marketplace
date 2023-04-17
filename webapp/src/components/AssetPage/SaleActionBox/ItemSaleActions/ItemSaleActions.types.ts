@@ -1,8 +1,9 @@
 import { Item } from '@dcl/schemas'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
+import { CatalogItem } from '../../../../modules/catalog/types'
 
 export type Props = {
-  item: Item
+  item: Item | CatalogItem
   wallet: Wallet | null
 }
 

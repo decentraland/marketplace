@@ -13,7 +13,7 @@ import { Props } from './BuyNFTButtons.types'
 const BuyNFTButtons = ({ asset, buyWithCardClassName }: Props) => {
   const { contractAddress, network } = asset
   const assetType = isNFT(asset) ? AssetType.NFT : AssetType.ITEM
-  const assetId = isNFT(asset) ? asset.tokenId : asset.itemId
+  const assetId = isNFT(asset) ? asset.tokenId : asset.id
 
   const analytics = getAnalytics()
 
