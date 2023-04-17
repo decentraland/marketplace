@@ -41,7 +41,7 @@
 .FavoritesCounter .bubble {
   opacity: 0;
   min-width: 65px;
-  height: 32px;
+  min-height: 32px;
   background-color: rgb(35, 31, 32, 0.4);
   color: var(--text);
   border-radius: 50px;
