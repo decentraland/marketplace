@@ -27,8 +27,6 @@ const BaseDetail = ({
 }: Props) => {
   const isMobile = useMobileMediaQuery()
 
-  console.log('isMobile', isMobile)
-
   return (
     <div className={classNames('BaseDetail', className)}>
       {isFavoritesEnabled && isMobile && !isNFT(asset) ? (
