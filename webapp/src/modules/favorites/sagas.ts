@@ -155,7 +155,7 @@ function* handleFetchFavoritedItemsRequest(
     if (results.length > 0) {
       yield put(fetchItemsRequest(options))
     } else {
-      yield put(fetchItemsSuccess([], 0, options, Date.now()))
+      yield put(fetchItemsSuccess([], total, options, Date.now()))
     }
 
     yield put(fetchFavoritedItemsSuccess(results, total))
