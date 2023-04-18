@@ -894,23 +894,23 @@
       "refresh": "刷新"
     },
     "pick_item_as_favorite_success": {
-      "title": "项目已添加到收藏夹",
-      "body": "{name} 已添加到收藏夹",
+      "title": "商品添加到愿望单",
+      "body": "{name} 已成功添加到心愿单",
       "view_my_lists": "查看我的列表"
     },
     "pick_item_as_favorite_failure": {
-      "title": "将项目添加到收藏夹时出错",
-      "body": "将 {name} 添加到收藏夹时出错",
+      "title": "将项目添加到愿望清单时出错",
+      "body": "将 {name} 添加到心愿单时出错",
       "try_again": "再试一次"
     },
     "unpick_item_as_favorite_success": {
-      "title": "从收藏夹中删除的项目",
-      "body": "{name} 已从收藏夹中删除",
+      "title": "从愿望清单中删除的项目",
+      "body": "{name} 已成功从心愿单中删除",
       "undo": "撤消"
     },
     "unpick_item_as_favorite_failure": {
-      "title": "从收藏夹中删除项目时出错",
-      "body": "从收藏夹中删除 {name} 时出错",
+      "title": "从心愿单中删除项目时出错",
+      "body": "从心愿单中删除 {name} 时出错",
       "try_again": "再试一次"
     },
     "fetch_assets_failure": {
@@ -1123,8 +1123,8 @@
     "for_rent": "可供出租"
   },
   "favorites_counter": {
-    "pick_label": "选择最喜欢的",
-    "unpick_label": "取消收藏"
+    "pick_label": "添加到心愿单",
+    "unpick_label": "从愿望单中移除"
   },
   "favorites_modal": {
     "title": "由保存",

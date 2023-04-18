@@ -129,6 +129,7 @@ function* handlePickItemAsFavoriteSuccess(
   action: PickItemAsFavoriteSuccessAction
 ) {
   const { item } = action.payload
+  yield put(hideAllToasts())
   yield put(showToast(getPickItemAsFavoriteSuccessToast(item), 'bottom center'))
 }
 
@@ -136,6 +137,7 @@ function* handlePickItemAsFavoriteFailure(
   action: PickItemAsFavoriteFailureAction
 ) {
   const { item } = action.payload
+  yield put(hideAllToasts())
   yield put(showToast(getPickItemAsFavoriteFailureToast(item), 'bottom center'))
 }
 
@@ -143,6 +145,7 @@ function* handleUnpickItemAsFavoriteSuccess(
   action: UnpickItemAsFavoriteSuccessAction
 ) {
   const { item } = action.payload
+  yield put(hideAllToasts())
   yield put(
     showToast(getUnpickItemAsFavoriteSuccessToast(item), 'bottom center')
   )
@@ -152,6 +155,7 @@ function* handleUnpickItemAsFavoriteFailure(
   action: UnpickItemAsFavoriteFailureAction
 ) {
   const { item } = action.payload
+  yield put(hideAllToasts())
   yield put(
     showToast(getUnpickItemAsFavoriteFailureToast(item), 'bottom center')
   )
