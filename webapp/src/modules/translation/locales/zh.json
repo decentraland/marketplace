@@ -1134,6 +1134,62 @@
   "lists_page": {
     "default_title": "心愿单"
   },
+  "mana_authorization_modal": {
+    "waiting_wallet": "确认钱包上的交易",
+    "waiting_confirmation": "处理授权",
+    "done": "完毕",
+    "title": "完成您的 {action}",
+    "authorize": {
+      "title": "首先，授权<contract></contract> 合同运营 MANA 代表您在分权中。 ",
+      "description": "请记住，某些钱包需要设置自定义 MANA 支出限制.输入商品价格 {price} MANA 或您现在或以后花费更高的钱。您可以随时更改限制。",
+      "action": "授权",
+      "message": "切记设置一个等于物品价格的上限{price} MANA 或更高。"
+    },
+    "confirm_transaction": {
+      "title": "确认交易到 {action} 项目",
+      "action": "确认交易"
+    },
+    "revoke_cap": {
+      "title": "撤销您当前的支出上限",
+      "description": "您目前的支出限额低于{price} MANA. 在制作新的支出之前，您必须撤销当前的支出上限。",
+      "action": "授权"
+    },
+    "set_cap": {
+      "title": "设置新的支出帽",
+      "description": "输入商品价格{price} MANA 或您现在或以后花费更高的钱。您可以随时更改限制。",
+      "action": "授权"
+    },
+    "mint": {
+      "title_action": "购买",
+      "contract": "Collection Store",
+      "action": "买"
+    },
+    "buy": {
+      "title_action": "购买",
+      "contract": "Marketplace",
+      "action": "买"
+    },
+    "bid": {
+      "title_action": "提供",
+      "contract": "Bids",
+      "action": "提供"
+    },
+    "rent": {
+      "title_action": "租金",
+      "contract": "Rentals",
+      "action": "租"
+    },
+    "claim_name": {
+      "title_action": "购买",
+      "contract": "DCLController",
+      "action": "宣称"
+    },
+    "swap_mana": {
+      "title_action": "交换",
+      "contract": "ERC20PredicateProxy",
+      "action": "交换"
+    }
+  },
   "claim_your_own_name": {
     "title": "声称自己的名字",
     "text": "在本节中，您可以找到由 Decentraland 用户列出的待售名称。或者，您可以从'构建器'部分以{mana}的固定价格声明自己唯一的名称。",
