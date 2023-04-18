@@ -2,6 +2,7 @@ import { Section } from '../../modules/vendor/decentraland/routing/types'
 
 export const enum AssetFilter {
   Rarity,
+  Status,
   Price,
   Collection,
   Creators,
@@ -14,6 +15,7 @@ export const enum AssetFilter {
 
 const WearablesFilters = [
   AssetFilter.Rarity,
+  AssetFilter.Status,
   AssetFilter.Price,
   AssetFilter.Network,
   AssetFilter.BodyShape,

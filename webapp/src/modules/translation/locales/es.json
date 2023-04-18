@@ -349,6 +349,16 @@
       "male": "Solo masculino",
       "unisex": "Solo unisex"
     },
+    "status": {
+      "title": "Estado",
+      "on_sale": "En venta",
+      "on_sale_tooltip": "Incluye items disponible para mintear o publicaciones disponibles",
+      "only_minting": "Solo disponible para mintear",
+      "only_minting_tooltip": "Solo incluye items disponibles para mintear (comprando directamente al creador).",
+      "only_listing": "Solo publicaciones",
+      "only_listing_tooltip": "Solo incluye items que estan siendo re-vendidos",
+      "not_for_sale": "No a la venta"
+    },
     "rarities": {
       "title": "Rareza",
       "all_items": "Todas las rarezas",

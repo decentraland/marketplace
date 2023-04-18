@@ -7,6 +7,7 @@ import {
   WearableGender,
   GenderFilterOption
 } from '@dcl/schemas'
+import { AssetStatusFilter } from '../../utils/filters'
 import { AssetType } from '../asset/types'
 import { VendorName } from '../vendor/types'
 import { View } from '../ui/types'
@@ -46,6 +47,7 @@ export type BrowseOptions = {
   isMap?: boolean
   isFullscreen?: boolean
   rarities?: Rarity[]
+  status?: AssetStatusFilter
   wearableGenders?: (WearableGender | GenderFilterOption)[]
   search?: string
   contracts?: string[]
