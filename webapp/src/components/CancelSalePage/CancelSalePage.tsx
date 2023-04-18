@@ -53,7 +53,7 @@ const CancelSalePage = (props: Props) => {
                       values={{
                         name: <b>{name}</b>,
                         amount: (
-                          <Mana network={nft.network} inline>
+                          <Mana showTooltip network={nft.network} inline>
                             {formatWeiMANA(order.price)}
                           </Mana>
                         )

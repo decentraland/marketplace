@@ -199,7 +199,7 @@ const CollectionPage = (props: Props) => {
                             {filteredItems.map(item => (
                               <div key={item.id} className="mobile-row">
                                 <AssetCell asset={item} />
-                                <Mana network={item.network} inline>
+                                <Mana showTooltip network={item.network} inline>
                                   {formatWeiMANA(item.price)}
                                 </Mana>
                               </div>
@@ -224,7 +224,11 @@ const CollectionPage = (props: Props) => {
                                   ).toLocaleString()}
                                 </Table.Cell>
                                 <Table.Cell>
-                                  <Mana network={item.network} inline>
+                                  <Mana
+                                    showTooltip
+                                    network={item.network}
+                                    inline
+                                  >
                                     {formatWeiMANA(item.price)}
                                   </Mana>
                                 </Table.Cell>

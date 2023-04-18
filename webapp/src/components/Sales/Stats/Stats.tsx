@@ -51,6 +51,7 @@ const Stats = ({
         isLoading={isLoading}
         icon={
           <Mana
+            showTooltip
             className="ethereum-earnings-icon"
             network={Network.ETHEREUM}
             size="large"
@@ -63,6 +64,7 @@ const Stats = ({
         isLoading={isLoading}
         icon={
           <Mana
+            showTooltip
             className="polygon-earnings-icon"
             network={Network.MATIC}
             size="medium"

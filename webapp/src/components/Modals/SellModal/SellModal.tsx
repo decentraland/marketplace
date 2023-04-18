@@ -245,7 +245,7 @@ const SellModal = ({
               values={{
                 name: <b>{getAssetName(nft)}</b>,
                 amount: (
-                  <Mana network={nft.network} inline>
+                  <Mana showTooltip network={nft.network} inline>
                     {parseMANANumber(price).toLocaleString()}
                   </Mana>
                 )
@@ -384,7 +384,7 @@ const SellModal = ({
               values={{
                 name: <b>{assetName}</b>,
                 amount: (
-                  <Mana network={nft.network} inline>
+                  <Mana showTooltip network={nft.network} inline>
                     {formatWeiMANA(order.price)}
                   </Mana>
                 )

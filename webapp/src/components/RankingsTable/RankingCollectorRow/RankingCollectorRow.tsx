@@ -33,7 +33,7 @@ const RankingCollectorRow = ({ entity }: Props) => {
           </div>
           <div className="rankings-collector-right-data">
             <>
-              <Mana network={Network.MATIC} inline>
+              <Mana showTooltip network={Network.MATIC} inline>
                 {entity.spent && formatWeiMANA(entity.spent)}
               </Mana>
               <span className="rankings-fiat-price">
@@ -100,7 +100,7 @@ const RankingCollectorRow = ({ entity }: Props) => {
             <Table.Cell width={3}>{entity.creatorsSupported}</Table.Cell>
             <Table.Cell width={4}>{entity.uniqueAndMythicItems}</Table.Cell>
             <Table.Cell>
-              <Mana network={Network.MATIC} inline>
+              <Mana showTooltip network={Network.MATIC} inline>
                 {entity.spent && formatWeiMANA(entity.spent)}
               </Mana>
               <span className="rankings-fiat-price">

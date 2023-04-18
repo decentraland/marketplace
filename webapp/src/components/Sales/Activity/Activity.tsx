@@ -46,7 +46,7 @@ const Activity = ({
                   <div key={sale.id} className="mobile-row">
                     <AssetCell asset={assets[sale.id]} />
 
-                    <Mana network={sale.network} inline>
+                    <Mana showTooltip network={sale.network} inline>
                       {formatWeiMANA(sale.price)}
                     </Mana>
                   </div>
@@ -85,7 +85,7 @@ const Activity = ({
                         </Table.Cell>
                         <Table.Cell>{t(`global.${sale.type}`)}</Table.Cell>
                         <Table.Cell>
-                          <Mana network={sale.network} inline>
+                          <Mana showTooltip network={sale.network} inline>
                             {formatWeiMANA(sale.price)}
                           </Mana>
                         </Table.Cell>

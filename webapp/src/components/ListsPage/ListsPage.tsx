@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { Page, Header } from 'decentraland-ui'
+import { useLocation } from 'react-router-dom'
+import { Header } from 'decentraland-ui'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { locations } from '../../modules/routing/locations'
 import { View } from '../../modules/ui/types'
@@ -15,34 +16,32 @@ import styles from './ListsPage.module.css'
 
 const ListsPage = ({ wallet, isConnecting, onRedirect }: Props) => {
   // Redirect to signIn if trying to access current account without a wallet
+  const { pathname, search } = useLocation()
+
   useEffect(() => {
     if (!isConnecting && !wallet) {
-      onRedirect(locations.signIn())
+      onRedirect(locations.signIn(`${pathname}${search}`))
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnecting, wallet, onRedirect])
 
   return (
-    <div className={styles.ListsPage}>
+    <>
       <Navbar isFullscreen />
       <Navigation activeTab={NavigationTab.MY_LISTS} />
-      <Page>
-        <Header sub className={styles.back}>
-          {/* TODO: use it on V1 */}
-          {/* <a href={locations.lists()}>{`< ${t('global.back')}`}</a> */}
-        </Header>
-        <Header size="large">
-          {/* TODO: use the name of the selected list */}
-          {t('lists_page.default_title')}
-        </Header>
+      <Header className={styles.header} size="large">
+        {/* TODO: use the name of the selected list */}
+        {t('lists_page.default_title')}
+      </Header>
+      {wallet ? (
         <AssetBrowse
           view={View.LISTS}
           section={Section.LISTS}
           vendor={VendorName.DECENTRALAND}
-          isFullscreen
         />
-      </Page>
-      <Footer isFullscreen />
-    </div>
+      ) : null}
+      <Footer />
+    </>
   )
 }
 

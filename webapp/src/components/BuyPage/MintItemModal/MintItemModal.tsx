@@ -218,7 +218,7 @@ const MintItemModal = (props: Props) => {
               isBuyWithCardPage ? (
                 <Icon name="credit card outline" />
               ) : (
-                <Mana inline size="small" network={item.network} />
+                <Mana showTooltip inline size="small" network={item.network} />
               )
             ) : null}
             {t(`${translationPageDescriptorId}.action`)}

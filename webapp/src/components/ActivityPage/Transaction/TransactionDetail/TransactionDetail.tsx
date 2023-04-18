@@ -42,6 +42,7 @@ const TransactionDetail = (props: Props) => {
             </Link>
           ) : (
             <Mana
+              showTooltip
               network={
                 tx.chainId
                   ? getChainConfiguration(tx.chainId).network

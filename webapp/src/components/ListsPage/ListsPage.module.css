@@ -1,24 +1,3 @@
-.ListsPage .PageHeader {
-  display: flex;
-  align-items: center;
-  background-color: var(--card);
-}
-
-.ListsPage .PageHeader > div {
-  margin: auto;
-  text-align: center;
-}
-
-.ListsPage ul.Menu {
-  margin-top: 0;
-  overflow: hidden;
-}
-
-.ListsPage .blockie-address {
-  margin-top: 16px;
-  font-size: 17px;
-}
-
-.back {
-  text-transform: none !important;
+.header:global(.ui.header) {
+  margin-left: 24px
 }

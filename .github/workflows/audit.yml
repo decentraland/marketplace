@@ -1,0 +1,16 @@
+name: Audit
+
+on: [push, pull_request]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./webapp
+    steps:
+      - uses: actions/checkout@master
+      - name: Install
+        run: npm ci
+      - name: Audit signatures
+        run: npm audit signatures

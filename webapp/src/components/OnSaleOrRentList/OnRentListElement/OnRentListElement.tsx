@@ -34,7 +34,7 @@ const OnRentListElement = ({
             asset={nft}
             link={locations.manage(nft.contractAddress, nft.tokenId)}
           />
-          <Mana network={nft.network} inline>
+          <Mana showTooltip network={nft.network} inline>
             {formatWeiMANA(rental.periods[0].pricePerDay)}
           </Mana>
         </div>
@@ -70,7 +70,7 @@ const OnRentListElement = ({
             ) : null}
           </Table.Cell>
           <Table.Cell>
-            <Mana network={nft.network} inline>
+            <Mana showTooltip network={nft.network} inline>
               {formatWeiMANA(rental.periods[0].pricePerDay)}
             </Mana>
           </Table.Cell>

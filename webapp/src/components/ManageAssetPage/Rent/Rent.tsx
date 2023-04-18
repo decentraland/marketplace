@@ -232,6 +232,7 @@ export const Rent = (props: Props) => {
                 </div>
                 <div className={styles.columnContent}>
                   <Mana
+                    showTooltip
                     withTooltip
                     size={'medium'}
                     className={styles.price}

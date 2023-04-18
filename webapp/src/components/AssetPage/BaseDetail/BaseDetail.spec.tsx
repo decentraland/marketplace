@@ -1,18 +1,26 @@
 import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media'
 import { Asset } from '../../../modules/asset/types'
-import { getAssetName } from '../../../modules/asset/utils'
 import { INITIAL_STATE } from '../../../modules/favorites/reducer'
 import { renderWithProviders } from '../../../utils/test'
-import Title from './Title'
-import { Props as TitleProps } from './Title.types'
+import BaseDetail from './BaseDetail'
+import { Props as BaseDetailProps } from './BaseDetail.types'
 
 jest.mock('decentraland-ui/dist/components/Media')
 
 const FAVORITES_COUNTER_TEST_ID = 'favorites-counter'
 
-function renderTitle(props: Partial<TitleProps> = {}) {
+function renderBaseDetail(props: Partial<BaseDetailProps> = {}) {
   return renderWithProviders(
-    <Title asset={{} as Asset} isFavoritesEnabled={false} {...props} />,
+    <BaseDetail
+      asset={{} as Asset}
+      assetImage={undefined}
+      isFavoritesEnabled={false}
+      badges={undefined}
+      left={undefined}
+      box={undefined}
+      isOnSale
+      {...props}
+    />,
     {
       preloadedState: {
         favorites: {
@@ -29,7 +37,7 @@ function renderTitle(props: Partial<TitleProps> = {}) {
   )
 }
 
-describe('Title', () => {
+describe('BaseDetail', () => {
   let asset: Asset
   let useMobileMediaQueryMock: jest.MockedFunction<typeof useMobileMediaQuery>
 
@@ -40,18 +48,13 @@ describe('Title', () => {
     >
   })
 
-  it('should render the Asset Name', () => {
-    const { getByText } = renderTitle({ asset, isFavoritesEnabled: true })
-    expect(getByText(getAssetName(asset))).toBeInTheDocument()
-  })
-
-  describe('when the dispositive is mobile', () => {
+  describe('when the dispositive is not mobile', () => {
     beforeEach(() => {
-      useMobileMediaQueryMock.mockReturnValue(true)
+      useMobileMediaQueryMock.mockReturnValue(false)
     })
 
     it('should not render the favorites counter', () => {
-      const { queryByTestId } = renderTitle({
+      const { queryByTestId } = renderBaseDetail({
         asset,
         isFavoritesEnabled: false
       })
@@ -59,14 +62,14 @@ describe('Title', () => {
     })
   })
 
-  describe('when the dispositive is not mobile', () => {
+  describe('when the dispositive is mobile', () => {
     beforeEach(() => {
-      useMobileMediaQueryMock.mockReturnValue(false)
+      useMobileMediaQueryMock.mockReturnValue(true)
     })
 
     describe('and the favorites feature flag is not enabled', () => {
       it('should not render the favorites counter', () => {
-        const { queryByTestId } = renderTitle({
+        const { queryByTestId } = renderBaseDetail({
           asset,
           isFavoritesEnabled: false
         })
@@ -81,7 +84,7 @@ describe('Title', () => {
         })
 
         it('should not render the favorites counter', () => {
-          const { queryByTestId } = renderTitle({
+          const { queryByTestId } = renderBaseDetail({
             asset,
             isFavoritesEnabled: true
           })
@@ -95,7 +98,7 @@ describe('Title', () => {
         })
 
         it('should render the favorites counter', () => {
-          const { getByTestId } = renderTitle({
+          const { getByTestId } = renderBaseDetail({
             asset,
             isFavoritesEnabled: true
           })

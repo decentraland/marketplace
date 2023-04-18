@@ -256,7 +256,7 @@ const RecentlySoldTable = (props: Props) => {
                   <div className="sale-item-right-data">
                     {item ? (
                       <>
-                        <Mana network={item?.network} inline>
+                        <Mana showTooltip network={item?.network} inline>
                           {formatWeiMANA(sale.price)}
                         </Mana>
                         <span className="rankings-fiat-price">
@@ -371,7 +371,7 @@ const RecentlySoldTable = (props: Props) => {
               })}
             </Table.Cell>
             <Table.Cell width={2}>
-              <Mana network={item?.network} inline>
+              <Mana showTooltip network={item?.network} inline>
                 {formatWeiMANA(sale.price)}
               </Mana>
               <span className="rankings-fiat-price">
@@ -424,7 +424,7 @@ const RecentlySoldTable = (props: Props) => {
                   <div className="sale-item-right-data">
                     {asset ? (
                       <>
-                        <Mana network={asset?.network} inline>
+                        <Mana showTooltip network={asset?.network} inline>
                           {formatWeiMANA(sale.price)}
                         </Mana>
                         <span className="rankings-fiat-price">
@@ -521,7 +521,7 @@ const RecentlySoldTable = (props: Props) => {
               })}
             </Table.Cell>
             <Table.Cell width={2}>
-              <Mana network={asset?.network} inline>
+              <Mana showTooltip network={asset?.network} inline>
                 {formatWeiMANA(sale.price)}
               </Mana>
               <span className="rankings-fiat-price">

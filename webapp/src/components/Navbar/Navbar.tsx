@@ -15,7 +15,12 @@ const Navbar = (props: Props) => {
   }
 
   const handleOnSignIn = useCallback(() => {
-    onNavigate(locations.signIn(`${pathname}${search}`))
+    const searchParams = new URLSearchParams(search)
+    const currentRedirectTo = searchParams.get('redirectTo')
+    const redirectTo = !currentRedirectTo
+      ? `${pathname}${search}`
+      : currentRedirectTo
+    onNavigate(locations.signIn(redirectTo))
   }, [onNavigate, pathname, search])
 
   const handleOnClickAccount = useCallback(() => {

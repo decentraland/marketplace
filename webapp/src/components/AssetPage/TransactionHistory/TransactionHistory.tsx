@@ -129,7 +129,7 @@ const TransactionHistory = (props: Props) => {
                       {formatEventDate(sale.timestamp)}
                     </Table.Cell>
                     <Table.Cell>
-                      <Mana network={network} inline>
+                      <Mana showTooltip network={network} inline>
                         {formatWeiMANA(sale.price)}
                       </Mana>
                     </Table.Cell>
@@ -144,7 +144,7 @@ const TransactionHistory = (props: Props) => {
               {sales.map(sale => (
                 <div className="mobile-tx-history-row" key={sale.id}>
                   <div className="price">
-                    <Mana network={network} inline>
+                    <Mana showTooltip network={network} inline>
                       {formatWeiMANA(sale.price)}
                     </Mana>
                   </div>

@@ -15,7 +15,7 @@ const OnSaleListElement = ({ nft, item, order }: Props) => {
       <Mobile>
         <div className="mobile-row">
           <AssetCell asset={item || nft!} />
-          <Mana network={item?.network || nft!.network} inline>
+          <Mana showTooltip network={item?.network || nft!.network} inline>
             {formatWeiMANA(item?.price || order!.price)}
           </Mana>
         </div>
@@ -30,7 +30,7 @@ const OnSaleListElement = ({ nft, item, order }: Props) => {
             {t(`global.${item ? 'primary' : 'secondary'}`)}
           </Table.Cell>
           <Table.Cell>
-            <Mana network={item?.network || nft!.network} inline>
+            <Mana showTooltip network={item?.network || nft!.network} inline>
               {formatWeiMANA(item?.price || order!.price)}
             </Mana>
           </Table.Cell>

@@ -113,7 +113,7 @@ const RentalHistory = (props: Props) => {
                       })}
                     </Table.Cell>
                     <Table.Cell>
-                      <Mana network={network} inline>
+                      <Mana showTooltip network={network} inline>
                         {formatWeiMANA(
                           getRentalChosenPeriod(rental).pricePerDay
                         )}
@@ -135,7 +135,7 @@ const RentalHistory = (props: Props) => {
                       values={{
                         days: rental.rentedDays,
                         pricePerDay: (
-                          <Mana network={network} inline>
+                          <Mana showTooltip network={network} inline>
                             {formatWeiMANA(
                               getRentalChosenPeriod(rental).pricePerDay
                             )}

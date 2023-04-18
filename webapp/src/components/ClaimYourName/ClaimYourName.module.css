@@ -1,0 +1,76 @@
+.gradient {
+  height: 152px;
+  width: 100%;
+  margin-bottom: 11px;
+  border-radius: 14.482757568359375px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.gradient::before {
+  content: '';
+  position: absolute;
+  aspect-ratio: 1/1;
+  width: 105%;
+  background-image: radial-gradient(
+      100% 100% at 6% 9%,
+      #ffbc5bff 2%,
+      #ffffff00 73%
+    ),
+    linear-gradient(60deg, #ff2d55 18%, #c640cd 100%);
+  z-index: -1;
+  animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 767px) {
+  .gradient {
+    display: none;
+  }
+}
+
+.container {
+  height: 146px;
+  width: calc(100% - 6px);
+  background: #242129;
+  border-radius: 14.482757568359375px;
+  display: flex;
+  align-items: center;
+  padding: 0 33px 0 15px;
+}
+
+.img {
+  margin-right: 14px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0px;
+  text-align: left;
+}
+
+.text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+.btn {
+  max-width: 222px;
+  margin-left: 21px !important;
+}

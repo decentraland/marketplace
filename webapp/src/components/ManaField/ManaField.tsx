@@ -27,7 +27,7 @@ export default class ManaField extends React.PureComponent<Props> {
         value={value}
         icon={
           <>
-            <Mana network={network} />
+            <Mana showTooltip network={network} />
             {mana ? (
               <div className="mana-to-fiat">
                 <ManaToFiat mana={mana} />
