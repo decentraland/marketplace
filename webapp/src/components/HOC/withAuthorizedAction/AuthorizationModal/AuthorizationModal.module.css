@@ -1,0 +1,17 @@
+.modalContainer {
+  padding: 45px 32px;
+  width: 100%;
+  max-width: 580px;
+}
+
+.header {
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 32px;
+  margin-bottom: 48px;
+  margin-top: 0;
+}
+
+.contractName {
+  color: var(--primary)
+}

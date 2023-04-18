@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import compact from 'lodash/compact'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
-import { NFTCategory } from '@dcl/schemas'
+import { Contract, NFTCategory } from '@dcl/schemas'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -10,7 +10,6 @@ import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
-import { hasAuthorizationAndEnoughAllowance } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { isWearableOrEmote } from '../../../modules/asset/utils'
@@ -19,7 +18,6 @@ import { useFingerprint } from '../../../modules/nft/hooks'
 import { getContractNames } from '../../../modules/vendor'
 import * as events from '../../../utils/events'
 import { AssetType } from '../../../modules/asset/types'
-import { AuthorizationModal } from '../../AuthorizationModal'
 import { AssetAction } from '../../AssetAction'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
@@ -32,13 +30,14 @@ import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
 import { NotEnoughMana } from '../NotEnoughMana'
 import { PriceHasChanged } from '../PriceHasChanged'
 import { Props } from './BuyNFTModal.types'
+import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
+import { AuthorizationAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 
 const BuyNFTModal = (props: Props) => {
   const {
     nft,
     order,
     wallet,
-    authorizations,
     isLoading,
     isOwner,
     hasInsufficientMANA,
@@ -46,12 +45,11 @@ const BuyNFTModal = (props: Props) => {
     isBuyWithCardPage,
     getContract,
     onExecuteOrder,
-    onExecuteOrderWithCard
+    onExecuteOrderWithCard,
+    onAuthorizedAction
   } = props
 
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
-  const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
-
   const analytics = getAnalytics()
 
   const handleExecuteOrder = useCallback(() => {
@@ -75,66 +73,38 @@ const BuyNFTModal = (props: Props) => {
     if (isBuyWithCardPage) analytics.track(events.CANCEL_BUY_NFT_WITH_CARD)
   }, [analytics, isBuyWithCardPage])
 
-  const authorization: Authorization | null = useMemo(() => {
+  const authorization: Authorization = useMemo(() => {
     const contractNames = getContractNames()
 
     const mana = getContract({
       name: contractNames.MANA,
       network: nft.network
-    })
+    }) as Contract
 
     // If the vendor is a partner we might need to use a different contract for authorizedAddress. See PR #680
-    return mana
-      ? {
-          address: wallet.address,
-          authorizedAddress: order!.marketplaceAddress,
-          contractAddress: mana.address,
-          contractName: ContractName.MANAToken,
-          chainId: nft.chainId,
-          type: AuthorizationType.ALLOWANCE
-        }
-      : null
+    return {
+      address: wallet.address,
+      authorizedAddress: order!.marketplaceAddress,
+      contractAddress: mana.address,
+      contractName: ContractName.MANAToken,
+      chainId: nft.chainId,
+      type: AuthorizationType.ALLOWANCE
+    }
   }, [getContract, nft.network, nft.chainId, wallet.address, order])
 
-  const shouldUpdateSpendingCap: boolean = useMemo<boolean>(() => {
-    return (
-      !!authorizations &&
-      !!authorization &&
-      !!order?.price &&
-      !hasAuthorizationAndEnoughAllowance(
-        authorizations,
-        authorization,
-        order.price
-      )
-    )
-  }, [authorizations, authorization, order?.price])
-
   const handleSubmit = useCallback(() => {
-    if (
-      (authorization &&
-        order?.price &&
-        hasAuthorizationAndEnoughAllowance(
-          authorizations,
-          authorization,
-          order.price
-        )) ||
-      isBuyWithCardPage
-    ) {
+    console.log({isBuyWithCardPage})
+    if (isBuyWithCardPage) {
       handleExecuteOrder()
-    } else {
-      setShowAuthorizationModal(true)
+      return;
     }
+    onAuthorizedAction(authorization, order?.price || '', handleExecuteOrder)
   }, [
-    authorizations,
     authorization,
     handleExecuteOrder,
+    onAuthorizedAction,
     isBuyWithCardPage,
-    setShowAuthorizationModal,
     order?.price
-  ])
-
-  const handleClose = useCallback(() => setShowAuthorizationModal(false), [
-    setShowAuthorizationModal
   ])
 
   const isDisabled =
@@ -258,17 +228,8 @@ const BuyNFTModal = (props: Props) => {
           translationPageDescriptorId={translationPageDescriptorId}
         />
       ) : null}
-      {authorization ? (
-        <AuthorizationModal
-          open={showAuthorizationModal}
-          authorization={authorization}
-          shouldUpdateSpendingCap={shouldUpdateSpendingCap}
-          onProceed={handleExecuteOrder}
-          onCancel={handleClose}
-        />
-      ) : null}
     </AssetAction>
   )
 }
 
-export default React.memo(BuyNFTModal)
+export default React.memo(withAuthorizedAction(BuyNFTModal, AuthorizationAction.BUY))

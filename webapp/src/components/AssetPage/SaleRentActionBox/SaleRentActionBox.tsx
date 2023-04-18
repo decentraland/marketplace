@@ -7,7 +7,6 @@ import { Link } from 'react-router-dom'
 import { Button, Popup } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import { hasAuthorizationAndEnoughAllowance } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
 import { formatWeiMANA } from '../../../lib/mana'
 import {
@@ -28,11 +27,12 @@ import { isOwnedBy } from '../../../modules/asset/utils'
 import { addressEquals, formatBalance } from '../../../modules/wallet/utils'
 import { Mana } from '../../Mana'
 import { ManaToFiat } from '../../ManaToFiat'
-import { AuthorizationModal } from '../../AuthorizationModal'
 import { LinkedProfile } from '../../LinkedProfile'
 import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
+import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
+import { AuthorizationAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 
 enum View {
   SALE,
@@ -42,11 +42,11 @@ enum View {
 const SaleRentActionBox = ({
   nft,
   wallet,
-  authorizations,
   order,
   rental,
   userHasAlreadyBidsOnNft,
   currentMana,
+  onAuthorizedAction,
   getContract,
   onRent
 }: Props) => {
@@ -79,7 +79,6 @@ const SaleRentActionBox = ({
   const isBiddable = bidService !== undefined
   const canBid = !isOwner && isBiddable && !userHasAlreadyBidsOnNft
   const isCurrentlyRented = isRentalListingExecuted(rental)
-  const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
   const authorization = useMemo(() => {
     if (!wallet) {
       return null
@@ -101,39 +100,21 @@ const SaleRentActionBox = ({
     )
   }, [wallet, getContract, nft.network])
 
-  const shouldUpdateSpendingCap: boolean =
-    !!authorization &&
-    selectedRentalPeriodIndex !== undefined &&
-    !!rental &&
-    (() => {
-      const bnPricePerDay = ethers.BigNumber.from(
-        rental.periods[selectedRentalPeriodIndex].pricePerDay
-      )
-
-      const bnMaxDays = ethers.BigNumber.from(
-        rental.periods[selectedRentalPeriodIndex].maxDays
-      )
-
-      return !hasAuthorizationAndEnoughAllowance(
-        authorizations,
-        authorization,
-        bnPricePerDay.mul(bnMaxDays).toString()
-      )
-    })()
-
   const handleOnRent = useCallback(() => {
-    if (!shouldUpdateSpendingCap) {
-      setShowAuthorizationModal(false)
+    if (!rental || selectedRentalPeriodIndex === undefined || !authorization) return;
+    const bnPricePerDay = ethers.BigNumber.from(
+      rental.periods[selectedRentalPeriodIndex].pricePerDay
+    )
+  
+    const bnMaxDays = ethers.BigNumber.from(
+      rental.periods[selectedRentalPeriodIndex].maxDays
+    )
+  
+    const price = bnPricePerDay.mul(bnMaxDays).toString()
+  
+    onAuthorizedAction(authorization, price, () => console.log("onRent(selectedRentalPeriodIndex)", onRent))
+  }, [selectedRentalPeriodIndex, authorization, rental, onRent, onAuthorizedAction])
 
-      if (selectedRentalPeriodIndex !== undefined) {
-        onRent(selectedRentalPeriodIndex)
-      }
-    } else {
-      setShowAuthorizationModal(true)
-    }
-  }, [onRent, selectedRentalPeriodIndex, shouldUpdateSpendingCap])
-
-  const handleCloseAuthorizationModal = () => setShowAuthorizationModal(false)
   const rentalEndDate: Date | null = isCurrentlyRented
     ? getRentalEndDate(rental!)
     : null
@@ -401,15 +382,6 @@ const SaleRentActionBox = ({
             {t('asset_page.actions.manage')}
           </Button>
         ) : null}
-        {authorization ? (
-          <AuthorizationModal
-            open={showAuthorizationModal}
-            authorization={authorization}
-            shouldUpdateSpendingCap={shouldUpdateSpendingCap}
-            onProceed={handleOnRent}
-            onCancel={handleCloseAuthorizationModal}
-          />
-        ) : null}
       </div>
       {isCurrentlyRented && !rentalHasEnded && !isTenant && !isOwner ? (
         <div className={styles.message}>
@@ -433,4 +405,4 @@ const SaleRentActionBox = ({
   )
 }
 
-export default memo(SaleRentActionBox)
+export default memo(withAuthorizedAction(SaleRentActionBox, AuthorizationAction.RENT))
