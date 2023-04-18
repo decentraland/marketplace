@@ -180,6 +180,11 @@ export const getRarities = createSelector<RootState, string, Rarity[]>(
     )
 )
 
+export const getStatus = createSelector<RootState, string, string>(
+  getRouterSearch,
+  search => getURLParam(search, 'status') || ''
+)
+
 export const getWearableGenders = createSelector<
   RootState,
   string,

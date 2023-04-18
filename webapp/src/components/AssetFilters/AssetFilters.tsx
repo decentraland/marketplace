@@ -9,7 +9,7 @@ import {
 import { getSectionFromCategory } from '../../modules/routing/search'
 import { isLandSection } from '../../modules/ui/utils'
 import { View } from '../../modules/ui/types'
-import { Sections } from '../../modules/routing/types'
+import { BrowseOptions, Sections } from '../../modules/routing/types'
 import { LANDFilters } from '../Vendor/decentraland/types'
 import { Menu } from '../Menu'
 import PriceFilter from './PriceFilter'
@@ -24,6 +24,7 @@ import { BodyShapeFilter } from './BodyShapeFilter'
 import { MoreFilters } from './MoreFilters'
 import { EmotePlayModeFilter } from './EmotePlayModeFilter'
 import { LocationFilter } from './LocationFilter'
+import { StatusFilter } from './StatusFilter'
 import { AssetFilter, filtersBySection } from './utils'
 import './AssetFilters.css'
 
@@ -35,6 +36,7 @@ export const AssetFilters = ({
   collection,
   creators,
   rarities,
+  status,
   network,
   category,
   bodyShapes,
@@ -56,6 +58,11 @@ export const AssetFilters = ({
   values
 }: Props): JSX.Element | null => {
   const isInLandSection = isLandSection(section)
+
+  const handleBrowseParamChange = useCallback(
+    (options: BrowseOptions) => onBrowse(options),
+    [onBrowse]
+  )
 
   const handlePriceChange = useCallback(
     (value: [string, string]) => {
@@ -227,6 +234,13 @@ export const AssetFilters = ({
           onChange={handleRarityChange}
           rarities={rarities}
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Network]}
+        />
+      ) : null}
+      {shouldRenderFilter(AssetFilter.Status) ? (
+        <StatusFilter
+          onChange={handleBrowseParamChange}
+          status={status}
+          defaultCollapsed={!!defaultCollapsed?.[AssetFilter.Status]}
         />
       ) : null}
       {isPriceFilterEnabled &&

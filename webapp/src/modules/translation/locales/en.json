@@ -353,6 +353,16 @@
       "available_for_female": "Available for female",
       "available_for_male": "Available for male"
     },
+    "status": {
+      "title": "Status",
+      "on_sale": "On Sale",
+      "on_sale_tooltip": "Includes items available for minting and/or with available listings.",
+      "only_minting": "Only available for minting",
+      "only_minting_tooltip": "Only includes items that are available for minting (buying directly from the creators).",
+      "only_listing": "Only listings",
+      "only_listing_tooltip": "Only includes items that are being resold.",
+      "not_for_sale": "Not for sale"
+    },
     "rarities": {
       "title": "Rarity",
       "all_items": "All rarities",

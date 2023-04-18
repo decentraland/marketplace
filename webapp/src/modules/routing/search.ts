@@ -73,6 +73,9 @@ export function getSearchParams(options?: BrowseOptions) {
         options.rarities.join(SEARCH_ARRAY_PARAM_SEPARATOR)
       )
     }
+    if (options.status) {
+      params.set('status', options.status.toString())
+    }
     if (options.wearableGenders && options.wearableGenders.length > 0) {
       params.set(
         'genders',
