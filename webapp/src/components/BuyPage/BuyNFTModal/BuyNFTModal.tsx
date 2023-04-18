@@ -93,7 +93,6 @@ const BuyNFTModal = (props: Props) => {
   }, [getContract, nft.network, nft.chainId, wallet.address, order])
 
   const handleSubmit = useCallback(() => {
-    console.log({isBuyWithCardPage})
     if (isBuyWithCardPage) {
       handleExecuteOrder()
       return;

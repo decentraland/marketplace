@@ -112,7 +112,7 @@ const SaleRentActionBox = ({
   
     const price = bnPricePerDay.mul(bnMaxDays).toString()
   
-    onAuthorizedAction(authorization, price, () => console.log("onRent(selectedRentalPeriodIndex)", onRent))
+    onAuthorizedAction(authorization, price, () => onRent(selectedRentalPeriodIndex))
   }, [selectedRentalPeriodIndex, authorization, rental, onRent, onAuthorizedAction])
 
   const rentalEndDate: Date | null = isCurrentlyRented

@@ -94,7 +94,7 @@ const BidModal = (props: Props) => {
 
   const handleConfirmBid = () => {
     const { onAuthorizedAction } = props;
-    onAuthorizedAction(authorization, ethers.utils.parseEther(price).toString(), () => console.log("handlePlaceBid", handlePlaceBid))
+    onAuthorizedAction(authorization, ethers.utils.parseEther(price).toString(), handlePlaceBid)
   }
 
   const isInvalidPrice = parseMANANumber(price) <= 0

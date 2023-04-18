@@ -92,7 +92,8 @@ const SellModal = (props: Props) => {
     )
 
   const handleSubmit = () => {
-    onAuthorizedAction(authorization, "0", () => console.log("handleCreateOrder", handleCreateOrder))
+    // TODO: Check authorization CAP in this case
+    onAuthorizedAction(authorization, '0', handleCreateOrder)
     setShowConfirm(false)
   }
 
