@@ -21,6 +21,10 @@
   background-color: rgba(35, 31, 32, 1);
 }
 
+.FavoritesCounter.Collapsed:hover .bubble {
+  box-shadow: 0px 0px 5px 2px rgba(255, 255, 255, 0.5);
+}
+
 
 .FavoritesCounter.Collapsed {
   display: flex;
@@ -31,13 +35,13 @@
 .FavoritesCounter.Collapsed {
   display: flex;
   align-items: center;
-  column-gap: 4px;
+  column-gap: 11px;
 }
 
 .FavoritesCounter .bubble {
   opacity: 0;
   min-width: 65px;
-  height: 32px;
+  min-height: 32px;
   background-color: rgb(35, 31, 32, 0.4);
   color: var(--text);
   border-radius: 50px;
@@ -60,7 +64,7 @@
 .FavoritesCounter.Collapsed .bubble {
   min-width: 38px;
   min-height: 33px;
-  border-radius: 17px;
+  border-radius: 13px;
   background-color: #231F20;
   border: .25px solid var(--text);
   display: flex;
@@ -90,5 +94,14 @@
 
   .FavoritesCounter:hover .bubble {
     background-color: rgb(35, 31, 32, 0.4);
+  }
+
+  .FavoritesCounter.Collapsed .bubble {
+    min-width: 32px;
+    min-height: 28px;
+  }
+
+  .FavoritesCounter.Collapsed .counter {
+    font-size: 12px;
   }
 }

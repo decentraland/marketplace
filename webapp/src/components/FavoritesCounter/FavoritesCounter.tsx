@@ -79,7 +79,7 @@ const FavoritesCounter = (props: Props) => {
       >
         <span>
           <Icon
-            size={isCollapsed ? 'large' : undefined}
+            size="large"
             fitted={isCollapsed}
             name={isPickedByUser ? 'bookmark' : 'bookmark outline'}
           />

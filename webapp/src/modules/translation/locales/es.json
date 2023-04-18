@@ -891,23 +891,23 @@
       "refresh": "Actualizar"
     },
     "pick_item_as_favorite_success": {
-      "title": "Item agregado a Favoritos",
-      "body": "{name} agregado a Favoritos",
+      "title": "Artículo agregado a la lista de deseos",
+      "body": "{name} se agregó con éxito a la lista de deseos",
       "view_my_lists": "Ver Mis Listas"
     },
     "pick_item_as_favorite_failure": {
-      "title": "Error al agregar el item a Favoritos",
-      "body": "Hubo un error al agregar {nombre} a Favoritos",
+      "title": "Error al agregar un elemento a la lista de deseos",
+      "body": "Hubo un error al agregar {nombre} a la lista de deseos",
       "try_again": "Intentar de nuevo"
     },
     "unpick_item_as_favorite_success": {
-      "title": "Item eliminado de Favoritos",
-      "body": "{name} fue eliminado de Favoritos",
+      "title": "Elemento eliminado de la lista de deseos",
+      "body": "{name} fue eliminado con éxito de la lista de deseos",
       "undo": "Deshacer"
     },
     "unpick_item_as_favorite_failure": {
-      "title": "Error al eliminar el item de Favoritos",
-      "body": "Hubo un error al eliminar {name} de Favoritos",
+      "title": "Error al eliminar el elemento de la lista de deseos",
+      "body": "Hubo un error al eliminar {nombre} de la lista de deseos",
       "try_again": "Intentar de nuevo"
     },
     "fetch_assets_failure": {
@@ -1120,8 +1120,8 @@
     "for_rent": "Disponible para la renta"
   },
   "favorites_counter": {
-    "pick_label": "elegir como favorito",
-    "unpick_label": "quitar de favoritos"
+    "pick_label": "añadir a la lista de deseos",
+    "unpick_label": "eliminar de la lista de deseos"
   },
   "favorites_modal": {
     "title": "Guardado por",
