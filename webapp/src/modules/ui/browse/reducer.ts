@@ -1,6 +1,10 @@
 import {
   FETCH_FAVORITED_ITEMS_SUCCESS,
-  FetchFavoritedItemsSuccessAction
+  FetchFavoritedItemsSuccessAction,
+  UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS,
+  UNPICK_ITEM_AS_FAVORITE_SUCCESS,
+  UndoUnpickingItemAsFavoriteSuccessAction,
+  UnpickItemAsFavoriteSuccessAction
 } from '../../favorites/actions'
 import {
   FetchItemsRequestAction,
@@ -46,6 +50,8 @@ type UIReducerAction =
   | FetchItemsRequestAction
   | FetchItemsSuccessAction
   | FetchFavoritedItemsSuccessAction
+  | UnpickItemAsFavoriteSuccessAction
+  | UndoUnpickingItemAsFavoriteSuccessAction
 
 export function browseReducer(
   state: BrowseUIState = INITIAL_STATE,
@@ -53,6 +59,7 @@ export function browseReducer(
 ): BrowseUIState {
   switch (action.type) {
     case SET_VIEW: {
+      console.log('Setting view to ', action.payload.view)
       return {
         ...state,
         view: action.payload.view
@@ -150,6 +157,20 @@ export function browseReducer(
       return {
         ...state,
         count: action.payload.total
+      }
+
+    case UNPICK_ITEM_AS_FAVORITE_SUCCESS:
+      console.log('Reducing count', state.count)
+      return {
+        ...state,
+        count: state.count !== undefined ? --state.count : state.count
+      }
+
+    case UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS:
+      console.log('Increasing count', state.count)
+      return {
+        ...state,
+        count: state.count !== undefined ? ++state.count : state.count
       }
 
     case FETCH_ITEMS_SUCCESS: {

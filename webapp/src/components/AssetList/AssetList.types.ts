@@ -19,6 +19,7 @@ export type Props = {
   nfts: NFT[]
   items: Item[]
   page: number
+  skip: number
   count?: number
   isLoading: boolean
   isManager?: boolean
@@ -33,6 +34,7 @@ export type MapStateProps = Pick<
   Props,
   | 'vendor'
   | 'section'
+  | 'skip'
   | 'nfts'
   | 'items'
   | 'page'

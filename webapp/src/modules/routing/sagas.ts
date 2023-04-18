@@ -186,6 +186,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const view = options.view!
   const vendor = options.vendor!
   const page = options.page!
+  let skip = options.skip
   const section = options.section!
   const sortBy = options.sortBy!
   const {
@@ -215,7 +216,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const category = getCategoryFromSection(section)
 
   const offset = isLoadMore ? page - 1 : 0
-  const skip = Math.min(offset, MAX_PAGE) * PAGE_SIZE
+  skip = skip ?? Math.min(offset, MAX_PAGE) * PAGE_SIZE
   const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
 
   switch (section) {
@@ -577,7 +578,8 @@ function* deriveCurrentOptions(
 }
 
 function deriveView(previous: BrowseOptions, current: BrowseOptions) {
-  return previous.page! < current.page!
+  return (previous.page && current.page && previous.page < current.page) ||
+    (previous.skip && current.skip && previous.skip < current.skip)
     ? View.LOAD_MORE
     : current.view || previous.view
 }

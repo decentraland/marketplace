@@ -39,6 +39,7 @@ export type BrowseOptions = {
   view?: View
   vendor?: VendorName
   page?: number
+  skip?: number
   section?: string
   sortBy?: SortBy
   onlyOnSale?: boolean

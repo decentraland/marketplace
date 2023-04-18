@@ -85,6 +85,14 @@ export const getPage = createSelector<RootState, string, number>(
   }
 )
 
+export const getSkip = createSelector<RootState, string, number>(
+  getRouterSearch,
+  search => {
+    const skip = getURLParam(search, 'skip')
+    return skip === null || isNaN(+skip) ? 0 : +skip
+  }
+)
+
 export const getSortBy = createSelector<
   RootState,
   string,

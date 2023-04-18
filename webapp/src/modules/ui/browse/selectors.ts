@@ -23,8 +23,10 @@ import { ItemState } from '../../item/reducer'
 import { VendorName } from '../../vendor'
 import { getAddress, getWallet } from '../../wallet/selectors'
 import { getTransactionsByType } from '../../transaction/selectors'
+import { getFavoritedItems as getFavoritedItemsFromState } from '../../favorites/selectors'
 import { View } from '../types'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
+import { FavoritesData } from '../../favorites/types'
 
 export const getState = (state: RootState) => state.ui.browse
 export const getView = (state: RootState): View | undefined =>
@@ -47,6 +49,15 @@ export const getItems = createSelector<
   Item[]
 >(getState, getItemData, (browse, itemsById) =>
   browse.itemIds.map(id => itemsById[id])
+)
+
+export const getItemsPickedByUser = createSelector<
+  RootState,
+  Record<string, FavoritesData | undefined>,
+  Item[],
+  Item[]
+>(getFavoritedItemsFromState, getItems, (favoritedItems, items) =>
+  items.filter(item => favoritedItems[item.id]?.pickedByUser === true)
 )
 
 export const getOnSaleItems = createSelector<

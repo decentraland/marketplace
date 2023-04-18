@@ -51,10 +51,11 @@ const AssetList = (props: Props) => {
 
   const handleLoadMore = useCallback(
     newPage => {
-      onBrowse({ page: newPage })
+      console.log('Items length', items.length)
+      onBrowse({ skip: items.length })
       getAnalytics().track(events.LOAD_MORE, { page: newPage })
     },
-    [onBrowse]
+    [onBrowse, items]
   )
 
   const maxQuerySize = getMaxQuerySize(vendor)
