@@ -6,7 +6,7 @@ import {
 } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { call, put, race, select, take, takeEvery } from 'redux-saga/effects'
 import { getIdentity } from '../identity/utils'
-import { fetchItemsRequest } from '../item/actions'
+import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 import { ItemBrowseOptions } from '../item/types'
 import {
   closeModal,
@@ -152,7 +152,12 @@ function* handleFetchFavoritedItemsRequest(
       }
     }
 
-    yield put(fetchItemsRequest(options))
+    if (results.length > 0) {
+      yield put(fetchItemsRequest(options))
+    } else {
+      yield put(fetchItemsSuccess([], 0, options, Date.now()))
+    }
+
     yield put(fetchFavoritedItemsSuccess(results, total))
   } catch (error) {
     yield put(fetchFavoritedItemsFailure((error as Error).message))
