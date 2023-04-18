@@ -25,11 +25,7 @@ const ITEM_HEIGHT = 55
 const DEFAULT_LIST_HEIGHT = 300
 const DEFAULT_LIST_WIDTH = 650
 
-const FavoritesModal = ({
-  metadata: { itemId },
-  getIdentity,
-  onClose
-}: Props) => {
+const FavoritesModal = ({ metadata: { itemId }, identity, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string>()
   const [favorites, setFavorites] = useState<{
@@ -39,15 +35,13 @@ const FavoritesModal = ({
 
   const isMobile = useMobileMediaQuery()
 
-  const favoritesAPI = useMemo(
-    () =>
-      new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
-        retries: retryParams.attempts,
-        retryDelay: retryParams.delay,
-        identity: getIdentity
-      }),
-    [getIdentity]
-  )
+  const favoritesAPI = useMemo(() => {
+    return new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
+      retries: retryParams.attempts,
+      retryDelay: retryParams.delay,
+      identity
+    })
+  }, [identity])
 
   const fetchNextPage = useCallback(
     async (startIndex: number, stopIndex: number) => {

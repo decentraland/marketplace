@@ -7,8 +7,7 @@ import FavoritesModal from './FavoritesModal'
 
 const mapState = (state: RootState): MapStateProps => {
   return {
-    getIdentity: () =>
-      (getCurrentIdentity(state) as AuthIdentity | null) ?? undefined
+    identity: (getCurrentIdentity(state) as AuthIdentity | null) ?? undefined
   }
 }
 

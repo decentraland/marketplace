@@ -7,9 +7,9 @@ export type Metadata = {
 
 export type Props = Omit<ModalProps, 'metadata'> & {
   metadata: Metadata
-  getIdentity: () => AuthIdentity | undefined
+  identity: AuthIdentity | undefined
 }
 
-export type MapStateProps = Pick<Props, 'getIdentity'>
+export type MapStateProps = Pick<Props, 'identity'>
 
 export type OwnProps = Pick<Props, 'metadata'>

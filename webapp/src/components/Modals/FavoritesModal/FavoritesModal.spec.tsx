@@ -1,4 +1,5 @@
 import { waitForElementToBeRemoved } from '@testing-library/react'
+import { AuthIdentity } from 'decentraland-crypto-fetch'
 import {
   FavoritesAPI,
   MARKETPLACE_FAVORITES_SERVER_URL
@@ -22,7 +23,7 @@ function renderFavoritesModal(props: Partial<Props> = {}) {
       name={'A name'}
       metadata={{ itemId }}
       onClose={jest.fn()}
-      getIdentity={jest.fn()}
+      identity={{} as AuthIdentity}
       {...props}
     />,
     {
