@@ -123,3 +123,7 @@
     width: 100%;
   }
 }
+
+.favorites {
+  justify-content: flex-end;
+}
