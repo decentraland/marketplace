@@ -88,16 +88,20 @@
 }
 
 @media (max-width: 768px) {
-  .FavoritesCounter.Collapsed .bubble {
-    min-width: 32px;
-    min-height: 28px;
-  }
-
   .FavoritesCounter .bubble {
     opacity: 1;
   }
 
   .FavoritesCounter:hover .bubble {
     background-color: rgb(35, 31, 32, 0.4);
+  }
+
+  .FavoritesCounter.Collapsed .bubble {
+    min-width: 32px;
+    min-height: 28px;
+  }
+
+  .FavoritesCounter.Collapsed .counter {
+    font-size: 12px;
   }
 }
