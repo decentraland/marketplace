@@ -7,5 +7,7 @@
     "type": "git",
     "url": "git+https://github.com/decentraland/marketplace.git"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@dcl/schemas": "^6.17.0"
+  }
 }
