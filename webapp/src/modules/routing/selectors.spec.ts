@@ -21,6 +21,7 @@ import {
   getOnlyOnRent,
   getSection,
   getSortBy,
+  getStatus,
   hasFiltersEnabled
 } from './selectors'
 
@@ -451,5 +452,17 @@ describe('when getting if the SortBy parameter is set', () => {
         )
       })
     })
+  })
+})
+
+describe('when there a status defined', () => {
+  let url: string
+  let status: string
+  beforeEach(() => {
+    status = 'only_minting'
+    url = `status=${status}`
+  })
+  it('should return an empty array', () => {
+    expect(getStatus.resultFunc(url)).toEqual(status)
   })
 })

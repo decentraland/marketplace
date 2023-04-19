@@ -16,6 +16,7 @@ import {
   replace
 } from 'connected-react-router'
 import {
+  CatalogFilters,
   NFTCategory,
   RentalStatus,
   Sale,
@@ -55,11 +56,11 @@ import {
   getCategoryFromSection,
   getDefaultOptionsByView,
   getSearchWearableCategory,
-  getItemSortBy,
-  getAssetOrderBy,
   getCollectionSortBy,
   getSearchEmoteCategory,
-  getCatalogSortBy
+  getCatalogSortBy,
+  getItemSortBy,
+  getAssetOrderBy
 } from './search'
 import {
   getRarities,
@@ -105,6 +106,7 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
+import { AssetStatusFilter } from '../../utils/filters'
 import { fetchCatalogRequest } from '../catalog/actions'
 import { buildBrowseURL } from './utils'
 
@@ -184,6 +186,7 @@ function* handleGoBack(action: GoBackAction) {
 export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const isItems = options.assetType === AssetType.ITEM
   const view = options.view!
+  console.log('view: ', view)
   const vendor = options.vendor!
   const page = options.page!
   const section = options.section!
@@ -199,7 +202,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     minPrice,
     maxPrice,
     creators,
-    network
+    network,
+    status
   } = options
 
   const address =
@@ -215,6 +219,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const category = getCategoryFromSection(section)
 
+  console.log('section: ', section)
   switch (section) {
     case Section.BIDS:
     case Section.STORE_SETTINGS:
@@ -283,6 +288,18 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         (section.toString().includes(Section.EMOTES) ||
           section.toString().includes(Section.WEARABLES))
       ) {
+        const statusParameters: Partial<CatalogFilters> = {
+          ...(status === AssetStatusFilter.ON_SALE ? { isOnSale: true } : {}),
+          ...(status === AssetStatusFilter.NOT_FOR_SALE
+            ? { isOnSale: false }
+            : {}),
+          ...(status === AssetStatusFilter.ONLY_LISTING
+            ? { onlyListing: true }
+            : {}),
+          ...(status === AssetStatusFilter.ONLY_MINTING
+            ? { onlyMinting: true }
+            : {})
+        }
         yield put(
           fetchCatalogRequest({
             first,
@@ -302,7 +319,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
             emotePlayMode,
             minPrice,
             maxPrice,
-            network
+            network,
+            ...statusParameters
           })
         )
       } else {
