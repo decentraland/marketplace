@@ -35,9 +35,9 @@ class CatalogApi extends BaseAPI {
       queryParams.append('isSoldOut', 'true')
     }
 
-    // if (filters.isOnSale) {
-    //   queryParams.append('isOnSale', 'true')
-    // }
+    if (filters.isOnSale) {
+      queryParams.append('isOnSale', 'true')
+    }
 
     if (filters.search) {
       queryParams.set('search', filters.search)

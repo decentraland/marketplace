@@ -9,60 +9,31 @@
 a.ui.card:hover,
 .ui.cards > .ui.card.link:hover,
 .ui.card.link:hover {
-  /* background-color: yellow; */
-  /* height: 383px; */
-  /* position: fixed; */
-  /* transform: scaleY(1.2) translate(0px, 30px) !important; */
-  /* transform: translate(0px, 0px) !important; */
-  /* 383px */
-  /* transition: transform 0.2s ease-in-out; */
-  /* box-shadow: 0 3px 10px gray !important; */
-  transition: height 4s;
+  transition: height 4s !important;
 }
-
-/* .AssetCard .rarity-background {
-  border-radius: 12px 12px 0px 0px !important;
-} */
-
-/* .AssetCard:hover ui.card:hover > .content:hover,
-.ui.cards:hover > .card:hover > .content {
-  position: absolute;
-  /* margin-top: 161px; */
-/* margin-top: 150px; */
-/* background-color: blue; 
-  width: 100%;
-  height: 185px;
-} */
 
 .ui.card.AssetCard:hover > .content,
 .ui.cards > .card.AssetCard:hover > .content {
   position: absolute;
   margin-top: 161px;
-  /* margin-top: 150px; */
-  /* background-color: blue; */
   width: 100%;
   height: 234px;
+  transition: height 4s !important;
   background-color: var(--card);
-  /* transition: height 4s; */
-  /* ease-in-out !important; */
-  box-shadow: 0 3px 10px gray !important;
-  /* transform: none; */
+  box-shadow: 0 4px 10px gray !important;
+  border-radius: 0px 0px 10px 10px !important;
 }
 
 .ui.card.AssetCard:hover .AssetImage,
 .ui.cards > .card.AssetCard:hover .AssetImage {
-  box-shadow: 0 3px 10px gray !important;
+  box-shadow: 0 4px 10px gray !important;
+  border-radius: 10px !important;
 }
 
 .ui.card.AssetCard .AssetImage,
 .ui.card.AssetCard .AssetImage .rarity-background {
-  border-radius: 12px 12px 0px 0px !important;
+  border-radius: 10px 10px 0px 0px !important;
 }
-
-/* .ui.card.AssetCard:hover > .content,
-.ui.cards > .card.AssetCard:hover > .content {
-  background-color: lightblue;
-} */
 
 .AssetCard .header,
 .AssetCard .dcl.mana.inline {
@@ -78,7 +49,6 @@ a.ui.card:hover,
 .AssetCard:hover .extraInformation {
   display: flex;
   margin: 15px 0px;
-  /* background-color: lightblue; */
 }
 
 .AssetCard .CatalogItemInformation {
@@ -133,11 +103,6 @@ a.ui.card.link:hover .meta {
 .AssetCard .tags {
   margin-top: 12px;
 }
-
-/* .AssetCard .AssetImage {
-  /* overflow: hidden; 
-  border-radius: 8px;
-} */
 
 .AssetCard .AssetImage .ens-subdomain {
   background-size: 557px;
