@@ -1,5 +1,11 @@
 import { createSelector } from 'reselect'
-import { Item, Order, RentalListing, RentalStatus } from '@dcl/schemas'
+import {
+  Item,
+  Order,
+  RentalListing,
+  RentalStatus,
+  CatalogItem
+} from '@dcl/schemas'
 import {
   Transaction,
   TransactionStatus
@@ -20,7 +26,6 @@ import { getTransactionsByType } from '../../transaction/selectors'
 import { View } from '../types'
 import { OnRentNFT, OnSaleElement, OnSaleNFT } from './types'
 import { CatalogState } from '../../catalog/reducer'
-import { CatalogItem } from '../../catalog/types'
 import { getData as getCatalogData } from '../../catalog/selectors'
 
 export const getState = (state: RootState) => state.ui.browse

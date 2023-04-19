@@ -9,7 +9,7 @@ import { getCount } from '../../modules/ui/browse/selectors'
 import {
   getVendor,
   getPage,
-  getAssetType,
+  // getAssetType,
   getCurrentBrowseOptions,
   getSection,
   getSearch,
@@ -24,10 +24,10 @@ import { getCatalogItems } from '../../modules/ui/browse/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
   const page = getPage(state)
-  const assetType = getAssetType(state)
+  // const assetType = getAssetType(state)
   return {
     vendor: getVendor(state),
-    assetType,
+    // assetType,
     section: getSection(state),
     // nfts: getNFTs(state),
     // items: getItems(state),

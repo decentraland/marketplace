@@ -1,6 +1,68 @@
 .AssetCard {
-  overflow: hidden;
+  height: 346px;
+  overflow: visible;
 }
+
+.AssetCard.ui.cards a.card:hover,
+.ui.link.card:hover,
+.ui.link.cards .card:hover,
+a.ui.card:hover,
+.ui.cards > .ui.card.link:hover,
+.ui.card.link:hover {
+  /* background-color: yellow; */
+  /* height: 383px; */
+  /* position: fixed; */
+  /* transform: scaleY(1.2) translate(0px, 30px) !important; */
+  /* transform: translate(0px, 0px) !important; */
+  /* 383px */
+  /* transition: transform 0.2s ease-in-out; */
+  /* box-shadow: 0 3px 10px gray !important; */
+  transition: height 4s;
+}
+
+/* .AssetCard .rarity-background {
+  border-radius: 12px 12px 0px 0px !important;
+} */
+
+/* .AssetCard:hover ui.card:hover > .content:hover,
+.ui.cards:hover > .card:hover > .content {
+  position: absolute;
+  /* margin-top: 161px; */
+/* margin-top: 150px; */
+/* background-color: blue; 
+  width: 100%;
+  height: 185px;
+} */
+
+.ui.card.AssetCard:hover > .content,
+.ui.cards > .card.AssetCard:hover > .content {
+  position: absolute;
+  margin-top: 161px;
+  /* margin-top: 150px; */
+  /* background-color: blue; */
+  width: 100%;
+  height: 234px;
+  background-color: var(--card);
+  /* transition: height 4s; */
+  /* ease-in-out !important; */
+  box-shadow: 0 3px 10px gray !important;
+  /* transform: none; */
+}
+
+.ui.card.AssetCard:hover .AssetImage,
+.ui.cards > .card.AssetCard:hover .AssetImage {
+  box-shadow: 0 3px 10px gray !important;
+}
+
+.ui.card.AssetCard .AssetImage,
+.ui.card.AssetCard .AssetImage .rarity-background {
+  border-radius: 12px 12px 0px 0px !important;
+}
+
+/* .ui.card.AssetCard:hover > .content,
+.ui.cards > .card.AssetCard:hover > .content {
+  background-color: lightblue;
+} */
 
 .AssetCard .header,
 .AssetCard .dcl.mana.inline {
@@ -9,12 +71,38 @@
   letter-spacing: -0.2px;
 }
 
+.AssetCard .extraInformation {
+  display: none;
+}
+
+.AssetCard:hover .extraInformation {
+  display: flex;
+  margin: 15px 0px;
+  /* background-color: lightblue; */
+}
+
+.AssetCard .CatalogItemInformation {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
 .AssetCard .header .title {
   flex: 1 2 auto;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   margin-right: 20px;
+  margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.AssetCard .Creator {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--secondary-text);
 }
 
 .ui.card.AssetCard > .content {
@@ -24,7 +112,7 @@
 .ui.card.AssetCard > .content > .header:not(.ui),
 .ui.cards > .card.AssetCard > .content > .header:not(.ui) {
   display: flex;
-  margin-bottom: 6px;
+  margin-bottom: 0px;
 }
 
 .AssetCard .dcl.mana.inline {
@@ -46,9 +134,10 @@ a.ui.card.link:hover .meta {
   margin-top: 12px;
 }
 
-.AssetCard .AssetImage {
-  overflow: hidden;
-}
+/* .AssetCard .AssetImage {
+  /* overflow: hidden; 
+  border-radius: 8px;
+} */
 
 .AssetCard .AssetImage .ens-subdomain {
   background-size: 557px;
@@ -79,7 +168,7 @@ a.ui.card.link:hover .meta {
   align-self: flex-end;
   background-color: #ecebed;
   border: 1px solid #a09ba8;
-  color: #43404A;
+  color: #43404a;
   font-size: 11px;
   border-radius: 50px !important;
   display: flex;
@@ -90,6 +179,16 @@ a.ui.card.link:hover .meta {
   text-transform: uppercase;
   top: 11px;
   z-index: 2;
+}
+
+.AssetCard .AssetImage {
+  height: 161px;
+}
+
+.AssetCard .PriceInMana .ui.header.large {
+  font-size: 30px;
+  font-weight: 600;
+  margin: 0px;
 }
 
 @media (max-width: 1199px) {

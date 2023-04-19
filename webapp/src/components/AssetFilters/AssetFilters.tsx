@@ -7,7 +7,6 @@ import {
   WearableGender
 } from '@dcl/schemas'
 import { getSectionFromCategory } from '../../modules/routing/search'
-import { AssetType } from '../../modules/asset/types'
 import { isLandSection } from '../../modules/ui/utils'
 import { View } from '../../modules/ui/types'
 import { Sections } from '../../modules/routing/types'
@@ -42,7 +41,6 @@ export const AssetFilters = ({
   isOnlySmart,
   isOnSale,
   emotePlayMode,
-  assetType,
   section,
   landStatus,
   defaultCollapsed,
@@ -57,7 +55,6 @@ export const AssetFilters = ({
   isCreatorFiltersEnabled,
   values
 }: Props): JSX.Element | null => {
-  const isPrimarySell = assetType === AssetType.ITEM
   const isInLandSection = isLandSection(section)
 
   const handlePriceChange = useCallback(
@@ -269,7 +266,7 @@ export const AssetFilters = ({
           defaultCollapsed={!!defaultCollapsed?.[AssetFilter.PlayMode]}
         />
       )}
-      {shouldRenderFilter(AssetFilter.Network) && !isPrimarySell && (
+      {shouldRenderFilter(AssetFilter.Network) && (
         <NetworkFilter
           onChange={handleNetworkChange}
           network={network}

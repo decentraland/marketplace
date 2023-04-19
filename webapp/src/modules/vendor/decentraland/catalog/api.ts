@@ -1,12 +1,10 @@
 import { BaseAPI } from 'decentraland-dapps/dist/lib/api'
 import { NFT_SERVER_URL } from '../nft'
 import { retryParams } from '../utils'
-import { CatalogFilters, CollectionsItemDBResult } from '../../../catalog/types'
+import { CatalogFilters, CatalogItem } from '@dcl/schemas'
 
 class CatalogApi extends BaseAPI {
-  fetch = async (
-    filters: CatalogFilters = {}
-  ): Promise<CollectionsItemDBResult> => {
+  fetch = async (filters: CatalogFilters = {}): Promise<CatalogItem[]> => {
     const queryParams = this.buildItemsQueryString(filters)
     return this.request('get', `/catalog?${queryParams}`)
   }
@@ -37,9 +35,9 @@ class CatalogApi extends BaseAPI {
       queryParams.append('isSoldOut', 'true')
     }
 
-    if (filters.isOnSale) {
-      queryParams.append('isOnSale', 'true')
-    }
+    // if (filters.isOnSale) {
+    //   queryParams.append('isOnSale', 'true')
+    // }
 
     if (filters.search) {
       queryParams.set('search', filters.search)
@@ -98,7 +96,7 @@ class CatalogApi extends BaseAPI {
     if (filters.itemId) {
       queryParams.append('itemId', filters.itemId)
     }
-
+    console.log('filters: ', filters)
     if (filters.network) {
       queryParams.append('network', filters.network)
     }

@@ -1,3 +1,4 @@
+import { CatalogFilters, CatalogItem } from '@dcl/schemas'
 import {
   fetchCatalogFailure,
   fetchCatalogRequest,
@@ -6,7 +7,6 @@ import {
   FETCH_CATALOG_REQUEST,
   FETCH_CATALOG_SUCCESS
 } from './actions'
-import { CatalogFilters, CatalogItem } from './types'
 
 const catalogFilters: CatalogFilters = {}
 
@@ -17,7 +17,7 @@ describe('when creating the action to signal the start of the catalog request', 
     expect(fetchCatalogRequest(catalogFilters)).toEqual({
       type: FETCH_CATALOG_REQUEST,
       meta: undefined,
-      payload: catalogFilters
+      payload: { filters: catalogFilters }
     })
   })
 })

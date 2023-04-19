@@ -1,35 +1,15 @@
-import { ChainId, Item, Network } from '@dcl/schemas'
-import { TradeType } from 'decentraland-dapps/dist/modules/gateway/transak/types'
-import {
-  NFTPurchase,
-  PurchaseStatus
-} from 'decentraland-dapps/dist/modules/gateway/types'
+import { CatalogFilters, CatalogItem } from '@dcl/schemas'
 import { loadingReducer } from 'decentraland-dapps/dist/modules/loading/reducer'
-import { NetworkGatewayType } from 'decentraland-ui'
-import { View } from '../ui/types'
 import {
-  buyItemFailure,
-  buyItemRequest,
-  buyItemSuccess,
-  buyItemWithCardFailure,
-  buyItemWithCardRequest,
-  buyItemWithCardSuccess,
-  fetchItemFailure,
-  fetchItemRequest,
-  fetchItemsFailure,
-  fetchItemsRequest,
-  fetchItemsSuccess,
-  fetchItemSuccess,
-  fetchTrendingItemsFailure,
-  fetchTrendingItemsRequest,
-  fetchTrendingItemsSuccess
+  fetchCatalogRequest,
+  fetchCatalogFailure,
+  fetchCatalogSuccess
 } from './actions'
 import { INITIAL_STATE, catalogItemReducer } from './reducer'
-import { CatalogFilters, CatalogItem } from './types'
 
 const catalogFilters: CatalogFilters = {}
 
-const item = {
+const catalogItem = {
   id: 'anId',
   contractAddress: 'aContractAddress',
   price: '5000000000000000000',
@@ -38,7 +18,7 @@ const item = {
   maxListingPrice: '5000000000000000000000'
 } as CatalogItem
 
-const anotherItem = {
+const anotherCatalogItem = {
   id: 'anotherId',
   contractAddress: 'aContractAddress',
   price: '5000000000000000000',
@@ -51,7 +31,7 @@ const anErrorMessage = 'An error'
 
 const trendingItemsBatchSize = 20
 
-describe(`when reducing the "${fetchItemsRequest.type}" action`, () => {
+describe(`when reducing the "${fetchCatalogRequest}" action`, () => {
   it('should return a state with the loading set', () => {
     const initialState = {
       ...INITIAL_STATE,
@@ -59,116 +39,53 @@ describe(`when reducing the "${fetchItemsRequest.type}" action`, () => {
     }
 
     expect(
-      catalogItemReducer(initialState, fetchItemsRequest(catalogFilters))
+      catalogItemReducer(initialState, fetchCatalogRequest(catalogFilters))
     ).toEqual({
       ...INITIAL_STATE,
       loading: loadingReducer(
         initialState.loading,
-        fetchItemsRequest(catalogFilters)
+        fetchCatalogRequest(catalogFilters)
       )
     })
   })
 })
 
-const failureActions = [
-  {
-    request: buyItemRequest(item),
-    failure: buyItemFailure(anErrorMessage)
-  },
-  {
-    request: buyItemWithCardRequest(item),
-    failure: buyItemWithCardFailure(anErrorMessage)
-  },
-  {
-    request: fetchItemsRequest(itemBrowseOptions),
-    failure: fetchItemsFailure(anErrorMessage, itemBrowseOptions)
-  },
-  {
-    request: fetchItemRequest(item.contractAddress, item.itemId),
-    failure: fetchItemFailure(item.contractAddress, item.itemId, anErrorMessage)
-  },
-  {
-    request: fetchTrendingItemsRequest(trendingItemsBatchSize),
-    failure: fetchTrendingItemsFailure(anErrorMessage)
-  }
-]
+describe(`when reducing the "${fetchCatalogFailure}" action`, () => {
+  it('should return a state with the error set and the loading state cleared', () => {
+    const initialState = {
+      ...INITIAL_STATE,
+      error: null,
+      loading: loadingReducer([], fetchCatalogRequest(catalogFilters))
+    }
 
-failureActions.forEach(action => {
-  describe(`when reducing the "${action.failure.type}" action`, () => {
-    it('should return a state with the error set and the loading state cleared', () => {
-      const initialState = {
-        ...INITIAL_STATE,
-        error: null,
-        loading: loadingReducer([], action.request)
-      }
-
-      expect(itemReducer(initialState, action.failure)).toEqual({
-        ...INITIAL_STATE,
-        error: anErrorMessage,
-        loading: []
-      })
+    expect(
+      catalogItemReducer(
+        initialState,
+        fetchCatalogFailure(anErrorMessage, catalogFilters)
+      )
+    ).toEqual({
+      ...INITIAL_STATE,
+      error: anErrorMessage,
+      loading: []
     })
   })
 })
 
-describe('when reducing the successful action of fetching items', () => {
-  const requestAction = fetchItemsRequest(itemBrowseOptions)
-  const successAction = fetchItemsSuccess(
-    [item],
-    1,
-    itemBrowseOptions,
-    223423423
-  )
+describe('when reducing the successful action of fetching catalog items', () => {
+  const requestAction = fetchCatalogRequest(catalogFilters)
+  const successAction = fetchCatalogSuccess([catalogItem], 1, catalogFilters)
 
   const initialState = {
     ...INITIAL_STATE,
-    data: { anotherId: anotherItem },
+    data: { anotherId: anotherCatalogItem },
     loading: loadingReducer([], requestAction)
   }
 
   it('should return a state with the the loaded items and the loading state cleared', () => {
-    expect(itemReducer(initialState, successAction)).toEqual({
+    expect(catalogItemReducer(initialState, successAction)).toEqual({
       ...INITIAL_STATE,
       loading: [],
-      data: { ...initialState.data, [item.id]: item }
-    })
-  })
-})
-
-describe('when reducing the successful action of fetching an item', () => {
-  const requestAction = fetchItemRequest(item.contractAddress, item.itemId)
-  const successAction = fetchItemSuccess(item)
-
-  const initialState = {
-    ...INITIAL_STATE,
-    data: { anotherId: anotherItem },
-    loading: loadingReducer([], requestAction)
-  }
-
-  it('should return a state with the the loaded items plus the fetched item and the loading state cleared', () => {
-    expect(itemReducer(initialState, successAction)).toEqual({
-      ...INITIAL_STATE,
-      loading: [],
-      data: { ...initialState.data, [item.id]: item }
-    })
-  })
-})
-
-describe('when reducing the successful action of fetching trending items', () => {
-  const requestAction = fetchTrendingItemsRequest(trendingItemsBatchSize)
-  const successAction = fetchTrendingItemsSuccess([item])
-
-  const initialState = {
-    ...INITIAL_STATE,
-    data: { anotherId: anotherItem },
-    loading: loadingReducer([], requestAction)
-  }
-
-  it('should return a state with the the loaded items plus the fetched trending items and the loading state cleared', () => {
-    expect(itemReducer(initialState, successAction)).toEqual({
-      ...INITIAL_STATE,
-      loading: [],
-      data: { ...initialState.data, [item.id]: item }
+      data: { ...initialState.data, [catalogItem.id]: catalogItem }
     })
   })
 })

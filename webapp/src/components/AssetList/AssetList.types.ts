@@ -10,12 +10,12 @@ import {
   ClearFiltersAction
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
-import { AssetType } from '../../modules/asset/types'
-import { CatalogItem } from '../../modules/catalog/types'
+import { CatalogItem } from '@dcl/schemas'
+// import { AssetType } from '../../modules/asset/types'
 
 export type Props = {
   vendor: VendorName
-  assetType: AssetType
+  // assetType: AssetType
   section?: Section
   // nfts: NFT[]
   // items: Item[]
@@ -40,7 +40,7 @@ export type MapStateProps = Pick<
   | 'page'
   | 'count'
   | 'isLoading'
-  | 'assetType'
+  // | 'assetType'
   | 'urlNext'
   | 'search'
   | 'hasFiltersEnabled'

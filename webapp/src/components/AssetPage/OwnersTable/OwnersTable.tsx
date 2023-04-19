@@ -29,11 +29,11 @@ const OwnersTable = (props: Props) => {
 
   // We're doing this outside of redux to avoid having to store all orders when we only care about the first ROWS_PER_PAGE
   useEffect(() => {
-    if (asset && asset.id) {
+    if (asset && asset.itemId) {
       setIsLoading(true)
       let params: OwnersFilters = {
         contractAddress: asset.contractAddress,
-        itemId: asset.id,
+        itemId: asset.itemId,
         first: ROWS_PER_PAGE,
         skip: (page - 1) * ROWS_PER_PAGE,
         sortBy: OwnersSortBy.ISSUED_ID,

@@ -4,7 +4,11 @@ import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
-import { getAssetName, getAssetUrl } from '../../modules/asset/utils'
+import {
+  getAssetName,
+  getAssetUrl,
+  isCatalogItem
+} from '../../modules/asset/utils'
 import { Asset } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import { isLand } from '../../modules/nft/utils'
@@ -24,6 +28,8 @@ import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
+import { LinkedProfile } from '../LinkedProfile'
+import mintingIcon from '../../images/minting.png'
 
 const RentalPrice = ({
   asset,
@@ -99,6 +105,89 @@ const AssetCard = (props: Props) => {
     [rental]
   )
 
+  const catalogItemInformation = () => {
+    let information: {
+      action: string
+      actionIcon: string | null
+      price: string | null
+      extraInformation: React.ReactNode | null
+    } | null = null
+    if (isCatalogItem(asset)) {
+      if (asset.isOnSale && asset.available > 0) {
+        information = {
+          action: 'Available for mint',
+          actionIcon: mintingIcon,
+          price: asset.minPrice,
+          extraInformation:
+            asset.maxListingPrice && asset.minListingPrice ? (
+              <span>
+                {asset.listings} Listings:{' '}
+                <Mana withTooltip size="small" network={asset.network}>
+                  {formatWeiMANA(asset.minListingPrice)}
+                </Mana>{' '}
+                - {formatWeiMANA(asset.maxListingPrice)}
+              </span>
+            ) : null
+        }
+      } else if (asset.minListingPrice) {
+        information = {
+          action: 'Cheapest Listing',
+          actionIcon: null,
+          price: asset.minPrice,
+          extraInformation:
+            asset.maxListingPrice && asset.minListingPrice ? (
+              <span>
+                {asset.listings} Listings:{' '}
+                <Mana withTooltip size="small" network={asset.network}>
+                  {formatWeiMANA(asset.minListingPrice)}
+                </Mana>{' '}
+                - {formatWeiMANA(asset.maxListingPrice)}
+              </span>
+            ) : null
+        }
+      } else {
+        information = {
+          action: 'Not for sale',
+          actionIcon: null,
+          price: null,
+          extraInformation: `${asset.owners} Owners`
+        }
+      }
+    }
+    return information ? (
+      <div className="CatalogItemInformation">
+        <span>
+          {information.action} &nbsp;
+          {information.actionIcon && (
+            <img
+              src={information.actionIcon}
+              alt="mint"
+              style={{ height: 14 }}
+            />
+          )}
+        </span>
+
+        {information.price && (
+          <div className="PriceInMana">
+            <Mana
+              withTooltip
+              size="large"
+              network={asset.network}
+              className="PriceInMana"
+            >
+              {formatWeiMANA(information.price)}
+            </Mana>
+          </div>
+        )}
+        {information.extraInformation && (
+          <span className="extraInformation">
+            {information.extraInformation}
+          </span>
+        )}
+      </div>
+    ) : null
+  }
+
   return (
     <Card
       className="AssetCard"
@@ -108,6 +197,7 @@ const AssetCard = (props: Props) => {
       onClick={onClick}
     >
       <AssetImage
+        className="AssetImage"
         asset={asset}
         showOrderListedTag={showListedTag}
         showMonospace
@@ -123,8 +213,17 @@ const AssetCard = (props: Props) => {
       ) : null}
       <Card.Content>
         <Card.Header>
-          <div className="title">{title}</div>
-          {price ? (
+          <div className="title">
+            {title}
+            {isCatalogItem(asset) && (
+              <LinkedProfile
+                address={asset.contractAddress}
+                textOnly={true}
+                className="Creator"
+              />
+            )}
+          </div>
+          {!catalogItemInformation && price ? (
             <Mana network={asset.network} inline>
               {formatWeiMANA(price)}
             </Mana>
@@ -133,9 +232,12 @@ const AssetCard = (props: Props) => {
           ) : null}
         </Card.Header>
         <div className="sub-header">
-          <Card.Meta className="card-meta">
-            {t(`networks.${asset.network.toLowerCase()}`)}
-          </Card.Meta>
+          {!isCatalogItem(asset) && (
+            <Card.Meta className="card-meta">
+              {t(`networks.${asset.network.toLowerCase()}`)}
+            </Card.Meta>
+          )}
+
           {rentalPricePerDay && price ? (
             <div>
               <RentalPrice
@@ -145,6 +247,7 @@ const AssetCard = (props: Props) => {
             </div>
           ) : null}
         </div>
+        {catalogItemInformation()}
 
         {parcel ? <ParcelTags nft={asset as NFT} /> : null}
         {estate ? <EstateTags nft={asset as NFT} /> : null}

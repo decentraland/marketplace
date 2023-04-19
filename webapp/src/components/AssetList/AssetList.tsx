@@ -14,7 +14,7 @@ const AssetList = (props: Props) => {
   const {
     vendor,
     section,
-    assetType,
+    // assetType,
     // items,
     // nfts,
     page,
@@ -28,6 +28,8 @@ const AssetList = (props: Props) => {
     // onClearFilters,
     catalogItems
   } = props
+
+  // console.log('flo a ver', assetType)
 
   // const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts -> catalogItems
 
@@ -90,7 +92,7 @@ const AssetList = (props: Props) => {
               <>
                 <AssetCard
                   isManager={isManager}
-                  key={assetType + '-' + catalogItem.id + '-' + index}
+                  key={catalogItem.id + '-' + index}
                   asset={catalogItem}
                 />
                 {/* <div

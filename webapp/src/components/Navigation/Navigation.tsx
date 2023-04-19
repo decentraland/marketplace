@@ -65,8 +65,7 @@ const Navigation = (props: Props) => {
               section: decentraland.Section.WEARABLES,
               vendor: VendorName.DECENTRALAND,
               page: 1,
-              sortBy: SortBy.RECENTLY_LISTED,
-              onlyOnSale: true
+              sortBy: SortBy.RECENTLY_LISTED
             })}
           >
             <Tabs.Tab active={activeTab === NavigationTab.COLLECTIBLES}>

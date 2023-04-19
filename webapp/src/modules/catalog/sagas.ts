@@ -9,7 +9,7 @@ import {
   fetchCatalogFailure,
   fetchCatalogSuccess
 } from './actions'
-import { CatalogItem } from './types'
+import { CatalogItem } from '@dcl/schemas'
 
 export function* catalogSaga() {
   yield takeEvery(FETCH_CATALOG_REQUEST, handleFetchCatalogRequest)

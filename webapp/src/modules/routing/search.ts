@@ -1,4 +1,5 @@
 import {
+  CatalogSortBy,
   CollectionSortBy,
   EmoteCategory,
   EmotePlayMode,
@@ -12,7 +13,6 @@ import { BrowseOptions, SortBy, SortDirection } from './types'
 import { Section } from '../vendor/decentraland'
 import { NFTSortBy } from '../nft/types'
 import { isAccountView, isLandSection } from '../ui/utils'
-import { CatalogSortBy } from '../catalog/types'
 
 const SEARCH_ARRAY_PARAM_SEPARATOR = '_'
 

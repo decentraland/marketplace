@@ -1,6 +1,5 @@
-// import { CatalogFilters, CatalogItem } from '@dcl/schemas'
+import { CatalogFilters, CatalogItem } from '@dcl/schemas'
 import { action } from 'typesafe-actions'
-import { CatalogFilters, CatalogItem } from './types'
 
 // Fetch Catalog
 

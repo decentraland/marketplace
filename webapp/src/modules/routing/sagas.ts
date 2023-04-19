@@ -193,7 +193,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     tenant,
     minPrice,
     maxPrice,
-    creators
+    creators,
+    network
   } = options
 
   const address =
@@ -291,7 +292,8 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           wearableGenders,
           emotePlayMode,
           minPrice,
-          maxPrice
+          maxPrice,
+          network
         })
       )
   }

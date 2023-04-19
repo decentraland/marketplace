@@ -1,5 +1,5 @@
 import { call, put, race, take } from 'redux-saga/effects'
-import { NFTCategory, Order, RentalListing } from '@dcl/schemas'
+import { NFTCategory, Order, RentalListing, CatalogItem } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Wallet } from 'decentraland-dapps/dist/modules/wallet/types'
 import { SET_PURCHASE } from 'decentraland-dapps/dist/modules/gateway/actions'
@@ -14,7 +14,6 @@ import { locations } from '../routing/locations'
 import { addressEquals } from '../wallet/utils'
 import { openTransak } from '../transak/actions'
 import { Asset } from './types'
-import { CatalogItem } from '../catalog/types'
 
 export const BUY_NFTS_WITH_CARD_EXPLANATION_POPUP_KEY =
   'buy-nfts-with-card-explanation-popup-key'
@@ -63,6 +62,9 @@ export function getAssetUrl(asset: Asset, isManager?: boolean) {
     return locations.manage(asset.contractAddress, asset.tokenId)
   }
   if ('itemId' in asset && asset.itemId !== null) {
+    return locations.item(asset.contractAddress, asset.itemId)
+  }
+  if ('id' in asset && asset.itemId !== null) {
     return locations.item(asset.contractAddress, asset.itemId)
   }
   return ''

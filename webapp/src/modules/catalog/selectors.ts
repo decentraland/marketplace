@@ -1,7 +1,7 @@
+import { CatalogItem } from '@dcl/schemas'
 import { createSelector } from 'reselect'
 import { RootState } from '../reducer'
 import { FETCH_CATALOG_REQUEST } from './actions'
-import { CatalogItem } from './types'
 
 export const getState = (state: RootState) => state.catalogItem
 export const getData = (state: RootState) => getState(state).data

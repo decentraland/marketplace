@@ -36,17 +36,17 @@ const ListingsTable = (props: Props) => {
         status: ListingStatus.OPEN
       }
 
-      if (asset.network === Network.MATIC && asset.id) {
-        params.itemId = asset.id
+      if (asset.network === Network.MATIC && asset.itemId) {
+        params.itemId = asset.itemId
       } else if (asset.network === Network.ETHEREUM) {
         params.nftName = asset.name
       }
 
-      asset.id &&
+      asset.itemId &&
         nftAPI
           .getOwners({
             contractAddress: asset.contractAddress,
-            itemId: asset.id,
+            itemId: asset.itemId,
             first: 1,
             skip: 0
           })
