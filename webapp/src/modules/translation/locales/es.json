@@ -1,5 +1,6 @@
 {
   "global": {
+    "close": "Cerrar",
     "day": "día",
     "assets": "Listado",
     "address": "Direccion",
