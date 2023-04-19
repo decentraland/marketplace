@@ -29,7 +29,11 @@ import {
 } from './actions'
 import { favoritesSaga } from './sagas'
 import { getListId } from './selectors'
-import { fetchItemsRequest } from '../item/actions'
+import {
+  FETCH_ITEMS_SUCCESS,
+  fetchItemsRequest,
+  fetchItemsSuccess
+} from '../item/actions'
 import { FavoritedItemIds } from './types'
 
 let item: Item
@@ -256,33 +260,81 @@ describe('when handling the request for fetching favorited items', () => {
     let favoritedItemIds: FavoritedItemIds
     let total: number
 
-    beforeEach(() => {
-      favoritedItemIds = [{ itemId: item.id }]
-      total = 1
-    })
+    describe("and there's more than favorited item", () => {
+      beforeEach(() => {
+        favoritedItemIds = [{ itemId: item.id }]
+        total = 1
+      })
 
-    it('should dispatch an action signaling the success of the handled action and the request of the retrieved items', () => {
-      return expectSaga(favoritesSaga, getIdentity)
-        .provide([
-          [select(getListId), listId],
-          [
-            matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
-            { results: favoritedItemIds, total }
-          ]
-        ])
-        .call.like({
-          fn: FavoritesAPI.prototype.getPicksByList,
-          args: [listId, options.filters]
-        })
-        .put(fetchFavoritedItemsSuccess(favoritedItemIds, total))
-        .put(
-          fetchItemsRequest({
-            ...options,
-            filters: { ...options.filters, ids: [item.id], first: 1 }
+      it('should dispatch an action signaling the success of the handled action and the request of the retrieved items', () => {
+        return expectSaga(favoritesSaga, getIdentity)
+          .provide([
+            [select(getListId), listId],
+            [
+              matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
+              { results: favoritedItemIds, total }
+            ]
+          ])
+          .call.like({
+            fn: FavoritesAPI.prototype.getPicksByList,
+            args: [listId, options.filters]
           })
-        )
-        .dispatch(fetchFavoritedItemsRequest(options))
-        .run({ silenceTimeout: true })
+          .put(fetchFavoritedItemsSuccess(favoritedItemIds, total))
+          .put(
+            fetchItemsRequest({
+              ...options,
+              filters: { ...options.filters, ids: [item.id], first: 1 }
+            })
+          )
+          .dispatch(fetchFavoritedItemsRequest(options))
+          .run({ silenceTimeout: true })
+      })
+
+      describe('and there are no favorited items', () => {
+        let currentTimestamp: number
+
+        beforeEach(() => {
+          favoritedItemIds = []
+          total = 0
+          currentTimestamp = Date.now()
+          jest.spyOn(Date, 'now').mockReturnValueOnce(currentTimestamp)
+        })
+
+        it('should dispatch an action signaling the success of the handled action and the success the items request', () => {
+          return expectSaga(favoritesSaga, getIdentity)
+            .provide([
+              [select(getListId), listId],
+              [
+                matchers.call.fn(FavoritesAPI.prototype.getPicksByList),
+                { results: favoritedItemIds, total }
+              ]
+            ])
+            .call.like({
+              fn: FavoritesAPI.prototype.getPicksByList,
+              args: [listId, options.filters]
+            })
+            .not.put(
+              fetchItemsRequest({
+                ...options,
+                filters: { ids: [item.id], first: 1 }
+              })
+            )
+            .put(
+              fetchItemsSuccess(
+                [],
+                total,
+                {
+                  ...options,
+                  filters: { first: total, ids: [] }
+                },
+                currentTimestamp
+              )
+            )
+            .put(fetchFavoritedItemsSuccess(favoritedItemIds, total))
+            .dispatch(fetchFavoritedItemsRequest(options))
+            .run({ silenceTimeout: true })
+        })
+      })
     })
   })
 })
