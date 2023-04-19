@@ -70,7 +70,7 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
         : getMaxEstateSize(state),
     rarities: 'rarities' in values ? values.rarities || [] : getRarities(state),
     status: ('status' in values
-      ? values.status || []
+      ? values.status || ''
       : getStatus(state)) as AssetStatusFilter,
     network: 'network' in values ? values.network : getNetwork(state),
     bodyShapes:
