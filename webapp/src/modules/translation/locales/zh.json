@@ -1110,7 +1110,11 @@
       "rented_until": "租到 {endDate, date, medium}",
       "claiming_back": "土地正在收回",
       "rental_ended": "租赁已结束"
-    }
+    },
+    "listings": "收藏品",
+    "available_for_mint": "可用於鑄幣",
+    "cheapest_listing": "最便宜的收藏品",
+    "not_for_sale": "不可出售"
   },
   "rentals_promotional_modal": {
     "title": "Announcing official LAND rentals",

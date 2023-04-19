@@ -115,39 +115,49 @@ const AssetCard = (props: Props) => {
     if (isCatalogItem(asset)) {
       if (asset.isOnSale && asset.available > 0) {
         information = {
-          action: 'Available for mint',
+          action: t('asset_card.available_for_mint'),
           actionIcon: mintingIcon,
           price: asset.minPrice,
           extraInformation:
             asset.maxListingPrice && asset.minListingPrice ? (
               <span>
-                {asset.listings} Listings:{' '}
-                <Mana withTooltip size="small" network={asset.network}>
+                {asset.listings} {t('asset_card.listings')}:&nbsp;
+                <Mana
+                  withTooltip
+                  size="small"
+                  network={asset.network}
+                  className="tiniMana"
+                >
                   {formatWeiMANA(asset.minListingPrice)}
-                </Mana>{' '}
-                - {formatWeiMANA(asset.maxListingPrice)}
+                </Mana>
+                &nbsp; - {formatWeiMANA(asset.maxListingPrice)}
               </span>
             ) : null
         }
       } else if (asset.minListingPrice) {
         information = {
-          action: 'Cheapest Listing',
+          action: t('asset_card.cheapest_listing'),
           actionIcon: null,
           price: asset.minPrice,
           extraInformation:
             asset.maxListingPrice && asset.minListingPrice ? (
               <span>
-                {asset.listings} Listings:{' '}
-                <Mana withTooltip size="small" network={asset.network}>
+                {asset.listings} {t('asset_card.listings')}:&nbsp;
+                <Mana
+                  withTooltip
+                  size="small"
+                  network={asset.network}
+                  className="tiniMana"
+                >
                   {formatWeiMANA(asset.minListingPrice)}
-                </Mana>{' '}
-                - {formatWeiMANA(asset.maxListingPrice)}
+                </Mana>
+                &nbsp; - {formatWeiMANA(asset.maxListingPrice)}
               </span>
             ) : null
         }
       } else {
         information = {
-          action: 'Not for sale',
+          action: t('asset_card.not_for_sale'),
           actionIcon: null,
           price: null,
           extraInformation: `${asset.owners} Owners`

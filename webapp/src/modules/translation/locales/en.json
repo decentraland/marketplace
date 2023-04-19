@@ -1113,7 +1113,11 @@
       "rented_until": "Rented until {endDate, date, medium}",
       "claiming_back": "Claiming back {asset_type, select, parcel {parcel} estate {estate} other {LAND}}",
       "rental_ended": "Rental period over"
-    }
+    },
+    "listings": "Listings",
+    "available_for_mint": "Available for mint",
+    "cheapest_listing": "Cheapest Listing",
+    "not_for_sale": "Not for sale"
   },
   "rentals_promotional_modal": {
     "title": "Announcing LAND rentals",

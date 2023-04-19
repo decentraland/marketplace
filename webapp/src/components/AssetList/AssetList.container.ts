@@ -5,11 +5,9 @@ import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors
 import { RootState } from '../../modules/reducer'
 import { browse, clearFilters } from '../../modules/routing/actions'
 import { getCount } from '../../modules/ui/browse/selectors'
-// import { getCatalogItems } from '../../modules/catalog/selectors'
 import {
   getVendor,
   getPage,
-  // getAssetType,
   getCurrentBrowseOptions,
   getSection,
   getSearch,
@@ -24,20 +22,13 @@ import { getCatalogItems } from '../../modules/ui/browse/selectors'
 
 const mapState = (state: RootState): MapStateProps => {
   const page = getPage(state)
-  // const assetType = getAssetType(state)
   return {
     vendor: getVendor(state),
-    // assetType,
     section: getSection(state),
-    // nfts: getNFTs(state),
-    // items: getItems(state),
     page,
     count: getCount(state),
     search: getSearch(state),
     isLoading: isLoadingType(getLoadingCatalog(state), FETCH_CATALOG_REQUEST),
-    // assetType === AssetType.ITEM
-    //   ? isLoadingType(getLoadingItems(state), FETCH_ITEMS_REQUEST)
-    //   : isLoadingType(getLoadingNFTs(state), FETCH_NFTS_REQUEST),
     urlNext: buildBrowseURL(getLocation(state).pathname, {
       ...getCurrentBrowseOptions(state),
       page: page + 1

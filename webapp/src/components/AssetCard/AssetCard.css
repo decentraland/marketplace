@@ -3,13 +3,25 @@
   overflow: visible;
 }
 
-.AssetCard.ui.cards a.card:hover,
-.ui.link.card:hover,
-.ui.link.cards .card:hover,
-a.ui.card:hover,
-.ui.cards > .ui.card.link:hover,
-.ui.card.link:hover {
-  transition: height 4s !important;
+.ui.cards a.card.AssetCard:hover,
+.ui.link.card.AssetCard:hover,
+.ui.link.cards .card.AssetCard:hover,
+a.ui.card.AssetCard:hover,
+.ui.cards > .ui.card.AssetCard.link:hover,
+.ui.card.AssetCard.link:hover {
+  border: none !important;
+}
+
+.ui.card.AssetCard > .content,
+.ui.cards > .card.AssetCard > .content {
+  height: 185px;
+  transition: height 0.3s !important;
+  margin-bottom: 20px;
+}
+
+.ui.card.AssetCard > .content > .header:not(.ui),
+.ui.cards > .card.AssetCard > .content > .header:not(.ui) {
+  flex: unset;
 }
 
 .ui.card.AssetCard:hover > .content,
@@ -18,15 +30,14 @@ a.ui.card:hover,
   margin-top: 161px;
   width: 100%;
   height: 234px;
-  transition: height 4s !important;
   background-color: var(--card);
-  box-shadow: 0 4px 10px gray !important;
+  box-shadow: 0px 4px 34px 0px rgba(255, 255, 255, 0.37) !important;
   border-radius: 0px 0px 10px 10px !important;
 }
 
 .ui.card.AssetCard:hover .AssetImage,
 .ui.cards > .card.AssetCard:hover .AssetImage {
-  box-shadow: 0 4px 10px gray !important;
+  box-shadow: 0px 4px 34px 0px rgba(255, 255, 255, 0.37) !important;
   border-radius: 10px !important;
 }
 
@@ -43,12 +54,17 @@ a.ui.card:hover,
 }
 
 .AssetCard .extraInformation {
-  display: none;
+  visibility: hidden;
+  height: 0px;
 }
 
 .AssetCard:hover .extraInformation {
-  display: flex;
-  margin: 15px 0px;
+  visibility: visible;
+}
+
+.AssetCard .ui.header.small {
+  font-size: 14.5px;
+  font-weight: 400;
 }
 
 .AssetCard .CatalogItemInformation {
@@ -56,6 +72,12 @@ a.ui.card:hover,
   display: flex;
   flex-direction: column;
   font-size: 14px;
+  transition: inherit;
+  flex: 1;
+}
+
+.AssetCard:hover .CatalogItemInformation {
+  margin-top: 13px;
 }
 
 .AssetCard .header .title {
@@ -73,10 +95,6 @@ a.ui.card:hover,
   font-size: 14px;
   font-weight: 400;
   color: var(--secondary-text);
-}
-
-.ui.card.AssetCard > .content {
-  flex: none;
 }
 
 .ui.card.AssetCard > .content > .header:not(.ui),

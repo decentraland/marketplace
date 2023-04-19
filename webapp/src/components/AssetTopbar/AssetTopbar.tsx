@@ -7,9 +7,7 @@ import {
   Icon,
   useTabletAndBelowMediaQuery
 } from 'decentraland-ui'
-// import { NFTCategory } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
-// import { AssetType } from '../../modules/asset/types'
 import { useInput } from '../../lib/input'
 import { getCountText, getOrderByOptions } from './utils'
 import { SortBy } from '../../modules/routing/types'
@@ -23,7 +21,6 @@ import {
   persistIsMapProperty
 } from '../../modules/ui/utils'
 import { Chip } from '../Chip'
-// import { AssetTypeFilter } from './AssetTypeFilter'
 import { Props } from './AssetTopbar.types'
 import { SelectedFilters } from './SelectedFilters'
 import styles from './AssetTopbar.module.css'
@@ -31,7 +28,6 @@ import styles from './AssetTopbar.module.css'
 export const AssetTopbar = ({
   search,
   view,
-  // assetType,
   count,
   isMap,
   onlyOnSale,
@@ -59,13 +55,6 @@ export const AssetTopbar = ({
   )
 
   const [searchValue, setSearchValue] = useInput(search, handleSearch, 500)
-
-  // const handleAssetTypeChange = useCallback(
-  //   (value: AssetType) => {
-  //     onBrowse({ assetType: value })
-  //   },
-  //   [onBrowse]
-  // )
 
   const handleOrderByDropdownChange = useCallback(
     (_, props: DropdownProps) => {
@@ -140,17 +129,6 @@ export const AssetTopbar = ({
           </div>
         )}
       </div>
-      {/* {view &&
-        !isLandSection(section) &&
-        !isAccountView(view) &&
-        (category === NFTCategory.WEARABLE ||
-          category === NFTCategory.EMOTE) && (
-          <AssetTypeFilter
-            view={view}
-            assetType={assetType}
-            onChange={handleAssetTypeChange}
-          />
-        )} */}
       {!isMap && (
         <div className={styles.infoRow}>
           <div className={styles.countContainer}>

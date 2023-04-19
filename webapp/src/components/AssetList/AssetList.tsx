@@ -14,24 +14,15 @@ const AssetList = (props: Props) => {
   const {
     vendor,
     section,
-    // assetType,
-    // items,
-    // nfts,
     page,
     count,
     search,
     isLoading,
-    // hasFiltersEnabled,
     onBrowse,
     urlNext,
     isManager,
-    // onClearFilters,
     catalogItems
   } = props
-
-  // console.log('flo a ver', assetType)
-
-  // const assets: (NFT | Item)[] = assetType === AssetType.ITEM ? items : nfts -> catalogItems
 
   const handleLoadMore = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -95,66 +86,10 @@ const AssetList = (props: Props) => {
                   key={catalogItem.id + '-' + index}
                   asset={catalogItem}
                 />
-                {/* <div
-                  key={index}
-                  style={{ backgroundColor: 'yellow', color: 'black' }}
-                >
-                  Card chanchullo :)
-                  <br></br>
-                  {catalogItem.name}
-                  <br></br>
-                  {catalogItem.price}
-                  <br></br>
-                  {catalogItem.rarity}
-                </div> */}
               </>
             ))
           : null}
       </Card.Group>
-
-      {/* {assets.length === 0 && !isLoading ? (
-        <div className="empty">
-          <div className="watermelon" />
-
-          <T
-            id={emptyStateTranslationString}
-            values={{
-              search,
-              currentSection:
-                assetType === AssetType.ITEM
-                  ? t('browse_page.primary_market_title').toLocaleLowerCase()
-                  : t('browse_page.secondary_market_title').toLocaleLowerCase(),
-              section:
-                assetType === AssetType.ITEM
-                  ? t('browse_page.secondary_market_title').toLocaleLowerCase()
-                  : t('browse_page.primary_market_title').toLocaleLowerCase(),
-              searchStore: (chunks: string) => (
-                <button
-                  className="empty-actions"
-                  onClick={() =>
-                    onBrowse({
-                      assetType:
-                        assetType === AssetType.ITEM
-                          ? AssetType.NFT
-                          : AssetType.ITEM
-                    })
-                  }
-                >
-                  {chunks}
-                </button>
-              ),
-              'if-filters': (chunks: string) =>
-                hasFiltersEnabled ? chunks : '',
-              clearFilters: (chunks: string) => (
-                <button className="empty-actions" onClick={onClearFilters}>
-                  {chunks}
-                </button>
-              ),
-              br: () => <br />
-            }}
-          />
-        </div>
-      ) : null} */}
 
       {catalogItems.length > 0 &&
       hasExtraPages &&

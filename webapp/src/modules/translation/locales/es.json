@@ -1107,7 +1107,11 @@
       "rented_until": "Rentada hasta {endDate, date, medium}",
       "claiming_back": "Reclamando {asset_type, select, parcel {la parcel} estate {el estate} other {LAND}}",
       "rental_ended": "Período de renta terminado"
-    }
+    },
+    "listings": "Collecionables",
+    "available_for_mint": "Disponible para mintear",
+    "cheapest_listing": "Coleccionable más barato",
+    "not_for_sale": "No disponible para la venta"
   },
   "rentals_promotional_modal": {
     "title": "¡La renta de tierras está disponible!",

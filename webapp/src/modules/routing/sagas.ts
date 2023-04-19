@@ -288,7 +288,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           search,
           category,
           rarities: rarities,
-          // contracts,
           wearableGenders,
           emotePlayMode,
           minPrice,
