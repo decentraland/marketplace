@@ -4,7 +4,7 @@ import { Item, NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
-import { getMaxQuerySize, MAX_PAGE } from '../../modules/vendor/api'
+import { PAGE_SIZE, getMaxQuerySize } from '../../modules/vendor/api'
 import { AssetType } from '../../modules/asset/types'
 import { NFT } from '../../modules/nft/types'
 import * as events from '../../utils/events'
@@ -21,7 +21,7 @@ const AssetList = (props: Props) => {
     assetType,
     items,
     nfts,
-    page,
+    skip,
     count,
     search,
     isLoading,
@@ -50,18 +50,17 @@ const AssetList = (props: Props) => {
   }, [])
 
   const handleLoadMore = useCallback(
-    newPage => {
-      console.log('Items length', items.length)
+    newSkip => {
+      console.log('Loading more', items.length)
       onBrowse({ skip: items.length })
-      getAnalytics().track(events.LOAD_MORE, { page: newPage })
+      getAnalytics().track(events.LOAD_MORE, { skip: newSkip })
     },
     [onBrowse, items]
   )
 
   const maxQuerySize = getMaxQuerySize(vendor)
 
-  const hasMorePages =
-    (assets.length !== count || count === maxQuerySize) && page <= MAX_PAGE
+  const hasMoreAssets = assets.length !== count || count === maxQuerySize
 
   const emptyStateTranslationString = useMemo(() => {
     if (assets.length > 0) {
@@ -103,11 +102,11 @@ const AssetList = (props: Props) => {
           : null}
       </Card.Group>
       <InfiniteScroll
-        page={page}
-        hasMorePages={hasMorePages}
+        skip={skip}
+        hasMorePages={hasMoreAssets}
         onLoadMore={handleLoadMore}
         isLoading={isLoading}
-        maxScrollPages={3}
+        maxScrollAssets={3 * PAGE_SIZE}
       >
         {assets.length === 0 && !isLoading ? (
           <div className="empty">

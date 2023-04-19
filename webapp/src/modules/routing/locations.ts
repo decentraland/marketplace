@@ -9,7 +9,9 @@ import { BrowseOptions } from './types'
 export const locations = {
   root: () => '/',
   signIn: (redirectTo?: string) => {
-    return `/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''}`
+    return `/sign-in${
+      redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ''
+    }`
   },
   settings: () => '/settings',
   lands: (options?: BrowseOptions) => {
@@ -45,7 +47,7 @@ export const locations = {
   defaultList: function() {
     return this.list(DEFAULT_FAVORITES_LIST_ID, {
       assetType: AssetType.ITEM,
-      page: 1,
+      skip: 0,
       section: Section.LISTS,
       view: View.LISTS
     })

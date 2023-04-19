@@ -2,18 +2,19 @@ import { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
 import { Props } from './InfiniteScroll.types'
+import { PAGE_SIZE } from '../../modules/vendor/api'
 
 export function InfiniteScroll({
-  page,
+  skip,
   hasMorePages,
   isLoading,
   children,
-  maxScrollPages,
+  maxScrollAssets,
   onLoadMore
 }: Props) {
   const [scrollPage, setScrollPage] = useState(0)
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(
-    maxScrollPages === 0
+    maxScrollAssets === 0
   )
 
   const onScroll = useCallback(() => {
@@ -24,20 +25,24 @@ export function InfiniteScroll({
       !isLoading &&
       scrollTop + clientHeight >= scrollHeight &&
       hasMorePages &&
-      (!maxScrollPages || scrollPage < maxScrollPages)
+      (!maxScrollAssets || scrollPage < maxScrollAssets)
     ) {
       setScrollPage(scrollPage + 1)
-      onLoadMore(page + 1)
+      onLoadMore(skip + 1 * PAGE_SIZE)
     }
-  }, [page, hasMorePages, isLoading, scrollPage, maxScrollPages, onLoadMore])
+  }, [skip, hasMorePages, isLoading, scrollPage, maxScrollAssets, onLoadMore])
 
   useEffect(() => {
-    if (!isLoading && maxScrollPages !== undefined && scrollPage === maxScrollPages) {
+    if (
+      !isLoading &&
+      maxScrollAssets !== undefined &&
+      scrollPage === maxScrollAssets
+    ) {
       setShowLoadMoreButton(true)
     } else {
       setShowLoadMoreButton(false)
     }
-  }, [isLoading, scrollPage, maxScrollPages, page, setShowLoadMoreButton])
+  }, [isLoading, scrollPage, maxScrollAssets, skip, setShowLoadMoreButton])
 
   useEffect(() => {
     window.addEventListener('scroll', onScroll)
@@ -45,9 +50,9 @@ export function InfiniteScroll({
   }, [onScroll])
 
   const handleLoadMore = useCallback(() => {
-    onLoadMore(page + 1)
+    onLoadMore(skip + 1 * PAGE_SIZE)
     setScrollPage(0)
-  }, [onLoadMore, page])
+  }, [onLoadMore, skip])
 
   if (!hasMorePages) {
     return children

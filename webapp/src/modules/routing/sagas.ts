@@ -180,7 +180,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const isItems = options.assetType === AssetType.ITEM
   const view = options.view!
   const vendor = options.vendor!
-  const page = options.page!
   let skip = options.skip ?? 0
   const section = options.section!
   const sortBy = options.sortBy!
@@ -244,13 +243,13 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
     case Section.SALES:
       yield spawn(handleFetchSales, {
         address: Array.isArray(address) ? address[0] : address,
-        page,
+        page: Math.round(skip / PAGE_SIZE),
         pageSize: SALES_PER_PAGE
       })
       break
     case Section.COLLECTIONS:
       yield handleFetchCollections(
-        page,
+        Math.round(skip / PAGE_SIZE),
         Array.isArray(address) ? address[0] : address,
         sortBy,
         search
@@ -261,7 +260,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         fetchFavoritedItemsRequest({
           view,
           section,
-          page,
+          page: Math.round(skip / PAGE_SIZE),
           filters: { first, skip }
         })
       )
@@ -288,7 +287,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         yield put(
           fetchItemsRequest({
             view,
-            page,
             filters: {
               first,
               skip,
