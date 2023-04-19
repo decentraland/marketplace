@@ -44,12 +44,7 @@ import {
 } from '../nft/actions'
 import { setView } from '../ui/actions'
 import { getFilters } from '../vendor/utils'
-import {
-  MAX_PAGE,
-  PAGE_SIZE,
-  getMaxQuerySize,
-  MAX_QUERY_SIZE
-} from '../vendor/api'
+import { PAGE_SIZE, getMaxQuerySize, MAX_QUERY_SIZE } from '../vendor/api'
 import { locations } from './locations'
 import {
   getCategoryFromSection,
@@ -186,7 +181,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const view = options.view!
   const vendor = options.vendor!
   const page = options.page!
-  let skip = options.skip
+  let skip = options.skip ?? 0
   const section = options.section!
   const sortBy = options.sortBy!
   const {
@@ -215,9 +210,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const category = getCategoryFromSection(section)
 
-  const offset = isLoadMore ? page - 1 : 0
-  skip = skip ?? Math.min(offset, MAX_PAGE) * PAGE_SIZE
-  const first = Math.min(page * PAGE_SIZE - skip, getMaxQuerySize(vendor))
+  skip = isLoadMore ? skip : 0
+  const first = Math.min(PAGE_SIZE, getMaxQuerySize(vendor))
+  console.log('Browse', { skip, first })
 
   switch (section) {
     case Section.BIDS:
