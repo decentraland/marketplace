@@ -2,7 +2,12 @@ import {
   loadingReducer,
   LoadingState
 } from 'decentraland-dapps/dist/modules/loading/reducer'
-import { FETCH_ITEMS_SUCCESS, FetchItemsSuccessAction } from '../item/actions'
+import {
+  FETCH_ITEM_SUCCESS,
+  FETCH_ITEMS_SUCCESS,
+  FetchItemsSuccessAction,
+  FetchItemSuccessAction
+} from '../item/actions'
 import {
   PickItemAsFavoriteFailureAction,
   PickItemAsFavoriteRequestAction,
@@ -60,6 +65,7 @@ type FavoritesReducerAction =
   | FetchFavoritedItemsSuccessAction
   | FetchFavoritedItemsFailureAction
   | FetchItemsSuccessAction
+  | FetchItemSuccessAction
 
 export function favoritesReducer(
   state = INITIAL_STATE,
@@ -128,6 +134,21 @@ export function favoritesReducer(
           items: {
             ...state.data.items,
             ...Object.fromEntries(items.map(item => [item.id, item.picks]))
+          }
+        }
+      }
+    }
+
+    case FETCH_ITEM_SUCCESS: {
+      const { item } = action.payload
+
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          items: {
+            ...state.data.items,
+            [item.id]: item.picks
           }
         }
       }

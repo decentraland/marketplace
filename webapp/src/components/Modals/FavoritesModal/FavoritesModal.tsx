@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { FixedSizeList } from 'react-window'
 import InfiniteLoader from 'react-window-infinite-loader'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -12,7 +12,11 @@ import {
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Modal } from 'decentraland-dapps/dist/containers'
 import { isErrorWithMessage } from '../../../lib/error'
-import { favoritesAPI } from '../../../modules/vendor/decentraland/favorites'
+import {
+  FavoritesAPI,
+  MARKETPLACE_FAVORITES_SERVER_URL
+} from '../../../modules/vendor/decentraland/favorites'
+import { retryParams } from '../../../modules/vendor/decentraland/utils'
 import { LinkedProfile } from '../../LinkedProfile'
 import { Props } from './FavoritesModal.types'
 import styles from './FavoritesModal.module.css'
@@ -21,7 +25,7 @@ const ITEM_HEIGHT = 55
 const DEFAULT_LIST_HEIGHT = 300
 const DEFAULT_LIST_WIDTH = 650
 
-const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
+const FavoritesModal = ({ metadata: { itemId }, identity, onClose }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string>()
   const [favorites, setFavorites] = useState<{
@@ -30,6 +34,14 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
   }>({ addresses: [], total: 0 })
 
   const isMobile = useMobileMediaQuery()
+
+  const favoritesAPI = useMemo(() => {
+    return new FavoritesAPI(MARKETPLACE_FAVORITES_SERVER_URL, {
+      retries: retryParams.attempts,
+      retryDelay: retryParams.delay,
+      identity
+    })
+  }, [identity])
 
   const fetchNextPage = useCallback(
     async (startIndex: number, stopIndex: number) => {
@@ -40,6 +52,7 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
           stopIndex - startIndex,
           startIndex
         )
+
         setFavorites({
           addresses: favorites.addresses.concat(result.addresses),
           total: result.total
@@ -52,7 +65,7 @@ const FavoritesModal = ({ metadata: { itemId }, onClose }: Props) => {
         setIsLoading(false)
       }
     },
-    [itemId, favorites]
+    [favoritesAPI, itemId, favorites.addresses]
   )
 
   const isItemLoaded = useCallback(

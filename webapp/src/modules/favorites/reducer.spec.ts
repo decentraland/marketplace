@@ -26,8 +26,12 @@ import {
 import { FavoritesState, INITIAL_STATE, favoritesReducer } from './reducer'
 import { FavoritedItemIds } from './types'
 import {
+  FetchItemRequestAction,
+  FetchItemSuccessAction,
   FetchItemsRequestAction,
   FetchItemsSuccessAction,
+  fetchItemRequest,
+  fetchItemSuccess,
   fetchItemsRequest,
   fetchItemsSuccess
 } from '../item/actions'
@@ -316,6 +320,38 @@ describe('when reducing the successful action of fetching the items', () => {
   })
 
   it('should return a state with favorited items and their picks stats', () => {
+    expect(favoritesReducer(initialState, successAction)).toEqual({
+      ...initialState,
+      data: {
+        ...initialState.data,
+        items: {
+          [item.id]: {
+            pickedByUser: false,
+            count: 1
+          }
+        }
+      }
+    })
+  })
+})
+
+describe('when reducing the successful action of fetching an item', () => {
+  let initialState: FavoritesState
+
+  let requestAction: FetchItemRequestAction
+  let successAction: FetchItemSuccessAction
+
+  beforeEach(() => {
+    requestAction = fetchItemRequest(item.contractAddress, item.itemId)
+    successAction = fetchItemSuccess(item)
+
+    initialState = {
+      ...INITIAL_STATE,
+      loading: loadingReducer([], requestAction)
+    }
+  })
+
+  it('should return a state with the current item and its picks stats', () => {
     expect(favoritesReducer(initialState, successAction)).toEqual({
       ...initialState,
       data: {
