@@ -64,9 +64,6 @@ export function getAssetUrl(asset: Asset, isManager?: boolean) {
   if ('itemId' in asset && asset.itemId !== null) {
     return locations.item(asset.contractAddress, asset.itemId)
   }
-  if ('id' in asset && asset.itemId !== null) {
-    return locations.item(asset.contractAddress, asset.itemId)
-  }
   return ''
 }
 

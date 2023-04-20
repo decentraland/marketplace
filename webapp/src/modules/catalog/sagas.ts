@@ -24,7 +24,6 @@ function* handleFetchCatalogRequest(action: FetchCatalogRequestAction) {
     )
     yield put(fetchCatalogSuccess(data, total, filters))
   } catch (error) {
-    console.log('error: ', error)
     yield put(
       fetchCatalogFailure(
         isErrorWithMessage(error) ? error.message : t('global.unknown_error'),

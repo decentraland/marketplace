@@ -96,7 +96,7 @@ class CatalogApi extends BaseAPI {
     if (filters.itemId) {
       queryParams.append('itemId', filters.itemId)
     }
-    console.log('filters: ', filters)
+
     if (filters.network) {
       queryParams.append('network', filters.network)
     }

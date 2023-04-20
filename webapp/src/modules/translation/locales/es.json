@@ -1111,7 +1111,8 @@
     "listings": "{count} {count, plural, one {Collecionable} other {Collecionables}}",
     "available_for_mint": "Disponible para mintear",
     "cheapest_listing": "Coleccionable más barato",
-    "not_for_sale": "No disponible para la venta"
+    "not_for_sale": "No disponible para la venta",
+    "owners": "{count} {count, plural, one {Dueño} other {Dueños}}"
   },
   "rentals_promotional_modal": {
     "title": "¡La renta de tierras está disponible!",

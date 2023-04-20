@@ -19,7 +19,9 @@ import {
   isRentalListingExecuted,
   isRentalListingOpen
 } from '../../modules/rental/utils'
+import mintingIcon from '../../images/minting.png'
 import { Mana } from '../Mana'
+import { LinkedProfile } from '../LinkedProfile'
 import { AssetImage } from '../AssetImage'
 import { ParcelTags } from './ParcelTags'
 import { EstateTags } from './EstateTags'
@@ -28,8 +30,6 @@ import { EmoteTags } from './EmoteTags'
 import { ENSTags } from './ENSTags'
 import { Props } from './AssetCard.types'
 import './AssetCard.css'
-import { LinkedProfile } from '../LinkedProfile'
-import mintingIcon from '../../images/minting.png'
 
 const RentalPrice = ({
   asset,
@@ -121,18 +121,13 @@ const AssetCard = (props: Props) => {
           extraInformation:
             asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
               <span>
-                {asset.listings}{' '}
                 {t('asset_card.listings', { count: asset.listings })}:&nbsp;
-                <Mana
-                  withTooltip
-                  size="small"
-                  network={asset.network}
-                  className="tiniMana"
-                >
+                <Mana size="small" network={asset.network} className="tiniMana">
                   {formatWeiMANA(asset.minListingPrice)}
                 </Mana>
                 &nbsp;
                 {asset.listings > 1 &&
+                  asset.minListingPrice === asset.maxListingPrice &&
                   `- ${formatWeiMANA(asset.maxListingPrice)}`}
               </span>
             ) : null
@@ -146,16 +141,12 @@ const AssetCard = (props: Props) => {
             asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
               <span>
                 {t('asset_card.listings', { count: asset.listings })}:&nbsp;
-                <Mana
-                  withTooltip
-                  size="small"
-                  network={asset.network}
-                  className="tiniMana"
-                >
+                <Mana size="small" network={asset.network} className="tiniMana">
                   {formatWeiMANA(asset.minListingPrice)}
                 </Mana>
                 &nbsp;{' '}
                 {asset.listings > 1 &&
+                  asset.minListingPrice === asset.maxListingPrice &&
                   `- ${formatWeiMANA(asset.maxListingPrice)}`}
               </span>
             ) : null
@@ -165,7 +156,9 @@ const AssetCard = (props: Props) => {
           action: t('asset_card.not_for_sale'),
           actionIcon: null,
           price: null,
-          extraInformation: `${asset.owners} Owners`
+          extraInformation: `${asset.owners} ${t('asset_card.owners', {
+            count: asset.owners
+          })}`
         }
       }
     }
@@ -174,22 +167,13 @@ const AssetCard = (props: Props) => {
         <span>
           {information.action} &nbsp;
           {information.actionIcon && (
-            <img
-              src={information.actionIcon}
-              alt="mint"
-              style={{ height: 14 }}
-            />
+            <img src={information.actionIcon} alt="mint" className="mintIcon" />
           )}
         </span>
 
         {information.price && (
           <div className="PriceInMana">
-            <Mana
-              withTooltip
-              size="large"
-              network={asset.network}
-              className="PriceInMana"
-            >
+            <Mana size="large" network={asset.network} className="PriceInMana">
               {formatWeiMANA(information.price)}
             </Mana>
           </div>
@@ -233,8 +217,8 @@ const AssetCard = (props: Props) => {
             {isCatalogItem(asset) && (
               <LinkedProfile
                 address={asset.contractAddress}
-                textOnly={true}
-                className="Creator"
+                textOnly
+                className="creator"
               />
             )}
           </div>

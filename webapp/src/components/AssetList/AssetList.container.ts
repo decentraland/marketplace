@@ -13,12 +13,12 @@ import {
   getSearch,
   hasFiltersEnabled
 } from '../../modules/routing/selectors'
-import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
-import AssetList from './AssetList'
 import { buildBrowseURL } from '../../modules/routing/utils'
 import { getLoading as getLoadingCatalog } from '../../modules/catalog/selectors'
 import { FETCH_CATALOG_REQUEST } from '../../modules/catalog/actions'
 import { getCatalogItems } from '../../modules/ui/browse/selectors'
+import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
+import AssetList from './AssetList'
 
 const mapState = (state: RootState): MapStateProps => {
   const page = getPage(state)

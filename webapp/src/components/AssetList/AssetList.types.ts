@@ -1,4 +1,5 @@
 import { Dispatch } from 'redux'
+import { CatalogItem } from '@dcl/schemas'
 import { VendorName } from '../../modules/vendor/types'
 import {
   browse,
@@ -7,7 +8,6 @@ import {
   ClearFiltersAction
 } from '../../modules/routing/actions'
 import { Section } from '../../modules/vendor/routing/types'
-import { CatalogItem } from '@dcl/schemas'
 
 export type Props = {
   vendor: VendorName

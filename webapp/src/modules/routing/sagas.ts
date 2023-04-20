@@ -102,8 +102,8 @@ import {
   PLACE_BID_SUCCESS
 } from '../bid/actions'
 import { getData } from '../event/selectors'
-import { buildBrowseURL } from './utils'
 import { fetchCatalogRequest } from '../catalog/actions'
+import { buildBrowseURL } from './utils'
 
 export function* routingSaga() {
   yield takeEvery(FETCH_ASSETS_FROM_ROUTE, handleFetchAssetsFromRoute)
@@ -179,7 +179,6 @@ function* handleGoBack(action: GoBackAction) {
 }
 
 export function* fetchAssetsFromRoute(options: BrowseOptions) {
-  // const isItems = options.assetType === AssetType.ITEM
   const view = options.view!
   const vendor = options.vendor!
   const page = options.page!

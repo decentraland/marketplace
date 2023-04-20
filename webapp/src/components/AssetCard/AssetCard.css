@@ -90,7 +90,7 @@ a.ui.card.AssetCard:hover,
   flex-direction: column;
 }
 
-.AssetCard .Creator {
+.AssetCard .creator {
   font-size: 14px;
   font-weight: 400;
   color: var(--secondary-text);
@@ -171,6 +171,10 @@ a.ui.card.link:hover .meta {
   font-size: 30px;
   font-weight: 600;
   margin: 0px;
+}
+
+.AssetCard .mintIcon {
+  height: 14px;
 }
 
 @media (max-width: 1199px) {
