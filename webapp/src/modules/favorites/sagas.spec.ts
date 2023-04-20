@@ -1,14 +1,11 @@
-import { call, select, take } from 'redux-saga/effects'
+import { select, take } from 'redux-saga/effects'
 import * as matchers from 'redux-saga-test-plan/matchers'
 import { expectSaga } from 'redux-saga-test-plan'
 import { throwError } from 'redux-saga-test-plan/providers'
 import { Item } from '@dcl/schemas'
 import { CONNECT_WALLET_SUCCESS } from 'decentraland-dapps/dist/modules/wallet/actions'
 import { closeModal, CLOSE_MODAL, openModal } from '../modal/actions'
-import {
-  FavoritesAPI,
-  MARKETPLACE_FAVORITES_SERVER_URL
-} from '../vendor/decentraland/favorites/api'
+import { FavoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import { ItemBrowseOptions } from '../item/types'
 import { View } from '../ui/types'
@@ -29,11 +26,7 @@ import {
 } from './actions'
 import { favoritesSaga } from './sagas'
 import { getListId } from './selectors'
-import {
-  FETCH_ITEMS_SUCCESS,
-  fetchItemsRequest,
-  fetchItemsSuccess
-} from '../item/actions'
+import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 import { FavoritedItemIds } from './types'
 
 let item: Item
@@ -230,8 +223,7 @@ describe('when handling the request for fetching favorited items', () => {
 
   beforeEach(() => {
     options = {
-      view: View.LISTS,
-      page: 0
+      view: View.LISTS
     }
     listId = 'listId'
   })

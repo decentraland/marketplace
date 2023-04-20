@@ -21,6 +21,7 @@ import {
   getOnlyOnRent,
   getOnlySmart,
   getSection,
+  getSkip,
   getSortBy,
   getViewAsGuest,
   hasFiltersEnabled
@@ -530,6 +531,49 @@ describe('when getting if it should filter for guests', () => {
 
     it('should return undefined', () => {
       expect(getViewAsGuest.resultFunc(url)).toBe(undefined)
+    })
+  })
+})
+
+// export const getSkip = createSelector<RootState, string, number>(
+//   getRouterSearch,
+//   search => {
+//     const skip = getURLParam(search, 'skip')
+//     return skip === null || isNaN(+skip) ? 0 : +skip
+//   }
+// )
+
+describe('when getting the skip parameter', () => {
+  let searchParams: URLSearchParams
+  beforeEach(() => {
+    searchParams = new URLSearchParams()
+  })
+
+  describe("and it's not set", () => {
+    it('should return 0', () => {
+      expect(getSkip.resultFunc(searchParams.toString())).toBe(0)
+    })
+  })
+
+  describe("and it's not set to a parsable number", () => {
+    beforeEach(() => {
+      searchParams.set('skip', 'notANumber')
+    })
+
+    it('should return 0', () => {
+      expect(getSkip.resultFunc(searchParams.toString())).toBe(0)
+    })
+  })
+
+  describe("and it's a parsable number", () => {
+    beforeEach(() => {
+      searchParams.set('skip', '1')
+    })
+
+    it('should return the number', () => {
+      expect(getSkip.resultFunc(searchParams.toString())).toBe(
+        Number(searchParams.get('skip'))
+      )
     })
   })
 })

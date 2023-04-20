@@ -37,8 +37,7 @@ import {
 } from '../item/actions'
 
 const itemBrowseOptions: ItemBrowseOptions = {
-  view: View.LISTS,
-  page: 0
+  view: View.LISTS
 }
 
 const item = {

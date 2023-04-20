@@ -32,8 +32,7 @@ import {
 import { FavoritedItemIds } from './types'
 
 const itemBrowseOptions: ItemBrowseOptions = {
-  view: View.LISTS,
-  page: 0
+  view: View.LISTS
 }
 
 const item = {

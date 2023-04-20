@@ -46,7 +46,7 @@ describe('when handling the clear filters request action', () => {
       address: '0x...',
       vendor: VendorName.DECENTRALAND,
       section: Section.LAND,
-      page: 1,
+      skip: 0,
       view: View.MARKET,
       sortBy: SortBy.NAME,
       search: 'aText',
@@ -75,7 +75,7 @@ describe('when handling the clear filters request action', () => {
     delete browseOptionsWithoutFilters.maxEstateSize
     delete browseOptionsWithoutFilters.search
     delete browseOptionsWithoutFilters.onlyOnSale
-    browseOptionsWithoutFilters.page = 1
+    browseOptionsWithoutFilters.skip = 0
     pathname = 'aPath'
   })
   describe('and the filters are set', () => {
@@ -171,12 +171,11 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
       vendor: VendorName.DECENTRALAND,
       section: Section.EMOTES,
       view: View.ACCOUNT,
-      page: 1
+      skip: 0
     }
 
     const filters: ItemBrowseOptions = {
       view: browseOptions.view,
-      page: browseOptions.page,
       filters: {
         first: 24,
         skip: 0,
@@ -208,7 +207,7 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
 
   it('should fetch favorited items when providing the LISTS section', () => {
     const browseOptions: BrowseOptions = {
-      page: 1,
+      skip: 0,
       address: '0x...',
       vendor: VendorName.DECENTRALAND,
       section: Section.LISTS,
@@ -217,7 +216,6 @@ describe('when handling the fetchAssetsFromRoute request action', () => {
 
     const filters: ItemBrowseOptions = {
       view: browseOptions.view,
-      page: browseOptions.page,
       section: browseOptions.section as Section,
       filters: {
         first: 24,
@@ -245,7 +243,7 @@ describe('when handling the browse action', () => {
     browseOptions = {
       onlyOnSale: undefined,
       sortBy: undefined,
-      page: 1,
+      skip: 1,
       onlyOnRent: undefined,
       isMap: undefined,
       isFullscreen: undefined,
@@ -914,7 +912,7 @@ describe('when handling the browse action', () => {
       }
       expectedBrowseOptions = {
         ...newBrowseOptions,
-        page: 1,
+        skip: 0,
         onlyOnSale: undefined,
         onlyOnRent: undefined,
         sortBy: undefined,
