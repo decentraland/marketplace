@@ -85,6 +85,7 @@
 
 .FavoritesCounter.Collapsed .counter.nonClickable {
   cursor: default;
+  text-decoration-line: none;
 }
 
 @media (max-width: 768px) {
