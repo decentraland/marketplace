@@ -535,14 +535,6 @@ describe('when getting if it should filter for guests', () => {
   })
 })
 
-// export const getSkip = createSelector<RootState, string, number>(
-//   getRouterSearch,
-//   search => {
-//     const skip = getURLParam(search, 'skip')
-//     return skip === null || isNaN(+skip) ? 0 : +skip
-//   }
-// )
-
 describe('when getting the skip parameter', () => {
   let searchParams: URLSearchParams
   beforeEach(() => {

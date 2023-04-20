@@ -13,11 +13,13 @@ import {
 import { NFT } from '../../nft/types'
 import { RootState } from '../../reducer'
 import { CLAIM_ASSET_TRANSACTION_SUBMITTED } from '../../rental/actions'
+import { FavoritesData } from '../../favorites/types'
 import { View } from '../types'
 import { BrowseUIState } from './reducer'
 import {
   getCount,
   getItems,
+  getItemsPickedByUser,
   getNFTs,
   getOnRentNFTsByLessor,
   getOnRentNFTsByTenant,
@@ -193,6 +195,22 @@ describe('when getting the NFTs of the ui browse state', () => {
 describe('when getting the Items of the ui browse state', () => {
   it('should retrieve the Items of the ui browse state', () => {
     expect(getItems(rootState)).toStrictEqual([item, itemOnSale])
+  })
+})
+
+describe('when getting the user favorited items of the ui browse state', () => {
+  let favoritedItems: Record<string, FavoritesData>
+  beforeEach(() => {
+    favoritedItems = {
+      [item.id]: { pickedByUser: true, count: 1 },
+      [itemOnSale.id]: { pickedByUser: false, count: 4 }
+    }
+  })
+
+  it('should retrieve the items that were favorited by the user', () => {
+    expect(
+      getItemsPickedByUser.resultFunc(favoritedItems, [item, itemOnSale])
+    ).toEqual([item])
   })
 })
 
