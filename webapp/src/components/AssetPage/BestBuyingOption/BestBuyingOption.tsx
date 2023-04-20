@@ -15,7 +15,7 @@ import { Button, Loader, Mana, Popup } from 'decentraland-ui'
 import { formatWeiMANA } from '../../../lib/mana'
 import { formatDistanceToNow } from '../../../lib/date'
 import { locations } from '../../../modules/routing/locations'
-import { isNFT } from '../../../modules/asset/utils'
+import { isCatalogItem, isNFT } from '../../../modules/asset/utils'
 import { bidAPI, orderAPI } from '../../../modules/vendor/decentraland'
 import mintingIcon from '../../../images/minting.png'
 import infoIcon from '../../../images/infoIcon.png'
@@ -63,8 +63,12 @@ const BestBuyingOption = ({ asset, tableRef }: Props) => {
         }
         const sortBy = OrderSortBy.CHEAPEST
 
-        if (asset.network === Network.MATIC && asset.itemId) {
-          params.itemId = asset.itemId
+        if (asset.network === Network.MATIC) {
+          if (isCatalogItem(asset)) {
+            params.itemId = asset.id
+          } else {
+            params.itemId = asset.itemId
+          }
         } else if (asset.network === Network.ETHEREUM) {
           params.nftName = asset.name
         }
