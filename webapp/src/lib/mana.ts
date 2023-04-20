@@ -6,7 +6,8 @@ import { MAXIMUM_FRACTION_DIGITS } from 'decentraland-dapps/dist/lib/mana'
  */
 export function formatWeiMANA(
   wei: string,
-  maximumFractionDigits: number = MAXIMUM_FRACTION_DIGITS
+  maximumFractionDigits: number = MAXIMUM_FRACTION_DIGITS,
+  formatMillion?: boolean
 ): string {
   const value = Number(ethers.utils.formatEther(wei))
 
@@ -20,6 +21,10 @@ export function formatWeiMANA(
 
   if (fixedValue === '0') {
     return getMinimumValueForFractionDigits(maximumFractionDigits).toString()
+  }
+
+  if (formatMillion && value > 1000000) {
+    return `${(+value / 1000000).toLocaleString()}M`
   }
 
   return fixedValue

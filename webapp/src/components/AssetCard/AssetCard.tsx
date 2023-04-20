@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { RentalListing } from '@dcl/schemas'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
+import { MAXIMUM_FRACTION_DIGITS } from 'decentraland-dapps/dist/lib/mana'
 import { Link } from 'react-router-dom'
 import { Card, Icon } from 'decentraland-ui'
 import { formatWeiMANA } from '../../lib/mana'
@@ -41,7 +42,7 @@ const RentalPrice = ({
   return (
     <>
       <Mana className="rental-price" network={asset.network} inline>
-        {formatWeiMANA(rentalPricePerDay)}
+        {formatWeiMANA(rentalPricePerDay, MAXIMUM_FRACTION_DIGITS, true)}
       </Mana>
       <span className="card-rental-day">/{t('global.day')}</span>
     </>
@@ -123,12 +124,20 @@ const AssetCard = (props: Props) => {
               <span>
                 {t('asset_card.listings', { count: asset.listings })}:&nbsp;
                 <Mana size="small" network={asset.network} className="tiniMana">
-                  {formatWeiMANA(asset.minListingPrice)}
+                  {formatWeiMANA(
+                    asset.minListingPrice,
+                    MAXIMUM_FRACTION_DIGITS,
+                    true
+                  )}
                 </Mana>
                 &nbsp;
                 {asset.listings > 1 &&
                   asset.minListingPrice === asset.maxListingPrice &&
-                  `- ${formatWeiMANA(asset.maxListingPrice)}`}
+                  `- ${formatWeiMANA(
+                    asset.maxListingPrice,
+                    MAXIMUM_FRACTION_DIGITS,
+                    true
+                  )}`}
               </span>
             ) : null
         }
@@ -142,12 +151,20 @@ const AssetCard = (props: Props) => {
               <span>
                 {t('asset_card.listings', { count: asset.listings })}:&nbsp;
                 <Mana size="small" network={asset.network} className="tiniMana">
-                  {formatWeiMANA(asset.minListingPrice)}
+                  {formatWeiMANA(
+                    asset.minListingPrice,
+                    MAXIMUM_FRACTION_DIGITS,
+                    true
+                  )}
                 </Mana>
                 &nbsp;{' '}
                 {asset.listings > 1 &&
                   asset.minListingPrice === asset.maxListingPrice &&
-                  `- ${formatWeiMANA(asset.maxListingPrice)}`}
+                  `- ${formatWeiMANA(
+                    asset.maxListingPrice,
+                    MAXIMUM_FRACTION_DIGITS,
+                    true
+                  )}`}
               </span>
             ) : null
         }
@@ -174,7 +191,7 @@ const AssetCard = (props: Props) => {
         {information.price && (
           <div className="PriceInMana">
             <Mana size="large" network={asset.network} className="PriceInMana">
-              {formatWeiMANA(information.price)}
+              {formatWeiMANA(information.price, MAXIMUM_FRACTION_DIGITS, true)}
             </Mana>
           </div>
         )}
@@ -224,7 +241,7 @@ const AssetCard = (props: Props) => {
           </div>
           {!catalogItemInformation && price ? (
             <Mana network={asset.network} inline>
-              {formatWeiMANA(price)}
+              {formatWeiMANA(price, MAXIMUM_FRACTION_DIGITS, true)}
             </Mana>
           ) : rentalPricePerDay ? (
             <RentalPrice asset={asset} rentalPricePerDay={rentalPricePerDay} />
