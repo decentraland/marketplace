@@ -1,6 +1,10 @@
 import { Item } from '@dcl/schemas'
 import { AssetType } from '../../asset/types'
-import { fetchFavoritedItemsSuccess } from '../../favorites/actions'
+import {
+  fetchFavoritedItemsSuccess,
+  undoUnpickingItemAsFavoriteSuccess,
+  unpickItemAsFavoriteSuccess
+} from '../../favorites/actions'
 import { FavoritedItemIds } from '../../favorites/types'
 import {
   fetchItemsRequest,
@@ -20,7 +24,11 @@ import { Section } from '../../vendor/decentraland'
 const assetIds = ['0x0-assetId1', '0x0-assetId2', '0x0-assetId3']
 
 describe('when reducing the action of setting a view', () => {
-  const initialState: BrowseUIState = { ...INITIAL_STATE }
+  let initialState: BrowseUIState
+
+  beforeEach(() => {
+    initialState = { ...INITIAL_STATE }
+  })
 
   it('should return a state with favorited items and their picks stats', () => {
     expect(browseReducer(initialState, setView(View.LISTS))).toEqual({
@@ -31,10 +39,14 @@ describe('when reducing the action of setting a view', () => {
 })
 
 describe('when reducing the browse action', () => {
-  const initialState: BrowseUIState = {
-    ...INITIAL_STATE,
-    nftIds: assetIds
-  }
+  let initialState: BrowseUIState
+
+  beforeEach(() => {
+    initialState = {
+      ...INITIAL_STATE,
+      nftIds: assetIds
+    }
+  })
 
   describe('when the view is set in the browser options', () => {
     it('should clear the nftIds array in the state', () => {
@@ -82,17 +94,21 @@ const fetchRequestActions: [
 describe.each(fetchRequestActions)(
   'when reducing the request action of %s',
   (_, { action, assetType }) => {
-    const initialState: BrowseUIState = {
-      ...INITIAL_STATE,
-      [`${assetType}Ids`]: assetIds,
-      count: assetIds.length
-    }
+    let initialState: BrowseUIState
+    let fetchOptions: NFTsFetchOptions & ItemBrowseOptions
 
-    let fetchOptions: NFTsFetchOptions & ItemBrowseOptions = {
-      vendor: VendorName.DECENTRALAND,
-      params: { first: 10, skip: 0 },
-      view: View.MARKET
-    }
+    beforeEach(() => {
+      initialState = {
+        ...INITIAL_STATE,
+        [`${assetType}Ids`]: assetIds,
+        count: assetIds.length
+      }
+      fetchOptions = {
+        vendor: VendorName.DECENTRALAND,
+        params: { first: 10, skip: 0 },
+        view: View.MARKET
+      }
+    })
 
     describe('when the view is atlas', () => {
       beforeEach(() => {
@@ -145,16 +161,17 @@ describe.each(fetchRequestActions)(
 )
 
 describe('when reducing the fetch NFTs success action', () => {
-  let initialState: BrowseUIState = { ...INITIAL_STATE }
-
-  let nftsFetchOptions = {
-    vendor: VendorName.DECENTRALAND,
-    params: { first: 10, skip: 0 }
-  } as NFTsFetchOptions
+  let initialState: BrowseUIState
+  let nftsFetchOptions: NFTsFetchOptions
   let nft: NFT
   let nfts: NFT[]
 
   beforeEach(() => {
+    initialState = { ...INITIAL_STATE }
+    nftsFetchOptions = {
+      vendor: VendorName.DECENTRALAND,
+      params: { first: 10, skip: 0 }
+    } as NFTsFetchOptions
     nft = {
       id: '0x0-assetId1',
       vendor: VendorName.DECENTRALAND,
@@ -302,8 +319,13 @@ describe('when reducing the fetch NFTs success action', () => {
 })
 
 describe('when reducing the success action of fetching trending items', () => {
-  const initialState: BrowseUIState = { ...INITIAL_STATE }
-  const item = { id: 'itemId1' } as Item
+  let initialState: BrowseUIState
+  let item: Item
+
+  beforeEach(() => {
+    initialState = { ...INITIAL_STATE }
+    item = { id: 'itemId1' } as Item
+  })
 
   it('should return a state with the ids of the trending items', () => {
     expect(
@@ -316,10 +338,15 @@ describe('when reducing the success action of fetching trending items', () => {
 })
 
 describe('when reducing the success action of fetching favorited items', () => {
-  const initialState: BrowseUIState = { ...INITIAL_STATE }
-  const favoritedItemIds: FavoritedItemIds = assetIds.map(id => ({
-    itemId: id
-  }))
+  let initialState: BrowseUIState
+  let favoritedItemIds: FavoritedItemIds
+
+  beforeEach(() => {
+    initialState = { ...INITIAL_STATE }
+    favoritedItemIds = assetIds.map(id => ({
+      itemId: id
+    }))
+  })
 
   it('should return a state with the count of favorited items', () => {
     expect(
@@ -335,13 +362,14 @@ describe('when reducing the success action of fetching favorited items', () => {
 })
 
 describe('when reducing the fetch items success action', () => {
-  let initialState: BrowseUIState = { ...INITIAL_STATE, lastTimestamp: 2 }
+  let initialState: BrowseUIState
 
   let itemsBrowserOptions: ItemBrowseOptions
   let item: Item
   let items: Item[]
 
   beforeEach(() => {
+    initialState = { ...INITIAL_STATE, lastTimestamp: 2 }
     item = {
       id: '0x0-assetId1',
       itemId: 'assetId1'
@@ -509,6 +537,80 @@ describe('when reducing the fetch items success action', () => {
             fetchItemsSuccess(items, count, itemsBrowserOptions, timestamp)
           )
         ).toEqual(initialState)
+      })
+    })
+  })
+})
+
+describe('when reducing the action of the success of the unpicking of an item', () => {
+  let initialState: BrowseUIState = { ...INITIAL_STATE }
+
+  describe('and the current state has no count', () => {
+    beforeEach(() => {
+      initialState.count = undefined
+    })
+
+    it('should return a state with its count unchanged', () => {
+      expect(
+        browseReducer(initialState, unpickItemAsFavoriteSuccess({} as Item))
+      ).toEqual({
+        ...initialState,
+        count: undefined
+      })
+    })
+  })
+
+  describe('and the current state has a count', () => {
+    beforeEach(() => {
+      initialState.count = 1
+    })
+
+    it('should return a state with its count reduced', () => {
+      expect(
+        browseReducer(initialState, unpickItemAsFavoriteSuccess({} as Item))
+      ).toEqual({
+        ...initialState,
+        count: 0
+      })
+    })
+  })
+})
+
+describe('when reducing the action of the success of the undo of the unpicking of an item', () => {
+  let initialState: BrowseUIState = { ...INITIAL_STATE }
+
+  describe('and the current state has no count', () => {
+    beforeEach(() => {
+      initialState.count = undefined
+    })
+
+    it('should return a state with its count unchanged', () => {
+      expect(
+        browseReducer(
+          initialState,
+          undoUnpickingItemAsFavoriteSuccess({} as Item)
+        )
+      ).toEqual({
+        ...initialState,
+        count: undefined
+      })
+    })
+  })
+
+  describe('and the current state has a count', () => {
+    beforeEach(() => {
+      initialState.count = 1
+    })
+
+    it('should return a state with its count increased', () => {
+      expect(
+        browseReducer(
+          initialState,
+          undoUnpickingItemAsFavoriteSuccess({} as Item)
+        )
+      ).toEqual({
+        ...initialState,
+        count: 2
       })
     })
   })
