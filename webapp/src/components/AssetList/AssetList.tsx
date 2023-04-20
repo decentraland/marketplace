@@ -4,7 +4,7 @@ import { NFTCategory } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
 import { getCategoryFromSection } from '../../modules/routing/search'
-import { PAGE_SIZE, getMaxQuerySize } from '../../modules/vendor/api'
+import { getMaxQuerySize } from '../../modules/vendor/api'
 import { AssetType } from '../../modules/asset/types'
 import * as events from '../../utils/events'
 import { InfiniteScroll } from '../InfiniteScroll'
@@ -93,11 +93,10 @@ const AssetList = (props: Props) => {
           : null}
       </Card.Group>
       <InfiniteScroll
-        skip={assets.length}
         hasMorePages={hasMoreAssets}
         onLoadMore={handleLoadMore}
         isLoading={isLoading}
-        maxScrollAssets={3 * PAGE_SIZE}
+        maxInfiniteScrolls={3}
       >
         {assets.length === 0 && !isLoading ? (
           <div className="empty">

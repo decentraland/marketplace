@@ -2,20 +2,15 @@ import { useCallback, useEffect, useState } from 'react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { Button } from 'decentraland-ui'
 import { Props } from './InfiniteScroll.types'
-import { PAGE_SIZE } from '../../modules/vendor/api'
 
 export function InfiniteScroll({
-  skip,
   hasMorePages,
   isLoading,
   children,
-  maxScrollAssets,
+  maxInfiniteScrolls,
   onLoadMore
 }: Props) {
-  const [scrollAssets, setScrollPage] = useState(0)
-  const [showLoadMoreButton, setShowLoadMoreButton] = useState(
-    maxScrollAssets === 0
-  )
+  const [scrolledTimes, setScrolledTimes] = useState(0)
 
   const onScroll = useCallback(() => {
     const scrollTop = document.documentElement.scrollTop
@@ -25,24 +20,12 @@ export function InfiniteScroll({
       !isLoading &&
       scrollTop + clientHeight >= scrollHeight &&
       hasMorePages &&
-      (!maxScrollAssets || scrollAssets < maxScrollAssets)
+      (!maxInfiniteScrolls || scrolledTimes < maxInfiniteScrolls)
     ) {
-      setScrollPage(scrollAssets + 1)
-      onLoadMore(skip + PAGE_SIZE)
+      setScrolledTimes(scrolledTimes + 1)
+      onLoadMore()
     }
-  }, [skip, hasMorePages, isLoading, scrollAssets, maxScrollAssets, onLoadMore])
-
-  useEffect(() => {
-    if (
-      !isLoading &&
-      maxScrollAssets !== undefined &&
-      scrollAssets === maxScrollAssets
-    ) {
-      setShowLoadMoreButton(true)
-    } else {
-      setShowLoadMoreButton(false)
-    }
-  }, [isLoading, scrollAssets, maxScrollAssets, skip, setShowLoadMoreButton])
+  }, [hasMorePages, isLoading, scrolledTimes, maxInfiniteScrolls, onLoadMore])
 
   useEffect(() => {
     window.addEventListener('scroll', onScroll)
@@ -50,9 +33,14 @@ export function InfiniteScroll({
   }, [onScroll])
 
   const handleLoadMore = useCallback(() => {
-    onLoadMore(skip + PAGE_SIZE)
-    setScrollPage(0)
-  }, [onLoadMore, skip])
+    onLoadMore()
+    setScrolledTimes(0)
+  }, [onLoadMore])
+
+  const showLoadMoreButton =
+    !isLoading &&
+    maxInfiniteScrolls !== undefined &&
+    scrolledTimes === maxInfiniteScrolls
 
   if (!hasMorePages) {
     return children
