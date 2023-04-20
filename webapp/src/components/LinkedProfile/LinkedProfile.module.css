@@ -1,0 +1,3 @@
+div:has(> .LinkedProfile) {
+	width: fit-content !important;
+}
