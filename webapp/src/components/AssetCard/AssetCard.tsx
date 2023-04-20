@@ -119,9 +119,10 @@ const AssetCard = (props: Props) => {
           actionIcon: mintingIcon,
           price: asset.minPrice,
           extraInformation:
-            asset.maxListingPrice && asset.minListingPrice ? (
+            asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
               <span>
-                {asset.listings} {t('asset_card.listings')}:&nbsp;
+                {asset.listings}{' '}
+                {t('asset_card.listings', { count: asset.listings })}:&nbsp;
                 <Mana
                   withTooltip
                   size="small"
@@ -130,7 +131,9 @@ const AssetCard = (props: Props) => {
                 >
                   {formatWeiMANA(asset.minListingPrice)}
                 </Mana>
-                &nbsp; - {formatWeiMANA(asset.maxListingPrice)}
+                &nbsp;
+                {asset.listings > 1 &&
+                  `- ${formatWeiMANA(asset.maxListingPrice)}`}
               </span>
             ) : null
         }
@@ -140,9 +143,9 @@ const AssetCard = (props: Props) => {
           actionIcon: null,
           price: asset.minPrice,
           extraInformation:
-            asset.maxListingPrice && asset.minListingPrice ? (
+            asset.maxListingPrice && asset.minListingPrice && asset.listings ? (
               <span>
-                {asset.listings} {t('asset_card.listings')}:&nbsp;
+                {t('asset_card.listings', { count: asset.listings })}:&nbsp;
                 <Mana
                   withTooltip
                   size="small"
@@ -151,7 +154,9 @@ const AssetCard = (props: Props) => {
                 >
                   {formatWeiMANA(asset.minListingPrice)}
                 </Mana>
-                &nbsp; - {formatWeiMANA(asset.maxListingPrice)}
+                &nbsp;{' '}
+                {asset.listings > 1 &&
+                  `- ${formatWeiMANA(asset.maxListingPrice)}`}
               </span>
             ) : null
         }

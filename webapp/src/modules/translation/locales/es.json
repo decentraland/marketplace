@@ -1108,7 +1108,7 @@
       "claiming_back": "Reclamando {asset_type, select, parcel {la parcel} estate {el estate} other {LAND}}",
       "rental_ended": "Período de renta terminado"
     },
-    "listings": "Collecionables",
+    "listings": "{count} {count, plural, one {Collecionable} other {Collecionables}}",
     "available_for_mint": "Disponible para mintear",
     "cheapest_listing": "Coleccionable más barato",
     "not_for_sale": "No disponible para la venta"
