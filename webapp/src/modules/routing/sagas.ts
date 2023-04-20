@@ -139,7 +139,6 @@ function* handleClearFilters() {
 }
 
 export function* handleBrowse(action: BrowseAction) {
-  console.log('Calling browse')
   const options: BrowseOptions = yield call(
     getNewBrowseOptions,
     action.payload.options
@@ -210,15 +209,16 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const category = getCategoryFromSection(section)
 
-  console.log('Skip original value', skip, options.skip)
+  // If it's the first time that it's loading the assets, we should load old assets,
+  // thus first should be skip plus the page size. If it's loading more assets, then it's the page size.
+  // If the section is the collection's one, the page size is different.
   const first = Math.min(
     (isLoadMore ? 0 : skip) +
       (Section.COLLECTIONS === section ? COLLECTIONS_PER_PAGE : PAGE_SIZE),
     getMaxQuerySize(vendor)
   )
-  console.log('WTF is going on with first', first)
+  // If it's the first time that it's loading the assets, it should start from 0, else it should be the skip number.
   skip = isLoadMore ? skip : 0
-  console.log('Browse', { skip, first, isLoadMore, section })
 
   switch (section) {
     case Section.BIDS:
@@ -243,19 +243,11 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       yield put(fetchTrendingItemsRequest())
       break
     case Section.RECENTLY_SOLD:
-      console.log('Fetching recently sold', {
-        ...(options.category && { categories: [options.category] })
-      })
       yield spawn(handleFetchSales, {
         ...(options.category && { categories: [options.category] })
       })
       break
     case Section.SALES:
-      console.log('Fetching sales', {
-        address: Array.isArray(address) ? address[0] : address,
-        first: SALES_PER_PAGE,
-        skip
-      })
       yield spawn(handleFetchSales, {
         address: Array.isArray(address) ? address[0] : address,
         first: SALES_PER_PAGE,
@@ -325,7 +317,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           })
         )
       } else {
-        console.log('Fetching NFT items')
         const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
 
         yield put(
@@ -353,11 +344,9 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 export function* getNewBrowseOptions(
   current: BrowseOptions
 ): Generator<unknown, BrowseOptions, any> {
-  console.log('Current browse options', current)
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
-  console.log('Derived view', view)
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
