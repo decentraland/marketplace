@@ -9,46 +9,43 @@ import {
   getNFTs,
   getCount,
   getItems,
-  getItemsPickedByUser,
-  getView
+  getItemsPickedByUser
 } from '../../modules/ui/browse/selectors'
 import {
   getVendor,
-  getPage,
   getAssetType,
   getSection,
   getSearch,
   hasFiltersEnabled,
-  getVisitedLocations,
-  getSkip
+  getVisitedLocations
 } from '../../modules/routing/selectors'
 import { getLoading as getLoadingNFTs } from '../../modules/nft/selectors'
 import { getLoading as getLoadingItems } from '../../modules/item/selectors'
 import { getLoading as getLoadingFavorites } from '../../modules/favorites/selectors'
+import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
+import { Asset, AssetType } from '../../modules/asset/types'
+import { Sections } from '../../modules/routing/types'
 import { MapStateProps, MapDispatch, MapDispatchProps } from './AssetList.types'
 import AssetList from './AssetList'
-import { FETCH_ITEMS_REQUEST } from '../../modules/item/actions'
-import { AssetType } from '../../modules/asset/types'
-import { Sections } from '../../modules/routing/types'
 
 const mapState = (state: RootState): MapStateProps => {
   const section = getSection(state)
-  const page = getPage(state)
   const assetType = getAssetType(state)
-  console.log('Items picked by user', getItemsPickedByUser(state))
-  console.log('Count', getCount(state))
-  console.log('View', getView(state))
+  let assets: Asset[]
+  if (assetType === AssetType.ITEM) {
+    assets =
+      section === Sections.decentraland.LISTS
+        ? getItemsPickedByUser(state)
+        : getItems(state)
+  } else {
+    assets = getNFTs(state)
+  }
+
   return {
     vendor: getVendor(state),
     assetType,
     section,
-    nfts: getNFTs(state),
-    items:
-      section === Sections.decentraland.LISTS
-        ? getItemsPickedByUser(state)
-        : getItems(state),
-    page,
-    skip: getSkip(state),
+    assets,
     count: getCount(state),
     search: getSearch(state),
     isLoading:

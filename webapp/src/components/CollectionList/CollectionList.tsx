@@ -16,7 +16,7 @@ const CollectionList = ({
   isLoading,
   search,
   sortBy,
-  page,
+  skip,
   onBrowse
 }: Props) => {
   const sortOptions = useRef([
@@ -29,8 +29,8 @@ const CollectionList = ({
     { value: SortBy.SIZE, text: t('filters.size') }
   ])
 
+  const page = Math.ceil(skip / COLLECTIONS_PER_PAGE) + 1
   const pages = Math.ceil(count / COLLECTIONS_PER_PAGE)
-
   const hasPagination = pages > 1
 
   return (
@@ -41,7 +41,10 @@ const CollectionList = ({
             value={search}
             onChange={newSearch => {
               if (search !== newSearch) {
-                onBrowse({ search: newSearch, page: 1 })
+                onBrowse({
+                  search: newSearch,
+                  skip: 0
+                })
               }
             }}
             placeholder={t('collection_list.search', {
@@ -113,7 +116,9 @@ const CollectionList = ({
                 activePage={page}
                 onPageChange={(_, data) => {
                   if (page !== data.activePage) {
-                    onBrowse({ page: Number(data.activePage) })
+                    onBrowse({
+                      skip: (Number(data.activePage) - 1) * COLLECTIONS_PER_PAGE
+                    })
                   }
                 }}
               />

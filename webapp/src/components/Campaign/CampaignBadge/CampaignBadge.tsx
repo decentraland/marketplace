@@ -18,7 +18,7 @@ const CampaignBadge = ({ contract, isCampaignBrowserEnabled }: Props) => {
     return locations.campaign({
       section: decentraland.Section.WEARABLES,
       vendor: VendorName.DECENTRALAND,
-      page: 1,
+      skip: 0,
       sortBy: SortBy.RECENTLY_LISTED,
       onlyOnSale: true,
       assetType: AssetType.ITEM,

@@ -139,6 +139,7 @@ function* handleClearFilters() {
 }
 
 export function* handleBrowse(action: BrowseAction) {
+  console.log('Calling browse')
   const options: BrowseOptions = yield call(
     getNewBrowseOptions,
     action.payload.options
@@ -209,9 +210,15 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
   const category = getCategoryFromSection(section)
 
+  console.log('Skip original value', skip, options.skip)
+  const first = Math.min(
+    (isLoadMore ? 0 : skip) +
+      (Section.COLLECTIONS === section ? COLLECTIONS_PER_PAGE : PAGE_SIZE),
+    getMaxQuerySize(vendor)
+  )
+  console.log('WTF is going on with first', first)
   skip = isLoadMore ? skip : 0
-  const first = Math.min(PAGE_SIZE, getMaxQuerySize(vendor))
-  console.log('Browse', { skip, first })
+  console.log('Browse', { skip, first, isLoadMore, section })
 
   switch (section) {
     case Section.BIDS:
@@ -236,20 +243,29 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
       yield put(fetchTrendingItemsRequest())
       break
     case Section.RECENTLY_SOLD:
+      console.log('Fetching recently sold', {
+        ...(options.category && { categories: [options.category] })
+      })
       yield spawn(handleFetchSales, {
         ...(options.category && { categories: [options.category] })
       })
       break
     case Section.SALES:
+      console.log('Fetching sales', {
+        address: Array.isArray(address) ? address[0] : address,
+        first: SALES_PER_PAGE,
+        skip
+      })
       yield spawn(handleFetchSales, {
         address: Array.isArray(address) ? address[0] : address,
-        page: Math.round(skip / PAGE_SIZE),
-        pageSize: SALES_PER_PAGE
+        first: SALES_PER_PAGE,
+        skip
       })
       break
     case Section.COLLECTIONS:
       yield handleFetchCollections(
-        Math.round(skip / PAGE_SIZE),
+        skip,
+        first,
         Array.isArray(address) ? address[0] : address,
         sortBy,
         search
@@ -260,7 +276,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
         fetchFavoritedItemsRequest({
           view,
           section,
-          page: Math.round(skip / PAGE_SIZE),
           filters: { first, skip }
         })
       )
@@ -310,6 +325,7 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           })
         )
       } else {
+        console.log('Fetching NFT items')
         const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
 
         yield put(
@@ -337,14 +353,16 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 export function* getNewBrowseOptions(
   current: BrowseOptions
 ): Generator<unknown, BrowseOptions, any> {
+  console.log('Current browse options', current)
   let previous: BrowseOptions = yield select(getCurrentBrowseOptions)
   current = yield deriveCurrentOptions(previous, current)
   const view = deriveView(previous, current)
+  console.log('Derived view', view)
   const vendor = deriveVendor(previous, current)
 
   if (shouldResetOptions(previous, current)) {
     previous = {
-      page: 1,
+      skip: 0,
       onlyOnSale: previous.onlyOnSale,
       onlyOnRent: previous.onlyOnRent,
       sortBy: previous.sortBy,
@@ -415,18 +433,18 @@ function* handleFetchOnRent(
 function* handleFetchSales({
   address,
   categories,
-  page = 1,
-  pageSize = 5
+  skip,
+  first
 }: {
   address?: string
   categories?: NFTCategory[]
-  page?: number
-  pageSize?: number
+  skip?: number
+  first?: number
 }) {
   yield put(
     fetchSalesRequest({
-      first: pageSize,
-      skip: (page - 1) * SALES_PER_PAGE,
+      first: first ?? SALES_PER_PAGE,
+      skip: skip ?? 0,
       sortBy: SaleSortBy.RECENTLY_SOLD,
       ...(categories && { categories }),
       ...(address && { seller: address })
@@ -466,7 +484,8 @@ function* handleFetchSales({
 }
 
 function* handleFetchCollections(
-  page: number,
+  skip: number,
+  first: number,
   creator: string,
   sortBy: SortBy,
   search?: string
@@ -474,8 +493,8 @@ function* handleFetchCollections(
   yield put(
     fetchCollectionsRequest(
       {
-        first: COLLECTIONS_PER_PAGE,
-        skip: (page - 1) * COLLECTIONS_PER_PAGE,
+        first,
+        skip,
         creator,
         search,
         sortBy: getCollectionSortBy(sortBy)
@@ -571,8 +590,7 @@ function* deriveCurrentOptions(
 }
 
 function deriveView(previous: BrowseOptions, current: BrowseOptions) {
-  return (previous.page && current.page && previous.page < current.page) ||
-    (previous.skip && current.skip && previous.skip < current.skip)
+  return (previous.skip ?? 0) < (current.skip ?? 0)
     ? View.LOAD_MORE
     : current.view || previous.view
 }

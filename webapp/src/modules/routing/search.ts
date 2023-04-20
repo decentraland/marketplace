@@ -56,9 +56,6 @@ export function getSearchParams(options?: BrowseOptions) {
     if (options.vendor) {
       params.set('vendor', options.vendor)
     }
-    if (options.page) {
-      params.set('page', options.page.toString())
-    }
     if (options.skip) {
       params.set('skip', options.skip.toString())
     }

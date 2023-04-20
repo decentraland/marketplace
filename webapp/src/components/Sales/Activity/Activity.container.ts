@@ -1,6 +1,7 @@
+import { Dispatch } from 'redux'
+import { connect } from 'react-redux'
 import { Item, Sale, SaleType } from '@dcl/schemas'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
-import { connect } from 'react-redux'
 import { NFT } from '../../../modules/nft/types'
 import { RootState } from '../../../modules/reducer'
 import {
@@ -20,11 +21,10 @@ import Activity from './Activity'
 import { FETCH_SALES_REQUEST } from '../../../modules/sale/actions'
 import { FETCH_ITEM_REQUEST } from '../../../modules/item/actions'
 import { FETCH_NFT_REQUEST } from '../../../modules/nft/actions'
-import { MapStateProps, MapDispatchProps } from './Activity.types'
 import { browse } from '../../../modules/routing/actions'
-import { Dispatch } from 'redux'
-import { getPage } from '../../../modules/routing/selectors'
+import { getSkip } from '../../../modules/routing/selectors'
 import { Asset } from '../../../modules/asset/types'
+import { MapStateProps, MapDispatchProps } from './Activity.types'
 
 const getAssets = (
   sales: Sale[],
@@ -56,7 +56,7 @@ const mapState = (state: RootState): MapStateProps => {
   const count = getCount(state)
   const items = getItemsData(state)
   const nfts = getNftData(state)
-  const page = getPage(state)
+  const skip = getSkip(state)
   const assets = getAssets(sales, items, nfts)
   const isLoading = getIsLoading(state)
 
@@ -64,7 +64,7 @@ const mapState = (state: RootState): MapStateProps => {
     sales,
     assets,
     count,
-    page,
+    skip,
     isLoading
   }
 }

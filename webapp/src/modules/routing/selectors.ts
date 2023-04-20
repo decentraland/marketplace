@@ -77,14 +77,6 @@ export const getSection = createSelector<
   return section as Section
 })
 
-export const getPage = createSelector<RootState, string, number>(
-  getRouterSearch,
-  search => {
-    const page = getURLParam(search, 'page')
-    return page === null || isNaN(+page) ? 1 : +page
-  }
-)
-
 export const getSkip = createSelector<RootState, string, number>(
   getRouterSearch,
   search => {
@@ -341,10 +333,10 @@ export const getCurrentLocationAddress = createSelector<
 )
 
 export const getPaginationUrlParams = createSelector(
-  getPage,
+  getSkip,
   getSortBy,
   getSearch,
-  (page, sortBy, search) => ({ page, sortBy, search })
+  (skip, sortBy, search) => ({ skip, sortBy, search })
 )
 
 export const getAssetsUrlParams = createSelector(

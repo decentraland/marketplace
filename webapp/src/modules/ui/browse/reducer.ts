@@ -59,7 +59,6 @@ export function browseReducer(
 ): BrowseUIState {
   switch (action.type) {
     case SET_VIEW: {
-      console.log('Setting view to ', action.payload.view)
       return {
         ...state,
         view: action.payload.view
@@ -160,14 +159,12 @@ export function browseReducer(
       }
 
     case UNPICK_ITEM_AS_FAVORITE_SUCCESS:
-      console.log('Reducing count', state.count)
       return {
         ...state,
         count: state.count !== undefined ? --state.count : state.count
       }
 
     case UNDO_UNPICKING_ITEM_AS_FAVORITE_SUCCESS:
-      console.log('Increasing count', state.count)
       return {
         ...state,
         count: state.count !== undefined ? ++state.count : state.count

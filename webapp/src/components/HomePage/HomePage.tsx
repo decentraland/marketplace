@@ -124,7 +124,7 @@ const HomePage = (props: Props) => {
         view,
         assetType: assetTypes[view],
         sortBy: sort[view],
-        page: 1,
+        skip: 0,
         onlyOnSale: true
       }),
     [onFetchAssetsFromRoute, vendor, sections, assetTypes, sort]

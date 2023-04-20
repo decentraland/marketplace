@@ -8,14 +8,14 @@ export type Props = {
   count: number
   isLoading: boolean
   search: string
-  page: number
+  skip: number
   sortBy?: SortBy
   onBrowse: (...params: Parameters<typeof browse>) => void
 }
 
 export type MapStateProps = Pick<
   Props,
-  'collections' | 'count' | 'isLoading' | 'search' | 'sortBy' | 'page'
+  'collections' | 'count' | 'isLoading' | 'search' | 'sortBy' | 'skip'
 >
 
 export type MapDispatchProps = Pick<Props, 'onBrowse'>

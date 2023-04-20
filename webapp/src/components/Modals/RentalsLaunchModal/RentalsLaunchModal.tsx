@@ -5,7 +5,7 @@ import {
   // Image,
   Button,
   useMobileMediaQuery,
-  Close,
+  Close
 } from 'decentraland-ui'
 import classNames from 'classnames'
 import { Link } from 'react-router-dom'
@@ -58,7 +58,7 @@ export const RentalsLaunchModal = ({
             assetType: AssetType.NFT,
             section: 'land',
             vendor: VendorName.DECENTRALAND,
-            page: 1,
+            skip: 0,
             sortBy: SortBy.NAME,
             onlyOnSale: false,
             viewAsGuest: false
@@ -98,7 +98,9 @@ export const RentalsLaunchModal = ({
           className={classNames(styles.rentalImage, 'ui medium image')}
         ></div>
         <Modal.Description className={styles.modalDescription}>
-          <h2 className={styles.modalTitle}>{t('rentals_promotional_modal.title')}</h2>
+          <h2 className={styles.modalTitle}>
+            {t('rentals_promotional_modal.title')}
+          </h2>
           {t('rentals_promotional_modal.description', {
             p: (children: React.ReactElement) => <p>{children}</p>,
             a: (children: React.ReactElement) => (

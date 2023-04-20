@@ -38,7 +38,6 @@ export type BrowseOptions = {
   assetType?: AssetType
   view?: View
   vendor?: VendorName
-  page?: number
   skip?: number
   section?: string
   sortBy?: SortBy

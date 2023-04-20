@@ -21,12 +21,12 @@ const Activity = ({
   count,
   sales,
   assets,
-  page,
+  skip,
   isLoading,
   onBrowse
 }: Props) => {
+  const page = Math.ceil(skip / SALES_PER_PAGE) + 1
   const pages = Math.ceil(count / SALES_PER_PAGE)
-
   const hasPagination = pages > 1
 
   return (
@@ -105,7 +105,9 @@ const Activity = ({
                 activePage={page}
                 onPageChange={(_, data) => {
                   if (page !== data.activePage) {
-                    onBrowse({ page: Number(data.activePage) })
+                    onBrowse({
+                      skip: (Number(data.activePage) - 1) * SALES_PER_PAGE
+                    })
                   }
                 }}
               />

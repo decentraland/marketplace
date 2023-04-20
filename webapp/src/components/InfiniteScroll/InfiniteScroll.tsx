@@ -12,7 +12,7 @@ export function InfiniteScroll({
   maxScrollAssets,
   onLoadMore
 }: Props) {
-  const [scrollPage, setScrollPage] = useState(0)
+  const [scrollAssets, setScrollPage] = useState(0)
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(
     maxScrollAssets === 0
   )
@@ -25,24 +25,24 @@ export function InfiniteScroll({
       !isLoading &&
       scrollTop + clientHeight >= scrollHeight &&
       hasMorePages &&
-      (!maxScrollAssets || scrollPage < maxScrollAssets)
+      (!maxScrollAssets || scrollAssets < maxScrollAssets)
     ) {
-      setScrollPage(scrollPage + 1)
-      onLoadMore(skip + 1 * PAGE_SIZE)
+      setScrollPage(scrollAssets + 1)
+      onLoadMore(skip + PAGE_SIZE)
     }
-  }, [skip, hasMorePages, isLoading, scrollPage, maxScrollAssets, onLoadMore])
+  }, [skip, hasMorePages, isLoading, scrollAssets, maxScrollAssets, onLoadMore])
 
   useEffect(() => {
     if (
       !isLoading &&
       maxScrollAssets !== undefined &&
-      scrollPage === maxScrollAssets
+      scrollAssets === maxScrollAssets
     ) {
       setShowLoadMoreButton(true)
     } else {
       setShowLoadMoreButton(false)
     }
-  }, [isLoading, scrollPage, maxScrollAssets, skip, setShowLoadMoreButton])
+  }, [isLoading, scrollAssets, maxScrollAssets, skip, setShowLoadMoreButton])
 
   useEffect(() => {
     window.addEventListener('scroll', onScroll)
@@ -50,7 +50,7 @@ export function InfiniteScroll({
   }, [onScroll])
 
   const handleLoadMore = useCallback(() => {
-    onLoadMore(skip + 1 * PAGE_SIZE)
+    onLoadMore(skip + PAGE_SIZE)
     setScrollPage(0)
   }, [onLoadMore, skip])
 

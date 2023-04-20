@@ -6,13 +6,13 @@ export type Props = {
   sales: Sale[]
   assets: Record<string, Asset>
   count: number
-  page: number
+  skip: number
   isLoading: boolean
   onBrowse: (options: BrowseOptions) => void
 }
 
 export type MapStateProps = Pick<
   Props,
-  'sales' | 'assets' | 'count' | 'page' | 'isLoading'
+  'sales' | 'assets' | 'count' | 'skip' | 'isLoading'
 >
 export type MapDispatchProps = Pick<Props, 'onBrowse'>
