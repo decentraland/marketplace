@@ -97,7 +97,7 @@ const BuyNFTModal = (props: Props) => {
       handleExecuteOrder()
       return;
     }
-    onAuthorizedAction(authorization, order?.price || '', handleExecuteOrder)
+    !!order && onAuthorizedAction(authorization, order.price, handleExecuteOrder)
   }, [
     authorization,
     handleExecuteOrder,
