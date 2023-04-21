@@ -8,6 +8,7 @@ import { closeModal, CLOSE_MODAL, openModal } from '../modal/actions'
 import { FavoritesAPI } from '../vendor/decentraland/favorites/api'
 import { getAddress } from '../wallet/selectors'
 import { ItemBrowseOptions } from '../item/types'
+import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 import { View } from '../ui/types'
 import {
   cancelPickItemAsFavorite,
@@ -26,7 +27,6 @@ import {
 } from './actions'
 import { favoritesSaga } from './sagas'
 import { getListId } from './selectors'
-import { fetchItemsRequest, fetchItemsSuccess } from '../item/actions'
 import { FavoritedItemIds } from './types'
 
 let item: Item
