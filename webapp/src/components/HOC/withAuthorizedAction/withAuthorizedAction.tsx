@@ -27,8 +27,7 @@ const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
 
 export default function withAuthorizedAction<P extends WithAuthorizedActionProps>(
   WrappedComponent: React.ComponentType<P>,
-  action: AuthorizedAction,
-  getActionStatus: (state: RootState) => AuthorizationStepStatus = () => AuthorizationStepStatus.PENDING
+  action: AuthorizedAction
 ): React.ComponentType<Omit<P, keyof WithAuthorizedActionProps>> {
 
   // TODO: Remove any type
@@ -77,8 +76,7 @@ export default function withAuthorizedAction<P extends WithAuthorizedActionProps
         requiredAllowance: ethers.utils.formatEther(requiredAllowanceInWei),
         authorizationType: !hasNeededAuthorization ? AuthorizationType.APPROVAL : AuthorizationType.ALLOWANCE,
         action,
-        onAuthorized,
-        getActionStatus
+        onAuthorized
       })
       setShowAuthorizationModal(true)
     }

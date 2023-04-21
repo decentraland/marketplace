@@ -20,7 +20,6 @@ export function AuthorizationModal({
   authorizationType,
   revokeStatus,
   grantStatus,
-  actionStatus,
   error,
   onClose,
   onRevoke,
@@ -54,10 +53,7 @@ export function AuthorizationModal({
           action: t(`mana_authorization_modal.${action}.action`)
         }),
         action: t('mana_authorization_modal.confirm_transaction.action'),
-        message: getStepMessage(authSteps.length, actionStatus, error, currentStep),
-        onActionClicked: handleAuthorized,
-        isLoading: LOADING_STATUS.includes(actionStatus),
-        status: actionStatus
+        onActionClicked: handleAuthorized
       }
     ].map((step, index) => {
       if (
@@ -102,7 +98,6 @@ export function AuthorizationModal({
     grantStatus,
     revokeStatus,
     currentStep,
-    actionStatus,
     error,
     handleGrantToken,
     handleRevokeToken,

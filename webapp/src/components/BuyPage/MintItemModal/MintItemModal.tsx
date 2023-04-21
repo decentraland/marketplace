@@ -234,5 +234,5 @@ const MintItemModal = (props: Props) => {
 }
 
 export default React.memo(
-  withAuthorizedAction(MintItemModal, AuthorizedAction.MINT, getMintItemStatus)
+  withAuthorizedAction(MintItemModal, AuthorizedAction.MINT)
 )

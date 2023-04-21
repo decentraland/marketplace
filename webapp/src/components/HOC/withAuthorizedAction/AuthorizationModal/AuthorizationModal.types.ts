@@ -35,8 +35,6 @@ export type Props = {
   revokeStatus: AuthorizationStepStatus
   grantStatus: AuthorizationStepStatus
   error: string
-  actionStatus: AuthorizationStepStatus,
-  getActionStatus: (state: RootState) => AuthorizationStepStatus
   onClose: () => void
   onAuthorized: () => void
   onRevoke: typeof revokeTokenRequest
@@ -45,5 +43,5 @@ export type Props = {
 
 export type MapDispatchProps = Pick<Props, 'onRevoke' | 'onGrant'>
 export type MapDispatch = Dispatch<RevokeTokenRequestAction | GrantTokenRequestAction>
-export type OwnProps = Pick<Props, 'authorization' | 'requiredAllowance' | 'getActionStatus'>
-export type MapStateProps = Pick<Props, 'revokeStatus' | 'grantStatus' | 'error' | 'actionStatus'>
+export type OwnProps = Pick<Props, 'authorization' | 'requiredAllowance'>
+export type MapStateProps = Pick<Props, 'revokeStatus' | 'grantStatus' | 'error'>

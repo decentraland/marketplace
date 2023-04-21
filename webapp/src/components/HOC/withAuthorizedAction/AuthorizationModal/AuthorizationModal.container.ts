@@ -21,7 +21,7 @@ import {
 import { getStepStatus } from './utils'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
-  const { authorization, requiredAllowance, getActionStatus } = ownProps
+  const { authorization, requiredAllowance } = ownProps
   const autorizations = getAuthorizations(state)
   return {
     revokeStatus: getStepStatus(
@@ -38,7 +38,6 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
       autorizations,
       requiredAllowance
     ),
-    actionStatus: getActionStatus(state),
     error: getError(state) || ''
   }
 }
