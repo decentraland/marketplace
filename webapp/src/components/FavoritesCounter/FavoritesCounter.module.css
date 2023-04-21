@@ -17,6 +17,22 @@
   -o-transition: opacity .2s ease-out;
 }
 
+.FavoritesCounter :global(.ui.loader) {
+  margin: 0 .25rem 0 0;
+}
+
+.FavoritesCounter :global(.ui.loader:before) {
+  border-color: var(--text) !important;
+}
+
+.FavoritesCounter :global(.ui.loader:after) {
+  border-color: rgb(35, 31, 32, 0.4) transparent transparent !important;
+}
+
+.FavoritesCounter:hover :global(.ui.loader:after) {
+  border-color: rgba(35, 31, 32, 1) transparent transparent !important;
+}
+
 .FavoritesCounter:hover .bubble {
   background-color: rgba(35, 31, 32, 1);
 }

@@ -17,12 +17,16 @@ export type Props = {
   isCollapsed?: boolean
   isPickedByUser: boolean
   count: number
+  isLoading: boolean
   onCounterClick: (item: Item) => ReturnType<typeof openModal>
   onPick: typeof pickItemAsFavoriteRequest
   onUnpick: typeof unpickItemAsFavoriteRequest
 }
 
-export type MapStateProps = Pick<Props, 'isPickedByUser' | 'count'>
+export type MapStateProps = Pick<
+  Props,
+  'isPickedByUser' | 'count' | 'isLoading'
+>
 
 export type MapDispatchProps = Pick<
   Props,
