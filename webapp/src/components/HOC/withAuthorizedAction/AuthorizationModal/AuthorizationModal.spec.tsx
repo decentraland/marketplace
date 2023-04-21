@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { render, RenderResult } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -35,13 +35,16 @@ describe('when clicking close button', () => {
 })
 
 describe('when shouldAuthorized is true', () => {
+  let screen: RenderResult
+  beforeEach(() => {
+    screen = renderAuthorizationModal({ shouldAuthorize: true })
+  })
+
   it('should render two steps', () => {
-    const screen = renderAuthorizationModal({ shouldAuthorize: true })
     expect(screen.getByTestId('multi-step').children.length).toBe(2)
   })
 
   it('should render authorization step', () => {
-    const screen = renderAuthorizationModal({ shouldAuthorize: true })
     expect(
       screen.getByRole('button', {
         name: t('mana_authorization_modal.authorize.action')
@@ -50,7 +53,6 @@ describe('when shouldAuthorized is true', () => {
   })
 
   it('should render confirm action step', () => {
-    const screen = renderAuthorizationModal({ shouldAuthorize: true })
     expect(
       screen.getByRole('button', {
         name: t('mana_authorization_modal.confirm_transaction.action')
@@ -59,7 +61,6 @@ describe('when shouldAuthorized is true', () => {
   })
 
   it('should show only first step enabled', () => {
-    const screen = renderAuthorizationModal({ shouldAuthorize: true })
     expect(
       screen.getByRole('button', {
         name: t('mana_authorization_modal.authorize.action')
@@ -75,27 +76,28 @@ describe('when shouldAuthorized is true', () => {
 })
 
 describe('when shouldUpdateAllowance is true', () => {
+  let screen: RenderResult
+  beforeEach(() => {
+    screen = renderAuthorizationModal({ shouldUpdateAllowance: true })
+  })
+
   it('should render two steps', () => {
-    const screen = renderAuthorizationModal({ shouldUpdateAllowance: true })
     expect(screen.getByTestId('multi-step').children.length).toBe(3)
   })
 
   it('should render revoke current cap step', () => {
-    const screen = renderAuthorizationModal({ shouldUpdateAllowance: true })
     expect(
       screen.getByText(t('mana_authorization_modal.revoke_cap.title'))
     ).toBeInTheDocument()
   })
 
   it('should render set new cap step', () => {
-    const screen = renderAuthorizationModal({ shouldUpdateAllowance: true })
     expect(
       screen.getByText(t('mana_authorization_modal.set_cap.title'))
     ).toBeInTheDocument()
   })
 
   it('should render confirm transaction step', () => {
-    const screen = renderAuthorizationModal({ shouldUpdateAllowance: true })
     expect(
       screen.getByRole('button', {
         name: t('mana_authorization_modal.confirm_transaction.action')
@@ -104,7 +106,6 @@ describe('when shouldUpdateAllowance is true', () => {
   })
 
   it('should show only first step enabled', () => {
-    const screen = renderAuthorizationModal({ shouldUpdateAllowance: true })
     expect(
       screen.getAllByRole('button', {
         name: t('mana_authorization_modal.authorize.action')
