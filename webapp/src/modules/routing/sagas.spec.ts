@@ -243,7 +243,7 @@ describe('when handling the browse action', () => {
     browseOptions = {
       onlyOnSale: undefined,
       sortBy: undefined,
-      skip: 1,
+      skip: 0,
       onlyOnRent: undefined,
       isMap: undefined,
       isFullscreen: undefined,
