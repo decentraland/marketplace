@@ -80,7 +80,7 @@ const FavoritesCounter = (props: Props) => {
       >
         <span>
           {isLoading ? (
-            <Loader active inline size="tiny" />
+            <Loader active inline size="tiny" className={styles.loader} />
           ) : (
             <Icon
               size="large"

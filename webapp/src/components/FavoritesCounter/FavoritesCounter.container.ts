@@ -21,7 +21,6 @@ import {
   MapStateProps,
   OwnProps
 } from './FavoritesCounter.types'
-import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
 
 const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   const {
@@ -30,10 +29,14 @@ const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
   return {
     isPickedByUser: getIsPickedByUser(state, itemId),
     count: getCount(state, itemId),
-    isLoading:
-      isLoadingType(getLoading(state), PICK_ITEM_AS_FAVORITE_REQUEST) ||
-      isLoadingType(getLoading(state), UNPICK_ITEM_AS_FAVORITE_REQUEST) ||
-      isLoadingType(getLoading(state), UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST)
+    isLoading: getLoading(state).some(
+      ({ type, payload }) =>
+        [
+          PICK_ITEM_AS_FAVORITE_REQUEST,
+          UNPICK_ITEM_AS_FAVORITE_REQUEST,
+          UNDO_UNPICKING_ITEM_AS_FAVORITE_REQUEST
+        ].includes(type) && payload.item.id === itemId
+    )
   }
 }
 
