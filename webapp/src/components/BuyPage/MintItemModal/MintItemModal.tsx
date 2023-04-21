@@ -95,7 +95,7 @@ const MintItemModal = (props: Props) => {
       handleExecuteOrder()
       return
     }
-    onAuthorizedAction(item?.price, handleExecuteOrder)
+    !!item && onAuthorizedAction(item.price, handleExecuteOrder)
   }, [item.price, isBuyWithCardPage, handleExecuteOrder, onAuthorizedAction])
 
   const isDisabled =

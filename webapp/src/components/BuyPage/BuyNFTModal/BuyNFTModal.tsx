@@ -19,6 +19,8 @@ import { AssetAction } from '../../AssetAction'
 import { Network as NetworkSubtitle } from '../../Network'
 import PriceSubtitle from '../../Price'
 import { AssetProviderPage } from '../../AssetProviderPage'
+import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
+import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { PriceTooLow } from '../PriceTooLow'
 import { Name } from '../Name'
 import { Price } from '../Price'
@@ -27,8 +29,6 @@ import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
 import { NotEnoughMana } from '../NotEnoughMana'
 import { PriceHasChanged } from '../PriceHasChanged'
 import { Props } from './BuyNFTModal.types'
-import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 
 const BuyNFTModal = (props: Props) => {
   const {
@@ -46,8 +46,6 @@ const BuyNFTModal = (props: Props) => {
     onAuthorizedAction,
     onSetAuthorization
   } = props
-
-  console.log('HOLA')
 
   const [fingerprint, isFingerprintLoading] = useFingerprint(nft)
   const analytics = getAnalytics()
@@ -104,7 +102,7 @@ const BuyNFTModal = (props: Props) => {
       handleExecuteOrder()
       return
     }
-    onAuthorizedAction(order?.price || '', handleExecuteOrder)
+    !!order && onAuthorizedAction(order.price, handleExecuteOrder)
   }, [handleExecuteOrder, onAuthorizedAction, isBuyWithCardPage, order?.price])
 
   const isDisabled =

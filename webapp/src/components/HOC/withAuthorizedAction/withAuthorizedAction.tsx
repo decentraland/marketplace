@@ -11,7 +11,6 @@ import {
 import { RootState } from '../../../modules/reducer'
 import {
   AuthorizationModal,
-  AuthorizationStepStatus,
   AuthorizedAction
 } from './AuthorizationModal'
 import { WithAuthorizedActionProps, MapStateProps, MapDispatch, MapDispatchProps } from './withAuthorizedAction.types'

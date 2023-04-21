@@ -1,3 +1,4 @@
+import { Dispatch } from 'redux'
 import {
   grantTokenRequest,
   GrantTokenRequestAction,
@@ -5,8 +6,6 @@ import {
   RevokeTokenRequestAction
 } from 'decentraland-dapps/dist/modules/authorization/actions'
 import { Authorization, AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
-import { Dispatch } from 'redux'
-import { RootState } from '../../../../modules/reducer'
 
 // Action to perfom after authorization step is finished
 export enum AuthorizedAction {
