@@ -18,7 +18,7 @@ export type Props = {
 
 export type MapStateProps = Pick<
   Props,
-  'authorizations' | 'isPlacingBid' | 'getContract'
+  'isPlacingBid' | 'getContract'
 >
 export type MapDispatchProps = Pick<Props, 'onNavigate' | 'onPlaceBid'>
 export type MapDispatch = Dispatch<

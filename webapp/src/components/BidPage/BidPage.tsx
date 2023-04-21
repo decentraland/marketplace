@@ -10,7 +10,6 @@ import { Props } from './BidPage.types'
 
 const BidPage = (props: Props) => {
   const {
-    authorizations,
     onNavigate,
     onPlaceBid,
     isPlacingBid,
@@ -28,7 +27,6 @@ const BidPage = (props: Props) => {
                   nft={nft}
                   rental={rental}
                   wallet={wallet}
-                  authorizations={authorizations}
                   onNavigate={onNavigate}
                   onPlaceBid={onPlaceBid}
                   isPlacingBid={isPlacingBid}

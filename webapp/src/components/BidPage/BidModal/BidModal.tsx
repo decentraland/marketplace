@@ -1,14 +1,12 @@
 import React, { useState, useCallback } from 'react'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
-import { ethers } from 'ethers'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
   Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
-import { hasAuthorizationAndEnoughAllowance } from 'decentraland-dapps/dist/modules/authorization/utils'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import {
   getRentalEndDate,
@@ -21,21 +19,22 @@ import { AssetAction } from '../../AssetAction'
 import { getDefaultExpirationDate } from '../../../modules/order/utils'
 import { locations } from '../../../modules/routing/locations'
 import { useFingerprint } from '../../../modules/nft/hooks'
-import { AuthorizationModal } from '../../AuthorizationModal'
 import { getContractNames } from '../../../modules/vendor'
 import { isLand } from '../../../modules/nft/utils'
 import { ManaField } from '../../ManaField'
+import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Mana } from '../../Mana'
 import { Props } from './BidModal.types'
 import './BidModal.css'
+import { AuthorizationAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { ethers } from 'ethers'
 
 const BidModal = (props: Props) => {
   const {
     nft,
     rental,
     wallet,
-    authorizations,
     onNavigate,
     onPlaceBid,
     isPlacingBid,
@@ -47,7 +46,6 @@ const BidModal = (props: Props) => {
 
   const [fingerprint, isLoading] = useFingerprint(nft)
 
-  const [showAuthorizationModal, setShowAuthorizationModal] = useState(false)
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
 
   const handlePlaceBid = useCallback(
@@ -90,34 +88,14 @@ const BidModal = (props: Props) => {
     type: AuthorizationType.ALLOWANCE
   }
 
-  const shouldUpdateSpendingCap: boolean =
-    !!authorizations &&
-    !!price &&
-    !hasAuthorizationAndEnoughAllowance(
-      authorizations,
-      authorization,
-      ethers.utils.parseEther(price).toString()
-    )
-
   const handleSubmit = () => {
     setShowConfirmationModal(true)
   }
 
   const handleConfirmBid = () => {
-    if (
-      hasAuthorizationAndEnoughAllowance(
-        authorizations,
-        authorization,
-        ethers.utils.parseEther(price).toString()
-      )
-    ) {
-      handlePlaceBid()
-    } else {
-      setShowAuthorizationModal(true)
-    }
+    const { onAuthorizedAction } = props;
+    onAuthorizedAction(authorization, ethers.utils.parseEther(price).toString(), handlePlaceBid)
   }
-
-  const handleClose = () => setShowAuthorizationModal(false)
 
   const isInvalidPrice = parseMANANumber(price) <= 0
   const isInvalidDate = +new Date(`${expiresAt} 00:00:00`) < Date.now()
@@ -209,14 +187,6 @@ const BidModal = (props: Props) => {
             </ChainButton>
           </div>
         </Form>
-        <AuthorizationModal
-          open={showAuthorizationModal}
-          authorization={authorization}
-          isLoading={isPlacingBid}
-          shouldUpdateSpendingCap={shouldUpdateSpendingCap}
-          onProceed={handlePlaceBid}
-          onCancel={handleClose}
-        />
         {showConfirmationModal ? (
           <ConfirmInputValueModal
             open={showConfirmationModal}
@@ -251,4 +221,4 @@ const BidModal = (props: Props) => {
   )
 }
 
-export default React.memo(BidModal)
+export default React.memo(withAuthorizedAction(BidModal, AuthorizationAction.BID))

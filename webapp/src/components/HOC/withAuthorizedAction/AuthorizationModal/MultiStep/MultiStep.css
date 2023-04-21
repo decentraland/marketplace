@@ -1,0 +1,82 @@
+.ui-multi-step {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.ui-multi-step .step-container {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 10px;
+}
+
+.ui-multi-step .step-container.disabled {
+  opacity: 0.5;
+}
+
+.ui-multi-step .step-position {
+  border: 1px solid var(--text);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ui-multi-step .step-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ui-multi-step .step-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.ui-multi-step .step-description {
+  margin: 0;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 24px;
+}
+
+.ui-multi-step .step-action {
+  max-width: 230px;
+  width: 100%;
+}
+
+.ui-multi-step .step-action-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  font-size: 13px;
+  align-items: center;
+}
+
+.ui-multi-step .disabled .step-action:disabled {
+  background: rgba(115, 110, 125, 0.5);
+  opacity: 1 !important; /** This is to override opacity: 0.45!important for buttons. The opacity will be given by upper component **/
+}
+
+.ui-multi-step .loader {
+  position: relative;
+  top: 12px;
+  left: 10px;
+}
+
+.ui-multi-step .check-icon {
+  color: var(--primary)
+}
+
+.ui-multi-step .step-message {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  height: 44px;
+  align-items: center;
+  margin-top: 10px;
+}

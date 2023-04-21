@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import {
-  getData as getAuthorizations,
   getLoading as getLoadingAuthorizations
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { isLoadingType } from 'decentraland-dapps/dist/modules/loading/selectors'
@@ -23,7 +22,6 @@ import {
 import BuyNFTModal from './BuyNFTModal'
 
 const mapState = (state: RootState): MapStateProps => ({
-  authorizations: getAuthorizations(state),
   isLoading:
     isLoadingType(
       getLoadingAuthorizations(state),

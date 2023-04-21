@@ -1137,6 +1137,62 @@
   "lists_page": {
     "default_title": "Wishlist"
   },
+  "mana_authorization_modal": {
+    "waiting_wallet": "Confirm the transaction on your wallet",
+    "waiting_confirmation": "Processing authorization",
+    "done": "Done",
+    "title": "Complete your {action}",
+    "authorize": {
+      "title": "First, authorize the <contract></contract> contract to operate MANA on your behalf in Decentraland. ",
+      "description": "Keep in mind that some wallets require setting a custom MANA spending limit. Enter the item price {price} MANA or a higher amount you're comfortable with for spending now or later. You can change the limit at any time.",
+      "action": "Authorize",
+      "message": "Remember to set a cap equal to the item price {price} MANA or higher."
+    },
+    "confirm_transaction": {
+      "title": "Confirm transaction to {action} the item",
+      "action": "Confirm transaction"
+    },
+    "revoke_cap": {
+      "title": "Revoke your current spending cap",
+      "description": "Your current spending cap is lower than {price} MANA. You'll have to revoke your current spending cap before making a new one.",
+      "action": "Authorize"
+    },
+    "set_cap": {
+      "title": "Set a new spending cap",
+      "description": "Enter the item price {price} MANA or a higher amount you're comfortable with for spending now or later. You can change the limit at any time.",
+      "action": "Authorize"
+    },
+    "mint": {
+      "title_action": "purchase",
+      "contract": "Collection Store",
+      "action": "buy"
+    },
+    "buy": {
+      "title_action": "purchase",
+      "contract": "Marketplace",
+      "action": "buy"
+    },
+    "bid": {
+      "title_action": "offer",
+      "contract": "Bids",
+      "action": "offer"
+    },
+    "rent": {
+      "title_action": "rental",
+      "contract": "Rentals",
+      "action": "rent"
+    },
+    "claim_name": {
+      "title_action": "purchase",
+      "contract": "DCLController",
+      "action": "claim"
+    },
+    "swap_mana": {
+      "title_action": "swap",
+      "contract": "ERC20PredicateProxy",
+      "action": "swap"
+    }
+  },
   "claim_your_own_name": {
     "title": "CLAIM YOUR OWN NAME",
     "text": "In this section you can find NAMEs that are listed for sale by Decentraland users. Alternatively, you can claim your own unique NAME from the Builder section for a fixed price of {mana}.",

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux'
 import {
-  getData as getAuthorizations,
   getLoading as getLoadingAuthorizations
 } from 'decentraland-dapps/dist/modules/authorization/selectors'
 import { FETCH_AUTHORIZATIONS_REQUEST } from 'decentraland-dapps/dist/modules/authorization/actions'
@@ -25,7 +24,6 @@ import {
 import MintItemModal from './MintItemModal'
 
 const mapState = (state: RootState): MapStateProps => ({
-  authorizations: getAuthorizations(state),
   isLoading:
     isLoadingType(
       getLoadingAuthorizations(state),
