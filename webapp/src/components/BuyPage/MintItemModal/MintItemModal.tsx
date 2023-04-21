@@ -90,7 +90,7 @@ const MintItemModal = (props: Props) => {
       handleExecuteOrder()
       return
     }
-    onAuthorizedAction(authorization, item?.price, handleExecuteOrder)
+    !!item && onAuthorizedAction(authorization, item.price, handleExecuteOrder)
   }, [
     authorization,
     item.price,

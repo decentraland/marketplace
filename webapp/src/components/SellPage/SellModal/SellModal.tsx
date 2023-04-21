@@ -25,10 +25,10 @@ import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { getContractNames } from '../../../modules/vendor'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
-import { Props } from './SellModal.types'
-import { showPriceBelowMarketValueWarning } from './utils'
 import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
 import { AuthorizationAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { Props } from './SellModal.types'
+import { showPriceBelowMarketValueWarning } from './utils'
 
 const SellModal = (props: Props) => {
   const {
