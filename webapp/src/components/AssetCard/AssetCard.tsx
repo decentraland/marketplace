@@ -99,6 +99,8 @@ const AssetCard = (props: Props) => {
     rental
   } = props
 
+  console.log('flo a ver assetcard llego aca?', asset)
+
   const title = getAssetName(asset)
   const { parcel, estate, wearable, emote, ens } = asset.data
   const rentalPricePerDay: string | null = useMemo(

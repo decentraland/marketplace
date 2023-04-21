@@ -43,6 +43,7 @@ import {
   TRANSFER_NFT_SUCCESS
 } from '../nft/actions'
 import { setView } from '../ui/actions'
+import { getFilters } from '../vendor/utils'
 import {
   MAX_PAGE,
   PAGE_SIZE,
@@ -54,6 +55,8 @@ import {
   getCategoryFromSection,
   getDefaultOptionsByView,
   getSearchWearableCategory,
+  getItemSortBy,
+  getAssetOrderBy,
   getCollectionSortBy,
   getSearchEmoteCategory,
   getCatalogSortBy
@@ -179,6 +182,7 @@ function* handleGoBack(action: GoBackAction) {
 }
 
 export function* fetchAssetsFromRoute(options: BrowseOptions) {
+  const isItems = options.assetType === AssetType.ITEM
   const view = options.view!
   const vendor = options.vendor!
   const page = options.page!
@@ -187,8 +191,10 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
   const {
     search,
     onlyOnSale,
+    onlyOnRent,
     onlySmart,
     isMap,
+    contracts,
     tenant,
     minPrice,
     maxPrice,
@@ -272,28 +278,111 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
       const { rarities, wearableGenders, emotePlayMode } = options
 
-      yield put(
-        fetchCatalogRequest({
-          first,
-          skip,
-          sortBy: getCatalogSortBy(sortBy),
-          isOnSale: onlyOnSale,
-          creator: address ? [address] : creators,
-          wearableCategory,
-          emoteCategory,
-          isWearableHead,
-          isWearableAccessory,
-          isWearableSmart: onlySmart,
-          search,
-          category,
-          rarities: rarities,
-          wearableGenders,
-          emotePlayMode,
-          minPrice,
-          maxPrice,
-          network
-        })
+      console.log(
+        'flo a ver view',
+        view,
+        'section',
+        section,
+        section.toString().includes(Section.EMOTES),
+        section.toString().includes(Section.EMOTES),
+        'section.toString().includes(Section.w)',
+        section.toString().includes(Section.WEARABLES),
+        'view === View.MARKET',
+        view === View.MARKET,
+        'el if si entra en fetch ntfs items',
+        view === View.MARKET &&
+          (section.toString().includes(Section.EMOTES) ||
+            section.toString().includes(Section.WEARABLES))
       )
+
+      if (
+        view === View.MARKET &&
+        (section.toString().includes(Section.EMOTES) ||
+          section.toString().includes(Section.WEARABLES))
+      ) {
+        console.log(
+          'flo a ver entro en el if? -> le pega a catalog',
+          view,
+          section
+        )
+        yield put(
+          fetchCatalogRequest({
+            first,
+            skip,
+            sortBy: getCatalogSortBy(sortBy),
+            isOnSale: onlyOnSale,
+            creator: address ? [address] : creators,
+            wearableCategory,
+            emoteCategory,
+            isWearableHead,
+            isWearableAccessory,
+            isWearableSmart: onlySmart,
+            search,
+            category,
+            rarities: rarities,
+            wearableGenders,
+            emotePlayMode,
+            minPrice,
+            maxPrice,
+            network
+          })
+        )
+      } else {
+        console.log(
+          'flo a ver entro en el else? -> le pega a nfts items',
+          view,
+          section
+        )
+        if (isItems) {
+          yield put(
+            fetchItemsRequest({
+              view,
+              page,
+              filters: {
+                first,
+                skip,
+                sortBy: getItemSortBy(sortBy),
+                isOnSale: onlyOnSale,
+                creator: address ? [address] : creators,
+                wearableCategory,
+                emoteCategory,
+                isWearableHead,
+                isWearableAccessory,
+                isWearableSmart: onlySmart,
+                search,
+                category,
+                rarities: rarities,
+                contracts,
+                wearableGenders,
+                emotePlayMode,
+                minPrice,
+                maxPrice
+              }
+            })
+          )
+        } else {
+          const [orderBy, orderDirection] = getAssetOrderBy(sortBy)
+
+          yield put(
+            fetchNFTsRequest({
+              vendor,
+              view,
+              params: {
+                first,
+                skip,
+                orderBy,
+                orderDirection,
+                onlyOnSale,
+                onlyOnRent,
+                address,
+                category,
+                search
+              },
+              filters: getFilters(vendor, options) // TODO: move to routing
+            })
+          )
+        }
+      }
   }
 }
 
