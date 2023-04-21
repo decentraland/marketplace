@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ethers } from 'ethers'
 import addDays from 'date-fns/addDays'
 import formatDate from 'date-fns/format'
@@ -6,7 +6,6 @@ import isValid from 'date-fns/isValid'
 import { Network, NFTCategory } from '@dcl/schemas'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
-  Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
@@ -25,10 +24,10 @@ import { Mana } from '../../Mana'
 import { ManaField } from '../../ManaField'
 import { getContractNames } from '../../../modules/vendor'
 import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
+import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
+import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { Props } from './SellModal.types'
 import { showPriceBelowMarketValueWarning } from './utils'
-import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizationAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 
 const SellModal = (props: Props) => {
   const {
@@ -40,7 +39,8 @@ const SellModal = (props: Props) => {
     getContract,
     onGoBack,
     onCreateOrder,
-    onAuthorizedAction
+    onAuthorizedAction,
+    onSetAuthorization
   } = props
 
   const isUpdate = order !== null
@@ -55,10 +55,6 @@ const SellModal = (props: Props) => {
   )
   const [showConfirm, setShowConfirm] = useState(false)
 
-  if (!wallet) {
-    return null
-  }
-
   const contractNames = getContractNames()
 
   const marketplace = getContract({
@@ -66,22 +62,28 @@ const SellModal = (props: Props) => {
     network: nft.network
   })
 
-  if (!marketplace) {
-    return null
-  }
+  useEffect(() => {
+    if (!marketplace || !wallet) {
+      return 
+    }
 
-  const authorization: Authorization = {
-    address: wallet.address,
-    authorizedAddress: marketplace.address,
-    contractAddress: nft.contractAddress,
-    contractName:
-      (nft.category === NFTCategory.WEARABLE ||
-        nft.category === NFTCategory.EMOTE) &&
-      nft.network === Network.MATIC
-        ? ContractName.ERC721CollectionV2
-        : ContractName.ERC721,
-    chainId: nft.chainId,
-    type: AuthorizationType.APPROVAL
+    onSetAuthorization({
+      address: wallet.address,
+      authorizedAddress: marketplace.address,
+      contractAddress: nft.contractAddress,
+      contractName:
+        (nft.category === NFTCategory.WEARABLE ||
+          nft.category === NFTCategory.EMOTE) &&
+        nft.network === Network.MATIC
+          ? ContractName.ERC721CollectionV2
+          : ContractName.ERC721,
+      chainId: nft.chainId,
+      type: AuthorizationType.APPROVAL
+    })
+  }, [marketplace, wallet, nft.category, nft.chainId, nft.contractAddress, nft.network, onSetAuthorization])
+
+  if (!marketplace || !wallet) {
+    return null
   }
 
   const handleCreateOrder = () =>
@@ -93,7 +95,7 @@ const SellModal = (props: Props) => {
 
   const handleSubmit = () => {
     // TODO: Check authorization CAP in this case
-    onAuthorizedAction(authorization, '0', handleCreateOrder)
+    onAuthorizedAction('0', handleCreateOrder)
     setShowConfirm(false)
   }
 
@@ -201,4 +203,4 @@ const SellModal = (props: Props) => {
   )
 }
 
-export default React.memo(withAuthorizedAction(SellModal, AuthorizationAction.SELL))
+export default React.memo(withAuthorizedAction(SellModal, AuthorizedAction.SELL))

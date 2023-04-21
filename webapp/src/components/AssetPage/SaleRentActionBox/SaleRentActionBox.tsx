@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState } from 'react'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { NFTCategory } from '@dcl/schemas'
 import { ethers } from 'ethers'
 import intlFormat from 'date-fns/intlFormat'
@@ -8,6 +8,7 @@ import { Button, Popup } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { isMobile } from 'decentraland-dapps/dist/lib/utils'
+import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
 import { formatWeiMANA } from '../../../lib/mana'
 import {
   canBeClaimed,
@@ -32,7 +33,7 @@ import { PeriodsDropdown } from './PeriodsDropdown'
 import { Props } from './SaleRentActionBox.types'
 import styles from './SaleRentActionBox.module.css'
 import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizationAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 
 enum View {
   SALE,
@@ -47,6 +48,7 @@ const SaleRentActionBox = ({
   userHasAlreadyBidsOnNft,
   currentMana,
   onAuthorizedAction,
+  onSetAuthorization,
   getContract,
   onRent
 }: Props) => {
@@ -79,41 +81,45 @@ const SaleRentActionBox = ({
   const isBiddable = bidService !== undefined
   const canBid = !isOwner && isBiddable && !userHasAlreadyBidsOnNft
   const isCurrentlyRented = isRentalListingExecuted(rental)
-  const authorization = useMemo(() => {
-    if (!wallet) {
-      return null
+
+  const contractNames = getContractNames()
+  const mana = getContract({
+    name: contractNames.MANA,
+    network: nft.network
+  })
+  const rentals = getContract({
+    name: getContractNames().RENTALS,
+    network: nft.network
+  })
+
+  useEffect(() => {
+    if (!wallet?.address) {
+      return
     }
 
-    const contractNames = getContractNames()
-    const mana = getContract({
-      name: contractNames.MANA,
-      network: nft.network
-    })
-    const rentals = getContract({
-      name: getContractNames().RENTALS,
-      network: nft.network
-    })
-    return getContractAuthorization(
-      wallet.address,
-      rentals?.address,
-      mana ? { ...mana, name: ContractName.MANAToken } : undefined
+    onSetAuthorization(
+      getContractAuthorization(
+        wallet.address,
+        rentals?.address,
+        mana ? { ...mana, name: ContractName.MANAToken } : undefined
+      ) as Authorization
     )
-  }, [wallet, getContract, nft.network])
+  }, [wallet?.address, mana, rentals?.address, nft.network, onSetAuthorization])
 
   const handleOnRent = useCallback(() => {
-    if (!rental || selectedRentalPeriodIndex === undefined || !authorization) return;
+    if (!rental || selectedRentalPeriodIndex === undefined) return
     const bnPricePerDay = ethers.BigNumber.from(
       rental.periods[selectedRentalPeriodIndex].pricePerDay
     )
-  
+
     const bnMaxDays = ethers.BigNumber.from(
       rental.periods[selectedRentalPeriodIndex].maxDays
     )
-  
+
     const price = bnPricePerDay.mul(bnMaxDays).toString()
-  
-    onAuthorizedAction(authorization, price, () => onRent(selectedRentalPeriodIndex))
-  }, [selectedRentalPeriodIndex, authorization, rental, onRent, onAuthorizedAction])
+
+    onAuthorizedAction(price, () => onRent(selectedRentalPeriodIndex))
+  }, [selectedRentalPeriodIndex, rental, onRent, onAuthorizedAction])
 
   const rentalEndDate: Date | null = isCurrentlyRented
     ? getRentalEndDate(rental!)
@@ -407,4 +413,6 @@ const SaleRentActionBox = ({
   )
 }
 
-export default memo(withAuthorizedAction(SaleRentActionBox, AuthorizationAction.RENT))
+export default memo(
+  withAuthorizedAction(SaleRentActionBox, AuthorizedAction.RENT)
+)

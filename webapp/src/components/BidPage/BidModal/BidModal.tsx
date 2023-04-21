@@ -1,10 +1,9 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Header, Form, Field, Button } from 'decentraland-ui'
 import { ContractName } from 'decentraland-transactions'
 import { t, T } from 'decentraland-dapps/dist/modules/translation/utils'
 import { toFixedMANAValue } from 'decentraland-dapps/dist/lib/mana'
 import {
-  Authorization,
   AuthorizationType
 } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
@@ -27,7 +26,7 @@ import { ConfirmInputValueModal } from '../../ConfirmInputValueModal'
 import { Mana } from '../../Mana'
 import { Props } from './BidModal.types'
 import './BidModal.css'
-import { AuthorizationAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
 import { ethers } from 'ethers'
 
 const BidModal = (props: Props) => {
@@ -47,6 +46,7 @@ const BidModal = (props: Props) => {
   const [fingerprint, isLoading] = useFingerprint(nft)
 
   const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+  const { onSetAuthorization } = props
 
   const handlePlaceBid = useCallback(
     () =>
@@ -58,10 +58,6 @@ const BidModal = (props: Props) => {
       ),
     [nft, price, expiresAt, fingerprint, onPlaceBid]
   )
-
-  if (!wallet) {
-    return null
-  }
 
   const contractNames = getContractNames()
 
@@ -75,17 +71,23 @@ const BidModal = (props: Props) => {
     network: nft.network
   })
 
-  if (!mana || !bids) {
-    return null
-  }
+  useEffect(() => {
+    if (!mana || !bids || !wallet) {
+      return;
+    }
+  
+    onSetAuthorization({
+      address: wallet.address,
+      authorizedAddress: bids.address,
+      contractAddress: mana.address,
+      contractName: ContractName.MANAToken,
+      chainId: mana.chainId,
+      type: AuthorizationType.ALLOWANCE
+    })
+  }, [bids, mana, onSetAuthorization, wallet])
 
-  const authorization: Authorization = {
-    address: wallet.address,
-    authorizedAddress: bids.address,
-    contractAddress: mana.address,
-    contractName: ContractName.MANAToken,
-    chainId: mana.chainId,
-    type: AuthorizationType.ALLOWANCE
+  if (!wallet || !mana || !bids) {
+    return null
   }
 
   const handleSubmit = () => {
@@ -94,7 +96,7 @@ const BidModal = (props: Props) => {
 
   const handleConfirmBid = () => {
     const { onAuthorizedAction } = props;
-    onAuthorizedAction(authorization, ethers.utils.parseEther(price).toString(), handlePlaceBid)
+    onAuthorizedAction(ethers.utils.parseEther(price).toString(), handlePlaceBid)
   }
 
   const isInvalidPrice = parseMANANumber(price) <= 0
@@ -221,4 +223,4 @@ const BidModal = (props: Props) => {
   )
 }
 
-export default React.memo(withAuthorizedAction(BidModal, AuthorizationAction.BID))
+export default React.memo(withAuthorizedAction(BidModal, AuthorizedAction.BID))

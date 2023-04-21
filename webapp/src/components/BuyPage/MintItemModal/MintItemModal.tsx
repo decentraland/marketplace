@@ -1,14 +1,11 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import compact from 'lodash/compact'
 import classNames from 'classnames'
 import { Header, Button, Mana, Icon } from 'decentraland-ui'
 import { Contract, Item } from '@dcl/schemas'
 import { T, t } from 'decentraland-dapps/dist/modules/translation/utils'
-import {
-  Authorization,
-  AuthorizationType
-} from 'decentraland-dapps/dist/modules/authorization/types'
+import { AuthorizationType } from 'decentraland-dapps/dist/modules/authorization/types'
 import { ContractName } from 'decentraland-transactions'
 import { ChainButton } from 'decentraland-dapps/dist/containers'
 import { getAnalytics } from 'decentraland-dapps/dist/modules/analytics/utils'
@@ -31,7 +28,8 @@ import { PriceHasChanged } from '../PriceHasChanged'
 import { PartiallySupportedNetworkCard } from '../PartiallySupportedNetworkCard'
 import { Props } from './MintItemModal.types'
 import withAuthorizedAction from '../../HOC/withAuthorizedAction/withAuthorizedAction'
-import { AuthorizationAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { AuthorizedAction } from '../../HOC/withAuthorizedAction/AuthorizationModal'
+import { getMintItemStatus } from '../../../modules/item/selectors'
 
 const MintItemModal = (props: Props) => {
   const {
@@ -45,10 +43,21 @@ const MintItemModal = (props: Props) => {
     getContract,
     onBuyItem,
     onBuyItemWithCard,
+    onSetAuthorization,
     onAuthorizedAction
   } = props
 
   const analytics = getAnalytics()
+  const contractNames = getContractNames()
+  const mana = getContract({
+    name: contractNames.MANA,
+    network: item.network
+  }) as Contract
+
+  const collectionStore = getContract({
+    name: contractNames.COLLECTION_STORE,
+    network: item.network
+  }) as Contract
 
   const handleExecuteOrder = useCallback(() => {
     if (isBuyWithCardPage) {
@@ -63,41 +72,31 @@ const MintItemModal = (props: Props) => {
     if (isBuyWithCardPage) analytics.track(events.CANCEL_BUY_NFT_WITH_CARD)
   }, [analytics, isBuyWithCardPage])
 
-  const authorization: Authorization = useMemo(() => {
-    const contractNames = getContractNames()
-    const mana = getContract({
-      name: contractNames.MANA,
-      network: item.network
-    }) as Contract
-
-    const collectionStore = getContract({
-      name: contractNames.COLLECTION_STORE,
-      network: item.network
-    }) as Contract
-
-    return {
+  useEffect(() => {
+    onSetAuthorization({
       address: wallet.address,
       authorizedAddress: collectionStore.address,
       contractAddress: mana.address,
       contractName: ContractName.MANAToken,
       chainId: item.chainId,
       type: AuthorizationType.ALLOWANCE
-    }
-  }, [getContract, item.network, item.chainId, wallet.address])
+    })
+  }, [
+    collectionStore.address,
+    mana.address,
+    item.network,
+    item.chainId,
+    wallet.address,
+    onSetAuthorization
+  ])
 
   const handleSubmit = useCallback(() => {
     if (isBuyWithCardPage) {
       handleExecuteOrder()
       return
     }
-    onAuthorizedAction(authorization, item?.price, handleExecuteOrder)
-  }, [
-    authorization,
-    item.price,
-    isBuyWithCardPage,
-    handleExecuteOrder,
-    onAuthorizedAction
-  ])
+    onAuthorizedAction(item?.price, handleExecuteOrder)
+  }, [item.price, isBuyWithCardPage, handleExecuteOrder, onAuthorizedAction])
 
   const isDisabled =
     !item.price || isOwner || (hasInsufficientMANA && !isBuyWithCardPage)
@@ -234,4 +233,6 @@ const MintItemModal = (props: Props) => {
   )
 }
 
-export default React.memo(withAuthorizedAction(MintItemModal, AuthorizationAction.MINT))
+export default React.memo(
+  withAuthorizedAction(MintItemModal, AuthorizedAction.MINT, getMintItemStatus)
+)

@@ -1,0 +1,53 @@
+import { connect } from 'react-redux'
+import {
+  grantTokenRequest,
+  GRANT_TOKEN_REQUEST,
+  revokeTokenRequest,
+  REVOKE_TOKEN_REQUEST
+} from 'decentraland-dapps/dist/modules/authorization/actions'
+import { Authorization } from 'decentraland-dapps/dist/modules/authorization/types'
+import {
+  getError,
+  getData as getAuthorizations
+} from 'decentraland-dapps/dist/modules/authorization/selectors'
+import { RootState } from '../../../../modules/reducer'
+import { AuthorizationModal } from './AuthorizationModal'
+import {
+  MapDispatch,
+  MapDispatchProps,
+  MapStateProps,
+  OwnProps
+} from './AuthorizationModal.types'
+import { getStepStatus } from './utils'
+
+const mapState = (state: RootState, ownProps: OwnProps): MapStateProps => {
+  const { authorization, requiredAllowance, getActionStatus } = ownProps
+  const autorizations = getAuthorizations(state)
+  return {
+    revokeStatus: getStepStatus(
+      state,
+      REVOKE_TOKEN_REQUEST,
+      authorization,
+      autorizations,
+      null
+    ),
+    grantStatus: getStepStatus(
+      state,
+      GRANT_TOKEN_REQUEST,
+      authorization,
+      autorizations,
+      requiredAllowance
+    ),
+    actionStatus: getActionStatus(state),
+    error: getError(state) || ''
+  }
+}
+
+const mapDispatch = (dispatch: MapDispatch): MapDispatchProps => ({
+  onRevoke: (authorization: Authorization) =>
+    dispatch(revokeTokenRequest(authorization)),
+  onGrant: (authorization: Authorization) =>
+    dispatch(grantTokenRequest(authorization))
+})
+
+export default connect(mapState, mapDispatch)(AuthorizationModal)
