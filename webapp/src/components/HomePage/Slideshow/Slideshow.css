@@ -111,9 +111,7 @@
   display: flex;
   justify-content: center;
   position: absolute;
-  top: 0;
-  width: 80px;
-  height: 100%;
+  width: fit-content;
   z-index: 5;
 }
 
