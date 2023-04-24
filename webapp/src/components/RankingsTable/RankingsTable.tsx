@@ -195,32 +195,36 @@ const RankingsTable = (props: Props) => {
             <Table.Row>
               <Mobile>
                 <Table.HeaderCell>
-                  {t(`home_page.analytics.rankings.${label}.item`)}
+                  <span>{t(`home_page.analytics.rankings.${label}.item`)}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.total_volume')}
+                  <span>{t('home_page.analytics.rankings.total_volume')}</span>
                 </Table.HeaderCell>
               </Mobile>
               <NotMobile>
                 <Table.HeaderCell>
-                  {t(`home_page.analytics.rankings.${label}.item`)}
+                  <span>{t(`home_page.analytics.rankings.${label}.item`)}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.category')}
+                  <span>{t('home_page.analytics.rankings.category')}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.rarity')}
+                  <span>{t('home_page.analytics.rankings.rarity')}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t(`home_page.analytics.rankings.${label}.items_sold`)}
+                  <span>
+                    {t(`home_page.analytics.rankings.${label}.items_sold`)}
+                  </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.total_volume')}
-                  <InfoTooltip
-                    content={t(
-                      'home_page.analytics.rankings.total_volume_tooltip'
-                    )}
-                  />
+                  <span>
+                    {t('home_page.analytics.rankings.total_volume')}
+                    <InfoTooltip
+                      content={t(
+                        'home_page.analytics.rankings.total_volume_tooltip'
+                      )}
+                    />
+                  </span>
                 </Table.HeaderCell>
               </NotMobile>
             </Table.Row>
@@ -232,39 +236,54 @@ const RankingsTable = (props: Props) => {
             <Table.Row>
               <Mobile>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.items.creator')}
+                  <span>{t('home_page.analytics.rankings.items.creator')}</span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.total_volume_sales')}
+                  {' '}
+                  <span>
+                    {t('home_page.analytics.rankings.total_volume_sales')}
+                  </span>
                 </Table.HeaderCell>
               </Mobile>
               <NotMobile>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.creators.creator')}
+                  <span>
+                    {t('home_page.analytics.rankings.creators.creator')}
+                  </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.creators.collections')}
+                  <span>
+                    {t('home_page.analytics.rankings.creators.collections')}
+                  </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.creators.items_sold')}
+                  <span>
+                    {t('home_page.analytics.rankings.creators.items_sold')}
+                  </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.creators.unique_collectors')}
-                  <InfoTooltip
-                    content={t(
-                      'home_page.analytics.rankings.creators.unique_collectors_tooltip'
+                  <span>
+                    {t(
+                      'home_page.analytics.rankings.creators.unique_collectors'
                     )}
-                  />
+                    <InfoTooltip
+                      content={t(
+                        'home_page.analytics.rankings.creators.unique_collectors_tooltip'
+                      )}
+                    />
+                  </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t(
-                    'home_page.analytics.rankings.creators.total_volume_sales'
-                  )}
-                  <InfoTooltip
-                    content={t(
-                      'home_page.analytics.rankings.creators.total_volume_sales_tooltip'
+                  <span>
+                    {t(
+                      'home_page.analytics.rankings.creators.total_volume_sales'
                     )}
-                  />
+                    <InfoTooltip
+                      content={t(
+                        'home_page.analytics.rankings.creators.total_volume_sales_tooltip'
+                      )}
+                    />
+                  </span>
                 </Table.HeaderCell>
               </NotMobile>
             </Table.Row>
@@ -276,46 +295,60 @@ const RankingsTable = (props: Props) => {
             <Table.Row>
               <Mobile>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.collectors.collector')}
+                  <span>
+                    {t('home_page.analytics.rankings.collectors.collector')}
+                  </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.collectors.total_spent')}
+                  <span>
+                    {t('home_page.analytics.rankings.collectors.total_spent')}
+                  </span>
                 </Table.HeaderCell>
               </Mobile>
               <NotMobile>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.collectors.collector')}
+                  <span>
+                    {t('home_page.analytics.rankings.collectors.collector')}
+                  </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.collectors.items_bought')}
+                  <span>
+                    {t('home_page.analytics.rankings.collectors.items_bought')}
+                  </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t(
-                    'home_page.analytics.rankings.collectors.creators_supported'
-                  )}
-                  <InfoTooltip
-                    content={t(
-                      'home_page.analytics.rankings.collectors.creators_supported_tooltip'
+                  <span>
+                    {t(
+                      'home_page.analytics.rankings.collectors.creators_supported'
                     )}
-                  />
+                    <InfoTooltip
+                      content={t(
+                        'home_page.analytics.rankings.collectors.creators_supported_tooltip'
+                      )}
+                    />
+                  </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t(
-                    'home_page.analytics.rankings.collectors.unique_items_bought'
-                  )}
-                  <InfoTooltip
-                    content={t(
-                      'home_page.analytics.rankings.collectors.unique_items_bought_tooltip'
+                  <span>
+                    {t(
+                      'home_page.analytics.rankings.collectors.unique_items_bought'
                     )}
-                  />
+                    <InfoTooltip
+                      content={t(
+                        'home_page.analytics.rankings.collectors.unique_items_bought_tooltip'
+                      )}
+                    />
+                  </span>
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  {t('home_page.analytics.rankings.collectors.total_spent')}
-                  <InfoTooltip
-                    content={t(
-                      'home_page.analytics.rankings.collectors.total_spent_tooltip'
-                    )}
-                  />
+                  <span>
+                    {t('home_page.analytics.rankings.collectors.total_spent')}
+                    <InfoTooltip
+                      content={t(
+                        'home_page.analytics.rankings.collectors.total_spent_tooltip'
+                      )}
+                    />
+                  </span>
                 </Table.HeaderCell>
               </NotMobile>
             </Table.Row>
