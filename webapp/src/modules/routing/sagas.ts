@@ -278,33 +278,11 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
 
       const { rarities, wearableGenders, emotePlayMode } = options
 
-      console.log(
-        'flo a ver view',
-        view,
-        'section',
-        section,
-        section.toString().includes(Section.EMOTES),
-        section.toString().includes(Section.EMOTES),
-        'section.toString().includes(Section.w)',
-        section.toString().includes(Section.WEARABLES),
-        'view === View.MARKET',
-        view === View.MARKET,
-        'el if si entra en fetch ntfs items',
-        view === View.MARKET &&
-          (section.toString().includes(Section.EMOTES) ||
-            section.toString().includes(Section.WEARABLES))
-      )
-
       if (
         view === View.MARKET &&
         (section.toString().includes(Section.EMOTES) ||
           section.toString().includes(Section.WEARABLES))
       ) {
-        console.log(
-          'flo a ver entro en el if? -> le pega a catalog',
-          view,
-          section
-        )
         yield put(
           fetchCatalogRequest({
             first,
@@ -328,11 +306,6 @@ export function* fetchAssetsFromRoute(options: BrowseOptions) {
           })
         )
       } else {
-        console.log(
-          'flo a ver entro en el else? -> le pega a nfts items',
-          view,
-          section
-        )
         if (isItems) {
           yield put(
             fetchItemsRequest({

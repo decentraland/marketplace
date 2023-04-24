@@ -190,10 +190,10 @@ describe('when getting the section', () => {
 })
 
 describe("when there's no assetType URL param and the vendor is DECENTRALAND and the location is in browse", () => {
-  it('should return ITEM as the assetType', () => {
+  it('should return CATALOG_ITEM as the assetType', () => {
     expect(
       getAssetType.resultFunc('', locations.browse(), VendorName.DECENTRALAND)
-    ).toBe(AssetType.ITEM)
+    ).toBe(AssetType.CATALOG_ITEM)
   })
 })
 
@@ -210,14 +210,14 @@ describe("when there's assetType URL param, the assetType is not NFT or ITEM and
 })
 
 describe("when there's assetType URL param, the assetType is not NFT or ITEM and the vendor is DECENTRALAND and the location is in browse", () => {
-  it('should return ITEM as the assetType', () => {
+  it('should return CATALOG_ITEM as the assetType', () => {
     expect(
       getAssetType.resultFunc(
         'assetType=something',
         locations.browse(),
         VendorName.DECENTRALAND
       )
-    ).toBe(AssetType.ITEM)
+    ).toBe(AssetType.CATALOG_ITEM)
   })
 })
 
