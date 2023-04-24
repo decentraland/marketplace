@@ -1,3 +1,4 @@
+import { waitFor } from '@testing-library/react'
 import {
   ChainId,
   Item,
@@ -7,7 +8,6 @@ import {
   Order,
   Rarity
 } from '@dcl/schemas'
-import { waitFor, within } from '@testing-library/react'
 import { t } from 'decentraland-dapps/dist/modules/translation/utils'
 import { formatDistanceToNow, getDateAndMonthName } from '../../../lib/date'
 import { formatWeiMANA } from '../../../lib/mana'
@@ -15,7 +15,7 @@ import { OwnersResponse } from '../../../modules/vendor/decentraland'
 import * as nftAPI from '../../../modules/vendor/decentraland/nft/api'
 import * as orderAPI from '../../../modules/vendor/decentraland/order/api'
 import { renderWithProviders } from '../../../utils/tests'
-import ListingsTable, { ROWS_PER_PAGE } from './ListingsTable'
+import ListingsTable from './ListingsTable'
 
 jest.mock('../../../modules/vendor/decentraland/nft/api')
 jest.mock('../../../modules/vendor/decentraland/order/api')
@@ -139,7 +139,7 @@ describe('Listings Table', () => {
         expect(loader).not.toBeInTheDocument()
       })
 
-      expect(getByTestId('listings-table')).not.toBe(null)
+      expect(getByTestId('table-content')).not.toBe(null)
     })
 
     it('should render the table data correctly', async () => {
@@ -163,65 +163,6 @@ describe('Listings Table', () => {
       expect(getByText(created)).not.toBe(null)
       expect(getByText(expires)).not.toBe(null)
       expect(getByText(price)).not.toBe(null)
-    })
-  })
-
-  describe('Pagination', () => {
-    describe('Should have pagination', () => {
-      beforeEach(() => {
-        ;(nftAPI.nftAPI.getOwners as jest.Mock).mockResolvedValueOnce({
-          data: Array(ROWS_PER_PAGE + 1).fill(ownersResponse),
-          total: 7
-        })
-        ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
-          data: Array(ROWS_PER_PAGE + 1).fill(orderResponse),
-          total: 7
-        })
-      })
-
-      it('should render the pagination correctly', async () => {
-        const screen = renderWithProviders(<ListingsTable asset={asset} />)
-
-        const { findByTestId, getByRole } = screen
-
-        const loader = await findByTestId('loader')
-
-        await waitFor(() => {
-          expect(loader).not.toBeInTheDocument()
-        })
-
-        const navigation = getByRole('navigation')
-
-        expect(within(navigation).getByText('1')).toBeInTheDocument()
-        expect(within(navigation).getByText('2')).toBeInTheDocument()
-      })
-    })
-
-    describe('Should not have pagination', () => {
-      beforeEach(() => {
-        ;(nftAPI.nftAPI.getOwners as jest.Mock).mockResolvedValueOnce({
-          data: Array(ROWS_PER_PAGE - 1).fill(ownersResponse),
-          total: 5
-        })
-        ;(orderAPI.orderAPI.fetchOrders as jest.Mock).mockResolvedValueOnce({
-          data: Array(ROWS_PER_PAGE - 1).fill(orderResponse),
-          total: 5
-        })
-      })
-
-      it('should not render pagination as there is no need', async () => {
-        const screen = renderWithProviders(<ListingsTable asset={asset} />)
-
-        const { findByTestId, queryByRole } = screen
-
-        const loader = await findByTestId('loader')
-
-        await waitFor(() => {
-          expect(loader).not.toBeInTheDocument()
-        })
-
-        expect(queryByRole('navigation')).not.toBeInTheDocument()
-      })
     })
   })
 })
