@@ -59,7 +59,9 @@
     "unknown_error": "Error desconocido",
     "the_parcel": "La Parcela",
     "the_estate": "El Estate",
-    "discord_server": "Servidor de Discord"
+    "discord_server": "Servidor de Discord",
+    "showing": "Mostrando",
+    "of": "de"
   },
   "address": {
     "invalid_address": "Dirección inválida",
@@ -579,7 +581,8 @@
     "cheapest": "Más baratos",
     "newest": "Más nuevos",
     "oldest": "Más viejos",
-    "there_are_no_listings": "No hay collecionables disponibles"
+    "there_are_no_listings": "No hay collecionables disponibles",
+    "view_listing": "Ver listado"
   },
   "owners_table": {
     "owner": "Dueño",

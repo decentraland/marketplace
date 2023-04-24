@@ -59,7 +59,9 @@
     "unknown_error": "不明错误",
     "the_parcel": "地块",
     "the_estate": "产业",
-    "discord_server": "Discord 服务器"
+    "discord_server": "Discord 服务器",
+    "showing": "顯示",
+    "of": "的"
   },
   "address": {
     "invalid_address": "这不是一个有效的地址",
@@ -580,7 +582,8 @@
     "最老": "最老",
     "issue_number_asc": "發行編號↑",
     "issue_number_desc": "發行編號↓",
-    "there_are_no_listings": "沒有可用的列表"
+    "there_are_no_listings": "沒有可用的列表",
+    "view_listing": "查看房源"
   },
   "owners_table": {
     "owner": "所有者",
