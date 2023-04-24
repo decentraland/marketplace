@@ -61,7 +61,9 @@
     "unknown_error": "Unknown error",
     "the_parcel": "the Parcel",
     "the_estate": "the Estate",
-    "discord_server": "Discord Server"
+    "discord_server": "Discord Server",
+    "showing": "Showing",
+    "of": "of"
   },
   "address": {
     "invalid_address": "That's not a valid address",
@@ -583,7 +585,8 @@
     "oldest": "Oldest",
     "issue_number_asc": "Issue Number ↑",
     "issue_number_desc": "Issue Number ↓",
-    "there_are_no_listings": "No available listings"
+    "there_are_no_listings": "No available listings",
+    "view_listing": "View listing"
   },
   "owners_table": {
     "owner": "Owner",

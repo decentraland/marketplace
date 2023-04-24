@@ -1,16 +1,8 @@
-.OwnersTable {
-  position: relative;
-}
-
-.OwnersTable .linkedProfileRow {
-  margin-left: 20px;
-}
-
-.OwnersTable .headerMargin {
+.headerMargin {
   padding: 20px !important;
 }
 
-.OwnersTable .issuedIdContainer {
+.issuedIdContainer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -18,41 +10,36 @@
   font-size: 14px;
 }
 
-.OwnersTable .issuedId {
-  font-size: 17px;
-  font-weight: 700;
-}
-
-.OwnersTable .row {
+.row {
   display: flex;
   flex-direction: row;
   gap: 10px;
   align-items: center;
 }
 
-.OwnersTable .badge {
+.badge {
   color: white;
-  background-color: var(--background) !important;
+  background-color: transparent !important;
 }
 
-.OwnersTable .gotToNFT {
+.gotToNFT {
   color: white;
   padding-right: 25px;
 }
 
-.OwnersTable .emptyTable {
+.emptyTable {
   height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.OwnersTable .emptyTableActionButton {
+.emptyTableActionButton {
   text-decoration: underline;
 }
 
 @media (max-width: 768px) {
-  .OwnersTable .linkedProfileRow {
+  .linkedProfileRow {
     margin-left: unset;
   }
 }
